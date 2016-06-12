@@ -74,8 +74,8 @@ XMLSignatureHelper::~XMLSignatureHelper()
 
 bool XMLSignatureHelper::Init()
 {
-    DBG_ASSERT( !mxSEInitializer.is(), "XMLSignatureHelper::Init - mxSEInitializer already set!" );
-    DBG_ASSERT( !mxSecurityContext.is(), "XMLSignatureHelper::Init - mxSecurityContext already set!" );
+    SAL_WARN_IF( mxSEInitializer.is(), "xmlsecurity", "XMLSignatureHelper::Init - mxSEInitializer already set!" );
+    SAL_WARN_IF( mxSecurityContext.is(), "xmlsecurity", "XMLSignatureHelper::Init - mxSecurityContext already set!" );
 
     mxSEInitializer = css::xml::crypto::SEInitializer::create( mxCtx );
 
@@ -89,7 +89,7 @@ void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,
     const OUString& sODFVersion)
 {
-    DBG_ASSERT( !mxUriBinding.is(), "SetStorage - UriBinding already set!" );
+    SAL_WARN_IF( mxUriBinding.is(), "xmlsecurity", "SetStorage - UriBinding already set!" );
     mxUriBinding = new UriBindingHelper( rxStorage );
     DBG_ASSERT(rxStorage.is(), "SetStorage - empty storage!");
     mbODFPre1_2 = DocumentSignatureHelper::isODFPre_1_2(sODFVersion);
