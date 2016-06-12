@@ -492,42 +492,63 @@ void XMLRedlineExport::ExportChangeInfo(
     aAny >>= sType;
     if(sType == sFormat) // TODO: Find out if the style is inserted or deleted to give the proper namespace
     {
-        SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
-                                          XML_TYPE, true, false );
-        rExport.Characters("style");
-        SvXMLElementExport aNameElem( rExport, XML_NAMESPACE_DC,
-                                          XML_NAME, true, false );
-        rExport.Characters("bold"); // TODO: Get the correct style name
-        SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
-                                          XML_START, true, false );
-        rExport.Characters("start"); // TODO: Get the correct start position
-        SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
-                                          XML_END, true, false );
-        rExport.Characters("end"); // TODO: Get the correct end position
+        {
+            SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
+                                            XML_TYPE, true, false );
+            rExport.Characters("style");
+        }
+        {
+            SvXMLElementExport aNameElem( rExport, XML_NAMESPACE_DC,
+                                            XML_NAME, true, false );
+            rExport.Characters("bold"); // TODO: Get the correct style name
+        }
+        {
+            SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
+                                            XML_START, true, false );
+            rExport.Characters("/"); // TODO: Get the correct start position
+        }
+        {
+            SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
+                                            XML_END, true, false );
+            rExport.Characters("/"); // TODO: Get the correct end position
+        }
     }
     else if(sType == sInsert)
     {
-        SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
-                                          XML_TYPE, true, false );
-        rExport.Characters("text"); // or paragraph TODO: Find a way to distinguish text and paragraph changes
-        SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
-                                          XML_START, true, false );
-        rExport.Characters("start"); // TODO: Get the correct start position (NumberingLevel for paragraph)
-        SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
-                                          XML_END, true, false );
+        {
+            SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
+                                            XML_TYPE, true, false );
+            rExport.Characters("text"); // or paragraph TODO: Find a way to distinguish text and paragraph changes
+        }
+        {
+            SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
+                                            XML_START, true, false );
+            rExport.Characters("/"); // TODO: Get the correct start position (NumberingLevel for paragraph)
+        }
+        {
+            SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
+                                            XML_END, true, false );
+        }
     }
     else if(sType == sDelete)
     {
-        SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
-                                          XML_TYPE, true, false );
-        rExport.Characters("text"); // or paragraph TODO: Find a way to distinguish text and paragraph changes
-        SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
-                                          XML_START, true, false );
-        rExport.Characters("start"); // TODO: Get the correct start position
-        SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
-                                          XML_END, true, false );
-        // TODO: Check if type is not paragraph
-        rExport.Characters("end"); // TODO: Get the correct end position
+        {
+            SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
+                                            XML_TYPE, true, false );
+            rExport.Characters("paragraph"); // or text TODO: Find a way to distinguish text and paragraph changes
+        }
+        {
+            SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
+                                            XML_START, true, false );
+            OUString paraPos = "2";
+            rExport.Characters("/" + paraPos); // TODO: Get the correct start position
+        }
+        {
+            SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
+                                            XML_END, true, false );
+            // TODO: Check if type is not paragraph
+            rExport.Characters("/"); // TODO: Get the correct end position
+        }
     }
 
     // comment as <text:p> sequence
