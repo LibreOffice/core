@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d46e90c8",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-06-12T05:46:56Z",
+      "side": 1,
+      "message": "Please explain how it is ensured that the code does not write past the end of this buffer. It seems to me that it is not ensured.",
+      "revId": "110378a73a35e469046b89c3ab88ae73fb212932",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f47394af",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-06-12T05:46:56Z",
+      "side": 1,
+      "message": "firebird internally uses \"unsigned int\" or \"int\". Why do you force this to be a 4 byte value? Won\u0027t that make an ABI mismatch with firebird when \"int\" is more than 4 bytes? Or do the docs somewhere say it should be a 32bit value? (In which case maybe the firebird source code is imperfect in this regard.)\n\nSee \"tag\" field of \"struct SvcSwitches\" in src/utilities/fbsvcmgr/fbsvcmgr.cpp, as well as \"const SvcSwitches restoreOptions[]\" in the same file.\n\nAlso see src/common/classes/Switches.h class Switches struct in_sw_tab_t field in_spb_sw, which is used in src/burp/burpswi.h in \"static const Switches::in_sw_tab_t reference_burp_in_sw_table[]\".\n\nAlso see in src/jrd/svc.cpp function Service::process_switches variable burp_options",
+      "range": {
+        "startLine": 630,
+        "startChar": 10,
+        "endLine": 630,
+        "endChar": 11
+      },
+      "revId": "110378a73a35e469046b89c3ab88ae73fb212932",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_3466dced",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-06-12T05:46:56Z",
+      "side": 1,
+      "message": "The crash happens here, because \"isc_vax_integer(pResults, 2)\" has value 22590 but the string seems to have length 87 or 88.\n\nHmm... 88 is 0x58 and 22590 is 0x583E. This looks like you read a 16 bit value instead of a 8bit value, or you have a off-by-one error or ...\n\nI would say a off-by-one error:\n(gdb) print /x pResults[0]\n$9 \u003d 0x3e\n(gdb) print /x pResults[1]\n$10 \u003d 0x58\n(gdb) print /x pResults[2]\n$11 \u003d 0x0\n(gdb) print *(int16_t*)pResults\n$15 \u003d 22590\n(gdb) print *(int16_t*)(pResults+1)\n$16 \u003d 88",
+      "revId": "110378a73a35e469046b89c3ab88ae73fb212932",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_1469d8be",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-06-12T05:46:56Z",
+      "side": 1,
+      "message": "This looks like it reads the lines of data from the service one at a time, and then throws away the data. Shouldn\u0027t we do something with the data, maybe save it somewhere? Or is that only a log output? Please explain.",
+      "revId": "110378a73a35e469046b89c3ab88ae73fb212932",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
