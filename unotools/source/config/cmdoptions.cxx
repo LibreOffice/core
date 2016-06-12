@@ -249,7 +249,7 @@ bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, co
             return m_aDisabledCommands.Lookup( aCommand );
         }
         default:
-            DBG_ASSERT( false, "SvtCommandOptions_Impl::Lookup()\nUnknown option type given!\n" );
+            SAL_WARN( "unotools", "SvtCommandOptions_Impl::Lookup()\nUnknown option type given!\n" );
     }
 
     return false;

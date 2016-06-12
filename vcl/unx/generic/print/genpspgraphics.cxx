@@ -379,12 +379,12 @@ void GenPspGraphics::SetFillColor( SalColor nSalColor )
 
 void GenPspGraphics::SetROPLineColor( SalROPColor )
 {
-    DBG_ASSERT( false, "Error: PrinterGfx::SetROPLineColor() not implemented" );
+    SAL_WARN( "vcl", "Error: PrinterGfx::SetROPLineColor() not implemented" );
 }
 
 void GenPspGraphics::SetROPFillColor( SalROPColor )
 {
-    DBG_ASSERT( false, "Error: PrinterGfx::SetROPFillColor() not implemented" );
+    SAL_WARN( "vcl", "Error: PrinterGfx::SetROPFillColor() not implemented" );
 }
 
 void GenPspGraphics::SetXORMode( bool bSet )
@@ -478,7 +478,7 @@ void GenPspGraphics::invert( sal_uInt32,
                           const SalPoint*,
                           SalInvert )
 {
-    DBG_ASSERT( false, "Error: PrinterGfx::Invert() not implemented" );
+    SAL_WARN( "vcl", "Error: PrinterGfx::Invert() not implemented" );
 }
 
 bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
