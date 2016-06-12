@@ -51,15 +51,6 @@ static void ImplInitMsgBoxImageList()
     }
 }
 
-void MessBox::ImplInitMessBoxData()
-{
-    mpVCLMultiLineEdit  = nullptr;
-    mpFixedImage        = nullptr;
-    mbHelpBtn           = false;
-    mpCheckBox          = nullptr;
-    mbCheck             = false;
-}
-
 void MessBox::ImplInitButtons()
 {
     WinBits nStyle = GetStyle();
@@ -140,9 +131,10 @@ void MessBox::ImplInitButtons()
 MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
                   const OUString& rTitle, const OUString& rMessage ) :
     ButtonDialog( WINDOW_MESSBOX ),
-    maMessText( rMessage )
+    maMessText( rMessage ),
+    mbHelpBtn( false ),
+    mbCheck( false )
 {
-    ImplInitMessBoxData();
     ImplInit( pParent, nStyle | WB_MOVEABLE | WB_HORZ | WB_CENTER );
     ImplInitButtons();
 
@@ -379,7 +371,13 @@ Size MessBox::GetOptimalSize() const
     return Size( 250, 100 );
 }
 
-void InfoBox::ImplInitInfoBoxData()
+InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
+    InfoBox( pParent, WB_OK | WB_DEF_OK, rMessage )
+{
+}
+
+InfoBox::InfoBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
+    MessBox( pParent, nStyle, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
@@ -388,38 +386,21 @@ void InfoBox::ImplInitInfoBoxData()
     SetImage( InfoBox::GetStandardImage() );
 }
 
-InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
-    MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
-{
-    ImplInitInfoBoxData();
-}
-
-InfoBox::InfoBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
-    MessBox( pParent, nStyle, OUString(), rMessage )
-{
-    ImplInitInfoBoxData();
-}
-
 Image InfoBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 4 );
 }
 
-void WarningBox::ImplInitWarningBoxData()
+WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
+                        const OUString& rMessage ) :
+    MessBox( pParent, nStyle, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( WarningBox::GetStandardImage() );
-}
-
-WarningBox::WarningBox( vcl::Window* pParent, WinBits nStyle,
-                        const OUString& rMessage ) :
-    MessBox( pParent, nStyle, OUString(), rMessage )
-{
-    ImplInitWarningBoxData();
 }
 
 void WarningBox::SetDefaultCheckBoxText()
@@ -435,20 +416,15 @@ Image WarningBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 3 );
 }
 
-void ErrorBox::ImplInitErrorBoxData()
+ErrorBox::ErrorBox( vcl::Window* pParent, WinBits nStyle,
+                    const OUString& rMessage ) :
+    MessBox( pParent, nStyle, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( ErrorBox::GetStandardImage() );
-}
-
-ErrorBox::ErrorBox( vcl::Window* pParent, WinBits nStyle,
-                    const OUString& rMessage ) :
-    MessBox( pParent, nStyle, OUString(), rMessage )
-{
-    ImplInitErrorBoxData();
 }
 
 Image ErrorBox::GetStandardImage()
@@ -466,19 +442,14 @@ Image ErrorBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 1 );
 }
 
-void QueryBox::ImplInitQueryBoxData()
+QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
+    MessBox( pParent, nStyle, OUString(), rMessage )
 {
     // Default Text is the display title from the application
     if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( QueryBox::GetStandardImage() );
-}
-
-QueryBox::QueryBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
-    MessBox( pParent, nStyle, OUString(), rMessage )
-{
-    ImplInitQueryBoxData();
 }
 
 void QueryBox::SetDefaultCheckBoxText()
