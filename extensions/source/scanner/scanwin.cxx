@@ -319,11 +319,12 @@ bool ImpTwain::ImplEnableSource()
 
 bool ImpTwain::ImplHandleMsg( void* pMsg )
 {
-    TW_UINT16   nRet;
+    TW_UINT16   nRet = TWRC_NOTDSEVENT;
     PTWAINMSG   pMess = (PTWAINMSG) pMsg;
     TW_EVENT    aEvt = { pMess, MSG_NULL };
 
-    nRet = PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_EVENT, MSG_PROCESSEVENT, &aEvt );
+    if (pDSM)
+        nRet = PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_EVENT, MSG_PROCESSEVENT, &aEvt );
 
     if( aEvt.TWMessage != MSG_NULL )
     {
@@ -354,8 +355,6 @@ bool ImpTwain::ImplHandleMsg( void* pMsg )
             break;
         }
     }
-    else
-        nRet = TWRC_NOTDSEVENT;
 
     return( TWRC_DSEVENT == nRet );
 }
