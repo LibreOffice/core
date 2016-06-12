@@ -80,8 +80,10 @@ sal_uInt16 ImpBitmap::ImplGetBitCount() const
         return 4;
     else if (nBitCount <= 8)
         return 8;
-    else
+    else if (nBitCount <= 24)
         return 24;
+    else
+        return 32;
 }
 
 BitmapBuffer* ImpBitmap::ImplAcquireBuffer( BitmapAccessMode nMode )
