@@ -105,6 +105,30 @@
       "revId": "a90edb718355c1fe4e9d606b0ddb5770ddef5699",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_54bfe0fa",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-06-12T11:17:39Z",
+      "side": 1,
+      "message": "Thanks Maxim. Dont think i would have ever found that. :D",
+      "parentUuid": "da7fb54a_11972a91",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 46
+      },
+      "revId": "a90edb718355c1fe4e9d606b0ddb5770ddef5699",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
