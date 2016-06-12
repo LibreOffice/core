@@ -33,6 +33,7 @@
 #include <ooo/vba/XExecutableDialog.hpp>
 #include <ooo/vba/excel/XlCalculation.hpp>
 #include <ooo/vba/excel/XlMousePointer.hpp>
+#include <ooo/vba/office/MsoShapeType.hpp>
 
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
@@ -58,6 +59,7 @@
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
 
+#include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>

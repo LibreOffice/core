@@ -18,6 +18,7 @@
  */
 #include <vbahelper/helperdecl.hxx>
 #include <ooo/vba/word/WdWindowState.hpp>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 
 #include "vbawindow.hxx"

@@ -18,6 +18,7 @@
  */
 #include "vbaview.hxx"
 #include <vbahelper/vbahelper.hxx>
+#include <basic/sberrors.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>

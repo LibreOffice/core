@@ -24,7 +24,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
-using namespace ::ooo::vba;
 
 SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< css::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext > const& xContext ) :
     VbaEventsHelperBase( aArgs, xContext )

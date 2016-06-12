@@ -18,9 +18,16 @@
  */
 #ifndef SC_VBA_PROPVALULE_HXX
 #define SC_VBA_PROPVALULE_HXX
-#include <ooo/vba/XPropValue.hpp>
-#include <cppuhelper/implbase.hxx>
 
+#include <exception>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cppuhelper/implbase.hxx>
+#include <ooo/vba/XPropValue.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
 
 typedef ::cppu::WeakImplHelper< ov::XPropValue > PropValueImpl_BASE;

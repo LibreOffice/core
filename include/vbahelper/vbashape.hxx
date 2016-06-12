@@ -19,16 +19,39 @@
 #ifndef INCLUDED_VBAHELPER_VBASHAPE_HXX
 #define INCLUDED_VBAHELPER_VBASHAPE_HXX
 
-#include <ooo/vba/office/MsoShapeType.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <ooo/vba/msforms/XShape.hpp>
-#include <ooo/vba/msforms/XLineFormat.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <exception>
+#include <memory>
 
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <ooo/vba/msforms/XShape.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <vbahelper/vbadllapi.h>
+#include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+    namespace drawing { class XShape; }
+    namespace drawing { class XShapes; }
+    namespace frame { class XModel; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace ooo { namespace vba {
+    class ShapeHelper;
+    class XHelperInterface;
+    namespace msforms { class XFillFormat; }
+    namespace msforms { class XLineFormat; }
+    namespace msforms { class XPictureFormat; }
+} }
 
 typedef  ::cppu::WeakImplHelper< ov::msforms::XShape, css::lang::XEventListener > ListeningShape;
 

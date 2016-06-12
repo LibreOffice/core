@@ -24,6 +24,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <unotools/eventcfg.hxx>
+#include <vbahelper/vbahelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

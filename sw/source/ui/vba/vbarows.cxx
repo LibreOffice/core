@@ -23,6 +23,7 @@
 #include <ooo/vba/word/WdRowAlignment.hpp>
 #include <ooo/vba/word/WdConstants.hpp>
 #include <ooo/vba/word/WdRulerStyle.hpp>
+#include <basic/sberrors.hxx>
 #include "wordvbahelper.hxx"
 #include "vbacolumns.hxx"
 #include "vbatablehelper.hxx"

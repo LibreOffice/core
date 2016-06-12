@@ -27,6 +27,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "vbacontrols.hxx"
 #include "vbacontrol.hxx"

@@ -28,9 +28,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <ooo/vba/office/MsoShapeType.hpp>
 #include <ooo/vba/word/WdRelativeHorizontalPosition.hpp>
 #include <ooo/vba/word/WdRelativeVerticalPosition.hpp>
 
+#include <basic/sberrors.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

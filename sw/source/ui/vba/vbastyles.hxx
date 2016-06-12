@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBASTYLES_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBASTYLES_HXX
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <ooo/vba/word/XStyles.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 

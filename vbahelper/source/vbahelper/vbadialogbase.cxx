@@ -18,6 +18,7 @@
  */
 #include <vbahelper/vbadialogbase.hxx>
 #include <vbahelper/vbahelper.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

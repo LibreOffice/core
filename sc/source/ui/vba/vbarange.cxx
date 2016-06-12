@@ -27,6 +27,7 @@
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
@@ -156,6 +157,7 @@
 #include "transobj.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
+#include <basic/sberrors.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/implbase.hxx>
 

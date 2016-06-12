@@ -18,6 +18,7 @@
  */
 #include "vbaparagraphformat.hxx"
 #include <vbahelper/vbahelper.hxx>
+#include <basic/sberrors.hxx>
 #include <tools/diagnose_ex.h>
 #include "wordvbahelper.hxx"
 #include <com/sun/star/style/LineSpacingMode.hpp>

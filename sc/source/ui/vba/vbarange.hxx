@@ -31,6 +31,7 @@
 
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
@@ -44,6 +45,7 @@
 #include "vbaformat.hxx"
 #include "address.hxx"
 #include <formula/grammar.hxx>
+#include <svl/itemset.hxx>
 
 class ScCellRangesBase;
 class ScCellRangeObj;

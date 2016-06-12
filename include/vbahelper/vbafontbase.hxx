@@ -19,9 +19,26 @@
 #ifndef INCLUDED_VBAHELPER_VBAFONTBASE_HXX
 #define INCLUDED_VBAHELPER_VBAFONTBASE_HXX
 
+#include <exception>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <ooo/vba/XFontBase.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <sal/types.h>
+#include <vbahelper/vbadllapi.h>
+#include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+    namespace container { class XIndexAccess; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace ooo { namespace vba {
+    class XHelperInterface;
+} }
 
 typedef  InheritedHelperInterfaceWeakImpl< ov::XFontBase > VbaFontBase_BASE;
 

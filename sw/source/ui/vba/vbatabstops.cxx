@@ -18,10 +18,12 @@
  */
 #include "vbatabstops.hxx"
 #include "vbatabstop.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <ooo/vba/word/WdTabLeader.hpp>
 #include <ooo/vba/word/WdTabAlignment.hpp>
+#include <basic/sberrors.hxx>
 #include <cppuhelper/implbase.hxx>
 
 using namespace ::ooo::vba;

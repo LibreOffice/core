@@ -18,6 +18,7 @@
  */
 #include "vbapagebreaks.hxx"
 #include "vbapagebreak.hxx"
+#include <basic/sberrors.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XWorksheet.hpp>
 using namespace ::com::sun::star;

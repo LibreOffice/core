@@ -19,6 +19,7 @@
 
 #include "excelvbahelper.hxx"
 
+#include <basic/basmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>

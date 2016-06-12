@@ -19,6 +19,7 @@
 #include "vbarow.hxx"
 #include <vbahelper/vbahelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <ooo/vba/word/WdRowHeightRule.hpp>

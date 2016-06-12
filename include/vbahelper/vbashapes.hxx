@@ -19,14 +19,36 @@
 #ifndef INCLUDED_VBAHELPER_VBASHAPES_HXX
 #define INCLUDED_VBAHELPER_VBASHAPES_HXX
 
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
+#include <exception>
+
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/script/BasicErrorException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
 #include <ooo/vba/msforms/XShapes.hpp>
-
-#include <vbahelper/vbahelperinterface.hxx>
-
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <vbahelper/vbadllapi.h>
+#include <vbahelper/vbahelper.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace container { class XEnumeration; }
+    namespace container { class XIndexAccess; }
+    namespace drawing { class XDrawPage; }
+    namespace drawing { class XShape; }
+    namespace drawing { class XShapes; }
+    namespace frame { class XModel; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace ooo { namespace vba {
+    class XHelperInterface;
+    namespace msforms { class XShapeRange; }
+} }
 
 typedef CollTestImplHelper< ov::msforms::XShapes > ScVbaShapes_BASE;
 

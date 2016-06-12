@@ -18,6 +18,7 @@
  */
 #include "vbastyles.hxx"
 #include "vbastyle.hxx"
+#include <basic/sberrors.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <ooo/vba/excel/XRange.hpp>
 

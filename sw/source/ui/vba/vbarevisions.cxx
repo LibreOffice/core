@@ -19,6 +19,7 @@
 #include "vbarevisions.hxx"
 #include "vbarevision.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 

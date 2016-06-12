@@ -18,11 +18,14 @@
  */
 #include <vbahelper/helperdecl.hxx>
 #include "vbaglobals.hxx"
+#include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <comphelper/unwrapargs.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include "vbaapplication.hxx"

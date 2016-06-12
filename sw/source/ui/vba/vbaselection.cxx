@@ -26,6 +26,7 @@
 #include <com/sun/star/text/XTextTableCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <basic/sberrors.hxx>
 #include <comphelper/string.hxx>
 #include <ooo/vba/word/WdUnits.hpp>
 #include <ooo/vba/word/WdMovementType.hpp>
