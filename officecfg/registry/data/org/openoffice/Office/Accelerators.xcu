@@ -349,6 +349,7 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RepeatSearch</value>
+            <value xml:lang="es">.uno:Save</value>
           </prop>
         </node>
       </node>
@@ -877,6 +878,7 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RepeatSearch</value>
+            <value xml:lang="es">.uno:Save</value>
             <value xml:lang="fr">.uno:Bold</value>
           </prop>
         </node>
@@ -2260,6 +2262,7 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RepeatSearch</value>
+            <value xml:lang="es">.uno:Save</value>
             <value xml:lang="fr">.uno:Bold</value>
           </prop>
         </node>
@@ -3653,6 +3656,7 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RepeatSearch</value>
+            <value xml:lang="es">.uno:Save</value>
             <value xml:lang="fr">.uno:Bold</value>
           </prop>
         </node>
@@ -4426,6 +4430,7 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RepeatSearch</value>
+            <value xml:lang="es">.uno:Save</value>
             <value xml:lang="fr">.uno:Bold</value>
           </prop>
         </node>
@@ -5199,6 +5204,7 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RepeatSearch</value>
+            <value xml:lang="es">.uno:Save</value>
             <value xml:lang="fr">.uno:Bold</value>
           </prop>
         </node>
@@ -5984,6 +5990,7 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RepeatSearch</value>
+            <value xml:lang="es">.uno:Save</value>
             <value xml:lang="fr">.uno:Bold</value>
           </prop>
         </node>
@@ -6775,6 +6782,7 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RepeatSearch</value>
+            <value xml:lang="es">.uno:Save</value>
             <value xml:lang="fr">.uno:Bold</value>
           </prop>
         </node>
