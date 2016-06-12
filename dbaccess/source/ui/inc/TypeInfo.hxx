@@ -114,7 +114,7 @@ const sal_uInt16 TYPE_BIT       = 31;
         @param  _nPrecision     the precision
         @param  _nScale         the scale
         @param  _bAutoIncrement if it is a auto increment
-        @param  _brForceToType  true when type was found which has some differenes
+        @param  _brForceToType  true when type was found which has some differences
     */
     TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,

@@ -236,7 +236,7 @@ public class utils {
     }
 
     /**
-     * This method returns the temp dicrectory of the user.
+     * This method returns the temp directory of the user.
      * Since Java 1.4 it is not possible to read environment variables. To workaround
      * this, the Java parameter -D could be used.
      */

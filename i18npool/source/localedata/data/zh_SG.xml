@@ -217,7 +217,7 @@
       <CurrencyID>SGD</CurrencyID>
       <CurrencySymbol>S$</CurrencySymbol>
       <BankSymbol>SGD</BankSymbol>
-      <CurrencyName>Singapore Dollor</CurrencyName>
+      <CurrencyName>Singapore Dollar</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
     <!--more currency should be put here -->

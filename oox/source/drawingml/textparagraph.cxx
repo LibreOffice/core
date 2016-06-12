@@ -129,7 +129,7 @@ void TextParagraph::insertAt(
             xProps->setPropertyValue( sNumberingLevel, Any( static_cast< sal_Int16 >( -1 ) ) );
         }
 
-// FIXME this is causing a lot of dispruption (ie does not work). I wonder what to do -- Hub
+// FIXME this is causing a lot of disruption (ie does not work). I wonder what to do -- Hub
 //          Reference< XTextRange > xEnd( xAt, UNO_QUERY );
 //      Reference< XPropertySet > xProps2( xEnd, UNO_QUERY );
 //          mpEndProperties->pushToPropSet( xProps2 );

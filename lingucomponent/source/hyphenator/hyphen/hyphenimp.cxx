@@ -282,7 +282,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         int nHyphenationPosAlt = -1;
         int nHyphenationPosAltHyph = -1;
 
-        // if this dictinary has not been loaded yet do that
+        // if this dictionary has not been loaded yet do that
         if (!aDicts[k].aPtr)
         {
             OUString DictFN = aDicts[k].aName + ".dic";
@@ -467,7 +467,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 // handle shortening
                 sal_Int16 nPos = (sal_Int16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
                 nHyphenationPosAltHyph : nHyphenationPos);
-                // dicretionary hyphenation
+                // discretionary hyphenation
                 xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LinguLocaleToLanguage( aLocale ), nPos,
                     aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
                     (sal_Int16) nHyphenationPosAltHyph);
@@ -563,7 +563,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     if (k != -1)
     {
         HyphenDict *dict = nullptr;
-        // if this dictioanry has not been loaded yet do that
+        // if this dictionary has not been loaded yet do that
         if (!aDicts[k].aPtr)
         {
             OUString DictFN = aDicts[k].aName + ".dic";

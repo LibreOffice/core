@@ -147,7 +147,7 @@ sal_uInt32 FrameContainer::getCount() const
 /**-***************************************************************************************************************
     @short      returns one item of this container
     @deprecated This value can't be guaranteed for multithreading environments.
-                So it will be marked as deprecatedf and should be replaced by "getAllElements()".
+                So it will be marked as deprecated and should be replaced by "getAllElements()".
 
     @param      nIndex
                     a value between 0 and (getCount()-1) to address one container item

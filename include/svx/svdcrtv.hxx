@@ -144,7 +144,7 @@ public:
     // Default = 5 Pixel
     sal_uInt16 GetAutoCloseDistPix() const { return sal_uInt16(nAutoCloseDistPix); }
 
-    // Setting for the minimum distantce in pixels between 2 bezier points when
+    // Setting for the minimum distance in pixels between 2 bezier points when
     // creating a freehand line.
     // Default = 10 Pixel
     sal_uInt16 GetFreeHandMinDistPix() const { return sal_uInt16(nFreeHandMinDistPix); }

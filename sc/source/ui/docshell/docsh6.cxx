@@ -193,7 +193,7 @@ SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
     return static_cast<SfxStyleSheetBasePool*>(aDocument.GetStyleSheetPool());
 }
 
-//  nach dem Laden von Vorlagen aus einem anderen Dokment (LoadStyles, Insert)
+//  nach dem Laden von Vorlagen aus einem anderen Dokument (LoadStyles, Insert)
 //  muessen die SetItems (ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET) auf den richtigen
 //  Pool umgesetzt werden, bevor der Quell-Pool geloescht wird.
 

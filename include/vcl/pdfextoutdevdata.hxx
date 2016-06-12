@@ -211,7 +211,7 @@ public:
     */
     sal_Int32 CreateNamedDest( const OUString& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr = -1 );
 
-    /** registers a destination for which a destinatin ID needs to be known immediately, instead of later on setting it via
+    /** registers a destination for which a destination ID needs to be known immediately, instead of later on setting it via
         SetLinkDest.
 
         This is used in contexts where a destination is referenced by means other than a link.

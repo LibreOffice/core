@@ -75,7 +75,7 @@ public:
     // returns false for non cached directory
     // a cached but empty directory will return true but not append anything
     bool listDirectory( const OString& rDir, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
-    // returns true for directoris that contain only user overridden fonts
+    // returns true for directories that contain only user overridden fonts
     bool scanAdditionalFiles( const OString& rDir );
 
     void flush();

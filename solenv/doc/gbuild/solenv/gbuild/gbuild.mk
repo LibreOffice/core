@@ -23,7 +23,7 @@ using namespace gb::types;
 static const Command SHELL;
 
 
-// gbuild root directorys
+// gbuild root directories
 static Path SRCDIR;
 static Path WORKDIR;
 
