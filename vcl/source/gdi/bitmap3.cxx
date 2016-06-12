@@ -332,6 +332,15 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
+        case BMP_CONVERSION_32BIT:
+        {
+            if( nBitCount < 32 )
+                bRet = ImplConvertUp( 32 );
+            else
+                bRet = true;
+        }
+        break;
+
         case BMP_CONVERSION_GHOSTED:
             bRet = ImplConvertGhosted();
         break;
