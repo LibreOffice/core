@@ -159,7 +159,7 @@ sal_Int32 BrowseBox::GetAccessibleControlCount() const
 
 Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 )
 {
-    DBG_ASSERT( false, "BrowseBox::CreateAccessibleControl: to be overwritten!" );
+    SAL_WARN( "svtools", "BrowseBox::CreateAccessibleControl: to be overwritten!" );
     return nullptr;
 }
 
