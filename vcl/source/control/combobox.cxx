@@ -1330,7 +1330,7 @@ void ComboBox::EnableUserDraw( bool bUserDraw )
 
 void ComboBox::DrawEntry(const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos)
 {
-    DBG_ASSERT(rEvt.GetWindow() == m_pImpl->m_pImplLB->GetMainWindow(), "DrawEntry?!");
+    SAL_WARN_IF(rEvt.GetWindow() != m_pImpl->m_pImplLB->GetMainWindow(), "vcl", "DrawEntry?!");
     m_pImpl->m_pImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), bDrawImage, bDrawText, bDrawTextAtImagePos);
 }
 

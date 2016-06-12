@@ -392,7 +392,7 @@ void AquaSalMenu::unsetMainMenu()
 
 void AquaSalMenu::setMainMenu()
 {
-    DBG_ASSERT( mbMenuBar, "setMainMenu on non menubar" );
+    SAL_WARN_IF( !mbMenuBar, "vcl", "setMainMenu on non menubar" );
     if( mbMenuBar )
     {
         if( pCurrentMenuBar != this )
@@ -718,7 +718,7 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
     else // not even a code ? nonsense -> ignore
         return;
 
-    DBG_ASSERT( nCommandKey, "unmapped accelerator key" );
+    SAL_WARN_IF( !nCommandKey, "vcl", "unmapped accelerator key" );
 
     nModifier=rKeyCode.GetModifier();
 
@@ -888,7 +888,7 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
             [pString release];
         }
         // anything but a separator should set a menu to dispatch to
-        DBG_ASSERT( mpVCLMenu, "no menu" );
+        SAL_WARN_IF( !mpVCLMenu, "vcl", "no menu" );
     }
 }
 

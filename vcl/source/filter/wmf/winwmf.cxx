@@ -537,7 +537,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             if ( nOptions & ETO_RTLREADING )
                 nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
             pOut->SetTextLayoutMode( nTextLayoutMode );
-            DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
+            SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl", "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
 
             // output only makes sense if the text contains characters
             if( nLen )

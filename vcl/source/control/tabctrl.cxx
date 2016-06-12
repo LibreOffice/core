@@ -1624,8 +1624,8 @@ Size TabControl::GetTabPageSizePixel() const
 void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
                              sal_uInt16 nPos )
 {
-    DBG_ASSERT( nPageId, "TabControl::InsertPage(): PageId == 0" );
-    DBG_ASSERT( GetPagePos( nPageId ) == TAB_PAGE_NOTFOUND,
+    SAL_WARN_IF( !nPageId, "vcl", "TabControl::InsertPage(): PageId == 0" );
+    SAL_WARN_IF( GetPagePos( nPageId ) != TAB_PAGE_NOTFOUND, "vcl",
                 "TabControl::InsertPage(): PageId already exists" );
 
     // insert new page item
@@ -1889,7 +1889,7 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
     {
         if ( pTabPage )
         {
-            DBG_ASSERT( !pTabPage->IsVisible() || isLayoutEnabled(pTabPage),
+            SAL_WARN_IF( pTabPage->IsVisible() && !isLayoutEnabled(pTabPage), "vcl",
                 "TabControl::SetTabPage() - Non-Layout Enabled Page is visible" );
 
             if ( IsDefaultSize() )

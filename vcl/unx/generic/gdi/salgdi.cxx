@@ -111,7 +111,7 @@ void X11SalGraphics::freeResources()
 {
     Display *pDisplay = GetXDisplay();
 
-    DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
+    SAL_WARN_IF( pPaintRegion_, "vcl", "pPaintRegion_" );
     if( mpClipRegion )
     {
         XDestroyRegion( mpClipRegion );

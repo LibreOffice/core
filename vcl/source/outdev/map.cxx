@@ -1518,8 +1518,8 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
 #define ENTER3( eUnitSource, eUnitDest )                                \
     long nNumerator      = 1;       \
     long nDenominator    = 1;       \
-    DBG_ASSERT( eUnitSource < s_ImplArySize, "Invalid source map unit");    \
-    DBG_ASSERT( eUnitDest < s_ImplArySize, "Invalid destination map unit"); \
+    SAL_WARN_IF( eUnitSource >= s_ImplArySize, "vcl", "Invalid source map unit");    \
+    SAL_WARN_IF( eUnitDest >= s_ImplArySize, "vcl", "Invalid destination map unit"); \
     if( (eUnitSource < s_ImplArySize) && (eUnitDest < s_ImplArySize) )  \
     {   \
         nNumerator   = aImplNumeratorAry[eUnitSource] *             \

@@ -37,7 +37,7 @@ GfxLink::GfxLink()
 
 GfxLink::GfxLink( std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkType nType )
 {
-    DBG_ASSERT( pBuf != nullptr && nSize,
+    SAL_WARN_IF( pBuf == nullptr || !nSize, "vcl",
                 "GfxLink::GfxLink(): empty/NULL buffer given" );
 
     meType = nType;

@@ -211,7 +211,7 @@ void Window::ImplToBottomChild()
 
 void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
 {
-    DBG_ASSERT( ImplIsOverlapWindow(), "Window::ImplCalcToTop(): Is not a OverlapWindow" );
+    SAL_WARN_IF( !ImplIsOverlapWindow(), "vcl", "Window::ImplCalcToTop(): Is not a OverlapWindow" );
 
     if ( !mpWindowImpl->mbFrame )
     {
@@ -238,7 +238,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
 
 void Window::ImplToTop( ToTopFlags nFlags )
 {
-    DBG_ASSERT( ImplIsOverlapWindow(), "Window::ImplToTop(): Is not a OverlapWindow" );
+    SAL_WARN_IF( !ImplIsOverlapWindow(), "vcl", "Window::ImplToTop(): Is not a OverlapWindow" );
 
     if ( mpWindowImpl->mbFrame )
     {
@@ -463,7 +463,7 @@ void Window::SetZOrder( vcl::Window* pRefWindow, ZOrderFlags nFlags )
     if (!pRefWindow || pRefWindow == this || mpWindowImpl->mbFrame)
         return;
 
-    DBG_ASSERT( pRefWindow->mpWindowImpl->mpParent == mpWindowImpl->mpParent, "Window::SetZOrder() - pRefWindow has other parent" );
+    SAL_WARN_IF( pRefWindow->mpWindowImpl->mpParent != mpWindowImpl->mpParent, "vcl", "Window::SetZOrder() - pRefWindow has other parent" );
     if ( nFlags & ZOrderFlags::Before )
     {
         if ( pRefWindow->mpWindowImpl->mpPrev.get() == this )
@@ -842,8 +842,8 @@ static SystemWindow *ImplGetLastSystemWindow( vcl::Window *pWin )
 
 void Window::SetParent( vcl::Window* pNewParent )
 {
-    DBG_ASSERT( pNewParent, "Window::SetParent(): pParent == NULL" );
-    DBG_ASSERT( pNewParent != this, "someone tried to reparent a window to itself" );
+    SAL_WARN_IF( !pNewParent, "vcl", "Window::SetParent(): pParent == NULL" );
+    SAL_WARN_IF( pNewParent == this, "vcl", "someone tried to reparent a window to itself" );
 
     if( pNewParent == this )
         return;
@@ -1164,8 +1164,8 @@ void Window::ImplSetFrameParent( const vcl::Window* pParent )
         // and reparent them
         if( ImplIsRealParentPath( pFrameWindow ) )
         {
-            DBG_ASSERT( mpWindowImpl->mpFrame != pFrameWindow->mpWindowImpl->mpFrame, "SetFrameParent to own" );
-            DBG_ASSERT( mpWindowImpl->mpFrame, "no frame" );
+            SAL_WARN_IF( mpWindowImpl->mpFrame == pFrameWindow->mpWindowImpl->mpFrame, "vcl", "SetFrameParent to own" );
+            SAL_WARN_IF( !mpWindowImpl->mpFrame, "vcl", "no frame" );
             SalFrame* pParentFrame = pParent ? pParent->mpWindowImpl->mpFrame : nullptr;
             pFrameWindow->mpWindowImpl->mpFrame->SetParent( pParentFrame );
         }

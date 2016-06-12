@@ -1120,7 +1120,7 @@ PolyArgs::~PolyArgs()
 
 void PolyArgs::AddPoint( long nX, long nY, PolyFlags aFlag )
 {
-    DBG_ASSERT( (mnPoints < mnMaxPoints), "FTGlyphOutline: AddPoint overflow!" );
+    SAL_WARN_IF( (mnPoints >= mnMaxPoints), "vcl", "FTGlyphOutline: AddPoint overflow!" );
     if( mnPoints >= mnMaxPoints )
         return;
 
@@ -1138,11 +1138,11 @@ void PolyArgs::ClosePolygon()
 
     // freetype seems to always close the polygon with an ON_CURVE point
     // PolyPoly wants to close the polygon itself => remove last point
-    DBG_ASSERT( (mnPoints >= 2), "FTGlyphOutline: PolyFinishNum failed!" );
+    SAL_WARN_IF( (mnPoints < 2), "vcl", "FTGlyphOutline: PolyFinishNum failed!" );
     --mnPoints;
-    DBG_ASSERT( (mpPointAry[0]==mpPointAry[mnPoints]), "FTGlyphOutline: PolyFinishEq failed!" );
-    DBG_ASSERT( (mpFlagAry[0]==POLY_NORMAL), "FTGlyphOutline: PolyFinishFE failed!" );
-    DBG_ASSERT( (mpFlagAry[mnPoints]==POLY_NORMAL), "FTGlyphOutline: PolyFinishFS failed!" );
+    SAL_WARN_IF( (mpPointAry[0]!=mpPointAry[mnPoints]), "vcl", "FTGlyphOutline: PolyFinishEq failed!" );
+    SAL_WARN_IF( (mpFlagAry[0]!=POLY_NORMAL), "vcl", "FTGlyphOutline: PolyFinishFE failed!" );
+    SAL_WARN_IF( (mpFlagAry[mnPoints]!=POLY_NORMAL), "vcl", "FTGlyphOutline: PolyFinishFS failed!" );
 
     tools::Polygon aPoly( mnPoints, mpPointAry, (bHasOffline ? mpFlagAry : nullptr) );
 
@@ -1521,7 +1521,7 @@ void ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
                     break;
             }
 
-            DBG_ASSERT( (it == aSubstVector.end()), "lookup<->coverage table mismatch" );
+            SAL_WARN_IF( (it != aSubstVector.end()), "vcl", "lookup<->coverage table mismatch" );
             // now apply the glyph substitutions that have been collected in this subtable
             for( it = aSubstVector.begin(); it != aSubstVector.end(); ++it )
                 maGlyphSubstitution[ (*it).first ] =  (*it).second;

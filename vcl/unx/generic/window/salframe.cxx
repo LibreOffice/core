@@ -375,7 +375,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
     }
     else if( (nSalFrameStyle & SalFrameStyleFlags::SYSTEMCHILD ) )
     {
-        DBG_ASSERT( mpParent, "SalFrameStyleFlags::SYSTEMCHILD window without parent" );
+        SAL_WARN_IF( !mpParent, "vcl", "SalFrameStyleFlags::SYSTEMCHILD window without parent" );
         if( mpParent )
         {
             aFrameParent = mpParent->mhWindow;
@@ -961,7 +961,7 @@ SalGraphics *X11SalFrame::AcquireGraphics()
 
 void X11SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
-    DBG_ASSERT( pGraphics == pGraphics_, "SalFrame::ReleaseGraphics pGraphics!=pGraphics_" );
+    SAL_WARN_IF( pGraphics != pGraphics_, "vcl", "SalFrame::ReleaseGraphics pGraphics!=pGraphics_" );
 
     if( pGraphics != pGraphics_ )
         return;

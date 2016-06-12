@@ -1340,7 +1340,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     bool bOutput = IsOutputEnabled();
     EnableOutput();
 
-    DBG_ASSERT( GetMapMode().GetMapUnit() == MAP_PIXEL, "MapMode must be PIXEL based" );
+    SAL_WARN_IF( GetMapMode().GetMapUnit() != MAP_PIXEL, "vcl", "MapMode must be PIXEL based" );
     if ( GetMapMode().GetMapUnit() != MAP_PIXEL )
         return;
 
@@ -1453,8 +1453,8 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
 {
     // FIXME: scaling: currently this is for pixel copying only
 
-    DBG_ASSERT( ! pDev->HasMirroredGraphics(), "PaintToDevice to mirroring graphics" );
-    DBG_ASSERT( ! pDev->IsRTLEnabled(), "PaintToDevice to mirroring device" );
+    SAL_WARN_IF(  pDev->HasMirroredGraphics(), "vcl", "PaintToDevice to mirroring graphics" );
+    SAL_WARN_IF(  pDev->IsRTLEnabled(), "vcl", "PaintToDevice to mirroring device" );
 
     vcl::Window* pRealParent = nullptr;
     if( ! mpWindowImpl->mbVisible )

@@ -107,7 +107,7 @@ AquaSalFrame::~AquaSalFrame()
     pSalData->maFrameCheck.erase( this );
     pSalData->maPresentationFrames.remove( this );
 
-    DBG_ASSERT( this != s_pCaptureFrame, "capture frame destroyed" );
+    SAL_WARN_IF( this == s_pCaptureFrame, "vcl", "capture frame destroyed" );
     if( this == s_pCaptureFrame )
         s_pCaptureFrame = nullptr;
 
@@ -277,7 +277,7 @@ SalGraphics* AquaSalFrame::AcquireGraphics()
 void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
     (void)pGraphics;
-    DBG_ASSERT( pGraphics == mpGraphics, "graphics released on wrong frame" );
+    SAL_WARN_IF( pGraphics != mpGraphics, "vcl", "graphics released on wrong frame" );
     mbGraphics = FALSE;
 }
 
@@ -1470,7 +1470,7 @@ void AquaSalFrame::SetMenu( SalMenu* pSalMenu )
     SalData::ensureThreadAutoreleasePool();
 
     AquaSalMenu* pMenu = static_cast<AquaSalMenu*>(pSalMenu);
-    DBG_ASSERT( ! pMenu || pMenu->mbMenuBar, "setting non menubar on frame" );
+    SAL_WARN_IF( pMenu && !pMenu->mbMenuBar, "vcl", "setting non menubar on frame" );
     mpMenu = pMenu;
     if( mpMenu  )
         mpMenu->setMainMenu();

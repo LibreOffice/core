@@ -128,7 +128,7 @@ JobSetup::JobSetup()
 
 JobSetup::JobSetup( const JobSetup& rJobSetup )
 {
-    DBG_ASSERT( !rJobSetup.mpData || (rJobSetup.mpData->mnRefCount < 0xFFFE), "JobSetup: RefCount overflow" );
+    SAL_WARN_IF( rJobSetup.mpData && (rJobSetup.mpData->mnRefCount >= 0xFFFE), "vcl", "JobSetup: RefCount overflow" );
 
     mpData = rJobSetup.mpData;
     if ( mpData )
@@ -165,7 +165,7 @@ OUString JobSetup::GetDriverName() const
 
 JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 {
-    DBG_ASSERT( !rJobSetup.mpData || (rJobSetup.mpData->mnRefCount) < 0xFFFE, "JobSetup: RefCount overflow" );
+    SAL_WARN_IF( rJobSetup.mpData && (rJobSetup.mpData->mnRefCount) >= 0xFFFE, "vcl", "JobSetup: RefCount overflow" );
 
     // Increment refcount first, so that we can assign to ourselves
     if ( rJobSetup.mpData )
@@ -297,7 +297,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                         else
                             pJobData->maValueMap[ aKey ] = aValue;
                     }
-                    DBG_ASSERT( rIStream.Tell() == nFirstPos+nRead, "corrupted job setup" );
+                    SAL_WARN_IF( rIStream.Tell() != nFirstPos+nRead, "vcl", "corrupted job setup" );
                     // ensure correct stream position
                     rIStream.Seek(nFirstPos + nRead);
                 }

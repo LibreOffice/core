@@ -343,9 +343,9 @@ ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCalle
 
 void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
 {
-    DBG_ASSERT( nUserEvent->mpWindow.get() == this,
+    SAL_WARN_IF( nUserEvent->mpWindow.get() != this, "vcl",
                 "Window::RemoveUserEvent(): Event doesn't send to this window or is already removed" );
-    DBG_ASSERT( nUserEvent->mbCall,
+    SAL_WARN_IF( !nUserEvent->mbCall, "vcl",
                 "Window::RemoveUserEvent(): Event is already removed" );
 
     if ( nUserEvent->mpWindow )

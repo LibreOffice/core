@@ -245,9 +245,9 @@ void Window::dispose()
     if ( pSVData->maHelpData.mpHelpWin && (pSVData->maHelpData.mpHelpWin->GetParent() == this) )
         ImplDestroyHelpWindow( true );
 
-    DBG_ASSERT( pSVData->maWinData.mpTrackWin.get() != this,
+    SAL_WARN_IF( pSVData->maWinData.mpTrackWin.get() == this, "vcl",
                 "Window::~Window(): Window is in TrackingMode" );
-    DBG_ASSERT(!IsMouseCaptured(),
+    SAL_WARN_IF(IsMouseCaptured(), "vcl",
                 "Window::~Window(): Window has the mouse captured");
 
     // due to old compatibility
@@ -523,7 +523,7 @@ void Window::dispose()
 
             auto myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
                 pParentWinData->maTopWindowChildren.end(), VclPtr<vcl::Window>(this) );
-            DBG_ASSERT( myPos != pParentWinData->maTopWindowChildren.end(), "Window::~Window: inconsistency in top window chain!" );
+            SAL_WARN_IF( myPos == pParentWinData->maTopWindowChildren.end(), "vcl", "Window::~Window: inconsistency in top window chain!" );
             if ( myPos != pParentWinData->maTopWindowChildren.end() )
                 pParentWinData->maTopWindowChildren.erase( myPos );
         }
@@ -894,7 +894,7 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
 
 void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
-    DBG_ASSERT( mpWindowImpl->mbFrame || pParent || GetType() == WINDOW_FIXEDIMAGE,
+    SAL_WARN_IF( !mpWindowImpl->mbFrame && !pParent && GetType() != WINDOW_FIXEDIMAGE, "vcl",
         "Window::Window(): pParent == NULL" );
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -2359,7 +2359,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 pSVData->mpIntroWindow->Hide();
             }
 
-            //DBG_ASSERT( !mpWindowImpl->mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
+            //SAL_WARN_IF( mpWindowImpl->mbSuppressAccessibilityEvents, "vcl", "Window::Show() - Frame reactivated");
             mpWindowImpl->mbSuppressAccessibilityEvents = false;
 
             mpWindowImpl->mbPaintFrame = true;
@@ -3189,7 +3189,7 @@ Reference< css::awt::XWindowPeer > Window::GetComponentInterface( bool bCreate )
 void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > xIFace )
 {
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
-    DBG_ASSERT( pWrapper, "SetComponentInterface: No Wrapper!" );
+    SAL_WARN_IF( !pWrapper, "vcl", "SetComponentInterface: No Wrapper!" );
     if ( pWrapper )
         pWrapper->SetWindowInterface( this, xIFace );
 }

@@ -486,13 +486,13 @@ bool Animation::Insert( const AnimationBitmap& rStepBmp )
 
 const AnimationBitmap& Animation::Get( sal_uInt16 nAnimation ) const
 {
-    DBG_ASSERT( ( nAnimation < maList.size() ), "No object at this position" );
+    SAL_WARN_IF( ( nAnimation >= maList.size() ), "vcl", "No object at this position" );
     return *maList[ nAnimation ];
 }
 
 void Animation::Replace( const AnimationBitmap& rNewAnimationBitmap, sal_uInt16 nAnimation )
 {
-    DBG_ASSERT( ( nAnimation < maList.size() ), "No object at this position" );
+    SAL_WARN_IF( ( nAnimation >= maList.size() ), "vcl", "No object at this position" );
 
     delete maList[ nAnimation ];
     maList[ nAnimation ] = new AnimationBitmap( rNewAnimationBitmap );
@@ -528,7 +528,7 @@ void Animation::ResetLoopCount()
 
 bool Animation::Convert( BmpConversion eConversion )
 {
-    DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
+    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
 
     bool bRet;
 
@@ -549,7 +549,7 @@ bool Animation::Convert( BmpConversion eConversion )
 
 bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
 {
-    DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
+    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
 
     bool bRet;
 
@@ -570,7 +570,7 @@ bool Animation::ReduceColors( sal_uInt16 nNewColorCount )
 
 bool Animation::Invert()
 {
-    DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
+    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
 
     bool bRet;
 
@@ -591,7 +591,7 @@ bool Animation::Invert()
 
 bool Animation::Mirror( BmpMirrorFlags nMirrorFlags )
 {
-    DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
+    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
 
     bool    bRet;
 
@@ -627,7 +627,7 @@ bool Animation::Adjust( short nLuminancePercent, short nContrastPercent,
              short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
              double fGamma, bool bInvert )
 {
-    DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
+    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
 
     bool bRet;
 
@@ -658,7 +658,7 @@ bool Animation::Adjust( short nLuminancePercent, short nContrastPercent,
 
 bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
 {
-    DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
+    SAL_WARN_IF( IsInAnimation(), "vcl", "Animation modified while it is animated" );
 
     bool bRet;
 

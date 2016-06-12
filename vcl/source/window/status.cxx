@@ -900,8 +900,8 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
                             StatusBarItemBits nBits,
                             long nOffset, sal_uInt16 nPos )
 {
-    DBG_ASSERT( nItemId, "StatusBar::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == STATUSBAR_ITEM_NOTFOUND,
+    SAL_WARN_IF( !nItemId, "vcl", "StatusBar::InsertItem(): ItemId == 0" );
+    SAL_WARN_IF( GetItemPos( nItemId ) != STATUSBAR_ITEM_NOTFOUND, "vcl",
                 "StatusBar::InsertItem(): ItemId already exists" );
 
     // default: IN and CENTER
@@ -1334,7 +1334,7 @@ OString StatusBar::GetHelpId( sal_uInt16 nItemId ) const
 
 void StatusBar::StartProgressMode( const OUString& rText )
 {
-    DBG_ASSERT( !mbProgressMode, "StatusBar::StartProgressMode(): progress mode is active" );
+    SAL_WARN_IF( mbProgressMode, "vcl", "StatusBar::StartProgressMode(): progress mode is active" );
 
     mbProgressMode  = true;
     mnPercent       = 0;
@@ -1354,7 +1354,7 @@ void StatusBar::StartProgressMode( const OUString& rText )
 
 void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
 {
-    DBG_ASSERT( mbProgressMode, "StatusBar::SetProgressValue(): no progress mode" );
+    SAL_WARN_IF( !mbProgressMode, "vcl", "StatusBar::SetProgressValue(): no progress mode" );
     SAL_WARN_IF( nNewPercent > 100, "vcl", "StatusBar::SetProgressValue(): nPercent > 100" );
 
     if ( mbProgressMode
@@ -1370,7 +1370,7 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
 
 void StatusBar::EndProgressMode()
 {
-    DBG_ASSERT( mbProgressMode, "StatusBar::EndProgressMode(): no progress mode" );
+    SAL_WARN_IF( !mbProgressMode, "vcl", "StatusBar::EndProgressMode(): no progress mode" );
 
     mbProgressMode = false;
     maPrgsTxt.clear();

@@ -523,7 +523,7 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
 
 void RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, LineType eLineType)
 {
-    DBG_ASSERT( mpFirstBand != nullptr, "RegionBand::InsertPoint - no bands available!" );
+    SAL_WARN_IF( mpFirstBand == nullptr, "vcl", "RegionBand::InsertPoint - no bands available!" );
 
     if ( rPoint.Y() == mpLastCheckedBand->mnYTop )
     {
@@ -636,7 +636,7 @@ bool RegionBand::OptimizeBandList()
     pBand = mpFirstBand;
     while ( pBand )
     {
-        DBG_ASSERT( pBand->mpFirstSep != nullptr, "Exiting RegionBand::OptimizeBandList(): empty band in region!" );
+        SAL_WARN_IF( pBand->mpFirstSep == nullptr, "vcl", "Exiting RegionBand::OptimizeBandList(): empty band in region!" );
 
         if ( pBand->mnYBottom < pBand->mnYTop )
             OSL_ENSURE(false, "RegionBand::OptimizeBandList(): YBottomBoundary < YTopBoundary" );
@@ -867,8 +867,8 @@ bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition)
 
 void RegionBand::Union(long nLeft, long nTop, long nRight, long nBottom)
 {
-    DBG_ASSERT( nLeft <= nRight, "RegionBand::Union() - nLeft > nRight" );
-    DBG_ASSERT( nTop <= nBottom, "RegionBand::Union() - nTop > nBottom" );
+    SAL_WARN_IF( nLeft > nRight, "vcl", "RegionBand::Union() - nLeft > nRight" );
+    SAL_WARN_IF( nTop > nBottom, "vcl", "RegionBand::Union() - nTop > nBottom" );
 
     // process union
     ImplRegionBand* pBand = mpFirstBand;
@@ -963,8 +963,8 @@ void RegionBand::Union(const RegionBand& rSource)
 
 void RegionBand::Exclude(long nLeft, long nTop, long nRight, long nBottom)
 {
-    DBG_ASSERT( nLeft <= nRight, "RegionBand::Exclude() - nLeft > nRight" );
-    DBG_ASSERT( nTop <= nBottom, "RegionBand::Exclude() - nTop > nBottom" );
+    SAL_WARN_IF( nLeft > nRight, "vcl", "RegionBand::Exclude() - nLeft > nRight" );
+    SAL_WARN_IF( nTop > nBottom, "vcl", "RegionBand::Exclude() - nTop > nBottom" );
 
     // process exclude
     ImplRegionBand* pBand = mpFirstBand;
@@ -1004,8 +1004,8 @@ void RegionBand::Exclude(long nLeft, long nTop, long nRight, long nBottom)
 
 void RegionBand::XOr(long nLeft, long nTop, long nRight, long nBottom)
 {
-    DBG_ASSERT( nLeft <= nRight, "RegionBand::Exclude() - nLeft > nRight" );
-    DBG_ASSERT( nTop <= nBottom, "RegionBand::Exclude() - nTop > nBottom" );
+    SAL_WARN_IF( nLeft > nRight, "vcl", "RegionBand::Exclude() - nLeft > nRight" );
+    SAL_WARN_IF( nTop > nBottom, "vcl", "RegionBand::Exclude() - nTop > nBottom" );
 
     // process xor
     ImplRegionBand* pBand = mpFirstBand;

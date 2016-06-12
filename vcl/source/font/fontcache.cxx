@@ -137,7 +137,7 @@ LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection* pFo
     {
         // find the best matching logical font family and update font selector accordingly
         pFontFamily = pFontList->FindFontFamily( aFontSelData );
-        DBG_ASSERT( (pFontFamily != nullptr), "ImplFontCache::Get() No logical font found!" );
+        SAL_WARN_IF( (pFontFamily == nullptr), "vcl", "ImplFontCache::Get() No logical font found!" );
         if( pFontFamily )
             aFontSelData.maSearchName = pFontFamily->GetSearchName();
 

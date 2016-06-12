@@ -493,7 +493,7 @@ bool Bitmap::ImplMakeMonoDither()
 
 bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 {
-    DBG_ASSERT( nGreys == 16 || nGreys == 256, "Only 16 or 256 greyscales are supported!" );
+    SAL_WARN_IF( nGreys != 16 && nGreys != 256, "vcl", "Only 16 or 256 greyscales are supported!" );
 
     BitmapReadAccess* pReadAcc = AcquireReadAccess();
     bool bRet = false;
@@ -605,7 +605,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 
 bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color* pExtColor)
 {
-    DBG_ASSERT( nBitCount > GetBitCount(), "New BitCount must be greater!" );
+    SAL_WARN_IF( nBitCount <= GetBitCount(), "vcl", "New BitCount must be greater!" );
 
     Bitmap::ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
@@ -687,7 +687,7 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color* pExtColor)
 
 bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
 {
-    DBG_ASSERT(nBitCount <= GetBitCount(), "New BitCount must be lower ( or equal when pExtColor is set )!");
+    SAL_WARN_IF(nBitCount > GetBitCount(), "vcl", "New BitCount must be lower ( or equal when pExtColor is set )!");
 
     Bitmap::ScopedReadAccess pReadAcc(*this);
     bool bRet = false;

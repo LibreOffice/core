@@ -743,7 +743,7 @@ long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
         else
             rPos = nEntry;
 
-        DBG_ASSERT( nIndex != -1, "found index for point, but relative index failed" );
+        SAL_WARN_IF( nIndex == -1, "vcl", "found index for point, but relative index failed" );
     }
 
     // Get line relative index

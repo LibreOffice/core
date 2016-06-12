@@ -718,7 +718,7 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
-    DBG_ASSERT( !mrParent.isPrinter(), "No transparency print possible!" );
+    SAL_WARN_IF( mrParent.isPrinter(), "vcl", "No transparency print possible!" );
     bool bTryDirectPaint(!mrParent.isPrinter() && !mbXORMode);
 
     // try to draw using GdiPlus directly
@@ -830,7 +830,7 @@ void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
                             const SalBitmap& rSSalBitmap,
                             SalColor nMaskColor )
 {
-    DBG_ASSERT( !mrParent.isPrinter(), "No transparency print possible!" );
+    SAL_WARN_IF( mrParent.isPrinter(), "vcl", "No transparency print possible!" );
 
     assert(dynamic_cast<const WinSalBitmap*>(&rSSalBitmap));
 
@@ -862,7 +862,7 @@ void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
 
 SalBitmap* WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
 {
-    DBG_ASSERT( !mrParent.isPrinter(), "No ::GetBitmap() from printer possible!" );
+    SAL_WARN_IF( mrParent.isPrinter(), "vcl", "No ::GetBitmap() from printer possible!" );
 
     WinSalBitmap* pSalBitmap = NULL;
 

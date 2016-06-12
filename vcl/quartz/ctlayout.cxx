@@ -698,7 +698,7 @@ sal_Int32 CTLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate n
 
 void CTLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
 {
-    DBG_ASSERT( ((nMaxIndex>0)&&!(nMaxIndex&1)),
+    SAL_WARN_IF( (nMaxIndex<=0) || (nMaxIndex&1), "vcl",
         "CTLayout::GetCaretPositions() : invalid number of caret pairs requested");
 
     // initialize the caret positions
