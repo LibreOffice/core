@@ -215,7 +215,10 @@ void SidebarTextControl::LogicInvalidate(const Rectangle* pRectangle)
 
     OString sRectangle = aRectangle.toString();
     SwWrtShell& rWrtShell = mrDocView.GetWrtShell();
-    rWrtShell.libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    if (comphelper::LibreOfficeKit::isViewCallback())
+        rWrtShell.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    else
+        rWrtShell.libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
