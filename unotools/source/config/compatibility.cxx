@@ -580,60 +580,39 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
     }
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtCompatibilityOptions_Impl*   SvtCompatibilityOptions::m_pDataContainer = nullptr;
-sal_Int32                       SvtCompatibilityOptions::m_nRefCount = 0;
-
-//  constructor
+std::weak_ptr<SvtCompatibilityOptions_Impl>    m_pOptions;
 
 SvtCompatibilityOptions::SvtCompatibilityOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
+
+    m_pImpl = m_pOptions.lock();
+    if( !m_pImpl )
     {
-        m_pDataContainer = new SvtCompatibilityOptions_Impl;
+        m_pImpl = std::make_shared<SvtCompatibilityOptions_Impl>();
+        m_pOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_COMPATIBILITY);
     }
 }
-
-//  destructor
 
 SvtCompatibilityOptions::~SvtCompatibilityOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+    m_pImpl.reset();
 }
-
-//  public method
 
 void SvtCompatibilityOptions::Clear()
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->Clear();
+    m_pImpl->Clear();
 }
 
 void SvtCompatibilityOptions::SetDefault( const OUString & sName, bool bValue )
 {
-    m_pDataContainer->SetDefault( sName, bValue );
+    m_pImpl->SetDefault( sName, bValue );
 }
-
-//  public method
 
 void SvtCompatibilityOptions::AppendItem( const OUString& sName,
                                           const OUString& sModule,
@@ -651,7 +630,7 @@ void SvtCompatibilityOptions::AppendItem( const OUString& sName,
                                           bool bProtectForm )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->AppendItem(
+    m_pImpl->AppendItem(
         sName, sModule, bUsePrtMetrics, bAddSpacing,
         bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
         bUseLineSpacing, bAddTableSpacing, bUseObjPos,
@@ -661,81 +640,79 @@ void SvtCompatibilityOptions::AppendItem( const OUString& sName,
 bool SvtCompatibilityOptions::IsUsePrtDevice() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsUsePrtDevice();
+    return m_pImpl->IsUsePrtDevice();
 }
 
 bool SvtCompatibilityOptions::IsAddSpacing() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsAddSpacing();
+    return m_pImpl->IsAddSpacing();
 }
 
 bool SvtCompatibilityOptions::IsAddSpacingAtPages() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsAddSpacingAtPages();
+    return m_pImpl->IsAddSpacingAtPages();
 }
 
 bool SvtCompatibilityOptions::IsUseOurTabStops() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsUseOurTabStops();
+    return m_pImpl->IsUseOurTabStops();
 }
 
 bool SvtCompatibilityOptions::IsNoExtLeading() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsNoExtLeading();
+    return m_pImpl->IsNoExtLeading();
 }
 
 bool SvtCompatibilityOptions::IsUseLineSpacing() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsUseLineSpacing();
+    return m_pImpl->IsUseLineSpacing();
 }
 
 bool SvtCompatibilityOptions::IsAddTableSpacing() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsAddTableSpacing();
+    return m_pImpl->IsAddTableSpacing();
 }
 
 bool SvtCompatibilityOptions::IsUseObjectPositioning() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsUseObjPos();
+    return m_pImpl->IsUseObjPos();
 }
 
 bool SvtCompatibilityOptions::IsUseOurTextWrapping() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsUseOurTextWrapping();
+    return m_pImpl->IsUseOurTextWrapping();
 }
 
 bool SvtCompatibilityOptions::IsConsiderWrappingStyle() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsConsiderWrappingStyle();
+    return m_pImpl->IsConsiderWrappingStyle();
 }
 
 bool SvtCompatibilityOptions::IsExpandWordSpace() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsExpandWordSpace();
+    return m_pImpl->IsExpandWordSpace();
 }
 
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetList();
+    return m_pImpl->GetList();
 }
 
 namespace
 {
     class theCompatibilityOptionsMutex : public rtl::Static<osl::Mutex, theCompatibilityOptionsMutex>{};
 }
-
-//  private method
 
 Mutex& SvtCompatibilityOptions::GetOwnStaticMutex()
 {
