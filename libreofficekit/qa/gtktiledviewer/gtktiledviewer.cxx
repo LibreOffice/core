@@ -183,6 +183,12 @@ static std::map<GtkWidget*, TiledWindow> g_aWindows;
 static void setupDocView(GtkWidget* pDocView);
 static GtkWidget* createWindow(TiledWindow& rWindow);
 static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpointer userdata);
+/// Called when the document size is changed.
+static void signalSize(LOKDocView* pLOKDocView, gpointer pData);
+/// Handler for m_pPartModeComboBox.
+static void changePartMode( GtkWidget* pSelector, gpointer /*pItem*/);
+/// Handler for m_pPartSelector.
+static void changePart( GtkWidget* pSelector, gpointer /*pItem*/ );
 
 static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
 {
@@ -623,6 +629,14 @@ static TiledWindow& setupWidgetAndCreateWindow(GtkWidget* pDocView)
     return lcl_getTiledWindow(pWindow);
 }
 
+/// Register handlers on the combo boxes.
+static void registerSelectorHandlers(TiledWindow& rWindow)
+{
+    // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
+    g_signal_connect(G_OBJECT(rWindow.m_pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
+    g_signal_connect(G_OBJECT(rWindow.m_pPartSelector), "changed", G_CALLBACK(changePart), 0);
+}
+
 /// Creates a new view, i.e. no LOK init or document load.
 static void createView(GtkWidget* pButton, gpointer /*pItem*/)
 {
@@ -633,6 +647,9 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
     // Hide the unused progress bar.
     gtk_widget_show_all(rNewWindow.m_pStatusBar);
     gtk_widget_hide(rNewWindow.m_pProgressBar);
+    // Trigger a 'document size changed' event to populate the part selectors.
+    signalSize(LOK_DOC_VIEW(pDocView), nullptr);
+    registerSelectorHandlers(rNewWindow);
 }
 
 /// Creates a new model, i.e. LOK init and document load, one view implicitly.
@@ -1175,9 +1192,7 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
 
     populatePartSelector(pDocView);
     populatePartModeSelector( GTK_COMBO_BOX_TEXT(rWindow.m_pPartModeComboBox) );
-    // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
-    g_signal_connect(G_OBJECT(rWindow.m_pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
-    g_signal_connect(G_OBJECT(rWindow.m_pPartSelector), "changed", G_CALLBACK(changePart), 0);
+    registerSelectorHandlers(rWindow);
 
     focusChain = g_list_append( focusChain, pDocView );
     gtk_container_set_focus_chain ( GTK_CONTAINER (rWindow.m_pVBox), focusChain );
