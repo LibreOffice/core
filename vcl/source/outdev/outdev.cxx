@@ -139,6 +139,11 @@ OutputDevice::OutputDevice() :
     mpOutDevData->mpInverseViewTransform = nullptr;
 }
 
+OutputDevice::~OutputDevice()
+{
+    disposeOnce();
+}
+
 void OutputDevice::dispose()
 {
     if ( GetUnoGraphicsList() )
