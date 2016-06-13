@@ -391,7 +391,7 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
-            SAL_WARN( "unotools", "unexpected property handle" );
+            SAL_WARN( "unotools.config", "unexpected property handle" );
     }
 
     if (pbVal)
@@ -490,7 +490,7 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
         case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
-            SAL_WARN( "unotools", "unexpected property handle" );
+            SAL_WARN( "unotools.config", "unexpected property handle" );
     }
 
     if (pbVal)
@@ -652,7 +652,7 @@ void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                 break;
 
                 default:
-                    SAL_WARN( "unotools", "unexpected case" );
+                    SAL_WARN( "unotools.config", "unexpected case" );
             }
         }
 
@@ -777,7 +777,7 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
         case UPH_IS_GRAMMAR_AUTO:                       bReadOnly = rOpt.bROIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                bReadOnly = rOpt.bROIsGrammarInteractive; break;
         default :
-            SAL_WARN( "unotools", "unexpected property handle" );
+            SAL_WARN( "unotools.config", "unexpected property handle" );
     }
     return bReadOnly;
 }
