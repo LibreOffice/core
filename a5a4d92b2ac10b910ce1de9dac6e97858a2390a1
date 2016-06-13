@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_5f1e19bb",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2016-06-13T17:18:33Z",
+      "side": 1,
+      "message": "The Api Guide uses this #define, so I guess it uses the correct type (unsigned int)",
+      "range": {
+        "startLine": 636,
+        "startChar": 4,
+        "endLine": 636,
+        "endChar": 8
+      },
+      "revId": "a5a4d92b2ac10b910ce1de9dac6e97858a2390a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_7f791dfc",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2016-06-13T17:18:33Z",
+      "side": 1,
+      "message": "I think we don\u0027t need the previous verbose option. In this case, isc_service_query blocks based on the API, so we don\u0027t need the while loop.",
+      "range": {
+        "startLine": 654,
+        "startChar": 1,
+        "endLine": 654,
+        "endChar": 4
+      },
+      "revId": "a5a4d92b2ac10b910ce1de9dac6e97858a2390a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
