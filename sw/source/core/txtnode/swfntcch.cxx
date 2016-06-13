@@ -57,8 +57,8 @@ SwFontObj *SwFontAccess::Get( )
 
 SwCacheObj *SwFontAccess::NewObj( )
 {
-    const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(pOwner))->SetInSwFntCache( true );
-    return new SwFontObj( pOwner, pShell );
+    const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(m_pOwner))->SetInSwFntCache( true );
+    return new SwFontObj( m_pOwner, pShell );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

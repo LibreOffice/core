@@ -2265,7 +2265,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                 return; // result of Check: Drucker+Zoom okay.
             }
             pFntObj->Unlock(); // forget this object, printer/zoom differs
-            pObj = nullptr;
+            m_pObj = nullptr;
         }
 
         // Search by font comparison, quite expensive!
@@ -2296,7 +2296,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
         {
             // Have to create new Object, hence Owner must be a SwFont, later
             // the Owner will be the "MagicNumber"
-            SwCacheAccess::pOwner = pOwn;
+            SwCacheAccess::m_pOwner = pOwn;
             pFntObj = Get(); // will create via NewObj() and lock
             OSL_ENSURE(pFntObj, "No Font, no Fun.");
         }
@@ -2314,14 +2314,14 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                 pFntObj->nPrtAscent = USHRT_MAX;
                 pFntObj->nPrtHeight = USHRT_MAX;
             }
-            pObj = pFntObj;
+            m_pObj = pFntObj;
         }
 
         // no matter if new or found, now the Owner of the Object is a
         // MagicNumber, and will be given to the SwFont, as well as the Index
         // for later direct access
         rMagic = pFntObj->GetOwner();
-        SwCacheAccess::pOwner = rMagic;
+        SwCacheAccess::m_pOwner = rMagic;
         rIndex = pFntObj->GetCachePos();
     }
 }
@@ -2329,7 +2329,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
 SwCacheObj *SwFntAccess::NewObj( )
 {
     // a new Font, a new "MagicNumber".
-    return new SwFntObj( *static_cast<SwSubFont const *>(pOwner), ++pMagicNo, pShell );
+    return new SwFntObj( *static_cast<SwSubFont const *>(m_pOwner), ++pMagicNo, pShell );
 }
 
 sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
