@@ -433,17 +433,17 @@ sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const OUString& rName,
 }
 
 sal_Bool ScDocFuncSend::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                         sal_Bool bRecord, sal_Bool bApi )
+                                         sal_Bool bApi )
 {
     SAL_INFO( "sc.tubes", "ApplyAttributes not implemented!" );
-    return ScDocFunc::ApplyAttributes( rMark, rPattern, bRecord, bApi );
+    return ScDocFunc::ApplyAttributes( rMark, rPattern, bApi );
 }
 
 sal_Bool ScDocFuncSend::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
-                                    sal_Bool bRecord, sal_Bool bApi )
+                                    sal_Bool bApi )
 {
     SAL_INFO( "sc.tubes", "ApplyStyle not implemented!" );
-    return ScDocFunc::ApplyStyle( rMark, rStyleName, bRecord, bApi );
+    return ScDocFunc::ApplyStyle( rMark, rStyleName, bApi );
 }
 
 sal_Bool ScDocFuncSend::MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,

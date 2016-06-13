@@ -47,9 +47,9 @@ public:
     virtual bool        SetNoteText( const ScAddress& rPos, const OUString& rNoteText, sal_Bool bApi );
     virtual sal_Bool    RenameTable( SCTAB nTab, const OUString& rName, sal_Bool bRecord, sal_Bool bApi );
     virtual sal_Bool    ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                         sal_Bool bRecord, sal_Bool bApi );
+                                         sal_Bool bApi );
     virtual sal_Bool    ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
-                                    sal_Bool bRecord, sal_Bool bApi );
+                                    sal_Bool bApi );
     virtual sal_Bool    MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
                                     sal_Bool bRecord, sal_Bool bApi );
 };
