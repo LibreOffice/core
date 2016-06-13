@@ -16,6 +16,24 @@
       "revId": "9fcc26c54cb2a92ad7faa2d9960cba8c0999a16f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_1f3f31b5",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2016-06-13T09:17:23Z",
+      "side": 1,
+      "message": "I\u0027ll check this situation: looks like validation of this test was not executed before. With this patch it is executed and fails",
+      "parentUuid": "da7fb54a_b1175ea2",
+      "revId": "9fcc26c54cb2a92ad7faa2d9960cba8c0999a16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
