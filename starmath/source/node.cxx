@@ -36,6 +36,7 @@
 
 #include <cassert>
 #include <math.h>
+#include <memory>
 #include <float.h>
 #include <vector>
 #include <boost/checked_delete.hpp>
@@ -2194,9 +2195,10 @@ void SmTextNode::CreateTextFromNode(OUString &rText)
     else
     {
         SmParser aParseTest;
-        SmNode *pTable = aParseTest.Parse(GetToken().aText);
+        std::unique_ptr<SmTableNode> pTable(aParseTest.Parse(GetToken().aText));
+        assert(pTable->GetType() == NTABLE);
         bQuoted=true;
-        if ( (pTable->GetType() == NTABLE) && (pTable->GetNumSubNodes() == 1) )
+        if (pTable->GetNumSubNodes() == 1)
         {
             SmNode *pResult = pTable->GetSubNode(0);
             if ( (pResult->GetType() == NLINE) &&
@@ -2207,7 +2209,6 @@ void SmTextNode::CreateTextFromNode(OUString &rText)
                     bQuoted=false;
             }
         }
-        delete pTable;
 
         if ((GetToken().eType == TIDENT) && (GetFontDesc() == FNT_FUNCTION))
         {
