@@ -1885,7 +1885,7 @@ bool ScDPObject::ParseFilters(
                 {
                     // Parse possible number from aQueryValueName and format
                     // locale independent as aQueryValue.
-                    sal_uInt32 nNumFormat;
+                    sal_uInt32 nNumFormat = 0;
                     double fValue;
                     if (pFormatter->IsNumberFormat( aQueryValueName, nNumFormat, fValue))
                         aQueryValue = ScDPCache::GetLocaleIndependentFormattedString( fValue, *pFormatter, nNumFormat);
