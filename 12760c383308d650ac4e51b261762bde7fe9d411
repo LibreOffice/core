@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_1478f8c3",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-13T07:24:09Z",
+      "side": 1,
+      "message": "Please mark this as virtual. It\u0027ll be virtual anyway, as the parent dtor is virtual, but it\u0027s confusing this way. :-)",
+      "revId": "12760c383308d650ac4e51b261762bde7fe9d411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
