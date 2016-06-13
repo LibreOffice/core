@@ -37,6 +37,7 @@
 #include "drawdoc.hxx"
 #include "AccessibleDrawDocumentView.hxx"
 #include "WindowUpdater.hxx"
+#include "ViewShellBase.hxx"
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -1016,7 +1017,13 @@ void Window::LogicInvalidate(const Rectangle* pRectangle)
             aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
         sRectangle = aRectangle.toString();
     }
-    mpViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    if (comphelper::LibreOfficeKit::isViewCallback())
+    {
+        SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
+        rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    }
+    else
+        mpViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 } // end of namespace sd
