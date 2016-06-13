@@ -201,7 +201,6 @@ class GtkSalFrame : public SalFrame
     bool                            m_bDefaultSize;
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
-    bool                            m_bSetFocusOnMap;
     OUString                        m_aTitle;
     OUString                        m_sWMClass;
 
@@ -223,6 +222,7 @@ class GtkSalFrame : public SalFrame
     GtkDnDTransferable*             m_pFormatConversionRequest;
 #else
     GdkRegion*                      m_pRegion;
+    bool                            m_bSetFocusOnMap;
 #endif
 
     SalMenu*                        m_pSalMenu;

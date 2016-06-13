@@ -1061,7 +1061,6 @@ void GtkSalFrame::InitCommon()
     m_bInDrag           = false;
     m_pFormatConversionRequest = nullptr;
     m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
-    m_bSetFocusOnMap    = false;
     m_pSalMenu          = nullptr;
     m_nWatcherId        = 0;
     m_nMenuExportId     = 0;
@@ -1416,7 +1415,7 @@ void GtkSalFrame::SetDefaultSize()
         gtk_window_maximize( GTK_WINDOW(m_pWindow) );
 }
 
-void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
+void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
 {
     if( m_pWindow )
     {
@@ -1429,9 +1428,6 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
             if( m_bDefaultSize )
                 SetDefaultSize();
             setMinMaxSize();
-
-            if( ! bNoActivate && (m_nStyle & SalFrameStyleFlags::TOOLWINDOW) )
-                m_bSetFocusOnMap = true;
 
             gtk_widget_show( m_pWindow );
 
@@ -2936,15 +2932,9 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     return false;
 }
 
-gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
+gboolean GtkSalFrame::signalMap(GtkWidget *, GdkEvent*, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-
-    bool bSetFocus = pThis->m_bSetFocusOnMap;
-    pThis->m_bSetFocusOnMap = false;
-
-    (void)pWidget; (void)bSetFocus;
-    //FIXME: no set input focus ...
 
     pThis->CallCallback( SalEvent::Resize, nullptr );
     pThis->TriggerPaintEvent();
