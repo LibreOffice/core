@@ -34,18 +34,18 @@ SwTextLine::~SwTextLine()
 
 SwCacheObj *SwTextLineAccess::NewObj()
 {
-    return new SwTextLine( const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(pOwner)) );
+    return new SwTextLine( const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(m_pOwner)) );
 }
 
 SwParaPortion *SwTextLineAccess::GetPara()
 {
     SwTextLine *pRet;
-    if ( pObj )
-        pRet = static_cast<SwTextLine*>(pObj);
+    if ( m_pObj )
+        pRet = static_cast<SwTextLine*>(m_pObj);
     else
     {
         pRet = static_cast<SwTextLine*>(Get());
-        const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(pOwner))->SetCacheIdx( pRet->GetCachePos() );
+        const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(m_pOwner))->SetCacheIdx( pRet->GetCachePos() );
     }
     if ( !pRet->GetPara() )
         pRet->SetPara( new SwParaPortion );
@@ -59,7 +59,7 @@ SwTextLineAccess::SwTextLineAccess( const SwTextFrame *pOwn ) :
 
 bool SwTextLineAccess::IsAvailable() const
 {
-    return pObj && static_cast<SwTextLine*>(pObj)->GetPara();
+    return m_pObj && static_cast<SwTextLine*>(m_pObj)->GetPara();
 }
 
 bool SwTextFrame::HasPara_() const

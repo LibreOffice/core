@@ -450,29 +450,29 @@ void SwCacheObj::Unlock()
 
 SwCacheAccess::~SwCacheAccess()
 {
-    if ( pObj )
-        pObj->Unlock();
+    if ( m_pObj )
+        m_pObj->Unlock();
 }
 
 void SwCacheAccess::Get_()
 {
-    OSL_ENSURE( !pObj, "SwCacheAcces Obj already available." );
+    OSL_ENSURE( !m_pObj, "SwCacheAcces Obj already available." );
 
-    pObj = NewObj();
-    if ( !rCache.Insert( pObj ) )
+    m_pObj = NewObj();
+    if ( !m_rCache.Insert( m_pObj ) )
     {
-        delete pObj;
-        pObj = nullptr;
+        delete m_pObj;
+        m_pObj = nullptr;
     }
     else
     {
-        pObj->Lock();
+        m_pObj->Lock();
     }
 }
 
 bool SwCacheAccess::IsAvailable() const
 {
-    return pObj != nullptr;
+    return m_pObj != nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

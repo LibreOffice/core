@@ -187,13 +187,13 @@ public:
  */
 class SwCacheAccess
 {
-    SwCache &rCache;
+    SwCache &m_rCache;
 
     void Get_();
 
 protected:
-    SwCacheObj *pObj;
-    const void *pOwner; /// Can be use in NewObj
+    SwCacheObj *m_pObj;
+    const void *m_pOwner; /// Can be use in NewObj
 
     virtual SwCacheObj *NewObj() = 0;
 
@@ -209,7 +209,7 @@ public:
 
     /// Shorthand for those who know that they did not override isAvailable()
     /// FIXME: wtf?
-    bool IsAvail() const { return pObj != nullptr; }
+    bool IsAvail() const { return m_pObj != nullptr; }
 };
 
 inline void SwCache::IncreaseMax( const sal_uInt16 nAdd )
@@ -242,29 +242,29 @@ inline SwCacheObj *SwCache::Next( SwCacheObj *pCacheObj)
 }
 
 inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, bool bSeek ) :
-    rCache( rC ),
-    pObj( nullptr ),
-    pOwner( pOwn )
+    m_rCache( rC ),
+    m_pObj( nullptr ),
+    m_pOwner( pOwn )
 {
-    if ( bSeek && pOwner && nullptr != (pObj = rCache.Get( pOwner )) )
-        pObj->Lock();
+    if ( bSeek && m_pOwner && nullptr != (m_pObj = m_rCache.Get( m_pOwner )) )
+        m_pObj->Lock();
 }
 
 inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn,
                               const sal_uInt16 nIndex ) :
-    rCache( rC ),
-    pObj( nullptr ),
-    pOwner( pOwn )
+    m_rCache( rC ),
+    m_pObj( nullptr ),
+    m_pOwner( pOwn )
 {
-    if ( pOwner && nullptr != (pObj = rCache.Get( pOwner, nIndex )) )
-        pObj->Lock();
+    if ( m_pOwner && nullptr != (m_pObj = m_rCache.Get( m_pOwner, nIndex )) )
+        m_pObj->Lock();
 }
 
 inline SwCacheObj *SwCacheAccess::Get()
 {
-    if ( !pObj )
+    if ( !m_pObj )
         Get_();
-    return pObj;
+    return m_pObj;
 }
 
 #endif

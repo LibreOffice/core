@@ -2213,8 +2213,8 @@ SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrame *pFrame ) 
 
 SwCacheObj *SwBorderAttrAccess::NewObj()
 {
-    const_cast<SwModify *>(static_cast<SwModify const *>(pOwner))->SetInCache( true );
-    return new SwBorderAttrs( static_cast<SwModify const *>(pOwner), pConstructor );
+    const_cast<SwModify *>(static_cast<SwModify const *>(m_pOwner))->SetInCache( true );
+    return new SwBorderAttrs( static_cast<SwModify const *>(m_pOwner), pConstructor );
 }
 
 SwBorderAttrs *SwBorderAttrAccess::Get()
