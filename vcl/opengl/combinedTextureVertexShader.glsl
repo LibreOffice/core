@@ -34,7 +34,7 @@ void main()
    mask_coord = mask_coord_in;
    alpha_coord = alpha_coord_in;
 #ifdef USE_VERTEX_COLORS
-   vertex_color = vertex_color_in;
+   vertex_color = vertex_color_in / 255.0;
 #endif
 }
 
