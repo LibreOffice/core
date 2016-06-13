@@ -2016,6 +2016,13 @@ void GtkSalFrame::SetAlwaysOnTop( bool bOnTop )
         gtk_window_set_keep_above( GTK_WINDOW( m_pWindow ), bOnTop );
 }
 
+static guint32 nLastUserInputTime = GDK_CURRENT_TIME;
+
+static void UpdateLastInputEventTime(guint32 nUserInputTime)
+{
+    nLastUserInputTime = nUserInputTime;
+}
+
 void GtkSalFrame::ToTop( SalFrameToTop nFlags )
 {
     if( m_pWindow )
@@ -2024,13 +2031,10 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
             gtk_widget_grab_focus( m_pWindow );
         else if( IS_WIDGET_MAPPED( m_pWindow ) )
         {
-            if( ! (nFlags & SalFrameToTop::GrabFocusOnly) )
-                gtk_window_present( GTK_WINDOW(m_pWindow) );
+            if (!(nFlags & SalFrameToTop::GrabFocusOnly))
+                gtk_window_present_with_time(GTK_WINDOW(m_pWindow), nLastUserInputTime);
             else
-            {
-                guint32 nUserTime = GDK_CURRENT_TIME;
-                gdk_window_focus( widget_get_window(m_pWindow), nUserTime );
-            }
+                gdk_window_focus(widget_get_window(m_pWindow), nLastUserInputTime);
         }
         else
         {
@@ -2560,6 +2564,8 @@ void GtkSalFrame::StartToolKitMoveBy()
 
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
+    UpdateLastInputEventTime(pEvent->time);
+
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     SalMouseEvent aEvent;
@@ -2649,31 +2655,32 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     return true;
 }
 
-gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEventScroll* pEvent, gpointer frame )
 {
-    GdkEventScroll* pSEvent = reinterpret_cast<GdkEventScroll*>(pEvent);
-    if (pSEvent->direction != GDK_SCROLL_SMOOTH)
+    UpdateLastInputEventTime(pEvent->time);
+
+    if (pEvent->direction != GDK_SCROLL_SMOOTH)
         return false;
 
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     SalWheelMouseEvent aEvent;
 
-    aEvent.mnTime = pSEvent->time;
-    aEvent.mnX = (sal_uLong)pSEvent->x;
+    aEvent.mnTime = pEvent->time;
+    aEvent.mnX = (sal_uLong)pEvent->x;
     // --- RTL --- (mirror mouse pos)
     if (AllSettings::GetLayoutRTL())
         aEvent.mnX = pThis->maGeometry.nWidth - 1 - aEvent.mnX;
-    aEvent.mnY = (sal_uLong)pSEvent->y;
-    aEvent.mnCode = GetMouseModCode( pSEvent->state );
+    aEvent.mnY = (sal_uLong)pEvent->y;
+    aEvent.mnCode = GetMouseModCode( pEvent->state );
 
     // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
     // equating to 3 scroll lines and a delta of 120. So scale the delta here
     // by 120 where a single mouse wheel click is an incoming delta_x of 1
     // and divide that by 40 to get the number of scrollines
-    if (pSEvent->delta_x != 0.0)
+    if (pEvent->delta_x != 0.0)
     {
-        aEvent.mnDelta = -pSEvent->delta_x * 120;
+        aEvent.mnDelta = -pEvent->delta_x * 120;
         aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
         if (aEvent.mnDelta == 0)
             aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -2685,9 +2692,9 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
         pThis->CallCallback(SalEvent::WheelMouse, &aEvent);
     }
 
-    if (pSEvent->delta_y != 0.0)
+    if (pEvent->delta_y != 0.0)
     {
-        aEvent.mnDelta = -pSEvent->delta_y * 120;
+        aEvent.mnDelta = -pEvent->delta_y * 120;
         aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
         if (aEvent.mnDelta == 0)
             aEvent.mnDelta = aEvent.mnNotchDelta;
@@ -2746,6 +2753,8 @@ void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gpointer frame)
 
 gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )
 {
+    UpdateLastInputEventTime(pEvent->time);
+
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     SalMouseEvent aEvent;
@@ -2788,6 +2797,8 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
 gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpointer frame )
 {
+    UpdateLastInputEventTime(pEvent->time);
+
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
@@ -2963,6 +2974,8 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 
 gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame )
 {
+    UpdateLastInputEventTime(pEvent->time);
+
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     vcl::DeletionListener aDel( pThis );
