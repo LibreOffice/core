@@ -319,6 +319,84 @@ public:
     }
 };
 
+class TestLegacyDocumentHandler : public cppu::WeakImplHelper< XDocumentHandler >
+{
+private:
+    OUString m_aStr;
+
+public:
+    TestLegacyDocumentHandler() {}
+    const OUString& getString() { return m_aStr; }
+
+    // XDocumentHandler
+    virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL endDocument() throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL endElement( const OUString& aName ) throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) throw (SAXException, RuntimeException, exception) override;
+};
+
+void SAL_CALL TestLegacyDocumentHandler::startDocument()
+        throw(SAXException, RuntimeException, exception)
+{
+    m_aStr.clear();
+}
+
+
+void SAL_CALL TestLegacyDocumentHandler::endDocument()
+        throw(SAXException, RuntimeException, exception)
+{
+}
+
+void SAL_CALL TestLegacyDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs )
+        throw( SAXException, RuntimeException, exception )
+{
+    m_aStr = m_aStr + aName;
+    sal_uInt16 len = xAttribs->getLength();
+    for (sal_uInt16 i = 0; i < len; i++)
+    {
+        OUString sAttrName = xAttribs->getNameByIndex(i);
+        OUString sAttrValue = xAttribs->getValueByIndex(i);
+        m_aStr = m_aStr + sAttrName + sAttrValue;
+    }
+}
+
+
+void SAL_CALL TestLegacyDocumentHandler::endElement( const OUString& aName )
+    throw( SAXException, RuntimeException, exception )
+{
+    m_aStr = m_aStr + aName;
+}
+
+
+void SAL_CALL TestLegacyDocumentHandler::characters( const OUString& aChars )
+        throw(SAXException, RuntimeException, exception)
+{
+    m_aStr = m_aStr + aChars;
+}
+
+
+void SAL_CALL TestLegacyDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces )
+        throw(SAXException, RuntimeException, exception)
+{
+    m_aStr = m_aStr + aWhitespaces;
+}
+
+
+void SAL_CALL TestLegacyDocumentHandler::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
+        throw(SAXException, RuntimeException, exception)
+{
+}
+
+
+void SAL_CALL TestLegacyDocumentHandler::setDocumentLocator( const Reference< XLocator >& /*xLocator*/ )
+        throw(SAXException, RuntimeException, exception)
+{
+}
+
 
 class XMLImportTest : public test::BootstrapFixture
 {
@@ -328,6 +406,8 @@ private:
     rtl::Reference< TestFastDocumentHandler > m_xFastDocumentHandler;
     Reference< XParser > m_xParser;
     Reference< XFastParser > m_xFastParser;
+    Reference< XParser > m_xLegacyFastParser;
+    Reference< TestLegacyDocumentHandler > m_xLegacyDocumentHandler;
     Reference< XFastTokenHandler > m_xFastTokenHandler;
 
 public:
@@ -345,16 +425,19 @@ public:
 void XMLImportTest::setUp()
 {
     test::BootstrapFixture::setUp();
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     m_xDocumentHandler.set( new TestDocumentHandler() );
     m_xFastDocumentHandler.set( new TestFastDocumentHandler() );
+    m_xLegacyDocumentHandler.set( new TestLegacyDocumentHandler() );
     m_xFastTokenHandler.set( new TestTokenHandler() );
-    m_xParser = Parser::create(
-        ::comphelper::getProcessComponentContext() );
-    m_xFastParser = FastParser::create(
-        ::comphelper::getProcessComponentContext() );
-    m_xParser->setDocumentHandler( m_xDocumentHandler.get() );
-    m_xFastParser->setFastDocumentHandler( m_xFastDocumentHandler.get() );
+    m_xParser = Parser::create( xContext );
+    m_xFastParser = FastParser::create( xContext );
+    m_xParser->setDocumentHandler( m_xDocumentHandler );
+    m_xFastParser->setFastDocumentHandler( m_xFastDocumentHandler );
     m_xFastParser->setTokenHandler( m_xFastTokenHandler );
+    m_xLegacyFastParser.set( xContext->getServiceManager()->createInstanceWithContext
+                    ( "com.sun.star.xml.sax.LegacyFastParser", xContext ), UNO_QUERY );
+    m_xLegacyFastParser->setDocumentHandler( m_xLegacyDocumentHandler );
     m_sDirPath = m_directories.getPathFromSrc( "/sax/qa/data/" );
 }
 
@@ -382,7 +465,12 @@ void XMLImportTest::parse()
         m_xFastParser->parseStream(source);
         const OUString& rFastParserStr = m_xFastDocumentHandler->getString();
 
+        source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
+        m_xLegacyFastParser->parseStream(source);
+        const OUString& rLegacyFastParserStr = m_xLegacyDocumentHandler->getString();
+
         CPPUNIT_ASSERT_EQUAL( rParserStr, rFastParserStr );
+        CPPUNIT_ASSERT_EQUAL( rFastParserStr, rLegacyFastParserStr );
         // OString o = OUStringToOString( Str, RTL_TEXTENCODING_ASCII_US );
         // CPPUNIT_ASSERT_MESSAGE( string(o.pData->buffer), false );
     }
