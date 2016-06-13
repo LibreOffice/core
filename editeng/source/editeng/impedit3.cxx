@@ -1099,7 +1099,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if ( pPortion->GetLen() && GetAsianCompressionMode() )
                 {
                     EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                    long* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
+                    long* pDXArray = &rArray[0] + nTmpPos - pLine->GetStart();
                     bCompressedChars |= ImplCalcAsianCompression(
                         pNode, pPortion, nTmpPos, pDXArray, 10000, false);
                 }
@@ -1270,7 +1270,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
                 // I need the manipulated DXArray for determining the break position...
-                long* pDXArray = pLine->GetCharPosArray().data() + (nPortionStart - pLine->GetStart());
+                long* pDXArray = nullptr;
+                if (!pLine->GetCharPosArray().empty())
+                {
+                    pDXArray = &pLine->GetCharPosArray()[0] + (nPortionStart - pLine->GetStart());
+                }
                 ImplCalcAsianCompression(
                     pNode, pPortion, nPortionStart, pDXArray, 10000, true);
             }
@@ -3064,7 +3068,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     aText = pPortion->GetNode()->GetString();
                                     nTextStart = nIndex;
                                     nTextLen = rTextPortion.GetLen();
-                                    pDXArray = pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart());
+                                    if (!pLine->GetCharPosArray().empty())
+                                        pDXArray = &pLine->GetCharPosArray()[0]+( nIndex-pLine->GetStart() );
 
                                     // Paint control characters (#i55716#)
                                     if ( aStatus.MarkFields() )
@@ -4431,9 +4436,13 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
                 sal_Int32 nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
                 sal_Int32 nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
                 DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
-                long* pDXArray = pLine->GetCharPosArray().data() + (nTxtPortionStart - pLine->GetStart());
-                if ( pTP->GetExtraInfos()->pOrgDXArray )
-                    memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray, (pTP->GetLen()-1)*sizeof(sal_Int32) );
+                long* pDXArray = nullptr;
+                if (!pLine->GetCharPosArray().empty())
+                {
+                    pDXArray = &pLine->GetCharPosArray()[0]+( nTxtPortionStart-pLine->GetStart() );
+                    if ( pTP->GetExtraInfos()->pOrgDXArray )
+                        memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray, (pTP->GetLen()-1)*sizeof(sal_Int32) );
+                }
                 ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, (sal_uInt16)nCompressPercent, true );
             }
         }
