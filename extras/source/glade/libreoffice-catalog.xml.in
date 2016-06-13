@@ -776,6 +776,9 @@
     <glade-widget-class title="Template Remote View" name="sfxlo-TemplateRemoteView"
                         generic-name="Template Icon View" parent="GtkIconView"
                         icon-name="widget-gtk-iconview"/>
+    <glade-widget-class title="Template Online View" name="sfxlo-TemplateOnlineView"
+                        generic-name="Template Icon View" parent="GtkIconView"
+                        icon-name="widget-gtk-iconview"/>
 
     <glade-widget-class title="Driver List Control" name="cuilo-DriverListControl"
                         generic-name="DriverListControl" parent="GtkEntry"

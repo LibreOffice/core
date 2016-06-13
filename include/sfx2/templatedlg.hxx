@@ -26,6 +26,7 @@ class PopupMenu;
 class TemplateAbstractView;
 class TemplateLocalView;
 class TemplateRemoteView;
+class TemplateOnlineView;
 class TemplateRepository;
 class TemplateSearchView;
 class ThumbnailView;
@@ -155,6 +156,7 @@ protected:
     VclPtr<TemplateAbstractView> mpCurView;
     VclPtr<TemplateLocalView> mpLocalView;
     VclPtr<TemplateRemoteView> mpRemoteView;
+    VclPtr<TemplateOnlineView> mpOnlineView;
     PopupMenu *mpActionMenu;
     PopupMenu *mpRepositoryMenu;
     PopupMenu *mpTemplateDefaultMenu;

@@ -12,6 +12,8 @@
 #include <sfx2/inputdlg.hxx>
 #include "templatesearchview.hxx"
 #include "templatesearchviewitem.hxx"
+#include "templateonlineviewitem.hxx"
+#include "templateonlineview.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -172,6 +174,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     get(mpLocalView, "template_view");
     get(mpSearchView, "search_view");
     get(mpRemoteView, "remote_view");
+    get(mpOnlineView, "online_view");
     get(mpOKButton, "ok");
     get(mpMoveButton, "move_btn");
     get(mpExportButton, "export_btn");
@@ -244,6 +247,12 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
                                     TEMPLATE_ITEM_MAX_HEIGHT_SUB-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
                                     TEMPLATE_ITEM_PADDING);
 
+
+    mpOnlineView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
+    mpOnlineView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                                    TEMPLATE_ITEM_MAX_HEIGHT_SUB-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                                    TEMPLATE_ITEM_PADDING);
+
     mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVItemStateHdl));
     mpSearchView->setCreateContextMenuHdl(LINK(this,SfxTemplateManagerDlg, CreateContextMenuHdl));
     mpSearchView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
@@ -279,7 +288,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
 
     createRepositoryMenu();
     createDefaultTemplateMenu();
-
+    mpOnlineView->Populate();
+    mpOnlineView->Show();
+    mpOnlineView->ShowTooltips(true);
+/*
     mpLocalView->Populate();
     mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
 
@@ -293,7 +305,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpCBApp->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectApplicationHdl));
     mpCBFolder->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectRegionHdl));
 
-    mpLocalView->Show();
+    mpLocalView->Show();*/
 }
 
 SfxTemplateManagerDlg::~SfxTemplateManagerDlg()
@@ -344,6 +356,8 @@ short SfxTemplateManagerDlg::Execute()
     //use application specific settings if there's no previous setting
     getApplicationSpecificSettings();
     readSettings();
+    mpLocalView->Hide();
+    mpOnlineView->Show();
 
     return ModalDialog::Execute();
 }
