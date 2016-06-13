@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_bf99e570",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-13T15:00:48Z",
+      "side": 1,
+      "message": "Dumb question: where is this new mnOutlineLevel variable ever used?",
+      "range": {
+        "startLine": 1603,
+        "startChar": 4,
+        "endLine": 1603,
+        "endChar": 18
+      },
+      "revId": "1f2a2c73e57802f903a94867b7bde386108f4d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
