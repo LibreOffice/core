@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-05-02T17:35:29</meta:creation-date><dc:language>nl-NL</dc:language><dc:date>2016-05-25T17:40:44.396641649</dc:date><meta:editing-cycles>31</meta:editing-cycles><meta:editing-duration>PT2H25S</meta:editing-duration><meta:generator>LibreOfficeDev/5.2.0.0.alpha1$Linux_X86_64 LibreOffice_project/64ab90d1cb496610240d01dec65893cf2f36b964</meta:generator><meta:document-statistic meta:table-count="3" meta:cell-count="452" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-05-02T17:35:29</meta:creation-date><dc:language>nl-NL</dc:language><dc:date>2016-06-13T16:14:17.382719405</dc:date><meta:editing-cycles>32</meta:editing-cycles><meta:editing-duration>PT2H32M42S</meta:editing-duration><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/d18f46c0aefda2f60a137d7ede1223d8667075f1</meta:generator><meta:document-statistic meta:table-count="3" meta:cell-count="452" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
@@ -13,8 +13,8 @@
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
      <config:config-item-map-named config:name="Tables">
       <config:config-item-map-entry config:name="Sheet1">
-       <config:config-item config:name="CursorPositionX" config:type="int">4</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">24</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">15</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -30,8 +30,8 @@
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">3</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">35</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">53</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -40,7 +40,7 @@
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">4</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">32</config:config-item>
        <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -65,7 +65,7 @@
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
-     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">894</config:config-item>
+     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1540</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
      <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -105,11 +105,20 @@
    <config:config-item config:name="ShowPageBreaks" config:type="boolean">true</config:config-item>
    <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
    <config:config-item config:name="ShowNotes" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="IsOutlineSymbolsSet" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ShowZeroValues" config:type="boolean">true</config:config-item>
    <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
    <config:config-item config:name="GridColor" config:type="long">12632256</config:config-item>
    <config:config-item config:name="RasterIsVisible" config:type="boolean">false</config:config-item>
    <config:config-item config:name="PrinterName" config:type="string">Generic Printer</config:config-item>
    <config:config-item-map-indexed config:name="ForbiddenCharacters">
+    <config:config-item-map-entry>
+     <config:config-item config:name="Language" config:type="string">en</config:config-item>
+     <config:config-item config:name="Country" config:type="string">US</config:config-item>
+     <config:config-item config:name="Variant" config:type="string"/>
+     <config:config-item config:name="BeginLine" config:type="string"/>
+     <config:config-item config:name="EndLine" config:type="string"/>
+    </config:config-item-map-entry>
     <config:config-item-map-entry>
      <config:config-item config:name="Language" config:type="string">nl</config:config-item>
      <config:config-item config:name="Country" config:type="string">NL</config:config-item>
@@ -118,14 +127,12 @@
      <config:config-item config:name="EndLine" config:type="string"/>
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
-   <config:config-item config:name="IsOutlineSymbolsSet" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="ShowZeroValues" config:type="boolean">true</config:config-item>
    <config:config-item config:name="LinkUpdateMode" config:type="short">3</config:config-item>
    <config:config-item config:name="RasterSubdivisionX" config:type="int">1</config:config-item>
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">jAH+/0dlbmVyaWMgUHJpbnRlcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU0dFTlBSVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAMAsgAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9R2VuZXJpYyBQcmludGVyCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MApjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKUGFnZVNpemU6QTQARHVwbGV4Ok5vbmUAABIAQ09NUEFUX0RVUExFWF9NT0RFCgBEVVBMRVhfT0ZG</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">jAH+/0dlbmVyaWMgUHJpbnRlcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU0dFTlBSVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAMAsgAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9R2VuZXJpYyBQcmludGVyCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MApjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKRHVwbGV4Ok5vbmUAUGFnZVNpemU6QTQAABIAQ09NUEFUX0RVUExFWF9NT0RFCgBEVVBMRVhfT0ZG</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">true</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -148,55 +155,55 @@
  </office:font-face-decls>
  <office:styles>
   <style:default-style style:family="table-cell">
-   <style:paragraph-properties style:tab-stop-distance="12.5mm"/>
+   <style:paragraph-properties style:tab-stop-distance="35.43pt"/>
    <style:text-properties style:font-name="Liberation Sans" fo:language="nl" fo:country="NL" style:font-name-asian="DejaVu Sans" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="DejaVu Sans" style:language-complex="hi" style:country-complex="IN"/>
   </style:default-style>
   <number:number-style style:name="N0">
    <number:number number:min-integer-digits="1"/>
   </number:number-style>
-  <number:currency-style style:name="N108P0" style:volatile="true">
+  <number:currency-style style:name="N122P0" style:volatile="true">
    <number:currency-symbol number:language="nl" number:country="NL">€</number:currency-symbol>
    <number:text> </number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
   </number:currency-style>
-  <number:currency-style style:name="N108">
+  <number:currency-style style:name="N122">
    <style:text-properties fo:color="#ff0000"/>
    <number:currency-symbol number:language="nl" number:country="NL">€</number:currency-symbol>
    <number:text> </number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text>-</number:text>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N108P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N122P0"/>
   </number:currency-style>
-  <number:time-style style:name="N109">
+  <number:time-style style:name="N123">
    <number:minutes number:style="long"/>
    <number:text>:</number:text>
    <number:seconds number:style="long"/>
   </number:time-style>
-  <number:time-style style:name="N110" number:truncate-on-overflow="false">
+  <number:time-style style:name="N124" number:truncate-on-overflow="false">
    <number:hours/>
    <number:text>:</number:text>
    <number:minutes number:style="long"/>
    <number:text>:</number:text>
    <number:seconds number:style="long"/>
   </number:time-style>
-  <number:time-style style:name="N111">
+  <number:time-style style:name="N125">
    <number:minutes number:style="long"/>
    <number:text>:</number:text>
    <number:seconds number:style="long" number:decimal-places="1"/>
   </number:time-style>
-  <number:number-style style:name="N112">
+  <number:number-style style:name="N126">
    <number:scientific-number number:decimal-places="1" loext:min-decimal-places="1" number:min-integer-digits="1" number:min-exponent-digits="1" loext:exponent-interval="3" loext:forced-exponent-sign="true"/>
   </number:number-style>
-  <number:number-style style:name="N114P0" style:volatile="true">
+  <number:number-style style:name="N128P0" style:volatile="true">
    <number:text>WAAR</number:text>
   </number:number-style>
-  <number:number-style style:name="N114P1" style:volatile="true">
+  <number:number-style style:name="N128P1" style:volatile="true">
    <number:text>WAAR</number:text>
   </number:number-style>
-  <number:number-style style:name="N114">
+  <number:number-style style:name="N128">
    <number:text>ONWAAR</number:text>
-   <style:map style:condition="value()&gt;0" style:apply-style-name="N114P0"/>
-   <style:map style:condition="value()&lt;0" style:apply-style-name="N114P1"/>
+   <style:map style:condition="value()&gt;0" style:apply-style-name="N128P0"/>
+   <style:map style:condition="value()&lt;0" style:apply-style-name="N128P1"/>
   </number:number-style>
   <number:number-style style:name="N10108P0" style:volatile="true" number:language="nl" number:country="NL">
    <number:text>€ </number:text>
@@ -446,7 +453,7 @@
   <style:style style:name="Result" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:font-style="italic" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="bold"/>
   </style:style>
-  <style:style style:name="Result2" style:family="table-cell" style:parent-style-name="Result" style:data-style-name="N108"/>
+  <style:style style:name="Result2" style:family="table-cell" style:parent-style-name="Result" style:data-style-name="N122"/>
   <style:style style:name="Heading" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
    <style:paragraph-properties fo:text-align="center"/>
@@ -464,22 +471,22 @@
  </office:styles>
  <office:automatic-styles>
   <style:style style:name="co1" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="22.58mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="64.01pt"/>
   </style:style>
   <style:style style:name="co2" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="22.23mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="63.01pt"/>
   </style:style>
   <style:style style:name="co3" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="59.43mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="168.46pt"/>
   </style:style>
   <style:style style:name="co4" style:family="table-column">
-   <style:table-column-properties fo:break-before="auto" style:column-width="28.75mm"/>
+   <style:table-column-properties fo:break-before="auto" style:column-width="81.5pt"/>
   </style:style>
   <style:style style:name="ro1" style:family="table-row">
-   <style:table-row-properties style:row-height="4.52mm" fo:break-before="auto" style:use-optimal-row-height="true"/>
+   <style:table-row-properties style:row-height="12.81pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ro2" style:family="table-row">
-   <style:table-row-properties style:row-height="4.52mm" fo:break-before="auto" style:use-optimal-row-height="false"/>
+   <style:table-row-properties style:row-height="12.81pt" fo:break-before="auto" style:use-optimal-row-height="false"/>
   </style:style>
   <style:style style:name="ta1" style:family="table" style:master-page-name="Default">
    <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
@@ -506,12 +513,12 @@
   <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99"/>
   <style:style style:name="ce4" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0mm" style:writing-mode="page"/>
+   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Courier New" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Courier New" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce6" style:family="table-cell" style:parent-style-name="Default">
@@ -523,17 +530,17 @@
   </style:style>
   <style:style style:name="ce8" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0mm" style:writing-mode="page"/>
+   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Times New Roman" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Times New Roman" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0mm" style:writing-mode="page"/>
+   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Arial" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:background-color="transparent"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default">
@@ -545,118 +552,118 @@
   </style:style>
   <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="value-type" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0mm" style:writing-mode="page"/>
+   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Times New Roman" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Times New Roman" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce14" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="center" fo:margin-left="0mm"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C1"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C1"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C1"/>
   </style:style>
-  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C1"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C1"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C1"/>
   </style:style>
-  <style:style style:name="ce16" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce16" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
+   <style:table-cell-properties style:rotation-align="none"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C6"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C6"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C6"/>
+  </style:style>
+  <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
+   <style:table-cell-properties style:rotation-align="none"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C12"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C12"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C12"/>
+  </style:style>
+  <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
+   <style:table-cell-properties style:rotation-align="none"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C29"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C29"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C29"/>
+  </style:style>
+  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
    <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
    <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
    <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
   </style:style>
-  <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C32"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C32"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C32"/>
   </style:style>
-  <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C33"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C33"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C33"/>
   </style:style>
-  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C34"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C34"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C34"/>
   </style:style>
-  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C35"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C35"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C35"/>
   </style:style>
-  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C36"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C36"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C36"/>
   </style:style>
-  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce25" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C37"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C37"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C37"/>
   </style:style>
-  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce26" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C46"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C46"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C46"/>
   </style:style>
-  <style:style style:name="ce24" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C1"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C1"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C1"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C47"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C47"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C47"/>
   </style:style>
-  <style:style style:name="ce25" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce28" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C49"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C49"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C49"/>
   </style:style>
-  <style:style style:name="ce26" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce29" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C50"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C50"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C50"/>
   </style:style>
-  <style:style style:name="ce27" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C51"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C51"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C51"/>
   </style:style>
-  <style:style style:name="ce28" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
+  <style:style style:name="ce31" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N128">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
-  </style:style>
-  <style:style style:name="ce29" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
-  </style:style>
-  <style:style style:name="ce30" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
-  </style:style>
-  <style:style style:name="ce31" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N114">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C31"/>
-   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C31"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.C52"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="OK" style:base-cell-address="Sheet2.C52"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="NOK" style:base-cell-address="Sheet2.C52"/>
   </style:style>
   <style:style style:name="ce32" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
    <style:table-cell-properties style:rotation-align="none"/>
@@ -664,7 +671,7 @@
   </style:style>
   <style:style style:name="ce33" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0mm" style:writing-mode="page"/>
+   <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Times New Roman" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Times New Roman" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce34" style:family="table-cell" style:parent-style-name="Default">
@@ -673,12 +680,12 @@
   </style:style>
   <style:style style:name="ce35" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto"/>
-   <style:paragraph-properties fo:text-align="start" css3t:text-justify="auto" fo:margin-left="0mm" style:writing-mode="page"/>
+   <style:paragraph-properties fo:text-align="start" css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Arial" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce36" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="middle" loext:vertical-justify="auto"/>
-   <style:paragraph-properties fo:text-align="start" css3t:text-justify="auto" fo:margin-left="0mm" style:writing-mode="page"/>
+   <style:paragraph-properties fo:text-align="start" css3t:text-justify="auto" fo:margin-left="0pt" style:writing-mode="page"/>
    <style:text-properties style:use-window-font-color="true" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Arial" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Arial" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce37" style:family="table-cell" style:parent-style-name="Default">
@@ -711,41 +718,41 @@
   <style:page-layout style:name="pm1">
    <style:page-layout-properties style:first-page-number="continue" style:writing-mode="lr-tb"/>
    <style:header-style>
-    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-bottom="2.5mm"/>
+    <style:header-footer-properties fo:min-height="21.26pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-bottom="7.09pt"/>
    </style:header-style>
    <style:footer-style>
-    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-top="2.5mm"/>
+    <style:header-footer-properties fo:min-height="21.26pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="7.09pt"/>
    </style:footer-style>
   </style:page-layout>
   <style:page-layout style:name="pm2">
    <style:page-layout-properties style:writing-mode="lr-tb"/>
    <style:header-style>
-    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-bottom="2.5mm" fo:border="2.49pt solid #000000" fo:padding="0.18mm" fo:background-color="#c0c0c0">
+    <style:header-footer-properties fo:min-height="21.26pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-bottom="7.09pt" fo:border="2.49pt solid #000000" fo:padding="0.51pt" fo:background-color="#c0c0c0">
      <style:background-image/>
     </style:header-footer-properties>
    </style:header-style>
    <style:footer-style>
-    <style:header-footer-properties fo:min-height="7.5mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-top="2.5mm" fo:border="2.49pt solid #000000" fo:padding="0.18mm" fo:background-color="#c0c0c0">
+    <style:header-footer-properties fo:min-height="21.26pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="7.09pt" fo:border="2.49pt solid #000000" fo:padding="0.51pt" fo:background-color="#c0c0c0">
      <style:background-image/>
     </style:header-footer-properties>
    </style:footer-style>
   </style:page-layout>
   <style:page-layout style:name="pm3">
-   <style:page-layout-properties fo:page-width="210.01mm" fo:page-height="297mm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="20mm" fo:margin-bottom="20mm" fo:margin-left="20mm" fo:margin-right="20mm" style:print-page-order="ttb" style:first-page-number="1" style:scale-to="100%" style:writing-mode="lr-tb" style:print="charts drawings objects zero-values"/>
+   <style:page-layout-properties fo:page-width="595.3pt" fo:page-height="841.89pt" style:num-format="1" style:print-orientation="portrait" fo:margin-top="56.69pt" fo:margin-bottom="56.69pt" fo:margin-left="56.69pt" fo:margin-right="56.69pt" style:print-page-order="ttb" style:first-page-number="1" style:scale-to="100%" style:writing-mode="lr-tb" style:print="charts drawings objects zero-values"/>
    <style:header-style>
-    <style:header-footer-properties fo:min-height="6.03mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-bottom="2.5mm"/>
+    <style:header-footer-properties fo:min-height="17.09pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-bottom="7.09pt"/>
    </style:header-style>
    <style:footer-style>
-    <style:header-footer-properties fo:min-height="6.03mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-top="2.5mm"/>
+    <style:header-footer-properties fo:min-height="17.09pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="7.09pt"/>
    </style:footer-style>
   </style:page-layout>
   <style:page-layout style:name="pm4">
-   <style:page-layout-properties fo:page-width="210.01mm" fo:page-height="297mm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="20mm" fo:margin-bottom="20mm" fo:margin-left="20mm" fo:margin-right="20mm" style:print-page-order="ttb" style:first-page-number="continue" style:scale-to="100%" style:writing-mode="lr-tb" style:print="charts drawings objects zero-values"/>
+   <style:page-layout-properties fo:page-width="595.3pt" fo:page-height="841.89pt" style:num-format="1" style:print-orientation="portrait" fo:margin-top="56.69pt" fo:margin-bottom="56.69pt" fo:margin-left="56.69pt" fo:margin-right="56.69pt" style:print-page-order="ttb" style:first-page-number="continue" style:scale-to="100%" style:writing-mode="lr-tb" style:print="charts drawings objects zero-values"/>
    <style:header-style>
-    <style:header-footer-properties fo:min-height="6.03mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-bottom="2.5mm"/>
+    <style:header-footer-properties fo:min-height="17.09pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-bottom="7.09pt"/>
    </style:header-style>
    <style:footer-style>
-    <style:header-footer-properties fo:min-height="6.03mm" fo:margin-left="0mm" fo:margin-right="0mm" fo:margin-top="2.5mm"/>
+    <style:header-footer-properties fo:min-height="17.09pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="7.09pt"/>
    </style:footer-style>
   </style:page-layout>
   <style:style style:name="T1" style:family="text">
@@ -769,7 +776,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-05-25">00-00-0000</text:date>, <text:time style:data-style-name="N2" text:time-value="17:36:05.236361356">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-06-13">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="15:42:01.803069070">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -824,7 +831,7 @@
       <text:p>result</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce1" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAAR</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce3"/>
     </table:table-row>
@@ -847,7 +854,7 @@
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce1" table:formula="of:=AND([Sheet2.C14:.C17])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAAR</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>CONCAT</text:p>
@@ -858,7 +865,7 @@
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce1" table:formula="of:=AND([Sheet2.C18:.C21])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAAR</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>TEXTJOIN</text:p>
@@ -869,7 +876,7 @@
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce1" table:formula="of:=AND([Sheet2.C22];[.C33])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAAR</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>IFS</text:p>
@@ -880,7 +887,7 @@
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce1" table:formula="of:=AND([Sheet2.C33:.C52])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAAR</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>SWITCH</text:p>
@@ -891,7 +898,7 @@
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce1" table:formula="of:=AND([Sheet2.C2:.C7])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAAR</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>MINIFS</text:p>
@@ -902,7 +909,7 @@
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce1" table:formula="of:=AND([Sheet2.C8:.C13])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
-      <text:p>WAAR</text:p>
+      <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>MAXIFS</text:p>
@@ -1018,7 +1025,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro1">
      <table:table-cell table:formula="of:=COM.MICROSOFT.MINIFS([$data.A29:.A33];[$data.B29:.C34];&quot;a&quot;)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Fout:502</text:p>
+      <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>#VALUE!</text:p>
@@ -1108,7 +1115,7 @@
     </table:table-row>
     <table:table-row table:style-name="ro1">
      <table:table-cell table:formula="of:=COM.MICROSOFT.MAXIFS([$data.A29:.A33];[$data.B29:.C34];&quot;a&quot;)" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>Fout:502</text:p>
+      <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce11" office:value-type="string" calcext:value-type="string">
       <text:p>#VALUE!</text:p>
@@ -1754,13 +1761,13 @@
      <table:table-cell table:number-columns-repeated="1015"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:formula="of:=COM.MICROSOFT.SWITCH([$Sheet2.E55];[$Sheet2.E48:.E54];[$Sheet2.F48:.F54])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+     <table:table-cell table:formula="of:=COM.MICROSOFT.SWITCH([$Sheet2.E55];[$Sheet2.E48:.E54];[$Sheet2.F48:.F54])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce13" table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+     <table:table-cell table:style-name="ce13" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=IF(ISNA([$Sheet2.A50]);1;0)" office:value-type="float" office:value="1" calcext:value-type="float">
+     <table:table-cell table:style-name="ce29" table:formula="of:=([$Sheet2.A50]=[$Sheet2.B50])" office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>WAAR</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1777,13 +1784,13 @@
      <table:table-cell table:number-columns-repeated="1015"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:formula="of:=COM.MICROSOFT.SWITCH([$Sheet2.E56];[$Sheet2.E49:.E55];[$Sheet2.F49:.F55])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+     <table:table-cell table:formula="of:=COM.MICROSOFT.SWITCH([$Sheet2.E56];[$Sheet2.E49:.E55];[$Sheet2.F49:.F55])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce13" table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+     <table:table-cell table:style-name="ce13" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce30" table:formula="of:=IF(ISNA([$Sheet2.A51]);1;0)" office:value-type="float" office:value="1" calcext:value-type="float">
+     <table:table-cell table:style-name="ce30" table:formula="of:=([$Sheet2.A51]=[$Sheet2.B51])" office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>WAAR</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1800,13 +1807,13 @@
      <table:table-cell table:number-columns-repeated="1015"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:formula="of:=COM.MICROSOFT.SWITCH([$Sheet2.E57];[$Sheet2.E50:.E56];[$Sheet2.F50:.F56])" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+     <table:table-cell table:formula="of:=COM.MICROSOFT.SWITCH([$Sheet2.E57];[$Sheet2.E50:.E56];[$Sheet2.F50:.F56])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce13" table:formula="of:=#N/A" office:value-type="string" office:string-value="" calcext:value-type="error">
-      <text:p>#N/A</text:p>
+     <table:table-cell table:style-name="ce13" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce31" table:formula="of:=IF(ISNA([$Sheet2.A52]);1;0)" office:value-type="float" office:value="1" calcext:value-type="float">
+     <table:table-cell table:style-name="ce31" table:formula="of:=([$Sheet2.A52]=[$Sheet2.B52])" office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>WAAR</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1875,9 +1882,9 @@
       <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C29"/>
      </calcext:conditional-format>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C37:Sheet2.C37">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C38"/>
-      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C38"/>
-      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C38"/>
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C37"/>
+      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C37"/>
+      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C37"/>
      </calcext:conditional-format>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C12:Sheet2.C12">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C12"/>
@@ -1890,44 +1897,43 @@
       <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C6"/>
      </calcext:conditional-format>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C46:Sheet2.C46">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C46"/>
+      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C46"/>
+      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C46"/>
+     </calcext:conditional-format>
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C47:Sheet2.C47">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C47"/>
       <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C47"/>
       <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C47"/>
      </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C47:Sheet2.C47">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C48"/>
-      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C48"/>
-      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C48"/>
-     </calcext:conditional-format>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C49:Sheet2.C49">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C50"/>
-      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C50"/>
-      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C50"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C50:Sheet2.C50">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C51"/>
-      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C51"/>
-      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C51"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C51:Sheet2.C51">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C52"/>
-      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C52"/>
-      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C52"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C52:Sheet2.C52">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C53"/>
-      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C53"/>
-      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C53"/>
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C49"/>
+      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C49"/>
+      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C49"/>
      </calcext:conditional-format>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C36:Sheet2.C36">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C36"/>
       <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C36"/>
       <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C36"/>
      </calcext:conditional-format>
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C50:Sheet2.C50">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C50"/>
+      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C50"/>
+      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C50"/>
+     </calcext:conditional-format>
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C51:Sheet2.C51">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C51"/>
+      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C51"/>
+      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C51"/>
+     </calcext:conditional-format>
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C52:Sheet2.C52">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C52"/>
+      <calcext:condition calcext:apply-style-name="OK" calcext:value="=1" calcext:base-cell-address="Sheet2.C52"/>
+      <calcext:condition calcext:apply-style-name="NOK" calcext:value="=0" calcext:base-cell-address="Sheet2.C52"/>
+     </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>
    <table:table table:name="data" table:style-name="ta3">
-    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co2" table:number-columns-repeated="1024" table:default-cell-style-name="ce6"/>
     <table:table-row table:style-name="ro1">
      <table:table-cell table:style-name="ce8" office:value-type="float" office:value="89" calcext:value-type="float">
