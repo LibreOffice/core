@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_1fad71e9",
+        "filename": "sw/uiconfig/swriter/ui/pagestylespanel.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-13T09:40:06Z",
+      "side": 1,
+      "message": "Hm, do we really need to duplicate those entries here? I bet the same list exists somewhere in cui already. Now that we have the helper class, can\u0027t we just have it in 1 place? \n\nFor example, look at how I\u0027ve done it for PaperSizeListBox class (also in svx/source/dialog)",
+      "revId": "bb808716eb187614af417e4fb8b4430dd6328879",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
