@@ -31,4 +31,8 @@
       constructor="com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation">
      <service name="com.sun.star.xml.sax.FastParser"/>
   </implementation>
+  <implementation name="com.sun.star.comp.extensions.xml.sax.LegacyFastParser"
+      constructor="com_sun_star_comp_extensions_xml_sax_LegacyFastParser_get_implementation">
+     <service name="com.sun.star.xml.sax.LegacyFastParser"/>
+  </implementation>
 </component>
