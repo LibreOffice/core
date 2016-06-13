@@ -78,22 +78,21 @@ void DbgTestSolarMutex()
 
 void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo)
 {
-        OString sMessage( "caught an exception!" );
-        sMessage += "\nin function:";
+        OString sMessage( "DBG_UNHANDLED_EXCEPTION in " );
         sMessage += currentFunction;
-        sMessage += "\ntype: ";
+        sMessage += "\n    type: ";
         sMessage += OUStringToOString( caught.getValueTypeName(), osl_getThreadTextEncoding() );
         css::uno::Exception exception;
         caught >>= exception;
         if ( !exception.Message.isEmpty() )
         {
-            sMessage += "\nmessage: ";
+            sMessage += "\n    message: ";
             sMessage += OUStringToOString( exception.Message, osl_getThreadTextEncoding() );
         }
         if ( exception.Context.is() )
         {
             const char* pContext = typeid( *exception.Context.get() ).name();
-            sMessage += "\ncontext: ";
+            sMessage += "\n    context: ";
             sMessage += pContext;
         }
         {
@@ -101,7 +100,7 @@ void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunc
                 specialized;
             if ( caught >>= specialized )
             {
-                sMessage += "\ndetails: ";
+                sMessage += "\n    details: ";
                 sMessage += OUStringToOString(
                     specialized.Details, osl_getThreadTextEncoding() );
             }
@@ -110,7 +109,7 @@ void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunc
             css::task::ErrorCodeIOException specialized;
             if ( caught >>= specialized )
             {
-                sMessage += "\ndetails: ";
+                sMessage += "\n    details: ";
                 sMessage += OString::number( specialized.ErrCode );
             }
         }
