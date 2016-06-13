@@ -25,8 +25,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/options.hxx>
-
-//  types, enums, ...
+#include <memory>
 
 enum CompatibilityOptions
 {
@@ -84,24 +83,7 @@ class SvtCompatibilityOptions_Impl;
 
 class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 {
-
-    //  public methods
-
     public:
-
-        //  constructor / destructor
-
-        /*-****************************************************************************************************
-            @short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
-                        We implement these class with a refcount mechanism! Every instance of this class increase it
-                        at create and decrease it at delete time - but all instances use the same data container!
-                        He is implemented as a static member ...
-
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer
-        *//*-*****************************************************************************************************/
-
          SvtCompatibilityOptions();
         virtual ~SvtCompatibilityOptions();
 
@@ -164,8 +146,6 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
         bool        IsConsiderWrappingStyle() const;
         bool        IsExpandWordSpace() const;
 
-    //  private methods
-
     private:
 
         /*-****************************************************************************************************
@@ -178,20 +158,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
-    //  private member
-
-    private:
-
-        /*Attention
-
-            Don't initialize these static members in these headers!
-            a) Double defined symbols will be detected ...
-            b) and unresolved externals exist at linking time.
-            Do it in your source only.
-         */
-
-        static SvtCompatibilityOptions_Impl*    m_pDataContainer;
-        static sal_Int32                        m_nRefCount;
+        std::shared_ptr<SvtCompatibilityOptions_Impl>    m_pImpl;
 
 };      // class SvtCompatibilityOptions
 
