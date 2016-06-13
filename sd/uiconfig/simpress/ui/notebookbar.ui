@@ -98,6 +98,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_sendtoback.png</property>
   </object>
+  <object class="GtkImage" id="ShowAnnotationsImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_showannotations.png</property>
+  </object>
   <object class="GtkImage" id="SpellDialogImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -122,6 +127,16 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_zoom.png</property>
+  </object>
+  <object class="GtkImage" id="ZoomOptimalImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_zoomoptimal.png</property>
+  </object>
+  <object class="GtkImage" id="ZoomPageImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_zoompage.png</property>
   </object>
   <object class="GtkGrid" id="NotebookBar">
     <property name="visible">True</property>
@@ -213,6 +228,7 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="Paste">
+                            <property name="width_request">70</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -271,6 +287,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="FormatPaintbrush">
+                            <property name="width_request">130</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -310,6 +327,7 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="InsertSlide">
+                            <property name="width_request">80</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1244,6 +1262,7 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="BringToFront">
+                            <property name="width_request">100</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1302,6 +1321,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="SendToBack">
+                            <property name="width_request">100</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1354,6 +1374,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkButton" id="InsertSlide1">
+                    <property name="width_request">80</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -1382,6 +1403,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="InsertTable">
+                    <property name="width_request">60</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -1414,6 +1436,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="InsertGraphic">
+                        <property name="width_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1472,6 +1495,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="InsertObjectChart">
+                        <property name="width_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1663,6 +1687,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="HyperlinkDialog">
+                        <property name="width_request">80</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1679,6 +1704,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="InsertAnnotation">
+                        <property name="width_request">80</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1695,6 +1721,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="Text2">
+                        <property name="width_request">80</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1711,6 +1738,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="HeaderAndFooter">
+                        <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1727,6 +1755,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="FontworkGalleryFloater">
+                        <property name="width_request">120</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1766,6 +1795,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="InsertSymbol">
+                        <property name="width_request">130</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1782,6 +1812,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="InsertMath">
+                        <property name="width_request">75</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1817,6 +1848,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="ImportFromFile">
+                    <property name="width_request">50</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -1858,6 +1890,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="Presentation">
+                        <property name="width_request">150</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1874,6 +1907,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="PresentationCurrentSlide">
+                        <property name="width_request">170</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1913,6 +1947,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="RehearseTimings">
+                        <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2019,6 +2054,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="SpellDialog">
+                        <property name="width_request">70</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2035,6 +2071,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="SpellOnline">
+                        <property name="width_request">180</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2051,6 +2088,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="ThesaurusDialog">
+                        <property name="width_request">80</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2090,6 +2128,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="InsertAnnotation1">
+                        <property name="width_request">80</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2343,12 +2382,14 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="ShowAnnotations">
+                    <property name="width_request">80</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="action_name">.uno:ShowAnnotations</property>
+                    <property name="image">ShowAnnotationsImg</property>
                     <property name="relief">none</property>
-                    <property name="xalign">0</property>
+                    <property name="image_position">top</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -2374,6 +2415,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="Zoom">
+                        <property name="width_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2390,6 +2432,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="ZoomOptimal">
+                        <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2406,6 +2449,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="ZoomPage">
+                        <property name="width_request">90</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2449,7 +2493,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutputQualityColor</property>
-                        <property name="image">OutputQualityColorImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2465,7 +2508,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutputQualityGrayscale</property>
-                        <property name="image">ZoomPageImg3</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2481,7 +2523,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutputQualityBlackWhite</property>
-                        <property name="image">ZoomPageImg2</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2527,15 +2568,5 @@
         <property name="top_attach">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="ZoomOptimalImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_zoomoptimal.png</property>
-  </object>
-  <object class="GtkImage" id="ZoomPageImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_zoompage.png</property>
   </object>
 </interface>
