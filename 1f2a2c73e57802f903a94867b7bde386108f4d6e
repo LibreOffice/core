@@ -39,6 +39,24 @@
       "revId": "1f2a2c73e57802f903a94867b7bde386108f4d6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_df1149ae",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-13T16:53:22Z",
+      "side": 1,
+      "message": "As I said, dumb question.. I assume I was just too blind to see it.",
+      "parentUuid": "da7fb54a_5fc29934",
+      "revId": "1f2a2c73e57802f903a94867b7bde386108f4d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
