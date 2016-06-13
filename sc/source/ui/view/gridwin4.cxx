@@ -943,6 +943,19 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // paint the background
         rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
 
+        if (bIsTiledRendering)
+        {
+            auto aOrigin = aOriginalMode.GetOrigin();
+            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
+            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+            static const double twipFactor = 15 * 1.76388889; // 26.45833335
+            aOrigin = Point(aOrigin.getX() * twipFactor,
+                            aOrigin.getY() * twipFactor);
+            MapMode aNew = rDevice.GetMapMode();
+            aNew.SetOrigin(aOrigin);
+            rDevice.SetMapMode(aNew);
+        }
+
         // paint the editeng text
         pEditView->Paint(rDevice.PixelToLogic(Rectangle(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()))), &rDevice);
         rDevice.SetMapMode(MAP_PIXEL);
