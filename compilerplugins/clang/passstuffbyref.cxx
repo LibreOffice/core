@@ -35,23 +35,105 @@ public:
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
+    // When warning about function params of primitive type that could be passed
+    // by value instead of by reference, make sure not to warn if the paremeter
+    // is ever bound to a reference; on the one hand, this needs scaffolding in
+    // all Traverse*Decl functions (indirectly) derived from FunctionDecl; and
+    // on the other hand, use a hack of ignoring just the DeclRefExprs nested in
+    // LValueToRValue ImplicitCastExprs when determining whether a param is
+    // bound to a reference:
+    bool TraverseFunctionDecl(FunctionDecl * decl);
+    bool TraverseCXXMethodDecl(CXXMethodDecl * decl);
+    bool TraverseCXXConstructorDecl(CXXConstructorDecl * decl);
+    bool TraverseCXXDestructorDecl(CXXDestructorDecl * decl);
+    bool TraverseCXXConversionDecl(CXXConversionDecl * decl);
     bool VisitFunctionDecl(const FunctionDecl * decl);
+    bool TraverseImplicitCastExpr(ImplicitCastExpr * expr);
+    bool VisitDeclRefExpr(const DeclRefExpr * expr);
+
     bool VisitCallExpr(const CallExpr * ) { if (mbInsideFunctionDecl) mbFoundDisqualifier = true; return true; }
     bool VisitMaterializeTemporaryExpr(const MaterializeTemporaryExpr * ) { if (mbInsideFunctionDecl) mbFoundDisqualifier = true; return true; }
     bool VisitDeclStmt(const DeclStmt * ) { if (mbInsideFunctionDecl) mbFoundDisqualifier = true; return true; }
     bool VisitLambdaExpr(const LambdaExpr * expr);
 
 private:
+    template<typename T> bool traverseAnyFunctionDecl(
+        T * decl, bool (RecursiveASTVisitor<PassStuffByRef>::* fn)(T *));
     void checkParams(const FunctionDecl * functionDecl);
     void checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl);
     bool isFat(QualType type);
     bool isPrimitiveConstRef(QualType type);
     bool mbInsideFunctionDecl;
     bool mbFoundDisqualifier;
+
+    struct FDecl {
+        std::set<ParmVarDecl const *> parms;
+        bool check = false;
+    };
+    std::vector<FDecl> functionDecls_;
 };
 
 bool startswith(const std::string& rStr, const char* pSubStr) {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
+}
+
+bool PassStuffByRef::TraverseFunctionDecl(FunctionDecl * decl) {
+    return traverseAnyFunctionDecl(
+        decl, &RecursiveASTVisitor::TraverseFunctionDecl);
+}
+
+bool PassStuffByRef::TraverseCXXMethodDecl(CXXMethodDecl * decl) {
+    return traverseAnyFunctionDecl(
+        decl, &RecursiveASTVisitor::TraverseCXXMethodDecl);
+}
+
+bool PassStuffByRef::TraverseCXXConstructorDecl(CXXConstructorDecl * decl) {
+    return traverseAnyFunctionDecl(
+        decl, &RecursiveASTVisitor::TraverseCXXConstructorDecl);
+}
+
+bool PassStuffByRef::TraverseCXXDestructorDecl(CXXDestructorDecl * decl) {
+    return traverseAnyFunctionDecl(
+        decl, &RecursiveASTVisitor::TraverseCXXDestructorDecl);
+}
+
+bool PassStuffByRef::TraverseCXXConversionDecl(CXXConversionDecl * decl) {
+    return traverseAnyFunctionDecl(
+        decl, &RecursiveASTVisitor::TraverseCXXConversionDecl);
+}
+
+template<typename T> bool PassStuffByRef::traverseAnyFunctionDecl(
+    T * decl, bool (RecursiveASTVisitor<PassStuffByRef>::* fn)(T *))
+{
+    if (ignoreLocation(decl)) {
+        return true;
+    }
+    if (decl->doesThisDeclarationHaveABody()) {
+        functionDecls_.emplace_back();
+    }
+    bool ret = (this->*fn)(decl);
+    if (decl->doesThisDeclarationHaveABody()) {
+        assert(!functionDecls_.empty());
+        if (functionDecls_.back().check) {
+            for (auto d: functionDecls_.back().parms) {
+                report(
+                    DiagnosticsEngine::Warning,
+                    ("passing primitive type param %0 by const &, rather pass"
+                     " by value"),
+                    d->getLocation())
+                    << d->getType() << d->getSourceRange();
+                auto can = decl->getCanonicalDecl();
+                if (can->getLocation() != decl->getLocation()) {
+                    report(
+                        DiagnosticsEngine::Note, "function is declared here:",
+                        can->getLocation())
+                        << can->getSourceRange();
+                }
+            }
+        }
+        functionDecls_.pop_back();
+    }
+    return ret;
 }
 
 bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
@@ -75,9 +157,36 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     return true;
 }
 
+bool PassStuffByRef::TraverseImplicitCastExpr(ImplicitCastExpr * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    return
+        (expr->getCastKind() == CK_LValueToRValue
+         && (dyn_cast<DeclRefExpr>(expr->getSubExpr()->IgnoreParenImpCasts())
+             != nullptr))
+        || RecursiveASTVisitor::TraverseImplicitCastExpr(expr);
+}
+
+bool PassStuffByRef::VisitDeclRefExpr(const DeclRefExpr * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    auto d = dyn_cast<ParmVarDecl>(expr->getDecl());
+    if (d == nullptr) {
+        return true;
+    }
+    for (auto & fd: functionDecls_) {
+        if (fd.parms.erase(d) == 1) {
+            break;
+        }
+    }
+    return true;
+}
+
 void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
     // Only warn on the definition of the function:
-    if (!functionDecl->isThisDeclarationADefinition()) {
+    if (!functionDecl->doesThisDeclarationHaveABody()) {
         return;
     }
     unsigned n = functionDecl->getNumParams();
@@ -102,24 +211,13 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
     if (startswith(aFunctionName, "slideshow::internal::ShapeAttributeLayer")) {
         return;
     }
+    assert(!functionDecls_.empty());
+    functionDecls_.back().check = true;
     for (unsigned i = 0; i != n; ++i) {
         const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
         auto const t = pvDecl->getType();
         if (isPrimitiveConstRef(t)) {
-#if 0 //TODO: check that the parm is not bound to a reference
-            report(
-                DiagnosticsEngine::Warning,
-                ("passing primitive type param %0 by const &, rather pass by value"),
-                pvDecl->getLocation())
-                << t << pvDecl->getSourceRange();
-            auto can = functionDecl->getCanonicalDecl();
-            if (can->getLocation() != functionDecl->getLocation()) {
-                report(
-                    DiagnosticsEngine::Note, "function is declared here:",
-                    can->getLocation())
-                    << can->getSourceRange();
-            }
-#endif
+            functionDecls_.back().parms.insert(pvDecl);
         }
     }
 }
@@ -246,7 +344,7 @@ bool PassStuffByRef::isPrimitiveConstRef(QualType type) {
         return false;
     }
     // ignore double for now, some of our code seems to believe it is cheaper to pass by ref
-    const BuiltinType* builtinType = dyn_cast<BuiltinType>(pointeeQT);
+    const BuiltinType* builtinType = pointeeQT->getAs<BuiltinType>();
     return builtinType->getKind() != BuiltinType::Kind::Double;
 }
 
