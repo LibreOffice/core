@@ -22,6 +22,29 @@
       "revId": "69eba0285bdb25a5ff97070fa8676570fc84778b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_5459a059",
+        "filename": "extensions/source/bibliography/formcontrolcontainer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-13T07:38:03Z",
+      "side": 1,
+      "message": "what\u0027s the benefit of this redundant set of parentheses?",
+      "range": {
+        "startLine": 64,
+        "startChar": 22,
+        "endLine": 64,
+        "endChar": 23
+      },
+      "revId": "69eba0285bdb25a5ff97070fa8676570fc84778b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
