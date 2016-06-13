@@ -1166,7 +1166,7 @@ VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
             }
         }
         else
-            SAL_WARN( "basctl", "No BASIC!");
+            SAL_WARN( "basctl.basicide", "No BASIC!");
         if (BasicManager* pBasicMgr = FindBasicManager(pBasic))
             StartListening( *pBasicMgr, true /* log on only once */ );
         return pWin;

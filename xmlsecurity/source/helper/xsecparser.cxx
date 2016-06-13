@@ -107,7 +107,7 @@ void SAL_CALL XSecParser::startElement(
         else if ( aName == TAG_REFERENCE )
         {
             OUString ouUri = xAttribs->getValueByName(ATTR_URI);
-            SAL_WARN_IF( ouUri == nullptr, "xmlsecurity", "URI == NULL" );
+            SAL_WARN_IF( ouUri == nullptr, "xmlsecurity.helper", "URI == NULL" );
 
             if (ouUri.startsWith(CHAR_FRAGMENT))
             {

@@ -230,7 +230,7 @@ IMPL_LINK_NOARG_TYPED(MacroSecurityTrustedSourcesTP, ViewCertPBHdl, Button*, voi
         if ( !xCert.is() )
             xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( maTrustedAuthors[nSelected][2] ) ;
 
-        SAL_WARN_IF( !xCert.is(), "xmlsecurity", "*MacroSecurityTrustedSourcesTP::ViewCertPBHdl(): Certificate not found and can't be created!" );
+        SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "*MacroSecurityTrustedSourcesTP::ViewCertPBHdl(): Certificate not found and can't be created!" );
 
         if ( xCert.is() )
         {

@@ -392,7 +392,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
 
 void XSecController::addSignature( sal_Int32 nSignatureId )
 {
-    SAL_WARN_IF( !m_xSecParser.is(), "xmlsecurity", "No XSecParser initialized" );
+    SAL_WARN_IF( !m_xSecParser.is(), "xmlsecurity.helper", "No XSecParser initialized" );
 
     m_nReservedSignatureId = nSignatureId;
     m_bVerifyCurrentSignature = true;

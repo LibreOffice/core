@@ -224,7 +224,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
         nullptr, mxCtx, eMode, bReadOnly, m_sODFVersion,
         m_bHasDocumentSignature);
     bool bInit = aSignaturesDialog->Init();
-    SAL_WARN_IF( !bInit, "xmlsecurity", "Error initializing security context!" );
+    SAL_WARN_IF( !bInit, "xmlsecurity.comp", "Error initializing security context!" );
     if ( bInit )
     {
         aSignaturesDialog->SetStorage( rxStorage );
@@ -259,7 +259,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 {
     if (!rxStorage.is())
     {
-        SAL_WARN( "xmlsecurity", "Error, no XStorage provided");
+        SAL_WARN( "xmlsecurity.comp", "Error, no XStorage provided");
         return Sequence<css::security::DocumentSignatureInformation>();
     }
     // First check for the InputStream, to avoid unnecessary initialization of the security environment...
@@ -281,7 +281,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
     bool bInit = aSignatureHelper.Init();
 
-    SAL_WARN_IF( !bInit, "xmlsecurity", "Error initializing security context!" );
+    SAL_WARN_IF( !bInit, "xmlsecurity.comp", "Error initializing security context!" );
 
     if ( !bInit )
         return Sequence< css::security::DocumentSignatureInformation >(0);
@@ -404,7 +404,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     bool bInit = aSignatureHelper.Init();
 
-    SAL_WARN_IF( !bInit, "xmlsecurity", "Error initializing security context!" );
+    SAL_WARN_IF( !bInit, "xmlsecurity.comp", "Error initializing security context!" );
 
     if ( bInit )
     {

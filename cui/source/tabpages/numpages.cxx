@@ -3236,7 +3236,7 @@ void SvxNumPositionTabPage::InitPosAndSpaceMode()
 {
     if ( pActNum == nullptr )
     {
-        SAL_WARN( "cui",
+        SAL_WARN( "cui.tabpages",
                 "<SvxNumPositionTabPage::InitPosAndSpaceMode()> - misusage of method -> <pAktNum> has to be already set!" );
         return;
     }

@@ -201,7 +201,7 @@ bool DigitalSignaturesDialog::Init()
 {
     bool bInit = maSignatureManager.maSignatureHelper.Init();
 
-    SAL_WARN_IF( !bInit, "xmlsecurity", "Error initializing security context!" );
+    SAL_WARN_IF( !bInit, "xmlsecurity.dialogs", "Error initializing security context!" );
 
     if ( bInit )
     {
@@ -447,7 +447,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 //in the digital signature dialog.
                 //Comparing the X509IssuerName with the one from the X509Certificate in order
                 //to find out if the X509IssuerName was modified does not work. See #i62684
-                SAL_WARN( "xmlsecurity", "Could not find embedded certificate!");
+                SAL_WARN( "xmlsecurity.dialogs", "Could not find embedded certificate!");
             }
 
             //In case there is no embedded certificate we try to get it from a local store
@@ -455,7 +455,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             if (!xCert.is())
                 xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
-            SAL_WARN_IF( !xCert.is(), "xmlsecurity", "Certificate not found and can't be created!" );
+            SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Certificate not found and can't be created!" );
 
             OUString aSubject;
             OUString aIssuer;
@@ -587,7 +587,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         if (!xCert.is())
             xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
-        SAL_WARN_IF( !xCert.is(), "xmlsecurity", "Error getting Certificate!" );
+        SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Error getting Certificate!" );
         if ( xCert.is() )
         {
             ScopedVclPtrInstance< CertificateViewer > aViewer( this, maSignatureManager.maSignatureHelper.GetSecurityEnvironment(), xCert, false );

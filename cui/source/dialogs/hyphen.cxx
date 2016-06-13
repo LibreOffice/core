@@ -366,7 +366,7 @@ IMPL_LINK_NOARG_TYPED( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, void
         catch (uno::Exception &e)
         {
             (void) e;
-            SAL_WARN( "cui", "Hyphenate All failed" );
+            SAL_WARN( "cui.dialogs", "Hyphenate All failed" );
         }
     }
 }

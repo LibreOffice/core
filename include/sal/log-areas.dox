@@ -504,6 +504,7 @@ certain functionality.
 
 @section xmlsecurity
 
+@li @c xmlsecurity.comp - xml security component
 @li @c xmlsecurity.dialogs - xml security dialogs
 @li @c xmlsecurity.helper
 @li @c xmlsecurity.xmlsec - xmlsec wrapper

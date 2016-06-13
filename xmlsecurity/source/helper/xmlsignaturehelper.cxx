@@ -74,8 +74,8 @@ XMLSignatureHelper::~XMLSignatureHelper()
 
 bool XMLSignatureHelper::Init()
 {
-    SAL_WARN_IF( mxSEInitializer.is(), "xmlsecurity", "XMLSignatureHelper::Init - mxSEInitializer already set!" );
-    SAL_WARN_IF( mxSecurityContext.is(), "xmlsecurity", "XMLSignatureHelper::Init - mxSecurityContext already set!" );
+    SAL_WARN_IF( mxSEInitializer.is(), "xmlsecurity.helper", "XMLSignatureHelper::Init - mxSEInitializer already set!" );
+    SAL_WARN_IF( mxSecurityContext.is(), "xmlsecurity.helper", "XMLSignatureHelper::Init - mxSecurityContext already set!" );
 
     mxSEInitializer = css::xml::crypto::SEInitializer::create( mxCtx );
 
@@ -89,9 +89,9 @@ void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,
     const OUString& sODFVersion)
 {
-    SAL_WARN_IF( mxUriBinding.is(), "xmlsecurity", "SetStorage - UriBinding already set!" );
+    SAL_WARN_IF( mxUriBinding.is(), "xmlsecurity.helper", "SetStorage - UriBinding already set!" );
     mxUriBinding = new UriBindingHelper( rxStorage );
-    SAL_WARN_IF(!rxStorage.is(), "xmlsecurity", "SetStorage - empty storage!");
+    SAL_WARN_IF(!rxStorage.is(), "xmlsecurity.helper", "SetStorage - empty storage!");
     mbODFPre1_2 = DocumentSignatureHelper::isODFPre_1_2(sODFVersion);
 }
 
@@ -256,7 +256,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css:
 {
     mbError = false;
 
-    SAL_WARN_IF(!xInputStream.is(), "xmlsecurity", "input stream missing");
+    SAL_WARN_IF(!xInputStream.is(), "xmlsecurity.helper", "input stream missing");
 
     /*
      * prepare ParserInputSrouce
