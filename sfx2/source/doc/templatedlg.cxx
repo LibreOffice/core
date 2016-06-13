@@ -380,7 +380,6 @@ void SfxTemplateManagerDlg::fillFolderComboBox()
     }
     mpCBFolder->SelectEntryPos(0);
     mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
-    mpLocalView->ShowTooltips(true);
 }
 
 void SfxTemplateManagerDlg::getApplicationSpecificSettings()
@@ -466,7 +465,6 @@ void SfxTemplateManagerDlg::readSettings ()
         //show all categories
         mpCBFolder->SelectEntryPos(0);
         mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
-        mpLocalView->ShowTooltips(true);
         mpLocalView->showAllTemplates();
     }
     else
@@ -504,7 +502,6 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, voi
         mpCurView->showAllTemplates();
         mpCBFolder->SelectEntryPos(0);
         mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
-        mpCurView->ShowTooltips(true);
     }
 
     if(mpSearchView->IsVisible())
@@ -519,13 +516,11 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
         if(mpCBFolder->GetSelectEntryPos() == 0)
         {
             mpLocalView->showAllTemplates();
-            mpLocalView->ShowTooltips(true);
             mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
         }
         else
         {
             mpLocalView->showRegion(sSelectedRegion);
-            mpLocalView->ShowTooltips(false);
             mpActionMenu->ShowItem(MNI_ACTION_RENAME_FOLDER);
         }
     }
@@ -1255,7 +1250,6 @@ void SfxTemplateManagerDlg::OnCategoryRename()
 
             mpLocalView->reload();
             mpLocalView->showRegion(aName);
-            mpLocalView->ShowTooltips(true);
         }
         else
         {
