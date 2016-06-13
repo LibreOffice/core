@@ -66,7 +66,7 @@ namespace
     };
 
     VDevBuffer::VDevBuffer()
-    :   Timer(),
+    :   Timer("VDevBuffer timer"),
         maFreeBuffers(),
         maUsedBuffers()
     {

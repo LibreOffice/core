@@ -3717,7 +3717,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                 // still be active
                 if ( !pDelayTimer )
                 {
-                    pDelayTimer = new Timer;
+                    pDelayTimer = new Timer("Restart ScInputHandlerDelay timer");
                     pDelayTimer->SetTimeout( 500 ); // 500 ms delay
                     pDelayTimer->SetTimeoutHdl( LINK( this, ScInputHandler, DelayTimer ) );
                     pDelayTimer->Start();
@@ -3729,7 +3729,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     {
         if ( !pDelayTimer )
         {
-            pDelayTimer = new Timer;
+            pDelayTimer = new Timer("ScInputHandlerDelay timer");
             pDelayTimer->SetTimeout( 500 ); // 500 ms delay
             pDelayTimer->SetTimeoutHdl( LINK( this, ScInputHandler, DelayTimer ) );
             pDelayTimer->Start();
