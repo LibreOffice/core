@@ -2840,10 +2840,9 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     return true;
 }
 
-gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEventScroll* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    GdkEventScroll* pSEvent = reinterpret_cast<GdkEventScroll*>(pEvent);
 
     static sal_uLong        nLines = 0;
     if( ! nLines )
@@ -2854,16 +2853,16 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
             nLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
     }
 
-    bool bNeg = (pSEvent->direction == GDK_SCROLL_DOWN || pSEvent->direction == GDK_SCROLL_RIGHT );
+    bool bNeg = (pEvent->direction == GDK_SCROLL_DOWN || pEvent->direction == GDK_SCROLL_RIGHT );
     SalWheelMouseEvent aEvent;
-    aEvent.mnTime           = pSEvent->time;
-    aEvent.mnX              = (sal_uLong)pSEvent->x;
-    aEvent.mnY              = (sal_uLong)pSEvent->y;
+    aEvent.mnTime           = pEvent->time;
+    aEvent.mnX              = (sal_uLong)pEvent->x;
+    aEvent.mnY              = (sal_uLong)pEvent->y;
     aEvent.mnDelta          = bNeg ? -120 : 120;
     aEvent.mnNotchDelta     = bNeg ? -1 : 1;
     aEvent.mnScrollLines    = nLines;
-    aEvent.mnCode           = GetMouseModCode( pSEvent->state );
-    aEvent.mbHorz           = (pSEvent->direction == GDK_SCROLL_LEFT || pSEvent->direction == GDK_SCROLL_RIGHT);
+    aEvent.mnCode           = GetMouseModCode( pEvent->state );
+    aEvent.mbHorz           = (pEvent->direction == GDK_SCROLL_LEFT || pEvent->direction == GDK_SCROLL_RIGHT);
 
     // --- RTL --- (mirror mouse pos)
     if( AllSettings::GetLayoutRTL() )
