@@ -44,6 +44,7 @@ $(eval $(call gb_Library_add_exception_objects,expwrap,\
 	sax/source/expatwrap/saxwriter \
 	sax/source/expatwrap/xml2utf \
 	sax/source/fastparser/fastparser \
+	sax/source/fastparser/legacyfastparser \
 ))
 
 # vim: set noet sw=4 ts=4:
