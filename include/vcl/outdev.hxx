@@ -99,7 +99,6 @@ class FontSelectPattern;
 class VCLXGraphics;
 class OutDevStateStack;
 struct BitmapSystemData;
-class VclReferenceBase;
 
 namespace vcl
 {
