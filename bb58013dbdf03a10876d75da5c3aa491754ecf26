@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_bf7c8573",
+        "filename": "sw/source/uibase/sidebar/PageFormatPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-13T09:53:56Z",
+      "side": 1,
+      "message": "Hum, I can\u0027t see \u0027Custom\u0027 entry ever added to mpMarginSelectbox, did I miss something? \n\nBut either way, this will again not work in non-English locales b/c entries are going to be translated. You either have to pass localized string as an argument to RemoveEntry, or you have to somehow make sure it is always on the same position and then remove entry on that fixed position",
+      "revId": "bb58013dbdf03a10876d75da5c3aa491754ecf26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9f87c160",
+        "filename": "sw/source/uibase/sidebar/PageMarginUtils.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-13T09:53:56Z",
+      "side": 1,
+      "message": "You can return right away i.e. instead of\n\nif (this \u0026\u0026 that) return true; else return false;\n\ndo just\n\nreturn (this \u0026\u0026 that);",
+      "revId": "bb58013dbdf03a10876d75da5c3aa491754ecf26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
