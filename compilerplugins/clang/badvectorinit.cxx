@@ -89,7 +89,7 @@ class BadVectorInit:
     public RecursiveASTVisitor<BadVectorInit>, public loplugin::Plugin
 {
 public:
-    explicit BadVectorInit(InstantiationData const & data): Plugin(data), mbInsideFunction(false) {}
+    explicit BadVectorInit(InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override
     {
@@ -101,15 +101,12 @@ public:
     bool VisitCXXMemberCallExpr(const CXXMemberCallExpr* );
 private:
     StringRef getFilename(SourceLocation loc);
-    bool mbInsideFunction;
     std::set<const VarDecl*> suspectSet;
 };
 
 bool BadVectorInit::TraverseFunctionDecl(FunctionDecl* decl)
 {
-    mbInsideFunction = true;
     bool ret = RecursiveASTVisitor::TraverseFunctionDecl(decl);
-    mbInsideFunction = false;
     suspectSet.clear();
     return ret;
 }
