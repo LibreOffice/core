@@ -106,6 +106,7 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
         const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
         auto const t = pvDecl->getType();
         if (isPrimitiveConstRef(t)) {
+#if 0 //TODO: check that the parm is not bound to a reference
             report(
                 DiagnosticsEngine::Warning,
                 ("passing primitive type param %0 by const &, rather pass by value"),
@@ -118,6 +119,7 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
                     can->getLocation())
                     << can->getSourceRange();
             }
+#endif
         }
     }
 }
