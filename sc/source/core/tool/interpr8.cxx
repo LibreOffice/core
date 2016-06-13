@@ -1417,11 +1417,15 @@ void ScInterpreter::ScConcat_MS()
                 if ( !aCell.isEmpty() )
                 {
                     if ( aCell.hasString() )
-                        aResBuf.append( aCell.getString( pDok ) );
+                    {
+                        svl::SharedString aSS;
+                        GetCellString( aSS, aCell);
+                        aResBuf.append( aSS.getString());
+                    }
                     else
                     {
                         if ( !aCell.hasEmptyValue() )
-                            aResBuf.append( OUString::number( aCell.getValue() ) );
+                            aResBuf.append( OUString::number( GetCellValue( aAdr, aCell)));
                     }
                 }
             }
@@ -1459,11 +1463,15 @@ void ScInterpreter::ScConcat_MS()
                         if ( !aCell.isEmpty() )
                         {
                             if ( aCell.hasString() )
-                                aResBuf.append(  aCell.getString( pDok ) );
+                            {
+                                svl::SharedString aSS;
+                                GetCellString( aSS, aCell);
+                                aResBuf.append( aSS.getString());
+                            }
                             else
                             {
                                 if ( !aCell.hasEmptyValue() )
-                                    aResBuf.append(  OUString::number( aCell.getValue() ) );
+                                    aResBuf.append( OUString::number( GetCellValue( aAdr, aCell)));
                             }
                         }
                     }
@@ -1537,11 +1545,15 @@ void ScInterpreter::ScTextJoin_MS()
                 if ( !aCell.isEmpty() )
                 {
                     if ( aCell.hasString() )
-                        aDelimiters.push_back( aCell.getString( pDok ) );
+                    {
+                        svl::SharedString aSS;
+                        GetCellString( aSS, aCell);
+                        aDelimiters.push_back( aSS.getString());
+                    }
                     else
                     {
                         if ( !aCell.hasEmptyValue() )
-                            aDelimiters.push_back( OUString::number( aCell.getValue() ) );
+                            aDelimiters.push_back( OUString::number( GetCellValue( aAdr, aCell)));
                     }
                 }
             }
@@ -1579,11 +1591,15 @@ void ScInterpreter::ScTextJoin_MS()
                         if ( !aCell.isEmpty() )
                         {
                             if ( aCell.hasString() )
-                                aDelimiters.push_back( aCell.getString( pDok ) );
+                            {
+                                svl::SharedString aSS;
+                                GetCellString( aSS, aCell);
+                                aDelimiters.push_back( aSS.getString());
+                            }
                             else
                             {
                                 if ( !aCell.hasEmptyValue() )
-                                    aDelimiters.push_back( OUString::number( aCell.getValue() ) );
+                                    aDelimiters.push_back( OUString::number( GetCellValue( aAdr, aCell)));
                             }
                         }
                         else
@@ -1682,11 +1698,15 @@ void ScInterpreter::ScTextJoin_MS()
                     if ( !aCell.isEmpty() )
                     {
                         if ( aCell.hasString() )
-                            aStr = aCell.getString( pDok );
+                        {
+                            svl::SharedString aSS;
+                            GetCellString( aSS, aCell);
+                            aStr = aSS.getString();
+                        }
                         else
                         {
                             if ( !aCell.hasEmptyValue() )
-                                aStr = OUString::number( aCell.getValue() );
+                                aStr = OUString::number( GetCellValue( aAdr, aCell));
                         }
                     }
                     else
@@ -1742,11 +1762,15 @@ void ScInterpreter::ScTextJoin_MS()
                             if ( !aCell.isEmpty() )
                             {
                                 if ( aCell.hasString() )
-                                    aStr = aCell.getString( pDok );
+                                {
+                                    svl::SharedString aSS;
+                                    GetCellString( aSS, aCell);
+                                    aStr = aSS.getString();
+                                }
                                 else
                                 {
                                     if ( !aCell.hasEmptyValue() )
-                                        aStr = OUString::number( aCell.getValue() );
+                                        aStr = OUString::number( GetCellValue( aAdr, aCell));
                                 }
                             }
                             else
@@ -1941,9 +1965,9 @@ void ScInterpreter::ScSwitch_MS()
                 ScRefCellValue aCell( *pDok, aAdr );
                 isValue = !( aCell.hasString() || aCell.hasEmptyValue() || aCell.isEmpty() );
                 if ( isValue )
-                    fRefVal = aCell.getValue();
+                    fRefVal = GetCellValue( aAdr, aCell);
                 else
-                    aRefStr = aCell.getString( pDok );
+                    GetCellString( aRefStr, aCell);
             }
             break;
         case svExternalSingleRef:
