@@ -202,9 +202,8 @@ class GtkSalGraphics : public X11SalGraphics
     vcl::Region               m_aClipRegion;
 
 public:
-                        GtkSalGraphics( GtkSalFrame *, GtkWidget *window );
-                        GtkSalGraphics( GtkSalFrame *, GtkWidget *window, SalX11Screen nXScreen );
-    virtual             ~GtkSalGraphics();
+    GtkSalGraphics(GtkSalFrame *, GtkWidget *window, SalX11Screen nXScreen);
+    virtual ~GtkSalGraphics();
 
     inline GtkWidget*  GetGtkWidget() const { return m_pWindow; }
     inline GdkWindow*  GetGdkWindow() const { return m_pWindow->window; }

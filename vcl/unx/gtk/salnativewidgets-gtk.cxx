@@ -61,16 +61,6 @@ enum
     BG_BLACK
 };
 
-GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
-    : X11SalGraphics(),
-      m_pWindow( pWindow ),
-      m_aClipRegion(true)
-{
-    Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ),
-          SalX11Screen( gdk_x11_screen_get_screen_number(
-                                gtk_widget_get_screen( pWindow ) ) ) );
-}
-
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow,
                                 SalX11Screen nXScreen )
     : X11SalGraphics(),
