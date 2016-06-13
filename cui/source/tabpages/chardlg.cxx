@@ -374,8 +374,7 @@ SvxCharNamePage::~SvxCharNamePage()
 
 void SvxCharNamePage::dispose()
 {
-    delete m_pImpl;
-    m_pImpl = nullptr;
+    m_pImpl.reset();
     m_pWestFrame.clear();
     m_pWestFontNameFT.clear();
     m_pWestFontNameLB.clear();
