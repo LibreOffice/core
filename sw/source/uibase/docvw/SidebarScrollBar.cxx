@@ -10,6 +10,7 @@
 #include <SidebarScrollBar.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include <SidebarWin.hxx>
 #include <view.hxx>
@@ -56,7 +57,10 @@ void SidebarScrollBar::LogicInvalidate(const Rectangle* pRectangle)
 
     OString sRectangle = aRectangle.toString();
     SwWrtShell& rWrtShell = m_rView.GetWrtShell();
-    rWrtShell.libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    if (comphelper::LibreOfficeKit::isViewCallback())
+        rWrtShell.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    else
+        rWrtShell.libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 void SidebarScrollBar::MouseButtonUp(const MouseEvent& /*rMouseEvent*/)
