@@ -188,6 +188,41 @@ void setSuffixCell(
 
 }
 
+namespace {
+/* TODO: move this to rtl::math::approxDiff() ? Though the name is funny, the
+ * approx is expected to be more correct than the raw diff. */
+/** Calculate a-b trying to diminish precision errors such as for 0.11-0.12
+    not return -0.009999999999999995 but -0.01 instead.
+ */
+double approxDiff( double a, double b )
+{
+    if (a == b)
+        return 0.0;
+    if (a == 0.0)
+        return -b;
+    if (b == 0.0)
+        return a;
+    const double c = a - b;
+    const double aa = fabs(a);
+    const double ab = fabs(b);
+    if (aa < 1e-16 || aa > 1e+16 || ab < 1e-16 || ab > 1e+16)
+        // This is going nowhere, live with the result.
+        return c;
+
+    const double q = aa < ab ? b / a : a / b;
+    const double d = (a * q - b * q) / q;
+    if (d == c)
+        // No differing error, live with the result.
+        return c;
+
+    // We now have two subtractions with a similar but not equal error. Obtain
+    // the exponent of the error magnitude and round accordingly.
+    const double e = fabs(d - c);
+    const double fExp = floor( log10( e));
+    return rtl::math::round( c, -(static_cast<int>(fExp))-1);
+}
+}
+
 void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             FillCmd& rCmd, FillDateCmd& rDateCmd,
                             double& rInc, sal_uInt16& rMinDigits,
@@ -314,7 +349,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             {
                 double nVal1 = aFirstCell.mfValue;
                 double nVal2 = GetValue(nCol+nAddX, nRow+nAddY);
-                rInc = nVal2 - nVal1;
+                rInc = approxDiff( nVal2, nVal1);
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                 nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                 bool bVal = true;
@@ -324,7 +359,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if (aCell.meType == CELLTYPE_VALUE)
                     {
                         nVal2 = aCell.mfValue;
-                        double nDiff = nVal2 - nVal1;
+                        double nDiff = approxDiff( nVal2, nVal1);
                         if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
                             bVal = false;
                         nVal1 = nVal2;
@@ -389,7 +424,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 short nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
                 if ( nFlag1 == nFlag2 )
                 {
-                    rInc = (double)nVal2 - (double)nVal1;
+                    rInc = approxDiff( nVal2, nVal1);
                     nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
                     nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                     bool bVal = true;
@@ -403,7 +438,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
                             if ( nFlag1 == nFlag2 )
                             {
-                                double nDiff = (double)nVal2 - (double)nVal1;
+                                double nDiff = approxDiff( nVal2, nVal1);
                                 if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
                                     bVal = false;
                                 nVal1 = nVal2;
