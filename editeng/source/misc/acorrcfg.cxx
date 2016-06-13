@@ -19,6 +19,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <editeng/acorrcfg.hxx>
+#include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
@@ -140,51 +141,51 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                 switch(nProp)
                 {
                     case  0:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= SaveWordCplSttLst;
                     break;//"Exceptions/TwoCapitalsAtStart",
                     case  1:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= SaveWordWrdSttLst;
                     break;//"Exceptions/CapitalAtStartSentence",
                     case  2:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= Autocorrect;
                     break;//"UseReplacementTable",
                     case  3:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= CapitalStartWord;
                     break;//"TwoCapitalsAtStart",
                     case  4:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= CapitalStartSentence;
                     break;//"CapitalAtStartSentence",
                     case  5:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= ChgWeightUnderl;
                     break;//"ChangeUnderlineWeight",
                     case  6:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= SetINetAttr;
                     break;//"SetInetAttribute",
                     case  7:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= ChgOrdinalNumber;
                     break;//"ChangeOrdinalNumber",
                     case 8:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                              nFlags |= AddNonBrkSpace;
                     break;//"AddNonBreakingSpace"
                     case  9:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= ChgToEnEmDash;
                     break;//"ChangeDash",
                     case 10:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= IgnoreDoubleSpace;
                     break;//"RemoveDoubleSpaces",
                     case 11:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= ChgSglQuotes;
                     break;//"ReplaceSingleQuote",
                     case 12:
@@ -198,7 +199,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"SingleQuoteAtEnd",
                     case 14:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= ChgQuotes;
                     break;//"ReplaceDoubleQuote",
                     case 15:
@@ -212,7 +213,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_Unicode >( nTemp ) );
                     break;//"DoubleQuoteAtEnd"
                     case 17:
-                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
+                        if(*o3tl::doAccess<bool>(pValues[nProp]))
                             nFlags |= CorrectCapsLock;
                     break;//"CorrectAccidentalCapsLock"
                 }
@@ -388,23 +389,23 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
             {
                 switch(nProp)
                 {
-                    case   0: rParent.bFileRel = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Text/FileLinks",
-                    case   1: rParent.bNetRel = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break; // "Text/InternetLinks",
-                    case   2: rParent.bAutoTextPreview = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Text/ShowPreview",
-                    case   3: rParent.bAutoTextTip = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break; // "Text/ShowToolTip",
-                    case   4: rParent.bSearchInAllCategories = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break; //"Text/SearchInAllCategories"
-                    case   5: rSwFlags.bAutoCorrect = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/UseReplacementTable",
-                    case   6: rSwFlags.bCapitalStartSentence = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/TwoCapitalsAtStart",
-                    case   7: rSwFlags.bCapitalStartWord = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/CapitalAtStartSentence",
-                    case   8: rSwFlags.bChgWeightUnderl = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeUnderlineWeight",
-                    case   9: rSwFlags.bSetINetAttr = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/SetInetAttribute",
-                    case  10: rSwFlags.bChgOrdinalNumber = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeOrdinalNumber",
-                    case  11: rSwFlags.bAddNonBrkSpace = *static_cast<sal_Bool const *>(pValues[nProp].getValue( )); break; // "Format/Option/AddNonBreakingSpace",
+                    case   0: rParent.bFileRel = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Text/FileLinks",
+                    case   1: rParent.bNetRel = *o3tl::doAccess<bool>(pValues[nProp]);  break; // "Text/InternetLinks",
+                    case   2: rParent.bAutoTextPreview = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Text/ShowPreview",
+                    case   3: rParent.bAutoTextTip = *o3tl::doAccess<bool>(pValues[nProp]);  break; // "Text/ShowToolTip",
+                    case   4: rParent.bSearchInAllCategories = *o3tl::doAccess<bool>(pValues[nProp]);  break; //"Text/SearchInAllCategories"
+                    case   5: rSwFlags.bAutoCorrect = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/UseReplacementTable",
+                    case   6: rSwFlags.bCapitalStartSentence = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/TwoCapitalsAtStart",
+                    case   7: rSwFlags.bCapitalStartWord = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/CapitalAtStartSentence",
+                    case   8: rSwFlags.bChgWeightUnderl = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/ChangeUnderlineWeight",
+                    case   9: rSwFlags.bSetINetAttr = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/SetInetAttribute",
+                    case  10: rSwFlags.bChgOrdinalNumber = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/ChangeOrdinalNumber",
+                    case  11: rSwFlags.bAddNonBrkSpace = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/AddNonBreakingSpace",
 // it doesn't exist here - the common flags are used for that -> LM
-//                  case  12: rSwFlags.bChgToEnEmDash = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeDash",
-                    case  13: rSwFlags.bDelEmptyNode = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelEmptyParagraphs",
-                    case  14: rSwFlags.bChgUserColl = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ReplaceUserStyle",
-                    case  15: rSwFlags.bChgEnumNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/ChangeToBullets/Enable",
+//                  case  12: rSwFlags.bChgToEnEmDash = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/ChangeDash",
+                    case  13: rSwFlags.bDelEmptyNode = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/DelEmptyParagraphs",
+                    case  14: rSwFlags.bChgUserColl = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/ReplaceUserStyle",
+                    case  15: rSwFlags.bChgEnumNum = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/ChangeToBullets/Enable",
                     case  16:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
@@ -436,7 +437,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                         rSwFlags.aBulletFont.SetPitch(FontPitch(nVal));
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",
-                    case  21: rSwFlags.bRightMargin = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/CombineParagraphs",
+                    case  21: rSwFlags.bRightMargin = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/CombineParagraphs",
                     case  22:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
@@ -444,17 +445,17 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_uInt8 >(nVal);
                     }
                     break; // "Format/Option/CombineValue",
-                    case  23: rSwFlags.bAFormatDelSpacesAtSttEnd =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelSpacesAtStartEnd",
-                    case  24: rSwFlags.bAFormatDelSpacesBetweenLines = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelSpacesBetween",
-                    case  25: rParent.bAutoFmtByInput = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/Enable",
-                    case  26: rSwFlags.bChgToEnEmDash = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ChangeDash",
-                    case  27: rSwFlags.bSetNumRule = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ApplyNumbering/Enable",
-                    case  28: rSwFlags.bSetBorder = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ChangeToBorders",
-                    case  29: rSwFlags.bCreateTable = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ChangeToTable",
-                    case  30: rSwFlags.bReplaceStyles =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ReplaceStyle",
-                    case  31: rSwFlags.bAFormatByInpDelSpacesAtSttEnd =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/DelSpacesAtStartEnd",
-                    case  32: rSwFlags.bAFormatByInpDelSpacesBetweenLines = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/DelSpacesBetween",
-                    case  33: rSwFlags.bAutoCompleteWords = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/Enable",
+                    case  23: rSwFlags.bAFormatDelSpacesAtSttEnd =  *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/DelSpacesAtStartEnd",
+                    case  24: rSwFlags.bAFormatDelSpacesBetweenLines = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/DelSpacesBetween",
+                    case  25: rParent.bAutoFmtByInput = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/Enable",
+                    case  26: rSwFlags.bChgToEnEmDash = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ChangeDash",
+                    case  27: rSwFlags.bSetNumRule = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ApplyNumbering/Enable",
+                    case  28: rSwFlags.bSetBorder = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ChangeToBorders",
+                    case  29: rSwFlags.bCreateTable = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ChangeToTable",
+                    case  30: rSwFlags.bReplaceStyles =  *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ReplaceStyle",
+                    case  31: rSwFlags.bAFormatByInpDelSpacesAtSttEnd =  *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/DelSpacesAtStartEnd",
+                    case  32: rSwFlags.bAFormatByInpDelSpacesBetweenLines = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/DelSpacesBetween",
+                    case  33: rSwFlags.bAutoCompleteWords = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/Enable",
                     case  34:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
@@ -469,10 +470,10 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/MaxListLen",
-                    case  36: rSwFlags.bAutoCmpltCollectWords = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/CollectWords",
-                    case  37: rSwFlags.bAutoCmpltEndless = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/EndlessList",
-                    case  38: rSwFlags.bAutoCmpltAppendBlanc = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/AppendBlank",
-                    case  39: rSwFlags.bAutoCmpltShowAsTip = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/ShowAsTip",
+                    case  36: rSwFlags.bAutoCmpltCollectWords = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/CollectWords",
+                    case  37: rSwFlags.bAutoCmpltEndless = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/EndlessList",
+                    case  38: rSwFlags.bAutoCmpltAppendBlanc = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/AppendBlank",
+                    case  39: rSwFlags.bAutoCmpltShowAsTip = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/ShowAsTip",
                     case  40:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
@@ -480,7 +481,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/AcceptKey"
-                    case 41 :rSwFlags.bAutoCmpltKeepList = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;//"Completion/KeepList"
+                    case 41 :rSwFlags.bAutoCmpltKeepList = *o3tl::doAccess<bool>(pValues[nProp]); break;//"Completion/KeepList"
                     case 42 :
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;

@@ -26,6 +26,7 @@
 #include <editeng/editids.hrc>
 #include <editeng/editeng.hxx>
 #include <svl/itempool.hxx>
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <algorithm>
 
@@ -286,19 +287,19 @@ void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, uno::Any & rMetric ) th
             switch( rMetric.getValueTypeClass() )
             {
             case uno::TypeClass_BYTE:
-                rMetric <<= (sal_Int8)(TWIPS_TO_MM(*static_cast<sal_Int8 const *>(rMetric.getValue())));
+                rMetric <<= (sal_Int8)(TWIPS_TO_MM(*o3tl::forceAccess<sal_Int8>(rMetric)));
                 break;
             case uno::TypeClass_SHORT:
-                rMetric <<= (sal_Int16)(TWIPS_TO_MM(*static_cast<sal_Int16 const *>(rMetric.getValue())));
+                rMetric <<= (sal_Int16)(TWIPS_TO_MM(*o3tl::forceAccess<sal_Int16>(rMetric)));
                 break;
             case uno::TypeClass_UNSIGNED_SHORT:
-                rMetric <<= (sal_uInt16)(TWIPS_TO_MM(*static_cast<sal_uInt16 const *>(rMetric.getValue())));
+                rMetric <<= (sal_uInt16)(TWIPS_TO_MM(*o3tl::forceAccess<sal_uInt16>(rMetric)));
                 break;
             case uno::TypeClass_LONG:
-                rMetric <<= (sal_Int32)(TWIPS_TO_MM(*static_cast<sal_Int32 const *>(rMetric.getValue())));
+                rMetric <<= (sal_Int32)(TWIPS_TO_MM(*o3tl::forceAccess<sal_Int32>(rMetric)));
                 break;
             case uno::TypeClass_UNSIGNED_LONG:
-                rMetric <<= (sal_uInt32)(TWIPS_TO_MM(*static_cast<sal_uInt32 const *>(rMetric.getValue())));
+                rMetric <<= (sal_uInt32)(TWIPS_TO_MM(*o3tl::forceAccess<sal_uInt32>(rMetric)));
                 break;
             default:
                 OSL_FAIL("AW: Missing unit translation to 100th mm!");
@@ -323,19 +324,19 @@ void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, uno::Any & rMetr
             switch( rMetric.getValueTypeClass() )
             {
                 case uno::TypeClass_BYTE:
-                    rMetric <<= (sal_Int8)(MM_TO_TWIPS(*static_cast<sal_Int8 const *>(rMetric.getValue())));
+                    rMetric <<= (sal_Int8)(MM_TO_TWIPS(*o3tl::forceAccess<sal_Int8>(rMetric)));
                     break;
                 case uno::TypeClass_SHORT:
-                    rMetric <<= (sal_Int16)(MM_TO_TWIPS(*static_cast<sal_Int16 const *>(rMetric.getValue())));
+                    rMetric <<= (sal_Int16)(MM_TO_TWIPS(*o3tl::forceAccess<sal_Int16>(rMetric)));
                     break;
                 case uno::TypeClass_UNSIGNED_SHORT:
-                    rMetric <<= (sal_uInt16)(MM_TO_TWIPS(*static_cast<sal_uInt16 const *>(rMetric.getValue())));
+                    rMetric <<= (sal_uInt16)(MM_TO_TWIPS(*o3tl::forceAccess<sal_uInt16>(rMetric)));
                     break;
                 case uno::TypeClass_LONG:
-                    rMetric <<= (sal_Int32)(MM_TO_TWIPS(*static_cast<sal_Int32 const *>(rMetric.getValue())));
+                    rMetric <<= (sal_Int32)(MM_TO_TWIPS(*o3tl::forceAccess<sal_Int32>(rMetric)));
                     break;
                 case uno::TypeClass_UNSIGNED_LONG:
-                    rMetric <<= (sal_uInt32)(MM_TO_TWIPS(*static_cast<sal_uInt32 const *>(rMetric.getValue())));
+                    rMetric <<= (sal_uInt32)(MM_TO_TWIPS(*o3tl::forceAccess<sal_uInt32>(rMetric)));
                     break;
                 default:
                     OSL_FAIL("AW: Missing unit translation to 100th mm!");
