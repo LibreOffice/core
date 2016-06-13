@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_7f375db0",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4420,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-13T11:02:37Z",
+      "side": 1,
+      "message": "Hmm, if I have a document without any tables, then this will still return true, do we want that? Perhaps return false for the default style and true for the non-default ones?",
+      "revId": "81dc918c136f2cc4c4efb49afb0d264332221b99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9f3c2195",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-13T11:02:37Z",
+      "side": 1,
+      "message": "The table shape and the table style string won\u0027t be compared to the same OUString reference, is that intentional? I would rather add a \"const OUString* pName \u003d pSNS++;\" and then compare twice against pName.",
+      "revId": "81dc918c136f2cc4c4efb49afb0d264332221b99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
