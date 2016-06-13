@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_7f4d9d71",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-13T09:17:09Z",
+      "side": 1,
+      "message": "Is there a reason to change this?",
+      "revId": "57040dc538209016f3f9022bbee1a8fcb544fd70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9f526112",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2033,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-13T09:17:09Z",
+      "side": 1,
+      "message": "If ContextLabel is the same as Label, you can just remove ContextLabel.",
+      "revId": "57040dc538209016f3f9022bbee1a8fcb544fd70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
