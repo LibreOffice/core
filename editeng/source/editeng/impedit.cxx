@@ -127,6 +127,8 @@ void ImpEditView::registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable
 
 void ImpEditView::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
+    // Per-view callbacks should always invoke ImpEditView::libreOfficeKitViewCallback().
+    assert(!comphelper::LibreOfficeKit::isViewCallback());
     if (mpLibreOfficeKitSearchable)
         mpLibreOfficeKitSearchable->libreOfficeKitCallback(nType, pPayload);
 }
