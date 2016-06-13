@@ -399,14 +399,22 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                     if (bMm100ToTwip)
                         aStart = OutputDevice::LogicToLogic(aStart, MAP_100TH_MM, MAP_TWIP);
                     aStart.Move(aOrigin.getX(), aOrigin.getY());
-                    libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+
+                    if (comphelper::LibreOfficeKit::isViewCallback())
+                        libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+                    else
+                        libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
                     Rectangle& rEnd = aRectangles.back();
                     Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
                     if (bMm100ToTwip)
                         aEnd = OutputDevice::LogicToLogic(aEnd, MAP_100TH_MM, MAP_TWIP);
                     aEnd.Move(aOrigin.getX(), aOrigin.getY());
-                    libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+
+                    if (comphelper::LibreOfficeKit::isViewCallback())
+                        libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+                    else
+                        libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
                 }
 
                 std::vector<OString> v;
@@ -420,7 +428,11 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 }
                 sRectangle = comphelper::string::join("; ", v);
             }
-            libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
+
+            if (comphelper::LibreOfficeKit::isViewCallback())
+                libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
+            else
+                libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
 
             pOutWin->Pop();
         }
