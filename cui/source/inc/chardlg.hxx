@@ -26,6 +26,7 @@
 #include <svx/checklbx.hxx>
 #include <svx/langbox.hxx>
 #include <vcl/layout.hxx>
+#include <memory>
 
 // forward ---------------------------------------------------------------
 
@@ -104,7 +105,7 @@ private:
     VclPtr<SvxLanguageBox>     m_pCTLFontLanguageLB;
     VclPtr<FixedText>          m_pCTLFontTypeFT;
 
-    SvxCharNamePage_Impl*   m_pImpl;
+    std::unique_ptr<SvxCharNamePage_Impl>   m_pImpl;
 
                         SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rSet );
 
