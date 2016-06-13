@@ -3360,7 +3360,7 @@ void ScInterpreter::ScGetPivotData()
 
                 // Parse possible number from MatchValueName and format
                 // locale independent as MatchValue.
-                sal_uInt32 nNumFormat;
+                sal_uInt32 nNumFormat = 0;
                 double fValue;
                 if (pFormatter->IsNumberFormat( aFilters[i].MatchValueName, nNumFormat, fValue))
                     aFilters[i].MatchValue = ScDPCache::GetLocaleIndependentFormattedString(
