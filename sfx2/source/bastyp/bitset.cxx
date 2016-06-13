@@ -107,7 +107,7 @@ sal_uInt16 IndexBitSet::GetFreeIndex()
         *this|=i;
         return i;
       }
-  SAL_WARN( "sfx2", "IndexBitSet enthaelt mehr als USHRT_MAX Eintraege");
+  SAL_WARN( "sfx", "IndexBitSet enthaelt mehr als USHRT_MAX Eintraege");
   return 0;
 }
 

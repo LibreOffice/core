@@ -92,15 +92,15 @@ namespace
         }
         catch( const ucb::CommandAbortedException& )
         {
-            SAL_INFO( "sfx2.appl", "CommandAbortedException" );
+            SAL_INFO( "sfx.appl", "CommandAbortedException" );
         }
         catch( const ucb::IllegalIdentifierException& )
         {
-            SAL_INFO( "sfx2.appl", "IllegalIdentifierException" );
+            SAL_INFO( "sfx.appl", "IllegalIdentifierException" );
         }
         catch( const ucb::ContentCreationException& )
         {
-            SAL_INFO( "sfx2.appl", "IllegalIdentifierException" );
+            SAL_INFO( "sfx.appl", "IllegalIdentifierException" );
         }
         catch( const uno::Exception& )
         {
