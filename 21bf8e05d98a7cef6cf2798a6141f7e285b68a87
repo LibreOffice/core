@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_85d3f037",
+        "filename": "sc/source/filter/inc/xetable.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-14T17:12:38Z",
+      "side": 1,
+      "message": "XclExpColOutlineBuffer::GetLevel() returns sal_uInt8 and also OOXML specifies outlineLevel to be xsd:unsignedByte. For clarity we should use the sal_uInt8 type also here.",
+      "range": {
+        "startLine": 746,
+        "startChar": 4,
+        "endLine": 746,
+        "endChar": 14
+      },
+      "revId": "21bf8e05d98a7cef6cf2798a6141f7e285b68a87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
