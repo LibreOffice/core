@@ -28,14 +28,194 @@
 
 #include <usp10.h>
 
+#include "opengl/PackedTextureAtlas.hxx"
+
+typedef std::unordered_map<int,int> IntMap;
+
 // Graphite headers
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
 #include <graphite_layout.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <graphite_features.hxx>
+#if ENABLE_GRAPHITE_DWRITE
+#include <d2d1.h>
+#include <dwrite.h>
 #endif
+#endif
+
+// This needs to come after any includes for d2d1.h, otherwise we get lots of errors
+#include "glyphy/demo.hxx"
 
 class WinFontInstance;
 struct VisualItem;
+
+namespace
+{
+// Extra space at the top and bottom of the glyph in total = tmHeight / GLYPH_SPACE_RATIO;
+const int GLYPH_SPACE_RATIO = 8;
+// Border size at the top of the glyph = tmHeight / GLYPH_OFFSET_RATIO;
+const int GLYPH_OFFSET_RATIO = GLYPH_SPACE_RATIO * 2;
+}
+
+struct OpenGLGlyphDrawElement
+{
+    Rectangle maLocation;
+    int maLeftOverhangs;
+    OpenGLTexture maTexture;
+    int mnBaselineOffset;
+    int mnHeight;
+    bool mbVertical;
+    bool mbRealGlyphIndices;
+
+    int getExtraSpace() const
+    {
+        return std::max(mnHeight / GLYPH_SPACE_RATIO, 4);
+    }
+
+    int getExtraOffset() const
+    {
+        return std::max(mnHeight / GLYPH_OFFSET_RATIO, 2);
+    }
+};
+
+class GlyphCache;
+
+struct GlobalGlyphCache
+{
+    GlobalGlyphCache()
+        : maPackedTextureAtlas(2048, 2048)
+    {}
+
+    PackedTextureAtlasManager maPackedTextureAtlas;
+    std::unordered_set<GlyphCache*> maGlyphCaches;
+};
+
+class GlyphCache
+{
+private:
+    static std::unique_ptr<GlobalGlyphCache> gGlobalGlyphCache;
+    std::unordered_map<int, OpenGLGlyphDrawElement> maOpenGLTextureCache;
+
+public:
+    GlyphCache()
+    {
+        gGlobalGlyphCache.get()->maGlyphCaches.insert(this);
+    }
+
+    ~GlyphCache()
+    {
+        gGlobalGlyphCache.get()->maGlyphCaches.erase(this);
+    }
+
+    bool ReserveTextureSpace(OpenGLGlyphDrawElement& rElement, int nWidth, int nHeight)
+    {
+        GlobalGlyphCache* pGlobalGlyphCache = gGlobalGlyphCache.get();
+        rElement.maTexture = pGlobalGlyphCache->maPackedTextureAtlas.Reserve(nWidth, nHeight);
+        if (!rElement.maTexture)
+            return false;
+        std::vector<GLuint> aTextureIDs = pGlobalGlyphCache->maPackedTextureAtlas.ReduceTextureNumber(8);
+        if (!aTextureIDs.empty())
+        {
+            for (auto& pGlyphCache: pGlobalGlyphCache->maGlyphCaches)
+            {
+                pGlyphCache->RemoveTextures(aTextureIDs);
+            }
+        }
+        return true;
+    }
+
+    void RemoveTextures(std::vector<GLuint>& rTextureIDs)
+    {
+        auto it = maOpenGLTextureCache.begin();
+
+        while (it != maOpenGLTextureCache.end())
+        {
+            GLuint nTextureID = it->second.maTexture.Id();
+
+            if (std::find(rTextureIDs.begin(), rTextureIDs.end(), nTextureID) != rTextureIDs.end())
+            {
+                it = maOpenGLTextureCache.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+
+    void PutDrawElementInCache(const OpenGLGlyphDrawElement& rElement, int nGlyphIndex)
+    {
+        assert(!IsGlyphCached(nGlyphIndex));
+        maOpenGLTextureCache[nGlyphIndex] = OpenGLGlyphDrawElement(rElement);
+    }
+
+    OpenGLGlyphDrawElement& GetDrawElement(int nGlyphIndex)
+    {
+        assert(IsGlyphCached(nGlyphIndex));
+        return maOpenGLTextureCache[nGlyphIndex];
+    }
+
+    bool IsGlyphCached(int nGlyphIndex) const
+    {
+        return maOpenGLTextureCache.find(nGlyphIndex) != maOpenGLTextureCache.end();
+    }
+};
+
+// win32 specific physical font instance
+class WinFontInstance : public LogicalFontInstance
+{
+public:
+    explicit                WinFontInstance( FontSelectPattern& );
+    virtual                 ~WinFontInstance();
+    void                    setupGLyphy(HDC hDC);
+
+private:
+    // TODO: also add HFONT??? Watch out for issues with too many active fonts...
+
+public:
+    bool                    HasKernData() const;
+    void                    SetKernData( int, const KERNINGPAIR* );
+    int                     GetKerning( sal_Unicode, sal_Unicode ) const;
+
+private:
+    KERNINGPAIR*            mpKerningPairs;
+    int                     mnKerningPairs;
+
+public:
+    SCRIPT_CACHE&           GetScriptCache() const
+                            { return maScriptCache; }
+private:
+    mutable SCRIPT_CACHE    maScriptCache;
+
+public:
+    int                     GetCachedGlyphWidth( int nCharCode ) const;
+    void                    CacheGlyphWidth( int nCharCode, int nCharWidth );
+
+    bool                    InitKashidaHandling( HDC );
+    int                     GetMinKashidaWidth() const { return mnMinKashidaWidth; }
+    int                     GetMinKashidaGlyph() const { return mnMinKashidaGlyph; }
+
+    static GLuint             mnGLyphyProgram;
+    demo_atlas_t*             mpGLyphyAtlas;
+    demo_font_t*              mpGLyphyFont;
+
+private:
+    GlyphCache maGlyphCache;
+public:
+    bool CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex, const WinLayout& rLayout, SalGraphics& rGraphics);
+
+    GlyphCache& GetGlyphCache()
+    {
+        return maGlyphCache;
+    }
+
+private:
+    IntMap                  maWidthMap;
+    mutable int             mnMinKashidaWidth;
+    mutable int             mnMinKashidaGlyph;
+    bool                    mbGLyphySetupCalled;
+};
 
 class WinLayout : public SalLayout
 {
