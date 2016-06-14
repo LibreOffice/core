@@ -56,7 +56,7 @@ namespace slideshow
             Throws a runtime exception if there's no such shape, or if
             it does not implement the AttributableShape interface.
          */
-        AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr&                rShapeManager,
+        std::shared_ptr< AttributableShape > lookupAttributableShape( const ShapeManagerSharedPtr&      rShapeManager,
                                                             const css::uno::Reference< css::drawing::XShape >&    xShape );
 
         /** Predicate whether a Begin, Duration or End timing is

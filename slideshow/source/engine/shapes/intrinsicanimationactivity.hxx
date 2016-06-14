@@ -57,8 +57,8 @@ namespace slideshow
         */
         ActivitySharedPtr createIntrinsicAnimationActivity(
             const SlideShowContext&         rContext,
-            const DrawShapeSharedPtr&       rDrawShape,
-            const WakeupEventSharedPtr&     rWakeupEvent,
+            const std::shared_ptr< DrawShape >& rDrawShape,
+            const std::shared_ptr< WakeupEvent >& rWakeupEvent,
             const ::std::vector<double>&    rTimeouts,
             ::std::size_t                   nNumLoops,
             CycleMode                       eCycleMode );

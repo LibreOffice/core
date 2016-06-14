@@ -60,9 +60,9 @@ namespace slideshow
                 Manager object, where subsets are
                 registered/unregistered
              */
-            ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+            ShapeSubset( const std::shared_ptr< AttributableShape >& rOriginalShape,
                          const DocTreeNode&                      rTreeNode,
-                         const SubsettableShapeManagerSharedPtr& rSubsetManager );
+                         const std::shared_ptr< SubsettableShapeManager >& rSubsetManager );
 
             /** Create a subset from another subset.
 
@@ -86,8 +86,8 @@ namespace slideshow
                 Original shape, which will be represented as a whole
                 by this object
              */
-            ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
-                         const SubsettableShapeManagerSharedPtr& rShapeManager );
+            ShapeSubset( const std::shared_ptr< AttributableShape >& rOriginalShape,
+                         const std::shared_ptr< SubsettableShapeManager >& rShapeManager );
 
             ~ShapeSubset();
 
@@ -96,7 +96,7 @@ namespace slideshow
                 If the subset is currently revoked, this method
                 returns the original shape.
              */
-            AttributableShapeSharedPtr  getSubsetShape() const;
+            std::shared_ptr< AttributableShape > getSubsetShape() const;
 
             /** Enable the subset shape.
 
@@ -129,10 +129,10 @@ namespace slideshow
             //ShapeSubset(const ShapeSubset&);
             //ShapeSubset& operator=( const ShapeSubset& );
 
-            AttributableShapeSharedPtr       mpOriginalShape;
-            AttributableShapeSharedPtr       mpSubsetShape;
+            std::shared_ptr< AttributableShape > mpOriginalShape;
+            std::shared_ptr< AttributableShape > mpSubsetShape;
             DocTreeNode                      maTreeNode;
-            SubsettableShapeManagerSharedPtr mpShapeManager;
+            std::shared_ptr< SubsettableShapeManager > mpShapeManager;
         };
     }
 }

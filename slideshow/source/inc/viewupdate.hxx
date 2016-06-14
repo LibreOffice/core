@@ -54,7 +54,6 @@ namespace slideshow
             virtual bool needsUpdate() const = 0;
         };
 
-        typedef ::std::shared_ptr< ViewUpdate > ViewUpdateSharedPtr;
     }
 }
 

@@ -147,7 +147,7 @@ namespace slideshow
                             const ::basegfx::B2DRectangle&      rUpdateBounds,
                             const ::basegfx::B2DRectangle&      rBounds,
                             const ::basegfx::B2DRectangle&      rUnitBounds,
-                            const ShapeAttributeLayerSharedPtr& rAttr,
+                            const std::shared_ptr< ShapeAttributeLayer >& rAttr,
                             const VectorOfDocTreeNodes&         rSubsets,
                             double                              nPrio ) :
                     maOrigBounds( rOrigBounds ),
@@ -164,7 +164,7 @@ namespace slideshow
                 const ::basegfx::B2DRectangle       maUpdateBounds;
                 const ::basegfx::B2DRectangle       maBounds;
                 const ::basegfx::B2DRectangle       maUnitBounds;
-                const ShapeAttributeLayerSharedPtr& mrAttr;
+                const std::shared_ptr< ShapeAttributeLayer >& mrAttr;
                 const VectorOfDocTreeNodes&         mrSubsets;
                 const double                        mnShapePriority;
             };
@@ -192,7 +192,7 @@ namespace slideshow
 
                 @return whether the rendering finished successfully.
             */
-            bool update( const GDIMetaFileSharedPtr&    rMtf,
+            bool update( const std::shared_ptr< GDIMetaFile >& rMtf,
                          const RenderArgs&              rArgs,
                          int                            nUpdateFlags,
                          bool                           bIsVisible ) const;
@@ -206,8 +206,8 @@ namespace slideshow
                 destination canvas
              */
             ::cppcanvas::RendererSharedPtr getRenderer( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
-                                                        const GDIMetaFileSharedPtr&         rMtf,
-                                                        const ShapeAttributeLayerSharedPtr& rAttr ) const;
+                                                        const std::shared_ptr< GDIMetaFile >& rMtf,
+                                                        const std::shared_ptr< ShapeAttributeLayer >& rAttr ) const;
 
 
         private:
@@ -229,7 +229,7 @@ namespace slideshow
 
                 ::cppcanvas::CanvasSharedPtr        mpDestinationCanvas;
                 ::cppcanvas::RendererSharedPtr      mpRenderer;
-                GDIMetaFileSharedPtr                mpMtf;
+                std::shared_ptr< GDIMetaFile >      mpMtf;
                 ::std::shared_ptr< cppcanvas::Bitmap >        mpLastBitmap;
                 ::cppcanvas::BitmapCanvasSharedPtr  mpLastBitmapCanvas;
             };
@@ -241,8 +241,8 @@ namespace slideshow
              */
             static bool prefetch( RendererCacheEntry&                  io_rCacheEntry,
                            const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                           const GDIMetaFileSharedPtr&          rMtf,
-                           const ShapeAttributeLayerSharedPtr&  rAttr );
+                           const std::shared_ptr< GDIMetaFile >& rMtf,
+                           const std::shared_ptr< ShapeAttributeLayer >& rAttr );
 
             /** Draw with prefetched Renderer to stored canvas
 
@@ -250,8 +250,8 @@ namespace slideshow
                 associated canvas (which happens to be mpLastCanvas).
              */
             bool draw( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                       const GDIMetaFileSharedPtr&          rMtf,
-                       const ShapeAttributeLayerSharedPtr&  rAttr,
+                       const std::shared_ptr< GDIMetaFile >& rMtf,
+                       const std::shared_ptr< ShapeAttributeLayer >& rAttr,
                        const ::basegfx::B2DHomMatrix&       rTransform,
                        const ::basegfx::B2DPolyPolygon*     pClip,
                        const VectorOfDocTreeNodes&          rSubsets ) const;
@@ -259,12 +259,12 @@ namespace slideshow
             /** Render shape to an active sprite
              */
             bool renderSprite( const ViewLayerSharedPtr&            rViewLayer,
-                               const GDIMetaFileSharedPtr&          rMtf,
+                               const std::shared_ptr< GDIMetaFile >& rMtf,
                                const ::basegfx::B2DRectangle&       rOrigBounds,
                                const ::basegfx::B2DRectangle&       rBounds,
                                const ::basegfx::B2DRectangle&       rUnitBounds,
                                int                                  nUpdateFlags,
-                               const ShapeAttributeLayerSharedPtr&  pAttr,
+                               const std::shared_ptr< ShapeAttributeLayer >& pAttr,
                                const VectorOfDocTreeNodes&          rSubsets,
                                double                               nPrio,
                                bool                                 bIsVisible ) const;
@@ -272,11 +272,11 @@ namespace slideshow
             /** Render shape to given canvas
              */
             bool render( const ::cppcanvas::CanvasSharedPtr&    rDestinationCanvas,
-                         const GDIMetaFileSharedPtr&            rMtf,
+                         const std::shared_ptr< GDIMetaFile >&  rMtf,
                          const ::basegfx::B2DRectangle&         rBounds,
                          const ::basegfx::B2DRectangle&         rUpdateBounds,
                          int                                    nUpdateFlags,
-                         const ShapeAttributeLayerSharedPtr&    pAttr,
+                         const std::shared_ptr< ShapeAttributeLayer >& pAttr,
                          const VectorOfDocTreeNodes&            rSubsets,
                          bool                                   bIsVisible ) const;
 
@@ -308,7 +308,7 @@ namespace slideshow
             mutable RendererCacheVector                 maRenderers;
 
             /// The sprite object
-            mutable AnimatedSpriteSharedPtr             mpSprite;
+            mutable std::shared_ptr< AnimatedSprite >   mpSprite;
 
             /// If true, render() calls go to the sprite
             mutable bool                                mbAnimationMode;
@@ -317,7 +317,6 @@ namespace slideshow
             mutable bool                                mbForceUpdate;
         };
 
-        typedef ::std::shared_ptr< ViewShape > ViewShapeSharedPtr;
 
     }
 }

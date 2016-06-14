@@ -56,7 +56,6 @@ namespace slideshow
             ~PauseEventHandler() {}
         };
 
-        typedef ::std::shared_ptr< PauseEventHandler > PauseEventHandlerSharedPtr;
     }
 }
 

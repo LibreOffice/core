@@ -128,7 +128,7 @@ namespace slideshow
                 shape, which displays only the given subset of the
                 original one.
              */
-            AttributableShapeSharedPtr getSubsetShape( const AttributableShapeSharedPtr&    rOrigShape,
+            std::shared_ptr< AttributableShape > getSubsetShape( const std::shared_ptr< AttributableShape >& rOrigShape,
                                                        const DocTreeNode&                   rTreeNode );
 
             /** Revoke a previously queried subset shape.
@@ -144,8 +144,8 @@ namespace slideshow
                 @param rSubsetShape
                 The subset created from rOrigShape
              */
-            void revokeSubset( const AttributableShapeSharedPtr& rOrigShape,
-                               const AttributableShapeSharedPtr& rSubsetShape );
+            void revokeSubset( const std::shared_ptr< AttributableShape >& rOrigShape,
+                               const std::shared_ptr< AttributableShape >& rSubsetShape );
 
             /** Notify the LayerManager that the given Shape starts an
                 animation now.
@@ -239,14 +239,14 @@ namespace slideshow
             /** Set of all shapes
              */
         private:
-            typedef ::std::map< ShapeSharedPtr, LayerWeakPtr, ShapeComparator > LayerShapeMap;
+            typedef ::std::map< ShapeSharedPtr, std::weak_ptr< Layer >, ShapeComparator > LayerShapeMap;
             typedef ::std::set< ShapeSharedPtr > ShapeUpdateSet;
 
 
             /// Adds shape area to containing layer's damage area
             void addUpdateArea( ShapeSharedPtr const& rShape );
 
-            LayerSharedPtr createForegroundLayer() const;
+            std::shared_ptr< Layer > createForegroundLayer() const;
 
             /** Push changes from updateShapeLayerAssociations() to current layer
 
@@ -346,7 +346,6 @@ namespace slideshow
             bool                     mbDisableAnimationZOrder;
         };
 
-        typedef ::std::shared_ptr< LayerManager > LayerManagerSharedPtr;
     }
 }
 

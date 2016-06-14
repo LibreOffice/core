@@ -124,7 +124,7 @@ public:
 
     // TODO(F2): Rework SlideBitmap to no longer be based on XBitmap,
     // but on canvas-independent basegfx bitmaps
-    virtual SlideBitmapSharedPtr getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const override;
+    virtual std::shared_ptr< SlideBitmap > getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const override;
 
 
 private:
@@ -162,7 +162,7 @@ private:
         bool bInitial) const;
 
     /// Renders current slide content to bitmap
-    SlideBitmapSharedPtr createCurrentSlideBitmap(
+    std::shared_ptr< SlideBitmap > createCurrentSlideBitmap(
         const UnoViewSharedPtr& rView,
         ::basegfx::B2ISize const & rSlideSize ) const;
 
@@ -196,7 +196,7 @@ private:
         SlideAnimationState_NUM_ENTRIES=4
     };
 
-    typedef std::vector< SlideBitmapSharedPtr > VectorOfSlideBitmaps;
+    typedef std::vector< std::shared_ptr< SlideBitmap > > VectorOfSlideBitmaps;
     /** Vector of slide bitmaps.
 
         Since the bitmap content is sensitive to animation
@@ -215,7 +215,7 @@ private:
     uno::Reference< drawing::XDrawPagesSupplier >       mxDrawPagesSupplier;
     uno::Reference< animations::XAnimationNode >        mxRootNode;
 
-    LayerManagerSharedPtr                               mpLayerManager;
+    std::shared_ptr< LayerManager >                     mpLayerManager;
     std::shared_ptr<ShapeManagerImpl>                 mpShapeManager;
     std::shared_ptr<SubsettableShapeManager>          mpSubsettableShapeManager;
 
@@ -231,7 +231,7 @@ private:
 
     RGBColor                                            maUserPaintColor;
     double                                              mdUserPaintStrokeWidth;
-    UserPaintOverlaySharedPtr                           mpPaintOverlay;
+    std::shared_ptr< class UserPaintOverlay >           mpPaintOverlay;
 
     /// Bitmaps with slide content at various states
     mutable VectorOfVectorOfSlideBitmaps                maSlideBitmaps;
@@ -286,7 +286,7 @@ void slideRenderer( SlideImpl* pSlide, const UnoViewSharedPtr& rView )
     // fully clear view content to background color
     rView->clearAll();
 
-    SlideBitmapSharedPtr         pBitmap( pSlide->getCurrentSlideBitmap( rView ) );
+    std::shared_ptr< SlideBitmap > pBitmap( pSlide->getCurrentSlideBitmap( rView ) );
     ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
 
     const ::basegfx::B2DHomMatrix   aViewTransform( rView->getTransformation() );
@@ -528,7 +528,7 @@ PolyPolygonVector SlideImpl::getPolygons()
     return maPolygons;
 }
 
-SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const
+std::shared_ptr< SlideBitmap > SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const
 {
     // search corresponding entry in maSlideBitmaps (which
     // contains the views as the key)
@@ -566,7 +566,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
                              "apply initial attributes");
     }
 
-    SlideBitmapSharedPtr&     rBitmap( aIter->second.at( meAnimationState ));
+    std::shared_ptr< SlideBitmap >& rBitmap( aIter->second.at( meAnimationState ));
     const ::basegfx::B2ISize& rSlideSize(
         getSlideSizePixel( ::basegfx::B2DSize( getSlideSize() ),
                            rView ));
@@ -648,7 +648,7 @@ bool SlideImpl::isAnimated()
     return mbHaveAnimations && maAnimations.isAnimated();
 }
 
-SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr&   rView,
+std::shared_ptr< SlideBitmap > SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr& rView,
                                                           const ::basegfx::B2ISize& rBmpSize ) const
 {
     ENSURE_OR_THROW( rView && rView->getCanvas(),
@@ -904,7 +904,7 @@ void SlideImpl::applyShapeAttributes(
                 continue;
             }
 
-            AttributableShapeSharedPtr pAttrShape(
+            std::shared_ptr< AttributableShape > pAttrShape(
                 ::std::dynamic_pointer_cast< AttributableShape >( pShape ) );
 
             if( !pAttrShape )
@@ -1124,7 +1124,7 @@ basegfx::B2ISize SlideImpl::getSlideSizeImpl() const
 } // namespace
 
 
-SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         xDrawPage,
+std::shared_ptr< Slide > createSlide( const uno::Reference< drawing::XDrawPage >& xDrawPage,
                             const uno::Reference<drawing::XDrawPagesSupplier>&  xDrawPages,
                             const uno::Reference< animations::XAnimationNode >& xRootNode,
                             EventQueue&                                         rEventQueue,

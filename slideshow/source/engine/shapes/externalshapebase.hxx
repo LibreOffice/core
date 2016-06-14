@@ -121,7 +121,7 @@ namespace slideshow
 
             std::shared_ptr<ExternalShapeBaseListener>                            mpListener;
 
-            SubsettableShapeManagerSharedPtr                                        mpShapeManager;
+            std::shared_ptr< SubsettableShapeManager >                              mpShapeManager;
             EventMultiplexer&                                                       mrEventMultiplexer;
 
             // The attributes of this Shape

@@ -51,7 +51,7 @@ namespace slideshow
         }
 #endif
 
-        AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr&                rShapeManager,
+        std::shared_ptr< AttributableShape > lookupAttributableShape( const ShapeManagerSharedPtr&      rShapeManager,
                                                             const uno::Reference< drawing::XShape >&    xShape          )
         {
             ENSURE_OR_THROW( rShapeManager,
@@ -62,7 +62,7 @@ namespace slideshow
             ENSURE_OR_THROW( pShape,
                               "lookupAttributableShape(): no shape found for given XShape" );
 
-            AttributableShapeSharedPtr pRes(
+            std::shared_ptr< AttributableShape > pRes(
                 ::std::dynamic_pointer_cast< AttributableShape >( pShape ) );
 
             // TODO(E3): Cannot throw here, people might set animation info

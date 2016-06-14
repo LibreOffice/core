@@ -84,7 +84,7 @@ namespace slideshow
             virtual void implSetIntrinsicAnimationTime(double) override;
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
+            typedef ::std::vector< std::shared_ptr< ViewMediaShape > > ViewMediaShapeVector;
             ViewMediaShapeVector                             maViewMediaShapes;
             bool                                             mbIsPlaying;
         };
@@ -143,7 +143,7 @@ namespace slideshow
             OSL_ENSURE( ::std::count_if(maViewMediaShapes.begin(),
                                         aEnd,
                                         [&rLayer]
-                                        ( const ViewMediaShapeSharedPtr& pShape )
+                                        ( const std::shared_ptr< ViewMediaShape >& pShape )
                                         { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "MediaShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
@@ -152,7 +152,7 @@ namespace slideshow
             if( (aIter=::std::remove_if( maViewMediaShapes.begin(),
                                          aEnd,
                                          [&rLayer]
-                                         ( const ViewMediaShapeSharedPtr& pShape )
+                                         ( const std::shared_ptr< ViewMediaShape >& pShape )
                                          { return rLayer == pShape->getViewLayer(); } ) ) == aEnd )
             {
                 // view layer seemingly was not added, failed
@@ -178,7 +178,7 @@ namespace slideshow
             if( ::std::count_if( maViewMediaShapes.begin(),
                                  maViewMediaShapes.end(),
                                  [&rCurrBounds]
-                                 ( const ViewMediaShapeSharedPtr& pShape )
+                                 ( const std::shared_ptr< ViewMediaShape >& pShape )
                                  { return pShape->render( rCurrBounds ); } )
                 != static_cast<ViewMediaShapeVector::difference_type>(maViewMediaShapes.size()) )
             {

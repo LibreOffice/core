@@ -68,7 +68,7 @@ void SequentialTimeContainer::dispose()
 }
 
 void SequentialTimeContainer::skipEffect(
-    AnimationNodeSharedPtr const& pChildNode )
+    std::shared_ptr< AnimationNode > const& pChildNode )
 {
     if (isChildNode(pChildNode)) {
         // empty all events ignoring timings => until next effect
@@ -82,7 +82,7 @@ void SequentialTimeContainer::skipEffect(
 }
 
 bool SequentialTimeContainer::resolveChild(
-    AnimationNodeSharedPtr const& pChildNode )
+    std::shared_ptr< AnimationNode > const& pChildNode )
 {
     bool const bResolved = pChildNode->resolve();
     if (bResolved && isMainSequenceRootNode()) {
@@ -108,13 +108,13 @@ bool SequentialTimeContainer::resolveChild(
 }
 
 void SequentialTimeContainer::notifyDeactivating(
-    AnimationNodeSharedPtr const& rNotifier )
+    std::shared_ptr< AnimationNode > const& rNotifier )
 {
     if (notifyDeactivatedChild( rNotifier ))
         return;
 
     OSL_ASSERT( mnFinishedChildren < maChildren.size() );
-    AnimationNodeSharedPtr const& pNextChild = maChildren[mnFinishedChildren];
+    std::shared_ptr< AnimationNode > const& pNextChild = maChildren[mnFinishedChildren];
     OSL_ASSERT( pNextChild->getState() == UNRESOLVED );
 
     if (! resolveChild( pNextChild )) {

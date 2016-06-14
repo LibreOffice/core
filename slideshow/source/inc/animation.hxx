@@ -61,7 +61,7 @@ namespace slideshow
                 Attribute layer to play the animation on.
              */
             virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
-                                   const ShapeAttributeLayerSharedPtr& rAttrLayer ) = 0;
+                                   const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) = 0;
 
             /** Notify that the animation is about to begin.
 
@@ -75,14 +75,13 @@ namespace slideshow
                 Attribute layer to play the animation on.
              */
             virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                                const ShapeAttributeLayerSharedPtr& rAttrLayer ) = 0;
+                                const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) = 0;
 
             /** Notify that the animation is about to end.
              */
             virtual void end() = 0;
         };
 
-        typedef ::std::shared_ptr< Animation > AnimationSharedPtr;
 
     }
 }
