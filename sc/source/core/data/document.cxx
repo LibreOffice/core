@@ -31,6 +31,7 @@
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/saveopt.hxx>
@@ -584,7 +585,19 @@ bool ScDocument::InsertTab(
         SetAllFormulasDirty(aCxt);
 
         if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
-            GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+        {
+            if (comphelper::LibreOfficeKit::isViewCallback())
+            {
+                SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                while (pViewShell)
+                {
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                    pViewShell = SfxViewShell::GetNext(*pViewShell);
+                }
+            }
+            else
+                GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+        }
     }
 
     return bValid;
@@ -752,7 +765,19 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
-                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                {
+                    if (comphelper::LibreOfficeKit::isViewCallback())
+                    {
+                        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                        while (pViewShell)
+                        {
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                            pViewShell = SfxViewShell::GetNext(*pViewShell);
+                        }
+                    }
+                    else
+                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                }
 
                 bValid = true;
             }
@@ -842,7 +867,19 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
-                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                {
+                    if (comphelper::LibreOfficeKit::isViewCallback())
+                    {
+                        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                        while (pViewShell)
+                        {
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                            pViewShell = SfxViewShell::GetNext(*pViewShell);
+                        }
+                    }
+                    else
+                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                }
 
                 bValid = true;
             }
@@ -887,7 +924,19 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool /* bUpdateRe
                         (*it)->SetStreamValid( false );
 
                 if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
-                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                {
+                    if (comphelper::LibreOfficeKit::isViewCallback())
+                    {
+                        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                        while (pViewShell)
+                        {
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                            pViewShell = SfxViewShell::GetNext(*pViewShell);
+                        }
+                    }
+                    else
+                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                }
             }
         }
     }
