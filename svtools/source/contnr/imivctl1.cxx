@@ -3041,6 +3041,7 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
     const Size& rSize, const OUString& rData, const Link<LinkParamNone*,void>& rNotifyEditEnd ) :
     MultiLineEdit( pParent, (pParent->GetStyle() & WB_ICON) ? WB_CENTER : WB_LEFT),
     aCallBackHdl( rNotifyEditEnd ),
+    aIdle("svtools contnr IcnViewEdit_Impl"),
     bCanceled( false ),
     bAlreadyInCallback( false ),
     bGrabFocus( false )
