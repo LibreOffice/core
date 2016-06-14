@@ -33,8 +33,7 @@ namespace utl
 {
 class SfxMiscCfg;
 
-static SfxMiscCfg* g_pOptions = nullptr;
-static sal_Int32 nRefCount = 0;
+std::weak_ptr<SfxMiscCfg> m_pOptions;
 
 class SfxMiscCfg : public utl::ConfigItem
 {
@@ -51,7 +50,7 @@ private:
 
 public:
     SfxMiscCfg( );
-    virtual ~SfxMiscCfg( );
+    ~SfxMiscCfg( );
 
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
@@ -82,6 +81,8 @@ SfxMiscCfg::SfxMiscCfg() :
 
 SfxMiscCfg::~SfxMiscCfg()
 {
+    if ( IsModified() )
+        Commit();
 }
 
 void SfxMiscCfg::SetNotFoundWarning( bool bSet)
@@ -185,68 +186,63 @@ MiscCfg::MiscCfg( )
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
-    if ( !g_pOptions )
+    m_pImpl = m_pOptions.lock();
+    if ( !m_pImpl )
     {
-        g_pOptions = new SfxMiscCfg;
-
+        m_pImpl = std::make_shared<SfxMiscCfg>();
+        m_pOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_MISCCFG);
     }
 
-    ++nRefCount;
-    g_pOptions->AddListener(this);
+    m_pImpl->AddListener(this);
 }
 
 MiscCfg::~MiscCfg( )
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
-    g_pOptions->RemoveListener(this);
-    if ( !--nRefCount )
-    {
-        if ( g_pOptions->IsModified() )
-            g_pOptions->Commit();
-        DELETEZ( g_pOptions );
-    }
+    m_pImpl->RemoveListener(this);
+    m_pImpl.reset();
 }
 
 bool MiscCfg::IsNotFoundWarning()   const
 {
-    return g_pOptions->IsNotFoundWarning();
+    return m_pImpl->IsNotFoundWarning();
 }
 
 void MiscCfg::SetNotFoundWarning(   bool bSet)
 {
-    g_pOptions->SetNotFoundWarning( bSet );
+    m_pImpl->SetNotFoundWarning( bSet );
 }
 
 bool MiscCfg::IsPaperSizeWarning()  const
 {
-    return g_pOptions->IsPaperSizeWarning();
+    return m_pImpl->IsPaperSizeWarning();
 }
 
 void MiscCfg::SetPaperSizeWarning(bool bSet)
 {
-    g_pOptions->SetPaperSizeWarning( bSet );
+    m_pImpl->SetPaperSizeWarning( bSet );
 }
 
 bool MiscCfg::IsPaperOrientationWarning()   const
 {
-    return g_pOptions->IsPaperOrientationWarning();
+    return m_pImpl->IsPaperOrientationWarning();
 }
 
 void MiscCfg::SetPaperOrientationWarning(   bool bSet)
 {
-    g_pOptions->SetPaperOrientationWarning( bSet );
+    m_pImpl->SetPaperOrientationWarning( bSet );
 }
 
 sal_Int32 MiscCfg::GetYear2000() const
 {
-    return g_pOptions->GetYear2000();
+    return m_pImpl->GetYear2000();
 }
 
 void MiscCfg::SetYear2000( sal_Int32 nSet )
 {
-    g_pOptions->SetYear2000( nSet );
+    m_pImpl->SetYear2000( nSet );
 }
 
 }

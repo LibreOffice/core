@@ -21,11 +21,16 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
+#include <memory>
 
 namespace utl
 {
+class SfxMiscCfg;
 class UNOTOOLS_DLLPUBLIC MiscCfg : public detail::Options
 {
+private:
+    std::shared_ptr<SfxMiscCfg> m_pImpl;
+
 public:
     MiscCfg( );
     virtual ~MiscCfg( );
