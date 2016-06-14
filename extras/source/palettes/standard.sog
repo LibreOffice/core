@@ -90,8 +90,8 @@ draw:angle="300"
 draw:border="0%"/>
 
 <draw:gradient
-draw:name="argile"
-draw:display-name="Argile"
+draw:name="clay"
+draw:display-name="Clay"
 draw:style="linear"
 draw:end-color="#968751"
 draw:start-color="#423c24"
@@ -114,8 +114,8 @@ draw:border="0%"/>
 
 
 <draw:gradient
-draw:name="grison"
-draw:display-name="Grison"
+draw:name="silver"
+draw:display-name="Silver"
 draw:style="linear"
 draw:start-color="#4c4c4c"
 draw:end-color="#b3b3b3"
@@ -160,8 +160,8 @@ draw:angle="600"
 draw:border="0%"/>
 
 <draw:gradient
-draw:name="sun-set"
-draw:display-name="Sun-Set"
+draw:name="sunset"
+draw:display-name="Sunset"
 draw:style="linear"
 draw:start-color="#333366"
 draw:end-color="#9999cc"
