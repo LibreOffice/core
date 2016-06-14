@@ -28,9 +28,7 @@
 #include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
 
-
 //  namespaces
-
 
 using namespace ::utl                   ;
 using namespace ::osl                   ;
@@ -157,22 +155,10 @@ using namespace ::com::sun::star::uno   ;
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
 public:
-
-
-//  constructor / destructor
-
-
-     SvtOptionsDrawinglayer_Impl();
-    virtual ~SvtOptionsDrawinglayer_Impl();
-
-
-//  override methods of baseclass
+    SvtOptionsDrawinglayer_Impl();
+    ~SvtOptionsDrawinglayer_Impl();
 
     virtual void Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
-
-
-//  public interface
-
 
     bool        IsOverlayBuffer() const { return m_bOverlayBuffer;}
     bool        IsPaintBuffer() const { return m_bPaintBuffer;}
@@ -220,8 +206,7 @@ public:
 //  private methods
 
 private:
-
-    virtual void ImplCommit() override;
+    virtual void ImplCommit() SAL_FINAL override;
 
     static Sequence< OUString > impl_GetPropertyNames();
 
@@ -271,9 +256,6 @@ private:
         bool        m_bAllowAA : 1;
         bool        m_bAllowAAChecked : 1;
 };
-
-
-//  constructor
 
 SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     ConfigItem( ROOTNODE_START  ),
@@ -535,14 +517,11 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     }
 }
 
-
-//  destructor
-
 SvtOptionsDrawinglayer_Impl::~SvtOptionsDrawinglayer_Impl()
 {
-    assert(!IsModified()); // should have been committed
+        if (IsModified())
+            Commit();
 }
-
 
 //  Commit
 
@@ -676,31 +655,11 @@ void SvtOptionsDrawinglayer_Impl::ImplCommit()
 void SvtOptionsDrawinglayer_Impl::Notify( const css::uno::Sequence<OUString>& )
 {
 }
-
-
-//  public method
-
-
-//  public method
-
-
-//  public method
-
-
-//  public method
-
-
-//  public method
-
-
 // #i73602#
-
 
 // #i74769#, #i75172#
 
-
 // #i4219#
-
 
 // helper
 bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
@@ -728,7 +687,6 @@ bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
 }
 
 // primitives
-
 
 void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( bool bState )
 {
@@ -791,236 +749,209 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtOptionsDrawinglayer_Impl* SvtOptionsDrawinglayer::m_pDataContainer = nullptr;
-sal_Int32 SvtOptionsDrawinglayer::m_nRefCount = 0;
-
-
-//  constructor
+std::weak_ptr<SvtOptionsDrawinglayer_Impl> m_pOptions;
 
 SvtOptionsDrawinglayer::SvtOptionsDrawinglayer()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already!
-    if( m_pDataContainer == nullptr )
+    m_pImpl = m_pOptions.lock();
+    if( !m_pImpl )
     {
-        m_pDataContainer = new SvtOptionsDrawinglayer_Impl();
+        m_pImpl = std::make_shared<SvtOptionsDrawinglayer_Impl>();
+        m_pOptions = m_pImpl;
     }
 }
-
-
-//  destructor
 
 SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        if (m_pDataContainer->IsModified())
-            m_pDataContainer->Commit();
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
-}
 
+    m_pImpl.reset();
+}
 
 //  public method
 
 bool SvtOptionsDrawinglayer::IsOverlayBuffer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsOverlayBuffer();
+    return m_pImpl->IsOverlayBuffer();
 }
-
 
 //  public method
 
 bool SvtOptionsDrawinglayer::IsPaintBuffer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsPaintBuffer();
+    return m_pImpl->IsPaintBuffer();
 }
-
 
 //  public method
 
 Color SvtOptionsDrawinglayer::GetStripeColorA() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetStripeColorA();
+    return m_pImpl->GetStripeColorA();
 }
-
 
 //  public method
 
 Color SvtOptionsDrawinglayer::GetStripeColorB() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetStripeColorB();
+    return m_pImpl->GetStripeColorB();
 }
-
 
 //  public method
 
 sal_uInt16 SvtOptionsDrawinglayer::GetStripeLength() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetStripeLength();
+    return m_pImpl->GetStripeLength();
 }
 
 // #i73602#
 bool SvtOptionsDrawinglayer::IsOverlayBuffer_Calc() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsOverlayBuffer_Calc();
+    return m_pImpl->IsOverlayBuffer_Calc();
 }
 
 bool SvtOptionsDrawinglayer::IsOverlayBuffer_Writer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsOverlayBuffer_Writer();
+    return m_pImpl->IsOverlayBuffer_Writer();
 }
 
 bool SvtOptionsDrawinglayer::IsOverlayBuffer_DrawImpress() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsOverlayBuffer_DrawImpress();
+    return m_pImpl->IsOverlayBuffer_DrawImpress();
 }
 
 // #i74769#, #i75172#
 bool SvtOptionsDrawinglayer::IsPaintBuffer_Calc() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsPaintBuffer_Calc();
+    return m_pImpl->IsPaintBuffer_Calc();
 }
 
 bool SvtOptionsDrawinglayer::IsPaintBuffer_Writer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsPaintBuffer_Writer();
+    return m_pImpl->IsPaintBuffer_Writer();
 }
 
 bool SvtOptionsDrawinglayer::IsPaintBuffer_DrawImpress() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsPaintBuffer_DrawImpress();
+    return m_pImpl->IsPaintBuffer_DrawImpress();
 }
 
 // #i4219#
 sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperWidth() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMaximumPaperWidth();
+    return m_pImpl->GetMaximumPaperWidth();
 }
 
 sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperHeight() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMaximumPaperHeight();
+    return m_pImpl->GetMaximumPaperHeight();
 }
 
 sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperLeftMargin() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMaximumPaperLeftMargin();
+    return m_pImpl->GetMaximumPaperLeftMargin();
 }
 
 sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperRightMargin() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMaximumPaperRightMargin();
+    return m_pImpl->GetMaximumPaperRightMargin();
 }
 
 sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperTopMargin() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMaximumPaperTopMargin();
+    return m_pImpl->GetMaximumPaperTopMargin();
 }
 
 sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperBottomMargin() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMaximumPaperBottomMargin();
+    return m_pImpl->GetMaximumPaperBottomMargin();
 }
 
 // helper
 bool SvtOptionsDrawinglayer::IsAAPossibleOnThisSystem() const
 {
-    return m_pDataContainer->IsAAPossibleOnThisSystem();
+    return m_pImpl->IsAAPossibleOnThisSystem();
 }
 
 // primitives
 bool SvtOptionsDrawinglayer::IsAntiAliasing() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsAntiAliasing() && IsAAPossibleOnThisSystem();
+    return m_pImpl->IsAntiAliasing() && IsAAPossibleOnThisSystem();
 }
 
 bool SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsAntiAliasing() && m_pDataContainer->IsSnapHorVerLinesToDiscrete();
+    return m_pImpl->IsAntiAliasing() && m_pImpl->IsSnapHorVerLinesToDiscrete();
 }
 
 bool SvtOptionsDrawinglayer::IsSolidDragCreate() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsSolidDragCreate();
+    return m_pImpl->IsSolidDragCreate();
 }
 
 bool SvtOptionsDrawinglayer::IsRenderDecoratedTextDirect() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsRenderDecoratedTextDirect();
+    return m_pImpl->IsRenderDecoratedTextDirect();
 }
 
 bool SvtOptionsDrawinglayer::IsRenderSimpleTextDirect() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsRenderSimpleTextDirect();
+    return m_pImpl->IsRenderSimpleTextDirect();
 }
 
 sal_uInt32 SvtOptionsDrawinglayer::GetQuadratic3DRenderLimit() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetQuadratic3DRenderLimit();
+    return m_pImpl->GetQuadratic3DRenderLimit();
 }
 
 sal_uInt32 SvtOptionsDrawinglayer::GetQuadraticFormControlRenderLimit() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetQuadraticFormControlRenderLimit();
+    return m_pImpl->GetQuadraticFormControlRenderLimit();
 }
 
 void SvtOptionsDrawinglayer::SetAntiAliasing( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetAntiAliasing( bState );
+    m_pImpl->SetAntiAliasing( bState );
 }
 
 // #i97672# selection settings
 bool SvtOptionsDrawinglayer::IsTransparentSelection() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsTransparentSelection();
+    return m_pImpl->IsTransparentSelection();
 }
 
 sal_uInt16 SvtOptionsDrawinglayer::GetTransparentSelectionPercent() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    sal_uInt16 aRetval(m_pDataContainer->GetTransparentSelectionPercent());
+    sal_uInt16 aRetval(m_pImpl->GetTransparentSelectionPercent());
 
     // crop to range [10% .. 90%]
     if(aRetval < 10)
@@ -1039,7 +970,7 @@ sal_uInt16 SvtOptionsDrawinglayer::GetTransparentSelectionPercent() const
 sal_uInt16 SvtOptionsDrawinglayer::GetSelectionMaximumLuminancePercent() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    sal_uInt16 aRetval(m_pDataContainer->GetSelectionMaximumLuminancePercent());
+    sal_uInt16 aRetval(m_pImpl->GetSelectionMaximumLuminancePercent());
 
     // crop to range [0% .. 100%]
     if(aRetval > 90)
@@ -1075,7 +1006,6 @@ namespace
 {
     class theOptionsDrawinglayerMutex : public rtl::Static<osl::Mutex, theOptionsDrawinglayerMutex>{};
 }
-
 
 //  private method
 
