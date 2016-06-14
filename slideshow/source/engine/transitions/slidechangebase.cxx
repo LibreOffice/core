@@ -168,7 +168,7 @@ void SlideChangeBase::renderBitmap(
     }
 }
 
-void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
+void SlideChangeBase::prefetch( const std::shared_ptr< AnimatableShape >&,
                                 const std::shared_ptr< ShapeAttributeLayer >& )
 {
     // we're a one-shot activity, and already finished
@@ -185,7 +185,7 @@ void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
     mbPrefetched = true;
 }
 
-void SlideChangeBase::start( const AnimatableShapeSharedPtr&     rShape,
+void SlideChangeBase::start( const std::shared_ptr< AnimatableShape >& rShape,
                              const std::shared_ptr< ShapeAttributeLayer >& rLayer )
 {
     // we're a one-shot activity, and already finished

@@ -70,8 +70,7 @@ private:
     const OUString msDescription;
 };
 
-typedef ::std::shared_ptr< Event > EventSharedPtr;
-typedef ::std::vector< EventSharedPtr > VectorOfEvents;
+typedef ::std::vector< std::shared_ptr< Event > > VectorOfEvents;
 
 } // namespace internal
 } // namespace presentation

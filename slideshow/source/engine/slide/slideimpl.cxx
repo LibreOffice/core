@@ -896,7 +896,7 @@ void SlideImpl::applyShapeAttributes(
 
         if( xShape.is() )
         {
-            ShapeSharedPtr pShape( mpLayerManager->lookupShape( xShape ) );
+            std::shared_ptr< Shape > pShape( mpLayerManager->lookupShape( xShape ) );
 
             if( !pShape )
             {
@@ -1032,7 +1032,7 @@ bool SlideImpl::loadShapes()
 
                 while( !aMPShapesFunctor.isImportDone() )
                 {
-                    ShapeSharedPtr const& rShape(
+                    std::shared_ptr< Shape > const& rShape(
                         aMPShapesFunctor.importShape() );
                     if( rShape )
                         mpLayerManager->addShape( rShape );
@@ -1077,7 +1077,7 @@ bool SlideImpl::loadShapes()
 
         while( !aShapesFunctor.isImportDone() )
         {
-            ShapeSharedPtr const& rShape(
+            std::shared_ptr< Shape > const& rShape(
                 aShapesFunctor.importShape() );
             if( rShape )
                 mpLayerManager->addShape( rShape );

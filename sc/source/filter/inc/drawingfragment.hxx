@@ -112,12 +112,11 @@ protected:
     virtual void        onEndElement() override;
 
 private:
-    typedef ::std::unique_ptr< ShapeAnchor > ShapeAnchorRef;
 
     css::uno::Reference< css::drawing::XShapes >
                         mxDrawPage;             /// Drawing page of this sheet.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
-    ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
+    std::unique_ptr< ShapeAnchor > mxAnchor;               /// Current anchor of top-level shape.
 };
 
 // VML

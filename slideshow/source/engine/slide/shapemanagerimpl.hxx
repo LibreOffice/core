@@ -115,10 +115,10 @@ private:
     // ShapeManager interface
 
 
-    virtual void enterAnimationMode( const AnimatableShapeSharedPtr& rShape ) override;
-    virtual void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape ) override;
-    virtual void notifyShapeUpdate( const ShapeSharedPtr& rShape ) override;
-    virtual ShapeSharedPtr lookupShape(
+    virtual void enterAnimationMode( const std::shared_ptr< AnimatableShape >& rShape ) override;
+    virtual void leaveAnimationMode( const std::shared_ptr< AnimatableShape >& rShape ) override;
+    virtual void notifyShapeUpdate( const std::shared_ptr< Shape >& rShape ) override;
+    virtual std::shared_ptr< Shape > lookupShape(
         css::uno::Reference< css::drawing::XShape > const & xShape ) const override;
     virtual void addHyperlinkArea( const std::shared_ptr<HyperlinkArea>& rArea ) override;
 
@@ -157,10 +157,10 @@ private:
     OUString checkForHyperlink( ::basegfx::B2DPoint const& hitPos )const;
 
 
-    typedef std::map<ShapeSharedPtr,
+    typedef std::map<std::shared_ptr< Shape >,
                      std::shared_ptr< ::comphelper::OInterfaceContainerHelper2 >,
                      Shape::lessThanShape>        ShapeToListenersMap;
-    typedef std::map<ShapeSharedPtr, sal_Int16,
+    typedef std::map<std::shared_ptr< Shape >, sal_Int16,
                        Shape::lessThanShape>      ShapeToCursorMap;
     typedef std::set<HyperlinkAreaSharedPtr,
                      HyperlinkArea::lessThanArea> AreaSet;

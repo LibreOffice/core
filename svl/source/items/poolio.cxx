@@ -988,7 +988,7 @@ void SfxItemPool::SetVersionMap
 )
 {
     // Create new map entry to insert
-    const SfxPoolVersion_ImplPtr pVerMap = std::make_shared<SfxPoolVersion_Impl>(
+    const std::shared_ptr< SfxPoolVersion_Impl > pVerMap = std::make_shared<SfxPoolVersion_Impl>(
                 nVer, nOldStart, nOldEnd, pOldWhichIdTab );
     pImpl->aVersions.push_back( pVerMap );
 
@@ -1053,7 +1053,7 @@ sal_uInt16 SfxItemPool::GetNewWhich
         // Map step by step from the top version down to the file version
         for ( size_t nMap = pImpl->aVersions.size(); nMap > 0; --nMap )
         {
-            SfxPoolVersion_ImplPtr pVerInfo = pImpl->aVersions[nMap-1];
+            std::shared_ptr< SfxPoolVersion_Impl > pVerInfo = pImpl->aVersions[nMap-1];
             if ( pVerInfo->_nVer > pImpl->nVersion )
             {   sal_uInt16 nOfs;
                 sal_uInt16 nCount = pVerInfo->_nEnd - pVerInfo->_nStart + 1;

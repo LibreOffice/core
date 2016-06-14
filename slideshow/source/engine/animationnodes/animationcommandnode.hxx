@@ -49,7 +49,7 @@ private:
     virtual bool hasPendingAnimation() const override;
 
 private:
-    IExternalMediaShapeBaseSharedPtr mpShape;
+    std::shared_ptr< IExternalMediaShapeBase > mpShape;
     css::uno::Reference<css::animations::XCommand > mxCommandNode;
 };
 

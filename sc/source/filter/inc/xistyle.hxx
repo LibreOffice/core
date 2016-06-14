@@ -431,9 +431,8 @@ private:
     void                SetUsedFlags( sal_uInt8 nUsedFlags );
 
 private:
-    typedef ::std::unique_ptr< ScPatternAttr > ScPatternAttrPtr;
 
-    ScPatternAttrPtr    mpPattern;          /// Calc item set.
+    std::unique_ptr< ScPatternAttr > mpPattern;          /// Calc item set.
     ScStyleSheet*       mpStyleSheet;       /// Calc cell style sheet.
 
     XclImpCellProt      maProtection;       /// Cell protection flags.

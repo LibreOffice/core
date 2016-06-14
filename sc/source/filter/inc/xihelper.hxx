@@ -182,7 +182,6 @@ public:
     sal_Int32           GetTotalHeight() const;
 
 private:    // types
-    typedef ::std::unique_ptr< XclFontData > XclFontDataPtr;
 
     /** Enumerates the supported header/footer portions. */
     enum XclImpHFPortion { EXC_HF_LEFT, EXC_HF_CENTER, EXC_HF_RIGHT, EXC_HF_PORTION_COUNT };
@@ -243,7 +242,7 @@ private:
     EditEngine&         mrEE;               /// The header/footer edit engine.
     XclImpHFPortionInfoVec maInfos;         /// Edit engine text objects for all portions.
     OUString            maCurrText;         /// Current text to insert into edit engine.
-    XclFontDataPtr      mxFontData;         /// Font data of current text.
+    std::unique_ptr< XclFontData > mxFontData;         /// Font data of current text.
     XclImpHFPortion     meCurrObj;          /// The current portion.
 };
 
@@ -324,11 +323,10 @@ public:
     sal_uInt16              GetScError() const;
 
 protected:
-    typedef ::std::unique_ptr< const ScTokenArray >   ScTokenArrayPtr;
 
     OUString            maStr;      /// Cached value is a string.
     double              mfValue;    /// Cached value is a double.
-    ScTokenArrayPtr     mxTokArr;   /// Cached value is a formula or error code or Boolean.
+    std::unique_ptr< const ScTokenArray > mxTokArr;   /// Cached value is a formula or error code or Boolean.
     sal_uInt8           mnBoolErr;  /// Boolean value or Excel error code.
     sal_uInt8           mnType;     /// The type of the cached value (EXC_CACHEDVAL_*).
 };

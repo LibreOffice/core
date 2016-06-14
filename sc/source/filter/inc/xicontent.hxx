@@ -136,10 +136,9 @@ public:
     void                Apply();
 
 private:
-    typedef ::std::unique_ptr< ScConditionalFormat > ScCondFmtPtr;
 
     ScRangeList         maRanges;           /// Destination cell ranges.
-    ScCondFmtPtr        mxScCondFmt;        /// Calc conditional format.
+    std::unique_ptr< ScConditionalFormat > mxScCondFmt;        /// Calc conditional format.
     sal_uInt32          mnFormatIndex;      /// Index of this conditional format in list.
     sal_uInt16          mnCondCount;        /// Number of conditions to be inserted.
     sal_uInt16          mnCondIndex;        /// Condition index to be inserted next.

@@ -120,13 +120,12 @@ public:
     bool                getAbsoluteRange( css::table::CellRangeAddress& orRange ) const;
 
 private:
-    typedef ::std::unique_ptr< StreamDataSequence >   StreamDataSeqPtr;
 
     ScRangeData*        mpScRangeData;       /// ScRangeData of the defined name.
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.
     sal_Int16           mnCalcSheet;        /// Calc sheet index for sheet-local names.
     sal_Unicode         mcBuiltinId;        /// Identifier for built-in defined names.
-    StreamDataSeqPtr    mxFormula;          /// Formula data for BIFF12 import.
+    std::unique_ptr< StreamDataSequence > mxFormula;          /// Formula data for BIFF12 import.
 };
 
 typedef std::shared_ptr< DefinedName > DefinedNameRef;

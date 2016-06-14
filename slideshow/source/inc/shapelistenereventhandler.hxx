@@ -55,7 +55,6 @@ namespace slideshow
                                           const css::uno::Reference<css::drawing::XShape>&                   xShape ) = 0;
         };
 
-        typedef ::std::shared_ptr< ShapeListenerEventHandler > ShapeListenerEventHandlerSharedPtr;
 
     }
 }

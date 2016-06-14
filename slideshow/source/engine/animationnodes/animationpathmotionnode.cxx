@@ -30,7 +30,7 @@ void AnimationPathMotionNode::dispose()
     AnimationBaseNode::dispose();
 }
 
-AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
+std::shared_ptr< AnimationActivity > AnimationPathMotionNode::createActivity() const
 {
     OUString aString;
     ENSURE_OR_THROW( (mxPathMotionNode->getPath() >>= aString),

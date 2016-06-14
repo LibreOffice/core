@@ -58,7 +58,7 @@ namespace slideshow
 
             /** Add the given activity to the queue.
              */
-            bool addActivity( const ActivitySharedPtr& pActivity );
+            bool addActivity( const std::shared_ptr< Activity >& pActivity );
 
             /** Process the activities queue.
 
@@ -90,7 +90,7 @@ namespace slideshow
         private:
             std::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
 
-            typedef ::std::deque< ActivitySharedPtr > ActivityQueue;
+            typedef ::std::deque< std::shared_ptr< Activity > > ActivityQueue;
 
             ActivityQueue           maCurrentActivitiesWaiting;  // currently running
                                                                  // activities, that still

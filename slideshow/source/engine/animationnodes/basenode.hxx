@@ -58,7 +58,7 @@ struct NodeContext
     ::basegfx::B2DVector             maSlideSize;
 
     /// Shape to be used (provided by parent, e.g. for iterations)
-    ShapeSubsetSharedPtr             mpMasterShapeSubset;
+    std::shared_ptr< ShapeSubset >   mpMasterShapeSubset;
 
     /// Additional delay to node begin (to offset iterate effects)
     double                           mnStartDelay;
@@ -119,8 +119,8 @@ public:
     bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
 protected:
-    void scheduleDeactivationEvent( EventSharedPtr const& pEvent =
-                                    EventSharedPtr() );
+    void scheduleDeactivationEvent( std::shared_ptr< Event > const& pEvent =
+                                    std::shared_ptr< Event >() );
 
     SlideShowContext const&                 getContext() const { return maContext; }
     ::std::shared_ptr<BaseNode> const&    getSelf() const { return mpSelf; }
@@ -197,7 +197,7 @@ private:
     const double                                       mnStartDelay;
     NodeState                                          meCurrState;
     int                                                meCurrentStateTransition;
-    EventSharedPtr                                     mpCurrentEvent;
+    std::shared_ptr< Event >                           mpCurrentEvent;
     const bool                                         mbIsMainSequenceRootNode;
 };
 

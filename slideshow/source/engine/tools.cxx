@@ -135,7 +135,7 @@ namespace slideshow
         /// extract unary double value from Any
         bool extractValue( double&                      o_rValue,
                            const uno::Any&              rSourceAny,
-                           const ShapeSharedPtr&        rShape,
+                           const std::shared_ptr< Shape >& rShape,
                            const ::basegfx::B2DVector&  rSlideBounds )
         {
             // try to extract numeric value (double, or smaller POD, like float or int)
@@ -170,7 +170,7 @@ namespace slideshow
         /// extract enum/constant group value from Any
         bool extractValue( sal_Int32&                       o_rValue,
                            const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            /*rShape*/,
+                           const std::shared_ptr< Shape >&  /*rShape*/,
                            const ::basegfx::B2DVector&      /*rSlideBounds*/ )
         {
             // try to extract numeric value (int, or smaller POD, like byte)
@@ -215,7 +215,7 @@ namespace slideshow
         /// extract enum/constant group value from Any
         bool extractValue( sal_Int16&                       o_rValue,
                            const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            rShape,
+                           const std::shared_ptr< Shape >&  rShape,
                            const ::basegfx::B2DVector&      rSlideBounds )
         {
             sal_Int32 aValue;
@@ -236,7 +236,7 @@ namespace slideshow
         /// extract color value from Any
         bool extractValue( RGBColor&                    o_rValue,
                            const uno::Any&              rSourceAny,
-                           const ShapeSharedPtr&        /*rShape*/,
+                           const std::shared_ptr< Shape >& /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             // try to extract numeric value (double, or smaller POD, like float or int)
@@ -318,7 +318,7 @@ namespace slideshow
         /// extract color value from Any
         bool extractValue( HSLColor&                    o_rValue,
                            const uno::Any&              rSourceAny,
-                           const ShapeSharedPtr&        /*rShape*/,
+                           const std::shared_ptr< Shape >& /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             // try double sequence
@@ -357,7 +357,7 @@ namespace slideshow
         /// extract plain string from Any
         bool extractValue( OUString&             o_rValue,
                            const uno::Any&              rSourceAny,
-                           const ShapeSharedPtr&        /*rShape*/,
+                           const std::shared_ptr< Shape >& /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             // try to extract string
@@ -370,7 +370,7 @@ namespace slideshow
         /// extract bool value from Any
         bool extractValue( bool&                        o_rValue,
                            const uno::Any&              rSourceAny,
-                           const ShapeSharedPtr&        /*rShape*/,
+                           const std::shared_ptr< Shape >& /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             bool bTmp;
@@ -410,7 +410,7 @@ namespace slideshow
         /// extract double 2-tuple from Any
         bool extractValue( ::basegfx::B2DTuple&         o_rPair,
                            const uno::Any&              rSourceAny,
-                           const ShapeSharedPtr&        rShape,
+                           const std::shared_ptr< Shape >& rShape,
                            const ::basegfx::B2DVector&  rSlideBounds )
         {
             animations::ValuePair aPair;

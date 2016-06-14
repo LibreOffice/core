@@ -76,9 +76,9 @@ private:
     @return generated delay event
 */
 template <typename FuncT>
-inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout, OUString const& rsDescription )
+inline std::shared_ptr< Event > makeDelay_( FuncT const& func, double nTimeout, OUString const& rsDescription )
 {
-    return EventSharedPtr( new Delay( func, nTimeout, rsDescription ) );
+    return std::shared_ptr< Event >( new Delay( func, nTimeout, rsDescription ) );
 }
 
 /** Generate immediate event
@@ -89,9 +89,9 @@ inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout, OUString c
     @return generated immediate event.
 */
 template <typename FuncT>
-inline EventSharedPtr makeEvent_( FuncT const& func, OUString const& rsDescription)
+inline std::shared_ptr< Event > makeEvent_( FuncT const& func, OUString const& rsDescription)
 {
-    return EventSharedPtr( new Delay( func, 0.0, rsDescription ) );
+    return std::shared_ptr< Event >( new Delay( func, 0.0, rsDescription ) );
 }
 
 
@@ -116,12 +116,12 @@ public:
 };
 
 template <typename FuncT>
-inline EventSharedPtr makeDelay_(
+inline std::shared_ptr< Event > makeDelay_(
     FuncT const& func, double nTimeout,
     char const* from_function, char const* from_file, int from_line,
     const OUString& rsDescription)
 {
-    return EventSharedPtr( new Delay_( func, nTimeout,
+    return std::shared_ptr< Event >( new Delay_( func, nTimeout,
             from_function, from_file, from_line, rsDescription) );
 }
 

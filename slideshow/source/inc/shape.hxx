@@ -40,10 +40,9 @@ namespace slideshow
 {
     namespace internal
     {
-        // forward declaration necessary, because methods use ShapeSharedPtr
+        // forward declaration necessary, because methods use std::shared_ptr< Shape >
         class Shape;
 
-        typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
 
         /** Represents a slide's shape object.
 
@@ -243,7 +242,7 @@ namespace slideshow
                     return nPrioL == nPrioR ? pLHS < pRHS : nPrioL < nPrioR;
                 }
 
-                bool operator()(const ShapeSharedPtr& rLHS, const ShapeSharedPtr& rRHS) const
+                bool operator()(const std::shared_ptr< Shape >& rLHS, const std::shared_ptr< Shape >& rRHS) const
                 {
                     return compare(rLHS.get(),rRHS.get());
                 }
@@ -251,11 +250,10 @@ namespace slideshow
             };
         };
 
-        typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
 
         /** A set which contains all shapes in an ordered fashion.
          */
-        typedef ::std::set< ShapeSharedPtr, Shape::lessThanShape >  ShapeSet;
+        typedef ::std::set< std::shared_ptr< Shape >, Shape::lessThanShape > ShapeSet;
     }
 }
 

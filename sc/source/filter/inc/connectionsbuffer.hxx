@@ -62,9 +62,8 @@ struct WebPrModel
 /** Common properties of an external data connection. */
 struct ConnectionModel
 {
-    typedef ::std::unique_ptr< WebPrModel > WebPrModelPtr;
 
-    WebPrModelPtr       mxWebPr;            /// Special settings for web queries.
+    std::unique_ptr< WebPrModel > mxWebPr;            /// Special settings for web queries.
     OUString     maName;             /// Unique name of this connection.
     OUString     maDescription;      /// User description of this connection.
     OUString     maSourceFile;       /// URL of a source data file.

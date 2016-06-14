@@ -106,7 +106,7 @@ private:
 
     std::shared_ptr< EventHandler > mpSlideStartHandler;
     std::shared_ptr< EventHandler > mpSlideEndHandler;
-    AnimationEventHandlerSharedPtr mpAnimationStartHandler;
+    std::shared_ptr< AnimationEventHandler > mpAnimationStartHandler;
 
     /** The number off main sequence effects so far.
     */
@@ -116,7 +116,7 @@ private:
         part of the effect rewinding.  It is also used as flag that prevents
         nested rewinds.
     */
-    EventSharedPtr mpAsynchronousRewindEvent;
+    std::shared_ptr< Event > mpAsynchronousRewindEvent;
 
     css::uno::Reference<css::animations::XAnimationNode> mxCurrentAnimationRootNode;
     ::std::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
