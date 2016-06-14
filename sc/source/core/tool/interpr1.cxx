@@ -2312,14 +2312,14 @@ void ScInterpreter::ScCellExternal()
     PopExternalSingleRef(nFileId, aTabName, aRef, pToken, &aFmt);
     if (nGlobalError)
     {
-        PushIllegalParameter();
+        PushError( nGlobalError);
         return;
     }
 
     OUString aInfoType = GetString().getString();
     if (nGlobalError)
     {
-        PushIllegalParameter();
+        PushError( nGlobalError);
         return;
     }
 
@@ -2820,7 +2820,7 @@ void ScInterpreter::ScIsError()
         {
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
-            if (nGlobalError || !pToken || pToken->GetType() == svError)
+            if (nGlobalError || pToken->GetType() == svError)
                 bRes = true;
         }
         break;
@@ -4424,9 +4424,9 @@ void ScInterpreter::ScMatch()
                 {
                     ScExternalRefCache::TokenRef pToken;
                     PopExternalSingleRef(pToken);
-                    if (!pToken)
+                    if (nGlobalError)
                     {
-                        PushInt(0);
+                        PushError( nGlobalError);
                         return;
                     }
                     if (pToken->GetType() == svDouble)
@@ -4739,11 +4739,8 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                     pSumExtraMatrix = GetNewMat(1,1);
                     ScExternalRefCache::TokenRef pToken;
                     PopExternalSingleRef(pToken);
-                    if (!pToken)
-                    {
-                        SetError( errIllegalParameter);
+                    if (nGlobalError)
                         return 0;
-                    }
 
                     if (pToken->GetType() == svDouble)
                         pSumExtraMatrix->PutDouble(pToken->GetDouble(), 0, 0);
@@ -4812,7 +4809,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             {
                 ScExternalRefCache::TokenRef pToken;
                 PopExternalSingleRef(pToken);
-                if (pToken)
+                if (!nGlobalError)
                 {
                     if (pToken->GetType() == svDouble)
                     {
@@ -5389,7 +5386,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     {
                         ScExternalRefCache::TokenRef pToken;
                         PopExternalSingleRef(pToken);
-                        if (pToken)
+                        if (!nGlobalError)
                         {
                             if (pToken->GetType() == svDouble)
                             {

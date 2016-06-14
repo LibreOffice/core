@@ -2039,7 +2039,7 @@ double ScInterpreter::GetDouble()
         {
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
-            if (!nGlobalError && pToken)
+            if (!nGlobalError)
             {
                 if (pToken->GetType() == svDouble)
                     nVal = pToken->GetDouble();
@@ -3069,14 +3069,19 @@ void ScInterpreter::ScMacro()
             {
                 ScExternalRefCache::TokenRef pToken;
                 PopExternalSingleRef(pToken);
-                if ( pToken->GetType() == svString )
-                    pPar->PutString( pToken->GetString().getString() );
-                else if ( pToken->GetType() == svDouble )
-                    pPar->PutDouble( pToken->GetDouble() );
+                if (nGlobalError)
+                    bOk = false;
                 else
                 {
-                    SetError( errIllegalArgument );
-                    bOk = false;
+                    if ( pToken->GetType() == svString )
+                        pPar->PutString( pToken->GetString().getString() );
+                    else if ( pToken->GetType() == svDouble )
+                        pPar->PutDouble( pToken->GetDouble() );
+                    else
+                    {
+                        SetError( errIllegalArgument );
+                        bOk = false;
+                    }
                 }
             }
             break;

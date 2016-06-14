@@ -344,10 +344,16 @@ void DoubleRefToVars( const formula::FormulaToken* p,
 ScDBRangeBase* PopDBDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2 );
+
 void PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef);
+
+/** Guarantees that nGlobalError is set if rToken could not be obtained. */
 void PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = nullptr);
+
+/** Guarantees that nGlobalError is set if rToken could not be obtained. */
 void PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef,
                           ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = nullptr);
+
 void PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName, ScComplexRefData& rRef);
 void PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray);
 void PopExternalDoubleRef(ScMatrixRef& rMat);

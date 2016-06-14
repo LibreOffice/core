@@ -461,13 +461,6 @@ ScMatrixRef ScInterpreter::GetMatrix()
                 SetError( errIllegalArgument);
                 break;
             }
-            if (!pToken)
-            {
-                SetError( errIllegalArgument);
-                pMat->PutError( nGlobalError, 0, 0);
-                nGlobalError = 0;
-                break;
-            }
             if (nGlobalError)
             {
                 pMat->PutError( nGlobalError, 0, 0);
