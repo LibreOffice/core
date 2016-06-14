@@ -1250,7 +1250,7 @@ void SwMiscConfig::ImplCommit()
             case 3 : pValues[nProp] <<= bGrfToGalleryAsLnk; break;
             case 4 : pValues[nProp] <<= bNumAlignSize; break;
             case 5 : pValues[nProp] <<= bSinglePrintJob; break;
-            case 6 : pValues[nProp] <<= static_cast<sal_uInt8>(nMailingFormats); break;
+            case 6 : pValues[nProp] <<= static_cast<sal_Int32>(nMailingFormats); break;
             case 7 : pValues[nProp] <<= sNameFromColumn;  break;
             case 8 : pValues[nProp] <<= sMailingPath;     break;
             case 9 : pValues[nProp] <<= sMailName;        break;
@@ -1282,7 +1282,7 @@ void SwMiscConfig::Load()
                 case 3 : bGrfToGalleryAsLnk = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 4 : bNumAlignSize = *o3tl::doAccess<bool>(pValues[nProp]); break;
                 case 5 : bSinglePrintJob = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 6 : nMailingFormats = static_cast<MailTextFormats>(*o3tl::doAccess<sal_Int8>(pValues[nProp])); break;
+                case 6 : nMailingFormats = static_cast<MailTextFormats>(*o3tl::doAccess<sal_Int32>(pValues[nProp])); break;
                 case 7 : pValues[nProp] >>= sTmp; sNameFromColumn = sTmp; break;
                 case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp;  break;
                 case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp;     break;
