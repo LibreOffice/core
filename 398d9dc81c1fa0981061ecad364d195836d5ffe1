@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c526d867",
+        "filename": "sw/source/uibase/shells/drawdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T16:47:38Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to add the new slots here. In fact I don\u0027t think you need them anywhere outside their ExecMethod (SwView::ExecTabWin) and StateMethod (SwView::GetTabWin). Unless, of course, you\u0027re sure that you do :)",
+      "revId": "398d9dc81c1fa0981061ecad364d195836d5ffe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_0521a04d",
+        "filename": "sw/source/uibase/shells/drawdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T16:47:38Z",
+      "side": 1,
+      "message": "and the same here -- will this else-branch ever handle page attributes? (this code looks like it\u0027s handling some drawing objects and attributes)",
+      "revId": "398d9dc81c1fa0981061ecad364d195836d5ffe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_251ea40c",
+        "filename": "sw/source/uibase/shells/frmsh.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T16:47:38Z",
+      "side": 1,
+      "message": "What I said about the previous file: don\u0027t put slot ids here unless you\u0027re 100% sure you need them",
+      "revId": "398d9dc81c1fa0981061ecad364d195836d5ffe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_450488bf",
+        "filename": "sw/source/uibase/sidebar/PageStylesPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T16:47:38Z",
+      "side": 1,
+      "message": "Uhm ... why? I mean, why 6 or 10 and not 42 and why is the default size of the dropdown not good enough?",
+      "revId": "398d9dc81c1fa0981061ecad364d195836d5ffe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_852cd04b",
+        "filename": "sw/source/uibase/sidebar/PageStylesPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T16:47:38Z",
+      "side": 1,
+      "message": "If this is the new custom widget numbering list box, maybe you can use its SetSelection method",
+      "revId": "398d9dc81c1fa0981061ecad364d195836d5ffe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
