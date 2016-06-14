@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_ba357347",
+        "filename": "unotools/source/config/defaultoptions.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-14T11:29:53Z",
+      "side": 1,
+      "message": "this calls the virtual ConfigItem::ImplCommit, which is a bit inappropriate for a dtor.\n\nplease mark this class as \"SAL_FINAL\" to prevent potential disasters if somebody adds a sub-class and overrides ImplCommit, which is then not called here.",
+      "revId": "7a60b2f3deaeced4352152525d1bb511a26b42bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
