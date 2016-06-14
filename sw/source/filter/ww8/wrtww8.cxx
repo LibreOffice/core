@@ -3135,6 +3135,8 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
 
     ExportDocument_Impl();
 
+    m_aFrames.clear();
+
     // park m_pCurPam in a "safe place" now that document is fully exported
     // before toggling redline mode to avoid ~SwIndexReg assert e.g. export
     // ooo103014-1.odt to .doc

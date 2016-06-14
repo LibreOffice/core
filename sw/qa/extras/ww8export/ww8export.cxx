@@ -666,6 +666,11 @@ DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
     //the save must survive without asserting
 }
 
+DECLARE_WW8EXPORT_TEST(testClearFramePams, "tdf46441-2.odt")
+{
+    //the save must survive without asserting
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf94386, "tdf94386.odt")
 {
     // check that the first and next page use different page styles
