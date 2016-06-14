@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_e5b03cf7",
+        "filename": "sw/inc/swtable.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001256
+      },
+      "writtenOn": "2016-06-14T19:15:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_e5b91ceb",
+      "range": {
+        "startLine": 78,
+        "startChar": 46,
+        "endLine": 78,
+        "endChar": 47
+      },
+      "revId": "f725eaecc4e2ede277702d2243aeb6df22f4569b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_05cfe07f",
         "filename": "sw/source/filter/html/htmltabw.cxx",
         "patchSetId": 16
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_2593045d",
+        "filename": "sw/source/filter/html/htmltabw.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001256
+      },
+      "writtenOn": "2016-06-14T19:15:57Z",
+      "side": 1,
+      "message": "There was a declration error initially, so i was trying.Well forgot to uncomment.",
+      "parentUuid": "da7fb54a_05cfe07f",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 24
+      },
+      "revId": "f725eaecc4e2ede277702d2243aeb6df22f4569b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_25cce488",
         "filename": "sw/source/filter/inc/wrtswtbl.hxx",
         "patchSetId": 16
@@ -83,6 +131,30 @@
       "writtenOn": "2016-06-14T18:51:47Z",
       "side": 1,
       "message": "Don\u0027t add commented code",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 21
+      },
+      "revId": "f725eaecc4e2ede277702d2243aeb6df22f4569b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_659d0c65",
+        "filename": "sw/source/filter/inc/wrtswtbl.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001256
+      },
+      "writtenOn": "2016-06-14T19:15:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_25cce488",
       "range": {
         "startLine": 36,
         "startChar": 0,
