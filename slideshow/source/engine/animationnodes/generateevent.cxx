@@ -38,13 +38,13 @@ namespace internal {
 
 using namespace com::sun::star;
 
-EventSharedPtr generateEvent(
+std::shared_ptr< Event > generateEvent(
     uno::Any const& rEventDescription,
     Delay::FunctorT const& rFunctor,
     SlideShowContext const& rContext,
     double nAdditionalDelay )
 {
-    EventSharedPtr pEvent;
+    std::shared_ptr< Event > pEvent;
 
     if (! rEventDescription.hasValue())
         return pEvent;
@@ -77,7 +77,7 @@ EventSharedPtr generateEvent(
         // common vars used inside switch
         uno::Reference<animations::XAnimationNode> xNode;
         uno::Reference<drawing::XShape> xShape;
-        ShapeSharedPtr pShape;
+        std::shared_ptr< Shape > pShape;
 
         // TODO(F1): Respect aEvent.Repeat value
 

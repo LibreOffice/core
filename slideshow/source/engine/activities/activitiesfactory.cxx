@@ -377,7 +377,7 @@ private:
     Subtype of the Animation object (e.g. NumberAnimation)
 */
 template<class BaseType, typename AnimationType>
-AnimationActivitySharedPtr createFromToByActivity(
+std::shared_ptr< AnimationActivity > createFromToByActivity(
     const uno::Any&                                          rFromAny,
     const uno::Any&                                          rToAny,
     const uno::Any&                                          rByAny,
@@ -385,7 +385,7 @@ AnimationActivitySharedPtr createFromToByActivity(
     const ::std::shared_ptr< AnimationType >&              rAnim,
     const Interpolator< typename AnimationType::ValueType >& rInterpolator,
     bool                                                     bCumulative,
-    const ShapeSharedPtr&                                    rShape,
+    const std::shared_ptr< Shape >&                          rShape,
     const ::basegfx::B2DVector&                              rSlideBounds )
 {
     typedef typename AnimationType::ValueType           ValueType;
@@ -419,7 +419,7 @@ AnimationActivitySharedPtr createFromToByActivity(
         aBy.reset(aTmpValue);
     }
 
-    return AnimationActivitySharedPtr(
+    return std::shared_ptr< AnimationActivity >(
         new FromToByActivity<BaseType, AnimationType>(
             aFrom,
             aTo,
@@ -605,13 +605,13 @@ private:
     Subtype of the Animation object (e.g. NumberAnimation)
 */
 template<class BaseType, typename AnimationType>
-AnimationActivitySharedPtr createValueListActivity(
+std::shared_ptr< AnimationActivity > createValueListActivity(
     const uno::Sequence<uno::Any>&                            rValues,
     const ActivityParameters&                                 rParms,
     const std::shared_ptr<AnimationType>&                   rAnim,
     const Interpolator<typename AnimationType::ValueType>&    rInterpolator,
     bool                                                      bCumulative,
-    const ShapeSharedPtr&                                     rShape,
+    const std::shared_ptr< Shape >&                           rShape,
     const ::basegfx::B2DVector&                               rSlideBounds )
 {
     typedef typename AnimationType::ValueType   ValueType;
@@ -629,7 +629,7 @@ AnimationActivitySharedPtr createValueListActivity(
         aValueVector.push_back( aValue );
     }
 
-    return AnimationActivitySharedPtr(
+    return std::shared_ptr< AnimationActivity >(
         new ValuesActivity<BaseType, AnimationType>(
             aValueVector,
             rParms,
@@ -660,7 +660,7 @@ AnimationActivitySharedPtr createValueListActivity(
     for HSL color space).
 */
 template<typename AnimationType>
-AnimationActivitySharedPtr createActivity(
+std::shared_ptr< AnimationActivity > createActivity(
     const ActivitiesFactory::CommonParameters&               rParms,
     const uno::Reference< animations::XAnimate >&            xNode,
     const ::std::shared_ptr< AnimationType >&              rAnim,
@@ -745,7 +745,7 @@ AnimationActivitySharedPtr createActivity(
                         rParms.mrEventQueue.getTimer(),
                         rParms.mrActivitiesQueue ) );
 
-                AnimationActivitySharedPtr pActivity(
+                std::shared_ptr< AnimationActivity > pActivity(
                     createValueListActivity< DiscreteActivityBase >(
                         xNode->getValues(),
                         aActivityParms,
@@ -809,7 +809,7 @@ AnimationActivitySharedPtr createActivity(
                         rParms.mrEventQueue.getTimer(),
                         rParms.mrActivitiesQueue ) );
 
-                AnimationActivitySharedPtr pActivity(
+                std::shared_ptr< AnimationActivity > pActivity(
                     createFromToByActivity< DiscreteActivityBase >(
                         xNode->getFrom(),
                         xNode->getTo(),
@@ -923,7 +923,7 @@ private:
 } // anon namespace
 
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
     const std::shared_ptr< NumberAnimation >&      rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
@@ -932,7 +932,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
     const std::shared_ptr< EnumAnimation >&        rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
@@ -941,7 +941,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
     const std::shared_ptr< ColorAnimation >&       rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
@@ -950,7 +950,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                            rParms,
     const std::shared_ptr< HSLColorAnimation >&        rAnim,
     const uno::Reference< animations::XAnimateColor >& xNode )
@@ -964,7 +964,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
                            Interpolator< HSLColor >( !xNode->getDirection() ) );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
     const std::shared_ptr< PairAnimation >&        rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
@@ -973,7 +973,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
     const std::shared_ptr< StringAnimation >&      rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
@@ -982,7 +982,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
     const std::shared_ptr< BoolAnimation >&        rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
@@ -991,7 +991,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createSimpleActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createSimpleActivity(
     const CommonParameters&         rParms,
     const std::shared_ptr< NumberAnimation >& rAnim,
     bool                            bDirectionForward )
@@ -1007,10 +1007,10 @@ AnimationActivitySharedPtr ActivitiesFactory::createSimpleActivity(
                                        rParms.mbAutoReverse );
 
     if( bDirectionForward )
-        return AnimationActivitySharedPtr(
+        return std::shared_ptr< AnimationActivity >(
             new SimpleActivity<1>( aActivityParms, rAnim ) );
     else
-        return AnimationActivitySharedPtr(
+        return std::shared_ptr< AnimationActivity >(
             new SimpleActivity<0>( aActivityParms, rAnim ) );
 }
 

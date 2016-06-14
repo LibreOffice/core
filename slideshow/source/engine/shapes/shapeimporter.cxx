@@ -146,7 +146,7 @@ bool importShapeGraphic(
 class ShapeOfGroup : public Shape
 {
 public:
-    ShapeOfGroup( ShapeSharedPtr const&                      pGroupShape,
+    ShapeOfGroup( std::shared_ptr< Shape > const&            pGroupShape,
                   uno::Reference<drawing::XShape> const&     xShape,
                   uno::Reference<beans::XPropertySet> const& xPropSet,
                   double                                     nPrio );
@@ -168,7 +168,7 @@ public:
     virtual bool isBackgroundDetached() const override;
 
 private:
-    ShapeSharedPtr const                  mpGroupShape;
+    std::shared_ptr< Shape > const        mpGroupShape;
     uno::Reference<drawing::XShape> const mxShape;
     double const                          mnPrio;
     basegfx::B2DPoint                     maPosOffset;
@@ -176,7 +176,7 @@ private:
     double                                mnHeight;
 };
 
-ShapeOfGroup::ShapeOfGroup( ShapeSharedPtr const&                      pGroupShape,
+ShapeOfGroup::ShapeOfGroup( std::shared_ptr< Shape > const&            pGroupShape,
                             uno::Reference<drawing::XShape> const&     xShape,
                             uno::Reference<beans::XPropertySet> const& xPropSet,
                             double                                     nPrio ) :
@@ -263,7 +263,7 @@ bool ShapeOfGroup::isBackgroundDetached() const
 
 } // anon namespace
 
-ShapeSharedPtr ShapeImporter::createShape(
+std::shared_ptr< Shape > ShapeImporter::createShape(
     uno::Reference<drawing::XShape> const& xCurrShape,
     uno::Reference<beans::XPropertySet> const& xPropSet,
     OUString const& shapeType ) const
@@ -314,7 +314,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // metafile of course would only contain the first
         // animation frame)
         if( !importShapeGraphic( aGraphicObject, xPropSet ) )
-            return ShapeSharedPtr(); // error loading graphic -
+            return std::shared_ptr< Shape >(); // error loading graphic -
                                      // no placeholders in
                                      // slideshow
 
@@ -485,13 +485,13 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
     }
 }
 
-ShapeSharedPtr ShapeImporter::importBackgroundShape() // throw (ShapeLoadFailedException)
+std::shared_ptr< Shape > ShapeImporter::importBackgroundShape() // throw (ShapeLoadFailedException)
 {
     if( maShapesStack.empty() )
         throw ShapeLoadFailedException();
 
     XShapesEntry& rTop = maShapesStack.top();
-    ShapeSharedPtr pBgShape(
+    std::shared_ptr< Shape > pBgShape(
         createBackgroundShape(mxPage,
                               uno::Reference<drawing::XDrawPage>(
                                   rTop.mxShapes,
@@ -502,9 +502,9 @@ ShapeSharedPtr ShapeImporter::importBackgroundShape() // throw (ShapeLoadFailedE
     return pBgShape;
 }
 
-ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
+std::shared_ptr< Shape > ShapeImporter::importShape() // throw (ShapeLoadFailedException)
 {
-    ShapeSharedPtr pRet;
+    std::shared_ptr< Shape > pRet;
     bool bIsGroupShape = false;
 
     while( !maShapesStack.empty() && !pRet )

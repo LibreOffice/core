@@ -101,7 +101,6 @@ namespace slideshow
             virtual void addHyperlinkArea( const std::shared_ptr<HyperlinkArea>& rArea ) = 0;
         };
 
-        typedef ::std::shared_ptr< ShapeManager > ShapeManagerSharedPtr;
     }
 }
 

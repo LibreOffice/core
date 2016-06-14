@@ -515,7 +515,7 @@ void BaseNode::activate_st()
     scheduleDeactivationEvent();
 }
 
-void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
+void BaseNode::scheduleDeactivationEvent( std::shared_ptr< Event > const& pEvent )
 {
     if (mpCurrentEvent) {
         mpCurrentEvent->dispose();

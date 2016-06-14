@@ -78,7 +78,7 @@ namespace slideshow
             mnNextTime = rNextTime;
         }
 
-        void WakeupEvent::setActivity( const ActivitySharedPtr& rActivity )
+        void WakeupEvent::setActivity( const std::shared_ptr< Activity >& rActivity )
         {
             mpActivity = rActivity;
         }

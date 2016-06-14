@@ -117,7 +117,7 @@ namespace slideshow
                 The shape, that will subsequently display on this
                 layer's views
              */
-            void setShapeViews( ShapeSharedPtr const& rShape ) const;
+            void setShapeViews( std::shared_ptr< Shape > const& rShape ) const;
 
 
             /** Change layer priority range.
@@ -149,7 +149,7 @@ namespace slideshow
 
             /** Update layer bound rect from shape bounds
              */
-            void updateBounds( ShapeSharedPtr const& rShape );
+            void updateBounds( std::shared_ptr< Shape > const& rShape );
 
             /** Commit collected layer bounds to ViewLayer
 
@@ -200,7 +200,7 @@ namespace slideshow
                 @return true, if the given shape is at least partially
                 inside the current update area.
             */
-            bool isInsideUpdateArea( ShapeSharedPtr const& rShape ) const;
+            bool isInsideUpdateArea( std::shared_ptr< Shape > const& rShape ) const;
 
         private:
             enum Dummy{ BackgroundLayer };

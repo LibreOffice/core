@@ -76,13 +76,13 @@ public:
 
     /** This method imports the presentation background shape
      */
-    ShapeSharedPtr importBackgroundShape(); // throw (ShapeLoadFailedException)
+    std::shared_ptr< Shape > importBackgroundShape(); // throw (ShapeLoadFailedException)
 
     /** This method imports presentation-visible shapes (and skips all others).
 
         @return the generated Shape, or NULL for no more shapes.
     */
-    ShapeSharedPtr importShape(); // throw (ConversionFailedException)
+    std::shared_ptr< Shape > importShape(); // throw (ConversionFailedException)
 
     /** Test whether import is done.
 
@@ -98,7 +98,7 @@ private:
                  OUString const& shapeType,
                  css::uno::Reference<css::drawing::XLayer> const& xLayer);
 
-    ShapeSharedPtr createShape(
+    std::shared_ptr< Shape > createShape(
         css::uno::Reference<css::drawing::XShape> const& xCurrShape,
         css::uno::Reference<css::beans::XPropertySet> const& xPropSet,
         OUString const& shapeType ) const;
@@ -107,12 +107,12 @@ private:
 
     struct XShapesEntry
     {
-        ShapeSharedPtr const mpGroupShape;
+        std::shared_ptr< Shape > const mpGroupShape;
         css::uno::Reference<css::drawing::XShapes> const mxShapes;
         sal_Int32 const mnCount;
         sal_Int32 mnPos;
 
-        explicit XShapesEntry( ShapeSharedPtr const& pGroupShape )
+        explicit XShapesEntry( std::shared_ptr< Shape > const& pGroupShape )
             : mpGroupShape(pGroupShape),
               mxShapes( pGroupShape->getXShape(),
                         css::uno::UNO_QUERY_THROW ),

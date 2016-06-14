@@ -235,7 +235,7 @@ namespace slideshow
         }
 
 
-        ShapeSharedPtr createMediaShape(
+        std::shared_ptr< Shape > createMediaShape(
             const uno::Reference< drawing::XShape >& xShape,
             double                                   nPrio,
             const SlideShowContext&                  rContext)

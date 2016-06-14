@@ -39,7 +39,7 @@ public:
 #endif
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const override;
+    virtual std::shared_ptr< AnimationActivity > createActivity() const override;
 };
 
 } // namespace internal

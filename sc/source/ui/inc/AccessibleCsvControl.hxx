@@ -518,7 +518,6 @@ private:
 class ScAccessibleCsvCell : public ScAccessibleCsvControl, public accessibility::AccessibleStaticTextBase
 {
 protected:
-    typedef ::std::unique_ptr< SvxEditSource >      SvxEditSourcePtr;
 
 private:
     OUString                    maCellText; /// The text contents of this cell.

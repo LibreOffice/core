@@ -240,28 +240,6 @@ private:
     void                finalize();
 
 private:
-    typedef ::std::unique_ptr< ScEditEngineDefaulter >    EditEngineDefaulterPtr;
-    typedef ::std::unique_ptr< FormulaBuffer >          FormulaBufferPtr;
-    typedef ::std::unique_ptr< SegmentProgressBar >     ProgressBarPtr;
-    typedef ::std::unique_ptr< WorkbookSettings >       WorkbookSettPtr;
-    typedef ::std::unique_ptr< ViewSettings >           ViewSettingsPtr;
-    typedef ::std::unique_ptr< WorksheetBuffer >        WorksheetBfrPtr;
-    typedef ::std::shared_ptr< ThemeBuffer >          ThemeBfrRef;
-    typedef ::std::unique_ptr< StylesBuffer >           StylesBfrPtr;
-    typedef ::std::unique_ptr< SharedStringsBuffer >    SharedStrBfrPtr;
-    typedef ::std::unique_ptr< ExternalLinkBuffer >     ExtLinkBfrPtr;
-    typedef ::std::unique_ptr< DefinedNamesBuffer >     DefNamesBfrPtr;
-    typedef ::std::unique_ptr< TableBuffer >            TableBfrPtr;
-    typedef ::std::unique_ptr< ScenarioBuffer >         ScenarioBfrPtr;
-    typedef ::std::unique_ptr< ConnectionsBuffer >      ConnectionsBfrPtr;
-    typedef ::std::unique_ptr< PivotCacheBuffer >       PivotCacheBfrPtr;
-    typedef ::std::unique_ptr< PivotTableBuffer >       PivotTableBfrPtr;
-    typedef ::std::unique_ptr< FormulaParser >          FormulaParserPtr;
-    typedef ::std::unique_ptr< UnitConverter >          UnitConvPtr;
-    typedef ::std::unique_ptr< AddressConverter >       AddressConvPtr;
-    typedef ::std::unique_ptr< oox::drawingml::chart::ChartConverter > ExcelChartConvPtr;
-    typedef ::std::unique_ptr< PageSettingsConverter >  PageSettConvPtr;
-    typedef ::std::unique_ptr< BiffCodecHelper >        BiffCodecHelperPtr;
 
     OUString            maCellStyles;           /// Style family name for cell styles.
     OUString            maPageStyles;           /// Style family name for page styles.
@@ -271,41 +249,41 @@ private:
     FilterBase&         mrBaseFilter;           /// Base filter object.
     ExcelFilter&        mrExcelFilter;          /// Base object for registration of this structure.
     FilterType          meFilterType;           /// File type of the filter.
-    ProgressBarPtr      mxProgressBar;          /// The progress bar.
+    std::unique_ptr< SegmentProgressBar > mxProgressBar;          /// The progress bar.
     StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
     sal_Int16           mnCurrSheet;            /// Current sheet index in Calc document.
     bool                mbWorkbook;             /// True = multi-sheet file.
 
     // buffers
-    FormulaBufferPtr    mxFormulaBuffer;
-    WorkbookSettPtr     mxWorkbookSettings;     /// Global workbook settings.
-    ViewSettingsPtr     mxViewSettings;         /// Workbook and sheet view settings.
-    WorksheetBfrPtr     mxWorksheets;           /// Sheet info buffer.
-    ThemeBfrRef         mxTheme;                /// Formatting theme from theme substream.
-    StylesBfrPtr        mxStyles;               /// All cell style objects from styles substream.
-    SharedStrBfrPtr     mxSharedStrings;        /// All strings from shared strings substream.
-    ExtLinkBfrPtr       mxExtLinks;             /// All external links.
-    DefNamesBfrPtr      mxDefNames;             /// All defined names.
-    TableBfrPtr         mxTables;               /// All tables (database ranges).
-    ScenarioBfrPtr      mxScenarios;            /// All scenarios.
-    ConnectionsBfrPtr   mxConnections;          /// All external data connections.
-    PivotCacheBfrPtr    mxPivotCaches;          /// All pivot caches in the document.
-    PivotTableBfrPtr    mxPivotTables;          /// All pivot tables in the document.
+    std::unique_ptr< FormulaBuffer > mxFormulaBuffer;
+    std::unique_ptr< WorkbookSettings > mxWorkbookSettings;     /// Global workbook settings.
+    std::unique_ptr< ViewSettings > mxViewSettings;         /// Workbook and sheet view settings.
+    std::unique_ptr< WorksheetBuffer > mxWorksheets;           /// Sheet info buffer.
+    std::shared_ptr< ThemeBuffer > mxTheme;                /// Formatting theme from theme substream.
+    std::unique_ptr< StylesBuffer > mxStyles;               /// All cell style objects from styles substream.
+    std::unique_ptr< SharedStringsBuffer > mxSharedStrings;        /// All strings from shared strings substream.
+    std::unique_ptr< ExternalLinkBuffer > mxExtLinks;             /// All external links.
+    std::unique_ptr< DefinedNamesBuffer > mxDefNames;             /// All defined names.
+    std::unique_ptr< TableBuffer > mxTables;               /// All tables (database ranges).
+    std::unique_ptr< ScenarioBuffer > mxScenarios;            /// All scenarios.
+    std::unique_ptr< ConnectionsBuffer > mxConnections;          /// All external data connections.
+    std::unique_ptr< PivotCacheBuffer > mxPivotCaches;          /// All pivot caches in the document.
+    std::unique_ptr< PivotTableBuffer > mxPivotTables;          /// All pivot tables in the document.
 
     // converters
-    FormulaParserPtr    mxFmlaParser;           /// Import formula parser.
-    UnitConvPtr         mxUnitConverter;        /// General unit converter.
-    AddressConvPtr      mxAddrConverter;        /// Cell address and cell range address converter.
-    ExcelChartConvPtr   mxChartConverter;       /// Chart object converter.
-    PageSettConvPtr     mxPageSettConverter;    /// Page/print settings converter.
+    std::unique_ptr< FormulaParser > mxFmlaParser;           /// Import formula parser.
+    std::unique_ptr< UnitConverter > mxUnitConverter;        /// General unit converter.
+    std::unique_ptr< AddressConverter > mxAddrConverter;        /// Cell address and cell range address converter.
+    std::unique_ptr< oox::drawingml::chart::ChartConverter > mxChartConverter;       /// Chart object converter.
+    std::unique_ptr< PageSettingsConverter > mxPageSettConverter;    /// Page/print settings converter.
 
-    EditEngineDefaulterPtr mxEditEngine;
+    std::unique_ptr< ScEditEngineDefaulter > mxEditEngine;
 
     // OOXML/BIFF12 specific
     XmlFilterBase*      mpOoxFilter;            /// Base OOXML/BIFF12 filter object.
 
     // BIFF2-BIFF8 specific
-    BiffCodecHelperPtr  mxCodecHelper;          /// Encoder/decoder helper.
+    std::unique_ptr< BiffCodecHelper > mxCodecHelper;          /// Encoder/decoder helper.
     BiffType            meBiff;                 /// BIFF version for BIFF import/export.
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
     bool                mbHasCodePage;          /// True = CODEPAGE record exists in imported stream.

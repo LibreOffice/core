@@ -447,11 +447,9 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 struct ScCaptionInitData
 {
-    typedef ::std::unique_ptr< SfxItemSet >           SfxItemSetPtr;
-    typedef ::std::unique_ptr< OutlinerParaObject >   OutlinerParaObjPtr;
 
-    SfxItemSetPtr       mxItemSet;          /// Caption object formatting.
-    OutlinerParaObjPtr  mxOutlinerObj;      /// Text object with all text portion formatting.
+    std::unique_ptr< SfxItemSet > mxItemSet;          /// Caption object formatting.
+    std::unique_ptr< OutlinerParaObject > mxOutlinerObj;      /// Text object with all text portion formatting.
     OUString     maSimpleText;       /// Simple text without formatting.
     Point               maCaptionOffset;    /// Caption position relative to cell corner.
     Size                maCaptionSize;      /// Size of the caption object.

@@ -49,7 +49,7 @@ namespace ActivitiesFactory
     struct CommonParameters
     {
         CommonParameters(
-            const EventSharedPtr&                 rEndEvent,
+            const std::shared_ptr< Event >&       rEndEvent,
             EventQueue&                           rEventQueue,
             ActivitiesQueue&                      rActivitiesQueue,
             double                                nMinDuration,
@@ -58,7 +58,7 @@ namespace ActivitiesFactory
             ::boost::optional<double> const&      aRepeats,
             double                                nAcceleration,
             double                                nDeceleration,
-            const ShapeSharedPtr&                 rShape,
+            const std::shared_ptr< Shape >&       rShape,
             const ::basegfx::B2DVector&           rSlideBounds )
             : mpEndEvent( rEndEvent ),
               mrEventQueue( rEventQueue ),
@@ -73,7 +73,7 @@ namespace ActivitiesFactory
               mbAutoReverse( bAutoReverse ) {}
 
         /// End event to fire when animation is over
-        EventSharedPtr                                  mpEndEvent;
+        std::shared_ptr< Event >                        mpEndEvent;
 
         /// Event queue to insert the end event into.
         EventQueue&                                     mrEventQueue;
@@ -119,7 +119,7 @@ namespace ActivitiesFactory
         double                                          mnDeceleration;
 
         /// Shape, to get bounds from
-        ShapeSharedPtr                                  mpShape;
+        std::shared_ptr< Shape >                        mpShape;
 
         /// LayerManager, to get page size from
         ::basegfx::B2DVector                            maSlideBounds;
@@ -145,7 +145,7 @@ namespace ActivitiesFactory
         @param xNode
         The SMIL animation node to animate
     */
-    AnimationActivitySharedPtr createAnimateActivity(
+    std::shared_ptr< AnimationActivity > createAnimateActivity(
         const CommonParameters&                        rParms,
         const std::shared_ptr< NumberAnimation >&      rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&   xNode );
@@ -167,7 +167,7 @@ namespace ActivitiesFactory
         @param xNode
         The SMIL animation node to animate
     */
-    AnimationActivitySharedPtr createAnimateActivity(
+    std::shared_ptr< AnimationActivity > createAnimateActivity(
         const CommonParameters&                        rParms,
         const std::shared_ptr< EnumAnimation >&        rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&      xNode );
@@ -189,7 +189,7 @@ namespace ActivitiesFactory
         @param xNode
         The SMIL animation node to animate
     */
-    AnimationActivitySharedPtr createAnimateActivity(
+    std::shared_ptr< AnimationActivity > createAnimateActivity(
         const CommonParameters&                        rParms,
         const std::shared_ptr< ColorAnimation >&       rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&      xNode );
@@ -211,7 +211,7 @@ namespace ActivitiesFactory
         @param xNode
         The SMIL animation node to animate
     */
-    AnimationActivitySharedPtr createAnimateActivity(
+    std::shared_ptr< AnimationActivity > createAnimateActivity(
         const CommonParameters&                            rParms,
         const std::shared_ptr< HSLColorAnimation >&        rAnimator,
         const css::uno::Reference< css::animations::XAnimateColor >&     xNode );
@@ -233,7 +233,7 @@ namespace ActivitiesFactory
         @param xNode
         The SMIL animation node to animate
     */
-    AnimationActivitySharedPtr createAnimateActivity(
+    std::shared_ptr< AnimationActivity > createAnimateActivity(
         const CommonParameters&                        rParms,
         const std::shared_ptr< PairAnimation >&        rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&   xNode );
@@ -255,7 +255,7 @@ namespace ActivitiesFactory
         @param xNode
         The SMIL animation node to animate
     */
-    AnimationActivitySharedPtr createAnimateActivity(
+    std::shared_ptr< AnimationActivity > createAnimateActivity(
         const CommonParameters&                        rParms,
         const std::shared_ptr< StringAnimation >&      rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&      xNode );
@@ -277,7 +277,7 @@ namespace ActivitiesFactory
         @param xNode
         The SMIL animation node to animate
     */
-    AnimationActivitySharedPtr createAnimateActivity(
+    std::shared_ptr< AnimationActivity > createAnimateActivity(
         const CommonParameters&                        rParms,
         const std::shared_ptr< BoolAnimation >&        rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&      xNode );
@@ -299,7 +299,7 @@ namespace ActivitiesFactory
         If true, the activity goes 'forward', i.e. from 0 to
         1. With false, the direction is reversed.
     */
-    AnimationActivitySharedPtr createSimpleActivity(
+    std::shared_ptr< AnimationActivity > createSimpleActivity(
         const CommonParameters&         rParms,
         const std::shared_ptr< NumberAnimation >& rAnimator,
         bool                            bDirectionForward );

@@ -54,21 +54,21 @@ namespace slideshow
             /** Add the given event to the queue. The event is fired
                 at, or shortly after, its Event::getActivationTime instant.
              */
-            bool addEvent( const EventSharedPtr& event );
+            bool addEvent( const std::shared_ptr< Event >& event );
 
             /** Add the given event to the queue. The event is fired
                 at, or shortly after, its Event::getActivationTime instant.
                 The difference to addEvent() is that events added during
                 process() are postponed to next process().
              */
-            bool addEventForNextRound( const EventSharedPtr& event );
+            bool addEventForNextRound( const std::shared_ptr< Event >& event );
 
             /** Another way to control the order of asynchronous event
                 execution.  Use this method to schedule events that are to
                 be executed after all regular events that have no delay,
                 even when they schedule new regular events without delay.
             */
-            bool addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent);
+            bool addEventWhenQueueIsEmpty (const std::shared_ptr< Event >& rpEvent);
 
             /** Process the event queue.
 
@@ -123,12 +123,12 @@ namespace slideshow
 
             struct EventEntry : public ::std::unary_function<EventEntry, bool>
             {
-                EventSharedPtr  pEvent;
+                std::shared_ptr< Event > pEvent;
                 double          nTime;
 
                 bool operator<( const EventEntry& ) const; // to leverage priority_queue's default compare
 
-                EventEntry( EventSharedPtr const& p, double t )
+                EventEntry( std::shared_ptr< Event > const& p, double t )
                     : pEvent(p), nTime(t) {}
             };
 

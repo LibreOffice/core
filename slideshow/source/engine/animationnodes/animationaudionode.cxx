@@ -58,7 +58,7 @@ void AnimationAudioNode::activate_st()
 {
     createPlayer();
 
-    AnimationEventHandlerSharedPtr aHandler(
+    std::shared_ptr< AnimationEventHandler > aHandler(
         std::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
     OSL_ENSURE( aHandler,
                 "could not cast self to AnimationEventHandler?" );
@@ -113,7 +113,7 @@ struct NotifyAudioStopped
 
 void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 {
-    AnimationEventHandlerSharedPtr aHandler(
+    std::shared_ptr< AnimationEventHandler > aHandler(
         std::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
     OSL_ENSURE( aHandler,
                 "could not cas self to AnimationEventHandler?" );

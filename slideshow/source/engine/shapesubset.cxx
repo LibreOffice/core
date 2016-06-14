@@ -44,7 +44,7 @@ namespace slideshow
                               "ShapeSubset::ShapeSubset(): Invalid shape manager" );
         }
 
-        ShapeSubset::ShapeSubset( const ShapeSubsetSharedPtr&   rOriginalSubset,
+        ShapeSubset::ShapeSubset( const std::shared_ptr< ShapeSubset >& rOriginalSubset,
                                   const DocTreeNode&            rTreeNode ) :
             mpOriginalShape( rOriginalSubset->mpSubsetShape ?
                              rOriginalSubset->mpSubsetShape :

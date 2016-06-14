@@ -64,9 +64,9 @@ namespace migration
     }
 
 
-    TStringVectorPtr BasicMigration::getFiles( const OUString& rBaseURL ) const
+    std::unique_ptr< TStringVector > BasicMigration::getFiles( const OUString& rBaseURL ) const
     {
-        TStringVectorPtr aResult( new TStringVector );
+        std::unique_ptr< TStringVector > aResult( new TStringVector );
         ::osl::Directory aDir( rBaseURL);
 
         if ( aDir.open() == ::osl::FileBase::E_None )
@@ -90,7 +90,7 @@ namespace migration
             TStringVector::const_iterator aI = aSubDirs.begin();
             while ( aI != aSubDirs.end() )
             {
-                TStringVectorPtr aSubResult = getFiles( *aI );
+                std::unique_ptr< TStringVector > aSubResult = getFiles( *aI );
                 aResult->insert( aResult->end(), aSubResult->begin(), aSubResult->end() );
                 ++aI;
             }
@@ -120,7 +120,7 @@ namespace migration
         if ( aStatus == ::utl::Bootstrap::PATH_EXISTS )
         {
             sTargetDir += sTargetUserBasic;
-            TStringVectorPtr aFileList = getFiles( m_sSourceDir );
+            std::unique_ptr< TStringVector > aFileList = getFiles( m_sSourceDir );
             TStringVector::const_iterator aI = aFileList->begin();
             while ( aI != aFileList->end() )
             {

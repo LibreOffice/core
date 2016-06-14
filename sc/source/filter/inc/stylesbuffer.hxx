@@ -654,9 +654,7 @@ public:
     const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );
 
 private:
-    typedef ::std::unique_ptr< ::ScPatternAttr > ScPatternAttrPtr;
-
-    ScPatternAttrPtr    mpPattern;          /// Calc item set.
+    std::unique_ptr< ScPatternAttr > mpPattern;          /// Calc item set.
     sal_uLong           mnScNumFmt;         /// Calc number format.
 
     XfModel             maModel;            /// Cell XF or style XF model data.

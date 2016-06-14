@@ -259,13 +259,11 @@ private:
 class ScAccessibleCsvTextData : public ScAccessibleTextData
 {
 private:
-    typedef ::std::unique_ptr< SvxTextForwarder > TextForwarderPtr;
-    typedef ::std::unique_ptr< ScCsvViewForwarder > ViewForwarderPtr;
 
     VclPtr<vcl::Window>         mpWindow;
     EditEngine*                 mpEditEngine;
-    TextForwarderPtr            mpTextForwarder;
-    ViewForwarderPtr            mpViewForwarder;
+    std::unique_ptr< SvxTextForwarder > mpTextForwarder;
+    std::unique_ptr< ScCsvViewForwarder > mpViewForwarder;
     OUString                    maCellText;
     Rectangle                   maBoundBox;
     Size                        maCellSize;

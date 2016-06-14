@@ -231,8 +231,8 @@ public:
         @param rHandler
         Handler to call when a shape listener changes
     */
-    void addShapeListenerHandler( const ShapeListenerEventHandlerSharedPtr& rHandler );
-    void removeShapeListenerHandler( const ShapeListenerEventHandlerSharedPtr& rHandler );
+    void addShapeListenerHandler( const std::shared_ptr< ShapeListenerEventHandler >& rHandler );
+    void removeShapeListenerHandler( const std::shared_ptr< ShapeListenerEventHandler >& rHandler );
 
     /** Register an event handler that will be called when
         user paint parameters change.
@@ -299,9 +299,9 @@ public:
         Handler to call when the animation start
     */
     void addAnimationStartHandler(
-        const AnimationEventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< AnimationEventHandler >& rHandler );
     void removeAnimationStartHandler(
-        const AnimationEventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< AnimationEventHandler >& rHandler );
 
     /** Register an event handler that will be called when an
         XAnimationNode ends its active duration.
@@ -314,9 +314,9 @@ public:
         Handler to call when the animation ends
     */
     void addAnimationEndHandler(
-        const AnimationEventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< AnimationEventHandler >& rHandler );
     void removeAnimationEndHandler(
-        const AnimationEventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< AnimationEventHandler >& rHandler );
 
     /** Register an event handler that will be called when the
         main animation sequence of a slide ends its active
@@ -345,9 +345,9 @@ public:
         Handler to call when the audio stops
     */
     void addAudioStoppedHandler(
-        const AnimationEventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< AnimationEventHandler >& rHandler );
     void removeAudioStoppedHandler(
-        const AnimationEventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< AnimationEventHandler >& rHandler );
 
     /** Register an event handler that will be called when an
         XCommand node's with the command STOPAUDIO is activated.
@@ -360,9 +360,9 @@ public:
         Handler to call when command is activated
     */
     void addCommandStopAudioHandler(
-        const AnimationEventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< AnimationEventHandler >& rHandler );
     void removeCommandStopAudioHandler(
-        const AnimationEventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< AnimationEventHandler >& rHandler );
 
     /** Register a handler that is called when the show enters
         or exits pause mode.
@@ -383,9 +383,9 @@ public:
         cannot cope with that, it must have the highest
         priority of all added handlers.
     */
-    void addClickHandler( const MouseEventHandlerSharedPtr& rHandler,
+    void addClickHandler( const std::shared_ptr< MouseEventHandler >& rHandler,
                           double                            nPriority );
-    void removeClickHandler( const MouseEventHandlerSharedPtr& rHandler );
+    void removeClickHandler( const std::shared_ptr< MouseEventHandler >& rHandler );
 
     /** Register a mouse handler that is called on a double
         mouse click
@@ -401,9 +401,9 @@ public:
         cannot cope with that, it must have the highest
         priority of all added handlers.
     */
-    void addDoubleClickHandler( const MouseEventHandlerSharedPtr&   rHandler,
+    void addDoubleClickHandler( const std::shared_ptr< MouseEventHandler >& rHandler,
                                 double                              nPriority );
-    void removeDoubleClickHandler( const MouseEventHandlerSharedPtr& rHandler );
+    void removeDoubleClickHandler( const std::shared_ptr< MouseEventHandler >& rHandler );
 
     /** Register a mouse handler that is called for mouse moves.
 
@@ -412,9 +412,9 @@ public:
         with decreasing priority, i.e. the handler with the
         currently highest priority will be called.
     */
-    void addMouseMoveHandler( const MouseEventHandlerSharedPtr& rHandler,
+    void addMouseMoveHandler( const std::shared_ptr< MouseEventHandler >& rHandler,
                               double                            nPriority );
-    void removeMouseMoveHandler( const MouseEventHandlerSharedPtr& rHandler );
+    void removeMouseMoveHandler( const std::shared_ptr< MouseEventHandler >& rHandler );
 
 
     /** Registers a hyperlink click handler.

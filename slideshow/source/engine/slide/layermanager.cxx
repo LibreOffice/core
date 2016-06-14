@@ -152,7 +152,7 @@ namespace slideshow
             manageViews(
                 [&rView]( const std::shared_ptr< Layer >& pLayer )
                 { return pLayer->addView( rView ); },
-                []( const ShapeSharedPtr& pShape, const ViewLayerSharedPtr& pLayer )
+                []( const std::shared_ptr< Shape >& pShape, const ViewLayerSharedPtr& pLayer )
                 { return pShape->addViewLayer( pLayer, true ); } );
 
             // in case we haven't reached all layers from the
@@ -172,7 +172,7 @@ namespace slideshow
             manageViews(
                 [&rView]( const std::shared_ptr< Layer >& pLayer )
                 { return pLayer->removeView( rView ); },
-                []( const ShapeSharedPtr& pShape, const ViewLayerSharedPtr& pLayer )
+                []( const std::shared_ptr< Shape >& pShape, const ViewLayerSharedPtr& pLayer )
                 { return pShape->removeViewLayer( pLayer ); } );
 
             // in case we haven't reached all layers from the
@@ -210,7 +210,7 @@ namespace slideshow
                 rShape.first->render();
         }
 
-        void LayerManager::addShape( const ShapeSharedPtr& rShape )
+        void LayerManager::addShape( const std::shared_ptr< Shape >& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::addShape(): invalid Shape" );
@@ -235,7 +235,7 @@ namespace slideshow
             rShapeEntry.second = rBgLayer;
         }
 
-        void LayerManager::implAddShape( const ShapeSharedPtr& rShape )
+        void LayerManager::implAddShape( const std::shared_ptr< Shape >& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::implAddShape(): invalid Shape" );
@@ -256,7 +256,7 @@ namespace slideshow
                 notifyShapeUpdate( rShape );
         }
 
-        void LayerManager::implRemoveShape( const ShapeSharedPtr& rShape )
+        void LayerManager::implRemoveShape( const std::shared_ptr< Shape >& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::implRemoveShape(): invalid Shape" );
@@ -292,13 +292,13 @@ namespace slideshow
             mbLayerAssociationDirty = true;
         }
 
-        ShapeSharedPtr LayerManager::lookupShape( const uno::Reference< drawing::XShape >& xShape ) const
+        std::shared_ptr< Shape > LayerManager::lookupShape( const uno::Reference< drawing::XShape >& xShape ) const
         {
             ENSURE_OR_THROW( xShape.is(), "LayerManager::lookupShape(): invalid Shape" );
 
             const XShapeHash::const_iterator aIter( maXShapeHash.find( xShape ));
             if( aIter == maXShapeHash.end() )
-                return ShapeSharedPtr(); // not found
+                return std::shared_ptr< Shape >(); // not found
 
             // found, return data part of entry pair.
             return aIter->second;
@@ -353,7 +353,7 @@ namespace slideshow
             }
         }
 
-        void LayerManager::enterAnimationMode( const AnimatableShapeSharedPtr& rShape )
+        void LayerManager::enterAnimationMode( const std::shared_ptr< AnimatableShape >& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::enterAnimationMode(): invalid Shape" );
@@ -383,7 +383,7 @@ namespace slideshow
             // between two frames, returning to the original state.
         }
 
-        void LayerManager::leaveAnimationMode( const AnimatableShapeSharedPtr& rShape )
+        void LayerManager::leaveAnimationMode( const std::shared_ptr< AnimatableShape >& rShape )
         {
             ENSURE_OR_THROW( !maLayers.empty(), "LayerManager::leaveAnimationMode(): no layers" );
             ENSURE_OR_THROW( rShape, "LayerManager::leaveAnimationMode(): invalid Shape" );
@@ -412,7 +412,7 @@ namespace slideshow
             // between two frames, returning to the original state.
         }
 
-        void LayerManager::notifyShapeUpdate( const ShapeSharedPtr& rShape )
+        void LayerManager::notifyShapeUpdate( const std::shared_ptr< Shape >& rShape )
         {
             if( !mbActive || mrViews.empty() )
                 return;
@@ -636,7 +636,7 @@ namespace slideshow
             return bRet;
         }
 
-        void LayerManager::addUpdateArea( ShapeSharedPtr const& rShape )
+        void LayerManager::addUpdateArea( std::shared_ptr< Shape > const& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::addUpdateArea(): invalid Shape" );
@@ -731,7 +731,7 @@ namespace slideshow
             ShapeUpdateSet                aUpdatedShapes; // shapes that need update
             while( aCurrShapeEntry != aEndShapeEntry )
             {
-                const ShapeSharedPtr pCurrShape( aCurrShapeEntry->first );
+                const std::shared_ptr< Shape > pCurrShape( aCurrShapeEntry->first );
                 const bool bThisIsBackgroundDetached(
                     pCurrShape->isBackgroundDetached() );
 

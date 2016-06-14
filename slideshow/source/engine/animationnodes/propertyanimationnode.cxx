@@ -26,7 +26,7 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
-AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
+std::shared_ptr< AnimationActivity > PropertyAnimationNode::createActivity() const
 {
     // Create AnimationActivity from common XAnimate parameters:
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
@@ -93,7 +93,7 @@ AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
             xAnimateNode );
     }
 
-    return AnimationActivitySharedPtr();
+    return std::shared_ptr< AnimationActivity >();
 }
 
 } // namespace internal

@@ -278,7 +278,6 @@ struct XclExpNumFmt
 };
 
 class SvNumberFormatter;
-typedef ::std::unique_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
 
 /** Stores all number formats used in the document. */
 class XclExpNumFmtBuffer : public XclExpRecordBase, protected XclExpRoot
@@ -310,7 +309,7 @@ private:
 private:
     typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
 
-    SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
+    std::unique_ptr< SvNumberFormatter > mxFormatter; /// Special number formatter for conversion.
     XclExpNumFmtVec     maFormatMap;    /// Maps core formats to Excel indexes.
     std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
     sal_uInt32          mnStdFmt;       /// Key for standard number format.
@@ -737,7 +736,7 @@ private:
     typedef std::vector< std::unique_ptr<XclExpDxf> > DxfContainer;
     std::map<OUString, sal_Int32> maStyleNameToDxfId;
     DxfContainer maDxf;
-    SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
+    std::unique_ptr< SvNumberFormatter > mxFormatter; /// Special number formatter for conversion.
     std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
 };
 

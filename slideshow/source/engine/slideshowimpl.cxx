@@ -385,11 +385,11 @@ private:
 
         @return the slide change activity, or NULL for no transition effect
     */
-    ActivitySharedPtr createSlideTransition(
+    std::shared_ptr< Activity > createSlideTransition(
         const uno::Reference< drawing::XDrawPage >&    xDrawPage,
         const std::shared_ptr< Slide >&                rLeavingSlide,
         const std::shared_ptr< Slide >&                rEnteringSlide,
-        const EventSharedPtr&                          rTransitionEndEvent );
+        const std::shared_ptr< Event >&                rTransitionEndEvent );
 
     /** Request/release the wait symbol.  The wait symbol is displayed when
         there are more requests then releases.  Locking the wait symbol
@@ -737,11 +737,11 @@ std::shared_ptr< SoundPlayer > SlideShowImpl::resetSlideTransitionSound( const u
     return mpCurrentSlideTransitionSound;
 }
 
-ActivitySharedPtr SlideShowImpl::createSlideTransition(
+std::shared_ptr< Activity > SlideShowImpl::createSlideTransition(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
     const std::shared_ptr< Slide >&             rLeavingSlide,
     const std::shared_ptr< Slide >&             rEnteringSlide,
-    const EventSharedPtr&                       rTransitionEndEvent)
+    const std::shared_ptr< Event >&             rTransitionEndEvent)
 {
     ENSURE_OR_THROW( !maViewContainer.empty(),
                       "createSlideTransition(): No views" );
@@ -751,7 +751,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     // return empty transition, if slide transitions
     // are disabled.
     if (mbNoSlideTransitions)
-        return ActivitySharedPtr();
+        return std::shared_ptr< Activity >();
 
     // retrieve slide change parameters from XDrawPage
     uno::Reference< beans::XPropertySet > xPropSet( xDrawPage,
@@ -761,7 +761,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     {
         OSL_TRACE( "createSlideTransition(): "
                    "Slide has no PropertySet - assuming no transition\n" );
-        return ActivitySharedPtr();
+        return std::shared_ptr< Activity >();
     }
 
     sal_Int16 nTransitionType(0);
@@ -771,7 +771,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     {
         OSL_TRACE( "createSlideTransition(): "
                    "Could not extract slide transition type from XDrawPage - assuming no transition\n" );
-        return ActivitySharedPtr();
+        return std::shared_ptr< Activity >();
     }
 
     sal_Int16 nTransitionSubType(0);
@@ -781,7 +781,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     {
         OSL_TRACE( "createSlideTransition(): "
                    "Could not extract slide transition subtype from XDrawPage - assuming no transition\n" );
-        return ActivitySharedPtr();
+        return std::shared_ptr< Activity >();
     }
 
     bool bTransitionDirection(false);
@@ -828,7 +828,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
             resetSlideTransitionSound( aSound, bLoopSound ) ));
 
     if( !pTransition )
-        return ActivitySharedPtr(); // no transition effect has been
+        return std::shared_ptr< Activity >(); // no transition effect has been
                                     // generated. Normally, that means
                                     // that simply no transition is
                                     // set on this slide.
@@ -840,7 +840,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     {
         OSL_TRACE( "createSlideTransition(): "
                    "Could not extract slide transition duration from XDrawPage - assuming no transition\n" );
-        return ActivitySharedPtr();
+        return std::shared_ptr< Activity >();
     }
 
     sal_Int32 nMinFrames(5);
@@ -858,11 +858,11 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     maEventQueue.addEvent(
         makeEvent( [pTransition] () {
                         pTransition->prefetch(
-                            AnimatableShapeSharedPtr(),
+                            std::shared_ptr< AnimatableShape >(),
                             std::shared_ptr< ShapeAttributeLayer >()); },
             "Animation::prefetch"));
 
-    return ActivitySharedPtr(
+    return std::shared_ptr< Activity >(
         ActivitiesFactory::createSimpleActivity(
             ActivitiesFactory::CommonParameters(
                 rTransitionEndEvent,
@@ -874,7 +874,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                 boost::optional<double>(1.0),
                 0.0,
                 0.0,
-                ShapeSharedPtr(),
+                std::shared_ptr< Shape >(),
                 basegfx::B2DSize( rEnteringSlide->getSlideSize() ) ),
             pTransition,
             true ));
@@ -1137,7 +1137,7 @@ void SlideShowImpl::displaySlide(
             // create slide transition, and add proper end event
             // (which then starts the slide effects
             // via CURRENT_SLIDE.show())
-            ActivitySharedPtr pSlideChangeActivity (
+            std::shared_ptr< Activity > pSlideChangeActivity (
                 createSlideTransition(
                     mpCurrentSlide->getXDrawPage(),
                     mpPreviousSlide,
