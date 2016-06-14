@@ -209,15 +209,9 @@ inline SbxValue& SbxValue::operator-=( const SbxValue& r )
 class SbxArray;
 class SbxInfo;
 
-#ifndef SBX_ARRAY_DECL_DEFINED
-#define SBX_ARRAY_DECL_DEFINED
 typedef tools::SvRef<SbxArray> SbxArrayRef;
-#endif
 
-#ifndef SBX_INFO_DECL_DEFINED
-#define SBX_INFO_DECL_DEFINED
 typedef tools::SvRef<SbxInfo> SbxInfoRef;
-#endif
 
 class SfxBroadcaster;
 
