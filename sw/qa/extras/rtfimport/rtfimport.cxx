@@ -2634,6 +2634,13 @@ DECLARE_RTFIMPORT_TEST(testTdf50821, "tdf50821.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(191), getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf91684, "tdf91684.rtf")
+{
+    // Scaling of the group shape children were incorrect, this was 3203.
+    // (Unit was assumed to be twips, but it was relative coordinates.)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1337), getShape(1)->getSize().Height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
