@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_1a701f72",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T08:50:39Z",
+      "side": 1,
+      "message": "The loop was this ugly already before, so not your fault, but while we\u0027re rewriting this piece of code, can we please make it less K\u0026R C-style and more C++-11? It\u0027s 2016 after all, not 1995",
+      "revId": "9629d41d9fecc771f92d30996e781169733b65f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_3a6de398",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T08:50:39Z",
+      "side": 1,
+      "message": "This loop is equally old-style and could be written better (again, not your fault). Additionally, are you sure the semantics/behaviour is the same as it used to be after your changes?",
+      "revId": "9629d41d9fecc771f92d30996e781169733b65f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
