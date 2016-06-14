@@ -309,7 +309,7 @@ public:
 
 void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
 {
-    sal_Int32 nThreads = std::min( rSheets.size(), (size_t) std::max(std::thread::hardware_concurrency(), 1U) );
+    sal_Int32 nThreads = std::min( rSheets.size(), (size_t) comphelper::ThreadPool::getPreferredConcurrency() );
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 

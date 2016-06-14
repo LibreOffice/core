@@ -2133,7 +2133,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     // This is staggeringly slow, and each element operates only
     // on its own data.
     const size_t nRows = maRowMap.size();
-    const size_t nThreads = nRows < 128 ? 1 : std::max(std::thread::hardware_concurrency(), 1U);
+    const size_t nThreads = nRows < 128 ? 1 : comphelper::ThreadPool::getPreferredConcurrency();
 #else
     const size_t nThreads = 1; // globally disable multi-threading for now.
 #endif
