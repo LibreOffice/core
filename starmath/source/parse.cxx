@@ -1566,8 +1566,7 @@ void SmParser::DoEscape()
             Error(PE_UNEXPECTED_TOKEN);
     }
 
-    std::unique_ptr<SmNode> pNode(new SmMathSymbolNode(m_aCurToken));
-    m_aNodeStack.push_front(std::move(pNode));
+    m_aNodeStack.push_front(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
 
     NextToken();
 }

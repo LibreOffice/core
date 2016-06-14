@@ -19,9 +19,6 @@
 
 #include <sal/config.h>
 
-#include <memory>
-#include <utility>
-
 /* Somehow, under same circumstances, MSVC creates object code for 2
  * inlined functions. Nobody here uses them, so simply define them away
  * so that there be no dupplicate symbols anymore.
@@ -420,10 +417,11 @@ void ScAccessiblePreviewHeaderCell::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
-
-        ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(o3tl::make_unique<ScAccessiblePreviewHeaderCellTextData>(mpViewShell, OUString(getAccessibleName()), maCellPos, mbColumnHeader, mbRowHeader)));
-
-        mpTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
+        mpTextHelper = new ::accessibility::AccessibleTextHelper(
+            o3tl::make_unique<ScAccessibilityEditSource>(
+                o3tl::make_unique<ScAccessiblePreviewHeaderCellTextData>(
+                    mpViewShell, OUString(getAccessibleName()), maCellPos,
+                    mbColumnHeader, mbRowHeader)));
         mpTextHelper->SetEventSource(this);
     }
 }

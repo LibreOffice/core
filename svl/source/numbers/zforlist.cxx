@@ -24,6 +24,7 @@
 #include <svl/currencytable.hxx>
 
 #include <comphelper/string.hxx>
+#include <o3tl/make_unique.hxx>
 #include <tools/debug.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
@@ -3737,12 +3738,11 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         aConfiguredCurrencyAbbrev, eConfiguredCurrencyLanguage );
     sal_uInt16 nSecondarySystemCurrencyPosition = 0;
     sal_uInt16 nMatchingSystemCurrencyPosition = 0;
-    std::unique_ptr<NfCurrencyEntry> pEntry(
-    // first entry is SYSTEM
-        new NfCurrencyEntry( *pLocaleData, LANGUAGE_SYSTEM ));
 
+    // First entry is SYSTEM:
     theCurrencyTable::get().insert(
-            theCurrencyTable::get().begin(), std::move(pEntry));
+        theCurrencyTable::get().begin(),
+        o3tl::make_unique<NfCurrencyEntry>(*pLocaleData, LANGUAGE_SYSTEM));
     sal_uInt16 nCurrencyPos = 1;
 
     css::uno::Sequence< css::lang::Locale > xLoc = LocaleDataWrapper::getInstalledLocaleNames();
@@ -3769,6 +3769,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             if ( pCurrencies[nDefault].Default )
                 break;
         }
+        std::unique_ptr<NfCurrencyEntry> pEntry;
         if ( nDefault < nCurrencyCount )
         {
             pEntry.reset(new NfCurrencyEntry(pCurrencies[nDefault], *pLocaleData, eLang));
@@ -3802,10 +3803,10 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             {
                 if (pCurrencies[nCurrency].LegacyOnly)
                 {
-                    pEntry.reset(new NfCurrencyEntry(pCurrencies[nCurrency], *pLocaleData, eLang));
                     rLegacyOnlyCurrencyTable.insert(
                         rLegacyOnlyCurrencyTable.begin() + nLegacyOnlyCurrencyPos++,
-                        std::move(pEntry));
+                        o3tl::make_unique<NfCurrencyEntry>(
+                            pCurrencies[nCurrency], *pLocaleData, eLang));
                 }
                 else if ( nCurrency != nDefault )
                 {
