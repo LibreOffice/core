@@ -25,13 +25,8 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
+#include <memory>
 
-/** forward declaration to our private date container implementation
-
-    We use these class as internal member to support small memory requirements.
-    You can create the container if it is necessary. The class which use these mechanism
-    is faster and smaller then a complete implementation!
-*/
 class SvtToolPanelOptions_Impl;
 
 /** collect information about sidebar group
@@ -41,16 +36,6 @@ class SvtToolPanelOptions_Impl;
 class SVT_DLLPUBLIC SvtToolPanelOptions: public utl::detail::Options
 {
     public:
-        /** standard constructor and destructor
-
-            This will initialize an instance with default values.
-            We implement these class with a refcount mechanism! Every instance of this class increase it
-            at create and decrease it at delete time - but all instances use the same data container!
-            He is implemented as a static member ...
-
-            \sa    member m_nRefCount
-            \sa    member m_pDataContainer
-        */
         SvtToolPanelOptions();
         virtual ~SvtToolPanelOptions();
 
@@ -77,17 +62,7 @@ class SVT_DLLPUBLIC SvtToolPanelOptions: public utl::detail::Options
         SVT_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
     private:
-
-        /**
-            \attention
-            Don't initialize these static members in these headers!
-            \li Double defined symbols will be detected ...
-            \li and unresolved externals exist at linking time.
-            Do it in your source only.
-        */
-        static SvtToolPanelOptions_Impl* m_pDataContainer;
-        static sal_Int32                 m_nRefCount;
-
+        std::shared_ptr<SvtToolPanelOptions_Impl> m_pImpl;
 };
 
 #endif
