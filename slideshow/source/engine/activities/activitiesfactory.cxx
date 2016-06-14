@@ -866,7 +866,7 @@ public:
         Standard Activity parameter struct
     */
     SimpleActivity( const ActivityParameters&       rParms,
-                    const NumberAnimationSharedPtr& rAnim ) :
+                    const std::shared_ptr< NumberAnimation >& rAnim ) :
         ContinuousActivityBase( rParms ),
         mpAnim( rAnim )
     {
@@ -917,7 +917,7 @@ public:
     }
 
 private:
-    NumberAnimationSharedPtr    mpAnim;
+    std::shared_ptr< NumberAnimation > mpAnim;
 };
 
 } // anon namespace
@@ -925,7 +925,7 @@ private:
 
 AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const NumberAnimationSharedPtr&                rAnim,
+    const std::shared_ptr< NumberAnimation >&      rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
@@ -934,7 +934,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
 
 AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const EnumAnimationSharedPtr&                  rAnim,
+    const std::shared_ptr< EnumAnimation >&        rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
@@ -943,7 +943,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
 
 AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const ColorAnimationSharedPtr&                 rAnim,
+    const std::shared_ptr< ColorAnimation >&       rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
@@ -952,7 +952,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
 
 AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                            rParms,
-    const HSLColorAnimationSharedPtr&                  rAnim,
+    const std::shared_ptr< HSLColorAnimation >&        rAnim,
     const uno::Reference< animations::XAnimateColor >& xNode )
 {
     // forward to appropriate template instantiation
@@ -966,7 +966,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
 
 AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const PairAnimationSharedPtr&                  rAnim,
+    const std::shared_ptr< PairAnimation >&        rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
@@ -975,7 +975,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
 
 AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const StringAnimationSharedPtr&                rAnim,
+    const std::shared_ptr< StringAnimation >&      rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
@@ -984,7 +984,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
 
 AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const BoolAnimationSharedPtr&                  rAnim,
+    const std::shared_ptr< BoolAnimation >&        rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
@@ -993,7 +993,7 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
 
 AnimationActivitySharedPtr ActivitiesFactory::createSimpleActivity(
     const CommonParameters&         rParms,
-    const NumberAnimationSharedPtr& rAnim,
+    const std::shared_ptr< NumberAnimation >& rAnim,
     bool                            bDirectionForward )
 {
     ActivityParameters aActivityParms( rParms.mpEndEvent,

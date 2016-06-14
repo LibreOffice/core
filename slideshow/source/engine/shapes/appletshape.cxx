@@ -100,7 +100,7 @@ namespace slideshow
             const sal_Size                                  mnNumPropEntries;
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewAppletShapeSharedPtr > ViewAppletShapeVector;
+            typedef ::std::vector< std::shared_ptr< ViewAppletShape > > ViewAppletShapeVector;
             ViewAppletShapeVector                           maViewAppletShapes;
             bool                                             mbIsPlaying;
         };
@@ -177,7 +177,7 @@ namespace slideshow
             OSL_ENSURE( ::std::count_if(maViewAppletShapes.begin(),
                                         aEnd,
                                         [&rLayer]
-                                        ( const ViewAppletShapeSharedPtr& pShape )
+                                        ( const std::shared_ptr< ViewAppletShape >& pShape )
                                         { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "AppletShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
@@ -186,7 +186,7 @@ namespace slideshow
             if( (aIter=::std::remove_if( maViewAppletShapes.begin(),
                                          aEnd,
                                          [&rLayer]
-                                         ( const ViewAppletShapeSharedPtr& pShape )
+                                         ( const std::shared_ptr< ViewAppletShape >& pShape )
                                          { return rLayer == pShape->getViewLayer(); } ) ) == aEnd )
             {
                 // view layer seemingly was not added, failed
@@ -212,7 +212,7 @@ namespace slideshow
             if( ::std::count_if( maViewAppletShapes.begin(),
                                  maViewAppletShapes.end(),
                                  [&rCurrBounds]
-                                 ( const ViewAppletShapeSharedPtr& pShape )
+                                 ( const std::shared_ptr< ViewAppletShape >& pShape )
                                  { return pShape->render( rCurrBounds ); } )
                 != static_cast<ViewAppletShapeVector::difference_type>(maViewAppletShapes.size()) )
             {

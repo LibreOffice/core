@@ -60,9 +60,9 @@ public:
 
     // Animation
     virtual void prefetch( const AnimatableShapeSharedPtr&,
-                           const ShapeAttributeLayerSharedPtr& ) override;
+                           const std::shared_ptr< ShapeAttributeLayer >& ) override;
     virtual void start( const AnimatableShapeSharedPtr&,
-                        const ShapeAttributeLayerSharedPtr& ) override;
+                        const std::shared_ptr< ShapeAttributeLayer >& ) override;
     virtual void end() override;
 
     // ViewEventHandler
@@ -76,9 +76,9 @@ protected:
         entering slides.
     */
     SlideChangeBase(
-        ::boost::optional<SlideSharedPtr> const & leavingSlide,
-        const SlideSharedPtr&                     pEnteringSlide,
-        const SoundPlayerSharedPtr&               pSoundPlayer,
+        ::boost::optional<std::shared_ptr< Slide >> const & leavingSlide,
+        const std::shared_ptr< Slide >&           pEnteringSlide,
+        const std::shared_ptr< SoundPlayer >&     pSoundPlayer,
         const UnoViewContainer&                   rViewContainer,
         ScreenUpdater&                            rScreenUpdater,
         EventMultiplexer&                         rEventMultiplexer,
@@ -100,9 +100,9 @@ protected:
         /// incoming slide sprite
         std::shared_ptr<cppcanvas::CustomSprite>    mpInSprite;
         /// outgoing slide bitmap
-        mutable SlideBitmapSharedPtr                  mpLeavingBitmap;
+        mutable std::shared_ptr< SlideBitmap >        mpLeavingBitmap;
         /// incoming slide bitmap
-        mutable SlideBitmapSharedPtr                  mpEnteringBitmap;
+        mutable std::shared_ptr< SlideBitmap >        mpEnteringBitmap;
 
         // for algo access
         const UnoViewSharedPtr& getView() const { return mpView; }
@@ -113,15 +113,15 @@ protected:
     ViewsVecT::const_iterator beginViews() { return maViewData.begin(); }
     ViewsVecT::const_iterator endViews() { return maViewData.end(); }
 
-    SlideBitmapSharedPtr getLeavingBitmap( const ViewEntry& rViewEntry ) const;
-    SlideBitmapSharedPtr getEnteringBitmap( const ViewEntry& rViewEntry ) const;
+    std::shared_ptr< SlideBitmap > getLeavingBitmap( const ViewEntry& rViewEntry ) const;
+    std::shared_ptr< SlideBitmap > getEnteringBitmap( const ViewEntry& rViewEntry ) const;
 
-    SlideBitmapSharedPtr createBitmap( const UnoViewSharedPtr&                pView,
-                                       const boost::optional<SlideSharedPtr>& rSlide_ ) const;
+    std::shared_ptr< SlideBitmap > createBitmap( const UnoViewSharedPtr&      pView,
+                                       const boost::optional<std::shared_ptr< Slide >>& rSlide_ ) const;
 
     ::basegfx::B2ISize getEnteringSlideSizePixel( const UnoViewSharedPtr& pView ) const;
 
-    static void renderBitmap( SlideBitmapSharedPtr const&                 pSlideBitmap,
+    static void renderBitmap( std::shared_ptr< SlideBitmap > const&       pSlideBitmap,
                        std::shared_ptr<cppcanvas::Canvas> const& pCanvas );
 
     /** Called on derived classes to perform actions before first run.
@@ -182,13 +182,13 @@ private:
     void addSprites( ViewEntry& rEntry );
     static void clearViewEntry( ViewEntry& rEntry );
 
-    SoundPlayerSharedPtr                mpSoundPlayer;
+    std::shared_ptr< SoundPlayer >      mpSoundPlayer;
 
     EventMultiplexer&                   mrEventMultiplexer;
     ScreenUpdater&                      mrScreenUpdater;
 
-    ::boost::optional<SlideSharedPtr>   maLeavingSlide;
-    SlideSharedPtr                      mpEnteringSlide;
+    ::boost::optional<std::shared_ptr< Slide >> maLeavingSlide;
+    std::shared_ptr< Slide >            mpEnteringSlide;
 
     ViewsVecT                           maViewData;
     const UnoViewContainer&             mrViewContainer;

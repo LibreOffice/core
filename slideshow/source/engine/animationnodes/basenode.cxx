@@ -313,7 +313,7 @@ private:
 };
 
 BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode,
-                    const BaseContainerNodeSharedPtr&                   rParent,
+                    const std::shared_ptr< BaseContainerNode >&         rParent,
                     const NodeContext&                                  rContext ) :
     maContext( rContext.maContext ),
     maDeactivatingListeners(),
@@ -609,7 +609,7 @@ void BaseNode::end()
     }
 }
 
-void BaseNode::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
+void BaseNode::notifyDeactivating( const std::shared_ptr< AnimationNode >& rNotifier )
 {
     (void) rNotifier; // avoid warning
     OSL_ASSERT( rNotifier->getState() == FROZEN ||
@@ -644,7 +644,7 @@ AnimationNode::NodeState BaseNode::getState() const
 }
 
 bool BaseNode::registerDeactivatingListener(
-    const AnimationNodeSharedPtr& rNotifee )
+    const std::shared_ptr< AnimationNode >& rNotifee )
 {
     if (! checkValidNode())
         return false;
@@ -657,7 +657,7 @@ bool BaseNode::registerDeactivatingListener(
     return true;
 }
 
-void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
+void BaseNode::setSelf( const std::shared_ptr< BaseNode >& rSelf )
 {
     ENSURE_OR_THROW( rSelf.get() == this,
                       "BaseNode::setSelf(): got ptr to different object" );

@@ -66,13 +66,13 @@ namespace slideshow
              */
             const ViewLayerSharedPtr& getViewLayer() const;
 
-            bool render( const GDIMetaFileSharedPtr& rMtf ) const;
+            bool render( const std::shared_ptr< GDIMetaFile >& rMtf ) const;
 
         private:
             /** Prefetch bitmap for given canvas
              */
             bool prefetch( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                           const GDIMetaFileSharedPtr&          rMtf ) const;
+                           const std::shared_ptr< GDIMetaFile >& rMtf ) const;
 
             /** The view layer this object is part of.
              */
@@ -82,7 +82,7 @@ namespace slideshow
             mutable css::uno::Reference< css::rendering::XBitmap >  mxBitmap;
 
             /// The last metafile a render object was generated for
-            mutable GDIMetaFileSharedPtr                        mpLastMtf;
+            mutable std::shared_ptr< GDIMetaFile >              mpLastMtf;
 
             /// The canvas, mpRenderer is associated with
             mutable ::basegfx::B2DHomMatrix                     maLastTransformation;
@@ -90,7 +90,6 @@ namespace slideshow
             const ::basegfx::B2DRectangle                       maBounds;
         };
 
-        typedef ::std::shared_ptr< ViewBackgroundShape > ViewBackgroundShapeSharedPtr;
 
     }
 }

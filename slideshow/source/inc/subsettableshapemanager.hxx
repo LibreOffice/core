@@ -91,8 +91,8 @@ namespace slideshow
                 @param rHandler
                 Handler to call when a shape listener changes
             */
-            virtual void addIntrinsicAnimationHandler( const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) = 0;
-            virtual void removeIntrinsicAnimationHandler( const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) = 0;
+            virtual void addIntrinsicAnimationHandler( const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler ) = 0;
+            virtual void removeIntrinsicAnimationHandler( const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler ) = 0;
 
             /** Notify that shape-intrinsic animations are now enabled.
             */
@@ -103,7 +103,6 @@ namespace slideshow
             virtual void notifyIntrinsicAnimationsDisabled() = 0;
         };
 
-        typedef ::std::shared_ptr< SubsettableShapeManager > SubsettableShapeManagerSharedPtr;
     }
 }
 

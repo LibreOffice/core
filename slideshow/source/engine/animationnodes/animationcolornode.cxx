@@ -41,7 +41,7 @@ namespace {
 class HSLWrapper : public HSLColorAnimation
 {
 public:
-    explicit HSLWrapper( const ColorAnimationSharedPtr& rAnimation )
+    explicit HSLWrapper( const std::shared_ptr< ColorAnimation >& rAnimation )
         : mpAnimation( rAnimation )
     {
         ENSURE_OR_THROW(
@@ -50,11 +50,11 @@ public:
     }
 
     virtual void prefetch( const AnimatableShapeSharedPtr&,
-                           const ShapeAttributeLayerSharedPtr& ) override
+                           const std::shared_ptr< ShapeAttributeLayer >& ) override
     {}
 
     virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                        const ShapeAttributeLayerSharedPtr& rAttrLayer ) override
+                        const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override
     {
         mpAnimation->start( rShape, rAttrLayer );
     }
@@ -75,7 +75,7 @@ public:
     }
 
 private:
-    ColorAnimationSharedPtr mpAnimation;
+    std::shared_ptr< ColorAnimation > mpAnimation;
 };
 
 } // anon namespace
@@ -102,7 +102,7 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
         // interface, and internally converts HSL to RGB color
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            HSLColorAnimationSharedPtr(
+            std::shared_ptr< HSLColorAnimation >(
                 new HSLWrapper(
                     AnimationFactory::createColorPropertyAnimation(
                         mxColorNode->getAttributeName(),

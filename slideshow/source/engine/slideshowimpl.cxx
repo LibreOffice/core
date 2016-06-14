@@ -269,7 +269,7 @@ public:
     /** Notification from eventmultiplexer that an animation event has occoured.
         This will be forewarded to all registered XSlideShowListener
      */
-    bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
+    bool handleAnimationEvent( const std::shared_ptr< AnimationNode >& rNode );
 
 private:
     // XSlideShow:
@@ -353,14 +353,14 @@ private:
     PolygonMap::iterator findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage);
 
     /// Creates a new slide.
-    SlideSharedPtr makeSlide(
+    std::shared_ptr< Slide > makeSlide(
         uno::Reference<drawing::XDrawPage> const& xDrawPage,
         uno::Reference<drawing::XDrawPagesSupplier> const& xDrawPages,
         uno::Reference<animations::XAnimationNode> const& xRootNode );
 
     /// Checks whether the given slide/animation node matches mpPrefetchSlide
     static bool matches(
-        SlideSharedPtr const& pSlide,
+        std::shared_ptr< Slide > const& pSlide,
         uno::Reference<drawing::XDrawPage> const& xSlide,
         uno::Reference<animations::XAnimationNode> const& xNode )
     {
@@ -372,7 +372,7 @@ private:
     }
 
     /// Resets the current slide transition sound object with a new one:
-    SoundPlayerSharedPtr resetSlideTransitionSound(
+    std::shared_ptr< SoundPlayer > resetSlideTransitionSound(
         uno::Any const& url = uno::Any(), bool bLoopSound = false );
 
     /// stops the current slide transition sound
@@ -387,8 +387,8 @@ private:
     */
     ActivitySharedPtr createSlideTransition(
         const uno::Reference< drawing::XDrawPage >&    xDrawPage,
-        const SlideSharedPtr&                          rLeavingSlide,
-        const SlideSharedPtr&                          rEnteringSlide,
+        const std::shared_ptr< Slide >&                rLeavingSlide,
+        const std::shared_ptr< Slide >&                rEnteringSlide,
         const EventSharedPtr&                          rTransitionEndEvent );
 
     /** Request/release the wait symbol.  The wait symbol is displayed when
@@ -447,7 +447,7 @@ private:
     EventMultiplexer                        maEventMultiplexer;
     ActivitiesQueue                         maActivitiesQueue;
     UserEventQueue                          maUserEventQueue;
-    SubsettableShapeManagerSharedPtr        mpDummyPtr;
+    std::shared_ptr< SubsettableShapeManager > mpDummyPtr;
 
     std::shared_ptr<SeparateListenerImpl> mpListener;
 
@@ -457,18 +457,18 @@ private:
     std::shared_ptr<PointerSymbol>        mpPointerSymbol;
 
     /// the current slide transition sound object:
-    SoundPlayerSharedPtr                    mpCurrentSlideTransitionSound;
+    std::shared_ptr< SoundPlayer >          mpCurrentSlideTransitionSound;
 
     uno::Reference<uno::XComponentContext>  mxComponentContext;
     uno::Reference<
         presentation::XTransitionFactory>   mxOptionalTransitionFactory;
 
     /// the previously running slide
-    SlideSharedPtr                          mpPreviousSlide;
+    std::shared_ptr< Slide >                mpPreviousSlide;
     /// the currently running slide
-    SlideSharedPtr                          mpCurrentSlide;
+    std::shared_ptr< Slide >                mpCurrentSlide;
     /// the already prefetched slide: best candidate for upcoming slide
-    SlideSharedPtr                          mpPrefetchSlide;
+    std::shared_ptr< Slide >                mpPrefetchSlide;
     /// slide to be prefetched: best candidate for upcoming slide
     uno::Reference<drawing::XDrawPage>      mxPrefetchSlide;
     ///  save the XDrawPagesSupplier to retrieve polygons
@@ -549,7 +549,7 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
     }
 
     // AnimationEventHandler
-    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) override
+    virtual bool handleAnimationEvent( const std::shared_ptr< AnimationNode >& rNode ) override
     {
         return mrShow.handleAnimationEvent(rNode);
     }
@@ -704,7 +704,7 @@ void SlideShowImpl::stopSlideTransitionSound()
     }
  }
 
-SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const uno::Any& rSound, bool bLoopSound )
+std::shared_ptr< SoundPlayer > SlideShowImpl::resetSlideTransitionSound( const uno::Any& rSound, bool bLoopSound )
 {
     bool bStopSound = false;
     OUString url;
@@ -714,7 +714,7 @@ SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const uno::Any& r
     rSound >>= url;
 
     if( !bStopSound && url.isEmpty() )
-        return SoundPlayerSharedPtr();
+        return std::shared_ptr< SoundPlayer >();
 
     stopSlideTransitionSound();
 
@@ -739,8 +739,8 @@ SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const uno::Any& r
 
 ActivitySharedPtr SlideShowImpl::createSlideTransition(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
-    const SlideSharedPtr&                       rLeavingSlide,
-    const SlideSharedPtr&                       rEnteringSlide,
+    const std::shared_ptr< Slide >&             rLeavingSlide,
+    const std::shared_ptr< Slide >&             rEnteringSlide,
     const EventSharedPtr&                       rTransitionEndEvent)
 {
     ENSURE_OR_THROW( !maViewContainer.empty(),
@@ -813,7 +813,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     if( !getPropertyValue( bLoopSound, xPropSet, "LoopSound" ) )
         OSL_TRACE( "createSlideTransition(): Could not get slide property 'LoopSound' - using no sound" );
 
-    NumberAnimationSharedPtr pTransition(
+    std::shared_ptr< NumberAnimation > pTransition(
         TransitionFactory::createSlideTransition(
             rLeavingSlide,
             rEnteringSlide,
@@ -859,7 +859,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
         makeEvent( [pTransition] () {
                         pTransition->prefetch(
                             AnimatableShapeSharedPtr(),
-                            ShapeAttributeLayerSharedPtr()); },
+                            std::shared_ptr< ShapeAttributeLayer >()); },
             "Animation::prefetch"));
 
     return ActivitySharedPtr(
@@ -893,19 +893,19 @@ PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawP
     return aEnd;
 }
 
-SlideSharedPtr SlideShowImpl::makeSlide(
+std::shared_ptr< Slide > SlideShowImpl::makeSlide(
     uno::Reference<drawing::XDrawPage> const&          xDrawPage,
     uno::Reference<drawing::XDrawPagesSupplier> const& xDrawPages,
     uno::Reference<animations::XAnimationNode> const&  xRootNode )
 {
     if( !xDrawPage.is() )
-        return SlideSharedPtr();
+        return std::shared_ptr< Slide >();
 
     //Retrieve polygons for the current slide
     PolygonMap::iterator aIter;
     aIter = findPolygons(xDrawPage);
 
-    const SlideSharedPtr pSlide( createSlide(xDrawPage,
+    const std::shared_ptr< Slide > pSlide( createSlide(xDrawPage,
                                              xDrawPages,
                                              xRootNode,
                                              maEventQueue,
@@ -2345,7 +2345,7 @@ bool SlideShowImpl::notifyHyperLinkClicked( OUString const& hyperLink )
 /** Notification from eventmultiplexer that an animation event has occoured.
     This will be forewarded to all registered XSlideShoeListener
  */
-bool SlideShowImpl::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
+bool SlideShowImpl::handleAnimationEvent( const std::shared_ptr< AnimationNode >& rNode )
 {
     osl::MutexGuard const guard( m_aMutex );
 

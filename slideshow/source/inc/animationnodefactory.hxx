@@ -44,13 +44,13 @@ namespace slideshow
         {
             /** Create an AnimationNode for the given XAnimationNode
              */
-            AnimationNodeSharedPtr createAnimationNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode,
+            std::shared_ptr< AnimationNode > createAnimationNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode,
                                                         const ::basegfx::B2DVector&                          rSlideSize,
                                                         const SlideShowContext&                              rContext );
 
 
 #if defined(DBG_UTIL)
-            void showTree( AnimationNodeSharedPtr& pRootNode );
+            void showTree( std::shared_ptr< AnimationNode >& pRootNode );
 # define SHOW_NODE_TREE(a) AnimationNodeFactory::showTree(a)
 #else
 # define SHOW_NODE_TREE(a)

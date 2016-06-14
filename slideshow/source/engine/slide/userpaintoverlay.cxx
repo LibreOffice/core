@@ -137,7 +137,7 @@ namespace slideshow
                         //(*aIter)->getCanvas()->clear();
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
-                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        std::shared_ptr< SlideBitmap > pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
 
                         const ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
@@ -339,7 +339,7 @@ namespace slideshow
                     {
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
-                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        std::shared_ptr< SlideBitmap > pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
 
                         ::basegfx::B2DHomMatrix     aViewTransform( (*aIter)->getTransformation() );
@@ -433,13 +433,13 @@ namespace slideshow
             bool                    mbActive;
         };
 
-        UserPaintOverlaySharedPtr UserPaintOverlay::create( const RGBColor&          rStrokeColor,
+        std::shared_ptr< class UserPaintOverlay > UserPaintOverlay::create( const RGBColor& rStrokeColor,
                                                             double                   nStrokeWidth,
                                                             const SlideShowContext&  rContext,
                                                             const PolyPolygonVector& rPolygons,
                                                             bool                     bActive )
         {
-            UserPaintOverlaySharedPtr pRet( new UserPaintOverlay( rStrokeColor,
+            std::shared_ptr< class UserPaintOverlay > pRet( new UserPaintOverlay( rStrokeColor,
                                                                   nStrokeWidth,
                                                                   rContext,
                                                                   rPolygons,

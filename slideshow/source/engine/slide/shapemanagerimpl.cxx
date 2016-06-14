@@ -34,7 +34,7 @@ namespace slideshow {
 namespace internal {
 
 ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
-                                    LayerManagerSharedPtr const& rLayerManager,
+                                    std::shared_ptr< LayerManager > const& rLayerManager,
                                     CursorManager&               rCursorManager,
                                     const ShapeEventListenerMap& rGlobalListenersMap,
                                     const ShapeCursorMap&        rGlobalCursorMap ):
@@ -264,17 +264,17 @@ void ShapeManagerImpl::addHyperlinkArea( const HyperlinkAreaSharedPtr& rArea )
     maHyperlinkShapes.insert(rArea);
 }
 
-AttributableShapeSharedPtr ShapeManagerImpl::getSubsetShape( const AttributableShapeSharedPtr& rOrigShape,
+std::shared_ptr< AttributableShape > ShapeManagerImpl::getSubsetShape( const std::shared_ptr< AttributableShape >& rOrigShape,
                                                              const DocTreeNode&                rTreeNode )
 {
     if( mpLayerManager )
         return mpLayerManager->getSubsetShape(rOrigShape,rTreeNode);
 
-    return AttributableShapeSharedPtr();
+    return std::shared_ptr< AttributableShape >();
 }
 
-void ShapeManagerImpl::revokeSubset( const AttributableShapeSharedPtr& rOrigShape,
-                                     const AttributableShapeSharedPtr& rSubsetShape )
+void ShapeManagerImpl::revokeSubset( const std::shared_ptr< AttributableShape >& rOrigShape,
+                                     const std::shared_ptr< AttributableShape >& rSubsetShape )
 {
     if( mpLayerManager )
         mpLayerManager->revokeSubset(rOrigShape,rSubsetShape);
@@ -380,12 +380,12 @@ OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitPos ) 
     return OUString();
 }
 
-void ShapeManagerImpl::addIntrinsicAnimationHandler( const IntrinsicAnimationEventHandlerSharedPtr& rHandler )
+void ShapeManagerImpl::addIntrinsicAnimationHandler( const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler )
 {
     maIntrinsicAnimationEventHandlers.add( rHandler );
 }
 
-void ShapeManagerImpl::removeIntrinsicAnimationHandler( const IntrinsicAnimationEventHandlerSharedPtr& rHandler )
+void ShapeManagerImpl::removeIntrinsicAnimationHandler( const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler )
 {
     maIntrinsicAnimationEventHandlers.remove( rHandler );
 }

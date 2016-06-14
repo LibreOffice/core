@@ -53,7 +53,7 @@ class ClippingAnimation : public NumberAnimation
 {
 public:
     ClippingAnimation(
-        const ParametricPolyPolygonSharedPtr&   rPolygon,
+        const std::shared_ptr< ParametricPolyPolygon >& rPolygon,
         const ShapeManagerSharedPtr&            rShapeManager,
         const TransitionInfo&                   rTransitionInfo,
         bool                                    bDirectionForward,
@@ -64,9 +64,9 @@ public:
     // Animation interface
 
     virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
-                           const ShapeAttributeLayerSharedPtr& rAttrLayer ) override;
+                           const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override;
     virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                        const ShapeAttributeLayerSharedPtr& rAttrLayer ) override;
+                        const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override;
     virtual void end() override;
 
     // NumberAnimation interface
@@ -78,14 +78,14 @@ private:
     void end_();
 
     AnimatableShapeSharedPtr           mpShape;
-    ShapeAttributeLayerSharedPtr       mpAttrLayer;
+    std::shared_ptr< ShapeAttributeLayer > mpAttrLayer;
     ShapeManagerSharedPtr              mpShapeManager;
     ClippingFunctor                    maClippingFunctor;
     bool                               mbSpriteActive;
 };
 
 ClippingAnimation::ClippingAnimation(
-    const ParametricPolyPolygonSharedPtr&   rPolygon,
+    const std::shared_ptr< ParametricPolyPolygon >& rPolygon,
     const ShapeManagerSharedPtr&            rShapeManager,
     const TransitionInfo&                   rTransitionInfo,
     bool                                    bDirectionForward,
@@ -120,12 +120,12 @@ ClippingAnimation::~ClippingAnimation()
 }
 
 void ClippingAnimation::prefetch( const AnimatableShapeSharedPtr&,
-                                  const ShapeAttributeLayerSharedPtr& )
+                                  const std::shared_ptr< ShapeAttributeLayer >& )
 {
 }
 
 void ClippingAnimation::start( const AnimatableShapeSharedPtr&      rShape,
-                               const ShapeAttributeLayerSharedPtr&  rAttrLayer )
+                               const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer )
 {
     OSL_ENSURE( !mpShape,
                 "ClippingAnimation::start(): Shape already set" );
@@ -222,14 +222,14 @@ AnimationActivitySharedPtr createShapeTransitionByType(
             case TransitionInfo::TRANSITION_CLIP_POLYPOLYGON:
             {
                 // generate parametric poly-polygon
-                ParametricPolyPolygonSharedPtr pPoly(
+                std::shared_ptr< ParametricPolyPolygon > pPoly(
                     ParametricPolyPolygonFactory::createClipPolyPolygon(
                         nType, nSubType ) );
 
                 // create a clip activity from that
                 pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                     rParms,
-                    NumberAnimationSharedPtr(
+                    std::shared_ptr< NumberAnimation >(
                         new ClippingAnimation(
                             pPoly,
                             rShapeManager,
@@ -304,7 +304,7 @@ AnimationActivitySharedPtr createShapeTransitionByType(
                         }
 
                         // generate parametric poly-polygon
-                        ParametricPolyPolygonSharedPtr pPoly(
+                        std::shared_ptr< ParametricPolyPolygon > pPoly(
                             ParametricPolyPolygonFactory::createClipPolyPolygon(
                                 animations::TransitionType::BARWIPE,
                                 nBarWipeSubType ) );
@@ -312,7 +312,7 @@ AnimationActivitySharedPtr createShapeTransitionByType(
                         // create a clip activity from that
                         pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                             rParms,
-                            NumberAnimationSharedPtr(
+                            std::shared_ptr< NumberAnimation >(
                                 new ClippingAnimation(
                                     pPoly,
                                     rShapeManager,

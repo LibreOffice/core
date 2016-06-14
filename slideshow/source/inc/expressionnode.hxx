@@ -53,7 +53,6 @@ namespace slideshow
 
         };
 
-        typedef ::std::shared_ptr< AnimationFunction > AnimationFunctionSharedPtr;
 
         /** Refinement of AnimationFunction
 

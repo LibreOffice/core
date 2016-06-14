@@ -62,7 +62,6 @@ namespace slideshow
             virtual ValueType getUnderlyingValue() const = 0;
         };
 
-        typedef ::std::shared_ptr< PairAnimation > PairAnimationSharedPtr;
 
     }
 }
