@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/module.hxx>
 #include <vcl/abstdlg.hxx>
+#include <vcl/bitmap.hxx>
 
 typedef VclAbstractDialogFactory* (SAL_CALL *FuncPtrCreateDialogFactory)();
 
