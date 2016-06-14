@@ -19,6 +19,58 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_e514bcf6",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T16:19:33Z",
+      "side": 1,
+      "message": "Maybe bNeedNextFreeColour \u003d true;",
+      "parentUuid": "da7fb54a_1a701f72",
+      "revId": "9629d41d9fecc771f92d30996e781169733b65f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e55d9cea",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T16:19:33Z",
+      "side": 1,
+      "message": "You can use less intermediate variables:\n\naName \u003d aNewName + foo + bar;",
+      "revId": "9629d41d9fecc771f92d30996e781169733b65f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_855e90e7",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T16:19:33Z",
+      "side": 1,
+      "message": "Please make this a separate func returning bool, FindColourByName or sth along that line, as you\u0027re using the same code on multiple places",
+      "revId": "9629d41d9fecc771f92d30996e781169733b65f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_3a6de398",
         "filename": "cui/source/tabpages/tpcolor.cxx",
         "patchSetId": 2
@@ -30,6 +82,23 @@
       "writtenOn": "2016-06-14T08:50:39Z",
       "side": 1,
       "message": "This loop is equally old-style and could be written better (again, not your fault). Additionally, are you sure the semantics/behaviour is the same as it used to be after your changes?",
+      "revId": "9629d41d9fecc771f92d30996e781169733b65f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8505b0c3",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-14T16:19:33Z",
+      "side": 1,
+      "message": "Use the above mentioned FindColourByName func here, then you\u0027ll likely not need bDifferent variable:\n\nif (FindColourByName(aName))  \n\nbDifferent is pretty bad name in this context anyway, bColourExists describes the situation better",
       "revId": "9629d41d9fecc771f92d30996e781169733b65f4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
