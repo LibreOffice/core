@@ -36,6 +36,11 @@ public:
     /// count for the CPU
     static      ThreadPool& getSharedOptimalPool();
 
+    /// returns a configurable max-concurrency
+    /// limit to avoid spawning an unnecessarily
+    /// large number of threads on high-core boxes.
+    static      sal_Int32 getPreferredConcurrency();
+
                 ThreadPool( sal_Int32 nWorkers );
     virtual    ~ThreadPool();
 

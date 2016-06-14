@@ -10,6 +10,7 @@
 #include <comphelper/threadpool.hxx>
 
 #include <rtl/instance.hxx>
+#include <rtl/string.hxx>
 #include <algorithm>
 #include <memory>
 #include <thread>
@@ -123,6 +124,23 @@ struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPoo
 ThreadPool& ThreadPool::getSharedOptimalPool()
 {
     return *ThreadPoolStatic::get().get();
+}
+
+sal_Int32 ThreadPool::getPreferredConcurrency()
+{
+    const sal_Int32 nHardThreads = std::max(std::thread::hardware_concurrency(), 1U);
+
+    sal_Int32 nThreads = nHardThreads;
+    const char *pEnv = getenv("MAX_CONCURRENCY");
+    if (pEnv != nullptr)
+    {
+        // Override with user/admin preferrence.
+        nThreads = rtl_str_toInt32(pEnv, 10);
+    }
+
+    nThreads = std::min(nHardThreads, nThreads);
+    nThreads = std::max(nThreads, 1);
+    return nThreads;
 }
 
 void ThreadPool::waitAndCleanupWorkers()
