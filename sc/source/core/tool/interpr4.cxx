@@ -2040,7 +2040,12 @@ double ScInterpreter::GetDouble()
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
             if (!nGlobalError && pToken)
-                nVal = pToken->GetDouble();
+            {
+                if (pToken->GetType() == svDouble)
+                    nVal = pToken->GetDouble();
+                else
+                    nVal = ConvertStringToValue( pToken->GetString().getString());
+            }
         }
         break;
         case svExternalDoubleRef:
