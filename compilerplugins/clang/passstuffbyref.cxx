@@ -58,7 +58,7 @@ public:
 
 private:
     template<typename T> bool traverseAnyFunctionDecl(
-        T * decl, bool (RecursiveASTVisitor<PassStuffByRef>::* fn)(T *));
+        T * decl, bool (RecursiveASTVisitor::* fn)(T *));
     void checkParams(const FunctionDecl * functionDecl);
     void checkReturnValue(const FunctionDecl * functionDecl, const CXXMethodDecl * methodDecl);
     bool isFat(QualType type);
@@ -103,7 +103,7 @@ bool PassStuffByRef::TraverseCXXConversionDecl(CXXConversionDecl * decl) {
 }
 
 template<typename T> bool PassStuffByRef::traverseAnyFunctionDecl(
-    T * decl, bool (RecursiveASTVisitor<PassStuffByRef>::* fn)(T *))
+    T * decl, bool (RecursiveASTVisitor::* fn)(T *))
 {
     if (ignoreLocation(decl)) {
         return true;
