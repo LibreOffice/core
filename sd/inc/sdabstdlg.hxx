@@ -31,6 +31,7 @@
 #include "prlayout.hxx"
 #include "sdenumdef.hxx"
 #include "pres.hxx"
+#include "sddllapi.h"
 
 namespace sd {
     class View;
