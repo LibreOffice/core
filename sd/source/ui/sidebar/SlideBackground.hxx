@@ -99,6 +99,7 @@ private:
     std::unique_ptr< XFillHatchItem > mpHatchItem;
     std::unique_ptr< XFillBitmapItem > mpBitmapItem;
 
+    css::uno::Reference<css::frame::XFrame> mxFrame;
     SfxBindings* mpBindings;
 
     SfxMapUnit meUnit;
@@ -114,6 +115,9 @@ private:
 
     void Initialize();
     void Update();
+    //DO NOT REMOVE, will be used in follow-up commits
+    void SetPanelTitle(const OUString& rTitle);
+
     Color GetColorSetOrDefault();
     XGradient GetGradientSetOrDefault();
     const OUString GetHatchingSetOrDefault();
