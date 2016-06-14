@@ -36,9 +36,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-
-static SvtHelpOptions_Impl* pOptions = nullptr;
-static sal_Int32           nRefCount = 0;
+std::weak_ptr<SvtHelpOptions_Impl> pHelpOptions;
 
 enum class HelpProperty
 {
@@ -60,10 +58,11 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 
     static Sequence< OUString > GetPropertyNames();
 
-    virtual void    ImplCommit() override;
+    virtual void    ImplCommit() SAL_FINAL override;
 
 public:
                     SvtHelpOptions_Impl();
+                    ~SvtHelpOptions_Impl();
 
     virtual void    Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void            Load( const css::uno::Sequence< OUString>& aPropertyNames);
@@ -119,7 +118,6 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
     return *pMutex;
 }
 
-
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     : ConfigItem( OUString( "Office.Common/Help" ) )
     , bExtendedHelp( false )
@@ -131,6 +129,11 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     EnableNotification( aNames );
 }
 
+SvtHelpOptions_Impl::~SvtHelpOptions_Impl()
+{
+    if ( IsModified() )
+        Commit();
+}
 
 static int lcl_MapPropertyName( const OUString& rCompare,
                 const uno::Sequence< OUString>& aInternalPropertyNames)
@@ -211,7 +214,6 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
     }
 }
 
-
 void SvtHelpOptions_Impl::ImplCommit()
 {
     Sequence< OUString > aNames = GetPropertyNames();
@@ -246,7 +248,6 @@ void SvtHelpOptions_Impl::ImplCommit()
     PutProperties( aNames, aValues );
 }
 
-
 void SvtHelpOptions_Impl::Notify( const Sequence<OUString>& aPropertyNames )
 {
     Load( aPropertyNames );
@@ -256,73 +257,67 @@ SvtHelpOptions::SvtHelpOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( SvtHelpOptions_Impl::getInitMutex() );
-    ++nRefCount;
-    if ( !pOptions )
-    {
-        pOptions = new SvtHelpOptions_Impl;
 
+    pImpl = pHelpOptions.lock();
+    if ( !pImpl )
+    {
+        pImpl = std::make_shared<SvtHelpOptions_Impl>();
+        pHelpOptions = pImpl;
         svtools::ItemHolder2::holdConfigItem(E_HELPOPTIONS);
     }
-    pImp = pOptions;
 }
-
 
 SvtHelpOptions::~SvtHelpOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( SvtHelpOptions_Impl::getInitMutex() );
-    if ( !--nRefCount )
-    {
-        if ( pOptions->IsModified() )
-            pOptions->Commit();
-        DELETEZ( pOptions );
-    }
+
+    pImpl.reset();
 }
 
 void SvtHelpOptions::SetExtendedHelp( bool b )
 {
-    pImp->SetExtendedHelp( b );
+    pImpl->SetExtendedHelp( b );
 }
 
 bool SvtHelpOptions::IsExtendedHelp() const
 {
-    return pImp->IsExtendedHelp();
+    return pImpl->IsExtendedHelp();
 }
 
 void SvtHelpOptions::SetHelpTips( bool b )
 {
-    pImp->SetHelpTips( b );
+    pImpl->SetHelpTips( b );
 }
 
 bool SvtHelpOptions::IsHelpTips() const
 {
-    return pImp->IsHelpTips();
+    return pImpl->IsHelpTips();
 }
-
 
 void SvtHelpOptions::SetWelcomeScreen( bool b )
 {
-    pImp->SetWelcomeScreen( b );
+    pImpl->SetWelcomeScreen( b );
 }
 
 bool SvtHelpOptions::IsWelcomeScreen() const
 {
-    return pImp->IsWelcomeScreen();
+    return pImpl->IsWelcomeScreen();
 }
 
 OUString SvtHelpOptions::GetSystem() const
 {
-    return pImp->GetSystem();
+    return pImpl->GetSystem();
 }
 
 const OUString&   SvtHelpOptions::GetHelpStyleSheet()const
 {
-    return pImp->GetHelpStyleSheet();
+    return pImpl->GetHelpStyleSheet();
 }
 
 void  SvtHelpOptions::SetHelpStyleSheet(const OUString& rStyleSheet)
 {
-    pImp->SetHelpStyleSheet(rStyleSheet);
+    pImpl->SetHelpStyleSheet(rStyleSheet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
