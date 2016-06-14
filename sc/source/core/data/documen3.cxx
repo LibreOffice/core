@@ -24,6 +24,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
@@ -1323,7 +1324,13 @@ bool ScDocument::SearchAndReplace(
                                 if ( comphelper::LibreOfficeKit::isActive() )
                                 {
                                     OString aPayload = OString::number(nTab);
-                                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                                    if (comphelper::LibreOfficeKit::isViewCallback())
+                                    {
+                                        if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                                    }
+                                    else
+                                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
                                 }
                             }
                         }
@@ -1353,7 +1360,13 @@ bool ScDocument::SearchAndReplace(
                                 if ( comphelper::LibreOfficeKit::isActive() )
                                 {
                                     OString aPayload = OString::number(nTab);
-                                    GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                                    if (comphelper::LibreOfficeKit::isViewCallback())
+                                    {
+                                        if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                                    }
+                                    else
+                                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
                                 }
                             }
                         }

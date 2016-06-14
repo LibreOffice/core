@@ -5886,15 +5886,27 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
     // selection start handle
     Rectangle aStart(aBoundingBox.Left() / nPPTX, aBoundingBox.Top() / nPPTY,
             aBoundingBox.Left() / nPPTX, (aBoundingBox.Top() / nPPTY) + 256);
-    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
     // selection end handle
     Rectangle aEnd(aBoundingBox.Right() / nPPTX, (aBoundingBox.Bottom() / nPPTY) - 256,
             aBoundingBox.Right() / nPPTX, aBoundingBox.Bottom() / nPPTY);
-    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
 
     // the selection itself
-    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, comphelper::string::join("; ", aRectangles).getStr());
+    OString aSelection = comphelper::string::join("; ", aRectangles).getStr();
+
+    if (comphelper::LibreOfficeKit::isViewCallback())
+    {
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.getStr());
+    }
+    else
+    {
+        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.getStr());
+    }
 }
 
 void ScGridWindow::UpdateCursorOverlay()

@@ -1790,8 +1790,10 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             GetFrameWin()->LeaveWait();
             if (!bIsApi)
             {
-                rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
-                                                            pSearchItem->GetSearchString().toUtf8().getStr());
+                if (comphelper::LibreOfficeKit::isViewCallback())
+                    GetViewData().GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8().getStr());
+                else
+                    rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8().getStr());
                 SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
             }
 
@@ -1874,7 +1876,13 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aTree);
                 OString aPayload = aStream.str().c_str();
-                rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+                if (comphelper::LibreOfficeKit::isViewCallback())
+                {
+                    SfxViewShell* pViewShell = GetViewData().GetViewShell();
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+                }
+                else
+                    rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
 
                 // Trigger LOK_CALLBACK_TEXT_SELECTION now.
                 MarkDataChanged();
