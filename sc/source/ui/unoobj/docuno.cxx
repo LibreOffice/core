@@ -30,6 +30,7 @@
 #include <svx/unoshape.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <svl/numuno.hxx>
@@ -864,7 +865,10 @@ void ScModelObj::resetSelection()
         pViewShell->Unmark();
 
     // and hide the cell and text selection
-    pDocShell->GetDocument().GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+    if (comphelper::LibreOfficeKit::isViewCallback())
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+    else
+        pDocShell->GetDocument().GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
 }
 
 void ScModelObj::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)
