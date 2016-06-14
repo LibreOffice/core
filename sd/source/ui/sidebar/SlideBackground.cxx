@@ -24,6 +24,7 @@
 #include "TransitionPreset.hxx"
 #include "sdresid.hxx"
 #include "ViewShellBase.hxx"
+#include "FrameView.hxx"
 #include "DrawDocShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "drawdoc.hxx"
@@ -119,7 +120,6 @@ void SlideBackground::Initialize()
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
     mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
 
-    populateMasterSlideDropdown();
 
     meUnit = maPaperSizeController.GetCoreMetric();
 
@@ -130,13 +130,21 @@ void SlideBackground::Initialize()
     mpFillGrad->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
     mpFillAttr->SetSelectHdl(LINK(this, SlideBackground, FillBackgroundHdl));
 
-    if (ViewShell* pMainViewShell = mrBase.GetMainViewShell().get())
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
+    if (pMainViewShell)
     {
-        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
-        SdPage* mpPage = pDrawViewShell->getCurrentPage();
-        OUString aLayoutName( mpPage->GetLayoutName() );
-        aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
-        mpMasterSlide->SelectEntry(aLayoutName);
+        FrameView *pFrameView = pMainViewShell->GetFrameView();
+
+        if ( pFrameView->GetViewShEditMode() ==  EM_PAGE )
+        {
+            DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
+            SdPage* mpPage = pDrawViewShell->getCurrentPage();
+            populateMasterSlideDropdown();
+
+            OUString aLayoutName( mpPage->GetLayoutName() );
+            aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
+            mpMasterSlide->SelectEntry(aLayoutName);
+        }
     }
 
     mpFillStyle->SelectEntryPos(0);
@@ -278,6 +286,7 @@ void SlideBackground::addListener()
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_CURRENT_PAGE |
+        tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED |
         tools::EventMultiplexerEvent::EID_SHAPE_CHANGED );
 }
 
@@ -297,6 +306,20 @@ IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
         case tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
             populateMasterSlideDropdown();
             break;
+        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        {
+            ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
+
+            if (pMainViewShell)
+            {
+                DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
+                EditMode eMode = pDrawViewShell->GetEditMode();
+
+                if ( eMode == EM_MASTERPAGE)
+                    mpMasterSlide->Disable();
+            }
+        }
+        break;
         case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
         {
             static sal_uInt16 SidArray[] = {
