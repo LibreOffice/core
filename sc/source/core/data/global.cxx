@@ -880,10 +880,21 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
 
 void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, const SdrModel* pDrawLayer)
 {
-    if (pDrawLayer && comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
-        return;
+        if (comphelper::LibreOfficeKit::isViewCallback())
+        {
+            if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
+        }
+        else
+        {
+            if (pDrawLayer)
+            {
+                pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
+                return;
+            }
+        }
     }
 
     // OpenURL is always called in the GridWindow by mouse clicks in some way or another.
