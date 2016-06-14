@@ -25,25 +25,20 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
+#include <memory>
 
 class SvtPrintOptions_Impl;
 class PrinterOptions;
 
-
 class SVT_DLLPUBLIC SvtBasePrintOptions: public utl::detail::Options
 {
 protected:
-
-    SvtPrintOptions_Impl* m_pDataContainer;
-
-    void        SetDataContainer( SvtPrintOptions_Impl* pDataContainer ) { m_pDataContainer = pDataContainer; }
+    std::unique_ptr<SvtPrintOptions_Impl> m_pImpl;
 
 public:
-
     static ::osl::Mutex& GetOwnStaticMutex();
 
 public:
-
                 SvtBasePrintOptions();
                 virtual ~SvtBasePrintOptions();
 
@@ -72,7 +67,6 @@ public:
     void        SetPDFAsStandardPrintJobFormat( bool bState );
 
 public:
-
     void        GetPrinterOptions( PrinterOptions& rOptions ) const;
     void        SetPrinterOptions( const PrinterOptions& rOptions );
 };
@@ -81,23 +75,18 @@ public:
 class SVT_DLLPUBLIC SvtPrinterOptions : public SvtBasePrintOptions
 {
 private:
-
-    static SvtPrintOptions_Impl*    m_pStaticDataContainer;
-    static sal_Int32                m_nRefCount;
+    std::shared_ptr<SvtPrintOptions_Impl>    m_pImpl;
 
 public:
-
     SvtPrinterOptions();
     virtual ~SvtPrinterOptions();
 };
-
 
 class SVT_DLLPUBLIC SvtPrintFileOptions : public SvtBasePrintOptions
 {
 private:
 
-    static SvtPrintOptions_Impl*    m_pStaticDataContainer;
-    static sal_Int32                m_nRefCount;
+    std::shared_ptr<SvtPrintOptions_Impl>    m_pImpl;
 
 public:
 
