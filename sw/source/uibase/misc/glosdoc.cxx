@@ -23,9 +23,7 @@
 
 #include <unotools/transliterationwrapper.hxx>
 
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <osl/diagnose.h>
 #include <svl/urihelper.hxx>
 #include <svl/fstathelper.hxx>

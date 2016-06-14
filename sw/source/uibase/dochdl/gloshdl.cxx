@@ -20,9 +20,7 @@
 #include <hintids.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/adjustitem.hxx>
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>

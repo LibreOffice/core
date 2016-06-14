@@ -30,9 +30,7 @@
 
 #include <vcl/svapp.hxx>
 
-#ifndef __RSC
 #include <tools/errinf.hxx>
-#endif
 
 namespace framework{
 
