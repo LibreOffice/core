@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_5aab8774",
+        "filename": "unotools/source/config/pathoptions.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-14T11:07:11Z",
+      "side": 1,
+      "message": "need to take the mutex here, and reset the shared_ptr",
+      "revId": "5f18949a2cf8d38a3f782e616a00e0e56be69d59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
