@@ -571,11 +571,14 @@ postKeyEventInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
+    std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
 
     if (priv->m_nTileSizeTwips)
     {
-        std::stringstream ss;
+        ss.str(std::string());
         ss << "lok::Document::setClientZoom(" << nTileSizePixels << ", " << nTileSizePixels << ", " << priv->m_nTileSizeTwips << ", " << priv->m_nTileSizeTwips << ")";
         g_info("%s", ss.str().c_str());
         priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
@@ -587,7 +590,7 @@ postKeyEventInThread(gpointer data)
     }
     if (priv->m_bVisibleAreaSet)
     {
-        std::stringstream ss;
+        ss.str(std::string());
         ss << "lok::Document::setClientVisibleArea(" << priv->m_aVisibleArea.x << ", " << priv->m_aVisibleArea.y << ", ";
         ss << priv->m_aVisibleArea.width << ", " << priv->m_aVisibleArea.height << ")";
         g_info("%s", ss.str().c_str());
@@ -599,7 +602,7 @@ postKeyEventInThread(gpointer data)
         priv->m_bVisibleAreaSet = false;
     }
 
-    std::stringstream ss;
+    ss.str(std::string());
     ss << "lok::Document::postKeyEvent(" << pLOEvent->m_nKeyEvent << ", " << pLOEvent->m_nCharCode << ", " << pLOEvent->m_nKeyCode << ")";
     g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument,
@@ -829,6 +832,9 @@ static gboolean postDocumentLoad(gpointer pData)
     LOKDocView* pLOKDocView = static_cast<LOKDocView*>(pData);
     LOKDocViewPrivate& priv = getPrivate(pLOKDocView);
 
+    std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
@@ -1630,6 +1636,9 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     GdkPoint aPoint;
     GError* error = nullptr;
 
+    std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     if (priv->m_bInDragMiddleHandle)
     {
@@ -1726,8 +1735,11 @@ setGraphicSelectionInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+    ss.str(std::string());
     ss << "lok::Document::setGraphicSelection(" << pLOEvent->m_nSetGraphicSelectionType;
     ss << ", " << pLOEvent->m_nSetGraphicSelectionX;
     ss << ", " << pLOEvent->m_nSetGraphicSelectionY << ")";
@@ -1761,8 +1773,11 @@ postMouseEventInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+    ss.str(std::string());
     ss << "lok::Document::postMouseEvent(" << pLOEvent->m_nPostMouseEventType;
     ss << ", " << pLOEvent->m_nPostMouseEventX;
     ss << ", " << pLOEvent->m_nPostMouseEventY;
@@ -1815,6 +1830,9 @@ setPartInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPart = pLOEvent->m_nPart;
 
+    std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setPart( priv->m_pDocument, nPart );
 
@@ -1830,6 +1848,9 @@ setPartmodeInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPartMode = pLOEvent->m_nPartMode;
 
+    std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setPartMode( priv->m_pDocument, nPartMode );
 }
@@ -1849,6 +1870,9 @@ setEditInThread(gpointer data)
     else if (priv->m_bEdit && !bEdit)
     {
         g_info("lok_doc_view_set_edit: leaving edit mode");
+        std::stringstream ss;
+        ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+        g_info("%s", ss.str().c_str());
         priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
         priv->m_pDocument->pClass->resetSelection(priv->m_pDocument);
     }
@@ -1865,8 +1889,11 @@ postCommandInThread (gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
-    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+    ss.str(std::string());
     ss << "lok::Document::postUnoCommand(" << pLOEvent->m_pCommand << ", " << pLOEvent->m_pArguments << ")";
     g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pLOEvent->m_pCommand, pLOEvent->m_pArguments, pLOEvent->m_bNotifyWhenFinished);
@@ -1912,8 +1939,11 @@ paintTileInThread (gpointer data)
     aTileRectangle.x = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileY;
     aTileRectangle.y = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileX;
 
-    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+    ss.str(std::string());
     GTimer* aTimer = g_timer_new();
     gulong nElapsedMs;
     ss << "lok::Document::paintTile(" << static_cast<void*>(pBuffer) << ", "
@@ -2806,6 +2836,9 @@ lok_doc_view_get_parts (LOKDocView* pDocView)
     if (!priv->m_pDocument)
         return -1;
 
+    std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getParts( priv->m_pDocument );
 }
@@ -2817,6 +2850,9 @@ lok_doc_view_get_part (LOKDocView* pDocView)
     if (!priv->m_pDocument)
         return -1;
 
+    std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPart( priv->m_pDocument );
 }
@@ -2857,6 +2893,9 @@ lok_doc_view_get_part_name (LOKDocView* pDocView, int nPart)
     if (!priv->m_pDocument)
         return nullptr;
 
+    std::stringstream ss;
+    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
+    g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPartName( priv->m_pDocument, nPart );
 }
@@ -2927,8 +2966,6 @@ lok_doc_view_reset_view(LOKDocView* pDocView)
     priv->m_pGraphicHandle = nullptr;
     memset(&priv->m_aGraphicHandleRects, 0, sizeof(priv->m_aGraphicHandleRects));
     memset(&priv->m_bInDragGraphicHandles, 0, sizeof(priv->m_bInDragGraphicHandles));
-
-    priv->m_nViewId = 0;
 
     gtk_widget_queue_draw(GTK_WIDGET(pDocView));
 }
