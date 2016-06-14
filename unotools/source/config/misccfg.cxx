@@ -50,7 +50,7 @@ private:
 
 public:
     SfxMiscCfg( );
-    ~SfxMiscCfg( );
+    virtual ~SfxMiscCfg( );
 
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
