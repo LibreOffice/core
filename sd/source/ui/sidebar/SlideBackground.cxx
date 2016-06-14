@@ -18,6 +18,8 @@
  */
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/ui/XDeck.hpp>
+#include <com/sun/star/ui/XPanel.hpp>
 #include "SlideBackground.hxx"
 #include "TransitionPreset.hxx"
 #include "sdresid.hxx"
@@ -90,6 +92,7 @@ SlideBackground::SlideBackground(
     mpGradientItem(),
     mpHatchItem(),
     mpBitmapItem(),
+    mxFrame(rxFrame),
     mpBindings(pBindings)
 {
     get(mpPaperSizeBox,"paperformat");
@@ -238,6 +241,35 @@ void SlideBackground::Update()
         default:
             break;
     }
+}
+
+void SlideBackground::SetPanelTitle( const OUString& rTitle )
+{
+    Reference<frame::XController2> xController( mxFrame->getController(), uno::UNO_QUERY);
+    if ( !xController.is() )
+        return;
+
+    Reference<ui::XSidebarProvider> xSidebarProvider( xController->getSidebar(), uno::UNO_QUERY );
+    if ( !xSidebarProvider.is() )
+        return;
+
+    Reference<ui::XDecks> xDecks ( xSidebarProvider->getDecks(), uno::UNO_QUERY);
+    if ( !xDecks.is() )
+        return;
+
+    Reference<ui::XDeck> xDeck ( xDecks->getByName("PropertyDeck"), uno::UNO_QUERY);
+    if ( !xDeck.is() )
+        return;
+
+    Reference<ui::XPanels> xPanels ( xDeck->getPanels(), uno::UNO_QUERY);
+    if ( !xPanels.is() )
+        return;
+
+    Reference<ui::XPanel> xPanel ( xPanels->getByName("SlideBackgroundPanel"), uno::UNO_QUERY);
+    if ( !xPanels.is() )
+        return;
+
+    xPanel->setTitle( rTitle );
 }
 
 void SlideBackground::addListener()
