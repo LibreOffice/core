@@ -3641,7 +3641,15 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         if ( pInputWin )
                             pInputWin->SetTextString(aString);
                         else if ( comphelper::LibreOfficeKit::isActive() )
-                            rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
+                        {
+                            if (comphelper::LibreOfficeKit::isViewCallback())
+                            {
+                                if (pActiveViewSh)
+                                    pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
+                            }
+                            else
+                                rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
+                        }
                     }
 
                     if ( pInputWin )                        // Named range input

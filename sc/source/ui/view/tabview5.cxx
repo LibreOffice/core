@@ -310,7 +310,13 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
             std::stringstream ss;
             ss << aDocSize.Width() << ", " << aDocSize.Height();
             OString sRect = ss.str().c_str();
-            pDocSh->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
+            if (comphelper::LibreOfficeKit::isViewCallback())
+            {
+                ScTabViewShell* pViewShell = aViewData.GetViewShell();
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
+            }
+            else
+                pDocSh->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
         }
     }
 }
