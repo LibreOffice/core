@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_a531d4a4",
+        "filename": "sc/source/filter/oox/workbookhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-14T16:41:27Z",
+      "side": 1,
+      "message": "It would be nice if after such change the names and comments were aligned as they were before. Reading things now stresses the eye.. here and in other places.",
+      "revId": "87c9356900b4f168a4bc1e7ac6d190acfa3edfd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
