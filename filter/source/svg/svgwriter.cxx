@@ -80,6 +80,7 @@ static const char   aXMLAttrTextDecoration[] = "text-decoration";
 static const char   aXMLAttrXLinkHRef[] = "xlink:href";
 static const char   aXMLAttrGradientUnits[] = "gradientUnits";
 static const char   aXMLAttrPatternUnits[] = "patternUnits";
+static const char   aXMLAttrPreserveAspectRatio[] = "preserveAspectRatio";
 static const char   aXMLAttrOffset[] = "offset";
 static const char   aXMLAttrStopColor[] = "stop-color";
 static const char   aXMLAttrStrokeLinejoin[] = "stroke-linejoin";
@@ -2657,6 +2658,10 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aPt.Y() ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::number( aSz.Width() ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number( aSz.Height() ) );
+
+                // the image must be scaled to aSz in a non-uniform way
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPreserveAspectRatio, "none" );
+
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, aBuffer.makeStringAndClear() );
                 {
                     SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemImage, true, true );
