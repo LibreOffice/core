@@ -1714,8 +1714,13 @@ void ScInputHandler::UpdateActiveView()
         ScDocShell* pDocShell = pActiveViewSh->GetViewData().GetDocShell();
         if (comphelper::LibreOfficeKit::isActive())
         {
-            ScDrawLayer *pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
-            pTableView->registerLibreOfficeKitCallback(pDrawLayer);
+            if (comphelper::LibreOfficeKit::isViewCallback())
+                pTableView->registerLibreOfficeKitViewCallback(pActiveViewSh);
+            else
+            {
+                ScDrawLayer *pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
+                pTableView->registerLibreOfficeKitCallback(pDrawLayer);
+            }
         }
     }
 
@@ -2124,8 +2129,16 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
 
         ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
         ScDocument& rDoc = pDocSh->GetDocument();
-        if ( rDoc.GetDrawLayer()->isTiledRendering() )
-            rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
+        if ( comphelper::LibreOfficeKit::isActive() )
+        {
+            if (comphelper::LibreOfficeKit::isViewCallback())
+            {
+                if (pActiveViewSh)
+                    pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
+            }
+            else
+                rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
+        }
     }
 
     // If the cursor is before the end of a paragraph, parts are being pushed to
