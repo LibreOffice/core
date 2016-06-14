@@ -48,6 +48,7 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     : mpFontData( static_cast<CoreTextFontFace const *>(rFSD.mpFontData) )
     , mfFontStretch( 1.0 )
     , mfFontRotation( 0.0 )
+    , maFontSelData( rFSD )
     , mpStyleDict( nullptr )
 {
     const FontSelectPattern* const pReqFont = &rFSD;
