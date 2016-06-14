@@ -82,8 +82,6 @@ namespace slideshow
             virtual void viewsChanged() = 0;
         };
 
-        typedef ::std::shared_ptr< ViewEventHandler > ViewEventHandlerSharedPtr;
-        typedef ::std::weak_ptr< ViewEventHandler >   ViewEventHandlerWeakPtr;
 
     }
 }

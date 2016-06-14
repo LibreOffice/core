@@ -34,7 +34,7 @@ namespace internal {
 
 BaseContainerNode::BaseContainerNode(
     const uno::Reference< animations::XAnimationNode >&     xNode,
-    const BaseContainerNodeSharedPtr&                       rParent,
+    const std::shared_ptr< BaseContainerNode >&             rParent,
     const NodeContext&                                      rContext )
     : BaseNode( xNode, rParent, rContext ),
       maChildren(),
@@ -94,7 +94,7 @@ bool BaseContainerNode::hasPendingAnimation() const
                 std::mem_fn(&AnimationNode::hasPendingAnimation) );
 }
 
-void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )
+void BaseContainerNode::appendChildNode( std::shared_ptr< AnimationNode > const& pNode )
 {
     if (! checkValidNode())
         return;
@@ -107,7 +107,7 @@ void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )
     }
 }
 
-bool BaseContainerNode::isChildNode( AnimationNodeSharedPtr const& pNode ) const
+bool BaseContainerNode::isChildNode( std::shared_ptr< AnimationNode > const& pNode ) const
 {
     // find given notifier in child vector
     VectorOfNodes::const_iterator const iEnd( maChildren.end() );
@@ -117,7 +117,7 @@ bool BaseContainerNode::isChildNode( AnimationNodeSharedPtr const& pNode ) const
 }
 
 bool BaseContainerNode::notifyDeactivatedChild(
-    AnimationNodeSharedPtr const& pChildNode )
+    std::shared_ptr< AnimationNode > const& pChildNode )
 {
     OSL_ASSERT( pChildNode->getState() == FROZEN ||
                 pChildNode->getState() == ENDED );
@@ -176,7 +176,7 @@ void BaseContainerNode::showState() const
 {
     for(const auto & i : maChildren)
     {
-        BaseNodeSharedPtr pNode =
+        std::shared_ptr< BaseNode > pNode =
             std::dynamic_pointer_cast<BaseNode>(i);
         SAL_INFO("slideshow.verbose",
                  "Node connection: n" <<

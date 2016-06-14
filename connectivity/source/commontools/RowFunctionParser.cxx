@@ -138,18 +138,17 @@ struct ParserContext
     OperandStack                            maOperandStack;
 };
 
-typedef std::shared_ptr< ParserContext > ParserContextSharedPtr;
 
 /** Generate apriori constant value
     */
 
 class ConstantFunctor
 {
-    ParserContextSharedPtr          mpContext;
+    std::shared_ptr< ParserContext > mpContext;
 
 public:
 
-    explicit ConstantFunctor( const ParserContextSharedPtr& rContext ) :
+    explicit ConstantFunctor( const std::shared_ptr< ParserContext >& rContext ) :
         mpContext( rContext )
     {
     }
@@ -164,10 +163,10 @@ public:
     */
 class IntConstantFunctor
 {
-    ParserContextSharedPtr  mpContext;
+    std::shared_ptr< ParserContext > mpContext;
 
 public:
-    explicit IntConstantFunctor( const ParserContextSharedPtr& rContext ) :
+    explicit IntConstantFunctor( const std::shared_ptr< ParserContext >& rContext ) :
         mpContext( rContext )
     {
     }
@@ -187,11 +186,11 @@ public:
 class BinaryFunctionFunctor
 {
     const ExpressionFunct   meFunct;
-    ParserContextSharedPtr  mpContext;
+    std::shared_ptr< ParserContext > mpContext;
 
 public:
 
-    BinaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
+    BinaryFunctionFunctor( const ExpressionFunct eFunct, const std::shared_ptr< ParserContext >& rContext ) :
         meFunct( eFunct ),
         mpContext( rContext )
     {
@@ -239,11 +238,11 @@ public:
 
 class UnaryFunctionFunctor
 {
-    ParserContextSharedPtr  mpContext;
+    std::shared_ptr< ParserContext > mpContext;
 
 public:
 
-    explicit UnaryFunctionFunctor(const ParserContextSharedPtr& rContext)
+    explicit UnaryFunctionFunctor(const std::shared_ptr< ParserContext >& rContext)
         : mpContext(rContext)
     {
     }
@@ -291,7 +290,7 @@ public:
         @param rParserContext
         Contains context info for the parser
         */
-    explicit ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
+    explicit ExpressionGrammar( const std::shared_ptr< ParserContext >& rParserContext ) :
         mpParserContext( rParserContext )
     {
     }
@@ -376,19 +375,19 @@ public:
         ::boost::spirit::rule< ScannerT >   orExpression,andExpression;
     };
 
-    const ParserContextSharedPtr& getContext() const
+    const std::shared_ptr< ParserContext >& getContext() const
     {
         return mpParserContext;
     }
 
 private:
-    ParserContextSharedPtr          mpParserContext; // might get modified during parsing
+    std::shared_ptr< ParserContext > mpParserContext; // might get modified during parsing
 };
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
-const ParserContextSharedPtr& getParserContext()
+const std::shared_ptr< ParserContext >& getParserContext()
 {
-    static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
+    static std::shared_ptr< ParserContext > lcl_parserContext( new ParserContext() );
 
     // clear node stack (since we reuse the static object, that's
     // the whole point here)
@@ -411,7 +410,7 @@ std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& _
     StringIteratorT aStart( rAsciiFunction.getStr() );
     StringIteratorT aEnd( rAsciiFunction.getStr()+rAsciiFunction.getLength() );
 
-    ParserContextSharedPtr pContext;
+    std::shared_ptr< ParserContext > pContext;
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
     // static parser context, because the actual

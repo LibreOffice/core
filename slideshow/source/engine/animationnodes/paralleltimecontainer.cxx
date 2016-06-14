@@ -50,7 +50,7 @@ void ParallelTimeContainer::activate_st()
 }
 
 void ParallelTimeContainer::notifyDeactivating(
-    AnimationNodeSharedPtr const& pChildNode )
+    std::shared_ptr< AnimationNode > const& pChildNode )
 {
     notifyDeactivatedChild( pChildNode );
 }

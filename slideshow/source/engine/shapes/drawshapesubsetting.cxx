@@ -232,7 +232,7 @@ namespace slideshow
         }
 
         DrawShapeSubsetting::DrawShapeSubsetting( const DocTreeNode&            rShapeSubset,
-                                                  const GDIMetaFileSharedPtr&   rMtf ) :
+                                                  const std::shared_ptr< GDIMetaFile >& rMtf ) :
             maActionClassVector(),
             mpMtf( rMtf ),
             maSubset( rShapeSubset ),
@@ -282,7 +282,7 @@ namespace slideshow
             return maSubset;
         }
 
-        AttributableShapeSharedPtr DrawShapeSubsetting::getSubsetShape( const DocTreeNode& rTreeNode ) const
+        std::shared_ptr< AttributableShape > DrawShapeSubsetting::getSubsetShape( const DocTreeNode& rTreeNode ) const
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::getSubsetShape()" );
 
@@ -299,10 +299,10 @@ namespace slideshow
                 return aIter->mpShape;
             }
 
-            return AttributableShapeSharedPtr();
+            return std::shared_ptr< AttributableShape >();
         }
 
-        void DrawShapeSubsetting::addSubsetShape( const AttributableShapeSharedPtr& rShape )
+        void DrawShapeSubsetting::addSubsetShape( const std::shared_ptr< AttributableShape >& rShape )
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::addSubsetShape()" );
 
@@ -336,7 +336,7 @@ namespace slideshow
             }
         }
 
-        bool DrawShapeSubsetting::revokeSubsetShape( const AttributableShapeSharedPtr& rShape )
+        bool DrawShapeSubsetting::revokeSubsetShape( const std::shared_ptr< AttributableShape >& rShape )
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::revokeSubsetShape()" );
 

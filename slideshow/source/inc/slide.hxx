@@ -142,14 +142,13 @@ namespace slideshow
                 that the view must have been added to this slide
                 before via viewAdded().
              */
-            virtual SlideBitmapSharedPtr
+            virtual std::shared_ptr< SlideBitmap >
                 getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const = 0;
 
         protected:
             ~Slide() {}
         };
 
-        typedef ::std::shared_ptr< Slide > SlideSharedPtr;
 
         class EventQueue;
         class CursorManager;
@@ -186,7 +185,7 @@ namespace slideshow
             @param rUserEventQueue
             UserEeventQueue
         */
-        SlideSharedPtr createSlide( const css::uno::Reference< css::drawing::XDrawPage >&          xDrawPage,
+        std::shared_ptr< Slide > createSlide( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
                                     const css::uno::Reference< css::drawing::XDrawPagesSupplier >& xDrawPages,
                                     const css::uno::Reference< css::animations::XAnimationNode >&  xRootNode,
                                     EventQueue&                                         rEventQueue,

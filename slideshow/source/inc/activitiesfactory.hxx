@@ -147,7 +147,7 @@ namespace ActivitiesFactory
     */
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
-        const NumberAnimationSharedPtr&                rAnimator,
+        const std::shared_ptr< NumberAnimation >&      rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&   xNode );
 
     /** Create an activity from an XAnimate node.
@@ -169,7 +169,7 @@ namespace ActivitiesFactory
     */
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
-        const EnumAnimationSharedPtr&                  rAnimator,
+        const std::shared_ptr< EnumAnimation >&        rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&      xNode );
 
     /** Create an activity from an XAnimate node.
@@ -191,7 +191,7 @@ namespace ActivitiesFactory
     */
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
-        const ColorAnimationSharedPtr&                 rAnimator,
+        const std::shared_ptr< ColorAnimation >&       rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&      xNode );
 
     /** Create an activity from an XAnimate node.
@@ -213,7 +213,7 @@ namespace ActivitiesFactory
     */
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                            rParms,
-        const HSLColorAnimationSharedPtr&                  rAnimator,
+        const std::shared_ptr< HSLColorAnimation >&        rAnimator,
         const css::uno::Reference< css::animations::XAnimateColor >&     xNode );
 
     /** Create an activity from an XAnimate node.
@@ -235,7 +235,7 @@ namespace ActivitiesFactory
     */
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
-        const PairAnimationSharedPtr&                  rAnimator,
+        const std::shared_ptr< PairAnimation >&        rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&   xNode );
 
     /** Create an activity from an XAnimate node.
@@ -257,7 +257,7 @@ namespace ActivitiesFactory
     */
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
-        const StringAnimationSharedPtr&                rAnimator,
+        const std::shared_ptr< StringAnimation >&      rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&      xNode );
 
     /** Create an activity from an XAnimate node.
@@ -279,7 +279,7 @@ namespace ActivitiesFactory
     */
     AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
-        const BoolAnimationSharedPtr&                  rAnimator,
+        const std::shared_ptr< BoolAnimation >&        rAnimator,
         const css::uno::Reference< css::animations::XAnimate >&      xNode );
 
     /** Create a simple activity for the given animator
@@ -301,7 +301,7 @@ namespace ActivitiesFactory
     */
     AnimationActivitySharedPtr createSimpleActivity(
         const CommonParameters&         rParms,
-        const NumberAnimationSharedPtr& rAnimator,
+        const std::shared_ptr< NumberAnimation >& rAnimator,
         bool                            bDirectionForward );
 }
 

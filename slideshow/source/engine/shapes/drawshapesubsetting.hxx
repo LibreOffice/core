@@ -87,10 +87,10 @@ namespace slideshow
             const DocTreeNode&          getSubsetNode       () const;
 
             /// Get subset shape for given node, if any
-            AttributableShapeSharedPtr  getSubsetShape      ( const DocTreeNode& rTreeNode ) const;
+            std::shared_ptr< AttributableShape > getSubsetShape      ( const DocTreeNode& rTreeNode ) const;
 
             /// Add child subset shape (or increase use count, if already existent)
-            void                        addSubsetShape      ( const AttributableShapeSharedPtr& rShape );
+            void                        addSubsetShape      ( const std::shared_ptr< AttributableShape >& rShape );
 
             /** Revoke subset shape
 
@@ -108,7 +108,7 @@ namespace slideshow
                 decremented, or there was no such subset found, in the
                 first place).
              */
-            bool                        revokeSubsetShape   ( const AttributableShapeSharedPtr& rShape );
+            bool                        revokeSubsetShape   ( const std::shared_ptr< AttributableShape >& rShape );
 
 
             // Doc tree methods
@@ -175,7 +175,7 @@ namespace slideshow
              */
             struct SubsetEntry
             {
-                AttributableShapeSharedPtr  mpShape;
+                std::shared_ptr< AttributableShape > mpShape;
                 sal_Int32                   mnStartActionIndex;
                 sal_Int32                   mnEndActionIndex;
 

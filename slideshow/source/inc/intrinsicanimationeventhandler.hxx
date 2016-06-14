@@ -44,7 +44,6 @@ namespace slideshow
             virtual bool disableAnimations() = 0;
         };
 
-        typedef ::std::shared_ptr< IntrinsicAnimationEventHandler > IntrinsicAnimationEventHandlerSharedPtr;
 
     }
 }

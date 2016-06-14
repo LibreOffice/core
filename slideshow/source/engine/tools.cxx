@@ -75,7 +75,7 @@ namespace slideshow
             };
 
             ::basegfx::B2DHomMatrix getAttributedShapeTransformation( const ::basegfx::B2DRectangle&        rShapeBounds,
-                                                                      const ShapeAttributeLayerSharedPtr&   pAttr )
+                                                                      const std::shared_ptr< ShapeAttributeLayer >& pAttr )
             {
                 ::basegfx::B2DHomMatrix     aTransform;
                 const ::basegfx::B2DSize&   rSize( rShapeBounds.getRange() );
@@ -460,7 +460,7 @@ namespace slideshow
         // representation fetched over the API is our default zero case.
 
         ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&      rShapeBounds,
-                                                        const ShapeAttributeLayerSharedPtr& pAttr )
+                                                        const std::shared_ptr< ShapeAttributeLayer >& pAttr )
         {
             if( !pAttr )
             {
@@ -479,7 +479,7 @@ namespace slideshow
 
         ::basegfx::B2DHomMatrix getSpriteTransformation( const ::basegfx::B2DVector&            rPixelSize,
                                                          const ::basegfx::B2DVector&            rOrigSize,
-                                                         const ShapeAttributeLayerSharedPtr&    pAttr )
+                                                         const std::shared_ptr< ShapeAttributeLayer >& pAttr )
         {
             ::basegfx::B2DHomMatrix aTransform;
 
@@ -546,7 +546,7 @@ namespace slideshow
 
         ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rUnitBounds,
                                                     const ::basegfx::B2DHomMatrix&      rShapeTransform,
-                                                    const ShapeAttributeLayerSharedPtr& pAttr )
+                                                    const std::shared_ptr< ShapeAttributeLayer >& pAttr )
         {
             ::basegfx::B2DHomMatrix aTransform;
 
@@ -595,7 +595,7 @@ namespace slideshow
         }
 
         ::basegfx::B2DRectangle getShapePosSize( const ::basegfx::B2DRectangle&         rOrigBounds,
-                                                 const ShapeAttributeLayerSharedPtr&    pAttr )
+                                                 const std::shared_ptr< ShapeAttributeLayer >& pAttr )
         {
             // an already empty shape bound need no further
             // treatment. In fact, any changes applied below would

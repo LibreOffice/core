@@ -155,7 +155,6 @@ namespace slideshow
             bool                                                        mbSpriteVisible;
         };
 
-        typedef ::std::shared_ptr< AnimatedSprite > AnimatedSpriteSharedPtr;
 
     }
 }

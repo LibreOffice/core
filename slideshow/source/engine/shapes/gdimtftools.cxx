@@ -358,7 +358,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
         // extract current aVDev content into a new animation
         // frame
-        GDIMetaFileSharedPtr pMtf( new GDIMetaFile() );
+        std::shared_ptr< GDIMetaFile > pMtf( new GDIMetaFile() );
         pMtf->AddAction(
             new MetaBmpExAction( aEmptyPoint,
                                  BitmapEx(
@@ -399,7 +399,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
 bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
                                  ::basegfx::B2DRectangle&       o_rPaintRect,
-                                 const GDIMetaFileSharedPtr&    rMtf )
+                                 const std::shared_ptr< GDIMetaFile >& rMtf )
 {
     // extract bounds: scroll rect, paint rect
     bool bScrollRectSet(false);

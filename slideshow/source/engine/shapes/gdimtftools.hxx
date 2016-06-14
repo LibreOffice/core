@@ -60,7 +60,7 @@ namespace slideshow
 
         struct MtfAnimationFrame
         {
-            MtfAnimationFrame( const GDIMetaFileSharedPtr& rMtf,
+            MtfAnimationFrame( const std::shared_ptr< GDIMetaFile >& rMtf,
                                double                      nDuration ) :
                 mpMtf( rMtf ),
                 mnDuration( nDuration )
@@ -73,7 +73,7 @@ namespace slideshow
                 return mnDuration;
             }
 
-            GDIMetaFileSharedPtr    mpMtf;
+            std::shared_ptr< GDIMetaFile > mpMtf;
             double                  mnDuration;
         };
 
@@ -130,7 +130,7 @@ namespace slideshow
          */
         bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
                                          ::basegfx::B2DRectangle&       o_rPaintRect,
-                                         const GDIMetaFileSharedPtr&    rMtf );
+                                         const std::shared_ptr< GDIMetaFile >& rMtf );
     }
 }
 

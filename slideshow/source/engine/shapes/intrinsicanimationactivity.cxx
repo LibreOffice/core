@@ -62,8 +62,8 @@ namespace slideshow
                 frame is shown.
              */
             IntrinsicAnimationActivity( const SlideShowContext&         rContext,
-                                        const DrawShapeSharedPtr&       rDrawShape,
-                                        const WakeupEventSharedPtr&     rWakeupEvent,
+                                        const std::shared_ptr< DrawShape >& rDrawShape,
+                                        const std::shared_ptr< WakeupEvent >& rWakeupEvent,
                                         const ::std::vector<double>&    rTimeouts,
                                         ::std::size_t                   nNumLoops,
                                         CycleMode                       eCycleMode );
@@ -82,8 +82,8 @@ namespace slideshow
         private:
             SlideShowContext                        maContext;
             std::weak_ptr<DrawShape>              mpDrawShape;
-            WakeupEventSharedPtr                    mpWakeupEvent;
-            IntrinsicAnimationEventHandlerSharedPtr mpListener;
+            std::shared_ptr< WakeupEvent >          mpWakeupEvent;
+            std::shared_ptr< IntrinsicAnimationEventHandler > mpListener;
             ::std::vector<double>                   maTimeouts;
             CycleMode                               meCycleMode;
             ::std::size_t                           mnCurrIndex;
@@ -112,8 +112,8 @@ namespace slideshow
 
 
         IntrinsicAnimationActivity::IntrinsicAnimationActivity( const SlideShowContext&         rContext,
-                                                                const DrawShapeSharedPtr&       rDrawShape,
-                                                                const WakeupEventSharedPtr&     rWakeupEvent,
+                                                                const std::shared_ptr< DrawShape >& rDrawShape,
+                                                                const std::shared_ptr< WakeupEvent >& rWakeupEvent,
                                                                 const ::std::vector<double>&    rTimeouts,
                                                                 ::std::size_t                   nNumLoops,
                                                                 CycleMode                       eCycleMode ) :
@@ -168,7 +168,7 @@ namespace slideshow
             if( !isActive() )
                 return false;
 
-            DrawShapeSharedPtr pDrawShape( mpDrawShape.lock() );
+            std::shared_ptr< DrawShape > pDrawShape( mpDrawShape.lock() );
             if( !pDrawShape || !mpWakeupEvent )
             {
                 // event or draw shape vanished, no sense living on ->
@@ -256,8 +256,8 @@ namespace slideshow
 
         ActivitySharedPtr createIntrinsicAnimationActivity(
             const SlideShowContext&         rContext,
-            const DrawShapeSharedPtr&       rDrawShape,
-            const WakeupEventSharedPtr&     rWakeupEvent,
+            const std::shared_ptr< DrawShape >& rDrawShape,
+            const std::shared_ptr< WakeupEvent >& rWakeupEvent,
             const ::std::vector<double>&    rTimeouts,
             ::std::size_t                   nNumLoops,
             CycleMode                       eCycleMode )

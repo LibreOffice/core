@@ -53,8 +53,8 @@ namespace internal
             updates
         */
         ThreadUnsafeListenerContainer<
-            ViewUpdateSharedPtr,
-            std::vector<ViewUpdateSharedPtr> > maUpdaters;
+            std::shared_ptr< ViewUpdate >,
+            std::vector<std::shared_ptr< ViewUpdate >> > maUpdaters;
 
         /// Views that have been notified for update
         UpdateRequestVector                    maViewUpdateRequests;
@@ -173,12 +173,12 @@ namespace internal
         UpdateRequestVector().swap( mpImpl->maViewUpdateRequests );
     }
 
-    void ScreenUpdater::addViewUpdate( ViewUpdateSharedPtr const& rViewUpdate )
+    void ScreenUpdater::addViewUpdate( std::shared_ptr< ViewUpdate > const& rViewUpdate )
     {
         mpImpl->maUpdaters.add( rViewUpdate );
     }
 
-    void ScreenUpdater::removeViewUpdate( ViewUpdateSharedPtr const& rViewUpdate )
+    void ScreenUpdater::removeViewUpdate( std::shared_ptr< ViewUpdate > const& rViewUpdate )
     {
         mpImpl->maUpdaters.remove( rViewUpdate );
     }
