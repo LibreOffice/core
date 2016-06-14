@@ -93,6 +93,7 @@ public:
     OUString         m_aUserDictionaryPath;
 
                     SvtDefaultOptions_Impl();
+                    ~SvtDefaultOptions_Impl();
 
     OUString         GetDefaultPath( sal_uInt16 nId ) const;
     virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
@@ -103,8 +104,7 @@ private:
 
 // global ----------------------------------------------------------------
 
-static SvtDefaultOptions_Impl*  pOptions = nullptr;
-static sal_Int32                nRefCount = 0;
+std::weak_ptr<SvtDefaultOptions_Impl>  pOptions;
 
 typedef OUString SvtDefaultOptions_Impl:: *PathStrPtr;
 
@@ -313,6 +313,12 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
     }
 }
 
+SvtDefaultOptions_Impl::~SvtDefaultOptions_Impl()
+{
+    if ( IsModified() )
+        Commit();
+}
+
 // class SvtDefaultOptions -----------------------------------------------
 namespace { struct lclMutex : public rtl::Static< ::osl::Mutex, lclMutex > {}; }
 
@@ -320,25 +326,20 @@ SvtDefaultOptions::SvtDefaultOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( lclMutex::get() );
-    if ( !pOptions )
+    pImpl = pOptions.lock();
+    if ( !pImpl )
     {
-        pOptions = new SvtDefaultOptions_Impl;
+        pImpl = std::make_shared<SvtDefaultOptions_Impl>();
+        pOptions = pImpl;
         ItemHolder1::holdConfigItem(E_DEFAULTOPTIONS);
     }
-    ++nRefCount;
-    pImpl.reset(pOptions);
 }
 
 SvtDefaultOptions::~SvtDefaultOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( lclMutex::get() );
-    if ( !--nRefCount )
-    {
-        if ( pOptions->IsModified() )
-            pOptions->Commit();
-        DELETEZ( pOptions );
-    }
+    pImpl.reset();
 }
 
 OUString SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const

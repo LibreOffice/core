@@ -30,7 +30,7 @@ class SvtDefaultOptions_Impl;
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDefaultOptions : public utl::detail::Options
 {
 private:
-    std::unique_ptr<SvtDefaultOptions_Impl> pImpl;
+    std::shared_ptr<SvtDefaultOptions_Impl> pImpl;
 
 public:
 
