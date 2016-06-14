@@ -875,6 +875,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
         bool bInShapeGroup = oGroupLeft && oGroupTop && oGroupRight && oGroupBottom
                              && oRelLeft && oRelTop && oRelRight && oRelBottom;
+        awt::Size aSize;
         if (bInShapeGroup)
         {
             // See lclGetAbsPoint() in the VML import: rShape is the group shape, oGroup is its coordinate system, oRel is the relative child shape.
@@ -886,6 +887,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             double fHeightRatio = static_cast< double >(nShapeHeight) / nCoordSysHeight;
             nLeft = static_cast< sal_Int32 >(rShape.nLeft + fWidthRatio * (*oRelLeft - *oGroupLeft));
             nTop = static_cast< sal_Int32 >(rShape.nTop + fHeightRatio * (*oRelTop - *oGroupTop));
+
+            // See lclGetAbsRect() in the VML import.
+            aSize.Width = static_cast<sal_Int32>(fWidthRatio * (*oRelRight - *oRelLeft) + 0.5);
+            aSize.Height = static_cast<sal_Int32>(fHeightRatio * (*oRelBottom - *oRelTop) + 0.5);
         }
 
         if (m_bTextFrame)
@@ -897,7 +902,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             xShape->setPosition(awt::Point(nLeft, nTop));
 
         if (bInShapeGroup)
-            xShape->setSize(awt::Size(*oRelRight - *oRelLeft, *oRelBottom - *oRelTop));
+            xShape->setSize(aSize);
         else
             xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
 
