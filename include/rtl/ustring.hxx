@@ -1381,11 +1381,11 @@ public:
      * @since LibreOffice 3.6
      */
     template< typename T >
-    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( const OUString& string, T& literal )
+    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( const OUString& rString, T& literal )
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        return string.equalsAsciiL(
+        return rString.equalsAsciiL(
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
     }
@@ -1397,11 +1397,11 @@ public:
      * @since LibreOffice 3.6
      */
     template< typename T >
-    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OUString& string )
+    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OUString& rString )
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        return string.equalsAsciiL(
+        return rString.equalsAsciiL(
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
     }
@@ -1413,11 +1413,11 @@ public:
      * @since LibreOffice 3.6
      */
     template< typename T >
-    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OUString& string, T& literal )
+    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OUString& rString, T& literal )
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        return !string.equalsAsciiL(
+        return !rString.equalsAsciiL(
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
     }
@@ -1429,11 +1429,11 @@ public:
      * @since LibreOffice 3.6
      */
     template< typename T >
-    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OUString& string )
+    friend inline typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OUString& rString )
     {
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        return !string.equalsAsciiL(
+        return !rString.equalsAsciiL(
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
             libreoffice_internal::ConstCharArrayDetector<T>::length);
     }
@@ -2828,10 +2828,10 @@ inline OString OUStringToOString( const OUString & rUnicode,
 */
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
-    std::basic_ostream<charT, traits> & stream, OUString const & string)
+    std::basic_ostream<charT, traits> & stream, OUString const & rString)
 {
     return stream <<
-        OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
+        OUStringToOString(rString, RTL_TEXTENCODING_UTF8).getStr();
         // best effort; potentially loses data due to conversion failures
         // (stray surrogate halves) and embedded null characters
 }

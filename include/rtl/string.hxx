@@ -1892,9 +1892,9 @@ struct CStringHash
  */
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
 operator <<(
-    std::basic_ostream<charT, traits> & stream, OString const & string)
+    std::basic_ostream<charT, traits> & stream, OString const & rString)
 {
-    return stream << string.getStr();
+    return stream << rString.getStr();
         // best effort; potentially loses data due to embedded null characters
 }
 
