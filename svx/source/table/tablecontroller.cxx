@@ -72,6 +72,7 @@
 #include <o3tl/enumrange.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace sdr::table;
@@ -2168,9 +2169,21 @@ void SvxTableController::updateSelectionOverlay()
                     aSelection = OutputDevice::LogicToLogic(aSelection, MAP_100TH_MM, MAP_TWIP);
                 }
 
-                pTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aSelectionStart.toString().getStr());
-                pTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aSelectionEnd.toString().getStr());
-                pTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.toString().getStr());
+                if (comphelper::LibreOfficeKit::isViewCallback())
+                {
+                    if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                    {
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aSelectionStart.toString().getStr());
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aSelectionEnd.toString().getStr());
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.toString().getStr());
+                    }
+                }
+                else
+                {
+                    pTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aSelectionStart.toString().getStr());
+                    pTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aSelectionEnd.toString().getStr());
+                    pTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.toString().getStr());
+                }
             }
         }
     }
@@ -2187,9 +2200,21 @@ void SvxTableController::destroySelectionOverlay()
         if (comphelper::LibreOfficeKit::isActive())
         {
             // Clear the LOK text selection so far provided by this table.
-            mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, "EMPTY");
-            mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, "EMPTY");
-            mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+            if (comphelper::LibreOfficeKit::isViewCallback())
+            {
+                if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                {
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, "EMPTY");
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, "EMPTY");
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+                }
+            }
+            else
+            {
+                mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, "EMPTY");
+                mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, "EMPTY");
+                mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+            }
         }
     }
 }
