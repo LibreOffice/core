@@ -174,8 +174,9 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
 }
 
 BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
-    : ToolBox(pParent, "toolbar", "modules/sbibliography/ui/toolbar.ui")
-    , aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
+    : ToolBox(pParent, "toolbar", "modules/sbibliography/ui/toolbar.ui"),
+    aIdle("extensions bibliography BibToolBar Idle"),
+    aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
     aBigImgLst(BibResId( RID_TOOLBAR_BIGIMGLIST )),
     aFtSource(VclPtr<FixedText>::Create(this,WB_VCENTER)),
     aLBSource(VclPtr<ListBox>::Create(this,WB_DROPDOWN)),

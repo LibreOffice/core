@@ -97,7 +97,8 @@ SvInplaceEdit2::SvInplaceEdit2
     const Selection& rSelection
 ) :
 
-    aCallBackHdl       ( rNotifyEditEnd ),
+    aCallBackHdl        ( rNotifyEditEnd ),
+    aIdle               ("svtools contnr SvInplaceEdit2"),
     bCanceled           ( false ),
     bAlreadyInCallBack  ( false )
 
