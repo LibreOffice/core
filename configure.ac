@@ -9336,6 +9336,9 @@ if test "$with_harfbuzz" = "yes" -o \( $_os != WINNT -a $_os != Darwin -a $_os !
     else
         libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz >= 0.9.10],[-I${WORKDIR}/UnpackedTarball/harfbuzz/src],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz -lharfbuzz-icu"])
     fi
+    if test "$COM" = "MSC"; then # override the above
+        HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib ${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz-icu.lib"
+    fi
 else
     AC_MSG_RESULT([no])
 fi
