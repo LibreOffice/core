@@ -18,6 +18,8 @@
  */
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/ui/XDeck.hpp>
+#include <com/sun/star/ui/XPanel.hpp>
 #include "SlideBackground.hxx"
 #include "TransitionPreset.hxx"
 #include "sdresid.hxx"
@@ -61,6 +63,7 @@
 #include <svx/dlgutil.hxx>
 #include <algorithm>
 #include "EventMultiplexer.hxx"
+#include "glob.hrc"
 
 using namespace ::com::sun::star;
 
@@ -138,6 +141,9 @@ SlideBackground::SlideBackground(
     mpGradientItem(),
     mpHatchItem(),
     mpBitmapItem(),
+    mxFrame(rxFrame),
+    maContext(),
+    mbTitle(false),
     mpBindings(pBindings)
 {
     get(mpPaperSizeBox,"paperformat");
@@ -197,6 +203,14 @@ void SlideBackground::Initialize()
     mpDspMasterObjects->SetClickHdl(LINK(this,SlideBackground, DspObjects));
 
     Update();
+}
+
+void SlideBackground::HandleContextChange(
+    const ::sfx2::sidebar::EnumContext& rContext)
+{
+    if (maContext == rContext)
+        return;
+    maContext = rContext;
 }
 
 void SlideBackground::Update()
@@ -298,6 +312,35 @@ void SlideBackground::Update()
     }
 }
 
+void SlideBackground::SetPanelTitle( const OUString& rTitle )
+{
+    Reference<frame::XController2> xController( mxFrame->getController(), uno::UNO_QUERY);
+    if ( !xController.is() )
+        return;
+
+    Reference<ui::XSidebarProvider> xSidebarProvider( xController->getSidebar(), uno::UNO_QUERY );
+    if ( !xSidebarProvider.is() )
+        return;
+
+    Reference<ui::XDecks> xDecks ( xSidebarProvider->getDecks(), uno::UNO_QUERY);
+    if ( !xDecks.is() )
+        return;
+
+    Reference<ui::XDeck> xDeck ( xDecks->getByName("PropertyDeck"), uno::UNO_QUERY);
+    if ( !xDeck.is() )
+        return;
+
+    Reference<ui::XPanels> xPanels ( xDeck->getPanels(), uno::UNO_QUERY);
+    if ( !xPanels.is() )
+        return;
+
+    Reference<ui::XPanel> xPanel ( xPanels->getByName("SlideBackgroundPanel"), uno::UNO_QUERY);
+    if ( !xPanels.is() )
+        return;
+
+    xPanel->setTitle( rTitle );
+}
+
 void SlideBackground::addListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
@@ -305,7 +348,8 @@ void SlideBackground::addListener()
         aLink,
         tools::EventMultiplexerEvent::EID_CURRENT_PAGE |
         tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED |
-        tools::EventMultiplexerEvent::EID_SHAPE_CHANGED );
+        tools::EventMultiplexerEvent::EID_SHAPE_CHANGED |
+        tools::EventMultiplexerEvent::EID_VIEW_ADDED);
 }
 
 void SlideBackground::removeListener()
@@ -351,6 +395,27 @@ IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
                 0 };
             updateMasterSlideSelection();
             GetBindings()->Invalidate( SidArray );
+        }
+        break;
+        case tools::EventMultiplexerEvent::EID_VIEW_ADDED:
+        {
+            if(!mbTitle)
+            {
+                sfx2::sidebar::EnumContext rDrawContext(sfx2::sidebar::EnumContext::Application_Draw,
+                                                        sfx2::sidebar::EnumContext::Context_DrawPage);
+                sfx2::sidebar::EnumContext rImpressContext(sfx2::sidebar::EnumContext::Application_Impress,
+                                                        sfx2::sidebar::EnumContext::Context_DrawPage);
+                if(maContext == rDrawContext)
+                {
+                    SetPanelTitle(SD_RESSTR(STR_PAGE_NAME));
+                    mbTitle = true;
+                }
+                else if(maContext == rImpressContext)
+                {
+                    SetPanelTitle(SD_RESSTR(STR_SLIDE_NAME));
+                    mbTitle = true;
+                }
+            }
         }
         break;
         default:
