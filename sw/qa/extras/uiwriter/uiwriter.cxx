@@ -3149,7 +3149,9 @@ class IdleTask
 };
 
 //constructor of IdleTask Class
-IdleTask::IdleTask() : flag( false )
+IdleTask::IdleTask() :
+    flag( false ),
+    maIdle("sw qa uiwriter IdleTask")
 {
     //setting the Priority of Idle task to LOW, LOWEST
     maIdle.SetPriority( SchedulerPriority::LOWEST );

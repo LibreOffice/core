@@ -416,6 +416,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
  */
 
 GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
+    maUpdateMenuBarIdle("vcl unx gtk GtkSalMenu"),
     mbMenuBar( bMenuBar ),
     mbNeedsUpdate( false ),
     mbReturnFocusToDocument( false ),

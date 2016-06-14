@@ -762,7 +762,8 @@ ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef
         m_bInRefMode( false ),
         m_aHelper(this,pB),
         pMyBindings( pB ),
-        pActiveWin(nullptr)
+        pActiveWin(nullptr),
+        aIdle("sc ui miscdigs ScRefHandler")
 {
     m_aHelper.SetWindow(m_rWindow.get());
     aIdle.SetPriority(SchedulerPriority::LOWER);

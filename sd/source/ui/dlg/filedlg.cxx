@@ -217,7 +217,8 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType    ) :
     FileDialogHelper( nDialogType ),
     mnPlaySoundEvent( nullptr ),
     mbUsableSelection( false ),
-    mbLabelPlaying(false)
+    mbLabelPlaying(false),
+    maUpdateIdle("sd dig SdFileDialog_Imp Update")
 {
     maUpdateIdle.SetIdleHdl(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
 
