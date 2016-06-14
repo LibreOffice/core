@@ -94,6 +94,7 @@
 #include <svl/whiter.hxx>
 #include <o3tl/enumrange.hxx>
 #include <memory>
+#include <filter/msfilter/escherex.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

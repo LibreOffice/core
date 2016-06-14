@@ -10,6 +10,7 @@
 #include <rtfsdrimport.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -25,6 +26,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <ooxml/resourceids.hxx>
+#include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <svx/svdtrans.hxx>
 #include <comphelper/sequence.hxx>

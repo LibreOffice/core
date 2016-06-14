@@ -14,6 +14,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/textenc.h>
+#include <sal/types.h>
 #include <tools/solar.h>
 
 namespace msfilter {

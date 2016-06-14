@@ -8,19 +8,26 @@
  */
 #ifndef INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
 #define INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
-#include <filter/msfilter/msfilterdllapi.h>
-#include <ostream>
+
+#include <cstdio>
 #include <memory>
 #include <vector>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <filter/msfilter/msfilterdllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
 
+namespace com { namespace sun { namespace star {
+    namespace beans { struct PropertyValue; }
+    namespace container { class XIndexAccess; }
+    namespace graphic { class XGraphic; }
+    namespace ui { class XUIConfigurationManager; }
+    namespace ui { class XUIConfigurationManagerSupplier; }
+} } }
 
 class TBCHeader;
 

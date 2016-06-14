@@ -36,28 +36,15 @@ namespace com{namespace sun{namespace star{
         }
         namespace container{
                 class XIndexContainer;
-                class XNameContainer;
-        }
-        namespace beans{
-                class XPropertySet;
-        }
-        namespace text{
-                class XText;
         }
         namespace awt{
                 struct Size;
-                class XControlModel;
-        }
-        namespace uno{
-                class XComponentContext;
         }
         namespace frame{
                 class XModel;
         }
 
 }}}
-
-class SfxObjectShell;
 
 class MSFILTER_DLLPUBLIC SvxMSConvertOCXControls
 {

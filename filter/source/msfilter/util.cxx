@@ -7,12 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/awt/Size.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
+#include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <memory>
 #include <unordered_map>

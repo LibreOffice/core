@@ -35,6 +35,8 @@
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/escherex.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

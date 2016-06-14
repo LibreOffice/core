@@ -19,14 +19,31 @@
 #ifndef INCLUDED_FILTER_MSFILTER_MSVBAHELPER_HXX
 #define INCLUDED_FILTER_MSFILTER_MSVBAHELPER_HXX
 
-#include <sfx2/objsh.hxx>
-#include <cppuhelper/implbase.hxx>
+#include <exception>
+
+#include <com/sun/star/awt/KeyEvent.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
-#include <com/sun/star/awt/KeyEvent.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace frame { class XModel; }
+    namespace uno { class XComponentContext; }
+    namespace uno { class XInterface; }
+} } }
+
+class SfxObjectShell;
+
 namespace ooo {
 namespace vba {
 

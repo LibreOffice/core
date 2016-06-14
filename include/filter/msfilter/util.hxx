@@ -10,14 +10,19 @@
 #ifndef INCLUDED_FILTER_MSFILTER_UTIL_HXX
 #define INCLUDED_FILTER_MSFILTER_UTIL_HXX
 
-#include <rtl/textenc.h>
-#include <tools/datetime.hxx>
-#include <tools/color.hxx>
-#include <com/sun/star/lang/Locale.hpp>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <svx/msdffdef.hxx>
-#include <com/sun/star/awt/Size.hpp>
-#include <filter/msfilter/escherex.hxx>
+#include <rtl/string.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <tools/datetime.hxx>
+#include <tools/color.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace awt { struct Size; }
+    namespace lang { struct Locale; }
+} } }
 
 namespace msfilter {
 namespace util {

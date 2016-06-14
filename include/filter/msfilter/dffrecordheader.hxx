@@ -20,10 +20,11 @@
 #ifndef INCLUDED_FILTER_MSFILTER_DFFRECORDHEADER_HXX
 #define INCLUDED_FILTER_MSFILTER_DFFRECORDHEADER_HXX
 
-#include <tools/solar.h>
-#include <tools/stream.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <svx/msdffdef.hxx>
+#include <sal/types.h>
+#include <tools/solar.h>
+#include <tools/stream.hxx>
 
 class MSFILTER_DLLPUBLIC DffRecordHeader
 {

@@ -25,6 +25,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
@@ -34,7 +35,8 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
-#include<rtl/character.hxx>
+#include <rtl/character.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <svtools/acceleratorexecute.hxx>
