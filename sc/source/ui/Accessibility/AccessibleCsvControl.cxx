@@ -1387,7 +1387,7 @@ ScAccessibleCsvCell::ScAccessibleCsvCell(
         const OUString& rCellText,
         sal_Int32 nRow, sal_Int32 nColumn ) :
     ScAccessibleCsvControl( rGrid.GetAccessible(), rGrid, nCellRole ),
-    AccessibleStaticTextBase( SvxEditSourcePtr() ),
+    AccessibleStaticTextBase( std::unique_ptr< SvxEditSource >() ),
     maCellText( rCellText ),
     mnLine( nRow ? (nRow + rGrid.GetFirstVisLine() - 1) : CSV_LINE_HEADER ),
     mnColumn( lcl_GetGridColumn( nColumn ) ),
@@ -1403,7 +1403,7 @@ ScAccessibleCsvCell::~ScAccessibleCsvCell()
 void SAL_CALL ScAccessibleCsvCell::disposing()
 {
     SolarMutexGuard aGuard;
-    SetEditSource( SvxEditSourcePtr() );
+    SetEditSource( std::unique_ptr< SvxEditSource >() );
     ScAccessibleCsvControl::disposing();
 }
 

@@ -35,7 +35,7 @@ void AnimationSetNode::implScheduleDeactivationEvent()
     scheduleDeactivationEvent();
 }
 
-AnimationActivitySharedPtr AnimationSetNode::createActivity() const
+std::shared_ptr< AnimationActivity > AnimationSetNode::createActivity() const
 {
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
     uno::Reference<animations::XAnimate> const xAnimateNode = getXAnimateNode();
@@ -189,7 +189,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     }
     }
 
-    return AnimationActivitySharedPtr();
+    return std::shared_ptr< AnimationActivity >();
 }
 
 } // namespace internal

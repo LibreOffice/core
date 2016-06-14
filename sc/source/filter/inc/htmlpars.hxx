@@ -441,12 +441,9 @@ protected:
     void                RecalcDocPos( const ScHTMLPos& rBasePos );
 
 private:
-    typedef ::std::unique_ptr< ScHTMLTableMap >         ScHTMLTableMapPtr;
-    typedef ::std::unique_ptr< SfxItemSet >             SfxItemSetPtr;
     typedef ::std::vector< SCCOLROW >                   ScSizeVec;
     typedef ::std::list< ScHTMLEntry* >                 ScHTMLEntryList;
     typedef ::std::map< ScHTMLPos, ScHTMLEntryList >    ScHTMLEntryMap;
-    typedef ::std::unique_ptr< ScHTMLEntry >            ScHTMLEntryPtr;
 
     /** Returns true, if the current cell does not contain an entry yet. */
     bool                IsEmptyCell() const;
@@ -457,7 +454,7 @@ private:
     static bool         IsSpaceCharInfo( const ImportInfo& rInfo );
 
     /** Creates and returns a new empty flying entry at position (0,0). */
-    ScHTMLEntryPtr      CreateEntry() const;
+    std::unique_ptr< ScHTMLEntry > CreateEntry() const;
     /** Creates a new flying entry.
         @param rInfo  Contains the initial edit engine selection for the entry. */
     void                CreateNewEntry( const ImportInfo& rInfo );
@@ -466,12 +463,12 @@ private:
     void                InsertLeadingEmptyLine();
 
     /** Pushes the passed entry into the list of the current cell. */
-    void                ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryPtr& rxEntry );
+    void                ImplPushEntryToList( ScHTMLEntryList& rEntryList, std::unique_ptr< ScHTMLEntry >& rxEntry );
     /** Tries to insert the entry into the current cell.
         @descr  If insertion is not possible (i.e., currently no cell open), the
         entry will be inserted into the parent table.
         @return  true = Entry as been pushed into the current cell; false = Entry dropped. */
-    bool                PushEntry( ScHTMLEntryPtr& rxEntry );
+    bool                PushEntry( std::unique_ptr< ScHTMLEntry >& rxEntry );
     /** Puts the current entry into the entry list, if it is not empty.
         @param rInfo  The import info struct containing the end position of the current entry.
         @param bLastInCell  true = If cell is still empty, put this entry always.
@@ -518,12 +515,12 @@ private:
 
 private:
     ScHTMLTable*        mpParentTable;      /// Pointer to parent table.
-    ScHTMLTableMapPtr   mxNestedTables;     /// Table of nested HTML tables.
+    std::unique_ptr< ScHTMLTableMap > mxNestedTables;     /// Table of nested HTML tables.
     OUString       maTableName;        /// Table name from <table id> option.
     ScHTMLTableAutoId   maTableId;          /// Unique identifier of this table.
     SfxItemSet          maTableItemSet;     /// Items for the entire table.
-    SfxItemSetPtr       mxRowItemSet;       /// Items for the current table row.
-    SfxItemSetPtr       mxDataItemSet;      /// Items for the current cell.
+    std::unique_ptr< SfxItemSet > mxRowItemSet;       /// Items for the current table row.
+    std::unique_ptr< SfxItemSet > mxDataItemSet;      /// Items for the current cell.
     ScRangeList         maHMergedCells;     /// List of all horizontally merged cells.
     ScRangeList         maVMergedCells;     /// List of all vertically merged cells.
     ScRangeList         maUsedCells;        /// List of all used cells.
@@ -531,7 +528,7 @@ private:
     ::std::vector< ScEEParseEntry* >& mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
     ScHTMLEntryMap      maEntryMap;         /// List of entries for each cell.
     ScHTMLEntryList*    mpCurrEntryList;    /// Current entry list from map for faster access.
-    ScHTMLEntryPtr      mxCurrEntry;        /// Working entry, not yet inserted in a list.
+    std::unique_ptr< ScHTMLEntry > mxCurrEntry;        /// Working entry, not yet inserted in a list.
     ScSizeVec           maCumSizes[ 2 ];    /// Cumulated cell counts for each HTML table column/row.
     ScHTMLSize          maSize;             /// Size of the table.
     ScHTMLPos           maCurrCell;         /// Address of current cell to fill.
@@ -608,10 +605,9 @@ private:
     DECL_LINK_TYPED( HTMLImportHdl, ImportInfo&, void );
 
 private:
-    typedef ::std::unique_ptr< ScHTMLGlobalTable >    ScHTMLGlobalTablePtr;
 
     OUStringBuffer maTitle;            /// The title of the document.
-    ScHTMLGlobalTablePtr mxGlobTable;       /// Contains the entire imported document.
+    std::unique_ptr< ScHTMLGlobalTable > mxGlobTable; /// Contains the entire imported document.
     ScHTMLTable*        mpCurrTable;        /// Pointer to current table (performance).
     ScHTMLTableId       mnUnusedId;         /// First unused table identifier.
     bool                mbTitleOn;          /// true = Inside of <title> </title>.

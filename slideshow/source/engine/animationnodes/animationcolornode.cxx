@@ -49,11 +49,11 @@ public:
             "HSLWrapper::HSLWrapper(): Invalid color animation delegate" );
     }
 
-    virtual void prefetch( const AnimatableShapeSharedPtr&,
+    virtual void prefetch( const std::shared_ptr< AnimatableShape >&,
                            const std::shared_ptr< ShapeAttributeLayer >& ) override
     {}
 
-    virtual void start( const AnimatableShapeSharedPtr&     rShape,
+    virtual void start( const std::shared_ptr< AnimatableShape >& rShape,
                         const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override
     {
         mpAnimation->start( rShape, rAttrLayer );
@@ -80,7 +80,7 @@ private:
 
 } // anon namespace
 
-AnimationActivitySharedPtr AnimationColorNode::createActivity() const
+std::shared_ptr< AnimationActivity > AnimationColorNode::createActivity() const
 {
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
 
@@ -116,7 +116,7 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
                           "Unexpected color space" );
     }
 
-    return AnimationActivitySharedPtr();
+    return std::shared_ptr< AnimationActivity >();
 }
 
 } // namespace internal

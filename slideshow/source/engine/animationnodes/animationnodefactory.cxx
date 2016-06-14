@@ -227,7 +227,7 @@ bool implCreateIteratedNodes(
     const DocTreeNodeSupplier& rTreeNodeSupplier(
         pTargetShape->getTreeNodeSupplier() );
 
-    ShapeSubsetSharedPtr pTargetSubset;
+    std::shared_ptr< ShapeSubset > pTargetSubset;
 
     NodeContext aContext( rContext );
 

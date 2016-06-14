@@ -80,20 +80,20 @@ namespace slideshow
             };
 
             std::shared_ptr< NumberAnimation > createNumberPropertyAnimation( const OUString&     rAttrName,
-                                                                           const AnimatableShapeSharedPtr&      rShape,
-                                                                           const ShapeManagerSharedPtr&         rShapeManager,
+                                                                           const std::shared_ptr< AnimatableShape >& rShape,
+                                                                           const std::shared_ptr< ShapeManager >& rShapeManager,
                                                                            const ::basegfx::B2DVector&          rSlideSize,
                                                                            int                                  nFlags=0 );
 
             std::shared_ptr< EnumAnimation > createEnumPropertyAnimation( const OUString&         rAttrName,
-                                                                       const AnimatableShapeSharedPtr&          rShape,
-                                                                       const ShapeManagerSharedPtr&             rShapeManager,
+                                                                       const std::shared_ptr< AnimatableShape >& rShape,
+                                                                       const std::shared_ptr< ShapeManager >&   rShapeManager,
                                                                        const ::basegfx::B2DVector&              rSlideSize,
                                                                        int                                      nFlags=0 );
 
             std::shared_ptr< ColorAnimation > createColorPropertyAnimation( const OUString&                rAttrName,
-                                                                          const AnimatableShapeSharedPtr&       rShape,
-                                                                          const ShapeManagerSharedPtr&          rShapeManager,
+                                                                          const std::shared_ptr< AnimatableShape >& rShape,
+                                                                          const std::shared_ptr< ShapeManager >& rShapeManager,
                                                                           const ::basegfx::B2DVector&           rSlideSize,
                                                                           int                                   nFlags=0 );
 
@@ -104,28 +104,28 @@ namespace slideshow
                 animations::AnimationTransformType::TRANSLATE or
                 animations::AnimationTransformType::SCALE.
              */
-            std::shared_ptr< PairAnimation > createPairPropertyAnimation( const AnimatableShapeSharedPtr&        rShape,
-                                                                         const ShapeManagerSharedPtr&           rShapeManager,
+            std::shared_ptr< PairAnimation > createPairPropertyAnimation( const std::shared_ptr< AnimatableShape >& rShape,
+                                                                         const std::shared_ptr< ShapeManager >& rShapeManager,
                                                                          const ::basegfx::B2DVector&            rSlideSize,
                                                                          sal_Int16                              nTransformType,
                                                                          int                                    nFlags=0 );
 
             std::shared_ptr< StringAnimation > createStringPropertyAnimation( const OUString&     rAttrName,
-                                                                           const AnimatableShapeSharedPtr&      rShape,
-                                                                           const ShapeManagerSharedPtr&         rShapeManager,
+                                                                           const std::shared_ptr< AnimatableShape >& rShape,
+                                                                           const std::shared_ptr< ShapeManager >& rShapeManager,
                                                                            const ::basegfx::B2DVector&          rSlideSize,
                                                                            int                                  nFlags=0 );
 
             std::shared_ptr< BoolAnimation > createBoolPropertyAnimation( const OUString&                 rAttrName,
-                                                                         const AnimatableShapeSharedPtr&        rShape,
-                                                                         const ShapeManagerSharedPtr&           rShapeManager,
+                                                                         const std::shared_ptr< AnimatableShape >& rShape,
+                                                                         const std::shared_ptr< ShapeManager >& rShapeManager,
                                                                          const ::basegfx::B2DVector&            rSlideSize,
                                                                          int                                    nFlags=0 );
 
             std::shared_ptr< NumberAnimation > createPathMotionAnimation( const OUString&         rSVGDPath,
                                                                        sal_Int16                                nAdditive,
-                                                                       const AnimatableShapeSharedPtr&          rShape,
-                                                                       const ShapeManagerSharedPtr&             rShapeManager,
+                                                                       const std::shared_ptr< AnimatableShape >& rShape,
+                                                                       const std::shared_ptr< ShapeManager >&   rShapeManager,
                                                                        const ::basegfx::B2DVector&              rSlideSize,
                                                                        int                                      nFlags=0);
         }

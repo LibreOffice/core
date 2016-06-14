@@ -443,7 +443,7 @@ AnimationBaseNode::fillCommonParameters() const
                                   xAnimationNode->getDecelerate() );
     }
 
-    EventSharedPtr pEndEvent;
+    std::shared_ptr< Event > pEndEvent;
     if (pSelf) {
         pEndEvent = makeEvent( [pSelf] () {pSelf->deactivate(); },
             "AnimationBaseNode::deactivate");

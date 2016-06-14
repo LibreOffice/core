@@ -56,7 +56,7 @@ sal_uInt32 LoadOlePropertySet(
         STREAM_SUMMARYINFO );
 
     // global section
-    SfxOleSectionRef xGlobSect = aGlobSet.GetSection( SECTION_GLOBAL );
+    std::shared_ptr< SfxOleSection > xGlobSect = aGlobSet.GetSection( SECTION_GLOBAL );
     if( xGlobSect.get() )
     {
         // set supported properties
@@ -141,7 +141,7 @@ sal_uInt32 LoadOlePropertySet(
         STREAM_DOCSUMMARYINFO );
 
     // custom properties
-    SfxOleSectionRef xCustomSect = aDocSet.GetSection( SECTION_CUSTOM );
+    std::shared_ptr< SfxOleSection > xCustomSect = aDocSet.GetSection( SECTION_CUSTOM );
     if( xCustomSect.get() )
     {
         uno::Reference < beans::XPropertyContainer > xUserDefined(
@@ -171,7 +171,7 @@ sal_uInt32 LoadOlePropertySet(
     uno::Reference< document::XCompatWriterDocProperties > xWriterProps( i_xDocProps, uno::UNO_QUERY );
     if ( xWriterProps.is() )
     {
-        SfxOleSectionRef xBuiltin = aDocSet.GetSection( SECTION_BUILTIN );
+        std::shared_ptr< SfxOleSection > xBuiltin = aDocSet.GetSection( SECTION_BUILTIN );
         if ( xBuiltin.get() )
         {
             try

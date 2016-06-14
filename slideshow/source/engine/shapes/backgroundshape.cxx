@@ -285,12 +285,12 @@ namespace slideshow
         }
 
 
-        ShapeSharedPtr createBackgroundShape(
+        std::shared_ptr< Shape > createBackgroundShape(
             const uno::Reference< drawing::XDrawPage >& xDrawPage,
             const uno::Reference< drawing::XDrawPage >& xMasterPage,
             const SlideShowContext&                     rContext )
         {
-            return ShapeSharedPtr(
+            return std::shared_ptr< Shape >(
                 new BackgroundShape(
                     xDrawPage,
                     xMasterPage,

@@ -64,7 +64,7 @@ namespace slideshow
             }
         }
 
-        bool ActivitiesQueue::addActivity( const ActivitySharedPtr& pActivity )
+        bool ActivitiesQueue::addActivity( const std::shared_ptr< Activity >& pActivity )
         {
             OSL_ENSURE( pActivity, "ActivitiesQueue::addActivity: activity ptr NULL" );
 
@@ -99,7 +99,7 @@ namespace slideshow
             while( !maCurrentActivitiesWaiting.empty() )
             {
                 // process topmost activity
-                ActivitySharedPtr pActivity( maCurrentActivitiesWaiting.front() );
+                std::shared_ptr< Activity > pActivity( maCurrentActivitiesWaiting.front() );
                 maCurrentActivitiesWaiting.pop_front();
 
                 bool bReinsert( false );

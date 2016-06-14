@@ -44,7 +44,7 @@ AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimatio
 {
     uno::Reference< drawing::XShape > xShape( mxCommandNode->getTarget(),
                                               uno::UNO_QUERY );
-    ShapeSharedPtr pShape( getContext().mpSubsettableShapeManager->lookupShape( xShape ) );
+    std::shared_ptr< Shape > pShape( getContext().mpSubsettableShapeManager->lookupShape( xShape ) );
     mpShape = ::std::dynamic_pointer_cast< IExternalMediaShapeBase >( pShape );
 }
 

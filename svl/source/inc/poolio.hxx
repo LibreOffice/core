@@ -60,7 +60,6 @@ struct SfxPoolVersion_Impl
 
 typedef std::vector<SfxPoolItem*> SfxPoolItemArrayBase_Impl;
 
-typedef std::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
 
 /**
  * This array contains a set of SfxPoolItems, if those items are
@@ -96,7 +95,7 @@ struct SfxItemPool_Impl
     SfxItemPool*                    mpMaster;
     SfxItemPool*                    mpSecondary;
     sal_uInt16*                     mpPoolRanges;
-    std::deque< SfxPoolVersion_ImplPtr > aVersions;
+    std::deque< std::shared_ptr< SfxPoolVersion_Impl > > aVersions;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
     sal_uInt16                      mnFileFormatVersion;

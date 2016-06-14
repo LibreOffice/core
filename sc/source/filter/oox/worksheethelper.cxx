@@ -376,8 +376,6 @@ private:
     void UpdateRowProgress( const CellRangeAddress& rUsedArea, sal_Int32 nRow );
 
 private:
-    typedef ::std::unique_ptr< VmlDrawing >       VmlDrawingPtr;
-    typedef ::std::unique_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
 
     const OUString      maSheetCellRanges;  /// Service name for a SheetCellRanges object.
     const ScAddress&    mrMaxApiPos;        /// Reference to maximum Calc cell address from address converter.
@@ -396,9 +394,9 @@ private:
     WorksheetSettings   maSheetSett;        /// Global settings for this sheet.
     PageSettings        maPageSett;         /// Page/print settings for this sheet.
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
-    VmlDrawingPtr       mxVmlDrawing;       /// Collection of all VML shapes.
+    std::unique_ptr< VmlDrawing > mxVmlDrawing;       /// Collection of all VML shapes.
     ExtLst              maExtLst;           /// List of extended elements
-    BiffSheetDrawingPtr mxBiffDrawing;      /// Collection of all BIFF/DFF shapes.
+    std::unique_ptr< BiffSheetDrawing > mxBiffDrawing; /// Collection of all BIFF/DFF shapes.
     OUString            maDrawingPath;      /// Path to DrawingML fragment.
     OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
     awt::Size                maDrawPageSize;     /// Current size of the drawing page in 1/100 mm.

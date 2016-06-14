@@ -70,9 +70,6 @@ private:
     bool                mbRelSize;          /// True = relative size, false = absolute size.
 };
 
-typedef std::shared_ptr< ShapeAnchor > ShapeAnchorRef;
-
-
 /** Handler for a chart drawing fragment (c:userShapes root element).
  */
 class ChartDrawingFragment : public ::oox::core::FragmentHandler2
@@ -95,7 +92,7 @@ private:
     css::uno::Reference< css::drawing::XShapes >
                         mxDrawPage;             /// Drawing page of this sheet.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
-    ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
+    std::unique_ptr< ShapeAnchor > mxAnchor;               /// Current anchor of top-level shape.
     EmuRectangle        maChartRectEmu;         /// Position and size of the chart object for embedded shapes (in EMUs).
     bool                mbOleSupport;           /// True = allow to insert OLE objects into the drawing page.
 };

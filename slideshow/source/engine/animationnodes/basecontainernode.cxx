@@ -148,7 +148,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
         if( mnLeftIterations >= 1.0 )
         {
             bFinished = false;
-            EventSharedPtr aRepetitionEvent =
+            std::shared_ptr< Event > aRepetitionEvent =
                     makeDelay( [this] () { this->repeat(); },
                                0.0,
                                "BaseContainerNode::repeat");

@@ -84,7 +84,7 @@ namespace slideshow
             }
         }
 
-        bool EventQueue::addEvent( const EventSharedPtr& rEvent )
+        bool EventQueue::addEvent( const std::shared_ptr< Event >& rEvent )
         {
             ::osl::MutexGuard aGuard( maMutex );
 
@@ -110,7 +110,7 @@ namespace slideshow
             return true;
         }
 
-        bool EventQueue::addEventForNextRound( EventSharedPtr const& rEvent )
+        bool EventQueue::addEventForNextRound( std::shared_ptr< Event > const& rEvent )
         {
             ::osl::MutexGuard aGuard( maMutex );
 
@@ -128,7 +128,7 @@ namespace slideshow
             return true;
         }
 
-        bool EventQueue::addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent)
+        bool EventQueue::addEventWhenQueueIsEmpty (const std::shared_ptr< Event >& rpEvent)
         {
             ::osl::MutexGuard aGuard( maMutex );
 

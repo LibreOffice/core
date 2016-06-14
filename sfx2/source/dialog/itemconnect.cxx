@@ -286,8 +286,7 @@ public:
     bool                        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
 
 private:
-    typedef std::shared_ptr< ItemConnectionBase > ItemConnectionRef;
-    typedef std::list< ItemConnectionRef >          ItemConnectionList;
+    typedef std::list< std::shared_ptr< ItemConnectionBase > > ItemConnectionList;
     typedef ItemConnectionList::iterator            ItemConnectionListIt;
 
     ItemConnectionList          maList;
@@ -296,7 +295,7 @@ private:
 void ItemConnectionArrayImpl::Append( ItemConnectionBase* pConnection )
 {
     if( pConnection )
-        maList.push_back( ItemConnectionRef( pConnection ) );
+        maList.push_back( std::shared_ptr< ItemConnectionBase >( pConnection ) );
 }
 
 void ItemConnectionArrayImpl::ApplyFlags( const SfxItemSet* pItemSet )

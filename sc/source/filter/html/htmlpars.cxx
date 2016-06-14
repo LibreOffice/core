@@ -2354,7 +2354,7 @@ bool ScHTMLTable::IsSpaceCharInfo( const ImportInfo& rInfo )
     return (rInfo.nToken == HTML_TEXTTOKEN) && (rInfo.aText.getLength() == 1) && (rInfo.aText[ 0 ] == ' ');
 }
 
-ScHTMLTable::ScHTMLEntryPtr ScHTMLTable::CreateEntry() const
+std::unique_ptr< ScHTMLEntry > ScHTMLTable::CreateEntry() const
 {
     return o3tl::make_unique<ScHTMLEntry>( GetCurrItemSet() );
 }
@@ -2366,7 +2366,7 @@ void ScHTMLTable::CreateNewEntry( const ImportInfo& rInfo )
     mxCurrEntry->aSel = rInfo.aSelection;
 }
 
-void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryPtr& rxEntry )
+void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, std::unique_ptr< ScHTMLEntry >& rxEntry )
 {
     // HTML entry list does not own the entries
     rEntryList.push_back( rxEntry.get() );
@@ -2374,7 +2374,7 @@ void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryP
     mrEEParseList.push_back( rxEntry.release() );
 }
 
-bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
+bool ScHTMLTable::PushEntry( std::unique_ptr< ScHTMLEntry >& rxEntry )
 {
     bool bPushed = false;
     if( rxEntry.get() && rxEntry->HasContents() )
@@ -2383,7 +2383,7 @@ bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
         {
             if( mbPushEmptyLine )
             {
-                ScHTMLEntryPtr xEmptyEntry = CreateEntry();
+                std::unique_ptr< ScHTMLEntry > xEmptyEntry = CreateEntry();
                 ImplPushEntryToList( *mpCurrEntryList, xEmptyEntry );
                 mbPushEmptyLine = false;
             }
@@ -2431,7 +2431,7 @@ void ScHTMLTable::PushTableEntry( ScHTMLTableId nTableId )
     OSL_ENSURE( nTableId != SC_HTML_GLOBAL_TABLE, "ScHTMLTable::PushTableEntry - cannot push global table" );
     if( nTableId != SC_HTML_GLOBAL_TABLE )
     {
-        ScHTMLEntryPtr xEntry( new ScHTMLEntry( maTableItemSet, nTableId ) );
+        std::unique_ptr< ScHTMLEntry > xEntry( new ScHTMLEntry( maTableItemSet, nTableId ) );
         PushEntry( xEntry );
     }
 }
@@ -2661,7 +2661,7 @@ void ScHTMLTable::FillEmptyCells()
                 maUsedCells.Join( aRange );
 
                 // insert a dummy entry
-                ScHTMLEntryPtr xEntry = CreateEntry();
+                std::unique_ptr< ScHTMLEntry > xEntry = CreateEntry();
                 ImplPushEntryToList( maEntryMap[ ScHTMLPos( aAddr ) ], xEntry );
             }
         }
@@ -2792,7 +2792,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
                 SCROW nFirstUnusedRow = aCellDocPos.mnRow + aCellDocSize.mnRows;
                 while( aEntryDocPos.mnRow < nFirstUnusedRow )
                 {
-                    ScHTMLEntryPtr xDummyEntry( new ScHTMLEntry( pEntry->GetItemSet() ) );
+                    std::unique_ptr< ScHTMLEntry > xDummyEntry( new ScHTMLEntry( pEntry->GetItemSet() ) );
                     xDummyEntry->nCol = aEntryDocPos.mnCol;
                     xDummyEntry->nRow = aEntryDocPos.mnRow;
                     xDummyEntry->nColOverlap = aCellDocSize.mnCols;

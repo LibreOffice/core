@@ -51,13 +51,13 @@ namespace slideshow
         }
 #endif
 
-        std::shared_ptr< AttributableShape > lookupAttributableShape( const ShapeManagerSharedPtr&      rShapeManager,
+        std::shared_ptr< AttributableShape > lookupAttributableShape( const std::shared_ptr< ShapeManager >& rShapeManager,
                                                             const uno::Reference< drawing::XShape >&    xShape          )
         {
             ENSURE_OR_THROW( rShapeManager,
                               "lookupAttributableShape(): invalid ShapeManager" );
 
-            ShapeSharedPtr pShape( rShapeManager->lookupShape( xShape ) );
+            std::shared_ptr< Shape > pShape( rShapeManager->lookupShape( xShape ) );
 
             ENSURE_OR_THROW( pShape,
                               "lookupAttributableShape(): no shape found for given XShape" );

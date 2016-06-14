@@ -210,8 +210,8 @@ struct EventMultiplexerImpl
         std::shared_ptr< EventHandler >,
         std::vector<std::shared_ptr< EventHandler >> >    ImplEventHandlers;
     typedef ThreadUnsafeListenerContainer<
-        AnimationEventHandlerSharedPtr,
-        std::vector<AnimationEventHandlerSharedPtr> >     ImplAnimationHandlers;
+        std::shared_ptr< AnimationEventHandler >,
+        std::vector<std::shared_ptr< AnimationEventHandler >> > ImplAnimationHandlers;
     typedef ThreadUnsafeListenerContainer<
         std::shared_ptr< PauseEventHandler >,
         std::vector<std::shared_ptr< PauseEventHandler >> > ImplPauseHandlers;
@@ -222,8 +222,8 @@ struct EventMultiplexerImpl
         std::shared_ptr< ViewRepaintHandler >,
         std::vector<std::shared_ptr< ViewRepaintHandler >> > ImplRepaintHandlers;
     typedef ThreadUnsafeListenerContainer<
-        ShapeListenerEventHandlerSharedPtr,
-        std::vector<ShapeListenerEventHandlerSharedPtr> > ImplShapeListenerHandlers;
+        std::shared_ptr< ShapeListenerEventHandler >,
+        std::vector<std::shared_ptr< ShapeListenerEventHandler >> > ImplShapeListenerHandlers;
     typedef ThreadUnsafeListenerContainer<
         std::shared_ptr< UserPaintEventHandler >,
         std::vector<std::shared_ptr< UserPaintEventHandler >> > ImplUserPaintEventHandlers;
@@ -239,7 +239,7 @@ struct EventMultiplexerImpl
 
     template< typename RegisterFunction >
     void addMouseHandler( ImplMouseHandlers&                rHandlerContainer,
-                          const MouseEventHandlerSharedPtr& rHandler,
+                          const std::shared_ptr< MouseEventHandler >& rHandler,
                           double                            nPriority,
                           RegisterFunction                  pRegisterListener );
 
@@ -398,7 +398,7 @@ bool EventMultiplexerImpl::notifyAllAnimationHandlers( ImplAnimationHandlers con
                                                        std::shared_ptr< AnimationNode > const& rNode )
 {
     return rContainer.applyAll(
-        [&rNode]( const AnimationEventHandlerSharedPtr& pEventHandler )
+        [&rNode]( const std::shared_ptr< AnimationEventHandler >& pEventHandler )
         { return pEventHandler->handleAnimationEvent( rNode ); } );
 }
 
@@ -445,7 +445,7 @@ UnoViewSharedPtr EventMultiplexerImpl::findUnoView(
 template< typename RegisterFunction >
 void EventMultiplexerImpl::addMouseHandler(
     ImplMouseHandlers&                rHandlerContainer,
-    const MouseEventHandlerSharedPtr& rHandler,
+    const std::shared_ptr< MouseEventHandler >& rHandler,
     double                            nPriority,
     RegisterFunction                  pRegisterListener )
 {
@@ -486,7 +486,7 @@ void EventMultiplexerImpl::tick()
 
 void EventMultiplexerImpl::scheduleTick()
 {
-    EventSharedPtr pEvent(
+    std::shared_ptr< Event > pEvent(
         makeDelay( [this] () { this->tick(); },
                    mnTimeout,
                    "EventMultiplexerImpl::tick with delay"));
@@ -506,7 +506,7 @@ void EventMultiplexerImpl::handleTicks()
     if( !mbIsAutoMode )
         return; // nothing to do, don't need no ticks
 
-    EventSharedPtr pTickEvent( mpTickEvent.lock() );
+    std::shared_ptr< Event > pTickEvent( mpTickEvent.lock() );
     if( pTickEvent )
         return; // nothing to do, there's already a tick
                 // pending
@@ -767,25 +767,25 @@ void EventMultiplexer::removeSlideEndHandler(
 }
 
 void EventMultiplexer::addAnimationStartHandler(
-    const AnimationEventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< AnimationEventHandler >& rHandler )
 {
     mpImpl->maAnimationStartHandlers.add( rHandler );
 }
 
 void EventMultiplexer::removeAnimationStartHandler(
-    const AnimationEventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< AnimationEventHandler >& rHandler )
 {
     mpImpl->maAnimationStartHandlers.remove( rHandler );
 }
 
 void EventMultiplexer::addAnimationEndHandler(
-    const AnimationEventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< AnimationEventHandler >& rHandler )
 {
     mpImpl->maAnimationEndHandlers.add( rHandler );
 }
 
 void EventMultiplexer::removeAnimationEndHandler(
-    const AnimationEventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< AnimationEventHandler >& rHandler )
 {
     mpImpl->maAnimationEndHandlers.remove( rHandler );
 }
@@ -803,25 +803,25 @@ void EventMultiplexer::removeSlideAnimationsEndHandler(
 }
 
 void EventMultiplexer::addAudioStoppedHandler(
-    const AnimationEventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< AnimationEventHandler >& rHandler )
 {
     mpImpl->maAudioStoppedHandlers.add( rHandler );
 }
 
 void EventMultiplexer::removeAudioStoppedHandler(
-    const AnimationEventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< AnimationEventHandler >& rHandler )
 {
     mpImpl->maAudioStoppedHandlers.remove( rHandler );
 }
 
 void EventMultiplexer::addCommandStopAudioHandler(
-    const AnimationEventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< AnimationEventHandler >& rHandler )
 {
     mpImpl->maCommandStopAudioHandlers.add( rHandler );
 }
 
 void EventMultiplexer::removeCommandStopAudioHandler(
-    const AnimationEventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< AnimationEventHandler >& rHandler )
 {
     mpImpl->maCommandStopAudioHandlers.remove( rHandler );
 }
@@ -859,12 +859,12 @@ void EventMultiplexer::removeViewRepaintHandler( const std::shared_ptr< ViewRepa
     mpImpl->maViewRepaintHandlers.remove( rHandler );
 }
 
-void EventMultiplexer::addShapeListenerHandler( const ShapeListenerEventHandlerSharedPtr& rHandler )
+void EventMultiplexer::addShapeListenerHandler( const std::shared_ptr< ShapeListenerEventHandler >& rHandler )
 {
     mpImpl->maShapeListenerHandlers.add( rHandler );
 }
 
-void EventMultiplexer::removeShapeListenerHandler( const ShapeListenerEventHandlerSharedPtr& rHandler )
+void EventMultiplexer::removeShapeListenerHandler( const std::shared_ptr< ShapeListenerEventHandler >& rHandler )
 {
     mpImpl->maShapeListenerHandlers.remove( rHandler );
 }
@@ -875,7 +875,7 @@ void EventMultiplexer::addUserPaintHandler( const std::shared_ptr< UserPaintEven
 }
 
 void EventMultiplexer::addClickHandler(
-    const MouseEventHandlerSharedPtr& rHandler,
+    const std::shared_ptr< MouseEventHandler >& rHandler,
     double                            nPriority )
 {
     mpImpl->addMouseHandler(
@@ -888,7 +888,7 @@ void EventMultiplexer::addClickHandler(
 }
 
 void EventMultiplexer::removeClickHandler(
-    const MouseEventHandlerSharedPtr&  rHandler )
+    const std::shared_ptr< MouseEventHandler >& rHandler )
 {
     mpImpl->maMouseClickHandlers.remove(
         EventMultiplexerImpl::ImplMouseHandlers::container_type::value_type(
@@ -900,7 +900,7 @@ void EventMultiplexer::removeClickHandler(
 }
 
 void EventMultiplexer::addDoubleClickHandler(
-    const MouseEventHandlerSharedPtr&   rHandler,
+    const std::shared_ptr< MouseEventHandler >& rHandler,
     double                              nPriority )
 {
     mpImpl->addMouseHandler(
@@ -913,7 +913,7 @@ void EventMultiplexer::addDoubleClickHandler(
 }
 
 void EventMultiplexer::removeDoubleClickHandler(
-    const MouseEventHandlerSharedPtr&    rHandler )
+    const std::shared_ptr< MouseEventHandler >& rHandler )
 {
     mpImpl->maMouseDoubleClickHandlers.remove(
         EventMultiplexerImpl::ImplMouseHandlers::container_type::value_type(
@@ -925,7 +925,7 @@ void EventMultiplexer::removeDoubleClickHandler(
 }
 
 void EventMultiplexer::addMouseMoveHandler(
-    const MouseEventHandlerSharedPtr& rHandler,
+    const std::shared_ptr< MouseEventHandler >& rHandler,
     double                            nPriority )
 {
     mpImpl->addMouseHandler(
@@ -938,7 +938,7 @@ void EventMultiplexer::addMouseMoveHandler(
 }
 
 void EventMultiplexer::removeMouseMoveHandler(
-    const MouseEventHandlerSharedPtr&  rHandler )
+    const std::shared_ptr< MouseEventHandler >& rHandler )
 {
     mpImpl->maMouseMoveHandlers.remove(
         EventMultiplexerImpl::ImplMouseHandlers::container_type::value_type(
@@ -972,7 +972,7 @@ void EventMultiplexer::notifyShapeListenerAdded(
     const uno::Reference<drawing::XShape>&                   xShape )
 {
     mpImpl->maShapeListenerHandlers.applyAll(
-        [&xListener, &xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
+        [&xListener, &xShape]( const std::shared_ptr< ShapeListenerEventHandler >& pHandler )
         { return pHandler->listenerAdded( xListener, xShape ); } );
 }
 
@@ -981,7 +981,7 @@ void EventMultiplexer::notifyShapeListenerRemoved(
     const uno::Reference<drawing::XShape>&                   xShape )
 {
     mpImpl->maShapeListenerHandlers.applyAll(
-        [&xListener, &xShape]( const ShapeListenerEventHandlerSharedPtr& pHandler )
+        [&xListener, &xShape]( const std::shared_ptr< ShapeListenerEventHandler >& pHandler )
         { return pHandler->listenerRemoved( xListener, xShape ); } );
 }
 
