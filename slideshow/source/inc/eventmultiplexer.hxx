@@ -70,7 +70,6 @@ public:
     virtual void viewClobbered( const UnoViewSharedPtr& rView ) = 0;
 };
 
-typedef ::std::shared_ptr< ViewRepaintHandler > ViewRepaintHandlerSharedPtr;
 
 /** Interface for handling hyperlink clicks.
 
@@ -97,7 +96,6 @@ protected:
     ~HyperlinkHandler() {}
 };
 
-typedef ::std::shared_ptr< HyperlinkHandler > HyperlinkHandlerSharedPtr;
 
 /** Interface for handling user paint state changes.
 
@@ -118,7 +116,6 @@ public:
     virtual bool disable() = 0;
 };
 
-typedef ::std::shared_ptr< UserPaintEventHandler > UserPaintEventHandlerSharedPtr;
 
 /** This class multiplexes user-activated and
     slide-show global events.
@@ -213,8 +210,8 @@ public:
         @param rHandler
         Handler to call.
     */
-    void addViewHandler( const ViewEventHandlerWeakPtr& rHandler );
-    void removeViewHandler( const ViewEventHandlerWeakPtr& rHandler );
+    void addViewHandler( const std::weak_ptr< ViewEventHandler >& rHandler );
+    void removeViewHandler( const std::weak_ptr< ViewEventHandler >& rHandler );
 
     /** Register an event handler that will be called when a view gets
         clobbered.
@@ -225,8 +222,8 @@ public:
         @param rHandler
         Handler to call when a view needs a repaint
     */
-    void addViewRepaintHandler( const ViewRepaintHandlerSharedPtr& rHandler );
-    void removeViewRepaintHandler( const ViewRepaintHandlerSharedPtr& rHandler );
+    void addViewRepaintHandler( const std::shared_ptr< ViewRepaintHandler >& rHandler );
+    void removeViewRepaintHandler( const std::shared_ptr< ViewRepaintHandler >& rHandler );
 
     /** Register an event handler that will be called when
         XShapeListeners are changed.
@@ -243,7 +240,7 @@ public:
         @param rHandler
         Handler to call when a shape listener changes
     */
-    void addUserPaintHandler( const UserPaintEventHandlerSharedPtr& rHandler );
+    void addUserPaintHandler( const std::shared_ptr< UserPaintEventHandler >& rHandler );
 
     /** Register an event handler that will be called when the
         user requests the next effect.
@@ -261,9 +258,9 @@ public:
         higher the priority, the earlier this handler will be
         tried.
     */
-    void addNextEffectHandler( const EventHandlerSharedPtr& rHandler,
+    void addNextEffectHandler( const std::shared_ptr< EventHandler >& rHandler,
                                double                       nPriority );
-    void removeNextEffectHandler( const EventHandlerSharedPtr& rHandler );
+    void removeNextEffectHandler( const std::shared_ptr< EventHandler >& rHandler );
 
     /** Register an event handler that will be called when the
         slide is just shown.
@@ -275,8 +272,8 @@ public:
         @param rHandler
         Handler to call when the next slide starts
     */
-    void addSlideStartHandler( const EventHandlerSharedPtr& rHandler );
-    void removeSlideStartHandler( const EventHandlerSharedPtr& rHandler );
+    void addSlideStartHandler( const std::shared_ptr< EventHandler >& rHandler );
+    void removeSlideStartHandler( const std::shared_ptr< EventHandler >& rHandler );
 
     /** Register an event handler that will be called when the
         slide is about to vanish.
@@ -288,8 +285,8 @@ public:
         @param rHandler
         Handler to call when the current slide ends
     */
-    void addSlideEndHandler( const EventHandlerSharedPtr& rHandler );
-    void removeSlideEndHandler( const EventHandlerSharedPtr& rHandler );
+    void addSlideEndHandler( const std::shared_ptr< EventHandler >& rHandler );
+    void removeSlideEndHandler( const std::shared_ptr< EventHandler >& rHandler );
 
     /** Register an event handler that will be called when an
         XAnimationNode starts its active duration.
@@ -333,9 +330,9 @@ public:
         Handler to call when the animation ends
     */
     void addSlideAnimationsEndHandler(
-        const EventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< EventHandler >& rHandler );
     void removeSlideAnimationsEndHandler(
-        const EventHandlerSharedPtr& rHandler );
+        const std::shared_ptr< EventHandler >& rHandler );
 
     /** Register an event handler that will be called when an
         XAudio node's sound stops playing.
@@ -370,8 +367,8 @@ public:
     /** Register a handler that is called when the show enters
         or exits pause mode.
     */
-    void addPauseHandler( const PauseEventHandlerSharedPtr& rHandler );
-    void removePauseHandler( const PauseEventHandlerSharedPtr& rHandler );
+    void addPauseHandler( const std::shared_ptr< PauseEventHandler >& rHandler );
+    void removePauseHandler( const std::shared_ptr< PauseEventHandler >& rHandler );
 
     /** Register a mouse handler that is called on mouse click
 
@@ -430,9 +427,9 @@ public:
         @param rHandler
         @param nPriority
     */
-    void addHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHandler,
+    void addHyperlinkHandler( const std::shared_ptr< HyperlinkHandler >& rHandler,
                               double                           nPriority );
-    void removeHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHandler );
+    void removeHyperlinkHandler( const std::shared_ptr< HyperlinkHandler >& rHandler );
 
 
     // External event notifications

@@ -96,9 +96,9 @@ namespace slideshow
                 @return the created animation, or NULL for no
                 transition effect
              */
-            NumberAnimationSharedPtr createSlideTransition(
-                const SlideSharedPtr&                          rLeavingSlide,
-                const SlideSharedPtr&                          rEnteringSlide,
+            std::shared_ptr< NumberAnimation > createSlideTransition(
+                const std::shared_ptr< Slide >&                rLeavingSlide,
+                const std::shared_ptr< Slide >&                rEnteringSlide,
                 const UnoViewContainer&                        rViewContainer,
                 ScreenUpdater&                                 rScreenUpdater,
                 EventMultiplexer&                              rEventMultiplexer,
@@ -108,7 +108,7 @@ namespace slideshow
                 sal_Int16                                      nTransitionSubType,
                 bool                                           bTransitionDirection,
                 const RGBColor&                                rTransitionFadeColor,
-                const SoundPlayerSharedPtr&                    rSoundPlayer );
+                const std::shared_ptr< SoundPlayer >&          rSoundPlayer );
         }
     }
 }

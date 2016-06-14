@@ -58,7 +58,7 @@ private:
     // From AnimationActivity interface
     virtual void setTargets(
         const AnimatableShapeSharedPtr&        rShape,
-        const ShapeAttributeLayerSharedPtr&    rAttrLayer ) override;
+        const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override;
 
 private:
     /** Hook for derived classes
@@ -108,7 +108,7 @@ protected:
 
     const AnimatableShapeSharedPtr& getShape() const { return mpShape; }
 
-    const ShapeAttributeLayerSharedPtr& getShapeAttributeLayer() const
+    const std::shared_ptr< ShapeAttributeLayer >& getShapeAttributeLayer() const
         { return mpAttributeLayer; }
 
     bool isRepeatCountValid() const { return bool(maRepeats); }
@@ -124,7 +124,7 @@ private:
     EventSharedPtr                  mpEndEvent;
     EventQueue&                     mrEventQueue;
     AnimatableShapeSharedPtr        mpShape; // only to pass on to animation
-    ShapeAttributeLayerSharedPtr    mpAttributeLayer; // only to pass on to anim
+    std::shared_ptr< ShapeAttributeLayer > mpAttributeLayer; // only to pass on to anim
 
     ::boost::optional<double> const maRepeats;
     const double                    mnAccelerationFraction;

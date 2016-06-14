@@ -43,7 +43,6 @@ namespace slideshow
         struct SlideShowContext;
         class  DrawShapeSubsetting;
         class  DrawShape;
-        typedef ::std::shared_ptr< DrawShape > DrawShapeSharedPtr;
 
         /** This class is the representation of a draw document's
             XShape, and implements the Shape, AnimatableShape, and
@@ -78,7 +77,7 @@ namespace slideshow
                 unsupported content, and, if necessary, returned as a
                 pre-rendererd bitmap.
              */
-            static DrawShapeSharedPtr create(
+            static std::shared_ptr< DrawShape > create(
                 const css::uno::Reference< css::drawing::XShape >&    xShape,
                 const css::uno::Reference< css::drawing::XDrawPage >& xContainingPage,
                 double                                     nPrio,
@@ -105,7 +104,7 @@ namespace slideshow
                 DrawShape will register itself for intrinsic animation
                 events.
              */
-            static DrawShapeSharedPtr create(
+            static std::shared_ptr< DrawShape > create(
                 const css::uno::Reference< css::drawing::XShape >&    xShape,
                 const css::uno::Reference< css::drawing::XDrawPage >& xContainingPage,
                 double                                     nPrio,
@@ -128,9 +127,9 @@ namespace slideshow
             // attribute methods
 
 
-            virtual ShapeAttributeLayerSharedPtr createAttributeLayer() override;
-            virtual bool revokeAttributeLayer( const ShapeAttributeLayerSharedPtr& rLayer ) override;
-            virtual ShapeAttributeLayerSharedPtr getTopmostAttributeLayer() const override;
+            virtual std::shared_ptr< ShapeAttributeLayer > createAttributeLayer() override;
+            virtual bool revokeAttributeLayer( const std::shared_ptr< ShapeAttributeLayer >& rLayer ) override;
+            virtual std::shared_ptr< ShapeAttributeLayer > getTopmostAttributeLayer() const override;
             virtual void setVisibility( bool bVisible ) override;
             virtual ::basegfx::B2DRectangle getBounds() const override;
             virtual ::basegfx::B2DRectangle getDomBounds() const override;
@@ -160,10 +159,10 @@ namespace slideshow
             virtual DocTreeNodeSupplier&        getTreeNodeSupplier() override;
 
             virtual DocTreeNode                 getSubsetNode() const override;
-            virtual AttributableShapeSharedPtr  getSubset( const DocTreeNode& rTreeNode ) const override;
-            virtual bool                        createSubset( AttributableShapeSharedPtr&   o_rSubset,
+            virtual std::shared_ptr< AttributableShape > getSubset( const DocTreeNode& rTreeNode ) const override;
+            virtual bool                        createSubset( std::shared_ptr< AttributableShape >& o_rSubset,
                                                               const DocTreeNode&            rTreeNode ) override;
-            virtual bool                        revokeSubset( const AttributableShapeSharedPtr& rShape ) override;
+            virtual bool                        revokeSubset( const std::shared_ptr< AttributableShape >& rShape ) override;
 
 
             // DocTreeNodeSupplier methods
@@ -199,7 +198,7 @@ namespace slideshow
                 crafted metafile, usable to display drawing layer text
                 animations.
             */
-            GDIMetaFileSharedPtr forceScrollTextMetaFile();
+            std::shared_ptr< GDIMetaFile > forceScrollTextMetaFile();
 
         private:
             /** Create a shape for the given XShape
@@ -286,7 +285,7 @@ namespace slideshow
             ::std::size_t                                                           mnCurrFrame;
 
             /// Metafile of currently active frame (static for shapes w/o intrinsic animation)
-            mutable GDIMetaFileSharedPtr                                            mpCurrMtf;
+            mutable std::shared_ptr< GDIMetaFile >                                  mpCurrMtf;
 
             /// loadflags of current meta file
             mutable int                                                             mnCurrMtfLoadFlags;
@@ -303,7 +302,7 @@ namespace slideshow
                                                                                               // calculated
 
             // Pointer to modifiable shape attributes
-            ShapeAttributeLayerSharedPtr                                            mpAttributeLayer; // only created lazily
+            std::shared_ptr< ShapeAttributeLayer >                                  mpAttributeLayer; // only created lazily
 
             // held here, to signal our destruction
             std::weak_ptr<Activity>                                               mpIntrinsicAnimationActivity;
@@ -318,7 +317,7 @@ namespace slideshow
             mutable State::StateId                                                  mnAttributeVisibilityState;
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewShapeSharedPtr > ViewShapeVector;
+            typedef ::std::vector< std::shared_ptr< ViewShape > > ViewShapeVector;
             ViewShapeVector                                                         maViewShapes;
 
             css::uno::Reference< css::uno::XComponentContext>                       mxComponentContext;

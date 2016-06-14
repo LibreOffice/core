@@ -31,7 +31,7 @@ namespace internal {
 
 AnimationAudioNode::AnimationAudioNode(
     const uno::Reference< animations::XAnimationNode >& xNode,
-    const BaseContainerNodeSharedPtr&                   rParent,
+    const std::shared_ptr< BaseContainerNode >&         rParent,
     const NodeContext&                                  rContext )
     : BaseNode( xNode, rParent, rContext ),
       mxAudioNode( xNode, uno::UNO_QUERY_THROW ),
@@ -171,7 +171,7 @@ void AnimationAudioNode::resetPlayer() const
 }
 
 bool AnimationAudioNode::handleAnimationEvent(
-    const AnimationNodeSharedPtr& /*rNode*/ )
+    const std::shared_ptr< AnimationNode >& /*rNode*/ )
 {
     // TODO(F2): for now we support only STOPAUDIO events.
     deactivate();

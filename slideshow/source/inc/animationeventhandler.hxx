@@ -52,7 +52,7 @@ namespace slideshow
                 returns false, possibly other, less prioritized
                 handlers are called, too.
              */
-            virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) = 0;
+            virtual bool handleAnimationEvent( const std::shared_ptr< AnimationNode >& rNode ) = 0;
         };
 
         typedef ::std::shared_ptr< AnimationEventHandler > AnimationEventHandlerSharedPtr;

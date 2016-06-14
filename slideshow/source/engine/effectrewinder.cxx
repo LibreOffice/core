@@ -53,12 +53,12 @@ private:
 class RewinderAnimationEventHandler : public AnimationEventHandler
 {
 public:
-    typedef ::std::function<bool (const AnimationNodeSharedPtr& rpNode)> Action;
+    typedef ::std::function<bool (const std::shared_ptr< AnimationNode >& rpNode)> Action;
     explicit RewinderAnimationEventHandler (const Action& rAction) : maAction(rAction) {}
     virtual ~RewinderAnimationEventHandler() {}
 private:
     const Action maAction;
-    virtual bool handleAnimationEvent (const AnimationNodeSharedPtr& rpNode) override
+    virtual bool handleAnimationEvent (const std::shared_ptr< AnimationNode >& rpNode) override
         { return maAction(rpNode); }
 };
 
@@ -97,7 +97,7 @@ void EffectRewinder::initialize()
 
     mpAnimationStartHandler.reset(
         new RewinderAnimationEventHandler(
-            [this]( const AnimationNodeSharedPtr& pNode)
+            [this]( const std::shared_ptr< AnimationNode >& pNode)
             { return this->notifyAnimationStart( pNode ); } ) );
     mrEventMultiplexer.addAnimationStartHandler(mpAnimationStartHandler);
 
@@ -292,15 +292,15 @@ bool EffectRewinder::resetEffectCount()
 }
 
 
-bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
+bool EffectRewinder::notifyAnimationStart (const std::shared_ptr< AnimationNode >& rpNode)
 {
     // This notification is only relevant for us when the rpNode belongs to
     // the main sequence.
-    BaseNodeSharedPtr pBaseNode (::std::dynamic_pointer_cast<BaseNode>(rpNode));
+    std::shared_ptr< BaseNode > pBaseNode (::std::dynamic_pointer_cast<BaseNode>(rpNode));
     if ( ! pBaseNode)
         return false;
 
-    BaseContainerNodeSharedPtr pParent (pBaseNode->getParentNode());
+    std::shared_ptr< BaseContainerNode > pParent (pBaseNode->getParentNode());
     if ( ! (pParent && pParent->isMainSequenceRootNode()))
         return false;
 

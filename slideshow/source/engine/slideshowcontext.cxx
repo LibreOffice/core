@@ -37,7 +37,7 @@ namespace slideshow
 namespace internal
 {
 
-SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettableShapeManager,
+SlideShowContext::SlideShowContext( std::shared_ptr< SubsettableShapeManager >& rSubsettableShapeManager,
                                     EventQueue&                       rEventQueue,
                                     EventMultiplexer&                 rEventMultiplexer,
                                     ScreenUpdater&                    rScreenUpdater,

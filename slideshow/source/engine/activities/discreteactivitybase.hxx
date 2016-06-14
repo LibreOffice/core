@@ -68,7 +68,7 @@ namespace slideshow
             ::std::size_t getNumberOfKeyTimes() const { return maDiscreteTimes.size(); }
 
         private:
-            WakeupEventSharedPtr            mpWakeupEvent;
+            std::shared_ptr< WakeupEvent >  mpWakeupEvent;
             const ::std::vector< double >   maDiscreteTimes;
             const double                    mnSimpleDuration;
             sal_uInt32                      mnCurrPerformCalls;
