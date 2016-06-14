@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_WIN_SOURCE_GDI_WINLAYOUT_HXX
-#define INCLUDED_VCL_WIN_SOURCE_GDI_WINLAYOUT_HXX
+#ifndef INCLUDED_VCL_INC_WIN_WINLAYOUT_HXX
+#define INCLUDED_VCL_INC_WIN_WINLAYOUT_HXX
 
 #include <rtl/ustring.hxx>
 
