@@ -1797,7 +1797,9 @@ void Window::doLazyDelete()
     if( pSysWin || ( pDockWin && pDockWin->IsFloatingMode() ) )
     {
         Show( false );
-        SetParent( ImplGetDefaultWindow() );
+        vcl::Window* defaultWindow = ImplGetDefaultWindow();
+        if (defaultWindow)
+            SetParent( defaultWindow );
     }
     vcl::LazyDeletor::Delete( this );
 }
