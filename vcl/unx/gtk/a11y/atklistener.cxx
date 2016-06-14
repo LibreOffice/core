@@ -378,6 +378,12 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
         }
 
+        //ACTIVE_DESCENDANT_CHANGED_NOFOCUS (sic) appears to have been added
+        //as a workaround or an aid for the ia2 winaccessibility implementation
+        //so ignore it silently without warning here
+        case accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS:
+            break;
+
         // #i92103#
         case accessibility::AccessibleEventId::LISTBOX_ENTRY_EXPANDED:
         {
