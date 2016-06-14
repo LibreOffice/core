@@ -21,11 +21,14 @@
 #define INCLUDED_FILTER_MSFILTER_MSCODEC_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
-
+#include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
-#include <filter/msfilter/msfilterdllapi.h>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { struct NamedValue; }
+} } }
 
 namespace msfilter {
 

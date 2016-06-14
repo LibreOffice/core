@@ -9,6 +9,7 @@
 #include "xltoolbar.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>

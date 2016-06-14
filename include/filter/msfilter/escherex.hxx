@@ -22,21 +22,35 @@
 
 #include <memory>
 #include <vector>
-#include <tools/solar.h>
-#include <tools/gen.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <svtools/grfmgr.hxx>
-#include <com/sun/star/awt/Size.hpp>
+
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
-#include <svx/msdffdef.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <svtools/grfmgr.hxx>
+#include <svx/msdffdef.hxx>
+#include <tools/color.hxx>
+#include <tools/gen.hxx>
+#include <tools/solar.h>
+#include <tools/stream.hxx>
+#include <vcl/mapmod.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace awt { struct Rectangle; }
+    namespace beans { class XPropertySet; }
+    namespace drawing { struct EnhancedCustomShapeParameter; }
+    namespace drawing { struct Hatch; }
+} } }
+
+namespace tools {
+    class Polygon;
+    class PolyPolygon;
+}
 
         /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPt Ver*/
 // In the Microsoft documentation the naming scheme is msofbt... instead of ESCHER_...
@@ -532,9 +546,6 @@ enum MSOPATHTYPE
 
 const sal_uInt32 DFF_DGG_CLUSTER_SIZE       = 0x00000400;   /// Shape IDs per cluster in DGG atom.
 
-class SvStream;
-class SvMemoryStream;
-
 namespace com { namespace sun { namespace star {
     namespace awt {
         struct Gradient;
@@ -736,7 +747,6 @@ public:
 #define ESCHER_CREATEPOLYGON_POLYLINE       2
 #define ESCHER_CREATEPOLYGON_POLYPOLYGON    4
 
-class GraphicAttr;
 class SdrObjCustomShape;
 
 struct EscherPropSortStruct

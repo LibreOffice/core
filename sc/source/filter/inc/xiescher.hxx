@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XIESCHER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XIESCHER_HXX
 
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <filter/msfilter/msdffimp.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/graph.hxx>

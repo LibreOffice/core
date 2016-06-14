@@ -18,10 +18,12 @@
  */
 
 #include "vbahelper/vbaeventshelperbase.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <unotools/eventcfg.hxx>
 #include <vbahelper/vbahelper.hxx>

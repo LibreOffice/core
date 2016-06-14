@@ -20,41 +20,39 @@
 #ifndef INCLUDED_FILTER_MSFILTER_MSDFFIMP_HXX
 #define INCLUDED_FILTER_MSFILTER_MSDFFIMP_HXX
 
-#include <string.h>
-
+#include <cstring>
 #include <map>
 #include <memory>
 #include <set>
+#include <utility>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/stl_types.hxx>
-
-#include <tools/solar.h>
-#include <tools/color.hxx>
-#include <tools/gen.hxx>
-
-#include <vcl/graph.hxx>
-
-#include <svx/msdffdef.hxx>
 #include <filter/msfilter/dffpropset.hxx>
 #include <filter/msfilter/dffrecordheader.hxx>
-
 #include <filter/msfilter/msfilterdllapi.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <svx/msdffdef.hxx>
+#include <tools/color.hxx>
+#include <tools/colordata.hxx>
+#include <tools/errcode.hxx>
+#include <tools/gen.hxx>
+#include <tools/ref.hxx>
+#include <tools/solar.h>
+#include <vcl/graph.hxx>
 
-class Graphic;
+class GDIMetaFile;
 class SotStorage;
 class SvStream;
 class SdrObject;
 class SdrOle2Obj;
 namespace tools {
     class Polygon;
-    class PolyPolygon;
 }
-class FmFormModel;
 class SdrModel;
 class SwFlyFrameFormat;
 
@@ -64,13 +62,13 @@ struct SvxMSDffShapeOrder;
 
 class SvxMSDffManager;
 class SfxItemSet;
-class SdrObject;
-class SdrTextObj;
 struct DffObjData;
 
-namespace com { namespace sun { namespace star { namespace embed {
-    class XStorage;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+    namespace embed { class XEmbeddedObject; }
+    namespace embed { class XStorage; }
+} } }
 
 class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
 {

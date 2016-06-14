@@ -20,6 +20,7 @@
 #include "vbahelper/vbaapplicationbase.hxx"
 #include <sal/macros.h>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -34,6 +35,7 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 
 #include <filter/msfilter/msvbahelper.hxx>
+#include <rtl/ref.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/timer.hxx>
 

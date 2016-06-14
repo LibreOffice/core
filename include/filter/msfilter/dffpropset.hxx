@@ -19,9 +19,12 @@
 #ifndef INCLUDED_FILTER_MSFILTER_DFFPROPSET_HXX
 #define INCLUDED_FILTER_MSFILTER_DFFPROPSET_HXX
 
-#include <filter/msfilter/msfilterdllapi.h>
-#include <filter/msfilter/dffrecordheader.hxx>
 #include <vector>
+
+#include <filter/msfilter/msfilterdllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <tools/solar.h>
 
 class SvStream;
 

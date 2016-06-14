@@ -20,43 +20,54 @@
 #ifndef INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
 #define INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
 
-#include <com/sun/star/io/XInputStream.hpp>
-#include <rtl/ustring.hxx>
-#include <tools/solar.h>
-#include <tools/gen.hxx>
-#include <tools/color.hxx>
-#include <svx/svdobj.hxx>
-#include <editeng/numitem.hxx>
-#include <editeng/editdata.hxx>
-#include <filter/msfilter/msdffimp.hxx>
-#include <filter/msfilter/msocximex.hxx>
+#include <algorithm>
+#include <cstddef>
+#include <memory>
+#include <type_traits>
+#include <vector>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <editeng/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include <editeng/flditem.hxx>
 #undef ITEMID_FIELD
+#include <filter/msfilter/dffrecordheader.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
-#include <vcl/font.hxx>
-#include <vector>
-#include <memory>
-#include <boost/optional.hpp>
+#include <filter/msfilter/msocximex.hxx>
 #include <o3tl/enumarray.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <svx/msdffdef.hxx>
+#include <tools/color.hxx>
+#include <tools/fontenum.hxx>
+#include <tools/gen.hxx>
+#include <tools/ref.hxx>
+#include <tools/solar.h>
+#include <vcl/graph.hxx>
 
-class SdrModel;
-class SdPage;
+namespace boost {
+    template <class T> class optional;
+}
+
+namespace com { namespace sun { namespace star {
+    namespace awt { struct Size; }
+    namespace drawing { class XShape; }
+    namespace form { class XFormComponent; }
+    namespace frame { class XModel; }
+} } }
+
 class SdrPage;
 class SdrObject;
 class SvStream;
-namespace tools {
-    class Polygon;
-    class PolyPolygon;
-}
 class SfxItemSet;
-class Outliner;
-class Graphic;
-class SvxMSDffManager;
+class SdrOutliner;
+class SfxStyleSheet;
+class SotStorage;
+class SvMemoryStream;
+class SvxNumberFormat;
 class PPTTextObj;
-class DffRecordHeader;
-class SvxBulletItem;
 enum class PptSlideLayout;
 enum class PptPlaceholder : sal_uInt8;
 
@@ -320,7 +331,6 @@ public:
     friend SvStream& ReadPptOEPlaceholderAtom( SvStream& rIn, PptOEPlaceholderAtom& rAtom );
 };
 
-struct ProcessData;
 struct PPTStyleSheet;
 struct HeaderFooterEntry;
 struct PptSlidePersistEntry
@@ -427,7 +437,6 @@ struct SdPageCapsule {
     SdrPage * page;
 };
 
-class PPTExtParaProv;
 class MSFILTER_DLLPUBLIC SdrEscherImport : public SvxMSDffManager
 {
 protected:
@@ -468,7 +477,6 @@ public:
 };
 
 
-class SvxFieldItem;
 struct MSFILTER_DLLPUBLIC PPTFieldEntry
 {
     sal_uInt16          nPos;
@@ -520,7 +528,6 @@ struct ProcessData
 
 
 class SdrTextObj;
-class SfxObjectShell;
 
 class MSFILTER_DLLPUBLIC SdrPowerPointImport : public SdrEscherImport
 {
@@ -1096,7 +1103,6 @@ struct PPTStyleTextPropReader
             );
 };
 
-class SvxFieldItem;
 class MSFILTER_DLLPUBLIC PPTPortionObj : public PPTCharPropSet
 {
 

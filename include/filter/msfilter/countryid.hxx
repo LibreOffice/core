@@ -21,9 +21,9 @@
 #ifndef INCLUDED_FILTER_MSFILTER_COUNTRYID_HXX
 #define INCLUDED_FILTER_MSFILTER_COUNTRYID_HXX
 
-#include <sal/types.h>
-#include <i18nlangtag/lang.h>
 #include <filter/msfilter/msfilterdllapi.h>
+#include <i18nlangtag/lang.h>
+#include <sal/types.h>
 
 
 namespace msfilter {

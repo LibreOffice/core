@@ -121,6 +121,7 @@
 #include <svtools/embedhlp.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/make_unique.hxx>
+#include <boost/optional.hpp>
 
 #include <algorithm>
 #include <cassert>

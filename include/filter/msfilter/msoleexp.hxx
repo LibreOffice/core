@@ -19,8 +19,19 @@
 #ifndef INCLUDED_FILTER_MSFILTER_MSOLEEXP_HXX
 #define INCLUDED_FILTER_MSFILTER_MSOLEEXP_HXX
 
-#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Reference.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace embed { class XEmbeddedObject; }
+} } }
+
+namespace svt {
+    class EmbeddedObjectRef;
+}
+
+class SotStorage;
 
 // for the CreateSdrOLEFromStorage we need the information, how we handle
 // convert able OLE-Objects - this ist stored in
@@ -28,10 +39,6 @@
 #define OLE_STARWRITER_2_WINWORD            0x0002
 #define OLE_STARCALC_2_EXCEL                0x0004
 #define OLE_STARIMPRESS_2_POWERPOINT        0x0008
-
-class SotStorage;
-
-#include <svtools/embedhlp.hxx>
 
 class MSFILTER_DLLPUBLIC SvxMSExportOLEObjects
 {

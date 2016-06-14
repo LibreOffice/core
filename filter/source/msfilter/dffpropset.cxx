@@ -19,6 +19,8 @@
 
 #include <algorithm>
 #include <filter/msfilter/dffpropset.hxx>
+#include <filter/msfilter/dffrecordheader.hxx>
+#include <svx/msdffdef.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
 

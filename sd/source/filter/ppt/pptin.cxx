@@ -92,6 +92,8 @@
 #include <comphelper/string.hxx>
 #include <oox/ole/olehelper.hxx>
 
+#include <boost/optional.hpp>
+
 #include <cassert>
 #include <memory>
 
