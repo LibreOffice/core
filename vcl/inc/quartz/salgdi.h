@@ -103,6 +103,7 @@ public:
     float               mfFontStretch;
     /// text rotation in radian
     float               mfFontRotation;
+    FontSelectPattern   maFontSelData;
 
 private:
     /// CoreText text style object
