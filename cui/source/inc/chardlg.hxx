@@ -207,6 +207,8 @@ private:
     VclPtr<FixedText>          m_pPositionFT;
     VclPtr<ListBox>            m_pPositionLB;
 
+    VclPtr<FixedText>          m_pA11yWarningFT;
+
     sal_uInt16          m_nHtmlMode;
 
     OUString            m_aTransparentColorName;

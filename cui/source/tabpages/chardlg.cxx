@@ -66,6 +66,7 @@
 #include <svl/stritem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
 #include <svl/intitem.hxx>
@@ -1371,6 +1372,7 @@ SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& 
     get(m_pEmphasisLB, "emphasislb");
     get(m_pPositionFT, "positionft");
     get(m_pPositionLB, "positionlb");
+    get(m_pA11yWarningFT, "a11ywarning");
 
     get(m_pPreviewWin, "preview");
     Initialize();
@@ -1405,6 +1407,7 @@ void SvxCharEffectsPage::dispose()
     m_pEmphasisLB.clear();
     m_pPositionFT.clear();
     m_pPositionLB.clear();
+    m_pA11yWarningFT.clear();
     SvxCharBasePage::dispose();
 }
 
@@ -1507,6 +1510,8 @@ void SvxCharEffectsPage::Initialize()
         m_pPositionFT->Hide();
         m_pPositionLB->Hide();
     }
+
+    m_pA11yWarningFT->Show(officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get());
 }
 
 void SvxCharEffectsPage::UpdatePreview_Impl()
