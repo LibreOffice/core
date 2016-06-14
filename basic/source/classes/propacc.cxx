@@ -26,6 +26,7 @@
 
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/any.hxx>
 
 #include <algorithm>
 #include <limits.h>
@@ -201,14 +202,13 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
         // Set PropertyValues
         Any aArgAsAny = sbxToUnoValue( rPar.Get(1),
                 cppu::UnoType<Sequence<PropertyValue>>::get() );
-        Sequence<PropertyValue> const *pArg =
-                static_cast<Sequence<PropertyValue> const *>(aArgAsAny.getValue());
+        auto pArg = o3tl::doAccess<Sequence<PropertyValue>>(aArgAsAny);
         Reference< XPropertyAccess > xPropAcc( xInterface, UNO_QUERY );
         xPropAcc->setPropertyValues( *pArg );
 
         // Build a SbUnoObject and return it
         auto xUnoObj = tools::make_ref<SbUnoObject>( "stardiv.uno.beans.PropertySet", Any(xInterface) );
-        if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
+        if( xUnoObj->getUnoAny().hasValue() )
         {
             // Return object
             refVar->PutObject( xUnoObj.get() );

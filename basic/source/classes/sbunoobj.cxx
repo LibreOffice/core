@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>
@@ -312,12 +315,13 @@ OUString implGetExceptionMsg( const Exception& e, const OUString& aExceptionType
 
 OUString implGetExceptionMsg( const Any& _rCaughtException )
 {
-    OSL_PRECOND( _rCaughtException.getValueTypeClass() == TypeClass_EXCEPTION, "implGetExceptionMsg: illegal argument!" );
-    if ( _rCaughtException.getValueTypeClass() != TypeClass_EXCEPTION )
+    auto e = o3tl::tryAccess<Exception>(_rCaughtException);
+    OSL_PRECOND( e, "implGetExceptionMsg: illegal argument!" );
+    if ( !e )
     {
         return OUString();
     }
-    return implGetExceptionMsg( *static_cast< const Exception* >( _rCaughtException.getValue() ), _rCaughtException.getValueTypeName() );
+    return implGetExceptionMsg( *e, _rCaughtException.getValueTypeName() );
 }
 
 Any convertAny( const Any& rVal, const Type& aDestType )
@@ -406,10 +410,10 @@ void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
         ++nLevel;
     }
 
-    if ( aExamine.getValueTypeClass() == TypeClass_EXCEPTION )
+    if ( auto e = o3tl::tryAccess<Exception>(aExamine) )
     {
         // the last element in the chain is still an exception, but no WrappedTargetException
-        implAppendExceptionMsg( aMessageBuf, *static_cast< const Exception* >( aExamine.getValue() ), aExamine.getValueTypeName(), nLevel );
+        implAppendExceptionMsg( aMessageBuf, *e, aExamine.getValueTypeName(), nLevel );
     }
 
     StarBASIC::Error( nError, aMessageBuf.makeStringAndClear() );
@@ -622,7 +626,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             SbxObjectRef xWrapper = static_cast<SbxObject*>(pSbUnoObject);
 
             // If the object is invalid deliver null
-            if( pSbUnoObject->getUnoAny().getValueType().getTypeClass() == TypeClass_VOID )
+            if( !pSbUnoObject->getUnoAny().hasValue() )
             {
                 pVar->PutObject( nullptr );
             }
@@ -723,7 +727,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             SbxObjectRef xWrapper = static_cast<SbxObject*>(pSbUnoObject);
 
             // If the object is invalid deliver null
-            if( pSbUnoObject->getUnoAny().getValueType().getTypeClass() == TypeClass_VOID )
+            if( !pSbUnoObject->getUnoAny().hasValue() )
             {
                 pVar->PutObject( nullptr );
             }
@@ -790,10 +794,10 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         break;
 
 
-        case TypeClass_BOOLEAN:         pVar->PutBool( *static_cast<sal_Bool const *>(aValue.getValue()) ); break;
+        case TypeClass_BOOLEAN:         pVar->PutBool( *o3tl::forceAccess<bool>(aValue) ); break;
         case TypeClass_CHAR:
         {
-            pVar->PutChar( *static_cast<sal_Unicode const *>(aValue.getValue()) );
+            pVar->PutChar( *o3tl::forceAccess<sal_Unicode>(aValue) );
             break;
         }
         case TypeClass_STRING:          { OUString val; aValue >>= val; pVar->PutString( val ); }  break;
@@ -1596,10 +1600,7 @@ OUString getDbgObjectNameImpl(SbUnoObject& rUnoObj)
     if( aName.isEmpty() )
     {
         Any aToInspectObj = rUnoObj.getUnoAny();
-        TypeClass eType = aToInspectObj.getValueType().getTypeClass();
-        Reference< XInterface > xObj;
-        if( eType == TypeClass_INTERFACE )
-            xObj = *static_cast<Reference< XInterface > const *>(aToInspectObj.getValue());
+        Reference< XInterface > xObj(aToInspectObj, css::uno::UNO_QUERY);
         if( xObj.is() )
         {
             Reference< XServiceInfo > xServiceInfo( xObj, UNO_QUERY );
@@ -1646,21 +1647,15 @@ OUString getBasicObjectTypeName( SbxObject* pObj )
 bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
 {
     Any aToInspectObj = rUnoObj.getUnoAny();
-    TypeClass eType = aToInspectObj.getValueType().getTypeClass();
-    if( eType != TypeClass_INTERFACE )
-    {
-        return false;
-    }
-    const Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aToInspectObj.getValue());
 
     // Return true for XInvocation based objects as interface type names don't count then
-    Reference< XInvocation > xInvocation( x, UNO_QUERY );
+    Reference< XInvocation > xInvocation( aToInspectObj, UNO_QUERY );
     if( xInvocation.is() )
     {
         return true;
     }
     bool bResult = false;
-    Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
+    Reference< XTypeProvider > xTypeProvider( aToInspectObj, UNO_QUERY );
     if( xTypeProvider.is() )
     {
         /*  Although interfaces in the ooo.vba namespace obey the IDL rules and
@@ -1744,19 +1739,16 @@ OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
     Any aToInspectObj = rUnoObj.getUnoAny();
 
     // allow only TypeClass interface
-    TypeClass eType = aToInspectObj.getValueType().getTypeClass();
     OUStringBuffer aRet;
-    if( eType != TypeClass_INTERFACE )
+    auto x = o3tl::tryAccess<Reference<XInterface>>(aToInspectObj);
+    if( !x )
     {
         aRet.append( ID_DBG_SUPPORTEDINTERFACES );
         aRet.append( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
     }
     else
     {
-        // get the interface from the Any
-        const Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aToInspectObj.getValue());
-
-        Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
+        Reference< XTypeProvider > xTypeProvider( *x, UNO_QUERY );
 
         aRet.append( "Supported interfaces by object " );
         aRet.append(getDbgObjectName(rUnoObj));
@@ -1774,7 +1766,7 @@ OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
                 Reference<XIdlClass> xClass = TypeToIdlClass( rType );
                 if( xClass.is() )
                 {
-                    aRet.append( Impl_GetInterfaceInfo( x, xClass, 1 ) );
+                    aRet.append( Impl_GetInterfaceInfo( *x, xClass, 1 ) );
                 }
                 else
                 {
@@ -2321,7 +2313,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     if( eType == TypeClass_INTERFACE )
     {
         // get the interface from the Any
-        x = *static_cast<Reference< XInterface > const *>(aUnoObj_.getValue());
+        aUnoObj_ >>= x;
         if( !x.is() )
             return;
     }
@@ -2990,7 +2982,7 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     {
         // Create a SbUnoObject out of it and return it
         SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, Any(xInterface) );
-        if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
+        if( xUnoObj->getUnoAny().hasValue() )
         {
             // return the object
             refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
@@ -3042,7 +3034,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     {
         // Create a SbUnoObject out of it and return it
         SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, Any(xInterface) );
-        if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
+        if( xUnoObj->getUnoAny().hasValue() )
         {
             // return the object
             refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
@@ -3097,13 +3089,11 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
         return;
     }
     Any aAny = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj))->getUnoAny();
-    TypeClass eType = aAny.getValueType().getTypeClass();
-    if( eType != TypeClass_INTERFACE )
+    auto x = o3tl::tryAccess<Reference<XInterface>>(aAny);
+    if( !x )
     {
         return;
     }
-    // get the interface out of the Any
-    Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aAny.getValue());
 
     // get CoreReflection
     Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
@@ -3125,7 +3115,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
         // check if the interface will be supported
         OUString aClassName = xClass->getName();
         Type aClassType( xClass->getTypeClass(), aClassName.getStr() );
-        if( !x->queryInterface( aClassType ).hasValue() )
+        if( !(*x)->queryInterface( aClassType ).hasValue() )
         {
             return;
         }
@@ -3426,8 +3416,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
                         // Interface located? Then it is a class
                         if( eType == TypeClass_INTERFACE )
                         {
-                            Reference< XInterface > xIface = *static_cast<Reference< XInterface > const *>(aValue.getValue());
-                            Reference< XIdlClass > xClass( xIface, UNO_QUERY );
+                            Reference< XIdlClass > xClass( aValue, UNO_QUERY );
                             if( xClass.is() )
                             {
                                 pRes = new SbxVariable( SbxVARIANT );

@@ -3691,8 +3691,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
 
                         if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
                         {
-                            Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aAny.getValue());
-                            Reference< XDefaultMethod > xDfltMethod( x, UNO_QUERY );
+                            Reference< XDefaultMethod > xDfltMethod( aAny, UNO_QUERY );
 
                             OUString sDefaultMethod;
                             if ( xDfltMethod.is() )
@@ -3820,8 +3819,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 
                     if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
                     {
-                        Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aAny.getValue());
-                        Reference< XIndexAccess > xIndexAccess( x, UNO_QUERY );
+                        Reference< XIndexAccess > xIndexAccess( aAny, UNO_QUERY );
                         if ( !bVBAEnabled )
                         {
                             if( xIndexAccess.is() )
@@ -3839,11 +3837,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 try
                                 {
                                     Any aAny2 = xIndexAccess->getByIndex( nIndex );
-                                    TypeClass eType = aAny2.getValueType().getTypeClass();
-                                    if( eType == TypeClass_INTERFACE )
-                                    {
-                                        xRet = *static_cast<Reference< XInterface > const *>(aAny2.getValue());
-                                    }
+                                    aAny2 >>= xRet;
                                 }
                                 catch (const IndexOutOfBoundsException&)
                                 {
@@ -3877,6 +3871,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             //      "
                             //   val = rst1("FirstName")
                             // has the default 'Fields' member between rst1 and '("FirstName")'
+                            Any x = aAny;
                             SbxVariable* pDflt = getDefaultProp( pElem );
                             if ( pDflt )
                             {
@@ -3890,7 +3885,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                         Any aUnoAny = pUnoObj->getUnoAny();
 
                                         if( aUnoAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
-                                            x = *static_cast<Reference< XInterface > const *>(aUnoAny.getValue());
+                                            x = aUnoAny;
                                         pElem = pDflt;
                                     }
                                 }
