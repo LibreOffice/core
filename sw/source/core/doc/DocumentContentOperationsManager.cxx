@@ -122,6 +122,23 @@ namespace
         return false;
     }
 
+    SwNodeIndex InitDelCount(SwPaM const& rSourcePaM, sal_uLong & rDelCount)
+    {
+        SwNodeIndex const& rStart(rSourcePaM.Start()->nNode);
+        // Special handling for SwDoc::AppendDoc
+        if (rSourcePaM.GetDoc()->GetNodes().GetEndOfExtras().GetIndex() + 1
+                == rStart.GetIndex())
+        {
+            rDelCount = 1;
+            return SwNodeIndex(rStart, +1);
+        }
+        else
+        {
+            rDelCount = 0;
+            return SwNodeIndex(rStart);
+        }
+    }
+
     /*
         The lcl_CopyBookmarks function has to copy bookmarks from the source to the destination nodes
         array. It is called after a call of the CopyNodes(..) function. But this function does not copy
@@ -133,7 +150,6 @@ namespace
         of "non-copy" nodes between rPam.Start() and rLastIdx.
         nNewIdx is the new position of interest.
     */
-
     void lcl_NonCopyCount( const SwPaM& rPam, SwNodeIndex& rLastIdx, const sal_uLong nNewIdx, sal_uLong& rDelCount )
     {
         sal_uLong nStart = rPam.Start()->nNode.GetIndex();
@@ -141,18 +157,14 @@ namespace
         if( rLastIdx.GetIndex() < nNewIdx ) // Moving forward?
         {
             // We never copy the StartOfContent node
-            // Special handling for SwDoc::AppendDoc
-            if( rPam.GetDoc()->GetNodes().GetEndOfExtras().GetIndex() + 1 == nStart )
-            {
-                ++rDelCount;
-                ++rLastIdx;
-            }
             do // count "non-copy" nodes
             {
                 SwNode& rNode = rLastIdx.GetNode();
                 if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
                     || ( rNode.IsEndNode() && rNode.StartOfSectionNode()->GetIndex() < nStart ) )
+                {
                     ++rDelCount;
+                }
                 ++rLastIdx;
             }
             while( rLastIdx.GetIndex() < nNewIdx );
@@ -165,7 +177,9 @@ namespace
                 SwNode& rNode = rLastIdx.GetNode();
                 if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
                     || ( rNode.IsEndNode() && rNode.StartOfSectionNode()->GetIndex() < nStart ) )
+                {
                     --rDelCount;
+                }
                 rLastIdx--;
             }
         }
@@ -233,8 +247,8 @@ namespace
             }
         }
         // We have to count the "non-copied" nodes..
-        SwNodeIndex aCorrIdx(rStt.nNode);
-        sal_uLong nDelCount = 0;
+        sal_uLong nDelCount;
+        SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
         for(mark_vector_t::const_iterator ppMark = vMarksToCopy.begin();
             ppMark != vMarksToCopy.end();
             ++ppMark)
@@ -254,12 +268,9 @@ namespace
                 aTmpPam,
                 pMark->GetName(),
                 IDocumentMarkAccess::GetType(*pMark));
-            if (pNewMark)
-            {
-                // Explicitly try to get exactly the same name as in the source
-                // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
-                pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
-            }
+            // Explicitly try to get exactly the same name as in the source
+            // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
+            pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
 
             // copying additional attributes for bookmarks or fieldmarks
             ::sw::mark::IBookmark* const pNewBookmark =
@@ -310,8 +321,8 @@ namespace
             std::unique_ptr<SwPaM> pDelPam;
             const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
             // We have to count the "non-copied" nodes
-            sal_uLong nDelCount = 0;
-            SwNodeIndex aCorrIdx( pStt->nNode );
+            sal_uLong nDelCount;
+            SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
 
             sal_uInt16 n = 0;
             pSrcDoc->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
