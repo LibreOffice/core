@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vector>
 
 namespace vcl { class Window; }
 class ResId;
