@@ -2040,6 +2040,14 @@ AC_ARG_WITH(export-validation,
          See https://cgit.freedesktop.org/libreoffice/contrib/dev-tools/tree/export-validation]),
 ,)
 
+AC_ARG_WITH(bffvalidator,
+    AS_HELP_STRING([--with-bffvalidator=<absolute path to BFFValidator>],
+        [Enables export validation for Microsoft Binary formats (doc, xls, ppt).
+         Requires installed Microsoft Office Binary File Format Validator.
+         Note: export-validation (--with-export-validation) is required to be turned on.
+         See https://www.microsoft.com/en-us/download/details.aspx?id=26794]),
+,with_bffvalidator=no)
+
 AC_ARG_WITH(junit,
     AS_HELP_STRING([--with-junit=<absolute path to JUnit 4 jar>],
         [Specifies the JUnit 4 jar file to use for JUnit-based tests.
@@ -2772,6 +2780,37 @@ if test "$with_export_validation" = yes; then
         AC_MSG_ERROR([officeotron too old])
     fi
     AC_SUBST(OFFICEOTRON)
+
+else
+    AC_MSG_RESULT([no])
+fi
+
+AC_MSG_CHECKING([for Microsoft Binary File Format Validator])
+if test "$with_bffvalidator" != "no"; then
+    AC_DEFINE(HAVE_BFFVALIDATOR)
+
+    if test "$with_export_validation" != "yes"; then
+        AC_MSG_ERROR([Please enable export validation (-with-export-validation)!])
+    fi
+
+    if test "$with_bffvalidator" = "yes"; then
+        BFFVALIDATOR=`win_short_path_for_make "$PROGRAMFILES/Microsoft Office/BFFValidator/BFFValidator.exe"`
+    else
+        BFFVALIDATOR="$with_bffvalidator"
+    fi
+
+    if test "$build_os" = "cygwin"; then
+        if test -n "$BFFVALIDATOR" -a -e "`cygpath $BFFVALIDATOR`"; then
+            AC_MSG_RESULT($BFFVALIDATOR)
+        else
+            AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
+        fi
+    elif test -n "$BFFVALIDATOR" -a -e "$BFFVALIDATOR"; then
+        AC_MSG_RESULT($BFFVALIDATOR)
+    else
+        AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
+    fi
+    AC_SUBST(BFFVALIDATOR)
 else
     AC_MSG_RESULT([no])
 fi
