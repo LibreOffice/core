@@ -5849,10 +5849,18 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
 
 void ScGridWindow::updateLibreOfficeKitCellCursor()
 {
-    ScDocument* pDoc = pViewData->GetDocument();
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     OString aCursor = getCellCursor(pViewData->GetZoomX(), pViewData->GetZoomY());
-    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
+    if (comphelper::LibreOfficeKit::isViewCallback())
+    {
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
+    }
+    else
+    {
+        ScDocument* pDoc = pViewData->GetDocument();
+        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
+    }
 }
 
 void ScGridWindow::CursorChanged()
@@ -5895,9 +5903,17 @@ void ScGridWindow::UpdateAllOverlays()
 
 void ScGridWindow::DeleteCursorOverlay()
 {
-    ScDocument* pDoc = pViewData->GetDocument();
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
+    if (comphelper::LibreOfficeKit::isViewCallback())
+    {
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
+    }
+    else
+    {
+        ScDocument* pDoc = pViewData->GetDocument();
+        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
+    }
     mpOOCursors.reset();
 }
 
@@ -6254,8 +6270,16 @@ void ScGridWindow::UpdateSelectionOverlay()
     }
     else
     {
-        ScDocument* pDoc = pViewData->GetDocument();
-        pDoc->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+        if (comphelper::LibreOfficeKit::isViewCallback())
+        {
+            ScTabViewShell* pViewShell = pViewData->GetViewShell();
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+        }
+        else
+        {
+            ScDocument* pDoc = pViewData->GetDocument();
+            pDoc->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+        }
     }
 
     if ( aOldMode != aDrawMode )

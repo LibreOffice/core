@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include <svx/svdview.hxx>
 #include "tabvwsh.hxx"
@@ -1102,7 +1103,13 @@ void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
         sRectangle = aRectangle.toString();
     }
 
-    pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    if (comphelper::LibreOfficeKit::isViewCallback())
+    {
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    }
+    else
+        pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
