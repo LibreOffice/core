@@ -600,7 +600,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
     if (!ValidColRowOrReplicated( nC, nR ))
     {
         OSL_FAIL("ScMatrixImpl::GetString: dimension error");
-        return OUString();
+        return svl::SharedString::getEmptyString();
     }
 
     double fVal = 0.0;
@@ -608,7 +608,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
     switch (maMat.get_type(aPos))
     {
         case mdds::mtm::element_string:
-            return maMat.get_string(aPos).getString();
+            return maMat.get_string(aPos);
         case mdds::mtm::element_empty:
         {
             if (maMatFlag.get_numeric(nR, nC) != SC_MATFLAG_EMPTYPATH)
@@ -621,7 +621,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
             OUString aStr;
             Color* pColor = nullptr;
             rFormatter.GetOutputString( 0.0, nKey, aStr, &pColor);
-            return aStr;
+            return svl::SharedString( aStr);    // string not interned
         }
         case mdds::mtm::element_numeric:
         case mdds::mtm::element_boolean:
@@ -635,14 +635,14 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
     if (nError)
     {
         SetErrorAtInterpreter( nError);
-        return ScGlobal::GetErrorString( nError);
+        return svl::SharedString( ScGlobal::GetErrorString( nError));   // string not interned
     }
 
     sal_uLong nKey = rFormatter.GetStandardFormat( css::util::NumberFormat::NUMBER,
             ScGlobal::eLnge);
     OUString aStr;
     rFormatter.GetInputLineString( fVal, nKey, aStr);
-    return aStr;
+    return svl::SharedString( aStr);    // string not interned
 }
 
 ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const

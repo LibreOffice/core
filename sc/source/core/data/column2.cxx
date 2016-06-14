@@ -2026,13 +2026,14 @@ formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
         case sc::element_type_string:
         {
             const svl::SharedString& rSS = sc::string_block::at(*it->data, aPos.second);
-            return formula::FormulaTokenRef(new formula::FormulaStringToken(rSS.getString()));
+            return formula::FormulaTokenRef(new formula::FormulaStringToken(rSS));
         }
         case sc::element_type_edittext:
         {
             const EditTextObject* pText = sc::edittext_block::at(*it->data, aPos.second);
             OUString aStr = ScEditUtil::GetString(*pText, pDocument);
-            return formula::FormulaTokenRef(new formula::FormulaStringToken(aStr));
+            svl::SharedString aSS( pDocument->GetSharedStringPool().intern(aStr));
+            return formula::FormulaTokenRef(new formula::FormulaStringToken(aSS));
         }
         case sc::element_type_empty:
         default:

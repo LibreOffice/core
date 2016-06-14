@@ -473,7 +473,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                 if (n < maExtNames.size())
                 {
                     const ExtName& r = maExtNames[n];
-                    pScToken->AddExternalName(r.mnFileId, r.maName);
+                    pScToken->AddExternalName(r.mnFileId, svl::SharedString( r.maName));    // string not interned
                 }
                 else
                     bRet = false;
@@ -485,7 +485,8 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                 if (n < maExtCellRefs.size())
                 {
                     const ExtCellRef& r = maExtCellRefs[n];
-                    pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
+                    pScToken->AddExternalSingleReference(r.mnFileId, svl::SharedString( r.maTabName),
+                            r.maRef); // string not interned
                 }
                 else
                     bRet = false;
@@ -497,7 +498,8 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                 if (n < maExtAreaRefs.size())
                 {
                     const ExtAreaRef& r = maExtAreaRefs[n];
-                    pScToken->AddExternalDoubleReference(r.mnFileId, r.maTabName, r.maRef);
+                    pScToken->AddExternalDoubleReference(r.mnFileId, svl::SharedString( r.maTabName),
+                            r.maRef);   // string not interned
                 }
                 else
                     bRet = false;

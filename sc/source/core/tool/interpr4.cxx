@@ -1737,7 +1737,8 @@ void ScInterpreter::PushExternalSingleRef(
     {
         ScSingleRefData aRef;
         aRef.InitAddress(ScAddress(nCol,nRow,nTab));
-        PushTempTokenWithoutError( new ScExternalSingleRefToken(nFileId, rTabName, aRef)) ;
+        PushTempTokenWithoutError( new ScExternalSingleRefToken(nFileId,
+                    pDok->GetSharedStringPool().intern( rTabName), aRef)) ;
     }
 }
 
@@ -1749,7 +1750,8 @@ void ScInterpreter::PushExternalDoubleRef(
     {
         ScComplexRefData aRef;
         aRef.InitRange(ScRange(nCol1,nRow1,nTab1,nCol2,nRow2,nTab2));
-        PushTempTokenWithoutError( new ScExternalDoubleRefToken(nFileId, rTabName, aRef) );
+        PushTempTokenWithoutError( new ScExternalDoubleRefToken(nFileId,
+                    pDok->GetSharedStringPool().intern( rTabName), aRef) );
     }
 }
 

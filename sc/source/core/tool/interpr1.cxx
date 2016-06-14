@@ -2356,7 +2356,7 @@ void ScInterpreter::ScCellExternal()
     {
         // ODF 1.2 says we need to always display address using the ODF A1 grammar.
         ScTokenArray aArray;
-        aArray.AddExternalSingleReference(nFileId, aTabName, aRef);
+        aArray.AddExternalSingleReference(nFileId, svl::SharedString( aTabName), aRef); // string not interned
         ScCompiler aComp(pDok, aPos, aArray);
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_ODFF_A1);
         OUString aStr;

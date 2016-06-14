@@ -904,12 +904,12 @@ FormulaToken* FormulaTokenArray::AddExternal( const OUString& rStr,
 
 FormulaToken* FormulaTokenArray::AddBad( const OUString& rStr )
 {
-    return Add( new FormulaStringOpToken( ocBad, rStr ) );
+    return Add( new FormulaStringOpToken( ocBad, svl::SharedString( rStr ) ) ); // string not interned
 }
 
 FormulaToken* FormulaTokenArray::AddStringXML( const OUString& rStr )
 {
-    return Add( new FormulaStringOpToken( ocStringXML, rStr ) );
+    return Add( new FormulaStringOpToken( ocStringXML, svl::SharedString( rStr ) ) );   // string not interned
 }
 
 

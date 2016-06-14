@@ -609,7 +609,7 @@ void XclImpSupbookTab::LoadCachedValues(const ScExternalRefCache::TableTypeRef& 
             case EXC_CACHEDVAL_STRING:
             {
                 const OUString& rStr = pCrn->GetString();
-                ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(rStr));
+                ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken( svl::SharedString( rStr)));    // string not interned
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;

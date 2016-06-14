@@ -125,7 +125,7 @@ svl::SharedString ScSimpleFormulaCalculator::GetString()
     Calculate();
 
     if (mbMatrixResult)
-        return maMatrixFormulaResult;
+        return svl::SharedString( maMatrixFormulaResult);   // string not interned
 
     if ((!mpCode->GetCodeError() || mpCode->GetCodeError() == formula::errDoubleRef) &&
             !maResult.GetResultError())

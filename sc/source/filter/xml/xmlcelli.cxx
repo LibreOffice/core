@@ -1444,7 +1444,8 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                         if (!IsPossibleErrorString())
                         {
                             pFCell->SetResultMatrix(
-                                nMatrixCols, nMatrixRows, pMat, new formula::FormulaStringToken(*maStringValue));
+                                    nMatrixCols, nMatrixRows, pMat, new formula::FormulaStringToken(
+                                        rXMLImport.GetDocument()->GetSharedStringPool().intern( *maStringValue)));
                             pFCell->ResetDirty();
                         }
                     }

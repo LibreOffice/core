@@ -418,17 +418,17 @@ FormulaToken* ScRawToken::CreateToken() const
                 return new FormulaIndexToken( eOp, name.nIndex, name.nSheet);
         case svExternalSingleRef:
             {
-                OUString aTabName(extref.cTabName);
+                svl::SharedString aTabName( OUString( extref.cTabName));    // string not interned
                 return new ScExternalSingleRefToken(extref.nFileId, aTabName, extref.aRef.Ref1);
             }
         case svExternalDoubleRef:
             {
-                OUString aTabName(extref.cTabName);
+                svl::SharedString aTabName( OUString( extref.cTabName));    // string not interned
                 return new ScExternalDoubleRefToken(extref.nFileId, aTabName, extref.aRef);
             }
         case svExternalName:
             {
-                OUString aName(extname.cName);
+                svl::SharedString aName( OUString( extname.cName));         // string not interned
                 return new ScExternalNameToken( extname.nFileId, aName );
             }
         case svJump :
@@ -1251,7 +1251,7 @@ bool ScTokenArray::AddFormulaToken(
                                     ScSingleRefData aSingleRef;
                                     // convert column/row settings, set sheet index to absolute
                                     lcl_ExternalRefToCalc( aSingleRef, aApiSRef );
-                                    AddExternalSingleReference( nFileId, aTabName, aSingleRef );
+                                    AddExternalSingleReference( nFileId, rSPool.intern( aTabName), aSingleRef );
                                 }
                                 else
                                     bError = true;
@@ -1270,7 +1270,7 @@ bool ScTokenArray::AddFormulaToken(
                                     // NOTE: This assumes that cached sheets are in consecutive order!
                                     aComplRef.Ref2.SetAbsTab(
                                         aComplRef.Ref1.Tab() + static_cast<SCTAB>(aApiCRef.Reference2.Sheet - aApiCRef.Reference1.Sheet));
-                                    AddExternalDoubleReference( nFileId, aTabName, aComplRef );
+                                    AddExternalDoubleReference( nFileId, rSPool.intern( aTabName), aComplRef );
                                 }
                                 else
                                     bError = true;
@@ -1278,7 +1278,7 @@ bool ScTokenArray::AddFormulaToken(
                             else if( aApiExtRef.Reference >>= aName )
                             {
                                 if( !aName.isEmpty() )
-                                    AddExternalName( nFileId, aName );
+                                    AddExternalName( nFileId, rSPool.intern( aName) );
                                 else
                                     bError = true;
                             }
@@ -2080,17 +2080,19 @@ FormulaToken* ScTokenArray::AddDBRange( sal_uInt16 n )
     return Add( new FormulaIndexToken( ocDBArea, n));
 }
 
-FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const OUString& rName )
+FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const svl::SharedString& rName )
 {
     return Add( new ScExternalNameToken(nFileId, rName) );
 }
 
-void ScTokenArray::AddExternalSingleReference( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef )
+void ScTokenArray::AddExternalSingleReference( sal_uInt16 nFileId, const svl::SharedString& rTabName,
+        const ScSingleRefData& rRef )
 {
     Add( new ScExternalSingleRefToken(nFileId, rTabName, rRef) );
 }
 
-FormulaToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef )
+FormulaToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, const svl::SharedString& rTabName,
+        const ScComplexRefData& rRef )
 {
     return Add( new ScExternalDoubleRefToken(nFileId, rTabName, rRef) );
 }
@@ -2105,9 +2107,10 @@ void ScTokenArray::AssignXMLString( const OUString &rText, const OUString &rForm
     sal_uInt16 nTokens = 1;
     FormulaToken *aTokens[2];
 
-    aTokens[0] = new FormulaStringOpToken( ocStringXML, rText );
+    aTokens[0] = new FormulaStringOpToken( ocStringXML, svl::SharedString( rText) );    // string not interned
     if( !rFormulaNmsp.isEmpty() )
-        aTokens[ nTokens++ ] = new FormulaStringOpToken( ocStringXML, rFormulaNmsp );
+        aTokens[ nTokens++ ] = new FormulaStringOpToken( ocStringXML,
+                svl::SharedString( rFormulaNmsp) );   // string not interned
 
     Assign( nTokens, aTokens );
 }
@@ -2400,7 +2403,8 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
                     OUString aTabName;
                     sal_uInt16 nFileId;
                     GetExternalTableData(pOldDoc, pNewDoc, rRef1.Tab(), aTabName, nFileId);
-                    ReplaceToken( j, new ScExternalDoubleRefToken(nFileId, aTabName, rRef), CODE_AND_RPN);
+                    ReplaceToken( j, new ScExternalDoubleRefToken(nFileId, svl::SharedString( aTabName), rRef),
+                            CODE_AND_RPN);  // string not interned (pNewDoc would have to be non-const)
                     // ATTENTION: rRef can't be used after this point
                 }
             }
@@ -2417,7 +2421,8 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
                     OUString aTabName;
                     sal_uInt16 nFileId;
                     GetExternalTableData(pOldDoc, pNewDoc, rRef.Tab(), aTabName, nFileId);
-                    ReplaceToken( j, new ScExternalSingleRefToken(nFileId, aTabName, rRef), CODE_AND_RPN);
+                    ReplaceToken( j, new ScExternalSingleRefToken(nFileId, svl::SharedString( aTabName), rRef),
+                            CODE_AND_RPN);  // string not interned (pNewDoc would have to be non-const)
                     // ATTENTION: rRef can't be used after this point
                 }
             }

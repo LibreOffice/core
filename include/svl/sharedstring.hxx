@@ -25,7 +25,7 @@ public:
 
     SharedString();
     SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
-    SharedString( const OUString& rStr );
+    explicit SharedString( const OUString& rStr );
     SharedString( const SharedString& r );
     ~SharedString();
 
