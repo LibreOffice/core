@@ -59,14 +59,11 @@ using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
-static SvtPrintOptions_Impl*   pPrinterOptionsDataContainer = nullptr;
-static SvtPrintOptions_Impl*   pPrintFileOptionsDataContainer = nullptr;
-
-SvtPrintOptions_Impl*   SvtPrinterOptions::m_pStaticDataContainer = nullptr;
-sal_Int32               SvtPrinterOptions::m_nRefCount = 0;
-
-SvtPrintOptions_Impl*   SvtPrintFileOptions::m_pStaticDataContainer = nullptr;
-sal_Int32               SvtPrintFileOptions::m_nRefCount = 0;
+namespace{
+    //global
+    std::weak_ptr<SvtPrintOptions_Impl>   g_pPrinterOptions;
+    std::weak_ptr<SvtPrintOptions_Impl>   g_pPrintFileOptions;
+}
 
 class SvtPrintOptions_Impl
 {
@@ -98,18 +95,12 @@ public:
     void        SetConvertToGreyscales( bool bState ) ;
     void        SetPDFAsStandardPrintJobFormat( bool bState ) ;
 
-
 //  private API
-
-
 private:
     void impl_setValue (const OUString& sProp, bool bNew );
     void impl_setValue (const OUString& sProp, sal_Int16 nNew );
 
-
 //  private member
-
-
 private:
        css::uno::Reference< css::container::XNameAccess > m_xCfg;
     css::uno::Reference< css::container::XNameAccess > m_xNode;
@@ -498,7 +489,6 @@ void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp,
 }
 
 SvtBasePrintOptions::SvtBasePrintOptions()
-    : m_pDataContainer(nullptr)
 {
 }
 
@@ -531,133 +521,133 @@ Mutex& SvtBasePrintOptions::GetOwnStaticMutex()
 bool SvtBasePrintOptions::IsReduceTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsReduceTransparency();
+    return m_pImpl->IsReduceTransparency();
 }
 
 sal_Int16 SvtBasePrintOptions::GetReducedTransparencyMode() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetReducedTransparencyMode();
+    return m_pImpl->GetReducedTransparencyMode();
 }
 
 bool SvtBasePrintOptions::IsReduceGradients() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsReduceGradients();
+    return m_pImpl->IsReduceGradients();
 }
 
 sal_Int16 SvtBasePrintOptions::GetReducedGradientMode() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetReducedGradientMode();
+    return m_pImpl->GetReducedGradientMode();
 }
 
 sal_Int16 SvtBasePrintOptions::GetReducedGradientStepCount() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetReducedGradientStepCount();
+    return m_pImpl->GetReducedGradientStepCount();
 }
 
 bool SvtBasePrintOptions::IsReduceBitmaps() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsReduceBitmaps();
+    return m_pImpl->IsReduceBitmaps();
 }
 
 sal_Int16 SvtBasePrintOptions::GetReducedBitmapMode() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetReducedBitmapMode();
+    return m_pImpl->GetReducedBitmapMode();
 }
 
 sal_Int16 SvtBasePrintOptions::GetReducedBitmapResolution() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetReducedBitmapResolution();
+    return m_pImpl->GetReducedBitmapResolution();
 }
 
 bool SvtBasePrintOptions::IsReducedBitmapIncludesTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsReducedBitmapIncludesTransparency();
+    return m_pImpl->IsReducedBitmapIncludesTransparency();
 }
 
 bool SvtBasePrintOptions::IsConvertToGreyscales() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsConvertToGreyscales();
+    return m_pImpl->IsConvertToGreyscales();
 }
 
 bool SvtBasePrintOptions::IsPDFAsStandardPrintJobFormat() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsPDFAsStandardPrintJobFormat();
+    return m_pImpl->IsPDFAsStandardPrintJobFormat();
 }
 
 void SvtBasePrintOptions::SetReduceTransparency( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetReduceTransparency( bState ) ;
+    m_pImpl->SetReduceTransparency( bState ) ;
 }
 
 void SvtBasePrintOptions::SetReducedTransparencyMode( sal_Int16 nMode )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetReducedTransparencyMode( nMode );
+    m_pImpl->SetReducedTransparencyMode( nMode );
 }
 
 void SvtBasePrintOptions::SetReduceGradients( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetReduceGradients( bState );
+    m_pImpl->SetReduceGradients( bState );
 }
 
 void SvtBasePrintOptions::SetReducedGradientMode( sal_Int16 nMode )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetReducedGradientMode( nMode );
+    m_pImpl->SetReducedGradientMode( nMode );
 }
 
 void SvtBasePrintOptions::SetReducedGradientStepCount( sal_Int16 nStepCount )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetReducedGradientStepCount( nStepCount );
+    m_pImpl->SetReducedGradientStepCount( nStepCount );
 }
 
 void SvtBasePrintOptions::SetReduceBitmaps( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetReduceBitmaps( bState );
+    m_pImpl->SetReduceBitmaps( bState );
 }
 
 void SvtBasePrintOptions::SetReducedBitmapMode( sal_Int16 nMode )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetReducedBitmapMode( nMode );
+    m_pImpl->SetReducedBitmapMode( nMode );
 }
 
 void SvtBasePrintOptions::SetReducedBitmapResolution( sal_Int16 nResolution )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetReducedBitmapResolution( nResolution );
+    m_pImpl->SetReducedBitmapResolution( nResolution );
 }
 
 void SvtBasePrintOptions::SetReducedBitmapIncludesTransparency( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetReducedBitmapIncludesTransparency( bState );
+    m_pImpl->SetReducedBitmapIncludesTransparency( bState );
 }
 
 void SvtBasePrintOptions::SetConvertToGreyscales( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetConvertToGreyscales( bState );
+    m_pImpl->SetConvertToGreyscales( bState );
 }
 
 void SvtBasePrintOptions::SetPDFAsStandardPrintJobFormat( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetPDFAsStandardPrintJobFormat( bState );
+    m_pImpl->SetPDFAsStandardPrintJobFormat( bState );
 }
 
 void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
@@ -713,69 +703,47 @@ SvtPrinterOptions::SvtPrinterOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already!
-    if( m_pStaticDataContainer == nullptr )
+
+    m_pImpl = g_pPrinterOptions.lock();
+    if( !m_pImpl )
     {
         OUString aRootPath( ROOTNODE_START );
-        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += "/Printer" );
-        pPrinterOptionsDataContainer = m_pStaticDataContainer;
+        m_pImpl = std::make_shared<SvtPrintOptions_Impl>( aRootPath += "/Printer" );
+        g_pPrinterOptions = m_pImpl;
         svtools::ItemHolder2::holdConfigItem(E_PRINTOPTIONS);
     }
-
-    SetDataContainer( m_pStaticDataContainer );
 }
 
 SvtPrinterOptions::~SvtPrinterOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pStaticDataContainer;
-        m_pStaticDataContainer = nullptr;
-        pPrinterOptionsDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 SvtPrintFileOptions::SvtPrintFileOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already!
-    if( m_pStaticDataContainer == nullptr )
+
+    m_pImpl = g_pPrintFileOptions.lock();
+    if( !m_pImpl )
     {
         OUString aRootPath( ROOTNODE_START );
-        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += "/File" );
-        pPrintFileOptionsDataContainer = m_pStaticDataContainer;
+        m_pImpl = std::make_shared<SvtPrintOptions_Impl>( aRootPath += "/File" );
+        g_pPrintFileOptions = m_pImpl;
 
         svtools::ItemHolder2::holdConfigItem(E_PRINTFILEOPTIONS);
     }
-
-    SetDataContainer( m_pStaticDataContainer );
 }
 
 SvtPrintFileOptions::~SvtPrintFileOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pStaticDataContainer;
-        m_pStaticDataContainer = nullptr;
-        pPrintFileOptionsDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
