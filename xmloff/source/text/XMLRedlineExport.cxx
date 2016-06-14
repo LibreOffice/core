@@ -39,7 +39,6 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -359,22 +358,16 @@ void XMLRedlineExport::ExportChangeInline(
 void XMLRedlineExport::ExportChangedRegion(
     const Reference<XPropertySet> & rPropSet)
 {
-    // Redline-ID
-    rExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT, GetRedlineID(rPropSet));
-
     // merge-last-paragraph
     Any aAny = rPropSet->getPropertyValue(sMergeLastPara);
     if( ! *static_cast<sal_Bool const *>(aAny.getValue()) )
         rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_MERGE_LAST_PARAGRAPH,
                              XML_FALSE);
 
-    // export change region element
-    SvXMLElementExport aChangedRegion(rExport, XML_NAMESPACE_TEXT,
-                                      XML_CHANGED_REGION, true, true);
-
-
     // scope for (first) change element
     {
+        rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "2");
+        rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_PARAGRAPH);
         aAny = rPropSet->getPropertyValue(sRedlineType);
         OUString sType;
         aAny >>= sType;
@@ -485,69 +478,6 @@ void XMLRedlineExport::ExportChangeInfo(
                                           XML_DATE, true,
                                           false );
         rExport.Characters(sBuf.makeStringAndClear());
-    }
-
-    aAny = rPropSet->getPropertyValue(sRedlineType);
-    OUString sType;
-    aAny >>= sType;
-    if(sType == sFormat)
-    {
-        {
-            SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
-                                            XML_TYPE, true, false );
-            rExport.Characters("style");
-        }
-        {
-            SvXMLElementExport aNameElem( rExport, XML_NAMESPACE_DC,
-                                            XML_NAME, true, false );
-            rExport.Characters("bold");
-        }
-        {
-            SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
-                                            XML_START, true, false );
-            rExport.Characters("/");
-        }
-        {
-            SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
-                                            XML_END, true, false );
-            rExport.Characters("/");
-        }
-    }
-    else if(sType == sInsert)
-    {
-        {
-            SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
-                                            XML_TYPE, true, false );
-            rExport.Characters("text");
-        }
-        {
-            SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
-                                            XML_START, true, false );
-            rExport.Characters("/");
-        }
-        {
-            SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
-                                            XML_END, true, false );
-        }
-    }
-    else if(sType == sDelete)
-    {
-        {
-            SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
-                                            XML_TYPE, true, false );
-            rExport.Characters("paragraph");
-        }
-        {
-            SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
-                                            XML_START, true, false );
-            OUString paraPos = "2";
-            rExport.Characters("/" + paraPos);
-        }
-        {
-            SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
-                                            XML_END, true, false );
-            rExport.Characters("/");
-        }
     }
 
     // comment as <text:p> sequence

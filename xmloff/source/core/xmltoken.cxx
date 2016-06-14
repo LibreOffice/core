@@ -104,6 +104,8 @@ namespace xmloff { namespace token {
         TOKEN( "http://www.w3.org/1999/xlink/namespace",      XML_N_XLINK_OLD ),
         TOKEN( "dc",                        XML_NP_DC ),
         TOKEN( "http://purl.org/dc/elements/1.1/",      XML_N_DC ),
+        TOKEN( "c",                        XML_NP_C ),
+        TOKEN( "https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office-collab",      XML_N_C ),
         TOKEN( "svg",                       XML_NP_SVG ),
         TOKEN( "http://www.w3.org/2000/svg",      XML_N_SVG ),
         TOKEN( "form",                      XML_NP_FORM ),

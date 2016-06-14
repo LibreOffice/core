@@ -333,7 +333,7 @@ void SvXMLExport::InitCtor_()
     }
 
     // namespaces for documents
-    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT| SvXMLExportFlags::UNDO) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_DC),    GetXMLToken(XML_N_DC),      XML_NAMESPACE_DC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_TEXT),  GetXMLToken(XML_N_TEXT),    XML_NAMESPACE_TEXT );
@@ -347,6 +347,7 @@ void SvXMLExport::InitCtor_()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOW),  GetXMLToken(XML_N_OOOW),    XML_NAMESPACE_OOOW );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOC),  GetXMLToken(XML_N_OOOC),    XML_NAMESPACE_OOOC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OF),    GetXMLToken(XML_N_OF),      XML_NAMESPACE_OF );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_C),     GetXMLToken(XML_N_C),       XML_NAMESPACE_C );
 
         if (getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         {

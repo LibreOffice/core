@@ -99,6 +99,8 @@ namespace xmloff { namespace token {
         XML_N_XLINK_OLD,
         XML_NP_DC,
         XML_N_DC,
+        XML_NP_C,
+        XML_N_C,
         XML_NP_SVG,
         XML_N_SVG,
         XML_NP_FORM,
