@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_9ae26fd4",
+        "filename": "unotools/source/config/saveopt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-14T11:11:08Z",
+      "side": 1,
+      "message": "can\u0027t drop this",
+      "revId": "3d07cbfa393952019b2ad439ac3a6b877e60e278",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_bae733e3",
+        "filename": "unotools/source/config/saveopt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-14T11:11:08Z",
+      "side": 1,
+      "message": "can\u0027t drop this",
+      "revId": "3d07cbfa393952019b2ad439ac3a6b877e60e278",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_daecf7c9",
+        "filename": "unotools/source/config/saveopt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-14T11:11:08Z",
+      "side": 1,
+      "message": "the IsModifieid...Commit stuff needs to move into a destructor of the Impl class",
+      "revId": "3d07cbfa393952019b2ad439ac3a6b877e60e278",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
