@@ -283,7 +283,18 @@ public:
     static sal_uInt16 MakeHashCode( const OUString& rName );
 };
 
+typedef tools::SvRef<SbxObject> SbxObjectRef;
 typedef tools::SvRef<SbxVariable> SbxVariableRef;
+
+//tdf#59222 SbxEnsureParentVariable is a SbxVariable which keeps a reference to
+//its parent, ensuring it always exists while this SbxVariable exists
+class BASIC_DLLPUBLIC SbxEnsureParentVariable : public SbxVariable
+{
+    SbxObjectRef xParent;
+public:
+    SbxEnsureParentVariable(const SbxVariable& r);
+    virtual void SetParent(SbxObject* p) override;
+};
 
 #endif // INCLUDED_BASIC_SBXVAR_HXX
 

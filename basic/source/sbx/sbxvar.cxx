@@ -100,6 +100,21 @@ SbxVariable::SbxVariable( const SbxVariable& r )
     }
 }
 
+SbxEnsureParentVariable::SbxEnsureParentVariable(const SbxVariable& r)
+    : SbxVariable(r)
+    , xParent(const_cast<SbxVariable&>(r).GetParent())
+{
+    assert(GetParent() == xParent.get());
+}
+
+void SbxEnsureParentVariable::SetParent(SbxObject* p)
+{
+    assert(GetParent() == xParent.get());
+    SbxVariable::SetParent(p);
+    xParent = SbxObjectRef(p);
+    assert(GetParent() == xParent.get());
+}
+
 SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 {
     pCst = nullptr;
