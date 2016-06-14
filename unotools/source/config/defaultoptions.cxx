@@ -99,7 +99,7 @@ public:
     virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
 private:
-    virtual void    ImplCommit() override;
+    virtual void    ImplCommit() SAL_FINAL override;
 };
 
 // global ----------------------------------------------------------------

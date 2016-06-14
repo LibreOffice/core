@@ -46,7 +46,7 @@ private:
     static const css::uno::Sequence<OUString> GetPropertyNames();
     void                    Load();
 
-    virtual void            ImplCommit() override;
+    virtual void            ImplCommit() final override;
 
 public:
     SfxMiscCfg( );
