@@ -323,8 +323,9 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
             if ( nWeekendDays.size() != 7 )
                 return  errIllegalArgument;
 
+            // Weekend days defined by string, Sunday...Saturday
             for ( int i = 0; i < 7; i++ )
-                bWeekendMask[ i ] = ( bool ) nWeekendDays[ i ];
+                bWeekendMask[ i ] = ( bool ) nWeekendDays[ ( i == 6 ? 0 : i + 1 ) ];
         }
     }
     else
