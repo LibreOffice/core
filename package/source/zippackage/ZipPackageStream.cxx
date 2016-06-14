@@ -832,7 +832,7 @@ bool ZipPackageStream::saveChild(
                     // cores and allow 4-times the amount for having the queue well filled. The
                     // 2nd pparameter is the time to wait beweeen cleanups in 10th of a second.
                     // Both values may be added to the configuration settings if needed.
-                    static sal_Int32 nAllowedThreads(std::max(std::thread::hardware_concurrency(), 1U) * 4);
+                    static sal_Int32 nAllowedThreads(comphelper::ThreadPool::getPreferredConcurrency() * 4);
                     rZipOut.reduceScheduledThreadsToGivenNumberOrLess(nAllowedThreads, 1);
 
                     // Start a new thread deflating this zip entry
