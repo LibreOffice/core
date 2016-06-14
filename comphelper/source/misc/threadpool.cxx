@@ -10,6 +10,7 @@
 #include <comphelper/threadpool.hxx>
 
 #include <rtl/instance.hxx>
+#include <rtl/string.hxx>
 #include <algorithm>
 #include <memory>
 #include <thread>
@@ -115,7 +116,7 @@ struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPoo
                                                       ThreadPoolStatic >
 {
     std::shared_ptr< ThreadPool > operator () () {
-        sal_Int32 nThreads = std::max( std::thread::hardware_concurrency(), 1U );
+        const sal_Int32 nThreads = ThreadPool::getPreferredConcurrency();
         return std::make_shared< ThreadPool >( nThreads );
     };
 };
@@ -123,6 +124,27 @@ struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPoo
 ThreadPool& ThreadPool::getSharedOptimalPool()
 {
     return *ThreadPoolStatic::get().get();
+}
+
+sal_Int32 ThreadPool::getPreferredConcurrency()
+{
+    static sal_Int32 ThreadCount = 0;
+    if (ThreadCount == 0)
+    {
+        const sal_Int32 nHardThreads = std::max(std::thread::hardware_concurrency(), 1U);
+        sal_Int32 nThreads = nHardThreads;
+        const char *pEnv = getenv("MAX_CONCURRENCY");
+        if (pEnv != nullptr)
+        {
+            // Override with user/admin preferrence.
+            nThreads = rtl_str_toInt32(pEnv, 10);
+        }
+
+        nThreads = std::min(nHardThreads, nThreads);
+        ThreadCount = std::max<sal_Int32>(nThreads, 1);
+    }
+
+    return ThreadCount;
 }
 
 void ThreadPool::waitAndCleanupWorkers()
