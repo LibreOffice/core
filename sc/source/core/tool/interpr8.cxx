@@ -1416,16 +1416,11 @@ void ScInterpreter::ScConcat_MS()
                 ScRefCellValue aCell( *pDok, aAdr );
                 if ( !aCell.isEmpty() )
                 {
-                    if ( aCell.hasString() )
+                    if ( !aCell.hasEmptyValue() )
                     {
                         svl::SharedString aSS;
                         GetCellString( aSS, aCell);
                         aResBuf.append( aSS.getString());
-                    }
-                    else
-                    {
-                        if ( !aCell.hasEmptyValue() )
-                            aResBuf.append( OUString::number( GetCellValue( aAdr, aCell)));
                     }
                 }
             }
@@ -1462,16 +1457,11 @@ void ScInterpreter::ScConcat_MS()
                         ScRefCellValue aCell( *pDok, aAdr );
                         if ( !aCell.isEmpty() )
                         {
-                            if ( aCell.hasString() )
+                            if ( !aCell.hasEmptyValue() )
                             {
                                 svl::SharedString aSS;
                                 GetCellString( aSS, aCell);
                                 aResBuf.append( aSS.getString());
-                            }
-                            else
-                            {
-                                if ( !aCell.hasEmptyValue() )
-                                    aResBuf.append( OUString::number( GetCellValue( aAdr, aCell)));
                             }
                         }
                     }
@@ -1500,7 +1490,7 @@ void ScInterpreter::ScConcat_MS()
                                 else
                                 {
                                     if ( pMat->IsValue( j, k ) )
-                                        aResBuf.append(  OUString::number( pMat->GetDouble( j, k ) ) );
+                                        aResBuf.append( pMat->GetString( *pFormatter, j, k ).getString() );
                                 }
                             }
                         }
@@ -1544,16 +1534,11 @@ void ScInterpreter::ScTextJoin_MS()
                 ScRefCellValue aCell( *pDok, aAdr );
                 if ( !aCell.isEmpty() )
                 {
-                    if ( aCell.hasString() )
+                    if ( !aCell.hasEmptyValue() )
                     {
                         svl::SharedString aSS;
                         GetCellString( aSS, aCell);
                         aDelimiters.push_back( aSS.getString());
-                    }
-                    else
-                    {
-                        if ( !aCell.hasEmptyValue() )
-                            aDelimiters.push_back( OUString::number( GetCellValue( aAdr, aCell)));
                     }
                 }
             }
@@ -1590,16 +1575,11 @@ void ScInterpreter::ScTextJoin_MS()
                         ScRefCellValue aCell( *pDok, aAdr );
                         if ( !aCell.isEmpty() )
                         {
-                            if ( aCell.hasString() )
+                            if ( !aCell.hasEmptyValue() )
                             {
                                 svl::SharedString aSS;
                                 GetCellString( aSS, aCell);
                                 aDelimiters.push_back( aSS.getString());
-                            }
-                            else
-                            {
-                                if ( !aCell.hasEmptyValue() )
-                                    aDelimiters.push_back( OUString::number( GetCellValue( aAdr, aCell)));
                             }
                         }
                         else
@@ -1632,7 +1612,7 @@ void ScInterpreter::ScTextJoin_MS()
                                     else
                                     {
                                         if ( pMat->IsValue( j, k ) )
-                                            aDelimiters.push_back( OUString::number( pMat->GetDouble( j, k ) ) );
+                                            aDelimiters.push_back( pMat->GetString( *pFormatter, j, k ).getString() );
                                     }
                                 }
                                 else
@@ -1697,16 +1677,11 @@ void ScInterpreter::ScTextJoin_MS()
                     OUString aStr;
                     if ( !aCell.isEmpty() )
                     {
-                        if ( aCell.hasString() )
+                        if ( !aCell.hasEmptyValue() )
                         {
                             svl::SharedString aSS;
                             GetCellString( aSS, aCell);
                             aStr = aSS.getString();
-                        }
-                        else
-                        {
-                            if ( !aCell.hasEmptyValue() )
-                                aStr = OUString::number( GetCellValue( aAdr, aCell));
                         }
                     }
                     else
@@ -1761,16 +1736,11 @@ void ScInterpreter::ScTextJoin_MS()
                             ScRefCellValue aCell( *pDok, aAdr );
                             if ( !aCell.isEmpty() )
                             {
-                                if ( aCell.hasString() )
+                                if ( !aCell.hasEmptyValue() )
                                 {
                                     svl::SharedString aSS;
                                     GetCellString( aSS, aCell);
                                     aStr = aSS.getString();
-                                }
-                                else
-                                {
-                                    if ( !aCell.hasEmptyValue() )
-                                        aStr = OUString::number( GetCellValue( aAdr, aCell));
                                 }
                             }
                             else
@@ -1819,7 +1789,7 @@ void ScInterpreter::ScTextJoin_MS()
                                         else
                                         {
                                             if ( pMat->IsValue( j, k ) )
-                                                aStr = OUString::number( pMat->GetDouble( j, k ) );
+                                                aStr = pMat->GetString( *pFormatter, j, k ).getString();
                                         }
                                     }
                                     else
