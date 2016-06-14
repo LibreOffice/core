@@ -129,7 +129,7 @@ public:
      * @param rPos position of the cell to determine if the reference is in the copied area
      * @param bRangeName set for range names, range names have special handling for absolute sheet ref + relative col/row ref
      */
-    void ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName = false );
+    void ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName = false );
 
     /**
      * Make all absolute references pointing to the copied range if the range is copied too

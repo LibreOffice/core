@@ -2383,7 +2383,7 @@ void AdjustSingleRefData( ScSingleRefData& rRef, const ScAddress& rOldPos, const
 
 }
 
-void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName )
+void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName )
 {
     for ( sal_uInt16 j=0; j<nLen; ++j )
     {
@@ -2403,8 +2403,8 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
                     OUString aTabName;
                     sal_uInt16 nFileId;
                     GetExternalTableData(pOldDoc, pNewDoc, rRef1.Tab(), aTabName, nFileId);
-                    ReplaceToken( j, new ScExternalDoubleRefToken(nFileId, svl::SharedString( aTabName), rRef),
-                            CODE_AND_RPN);  // string not interned (pNewDoc would have to be non-const)
+                    ReplaceToken( j, new ScExternalDoubleRefToken( nFileId,
+                                pNewDoc->GetSharedStringPool().intern( aTabName), rRef), CODE_AND_RPN);
                     // ATTENTION: rRef can't be used after this point
                 }
             }
@@ -2421,8 +2421,8 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
                     OUString aTabName;
                     sal_uInt16 nFileId;
                     GetExternalTableData(pOldDoc, pNewDoc, rRef.Tab(), aTabName, nFileId);
-                    ReplaceToken( j, new ScExternalSingleRefToken(nFileId, svl::SharedString( aTabName), rRef),
-                            CODE_AND_RPN);  // string not interned (pNewDoc would have to be non-const)
+                    ReplaceToken( j, new ScExternalSingleRefToken( nFileId,
+                                pNewDoc->GetSharedStringPool().intern( aTabName), rRef), CODE_AND_RPN);
                     // ATTENTION: rRef can't be used after this point
                 }
             }
