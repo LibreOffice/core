@@ -56,8 +56,8 @@ namespace slideshow
 
         bool ViewShape::prefetch( RendererCacheEntry&                   io_rCacheEntry,
                                   const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
-                                  const GDIMetaFileSharedPtr&           rMtf,
-                                  const ShapeAttributeLayerSharedPtr&   rAttr )
+                                  const std::shared_ptr< GDIMetaFile >& rMtf,
+                                  const std::shared_ptr< ShapeAttributeLayer >& rAttr )
         {
             ENSURE_OR_RETURN_FALSE( rMtf,
                                "ViewShape::prefetch(): no valid metafile!" );
@@ -174,8 +174,8 @@ namespace slideshow
         }
 
         bool ViewShape::draw( const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
-                              const GDIMetaFileSharedPtr&           rMtf,
-                              const ShapeAttributeLayerSharedPtr&   rAttr,
+                              const std::shared_ptr< GDIMetaFile >& rMtf,
+                              const std::shared_ptr< ShapeAttributeLayer >& rAttr,
                               const ::basegfx::B2DHomMatrix&        rTransform,
                               const ::basegfx::B2DPolyPolygon*      pClip,
                               const VectorOfDocTreeNodes&           rSubsets ) const
@@ -269,7 +269,7 @@ namespace slideshow
             ::basegfx::B2DRectangle calcUpdateAreaPixel( const ::basegfx::B2DRectangle&         rUnitBounds,
                                                          const ::basegfx::B2DHomMatrix&         rShapeTransformation,
                                                          const ::basegfx::B2DHomMatrix&         rCanvasTransformation,
-                                                         const ShapeAttributeLayerSharedPtr&    pAttr                   )
+                                                         const std::shared_ptr< ShapeAttributeLayer >& pAttr                   )
             {
                 // calc update area for whole shape (including
                 // character scaling)
@@ -281,12 +281,12 @@ namespace slideshow
         }
 
         bool ViewShape::renderSprite( const ViewLayerSharedPtr&             rViewLayer,
-                                      const GDIMetaFileSharedPtr&           rMtf,
+                                      const std::shared_ptr< GDIMetaFile >& rMtf,
                                       const ::basegfx::B2DRectangle&        rOrigBounds,
                                       const ::basegfx::B2DRectangle&        rBounds,
                                       const ::basegfx::B2DRectangle&        rUnitBounds,
                                       int                                   nUpdateFlags,
-                                      const ShapeAttributeLayerSharedPtr&   pAttr,
+                                      const std::shared_ptr< ShapeAttributeLayer >& pAttr,
                                       const VectorOfDocTreeNodes&           rSubsets,
                                       double                                nPrio,
                                       bool                                  bIsVisible ) const
@@ -500,11 +500,11 @@ namespace slideshow
         }
 
         bool ViewShape::render( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
-                                const GDIMetaFileSharedPtr&         rMtf,
+                                const std::shared_ptr< GDIMetaFile >& rMtf,
                                 const ::basegfx::B2DRectangle&      rBounds,
                                 const ::basegfx::B2DRectangle&      rUpdateBounds,
                                 int                                 nUpdateFlags,
-                                const ShapeAttributeLayerSharedPtr& pAttr,
+                                const std::shared_ptr< ShapeAttributeLayer >& pAttr,
                                 const VectorOfDocTreeNodes&         rSubsets,
                                 bool                                bIsVisible ) const
         {
@@ -763,8 +763,8 @@ namespace slideshow
         }
 
         ::cppcanvas::RendererSharedPtr ViewShape::getRenderer( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                                                               const GDIMetaFileSharedPtr&          rMtf,
-                                                               const ShapeAttributeLayerSharedPtr&  rAttr ) const
+                                                               const std::shared_ptr< GDIMetaFile >& rMtf,
+                                                               const std::shared_ptr< ShapeAttributeLayer >& rAttr ) const
         {
             // lookup destination canvas - is there already a renderer
             // created for that target?
@@ -830,7 +830,7 @@ namespace slideshow
             mbForceUpdate   = true;
         }
 
-        bool ViewShape::update( const GDIMetaFileSharedPtr& rMtf,
+        bool ViewShape::update( const std::shared_ptr< GDIMetaFile >& rMtf,
                                 const RenderArgs&           rArgs,
                                 int                         nUpdateFlags,
                                 bool                        bIsVisible ) const

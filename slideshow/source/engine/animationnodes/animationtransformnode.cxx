@@ -41,7 +41,7 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
 
     const sal_Int16 nTransformType( mxTransformNode->getTransformType() );
 
-    const AttributableShapeSharedPtr& rShape( getShape() );
+    const std::shared_ptr< AttributableShape >& rShape( getShape() );
 
     switch( nTransformType )
     {

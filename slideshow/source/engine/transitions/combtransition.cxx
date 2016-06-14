@@ -68,9 +68,9 @@ basegfx::B2DPolyPolygon createClipPolygon(
 }
 
 CombTransition::CombTransition(
-    boost::optional<SlideSharedPtr> const & leavingSlide,
-    const SlideSharedPtr&                   pEnteringSlide,
-    const SoundPlayerSharedPtr&             pSoundPlayer,
+    boost::optional<std::shared_ptr< Slide >> const & leavingSlide,
+    const std::shared_ptr< Slide >&         pEnteringSlide,
+    const std::shared_ptr< SoundPlayer >&   pSoundPlayer,
     const UnoViewContainer&                 rViewContainer,
     ScreenUpdater&                          rScreenUpdater,
     EventMultiplexer&                       rEventMultiplexer,
@@ -88,7 +88,7 @@ CombTransition::CombTransition(
 void CombTransition::renderComb( double           t,
                                  const ViewEntry& rViewEntry ) const
 {
-    const SlideBitmapSharedPtr& pEnteringBitmap = getEnteringBitmap(rViewEntry);
+    const std::shared_ptr< SlideBitmap >& pEnteringBitmap = getEnteringBitmap(rViewEntry);
     const cppcanvas::CanvasSharedPtr pCanvas_ = rViewEntry.mpView->getCanvas();
 
     if( !pEnteringBitmap || !pCanvas_ )
@@ -128,7 +128,7 @@ void CombTransition::renderComb( double           t,
                            enteringSizePixel,
                            mnNumStripes, 1 ) );
 
-    SlideBitmapSharedPtr const & pLeavingBitmap = getLeavingBitmap(rViewEntry);
+    std::shared_ptr< SlideBitmap > const & pLeavingBitmap = getLeavingBitmap(rViewEntry);
     if( pLeavingBitmap )
     {
         // render odd strips:

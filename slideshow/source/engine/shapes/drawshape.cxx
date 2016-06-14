@@ -77,7 +77,7 @@ namespace slideshow
         // Private methods
 
 
-        GDIMetaFileSharedPtr DrawShape::forceScrollTextMetaFile()
+        std::shared_ptr< GDIMetaFile > DrawShape::forceScrollTextMetaFile()
         {
             if ((mnCurrMtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != MTF_LOAD_SCROLL_TEXT_MTF)
             {
@@ -169,7 +169,7 @@ namespace slideshow
             if( ::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
                                  [this, &bVisible, &renderArgs, &nUpdateFlags]
-                                 ( const ViewShapeSharedPtr& pShape )
+                                 ( const std::shared_ptr< ViewShape >& pShape )
                                  { return pShape->update( this->mpCurrMtf,
                                                           renderArgs,
                                                           nUpdateFlags,
@@ -514,14 +514,14 @@ namespace slideshow
         // Public methods
 
 
-        DrawShapeSharedPtr DrawShape::create(
+        std::shared_ptr< DrawShape > DrawShape::create(
             const uno::Reference< drawing::XShape >&    xShape,
             const uno::Reference< drawing::XDrawPage >& xContainingPage,
             double                                      nPrio,
             bool                                        bForeignSource,
             const SlideShowContext&                     rContext )
         {
-            DrawShapeSharedPtr pShape( new DrawShape(xShape,
+            std::shared_ptr< DrawShape > pShape( new DrawShape(xShape,
                                                      xContainingPage,
                                                      nPrio,
                                                      bForeignSource,
@@ -546,14 +546,14 @@ namespace slideshow
             return pShape;
         }
 
-        DrawShapeSharedPtr DrawShape::create(
+        std::shared_ptr< DrawShape > DrawShape::create(
             const uno::Reference< drawing::XShape >&    xShape,
             const uno::Reference< drawing::XDrawPage >& xContainingPage,
             double                                      nPrio,
             const Graphic&                              rGraphic,
             const SlideShowContext&                     rContext )
         {
-            DrawShapeSharedPtr pShape( new DrawShape(xShape,
+            std::shared_ptr< DrawShape > pShape( new DrawShape(xShape,
                                                      xContainingPage,
                                                      nPrio,
                                                      rGraphic,
@@ -570,7 +570,7 @@ namespace slideshow
                     std::back_insert_iterator< std::vector<double> >( aTimeout ),
                     std::mem_fn(&MtfAnimationFrame::getDuration) );
 
-                WakeupEventSharedPtr pWakeupEvent(
+                std::shared_ptr< WakeupEvent > pWakeupEvent(
                     new WakeupEvent( rContext.mrEventQueue.getTimer(),
                                      rContext.mrActivitiesQueue ) );
 
@@ -621,14 +621,14 @@ namespace slideshow
             if( ::std::any_of( maViewShapes.begin(),
                                maViewShapes.end(),
                                [&rNewLayer]
-                               ( const ViewShapeSharedPtr& pShape )
+                               ( const std::shared_ptr< ViewShape >& pShape )
                                { return rNewLayer == pShape->getViewLayer(); } ) )
             {
                 // yes, nothing to do
                 return;
             }
 
-            ViewShapeSharedPtr pNewShape( new ViewShape( rNewLayer ) );
+            std::shared_ptr< ViewShape > pNewShape( new ViewShape( rNewLayer ) );
 
             maViewShapes.push_back( pNewShape );
 
@@ -656,7 +656,7 @@ namespace slideshow
             OSL_ENSURE( ::std::count_if(maViewShapes.begin(),
                                         aEnd,
                                         [&rLayer]
-                                        ( const ViewShapeSharedPtr& pShape )
+                                        ( const std::shared_ptr< ViewShape >& pShape )
                                         { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "DrawShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
@@ -665,7 +665,7 @@ namespace slideshow
             if( (aIter=::std::remove_if( maViewShapes.begin(),
                                          aEnd,
                                          [&rLayer]
-                                         ( const ViewShapeSharedPtr& pShape )
+                                         ( const std::shared_ptr< ViewShape >& pShape )
                                          { return rLayer == pShape->getViewLayer(); } ) )  == aEnd )
             {
                 // view layer seemingly was not added, failed
@@ -930,7 +930,7 @@ namespace slideshow
             {
                 // TODO(Q2): Although this _is_ currently
                 // view-agnostic, it might not stay like that.
-                ViewShapeSharedPtr const& pViewShape = maViewShapes.front();
+                std::shared_ptr< ViewShape > const& pViewShape = maViewShapes.front();
                 cppcanvas::CanvasSharedPtr const pCanvas(
                     pViewShape->getViewLayer()->getCanvas() );
 
@@ -1039,7 +1039,7 @@ namespace slideshow
         // AttributableShape methods
 
 
-        ShapeAttributeLayerSharedPtr DrawShape::createAttributeLayer()
+        std::shared_ptr< ShapeAttributeLayer > DrawShape::createAttributeLayer()
         {
             // create new layer, with last as its new child
             mpAttributeLayer.reset( new ShapeAttributeLayer( mpAttributeLayer ) );
@@ -1050,7 +1050,7 @@ namespace slideshow
             return mpAttributeLayer;
         }
 
-        bool DrawShape::revokeAttributeLayer( const ShapeAttributeLayerSharedPtr& rLayer )
+        bool DrawShape::revokeAttributeLayer( const std::shared_ptr< ShapeAttributeLayer >& rLayer )
         {
             if( !mpAttributeLayer )
                 return false; // no layers
@@ -1073,7 +1073,7 @@ namespace slideshow
             }
         }
 
-        ShapeAttributeLayerSharedPtr DrawShape::getTopmostAttributeLayer() const
+        std::shared_ptr< ShapeAttributeLayer > DrawShape::getTopmostAttributeLayer() const
         {
             return mpAttributeLayer;
         }
@@ -1103,17 +1103,17 @@ namespace slideshow
             return maSubsetting.getSubsetNode();
         }
 
-        AttributableShapeSharedPtr DrawShape::getSubset( const DocTreeNode& rTreeNode ) const
+        std::shared_ptr< AttributableShape > DrawShape::getSubset( const DocTreeNode& rTreeNode ) const
         {
             // forward to delegate
             return maSubsetting.getSubsetShape( rTreeNode );
         }
 
-        bool DrawShape::createSubset( AttributableShapeSharedPtr&   o_rSubset,
+        bool DrawShape::createSubset( std::shared_ptr< AttributableShape >& o_rSubset,
                                       const DocTreeNode&            rTreeNode )
         {
             // subset shape already created for this DocTreeNode?
-            AttributableShapeSharedPtr pSubset( maSubsetting.getSubsetShape( rTreeNode ) );
+            std::shared_ptr< AttributableShape > pSubset( maSubsetting.getSubsetShape( rTreeNode ) );
 
             // when true, this method has created a new subset
             // DrawShape
@@ -1151,7 +1151,7 @@ namespace slideshow
             return bNewlyCreated;
         }
 
-        bool DrawShape::revokeSubset( const AttributableShapeSharedPtr& rShape )
+        bool DrawShape::revokeSubset( const std::shared_ptr< AttributableShape >& rShape )
         {
             // flush bounds cache
             maCurrentShapeUnitBounds.reset();
@@ -1173,7 +1173,7 @@ namespace slideshow
                 // persistent subset, containing all text/only the
                 // background respectively. From _that_ object,
                 // generate the temporary character subset shapes.
-                const ShapeAttributeLayerSharedPtr& rAttrLayer(
+                const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer(
                     rShape->getTopmostAttributeLayer() );
                 if( rAttrLayer &&
                     rAttrLayer->isVisibilityValid() &&

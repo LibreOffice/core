@@ -30,7 +30,7 @@ class AnimationPathMotionNode : public AnimationBaseNode
 public:
     AnimationPathMotionNode(
         const css::uno::Reference<css::animations::XAnimationNode >& xNode,
-        const BaseContainerNodeSharedPtr&               rParent,
+        const std::shared_ptr< BaseContainerNode >&     rParent,
         const NodeContext&                              rContext )
         : AnimationBaseNode( xNode, rParent, rContext ),
           mxPathMotionNode( xNode, css::uno::UNO_QUERY_THROW ) {}

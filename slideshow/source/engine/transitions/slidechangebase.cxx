@@ -36,9 +36,9 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
-SlideChangeBase::SlideChangeBase( boost::optional<SlideSharedPtr> const & leavingSlide,
-                                  const SlideSharedPtr&                   pEnteringSlide,
-                                  const SoundPlayerSharedPtr&             pSoundPlayer,
+SlideChangeBase::SlideChangeBase( boost::optional<std::shared_ptr< Slide >> const & leavingSlide,
+                                  const std::shared_ptr< Slide >&         pEnteringSlide,
+                                  const std::shared_ptr< SoundPlayer >&   pSoundPlayer,
                                   const UnoViewContainer&                 rViewContainer,
                                   ScreenUpdater&                          rScreenUpdater,
                                   EventMultiplexer&                       rEventMultiplexer,
@@ -62,7 +62,7 @@ SlideChangeBase::SlideChangeBase( boost::optional<SlideSharedPtr> const & leavin
         "SlideChangeBase::SlideChangeBase(): Invalid entering slide!" );
 }
 
-SlideBitmapSharedPtr SlideChangeBase::getLeavingBitmap( const ViewEntry& rViewEntry ) const
+std::shared_ptr< SlideBitmap > SlideChangeBase::getLeavingBitmap( const ViewEntry& rViewEntry ) const
 {
     if( !rViewEntry.mpLeavingBitmap )
         rViewEntry.mpLeavingBitmap = createBitmap(rViewEntry.mpView,
@@ -71,23 +71,23 @@ SlideBitmapSharedPtr SlideChangeBase::getLeavingBitmap( const ViewEntry& rViewEn
     return rViewEntry.mpLeavingBitmap;
 }
 
-SlideBitmapSharedPtr SlideChangeBase::getEnteringBitmap( const ViewEntry& rViewEntry ) const
+std::shared_ptr< SlideBitmap > SlideChangeBase::getEnteringBitmap( const ViewEntry& rViewEntry ) const
 {
     if( !rViewEntry.mpEnteringBitmap )
         rViewEntry.mpEnteringBitmap = createBitmap( rViewEntry.mpView,
-                                                    boost::optional<SlideSharedPtr>(mpEnteringSlide) );
+                                                    boost::optional<std::shared_ptr< Slide >>(mpEnteringSlide) );
 
     return rViewEntry.mpEnteringBitmap;
 }
 
-SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&                rView,
-                                                    const boost::optional<SlideSharedPtr>& rSlide ) const
+std::shared_ptr< SlideBitmap > SlideChangeBase::createBitmap( const UnoViewSharedPtr&      rView,
+                                                    const boost::optional<std::shared_ptr< Slide >>& rSlide ) const
 {
-    SlideBitmapSharedPtr pRet;
+    std::shared_ptr< SlideBitmap > pRet;
     if( !rSlide )
         return pRet;
 
-    SlideSharedPtr const & pSlide = *rSlide;
+    std::shared_ptr< Slide > const & pSlide = *rSlide;
     if( !pSlide )
     {
         // TODO(P3): No need to generate a bitmap here. This only made
@@ -145,7 +145,7 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
 }
 
 void SlideChangeBase::renderBitmap(
-    SlideBitmapSharedPtr const & pSlideBitmap,
+    std::shared_ptr< SlideBitmap > const & pSlideBitmap,
     cppcanvas::CanvasSharedPtr const & pCanvas )
 {
     if( pSlideBitmap && pCanvas )
@@ -169,7 +169,7 @@ void SlideChangeBase::renderBitmap(
 }
 
 void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
-                                const ShapeAttributeLayerSharedPtr& )
+                                const std::shared_ptr< ShapeAttributeLayer >& )
 {
     // we're a one-shot activity, and already finished
     if( mbFinished || mbPrefetched )
@@ -186,7 +186,7 @@ void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
 }
 
 void SlideChangeBase::start( const AnimatableShapeSharedPtr&     rShape,
-                             const ShapeAttributeLayerSharedPtr& rLayer )
+                             const std::shared_ptr< ShapeAttributeLayer >& rLayer )
 {
     // we're a one-shot activity, and already finished
     if( mbFinished )
@@ -224,7 +224,7 @@ void SlideChangeBase::end()
             // fully clear view content to background color
             aCurr->mpView->clearAll();
 
-            const SlideBitmapSharedPtr pSlideBitmap( getEnteringBitmap( *aCurr ));
+            const std::shared_ptr< SlideBitmap > pSlideBitmap( getEnteringBitmap( *aCurr ));
             pSlideBitmap->clip( basegfx::B2DPolyPolygon() /* no clipping */ );
             aCurr->mpView->clearAll();
             renderBitmap( pSlideBitmap,

@@ -37,7 +37,7 @@ public:
 
     /** Add given child node to this container
      */
-    void appendChildNode( AnimationNodeSharedPtr const& pNode );
+    void appendChildNode( std::shared_ptr< AnimationNode > const& pNode );
 
 #if defined(DBG_UTIL)
     virtual void showState() const override;
@@ -56,15 +56,15 @@ private:
     // force to be implemented by derived class:
     virtual void activate_st() override = 0;
     virtual void notifyDeactivating(
-        AnimationNodeSharedPtr const& rNotifier ) override = 0;
+        std::shared_ptr< AnimationNode > const& rNotifier ) override = 0;
 
 protected:
     bool isDurationIndefinite() const { return mbDurationIndefinite; }
 
-    bool isChildNode( AnimationNodeSharedPtr const& pNode ) const;
+    bool isChildNode( std::shared_ptr< AnimationNode > const& pNode ) const;
 
     /// @return true: if all children have been deactivated
-    bool notifyDeactivatedChild( AnimationNodeSharedPtr const& pChildNode );
+    bool notifyDeactivatedChild( std::shared_ptr< AnimationNode > const& pChildNode );
 
     void repeat();
 
@@ -75,14 +75,14 @@ protected:
         VectorOfNodes::const_iterator iPos( maChildren.begin() );
         VectorOfNodes::const_iterator const iEnd( maChildren.end() );
         for ( ; iPos != iEnd; ++iPos ) {
-            AnimationNodeSharedPtr const& pNode = *iPos;
+            std::shared_ptr< AnimationNode > const& pNode = *iPos;
             if (nodeStateMask != -1 && (pNode->getState() & nodeStateMask) == 0)
                 continue;
             func(pNode);
         }
     }
 
-    typedef ::std::vector<AnimationNodeSharedPtr> VectorOfNodes;
+    typedef ::std::vector<std::shared_ptr< AnimationNode >> VectorOfNodes;
     VectorOfNodes       maChildren;
     ::std::size_t       mnFinishedChildren;
     double       mnLeftIterations;
@@ -91,7 +91,6 @@ private:
     const bool          mbDurationIndefinite;
 };
 
-typedef ::std::shared_ptr< BaseContainerNode > BaseContainerNodeSharedPtr;
 
 } // namespace interface
 } // namespace presentation

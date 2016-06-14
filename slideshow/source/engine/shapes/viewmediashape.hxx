@@ -159,7 +159,6 @@ namespace slideshow
             bool                                              mbIsSoundEnabled;
         };
 
-        typedef ::std::shared_ptr< ViewMediaShape > ViewMediaShapeSharedPtr;
 
     }
 }

@@ -78,7 +78,6 @@ namespace slideshow
             css::uno::Reference< css::rendering::XBitmap >          mxBitmap;
         };
 
-        typedef ::std::shared_ptr< SlideBitmap > SlideBitmapSharedPtr;
     }
 }
 

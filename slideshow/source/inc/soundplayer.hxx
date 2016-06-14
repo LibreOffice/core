@@ -101,7 +101,6 @@ namespace slideshow
             css::uno::Reference< css::media::XPlayer > mxPlayer;
         };
 
-        typedef ::std::shared_ptr< SoundPlayer > SoundPlayerSharedPtr;
     }
 }
 

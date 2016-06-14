@@ -207,26 +207,26 @@ struct EventMultiplexerImpl
         ImplMouseHandlerEntry,
         std::vector<ImplMouseHandlerEntry> >              ImplMouseHandlers;
     typedef ThreadUnsafeListenerContainer<
-        EventHandlerSharedPtr,
-        std::vector<EventHandlerSharedPtr> >              ImplEventHandlers;
+        std::shared_ptr< EventHandler >,
+        std::vector<std::shared_ptr< EventHandler >> >    ImplEventHandlers;
     typedef ThreadUnsafeListenerContainer<
         AnimationEventHandlerSharedPtr,
         std::vector<AnimationEventHandlerSharedPtr> >     ImplAnimationHandlers;
     typedef ThreadUnsafeListenerContainer<
-        PauseEventHandlerSharedPtr,
-        std::vector<PauseEventHandlerSharedPtr> >         ImplPauseHandlers;
+        std::shared_ptr< PauseEventHandler >,
+        std::vector<std::shared_ptr< PauseEventHandler >> > ImplPauseHandlers;
     typedef ThreadUnsafeListenerContainer<
-        ViewEventHandlerWeakPtr,
-        std::vector<ViewEventHandlerWeakPtr> >            ImplViewHandlers;
+        std::weak_ptr< ViewEventHandler >,
+        std::vector<std::weak_ptr< ViewEventHandler >> >  ImplViewHandlers;
     typedef ThreadUnsafeListenerContainer<
-        ViewRepaintHandlerSharedPtr,
-        std::vector<ViewRepaintHandlerSharedPtr> >        ImplRepaintHandlers;
+        std::shared_ptr< ViewRepaintHandler >,
+        std::vector<std::shared_ptr< ViewRepaintHandler >> > ImplRepaintHandlers;
     typedef ThreadUnsafeListenerContainer<
         ShapeListenerEventHandlerSharedPtr,
         std::vector<ShapeListenerEventHandlerSharedPtr> > ImplShapeListenerHandlers;
     typedef ThreadUnsafeListenerContainer<
-        UserPaintEventHandlerSharedPtr,
-        std::vector<UserPaintEventHandlerSharedPtr> >     ImplUserPaintEventHandlers;
+        std::shared_ptr< UserPaintEventHandler >,
+        std::vector<std::shared_ptr< UserPaintEventHandler >> > ImplUserPaintEventHandlers;
     typedef ThreadUnsafeListenerContainer<
         PrioritizedHandlerEntry<HyperlinkHandler>,
         std::vector<PrioritizedHandlerEntry<HyperlinkHandler> > > ImplHyperLinkHandlers;
@@ -244,7 +244,7 @@ struct EventMultiplexerImpl
                           RegisterFunction                  pRegisterListener );
 
     static bool notifyAllAnimationHandlers( ImplAnimationHandlers const& rContainer,
-                                     AnimationNodeSharedPtr const& rNode );
+                                     std::shared_ptr< AnimationNode > const& rNode );
 
     bool notifyMouseHandlers(
         const ImplMouseHandlers& rQueue,
@@ -395,7 +395,7 @@ void SAL_CALL EventMultiplexerListener::mouseMoved(
 
 
 bool EventMultiplexerImpl::notifyAllAnimationHandlers( ImplAnimationHandlers const& rContainer,
-                                                       AnimationNodeSharedPtr const& rNode )
+                                                       std::shared_ptr< AnimationNode > const& rNode )
 {
     return rContainer.applyAll(
         [&rNode]( const AnimationEventHandlerSharedPtr& pEventHandler )
@@ -721,7 +721,7 @@ double EventMultiplexer::getAutomaticTimeout() const
 }
 
 void EventMultiplexer::addNextEffectHandler(
-    EventHandlerSharedPtr const& rHandler,
+    std::shared_ptr< EventHandler > const& rHandler,
     double                       nPriority )
 {
     mpImpl->maNextEffectHandlers.addSorted(
@@ -734,7 +734,7 @@ void EventMultiplexer::addNextEffectHandler(
 }
 
 void EventMultiplexer::removeNextEffectHandler(
-    const EventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< EventHandler >& rHandler )
 {
     mpImpl->maNextEffectHandlers.remove(
         EventMultiplexerImpl::ImplNextEffectHandlers::container_type::value_type(
@@ -743,25 +743,25 @@ void EventMultiplexer::removeNextEffectHandler(
 }
 
 void EventMultiplexer::addSlideStartHandler(
-    const EventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< EventHandler >& rHandler )
 {
     mpImpl->maSlideStartHandlers.add( rHandler );
 }
 
 void EventMultiplexer::removeSlideStartHandler(
-    const EventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< EventHandler >& rHandler )
 {
     mpImpl->maSlideStartHandlers.remove( rHandler );
 }
 
 void EventMultiplexer::addSlideEndHandler(
-    const EventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< EventHandler >& rHandler )
 {
     mpImpl->maSlideEndHandlers.add( rHandler );
 }
 
 void EventMultiplexer::removeSlideEndHandler(
-    const EventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< EventHandler >& rHandler )
 {
     mpImpl->maSlideEndHandlers.remove( rHandler );
 }
@@ -791,13 +791,13 @@ void EventMultiplexer::removeAnimationEndHandler(
 }
 
 void EventMultiplexer::addSlideAnimationsEndHandler(
-    const EventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< EventHandler >& rHandler )
 {
     mpImpl->maSlideAnimationsEndHandlers.add( rHandler );
 }
 
 void EventMultiplexer::removeSlideAnimationsEndHandler(
-    const EventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< EventHandler >& rHandler )
 {
     mpImpl->maSlideAnimationsEndHandlers.remove( rHandler );
 }
@@ -827,34 +827,34 @@ void EventMultiplexer::removeCommandStopAudioHandler(
 }
 
 void EventMultiplexer::addPauseHandler(
-    const PauseEventHandlerSharedPtr& rHandler )
+    const std::shared_ptr< PauseEventHandler >& rHandler )
 {
     mpImpl->maPauseHandlers.add( rHandler );
 }
 
 void EventMultiplexer::removePauseHandler(
-    const PauseEventHandlerSharedPtr&  rHandler )
+    const std::shared_ptr< PauseEventHandler >& rHandler )
 {
     mpImpl->maPauseHandlers.remove( rHandler );
 }
 
 void EventMultiplexer::addViewHandler(
-    const ViewEventHandlerWeakPtr& rHandler )
+    const std::weak_ptr< ViewEventHandler >& rHandler )
 {
     mpImpl->maViewHandlers.add( rHandler );
 }
 
-void EventMultiplexer::removeViewHandler( const ViewEventHandlerWeakPtr& rHandler )
+void EventMultiplexer::removeViewHandler( const std::weak_ptr< ViewEventHandler >& rHandler )
 {
     mpImpl->maViewHandlers.remove( rHandler );
 }
 
-void EventMultiplexer::addViewRepaintHandler( const ViewRepaintHandlerSharedPtr& rHandler )
+void EventMultiplexer::addViewRepaintHandler( const std::shared_ptr< ViewRepaintHandler >& rHandler )
 {
     mpImpl->maViewRepaintHandlers.add( rHandler );
 }
 
-void EventMultiplexer::removeViewRepaintHandler( const ViewRepaintHandlerSharedPtr& rHandler )
+void EventMultiplexer::removeViewRepaintHandler( const std::shared_ptr< ViewRepaintHandler >& rHandler )
 {
     mpImpl->maViewRepaintHandlers.remove( rHandler );
 }
@@ -869,7 +869,7 @@ void EventMultiplexer::removeShapeListenerHandler( const ShapeListenerEventHandl
     mpImpl->maShapeListenerHandlers.remove( rHandler );
 }
 
-void EventMultiplexer::addUserPaintHandler( const UserPaintEventHandlerSharedPtr& rHandler )
+void EventMultiplexer::addUserPaintHandler( const std::shared_ptr< UserPaintEventHandler >& rHandler )
 {
     mpImpl->maUserPaintEventHandlers.add( rHandler );
 }
@@ -950,7 +950,7 @@ void EventMultiplexer::removeMouseMoveHandler(
             &presentation::XSlideShowView::removeMouseMotionListener );
 }
 
-void EventMultiplexer::addHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHandler,
+void EventMultiplexer::addHyperlinkHandler( const std::shared_ptr< HyperlinkHandler >& rHandler,
                                             double                           nPriority )
 {
     mpImpl->maHyperlinkHandlers.addSorted(
@@ -959,7 +959,7 @@ void EventMultiplexer::addHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHa
             nPriority) );
 }
 
-void EventMultiplexer::removeHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHandler )
+void EventMultiplexer::removeHyperlinkHandler( const std::shared_ptr< HyperlinkHandler >& rHandler )
 {
     mpImpl->maHyperlinkHandlers.remove(
         EventMultiplexerImpl::ImplHyperLinkHandlers::container_type::value_type(
@@ -988,14 +988,14 @@ void EventMultiplexer::notifyShapeListenerRemoved(
 void EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )
 {
     mpImpl->maUserPaintEventHandlers.applyAll(
-        [&rUserColor]( const UserPaintEventHandlerSharedPtr& pHandler )
+        [&rUserColor]( const std::shared_ptr< UserPaintEventHandler >& pHandler )
         { return pHandler->colorChanged( rUserColor ); } );
 }
 
 void EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
 {
     mpImpl->maUserPaintEventHandlers.applyAll(
-        [&rUserStrokeWidth]( const UserPaintEventHandlerSharedPtr& pHandler )
+        [&rUserStrokeWidth]( const std::shared_ptr< UserPaintEventHandler >& pHandler )
         { return pHandler->widthChanged( rUserStrokeWidth ); } );
 }
 
@@ -1019,7 +1019,7 @@ void EventMultiplexer::notifySwitchEraserMode(){
 void EventMultiplexer::notifyEraseAllInk( bool bEraseAllInk )
 {
     mpImpl->maUserPaintEventHandlers.applyAll(
-        [&bEraseAllInk]( const UserPaintEventHandlerSharedPtr& pHandler )
+        [&bEraseAllInk]( const std::shared_ptr< UserPaintEventHandler >& pHandler )
         { return pHandler->eraseAllInkChanged( bEraseAllInk ); } );
 }
 
@@ -1027,7 +1027,7 @@ void EventMultiplexer::notifyEraseAllInk( bool bEraseAllInk )
 void EventMultiplexer::notifyEraseInkWidth( sal_Int32 rEraseInkSize )
 {
     mpImpl->maUserPaintEventHandlers.applyAll(
-        [&rEraseInkSize]( const UserPaintEventHandlerSharedPtr& pHandler )
+        [&rEraseInkSize]( const std::shared_ptr< UserPaintEventHandler >& pHandler )
         { return pHandler->eraseInkWidthChanged( rEraseInkSize ); } );
 }
 
@@ -1049,14 +1049,14 @@ bool EventMultiplexer::notifySlideEndEvent()
 }
 
 bool EventMultiplexer::notifyAnimationStart(
-    const AnimationNodeSharedPtr& rNode )
+    const std::shared_ptr< AnimationNode >& rNode )
 {
     return EventMultiplexerImpl::notifyAllAnimationHandlers( mpImpl->maAnimationStartHandlers,
                                                rNode );
 }
 
 bool EventMultiplexer::notifyAnimationEnd(
-    const AnimationNodeSharedPtr& rNode )
+    const std::shared_ptr< AnimationNode >& rNode )
 {
     return EventMultiplexerImpl::notifyAllAnimationHandlers( mpImpl->maAnimationEndHandlers,
                                                rNode );
@@ -1069,7 +1069,7 @@ bool EventMultiplexer::notifySlideAnimationsEnd()
 }
 
 bool EventMultiplexer::notifyAudioStopped(
-    const AnimationNodeSharedPtr& rNode )
+    const std::shared_ptr< AnimationNode >& rNode )
 {
     return EventMultiplexerImpl::notifyAllAnimationHandlers(
         mpImpl->maAudioStoppedHandlers,
@@ -1077,7 +1077,7 @@ bool EventMultiplexer::notifyAudioStopped(
 }
 
 bool EventMultiplexer::notifyCommandStopAudio(
-    const AnimationNodeSharedPtr& rNode )
+    const std::shared_ptr< AnimationNode >& rNode )
 {
     return EventMultiplexerImpl::notifyAllAnimationHandlers(
         mpImpl->maCommandStopAudioHandlers,
@@ -1087,7 +1087,7 @@ bool EventMultiplexer::notifyCommandStopAudio(
 void EventMultiplexer::notifyPauseMode( bool bPauseShow )
 {
     mpImpl->maPauseHandlers.applyAll(
-        [&bPauseShow]( const PauseEventHandlerSharedPtr& pHandler )
+        [&bPauseShow]( const std::shared_ptr< PauseEventHandler >& pHandler )
         { return pHandler->handlePause( bPauseShow ); } );
 }
 
@@ -1108,7 +1108,7 @@ void EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     mpImpl->maViewHandlers.applyAll(
-        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
+        [&rView]( const std::weak_ptr< ViewEventHandler >& pHandler )
         { return pHandler.lock()->viewAdded( rView ); } );
 }
 
@@ -1130,14 +1130,14 @@ void EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     mpImpl->maViewHandlers.applyAll(
-        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
+        [&rView]( const std::weak_ptr< ViewEventHandler >& pHandler )
         { return pHandler.lock()->viewRemoved( rView ); } );
 }
 
 bool EventMultiplexer::notifyViewChanged( const UnoViewSharedPtr& rView )
 {
     return mpImpl->maViewHandlers.applyAll(
-        [&rView]( const ViewEventHandlerWeakPtr& pHandler )
+        [&rView]( const std::weak_ptr< ViewEventHandler >& pHandler )
         { return pHandler.lock()->viewChanged( rView ); } );
 }
 
@@ -1166,7 +1166,7 @@ void EventMultiplexer::notifyViewClobbered(
         return; // view not registered here
 
     mpImpl->maViewRepaintHandlers.applyAll(
-        [&pView]( const ViewRepaintHandlerSharedPtr& pHandler )
+        [&pView]( const std::shared_ptr< ViewRepaintHandler >& pHandler )
         { return pHandler->viewClobbered( pView ); } );
 }
 

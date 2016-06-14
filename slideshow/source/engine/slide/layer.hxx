@@ -255,9 +255,7 @@ namespace slideshow
             bool                       mbClipSet; // true, if beginUpdate set a clip
         };
 
-        typedef ::std::shared_ptr< Layer >    LayerSharedPtr;
-        typedef ::std::weak_ptr< Layer >      LayerWeakPtr;
-        typedef ::std::vector< LayerSharedPtr > LayerVector;
+        typedef ::std::vector< std::shared_ptr< Layer > > LayerVector;
 
     }
 }

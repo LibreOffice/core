@@ -75,7 +75,7 @@ namespace slideshow
                 @param rShape
                 Shape for which attribute layers should be generated.
             */
-            bool createAttributeLayer( const AttributableShapeSharedPtr& rShape )
+            bool createAttributeLayer( const std::shared_ptr< AttributableShape >& rShape )
             {
                 reset();
 
@@ -87,14 +87,14 @@ namespace slideshow
                 return static_cast< bool >(mpAttributeLayer);
             }
 
-            const ShapeAttributeLayerSharedPtr& get() const
+            const std::shared_ptr< ShapeAttributeLayer >& get() const
             {
                 return mpAttributeLayer;
             }
 
         private:
-            AttributableShapeSharedPtr      mpShape;
-            ShapeAttributeLayerSharedPtr    mpAttributeLayer;
+            std::shared_ptr< AttributableShape > mpShape;
+            std::shared_ptr< ShapeAttributeLayer > mpAttributeLayer;
         };
 
     }

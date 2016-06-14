@@ -82,7 +82,6 @@ namespace slideshow
             UnoViewVector   maViews;
         };
 
-        typedef ::std::shared_ptr< UnoViewContainer > UnoViewContainerSharedPtr;
 
     }
 }

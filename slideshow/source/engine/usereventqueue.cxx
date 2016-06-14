@@ -124,7 +124,7 @@ public:
         maAnimationEventMap()
     {}
 
-    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) override
+    virtual bool handleAnimationEvent( const std::shared_ptr< AnimationNode >& rNode ) override
     {
         ENSURE_OR_RETURN_FALSE(
             rNode,

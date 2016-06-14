@@ -39,9 +39,9 @@ public:
         @param nNumStripes
         Number of comb-like stripes to show in this effect
     */
-    CombTransition( ::boost::optional<SlideSharedPtr> const & leavingSlide,
-                    const SlideSharedPtr&                     pEnteringSlide,
-                    const SoundPlayerSharedPtr&               pSoundPlayer,
+    CombTransition( ::boost::optional<std::shared_ptr< Slide >> const & leavingSlide,
+                    const std::shared_ptr< Slide >&           pEnteringSlide,
+                    const std::shared_ptr< SoundPlayer >&     pSoundPlayer,
                     const UnoViewContainer&                   rViewContainer,
                     ScreenUpdater&                            rScreenUpdater,
                     EventMultiplexer&                         rEventMultiplexer,
