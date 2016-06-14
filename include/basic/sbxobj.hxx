@@ -81,8 +81,6 @@ public:
     void Dump( SvStream&, bool bDumpAll=false );
 };
 
-typedef tools::SvRef<SbxObject> SbxObjectRef;
-
 #endif // INCLUDED_BASIC_SBXOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -830,7 +830,7 @@ RTLFUNC(Array)
     for( sal_uInt16 i = 0 ; i < nArraySize ; i++ )
     {
         SbxVariable* pVar = rPar.Get(i+1);
-        SbxVariable* pNew = new SbxVariable( *pVar );
+        SbxVariable* pNew = new SbxEnsureParentVariable(*pVar);
         pNew->SetFlag( SbxFlagBits::Write );
         short index = static_cast< short >(i);
         if ( bIncIndex )
