@@ -90,6 +90,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
         mnLastTicks( tools::Time::GetSystemTicks() ),
+        maDockIdle("vcl window ImplDockFloatWin Dock"),
         mbInMove( false ),
         mnLastUserEvent( nullptr )
 {
