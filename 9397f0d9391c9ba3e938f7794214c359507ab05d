@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_601edabb",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2016-06-15T16:31:07Z",
+      "side": 1,
+      "message": "I thought DBG_ASSERT should not be used in new code? See tdf#43157.",
+      "range": {
+        "startLine": 791,
+        "startChar": 8,
+        "endLine": 791,
+        "endChar": 18
+      },
+      "revId": "9397f0d9391c9ba3e938f7794214c359507ab05d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
