@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_60d97a21",
+        "filename": "sd/source/ui/animations/SlideTransitionPane.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-06-15T16:08:48Z",
+      "side": 1,
+      "message": "Why?",
+      "revId": "a2dc44d5b4aa2cb4b0ed38deaf50999ffbf90554",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a030e257",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 1890,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-06-15T16:08:48Z",
+      "side": 1,
+      "message": "Odd that the VBox is a child of a ToolBox. It doesn\u0027t even open in glade (at least with 3.20). Just place that box _instead_ of the sfxlo-SidebarToolBox.",
+      "revId": "a2dc44d5b4aa2cb4b0ed38deaf50999ffbf90554",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
