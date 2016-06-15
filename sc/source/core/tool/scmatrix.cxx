@@ -77,7 +77,10 @@ double convertStringToValue( ScInterpreter* pErrorInterpreter, const OUString& r
         short nCurFmtType = 0;
         double fValue = pErrorInterpreter->ConvertStringToValue( rStr, nError, nCurFmtType);
         if (nError)
+        {
+            pErrorInterpreter->SetError( nError);
             return formula::CreateDoubleError( nError);
+        }
         return fValue;
     }
     return formula::CreateDoubleError( formula::errNoValue);
