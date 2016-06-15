@@ -28,6 +28,7 @@
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
+#include <memory>
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
@@ -86,7 +87,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions : public utl::detail::
         };
 
     public:
-
          SvtModuleOptions();
         virtual ~SvtModuleOptions();
 
@@ -169,16 +169,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions : public utl::detail::
     private:
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& impl_GetOwnStaticMutex();
 
-        /*Attention
-
-            Don't initialize these static members in these headers!
-            a) Double defined symbols will be detected ...
-            b) and unresolved externals exist at linking time.
-            Do it in your source only.
-         */
-
-        static SvtModuleOptions_Impl*   m_pDataContainer;
-        static sal_Int32                m_nRefCount;
+        std::shared_ptr<SvtModuleOptions_Impl>   m_pImpl;
 
 };      // class SvtModuleOptions
 
