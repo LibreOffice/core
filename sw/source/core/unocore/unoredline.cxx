@@ -309,6 +309,16 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     {
         aRet <<= !rRedline.IsDelLastPara();
     }
+    else if (rPropertyName == UNO_NAME_START || rPropertyName == UNO_NAME_END)
+    {
+          SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
+           sal_Int32 nStart(COMPLETE_STRING), nEnd(COMPLETE_STRING);
+           rRedline.CalcStartEnd(pNodeIdx->GetNode().GetIndex(), nStart, nEnd);
+           if(rPropertyName == UNO_NAME_START)
+               aRet <<= nStart;
+           else
+               aRet <<= nEnd;
+    }
     return aRet;
 }
 

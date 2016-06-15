@@ -73,8 +73,9 @@
     {OUString(UNO_NAME_REDLINE_IDENTIFIER), 0, cppu::UnoType<OUString>::get(),                         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\
     {OUString(UNO_NAME_IS_IN_HEADER_FOOTER), 0, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\
     {OUString(UNO_NAME_REDLINE_TEXT), 0, cppu::UnoType<css::text::XText>::get(),                    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
-    {OUString(UNO_NAME_MERGE_LAST_PARA), 0, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},
-
+    {OUString(UNO_NAME_MERGE_LAST_PARA), 0, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\
+    {OUString(UNO_NAME_START), 0, cppu::UnoType<bool>::get(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\
+    {OUString(UNO_NAME_END), 0, cppu::UnoType<bool>::get(),                               PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},
 #define COMMON_CRSR_PARA_PROPERTIES_FN_ONLY \
         { OUString(UNO_NAME_PARA_STYLE_NAME), FN_UNO_PARA_STYLE,        cppu::UnoType<OUString>::get(),                PropertyAttribute::MAYBEVOID,     0},                                                       \
         { OUString(UNO_NAME_PAGE_STYLE_NAME), FN_UNO_PAGE_STYLE,        cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
