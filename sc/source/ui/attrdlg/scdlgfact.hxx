@@ -64,7 +64,11 @@ public:                                             \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \
-    virtual short   Execute() override ;
+    virtual short   Execute() override ;            \
+    std::vector<OString> getAllPageUIXMLDescriptions() const; \
+    bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
+    virtual Bitmap  createScreenshot() const override; \
+    virtual OString GetScreenshotId() const; \
 
 #define DECL_ABSTDLG2_BASE(Class,DialogClass)       \
     ScopedVclPtr<DialogClass> pDlg;                 \
@@ -83,6 +87,22 @@ Class::~Class()                                     \
 short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
+}                                                   \
+std::vector<OString> Class::getAllPageUIXMLDescriptions() const \
+{                                                   \
+    return pDlg->getAllPageUIXMLDescriptions();     \
+}                                                   \
+bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) \
+{                                                   \
+   return pDlg->selectPageByUIXMLDescription(rUIXMLDescription);  \
+}                                                   \
+Bitmap Class::createScreenshot() const              \
+{                                                   \
+    return pDlg->createScreenshot();                \
+}                                                   \
+OString Class::GetScreenshotId() const              \
+{                                                   \
+    return pDlg->GetScreenshotId();                 \
 }
 
 #define IMPL_ABSTDLG2_BASE(Class)                   \
@@ -509,8 +529,7 @@ public:
     virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  vcl::Window* pParent,
                                                                 const OUString& rTitle, //Dialog Title
                                                                 const OUString& rTabBgColorNoColorText, //Label for no tab color
-                                                                const Color& rDefaultColor, //Currently selected Color
-                                                                const OString& sHelpId ) override;
+                                                                const Color& rDefaultColor ) override; //Currently selected Color
 
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( bool                    bAscii = true,
                                                                     const ScImportOptions*  pOptions = nullptr,

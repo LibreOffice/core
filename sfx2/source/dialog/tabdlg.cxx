@@ -1235,7 +1235,7 @@ OString SfxTabDialog::GetScreenshotId() const
         vcl::Window* pToplevelBox = pActiveTabPage->GetWindow( GetWindowType::FirstChild );
 
         if ( pToplevelBox )
-            aScreenshotId = aScreenshotId + OString("#") + pToplevelBox->GetHelpId();
+            aScreenshotId = pToplevelBox->GetHelpId();
     }
 
     return aScreenshotId;
@@ -1330,6 +1330,54 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
 FactoryFunction SfxTabDialog::GetUITestFactory() const
 {
     return SfxTabDialogUIObject::create;
+}
+
+std::vector<OString> SfxTabDialog::getAllPageUIXMLDescriptions() const
+{
+    std::vector<OString> aRetval;
+
+    for (SfxTabDlgData_Impl::const_iterator it = m_pImpl->aData.begin(); it != m_pImpl->aData.end(); ++it)
+    {
+        SfxTabPage* pCandidate = GetTabPage((*it)->nId);
+
+        if (!pCandidate)
+        {
+            // force SfxTabPage creation
+            const_cast<SfxTabDialog*>(this)->ShowPage((*it)->nId);
+            pCandidate = GetTabPage((*it)->nId);
+        }
+
+        if (pCandidate)
+        {
+            // use UIXMLDescription (without '.ui', with '/')
+            aRetval.push_back(pCandidate->getUIFile());
+        }
+    }
+
+    return aRetval;
+}
+
+bool SfxTabDialog::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
+{
+    for (SfxTabDlgData_Impl::const_iterator it = m_pImpl->aData.begin(); it != m_pImpl->aData.end(); ++it)
+    {
+        SfxTabPage* pCandidate = (*it)->pTabPage;
+
+        if (!pCandidate)
+        {
+            // force SfxTabPage creation
+            const_cast<SfxTabDialog*>(this)->ShowPage((*it)->nId);
+            pCandidate = GetTabPage((*it)->nId);
+        }
+
+        if (pCandidate && pCandidate->getUIFile() == rUIXMLDescription)
+        {
+            ShowPage((*it)->nId);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -47,7 +47,7 @@ private:
     DECL_LINK_TYPED( ToggleHandle, CheckBox&, void );
 
 public:
-                        ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewData );
+           SC_DLLPUBLIC ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewData );
                         virtual ~ScShareDocumentDlg();
     virtual void        dispose() override;
 

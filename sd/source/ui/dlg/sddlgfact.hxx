@@ -22,17 +22,25 @@
 #include "sdabstdlg.hxx"
 #include <sfx2/basedlgs.hxx>
 
-#define DECL_ABSTDLG_BASE(Class,DialogClass)        \
-    ScopedVclPtr<DialogClass> pDlg;                 \
-public:                                             \
-    explicit Class(DialogClass* p)                  \
-        : pDlg(p)                                   \
-    {                                               \
-    }                                               \
-    virtual         ~Class();                       \
+#define DECL_ABSTDLG_BASE(Class,DialogClass)            \
+    ScopedVclPtr<DialogClass> pDlg;                     \
+public:                                                 \
+    explicit Class(DialogClass* p)                      \
+        : pDlg(p)                                       \
+    {                                                   \
+    }                                                   \
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override; \
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
+    virtual Bitmap createScreenshot() const override;   \
+    virtual OString GetScreenshotId() const;   \
+    virtual         ~Class();                           \
     virtual short   Execute() override ;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
+std::vector<OString> Class::getAllPageUIXMLDescriptions() const { return pDlg->getAllPageUIXMLDescriptions(); } \
+bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) { return pDlg->selectPageByUIXMLDescription(rUIXMLDescription); } \
+Bitmap Class::createScreenshot() const { return pDlg->createScreenshot();} \
+OString Class::GetScreenshotId() const { return pDlg->GetScreenshotId();} \
 Class::~Class()                                     \
 {                                                   \
 }                                                   \

@@ -22,17 +22,24 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vector>
 
 namespace vcl { class Window; }
 class ResId;
 class Dialog;
+class Bitmap;
 
 class VCL_DLLPUBLIC VclAbstractDialog
 {
 public:
     virtual             ~VclAbstractDialog();
-
     virtual short       Execute() = 0;
+
+    // Screenshot interface
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
+    virtual Bitmap createScreenshot() const;
+    virtual OString GetScreenshotId() const { return OString(); };
 };
 
 class VCL_DLLPUBLIC VclAbstractDialog2

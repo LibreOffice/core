@@ -361,6 +361,7 @@ void Dialog::ImplInitDialogData()
     mbInExecute             = false;
     mbInClose               = false;
     mbModalMode             = false;
+    mbPaintComplete         = false;
     mpContentArea.clear();
     mpActionArea.clear();
     mnMousePositioned       = 0;
@@ -876,6 +877,50 @@ void Dialog::ImplEndExecuteModal()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mnModalMode--;
+}
+
+void Dialog::PrePaint(vcl::RenderContext& rRenderContext)
+{
+    SystemWindow::PrePaint(rRenderContext);
+    mbPaintComplete = false;
+}
+
+void Dialog::PostPaint(vcl::RenderContext& rRenderContext)
+{
+    SystemWindow::PostPaint(rRenderContext);
+    mbPaintComplete = true;
+}
+
+std::vector<OString> Dialog::getAllPageUIXMLDescriptions() const
+{
+    // default has no pages
+    return std::vector<OString>();
+}
+
+bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
+{
+    // default cannot select anything (which is okay, return true)
+    return true;
+}
+
+Bitmap Dialog::createScreenshot()
+{
+    // same prerequisites as in Execute()
+    setDeferredProperties();
+    ImplAdjustNWFSizes();
+    Show();
+    ToTop();
+
+    // ensure repaint
+    Invalidate();
+    mbPaintComplete = false;
+
+    while (!mbPaintComplete)
+    {
+        Application::Yield();
+    }
+
+    return GetBitmap(Point(), GetOutputSizePixel());
 }
 
 short Dialog::Execute()
