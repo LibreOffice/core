@@ -1474,8 +1474,6 @@ public:
 
 bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
 {
-    static SalWheelMouseEvent aPreviousEvent;
-
     if (!Setup())
         return false;
 
@@ -1486,12 +1484,13 @@ bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
     // avoid the problem that scrolling via wheel to this point brings a widget
     // under the mouse that also accepts wheel commands, so stick with the old
     // widget if the time gap is very small
-    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(pSVData->maWinData.mpLastWheelWindow))
+    if (shouldReusePreviousMouseWindow(pSVData->maWinData.maLastWheelEvent, rEvt) &&
+        acceptableWheelScrollTarget(pSVData->maWinData.mpLastWheelWindow))
     {
         xMouseWindow = pSVData->maWinData.mpLastWheelWindow;
     }
 
-    aPreviousEvent = rEvt;
+    pSVData->maWinData.maLastWheelEvent = rEvt;
 
     pSVData->maWinData.mpLastWheelWindow = Dispatch(xMouseWindow);
 

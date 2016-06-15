@@ -31,6 +31,7 @@
 
 #include "vcleventlisteners.hxx"
 #include "impfontcache.hxx"
+#include "salwtype.hxx"
 #include "xconnection.hxx"
 
 #include <unordered_map>
@@ -194,6 +195,8 @@ struct ImplSVWinData
     ImageList*              mpMsgBoxImgList;                // ImageList for MessageBox
     VclPtr<vcl::Window>     mpAutoScrollWin;                // window, that is in AutoScrollMode mode
     VclPtr<vcl::Window>     mpLastWheelWindow;              // window, that last received a mouse wheel event
+    SalWheelMouseEvent      maLastWheelEvent;               // the last received mouse whell event
+
     StartTrackingFlags      mnTrackFlags;                   // tracking flags
     StartAutoScrollFlags    mnAutoScrollFlags;              // auto scroll flags
     bool                    mbNoDeactivate;                 // true: do not execute Deactivate
