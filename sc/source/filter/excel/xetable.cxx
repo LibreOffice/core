@@ -1578,6 +1578,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     mnWidth( 0 ),
     mnScWidth( 0 ),
     mnFlags( 0 ),
+    mnOutlineLevel( 0 ),
     mnFirstXclCol( static_cast< sal_uInt16 >( nScCol ) ),
     mnLastXclCol( static_cast< sal_uInt16 >( nScCol ) )
 {
@@ -1599,6 +1600,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     rOutlineBfr.Update( nScCol );
     ::set_flag( mnFlags, EXC_COLINFO_COLLAPSED, rOutlineBfr.IsCollapsed() );
     ::insert_value( mnFlags, rOutlineBfr.GetLevel(), 8, 3 );
+    mnOutlineLevel = rOutlineBfr.GetLevel();
 }
 
 void XclExpColinfo::ConvertXFIndexes()
@@ -1651,9 +1653,9 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
             XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ),
             // OOXTODO: XML_customWidth,
             XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
-            XML_max,            OString::number(  (nLastXclCol+1) ).getStr(),
-            XML_min,            OString::number(  (mnFirstXclCol+1) ).getStr(),
-            // OOXTODO: XML_outlineLevel,
+            XML_max,            OString::number( (nLastXclCol + 1) ).getStr(),
+            XML_min,            OString::number( (mnFirstXclCol + 1) ).getStr(),
+            XML_outlineLevel,   OString::number( mnOutlineLevel ).getStr(),
             // OOXTODO: XML_phonetic,
             XML_style,          lcl_GetStyleId( rStrm, maXFId.mnXFIndex ).getStr(),
             XML_width,          OString::number( (double) (mnScWidth / (double)sc::TwipsToHMM( GetCharWidth() )) ).getStr(),
