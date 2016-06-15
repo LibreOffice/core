@@ -221,44 +221,28 @@ Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtPrintWarningOptions_Impl*    SvtPrintWarningOptions::m_pDataContainer = nullptr;
-sal_Int32                       SvtPrintWarningOptions::m_nRefCount = 0;
-
-//  constructor
+std::weak_ptr<SvtPrintWarningOptions_Impl> m_pPrintWarningOptions;
 
 SvtPrintWarningOptions::SvtPrintWarningOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already!
-    if( m_pDataContainer == nullptr )
+
+    m_pImpl = m_pPrintWarningOptions.lock();
+    if( !m_pImpl )
     {
-        m_pDataContainer = new SvtPrintWarningOptions_Impl();
+        m_pImpl = std::make_shared<SvtPrintWarningOptions_Impl>();
+        m_pPrintWarningOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_PRINTWARNINGOPTIONS);
     }
 }
-
-//  destructor
 
 SvtPrintWarningOptions::~SvtPrintWarningOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 //  public method
@@ -266,7 +250,7 @@ SvtPrintWarningOptions::~SvtPrintWarningOptions()
 bool SvtPrintWarningOptions::IsPaperSize() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsPaperSize();
+    return m_pImpl->IsPaperSize();
 }
 
 //  public method
@@ -274,7 +258,7 @@ bool SvtPrintWarningOptions::IsPaperSize() const
 bool SvtPrintWarningOptions::IsPaperOrientation() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsPaperOrientation();
+    return m_pImpl->IsPaperOrientation();
 }
 
 //  public method
@@ -282,7 +266,7 @@ bool SvtPrintWarningOptions::IsPaperOrientation() const
 bool SvtPrintWarningOptions::IsTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsTransparency();
+    return m_pImpl->IsTransparency();
 }
 
 //  public method
@@ -290,7 +274,7 @@ bool SvtPrintWarningOptions::IsTransparency() const
 void SvtPrintWarningOptions::SetPaperSize( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetPaperSize( bState );
+    m_pImpl->SetPaperSize( bState );
 }
 
 //  public method
@@ -298,7 +282,7 @@ void SvtPrintWarningOptions::SetPaperSize( bool bState )
 void SvtPrintWarningOptions::SetPaperOrientation( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetPaperOrientation( bState );
+    m_pImpl->SetPaperOrientation( bState );
 }
 
 //  public method
@@ -306,19 +290,19 @@ void SvtPrintWarningOptions::SetPaperOrientation( bool bState )
 void SvtPrintWarningOptions::SetTransparency( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetTransparency( bState );
+    m_pImpl->SetTransparency( bState );
 }
 
 bool SvtPrintWarningOptions::IsModifyDocumentOnPrintingAllowed() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsModifyDocumentOnPrintingAllowed();
+    return m_pImpl->IsModifyDocumentOnPrintingAllowed();
 }
 
 void SvtPrintWarningOptions::SetModifyDocumentOnPrintingAllowed( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetModifyDocumentOnPrintingAllowed( bState );
+    m_pImpl->SetModifyDocumentOnPrintingAllowed( bState );
 }
 
 namespace
