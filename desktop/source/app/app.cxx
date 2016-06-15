@@ -1121,7 +1121,7 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
     css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
     bool bRet = false;
     aRet >>= bRet;
-    return !bEmergencySave || bRet;
+    return bRet;
 }
 
 }
