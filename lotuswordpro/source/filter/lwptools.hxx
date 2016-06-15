@@ -91,15 +91,15 @@ public:
     static bool IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len);
 
     inline static double ConvertFromUnits(sal_Int32 nUnits);
-    inline static double ConvertToMetric(const double& fInch);
+    inline static double ConvertToMetric(double fInch);
     inline static double ConvertFromUnitsToMetric(sal_Int32 nUnits);
 
-    inline static bool IsOddNumber(sal_uInt16& nNumber);
-    inline static bool IsEvenNumber(sal_uInt16& nNumber);
+    inline static bool IsOddNumber(sal_uInt16 nNumber);
+    inline static bool IsEvenNumber(sal_uInt16 nNumber);
 
     static bool isFileUrl(const OString& fileName);
     static OUString convertToFileUrl(const OString& fileName);
-    static OUString    DateTimeToOUString(LtTm& dt);
+    static OUString    DateTimeToOUString(const LtTm& dt);
 
     static XFDateStyle* GetSystemDateStyle(bool bLongFormat);
     static XFTimeStyle* GetSystemTimeStyle();
@@ -109,7 +109,7 @@ inline double LwpTools::ConvertFromUnits(sal_Int32 nUnits)
 {
     return (double)nUnits/UNITS_PER_INCH;
 }
-inline double LwpTools::ConvertToMetric(const double& fInch)
+inline double LwpTools::ConvertToMetric(double fInch)
 {
     return fInch*CM_PER_INCH;
 }
@@ -118,11 +118,11 @@ inline double LwpTools::ConvertFromUnitsToMetric(sal_Int32 nUnits)
     double fInch = ConvertFromUnits(nUnits);
     return ConvertToMetric(fInch);
 }
-inline bool LwpTools::IsOddNumber(sal_uInt16& nNumber)
+inline bool LwpTools::IsOddNumber(sal_uInt16 nNumber)
 {
     return (nNumber%2) != 0;
 }
-inline bool LwpTools::IsEvenNumber(sal_uInt16& nNumber)
+inline bool LwpTools::IsEvenNumber(sal_uInt16 nNumber)
 {
     return (nNumber%2) == 0;
 }
