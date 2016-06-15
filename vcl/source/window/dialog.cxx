@@ -879,15 +879,16 @@ void Dialog::PostPaint(vcl::RenderContext& rRenderContext)
     mbPaintComplete = true;
 }
 
-std::vector<OUString> Dialog::getAllPageUIXMLDescriptions() const
+std::vector<OString> Dialog::getAllPageUIXMLDescriptions() const
 {
     // default has no pages
-    return std::vector<OUString>();
+    return std::vector<OString>();
 }
 
-void Dialog::selectPageByUIXMLDescription(const OUString& /*rUIXMLDescription*/)
+bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
 {
-    // default cannot select anything
+    // default cannot select anything (which is okay, return true)
+    return true;
 }
 
 Bitmap Dialog::createScreenshot()

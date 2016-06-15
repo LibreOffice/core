@@ -200,8 +200,8 @@ public:
     bool Apply();
 
     // Screenshot interface
-    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const override;
-    virtual void selectPageByUIXMLDescription(const OUString& rUIXMLDescription) override;
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override;
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
 };
 
 namespace sfx { class ItemConnectionBase; }

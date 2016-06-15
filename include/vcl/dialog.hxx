@@ -101,8 +101,8 @@ public:
     virtual void PostPaint(vcl::RenderContext& rRenderContext) override;
 
     // Screenshot interface
-    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const;
-    virtual void selectPageByUIXMLDescription(const OUString& rUIXMLDescription);
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
     Bitmap createScreenshot();
 
     virtual short   Execute();
