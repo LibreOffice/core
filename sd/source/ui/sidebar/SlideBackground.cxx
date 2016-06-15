@@ -159,6 +159,9 @@ void SlideBackground::Update()
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectEntryPos();
     SfxObjectShell* pSh = SfxObjectShell::Current();
+    if (!pSh)
+        return;
+
     switch(eXFS)
     {
         case drawing::FillStyle_NONE:
