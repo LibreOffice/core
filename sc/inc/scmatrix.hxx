@@ -306,6 +306,8 @@ public:
     virtual double GetDouble( SCSIZE nC, SCSIZE nR) const = 0;
     /// @return 0.0 if empty or empty path, else value or DoubleError.
     virtual double GetDouble( SCSIZE nIndex) const = 0;
+    /// @return value or DoubleError or string converted to value.
+    virtual double GetDoubleWithStringConversion( SCSIZE nC, SCSIZE nR ) const = 0;
 
     /// @return empty string if empty or empty path, else string content.
     virtual svl::SharedString GetString( SCSIZE nC, SCSIZE nR) const = 0;
@@ -517,6 +519,8 @@ public:
     virtual double GetDouble( SCSIZE nC, SCSIZE nR) const override;
     /// @return 0.0 if empty or empty path, else value or DoubleError.
     virtual double GetDouble( SCSIZE nIndex) const override;
+    /// @return value or DoubleError or string converted to value.
+    virtual double GetDoubleWithStringConversion( SCSIZE nC, SCSIZE nR ) const override;
 
     /// @return empty string if empty or empty path, else string content.
     virtual svl::SharedString GetString( SCSIZE nC, SCSIZE nR) const override;
@@ -731,6 +735,8 @@ public:
     virtual double GetDouble(SCSIZE nC, SCSIZE nR) const override;
     /// @return 0.0 if empty or empty path, else value or DoubleError.
     virtual double GetDouble(SCSIZE nIndex) const override;
+    /// @return value or DoubleError or string converted to value.
+    virtual double GetDoubleWithStringConversion( SCSIZE nC, SCSIZE nR ) const override;
 
     /// @return empty string if empty or empty path, else string content.
     virtual svl::SharedString GetString(SCSIZE nC, SCSIZE nR) const override;

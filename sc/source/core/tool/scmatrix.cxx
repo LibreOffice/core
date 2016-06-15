@@ -69,6 +69,20 @@ typedef mdds::multi_type_matrix<matrix_trait> MatrixImplType;
 
 namespace {
 
+double convertStringToValue( ScInterpreter* pErrorInterpreter, const OUString& rStr )
+{
+    if (pErrorInterpreter)
+    {
+        sal_uInt16 nError = 0;
+        short nCurFmtType = 0;
+        double fValue = pErrorInterpreter->ConvertStringToValue( rStr, nError, nCurFmtType);
+        if (nError)
+            return formula::CreateDoubleError( nError);
+        return fValue;
+    }
+    return formula::CreateDoubleError( formula::errNoValue);
+}
+
 struct ElemEqualZero : public unary_function<double, double>
 {
     double operator() (double val) const
@@ -244,6 +258,7 @@ public:
     sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const;
     double GetDouble(SCSIZE nC, SCSIZE nR) const;
     double GetDouble( SCSIZE nIndex) const;
+    double GetDoubleWithStringConversion(SCSIZE nC, SCSIZE nR) const;
     svl::SharedString GetString(SCSIZE nC, SCSIZE nR) const;
     svl::SharedString GetString( SCSIZE nIndex) const;
     svl::SharedString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
@@ -558,6 +573,14 @@ double ScMatrixImpl::GetDouble( SCSIZE nIndex) const
     SCSIZE nC, nR;
     CalcPosition(nIndex, nC, nR);
     return GetDouble(nC, nR);
+}
+
+double ScMatrixImpl::GetDoubleWithStringConversion(SCSIZE nC, SCSIZE nR) const
+{
+    ScMatrixValue aMatVal = Get(nC, nR);
+    if (aMatVal.nType == SC_MATVAL_STRING)
+        return convertStringToValue( pErrorInterpreter, aMatVal.aStr.getString());
+    return aMatVal.fVal;
 }
 
 svl::SharedString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
@@ -2734,6 +2757,11 @@ double ScFullMatrix::GetDouble( SCSIZE nIndex) const
     return pImpl->GetDouble(nIndex);
 }
 
+double ScFullMatrix::GetDoubleWithStringConversion(SCSIZE nC, SCSIZE nR) const
+{
+    return pImpl->GetDoubleWithStringConversion(nC, nR);
+}
+
 svl::SharedString ScFullMatrix::GetString(SCSIZE nC, SCSIZE nR) const
 {
     return pImpl->GetString(nC, nR);
@@ -3034,16 +3062,7 @@ public:
 
     double operator()(const svl::SharedString& rStr) const
     {
-        if (mpErrorInterpreter)
-        {
-            sal_uInt16 nError = 0;
-            short nCurFmtType = 0;
-            double fValue = mpErrorInterpreter->ConvertStringToValue( rStr.getString(), nError, nCurFmtType);
-            if (nError)
-                return formula::CreateDoubleError( nError);
-            return fValue;
-        }
-        return formula::CreateDoubleError( formula::errNoValue);
+        return convertStringToValue( mpErrorInterpreter, rStr.getString());
     }
 
     TEmptyRes operator()(char) const
@@ -3601,6 +3620,12 @@ double ScVectorRefMatrix::GetDouble(SCSIZE nIndex) const
 {
     const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
     return mpFullMatrix->GetDouble(nIndex);
+}
+
+double ScVectorRefMatrix::GetDoubleWithStringConversion(SCSIZE nC, SCSIZE nR) const
+{
+    const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
+    return mpFullMatrix->GetDoubleWithStringConversion(nC, nR);
 }
 
 svl::SharedString ScVectorRefMatrix::GetString(SCSIZE nC, SCSIZE nR) const
