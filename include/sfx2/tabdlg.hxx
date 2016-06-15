@@ -203,6 +203,9 @@ public:
     bool Apply();
 
     virtual FactoryFunction GetUITestFactory() const override;
+    // Screenshot interface
+    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const override;
+    virtual void selectPageByUIXMLDescription(const OUString& rUIXMLDescription) override;
 };
 
 namespace sfx { class ItemConnectionBase; }

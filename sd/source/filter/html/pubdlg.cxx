@@ -1587,6 +1587,32 @@ bool SdPublishingDlg::Save()
     return( aMedium.GetError() == 0 );
 }
 
+std::vector<OUString> SdPublishingDlg::getAllPageUIXMLDescriptions() const
+{
+    // this dialog has a hard number of pages
+    std::vector<OUString> aRetval;
+
+    for (sal_uInt32 a(0); a < 6; a++)
+    {
+        aRetval.push_back(OUString::number(a));
+    }
+
+    return aRetval;
+}
+
+void SdPublishingDlg::selectPageByUIXMLDescription(const OUString& rUIXMLDescription)
+{
+    // rUIXMLDescription contains one of the values above, make use of it
+    const sal_uInt32 nPage(rUIXMLDescription.toUInt32());
+
+    if (nPage < 6)
+    {
+        aAssistentFunc.GotoPage(nPage + 1);
+
+        // does this already call 'ChangePage()'..? Check!
+    }
+}
+
 // SdDesignNameDlg Methods
 SdDesignNameDlg::SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName)
     : ModalDialog(pWindow, "NameDesignDialog", "modules/sdraw/ui/namedesign.ui")
