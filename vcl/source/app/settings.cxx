@@ -2408,7 +2408,7 @@ ImplMiscData::ImplMiscData()
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
     mbEnableLocalizedDecimalSep = (pEnv != nullptr);
     // Should we display any windows?
-    mbPseudoHeadless = getenv("VCL_HIDE_WINDOWS") || comphelper::LibreOfficeKit::isActive();
+    mbPseudoHeadless = false; // getenv("VCL_HIDE_WINDOWS") || comphelper::LibreOfficeKit::isActive();
 }
 
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )

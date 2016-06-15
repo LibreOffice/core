@@ -26,13 +26,18 @@
 namespace vcl { class Window; }
 class ResId;
 class Dialog;
+class Bitmap;
 
 class VCL_DLLPUBLIC VclAbstractDialog
 {
 public:
     virtual             ~VclAbstractDialog();
-
     virtual short       Execute() = 0;
+
+    // Screenshot interface
+    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const;
+    virtual void selectPageByUIXMLDescription(const OUString& rUIXMLDescription);
+    virtual Bitmap createScreenshot() const;
 };
 
 class VCL_DLLPUBLIC VclAbstractDialog2
