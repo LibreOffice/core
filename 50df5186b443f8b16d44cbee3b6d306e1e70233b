@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_40ae3686",
+        "filename": "svx/source/sidebar/paragraph/ParaSpacingWindow.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-06-15T15:01:47Z",
+      "side": 1,
+      "message": "The new is here, but I can\u0027t see delete anywhere. Anyway - instead of fixing this you could try adding\n\naddStatusListener(\".uno:MetricUnit\");\n\nto the controller. That way you should get the SID_ATTR_METRIC updates into StateChanged too, and then kill MetricListener.",
+      "range": {
+        "startLine": 57,
+        "startChar": 31,
+        "endLine": 57,
+        "endChar": 34
+      },
+      "revId": "50df5186b443f8b16d44cbee3b6d306e1e70233b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
