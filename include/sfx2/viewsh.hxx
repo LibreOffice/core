@@ -327,6 +327,10 @@ public:
     void registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
+    /// Set if we are doing tiled searching.
+    void setTiledSearching(bool bTiledSearching);
+    /// Are we doing tiled searching?
+    bool isTiledSearching() const;
 };
 
 

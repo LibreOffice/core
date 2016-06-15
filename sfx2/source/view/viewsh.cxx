@@ -55,6 +55,8 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/commandinfoprovider.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <sfx2/app.hxx>
 #include "view.hrc"
@@ -309,6 +311,7 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 ,   mpIPClientList(nullptr)
 ,   m_pLibreOfficeKitViewCallback(nullptr)
 ,   m_pLibreOfficeKitViewData(nullptr)
+,   m_bTiledSearching(false)
 {}
 
 SfxViewShell_Impl::~SfxViewShell_Impl()
@@ -1603,8 +1606,30 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
 
 void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
 {
+    if (pImp->m_bTiledSearching)
+    {
+        switch (nType)
+        {
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_TEXT_SELECTION_START:
+        case LOK_CALLBACK_TEXT_SELECTION_END:
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+            return;
+        }
+    }
+
     if (pImp->m_pLibreOfficeKitViewCallback)
         pImp->m_pLibreOfficeKitViewCallback(nType, pPayload, pImp->m_pLibreOfficeKitViewData);
+}
+
+void SfxViewShell::setTiledSearching(bool bTiledSearching)
+{
+    pImp->m_bTiledSearching = bTiledSearching;
+}
+
+bool SfxViewShell::isTiledSearching() const
+{
+    return pImp->m_bTiledSearching;
 }
 
 bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )

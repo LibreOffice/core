@@ -275,10 +275,14 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
             {
                 // Disable LOK selection notifications during search.
                 SwDrawModel* pModel = m_pWrtShell->getIDocumentDrawModelAccess().GetDrawModel();
-                if (pModel)
+                if (comphelper::LibreOfficeKit::isViewCallback())
+                    m_pWrtShell->GetSfxViewShell()->setTiledSearching(true);
+                else if (pModel)
                     pModel->setTiledSearching(true);
                 bool bRet = SearchAll();
-                if (pModel)
+                if (comphelper::LibreOfficeKit::isViewCallback())
+                    m_pWrtShell->GetSfxViewShell()->setTiledSearching(false);
+                else if (pModel)
                     pModel->setTiledSearching(false);
 
                 if( !bRet )

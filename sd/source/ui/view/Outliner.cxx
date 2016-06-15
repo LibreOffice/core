@@ -619,8 +619,18 @@ bool Outliner::SearchAndReplaceAll()
     else if( nullptr != dynamic_cast< const DrawViewShell *>( pViewShell.get() ))
     {
         // Disable selection change notifications during search all.
-        pViewShell->GetDoc()->setTiledSearching(true);
-        comphelper::ScopeGuard aGuard([pViewShell]() { pViewShell->GetDoc()->setTiledSearching(false); });
+        SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
+        if (comphelper::LibreOfficeKit::isViewCallback())
+            rSfxViewShell.setTiledSearching(true);
+        else
+            pViewShell->GetDoc()->setTiledSearching(true);
+        comphelper::ScopeGuard aGuard([pViewShell, &rSfxViewShell]()
+        {
+            if (comphelper::LibreOfficeKit::isViewCallback())
+                rSfxViewShell.setTiledSearching(false);
+            else
+                pViewShell->GetDoc()->setTiledSearching(false);
+        });
 
         // Go to beginning/end of document.
         maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
@@ -671,10 +681,7 @@ bool Outliner::SearchAndReplaceAll()
             boost::property_tree::write_json(aStream, aTree);
             OString aPayload = aStream.str().c_str();
             if (comphelper::LibreOfficeKit::isViewCallback())
-            {
-                SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
                 rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
-            }
             else
                 pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
         }
