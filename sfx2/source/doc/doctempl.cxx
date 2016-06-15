@@ -1566,6 +1566,8 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
         }
         catch ( Exception& ) {}
     }
+
+    CreateFromHierarchy(rContent);
 }
 
 
