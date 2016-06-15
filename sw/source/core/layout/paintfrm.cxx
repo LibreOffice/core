@@ -106,8 +106,8 @@
 using namespace ::editeng;
 using namespace ::com::sun::star;
 using ::drawinglayer::primitive2d::BorderLinePrimitive2D;
-using ::std::pair;
-using ::std::make_pair;
+using std::pair;
+using std::make_pair;
 
 struct SwPaintProperties;
 
@@ -2116,7 +2116,7 @@ void DrawGraphic(
                                         aGrf.SSize(),
                                         Size( aPaintOffset.X(), aPaintOffset.Y() ),
                                         nullptr, GraphicManagerDrawFlags::STANDARD,
-                                        ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
+                                        std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
             }
             // reset clipping at output device
             pOutDev->Pop();

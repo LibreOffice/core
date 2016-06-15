@@ -70,7 +70,7 @@ class SwThreadManager
 
         static bool mbThreadManagerInstantiated;
 
-        ::std::unique_ptr<ThreadManager> mpThreadManagerImpl;
+        std::unique_ptr<ThreadManager> mpThreadManagerImpl;
 
 };
 #endif

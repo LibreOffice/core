@@ -2906,7 +2906,7 @@ void WW8Export::WriteFkpPlcUsw()
 
     if ( pSttbfAssoc )                      // #i106057#
     {
-        ::std::vector<OUString> aStrings(pSttbfAssoc->getStrings());
+        std::vector<OUString> aStrings(pSttbfAssoc->getStrings());
         WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
                            pFib->lcbSttbfAssoc);
     }

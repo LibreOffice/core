@@ -299,7 +299,7 @@ SwUnoCursorHelper::SetPageDesc(
     {
         return false;
     }
-    ::std::unique_ptr<SwFormatPageDesc> pNewDesc;
+    std::unique_ptr<SwFormatPageDesc> pNewDesc;
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
     {
@@ -420,7 +420,7 @@ lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
     {
         throw lang::IllegalArgumentException();
     }
-    ::std::unique_ptr<SwFormatDrop> pDrop;
+    std::unique_ptr<SwFormatDrop> pDrop;
     SfxPoolItem const* pItem(nullptr);
     if (SfxItemState::SET ==
             rItemSet.GetItemState(RES_PARATR_DROP, true, &pItem))
@@ -445,7 +445,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
         throw lang::IllegalArgumentException();
     }
 
-    ::std::unique_ptr<SwFormatRuby> pRuby;
+    std::unique_ptr<SwFormatRuby> pRuby;
     const SfxPoolItem* pItem;
     if (SfxItemState::SET ==
             rItemSet.GetItemState(RES_TXTATR_CJK_RUBY, true, &pItem))
@@ -1880,8 +1880,8 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     const SfxItemPropertyMap &rMap = rPropSet.getPropertyMap();
-    ::std::unique_ptr<SfxItemSet> pSet;
-    ::std::unique_ptr<SfxItemSet> pSetParent;
+    std::unique_ptr<SfxItemSet> pSet;
+    std::unique_ptr<SfxItemSet> pSetParent;
 
     for (sal_Int32 i = 0, nEnd = rPropertyNames.getLength(); i < nEnd; i++)
     {

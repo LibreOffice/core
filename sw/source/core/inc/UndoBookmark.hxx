@@ -32,7 +32,7 @@ namespace sw {
 
 class SwUndoBookmark : public SwUndo
 {
-    const ::std::unique_ptr<SwHistoryBookmark> m_pHistoryBookmark;
+    const std::unique_ptr<SwHistoryBookmark> m_pHistoryBookmark;
 
 protected:
     SwUndoBookmark( SwUndoId nUndoId, const ::sw::mark::IMark& );

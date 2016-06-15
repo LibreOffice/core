@@ -266,7 +266,7 @@ public:
     // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground()
         throw (css::uno::RuntimeException, std::exception) override;
-    typedef std::vector< ::std::pair<SwAccessibleContext*,
+    typedef std::vector< std::pair<SwAccessibleContext*,
         css::uno::WeakReference<css::accessibility::XAccessible> > > Cells_t;
     Cells_t m_vecCellAdd;
     Cells_t m_vecCellRemove;

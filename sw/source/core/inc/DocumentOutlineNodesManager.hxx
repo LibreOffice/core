@@ -33,7 +33,7 @@ public:
 
     DocumentOutlineNodesManager( SwDoc& i_rSwdoc );
 
-    //typedef ::std::vector< const SwTextNode* > tSortedOutlineNodeList;
+    //typedef std::vector< const SwTextNode* > tSortedOutlineNodeList;
 
     sal_Int32 getOutlineNodesCount() const override;
 

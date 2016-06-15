@@ -29,7 +29,7 @@ class SwNodeNum;
 class IDocumentListItems
 {
 public:
-    typedef ::std::vector< const SwNodeNum* > tSortedNodeNumList;
+    typedef std::vector< const SwNodeNum* > tSortedNodeNumList;
 
     virtual void addListItem( const SwNodeNum& rNodeNum ) = 0;
     virtual void removeListItem( const SwNodeNum& rNodeNum ) = 0;

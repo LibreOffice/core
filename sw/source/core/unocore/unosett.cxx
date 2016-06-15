@@ -1352,7 +1352,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
 {
     bool bChapterNum = pHeadingStyleName != nullptr;
 
-    ::std::vector<PropertyValue> aPropertyValues;
+    std::vector<PropertyValue> aPropertyValues;
     aPropertyValues.reserve(32);
     //fill all properties into the array
 
@@ -1631,7 +1631,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
     };
 
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
-    ::std::vector<PropertyValue const*> aPropertyValues;
+    std::vector<PropertyValue const*> aPropertyValues;
     bool bExcept = false;
     for(sal_Int32 i = 0; i < rProperties.getLength() && !bExcept; i++)
     {

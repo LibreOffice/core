@@ -2556,7 +2556,7 @@ struct SwTableCellInfo::Impl
     const SwTable * m_pTable;
     const SwCellFrame * m_pCellFrame;
     const SwTabFrame * m_pTabFrame;
-    typedef ::std::set<const SwTableBox *> TableBoxes_t;
+    typedef std::set<const SwTableBox *> TableBoxes_t;
     TableBoxes_t m_HandledTableBoxes;
 
 public:

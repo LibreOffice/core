@@ -1083,7 +1083,7 @@ class HTMLEndPosLst
                                     // but the text length
     // the script that is valid up to the position
     // contained in aScriptChgList at the same index
-    ::std::vector<sal_uInt16> aScriptLst;
+    std::vector<sal_uInt16> aScriptLst;
 
     SwDoc *pDoc;            // das aktuelle Dokument
     SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)

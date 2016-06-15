@@ -165,7 +165,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
 
 struct  SwAddressPreview_Impl
 {
-    ::std::vector< OUString >    aAddresses;
+    std::vector< OUString >      aAddresses;
     sal_uInt16                          nRows;
     sal_uInt16                          nColumns;
     sal_uInt16                          nSelectedAddress;
@@ -598,7 +598,7 @@ SwMergeAddressItem   SwAddressIterator::Next()
                     nOpen = sAddress.getLength();
                 if (nReturn == -1)
                     nReturn = sAddress.getLength();
-                sal_Int32 nTarget = ::std::min(nOpen, nReturn);
+                sal_Int32 nTarget = std::min(nOpen, nReturn);
                 aRet.sText = sAddress.copy(0, nTarget);
                 sAddress = sAddress.copy(nTarget);
             }

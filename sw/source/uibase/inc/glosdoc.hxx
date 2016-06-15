@@ -35,8 +35,8 @@ typedef tools::SvRef<SwDocShell> SwDocShellRef;
 #include <vector>
 #include "swdllapi.h"
 
-typedef ::std::vector< css::uno::WeakReference< css::text::XAutoTextGroup > > UnoAutoTextGroups;
-typedef ::std::vector< css::uno::WeakReference< css::text::XAutoTextEntry > > UnoAutoTextEntries;
+typedef std::vector< css::uno::WeakReference< css::text::XAutoTextGroup > > UnoAutoTextGroups;
+typedef std::vector< css::uno::WeakReference< css::text::XAutoTextEntry > > UnoAutoTextEntries;
 
 #define GLOS_DELIM (sal_Unicode)'*'
 

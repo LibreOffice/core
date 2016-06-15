@@ -274,7 +274,7 @@ public:
 class SwDocIndexDescriptorProperties_Impl
 {
 private:
-    ::std::unique_ptr<SwTOXBase> m_pTOXBase;
+    std::unique_ptr<SwTOXBase> m_pTOXBase;
     OUString m_sUserTOXTypeName;
 
 public:
@@ -328,7 +328,7 @@ public:
     const TOXTypes              m_eTOXType;
     bool                        m_bIsDescriptor;
     SwDoc *                     m_pDoc;
-    ::std::unique_ptr<SwDocIndexDescriptorProperties_Impl> m_pProps;
+    std::unique_ptr<SwDocIndexDescriptorProperties_Impl> m_pProps;
     uno::WeakReference<container::XIndexReplace> m_wStyleAccess;
     uno::WeakReference<container::XIndexReplace> m_wTokenAccess;
 
@@ -1950,11 +1950,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
 template<typename T> struct NotContainedIn
 {
-    ::std::vector<T> const& m_rVector;
-    explicit NotContainedIn(::std::vector<T> const& rVector)
+    std::vector<T> const& m_rVector;
+    explicit NotContainedIn(std::vector<T> const& rVector)
         : m_rVector(rVector) { }
     bool operator() (T const& rT) {
-        return ::std::find(m_rVector.begin(), m_rVector.end(), rT)
+        return std::find(m_rVector.begin(), m_rVector.end(), rT)
                     == m_rVector.end();
     }
 };
@@ -1986,7 +1986,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
             | SetAttrMode::DONTEXPAND)
         : SetAttrMode::DONTEXPAND;
 
-    ::std::vector<SwTextAttr *> oldMarks;
+    std::vector<SwTextAttr *> oldMarks;
     if (bMark)
     {
         oldMarks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
@@ -2005,11 +2005,11 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     {
         // #i107672#
         // ensure that we do not retrieve a different mark at the same position
-        ::std::vector<SwTextAttr *> const newMarks(
+        std::vector<SwTextAttr *> const newMarks(
             rPam.GetNode().GetTextNode()->GetTextAttrsAt(
                 rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
-        ::std::vector<SwTextAttr *>::const_iterator const iter(
-            ::std::find_if(newMarks.begin(), newMarks.end(),
+        std::vector<SwTextAttr *>::const_iterator const iter(
+            std::find_if(newMarks.begin(), newMarks.end(),
                 NotContainedIn<SwTextAttr *>(oldMarks)));
         OSL_ASSERT(newMarks.end() != iter);
         if (newMarks.end() != iter)

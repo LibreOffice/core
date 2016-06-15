@@ -466,7 +466,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             break;
         case FN_UNO_DOCUMENT_INDEX_MARK:
         {
-            ::std::vector<SwTextAttr *> marks;
+            std::vector<SwTextAttr *> marks;
             if (rPam.GetNode().IsTextNode())
             {
                 marks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
@@ -620,7 +620,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_REFERENCE_MARK:
         {
-            ::std::vector<SwTextAttr *> marks;
+            std::vector<SwTextAttr *> marks;
             if (rPam.GetNode().IsTextNode())
             {
                 marks = (

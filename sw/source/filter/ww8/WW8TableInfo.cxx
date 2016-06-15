@@ -346,7 +346,7 @@ RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow()
 
 
 #ifdef DBG_UTIL
-::std::string WW8TableNodeInfoInner::toString() const
+std::string WW8TableNodeInfoInner::toString() const
 {
     static char buffer[256];
     snprintf(buffer, sizeof(buffer),
@@ -365,7 +365,7 @@ RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow()
              mnShadowsAfter,
              mbVertMerge ? "yes" : "no");
 
-    return ::std::string(buffer);
+    return std::string(buffer);
 }
 #endif
 
@@ -384,14 +384,14 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
 }
 
 #ifdef DBG_UTIL
-::std::string WW8TableNodeInfo::toString() const
+std::string WW8TableNodeInfo::toString() const
 {
     static char buffer[1024];
     snprintf(buffer, sizeof(buffer),
              "<tableNodeInfo p=\"%p\" depth=\"%" SAL_PRIuUINT32 "\">"
              ,this, getDepth());
 
-    ::std::string sResult(buffer);
+    std::string sResult(buffer);
 
     Inners_t::const_iterator aIt(mInners.begin());
     Inners_t::const_iterator aEnd(mInners.end());
@@ -1006,7 +1006,7 @@ bool CellInfo::operator < (const CellInfo & aCellInfo) const
 }
 
 #ifdef DBG_UTIL
-::std::string CellInfo::toString() const
+std::string CellInfo::toString() const
 {
     static char sBuffer[256];
 
@@ -1287,9 +1287,9 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells(RowEndInners_t &rLastRowEnds)
 }
 
 #ifdef DBG_UTIL
-::std::string WW8TableCellGrid::toString()
+std::string WW8TableCellGrid::toString()
 {
-    ::std::string sResult = "<WW8TableCellGrid>";
+    std::string sResult = "<WW8TableCellGrid>";
 
     RowTops_t::const_iterator aTopsIt = getRowTopsBegin();
     static char sBuffer[1024];

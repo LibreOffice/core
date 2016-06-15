@@ -157,7 +157,7 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
         int curr = m_nCurrent; // Index from which we'll twist the tail.
         int n = (number_ofm_entries - curr) / 2; // Number of entries that will swap places
         for (int i = 0; i < n; i++) {
-            ::std::swap(m_entries[curr + i], m_entries[number_ofm_entries -1 - i]);
+            std::swap(m_entries[curr + i], m_entries[number_ofm_entries -1 - i]);
         }
 
         if (*m_entries.back()->GetPoint() != rPos)

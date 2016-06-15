@@ -236,7 +236,7 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
                 rFrames.push_back(entry);
             }
         }
-        ::std::sort(rFrames.begin(), rFrames.end(), FrameClientSortListLess());
+        std::sort(rFrames.begin(), rFrames.end(), FrameClientSortListLess());
     }
 }
 
@@ -453,7 +453,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 
     SwXParagraphEnumerationImpl(
             uno::Reference< text::XText > const& xParent,
-            ::std::shared_ptr<SwUnoCursor> pCursor,
+            std::shared_ptr<SwUnoCursor> pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode, SwTable const*const pTable)
         : m_xParentText( xParent )
@@ -515,7 +515,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 
 SwXParagraphEnumeration* SwXParagraphEnumeration::Create(
     uno::Reference< text::XText > const& xParent,
-    const ::std::shared_ptr<SwUnoCursor>& pCursor,
+    const std::shared_ptr<SwUnoCursor>& pCursor,
     const CursorType eType,
     SwStartNode const*const pStartNode,
     SwTable const*const pTable)
@@ -1508,7 +1508,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
     virtual SwUnoCursor* GetCursor() override
         { return &(*m_pUnoCursor); };
     void MakeRanges();
-    ::std::vector< uno::Reference< text::XTextRange > > m_Ranges;
+    std::vector< uno::Reference< text::XTextRange > > m_Ranges;
     sw::UnoCursorPointer m_pUnoCursor;
 };
 
@@ -1655,8 +1655,8 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
     {
         FrameClientSortList_t vFrames;
         ::CollectFrameAtNode(rPaM.GetPoint()->nNode, vFrames, false);
-        ::std::transform(vFrames.begin(), vFrames.end(),
-            ::std::back_inserter(m_vFrames),
+        std::transform(vFrames.begin(), vFrames.end(),
+            std::back_inserter(m_vFrames),
             [] (const FrameClientSortListEntry& rEntry) { return rEntry.pFrameClient; });
     }
     else if (pFormat)

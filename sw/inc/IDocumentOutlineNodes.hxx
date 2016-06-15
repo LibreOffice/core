@@ -30,7 +30,7 @@ class SwTextNode;
 class IDocumentOutlineNodes
 {
 public:
-    typedef ::std::vector< const SwTextNode* > tSortedOutlineNodeList;
+    typedef std::vector< const SwTextNode* > tSortedOutlineNodeList;
 
     virtual sal_Int32 getOutlineNodesCount() const = 0;
 

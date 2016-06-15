@@ -162,20 +162,20 @@ namespace sw { namespace sidebar {
         // - page usage - only left, only right, both, mirrored
         // item also hold the numbering type for the page style which should
         // be kept stable.
-        ::std::unique_ptr<SvxPageItem> mpPageItem;
+        std::unique_ptr<SvxPageItem> mpPageItem;
 
         // item keeping the page style's left and right margins
-        ::std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
+        std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
         // item keeping the page style's top and bottom margins
-        ::std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
+        std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
 
         // item keeping the page style's page size
-        ::std::unique_ptr<SvxSizeItem> mpPageSizeItem;
+        std::unique_ptr<SvxSizeItem> mpPageSizeItem;
         // Paper corresponding to the page style's page size
         Paper mePaper;
 
         // item keeping the page column type
-        ::std::unique_ptr<SfxInt16Item> mpPageColumnTypeItem;
+        std::unique_ptr<SfxInt16Item> mpPageColumnTypeItem;
 
         FieldUnit           meFUnit;
         SfxMapUnit          meUnit;

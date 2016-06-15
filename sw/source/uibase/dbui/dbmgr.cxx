@@ -1277,7 +1277,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     long nStartRow, nEndRow;
     bool bFreezedLayouts = false;
     // to collect temporary email files
-    ::std::vector< OUString> aFilesToRemove;
+    std::vector< OUString> aFilesToRemove;
 
     // The SfxObjectShell will be closed explicitly later but
     // it is more safe to use SfxObjectShellLock here

@@ -221,7 +221,7 @@ class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
 {
     SwTextFormatColl *pTextFormatColl, *pLastNdColl;
     std::vector<SwFrameFormat*>* pFrameFormats;
-    ::std::vector< std::shared_ptr<SwUndoInsLayFormat> > m_FlyUndos;
+    std::vector< std::shared_ptr<SwUndoInsLayFormat> > m_FlyUndos;
     SwRedlineData* pRedlData;
     bool bSttWasTextNd;
 protected:

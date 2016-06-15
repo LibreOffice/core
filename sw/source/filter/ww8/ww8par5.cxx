@@ -1273,7 +1273,7 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pField,
     {
         //Get the name of the ref field, and see if actually a variable
         const OUString sName = pField->GetPar1();
-        ::std::map<OUString, OUString, SwWW8::ltstr>::const_iterator
+        std::map<OUString, OUString, SwWW8::ltstr>::const_iterator
             aResult = aFieldVarNames.find(sName);
 
         if (aResult != aFieldVarNames.end())
@@ -1297,7 +1297,7 @@ OUString SwWW8ImplReader::GetMappedBookmark(const OUString &rOrigName)
 
     //See if there has been a variable set with this name, if so get
     //the pseudo bookmark name that was set with it.
-    ::std::map<OUString, OUString, SwWW8::ltstr>::const_iterator aResult =
+    std::map<OUString, OUString, SwWW8::ltstr>::const_iterator aResult =
             m_pReffingStck->aFieldVarNames.find(sName);
 
     return (aResult == m_pReffingStck->aFieldVarNames.end())

@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
 } } }
 
-typedef ::std::map< OUString, RedlineInfo* > RedlineMapType;
+typedef std::map< OUString, RedlineInfo* > RedlineMapType;
 
 class XMLRedlineImportHelper
 {

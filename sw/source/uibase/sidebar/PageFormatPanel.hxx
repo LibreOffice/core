@@ -92,9 +92,9 @@ private:
     ::sfx2::sidebar::ControllerItem maSwPageLRControl;
     ::sfx2::sidebar::ControllerItem maSwPageULControl;
 
-    ::std::unique_ptr<SvxPageItem>        mpPageItem;
-    ::std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
-    ::std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
+    std::unique_ptr<SvxPageItem>          mpPageItem;
+    std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
+    std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
 
     FieldUnit meFUnit, meLastFUnit;
     SfxMapUnit meUnit;

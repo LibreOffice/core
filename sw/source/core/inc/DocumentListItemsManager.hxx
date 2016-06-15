@@ -49,7 +49,7 @@ public:
                          const SwNodeNum* pNodeNumTwo ) const;
     };
 
-    typedef ::std::set< const SwNodeNum*, lessThanNodeNum > tImplSortedNodeNumList;
+    typedef std::set< const SwNodeNum*, lessThanNodeNum > tImplSortedNodeNumList;
 
 private:
 

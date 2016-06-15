@@ -84,7 +84,7 @@ namespace sw { namespace mark
 
 void DelBookmarks(const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,
-    ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =nullptr,
+    std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =nullptr,
     const SwIndex* pSttIdx =nullptr,
     const SwIndex* pEndIdx =nullptr);
 
@@ -101,7 +101,7 @@ struct SaveFly
     { }
 };
 
-typedef ::std::deque< SaveFly > SaveFlyArr;
+typedef std::deque< SaveFly > SaveFlyArr;
 
 void RestFlyInRange( SaveFlyArr& rArr, const SwNodeIndex& rSttIdx,
                       const SwNodeIndex* pInsPos );

@@ -110,7 +110,7 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
     /// pointer to the list, to whose the text node is added to
     SwList* mpList;
 
-    ::std::unique_ptr< OUString > m_pNumStringCache;
+    std::unique_ptr< OUString > m_pNumStringCache;
 
     css::uno::WeakReference<css::text::XTextContent> m_wXParagraph;
 
@@ -385,7 +385,7 @@ public:
         @param nWhich   only attributes with this id are returned.
         @param eMode    the predicate for matching (@see GetTextAttrMode).
      */
-    ::std::vector<SwTextAttr *> GetTextAttrsAt(
+    std::vector<SwTextAttr *> GetTextAttrsAt(
         sal_Int32 const nIndex,
         RES_TXTATR const nWhich ) const;
 

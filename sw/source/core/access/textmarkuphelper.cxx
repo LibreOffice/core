@@ -175,7 +175,7 @@ css::uno::Sequence< css::accessibility::TextSegment >
                             mpTextMarkupList
                             ? mpTextMarkupList
                             : getTextMarkupList( *mpTextNode, nTextMarkupType );
-    ::std::vector< css::accessibility::TextSegment > aTmpTextMarkups;
+    std::vector< css::accessibility::TextSegment > aTmpTextMarkups;
     if ( pTextMarkupList )
     {
         const OUString rText = mrPortionData.GetAccessibleString();
@@ -205,7 +205,7 @@ css::uno::Sequence< css::accessibility::TextSegment >
 
     uno::Sequence< css::accessibility::TextSegment > aTextMarkups(
                                                     aTmpTextMarkups.size() );
-    ::std::copy( aTmpTextMarkups.begin(), aTmpTextMarkups.end(), aTextMarkups.begin() );
+    std::copy( aTmpTextMarkups.begin(), aTmpTextMarkups.end(), aTextMarkups.begin() );
 
     return aTextMarkups;
 }

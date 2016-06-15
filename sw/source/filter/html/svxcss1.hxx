@@ -177,8 +177,8 @@ public:
 
 class SvxCSS1Parser : public CSS1Parser
 {
-    typedef ::std::vector<std::unique_ptr<CSS1Selector>> CSS1Selectors;
-    typedef ::std::map<OUString, std::unique_ptr<SvxCSS1MapEntry>> CSS1Map;
+    typedef std::vector<std::unique_ptr<CSS1Selector>> CSS1Selectors;
+    typedef std::map<OUString, std::unique_ptr<SvxCSS1MapEntry>> CSS1Map;
     CSS1Selectors m_Selectors;   // List of "open" Selectors
 
     CSS1Map m_Ids;

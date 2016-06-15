@@ -58,8 +58,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::sw::access;
 
-typedef ::std::set < sal_Int32 > Int32Set_Impl;
-typedef ::std::pair < sal_Int32, sal_Int32 > Int32Pair_Impl;
+typedef std::set < sal_Int32 > Int32Set_Impl;
+typedef std::pair < sal_Int32, sal_Int32 > Int32Pair_Impl;
 
 const unsigned int SELECTION_WITH_NUM = 10;
 
@@ -77,7 +77,7 @@ class SwAccessibleTableData_Impl
     SwAccessibleMap& mrAccMap;
     Int32Set_Impl   maRows;
     Int32Set_Impl   maColumns;
-    ::std::list < Int32Pair_Impl > maExtents;   // cell extends for event processing only
+    std::list < Int32Pair_Impl > maExtents;     // cell extends for event processing only
     Point   maTabFramePos;
     const SwTabFrame *mpTabFrame;
     bool mbIsInPagePreview;
@@ -384,7 +384,7 @@ void SwAccessibleTableData_Impl::GetSelection(
                     Int32Set_Impl::const_iterator aSttRowOrCol(
                         rRowsOrCols.lower_bound( nPos ) );
                     sal_Int32 nRowOrCol =
-                        static_cast< sal_Int32 >( ::std::distance(
+                        static_cast< sal_Int32 >( std::distance(
                             rRowsOrCols.begin(), aSttRowOrCol ) );
 
                     nPos = bColumns ? (rBox.Right() - rTabPos.X())
@@ -392,7 +392,7 @@ void SwAccessibleTableData_Impl::GetSelection(
                     Int32Set_Impl::const_iterator aEndRowOrCol(
                         rRowsOrCols.upper_bound( nPos ) );
                     sal_Int32 nExt =
-                        static_cast< sal_Int32 >( ::std::distance(
+                        static_cast< sal_Int32 >( std::distance(
                             aSttRowOrCol, aEndRowOrCol ) );
 
                     rSelHdl.Unselect( nRowOrCol, nExt );
@@ -440,7 +440,7 @@ void SwAccessibleTableData_Impl::GetSelection(
     if( nStart > 0 )
     {
         Int32Set_Impl::const_iterator aStt( rRowsOrColumns.begin() );
-        ::std::advance( aStt,
+        std::advance( aStt,
             static_cast< Int32Set_Impl::difference_type >( nStart ) );
         if( bColumns )
             aArea.Left( *aStt + aPos.getX() );
@@ -450,7 +450,7 @@ void SwAccessibleTableData_Impl::GetSelection(
     if( nEnd < static_cast< sal_Int32 >( rRowsOrColumns.size() ) )
     {
         Int32Set_Impl::const_iterator aEnd( rRowsOrColumns.begin() );
-        ::std::advance( aEnd,
+        std::advance( aEnd,
             static_cast< Int32Set_Impl::difference_type >( nEnd ) );
         if( bColumns )
             aArea.Right( *aEnd + aPos.getX() - 1 );
@@ -490,7 +490,7 @@ bool SwAccessibleTableData_Impl::CompareExtents(
     if( maExtents.size() != rCmp.maExtents.size() )
         return false;
 
-    return ::std::equal(maExtents.begin(), maExtents.end(), rCmp.maExtents.begin());
+    return std::equal(maExtents.begin(), maExtents.end(), rCmp.maExtents.begin());
 }
 
 SwAccessibleTableData_Impl::SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap,
@@ -513,7 +513,7 @@ inline Int32Set_Impl::const_iterator SwAccessibleTableData_Impl::GetRowIter(
     Int32Set_Impl::const_iterator aCol( GetRows().begin() );
     if( nRow > 0 )
     {
-        ::std::advance( aCol,
+        std::advance( aCol,
                     static_cast< Int32Set_Impl::difference_type >( nRow ) );
     }
     return aCol;
@@ -525,7 +525,7 @@ inline Int32Set_Impl::const_iterator SwAccessibleTableData_Impl::GetColumnIter(
     Int32Set_Impl::const_iterator aCol = GetColumns().begin();
     if( nColumn > 0 )
     {
-        ::std::advance( aCol,
+        std::advance( aCol,
                     static_cast< Int32Set_Impl::difference_type >( nColumn ) );
     }
     return aCol;
@@ -556,16 +556,16 @@ void SwAccessibleTableData_Impl::GetRowColumnAndExtent(
     Int32Set_Impl::const_iterator aEnd(
                 maRows.upper_bound( rBox.Bottom() - maTabFramePos.Y() ) );
     rRow =
-         static_cast< sal_Int32 >( ::std::distance( maRows.begin(), aStt ) );
+         static_cast< sal_Int32 >( std::distance( maRows.begin(), aStt ) );
     rRowExtent =
-         static_cast< sal_Int32 >( ::std::distance( aStt, aEnd ) );
+         static_cast< sal_Int32 >( std::distance( aStt, aEnd ) );
 
     aStt = maColumns.lower_bound( rBox.Left() - maTabFramePos.X() );
     aEnd = maColumns.upper_bound( rBox.Right() - maTabFramePos.X() );
     rColumn =
-         static_cast< sal_Int32 >( ::std::distance( maColumns.begin(), aStt ) );
+         static_cast< sal_Int32 >( std::distance( maColumns.begin(), aStt ) );
     rColumnExtent =
-         static_cast< sal_Int32 >( ::std::distance( aStt, aEnd ) );
+         static_cast< sal_Int32 >( std::distance( aStt, aEnd ) );
 }
 
 class SwAccSingleTableSelHander_Impl : public SwAccTableSelHander_Impl
@@ -596,7 +596,7 @@ void SwAccSingleTableSelHander_Impl::Unselect( sal_Int32, sal_Int32 )
 class SwAccAllTableSelHander_Impl : public SwAccTableSelHander_Impl
 
 {
-    ::std::vector< bool > aSelected;
+    std::vector< bool > aSelected;
     sal_Int32 nCount;
 
 public:
@@ -1032,7 +1032,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
         Int32Set_Impl::const_iterator aEndRow(
                 GetTableData().GetRows().upper_bound( nBottom ) );
         nExtend =
-             static_cast< sal_Int32 >( ::std::distance( aSttRow, aEndRow ) );
+             static_cast< sal_Int32 >( std::distance( aSttRow, aEndRow ) );
     }
 
     return nExtend;
@@ -1063,7 +1063,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumnExtentAt(
         Int32Set_Impl::const_iterator aEndCol(
                 GetTableData().GetColumns().upper_bound( nRight ) );
         nExtend =
-             static_cast< sal_Int32 >( ::std::distance( aSttCol, aEndCol ) );
+             static_cast< sal_Int32 >( std::distance( aSttCol, aEndCol ) );
     }
 
     return nExtend;
@@ -1296,7 +1296,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
         nTop -= GetFrame()->Frame().Top();
         Int32Set_Impl::const_iterator aRow(
                 GetTableData().GetRows().lower_bound( nTop ) );
-        nRet = static_cast< sal_Int32 >( ::std::distance(
+        nRet = static_cast< sal_Int32 >( std::distance(
                     GetTableData().GetRows().begin(), aRow ) );
     }
     else
@@ -1334,7 +1334,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
         nLeft -= GetFrame()->Frame().Left();
         Int32Set_Impl::const_iterator aCol(
                 GetTableData().GetColumns().lower_bound( nLeft ) );
-        nRet = static_cast< sal_Int32 >( ::std::distance(
+        nRet = static_cast< sal_Int32 >( std::distance(
                     GetTableData().GetColumns().begin(), aCol ) );
     }
     else

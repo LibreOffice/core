@@ -1106,11 +1106,11 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
     // (either all the text or the text within the selection
     // when the conversion was started)
     const sal_Int32 nTextBegin = ( rArgs.pStartNode == this )
-        ? ::std::min(rArgs.pStartIdx->GetIndex(), m_Text.getLength())
+        ? std::min(rArgs.pStartIdx->GetIndex(), m_Text.getLength())
         : 0;
 
     const sal_Int32 nTextEnd = ( rArgs.pEndNode == this )
-        ?  ::std::min(rArgs.pEndIdx->GetIndex(), m_Text.getLength())
+        ?  std::min(rArgs.pEndIdx->GetIndex(), m_Text.getLength())
         :  m_Text.getLength();
 
     rArgs.aConvText.clear();

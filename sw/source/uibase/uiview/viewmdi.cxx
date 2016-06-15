@@ -384,7 +384,7 @@ IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
 
             // collect navigator reminders
             IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-            ::std::vector< const ::sw::mark::IMark* > vNavMarks;
+            std::vector< const ::sw::mark::IMark* > vNavMarks;
             for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)

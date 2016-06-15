@@ -377,7 +377,7 @@ namespace
         : public SwSimpleEnumeration_Base
     {
         private:
-            typedef ::std::list< css::uno::Any > shapescontainer_t;
+            typedef std::list< css::uno::Any > shapescontainer_t;
             shapescontainer_t m_aShapes;
         protected:
             virtual ~SwXShapesEnumeration() {};
@@ -399,7 +399,7 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
     : m_aShapes()
 {
     SolarMutexGuard aGuard;
-    ::std::insert_iterator<shapescontainer_t> pInserter = ::std::insert_iterator<shapescontainer_t>(m_aShapes, m_aShapes.begin());
+    std::insert_iterator<shapescontainer_t> pInserter = std::insert_iterator<shapescontainer_t>(m_aShapes, m_aShapes.begin());
     sal_Int32 nCount = pDrawPage->getCount();
     std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDrawPage->GetDoc());
     for(sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)

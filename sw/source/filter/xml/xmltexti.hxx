@@ -79,7 +79,7 @@ public:
 
     virtual void endAppletOrPlugin(
         const css::uno::Reference < css::beans::XPropertySet > &rPropSet,
-        ::std::map < const OUString, OUString > &rParamMap) override;
+        std::map < const OUString, OUString > &rParamMap) override;
 
     virtual bool IsInHeaderFooter() const override;
 

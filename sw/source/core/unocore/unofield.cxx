@@ -589,7 +589,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         bool bSetValue = true;
         if( rPropertyName == UNO_NAME_SUB_TYPE )
         {
-            const ::std::vector<OUString>& rExtraArr(
+            const std::vector<OUString>& rExtraArr(
                     SwStyleNameMapper::GetExtraUINameArray());
             const OUString sTypeName = pType->GetName();
             static sal_uInt16 nIds[] =
@@ -3021,7 +3021,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
         }
     }
     // now handle meta-fields, which are not SwFields
-    const ::std::vector< uno::Reference<text::XTextField> > MetaFields(
+    const std::vector< uno::Reference<text::XTextField> > MetaFields(
            m_pImpl->m_pDoc->GetMetaFieldManager().getMetaFields() );
     for (const auto & rMetaField : MetaFields)
     {

@@ -48,7 +48,7 @@ class SwFrameFormat;
 class SwRangeRedline;
 class SwTextRuby;
 
-typedef ::std::deque<
+typedef std::deque<
     css::uno::Reference< css::text::XTextRange > >
     TextRangeList_t;
 
@@ -107,10 +107,10 @@ private:
         m_xTextField;
     css::uno::Reference< css::text::XTextContent >
         m_xMeta;
-    ::std::unique_ptr< css::uno::Any > m_pRubyText;
-    ::std::unique_ptr< css::uno::Any > m_pRubyStyle;
-    ::std::unique_ptr< css::uno::Any > m_pRubyAdjust;
-    ::std::unique_ptr< css::uno::Any > m_pRubyIsAbove;
+    std::unique_ptr< css::uno::Any > m_pRubyText;
+    std::unique_ptr< css::uno::Any > m_pRubyStyle;
+    std::unique_ptr< css::uno::Any > m_pRubyAdjust;
+    std::unique_ptr< css::uno::Any > m_pRubyIsAbove;
     sw::UnoCursorPointer m_pUnoCursor;
 
     const SwDepend              m_FrameDepend;

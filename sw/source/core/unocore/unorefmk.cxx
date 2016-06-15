@@ -187,11 +187,11 @@ throw (uno::RuntimeException, std::exception)
 
 template<typename T> struct NotContainedIn
 {
-    ::std::vector<T> const& m_rVector;
-    explicit NotContainedIn(::std::vector<T> const& rVector)
+    std::vector<T> const& m_rVector;
+    explicit NotContainedIn(std::vector<T> const& rVector)
         : m_rVector(rVector) { }
     bool operator() (T const& rT) {
-        return ::std::find(m_rVector.begin(), m_rVector.end(), rT)
+        return std::find(m_rVector.begin(), m_rVector.end(), rT)
                     == m_rVector.end();
     }
 };
@@ -214,7 +214,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
             | SetAttrMode::DONTEXPAND)
         : SetAttrMode::DONTEXPAND;
 
-    ::std::vector<SwTextAttr *> oldMarks;
+    std::vector<SwTextAttr *> oldMarks;
     if (bMark)
     {
         oldMarks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
@@ -234,11 +234,11 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     {
         // #i107672#
         // ensure that we do not retrieve a different mark at the same position
-        ::std::vector<SwTextAttr *> const newMarks(
+        std::vector<SwTextAttr *> const newMarks(
             rPam.GetNode().GetTextNode()->GetTextAttrsAt(
                 rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
-        ::std::vector<SwTextAttr *>::const_iterator const iter(
-            ::std::find_if(newMarks.begin(), newMarks.end(),
+        std::vector<SwTextAttr *>::const_iterator const iter(
+            std::find_if(newMarks.begin(), newMarks.end(),
                 NotContainedIn<SwTextAttr *>(oldMarks)));
         OSL_ASSERT(newMarks.end() != iter);
         if (newMarks.end() != iter)
@@ -317,7 +317,7 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException, std::exception)
                     &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTextNode const& rTextNode = pTextMark->GetTextNode();
-                const ::std::unique_ptr<SwPaM> pPam( (pTextMark->End())
+                const std::unique_ptr<SwPaM> pPam( (pTextMark->End())
                     ?   new SwPaM( rTextNode, *pTextMark->End(),
                                    rTextNode, pTextMark->GetStart())
                     :   new SwPaM( rTextNode, pTextMark->GetStart()) );
@@ -641,7 +641,7 @@ private:
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
     ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
-    ::std::unique_ptr<const TextRangeList_t> m_pTextPortions;
+    std::unique_ptr<const TextRangeList_t> m_pTextPortions;
     // 3 possible states: not attached, attached, disposed
     bool m_bIsDisposed;
     bool m_bIsDescriptor;
@@ -735,7 +735,7 @@ SwXMeta::CreateXMeta(SwDoc & rDoc, bool const isField)
 uno::Reference<rdf::XMetadatable>
 SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             uno::Reference<text::XText> const& i_xParent,
-            ::std::unique_ptr<TextRangeList_t const> && pPortions)
+            std::unique_ptr<TextRangeList_t const> && pPortions)
 {
     // re-use existing SwXMeta
     // #i105557#: do not iterate over the registered clients: race condition

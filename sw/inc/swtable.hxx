@@ -490,7 +490,7 @@ class SwCellFrame;
 class SW_DLLPUBLIC SwTableCellInfo
 {
     struct Impl;
-    ::std::unique_ptr<Impl> m_pImpl;
+    std::unique_ptr<Impl> m_pImpl;
 
     const SwCellFrame * getCellFrame() const;
 

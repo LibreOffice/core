@@ -90,7 +90,7 @@ PageSizeControl::PageSizeControl(
         OUString aWidthStr;
         OUString aHeightStr;
         OUString aItemText2;
-        for ( ::std::vector< Paper >::size_type nPaperIdx = 0;
+        for ( std::vector< Paper >::size_type nPaperIdx = 0;
               nPaperIdx < maPaperList.size();
               ++nPaperIdx )
         {

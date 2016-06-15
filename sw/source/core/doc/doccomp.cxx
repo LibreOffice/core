@@ -52,7 +52,7 @@
 
 using namespace ::com::sun::star;
 
-using ::std::vector;
+using std::vector;
 
 class SwCompareLine
 {

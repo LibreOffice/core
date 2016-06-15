@@ -809,23 +809,23 @@ struct MakeUnoObject
     }
 };
 
-::std::vector< uno::Reference<text::XTextField> >
+std::vector< uno::Reference<text::XTextField> >
 MetaFieldManager::getMetaFields()
 {
     // erase deleted fields
     const MetaFieldList_t::iterator iter(
-        ::std::remove_if(m_MetaFields.begin(), m_MetaFields.end(),
+        std::remove_if(m_MetaFields.begin(), m_MetaFields.end(),
             [] (std::weak_ptr<MetaField> const& rField) { return rField.expired(); }));
     m_MetaFields.erase(iter, m_MetaFields.end());
     // filter out fields in UNDO
     MetaFieldList_t filtered(m_MetaFields.size());
     const MetaFieldList_t::iterator iter2(
-    ::std::remove_copy_if(m_MetaFields.begin(), m_MetaFields.end(),
+    std::remove_copy_if(m_MetaFields.begin(), m_MetaFields.end(),
         filtered.begin(), IsInUndo()));
     filtered.erase(iter2, filtered.end());
     // create uno objects
-    ::std::vector< uno::Reference<text::XTextField> > ret(filtered.size());
-    ::std::transform(filtered.begin(), filtered.end(), ret.begin(),
+    std::vector< uno::Reference<text::XTextField> > ret(filtered.size());
+    std::transform(filtered.begin(), filtered.end(), ret.begin(),
             MakeUnoObject());
     return ret;
 }

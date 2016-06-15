@@ -92,7 +92,7 @@ struct SwSendMailDialog_Impl
     friend class SwSendMailDialog;
     ::osl::Mutex                                aDescriptorMutex;
 
-    ::std::vector< SwMailDescriptor >           aDescriptors;
+    std::vector< SwMailDescriptor >             aDescriptors;
     sal_uInt32                                  nCurrentDescriptor;
     sal_uInt32                                  nDocumentCount;
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;

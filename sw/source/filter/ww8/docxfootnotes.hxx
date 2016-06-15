@@ -26,7 +26,7 @@ class SwFormatFootnote;
 
 namespace docx {
 
-typedef ::std::vector< const SwFormatFootnote* > FootnotesVector;
+typedef std::vector< const SwFormatFootnote* > FootnotesVector;
 
 /** Remember footnotes/endnotes so that we can dump them in one go.
 

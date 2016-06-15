@@ -769,10 +769,10 @@ public:
 
     void GetConnectableFrameFormats
     (SwFrameFormat & rFormat, const OUString & rReference, bool bSuccessors,
-     ::std::vector< OUString > & aPrevPageVec,
-     ::std::vector< OUString > & aThisPageVec,
-     ::std::vector< OUString > & aNextPageVec,
-     ::std::vector< OUString > & aRestVec);
+     std::vector< OUString > & aPrevPageVec,
+     std::vector< OUString > & aThisPageVec,
+     std::vector< OUString > & aNextPageVec,
+     std::vector< OUString > & aRestVec);
 
     /** SwFEShell::GetShapeBackgrd
 

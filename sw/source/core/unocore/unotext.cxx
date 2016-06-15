@@ -109,7 +109,7 @@ public:
 
     void ConvertCell(
             const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
-            ::std::vector<SwNodeRange> & rRowNodes,
+            std::vector<SwNodeRange> & rRowNodes,
             SwNodeRange *const pLastCell,
             bool & rbExcept);
 
@@ -1810,7 +1810,7 @@ static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
 
 void SwXText::Impl::ConvertCell(
     const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
-    ::std::vector<SwNodeRange> & rRowNodes,
+    std::vector<SwNodeRange> & rRowNodes,
     SwNodeRange *const pLastCell,
     bool & rbExcept)
 {
@@ -2042,7 +2042,7 @@ lcl_ApplyCellProperties(
     TableColumnSeparators const& rRowSeparators,
     const uno::Sequence< beans::PropertyValue >& rCellProperties,
     const uno::Reference< uno::XInterface >& xCell,
-    ::std::vector<VerticallyMergedCell> & rMergedCells)
+    std::vector<VerticallyMergedCell> & rMergedCells)
 {
     const sal_Int32 nCellProperties = rCellProperties.getLength();
     const uno::Reference< beans::XPropertySet > xCellPS(xCell, uno::UNO_QUERY);
@@ -2158,7 +2158,7 @@ lcl_ApplyCellProperties(
 }
 
 static void
-lcl_MergeCells(::std::vector<VerticallyMergedCell> & rMergedCells)
+lcl_MergeCells(std::vector<VerticallyMergedCell> & rMergedCells)
 {
     if (rMergedCells.size())
     {

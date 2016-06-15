@@ -101,7 +101,7 @@ namespace sw {
     };
     /// Smart pointer class ensuring that the pointed object is deleted with a locked SolarMutex.
     template<typename T>
-    using UnoImplPtr = ::std::unique_ptr<T, UnoImplPtrDeleter<T> >;
+    using UnoImplPtr = std::unique_ptr<T, UnoImplPtrDeleter<T> >;
 
     template< class C > C *
     UnoTunnelGetImplementation( css::uno::Reference< css::lang::XUnoTunnel > const & xUnoTunnel)

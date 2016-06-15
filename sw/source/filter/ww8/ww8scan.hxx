@@ -169,8 +169,8 @@ class  WW8PLCFx_PCD;
  attention: the *extra data* of each string are SKIPPED and ignored
  */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen,
-    sal_uInt16 nExtraLen, rtl_TextEncoding eCS, ::std::vector<OUString> &rArray,
-    ::std::vector<ww::bytes>* pExtraArray = nullptr, ::std::vector<OUString>* pValueArray = nullptr);
+    sal_uInt16 nExtraLen, rtl_TextEncoding eCS, std::vector<OUString> &rArray,
+    std::vector<ww::bytes>* pExtraArray = nullptr, std::vector<OUString>* pValueArray = nullptr);
 
 struct WW8FieldDesc
 {
@@ -851,7 +851,7 @@ enum ManTypes // enums for PLCFMan-ctor
 struct WW8PLCFxDesc
 {
     WW8PLCFx* pPLCFx;
-    ::std::stack<sal_uInt16>* pIdStack;  // memory for Attr-Id for Attr-end(s)
+    std::stack<sal_uInt16>* pIdStack;    // memory for Attr-Id for Attr-end(s)
     const sal_uInt8* pMemPos;// where are the Sprm(s)
     long nOrigSprmsLen;
 

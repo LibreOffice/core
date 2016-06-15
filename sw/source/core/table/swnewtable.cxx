@@ -1095,10 +1095,10 @@ static void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
         return;
     if( nCnt > nCount )
         nCnt = nCount;
-    ::std::unique_ptr<size_t[]> const pSplitIdx(new size_t[nCnt]);
+    std::unique_ptr<size_t[]> const pSplitIdx(new size_t[nCnt]);
     if( bSameHeight )
     {
-        ::std::unique_ptr<SwTwips[]> const pHeights(new SwTwips[nCount]);
+        std::unique_ptr<SwTwips[]> const pHeights(new SwTwips[nCount]);
         SwTwips nHeight = 0;
         for (size_t i = 0; i < nCount; ++i)
         {

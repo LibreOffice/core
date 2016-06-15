@@ -684,7 +684,7 @@ IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, Address
     {
         //search in ListBox if it's one of the first entries
         OUString sSelect;
-        ::std::vector<OUString>* pVector = nullptr;
+        std::vector<OUString>* pVector = nullptr;
         switch(nSelected) {
             case USER_DATA_SALUTATION:
                 sSelect =  m_sCurrentSalutation;
@@ -700,7 +700,7 @@ IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, Address
         }
         m_pFieldCB->Clear();
         if(pVector) {
-            ::std::vector<OUString>::iterator  aIterator;
+            std::vector<OUString>::iterator    aIterator;
             for( aIterator = pVector->begin(); aIterator != pVector->end(); ++aIterator)
                 m_pFieldCB->InsertEntry(*aIterator);
         }
@@ -798,9 +798,9 @@ class SwAssignFieldsControl : public Control
     VclPtr<HeaderBar>           m_aHeaderHB;
     VclPtr<Window>              m_aWindow;
 
-    ::std::vector<VclPtr<FixedText> >   m_aFieldNames;
-    ::std::vector<VclPtr<ListBox> >     m_aMatches;
-    ::std::vector<VclPtr<FixedText> >   m_aPreviews;
+    std::vector<VclPtr<FixedText> >     m_aFieldNames;
+    std::vector<VclPtr<ListBox> >       m_aMatches;
+    std::vector<VclPtr<FixedText> >     m_aPreviews;
 
     SwMailMergeConfigItem*              m_rConfigItem;
 

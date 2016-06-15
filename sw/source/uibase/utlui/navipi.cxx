@@ -504,13 +504,13 @@ void SwNavigationPI::MakeMark()
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
 
     // collect and sort navigator reminder names
-    ::std::vector< OUString > vNavMarkNames;
+    std::vector< OUString > vNavMarkNames;
     for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
         ppMark != pMarkAccess->getAllMarksEnd();
         ++ppMark)
         if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER )
             vNavMarkNames.push_back(ppMark->get()->GetName());
-    ::std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
+    std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
 
     // we are maxed out and delete one
     // nAutoMarkIdx rotates through the available MarkNames

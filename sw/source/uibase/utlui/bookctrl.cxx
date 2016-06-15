@@ -108,7 +108,7 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
             IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
             IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();
             sal_uInt16 nPopupId = 1;
-            ::std::map<sal_Int32, sal_uInt16> aBookmarkIdx;
+            std::map<sal_Int32, sal_uInt16> aBookmarkIdx;
             for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBookmarkStart;
                 ppBookmark != pMarkAccess->getBookmarksEnd();
                 ++ppBookmark)

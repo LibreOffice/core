@@ -99,11 +99,11 @@ namespace
             pMark);
     }
 
-    inline ::std::unique_ptr<SwPosition> lcl_PositionFromContentNode(
+    inline std::unique_ptr<SwPosition> lcl_PositionFromContentNode(
         SwContentNode * const pContentNode,
         const bool bAtEnd=false)
     {
-        ::std::unique_ptr<SwPosition> pResult(new SwPosition(*pContentNode));
+        std::unique_ptr<SwPosition> pResult(new SwPosition(*pContentNode));
         pResult->nContent.Assign(pContentNode, bAtEnd ? pContentNode->Len() : 0);
         return pResult;
     }
@@ -112,7 +112,7 @@ namespace
     // else set it to the begin of the Node after rEnd, if there is one
     // else set it to the end of the node before rStt
     // else set it to the ContentNode of the Pos outside the Range
-    inline ::std::unique_ptr<SwPosition> lcl_FindExpelPosition(
+    inline std::unique_ptr<SwPosition> lcl_FindExpelPosition(
         const SwNodeIndex& rStt,
         const SwNodeIndex& rEnd,
         const SwPosition& rOtherPosition)
@@ -664,11 +664,11 @@ namespace sw { namespace mark
     void MarkManager::deleteMarks(
             const SwNodeIndex& rStt,
             const SwNodeIndex& rEnd,
-            ::std::vector<SaveBookmark>* pSaveBkmk,
+            std::vector<SaveBookmark>* pSaveBkmk,
             const SwIndex* pSttIdx,
             const SwIndex* pEndIdx )
     {
-        ::std::vector<const_iterator_t> vMarksToDelete;
+        std::vector<const_iterator_t> vMarksToDelete;
         bool bIsSortingNeeded = false;
 
         // boolean indicating, if at least one mark has been moved while collecting marks for deletion
@@ -753,7 +753,7 @@ namespace sw { namespace mark
                 // the bookmark is partially in the range
                 // move position of that is in the range out of it
 
-                ::std::unique_ptr< SwPosition > pNewPos;
+                std::unique_ptr< SwPosition > pNewPos;
                 {
                     if ( pEndIdx != nullptr )
                     {
@@ -817,7 +817,7 @@ namespace sw { namespace mark
             // for the shared_ptr<> (the entry in m_vAllMarks) again
             // reverse iteration, since erasing an entry invalidates iterators
             // behind it (the iterators in vMarksToDelete are sorted)
-            for ( ::std::vector< const_iterator_t >::reverse_iterator pppMark = vMarksToDelete.rbegin();
+            for ( std::vector< const_iterator_t >::reverse_iterator pppMark = vMarksToDelete.rbegin();
                   pppMark != vMarksToDelete.rend();
                   ++pppMark )
             {
@@ -1315,7 +1315,7 @@ void SaveBookmark::SetInDoc(
 void DelBookmarks(
     const SwNodeIndex& rStt,
     const SwNodeIndex& rEnd,
-    ::std::vector<SaveBookmark> * pSaveBkmk,
+    std::vector<SaveBookmark> * pSaveBkmk,
     const SwIndex* pSttIdx,
     const SwIndex* pEndIdx)
 {

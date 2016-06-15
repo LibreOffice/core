@@ -63,8 +63,8 @@ LocaleDataWrapper*  SwSortElement::pLclData = nullptr;
 
 // List of all sorted elements
 
-typedef ::std::multiset<SwSortTextElement> SwSortTextElements;
-typedef ::std::multiset<SwSortBoxElement> SwSortBoxElements;
+typedef std::multiset<SwSortTextElement> SwSortTextElements;
+typedef std::multiset<SwSortBoxElement> SwSortBoxElements;
 
 /// Construct a SortElement for the Sort
 void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,

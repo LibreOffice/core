@@ -71,8 +71,8 @@ private:
     sal_uInt16 nStrings;
 
     static bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
-        const ::std::vector<OUString>& rStrings,
-        const ::std::vector<ww::bytes>& rExtra);
+        const std::vector<OUString>& rStrings,
+        const std::vector<ww::bytes>& rExtra);
     static bool HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
 
     WW8Glossary(const WW8Glossary&) = delete;

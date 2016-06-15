@@ -123,7 +123,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
     }
 }
 
-::std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
+std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
                                                 const sal_uInt32 nPos,
                                                 const SwAccessibleChildMapKey::LayerId eLayerId,
                                                 const SwAccessibleChild& rLower )
@@ -133,7 +133,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
     return insert( aEntry );
 }
 
-::std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
+std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
                                                 const SdrObject *pObj,
                                                 const SwAccessibleChild& rLower )
 {

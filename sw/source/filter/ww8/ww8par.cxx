@@ -1154,7 +1154,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         aMemStream.WriteUInt16( 0 ).WriteUInt16( nBufferSize );
 
         // copy from DFF stream to memory stream
-        ::std::vector< sal_uInt8 > aBuffer( nBufferSize );
+        std::vector< sal_uInt8 > aBuffer( nBufferSize );
         sal_uInt8* pnData = &aBuffer.front();
         sal_uInt8 nStreamSize;
         if (pnData && rSt.ReadBytes(pnData, nBufferSize) == nBufferSize)
@@ -1396,7 +1396,7 @@ void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
             if ( pFltBookmark != nullptr && pFltBookmark->IsTOCBookmark() )
             {
                 const OUString& rName = pFltBookmark->GetName();
-                ::std::set< OUString, SwWW8::ltstr >::const_iterator aResult = aReferencedTOCBookmarks.find(rName);
+                std::set< OUString, SwWW8::ltstr >::const_iterator aResult = aReferencedTOCBookmarks.find(rName);
                 if ( aResult == aReferencedTOCBookmarks.end() )
                 {
                     bInsertBookmarkIntoDoc = false;
@@ -5973,7 +5973,7 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
     if (!m_pAtnNames && m_pWwFib->lcbGrpStAtnOwners)
     {
         // Determine authors: can be found in the TableStream
-        m_pAtnNames = new ::std::vector<OUString>;
+        m_pAtnNames = new std::vector<OUString>;
         SvStream& rStrm = *m_pTableStream;
 
         long nOldPos = rStrm.Tell();

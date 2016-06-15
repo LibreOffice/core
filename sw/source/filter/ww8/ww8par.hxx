@@ -494,11 +494,11 @@ inline bool get_flag( Type nBitField, Type nMask )
 
 template< typename ReturnType, typename Type >
 inline ReturnType ulimit_cast( Type nValue, ReturnType nMax )
-{ return static_cast< ReturnType >( ::std::min< Type >( nValue, nMax ) ); }
+{ return static_cast< ReturnType >( std::min< Type >( nValue, nMax ) ); }
 
 template< typename ReturnType, typename Type >
 inline ReturnType ulimit_cast( Type nValue )
-{ return ulimit_cast( nValue, ::std::numeric_limits< ReturnType >::max() ); }
+{ return ulimit_cast( nValue, std::numeric_limits< ReturnType >::max() ); }
 
 class SwMacroInfo : public SdrObjUserData
 {
@@ -821,8 +821,8 @@ private:
     */
     SwWW8ImplReader& mrReader;
     std::deque<wwSection> maSegments;
-    typedef ::std::deque<wwSection>::iterator mySegIter;
-    typedef ::std::deque<wwSection>::reverse_iterator mySegrIter;
+    typedef std::deque<wwSection>::iterator mySegIter;
+    typedef std::deque<wwSection>::reverse_iterator mySegrIter;
 
     //Num of page desc's entered into the document
     sal_uInt16 mnDesc;

@@ -146,7 +146,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     }
     //now create appropriate controls
 
-    ::std::vector< OUString >::iterator  aHeaderIter;
+    std::vector< OUString >::iterator    aHeaderIter;
 
     long nFTXPos = m_pWindow->LogicToPixel(Point(RSC_SP_CTRL_X, RSC_SP_CTRL_X), MAP_APPFONT).X();
     long nFTHeight = m_pWindow->LogicToPixel(Size(RSC_BS_CHARHEIGHT, RSC_BS_CHARHEIGHT), MAP_APPFONT).Height();
@@ -455,7 +455,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             }
             while(pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 ))
             {
-                ::std::vector<OUString> aNewData;
+                std::vector<OUString> aNewData;
                 //analyze data line
                 sal_Int32 nDataCount = comphelper::string::getTokenCount(sLine, '\t');
                 sal_Int32 nIndex = 0;
@@ -480,7 +480,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
         const sal_uInt32 nCount = rAddressHeader.Count();
         for(sal_uInt32 nHeader = 0; nHeader < nCount; ++nHeader)
             m_pCSVData->aDBColumnHeaders.push_back( rAddressHeader.GetString(nHeader));
-        ::std::vector<OUString> aNewData;
+        std::vector<OUString> aNewData;
         OUString sTemp;
         aNewData.insert(aNewData.begin(), nCount, sTemp);
         m_pCSVData->aDBData.push_back(aNewData);
@@ -518,7 +518,7 @@ void SwCreateAddressListDialog::dispose()
 IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, NewHdl_Impl, Button*, void)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
-    ::std::vector<OUString> aNewData;
+    std::vector<OUString> aNewData;
     OUString sTemp;
     aNewData.insert(aNewData.begin(), m_pCSVData->aDBColumnHeaders.size(), sTemp);
     m_pCSVData->aDBData.insert(m_pCSVData->aDBData.begin() + ++nCurrent, aNewData);
@@ -557,7 +557,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, FindHdl_Impl, Button*, void)
     {
         m_pFindDlg = VclPtr<SwFindEntryDialog>::Create(this);
         ListBox& rColumnBox = m_pFindDlg->GetFieldsListBox();
-        ::std::vector< OUString >::iterator  aHeaderIter;
+        std::vector< OUString >::iterator    aHeaderIter;
         for(aHeaderIter = m_pCSVData->aDBColumnHeaders.begin();
                     aHeaderIter != m_pCSVData->aDBColumnHeaders.end();
                     ++aHeaderIter)
@@ -586,7 +586,7 @@ IMPL_LINK_TYPED(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, pButton, 
     {
         ListBox& rColumnBox = m_pFindDlg->GetFieldsListBox();
         rColumnBox.Clear();
-        ::std::vector< OUString >::iterator  aHeaderIter;
+        std::vector< OUString >::iterator    aHeaderIter;
         for(aHeaderIter = m_pCSVData->aDBColumnHeaders.begin();
                     aHeaderIter != m_pCSVData->aDBColumnHeaders.end();
                     ++aHeaderIter)
@@ -597,12 +597,12 @@ IMPL_LINK_TYPED(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, pButton, 
 namespace
 {
 
-void lcl_WriteValues(const ::std::vector<OUString> *pFields, SvStream* pStream)
+void lcl_WriteValues(const std::vector<OUString> *pFields, SvStream* pStream)
 {
     OUString sLine;
-    const ::std::vector< OUString >::const_iterator aBegin = pFields->begin();
-    const ::std::vector< OUString >::const_iterator aEnd = pFields->end();
-    for(::std::vector< OUString >::const_iterator aIter = aBegin; aIter != aEnd; ++aIter)
+    const std::vector< OUString >::const_iterator aBegin = pFields->begin();
+    const std::vector< OUString >::const_iterator aEnd = pFields->end();
+    for(std::vector< OUString >::const_iterator aIter = aBegin; aIter != aEnd; ++aIter)
     {
         if (aIter==aBegin)
         {
@@ -648,7 +648,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
 
         lcl_WriteValues(&(m_pCSVData->aDBColumnHeaders), pStream);
 
-        ::std::vector< ::std::vector< OUString > >::iterator aDataIter;
+        std::vector< std::vector< OUString > >::iterator aDataIter;
         for( aDataIter = m_pCSVData->aDBData.begin(); aDataIter != m_pCSVData->aDBData.end(); ++aDataIter)
         {
             lcl_WriteValues(&(*aDataIter), pStream);
@@ -714,7 +714,7 @@ void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
     {
         for(nPos = nStart; nPos < nEnd; ++nPos)
         {
-            ::std::vector< OUString> aData = m_pCSVData->aDBData[nPos];
+            std::vector< OUString> aData = m_pCSVData->aDBData[nPos];
             if(nColumn >=0)
                 bFound = -1 != aData[(sal_uInt32)nColumn].toAsciiLowerCase().indexOf(sSearch);
             else
