@@ -2617,9 +2617,9 @@ SfxBoolItem Notebookbar SID_NOTEBOOKBAR
     RecordPerSet;
     Asynchron;
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
 
