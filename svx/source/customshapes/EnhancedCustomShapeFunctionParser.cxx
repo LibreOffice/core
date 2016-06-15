@@ -781,16 +781,15 @@ struct ParserContext
 
 };
 
-typedef std::shared_ptr< ParserContext > ParserContextSharedPtr;
 
 /** Generate parse-dependent-but-then-constant value
     */
 class DoubleConstantFunctor
 {
-    ParserContextSharedPtr  mxContext;
+    std::shared_ptr< ParserContext > mxContext;
 
 public:
-    explicit DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
+    explicit DoubleConstantFunctor( const std::shared_ptr< ParserContext >& rContext ) :
         mxContext( rContext )
     {
     }
@@ -803,11 +802,11 @@ public:
 class EnumFunctor
 {
     const ExpressionFunct           meFunct;
-    ParserContextSharedPtr          mxContext;
+    std::shared_ptr< ParserContext > mxContext;
 
 public:
 
-    EnumFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext )
+    EnumFunctor( const ExpressionFunct eFunct, const std::shared_ptr< ParserContext >& rContext )
     : meFunct( eFunct )
     , mxContext( rContext )
     {
@@ -838,11 +837,11 @@ public:
 class UnaryFunctionFunctor
 {
     const ExpressionFunct   meFunct;
-    ParserContextSharedPtr  mxContext;
+    std::shared_ptr< ParserContext > mxContext;
 
 public:
 
-    UnaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
+    UnaryFunctionFunctor( const ExpressionFunct eFunct, const std::shared_ptr< ParserContext >& rContext ) :
         meFunct( eFunct ),
         mxContext( rContext )
     {
@@ -875,11 +874,11 @@ public:
 class BinaryFunctionFunctor
 {
     const ExpressionFunct   meFunct;
-    ParserContextSharedPtr  mxContext;
+    std::shared_ptr< ParserContext > mxContext;
 
 public:
 
-    BinaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
+    BinaryFunctionFunctor( const ExpressionFunct eFunct, const std::shared_ptr< ParserContext >& rContext ) :
         meFunct( eFunct ),
         mxContext( rContext )
     {
@@ -910,11 +909,11 @@ public:
 
 class IfFunctor
 {
-    ParserContextSharedPtr  mxContext;
+    std::shared_ptr< ParserContext > mxContext;
 
 public:
 
-    explicit IfFunctor( const ParserContextSharedPtr& rContext ) :
+    explicit IfFunctor( const std::shared_ptr< ParserContext >& rContext ) :
         mxContext( rContext )
     {
     }
@@ -1002,7 +1001,7 @@ public:
         @param rParserContext
         Contains context info for the parser
         */
-    explicit ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
+    explicit ExpressionGrammar( const std::shared_ptr< ParserContext >& rParserContext ) :
         mpParserContext( rParserContext )
     {
     }
@@ -1127,19 +1126,19 @@ public:
         ::boost::spirit::rule< ScannerT >   identifier;
     };
 
-    const ParserContextSharedPtr& getContext() const
+    const std::shared_ptr< ParserContext >& getContext() const
     {
         return mpParserContext;
     }
 
 private:
-    ParserContextSharedPtr          mpParserContext; // might get modified during parsing
+    std::shared_ptr< ParserContext > mpParserContext; // might get modified during parsing
 };
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
-const ParserContextSharedPtr& getParserContext()
+const std::shared_ptr< ParserContext >& getParserContext()
 {
-    static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
+    static std::shared_ptr< ParserContext > lcl_parserContext( new ParserContext() );
 
     // clear node stack (since we reuse the static object, that's
     // the whole point here)
@@ -1166,7 +1165,7 @@ std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& r
     StringIteratorT aStart( rAsciiFunction.getStr() );
     StringIteratorT aEnd( rAsciiFunction.getStr()+rAsciiFunction.getLength() );
 
-    ParserContextSharedPtr pContext;
+    std::shared_ptr< ParserContext > pContext;
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
     // static parser context, because the actual

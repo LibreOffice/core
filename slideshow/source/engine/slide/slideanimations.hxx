@@ -105,7 +105,7 @@ namespace slideshow
         private:
             SlideShowContext         maContext;
             const basegfx::B2DVector maSlideSize;
-            AnimationNodeSharedPtr   mpRootNode;
+            std::shared_ptr< AnimationNode > mpRootNode;
         };
     }
 }

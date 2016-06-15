@@ -56,7 +56,7 @@ protected:
     /// Create parameter struct for ActivitiesFactory
     ActivitiesFactory::CommonParameters fillCommonParameters() const;
     ::basegfx::B2DVector const&         getSlideSize() const { return maSlideSize; }
-    AttributableShapeSharedPtr          getShape() const;
+    std::shared_ptr< AttributableShape > getShape() const;
 
 private:
     virtual bool hasPendingAnimation() const override;
@@ -83,10 +83,10 @@ private:
     AnimationActivitySharedPtr                      mpActivity;
 
     /// When valid, this node has a plain target shape
-    AttributableShapeSharedPtr                      mpShape;
+    std::shared_ptr< AttributableShape >            mpShape;
     /// When valid, this is a subsetted target shape
     ShapeSubsetSharedPtr                            mpShapeSubset;
-    SubsettableShapeManagerSharedPtr                mpSubsetManager;
+    std::shared_ptr< SubsettableShapeManager >      mpSubsetManager;
     bool                                            mbIsIndependentSubset;
 };
 

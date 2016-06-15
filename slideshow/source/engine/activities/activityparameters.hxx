@@ -101,7 +101,7 @@ struct ActivityParameters
     /// End event to fire, when activity is over
     const EventSharedPtr&                       mrEndEvent;
     /// Wakeup event to use for discrete activities
-    WakeupEventSharedPtr                        mpWakeupEvent;
+    std::shared_ptr< WakeupEvent >              mpWakeupEvent;
 
     /// EventQueue to add events to
     EventQueue&                                 mrEventQueue;

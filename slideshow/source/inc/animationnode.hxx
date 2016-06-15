@@ -141,7 +141,6 @@ public:
     virtual bool hasPendingAnimation() const = 0;
 };
 
-typedef ::std::shared_ptr< AnimationNode > AnimationNodeSharedPtr;
 
 } // namespace internal
 } // namespace presentation

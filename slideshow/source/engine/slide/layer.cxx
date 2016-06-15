@@ -198,14 +198,14 @@ namespace slideshow
         public:
             LayerEndUpdate( const LayerEndUpdate& ) = delete;
             LayerEndUpdate& operator=( const LayerEndUpdate& ) = delete;
-            explicit LayerEndUpdate( LayerSharedPtr const& rLayer ) :
+            explicit LayerEndUpdate( std::shared_ptr< Layer > const& rLayer ) :
                 mpLayer( rLayer )
             {}
 
             ~LayerEndUpdate() { if(mpLayer) mpLayer->endUpdate(); }
 
         private:
-            LayerSharedPtr mpLayer;
+            std::shared_ptr< Layer > mpLayer;
         };
 
         Layer::EndUpdater Layer::beginUpdate()
@@ -261,14 +261,14 @@ namespace slideshow
             return maUpdateAreas.overlaps( rShape->getUpdateArea() );
         }
 
-        LayerSharedPtr Layer::createBackgroundLayer()
+        std::shared_ptr< Layer > Layer::createBackgroundLayer()
         {
-            return LayerSharedPtr(new Layer( BackgroundLayer ));
+            return std::shared_ptr< Layer >(new Layer( BackgroundLayer ));
         }
 
-        LayerSharedPtr Layer::createLayer( )
+        std::shared_ptr< Layer > Layer::createLayer( )
         {
-            return LayerSharedPtr( new Layer );
+            return std::shared_ptr< Layer >( new Layer );
         }
 
     }

@@ -42,11 +42,10 @@ template <class AnimationT>
 class SetActivity : public AnimationActivity
 {
 public:
-    typedef ::std::shared_ptr< AnimationT >   AnimationSharedPtrT;
     typedef typename AnimationT::ValueType      ValueT;
 
     SetActivity( const ActivitiesFactory::CommonParameters& rParms,
-                 const AnimationSharedPtrT&                 rAnimation,
+                 const std::shared_ptr< AnimationT >&       rAnimation,
                  const ValueT&                              rToValue )
         : mpAnimation( rAnimation ),
           mpShape(),
@@ -110,7 +109,7 @@ public:
     }
 
     virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
-                             const ShapeAttributeLayerSharedPtr&    rAttrLayer ) override
+                             const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override
     {
         ENSURE_OR_THROW( rShape, "Invalid shape" );
         ENSURE_OR_THROW( rAttrLayer, "Invalid attribute layer" );
@@ -120,9 +119,9 @@ public:
     }
 
 private:
-    AnimationSharedPtrT             mpAnimation;
+    std::shared_ptr< AnimationT >   mpAnimation;
     AnimatableShapeSharedPtr        mpShape;
-    ShapeAttributeLayerSharedPtr    mpAttributeLayer;
+    std::shared_ptr< ShapeAttributeLayer > mpAttributeLayer;
     EventSharedPtr                  mpEndEvent;
     EventQueue&                     mrEventQueue;
     ValueT                          maToValue;

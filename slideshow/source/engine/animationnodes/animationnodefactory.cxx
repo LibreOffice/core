@@ -60,15 +60,15 @@ namespace internal {
 namespace {
 
 // forward declaration needed by NodeCreator
-BaseNodeSharedPtr implCreateAnimationNode(
+std::shared_ptr< BaseNode > implCreateAnimationNode(
     const uno::Reference< animations::XAnimationNode >&  xNode,
-    const BaseContainerNodeSharedPtr&                    rParent,
+    const std::shared_ptr< BaseContainerNode >&          rParent,
     const NodeContext&                                   rContext );
 
 class NodeCreator
 {
 public:
-    NodeCreator( BaseContainerNodeSharedPtr&    rParent,
+    NodeCreator( std::shared_ptr< BaseContainerNode >& rParent,
                  const NodeContext&             rContext )
         : mrParent( rParent ), mrContext( rContext ) {}
 
@@ -83,7 +83,7 @@ protected:
         const uno::Reference< animations::XAnimationNode >&   xChildNode,
         const NodeContext&                                    rContext ) const
     {
-        BaseNodeSharedPtr pChild( implCreateAnimationNode( xChildNode,
+        std::shared_ptr< BaseNode > pChild( implCreateAnimationNode( xChildNode,
                                                            mrParent,
                                                            rContext ) );
 
@@ -96,7 +96,7 @@ protected:
             mrParent->appendChildNode( pChild );
     }
 
-    BaseContainerNodeSharedPtr&     mrParent;
+    std::shared_ptr< BaseContainerNode >& mrParent;
     const NodeContext&              mrContext;
 };
 
@@ -108,7 +108,7 @@ protected:
 class CloningNodeCreator : private NodeCreator
 {
 public:
-    CloningNodeCreator( BaseContainerNodeSharedPtr& rParent,
+    CloningNodeCreator( std::shared_ptr< BaseContainerNode >& rParent,
                         const NodeContext&          rContext )
         : NodeCreator( rParent, rContext ) {}
 
@@ -156,7 +156,7 @@ public:
 */
 bool implCreateIteratedNodes(
     const uno::Reference< animations::XIterateContainer >&    xIterNode,
-    BaseContainerNodeSharedPtr&                               rParent,
+    std::shared_ptr< BaseContainerNode >&                     rParent,
     const NodeContext&                                        rContext )
 {
     ENSURE_OR_THROW( xIterNode.is(),
@@ -220,7 +220,7 @@ bool implCreateIteratedNodes(
     // Lookup shape, and fill NodeContext
     // ==================================
 
-    AttributableShapeSharedPtr  pTargetShape(
+    std::shared_ptr< AttributableShape > pTargetShape(
         lookupAttributableShape( rContext.maContext.mpSubsettableShapeManager,
                                  xTargetShape ) );
 
@@ -441,16 +441,16 @@ bool implCreateIteratedNodes(
     return true;
 }
 
-BaseNodeSharedPtr implCreateAnimationNode(
+std::shared_ptr< BaseNode > implCreateAnimationNode(
     const uno::Reference< animations::XAnimationNode >&  xNode,
-    const BaseContainerNodeSharedPtr&                    rParent,
+    const std::shared_ptr< BaseContainerNode >&          rParent,
     const NodeContext&                                   rContext )
 {
     ENSURE_OR_THROW( xNode.is(),
                       "implCreateAnimationNode(): invalid XAnimationNode" );
 
-    BaseNodeSharedPtr           pCreatedNode;
-    BaseContainerNodeSharedPtr  pCreatedContainer;
+    std::shared_ptr< BaseNode > pCreatedNode;
+    std::shared_ptr< BaseContainerNode > pCreatedContainer;
 
     // create the internal node, corresponding to xNode
     switch( xNode->getType() )
@@ -461,7 +461,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
         return pCreatedNode;
 
     case animations::AnimationNodeType::PAR:
-        pCreatedNode = pCreatedContainer = BaseContainerNodeSharedPtr(
+        pCreatedNode = pCreatedContainer = std::shared_ptr< BaseContainerNode >(
             new ParallelTimeContainer( xNode, rParent, rContext ) );
         break;
 
@@ -469,12 +469,12 @@ BaseNodeSharedPtr implCreateAnimationNode(
         // map iterate container to ParallelTimeContainer.
         // the iterating functionality is to be found
         // below, (see method implCreateIteratedNodes)
-        pCreatedNode = pCreatedContainer = BaseContainerNodeSharedPtr(
+        pCreatedNode = pCreatedContainer = std::shared_ptr< BaseContainerNode >(
             new ParallelTimeContainer( xNode, rParent, rContext ) );
         break;
 
     case animations::AnimationNodeType::SEQ:
-        pCreatedNode = pCreatedContainer = BaseContainerNodeSharedPtr(
+        pCreatedNode = pCreatedContainer = std::shared_ptr< BaseContainerNode >(
             new SequentialTimeContainer( xNode, rParent, rContext ) );
         break;
 
@@ -562,7 +562,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
             {
                 OSL_FAIL( "implCreateAnimationNode(): "
                             "child node creation failed" );
-                return BaseNodeSharedPtr();
+                return std::shared_ptr< BaseNode >();
             }
         }
     }
@@ -572,7 +572,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
 
 } // anon namespace
 
-AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
+std::shared_ptr< AnimationNode > AnimationNodeFactory::createAnimationNode(
     const uno::Reference< animations::XAnimationNode >&   xNode,
     const ::basegfx::B2DVector&                           rSlideSize,
     const SlideShowContext&                               rContext )
@@ -581,15 +581,15 @@ AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
         xNode.is(),
         "AnimationNodeFactory::createAnimationNode(): invalid XAnimationNode" );
 
-    return BaseNodeSharedPtr( implCreateAnimationNode(
+    return std::shared_ptr< BaseNode >( implCreateAnimationNode(
                                   xNode,
-                                  BaseContainerNodeSharedPtr(), // no parent
+                                  std::shared_ptr< BaseContainerNode >(), // no parent
                                   NodeContext( rContext,
                                                rSlideSize )));
 }
 
 #if defined(DBG_UTIL)
-void AnimationNodeFactory::showTree( AnimationNodeSharedPtr& pRootNode )
+void AnimationNodeFactory::showTree( std::shared_ptr< AnimationNode >& pRootNode )
 {
     if( pRootNode )
         DEBUG_NODES_SHOWTREE( std::dynamic_pointer_cast<BaseContainerNode>(

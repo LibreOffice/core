@@ -32,7 +32,7 @@ AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
     uno::Reference<animations::XAnimate> const& xAnimateNode =getXAnimateNode();
     OUString const attrName( xAnimateNode->getAttributeName() );
-    AttributableShapeSharedPtr const pShape( getShape() );
+    std::shared_ptr< AttributableShape > const pShape( getShape() );
 
     switch (AnimationFactory::classifyAttributeName( attrName )) {
     default:

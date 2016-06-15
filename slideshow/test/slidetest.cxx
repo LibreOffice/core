@@ -47,7 +47,7 @@ namespace
 class LayerManagerTest : public CppUnit::TestFixture
 {
     target::UnoViewContainer      maViews;
-    target::LayerManagerSharedPtr mpLayerManager;
+    target::std::shared_ptr< LayerManager > mpLayerManager;
     TestViewSharedPtr             mpTestView;
     TestShapeSharedPtr            mpTestShape;
 
@@ -75,11 +75,11 @@ public:
 
     void testLayer()
     {
-        target::LayerSharedPtr pBgLayer(
+        target::std::shared_ptr< Layer > pBgLayer(
             target::Layer::createBackgroundLayer( basegfx::B2DRange(0,0,100,100) ) );
         pBgLayer->addView( mpTestView );
 
-        target::LayerSharedPtr pFgLayer(
+        target::std::shared_ptr< Layer > pFgLayer(
             target::Layer::createLayer( basegfx::B2DRange(0,0,100,100) ) );
         pFgLayer->addView( mpTestView );
 

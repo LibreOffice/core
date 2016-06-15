@@ -62,7 +62,7 @@ public:
         registeres its event handlers.
     */
     ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
-                      LayerManagerSharedPtr const& rLayerManager,
+                      std::shared_ptr< LayerManager > const& rLayerManager,
                       CursorManager&               rCursorManager,
                       const ShapeEventListenerMap& rGlobalListenersMap,
                       const ShapeCursorMap&        rGlobalCursorMap );
@@ -134,9 +134,9 @@ private:
         const std::shared_ptr<AttributableShape>& rSubsetShape ) override;
 
     virtual void addIntrinsicAnimationHandler(
-        const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) override;
+        const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler ) override;
     virtual void removeIntrinsicAnimationHandler(
-        const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) override;
+        const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler ) override;
     virtual void notifyIntrinsicAnimationsEnabled() override;
     virtual void notifyIntrinsicAnimationsDisabled() override;
 
@@ -166,11 +166,11 @@ private:
                      HyperlinkArea::lessThanArea> AreaSet;
 
     typedef ThreadUnsafeListenerContainer<
-        IntrinsicAnimationEventHandlerSharedPtr,
-        std::vector<IntrinsicAnimationEventHandlerSharedPtr> > ImplIntrinsicAnimationEventHandlers;
+        std::shared_ptr< IntrinsicAnimationEventHandler >,
+        std::vector<std::shared_ptr< IntrinsicAnimationEventHandler >> > ImplIntrinsicAnimationEventHandlers;
 
     EventMultiplexer&                   mrMultiplexer;
-    LayerManagerSharedPtr               mpLayerManager;
+    std::shared_ptr< LayerManager >     mpLayerManager;
     CursorManager&                      mrCursorManager;
     const ShapeEventListenerMap&        mrGlobalListenersMap;
     const ShapeCursorMap&               mrGlobalCursorMap;

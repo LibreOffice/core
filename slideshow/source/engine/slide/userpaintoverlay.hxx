@@ -38,7 +38,6 @@ namespace slideshow
         struct SlideShowContext;
 
         class PaintOverlayHandler;
-        typedef ::std::shared_ptr< class UserPaintOverlay > UserPaintOverlaySharedPtr;
         typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
         /** Slide overlay, which can be painted into by the user.
 
@@ -57,7 +56,7 @@ namespace slideshow
                 @param nStrokeWidth
                 Width of the stroked path
              */
-            static UserPaintOverlaySharedPtr create( const RGBColor&          rStrokeColor,
+            static std::shared_ptr< class UserPaintOverlay > create( const RGBColor& rStrokeColor,
                                                      double                   nStrokeWidth,
                                                      const SlideShowContext&  rContext,
                                                      const PolyPolygonVector& rPolygons,

@@ -119,13 +119,13 @@ public:
     */
     PluginSlideChange( sal_Int16                                nTransitionType,
                        sal_Int16                                nTransitionSubType,
-                       boost::optional<SlideSharedPtr> const&   leavingSlide_,
-                       const SlideSharedPtr&                    pEnteringSlide,
+                       boost::optional<std::shared_ptr< Slide >> const& leavingSlide_,
+                       const std::shared_ptr< Slide >&          pEnteringSlide,
                        const UnoViewContainer&                  rViewContainer,
                        ScreenUpdater&                           rScreenUpdater,
                        const uno::Reference<
                              presentation::XTransitionFactory>& xFactory,
-                       const SoundPlayerSharedPtr&              pSoundPlayer,
+                       const std::shared_ptr< SoundPlayer >&    pSoundPlayer,
                        EventMultiplexer&                        rEventMultiplexer) :
         SlideChangeBase( leavingSlide_,
                          pEnteringSlide,
@@ -283,18 +283,18 @@ public:
         polygon.
     */
     ClippedSlideChange(
-        const SlideSharedPtr&                   pEnteringSlide,
-        const ParametricPolyPolygonSharedPtr&   rPolygon,
+        const std::shared_ptr< Slide >&         pEnteringSlide,
+        const std::shared_ptr< ParametricPolyPolygon >& rPolygon,
         const TransitionInfo&                   rTransitionInfo,
         const UnoViewContainer&                 rViewContainer,
         ScreenUpdater&                          rScreenUpdater,
         EventMultiplexer&                       rEventMultiplexer,
         bool                                    bDirectionForward,
-        const SoundPlayerSharedPtr&             pSoundPlayer ) :
+        const std::shared_ptr< SoundPlayer >&   pSoundPlayer ) :
         SlideChangeBase(
             // leaving bitmap is empty, we're leveraging the fact that the
             // old slide is still displayed in the background:
-            boost::optional<SlideSharedPtr>(),
+            boost::optional<std::shared_ptr< Slide >>(),
             pEnteringSlide,
             pSoundPlayer,
             rViewContainer,
@@ -355,10 +355,10 @@ public:
         entering slides, which applies a fade effect.
     */
     FadingSlideChange(
-        boost::optional<SlideSharedPtr> const & leavingSlide,
-        const SlideSharedPtr&                   pEnteringSlide,
+        boost::optional<std::shared_ptr< Slide >> const & leavingSlide,
+        const std::shared_ptr< Slide >&         pEnteringSlide,
         boost::optional<RGBColor> const&        rFadeColor,
-        const SoundPlayerSharedPtr&             pSoundPlayer,
+        const std::shared_ptr< SoundPlayer >&   pSoundPlayer,
         const UnoViewContainer&                 rViewContainer,
         ScreenUpdater&                          rScreenUpdater,
         EventMultiplexer&                       rEventMultiplexer )
@@ -453,10 +453,10 @@ public:
         entering slides, which applies a cut effect.
     */
     CutSlideChange(
-        boost::optional<SlideSharedPtr> const & leavingSlide,
-        const SlideSharedPtr&                   pEnteringSlide,
+        boost::optional<std::shared_ptr< Slide >> const & leavingSlide,
+        const std::shared_ptr< Slide >&         pEnteringSlide,
         const RGBColor&                          rFadeColor,
-        const SoundPlayerSharedPtr&             pSoundPlayer,
+        const std::shared_ptr< SoundPlayer >&   pSoundPlayer,
         const UnoViewContainer&                 rViewContainer,
         ScreenUpdater&                          rScreenUpdater,
         EventMultiplexer&                       rEventMultiplexer )
@@ -557,9 +557,9 @@ public:
         final slide position. The vector must have unit length.
     */
     MovingSlideChange(
-        const boost::optional<SlideSharedPtr>& leavingSlide,
-        const SlideSharedPtr&                  pEnteringSlide,
-        const SoundPlayerSharedPtr&            pSoundPlayer,
+        const boost::optional<std::shared_ptr< Slide >>& leavingSlide,
+        const std::shared_ptr< Slide >&        pEnteringSlide,
+        const std::shared_ptr< SoundPlayer >&  pSoundPlayer,
         const UnoViewContainer&                rViewContainer,
         ScreenUpdater&                         rScreenUpdater,
         EventMultiplexer&                      rEventMultiplexer,
@@ -674,18 +674,18 @@ void MovingSlideChange::performOut(
 }
 
 
-NumberAnimationSharedPtr createPushWipeTransition(
-    boost::optional<SlideSharedPtr> const &         leavingSlide_,
-    const SlideSharedPtr&                           pEnteringSlide,
+std::shared_ptr< NumberAnimation > createPushWipeTransition(
+    boost::optional<std::shared_ptr< Slide >> const & leavingSlide_,
+    const std::shared_ptr< Slide >&                 pEnteringSlide,
     const UnoViewContainer&                         rViewContainer,
     ScreenUpdater&                                  rScreenUpdater,
     EventMultiplexer&                               rEventMultiplexer,
     sal_Int16                                       /*nTransitionType*/,
     sal_Int16                                       nTransitionSubType,
     bool                                            /*bTransitionDirection*/,
-    const SoundPlayerSharedPtr&                     pSoundPlayer )
+    const std::shared_ptr< SoundPlayer >&           pSoundPlayer )
 {
-    boost::optional<SlideSharedPtr> leavingSlide; // no bitmap
+    boost::optional<std::shared_ptr< Slide >> leavingSlide; // no bitmap
     if (leavingSlide_ && (*leavingSlide_).get() != nullptr)
     {
         // opt: only page, if we've an
@@ -706,7 +706,7 @@ NumberAnimationSharedPtr createPushWipeTransition(
             "createPushWipeTransition(): Unexpected transition "
             "subtype for animations::TransitionType::PUSHWIPE "
             "transitions" );
-        return NumberAnimationSharedPtr();
+        return std::shared_ptr< NumberAnimation >();
 
     case animations::TransitionSubType::FROMTOP:
         aDirection = ::basegfx::B2DVector( 0.0, 1.0 );
@@ -753,7 +753,7 @@ NumberAnimationSharedPtr createPushWipeTransition(
 
     if( bComb )
     {
-        return NumberAnimationSharedPtr(
+        return std::shared_ptr< NumberAnimation >(
             new CombTransition( leavingSlide,
                                 pEnteringSlide,
                                 pSoundPlayer,
@@ -765,7 +765,7 @@ NumberAnimationSharedPtr createPushWipeTransition(
     }
     else
     {
-        return NumberAnimationSharedPtr(
+        return std::shared_ptr< NumberAnimation >(
             new MovingSlideChange( leavingSlide,
                                    pEnteringSlide,
                                    pSoundPlayer,
@@ -777,16 +777,16 @@ NumberAnimationSharedPtr createPushWipeTransition(
     }
 }
 
-NumberAnimationSharedPtr createSlideWipeTransition(
-    boost::optional<SlideSharedPtr> const &         leavingSlide,
-    const SlideSharedPtr&                           pEnteringSlide,
+std::shared_ptr< NumberAnimation > createSlideWipeTransition(
+    boost::optional<std::shared_ptr< Slide >> const & leavingSlide,
+    const std::shared_ptr< Slide >&                 pEnteringSlide,
     const UnoViewContainer&                         rViewContainer,
     ScreenUpdater&                                  rScreenUpdater,
     EventMultiplexer&                               rEventMultiplexer,
     sal_Int16                                       /*nTransitionType*/,
     sal_Int16                                       nTransitionSubType,
     bool                                            bTransitionDirection,
-    const SoundPlayerSharedPtr&                     pSoundPlayer )
+    const std::shared_ptr< SoundPlayer >&           pSoundPlayer )
 {
     // setup 'in' direction vector
     ::basegfx::B2DVector aInDirection;
@@ -797,7 +797,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
             "createSlideWipeTransition(): Unexpected transition "
             "subtype for animations::TransitionType::SLIDEWIPE "
             "transitions" );
-        return NumberAnimationSharedPtr();
+        return std::shared_ptr< NumberAnimation >();
 
     case animations::TransitionSubType::FROMTOP:
         aInDirection = ::basegfx::B2DVector( 0.0, 1.0 );
@@ -839,9 +839,9 @@ NumberAnimationSharedPtr createSlideWipeTransition(
         // the 'leaving' slide.
 
 
-        return NumberAnimationSharedPtr(
+        return std::shared_ptr< NumberAnimation >(
             new MovingSlideChange(
-                boost::optional<SlideSharedPtr>() /* no slide */,
+                boost::optional<std::shared_ptr< Slide >>() /* no slide */,
                 pEnteringSlide,
                 pSoundPlayer,
                 rViewContainer,
@@ -857,7 +857,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
         // and the old one is moving off in the foreground.
 
 
-        return NumberAnimationSharedPtr(
+        return std::shared_ptr< NumberAnimation >(
             new MovingSlideChange( leavingSlide,
                                    pEnteringSlide,
                                    pSoundPlayer,
@@ -869,16 +869,16 @@ NumberAnimationSharedPtr createSlideWipeTransition(
     }
 }
 
-NumberAnimationSharedPtr createPluginTransition(
+std::shared_ptr< NumberAnimation > createPluginTransition(
     sal_Int16                                nTransitionType,
     sal_Int16                                nTransitionSubType,
-    boost::optional<SlideSharedPtr> const&   pLeavingSlide,
-    const SlideSharedPtr&                    pEnteringSlide,
+    boost::optional<std::shared_ptr< Slide >> const& pLeavingSlide,
+    const std::shared_ptr< Slide >&          pEnteringSlide,
     const UnoViewContainer&                  rViewContainer,
     ScreenUpdater&                           rScreenUpdater,
     const uno::Reference<
           presentation::XTransitionFactory>& xFactory,
-    const SoundPlayerSharedPtr&              pSoundPlayer,
+    const std::shared_ptr< SoundPlayer >&    pSoundPlayer,
     EventMultiplexer&                        rEventMultiplexer)
 {
     std::unique_ptr<PluginSlideChange> pTransition(
@@ -894,19 +894,19 @@ NumberAnimationSharedPtr createPluginTransition(
             rEventMultiplexer ));
 
     if( pTransition->Success() )
-        return NumberAnimationSharedPtr( pTransition.release() );
+        return std::shared_ptr< NumberAnimation >( pTransition.release() );
     else
     {
-        return NumberAnimationSharedPtr();
+        return std::shared_ptr< NumberAnimation >();
     }
 }
 
 } // anon namespace
 
 
-NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
-    const SlideSharedPtr&                                   pLeavingSlide,
-    const SlideSharedPtr&                                   pEnteringSlide,
+std::shared_ptr< NumberAnimation > TransitionFactory::createSlideTransition(
+    const std::shared_ptr< Slide >&                         pLeavingSlide,
+    const std::shared_ptr< Slide >&                         pEnteringSlide,
     const UnoViewContainer&                                 rViewContainer,
     ScreenUpdater&                                          rScreenUpdater,
     EventMultiplexer&                                       rEventMultiplexer,
@@ -915,7 +915,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
     sal_Int16                                               nTransitionSubType,
     bool                                                    bTransitionDirection,
     const RGBColor&                                         rTransitionFadeColor,
-    const SoundPlayerSharedPtr&                             pSoundPlayer            )
+    const std::shared_ptr< SoundPlayer >&                   pSoundPlayer            )
 {
     // xxx todo: change to TransitionType::NONE, TransitionSubType::NONE:
     if (nTransitionType == 0 && nTransitionSubType == 0) {
@@ -925,7 +925,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
             // xxx todo: for now, presentation.cxx takes care about the slide
             // #i50492#  transition sound object, so just release it here
         }
-        return NumberAnimationSharedPtr();
+        return std::shared_ptr< NumberAnimation >();
     }
 
     ENSURE_OR_THROW(
@@ -936,7 +936,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
         xOptionalFactory->hasTransition(nTransitionType, nTransitionSubType) )
     {
         // #i82460# - optional plugin factory claims this transition. delegate.
-        NumberAnimationSharedPtr pTransition(
+        std::shared_ptr< NumberAnimation > pTransition(
             createPluginTransition(
                 nTransitionType,
                 nTransitionSubType,
@@ -966,18 +966,18 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                     "Invalid type/subtype (%d/%d) combination encountered.",
                     nTransitionType,
                     nTransitionSubType );
-                return NumberAnimationSharedPtr();
+                return std::shared_ptr< NumberAnimation >();
 
 
             case TransitionInfo::TRANSITION_CLIP_POLYPOLYGON:
             {
                 // generate parametric poly-polygon
-                ParametricPolyPolygonSharedPtr pPoly(
+                std::shared_ptr< ParametricPolyPolygon > pPoly(
                     ParametricPolyPolygonFactory::createClipPolyPolygon(
                         nTransitionType, nTransitionSubType ) );
 
                 // create a clip transition from that
-                return NumberAnimationSharedPtr(
+                return std::shared_ptr< NumberAnimation >(
                     new ClippedSlideChange( pEnteringSlide,
                                             pPoly,
                                             *pTransitionInfo,
@@ -997,7 +997,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                             "TransitionFactory::createSlideTransition(): "
                             "Unexpected transition type for "
                             "TRANSITION_SPECIAL transitions" );
-                        return NumberAnimationSharedPtr();
+                        return std::shared_ptr< NumberAnimation >();
 
                     case animations::TransitionType::RANDOM:
                     {
@@ -1065,7 +1065,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                     case animations::TransitionType::FADE:
                     {
                         // black page:
-                        boost::optional<SlideSharedPtr> leavingSlide;
+                        boost::optional<std::shared_ptr< Slide >> leavingSlide;
                         boost::optional<RGBColor> aFadeColor;
 
                         switch( nTransitionSubType )
@@ -1096,7 +1096,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                         }
 
                         if( nTransitionType == animations::TransitionType::FADE )
-                            return NumberAnimationSharedPtr(
+                            return std::shared_ptr< NumberAnimation >(
                                 new FadingSlideChange(
                                     leavingSlide,
                                     pEnteringSlide,
@@ -1106,7 +1106,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                                     rScreenUpdater,
                                     rEventMultiplexer ));
                         else
-                            return NumberAnimationSharedPtr(
+                            return std::shared_ptr< NumberAnimation >(
                                 new CutSlideChange(
                                     leavingSlide,
                                     pEnteringSlide,
@@ -1133,7 +1133,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
         "TransitionFactory::createSlideTransition(): "
         "Unknown type/subtype combination encountered" );
 
-    return NumberAnimationSharedPtr();
+    return std::shared_ptr< NumberAnimation >();
 }
 
 } // namespace internal

@@ -52,7 +52,7 @@ namespace slideshow
     {
 
         bool ViewBackgroundShape::prefetch( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
-                                            const GDIMetaFileSharedPtr&         rMtf ) const
+                                            const std::shared_ptr< GDIMetaFile >& rMtf ) const
         {
             SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::prefetch()" );
             ENSURE_OR_RETURN_FALSE( rMtf,
@@ -147,7 +147,7 @@ namespace slideshow
             return mpViewLayer;
         }
 
-        bool ViewBackgroundShape::render( const GDIMetaFileSharedPtr& rMtf ) const
+        bool ViewBackgroundShape::render( const std::shared_ptr< GDIMetaFile >& rMtf ) const
         {
             SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::draw()" );
 

@@ -52,7 +52,7 @@ namespace slideshow
         {
         public:
             ClippingFunctor(
-                const ParametricPolyPolygonSharedPtr&   rPolygon,
+                const std::shared_ptr< ParametricPolyPolygon >& rPolygon,
                 const TransitionInfo&                   rTransitionInfo,
                 bool                                    bDirectionForward,
                 bool                                    bModeIn );
@@ -71,7 +71,7 @@ namespace slideshow
                                                   const ::basegfx::B2DSize& rTargetSize );
 
         private:
-            ParametricPolyPolygonSharedPtr     mpParametricPoly;
+            std::shared_ptr< ParametricPolyPolygon > mpParametricPoly;
             ::basegfx::B2DHomMatrix            maStaticTransformation;
             // AW: Not needed
             // ::basegfx::B2DPolyPolygon          maBackgroundRect;

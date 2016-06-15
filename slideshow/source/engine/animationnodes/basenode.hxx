@@ -112,9 +112,9 @@ public:
     virtual css::uno::Reference<css::animations::XAnimationNode> getXAnimationNode() const override;
     virtual NodeState getState() const override;
     virtual bool registerDeactivatingListener(
-        const AnimationNodeSharedPtr& rNotifee ) override;
+        const std::shared_ptr< AnimationNode >& rNotifee ) override;
     // nop:
-    virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier ) override;
+    virtual void notifyDeactivating( const std::shared_ptr< AnimationNode >& rNotifier ) override;
 
     bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
@@ -187,7 +187,7 @@ private:
 private:
     SlideShowContext                                   maContext;
 
-    typedef ::std::vector< AnimationNodeSharedPtr >    ListenerVector;
+    typedef ::std::vector< std::shared_ptr< AnimationNode > > ListenerVector;
 
     ListenerVector                                     maDeactivatingListeners;
     css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
@@ -201,7 +201,6 @@ private:
     const bool                                         mbIsMainSequenceRootNode;
 };
 
-typedef ::std::shared_ptr< BaseNode > BaseNodeSharedPtr;
 
 } // namespace internal
 } // namespace slideshow

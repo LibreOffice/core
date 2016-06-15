@@ -104,8 +104,8 @@ private:
     EventQueue& mrEventQueue;
     UserEventQueue& mrUserEventQueue;
 
-    EventHandlerSharedPtr mpSlideStartHandler;
-    EventHandlerSharedPtr mpSlideEndHandler;
+    std::shared_ptr< EventHandler > mpSlideStartHandler;
+    std::shared_ptr< EventHandler > mpSlideEndHandler;
     AnimationEventHandlerSharedPtr mpAnimationStartHandler;
 
     /** The number off main sequence effects so far.
@@ -129,7 +129,7 @@ private:
     /** Called by listeners when an animation (not necessarily of a main
         sequence effect) starts.
     */
-    bool notifyAnimationStart (const AnimationNodeSharedPtr& rpNode);
+    bool notifyAnimationStart (const std::shared_ptr< AnimationNode >& rpNode);
 
     /** Count the number of effects (or effect groups) in the main effect
         sequence.
