@@ -29,15 +29,15 @@ public:                                                 \
         : pDlg(p)                                       \
     {                                                   \
     }                                                   \
-    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const override; \
-    virtual void selectPageByUIXMLDescription(const OUString& rUIXMLDescription) override; \
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const override; \
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
     virtual Bitmap createScreenshot() const override;   \
     virtual         ~Class();                           \
     virtual short   Execute() override ;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
-std::vector<OUString> Class::getAllPageUIXMLDescriptions() const { return pDlg->getAllPageUIXMLDescriptions(); } \
-void Class::selectPageByUIXMLDescription(const OUString& rUIXMLDescription) { pDlg->selectPageByUIXMLDescription(rUIXMLDescription); } \
+std::vector<OString> Class::getAllPageUIXMLDescriptions() const { return pDlg->getAllPageUIXMLDescriptions(); } \
+bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) { return pDlg->selectPageByUIXMLDescription(rUIXMLDescription); } \
 Bitmap Class::createScreenshot() const { return pDlg->createScreenshot();} \
 Class::~Class()                                     \
 {                                                   \
