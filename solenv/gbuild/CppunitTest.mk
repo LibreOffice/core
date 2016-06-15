@@ -98,6 +98,8 @@ $(call gb_CppunitTest_get_clean_target,%) :
 $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
+	        $(if $(gb_CppunitTest_vcl_hide_windows),VCL_HIDE_WINDOWS=1 && ) \
+	        $(if $(gb_CppunitTest_vcl_show_windows),unset VCL_HIDE_WINDOWS && ) \
 		mkdir -p $(dir $@) && \
 		rm -fr $@.user && mkdir $@.user && \
 		$(if $(gb_CppunitTest__use_confpreinit), \
@@ -108,7 +110,6 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 		($(gb_CppunitTest_CPPTESTPRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
-		$(if $(HEADLESS),,VCL_HIDE_WINDOWS=1) \
 		$(gb_CppunitTest_malloc_check) \
 		$(if $(strip $(PYTHON_URE)),\
 			PYTHONDONTWRITEBYTECODE=1) \
@@ -209,6 +210,14 @@ endef
 
 define gb_CppunitTest_use_vcl_non_headless
 $(call gb_CppunitTest_get_target,$(1)) : HEADLESS :=
+$(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest_vcl_hide_windows := $(true)
+$(call gb_CppunitTest__use_vcl,$(1),$(false))
+
+endef
+
+define gb_CppunitTest_use_vcl_non_headless_with_windows
+$(call gb_CppunitTest_get_target,$(1)) : HEADLESS :=
+$(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest_vcl_show_windows := $(true)
 $(call gb_CppunitTest__use_vcl,$(1),$(false))
 
 endef
