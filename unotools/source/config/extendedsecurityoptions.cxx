@@ -239,45 +239,28 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtExtendedSecurityOptions_Impl*    SvtExtendedSecurityOptions::m_pDataContainer    = nullptr;
-sal_Int32                           SvtExtendedSecurityOptions::m_nRefCount         = 0;
-
-//  constructor
+std::weak_ptr<SvtExtendedSecurityOptions_Impl> m_pExtendedSecurityOptions;
 
 SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
-    {
-       m_pDataContainer = new SvtExtendedSecurityOptions_Impl;
 
+    m_pImpl = m_pExtendedSecurityOptions.lock();
+    if( !m_pImpl )
+    {
+        m_pImpl = std::make_shared<SvtExtendedSecurityOptions_Impl>();
+        m_pExtendedSecurityOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_EXTENDEDSECURITYOPTIONS);
     }
 }
-
-//  destructor
 
 SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetInitMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 //  public method
@@ -285,7 +268,7 @@ SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpenHyperlinkMode()
 {
     MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->GetOpenHyperlinkMode();
+    return m_pImpl->GetOpenHyperlinkMode();
 }
 
 namespace
