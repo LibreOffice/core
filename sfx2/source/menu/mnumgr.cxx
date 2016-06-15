@@ -474,8 +474,9 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
 
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aRoot, true);
-            const SfxObjectShell* objSh = pFrame->GetObjectShell();
-            objSh->libreOfficeKitCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
+            if (SfxViewShell* pViewShell = pFrame->GetViewShell())
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
+
         }
         else
             aPop.Execute( rPoint, pWindow );
