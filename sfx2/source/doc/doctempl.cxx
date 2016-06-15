@@ -721,7 +721,7 @@ bool SfxDocumentTemplates::CopyTo
         aTransferInfo.MoveData = false;
         aTransferInfo.SourceURL = pSource->GetTargetURL();
         aTransferInfo.NewTitle = aTitle;
-        aTransferInfo.NameClash = NameClash::OVERWRITE;
+        aTransferInfo.NameClash = NameClash::RENAME;
 
         Any aArg = makeAny( aTransferInfo );
         OUString aCmd( COMMAND_TRANSFER  );
