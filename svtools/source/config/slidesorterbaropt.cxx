@@ -343,20 +343,18 @@ void SvtSlideSorterBarOptions_Impl::SetVisibleViewImpl( bool& bVisibleView, bool
     }
 }
 
-//  initialize static member, see definition for further information
-//  DON'T DO IT IN YOUR HEADER!
-SvtSlideSorterBarOptions_Impl* SvtSlideSorterBarOptions::m_pDataContainer    = nullptr  ;
-sal_Int32                      SvtSlideSorterBarOptions::m_nRefCount = 0     ;
+std::weak_ptr<SvtSlideSorterBarOptions_Impl> m_pSlideSorterBarOptions;
 
 SvtSlideSorterBarOptions::SvtSlideSorterBarOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
+
+    m_pImpl = m_pSlideSorterBarOptions.lock();
+    if( !m_pImpl )
     {
-       m_pDataContainer = new SvtSlideSorterBarOptions_Impl;
+        m_pImpl = std::make_shared<SvtSlideSorterBarOptions_Impl>();
+        m_pSlideSorterBarOptions = m_pImpl;
     }
 }
 
@@ -364,75 +362,68 @@ SvtSlideSorterBarOptions::~SvtSlideSorterBarOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetInitMutex() );
-    --m_nRefCount;
-    // If last instance was deleted we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        if (m_pDataContainer->IsModified())
-            m_pDataContainer->Commit();
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleImpressView() const
 {
-    return m_pDataContainer->m_bVisibleImpressView && !comphelper::LibreOfficeKit::isActive();
+    return m_pImpl->m_bVisibleImpressView && !comphelper::LibreOfficeKit::isActive();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleImpressView(bool bVisible)
 {
-    m_pDataContainer->SetVisibleImpressView( bVisible );
+    m_pImpl->SetVisibleImpressView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleOutlineView() const
 {
-    return m_pDataContainer->m_bVisibleOutlineView;
+    return m_pImpl->m_bVisibleOutlineView;
 }
 
 void SvtSlideSorterBarOptions::SetVisibleOutlineView(bool bVisible)
 {
-    m_pDataContainer->SetVisibleOutlineView( bVisible );
+    m_pImpl->SetVisibleOutlineView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleNotesView() const
 {
-    return m_pDataContainer->m_bVisibleNotesView;
+    return m_pImpl->m_bVisibleNotesView;
 }
 
 void SvtSlideSorterBarOptions::SetVisibleNotesView(bool bVisible)
 {
-    m_pDataContainer->SetVisibleNotesView( bVisible );
+    m_pImpl->SetVisibleNotesView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleHandoutView() const
 {
-    return m_pDataContainer->m_bVisibleHandoutView;
+    return m_pImpl->m_bVisibleHandoutView;
 }
 
 void SvtSlideSorterBarOptions::SetVisibleHandoutView(bool bVisible)
 {
-    m_pDataContainer->SetVisibleHandoutView( bVisible );
+    m_pImpl->SetVisibleHandoutView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleSlideSorterView() const
 {
-    return m_pDataContainer->m_bVisibleSlideSorterView && !comphelper::LibreOfficeKit::isActive();
+    return m_pImpl->m_bVisibleSlideSorterView && !comphelper::LibreOfficeKit::isActive();
 }
 
 void SvtSlideSorterBarOptions::SetVisibleSlideSorterView(bool bVisible)
 {
-    m_pDataContainer->SetVisibleSlideSorterView( bVisible );
+    m_pImpl->SetVisibleSlideSorterView( bVisible );
 }
 
 bool SvtSlideSorterBarOptions::GetVisibleDrawView() const
 {
-    return m_pDataContainer->m_bVisibleDrawView;
+    return m_pImpl->m_bVisibleDrawView;
 }
 
 void SvtSlideSorterBarOptions::SetVisibleDrawView(bool bVisible)
 {
-    m_pDataContainer->SetVisibleDrawView( bVisible );
+    m_pImpl->SetVisibleDrawView( bVisible );
 }
 
 namespace
