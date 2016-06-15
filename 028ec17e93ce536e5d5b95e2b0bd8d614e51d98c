@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_60b7ba39",
+        "filename": "sw/source/uibase/sidebar/PageFooterPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T12:04:11Z",
+      "side": 1,
+      "message": "Non-translatable strings :(",
+      "revId": "028ec17e93ce536e5d5b95e2b0bd8d614e51d98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8082fe50",
+        "filename": "sw/source/uibase/sidebar/PageFooterPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T12:04:11Z",
+      "side": 1,
+      "message": "here too",
+      "revId": "028ec17e93ce536e5d5b95e2b0bd8d614e51d98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a0870260",
+        "filename": "sw/source/uibase/sidebar/PageHeaderPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T12:04:11Z",
+      "side": 1,
+      "message": "non-translatable strings :(",
+      "revId": "028ec17e93ce536e5d5b95e2b0bd8d614e51d98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
