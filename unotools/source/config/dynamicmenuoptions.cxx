@@ -566,44 +566,31 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
     }
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtDynamicMenuOptions_Impl*     SvtDynamicMenuOptions::m_pDataContainer = nullptr;
-sal_Int32                       SvtDynamicMenuOptions::m_nRefCount      = 0;
-
-//  constructor
+namespace {
+    // global
+    std::weak_ptr<SvtDynamicMenuOptions_Impl> g_pDynamicMenuOptions;
+}
 
 SvtDynamicMenuOptions::SvtDynamicMenuOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
+
+    m_pImpl = g_pDynamicMenuOptions.lock();
+    if( !m_pImpl )
     {
-        m_pDataContainer = new SvtDynamicMenuOptions_Impl;
+        m_pImpl = std::make_shared<SvtDynamicMenuOptions_Impl>();
+        g_pDynamicMenuOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_DYNAMICMENUOPTIONS);
     }
 }
-
-//  destructor
 
 SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 //  public method
@@ -611,7 +598,7 @@ SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions::GetMenu( EDynamicMenuType eMenu ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMenu( eMenu );
+    return m_pImpl->GetMenu( eMenu );
 }
 
 namespace
