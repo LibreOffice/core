@@ -99,6 +99,7 @@ using ::std::advance;
 
 
 #define TITLE                   "Title"
+#define ISFOLDER                "IsFolder"
 #define TARGET_URL              "TargetURL"
 
 #define COMMAND_TRANSFER        "transfer"
@@ -1535,13 +1536,14 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 
     // now get the content of the region
     uno::Reference< XResultSet > xResultSet;
-    Sequence< OUString > aProps(2);
+    Sequence< OUString > aProps(3);
     aProps[0] = TITLE;
-    aProps[1] = TARGET_URL;
+    aProps[1] = ISFOLDER;
+    aProps[2] = TARGET_URL;
 
     try
     {
-        ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
+        ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
         Sequence< NumberedSortingInfo >     aSortingInfo(1);
         aSortingInfo.getArray()->ColumnIndex = 1;
         aSortingInfo.getArray()->Ascending = true;
@@ -1551,6 +1553,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 
     if ( xResultSet.is() )
     {
+        uno::Reference< XCommandEnvironment > aCmdEnv;
         uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
@@ -1559,9 +1562,18 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
             while ( xResultSet->next() )
             {
                 OUString aTitle( xRow->getString( 1 ) );
-                OUString aTargetDir( xRow->getString( 2 ) );
+                bool bIsFolder( xRow->getBoolean( 2 ) );
+                OUString aTargetDir( xRow->getString( 3 ) );
 
-                pRegion->AddEntry( aTitle, aTargetDir );
+                if(!bIsFolder)
+                    pRegion->AddEntry( aTitle, aTargetDir );
+                else
+                {
+                    OUString aId = xContentAccess->queryContentIdentifierString();
+                    Content  aContent( aId, aCmdEnv, comphelper::getProcessComponentContext() );
+
+                    AddRegion( aTitle, aContent );
+                }
             }
         }
         catch ( Exception& ) {}
