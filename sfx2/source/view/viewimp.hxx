@@ -61,6 +61,8 @@ struct SfxViewShell_Impl
 
     LibreOfficeKitCallback m_pLibreOfficeKitViewCallback;
     void* m_pLibreOfficeKitViewData;
+    /// Set if we are in the middle of a tiled search.
+    bool m_bTiledSearching;
 
     explicit SfxViewShell_Impl(SfxViewShellFlags const nFlags);
     ~SfxViewShell_Impl();
