@@ -35,6 +35,7 @@
 #include "markdata.hxx"
 #include <gridwin.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
     : TabBar(pParent, WB_3DLOOK | WB_MINSCROLL | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG)
@@ -414,9 +415,15 @@ void ScTabControl::SwitchToPageId(sal_uInt16 nId)
                 SelectPage( i, i==nId );
             Select();
 
-            // notify LibreOfficeKit about changed page
-            OString aPayload = OString::number(nId - 1);
-            pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                // notify LibreOfficeKit about changed page
+                OString aPayload = OString::number(nId - 1);
+                if (comphelper::LibreOfficeKit::isViewCallback())
+                    pViewData->GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                else
+                    pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+            }
         }
     }
 }
