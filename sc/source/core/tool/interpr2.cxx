@@ -197,16 +197,36 @@ void ScInterpreter::ScGetDayOfWeek()
 
         Date aDate = *(pFormatter->GetNullDate());
         aDate += (long)::rtl::math::approxFloor(GetDouble());
-        int nVal = (int) aDate.GetDayOfWeek();
-        if (nFlag == 1)
+        int nVal = (int) aDate.GetDayOfWeek();  // MONDAY = 0
+        switch (nFlag)
         {
-            if (nVal == 6)
-                nVal = 1;
-            else
-                nVal += 2;
+            case 1:     // Sunday = 1
+                if (nVal == 6)
+                    nVal = 1;
+                else
+                    nVal += 2;
+            break;
+            case 2:     // Monday = 1
+                nVal += 1;
+            break;
+            case 3:     // Monday = 0
+                ;   // nothing
+            break;
+            case 11:    // Monday = 1
+            case 12:    // Tuesday = 1
+            case 13:    // Wednesday = 1
+            case 14:    // Thursday = 1
+            case 15:    // Friday = 1
+            case 16:    // Saturday = 1
+            case 17:    // Sunday = 1
+                if (nVal < nFlag - 11)      // x = nFlag - 11 = 0,1,2,3,4,5,6
+                    nVal += 19 - nFlag;     // nVal += (8 - (nFlag - 11) = 8 - x = 8,7,6,5,4,3,2)
+                else
+                    nVal -= nFlag - 12;     // nVal -= ((nFlag - 11) - 1 = x - 1 = -1,0,1,2,3,4,5)
+            break;
+            default:
+                SetError( errIllegalArgument);
         }
-        else if (nFlag == 2)
-            nVal += 1;
         PushInt( nVal );
     }
 }
