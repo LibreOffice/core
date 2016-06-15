@@ -45,14 +45,13 @@ all:
 LIBXSLTVERSION=$(LIBXSLT_MAJOR).$(LIBXSLT_MINOR).$(LIBXSLT_MICRO)
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
-TARFILE_MD5=e61d0364a30146aaa3001296f853b2b9
+TARFILE_MD5=9667bf6f9310b957254fdcf6596600b7
 
 # libxslt-internal-symbols: #i112480#: Solaris ld requires symbols to be defined
 PATCH_FILES=libxslt-configure.patch \
-        libxslt-bsd.patch \
             libxslt-win_manifest.patch \
-            libxslt-mingw.patch \
-            libxslt-internal-symbols.patch
+            libxslt-CVE-2015-7995.patch
+
 
 
 # This is only for UNX environment now
@@ -110,7 +109,7 @@ CPPFLAGS+:=$(ARCH_FLAGS) -xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes
+CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes ac_cv_func_clock_gettime=false
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
