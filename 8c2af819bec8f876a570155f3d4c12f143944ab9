@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c0e8867f",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2016-06-15T18:13:16Z",
+      "side": 1,
+      "message": "Please notice the logic: If condition is true, then the message is generated. https://docs.libreoffice.org/sal/html/sal_log.html",
+      "range": {
+        "startLine": 218,
+        "startChar": 37,
+        "endLine": 218,
+        "endChar": 39
+      },
+      "revId": "8c2af819bec8f876a570155f3d4c12f143944ab9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
