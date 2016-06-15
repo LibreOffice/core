@@ -643,85 +643,63 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtMiscOptions_Impl*    SvtMiscOptions::m_pDataContainer    = nullptr  ;
-sal_Int32               SvtMiscOptions::m_nRefCount = 0     ;
-
-
-//  constructor
+std::weak_ptr<SvtMiscOptions_Impl> m_pMiscOptions;
 
 SvtMiscOptions::SvtMiscOptions()
 {
-    // SvtMiscOptions_Impl ctor indirectly calls code that requires locked
-    // SolarMutex; lock it first:
-    SolarMutexGuard g;
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
+
+    m_pImpl = m_pMiscOptions.lock();
+    if( !m_pImpl )
     {
-       m_pDataContainer = new SvtMiscOptions_Impl;
-       svtools::ItemHolder2::holdConfigItem(E_MISCOPTIONS);
+        m_pImpl = std::make_shared<SvtMiscOptions_Impl>();
+        m_pMiscOptions = m_pImpl;
+        svtools::ItemHolder2::holdConfigItem(E_MISCOPTIONS);
     }
 }
-
-
-//  destructor
 
 SvtMiscOptions::~SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetInitMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 bool SvtMiscOptions::UseSystemFileDialog() const
 {
-    return m_pDataContainer->UseSystemFileDialog();
+    return m_pImpl->UseSystemFileDialog();
 }
 
 void SvtMiscOptions::SetUseSystemFileDialog( bool bEnable )
 {
-    m_pDataContainer->SetUseSystemFileDialog( bEnable );
+    m_pImpl->SetUseSystemFileDialog( bEnable );
 }
 
 bool SvtMiscOptions::IsUseSystemFileDialogReadOnly() const
 {
-    return m_pDataContainer->IsUseSystemFileDialogReadOnly();
+    return m_pImpl->IsUseSystemFileDialogReadOnly();
 }
 
 bool SvtMiscOptions::IsPluginsEnabled() const
 {
-    return m_pDataContainer->IsPluginsEnabled();
+    return m_pImpl->IsPluginsEnabled();
 }
 
 sal_Int16 SvtMiscOptions::GetSymbolsSize() const
 {
-    return m_pDataContainer->GetSymbolsSize();
+    return m_pImpl->GetSymbolsSize();
 }
 
 void SvtMiscOptions::SetSymbolsSize( sal_Int16 nSet )
 {
-    m_pDataContainer->SetSymbolsSize( nSet );
+    m_pImpl->SetSymbolsSize( nSet );
 }
 
 sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
 {
-    sal_Int16 eOptSymbolsSize = m_pDataContainer->GetSymbolsSize();
+    sal_Int16 eOptSymbolsSize = m_pImpl->GetSymbolsSize();
 
     if ( eOptSymbolsSize == SFX_SYMBOLS_SIZE_AUTO )
     {
@@ -749,67 +727,67 @@ OUString SvtMiscOptions::GetIconTheme() const
 
 void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
 {
-    m_pDataContainer->SetIconTheme(iconTheme);
+    m_pImpl->SetIconTheme(iconTheme);
 }
 
 bool SvtMiscOptions::DisableUICustomization() const
 {
-    return m_pDataContainer->DisableUICustomization();
+    return m_pImpl->DisableUICustomization();
 }
 
 sal_Int16 SvtMiscOptions::GetToolboxStyle() const
 {
-    return m_pDataContainer->GetToolboxStyle();
+    return m_pImpl->GetToolboxStyle();
 }
 
 void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
 {
-    m_pDataContainer->SetToolboxStyle( nStyle );
+    m_pImpl->SetToolboxStyle( nStyle );
 }
 
 bool SvtMiscOptions::UseSystemPrintDialog() const
 {
-    return m_pDataContainer->UseSystemPrintDialog();
+    return m_pImpl->UseSystemPrintDialog();
 }
 
 void SvtMiscOptions::SetUseSystemPrintDialog( bool bEnable )
 {
-    m_pDataContainer->SetUseSystemPrintDialog( bEnable );
+    m_pImpl->SetUseSystemPrintDialog( bEnable );
 }
 
 bool SvtMiscOptions::ShowLinkWarningDialog() const
 {
-    return m_pDataContainer->ShowLinkWarningDialog();
+    return m_pImpl->ShowLinkWarningDialog();
 }
 
 void SvtMiscOptions::SetShowLinkWarningDialog( bool bSet )
 {
-    m_pDataContainer->SetShowLinkWarningDialog( bSet );
+    m_pImpl->SetShowLinkWarningDialog( bSet );
 }
 
 bool SvtMiscOptions::IsShowLinkWarningDialogReadOnly() const
 {
-    return m_pDataContainer->IsShowLinkWarningDialogReadOnly();
+    return m_pImpl->IsShowLinkWarningDialogReadOnly();
 }
 
 void SvtMiscOptions::SetExperimentalMode( bool bSet )
 {
-    m_pDataContainer->SetExperimentalMode( bSet );
+    m_pImpl->SetExperimentalMode( bSet );
 }
 
 bool SvtMiscOptions::IsExperimentalMode() const
 {
-    return m_pDataContainer->IsExperimentalMode();
+    return m_pImpl->IsExperimentalMode();
 }
 
 void SvtMiscOptions::SetMacroRecorderMode( bool bSet )
 {
-    m_pDataContainer->SetMacroRecorderMode( bSet );
+    m_pImpl->SetMacroRecorderMode( bSet );
 }
 
 bool SvtMiscOptions::IsMacroRecorderMode() const
 {
-    return m_pDataContainer->IsMacroRecorderMode();
+    return m_pImpl->IsMacroRecorderMode();
 }
 
 namespace
@@ -825,18 +803,18 @@ Mutex & SvtMiscOptions::GetInitMutex()
 
 void SvtMiscOptions::AddListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
-    m_pDataContainer->AddListenerLink( rLink );
+    m_pImpl->AddListenerLink( rLink );
 }
 
 void SvtMiscOptions::RemoveListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
-    m_pDataContainer->RemoveListenerLink( rLink );
+    m_pImpl->RemoveListenerLink( rLink );
 }
 
 bool
 SvtMiscOptions::IconThemeWasSetAutomatically()
 {
-    return m_pDataContainer->IconThemeWasSetAutomatically();
+    return m_pImpl->IconThemeWasSetAutomatically();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
