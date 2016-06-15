@@ -263,16 +263,6 @@ struct FactoryInfo
         css::uno::Reference< css::util::XStringSubstitution >  xSubstVars;
 };
 
-/*-************************************************************************************************************
-    @short          IMPL data container for wrapper class SvtModulOptions!
-    @descr          These class is used as a static data container of class SvtModuleOptions. The hold it by using
-                    a refcount and make it threadsafe by using an osl mutex. So we don't must do anything for that.
-                    We can implement pure functionality to read/write configuration data only.
-    @base           ConfigItem
-
-    @devstatus      ready to use
-    @threadsafe     no
-*//*-*************************************************************************************************************/
 class SvtModuleOptions_Impl : public ::utl::ConfigItem
 {
 
@@ -815,12 +805,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     m_bReadOnlyStatesWellKnown = true;
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtModuleOptions_Impl*  SvtModuleOptions::m_pDataContainer  = nullptr;
-sal_Int32               SvtModuleOptions::m_nRefCount       = 0;
+std::weak_ptr<SvtModuleOptions_Impl> m_pModuleOptions;
 
 /*-************************************************************************************************************
     @short      standard constructor and destructor
@@ -832,25 +817,24 @@ sal_Int32               SvtModuleOptions::m_nRefCount       = 0;
 *//*-*************************************************************************************************************/
 SvtModuleOptions::SvtModuleOptions()
 {
+    // Global access, must be guarded (multithreading!)
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    ++m_nRefCount;
-    if( m_nRefCount == 1 )
-    {
-        m_pDataContainer = new SvtModuleOptions_Impl();
 
+    m_pImpl = m_pModuleOptions.lock();
+    if( !m_pImpl )
+    {
+        m_pImpl = std::make_shared<SvtModuleOptions_Impl>();
+        m_pModuleOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_MODULEOPTIONS);
     }
 }
 
 SvtModuleOptions::~SvtModuleOptions()
 {
+    // Global access, must be guarded (multithreading!)
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    --m_nRefCount;
-    if( m_nRefCount == 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 /*-************************************************************************************************************
@@ -864,19 +848,19 @@ SvtModuleOptions::~SvtModuleOptions()
 bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( eModule );
+    return m_pImpl->IsModuleInstalled( eModule );
 }
 
 OUString SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->GetFactoryName( eFactory );
+    return m_pImpl->GetFactoryName( eFactory );
 }
 
 OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->GetFactoryStandardTemplate( eFactory );
+    return m_pImpl->GetFactoryStandardTemplate( eFactory );
 }
 
 OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
@@ -888,20 +872,20 @@ OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
 OUString SvtModuleOptions::GetFactoryDefaultFilter( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->GetFactoryDefaultFilter( eFactory );
+    return m_pImpl->GetFactoryDefaultFilter( eFactory );
 }
 
 bool SvtModuleOptions::IsDefaultFilterReadonly( EFactory eFactory   ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    m_pDataContainer->MakeReadonlyStatesAvailable();
-    return m_pDataContainer->IsDefaultFilterReadonly( eFactory );
+    m_pImpl->MakeReadonlyStatesAvailable();
+    return m_pImpl->IsDefaultFilterReadonly( eFactory );
 }
 
 sal_Int32 SvtModuleOptions::GetFactoryIcon( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->GetFactoryIcon( eFactory );
+    return m_pImpl->GetFactoryIcon( eFactory );
 }
 
 bool SvtModuleOptions::ClassifyFactoryByName( const OUString& sName    ,
@@ -915,56 +899,56 @@ void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFacto
                                                    const OUString& sTemplate  )
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    m_pDataContainer->SetFactoryStandardTemplate( eFactory, sTemplate );
+    m_pImpl->SetFactoryStandardTemplate( eFactory, sTemplate );
 }
 
 void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
                                                 const OUString& sFilter )
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    m_pDataContainer->SetFactoryDefaultFilter( eFactory, sFilter );
+    m_pImpl->SetFactoryDefaultFilter( eFactory, sFilter );
 }
 
 bool SvtModuleOptions::IsMath() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( EModule::MATH );
+    return m_pImpl->IsModuleInstalled( EModule::MATH );
 }
 
 bool SvtModuleOptions::IsChart() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( EModule::CHART );
+    return m_pImpl->IsModuleInstalled( EModule::CHART );
 }
 
 bool SvtModuleOptions::IsCalc() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( EModule::CALC );
+    return m_pImpl->IsModuleInstalled( EModule::CALC );
 }
 
 bool SvtModuleOptions::IsDraw() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( EModule::DRAW );
+    return m_pImpl->IsModuleInstalled( EModule::DRAW );
 }
 
 bool SvtModuleOptions::IsWriter() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( EModule::WRITER );
+    return m_pImpl->IsModuleInstalled( EModule::WRITER );
 }
 
 bool SvtModuleOptions::IsImpress() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( EModule::IMPRESS );
+    return m_pImpl->IsModuleInstalled( EModule::IMPRESS );
 }
 
 bool SvtModuleOptions::IsDataBase() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsModuleInstalled( EModule::DATABASE );
+    return m_pImpl->IsModuleInstalled( EModule::DATABASE );
 }
 
 namespace
@@ -1157,27 +1141,27 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
 css::uno::Sequence < OUString > SvtModuleOptions::GetAllServiceNames()
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->GetAllServiceNames();
+    return m_pImpl->GetAllServiceNames();
 }
 
 OUString SvtModuleOptions::GetDefaultModuleName()
 {
     OUString aModule;
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
+    if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::WRITER);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::CALC))
+    else if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::CALC))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::CALC);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS))
+    else if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::IMPRESS);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
+    else if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::DATABASE);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+    else if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::DRAW);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::WEB))
+    else if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::WEB))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::WRITERWEB);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::GLOBAL))
+    else if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::GLOBAL))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::WRITERGLOBAL);
-    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::EModule::MATH))
+    else if (m_pImpl->IsModuleInstalled(SvtModuleOptions::EModule::MATH))
         aModule = GetFactoryShortName(SvtModuleOptions::EFactory::MATH);
     return aModule;
 }
