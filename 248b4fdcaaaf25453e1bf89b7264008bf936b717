@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c5125862",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T11:53:33Z",
+      "side": 1,
+      "message": "eFillStyle looks nicer (e for enum)",
+      "revId": "248b4fdcaaaf25453e1bf89b7264008bf936b717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e0aaead3",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T11:53:33Z",
+      "side": 1,
+      "message": "Try to merge this case with the one above, so have\n\ncase BITMAP:\ncase PATTERN:\n\nand then some ifs inside, b/c they share quite a lot of code",
+      "revId": "248b4fdcaaaf25453e1bf89b7264008bf936b717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_052600ce",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T11:53:33Z",
+      "side": 1,
+      "message": "This doesn\u0027t have to be a member function of the object, as it does hardly anything w/ the object or its member variables. You can make it a local function that takes a pointer or reference to bitmap item as an argument",
+      "revId": "248b4fdcaaaf25453e1bf89b7264008bf936b717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_00b0ae42",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T11:53:33Z",
+      "side": 1,
+      "message": "and maybe the same here ( \u003d  merging 2 cases into 1) it\u0027s XFillBitmapItem going out in both cases",
+      "revId": "248b4fdcaaaf25453e1bf89b7264008bf936b717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
