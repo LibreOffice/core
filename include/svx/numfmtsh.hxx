@@ -130,6 +130,8 @@ public:
 
     sal_uInt16          GetFormatIntegerDigits( const OUString&  rFormat ) const;
 
+    double              GetDefaultValNum( const short nType ) const;
+
     void                MakePreviewString( const OUString& rFormatStr,
                                            OUString&       rPreviewStr,
                                            Color*&         rpFontColor );
@@ -177,8 +179,6 @@ public:
 
     void                SetUseStarFormat( bool bUse ) { bUseStarFormat = bUse; }
 private:
-    static const double     DEFAULT_NUMVALUE;
-
     SvNumberFormatter*      pFormatter;
     SvNumberFormatTable*    pCurFmtTable;
     SvxNumberValueType      eValType;
@@ -197,6 +197,7 @@ private:
     sal_uInt32              nCurCurrencyEntryPos;
     std::vector<OUString>   aCurrencyFormatList;
     bool                    bUseStarFormat;
+    bool                    bIsDefaultValNum;
 
     SVX_DLLPRIVATE short FillEntryList_Impl( std::vector<OUString>& rList );
     SVX_DLLPRIVATE void  FillEListWithStd_Impl( std::vector<OUString>& rList,sal_uInt16 aPrivCat, short &Pos);
