@@ -275,7 +275,7 @@ public:
     void SwitchViewActivated();
 private:
     class Implementation;
-    ::std::unique_ptr<Implementation> mpImpl;
+    std::unique_ptr<Implementation> mpImpl;
 
     ::sd::slidesorter::SlideSorter& mrSlideSorter;
 

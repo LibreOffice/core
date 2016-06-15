@@ -71,7 +71,7 @@ private:
         area.
         Cleared on every call to ForgetVisibleRequests() and MakeVisible().
     */
-    ::std::vector<Rectangle> maVisibleRequests;
+    std::vector<Rectangle> maVisibleRequests;
 
     /** Animation id for a scroll animation that sets the top
         and left of the visible area to maRequestedVisibleTopLeft.

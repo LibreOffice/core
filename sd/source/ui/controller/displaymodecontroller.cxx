@@ -258,7 +258,7 @@ void DisplayModeController::setToolboxItemImage( sal_uInt16 nImage )
         if (size.Width() > targetSize)
             scale = (double)targetSize / (double)size.Width();
         if (size.Height() > targetSize)
-            scale = ::std::min( scale, (double)targetSize / (double)size.Height() );
+            scale = std::min( scale, (double)targetSize / (double)size.Height() );
         aBmp.Scale( scale, scale );
         pToolBox->SetItemImage( nId, Image( aBmp ) );
     }

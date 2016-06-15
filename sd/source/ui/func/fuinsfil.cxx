@@ -69,15 +69,15 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
 
-typedef ::std::pair< OUString, OUString > FilterDesc;
+typedef std::pair< OUString, OUString > FilterDesc;
 
 namespace
 {
 
-OUString lcl_GetExtensionsList ( ::std::vector< FilterDesc > const& rFilterDescList )
+OUString lcl_GetExtensionsList ( std::vector< FilterDesc > const& rFilterDescList )
 {
     OUString aExtensions;
-    ::std::vector< FilterDesc >::const_iterator aIter( rFilterDescList.begin() );
+    std::vector< FilterDesc >::const_iterator aIter( rFilterDescList.begin() );
 
     while (aIter != rFilterDescList.end())
     {
@@ -96,11 +96,11 @@ OUString lcl_GetExtensionsList ( ::std::vector< FilterDesc > const& rFilterDescL
     return aExtensions;
 }
 
-void lcl_AddFilter ( ::std::vector< FilterDesc >& rFilterDescList,
+void lcl_AddFilter ( std::vector< FilterDesc >& rFilterDescList,
                      const std::shared_ptr<const SfxFilter>& pFilter )
 {
     if (pFilter)
-        rFilterDescList.push_back( ::std::make_pair( pFilter->GetUIName(), pFilter->GetDefaultExtension() ) );
+        rFilterDescList.push_back( std::make_pair( pFilter->GetUIName(), pFilter->GetDefaultExtension() ) );
 }
 
 }
@@ -128,8 +128,8 @@ rtl::Reference<FuPoor> FuInsertFile::Create( ViewShell* pViewSh, ::sd::Window* p
 void FuInsertFile::DoExecute( SfxRequest& rReq )
 {
     SfxFilterMatcher&       rMatcher = SfxGetpApp()->GetFilterMatcher();
-    ::std::vector< FilterDesc > aFilterVector;
-    ::std::vector< OUString > aOtherFilterVector;
+    std::vector< FilterDesc > aFilterVector;
+    std::vector< OUString > aOtherFilterVector;
     const SfxItemSet*       pArgs = rReq.GetArgs ();
 
     FuInsertFile::GetSupportedFilterVector( aOtherFilterVector );
@@ -204,7 +204,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 lcl_AddFilter( aFilterVector, pFilter );
 
                 // add additional supported filters
-                ::std::vector< OUString >::const_iterator aOtherIter( aOtherFilterVector.begin() );
+                std::vector< OUString >::const_iterator aOtherIter( aOtherFilterVector.begin() );
 
                 while( aOtherIter != aOtherFilterVector.end() )
                 {
@@ -223,7 +223,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 xFilterManager->setCurrentFilter( aAllSpec );
 
                 // add filters to filter manager finally
-                ::std::vector< ::std::pair < OUString, OUString > >::const_iterator aIter( aFilterVector.begin() );
+                std::vector< std::pair < OUString, OUString > >::const_iterator aIter( aFilterVector.begin() );
 
                 while( aIter != aFilterVector.end() )
                 {
@@ -289,7 +289,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            bool bFound = ( ::std::find( aOtherFilterVector.begin(), aOtherFilterVector.end(), pFilter->GetMimeType() ) != aOtherFilterVector.end() );
+            bool bFound = ( std::find( aOtherFilterVector.begin(), aOtherFilterVector.end(), pFilter->GetMimeType() ) != aOtherFilterVector.end() );
             if( !bFound &&
                 ( aFilterName.indexOf( "Text" ) != -1 ||
                 aFilterName.indexOf( "Rich" ) != -1 ||
@@ -717,7 +717,7 @@ bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         return false;
 }
 
-void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterVector )
+void FuInsertFile::GetSupportedFilterVector( std::vector< OUString >& rFilterVector )
 {
     SfxFilterMatcher&   rMatcher = SfxGetpApp()->GetFilterMatcher();
     std::shared_ptr<const SfxFilter> pSearchFilter;

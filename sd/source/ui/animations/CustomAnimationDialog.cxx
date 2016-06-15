@@ -1023,7 +1023,7 @@ private:
     void onSoundPreview();
 
 private:
-    ::std::vector< OUString > maSoundList;
+    std::vector< OUString > maSoundList;
     bool mbHasText;
     const STLPropertySet* mpSet;
 

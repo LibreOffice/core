@@ -77,7 +77,7 @@ AnimationParametricFunction::AnimationParametricFunction (const ParametricFuncti
     const sal_Int32 nSampleCount (64);
 
     // Sample the given parametric function.
-    ::std::vector<basegfx::B2DPoint> aPoints;
+    std::vector<basegfx::B2DPoint> aPoints;
     aPoints.reserve(nSampleCount);
     for (sal_Int32 nIndex=0; nIndex<nSampleCount; ++nIndex)
     {

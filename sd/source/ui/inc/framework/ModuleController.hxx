@@ -109,7 +109,7 @@ private:
 
     /** Called for every entry in the ResourceFactories configuration entry.
     */
-    void ProcessFactory (const ::std::vector<css::uno::Any>& rValues);
+    void ProcessFactory (const std::vector<css::uno::Any>& rValues);
 
     /** Instantiate all startup services that are found in the
         /org.openoffice.Office.Impress/MultiPaneGUI/Framework/StartupServices
@@ -125,7 +125,7 @@ private:
         somewhere.  It typically will register as
         XConfigurationChangeListener at the configuration controller.
     */
-    void ProcessStartupService (const ::std::vector<css::uno::Any>& rValues);
+    void ProcessStartupService (const std::vector<css::uno::Any>& rValues);
 };
 
 } } // end of namespace sd::framework

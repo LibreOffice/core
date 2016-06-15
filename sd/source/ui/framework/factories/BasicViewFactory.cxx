@@ -68,14 +68,14 @@ public:
 //===== BasicViewFactory::ViewShellContainer ==================================
 
 class BasicViewFactory::ViewShellContainer
-    : public ::std::vector<std::shared_ptr<ViewDescriptor> >
+    : public std::vector<std::shared_ptr<ViewDescriptor> >
 {
 public:
     ViewShellContainer() {};
 };
 
 class BasicViewFactory::ViewCache
-    : public ::std::vector<std::shared_ptr<ViewDescriptor> >
+    : public std::vector<std::shared_ptr<ViewDescriptor> >
 {
 public:
     ViewCache() {};
@@ -193,7 +193,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
     if (rxView.is() && mpBase!=nullptr)
     {
         ViewShellContainer::iterator iViewShell (
-            ::std::find_if(
+            std::find_if(
                 mpViewShellContainer->begin(),
                 mpViewShellContainer->end(),
                 [&] (std::shared_ptr<ViewDescriptor> const& pVD) {
@@ -448,7 +448,7 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
     Reference<XRelocatableResource> xResource (rpDescriptor->mxView, UNO_QUERY);
     if (xResource.is())
     {
-        static ::std::vector<Reference<XResourceId> > s_aCacheableResources;
+        static std::vector<Reference<XResourceId> > s_aCacheableResources;
         if (s_aCacheableResources.empty() )
         {
             std::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*mpBase));
@@ -460,7 +460,7 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftImpressPaneURL));
         }
 
-        ::std::vector<Reference<XResourceId> >::const_iterator iId;
+        std::vector<Reference<XResourceId> >::const_iterator iId;
         for (iId=s_aCacheableResources.begin(); iId!=s_aCacheableResources.end(); ++iId)
         {
             if ((*iId)->compareTo(rpDescriptor->mxViewId) == 0)

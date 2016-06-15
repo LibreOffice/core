@@ -34,7 +34,7 @@ class ImpPageListWatcher
 {
 protected:
     // typedefs for a vector of SdPages
-    typedef ::std::vector< SdPage* > SdPageVector;
+    typedef std::vector< SdPage* > SdPageVector;
 
     const SdrModel&                 mrModel;
 

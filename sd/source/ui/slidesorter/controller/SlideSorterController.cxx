@@ -814,7 +814,7 @@ void SlideSorterController::FinishEditModeChange()
 
         // Restore the selection.
         mpPageSelector->DeselectAllPages();
-        ::std::vector<SdPage*>::iterator iPage;
+        std::vector<SdPage*>::iterator iPage;
         for (iPage=maSelectionBeforeSwitch.begin();
              iPage!=maSelectionBeforeSwitch.end();
              ++iPage)

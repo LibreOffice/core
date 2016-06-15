@@ -29,7 +29,7 @@ SdTransferable* TransferableData::CreateTransferable (
     ::sd::View* pWorkView,
     bool bInitOnGetData,
     SlideSorterViewShell* pViewShell,
-    const ::std::vector<Representative>& rRepresentatives)
+    const std::vector<Representative>& rRepresentatives)
 {
     SdTransferable* pTransferable = new SdTransferable (pSrcDoc, pWorkView, bInitOnGetData);
     std::shared_ptr<TransferableData> pData (new TransferableData(pViewShell, rRepresentatives));
@@ -54,7 +54,7 @@ std::shared_ptr<TransferableData> TransferableData::GetFromTransferable (const S
 
 TransferableData::TransferableData (
     SlideSorterViewShell* pViewShell,
-    const ::std::vector<Representative>& rRepresentatives)
+    const std::vector<Representative>& rRepresentatives)
     : mpViewShell(pViewShell),
       maRepresentatives(rRepresentatives)
 {

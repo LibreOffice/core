@@ -888,7 +888,7 @@ void SlideSorterViewShell::PostMoveSlidesActions(const std::shared_ptr<SlideSort
     }
 
     mpSlideSorter->GetController().GetPageSelector().DeselectAllPages();
-    ::std::vector<SdPage*>::iterator iPage;
+    std::vector<SdPage*>::iterator iPage;
     for (iPage=rpSelection->begin();
         iPage!=rpSelection->end();
         ++iPage)

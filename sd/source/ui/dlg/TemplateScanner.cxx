@@ -141,7 +141,7 @@ void TemplateDir::EnableSorting(bool bSortingEnabled)
         if (mpEntryCompare.get() == nullptr)
             mpEntryCompare.reset(new TemplateEntryCompare);
 
-        ::std::sort(maEntries.begin(), maEntries.end(), *mpEntryCompare);
+        std::sort(maEntries.begin(), maEntries.end(), *mpEntryCompare);
     }
 }
 
@@ -149,8 +149,8 @@ void TemplateDir::InsertEntry(TemplateEntry* pNewEntry)
 {
     if (mbSortingEnabled)
     {
-        ::std::vector<TemplateEntry*>::iterator aPlaceToInsert =
-            ::std::upper_bound(maEntries.begin(), maEntries.end(), pNewEntry, *mpEntryCompare);
+        std::vector<TemplateEntry*>::iterator aPlaceToInsert =
+            std::upper_bound(maEntries.begin(), maEntries.end(), pNewEntry, *mpEntryCompare);
         maEntries.insert(aPlaceToInsert, pNewEntry);
     }
     else
@@ -158,7 +158,7 @@ void TemplateDir::InsertEntry(TemplateEntry* pNewEntry)
 }
 
 class TemplateScanner::FolderDescriptorList
-    : public ::std::multiset<FolderDescriptor,FolderDescriptor::Comparator>
+    : public std::multiset<FolderDescriptor,FolderDescriptor::Comparator>
 {
 };
 

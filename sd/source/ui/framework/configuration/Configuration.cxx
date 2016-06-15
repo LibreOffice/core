@@ -33,7 +33,7 @@ namespace {
     for STL containers.
 */
 class XResourceIdLess
-    :   public ::std::binary_function <Reference<XResourceId>, Reference<XResourceId>, bool>
+    :   public std::binary_function <Reference<XResourceId>, Reference<XResourceId>, bool>
 {
 public:
     bool operator () (const Reference<XResourceId>& rId1, const Reference<XResourceId>& rId2) const
@@ -47,7 +47,7 @@ public:
 namespace sd { namespace framework {
 
 class Configuration::ResourceContainer
-    : public ::std::set<Reference<XResourceId>, XResourceIdLess>
+    : public std::set<Reference<XResourceId>, XResourceIdLess>
 {
 public:
     ResourceContainer() {}
@@ -138,7 +138,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     bool bFilterResources (!rsResourceURLPrefix.isEmpty());
 
     // Collect the matching resources in a vector.
-    ::std::vector<Reference<XResourceId> > aResources;
+    std::vector<Reference<XResourceId> > aResources;
     ResourceContainer::const_iterator iResource;
     for (iResource=mpResourceContainer->begin();
          iResource!=mpResourceContainer->end();

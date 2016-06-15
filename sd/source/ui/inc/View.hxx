@@ -249,7 +249,7 @@ protected:
     SdrDropMarkerOverlay*   mpDropMarker;
     sal_uInt16              mnDragSrcPgNum;
     Point                   maDropPos;
-    ::std::vector<OUString> maDropFileVector;
+    std::vector<OUString> maDropFileVector;
     sal_Int8                mnAction;
     Idle                    maDropErrorIdle;
     Idle                    maDropInsertFileIdle;
@@ -265,7 +265,7 @@ protected:
     SmartTagSet             maSmartTags;
 
 private:
-    ::std::unique_ptr<ViewClipboard> mpClipboard;
+    std::unique_ptr<ViewClipboard> mpClipboard;
     OutlinerMasterViewFilter maMasterViewFilter;
 };
 

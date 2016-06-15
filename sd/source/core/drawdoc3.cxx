@@ -628,7 +628,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         sal_uInt16 nActualInsertPos = nInsertPos;
 
         // Collect the bookmarked pages
-        ::std::vector<SdPage*> aBookmarkedPages (rBookmarkList.size(), nullptr);
+        std::vector<SdPage*> aBookmarkedPages (rBookmarkList.size(), nullptr);
         for ( size_t nPos = 0, n = rBookmarkList.size(); nPos < n; ++nPos)
         {
             OUString aPgName(rBookmarkList[nPos]);

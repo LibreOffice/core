@@ -602,7 +602,7 @@ sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
 //===== Properties ============================================================
 
 void DrawController::FillPropertyTable (
-    ::std::vector<beans::Property>& rProperties)
+    std::vector<beans::Property>& rProperties)
 {
     rProperties.push_back(
         beans::Property("VisibleArea",
@@ -675,7 +675,7 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
 
     if (mpPropertyArrayHelper.get() == nullptr)
     {
-        ::std::vector<beans::Property> aProperties;
+        std::vector<beans::Property> aProperties;
         FillPropertyTable(aProperties);
         mpPropertyArrayHelper.reset(new OPropertyArrayHelper(comphelper::containerToSequence(aProperties), false));
     }

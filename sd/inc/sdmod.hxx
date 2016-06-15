@@ -156,7 +156,7 @@ private:
 
     /** The resource container controls the lifetime of some singletons.
     */
-    ::std::unique_ptr< ::sd::SdGlobalResourceContainer> mpResourceContainer;
+    std::unique_ptr< ::sd::SdGlobalResourceContainer> mpResourceContainer;
 
     bool mbEventListenerAdded;
 

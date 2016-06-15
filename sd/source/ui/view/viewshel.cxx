@@ -111,7 +111,7 @@ private:
     ::sd::ViewShell& mrViewShell;
     /** This cache holds the already created object bars.
     */
-    typedef ::std::map< ::sd::ShellId,SfxShell*> ShellCache;
+    typedef std::map< ::sd::ShellId,SfxShell*> ShellCache;
     ShellCache maShellCache;
 };
 
@@ -1216,7 +1216,7 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
         if(nCount)
         {
             // prepare list
-            ::std::vector< OUString > aStringList;
+            std::vector< OUString > aStringList;
             sal_uInt16 a;
 
             for( a = 0; a < nCount; a++)

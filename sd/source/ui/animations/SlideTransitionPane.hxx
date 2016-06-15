@@ -128,7 +128,7 @@ private:
     bool         mbUpdatingControls;
     bool         mbIsMainViewChangePending;
 
-    typedef ::std::vector< OUString > tSoundListType;
+    typedef std::vector< OUString > tSoundListType;
     tSoundListType  maSoundList;
     mutable OUString maCurrentSoundFile;
 

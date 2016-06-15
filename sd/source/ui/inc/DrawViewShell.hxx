@@ -415,7 +415,7 @@ private:
         content that are supported both by that content and by the
         DrawViewShell.
     */
-    ::std::unique_ptr<SvxClipboardFormatItem> mpCurrentClipboardFormats;
+    std::unique_ptr<SvxClipboardFormatItem> mpCurrentClipboardFormats;
 
     /** On some occasions it is necessary to make SwitchPage calls
         asynchronously.
@@ -487,8 +487,8 @@ private:
 
     using ViewShell::Notify;
 
-    ::std::unique_ptr< AnnotationManager > mpAnnotationManager;
-    ::std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
+    std::unique_ptr< AnnotationManager > mpAnnotationManager;
+    std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
 
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
 

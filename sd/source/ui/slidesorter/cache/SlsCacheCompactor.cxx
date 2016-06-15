@@ -77,7 +77,7 @@ private:
 
 namespace sd { namespace slidesorter { namespace cache {
 
-::std::unique_ptr<CacheCompactor> CacheCompactor::Create (
+std::unique_ptr<CacheCompactor> CacheCompactor::Create (
     BitmapCache& rCache,
     sal_Int32 nMaximalCacheSize)
 {
@@ -101,7 +101,7 @@ namespace sd { namespace slidesorter { namespace cache {
     else
         pCompressor.reset(new PngCompression());
 
-    ::std::unique_ptr<CacheCompactor> pCompactor;
+    std::unique_ptr<CacheCompactor> pCompactor;
     OUString sCompactionPolicy(sCompress);
     Any aCompactionPolicy (CacheConfiguration::Instance()->GetValue("CompactionPolicy"));
     if (aCompactionPolicy.has<OUString>())
@@ -171,7 +171,7 @@ void CacheCompactionByCompression::Run()
     {
         SAL_INFO("sd.sls", OSL_THIS_FUNC << ": bitmap cache uses to much space: " << mrCache.GetSize() << " > " << mnMaximalCacheSize);
 
-        ::std::unique_ptr< ::sd::slidesorter::cache::BitmapCache::CacheIndex> pIndex (
+        std::unique_ptr< ::sd::slidesorter::cache::BitmapCache::CacheIndex> pIndex (
             mrCache.GetCacheIndex());
         ::sd::slidesorter::cache::BitmapCache::CacheIndex::iterator iIndex;
         for (iIndex=pIndex->begin(); iIndex!=pIndex->end(); ++iIndex)

@@ -93,8 +93,8 @@ private:
         OUStringHash> FactoryMap;
     FactoryMap maFactoryMap;
 
-    typedef ::std::vector<
-        ::std::pair<
+    typedef std::vector<
+        std::pair<
             OUString,
             css::uno::Reference<css::drawing::framework::XResourceFactory> > >
         FactoryPatternList;

@@ -86,10 +86,10 @@ namespace sd
             virtual ~RemoteServer();
             static RemoteServer *spServer;
             static ::osl::Mutex sDataMutex;
-            static ::std::vector<Communicator*> sCommunicators;
+            static std::vector<Communicator*> sCommunicators;
             osl::AcceptorSocket mSocket;
 
-            ::std::vector< std::shared_ptr< ClientInfoInternal > > mAvailableClients;
+            std::vector< std::shared_ptr< ClientInfoInternal > > mAvailableClients;
 
             void execute() override;
     };

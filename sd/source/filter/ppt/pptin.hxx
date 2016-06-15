@@ -41,7 +41,7 @@ struct PptInteractiveInfoAtom;
 class Ppt97Animation;
 
 typedef std::shared_ptr< Ppt97Animation > Ppt97AnimationPtr;
-typedef ::std::map < SdrObject*, Ppt97AnimationPtr > tAnimationMap;
+typedef std::map < SdrObject*, Ppt97AnimationPtr > tAnimationMap;
 typedef std::vector< std::pair< SdrObject*, Ppt97AnimationPtr > > tAnimationVector;
 
 class ImplSdPPTImport : public SdrPowerPointImport

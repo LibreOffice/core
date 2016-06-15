@@ -437,7 +437,7 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
     {
         Reference< XDrawPage > xSlide;
         Reference< XAnimationNode > xAnimNode;
-        ::std::vector<PropertyValue> aProperties;
+        std::vector<PropertyValue> aProperties;
 
         const sal_Int32 nNextSlideNumber = getNextSlideNumber();
         if( getSlideAPI( nNextSlideNumber, xSlide, xAnimNode )  )

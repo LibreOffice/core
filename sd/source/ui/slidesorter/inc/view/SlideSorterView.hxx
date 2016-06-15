@@ -215,7 +215,7 @@ private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
     bool mbIsDisposed;
-    ::std::unique_ptr<Layouter> mpLayouter;
+    std::unique_ptr<Layouter> mpLayouter;
     bool mbPageObjectVisibilitiesValid;
     std::shared_ptr<cache::PageCache> mpPreviewCache;
     std::shared_ptr<LayeredDevice> mpLayeredDevice;
@@ -230,7 +230,7 @@ private:
     SharedILayerPainter mpBackgroundPainter;
     std::unique_ptr<ToolTip> mpToolTip;
     bool mbIsRearrangePending;
-    ::std::vector<Link<LinkParamNone*,void>> maVisibilityChangeListeners;
+    std::vector<Link<LinkParamNone*,void>> maVisibilityChangeListeners;
 
     /** Determine the visibility of all page objects.
     */

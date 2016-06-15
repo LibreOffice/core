@@ -74,7 +74,7 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance()
             RecentlyUsedMasterPages* pInstance = new RecentlyUsedMasterPages();
             pInstance->LateInit();
             SdGlobalResourceContainer::Instance().AddResource (
-                ::std::unique_ptr<SdGlobalResource>(pInstance));
+                std::unique_ptr<SdGlobalResource>(pInstance));
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             mpInstance = pInstance;
         }
@@ -239,7 +239,7 @@ void RecentlyUsedMasterPages::SavePersistentValues()
 
 void RecentlyUsedMasterPages::AddEventListener (const Link<LinkParamNone*,void>& rEventListener)
 {
-    if (::std::find (
+    if (std::find (
         maListeners.begin(),
         maListeners.end(),
         rEventListener) == maListeners.end())
@@ -251,7 +251,7 @@ void RecentlyUsedMasterPages::AddEventListener (const Link<LinkParamNone*,void>&
 void RecentlyUsedMasterPages::RemoveEventListener (const Link<LinkParamNone*,void>& rEventListener)
 {
     maListeners.erase (
-        ::std::find (
+        std::find (
             maListeners.begin(),
             maListeners.end(),
             rEventListener));
@@ -327,7 +327,7 @@ void RecentlyUsedMasterPages::AddMasterPage (
     {
 
         MasterPageList::iterator aIterator (
-            ::std::find_if(mvMasterPages.begin(),mvMasterPages.end(),
+            std::find_if(mvMasterPages.begin(),mvMasterPages.end(),
                 Descriptor::TokenComparator(aToken)));
         if (aIterator != mvMasterPages.end())
         {

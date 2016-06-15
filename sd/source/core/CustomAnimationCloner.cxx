@@ -70,7 +70,7 @@ namespace sd
         Reference< XShape > getClonedShape( const Reference< XShape >& xSource ) const;
         Reference< XAnimationNode > getClonedNode( const Reference< XAnimationNode >& xSource ) const;
 
-        mutable ::std::map< Reference< XShape >, Reference< XShape > > maShapeMap;
+        mutable std::map< Reference< XShape >, Reference< XShape > > maShapeMap;
         std::vector< Reference< XAnimationNode > > maSourceNodeVector;
         std::vector< Reference< XAnimationNode > > maCloneNodeVector;
     };

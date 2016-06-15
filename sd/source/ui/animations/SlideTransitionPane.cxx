@@ -222,8 +222,8 @@ void lcl_ApplyToPages(
     const ::sd::slidesorter::SharedPageSelection& rpPages,
     const ::sd::impl::TransitionEffect & rEffect )
 {
-    ::std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
-    const ::std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
+    std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
+    const std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
     for( ; aIt != aEndIt; ++aIt )
     {
         rEffect.applyTo( *(*aIt) );
@@ -249,8 +249,8 @@ void lcl_CreateUndoForPages(
     SdUndoGroup* pUndoGroup = new SdUndoGroup( pDoc );
     pUndoGroup->SetComment( aComment );
 
-    ::std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
-    const ::std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
+    std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
+    const std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
     for( ; aIt != aEndIt; ++aIt )
     {
         pUndoGroup->AddAction( new sd::UndoTransition( pDoc, (*aIt) ) );
@@ -260,7 +260,7 @@ void lcl_CreateUndoForPages(
     pManager->LeaveListAction();
 }
 
-struct lcl_EqualsSoundFileName : public ::std::unary_function< OUString, bool >
+struct lcl_EqualsSoundFileName : public std::unary_function< OUString, bool >
 {
     explicit lcl_EqualsSoundFileName( const OUString & rStr ) :
             maStr( rStr )
@@ -282,16 +282,16 @@ private:
 };
 
 // returns -1 if no object was found
-bool lcl_findSoundInList( const ::std::vector< OUString > & rSoundList,
+bool lcl_findSoundInList( const std::vector< OUString > & rSoundList,
                           const OUString & rFileName,
-                          ::std::vector< OUString >::size_type & rOutPosition )
+                          std::vector< OUString >::size_type & rOutPosition )
 {
-    ::std::vector< OUString >::const_iterator aIt =
-          ::std::find_if( rSoundList.begin(), rSoundList.end(),
+    std::vector< OUString >::const_iterator aIt =
+          std::find_if( rSoundList.begin(), rSoundList.end(),
                           lcl_EqualsSoundFileName( rFileName ));
     if( aIt != rSoundList.end())
     {
-        rOutPosition = ::std::distance( rSoundList.begin(), aIt );
+        rOutPosition = std::distance( rSoundList.begin(), aIt );
         return true;
     }
 
@@ -299,7 +299,7 @@ bool lcl_findSoundInList( const ::std::vector< OUString > & rSoundList,
 }
 
 OUString lcl_getSoundFileURL(
-    const ::std::vector< OUString > & rSoundList,
+    const std::vector< OUString > & rSoundList,
     const ListBox* rListBox )
 {
     if( rListBox->GetSelectEntryCount() > 0 )
@@ -319,7 +319,7 @@ OUString lcl_getSoundFileURL(
     return OUString();
 }
 
-struct lcl_AppendSoundToListBox : public ::std::unary_function< OUString, void >
+struct lcl_AppendSoundToListBox : public std::unary_function< OUString, void >
 {
     explicit lcl_AppendSoundToListBox( ListBox*  rListBox ) :
             mrListBox( rListBox )
@@ -336,7 +336,7 @@ private:
 };
 
 void lcl_FillSoundListBox(
-    const ::std::vector< OUString > & rSoundList,
+    const std::vector< OUString > & rSoundList,
     ListBox*  rOutListBox )
 {
     sal_Int32 nCount = rOutListBox->GetEntryCount();
@@ -345,7 +345,7 @@ void lcl_FillSoundListBox(
     for( sal_Int32 i=nCount - 1; i>=3; --i )
         rOutListBox->RemoveEntry( i );
 
-    ::std::for_each( rSoundList.begin(), rSoundList.end(),
+    std::for_each( rSoundList.begin(), rSoundList.end(),
                      lcl_AppendSoundToListBox( rOutListBox ));
 }
 

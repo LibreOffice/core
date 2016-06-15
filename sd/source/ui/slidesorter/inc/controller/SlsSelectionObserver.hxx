@@ -67,7 +67,7 @@ private:
     SlideSorter& mrSlideSorter;
     bool mbIsOvservationActive;
 
-    ::std::vector<const SdPage*> maInsertedPages;
+    std::vector<const SdPage*> maInsertedPages;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

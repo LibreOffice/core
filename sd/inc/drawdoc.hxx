@@ -180,8 +180,8 @@ private:
     CharClass*          mpCharClass;
     css::lang::Locale*  mpLocale;
 
-    ::std::unique_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
-    ::std::unique_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
+    std::unique_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
+    std::unique_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
 
     SAL_DLLPRIVATE void                UpdatePageObjectsInNotes(sal_uInt16 nStartPos);
     SAL_DLLPRIVATE void                UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_Int32 nIncrement);

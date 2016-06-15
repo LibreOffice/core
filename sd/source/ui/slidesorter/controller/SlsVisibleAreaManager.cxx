@@ -43,7 +43,7 @@ namespace {
         SlideSorter& mrSlideSorter;
         Point maStart;
         const Point maEnd;
-        const ::std::function<double (double)> maAccelerationFunction;
+        const std::function<double (double)> maAccelerationFunction;
     };
 
 } // end of anonymous namespace
@@ -164,7 +164,7 @@ void VisibleAreaManager::MakeVisible()
     const sal_Int32 nVisibleHeight (aVisibleArea.GetHeight());
 
     // Find the longest run of boxes whose union fits into the visible area.
-    for (::std::vector<Rectangle>::const_iterator
+    for (std::vector<Rectangle>::const_iterator
              iBox(maVisibleRequests.begin()),
              iEnd(maVisibleRequests.end());
          iBox!=iEnd;

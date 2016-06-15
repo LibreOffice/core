@@ -91,8 +91,8 @@ public:
 
 namespace {
 
-typedef ::std::vector<
-    ::std::pair< ::sd::slidesorter::cache::BitmapCache::CacheKey,
+typedef std::vector<
+    std::pair< ::sd::slidesorter::cache::BitmapCache::CacheKey,
       ::sd::slidesorter::cache::BitmapCache::CacheEntry>
     > SortableBitmapContainer;
 
@@ -369,7 +369,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
     }
 }
 
-::std::unique_ptr<BitmapCache::CacheIndex> BitmapCache::GetCacheIndex() const
+std::unique_ptr<BitmapCache::CacheIndex> BitmapCache::GetCacheIndex() const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -392,10 +392,10 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
     }
 
     // Sort the remaining entries.
-    ::std::sort(aSortedContainer.begin(), aSortedContainer.end(), AccessTimeComparator());
+    std::sort(aSortedContainer.begin(), aSortedContainer.end(), AccessTimeComparator());
 
     // Return a list with the keys of the sorted entries.
-    ::std::unique_ptr<CacheIndex> pIndex(new CacheIndex());
+    std::unique_ptr<CacheIndex> pIndex(new CacheIndex());
     SortableBitmapContainer::iterator iIndexEntry;
     pIndex->reserve(aSortedContainer.size());
     for (iIndexEntry=aSortedContainer.begin(); iIndexEntry!=aSortedContainer.end(); ++iIndexEntry)

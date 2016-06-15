@@ -155,7 +155,7 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 {
     bool bOk = true;
 
-    ::std::vector<SdrObject*> aObjects;
+    std::vector<SdrObject*> aObjects;
 
     SdrPage* pSdrPage = nullptr;
 
@@ -229,8 +229,8 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
             // first deselect all
             mrView.UnmarkAllObj( pPV );
 
-            ::std::vector<SdrObject*>::iterator aIter( aObjects.begin() );
-            const ::std::vector<SdrObject*>::iterator aEnd( aObjects.end() );
+            std::vector<SdrObject*>::iterator aIter( aObjects.begin() );
+            const std::vector<SdrObject*>::iterator aEnd( aObjects.end() );
             while( aIter != aEnd )
             {
                 SdrObject* pObj = (*aIter++);

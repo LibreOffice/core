@@ -2100,7 +2100,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
         bool bPresPage = mbIsImpressDocument && ePageKind != PK_HANDOUT;
 
         // Collect the types of this class.
-        ::std::vector<uno::Type> aTypes;
+        std::vector<uno::Type> aTypes;
         aTypes.reserve(13);
         aTypes.push_back(cppu::UnoType<drawing::XDrawPage>::get());
         aTypes.push_back(cppu::UnoType<beans::XPropertySet>::get());
@@ -2126,7 +2126,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
         // Join those types in a sequence.
         maTypeSequence.realloc(aTypes.size() + nBaseTypes);
         uno::Type* pTypes = maTypeSequence.getArray();
-        ::std::vector<uno::Type>::const_iterator iType;
+        std::vector<uno::Type>::const_iterator iType;
         for (iType=aTypes.begin(); iType!=aTypes.end(); ++iType)
             *pTypes++ = *iType;
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
@@ -2744,7 +2744,7 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
         bool bPresPage = mbIsImpressDocument && SvxFmDrawPage::mpPage && ePageKind != PK_HANDOUT;
 
         // Collect the types of this class.
-        ::std::vector<uno::Type> aTypes;
+        std::vector<uno::Type> aTypes;
         aTypes.reserve(12);
         aTypes.push_back(cppu::UnoType<drawing::XDrawPage>::get());
         aTypes.push_back(cppu::UnoType<beans::XPropertySet>::get());
@@ -2769,7 +2769,7 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
         // Join those types in a sequence.
         maTypeSequence.realloc(aTypes.size() + nBaseTypes);
         uno::Type* pTypes = maTypeSequence.getArray();
-        ::std::vector<uno::Type>::const_iterator iType;
+        std::vector<uno::Type>::const_iterator iType;
         for (iType=aTypes.begin(); iType!=aTypes.end(); ++iType)
             *pTypes++ = *iType;
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )

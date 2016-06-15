@@ -49,7 +49,7 @@ void WindowUpdater::RegisterWindow (vcl::Window* pWindow)
     if (pWindow != nullptr)
     {
         tWindowList::iterator aWindowIterator (
-            ::std::find (
+            std::find (
                 maWindowList.begin(), maWindowList.end(), pWindow));
         if (aWindowIterator == maWindowList.end())
         {
@@ -63,7 +63,7 @@ void WindowUpdater::RegisterWindow (vcl::Window* pWindow)
 void WindowUpdater::UnregisterWindow (vcl::Window* pWindow)
 {
     tWindowList::iterator aWindowIterator (
-        ::std::find (
+        std::find (
             maWindowList.begin(), maWindowList.end(), pWindow));
     if (aWindowIterator != maWindowList.end())
     {

@@ -91,7 +91,7 @@ public:
 private:
     AccessibleSlideSorterView& mrAccessibleSlideSorter;
     ::sd::slidesorter::SlideSorter& mrSlideSorter;
-    typedef ::std::vector<rtl::Reference<AccessibleSlideSorterObject> > PageObjectList;
+    typedef std::vector<rtl::Reference<AccessibleSlideSorterObject> > PageObjectList;
     PageObjectList maPageObjects;
     sal_Int32 mnFirstVisibleChild;
     sal_Int32 mnLastVisibleChild;

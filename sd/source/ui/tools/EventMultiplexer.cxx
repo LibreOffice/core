@@ -118,8 +118,8 @@ protected:
 
 private:
     ViewShellBase& mrBase;
-    typedef ::std::pair<Link<EventMultiplexerEvent&,void>,EventMultiplexerEvent::EventId> ListenerDescriptor;
-    typedef ::std::vector<ListenerDescriptor> ListenerList;
+    typedef std::pair<Link<EventMultiplexerEvent&,void>,EventMultiplexerEvent::EventId> ListenerDescriptor;
+    typedef std::vector<ListenerDescriptor> ListenerList;
     ListenerList maListeners;
 
     /// Remember whether we are listening to the UNO controller.

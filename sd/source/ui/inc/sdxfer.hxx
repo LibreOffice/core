@@ -136,7 +136,7 @@ private:
     bool                            mbPageTransferable           : 1;
     bool                            mbPageTransferablePersistent : 1;
     bool                            mbIsUnoObj                  : 1;
-    ::std::vector<std::shared_ptr<UserData> > maUserData;
+    std::vector<std::shared_ptr<UserData> > maUserData;
 
                                     SdTransferable( const SdTransferable& ) = delete;
     SdTransferable&                 operator=( const SdTransferable& ) = delete;

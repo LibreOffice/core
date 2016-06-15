@@ -127,7 +127,7 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
 {
     OSL_ASSERT( ! mbIsDisposed);
 
-    const AnimationList::iterator iAnimation (::std::find_if(
+    const AnimationList::iterator iAnimation (std::find_if(
         maAnimations.begin(),
         maAnimations.end(),
         [nId] (std::shared_ptr<Animation> const& pAnim)

@@ -103,10 +103,10 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
 {
     const sal_Int32 nIconWidth (maTransitionEffectIcon.GetSizePixel().Width());
     const sal_Int32 nLeftAreaWidth (
-        ::std::max(
+        std::max(
             gnInfoAreaMinWidth,
             gnRightPageNumberOffset
-                + ::std::max(
+                + std::max(
                     nPageNumberAreaWidth,
                     nIconWidth)));
     sal_Int32 nPreviewWidth;

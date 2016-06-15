@@ -400,7 +400,7 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
     SfxErrorContext aEc( ERRCTX_ERROR, mpViewSh->GetActiveWindow(), RID_SO_ERRCTX );
     ErrCode nError = 0;
 
-    ::std::vector< OUString >::const_iterator aIter( maDropFileVector.begin() );
+    std::vector< OUString >::const_iterator aIter( maDropFileVector.begin() );
 
     while( (aIter != maDropFileVector.end()) && !nError )
     {
@@ -446,13 +446,13 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
 
                 if( pFoundFilter && !nErr )
                 {
-                    ::std::vector< OUString > aFilterVector;
+                    std::vector< OUString > aFilterVector;
                     OUString aFilterName = pFoundFilter->GetFilterName();
                     OUString aLowerAsciiFileName = aCurrentDropFile.toAsciiLowerCase();
 
                     FuInsertFile::GetSupportedFilterVector( aFilterVector );
 
-                    if( ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFoundFilter->GetMimeType() ) != aFilterVector.end() ) ||
+                    if( ( std::find( aFilterVector.begin(), aFilterVector.end(), pFoundFilter->GetMimeType() ) != aFilterVector.end() ) ||
                         aFilterName.indexOf( "Text" ) != -1 ||
                         aFilterName.indexOf( "Rich" ) != -1 ||
                         aFilterName.indexOf( "RTF" ) != -1 ||

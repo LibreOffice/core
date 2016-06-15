@@ -111,11 +111,11 @@ void SAL_CALL PropertySet::removePropertyChangeListener (
         css::lang::WrappedTargetException,
         css::uno::RuntimeException, std::exception)
 {
-    ::std::pair<ChangeListenerContainer::iterator,ChangeListenerContainer::iterator>
+    std::pair<ChangeListenerContainer::iterator,ChangeListenerContainer::iterator>
         aRange (mpChangeListeners->equal_range(rsPropertyName));
 
     ChangeListenerContainer::iterator iListener (
-        ::std::find_if(
+        std::find_if(
             aRange.first,
             aRange.second,
             [&rxListener] (const ChangeListenerContainer::value_type& listener) {
@@ -162,7 +162,7 @@ void PropertySet::CallListeners (
     const OUString& rsPropertyName,
     const beans::PropertyChangeEvent& rEvent)
 {
-    ::std::pair<ChangeListenerContainer::iterator,ChangeListenerContainer::iterator>
+    std::pair<ChangeListenerContainer::iterator,ChangeListenerContainer::iterator>
         aRange (mpChangeListeners->equal_range(rsPropertyName));
     ChangeListenerContainer::const_iterator iListener;
     for (iListener=aRange.first; iListener!=aRange.second; ++iListener)

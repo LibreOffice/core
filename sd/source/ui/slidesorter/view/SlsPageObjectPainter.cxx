@@ -390,9 +390,9 @@ void PageObjectPainter::PaintBackgroundDetail (
         const sal_Int32 nDefaultConstantSize(nHeight/4);
         const sal_Int32 nMinimalGradientSize(40);
         const sal_Int32 nY1 (
-            ::std::max<sal_Int32>(
+            std::max<sal_Int32>(
                 0,
-                ::std::min<sal_Int32>(
+                std::min<sal_Int32>(
                     nDefaultConstantSize,
                     (nHeight - nMinimalGradientSize)/2)));
         const sal_Int32 nY2 (nHeight-nY1);

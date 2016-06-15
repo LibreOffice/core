@@ -454,8 +454,8 @@ void SlideSorterView::DeterminePageObjectVisibilities()
         Rectangle aViewArea (pWindow->PixelToLogic(Rectangle(Point(0,0),pWindow->GetSizePixel())));
         const Range aRange (mpLayouter->GetRangeOfVisiblePageObjects(aViewArea));
         const Range aUnion(
-            ::std::min(maVisiblePageRange.Min(), aRange.Min()),
-            ::std::max(maVisiblePageRange.Max(), aRange.Max()));
+            std::min(maVisiblePageRange.Min(), aRange.Min()),
+            std::max(maVisiblePageRange.Max(), aRange.Max()));
 
         // For page objects that just dropped off the visible area we
         // decrease the priority of pending requests for preview bitmaps.
@@ -480,8 +480,8 @@ void SlideSorterView::DeterminePageObjectVisibilities()
 
             // Tell the listeners that the visibility of some objects has
             // changed.
-            ::std::vector<Link<LinkParamNone*,void>>& aChangeListeners (maVisibilityChangeListeners);
-            for (::std::vector<Link<LinkParamNone*,void>>::const_iterator
+            std::vector<Link<LinkParamNone*,void>>& aChangeListeners (maVisibilityChangeListeners);
+            for (std::vector<Link<LinkParamNone*,void>>::const_iterator
                      iLink(aChangeListeners.begin()),
                      iEnd(aChangeListeners.end());
                  iLink!=iEnd;
@@ -585,7 +585,7 @@ Rectangle SlideSorterView::GetModelArea()
 static ::canvas::tools::ElapsedTime gaTimer;
 static const size_t gFrameTimeCount (10);
 static size_t gFrameTimeIndex (0);
-static ::std::vector<double> gFrameTimes (gFrameTimeCount, 0);
+static std::vector<double> gFrameTimes (gFrameTimeCount, 0);
 static double gFrameTimeSum (0);
 static const Rectangle gFrameTimeBox (10,10,150,20);
 static double gnLastFrameStart = 0;
@@ -714,7 +714,7 @@ Pair SlideSorterView::GetVisiblePageRange()
 
 void SlideSorterView::AddVisibilityChangeListener (const Link<LinkParamNone*,void>& rListener)
 {
-    if (::std::find (
+    if (std::find (
         maVisibilityChangeListeners.begin(),
         maVisibilityChangeListeners.end(),
         rListener) == maVisibilityChangeListeners.end())
@@ -726,7 +726,7 @@ void SlideSorterView::AddVisibilityChangeListener (const Link<LinkParamNone*,voi
 void SlideSorterView::RemoveVisibilityChangeListener(const Link<LinkParamNone*,void>&rListener)
 {
     maVisibilityChangeListeners.erase (
-        ::std::find (
+        std::find (
             maVisibilityChangeListeners.begin(),
             maVisibilityChangeListeners.end(),
             rListener));

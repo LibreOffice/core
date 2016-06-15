@@ -182,7 +182,7 @@ public:
 
 private:
     class Implementation;
-    ::std::unique_ptr<ViewShellManager::Implementation> mpImpl;
+    std::unique_ptr<ViewShellManager::Implementation> mpImpl;
     bool mbValid;
 
     void LockUpdate();

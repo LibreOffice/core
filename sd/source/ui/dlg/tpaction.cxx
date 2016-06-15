@@ -750,7 +750,7 @@ void SdTPAction::SetEditText( OUString const & rStr )
             break;
         case presentation::ClickAction_VERB:
             {
-                ::std::vector< long >::iterator aFound( ::std::find( aVerbVector.begin(), aVerbVector.end(), rStr.toInt32() ) );
+                std::vector< long >::iterator aFound( std::find( aVerbVector.begin(), aVerbVector.end(), rStr.toInt32() ) );
                 if( aFound != aVerbVector.end() )
                     m_pLbOLEAction->SelectEntryPos( static_cast< short >( aFound - aVerbVector.begin() ) );
             }

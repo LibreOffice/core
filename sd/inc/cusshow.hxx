@@ -30,7 +30,7 @@ class SdPage;
 class SD_DLLPUBLIC SdCustomShow
 {
 public:
-    typedef ::std::vector<const SdPage*> PageVec;
+    typedef std::vector<const SdPage*> PageVec;
 
 private:
     PageVec       maPages;

@@ -134,7 +134,7 @@ class SelectionIteratorImpl
 {
 public:
     SelectionIteratorImpl (
-        const ::std::vector< SdrObjectWeakRef >& rObjectList,
+        const std::vector< SdrObjectWeakRef >& rObjectList,
         sal_Int32 nObjectIndex,
         SdDrawDocument* pDocument,
         const std::weak_ptr<ViewShell>& rpViewShellWeak,
@@ -148,7 +148,7 @@ public:
     virtual bool operator== (const IteratorImplBase& rIterator) const override;
 
 private:
-    const ::std::vector<SdrObjectWeakRef>& mrObjectList;
+    const std::vector<SdrObjectWeakRef>& mrObjectList;
     sal_Int32 mnObjectIndex;
 
     /** Compare the given iterator with this object.  This method handles

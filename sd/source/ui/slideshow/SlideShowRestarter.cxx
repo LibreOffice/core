@@ -101,7 +101,7 @@ IMPL_LINK_NOARG_TYPED(SlideShowRestarter, EndPresentation, void*, void)
             // restart of the slide show.
             if (mpViewShellBase != nullptr)
             {
-                ::std::shared_ptr<FrameworkHelper> pHelper(
+                std::shared_ptr<FrameworkHelper> pHelper(
                     FrameworkHelper::Instance(*mpViewShellBase));
                 if (pHelper->GetConfigurationController()->getResource(
                     FrameworkHelper::CreateResourceId(FrameworkHelper::msFullScreenPaneURL)).is())
@@ -111,7 +111,7 @@ IMPL_LINK_NOARG_TYPED(SlideShowRestarter, EndPresentation, void*, void)
 
                     pHelper->RunOnConfigurationEvent(
                         FrameworkHelper::msConfigurationUpdateEndEvent,
-                        ::std::bind(&SlideShowRestarter::StartPresentation, shared_from_this()));
+                        std::bind(&SlideShowRestarter::StartPresentation, shared_from_this()));
                     pHelper->UpdateConfiguration();
                 }
                 else

@@ -74,7 +74,7 @@ public:
         void Release (bool bForce = false);
         DECL_LINK_TYPED(TimeoutCallback, Timer *, void);
     private:
-        ::std::unique_ptr<ToolBarManager::UpdateLock> mpLock;
+        std::unique_ptr<ToolBarManager::UpdateLock> mpLock;
         /** The timer is used both as a safe guard to unlock the update lock
             when Release() is not called explicitly.  It is also used to
             defer the release of the lock to a time when the UI is not

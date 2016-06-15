@@ -77,7 +77,7 @@ public:
             mbSortingEnabled(false), mpEntryCompare(nullptr) {}
 
     OUString msRegion;
-    ::std::vector<TemplateEntry*> maEntries;
+    std::vector<TemplateEntry*> maEntries;
 
     void EnableSorting(bool bSortingEnabled = true);
     void InsertEntry(TemplateEntry* pNewEntry);

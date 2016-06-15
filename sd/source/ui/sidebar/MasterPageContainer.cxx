@@ -60,7 +60,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-typedef ::std::vector<sd::sidebar::SharedMasterPageDescriptor> MasterPageContainerType;
+typedef std::vector<sd::sidebar::SharedMasterPageDescriptor> MasterPageContainerType;
 
 } // end of anonymous namespace
 
@@ -155,7 +155,7 @@ private:
     Image maLargePreviewNotAvailable;
     Image maSmallPreviewNotAvailable;
 
-    ::std::vector<Link<MasterPageContainerChangeEvent&,void>> maChangeListeners;
+    std::vector<Link<MasterPageContainerChangeEvent&,void>> maChangeListeners;
 
     // We have to remember the tasks for initialization and filling in case
     // a MasterPageContainer object is destroyed before these tasks have
@@ -167,7 +167,7 @@ private:
 
     bool mbContainerCleaningPending;
 
-    typedef ::std::pair<MasterPageContainerChangeEvent::EventType,Token> EventData;
+    typedef std::pair<MasterPageContainerChangeEvent::EventType,Token> EventData;
 
     Image GetPreviewSubstitution (sal_uInt16 nId, PreviewSize ePreviewSize);
 
@@ -319,7 +319,7 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForURL (
     if (!sURL.isEmpty())
     {
         MasterPageContainerType::iterator iEntry (
-            ::std::find_if (
+            std::find_if (
                 mpImpl->maContainer.begin(),
                 mpImpl->maContainer.end(),
                 MasterPageDescriptor::URLComparator(sURL)));
@@ -337,7 +337,7 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForStyleName (const OUSt
     if (!sStyleName.isEmpty())
     {
         MasterPageContainerType::iterator iEntry (
-            ::std::find_if (
+            std::find_if (
                 mpImpl->maContainer.begin(),
                 mpImpl->maContainer.end(),
                 MasterPageDescriptor::StyleNameComparator(sStyleName)));
@@ -356,7 +356,7 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForPageObject (
     if (pPage != nullptr)
     {
         MasterPageContainerType::iterator iEntry (
-            ::std::find_if (
+            std::find_if (
                 mpImpl->maContainer.begin(),
                 mpImpl->maContainer.end(),
                 MasterPageDescriptor::PageObjectComparator(pPage)));
@@ -548,8 +548,8 @@ void MasterPageContainer::Implementation::AddChangeListener (const Link<MasterPa
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    ::std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener (
-        ::std::find(maChangeListeners.begin(),maChangeListeners.end(),rLink));
+    std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener (
+        std::find(maChangeListeners.begin(),maChangeListeners.end(),rLink));
     if (iListener == maChangeListeners.end())
         maChangeListeners.push_back(rLink);
 
@@ -559,8 +559,8 @@ void MasterPageContainer::Implementation::RemoveChangeListener (const Link<Maste
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    ::std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener (
-        ::std::find(maChangeListeners.begin(),maChangeListeners.end(),rLink));
+    std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener (
+        std::find(maChangeListeners.begin(),maChangeListeners.end(),rLink));
     if (iListener != maChangeListeners.end())
         maChangeListeners.erase(iListener);
 }
@@ -627,7 +627,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     // Look up the new MasterPageDescriptor and either insert it or update
     // an already existing one.
     MasterPageContainerType::iterator aEntry (
-        ::std::find_if (
+        std::find_if (
             maContainer.begin(),
             maContainer.end(),
             MasterPageDescriptor::AllComparator(rpDescriptor)));
@@ -932,8 +932,8 @@ void MasterPageContainer::Implementation::FireContainerChange (
     MasterPageContainerChangeEvent::EventType eType,
     Token aToken)
 {
-    ::std::vector<Link<MasterPageContainerChangeEvent&,void>> aCopy(maChangeListeners.begin(),maChangeListeners.end());
-    ::std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener;
+    std::vector<Link<MasterPageContainerChangeEvent&,void>> aCopy(maChangeListeners.begin(),maChangeListeners.end());
+    std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener;
     MasterPageContainerChangeEvent aEvent;
     aEvent.meEventType = eType;
     aEvent.maChildToken = aToken;

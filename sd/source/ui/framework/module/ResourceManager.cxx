@@ -39,7 +39,7 @@ namespace {
 namespace sd { namespace framework {
 
 class ResourceManager::MainViewContainer
-    : public ::std::set<OUString>
+    : public std::set<OUString>
 {
 public:
     MainViewContainer() {}

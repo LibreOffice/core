@@ -496,7 +496,7 @@ protected:
     /// The type of the shell.  Returned by GetShellType().
     ShellType meShellType;
 
-    ::std::unique_ptr<Implementation> mpImpl;
+    std::unique_ptr<Implementation> mpImpl;
 
     // Support methods for centralized UNDO/REDO
     virtual ::svl::IUndoManager* ImpGetUndoManager() const;
@@ -551,7 +551,7 @@ private:
         with reference to the digit language used to display digits in text
         shapes.
     */
-    ::std::unique_ptr< ::sd::WindowUpdater> mpWindowUpdater;
+    std::unique_ptr< ::sd::WindowUpdater> mpWindowUpdater;
 
     /** Code common to all constructors.  It generally is a bad idea
         to call this function from outside a constructor.

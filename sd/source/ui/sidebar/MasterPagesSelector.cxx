@@ -155,7 +155,7 @@ void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
 
 void MasterPagesSelector::Fill()
 {
-    ::std::unique_ptr<ItemList> pItemList (new ItemList());
+    std::unique_ptr<ItemList> pItemList (new ItemList());
 
     Fill(*pItemList);
 
@@ -656,7 +656,7 @@ void MasterPagesSelector::InvalidateItem (MasterPageContainer::Token aToken)
     }
 }
 
-void MasterPagesSelector::UpdateItemList (::std::unique_ptr<ItemList> && pNewItemList)
+void MasterPagesSelector::UpdateItemList (std::unique_ptr<ItemList> && pNewItemList)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 

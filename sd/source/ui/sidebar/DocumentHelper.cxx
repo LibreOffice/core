@@ -231,7 +231,7 @@ SdPage* DocumentHelper::AddMasterPage (
             pClonedMasterPage = nullptr;
             DBG_UNHANDLED_EXCEPTION();
         }
-        catch(const ::std::exception&)
+        catch(const std::exception&)
         {
             pClonedMasterPage = nullptr;
             OSL_TRACE ("caught general exception");
@@ -305,8 +305,8 @@ void DocumentHelper::AssignMasterPageToPageList (
 
     // Create a second list that contains only the valid pointers to
     // pages for which an assignment is necessary.
-    ::std::vector<SdPage*>::const_iterator iPage;
-    ::std::vector<SdPage*> aCleanedList;
+    std::vector<SdPage*>::const_iterator iPage;
+    std::vector<SdPage*> aCleanedList;
     for (iPage=rpPageList->begin(); iPage!=rpPageList->end(); ++iPage)
     {
         OSL_ASSERT(*iPage!=nullptr && (*iPage)->GetModel() == &rTargetDocument);

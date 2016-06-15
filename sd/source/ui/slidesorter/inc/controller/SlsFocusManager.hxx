@@ -179,7 +179,7 @@ private:
     */
     bool mbPageIsFocused;
 
-    ::std::vector<Link<LinkParamNone*,void>> maFocusChangeListeners;
+    std::vector<Link<LinkParamNone*,void>> maFocusChangeListeners;
 
     /** When vertical wrap is active then pressing UP in the top row moves
         the focus to the bottom row, DOWN in the bottom row moves the focus

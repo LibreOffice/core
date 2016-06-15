@@ -114,7 +114,7 @@ private:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
 
-    typedef ::std::vector<SdPage*> PageList;
+    typedef std::vector<SdPage*> PageList;
     /** Remember the pages that are dragged to another document or to
         another place in the same document so that they can be removed after
         a move operation.

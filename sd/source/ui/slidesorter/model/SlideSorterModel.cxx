@@ -312,14 +312,14 @@ void SlideSorterModel::Resync()
 
 void SlideSorterModel::ClearDescriptorList()
 {
-    ::std::vector<SharedPageDescriptor> aDescriptors;
+    std::vector<SharedPageDescriptor> aDescriptors;
 
     {
         ::osl::MutexGuard aGuard (maMutex);
         aDescriptors.swap(maPageDescriptors);
     }
 
-    for (::std::vector<SharedPageDescriptor>::iterator iDescriptor=aDescriptors.begin(), iEnd=aDescriptors.end();
+    for (std::vector<SharedPageDescriptor>::iterator iDescriptor=aDescriptors.begin(), iEnd=aDescriptors.end();
          iDescriptor!=iEnd;
          ++iDescriptor)
     {

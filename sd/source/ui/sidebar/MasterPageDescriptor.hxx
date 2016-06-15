@@ -59,7 +59,7 @@ public:
             Returns a list of event types for which event notifications have
             to be sent to listeners.  The list may be empty or NULL.
     */
-    ::std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> >
+    std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> >
         Update (
             const MasterPageDescriptor& rDescriptor);
 

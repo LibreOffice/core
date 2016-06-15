@@ -1918,7 +1918,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                     // Check if this sound file already exists.
                     // If not, it is exported to our local sound directory.
                     bool    bSoundExists = false;
-                    ::std::vector< OUString > aSoundList;
+                    std::vector< OUString > aSoundList;
 
                     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, aSoundList );
                     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, aSoundList );

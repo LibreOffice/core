@@ -123,7 +123,7 @@ public:
 
 private:
     ScopedVclPtr<VirtualDevice> mpLayerDevice;
-    ::std::vector<SharedILayerPainter> maPainters;
+    std::vector<SharedILayerPainter> maPainters;
     vcl::Region maInvalidationRegion;
 
     void ValidateRectangle (const Rectangle& rBox);
@@ -143,8 +143,8 @@ public:
 
     const SharedLayer& back() const { return mvLayers.back(); }
 
-    const ::std::vector<SharedLayer>::const_iterator begin() const { return mvLayers.begin(); }
-    const ::std::vector<SharedLayer>::const_iterator end() const { return mvLayers.end(); }
+    const std::vector<SharedLayer>::const_iterator begin() const { return mvLayers.begin(); }
+    const std::vector<SharedLayer>::const_iterator end() const { return mvLayers.end(); }
 
     void clear() { mvLayers.clear(); }
 
@@ -155,7 +155,7 @@ public:
     SharedLayer& operator[](size_t i) { return mvLayers[i]; }
 
 private:
-    ::std::vector<SharedLayer> mvLayers;
+    std::vector<SharedLayer> mvLayers;
 };
 
 //===== LayeredDevice =========================================================
@@ -430,7 +430,7 @@ void Layer::ValidateRectangle (const Rectangle& rBox)
     const vcl::Region aSavedClipRegion (mpLayerDevice->GetClipRegion());
     mpLayerDevice->IntersectClipRegion(rBox);
 
-    for (::std::vector<SharedILayerPainter>::const_iterator
+    for (std::vector<SharedILayerPainter>::const_iterator
              iPainter(maPainters.begin()),
              iEnd(maPainters.end());
          iPainter!=iEnd;
@@ -470,15 +470,15 @@ void Layer::Resize (const Size& rSize)
 
 void Layer::AddPainter (const SharedILayerPainter& rpPainter)
 {
-    OSL_ASSERT(::std::find(maPainters.begin(), maPainters.end(), rpPainter) == maPainters.end());
+    OSL_ASSERT(std::find(maPainters.begin(), maPainters.end(), rpPainter) == maPainters.end());
 
     maPainters.push_back(rpPainter);
 }
 
 void Layer::RemovePainter (const SharedILayerPainter& rpPainter)
 {
-    const ::std::vector<SharedILayerPainter>::iterator iPainter (
-        ::std::find(maPainters.begin(), maPainters.end(), rpPainter));
+    const std::vector<SharedILayerPainter>::iterator iPainter (
+        std::find(maPainters.begin(), maPainters.end(), rpPainter));
     if (iPainter != maPainters.end())
     {
         maPainters.erase(iPainter);

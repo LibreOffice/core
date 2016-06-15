@@ -59,14 +59,14 @@ ConfigurationControllerResourceManager::ResourceDescriptor
 }
 
 void ConfigurationControllerResourceManager::ActivateResources (
-    const ::std::vector<Reference<XResourceId> >& rResources,
+    const std::vector<Reference<XResourceId> >& rResources,
     const Reference<XConfiguration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
     // Iterate in normal order over the resources that are to be
     // activated so that resources on which others depend are activated
     // before the depending resources are activated.
-    ::std::for_each(
+    std::for_each(
         rResources.begin(),
         rResources.end(),
         [&] (Reference<XResourceId> const& xResource) {
@@ -75,14 +75,14 @@ void ConfigurationControllerResourceManager::ActivateResources (
 }
 
 void ConfigurationControllerResourceManager::DeactivateResources (
-    const ::std::vector<Reference<XResourceId> >& rResources,
+    const std::vector<Reference<XResourceId> >& rResources,
     const Reference<XConfiguration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
     // Iterate in reverse order over the resources that are to be
     // deactivated so that resources on which others depend are deactivated
     // only when the depending resources have already been deactivated.
-    ::std::for_each(
+    std::for_each(
         rResources.rbegin(),
         rResources.rend(),
         [&] (Reference<XResourceId> const& xResource) {

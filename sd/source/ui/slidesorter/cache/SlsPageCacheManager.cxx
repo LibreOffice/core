@@ -74,7 +74,7 @@ public:
     are added the list is shortened to the maximally allowed number of
     elements by removing the least recently used elements.
 */
-typedef ::std::deque<RecentlyUsedCacheDescriptor> RecentlyUsedQueue;
+typedef std::deque<RecentlyUsedCacheDescriptor> RecentlyUsedQueue;
 
 /** Compare the caches by preview size.  Those that match the given size
     come first, then, regardless of the given size, the largest ones before
@@ -247,7 +247,7 @@ void PageCacheManager::Recycle (
                 iRecentCache->maPreviewSize, iRecentCache->mpCache));
     }
 
-    ::std::sort(aCaches.begin(), aCaches.end(), BestFittingCacheComparer(rPreviewSize));
+    std::sort(aCaches.begin(), aCaches.end(), BestFittingCacheComparer(rPreviewSize));
 
     BestFittingPageCaches::const_iterator iBestCache;
     for (iBestCache=aCaches.begin(); iBestCache!=aCaches.end(); ++iBestCache)
@@ -258,7 +258,7 @@ void PageCacheManager::Recycle (
 
 void PageCacheManager::ReleaseCache (const std::shared_ptr<Cache>& rpCache)
 {
-    PageCacheContainer::iterator iCache (::std::find_if(
+    PageCacheContainer::iterator iCache (std::find_if(
         mpPageCaches->begin(),
         mpPageCaches->end(),
         PageCacheContainer::CompareWithCache(rpCache)));
@@ -285,7 +285,7 @@ std::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
     if (rpCache.get() != nullptr)
     {
         // Look up the given cache in the list of active caches.
-        PageCacheContainer::iterator iCacheToChange (::std::find_if(
+        PageCacheContainer::iterator iCacheToChange (std::find_if(
             mpPageCaches->begin(),
             mpPageCaches->end(),
             PageCacheContainer::CompareWithCache(rpCache)));

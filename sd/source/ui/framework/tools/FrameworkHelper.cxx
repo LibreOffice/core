@@ -231,9 +231,9 @@ const OUString FrameworkHelper::msConfigurationControllerService("com.sun.star.d
 //----- helper ----------------------------------------------------------------
 namespace
 {
-    ::std::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
+    std::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
     {
-        ::std::shared_ptr< ViewShell > pViewShell;
+        std::shared_ptr< ViewShell > pViewShell;
         if ( !i_rViewShellWrapper.is() )
             return pViewShell;
 
@@ -296,7 +296,7 @@ class FrameworkHelper::DisposeListener
       public FrameworkHelperDisposeListenerInterfaceBase
 {
 public:
-    explicit DisposeListener (const ::std::shared_ptr<FrameworkHelper>& rpHelper);
+    explicit DisposeListener (const std::shared_ptr<FrameworkHelper>& rpHelper);
     virtual ~DisposeListener();
 
     virtual void SAL_CALL disposing() override;
@@ -305,7 +305,7 @@ public:
         throw(RuntimeException, std::exception) override;
 
 private:
-    ::std::shared_ptr<FrameworkHelper> mpHelper;
+    std::shared_ptr<FrameworkHelper> mpHelper;
 };
 
 //----- FrameworkHelper::Deleter ----------------------------------------------
@@ -325,10 +325,10 @@ std::unique_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new V
 
 FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
 
-::std::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
+std::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
 {
 
-    ::std::shared_ptr<FrameworkHelper> pHelper;
+    std::shared_ptr<FrameworkHelper> pHelper;
 
     InstanceMap::const_iterator iHelper (maInstanceMap.find(&rBase));
     if (iHelper == maInstanceMap.end())
@@ -337,7 +337,7 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
         ::osl::MutexGuard aGuard (aMutexFunctor());
         if (iHelper == maInstanceMap.end())
         {
-            pHelper = ::std::shared_ptr<FrameworkHelper>(
+            pHelper = std::shared_ptr<FrameworkHelper>(
                 new FrameworkHelper(rBase),
                 FrameworkHelper::Deleter());
             pHelper->Initialize();
@@ -406,16 +406,16 @@ bool FrameworkHelper::IsValid()
     return mxConfigurationController.is();
 }
 
-::std::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const OUString& rsPaneURL)
+std::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const OUString& rsPaneURL)
 {
     if ( !mxConfigurationController.is() )
-        return ::std::shared_ptr<ViewShell>();
+        return std::shared_ptr<ViewShell>();
 
     Reference<XResourceId> xPaneId( CreateResourceId( rsPaneURL ) );
     return lcl_getViewShell( lcl_getFirstViewInPane( mxConfigurationController, xPaneId ) );
 }
 
-::std::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const Reference<XView>& rxView)
+std::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const Reference<XView>& rxView)
 {
     return lcl_getViewShell( rxView.get() );
 }
@@ -552,7 +552,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         Reference<XResourceId> xPaneId (
             CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
         Reference<XView> xView (GetView(xPaneId));
-        ::std::shared_ptr<ViewShell> pCenterViewShell (GetViewShell(xView));
+        std::shared_ptr<ViewShell> pCenterViewShell (GetViewShell(xView));
 
         // Compute requested view
         OUString sRequestedView;
@@ -779,7 +779,7 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
 //----- FrameworkHelper::DisposeListener --------------------------------------
 
 FrameworkHelper::DisposeListener::DisposeListener (
-    const ::std::shared_ptr<FrameworkHelper>& rpHelper)
+    const std::shared_ptr<FrameworkHelper>& rpHelper)
     : FrameworkHelperDisposeListenerInterfaceBase(maMutex),
       mpHelper(rpHelper)
 {

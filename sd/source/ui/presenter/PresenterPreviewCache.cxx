@@ -64,7 +64,7 @@ private:
     Reference<XInterface> mxDocument;
     sal_Int32 mnFirstVisibleSlideIndex;
     sal_Int32 mnLastVisibleSlideIndex;
-    typedef ::std::vector<css::uno::Reference<css::drawing::XSlidePreviewCacheListener> > ListenerContainer;
+    typedef std::vector<css::uno::Reference<css::drawing::XSlidePreviewCacheListener> > ListenerContainer;
     ListenerContainer maListeners;
 
     void CallListeners (const sal_Int32 nSlideIndex);

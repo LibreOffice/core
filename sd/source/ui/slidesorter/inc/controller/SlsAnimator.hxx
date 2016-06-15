@@ -58,8 +58,8 @@ public:
     /** An animation object is called with values between 0 and 1 as single
         argument to its operator() method.
     */
-    typedef ::std::function<void (double)> AnimationFunctor;
-    typedef ::std::function<void ()> FinishFunctor;
+    typedef std::function<void (double)> AnimationFunctor;
+    typedef std::function<void ()> FinishFunctor;
 
     typedef sal_Int32 AnimationId;
     static const AnimationId NotAnAnimationId = -1;
@@ -95,7 +95,7 @@ private:
     Idle maIdle;
     bool mbIsDisposed;
     class Animation;
-    typedef ::std::vector<std::shared_ptr<Animation> > AnimationList;
+    typedef std::vector<std::shared_ptr<Animation> > AnimationList;
     AnimationList maAnimations;
     ::canvas::tools::ElapsedTime maElapsedTime;
 

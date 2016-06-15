@@ -109,7 +109,7 @@ private:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
 
-    ::std::vector<Link<LinkParamNone*,void>> maSelectionChangeListeners;
+    std::vector<Link<LinkParamNone*,void>> maSelectionChangeListeners;
 
     /** When this flag is set then on the next call to Paint() the selection
         is moved into the visible area.
@@ -134,14 +134,14 @@ private:
         @param rSelectedNormalPages
             A list of normal pages.  Supplying master pages is an error.
     */
-    void DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedNormalPages);
+    void DeleteSelectedNormalPages (const std::vector<SdPage*>& rSelectedNormalPages);
 
     /** Delete the given list of master pages.  This method is a helper
         function for DeleteSelectedPages().
         @param rSelectedMasterPages
             A list of master pages.  Supplying normal pages is an error.
     */
-    void DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedMasterPages);
+    void DeleteSelectedMasterPages (const std::vector<SdPage*>& rSelectedMasterPages);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

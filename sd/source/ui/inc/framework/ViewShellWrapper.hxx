@@ -68,7 +68,7 @@ public:
             to the ViewShell object.
     */
     ViewShellWrapper (
-        ::std::shared_ptr<ViewShell> pViewShell,
+        std::shared_ptr<ViewShell> pViewShell,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
     virtual ~ViewShellWrapper();
@@ -82,7 +82,7 @@ public:
         to obtain a pointer to the wrapped ViewShell object for a given
         XView object.
     */
-    const ::std::shared_ptr<ViewShell>& GetViewShell() { return mpViewShell;}
+    const std::shared_ptr<ViewShell>& GetViewShell() { return mpViewShell;}
 
     // XUnoTunnel
 
@@ -139,8 +139,8 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    ::std::shared_ptr< ViewShell >                                      mpViewShell;
-    ::std::shared_ptr< ::sd::slidesorter::SlideSorterViewShell >        mpSlideSorterViewShell;
+    std::shared_ptr< ViewShell >                                        mpViewShell;
+    std::shared_ptr< ::sd::slidesorter::SlideSorterViewShell >          mpSlideSorterViewShell;
     const css::uno::Reference< css::drawing::framework::XResourceId >   mxViewId;
     css::uno::Reference<css::awt::XWindow >                             mxWindow;
 };

@@ -65,7 +65,7 @@ private:
 class AnimationParametricFunction
 {
 public:
-    typedef ::std::function<basegfx::B2DPoint (double)> ParametricFunction;
+    typedef std::function<basegfx::B2DPoint (double)> ParametricFunction;
     AnimationParametricFunction (const ParametricFunction& rFunction);
 
     double operator() (const double nX);
@@ -74,7 +74,7 @@ private:
     /** y-Values of the parametric function given to the constructor
         evaluated (and interpolated) for evenly spaced x-Values.
     */
-    ::std::vector<double> maY;
+    std::vector<double> maY;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

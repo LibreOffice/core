@@ -767,7 +767,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         size_t nIndex = m_nCurrentFrame + 1;
                         m_FrameList.insert(
                                 m_FrameList.begin() + nIndex,
-                                ::std::make_pair(pBitmapEx, pTime));
+                                std::make_pair(pBitmapEx, pTime));
 
                         // increment => next one inserted after this one
                         ++m_nCurrentFrame;
@@ -795,7 +795,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                             m_FrameList.begin() + nIndex,
-                            ::std::make_pair(pBitmapEx, pTime));
+                            std::make_pair(pBitmapEx, pTime));
 
                     // increment => next one inserted after this one
                     ++m_nCurrentFrame;
@@ -817,7 +817,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
             size_t nIndex = m_nCurrentFrame + 1;
             m_FrameList.insert(
                     m_FrameList.begin() + nIndex,
-                    ::std::make_pair(pBitmapEx, pTime));
+                    std::make_pair(pBitmapEx, pTime));
         }
 
         // one single object
@@ -849,7 +849,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                         m_FrameList.begin() + nIndex,
-                        ::std::make_pair(pBitmapEx, pTime));
+                        std::make_pair(pBitmapEx, pTime));
 
                     // increment => next one inserted after this one
                     ++m_nCurrentFrame;

@@ -117,7 +117,7 @@ private:
     /** Type and data member for a list of devices that have to be kept
         up-to-date.
     */
-    typedef ::std::vector< VclPtr<vcl::Window> > tWindowList;
+    typedef std::vector< VclPtr<vcl::Window> > tWindowList;
     tWindowList maWindowList;
 
     /** The central method of this class.  Update the given output device.

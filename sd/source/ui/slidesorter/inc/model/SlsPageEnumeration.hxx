@@ -54,7 +54,7 @@ public:
             enumeration.  Pages for which rPredicate returns <FALSE/> are
             exclude.
     */
-    typedef ::std::function<bool (const SharedPageDescriptor&)> PagePredicate;
+    typedef std::function<bool (const SharedPageDescriptor&)> PagePredicate;
     static PageEnumeration Create (
         const SlideSorterModel& rModel,
         const PagePredicate& rPredicate);
@@ -67,7 +67,7 @@ public:
 
     /** Create and return an exact copy of the called object.
     */
-    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() override;
+    virtual std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() override;
 
     PageEnumeration& operator= (const PageEnumeration& rEnumeration);
 
@@ -90,12 +90,12 @@ public:
 
 private:
     /// Implementation object.
-    ::std::unique_ptr<Enumeration<SharedPageDescriptor> > mpImpl;
+    std::unique_ptr<Enumeration<SharedPageDescriptor> > mpImpl;
 
     /** This constructor expects an implementation object that holds
         the predicate that filters the pages.
     */
-    PageEnumeration (::std::unique_ptr<Enumeration<SharedPageDescriptor> > && pImpl);
+    PageEnumeration (std::unique_ptr<Enumeration<SharedPageDescriptor> > && pImpl);
 
 };
 

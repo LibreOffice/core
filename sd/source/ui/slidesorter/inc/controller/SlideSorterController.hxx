@@ -248,7 +248,7 @@ private:
         the time when the edit mode is switched to EM_MASTERPAGE.  With this
         we can restore the selection when switching back to EM_PAGE mode.
     */
-    ::std::vector<SdPage*> maSelectionBeforeSwitch;
+    std::vector<SdPage*> maSelectionBeforeSwitch;
     /// The current page before the edit mode is switched to EM_MASTERPAGE.
     int mnCurrentPageBeforeSwitch;
 

@@ -185,7 +185,7 @@ public:
 
 private:
     class Implementation;
-    ::std::unique_ptr<Implementation> mpImpl;
+    std::unique_ptr<Implementation> mpImpl;
 
     /// Specifies whether to search and replace, to spell check or to do a
     /// text conversion.
@@ -258,7 +258,7 @@ private:
         selection.  This copy is necessary because during the search
         process the mark list is modified.
     */
-    ::std::vector<SdrObjectWeakRef> maMarkListCopy;
+    std::vector<SdrObjectWeakRef> maMarkListCopy;
 
     /** Current object that may be a text object.  The object pointer to
         corresponds to <member>mnObjIndex</member>.  While iterating over the

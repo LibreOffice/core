@@ -159,7 +159,7 @@ private:
     */
     void CheckPureAnchors (
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
-        ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId> >&
+        std::vector<css::uno::Reference<css::drawing::framework::XResourceId> >&
             rResourcesToDeactivate);
 
     /** Remove from the requested configuration all pure anchors that have no

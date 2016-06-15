@@ -43,7 +43,7 @@ FontProvider& FontProvider::Instance()
             // SdGlobalResourceContainer so that it is eventually released.
             FontProvider* pInstance = new FontProvider();
             SdGlobalResourceContainer::Instance().AddResource (
-                ::std::unique_ptr<SdGlobalResource>(pInstance));
+                std::unique_ptr<SdGlobalResource>(pInstance));
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             mpInstance = pInstance;
         }
