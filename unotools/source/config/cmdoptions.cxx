@@ -286,44 +286,28 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
     return lDisabledItems;
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtCommandOptions_Impl*     SvtCommandOptions::m_pDataContainer = nullptr;
-sal_Int32                   SvtCommandOptions::m_nRefCount      = 0;
-
-//  constructor
+std::weak_ptr<SvtCommandOptions_Impl> m_pCommandOptions;
 
 SvtCommandOptions::SvtCommandOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
+
+    m_pImpl = m_pCommandOptions.lock();
+    if( !m_pImpl )
     {
-        m_pDataContainer = new SvtCommandOptions_Impl;
+        m_pImpl = std::make_shared<SvtCommandOptions_Impl>();
+        m_pCommandOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_CMDOPTIONS);
     }
 }
-
-//  destructor
 
 SvtCommandOptions::~SvtCommandOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 //  public method
@@ -331,7 +315,7 @@ SvtCommandOptions::~SvtCommandOptions()
 bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->HasEntries( eOption );
+    return m_pImpl->HasEntries( eOption );
 }
 
 //  public method
@@ -339,7 +323,7 @@ bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandURL ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->Lookup( eCmdOption, aCommandURL );
+    return m_pImpl->Lookup( eCmdOption, aCommandURL );
 }
 
 //  public method
@@ -347,7 +331,7 @@ bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandUR
 void SvtCommandOptions::EstablisFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->EstablisFrameCallback(xFrame);
+    m_pImpl->EstablisFrameCallback(xFrame);
 }
 
 namespace
