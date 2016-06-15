@@ -71,6 +71,7 @@ SfxMacroTabPage_Impl::SfxMacroTabPage_Impl()
     , pMacroFrame(nullptr)
     , pMacroLB(nullptr)
     , bReadOnly(false)
+    , maFillGroupIdle("cui tabpages SfxMacroTabPage_Impl FillGroup")
     , bGotEvents(false)
     , m_bDummyActivated(false)
 {

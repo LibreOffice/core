@@ -539,6 +539,7 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
                   ,m_aRowSetApproveListeners(m_aMutex)
                   ,m_aParameterListeners(m_aMutex)
                   ,m_aFilterListeners(m_aMutex)
+                  ,m_aTabActivationIdle("svx form FormController TabActivation")
                   ,m_pControlBorderManager( new ::svxform::ControlBorderManager )
                   ,m_xFormOperations()
                   ,m_aMode( OUString( "DataMode"  ) )

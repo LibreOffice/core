@@ -191,6 +191,7 @@ void SdrPaintView::ImpClearVars()
 SdrPaintView::SdrPaintView(SdrModel* pModel, OutputDevice* pOut)
 :   mpPageView(nullptr),
     maDefaultAttr(pModel->GetItemPool()),
+    maComeBackIdle("svx svdraw SdrPaintView ComeBack"),
     mbBufferedOutputAllowed(false),
     mbBufferedOverlayAllowed(false),
     mbPagePaintingAllowed(true),

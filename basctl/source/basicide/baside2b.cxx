@@ -222,6 +222,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     rModulWindow(*pModulWindow),
     nCurTextWidth(0),
     aHighlighter(HighlighterLanguage::Basic),
+    aSyntaxIdle("basctl basicide EditorWindow Syntax"),
     bHighlighting(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true),

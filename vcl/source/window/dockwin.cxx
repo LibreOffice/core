@@ -415,13 +415,15 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
 }
 
 DockingWindow::DockingWindow( WindowType nType ) :
-    Window(nType)
+    Window(nType),
+    maLayoutIdle("vcl window DockingWindow Layout")
 {
     ImplInitDockingWindowData();
 }
 
 DockingWindow::DockingWindow( vcl::Window* pParent, WinBits nStyle ) :
-    Window( WINDOW_DOCKINGWINDOW )
+    Window( WINDOW_DOCKINGWINDOW ),
+    maLayoutIdle("vcl window DockingWindow Layout")
 {
     ImplInitDockingWindowData();
     ImplInit( pParent, nStyle );
@@ -445,8 +447,9 @@ void DockingWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStr
 }
 
 DockingWindow::DockingWindow(vcl::Window* pParent, const OString& rID,
-    const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : Window(WINDOW_DOCKINGWINDOW)
+    const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame) :
+    Window(WINDOW_DOCKINGWINDOW),
+    maLayoutIdle("vcl window DockingWindow Layout")
 {
     ImplInitDockingWindowData();
 
