@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_40e636b5",
+        "filename": "sd/source/ui/animations/SlideTransitionPane.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2016-06-15T17:49:55Z",
+      "side": 1,
+      "message": "I get assertion in mrBase.GetEventMultiplexer():\nsd/source/ui/view/ViewShellBase.cxx:925: OSL_ASSERT: mpImpl.get()!\u003dnullptr",
+      "parentUuid": "da7fb54a_60d97a21",
+      "revId": "a2dc44d5b4aa2cb4b0ed38deaf50999ffbf90554",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_a030e257",
         "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
         "patchSetId": 4
