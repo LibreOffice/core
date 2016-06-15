@@ -110,6 +110,12 @@ public:
 
     const css::uno::Reference<css::frame::XFrame>& getFrame() { return m_xFrame; }
 
+    /// return UI-File name (without '.ui')
+    const OString& getUIFile() const
+    {
+        return m_sHelpRoot;
+    }
+
 private:
     VclBuilder(const VclBuilder&) = delete;
     VclBuilder& operator=(const VclBuilder&) = delete;
@@ -461,6 +467,15 @@ public:
         if (!m_pUIBuilder)
             return;
         m_pUIBuilder->setDeferredProperties();
+    }
+    OString getUIFile() const
+    {
+        if (m_pUIBuilder)
+        {
+            return m_pUIBuilder->getUIFile();
+        }
+
+        return OString();
     }
 
 protected:
