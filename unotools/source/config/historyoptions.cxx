@@ -523,66 +523,47 @@ void SvtHistoryOptions_Impl::DeleteItem(EHistoryType eHistory, const OUString& s
     }
 }
 
-// initialize static member
-// DON'T DO IT IN YOUR HEADER!
-// see definition for further information
-
-SvtHistoryOptions_Impl*  SvtHistoryOptions::m_pDataContainer = nullptr;
-sal_Int32     SvtHistoryOptions::m_nRefCount  = 0;
-
-// constructor
+std::weak_ptr<SvtHistoryOptions_Impl> m_pHistoryOptions;
 
 SvtHistoryOptions::SvtHistoryOptions()
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
+    m_pImpl = m_pHistoryOptions.lock();
+    if( !m_pImpl )
     {
-        m_pDataContainer = new SvtHistoryOptions_Impl;
-
+        m_pImpl = std::make_shared<SvtHistoryOptions_Impl>();
+        m_pHistoryOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_HISTORYOPTIONS);
     }
 }
-
-// destructor
 
 SvtHistoryOptions::~SvtHistoryOptions()
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+    m_pImpl.reset();
 }
 
 sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    return m_pDataContainer->GetCapacity(eHistory);
+    return m_pImpl->GetCapacity(eHistory);
 }
 
 void SvtHistoryOptions::Clear( EHistoryType eHistory )
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    m_pDataContainer->Clear( eHistory );
+    m_pImpl->Clear( eHistory );
 }
 
 Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType eHistory ) const
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    return m_pDataContainer->GetList( eHistory );
+    return m_pImpl->GetList( eHistory );
 }
 
 void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
@@ -591,14 +572,14 @@ void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    m_pDataContainer->AppendItem(eHistory, sURL, sFilter, sTitle, sPassword, sThumbnail);
+    m_pImpl->AppendItem(eHistory, sURL, sFilter, sTitle, sPassword, sThumbnail);
 }
 
 void SvtHistoryOptions::DeleteItem(EHistoryType eHistory, const OUString& sURL)
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    m_pDataContainer->DeleteItem(eHistory, sURL);
+    m_pImpl->DeleteItem(eHistory, sURL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
