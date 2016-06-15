@@ -574,7 +574,7 @@ namespace slideshow
                     new WakeupEvent( rContext.mrEventQueue.getTimer(),
                                      rContext.mrActivitiesQueue ) );
 
-                ActivitySharedPtr pActivity =
+                std::shared_ptr< Activity > pActivity =
                     createIntrinsicAnimationActivity(
                         rContext,
                         pShape,
@@ -599,7 +599,7 @@ namespace slideshow
             {
                 // dispose intrinsic animation activity, else, it will
                 // linger forever
-                ActivitySharedPtr pActivity( mpIntrinsicAnimationActivity.lock() );
+                std::shared_ptr< Activity > pActivity( mpIntrinsicAnimationActivity.lock() );
                 if( pActivity )
                     pActivity->dispose();
             }

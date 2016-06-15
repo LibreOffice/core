@@ -121,8 +121,7 @@ public:
     void                SetCodePage( sal_uInt16 nCodePage );
 
 private:
-    typedef std::shared_ptr< rtl_TextEncoding > TextEncRef;
-    TextEncRef          mxTextEnc;
+    std::shared_ptr< rtl_TextEncoding > mxTextEnc;
 };
 
 
@@ -218,7 +217,6 @@ private:
     sal_Int32           mnPropType;
 };
 
-typedef std::shared_ptr< SfxOlePropertyBase > SfxOlePropertyRef;
 
 
 /** Property representing the codepage used to encode bytestrings in the entire property set. */
@@ -263,13 +261,13 @@ private:
 class SfxOleSection : public SfxOleObjectBase
 {
 private:
-    typedef ::std::map< sal_Int32, SfxOlePropertyRef > SfxOlePropMap;
+    typedef ::std::map< sal_Int32, std::shared_ptr< SfxOlePropertyBase > > SfxOlePropMap;
 
 public:
     explicit            SfxOleSection( bool bSupportsDict );
 
     /** Returns the property with the passed ID, or an empty reference, if nothing found. */
-    SfxOlePropertyRef   GetProperty( sal_Int32 nPropId ) const;
+    std::shared_ptr< SfxOlePropertyBase > GetProperty( sal_Int32 nPropId ) const;
     /** Returns the value of a signed int32 property with the passed ID in rnValue.
         @return  true = Property found, rnValue is valid; false = Property not found. */
     bool                GetInt32Value( sal_Int32& rnValue, sal_Int32 nPropId ) const;
@@ -290,7 +288,7 @@ public:
     bool                GetDateValue( css::util::Date& rValue, sal_Int32 nPropId ) const;
 
     /** Adds the passed property to the property set. Drops an existing old property. */
-    void                SetProperty( const SfxOlePropertyRef& xProp );
+    void                SetProperty( const std::shared_ptr< SfxOlePropertyBase >& xProp );
     /** Inserts a signed int32 property with the passed value. */
     void                SetInt32Value( sal_Int32 nPropId, sal_Int32 nValue );
     /** Inserts a floating-point property with the passed value. */
@@ -343,7 +341,6 @@ private:
     bool                mbSupportsDict;         /// true = section supports dictionary.
 };
 
-typedef std::shared_ptr< SfxOleSection > SfxOleSectionRef;
 
 
 /** Enumerates different section types in OLE property sets. */
@@ -367,9 +364,9 @@ public:
     ErrCode             SavePropertySet( SotStorage* pStrg, const OUString& rStrmName );
 
     /** Returns the specified section, or an empty reference, if nothing found. */
-    SfxOleSectionRef    GetSection( SfxOleSectionType eSection ) const;
+    std::shared_ptr< SfxOleSection > GetSection( SfxOleSectionType eSection ) const;
     /** Returns the specified section, or an empty reference, if nothing found. */
-    SfxOleSectionRef    GetSection( const SvGlobalName& rSectionGuid ) const;
+    std::shared_ptr< SfxOleSection > GetSection( const SvGlobalName& rSectionGuid ) const;
 
     /** Creates and returns the specified section, or just returns it if it already exists. */
     SfxOleSection&      AddSection( SfxOleSectionType eSection );
@@ -384,7 +381,7 @@ private:
     static const SvGlobalName& GetSectionGuid( SfxOleSectionType eSection );
 
 private:
-    typedef ::std::map< SvGlobalName, SfxOleSectionRef > SfxOleSectionMap;
+    typedef ::std::map< SvGlobalName, std::shared_ptr< SfxOleSection > > SfxOleSectionMap;
     SfxOleSectionMap    maSectionMap;
 };
 

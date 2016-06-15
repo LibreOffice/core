@@ -233,30 +233,30 @@ bool ShapeManagerImpl::needsUpdate() const
     return false;
 }
 
-void ShapeManagerImpl::enterAnimationMode( const AnimatableShapeSharedPtr& rShape )
+void ShapeManagerImpl::enterAnimationMode( const std::shared_ptr< AnimatableShape >& rShape )
 {
     if( mbEnabled && mpLayerManager )
         mpLayerManager->enterAnimationMode(rShape);
 }
 
-void ShapeManagerImpl::leaveAnimationMode( const AnimatableShapeSharedPtr& rShape )
+void ShapeManagerImpl::leaveAnimationMode( const std::shared_ptr< AnimatableShape >& rShape )
 {
     if( mbEnabled && mpLayerManager )
         mpLayerManager->leaveAnimationMode(rShape);
 }
 
-void ShapeManagerImpl::notifyShapeUpdate( const ShapeSharedPtr& rShape )
+void ShapeManagerImpl::notifyShapeUpdate( const std::shared_ptr< Shape >& rShape )
 {
     if( mbEnabled && mpLayerManager )
         mpLayerManager->notifyShapeUpdate(rShape);
 }
 
-ShapeSharedPtr ShapeManagerImpl::lookupShape( uno::Reference< drawing::XShape > const & xShape ) const
+std::shared_ptr< Shape > ShapeManagerImpl::lookupShape( uno::Reference< drawing::XShape > const & xShape ) const
 {
     if( mpLayerManager )
         return mpLayerManager->lookupShape(xShape);
 
-    return ShapeSharedPtr();
+    return std::shared_ptr< Shape >();
 }
 
 void ShapeManagerImpl::addHyperlinkArea( const HyperlinkAreaSharedPtr& rArea )
@@ -294,7 +294,7 @@ bool ShapeManagerImpl::listenerAdded(
     }
 
     // is this one of our shapes? other shapes are ignored.
-    ShapeSharedPtr pShape( lookupShape(xShape) );
+    std::shared_ptr< Shape > pShape( lookupShape(xShape) );
     if( pShape )
     {
         maShapeListenerMap.insert(
@@ -315,7 +315,7 @@ bool ShapeManagerImpl::listenerRemoved(
     if( mrGlobalListenersMap.find(xShape) == mrGlobalListenersMap.end() )
     {
         // is this one of our shapes? other shapes are ignored.
-        ShapeSharedPtr pShape( lookupShape(xShape) );
+        std::shared_ptr< Shape > pShape( lookupShape(xShape) );
         if( pShape )
             maShapeListenerMap.erase(pShape);
     }
@@ -326,7 +326,7 @@ bool ShapeManagerImpl::listenerRemoved(
 void ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   xShape,
                                       sal_Int16                                nCursor )
 {
-    ShapeSharedPtr pShape( lookupShape(xShape) );
+    std::shared_ptr< Shape > pShape( lookupShape(xShape) );
 
     // is this one of our shapes? other shapes are ignored.
     if( !pShape )

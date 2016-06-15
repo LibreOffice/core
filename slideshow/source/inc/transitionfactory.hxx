@@ -61,10 +61,10 @@ namespace slideshow
                 @return the created activity, or NULL for no
                 transition effect
              */
-            AnimationActivitySharedPtr createShapeTransition(
+            std::shared_ptr< AnimationActivity > createShapeTransition(
                 const ActivitiesFactory::CommonParameters&              rParms,
-                const AnimatableShapeSharedPtr&                         rShape,
-                const ShapeManagerSharedPtr&                            rShapeManager,
+                const std::shared_ptr< AnimatableShape >&               rShape,
+                const std::shared_ptr< ShapeManager >&                  rShapeManager,
                 const ::basegfx::B2DVector&                             rSlideSize,
                 css::uno::Reference< css::animations::XTransitionFilter > const&  xTransition );
 

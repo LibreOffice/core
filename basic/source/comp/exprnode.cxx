@@ -58,7 +58,7 @@ SbiExprNode::SbiExprNode( const OUString& rVal ):
 {
 }
 
-SbiExprNode::SbiExprNode( const SbiSymDef& r, SbxDataType t, SbiExprListPtr l ) :
+SbiExprNode::SbiExprNode( const SbiSymDef& r, SbxDataType t, std::unique_ptr<SbiExprList> l ) :
     pWithParent(nullptr),
     eNodeType(SbxVARVAL),
     eTok(NIL),

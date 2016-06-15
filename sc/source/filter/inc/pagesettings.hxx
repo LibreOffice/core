@@ -168,8 +168,7 @@ private:
                             const OUString& rContent );
 
 private:
-    typedef ::std::unique_ptr< HeaderFooterParser > HeaderFooterParserPtr;
-    HeaderFooterParserPtr mxHFParser;
+    std::unique_ptr< HeaderFooterParser > mxHFParser;
     HFHelperData        maHeaderData;
     HFHelperData        maFooterData;
 };

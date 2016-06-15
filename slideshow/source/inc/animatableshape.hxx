@@ -72,7 +72,6 @@ namespace slideshow
 
         };
 
-        typedef ::std::shared_ptr< AnimatableShape > AnimatableShapeSharedPtr;
 
     }
 }

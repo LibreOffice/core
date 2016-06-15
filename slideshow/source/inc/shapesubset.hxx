@@ -31,7 +31,6 @@ namespace slideshow
     namespace internal
     {
         class ShapeSubset;
-        typedef ::std::shared_ptr< ShapeSubset > ShapeSubsetSharedPtr;
 
         /* Definition of ShapeSubset class */
 
@@ -77,7 +76,7 @@ namespace slideshow
                 @param rTreeNode
                 Subset of the original subset
              */
-            ShapeSubset( const ShapeSubsetSharedPtr&        rOriginalSubset,
+            ShapeSubset( const std::shared_ptr< ShapeSubset >& rOriginalSubset,
                          const DocTreeNode&                 rTreeNode );
 
             /** Create full set for the given shape.

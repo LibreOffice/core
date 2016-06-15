@@ -55,11 +55,10 @@ namespace slideshow
                 @param rAttrLayer
                 Attribute layer to change the animated values on.
              */
-            virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
+            virtual void setTargets( const std::shared_ptr< AnimatableShape >& rShape,
                                      const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) = 0;
         };
 
-        typedef ::std::shared_ptr< AnimationActivity > AnimationActivitySharedPtr;
 
     }
 }

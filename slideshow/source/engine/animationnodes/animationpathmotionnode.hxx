@@ -44,7 +44,7 @@ protected:
     virtual void dispose() override;
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const override;
+    virtual std::shared_ptr< AnimationActivity > createActivity() const override;
 
     css::uno::Reference<css::animations::XAnimateMotion >  mxPathMotionNode;
 };

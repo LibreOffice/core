@@ -56,7 +56,7 @@ class RehearseTimingsActivity::WakeupEvent : public Event
 {
 public:
     WakeupEvent( std::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
-                 ActivitySharedPtr const&                                 rActivity,
+                 std::shared_ptr< Activity > const&                       rActivity,
                  ActivitiesQueue &                                        rActivityQueue ) :
         Event("WakeupEvent"),
         maTimer(pTimeBase),
@@ -71,7 +71,7 @@ public:
     virtual void dispose() override {}
     virtual bool fire() override
     {
-        ActivitySharedPtr pActivity( mpActivity.lock() );
+        std::shared_ptr< Activity > pActivity( mpActivity.lock() );
         if( !pActivity )
             return false;
 

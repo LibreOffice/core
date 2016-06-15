@@ -112,7 +112,7 @@ namespace slideshow
             return pRet;
         }
 
-        void Layer::setShapeViews( ShapeSharedPtr const& rShape ) const
+        void Layer::setShapeViews( std::shared_ptr< Shape > const& rShape ) const
         {
             rShape->clearAllViewLayers();
 
@@ -137,7 +137,7 @@ namespace slideshow
                                              basegfx::B2VectorOrientation::Positive );
         }
 
-        void Layer::updateBounds( ShapeSharedPtr const& rShape )
+        void Layer::updateBounds( std::shared_ptr< Shape > const& rShape )
         {
             if( !mbBackgroundLayer )
             {
@@ -256,7 +256,7 @@ namespace slideshow
             clearUpdateRanges();
         }
 
-        bool Layer::isInsideUpdateArea( ShapeSharedPtr const& rShape ) const
+        bool Layer::isInsideUpdateArea( std::shared_ptr< Shape > const& rShape ) const
         {
             return maUpdateAreas.overlaps( rShape->getUpdateArea() );
         }

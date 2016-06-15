@@ -35,8 +35,7 @@ class SbiProcDef;
 
 
 #include <vector>
-typedef ::std::unique_ptr<SbiExprList> SbiExprListPtr;
-typedef ::std::vector<SbiExprListPtr> SbiExprListVector;
+typedef ::std::vector<std::unique_ptr<SbiExprList>> SbiExprListVector;
 
 struct SbVar {
     SbiExprNode*        pNext;      // next element (for structures)
@@ -121,7 +120,7 @@ public:
     SbiExprNode();
     SbiExprNode( double, SbxDataType );
     SbiExprNode( const OUString& );
-    SbiExprNode( const SbiSymDef&, SbxDataType, SbiExprListPtr = nullptr );
+    SbiExprNode( const SbiSymDef&, SbxDataType, std::unique_ptr<SbiExprList> = nullptr );
     SbiExprNode( SbiExprNode*, SbiToken, SbiExprNode* );
     SbiExprNode( SbiExprNode*, sal_uInt16 );    // #120061 TypeOf
     SbiExprNode( sal_uInt16 );                  // new <type>
@@ -187,7 +186,7 @@ public:
     SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR,
         SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = nullptr ); // parsing Ctor
     SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
-    SbiExpression( SbiParser*, const SbiSymDef&, SbiExprListPtr = nullptr );
+    SbiExpression( SbiParser*, const SbiSymDef&, std::unique_ptr<SbiExprList> = nullptr );
    ~SbiExpression();
     OUString& GetName()             { return aArgName;            }
     void SetBased()                 { bBased = true;              }
@@ -225,8 +224,8 @@ class SbiExprList final {            // class for parameters and dims
 public:
     SbiExprList();
     ~SbiExprList();
-    static SbiExprListPtr ParseParameters(SbiParser*, bool bStandaloneExpression = false, bool bPar = true);
-    static SbiExprListPtr ParseDimList( SbiParser* );
+    static std::unique_ptr<SbiExprList> ParseParameters(SbiParser*, bool bStandaloneExpression = false, bool bPar = true);
+    static std::unique_ptr<SbiExprList> ParseDimList( SbiParser* );
     bool  IsBracket()               { return bBracket;        }
     bool  IsValid()                 { return !bError; }
     short GetSize()                 { return aData.size();    }

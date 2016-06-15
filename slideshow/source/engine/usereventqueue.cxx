@@ -48,11 +48,11 @@ namespace internal {
 
 namespace {
 
-typedef std::vector<EventSharedPtr> ImpEventVector;
-typedef std::queue<EventSharedPtr> ImpEventQueue;
+typedef std::vector<std::shared_ptr< Event >> ImpEventVector;
+typedef std::queue<std::shared_ptr< Event >> ImpEventQueue;
 typedef std::map<uno::Reference<animations::XAnimationNode>,
                  ImpEventVector> ImpAnimationEventMap;
-typedef std::map<ShapeSharedPtr, ImpEventQueue,
+typedef std::map<std::shared_ptr< Shape >, ImpEventQueue,
                  Shape::lessThanShape> ImpShapeEventMap;
 
 // MouseEventHandler base class, not consuming any event:
@@ -73,7 +73,7 @@ bool fireSingleEvent( ContainerT & rQueue, EventQueue & rEventQueue )
     // post next event in given queue:
     while (! rQueue.empty())
     {
-        EventSharedPtr const pEvent(rQueue.front());
+        std::shared_ptr< Event > const pEvent(rQueue.front());
         rQueue.pop();
 
         // skip all inactive events (as the purpose of
@@ -105,7 +105,7 @@ public:
         maEvents()
     {}
 
-    void addEvent( const EventSharedPtr& rEvent )
+    void addEvent( const std::shared_ptr< Event >& rEvent )
     {
         maEvents.push( rEvent );
     }
@@ -150,7 +150,7 @@ public:
         return bRet;
     }
 
-    void addEvent( const EventSharedPtr&                                rEvent,
+    void addEvent( const std::shared_ptr< Event >&                      rEvent,
                    const uno::Reference< animations::XAnimationNode >&  xNode )
     {
         ImpAnimationEventMap::iterator aIter;
@@ -293,8 +293,8 @@ public:
         maShapeEventMap()
     {}
 
-    void addEvent( const EventSharedPtr& rEvent,
-                   const ShapeSharedPtr& rShape )
+    void addEvent( const std::shared_ptr< Event >& rEvent,
+                   const std::shared_ptr< Shape >& rShape )
     {
         ImpShapeEventMap::iterator aIter;
         if( (aIter=maShapeEventMap.find( rShape )) == maShapeEventMap.end() )
@@ -449,7 +449,7 @@ public:
     }
 
 private:
-    ShapeSharedPtr mpLastShape;
+    std::shared_ptr< Shape > mpLastShape;
 };
 
 class MouseLeaveHandler : public MouseHandlerBase
@@ -495,7 +495,7 @@ private:
 template< typename Handler, typename Functor >
 void UserEventQueue::registerEvent(
     std::shared_ptr< Handler >& rHandler,
-    const EventSharedPtr&         rEvent,
+    const std::shared_ptr< Event >& rEvent,
     const Functor&                rRegistrationFunctor )
 {
     ENSURE_OR_THROW( rEvent,
@@ -514,7 +514,7 @@ void UserEventQueue::registerEvent(
 template< typename Handler, typename Arg, typename Functor >
 void UserEventQueue::registerEvent(
     std::shared_ptr< Handler >& rHandler,
-    const EventSharedPtr&         rEvent,
+    const std::shared_ptr< Event >& rEvent,
     const Arg&                    rArg,
     const Functor&                rRegistrationFunctor )
 {
@@ -627,40 +627,40 @@ void UserEventQueue::setAdvanceOnClick( bool bAdvanceOnClick )
 }
 
 void UserEventQueue::registerAnimationStartEvent(
-    const EventSharedPtr&                                 rEvent,
+    const std::shared_ptr< Event >&                       rEvent,
     const uno::Reference< animations::XAnimationNode>&    xNode )
 {
     registerEvent( mpAnimationStartEventHandler,
                    rEvent,
                    xNode,
-                   [this]( const AnimationEventHandlerSharedPtr& rHandler )
+                   [this]( const std::shared_ptr< AnimationEventHandler >& rHandler )
                    { return this->mrMultiplexer.addAnimationStartHandler( rHandler ); } );
 }
 
 void UserEventQueue::registerAnimationEndEvent(
-    const EventSharedPtr&                               rEvent,
+    const std::shared_ptr< Event >&                     rEvent,
     const uno::Reference<animations::XAnimationNode>&   xNode )
 {
     registerEvent( mpAnimationEndEventHandler,
                    rEvent,
                    xNode,
-                   [this]( const AnimationEventHandlerSharedPtr& rHandler )
+                   [this]( const std::shared_ptr< AnimationEventHandler >& rHandler )
                    { return this->mrMultiplexer.addAnimationEndHandler( rHandler ); } );
 }
 
 void UserEventQueue::registerAudioStoppedEvent(
-    const EventSharedPtr&                               rEvent,
+    const std::shared_ptr< Event >&                     rEvent,
     const uno::Reference<animations::XAnimationNode>&   xNode )
 {
     registerEvent( mpAudioStoppedEventHandler,
                    rEvent,
                    xNode,
-                   [this]( const AnimationEventHandlerSharedPtr& rHandler )
+                   [this]( const std::shared_ptr< AnimationEventHandler >& rHandler )
                    { return this->mrMultiplexer.addAudioStoppedHandler( rHandler ); } );
 }
 
-void UserEventQueue::registerShapeClickEvent( const EventSharedPtr& rEvent,
-                                              const ShapeSharedPtr& rShape )
+void UserEventQueue::registerShapeClickEvent( const std::shared_ptr< Event >& rEvent,
+                                              const std::shared_ptr< Shape >& rShape )
 {
     ENSURE_OR_THROW(
         rEvent,
@@ -712,7 +712,7 @@ private:
 };
 } // anon namespace
 
-void UserEventQueue::registerNextEffectEvent( const EventSharedPtr& rEvent )
+void UserEventQueue::registerNextEffectEvent( const std::shared_ptr< Event >& rEvent )
 {
     // TODO: better name may be mpNextEffectEventHandler?  then we have
     //       next effect (=> waiting to be started)
@@ -727,7 +727,7 @@ void UserEventQueue::registerNextEffectEvent( const EventSharedPtr& rEvent )
 }
 
 void UserEventQueue::registerSkipEffectEvent(
-    EventSharedPtr const & pEvent,
+    std::shared_ptr< Event > const & pEvent,
     const bool bSkipTriggersNextEffect)
 {
     if(!mpSkipEffectEventHandler)
@@ -750,8 +750,8 @@ void UserEventQueue::registerSkipEffectEvent(
 }
 
 void UserEventQueue::registerShapeDoubleClickEvent(
-    const EventSharedPtr& rEvent,
-    const ShapeSharedPtr& rShape )
+    const std::shared_ptr< Event >& rEvent,
+    const std::shared_ptr< Shape >& rShape )
 {
     ENSURE_OR_THROW(
         rEvent,
@@ -774,23 +774,23 @@ void UserEventQueue::registerShapeDoubleClickEvent(
     mpShapeDoubleClickEventHandler->addEvent( rEvent, rShape );
 }
 
-void UserEventQueue::registerMouseEnterEvent( const EventSharedPtr& rEvent,
-                                              const ShapeSharedPtr& rShape )
+void UserEventQueue::registerMouseEnterEvent( const std::shared_ptr< Event >& rEvent,
+                                              const std::shared_ptr< Shape >& rShape )
 {
     registerEvent( mpMouseEnterHandler,
                    rEvent,
                    rShape,
-                   [this]( const MouseEventHandlerSharedPtr& rHandler )
+                   [this]( const std::shared_ptr< MouseEventHandler >& rHandler )
                    { return this->mrMultiplexer.addMouseMoveHandler( rHandler, 0.0 ); } );
 }
 
-void UserEventQueue::registerMouseLeaveEvent( const EventSharedPtr& rEvent,
-                                              const ShapeSharedPtr& rShape )
+void UserEventQueue::registerMouseLeaveEvent( const std::shared_ptr< Event >& rEvent,
+                                              const std::shared_ptr< Shape >& rShape )
 {
     registerEvent( mpMouseLeaveHandler,
                    rEvent,
                    rShape,
-                   [this]( const MouseEventHandlerSharedPtr& rHandler )
+                   [this]( const std::shared_ptr< MouseEventHandler >& rHandler )
                    { return this->mrMultiplexer.addMouseMoveHandler( rHandler, 0.0 ); } );
 }
 

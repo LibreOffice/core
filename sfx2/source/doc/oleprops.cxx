@@ -716,9 +716,9 @@ SfxOleSection::SfxOleSection( bool bSupportsDict ) :
 {
 }
 
-SfxOlePropertyRef SfxOleSection::GetProperty( sal_Int32 nPropId ) const
+std::shared_ptr< SfxOlePropertyBase > SfxOleSection::GetProperty( sal_Int32 nPropId ) const
 {
-    SfxOlePropertyRef xProp;
+    std::shared_ptr< SfxOlePropertyBase > xProp;
     SfxOlePropMap::const_iterator aIt = maPropMap.find( nPropId );
     if( aIt != maPropMap.end() )
         xProp = aIt->second;
@@ -727,7 +727,7 @@ SfxOlePropertyRef SfxOleSection::GetProperty( sal_Int32 nPropId ) const
 
 bool SfxOleSection::GetInt32Value( sal_Int32& rnValue, sal_Int32 nPropId ) const
 {
-    SfxOlePropertyRef xProp = GetProperty( nPropId );
+    std::shared_ptr< SfxOlePropertyBase > xProp = GetProperty( nPropId );
     const SfxOleInt32Property* pProp =
         dynamic_cast< const SfxOleInt32Property* >( xProp.get() );
     if( pProp )
@@ -737,7 +737,7 @@ bool SfxOleSection::GetInt32Value( sal_Int32& rnValue, sal_Int32 nPropId ) const
 
 bool SfxOleSection::GetDoubleValue( double& rfValue, sal_Int32 nPropId ) const
 {
-    SfxOlePropertyRef xProp = GetProperty( nPropId );
+    std::shared_ptr< SfxOlePropertyBase > xProp = GetProperty( nPropId );
     const SfxOleDoubleProperty* pProp =
         dynamic_cast< const SfxOleDoubleProperty* >( xProp.get() );
     if( pProp )
@@ -747,7 +747,7 @@ bool SfxOleSection::GetDoubleValue( double& rfValue, sal_Int32 nPropId ) const
 
 bool SfxOleSection::GetBoolValue( bool& rbValue, sal_Int32 nPropId ) const
 {
-    SfxOlePropertyRef xProp = GetProperty( nPropId );
+    std::shared_ptr< SfxOlePropertyBase > xProp = GetProperty( nPropId );
     const SfxOleBoolProperty* pProp =
         dynamic_cast< const SfxOleBoolProperty* >( xProp.get() );
     if( pProp )
@@ -757,7 +757,7 @@ bool SfxOleSection::GetBoolValue( bool& rbValue, sal_Int32 nPropId ) const
 
 bool SfxOleSection::GetStringValue( OUString& rValue, sal_Int32 nPropId ) const
 {
-    SfxOlePropertyRef xProp = GetProperty( nPropId );
+    std::shared_ptr< SfxOlePropertyBase > xProp = GetProperty( nPropId );
     const SfxOleStringPropertyBase* pProp =
         dynamic_cast< const SfxOleStringPropertyBase* >( xProp.get() );
     if( pProp )
@@ -767,7 +767,7 @@ bool SfxOleSection::GetStringValue( OUString& rValue, sal_Int32 nPropId ) const
 
 bool SfxOleSection::GetFileTimeValue( util::DateTime& rValue, sal_Int32 nPropId ) const
 {
-    SfxOlePropertyRef xProp = GetProperty( nPropId );
+    std::shared_ptr< SfxOlePropertyBase > xProp = GetProperty( nPropId );
     const SfxOleFileTimeProperty* pProp =
         dynamic_cast< const SfxOleFileTimeProperty* >( xProp.get() );
     if( pProp )
@@ -782,7 +782,7 @@ bool SfxOleSection::GetFileTimeValue( util::DateTime& rValue, sal_Int32 nPropId 
 
 bool SfxOleSection::GetDateValue( util::Date& rValue, sal_Int32 nPropId ) const
 {
-    SfxOlePropertyRef xProp = GetProperty( nPropId );
+    std::shared_ptr< SfxOlePropertyBase > xProp = GetProperty( nPropId );
     const SfxOleDateProperty* pProp =
         dynamic_cast< const SfxOleDateProperty* >( xProp.get() );
     if( pProp )
@@ -795,7 +795,7 @@ bool SfxOleSection::GetDateValue( util::Date& rValue, sal_Int32 nPropId ) const
     return pProp != nullptr;
 }
 
-void SfxOleSection::SetProperty( const SfxOlePropertyRef& xProp )
+void SfxOleSection::SetProperty( const std::shared_ptr< SfxOlePropertyBase >& xProp )
 {
     if( xProp.get() )
         maPropMap[ xProp->GetPropId() ] = xProp;
@@ -803,33 +803,33 @@ void SfxOleSection::SetProperty( const SfxOlePropertyRef& xProp )
 
 void SfxOleSection::SetInt32Value( sal_Int32 nPropId, sal_Int32 nValue )
 {
-    SetProperty( SfxOlePropertyRef( new SfxOleInt32Property( nPropId, nValue ) ) );
+    SetProperty( std::shared_ptr< SfxOlePropertyBase >( new SfxOleInt32Property( nPropId, nValue ) ) );
 }
 
 void SfxOleSection::SetDoubleValue( sal_Int32 nPropId, double fValue )
 {
-    SetProperty( SfxOlePropertyRef( new SfxOleDoubleProperty( nPropId, fValue ) ) );
+    SetProperty( std::shared_ptr< SfxOlePropertyBase >( new SfxOleDoubleProperty( nPropId, fValue ) ) );
 }
 
 void SfxOleSection::SetBoolValue( sal_Int32 nPropId, bool bValue )
 {
-    SetProperty( SfxOlePropertyRef( new SfxOleBoolProperty( nPropId, bValue ) ) );
+    SetProperty( std::shared_ptr< SfxOlePropertyBase >( new SfxOleBoolProperty( nPropId, bValue ) ) );
 }
 
 bool SfxOleSection::SetStringValue( sal_Int32 nPropId, const OUString& rValue )
 {
     bool bInserted = !rValue.isEmpty();
     if( bInserted )
-        SetProperty( SfxOlePropertyRef( new SfxOleString8Property( nPropId, maCodePageProp, rValue ) ) );
+        SetProperty( std::shared_ptr< SfxOlePropertyBase >( new SfxOleString8Property( nPropId, maCodePageProp, rValue ) ) );
     return bInserted;
 }
 
 void SfxOleSection::SetFileTimeValue( sal_Int32 nPropId, const util::DateTime& rValue )
 {
     if ( rValue.Year == 0 || rValue.Month == 0 || rValue.Day == 0 )
-        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) ) );
+        SetProperty( std::shared_ptr< SfxOlePropertyBase >( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) ) );
     else
-        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, rValue ) ) );
+        SetProperty( std::shared_ptr< SfxOlePropertyBase >( new SfxOleFileTimeProperty( nPropId, rValue ) ) );
 }
 
 void SfxOleSection::SetDateValue( sal_Int32 nPropId, const util::Date& rValue )
@@ -837,12 +837,12 @@ void SfxOleSection::SetDateValue( sal_Int32 nPropId, const util::Date& rValue )
     //Annoyingly MS2010 considers VT_DATE apparently as an invalid possibility, so here we use VT_FILETIME
     //instead :-(
     if ( rValue.Year == 0 || rValue.Month == 0 || rValue.Day == 0 )
-        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) ) );
+        SetProperty( std::shared_ptr< SfxOlePropertyBase >( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) ) );
     else
     {
         const util::DateTime aValue(0, 0, 0, 0, rValue.Day, rValue.Month,
                 rValue.Year, false );
-        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, aValue ) ) );
+        SetProperty( std::shared_ptr< SfxOlePropertyBase >( new SfxOleFileTimeProperty( nPropId, aValue ) ) );
     }
 }
 
@@ -850,7 +850,7 @@ void SfxOleSection::SetThumbnailValue( sal_Int32 nPropId,
     const uno::Sequence<sal_Int8> & i_rData)
 {
     SfxOleThumbnailProperty* pThumbnail = new SfxOleThumbnailProperty( nPropId, i_rData );
-    SfxOlePropertyRef xProp( pThumbnail );  // take ownership
+    std::shared_ptr< SfxOlePropertyBase > xProp( pThumbnail ); // take ownership
     if( pThumbnail->IsValid() )
         SetProperty( xProp );
 }
@@ -859,7 +859,7 @@ void SfxOleSection::SetBlobValue( sal_Int32 nPropId,
     const uno::Sequence<sal_Int8> & i_rData)
 {
     SfxOleBlobProperty* pBlob( new SfxOleBlobProperty( nPropId, i_rData ) );
-    SfxOlePropertyRef xProp( pBlob );
+    std::shared_ptr< SfxOlePropertyBase > xProp( pBlob );
     if( pBlob->IsValid() ) {
         SetProperty( xProp );
     }
@@ -1043,7 +1043,7 @@ void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
     sal_Int32 nPropType(0);
     rStrm.ReadInt32( nPropType );
     // create empty property object
-    SfxOlePropertyRef xProp;
+    std::shared_ptr< SfxOlePropertyBase > xProp;
     switch( nPropType )
     {
         case PROPTYPE_INT32:
@@ -1127,14 +1127,14 @@ ErrCode SfxOlePropertySet::SavePropertySet( SotStorage* pStrg, const OUString& r
     return GetError();
 }
 
-SfxOleSectionRef SfxOlePropertySet::GetSection( SfxOleSectionType eSection ) const
+std::shared_ptr< SfxOleSection > SfxOlePropertySet::GetSection( SfxOleSectionType eSection ) const
 {
     return GetSection( GetSectionGuid( eSection ) );
 }
 
-SfxOleSectionRef SfxOlePropertySet::GetSection( const SvGlobalName& rSectionGuid ) const
+std::shared_ptr< SfxOleSection > SfxOlePropertySet::GetSection( const SvGlobalName& rSectionGuid ) const
 {
-    SfxOleSectionRef xSection;
+    std::shared_ptr< SfxOleSection > xSection;
     SfxOleSectionMap::const_iterator aIt = maSectionMap.find( rSectionGuid );
     if( aIt != maSectionMap.end() )
         xSection = aIt->second;
@@ -1148,7 +1148,7 @@ SfxOleSection& SfxOlePropertySet::AddSection( SfxOleSectionType eSection )
 
 SfxOleSection& SfxOlePropertySet::AddSection( const SvGlobalName& rSectionGuid )
 {
-    SfxOleSectionRef xSection = GetSection( rSectionGuid );
+    std::shared_ptr< SfxOleSection > xSection = GetSection( rSectionGuid );
     if( !xSection )
     {
         // #i66214# #i66428# applications may write broken dictionary properties in wrong sections

@@ -84,7 +84,6 @@ namespace slideshow
             virtual void end() = 0;
         };
 
-        typedef ::std::shared_ptr< Activity > ActivitySharedPtr;
 
     }
 }

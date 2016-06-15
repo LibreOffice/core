@@ -36,7 +36,7 @@ namespace slideshow
         class DelayFacade : public Event
         {
         public:
-            DelayFacade( const EventSharedPtr&  rEvent,
+            DelayFacade( const std::shared_ptr< Event >& rEvent,
                          double                 nTimeout    ) :
                 Event("DelayFacade"),
                 mpEvent( rEvent ),
@@ -78,7 +78,7 @@ namespace slideshow
             }
 
         private:
-            EventSharedPtr  mpEvent;
+            std::shared_ptr< Event > mpEvent;
             double          mnTimeout;
         };
 
@@ -89,14 +89,14 @@ namespace slideshow
                 event. When enqueued, this event will fire the
                 requested action only after the specified timeout.
              */
-            EventSharedPtr  mpTimeoutEvent;
+            std::shared_ptr< Event > mpTimeoutEvent;
 
             /** This member contains a pointer to the interruption
                 event. When enqueued, this event will fire
                 immediately, interrupting a potentially waiting
                 timeout event.
              */
-            EventSharedPtr  mpImmediateEvent;
+            std::shared_ptr< Event > mpImmediateEvent;
         };
 
         /** Generate an interruptable delay event.

@@ -107,7 +107,6 @@ namespace slideshow
             virtual bool handleMouseMoved( const css::awt::MouseEvent& e ) = 0;
         };
 
-        typedef ::std::shared_ptr< MouseEventHandler > MouseEventHandlerSharedPtr;
 
     }
 }

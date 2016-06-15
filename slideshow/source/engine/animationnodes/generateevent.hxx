@@ -41,7 +41,7 @@ namespace internal {
     @param nAdditionalDelay
     Additional delay, gets added on top of timeout.
 */
-EventSharedPtr generateEvent(
+std::shared_ptr< Event > generateEvent(
     css::uno::Any const& rEventDescription,
     Delay::FunctorT const& rFunctor,
     SlideShowContext const& rContext,

@@ -72,16 +72,12 @@ private:
     bool                IsSelectionChanged();
 
 private:
-    typedef ::std::unique_ptr< ScConversionEngineBase >   ScConvEnginePtr;
-    typedef ::std::unique_ptr< ScDocument >               ScDocumentPtr;
-    typedef ::std::unique_ptr< ScSelectionState >         ScSelectionStatePtr;
-    typedef ::std::unique_ptr< ScRangeList >              ScRangeListPtr;
 
-    ScConvEnginePtr     mxEngine;
-    ScDocumentPtr       mxUndoDoc;
-    ScDocumentPtr       mxRedoDoc;
-    ScSelectionStatePtr mxOldSel;           /// For cursor position in selection
-    ScRangeListPtr      mxOldRangeList;     /// Original selection range for comparison.
+    std::unique_ptr< ScConversionEngineBase > mxEngine;
+    std::unique_ptr< ScDocument > mxUndoDoc;
+    std::unique_ptr< ScDocument > mxRedoDoc;
+    std::unique_ptr< ScSelectionState > mxOldSel; /// For cursor position in selection
+    std::unique_ptr< ScRangeList > mxOldRangeList;     /// Original selection range for comparison.
     ScTabViewShell*     mpViewShell;
     ScViewData*         mpViewData;
     ScDocShell*         mpDocShell;

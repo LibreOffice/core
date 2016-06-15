@@ -108,7 +108,7 @@ public:
         perform();
     }
 
-    virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
+    virtual void setTargets( const std::shared_ptr< AnimatableShape >& rShape,
                              const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override
     {
         ENSURE_OR_THROW( rShape, "Invalid shape" );
@@ -120,20 +120,20 @@ public:
 
 private:
     std::shared_ptr< AnimationT >   mpAnimation;
-    AnimatableShapeSharedPtr        mpShape;
+    std::shared_ptr< AnimatableShape > mpShape;
     std::shared_ptr< ShapeAttributeLayer > mpAttributeLayer;
-    EventSharedPtr                  mpEndEvent;
+    std::shared_ptr< Event >        mpEndEvent;
     EventQueue&                     mrEventQueue;
     ValueT                          maToValue;
     bool                            mbIsActive;
 };
 
-template <class AnimationT> AnimationActivitySharedPtr makeSetActivity(
+template <class AnimationT> std::shared_ptr< AnimationActivity > makeSetActivity(
     const ActivitiesFactory::CommonParameters& rParms,
     const ::std::shared_ptr< AnimationT >&   rAnimation,
     const typename AnimationT::ValueType&      rToValue )
 {
-    return AnimationActivitySharedPtr(
+    return std::shared_ptr< AnimationActivity >(
         new SetActivity<AnimationT>(rParms,rAnimation,rToValue) );
 }
 

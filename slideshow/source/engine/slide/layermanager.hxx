@@ -109,7 +109,7 @@ namespace slideshow
 
                 This method adds a shape to the page.
              */
-            void addShape( const ShapeSharedPtr& rShape );
+            void addShape( const std::shared_ptr< Shape >& rShape );
 
             /** Lookup a Shape from an XShape model object
 
@@ -120,7 +120,7 @@ namespace slideshow
                 The XShape object, for which the representing Shape
                 should be looked up.
              */
-            ShapeSharedPtr lookupShape( const css::uno::Reference< css::drawing::XShape >& xShape ) const;
+            std::shared_ptr< Shape > lookupShape( const css::uno::Reference< css::drawing::XShape >& xShape ) const;
 
             /** Query a subset of the given original shape
 
@@ -153,7 +153,7 @@ namespace slideshow
                 This method enters animation mode for the Shape on all
                 registered views.
              */
-            void enterAnimationMode( const AnimatableShapeSharedPtr& rShape );
+            void enterAnimationMode( const std::shared_ptr< AnimatableShape >& rShape );
 
             /** Notify the LayerManager that the given Shape is no
                 longer animated.
@@ -161,7 +161,7 @@ namespace slideshow
                 This methods ends animation mode for the given Shape
                 on all registered views.
              */
-            void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape );
+            void leaveAnimationMode( const std::shared_ptr< AnimatableShape >& rShape );
 
             /** Notify that a shape needs an update
 
@@ -176,7 +176,7 @@ namespace slideshow
                 @param rShape
                 Shape which needs an update
              */
-            void notifyShapeUpdate( const ShapeSharedPtr& rShape);
+            void notifyShapeUpdate( const std::shared_ptr< Shape >& rShape);
 
             /** Check whether any update operations  are pending.
 
@@ -224,14 +224,14 @@ namespace slideshow
              */
             typedef std::unordered_map<
                   css::uno::Reference< css::drawing::XShape >,
-                  ShapeSharedPtr,
+                  std::shared_ptr< Shape >,
                   hash< css::uno::Reference< css::drawing::XShape > >
                 > XShapeHash;
 
             class ShapeComparator
             {
             public:
-                bool operator() (const ShapeSharedPtr& rpS1, const ShapeSharedPtr& rpS2 ) const
+                bool operator() (const std::shared_ptr< Shape >& rpS1, const std::shared_ptr< Shape >& rpS2 ) const
                 {
                     return Shape::lessThanShape::compare(rpS1.get(), rpS2.get());
                 }
@@ -239,12 +239,12 @@ namespace slideshow
             /** Set of all shapes
              */
         private:
-            typedef ::std::map< ShapeSharedPtr, std::weak_ptr< Layer >, ShapeComparator > LayerShapeMap;
-            typedef ::std::set< ShapeSharedPtr > ShapeUpdateSet;
+            typedef ::std::map< std::shared_ptr< Shape >, std::weak_ptr< Layer >, ShapeComparator > LayerShapeMap;
+            typedef ::std::set< std::shared_ptr< Shape > > ShapeUpdateSet;
 
 
             /// Adds shape area to containing layer's damage area
-            void addUpdateArea( ShapeSharedPtr const& rShape );
+            void addUpdateArea( std::shared_ptr< Shape > const& rShape );
 
             std::shared_ptr< Layer > createForegroundLayer() const;
 
@@ -284,11 +284,11 @@ namespace slideshow
 
             /** Common stuff when adding a shape
              */
-            void          implAddShape( const ShapeSharedPtr& rShape );
+            void          implAddShape( const std::shared_ptr< Shape >& rShape );
 
             /** Common stuff when removing a shape
              */
-            void          implRemoveShape( const ShapeSharedPtr& rShape );
+            void          implRemoveShape( const std::shared_ptr< Shape >& rShape );
 
             /** Add or remove views
 

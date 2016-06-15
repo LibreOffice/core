@@ -39,7 +39,7 @@ using namespace ::com::sun::star::uno;
 // Return-value: a new instance, which were inserted and then deleted.
 // Array-Index were returned as SbiExprList
 
-SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst )
+SbiSymDef* SbiParser::VarDecl( std::unique_ptr<SbiExprList>* ppDim, bool bStatic, bool bConst )
 {
     bool bWithEvents = false;
     if( Peek() == WITHEVENTS )
@@ -50,7 +50,7 @@ SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst 
     if( !TestSymbol() ) return nullptr;
     SbxDataType t = eScanType;
     SbiSymDef* pDef = bConst ? new SbiConstDef( aSym ) : new SbiSymDef( aSym );
-    SbiExprListPtr pDim;
+    std::unique_ptr<SbiExprList> pDim;
     // Brackets?
     if( Peek() == LPAREN )
     {
@@ -296,7 +296,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             Error( ERRCODE_BASIC_UNEXPECTED, eCurTok );
     }
     SbiSymDef* pDef;
-    SbiExprListPtr pDim;
+    std::unique_ptr<SbiExprList> pDim;
 
     // #40689, Statics -> Modul-Initialising, skip in Sub
     sal_uInt32 nEndOfStaticLbl = 0;
@@ -594,7 +594,7 @@ void SbiParser::DefType( bool bPrivate )
     while( !bDone && !IsEof() )
     {
         std::unique_ptr<SbiSymDef> pElem;
-        SbiExprListPtr pDim;
+        std::unique_ptr<SbiExprList> pDim;
         switch( Peek() )
         {
             case ENDTYPE :
@@ -734,7 +734,7 @@ void SbiParser::DefEnum( bool bPrivate )
 
             default:
             {
-                SbiExprListPtr pDim;
+                std::unique_ptr<SbiExprList> pDim;
                 pElem = VarDecl( &pDim, false, true );
                 if( !pElem )
                 {

@@ -254,7 +254,7 @@ namespace slideshow
         }
 
 
-        ActivitySharedPtr createIntrinsicAnimationActivity(
+        std::shared_ptr< Activity > createIntrinsicAnimationActivity(
             const SlideShowContext&         rContext,
             const std::shared_ptr< DrawShape >& rDrawShape,
             const std::shared_ptr< WakeupEvent >& rWakeupEvent,
@@ -262,7 +262,7 @@ namespace slideshow
             ::std::size_t                   nNumLoops,
             CycleMode                       eCycleMode )
         {
-            return ActivitySharedPtr(
+            return std::shared_ptr< Activity >(
                 new IntrinsicAnimationActivity(rContext,
                                                rDrawShape,
                                                rWakeupEvent,

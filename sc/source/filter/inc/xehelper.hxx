@@ -58,9 +58,8 @@ public:
     void                Progress();
 
 private:
-    typedef std::unique_ptr< ScfProgressBar > ScfProgressBarPtr;
 
-    ScfProgressBarPtr   mxProgress;         /// Progress bar implementation.
+    std::unique_ptr< ScfProgressBar > mxProgress;         /// Progress bar implementation.
     ScfProgressBar*     mpSubProgress;      /// Current sub progress bar.
 
     ScfProgressBar*     mpSubRowCreate;     /// Sub progress bar for creating table rows.
