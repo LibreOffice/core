@@ -37,7 +37,7 @@ namespace xls {
 /** Contains UNO API filter settings for a column in a filtered range. */
 struct ApiFilterSettings
 {
-    typedef ::std::vector<css::sheet::TableFilterField3> FilterFieldVector;
+    typedef std::vector<css::sheet::TableFilterField3> FilterFieldVector;
 
     FilterFieldVector   maFilterFields;     /// List of UNO API filter settings.
     OptValue< bool >    mobNeedsRegExp;     /// If set, requires regular expressions to be enabled/disabled.
@@ -146,7 +146,7 @@ private:
     void                appendCriterion( const FilterCriterionModel& rCriterion );
 
 private:
-    typedef ::std::vector< FilterCriterionModel > FilterCriterionVector;
+    typedef std::vector< FilterCriterionModel > FilterCriterionVector;
 
     FilterCriterionVector maCriteria;
     bool                mbAnd;

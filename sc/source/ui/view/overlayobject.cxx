@@ -75,7 +75,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayDashedBorder::createOve
     basegfx::BColor aColorA = pMgr->getStripeColorA().getBColor();
     basegfx::BColor aColorB = pMgr->getStripeColorB().getBColor();
     if (!mbToggle)
-        ::std::swap(aColorA, aColorB);
+        std::swap(aColorA, aColorB);
 
     const basegfx::B2DPolygon aPoly = basegfx::tools::createPolygonFromRect(maRange);
     B2DPolyPolygon aPolygon(aPoly);

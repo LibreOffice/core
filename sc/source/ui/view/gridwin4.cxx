@@ -1566,7 +1566,7 @@ bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
     return ( bSimpleQuery && bColumnFound );
 }
 
-void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
+void ScGridWindow::GetSelectionRects( std::vector< Rectangle >& rPixelRects )
 {
     ScMarkData aMultiMark( pViewData->GetMarkData() );
     aMultiMark.SetMarking( false );

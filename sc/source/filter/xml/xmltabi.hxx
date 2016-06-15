@@ -40,7 +40,7 @@ struct ScXMLExternalTabData
 class ScXMLTableContext : public SvXMLImportContext
 {
     OUString   sPrintRanges;
-    ::std::unique_ptr<ScXMLExternalTabData> pExternalRefInfo;
+    std::unique_ptr<ScXMLExternalTabData> pExternalRefInfo;
     sal_Int32       nStartOffset;
     bool            bStartFormPage;
     bool            bPrintEntireSheet;

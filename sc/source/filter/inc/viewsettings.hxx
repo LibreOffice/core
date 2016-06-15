@@ -181,8 +181,8 @@ private:
 private:
     typedef RefVector< WorkbookViewModel >                                      WorkbookViewModelVec;
     typedef RefMap< sal_Int16, SheetViewModel >                                 SheetViewModelMap;
-    typedef ::std::map< sal_Int16, css::uno::Any >                 SheetPropertiesMap;
-    typedef ::std::map< sal_Int16, css::table::CellRangeAddress >  SheetUsedAreaMap;
+    typedef std::map< sal_Int16, css::uno::Any >                   SheetPropertiesMap;
+    typedef std::map< sal_Int16, css::table::CellRangeAddress >    SheetUsedAreaMap;
 
     WorkbookViewModelVec maBookViews;       /// Workbook view models.
     SheetViewModelMap   maSheetViews;       /// Active view model for each sheet.

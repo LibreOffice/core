@@ -1087,7 +1087,7 @@ void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
         pDim->SetSubtotalName(rName);
 }
 
-void ScXMLDataPilotFieldContext::AddGroup(const ::std::vector<OUString>& rMembers, const OUString& rName)
+void ScXMLDataPilotFieldContext::AddGroup(const std::vector<OUString>& rMembers, const OUString& rName)
 {
     ScXMLDataPilotGroup aGroup;
     aGroup.aMembers = rMembers;
@@ -1124,13 +1124,13 @@ void ScXMLDataPilotFieldContext::EndElement()
                     aGroupDim.SetDateInfo(aInfo, nGroupPart);
                 else
                 {
-                    ::std::vector<ScXMLDataPilotGroup>::const_iterator aItr(aGroups.begin());
-                    ::std::vector<ScXMLDataPilotGroup>::const_iterator aEndItr(aGroups.end());
+                    std::vector<ScXMLDataPilotGroup>::const_iterator aItr(aGroups.begin());
+                    std::vector<ScXMLDataPilotGroup>::const_iterator aEndItr(aGroups.end());
                     while (aItr != aEndItr)
                     {
                         ScDPSaveGroupItem aItem(aItr->aName);
-                        ::std::vector<OUString>::const_iterator aMembersItr(aItr->aMembers.begin());
-                        ::std::vector<OUString>::const_iterator aMembersEndItr(aItr->aMembers.end());
+                        std::vector<OUString>::const_iterator aMembersItr(aItr->aMembers.begin());
+                        std::vector<OUString>::const_iterator aMembersEndItr(aItr->aMembers.end());
                         while (aMembersItr != aMembersEndItr)
                         {
                             aItem.AddElement(*aMembersItr);

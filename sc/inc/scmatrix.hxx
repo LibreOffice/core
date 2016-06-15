@@ -276,10 +276,10 @@ public:
             SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 ) = 0;
 
     /** Put a column vector of doubles, starting at row nR, must fit into dimensions. */
-    virtual void PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR ) = 0;
+    virtual void PutDoubleVector( const std::vector< double > & rVec, SCSIZE nC, SCSIZE nR ) = 0;
 
     /** Put a column vector of strings, starting at row nR, must fit into dimensions. */
-    virtual void PutStringVector( const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR ) = 0;
+    virtual void PutStringVector( const std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR ) = 0;
 
     /** Put a column vector of empties, starting at row nR, must fit into dimensions. */
     virtual void PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR ) = 0;
@@ -492,10 +492,10 @@ public:
             SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 ) override;
 
     /** Put a column vector of doubles, starting at row nR, must fit into dimensions. */
-    virtual void PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR ) override;
+    virtual void PutDoubleVector( const std::vector< double > & rVec, SCSIZE nC, SCSIZE nR ) override;
 
     /** Put a column vector of strings, starting at row nR, must fit into dimensions. */
-    virtual void PutStringVector( const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR ) override;
+    virtual void PutStringVector( const std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR ) override;
 
     /** Put a column vector of empties, starting at row nR, must fit into dimensions. */
     virtual void PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR ) override;
@@ -706,10 +706,10 @@ public:
     virtual void FillDouble(double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2) override;
 
     /** Put a column vector of doubles, starting at row nR, must fit into dimensions. */
-    virtual void PutDoubleVector(const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR) override;
+    virtual void PutDoubleVector(const std::vector< double > & rVec, SCSIZE nC, SCSIZE nR) override;
 
     /** Put a column vector of strings, starting at row nR, must fit into dimensions. */
-    virtual void PutStringVector(const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR) override;
+    virtual void PutStringVector(const std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR) override;
 
     /** Put a column vector of empties, starting at row nR, must fit into dimensions. */
     virtual void PutEmptyVector(SCSIZE nCount, SCSIZE nC, SCSIZE nR) override;

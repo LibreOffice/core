@@ -73,7 +73,7 @@ struct ScCsvExpData
                                     mnIndex( nIndex ), mnType( nType ) {}
 };
 
-typedef ::std::vector< ScCsvExpData > ScCsvExpDataVec;
+typedef std::vector< ScCsvExpData > ScCsvExpDataVec;
 
 /** Specifies which element should be used to perform an action. */
 enum ScMoveMode

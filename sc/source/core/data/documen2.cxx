@@ -1221,7 +1221,7 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 
 void ScDocument::AddLookupCache( ScLookupCache & rCache )
 {
-    if (!pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
+    if (!pLookupCacheMapImpl->aCacheMap.insert( std::pair< const ScRange,
                 ScLookupCache*>( rCache.getRange(), &rCache)).second)
     {
         OSL_FAIL( "ScDocument::AddLookupCache: couldn't add to hash map");

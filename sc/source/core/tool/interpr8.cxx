@@ -218,7 +218,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
         }
     }
 
-    mfStepSize = ::std::numeric_limits<double>::max();
+    mfStepSize = std::numeric_limits<double>::max();
     if ( mnMonthDay )
     {
         aDate = aNullDate + static_cast< long >( maRange[ 0 ].X );
@@ -542,7 +542,7 @@ void ScETSForecastCalculation::calcAccuracyIndicators()
 SCSIZE ScETSForecastCalculation::CalcPeriodLen()
 {
     SCSIZE nBestVal = mnCount;
-    double fBestME = ::std::numeric_limits<double>::max();
+    double fBestME = std::numeric_limits<double>::max();
 
     for ( SCSIZE nPeriodLen = mnCount / 2; nPeriodLen > 1; nPeriodLen-- )
     {

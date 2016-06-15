@@ -446,7 +446,7 @@ void ScTpUserLists::RemoveList( size_t nList )
     if (pUserLists && nList < pUserLists->size())
     {
         ScUserList::iterator itr = pUserLists->begin();
-        ::std::advance(itr, nList);
+        std::advance(itr, nList);
         pUserLists->erase(itr);
     }
 }

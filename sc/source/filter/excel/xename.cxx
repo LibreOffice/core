@@ -143,7 +143,7 @@ private:
     typedef XclExpRecordList< XclExpName >      XclExpNameList;
     typedef XclExpNameList::RecordRefType       XclExpNameRef;
 
-    typedef ::std::map< ::std::pair<SCTAB, sal_uInt16>, sal_uInt16> NamedExpIndexMap;
+    typedef std::map< std::pair<SCTAB, sal_uInt16>, sal_uInt16> NamedExpIndexMap;
 
 private:
     /**

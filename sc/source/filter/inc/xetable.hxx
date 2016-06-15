@@ -136,7 +136,7 @@ public:
     XclExpArrayRef FindArray( const ScTokenArray& rScTokArr, const ScAddress& rBasePos ) const;
 
 private:
-    typedef ::std::map< ScAddress, XclExpArrayRef > XclExpArrayMap;
+    typedef std::map< ScAddress, XclExpArrayRef > XclExpArrayMap;
     XclExpArrayMap      maRecMap;       /// Map containing the ARRAY records.
 };
 
@@ -522,7 +522,7 @@ private:
     virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol ) = 0;
 
 private:
-    typedef ::std::vector< XclExpMultiXFId > XclExpMultiXFIdDeq;
+    typedef std::vector< XclExpMultiXFId > XclExpMultiXFIdDeq;
 
     sal_uInt16          mnMulRecId;     /// Record ID for multiple record variant.
     sal_Size            mnContSize;     /// Data size of contents for one cell
@@ -587,7 +587,7 @@ public:
     /** Returns true, if a collapsed group ends at the last processed position. */
     inline bool         IsCollapsed() const { return mbCurrCollapse; }
     /** Returns the highest level of an open group at the last processed position. */
-    inline sal_uInt8    GetLevel() const { return ::std::min( mnCurrLevel, EXC_OUTLINE_MAX ); }
+    inline sal_uInt8    GetLevel() const { return std::min( mnCurrLevel, EXC_OUTLINE_MAX ); }
 
 protected:
     /** Constructs the outline buffer.
@@ -605,7 +605,7 @@ private:
         bool                mbHidden;           /// true = Group in this level is hidden.
         inline explicit     XclExpLevelInfo() : mnScEndPos( 0 ), mbHidden( false ) {}
     };
-    typedef ::std::vector< XclExpLevelInfo > XclExpLevelInfoVec;
+    typedef std::vector< XclExpLevelInfo > XclExpLevelInfoVec;
 
     const ScOutlineArray* mpScOLArray;      /// Pointer to Calc outline array.
     XclExpLevelInfoVec  maLevelInfos;       /// Info for current row and all levels.
@@ -937,7 +937,7 @@ private:
 
 private:
     typedef std::shared_ptr<XclExpRow>  RowRef;
-    typedef ::std::map<sal_uInt32, RowRef>  RowMap;
+    typedef std::map<sal_uInt32, RowRef>    RowMap;
 
     RowMap              maRowMap;
     XclExpRowOutlineBuffer maOutlineBfr;    /// Buffer for row outline groups.

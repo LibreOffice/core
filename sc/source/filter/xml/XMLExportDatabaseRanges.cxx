@@ -116,7 +116,7 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
 
 namespace {
 
-class WriteDatabaseRange : public ::std::unary_function<ScDBData, void>
+class WriteDatabaseRange : public std::unary_function<ScDBData, void>
 {
     ScXMLExport& mrExport;
     ScDocument* mpDoc;
@@ -132,7 +132,7 @@ public:
         meRangeType = eNew;
     }
 
-    void operator() (const ::std::pair<SCTAB, const ScDBData*>& r)
+    void operator() (const std::pair<SCTAB, const ScDBData*>& r)
     {
         if (meRangeType != ScDBCollection::SheetAnonymous)
             return;
@@ -684,7 +684,7 @@ private:
 
 void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
 {
-    typedef ::std::map<SCTAB, const ScDBData*> SheetLocalDBs;
+    typedef std::map<SCTAB, const ScDBData*> SheetLocalDBs;
 
     pDoc = rExport.GetDocument();
     if (!pDoc)
@@ -723,17 +723,17 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
         // Write global named ranges.
         func.setRangeType(ScDBCollection::GlobalNamed);
         const ScDBCollection::NamedDBs& rNamedDBs = pDBCollection->getNamedDBs();
-        ::std::for_each(rNamedDBs.begin(), rNamedDBs.end(), func);
+        std::for_each(rNamedDBs.begin(), rNamedDBs.end(), func);
 
         // Add global anonymous DB ranges.
         func.setRangeType(ScDBCollection::GlobalAnonymous);
         const ScDBCollection::AnonDBs& rAnonDBs = pDBCollection->getAnonDBs();
-        ::std::for_each(rAnonDBs.begin(), rAnonDBs.end(), func);
+        std::for_each(rAnonDBs.begin(), rAnonDBs.end(), func);
     }
 
     // Write sheet-local ranges.
     func.setRangeType(ScDBCollection::SheetAnonymous);
-    ::std::for_each(aSheetDBs.begin(), aSheetDBs.end(), func);
+    std::for_each(aSheetDBs.begin(), aSheetDBs.end(), func);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

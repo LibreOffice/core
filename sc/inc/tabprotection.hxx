@@ -114,7 +114,7 @@ struct ScEnhancedProtection
     sal_uInt32                  mnAreserved;
     sal_uInt32                  mnPasswordVerifier;
     OUString                    maTitle;
-    ::std::vector< sal_uInt8 >  maSecurityDescriptor;       // imported as raw BIFF data
+    std::vector< sal_uInt8 >    maSecurityDescriptor;       // imported as raw BIFF data
     OUString                    maSecurityDescriptorXML;    // imported from OOXML
     // OOXML password definitions
     OUString                    maAlgorithmName;
@@ -188,8 +188,8 @@ public:
     bool isOptionEnabled(Option eOption) const;
     void setOption(Option eOption, bool bEnabled);
 
-    void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
-    const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const;
+    void setEnhancedProtection( const std::vector< ScEnhancedProtection > & rProt );
+    const std::vector< ScEnhancedProtection > & getEnhancedProtection() const;
     bool updateReference( UpdateRefMode, ScDocument*, const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     bool isBlockEditable( const ScRange& rRange ) const;
     bool isSelectionEditable( const ScRangeList& rRangeList ) const;

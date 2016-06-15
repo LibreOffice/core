@@ -508,7 +508,7 @@ bool ScComplexRefData::IncEndColSticky( SCCOL nDelta, const ScAddress& rPos )
 
     if (nCol2 < MAXCOL)
     {
-        SCCOL nCol = ::std::min( static_cast<SCCOL>(nCol2 + nDelta), MAXCOL);
+        SCCOL nCol = std::min( static_cast<SCCOL>(nCol2 + nDelta), MAXCOL);
         if (Ref2.IsColRel())
             Ref2.SetRelCol( nCol - rPos.Col());
         else
@@ -537,7 +537,7 @@ bool ScComplexRefData::IncEndRowSticky( SCROW nDelta, const ScAddress& rPos )
 
     if (nRow2 < MAXROW)
     {
-        SCROW nRow = ::std::min( static_cast<SCROW>(nRow2 + nDelta), MAXROW);
+        SCROW nRow = std::min( static_cast<SCROW>(nRow2 + nDelta), MAXROW);
         if (Ref2.IsRowRel())
             Ref2.SetRelRow( nRow - rPos.Row());
         else

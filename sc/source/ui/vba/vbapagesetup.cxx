@@ -629,7 +629,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getPaperSize() throw (uno::RuntimeException, 
     awt::Size aSize; // current papersize
     mxPageProps->getPropertyValue( "Size" ) >>= aSize;
     if ( mbIsLandscape )
-        ::std::swap( aSize.Width, aSize.Height );
+        std::swap( aSize.Width, aSize.Height );
 
     sal_Int32 nPaperSizeIndex = msfilter::util::PaperSizeConv::getMSPaperSizeIndex( aSize );
     if ( nPaperSizeIndex == 0 )
@@ -646,7 +646,7 @@ void SAL_CALL ScVbaPageSetup::setPaperSize( sal_Int32 papersize ) throw (uno::Ru
         aPaperSize.Height = rConvertedSize.mnHeight;
         aPaperSize.Width = rConvertedSize.mnWidth;
         if ( mbIsLandscape )
-            ::std::swap( aPaperSize.Width, aPaperSize.Height );
+            std::swap( aPaperSize.Width, aPaperSize.Height );
         mxPageProps->setPropertyValue( "Size", uno::makeAny( aPaperSize ) );
     }
 }

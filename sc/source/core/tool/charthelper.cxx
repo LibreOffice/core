@@ -142,10 +142,10 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, 
                 Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
                 if( xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider() )
                 {
-                    ::std::vector< ScRangeList > aRangesVector;
+                    std::vector< ScRangeList > aRangesVector;
                     pDestDoc->GetChartRanges( aChartName, aRangesVector, pSrcDoc );
 
-                    ::std::vector< ScRangeList >::iterator aIt( aRangesVector.begin() );
+                    std::vector< ScRangeList >::iterator aIt( aRangesVector.begin() );
                     for( ; aIt!=aRangesVector.end(); ++aIt )
                     {
                         ScRangeList& rScRangeList( *aIt );
@@ -355,7 +355,7 @@ void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVe
     }
 }
 
-void ScChartHelper::GetChartNames( ::std::vector< OUString >& rChartNames, SdrPage* pPage )
+void ScChartHelper::GetChartNames( std::vector< OUString >& rChartNames, SdrPage* pPage )
 {
     if ( pPage )
     {
@@ -377,7 +377,7 @@ void ScChartHelper::GetChartNames( ::std::vector< OUString >& rChartNames, SdrPa
 }
 
 void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
-    const ScRangeListVector& rRangesVector, const ::std::vector< OUString >& rExcludedChartNames, bool bSameDoc )
+    const ScRangeListVector& rRangesVector, const std::vector< OUString >& rExcludedChartNames, bool bSameDoc )
 {
     if ( pDoc && pPage && pModelObj )
     {
@@ -393,8 +393,8 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                 if ( pSdrOle2Obj && pSdrOle2Obj->IsChart() )
                 {
                     OUString aChartName = pSdrOle2Obj->GetPersistName();
-                    ::std::vector< OUString >::const_iterator aEnd = rExcludedChartNames.end();
-                    ::std::vector< OUString >::const_iterator aFound = ::std::find( rExcludedChartNames.begin(), aEnd, aChartName );
+                    std::vector< OUString >::const_iterator aEnd = rExcludedChartNames.end();
+                    std::vector< OUString >::const_iterator aFound = std::find( rExcludedChartNames.begin(), aEnd, aChartName );
                     if ( aFound == aEnd )
                     {
                         uno::Reference< embed::XEmbeddedObject > xEmbeddedObj = pSdrOle2Obj->GetObjRef();

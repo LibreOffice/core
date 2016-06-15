@@ -163,7 +163,7 @@ private:
     void updateStates();
 
 private:
-    ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > maMenuItems;
+    std::vector< css::uno::Reference< css::accessibility::XAccessible > > maMenuItems;
     css::uno::Reference< css::accessibility::XAccessibleStateSet >          mxStateSet;
 
     size_t mnMenuPos;

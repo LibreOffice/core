@@ -555,8 +555,8 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
         // enhanced protections if there are
         if (pTabProtect)
         {
-            const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
-            for (::std::vector<ScEnhancedProtection>::const_iterator it( rProts.begin()), itEnd( rProts.end());
+            const std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
+            for (std::vector<ScEnhancedProtection>::const_iterator it( rProts.begin()), itEnd( rProts.end());
                     it != itEnd; ++it)
             {
                 Add( new XclExpSheetEnhancedProtection( GetRoot(), *it));

@@ -537,7 +537,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 ScAddress aAddress;
                 ScCompiler* pComp = new ScCompiler(&rDoc,aAddress);
                 pComp->SetGrammar( rDoc.GetGrammar() );
-                xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> (pComp))));
+                xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj(std::unique_ptr<formula::FormulaCompiler> (pComp))));
                 break;
             }
             break;

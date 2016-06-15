@@ -95,14 +95,14 @@ private:
     bool            bAutoFilter;        ///< AutoFilter? (not saved)
     bool            bModified;          ///< is set/cleared for/by(?) UpdateReference
 
-    ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
+    std::vector< OUString > maTableColumnNames;     ///< names of table columns
     bool            mbTableColumnNamesDirty;
     SCSIZE          nFilteredRowCount;
 
     using ScRefreshTimer::operator==;
 
 public:
-    struct less : public ::std::binary_function<std::unique_ptr<ScDBData>, std::unique_ptr<ScDBData>, bool>
+    struct less : public std::binary_function<std::unique_ptr<ScDBData>, std::unique_ptr<ScDBData>, bool>
     {
         bool operator() (const std::unique_ptr<ScDBData>& left, const std::unique_ptr<ScDBData>& right) const;
     };
@@ -146,8 +146,8 @@ public:
     ScRange     GetHeaderArea() const;
     void        StartTableColumnNamesListener();
     void        EndTableColumnNamesListener();
-    SC_DLLPUBLIC void SetTableColumnNames( const ::std::vector< OUString >& rNames );
-    SC_DLLPUBLIC const ::std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
+    SC_DLLPUBLIC void SetTableColumnNames( const std::vector< OUString >& rNames );
+    SC_DLLPUBLIC const std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
     bool        AreTableColumnNamesDirty() const { return mbTableColumnNamesDirty; }
 
     /** Refresh/update the column names with the header row's cell contents. */
@@ -237,7 +237,7 @@ public:
     {
         friend class ScDBCollection;
 
-        typedef ::std::set<std::unique_ptr<ScDBData>, ScDBData::less> DBsType;
+        typedef std::set<std::unique_ptr<ScDBData>, ScDBData::less> DBsType;
         DBsType m_DBs;
         ScDBCollection& mrParent;
         NamedDBs(ScDBCollection& rParent, ScDocument& rDoc);
@@ -270,7 +270,7 @@ public:
      */
     class AnonDBs
     {
-        typedef ::std::vector<std::unique_ptr<ScDBData>> DBsType;
+        typedef std::vector<std::unique_ptr<ScDBData>> DBsType;
         DBsType m_DBs;
 
         AnonDBs& operator=(AnonDBs const&) = delete;

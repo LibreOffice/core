@@ -72,12 +72,12 @@ using namespace ::com::sun::star;
 using namespace ::formula;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::std::unique_ptr;
-using ::std::vector;
-using ::std::list;
-using ::std::distance;
-using ::std::unary_function;
-using ::std::shared_ptr;
+using std::unique_ptr;
+using std::vector;
+using std::list;
+using std::distance;
+using std::unary_function;
+using std::shared_ptr;
 
 namespace
 {
@@ -104,7 +104,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
     return aDataSequencePropertyMap_Impl;
 }
 
-struct lcl_appendTableNumber : public ::std::unary_function< SCTAB, void >
+struct lcl_appendTableNumber : public std::unary_function< SCTAB, void >
 {
     explicit lcl_appendTableNumber( OUStringBuffer & rBuffer ) :
             m_rBuffer( rBuffer )
@@ -119,10 +119,10 @@ private:
     OUStringBuffer & m_rBuffer;
 };
 
-OUString lcl_createTableNumberList( const ::std::list< SCTAB > & rTableList )
+OUString lcl_createTableNumberList( const std::list< SCTAB > & rTableList )
 {
     OUStringBuffer aBuffer;
-    ::std::for_each( rTableList.begin(), rTableList.end(), lcl_appendTableNumber( aBuffer ));
+    std::for_each( rTableList.begin(), rTableList.end(), lcl_appendTableNumber( aBuffer ));
     // remove last trailing ' '
     if( !aBuffer.isEmpty() )
         aBuffer.setLength( aBuffer.getLength() - 1 );
@@ -994,7 +994,7 @@ void lcl_convertTokensToString(OUString& rStr, const vector<ScTokenRef>& rTokens
     const sal_Unicode cRangeSep = ScCompiler::GetNativeSymbolChar(ocSep);
     FormulaGrammar::Grammar eGrammar = pDoc->GetGrammar();
     Tokens2RangeString func(pDoc, eGrammar, cRangeSep);
-    func = ::std::for_each(rTokens.begin(), rTokens.end(), func);
+    func = std::for_each(rTokens.begin(), rTokens.end(), func);
     func.getString(rStr);
 }
 
@@ -1100,8 +1100,8 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
 bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             SCROW nCornerRowCount=1, SCCOL nCornerColumnCount=1)
 {
-    using ::std::max;
-    using ::std::min;
+    using std::max;
+    using std::min;
 
     if (rRefTokens.empty())
         return false;
@@ -1526,7 +1526,7 @@ ScChart2DataProvider::createDataSource(
         return xResult;
 
     ScChart2DataSource* pDS = nullptr;
-    ::std::list< Reference< chart2::data::XLabeledDataSequence > > aSeqs;
+    std::list< Reference< chart2::data::XLabeledDataSequence > > aSeqs;
 
     // Fill Categories
     if( bCategories )
@@ -1573,22 +1573,22 @@ ScChart2DataProvider::createDataSource(
     }
 
     pDS = new ScChart2DataSource(m_pDocument);
-    ::std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aItr( aSeqs.begin() );
-    ::std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aEndItr( aSeqs.end() );
+    std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aItr( aSeqs.begin() );
+    std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aEndItr( aSeqs.end() );
 
     //reorder labeled sequences according to aSequenceMapping
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVector;
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVector;
     while(aItr != aEndItr)
     {
         aSeqVector.push_back(*aItr);
         ++aItr;
     }
 
-    ::std::map< sal_Int32, Reference< chart2::data::XLabeledDataSequence > > aSequenceMap;
+    std::map< sal_Int32, Reference< chart2::data::XLabeledDataSequence > > aSequenceMap;
     for( sal_Int32 nNewIndex = 0; nNewIndex < aSequenceMapping.getLength(); nNewIndex++ )
     {
         // note: assuming that the values in the sequence mapping are always non-negative
-        ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::size_type nOldIndex( static_cast< sal_uInt32 >( aSequenceMapping[nNewIndex] ) );
+        std::vector< Reference< chart2::data::XLabeledDataSequence > >::size_type nOldIndex( static_cast< sal_uInt32 >( aSequenceMapping[nNewIndex] ) );
         if( nOldIndex < aSeqVector.size() )
         {
             pDS->AddLabeledSequence( aSeqVector[nOldIndex] );
@@ -1596,8 +1596,8 @@ ScChart2DataProvider::createDataSource(
         }
     }
 
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorItr( aSeqVector.begin() );
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorEndItr( aSeqVector.end() );
+    std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorItr( aSeqVector.begin() );
+    std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorEndItr( aSeqVector.end() );
     while(aVectorItr != aVectorEndItr)
     {
         Reference< chart2::data::XLabeledDataSequence > xSeq( *aVectorItr );
@@ -1791,7 +1791,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     const uno::Reference< chart2::data::XDataSource >& xDataSource )
     throw (uno::RuntimeException, std::exception)
 {
-    ::std::vector< beans::PropertyValue > aResult;
+    std::vector< beans::PropertyValue > aResult;
     bool bRowSourceDetected = false;
     bool bFirstCellAsLabel = false;
     bool bHasCategories = false;
@@ -1928,7 +1928,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     {
         list<SCTAB> aTableNumList;
         InsertTabNumber func;
-        func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
+        func = std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getList(aTableNumList);
         aResult.push_back(
             beans::PropertyValue( OUString("TableNumberList"), -1,
@@ -2260,7 +2260,7 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const OUString& sRang
         throw lang::IllegalArgumentException();
 
     Tokens2RangeStringXML converter(m_pDocument);
-    converter = ::std::for_each(aRefTokens.begin(), aRefTokens.end(), converter);
+    converter = std::for_each(aRefTokens.begin(), aRefTokens.end(), converter);
     converter.getString(aRet);
 
     return aRet;
@@ -2547,7 +2547,7 @@ void ScChart2DataSequence::BuildDataCache()
 
     StopListeningToAllExternalRefs();
 
-    ::std::list<sal_Int32> aHiddenValues;
+    std::list<sal_Int32> aHiddenValues;
     sal_Int32 nDataCount = 0;
     sal_Int32 nHiddenValueCount = 0;
 
@@ -2631,7 +2631,7 @@ void ScChart2DataSequence::BuildDataCache()
     // convert the hidden cell list to sequence.
     m_aHiddenValues.realloc(nHiddenValueCount);
     sal_Int32* pArr = m_aHiddenValues.getArray();
-    ::std::list<sal_Int32>::const_iterator itr = aHiddenValues.begin(), itrEnd = aHiddenValues.end();
+    std::list<sal_Int32>::const_iterator itr = aHiddenValues.begin(), itrEnd = aHiddenValues.end();
     for (;itr != itrEnd; ++itr, ++pArr)
         *pArr = *itr;
 
@@ -3197,7 +3197,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
 
     // Determine the total size of all ranges.
     AccumulateRangeSize func;
-    func = ::std::for_each(m_aTokens.begin(), m_aTokens.end(), func);
+    func = std::for_each(m_aTokens.begin(), m_aTokens.end(), func);
     SCCOL nCols = func.getCols();
     SCROW nRows = func.getRows();
 
@@ -3227,7 +3227,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
     // Generate label strings based on the info so far.
     sal_Int32 nCount = bColumn ? nCols : nRows;
     GenerateLabelStrings genLabels(nCount, eOrigin, bColumn);
-    genLabels = ::std::for_each(m_aTokens.begin(), m_aTokens.end(), genLabels);
+    genLabels = std::for_each(m_aTokens.begin(), m_aTokens.end(), genLabels);
     Sequence<OUString> aSeq = genLabels.getLabels();
 
     return aSeq;

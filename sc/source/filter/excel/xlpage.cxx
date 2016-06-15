@@ -220,7 +220,7 @@ Size XclPageData::GetScPaperSize() const
         aSize = SvxPaperInfo::GetDefaultPaperSize();
 
     if( !mbPortrait )
-        ::std::swap( aSize.Width(), aSize.Height() );
+        std::swap( aSize.Width(), aSize.Height() );
 
     return aSize;
 }

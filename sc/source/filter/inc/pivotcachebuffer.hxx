@@ -38,8 +38,8 @@ namespace xls {
 
 class WorksheetHelper;
 
-typedef ::std::pair< sal_Int32, OUString > IdCaptionPair;
-typedef ::std::vector< IdCaptionPair > IdCaptionPairList;
+typedef std::pair< sal_Int32, OUString > IdCaptionPair;
+typedef std::vector< IdCaptionPair > IdCaptionPairList;
 
 class PivotCacheItem
 {
@@ -123,7 +123,7 @@ public:
     /** Returns the specified item. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
     /** Returns the names of all items. */
-    void                getCacheItemNames( ::std::vector< OUString >& orItemNames ) const;
+    void                getCacheItemNames( std::vector< OUString >& orItemNames ) const;
     void                applyItemCaptions( const IdCaptionPairList& vCaptions );
 
 private:
@@ -133,7 +133,7 @@ private:
     void                importArray( SequenceInputStream& rStrm );
 
 private:
-    typedef ::std::vector< PivotCacheItem > CacheItemVector;
+    typedef std::vector< PivotCacheItem > CacheItemVector;
     CacheItemVector     maItems;            /// All items of this list.
 };
 
@@ -203,7 +203,7 @@ struct PivotCacheGroupItem
                             maOrigName( rItemName ), maGroupName( rItemName ) {}
 };
 
-typedef ::std::vector< PivotCacheGroupItem > PivotCacheGroupItemVector;
+typedef std::vector< PivotCacheGroupItem > PivotCacheGroupItemVector;
 
 class PivotCacheField : public WorkbookHelper
 {
@@ -273,7 +273,7 @@ public:
     /** Returns the shared or group item with the specified index. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
     /** Returns the names of all shared or group items. */
-    void                getCacheItemNames( ::std::vector< OUString >& orItemNames ) const;
+    void                getCacheItemNames( std::vector< OUString >& orItemNames ) const;
     /** Returns shared or group items. */
     const PivotCacheItemList&  getCacheItems() const;
 
@@ -313,7 +313,7 @@ private:
                             sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nItemIdx ) const;
 
 private:
-    typedef ::std::vector< sal_Int32 > IndexVector;
+    typedef std::vector< sal_Int32 > IndexVector;
 
     PivotCacheItemList  maSharedItems;      /// All shared items of this field.
     PivotCacheItemList  maGroupItems;       /// All group items of this field.
@@ -436,7 +436,7 @@ private:
 
 private:
     typedef RefVector< PivotCacheField >    PivotCacheFieldVector;
-    typedef ::std::vector< sal_Int32 >      IndexVector;
+    typedef std::vector< sal_Int32 >        IndexVector;
 
     PivotCacheFieldVector maFields;         /// All pivot cache fields.
     PivotCacheFieldVector maDatabaseFields; /// All cache fields that are based on source data.
@@ -468,9 +468,9 @@ private:
     PivotCache&         createPivotCache( sal_Int32 nCacheId );
 
 private:
-    typedef ::std::map< sal_Int32, OUString >    FragmentPathMap;
+    typedef std::map< sal_Int32, OUString >      FragmentPathMap;
     typedef RefMap< sal_Int32, PivotCache >             PivotCacheMap;
-    typedef ::std::vector< sal_Int32 >                  PivotCacheIdVector;
+    typedef std::vector< sal_Int32 >                    PivotCacheIdVector;
 
     FragmentPathMap     maFragmentPaths;
     PivotCacheMap       maCaches;

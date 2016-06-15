@@ -64,8 +64,8 @@ public:
     const Item* Next();
 
 private:
-    ::std::vector<Item>::const_iterator maIter;
-    ::std::vector<Item> maArray;
+    std::vector<Item>::const_iterator maIter;
+    std::vector<Item> maArray;
 };
 
 #endif

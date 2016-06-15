@@ -31,7 +31,7 @@ static inline sal_uLong TimeNow()          // Sekunden
 
 namespace {
 
-class FindByRange : public ::std::unary_function<ScAutoStyleData, bool>
+class FindByRange : public std::unary_function<ScAutoStyleData, bool>
 {
     ScRange maRange;
 public:
@@ -39,7 +39,7 @@ public:
     bool operator() (const ScAutoStyleData& rData) const { return rData.aRange == maRange; }
 };
 
-class FindByTimeout : public ::std::unary_function<ScAutoStyleData, bool>
+class FindByTimeout : public std::unary_function<ScAutoStyleData, bool>
 {
     sal_uLong mnTimeout;
 public:
@@ -47,7 +47,7 @@ public:
     bool operator() (const ScAutoStyleData& rData) const { return rData.nTimeout >= mnTimeout; }
 };
 
-struct FindNonZeroTimeout : public ::std::unary_function<ScAutoStyleData, bool>
+struct FindNonZeroTimeout : public std::unary_function<ScAutoStyleData, bool>
 {
     bool operator() (const ScAutoStyleData& rData) const
     {
@@ -104,7 +104,7 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
 
     // Remove the first item with the same range.
     std::vector<ScAutoStyleData>::iterator itr =
-        ::std::find_if(aEntries.begin(), aEntries.end(), FindByRange(rRange));
+        std::find_if(aEntries.begin(), aEntries.end(), FindByRange(rRange));
 
     if (itr != aEntries.end())
         aEntries.erase(itr);
@@ -119,7 +119,7 @@ void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const
 
     //  Einfuege-Position suchen
     std::vector<ScAutoStyleData>::iterator iter =
-        ::std::find_if(aEntries.begin(), aEntries.end(), FindByTimeout(nTimeout));
+        std::find_if(aEntries.begin(), aEntries.end(), FindByTimeout(nTimeout));
 
     aEntries.insert(iter, ScAutoStyleData(nTimeout,rRange,rStyle));
 
@@ -173,7 +173,7 @@ void ScAutoStyleList::StartTimer( sal_uLong nNow )      // Sekunden
 {
     // ersten Eintrag mit Timeout != 0 suchen
     std::vector<ScAutoStyleData>::iterator iter =
-        ::std::find_if(aEntries.begin(),aEntries.end(), FindNonZeroTimeout());
+        std::find_if(aEntries.begin(),aEntries.end(), FindNonZeroTimeout());
 
     if (iter != aEntries.end())
     {

@@ -83,7 +83,7 @@ public:
     sal_uInt16          GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId = 0xFFFF ) const;
 
 private:
-    typedef ::std::map< OUString, SCTAB > XclTabNameMap;
+    typedef std::map< OUString, SCTAB > XclTabNameMap;
 
     XclTabNameMap       maTabNames;     /// All Excel sheet names with Calc sheet index.
     ScfUInt16Vec        maTabIdVec;     /// The vector with sheet indexes.
@@ -149,8 +149,8 @@ public:
     sal_uInt32   GetStorageId() const { return mnStorageId; }
 
 private:
-    typedef ::std::unique_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
-    typedef ::std::unique_ptr< ScTokenArray >       TokenArrayPtr;
+    typedef std::unique_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
+    typedef std::unique_ptr< ScTokenArray >         TokenArrayPtr;
 
     XclImpCachedMatrixPtr mxDdeMatrix;      /// Cached results of the DDE link.
     MOper*              mpMOper;            /// Cached values for OLE link
@@ -219,7 +219,7 @@ public:
     const OUString&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
 
 private:
-    typedef ::std::unique_ptr< XclImpLinkManagerImpl > XclImpLinkMgrImplPtr;
+    typedef std::unique_ptr< XclImpLinkManagerImpl > XclImpLinkMgrImplPtr;
     XclImpLinkMgrImplPtr mxImpl;
 };
 

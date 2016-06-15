@@ -92,10 +92,10 @@ void XclExpRangeFmlaBase::Extend( const ScAddress& rScPos )
 {
     sal_uInt16 nXclCol = static_cast< sal_uInt16 >( rScPos.Col() );
     sal_uInt32 nXclRow = static_cast< sal_uInt32 >( rScPos.Row() );
-    maXclRange.maFirst.mnCol = ::std::min( maXclRange.maFirst.mnCol, nXclCol );
-    maXclRange.maFirst.mnRow = ::std::min( maXclRange.maFirst.mnRow, nXclRow );
-    maXclRange.maLast.mnCol  = ::std::max( maXclRange.maLast.mnCol,  nXclCol );
-    maXclRange.maLast.mnRow  = ::std::max( maXclRange.maLast.mnRow,  nXclRow );
+    maXclRange.maFirst.mnCol = std::min( maXclRange.maFirst.mnCol, nXclCol );
+    maXclRange.maFirst.mnRow = std::min( maXclRange.maFirst.mnRow, nXclRow );
+    maXclRange.maLast.mnCol  = std::max( maXclRange.maLast.mnCol,    nXclCol );
+    maXclRange.maLast.mnRow  = std::max( maXclRange.maLast.mnRow,    nXclRow );
 }
 
 void XclExpRangeFmlaBase::WriteRangeAddress( XclExpStream& rStrm ) const
@@ -1266,7 +1266,7 @@ void XclExpMultiCellBase::GetXFIndexes( ScfUInt16Vec& rXFIndexes ) const
     ScfUInt16Vec::iterator aDestIt = rXFIndexes.begin() + GetXclCol();
     for( XclExpMultiXFIdDeq::const_iterator aIt = maXFIds.begin(), aEnd = maXFIds.end(); aIt != aEnd; ++aIt )
     {
-        ::std::fill( aDestIt, aDestIt + aIt->mnCount, aIt->mnXFIndex );
+        std::fill( aDestIt, aDestIt + aIt->mnCount, aIt->mnXFIndex );
         aDestIt += aIt->mnCount;
     }
 }
@@ -1698,7 +1698,7 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
     }
 
     // put XF indexes into passed vector, collect use count of all different widths
-    typedef ::std::map< sal_uInt16, sal_uInt16 > XclExpWidthMap;
+    typedef std::map< sal_uInt16, sal_uInt16 > XclExpWidthMap;
     XclExpWidthMap aWidthMap;
     sal_uInt16 nMaxColCount = 0;
     sal_uInt16 nMaxUsedWidth = 0;
@@ -1888,7 +1888,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
                 // insert the cell, InsertCell() may merge it with existing BLANK records
                 InsertCell( xNewCell, nPos, false );
                 // insert default XF indexes into aXFIndexes
-                ::std::fill( aXFIndexes.begin() + nFirstFreeXclCol,
+                std::fill( aXFIndexes.begin() + nFirstFreeXclCol,
                     aXFIndexes.begin() + nNextUsedXclCol, aXFId.mnXFIndex );
                 // don't step forward with nPos, InsertCell() may remove records
             }
@@ -1903,7 +1903,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
     ScfUInt16Vec::const_iterator aColBeg = rColXFIndexes.begin(), aColIt;
 
     // find most used XF index in the row
-    typedef ::std::map< sal_uInt16, size_t > XclExpXFIndexMap;
+    typedef std::map< sal_uInt16, size_t > XclExpXFIndexMap;
     XclExpXFIndexMap aIndexMap;
     sal_uInt16 nRowXFIndex = EXC_XF_DEFAULTCELL;
     size_t nMaxXFCount = 0;
@@ -2101,7 +2101,7 @@ void XclExpRowBuffer::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
 void XclExpRowBuffer::CreateRows( SCROW nFirstFreeScRow )
 {
     if( nFirstFreeScRow > 0 )
-        GetOrCreateRow(  ::std::max ( nFirstFreeScRow - 1, GetMaxPos().Row() ), true );
+        GetOrCreateRow(  std::max ( nFirstFreeScRow - 1, GetMaxPos().Row() ), true );
 }
 
 class RowFinalizeTask : public comphelper::ThreadTask
@@ -2166,7 +2166,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
 
     // *** Default row format *** ---------------------------------------------
 
-    typedef ::std::map< XclExpDefaultRowData, size_t > XclExpDefRowDataMap;
+    typedef std::map< XclExpDefaultRowData, size_t > XclExpDefRowDataMap;
     XclExpDefRowDataMap aDefRowMap;
 
     XclExpDefaultRowData aMaxDefData;
@@ -2240,22 +2240,22 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
         // find used column range
         if( !rRow->IsEmpty() )      // empty rows return (0...0) as used range
         {
-            nFirstUsedXclCol = ::std::min( nFirstUsedXclCol, rRow->GetFirstUsedXclCol() );
-            nFirstFreeXclCol = ::std::max( nFirstFreeXclCol, rRow->GetFirstFreeXclCol() );
+            nFirstUsedXclCol = std::min( nFirstUsedXclCol, rRow->GetFirstUsedXclCol() );
+            nFirstFreeXclCol = std::max( nFirstFreeXclCol, rRow->GetFirstFreeXclCol() );
         }
 
         // find used row range
         if( rRow->IsEnabled() )
         {
             sal_uInt16 nXclRow = rRow->GetXclRow();
-            nFirstUsedXclRow = ::std::min< sal_uInt32 >( nFirstUsedXclRow, nXclRow );
-            nFirstFreeXclRow = ::std::max< sal_uInt32 >( nFirstFreeXclRow, nXclRow + 1 );
+            nFirstUsedXclRow = std::min< sal_uInt32 >( nFirstUsedXclRow, nXclRow );
+            nFirstFreeXclRow = std::max< sal_uInt32 >( nFirstFreeXclRow, nXclRow + 1 );
         }
     }
 
     // adjust start position, if there are no or only empty/disabled ROW records
-    nFirstUsedXclCol = ::std::min( nFirstUsedXclCol, nFirstFreeXclCol );
-    nFirstUsedXclRow = ::std::min( nFirstUsedXclRow, nFirstFreeXclRow );
+    nFirstUsedXclCol = std::min( nFirstUsedXclCol, nFirstFreeXclCol );
+    nFirstUsedXclRow = std::min( nFirstUsedXclRow, nFirstFreeXclRow );
 
     // initialize the DIMENSIONS record
     maDimensions.SetDimensions(
@@ -2555,7 +2555,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     }
 
     // create missing row settings for rows anyhow flagged or with outlines
-    maRowBfr.CreateRows( ::std::max( nFirstUnflaggedScRow, nFirstUngroupedScRow ) );
+    maRowBfr.CreateRows( std::max( nFirstUnflaggedScRow, nFirstUngroupedScRow ) );
 }
 
 void XclExpCellTable::Finalize()

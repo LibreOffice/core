@@ -232,7 +232,7 @@ bool lclConvertTimeInterval( sal_uInt16& rnValue, sal_uInt16& rnTimeUnit, const 
 /** Stores global data needed in various classes of the Chart export filter. */
 struct XclExpChRootData : public XclChRootData
 {
-    typedef ::std::vector< XclChFrBlock > XclChFrBlockVector;
+    typedef std::vector< XclChFrBlock > XclChFrBlockVector;
 
     XclExpChChart&      mrChartData;            /// The chart data object.
     XclChFrBlockVector  maWrittenFrBlocks;      /// Stack of future record levels already written out.
@@ -1229,7 +1229,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget,
                 // manual title position implies manual plot area
                 GetChartData().SetManualPlotArea();
                 // calculate the default title position in chart units
-                sal_Int32 nDefPosX = ::std::max< sal_Int32 >( (EXC_CHART_TOTALUNITS - maData.maRect.mnWidth) / 2, 0 );
+                sal_Int32 nDefPosX = std::max< sal_Int32 >( (EXC_CHART_TOTALUNITS - maData.maRect.mnWidth) / 2, 0 );
                 sal_Int32 nDefPosY = 85;
                 // set the position relative to the standard position
                 XclChRectangle& rFrameRect = mxFramePos->GetFramePosData().maRect;
@@ -2437,7 +2437,7 @@ void XclExpChTypeGroup::ConvertSeries(
     Reference< XDataSeriesContainer > xSeriesCont( xChartType, UNO_QUERY );
     if( xSeriesCont.is() )
     {
-        typedef ::std::vector< Reference< XDataSeries > > XDataSeriesVec;
+        typedef std::vector< Reference< XDataSeries > > XDataSeriesVec;
         XDataSeriesVec aSeriesVec;
 
         // copy data series attached to the current axes set to the vector
@@ -2478,7 +2478,7 @@ void XclExpChTypeGroup::ConvertSeries(
             {
                 // reverse series order for some unstacked 2D chart types
                 if( maTypeInfo.mbReverseSeries && !Is3dChart() )
-                    ::std::reverse( aSeriesVec.begin(), aSeriesVec.end() );
+                    std::reverse( aSeriesVec.begin(), aSeriesVec.end() );
             }
 
             // deep 3d chart or clustered 3d chart (stacked is not clustered)

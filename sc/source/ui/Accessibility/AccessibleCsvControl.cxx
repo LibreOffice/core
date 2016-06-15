@@ -273,7 +273,7 @@ static sal_Int32 lcl_GetApiPos( sal_Int32 nRulerPos )
         nApiPos += nStart - nExp + 1;
         nExp *= 10;
     }
-    return ::std::max( nApiPos, static_cast<sal_Int32>(0) );
+    return std::max( nApiPos, static_cast<sal_Int32>(0) );
 }
 
 /** Converts an API text index to a ruler cursor position. */
@@ -293,7 +293,7 @@ static sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
         nApiLimit = lcl_GetApiPos( nExp );
     }
     sal_Int32 nRelPos = nApiPos - nApiBase;
-    return nRulerPos + nRelPos / nDiv * 10 + ::std::max( nRelPos % nDiv - nDiv + 10L, 0L );
+    return nRulerPos + nRelPos / nDiv * 10 + std::max( nRelPos % nDiv - nDiv + 10L, 0L );
 }
 
 /** Expands the sequence's size and returns the base index of the new inserted elements. */
@@ -477,7 +477,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const css::awt::Point&
     ensureAlive();
     ScCsvRuler& rRuler = implGetRuler();
     // use object's coordinate system, convert to API position
-    return lcl_GetApiPos( ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), static_cast<sal_Int32>(0) ), rRuler.GetPosCount() ) );
+    return lcl_GetApiPos( std::min( std::max( rRuler.GetPosFromX( rPoint.X ), static_cast<sal_Int32>(0) ), rRuler.GetPosCount() ) );
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getSelectedText() throw( RuntimeException, std::exception )
@@ -785,7 +785,7 @@ void ScAccessibleCsvRuler::ensureValidRange( sal_Int32& rnStartIndex, sal_Int32&
         throw( IndexOutOfBoundsException )
 {
     if( rnStartIndex > rnEndIndex )
-        ::std::swap( rnStartIndex, rnEndIndex );
+        std::swap( rnStartIndex, rnEndIndex );
     if( (rnStartIndex < 0) || (rnEndIndex > implGetTextLength()) )
         throw IndexOutOfBoundsException();
 }
@@ -1569,13 +1569,13 @@ Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
     return aRect;
 }
 
-::std::unique_ptr< SvxEditSource > ScAccessibleCsvCell::implCreateEditSource()
+std::unique_ptr< SvxEditSource > ScAccessibleCsvCell::implCreateEditSource()
 {
     ScCsvGrid& rGrid = implGetGrid();
     Rectangle aBoundRect( implGetBoundingBox() );
     aBoundRect -= implGetRealPos();
 
-    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( o3tl::make_unique<ScAccessibleCsvTextData>(&rGrid, rGrid.GetEditEngine(), maCellText, aBoundRect, implGetRealSize()) ) );
+    std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( o3tl::make_unique<ScAccessibleCsvTextData>(&rGrid, rGrid.GetEditEngine(), maCellText, aBoundRect, implGetRealSize()) ) );
     return pEditSource;
 }
 

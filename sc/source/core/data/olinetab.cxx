@@ -746,7 +746,7 @@ bool ScOutlineArray::ManualAction(
                 // is visible
                 SCCOLROW nEnd = rTable.LastHiddenColRow(nEntryStart, bCol);
                 bool bAllHidden = (nEntryEnd <= nEnd && nEnd <
-                        ::std::numeric_limits<SCCOLROW>::max());
+                        std::numeric_limits<SCCOLROW>::max());
 
                 bool bToggle = ( bShow != bAllHidden );
                 if ( bToggle )
@@ -783,7 +783,7 @@ void ScOutlineArray::finalizeImport(ScTable& rTable)
         SCCOLROW nEntryEnd   = pEntry->GetEnd();
         SCCOLROW nEnd = rTable.LastHiddenColRow(nEntryStart, false/*bCol*/);
         bool bAllHidden = (nEntryEnd <= nEnd && nEnd <
-                ::std::numeric_limits<SCCOLROW>::max());
+                std::numeric_limits<SCCOLROW>::max());
 
         pEntry->SetHidden(bAllHidden);
         SetVisibleBelow(aIter.LastLevel(), aIter.LastEntry(), !bAllHidden, !bAllHidden);

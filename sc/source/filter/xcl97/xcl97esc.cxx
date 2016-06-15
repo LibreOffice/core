@@ -407,7 +407,7 @@ void XclEscherEx::EndDocument()
 
 std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
-    ::std::unique_ptr< XclExpOcxControlObj > xOcxCtrl;
+    std::unique_ptr< XclExpOcxControlObj > xOcxCtrl;
 
     Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( xShape );
     if( xCtrlModel.is() )
@@ -437,7 +437,7 @@ std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< X
 
 std::unique_ptr<XclExpTbxControlObj> XclEscherEx::CreateTBXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
-    ::std::unique_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pChildAnchor ) );
+    std::unique_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pChildAnchor ) );
     if( xTbxCtrl->GetObjType() == EXC_OBJTYPE_UNKNOWN )
         xTbxCtrl.reset();
 

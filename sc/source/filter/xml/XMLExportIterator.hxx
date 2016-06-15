@@ -163,7 +163,7 @@ struct ScMyAreaLink
     bool                        operator<(const ScMyAreaLink& rAreaLink ) const;
 };
 
-typedef ::std::list< ScMyAreaLink > ScMyAreaLinkList;
+typedef std::list< ScMyAreaLink > ScMyAreaLinkList;
 
 class ScMyAreaLinksContainer : public ScMyIteratorBase
 {
@@ -218,8 +218,8 @@ struct ScMyDetectiveObj
     bool operator<(const ScMyDetectiveObj& rDetObj) const;
 };
 
-typedef ::std::list< ScMyDetectiveObj > ScMyDetectiveObjList;
-typedef ::std::vector< ScMyDetectiveObj > ScMyDetectiveObjVec;
+typedef std::list< ScMyDetectiveObj > ScMyDetectiveObjList;
+typedef std::vector< ScMyDetectiveObj > ScMyDetectiveObjVec;
 
 class ScMyDetectiveObjContainer : public ScMyIteratorBase
 {
@@ -252,8 +252,8 @@ struct ScMyDetectiveOp
     bool operator<(const ScMyDetectiveOp& rDetOp) const;
 };
 
-typedef ::std::list< ScMyDetectiveOp > ScMyDetectiveOpList;
-typedef ::std::vector< ScMyDetectiveOp > ScMyDetectiveOpVec;
+typedef std::list< ScMyDetectiveOp > ScMyDetectiveOpList;
+typedef std::vector< ScMyDetectiveOp > ScMyDetectiveOpVec;
 
 class ScMyDetectiveOpContainer : public ScMyIteratorBase
 {

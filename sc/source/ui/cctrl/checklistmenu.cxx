@@ -39,7 +39,7 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::accessibility::XAccessibleContext;
-using ::std::vector;
+using std::vector;
 
 ScMenuFloatingWindow::MenuItemData::MenuItemData() :
     mbEnabled(true), mbSeparator(false),
@@ -286,7 +286,7 @@ Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
         vector<MenuItemData>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
         for (itr = itrBeg; itr != itrEnd; ++itr)
         {
-            size_t nPos = ::std::distance(itrBeg, itr);
+            size_t nPos = std::distance(itrBeg, itr);
             p->appendMenuItem(itr->maText, itr->mbEnabled, nPos);
         }
     }
@@ -338,7 +338,7 @@ Size ScMenuFloatingWindow::getMenuSize() const
         if (itr->mbSeparator)
             continue;
 
-        nTextWidth = ::std::max(GetTextWidth(itr->maText), nTextWidth);
+        nTextWidth = std::max(GetTextWidth(itr->maText), nTextWidth);
     }
 
     size_t nLastPos = maMenuItems.size()-1;
@@ -594,7 +594,7 @@ void ScMenuFloatingWindow::fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAc
     vector<MenuItemData>::const_iterator itr, itrBeg = maMenuItems.begin(), itrEnd = maMenuItems.end();
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
-        size_t nPos = ::std::distance(itrBeg, itr);
+        size_t nPos = std::distance(itrBeg, itr);
         pAccMenu->appendMenuItem(itr->maText, itr->mbEnabled, nPos);
     }
 }

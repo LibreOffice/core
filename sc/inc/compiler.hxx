@@ -456,7 +456,7 @@ private:
     virtual void fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& xMap ) const override;
     virtual void fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const override;
     virtual void fillFromAddInMap( const NonConstOpCodeMapPtr& xMap, formula::FormulaGrammar::Grammar _eGrammar ) const override;
-    virtual void fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const override;
+    virtual void fillAddInToken(std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const override;
 
     virtual bool HandleExternalReference(const formula::FormulaToken& _aToken) override;
     virtual bool HandleRange() override;

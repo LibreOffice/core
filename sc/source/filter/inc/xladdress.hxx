@@ -89,7 +89,7 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclRange& rXclRange 
     return rStrm;
 }
 
-typedef ::std::vector< XclRange > XclRangeVector;
+typedef std::vector< XclRange > XclRangeVector;
 
 /** A 2D cell range address list with Excel column and row indexes. */
 class XclRangeList

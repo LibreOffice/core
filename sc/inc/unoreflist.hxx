@@ -42,7 +42,7 @@ struct ScUnoRefEntry
 class ScUnoRefList
 {
 private:
-    ::std::list<ScUnoRefEntry> aEntries;
+    std::list<ScUnoRefEntry> aEntries;
 
 public:
                 ScUnoRefList();

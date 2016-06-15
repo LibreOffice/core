@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <limits>
 
-using ::std::numeric_limits;
+using std::numeric_limits;
 
 template<typename ValueType_, typename ExtValueType_ = ValueType_>
 class ScFlatSegmentsImpl
@@ -93,7 +93,7 @@ ScFlatSegmentsImpl<ValueType_, ExtValueType_>::~ScFlatSegmentsImpl()
 template<typename ValueType_, typename ExtValueType_>
 bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue)
 {
-    ::std::pair<typename fst_type::const_iterator, bool> ret;
+    std::pair<typename fst_type::const_iterator, bool> ret;
     ret = maSegments.insert(maItr, nPos1, nPos2+1, nValue);
     maItr = ret.first;
     return ret.second;
@@ -139,7 +139,7 @@ ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOL
     }
     if (nCurPos <= nPos2)
     {
-        nEndPos = ::std::min(nEndPos, nPos2);
+        nEndPos = std::min(nEndPos, nPos2);
         nValue += aData.mnValue * (nEndPos - nCurPos + 1);
     }
     return nValue;
@@ -165,7 +165,7 @@ template<typename ValueType_, typename ExtValueType_>
 bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getRangeDataLeaf(SCCOLROW nPos, RangeData& rData)
 {
     // Conduct leaf-node only search.  Faster when searching between range insertion.
-    const ::std::pair<typename fst_type::const_iterator, bool> &ret =
+    const std::pair<typename fst_type::const_iterator, bool> &ret =
         maSegments.search(maItr, nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2);
 
     if (!ret.second)

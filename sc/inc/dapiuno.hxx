@@ -603,7 +603,7 @@ private:
     css::uno::Any maOrient;
 };
 
-typedef ::std::vector< OUString > ScFieldGroupMembers;
+typedef std::vector< OUString > ScFieldGroupMembers;
 
 struct ScFieldGroup
 {
@@ -611,7 +611,7 @@ struct ScFieldGroup
     ScFieldGroupMembers maMembers;
 };
 
-typedef ::std::vector< ScFieldGroup > ScFieldGroups;
+typedef std::vector< ScFieldGroup > ScFieldGroups;
 
 typedef ::cppu::WeakImplHelper
 <

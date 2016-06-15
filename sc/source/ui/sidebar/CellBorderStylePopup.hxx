@@ -30,7 +30,7 @@ class CellBorderStylePopup : public svx::sidebar::Popup
 public:
     CellBorderStylePopup(
         vcl::Window* pParent,
-        const ::std::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator);
+        const std::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator);
     virtual ~CellBorderStylePopup();
 };
 

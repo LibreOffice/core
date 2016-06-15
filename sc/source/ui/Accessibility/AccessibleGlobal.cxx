@@ -21,7 +21,7 @@
 
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
-using ::std::set;
+using std::set;
 
 ScAccessibleStateSet::ScAccessibleStateSet()
 {

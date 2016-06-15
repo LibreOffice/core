@@ -315,7 +315,7 @@ public:
 
     /** Inserts a record at the specified position into the list. */
     inline void         InsertRecord( RecordRefType xRec, size_t nPos )
-                            { if( xRec.get() ) maRecs.insert( maRecs.begin() + ::std::min( nPos, maRecs.size() ), xRec ); }
+                            { if( xRec.get() ) maRecs.insert( maRecs.begin() + std::min( nPos, maRecs.size() ), xRec ); }
     /** Appends a record to the list. */
     inline void         AppendRecord( RecordRefType xRec )
                             { if( xRec.get() ) maRecs.push_back( xRec ); }
@@ -349,7 +349,7 @@ public:
     }
 
 private:
-    typedef ::std::vector< RecordRefType > RecordVec;
+    typedef std::vector< RecordRefType > RecordVec;
     RecordVec           maRecs;
 };
 

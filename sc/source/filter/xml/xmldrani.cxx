@@ -282,7 +282,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
 
     ScDocument* pDoc = GetScImport().GetDocument();
 
-    ::std::unique_ptr<ScDBData> pData(
+    std::unique_ptr<ScDBData> pData(
         new ScDBData(rName, maRange.aStart.Tab(), maRange.aStart.Col(), maRange.aStart.Row(), maRange.aEnd.Col(), maRange.aEnd.Row(), bByRow, bHasHeader));
 
     pData->SetAutoFilter(bAutoFilter);
@@ -438,7 +438,7 @@ void ScXMLDatabaseRangeContext::EndElement()
     if (meRangeType == ScDBCollection::SheetAnonymous)
     {
         OUString aName(STR_DB_LOCAL_NONAME);
-        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(aName));
+        std::unique_ptr<ScDBData> pData(ConvertToDBData(aName));
 
         if (pData.get())
         {
@@ -453,7 +453,7 @@ void ScXMLDatabaseRangeContext::EndElement()
     else if (meRangeType == ScDBCollection::GlobalAnonymous)
     {
         OUString aName(STR_DB_GLOBAL_NONAME);
-        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(aName));
+        std::unique_ptr<ScDBData> pData(ConvertToDBData(aName));
 
         if (pData.get())
         {
@@ -469,7 +469,7 @@ void ScXMLDatabaseRangeContext::EndElement()
     }
     else if (meRangeType == ScDBCollection::GlobalNamed)
     {
-        ::std::unique_ptr<ScDBData> pData(ConvertToDBData(sDatabaseRangeName));
+        std::unique_ptr<ScDBData> pData(ConvertToDBData(sDatabaseRangeName));
 
         if (pData.get())
         {

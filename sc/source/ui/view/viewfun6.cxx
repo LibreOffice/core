@@ -48,7 +48,7 @@
 
 #include <vector>
 
-using ::std::vector;
+using std::vector;
 
 void ScViewFunc::DetectiveAddPred()
 {

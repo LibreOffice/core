@@ -55,7 +55,7 @@ inline bool lclIsLeapYear( sal_Int32 nYear )
 
 void lclSkipYearBlock( sal_Int32& ornDays, sal_Int16& ornYear, sal_Int32 nDaysInBlock, sal_Int32 nYearsPerBlock, sal_Int32 nMaxBlocks )
 {
-    sal_Int32 nBlocks = ::std::min< sal_Int32 >( ornDays / nDaysInBlock, nMaxBlocks );
+    sal_Int32 nBlocks = std::min< sal_Int32 >( ornDays / nDaysInBlock, nMaxBlocks );
     ornYear = static_cast< sal_Int16 >( ornYear + nYearsPerBlock * nBlocks );
     ornDays -= nBlocks * nDaysInBlock;
 }
@@ -138,7 +138,7 @@ void UnitConverter::finalizeImport()
                 // get maximum width of all digits
                 sal_Int32 nDigitWidth = 0;
                 for( sal_Unicode cChar = '0'; cChar <= '9'; ++cChar )
-                    nDigitWidth = ::std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), UNIT_TWIP ) );
+                    nDigitWidth = std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), UNIT_TWIP ) );
                 if( nDigitWidth > 0 )
                     maCoeffs[ UNIT_DIGIT ] = nDigitWidth;
                 // get width of space character

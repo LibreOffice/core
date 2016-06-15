@@ -296,7 +296,7 @@ public:
     ApiTokenSequence toSequence() const;
 
 private:
-    ::std::vector< ApiToken > mvTokens;
+    std::vector< ApiToken > mvTokens;
 };
 
 // Token sequence iterator ====================================================

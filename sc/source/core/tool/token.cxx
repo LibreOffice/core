@@ -48,7 +48,7 @@
 #include <reordermap.hxx>
 #include <svl/sharedstring.hxx>
 
-using ::std::vector;
+using std::vector;
 
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>

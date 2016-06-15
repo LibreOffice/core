@@ -1542,7 +1542,7 @@ bool ScChangeActionContent::Reject( ScDocument* pDoc )
 }
 
 bool ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
-        bool bOldest, ::std::stack<ScChangeActionContent*>* pRejectActions )
+        bool bOldest, std::stack<ScChangeActionContent*>* pRejectActions )
 {
     if ( !aBigRange.IsValid( pDoc ) )
         return false;
@@ -2408,7 +2408,7 @@ void ScChangeTrack::MasterLinks( ScChangeAction* pAppend )
 
 void ScChangeTrack::AppendLoaded( ScChangeAction* pAppend )
 {
-    aMap.insert( ::std::make_pair( pAppend->GetActionNumber(), pAppend ) );
+    aMap.insert( std::make_pair( pAppend->GetActionNumber(), pAppend ) );
     if ( !pLast )
         pFirst = pLast = pAppend;
     else
@@ -2428,7 +2428,7 @@ void ScChangeTrack::Append( ScChangeAction* pAppend, sal_uLong nAction )
     if ( bUseFixDateTime )
         pAppend->SetDateTimeUTC( aFixDateTime );
     pAppend->SetActionNumber( nAction );
-    aMap.insert( ::std::make_pair( nAction, pAppend ) );
+    aMap.insert( std::make_pair( nAction, pAppend ) );
     // UpdateReference Inserts before Dependencies.
     // Delete rejecting Insert which had UpdateReference with Delete Undo.
     // UpdateReference also with pLast==NULL, as pAppend can be a Delete,
@@ -3171,7 +3171,7 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
             Remove( pAct );
             if ( IsInPasteCut() )
             {
-                aPasteCutMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
+                aPasteCutMap.insert( std::make_pair( pAct->GetActionNumber(), pAct ) );
                 continue;
             }
 
@@ -3895,7 +3895,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
     bool bIsMasterDelete = ( bListMasterDelete && pAct->IsMasterDelete() );
 
     const ScChangeAction* pCur = nullptr;
-    ::std::stack<ScChangeAction*> cStack;
+    std::stack<ScChangeAction*> cStack;
     cStack.push(pAct);
 
     while ( !cStack.empty() )
@@ -3914,7 +3914,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     if ( bAllFlat )
                     {
                         sal_uLong n = p->GetActionNumber();
-                        if ( !IsGenerated( n ) && rMap.insert( ::std::make_pair( n, p ) ).second )
+                        if ( !IsGenerated( n ) && rMap.insert( std::make_pair( n, p ) ).second )
                             if ( p->HasDependent() )
                                 cStack.push( p );
                     }
@@ -3923,10 +3923,10 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                         if ( p->GetType() == SC_CAT_CONTENT )
                         {
                             if ( static_cast<ScChangeActionContent*>(p)->IsTopContent() )
-                                rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                                rMap.insert( std::make_pair( p->GetActionNumber(), p ) );
                         }
                         else
-                            rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                            rMap.insert( std::make_pair( p->GetActionNumber(), p ) );
                     }
                 }
                 pL = pL->GetNext();
@@ -3945,9 +3945,9 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     ScChangeAction* p = pDel;
                     while ( (p = p->GetPrev()) != nullptr && p->GetType() == eType &&
                             !static_cast<ScChangeActionDel*>(p)->IsTopDelete() )
-                        rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                        rMap.insert( std::make_pair( p->GetActionNumber(), p ) );
                     // delete this in the map too
-                    rMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
+                    rMap.insert( std::make_pair( pAct->GetActionNumber(), pAct ) );
                 }
                 else
                 {
@@ -3961,7 +3961,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                             {
                                 // Only a TopContent of a chain is in LinkDeleted
                                 sal_uLong n = p->GetActionNumber();
-                                if ( !IsGenerated( n ) && rMap.insert( ::std::make_pair( n, p ) ).second )
+                                if ( !IsGenerated( n ) && rMap.insert( std::make_pair( n, p ) ).second )
                                     if ( p->HasDeleted() ||
                                             p->GetType() == SC_CAT_CONTENT )
                                         cStack.push( p );
@@ -3971,10 +3971,10 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                                 if ( p->IsDeleteType() )
                                 {   // Further TopDeletes to same level: it's not rejectable
                                     if ( static_cast<ScChangeActionDel*>(p)->IsTopDelete() )
-                                        rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                                        rMap.insert( std::make_pair( p->GetActionNumber(), p ) );
                                 }
                                 else
-                                    rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                                    rMap.insert( std::make_pair( p->GetActionNumber(), p ) );
                             }
                         }
                         pL = pL->GetNext();
@@ -3989,7 +3989,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             while ( pL )
             {
                 ScChangeAction* p = const_cast<ScChangeAction*>(pL->GetAction());
-                if ( p != pAct && rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) ).second )
+                if ( p != pAct && rMap.insert( std::make_pair( p->GetActionNumber(), p ) ).second )
                 {
                     // Only one TopContent of a chain is in LinkDeleted
                     if ( bAllFlat && (p->HasDeleted() ||
@@ -4009,7 +4009,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     if ( bAllFlat )
                     {
                         sal_uLong n = p->GetActionNumber();
-                        if ( !IsGenerated( n ) && rMap.insert( ::std::make_pair( n, p ) ).second )
+                        if ( !IsGenerated( n ) && rMap.insert( std::make_pair( n, p ) ).second )
                             if ( p->HasDependent() || p->HasDeleted() )
                                 cStack.push( p );
                     }
@@ -4018,10 +4018,10 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                         if ( p->GetType() == SC_CAT_CONTENT )
                         {
                             if ( static_cast<ScChangeActionContent*>(p)->IsTopContent() )
-                                rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                                rMap.insert( std::make_pair( p->GetActionNumber(), p ) );
                         }
                         else
-                            rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                            rMap.insert( std::make_pair( p->GetActionNumber(), p ) );
                     }
                 }
                 pL = pL->GetNext();
@@ -4034,14 +4034,14 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             while ( ( pContent = pContent->GetPrevContent() ) != nullptr )
             {
                 if ( !pContent->IsRejected() )
-                    rMap.insert( ::std::make_pair( pContent->GetActionNumber(), pContent ) );
+                    rMap.insert( std::make_pair( pContent->GetActionNumber(), pContent ) );
             }
             pContent = const_cast<ScChangeActionContent*>(static_cast<const ScChangeActionContent*>(pCur));
             // All succeeding ones
             while ( ( pContent = pContent->GetNextContent() ) != nullptr )
             {
                 if ( !pContent->IsRejected() )
-                    rMap.insert( ::std::make_pair( pContent->GetActionNumber(), pContent ) );
+                    rMap.insert( std::make_pair( pContent->GetActionNumber(), pContent ) );
             }
             // all MatrixReferences of a MatrixOrigin
             const ScChangeActionLinkEntry* pL = pCur->GetFirstDependentEntry();
@@ -4053,12 +4053,12 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     if ( bAllFlat )
                     {
                         sal_uLong n = p->GetActionNumber();
-                        if ( !IsGenerated( n ) && rMap.insert( ::std::make_pair( n, p ) ).second )
+                        if ( !IsGenerated( n ) && rMap.insert( std::make_pair( n, p ) ).second )
                             if ( p->HasDependent() )
                                 cStack.push( p );
                     }
                     else
-                        rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                        rMap.insert( std::make_pair( p->GetActionNumber(), p ) );
                 }
                 pL = pL->GetNext();
             }
@@ -4116,7 +4116,7 @@ bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
     if ( pContent->HasDependent() )
     {
         bool bOk = true;
-        ::std::stack<ScChangeActionContent*> aRejectActions;
+        std::stack<ScChangeActionContent*> aRejectActions;
         const ScChangeActionLinkEntry* pL = pContent->GetFirstDependentEntry();
         while ( pL )
         {
@@ -4412,13 +4412,13 @@ sal_uLong ScChangeTrack::AddLoadedGenerated(
         pFirstGeneratedDelContent->pPrev = pAct;
     pAct->pNext = pFirstGeneratedDelContent;
     pFirstGeneratedDelContent = pAct;
-    aGeneratedMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
+    aGeneratedMap.insert( std::make_pair( pAct->GetActionNumber(), pAct ) );
     return pAct->GetActionNumber();
 }
 
 void ScChangeTrack::AppendCloned( ScChangeAction* pAppend )
 {
-    aMap.insert( ::std::make_pair( pAppend->GetActionNumber(), pAppend ) );
+    aMap.insert( std::make_pair( pAppend->GetActionNumber(), pAppend ) );
     if ( !pLast )
         pFirst = pLast = pAppend;
     else
@@ -4440,7 +4440,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
     pClonedTrack->SetTimeNanoSeconds( IsTimeNanoSeconds() );
 
     // clone generated actions
-    ::std::stack< const ScChangeAction* > aGeneratedStack;
+    std::stack< const ScChangeAction* > aGeneratedStack;
     const ScChangeAction* pGenerated = GetFirstGenerated();
     while ( pGenerated )
     {
@@ -4605,7 +4605,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
     {
         if ( pAction->HasDeleted() )
         {
-            ::std::stack< sal_uLong > aStack;
+            std::stack< sal_uLong > aStack;
             const ScChangeActionLinkEntry* pL = pAction->GetFirstDeletedEntry();
             while ( pL )
             {
@@ -4639,7 +4639,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
     {
         if ( pAction->HasDependent() )
         {
-            ::std::stack< sal_uLong > aStack;
+            std::stack< sal_uLong > aStack;
             const ScChangeActionLinkEntry* pL = pAction->GetFirstDependentEntry();
             while ( pL )
             {

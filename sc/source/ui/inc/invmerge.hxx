@@ -27,7 +27,7 @@
 class ScInvertMerger
 {
 private:
-    ::std::vector< Rectangle >* pRects;
+    std::vector< Rectangle >* pRects;
     Rectangle   aTotalRect;
     Rectangle   aLineRect;
 
@@ -35,7 +35,7 @@ private:
     void        FlushTotal();
 
 public:
-                ScInvertMerger( ::std::vector< Rectangle >* pRectangles );
+                ScInvertMerger( std::vector< Rectangle >* pRectangles );
                 ~ScInvertMerger();
 
     void        AddRect( const Rectangle& rRect );

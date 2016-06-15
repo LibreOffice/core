@@ -237,7 +237,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
     // expand selection, and instead of selection start- and end-index
 
     if ( nEndPos < nStartPos )
-        ::std::swap(nEndPos, nStartPos);
+        std::swap(nEndPos, nStartPos);
 
     ExpandToText(pSource, nLen, nStartPos, nEndPos, meConv);
 

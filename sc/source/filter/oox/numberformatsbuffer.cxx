@@ -2001,7 +2001,7 @@ void NumberFormatsBuffer::writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 n
 void NumberFormatsBuffer::insertBuiltinFormats()
 {
     // build a map containing pointers to all tables
-    typedef ::std::map< OUString, const BuiltinFormatTable* > BuiltinMap;
+    typedef std::map< OUString, const BuiltinFormatTable* > BuiltinMap;
     BuiltinMap aBuiltinMap;
     for(auto const &rTable : spBuiltinFormatTables)
         aBuiltinMap[ OUString::createFromAscii(rTable.mpcLocale) ] = &rTable;
@@ -2010,7 +2010,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     Locale aSysLocale( LanguageTag::convertToLocale( maLocaleStr));
 
     // build a list of table pointers for the current locale, with all parent tables
-    typedef ::std::vector< const BuiltinFormatTable* > BuiltinVec;
+    typedef std::vector< const BuiltinFormatTable* > BuiltinVec;
     BuiltinVec aBuiltinVec;
     BuiltinMap::const_iterator aMIt = aBuiltinMap.find( maLocaleStr ), aMEnd = aBuiltinMap.end();
     OSL_ENSURE( aMIt != aMEnd,
@@ -2026,7 +2026,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
         aBuiltinVec.push_back( aMIt->second );
 
     // insert the default formats in the format map (in reverse order from default table to system locale)
-    typedef ::std::map< sal_Int32, sal_Int32 > ReuseMap;
+    typedef std::map< sal_Int32, sal_Int32 > ReuseMap;
     ReuseMap aReuseMap;
     for( BuiltinVec::reverse_iterator aVIt = aBuiltinVec.rbegin(), aVEnd = aBuiltinVec.rend(); aVIt != aVEnd; ++aVIt )
     {

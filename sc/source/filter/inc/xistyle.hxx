@@ -65,7 +65,7 @@ public:
 
 private:
     void ExportPalette();
-    typedef ::std::vector< ColorData > ColorDataVec;
+    typedef std::vector< ColorData > ColorDataVec;
     ColorDataVec        maColorTable;       /// Colors read from file.
     const XclImpRoot&             mrRoot;
 };
@@ -243,7 +243,7 @@ public:
                             bool bSkipPoolDefs = false ) const;
 
 private:
-    typedef ::std::map< sal_uInt16, sal_uLong > XclImpIndexMap;
+    typedef std::map< sal_uInt16, sal_uLong > XclImpIndexMap;
 
     XclImpIndexMap      maIndexMap;     /// Maps Excel format indexes to Calc formats.
     sal_uInt16          mnNextXclIdx;   /// Index counter for BIFF2-BIFF4.
@@ -402,7 +402,7 @@ public:
     const ScPatternAttr& CreatePattern( bool bSkipPoolDefs = false );
 
     void                ApplyPatternToAttrList(
-                            ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
+                            std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
                             sal_uInt32 nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND);
 
     /** Inserts all formatting attributes to the specified area in the Calc document.
@@ -431,7 +431,7 @@ private:
     void                SetUsedFlags( sal_uInt8 nUsedFlags );
 
 private:
-    typedef ::std::unique_ptr< ScPatternAttr > ScPatternAttrPtr;
+    typedef std::unique_ptr< ScPatternAttr > ScPatternAttrPtr;
 
     ScPatternAttrPtr    mpPattern;          /// Calc item set.
     ScStyleSheet*       mpStyleSheet;       /// Calc cell style sheet.
@@ -517,7 +517,7 @@ public:
 
 private:
     typedef std::vector< std::unique_ptr<XclImpStyle> >        XclImpStyleList;
-    typedef ::std::map< sal_uInt16, XclImpStyle* >  XclImpStyleMap;
+    typedef std::map< sal_uInt16, XclImpStyle* >    XclImpStyleMap;
 
     std::vector< std::unique_ptr<XclImpXF> > maXFList; /// List of contents of all XF record.
     XclImpStyleList     maBuiltinStyles;    /// List of built-in cell styles.
@@ -669,9 +669,9 @@ private:
 
 private:
     typedef std::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
-    typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
-    typedef ::std::pair< XclRange, OUString >        XclImpHyperlinkRange;
-    typedef ::std::list< XclImpHyperlinkRange >      XclImpHyperlinkList;
+    typedef std::vector< XclImpXFRangeColumnRef >    XclImpXFRangeColumnVec;
+    typedef std::pair< XclRange, OUString >          XclImpHyperlinkRange;
+    typedef std::list< XclImpHyperlinkRange >        XclImpHyperlinkList;
 
     XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.
     XclImpHyperlinkList maHyperlinks;       /// Maps URLs to hyperlink cells.

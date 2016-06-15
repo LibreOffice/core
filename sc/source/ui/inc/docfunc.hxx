@@ -82,8 +82,8 @@ public:
     bool            DetectiveMarkInvalid(SCTAB nTab);
     bool            DetectiveDelAll(SCTAB nTab);
     bool            DetectiveRefresh(bool bAutomatic = false);
-    void            DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
-    void            DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
+    void            DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, std::vector<ScTokenRef>& rRefTokens);
+    void            DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, std::vector<ScTokenRef>& rRefTokens);
 
     SC_DLLPUBLIC bool DeleteContents(
         const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi );

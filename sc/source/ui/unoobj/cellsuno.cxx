@@ -9649,7 +9649,7 @@ void ScUniqueCellFormatsObj::GetObjects_Impl()
         // due to using the ScPatterAttr pointers
 
         ScUniqueFormatsOrder aComp;
-        ::std::sort( aRangeLists.begin(), aRangeLists.end(), aComp );
+        std::sort( aRangeLists.begin(), aRangeLists.end(), aComp );
     }
 }
 

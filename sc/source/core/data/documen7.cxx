@@ -376,7 +376,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
         CalcAll();
     else
     {
-        ::std::vector<ScFormulaCell*> vAlwaysDirty;
+        std::vector<ScFormulaCell*> vAlwaysDirty;
         ScFormulaCell* pCell = pFormulaTree;
         while ( pCell )
         {
@@ -396,7 +396,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
             }
             pCell = pCell->GetNext();
         }
-        for (::std::vector<ScFormulaCell*>::iterator it( vAlwaysDirty.begin()), itEnd( vAlwaysDirty.end());
+        for (std::vector<ScFormulaCell*>::iterator it( vAlwaysDirty.begin()), itEnd( vAlwaysDirty.end());
                 it != itEnd; ++it)
         {
             pCell = *it;

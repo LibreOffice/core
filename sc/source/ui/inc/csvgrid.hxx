@@ -51,14 +51,14 @@ struct ScCsvColState
     void                 Select( bool bSel ) { mbColumnSelected = bSel; }
 };
 
-typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
+typedef std::vector< ScCsvColState > ScCsvColStateVec;
 
 /** A data grid control for the CSV import dialog. The design of this control
     simulates a Calc spreadsheet with row and column headers. */
 class SC_DLLPUBLIC ScCsvGrid : public ScCsvControl, public utl::ConfigurationListener
 {
 private:
-    typedef ::std::unique_ptr< ScEditEngineDefaulter > ScEditEnginePtr;
+    typedef std::unique_ptr< ScEditEngineDefaulter > ScEditEnginePtr;
 
     VclPtr<VirtualDevice>       mpBackgrDev;        /// Grid background, headers, cell texts.
     VclPtr<VirtualDevice>       mpGridDev;          /// Data grid with selection and cursor.

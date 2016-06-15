@@ -379,7 +379,7 @@ const SfxPoolItem& ScColumn::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
 
 const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const
 {
-    ::std::map< const ScPatternAttr*, size_t > aAttrMap;
+    std::map< const ScPatternAttr*, size_t > aAttrMap;
     const ScPatternAttr* pMaxPattern = nullptr;
     size_t nMaxCount = 0;
 

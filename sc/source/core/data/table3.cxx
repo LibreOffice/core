@@ -771,7 +771,7 @@ void fillSortedColumnArray(
                         // Original source cells will be deleted during
                         // sc::CellStoreType::transfer(), SvtListener is a base
                         // class, so we need to replace it.
-                        auto it( ::std::find( rCellListeners.begin(), rCellListeners.end(), rCell.maCell.mpFormula));
+                        auto it( std::find( rCellListeners.begin(), rCellListeners.end(), rCell.maCell.mpFormula));
                         if (it != rCellListeners.end())
                             *it = pNew;
                     }
@@ -1970,7 +1970,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     // references don't have to be tested for updates each time a new row is
     // inserted
     RowEntry aRowEntry;
-    ::std::vector< RowEntry > aRowVector;
+    std::vector< RowEntry > aRowVector;
 
     for (sal_uInt16 nLevel=0; nLevel<=nLevelCount && bSpaceLeft; nLevel++)      // including grand total
     {
@@ -2019,7 +2019,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         if ( bChanged && bTestPrevSub )
                         {
                             // No group change on rows that will contain subtotal formulas
-                            for ( ::std::vector< RowEntry >::const_iterator
+                            for ( std::vector< RowEntry >::const_iterator
                                     iEntry( aRowVector.begin());
                                     iEntry != aRowVector.end(); ++iEntry)
                             {
@@ -2047,7 +2047,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
                     if (bSpaceLeft)
                     {
-                        for ( ::std::vector< RowEntry >::iterator iMove(
+                        for ( std::vector< RowEntry >::iterator iMove(
                                     aRowVector.begin() );
                                 iMove != aRowVector.end(); ++iMove)
                         {
@@ -2119,7 +2119,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     aRef.InitFlags();
     aRef.Ref1.SetAbsTab(nTab);
     aRef.Ref2.SetAbsTab(nTab);
-    for ( ::std::vector< RowEntry >::const_iterator iEntry( aRowVector.begin());
+    for ( std::vector< RowEntry >::const_iterator iEntry( aRowVector.begin());
             iEntry != aRowVector.end(); ++iEntry)
     {
         SCCOL nResCount         = rParam.nSubTotals[iEntry->nGroupNo];

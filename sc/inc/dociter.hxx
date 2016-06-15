@@ -169,8 +169,8 @@ private:
         SCCOL mnCols;
     };
 
-    ::std::unique_ptr<ScDBQueryParamBase> mpParam;
-    ::std::unique_ptr<DataAccess>         mpData;
+    std::unique_ptr<ScDBQueryParamBase> mpParam;
+    std::unique_ptr<DataAccess>           mpData;
 
 public:
                     ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
@@ -554,14 +554,14 @@ class ScRowBreakIterator
 public:
     static SCROW NOT_FOUND;
 
-    explicit ScRowBreakIterator(::std::set<SCROW>& rBreaks);
+    explicit ScRowBreakIterator(std::set<SCROW>& rBreaks);
     SCROW first();
     SCROW next();
 
 private:
-    ::std::set<SCROW>& mrBreaks;
-    ::std::set<SCROW>::const_iterator maItr;
-    ::std::set<SCROW>::const_iterator maEnd;
+    std::set<SCROW>& mrBreaks;
+    std::set<SCROW>::const_iterator maItr;
+    std::set<SCROW>::const_iterator maEnd;
 };
 
 class ScDocRowHeightUpdater
@@ -581,7 +581,7 @@ public:
      */
     explicit ScDocRowHeightUpdater(
         ScDocument& rDoc, OutputDevice* pOutDev, double fPPTX, double fPPTY,
-        const ::std::vector<TabRanges>* pTabRangesArray = nullptr);
+        const std::vector<TabRanges>* pTabRangesArray = nullptr);
 
     void update();
 
@@ -593,7 +593,7 @@ private:
     VclPtr<OutputDevice> mpOutDev;
     double mfPPTX;
     double mfPPTY;
-    const ::std::vector<TabRanges>* mpTabRangesArray;
+    const std::vector<TabRanges>* mpTabRangesArray;
 };
 
 #endif

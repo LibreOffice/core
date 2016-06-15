@@ -70,8 +70,8 @@ public:
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;
 
     virtual void                    CreateCacheTable() override;
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rDataDims) override;
-    virtual void                    GetDrillDownData(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria,
+    virtual void                    FilterCacheTable(const std::vector<ScDPFilteredCache::Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rDataDims) override;
+    virtual void                    GetDrillDownData(const std::vector<ScDPFilteredCache::Criterion>& rCriteria,
                                                      const std::unordered_set<sal_Int32>& rCatDims,
                                                      css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rData) override;
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) override;

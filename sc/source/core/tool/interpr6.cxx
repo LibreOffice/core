@@ -32,7 +32,7 @@
 
 using namespace formula;
 
-double const fHalfMachEps = 0.5 * ::std::numeric_limits<double>::epsilon();
+double const fHalfMachEps = 0.5 * std::numeric_limits<double>::epsilon();
 
 // The idea how this group of gamma functions is calculated, is
 // based on the Cephes library
@@ -44,7 +44,7 @@ double const fHalfMachEps = 0.5 * ::std::numeric_limits<double>::epsilon();
 double ScInterpreter::GetGammaContFraction( double fA, double fX )
 {
 
-    double const fBigInv = ::std::numeric_limits<double>::epsilon();
+    double const fBigInv = std::numeric_limits<double>::epsilon();
     double const fBig = 1.0/fBigInv;
     double fCount = 0.0;
     double fY = 1.0 - fA;
@@ -168,7 +168,7 @@ double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda 
         // use exp(ln()) only for large arguments because of less accuracy
         if (fXr > 1.0)
         {
-            const double fLogDblMax = log( ::std::numeric_limits<double>::max());
+            const double fLogDblMax = log( std::numeric_limits<double>::max());
             if (log(fXr) * (fAlpha-1.0) < fLogDblMax && fAlpha < fMaxGammaArgument)
             {
                 return pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda / GetGamma(fAlpha);

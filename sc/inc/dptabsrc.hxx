@@ -115,7 +115,7 @@ private:
     bool                    bResultOverflow;
     bool                    bPageFiltered;      // set if page field filters have been applied to cache table
 
-    ::std::unique_ptr<OUString> mpGrandTotalName;
+    std::unique_ptr<OUString> mpGrandTotalName;
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();
@@ -545,7 +545,7 @@ private:
     css::sheet::DataPilotFieldAutoShowInfo aAutoShowInfo;  // stored user settings
     css::sheet::DataPilotFieldLayoutInfo   aLayoutInfo;    // stored user settings
                                                     // valid only from result calculation:
-    ::std::vector<sal_Int32>    aGlobalOrder;       // result of sorting by name or position
+    std::vector<sal_Int32>      aGlobalOrder;       // result of sorting by name or position
     long                        nSortMeasure;       // measure (index of data dimension) to sort by
     long                        nAutoMeasure;       // measure (index of data dimension) for AutoShow
     bool                        bShowEmpty:1;
@@ -626,8 +626,8 @@ public:
     void EvaluateSortOrder();
     void SetEnableLayout(bool bSet);
 
-    const ::std::vector<sal_Int32>& GetGlobalOrder() const      { return aGlobalOrder; }
-    ::std::vector<sal_Int32>&  GetGlobalOrder()                 { return aGlobalOrder; }
+    const std::vector<sal_Int32>& GetGlobalOrder() const        { return aGlobalOrder; }
+    std::vector<sal_Int32>&    GetGlobalOrder()                 { return aGlobalOrder; }
     long                    GetSortMeasure() const              { return nSortMeasure; }
     long                    GetAutoMeasure() const              { return nAutoMeasure; }
 

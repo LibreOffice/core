@@ -91,8 +91,8 @@ sal_Int32 lclGetColorDistance( const Color& rColor1, const Color& rColor2 )
 
 sal_uInt8 lclGetMergedColorComp( sal_uInt8 nComp1, sal_uInt32 nWeight1, sal_uInt8 nComp2, sal_uInt32 nWeight2 )
 {
-    sal_uInt8 nComp1Dist = ::std::min< sal_uInt8 >( nComp1, 0xFF - nComp1 );
-    sal_uInt8 nComp2Dist = ::std::min< sal_uInt8 >( nComp2, 0xFF - nComp2 );
+    sal_uInt8 nComp1Dist = std::min< sal_uInt8 >( nComp1, 0xFF - nComp1 );
+    sal_uInt8 nComp2Dist = std::min< sal_uInt8 >( nComp2, 0xFF - nComp2 );
     if( nComp1Dist != nComp2Dist )
     {
         /*  #i36945# One of the passed RGB components is nearer at the limits (0x00 or 0xFF).
@@ -298,8 +298,8 @@ private:
 private:
     typedef std::vector< std::unique_ptr<XclListColor> >     XclListColorList;
     typedef std::shared_ptr< XclListColorList > XclListColorListRef;
-    typedef ::std::vector< XclColorIdData >       XclColorIdDataVec;
-    typedef ::std::vector< XclPaletteColor >      XclPaletteColorVec;
+    typedef std::vector< XclColorIdData >         XclColorIdDataVec;
+    typedef std::vector< XclPaletteColor >        XclPaletteColorVec;
 
     const XclDefaultPalette& mrDefPal;      /// The default palette for the current BIFF version.
     XclListColorListRef mxColorList;        /// Working color list.
@@ -639,7 +639,7 @@ void XclExpPaletteImpl::ReduceLeastUsedColor()
         pKeepEntry->Merge( *pRemoveEntry );
         // remove the less used color, adjust nKeep index if kept color follows removed color
         XclListColorList::iterator itr = mxColorList->begin();
-        ::std::advance(itr, nRemove);
+        std::advance(itr, nRemove);
         mxColorList->erase(itr);
         if( nKeep > nRemove ) --nKeep;
 
@@ -817,7 +817,7 @@ void XclExpPalette::WriteBody( XclExpStream& rStrm )
 
 namespace {
 
-typedef ::std::pair< sal_uInt16, sal_Int16 > WhichAndScript;
+typedef std::pair< sal_uInt16, sal_Int16 > WhichAndScript;
 
 sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
         const WhichAndScript& rWAS1, const WhichAndScript& rWAS2, const WhichAndScript& rWAS3 )
@@ -1376,7 +1376,7 @@ XclExpNumFmtBuffer::~XclExpNumFmtBuffer()
 sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uInt32 nScNumFmt )
 {
     XclExpNumFmtVec::const_iterator aIt =
-        ::std::find_if( maFormatMap.begin(), maFormatMap.end(), XclExpNumFmtPred( nScNumFmt ) );
+        std::find_if( maFormatMap.begin(), maFormatMap.end(), XclExpNumFmtPred( nScNumFmt ) );
     if( aIt != maFormatMap.end() )
         return aIt->mnXclNumFmt;
 
@@ -1945,7 +1945,7 @@ void XclExpCellArea::FillToCF8( sal_uInt16& rnPattern, sal_uInt16& rnColor ) con
     if( !aTmp.IsTransparent() && (aTmp.mnBackColor == EXC_COLOR_WINDOWTEXT) )
         aTmp.mnBackColor = 0;
     if( aTmp.mnPattern == EXC_PATT_SOLID )
-        ::std::swap( aTmp.mnForeColor, aTmp.mnBackColor );
+        std::swap( aTmp.mnForeColor, aTmp.mnBackColor );
     ::insert_value( rnColor,   aTmp.mnForeColor,  0, 7 );
     ::insert_value( rnColor,   aTmp.mnBackColor,  7, 7 );
     ::insert_value( rnPattern, aTmp.mnPattern,   10, 6 );

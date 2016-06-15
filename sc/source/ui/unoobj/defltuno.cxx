@@ -227,7 +227,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
             // the max value of unsigned 16-bit integer is used as the flag
             // value for unlimited precision, c.f.
             // SvNumberFormatter::UNLIMITED_PRECISION.
-            if (nPrec <= ::std::numeric_limits<sal_Int16>::max())
+            if (nPrec <= std::numeric_limits<sal_Int16>::max())
                 aRet <<= static_cast<sal_Int16> (nPrec);
         }
         else if (aPropertyName == SC_UNO_TABSTOPDIS)

@@ -190,7 +190,7 @@ ScXMLCellExportPropertyMapper::~ScXMLCellExportPropertyMapper()
 
 void ScXMLCellExportPropertyMapper::ContextFilter(
     bool bEnableFoFontFamily,
-    ::std::vector< XMLPropertyState >& rProperties,
+    std::vector< XMLPropertyState >& rProperties,
     const uno::Reference< beans::XPropertySet >& rPropSet ) const
 {
     XMLPropertyState* pPadding = nullptr;
@@ -235,8 +235,8 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     XMLPropertyState* pParaAdjust = nullptr;
     XMLPropertyState* pParaAdjustLast = nullptr;
 
-    ::std::vector< XMLPropertyState >::iterator aEndIter(rProperties.end());
-    for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
+    std::vector< XMLPropertyState >::iterator aEndIter(rProperties.end());
+    for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != aEndIter; ++aIter )
     {
         XMLPropertyState* propertyState = &(*aIter);
@@ -516,7 +516,7 @@ void ScXMLCellExportPropertyMapper::handleSpecialItem(
             const XMLPropertyState& /* rProperty */,
             const SvXMLUnitConverter& /* rUnitConverter */,
             const SvXMLNamespaceMap& /* rNamespaceMap */,
-            const ::std::vector< XMLPropertyState > * /* pProperties */,
+            const std::vector< XMLPropertyState > * /* pProperties */,
             sal_uInt32 /* nIdx */ ) const
 {
     // the SpecialItem NumberFormat must not be handled by this method
@@ -527,7 +527,7 @@ void ScXMLCellExportPropertyMapper::handleElementItem(
             SvXMLExport& rExport,
             const XMLPropertyState& rProperty,
             SvXmlExportFlags /* nFlags */,
-            const ::std::vector< XMLPropertyState > * /* pProperties */,
+            const std::vector< XMLPropertyState > * /* pProperties */,
             sal_uInt32 /* nIdx */) const
 {
     sal_uInt32 nContextId = getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex );
@@ -558,7 +558,7 @@ ScXMLRowExportPropertyMapper::~ScXMLRowExportPropertyMapper()
 
 void ScXMLRowExportPropertyMapper::ContextFilter(
     bool /* bEnableFoFontFamily */,
-    ::std::vector< XMLPropertyState >& /* rProperties */,
+    std::vector< XMLPropertyState >& /* rProperties */,
     const uno::Reference< beans::XPropertySet >& /* rPropSet */ ) const
 {
     //#108550#; don't filter the height, so other applications know the calculated height
@@ -580,7 +580,7 @@ void ScXMLColumnExportPropertyMapper::handleSpecialItem(
             const XMLPropertyState& /* rProperty */,
             const SvXMLUnitConverter& /* rUnitConverter */,
             const SvXMLNamespaceMap& /* rNamespaceMap */,
-            const ::std::vector< XMLPropertyState > * /* pProperties */,
+            const std::vector< XMLPropertyState > * /* pProperties */,
             sal_uInt32 /* nIdx */ ) const
 {
     // the SpecialItem IsVisible must not be handled by this method
@@ -602,7 +602,7 @@ void ScXMLTableExportPropertyMapper::handleSpecialItem(
             const XMLPropertyState& /* rProperty */,
             const SvXMLUnitConverter& /* rUnitConverter */,
             const SvXMLNamespaceMap& /* rNamespaceMap */,
-            const ::std::vector< XMLPropertyState > * /* pProperties */,
+            const std::vector< XMLPropertyState > * /* pProperties */,
             sal_uInt32 /* nIdx */ ) const
 {
     // the SpecialItem PageStyle must not be handled by this method
@@ -611,7 +611,7 @@ void ScXMLTableExportPropertyMapper::handleSpecialItem(
 void ScXMLAutoStylePoolP::exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
             sal_Int32 nFamily,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
@@ -620,8 +620,8 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
-        ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
-        ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
+        std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
+        std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
         for(; i != endi; ++i)
         {
             rtl::Reference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetCellStylesPropertySetMapper());
@@ -649,8 +649,8 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
     }
     else if (nFamily == XML_STYLE_FAMILY_TABLE_TABLE)
     {
-        ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
-        ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
+        std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
+        std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
         for(; i != endi; ++i)
         {
             rtl::Reference< XMLPropertySetMapper > aPropMapper(rScXMLExport.GetTableStylesPropertySetMapper());
@@ -687,8 +687,8 @@ void ScXMLAutoStylePoolP::exportStyleContent(
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
         bool bNotFound = true;
-        ::std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
-        ::std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
+        std::vector< XMLPropertyState >::const_iterator i(rProperties.begin());
+        std::vector< XMLPropertyState >::const_iterator endi(rProperties.end());
         for(; i != endi && bNotFound; ++i)
         {
             if (i->mnIndex != -1)

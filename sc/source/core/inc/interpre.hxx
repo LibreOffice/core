@@ -121,7 +121,7 @@ struct FormulaTokenRef_less
     bool operator () ( const formula::FormulaConstTokenRef& r1, const formula::FormulaConstTokenRef& r2 ) const
         { return r1.get() < r2.get(); }
 };
-typedef ::std::map< const formula::FormulaConstTokenRef, formula::FormulaTokenRef, FormulaTokenRef_less> ScTokenMatrixMap;
+typedef std::map< const formula::FormulaConstTokenRef, formula::FormulaTokenRef, FormulaTokenRef_less> ScTokenMatrixMap;
 
 class ScInterpreter
 {
@@ -676,9 +676,9 @@ void ScGetIsoWeekOfYear();
 void ScWeeknumOOo();
 void ScEasterSunday();
 sal_uInt16 GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
-        ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ] );
+        std::vector<double>& rSortArray, bool bWeekendMask[ 7 ] );
 sal_uInt16 GetWeekendAndHolidayMasks_MS( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
-        ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ] );
+        std::vector<double>& rSortArray, bool bWeekendMask[ 7 ] );
 static inline sal_Int16 GetDayOfWeek( sal_Int32 n );
 void ScNetWorkdays( bool bOOXML_Version );
 void ScWorkday_MS();
@@ -814,7 +814,7 @@ public:
 static SC_DLLPUBLIC double phi(double x);
 static SC_DLLPUBLIC double integralPhi(double x);
 static SC_DLLPUBLIC double gaussinv(double x);
-static SC_DLLPUBLIC double GetPercentile( ::std::vector<double> & rArray, double fPercentile );
+static SC_DLLPUBLIC double GetPercentile( std::vector<double> & rArray, double fPercentile );
 
 private:
 double GetBetaDist(double x, double alpha, double beta);  //cumulative distribution function
@@ -883,11 +883,11 @@ void ScStandard();
 void ScSkew();
 void ScSkewp();
 void ScMedian();
-double GetMedian( ::std::vector<double> & rArray );
-double GetPercentileExclusive( ::std::vector<double> & rArray, double fPercentile );
-void GetNumberSequenceArray( sal_uInt8 nParamCount, ::std::vector<double>& rArray, bool bConvertTextInArray );
-void GetSortArray( sal_uInt8 nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray );
-static void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = nullptr);
+double GetMedian( std::vector<double> & rArray );
+double GetPercentileExclusive( std::vector<double> & rArray, double fPercentile );
+void GetNumberSequenceArray( sal_uInt8 nParamCount, std::vector<double>& rArray, bool bConvertTextInArray );
+void GetSortArray( sal_uInt8 nParamCount, std::vector<double>& rSortArray, std::vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray );
+static void QuickSort(std::vector<double>& rSortArray, std::vector<long>* pIndexOrder = nullptr);
 void ScModalValue();
 void ScModalValue_Multi();
 void ScAveDev();
@@ -900,7 +900,7 @@ void ScChiTest();
 void ScRank( bool bAverage );
 void ScPercentile( bool bInclusive );
 void ScPercentrank( bool bInclusive );
-static double GetPercentrank( ::std::vector<double> & rArray, double fVal, bool bInclusive );
+static double GetPercentrank( std::vector<double> & rArray, double fVal, bool bInclusive );
 void ScLarge();
 void ScSmall();
 void ScFrequency();

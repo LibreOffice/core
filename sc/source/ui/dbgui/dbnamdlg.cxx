@@ -495,7 +495,7 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, AddBtnHdl, Button*, void)
 
 namespace {
 
-class FindByName : public ::std::unary_function<std::unique_ptr<ScDBData>, bool>
+class FindByName : public std::unary_function<std::unique_ptr<ScDBData>, bool>
 {
     const OUString& mrName;
 public:
@@ -513,7 +513,7 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, RemoveBtnHdl, Button*, void)
     OUString aStrEntry = m_pEdName->GetText();
     ScDBCollection::NamedDBs& rDBs = aLocalDbCol.getNamedDBs();
     ScDBCollection::NamedDBs::iterator itr =
-        ::std::find_if(rDBs.begin(), rDBs.end(), FindByName(aStrEntry));
+        std::find_if(rDBs.begin(), rDBs.end(), FindByName(aStrEntry));
 
     if (itr != rDBs.end())
     {

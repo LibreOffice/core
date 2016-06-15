@@ -392,7 +392,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     ScDocument* pDocument = ( pViewData ? pViewData->GetDocument() : nullptr );
     SdrPageView* pPageView = ( pView ? pView->GetSdrPageView() : nullptr );
     SdrPage* pPage = ( pPageView ? pPageView->GetPage() : nullptr );
-    ::std::vector< OUString > aExcludedChartNames;
+    std::vector< OUString > aExcludedChartNames;
     ScRangeListVector aProtectedChartRangesVector;
 
     if (pView && rMEvt.IsLeft())

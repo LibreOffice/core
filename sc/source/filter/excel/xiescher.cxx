@@ -608,12 +608,12 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
     }
     else
     {
-        long nLineWidth = 35 * ::std::min( rLineData.mnWidth, EXC_OBJ_LINE_THICK );
+        long nLineWidth = 35 * std::min( rLineData.mnWidth, EXC_OBJ_LINE_THICK );
         rSdrObj.SetMergedItem( XLineWidthItem( nLineWidth ) );
         rSdrObj.SetMergedItem( XLineColorItem( EMPTY_OUSTRING, GetPalette().GetColor( rLineData.mnColorIdx ) ) );
         rSdrObj.SetMergedItem( XLineJointItem( css::drawing::LineJoint_MITER ) );
 
-        sal_uLong nDotLen = ::std::max< sal_uLong >( 70 * rLineData.mnWidth, 35 );
+        sal_uLong nDotLen = std::max< sal_uLong >( 70 * rLineData.mnWidth, 35 );
         sal_uLong nDashLen = 3 * nDotLen;
         sal_uLong nDist = 2 * nDotLen;
 
@@ -701,7 +701,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
                 { 0x88, 0x00, 0x22, 0x00, 0x88, 0x00, 0x22, 0x00 },
                 { 0x80, 0x00, 0x08, 0x00, 0x80, 0x00, 0x08, 0x00 }
             };
-            const sal_uInt8* const pnPattern = sppnPatterns[ ::std::min< size_t >( rFillData.mnPattern - 2, SAL_N_ELEMENTS( sppnPatterns ) ) ];
+            const sal_uInt8* const pnPattern = sppnPatterns[ std::min< size_t >( rFillData.mnPattern - 2, SAL_N_ELEMENTS( sppnPatterns ) ) ];
             // create 2-colored 8x8 DIB
             SvMemoryStream aMemStrm;
             aMemStrm.WriteUInt32( 12 ).WriteInt16( 8 ).WriteInt16( 8 ).WriteUInt16( 1 ).WriteUInt16( 1 );
@@ -717,7 +717,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
             aXOBitmap.Bitmap2Array();
             aXOBitmap.SetBitmapType( XBITMAP_8X8 );
             if( aXOBitmap.GetBackgroundColor().GetColor() == COL_BLACK )
-                ::std::swap( aPattColor, aBackColor );
+                std::swap( aPattColor, aBackColor );
             aXOBitmap.SetPixelColor( aPattColor );
             aXOBitmap.SetBackgroundColor( aBackColor );
             aXOBitmap.Array2Bitmap();
@@ -886,7 +886,7 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
         nSubRecSize = rStrm.ReaduInt16();
         rStrm.PushPosition();
         // sometimes the last subrecord has an invalid length (OBJLBSDATA) -> min()
-        nSubRecSize = static_cast< sal_uInt16 >( ::std::min< sal_Size >( nSubRecSize, rStrm.GetRecLeft() ) );
+        nSubRecSize = static_cast< sal_uInt16 >( std::min< sal_Size >( nSubRecSize, rStrm.GetRecLeft() ) );
 
         switch( nSubRecId )
         {
@@ -936,7 +936,7 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
         while( (nDataSize > 0) && (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord() )
         {
             OSL_ENSURE( nDataSize >= rStrm.GetRecLeft(), "XclImpDrawObjBase::ImplReadObj8 - CONTINUE too long" );
-            nDataSize -= ::std::min< sal_uInt32 >( rStrm.GetRecLeft(), nDataSize );
+            nDataSize -= std::min< sal_uInt32 >( rStrm.GetRecLeft(), nDataSize );
         }
         OSL_ENSURE( nDataSize == 0, "XclImpDrawObjBase::ImplReadObj8 - missing CONTINUE records" );
         // next record may be MSODRAWING or CONTINUE or anything else
@@ -955,7 +955,7 @@ void XclImpDrawObjVector::InsertGrouped( XclImpDrawObjRef xDrawObj )
 sal_Size XclImpDrawObjVector::GetProgressSize() const
 {
     sal_Size nProgressSize = 0;
-    for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = mObjs.begin(), aEnd = mObjs.end(); aIt != aEnd; ++aIt )
+    for( std::vector< XclImpDrawObjRef >::const_iterator aIt = mObjs.begin(), aEnd = mObjs.end(); aIt != aEnd; ++aIt )
         nProgressSize += (*aIt)->GetProgressSize();
     return nProgressSize;
 }
@@ -1016,7 +1016,7 @@ SdrObjectPtr XclImpGroupObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     std::unique_ptr<SdrObjGroup, SdrObjectFree> xSdrObj( new SdrObjGroup );
     // child objects in BIFF2-BIFF5 have absolute size, not needed to pass own anchor rectangle
     SdrObjList& rObjList = *xSdrObj->GetSubList();  // SdrObjGroup always returns existing sublist
-    for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end(); aIt != aEnd; ++aIt )
+    for( std::vector< XclImpDrawObjRef >::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end(); aIt != aEnd; ++aIt )
         rDffConv.ProcessObject( rObjList, **aIt );
     rDffConv.Progress();
     return std::move(xSdrObj);
@@ -1339,8 +1339,8 @@ namespace {
 ::basegfx::B2DPoint lclGetPolyPoint( const Rectangle& rAnchorRect, const Point& rPoint )
 {
     return ::basegfx::B2DPoint(
-        rAnchorRect.Left() + static_cast< sal_Int32 >( ::std::min< double >( rPoint.X(), 16384.0 ) / 16384.0 * rAnchorRect.GetWidth() + 0.5 ),
-        rAnchorRect.Top() + static_cast< sal_Int32 >( ::std::min< double >( rPoint.Y(), 16384.0 ) / 16384.0 * rAnchorRect.GetHeight() + 0.5 ) );
+        rAnchorRect.Left() + static_cast< sal_Int32 >( std::min< double >( rPoint.X(), 16384.0 ) / 16384.0 * rAnchorRect.GetWidth() + 0.5 ),
+        rAnchorRect.Top() + static_cast< sal_Int32 >( std::min< double >( rPoint.Y(), 16384.0 ) / 16384.0 * rAnchorRect.GetHeight() + 0.5 ) );
 }
 
 } // namespace
@@ -2602,7 +2602,7 @@ void XclImpScrollBarObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     rPropSet.SetProperty< sal_Int32 >( "ScrollValueMax", mnMax );
     rPropSet.SetProperty< sal_Int32 >( "LineIncrement", mnStep );
     rPropSet.SetProperty< sal_Int32 >( "BlockIncrement", mnPageStep );
-    rPropSet.SetProperty( "VisibleSize", ::std::min< sal_Int32 >( mnPageStep, 1 ) );
+    rPropSet.SetProperty( "VisibleSize", std::min< sal_Int32 >( mnPageStep, 1 ) );
 
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
     sal_Int32 nApiOrient = ::get_flagvalue( mnOrient, EXC_OBJ_SCROLLBAR_HOR, AwtScrollOrient::HORIZONTAL, AwtScrollOrient::VERTICAL );
@@ -3328,7 +3328,7 @@ void XclImpDffConverter::ProcessObject( SdrObjList& rObjList, const XclImpDrawOb
 void XclImpDffConverter::ProcessDrawing( const XclImpDrawObjVector& rDrawObjs )
 {
     SdrPage& rSdrPage = GetConvData().mrSdrPage;
-    for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = rDrawObjs.begin(), aEnd = rDrawObjs.end(); aIt != aEnd; ++aIt )
+    for( std::vector< XclImpDrawObjRef >::const_iterator aIt = rDrawObjs.begin(), aEnd = rDrawObjs.end(); aIt != aEnd; ++aIt )
         ProcessObject( rSdrPage, **aIt );
 }
 
@@ -3673,7 +3673,7 @@ OUString XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
         aMemStream.WriteUInt16( 0 ).WriteUInt16( nBufferSize );
 
         // copy from DFF stream to memory stream
-        ::std::vector< sal_uInt8 > aBuffer( nBufferSize );
+        std::vector< sal_uInt8 > aBuffer( nBufferSize );
         sal_uInt8* pnData = &aBuffer.front();
         if (rDffStrm.ReadBytes(pnData, nBufferSize) == nBufferSize)
         {
@@ -4154,7 +4154,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
     ScAddress aScNotePos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, maScUsedArea.aStart.Tab(), true ) )
     {
-        sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.GetRecLeft() ) );
+        sal_uInt16 nPartLen = std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.GetRecLeft() ) );
         OUString aNoteText = rStrm.ReadRawByteString( nPartLen );
         nTotalLen = nTotalLen - nPartLen;
         while( (nTotalLen > 0) && (rStrm.GetNextRecId() == EXC_ID_NOTE) && rStrm.StartNextRecord() )
@@ -4166,7 +4166,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
             {
                 OSL_ENSURE( nPartLen <= nTotalLen, "XclImpObjectManager::ReadNote3 - string too long" );
                 aNoteText += rStrm.ReadRawByteString( nPartLen );
-                nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
+                nTotalLen = nTotalLen - std::min( nTotalLen, nPartLen );
             }
             else
             {

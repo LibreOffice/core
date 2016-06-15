@@ -100,7 +100,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::std::for_each;
+using std::for_each;
 
     //=====  internal  ========================================================
 
@@ -929,7 +929,7 @@ struct SetRelation
 utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddress* pAddress) const
 {
     SetRelation aSetRelation(this, pAddress);
-    ::std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), aSetRelation);
+    std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), aSetRelation);
     return aSetRelation.mpRelationSet;
 }
 

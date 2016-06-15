@@ -431,7 +431,7 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEnt
 
                 // line?
                 if ( mbMirrorEntries )
-                    ::std::swap( nStartPos, nEndPos );      // in RTL mode, nStartPos is the larger value
+                    std::swap( nStartPos, nEndPos );        // in RTL mode, nStartPos is the larger value
                 if ( (nStartPos <= nEntryMousePos) && (nEntryMousePos <= nEndPos) )
                 {
                     rbButton = false;

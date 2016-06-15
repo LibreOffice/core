@@ -49,11 +49,11 @@ typedef size_t SCSIZE;
 // included, we should not be using those stupid macros anyway.
 #undef min
 #undef max
-const SCROW    SCROW_MAX    = ::std::numeric_limits<SCROW>::max();
-const SCCOL    SCCOL_MAX    = ::std::numeric_limits<SCCOL>::max();
-const SCTAB    SCTAB_MAX    = ::std::numeric_limits<SCTAB>::max();
-const SCCOLROW SCCOLROW_MAX = ::std::numeric_limits<SCCOLROW>::max();
-const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
+const SCROW    SCROW_MAX    = std::numeric_limits<SCROW>::max();
+const SCCOL    SCCOL_MAX    = std::numeric_limits<SCCOL>::max();
+const SCTAB    SCTAB_MAX    = std::numeric_limits<SCTAB>::max();
+const SCCOLROW SCCOLROW_MAX = std::numeric_limits<SCCOLROW>::max();
+const SCSIZE   SCSIZE_MAX   = std::numeric_limits<SCSIZE>::max();
 
 // The maximum values. Defines are needed for preprocessor checks, for example
 // in bcaslot.cxx, otherwise type safe constants are preferred.

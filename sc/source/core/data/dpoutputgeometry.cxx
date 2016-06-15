@@ -22,7 +22,7 @@
 
 #include <vector>
 
-using ::std::vector;
+using std::vector;
 
 ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter) :
     maOutRange(rOutRange),

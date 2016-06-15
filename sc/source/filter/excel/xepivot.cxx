@@ -343,7 +343,7 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
             if( nFmtType == css::util::NumberFormat::LOGICAL )
                 InsertOrigBoolItem( fValue != 0 );
             else if( nFmtType & css::util::NumberFormat::DATETIME )
-                InsertOrigDateTimeItem( GetDateTimeFromDouble( ::std::max( fValue, 0.0 ) ) );
+                InsertOrigDateTimeItem( GetDateTimeFromDouble( std::max( fValue, 0.0 ) ) );
             else
                 InsertOrigDoubleItem( fValue );
         }
@@ -455,7 +455,7 @@ void XclExpPCField::InsertOrigTextItem( const OUString& rText )
     size_t nPos = 0;
     bool bFound = false;
     // #i76047# maximum item text length in pivot cache is 255
-    OUString aShortText = rText.copy( 0, ::std::min(rText.getLength(), EXC_PC_MAXSTRLEN ) );
+    OUString aShortText = rText.copy( 0, std::min(rText.getLength(), EXC_PC_MAXSTRLEN ) );
     for( size_t nSize = maOrigItemList.GetSize(); !bFound && (nPos < nSize); ++nPos )
         if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsText( aShortText )) )
             InsertItemArrayIndex( nPos );
@@ -651,9 +651,9 @@ XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& r
                 if( nSrcRow2 > nDocRow2 )
                     nSrcRow2 = nDocRow2 + 1;
 
-                maDocSrcRange.aStart.SetCol( ::std::max( nDocCol1, nSrcCol1 ) );
+                maDocSrcRange.aStart.SetCol( std::max( nDocCol1, nSrcCol1 ) );
                 maDocSrcRange.aStart.SetRow( nSrcRow1 );
-                maDocSrcRange.aEnd.SetCol( ::std::min( nDocCol2, nSrcCol2 ) );
+                maDocSrcRange.aEnd.SetCol( std::min( nDocCol2, nSrcCol2 ) );
                 maDocSrcRange.aEnd.SetRow( nSrcRow2 );
 
                 GetDoc().GetName( nScTab, maTabName );
@@ -1394,7 +1394,7 @@ void XclExpPivotTable::Finalize()
 
     if( pFieldVec && !pFieldVec->empty() && (pFieldVec->back() != EXC_SXIVD_DATA) )
     {
-        ScfUInt16Vec::const_iterator aIt = ::std::find( pFieldVec->begin(), pFieldVec->end(), EXC_SXIVD_DATA );
+        ScfUInt16Vec::const_iterator aIt = std::find( pFieldVec->begin(), pFieldVec->end(), EXC_SXIVD_DATA );
         if( aIt != pFieldVec->end() )
             maPTInfo.mnDataPos = static_cast< sal_uInt16 >( aIt - pFieldVec->begin() );
     }
@@ -1430,8 +1430,8 @@ void XclExpPivotTable::Finalize()
         // Insert an extra row only when there is no column field.
         ++rnDataXclRow;
 
-    rnXclCol2 = ::std::max( rnXclCol2, rnDataXclCol );
-    rnXclRow2 = ::std::max( rnXclRow2, rnDataXclRow );
+    rnXclCol2 = std::max( rnXclCol2, rnDataXclCol );
+    rnXclRow2 = std::max( rnXclRow2, rnDataXclRow );
     maPTInfo.mnDataCols = rnXclCol2 - rnDataXclCol + 1;
     maPTInfo.mnDataRows = rnXclRow2 - rnDataXclRow + 1;
 

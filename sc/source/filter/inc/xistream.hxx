@@ -146,9 +146,9 @@ private:
 private:
     ::msfilter::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
     css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
-    ::std::vector< sal_uInt8 > maSalt;
-    ::std::vector< sal_uInt8 > maVerifier;
-    ::std::vector< sal_uInt8 > maVerifierHash;
+    std::vector< sal_uInt8 > maSalt;
+    std::vector< sal_uInt8 > maVerifier;
+    std::vector< sal_uInt8 > maVerifierHash;
 };
 
 // Stream
@@ -474,7 +474,7 @@ private:
                             { return b16BitLen ? ReaduInt16() : ReaduInt8(); }
 
 private:
-    typedef ::std::vector< XclImpStreamPos > XclImpStreamPosStack;
+    typedef std::vector< XclImpStreamPos > XclImpStreamPosStack;
 
     SvStream&           mrStrm;         /// Reference to the system input stream.
     const XclImpRoot&   mrRoot;         /// Filter root data.

@@ -52,7 +52,7 @@ struct ScUnoListenerEntry
 class ScUnoListenerCalls
 {
 private:
-    ::std::list<ScUnoListenerEntry> aEntries;
+    std::list<ScUnoListenerEntry> aEntries;
 
 public:
                 ScUnoListenerCalls();

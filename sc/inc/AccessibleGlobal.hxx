@@ -53,7 +53,7 @@ public:
     void clear();
 
 private:
-    ::std::set<sal_Int16> maStates;
+    std::set<sal_Int16> maStates;
 };
 
 #endif

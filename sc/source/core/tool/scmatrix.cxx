@@ -49,9 +49,9 @@ using std::cout;
 using std::endl;
 #endif
 
-using ::std::pair;
-using ::std::advance;
-using ::std::unary_function;
+using std::pair;
+using std::advance;
+using std::unary_function;
 
 /**
  * Custom string trait struct to tell mdds::multi_type_matrix about the
@@ -263,8 +263,8 @@ public:
     void MatCopy(ScMatrixImpl& mRes) const;
     void MatTrans(ScMatrixImpl& mRes) const;
     void FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 );
-    void PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR );
-    void PutStringVector( const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR );
+    void PutDoubleVector( const std::vector< double > & rVec, SCSIZE nC, SCSIZE nR );
+    void PutStringVector( const std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR );
     void PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
     void PutEmptyResultVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
     void PutEmptyPathVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
@@ -834,7 +834,7 @@ void ScMatrixImpl::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, 
     }
 }
 
-void ScMatrixImpl::PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR )
+void ScMatrixImpl::PutDoubleVector( const std::vector< double > & rVec, SCSIZE nC, SCSIZE nR )
 {
     if (!rVec.empty() && ValidColRow( nC, nR) && ValidColRow( nC, nR + rVec.size() - 1))
     {
@@ -846,7 +846,7 @@ void ScMatrixImpl::PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE
     }
 }
 
-void ScMatrixImpl::PutStringVector( const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR )
+void ScMatrixImpl::PutStringVector( const std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR )
 {
     if (!rVec.empty() && ValidColRow( nC, nR) && ValidColRow( nC, nR + rVec.size() - 1))
     {
@@ -2006,7 +2006,7 @@ struct return_type<char>
 template<typename T, typename U, typename return_type>
 struct wrapped_iterator
 {
-    typedef ::std::bidirectional_iterator_tag iterator_category;
+    typedef std::bidirectional_iterator_tag iterator_category;
     typedef typename T::const_iterator::value_type old_value_type;
     typedef return_type value_type;
     typedef value_type* pointer;
@@ -2830,12 +2830,12 @@ void ScFullMatrix::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, 
     pImpl->FillDouble(fVal, nC1, nR1, nC2, nR2);
 }
 
-void ScFullMatrix::PutDoubleVector( const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR )
+void ScFullMatrix::PutDoubleVector( const std::vector< double > & rVec, SCSIZE nC, SCSIZE nR )
 {
     pImpl->PutDoubleVector(rVec, nC, nR);
 }
 
-void ScFullMatrix::PutStringVector( const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR )
+void ScFullMatrix::PutStringVector( const std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR )
 {
     pImpl->PutStringVector(rVec, nC, nR);
 }
@@ -3555,13 +3555,13 @@ void ScVectorRefMatrix::FillDouble(double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE n
     mpFullMatrix->FillDouble(fVal, nC1, nR1, nC2, nR2);
 }
 
-void ScVectorRefMatrix::PutDoubleVector(const ::std::vector< double > & rVec, SCSIZE nC, SCSIZE nR)
+void ScVectorRefMatrix::PutDoubleVector(const std::vector< double > & rVec, SCSIZE nC, SCSIZE nR)
 {
     ensureFullMatrix();
     mpFullMatrix->PutDoubleVector(rVec, nC, nR);
 }
 
-void ScVectorRefMatrix::PutStringVector(const ::std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR)
+void ScVectorRefMatrix::PutStringVector(const std::vector< svl::SharedString > & rVec, SCSIZE nC, SCSIZE nR)
 {
     ensureFullMatrix();
     mpFullMatrix->PutStringVector(rVec, nC, nR);

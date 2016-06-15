@@ -72,7 +72,7 @@
 
 using namespace formula;
 using namespace ::com::sun::star;
-using ::std::vector;
+using std::vector;
 
 CharClass*                          ScCompiler::pCharClassEnglish = nullptr;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
@@ -681,14 +681,14 @@ static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
     {
         size_t nCount = rTabNames.size();
         vector<OUString>::const_iterator itrBeg = rTabNames.begin(), itrEnd = rTabNames.end();
-        vector<OUString>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
+        vector<OUString>::const_iterator itr = std::find(itrBeg, itrEnd, rTabName1);
         if (itr == rTabNames.end())
         {
             rTabName2 = ScGlobal::GetRscString(STR_NO_REF_TABLE);
             return false;
         }
 
-        size_t nDist = ::std::distance(itrBeg, itr);
+        size_t nDist = std::distance(itrBeg, itr);
         if (nDist + static_cast<size_t>(nTabSpan) >= nCount)
         {
             rTabName2 = ScGlobal::GetRscString(STR_NO_REF_TABLE);
@@ -5033,7 +5033,7 @@ FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaT
     return extendRangeReference( rTok1, rTok2, aPos, true/*bReuseDoubleRef*/ );
 }
 
-void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const
+void ScCompiler::fillAddInToken(std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const
 {
     // All known AddIn functions.
     sheet::FormulaOpCodeMapEntry aEntry;

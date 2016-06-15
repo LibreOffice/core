@@ -44,7 +44,7 @@ class CondFormat;
 /** Model for a single rule in a conditional formatting. */
 struct CondFormatRuleModel
 {
-    typedef ::std::vector< ApiTokenSequence > ApiTokenSequenceVector;
+    typedef std::vector< ApiTokenSequence > ApiTokenSequenceVector;
 
     ApiTokenSequenceVector maFormulas;      /// Formulas for rule conditions.
     OUString     maText;             /// Text for 'contains' rules.

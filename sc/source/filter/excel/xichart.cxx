@@ -120,7 +120,7 @@ using ::com::sun::star::chart2::data::XLabeledDataSequence;
 using ::com::sun::star::chart2::data::LabeledDataSequence;
 
 using ::formula::FormulaToken;
-using ::std::unique_ptr;
+using std::unique_ptr;
 
 namespace cssc = ::com::sun::star::chart;
 namespace cssc2 = ::com::sun::star::chart2;
@@ -865,7 +865,7 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
 Sequence< Reference< XFormattedString > > XclImpChSourceLink::CreateStringSequence(
         const XclImpChRoot& rRoot, sal_uInt16 nLeadFontIdx, const Color& rLeadFontColor ) const
 {
-    ::std::vector< Reference< XFormattedString > > aStringVec;
+    std::vector< Reference< XFormattedString > > aStringVec;
     if( mxString )
     {
         for( XclImpStringIterator aIt( *mxString ); aIt.Is(); ++aIt )
@@ -890,7 +890,7 @@ Sequence< Reference< XFormattedString > > XclImpChSourceLink::CreateStringSequen
     return ScfApiHelper::VectorToSequence( aStringVec );
 }
 
-void XclImpChSourceLink::FillSourceLink( ::std::vector< ScTokenRef >& rTokens ) const
+void XclImpChSourceLink::FillSourceLink( std::vector< ScTokenRef >& rTokens ) const
 {
     if( !mxTokenArray )
         // no links to fill.
@@ -1319,7 +1319,7 @@ void XclImpChPieFormat::ReadChPieFormat( XclImpStream& rStrm )
 
 void XclImpChPieFormat::Convert( ScfPropertySet& rPropSet ) const
 {
-    double fApiDist = ::std::min< double >( mnPieDist / 100.0, 1.0 );
+    double fApiDist = std::min< double >( mnPieDist / 100.0, 1.0 );
     rPropSet.SetProperty( EXC_CHPROP_OFFSET, fApiDist );
 }
 
@@ -1736,7 +1736,7 @@ Reference< XPropertySet > XclImpChSerErrorBar::CreateErrorBar( const XclImpChSer
                 if( xDataSink.is() )
                 {
                     // create vector of all value sequences
-                    ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
+                    std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
                     // add positive values
                     if( pPosBar )
                     {
@@ -2014,7 +2014,7 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
         if( xDataSink.is() )
         {
             // create vector of all value sequences
-            ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
+            std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
             // add Y values
             Reference< XLabeledDataSequence > xYValueSeq =
                 CreateValueSequence( EXC_CHPROP_ROLE_YVALUES );
@@ -2080,7 +2080,7 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
     return xDataSeries;
 }
 
-void XclImpChSeries::FillAllSourceLinks( ::std::vector< ScTokenRef >& rTokens ) const
+void XclImpChSeries::FillAllSourceLinks( std::vector< ScTokenRef >& rTokens ) const
 {
     if( mxValueLink )
         mxValueLink->FillSourceLink( rTokens );
@@ -2698,7 +2698,7 @@ void XclImpChTypeGroup::Finalize()
 
     // reverse series order for some unstacked 2D chart types
     if( maTypeInfo.mbReverseSeries && !Is3dChart() && !maType.IsStacked() && !maType.IsPercent() )
-        ::std::reverse( maSeries.begin(), maSeries.end() );
+        std::reverse( maSeries.begin(), maSeries.end() );
 
     // update chart type group format, may depend on chart type finalized above
     if( mxGroupFmt )
@@ -2890,7 +2890,7 @@ void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > xChartType, s
     if( xDataSink.is() )
     {
         // create a list of data sequences from all series
-        ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
+        std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
         OSL_ENSURE( maSeries.size() >= 3, "XclImpChTypeGroup::CreateChartType - missing stock series" );
         int nRoleIdx = (maSeries.size() == 3) ? 1 : 0;
         for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end();
@@ -4001,12 +4001,12 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
     ScDocument& rDoc = GetRoot().GetDoc();
     if( ScChartListenerCollection* pChartCollection = rDoc.GetChartListenerCollection() )
     {
-        ::std::unique_ptr< ::std::vector< ScTokenRef > > xRefTokens( new ::std::vector< ScTokenRef > );
+        std::unique_ptr< std::vector< ScTokenRef > > xRefTokens( new std::vector< ScTokenRef > );
         for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end(); aIt != aEnd; ++aIt )
             (*aIt)->FillAllSourceLinks( *xRefTokens );
         if( !xRefTokens->empty() )
         {
-            ::std::unique_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, xRefTokens.release() ) );
+            std::unique_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, xRefTokens.release() ) );
             xListener->SetUsed( true );
             xListener->StartListeningTo();
             pChartCollection->insert( xListener.release() );

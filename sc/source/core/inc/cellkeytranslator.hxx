@@ -40,7 +40,7 @@ struct ScCellKeyword
     ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const css::lang::Locale& rLocale);
 };
 
-typedef std::unordered_map< OUString, ::std::list<ScCellKeyword>, OUStringHash > ScCellKeywordHashMap;
+typedef std::unordered_map< OUString, std::list<ScCellKeyword>, OUStringHash > ScCellKeywordHashMap;
 
 /** Translate cell function keywords.
 
@@ -75,7 +75,7 @@ private:
                   OpCode eOpCode = ocNone);
     void addToMap(const TransItem* pItems, const css::lang::Locale& rLocale);
 
-    static ::std::unique_ptr<ScCellKeywordTranslator> spInstance;
+    static std::unique_ptr<ScCellKeywordTranslator> spInstance;
     ScCellKeywordHashMap maStringNameMap;
     ::utl::TransliterationWrapper maTransWrapper;
 };

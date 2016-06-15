@@ -725,7 +725,7 @@ long ScDrawStringsVars::GetMaxDigitWidth()
     {
         sal_Char cDigit = cZero + i;
         long n = pOutput->pFmtDevice->GetTextWidth(OUString(cDigit));
-        nMaxDigitWidth = ::std::max(nMaxDigitWidth, n);
+        nMaxDigitWidth = std::max(nMaxDigitWidth, n);
     }
     return nMaxDigitWidth;
 }
@@ -1278,7 +1278,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
         // nLeftMissing, nRightMissing are logical, eHorJust values are visual
         if ( bLayoutRTL )
-            ::std::swap( nLeftMissing, nRightMissing );
+            std::swap( nLeftMissing, nRightMissing );
 
         SCCOL nRightX = nCellX;
         SCCOL nLeftX = nCellX;

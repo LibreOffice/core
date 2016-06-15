@@ -402,17 +402,17 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
     switch( getFilterType() )
     {
         case FILTER_OOXML:
-            maColors.insert( maColors.begin(), spnDefColors8, ::std::end(spnDefColors8) );
+            maColors.insert( maColors.begin(), spnDefColors8, std::end(spnDefColors8) );
             mnAppendIndex = OOX_COLOR_USEROFFSET;
         break;
         case FILTER_BIFF:
             switch( getBiff() )
             {
-                case BIFF2: maColors.insert( maColors.begin(), spnDefColors2, ::std::end(spnDefColors2) );  break;
+                case BIFF2: maColors.insert( maColors.begin(), spnDefColors2, std::end(spnDefColors2) );    break;
                 case BIFF3:
-                case BIFF4: maColors.insert( maColors.begin(), spnDefColors3, ::std::end(spnDefColors3) );  break;
-                case BIFF5: maColors.insert( maColors.begin(), spnDefColors5, ::std::end(spnDefColors5) );  break;
-                case BIFF8: maColors.insert( maColors.begin(), spnDefColors8, ::std::end(spnDefColors8) );  break;
+                case BIFF4: maColors.insert( maColors.begin(), spnDefColors3, std::end(spnDefColors3) );    break;
+                case BIFF5: maColors.insert( maColors.begin(), spnDefColors5, std::end(spnDefColors5) );    break;
+                case BIFF8: maColors.insert( maColors.begin(), spnDefColors8, std::end(spnDefColors8) );    break;
                 case BIFF_UNKNOWN: break;
             }
             mnAppendIndex = BIFF_COLOR_USEROFFSET;
@@ -2641,7 +2641,7 @@ void CellStyleBuffer::finalizeImport()
             Reference< XStyle > xStyle( xStyleFamilyIA->getByIndex( nIndex ), UNO_QUERY_THROW );
             if( bReserveAll || !xStyle->isUserDefined() )
             {
-                // create an empty entry by using ::std::map<>::operator[]
+                // create an empty entry by using std::map<>::operator[]
                 aCellStyles[ xStyle->getName() ];
             }
         }

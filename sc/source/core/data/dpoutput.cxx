@@ -57,7 +57,7 @@
 #include <vector>
 
 using namespace com::sun::star;
-using ::std::vector;
+using std::vector;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -110,11 +110,11 @@ class ScDPOutputImpl
 {
     ScDocument*         mpDoc;
     sal_uInt16          mnTab;
-    ::std::vector< bool > mbNeedLineCols;
-    ::std::vector< SCCOL > mnCols;
+    std::vector< bool > mbNeedLineCols;
+    std::vector< SCCOL > mnCols;
 
-    ::std::vector< bool > mbNeedLineRows;
-    ::std::vector< SCROW > mnRows;
+    std::vector< bool > mbNeedLineRows;
+    std::vector< SCROW > mnRows;
 
     SCCOL   mnTabStartCol;
     SCROW   mnTabStartRow;

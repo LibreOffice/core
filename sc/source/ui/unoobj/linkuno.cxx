@@ -46,7 +46,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
-using ::std::vector;
+using std::vector;
 
 //  fuer Sheet- und Area-Links benutzt:
 static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
@@ -1733,7 +1733,7 @@ Any SAL_CALL ScExternalDocLinksObj::getByIndex(sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (nIndex > ::std::numeric_limits<sal_uInt16>::max() || nIndex < ::std::numeric_limits<sal_uInt16>::min())
+    if (nIndex > std::numeric_limits<sal_uInt16>::max() || nIndex < std::numeric_limits<sal_uInt16>::min())
         throw lang::IndexOutOfBoundsException();
 
     sal_uInt16 nFileId = static_cast<sal_uInt16>(nIndex);

@@ -259,8 +259,8 @@ private:
 class ScAccessibleCsvTextData : public ScAccessibleTextData
 {
 private:
-    typedef ::std::unique_ptr< SvxTextForwarder > TextForwarderPtr;
-    typedef ::std::unique_ptr< ScCsvViewForwarder > ViewForwarderPtr;
+    typedef std::unique_ptr< SvxTextForwarder > TextForwarderPtr;
+    typedef std::unique_ptr< ScCsvViewForwarder > ViewForwarderPtr;
 
     VclPtr<vcl::Window>         mpWindow;
     EditEngine*                 mpEditEngine;

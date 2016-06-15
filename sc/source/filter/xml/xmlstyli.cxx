@@ -81,7 +81,7 @@ ScXMLCellImportPropertyMapper::~ScXMLCellImportPropertyMapper()
 {
 }
 
-void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
+void ScXMLCellImportPropertyMapper::finished(std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     static const sal_Int16 aPaddingCTF[4] = { CTF_SC_LEFTPADDING, CTF_SC_RIGHTPADDING,
                                             CTF_SC_TOPPADDING, CTF_SC_BOTTOMPADDING };
@@ -101,8 +101,8 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     XMLPropertyState* pOldDiagBorderWidths[2] = { nullptr };      // old attribute names without "s"
     XMLPropertyState* pDiagBorderWidths[2] = { nullptr };
 
-    ::std::vector< XMLPropertyState >::iterator endproperty(rProperties.end());
-    for (::std::vector< XMLPropertyState >::iterator aIter =  rProperties.begin();
+    std::vector< XMLPropertyState >::iterator endproperty(rProperties.end());
+    for (std::vector< XMLPropertyState >::iterator aIter =    rProperties.begin();
         aIter != endproperty; ++aIter)
     {
         XMLPropertyState*property = &(*aIter);
@@ -224,14 +224,14 @@ ScXMLRowImportPropertyMapper::~ScXMLRowImportPropertyMapper()
 {
 }
 
-void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
+void ScXMLRowImportPropertyMapper::finished(std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pHeight(nullptr);
     XMLPropertyState* pOptimalHeight(nullptr);
     XMLPropertyState* pPageBreak(nullptr);
-    ::std::vector< XMLPropertyState >::iterator endproperty(rProperties.end());
-    for (::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
+    std::vector< XMLPropertyState >::iterator endproperty(rProperties.end());
+    for (std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
         aIter != endproperty; ++aIter)
     {
         XMLPropertyState* property = &(*aIter);
@@ -282,13 +282,13 @@ class XMLTableCellPropsContext : public SvXMLPropertySetContext
              const OUString& rLName,
              const uno::Reference< xml::sax::XAttributeList >& xAttrList,
              sal_uInt32 nFamily,
-             ::std::vector< XMLPropertyState > &rProps,
+             std::vector< XMLPropertyState > &rProps,
              const rtl::Reference < SvXMLImportPropertyMapper > &rMap);
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-           ::std::vector< XMLPropertyState > &rProperties,
+           std::vector< XMLPropertyState > &rProperties,
            const XMLPropertyState& rProp ) override;
 };
 
@@ -297,7 +297,7 @@ XMLTableCellPropsContext::XMLTableCellPropsContext(
              const OUString& rLName,
              const uno::Reference< xml::sax::XAttributeList >& xAttrList,
              sal_uInt32 nFamily,
-             ::std::vector< XMLPropertyState > &rProps,
+             std::vector< XMLPropertyState > &rProps,
              const rtl::Reference < SvXMLImportPropertyMapper > &rMap)
           : SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
                rProps, rMap )
@@ -307,7 +307,7 @@ XMLTableCellPropsContext::XMLTableCellPropsContext(
 SvXMLImportContext* XMLTableCellPropsContext::CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-           ::std::vector< XMLPropertyState > &rProperties,
+           std::vector< XMLPropertyState > &rProperties,
            const XMLPropertyState& rProp )
 {
     // no need for a custom context or indeed a SvXMLTokenMap to grab just the
@@ -600,8 +600,8 @@ XMLPropertyState* XMLTableStyleContext::FindProperty(const sal_Int16 nContextID)
         xPrMap = xImpPrMap->getPropertySetMapper();
     if( xPrMap.is() )
     {
-        ::std::vector< XMLPropertyState >::iterator endproperty(GetProperties().end());
-        ::std::vector< XMLPropertyState >::iterator aIter(GetProperties().begin());
+        std::vector< XMLPropertyState >::iterator endproperty(GetProperties().end());
+        std::vector< XMLPropertyState >::iterator aIter(GetProperties().begin());
         while(!pRet && aIter != endproperty)
         {
             XMLPropertyState* property = &(*aIter);

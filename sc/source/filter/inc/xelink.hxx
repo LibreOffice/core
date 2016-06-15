@@ -110,8 +110,8 @@ private:
         inline explicit     XclExpTabInfoEntry() : mnXclTab( 0 ), mnFlags( 0 ) {}
     };
 
-    typedef ::std::vector< XclExpTabInfoEntry > XclExpTabInfoVec;
-    typedef ::std::vector< SCTAB >              ScTabVec;
+    typedef std::vector< XclExpTabInfoEntry > XclExpTabInfoVec;
+    typedef std::vector< SCTAB >                ScTabVec;
 
     XclExpTabInfoVec    maTabInfoVec;       /// Array of Calc sheet index information.
 

@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
-using ::std::list;
+using std::list;
 
 void ScMyStyleNumberFormats::AddStyleNumberFormat(const OUString& rStyleName, const sal_Int32 nNumberFormat)
 {

@@ -77,7 +77,7 @@ public:
     ScChartListener( const OUString& rName, ScDocument* pDoc,
                      const ScRangeListRef& rRangeListRef );
     ScChartListener( const OUString& rName, ScDocument* pDoc,
-                     ::std::vector<ScTokenRef>* pTokens );
+                     std::vector<ScTokenRef>* pTokens );
     ScChartListener( const ScChartListener& );
     virtual ~ScChartListener();
 

@@ -672,7 +672,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
 
     // char array delimited by \0.
     // app \0 topic \0 item \0 (extra \0) where the extra is optional.
-    ::std::vector<OUString> aStrs;
+    std::vector<OUString> aStrs;
     const char* pStart = p;
     sal_Int32 nStart = 0;
     for (sal_Int32 i = 0; i < nSeqLen; ++i, ++p)

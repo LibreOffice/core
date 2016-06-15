@@ -236,21 +236,21 @@ void ScCaptionCreator::FitCaptionToRect( const Rectangle* pVisRect )
 
     // tail position
     Point aTailPos = mpCaption->GetTailPos();
-    aTailPos.X() = ::std::max( ::std::min( aTailPos.X(), rVisRect.Right() ), rVisRect.Left() );
-    aTailPos.Y() = ::std::max( ::std::min( aTailPos.Y(), rVisRect.Bottom() ), rVisRect.Top() );
+    aTailPos.X() = std::max( std::min( aTailPos.X(), rVisRect.Right() ), rVisRect.Left() );
+    aTailPos.Y() = std::max( std::min( aTailPos.Y(), rVisRect.Bottom() ), rVisRect.Top() );
     mpCaption->SetTailPos( aTailPos );
 
     // caption rectangle
     Rectangle aCaptRect = mpCaption->GetLogicRect();
     Point aCaptPos = aCaptRect.TopLeft();
     // move textbox inside right border of visible area
-    aCaptPos.X() = ::std::min< long >( aCaptPos.X(), rVisRect.Right() - aCaptRect.GetWidth() );
+    aCaptPos.X() = std::min< long >( aCaptPos.X(), rVisRect.Right() - aCaptRect.GetWidth() );
     // move textbox inside left border of visible area (this may move it outside on right side again)
-    aCaptPos.X() = ::std::max< long >( aCaptPos.X(), rVisRect.Left() );
+    aCaptPos.X() = std::max< long >( aCaptPos.X(), rVisRect.Left() );
     // move textbox inside bottom border of visible area
-    aCaptPos.Y() = ::std::min< long >( aCaptPos.Y(), rVisRect.Bottom() - aCaptRect.GetHeight() );
+    aCaptPos.Y() = std::min< long >( aCaptPos.Y(), rVisRect.Bottom() - aCaptRect.GetHeight() );
     // move textbox inside top border of visible area (this may move it outside on bottom side again)
-    aCaptPos.Y() = ::std::max< long >( aCaptPos.Y(), rVisRect.Top() );
+    aCaptPos.Y() = std::max< long >( aCaptPos.Y(), rVisRect.Top() );
     // update caption
     aCaptRect.SetPos( aCaptPos );
     mpCaption->SetLogicRect( aCaptRect );
@@ -447,8 +447,8 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 struct ScCaptionInitData
 {
-    typedef ::std::unique_ptr< SfxItemSet >           SfxItemSetPtr;
-    typedef ::std::unique_ptr< OutlinerParaObject >   OutlinerParaObjPtr;
+    typedef std::unique_ptr< SfxItemSet >             SfxItemSetPtr;
+    typedef std::unique_ptr< OutlinerParaObject >     OutlinerParaObjPtr;
 
     SfxItemSetPtr       mxItemSet;          /// Caption object formatting.
     OutlinerParaObjPtr  mxOutlinerObj;      /// Text object with all text portion formatting.
@@ -797,7 +797,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         pCaption->SetText( aBuffer.makeStringAndClear() );
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc );
         // adjust caption size to text size
-        long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
+        long nMaxWidth = std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
         pCaption->SetMergedItem( makeSdrTextAutoGrowWidthItem( true ) );
         pCaption->SetMergedItem( makeSdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
         pCaption->SetMergedItem( makeSdrTextMaxFrameWidthItem( nMaxWidth ) );

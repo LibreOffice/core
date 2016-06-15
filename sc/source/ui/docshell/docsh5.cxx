@@ -60,8 +60,8 @@ using com::sun::star::container::XNameContainer;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
 
-using ::std::unique_ptr;
-using ::std::vector;
+using std::unique_ptr;
+using std::vector;
 
 //  former viewfunc/dbfunc methods
 

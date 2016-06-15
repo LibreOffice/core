@@ -62,8 +62,8 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 using namespace com::sun::star;
-using ::std::vector;
-using ::std::set;
+using std::vector;
+using std::set;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
@@ -1962,7 +1962,7 @@ public:
 bool ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
 {
     sal_Int32 nCompare = 0;
-    // seems that some ::std::sort() implementations pass the same index twice
+    // seems that some std::sort() implementations pass the same index twice
     if( nIndex1 != nIndex2 )
     {
         ScDPMembers* pMembers = rLevel.GetMembersObject();
@@ -2028,7 +2028,7 @@ void ScDPLevel::EvaluateSortOrder()
                 // allow manual or name (manual is always ascending)
                 bool bAscending = ( aSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL || aSortInfo.IsAscending );
                 ScDPGlobalMembersOrder aComp( *this, bAscending );
-                ::std::sort( aGlobalOrder.begin(), aGlobalOrder.end(), aComp );
+                std::sort( aGlobalOrder.begin(), aGlobalOrder.end(), aComp );
             }
             break;
     }

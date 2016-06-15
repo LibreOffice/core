@@ -1864,7 +1864,7 @@ css::uno::Reference< css::accessibility::XAccessible > ScTextWnd::CreateAccessib
 
 void ScTextWnd::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
-    OSL_ENSURE( ::std::find( maAccTextDatas.begin(), maAccTextDatas.end(), &rTextData ) == maAccTextDatas.end(),
+    OSL_ENSURE( std::find( maAccTextDatas.begin(), maAccTextDatas.end(), &rTextData ) == maAccTextDatas.end(),
         "ScTextWnd::InsertAccessibleTextData - passed object already registered" );
     maAccTextDatas.push_back( &rTextData );
 }
@@ -1872,7 +1872,7 @@ void ScTextWnd::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextDat
 void ScTextWnd::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
     AccTextDataVector::iterator aEnd = maAccTextDatas.end();
-    AccTextDataVector::iterator aIt = ::std::find( maAccTextDatas.begin(), aEnd, &rTextData );
+    AccTextDataVector::iterator aIt = std::find( maAccTextDatas.begin(), aEnd, &rTextData );
     OSL_ENSURE( aIt != aEnd, "ScTextWnd::RemoveAccessibleTextData - passed object not registered" );
     if( aIt != aEnd )
         maAccTextDatas.erase( aIt );

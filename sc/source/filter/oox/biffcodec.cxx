@@ -163,10 +163,10 @@ Sequence< NamedValue > BiffDecoder_RCF::implVerifyPassword( const OUString& rPas
     if( (0 < nLen) && (nLen < 16) )
     {
         // copy string to sal_uInt16 array
-        ::std::vector< sal_uInt16 > aPassVect( 16 );
+        std::vector< sal_uInt16 > aPassVect( 16 );
         const sal_Unicode* pcChar = rPassword.getStr();
         const sal_Unicode* pcCharEnd = pcChar + nLen;
-        ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
+        std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
         for( ; pcChar < pcCharEnd; ++pcChar, ++aIt )
             *aIt = static_cast< sal_uInt16 >( *pcChar );
 
@@ -209,7 +209,7 @@ void BiffDecoder_RCF::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcD
 
         // decode the block
         sal_uInt16 nBlockLeft = static_cast< sal_uInt16 >( BIFF_RCF_BLOCKSIZE - lclGetRcfOffset( nCurrPos ) );
-        sal_uInt16 nDecBytes = ::std::min( nBytesLeft, nBlockLeft );
+        sal_uInt16 nDecBytes = std::min( nBytesLeft, nBlockLeft );
         maCodec.decode( pnCurrDest, pnCurrSrc, static_cast< sal_Int32 >( nDecBytes ) );
 
         // prepare for next block

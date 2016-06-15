@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
 using ::com::sun::star::uno::Sequence;
-using ::std::list;
+using std::list;
 
 using namespace ::com::sun::star;
 
@@ -72,7 +72,7 @@ ScCellKeyword::ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const lang::
 {
 }
 
-::std::unique_ptr<ScCellKeywordTranslator> ScCellKeywordTranslator::spInstance;
+std::unique_ptr<ScCellKeywordTranslator> ScCellKeywordTranslator::spInstance;
 
 static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
                             OpCode eOpCode = ocNone, const lang::Locale* pLocale = nullptr)

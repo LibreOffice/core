@@ -108,7 +108,7 @@ void XclImpOutlineBuffer::MakeScOutline()
     if (!mpOutlineArray)
         return;
 
-    ::std::vector<SCSIZE> aOutlineStack;
+    std::vector<SCSIZE> aOutlineStack;
     aOutlineStack.reserve(mnMaxLevel);
     OutlineLevels::const_iterator itr = maLevels.begin(), itrEnd = maLevels.end();
     for (; itr != itrEnd; ++itr)

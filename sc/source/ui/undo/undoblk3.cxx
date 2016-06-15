@@ -659,7 +659,7 @@ OUString ScUndoMerge::GetComment() const
 
 void ScUndoMerge::DoChange( bool bUndo ) const
 {
-    using ::std::set;
+    using std::set;
 
     if (maOption.maTabs.empty())
         // Nothing to do.

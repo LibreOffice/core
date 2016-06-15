@@ -36,12 +36,12 @@ namespace {
     @return  A negative value, if rLeft<rRight; or a positive value, if rLeft>rRight;
     or 0, if rLeft==rRight. */
 template< typename Type >
-int lclCompareVectors( const ::std::vector< Type >& rLeft, const ::std::vector< Type >& rRight )
+int lclCompareVectors( const std::vector< Type >& rLeft, const std::vector< Type >& rRight )
 {
     int nResult = 0;
 
     // 1st: compare all elements of the vectors
-    typedef typename ::std::vector< Type >::const_iterator CIT;
+    typedef typename std::vector< Type >::const_iterator CIT;
     CIT aEndL = rLeft.end(), aEndR = rRight.end();
     for( CIT aItL = rLeft.begin(), aItR = rRight.begin(); !nResult && (aItL != aEndL) && (aItR != aEndR); ++aItL, ++aItR )
         nResult = static_cast< int >( *aItL ) - static_cast< int >( *aItR );
@@ -58,7 +58,7 @@ int lclCompareVectors( const ::std::vector< Type >& rLeft, const ::std::vector< 
 /** Base class for value hashers.
     @descr  These function objects are used to hash any value to a sal_uInt32 value. */
 template< typename Type >
-struct XclHasher : public ::std::unary_function< Type, sal_uInt32 > {};
+struct XclHasher : public std::unary_function< Type, sal_uInt32 > {};
 
 template< typename Type >
 struct XclDirectHasher : public XclHasher< Type >
@@ -76,10 +76,10 @@ struct XclFormatRunHasher : public XclHasher< const XclFormatRun& >
     @descr Uses the passed hasher function object to calculate hash values from
     all vector elements. */
 template< typename Type, typename ValueHasher >
-sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec, const ValueHasher& rHasher )
+sal_uInt16 lclHashVector( const std::vector< Type >& rVec, const ValueHasher& rHasher )
 {
     sal_uInt32 nHash = rVec.size();
-    typedef typename ::std::vector< Type >::const_iterator CIT;
+    typedef typename std::vector< Type >::const_iterator CIT;
     for( CIT aIt = rVec.begin(), aEnd = rVec.end(); aIt != aEnd; ++aIt )
         (nHash *= 31) += rHasher( *aIt );
     return static_cast< sal_uInt16 >( nHash ^ (nHash >> 16) );
@@ -87,7 +87,7 @@ sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec, const ValueHasher& 
 
 /** Calculates a hash value from a vector. Uses XclDirectHasher to hash the vector elements. */
 template< typename Type >
-inline sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec )
+inline sal_uInt16 lclHashVector( const std::vector< Type >& rVec )
 {
     return lclHashVector( rVec, XclDirectHasher< Type >() );
 }
@@ -476,7 +476,7 @@ void XclExpString::CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin,
             mbIsUnicode = true;
     }
     if( !mbWrapped )
-        mbWrapped = ::std::find( aBeg, aEnd, EXC_LF ) != aEnd;
+        mbWrapped = std::find( aBeg, aEnd, EXC_LF ) != aEnd;
 }
 
 void XclExpString::CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
@@ -490,7 +490,7 @@ void XclExpString::CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sa
         *aIt = static_cast< sal_uInt8 >( *pcSrcChar );
     mbIsUnicode = false;
     if( !mbWrapped )
-        mbWrapped = ::std::find( aBeg, aEnd, EXC_LF_C ) != aEnd;
+        mbWrapped = std::find( aBeg, aEnd, EXC_LF_C ) != aEnd;
 }
 
 void XclExpString::Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen, bool bBiff8 )

@@ -450,7 +450,7 @@ private:
     using               XclExpRoot::CreateRecord;
 
     typedef std::shared_ptr< ExcAutoFilterRecs >  XclExpTabFilterRef;
-    typedef ::std::map< SCTAB, XclExpTabFilterRef > XclExpTabFilterMap;
+    typedef std::map< SCTAB, XclExpTabFilterRef > XclExpTabFilterMap;
 
     XclExpTabFilterMap  maFilterMap;
 };

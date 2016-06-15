@@ -125,7 +125,7 @@ void ScChartLockGuard::AlsoLockThisChart( const Reference< frame::XModel >& xMod
     WeakReference< frame::XModel > xWeakModel(xModel);
 
     std::vector< WeakReference< frame::XModel > >::iterator aFindIter(
-            ::std::find( maChartModels.begin(), maChartModels.end(), xWeakModel ) );
+            std::find( maChartModels.begin(), maChartModels.end(), xWeakModel ) );
 
     if( aFindIter == maChartModels.end() )
     {

@@ -88,9 +88,9 @@ public:
     void                SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    typedef ::std::list< XclExpStringRef >      XclExpStringList;
-    typedef ::std::vector< XclExpHashEntry >    XclExpHashVec;
-    typedef ::std::vector< XclExpHashVec >      XclExpHashTab;
+    typedef std::list< XclExpStringRef >        XclExpStringList;
+    typedef std::vector< XclExpHashEntry >      XclExpHashVec;
+    typedef std::vector< XclExpHashVec >        XclExpHashTab;
 
     XclExpStringList    maStringList;   /// List of unique strings (in SST ID order).
     XclExpHashTab       maHashTab;      /// Hashed table that manages string pointers.
@@ -122,7 +122,7 @@ sal_uInt32 XclExpSstImpl::Insert( XclExpStringRef xString )
 
     XclExpHashVec& rVec = maHashTab[ nHash ];
     XclExpHashEntry aEntry( xString.get(), mnSize );
-    XclExpHashVec::iterator aIt = ::std::lower_bound( rVec.begin(), rVec.end(), aEntry, XclExpHashEntrySWO() );
+    XclExpHashVec::iterator aIt = std::lower_bound( rVec.begin(), rVec.end(), aEntry, XclExpHashEntrySWO() );
     if( (aIt == rVec.end()) || (*aIt->mpString != *xString) )
     {
         nSstIndex = mnSize;
@@ -284,7 +284,7 @@ void XclExpMergedcells::Save( XclExpStream& rStrm )
         size_t nRemainingRanges = aXclRanges.size();
         while( nRemainingRanges > 0 )
         {
-            size_t nRangeCount = ::std::min< size_t >( nRemainingRanges, EXC_MERGEDCELLS_MAXCOUNT );
+            size_t nRangeCount = std::min< size_t >( nRemainingRanges, EXC_MERGEDCELLS_MAXCOUNT );
             rStrm.StartRecord( EXC_ID_MERGEDCELLS, 2 + 8 * nRangeCount );
             aXclRanges.WriteSubList( rStrm, nFirstRange, nRangeCount );
             rStrm.EndRecord();
@@ -1830,7 +1830,7 @@ XclExpDV& XclExpDval::SearchOrCreateDv( sal_uLong nScHandle )
         size_t nFirstPos = 0;
         size_t nLastPos = maDVList.GetSize() - 1;
         bool bLoop = true;
-        sal_uLong nCurrScHandle = ::std::numeric_limits< sal_uLong >::max();
+        sal_uLong nCurrScHandle = std::numeric_limits< sal_uLong >::max();
         while( (nFirstPos <= nLastPos) && bLoop )
         {
             nCurrPos = (nFirstPos + nLastPos) / 2;

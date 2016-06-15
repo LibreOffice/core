@@ -18,7 +18,7 @@ class ScRange;
 
 struct ScCellMergeOption
 {
-    ::std::set<SCTAB> maTabs;
+    std::set<SCTAB> maTabs;
     SCCOL mnStartCol;
     SCROW mnStartRow;
     SCCOL mnEndCol;

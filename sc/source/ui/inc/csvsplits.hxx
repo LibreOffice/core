@@ -33,7 +33,7 @@ const sal_Int32 CSV_POS_INVALID     = -1;
 class ScCsvSplits
 {
 private:
-    typedef ::std::vector< sal_Int32 >      ScSplitVector;
+    typedef std::vector< sal_Int32 >        ScSplitVector;
     typedef ScSplitVector::iterator         iterator;
     typedef ScSplitVector::const_iterator   const_iterator;
 

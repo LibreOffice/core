@@ -775,7 +775,7 @@ void XclImpLinkManagerImpl::ReadExternsheet( XclImpStream& rStrm )
     sal_uInt16 nXtiCount;
     nXtiCount = rStrm.ReaduInt16();
     OSL_ENSURE( static_cast< sal_Size >( nXtiCount * 6 ) == rStrm.GetRecLeft(), "XclImpLinkManagerImpl::ReadExternsheet - invalid count" );
-    nXtiCount = static_cast< sal_uInt16 >( ::std::min< sal_Size >( nXtiCount, rStrm.GetRecLeft() / 6 ) );
+    nXtiCount = static_cast< sal_uInt16 >( std::min< sal_Size >( nXtiCount, rStrm.GetRecLeft() / 6 ) );
 
     /*  #i104057# A weird external XLS generator writes multiple EXTERNSHEET
         records instead of only one as expected. Surprisingly, Excel seems to

@@ -34,8 +34,8 @@ struct ScInterpreterTableOpParams
     ScAddress   aOld2;
     ScAddress   aNew2;
     ScAddress   aFormulaPos;
-    ::std::vector< ScFormulaCell* > aNotifiedFormulaCells;
-    ::std::vector< ScAddress >      aNotifiedFormulaPos;
+    std::vector< ScFormulaCell* > aNotifiedFormulaCells;
+    std::vector< ScAddress >        aNotifiedFormulaPos;
     bool        bValid;
     bool        bRefresh;
     bool        bCollectNotifications;
@@ -67,7 +67,7 @@ struct ScInterpreterTableOpParams
         aOld2                 = r.aOld2;
         aNew2                 = r.aNew2;
         aFormulaPos           = r.aFormulaPos;
-        ::std::vector< ScFormulaCell* >().swap( aNotifiedFormulaCells );
+        std::vector< ScFormulaCell* >().swap( aNotifiedFormulaCells );
         aNotifiedFormulaPos   = r.aNotifiedFormulaPos;
         bValid                = r.bValid;
         bRefresh              = r.bRefresh;

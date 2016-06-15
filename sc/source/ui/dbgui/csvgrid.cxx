@@ -512,7 +512,7 @@ void ScCsvGrid::SetTypeNames( const std::vector<OUString>& rTypeNames )
     for( nIx = 0, nItemId = 1; nIx < nCount; ++nIx, ++nItemId )
         maPopup.InsertItem( nItemId, maTypeNames[ nIx ] );
 
-    ::std::for_each( maColStates.begin(), maColStates.end(), Func_SetType( CSV_TYPE_DEFAULT ) );
+    std::for_each( maColStates.begin(), maColStates.end(), Func_SetType( CSV_TYPE_DEFAULT ) );
 }
 
 const OUString& ScCsvGrid::GetColumnTypeName( sal_uInt32 nColIndex ) const
@@ -707,7 +707,7 @@ void ScCsvGrid::MoveCursorRel( ScMoveMode eDir )
 
 void ScCsvGrid::ImplClearSelection()
 {
-    ::std::for_each( maColStates.begin(), maColStates.end(), Func_Select( false ) );
+    std::for_each( maColStates.begin(), maColStates.end(), Func_Select( false ) );
     ImplDrawGridDev();
 }
 
@@ -1158,10 +1158,10 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
 
     // cell texts
     mpEditEngine->SetDefaultItem( SvxColorItem( maTextColor, EE_CHAR_COLOR ) );
-    size_t nLineCount = ::std::min( static_cast< size_t >( GetLastVisLine() - GetFirstVisLine() + 1 ), maTexts.size() );
+    size_t nLineCount = std::min( static_cast< size_t >( GetLastVisLine() - GetFirstVisLine() + 1 ), maTexts.size() );
     // #i67432# cut string to avoid edit engine performance problems with very large strings
-    sal_Int32 nFirstVisPos = ::std::max( GetColumnPos( nColIndex ), GetFirstVisPos() );
-    sal_Int32 nLastVisPos = ::std::min( GetColumnPos( nColIndex + 1 ), GetLastVisPos() );
+    sal_Int32 nFirstVisPos = std::max( GetColumnPos( nColIndex ), GetFirstVisPos() );
+    sal_Int32 nLastVisPos = std::min( GetColumnPos( nColIndex + 1 ), GetLastVisPos() );
     sal_Int32 nStrPos = nFirstVisPos - GetColumnPos( nColIndex );
     sal_Int32 nStrLen = nLastVisPos - nFirstVisPos + 1;
     sal_Int32 nStrX = GetX( nFirstVisPos );
@@ -1171,7 +1171,7 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
         if( (nColIndex < rStrVec.size()) && (rStrVec[ nColIndex ].getLength() > nStrPos) )
         {
             const OUString& rStr = rStrVec[ nColIndex ];
-            OUString aText = rStr.copy( nStrPos, ::std::min( nStrLen, rStr.getLength() - nStrPos) );
+            OUString aText = rStr.copy( nStrPos, std::min( nStrLen, rStr.getLength() - nStrPos) );
             ImplDrawCellText( Point( nStrX, GetY( GetFirstVisLine() + nLine ) ), aText );
         }
     }

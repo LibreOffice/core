@@ -89,8 +89,8 @@ ScAddress XclImpAddressConverter::CreateValidAddress(
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( !ConvertAddress( aScPos, rXclPos, nScTab, bWarn ) )
     {
-        aScPos.SetCol( static_cast< SCCOL >( ::std::min( rXclPos.mnCol, mnMaxCol ) ) );
-        aScPos.SetRow( static_cast< SCROW >( ::std::min( rXclPos.mnRow, mnMaxRow ) ) );
+        aScPos.SetCol( static_cast< SCCOL >( std::min( rXclPos.mnCol, mnMaxCol ) ) );
+        aScPos.SetRow( static_cast< SCROW >( std::min( rXclPos.mnRow, mnMaxRow ) ) );
         aScPos.SetTab( limit_cast< SCTAB >( nScTab, 0, maMaxPos.Tab() ) );
     }
     return aScPos;
@@ -112,8 +112,8 @@ bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
         sal_uInt32 nXclRow2 = rXclRange.maLast.mnRow;
         if( !CheckAddress( rXclRange.maLast, bWarn ) )
         {
-            nXclCol2 = ::std::min( nXclCol2, mnMaxCol );
-            nXclRow2 = ::std::min( nXclRow2, mnMaxRow );
+            nXclCol2 = std::min( nXclCol2, mnMaxCol );
+            nXclRow2 = std::min( nXclRow2, mnMaxRow );
         }
         lclFillAddress( rScRange.aEnd, nXclCol2, nXclRow2, nScTab2 );
     }
@@ -228,7 +228,7 @@ void XclImpStringHelper::SetToDocument(
     if (rString.GetText().isEmpty())
         return;
 
-    ::std::unique_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, nXFIndex ) );
+    std::unique_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, nXFIndex ) );
 
     if (pTextObj.get())
     {
@@ -485,8 +485,8 @@ void XclImpHFConverter::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nWhichId
 
 sal_Int32 XclImpHFConverter::GetTotalHeight() const
 {
-    return ::std::max( maInfos[ EXC_HF_LEFT ].mnHeight,
-        ::std::max( maInfos[ EXC_HF_CENTER ].mnHeight, maInfos[ EXC_HF_RIGHT ].mnHeight ) );
+    return std::max( maInfos[ EXC_HF_LEFT ].mnHeight,
+        std::max( maInfos[ EXC_HF_CENTER ].mnHeight, maInfos[ EXC_HF_RIGHT ].mnHeight ) );
 }
 
 // private --------------------------------------------------------------------
@@ -505,7 +505,7 @@ sal_uInt16 XclImpHFConverter::GetCurrMaxLineHeight() const
 void XclImpHFConverter::UpdateMaxLineHeight( XclImpHFPortion ePortion )
 {
     sal_uInt16& rnMaxHt = maInfos[ ePortion ].mnMaxLineHt;
-    rnMaxHt = ::std::max( rnMaxHt, mxFontData->mnHeight );
+    rnMaxHt = std::max( rnMaxHt, mxFontData->mnHeight );
 }
 
 void XclImpHFConverter::UpdateCurrMaxLineHeight()

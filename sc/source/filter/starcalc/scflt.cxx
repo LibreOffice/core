@@ -369,7 +369,7 @@ static OUString lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
 
 template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStream& rStream )
 {
-    std::unique_ptr<T> pData(new (::std::nothrow) T( rStream));
+    std::unique_ptr<T> pData(new (std::nothrow) T( rStream));
     sal_uLong nError = rStream.GetError();
     if (pData)
     {
@@ -2138,7 +2138,7 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
     if (!rAttr.Count)
         return;
 
-    rAttr.pData = new (::std::nothrow) Sc10ColData[rAttr.Count];
+    rAttr.pData = new (std::nothrow) Sc10ColData[rAttr.Count];
     if (rAttr.pData == nullptr)
     {
         nError = errOutOfMemory;
@@ -2361,7 +2361,7 @@ void Sc10Import::LoadObjects()
                     {
                         Sc10ChartHeader ChartHeader;
                         Sc10ChartSheetData ChartSheetData;
-                        Sc10ChartTypeData* pTypeData = new (::std::nothrow) Sc10ChartTypeData;
+                        Sc10ChartTypeData* pTypeData = new (std::nothrow) Sc10ChartTypeData;
                         if (!pTypeData)
                             nError = errOutOfMemory;
                         else

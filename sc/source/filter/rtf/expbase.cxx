@@ -55,7 +55,7 @@ bool ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
     nStartRow = pDoc->FirstVisibleRow(nStartRow, nEndRow, nTab);
     nEndRow = pDoc->LastVisibleRow(nStartRow, nEndRow, nTab);
     return nStartCol <= nEndCol && nStartRow <= nEndRow && nEndRow !=
-        ::std::numeric_limits<SCROW>::max();
+        std::numeric_limits<SCROW>::max();
 }
 
 bool ScExportBase::IsEmptyTable( SCTAB nTab ) const

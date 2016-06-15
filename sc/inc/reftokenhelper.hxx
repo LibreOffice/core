@@ -35,27 +35,27 @@ namespace ScRefTokenHelper
      * The source range may consist of multiple ranges separated by ';'s.
      */
     void compileRangeRepresentation(
-        ::std::vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
+        std::vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
         const sal_Unicode cSep, ::formula::FormulaGrammar::Grammar eGrammar, bool bOnly3DRef = false);
 
     bool getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal = false);
 
-    void getRangeListFromTokens(ScRangeList& rRangeList, const ::std::vector<ScTokenRef>& pTokens, const ScAddress& rPos);
+    void getRangeListFromTokens(ScRangeList& rRangeList, const std::vector<ScTokenRef>& pTokens, const ScAddress& rPos);
 
     /**
      * Create a double reference token from a range object.
      */
     void getTokenFromRange(ScTokenRef& pToken, const ScRange& rRange);
 
-    void getTokensFromRangeList(::std::vector<ScTokenRef>& pTokens, const ScRangeList& rRanges);
+    void getTokensFromRangeList(std::vector<ScTokenRef>& pTokens, const ScRangeList& rRanges);
 
     bool SC_DLLPUBLIC isRef(const ScTokenRef& pToken);
     bool SC_DLLPUBLIC isExternalRef(const ScTokenRef& pToken);
 
     bool SC_DLLPUBLIC intersects(
-        const ::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
+        const std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
 
-    void SC_DLLPUBLIC join(::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
+    void SC_DLLPUBLIC join(std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
 
     bool getDoubleRefDataFromToken(ScComplexRefData& rData, const ScTokenRef& pToken);
 

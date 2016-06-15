@@ -165,7 +165,7 @@ private:
 
     static ScDocument* GetDocument(ScTabViewShell* mpViewShell);
 
-    ::std::unique_ptr< SvxEditSource > CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos);
+    std::unique_ptr< SvxEditSource > CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos);
 
     void FillDependends(utl::AccessibleRelationSetHelper* pRelationSet);
     void FillPrecedents(utl::AccessibleRelationSetHelper* pRelationSet);

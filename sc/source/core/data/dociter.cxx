@@ -47,8 +47,8 @@
 #include <vector>
 
 using ::rtl::math::approxEqual;
-using ::std::vector;
-using ::std::set;
+using std::vector;
+using std::set;
 
 // iterators have very high frequency use -> custom debug.
 // #define debugiter(...) fprintf(stderr, __VA_ARGS__)
@@ -1717,8 +1717,8 @@ bool ScQueryCellIterator::BinarySearch()
     size_t nLastInRange = nLo;
     size_t nFirstLastInRange = nLastInRange;
     double fLastInRangeValue = bLessEqual ?
-        -(::std::numeric_limits<double>::max()) :
-            ::std::numeric_limits<double>::max();
+        -(std::numeric_limits<double>::max()) :
+            std::numeric_limits<double>::max();
     OUString aLastInRangeString;
     if (!bLessEqual)
         aLastInRangeString = OUString(sal_Unicode(0xFFFF));

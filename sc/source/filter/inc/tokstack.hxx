@@ -128,7 +128,7 @@ private:
             sal_uInt16 mnIndex;
             sal_Int16  mnSheet;
         };
-        ::std::vector<RangeName> maRangeNames;
+        std::vector<RangeName> maRangeNames;
 
         /** for storage of external names */
         struct ExtName
@@ -136,7 +136,7 @@ private:
             sal_uInt16  mnFileId;
             OUString    maName;
         };
-        ::std::vector<ExtName>      maExtNames;
+        std::vector<ExtName>        maExtNames;
 
         /** for storage of external cell references */
         struct ExtCellRef
@@ -145,7 +145,7 @@ private:
             OUString        maTabName;
             ScSingleRefData   maRef;
         };
-        ::std::vector<ExtCellRef>   maExtCellRefs;
+        std::vector<ExtCellRef>     maExtCellRefs;
 
         /** for storage of external area references */
         struct ExtAreaRef
@@ -154,7 +154,7 @@ private:
             OUString        maTabName;
             ScComplexRefData    maRef;
         };
-        ::std::vector<ExtAreaRef>   maExtAreaRefs;
+        std::vector<ExtAreaRef>     maExtAreaRefs;
 
         sal_uInt16*                     pElement;   // Array with Indices for elements
         E_TYPE*                         pType;      // ...with Type-Info

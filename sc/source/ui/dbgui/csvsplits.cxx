@@ -28,7 +28,7 @@ bool ScCsvSplits::Insert( sal_Int32 nPos )
     if (nPos < 0)
         return false;
 
-    const iterator aIter = ::std::lower_bound( maVec.begin(), maVec.end(), nPos );
+    const iterator aIter = std::lower_bound( maVec.begin(), maVec.end(), nPos );
 
     if (aIter != maVec.end() && *aIter == nPos)
         return false;
@@ -70,13 +70,13 @@ bool ScCsvSplits::HasSplit( sal_Int32 nPos ) const
 
 sal_uInt32 ScCsvSplits::GetIndex( sal_Int32 nPos ) const
 {
-    const_iterator aIter = ::std::lower_bound( maVec.begin(), maVec.end(), nPos );
+    const_iterator aIter = std::lower_bound( maVec.begin(), maVec.end(), nPos );
     return GetIterIndex( ((aIter != maVec.end()) && (*aIter == nPos)) ? aIter : maVec.end() );
 }
 
 sal_uInt32 ScCsvSplits::LowerBound( sal_Int32 nPos ) const
 {
-    return GetIterIndex( ::std::lower_bound( maVec.begin(), maVec.end(), nPos ) );
+    return GetIterIndex( std::lower_bound( maVec.begin(), maVec.end(), nPos ) );
 }
 
 sal_uInt32 ScCsvSplits::UpperBound( sal_Int32 nPos ) const

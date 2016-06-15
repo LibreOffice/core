@@ -116,7 +116,7 @@ public:
 
     /** Get filtering criteria based on the position of the cell within data
         field region. */
-    bool            GetDataResultPositionData(::std::vector< css::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
+    bool            GetDataResultPositionData(std::vector< css::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
 
     long            GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient );
     bool GetHeaderDrag(

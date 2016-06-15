@@ -469,7 +469,7 @@ ScViewData::~ScViewData()
 {
     KillEditView();
     delete pOptions;
-    ::std::for_each(
+    std::for_each(
         maTabData.begin(), maTabData.end(), boost::checked_deleter<ScViewDataTable>());
 }
 

@@ -96,7 +96,7 @@ ScUnoAddInFuncData::~ScUnoAddInFuncData()
     delete[] pArgDescs;
 }
 
-const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetCompNames() const
+const std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetCompNames() const
 {
     if ( !bCompInitialized )
     {
@@ -130,7 +130,7 @@ const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetC
     return maCompNames;
 }
 
-void ScUnoAddInFuncData::SetCompNames( const ::std::vector< ScUnoAddInFuncData::LocalizedName >& rNew )
+void ScUnoAddInFuncData::SetCompNames( const std::vector< ScUnoAddInFuncData::LocalizedName >& rNew )
 {
     OSL_ENSURE( !bCompInitialized, "SetCompNames after initializing" );
 
@@ -141,14 +141,14 @@ void ScUnoAddInFuncData::SetCompNames( const ::std::vector< ScUnoAddInFuncData::
 
 bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const
 {
-    const ::std::vector<LocalizedName>& rCompNames = GetCompNames();
+    const std::vector<LocalizedName>& rCompNames = GetCompNames();
     if ( !rCompNames.empty() )
     {
         LanguageTag aLanguageTag( eDestLang);
         const OUString aSearch( aLanguageTag.getBcp47());
 
         // First, check exact match without fallback overhead.
-        ::std::vector<LocalizedName>::const_iterator itNames( rCompNames.begin());
+        std::vector<LocalizedName>::const_iterator itNames( rCompNames.begin());
         for ( ; itNames != rCompNames.end(); ++itNames)
         {
             if ((*itNames).maLocale == aSearch)
@@ -160,7 +160,7 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
 
         // Second, try match of fallback search with fallback locales,
         // appending also 'en-US' and 'en' to search if not queried.
-        ::std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings( true));
+        std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings( true));
         if (aSearch != "en-US")
         {
             aFallbackSearch.push_back( "en-US");
@@ -169,15 +169,15 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
                 aFallbackSearch.push_back( "en");
             }
         }
-        ::std::vector< OUString >::const_iterator itSearch( aFallbackSearch.begin());
+        std::vector< OUString >::const_iterator itSearch( aFallbackSearch.begin());
         for ( ; itSearch != aFallbackSearch.end(); ++itSearch)
         {
             itNames = rCompNames.begin();
             for ( ; itNames != rCompNames.end(); ++itNames)
             {
                 // We checked already the full tag, start with second.
-                ::std::vector< OUString > aFallbackLocales( LanguageTag( (*itNames).maLocale).getFallbackStrings( false));
-                for (::std::vector< OUString >::const_iterator itLocales( aFallbackLocales.begin());
+                std::vector< OUString > aFallbackLocales( LanguageTag( (*itNames).maLocale).getFallbackStrings( false));
+                for (std::vector< OUString >::const_iterator itLocales( aFallbackLocales.begin());
                         itLocales != aFallbackLocales.end(); ++itLocales)
                 {
                     if (*itLocales == *itSearch)
@@ -458,7 +458,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 // get compatibility names
 
-                ::std::vector<ScUnoAddInFuncData::LocalizedName> aCompNames;
+                std::vector<ScUnoAddInFuncData::LocalizedName> aCompNames;
 
                 OUString aCompPath(aFuncPropPath + CFGSTR_COMPATIBILITYNAME);
                 uno::Sequence<OUString> aCompPropNames( &aCompPath, 1 );
@@ -625,10 +625,10 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
         ScUnoAddInFuncData* pFuncData = ppFuncData[i];
         if ( pFuncData )
         {
-            const ::std::vector<ScUnoAddInFuncData::LocalizedName>& rNames = pFuncData->GetCompNames();
+            const std::vector<ScUnoAddInFuncData::LocalizedName>& rNames = pFuncData->GetCompNames();
             if ( !rNames.empty() )
             {
-                ::std::vector<ScUnoAddInFuncData::LocalizedName>::const_iterator it( rNames.begin());
+                std::vector<ScUnoAddInFuncData::LocalizedName>::const_iterator it( rNames.begin());
                 for ( ; it != rNames.end(); ++it)
                 {
                     if ( ScGlobal::pCharClass->uppercase( (*it).maName ) == aUpperCmp )

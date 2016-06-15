@@ -78,7 +78,7 @@
 
 using namespace com::sun::star;
 using namespace formula;
-using ::std::unique_ptr;
+using std::unique_ptr;
 
 #define ADDIN_MAXSTRLEN 256
 
@@ -3345,7 +3345,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 
 namespace {
 
-class FindByPointer : public ::std::unary_function<ScInterpreterTableOpParams, bool>
+class FindByPointer : public std::unary_function<ScInterpreterTableOpParams, bool>
 {
     const ScInterpreterTableOpParams* mpTableOp;
 public:
@@ -3386,7 +3386,7 @@ void ScInterpreter::ScTableOp()
     {
         pTableOp->aNotifiedFormulaPos = pDok->aLastTableOpParams.aNotifiedFormulaPos;
         pTableOp->bRefresh = true;
-        for ( ::std::vector< ScAddress >::const_iterator iBroadcast(
+        for ( std::vector< ScAddress >::const_iterator iBroadcast(
                     pTableOp->aNotifiedFormulaPos.begin() );
                 iBroadcast != pTableOp->aNotifiedFormulaPos.end();
                 ++iBroadcast )
@@ -3419,7 +3419,7 @@ void ScInterpreter::ScTableOp()
     }
 
     auto const itr =
-        ::std::find_if(pDok->m_TableOpList.begin(), pDok->m_TableOpList.end(), FindByPointer(pTableOp));
+        std::find_if(pDok->m_TableOpList.begin(), pDok->m_TableOpList.end(), FindByPointer(pTableOp));
     if (itr != pDok->m_TableOpList.end())
     {
         pTableOp = itr->release();
@@ -3427,7 +3427,7 @@ void ScInterpreter::ScTableOp()
     }
 
     // set dirty again once more to be able to recalculate original
-    for ( ::std::vector< ScFormulaCell* >::const_iterator iBroadcast(
+    for ( std::vector< ScFormulaCell* >::const_iterator iBroadcast(
                 pTableOp->aNotifiedFormulaCells.begin() );
             iBroadcast != pTableOp->aNotifiedFormulaCells.end();
             ++iBroadcast )
@@ -3448,7 +3448,7 @@ void ScInterpreter::ScTableOp()
     // Reset all dirty flags so next incarnation does really collect all cell
     // pointers during notifications and not just non-dirty ones, which may
     // happen if a formula cell is used by more than one TableOp block.
-    for ( ::std::vector< ScFormulaCell* >::const_iterator iBroadcast2(
+    for ( std::vector< ScFormulaCell* >::const_iterator iBroadcast2(
                 pTableOp->aNotifiedFormulaCells.begin() );
             iBroadcast2 != pTableOp->aNotifiedFormulaCells.end();
             ++iBroadcast2 )

@@ -182,7 +182,7 @@ public:
     sal_Int32           GetTotalHeight() const;
 
 private:    // types
-    typedef ::std::unique_ptr< XclFontData > XclFontDataPtr;
+    typedef std::unique_ptr< XclFontData > XclFontDataPtr;
 
     /** Enumerates the supported header/footer portions. */
     enum XclImpHFPortion { EXC_HF_LEFT, EXC_HF_CENTER, EXC_HF_RIGHT, EXC_HF_PORTION_COUNT };
@@ -197,7 +197,7 @@ private:    // types
         sal_uInt16          mnMaxLineHt;    /// Maximum font height for the current text line.
         explicit            XclImpHFPortionInfo();
     };
-    typedef ::std::vector< XclImpHFPortionInfo > XclImpHFPortionInfoVec;
+    typedef std::vector< XclImpHFPortionInfo > XclImpHFPortionInfoVec;
 
 private:
     /** Returns the current edit engine text object. */
@@ -324,7 +324,7 @@ public:
     sal_uInt16              GetScError() const;
 
 protected:
-    typedef ::std::unique_ptr< const ScTokenArray >   ScTokenArrayPtr;
+    typedef std::unique_ptr< const ScTokenArray >     ScTokenArrayPtr;
 
     OUString            maStr;      /// Cached value is a string.
     double              mfValue;    /// Cached value is a double.

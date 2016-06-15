@@ -32,7 +32,7 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
-using ::std::vector;
+using std::vector;
 
 bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2)
 {
@@ -112,8 +112,8 @@ public:
     bool isOptionEnabled(SCSIZE nOptId) const;
     void setOption(SCSIZE nOptId, bool bEnabled);
 
-    void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
-    const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const { return maEnhancedProtection;}
+    void setEnhancedProtection( const std::vector< ScEnhancedProtection > & rProt );
+    const std::vector< ScEnhancedProtection > & getEnhancedProtection() const { return maEnhancedProtection;}
     bool updateReference( UpdateRefMode, ScDocument*, const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     bool isBlockEditable( const ScRange& rRange ) const;
     bool isSelectionEditable( const ScRangeList& rRangeList ) const;
@@ -121,12 +121,12 @@ public:
 private:
     OUString maPassText;
     css::uno::Sequence<sal_Int8>   maPassHash;
-    ::std::vector<bool> maOptions;
+    std::vector<bool> maOptions;
     bool mbEmptyPass;
     bool mbProtected;
     ScPasswordHash meHash1;
     ScPasswordHash meHash2;
-    ::std::vector< ScEnhancedProtection > maEnhancedProtection;
+    std::vector< ScEnhancedProtection > maEnhancedProtection;
 };
 
 Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const OUString& aPassText, ScPasswordHash eHash)
@@ -345,7 +345,7 @@ void ScTableProtectionImpl::setOption(SCSIZE nOptId, bool bEnabled)
     maOptions[nOptId] = bEnabled;
 }
 
-void ScTableProtectionImpl::setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt )
+void ScTableProtectionImpl::setEnhancedProtection( const std::vector< ScEnhancedProtection > & rProt )
 {
     maEnhancedProtection = rProt;
 }
@@ -354,7 +354,7 @@ bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, ScDocument* pD
         const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     bool bChanged = false;
-    for (::std::vector<ScEnhancedProtection>::iterator it(maEnhancedProtection.begin());
+    for (std::vector<ScEnhancedProtection>::iterator it(maEnhancedProtection.begin());
             it != maEnhancedProtection.end(); ++it)
     {
         if ((*it).maRangeList.Is())
@@ -379,7 +379,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
     // present we assume the permission to edit is not granted. Until we
     // actually can evaluate the descriptors..
 
-    for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
+    for (std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
             itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
     {
         if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.Is())
@@ -399,7 +399,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
 
     // Test also for cases where rRange is encompassed by a union of two or
     // more ranges of the list. The original ranges are not necessarily joined.
-    for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
+    for (std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
             itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
     {
         if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.Is())
@@ -420,7 +420,7 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
     /* TODO: once we handle passwords, remember a successful unlock at
      * ScEnhancedProtection so we can use that here. */
     ScRangeList aRangeList;
-    for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
+    for (std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
             itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
     {
         if (!(*it).hasSecurityDescriptor() && (*it).maRangeList.Is())
@@ -607,12 +607,12 @@ void ScTableProtection::setOption(Option eOption, bool bEnabled)
     mpImpl->setOption(eOption, bEnabled);
 }
 
-void ScTableProtection::setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt )
+void ScTableProtection::setEnhancedProtection( const std::vector< ScEnhancedProtection > & rProt )
 {
     mpImpl->setEnhancedProtection(rProt);
 }
 
-const ::std::vector< ScEnhancedProtection > & ScTableProtection::getEnhancedProtection() const
+const std::vector< ScEnhancedProtection > & ScTableProtection::getEnhancedProtection() const
 {
     return mpImpl->getEnhancedProtection();
 }

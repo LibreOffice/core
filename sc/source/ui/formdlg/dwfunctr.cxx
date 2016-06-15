@@ -446,7 +446,7 @@ void ScFunctionWin::UpdateFunctionList()
     }
     else // LRU-Liste
     {
-        for (::std::vector<const formula::IFunctionDescription*>::iterator iter=aLRUList.begin();
+        for (std::vector<const formula::IFunctionDescription*>::iterator iter=aLRUList.begin();
                 iter != aLRUList.end(); ++iter)
         {
             const formula::IFunctionDescription* pDesc = *iter;

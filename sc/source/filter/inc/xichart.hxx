@@ -412,7 +412,7 @@ public:
                         CreateStringSequence( const XclImpChRoot& rRoot,
                             sal_uInt16 nLeadFontIdx, const Color& rLeadFontColor ) const;
 
-    void                FillSourceLink(::std::vector<ScTokenRef>& rTokens) const;
+    void                FillSourceLink(std::vector<ScTokenRef>& rTokens) const;
 
 private:
     XclChSourceLink     maData;             /// Contents of the CHSOURCELINK record.
@@ -795,7 +795,7 @@ public:
     css::uno::Reference< css::chart2::XDataSeries >
                         CreateDataSeries() const;
 
-    void                FillAllSourceLinks(::std::vector<ScTokenRef>& rTokens) const;
+    void                FillAllSourceLinks(std::vector<ScTokenRef>& rTokens) const;
 
 private:
     /** Reads a CHSOURCELINK record. */
@@ -819,10 +819,10 @@ private:
                         CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const;
 
 private:
-    typedef ::std::map<sal_uInt16, XclImpChDataFormatRef> XclImpChDataFormatMap;
-    typedef ::std::map<sal_uInt16, XclImpChTextRef>       XclImpChTextMap;
-    typedef ::std::list< XclImpChSerTrendLineRef >        XclImpChSerTrendLineList;
-    typedef ::std::map<sal_uInt8, std::unique_ptr<XclImpChSerErrorBar>> XclImpChSerErrorBarMap;
+    typedef std::map<sal_uInt16, XclImpChDataFormatRef> XclImpChDataFormatMap;
+    typedef std::map<sal_uInt16, XclImpChTextRef>         XclImpChTextMap;
+    typedef std::list< XclImpChSerTrendLineRef >          XclImpChSerTrendLineList;
+    typedef std::map<sal_uInt8, std::unique_ptr<XclImpChSerErrorBar>> XclImpChSerErrorBarMap;
 
     XclChSeries         maData;             /// Contents of the CHSERIES record.
     XclImpChSourceLinkRef mxValueLink;      /// Link data for series values.
@@ -1038,10 +1038,10 @@ private:
                                            sal_Int32 nApiAxesSetIdx ) const;
 
 private:
-    typedef ::std::vector< XclImpChSeriesRef >               XclImpChSeriesVec;
-    typedef ::std::map<sal_uInt16, std::unique_ptr<XclImpChDropBar>> XclImpChDropBarMap;
-    typedef ::std::map<sal_uInt16, XclImpChLineFormat> XclImpChLineFormatMap;
-    typedef ::std::set< sal_uInt16 >                         UInt16Set;
+    typedef std::vector< XclImpChSeriesRef >                 XclImpChSeriesVec;
+    typedef std::map<sal_uInt16, std::unique_ptr<XclImpChDropBar>> XclImpChDropBarMap;
+    typedef std::map<sal_uInt16, XclImpChLineFormat> XclImpChLineFormatMap;
+    typedef std::set< sal_uInt16 >                           UInt16Set;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
     XclImpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).
@@ -1252,7 +1252,7 @@ private:
     void                ConvertBackground( css::uno::Reference< css::chart2::XDiagram >  xDiagram ) const;
 
 private:
-    typedef ::std::map<sal_uInt16, XclImpChTypeGroupRef> XclImpChTypeGroupMap;
+    typedef std::map<sal_uInt16, XclImpChTypeGroupRef> XclImpChTypeGroupMap;
 
     XclChAxesSet        maData;             /// Contents of the CHAXESSET record.
     XclImpChFramePosRef mxFramePos;         /// Outer plot area position (CHFRAMEPOS record).
@@ -1334,9 +1334,9 @@ private:
         CreateDiagram() const;
 
 private:
-    typedef ::std::vector< XclImpChSeriesRef >                   XclImpChSeriesVec;
-    typedef ::std::map<XclChDataPointPos, XclImpChDataFormatRef> XclImpChDataFormatMap;
-    typedef ::std::map<sal_uInt16, std::unique_ptr<XclImpChText>> XclImpChTextMap;
+    typedef std::vector< XclImpChSeriesRef >                     XclImpChSeriesVec;
+    typedef std::map<XclChDataPointPos, XclImpChDataFormatRef> XclImpChDataFormatMap;
+    typedef std::map<sal_uInt16, std::unique_ptr<XclImpChText>> XclImpChTextMap;
 
     XclChRectangle      maRect;             /// Position of the chart on the sheet (CHCHART record).
     XclImpChSeriesVec   maSeries;           /// List of series data (CHSERIES groups).

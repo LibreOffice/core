@@ -40,8 +40,8 @@
 #include <formula/errorcodes.hxx>
 
 using namespace formula;
-using ::std::pair;
-using ::std::unary_function;
+using std::pair;
+using std::unary_function;
 
 // ScRangeData
 

@@ -31,7 +31,7 @@
 
 class ScDocument;
 
-typedef ::std::vector<ScDPItemData> ScDPItemDataVec;
+typedef std::vector<ScDPItemData> ScDPItemDataVec;
 
 class ScDPGroupItem
 {
@@ -51,7 +51,7 @@ public:
     void        FillGroupFilter( ScDPFilteredCache::GroupFilter& rFilter ) const;
 };
 
-typedef ::std::vector<ScDPGroupItem> ScDPGroupItemVec;
+typedef std::vector<ScDPGroupItem> ScDPGroupItemVec;
 
 class ScDPGroupDimension
 {
@@ -88,7 +88,7 @@ public:
     bool IsDateDimension() const { return mbDateDimension;}
 };
 
-typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
+typedef std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
 
 class SC_DLLPUBLIC ScDPNumGroupDimension
 {
@@ -134,7 +134,7 @@ class ScDPGroupTableData : public ScDPTableData
     bool        IsNumGroupDimension( long nDimension ) const;
     void GetNumGroupInfo(long nDimension, ScDPNumGroupInfo& rInfo);
 
-    void        ModifyFilterCriteria(::std::vector<ScDPFilteredCache::Criterion>& rCriteria);
+    void        ModifyFilterCriteria(std::vector<ScDPFilteredCache::Criterion>& rCriteria);
 
 public:
                 // takes ownership of pSource

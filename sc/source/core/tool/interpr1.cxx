@@ -81,7 +81,7 @@ ScTokenStack* ScInterpreter::pGlobalStack = nullptr;
 bool ScInterpreter::bGlobalStackInUse = false;
 
 using namespace formula;
-using ::std::unique_ptr;
+using std::unique_ptr;
 
 void ScInterpreter::ScIfJump()
 {
@@ -308,8 +308,8 @@ void ScInterpreter::ScIfError( bool bNAonly )
                 }
                 // If the matrix has no queried error at all we can simply use
                 // it as result and don't need to bother with jump matrix.
-                SCSIZE nErrorCol = ::std::numeric_limits<SCSIZE>::max(),
-                       nErrorRow = ::std::numeric_limits<SCSIZE>::max();
+                SCSIZE nErrorCol = std::numeric_limits<SCSIZE>::max(),
+                       nErrorRow = std::numeric_limits<SCSIZE>::max();
                 SCSIZE nCols, nRows;
                 pMat->GetDimensions( nCols, nRows );
                 if (nCols == 0 || nRows == 0)
@@ -3423,7 +3423,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
-    double nMin = ::std::numeric_limits<double>::max();
+    double nMin = std::numeric_limits<double>::max();
     double nVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3518,7 +3518,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
-    double nMax = -(::std::numeric_limits<double>::max());
+    double nMax = -(std::numeric_limits<double>::max());
     double nVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3716,9 +3716,9 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
         }
     }
 
-    ::std::vector<double>::size_type n = values.size();
+    std::vector<double>::size_type n = values.size();
     vMean = fSum / n;
-    for (::std::vector<double>::size_type i = 0; i < n; i++)
+    for (std::vector<double>::size_type i = 0; i < n; i++)
         vSum += ::rtl::math::approxSub( values[i], vMean) * ::rtl::math::approxSub( values[i], vMean);
     rVal = vSum;
 }
@@ -6765,7 +6765,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
     if ( GetByte() == 3 )
     {
         // First, get the query criteria range.
-        ::std::unique_ptr<ScDBRangeBase> pQueryRef( PopDBDoubleRef() );
+        std::unique_ptr<ScDBRangeBase> pQueryRef( PopDBDoubleRef() );
         if (!pQueryRef.get())
             return nullptr;
 
@@ -7608,7 +7608,7 @@ void ScInterpreter::ScIndex()
                         // Access one element of a vector independent of col/row
                         // orientation?
                         bool bVector = ((nCol == 0 || nRow == 0) && (nC == 1 || nR == 1));
-                        SCSIZE nElement = ::std::max( static_cast<SCSIZE>(nCol),
+                        SCSIZE nElement = std::max( static_cast<SCSIZE>(nCol),
                                 static_cast<SCSIZE>(nRow));
                         if (nC == 0 || nR == 0 ||
                                 (!bVector && (static_cast<SCSIZE>(nCol) > nC ||

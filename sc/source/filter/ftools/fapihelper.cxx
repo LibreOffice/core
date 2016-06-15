@@ -99,7 +99,7 @@ Reference< XInterface > ScfApiHelper::CreateInstance( const OUString& rServiceNa
 }
 
 uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( SfxMedium& rMedium,
-        ::comphelper::IDocPasswordVerifier& rVerifier, const ::std::vector< OUString >* pDefaultPasswords )
+        ::comphelper::IDocPasswordVerifier& rVerifier, const std::vector< OUString >* pDefaultPasswords )
 {
     uno::Sequence< beans::NamedValue > aEncryptionData;
     const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(rMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);
@@ -276,8 +276,8 @@ ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
     OSL_ENSURE( ppcPropNames, "ScfPropSetHelper::ScfPropSetHelper - no strings found" );
 
     // create OUStrings from ASCII property names
-    typedef ::std::pair< OUString, size_t >     IndexedOUString;
-    typedef ::std::vector< IndexedOUString >    IndexedOUStringVec;
+    typedef std::pair< OUString, size_t >       IndexedOUString;
+    typedef std::vector< IndexedOUString >      IndexedOUStringVec;
     IndexedOUStringVec aPropNameVec;
     for( size_t nVecIdx = 0; *ppcPropNames; ++ppcPropNames, ++nVecIdx )
     {
@@ -286,7 +286,7 @@ ScfPropSetHelper::ScfPropSetHelper( const sal_Char* const* ppcPropNames ) :
     }
 
     // sorts the pairs, which will be sorted by first component (the property name)
-    ::std::sort( aPropNameVec.begin(), aPropNameVec.end() );
+    std::sort( aPropNameVec.begin(), aPropNameVec.end() );
 
     // resize member sequences
     size_t nSize = aPropNameVec.size();

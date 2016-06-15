@@ -18,7 +18,7 @@
 #include <memory>
 #include <utility>
 #include <o3tl/make_unique.hxx>
-using ::std::unique_ptr;
+using std::unique_ptr;
 
 ScUndoAllRangeNames::ScUndoAllRangeNames(
     ScDocShell* pDocSh,

@@ -119,9 +119,9 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         case EXC_BIFF8: maXclMaxPos.Set( EXC_MAXCOL8, EXC_MAXROW8, EXC_MAXTAB8 );   break;
         default:        DBG_ERROR_BIFF();
     }
-    maMaxPos.SetCol( ::std::min( maScMaxPos.Col(), maXclMaxPos.Col() ) );
-    maMaxPos.SetRow( ::std::min( maScMaxPos.Row(), maXclMaxPos.Row() ) );
-    maMaxPos.SetTab( ::std::min( maScMaxPos.Tab(), maXclMaxPos.Tab() ) );
+    maMaxPos.SetCol( std::min( maScMaxPos.Col(), maXclMaxPos.Col() ) );
+    maMaxPos.SetRow( std::min( maScMaxPos.Row(), maXclMaxPos.Row() ) );
+    maMaxPos.SetTab( std::min( maScMaxPos.Tab(), maXclMaxPos.Tab() ) );
 
     // document URL and path
     if( const SfxItemSet* pItemSet = mrMedium.GetItemSet() )
@@ -227,7 +227,7 @@ sal_Int32 XclRoot::GetHmmFromPixelY( double fPixelY ) const
 
 uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
-    ::std::vector< OUString > aDefaultPasswords;
+    std::vector< OUString > aDefaultPasswords;
     aDefaultPasswords.push_back( mrData.maDefPassword );
     return ScfApiHelper::QueryEncryptionDataForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );
 }

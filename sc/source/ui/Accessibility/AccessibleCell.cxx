@@ -392,13 +392,13 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
     return pDoc;
 }
 
-::std::unique_ptr< SvxEditSource > ScAccessibleCell::CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos)
+std::unique_ptr< SvxEditSource > ScAccessibleCell::CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos)
 {
     if (IsFormulaMode())
     {
-        return ::std::unique_ptr< SvxEditSource >();
+        return std::unique_ptr< SvxEditSource >();
     }
-    ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(o3tl::make_unique<ScAccessibleCellTextData>(pViewShell, aCell, eSplitPos, this)));
+    std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(o3tl::make_unique<ScAccessibleCellTextData>(pViewShell, aCell, eSplitPos, this)));
 
     return pEditSource;
 }

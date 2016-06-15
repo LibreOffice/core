@@ -46,11 +46,11 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
-using ::std::for_each;
+using std::for_each;
 
 namespace {
 
-class AddRemoveEventListener : public ::std::unary_function<void, Reference<XAccessible> >
+class AddRemoveEventListener : public std::unary_function<void, Reference<XAccessible> >
 {
 public:
     explicit AddRemoveEventListener(const Reference<XAccessibleEventListener>& rListener, bool bAdd) :

@@ -128,7 +128,7 @@ private:
     const sal_Int16*    GetDateGroupStep() const;
 
 private:
-    typedef ::std::vector< XclImpPCItemRef > XclImpPCItemVec;
+    typedef std::vector< XclImpPCItemRef > XclImpPCItemVec;
 
     XclImpPivotCache&   mrPCache;           /// Parent pivot cache containing this field.
     XclImpPCItemVec     maItems;            /// List of all displayed data items.
@@ -179,7 +179,7 @@ public:
     bool                IsValid() const;
 
 private:
-    typedef ::std::vector< XclImpPCFieldRef > XclImpPCFieldVec;
+    typedef std::vector< XclImpPCFieldRef > XclImpPCFieldVec;
 
     XclPCInfo           maPCInfo;           /// Pivot cache settings (SXDB record).
     XclImpPCFieldVec    maFields;           /// List of pivot cache fields.
@@ -280,8 +280,8 @@ private:
     void                ConvertItems( ScDPSaveDimension& rSaveDim ) const;
 
 private:
-    typedef ::std::list< XclPTDataFieldInfo >   XclPTDataFieldInfoList;
-    typedef ::std::vector< XclImpPTItemRef >    XclImpPTItemVec;
+    typedef std::list< XclPTDataFieldInfo >     XclPTDataFieldInfoList;
+    typedef std::vector< XclImpPTItemRef >      XclImpPTItemVec;
 
     const XclImpPivotTable& mrPTable;       /// Parent pivot table containing this field.
     XclPTFieldInfo      maFieldInfo;        /// General field info (SXVD record).
@@ -341,7 +341,7 @@ public:
     void                ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveData& rSaveData);
 
 private:
-    typedef ::std::vector< XclImpPTFieldRef > XclImpPTFieldVec;
+    typedef std::vector< XclImpPTFieldRef > XclImpPTFieldVec;
 
     XclImpPivotCacheRef mxPCache;           /// Pivot cache containing field/item names.
 
@@ -417,8 +417,8 @@ public:
     void                MaybeRefreshPivotTables();
 
 private:
-    typedef ::std::vector< XclImpPivotCacheRef >    XclImpPivotCacheVec;
-    typedef ::std::vector< XclImpPivotTableRef >    XclImpPivotTableVec;
+    typedef std::vector< XclImpPivotCacheRef >      XclImpPivotCacheVec;
+    typedef std::vector< XclImpPivotTableRef >      XclImpPivotTableVec;
 
     XclImpPivotCacheVec maPCaches;          /// List of all pivot caches.
     XclImpPivotTableVec maPTables;          /// List of all pivot tables.

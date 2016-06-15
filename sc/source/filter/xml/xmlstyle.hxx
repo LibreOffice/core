@@ -108,7 +108,7 @@ protected:
     /** Application-specific filter. By default do nothing. */
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 public:
     explicit ScXMLCellExportPropertyMapper(
@@ -118,7 +118,7 @@ public:
             SvXMLExport& rExport,
             const XMLPropertyState& rProperty,
             SvXmlExportFlags nFlags,
-            const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+            const std::vector< XMLPropertyState > *pProperties = nullptr,
             sal_uInt32 nIdx = 0 ) const override;
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
@@ -127,7 +127,7 @@ public:
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
-            const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+            const std::vector< XMLPropertyState > *pProperties = nullptr,
             sal_uInt32 nIdx = 0 ) const override;
 };
 
@@ -137,7 +137,7 @@ protected:
     /** Application-specific filter. By default do nothing. */
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 public:
     explicit ScXMLRowExportPropertyMapper(
@@ -158,7 +158,7 @@ public:
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
-            const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+            const std::vector< XMLPropertyState > *pProperties = nullptr,
             sal_uInt32 nIdx = 0 ) const override;
 };
 
@@ -176,7 +176,7 @@ public:
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
-            const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+            const std::vector< XMLPropertyState > *pProperties = nullptr,
             sal_uInt32 nIdx = 0 ) const override;
 };
 
@@ -187,7 +187,7 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
     virtual void exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
             sal_Int32 nFamily,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
@@ -196,7 +196,7 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
     virtual void exportStyleContent(
             const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
             sal_Int32 nFamily,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap

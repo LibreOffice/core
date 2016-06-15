@@ -117,7 +117,7 @@ using namespace ::com::sun::star;
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
-using ::std::set;
+using std::set;
 
 namespace {
 
@@ -4425,7 +4425,7 @@ void ScDocument::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool b
 SCROW ScDocument::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return ::std::numeric_limits<SCROW>::max();
+        return std::numeric_limits<SCROW>::max();
 
     return maTabs[nTab]->FirstVisibleRow(nStartRow, nEndRow);
 }
@@ -4433,7 +4433,7 @@ SCROW ScDocument::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) co
 SCROW ScDocument::LastVisibleRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return ::std::numeric_limits<SCROW>::max();
+        return std::numeric_limits<SCROW>::max();
 
     return maTabs[nTab]->LastVisibleRow(nStartRow, nEndRow);
 }
@@ -4481,7 +4481,7 @@ void ScDocument::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool
 SCROW ScDocument::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return ::std::numeric_limits<SCROW>::max();
+        return std::numeric_limits<SCROW>::max();
 
     return maTabs[nTab]->FirstNonFilteredRow(nStartRow, nEndRow);
 }
@@ -4489,7 +4489,7 @@ SCROW ScDocument::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab
 SCROW ScDocument::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return ::std::numeric_limits<SCROW>::max();
+        return std::numeric_limits<SCROW>::max();
 
     return maTabs[nTab]->LastNonFilteredRow(nStartRow, nEndRow);
 }

@@ -34,7 +34,7 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 using namespace ::com::sun::star;
-using ::std::vector;
+using std::vector;
 
 ScDPTableData::CalcInfo::CalcInfo() :
     pInitState( nullptr ),
@@ -256,7 +256,7 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
     if ( nIndex >= GetMembersCount( nDim ) )
         return nullptr;
 
-    const ::std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
+    const std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
 
     return GetCacheTable().getCache().GetItemDataById( (SCCOL) nDim, (SCROW)nMembers[nIndex] );
 }

@@ -53,7 +53,7 @@
 #include <string.h>
 #include <math.h>
 
-using ::std::vector;
+using std::vector;
 using namespace com::sun::star;
 using namespace formula;
 
@@ -2184,12 +2184,12 @@ void ScInterpreter::ScIntersect()
             {
                 const ScAddress& r21 = (*it2).Ref1.toAbs(aPos);
                 const ScAddress& r22 = (*it2).Ref2.toAbs(aPos);
-                SCCOL nCol1 = ::std::max( r11.Col(), r21.Col());
-                SCROW nRow1 = ::std::max( r11.Row(), r21.Row());
-                SCTAB nTab1 = ::std::max( r11.Tab(), r21.Tab());
-                SCCOL nCol2 = ::std::min( r12.Col(), r22.Col());
-                SCROW nRow2 = ::std::min( r12.Row(), r22.Row());
-                SCTAB nTab2 = ::std::min( r12.Tab(), r22.Tab());
+                SCCOL nCol1 = std::max( r11.Col(), r21.Col());
+                SCROW nRow1 = std::max( r11.Row(), r21.Row());
+                SCTAB nTab1 = std::max( r11.Tab(), r21.Tab());
+                SCCOL nCol2 = std::min( r12.Col(), r22.Col());
+                SCROW nRow2 = std::min( r12.Row(), r22.Row());
+                SCTAB nTab2 = std::min( r12.Tab(), r22.Tab());
                 if (nCol2 < nCol1 || nRow2 < nRow1 || nTab2 < nTab1)
                     ;   // nothing
                 else
@@ -2253,12 +2253,12 @@ void ScInterpreter::ScIntersect()
                     ;   // nothing, prevent compiler warning
             }
         }
-        SCCOL nCol1 = ::std::max( nC1[0], nC1[1]);
-        SCROW nRow1 = ::std::max( nR1[0], nR1[1]);
-        SCTAB nTab1 = ::std::max( nT1[0], nT1[1]);
-        SCCOL nCol2 = ::std::min( nC2[0], nC2[1]);
-        SCROW nRow2 = ::std::min( nR2[0], nR2[1]);
-        SCTAB nTab2 = ::std::min( nT2[0], nT2[1]);
+        SCCOL nCol1 = std::max( nC1[0], nC1[1]);
+        SCROW nRow1 = std::max( nR1[0], nR1[1]);
+        SCTAB nTab1 = std::max( nT1[0], nT1[1]);
+        SCCOL nCol2 = std::min( nC2[0], nC2[1]);
+        SCROW nRow2 = std::min( nR2[0], nR2[1]);
+        SCTAB nTab2 = std::min( nT2[0], nT2[1]);
         if (nCol2 < nCol1 || nRow2 < nRow1 || nTab2 < nTab1)
             PushError( errNoRef);
         else if (nCol2 == nCol1 && nRow2 == nRow1 && nTab2 == nTab1)

@@ -117,7 +117,7 @@ class ScHint;
 class ScTable
 {
 private:
-    typedef ::std::vector< ScRange > ScRangeVec;
+    typedef std::vector< ScRange > ScRangeVec;
 
     ScColContainer  aCol;
 
@@ -152,10 +152,10 @@ private:
     std::unique_ptr<ScFlatBoolColSegments>  mpFilteredCols;
     std::unique_ptr<ScFlatBoolRowSegments>  mpFilteredRows;
 
-    ::std::set<SCROW>                      maRowPageBreaks;
-    ::std::set<SCROW>                      maRowManualBreaks;
-    ::std::set<SCCOL>                      maColPageBreaks;
-    ::std::set<SCCOL>                      maColManualBreaks;
+    std::set<SCROW>                        maRowPageBreaks;
+    std::set<SCROW>                        maRowManualBreaks;
+    std::set<SCCOL>                        maColPageBreaks;
+    std::set<SCCOL>                        maColManualBreaks;
 
     ScOutlineTable* pOutlineTable;
 
@@ -772,11 +772,11 @@ public:
     void        UpdatePageBreaks( const ScRange* pUserArea );
     void        RemoveManualBreaks();
     bool        HasManualBreaks() const;
-    void        SetRowManualBreaks( const ::std::set<SCROW>& rBreaks );
-    void        SetColManualBreaks( const ::std::set<SCCOL>& rBreaks );
+    void        SetRowManualBreaks( const std::set<SCROW>& rBreaks );
+    void        SetColManualBreaks( const std::set<SCCOL>& rBreaks );
 
-    void        GetAllRowBreaks(::std::set<SCROW>& rBreaks, bool bPage, bool bManual) const;
-    void        GetAllColBreaks(::std::set<SCCOL>& rBreaks, bool bPage, bool bManual) const;
+    void        GetAllRowBreaks(std::set<SCROW>& rBreaks, bool bPage, bool bManual) const;
+    void        GetAllColBreaks(std::set<SCCOL>& rBreaks, bool bPage, bool bManual) const;
     bool        HasRowPageBreak(SCROW nRow) const;
     bool        HasColPageBreak(SCCOL nCol) const;
     bool        HasRowManualBreak(SCROW nRow) const;

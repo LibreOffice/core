@@ -811,7 +811,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             if ( !bLineBreak )
             {
                 long nTxtWidth = static_cast< long >( pEditEngine->CalcTextWidth() );
-                aSize.setWidth( ::std::max( aSize.getWidth(), nTxtWidth ) );
+                aSize.setWidth( std::max( aSize.getWidth(), nTxtWidth ) );
             }
         }
 
@@ -904,7 +904,7 @@ SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( bool /* bC
 
 IMPL_LINK_TYPED(ScAccessibleTextData, NotifyHdl, EENotify&, aNotify, void)
 {
-    ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &aNotify );
+    std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &aNotify );
 
     if( aHint.get() )
         GetBroadcaster().Broadcast( *aHint.get() );
@@ -1010,7 +1010,7 @@ SvxEditViewForwarder* ScAccessibleEditObjectTextData::GetEditViewForwarder( bool
 
 IMPL_LINK_TYPED(ScAccessibleEditObjectTextData, NotifyHdl, EENotify&, rNotify, void)
 {
-    ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &rNotify );
+    std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &rNotify );
 
     if( aHint.get() )
         GetBroadcaster().Broadcast( *aHint.get() );

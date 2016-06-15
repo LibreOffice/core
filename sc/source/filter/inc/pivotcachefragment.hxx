@@ -118,7 +118,7 @@ private:
     void                startNextRow();
 
 private:
-    typedef ::std::vector< sal_Int32 > ColumnIndexVector;
+    typedef std::vector< sal_Int32 > ColumnIndexVector;
 
     const PivotCache&   mrPivotCache;
     ColumnIndexVector   maUnsharedCols; /// Column indexes of all unshared cache fields.

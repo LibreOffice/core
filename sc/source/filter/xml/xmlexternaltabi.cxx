@@ -93,7 +93,7 @@ SvXMLImportContext* ScXMLExternalRefTabSourceContext::CreateChildContext(
  */
 static bool lcl_isValidRelativeURL(const OUString& rUrl)
 {
-    sal_Int32 n = ::std::min( rUrl.getLength(), static_cast<sal_Int32>(3));
+    sal_Int32 n = std::min( rUrl.getLength(), static_cast<sal_Int32>(3));
     if (n < 3)
         return false;
     const sal_Unicode* p = rUrl.getStr();
@@ -277,7 +277,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
             {
-                mnRepeatCount = ::std::max(sValue.toInt32(), static_cast<sal_Int32>(1));
+                mnRepeatCount = std::max(sValue.toInt32(), static_cast<sal_Int32>(1));
             }
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:

@@ -65,7 +65,7 @@ public:
       @param _rArgumens
       Vector, which the indices are written to
     */
-    virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const override ;
+    virtual void fillVisibleArgumentMapping(std::vector<sal_uInt16>& _rArguments) const override ;
 
     /**
       Returns the category of the function
@@ -86,7 +86,7 @@ public:
 
       @return    function signature with parameters
     */
-    virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const override ;
+    virtual OUString getFormula(const std::vector< OUString >& _aArguments) const override ;
 
     /**
       Returns the name of the function
@@ -252,8 +252,8 @@ public:
     const ScFuncDesc* GetFunction( sal_uInt32 nIndex ) const;
 
 private:
-    ::std::vector<const ScFuncDesc*> aFunctionList; /**< List of functions */
-    ::std::vector<const ScFuncDesc*>::iterator aFunctionListIter; /**< position in function list */
+    std::vector<const ScFuncDesc*> aFunctionList; /**< List of functions */
+    std::vector<const ScFuncDesc*>::iterator aFunctionListIter; /**< position in function list */
     sal_Int32  nMaxFuncNameLen; /**< Length of longest function name */
 };
 
@@ -266,7 +266,7 @@ private:
 class ScFunctionCategory : public formula::IFunctionCategory
 {
 public:
-    ScFunctionCategory(::std::vector<const ScFuncDesc*>* _pCategory,sal_uInt32 _nCategory)
+    ScFunctionCategory(std::vector<const ScFuncDesc*>* _pCategory,sal_uInt32 _nCategory)
             : m_pCategory(_pCategory),m_nCategory(_nCategory){}
     virtual ~ScFunctionCategory(){}
 
@@ -292,7 +292,7 @@ public:
     virtual OUString getName() const override;
 
 private:
-    ::std::vector<const ScFuncDesc*>* m_pCategory; /**< list of functions in this category */
+    std::vector<const ScFuncDesc*>* m_pCategory; /**< list of functions in this category */
     mutable OUString m_sName; /**< name of this category */
     sal_uInt32 m_nCategory; /**< index number of this category */
 };
@@ -378,7 +378,7 @@ public:
       @param _rLastRUFunctions
       a vector of pointer to IFunctionDescription, by reference.
     */
-    virtual void fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const override;
+    virtual void fillLastRecentlyUsedFunctions(std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const override;
 
     /**
       Maps Etoken to character

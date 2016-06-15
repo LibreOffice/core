@@ -381,7 +381,7 @@ void PivotCacheItemList::applyItemCaptions( const IdCaptionPairList& vCaptions )
     }
 }
 
-void PivotCacheItemList::getCacheItemNames( ::std::vector< OUString >& orItemNames ) const
+void PivotCacheItemList::getCacheItemNames( std::vector< OUString >& orItemNames ) const
 {
     orItemNames.clear();
     orItemNames.reserve( maItems.size() );
@@ -553,9 +553,9 @@ void PivotCacheField::importPCDField( SequenceInputStream& rStrm )
     if( getFlag( nFlags, BIFF12_PCDFIELD_HASCAPTION ) )
         rStrm >> maFieldModel.maCaption;
     if( getFlag( nFlags, BIFF12_PCDFIELD_HASFORMULA ) )
-        rStrm.skip( ::std::max< sal_Int32 >( rStrm.readInt32(), 0 ) );
+        rStrm.skip( std::max< sal_Int32 >( rStrm.readInt32(), 0 ) );
     if( maFieldModel.mnMappingCount > 0 )
-        rStrm.skip( ::std::max< sal_Int32 >( rStrm.readInt32(), 0 ) );
+        rStrm.skip( std::max< sal_Int32 >( rStrm.readInt32(), 0 ) );
     if( getFlag( nFlags, BIFF12_PCDFIELD_HASPROPERTYNAME ) )
         rStrm >> maFieldModel.maPropertyName;
 
@@ -754,7 +754,7 @@ void PivotCacheField::applyItemCaptions( const IdCaptionPairList& vCaptions )
         maSharedItems.applyItemCaptions( vCaptions );
 }
 
-void PivotCacheField::getCacheItemNames( ::std::vector< OUString >& orItemNames ) const
+void PivotCacheField::getCacheItemNames( std::vector< OUString >& orItemNames ) const
 {
     if( hasGroupItems() )
         maGroupItems.getCacheItemNames( orItemNames );
@@ -839,8 +839,8 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
     if( !xDPGrouping.is() ) return OUString();
 
     // map the group item indexes from maGroupItems to all item indexes from maDiscreteItems
-    typedef ::std::vector< sal_Int32 > GroupItemList;
-    typedef ::std::vector< GroupItemList > GroupItemMap;
+    typedef std::vector< sal_Int32 > GroupItemList;
+    typedef std::vector< GroupItemList > GroupItemMap;
     GroupItemMap aItemMap( maGroupItems.size() );
     for( IndexVector::const_iterator aBeg = maDiscreteItems.begin(), aIt = aBeg, aEnd = maDiscreteItems.end(); aIt != aEnd; ++aIt )
     {
@@ -870,10 +870,10 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 involved). Therefore, the passed collection of current item
                 names as they are already grouped is used here to resolve the
                 item names. */
-            ::std::vector< OUString > aMembers;
+            std::vector< OUString > aMembers;
             for( GroupItemList::iterator aBeg2 = aIt->begin(), aIt2 = aBeg2, aEnd2 = aIt->end(); aIt2 != aEnd2; ++aIt2 )
                 if( const PivotCacheGroupItem* pName = ContainerHelper::getVectorElement( orItemNames, *aIt2 ) )
-                    if( ::std::find( aMembers.begin(), aMembers.end(), pName->maGroupName ) == aMembers.end() )
+                    if( std::find( aMembers.begin(), aMembers.end(), pName->maGroupName ) == aMembers.end() )
                         aMembers.push_back( pName->maGroupName );
 
             /*  Check again, that this is not just a group that is not grouped

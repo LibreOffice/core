@@ -1018,12 +1018,12 @@ void ScDocument::FillInfo(
                 SCROW nLastRealDocRow  = static_cast< SCROW >( nLastRealDocRowS );
 
                 // first visible column (nX1-1 is first processed document column)
-                SCCOL nFirstDocCol = (nCol1 > 0) ? ::std::max< SCCOL >( nFirstRealDocCol, nCol1 - 1 ) : nFirstRealDocCol;
+                SCCOL nFirstDocCol = (nCol1 > 0) ? std::max< SCCOL >( nFirstRealDocCol, nCol1 - 1 ) : nFirstRealDocCol;
                 sal_uInt16 nFirstCellInfoX = static_cast< sal_uInt16 >( nFirstDocCol + 1 );
                 nFirstCol = static_cast< size_t >( nFirstCellInfoX - nCol1 );
 
                 // last visible column (nX2+1 is last processed document column)
-                SCCOL nLastDocCol = (nCol2 < MAXCOL) ? ::std::min< SCCOL >( nLastRealDocCol, nCol2 + 1 ) : nLastRealDocCol;
+                SCCOL nLastDocCol = (nCol2 < MAXCOL) ? std::min< SCCOL >( nLastRealDocCol, nCol2 + 1 ) : nLastRealDocCol;
                 sal_uInt16 nLastCellInfoX = static_cast< sal_uInt16 >( nLastDocCol + 1 );
                 size_t nLastCol = static_cast< size_t >( nLastCellInfoX - nCol1 );
 

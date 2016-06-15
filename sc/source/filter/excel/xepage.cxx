@@ -39,8 +39,8 @@
 
 using namespace ::oox;
 
-using ::std::set;
-using ::std::numeric_limits;
+using std::set;
+using std::numeric_limits;
 
 // Page settings records ======================================================
 
@@ -321,7 +321,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
     {
         // Excel allows only up to 1026 page breaks.  Trim any excess page breaks.
         ScfUInt16Vec::iterator itr = maData.maHorPageBreaks.begin();
-        ::std::advance(itr, 1026);
+        std::advance(itr, 1026);
         maData.maHorPageBreaks.erase(itr, maData.maHorPageBreaks.end());
     }
 

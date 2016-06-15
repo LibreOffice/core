@@ -445,8 +445,8 @@ public:
     OUString            resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const;
 
 protected:
-    typedef ::std::pair< sal_Int32, bool >  WhiteSpace;
-    typedef ::std::vector< WhiteSpace >     WhiteSpaceVec;
+    typedef std::pair< sal_Int32, bool >    WhiteSpace;
+    typedef std::vector< WhiteSpace >       WhiteSpaceVec;
 
     /** Initializes the formula parser before importing a formula. */
     void                initializeImport( const CellAddress& rBaseAddress, FormulaType eType );
@@ -551,7 +551,7 @@ protected:
     bool                mbAllowNulChars;            /// True = keep NUL characters in string tokens.
 
 private:
-    typedef ::std::vector< size_t > SizeTypeVector;
+    typedef std::vector< size_t > SizeTypeVector;
 
     ApiTokenVector      maTokenStorage;             /// Raw unordered token storage.
     SizeTypeVector      maTokenIndexes;             /// Indexes into maTokenStorage.
@@ -851,7 +851,7 @@ bool FormulaParserImpl::pushFunctionOperatorToken( sal_Int32 nOpCode, size_t nPa
 {
     /*  #i70925# if there are not enough tokens available on token stack, do
         not exit with error, but reduce parameter count. */
-    nParamCount = ::std::min( maOperandSizeStack.size(), nParamCount );
+    nParamCount = std::min( maOperandSizeStack.size(), nParamCount );
 
     // convert all parameters on stack to a single operand separated with OPCODE_SEP
     bool bOk = true;
@@ -2581,7 +2581,7 @@ OUString FormulaParser::importOleTargetLink( SequenceInputStream& rStrm )
 {
     OUString aTargetLink;
     sal_Int32 nFmlaSize = rStrm.readInt32();
-    sal_Int64 nFmlaEndPos = rStrm.tell() + ::std::max< sal_Int32 >( nFmlaSize, 0 );
+    sal_Int64 nFmlaEndPos = rStrm.tell() + std::max< sal_Int32 >( nFmlaSize, 0 );
     if( (nFmlaSize == 7) && (rStrm.getRemaining() >= 7) )
     {
         sal_uInt8 nToken = rStrm.readuChar();

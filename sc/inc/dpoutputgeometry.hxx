@@ -43,9 +43,9 @@ public:
     void setDataFieldCount(sal_uInt32 nCount);
     void setDataLayoutType(FieldType eType);
 
-    void getColumnFieldPositions(::std::vector<ScAddress>& rAddrs) const;
-    void getRowFieldPositions(::std::vector<ScAddress>& rAddrs) const;
-    void getPageFieldPositions(::std::vector<ScAddress>& rAddrs) const;
+    void getColumnFieldPositions(std::vector<ScAddress>& rAddrs) const;
+    void getRowFieldPositions(std::vector<ScAddress>& rAddrs) const;
+    void getPageFieldPositions(std::vector<ScAddress>& rAddrs) const;
 
     SCROW getRowFieldHeaderRow() const;
 

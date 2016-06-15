@@ -302,7 +302,7 @@ FontStrikeout XclFontData::GetScStrikeout() const
 
 void XclFontData::SetScHeight( sal_Int32 nTwips )
 {
-    mnHeight = static_cast< sal_uInt16 >( ::std::min( nTwips, static_cast<sal_Int32>(0x7FFFL) ) );
+    mnHeight = static_cast< sal_uInt16 >( std::min( nTwips, static_cast<sal_Int32>(0x7FFFL) ) );
 }
 
 void XclFontData::SetScFamily( FontFamily eScFamily )
@@ -451,7 +451,7 @@ sal_Int16 XclFontData::GetApiStrikeout() const
 
 void XclFontData::SetApiHeight( float fPoint )
 {
-    mnHeight = static_cast< sal_uInt16 >( ::std::min( fPoint * TWIPS_PER_POINT + 0.5, 32767.0 ) );
+    mnHeight = static_cast< sal_uInt16 >( std::min( fPoint * TWIPS_PER_POINT + 0.5, 32767.0 ) );
 }
 
 void XclFontData::SetApiFamily( sal_Int16 nApiFamily )
@@ -1474,13 +1474,13 @@ void XclNumFmtBuffer::InsertFormat( sal_uInt16 nXclNumFmt, const OUString& rForm
 void XclNumFmtBuffer::InsertBuiltinFormats()
 {
     // build a map containing tables for all languages
-    typedef ::std::map< LanguageType, const XclBuiltInFormatTable* > XclBuiltInMap;
+    typedef std::map< LanguageType, const XclBuiltInFormatTable* > XclBuiltInMap;
     XclBuiltInMap aBuiltInMap;
     for(const auto &rTable : spBuiltInFormatTables)
         aBuiltInMap[ rTable.meLanguage ] = &rTable;
 
     // build a list of table pointers for the current language, with all parent tables
-    typedef ::std::vector< const XclBuiltInFormatTable* > XclBuiltInVec;
+    typedef std::vector< const XclBuiltInFormatTable* > XclBuiltInVec;
     XclBuiltInVec aBuiltInVec;
     for( XclBuiltInMap::const_iterator aMIt = aBuiltInMap.find( meSysLang ), aMEnd = aBuiltInMap.end();
             aMIt != aMEnd; aMIt = aBuiltInMap.find( aMIt->second->meParentLang ) )
@@ -1496,7 +1496,7 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     }
 
     // insert the default formats in the format map, from root parent to system language
-    typedef ::std::map< sal_uInt16, sal_uInt16 > XclReuseMap;
+    typedef std::map< sal_uInt16, sal_uInt16 > XclReuseMap;
     XclReuseMap aReuseMap;
     for( XclBuiltInVec::reverse_iterator aVIt = aBuiltInVec.rbegin(), aVEnd = aBuiltInVec.rend(); aVIt != aVEnd; ++aVIt )
     {

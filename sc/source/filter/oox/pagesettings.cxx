@@ -426,8 +426,8 @@ private:
     void                setNewPortion( HFPortionId ePortion );
 
 private:
-    typedef ::std::vector< HFPortionInfo >  HFPortionInfoVec;
-    typedef ::std::set< OString >           OStringSet;
+    typedef std::vector< HFPortionInfo >    HFPortionInfoVec;
+    typedef std::set< OString >             OStringSet;
 
     const OUString      maPageNumberService;
     const OUString      maPageCountService;
@@ -474,8 +474,8 @@ HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     maSheetNameService( "com.sun.star.text.TextField.SheetName" ),
     maFileNameService( "com.sun.star.text.TextField.FileName" ),
     maDateTimeService( "com.sun.star.text.TextField.DateTime" ),
-    maBoldNames( sppcBoldNames, ::std::end(sppcBoldNames) ),
-    maItalicNames( sppcItalicNames, ::std::end(sppcItalicNames) ),
+    maBoldNames( sppcBoldNames, std::end(sppcBoldNames) ),
+    maItalicNames( sppcItalicNames, std::end(sppcItalicNames) ),
     maPortions( static_cast< size_t >( HF_COUNT ) ),
     meCurrPortion( HF_CENTER )
 {
@@ -725,8 +725,8 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
     maPortions[ HF_CENTER ].mfTotalHeight += getCurrHeight( HF_CENTER );
     maPortions[ HF_RIGHT  ].mfTotalHeight += getCurrHeight( HF_RIGHT );
 
-    return ::std::max( maPortions[ HF_LEFT ].mfTotalHeight,
-        ::std::max( maPortions[ HF_CENTER ].mfTotalHeight, maPortions[ HF_RIGHT ].mfTotalHeight ) );
+    return std::max( maPortions[ HF_LEFT ].mfTotalHeight,
+        std::max( maPortions[ HF_CENTER ].mfTotalHeight, maPortions[ HF_RIGHT ].mfTotalHeight ) );
 }
 
 // private --------------------------------------------------------------------
@@ -745,7 +745,7 @@ double HeaderFooterParser::getCurrHeight() const
 void HeaderFooterParser::updateCurrHeight( HFPortionId ePortion )
 {
     double& rfMaxHt = maPortions[ ePortion ].mfCurrHeight;
-    rfMaxHt = ::std::max( rfMaxHt, maFontModel.mfHeight );
+    rfMaxHt = std::max( rfMaxHt, maFontModel.mfHeight );
 }
 
 void HeaderFooterParser::updateCurrHeight()
@@ -951,7 +951,7 @@ void PageSettingsConverter::writePageSettingsProperties(
         if( bValid )
         {
             if( bLandscape )
-                ::std::swap( aSize.Width, aSize.Height );
+                std::swap( aSize.Width, aSize.Height );
             rPropSet.setProperty( PROP_Size, aSize );
         }
     }
@@ -1017,7 +1017,7 @@ void PageSettingsConverter::convertHeaderFooterData(
     if( orHFData.mbHasContent )
     {
         // use maximum height of odd/even header/footer
-        orHFData.mnHeight = ::std::max( nOddHeight, nEvenHeight );
+        orHFData.mnHeight = std::max( nOddHeight, nEvenHeight );
         /*  Calc contains distance between bottom of header and top of page
             body in "HeaderBodyDistance" property, and distance between bottom
             of page body and top of footer in "FooterBodyDistance" property */
@@ -1032,7 +1032,7 @@ void PageSettingsConverter::convertHeaderFooterData(
             body to bottom of footer (including "FooterBodyDistance"). */
         orHFData.mnHeight += orHFData.mnBodyDist;
         // negative body distance not allowed
-        orHFData.mnBodyDist = ::std::max< sal_Int32 >( orHFData.mnBodyDist, 0 );
+        orHFData.mnBodyDist = std::max< sal_Int32 >( orHFData.mnBodyDist, 0 );
     }
 }
 

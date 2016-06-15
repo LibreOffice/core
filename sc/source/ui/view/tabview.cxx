@@ -837,7 +837,7 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
     }
 
     if ( bLayoutRTL )
-        ::std::swap( rBorder.Left(), rBorder.Right() );
+        std::swap( rBorder.Left(), rBorder.Right() );
 }
 
 IMPL_LINK_NOARG_TYPED(ScTabView, TabBarResize, TabBar*, void)

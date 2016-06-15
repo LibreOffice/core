@@ -148,10 +148,10 @@ class ScUndoMoveTab: public ScSimpleUndo
 public:
                     ScUndoMoveTab(
                         ScDocShell* pNewDocShell,
-                        ::std::vector<SCTAB>* pOldTabs,
-                        ::std::vector<SCTAB>* pNewTabs,
-                        ::std::vector< OUString>* pOldNames = nullptr,
-                        ::std::vector< OUString>* pNewNames = nullptr );
+                        std::vector<SCTAB>* pOldTabs,
+                        std::vector<SCTAB>* pNewTabs,
+                        std::vector< OUString>* pOldNames = nullptr,
+                        std::vector< OUString>* pNewNames = nullptr );
 
     virtual         ~ScUndoMoveTab();
 
@@ -163,10 +163,10 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
-    std::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
-    std::shared_ptr< ::std::vector< OUString> > mpOldNames;
-    std::shared_ptr< ::std::vector< OUString> > mpNewNames;
+    std::shared_ptr< std::vector<SCTAB> > mpOldTabs;
+    std::shared_ptr< std::vector<SCTAB> > mpNewTabs;
+    std::shared_ptr< std::vector< OUString> > mpOldNames;
+    std::shared_ptr< std::vector< OUString> > mpNewNames;
 
     void DoChange( bool bUndo ) const;
 };
@@ -176,9 +176,9 @@ class ScUndoCopyTab: public ScSimpleUndo
 public:
                     ScUndoCopyTab(
                         ScDocShell* pNewDocShell,
-                        ::std::vector<SCTAB>* pOldTabs,
-                        ::std::vector<SCTAB>* pNewTabs,
-                        ::std::vector< OUString>* pNewNames = nullptr );
+                        std::vector<SCTAB>* pOldTabs,
+                        std::vector<SCTAB>* pNewTabs,
+                        std::vector< OUString>* pNewNames = nullptr );
 
     virtual         ~ScUndoCopyTab();
 
@@ -190,9 +190,9 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    std::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
-    std::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
-    std::shared_ptr< ::std::vector< OUString> > mpNewNames;
+    std::shared_ptr< std::vector<SCTAB> > mpOldTabs;
+    std::shared_ptr< std::vector<SCTAB> > mpNewTabs;
+    std::shared_ptr< std::vector< OUString> > mpNewNames;
     SdrUndoAction*  pDrawUndo;
 
     void DoChange() const;
@@ -333,7 +333,7 @@ private:
 class ScUndoDocProtect : public ScSimpleUndo
 {
 public:
-                    ScUndoDocProtect(ScDocShell* pShell, ::std::unique_ptr<ScDocProtection> && pProtectSettings);
+                    ScUndoDocProtect(ScDocShell* pShell, std::unique_ptr<ScDocProtection> && pProtectSettings);
     virtual         ~ScUndoDocProtect();
 
     virtual void    Undo() override;
@@ -344,7 +344,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ::std::unique_ptr<ScDocProtection> mpProtectSettings;
+    std::unique_ptr<ScDocProtection> mpProtectSettings;
 
     void    DoProtect(bool bProtect);
 };
@@ -367,7 +367,7 @@ public:
 
 private:
     SCTAB   mnTab;
-    ::std::unique_ptr<ScTableProtection> mpProtectSettings;
+    std::unique_ptr<ScTableProtection> mpProtectSettings;
 
     void    DoProtect(bool bProtect);
 };

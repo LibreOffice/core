@@ -709,7 +709,7 @@ class ScChangeActionContent : public ScChangeAction
     // pRejectActions!=NULL: reject actions get
     // stacked, no SetNewValue, no Append
     bool Select( ScDocument*, ScChangeTrack*,
-                 bool bOldest, ::std::stack<ScChangeActionContent*>* pRejectActions );
+                 bool bOldest, std::stack<ScChangeActionContent*>* pRejectActions );
 
     void PutValueToDoc(
         const ScCellValue& rCell, const OUString& rValue, ScDocument* pDoc, SCsCOL nDx, SCsROW nDy ) const;

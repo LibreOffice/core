@@ -27,9 +27,9 @@
 #include <boost/checked_delete.hpp>
 
 using namespace com::sun::star;
-using ::std::vector;
-using ::std::unary_function;
-using ::std::for_each;
+using std::vector;
+using std::unary_function;
+using std::for_each;
 
 // Update chart listeners quickly, to get a similar behavior to loaded charts
 // which register UNO listeners.

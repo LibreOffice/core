@@ -142,8 +142,8 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
             maEncryptionData = maCodec.GetEncryptionData();
 
             // since the export uses Std97 encryption always we have to request it here
-            ::std::vector< sal_uInt16 > aPassVect( 16 );
-            ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
+            std::vector< sal_uInt16 > aPassVect( 16 );
+            std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
             for( sal_Int32 nInd = 0; nInd < nLen; ++nInd, ++aIt )
                 *aIt = static_cast< sal_uInt16 >( rPassword[nInd] );
 
@@ -224,10 +224,10 @@ uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const
     if( (0 < nLen) && (nLen < 16) )
     {
         // copy string to sal_uInt16 array
-        ::std::vector< sal_uInt16 > aPassVect( 16 );
+        std::vector< sal_uInt16 > aPassVect( 16 );
         const sal_Unicode* pcChar = rPassword.getStr();
         const sal_Unicode* pcCharEnd = pcChar + nLen;
-        ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
+        std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
         for( ; pcChar < pcCharEnd; ++pcChar, ++aIt )
             *aIt = static_cast< sal_uInt16 >( *pcChar );
 
@@ -288,7 +288,7 @@ sal_uInt16 XclImpBiff8Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
     while( nBytesLeft )
     {
         sal_uInt16 nBlockLeft = EXC_ENCR_BLOCKSIZE - GetOffset( rStrm.Tell() );
-        sal_uInt16 nDecBytes = ::std::min< sal_uInt16 >( nBytesLeft, nBlockLeft );
+        sal_uInt16 nDecBytes = std::min< sal_uInt16 >( nBytesLeft, nBlockLeft );
 
         // read the block from stream
         nRet = nRet + static_cast<sal_uInt16>(rStrm.ReadBytes(pnCurrData, nDecBytes));
@@ -725,12 +725,12 @@ sal_Size XclImpStream::CopyToStream( SvStream& rOutStrm, sal_Size nBytes )
     if( mbValid && (nBytes > 0) )
     {
         const sal_Size nMaxBuffer = 4096;
-        std::unique_ptr<sal_uInt8[]> pnBuffer(new sal_uInt8[ ::std::min( nBytes, nMaxBuffer ) ]);
+        std::unique_ptr<sal_uInt8[]> pnBuffer(new sal_uInt8[ std::min( nBytes, nMaxBuffer ) ]);
         sal_Size nBytesLeft = nBytes;
 
         while( mbValid && (nBytesLeft > 0) )
         {
-            sal_Size nReadSize = ::std::min( nBytesLeft, nMaxBuffer );
+            sal_Size nReadSize = std::min( nBytesLeft, nMaxBuffer );
             nRet += Read( pnBuffer.get(), nReadSize );
             // writing more bytes than read results in invalid memory access
             SAL_WARN_IF(nRet != nReadSize, "sc", "read less bytes than requested");
@@ -818,7 +818,7 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
     {
         if( b16Bit )
         {
-            nReadSize = ::std::min< sal_uInt16 >( nCharsLeft, mnRawRecLeft / 2 );
+            nReadSize = std::min< sal_uInt16 >( nCharsLeft, mnRawRecLeft / 2 );
             OSL_ENSURE( (nReadSize <= nCharsLeft) || !(mnRawRecLeft & 0x1),
                 "XclImpStream::ReadRawUniString - missing a byte" );
         }
@@ -886,7 +886,7 @@ void XclImpStream::IgnoreRawUniString( sal_uInt16 nChars, bool b16Bit )
     {
         if( b16Bit )
         {
-            nReadSize = ::std::min< sal_uInt16 >( nCharsLeft, mnRawRecLeft / 2 );
+            nReadSize = std::min< sal_uInt16 >( nCharsLeft, mnRawRecLeft / 2 );
             OSL_ENSURE( (nReadSize <= nCharsLeft) || !(mnRawRecLeft & 0x1),
                 "XclImpStream::IgnoreRawUniString - missing a byte" );
             Ignore( nReadSize * 2 );
@@ -1037,7 +1037,7 @@ bool XclImpStream::EnsureRawReadSize( sal_uInt16 nBytes )
 
 sal_uInt16 XclImpStream::GetMaxRawReadSize( sal_Size nBytes ) const
 {
-    return static_cast< sal_uInt16 >( ::std::min< sal_Size >( nBytes, mnRawRecLeft ) );
+    return static_cast< sal_uInt16 >( std::min< sal_Size >( nBytes, mnRawRecLeft ) );
 }
 
 sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )

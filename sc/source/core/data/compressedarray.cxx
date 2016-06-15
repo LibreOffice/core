@@ -326,8 +326,8 @@ void ScBitMaskCompressedArray<A,D>::AndValue( A nStart, A nEnd,
     {
         if ((this->pData[nIndex].aValue & rValueToAnd) != this->pData[nIndex].aValue)
         {
-            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
+            A nS = std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
+            A nE = std::min( this->pData[nIndex].nEnd, nEnd);
             this->SetValue( nS, nE, this->pData[nIndex].aValue & rValueToAnd);
             if (nE >= nEnd)
                 break;  // while
@@ -352,8 +352,8 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
     {
         if ((this->pData[nIndex].aValue | rValueToOr) != this->pData[nIndex].aValue)
         {
-            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
-            A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
+            A nS = std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
+            A nE = std::min( this->pData[nIndex].nEnd, nEnd);
             this->SetValue( nS, nE, this->pData[nIndex].aValue | rValueToOr);
             if (nE >= nEnd)
                 break;  // while
@@ -388,7 +388,7 @@ void ScBitMaskCompressedArray<A,D>::CopyFromAnded(
 template< typename A, typename D >
 A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( const D& rBitMask ) const
 {
-    A nEnd = ::std::numeric_limits<A>::max();
+    A nEnd = std::numeric_limits<A>::max();
     size_t nIndex = this->nCount-1;
     while (true)
     {

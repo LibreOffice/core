@@ -239,7 +239,7 @@ class ScChart2DataSequence : public
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
             const css::uno::Reference< css::chart2::data::XDataProvider >& xDP,
-            ::std::vector<ScTokenRef>&& rTokens, bool bIncludeHiddenCells );
+            std::vector<ScTokenRef>&& rTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence();
     ScChart2DataSequence(const ScChart2DataSequence&) = delete;

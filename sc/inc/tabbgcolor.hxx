@@ -34,7 +34,7 @@ struct ScUndoTabColorInfo
     explicit ScUndoTabColorInfo(SCTAB nTab);
     ScUndoTabColorInfo(const ScUndoTabColorInfo& r);
 
-    typedef ::std::vector<ScUndoTabColorInfo> List;
+    typedef std::vector<ScUndoTabColorInfo> List;
 };
 
 #endif

@@ -21,7 +21,7 @@
 
 #include "invmerge.hxx"
 
-ScInvertMerger::ScInvertMerger( ::std::vector< Rectangle >* pRectangles ) :
+ScInvertMerger::ScInvertMerger( std::vector< Rectangle >* pRectangles ) :
     pRects( pRectangles )
 {
     //  collect rectangles instead of inverting

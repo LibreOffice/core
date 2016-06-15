@@ -2179,7 +2179,7 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
             else if( nCount > 1 )
             {
                 // set multiple functions, ignore NONE and AUTO in this case
-                ::std::vector< sal_uInt16 > aSubt;
+                std::vector< sal_uInt16 > aSubt;
                 for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
                 {
                     GeneralFunction eFunc = rSubtotals[ nIdx ];
@@ -2187,7 +2187,7 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
                     {
                         // do not insert functions twice
                         sal_uInt16 nFunc = static_cast< sal_uInt16 >( eFunc );
-                        if( ::std::find( aSubt.begin(), aSubt.end(), nFunc ) == aSubt.end() )
+                        if( std::find( aSubt.begin(), aSubt.end(), nFunc ) == aSubt.end() )
                             aSubt.push_back( nFunc );
                     }
                 }
@@ -3057,7 +3057,7 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
-    ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
+    ScFieldGroupMembers::iterator aIt = std::find( rMembers.begin(), rMembers.end(), rName );
     if( aIt == rMembers.end() )
         throw NoSuchElementException();
     return Any( Reference< XNamed >( new ScDataPilotFieldGroupItemObj( *this, *aIt ) ) );
@@ -3073,7 +3073,7 @@ sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName ) t
 {
     SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
-    return ::std::find( rMembers.begin(), rMembers.end(), rName ) != rMembers.end();
+    return std::find( rMembers.begin(), rMembers.end(), rName ) != rMembers.end();
 }
 
 // XNameReplace
@@ -3091,8 +3091,8 @@ void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, co
         return;
 
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
-    ScFieldGroupMembers::iterator aOldIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
-    ScFieldGroupMembers::iterator aNewIt = ::std::find( rMembers.begin(), rMembers.end(), aNewName );
+    ScFieldGroupMembers::iterator aOldIt = std::find( rMembers.begin(), rMembers.end(), rName );
+    ScFieldGroupMembers::iterator aNewIt = std::find( rMembers.begin(), rMembers.end(), aNewName );
     // throw if passed member name does not exist
     if( aOldIt == rMembers.end() )
         throw NoSuchElementException();
@@ -3114,7 +3114,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, con
         throw IllegalArgumentException();
 
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
-    ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
+    ScFieldGroupMembers::iterator aIt = std::find( rMembers.begin(), rMembers.end(), rName );
     // throw if passed name already exists
     if( aIt != rMembers.end() )
         throw IllegalArgumentException();
@@ -3129,7 +3129,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
     if( rName.isEmpty() )
         throw IllegalArgumentException();
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
-    ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
+    ScFieldGroupMembers::iterator aIt = std::find( rMembers.begin(), rMembers.end(), rName );
     // throw if passed name does not exist
     if( aIt == rMembers.end() )
         throw NoSuchElementException();

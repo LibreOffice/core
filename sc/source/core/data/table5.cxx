@@ -49,7 +49,7 @@
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
-using ::std::set;
+using std::set;
 
 #define GET_SCALEVALUE(set,id)  static_cast<const SfxUInt16Item&>(set.Get( id )).GetValue()
 
@@ -242,7 +242,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             // subtract size of repeat rows from page size
             unsigned long nHeights = GetTotalRowHeight(nRepeatStartY, nRepeatEndY);
 #if OSL_DEBUG_LEVEL > 0
-            if (nHeights == ::std::numeric_limits<unsigned long>::max())
+            if (nHeights == std::numeric_limits<unsigned long>::max())
                 OSL_FAIL("ScTable::UpdatePageBreaks: row heights overflow");
 #endif
             nPageSizeY -= nHeights;
@@ -256,7 +256,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             // Hidden row range.  Skip them unless there is a manual break.
             SCROW nLastCommon = aIterHidden.getLastPos();
             if (nNextManualBreak >= 0)
-                nLastCommon = ::std::min(nLastCommon, nNextManualBreak-1);
+                nLastCommon = std::min(nLastCommon, nNextManualBreak-1);
             nY = nLastCommon;
         }
         else
@@ -265,9 +265,9 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
             SCROW nLastHidden = aIterHidden.getLastPos();
             SCROW nLastHeight = aIterHeights.getLastPos();
-            SCROW nLastCommon = ::std::min(nLastHidden, nLastHeight);
+            SCROW nLastCommon = std::min(nLastHidden, nLastHeight);
             if (nNextManualBreak >= 0)
-                nLastCommon = ::std::min(nLastCommon, nNextManualBreak-1);
+                nLastCommon = std::min(nLastCommon, nNextManualBreak-1);
 
             if (nLastCommon > nY)
             {
@@ -318,7 +318,7 @@ bool ScTable::HasManualBreaks() const
     return !maRowManualBreaks.empty() || !maColManualBreaks.empty();
 }
 
-void ScTable::SetRowManualBreaks( const ::std::set<SCROW>& rBreaks )
+void ScTable::SetRowManualBreaks( const std::set<SCROW>& rBreaks )
 {
     maRowManualBreaks = rBreaks;
     InvalidatePageBreaks();
@@ -326,7 +326,7 @@ void ScTable::SetRowManualBreaks( const ::std::set<SCROW>& rBreaks )
         SetStreamValid(false);
 }
 
-void ScTable::SetColManualBreaks( const ::std::set<SCCOL>& rBreaks )
+void ScTable::SetColManualBreaks( const std::set<SCCOL>& rBreaks )
 {
     maColManualBreaks = rBreaks;
     InvalidatePageBreaks();
@@ -470,8 +470,8 @@ void ScTable::SetColBreak(SCCOL nCol, bool bPage, bool bManual)
 
 Sequence<TablePageBreakData> ScTable::GetRowBreakData() const
 {
-    using ::std::copy;
-    using ::std::inserter;
+    using std::copy;
+    using std::inserter;
 
     set<SCROW> aRowBreaks = maRowPageBreaks;
     copy(maRowManualBreaks.begin(), maRowManualBreaks.end(), inserter(aRowBreaks, aRowBreaks.begin()));
@@ -683,7 +683,7 @@ SCROW ScTable::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const
         nRow = aData.mnRow2 + 1;
     }
 
-    return ::std::numeric_limits<SCROW>::max();
+    return std::numeric_limits<SCROW>::max();
 }
 
 SCROW ScTable::LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const
@@ -706,7 +706,7 @@ SCROW ScTable::LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const
         nRow = aData.mnRow1 - 1;
     }
 
-    return ::std::numeric_limits<SCROW>::max();
+    return std::numeric_limits<SCROW>::max();
 }
 
 SCROW ScTable::CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const
@@ -774,7 +774,7 @@ SCCOLROW ScTable::LastHiddenColRow(SCCOLROW nPos, bool bCol) const
         if (RowHidden(nRow, nullptr, &nLastRow))
             return static_cast<SCCOLROW>(nLastRow);
     }
-    return ::std::numeric_limits<SCCOLROW>::max();
+    return std::numeric_limits<SCCOLROW>::max();
 }
 
 bool ScTable::RowFiltered(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
@@ -893,7 +893,7 @@ SCROW ScTable::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const
         nRow = aData.mnRow2 + 1;
     }
 
-    return ::std::numeric_limits<SCROW>::max();
+    return std::numeric_limits<SCROW>::max();
 }
 
 SCROW ScTable::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const
@@ -916,7 +916,7 @@ SCROW ScTable::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const
         nRow = aData.mnRow1 - 1;
     }
 
-    return ::std::numeric_limits<SCROW>::max();
+    return std::numeric_limits<SCROW>::max();
 }
 
 SCROW ScTable::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const

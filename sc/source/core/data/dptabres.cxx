@@ -51,8 +51,8 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 using namespace com::sun::star;
-using ::std::vector;
-using ::std::pair;
+using std::vector;
+using std::pair;
 using ::com::sun::star::uno::Sequence;
 
 namespace {
@@ -3100,7 +3100,7 @@ void ScDPResultDimension::SortMembers( ScDPResultMember* pRefMember )
             aMemberOrder[nPos] = nPos;
 
         ScDPRowMembersOrder aComp( *this, nSortMeasure, bSortAscending );
-        ::std::sort( aMemberOrder.begin(), aMemberOrder.end(), aComp );
+        std::sort( aMemberOrder.begin(), aMemberOrder.end(), aComp );
     }
 
     // handle children
@@ -3141,7 +3141,7 @@ void ScDPResultDimension::DoAutoShow( ScDPResultMember* pRefMember )
             aAutoOrder[nPos] = nPos;
 
         ScDPRowMembersOrder aComp( *this, nAutoMeasure, !bAutoTopItems );
-        ::std::sort( aAutoOrder.begin(), aAutoOrder.end(), aComp );
+        std::sort( aAutoOrder.begin(), aAutoOrder.end(), aComp );
 
         // look for equal values to the last included one
 
@@ -3663,7 +3663,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
             rMemberOrder[nPos] = nPos;
 
         ScDPColMembersOrder aComp( *this, pRefDim->GetSortMeasure(), pRefDim->IsSortAscending() );
-        ::std::sort( rMemberOrder.begin(), rMemberOrder.end(), aComp );
+        std::sort( rMemberOrder.begin(), rMemberOrder.end(), aComp );
     }
 
     // handle children
@@ -3716,7 +3716,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
             aAutoOrder[nPos] = nPos;
 
         ScDPColMembersOrder aComp( *this, pRefDim->GetAutoMeasure(), !pRefDim->IsAutoTopItems() );
-        ::std::sort( aAutoOrder.begin(), aAutoOrder.end(), aComp );
+        std::sort( aAutoOrder.begin(), aAutoOrder.end(), aComp );
 
         // look for equal values to the last included one
 

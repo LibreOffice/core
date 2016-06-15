@@ -33,10 +33,10 @@
 #define CALC_TEST_PERF 0
 
 using namespace ::com::sun::star;
-using ::std::cout;
-using ::std::cerr;
-using ::std::endl;
-using ::std::vector;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::vector;
 
 #endif
 

@@ -94,7 +94,7 @@ public:
     void swap( ScRangeList& r );
 
 private:
-    ::std::vector<ScRange*> maRanges;
+    std::vector<ScRange*> maRanges;
     SCROW           mnMaxRowUsed;
     typedef std::vector<ScRange*>::iterator iterator;
     typedef std::vector<ScRange*>::const_iterator const_iterator;
@@ -131,7 +131,7 @@ public:
     const ScRangePair*  operator[](size_t idx) const;
 
 private:
-    ::std::vector< ScRangePair* > maPairs;
+    std::vector< ScRangePair* > maPairs;
 };
 typedef tools::SvRef<ScRangePairList> ScRangePairListRef;
 

@@ -39,7 +39,7 @@ enum ScConflictAction
     SC_CONFLICT_ACTION_KEEP_OTHER
 };
 
-typedef ::std::vector< sal_uLong > ScChangeActionList;
+typedef std::vector< sal_uLong > ScChangeActionList;
 
 // struct ScConflictsListEntry
 
@@ -53,7 +53,7 @@ struct ScConflictsListEntry
     bool                HasOwnAction( sal_uLong nOwnAction ) const;
 };
 
-typedef ::std::vector< ScConflictsListEntry > ScConflictsList;
+typedef std::vector< ScConflictsListEntry > ScConflictsList;
 
 // class ScConflictsListHelper
 

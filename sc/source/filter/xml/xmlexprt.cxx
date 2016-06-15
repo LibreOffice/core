@@ -186,7 +186,7 @@
 using namespace formula;
 using namespace com::sun::star;
 using namespace xmloff::token;
-using ::std::vector;
+using std::vector;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 

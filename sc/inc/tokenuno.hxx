@@ -130,7 +130,7 @@ public:
 class ScFormulaOpCodeMapperObj : public formula::FormulaOpCodeMapperObj
 {
 public:
-    ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> && _pCompiler);
+    ScFormulaOpCodeMapperObj(std::unique_ptr<formula::FormulaCompiler> && _pCompiler);
 };
 
 #endif

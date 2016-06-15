@@ -75,7 +75,7 @@ private:
 
         inline explicit     ScenarioEntry() : mbProtected( false ) {}
     };
-    typedef ::std::vector< ScenarioEntry > ScenarioList;
+    typedef std::vector< ScenarioEntry > ScenarioList;
 
 private:
     const ScenarioEntry* GetSelectedEntry() const;

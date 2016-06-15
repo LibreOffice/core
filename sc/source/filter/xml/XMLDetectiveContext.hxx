@@ -37,7 +37,7 @@ struct ScMyImpDetectiveObj
                                 ScMyImpDetectiveObj();
 };
 
-typedef ::std::vector< ScMyImpDetectiveObj > ScMyImpDetectiveObjVec;
+typedef std::vector< ScMyImpDetectiveObj > ScMyImpDetectiveObjVec;
 
 struct ScMyImpDetectiveOp
 {
@@ -54,7 +54,7 @@ struct ScMyImpDetectiveOp
     bool operator<(const ScMyImpDetectiveOp& rDetOp) const;
 };
 
-typedef ::std::list< ScMyImpDetectiveOp > ScMyImpDetectiveOpList;
+typedef std::list< ScMyImpDetectiveOp > ScMyImpDetectiveOpList;
 
 class ScMyImpDetectiveOpArray
 {

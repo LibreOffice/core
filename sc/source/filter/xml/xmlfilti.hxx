@@ -202,7 +202,7 @@ class ScXMLDPFilterContext : public SvXMLImportContext
     bool        bConnectionOr:1;
     bool        bNextConnectionOr:1;
     bool        bConditionSourceRange:1;
-    ::std::stack<bool>  aConnectionOrStack;
+    std::stack<bool>    aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }

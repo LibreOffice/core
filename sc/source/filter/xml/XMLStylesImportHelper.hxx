@@ -93,7 +93,7 @@ class ScMyStyleRanges : public SvRefBase
     std::shared_ptr<ScSimpleRangeList> mpUndefinedList;
     ScMyCurrencyStylesSet*  pCurrencyList;
 
-    static void SetStylesToRanges(const ::std::list<ScRange>& rList,
+    static void SetStylesToRanges(const std::list<ScRange>& rList,
         const OUString* pStyleName, const sal_Int16 nCellType,
         const OUString* pCurrency, ScXMLImport& rImport);
 public:

@@ -43,7 +43,7 @@
 using namespace ::com::sun::star::sheet;
 
 using ::com::sun::star::uno::Sequence;
-using ::std::vector;
+using std::vector;
 
 namespace {
 

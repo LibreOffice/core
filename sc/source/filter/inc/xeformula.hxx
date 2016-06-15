@@ -39,7 +39,7 @@ struct XclExpRefLogEntry
 };
 
 /** Vector containing a log for all external references in a formula, used i.e. in change tracking. */
-typedef ::std::vector< XclExpRefLogEntry > XclExpRefLog;
+typedef std::vector< XclExpRefLogEntry > XclExpRefLog;
 
 // Formula compiler ===========================================================
 

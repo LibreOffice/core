@@ -47,23 +47,23 @@ public:
     css::table::CellRangeAddress& operator[]( size_t i )
     { return mvAddresses[ i ]; }
 
-    ::std::vector< css::table::CellRangeAddress >::const_iterator begin() const
+    std::vector< css::table::CellRangeAddress >::const_iterator begin() const
     { return mvAddresses.begin(); }
-    ::std::vector< css::table::CellRangeAddress >::iterator begin()
+    std::vector< css::table::CellRangeAddress >::iterator begin()
     { return mvAddresses.begin(); }
 
-    ::std::vector< css::table::CellRangeAddress >::const_iterator end() const
+    std::vector< css::table::CellRangeAddress >::const_iterator end() const
     { return mvAddresses.end(); }
 
-    ::std::vector< css::table::CellRangeAddress >::reverse_iterator rbegin()
+    std::vector< css::table::CellRangeAddress >::reverse_iterator rbegin()
     { return mvAddresses.rbegin(); }
 
-    ::std::vector< css::table::CellRangeAddress >::reverse_iterator rend()
+    std::vector< css::table::CellRangeAddress >::reverse_iterator rend()
     { return mvAddresses.rend(); }
 
     void clear() { mvAddresses.clear(); }
 
-    void erase( ::std::vector< css::table::CellRangeAddress >::iterator it )
+    void erase( std::vector< css::table::CellRangeAddress >::iterator it )
     { mvAddresses.erase( it ); }
 
     void pop_back() { mvAddresses.pop_back(); }
@@ -79,7 +79,7 @@ public:
     toSequence() const;
 
 private:
-    ::std::vector< css::table::CellRangeAddress > mvAddresses;
+    std::vector< css::table::CellRangeAddress > mvAddresses;
 };
 
 /** A 2D cell address struct for binary filters. */
@@ -141,13 +141,13 @@ class BinRangeList
 public:
     inline explicit     BinRangeList() : mvRanges() {}
 
-    ::std::vector< BinRange >::const_iterator begin() const { return mvRanges.begin(); }
-    ::std::vector< BinRange >::const_iterator end() const { return mvRanges.end(); }
+    std::vector< BinRange >::const_iterator begin() const { return mvRanges.begin(); }
+    std::vector< BinRange >::const_iterator end() const { return mvRanges.end(); }
 
     void                read( SequenceInputStream& rStrm );
 
 private:
-    ::std::vector< BinRange > mvRanges;
+    std::vector< BinRange > mvRanges;
 };
 
 inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRangeList& orRanges )

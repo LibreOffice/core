@@ -92,7 +92,7 @@ private:
     long                nCallerPos;
     sal_uInt16          nCategory;
     OString             sHelpId;
-    mutable ::std::vector< LocalizedName > maCompNames;
+    mutable std::vector< LocalizedName > maCompNames;
     mutable bool        bCompInitialized;
 
 public:
@@ -119,14 +119,14 @@ public:
     sal_uInt16              GetCategory() const         { return nCategory; }
     const OString&          GetHelpId() const           { return sHelpId; }
 
-    const ::std::vector< LocalizedName >&  GetCompNames() const;
+    const std::vector< LocalizedName >&    GetCompNames() const;
     bool                    GetExcelName( LanguageType eDestLang, OUString& rRetExcelName ) const;
 
     void    SetFunction( const css::uno::Reference< css::reflection::XIdlMethod>& rNewFunc,
                          const css::uno::Any& rNewObj );
     void    SetArguments( long nNewCount, const ScAddInArgDesc* pNewDescs );
     void    SetCallerPos( long nNewPos );
-    void    SetCompNames( const ::std::vector< LocalizedName >& rNew );
+    void    SetCompNames( const std::vector< LocalizedName >& rNew );
 };
 
 class SC_DLLPUBLIC ScUnoAddInCollection

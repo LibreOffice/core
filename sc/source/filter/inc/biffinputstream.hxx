@@ -73,7 +73,7 @@ private:
     void                updateDecoded();
 
 private:
-    typedef ::std::vector< sal_uInt8 > DataBuffer;
+    typedef std::vector< sal_uInt8 > DataBuffer;
 
     BinaryInputStream&  mrInStrm;               /// Core input stream.
     DataBuffer          maOriginalData;         /// Original data read from stream.

@@ -297,7 +297,7 @@ public:
 
 struct ScXMLDataPilotGroup
 {
-    ::std::vector<OUString> aMembers;
+    std::vector<OUString> aMembers;
     OUString aName;
 };
 
@@ -306,7 +306,7 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     ScXMLDataPilotTableContext* pDataPilotTable;
     ScDPSaveDimension*          pDim;
 
-    ::std::vector<ScXMLDataPilotGroup> aGroups;
+    std::vector<ScXMLDataPilotGroup> aGroups;
     OUString                    sGroupSource;
     OUString                    sSelectedPage;
     OUString                    sName;
@@ -364,7 +364,7 @@ public:
         bAutoStart = bAutoSt;
         bAutoEnd = bAutoE;
     }
-    void AddGroup(const ::std::vector<OUString>& rMembers, const OUString& rName);
+    void AddGroup(const std::vector<OUString>& rMembers, const OUString& rName);
 };
 
 class ScXMLDataPilotFieldReferenceContext : public SvXMLImportContext
@@ -583,7 +583,7 @@ class ScXMLDataPilotGroupContext : public SvXMLImportContext
     ScXMLDataPilotFieldContext* pDataPilotField;
 
     OUString sName;
-    ::std::vector<OUString> aMembers;
+    std::vector<OUString> aMembers;
 
     const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }

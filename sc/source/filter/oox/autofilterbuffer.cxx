@@ -571,7 +571,7 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
         OSL_ENSURE( nMaxCount > 0, "AutoFilter::finalizeImport - invalid maximum filter field count" );
 
         // resulting list of all UNO API filter fields
-        ::std::vector<TableFilterField3> aFilterFields;
+        std::vector<TableFilterField3> aFilterFields;
 
         // track if columns require to enable or disable regular expressions
         OptValue< bool > obNeedsRegExp;

@@ -941,7 +941,7 @@ void XclExpChTrCellContent::GetCellData(
                     else
                         nSize += (aIt->mnFirstXclTab == aIt->mnLastXclTab) ? 6 : 8;
                 }
-                rpData->nSize = ::std::min< sal_Size >( nSize, 0xFFFF );
+                rpData->nSize = std::min< sal_Size >( nSize, 0xFFFF );
                 rXclLength1 = 0x00000052;
                 rXclLength2 = 0x0018;
             }
