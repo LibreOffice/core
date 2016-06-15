@@ -182,7 +182,8 @@ void SwMailDispatcherListener_Impl::mailDelivered(
                         uno::Reference< mail::XMailMessage> xMailMessage)
 {
     SolarMutexGuard aGuard;
-    m_pSendMailDialog->DocumentSent( xMailMessage, true, nullptr );
+    if (!m_pSendMailDialog->isDisposed())
+        m_pSendMailDialog->DocumentSent( xMailMessage, true, nullptr );
     DeleteAttachments( xMailMessage );
 }
 
@@ -192,7 +193,8 @@ void SwMailDispatcherListener_Impl::mailDeliveryError(
                 const OUString& sErrorMessage)
 {
     SolarMutexGuard aGuard;
-    m_pSendMailDialog->DocumentSent( xMailMessage, false, &sErrorMessage );
+    if (!m_pSendMailDialog->isDisposed())
+        m_pSendMailDialog->DocumentSent( xMailMessage, false, &sErrorMessage );
     DeleteAttachments( xMailMessage );
 }
 
