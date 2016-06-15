@@ -49,6 +49,10 @@ public:
     void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
     vcl::Window*        GetViewWindow() const { return mpViewWindow; }
     void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
+
+    // Screenshot interface
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
 };
 
 #endif // INCLUDED_VCL_TABDLG_HXX
