@@ -600,6 +600,10 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
             Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase | InvalidateFlags::NoTransparent | InvalidateFlags::NoClipChildren);
         else if ( pRegion )
             Invalidate(*pRegion, InvalidateFlags::NoChildren | InvalidateFlags::NoErase | InvalidateFlags::NoTransparent | InvalidateFlags::NoClipChildren);
+
+        // call PostPaint before returning
+        PostPaint(*this);
+
         return;
     }
 
@@ -611,6 +615,9 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
         aHelper.DoPaint(pRegion);
     else
         mpWindowImpl->mnPaintFlags = 0;
+
+    // call PostPaint
+    PostPaint(*this);
 }
 
 void Window::ImplCallOverlapPaint()
@@ -1008,6 +1015,10 @@ void Window::ImplUpdateAll()
 }
 
 void Window::PrePaint(vcl::RenderContext& /*rRenderContext*/)
+{
+}
+
+void Window::PostPaint(vcl::RenderContext& /*rRenderContext*/)
 {
 }
 

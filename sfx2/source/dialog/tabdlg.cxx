@@ -1310,4 +1310,54 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
     }
 }
 
+std::vector<OUString> SfxTabDialog::getAllPageUIXMLDescriptions() const
+{
+    std::vector<OUString> aRetval;
+
+    for (SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it)
+    {
+        SfxTabPage* pCandidate = GetTabPage((*it)->nId);
+
+        if (!pCandidate)
+        {
+            // force SfxTabPage creation
+            const_cast<SfxTabDialog*>(this)->ShowPage((*it)->nId);
+            pCandidate = GetTabPage((*it)->nId);
+        }
+
+        if (pCandidate)
+        {
+            // for now, use IDs, later change to UI-Strings
+            aRetval.push_back(OUString::number((*it)->nId));
+        }
+    }
+
+    return aRetval;
+}
+
+void SfxTabDialog::selectPageByUIXMLDescription(const OUString& rUIXMLDescription)
+{
+    // for now, use IDs, later change to UI-Strings
+    const sal_uInt16 nTargetId((sal_uInt16)rUIXMLDescription.toUInt32());
+    bool bDone(false);
+
+    for (SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); !bDone && it != pImpl->aData.end(); ++it)
+    {
+        SfxTabPage* pCandidate = (*it)->pTabPage;
+
+        if (!pCandidate)
+        {
+            // force SfxTabPage creation
+            const_cast<SfxTabDialog*>(this)->ShowPage((*it)->nId);
+            pCandidate = GetTabPage((*it)->nId);
+        }
+
+        if (pCandidate && (*it)->nId == nTargetId)
+        {
+            ShowPage(nTargetId);
+            bDone = true;
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

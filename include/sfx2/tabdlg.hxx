@@ -198,6 +198,10 @@ public:
 
     //calls Ok without closing dialog
     bool Apply();
+
+    // Screenshot interface
+    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const override;
+    virtual void selectPageByUIXMLDescription(const OUString& rUIXMLDescription) override;
 };
 
 namespace sfx { class ItemConnectionBase; }
