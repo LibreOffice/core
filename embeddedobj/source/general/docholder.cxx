@@ -840,11 +840,11 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
             m_pInterceptor = new Interceptor( this );
             m_pInterceptor->acquire();
 
+            xInterception->registerDispatchProviderInterceptor( m_pInterceptor );
+
             // register interceptor from outside
             if ( m_xOutplaceInterceptor.is() )
                 xInterception->registerDispatchProviderInterceptor( m_xOutplaceInterceptor );
-
-            xInterception->registerDispatchProviderInterceptor( m_pInterceptor );
         }
 
         uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );
