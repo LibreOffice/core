@@ -837,11 +837,13 @@ void SdrModel::libreOfficeKitCallback(int nType, const char* pPayload) const
 
 void SdrModel::setTiledSearching(bool bTiledSearching)
 {
+    assert(!comphelper::LibreOfficeKit::isViewCallback());
     mbTiledSearching = bTiledSearching;
 }
 
 bool SdrModel::isTiledSearching() const
 {
+    assert(!comphelper::LibreOfficeKit::isViewCallback());
     return mbTiledSearching;
 }
 

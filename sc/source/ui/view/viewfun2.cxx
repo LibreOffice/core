@@ -1822,9 +1822,15 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     }
 
     // Avoid LOK selection notifications before we have all the results.
-    rDoc.GetDrawLayer()->setTiledSearching(true);
+    if (comphelper::LibreOfficeKit::isViewCallback())
+        GetViewData().GetViewShell()->setTiledSearching(true);
+    else
+        rDoc.GetDrawLayer()->setTiledSearching(true);
     MarkDataChanged();
-    rDoc.GetDrawLayer()->setTiledSearching(false);
+    if (comphelper::LibreOfficeKit::isViewCallback())
+        GetViewData().GetViewShell()->setTiledSearching(false);
+    else
+        rDoc.GetDrawLayer()->setTiledSearching(false);
 
     if ( bFound )
     {
