@@ -553,26 +553,26 @@ bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
     // Ignore hyperlink without an URL.
     if (!rUrl.isEmpty())
     {
-        m_aStyles.append('{');
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FIELD);
-        m_aStyles.append('{');
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE);
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FLDINST);
-        m_aStyles.append(" HYPERLINK ");
+        m_aRun->append('{');
+        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FIELD);
+        m_aRun->append('{');
+        m_aRun->append(OOO_STRING_SVTOOLS_RTF_IGNORE);
+        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FLDINST);
+        m_aRun->append(" HYPERLINK ");
 
-        m_aStyles.append("\"");
-        m_aStyles.append(msfilter::rtfutil::OutString(rUrl, m_rExport.m_eCurrentEncoding));
-        m_aStyles.append("\" ");
+        m_aRun->append("\"");
+        m_aRun->append(msfilter::rtfutil::OutString(rUrl, m_rExport.m_eCurrentEncoding));
+        m_aRun->append("\" ");
 
         if (!rTarget.isEmpty())
         {
-            m_aStyles.append("\\\\t \"");
-            m_aStyles.append(msfilter::rtfutil::OutString(rTarget, m_rExport.m_eCurrentEncoding));
-            m_aStyles.append("\" ");
+            m_aRun->append("\\\\t \"");
+            m_aRun->append(msfilter::rtfutil::OutString(rTarget, m_rExport.m_eCurrentEncoding));
+            m_aRun->append("\" ");
         }
 
-        m_aStyles.append("}");
-        m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {");
+        m_aRun->append("}");
+        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " {");
     }
     return true;
 }
