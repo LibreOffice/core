@@ -112,6 +112,7 @@ void MasterPagesSelector::dispose()
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->RemoveChangeListener(aChangeListener);
+    mpContainer.reset();
     PreviewValueSet::dispose();
 }
 
