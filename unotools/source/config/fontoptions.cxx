@@ -243,45 +243,28 @@ Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtFontOptions_Impl*    SvtFontOptions::m_pDataContainer    = nullptr;
-sal_Int32               SvtFontOptions::m_nRefCount         = 0;
-
-//  constructor
+std::weak_ptr<SvtFontOptions_Impl> m_pFontOptions;
 
 SvtFontOptions::SvtFontOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
-    {
-        m_pDataContainer = new SvtFontOptions_Impl;
 
+    m_pImpl = m_pFontOptions.lock();
+    if( !m_pImpl )
+    {
+        m_pImpl = std::make_shared<SvtFontOptions_Impl>();
+        m_pFontOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_FONTOPTIONS);
     }
 }
-
-//  destructor
 
 SvtFontOptions::~SvtFontOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 //  public method
@@ -289,7 +272,7 @@ SvtFontOptions::~SvtFontOptions()
 bool SvtFontOptions::IsFontHistoryEnabled() const
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsFontHistoryEnabled();
+    return m_pImpl->IsFontHistoryEnabled();
 }
 
 //  public method
@@ -297,7 +280,7 @@ bool SvtFontOptions::IsFontHistoryEnabled() const
 bool SvtFontOptions::IsFontWYSIWYGEnabled() const
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsFontWYSIWYGEnabled();
+    return m_pImpl->IsFontWYSIWYGEnabled();
 }
 
 //  public method
@@ -305,7 +288,7 @@ bool SvtFontOptions::IsFontWYSIWYGEnabled() const
 void SvtFontOptions::EnableFontWYSIWYG( bool bState )
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    m_pDataContainer->EnableFontWYSIWYG( bState );
+    m_pImpl->EnableFontWYSIWYG( bState );
 }
 
 namespace
