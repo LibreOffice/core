@@ -25,6 +25,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
+#include <memory>
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation
@@ -43,17 +44,6 @@ class SvtPrintWarningOptions_Impl;
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtPrintWarningOptions : public utl::detail::Options
 {
     public:
-        /*-****************************************************************************************************
-            @short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
-                        We implement these class with a refcount mechanism! Every instance of this class increase it
-                        at create and decrease it at delete time - but all instances use the same data container!
-                        He is implemented as a static member ...
-
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer
-        *//*-*****************************************************************************************************/
-
          SvtPrintWarningOptions();
         virtual ~SvtPrintWarningOptions();
 
@@ -86,17 +76,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtPrintWarningOptions : public utl::de
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     private:
-
-        /*Attention
-
-            Don't initialize these static members in these headers!
-            a) Double defined symbols will be detected ...
-            b) and unresolved externals exist at linking time.
-            Do it in your source only.
-         */
-
-        static SvtPrintWarningOptions_Impl* m_pDataContainer;
-        static sal_Int32                    m_nRefCount;
+        std::shared_ptr<SvtPrintWarningOptions_Impl> m_pImpl;
 
 };      // class SvtPrintWarningOptions
 
