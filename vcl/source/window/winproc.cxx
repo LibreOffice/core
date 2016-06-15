@@ -1509,26 +1509,27 @@ public:
 bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
 {
     static SalWheelMouseEvent aPreviousEvent;
-    static VclPtr<vcl::Window> xPreviousWindow;
 
     if (!Setup())
         return false;
 
     VclPtr<vcl::Window> xMouseWindow = FindTarget();
 
+    ImplSVData* pSVData = ImplGetSVData();
+
     // avoid the problem that scrolling via wheel to this point brings a widget
     // under the mouse that also accepts wheel commands, so stick with the old
     // widget if the time gap is very small
-    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(xPreviousWindow))
+    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(pSVData->maWinData.mpLastWheelWindow))
     {
-        xMouseWindow = xPreviousWindow.get();
+        xMouseWindow = pSVData->maWinData.mpLastWheelWindow;
     }
 
     aPreviousEvent = rEvt;
 
-    xPreviousWindow = Dispatch(xMouseWindow);
+    pSVData->maWinData.mpLastWheelWindow = Dispatch(xMouseWindow);
 
-    return xPreviousWindow;
+    return pSVData->maWinData.mpLastWheelWindow.get();
 }
 
 class HandleGestureEvent : public HandleGestureEventBase

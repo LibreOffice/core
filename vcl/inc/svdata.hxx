@@ -208,6 +208,7 @@ struct ImplSVWinData
     AutoTimer*              mpTrackTimer;                   // tracking timer
     ImageList*              mpMsgBoxImgList;                // ImageList for MessageBox
     VclPtr<vcl::Window>     mpAutoScrollWin;                // window, that is in AutoScrollMode mode
+    VclPtr<vcl::Window>     mpLastWheelWindow;              // window, that last received a mouse wheel event
     StartTrackingFlags      mnTrackFlags;                   // tracking flags
     StartAutoScrollFlags    mnAutoScrollFlags;              // auto scroll flags
     bool                    mbNoDeactivate;                 // true: do not execute Deactivate
