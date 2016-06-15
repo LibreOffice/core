@@ -37,9 +37,9 @@ namespace slideshow
 {
     namespace internal
     {
-        AnimatedSprite::AnimatedSprite( const ViewLayerSharedPtr&   rViewLayer,
-                                        const ::basegfx::B2DSize&   rSpriteSizePixel,
-                                        double                      nSpritePrio ) :
+        AnimatedSprite::AnimatedSprite( const std::shared_ptr< ViewLayer >& rViewLayer,
+                                        const ::basegfx::B2DSize&           rSpriteSizePixel,
+                                        double                              nSpritePrio ) :
             mpViewLayer( rViewLayer ),
             mpSprite(),
             maEffectiveSpriteSizePixel( rSpriteSizePixel ),

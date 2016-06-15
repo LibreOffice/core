@@ -35,12 +35,12 @@ void AnimationSetNode::implScheduleDeactivationEvent()
     scheduleDeactivationEvent();
 }
 
-AnimationActivitySharedPtr AnimationSetNode::createActivity() const
+std::shared_ptr< AnimationActivity > AnimationSetNode::createActivity() const
 {
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
     uno::Reference<animations::XAnimate> const xAnimateNode = getXAnimateNode();
     OUString const attrName( xAnimateNode->getAttributeName() );
-    AttributableShapeSharedPtr const pShape( getShape() );
+    std::shared_ptr< AttributableShape > const pShape( getShape() );
 
     // make deactivation a two-step procedure. Normally, we
     // could solely rely on
@@ -189,7 +189,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     }
     }
 
-    return AnimationActivitySharedPtr();
+    return std::shared_ptr< AnimationActivity >();
 }
 
 } // namespace internal

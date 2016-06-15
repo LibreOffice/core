@@ -52,9 +52,9 @@ namespace slideshow
             // ViewEventHandler
 
 
-            virtual void viewAdded( const UnoViewSharedPtr& ) override {}
-            virtual void viewRemoved( const UnoViewSharedPtr& ) override {}
-            virtual void viewChanged( const UnoViewSharedPtr& rView ) override
+            virtual void viewAdded( const std::shared_ptr< UnoView >& ) override {}
+            virtual void viewRemoved( const std::shared_ptr< UnoView >& ) override {}
+            virtual void viewChanged( const std::shared_ptr< UnoView >& rView ) override
             {
                 mrBase.implViewChanged(rView);
             }

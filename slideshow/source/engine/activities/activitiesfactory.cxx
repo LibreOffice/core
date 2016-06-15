@@ -377,7 +377,7 @@ private:
     Subtype of the Animation object (e.g. NumberAnimation)
 */
 template<class BaseType, typename AnimationType>
-AnimationActivitySharedPtr createFromToByActivity(
+std::shared_ptr< AnimationActivity > createFromToByActivity(
     const uno::Any&                                          rFromAny,
     const uno::Any&                                          rToAny,
     const uno::Any&                                          rByAny,
@@ -419,7 +419,7 @@ AnimationActivitySharedPtr createFromToByActivity(
         aBy.reset(aTmpValue);
     }
 
-    return AnimationActivitySharedPtr(
+    return std::shared_ptr< AnimationActivity >(
         new FromToByActivity<BaseType, AnimationType>(
             aFrom,
             aTo,
@@ -473,7 +473,6 @@ class ValuesActivity : public BaseType
 {
 public:
     typedef typename AnimationType::ValueType   ValueType;
-    typedef std::vector<ValueType>              ValueVectorType;
 
 private:
     // some compilers don't inline methods whose definition they haven't
@@ -507,7 +506,7 @@ public:
         value, or start afresh each time.
     */
     ValuesActivity(
-        const ValueVectorType&                      rValues,
+        const std::vector<ValueType>&               rValues,
         const ActivityParameters&                   rParms,
         const std::shared_ptr<AnimationType>&     rAnim,
         const Interpolator< ValueType >&            rInterpolator,
@@ -587,7 +586,7 @@ public:
     }
 
 private:
-    ValueVectorType                         maValues;
+    std::vector<ValueType>                  maValues;
 
     std::shared_ptr<ExpressionNode>                 mpFormula;
 
@@ -605,7 +604,7 @@ private:
     Subtype of the Animation object (e.g. NumberAnimation)
 */
 template<class BaseType, typename AnimationType>
-AnimationActivitySharedPtr createValueListActivity(
+std::shared_ptr< AnimationActivity > createValueListActivity(
     const uno::Sequence<uno::Any>&                            rValues,
     const ActivityParameters&                                 rParms,
     const std::shared_ptr<AnimationType>&                   rAnim,
@@ -615,9 +614,8 @@ AnimationActivitySharedPtr createValueListActivity(
     const ::basegfx::B2DVector&                               rSlideBounds )
 {
     typedef typename AnimationType::ValueType   ValueType;
-    typedef std::vector<ValueType>              ValueVectorType;
 
-    ValueVectorType aValueVector;
+    std::vector<ValueType> aValueVector;
     aValueVector.reserve( rValues.getLength() );
 
     for( ::std::size_t i=0, nLen=rValues.getLength(); i<nLen; ++i )
@@ -629,7 +627,7 @@ AnimationActivitySharedPtr createValueListActivity(
         aValueVector.push_back( aValue );
     }
 
-    return AnimationActivitySharedPtr(
+    return std::shared_ptr< AnimationActivity >(
         new ValuesActivity<BaseType, AnimationType>(
             aValueVector,
             rParms,
@@ -660,7 +658,7 @@ AnimationActivitySharedPtr createValueListActivity(
     for HSL color space).
 */
 template<typename AnimationType>
-AnimationActivitySharedPtr createActivity(
+std::shared_ptr< AnimationActivity > createActivity(
     const ActivitiesFactory::CommonParameters&               rParms,
     const uno::Reference< animations::XAnimate >&            xNode,
     const ::std::shared_ptr< AnimationType >&              rAnim,
@@ -745,7 +743,7 @@ AnimationActivitySharedPtr createActivity(
                         rParms.mrEventQueue.getTimer(),
                         rParms.mrActivitiesQueue ) );
 
-                AnimationActivitySharedPtr pActivity(
+                std::shared_ptr< AnimationActivity > pActivity(
                     createValueListActivity< DiscreteActivityBase >(
                         xNode->getValues(),
                         aActivityParms,
@@ -809,7 +807,7 @@ AnimationActivitySharedPtr createActivity(
                         rParms.mrEventQueue.getTimer(),
                         rParms.mrActivitiesQueue ) );
 
-                AnimationActivitySharedPtr pActivity(
+                std::shared_ptr< AnimationActivity > pActivity(
                     createFromToByActivity< DiscreteActivityBase >(
                         xNode->getFrom(),
                         xNode->getTo(),
@@ -866,7 +864,7 @@ public:
         Standard Activity parameter struct
     */
     SimpleActivity( const ActivityParameters&       rParms,
-                    const NumberAnimationSharedPtr& rAnim ) :
+                    const std::shared_ptr< NumberAnimation >& rAnim ) :
         ContinuousActivityBase( rParms ),
         mpAnim( rAnim )
     {
@@ -917,42 +915,42 @@ public:
     }
 
 private:
-    NumberAnimationSharedPtr    mpAnim;
+    std::shared_ptr< NumberAnimation > mpAnim;
 };
 
 } // anon namespace
 
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const NumberAnimationSharedPtr&                rAnim,
+    const std::shared_ptr< NumberAnimation >&      rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const EnumAnimationSharedPtr&                  rAnim,
+    const std::shared_ptr< EnumAnimation >&        rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const ColorAnimationSharedPtr&                 rAnim,
+    const std::shared_ptr< ColorAnimation >&       rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                            rParms,
-    const HSLColorAnimationSharedPtr&                  rAnim,
+    const std::shared_ptr< HSLColorAnimation >&        rAnim,
     const uno::Reference< animations::XAnimateColor >& xNode )
 {
     // forward to appropriate template instantiation
@@ -964,36 +962,36 @@ AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
                            Interpolator< HSLColor >( !xNode->getDirection() ) );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const PairAnimationSharedPtr&                  rAnim,
+    const std::shared_ptr< PairAnimation >&        rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const StringAnimationSharedPtr&                rAnim,
+    const std::shared_ptr< StringAnimation >&      rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createAnimateActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createAnimateActivity(
     const CommonParameters&                        rParms,
-    const BoolAnimationSharedPtr&                  rAnim,
+    const std::shared_ptr< BoolAnimation >&        rAnim,
     const uno::Reference< animations::XAnimate >&  xNode )
 {
     // forward to appropriate template instantiation
     return createActivity( rParms, xNode, rAnim );
 }
 
-AnimationActivitySharedPtr ActivitiesFactory::createSimpleActivity(
+std::shared_ptr< AnimationActivity > ActivitiesFactory::createSimpleActivity(
     const CommonParameters&         rParms,
-    const NumberAnimationSharedPtr& rAnim,
+    const std::shared_ptr< NumberAnimation >& rAnim,
     bool                            bDirectionForward )
 {
     ActivityParameters aActivityParms( rParms.mpEndEvent,
@@ -1007,10 +1005,10 @@ AnimationActivitySharedPtr ActivitiesFactory::createSimpleActivity(
                                        rParms.mbAutoReverse );
 
     if( bDirectionForward )
-        return AnimationActivitySharedPtr(
+        return std::shared_ptr< AnimationActivity >(
             new SimpleActivity<1>( aActivityParms, rAnim ) );
     else
-        return AnimationActivitySharedPtr(
+        return std::shared_ptr< AnimationActivity >(
             new SimpleActivity<0>( aActivityParms, rAnim ) );
 }
 

@@ -71,7 +71,7 @@ namespace slideshow
                 implementation 'thinks' it does not need to render
                 something to screen.
             */
-            void notifyUpdate( const UnoViewSharedPtr& rView, bool bViewClobbered=false );
+            void notifyUpdate( const std::shared_ptr< UnoView >& rView, bool bViewClobbered=false );
 
             /** Commits collected update actions
              */
@@ -83,7 +83,7 @@ namespace slideshow
                 Add this ViewUpdate to the list that's asked for
                 pending updates
              */
-            void addViewUpdate( ViewUpdateSharedPtr const& rViewUpdate );
+            void addViewUpdate( std::shared_ptr< ViewUpdate > const& rViewUpdate );
 
             /** Unregister ViewUpdate
 
@@ -91,7 +91,7 @@ namespace slideshow
                 Remove this ViewUpdate from the list that's asked for
                 pending updates
              */
-            void removeViewUpdate( ViewUpdateSharedPtr const& );
+            void removeViewUpdate( std::shared_ptr< ViewUpdate > const& );
 
             /** A wart.
 

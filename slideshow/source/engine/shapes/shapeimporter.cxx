@@ -153,9 +153,9 @@ public:
 
     // Shape:
     virtual uno::Reference<drawing::XShape> getXShape() const override;
-    virtual void addViewLayer( ViewLayerSharedPtr const& pNewLayer,
+    virtual void addViewLayer( std::shared_ptr< ViewLayer > const& pNewLayer,
                                bool                      bRedrawLayer ) override;
-    virtual bool removeViewLayer( ViewLayerSharedPtr const& pNewLayer ) override;
+    virtual bool removeViewLayer( std::shared_ptr< ViewLayer > const& pNewLayer ) override;
     virtual void clearAllViewLayers() override;
     virtual bool update() const override;
     virtual bool render() const override;
@@ -199,12 +199,12 @@ uno::Reference<drawing::XShape> ShapeOfGroup::getXShape() const
     return mxShape;
 }
 
-void ShapeOfGroup::addViewLayer( ViewLayerSharedPtr const& /*pNewLayer*/,
+void ShapeOfGroup::addViewLayer( std::shared_ptr< ViewLayer > const& /*pNewLayer*/,
                                  bool                      /*bRedrawLayer*/ )
 {
 }
 
-bool ShapeOfGroup::removeViewLayer( ViewLayerSharedPtr const& /*pNewLayer*/ )
+bool ShapeOfGroup::removeViewLayer( std::shared_ptr< ViewLayer > const& /*pNewLayer*/ )
 {
     return true;
 }
@@ -580,7 +580,7 @@ bool ShapeImporter::isImportDone() const
     return maShapesStack.empty();
 }
 
-const PolyPolygonVector& ShapeImporter::getPolygons()
+const std::vector< cppcanvas::PolyPolygonSharedPtr>& ShapeImporter::getPolygons()
 {
     return maPolygons;
 }

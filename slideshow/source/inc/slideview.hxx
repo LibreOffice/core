@@ -42,7 +42,7 @@ namespace slideshow
             @param rViewChangeFunc
             Functor to call, when the UNO view signals a repaint.
         */
-        UnoViewSharedPtr createSlideView(
+        std::shared_ptr< UnoView > createSlideView(
             css::uno::Reference< css::presentation::XSlideShowView> const& xView,
             EventQueue&                                                rEventQueue,
             EventMultiplexer&                                          rEventMultiplexer );

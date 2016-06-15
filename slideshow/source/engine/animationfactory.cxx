@@ -54,15 +54,15 @@ namespace slideshow
             template< typename ValueT > class TupleAnimation : public PairAnimation
             {
             public:
-                TupleAnimation( const ShapeManagerSharedPtr&        rShapeManager,
-                                int                                 nFlags,
-                                bool         (ShapeAttributeLayer::*pIs1stValid)() const,
-                                bool         (ShapeAttributeLayer::*pIs2ndValid)() const,
-                                const ValueT&                       rDefaultValue,
-                                const ::basegfx::B2DSize&           rReferenceSize,
-                                double       (ShapeAttributeLayer::*pGet1stValue)() const,
-                                double       (ShapeAttributeLayer::*pGet2ndValue)() const,
-                                void         (ShapeAttributeLayer::*pSetValue)( const ValueT& ) ) :
+                TupleAnimation( const std::shared_ptr< ShapeManager >&  rShapeManager,
+                                int                                     nFlags,
+                                bool             (ShapeAttributeLayer::*pIs1stValid)() const,
+                                bool             (ShapeAttributeLayer::*pIs2ndValid)() const,
+                                const ValueT&                           rDefaultValue,
+                                const ::basegfx::B2DSize&               rReferenceSize,
+                                double           (ShapeAttributeLayer::*pGet1stValue)() const,
+                                double           (ShapeAttributeLayer::*pGet2ndValue)() const,
+                                void             (ShapeAttributeLayer::*pSetValue)( const ValueT& ) ) :
                     mpShape(),
                     mpAttrLayer(),
                     mpShapeManager( rShapeManager ),
@@ -89,12 +89,12 @@ namespace slideshow
 
                 // Animation interface
 
-                virtual void prefetch( const AnimatableShapeSharedPtr&,
-                                       const ShapeAttributeLayerSharedPtr& ) override
+                virtual void prefetch( const std::shared_ptr< AnimatableShape >&,
+                                       const std::shared_ptr< ShapeAttributeLayer >& ) override
                 {}
 
-                virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                                    const ShapeAttributeLayerSharedPtr& rAttrLayer ) override
+                virtual void start( const std::shared_ptr< AnimatableShape >&       rShape,
+                                    const std::shared_ptr< ShapeAttributeLayer >&   rAttrLayer ) override
                 {
                     OSL_ENSURE( !mpShape,
                                 "TupleAnimation::start(): Shape already set" );
@@ -185,14 +185,14 @@ namespace slideshow
                 }
 
             private:
-                AnimatableShapeSharedPtr           mpShape;
-                ShapeAttributeLayerSharedPtr       mpAttrLayer;
-                ShapeManagerSharedPtr              mpShapeManager;
-                bool        (ShapeAttributeLayer::*mpIs1stValidFunc)() const;
-                bool        (ShapeAttributeLayer::*mpIs2ndValidFunc)() const;
-                double      (ShapeAttributeLayer::*mpGet1stValueFunc)() const;
-                double      (ShapeAttributeLayer::*mpGet2ndValueFunc)() const;
-                void        (ShapeAttributeLayer::*mpSetValueFunc)( const ValueT& );
+                std::shared_ptr< AnimatableShape >      mpShape;
+                std::shared_ptr< ShapeAttributeLayer >  mpAttrLayer;
+                std::shared_ptr< ShapeManager >         mpShapeManager;
+                bool             (ShapeAttributeLayer::*mpIs1stValidFunc)() const;
+                bool             (ShapeAttributeLayer::*mpIs2ndValidFunc)() const;
+                double           (ShapeAttributeLayer::*mpGet1stValueFunc)() const;
+                double           (ShapeAttributeLayer::*mpGet2ndValueFunc)() const;
+                void             (ShapeAttributeLayer::*mpSetValueFunc)( const ValueT& );
 
                 const int                          mnFlags;
 
@@ -205,11 +205,11 @@ namespace slideshow
             class PathAnimation : public NumberAnimation
             {
             public:
-                PathAnimation( const OUString&       rSVGDPath,
-                               sal_Int16                    nAdditive,
-                               const ShapeManagerSharedPtr& rShapeManager,
-                               const ::basegfx::B2DVector&  rSlideSize,
-                               int                          nFlags ) :
+                PathAnimation( const OUString&                          rSVGDPath,
+                               sal_Int16                                nAdditive,
+                               const std::shared_ptr< ShapeManager >&   rShapeManager,
+                               const ::basegfx::B2DVector&              rSlideSize,
+                               int                                      nFlags ) :
                     maPathPoly(),
                     mpShape(),
                     mpAttrLayer(),
@@ -243,12 +243,12 @@ namespace slideshow
 
                 // Animation interface
 
-                virtual void prefetch( const AnimatableShapeSharedPtr&,
-                                       const ShapeAttributeLayerSharedPtr& ) override
+                virtual void prefetch( const std::shared_ptr< AnimatableShape >&,
+                                       const std::shared_ptr< ShapeAttributeLayer >& ) override
                 {}
 
-                virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                                    const ShapeAttributeLayerSharedPtr& rAttrLayer ) override
+                virtual void start( const std::shared_ptr< AnimatableShape >&       rShape,
+                                    const std::shared_ptr< ShapeAttributeLayer >&   rAttrLayer ) override
                 {
                     OSL_ENSURE( !mpShape,
                                 "PathAnimation::start(): Shape already set" );
@@ -340,15 +340,15 @@ namespace slideshow
                 }
 
             private:
-                ::basegfx::B2DPolygon              maPathPoly;
-                AnimatableShapeSharedPtr           mpShape;
-                ShapeAttributeLayerSharedPtr       mpAttrLayer;
-                ShapeManagerSharedPtr              mpShapeManager;
-                const ::basegfx::B2DSize           maPageSize;
-                ::basegfx::B2DPoint                maShapeOrig;
-                const int                          mnFlags;
-                bool                               mbAnimationStarted;
-                sal_Int16                          mnAdditive;
+                ::basegfx::B2DPolygon                   maPathPoly;
+                std::shared_ptr< AnimatableShape >      mpShape;
+                std::shared_ptr< ShapeAttributeLayer >  mpAttrLayer;
+                std::shared_ptr< ShapeManager >         mpShapeManager;
+                const ::basegfx::B2DSize                maPageSize;
+                ::basegfx::B2DPoint                     maShapeOrig;
+                const int                               mnFlags;
+                bool                                    mbAnimationStarted;
+                sal_Int16                               mnAdditive;
             };
 
 
@@ -408,7 +408,7 @@ namespace slideshow
                     Modifies up values before passing them to the pSetValue method.
                     Must provide operator()( const ValueT& ) method.
                  */
-                GenericAnimation( const ShapeManagerSharedPtr&          rShapeManager,
+                GenericAnimation( const std::shared_ptr< ShapeManager >& rShapeManager,
                                   int                                   nFlags,
                                   bool           (ShapeAttributeLayer::*pIsValid)() const,
                                   const ValueT&                         rDefaultValue,
@@ -441,12 +441,12 @@ namespace slideshow
 
                 // Animation interface
 
-                virtual void prefetch( const AnimatableShapeSharedPtr&,
-                                       const ShapeAttributeLayerSharedPtr& )
+                virtual void prefetch( const std::shared_ptr< AnimatableShape >&,
+                                       const std::shared_ptr< ShapeAttributeLayer >& )
                 {}
 
-                virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                                    const ShapeAttributeLayerSharedPtr& rAttrLayer )
+                virtual void start( const std::shared_ptr< AnimatableShape >&       rShape,
+                                    const std::shared_ptr< ShapeAttributeLayer >&   rAttrLayer )
                 {
                     OSL_ENSURE( !mpShape,
                                 "GenericAnimation::start(): Shape already set" );
@@ -562,20 +562,20 @@ namespace slideshow
                 }
 
             private:
-                AnimatableShapeSharedPtr           mpShape;
-                ShapeAttributeLayerSharedPtr       mpAttrLayer;
-                ShapeManagerSharedPtr              mpShapeManager;
-                bool        (ShapeAttributeLayer::*mpIsValidFunc)() const;
-                ValueT      (ShapeAttributeLayer::*mpGetValueFunc)() const;
-                void        (ShapeAttributeLayer::*mpSetValueFunc)( const ValueT& );
+                std::shared_ptr< AnimatableShape >      mpShape;
+                std::shared_ptr< ShapeAttributeLayer >  mpAttrLayer;
+                std::shared_ptr< ShapeManager >         mpShapeManager;
+                bool             (ShapeAttributeLayer::*mpIsValidFunc)() const;
+                ValueT           (ShapeAttributeLayer::*mpGetValueFunc)() const;
+                void             (ShapeAttributeLayer::*mpSetValueFunc)( const ValueT& );
 
-                ModifierFunctor                    maGetterModifier;
-                ModifierFunctor                    maSetterModifier;
+                ModifierFunctor                         maGetterModifier;
+                ModifierFunctor                         maSetterModifier;
 
-                const int                          mnFlags;
+                const int                               mnFlags;
 
-                const ValueT                       maDefaultValue;
-                bool                               mbAnimationStarted;
+                const ValueT                            maDefaultValue;
+                bool                                    mbAnimationStarted;
             };
 
             //Current c++0x draft (apparently) has std::identity, but not operator()
@@ -592,7 +592,7 @@ namespace slideshow
                 interface GenericAnimation will implement).
              */
             template< typename AnimationBase > ::std::shared_ptr< AnimationBase >
-                makeGenericAnimation( const ShapeManagerSharedPtr&                             rShapeManager,
+                makeGenericAnimation( const std::shared_ptr< ShapeManager >&                   rShapeManager,
                                       int                                                      nFlags,
                                       bool                              (ShapeAttributeLayer::*pIsValid)() const,
                                       const typename AnimationBase::ValueType&                 rDefaultValue,
@@ -632,7 +632,7 @@ namespace slideshow
 
             /** Overload for NumberAnimations which need scaling (width,height,x,y currently)
              */
-            NumberAnimationSharedPtr makeGenericAnimation( const ShapeManagerSharedPtr&                             rShapeManager,
+            std::shared_ptr< NumberAnimation > makeGenericAnimation( const std::shared_ptr< ShapeManager >&         rShapeManager,
                                                            int                                                      nFlags,
                                                            bool                              (ShapeAttributeLayer::*pIsValid)() const,
                                                            double                                                   nDefaultValue,
@@ -640,7 +640,7 @@ namespace slideshow
                                                            void                              (ShapeAttributeLayer::*pSetValue)( const double& ),
                                                            double                                                   nScaleValue )
             {
-                return NumberAnimationSharedPtr(
+                return std::shared_ptr< NumberAnimation >(
                     new GenericAnimation< NumberAnimation, Scaler >( rShapeManager,
                                                                      nFlags,
                                                                      pIsValid,
@@ -652,8 +652,8 @@ namespace slideshow
             }
 
 
-            uno::Any getShapeDefault( const AnimatableShapeSharedPtr&   rShape,
-                                      const OUString&            rPropertyName )
+            uno::Any getShapeDefault( const std::shared_ptr< AnimatableShape >& rShape,
+                                      const OUString&                           rPropertyName )
             {
                 uno::Reference< drawing::XShape > xShape( rShape->getXShape() );
 
@@ -671,8 +671,8 @@ namespace slideshow
                 return xPropSet->getPropertyValue( rPropertyName );
             }
 
-            template< typename ValueType > ValueType getDefault( const AnimatableShapeSharedPtr&    rShape,
-                                                                 const OUString&             rPropertyName )
+            template< typename ValueType > ValueType getDefault( const std::shared_ptr< AnimatableShape >&  rShape,
+                                                                 const OUString&                            rPropertyName )
             {
                 const uno::Any& rAny( getShapeDefault( rShape,
                                                        rPropertyName ) );
@@ -702,8 +702,8 @@ namespace slideshow
                 }
             }
 
-            template<> RGBColor getDefault< RGBColor >( const AnimatableShapeSharedPtr& rShape,
-                                                        const OUString&          rPropertyName )
+            template<> RGBColor getDefault< RGBColor >( const std::shared_ptr< AnimatableShape >&   rShape,
+                                                        const OUString&                             rPropertyName )
             {
                 const uno::Any& rAny( getShapeDefault( rShape,
                                                        rPropertyName ) );
@@ -801,11 +801,11 @@ namespace slideshow
             }
         }
 
-        NumberAnimationSharedPtr AnimationFactory::createNumberPropertyAnimation( const OUString&                rAttrName,
-                                                                                  const AnimatableShapeSharedPtr&       rShape,
-                                                                                  const ShapeManagerSharedPtr&          rShapeManager,
-                                                                                  const ::basegfx::B2DVector&           rSlideSize,
-                                                                                  int                                   nFlags )
+        std::shared_ptr< NumberAnimation > AnimationFactory::createNumberPropertyAnimation( const OUString&                 rAttrName,
+                                                                                  const std::shared_ptr< AnimatableShape >& rShape,
+                                                                                  const std::shared_ptr< ShapeManager >&    rShapeManager,
+                                                                                  const ::basegfx::B2DVector&               rSlideSize,
+                                                                                  int                                       nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
             // be checked and possibly adapted in their switch statement
@@ -962,14 +962,14 @@ namespace slideshow
                                                  rSlideSize.getY() );
             }
 
-            return NumberAnimationSharedPtr();
+            return std::shared_ptr< NumberAnimation >();
         }
 
-        EnumAnimationSharedPtr AnimationFactory::createEnumPropertyAnimation( const OUString&                rAttrName,
-                                                                              const AnimatableShapeSharedPtr&       rShape,
-                                                                              const ShapeManagerSharedPtr&          rShapeManager,
-                                                                              const ::basegfx::B2DVector&           /*rSlideSize*/,
-                                                                              int                                   nFlags )
+        std::shared_ptr< EnumAnimation > AnimationFactory::createEnumPropertyAnimation( const OUString&                 rAttrName,
+                                                                              const std::shared_ptr< AnimatableShape >& rShape,
+                                                                              const std::shared_ptr< ShapeManager >&    rShapeManager,
+                                                                              const ::basegfx::B2DVector&             /*rSlideSize*/,
+                                                                              int                                       nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
             // be checked and possibly adapted in their switch statement
@@ -1058,14 +1058,14 @@ namespace slideshow
                                                                 &ShapeAttributeLayer::setUnderlineMode );
             }
 
-            return EnumAnimationSharedPtr();
+            return std::shared_ptr< EnumAnimation >();
         }
 
-        ColorAnimationSharedPtr AnimationFactory::createColorPropertyAnimation( const OUString&              rAttrName,
-                                                                                const AnimatableShapeSharedPtr&     rShape,
-                                                                                const ShapeManagerSharedPtr&        rShapeManager,
-                                                                                const ::basegfx::B2DVector&         /*rSlideSize*/,
-                                                                                int                                 nFlags )
+        std::shared_ptr< ColorAnimation > AnimationFactory::createColorPropertyAnimation( const OUString&                   rAttrName,
+                                                                                const std::shared_ptr< AnimatableShape >&   rShape,
+                                                                                const std::shared_ptr< ShapeManager >&      rShapeManager,
+                                                                                const ::basegfx::B2DVector&               /*rSlideSize*/,
+                                                                                int                                         nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
             // be checked and possibly adapted in their switch statement
@@ -1157,21 +1157,21 @@ namespace slideshow
                                                                  &ShapeAttributeLayer::setLineColor );
             }
 
-            return ColorAnimationSharedPtr();
+            return std::shared_ptr< ColorAnimation >();
         }
 
-        PairAnimationSharedPtr AnimationFactory::createPairPropertyAnimation( const AnimatableShapeSharedPtr&       rShape,
-                                                                              const ShapeManagerSharedPtr&          rShapeManager,
-                                                                              const ::basegfx::B2DVector&           rSlideSize,
-                                                                              sal_Int16                             nTransformType,
-                                                                              int                                   nFlags )
+        std::shared_ptr< PairAnimation > AnimationFactory::createPairPropertyAnimation( const std::shared_ptr< AnimatableShape >&   rShape,
+                                                                              const std::shared_ptr< ShapeManager >&                rShapeManager,
+                                                                              const ::basegfx::B2DVector&                           rSlideSize,
+                                                                              sal_Int16                                             nTransformType,
+                                                                              int                                                   nFlags )
         {
             const ::basegfx::B2DRectangle& rBounds( rShape->getBounds() );
 
             switch( nTransformType )
             {
                 case animations::AnimationTransformType::SCALE:
-                    return PairAnimationSharedPtr(
+                    return std::shared_ptr< PairAnimation >(
                         new TupleAnimation< ::basegfx::B2DSize >(
                             rShapeManager,
                             nFlags,
@@ -1188,7 +1188,7 @@ namespace slideshow
                             &ShapeAttributeLayer::setSize ) );
 
                 case animations::AnimationTransformType::TRANSLATE:
-                    return PairAnimationSharedPtr(
+                    return std::shared_ptr< PairAnimation >(
                         new TupleAnimation< ::basegfx::B2DPoint >(
                             rShapeManager,
                             nFlags,
@@ -1210,14 +1210,14 @@ namespace slideshow
                     break;
             }
 
-            return PairAnimationSharedPtr();
+            return std::shared_ptr< PairAnimation >();
         }
 
-        StringAnimationSharedPtr AnimationFactory::createStringPropertyAnimation( const OUString&                rAttrName,
-                                                                                  const AnimatableShapeSharedPtr&       rShape,
-                                                                                  const ShapeManagerSharedPtr&          rShapeManager,
-                                                                                  const ::basegfx::B2DVector&           /*rSlideSize*/,
-                                                                                  int                                   nFlags )
+        std::shared_ptr< StringAnimation > AnimationFactory::createStringPropertyAnimation( const OUString&                 rAttrName,
+                                                                                  const std::shared_ptr< AnimatableShape >& rShape,
+                                                                                  const std::shared_ptr< ShapeManager >&    rShapeManager,
+                                                                                  const ::basegfx::B2DVector&               /*rSlideSize*/,
+                                                                                  int                                       nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
             // be checked and possibly adapted in their switch statement
@@ -1284,14 +1284,14 @@ namespace slideshow
                                                                   &ShapeAttributeLayer::setFontFamily );
             }
 
-            return StringAnimationSharedPtr();
+            return std::shared_ptr< StringAnimation >();
         }
 
-        BoolAnimationSharedPtr AnimationFactory::createBoolPropertyAnimation( const OUString&                rAttrName,
-                                                                              const AnimatableShapeSharedPtr&       /*rShape*/,
-                                                                              const ShapeManagerSharedPtr&          rShapeManager,
-                                                                              const ::basegfx::B2DVector&           /*rSlideSize*/,
-                                                                              int                                   nFlags )
+        std::shared_ptr< BoolAnimation > AnimationFactory::createBoolPropertyAnimation( const OUString&                 rAttrName,
+                                                                              const std::shared_ptr< AnimatableShape >& /*rShape*/,
+                                                                              const std::shared_ptr< ShapeManager >&    rShapeManager,
+                                                                              const ::basegfx::B2DVector&               /*rSlideSize*/,
+                                                                              int                                       nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
             // be checked and possibly adapted in their switch statement
@@ -1359,17 +1359,17 @@ namespace slideshow
                                                                 &ShapeAttributeLayer::setVisibility );
             }
 
-            return BoolAnimationSharedPtr();
+            return std::shared_ptr< BoolAnimation >();
         }
 
-        NumberAnimationSharedPtr AnimationFactory::createPathMotionAnimation( const OUString&            rSVGDPath,
-                                                                              sal_Int16                         nAdditive,
-                                                                              const AnimatableShapeSharedPtr&   /*rShape*/,
-                                                                              const ShapeManagerSharedPtr&      rShapeManager,
-                                                                              const ::basegfx::B2DVector&       rSlideSize,
-                                                                              int                               nFlags )
+        std::shared_ptr< NumberAnimation > AnimationFactory::createPathMotionAnimation( const OUString&                 rSVGDPath,
+                                                                              sal_Int16                                 nAdditive,
+                                                                              const std::shared_ptr< AnimatableShape >& /*rShape*/,
+                                                                              const std::shared_ptr< ShapeManager >&    rShapeManager,
+                                                                              const ::basegfx::B2DVector&               rSlideSize,
+                                                                              int                                       nFlags )
         {
-            return NumberAnimationSharedPtr(
+            return std::shared_ptr< NumberAnimation >(
                 new PathAnimation( rSVGDPath, nAdditive,
                                    rShapeManager,
                                    rSlideSize,

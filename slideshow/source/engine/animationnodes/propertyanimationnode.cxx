@@ -26,13 +26,13 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
-AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
+std::shared_ptr< AnimationActivity > PropertyAnimationNode::createActivity() const
 {
     // Create AnimationActivity from common XAnimate parameters:
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
     uno::Reference<animations::XAnimate> const& xAnimateNode =getXAnimateNode();
     OUString const attrName( xAnimateNode->getAttributeName() );
-    AttributableShapeSharedPtr const pShape( getShape() );
+    std::shared_ptr< AttributableShape > const pShape( getShape() );
 
     switch (AnimationFactory::classifyAttributeName( attrName )) {
     default:
@@ -93,7 +93,7 @@ AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
             xAnimateNode );
     }
 
-    return AnimationActivitySharedPtr();
+    return std::shared_ptr< AnimationActivity >();
 }
 
 } // namespace internal

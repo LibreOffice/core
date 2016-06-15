@@ -60,7 +60,6 @@ struct TransitionSettings
     float mnRequiredGLVersion;
 };
 
-typedef std::vector<Primitive> Primitives_t;
 typedef std::vector<std::shared_ptr<SceneObject> > SceneObjects_t;
 typedef std::vector<std::shared_ptr<Operation> > Operations_t;
 
@@ -72,8 +71,8 @@ public:
     }
 
     TransitionScene(
-            const Primitives_t& rLeavingSlidePrimitives,
-            const Primitives_t& rEnteringSlidePrimitives,
+            const std::vector<Primitive>& rLeavingSlidePrimitives,
+            const std::vector<Primitive>& rEnteringSlidePrimitives,
             const Operations_t& rOverallOperations = Operations_t(),
             const SceneObjects_t& rSceneObjects = SceneObjects_t()
     )
@@ -89,12 +88,12 @@ public:
 
     void swap(TransitionScene& rOther);
 
-    const Primitives_t& getLeavingSlide() const
+    const std::vector<Primitive>& getLeavingSlide() const
     {
         return maLeavingSlidePrimitives;
     }
 
-    const Primitives_t& getEnteringSlide() const
+    const std::vector<Primitive>& getEnteringSlide() const
     {
         return maEnteringSlidePrimitives;
     }
@@ -112,11 +111,11 @@ public:
 private:
     /** All the primitives that use the leaving slide texture
     */
-    Primitives_t maLeavingSlidePrimitives;
+    std::vector<Primitive> maLeavingSlidePrimitives;
 
     /** All the primitives that use the leaving slide texture
     */
-    Primitives_t maEnteringSlidePrimitives;
+    std::vector<Primitive> maEnteringSlidePrimitives;
 
     /** All the operations that should be applied to both leaving and entering slide primitives. These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
     */
@@ -167,7 +166,7 @@ protected:
 
     void setScene(TransitionScene const& rScene);
 
-    void displaySlide( double nTime, sal_Int32 glSlideTex, const Primitives_t& primitives, double SlideWidthScale, double SlideHeightScale );
+    void displaySlide( double nTime, sal_Int32 glSlideTex, const std::vector<Primitive>& primitives, double SlideWidthScale, double SlideHeightScale );
     void displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
     void applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale );
 
@@ -291,7 +290,7 @@ public:
 protected:
     /** All the surrounding scene primitives
     */
-    Primitives_t maPrimitives;
+    std::vector<Primitive> maPrimitives;
     std::vector<int> maFirstIndices;
 };
 

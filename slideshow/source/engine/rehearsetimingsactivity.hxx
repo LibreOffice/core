@@ -70,9 +70,9 @@ public:
     bool hasBeenClicked() const;
 
     // ViewEventHandler interface
-    virtual void viewAdded( const UnoViewSharedPtr& rView ) override;
-    virtual void viewRemoved( const UnoViewSharedPtr& rView ) override;
-    virtual void viewChanged( const UnoViewSharedPtr& rView ) override;
+    virtual void viewAdded( const std::shared_ptr< UnoView >& rView ) override;
+    virtual void viewRemoved( const std::shared_ptr< UnoView >& rView ) override;
+    virtual void viewChanged( const std::shared_ptr< UnoView >& rView ) override;
     virtual void viewsChanged() override;
 
     // Disposable:
@@ -96,7 +96,7 @@ private:
     friend class MouseHandler;
 
     typedef std::vector<
-        std::pair<UnoViewSharedPtr,
+        std::pair<std::shared_ptr< UnoView >,
                     std::shared_ptr<cppcanvas::CustomSprite> > > ViewsVecT;
 
     template <typename func_type>
@@ -109,7 +109,7 @@ private:
     }
 
     ::basegfx::B2DRange calcSpriteRectangle(
-        UnoViewSharedPtr const & rView ) const;
+        std::shared_ptr< UnoView > const & rView ) const;
 
     EventQueue&                     mrEventQueue;
     ScreenUpdater&                  mrScreenUpdater;

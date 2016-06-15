@@ -45,14 +45,13 @@ namespace slideshow
             typedef std::pair< ::basegfx::B2DRange,
                                OUString >    HyperlinkRegion;
 
-            typedef std::vector<HyperlinkRegion>    HyperlinkRegions;
 
             /** Request hyperlink-sensitive areas.
 
                 @return a vector of hyperlink-sensitive areas, plus
                 the URI associated to them.
              */
-            virtual HyperlinkRegions getHyperlinkRegions() const = 0;
+            virtual std::vector<HyperlinkRegion> getHyperlinkRegions() const = 0;
 
             /** Retrieve priority of link area
 
@@ -89,7 +88,6 @@ namespace slideshow
             ~HyperlinkArea() {}
        };
 
-        typedef std::shared_ptr< HyperlinkArea > HyperlinkAreaSharedPtr;
     }
 }
 

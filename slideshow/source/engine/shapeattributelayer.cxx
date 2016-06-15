@@ -126,7 +126,7 @@ namespace slideshow
             }
         }
 
-        ShapeAttributeLayer::ShapeAttributeLayer( const ShapeAttributeLayerSharedPtr& rChildLayer ) :
+        ShapeAttributeLayer::ShapeAttributeLayer( const std::shared_ptr< ShapeAttributeLayer >& rChildLayer ) :
             mpChild( rChildLayer ),
 
             maSize(),
@@ -195,7 +195,7 @@ namespace slideshow
         {
         }
 
-        bool ShapeAttributeLayer::revokeChildLayer( const ShapeAttributeLayerSharedPtr& rChildLayer )
+        bool ShapeAttributeLayer::revokeChildLayer( const std::shared_ptr< ShapeAttributeLayer >& rChildLayer )
         {
             ENSURE_OR_RETURN_FALSE( rChildLayer,
                                "ShapeAttributeLayer::revokeChildLayer(): Will not remove NULL child" );
@@ -236,7 +236,7 @@ namespace slideshow
             return true;
         }
 
-        const ShapeAttributeLayerSharedPtr&  ShapeAttributeLayer::getChildLayer() const
+        const std::shared_ptr< ShapeAttributeLayer >& ShapeAttributeLayer::getChildLayer() const
         {
             return mpChild;
         }

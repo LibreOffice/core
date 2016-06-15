@@ -48,7 +48,7 @@ public:
     {
         target::UnoViewContainer aContainer;
 
-        TestViewSharedPtr pView = createTestView();
+        std::shared_ptr<TestView> pView = createTestView();
         aContainer.addView( pView );
 
         CPPUNIT_ASSERT_MESSAGE( "Testing container size",

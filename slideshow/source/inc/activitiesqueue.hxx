@@ -58,7 +58,7 @@ namespace slideshow
 
             /** Add the given activity to the queue.
              */
-            bool addActivity( const ActivitySharedPtr& pActivity );
+            bool addActivity( const std::shared_ptr< Activity >& pActivity );
 
             /** Process the activities queue.
 
@@ -90,21 +90,20 @@ namespace slideshow
         private:
             std::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
 
-            typedef ::std::deque< ActivitySharedPtr > ActivityQueue;
 
-            ActivityQueue           maCurrentActivitiesWaiting;  // currently running
+            std::deque< std::shared_ptr< Activity > > maCurrentActivitiesWaiting; // currently running
                                                                  // activities, that still
                                                                  // await processing for this
                                                                  // round
 
-            ActivityQueue           maCurrentActivitiesReinsert;    // currently running
+            std::deque< std::shared_ptr< Activity > > maCurrentActivitiesReinsert; // currently running
                                                                       // activities, that are
                                                                       // already processed for
                                                                       // this round, and wants
                                                                     // to be reinserted next
                                                                     // round
 
-            ActivityQueue           maDequeuedActivities; // This list collects all activities which did not request
+            std::deque< std::shared_ptr< Activity > > maDequeuedActivities; // This list collects all activities which did not request
                                                           // a reinsertion. After the screen update has been
                                                           // performed, those are notified via dequeued(). This
                                                           // facilitates cleanup actions taking place _after_ the

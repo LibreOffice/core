@@ -67,11 +67,9 @@ namespace slideshow
             ;
         };
 
-        typedef ::std::shared_ptr< State > StateSharedPtr;
 
         class ShapeAttributeLayer;
 
-        typedef ::std::shared_ptr< ShapeAttributeLayer > ShapeAttributeLayerSharedPtr;
 
         /** Encapsulates all modifiable attributes of a shape.
 
@@ -100,7 +98,7 @@ namespace slideshow
                 @attention
                 This method is only supposed to be called from Shape objects
              */
-            explicit ShapeAttributeLayer( const ShapeAttributeLayerSharedPtr& rChildLayer );
+            explicit ShapeAttributeLayer( const std::shared_ptr< ShapeAttributeLayer >& rChildLayer );
 
             // Children management methods
 
@@ -117,14 +115,14 @@ namespace slideshow
                 @attention
                 This method is only supposed to be called from Shape objects
              */
-            bool revokeChildLayer( const ShapeAttributeLayerSharedPtr& rChildLayer );
+            bool revokeChildLayer( const std::shared_ptr< ShapeAttributeLayer >& rChildLayer );
 
             /** Query the child layer of this object.
 
                 @attention
                 This method is only supposed to be called from Shape objects
              */
-            const ShapeAttributeLayerSharedPtr& getChildLayer() const;
+            const std::shared_ptr< ShapeAttributeLayer >& getChildLayer() const;
 
             /** Set the additive mode for possible child attributes
 
@@ -504,7 +502,7 @@ namespace slideshow
                                                 bool (ShapeAttributeLayer::*pIsValid)() const,
                                                 T   (ShapeAttributeLayer::*pGetValue)() const ) const;
 
-            ShapeAttributeLayerSharedPtr                mpChild; // may be NULL
+            std::shared_ptr< ShapeAttributeLayer >      mpChild; // may be NULL
 
             ::basegfx::B2DSize                          maSize;
             ::basegfx::B2DPoint                         maPosition;

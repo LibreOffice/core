@@ -110,7 +110,7 @@ public:
         the mouse events below.
     */
     void registerAnimationStartEvent(
-        const EventSharedPtr&                             rEvent,
+        const std::shared_ptr< Event >&                   rEvent,
         const css::uno::Reference<css::animations::XAnimationNode>&    xNode );
 
     /** Register an event that will be fired when the given
@@ -121,7 +121,7 @@ public:
         the mouse events below.
     */
     void registerAnimationEndEvent(
-        const EventSharedPtr&                               rEvent,
+        const std::shared_ptr< Event >&                     rEvent,
         const css::uno::Reference<css::animations::XAnimationNode>&      xNode );
 
     /** Register an event that will be fired when audio output
@@ -132,7 +132,7 @@ public:
         the mouse events below.
     */
     void registerAudioStoppedEvent(
-        const EventSharedPtr&                               rEvent,
+        const std::shared_ptr< Event >&                     rEvent,
         const css::uno::Reference<css::animations::XAnimationNode>&      xNode );
 
     /** Register an event that is fired when a shape is clicked
@@ -143,7 +143,7 @@ public:
         registered will be the one fired for the first mouse
         click on the given shape.
     */
-    void registerShapeClickEvent( const EventSharedPtr& rEvent,
+    void registerShapeClickEvent( const std::shared_ptr< Event >& rEvent,
                                   const ShapeSharedPtr& rShape );
 
     /** Registers an event that is fired when the current effects(s)
@@ -159,7 +159,7 @@ public:
             triggered.
     */
     void registerSkipEffectEvent(
-        EventSharedPtr const& pEvent,
+        std::shared_ptr< Event > const& pEvent,
         const bool bSkipTriggersNextEffect);
 
     /** Register an event that is fired to show the next event
@@ -175,7 +175,7 @@ public:
         the slide the mouse is clicked, i.e. the shape need
         not be hit by the mouse.
     */
-    void registerNextEffectEvent( const EventSharedPtr& rEvent );
+    void registerNextEffectEvent( const std::shared_ptr< Event >& rEvent );
 
     /** Register an event that is fired on a double mouse
         click on a shape
@@ -188,7 +188,7 @@ public:
         mouse is clicked, i.e. the shape need not be hit by
         the mouse.
     */
-    void registerShapeDoubleClickEvent( const EventSharedPtr& rEvent,
+    void registerShapeDoubleClickEvent( const std::shared_ptr< Event >& rEvent,
                                         const ShapeSharedPtr& rShape );
 
     /** Register an event that is fired when the mouse enters
@@ -200,7 +200,7 @@ public:
         be the one fired for the first time the mouse enters
         the given shape.
     */
-    void registerMouseEnterEvent( const EventSharedPtr& rEvent,
+    void registerMouseEnterEvent( const std::shared_ptr< Event >& rEvent,
                                   const ShapeSharedPtr& rShape );
 
     /** Register an event that is fired when the mouse leaves
@@ -212,7 +212,7 @@ public:
         be the one fired for the first time the mouse leaves
         the given shape area.
     */
-    void registerMouseLeaveEvent( const EventSharedPtr& rEvent,
+    void registerMouseLeaveEvent( const std::shared_ptr< Event >& rEvent,
                                   const ShapeSharedPtr& rShape );
 
     /** Typically skipping the current effect is triggered by mouse clicks
@@ -229,7 +229,7 @@ private:
     */
     template< typename Handler, typename Functor >
     void registerEvent( ::std::shared_ptr< Handler >& rHandler,
-                        const EventSharedPtr&           rEvent,
+                        const std::shared_ptr< Event >& rEvent,
                         const Functor&                  rRegistrationFunctor );
 
     /** Generically register an event on one of the handlers.
@@ -242,7 +242,7 @@ private:
     */
     template< typename Handler, typename Arg, typename Functor >
     void registerEvent( ::std::shared_ptr< Handler >& rHandler,
-                        const EventSharedPtr&           rEvent,
+                        const std::shared_ptr< Event >& rEvent,
                         const Arg&                      rArg,
                         const Functor&                  rRegistrationFunctor );
 

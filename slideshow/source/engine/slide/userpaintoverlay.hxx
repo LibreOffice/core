@@ -38,8 +38,6 @@ namespace slideshow
         struct SlideShowContext;
 
         class PaintOverlayHandler;
-        typedef ::std::shared_ptr< class UserPaintOverlay > UserPaintOverlaySharedPtr;
-        typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
         /** Slide overlay, which can be painted into by the user.
 
             This class registers itself at the EventMultiplexer,
@@ -57,22 +55,22 @@ namespace slideshow
                 @param nStrokeWidth
                 Width of the stroked path
              */
-            static UserPaintOverlaySharedPtr create( const RGBColor&          rStrokeColor,
-                                                     double                   nStrokeWidth,
-                                                     const SlideShowContext&  rContext,
-                                                     const PolyPolygonVector& rPolygons,
-                                                     bool                     bActive);
+            static std::shared_ptr< class UserPaintOverlay > create( const RGBColor&                      rStrokeColor,
+                                                     double                                               nStrokeWidth,
+                                                     const SlideShowContext&                              rContext,
+                                                     const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolygons,
+                                                     bool                                                 bActive);
             ~UserPaintOverlay();
             UserPaintOverlay(const UserPaintOverlay&) = delete;
             UserPaintOverlay& operator=(const UserPaintOverlay&) = delete;
-            PolyPolygonVector getPolygons();
+            std::vector< cppcanvas::PolyPolygonSharedPtr> getPolygons();
             void drawPolygons();
 
         private:
             UserPaintOverlay( const RGBColor&          rStrokeColor,
                               double                   nStrokeWidth,
                               const SlideShowContext&  rContext,
-                              const PolyPolygonVector& rPolygons,
+                              const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolygons,
                               bool                    bActive );
 
             ::std::shared_ptr<PaintOverlayHandler>    mpHandler;

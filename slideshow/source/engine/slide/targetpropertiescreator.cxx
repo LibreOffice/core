@@ -39,7 +39,6 @@ namespace internal
     namespace
     {
         // Vector containing all properties for a given shape
-        typedef ::std::vector< beans::NamedValue > VectorOfNamedValues;
 
         /** The hash map key
 
@@ -89,7 +88,7 @@ namespace internal
         };
 
         // A hash map which maps a XShape to the corresponding vector of initial properties
-        typedef std::unordered_map< ShapeHashKey, VectorOfNamedValues, ShapeKeyHasher > XShapeHash;
+        typedef std::unordered_map< ShapeHashKey, std::vector< beans::NamedValue >, ShapeKeyHasher > XShapeHash;
 
 
         class NodeFunctor
@@ -307,7 +306,7 @@ namespace internal
                         mrShapeHash.insert(
                                     XShapeHash::value_type(
                                         aTarget,
-                                        VectorOfNamedValues(
+                                        std::vector< beans::NamedValue >(
                                             1,
                                             beans::NamedValue(
                                                 //xAnimateNode->getAttributeName(),

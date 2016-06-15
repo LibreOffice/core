@@ -41,7 +41,7 @@ namespace {
 class HSLWrapper : public HSLColorAnimation
 {
 public:
-    explicit HSLWrapper( const ColorAnimationSharedPtr& rAnimation )
+    explicit HSLWrapper( const std::shared_ptr< ColorAnimation >& rAnimation )
         : mpAnimation( rAnimation )
     {
         ENSURE_OR_THROW(
@@ -49,12 +49,12 @@ public:
             "HSLWrapper::HSLWrapper(): Invalid color animation delegate" );
     }
 
-    virtual void prefetch( const AnimatableShapeSharedPtr&,
-                           const ShapeAttributeLayerSharedPtr& ) override
+    virtual void prefetch( const std::shared_ptr< AnimatableShape >&,
+                           const std::shared_ptr< ShapeAttributeLayer >& ) override
     {}
 
-    virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                        const ShapeAttributeLayerSharedPtr& rAttrLayer ) override
+    virtual void start( const std::shared_ptr< AnimatableShape >& rShape,
+                        const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override
     {
         mpAnimation->start( rShape, rAttrLayer );
     }
@@ -75,12 +75,12 @@ public:
     }
 
 private:
-    ColorAnimationSharedPtr mpAnimation;
+    std::shared_ptr< ColorAnimation > mpAnimation;
 };
 
 } // anon namespace
 
-AnimationActivitySharedPtr AnimationColorNode::createActivity() const
+std::shared_ptr< AnimationActivity > AnimationColorNode::createActivity() const
 {
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
 
@@ -102,7 +102,7 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
         // interface, and internally converts HSL to RGB color
         return ActivitiesFactory::createAnimateActivity(
             aParms,
-            HSLColorAnimationSharedPtr(
+            std::shared_ptr< HSLColorAnimation >(
                 new HSLWrapper(
                     AnimationFactory::createColorPropertyAnimation(
                         mxColorNode->getAttributeName(),
@@ -116,7 +116,7 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
                           "Unexpected color space" );
     }
 
-    return AnimationActivitySharedPtr();
+    return std::shared_ptr< AnimationActivity >();
 }
 
 } // namespace internal

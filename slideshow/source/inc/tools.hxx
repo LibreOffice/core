@@ -66,7 +66,6 @@ namespace slideshow
         class Shape;
         class ShapeAttributeLayer;
 
-        typedef ::std::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
 
         template <typename T>
         inline ::std::size_t hash_value( T const * p )

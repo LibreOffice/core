@@ -94,7 +94,7 @@ public:
                const uno::Reference<uno::XComponentContext>&     xContext,
                const ShapeEventListenerMap&                      rShapeListenerMap,
                const ShapeCursorMap&                             rShapeCursorMap,
-               const PolyPolygonVector&                          rPolyPolygonVector,
+               const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolyPolygonVector,
                RGBColor const&                                   rUserPaintColor,
                double                                            dUserPaintStrokeWidth,
                bool                                              bUserPaintEnabled,
@@ -114,7 +114,7 @@ public:
     virtual basegfx::B2ISize getSlideSize() const override;
     virtual uno::Reference<drawing::XDrawPage > getXDrawPage() const override;
     virtual uno::Reference<animations::XAnimationNode> getXAnimationNode() const override;
-    virtual PolyPolygonVector getPolygons() override;
+    virtual std::vector< cppcanvas::PolyPolygonSharedPtr> getPolygons() override;
     virtual void drawPolygons() const override;
     virtual bool isPaintOverlayActive() const override;
     virtual void enablePaintOverlay() override;
@@ -124,14 +124,14 @@ public:
 
     // TODO(F2): Rework SlideBitmap to no longer be based on XBitmap,
     // but on canvas-independent basegfx bitmaps
-    virtual SlideBitmapSharedPtr getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const override;
+    virtual std::shared_ptr< SlideBitmap > getCurrentSlideBitmap( const std::shared_ptr< UnoView >& rView ) const override;
 
 
 private:
     // ViewEventHandler
-    virtual void viewAdded( const UnoViewSharedPtr& rView ) override;
-    virtual void viewRemoved( const UnoViewSharedPtr& rView ) override;
-    virtual void viewChanged( const UnoViewSharedPtr& rView ) override;
+    virtual void viewAdded( const std::shared_ptr< UnoView >& rView ) override;
+    virtual void viewRemoved( const std::shared_ptr< UnoView >& rView ) override;
+    virtual void viewChanged( const std::shared_ptr< UnoView >& rView ) override;
     virtual void viewsChanged() override;
 
     // CursorManager
@@ -162,8 +162,8 @@ private:
         bool bInitial) const;
 
     /// Renders current slide content to bitmap
-    SlideBitmapSharedPtr createCurrentSlideBitmap(
-        const UnoViewSharedPtr& rView,
+    std::shared_ptr< SlideBitmap > createCurrentSlideBitmap(
+        const std::shared_ptr< UnoView >& rView,
         ::basegfx::B2ISize const & rSlideSize ) const;
 
     /// Prefetch all shapes (not the animations)
@@ -182,7 +182,7 @@ private:
     void startIntrinsicAnimations();
 
     /// Add Polygons to the member maPolygons
-    void addPolygons(const PolyPolygonVector& rPolygons);
+    void addPolygons(const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolygons);
 
     // Types
     // =====
@@ -196,15 +196,14 @@ private:
         SlideAnimationState_NUM_ENTRIES=4
     };
 
-    typedef std::vector< SlideBitmapSharedPtr > VectorOfSlideBitmaps;
     /** Vector of slide bitmaps.
 
         Since the bitmap content is sensitive to animation
         effects, we have an inner vector containing a distinct
         bitmap for each of the SlideAnimationStates.
     */
-    typedef ::std::vector< std::pair< UnoViewSharedPtr,
-                                      VectorOfSlideBitmaps > > VectorOfVectorOfSlideBitmaps;
+    typedef ::std::vector< std::pair< std::shared_ptr< UnoView >,
+                                      std::vector< std::shared_ptr< SlideBitmap > > > > VectorOfVectorOfSlideBitmaps;
 
 
     // Member variables
@@ -215,7 +214,7 @@ private:
     uno::Reference< drawing::XDrawPagesSupplier >       mxDrawPagesSupplier;
     uno::Reference< animations::XAnimationNode >        mxRootNode;
 
-    LayerManagerSharedPtr                               mpLayerManager;
+    std::shared_ptr< LayerManager >                     mpLayerManager;
     std::shared_ptr<ShapeManagerImpl>                 mpShapeManager;
     std::shared_ptr<SubsettableShapeManager>          mpSubsettableShapeManager;
 
@@ -227,11 +226,11 @@ private:
 
     /// Handles the animation and event generation for us
     SlideAnimations                                     maAnimations;
-    PolyPolygonVector                                   maPolygons;
+    std::vector< cppcanvas::PolyPolygonSharedPtr>       maPolygons;
 
     RGBColor                                            maUserPaintColor;
     double                                              mdUserPaintStrokeWidth;
-    UserPaintOverlaySharedPtr                           mpPaintOverlay;
+    std::shared_ptr< class UserPaintOverlay >           mpPaintOverlay;
 
     /// Bitmaps with slide content at various states
     mutable VectorOfVectorOfSlideBitmaps                maSlideBitmaps;
@@ -281,12 +280,12 @@ private:
 };
 
 
-void slideRenderer( SlideImpl* pSlide, const UnoViewSharedPtr& rView )
+void slideRenderer( SlideImpl* pSlide, const std::shared_ptr< UnoView >& rView )
 {
     // fully clear view content to background color
     rView->clearAll();
 
-    SlideBitmapSharedPtr         pBitmap( pSlide->getCurrentSlideBitmap( rView ) );
+    std::shared_ptr< SlideBitmap > pBitmap( pSlide->getCurrentSlideBitmap( rView ) );
     ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
 
     const ::basegfx::B2DHomMatrix   aViewTransform( rView->getTransformation() );
@@ -320,7 +319,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                       const uno::Reference< uno::XComponentContext >&       xComponentContext,
                       const ShapeEventListenerMap&                          rShapeListenerMap,
                       const ShapeCursorMap&                                 rShapeCursorMap,
-                      const PolyPolygonVector&                              rPolyPolygonVector,
+                      const std::vector< cppcanvas::PolyPolygonSharedPtr>&  rPolyPolygonVector,
                       RGBColor const&                                       aUserPaintColor,
                       double                                                dUserPaintStrokeWidth,
                       bool                                                  bUserPaintEnabled,
@@ -521,14 +520,14 @@ uno::Reference<animations::XAnimationNode> SlideImpl::getXAnimationNode() const
     return mxRootNode;
 }
 
-PolyPolygonVector SlideImpl::getPolygons()
+std::vector< cppcanvas::PolyPolygonSharedPtr> SlideImpl::getPolygons()
 {
     if(mbPaintOverlayActive)
         maPolygons = mpPaintOverlay->getPolygons();
     return maPolygons;
 }
 
-SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const
+std::shared_ptr< SlideBitmap > SlideImpl::getCurrentSlideBitmap( const std::shared_ptr< UnoView >& rView ) const
 {
     // search corresponding entry in maSlideBitmaps (which
     // contains the views as the key)
@@ -566,7 +565,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
                              "apply initial attributes");
     }
 
-    SlideBitmapSharedPtr&     rBitmap( aIter->second.at( meAnimationState ));
+    std::shared_ptr< SlideBitmap >& rBitmap( aIter->second.at( meAnimationState ));
     const ::basegfx::B2ISize& rSlideSize(
         getSlideSizePixel( ::basegfx::B2DSize( getSlideSize() ),
                            rView ));
@@ -586,17 +585,17 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
 // private methods
 
 
-void SlideImpl::viewAdded( const UnoViewSharedPtr& rView )
+void SlideImpl::viewAdded( const std::shared_ptr< UnoView >& rView )
 {
     maSlideBitmaps.push_back(
         std::make_pair( rView,
-                        VectorOfSlideBitmaps(SlideAnimationState_NUM_ENTRIES) ));
+                        std::vector< std::shared_ptr< SlideBitmap > >(SlideAnimationState_NUM_ENTRIES) ));
 
     if( mpLayerManager )
         mpLayerManager->viewAdded( rView );
 }
 
-void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
+void SlideImpl::viewRemoved( const std::shared_ptr< UnoView >& rView )
 {
     if( mpLayerManager )
         mpLayerManager->viewRemoved( rView );
@@ -611,7 +610,7 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
                         aEnd );
 }
 
-void SlideImpl::viewChanged( const UnoViewSharedPtr& rView )
+void SlideImpl::viewChanged( const std::shared_ptr< UnoView >& rView )
 {
     // nothing to do for the Slide - getCurrentSlideBitmap() lazily
     // handles bitmap resizes
@@ -648,7 +647,7 @@ bool SlideImpl::isAnimated()
     return mbHaveAnimations && maAnimations.isAnimated();
 }
 
-SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr&   rView,
+std::shared_ptr< SlideBitmap > SlideImpl::createCurrentSlideBitmap( const std::shared_ptr< UnoView >& rView,
                                                           const ::basegfx::B2ISize& rBmpSize ) const
 {
     ENSURE_OR_THROW( rView && rView->getCanvas(),
@@ -827,11 +826,11 @@ void SlideImpl::drawPolygons() const
         mpPaintOverlay->drawPolygons();
 }
 
-void SlideImpl::addPolygons(const PolyPolygonVector& rPolygons)
+void SlideImpl::addPolygons(const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolygons)
 {
     if(!rPolygons.empty())
     {
-        for( PolyPolygonVector::const_iterator aIter = rPolygons.begin(),
+        for( std::vector< cppcanvas::PolyPolygonSharedPtr>::const_iterator aIter = rPolygons.begin(),
                  aEnd = rPolygons.end();
              aIter!=aEnd;
              ++aIter )
@@ -904,7 +903,7 @@ void SlideImpl::applyShapeAttributes(
                 continue;
             }
 
-            AttributableShapeSharedPtr pAttrShape(
+            std::shared_ptr< AttributableShape > pAttrShape(
                 ::std::dynamic_pointer_cast< AttributableShape >( pShape ) );
 
             if( !pAttrShape )
@@ -1124,7 +1123,7 @@ basegfx::B2ISize SlideImpl::getSlideSizeImpl() const
 } // namespace
 
 
-SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         xDrawPage,
+std::shared_ptr< Slide > createSlide( const uno::Reference< drawing::XDrawPage >& xDrawPage,
                             const uno::Reference<drawing::XDrawPagesSupplier>&  xDrawPages,
                             const uno::Reference< animations::XAnimationNode >& xRootNode,
                             EventQueue&                                         rEventQueue,
@@ -1137,7 +1136,7 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
                             const uno::Reference< uno::XComponentContext >&     xComponentContext,
                             const ShapeEventListenerMap&                        rShapeListenerMap,
                             const ShapeCursorMap&                               rShapeCursorMap,
-                            const PolyPolygonVector&                            rPolyPolygonVector,
+                            const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolyPolygonVector,
                             RGBColor const&                                     rUserPaintColor,
                             double                                              dUserPaintStrokeWidth,
                             bool                                                bUserPaintEnabled,

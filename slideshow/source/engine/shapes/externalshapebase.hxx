@@ -100,7 +100,7 @@ namespace slideshow
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const = 0;
 
             /// override in derived class to resize
-            virtual void implViewChanged( const UnoViewSharedPtr& rView ) = 0;
+            virtual void implViewChanged( const std::shared_ptr< UnoView >& rView ) = 0;
             /// override in derived class to resize
             virtual void implViewsChanged() = 0;
 
@@ -121,7 +121,7 @@ namespace slideshow
 
             std::shared_ptr<ExternalShapeBaseListener>                            mpListener;
 
-            SubsettableShapeManagerSharedPtr                                        mpShapeManager;
+            std::shared_ptr< SubsettableShapeManager >                              mpShapeManager;
             EventMultiplexer&                                                       mrEventMultiplexer;
 
             // The attributes of this Shape

@@ -49,14 +49,14 @@ namespace slideshow
                 @param rView
                 The newly added view
              */
-            virtual void viewAdded( const UnoViewSharedPtr& rView ) = 0;
+            virtual void viewAdded( const std::shared_ptr< UnoView >& rView ) = 0;
 
             /** Notify removed view.
 
                 @param rView
                 The removed view
              */
-            virtual void viewRemoved( const UnoViewSharedPtr& rView ) = 0;
+            virtual void viewRemoved( const std::shared_ptr< UnoView >& rView ) = 0;
 
             /** Notify changed view.
 
@@ -67,7 +67,7 @@ namespace slideshow
                 @param rView
                 The changed view
              */
-            virtual void viewChanged( const UnoViewSharedPtr& rView ) = 0;
+            virtual void viewChanged( const std::shared_ptr< UnoView >& rView ) = 0;
 
             /** Notify that all views changed.
 
@@ -82,8 +82,6 @@ namespace slideshow
             virtual void viewsChanged() = 0;
         };
 
-        typedef ::std::shared_ptr< ViewEventHandler > ViewEventHandlerSharedPtr;
-        typedef ::std::weak_ptr< ViewEventHandler >   ViewEventHandlerWeakPtr;
 
     }
 }

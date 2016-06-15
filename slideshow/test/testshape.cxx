@@ -42,8 +42,8 @@ class ImplTestShape : public TestShape,
                       private cppu::BaseMutex,
                       public ShapeBase
 {
-    typedef std::vector<std::pair<target::ViewLayerSharedPtr,bool> > ViewVector;
-    ViewVector               maViewLayers;
+    typedef std::vector<std::pair<target::std::shared_ptr< ViewLayer >,bool> > std::vector< std::shared_ptr< View > >;
+    std::vector< std::shared_ptr< View > > maViewLayers;
     const basegfx::B2DRange  maRect;
     const double             mnPrio;
     sal_Int32                mnAnimated;
@@ -65,7 +65,7 @@ public:
 
 private:
     // TestShape
-    virtual std::vector<std::pair<target::ViewLayerSharedPtr,bool> > getViewLayers() const
+    virtual std::vector<std::pair<target::std::shared_ptr< ViewLayer >,bool> > getViewLayers() const
     {
         return maViewLayers;
     }
@@ -113,18 +113,18 @@ private:
     {
         return uno::Reference< drawing::XShape >( const_cast<ImplTestShape*>(this) );
     }
-    virtual void addViewLayer( const target::ViewLayerSharedPtr& rNewLayer,
+    virtual void addViewLayer( const target::std::shared_ptr< ViewLayer >& rNewLayer,
                                bool                              bRedrawLayer )
     {
         maViewLayers.push_back( std::make_pair(rNewLayer,bRedrawLayer) );
     }
-    virtual bool removeViewLayer( const target::ViewLayerSharedPtr& rNewLayer )
+    virtual bool removeViewLayer( const target::std::shared_ptr< ViewLayer >& rNewLayer )
     {
         if( std::none_of(
                 maViewLayers.begin(),
                 maViewLayers.end(),
                 [&rNewLayer]
-                ( const ViewVector::value_type& cp )
+                ( const std::vector< std::shared_ptr< View > >::value_type& cp )
                 { return cp.first == rNewLayer; } ) )
             throw std::exception();
 
@@ -133,7 +133,7 @@ private:
                 maViewLayers.begin(),
                 maViewLayers.end(),
                 [&rNewLayer]
-                ( const ViewVector::value_type& cp )
+                ( const std::vector< std::shared_ptr< View > >::value_type& cp )
                 { return cp.first == rNewLayer; } ) );
         return true;
     }
@@ -196,10 +196,10 @@ private:
 };
 
 
-TestShapeSharedPtr createTestShape(const basegfx::B2DRange& rRect,
+std::shared_ptr<TestShape> createTestShape(const basegfx::B2DRange& rRect,
                                    double                   nPrio)
 {
-    return TestShapeSharedPtr(
+    return std::shared_ptr<TestShape>(
         comphelper::make_shared_from_UNO(
             new ImplTestShape(rRect,nPrio)) );
 }

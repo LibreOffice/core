@@ -30,7 +30,7 @@ void AnimationTransitionFilterNode::dispose()
     AnimationBaseNode::dispose();
 }
 
-AnimationActivitySharedPtr
+std::shared_ptr< AnimationActivity >
 AnimationTransitionFilterNode::createActivity() const
 {
     return TransitionFactory::createShapeTransition(

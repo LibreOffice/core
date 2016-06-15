@@ -51,8 +51,8 @@ namespace slideshow
     namespace internal
     {
 
-        bool ViewBackgroundShape::prefetch( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
-                                            const GDIMetaFileSharedPtr&         rMtf ) const
+        bool ViewBackgroundShape::prefetch( const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
+                                            const std::shared_ptr< GDIMetaFile >& rMtf ) const
         {
             SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::prefetch()" );
             ENSURE_OR_RETURN_FALSE( rMtf,
@@ -130,8 +130,8 @@ namespace slideshow
             return mxBitmap.is();
         }
 
-        ViewBackgroundShape::ViewBackgroundShape( const ViewLayerSharedPtr&         rViewLayer,
-                                                  const ::basegfx::B2DRectangle&    rShapeBounds ) :
+        ViewBackgroundShape::ViewBackgroundShape( const std::shared_ptr< ViewLayer >& rViewLayer,
+                                                  const ::basegfx::B2DRectangle&      rShapeBounds ) :
             mpViewLayer( rViewLayer ),
             mxBitmap(),
             mpLastMtf(),
@@ -142,12 +142,12 @@ namespace slideshow
             ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewBackgroundShape::ViewBackgroundShape(): Invalid ViewLayer canvas" );
         }
 
-        const ViewLayerSharedPtr& ViewBackgroundShape::getViewLayer() const
+        const std::shared_ptr< ViewLayer >& ViewBackgroundShape::getViewLayer() const
         {
             return mpViewLayer;
         }
 
-        bool ViewBackgroundShape::render( const GDIMetaFileSharedPtr& rMtf ) const
+        bool ViewBackgroundShape::render( const std::shared_ptr< GDIMetaFile >& rMtf ) const
         {
             SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::draw()" );
 

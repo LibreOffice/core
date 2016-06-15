@@ -76,14 +76,13 @@ namespace slideshow
                 bool                        mbParseAnimationFunction;
             };
 
-            typedef ::std::shared_ptr< ParserContext > ParserContextSharedPtr;
 
 
             template< typename Generator > class ShapeBoundsFunctor
             {
             public:
                 ShapeBoundsFunctor( Generator                       aGenerator,
-                                    const ParserContextSharedPtr&   rContext ) :
+                                    const std::shared_ptr< ParserContext >& rContext ) :
                     maGenerator( aGenerator ),
                     mpContext( rContext )
                 {
@@ -100,12 +99,12 @@ namespace slideshow
 
             private:
                 Generator               maGenerator;
-                ParserContextSharedPtr  mpContext;
+                std::shared_ptr< ParserContext > mpContext;
             };
 
             template< typename Generator > ShapeBoundsFunctor< Generator >
                 makeShapeBoundsFunctor( const Generator&                rGenerator,
-                                        const ParserContextSharedPtr&   rContext )
+                                        const std::shared_ptr< ParserContext >& rContext )
             {
                 return ShapeBoundsFunctor<Generator>(rGenerator, rContext);
             }
@@ -116,7 +115,7 @@ namespace slideshow
             {
             public:
                 ConstantFunctor( double                         rValue,
-                                 const ParserContextSharedPtr&  rContext ) :
+                                 const std::shared_ptr< ParserContext >& rContext ) :
                     mnValue( rValue ),
                     mpContext( rContext )
                 {
@@ -132,7 +131,7 @@ namespace slideshow
 
             private:
                 const double            mnValue;
-                ParserContextSharedPtr  mpContext;
+                std::shared_ptr< ParserContext > mpContext;
             };
 
             /** Generate parse-dependent-but-then-constant value
@@ -140,7 +139,7 @@ namespace slideshow
             class DoubleConstantFunctor
             {
             public:
-                explicit DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
+                explicit DoubleConstantFunctor( const std::shared_ptr< ParserContext >& rContext ) :
                     mpContext( rContext )
                 {
                     ENSURE_OR_THROW( mpContext,
@@ -155,7 +154,7 @@ namespace slideshow
                 }
 
             private:
-                ParserContextSharedPtr  mpContext;
+                std::shared_ptr< ParserContext > mpContext;
             };
 
             /** Generate special t value expression node
@@ -163,7 +162,7 @@ namespace slideshow
             class ValueTFunctor
             {
             public:
-                explicit ValueTFunctor( const ParserContextSharedPtr& rContext ) :
+                explicit ValueTFunctor( const std::shared_ptr< ParserContext >& rContext ) :
                     mpContext( rContext )
                 {
                     ENSURE_OR_THROW( mpContext,
@@ -184,7 +183,7 @@ namespace slideshow
                 }
 
             private:
-                ParserContextSharedPtr  mpContext;
+                std::shared_ptr< ParserContext > mpContext;
             };
 
             template< typename Functor > class UnaryFunctionFunctor
@@ -220,7 +219,7 @@ namespace slideshow
 
             public:
                 UnaryFunctionFunctor( const Functor&                rFunctor,
-                                      const ParserContextSharedPtr& rContext ) :
+                                      const std::shared_ptr< ParserContext >& rContext ) :
                     maFunctor( rFunctor ),
                     mpContext( rContext )
                 {
@@ -259,7 +258,7 @@ namespace slideshow
 
             private:
                 Functor                 maFunctor;
-                ParserContextSharedPtr  mpContext;
+                std::shared_ptr< ParserContext > mpContext;
             };
 
             // TODO(Q2): Refactor makeUnaryFunctionFunctor,
@@ -269,7 +268,7 @@ namespace slideshow
             // unary, binary, ternary, etc. function pointers.
             template< typename Functor > UnaryFunctionFunctor<Functor>
                 makeUnaryFunctionFunctor( const Functor&                rFunctor,
-                                          const ParserContextSharedPtr& rContext )
+                                          const std::shared_ptr< ParserContext >& rContext )
             {
                 return UnaryFunctionFunctor<Functor>( rFunctor, rContext );
             }
@@ -279,7 +278,7 @@ namespace slideshow
             // a dedicated overload here.
             UnaryFunctionFunctor< double (*)(double) >
                 makeUnaryFunctionFunctor( double (*pFunc)(double),
-                                          const ParserContextSharedPtr& rContext )
+                                          const std::shared_ptr< ParserContext >& rContext )
             {
                 return UnaryFunctionFunctor< double (*)(double) >( pFunc, rContext );
             }
@@ -295,7 +294,7 @@ namespace slideshow
             {
             public:
                 BinaryFunctionFunctor( const Generator&                 rGenerator,
-                                       const ParserContextSharedPtr&    rContext ) :
+                                       const std::shared_ptr< ParserContext >& rContext ) :
                     maGenerator( rGenerator ),
                     mpContext( rContext )
                 {
@@ -338,12 +337,12 @@ namespace slideshow
 
             private:
                 Generator               maGenerator;
-                ParserContextSharedPtr  mpContext;
+                std::shared_ptr< ParserContext > mpContext;
             };
 
             template< typename Generator > BinaryFunctionFunctor<Generator>
                 makeBinaryFunctionFunctor( const Generator&                 rGenerator,
-                                           const ParserContextSharedPtr&    rContext )
+                                           const std::shared_ptr< ParserContext >& rContext )
             {
                 return BinaryFunctionFunctor<Generator>( rGenerator, rContext );
             }
@@ -407,7 +406,7 @@ namespace slideshow
                     @param rParserContext
                     Contains context info for the parser
                  */
-                explicit ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
+                explicit ExpressionGrammar( const std::shared_ptr< ParserContext >& rParserContext ) :
                     mpParserContext( rParserContext )
                 {
                 }
@@ -502,19 +501,19 @@ namespace slideshow
                     ::boost::spirit::rule< ScannerT >   identifier;
                 };
 
-                const ParserContextSharedPtr& getContext() const
+                const std::shared_ptr< ParserContext >& getContext() const
                 {
                     return mpParserContext;
                 }
 
             private:
-                ParserContextSharedPtr  mpParserContext; // might get modified during parsing
+                std::shared_ptr< ParserContext > mpParserContext; // might get modified during parsing
             };
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
-            const ParserContextSharedPtr& getParserContext()
+            const std::shared_ptr< ParserContext >& getParserContext()
             {
-                static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
+                static std::shared_ptr< ParserContext > lcl_parserContext( new ParserContext() );
 
                 // clear node stack (since we reuse the static object, that's
                 // the whole point here)
@@ -538,7 +537,7 @@ namespace slideshow
             StringIteratorT aStart( rAsciiSmilValue.getStr() );
             StringIteratorT aEnd( rAsciiSmilValue.getStr()+rAsciiSmilValue.getLength() );
 
-            ParserContextSharedPtr pContext;
+            std::shared_ptr< ParserContext > pContext;
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
             // static parser context, because the actual
@@ -587,7 +586,7 @@ namespace slideshow
             StringIteratorT aStart( rAsciiSmilFunction.getStr() );
             StringIteratorT aEnd( rAsciiSmilFunction.getStr()+rAsciiSmilFunction.getLength() );
 
-            ParserContextSharedPtr pContext;
+            std::shared_ptr< ParserContext > pContext;
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
             // static parser context, because the actual

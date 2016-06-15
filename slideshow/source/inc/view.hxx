@@ -50,7 +50,7 @@ namespace slideshow
                 underlying view transformation, returned by the
                 getTransformation() method.
              */
-            virtual ViewLayerSharedPtr createViewLayer( const basegfx::B2DRange& rLayerBounds ) const = 0;
+            virtual std::shared_ptr< ViewLayer > createViewLayer( const basegfx::B2DRange& rLayerBounds ) const = 0;
 
             /** Update screen representation from backbuffer
              */
@@ -78,9 +78,6 @@ namespace slideshow
              */
             virtual void setCursorShape( sal_Int16 nPointerShape ) = 0;
         };
-
-        typedef std::shared_ptr< View >     ViewSharedPtr;
-        typedef std::vector< ViewSharedPtr >  ViewVector;
     }
 }
 

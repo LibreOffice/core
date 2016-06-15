@@ -54,12 +54,12 @@ namespace slideshow
         {
         }
 
-        ViewLayerSharedPtr Layer::addView( const ViewSharedPtr& rNewView )
+        std::shared_ptr< ViewLayer > Layer::addView( const std::shared_ptr< View >& rNewView )
         {
             OSL_ASSERT( rNewView );
 
-            ViewEntryVector::iterator aIter;
-            const ViewEntryVector::iterator aEnd( maViewEntries.end() );
+            std::vector< ViewEntry >::iterator aIter;
+            const std::vector< ViewEntry >::iterator aEnd( maViewEntries.end() );
             if( (aIter=std::find_if( maViewEntries.begin(),
                                      aEnd,
                                      [&rNewView]( const ViewEntry& rViewEntry )
@@ -71,7 +71,7 @@ namespace slideshow
             }
 
             // not yet added - create new view layer
-            ViewLayerSharedPtr pNewLayer;
+            std::shared_ptr< ViewLayer > pNewLayer;
             if( mbBackgroundLayer )
                 pNewLayer = rNewView;
             else
@@ -85,19 +85,19 @@ namespace slideshow
             return maViewEntries.back().mpViewLayer;
         }
 
-        ViewLayerSharedPtr Layer::removeView( const ViewSharedPtr& rView )
+        std::shared_ptr< ViewLayer > Layer::removeView( const std::shared_ptr< View >& rView )
         {
             OSL_ASSERT( rView );
 
-            ViewEntryVector::iterator       aIter;
-            const ViewEntryVector::iterator aEnd( maViewEntries.end() );
+            std::vector< ViewEntry >::iterator aIter;
+            const std::vector< ViewEntry >::iterator aEnd( maViewEntries.end() );
             if( (aIter=std::find_if( maViewEntries.begin(),
                                        aEnd,
                                        [&rView]( const ViewEntry& rViewEntry )
                                        { return rViewEntry.getView() == rView; } ) ) == aEnd )
             {
                 // View was not added/is already removed
-                return ViewLayerSharedPtr();
+                return std::shared_ptr< ViewLayer >();
             }
 
             OSL_ENSURE( std::count_if( maViewEntries.begin(),
@@ -106,7 +106,7 @@ namespace slideshow
                                        { return rViewEntry.getView() == rView; } ) == 1,
                         "Layer::removeView(): view added multiple times" );
 
-            ViewLayerSharedPtr pRet( aIter->mpViewLayer );
+            std::shared_ptr< ViewLayer > pRet( aIter->mpViewLayer );
             maViewEntries.erase(aIter);
 
             return pRet;
@@ -198,17 +198,17 @@ namespace slideshow
         public:
             LayerEndUpdate( const LayerEndUpdate& ) = delete;
             LayerEndUpdate& operator=( const LayerEndUpdate& ) = delete;
-            explicit LayerEndUpdate( LayerSharedPtr const& rLayer ) :
+            explicit LayerEndUpdate( std::shared_ptr< Layer > const& rLayer ) :
                 mpLayer( rLayer )
             {}
 
             ~LayerEndUpdate() { if(mpLayer) mpLayer->endUpdate(); }
 
         private:
-            LayerSharedPtr mpLayer;
+            std::shared_ptr< Layer > mpLayer;
         };
 
-        Layer::EndUpdater Layer::beginUpdate()
+        std::shared_ptr<LayerEndUpdate> Layer::beginUpdate()
         {
             if( maUpdateAreas.count() )
             {
@@ -226,7 +226,7 @@ namespace slideshow
                 {
                     for( const auto& rViewEntry : maViewEntries )
                     {
-                        const ViewLayerSharedPtr& pViewLayer = rViewEntry.getViewLayer();
+                        const std::shared_ptr< ViewLayer >& pViewLayer = rViewEntry.getViewLayer();
 
                         // set clip to all view layers and
                         pViewLayer->setClip( aClip );
@@ -261,14 +261,14 @@ namespace slideshow
             return maUpdateAreas.overlaps( rShape->getUpdateArea() );
         }
 
-        LayerSharedPtr Layer::createBackgroundLayer()
+        std::shared_ptr< Layer > Layer::createBackgroundLayer()
         {
-            return LayerSharedPtr(new Layer( BackgroundLayer ));
+            return std::shared_ptr< Layer >(new Layer( BackgroundLayer ));
         }
 
-        LayerSharedPtr Layer::createLayer( )
+        std::shared_ptr< Layer > Layer::createLayer( )
         {
-            return LayerSharedPtr( new Layer );
+            return std::shared_ptr< Layer >( new Layer );
         }
 
     }

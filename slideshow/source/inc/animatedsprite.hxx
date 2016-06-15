@@ -64,7 +64,7 @@ namespace slideshow
                 Priority of the sprite. Must remain static over the
                 lifetime of this object
              */
-            AnimatedSprite( const ViewLayerSharedPtr&   rViewLayer,
+            AnimatedSprite( const std::shared_ptr< ViewLayer >& rViewLayer,
                             const ::basegfx::B2DSize&   rSpriteSizePixel,
                             double                      nSpritePrio );
             AnimatedSprite(const AnimatedSprite&) = delete;
@@ -140,7 +140,7 @@ namespace slideshow
             void transform( const ::basegfx::B2DHomMatrix& rTransform );
 
         private:
-            ViewLayerSharedPtr                                          mpViewLayer;
+            std::shared_ptr< ViewLayer >                                mpViewLayer;
 
             ::cppcanvas::CustomSpriteSharedPtr                          mpSprite;
             ::basegfx::B2DSize                                          maEffectiveSpriteSizePixel;
@@ -155,7 +155,6 @@ namespace slideshow
             bool                                                        mbSpriteVisible;
         };
 
-        typedef ::std::shared_ptr< AnimatedSprite > AnimatedSpriteSharedPtr;
 
     }
 }

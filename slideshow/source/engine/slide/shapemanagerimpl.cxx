@@ -34,7 +34,7 @@ namespace slideshow {
 namespace internal {
 
 ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
-                                    LayerManagerSharedPtr const& rLayerManager,
+                                    std::shared_ptr< LayerManager > const& rLayerManager,
                                     CursorManager&               rCursorManager,
                                     const ShapeEventListenerMap& rGlobalListenersMap,
                                     const ShapeCursorMap&        rGlobalCursorMap ):
@@ -233,13 +233,13 @@ bool ShapeManagerImpl::needsUpdate() const
     return false;
 }
 
-void ShapeManagerImpl::enterAnimationMode( const AnimatableShapeSharedPtr& rShape )
+void ShapeManagerImpl::enterAnimationMode( const std::shared_ptr< AnimatableShape >& rShape )
 {
     if( mbEnabled && mpLayerManager )
         mpLayerManager->enterAnimationMode(rShape);
 }
 
-void ShapeManagerImpl::leaveAnimationMode( const AnimatableShapeSharedPtr& rShape )
+void ShapeManagerImpl::leaveAnimationMode( const std::shared_ptr< AnimatableShape >& rShape )
 {
     if( mbEnabled && mpLayerManager )
         mpLayerManager->leaveAnimationMode(rShape);
@@ -259,22 +259,22 @@ ShapeSharedPtr ShapeManagerImpl::lookupShape( uno::Reference< drawing::XShape > 
     return ShapeSharedPtr();
 }
 
-void ShapeManagerImpl::addHyperlinkArea( const HyperlinkAreaSharedPtr& rArea )
+void ShapeManagerImpl::addHyperlinkArea( const std::shared_ptr< HyperlinkArea >& rArea )
 {
     maHyperlinkShapes.insert(rArea);
 }
 
-AttributableShapeSharedPtr ShapeManagerImpl::getSubsetShape( const AttributableShapeSharedPtr& rOrigShape,
+std::shared_ptr< AttributableShape > ShapeManagerImpl::getSubsetShape( const std::shared_ptr< AttributableShape >& rOrigShape,
                                                              const DocTreeNode&                rTreeNode )
 {
     if( mpLayerManager )
         return mpLayerManager->getSubsetShape(rOrigShape,rTreeNode);
 
-    return AttributableShapeSharedPtr();
+    return std::shared_ptr< AttributableShape >();
 }
 
-void ShapeManagerImpl::revokeSubset( const AttributableShapeSharedPtr& rOrigShape,
-                                     const AttributableShapeSharedPtr& rSubsetShape )
+void ShapeManagerImpl::revokeSubset( const std::shared_ptr< AttributableShape >& rOrigShape,
+                                     const std::shared_ptr< AttributableShape >& rSubsetShape )
 {
     if( mpLayerManager )
         mpLayerManager->revokeSubset(rOrigShape,rSubsetShape);
@@ -364,9 +364,9 @@ OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitPos ) 
     AreaSet::const_reverse_iterator const iEnd( maHyperlinkShapes.rend() );
     for( ; iPos != iEnd; ++iPos )
     {
-        HyperlinkAreaSharedPtr const& pArea = *iPos;
+        std::shared_ptr< HyperlinkArea > const& pArea = *iPos;
 
-        HyperlinkArea::HyperlinkRegions const linkRegions(
+        std::vector<HyperlinkArea::HyperlinkRegion> const linkRegions(
             pArea->getHyperlinkRegions() );
 
         for( std::size_t i = linkRegions.size(); i--; )
@@ -380,12 +380,12 @@ OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitPos ) 
     return OUString();
 }
 
-void ShapeManagerImpl::addIntrinsicAnimationHandler( const IntrinsicAnimationEventHandlerSharedPtr& rHandler )
+void ShapeManagerImpl::addIntrinsicAnimationHandler( const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler )
 {
     maIntrinsicAnimationEventHandlers.add( rHandler );
 }
 
-void ShapeManagerImpl::removeIntrinsicAnimationHandler( const IntrinsicAnimationEventHandlerSharedPtr& rHandler )
+void ShapeManagerImpl::removeIntrinsicAnimationHandler( const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler )
 {
     maIntrinsicAnimationEventHandlers.remove( rHandler );
 }

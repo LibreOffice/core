@@ -51,7 +51,7 @@ class ImplTestView : public TestView,
                      public ViewBase
 {
     mutable std::vector<std::pair<basegfx::B2DVector,double> > maCreatedSprites;
-    mutable std::vector<TestViewSharedPtr>                     maViewLayers;
+    mutable std::vector<std::shared_ptr<TestView>>             maViewLayers;
     basegfx::B2DRange                                  maBounds;
     basegfx::B1DRange                                  maPriority;
     bool                                               mbIsClipSet;
@@ -166,7 +166,7 @@ public:
     }
 
     // ViewLayer
-    virtual bool isOnView(target::ViewSharedPtr const& /*rView*/) const
+    virtual bool isOnView(target::std::shared_ptr< View > const& /*rView*/) const
     {
         return true;
     }
@@ -230,10 +230,10 @@ public:
         return bRet;
     }
 
-    virtual target::ViewLayerSharedPtr createViewLayer(
+    virtual target::std::shared_ptr< ViewLayer > createViewLayer(
         const basegfx::B2DRange& rLayerBounds ) const
     {
-        maViewLayers.push_back( TestViewSharedPtr(new ImplTestView()));
+        maViewLayers.push_back( std::shared_ptr<TestView>(new ImplTestView()));
         maViewLayers.back()->resize( rLayerBounds );
 
         return maViewLayers.back();
@@ -288,9 +288,9 @@ public:
 };
 
 
-TestViewSharedPtr createTestView()
+std::shared_ptr<TestView> createTestView()
 {
-    return TestViewSharedPtr(
+    return std::shared_ptr<TestView>(
         comphelper::make_shared_from_UNO(
             new ImplTestView()) );
 }

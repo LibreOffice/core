@@ -56,7 +56,7 @@ protected:
     /// Create parameter struct for ActivitiesFactory
     ActivitiesFactory::CommonParameters fillCommonParameters() const;
     ::basegfx::B2DVector const&         getSlideSize() const { return maSlideSize; }
-    AttributableShapeSharedPtr          getShape() const;
+    std::shared_ptr< AttributableShape > getShape() const;
 
 private:
     virtual bool hasPendingAnimation() const override;
@@ -66,7 +66,7 @@ private: // state transition callbacks
     virtual bool resolve_st() override;
     virtual void activate_st() override;
     virtual void deactivate_st( NodeState eDestState ) override;
-    virtual AnimationActivitySharedPtr createActivity() const = 0;
+    virtual std::shared_ptr< AnimationActivity > createActivity() const = 0;
 
 private:
     /** Returns true, if this is a subset animation, and
@@ -80,13 +80,13 @@ private:
     css::uno::Reference<css::animations::XAnimate>  mxAnimateNode;
     ShapeAttributeLayerHolder                       maAttributeLayerHolder;
     ::basegfx::B2DVector                            maSlideSize;
-    AnimationActivitySharedPtr                      mpActivity;
+    std::shared_ptr< AnimationActivity >            mpActivity;
 
     /// When valid, this node has a plain target shape
-    AttributableShapeSharedPtr                      mpShape;
+    std::shared_ptr< AttributableShape >            mpShape;
     /// When valid, this is a subsetted target shape
-    ShapeSubsetSharedPtr                            mpShapeSubset;
-    SubsettableShapeManagerSharedPtr                mpSubsetManager;
+    std::shared_ptr< ShapeSubset >                  mpShapeSubset;
+    std::shared_ptr< SubsettableShapeManager >      mpSubsetManager;
     bool                                            mbIsIndependentSubset;
 };
 

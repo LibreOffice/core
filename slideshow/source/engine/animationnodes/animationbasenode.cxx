@@ -42,7 +42,7 @@ namespace internal {
 
 AnimationBaseNode::AnimationBaseNode(
     const uno::Reference< animations::XAnimationNode >&   xNode,
-    const BaseContainerNodeSharedPtr&                     rParent,
+    const std::shared_ptr< BaseContainerNode >&           rParent,
     const NodeContext&                                    rContext )
     : BaseNode( xNode, rParent, rContext ),
       mxAnimateNode( xNode, uno::UNO_QUERY_THROW ),
@@ -341,7 +341,7 @@ void AnimationBaseNode::deactivate_st( NodeState eDestState )
             // for all other shapes, removing the
             // attribute layer quite possibly changes
             // shape display. Thus, force update
-            AttributableShapeSharedPtr const pShape( getShape() );
+            std::shared_ptr< AttributableShape > const pShape( getShape() );
 
             // don't anybody dare to check against
             // pShape->isVisible() here, removing the
@@ -431,7 +431,7 @@ AnimationBaseNode::fillCommonParameters() const
     // calc accel/decel:
     double nAcceleration = 0.0;
     double nDeceleration = 0.0;
-    BaseNodeSharedPtr const pSelf( getSelf() );
+    std::shared_ptr< BaseNode > const pSelf( getSelf() );
     for ( std::shared_ptr<BaseNode> pNode( pSelf );
           pNode; pNode = pNode->getParentNode() )
     {
@@ -443,7 +443,7 @@ AnimationBaseNode::fillCommonParameters() const
                                   xAnimationNode->getDecelerate() );
     }
 
-    EventSharedPtr pEndEvent;
+    std::shared_ptr< Event > pEndEvent;
     if (pSelf) {
         pEndEvent = makeEvent( [pSelf] () {pSelf->deactivate(); },
             "AnimationBaseNode::deactivate");
@@ -468,7 +468,7 @@ AnimationBaseNode::fillCommonParameters() const
         getSlideSize());
 }
 
-AttributableShapeSharedPtr AnimationBaseNode::getShape() const
+std::shared_ptr< AttributableShape > AnimationBaseNode::getShape() const
 {
     // any subsetting at all?
     if (mpShapeSubset)

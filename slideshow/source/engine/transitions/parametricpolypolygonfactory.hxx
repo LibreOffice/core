@@ -30,7 +30,7 @@ namespace slideshow
 
         namespace ParametricPolyPolygonFactory
         {
-            ParametricPolyPolygonSharedPtr createClipPolyPolygon( sal_Int16 nTransitionType,
+            std::shared_ptr< ParametricPolyPolygon > createClipPolyPolygon( sal_Int16 nTransitionType,
                                                                          sal_Int16 nTransitionSubType );
         }
     }

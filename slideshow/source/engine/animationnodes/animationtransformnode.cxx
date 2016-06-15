@@ -35,13 +35,13 @@ void AnimationTransformNode::dispose()
     AnimationBaseNode::dispose();
 }
 
-AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
+std::shared_ptr< AnimationActivity > AnimationTransformNode::createActivity() const
 {
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
 
     const sal_Int16 nTransformType( mxTransformNode->getTransformType() );
 
-    const AttributableShapeSharedPtr& rShape( getShape() );
+    const std::shared_ptr< AttributableShape >& rShape( getShape() );
 
     switch( nTransformType )
     {

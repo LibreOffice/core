@@ -86,7 +86,6 @@ struct SpriteEntry
     double                                     mnPriority;
 };
 
-typedef std::vector< SpriteEntry > SpriteVector;
 
 
 /** Create a clip polygon for slide views
@@ -251,7 +250,7 @@ class LayerSpriteContainer
         from time to time, for invalid references). This vector is
         kept sorted with increasing sprite priority.
     */
-    SpriteVector       maSprites;
+    std::vector< SpriteEntry > maSprites;
 
     /// Priority of this layer, relative to other view layers
     basegfx::B1DRange  maLayerPrioRange;
@@ -276,7 +275,7 @@ class LayerSpriteContainer
      */
     void updateSprites()
     {
-        SpriteVector aValidSprites;
+        std::vector< SpriteEntry > aValidSprites;
 
         // check all sprites for validity and set new priority
         for( const auto& rSprite : maSprites )
@@ -330,7 +329,7 @@ public:
         SpriteEntry aEntry( pSprite,nPriority );
 
         // insert new sprite, such that vector stays sorted
-        SpriteVector::iterator aInsertPos(
+        std::vector< SpriteEntry >::iterator aInsertPos(
             maSprites.insert(
                 std::lower_bound( maSprites.begin(),
                                   maSprites.end(),
@@ -678,7 +677,7 @@ public:
 
 private:
     // View:
-    virtual ViewLayerSharedPtr createViewLayer( const basegfx::B2DRange& rLayerBounds ) const override;
+    virtual std::shared_ptr< ViewLayer > createViewLayer( const basegfx::B2DRange& rLayerBounds ) const override;
     virtual bool updateScreen() const override;
     virtual bool paintScreen() const override;
     virtual void setViewSize( const ::basegfx::B2DSize& ) override;
@@ -812,7 +811,7 @@ void SlideView::disposing()
     }
 }
 
-ViewLayerSharedPtr SlideView::createViewLayer( const basegfx::B2DRange& rLayerBounds ) const
+std::shared_ptr< ViewLayer > SlideView::createViewLayer( const basegfx::B2DRange& rLayerBounds ) const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -1182,7 +1181,7 @@ void SlideView::pruneLayers( bool bWithViewLayerUpdate ) const
 
 } // anonymous namespace
 
-UnoViewSharedPtr createSlideView( uno::Reference< presentation::XSlideShowView> const& xView,
+std::shared_ptr< UnoView > createSlideView( uno::Reference< presentation::XSlideShowView> const& xView,
                                   EventQueue&                                          rEventQueue,
                                   EventMultiplexer&                                    rEventMultiplexer )
 {

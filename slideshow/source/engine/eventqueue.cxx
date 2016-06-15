@@ -58,13 +58,13 @@ namespace slideshow
         EventQueue::~EventQueue()
         {
             // add in all that have been added explicitly for this round:
-            EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
-            for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
+            std::vector<EventEntry>::const_iterator const iEnd( maNextEvents.end() );
+            for ( std::vector<EventEntry>::const_iterator iPos( maNextEvents.begin() );
                   iPos != iEnd; ++iPos )
             {
                 maEvents.push(*iPos);
             }
-            EventEntryVector().swap( maNextEvents );
+            std::vector<EventEntry>().swap( maNextEvents );
 
             // dispose event queue
             while( !maEvents.empty() )
@@ -84,7 +84,7 @@ namespace slideshow
             }
         }
 
-        bool EventQueue::addEvent( const EventSharedPtr& rEvent )
+        bool EventQueue::addEvent( const std::shared_ptr< Event >& rEvent )
         {
             ::osl::MutexGuard aGuard( maMutex );
 
@@ -110,7 +110,7 @@ namespace slideshow
             return true;
         }
 
-        bool EventQueue::addEventForNextRound( EventSharedPtr const& rEvent )
+        bool EventQueue::addEventForNextRound( std::shared_ptr< Event > const& rEvent )
         {
             ::osl::MutexGuard aGuard( maMutex );
 
@@ -128,7 +128,7 @@ namespace slideshow
             return true;
         }
 
-        bool EventQueue::addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent)
+        bool EventQueue::addEventWhenQueueIsEmpty (const std::shared_ptr< Event >& rpEvent)
         {
             ::osl::MutexGuard aGuard( maMutex );
 
@@ -169,12 +169,12 @@ namespace slideshow
             SAL_INFO("slideshow.verbose", "EventQueue: heartbeat" );
 
             // add in all that have been added explicitly for this round:
-            EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
-            for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
+            std::vector<EventEntry>::const_iterator const iEnd( maNextEvents.end() );
+            for ( std::vector<EventEntry>::const_iterator iPos( maNextEvents.begin() );
                   iPos != iEnd; ++iPos ) {
                 maEvents.push(*iPos);
             }
-            EventEntryVector().swap( maNextEvents );
+            std::vector<EventEntry>().swap( maNextEvents );
 
             // perform topmost, ready-to-execute event
             // =======================================
@@ -301,10 +301,10 @@ namespace slideshow
 
             // TODO(P1): Maybe a plain vector and vector.swap will
             // be faster here. Profile.
-            maEvents = ImplQueueType();
+            maEvents = std::priority_queue< EventEntry >();
 
             maNextEvents.clear();
-            maNextNextEvents = ImplQueueType();
+            maNextNextEvents = std::priority_queue< EventEntry >();
         }
     }
 }

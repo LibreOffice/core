@@ -192,19 +192,19 @@ private:
     double GetMixerState(sal_uInt32 nTime);
 
 
-    SlideShowContext                            maContext;
-    std::shared_ptr<WakeupEvent>              mpWakeupEvent;
-    std::weak_ptr<DrawShape>                  mpParentDrawShape;
-    DrawShapeSharedPtr                          mpDrawShape;
-    ShapeAttributeLayerHolder                   maShapeAttrLayer;
-    GDIMetaFileSharedPtr                        mpMetaFile;
-    IntrinsicAnimationEventHandlerSharedPtr     mpListener;
-    canvas::tools::ElapsedTime                  maTimer;
-    double                                      mfRotationAngle;
-    bool                                        mbIsShapeAnimated;
-    bool                                        mbIsDisposed;
-    bool                                        mbIsActive;
-    drawing::TextAnimationKind                  meAnimKind;
+    SlideShowContext                                    maContext;
+    std::shared_ptr<WakeupEvent>                        mpWakeupEvent;
+    std::weak_ptr<DrawShape>                            mpParentDrawShape;
+    std::shared_ptr< DrawShape >                        mpDrawShape;
+    ShapeAttributeLayerHolder                           maShapeAttrLayer;
+    std::shared_ptr< GDIMetaFile >                      mpMetaFile;
+    std::shared_ptr< IntrinsicAnimationEventHandler >   mpListener;
+    canvas::tools::ElapsedTime                          maTimer;
+    double                                              mfRotationAngle;
+    bool                                                mbIsShapeAnimated;
+    bool                                                mbIsDisposed;
+    bool                                                mbIsActive;
+    drawing::TextAnimationKind                          meAnimKind;
 
     // The blink frequency in ms
     sal_uInt32                                  mnFrequency;
@@ -688,7 +688,7 @@ bool ActivityImpl::perform()
         mpDrawShape,
         "ActivityImpl::perform(): still active, but NULL draw shape" );
 
-    DrawShapeSharedPtr const pParentDrawShape( mpParentDrawShape );
+    std::shared_ptr< DrawShape > const pParentDrawShape( mpParentDrawShape );
     if( !pParentDrawShape )
         return false; // parent has vanished
 
@@ -885,7 +885,7 @@ void ActivityImpl::dispose()
             // ShapeSubset. This is because of lifetime issues
             // (ShapeSubset generates circular references to parent
             // shape)
-            DrawShapeSharedPtr pParent( mpParentDrawShape.lock() );
+            std::shared_ptr< DrawShape > pParent( mpParentDrawShape.lock() );
             if( pParent )
                 maContext.mpSubsettableShapeManager->revokeSubset(
                     pParent,

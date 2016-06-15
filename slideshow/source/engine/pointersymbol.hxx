@@ -29,13 +29,12 @@ namespace slideshow {
 namespace internal {
 
 class EventMultiplexer;
-typedef std::shared_ptr<class PointerSymbol> PointerSymbolSharedPtr;
 
 /// On-screen 'laser pointer' from the Impress remote control
 class PointerSymbol : public ViewEventHandler
 {
 public:
-    static PointerSymbolSharedPtr create( const css::uno::Reference<css::rendering::XBitmap>& xBitmap,
+    static std::shared_ptr<class PointerSymbol> create( const css::uno::Reference<css::rendering::XBitmap>& xBitmap,
                                           ScreenUpdater&                               rScreenUpdater,
                                           EventMultiplexer&                            rEventMultiplexer,
                                           const UnoViewContainer&                      rViewContainer );
@@ -51,15 +50,15 @@ private:
                    const UnoViewContainer&                      rViewContainer );
 
     // ViewEventHandler
-    virtual void viewAdded( const UnoViewSharedPtr& rView ) override;
-    virtual void viewRemoved( const UnoViewSharedPtr& rView ) override;
-    virtual void viewChanged( const UnoViewSharedPtr& rView ) override;
+    virtual void viewAdded( const std::shared_ptr< UnoView >& rView ) override;
+    virtual void viewRemoved( const std::shared_ptr< UnoView >& rView ) override;
+    virtual void viewChanged( const std::shared_ptr< UnoView >& rView ) override;
     virtual void viewsChanged() override;
 
-    ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
+    ::basegfx::B2DPoint calcSpritePos( std::shared_ptr< UnoView > const & rView ) const;
 
     typedef ::std::vector<
-        ::std::pair<UnoViewSharedPtr,
+        ::std::pair<std::shared_ptr< UnoView >,
                     cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
 
     css::uno::Reference<css::rendering::XBitmap>  mxBitmap;

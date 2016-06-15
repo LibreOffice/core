@@ -34,7 +34,7 @@ namespace internal {
 
 BaseContainerNode::BaseContainerNode(
     const uno::Reference< animations::XAnimationNode >&     xNode,
-    const BaseContainerNodeSharedPtr&                       rParent,
+    const std::shared_ptr< BaseContainerNode >&             rParent,
     const NodeContext&                                      rContext )
     : BaseNode( xNode, rParent, rContext ),
       maChildren(),
@@ -67,7 +67,7 @@ bool BaseContainerNode::init_children()
     return (std::count_if(
                 maChildren.begin(), maChildren.end(),
                 std::mem_fn(&AnimationNode::init) ) ==
-            static_cast<VectorOfNodes::difference_type>(maChildren.size()));
+            static_cast<std::vector<std::shared_ptr< AnimationNode >>::difference_type>(maChildren.size()));
 }
 
 void BaseContainerNode::deactivate_st( NodeState eDestState )
@@ -94,7 +94,7 @@ bool BaseContainerNode::hasPendingAnimation() const
                 std::mem_fn(&AnimationNode::hasPendingAnimation) );
 }
 
-void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )
+void BaseContainerNode::appendChildNode( std::shared_ptr< AnimationNode > const& pNode )
 {
     if (! checkValidNode())
         return;
@@ -107,17 +107,17 @@ void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )
     }
 }
 
-bool BaseContainerNode::isChildNode( AnimationNodeSharedPtr const& pNode ) const
+bool BaseContainerNode::isChildNode( std::shared_ptr< AnimationNode > const& pNode ) const
 {
     // find given notifier in child vector
-    VectorOfNodes::const_iterator const iEnd( maChildren.end() );
-    VectorOfNodes::const_iterator const iFind(
+    std::vector<std::shared_ptr< AnimationNode >>::const_iterator const iEnd( maChildren.end() );
+    std::vector<std::shared_ptr< AnimationNode >>::const_iterator const iFind(
         std::find( maChildren.begin(), iEnd, pNode ) );
     return (iFind != iEnd);
 }
 
 bool BaseContainerNode::notifyDeactivatedChild(
-    AnimationNodeSharedPtr const& pChildNode )
+    std::shared_ptr< AnimationNode > const& pChildNode )
 {
     OSL_ASSERT( pChildNode->getState() == FROZEN ||
                 pChildNode->getState() == ENDED );
@@ -148,7 +148,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
         if( mnLeftIterations >= 1.0 )
         {
             bFinished = false;
-            EventSharedPtr aRepetitionEvent =
+            std::shared_ptr< Event > aRepetitionEvent =
                     makeDelay( [this] () { this->repeat(); },
                                0.0,
                                "BaseContainerNode::repeat");
@@ -176,7 +176,7 @@ void BaseContainerNode::showState() const
 {
     for(const auto & i : maChildren)
     {
-        BaseNodeSharedPtr pNode =
+        std::shared_ptr< BaseNode > pNode =
             std::dynamic_pointer_cast<BaseNode>(i);
         SAL_INFO("slideshow.verbose",
                  "Node connection: n" <<

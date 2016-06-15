@@ -33,7 +33,7 @@ class SequentialTimeContainer : public BaseContainerNode
 public:
     SequentialTimeContainer(
         css::uno::Reference<css::animations::XAnimationNode> const& xNode,
-        BaseContainerNodeSharedPtr const& pParent,
+        std::shared_ptr< BaseContainerNode > const& pParent,
         NodeContext const& rContext )
         : BaseContainerNode( xNode, pParent, rContext ) {}
 
@@ -47,15 +47,15 @@ protected:
 
 private:
     virtual void activate_st() override;
-    virtual void notifyDeactivating( AnimationNodeSharedPtr const& rNotifier ) override;
+    virtual void notifyDeactivating( std::shared_ptr< AnimationNode > const& rNotifier ) override;
 
-    void skipEffect( AnimationNodeSharedPtr const& pChildNode );
+    void skipEffect( std::shared_ptr< AnimationNode > const& pChildNode );
 
 private:
-    bool resolveChild( AnimationNodeSharedPtr const& pChildNode );
+    bool resolveChild( std::shared_ptr< AnimationNode > const& pChildNode );
 
-    EventSharedPtr mpCurrentSkipEvent;
-    EventSharedPtr mpCurrentRewindEvent;
+    std::shared_ptr< Event > mpCurrentSkipEvent;
+    std::shared_ptr< Event > mpCurrentRewindEvent;
 };
 
 } // namespace internal

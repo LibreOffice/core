@@ -74,8 +74,8 @@ namespace slideshow
                 const beans::NamedValue&    mrKey;
             };
 
-            ::basegfx::B2DHomMatrix getAttributedShapeTransformation( const ::basegfx::B2DRectangle&        rShapeBounds,
-                                                                      const ShapeAttributeLayerSharedPtr&   pAttr )
+            ::basegfx::B2DHomMatrix getAttributedShapeTransformation( const ::basegfx::B2DRectangle&                rShapeBounds,
+                                                                      const std::shared_ptr< ShapeAttributeLayer >& pAttr )
             {
                 ::basegfx::B2DHomMatrix     aTransform;
                 const ::basegfx::B2DSize&   rSize( rShapeBounds.getRange() );
@@ -459,8 +459,8 @@ namespace slideshow
         // rotated on the page will still have 0.0 rotation angle, as the metafile
         // representation fetched over the API is our default zero case.
 
-        ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&      rShapeBounds,
-                                                        const ShapeAttributeLayerSharedPtr& pAttr )
+        ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&                rShapeBounds,
+                                                        const std::shared_ptr< ShapeAttributeLayer >& pAttr )
         {
             if( !pAttr )
             {
@@ -477,9 +477,9 @@ namespace slideshow
             }
         }
 
-        ::basegfx::B2DHomMatrix getSpriteTransformation( const ::basegfx::B2DVector&            rPixelSize,
-                                                         const ::basegfx::B2DVector&            rOrigSize,
-                                                         const ShapeAttributeLayerSharedPtr&    pAttr )
+        ::basegfx::B2DHomMatrix getSpriteTransformation( const ::basegfx::B2DVector&                   rPixelSize,
+                                                         const ::basegfx::B2DVector&                   rOrigSize,
+                                                         const std::shared_ptr< ShapeAttributeLayer >& pAttr )
         {
             ::basegfx::B2DHomMatrix aTransform;
 
@@ -544,9 +544,9 @@ namespace slideshow
             return aTransform;
         }
 
-        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rUnitBounds,
-                                                    const ::basegfx::B2DHomMatrix&      rShapeTransform,
-                                                    const ShapeAttributeLayerSharedPtr& pAttr )
+        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&                rUnitBounds,
+                                                    const ::basegfx::B2DHomMatrix&                rShapeTransform,
+                                                    const std::shared_ptr< ShapeAttributeLayer >& pAttr )
         {
             ::basegfx::B2DHomMatrix aTransform;
 
@@ -577,7 +577,7 @@ namespace slideshow
         }
 
         ::basegfx::B2DRange getShapeUpdateArea( const ::basegfx::B2DRange&      rUnitBounds,
-                                                    const ::basegfx::B2DRange&      rShapeBounds )
+                                                const ::basegfx::B2DRange&      rShapeBounds )
         {
             return ::basegfx::B2DRectangle(
                 basegfx::tools::lerp( rShapeBounds.getMinX(),
@@ -594,8 +594,8 @@ namespace slideshow
                                       rUnitBounds.getMaxY() ) );
         }
 
-        ::basegfx::B2DRectangle getShapePosSize( const ::basegfx::B2DRectangle&         rOrigBounds,
-                                                 const ShapeAttributeLayerSharedPtr&    pAttr )
+        ::basegfx::B2DRectangle getShapePosSize( const ::basegfx::B2DRectangle&                rOrigBounds,
+                                                 const std::shared_ptr< ShapeAttributeLayer >& pAttr )
         {
             // an already empty shape bound need no further
             // treatment. In fact, any changes applied below would
@@ -751,8 +751,8 @@ namespace slideshow
         }
 */
 
-        basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector& rSlideSize,
-                                              const UnoViewSharedPtr&   pView )
+        basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector&         rSlideSize,
+                                              const std::shared_ptr< UnoView >& pView )
         {
             ENSURE_OR_THROW(pView, "getSlideSizePixel(): invalid view");
 

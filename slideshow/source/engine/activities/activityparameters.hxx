@@ -76,7 +76,7 @@ struct ActivityParameters
         doubles.
     */
     ActivityParameters(
-        const EventSharedPtr&                       rEndEvent,
+        const std::shared_ptr< Event >&             rEndEvent,
         EventQueue&                                 rEventQueue,
         ActivitiesQueue&                            rActivitiesQueue,
         double                                      nMinDuration,
@@ -99,9 +99,9 @@ struct ActivityParameters
           mbAutoReverse( bAutoReverse ) {}
 
     /// End event to fire, when activity is over
-    const EventSharedPtr&                       mrEndEvent;
+    const std::shared_ptr< Event >&             mrEndEvent;
     /// Wakeup event to use for discrete activities
-    WakeupEventSharedPtr                        mpWakeupEvent;
+    std::shared_ptr< WakeupEvent >              mpWakeupEvent;
 
     /// EventQueue to add events to
     EventQueue&                                 mrEventQueue;

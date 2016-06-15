@@ -58,7 +58,7 @@ struct NodeContext
     ::basegfx::B2DVector             maSlideSize;
 
     /// Shape to be used (provided by parent, e.g. for iterations)
-    ShapeSubsetSharedPtr             mpMasterShapeSubset;
+    std::shared_ptr< ShapeSubset >   mpMasterShapeSubset;
 
     /// Additional delay to node begin (to offset iterate effects)
     double                           mnStartDelay;
@@ -112,15 +112,15 @@ public:
     virtual css::uno::Reference<css::animations::XAnimationNode> getXAnimationNode() const override;
     virtual NodeState getState() const override;
     virtual bool registerDeactivatingListener(
-        const AnimationNodeSharedPtr& rNotifee ) override;
+        const std::shared_ptr< AnimationNode >& rNotifee ) override;
     // nop:
-    virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier ) override;
+    virtual void notifyDeactivating( const std::shared_ptr< AnimationNode >& rNotifier ) override;
 
     bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
 protected:
-    void scheduleDeactivationEvent( EventSharedPtr const& pEvent =
-                                    EventSharedPtr() );
+    void scheduleDeactivationEvent( std::shared_ptr< Event > const& pEvent =
+                                    std::shared_ptr< Event >() );
 
     SlideShowContext const&                 getContext() const { return maContext; }
     ::std::shared_ptr<BaseNode> const&    getSelf() const { return mpSelf; }
@@ -187,9 +187,8 @@ private:
 private:
     SlideShowContext                                   maContext;
 
-    typedef ::std::vector< AnimationNodeSharedPtr >    ListenerVector;
 
-    ListenerVector                                     maDeactivatingListeners;
+    std::vector< std::shared_ptr< AnimationNode > >    maDeactivatingListeners;
     css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
     ::std::shared_ptr< BaseContainerNode >           mpParent;
     ::std::shared_ptr< BaseNode >                    mpSelf;
@@ -197,11 +196,10 @@ private:
     const double                                       mnStartDelay;
     NodeState                                          meCurrState;
     int                                                meCurrentStateTransition;
-    EventSharedPtr                                     mpCurrentEvent;
+    std::shared_ptr< Event >                           mpCurrentEvent;
     const bool                                         mbIsMainSequenceRootNode;
 };
 
-typedef ::std::shared_ptr< BaseNode > BaseNodeSharedPtr;
 
 } // namespace internal
 } // namespace slideshow

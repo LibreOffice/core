@@ -31,10 +31,10 @@ namespace slideshow
 {
     namespace internal
     {
-        ClippingFunctor::ClippingFunctor(const ParametricPolyPolygonSharedPtr&   rPolygon,
-                                         const TransitionInfo&                   rTransitionInfo,
-                                         bool                                    bDirectionForward,
-                                         bool                                    bModeIn ) :
+        ClippingFunctor::ClippingFunctor(const std::shared_ptr< ParametricPolyPolygon >& rPolygon,
+                                         const TransitionInfo&                           rTransitionInfo,
+                                         bool                                            bDirectionForward,
+                                         bool                                            bModeIn ) :
             mpParametricPoly( rPolygon ),
             maStaticTransformation(),
             mbForwardParameterSweep( true ),

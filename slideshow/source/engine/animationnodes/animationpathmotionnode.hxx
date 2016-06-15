@@ -30,7 +30,7 @@ class AnimationPathMotionNode : public AnimationBaseNode
 public:
     AnimationPathMotionNode(
         const css::uno::Reference<css::animations::XAnimationNode >& xNode,
-        const BaseContainerNodeSharedPtr&               rParent,
+        const std::shared_ptr< BaseContainerNode >&     rParent,
         const NodeContext&                              rContext )
         : AnimationBaseNode( xNode, rParent, rContext ),
           mxPathMotionNode( xNode, css::uno::UNO_QUERY_THROW ) {}
@@ -44,7 +44,7 @@ protected:
     virtual void dispose() override;
 
 private:
-    virtual AnimationActivitySharedPtr createActivity() const override;
+    virtual std::shared_ptr< AnimationActivity > createActivity() const override;
 
     css::uno::Reference<css::animations::XAnimateMotion >  mxPathMotionNode;
 };

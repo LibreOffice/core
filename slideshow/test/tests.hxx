@@ -40,22 +40,20 @@ public:
     virtual std::vector<std::shared_ptr<TestView> > getViewLayers() const = 0;
 };
 
-typedef std::shared_ptr<TestView> TestViewSharedPtr;
-TestViewSharedPtr createTestView();
+std::shared_ptr<TestView> createTestView();
 
 
 class TestShape : public slideshow::internal::AnimatableShape
 {
 public:
     virtual std::vector<
-    std::pair<slideshow::internal::ViewLayerSharedPtr,bool> > getViewLayers() const = 0;
+    std::pair<slideshow::internal::std::shared_ptr< ViewLayer >,bool> > getViewLayers() const = 0;
     virtual sal_Int32 getNumUpdates() const = 0;
     virtual sal_Int32 getNumRenders() const = 0;
     virtual sal_Int32 getAnimationCount() const = 0;
 };
 
-typedef std::shared_ptr<TestShape> TestShapeSharedPtr;
-TestShapeSharedPtr createTestShape(const basegfx::B2DRange& rRect,
+std::shared_ptr<TestShape> createTestShape(const basegfx::B2DRange& rRect,
                                    double                   nPrio);
 
 #endif // INCLUDED_SLIDESHOW_TEST_TESTS_HXX

@@ -99,10 +99,10 @@ namespace slideshow
 
             // From ViewEventHandler, forwarded by SlideImpl
             /// Notify new view added to UnoViewContainer
-            void viewAdded( const UnoViewSharedPtr& rView );
+            void viewAdded( const std::shared_ptr< UnoView >& rView );
             /// Notify view removed from UnoViewContainer
-            void viewRemoved( const UnoViewSharedPtr& rView );
-            void viewChanged( const UnoViewSharedPtr& rView );
+            void viewRemoved( const std::shared_ptr< UnoView >& rView );
+            void viewChanged( const std::shared_ptr< UnoView >& rView );
             void viewsChanged();
 
             /** Add the shape to this object
@@ -128,7 +128,7 @@ namespace slideshow
                 shape, which displays only the given subset of the
                 original one.
              */
-            AttributableShapeSharedPtr getSubsetShape( const AttributableShapeSharedPtr&    rOrigShape,
+            std::shared_ptr< AttributableShape > getSubsetShape( const std::shared_ptr< AttributableShape >& rOrigShape,
                                                        const DocTreeNode&                   rTreeNode );
 
             /** Revoke a previously queried subset shape.
@@ -144,8 +144,8 @@ namespace slideshow
                 @param rSubsetShape
                 The subset created from rOrigShape
              */
-            void revokeSubset( const AttributableShapeSharedPtr& rOrigShape,
-                               const AttributableShapeSharedPtr& rSubsetShape );
+            void revokeSubset( const std::shared_ptr< AttributableShape >& rOrigShape,
+                               const std::shared_ptr< AttributableShape >& rSubsetShape );
 
             /** Notify the LayerManager that the given Shape starts an
                 animation now.
@@ -153,7 +153,7 @@ namespace slideshow
                 This method enters animation mode for the Shape on all
                 registered views.
              */
-            void enterAnimationMode( const AnimatableShapeSharedPtr& rShape );
+            void enterAnimationMode( const std::shared_ptr< AnimatableShape >& rShape );
 
             /** Notify the LayerManager that the given Shape is no
                 longer animated.
@@ -161,7 +161,7 @@ namespace slideshow
                 This methods ends animation mode for the given Shape
                 on all registered views.
              */
-            void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape );
+            void leaveAnimationMode( const std::shared_ptr< AnimatableShape >& rShape );
 
             /** Notify that a shape needs an update
 
@@ -239,14 +239,14 @@ namespace slideshow
             /** Set of all shapes
              */
         private:
-            typedef ::std::map< ShapeSharedPtr, LayerWeakPtr, ShapeComparator > LayerShapeMap;
+            typedef ::std::map< ShapeSharedPtr, std::weak_ptr< Layer >, ShapeComparator > LayerShapeMap;
             typedef ::std::set< ShapeSharedPtr > ShapeUpdateSet;
 
 
             /// Adds shape area to containing layer's damage area
             void addUpdateArea( ShapeSharedPtr const& rShape );
 
-            LayerSharedPtr createForegroundLayer() const;
+            std::shared_ptr< Layer > createForegroundLayer() const;
 
             /** Push changes from updateShapeLayerAssociations() to current layer
 
@@ -306,7 +306,7 @@ namespace slideshow
             const UnoViewContainer&  mrViews;
 
             /// All layers of this object. Vector owns the layers
-            LayerVector              maLayers;
+            std::vector< std::shared_ptr< Layer > > maLayers;
 
             /** Contains all shapes with their XShape reference as the key
              */
@@ -346,7 +346,6 @@ namespace slideshow
             bool                     mbDisableAnimationZOrder;
         };
 
-        typedef ::std::shared_ptr< LayerManager > LayerManagerSharedPtr;
     }
 }
 

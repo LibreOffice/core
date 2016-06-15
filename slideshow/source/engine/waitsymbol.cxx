@@ -43,12 +43,12 @@ namespace internal {
 const sal_Int32 LEFT_BORDER_SPACE  = 10;
 const sal_Int32 LOWER_BORDER_SPACE = 10;
 
-WaitSymbolSharedPtr WaitSymbol::create( const uno::Reference<rendering::XBitmap>& xBitmap,
+std::shared_ptr<class WaitSymbol> WaitSymbol::create( const uno::Reference<rendering::XBitmap>& xBitmap,
                                         ScreenUpdater&                            rScreenUpdater,
                                         EventMultiplexer&                         rEventMultiplexer,
                                         const UnoViewContainer&                   rViewContainer )
 {
-    WaitSymbolSharedPtr pRet(
+    std::shared_ptr<class WaitSymbol> pRet(
         new WaitSymbol( xBitmap,
                         rScreenUpdater,
                         rViewContainer ));
@@ -93,7 +93,7 @@ void WaitSymbol::setVisible( const bool bVisible )
 }
 
 basegfx::B2DPoint WaitSymbol::calcSpritePos(
-    UnoViewSharedPtr const & rView ) const
+    std::shared_ptr< UnoView > const & rView ) const
 {
     const awt::Rectangle aViewArea( rView->getUnoView()->getCanvasArea() );
     return basegfx::B2DPoint(
@@ -104,7 +104,7 @@ basegfx::B2DPoint WaitSymbol::calcSpritePos(
                                             - LOWER_BORDER_SPACE ) );
 }
 
-void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
+void WaitSymbol::viewAdded( const std::shared_ptr< UnoView >& rView )
 {
     cppcanvas::CustomSpriteSharedPtr sprite;
 
@@ -137,7 +137,7 @@ void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
     maViews.push_back( ViewsVecT::value_type( rView, sprite ) );
 }
 
-void WaitSymbol::viewRemoved( const UnoViewSharedPtr& rView )
+void WaitSymbol::viewRemoved( const std::shared_ptr< UnoView >& rView )
 {
     maViews.erase(
         std::remove_if(
@@ -148,7 +148,7 @@ void WaitSymbol::viewRemoved( const UnoViewSharedPtr& rView )
         maViews.end() );
 }
 
-void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
+void WaitSymbol::viewChanged( const std::shared_ptr< UnoView >& rView )
 {
     // find entry corresponding to modified view
     ViewsVecT::iterator aModifiedEntry(

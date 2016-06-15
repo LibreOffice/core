@@ -63,7 +63,7 @@ namespace slideshow
                 @param rView
                 The associated View object.
              */
-            ViewMediaShape( const ViewLayerSharedPtr&                                  rViewLayer,
+            ViewMediaShape( const std::shared_ptr< ViewLayer >&                        rViewLayer,
                             const css::uno::Reference< css::drawing::XShape >&         rxShape,
                             const css::uno::Reference< css::uno::XComponentContext >&  rxContext );
 
@@ -78,7 +78,7 @@ namespace slideshow
 
             /** Query the associated view layer of this shape
              */
-            const ViewLayerSharedPtr& getViewLayer() const;
+            const std::shared_ptr< ViewLayer >& getViewLayer() const;
 
             // animation methods
 
@@ -146,7 +146,7 @@ namespace slideshow
             void implInitializePlayerWindow( const ::basegfx::B2DRectangle& rBounds,
                                              const css::uno::Sequence< css::uno::Any >& rVCLDeviceParams,
                                              const OUString& rMimeType );
-            ViewLayerSharedPtr                    mpViewLayer;
+            std::shared_ptr< ViewLayer >          mpViewLayer;
             VclPtr< SystemChildWindow >           mpMediaWindow;
             VclPtr< vcl::Window >                 mpEventHandlerParent;
             mutable css::awt::Point               maWindowOffset;
@@ -159,7 +159,6 @@ namespace slideshow
             bool                                              mbIsSoundEnabled;
         };
 
-        typedef ::std::shared_ptr< ViewMediaShape > ViewMediaShapeSharedPtr;
 
     }
 }

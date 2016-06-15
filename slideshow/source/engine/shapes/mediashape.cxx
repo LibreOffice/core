@@ -65,9 +65,9 @@ namespace slideshow
             // View layer methods
 
 
-            virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
+            virtual void addViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer,
                                        bool                         bRedrawLayer ) override;
-            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) override;
+            virtual bool removeViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer ) override;
             virtual void clearAllViewLayers() override;
 
 
@@ -75,7 +75,7 @@ namespace slideshow
 
 
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const override;
-            virtual void implViewChanged( const UnoViewSharedPtr& rView ) override;
+            virtual void implViewChanged( const std::shared_ptr< UnoView >& rView ) override;
             virtual void implViewsChanged() override;
             virtual bool implStartIntrinsicAnimation() override;
             virtual bool implEndIntrinsicAnimation() override;
@@ -84,8 +84,7 @@ namespace slideshow
             virtual void implSetIntrinsicAnimationTime(double) override;
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
-            ViewMediaShapeVector                             maViewMediaShapes;
+            std::vector< std::shared_ptr< ViewMediaShape > > maViewMediaShapes;
             bool                                             mbIsPlaying;
         };
 
@@ -100,7 +99,7 @@ namespace slideshow
         }
 
 
-        void MediaShape::implViewChanged( const UnoViewSharedPtr& rView )
+        void MediaShape::implViewChanged( const std::shared_ptr< UnoView >& rView )
         {
             const ::basegfx::B2DRectangle& rBounds = getBounds();
             // determine ViewMediaShape that needs update
@@ -119,7 +118,7 @@ namespace slideshow
         }
 
 
-        void MediaShape::addViewLayer( const ViewLayerSharedPtr& rNewLayer,
+        void MediaShape::addViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer,
                                        bool                      bRedrawLayer )
         {
             maViewMediaShapes.push_back(
@@ -136,23 +135,23 @@ namespace slideshow
         }
 
 
-        bool MediaShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
+        bool MediaShape::removeViewLayer( const std::shared_ptr< ViewLayer >& rLayer )
         {
-            const ViewMediaShapeVector::iterator aEnd( maViewMediaShapes.end() );
+            const std::vector< std::shared_ptr< ViewMediaShape > >::iterator aEnd( maViewMediaShapes.end() );
 
             OSL_ENSURE( ::std::count_if(maViewMediaShapes.begin(),
                                         aEnd,
                                         [&rLayer]
-                                        ( const ViewMediaShapeSharedPtr& pShape )
+                                        ( const std::shared_ptr< ViewMediaShape >& pShape )
                                         { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "MediaShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
-            ViewMediaShapeVector::iterator aIter;
+            std::vector< std::shared_ptr< ViewMediaShape > >::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewMediaShapes.begin(),
                                          aEnd,
                                          [&rLayer]
-                                         ( const ViewMediaShapeSharedPtr& pShape )
+                                         ( const std::shared_ptr< ViewMediaShape >& pShape )
                                          { return rLayer == pShape->getViewLayer(); } ) ) == aEnd )
             {
                 // view layer seemingly was not added, failed
@@ -178,9 +177,9 @@ namespace slideshow
             if( ::std::count_if( maViewMediaShapes.begin(),
                                  maViewMediaShapes.end(),
                                  [&rCurrBounds]
-                                 ( const ViewMediaShapeSharedPtr& pShape )
+                                 ( const std::shared_ptr< ViewMediaShape >& pShape )
                                  { return pShape->render( rCurrBounds ); } )
-                != static_cast<ViewMediaShapeVector::difference_type>(maViewMediaShapes.size()) )
+                != static_cast<std::vector< std::shared_ptr< ViewMediaShape > >::difference_type>(maViewMediaShapes.size()) )
             {
                 // at least one of the ViewShape::update() calls did return
                 // false - update failed on at least one ViewLayer

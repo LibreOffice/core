@@ -56,7 +56,7 @@ class RehearseTimingsActivity::WakeupEvent : public Event
 {
 public:
     WakeupEvent( std::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
-                 ActivitySharedPtr const&                                 rActivity,
+                 std::shared_ptr< Activity > const&                       rActivity,
                  ActivitiesQueue &                                        rActivityQueue ) :
         Event("WakeupEvent"),
         maTimer(pTimeBase),
@@ -71,7 +71,7 @@ public:
     virtual void dispose() override {}
     virtual bool fire() override
     {
-        ActivitySharedPtr pActivity( mpActivity.lock() );
+        std::shared_ptr< Activity > pActivity( mpActivity.lock() );
         if( !pActivity )
             return false;
 
@@ -303,7 +303,7 @@ void RehearseTimingsActivity::end()
     }
 }
 
-basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( UnoViewSharedPtr const& rView ) const
+basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( std::shared_ptr< UnoView > const& rView ) const
 {
     const Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
                                                  UNO_QUERY );
@@ -328,7 +328,7 @@ basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( UnoViewSharedPtr
         spritePos.getY() + spriteSize.getY() );
 }
 
-void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
+void RehearseTimingsActivity::viewAdded( const std::shared_ptr< UnoView >& rView )
 {
     cppcanvas::CustomSpriteSharedPtr sprite(
         rView->createSprite( basegfx::B2DSize(
@@ -352,7 +352,7 @@ void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
         sprite->show();
 }
 
-void RehearseTimingsActivity::viewRemoved( const UnoViewSharedPtr& rView )
+void RehearseTimingsActivity::viewRemoved( const std::shared_ptr< UnoView >& rView )
 {
     maViews.erase(
         std::remove_if( maViews.begin(), maViews.end(),
@@ -362,7 +362,7 @@ void RehearseTimingsActivity::viewRemoved( const UnoViewSharedPtr& rView )
         maViews.end() );
 }
 
-void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
+void RehearseTimingsActivity::viewChanged( const std::shared_ptr< UnoView >& rView )
 {
     // find entry corresponding to modified view
     ViewsVecT::iterator aModifiedEntry(

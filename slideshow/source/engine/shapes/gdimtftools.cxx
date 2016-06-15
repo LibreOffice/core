@@ -263,10 +263,10 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
     }
 }
 
-bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
-                              ::std::size_t&                o_rLoopCount,
-                              CycleMode&                    o_eCycleMode,
-                              const Graphic&                rGraphic )
+bool getAnimationFromGraphic( std::vector< MtfAnimationFrame >&     o_rFrames,
+                              ::std::size_t&                        o_rLoopCount,
+                              CycleMode&                            o_eCycleMode,
+                              const Graphic&                        rGraphic )
 {
     o_rFrames.clear();
 
@@ -358,7 +358,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
         // extract current aVDev content into a new animation
         // frame
-        GDIMetaFileSharedPtr pMtf( new GDIMetaFile() );
+        std::shared_ptr< GDIMetaFile > pMtf( new GDIMetaFile() );
         pMtf->AddAction(
             new MetaBmpExAction( aEmptyPoint,
                                  BitmapEx(
@@ -397,9 +397,9 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     return !o_rFrames.empty();
 }
 
-bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
-                                 ::basegfx::B2DRectangle&       o_rPaintRect,
-                                 const GDIMetaFileSharedPtr&    rMtf )
+bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&               o_rScrollRect,
+                                 ::basegfx::B2DRectangle&               o_rPaintRect,
+                                 const std::shared_ptr< GDIMetaFile >&  rMtf )
 {
     // extract bounds: scroll rect, paint rect
     bool bScrollRectSet(false);

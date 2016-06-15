@@ -31,7 +31,7 @@ namespace internal {
 
 AnimationAudioNode::AnimationAudioNode(
     const uno::Reference< animations::XAnimationNode >& xNode,
-    const BaseContainerNodeSharedPtr&                   rParent,
+    const std::shared_ptr< BaseContainerNode >&         rParent,
     const NodeContext&                                  rContext )
     : BaseNode( xNode, rParent, rContext ),
       mxAudioNode( xNode, uno::UNO_QUERY_THROW ),
@@ -58,7 +58,7 @@ void AnimationAudioNode::activate_st()
 {
     createPlayer();
 
-    AnimationEventHandlerSharedPtr aHandler(
+    std::shared_ptr< AnimationEventHandler > aHandler(
         std::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
     OSL_ENSURE( aHandler,
                 "could not cast self to AnimationEventHandler?" );
@@ -113,7 +113,7 @@ struct NotifyAudioStopped
 
 void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 {
-    AnimationEventHandlerSharedPtr aHandler(
+    std::shared_ptr< AnimationEventHandler > aHandler(
         std::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
     OSL_ENSURE( aHandler,
                 "could not cas self to AnimationEventHandler?" );
@@ -171,7 +171,7 @@ void AnimationAudioNode::resetPlayer() const
 }
 
 bool AnimationAudioNode::handleAnimationEvent(
-    const AnimationNodeSharedPtr& /*rNode*/ )
+    const std::shared_ptr< AnimationNode >& /*rNode*/ )
 {
     // TODO(F2): for now we support only STOPAUDIO events.
     deactivate();

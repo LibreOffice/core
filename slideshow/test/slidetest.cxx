@@ -47,9 +47,9 @@ namespace
 class LayerManagerTest : public CppUnit::TestFixture
 {
     target::UnoViewContainer      maViews;
-    target::LayerManagerSharedPtr mpLayerManager;
-    TestViewSharedPtr             mpTestView;
-    TestShapeSharedPtr            mpTestShape;
+    target::std::shared_ptr< LayerManager > mpLayerManager;
+    std::shared_ptr<TestView>     mpTestView;
+    std::shared_ptr<TestShape>    mpTestShape;
 
 public:
     void setUp()
@@ -75,11 +75,11 @@ public:
 
     void testLayer()
     {
-        target::LayerSharedPtr pBgLayer(
+        target::std::shared_ptr< Layer > pBgLayer(
             target::Layer::createBackgroundLayer( basegfx::B2DRange(0,0,100,100) ) );
         pBgLayer->addView( mpTestView );
 
-        target::LayerSharedPtr pFgLayer(
+        target::std::shared_ptr< Layer > pFgLayer(
             target::Layer::createLayer( basegfx::B2DRange(0,0,100,100) ) );
         pFgLayer->addView( mpTestView );
 
@@ -94,14 +94,14 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "BG layer must have pending updates!",
                                 pBgLayer->isUpdatePending() );
 
-        TestShapeSharedPtr pTestShape = createTestShape(
+        std::shared_ptr<TestShape> pTestShape = createTestShape(
             basegfx::B2DRange(0.0,0.0,1000.0,1000.0),
             1.0);
         pBgLayer->updateBounds( pTestShape );
         CPPUNIT_ASSERT_MESSAGE( "BG layer must not resize!",
                                 !pBgLayer->commitBounds() );
 
-        TestShapeSharedPtr pTestShape2 = createTestShape(
+        std::shared_ptr<TestShape> pTestShape2 = createTestShape(
             basegfx::B2DRange(0.0,0.0,1.0,1.0),
             1.0);
         pFgLayer->updateBounds( pTestShape2 );
@@ -130,7 +130,7 @@ public:
                                 !mpTestShape->getNumUpdates() );
 
         // test second view, check whether shape gets additional view
-        TestViewSharedPtr pTestView( createTestView() );
+        std::shared_ptr<TestView> pTestView( createTestView() );
         CPPUNIT_ASSERT_MESSAGE( "Adding second View failed",
                                 maViews.addView( pTestView ) );
         CPPUNIT_ASSERT_MESSAGE( "View container must have two views",
@@ -150,13 +150,13 @@ public:
 
     void testShapeOrdering()
     {
-        TestShapeSharedPtr pShape2( createTestShape(
+        std::shared_ptr<TestShape> pShape2( createTestShape(
             basegfx::B2DRange(0.0,0.0,10.0,10.0),
             2.0));
-        TestShapeSharedPtr pShape3( createTestShape(
+        std::shared_ptr<TestShape> pShape3( createTestShape(
             basegfx::B2DRange(0.0,0.0,10.0,10.0),
             3.0));
-        TestShapeSharedPtr pShape4( createTestShape(
+        std::shared_ptr<TestShape> pShape4( createTestShape(
             basegfx::B2DRange(0.0,0.0,10.0,10.0),
             4.0));
 
@@ -224,16 +224,16 @@ public:
 
     void testShapeRepaint()
     {
-        TestShapeSharedPtr pShape2( createTestShape(
+        std::shared_ptr<TestShape> pShape2( createTestShape(
             basegfx::B2DRange(0.0,0.0,10.0,10.0),
             2.0));
-        TestShapeSharedPtr pShape3( createTestShape(
+        std::shared_ptr<TestShape> pShape3( createTestShape(
             basegfx::B2DRange(0.0,0.0,10.0,10.0),
             3.0));
-        TestShapeSharedPtr pShape4( createTestShape(
+        std::shared_ptr<TestShape> pShape4( createTestShape(
             basegfx::B2DRange(0.0,0.0,10.0,10.0),
             4.0));
-        TestShapeSharedPtr pShape5( createTestShape(
+        std::shared_ptr<TestShape> pShape5( createTestShape(
             basegfx::B2DRange(20.0,20.0,30.0,30.0),
             4.0));
 
@@ -290,13 +290,13 @@ public:
 
     void testRefCounting()
     {
-        TestShapeSharedPtr pShape2( createTestShape(
+        std::shared_ptr<TestShape> pShape2( createTestShape(
             basegfx::B2DRange(0.0,0.0,10.0,10.0),
             2.0));
-        TestShapeSharedPtr pShape3( createTestShape(
+        std::shared_ptr<TestShape> pShape3( createTestShape(
             basegfx::B2DRange(0.0,0.0,10.0,10.0),
             3.0));
-        TestShapeSharedPtr pShape4( createTestShape(
+        std::shared_ptr<TestShape> pShape4( createTestShape(
             basegfx::B2DRange(0.0,0.0,10.0,10.0),
             4.0));
 

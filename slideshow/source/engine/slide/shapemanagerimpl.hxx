@@ -61,11 +61,11 @@ public:
         The slideshow-global event source, where this class
         registeres its event handlers.
     */
-    ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
-                      LayerManagerSharedPtr const& rLayerManager,
-                      CursorManager&               rCursorManager,
-                      const ShapeEventListenerMap& rGlobalListenersMap,
-                      const ShapeCursorMap&        rGlobalCursorMap );
+    ShapeManagerImpl( EventMultiplexer&                     rMultiplexer,
+                      std::shared_ptr< LayerManager > const& rLayerManager,
+                      CursorManager&                        rCursorManager,
+                      const ShapeEventListenerMap&          rGlobalListenersMap,
+                      const ShapeCursorMap&                 rGlobalCursorMap );
 
     /// Forbid copy construction
     ShapeManagerImpl(const ShapeManagerImpl&) = delete;
@@ -115,8 +115,8 @@ private:
     // ShapeManager interface
 
 
-    virtual void enterAnimationMode( const AnimatableShapeSharedPtr& rShape ) override;
-    virtual void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape ) override;
+    virtual void enterAnimationMode( const std::shared_ptr< AnimatableShape >& rShape ) override;
+    virtual void leaveAnimationMode( const std::shared_ptr< AnimatableShape >& rShape ) override;
     virtual void notifyShapeUpdate( const ShapeSharedPtr& rShape ) override;
     virtual ShapeSharedPtr lookupShape(
         css::uno::Reference< css::drawing::XShape > const & xShape ) const override;
@@ -134,9 +134,9 @@ private:
         const std::shared_ptr<AttributableShape>& rSubsetShape ) override;
 
     virtual void addIntrinsicAnimationHandler(
-        const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) override;
+        const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler ) override;
     virtual void removeIntrinsicAnimationHandler(
-        const IntrinsicAnimationEventHandlerSharedPtr& rHandler ) override;
+        const std::shared_ptr< IntrinsicAnimationEventHandler >& rHandler ) override;
     virtual void notifyIntrinsicAnimationsEnabled() override;
     virtual void notifyIntrinsicAnimationsDisabled() override;
 
@@ -162,15 +162,15 @@ private:
                      Shape::lessThanShape>        ShapeToListenersMap;
     typedef std::map<ShapeSharedPtr, sal_Int16,
                        Shape::lessThanShape>      ShapeToCursorMap;
-    typedef std::set<HyperlinkAreaSharedPtr,
+    typedef std::set<std::shared_ptr< HyperlinkArea >,
                      HyperlinkArea::lessThanArea> AreaSet;
 
     typedef ThreadUnsafeListenerContainer<
-        IntrinsicAnimationEventHandlerSharedPtr,
-        std::vector<IntrinsicAnimationEventHandlerSharedPtr> > ImplIntrinsicAnimationEventHandlers;
+        std::shared_ptr< IntrinsicAnimationEventHandler >,
+        std::vector<std::shared_ptr< IntrinsicAnimationEventHandler >> > ImplIntrinsicAnimationEventHandlers;
 
     EventMultiplexer&                   mrMultiplexer;
-    LayerManagerSharedPtr               mpLayerManager;
+    std::shared_ptr< LayerManager >     mpLayerManager;
     CursorManager&                      mrCursorManager;
     const ShapeEventListenerMap&        mrGlobalListenersMap;
     const ShapeCursorMap&               mrGlobalCursorMap;

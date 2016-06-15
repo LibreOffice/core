@@ -54,7 +54,7 @@ namespace slideshow
                 (false is e.g. returned, if the view was already
                 added)
              */
-            bool addView( const UnoViewSharedPtr& rView );
+            bool addView( const std::shared_ptr< UnoView >& rView );
 
             /** Remove a previously added a view from this container
 
@@ -62,7 +62,7 @@ namespace slideshow
                 removed, and an empty shared_ptr otherwise (e.g. if
                 this view wasn't added in the first place)
             */
-            UnoViewSharedPtr removeView( const css::uno::Reference<css::presentation::XSlideShowView >& xView );
+            std::shared_ptr< UnoView > removeView( const css::uno::Reference<css::presentation::XSlideShowView >& xView );
 
             /// Dispose all stored views. Implies clear().
             void dispose();
@@ -72,17 +72,16 @@ namespace slideshow
 
             bool empty() const { return maViews.empty(); }
 
-            UnoViewVector::iterator         begin() { return maViews.begin(); }
-            UnoViewVector::const_iterator   begin() const { return maViews.begin(); }
-            UnoViewVector::iterator         end() { return maViews.end(); }
-            UnoViewVector::const_iterator   end() const { return maViews.end(); }
+            std::vector< std::shared_ptr< UnoView > >::iterator begin() { return maViews.begin(); }
+            std::vector< std::shared_ptr< UnoView > >::const_iterator begin() const { return maViews.begin(); }
+            std::vector< std::shared_ptr< UnoView > >::iterator end() { return maViews.end(); }
+            std::vector< std::shared_ptr< UnoView > >::const_iterator end() const { return maViews.end(); }
 
         private:
             /// All added views
-            UnoViewVector   maViews;
+            std::vector< std::shared_ptr< UnoView > > maViews;
         };
 
-        typedef ::std::shared_ptr< UnoViewContainer > UnoViewContainerSharedPtr;
 
     }
 }

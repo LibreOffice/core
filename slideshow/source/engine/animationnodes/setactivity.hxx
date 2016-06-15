@@ -42,11 +42,10 @@ template <class AnimationT>
 class SetActivity : public AnimationActivity
 {
 public:
-    typedef ::std::shared_ptr< AnimationT >   AnimationSharedPtrT;
     typedef typename AnimationT::ValueType      ValueT;
 
     SetActivity( const ActivitiesFactory::CommonParameters& rParms,
-                 const AnimationSharedPtrT&                 rAnimation,
+                 const std::shared_ptr< AnimationT >&       rAnimation,
                  const ValueT&                              rToValue )
         : mpAnimation( rAnimation ),
           mpShape(),
@@ -109,8 +108,8 @@ public:
         perform();
     }
 
-    virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
-                             const ShapeAttributeLayerSharedPtr&    rAttrLayer ) override
+    virtual void setTargets( const std::shared_ptr< AnimatableShape >&      rShape,
+                             const std::shared_ptr< ShapeAttributeLayer >&  rAttrLayer ) override
     {
         ENSURE_OR_THROW( rShape, "Invalid shape" );
         ENSURE_OR_THROW( rAttrLayer, "Invalid attribute layer" );
@@ -120,21 +119,21 @@ public:
     }
 
 private:
-    AnimationSharedPtrT             mpAnimation;
-    AnimatableShapeSharedPtr        mpShape;
-    ShapeAttributeLayerSharedPtr    mpAttributeLayer;
-    EventSharedPtr                  mpEndEvent;
-    EventQueue&                     mrEventQueue;
-    ValueT                          maToValue;
-    bool                            mbIsActive;
+    std::shared_ptr< AnimationT >           mpAnimation;
+    std::shared_ptr< AnimatableShape >      mpShape;
+    std::shared_ptr< ShapeAttributeLayer >  mpAttributeLayer;
+    std::shared_ptr< Event >                mpEndEvent;
+    EventQueue&                             mrEventQueue;
+    ValueT                                  maToValue;
+    bool                                    mbIsActive;
 };
 
-template <class AnimationT> AnimationActivitySharedPtr makeSetActivity(
+template <class AnimationT> std::shared_ptr< AnimationActivity > makeSetActivity(
     const ActivitiesFactory::CommonParameters& rParms,
     const ::std::shared_ptr< AnimationT >&   rAnimation,
     const typename AnimationT::ValueType&      rToValue )
 {
-    return AnimationActivitySharedPtr(
+    return std::shared_ptr< AnimationActivity >(
         new SetActivity<AnimationT>(rParms,rAnimation,rToValue) );
 }
 

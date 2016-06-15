@@ -87,10 +87,10 @@ namespace slideshow
             const DocTreeNode&          getSubsetNode       () const;
 
             /// Get subset shape for given node, if any
-            AttributableShapeSharedPtr  getSubsetShape      ( const DocTreeNode& rTreeNode ) const;
+            std::shared_ptr< AttributableShape > getSubsetShape      ( const DocTreeNode& rTreeNode ) const;
 
             /// Add child subset shape (or increase use count, if already existent)
-            void                        addSubsetShape      ( const AttributableShapeSharedPtr& rShape );
+            void                        addSubsetShape      ( const std::shared_ptr< AttributableShape >& rShape );
 
             /** Revoke subset shape
 
@@ -108,7 +108,7 @@ namespace slideshow
                 decremented, or there was no such subset found, in the
                 first place).
              */
-            bool                        revokeSubsetShape   ( const AttributableShapeSharedPtr& rShape );
+            bool                        revokeSubsetShape   ( const std::shared_ptr< AttributableShape >& rShape );
 
 
             // Doc tree methods
@@ -141,7 +141,7 @@ namespace slideshow
                 are currently hidden, because displayed by child
                 shapes).
              */
-            const VectorOfDocTreeNodes& getActiveSubsets() const {  return maCurrentSubsets; }
+            const std::vector< DocTreeNode >& getActiveSubsets() const { return maCurrentSubsets; }
 
             /** This enum classifies each action index in the
                 metafile.
@@ -163,7 +163,6 @@ namespace slideshow
                 CLASS_CHARACTER_CELL_END
             };
 
-            typedef ::std::vector< IndexClassificator > IndexClassificatorVector;
 
         private:
             /** Entry for subset shape
@@ -175,7 +174,7 @@ namespace slideshow
              */
             struct SubsetEntry
             {
-                AttributableShapeSharedPtr  mpShape;
+                std::shared_ptr< AttributableShape > mpShape;
                 sal_Int32                   mnStartActionIndex;
                 sal_Int32                   mnEndActionIndex;
 
@@ -207,15 +206,15 @@ namespace slideshow
             void initCurrentSubsets();
             void reset();
 
-            static sal_Int32   implGetNumberOfTreeNodes( const IndexClassificatorVector::const_iterator&   rBegin,
-                                                  const IndexClassificatorVector::const_iterator&   rEnd,
+            static sal_Int32   implGetNumberOfTreeNodes( const std::vector< IndexClassificator >::const_iterator& rBegin,
+                                                  const std::vector< IndexClassificator >::const_iterator& rEnd,
                                                   DocTreeNode::NodeType                             eNodeType );
-            DocTreeNode implGetTreeNode( const IndexClassificatorVector::const_iterator&    rBegin,
-                                         const IndexClassificatorVector::const_iterator&    rEnd,
+            DocTreeNode implGetTreeNode( const std::vector< IndexClassificator >::const_iterator& rBegin,
+                                         const std::vector< IndexClassificator >::const_iterator& rEnd,
                                          sal_Int32                                          nNodeIndex,
                                          DocTreeNode::NodeType                              eNodeType ) const;
 
-            mutable IndexClassificatorVector    maActionClassVector;
+            mutable std::vector< IndexClassificator > maActionClassVector;
 
             /// Metafile to retrieve subset info from
             ::std::shared_ptr< GDIMetaFile >  mpMtf;
@@ -238,7 +237,7 @@ namespace slideshow
                 Note that this is generally _not_ equivalent to
                 maSubset, as it excludes all active subset children!
              */
-            mutable VectorOfDocTreeNodes        maCurrentSubsets;
+            mutable std::vector< DocTreeNode >  maCurrentSubsets;
 
             /// Whether the shape's doc tree has been initialized successfully, or not
             mutable bool                        mbNodeTreeInitialized;

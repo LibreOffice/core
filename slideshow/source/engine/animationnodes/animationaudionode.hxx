@@ -50,12 +50,12 @@ private:
     virtual bool hasPendingAnimation() const override;
 
     /// overridden, because we need to deal with STOPAUDIO commands
-    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) override;
+    virtual bool handleAnimationEvent( const std::shared_ptr< AnimationNode >& rNode ) override;
 
 private:
     css::uno::Reference<css::animations::XAudio >  mxAudioNode;
     OUString                                       maSoundURL;
-    mutable SoundPlayerSharedPtr                   mpPlayer;
+    mutable std::shared_ptr< SoundPlayer >         mpPlayer;
 
     void createPlayer() const;
     void resetPlayer() const;

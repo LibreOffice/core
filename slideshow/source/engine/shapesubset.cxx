@@ -32,9 +32,9 @@ namespace slideshow
 {
     namespace internal
     {
-        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+        ShapeSubset::ShapeSubset( const std::shared_ptr< AttributableShape >& rOriginalShape,
                                   const DocTreeNode&                      rTreeNode,
-                                  const SubsettableShapeManagerSharedPtr& rShapeManager ) :
+                                  const std::shared_ptr< SubsettableShapeManager >& rShapeManager ) :
             mpOriginalShape( rOriginalShape ),
             mpSubsetShape(),
             maTreeNode( rTreeNode ),
@@ -44,7 +44,7 @@ namespace slideshow
                               "ShapeSubset::ShapeSubset(): Invalid shape manager" );
         }
 
-        ShapeSubset::ShapeSubset( const ShapeSubsetSharedPtr&   rOriginalSubset,
+        ShapeSubset::ShapeSubset( const std::shared_ptr< ShapeSubset >& rOriginalSubset,
                                   const DocTreeNode&            rTreeNode ) :
             mpOriginalShape( rOriginalSubset->mpSubsetShape ?
                              rOriginalSubset->mpSubsetShape :
@@ -61,8 +61,8 @@ namespace slideshow
                               "ShapeSubset::ShapeSubset(): Subset is bigger than parent" );
         }
 
-        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
-                                  const SubsettableShapeManagerSharedPtr& rShapeManager ) :
+        ShapeSubset::ShapeSubset( const std::shared_ptr< AttributableShape >& rOriginalShape,
+                                  const std::shared_ptr< SubsettableShapeManager >& rShapeManager ) :
             mpOriginalShape( rOriginalShape ),
             mpSubsetShape(),
             maTreeNode(),
@@ -88,7 +88,7 @@ namespace slideshow
             }
         }
 
-        AttributableShapeSharedPtr ShapeSubset::getSubsetShape() const
+        std::shared_ptr< AttributableShape > ShapeSubset::getSubsetShape() const
         {
             return mpSubsetShape ? mpSubsetShape : mpOriginalShape;
         }

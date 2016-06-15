@@ -50,13 +50,13 @@ namespace slideshow
                     public UserPaintEventHandler
         {
         public:
-            PaintOverlayHandler( const RGBColor&          rStrokeColor,
-                                 double                   nStrokeWidth,
-                                 ScreenUpdater&           rScreenUpdater,
-                                 const UnoViewContainer&  rViews,
-                                 Slide&                   rSlide,
-                                 const PolyPolygonVector& rPolygons,
-                                 bool                     bActive ) :
+            PaintOverlayHandler( const RGBColor&                                      rStrokeColor,
+                                 double                                               nStrokeWidth,
+                                 ScreenUpdater&                                       rScreenUpdater,
+                                 const UnoViewContainer&                              rViews,
+                                 Slide&                                               rSlide,
+                                 const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolygons,
+                                 bool                                                 bActive ) :
                 mrScreenUpdater( rScreenUpdater ),
                 maViews(),
                 maPolygons( rPolygons ),
@@ -86,19 +86,19 @@ namespace slideshow
             }
 
             // ViewEventHandler methods
-            virtual void viewAdded( const UnoViewSharedPtr& rView ) override
+            virtual void viewAdded( const std::shared_ptr< UnoView >& rView ) override
             {
                 maViews.push_back( rView );
             }
 
-            virtual void viewRemoved( const UnoViewSharedPtr& rView ) override
+            virtual void viewRemoved( const std::shared_ptr< UnoView >& rView ) override
             {
                 maViews.erase( ::std::remove( maViews.begin(),
                                               maViews.end(),
                                               rView ) );
             }
 
-            virtual void viewChanged( const UnoViewSharedPtr& /*rView*/ ) override
+            virtual void viewChanged( const std::shared_ptr< UnoView >& /*rView*/ ) override
             {
                 // TODO(F2): for persistent drawings, need to store
                 // polygon and repaint here.
@@ -129,7 +129,7 @@ namespace slideshow
             void repaintWithoutPolygons()
             {
                     // must get access to the instance to erase all polygon
-                    for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+                    for( std::vector< std::shared_ptr< UnoView > >::iterator aIter=maViews.begin(), aEnd=maViews.end();
                         aIter!=aEnd;
                         ++aIter )
                     {
@@ -137,7 +137,7 @@ namespace slideshow
                         //(*aIter)->getCanvas()->clear();
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
-                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        std::shared_ptr< SlideBitmap > pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
 
                         const ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
@@ -213,7 +213,7 @@ namespace slideshow
             //Draw all registered polygons.
             void drawPolygons()
             {
-                for( PolyPolygonVector::iterator aIter=maPolygons.begin(), aEnd=maPolygons.end();
+                for( std::vector< cppcanvas::PolyPolygonSharedPtr>::iterator aIter=maPolygons.begin(), aEnd=maPolygons.end();
                                      aIter!=aEnd;
                                      ++aIter )
                 {
@@ -224,7 +224,7 @@ namespace slideshow
             }
 
             //Retrieve all registered polygons.
-            const PolyPolygonVector& getPolygons()
+            const std::vector< cppcanvas::PolyPolygonSharedPtr>& getPolygons()
             {
                 return maPolygons;
             }
@@ -333,13 +333,13 @@ namespace slideshow
 
                     //The point is to redraw the LastPoint the way it was originally on the bitmap,
                     //of the slide
-            for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+            for( std::vector< std::shared_ptr< UnoView > >::iterator aIter=maViews.begin(), aEnd=maViews.end();
                         aIter!=aEnd;
                         ++aIter )
                     {
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
-                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        std::shared_ptr< SlideBitmap > pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
 
                         ::basegfx::B2DHomMatrix     aViewTransform( (*aIter)->getTransformation() );
@@ -384,7 +384,7 @@ namespace slideshow
                         aPoly.append( maLastPoint );
 
                         // paint to all views
-                        for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+                        for( std::vector< std::shared_ptr< UnoView > >::iterator aIter=maViews.begin(), aEnd=maViews.end();
                              aIter!=aEnd;
                              ++aIter )
                         {
@@ -417,8 +417,8 @@ namespace slideshow
 
         private:
             ScreenUpdater&          mrScreenUpdater;
-            UnoViewVector           maViews;
-            PolyPolygonVector       maPolygons;
+            std::vector< std::shared_ptr< UnoView > > maViews;
+            std::vector< cppcanvas::PolyPolygonSharedPtr> maPolygons;
             RGBColor                maStrokeColor;
             double                  mnStrokeWidth;
             basegfx::B2DPoint       maLastPoint;
@@ -433,13 +433,13 @@ namespace slideshow
             bool                    mbActive;
         };
 
-        UserPaintOverlaySharedPtr UserPaintOverlay::create( const RGBColor&          rStrokeColor,
+        std::shared_ptr< class UserPaintOverlay > UserPaintOverlay::create( const RGBColor& rStrokeColor,
                                                             double                   nStrokeWidth,
                                                             const SlideShowContext&  rContext,
-                                                            const PolyPolygonVector& rPolygons,
+                                                            const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolygons,
                                                             bool                     bActive )
         {
-            UserPaintOverlaySharedPtr pRet( new UserPaintOverlay( rStrokeColor,
+            std::shared_ptr< class UserPaintOverlay > pRet( new UserPaintOverlay( rStrokeColor,
                                                                   nStrokeWidth,
                                                                   rContext,
                                                                   rPolygons,
@@ -451,7 +451,7 @@ namespace slideshow
         UserPaintOverlay::UserPaintOverlay( const RGBColor&          rStrokeColor,
                                             double                   nStrokeWidth,
                                             const SlideShowContext&  rContext,
-                                            const PolyPolygonVector& rPolygons,
+                                            const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolygons,
                                             bool                     bActive ) :
             mpHandler( new PaintOverlayHandler( rStrokeColor,
                                                 nStrokeWidth,
@@ -468,7 +468,7 @@ namespace slideshow
             mrMultiplexer.addUserPaintHandler(mpHandler);
         }
 
-        PolyPolygonVector UserPaintOverlay::getPolygons()
+        std::vector< cppcanvas::PolyPolygonSharedPtr> UserPaintOverlay::getPolygons()
         {
             return mpHandler->getPolygons();
         }

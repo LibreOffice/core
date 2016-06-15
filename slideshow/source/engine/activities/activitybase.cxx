@@ -88,8 +88,8 @@ namespace slideshow
             return mbIsActive;
         }
 
-        void ActivityBase::setTargets( const AnimatableShapeSharedPtr&      rShape,
-                                       const ShapeAttributeLayerSharedPtr&  rAttrLayer )
+        void ActivityBase::setTargets( const std::shared_ptr< AnimatableShape >&        rShape,
+                                       const std::shared_ptr< ShapeAttributeLayer >&    rAttrLayer )
         {
             ENSURE_OR_THROW( rShape,
                               "ActivityBase::setTargets(): Invalid shape" );

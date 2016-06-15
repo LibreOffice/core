@@ -232,7 +232,7 @@ namespace slideshow
         }
 
         DrawShapeSubsetting::DrawShapeSubsetting( const DocTreeNode&            rShapeSubset,
-                                                  const GDIMetaFileSharedPtr&   rMtf ) :
+                                                  const std::shared_ptr< GDIMetaFile >& rMtf ) :
             maActionClassVector(),
             mpMtf( rMtf ),
             maSubset( rShapeSubset ),
@@ -282,7 +282,7 @@ namespace slideshow
             return maSubset;
         }
 
-        AttributableShapeSharedPtr DrawShapeSubsetting::getSubsetShape( const DocTreeNode& rTreeNode ) const
+        std::shared_ptr< AttributableShape > DrawShapeSubsetting::getSubsetShape( const DocTreeNode& rTreeNode ) const
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::getSubsetShape()" );
 
@@ -299,10 +299,10 @@ namespace slideshow
                 return aIter->mpShape;
             }
 
-            return AttributableShapeSharedPtr();
+            return std::shared_ptr< AttributableShape >();
         }
 
-        void DrawShapeSubsetting::addSubsetShape( const AttributableShapeSharedPtr& rShape )
+        void DrawShapeSubsetting::addSubsetShape( const std::shared_ptr< AttributableShape >& rShape )
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::addSubsetShape()" );
 
@@ -336,7 +336,7 @@ namespace slideshow
             }
         }
 
-        bool DrawShapeSubsetting::revokeSubsetShape( const AttributableShapeSharedPtr& rShape )
+        bool DrawShapeSubsetting::revokeSubsetShape( const std::shared_ptr< AttributableShape >& rShape )
         {
             SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::revokeSubsetShape()" );
 
@@ -425,8 +425,8 @@ namespace slideshow
                 <pre>
                 bool operator()( IndexClassificator                              eCurrElemClassification
                                  sal_Int32                                       nCurrElemCount,
-                                 const IndexClassificatorVector::const_iterator& rCurrElemBegin,
-                                 const IndexClassificatorVector::const_iterator& rCurrElemEnd );
+                                 const std::vector< IndexClassificator >::const_iterator& rCurrElemBegin,
+                                 const std::vector< IndexClassificator >::const_iterator& rCurrElemEnd );
                 </pre>
                 If the functor returns false, iteration over the
                 shapes is immediately stopped.
@@ -444,8 +444,8 @@ namespace slideshow
              */
             template< typename FunctorT > void iterateActionClassifications(
                 FunctorT&                                                            io_rFunctor,
-                const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,
-                const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd )
+                const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rBegin,
+                const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rEnd )
             {
                 sal_Int32 nCurrShapeCount( 0 );
                 sal_Int32 nCurrParaCount( 0 );
@@ -454,15 +454,15 @@ namespace slideshow
                 sal_Int32 nCurrWordCount( 0 );
                 sal_Int32 nCurrCharCount( 0 );
 
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastShapeStart(rBegin);
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastParaStart(rBegin);
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastLineStart(rBegin);
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastSentenceStart(rBegin);
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastWordStart(rBegin);
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastCharStart(rBegin);
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aLastShapeStart(rBegin);
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aLastParaStart(rBegin);
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aLastLineStart(rBegin);
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aLastSentenceStart(rBegin);
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aLastWordStart(rBegin);
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aLastCharStart(rBegin);
 
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator aNext;
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator aCurr( rBegin );
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aNext;
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aCurr( rBegin );
                 while( aCurr != rEnd )
                 {
                     // aNext will hold an iterator to the next element
@@ -630,8 +630,8 @@ namespace slideshow
 
                 bool operator()( DrawShapeSubsetting::IndexClassificator                                eCurrElemClassification,
                                  sal_Int32                                                              /*nCurrElemCount*/,
-                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&   /*rCurrElemBegin*/,
-                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&   /*rCurrElemEnd*/ )
+                                 const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& /*rCurrElemBegin*/,
+                                 const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& /*rCurrElemEnd*/ )
                 {
                     if( eCurrElemClassification == meClass )
                         ++mnCurrCount;
@@ -650,8 +650,8 @@ namespace slideshow
             };
         }
 
-        sal_Int32 DrawShapeSubsetting::implGetNumberOfTreeNodes( const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,
-                                                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd,
+        sal_Int32 DrawShapeSubsetting::implGetNumberOfTreeNodes( const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rBegin,
+                                                                 const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rEnd,
                                                                  DocTreeNode::NodeType                                                eNodeType )
         {
             const IndexClassificator eRequestedClass(
@@ -690,8 +690,8 @@ namespace slideshow
             {
             public:
                 FindNthElementFunctor( sal_Int32                                                      nNodeIndex,
-                                       DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rLastBegin,
-                                       DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rLastEnd,
+                                       std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rLastBegin,
+                                       std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rLastEnd,
                                        DrawShapeSubsetting::IndexClassificator                        eClass ) :
                     mnNodeIndex( nNodeIndex ),
                     mrLastBegin( rLastBegin ),
@@ -702,8 +702,8 @@ namespace slideshow
 
                 bool operator()( DrawShapeSubsetting::IndexClassificator                                eCurrElemClassification,
                                  sal_Int32                                                              nCurrElemCount,
-                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&   rCurrElemBegin,
-                                 const DrawShapeSubsetting::IndexClassificatorVector::const_iterator&   rCurrElemEnd )
+                                 const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rCurrElemBegin,
+                                 const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rCurrElemEnd )
                 {
                     if( eCurrElemClassification == meClass &&
                         nCurrElemCount == mnNodeIndex )
@@ -721,14 +721,14 @@ namespace slideshow
 
             private:
                 sal_Int32                                                       mnNodeIndex;
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator&  mrLastBegin;
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator&  mrLastEnd;
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& mrLastBegin;
+                std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& mrLastEnd;
                 DrawShapeSubsetting::IndexClassificator                         meClass;
             };
 
-            DocTreeNode makeTreeNode( const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,
-                                      const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rStart,
-                                      const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd,
+            DocTreeNode makeTreeNode( const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rBegin,
+                                      const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rStart,
+                                      const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator& rEnd,
                                       DocTreeNode::NodeType                                                eNodeType )
             {
                 return DocTreeNode( ::std::distance(rBegin,
@@ -739,16 +739,16 @@ namespace slideshow
             }
         }
 
-        DocTreeNode DrawShapeSubsetting::implGetTreeNode( const IndexClassificatorVector::const_iterator&   rBegin,
-                                                          const IndexClassificatorVector::const_iterator&   rEnd,
+        DocTreeNode DrawShapeSubsetting::implGetTreeNode( const std::vector< IndexClassificator >::const_iterator& rBegin,
+                                                          const std::vector< IndexClassificator >::const_iterator& rEnd,
                                                           sal_Int32                                         nNodeIndex,
                                                           DocTreeNode::NodeType                             eNodeType ) const
         {
             const IndexClassificator eRequestedClass(
                 mapDocTreeNode( eNodeType ) );
 
-            DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastBegin(rEnd);
-            DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastEnd(rEnd);
+            std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aLastBegin(rEnd);
+            std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aLastEnd(rEnd);
 
             // create a nth element functor for the requested class of
             // actions, and nNodeIndex as the target index
@@ -782,9 +782,9 @@ namespace slideshow
             ensureInitializedNodeTree();
 
             // convert from vector indices to vector iterators
-            const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aBegin( maActionClassVector.begin() );
-            const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aParentBegin( aBegin + rParentNode.getStartIndex() );
-            const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aParentEnd( aBegin + rParentNode.getEndIndex() );
+            const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aBegin( maActionClassVector.begin() );
+            const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aParentBegin( aBegin + rParentNode.getStartIndex() );
+            const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aParentEnd( aBegin + rParentNode.getEndIndex() );
 
             return implGetNumberOfTreeNodes( aParentBegin,
                                              aParentEnd,
@@ -798,9 +798,9 @@ namespace slideshow
             ensureInitializedNodeTree();
 
             // convert from vector indices to vector iterators
-            const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aBegin( maActionClassVector.begin() );
-            const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aParentBegin( aBegin + rParentNode.getStartIndex() );
-            const DrawShapeSubsetting::IndexClassificatorVector::const_iterator aParentEnd( aBegin + rParentNode.getEndIndex() );
+            const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aBegin( maActionClassVector.begin() );
+            const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aParentBegin( aBegin + rParentNode.getStartIndex() );
+            const std::vector< DrawShapeSubsetting::IndexClassificator >::const_iterator aParentEnd( aBegin + rParentNode.getEndIndex() );
 
             return implGetTreeNode( aParentBegin,
                                     aParentEnd,

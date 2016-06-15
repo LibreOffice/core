@@ -30,10 +30,9 @@ namespace slideshow
 {
     namespace internal
     {
-        // forward declaration necessary, because methods use AttributableShapeSharedPtr
+        // forward declaration necessary, because methods use std::shared_ptr< AttributableShape >
         class AttributableShape;
 
-        typedef ::std::shared_ptr< AttributableShape > AttributableShapeSharedPtr;
 
         /** Represents an animatable shape, that can have its
             attributes changed.
@@ -71,7 +70,7 @@ namespace slideshow
 
                 @return the new layer
              */
-            virtual ShapeAttributeLayerSharedPtr createAttributeLayer() = 0;
+            virtual std::shared_ptr< ShapeAttributeLayer > createAttributeLayer() = 0;
 
             /** Revoke a previously generated attribute layer.
 
@@ -88,7 +87,7 @@ namespace slideshow
                 otherwise (e.g. if the given layer was not generated
                 for this shape).
              */
-            virtual bool revokeAttributeLayer( const ShapeAttributeLayerSharedPtr& rLayer ) = 0;
+            virtual bool revokeAttributeLayer( const std::shared_ptr< ShapeAttributeLayer >& rLayer ) = 0;
 
             /** Get the topmost shape attribute layer (if any).
 
@@ -108,7 +107,7 @@ namespace slideshow
 
                 @return the topmost layer
              */
-            virtual ShapeAttributeLayerSharedPtr getTopmostAttributeLayer() const = 0;
+            virtual std::shared_ptr< ShapeAttributeLayer > getTopmostAttributeLayer() const = 0;
 
 
             /** Change default shape visibility
@@ -161,7 +160,7 @@ namespace slideshow
                 @return a NULL Shape pointer, if no subset exists for
                 the given DocTreeNode.
             */
-            virtual AttributableShapeSharedPtr getSubset( const DocTreeNode& rTreeNode ) const = 0;
+            virtual std::shared_ptr< AttributableShape > getSubset( const DocTreeNode& rTreeNode ) const = 0;
 
             /** Create a subset Shape
 
@@ -194,7 +193,7 @@ namespace slideshow
                 @return true, if the shape was newly created, and
                 false, if an already existing subset is returned.
             */
-            virtual bool createSubset( AttributableShapeSharedPtr&  o_rSubset,
+            virtual bool createSubset( std::shared_ptr< AttributableShape >& o_rSubset,
                                        const DocTreeNode&           rTreeNode ) = 0;
 
             /** Revoke a previously generated shape subset.
@@ -212,7 +211,7 @@ namespace slideshow
                 @return true, if the last client called
                 revokeSubset().
              */
-            virtual bool revokeSubset( const AttributableShapeSharedPtr& rShape ) = 0;
+            virtual bool revokeSubset( const std::shared_ptr< AttributableShape >& rShape ) = 0;
         };
     }
 }

@@ -45,7 +45,7 @@ namespace slideshow
 namespace internal
 {
     typedef std::vector<
-        std::pair<UnoViewSharedPtr,bool> > UpdateRequestVector;
+        std::pair<std::shared_ptr< UnoView >,bool> > UpdateRequestVector;
 
     struct ScreenUpdater::ImplScreenUpdater
     {
@@ -53,8 +53,8 @@ namespace internal
             updates
         */
         ThreadUnsafeListenerContainer<
-            ViewUpdateSharedPtr,
-            std::vector<ViewUpdateSharedPtr> > maUpdaters;
+            std::shared_ptr< ViewUpdate >,
+            std::vector<std::shared_ptr< ViewUpdate >> > maUpdaters;
 
         /// Views that have been notified for update
         UpdateRequestVector                    maViewUpdateRequests;
@@ -96,7 +96,7 @@ namespace internal
         mpImpl->mbUpdateAllRequest = true;
     }
 
-    void ScreenUpdater::notifyUpdate( const UnoViewSharedPtr& rView,
+    void ScreenUpdater::notifyUpdate( const std::shared_ptr< UnoView >& rView,
                                       bool                    bViewClobbered )
     {
         mpImpl->maViewUpdateRequests.push_back(
@@ -152,9 +152,9 @@ namespace internal
             {
                 // TODO(P1): this is O(n^2) in the number of views, if
                 // lots of views notify updates.
-                const UnoViewVector::const_iterator aEndOfViews(
+                const std::vector< std::shared_ptr< UnoView > >::const_iterator aEndOfViews(
                     mpImpl->mrViewContainer.end() );
-                UnoViewVector::const_iterator aFoundView;
+                std::vector< std::shared_ptr< UnoView > >::const_iterator aFoundView;
                 if( (aFoundView=std::find(mpImpl->mrViewContainer.begin(),
                                           aEndOfViews,
                                           rViewUpdateRequest.first)) != aEndOfViews )
@@ -173,12 +173,12 @@ namespace internal
         UpdateRequestVector().swap( mpImpl->maViewUpdateRequests );
     }
 
-    void ScreenUpdater::addViewUpdate( ViewUpdateSharedPtr const& rViewUpdate )
+    void ScreenUpdater::addViewUpdate( std::shared_ptr< ViewUpdate > const& rViewUpdate )
     {
         mpImpl->maUpdaters.add( rViewUpdate );
     }
 
-    void ScreenUpdater::removeViewUpdate( ViewUpdateSharedPtr const& rViewUpdate )
+    void ScreenUpdater::removeViewUpdate( std::shared_ptr< ViewUpdate > const& rViewUpdate )
     {
         mpImpl->maUpdaters.remove( rViewUpdate );
     }

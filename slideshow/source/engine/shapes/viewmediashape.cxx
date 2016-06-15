@@ -71,7 +71,7 @@ namespace slideshow
 {
     namespace internal
     {
-        ViewMediaShape::ViewMediaShape( const ViewLayerSharedPtr&                       rViewLayer,
+        ViewMediaShape::ViewMediaShape( const std::shared_ptr< ViewLayer >&             rViewLayer,
                                         const uno::Reference< drawing::XShape >&        rxShape,
                                         const uno::Reference< uno::XComponentContext >& rxContext ) :
             mpViewLayer( rViewLayer ),
@@ -89,7 +89,7 @@ namespace slideshow
             ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewMediaShape::ViewMediaShape(): Invalid ViewLayer canvas" );
             ENSURE_OR_THROW( mxComponentContext.is(), "ViewMediaShape::ViewMediaShape(): Invalid component context" );
 
-            UnoViewSharedPtr xUnoView(std::dynamic_pointer_cast<UnoView>(rViewLayer));
+            std::shared_ptr< UnoView > xUnoView(std::dynamic_pointer_cast<UnoView>(rViewLayer));
             if (xUnoView)
             {
                 mbIsSoundEnabled = xUnoView->isSoundEnabled();
@@ -113,7 +113,7 @@ namespace slideshow
         }
 
 
-        const ViewLayerSharedPtr& ViewMediaShape::getViewLayer() const
+        const std::shared_ptr< ViewLayer >& ViewMediaShape::getViewLayer() const
         {
             return mpViewLayer;
         }

@@ -35,8 +35,8 @@ using namespace ::com::sun::star;
 namespace std
 {
     // add operator!= for weak_ptr
-    inline bool operator!=( slideshow::internal::LayerWeakPtr const& rLHS,
-                            slideshow::internal::LayerWeakPtr const& rRHS )
+    inline bool operator!=( std::weak_ptr< slideshow::internal::Layer > const& rLHS,
+                            std::weak_ptr< slideshow::internal::Layer > const& rRHS )
     {
         return rLHS.lock().get() != rRHS.lock().get();
     }
@@ -51,11 +51,11 @@ namespace slideshow
                      LayerFunc layerFunc,
                      ShapeFunc shapeFunc )
         {
-            LayerSharedPtr                      pCurrLayer;
-            ViewLayerSharedPtr                  pCurrViewLayer;
+            std::shared_ptr< Layer >            pCurrLayer;
+            std::shared_ptr< ViewLayer >        pCurrViewLayer;
             for( const auto& rShape : maAllShapes )
             {
-                LayerSharedPtr pLayer = rShape.second.lock();
+                std::shared_ptr< Layer > pLayer = rShape.second.lock();
                 if( pLayer && pLayer != pCurrLayer )
                 {
                     pCurrLayer = pLayer;
@@ -137,7 +137,7 @@ namespace slideshow
             OSL_ASSERT( maLayers.size() == 1 && maLayers.front()->isBackgroundLayer() );
         }
 
-        void LayerManager::viewAdded( const UnoViewSharedPtr& rView )
+        void LayerManager::viewAdded( const std::shared_ptr< UnoView >& rView )
         {
             // view must be member of mrViews container
             OSL_ASSERT( std::find(mrViews.begin(),
@@ -150,9 +150,9 @@ namespace slideshow
 
             // add View to all registered shapes
             manageViews(
-                [&rView]( const LayerSharedPtr& pLayer )
+                [&rView]( const std::shared_ptr< Layer >& pLayer )
                 { return pLayer->addView( rView ); },
-                []( const ShapeSharedPtr& pShape, const ViewLayerSharedPtr& pLayer )
+                []( const ShapeSharedPtr& pShape, const std::shared_ptr< ViewLayer >& pLayer )
                 { return pShape->addViewLayer( pLayer, true ); } );
 
             // in case we haven't reached all layers from the
@@ -161,7 +161,7 @@ namespace slideshow
                 pLayer->addView( rView );
         }
 
-        void LayerManager::viewRemoved( const UnoViewSharedPtr& rView )
+        void LayerManager::viewRemoved( const std::shared_ptr< UnoView >& rView )
         {
             // view must not be member of mrViews container anymore
             OSL_ASSERT( std::find(mrViews.begin(),
@@ -170,9 +170,9 @@ namespace slideshow
 
             // remove View from all registered shapes
             manageViews(
-                [&rView]( const LayerSharedPtr& pLayer )
+                [&rView]( const std::shared_ptr< Layer >& pLayer )
                 { return pLayer->removeView( rView ); },
-                []( const ShapeSharedPtr& pShape, const ViewLayerSharedPtr& pLayer )
+                []( const ShapeSharedPtr& pShape, const std::shared_ptr< ViewLayer >& pLayer )
                 { return pShape->removeViewLayer( pLayer ); } );
 
             // in case we haven't reached all layers from the
@@ -181,7 +181,7 @@ namespace slideshow
                 pLayer->removeView( rView );
         }
 
-        void LayerManager::viewChanged( const UnoViewSharedPtr& rView )
+        void LayerManager::viewChanged( const std::shared_ptr< UnoView >& rView )
         {
             (void)rView;
 
@@ -230,7 +230,7 @@ namespace slideshow
 
         void LayerManager::putShape2BackgroundLayer( LayerShapeMap::value_type& rShapeEntry )
         {
-            LayerSharedPtr& rBgLayer( maLayers.front() );
+            std::shared_ptr< Layer >& rBgLayer( maLayers.front() );
             rBgLayer->setShapeViews(rShapeEntry.first);
             rShapeEntry.second = rBgLayer;
         }
@@ -240,7 +240,7 @@ namespace slideshow
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::implAddShape(): invalid Shape" );
 
-            LayerShapeMap::value_type aValue (rShape, LayerWeakPtr());
+            LayerShapeMap::value_type aValue (rShape, std::weak_ptr< Layer >());
 
             OSL_ASSERT( maAllShapes.find(rShape) == maAllShapes.end() ); // shape must not be added already
             mbLayerAssociationDirty = true;
@@ -277,7 +277,7 @@ namespace slideshow
                 (rShape->isVisible() &&
                  !rShape->isBackgroundDetached()) )
             {
-                LayerSharedPtr pLayer = aShapeEntry->second.lock();
+                std::shared_ptr< Layer > pLayer = aShapeEntry->second.lock();
                 if( pLayer )
                 {
                     // store area early, once the shape is removed from
@@ -304,12 +304,12 @@ namespace slideshow
             return aIter->second;
         }
 
-        AttributableShapeSharedPtr LayerManager::getSubsetShape( const AttributableShapeSharedPtr&  rOrigShape,
+        std::shared_ptr< AttributableShape > LayerManager::getSubsetShape( const std::shared_ptr< AttributableShape >& rOrigShape,
                                                                  const DocTreeNode&                 rTreeNode )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
 
-            AttributableShapeSharedPtr pSubset;
+            std::shared_ptr< AttributableShape > pSubset;
 
             // shape already added?
             if( rOrigShape->createSubset( pSubset,
@@ -335,8 +335,8 @@ namespace slideshow
             return pSubset;
         }
 
-        void LayerManager::revokeSubset( const AttributableShapeSharedPtr& rOrigShape,
-                                         const AttributableShapeSharedPtr& rSubsetShape )
+        void LayerManager::revokeSubset( const std::shared_ptr< AttributableShape >& rOrigShape,
+                                         const std::shared_ptr< AttributableShape >& rSubsetShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
 
@@ -353,7 +353,7 @@ namespace slideshow
             }
         }
 
-        void LayerManager::enterAnimationMode( const AnimatableShapeSharedPtr& rShape )
+        void LayerManager::enterAnimationMode( const std::shared_ptr< AnimatableShape >& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::enterAnimationMode(): invalid Shape" );
@@ -383,7 +383,7 @@ namespace slideshow
             // between two frames, returning to the original state.
         }
 
-        void LayerManager::leaveAnimationMode( const AnimatableShapeSharedPtr& rShape )
+        void LayerManager::leaveAnimationMode( const std::shared_ptr< AnimatableShape >& rShape )
         {
             ENSURE_OR_THROW( !maLayers.empty(), "LayerManager::leaveAnimationMode(): no layers" );
             ENSURE_OR_THROW( rShape, "LayerManager::leaveAnimationMode(): invalid Shape" );
@@ -496,11 +496,11 @@ namespace slideshow
             // update each shape on each layer, that has
             // isUpdatePending()
             bool                                bIsCurrLayerUpdating(false);
-            Layer::EndUpdater                   aEndUpdater;
-            LayerSharedPtr                      pCurrLayer;
+            std::shared_ptr<LayerEndUpdate>     aEndUpdater;
+            std::shared_ptr< Layer >            pCurrLayer;
             for( const auto& rShape : maAllShapes )
             {
-                LayerSharedPtr pLayer = rShape.second.lock();
+                std::shared_ptr< Layer > pLayer = rShape.second.lock();
                 if( pLayer != pCurrLayer )
                 {
                     pCurrLayer = pLayer;
@@ -603,7 +603,7 @@ namespace slideshow
         bool LayerManager::renderTo( const ::cppcanvas::CanvasSharedPtr& rTargetCanvas ) const
         {
             bool bRet( true );
-            ViewLayerSharedPtr pTmpLayer( new DummyLayer( rTargetCanvas ) );
+            std::shared_ptr< ViewLayer > pTmpLayer( new DummyLayer( rTargetCanvas ) );
 
             for( const auto& rShape : maAllShapes )
             {
@@ -646,7 +646,7 @@ namespace slideshow
             if( aShapeEntry == maAllShapes.end() )
                 return;
 
-            LayerSharedPtr pLayer = aShapeEntry->second.lock();
+            std::shared_ptr< Layer > pLayer = aShapeEntry->second.lock();
             if( pLayer )
                 pLayer->addUpdateRange( rShape->getUpdateArea() );
         }
@@ -658,7 +658,7 @@ namespace slideshow
             const bool bLayerExists( maLayers.size() > nCurrLayerIndex );
             if( bLayerExists )
             {
-                const LayerSharedPtr& rLayer( maLayers.at(nCurrLayerIndex) );
+                const std::shared_ptr< Layer >& rLayer( maLayers.at(nCurrLayerIndex) );
                 const bool bLayerResized( rLayer->commitBounds() );
                 rLayer->setPriority( basegfx::B1DRange(nCurrLayerIndex,
                                                        nCurrLayerIndex+1) );
@@ -680,11 +680,11 @@ namespace slideshow
             }
         }
 
-        LayerSharedPtr LayerManager::createForegroundLayer() const
+        std::shared_ptr< Layer > LayerManager::createForegroundLayer() const
         {
             OSL_ASSERT( mbActive );
 
-            LayerSharedPtr pLayer( Layer::createLayer() );
+            std::shared_ptr< Layer > pLayer( Layer::createLayer() );
 
             // create ViewLayers for all registered views, and add to
             // newly created layer.
@@ -719,7 +719,7 @@ namespace slideshow
 
             // to avoid tons of temporaries, create weak_ptr to Layers
             // beforehand
-            std::vector< LayerWeakPtr > aWeakLayers(maLayers.size());
+            std::vector< std::weak_ptr< Layer > > aWeakLayers(maLayers.size());
             std::copy(maLayers.begin(),maLayers.end(),aWeakLayers.begin());
 
             std::size_t                   nCurrLayerIndex(0);
@@ -766,8 +766,8 @@ namespace slideshow
 
                 // note: using indices here, since vector::insert
                 // above invalidates iterators
-                LayerSharedPtr& rCurrLayer( maLayers.at(nCurrLayerIndex) );
-                LayerWeakPtr& rCurrWeakLayer( aWeakLayers.at(nCurrLayerIndex) );
+                std::shared_ptr< Layer >& rCurrLayer( maLayers.at(nCurrLayerIndex) );
+                std::weak_ptr< Layer >& rCurrWeakLayer( aWeakLayers.at(nCurrLayerIndex) );
                 if( rCurrWeakLayer != aCurrShapeEntry->second )
                 {
                     // mismatch: shape is not contained in current
@@ -779,7 +779,7 @@ namespace slideshow
                     // non-sprite shape
                     if( !bThisIsBackgroundDetached && pCurrShape->isVisible() )
                     {
-                        LayerSharedPtr pOldLayer( aCurrShapeEntry->second.lock() );
+                        std::shared_ptr< Layer > pOldLayer( aCurrShapeEntry->second.lock() );
                         if( pOldLayer )
                         {
                             // old layer still valid? then we need to

@@ -55,13 +55,13 @@ namespace slideshow
             Vector of timeout values, to wait before the next
             frame is shown.
         */
-        ActivitySharedPtr createIntrinsicAnimationActivity(
-            const SlideShowContext&         rContext,
-            const DrawShapeSharedPtr&       rDrawShape,
-            const WakeupEventSharedPtr&     rWakeupEvent,
-            const ::std::vector<double>&    rTimeouts,
-            ::std::size_t                   nNumLoops,
-            CycleMode                       eCycleMode );
+        std::shared_ptr< Activity > createIntrinsicAnimationActivity(
+            const SlideShowContext&                 rContext,
+            const std::shared_ptr< DrawShape >&     rDrawShape,
+            const std::shared_ptr< WakeupEvent >&   rWakeupEvent,
+            const ::std::vector<double>&            rTimeouts,
+            ::std::size_t                           nNumLoops,
+            CycleMode                               eCycleMode );
     }
 }
 

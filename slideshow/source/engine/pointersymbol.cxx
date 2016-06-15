@@ -40,12 +40,12 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
-PointerSymbolSharedPtr PointerSymbol::create( const uno::Reference<rendering::XBitmap>& xBitmap,
+std::shared_ptr<class PointerSymbol> PointerSymbol::create( const uno::Reference<rendering::XBitmap>& xBitmap,
                                               ScreenUpdater&                            rScreenUpdater,
                                               EventMultiplexer&                         rEventMultiplexer,
                                               const UnoViewContainer&                   rViewContainer )
 {
-    PointerSymbolSharedPtr pRet(
+    std::shared_ptr<class PointerSymbol> pRet(
         new PointerSymbol( xBitmap,
                            rScreenUpdater,
                            rViewContainer ));
@@ -90,7 +90,7 @@ void PointerSymbol::setVisible( const bool bVisible )
     }
 }
 
-basegfx::B2DPoint PointerSymbol::calcSpritePos(UnoViewSharedPtr const & rView) const
+basegfx::B2DPoint PointerSymbol::calcSpritePos(std::shared_ptr< UnoView > const & rView) const
 {
     const awt::Rectangle aViewArea( rView->getUnoView()->getCanvasArea() );
     const geometry::IntegerSize2D realTranslationOffset ( rView->getTranslationOffset() );
@@ -100,7 +100,7 @@ basegfx::B2DPoint PointerSymbol::calcSpritePos(UnoViewSharedPtr const & rView) c
         realTranslationOffset.Height + ((aViewArea.Height - aViewArea.Y) - 2 * realTranslationOffset.Height) * maPos.Y);
 }
 
-void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
+void PointerSymbol::viewAdded( const std::shared_ptr< UnoView >& rView )
 {
     cppcanvas::CustomSpriteSharedPtr sprite;
 
@@ -133,7 +133,7 @@ void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
     maViews.push_back( ViewsVecT::value_type( rView, sprite ) );
 }
 
-void PointerSymbol::viewRemoved( const UnoViewSharedPtr& rView )
+void PointerSymbol::viewRemoved( const std::shared_ptr< UnoView >& rView )
 {
     maViews.erase(
         std::remove_if(
@@ -144,7 +144,7 @@ void PointerSymbol::viewRemoved( const UnoViewSharedPtr& rView )
         maViews.end() );
 }
 
-void PointerSymbol::viewChanged( const UnoViewSharedPtr& rView )
+void PointerSymbol::viewChanged( const std::shared_ptr< UnoView >& rView )
 {
     // find entry corresponding to modified view
     ViewsVecT::iterator aModifiedEntry(

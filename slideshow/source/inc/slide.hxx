@@ -53,7 +53,6 @@ namespace slideshow
     {
         class RGBColor;
         class ScreenUpdater;
-        typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
         class Slide
         {
         public:
@@ -106,7 +105,7 @@ namespace slideshow
             virtual css::uno::Reference< css::animations::XAnimationNode > getXAnimationNode() const = 0;
 
             ///Gets the slide Polygons
-            virtual PolyPolygonVector getPolygons() = 0;
+            virtual std::vector< cppcanvas::PolyPolygonSharedPtr> getPolygons() = 0;
 
             ///Draw the slide Polygons
             virtual void drawPolygons() const = 0;
@@ -142,14 +141,13 @@ namespace slideshow
                 that the view must have been added to this slide
                 before via viewAdded().
              */
-            virtual SlideBitmapSharedPtr
-                getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const = 0;
+            virtual std::shared_ptr< SlideBitmap >
+                getCurrentSlideBitmap( const std::shared_ptr< UnoView >& rView ) const = 0;
 
         protected:
             ~Slide() {}
         };
 
-        typedef ::std::shared_ptr< Slide > SlideSharedPtr;
 
         class EventQueue;
         class CursorManager;
@@ -186,7 +184,7 @@ namespace slideshow
             @param rUserEventQueue
             UserEeventQueue
         */
-        SlideSharedPtr createSlide( const css::uno::Reference< css::drawing::XDrawPage >&          xDrawPage,
+        std::shared_ptr< Slide > createSlide( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
                                     const css::uno::Reference< css::drawing::XDrawPagesSupplier >& xDrawPages,
                                     const css::uno::Reference< css::animations::XAnimationNode >&  xRootNode,
                                     EventQueue&                                         rEventQueue,
@@ -199,7 +197,7 @@ namespace slideshow
                                     const css::uno::Reference< css::uno::XComponentContext >&      xContext,
                                     const ShapeEventListenerMap&                        rShapeListenerMap,
                                     const ShapeCursorMap&                               rShapeCursorMap,
-                                    const PolyPolygonVector&                            rPolyPolygonVector,
+                                    const std::vector< cppcanvas::PolyPolygonSharedPtr>& rPolyPolygonVector,
                                     RGBColor const&                                     aUserPaintColor,
                                     double                                              dUserPaintStrokeWidth,
                                     bool                                                bUserPaintEnabled,

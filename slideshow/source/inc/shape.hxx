@@ -84,8 +84,8 @@ namespace slideshow
                 @param bRedrawLayer
                 Redraw shape on given layer
              */
-            virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
-                                       bool                         bRedrawLayer ) = 0;
+            virtual void addViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer,
+                                       bool                                bRedrawLayer ) = 0;
 
             /** Withdraw the shape from a view layer
 
@@ -94,7 +94,7 @@ namespace slideshow
 
                 @return true, if the shape was successfully removed
              */
-            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) = 0;
+            virtual bool removeViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer ) = 0;
 
             /** Withdraw all view layers at once
 

@@ -55,8 +55,8 @@ namespace slideshow
                 Bounds of the background shape, in document coordinate
                 system.
              */
-            ViewBackgroundShape( const ViewLayerSharedPtr&      rViewLayer,
-                                 const ::basegfx::B2DRectangle& rShapeBounds );
+            ViewBackgroundShape( const std::shared_ptr< ViewLayer >& rViewLayer,
+                                 const ::basegfx::B2DRectangle&      rShapeBounds );
             /// Forbid copy construction
             ViewBackgroundShape(const ViewBackgroundShape&) = delete;
             /// Forbid copy assignment
@@ -64,25 +64,25 @@ namespace slideshow
 
             /** Query the associated view layer of this shape
              */
-            const ViewLayerSharedPtr& getViewLayer() const;
+            const std::shared_ptr< ViewLayer >& getViewLayer() const;
 
-            bool render( const GDIMetaFileSharedPtr& rMtf ) const;
+            bool render( const std::shared_ptr< GDIMetaFile >& rMtf ) const;
 
         private:
             /** Prefetch bitmap for given canvas
              */
-            bool prefetch( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                           const GDIMetaFileSharedPtr&          rMtf ) const;
+            bool prefetch( const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
+                           const std::shared_ptr< GDIMetaFile >& rMtf ) const;
 
             /** The view layer this object is part of.
              */
-            ViewLayerSharedPtr                                  mpViewLayer;
+            std::shared_ptr< ViewLayer >                        mpViewLayer;
 
             /// Generated content bitmap, already with correct output size
             mutable css::uno::Reference< css::rendering::XBitmap >  mxBitmap;
 
             /// The last metafile a render object was generated for
-            mutable GDIMetaFileSharedPtr                        mpLastMtf;
+            mutable std::shared_ptr< GDIMetaFile >              mpLastMtf;
 
             /// The canvas, mpRenderer is associated with
             mutable ::basegfx::B2DHomMatrix                     maLastTransformation;
@@ -90,7 +90,6 @@ namespace slideshow
             const ::basegfx::B2DRectangle                       maBounds;
         };
 
-        typedef ::std::shared_ptr< ViewBackgroundShape > ViewBackgroundShapeSharedPtr;
 
     }
 }

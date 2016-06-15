@@ -77,9 +77,9 @@ namespace slideshow
             // View layer methods
 
 
-            virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
+            virtual void addViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer,
                                        bool                         bRedrawLayer ) override;
-            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) override;
+            virtual bool removeViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer ) override;
             virtual void clearAllViewLayers() override;
 
 
@@ -87,7 +87,7 @@ namespace slideshow
 
 
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const override;
-            virtual void implViewChanged( const UnoViewSharedPtr& rView ) override;
+            virtual void implViewChanged( const std::shared_ptr< UnoView >& rView ) override;
             virtual void implViewsChanged() override;
             virtual bool implStartIntrinsicAnimation() override;
             virtual bool implEndIntrinsicAnimation() override;
@@ -100,8 +100,7 @@ namespace slideshow
             const sal_Size                                  mnNumPropEntries;
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewAppletShapeSharedPtr > ViewAppletShapeVector;
-            ViewAppletShapeVector                           maViewAppletShapes;
+            std::vector< std::shared_ptr< ViewAppletShape > > maViewAppletShapes;
             bool                                             mbIsPlaying;
         };
 
@@ -121,7 +120,7 @@ namespace slideshow
         }
 
 
-        void AppletShape::implViewChanged( const UnoViewSharedPtr& rView )
+        void AppletShape::implViewChanged( const std::shared_ptr< UnoView >& rView )
         {
             const ::basegfx::B2DRectangle& rBounds = getBounds();
             // determine ViewAppletShape that needs update
@@ -142,7 +141,7 @@ namespace slideshow
         }
 
 
-        void AppletShape::addViewLayer( const ViewLayerSharedPtr& rNewLayer,
+        void AppletShape::addViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer,
                                         bool                      bRedrawLayer )
         {
             try
@@ -170,23 +169,23 @@ namespace slideshow
         }
 
 
-        bool AppletShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
+        bool AppletShape::removeViewLayer( const std::shared_ptr< ViewLayer >& rLayer )
         {
-            const ViewAppletShapeVector::iterator aEnd( maViewAppletShapes.end() );
+            const std::vector< std::shared_ptr< ViewAppletShape > >::iterator aEnd( maViewAppletShapes.end() );
 
             OSL_ENSURE( ::std::count_if(maViewAppletShapes.begin(),
                                         aEnd,
                                         [&rLayer]
-                                        ( const ViewAppletShapeSharedPtr& pShape )
+                                        ( const std::shared_ptr< ViewAppletShape >& pShape )
                                         { return rLayer == pShape->getViewLayer(); } ) < 2,
                         "AppletShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
-            ViewAppletShapeVector::iterator aIter;
+            std::vector< std::shared_ptr< ViewAppletShape > >::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewAppletShapes.begin(),
                                          aEnd,
                                          [&rLayer]
-                                         ( const ViewAppletShapeSharedPtr& pShape )
+                                         ( const std::shared_ptr< ViewAppletShape >& pShape )
                                          { return rLayer == pShape->getViewLayer(); } ) ) == aEnd )
             {
                 // view layer seemingly was not added, failed
@@ -212,9 +211,9 @@ namespace slideshow
             if( ::std::count_if( maViewAppletShapes.begin(),
                                  maViewAppletShapes.end(),
                                  [&rCurrBounds]
-                                 ( const ViewAppletShapeSharedPtr& pShape )
+                                 ( const std::shared_ptr< ViewAppletShape >& pShape )
                                  { return pShape->render( rCurrBounds ); } )
-                != static_cast<ViewAppletShapeVector::difference_type>(maViewAppletShapes.size()) )
+                != static_cast<std::vector< std::shared_ptr< ViewAppletShape > >::difference_type>(maViewAppletShapes.size()) )
             {
                 // at least one of the ViewShape::update() calls did return
                 // false - update failed on at least one ViewLayer

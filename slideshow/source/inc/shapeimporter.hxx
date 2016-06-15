@@ -35,10 +35,6 @@ namespace internal {
 
 struct SlideShowContext;
 
-typedef std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
-typedef std::shared_ptr< UnoView >      UnoViewSharedPtr;
-typedef std::vector< UnoViewSharedPtr >   UnoViewVector;
-
 /** This class imports all shapes from a given XShapes object
  */
 class ShapeImporter
@@ -90,7 +86,7 @@ public:
         importShape() call.
     */
     bool isImportDone() const;
-    const PolyPolygonVector& getPolygons();
+    const std::vector< cppcanvas::PolyPolygonSharedPtr>& getPolygons();
 
     double getImportedShapesCount() { return mnAscendingPrio; }
 private:
@@ -122,13 +118,12 @@ private:
             : mpGroupShape(), mxShapes(xShapes),
               mnCount(xShapes->getCount()), mnPos(0) {}
     };
-    typedef ::std::stack<XShapesEntry> XShapesStack;
 
     css::uno::Reference<css::drawing::XDrawPage> mxPage;
     css::uno::Reference<css::drawing::XDrawPagesSupplier> mxPagesSupplier;
     const SlideShowContext&                   mrContext;
-    PolyPolygonVector                         maPolygons;
-    XShapesStack                              maShapesStack;
+    std::vector< cppcanvas::PolyPolygonSharedPtr> maPolygons;
+    std::stack<XShapesEntry>                  maShapesStack;
     double                                    mnAscendingPrio;
     bool                                      mbConvertingMasterPage;
 };

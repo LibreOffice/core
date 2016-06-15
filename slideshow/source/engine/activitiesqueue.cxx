@@ -64,7 +64,7 @@ namespace slideshow
             }
         }
 
-        bool ActivitiesQueue::addActivity( const ActivitySharedPtr& pActivity )
+        bool ActivitiesQueue::addActivity( const std::shared_ptr< Activity >& pActivity )
         {
             OSL_ENSURE( pActivity, "ActivitiesQueue::addActivity: activity ptr NULL" );
 
@@ -83,9 +83,9 @@ namespace slideshow
 
             // accumulate time lag for all activities, and lag time
             // base if necessary:
-            ActivityQueue::const_iterator iPos(
+            std::deque< std::shared_ptr< Activity > >::const_iterator iPos(
                 maCurrentActivitiesWaiting.begin() );
-            const ActivityQueue::const_iterator iEnd(
+            const std::deque< std::shared_ptr< Activity > >::const_iterator iEnd(
                 maCurrentActivitiesWaiting.end() );
             double fLag = 0.0;
             for ( ; iPos != iEnd; ++iPos )
@@ -99,7 +99,7 @@ namespace slideshow
             while( !maCurrentActivitiesWaiting.empty() )
             {
                 // process topmost activity
-                ActivitySharedPtr pActivity( maCurrentActivitiesWaiting.front() );
+                std::shared_ptr< Activity > pActivity( maCurrentActivitiesWaiting.front() );
                 maCurrentActivitiesWaiting.pop_front();
 
                 bool bReinsert( false );
@@ -181,11 +181,11 @@ namespace slideshow
             // dequeue all entries:
             for( const auto& pActivity : maCurrentActivitiesWaiting )
                 pActivity->dequeued();
-            ActivityQueue().swap( maCurrentActivitiesWaiting );
+            std::deque< std::shared_ptr< Activity > >().swap( maCurrentActivitiesWaiting );
 
             for( const auto& pActivity : maCurrentActivitiesReinsert )
                 pActivity->dequeued();
-            ActivityQueue().swap( maCurrentActivitiesReinsert );
+            std::deque< std::shared_ptr< Activity > >().swap( maCurrentActivitiesReinsert );
         }
     }
 }

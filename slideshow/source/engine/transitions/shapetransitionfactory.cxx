@@ -53,20 +53,20 @@ class ClippingAnimation : public NumberAnimation
 {
 public:
     ClippingAnimation(
-        const ParametricPolyPolygonSharedPtr&   rPolygon,
-        const ShapeManagerSharedPtr&            rShapeManager,
-        const TransitionInfo&                   rTransitionInfo,
-        bool                                    bDirectionForward,
-        bool                                    bModeIn );
+        const std::shared_ptr< ParametricPolyPolygon >& rPolygon,
+        const std::shared_ptr< ShapeManager >&          rShapeManager,
+        const TransitionInfo&                           rTransitionInfo,
+        bool                                            bDirectionForward,
+        bool                                            bModeIn );
 
     virtual ~ClippingAnimation();
 
     // Animation interface
 
-    virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
-                           const ShapeAttributeLayerSharedPtr& rAttrLayer ) override;
-    virtual void start( const AnimatableShapeSharedPtr&     rShape,
-                        const ShapeAttributeLayerSharedPtr& rAttrLayer ) override;
+    virtual void prefetch( const std::shared_ptr< AnimatableShape >& rShape,
+                           const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override;
+    virtual void start( const std::shared_ptr< AnimatableShape >& rShape,
+                        const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer ) override;
     virtual void end() override;
 
     // NumberAnimation interface
@@ -77,19 +77,19 @@ public:
 private:
     void end_();
 
-    AnimatableShapeSharedPtr           mpShape;
-    ShapeAttributeLayerSharedPtr       mpAttrLayer;
-    ShapeManagerSharedPtr              mpShapeManager;
-    ClippingFunctor                    maClippingFunctor;
-    bool                               mbSpriteActive;
+    std::shared_ptr< AnimatableShape >      mpShape;
+    std::shared_ptr< ShapeAttributeLayer >  mpAttrLayer;
+    std::shared_ptr< ShapeManager >         mpShapeManager;
+    ClippingFunctor                         maClippingFunctor;
+    bool                                    mbSpriteActive;
 };
 
 ClippingAnimation::ClippingAnimation(
-    const ParametricPolyPolygonSharedPtr&   rPolygon,
-    const ShapeManagerSharedPtr&            rShapeManager,
-    const TransitionInfo&                   rTransitionInfo,
-    bool                                    bDirectionForward,
-    bool                                    bModeIn ) :
+    const std::shared_ptr< ParametricPolyPolygon >& rPolygon,
+    const std::shared_ptr< ShapeManager >&          rShapeManager,
+    const TransitionInfo&                           rTransitionInfo,
+    bool                                            bDirectionForward,
+    bool                                            bModeIn ) :
         mpShape(),
         mpAttrLayer(),
         mpShapeManager( rShapeManager ),
@@ -119,13 +119,13 @@ ClippingAnimation::~ClippingAnimation()
     }
 }
 
-void ClippingAnimation::prefetch( const AnimatableShapeSharedPtr&,
-                                  const ShapeAttributeLayerSharedPtr& )
+void ClippingAnimation::prefetch( const std::shared_ptr< AnimatableShape >&,
+                                  const std::shared_ptr< ShapeAttributeLayer >& )
 {
 }
 
-void ClippingAnimation::start( const AnimatableShapeSharedPtr&      rShape,
-                               const ShapeAttributeLayerSharedPtr&  rAttrLayer )
+void ClippingAnimation::start( const std::shared_ptr< AnimatableShape >&     rShape,
+                               const std::shared_ptr< ShapeAttributeLayer >& rAttrLayer )
 {
     OSL_ENSURE( !mpShape,
                 "ClippingAnimation::start(): Shape already set" );
@@ -191,14 +191,14 @@ double ClippingAnimation::getUnderlyingValue() const
                     // Permissible range for operator() above is [0,1]
 }
 
-AnimationActivitySharedPtr createShapeTransitionByType(
-    const ActivitiesFactory::CommonParameters&              rParms,
-    const AnimatableShapeSharedPtr&                         rShape,
-    const ShapeManagerSharedPtr&                            rShapeManager,
-    const ::basegfx::B2DVector&                             rSlideSize,
+std::shared_ptr< AnimationActivity > createShapeTransitionByType(
+    const ActivitiesFactory::CommonParameters&                       rParms,
+    const std::shared_ptr< AnimatableShape >&                        rShape,
+    const std::shared_ptr< ShapeManager >&                           rShapeManager,
+    const ::basegfx::B2DVector&                                      rSlideSize,
     css::uno::Reference< css::animations::XTransitionFilter > const& xTransition,
-    sal_Int16                                               nType,
-    sal_Int16                                               nSubType )
+    sal_Int16                                                        nType,
+    sal_Int16                                                        nSubType )
 {
     ENSURE_OR_THROW(
         xTransition.is(),
@@ -207,7 +207,7 @@ AnimationActivitySharedPtr createShapeTransitionByType(
     const TransitionInfo* pTransitionInfo(
         getTransitionInfo( nType, nSubType ) );
 
-    AnimationActivitySharedPtr pGeneratedActivity;
+    std::shared_ptr< AnimationActivity > pGeneratedActivity;
     if( pTransitionInfo != nullptr )
     {
         switch( pTransitionInfo->meTransitionClass )
@@ -216,20 +216,20 @@ AnimationActivitySharedPtr createShapeTransitionByType(
             case TransitionInfo::TRANSITION_INVALID:
                 OSL_FAIL( "createShapeTransitionByType(): Invalid transition type. "
                             "Don't ask me for a 0 TransitionType, have no XTransitionFilter node instead!" );
-                return AnimationActivitySharedPtr();
+                return std::shared_ptr< AnimationActivity >();
 
 
             case TransitionInfo::TRANSITION_CLIP_POLYPOLYGON:
             {
                 // generate parametric poly-polygon
-                ParametricPolyPolygonSharedPtr pPoly(
+                std::shared_ptr< ParametricPolyPolygon > pPoly(
                     ParametricPolyPolygonFactory::createClipPolyPolygon(
                         nType, nSubType ) );
 
                 // create a clip activity from that
                 pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                     rParms,
-                    NumberAnimationSharedPtr(
+                    std::shared_ptr< NumberAnimation >(
                         new ClippingAnimation(
                             pPoly,
                             rShapeManager,
@@ -304,7 +304,7 @@ AnimationActivitySharedPtr createShapeTransitionByType(
                         }
 
                         // generate parametric poly-polygon
-                        ParametricPolyPolygonSharedPtr pPoly(
+                        std::shared_ptr< ParametricPolyPolygon > pPoly(
                             ParametricPolyPolygonFactory::createClipPolyPolygon(
                                 animations::TransitionType::BARWIPE,
                                 nBarWipeSubType ) );
@@ -312,7 +312,7 @@ AnimationActivitySharedPtr createShapeTransitionByType(
                         // create a clip activity from that
                         pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                             rParms,
-                            NumberAnimationSharedPtr(
+                            std::shared_ptr< NumberAnimation >(
                                 new ClippingAnimation(
                                     pPoly,
                                     rShapeManager,
@@ -366,10 +366,10 @@ AnimationActivitySharedPtr createShapeTransitionByType(
 
 } // anon namespace
 
-AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
+std::shared_ptr< AnimationActivity > TransitionFactory::createShapeTransition(
     const ActivitiesFactory::CommonParameters&          rParms,
-    const AnimatableShapeSharedPtr&                     rShape,
-    const ShapeManagerSharedPtr&                        rShapeManager,
+    const std::shared_ptr< AnimatableShape >&           rShape,
+    const std::shared_ptr< ShapeManager >&              rShapeManager,
     const ::basegfx::B2DVector&                         rSlideSize,
     uno::Reference< animations::XTransitionFilter > const& xTransition )
 {

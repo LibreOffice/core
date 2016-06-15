@@ -59,7 +59,6 @@ namespace slideshow
         class Layer : public std::enable_shared_from_this<Layer>
         {
         public:
-            typedef std::shared_ptr<LayerEndUpdate> EndUpdater;
 
             /// Forbid copy construction
             Layer(const Layer&) = delete;
@@ -99,7 +98,7 @@ namespace slideshow
 
                 @return the newly generated ViewLayer for this View
              */
-            ViewLayerSharedPtr addView( const ViewSharedPtr& rNewView );
+            std::shared_ptr< ViewLayer > addView( const std::shared_ptr< View >& rNewView );
 
             /** Remove a view
 
@@ -109,7 +108,7 @@ namespace slideshow
                 @return the ViewLayer of the removed Layer, if
                 any. Otherwise, NULL is returned.
              */
-            ViewLayerSharedPtr removeView( const ViewSharedPtr& rView );
+            std::shared_ptr< ViewLayer > removeView( const std::shared_ptr< View >& rView );
 
             /** Init shape with this layer's views
 
@@ -182,12 +181,12 @@ namespace slideshow
 
                 This method initializes a full layer update of the
                 update area. When the last copy of the returned
-                EndUpdater is destroyed, the Layer leaves update mode
+                std::shared_ptr<LayerEndUpdate> is destroyed, the Layer leaves update mode
                 again.
 
                 @return a update end RAII object.
             */
-            EndUpdater beginUpdate();
+            std::shared_ptr<LayerEndUpdate> beginUpdate();
 
             /** Finish layer update
 
@@ -227,23 +226,22 @@ namespace slideshow
 
             struct ViewEntry
             {
-                ViewEntry( const ViewSharedPtr&      rView,
-                           const ViewLayerSharedPtr& rViewLayer ) :
+                ViewEntry( const std::shared_ptr< View >& rView,
+                           const std::shared_ptr< ViewLayer >& rViewLayer ) :
                     mpView( rView ),
                     mpViewLayer( rViewLayer )
                 {}
 
-                ViewSharedPtr      mpView;
-                ViewLayerSharedPtr mpViewLayer;
+                std::shared_ptr< View > mpView;
+                std::shared_ptr< ViewLayer > mpViewLayer;
 
                 // for generic algo access (which needs actual functions)
-                const ViewSharedPtr&      getView() const { return mpView; }
-                const ViewLayerSharedPtr& getViewLayer() const { return mpViewLayer; }
+                const std::shared_ptr< View >& getView() const { return mpView; }
+                const std::shared_ptr< ViewLayer >& getViewLayer() const { return mpViewLayer; }
             };
 
-            typedef ::std::vector< ViewEntry > ViewEntryVector;
 
-            ViewEntryVector            maViewEntries;
+            std::vector< ViewEntry >   maViewEntries;
             basegfx::B2DPolyRange      maUpdateAreas;
             basegfx::B2DRange          maBounds;
             basegfx::B2DRange          maNewBounds;
@@ -254,11 +252,6 @@ namespace slideshow
                                                           // background layer
             bool                       mbClipSet; // true, if beginUpdate set a clip
         };
-
-        typedef ::std::shared_ptr< Layer >    LayerSharedPtr;
-        typedef ::std::weak_ptr< Layer >      LayerWeakPtr;
-        typedef ::std::vector< LayerSharedPtr > LayerVector;
-
     }
 }
 

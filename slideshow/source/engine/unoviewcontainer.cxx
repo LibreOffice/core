@@ -37,7 +37,7 @@ namespace slideshow
         {
         }
 
-        bool UnoViewContainer::addView( const UnoViewSharedPtr& rView )
+        bool UnoViewContainer::addView( const std::shared_ptr< UnoView >& rView )
         {
             // check whether same view is already added
 
@@ -45,7 +45,7 @@ namespace slideshow
             // already added?
             if( ::std::any_of( maViews.begin(),
                                maViews.end(),
-                               [&rTmpView]( const UnoViewSharedPtr& pView )
+                               [&rTmpView]( const std::shared_ptr< UnoView >& pView )
                                { return rTmpView == pView->getUnoView(); } ) )
             {
                 // yes, nothing to do
@@ -58,31 +58,31 @@ namespace slideshow
             return true;
         }
 
-        UnoViewSharedPtr UnoViewContainer::removeView( const uno::Reference< presentation::XSlideShowView >& xView )
+        std::shared_ptr< UnoView > UnoViewContainer::removeView( const uno::Reference< presentation::XSlideShowView >& xView )
         {
             // check whether same view is already added
-            const UnoViewVector::iterator aEnd( maViews.end() );
-            UnoViewVector::iterator aIter;
+            const std::vector< std::shared_ptr< UnoView > >::iterator aEnd( maViews.end() );
+            std::vector< std::shared_ptr< UnoView > >::iterator aIter;
 
             // added in the first place?
             if( (aIter=::std::find_if( maViews.begin(),
                                        aEnd,
-                                       [&xView]( const UnoViewSharedPtr& pView )
+                                       [&xView]( const std::shared_ptr< UnoView >& pView )
                                        { return xView == pView->getUnoView(); } )) == aEnd )
             {
                 // nope, nothing to do
-                return UnoViewSharedPtr();
+                return std::shared_ptr< UnoView >();
             }
 
             OSL_ENSURE(
                 ::std::count_if(
                     maViews.begin(),
                     aEnd,
-                    [&xView]( const UnoViewSharedPtr& pView )
+                    [&xView]( const std::shared_ptr< UnoView >& pView )
                     { return xView == pView->getUnoView(); } ) == 1,
                 "UnoViewContainer::removeView(): View was added multiple times" );
 
-            UnoViewSharedPtr pView( *aIter );
+            std::shared_ptr< UnoView > pView( *aIter );
 
             // actually erase from container
             maViews.erase( aIter );

@@ -57,9 +57,9 @@ namespace slideshow
 {
     namespace internal
     {
-        ViewAppletShape::ViewAppletShape( const ViewLayerSharedPtr&                       rViewLayer,
+        ViewAppletShape::ViewAppletShape( const std::shared_ptr< ViewLayer >&             rViewLayer,
                                           const uno::Reference< drawing::XShape >&        rxShape,
-                                          const OUString&                          rServiceName,
+                                          const OUString&                                 rServiceName,
                                           const char**                                    pPropCopyTable,
                                           sal_Size                                        nNumPropEntries,
                                           const uno::Reference< uno::XComponentContext >& rxContext ) :
@@ -114,7 +114,7 @@ namespace slideshow
         }
 
 
-        const ViewLayerSharedPtr& ViewAppletShape::getViewLayer() const
+        const std::shared_ptr< ViewLayer >& ViewAppletShape::getViewLayer() const
         {
             return mpViewLayer;
         }

@@ -60,8 +60,8 @@ namespace slideshow
 
         struct MtfAnimationFrame
         {
-            MtfAnimationFrame( const GDIMetaFileSharedPtr& rMtf,
-                               double                      nDuration ) :
+            MtfAnimationFrame( const std::shared_ptr< GDIMetaFile >&    rMtf,
+                               double                                   nDuration ) :
                 mpMtf( rMtf ),
                 mnDuration( nDuration )
             {
@@ -73,11 +73,10 @@ namespace slideshow
                 return mnDuration;
             }
 
-            GDIMetaFileSharedPtr    mpMtf;
+            std::shared_ptr< GDIMetaFile > mpMtf;
             double                  mnDuration;
         };
 
-        typedef ::std::vector< MtfAnimationFrame > VectorOfMtfAnimationFrames;
 
 
         /** Retrieve a meta file for the given shape
@@ -118,19 +117,19 @@ namespace slideshow
             @param rGraphic
             Input graphic object, to extract animations from
          */
-        bool getAnimationFromGraphic( VectorOfMtfAnimationFrames& o_rFrames,
-                                      ::std::size_t&              o_rLoopCount,
-                                      CycleMode&                  o_eCycleMode,
-                                      const Graphic&              rGraphic );
+        bool getAnimationFromGraphic( std::vector< MtfAnimationFrame >& o_rFrames,
+                                      ::std::size_t&                    o_rLoopCount,
+                                      CycleMode&                        o_eCycleMode,
+                                      const Graphic&                    rGraphic );
 
         /** Retrieve scroll text animation rectangles from given metafile
 
             @return true, if both rectangles have been found, false
             otherwise.
          */
-        bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
-                                         ::basegfx::B2DRectangle&       o_rPaintRect,
-                                         const GDIMetaFileSharedPtr&    rMtf );
+        bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&               o_rScrollRect,
+                                         ::basegfx::B2DRectangle&               o_rPaintRect,
+                                         const std::shared_ptr< GDIMetaFile >&  rMtf );
     }
 }
 

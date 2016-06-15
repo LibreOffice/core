@@ -66,16 +66,15 @@ public:
         The activity given here will be reinserted into the
         ActivitiesQueue, once the timeout is reached.
     */
-    void setActivity( const ActivitySharedPtr& rActivity );
+    void setActivity( const std::shared_ptr< Activity >& rActivity );
 
 private:
     ::canvas::tools::ElapsedTime    maTimer;
     double                          mnNextTime;
-    ActivitySharedPtr               mpActivity;
+    std::shared_ptr< Activity >     mpActivity;
     ActivitiesQueue&                mrActivityQueue;
 };
 
-typedef ::std::shared_ptr< WakeupEvent > WakeupEventSharedPtr;
 
 } // namespace internal
 } // namespace presentation

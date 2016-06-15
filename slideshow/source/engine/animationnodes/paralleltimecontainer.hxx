@@ -33,7 +33,7 @@ class ParallelTimeContainer : public BaseContainerNode
 public:
     ParallelTimeContainer(
         const css::uno::Reference< css::animations::XAnimationNode >& xNode,
-        const BaseContainerNodeSharedPtr&               rParent,
+        const std::shared_ptr< BaseContainerNode >&     rParent,
         const NodeContext&                              rContext )
         : BaseContainerNode( xNode, rParent, rContext ) {}
 
@@ -44,7 +44,7 @@ public:
 
 private:
     virtual void activate_st() override;
-    virtual void notifyDeactivating( AnimationNodeSharedPtr const& pChildNode ) override;
+    virtual void notifyDeactivating( std::shared_ptr< AnimationNode > const& pChildNode ) override;
 };
 
 } // namespace internal

@@ -71,12 +71,12 @@ namespace slideshow
                 @param nNumPropEntries
                 Number of property table entries (in pPropCopyTable)
              */
-            ViewAppletShape( const ViewLayerSharedPtr&                         rViewLayer,
-                             const css::uno::Reference< css::drawing::XShape >&        rxShape,
-                             const OUString&                                   rServiceName,
-                             const char**                                      pPropCopyTable,
-                             sal_Size                                          nNumPropEntries,
-                             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            ViewAppletShape( const std::shared_ptr< ViewLayer >&                        rViewLayer,
+                             const css::uno::Reference< css::drawing::XShape >&         rxShape,
+                             const OUString&                                            rServiceName,
+                             const char**                                               pPropCopyTable,
+                             sal_Size                                                   nNumPropEntries,
+                             const css::uno::Reference< css::uno::XComponentContext >&  rxContext );
 
             /** destroy the object
              */
@@ -89,7 +89,7 @@ namespace slideshow
 
             /** Query the associated view layer of this shape
              */
-            const ViewLayerSharedPtr& getViewLayer() const;
+            const std::shared_ptr< ViewLayer >& getViewLayer() const;
 
             // animation methods
 
@@ -140,7 +140,7 @@ namespace slideshow
 
         private:
 
-            ViewLayerSharedPtr                                    mpViewLayer;
+            std::shared_ptr< ViewLayer >                          mpViewLayer;
 
             /// the actual viewer component for this applet
             css::uno::Reference<
@@ -153,7 +153,6 @@ namespace slideshow
                 css::uno::XComponentContext>         mxComponentContext;
         };
 
-        typedef ::std::shared_ptr< ViewAppletShape > ViewAppletShapeSharedPtr;
 
     }
 }

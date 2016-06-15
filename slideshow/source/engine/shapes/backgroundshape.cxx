@@ -77,9 +77,9 @@ namespace slideshow
             // View layer methods
 
 
-            virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
+            virtual void addViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer,
                                        bool                         bRedrawLayer ) override;
-            virtual bool removeViewLayer( const ViewLayerSharedPtr& rNewLayer ) override;
+            virtual bool removeViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer ) override;
             virtual void clearAllViewLayers() override;
 
 
@@ -103,14 +103,13 @@ namespace slideshow
 
         private:
             /// The metafile actually representing the Shape
-            GDIMetaFileSharedPtr        mpMtf;
+            std::shared_ptr< GDIMetaFile > mpMtf;
 
             // The attributes of this Shape
             ::basegfx::B2DRectangle     maBounds; // always needed for rendering
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewBackgroundShapeSharedPtr > ViewBackgroundShapeVector;
-            ViewBackgroundShapeVector   maViewShapes;
+            std::vector< std::shared_ptr< ViewBackgroundShape > > maViewShapes;
         };
 
 
@@ -123,7 +122,7 @@ namespace slideshow
         {
             uno::Reference< beans::XPropertySet > xPropSet( xDrawPage,
                                                             uno::UNO_QUERY_THROW );
-            GDIMetaFileSharedPtr pMtf( new GDIMetaFile() );
+            std::shared_ptr< GDIMetaFile > pMtf( new GDIMetaFile() );
 
             // first try the page background (overrides
             // masterpage background), then try masterpage
@@ -156,13 +155,13 @@ namespace slideshow
             return uno::Reference< drawing::XShape >();
         }
 
-        void BackgroundShape::addViewLayer( const ViewLayerSharedPtr&   rNewLayer,
+        void BackgroundShape::addViewLayer( const std::shared_ptr< ViewLayer >& rNewLayer,
                                             bool                        bRedrawLayer )
         {
             // already added?
             if( ::std::any_of( maViewShapes.begin(),
                                maViewShapes.end(),
-                               [&rNewLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
+                               [&rNewLayer]( const std::shared_ptr< ViewBackgroundShape >& pBgShape )
                                { return pBgShape->getViewLayer() == rNewLayer; } ) )
             {
                 // yes, nothing to do
@@ -178,21 +177,21 @@ namespace slideshow
                 maViewShapes.back()->render( mpMtf );
         }
 
-        bool BackgroundShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
+        bool BackgroundShape::removeViewLayer( const std::shared_ptr< ViewLayer >& rLayer )
         {
-            const ViewBackgroundShapeVector::iterator aEnd( maViewShapes.end() );
+            const std::vector< std::shared_ptr< ViewBackgroundShape > >::iterator aEnd( maViewShapes.end() );
 
             OSL_ENSURE( ::std::count_if(maViewShapes.begin(),
                                         aEnd,
-                                        [&rLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
+                                        [&rLayer]( const std::shared_ptr< ViewBackgroundShape >& pBgShape )
                                         { return pBgShape->getViewLayer() == rLayer; } ) < 2,
                         "BackgroundShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
-            ViewBackgroundShapeVector::iterator aIter;
+            std::vector< std::shared_ptr< ViewBackgroundShape > >::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewShapes.begin(),
                                          aEnd,
-                                         [&rLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
+                                         [&rLayer]( const std::shared_ptr< ViewBackgroundShape >& pBgShape )
                                          { return pBgShape->getViewLayer() == rLayer; } )) == aEnd )
             {
                 // view layer seemingly was not added, failed
@@ -262,9 +261,9 @@ namespace slideshow
             // redraw all view shapes, by calling their render() method
             if( ::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
-                                 [this]( const ViewBackgroundShapeSharedPtr& pBgShape )
+                                 [this]( const std::shared_ptr< ViewBackgroundShape >& pBgShape )
                                  { return pBgShape->render( this->mpMtf ); } )
-                != static_cast<ViewBackgroundShapeVector::difference_type>(maViewShapes.size()) )
+                != static_cast<std::vector< std::shared_ptr< ViewBackgroundShape > >::difference_type>(maViewShapes.size()) )
             {
                 // at least one of the ViewBackgroundShape::render() calls did return
                 // false - update failed on at least one ViewLayer
