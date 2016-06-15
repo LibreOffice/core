@@ -57,6 +57,23 @@ VclAbstractDialog::~VclAbstractDialog()
 {
 }
 
+std::vector<OUString> VclAbstractDialog::getAllPageUIXMLDescriptions() const
+{
+    // default has no pages
+    return std::vector<OUString>();
+}
+
+void VclAbstractDialog::selectPageByUIXMLDescription(const OUString& /*rUIXMLDescription*/)
+{
+    // default cannot select a page
+}
+
+Bitmap VclAbstractDialog::createScreenshot() const
+{
+    // default returns empty bitmap
+    return Bitmap();
+}
+
 // virtual
 VclAbstractDialog2::~VclAbstractDialog2()
 {

@@ -150,7 +150,7 @@ class AbstractHeaderFooterDialog : public VclAbstractDialog
 class SdAbstractDialogFactory
 {
 public:
-    static SdAbstractDialogFactory*     Create();
+    SD_DLLPUBLIC static SdAbstractDialogFactory*     Create();
 
     virtual VclAbstractDialog*          CreateBreakDlg(vcl::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount ) = 0;
     virtual AbstractCopyDlg*            CreateCopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, const rtl::Reference<XColorList> &pColTab, ::sd::View* pView ) = 0;

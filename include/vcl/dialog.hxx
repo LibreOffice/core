@@ -42,6 +42,7 @@ private:
     bool            mbInExecute;
     bool            mbInClose;
     bool            mbModalMode;
+    bool            mbPaintComplete;
     InitFlag        mnInitFlag; // used for deferred init
 
     VclPtr<VclButtonBox> mpActionArea;
@@ -92,6 +93,17 @@ public:
     VclBox* get_content_area() { return mpContentArea; }
 
     virtual bool    Close() override;
+
+    // try to extract content and return as Bitmap. To do that reliably, a Yield-loop
+    // like in Execute() has to be executed and it is necessary to detect when the
+    // paint is finished
+    virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
+    virtual void PostPaint(vcl::RenderContext& rRenderContext) override;
+
+    // Screenshot interface
+    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const;
+    virtual void selectPageByUIXMLDescription(const OUString& rUIXMLDescription);
+    Bitmap createScreenshot();
 
     virtual short   Execute();
     bool            IsInExecute() const { return mbInExecute; }
