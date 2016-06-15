@@ -523,6 +523,17 @@ DECLARE_RTFEXPORT_TEST(testHyperlink, "hyperlink.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 3, "!"), "HyperLinkURL"));
 }
 
+DECLARE_RTFEXPORT_TEST(testHyperlinkTdf100105, "hyperlink_empty.rtf")
+{
+    // export of empty link was invalid, group was closed before it was opened
+    uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xCursor(xTextDoc->getText()->createTextCursor());
+    xCursor->gotoStart(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://example.net"), getProperty<OUString>(xCursor, "HyperLinkURL"));
+    // getRun doesn't provide a 0-length hyperlink
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 1, "foobar"), "HyperLinkURL"));
+}
+
 DECLARE_RTFEXPORT_TEST(test78758, "fdo78758.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(OUString("#__RefHeading___Toc264438068"),
