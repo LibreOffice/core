@@ -98,7 +98,7 @@
                 <child>
                   <object class="GtkLabel" id="google_prefix_label">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">G-</property>
+                    <property name="label" translatable="no">G-</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
