@@ -1963,14 +1963,14 @@ double ScInterpreter::GetDoubleFromMatrix(const ScMatrixRef& pMat)
         return 0.0;
 
     if ( !pJumpMatrix )
-        return pMat->GetDouble( 0 );
+        return pMat->GetDoubleWithStringConversion( 0, 0);
 
     SCSIZE nCols, nRows, nC, nR;
     pMat->GetDimensions( nCols, nRows);
     pJumpMatrix->GetPos( nC, nR);
     // Use vector replication for single row/column arrays.
     if ( (nC < nCols || nCols == 1) && (nR < nRows || nRows == 1) )
-        return pMat->GetDouble( nC, nR);
+        return pMat->GetDoubleWithStringConversion( nC, nR);
 
     SetError( errNoValue);
     return 0.0;
