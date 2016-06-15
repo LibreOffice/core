@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_344c1770",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T20:23:39Z",
+      "side": 1,
+      "message": "I guess I\u0027ll leave the decision what\u0027s supposed to be here to UX people, but \"Slide\" only ... hmm ... \"Slide format\" maybe? Even \"Slide background\" was slightly more descriptive",
+      "revId": "01517db983239b060e5db24c4e4d663af7b611b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b46e67c7",
+        "filename": "sd/source/core/glob.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T20:23:39Z",
+      "side": 1,
+      "message": "If we really stick to \"Page\" and \"Slide\" only, you can as well reuse STR_PAGE_NAME, STR_SLIDE_NAME from this very file",
+      "revId": "01517db983239b060e5db24c4e4d663af7b611b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f441cf3a",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-15T20:23:39Z",
+      "side": 1,
+      "message": "Maybe you also want to add a case for Impress here so that the title is set correctly, no matter which app has been opened first",
+      "revId": "01517db983239b060e5db24c4e4d663af7b611b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
