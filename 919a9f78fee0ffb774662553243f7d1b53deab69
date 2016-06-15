@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_651eecbb",
+        "filename": "sfx2/source/doc/doctempl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1576,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-06-15T05:53:44Z",
+      "side": 1,
+      "message": "@Samuel: Hi, I\u0027ve created a recursive approach to add subfolders as categories(region) too. But, the case of identifying a folder is never reached (see bIsFolder). I am not sure why it is behaving like this. I spent a lot of time trying to figure out but it\u0027s still not clear.\n\nI think the recursive approach should work and I tried to debugging it by removing the conditions.. i think line 1575 is never executed correctly :( \n\nHelp needed :-)",
+      "range": {
+        "startLine": 1570,
+        "startChar": 16,
+        "endLine": 1576,
+        "endChar": 17
+      },
+      "revId": "919a9f78fee0ffb774662553243f7d1b53deab69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
