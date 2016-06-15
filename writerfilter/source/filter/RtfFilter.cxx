@@ -53,25 +53,25 @@ class RtfFilter : public cppu::WeakImplHelper
 
 public:
     explicit RtfFilter(const uno::Reference<uno::XComponentContext>& xContext);
-    virtual ~RtfFilter();
+    ~RtfFilter() override;
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel() throw (uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception) override;
+    void SAL_CALL cancel() throw (uno::RuntimeException, std::exception) override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const uno::Sequence<uno::Any>& rArguments) throw (uno::Exception, uno::RuntimeException, std::exception) override;
+    void SAL_CALL initialize(const uno::Sequence<uno::Any>& rArguments) throw (uno::Exception, uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (uno::RuntimeException, std::exception) override;
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (uno::RuntimeException, std::exception) override;
+    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
 
 };
 
