@@ -447,7 +447,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
     sal_Int32 nTablePos, sal_Int32 nTableSiz, SwDoc& rDocOut )
 {
-    ::std::vector<OUString> aAuthorNames;
+    std::vector<OUString> aAuthorNames;
     WW8ReadSTTBF( !m_bVer67, rStrm, nTablePos, nTableSiz, m_bVer67 ? 2 : 0,
         m_eStructCharSet, aAuthorNames );
 

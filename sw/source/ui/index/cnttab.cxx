@@ -3900,7 +3900,7 @@ void SwEntryBrowseBox::Resize()
     {
         long nWidth = GetSizePixel().Width();
         std::vector<long> aWidths = GetOptimalColWidths();
-        long nNaturalWidth(::std::accumulate(aWidths.begin(), aWidths.end(), 0));
+        long nNaturalWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
         long nExcess = ((nWidth - nNaturalWidth) / aWidths.size()) - 1;
 
         for (size_t i = 0; i < aWidths.size(); ++i)
@@ -3941,7 +3941,7 @@ Size SwEntryBrowseBox::GetOptimalSize() const
 
     std::vector<long> aWidths = GetOptimalColWidths();
 
-    long nWidth(::std::accumulate(aWidths.begin(), aWidths.end(), 0));
+    long nWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
 
     aSize.Width() = std::max(aSize.Width(), nWidth);
 

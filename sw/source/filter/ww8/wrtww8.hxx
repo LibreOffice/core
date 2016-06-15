@@ -233,7 +233,7 @@ public:
 class WW8_WrPlcSepx : public MSWordSections
 {
     std::vector<WW8_CP> aCps;
-    ::std::vector< std::shared_ptr<WW8_PdAttrDesc> > m_SectionAttributes;
+    std::vector< std::shared_ptr<WW8_PdAttrDesc> > m_SectionAttributes;
     // hack to prevent adding sections in endnotes
     bool m_bHeaderFooterWritten;
     WW8_WrPlc0* pTextPos;        // Position of the headers/footers
@@ -310,10 +310,10 @@ class wwFontHelper
 {
 private:
     /// Keep track of fonts that need to be exported.
-    ::std::map<wwFont, sal_uInt16> maFonts;
+    std::map<wwFont, sal_uInt16> maFonts;
 
     /// Convert from fast insertion map to linear vector in the order that we want to write.
-    ::std::vector< const wwFont* > AsVector() const;
+    std::vector< const wwFont* > AsVector() const;
 
 public:
     wwFontHelper() : bLoadAllFonts(false) {}
@@ -402,7 +402,7 @@ private:
     HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&) = delete;
 };
 
-typedef ::std::pair<OUString, sal_uLong> aBookmarkPair;
+typedef std::pair<OUString, sal_uLong> aBookmarkPair;
 
 class WW8_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
 {
@@ -559,7 +559,7 @@ public:
     SwPaM *m_pCurPam, *m_pOrigPam;
 
     /// Stack to remember the nesting (see MSWordSaveData for more)
-    ::std::stack< MSWordSaveData > m_aSaveData;
+    std::stack< MSWordSaveData > m_aSaveData;
 
     /// Used to split the runs according to the bookmarks start and ends
     typedef std::vector< ::sw::mark::IMark* > IMarkVector;
@@ -1043,7 +1043,7 @@ public:
 
     void MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo);
 
-    void WriteAsStringTable(const ::std::vector<OUString>&, sal_Int32& rfcSttbf,
+    void WriteAsStringTable(const std::vector<OUString>&, sal_Int32& rfcSttbf,
         sal_Int32& rlcbSttbf);
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) override;

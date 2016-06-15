@@ -212,7 +212,7 @@ struct SwShapeFunc
         return p1 < p2;
     }
 };
-typedef ::std::pair < const SdrObject *, ::rtl::Reference < ::accessibility::AccessibleShape > > SwAccessibleObjShape_Impl;
+typedef std::pair < const SdrObject *, ::rtl::Reference < ::accessibility::AccessibleShape > > SwAccessibleObjShape_Impl;
 
 class SwAccessibleShapeMap_Impl
 {
@@ -498,7 +498,7 @@ public:
     }
 };
 
-class SwAccessibleEventList_Impl: public ::std::list < SwAccessibleEvent_Impl >
+class SwAccessibleEventList_Impl: public std::list < SwAccessibleEvent_Impl >
 {
     bool mbFiring;
 
@@ -555,7 +555,7 @@ void SwAccessibleEventList_Impl::MoveMissingXAccToEnd()
 // shape) leads to an assert, because a client of the Modify is destroyed
 // within a Modify call.
 
-class SwShapeList_Impl: public ::std::list < uno::Reference < drawing::XShape > >
+class SwShapeList_Impl: public std::list < uno::Reference < drawing::XShape > >
 {
 public:
     SwShapeList_Impl() {}
@@ -782,7 +782,7 @@ void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
     // find proper rectangle
     Rectangles::const_iterator aBegin = maLogicRects.begin();
     Rectangles::const_iterator aEnd = maLogicRects.end();
-    Rectangles::const_iterator aFound = ::std::find_if( aBegin, aEnd,
+    Rectangles::const_iterator aFound = std::find_if( aBegin, aEnd,
                                                  ContainsPredicate( rPoint ) );
 
     if( aFound != aEnd )

@@ -1056,7 +1056,7 @@ namespace
         : public SwSimpleEnumeration_Base
     {
         private:
-            typedef ::std::list< Any > frmcontainer_t;
+            typedef std::list< Any > frmcontainer_t;
             frmcontainer_t m_aFrames;
         protected:
             virtual ~SwXFrameEnumeration() {};
@@ -1084,7 +1084,7 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
         return;
     // #i104937#
     const size_t nSize = pFormats->size();
-    ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
+    std::insert_iterator<frmcontainer_t> pInserter = std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // #i104937#
     SwFrameFormat* pFormat( nullptr );
 
@@ -1239,7 +1239,7 @@ uno::Sequence<OUString> SwXFrames::getElementNames() throw( uno::RuntimeExceptio
     if(!IsValid())
         throw uno::RuntimeException();
     const Reference<XEnumeration> xEnum = createEnumeration();
-    ::std::vector<OUString> vNames;
+    std::vector<OUString> vNames;
     while(xEnum->hasMoreElements())
     {
         Reference<container::XNamed> xNamed;
@@ -1654,7 +1654,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames()
     if(!IsValid())
         throw uno::RuntimeException();
 
-    ::std::vector< OUString > ret;
+    std::vector< OUString > ret;
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
     for (IDocumentMarkAccess::const_iterator_t ppMark =
             pMarkAccess->getBookmarksBegin();

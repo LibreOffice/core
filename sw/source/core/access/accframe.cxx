@@ -283,7 +283,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
 void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
                                      const SwRect& rVisArea,
                                      const SwFrame& rFrame,
-                                     ::std::list< SwAccessibleChild >& rChildren,
+                                     std::list< SwAccessibleChild >& rChildren,
                                      bool bInPagePreview )
 {
     if( SwAccessibleChildMap::IsSortingRequired( rFrame ) )
@@ -471,7 +471,7 @@ sw::access::SwAccessibleChild SwAccessibleFrame::GetChildAtPixel(
 }
 
 void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
-                                     ::std::list< sw::access::SwAccessibleChild >& rChildren ) const
+                                     std::list< sw::access::SwAccessibleChild >& rChildren ) const
 {
     GetChildren( rAccMap, maVisArea, *mpFrame, rChildren, IsInPagePreview() );
 }

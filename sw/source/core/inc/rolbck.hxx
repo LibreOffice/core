@@ -90,7 +90,7 @@ public:
 
 class SwHistorySetFormat : public SwHistoryHint
 {
-    ::std::unique_ptr<SfxPoolItem> m_pAttr;
+    std::unique_ptr<SfxPoolItem> m_pAttr;
     const sal_uLong m_nNodeIndex;
 
 public:
@@ -114,7 +114,7 @@ public:
 
 class SwHistorySetText : public SwHistoryHint
 {
-    ::std::unique_ptr<SfxPoolItem> m_pAttr;
+    std::unique_ptr<SfxPoolItem> m_pAttr;
     const sal_uLong m_nNodeIndex;
     const sal_Int32 m_nStart;
     const sal_Int32 m_nEnd;
@@ -132,8 +132,8 @@ class SwHistorySetTextField : public SwHistoryHint
 {
     //!! beware of the order for the declaration of the unique_ptrs.
     //!! If they get destroyed in the wrong order sw may crash (namely mail-merge as well)
-    ::std::unique_ptr<SwFieldType> m_pFieldType;
-    const ::std::unique_ptr<SwFormatField> m_pField;
+    std::unique_ptr<SwFieldType> m_pFieldType;
+    const std::unique_ptr<SwFormatField> m_pField;
 
     sal_uLong m_nNodeIndex;
     sal_Int32 m_nPos;
@@ -197,7 +197,7 @@ public:
 
 class SwHistorySetFootnote : public SwHistoryHint
 {
-    const ::std::unique_ptr<SwUndoSaveSection> m_pUndo;
+    const std::unique_ptr<SwUndoSaveSection> m_pUndo;
     const OUString m_FootnoteNumber;
     sal_uLong m_nNodeIndex;
     const sal_Int32 m_nStart;
@@ -227,7 +227,7 @@ public:
 
 class SwHistoryTextFlyCnt : public SwHistoryHint
 {
-    ::std::unique_ptr<SwUndoDelLayFormat> m_pUndo;
+    std::unique_ptr<SwUndoDelLayFormat> m_pUndo;
 
 public:
     SwHistoryTextFlyCnt( SwFrameFormat* const pFlyFormat );

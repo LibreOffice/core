@@ -291,7 +291,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             if ( pFieldmark != nullptr )
             {
                 uno::Sequence< OUString > vListEntries(aFormula.maListEntries.size());
-                ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), vListEntries.begin());
+                std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), vListEntries.begin());
                 (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
                 sal_Int32 nIndex = aFormula.mfDropdownIndex  < aFormula.maListEntries.size() ? aFormula.mfDropdownIndex : 0;
                 (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(nIndex);

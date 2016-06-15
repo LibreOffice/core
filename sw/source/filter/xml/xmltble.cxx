@@ -61,8 +61,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 using table::XCell;
-using ::std::vector;
-using ::std::advance;
+using std::vector;
+using std::advance;
 
 // string constants for table cell export
 static const char g_sNumberFormat[] = "NumberFormat";

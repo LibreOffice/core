@@ -135,8 +135,8 @@ protected:
 public:
     ~SwNodes();
 
-    typedef ::std::vector<SwNodeRange> NodeRanges_t;
-    typedef ::std::vector<NodeRanges_t> TableRanges_t;
+    typedef std::vector<SwNodeRange> NodeRanges_t;
+    typedef std::vector<NodeRanges_t> TableRanges_t;
 
     SwNodePtr operator[]( sal_uLong n ) const; // defined in node.hxx
 

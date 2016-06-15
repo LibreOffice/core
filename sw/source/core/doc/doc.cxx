@@ -885,7 +885,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 
                 // add the post-it document pages to print, i.e those
                 // post-it pages that have the data for the above physical page
-                ::std::map<sal_Int32, sal_Int32>::const_iterator const iter(
+                std::map<sal_Int32, sal_Int32>::const_iterator const iter(
                         aPostItLastStartPageNum.find(nPhysPage));
                 if (iter != aPostItLastStartPageNum.end())
                 {
@@ -1540,12 +1540,12 @@ bool SwDoc::ConvertFieldsToText()
             continue;
 
         SwIterator<SwFormatField,SwFieldType> aIter( *pCurType );
-        ::std::vector<const SwFormatField*> aFieldFormats;
+        std::vector<const SwFormatField*> aFieldFormats;
         for( SwFormatField* pCurFieldFormat = aIter.First(); pCurFieldFormat; pCurFieldFormat = aIter.Next() )
             aFieldFormats.push_back(pCurFieldFormat);
 
-        ::std::vector<const SwFormatField*>::iterator aBegin = aFieldFormats.begin();
-        ::std::vector<const SwFormatField*>::iterator aEnd = aFieldFormats.end();
+        std::vector<const SwFormatField*>::iterator aBegin = aFieldFormats.begin();
+        std::vector<const SwFormatField*>::iterator aEnd = aFieldFormats.end();
         while(aBegin != aEnd)
         {
             const SwTextField *pTextField = (*aBegin)->GetTextField();

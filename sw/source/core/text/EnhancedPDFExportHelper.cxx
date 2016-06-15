@@ -1347,7 +1347,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 OUString sStyleName;
                 if ( !pInetFormatAttr )
                 {
-                    ::std::vector<SwTextAttr *> const charAttrs(
+                    std::vector<SwTextAttr *> const charAttrs(
                         pNd->GetTextAttrsAt(rInf.GetIdx(), RES_TXTATR_CHARFMT));
                     // TODO: handle more than 1 char style?
                     const SwCharFormat* pCharFormat = (charAttrs.size())

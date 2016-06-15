@@ -43,7 +43,7 @@ class SwTable;
 class SwUndoTableMerge;
 class SwCellFrame;
 
-typedef ::std::deque< SwCellFrame* > SwCellFrames;
+typedef std::deque< SwCellFrame* > SwCellFrames;
 
 struct CompareSwSelBoxes
 {

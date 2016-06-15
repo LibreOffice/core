@@ -85,7 +85,7 @@ const SwFrame     *g_pRowCacheLastCellFrame = nullptr;
 
 class TableWait
 {
-    const ::std::unique_ptr<SwWait> m_pWait;
+    const std::unique_ptr<SwWait> m_pWait;
     // this seems really fishy: do some locking, if an arbitrary number of lines is exceeded
     static const size_t our_kLineLimit = 20;
     static bool ShouldWait(size_t nCnt, SwFrame *pFrame, size_t nCnt2)
@@ -1117,7 +1117,7 @@ void SwFEShell::AdjustCellWidth( bool bBalance )
 
     // switch on wait-cursor, as we do not know how
     // much content is affected
-    TableWait aWait(::std::numeric_limits<size_t>::max(), nullptr,
+    TableWait aWait(std::numeric_limits<size_t>::max(), nullptr,
                   *GetDoc()->GetDocShell());
 
     GetDoc()->AdjustCellWidth( *getShellCursor( false ), bBalance );

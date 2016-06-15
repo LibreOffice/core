@@ -1903,7 +1903,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         else
         {
             const OUString* aRequestedAttrIter =
-                  ::std::find( aRequestedAttributes.begin(), aRequestedAttributes.end(), sMMToPixelRatio );
+                  std::find( aRequestedAttributes.begin(), aRequestedAttributes.end(), sMMToPixelRatio );
             if ( aRequestedAttrIter != aRequestedAttributes.end() )
                 bProvideMMToPixelRatio = true;
         }

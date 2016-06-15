@@ -185,11 +185,11 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell )
     {
-        ::std::list< SwAccessibleChild > aChildren;
+        std::list< SwAccessibleChild > aChildren;
         m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
 
-        ::std::list< SwAccessibleChild >::const_iterator aIter = aChildren.begin();
-        ::std::list< SwAccessibleChild >::const_iterator aEndIter = aChildren.end();
+        std::list< SwAccessibleChild >::const_iterator aIter = aChildren.begin();
+        std::list< SwAccessibleChild >::const_iterator aEndIter = aChildren.end();
         while( aIter != aEndIter )
         {
             const SwAccessibleChild& rChild = *aIter;
@@ -227,12 +227,12 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
             const size_t nSelObjs = pFEShell->IsObjSelected();
             if( nSelObjs > 0 )
             {
-                ::std::list< SwAccessibleChild > aChildren;
+                std::list< SwAccessibleChild > aChildren;
                 m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
 
-                ::std::list< SwAccessibleChild >::const_iterator aIter =
+                std::list< SwAccessibleChild >::const_iterator aIter =
                     aChildren.begin();
-                ::std::list< SwAccessibleChild >::const_iterator aEndIter =
+                std::list< SwAccessibleChild >::const_iterator aEndIter =
                     aChildren.end();
                 while( aIter != aEndIter && static_cast<size_t>(nCount) < nSelObjs )
                 {
@@ -252,11 +252,11 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         //we should check whether it is selected in the selection cursor.
         if( nCount == 0 )
         {
-            ::std::list< SwAccessibleChild > aChildren;
+            std::list< SwAccessibleChild > aChildren;
             m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
-            ::std::list< SwAccessibleChild >::const_iterator aIter =
+            std::list< SwAccessibleChild >::const_iterator aIter =
                 aChildren.begin();
-            ::std::list< SwAccessibleChild >::const_iterator aEndIter =
+            std::list< SwAccessibleChild >::const_iterator aEndIter =
                 aChildren.end();
             while( aIter != aEndIter )
             {
@@ -316,11 +316,11 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
         if( 0 == nSelObjs || static_cast<size_t>(nSelectedChildIndex) >= nSelObjs )
             throwIndexOutOfBoundsException();
 
-        ::std::list< SwAccessibleChild > aChildren;
+        std::list< SwAccessibleChild > aChildren;
         m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
 
-        ::std::list< SwAccessibleChild >::const_iterator aIter = aChildren.begin();
-        ::std::list< SwAccessibleChild >::const_iterator aEndIter = aChildren.end();
+        std::list< SwAccessibleChild >::const_iterator aIter = aChildren.begin();
+        std::list< SwAccessibleChild >::const_iterator aEndIter = aChildren.end();
         while( aIter != aEndIter && !aChild.IsValid() )
         {
             const SwAccessibleChild& rChild = *aIter;

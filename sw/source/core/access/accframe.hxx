@@ -73,7 +73,7 @@ protected:
     static void GetChildren( SwAccessibleMap& rAccMap,
                              const SwRect& rVisArea,
                              const SwFrame& rFrame,
-                             ::std::list< sw::access::SwAccessibleChild >& rChildren,
+                             std::list< sw::access::SwAccessibleChild >& rChildren,
                              bool bInPagePreview );
 
     bool IsEditable( SwViewShell *pVSh ) const;
@@ -132,7 +132,7 @@ protected:
     sw::access::SwAccessibleChild GetChildAtPixel( const Point& rPos,
                                                    SwAccessibleMap& rAccMap ) const;
     void GetChildren( SwAccessibleMap& rAccMap,
-                      ::std::list< sw::access::SwAccessibleChild >& rChildren ) const;
+                      std::list< sw::access::SwAccessibleChild >& rChildren ) const;
 
     inline void SetVisArea( const SwRect& rNewVisArea )
     {

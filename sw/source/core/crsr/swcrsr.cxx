@@ -1023,7 +1023,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     }
     else if( FND_IN_SELALL & eFndRngs )
     {
-        ::std::unique_ptr< SwCursor> pSav( Create( this ) );  // save the current cursor
+        std::unique_ptr< SwCursor> pSav( Create( this ) );    // save the current cursor
 
         const SwNode* pSttNd = ( FND_IN_BODYONLY & eFndRngs )
                             ? rNds.GetEndOfContent().StartOfSectionNode()

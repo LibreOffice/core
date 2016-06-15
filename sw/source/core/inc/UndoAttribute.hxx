@@ -36,9 +36,9 @@ class SwEndNoteInfo;
 class SwUndoAttr : public SwUndo, private SwUndRng
 {
     SfxItemSet m_AttrSet;                           // attributes for Redo
-    const ::std::unique_ptr<SwHistory> m_pHistory;    // History for Undo
-    ::std::unique_ptr<SwRedlineData> m_pRedlineData;  // Redlining
-    ::std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
+    const std::unique_ptr<SwHistory> m_pHistory;      // History for Undo
+    std::unique_ptr<SwRedlineData> m_pRedlineData;    // Redlining
+    std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
     sal_uLong m_nNodeIndex;                         // Offset: for Redlining
     const SetAttrMode m_nInsertFlags;               // insert flags
 
@@ -61,7 +61,7 @@ public:
 
 class SwUndoResetAttr : public SwUndo, private SwUndRng
 {
-    const ::std::unique_ptr<SwHistory> m_pHistory;
+    const std::unique_ptr<SwHistory> m_pHistory;
     std::set<sal_uInt16> m_Ids;
     const sal_uInt16 m_nFormatId;             // Format-Id for Redo
 
@@ -84,7 +84,7 @@ class SwUndoFormatAttr : public SwUndo
 {
     friend class SwUndoDefaultAttr;
     SwFormat * m_pFormat;
-    ::std::unique_ptr<SfxItemSet> m_pOldSet;    // old attributes
+    std::unique_ptr<SfxItemSet> m_pOldSet;      // old attributes
     sal_uLong m_nNodeIndex;
     const sal_uInt16 m_nFormatWhich;
     const bool m_bSaveDrawPt;
@@ -142,7 +142,7 @@ class SwUndoFormatResetAttr : public SwUndo
         // which ID of the reset attribute
         const sal_uInt16 m_nWhichId;
         // old attribute which has been reset - needed for undo.
-        ::std::unique_ptr<SfxPoolItem> m_pOldItem;
+        std::unique_ptr<SfxPoolItem> m_pOldItem;
 };
 
 class SwUndoDontExpandFormat : public SwUndo
@@ -161,7 +161,7 @@ public:
 // helper class to receive changed attribute sets
 class SwUndoFormatAttrHelper : public SwClient
 {
-    ::std::unique_ptr<SwUndoFormatAttr> m_pUndo;
+    std::unique_ptr<SwUndoFormatAttr> m_pUndo;
     const bool m_bSaveDrawPt;
 
 public:
@@ -176,7 +176,7 @@ public:
 
 class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
 {
-    const ::std::unique_ptr<SwHistory> m_pHistory;
+    const std::unique_ptr<SwHistory> m_pHistory;
     const bool m_bModulus;
 
 public:
@@ -194,8 +194,8 @@ public:
 
 class SwUndoDefaultAttr : public SwUndo
 {
-    ::std::unique_ptr<SfxItemSet> m_pOldSet;        // the old attributes
-    ::std::unique_ptr<SvxTabStopItem> m_pTabStop;
+    std::unique_ptr<SfxItemSet> m_pOldSet;          // the old attributes
+    std::unique_ptr<SvxTabStopItem> m_pTabStop;
 
 public:
     // registers at the format and saves old attributes
@@ -209,7 +209,7 @@ public:
 
 class SwUndoChangeFootNote : public SwUndo, private SwUndRng
 {
-    const ::std::unique_ptr<SwHistory> m_pHistory;
+    const std::unique_ptr<SwHistory> m_pHistory;
     const OUString m_Text;
     const sal_uInt16 m_nNumber;
     const bool m_bEndNote;
@@ -228,7 +228,7 @@ public:
 
 class SwUndoFootNoteInfo : public SwUndo
 {
-    ::std::unique_ptr<SwFootnoteInfo> m_pFootNoteInfo;
+    std::unique_ptr<SwFootnoteInfo> m_pFootNoteInfo;
 
 public:
     SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo );
@@ -241,7 +241,7 @@ public:
 
 class SwUndoEndNoteInfo : public SwUndo
 {
-    ::std::unique_ptr<SwEndNoteInfo> m_pEndNoteInfo;
+    std::unique_ptr<SwEndNoteInfo> m_pEndNoteInfo;
 
 public:
     SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo );

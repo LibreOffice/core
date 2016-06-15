@@ -86,7 +86,7 @@ class SwGrfShell::SwExternalToolEdit
 {
 private:
     SwWrtShell *const m_pShell;
-    ::std::shared_ptr<SwUnoCursor> const m_pCursor;
+    std::shared_ptr<SwUnoCursor> const m_pCursor;
 
 public:
     explicit SwExternalToolEdit(SwWrtShell *const pShell)

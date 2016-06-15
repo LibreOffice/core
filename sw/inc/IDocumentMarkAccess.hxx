@@ -51,7 +51,7 @@ class IDocumentMarkAccess
         };
 
         typedef std::shared_ptr< ::sw::mark::IMark> pMark_t;
-        typedef ::std::vector< pMark_t > container_t;
+        typedef std::vector< pMark_t > container_t;
         typedef container_t::iterator iterator_t;
         typedef container_t::const_iterator const_iterator_t;
         typedef container_t::const_reverse_iterator const_reverse_iterator_t;
@@ -170,7 +170,7 @@ class IDocumentMarkAccess
         virtual void deleteMarks(
             const SwNodeIndex& rStt,
             const SwNodeIndex& rEnd,
-            ::std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk, // Ugly: SaveBookmark is core-internal
+            std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk, // Ugly: SaveBookmark is core-internal
             const SwIndex* pSttIdx,
             const SwIndex* pEndIdx) =0;
 

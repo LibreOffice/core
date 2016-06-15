@@ -258,7 +258,7 @@ protected:
     virtual void exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
             sal_Int32 nFamily,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
@@ -272,7 +272,7 @@ public:
 void SwXMLAutoStylePoolP::exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
             sal_Int32 nFamily,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
@@ -282,7 +282,7 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
 
     if( XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily )
     {
-        for( ::std::vector< XMLPropertyState >::const_iterator
+        for( std::vector< XMLPropertyState >::const_iterator
                     aProperty = rProperties.begin();
              aProperty != rProperties.end();
               ++aProperty )

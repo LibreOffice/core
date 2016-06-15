@@ -80,7 +80,7 @@ using namespace nsHdFtFlags;
 /// For the output of sections.
 struct WW8_PdAttrDesc
 {
-    ::std::unique_ptr<sal_uInt8[]> m_pData;
+    std::unique_ptr<sal_uInt8[]> m_pData;
     sal_uInt16 m_nLen;
     WW8_FC m_nSepxFcPos;
     WW8_PdAttrDesc() : m_nLen(0), m_nSepxFcPos(0xffffffff) /*default: none*/
@@ -828,7 +828,7 @@ bool operator<(const wwFont &r1, const wwFont &r2)
 sal_uInt16 wwFontHelper::GetId(const wwFont &rFont)
 {
     sal_uInt16 nRet;
-    ::std::map<wwFont, sal_uInt16>::const_iterator aIter = maFonts.find(rFont);
+    std::map<wwFont, sal_uInt16>::const_iterator aIter = maFonts.find(rFont);
     if (aIter != maFonts.end())
         nRet = aIter->second;
     else
@@ -888,11 +888,11 @@ sal_uInt16 wwFontHelper::GetId(const SvxFontItem& rFont)
     return GetId(aFont);
 }
 
-::std::vector< const wwFont* > wwFontHelper::AsVector() const
+std::vector< const wwFont* > wwFontHelper::AsVector() const
 {
-    ::std::vector<const wwFont *> aFontList( maFonts.size() );
+    std::vector<const wwFont *> aFontList( maFonts.size() );
 
-    typedef ::std::map<wwFont, sal_uInt16>::const_iterator myiter;
+    typedef std::map<wwFont, sal_uInt16>::const_iterator myiter;
     myiter aEnd = maFonts.end();
     for ( myiter aIter = maFonts.begin(); aIter != aEnd; ++aIter )
         aFontList[aIter->second] = &aIter->first;
@@ -912,7 +912,7 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
      * Convert from fast insertion map to linear vector in the order that we
      * want to write.
      */
-    ::std::vector<const wwFont *> aFontList( AsVector() );
+    std::vector<const wwFont *> aFontList( AsVector() );
 
     /*
      * Write them all to pTableStream
@@ -929,7 +929,7 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
 
 void wwFontHelper::WriteFontTable( DocxAttributeOutput& rAttrOutput )
 {
-    ::std::vector<const wwFont *> aFontList( AsVector() );
+    std::vector<const wwFont *> aFontList( AsVector() );
 
     for ( auto aFont : aFontList )
         aFont->WriteDocx(&rAttrOutput);
@@ -937,7 +937,7 @@ void wwFontHelper::WriteFontTable( DocxAttributeOutput& rAttrOutput )
 
 void wwFontHelper::WriteFontTable( const RtfAttributeOutput& rAttrOutput )
 {
-    ::std::vector<const wwFont *> aFontList( AsVector() );
+    std::vector<const wwFont *> aFontList( AsVector() );
 
     for ( auto aFont : aFontList )
         aFont->WriteRtf(&rAttrOutput);
@@ -2152,8 +2152,8 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
     OSL_ENSURE( aCps.size() + 2 == pTextPos->Count(), "WritePlc: DeSync" );
 
-    ::std::vector<std::pair<OUString,OUString> > aStrArr;
-    typedef ::std::vector<std::pair<OUString,OUString> >::iterator myiter;
+    std::vector<std::pair<OUString,OUString> > aStrArr;
+    typedef std::vector<std::pair<OUString,OUString> >::iterator myiter;
     WW8Fib& rFib = *rWrt.pFib;              // n+1-th CP-Pos according to the manual
     sal_uInt16 i;
     bool bWriteCP = true;
@@ -2183,8 +2183,8 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 }
 
                 //sort and remove duplicates
-                ::std::sort(aStrArr.begin(), aStrArr.end(),&lcl_AuthorComp);
-                myiter aIter = ::std::unique(aStrArr.begin(), aStrArr.end());
+                std::sort(aStrArr.begin(), aStrArr.end(),&lcl_AuthorComp);
+                myiter aIter = std::unique(aStrArr.begin(), aStrArr.end());
                 aStrArr.erase(aIter, aStrArr.end());
 
                 // Also sort the start and end positions. We need to reference
@@ -2367,7 +2367,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
 
                 //aStrArr is sorted
-                myiter aIter = ::std::lower_bound(aStrArr.begin(),
+                myiter aIter = std::lower_bound(aStrArr.begin(),
                         aStrArr.end(), std::pair<OUString,OUString>(rAtn.msOwner,OUString()),
                         &lcl_AuthorComp);
                 OSL_ENSURE(aIter != aStrArr.end() && aIter->first == rAtn.msOwner,

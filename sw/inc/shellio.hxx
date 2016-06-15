@@ -361,7 +361,7 @@ class SW_DLLPUBLIC Writer
     void AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
     void AddFontItems_( SfxItemPool& rPool, sal_uInt16 nWhichId );
 
-    ::std::unique_ptr<Writer_Impl> m_pImpl;
+    std::unique_ptr<Writer_Impl> m_pImpl;
 
     Writer(Writer const&) = delete;
     Writer& operator=(Writer const&) = delete;

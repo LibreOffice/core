@@ -1275,7 +1275,7 @@ static bool lcl_GetTextAttrParent(sal_Int32 nIndex, sal_Int32 nHintStart, sal_In
 
 static void
 lcl_GetTextAttrs(
-    ::std::vector<SwTextAttr *> *const pVector,
+    std::vector<SwTextAttr *> *const pVector,
     SwTextAttr **const ppTextAttr,
     SwpHints *const pSwpHints,
     sal_Int32 const nIndex, RES_TXTATR const nWhich,
@@ -1337,10 +1337,10 @@ lcl_GetTextAttrs(
     }
 }
 
-::std::vector<SwTextAttr *>
+std::vector<SwTextAttr *>
 SwTextNode::GetTextAttrsAt(sal_Int32 const nIndex, RES_TXTATR const nWhich) const
 {
-    ::std::vector<SwTextAttr *> ret;
+    std::vector<SwTextAttr *> ret;
     lcl_GetTextAttrs(& ret, nullptr, m_pSwpHints, nIndex, nWhich, DEFAULT);
     return ret;
 }

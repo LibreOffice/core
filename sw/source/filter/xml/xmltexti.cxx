@@ -910,7 +910,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
 
 void SwXMLTextImportHelper::endAppletOrPlugin(
         const uno::Reference < XPropertySet > &rPropSet,
-        ::std::map < const OUString, OUString > &rParamMap)
+        std::map < const OUString, OUString > &rParamMap)
 {
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
@@ -935,8 +935,8 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             const sal_Int32 nCount = rParamMap.size();
             uno::Sequence< beans::PropertyValue > aCommandSequence( nCount );
 
-            ::std::map < const OUString, OUString > ::iterator aIter = rParamMap.begin();
-            ::std::map < const OUString, OUString > ::iterator aEnd = rParamMap.end();
+            std::map < const OUString, OUString > ::iterator aIter = rParamMap.begin();
+            std::map < const OUString, OUString > ::iterator aEnd = rParamMap.end();
             sal_Int32 nIndex=0;
             while (aIter != aEnd )
             {

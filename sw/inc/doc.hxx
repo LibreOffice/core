@@ -348,7 +348,7 @@ class SW_DLLPUBLIC SwDoc :
     /// Cell Styles not assigned to a Table Style
     std::unique_ptr<SwCellStyleTable> mpCellStyles;
 private:
-    ::std::unique_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
+    std::unique_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
     // other
 

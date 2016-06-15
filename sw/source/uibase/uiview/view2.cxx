@@ -324,7 +324,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     // pool formats
 
-    const ::std::vector<OUString>& rFramePoolArr(
+    const std::vector<OUString>& rFramePoolArr(
             SwStyleNameMapper::GetFrameFormatUINameArray());
     for(const auto & i : rFramePoolArr)
     {

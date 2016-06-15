@@ -92,8 +92,8 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     OUString                                m_sFilter;
     sal_Int32                               m_nResultSetCursorPos;
 
-    ::std::vector<DBAddressDataAssignment>  m_aAddressDataAssignments;
-    ::std::vector< OUString>         m_aAddressBlocks;
+    std::vector<DBAddressDataAssignment>    m_aAddressDataAssignments;
+    std::vector< OUString>           m_aAddressBlocks;
     sal_Int32                               m_nCurrentAddressBlock;
     bool                                m_bIsAddressBlock;
     bool                                m_bIsHideEmptyParagraphs;
@@ -104,11 +104,11 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 
     bool                                m_bIsGreetingLine;
     bool                                m_bIsIndividualGreetingLine;
-    ::std::vector< OUString>         m_aFemaleGreetingLines;
+    std::vector< OUString>           m_aFemaleGreetingLines;
     sal_Int32                               m_nCurrentFemaleGreeting;
-    ::std::vector< OUString>         m_aMaleGreetingLines;
+    std::vector< OUString>           m_aMaleGreetingLines;
     sal_Int32                               m_nCurrentMaleGreeting;
-    ::std::vector< OUString>         m_aNeutralGreetingLines;
+    std::vector< OUString>           m_aNeutralGreetingLines;
     sal_Int32                               m_nCurrentNeutralGreeting;
     OUString                         m_sFemaleGenderValue;
     uno::Sequence< OUString>         m_aSavedDocuments;
@@ -142,7 +142,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     ResStringArray                          m_AddressHeaderSA;
 
     //these addresses are not stored in the configuration
-    ::std::vector< SwDocMergeInfo >         m_aMergeInfos;
+    std::vector< SwDocMergeInfo >           m_aMergeInfos;
 
     //we do overwrite the usersettings in a special case
     //than we do remind the usersettings here
@@ -578,7 +578,7 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
     //load the existing node names to find new names
     Sequence<OUString> aAssignments = GetNodeNames(OUString::createFromAscii(cAddressDataAssignments));
 
-    ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
+    std::vector<DBAddressDataAssignment>::iterator aAssignIter;
     for(aAssignIter = m_aAddressDataAssignments.begin();
                 aAssignIter != m_aAddressDataAssignments.end(); ++aAssignIter)
     {
@@ -649,7 +649,7 @@ void SwMailMergeConfigItem_Impl::SetAddressBlocks(
 const Sequence< OUString>   SwMailMergeConfigItem_Impl::GetGreetings(
         SwMailMergeConfigItem::Gender eType, bool bConvertToConfig) const
 {
-    const ::std::vector< OUString>& rGreetings =
+    const std::vector< OUString>& rGreetings =
             eType == SwMailMergeConfigItem::FEMALE ? m_aFemaleGreetingLines :
             eType == SwMailMergeConfigItem::MALE ? m_aMaleGreetingLines :
                                 m_aNeutralGreetingLines;
@@ -669,7 +669,7 @@ void  SwMailMergeConfigItem_Impl::SetGreetings(
         const Sequence< OUString>& rSetGreetings,
         bool bConvertFromConfig)
 {
-    ::std::vector< OUString>& rGreetings =
+    std::vector< OUString>& rGreetings =
             eType == SwMailMergeConfigItem::FEMALE ? m_aFemaleGreetingLines :
             eType == SwMailMergeConfigItem::MALE ? m_aMaleGreetingLines :
                                 m_aNeutralGreetingLines;
@@ -1146,7 +1146,7 @@ Sequence< OUString> SwMailMergeConfigItem::GetColumnAssignment(
                 const SwDBData& rDBData ) const
 {
     Sequence< OUString> aRet;
-    ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
+    std::vector<DBAddressDataAssignment>::iterator aAssignIter;
     for(aAssignIter = m_pImpl->m_aAddressDataAssignments.begin();
                 aAssignIter != m_pImpl->m_aAddressDataAssignments.end(); ++aAssignIter)
     {
@@ -1174,7 +1174,7 @@ OUString     SwMailMergeConfigItem::GetAssignedColumn(sal_uInt32 nColumn) const
 void SwMailMergeConfigItem::SetColumnAssignment( const SwDBData& rDBData,
                             const Sequence< OUString>& rList)
 {
-    ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
+    std::vector<DBAddressDataAssignment>::iterator aAssignIter;
     bool bFound = false;
     for(aAssignIter = m_pImpl->m_aAddressDataAssignments.begin();
                 aAssignIter != m_pImpl->m_aAddressDataAssignments.end(); ++aAssignIter)

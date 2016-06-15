@@ -259,7 +259,7 @@ public:
 class SwInsertSectionTabDialog : public SfxTabDialog
 {
     SwWrtShell&     rWrtSh;
-    ::std::unique_ptr<SwSectionData> m_pSectionData;
+    std::unique_ptr<SwSectionData> m_pSectionData;
 
     sal_uInt16 m_nSectionPageId;
     sal_uInt16 m_nColumnPageId;

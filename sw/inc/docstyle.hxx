@@ -166,7 +166,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
     sal_uInt32          nLastPos;
     bool                bFirstCalled;
 
-    void                AppendStyleList(const ::std::vector<OUString>& rLst,
+    void                AppendStyleList(const std::vector<OUString>& rLst,
                                         bool        bUsed,
                                         bool        bTestHidden,
                                         bool        bOnlyHidden,

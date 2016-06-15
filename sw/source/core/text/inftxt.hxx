@@ -139,7 +139,7 @@ public:
 class SwTextSizeInfo : public SwTextInfo
 {
 private:
-    typedef ::std::map< sal_uIntPtr, sal_uInt16 > SwTextPortionMap;
+    typedef std::map< sal_uIntPtr, sal_uInt16 > SwTextPortionMap;
 
 protected:
     // during formatting, a small database is built, mapping portion pointers
@@ -312,7 +312,7 @@ public:
     // stored in m_aMaxWidth and discarded after a line has been formatted.
     inline void SetMaxWidthDiff( const void *nKey, sal_uInt16 nVal )
     {
-        m_aMaxWidth.insert( ::std::make_pair( reinterpret_cast<sal_uIntPtr>(nKey), nVal ) );
+        m_aMaxWidth.insert( std::make_pair( reinterpret_cast<sal_uIntPtr>(nKey), nVal ) );
     };
     inline sal_uInt16 GetMaxWidthDiff( const void *nKey )
     {

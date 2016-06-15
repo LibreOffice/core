@@ -82,7 +82,7 @@ class SwStyleNameMapper
 
 protected:
     // UI Name tables
-    static ::std::vector<OUString> *m_pTextUINameArray,
+    static std::vector<OUString> *m_pTextUINameArray,
                             *m_pListsUINameArray,
                             *m_pExtraUINameArray,
                             *m_pRegisterUINameArray,
@@ -173,33 +173,33 @@ public:
                     const OUString& rExtraUIName);
     static const OUString GetSpecialExtraUIName(const OUString& rExtraProgName);
 
-    static const ::std::vector<OUString>& GetTextUINameArray();
-    static const ::std::vector<OUString>& GetListsUINameArray();
-    static const ::std::vector<OUString>& GetExtraUINameArray();
-    static const ::std::vector<OUString>& GetRegisterUINameArray();
-    static const ::std::vector<OUString>& GetDocUINameArray();
-    static const ::std::vector<OUString>& GetHTMLUINameArray();
-    static const ::std::vector<OUString>& GetFrameFormatUINameArray();
-    static const ::std::vector<OUString>& GetChrFormatUINameArray();
-    static const ::std::vector<OUString>& GetHTMLChrFormatUINameArray();
-    static const ::std::vector<OUString>& GetPageDescUINameArray();
-    static const ::std::vector<OUString>& GetNumRuleUINameArray();
-    static const ::std::vector<OUString>& GetTableStyleUINameArray();
-    static const ::std::vector<OUString>& GetCellStyleUINameArray();
+    static const std::vector<OUString>& GetTextUINameArray();
+    static const std::vector<OUString>& GetListsUINameArray();
+    static const std::vector<OUString>& GetExtraUINameArray();
+    static const std::vector<OUString>& GetRegisterUINameArray();
+    static const std::vector<OUString>& GetDocUINameArray();
+    static const std::vector<OUString>& GetHTMLUINameArray();
+    static const std::vector<OUString>& GetFrameFormatUINameArray();
+    static const std::vector<OUString>& GetChrFormatUINameArray();
+    static const std::vector<OUString>& GetHTMLChrFormatUINameArray();
+    static const std::vector<OUString>& GetPageDescUINameArray();
+    static const std::vector<OUString>& GetNumRuleUINameArray();
+    static const std::vector<OUString>& GetTableStyleUINameArray();
+    static const std::vector<OUString>& GetCellStyleUINameArray();
 
-    static const ::std::vector<OUString>& GetTextProgNameArray();
-    static const ::std::vector<OUString>& GetListsProgNameArray();
-    static const ::std::vector<OUString>& GetExtraProgNameArray();
-    static const ::std::vector<OUString>& GetRegisterProgNameArray();
-    static const ::std::vector<OUString>& GetDocProgNameArray();
-    static const ::std::vector<OUString>& GetHTMLProgNameArray();
-    static const ::std::vector<OUString>& GetFrameFormatProgNameArray();
-    static const ::std::vector<OUString>& GetChrFormatProgNameArray();
-    static const ::std::vector<OUString>& GetHTMLChrFormatProgNameArray();
-    static const ::std::vector<OUString>& GetPageDescProgNameArray();
-    static const ::std::vector<OUString>& GetNumRuleProgNameArray();
-    static const ::std::vector<OUString>& GetTableStyleProgNameArray();
-    static const ::std::vector<OUString>& GetCellStyleProgNameArray();
+    static const std::vector<OUString>& GetTextProgNameArray();
+    static const std::vector<OUString>& GetListsProgNameArray();
+    static const std::vector<OUString>& GetExtraProgNameArray();
+    static const std::vector<OUString>& GetRegisterProgNameArray();
+    static const std::vector<OUString>& GetDocProgNameArray();
+    static const std::vector<OUString>& GetHTMLProgNameArray();
+    static const std::vector<OUString>& GetFrameFormatProgNameArray();
+    static const std::vector<OUString>& GetChrFormatProgNameArray();
+    static const std::vector<OUString>& GetHTMLChrFormatProgNameArray();
+    static const std::vector<OUString>& GetPageDescProgNameArray();
+    static const std::vector<OUString>& GetNumRuleProgNameArray();
+    static const std::vector<OUString>& GetTableStyleProgNameArray();
+    static const std::vector<OUString>& GetCellStyleProgNameArray();
 };
 #endif // _NAME_MAPPER_HXX
 

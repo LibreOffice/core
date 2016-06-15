@@ -60,7 +60,7 @@ private:
     OUString msMacroEnter;
     OUString msMacroExit;
 
-    ::std::vector< OUString > msListEntries;
+    std::vector< OUString > msListEntries;
 
 protected:
     static void WriteOUString(SvStream * pStream, const OUString & rStr, bool bAddZero);

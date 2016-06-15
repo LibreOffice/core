@@ -194,7 +194,7 @@ public:
 class SW_DLLPUBLIC MetaFieldManager
 {
 private:
-    typedef ::std::vector< std::weak_ptr<MetaField> > MetaFieldList_t;
+    typedef std::vector< std::weak_ptr<MetaField> > MetaFieldList_t;
     MetaFieldList_t m_MetaFields;
     /// Document properties of a clipboard document, empty for non-clipboard documents.
     css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
@@ -209,7 +209,7 @@ public:
                 const sal_uInt32 nNumberFormat = SAL_MAX_UINT32,
                 const bool bIsFixedLanguage = false );
     /// get all meta fields
-    ::std::vector< css::uno::Reference<css::text::XTextField> > getMetaFields();
+    std::vector< css::uno::Reference<css::text::XTextField> > getMetaFields();
     /// Copy document properties from rSource to m_xDocumentProperties.
     void copyDocumentProperties(const SwDoc& rSource);
     const css::uno::Reference<css::document::XDocumentProperties>& getDocumentProperties();

@@ -1346,7 +1346,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     pTextAttr = nullptr;
                     if( SwContentAtPos::SW_TOXMARK & rContentAtPos.eContentAtPos )
                     {
-                        ::std::vector<SwTextAttr *> const marks(
+                        std::vector<SwTextAttr *> const marks(
                             pTextNd->GetTextAttrsAt(
                                aPos.nContent.GetIndex(), RES_TXTATR_TOXMARK));
                         if (marks.size())
@@ -1358,7 +1358,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     if( !pTextAttr &&
                         SwContentAtPos::SW_REFMARK & rContentAtPos.eContentAtPos )
                     {
-                        ::std::vector<SwTextAttr *> const marks(
+                        std::vector<SwTextAttr *> const marks(
                             pTextNd->GetTextAttrsAt(
                                aPos.nContent.GetIndex(), RES_TXTATR_REFMARK));
                         if (marks.size())

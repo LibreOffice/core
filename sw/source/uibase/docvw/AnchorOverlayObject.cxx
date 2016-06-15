@@ -127,7 +127,7 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecompo
         }
         else
         {
-            ::std::vector< double > aDotDashArray;
+            std::vector< double > aDotDashArray;
             const double fDistance(3.0 * 15.0);
             const double fDashLen(5.0 * 15.0);
 

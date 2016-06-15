@@ -223,7 +223,7 @@ namespace
         const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
         SwPosition* pCpyStt = rCpyPam.Start();
 
-        typedef ::std::vector< const ::sw::mark::IMark* > mark_vector_t;
+        typedef std::vector< const ::sw::mark::IMark* > mark_vector_t;
         mark_vector_t vMarksToCopy;
         for ( IDocumentMarkAccess::const_iterator_t ppMark = pSrcMarkAccess->getAllMarksBegin();
               ppMark != pSrcMarkAccess->getAllMarksEnd();
@@ -473,7 +473,7 @@ namespace
 namespace
 {
     void
-    lcl_CalcBreaks( ::std::vector<sal_Int32> & rBreaks, SwPaM const & rPam )
+    lcl_CalcBreaks( std::vector<sal_Int32> & rBreaks, SwPaM const & rPam )
     {
         SwTextNode const * const pTextNode(
                 rPam.End()->nNode.GetNode().GetTextNode() );
@@ -503,7 +503,7 @@ namespace
     bool lcl_DoWithBreaks(::sw::DocumentContentOperationsManager & rDocumentContentOperations, SwPaM & rPam,
             bool (::sw::DocumentContentOperationsManager::*pFunc)(SwPaM&, bool), const bool bForceJoinNext = false)
     {
-        ::std::vector<sal_Int32> Breaks;
+        std::vector<sal_Int32> Breaks;
 
         lcl_CalcBreaks(Breaks, rPam);
 
@@ -521,7 +521,7 @@ namespace
 
         bool bRet( true );
         // iterate from end to start, to avoid invalidating the offsets!
-        ::std::vector<sal_Int32>::reverse_iterator iter( Breaks.rbegin() );
+        std::vector<sal_Int32>::reverse_iterator iter( Breaks.rbegin() );
         SwPaM aPam( rSelectionEnd, rSelectionEnd ); // end node!
         SwPosition & rEnd( *aPam.End() );
         SwPosition & rStart( *aPam.Start() );
@@ -2037,7 +2037,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
 
     // Copy all Bookmarks that are within the Move range into an array,
     // that saves the position as an offset.
-    ::std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
+    std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
     DelBookmarks(
         pStt->nNode,
         pEnd->nNode,
@@ -2145,7 +2145,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     // Insert the Bookmarks back into the Document.
     *rPaM.GetMark() = *aSavePam.Start();
     for(
-        ::std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
+        std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
         pBkmk != aSaveBkmks.end();
         ++pBkmk)
         pBkmk->SetInDoc(
@@ -2230,7 +2230,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     // Copy all Bookmarks that are within the Move range into an array
     // that stores all references to positions as an offset.
     // The final mapping happens after the Move.
-    ::std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
+    std::vector< ::sw::mark::SaveBookmark> aSaveBkmks;
     DelBookmarks(rRange.aStart, rRange.aEnd, &aSaveBkmks);
 
     // Save the paragraph-bound Flys, so that they can be moved.
@@ -2266,7 +2266,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     // Add the Bookmarks back to the Document
     for(
-        ::std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
+        std::vector< ::sw::mark::SaveBookmark>::iterator pBkmk = aSaveBkmks.begin();
         pBkmk != aSaveBkmks.end();
         ++pBkmk)
         pBkmk->SetInDoc(&m_rDoc, aIdx);
@@ -3001,7 +3001,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     // unfortunately replace works slightly differently from delete,
     // so we cannot use lcl_DoWithBreaks here...
 
-    ::std::vector<sal_Int32> Breaks;
+    std::vector<sal_Int32> Breaks;
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
     aPam.Normalize(false);
@@ -3037,7 +3037,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
 
     bool bRet( true );
     // iterate from end to start, to avoid invalidating the offsets!
-    ::std::vector<sal_Int32>::reverse_iterator iter( Breaks.rbegin() );
+    std::vector<sal_Int32>::reverse_iterator iter( Breaks.rbegin() );
     OSL_ENSURE(aPam.GetPoint() == aPam.End(), "wrong!");
     SwPosition & rEnd( *aPam.End() );
     SwPosition & rStart( *aPam.Start() );
@@ -3250,7 +3250,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     // and then only copy them. This maintains the ordering numbers (which are only
     // managed in the DrawModel).
     SwDoc *const pDest = rStartIdx.GetNode().GetDoc();
-    ::std::set< ZSortFly > aSet;
+    std::set< ZSortFly > aSet;
     const size_t nArrLen = m_rDoc.GetSpzFrameFormats()->size();
 
     SwTextBoxHelper::SavedLink aOldTextBoxes;
@@ -3342,8 +3342,8 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     // Store all copied (and also the newly created) frames in another array.
     // They are stored as matching the originals, so that we will be later
     // able to build the chains accordingly.
-    ::std::vector< SwFrameFormat* > aVecSwFrameFormat;
-    ::std::set< ZSortFly >::const_iterator it=aSet.begin();
+    std::vector< SwFrameFormat* > aVecSwFrameFormat;
+    std::set< ZSortFly >::const_iterator it=aSet.begin();
 
     while (it != aSet.end())
     {
@@ -3461,14 +3461,14 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     if ( aSet.size() == aVecSwFrameFormat.size() )
     {
         size_t n = 0;
-        for (::std::set< ZSortFly >::const_iterator nIt=aSet.begin() ; nIt != aSet.end(); ++nIt, ++n )
+        for (std::set< ZSortFly >::const_iterator nIt=aSet.begin() ; nIt != aSet.end(); ++nIt, ++n )
         {
             const SwFrameFormat *pFormatN = (*nIt).GetFormat();
             const SwFormatChain &rChain = pFormatN->GetChain();
             int nCnt = int(nullptr != rChain.GetPrev());
             nCnt += rChain.GetNext() ? 1: 0;
             size_t k = 0;
-            for (::std::set< ZSortFly >::const_iterator kIt=aSet.begin() ; kIt != aSet.end(); ++kIt, ++k )
+            for (std::set< ZSortFly >::const_iterator kIt=aSet.begin() ; kIt != aSet.end(); ++kIt, ++k )
             {
                 const SwFrameFormat *pFormatK = (*kIt).GetFormat();
                 if ( rChain.GetPrev() == pFormatK )

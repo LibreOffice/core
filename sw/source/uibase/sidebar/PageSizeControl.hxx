@@ -58,7 +58,7 @@ private:
     VclPtr<MetricField> maWidthHeightField;
 
     Paper mePaper;
-    ::std::vector< Paper > maPaperList;
+    std::vector< Paper > maPaperList;
 
     PagePropertyPanel& mrPagePropPanel;
 

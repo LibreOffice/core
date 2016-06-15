@@ -184,7 +184,7 @@ bool Writer::CopyNextPam( SwPaM ** ppPam )
 sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 {
     const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-    const IDocumentMarkAccess::const_iterator_t ppBkmk = ::std::lower_bound(
+    const IDocumentMarkAccess::const_iterator_t ppBkmk = std::lower_bound(
         pMarkAccess->getAllMarksBegin(),
         pMarkAccess->getAllMarksEnd(),
         rPos,

@@ -1817,10 +1817,10 @@ static sal_uInt16 SwFormatGetPageNum(const SwFlyFrameFormat * pFormat)
 void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
                                       const OUString & rReference,
                                       bool bSuccessors,
-                                      ::std::vector< OUString > & aPrevPageVec,
-                                      ::std::vector< OUString > & aThisPageVec,
-                                      ::std::vector< OUString > & aNextPageVec,
-                                      ::std::vector< OUString > & aRestVec)
+                                      std::vector< OUString > & aPrevPageVec,
+                                      std::vector< OUString > & aThisPageVec,
+                                      std::vector< OUString > & aNextPageVec,
+                                      std::vector< OUString > & aRestVec)
 {
     StartAction();
 
@@ -1837,7 +1837,7 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
     const size_t nCnt = mpDoc->GetFlyCount(FLYCNTTYPE_FRM);
 
     /* potential successors resp. predecessors */
-    ::std::vector< const SwFrameFormat * > aTmpSpzArray;
+    std::vector< const SwFrameFormat * > aTmpSpzArray;
 
     mpDoc->FindFlyByName(rReference);
 
@@ -1878,7 +1878,7 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
         /* number of page rFormat resides on */
         sal_uInt16 nPageNum = SwFormatGetPageNum(static_cast<SwFlyFrameFormat *>(&rFormat));
 
-        ::std::vector< const SwFrameFormat * >::const_iterator aIt;
+        std::vector< const SwFrameFormat * >::const_iterator aIt;
 
         for (aIt = aTmpSpzArray.begin(); aIt != aTmpSpzArray.end(); ++aIt)
         {

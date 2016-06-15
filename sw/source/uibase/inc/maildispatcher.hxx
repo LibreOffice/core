@@ -142,8 +142,8 @@ private:
 
 private:
     css::uno::Reference< css::mail::XSmtpService> mailserver_;
-    ::std::list< css::uno::Reference< css::mail::XMailMessage > > messages_;
-    ::std::list< ::rtl::Reference<IMailDispatcherListener> > listeners_;
+    std::list< css::uno::Reference< css::mail::XMailMessage > > messages_;
+    std::list< ::rtl::Reference<IMailDispatcherListener> > listeners_;
     ::osl::Mutex message_container_mutex_;
     ::osl::Mutex listener_container_mutex_;
     ::osl::Mutex thread_status_mutex_;

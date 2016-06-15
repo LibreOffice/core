@@ -885,7 +885,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
 
         {
             IDocumentMarkAccess* const pMarkAccess = pTmpDoc->getIDocumentMarkAccess();
-            ::std::vector< ::sw::mark::IMark* > vDdeMarks;
+            std::vector< ::sw::mark::IMark* > vDdeMarks;
             // find all DDE-Bookmarks
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
@@ -895,7 +895,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
                     vDdeMarks.push_back(ppMark->get());
             }
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
-            for(::std::vector< ::sw::mark::IMark* >::iterator ppMark = vDdeMarks.begin();
+            for(std::vector< ::sw::mark::IMark* >::iterator ppMark = vDdeMarks.begin();
                 ppMark != vDdeMarks.end();
                 ++ppMark)
                 pMarkAccess->deleteMark(*ppMark);

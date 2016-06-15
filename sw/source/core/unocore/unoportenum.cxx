@@ -73,8 +73,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::std;
 
-typedef ::std::pair< TextRangeList_t * const, SwTextAttr const * const > PortionList_t;
-typedef ::std::stack< PortionList_t > PortionStack_t;
+typedef std::pair< TextRangeList_t * const, SwTextAttr const * const > PortionList_t;
+typedef std::stack< PortionList_t > PortionStack_t;
 
 static void lcl_CreatePortions(
     TextRangeList_t & i_rPortions,
@@ -407,7 +407,7 @@ throw( container::NoSuchElementException, lang::WrappedTargetException,
     return any;
 }
 
-typedef ::std::deque< sal_Int32 > FieldMarks_t;
+typedef std::deque< sal_Int32 > FieldMarks_t;
 
 static void
 lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCursor const & rUnoCursor,
@@ -419,7 +419,7 @@ lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCursor const & rUnoCurso
 
     const sal_Unicode fld[] = {
         CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, CH_TXT_ATR_FORMELEMENT, 0 };
-    sal_Int32 pos = ::std::max(static_cast<const sal_Int32>(0), i_nStartPos);
+    sal_Int32 pos = std::max(static_cast<const sal_Int32>(0), i_nStartPos);
     while ((pos = ::comphelper::string::indexOfAny(pTextNode->GetText(), fld, pos)) != -1)
     {
         rFieldMarks.push_back(pos);
@@ -580,7 +580,7 @@ static uno::Reference<text::XTextRange>
 lcl_CreateMetaPortion(
     uno::Reference<text::XText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
-    SwTextAttr & rAttr, ::std::unique_ptr<TextRangeList_t const> && pPortions)
+    SwTextAttr & rAttr, std::unique_ptr<TextRangeList_t const> && pPortions)
 {
     const uno::Reference<rdf::XMetadatable> xMeta( SwXMeta::CreateXMeta(
             *static_cast<SwFormatMeta &>(rAttr.GetAttr()).GetMeta(),
@@ -788,7 +788,7 @@ lcl_ExportHints(
                         }
                         else
                         {
-                            ::std::unique_ptr<const TextRangeList_t>
+                            std::unique_ptr<const TextRangeList_t>
                                 pCurrentPortions(Top.first);
                             rPortionStack.pop();
                             const uno::Reference<text::XTextRange> xPortion(
@@ -961,7 +961,7 @@ lcl_ExportHints(
                             if ((i_nEndPos < 0) ||
                                 (*pAttr->GetEnd() <= i_nEndPos))
                             {
-                                rPortionStack.push( ::std::make_pair(
+                                rPortionStack.push( std::make_pair(
                                         new TextRangeList_t, pAttr ));
                             }
                         }

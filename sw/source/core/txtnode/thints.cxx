@@ -242,7 +242,7 @@ MakeTextAttrNesting(SwTextNode & rNode, SwTextAttrNesting & rNesting,
     return static_txtattr_cast<SwTextAttrNesting*>(pNew);
 }
 
-typedef ::std::vector<SwTextAttrNesting *> NestList_t;
+typedef std::vector<SwTextAttrNesting *> NestList_t;
 
 static void
 lcl_DoSplitNew(NestList_t & rSplits, SwTextNode & rNode,
@@ -253,7 +253,7 @@ lcl_DoSplitNew(NestList_t & rSplits, SwTextNode & rNode,
     const sal_Int32 nSplitPos( (bSplitAtStart) ? nOtherStart : nOtherEnd );
     // first find the portion that is split (not necessarily the last one!)
     NestList_t::iterator const iter(
-        ::std::find_if( rSplits.begin(), rSplits.end(),
+        std::find_if( rSplits.begin(), rSplits.end(),
             [nSplitPos](SwTextAttrEnd * const pAttr) {
                 return TextAttrContains(nSplitPos, pAttr);
             } ) );

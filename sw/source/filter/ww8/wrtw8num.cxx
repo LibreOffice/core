@@ -104,7 +104,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
 
     // Is this list now duplicated into a new list which we should use
     // #i77812# - perform 'deep' search in duplication map
-    ::std::map<sal_uInt16,sal_uInt16>::const_iterator aResult = m_aRuleDuplicates.end();
+    std::map<sal_uInt16,sal_uInt16>::const_iterator aResult = m_aRuleDuplicates.end();
     do {
         aResult = m_aRuleDuplicates.find(nRet);
         if ( aResult != m_aRuleDuplicates.end() )

@@ -210,8 +210,8 @@ private:
 
     VclPtr<OKButton>               m_pOK;
 
-    ::std::vector<OUString>   m_aSalutations;
-    ::std::vector<OUString>   m_aPunctuations;
+    std::vector<OUString>     m_aSalutations;
+    std::vector<OUString>     m_aPunctuations;
 
     OUString                m_sCurrentSalutation;
     OUString                m_sCurrentPunctuation;

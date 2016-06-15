@@ -43,7 +43,7 @@ class SwTableNode;
 class XMLPropertySetMapper;
 class SwXMLTableLines_Impl;
 
-typedef ::std::vector< SwXMLTableLines_Impl* > SwXMLTableLinesCache_Impl;
+typedef std::vector< SwXMLTableLines_Impl* > SwXMLTableLinesCache_Impl;
 
 class SwXMLExport : public SvXMLExport
 {
@@ -95,7 +95,7 @@ class SwXMLExport : public SvXMLExport
     virtual void ExportContent_() override;
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
-    virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings ) override;
+    virtual sal_Int32 GetDocumentSpecificSettings( std::list< SettingsGroup >& _out_rSettings ) override;
 
     void setBlockMode();
 private:

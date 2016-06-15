@@ -1200,7 +1200,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 {
     OSL_ENSURE( rPaM.GetDoc() == this, "need same doc" );
 
-    ::std::map<SwNumRule *, ListStyleData> aMyNumRuleMap;
+    std::map<SwNumRule *, ListStyleData> aMyNumRuleMap;
 
     bool bFirst = true;
 

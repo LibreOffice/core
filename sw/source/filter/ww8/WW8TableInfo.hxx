@@ -40,13 +40,13 @@ namespace ww8
 const unsigned int MAXTABLECELLS = 63;
 
 class WW8TableNodeInfo;
-typedef ::std::vector<const SwTableBox *> TableBoxVector;
+typedef std::vector<const SwTableBox *> TableBoxVector;
 typedef std::shared_ptr<TableBoxVector> TableBoxVectorPtr;
-typedef ::std::vector<sal_uInt32> GridCols;
+typedef std::vector<sal_uInt32> GridCols;
 typedef std::shared_ptr<GridCols> GridColsPtr;
-typedef ::std::vector<sal_Int32> RowSpans;
+typedef std::vector<sal_Int32> RowSpans;
 typedef std::shared_ptr<RowSpans> RowSpansPtr;
-typedef ::std::vector<sal_uInt32> Widths;
+typedef std::vector<sal_uInt32> Widths;
 typedef std::shared_ptr<Widths> WidthsPtr;
 
 class WW8TableNodeInfoInner
@@ -108,7 +108,7 @@ public:
     RowSpansPtr getRowSpansOfRow();
 
 #ifdef DBG_UTIL
-    ::std::string toString() const;
+    std::string toString() const;
 #endif
 };
 
@@ -152,21 +152,21 @@ public:
     }
 
 #ifdef DBG_UTIL
-    ::std::string toString() const;
+    std::string toString() const;
 #endif
 };
 
-typedef ::std::multiset<CellInfo, ::std::less<CellInfo> > CellInfoMultiSet;
-typedef ::std::map<sal_uInt32, WW8TableNodeInfoInner*,
-            ::std::greater<sal_uInt32> > RowEndInners_t;
+typedef std::multiset<CellInfo, std::less<CellInfo> > CellInfoMultiSet;
+typedef std::map<sal_uInt32, WW8TableNodeInfoInner*,
+            std::greater<sal_uInt32> > RowEndInners_t;
 
 
 class WW8TableInfo;
 class WW8TableNodeInfo
 {
 public:
-    typedef ::std::map<sal_uInt32, WW8TableNodeInfoInner::Pointer_t,
-                ::std::greater<sal_uInt32> > Inners_t;
+    typedef std::map<sal_uInt32, WW8TableNodeInfoInner::Pointer_t,
+                std::greater<sal_uInt32> > Inners_t;
 
 private:
     WW8TableInfo * mpParent;
@@ -212,7 +212,7 @@ public:
     sal_uInt32 getRow() const;
 
 #ifdef DBG_UTIL
-    ::std::string toString() const;
+    std::string toString() const;
 #endif
 
     bool operator < (const WW8TableNodeInfo & rInfo) const;
@@ -257,8 +257,8 @@ public:
 
 class WW8TableCellGrid
 {
-    typedef ::std::set<long> RowTops_t;
-    typedef ::std::map<long, WW8TableCellGridRow::Pointer_t> Rows_t;
+    typedef std::set<long> RowTops_t;
+    typedef std::map<long, WW8TableCellGridRow::Pointer_t> Rows_t;
 
     RowTops_t m_aRowTops;
     Rows_t m_aRows;
@@ -281,7 +281,7 @@ public:
     WW8TableNodeInfo *connectCells(RowEndInners_t &rLastRowEnds);
 
 #ifdef DBG_UTIL
-    ::std::string toString();
+    std::string toString();
 #endif
 
     TableBoxVectorPtr getTableBoxesOfRow(WW8TableNodeInfoInner * pNodeInfo);

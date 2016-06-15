@@ -331,7 +331,7 @@ class HTMLTable;
 class SwCSS1Parser;
 class SwHTMLNumRuleInfo;
 
-typedef ::std::vector<std::unique_ptr<ImageMap>> ImageMaps;
+typedef std::vector<std::unique_ptr<ImageMap>> ImageMaps;
 
 #define HTML_CNTXT_PROTECT_STACK    0x0001
 #define HTML_CNTXT_STRIP_PARA       0x0002

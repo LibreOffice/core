@@ -146,7 +146,7 @@ void WW8FFData::Write(SvStream * pDataStrm)
         sal_uInt32 nListboxEntries = msListEntries.size();
         pDataStrm->WriteUInt32( nListboxEntries );
 
-        ::std::vector< OUString >::const_iterator aIt = msListEntries.begin();
+        std::vector< OUString >::const_iterator aIt = msListEntries.begin();
 
         while (aIt != msListEntries.end())
         {
