@@ -39,12 +39,9 @@ class DecoToolBox : public ToolBox
     long lastSize;
     Size maMinSize;
 
-    using Window::ImplInit;
 public:
     explicit DecoToolBox(vcl::Window* pParent);
     virtual ~DecoToolBox() {}
-
-    void    ImplInit();
 
     void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 

@@ -35,14 +35,9 @@
 #define IID_DOCUMENTCLOSE 1
 
 DecoToolBox::DecoToolBox( vcl::Window* pParent ) :
-    ToolBox( pParent, 0 )
+    ToolBox( pParent, 0 ),
+    lastSize(-1)
 {
-    ImplInit();
-}
-
-void DecoToolBox::ImplInit()
-{
-    lastSize = -1;
     calcMinSize();
 }
 
