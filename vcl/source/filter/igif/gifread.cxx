@@ -20,6 +20,7 @@
 #include "decode.hxx"
 #include "gifread.hxx"
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
 
@@ -885,18 +886,21 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 
 VCL_DLLPUBLIC bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
 {
-    std::unique_ptr<GIFReader>  xGIFReader(static_cast<GIFReader*>(rGraphic.GetContext()));
-    rGraphic.SetContext(nullptr);
+    auto pContext = rGraphic.GetContext();
+    rGraphic.SetContext();
+    GIFReader* pGIFReader = dynamic_cast<GIFReader*>( pContext.get() );
+    if (!pGIFReader)
+    {
+        pContext = std::make_shared<GIFReader>( rStm );
+        pGIFReader = static_cast<GIFReader*>( pContext.get() );
+    }
 
     SvStreamEndian nOldFormat = rStm.GetEndian();
     rStm.SetEndian( SvStreamEndian::LITTLE );
 
-    if (!xGIFReader)
-        xGIFReader.reset(new GIFReader(rStm));
-
     bool bRet = true;
 
-    ReadState eReadState = xGIFReader->ReadGIF(rGraphic);
+    ReadState eReadState = pGIFReader->ReadGIF(rGraphic);
 
     if (eReadState == GIFREAD_ERROR)
     {
@@ -904,8 +908,8 @@ VCL_DLLPUBLIC bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
     }
     else if (eReadState == GIFREAD_NEED_MORE)
     {
-        rGraphic = xGIFReader->GetIntermediateGraphic();
-        rGraphic.SetContext(xGIFReader.release());
+        rGraphic = pGIFReader->GetIntermediateGraphic();
+        rGraphic.SetContext(pContext);
     }
 
     rStm.SetEndian(nOldFormat);

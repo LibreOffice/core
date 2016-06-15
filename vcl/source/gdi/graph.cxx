@@ -496,12 +496,12 @@ sal_uLong Graphic::GetAnimationLoopCount() const
     return mpImpGraphic->ImplGetAnimationLoopCount();
 }
 
-GraphicReader* Graphic::GetContext()
+std::shared_ptr<GraphicReader> Graphic::GetContext()
 {
     return mpImpGraphic->ImplGetContext();
 }
 
-void Graphic::SetContext( GraphicReader* pReader )
+void Graphic::SetContext( std::shared_ptr<GraphicReader> pReader )
 {
     mpImpGraphic->ImplSetContext( pReader );
 }
