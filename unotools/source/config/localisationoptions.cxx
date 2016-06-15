@@ -218,45 +218,28 @@ Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtLocalisationOptions_Impl*    SvtLocalisationOptions::m_pDataContainer    = nullptr;
-sal_Int32                       SvtLocalisationOptions::m_nRefCount         = 0;
-
-//  constructor
+std::weak_ptr<SvtLocalisationOptions_Impl> m_pLocalisationOptions;
 
 SvtLocalisationOptions::SvtLocalisationOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
-    {
-        m_pDataContainer = new SvtLocalisationOptions_Impl;
 
+    m_pImpl = m_pLocalisationOptions.lock();
+    if( !m_pImpl )
+    {
+        m_pImpl = std::make_shared<SvtLocalisationOptions_Impl>();
+        m_pLocalisationOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_LOCALISATIONOPTIONS);
     }
 }
-
-//  destructor
 
 SvtLocalisationOptions::~SvtLocalisationOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 //  public method
@@ -264,7 +247,7 @@ SvtLocalisationOptions::~SvtLocalisationOptions()
 bool SvtLocalisationOptions::IsAutoMnemonic() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsAutoMnemonic();
+    return m_pImpl->IsAutoMnemonic();
 }
 
 //  public method
@@ -272,7 +255,7 @@ bool SvtLocalisationOptions::IsAutoMnemonic() const
 sal_Int32 SvtLocalisationOptions::GetDialogScale() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetDialogScale();
+    return m_pImpl->GetDialogScale();
 }
 
 namespace
