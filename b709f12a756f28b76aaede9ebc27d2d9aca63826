@@ -16,6 +16,24 @@
       "revId": "b709f12a756f28b76aaede9ebc27d2d9aca63826",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_942b2382",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-06-15T19:51:06Z",
+      "side": 1,
+      "message": "I think it is the only corner case. New patch exclude \u0027-\u0027 from list.",
+      "parentUuid": "da7fb54a_fa0384b6",
+      "revId": "b709f12a756f28b76aaede9ebc27d2d9aca63826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
