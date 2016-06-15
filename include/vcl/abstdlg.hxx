@@ -35,8 +35,8 @@ public:
     virtual short       Execute() = 0;
 
     // Screenshot interface
-    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const;
-    virtual void selectPageByUIXMLDescription(const OUString& rUIXMLDescription);
+    virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
+    virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
     virtual Bitmap createScreenshot() const;
 };
 

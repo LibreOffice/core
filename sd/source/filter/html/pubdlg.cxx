@@ -1586,20 +1586,20 @@ bool SdPublishingDlg::Save()
     return( aMedium.GetError() == 0 );
 }
 
-std::vector<OUString> SdPublishingDlg::getAllPageUIXMLDescriptions() const
+std::vector<OString> SdPublishingDlg::getAllPageUIXMLDescriptions() const
 {
     // this dialog has a hard number of pages
-    std::vector<OUString> aRetval;
+    std::vector<OString> aRetval;
 
     for (sal_uInt32 a(0); a < 6; a++)
     {
-        aRetval.push_back(OUString::number(a));
+        aRetval.push_back(OString::number(a));
     }
 
     return aRetval;
 }
 
-void SdPublishingDlg::selectPageByUIXMLDescription(const OUString& rUIXMLDescription)
+bool SdPublishingDlg::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
 {
     // rUIXMLDescription contains one of the values above, make use of it
     const sal_uInt32 nPage(rUIXMLDescription.toUInt32());
@@ -1607,9 +1607,10 @@ void SdPublishingDlg::selectPageByUIXMLDescription(const OUString& rUIXMLDescrip
     if (nPage < 6)
     {
         aAssistentFunc.GotoPage(nPage + 1);
-
-        // does this already call 'ChangePage()'..? Check!
+        return true;
     }
+
+    return false;
 }
 
 // SdDesignNameDlg Methods
