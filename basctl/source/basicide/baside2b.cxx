@@ -222,7 +222,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     rModulWindow(*pModulWindow),
     nCurTextWidth(0),
     aHighlighter(HighlighterLanguage::Basic),
-    bHighlightning(false),
+    bHighlighting(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true),
     pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
@@ -1263,7 +1263,7 @@ void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
     if ( pProgress )
         pProgress->StepProgress();
 
-    if ( !bHighlightning && bDoSyntaxHighlight )
+    if ( !bHighlighting && bDoSyntaxHighlight )
     {
         if ( bDelayHighlight )
         {
@@ -1282,7 +1282,7 @@ IMPL_LINK_NOARG_TYPED(EditorWindow, SyntaxTimerHdl, Idle *, void)
     bool const bWasModified = pEditEngine->IsModified();
     //pEditEngine->SetUpdateMode(false);
 
-    bHighlightning = true;
+    bHighlighting = true;
     for ( std::set<sal_uInt16>::const_iterator it = aSyntaxLineTable.begin();
           it != aSyntaxLineTable.end(); ++it )
     {
@@ -1297,7 +1297,7 @@ IMPL_LINK_NOARG_TYPED(EditorWindow, SyntaxTimerHdl, Idle *, void)
     pEditEngine->SetModified( bWasModified );
 
     aSyntaxLineTable.clear();
-    bHighlightning = false;
+    bHighlighting = false;
 }
 
 void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )

@@ -102,7 +102,7 @@ private:
     void            ImpDoHighlight( sal_uLong nLineOff );
     void            ImplSetFont();
 
-    bool            bHighlightning;
+    bool            bHighlighting;
     bool            bDoSyntaxHighlight;
     bool            bDelayHighlight;
 
