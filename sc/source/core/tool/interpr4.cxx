@@ -187,10 +187,11 @@ sal_uInt16 ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
 
 double ScInterpreter::ConvertStringToValue( const OUString& rStr )
 {
-    double fValue = ScGlobal::ConvertStringToValue( rStr, maCalcConfig, nGlobalError, mnStringNoValueError,
+    sal_uInt16 nError = 0;
+    double fValue = ScGlobal::ConvertStringToValue( rStr, maCalcConfig, nError, mnStringNoValueError,
             pFormatter, nCurFmtType);
-    if (nGlobalError)
-        SetError(nGlobalError);
+    if (nError)
+        SetError(nError);
     return fValue;
 }
 
