@@ -40,6 +40,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
@@ -117,8 +118,8 @@ void LOKInteractionHandler::postError(css::task::InteractionClassification class
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
-    if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandlers[nView])
+    std::size_t nView = (comphelper::LibreOfficeKit::isViewCallback() && SfxViewShell::Current()) ? SfxLokHelper::getView() : 0;
+    if (m_pLOKDocument && m_pLOKDocument->mpCallbackFlushHandlers.size() > nView && m_pLOKDocument->mpCallbackFlushHandlers[nView])
         m_pLOKDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_ERROR, aStream.str().c_str());
     else if (m_pLOKit->mpCallback)
         m_pLOKit->mpCallback(LOK_CALLBACK_ERROR, aStream.str().c_str(), m_pLOKit->mpCallbackData);
