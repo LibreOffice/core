@@ -5052,6 +5052,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     DragSourceHelper( this ),
 
     m_eBufferLanguage(LANGUAGE_DONTKNOW),
+    m_aTemplateIdle("sw uibase docvw SwEditWin Template"),
     m_pApplyTempl(nullptr),
     m_pAnchorMarker( nullptr ),
     m_pUserMarker( nullptr ),

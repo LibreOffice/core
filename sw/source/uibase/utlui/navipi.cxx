@@ -661,6 +661,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     m_aGlobalTree(VclPtr<SwGlobalTree>::Create(this, SW_RES(TL_GLOBAL))),
     m_aDocListBox(VclPtr<ListBox>::Create(this, SW_RES(LB_DOCS))),
 
+    m_aPageChgIdle("sw uibase utliui SwNavigationPI PageChg"),
+
     m_pxObjectShell(nullptr),
     m_pContentView(nullptr),
     m_pContentWrtShell(nullptr),

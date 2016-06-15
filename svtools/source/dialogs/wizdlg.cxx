@@ -337,14 +337,16 @@ TabPage* WizardDialog::ImplGetPage( sal_uInt16 nLevel ) const
 }
 
 WizardDialog::WizardDialog( vcl::Window* pParent, WinBits nStyle ) :
-    ModalDialog( pParent, nStyle )
+    ModalDialog( pParent, nStyle ),
+    maWizardLayoutIdle("svtools dialogs WizardDialog WizardLayout")
 {
     ImplInitData();
 }
 
 
 WizardDialog::WizardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
-    ModalDialog( pParent, rID, rUIXMLDescription )
+    ModalDialog( pParent, rID, rUIXMLDescription ),
+    maWizardLayoutIdle("svtools dialogs WizardDialog WizardLayout")
 {
     ImplInitData();
 }

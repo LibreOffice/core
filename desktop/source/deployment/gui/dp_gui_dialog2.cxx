@@ -671,6 +671,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     , m_bDisableWarning(false)
     , m_bDeleteWarning(false)
     , m_nProgress(0)
+    , m_aIdle("desktop deployment gui ExtMgrDialog")
     , m_pManager(pManager)
 {
     get(m_pExtensionBox, "extensions");
@@ -1169,6 +1170,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     , m_bStopProgress(false)
     , m_bHasLockedEntries(false)
     , m_nProgress(0)
+    , m_aIdle("desktop deployment gui UpdateRequiredDialog")
     , m_pManager(pManager)
 {
     get(m_pExtensionBox, "extensions");

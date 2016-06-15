@@ -74,6 +74,8 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
         mnLastTicks( tools::Time::GetSystemTicks() ),
+        maDockIdle("vcl window ImplDockFloatWin2 Dock"),
+        maEndDockIdle("vcl window ImplDockFloatWin2 EndDock"),
         mbInMove( false ),
         mnLastUserEvent( nullptr )
 {

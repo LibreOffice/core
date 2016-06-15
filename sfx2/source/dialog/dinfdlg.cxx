@@ -1459,7 +1459,9 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_nScrollPos (0),
     m_pCurrentLine (nullptr),
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
-                        Application::GetSettings().GetLanguageTag().getLanguageType() )
+                        Application::GetSettings().GetLanguageTag().getLanguageType() ),
+    m_aEditLoseFocusIdle("sfx2 dialog CustomPropertiesWindow EditLoseFocus"),
+    m_aBoxLoseFocusIdle("sfx2 dialog CustomPropertiesWindow BoxLoseFocus")
 {
     Point aPos(LogicToPixel(Point(159, 2), MAP_APPFONT));
 

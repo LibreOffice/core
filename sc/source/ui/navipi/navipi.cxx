@@ -560,6 +560,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
         aLbEntries  ( VclPtr<ScContentTree>::Create( this, ScResId( LB_ENTRIES ) ) ),
         aWndScenarios( VclPtr<ScScenarioWindow>::Create( this,ScResId( STR_QHLP_SCEN_LISTBOX), ScResId(STR_QHLP_SCEN_COMMENT)) ),
         aLbDocuments( VclPtr<ScDocListBox>::Create( this, ScResId( LB_DOCUMENTS ) ) ),
+        aContentIdle("sc ui navipi ScNavigatorDlg Content"),
         aStrDragMode ( ScResId( STR_DRAGMODE ) ),
         aStrDisplay  ( ScResId( STR_DISPLAY ) ),
         aStrActiveWin( ScResId( STR_ACTIVEWIN ) ),

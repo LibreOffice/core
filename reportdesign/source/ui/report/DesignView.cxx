@@ -93,6 +93,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     ,m_pAddField(nullptr)
     ,m_pCurrentView(nullptr)
     ,m_pReportExplorer(nullptr)
+    ,m_aMarkIdle("reportdesign ui ODesignView Mark")
     ,m_eMode( RPTUI_SELECT )
     ,m_eActObj( OBJ_NONE )
     ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid

@@ -91,6 +91,7 @@ void SystemWindow::Init()
 
 SystemWindow::SystemWindow(WindowType nType)
     : Window(nType)
+    , maLayoutIdle("vcl window SystemWindow Layout")
     , mbIsDefferedInit(false)
 {
     Init();

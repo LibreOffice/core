@@ -428,6 +428,7 @@ bool LngSvcMgrListenerHelper::RemoveLngSvcEvtBroadcaster(
 LngSvcMgr::LngSvcMgr()
     : utl::ConfigItem("Office.Linguistic")
     , aEvtListeners(GetLinguMutex())
+    , aUpdateIdle("linguistic LngSvcMgr Update")
 {
     bDisposing = false;
 
