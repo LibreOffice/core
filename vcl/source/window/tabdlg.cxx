@@ -242,4 +242,98 @@ void TabDialog::StateChanged( StateChangedType nType )
     Dialog::StateChanged( nType );
 }
 
+vcl::Window* findTabControl(vcl::Window* pCurrent)
+{
+    if (!pCurrent)
+    {
+        return nullptr;
+    }
+
+    if (pCurrent->GetType() == WINDOW_TABCONTROL)
+    {
+        return pCurrent;
+    }
+
+    vcl::Window* pChild = pCurrent->GetWindow(GetWindowType::FirstChild);
+
+    while (pChild)
+    {
+
+        vcl::Window* pInorderChild = findTabControl(pChild);
+
+        if (pInorderChild)
+        {
+            return pInorderChild;
+        }
+
+        pChild = pChild->GetWindow(GetWindowType::Next);
+    }
+}
+
+std::vector<OString> TabDialog::getAllPageUIXMLDescriptions() const
+{
+    std::vector<OString> aRetval;
+
+    const TabControl* pTabCtrl = dynamic_cast<TabControl*>(findTabControl(const_cast<TabDialog*>(this)));
+
+    if (pTabCtrl)
+    {
+        for (sal_uInt16 a(0); a < pTabCtrl->GetPageCount(); a++)
+        {
+            const sal_uInt16 nPageId(pTabCtrl->GetPageId(a));
+
+            if (TAB_PAGE_NOTFOUND != nPageId)
+            {
+                TabPage* pCandidate = pTabCtrl->GetTabPage(nPageId);
+
+                if (pCandidate)
+                {
+                    // use UIXMLDescription (without '.ui', with '/')
+                    // aRetval.push_back(pCandidate->getUIFile());
+
+                    // for now, directly use nPageID since we had a case where
+                    // two TabPages had the same ui file (HeaderFooterDialog)
+                    aRetval.push_back(OString::number(nPageId));
+                }
+            }
+        }
+    }
+
+    return aRetval;
+}
+
+bool TabDialog::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
+{
+    TabControl* pTabCtrl = dynamic_cast<TabControl*>(findTabControl(const_cast<TabDialog*>(this)));
+
+    if (pTabCtrl)
+    {
+        for (sal_uInt16 a(0); a < pTabCtrl->GetPageCount(); a++)
+        {
+            const sal_uInt16 nPageId(pTabCtrl->GetPageId(a));
+
+            if (TAB_PAGE_NOTFOUND != nPageId)
+            {
+                TabPage* pCandidate = pTabCtrl->GetTabPage(nPageId);
+
+                if (pCandidate)
+                {
+                    // if (pCandidate->getUIFile() == rUIXMLDescription)
+
+                    // for now, directly work with nPageID, see above. Will need to be
+                    // adapted to the schema later planned to be used in rUIXMLDescription
+                    if (rUIXMLDescription.toUInt32() == nPageId)
+                    {
+                        pTabCtrl->SelectTabPage(nPageId);
+
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
