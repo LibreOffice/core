@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svtools/menuoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -31,9 +30,7 @@
 
 #include <list>
 
-
 //  namespaces
-
 
 using namespace ::utl                   ;
 using namespace ::osl                   ;
@@ -58,36 +55,28 @@ using namespace ::com::sun::star::uno   ;
 
 #include <tools/link.hxx>
 
-
 //  private declarations!
-
 
 class SvtMenuOptions_Impl : public ConfigItem
 {
 
     //  private member
 
-
     private:
         bool        m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
         bool        m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
         TriState    m_eMenuIcons                        ;   /// cache "MenuIcons" of Menu section
 
-
     //  public methods
-
 
     public:
 
-
         //  constructor / destructor
-
 
          SvtMenuOptions_Impl();
         virtual ~SvtMenuOptions_Impl();
 
         //  override methods of baseclass
-
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
@@ -103,7 +92,6 @@ class SvtMenuOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames ) override;
 
         //  public interface
-
 
         /*-****************************************************************************************************
             @short      access method to get internal values
@@ -124,9 +112,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                         // tdf#93451: don't Commit() here, it's too early
                     }
 
-
     //  private methods
-
 
     private:
 
@@ -141,7 +127,6 @@ class SvtMenuOptions_Impl : public ConfigItem
 
         static Sequence< OUString > impl_GetPropertyNames();
 };
-
 
 //  constructor
 
@@ -215,14 +200,12 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     EnableNotification( seqNames );
 }
 
-
 //  destructor
 
 SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
 {
     assert(!IsModified()); // should have been committed
 }
-
 
 //  public method
 
@@ -276,7 +259,6 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
         m_eMenuIcons = bSystemMenuIcons ? TRISTATE_INDET : static_cast<TriState>(bMenuIcons);
 }
 
-
 //  public method
 
 void SvtMenuOptions_Impl::ImplCommit()
@@ -315,7 +297,6 @@ void SvtMenuOptions_Impl::ImplCommit()
     PutProperties( seqNames, seqValues );
 }
 
-
 //  private method
 
 Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
@@ -334,76 +315,53 @@ Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-SvtMenuOptions_Impl*    SvtMenuOptions::m_pDataContainer    = nullptr  ;
-sal_Int32               SvtMenuOptions::m_nRefCount         = 0     ;
-
-
-//  constructor
+std::weak_ptr<SvtMenuOptions_Impl> m_pMenuOptions;
 
 SvtMenuOptions::SvtMenuOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already!
-    if( m_pDataContainer == nullptr )
-    {
-        m_pDataContainer = new SvtMenuOptions_Impl();
 
+    m_pImpl = m_pMenuOptions.lock();
+    if( !m_pImpl )
+    {
+        m_pImpl = std::make_shared<SvtMenuOptions_Impl>();
+        m_pMenuOptions = m_pImpl;
         svtools::ItemHolder2::holdConfigItem(E_MENUOPTIONS);
     }
 }
-
-
-//  destructor
 
 SvtMenuOptions::~SvtMenuOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
-}
 
+    m_pImpl.reset();
+}
 
 //  public method
 
 bool SvtMenuOptions::IsEntryHidingEnabled() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsEntryHidingEnabled();
+    return m_pImpl->IsEntryHidingEnabled();
 }
-
 
 //  public method
 
 TriState SvtMenuOptions::GetMenuIconsState() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMenuIconsState();
+    return m_pImpl->GetMenuIconsState();
 }
-
 
 //  public method
 
 void SvtMenuOptions::SetMenuIconsState(TriState eState)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetMenuIconsState(eState);
+    m_pImpl->SetMenuIconsState(eState);
 }
-
 
 //  private method
 
