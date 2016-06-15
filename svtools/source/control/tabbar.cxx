@@ -412,7 +412,8 @@ public:
 };
 
 TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
-    Edit( pParent, nWinStyle )
+    Edit( pParent, nWinStyle ),
+    maLoseFocusIdle("svtools control TabBarEdit LoseFocus")
 {
     mbPostEvt = false;
 }

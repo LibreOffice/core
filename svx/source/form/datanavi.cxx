@@ -2755,6 +2755,7 @@ namespace svxform
         const OUString& _rPropertyName,
         const Reference< XPropertySet >& _rPropSet)
         : ModalDialog(pParent, "AddConditionDialog", "svx/ui/addconditiondialog.ui")
+        , m_aResultIdle("svx form AddConditionDialog Result")
         , m_sPropertyName(_rPropertyName)
         , m_xBinding(_rPropSet)
 

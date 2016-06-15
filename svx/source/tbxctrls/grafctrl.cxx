@@ -88,6 +88,7 @@ public:
 
 ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame ) :
     MetricField( pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_3DLOOK ),
+    maIdle("svx tbxctrls ImplGrafMetricField Idle"),
     maCommand( rCmd ),
     mxFrame( rFrame )
 {
