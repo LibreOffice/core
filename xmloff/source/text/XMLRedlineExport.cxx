@@ -366,11 +366,25 @@ void XMLRedlineExport::ExportChangedRegion(
 
     // scope for (first) change element
     {
-        rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "2");
-        rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_PARAGRAPH);
         aAny = rPropSet->getPropertyValue(sRedlineType);
         OUString sType;
         aAny >>= sType;
+        XMLTokenEnum eChangeType = XML_PARAGRAPH;
+        OUString sParagraphIdx = "2", sCharStart, sCharEnd;
+        rPropSet->getPropertyValue("Start") >>= sCharStart;
+        rPropSet->getPropertyValue("End") >>= sCharEnd;
+        if(eChangeType == XML_PARAGRAPH)
+        {
+            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + sParagraphIdx);
+            rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_PARAGRAPH);
+        }
+        else
+        {
+            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + sParagraphIdx + "/" + sCharStart);
+            if( sType == sInsert )
+                rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + sParagraphIdx + "/" + sCharEnd);
+            rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, eChangeType);
+        }
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
                                    ConvertTypeName(sType), true, true);
 
@@ -418,11 +432,11 @@ const OUString XMLRedlineExport::ConvertTypeName(
 {
     if (sApiName == sDelete)
     {
-        return sDeletion;
+        return sInsertion;
     }
     else if (sApiName == sInsert)
     {
-        return sInsertion;
+        return sDeletion;
     }
     else if (sApiName == sFormat)
     {
