@@ -70,13 +70,30 @@ namespace o3tl
 #define SVX_ENABLE_FLASH    0x04
 
 
-// copy from numfmt.hxx
-#define SVX_NUMVAL_STANDARD     -1234.12345678901234
-#define SVX_NUMVAL_CURRENCY     -1234
-#define SVX_NUMVAL_PERCENT      -0.1295
-#define SVX_NUMVAL_TIME         36525.5678935185
-#define SVX_NUMVAL_DATE         36525.5678935185
-#define SVX_NUMVAL_BOOLEAN      1
+// Default values for Number Format Category List and Preview
+enum SvxNumValCategory
+{
+    SVX_NUMVAL_STANDARD = 0,
+    SVX_NUMVAL_PERCENT,
+    SVX_NUMVAL_CURRENCY,
+    SVX_NUMVAL_DATE,
+    SVX_NUMVAL_TIME,
+    SVX_NUMVAL_SCIENTIFIC,
+    SVX_NUMVAL_FRACTION,
+    SVX_NUMVAL_BOOLEAN,
+    SVX_NUMVAL_NOVALUE
+};
+const double fSvxNumValConst[] = {
+    -1234.56789012345678,   // SVX_NUMVAL_STANDARD
+    -0.1295,                // SVX_NUMVAL_PERCENT
+    -1234.0,                // SVX_NUMVAL_CURRENCY
+    36525.5678935185,       // SVX_NUMVAL_DATE
+    36525.5678935185,       // SVX_NUMVAL_TIME
+    12345.67889,            // SVX_NUMVAL_SCIENTIFIC
+    123.456,                // SVX_NUMVAL_FRACTION
+    1.0,                    // SVX_NUMVAL_BOOLEAN
+    0.0                     // SVX_NUMVAL_NOVALUE
+};
 
 // copy from page.hxx
 // enum ------------------------------------------------------------------
