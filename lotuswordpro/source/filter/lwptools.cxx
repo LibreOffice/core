@@ -224,7 +224,7 @@ OUString LwpTools::convertToFileUrl(const OString &fileName)
     return uUrlFileName;
 }
 
-OUString LwpTools::DateTimeToOUString(LtTm & dt)
+OUString LwpTools::DateTimeToOUString(const LtTm &dt)
 {
     OUString aResult = OUString::number(dt.tm_year) + "-" + OUString::number(dt.tm_mon) + "-" + OUString::number(dt.tm_mday) +
         "T" + OUString::number(dt.tm_hour) + ":" + OUString::number(dt.tm_min) + ":" + OUString::number(dt.tm_sec);
