@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c009662e",
+        "filename": "sw/qa/complex/accessibility/AccessibleRelationSet.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-15T10:49:49Z",
+      "side": 0,
+      "message": "ah, the old test actually sleeps here for half a second - of course sleep wouldn\u0027t do anything in the CppUnit test because it runs on the same thread that would do the VCL event dispatching...\n\nthere is also com/sun/star/awt/XToolkitExperimental.idl processEventsToIdle, maybe that will be useful here, should process all the events at least...",
+      "revId": "74a1b26ffb576205bbdc5e94aeb503306eb6aabc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
