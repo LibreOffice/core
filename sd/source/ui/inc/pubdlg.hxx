@@ -200,6 +200,10 @@ public:
     virtual void dispose() override;
 
     void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams );
+
+    // Screenshot interface
+    virtual std::vector<OUString> getAllPageUIXMLDescriptions() const override;
+    virtual void selectPageByUIXMLDescription(const OUString& rUIXMLDescription) override;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
