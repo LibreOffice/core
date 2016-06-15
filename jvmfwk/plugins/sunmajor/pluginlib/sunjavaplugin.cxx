@@ -548,6 +548,9 @@ static void do_msvcr_magic(rtl_uString *jvm_dll)
 
     FILE *f = _wfopen(reinterpret_cast<LPCWSTR>(Module->buffer), L"rb");
 
+    if (!f)
+        return;
+
     if (fstat(fileno(f), &st) == -1)
     {
         fclose(f);
