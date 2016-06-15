@@ -1694,6 +1694,11 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         throw uno::RuntimeException();
     }
 
+    if (!aArguments.has("DocumentBaseURL") && !sURL.isEmpty())
+    {
+        aArguments.put("DocumentBaseURL", sURL);
+    }
+
     impl_loadFromStorage_nolck_throw( xDocumentStorage, aArguments.getPropertyValues() );
     // TODO: do we need to take ownership of the storage? In opposite to loadFromStorage, we created the storage
     // ourself here, and perhaps this means we're also responsible for it ...?
