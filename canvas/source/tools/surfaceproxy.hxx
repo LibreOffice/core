@@ -40,7 +40,7 @@ namespace canvas
     public:
 
         SurfaceProxy( const std::shared_ptr<canvas::IColorBuffer>& pBuffer,
-                      const PageManagerSharedPtr &pPageManager );
+                      const std::shared_ptr< PageManager > &pPageManager );
 
         // ISurfaceProxy interface
         virtual void setColorBufferDirty() override;
@@ -102,12 +102,12 @@ namespace canvas
                            const ::basegfx::B2DHomMatrix&   rTransform ) override;
 
     private:
-        PageManagerSharedPtr          mpPageManager;
+        std::shared_ptr< PageManager >          mpPageManager;
 
         // the pagemanager will distribute the image
         // to one or more surfaces, this is why we
         // need a list here.
-        std::vector<SurfaceSharedPtr> maSurfaceList;
+        std::vector<std::shared_ptr< Surface >> maSurfaceList;
 
         // pointer to the source of image data
         // which always is stored in system memory,

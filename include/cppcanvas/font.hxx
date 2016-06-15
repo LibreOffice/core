@@ -37,8 +37,6 @@ namespace cppcanvas
     public:
         virtual ~Font() {}
     };
-
-    typedef std::shared_ptr< ::cppcanvas::Font > FontSharedPtr;
 }
 
 #endif // INCLUDED_CPPCANVAS_FONT_HXX

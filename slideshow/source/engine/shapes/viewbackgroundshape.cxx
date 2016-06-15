@@ -81,7 +81,7 @@ namespace slideshow
                     ::basegfx::fround( aTmpRect.getRange().getY() + 1) );
 
                 // create a bitmap of appropriate size
-                ::cppcanvas::BitmapSharedPtr pBitmap(
+                ::std::shared_ptr< cppcanvas::Bitmap > pBitmap(
                     ::cppcanvas::BaseGfxFactory::createBitmap(
                         rDestinationCanvas,
                         aBmpSizePixel ) );

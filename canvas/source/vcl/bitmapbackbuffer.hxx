@@ -87,7 +87,6 @@ namespace vclcanvas
         mutable bool                            mbVDevContentIsCurrent;
     };
 
-    typedef std::shared_ptr< BitmapBackBuffer > BitmapBackBufferSharedPtr;
 
 }
 

@@ -2280,14 +2280,14 @@ bool GtkSalGraphics::SupportsCairo() const
     return true;
 }
 
-cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+std::shared_ptr< cairo::Surface > GtkSalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
 {
-    return cairo::SurfaceSharedPtr(new cairo::Gtk3Surface(rSurface));
+    return std::shared_ptr< cairo::Surface >(new cairo::Gtk3Surface(rSurface));
 }
 
-cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x, int y, int width, int height) const
+std::shared_ptr< cairo::Surface > GtkSalGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x, int y, int width, int height) const
 {
-    return cairo::SurfaceSharedPtr(new cairo::Gtk3Surface(this, x, y, width, height));
+    return std::shared_ptr< cairo::Surface >(new cairo::Gtk3Surface(this, x, y, width, height));
 }
 
 void GtkSalGraphics::WidgetQueueDraw() const

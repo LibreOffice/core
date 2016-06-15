@@ -79,7 +79,7 @@ namespace vclcanvas
             When true, hasAlpha() will always return true, otherwise, false.
          */
         void init( css::rendering::XGraphicDevice&              rDevice,
-                   const OutDevProviderSharedPtr&               rOutDev,
+                   const std::shared_ptr< OutDevProvider >&     rOutDev,
                    bool                                         bProtect,
                    bool                                         bHaveAlpha );
 
@@ -88,14 +88,14 @@ namespace vclcanvas
             This changes the primary output device, where rendering is
             sent to.
          */
-        void setOutDev( const OutDevProviderSharedPtr&  rOutDev,
+        void setOutDev( const std::shared_ptr< OutDevProvider >&  rOutDev,
                         bool                            bProtect);
 
         /** Set secondary output device
 
             Used for sprites, to generate mask bitmap.
          */
-        void setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev );
+        void setBackgroundOutDev( const std::shared_ptr< OutDevProvider >& rOutDev );
 
 
         // CanvasHelper functionality
@@ -260,7 +260,7 @@ namespace vclcanvas
         css::rendering::IntegerBitmapLayout getMemoryLayout();
 
         /// Repaint a cached bitmap
-        bool repaint( const GraphicObjectSharedPtr&                   rGrf,
+        bool repaint( const std::shared_ptr< GraphicObject >&                   rGrf,
                       const css::rendering::ViewState&                viewState,
                       const css::rendering::RenderState&              renderState,
                       const ::Point&                                  rPt,
@@ -296,13 +296,13 @@ namespace vclcanvas
         css::rendering::XGraphicDevice*              mpDevice;
 
         /// Rendering to this outdev preserves its state
-        OutDevProviderSharedPtr                      mpProtectedOutDev;
+        std::shared_ptr< OutDevProvider >            mpProtectedOutDev;
 
         /// Rendering to this outdev does not preserve its state
-        OutDevProviderSharedPtr                      mpOutDev;
+        std::shared_ptr< OutDevProvider >            mpOutDev;
 
         /// Rendering to this outdev does not preserve its state
-        OutDevProviderSharedPtr                      mp2ndOutDev;
+        std::shared_ptr< OutDevProvider >            mp2ndOutDev;
 
         /// When true, content is able to represent alpha
         bool                                         mbHaveAlpha;

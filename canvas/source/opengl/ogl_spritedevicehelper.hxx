@@ -107,7 +107,7 @@ namespace oglcanvas
                                            const ::basegfx::B2DHomMatrix&                   rTexTransform );
 
         /// create a pbuffer context (for rendering into background surface)
-        IBufferContextSharedPtr createBufferContext(const ::basegfx::B2IVector& rSize) const;
+        std::shared_ptr<IBufferContext> createBufferContext(const ::basegfx::B2IVector& rSize) const;
 
         /// Get instance of internal texture cache
         TextureCache& getTextureCache() const;

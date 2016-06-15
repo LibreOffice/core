@@ -43,7 +43,7 @@ namespace vclcanvas
         virtual ~RepaintTarget() {}
 
         // call this when a bitmap is repainted
-        virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
+        virtual bool repaint( const std::shared_ptr< GraphicObject >&         rGrf,
                               const css::rendering::ViewState&                viewState,
                               const css::rendering::RenderState&              renderState,
                               const ::Point&                                  rPt,

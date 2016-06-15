@@ -136,7 +136,7 @@ namespace vclcanvas
         maVDev.disposeAndClear();
     }
 
-    void SpriteCanvasHelper::init( const OutDevProviderSharedPtr& rOutDev,
+    void SpriteCanvasHelper::init( const std::shared_ptr< OutDevProvider >& rOutDev,
                                    SpriteCanvas&                  rOwningSpriteCanvas,
                                    ::canvas::SpriteRedrawManager& rManager,
                                    bool                           bProtect,
@@ -203,7 +203,7 @@ namespace vclcanvas
         flush();
 
         OutputDevice&       rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
-        BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
+        std::shared_ptr< BackBuffer > pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
         OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
 
         // actual OutputDevice is a shared resource - restore its
@@ -319,7 +319,7 @@ namespace vclcanvas
                          "SpriteCanvasHelper::backgroundPaint(): NULL device pointer " );
 
         OutputDevice&       rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
-        BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
+        std::shared_ptr< BackBuffer > pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
         OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
 
         repaintBackground( rOutDev, rBackOutDev, rUpdateRect );
@@ -335,7 +335,7 @@ namespace vclcanvas
                          "SpriteCanvasHelper::scrollUpdate(): NULL device pointer " );
 
         OutputDevice&       rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
-        BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
+        std::shared_ptr< BackBuffer > pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
         OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
 
         const Size&                rTargetSizePixel( rOutDev.GetOutputSizePixel() );
@@ -460,7 +460,7 @@ namespace vclcanvas
                          "SpriteCanvasHelper::genericUpdate(): NULL device pointer " );
 
         OutputDevice&       rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
-        BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
+        std::shared_ptr< BackBuffer > pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
         OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
 
         // limit size of update VDev to target outdev's size
@@ -616,7 +616,7 @@ namespace vclcanvas
 
     void SpriteCanvasHelper::renderMemUsage( OutputDevice& rOutDev )
     {
-        BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
+        std::shared_ptr< BackBuffer > pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
 
         if( mpRedrawManager &&
             pBackBuffer )

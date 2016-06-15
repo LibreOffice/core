@@ -560,9 +560,9 @@ namespace oglcanvas
         };
     }
 
-    IBufferContextSharedPtr SpriteDeviceHelper::createBufferContext(const ::basegfx::B2IVector& rSize) const
+    std::shared_ptr<IBufferContext> SpriteDeviceHelper::createBufferContext(const ::basegfx::B2IVector& rSize) const
     {
-        return IBufferContextSharedPtr(new BufferContextImpl(rSize));
+        return std::shared_ptr<IBufferContext>(new BufferContextImpl(rSize));
     }
 
     TextureCache& SpriteDeviceHelper::getTextureCache() const

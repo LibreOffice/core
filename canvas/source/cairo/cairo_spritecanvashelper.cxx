@@ -52,9 +52,9 @@ namespace cairocanvas
             ::boost::polymorphic_downcast< Sprite* >(rSprite.get())->redraw( pCairo, true);
         }
 
-        void repaintBackground( const CairoSharedPtr&      pCairo,
-                                const SurfaceSharedPtr&    pBackgroundSurface,
-                                const ::basegfx::B2DRange& rArea )
+        void repaintBackground( const CairoSharedPtr&               pCairo,
+                                const std::shared_ptr< Surface >&   pBackgroundSurface,
+                                const ::basegfx::B2DRange&          rArea )
         {
             cairo_save( pCairo.get() );
             cairo_rectangle( pCairo.get(), ceil( rArea.getMinX() ), ceil( rArea.getMinY() ),
@@ -164,8 +164,8 @@ namespace cairocanvas
 
         // force compositing surface to be available before using it
         // inside forEachSpriteArea
-        SurfaceSharedPtr pCompositingSurface = getCompositingSurface(rSize);
-        SurfaceSharedPtr pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
+        std::shared_ptr< Surface > pCompositingSurface = getCompositingSurface(rSize);
+        std::shared_ptr< Surface > pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
@@ -250,8 +250,8 @@ namespace cairocanvas
                                                   rSize.getX(),
                                                   rSize.getY() );
 
-        SurfaceSharedPtr pCompositingSurface = getCompositingSurface(rSize);
-        SurfaceSharedPtr pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
+        std::shared_ptr< Surface > pCompositingSurface = getCompositingSurface(rSize);
+        std::shared_ptr< Surface > pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
@@ -302,7 +302,7 @@ namespace cairocanvas
             aDestRect.intersect( aOutputBounds );
 
             ::basegfx::B2ISize aScrollSize( aDestRect.getWidth(), aDestRect.getHeight() );
-            SurfaceSharedPtr pScrollSurface( getTemporarySurface() );
+            std::shared_ptr< Surface > pScrollSurface( getTemporarySurface() );
             CairoSharedPtr pScrollCairo( pScrollSurface->getCairo() );
 
             cairo_save( pScrollCairo.get() );
@@ -380,8 +380,8 @@ namespace cairocanvas
 
         const ::basegfx::B2ISize& rDeviceSize = mpOwningSpriteCanvas->getSizePixel();
 
-        SurfaceSharedPtr pCompositingSurface = getCompositingSurface(rDeviceSize);
-        SurfaceSharedPtr pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
+        std::shared_ptr< Surface > pCompositingSurface = getCompositingSurface(rDeviceSize);
+        std::shared_ptr< Surface > pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
@@ -427,8 +427,8 @@ namespace cairocanvas
         // limit size of update VDev to target outdev's size
         const ::basegfx::B2ISize& rSize = mpOwningSpriteCanvas->getSizePixel();
 
-        SurfaceSharedPtr pCompositingSurface = getCompositingSurface(rSize);
-        SurfaceSharedPtr pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
+        std::shared_ptr< Surface > pCompositingSurface = getCompositingSurface(rSize);
+        std::shared_ptr< Surface > pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
@@ -481,7 +481,7 @@ namespace cairocanvas
         cairo_paint( pWindowCairo.get() );
     }
 
-    ::cairo::SurfaceSharedPtr SpriteCanvasHelper::getCompositingSurface( const ::basegfx::B2ISize& rNeededSize )
+    std::shared_ptr< cairo::Surface > SpriteCanvasHelper::getCompositingSurface( const ::basegfx::B2ISize& rNeededSize )
     {
         if( rNeededSize.getX() > maCompositingSurfaceSize.getX() ||
             rNeededSize.getY() > maCompositingSurfaceSize.getY() )
@@ -501,14 +501,14 @@ namespace cairocanvas
         return mpCompositingSurface;
     }
 
-    ::cairo::SurfaceSharedPtr SpriteCanvasHelper::getTemporarySurface()
+    std::shared_ptr< cairo::Surface > SpriteCanvasHelper::getTemporarySurface()
     {
         if ( !mpTemporarySurface )
             mpTemporarySurface = createSurface( maCompositingSurfaceSize );
         return mpTemporarySurface;
     }
 
-    ::cairo::SurfaceSharedPtr SpriteCanvasHelper::createSurface( const ::basegfx::B2ISize& rNeededSize ) const
+    std::shared_ptr< cairo::Surface > SpriteCanvasHelper::createSurface( const ::basegfx::B2ISize& rNeededSize ) const
     {
         return mpOwningSpriteCanvas->getWindowSurface()->getSimilar(
                     CAIRO_CONTENT_COLOR,
