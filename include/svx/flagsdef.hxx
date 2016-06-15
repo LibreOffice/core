@@ -70,12 +70,14 @@ namespace o3tl
 #define SVX_ENABLE_FLASH    0x04
 
 
-// copy from numfmt.hxx
-#define SVX_NUMVAL_STANDARD     -1234.12345678901234
-#define SVX_NUMVAL_CURRENCY     -1234
+// same for numfmtsh.hxx
+#define SVX_NUMVAL_STANDARD     -1234.56789012345678
 #define SVX_NUMVAL_PERCENT      -0.1295
-#define SVX_NUMVAL_TIME         36525.5678935185
+#define SVX_NUMVAL_CURRENCY     -1234
 #define SVX_NUMVAL_DATE         36525.5678935185
+#define SVX_NUMVAL_TIME         36525.5678935185
+#define SVX_NUMVAL_SCIENTIFIC   12345.67889
+#define SVX_NUMVAL_FRACTION     12.34567889
 #define SVX_NUMVAL_BOOLEAN      1
 
 // copy from page.hxx

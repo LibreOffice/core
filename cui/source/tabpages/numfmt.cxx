@@ -1686,18 +1686,20 @@ OUString SvxNumberFormatTabPage::GetExpColorString(
     double nVal = 0;
     switch (nTmpCatPos)
     {
-        case CAT_CURRENCY:      nVal=SVX_NUMVAL_CURRENCY; break;
+        case CAT_ALL:           nVal=SVX_NUMVAL_STANDARD; break;
 
-        case CAT_SCIENTIFIC:
-        case CAT_FRACTION:
         case CAT_NUMBER:        nVal=SVX_NUMVAL_STANDARD; break;
 
         case CAT_PERCENT:       nVal=SVX_NUMVAL_PERCENT; break;
 
-        case CAT_ALL:           nVal=SVX_NUMVAL_STANDARD; break;
+        case CAT_CURRENCY:      nVal=SVX_NUMVAL_CURRENCY; break;
 
-        case CAT_TIME:          nVal=SVX_NUMVAL_TIME; break;
         case CAT_DATE:          nVal=SVX_NUMVAL_DATE; break;
+        case CAT_TIME:          nVal=SVX_NUMVAL_TIME; break;
+
+        case CAT_SCIENTIFIC:    nVal=SVX_NUMVAL_SCIENTIFIC; break;
+
+        case CAT_FRACTION:      nVal=SVX_NUMVAL_FRACTION; break;
 
         case CAT_BOOLEAN:       nVal=SVX_NUMVAL_BOOLEAN; break;
 

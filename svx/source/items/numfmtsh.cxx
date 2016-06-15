@@ -27,12 +27,10 @@
 #include <svl/currencytable.hxx>
 
 #include <svx/numfmtsh.hxx>
+#include <svx/flagsdef.hxx>
 #include <svx/tbcontrl.hxx>
 
 #include <limits>
-
-const double SvxNumberFormatShell::DEFAULT_NUMVALUE = 1234.56789;
-
 
 SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumFormatter,
                                               sal_uInt32           nFormatKey,
@@ -69,8 +67,9 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , bBankingSymbol  (false)
     , nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
     , bUseStarFormat  (false)
+    , bIsDefaultValNum (true)
 {
-    nValNum = DEFAULT_NUMVALUE;
+    nValNum = SVX_NUMVAL_STANDARD;
 
     switch ( eValType )
     {
@@ -78,12 +77,15 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
             aValStr = rNumStr;
             break;
         case SVX_VALUE_TYPE_NUMBER:
+            if ( pFormatter )
+            {
+                nValNum = GetDefaultValNum( pFormatter->GetType( nCurFormatKey ) );
+            }
         case SVX_VALUE_TYPE_UNDEFINED:
         default:
             aValStr.clear();
     }
 }
-
 
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32          nFormatKey,
@@ -101,6 +103,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , bBankingSymbol  (false)
     , nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
     , bUseStarFormat  (false)
+    , bIsDefaultValNum (false)
 {
     //  #50441# When used in Writer, the SvxNumberInfoItem contains the
     //  original string in addition to the value
@@ -116,7 +119,8 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
         case SVX_VALUE_TYPE_STRING:
         case SVX_VALUE_TYPE_UNDEFINED:
         default:
-            nValNum = DEFAULT_NUMVALUE;
+            nValNum = SVX_NUMVAL_STANDARD;
+            bIsDefaultValNum = true;
     }
 }
 
@@ -401,6 +405,33 @@ void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
 }
 
 
+double SvxNumberFormatShell::GetDefaultValNum( const short nType ) const
+{
+    switch( nType )
+    {
+        case css::util::NumberFormat::NUMBER:
+            return SVX_NUMVAL_STANDARD;
+        case css::util::NumberFormat::CURRENCY:
+            return SVX_NUMVAL_CURRENCY;
+        case css::util::NumberFormat::PERCENT:
+            return SVX_NUMVAL_PERCENT;
+        case css::util::NumberFormat::DATE:
+        case css::util::NumberFormat::DATETIME:
+            return SVX_NUMVAL_DATE;
+        case css::util::NumberFormat::TIME:
+            return SVX_NUMVAL_TIME;
+        case css::util::NumberFormat::SCIENTIFIC:
+            return SVX_NUMVAL_SCIENTIFIC;
+        case css::util::NumberFormat::FRACTION:
+            return SVX_NUMVAL_FRACTION;
+        case css::util::NumberFormat::LOGICAL:
+            return SVX_NUMVAL_BOOLEAN;
+        default: break;
+    }
+    return SVX_NUMVAL_STANDARD;
+}
+
+
 void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
                                               OUString&       rPreviewStr,
                                               Color*&         rpFontColor )
@@ -428,6 +459,8 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
         }
         else
         {
+            if ( bIsDefaultValNum )
+                nValNum = GetDefaultValNum( pFormatter->GetType(nExistingFormat) );
             pFormatter->GetOutputString( nValNum, nExistingFormat,
                                          rPreviewStr, &rpFontColor, bUseStarFormat );
         }
