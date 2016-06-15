@@ -481,6 +481,10 @@ void Window::dispose()
     if( pSVData->maWinData.mpActiveApplicationFrame == this )
         pSVData->maWinData.mpActiveApplicationFrame = nullptr;
 
+    // reset hint of what was the last wheeled window
+    if( pSVData->maWinData.mpLastWheelWindow == this )
+        pSVData->maWinData.mpLastWheelWindow = nullptr;
+
     // reset marked windows
     if ( mpWindowImpl->mpFrameData != nullptr )
     {
