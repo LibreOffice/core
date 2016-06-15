@@ -1233,13 +1233,13 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         SfxWhichIter aSetIterator (rSet);
         sal_uInt16 nItemId (aSetIterator.FirstWhich());
 
-        FrameView *pFrameView;
         while (nItemId > 0)
         {
             bool bState (false);
             Reference<XResourceId> xResourceId;
             try
             {
+                // Check if the right view is active
                 switch (nItemId)
                 {
                     case SID_LEFT_PANE_IMPRESS:
@@ -1254,22 +1254,13 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
+                    case SID_DRAWINGMODE:
                     case SID_NORMAL_MULTI_PANE_GUI:
-                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
-                        {
-                            pFrameView = pViewShell->GetFrameView();
-                            bState = pFrameView->GetViewShEditMode() == EM_PAGE
-                                && pFrameView->GetPageKind() == PK_STANDARD;
-                        }
-                        break;
-
                     case SID_SLIDE_MASTER_MODE:
-                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
-                        {
-                            pFrameView = pViewShell->GetFrameView();
-                            bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
-                                && pFrameView->GetPageKind() == PK_STANDARD;
-                        }
+                        xResourceId = ResourceId::createWithAnchorURL(
+                            xContext, FrameworkHelper::msImpressViewURL,
+                            FrameworkHelper::msCenterPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_SLIDE_SORTER_MULTI_PANE_GUI:
@@ -1290,30 +1281,18 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         break;
 
                     case SID_HANDOUT_MASTER_MODE:
-                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
-                        {
-                            pFrameView = pViewShell->GetFrameView();
-                            bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
-                                && pFrameView->GetPageKind() == PK_HANDOUT;
-                        }
+                        xResourceId = ResourceId::createWithAnchorURL(
+                            xContext, FrameworkHelper::msHandoutViewURL,
+                            FrameworkHelper::msCenterPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_NOTES_MODE:
-                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
-                        {
-                            pFrameView = pViewShell->GetFrameView();
-                            bState = pFrameView->GetViewShEditMode() == EM_PAGE
-                                && pFrameView->GetPageKind() == PK_NOTES;
-                        }
-                        break;
-
                     case SID_NOTES_MASTER_MODE:
-                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
-                        {
-                            pFrameView = pViewShell->GetFrameView();
-                            bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
-                                && pFrameView->GetPageKind() == PK_NOTES;
-                        }
+                        xResourceId = ResourceId::createWithAnchorURL(
+                            xContext, FrameworkHelper::msNotesViewURL,
+                            FrameworkHelper::msCenterPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_TOGGLE_TABBAR_VISIBILITY:
@@ -1330,32 +1309,27 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
             {
             }
 
-            // Take the master page mode into account.
-            switch (nItemId)
+            // Check if edit mode fits too
+            if (bState)
             {
-                case SID_NORMAL_MULTI_PANE_GUI:
-                case SID_NOTES_MODE:
+                ViewShell* const pCenterViewShell = FrameworkHelper::Instance(mrBase)->GetViewShell(
+                    FrameworkHelper::msCenterPaneURL).get();
+                DrawViewShell* const pShell = dynamic_cast<DrawViewShell*>(pCenterViewShell);
+                if (pShell)
                 {
-                    // Determine the master page mode.
-                    ViewShell* pCenterViewShell = FrameworkHelper::Instance(mrBase)->GetViewShell(
-                        FrameworkHelper::msCenterPaneURL).get();
-                    bool bMasterPageMode (false);
-                    if (DrawViewShell* pShell = dynamic_cast<DrawViewShell*>(pCenterViewShell))
+                    switch (nItemId)
                     {
-                        if (pShell->GetEditMode() == EM_MASTERPAGE)
-                        {
-                            bMasterPageMode = true;
-                        }
+                        case SID_DRAWINGMODE:
+                        case SID_NORMAL_MULTI_PANE_GUI:
+                        case SID_NOTES_MODE:
+                            bState = pShell->GetEditMode() == EM_PAGE;
+                            break;
+                        case SID_SLIDE_MASTER_MODE:
+                        case SID_NOTES_MASTER_MODE:
+                            bState = pShell->GetEditMode() == EM_MASTERPAGE;
+                            break;
                     }
-
-                    bState &= !bMasterPageMode;
-                    break;
                 }
-
-                case SID_HANDOUT_MASTER_MODE:
-                    // There is only the master page mode for the handout
-                    // view so ignore the master page flag.
-                    break;
             }
 
             // And finally set the state.
