@@ -114,9 +114,8 @@ String STR_CLASSIFIED_INTELLECTUAL_PROPERTY
 String STR_CLASSIFIED_NATIONAL_SECURITY
 {
     Text [ en-US ] = "National Security:" ;
-}
+};
 
-;
 String STR_CLASSIFIED_EXPORT_CONTROL
 {
     Text [ en-US ] = "Export Control:" ;
