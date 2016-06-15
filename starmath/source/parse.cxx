@@ -1573,8 +1573,8 @@ void SmParser::DoEscape()
 
 void SmParser::DoOperator()
 {
-    if (TokenInGroup(TG::Oper))
-    {
+    assert(TokenInGroup(TG::Oper));
+
         std::unique_ptr<SmStructureNode> pSNode(new SmOperNode(m_aCurToken));
 
         // put operator on top of stack
@@ -1589,7 +1589,6 @@ void SmParser::DoOperator()
 
         pSNode->SetSubNodes(pOperator, popOrZero(m_aNodeStack));
         m_aNodeStack.push_front(std::move(pSNode));
-    }
 }
 
 void SmParser::DoOper()
@@ -1647,7 +1646,7 @@ void SmParser::DoOper()
 
 void SmParser::DoUnOper()
 {
-    OSL_ENSURE(TokenInGroup(TG::UnOper), "Sm: wrong token");
+    assert(TokenInGroup(TG::UnOper));
 
     SmToken      aNodeToken = m_aCurToken;
     SmTokenType  eType      = m_aCurToken.eType;
@@ -1747,7 +1746,7 @@ void SmParser::DoUnOper()
 
 void SmParser::DoAttribut()
 {
-    OSL_ENSURE(TokenInGroup(TG::Attribute), "Sm: wrong token group");
+    assert(TokenInGroup(TG::Attribute));
 
     std::unique_ptr<SmStructureNode> pSNode(new SmAttributNode(m_aCurToken));
     SmNode      *pAttr;
@@ -1783,7 +1782,7 @@ void SmParser::DoAttribut()
 
 void SmParser::DoFontAttribut()
 {
-    OSL_ENSURE(TokenInGroup(TG::FontAttr), "Sm: wrong token group");
+    assert(TokenInGroup(TG::FontAttr));
 
     switch (m_aCurToken.eType)
     {
@@ -1815,7 +1814,7 @@ void SmParser::DoFontAttribut()
 
 void SmParser::DoColor()
 {
-    OSL_ENSURE(m_aCurToken.eType == TCOLOR, "Sm : Ooops...");
+    assert(m_aCurToken.eType == TCOLOR);
 
     // last color rules, get that one
     SmToken  aToken;
@@ -1835,7 +1834,7 @@ void SmParser::DoColor()
 
 void SmParser::DoFont()
 {
-    OSL_ENSURE(m_aCurToken.eType == TFONT, "Sm : Ooops...");
+    assert(m_aCurToken.eType == TFONT);
 
     // last font rules, get that one
     SmToken  aToken;
@@ -1878,7 +1877,7 @@ static bool lcl_IsNumber(const OUString& rText)
 
 void SmParser::DoFontSize()
 {
-    OSL_ENSURE(m_aCurToken.eType == TSIZE, "Sm : Ooops...");
+    assert(m_aCurToken.eType == TSIZE);
 
     FontSizeType   Type;
     std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(m_aCurToken));
@@ -1944,8 +1943,7 @@ void SmParser::DoFontSize()
 
 void SmParser::DoBrace()
 {
-    OSL_ENSURE(m_aCurToken.eType == TLEFT  ||  TokenInGroup(TG::LBrace),
-        "Sm: kein Klammer Ausdruck");
+    assert(m_aCurToken.eType == TLEFT  ||  TokenInGroup(TG::LBrace));
 
     std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(m_aCurToken));
     SmNode *pBody   = nullptr,
