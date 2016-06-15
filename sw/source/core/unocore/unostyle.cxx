@@ -4400,6 +4400,16 @@ const CellStyleNameMap& SwXTextTableStyle::GetCellStyleNameMap()
         aNewMap[ "even-columns" ] = EVEN_COLUMNS_STYLE;
         aNewMap[ "odd-columns"  ] = ODD_COLUMNS_STYLE;
         aNewMap[ "background"   ] = BACKGROUND_STYLE;
+        // loext
+        aNewMap[ "first-row-first-column" ] = FIRST_ROW_FIRST_COLUMN_STYLE;
+        aNewMap[ "first-row-last-column"  ] = FIRST_ROW_LAST_COLUMN_STYLE;
+        aNewMap[ "last-row-first-column"  ] = LAST_ROW_FIRST_COLUMN_STYLE;
+        aNewMap[ "last-row-last-column"   ] = LAST_ROW_LAST_COLUMN_STYLE;
+        aNewMap[ "first-row-odd-column"   ] = FIRST_ROW_ODD_COLUMN_STYLE;
+        aNewMap[ "first-row-even-column"  ] = FIRST_ROW_EVEN_COLUMN_STYLE;
+        aNewMap[ "last-row-odd-column"    ] = LAST_ROW_ODD_COLUMN_STYLE;
+        aNewMap[ "last-row-even-column"   ] = LAST_ROW_EVEN_COLUMN_STYLE;
+
         aMap.swap(aNewMap);
     }
     return aMap;

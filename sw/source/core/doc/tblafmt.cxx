@@ -1056,16 +1056,24 @@ const std::vector<sal_Int32>& SwTableAutoFormat::GetTableTemplateMap()
     if (!pTableTemplateMap)
     {
         pTableTemplateMap = new std::vector<sal_Int32>;
-        pTableTemplateMap->push_back(0); // FIRST_ROW
-        pTableTemplateMap->push_back(1); // LAST_ROW
-        pTableTemplateMap->push_back(2); // FIRST_COLUMN
-        pTableTemplateMap->push_back(3); // LAST_COLUMN
-        pTableTemplateMap->push_back(4); // EVEN_ROWS
-        pTableTemplateMap->push_back(5); // ODD_ROWS
-        pTableTemplateMap->push_back(6); // EVEN_COLUMNS
-        pTableTemplateMap->push_back(7); // ODD_COLUMNS
-        pTableTemplateMap->push_back(8); // BODY
-        pTableTemplateMap->push_back(9); // BACKGROUND
+        pTableTemplateMap->push_back(0 ); // FIRST_ROW
+        pTableTemplateMap->push_back(1 ); // LAST_ROW
+        pTableTemplateMap->push_back(2 ); // FIRST_COLUMN
+        pTableTemplateMap->push_back(3 ); // LAST_COLUMN
+        pTableTemplateMap->push_back(4 ); // EVEN_ROWS
+        pTableTemplateMap->push_back(5 ); // ODD_ROWS
+        pTableTemplateMap->push_back(6 ); // EVEN_COLUMNS
+        pTableTemplateMap->push_back(7 ); // ODD_COLUMNS
+        pTableTemplateMap->push_back(8 ); // BODY not used
+        pTableTemplateMap->push_back(9 ); // BACKGROUND not used
+        pTableTemplateMap->push_back(9 ); // FIRST_ROW_FIRST_COLUMN
+        pTableTemplateMap->push_back(9 ); // FIRST_ROW_LAST_COLUMN
+        pTableTemplateMap->push_back(9 ); // LAST_ROW_FIRST_COLUMN
+        pTableTemplateMap->push_back(9 ); // LAST_ROW_LAST_COLUMN
+        pTableTemplateMap->push_back(9 ); // FIRST_ROW_ODD_COLUMN
+        pTableTemplateMap->push_back(9 ); // FIRST_ROW_EVEN_COLUMN
+        pTableTemplateMap->push_back(9 ); // LAST_ROW_ODD_COLUMN
+        pTableTemplateMap->push_back(9 ); // LAST_ROW_EVEN_COLUMN
     }
     return *pTableTemplateMap;
 }
