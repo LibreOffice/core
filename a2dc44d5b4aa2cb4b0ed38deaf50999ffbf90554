@@ -33,6 +33,24 @@
       "revId": "a2dc44d5b4aa2cb4b0ed38deaf50999ffbf90554",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_0027ce12",
+        "filename": "sd/uiconfig/simpress/ui/notebookbar.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 1890,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-06-15T16:24:00Z",
+      "side": 1,
+      "message": "OK, my mistake, it does open in glade (I added the wrong catalog), but still would be great to simplify.",
+      "parentUuid": "da7fb54a_a030e257",
+      "revId": "a2dc44d5b4aa2cb4b0ed38deaf50999ffbf90554",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
