@@ -451,7 +451,8 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
     pFrameFormat(nullptr),
     pDesc(nullptr),
     pNumRule(nullptr),
-
+    pTableFormat(nullptr),
+    pBoxFormat(nullptr),
     rDoc(rDocument),
     aCoreSet(GetPool().GetPool(),   //UUUU sorted by indices, one double removed
             RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,             // [1
@@ -494,6 +495,8 @@ SwDocStyleSheet::SwDocStyleSheet( const SwDocStyleSheet& rOrg) :
     pFrameFormat(rOrg.pFrameFormat),
     pDesc(rOrg.pDesc),
     pNumRule(rOrg.pNumRule),
+    pTableFormat(rOrg.pTableFormat),
+    pBoxFormat(rOrg.pBoxFormat),
     rDoc(rOrg.rDoc),
     aCoreSet(rOrg.aCoreSet),
     bPhysical(rOrg.bPhysical)
