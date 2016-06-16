@@ -44,7 +44,7 @@ void ThreadPoolTest::testPreferredConcurrency() {
     // Revert and check. Again, nothing should change.
     unsetenv("MAX_CONCURRENCY");
     nThreads = comphelper::ThreadPool::getPreferredConcurrency();
-    CPPUNIT_ASSERT_EQUAL(nExpected, nThreads);
+    CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
 #endif
 }
 
