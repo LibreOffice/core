@@ -39,6 +39,18 @@ bool isViewCallback()
     return g_bViewCallback;
 }
 
+static bool g_bLocalRendering(false);
+
+void setLocalRendering(bool bLocalRendering)
+{
+    g_bLocalRendering = bLocalRendering;
+}
+
+bool isLocalRendering()
+{
+    return g_bLocalRendering;
+}
+
 static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent)(nullptr);
 static void *pStatusIndicatorCallbackData(nullptr);
 
