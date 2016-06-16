@@ -742,7 +742,7 @@ private:
     void SetColorModel(ColorModel eModel);
     void ChangeColorModel();
     void UpdateColorValues();
-    sal_Int32 SearchColorList(OUString aColorName);
+    sal_Int32 SearchColorList(OUString const & aColorName);
     DECL_LINK_TYPED( ModifiedHdl_Impl, Edit&, void );
 
     long CheckChanges_Impl();

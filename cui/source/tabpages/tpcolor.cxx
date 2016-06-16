@@ -1038,7 +1038,7 @@ void SvxColorTabPage::UpdateColorValues()
     }
 }
 
-sal_Int32 SvxColorTabPage::SearchColorList(OUString aColorName)
+sal_Int32 SvxColorTabPage::SearchColorList(OUString const & aColorName)
 {
     long nCount = pColorList->Count();
     bool bValidColorName = true;
