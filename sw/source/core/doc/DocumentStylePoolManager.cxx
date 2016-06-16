@@ -495,70 +495,70 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             }
             break;
 
-        case RES_POOLCOLL_HEADLINE1:        // Headinline 1
+        case RES_POOLCOLL_HEADLINE1:        // Heading 1
             {
                 SvxULSpaceItem aUL( PT_12, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 0, false );
             }
             break;
-        case RES_POOLCOLL_HEADLINE2:        // Headinline 2
+        case RES_POOLCOLL_HEADLINE2:        // Heading 2
             {
                 SvxULSpaceItem aUL( PT_10, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 1, false );
             }
             break;
-        case RES_POOLCOLL_HEADLINE3:        // Headinline 3
+        case RES_POOLCOLL_HEADLINE3:        // Heading 3
             {
                 SvxULSpaceItem aUL( PT_7, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 2, false );
             }
             break;
-        case RES_POOLCOLL_HEADLINE4:        // Headinline 4
+        case RES_POOLCOLL_HEADLINE4:        // Heading 4
             {
                 SvxULSpaceItem aUL( PT_6, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 3, true );
             }
             break;
-        case RES_POOLCOLL_HEADLINE5:        // Headinline 5
+        case RES_POOLCOLL_HEADLINE5:        // Heading 5
             {
                 SvxULSpaceItem aUL( PT_6, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 4, false );
             }
             break;
-        case RES_POOLCOLL_HEADLINE6:        // Headinline 6
+        case RES_POOLCOLL_HEADLINE6:        // Heading 6
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 5, true );
             }
             break;
-        case RES_POOLCOLL_HEADLINE7:        // Headinline 7
+        case RES_POOLCOLL_HEADLINE7:        // Heading 7
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 6, false );
             }
             break;
-        case RES_POOLCOLL_HEADLINE8:        // Headinline 8
+        case RES_POOLCOLL_HEADLINE8:        // Heading 8
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 7, true );
             }
             break;
-        case RES_POOLCOLL_HEADLINE9:        // Headinline 9
+        case RES_POOLCOLL_HEADLINE9:        // Heading 9
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 8, false );
             }
             break;
-        case RES_POOLCOLL_HEADLINE10:       // Headinline 10
+        case RES_POOLCOLL_HEADLINE10:       // Heading 10
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
