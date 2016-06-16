@@ -96,7 +96,6 @@ officecfg_XCSFILES := \
     Office/UI/WriterWindowState \
     Office/UI/XFormsWindowState \
     Office/Views \
-    Office/WebWizard \
     Office/Writer \
     Office/WriterWeb \
     Setup \
