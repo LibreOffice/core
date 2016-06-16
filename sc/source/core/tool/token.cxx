@@ -508,7 +508,8 @@ void DumpToken(formula::FormulaToken const & rToken)
         break;
     default:
         cout << "-- FormulaToken" << endl;
-        cout << "  opcode: " << rToken.GetOpCode() << endl;
+        cout << "  opcode: " << rToken.GetOpCode() << " " <<
+            formula::FormulaCompiler::GetNativeSymbol( rToken.GetOpCode()).toUtf8().getStr() << endl;
         cout << "  type: " << static_cast<int>(rToken.GetType()) << endl;
         switch (rToken.GetType())
         {
