@@ -66,6 +66,7 @@ private:
     DECL_LINK_TYPED(ClickHandler, ToolBox*, void);
     DECL_LINK_TYPED(DoubleClickHandler, ToolBox*, void);
     DECL_LINK_TYPED(SelectHandler, ToolBox*, void);
+    DECL_LINK_TYPED(ChangedIconSizeHandler, LinkParamNone*, void );
 
     css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const sal_uInt16 nItemId) const;
 
