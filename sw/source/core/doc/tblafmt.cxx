@@ -393,6 +393,11 @@ SwBoxAutoFormat& SwBoxAutoFormat::operator=( const SwBoxAutoFormat& rNew )
     return *this;
 }
 
+bool SwBoxAutoFormat::operator==(const SwBoxAutoFormat& rRight)
+{
+    return GetBackground().GetColor() == rRight.GetBackground().GetColor();
+}
+
 #define READ( aItem, aItemType, nVers )\
     pNew = aItem.Create(rStream, nVers ); \
     aItem = *static_cast<aItemType*>(pNew); \
@@ -921,6 +926,24 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
     m_aKeepWithNextPara = static_cast<const SvxFormatKeepItem&>(rSet.Get(RES_KEEP));
     m_aRepeatHeading = table.GetRowsToRepeat();
     m_aShadow = static_cast<const SvxShadowItem&>(rSet.Get(RES_SHADOW));
+}
+
+bool SwTableAutoFormat::FirstRowEndColumnIsRow()
+{
+    return *aBoxAutoFormat[3] == *aBoxAutoFormat[2];
+}
+
+bool SwTableAutoFormat::FirstRowStartColumnIsRow()
+{
+    return *aBoxAutoFormat[0] == *aBoxAutoFormat[1];
+}
+bool SwTableAutoFormat::LastRowEndColumnIsRow()
+{
+    return *aBoxAutoFormat[15] == *aBoxAutoFormat[14];
+}
+bool SwTableAutoFormat::LastRowStartColumnIsRow()
+{
+    return *aBoxAutoFormat[12] == *aBoxAutoFormat[13];
 }
 
 bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
