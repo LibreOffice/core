@@ -580,18 +580,22 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
     }
 }
 
-std::weak_ptr<SvtCompatibilityOptions_Impl>    m_pOptions;
+namespace {
+
+std::weak_ptr<SvtCompatibilityOptions_Impl> theOptions;
+
+}
 
 SvtCompatibilityOptions::SvtCompatibilityOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
 
-    m_pImpl = m_pOptions.lock();
+    m_pImpl = theOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtCompatibilityOptions_Impl>();
-        m_pOptions = m_pImpl;
+        theOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_COMPATIBILITY);
     }
 }
