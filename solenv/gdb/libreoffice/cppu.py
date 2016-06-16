@@ -20,22 +20,16 @@ class UnoAnyPrinter(object):
         self.typename = typename.replace('com::sun::star::', '')
 
     def to_string(self):
-        if self._is_set():
-            return ('%s %s' % (self.typename, self._make_string()))
-        else:
-            return "empty %s" % self.typename
-
-    def _is_set(self):
-        return self.value['pType'].dereference()['eTypeClass'] != TypeClass.VOID
-
-    def _make_string(self):
-        ptr = self.value['pData']
-        assert ptr
         type_desc = self.value['pType']
         assert type_desc
         type = make_uno_type(type_desc.dereference())
         assert type
-        return str(uno_cast(type, ptr).dereference())
+        if type_desc.dereference()['eTypeClass'] == TypeClass.VOID:
+            return ('%s(%s)' % (self.typename, type.tag))
+        else:
+            ptr = self.value['pData']
+            assert ptr
+            return ('%s(%s: %s)' % (self.typename, type.tag, str(uno_cast(type, ptr).dereference())))
 
 class UnoReferencePrinter(object):
     '''Prints reference to a UNO interface'''
