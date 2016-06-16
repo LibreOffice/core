@@ -259,7 +259,6 @@ void CursorWrapper::ImplConstruct(const Reference< css::sdbc::XResultSet>& _rxCu
         m_xGeneric = m_xMoveOperations.get();
 }
 
-
 const CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSet>& _rxCursor)
 {
     m_xMoveOperations.set(_rxCursor, UNO_QUERY);
@@ -274,31 +273,27 @@ const CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSe
     return *this;
 }
 
-
 FmXDisposeListener::~FmXDisposeListener()
 {
     setAdapter(nullptr);
 }
 
-
 void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 {
     if (m_pAdapter)
     {
-        ::osl::MutexGuard aGuard(m_rMutex);
+        ::osl::MutexGuard aGuard(m_aMutex);
         m_pAdapter->release();
         m_pAdapter = nullptr;
     }
 
     if (pAdapter)
     {
-        ::osl::MutexGuard aGuard(m_rMutex);
+        ::osl::MutexGuard aGuard(m_aMutex);
         m_pAdapter = pAdapter;
         m_pAdapter->acquire();
     }
 }
-
-
 
 FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< css::lang::XComponent>& _rxObject, sal_Int16 _nId)
     :m_xObject(_rxObject)
@@ -310,7 +305,6 @@ FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, con
     if (m_xObject.is())
         m_xObject->addEventListener(this);
 }
-
 
 FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
 {
