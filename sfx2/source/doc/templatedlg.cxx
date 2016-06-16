@@ -847,9 +847,6 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pI
         OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
         ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aDeletedTemplate))->Execute();
     }
-
-    if(mpSearchView->IsVisible())
-        SearchUpdateHdl(*mpSearchFilter);
 }
 
 IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, pItem, void)
