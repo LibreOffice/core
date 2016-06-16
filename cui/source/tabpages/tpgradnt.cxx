@@ -240,7 +240,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
             INetURLObject   aURL( m_pGradientList->GetPath() );
 
             aURL.Append( m_pGradientList->GetName() );
-            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+            SAL_WARN_IF( aURL.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
 
             if ( aURL.getBase().getLength() > 18 )
             {
@@ -302,7 +302,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
                                                           SVX_RESSTR( RID_SVXSTR_GRADIENT ),
                                                           CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
                                                           &aWarningBoxImage );
-            DBG_ASSERT(aMessDlg, "Dialog creation failed!");
+            assert(aMessDlg && "Dialog creation failed!");
             aMessDlg->SetButtonText( SvxMessDialogButton::N1,
                                     OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
             aMessDlg->SetButtonText( SvxMessDialogButton::N2,
@@ -370,7 +370,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
                         (sal_uInt16) m_pMtrColorFrom->GetValue(),
                         (sal_uInt16) m_pMtrColorTo->GetValue() ));
         }
-        DBG_ASSERT( pXGradient, "XGradient konnte nicht erzeugt werden" );
+        assert( pXGradient && "XGradient could not be created" );
         rSet->Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
         rSet->Put( XFillGradientItem( aString, *pXGradient ) );
         rSet->Put( XGradientStepCountItem( nValue ) );
@@ -465,18 +465,12 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 
     long nCount = m_pGradientList->Count();
     long j = 1;
-    bool bDifferent = false;
+    bool bValidGradientName = false;
 
-    while( !bDifferent )
+    while( !bValidGradientName )
     {
-        aName  = aNewName;
-        aName += " ";
-        aName += OUString::number( j++ );
-        bDifferent = true;
-
-        for( long i = 0; i < nCount && bDifferent; i++ )
-            if( aName == m_pGradientList->GetGradient( i )->GetName() )
-                bDifferent = false;
+        aName  = aNewName + " " + OUString::number( j++ );
+        bValidGradientName = (SearchGradientList(aName) == LISTBOX_ENTRY_NOTFOUND);
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -488,15 +482,9 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
     {
         pDlg->GetName( aName );
 
-        bDifferent = true;
+        bValidGradientName = (SearchGradientList(aName) == LISTBOX_ENTRY_NOTFOUND);
 
-        for (long i = 0; i < nCount && bDifferent; ++i)
-        {
-            if( aName == m_pGradientList->GetGradient( i )->GetName() )
-                bDifferent = false;
-        }
-
-        if (bDifferent)
+        if (bValidGradientName)
         {
             nError = 0;
             break;
@@ -569,26 +557,19 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
         OUString aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialog creation failed!");
+        assert(pFact && "Dialog creation failed!");
         std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
-        DBG_ASSERT(pDlg, "Dialog creation failed!");
+        assert(pDlg && "Dialog creation failed!");
 
-        long nCount = m_pGradientList->Count();
         bool bLoop = true;
 
         while( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bool bDifferent = true;
+            sal_Int32 nGradientPos = SearchGradientList(aName);
+            bool bValidGradientName = (nGradientPos == nPos) || (nGradientPos == LISTBOX_ENTRY_NOTFOUND);
 
-            for( long i = 0; i < nCount && bDifferent; i++ )
-            {
-                if( aName == m_pGradientList->GetGradient( i )->GetName() &&
-                    aName != aOldName )
-                    bDifferent = false;
-            }
-
-            if( bDifferent )
+            if( bValidGradientName )
             {
                 bLoop = false;
                 XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
@@ -776,7 +757,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickSaveHdl_Impl, Button*, void)
     while (nIndex >= 0);
 
     INetURLObject aFile(aLastDir);
-    DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+    SAL_WARN_IF( aFile.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
 
     if( !m_pGradientList->GetName().isEmpty() )
     {
@@ -947,5 +928,21 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
     }
 }
 
+sal_Int32 SvxGradientTabPage::SearchGradientList(OUString aGradientName)
+{
+    long nCount = m_pGradientList->Count();
+    bool bValidGradientName = true;
+    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+
+    for(long i = 0;i < nCount && bValidGradientName;i++)
+    {
+        if(aGradientName == m_pGradientList->GetGradient( i )->GetName())
+        {
+            nPos = i;
+            bValidGradientName = false;
+        }
+    }
+    return nPos;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
