@@ -2332,6 +2332,12 @@ const SwFrameFormat*  SwFEShell::GetFlyNum(size_t nIdx, FlyCntType eType, bool b
     return GetDoc()->GetFlyNum(nIdx, eType, bIgnoreTextBoxes);
 }
 
+std::vector<SwFrameFormat const*> SwFEShell::GetFlyFrameFormats(
+        FlyCntType const eType, bool const bIgnoreTextBoxes)
+{
+    return GetDoc()->GetFlyFrameFormats(eType, bIgnoreTextBoxes);
+}
+
 // show the current selected object
 void SwFEShell::MakeSelVisible()
 {
