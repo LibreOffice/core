@@ -1314,7 +1314,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pUnoCmdDebugger, -1);
     g_signal_connect(G_OBJECT(pUnoCmdDebugger), "clicked", G_CALLBACK(unoCommandDebugger), nullptr);
 
-    static bool bViewCallback = getenv("LOK_VIEW_CALLBACK");
+    static bool bViewCallback = !getenv("LOK_MODEL_CALLBACK");
     if (bViewCallback)
     {
         GtkToolItem* pNewViewButton = gtk_tool_button_new( nullptr, nullptr);
