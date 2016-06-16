@@ -192,7 +192,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/UI/WindowState.xcs \
 	$(postprocess_XCS)/Office/UI.xcs \
 	$(postprocess_XCS)/Office/Views.xcs \
-	$(postprocess_XCS)/Office/WebWizard.xcs \
 	$(postprocess_XCS)/Office/Writer.xcs \
 	$(postprocess_XCS)/Office/WriterWeb.xcs \
 	$(postprocess_XCS)/Setup.xcs \
@@ -254,7 +253,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/UI/StartModuleWindowState.xcu \
 	$(postprocess_XCU)/Office/UI.xcu \
 	$(postprocess_XCU)/Office/Views.xcu \
-	$(postprocess_XCU)/Office/WebWizard.xcu \
 	$(postprocess_XCU)/Office/Writer.xcu \
 	$(postprocess_XCU)/Setup.xcu \
 	$(postprocess_XCU)/System.xcu \
