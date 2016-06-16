@@ -418,6 +418,9 @@ public:
     size_t GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
     const SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false) const;
 
+    std::vector<SwFrameFormat const*> GetFlyFrameFormats(
+            FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false);
+
     /// If a fly is selected, it draws cursor into the first ContentFrame.
     const SwFrameFormat* SelFlyGrabCursor();
 
