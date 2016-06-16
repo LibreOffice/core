@@ -357,6 +357,18 @@ void XFillBitmapItem::SetGraphicObject(const GraphicObject& rGraphicObject)
     maGraphicObject = rGraphicObject;
 }
 
+bool XFillBitmapItem::isPattern()
+{
+    if(this)
+    {
+        std::unique_ptr<GraphicObject> pGraphicObject = nullptr;
+        pGraphicObject.reset(new GraphicObject(this->GetGraphicObject()));
+        BitmapColor aBack, aFront;
+        return isHistorical8x8(pGraphicObject->GetGraphic().GetBitmap(), aBack, aFront);
+    }
+    return false;
+}
+
 sal_uInt16 XFillBitmapItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 2;
