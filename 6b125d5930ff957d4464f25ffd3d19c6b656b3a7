@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_b7dd8944",
+        "filename": "unotools/source/config/dynamicmenuoptions.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T13:49:31Z",
+      "side": 1,
+      "message": "please don\u0027t use \"m_\" prefix for global variables - use \"g_\" instead.\n\n\"m_\" is only for *non-static* member variables so lot of the FooOptions were already abusing it before.\n\nsee also commit ed8a2341b9631ad312ff40d23331c66d537aad20",
+      "revId": "6b125d5930ff957d4464f25ffd3d19c6b656b3a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
