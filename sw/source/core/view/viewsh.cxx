@@ -124,9 +124,6 @@ void SwViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallbac
 
 void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
-    if (mbInLibreOfficeKitCallback)
-        return;
-
     getIDocumentDrawModelAccess().GetDrawModel()->libreOfficeKitCallback(nType, pPayload);
 }
 

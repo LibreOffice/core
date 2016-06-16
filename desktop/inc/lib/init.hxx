@@ -30,7 +30,7 @@ namespace desktop {
     class DESKTOP_DLLPUBLIC CallbackFlushHandler : public Idle
     {
     public:
-        explicit CallbackFlushHandler(LibreOfficeKitCallback pCallback, void* pData);
+        explicit CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData);
         virtual ~CallbackFlushHandler();
         virtual void Invoke() override;
         static void callback(const int type, const char* payload, void* data);
@@ -44,6 +44,7 @@ namespace desktop {
 
         std::vector<std::pair<int, std::string>> m_queue;
         std::map<int, std::string> m_states;
+        LibreOfficeKitDocument* m_pDocument;
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
         bool m_bPartTilePainting;
