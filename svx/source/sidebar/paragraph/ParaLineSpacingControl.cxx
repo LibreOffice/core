@@ -34,15 +34,13 @@
 
 // values of the mpLineDist listbox
 #define LLINESPACE_1          0
-#define LLINESPACE_15         1
-#define LLINESPACE_2          2
-#define LLINESPACE_PROP       3
-#define LLINESPACE_MIN        4
-#define LLINESPACE_DURCH      5
-#define LLINESPACE_FIX        6
-
-// special case; should not conflict with the mpLinDist values
-#define LLINESPACE_115        7
+#define LLINESPACE_115        1
+#define LLINESPACE_15         2
+#define LLINESPACE_2          3
+#define LLINESPACE_PROP       4
+#define LLINESPACE_MIN        5
+#define LLINESPACE_DURCH      6
+#define LLINESPACE_FIX        7
 
 #define MIN_FIXED_DISTANCE    28
 
@@ -142,6 +140,10 @@ void ParaLineSpacingControl::Initialize()
                         if ( LINESPACE_1 == currSPItem->GetPropLineSpace() )
                         {
                             SelectEntryPos(LLINESPACE_1);
+                        }
+                        else if ( LINESPACE_115 == currSPItem->GetPropLineSpace() )
+                        {
+                            SelectEntryPos(LLINESPACE_115);
                         }
                         else if ( LINESPACE_15 == currSPItem->GetPropLineSpace() )
                         {
@@ -244,6 +246,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
     switch (mpLineDist->GetSelectEntryPos())
     {
         case LLINESPACE_1:
+        case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
             if (mpActLineDistFld == mpLineDistAtPercentBox)
@@ -342,6 +345,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
     switch ( nPos )
     {
         case LLINESPACE_1:
+        case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
             SetLineSpace(aSpacing, nPos);
@@ -372,6 +376,11 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
         case LLINESPACE_1:
             rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
             rLineSpace.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+            break;
+
+        case LLINESPACE_115:
+            rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            rLineSpace.SetPropLineSpace( LINESPACE_115 );
             break;
 
         case LLINESPACE_15:
@@ -431,11 +440,7 @@ void ParaLineSpacingControl::ExecuteLineSpacing(sal_Int32 nEntry)
 {
     SvxLineSpacingItem aSpacing(DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
 
-    // special-case the 1.15 line spacing
-    if (nEntry == LLINESPACE_115)
-        SetLineSpace(aSpacing, LLINESPACE_PROP, mpLineDistAtPercentBox->Denormalize(LINESPACE_115));
-    else
-        SetLineSpace(aSpacing, nEntry);
+    SetLineSpace(aSpacing, nEntry);
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(
             SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, { &aSpacing });
