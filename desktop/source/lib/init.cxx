@@ -430,8 +430,9 @@ LibLODocument_Impl::~LibLODocument_Impl()
     mxComponent->dispose();
 }
 
-CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitCallback pCallback, void* pData)
+CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
     : Idle( "lokit timer callback" ),
+      m_pDocument(pDocument),
       m_pCallback(pCallback),
       m_pData(pData),
       m_bPartTilePainting(false)
@@ -498,6 +499,10 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             //SAL_WARN("lokevt", "Skipping while painting [" + std::to_string(type) + "]: [" + payload + "].");
             return;
         }
+
+        // In Writer we drop all notifications during painting.
+        if (doc_getDocumentType(m_pDocument) == LOK_DOCTYPE_TEXT)
+            return;
     }
 
     // Supress invalid payloads.
@@ -1338,7 +1343,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
-    pDocument->mpCallbackFlushHandlers[nView].reset(new CallbackFlushHandler(pCallback, pData));
+    pDocument->mpCallbackFlushHandlers[nView].reset(new CallbackFlushHandler(pThis, pCallback, pData));
 
     if (comphelper::LibreOfficeKit::isViewCallback())
     {
