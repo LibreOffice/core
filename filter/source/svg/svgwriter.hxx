@@ -84,12 +84,12 @@ class SVGAttributeWriter
 {
 private:
 
-    vcl::Font                  maCurFont;
-    SVGExport&                 mrExport;
-    SVGFontExport&             mrFontExport;
-    SvXMLElementExport*        mpElemFont;
-
+    vcl::Font                               maCurFont;
+    SVGExport&                              mrExport;
+    SVGFontExport&                          mrFontExport;
+    SvXMLElementExport*                     mpElemFont;
     static double            ImplRound( double fVal );
+
 
 public:
 
@@ -111,14 +111,13 @@ public:
 
 struct SVGShapeDescriptor
 {
-    tools::PolyPolygon          maShapePolyPoly;
-    Color                       maShapeFillColor;
-    Color                       maShapeLineColor;
-    sal_Int32                   mnStrokeWidth;
-    SvtGraphicStroke::DashArray maDashArray;
-    ::std::unique_ptr< Gradient > mapShapeGradient;
-    OUString                    maId;
-
+    tools::PolyPolygon                  maShapePolyPoly;
+    Color                               maShapeFillColor;
+    Color                               maShapeLineColor;
+    sal_Int32                           mnStrokeWidth;
+    SvtGraphicStroke::DashArray         maDashArray;
+    ::std::unique_ptr< Gradient >       mapShapeGradient;
+    OUString                            maId;
     basegfx::B2DLineJoin        maLineJoin;
     css::drawing::LineCap       maLineCap;
 
@@ -157,9 +156,9 @@ class SVGTextWriter
     SVGExport&                                  mrExport;
     SVGAttributeWriter*                         mpContext;
     VclPtr<VirtualDevice>                       mpVDev;
-    bool                                    mbIsTextShapeStarted;
+    bool                                        mbIsTextShapeStarted;
     Reference<XText>                            mrTextShape;
-    OUString                             msShapeId;
+    OUString                                    msShapeId;
     Reference<XEnumeration>                     mrParagraphEnumeration;
     Reference<XTextContent>                     mrCurrentTextParagraph;
     Reference<XEnumeration>                     mrTextPortionEnumeration;
@@ -248,8 +247,6 @@ class SVGTextWriter
 
     void implRegisterInterface( const Reference< XInterface >& rxIf );
     const OUString & implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
-
-
 };
 
 
@@ -268,8 +265,8 @@ private:
     SVGTextWriter                               maTextWriter;
     VclPtr<VirtualDevice>                       mpVDev;
     MapMode                                     maTargetMapMode;
-    bool                                    mbClipAttrChanged;
-    bool                                    mbIsPlaceholderShape;
+    bool                                        mbClipAttrChanged;
+    bool                                        mbIsPlaceholderShape;
 
 
     void                    ImplAcquireContext()
@@ -323,11 +320,10 @@ private:
 
 public:
 
-    static OUString  GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine );
-    static BitmapChecksum GetChecksum( const MetaAction* pAction );
+    static OUString         GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine );
+    static BitmapChecksum   GetChecksum( const MetaAction* pAction );
 
 public:
-
                             SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport );
     virtual                 ~SVGActionWriter();
 
@@ -354,7 +350,8 @@ public:
 
     // XSVGWriter
     virtual void SAL_CALL write( const Reference<XDocumentHandler>& rxDocHandler,
-        const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException, std::exception ) override;
+                                 const Sequence<sal_Int8>& rMtfSeq )
+                               throw( RuntimeException, std::exception ) override;
 };
 
 #endif // INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
