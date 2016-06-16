@@ -115,10 +115,6 @@ void XMLRedlineExport::ExportChange(
         if (pCurrentChangesList != nullptr)
             ExportChangeAutoStyle(rPropSet);
     }
-    else
-    {
-        ExportChangeInline(rPropSet);
-    }
 }
 
 
@@ -323,37 +319,6 @@ void XMLRedlineExport::ExportChangesListAutoStyles()
         }
     }
 }
-
-void XMLRedlineExport::ExportChangeInline(
-    const Reference<XPropertySet> & rPropSet)
-{
-    // determine element name (depending on collapsed, start/end)
-    enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
-    Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
-    bool bCollapsed = *static_cast<sal_Bool const *>(aAny.getValue());
-    if (bCollapsed)
-    {
-        eElement = XML_CHANGE;
-    }
-    else
-    {
-        aAny = rPropSet->getPropertyValue(sIsStart);
-        const bool bStart = *static_cast<sal_Bool const *>(aAny.getValue());
-        eElement = bStart ? XML_CHANGE_START : XML_CHANGE_END;
-    }
-
-    if (XML_TOKEN_INVALID != eElement)
-    {
-        // we always need the ID
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_CHANGE_ID,
-                             GetRedlineID(rPropSet));
-
-        // export the element (no whitespace because we're in the text body)
-        SvXMLElementExport aChangeElem(rExport, XML_NAMESPACE_TEXT,
-                                       eElement, false, false);
-    }
-}
-
 
 void XMLRedlineExport::ExportChangedRegion(
     const Reference<XPropertySet> & rPropSet)

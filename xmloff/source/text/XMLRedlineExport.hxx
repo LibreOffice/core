@@ -146,11 +146,6 @@ public:
 
 private:
 
-    /// export the change mark contained in the text body
-    void ExportChangeInline(
-        /// PropertySet of RedlinePortion
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
-
     /// export the auto styles used in this change
     void ExportChangeAutoStyle(
         /// PropertySet of RedlinePortion
