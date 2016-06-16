@@ -58,7 +58,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "Volume",
@@ -119,10 +119,10 @@ struct StaticStockChartTypeTemplateInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -271,9 +271,9 @@ void SAL_CALL StockChartTypeTemplate::resetStyles(
     ChartTypeTemplate::resetStyles( xDiagram );
     if( getDimension() == 3 )
     {
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+        std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-        for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
+        for( std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
              aIt != aSeriesVec.end(); ++aIt )
         {
             Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY );

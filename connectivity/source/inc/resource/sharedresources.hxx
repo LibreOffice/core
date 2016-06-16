@@ -140,7 +140,7 @@ namespace connectivity
                 the string from the resource file, with applied string substitution
         */
         OUString getResourceStringWithSubstitution( ResourceId _nResId,
-                    const ::std::list< ::std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const;
+                    const std::list< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const;
     };
 
 

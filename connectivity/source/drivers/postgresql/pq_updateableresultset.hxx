@@ -58,7 +58,7 @@ struct UpdateableField
     bool    isTouched;
 };
 
-typedef ::std::vector< UpdateableField > UpdateableFieldVector;
+typedef std::vector< UpdateableField > UpdateableFieldVector;
 
 class UpdateableResultSet :
         public SequenceResultSet,

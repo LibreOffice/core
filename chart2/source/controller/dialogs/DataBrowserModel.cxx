@@ -126,7 +126,7 @@ bool lcl_SequenceOfSeriesIsShared(
     return bResult;
 }
 
-typedef ::std::vector< Reference< chart2::data::XLabeledDataSequence > > lcl_tSharedSeqVec;
+typedef std::vector< Reference< chart2::data::XLabeledDataSequence > > lcl_tSharedSeqVec;
 
 lcl_tSharedSeqVec lcl_getSharedSequences( const Sequence< Reference< chart2::XDataSeries > > & rSeries )
 {
@@ -172,7 +172,7 @@ sal_Int32 lcl_getValuesRepresentationIndex(
     return nResult;
 }
 
-struct lcl_RepresentationsOfLSeqMatch : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+struct lcl_RepresentationsOfLSeqMatch : public std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
     explicit lcl_RepresentationsOfLSeqMatch( const Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
             m_aValuesRep( xLSeq.is() ?
@@ -190,7 +190,7 @@ private:
     OUString m_aValuesRep;
 };
 
-struct lcl_RolesOfLSeqMatch : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+struct lcl_RolesOfLSeqMatch : public std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
     explicit lcl_RolesOfLSeqMatch( const Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
         m_aRole(DataSeriesHelper::getRole(xLSeq)) {}
@@ -235,7 +235,7 @@ struct DataBrowserModel::tDataColumn
     {}
 };
 
-struct DataBrowserModel::implColumnLess : public ::std::binary_function<
+struct DataBrowserModel::implColumnLess : public std::binary_function<
         DataBrowserModel::tDataColumn, DataBrowserModel::tDataColumn, bool >
 {
     bool operator() ( const first_argument_type & rLeft, const second_argument_type & rRight )
@@ -263,7 +263,7 @@ DataBrowserModel::~DataBrowserModel()
 
 namespace
 {
-struct lcl_DataSeriesOfHeaderMatches : public ::std::unary_function< ::chart::DataBrowserModel::tDataHeader, bool >
+struct lcl_DataSeriesOfHeaderMatches : public std::unary_function< ::chart::DataBrowserModel::tDataHeader, bool >
 {
     explicit lcl_DataSeriesOfHeaderMatches(
         const Reference< chart2::XDataSeries > & xSeriesToCompareWith ) :
@@ -308,7 +308,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         // Find the corresponding header and determine the last column of this
         // data series.
         tDataHeaderVector::const_iterator aIt(
-            ::std::find_if( m_aHeaders.begin(), m_aHeaders.end(),
+            std::find_if( m_aHeaders.begin(), m_aHeaders.end(),
                             lcl_DataSeriesOfHeaderMatches( xSeries )));
         if( aIt != m_aHeaders.end())
             nStartCol = aIt->m_nEndColumn;
@@ -351,7 +351,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         for (sal_Int32 nIndex = nStartCol; nSeqIdx < nSeqSize; ++nSeqIdx)
         {
             lcl_tSharedSeqVec::const_iterator aSharedIt(
-                ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
+                std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
                                 lcl_RolesOfLSeqMatch( aLSequences[nSeqIdx] )));
 
             if( aSharedIt != aSharedSequences.end())
@@ -487,7 +487,7 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
     for (sal_Int32 i = 0; i < aSequencesOfDeleted.getLength(); ++i)
     {
         std::vector<Reference<chart2::data::XLabeledDataSequence> >::const_iterator aHitIt(
-            ::std::find_if( aAllDataSeqs.begin(), aAllDataSeqs.end(),
+            std::find_if( aAllDataSeqs.begin(), aAllDataSeqs.end(),
                 lcl_RepresentationsOfLSeqMatch( aSequencesOfDeleted[i] )));
         // if not used by the remaining series this sequence can be deleted
         if( aHitIt == aAllDataSeqs.end() )
@@ -497,8 +497,8 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
     // delete unnecessary sequences of the internal data
     // iterate using greatest index first, so that deletion does not
     // shift other sequences that will be deleted later
-    ::std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
-    for( ::std::vector< sal_Int32 >::reverse_iterator aIt(
+    std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
+    for( std::vector< sal_Int32 >::reverse_iterator aIt(
              aSequenceIndexesToDelete.rbegin()); aIt != aSequenceIndexesToDelete.rend(); ++aIt )
     {
         if( *aIt != -1 )
@@ -879,7 +879,7 @@ void DataBrowserModel::updateFromModel()
                             else if( aRole == "values-x" )
                                 nSequenceNumberFormatKey = nXAxisNumberFormat;
 
-                            if( ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
+                            if( std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
                                              lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) == aSharedSequences.end())
                             {
                                 // no shared sequence
@@ -922,7 +922,7 @@ void DataBrowserModel::updateFromModel()
 
                         nHeaderStart = nHeaderEnd;
 
-                        ::std::sort( m_aColumns.begin() + nStartColIndex, m_aColumns.end(), implColumnLess() );
+                        std::sort( m_aColumns.begin() + nStartColIndex, m_aColumns.end(), implColumnLess() );
                     }
                 }
             }
@@ -938,7 +938,7 @@ void DataBrowserModel::addErrorBarRanges(
 {
     try
     {
-        ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSequences;
+        std::vector< Reference< chart2::data::XLabeledDataSequence > > aSequences;
 
         Reference< chart2::data::XDataSource > xErrorSource(
             StatisticsHelper::getErrorBars( xDataSeries, bYError ), uno::UNO_QUERY );
@@ -959,7 +959,7 @@ void DataBrowserModel::addErrorBarRanges(
         if( xErrorLSequence.is())
             aSequences.push_back( xErrorLSequence );
 
-        for( ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aIt( aSequences.begin());
+        for( std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aIt( aSequences.begin());
              aIt != aSequences.end(); ++aIt )
         {
             m_aColumns.push_back(

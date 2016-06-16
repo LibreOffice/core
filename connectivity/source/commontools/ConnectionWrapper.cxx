@@ -181,7 +181,7 @@ Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelImplementationId()
 
 namespace
 {
-    class TPropertyValueLessFunctor : public ::std::binary_function< css::beans::PropertyValue,css::beans::PropertyValue,bool>
+    class TPropertyValueLessFunctor : public std::binary_function< css::beans::PropertyValue,css::beans::PropertyValue,bool>
     {
     public:
         TPropertyValueLessFunctor()
@@ -212,7 +212,7 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
     // now we need to sort the properties
     PropertyValue* pBegin = _rInfo.getArray();
     PropertyValue* pEnd   = pBegin + _rInfo.getLength();
-    ::std::sort(pBegin,pEnd,TPropertyValueLessFunctor());
+    std::sort(pBegin,pEnd,TPropertyValueLessFunctor());
 
     pBegin = _rInfo.getArray();
     pEnd   = pBegin + _rInfo.getLength();

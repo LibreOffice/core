@@ -49,7 +49,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "NumberOfLines",
@@ -89,10 +89,10 @@ struct StaticColumnLineChartTypeTemplateInfoHelper_Initializer
 private:
     static uno::Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -212,7 +212,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
         {
             Reference< XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
             Sequence< Reference< XDataSeries > > aColumnSeq( nNumberOfColumns );
-            ::std::copy( aFlatSeriesSeq.begin(),
+            std::copy( aFlatSeriesSeq.begin(),
                          aFlatSeriesSeq.begin() + nNumberOfColumns,
                          aColumnSeq.getArray());
             xDSCnt->setDataSeries( aColumnSeq );
@@ -228,7 +228,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
         {
             Reference< XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
             Sequence< Reference< XDataSeries > > aLineSeq( nNumberOfLines );
-            ::std::copy( aFlatSeriesSeq.begin() + nNumberOfColumns,
+            std::copy( aFlatSeriesSeq.begin() + nNumberOfColumns,
                          aFlatSeriesSeq.end(),
                          aLineSeq.getArray());
             xDSCnt->setDataSeries( aLineSeq );

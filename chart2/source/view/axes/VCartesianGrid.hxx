@@ -40,7 +40,7 @@ public:
 
     virtual void createShapes() override;
 
-    static void fillLinePropertiesFromGridModel( ::std::vector<VLineProperties>& rLinePropertiesList
+    static void fillLinePropertiesFromGridModel( std::vector<VLineProperties>& rLinePropertiesList
                     , const css::uno::Sequence<
                         css::uno::Reference< css::beans::XPropertySet > >& rGridPropertiesList );
 

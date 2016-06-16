@@ -907,7 +907,7 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
 
     m_aValueRange[12] = aMap;
 
-    ::std::map< sal_Int32,OUString> aMap2;
+    std::map< sal_Int32,OUString> aMap2;
     aMap2[0] = "YES";
     aMap2[1] = "NO";
     m_aIntValueRange[18] = aMap2;
@@ -1040,7 +1040,7 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
     aMap[1] = 0;
     m_aValueRange[8] = aMap2;
 
-    ::std::map< sal_Int32,OUString> aMap3;
+    std::map< sal_Int32,OUString> aMap3;
     aMap3[0]                    = "";
     aMap3[DB_COLLATION_ASC]     = "A";
     aMap3[DB_COLLATION_DESC]    = "D";
@@ -1063,7 +1063,7 @@ void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
     m_aColMapping.push_back(6);
     m_aColMapping.push_back(7);
 
-    ::std::map< sal_Int32,OUString> aMap;
+    std::map< sal_Int32,OUString> aMap;
     aMap[0] = "YES";
     aMap[1] = "NO";
     m_aIntValueRange[7] = aMap;
@@ -1090,7 +1090,7 @@ void ODatabaseMetaDataResultSet::setCrossReferenceMap()
     m_aColMapping.push_back(16);
     m_aColMapping.push_back(18);
 
-    ::std::map< OUString,sal_Int32> aMap;
+    std::map< OUString,sal_Int32> aMap;
     aMap[ OUString("CASCADE")] = KeyRule::CASCADE;
     aMap[ OUString("RESTRICT")] = KeyRule::RESTRICT;
     aMap[ OUString("SET NULL")] = KeyRule::SET_NULL;
@@ -1111,7 +1111,7 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
     for(;i<19;i++)
         m_aColMapping.push_back(i);
 
-    ::std::map< OUString,sal_Int32> aMap1;
+    std::map< OUString,sal_Int32> aMap1;
     aMap1[ OUString()] = 10;
 
     m_aStrValueRange[18] = aMap1;

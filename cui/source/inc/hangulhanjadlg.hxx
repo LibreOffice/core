@@ -193,7 +193,7 @@ namespace svx
     };
 
 
-    typedef ::std::vector< css::uno::Reference< css::linguistic2::XConversionDictionary > > HHDictList;
+    typedef std::vector< css::uno::Reference< css::linguistic2::XConversionDictionary > > HHDictList;
 
     class HangulHanjaOptionsDialog : public ModalDialog
     {

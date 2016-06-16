@@ -70,8 +70,8 @@ struct AttachedObject_Impl
 
 struct AttacherIndex_Impl
 {
-    ::std::deque< ScriptEventDescriptor > aEventList;
-    ::std::deque< AttachedObject_Impl > aObjList;
+    std::deque< ScriptEventDescriptor > aEventList;
+    std::deque< AttachedObject_Impl > aObjList;
 };
 
 
@@ -79,7 +79,7 @@ class ImplEventAttacherManager
     : public WeakImplHelper< XEventAttacherManager, XPersistObject >
 {
     friend class AttacherAllListener_Impl;
-    ::std::deque< AttacherIndex_Impl >  aIndex;
+    std::deque< AttacherIndex_Impl >    aIndex;
     Mutex aLock;
     // Container for the ScriptListener
     OInterfaceContainerHelper2          aScriptListeners;
@@ -132,7 +132,7 @@ private:
     @return
         the iterator pointing to the position indicated by the index
     */
-    ::std::deque<AttacherIndex_Impl>::iterator implCheckIndex( sal_Int32 _nIndex );
+    std::deque<AttacherIndex_Impl>::iterator implCheckIndex( sal_Int32 _nIndex );
 };
 
 
@@ -394,12 +394,12 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
 }
 
 
-::std::deque< AttacherIndex_Impl >::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex )
+std::deque< AttacherIndex_Impl >::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex )
 {
     if ( (_nIndex < 0) || (static_cast<sal_uInt32>(_nIndex) >= aIndex.size()) )
         throw IllegalArgumentException();
 
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin() + _nIndex;
+    std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin() + _nIndex;
     return aIt;
 }
 
@@ -414,9 +414,9 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
     Guard< Mutex > aGuard( aLock );
 
     // Examine the index and apply the array
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
+    std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
-    ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
+    std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
 
     ScriptEventDescriptor aEvt = ScriptEvent;
     sal_Int32 nLastDot = aEvt.ListenerType.lastIndexOf('.');
@@ -452,7 +452,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvents
     Guard< Mutex > aGuard( aLock );
 
     // Examine the index and apply the array
-    ::std::deque< AttachedObject_Impl > aList = implCheckIndex( nIndex )->aObjList;
+    std::deque< AttachedObject_Impl > aList = implCheckIndex( nIndex )->aObjList;
     for( const auto& rObj : aList )
         this->detach( nIndex, rObj.xTarget );
 
@@ -477,9 +477,9 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
 {
     Guard< Mutex > aGuard( aLock );
 
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
+    std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
-    ::std::deque< AttachedObject_Impl > aList = aIt->aObjList;
+    std::deque< AttachedObject_Impl > aList = aIt->aObjList;
     for( const auto& rObj : aList )
         this->detach( nIndex, rObj.xTarget );
 
@@ -488,7 +488,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     if (nLastDot != -1)
         aLstType = aLstType.copy(nLastDot+1);
 
-    ::std::deque< ScriptEventDescriptor >::const_iterator aEvtEnd = aIt->aEventList.end();
+    std::deque< ScriptEventDescriptor >::const_iterator aEvtEnd = aIt->aEventList.end();
     for( std::deque< ScriptEventDescriptor >::iterator aEvtIt =  aIt->aEventList.begin();
          aEvtIt != aEvtEnd;
          ++aEvtIt )
@@ -511,9 +511,9 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
     throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
+    std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
-    ::std::deque< AttachedObject_Impl > aList = aIt->aObjList;
+    std::deque< AttachedObject_Impl > aList = aIt->aObjList;
     for( const auto& rObj : aList )
         this->detach( nIndex, rObj.xTarget );
     aIt->aEventList.clear();
@@ -529,7 +529,7 @@ void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
     if( nIndex < 0 )
         throw IllegalArgumentException();
 
-    if ( static_cast< ::std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
+    if ( static_cast< std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
         aIndex.resize(nIndex+1);
 
     AttacherIndex_Impl aTmp;
@@ -541,9 +541,9 @@ void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
     throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
+    std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
-    ::std::deque< AttachedObject_Impl > aList = aIt->aObjList;
+    std::deque< AttachedObject_Impl > aList = aIt->aObjList;
     for( const auto& rObj : aList )
         this->detach( nIndex, rObj.xTarget );
 
@@ -555,7 +555,7 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
     throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
+    std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
     return comphelper::containerToSequence<ScriptEventDescriptor>(aIt->aEventList);
 }
 
@@ -567,7 +567,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
     if( nIndex < 0 || !xObject.is() )
         throw IllegalArgumentException();
 
-    if( static_cast< ::std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
+    if( static_cast< std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
     {
         // read older files
         if( nVersion == 1 )
@@ -580,7 +580,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
             throw IllegalArgumentException();
     }
 
-    ::std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
+    std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
 
     AttachedObject_Impl aTmp;
     aTmp.xTarget = xObject;
@@ -627,12 +627,12 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
 {
     Guard< Mutex > aGuard( aLock );
     //return;
-    if( nIndex < 0 || static_cast< ::std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() || !xObject.is() )
+    if( nIndex < 0 || static_cast< std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() || !xObject.is() )
         throw IllegalArgumentException();
 
-    ::std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
-    ::std::deque< AttachedObject_Impl >::iterator aObjEnd = aCurrentPosition->aObjList.end();
-    for( ::std::deque< AttachedObject_Impl >::iterator aObjIt =  aCurrentPosition->aObjList.begin();
+    std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
+    std::deque< AttachedObject_Impl >::iterator aObjEnd = aCurrentPosition->aObjList.end();
+    for( std::deque< AttachedObject_Impl >::iterator aObjIt =    aCurrentPosition->aObjList.begin();
          aObjIt != aObjEnd;
          ++aObjIt )
     {

@@ -128,7 +128,7 @@ namespace connectivity
         class OOp_Round : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** EXP(X)
@@ -179,7 +179,7 @@ namespace connectivity
         class OOp_Log : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** LOG10(X)
@@ -238,7 +238,7 @@ namespace connectivity
         class OOp_Pi : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** COS(X)

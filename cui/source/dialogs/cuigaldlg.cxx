@@ -84,7 +84,7 @@ void SearchThread::execute()
     {
         const sal_Int32 nFileNumber = mpBrowser->m_pCbbFileType->GetEntryPos( aFileType );
         sal_Int32 nBeginFormat, nEndFormat;
-        ::std::vector< OUString > aFormats;
+        std::vector< OUString > aFormats;
 
         if( !nFileNumber || ( nFileNumber >= mpBrowser->m_pCbbFileType->GetEntryCount() ) )
         {
@@ -105,7 +105,7 @@ void SearchThread::execute()
 
 
 void SearchThread::ImplSearch( const INetURLObject& rStartURL,
-                               const ::std::vector< OUString >& rFormats,
+                               const std::vector< OUString >& rFormats,
                                bool bRecursive )
 {
     {
@@ -153,12 +153,12 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                         GraphicDescriptor   aDesc( aFoundURL );
 
                         if( ( aDesc.Detect() &&
-                              ::std::find( rFormats.begin(),
+                              std::find( rFormats.begin(),
                                            rFormats.end(),
                                            GraphicDescriptor::GetImportFormatShortName(
                                                aDesc.GetFileFormat() ).toAsciiLowerCase() )
                               != rFormats.end() ) ||
-                            ::std::find( rFormats.begin(),
+                            std::find( rFormats.begin(),
                                          rFormats.end(),
                                          aFoundURL.GetExtension().toAsciiLowerCase() )
                             != rFormats.end() )
@@ -366,8 +366,8 @@ IMPL_LINK_NOARG_TYPED(TakeProgress, CleanUpHdl, void*, void)
         maTakeThread->join();
 
     TPGalleryThemeProperties*   pBrowser = static_cast<TPGalleryThemeProperties*>( GetParent() );
-    ::std::vector<bool, std::allocator<bool> > aRemoveEntries( pBrowser->aFoundList.size(), false );
-    ::std::vector< OUString >   aRemainingVector;
+    std::vector<bool, std::allocator<bool> > aRemoveEntries( pBrowser->aFoundList.size(), false );
+    std::vector< OUString >     aRemainingVector;
     sal_uInt32                  i, nCount;
 
     GetParent()->EnterWait();

@@ -55,7 +55,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-struct lcl_ObjectToOID : public ::std::unary_function< Reference< uno::XInterface >, ::chart::ObjectIdentifier >
+struct lcl_ObjectToOID : public std::unary_function< Reference< uno::XInterface >, ::chart::ObjectIdentifier >
 {
     explicit lcl_ObjectToOID( const Reference< chart2::XChartDocument > & xChartDoc ) :
             m_xModel( xChartDoc, uno::UNO_QUERY )
@@ -160,7 +160,7 @@ private:
         const ObjectHierarchy::tOID& rParentOID,
         const ObjectHierarchy::tOID& rOID );
 
-    typedef ::std::map< ObjectHierarchy::tOID, ObjectHierarchy::tChildContainer >
+    typedef std::map< ObjectHierarchy::tOID, ObjectHierarchy::tChildContainer >
         tChildMap;
     tChildMap m_aChildMap;
     ExplicitValueProvider* m_pExplicitValueProvider;
@@ -309,8 +309,8 @@ void ImplObjectHierarchy::createAxesTree(
     {
         Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true ) );
         if( !m_bOrderingForElementSelector )
-            ::std::transform( aAxes.getConstArray(), aAxes.getConstArray() + aAxes.getLength(),
-                          ::std::back_inserter( rContainer ),
+            std::transform( aAxes.getConstArray(), aAxes.getConstArray() + aAxes.getLength(),
+                          std::back_inserter( rContainer ),
                           lcl_ObjectToOID( xChartDoc ));
 
         // get all axes, also invisible ones
@@ -579,7 +579,7 @@ ObjectHierarchy::tChildContainer ImplObjectHierarchy::getSiblings( const ObjectH
              aIt != m_aChildMap.end(); ++aIt )
         {
             ObjectHierarchy::tChildContainer::const_iterator aElemIt(
-                ::std::find( aIt->second.begin(), aIt->second.end(), rNode ));
+                std::find( aIt->second.begin(), aIt->second.end(), rNode ));
             if( aElemIt != aIt->second.end())
                 return aIt->second;
         }
@@ -594,7 +594,7 @@ ObjectHierarchy::tOID ImplObjectHierarchy::getParentImpl(
     // search children
     ObjectHierarchy::tChildContainer aChildren( getChildren( rParentOID ));
     ObjectHierarchy::tChildContainer::const_iterator aIt(
-        ::std::find( aChildren.begin(), aChildren.end(), rOID ));
+        std::find( aChildren.begin(), aChildren.end(), rOID ));
     // recursion end
     if( aIt != aChildren.end())
         return rParentOID;
@@ -779,7 +779,7 @@ bool ObjectKeyNavigation::next()
     if( bResult )
     {
         ObjectHierarchy::tChildContainer::const_iterator aIt(
-            ::std::find( aSiblings.begin(), aSiblings.end(), getCurrentSelection()));
+            std::find( aSiblings.begin(), aSiblings.end(), getCurrentSelection()));
         OSL_ASSERT( aIt != aSiblings.end());
         if( ++aIt == aSiblings.end())
             aIt = aSiblings.begin();
@@ -799,7 +799,7 @@ bool ObjectKeyNavigation::previous()
     if( bResult )
     {
         ObjectHierarchy::tChildContainer::const_iterator aIt(
-            ::std::find( aSiblings.begin(), aSiblings.end(), getCurrentSelection()));
+            std::find( aSiblings.begin(), aSiblings.end(), getCurrentSelection()));
         OSL_ASSERT( aIt != aSiblings.end());
         if( aIt == aSiblings.begin())
             aIt = aSiblings.end();

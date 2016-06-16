@@ -78,7 +78,7 @@ private:
     VclPtr<CheckBox>               m_pExperimentalCB;
     VclPtr<CheckBox>               m_pMacroCB;
 
-    ::std::vector< JavaInfo* >
+    std::vector< JavaInfo* >
                             m_aAddedInfos;
 
     rtl::Reference< ::svt::DialogClosedListener >           xDialogListener;

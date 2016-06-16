@@ -367,7 +367,7 @@ public:
         @param nDoNotRemove
             A value that shall not be removed, i.e. the ugly 0x88
             (SVX_NUM_BITMAP|0x80)
-            Pass ::std::numeric_limits<sal_uInt16>::max() if there is no such
+            Pass std::numeric_limits<sal_uInt16>::max() if there is no such
             restriction.
      */
     static void         GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotRemove );

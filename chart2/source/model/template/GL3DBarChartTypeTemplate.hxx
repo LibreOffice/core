@@ -43,10 +43,10 @@ public:
 
     virtual css::uno::Reference<css::chart2::XChartType> SAL_CALL
         getChartTypeForNewSeries( const css::uno::Sequence<css::uno::Reference<css::chart2::XChartType> >& xOldChartTypes )
-            throw (css::uno::RuntimeException, ::std::exception) override;
+            throw (css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL supportsCategories()
-        throw (css::uno::RuntimeException, ::std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     // OPropertySet
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const

@@ -84,7 +84,7 @@ namespace connectivity
     private:
         ::osl::Mutex                                            m_aMutex;
         Reference<XComponentContext>                            m_aContext;
-        ::std::unique_ptr< ::comphelper::OfficeResourceBundle > m_pResources;
+        std::unique_ptr< ::comphelper::OfficeResourceBundle > m_pResources;
         bool                                                    m_bAttemptedInit;
     };
 
@@ -190,7 +190,7 @@ namespace connectivity
         const Type& _rExceptionType, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 )
     {
         if ( !::cppu::UnoType< SQLException >::get().isAssignableFrom( _rExceptionType ) )
-            throw ::std::bad_cast();
+            throw std::bad_cast();
 
         // default-construct an exception of the desired type
         Any aException( nullptr, _rExceptionType );

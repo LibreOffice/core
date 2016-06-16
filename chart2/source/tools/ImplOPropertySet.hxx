@@ -43,10 +43,10 @@ public:
         GetPropertyStateByHandle( sal_Int32 nHandle ) const;
 
     css::uno::Sequence< css::beans::PropertyState >
-        GetPropertyStatesByHandle( const ::std::vector< sal_Int32 > & aHandles ) const;
+        GetPropertyStatesByHandle( const std::vector< sal_Int32 > & aHandles ) const;
 
     void SetPropertyToDefault( sal_Int32 nHandle );
-    void SetPropertiesToDefault( const ::std::vector< sal_Int32 > & aHandles );
+    void SetPropertiesToDefault( const std::vector< sal_Int32 > & aHandles );
     void SetAllPropertiesToDefault();
 
     /** @param rValue is set to the value for the property given in nHandle.  If
@@ -69,7 +69,7 @@ public:
         GetStyle() const { return m_xStyle;}
 
     typedef
-        ::std::map< sal_Int32, css::uno::Any >
+        std::map< sal_Int32, css::uno::Any >
         tPropertyMap;
 
 private:

@@ -33,9 +33,9 @@ struct ControllerFeature: public css::frame::DispatchInformation
     sal_uInt16 nFeatureId;
 };
 
-typedef ::std::map< OUString,
+typedef std::map< OUString,
                     ControllerFeature,
-                    ::std::less< OUString > > SupportedFeatures;
+                    std::less< OUString > > SupportedFeatures;
 
 struct FeatureState
 {

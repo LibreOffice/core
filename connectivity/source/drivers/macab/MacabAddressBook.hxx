@@ -39,7 +39,7 @@ namespace connectivity
             protected:
                 ABAddressBookRef m_aAddressBook;
                 MacabRecords *m_xMacabRecords;
-                ::std::vector<MacabGroup *> m_xMacabGroups;
+                std::vector<MacabGroup *> m_xMacabGroups;
                 bool m_bRetrievedGroups;
 
             public:
@@ -48,7 +48,7 @@ namespace connectivity
                 static const OUString & getDefaultTableName();
 
                 MacabRecords *getMacabRecords();
-                ::std::vector<MacabGroup *> getMacabGroups();
+                std::vector<MacabGroup *> getMacabGroups();
 
                 MacabGroup *getMacabGroup(const OUString& _groupName);
                 MacabRecords *getMacabRecords(const OUString& _tableName);

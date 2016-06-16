@@ -38,7 +38,7 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
              , m_bHandledByInternalHandler(false)
              , m_xAuthenticationHandler(xAuthenticationHandler)
 {
-    ::std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
+    std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
     ::ucbhelper::InterceptedInteraction::InterceptedRequest                  aInterceptedRequest;
 
     aInterceptedRequest.Handle = HANDLE_INTERACTIVEIOEXCEPTION;
@@ -65,7 +65,7 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
 
 void StillReadWriteInteraction::resetInterceptions()
 {
-    setInterceptions(::std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest >());
+    setInterceptions(std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest >());
 }
 
 void StillReadWriteInteraction::resetErrorStates()

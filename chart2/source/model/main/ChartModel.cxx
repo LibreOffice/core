@@ -1204,7 +1204,7 @@ enum eServiceType
     SERVICE_NAMESPACE_MAP
 };
 
-typedef ::std::map< OUString, enum eServiceType > tServiceNameMap;
+typedef std::map< OUString, enum eServiceType > tServiceNameMap;
 
 tServiceNameMap & lcl_getStaticServiceNameMap()
 {

@@ -1099,7 +1099,7 @@ void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotR
     // the i18n framework per configuration must be removed from the listbox.
     // Do not remove a special entry matching nDoNotRemove.
     const sal_uInt16 nDontRemove = SAL_MAX_UINT16;
-    ::std::vector< sal_uInt16> aRemove( rFmtLB.GetEntryCount(), nDontRemove);
+    std::vector< sal_uInt16> aRemove( rFmtLB.GetEntryCount(), nDontRemove);
     for (size_t i=0; i<aRemove.size(); ++i)
     {
         sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(

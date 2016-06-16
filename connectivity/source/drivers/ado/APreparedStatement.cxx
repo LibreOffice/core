@@ -240,7 +240,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
 
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
-    setParameter( parameterIndex, adLongVarWChar, ::std::numeric_limits< sal_Int32 >::max(), x );
+    setParameter( parameterIndex, adLongVarWChar, std::numeric_limits< sal_Int32 >::max(), x );
 }
 
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException)

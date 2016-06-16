@@ -62,7 +62,7 @@ namespace connectivity
     typedef ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener>  OConnectionPool_Base;
 
     // typedef for the internal structure
-    typedef ::std::vector< css::uno::Reference< css::sdbc::XPooledConnection> > TPooledConnections;
+    typedef std::vector< css::uno::Reference< css::sdbc::XPooledConnection> > TPooledConnections;
 
      // contains the currently pooled connections
     typedef struct
@@ -83,7 +83,7 @@ namespace connectivity
 
     //  typedef TDigestHolder
 
-    struct TDigestLess : public ::std::binary_function< TDigestHolder, TDigestHolder, bool>
+    struct TDigestLess : public std::binary_function< TDigestHolder, TDigestHolder, bool>
     {
         bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
         {
@@ -94,7 +94,7 @@ namespace connectivity
         }
     };
 
-    typedef ::std::map< TDigestHolder,TConnectionPool,TDigestLess> TConnectionMap;
+    typedef std::map< TDigestHolder,TConnectionPool,TDigestLess> TConnectionMap;
 
     // contains additional information about a activeconnection which is needed to put it back to the pool
     typedef struct
@@ -103,7 +103,7 @@ namespace connectivity
         css::uno::Reference< css::sdbc::XPooledConnection> xPooledConnection;
     } TActiveConnectionInfo;
 
-    typedef ::std::map< css::uno::Reference< css::sdbc::XConnection>,
+    typedef std::map< css::uno::Reference< css::sdbc::XConnection>,
                         TActiveConnectionInfo> TActiveConnectionMap;
 
     class OConnectionPool : public OConnectionPool_Base

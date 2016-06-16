@@ -39,7 +39,7 @@ namespace connectivity
         class ProfileStruct;
     }
 }
-typedef ::std::map < OUString, ::connectivity::mozab::ProfileStruct* > ProfileList;
+typedef std::map < OUString, ::connectivity::mozab::ProfileStruct* > ProfileList;
 namespace connectivity
 {
     namespace mozab

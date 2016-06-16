@@ -33,15 +33,15 @@ using namespace ::comphelper;
 
 namespace
 {
-    typedef ::std::pair< AccessibleEventNotifier::TClientId,
+    typedef std::pair< AccessibleEventNotifier::TClientId,
             AccessibleEventObject > ClientEvent;
 
-    typedef ::std::map< AccessibleEventNotifier::TClientId,
+    typedef std::map< AccessibleEventNotifier::TClientId,
                 ::comphelper::OInterfaceContainerHelper2*,
-                ::std::less< AccessibleEventNotifier::TClientId > > ClientMap;
+                std::less< AccessibleEventNotifier::TClientId > > ClientMap;
 
     /// key is the end of the interval, value is the start of the interval
-    typedef ::std::map<AccessibleEventNotifier::TClientId,
+    typedef std::map<AccessibleEventNotifier::TClientId,
                 AccessibleEventNotifier::TClientId> IntervalMap;
 
     struct lclMutex
@@ -52,8 +52,8 @@ namespace
         : public rtl::StaticWithInit<IntervalMap, FreeIntervals> {
             IntervalMap operator() () {
                 IntervalMap map;
-                map.insert(::std::make_pair(
-                    ::std::numeric_limits<AccessibleEventNotifier::TClientId>::max(), 1));
+                map.insert(std::make_pair(
+                    std::numeric_limits<AccessibleEventNotifier::TClientId>::max(), 1));
                 return map;
             }
         };
@@ -74,12 +74,12 @@ namespace
             if (lower != rFreeIntervals.end() && lower->first == nId - 1)
             {
                 // add nId by replacing lower with new merged entry
-                rFreeIntervals.insert(::std::make_pair(nId, lower->second));
+                rFreeIntervals.insert(std::make_pair(nId, lower->second));
                 rFreeIntervals.erase(lower);
             }
             else // otherwise just add new 1-element interval
             {
-                rFreeIntervals.insert(::std::make_pair(nId, nId));
+                rFreeIntervals.insert(std::make_pair(nId, nId));
             }
         }
         // currently it's not checked whether intervals can be merged now

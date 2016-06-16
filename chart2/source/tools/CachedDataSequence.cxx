@@ -147,7 +147,7 @@ Sequence< double > CachedDataSequence::Impl_getNumericalData() const
     if( m_eCurrentDataType == TEXTUAL )
     {
         const OUString * pTextArray = m_aTextualSequence.getConstArray();
-        ::std::transform( pTextArray, pTextArray + nSize,
+        std::transform( pTextArray, pTextArray + nSize,
                           pResultArray,
                           CommonFunctors::OUStringToDouble() );
     }
@@ -155,7 +155,7 @@ Sequence< double > CachedDataSequence::Impl_getNumericalData() const
     {
         OSL_ASSERT( m_eCurrentDataType == MIXED );
         const Any * pMixedArray = m_aMixedSequence.getConstArray();
-        ::std::transform( pMixedArray, pMixedArray + nSize,
+        std::transform( pMixedArray, pMixedArray + nSize,
                           pResultArray,
                           CommonFunctors::AnyToDouble() );
     }
@@ -177,7 +177,7 @@ Sequence< OUString > CachedDataSequence::Impl_getTextualData() const
     if( m_eCurrentDataType == NUMERICAL )
     {
         const double * pTextArray = m_aNumericalSequence.getConstArray();
-        ::std::transform( pTextArray, pTextArray + nSize,
+        std::transform( pTextArray, pTextArray + nSize,
                           pResultArray,
                           CommonFunctors::DoubleToOUString() );
     }
@@ -185,7 +185,7 @@ Sequence< OUString > CachedDataSequence::Impl_getTextualData() const
     {
         OSL_ASSERT( m_eCurrentDataType == MIXED );
         const Any * pMixedArray = m_aMixedSequence.getConstArray();
-        ::std::transform( pMixedArray, pMixedArray + nSize,
+        std::transform( pMixedArray, pMixedArray + nSize,
                           pResultArray,
                           CommonFunctors::AnyToString() );
     }
@@ -208,7 +208,7 @@ Sequence< Any > CachedDataSequence::Impl_getMixedData() const
     if( m_eCurrentDataType == NUMERICAL )
     {
         const double * pTextArray = m_aNumericalSequence.getConstArray();
-        ::std::transform( pTextArray, pTextArray + nSize,
+        std::transform( pTextArray, pTextArray + nSize,
                           pResultArray,
                           CommonFunctors::makeAny< double >() );
     }
@@ -216,7 +216,7 @@ Sequence< Any > CachedDataSequence::Impl_getMixedData() const
     {
         OSL_ASSERT( m_eCurrentDataType == TEXTUAL );
         const OUString * pMixedArray = m_aTextualSequence.getConstArray();
-        ::std::transform( pMixedArray, pMixedArray + nSize,
+        std::transform( pMixedArray, pMixedArray + nSize,
                           pResultArray,
                           CommonFunctors::makeAny< OUString >() );
     }

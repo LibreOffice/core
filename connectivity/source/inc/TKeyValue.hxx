@@ -27,7 +27,7 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OKeyValue
     {
     private:
-        ::std::vector<ORowSetValueDecoratorRef> m_aKeys;
+        std::vector<ORowSetValueDecoratorRef> m_aKeys;
         sal_Int32 m_nValue;
 
     protected:
@@ -53,12 +53,12 @@ namespace connectivity
             m_aKeys.push_back(_aValueRef);
         }
 
-        OUString getKeyString(::std::vector<ORowSetValueDecoratorRef>::size_type i) const
+        OUString getKeyString(std::vector<ORowSetValueDecoratorRef>::size_type i) const
         {
             OSL_ENSURE(m_aKeys.size() > i,"Wrong index for KEyValue");
             return m_aKeys[i]->getValue();
         }
-        double          getKeyDouble(::std::vector<ORowSetValueDecoratorRef>::size_type i) const
+        double          getKeyDouble(std::vector<ORowSetValueDecoratorRef>::size_type i) const
         {
             OSL_ENSURE(m_aKeys.size() > i,"Wrong index for KEyValue");
             return m_aKeys[i]->getValue();

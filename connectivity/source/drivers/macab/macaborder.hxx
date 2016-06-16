@@ -51,7 +51,7 @@ namespace connectivity
 
         class MacabComplexOrder : public MacabOrder
         {
-            ::std::vector<MacabOrder *> m_aOrders;
+            std::vector<MacabOrder *> m_aOrders;
 
         public:
             MacabComplexOrder();

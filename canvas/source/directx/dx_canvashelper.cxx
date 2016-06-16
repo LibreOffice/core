@@ -358,8 +358,8 @@ namespace dxcanvas
             if(bIsMiter)
                 aPen.SetMiterLimit( static_cast< Gdiplus::REAL >(strokeAttributes.MiterLimit) );
 
-            const ::std::vector< Gdiplus::REAL >& rDashArray(
-                ::comphelper::sequenceToContainer< ::std::vector< Gdiplus::REAL > >(
+            const std::vector< Gdiplus::REAL >& rDashArray(
+                ::comphelper::sequenceToContainer< std::vector< Gdiplus::REAL > >(
                     strokeAttributes.DashArray ) );
             if( !rDashArray.empty() )
             {

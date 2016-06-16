@@ -268,7 +268,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         sal_uInt16 pPassData[16];
         memset( pPassData, 0, sizeof(pPassData) );
 
-        sal_Int32 nPassLen = ::std::min< sal_Int32 >( aPassword.getLength(), 15 );
+        sal_Int32 nPassLen = std::min< sal_Int32 >( aPassword.getLength(), 15 );
         memcpy( pPassData, aPassword.getStr(), nPassLen * sizeof(pPassData[0]) );
 
         aResultKey = GenerateStd97Key( pPassData, aDocId );
@@ -350,7 +350,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         const Reference< XInteractionHandler >& rxInteractHandler,
         const OUString& rDocumentUrl,
         DocPasswordRequestType eRequestType,
-        const ::std::vector< OUString >* pDefaultPasswords,
+        const std::vector< OUString >* pDefaultPasswords,
         bool* pbIsDefaultPassword )
 {
     css::uno::Sequence< css::beans::NamedValue > aEncData;
@@ -361,7 +361,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         *pbIsDefaultPassword = false;
     if( pDefaultPasswords )
     {
-        for( ::std::vector< OUString >::const_iterator aIt = pDefaultPasswords->begin(), aEnd = pDefaultPasswords->end(); (eResult == DocPasswordVerifierResult::WrongPassword) && (aIt != aEnd); ++aIt )
+        for( std::vector< OUString >::const_iterator aIt = pDefaultPasswords->begin(), aEnd = pDefaultPasswords->end(); (eResult == DocPasswordVerifierResult::WrongPassword) && (aIt != aEnd); ++aIt )
         {
             OSL_ENSURE( !aIt->isEmpty(), "DocPasswordHelper::requestAndVerifyDocPassword - unexpected empty default password" );
             if( !aIt->isEmpty() )

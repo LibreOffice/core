@@ -51,7 +51,7 @@ namespace connectivity
 
         class KabComplexOrder : public KabOrder
         {
-            ::std::vector<KabOrder *> m_aOrders;
+            std::vector<KabOrder *> m_aOrders;
 
         public:
             KabComplexOrder();

@@ -52,7 +52,7 @@ namespace chart
 {
 
 void CharacterProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     // CharacterProperties
     rOutProperties.push_back(

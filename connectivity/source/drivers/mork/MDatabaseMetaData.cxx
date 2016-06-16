@@ -63,7 +63,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     aRows.clear();
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    ::std::vector< OUString > tables;
+    std::vector< OUString > tables;
     if (!connectivity::mork::MDatabaseMetaDataHelper::getTableStrings(m_pConnection, tables))
     {
         ::connectivity::SharedResources aResources;
@@ -952,7 +952,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTablePrivileges);
     Reference< XResultSet > xRef = pResult;
 
-    ::std::vector< OUString > tables;
+    std::vector< OUString > tables;
     if ( !connectivity::mork::MDatabaseMetaDataHelper::getTableStrings( m_pConnection, tables) )
     {
         ::connectivity::SharedResources aResources;

@@ -78,7 +78,7 @@ ORowSetValue OOp_Ceiling::operate(const ORowSetValue& lhs) const
     return ceil(nVal);
 }
 
-ORowSetValue OOp_Round::operate(const ::std::vector<ORowSetValue>& lhs) const
+ORowSetValue OOp_Round::operate(const std::vector<ORowSetValue>& lhs) const
 {
     if ( lhs.empty() || lhs.size() > 2 )
         return ORowSetValue();
@@ -113,7 +113,7 @@ ORowSetValue OOp_Ln::operate(const ORowSetValue& lhs) const
     return nVal;
 }
 
-ORowSetValue OOp_Log::operate(const ::std::vector<ORowSetValue>& lhs) const
+ORowSetValue OOp_Log::operate(const std::vector<ORowSetValue>& lhs) const
 {
     if ( lhs.empty() || lhs.size() > 2 )
         return ORowSetValue();
@@ -160,7 +160,7 @@ ORowSetValue OOp_Sqrt::operate(const ORowSetValue& lhs) const
     return nVal;
 }
 
-ORowSetValue OOp_Pi::operate(const ::std::vector<ORowSetValue>& /*lhs*/) const
+ORowSetValue OOp_Pi::operate(const std::vector<ORowSetValue>& /*lhs*/) const
 {
     return fPi;
 }

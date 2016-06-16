@@ -53,7 +53,7 @@ protected:
         throw (css::uno::Exception) override;
 
 private:
-    ::std::vector< ItemConverter * >    m_aConverters;
+    std::vector< ItemConverter * >      m_aConverters;
 };
 
 }}

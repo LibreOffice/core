@@ -31,7 +31,7 @@ namespace chart
 namespace RegressionCalculationHelper
 {
 
-typedef ::std::pair< ::std::vector< double >, ::std::vector< double > > tDoubleVectorPair;
+typedef std::pair< std::vector< double >, std::vector< double > > tDoubleVectorPair;
 
 /** takes the given x- and y-values and copies them into the resulting pair,
     which contains x-values in the first element and the y-values in the second
@@ -47,7 +47,7 @@ tDoubleVectorPair
              Pred aPred )
 {
     tDoubleVectorPair aResult;
-    sal_Int32 nSize = ::std::min( rXValues.getLength(), rYValues.getLength());
+    sal_Int32 nSize = std::min( rXValues.getLength(), rYValues.getLength());
     for( sal_Int32 i=0; i<nSize; ++i )
     {
         if( aPred( rXValues[i], rYValues[i] ))
@@ -60,7 +60,7 @@ tDoubleVectorPair
     return aResult;
 }
 
-class isValid : public ::std::binary_function< double, double, bool >
+class isValid : public std::binary_function< double, double, bool >
 {
 public:
     inline bool operator()( double x, double y )
@@ -71,7 +71,7 @@ public:
     }
 };
 
-class isValidAndXPositive : public ::std::binary_function< double, double, bool >
+class isValidAndXPositive : public std::binary_function< double, double, bool >
 {
 public:
     inline bool operator()( double x, double y )
@@ -83,7 +83,7 @@ public:
     }
 };
 
-class isValidAndYPositive : public ::std::binary_function< double, double, bool >
+class isValidAndYPositive : public std::binary_function< double, double, bool >
 {
 public:
     inline bool operator()( double x, double y )
@@ -95,7 +95,7 @@ public:
     }
 };
 
-class isValidAndYNegative : public ::std::binary_function< double, double, bool >
+class isValidAndYNegative : public std::binary_function< double, double, bool >
 {
 public:
     inline bool operator()( double x, double y )
@@ -107,7 +107,7 @@ public:
     }
 };
 
-class isValidAndBothPositive : public ::std::binary_function< double, double, bool >
+class isValidAndBothPositive : public std::binary_function< double, double, bool >
 {
 public:
     inline bool operator()( double x, double y )
@@ -120,7 +120,7 @@ public:
     }
 };
 
-class isValidAndXPositiveAndYNegative : public ::std::binary_function< double, double, bool >
+class isValidAndXPositiveAndYNegative : public std::binary_function< double, double, bool >
 {
 public:
     inline bool operator()( double x, double y )

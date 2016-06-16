@@ -293,7 +293,7 @@ namespace cppcanvas
             {
                 const sal_Int32 nNumLoops(
                     static_cast< sal_Int32 >(
-                        ::std::max( 1.0,
+                        std::max( 1.0,
                                     nLineWidth / nDashSkip ) + .5) );
 
                 double x = nX;

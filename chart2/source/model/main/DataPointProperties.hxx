@@ -86,7 +86,7 @@ namespace DataPointProperties
     };
 
     void AddPropertiesToVector(
-        ::std::vector< css::beans::Property > & rOutProperties );
+        std::vector< css::beans::Property > & rOutProperties );
 
     void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 }

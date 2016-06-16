@@ -648,7 +648,7 @@ void SAL_CALL OCalcTable::disposing()
 Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException, std::exception)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
-    ::std::vector<Type> aOwnTypes;
+    std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
 
     const Type* pBegin = aTypes.getConstArray();

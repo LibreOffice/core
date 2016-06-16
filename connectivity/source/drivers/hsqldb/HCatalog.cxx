@@ -134,7 +134,7 @@ Any SAL_CALL OHCatalog::queryInterface( const Type & rType ) throw(RuntimeExcept
 Sequence< Type > SAL_CALL OHCatalog::getTypes(  ) throw(RuntimeException, std::exception)
 {
     Sequence< Type > aTypes = OCatalog::getTypes();
-    ::std::vector<Type> aOwnTypes;
+    std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();

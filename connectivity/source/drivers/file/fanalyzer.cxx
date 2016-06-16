@@ -132,7 +132,7 @@ void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow)
 void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
 {
     // first the select part
-    for ( ::std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    for ( std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
         if ( aIter->first.is() )
             bindRow(aIter->first->m_aCodeList,_pRow);
@@ -161,7 +161,7 @@ bool OSQLAnalyzer::hasFunctions() const
     if ( m_bSelectionFirstTime )
     {
         m_bSelectionFirstTime = false;
-        for ( ::std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end() && !m_bHasSelectionCode ;++aIter)
+        for ( std::vector< TPredicates >::const_iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end() && !m_bHasSelectionCode ;++aIter)
         {
             if ( aIter->first.is() )
                 m_bHasSelectionCode = aIter->first->hasCode();
@@ -170,10 +170,10 @@ bool OSQLAnalyzer::hasFunctions() const
     return m_bHasSelectionCode;
 }
 
-void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping)
+void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const std::vector<sal_Int32>& _rColumnMapping)
 {
     sal_Int32 nPos = 1;
-    for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter,++nPos)
+    for ( std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter,++nPos)
     {
         if ( aIter->second.is() )
         {
@@ -190,7 +190,7 @@ void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std:
 void OSQLAnalyzer::dispose()
 {
     m_aCompiler->dispose();
-    for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    for ( std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
         if ( aIter->first.is() )
             aIter->first->dispose();
@@ -200,7 +200,7 @@ void OSQLAnalyzer::dispose()
 void OSQLAnalyzer::setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols)
 {
     m_aCompiler->setOrigColumns(rCols);
-    for ( ::std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
+    for ( std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter)
     {
         if ( aIter->first.is() )
             aIter->first->setOrigColumns(rCols);

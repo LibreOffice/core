@@ -50,7 +50,7 @@ struct AttributeList_Impl
         // performance improvement during adding
         vecAttribute.reserve(20);
     }
-    ::std::vector<struct TagAttribute_Impl> vecAttribute;
+    std::vector<struct TagAttribute_Impl> vecAttribute;
 };
 
 sal_Int16 SAL_CALL AttributeList::getLength() throw( css::uno::RuntimeException, std::exception )
@@ -78,7 +78,7 @@ OUString SAL_CALL  AttributeList::getValueByIndex(sal_Int16 i) throw( css::uno::
 
 OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName ) throw( css::uno::RuntimeException, std::exception )
 {
-    ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
+    std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
     for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
@@ -90,7 +90,7 @@ OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName ) throw( c
 
 OUString SAL_CALL AttributeList::getValueByName(const OUString& sName) throw( css::uno::RuntimeException, std::exception )
 {
-    ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
+    std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
     for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {

@@ -59,7 +59,7 @@ LegendItemConverter::LegendItemConverter(
 
 LegendItemConverter::~LegendItemConverter()
 {
-    ::std::for_each( m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
+    std::for_each( m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void LegendItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

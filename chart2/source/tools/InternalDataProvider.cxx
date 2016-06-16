@@ -69,7 +69,7 @@ static const char lcl_aCategoriesRoleName[] = "categories";
 static const char lcl_aLabelRangePrefix[] = "label ";
 static const char lcl_aCompleteRange[] = "all";
 
-typedef ::std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
+typedef std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
     lcl_tSequenceMap;
 
 std::vector< OUString > lcl_AnyToStringSequence( const std::vector< uno::Any >& aAnySeq )
@@ -92,7 +92,7 @@ std::vector< uno::Any > lcl_StringToAnyVector( const css::uno::Sequence< OUStrin
     return aResult;
 }
 
-struct lcl_setModified : public ::std::unary_function< lcl_tSequenceMap, void >
+struct lcl_setModified : public std::unary_function< lcl_tSequenceMap, void >
 {
     void operator() ( const lcl_tSequenceMap::value_type & rMapEntry )
     {
@@ -107,7 +107,7 @@ struct lcl_setModified : public ::std::unary_function< lcl_tSequenceMap, void >
     }
 };
 
-struct lcl_internalizeSeries : public ::std::unary_function< Reference< chart2::XDataSeries >, void >
+struct lcl_internalizeSeries : public std::unary_function< Reference< chart2::XDataSeries >, void >
 {
     lcl_internalizeSeries( InternalData & rInternalData,
                            InternalDataProvider & rProvider,
@@ -136,7 +136,7 @@ struct lcl_internalizeSeries : public ::std::unary_function< Reference< chart2::
 
                 if( xValues.is() )
                 {
-                    ::std::vector< double > aValues( ContainerHelper::SequenceToVector( xValues->getNumericalData()));
+                    std::vector< double > aValues( ContainerHelper::SequenceToVector( xValues->getNumericalData()));
                     if( m_bDataInColumns )
                         m_rInternalData.setColumnValues( nNewIndex, aValues );
                     else
@@ -184,7 +184,7 @@ private:
     bool                    m_bDataInColumns;
 };
 
-struct lcl_copyFromLevel : public ::std::unary_function< vector< uno::Any >, uno::Any >
+struct lcl_copyFromLevel : public std::unary_function< vector< uno::Any >, uno::Any >
 {
 public:
 
@@ -203,7 +203,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_getStringFromLevelVector : public ::std::unary_function< vector< uno::Any >, OUString >
+struct lcl_getStringFromLevelVector : public std::unary_function< vector< uno::Any >, OUString >
 {
 public:
 
@@ -222,7 +222,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_setAnyAtLevel : public ::std::binary_function< vector< uno::Any >, uno::Any, vector< uno::Any > >
+struct lcl_setAnyAtLevel : public std::binary_function< vector< uno::Any >, uno::Any, vector< uno::Any > >
 {
 public:
 
@@ -242,7 +242,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_setAnyAtLevelFromStringSequence : public ::std::binary_function< vector< uno::Any >, OUString, vector< uno::Any > >
+struct lcl_setAnyAtLevelFromStringSequence : public std::binary_function< vector< uno::Any >, OUString, vector< uno::Any > >
 {
 public:
 
@@ -262,7 +262,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_insertAnyAtLevel : public ::std::unary_function< vector< uno::Any >, void >
+struct lcl_insertAnyAtLevel : public std::unary_function< vector< uno::Any >, void >
 {
 public:
 
@@ -285,7 +285,7 @@ private:
     sal_Int32 m_nLevel;
 };
 
-struct lcl_removeAnyAtLevel : public ::std::unary_function< vector< uno::Any >, void >
+struct lcl_removeAnyAtLevel : public std::unary_function< vector< uno::Any >, void >
 {
 public:
 
@@ -391,7 +391,7 @@ InternalDataProvider::InternalDataProvider(
             }
 
             // data series
-            ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartDoc ));
+            std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartDoc ));
             lcl_internalizeSeries ftor( m_aInternalData, *this, bConnectToModel, m_bDataInColumns );
             for( const auto& rxScreen : aSeriesVector )
                 ftor( rxScreen );
@@ -462,8 +462,8 @@ void InternalDataProvider::adaptMapReferences(
     // erase map values for old index
     m_aSequenceMap.erase( aRange.first, aRange.second );
     // add new entries for values with new index
-    ::std::copy( aNewElements.begin(), aNewElements.end(),
-                 ::std::inserter( m_aSequenceMap,
+    std::copy( aNewElements.begin(), aNewElements.end(),
+                 std::inserter( m_aSequenceMap,
                                   m_aSequenceMap.upper_bound( rNewRangeRepresentation )));
 }
 
@@ -701,7 +701,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     if( aRangeRepresentation == lcl_aCategoriesRangeName )
     {
         //return split complex categories if we have any:
-        ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aComplexCategories;
+        std::vector< Reference< chart2::data::XLabeledDataSequence > > aComplexCategories;
         vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         if( bUseColumns==m_bDataInColumns )
         {
@@ -727,7 +727,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
 
     OSL_ASSERT( aRangeRepresentation == lcl_aCompleteRange );
 
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultLSeqVec;
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultLSeqVec;
 
     // categories
     if( bHasCategories )
@@ -735,7 +735,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
             new LabeledDataSequence( createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName ) ) );
 
     // data with labels
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aDataVec;
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aDataVec;
     const sal_Int32 nCount = (bUseColumns ? m_aInternalData.getColumnCount() : m_aInternalData.getRowCount());
     for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
     {
@@ -766,8 +766,8 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     }
 
     //add left over data sequences to result
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aIt(aDataVec.begin());
-    const ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aEndIt(aDataVec.end());
+    std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aIt(aDataVec.begin());
+    const std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aEndIt(aDataVec.end());
     for( ;aIt!=aEndIt; ++aIt)
     {
         if( aIt->is() )
@@ -1071,14 +1071,14 @@ void SAL_CALL InternalDataProvider::insertComplexCategoryLevel( sal_Int32 nLevel
     if( nLevel>0 )
     {
         vector< vector< uno::Any > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
-        ::std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_insertAnyAtLevel(nLevel) );
+        std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_insertAnyAtLevel(nLevel) );
         if( m_bDataInColumns )
             m_aInternalData.setComplexRowLabels( aComplexCategories );
         else
             m_aInternalData.setComplexColumnLabels( aComplexCategories );
 
         tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
-        ::std::for_each( aRange.first, aRange.second, lcl_setModified());
+        std::for_each( aRange.first, aRange.second, lcl_setModified());
     }
 }
 void SAL_CALL InternalDataProvider::deleteComplexCategoryLevel( sal_Int32 nLevel )
@@ -1088,14 +1088,14 @@ void SAL_CALL InternalDataProvider::deleteComplexCategoryLevel( sal_Int32 nLevel
     if( nLevel>0 )
     {
         vector< vector< uno::Any > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
-        ::std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_removeAnyAtLevel(nLevel) );
+        std::for_each( aComplexCategories.begin(), aComplexCategories.end(), lcl_removeAnyAtLevel(nLevel) );
         if( m_bDataInColumns )
             m_aInternalData.setComplexRowLabels( aComplexCategories );
         else
             m_aInternalData.setComplexColumnLabels( aComplexCategories );
 
         tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
-        ::std::for_each( aRange.first, aRange.second, lcl_setModified());
+        std::for_each( aRange.first, aRange.second, lcl_setModified());
     }
 }
 
@@ -1117,10 +1117,10 @@ void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 
     // notify change to all affected ranges
     tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
     tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::number( nMaxRep )));
-    ::std::for_each( aBegin, aEnd, lcl_setModified());
+    std::for_each( aBegin, aEnd, lcl_setModified());
 
     tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
-    ::std::for_each( aRange.first, aRange.second, lcl_setModified());
+    std::for_each( aRange.first, aRange.second, lcl_setModified());
 }
 
 void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 nAtIndex )
@@ -1141,10 +1141,10 @@ void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 
     // notify change to all affected ranges
     tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
     tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::number( nMaxRep )));
-    ::std::for_each( aBegin, aEnd, lcl_setModified());
+    std::for_each( aBegin, aEnd, lcl_setModified());
 
     tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
-    ::std::for_each( aRange.first, aRange.second, lcl_setModified());
+    std::for_each( aRange.first, aRange.second, lcl_setModified());
 }
 
 void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex )
@@ -1161,10 +1161,10 @@ void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::s
     // notify change to all affected ranges
     tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
     tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::number( nMaxRep )));
-    ::std::for_each( aBegin, aEnd, lcl_setModified());
+    std::for_each( aBegin, aEnd, lcl_setModified());
 
     tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
-    ::std::for_each( aRange.first, aRange.second, lcl_setModified());
+    std::for_each( aRange.first, aRange.second, lcl_setModified());
 }
 
 void SAL_CALL InternalDataProvider::registerDataSequenceForChanges( const Reference< chart2::data::XDataSequence >& xSeq )
@@ -1352,7 +1352,7 @@ class SplitCategoriesProvider_ForComplexDescriptions : public SplitCategoriesPro
 {
 public:
 
-    explicit SplitCategoriesProvider_ForComplexDescriptions( const ::std::vector< ::std::vector< uno::Any > >& rComplexDescriptions )
+    explicit SplitCategoriesProvider_ForComplexDescriptions( const std::vector< std::vector< uno::Any > >& rComplexDescriptions )
         : m_rComplexDescriptions( rComplexDescriptions )
     {}
     virtual ~SplitCategoriesProvider_ForComplexDescriptions()
@@ -1362,7 +1362,7 @@ public:
     virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;
 
 private:
-    const ::std::vector< ::std::vector< uno::Any > >& m_rComplexDescriptions;
+    const std::vector< std::vector< uno::Any > >& m_rComplexDescriptions;
 };
 
 sal_Int32 SplitCategoriesProvider_ForComplexDescriptions::getLevelCount() const

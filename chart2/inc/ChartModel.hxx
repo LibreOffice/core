@@ -142,7 +142,7 @@ private:
     css::awt::Size                                     m_aVisualAreaSize;
     css::uno::Reference< css::frame::XModel >          m_xParent;
     css::uno::Reference< css::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
-    ::std::vector< GraphicObject >                            m_aGraphicObjectVector;
+    std::vector< GraphicObject >                              m_aGraphicObjectVector;
 
     css::uno::Reference< css::chart2::data::XDataProvider >   m_xDataProvider;
     /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an

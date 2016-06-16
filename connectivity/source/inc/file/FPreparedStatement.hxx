@@ -60,7 +60,7 @@ namespace connectivity
 
             sal_uInt32 AddParameter(connectivity::OSQLParseNode * pParameter,
                                 const css::uno::Reference< css::beans::XPropertySet>& _xCol);
-            void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);
+            void scanParameter(OSQLParseNode* pParseNode,std::vector< OSQLParseNode*>& _rParaNodes);
             void describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable);
             void describeParameter();
 

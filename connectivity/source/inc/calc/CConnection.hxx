@@ -40,7 +40,7 @@ namespace connectivity
             // the spreadsheet document:
             css::uno::Reference< css::sheet::XSpreadsheetDocument > m_xDoc;
             /// close listener that vetoes so nobody disposes m_xDoc
-            ::std::unique_ptr< ::utl::CloseVeto> m_pCloseListener;
+            std::unique_ptr< ::utl::CloseVeto> m_pCloseListener;
             OUString m_sPassword;
             OUString m_aFileName;
             oslInterlockedCount m_nDocCount;

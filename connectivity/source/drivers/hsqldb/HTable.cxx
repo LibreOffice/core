@@ -345,7 +345,7 @@ Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException, std::
     if ( m_Type == "VIEW" )
     {
         Sequence< Type > aTypes = OTableHelper::getTypes();
-        ::std::vector<Type> aOwnTypes;
+        std::vector<Type> aOwnTypes;
         aOwnTypes.reserve(aTypes.getLength());
         const Type* pIter = aTypes.getConstArray();
         const Type* pEnd = pIter + aTypes.getLength();

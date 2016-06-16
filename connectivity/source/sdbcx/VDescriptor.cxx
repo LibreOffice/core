@@ -64,14 +64,14 @@ namespace connectivity
 
         namespace
         {
-            struct ResetROAttribute : public ::std::unary_function< Property, void >
+            struct ResetROAttribute : public std::unary_function< Property, void >
             {
                 void operator ()( Property& _rProperty ) const
                 {
                     _rProperty.Attributes &= ~PropertyAttribute::READONLY;
                 }
             };
-            struct SetROAttribute : public ::std::unary_function< Property, void >
+            struct SetROAttribute : public std::unary_function< Property, void >
             {
                 void operator ()( Property& _rProperty ) const
                 {
@@ -87,9 +87,9 @@ namespace connectivity
             describeProperties( aProperties );
 
             if ( isNew() )
-                ::std::for_each( aProperties.getArray(), aProperties.getArray() + aProperties.getLength(), ResetROAttribute() );
+                std::for_each( aProperties.getArray(), aProperties.getArray() + aProperties.getLength(), ResetROAttribute() );
             else
-                ::std::for_each( aProperties.getArray(), aProperties.getArray() + aProperties.getLength(), SetROAttribute() );
+                std::for_each( aProperties.getArray(), aProperties.getArray() + aProperties.getLength(), SetROAttribute() );
 
             return new ::cppu::OPropertyArrayHelper( aProperties );
         }

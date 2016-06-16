@@ -52,7 +52,7 @@ void OTableKeyHelper::refreshColumns()
     if ( !m_pTable )
         return;
 
-    ::std::vector< OUString> aVector;
+    std::vector< OUString> aVector;
     if ( !isNew() )
     {
         aVector = m_aProps->m_aKeyColumnNames;

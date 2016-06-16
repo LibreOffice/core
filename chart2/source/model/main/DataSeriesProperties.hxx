@@ -39,7 +39,7 @@ namespace DataSeriesProperties
     };
 
     void AddPropertiesToVector(
-        ::std::vector< css::beans::Property > & rOutProperties );
+        std::vector< css::beans::Property > & rOutProperties );
 
     void AddDefaultsToMap( tPropertyValueMap & rOutMap );
 }

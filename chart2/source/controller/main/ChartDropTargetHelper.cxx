@@ -36,10 +36,10 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-::std::vector< OUString > lcl_getStringsFromByteSequence(
+std::vector< OUString > lcl_getStringsFromByteSequence(
     const Sequence< sal_Int8 > & aByteSequence )
 {
-    ::std::vector< OUString > aResult;
+    std::vector< OUString > aResult;
     const sal_Int32 nLength = aByteSequence.getLength();
     const sal_Char * pBytes( reinterpret_cast< const sal_Char* >( aByteSequence.getConstArray()));
     sal_Int32 nStartPos = 0;
@@ -106,7 +106,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
             Sequence<sal_Int8> aBytes = aDataHelper.GetSequence(SotClipboardFormatId::LINK, OUString());
             if (aBytes.getLength())
             {
-                ::std::vector< OUString > aStrings( lcl_getStringsFromByteSequence( aBytes ));
+                std::vector< OUString > aStrings( lcl_getStringsFromByteSequence( aBytes ));
                 if( aStrings.size() >= 3 && aStrings[0] == "soffice" )
                 {
                     OUString aRangeString( aStrings[2] );

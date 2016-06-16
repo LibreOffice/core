@@ -37,7 +37,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
         css::configuration::theDefaultProvider::get( rxContext ) );
 
-    ::std::vector< css::uno::Any > lParams;
+    std::vector< css::uno::Any > lParams;
     css::beans::PropertyValue      aParam ;
 
     // set root path

@@ -179,7 +179,7 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
 }
 
 sal_Bool SAL_CALL ChartTypeTemplate::supportsCategories()
-    throw (css::uno::RuntimeException, ::std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return true;
 }
@@ -298,7 +298,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
 
         Sequence< Reference< XChartType > > aChartTypes(
             DiagramHelper::getChartTypesFromDiagram( xDiagram ));
-        sal_Int32 nMax = ::std::min( aChartTypes.getLength(), aSeriesSeq.getLength());
+        sal_Int32 nMax = std::min( aChartTypes.getLength(), aSeriesSeq.getLength());
         for( i=0; i<nMax; ++i )
         {
             Reference< XDataSeriesContainer > xDSCnt( aChartTypes[i], uno::UNO_QUERY_THROW );
@@ -853,7 +853,7 @@ void ChartTypeTemplate::createChartTypes(
                     Sequence< Reference< XDataSeries > > aNewSeriesSeq( xDSCnt->getDataSeries());
                     sal_Int32 nNewStartIndex = aNewSeriesSeq.getLength();
                     aNewSeriesSeq.realloc( nNewStartIndex + aSeriesSeq[nSeriesIdx].getLength() );
-                    ::std::copy( aSeriesSeq[nSeriesIdx].begin(),
+                    std::copy( aSeriesSeq[nSeriesIdx].begin(),
                                  aSeriesSeq[nSeriesIdx].end(),
                                  aNewSeriesSeq.getArray() + nNewStartIndex );
                     xDSCnt->setDataSeries( aNewSeriesSeq );

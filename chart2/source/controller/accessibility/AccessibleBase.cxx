@@ -232,23 +232,23 @@ bool AccessibleBase::ImplUpdateChildren()
     {
         ObjectHierarchy::tChildContainer aModelChildren(
             m_aAccInfo.m_spObjectHierarchy->getChildren( GetId() ));
-        ::std::vector< ChildOIDMap::key_type > aAccChildren;
+        std::vector< ChildOIDMap::key_type > aAccChildren;
         aAccChildren.reserve( aModelChildren.size());
-        ::std::transform( m_aChildOIDMap.begin(), m_aChildOIDMap.end(),
-                          ::std::back_inserter( aAccChildren ),
+        std::transform( m_aChildOIDMap.begin(), m_aChildOIDMap.end(),
+                          std::back_inserter( aAccChildren ),
                           ::o3tl::select1st< ChildOIDMap::value_type >() );
 
-        ::std::sort( aModelChildren.begin(), aModelChildren.end());
+        std::sort( aModelChildren.begin(), aModelChildren.end());
 
-        ::std::vector< ObjectHierarchy::tOID > aChildrenToRemove, aChildrenToAdd;
-        ::std::set_difference( aModelChildren.begin(), aModelChildren.end(),
+        std::vector< ObjectHierarchy::tOID > aChildrenToRemove, aChildrenToAdd;
+        std::set_difference( aModelChildren.begin(), aModelChildren.end(),
                                aAccChildren.begin(), aAccChildren.end(),
-                               ::std::back_inserter( aChildrenToAdd ));
-        ::std::set_difference( aAccChildren.begin(), aAccChildren.end(),
+                               std::back_inserter( aChildrenToAdd ));
+        std::set_difference( aAccChildren.begin(), aAccChildren.end(),
                                aModelChildren.begin(), aModelChildren.end(),
-                               ::std::back_inserter( aChildrenToRemove ));
+                               std::back_inserter( aChildrenToRemove ));
 
-        ::std::vector< ObjectHierarchy::tOID >::const_iterator aIt( aChildrenToRemove.begin());
+        std::vector< ObjectHierarchy::tOID >::const_iterator aIt( aChildrenToRemove.begin());
         for( ; aIt != aChildrenToRemove.end(); ++aIt )
         {
             RemoveChildByOId( *aIt );
@@ -316,7 +316,7 @@ void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
 
         // search child in vector
         ChildListVectorType::iterator aVecIter =
-            ::std::find( m_aChildList.begin(), m_aChildList.end(), xChild );
+            std::find( m_aChildList.begin(), m_aChildList.end(), xChild );
 
         OSL_ENSURE( aVecIter != m_aChildList.end(),
                     "Inconsistent ChildMap" );

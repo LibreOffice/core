@@ -400,7 +400,7 @@ double PieChart::getMaxOffset()
     if( m_aZSlots[0].size()<=0 )
         return m_fMaxOffset;
 
-    const ::std::vector< VDataSeries* >& rSeriesList( m_aZSlots[0][0].m_aSeriesVector );
+    const std::vector< VDataSeries* >& rSeriesList( m_aZSlots[0][0].m_aSeriesVector );
     if( rSeriesList.size()<=0 )
         return m_fMaxOffset;
 
@@ -517,8 +517,8 @@ void PieChart::createShapes()
     ///that the radius axis scale is the one with index 0 and the angle axis
     ///scale is the one with index 1.
 
-    ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = m_aZSlots[0].begin();
-    const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aZSlots[0].end();
+    std::vector< VDataSeriesGroup >::iterator               aXSlotIter = m_aZSlots[0].begin();
+    const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aZSlots[0].end();
 
     ///m_bUseRings == true if chart type is `donut`, == false if chart type is
     ///`pie`; if the chart is of `donut` type we have as many rings as many data
@@ -533,7 +533,7 @@ void PieChart::createShapes()
     ///the `explodeable` ring is the first one except when the radius axis
     ///orientation is reversed (always!?) and we are dealing with a donut: in
     ///such a case the `explodeable` ring is the last one.
-    ::std::vector< VDataSeriesGroup >::size_type nExplodeableSlot = 0;
+    std::vector< VDataSeriesGroup >::size_type nExplodeableSlot = 0;
     if( m_pPosHelper->isMathematicalOrientationRadius() && m_bUseRings )
         nExplodeableSlot = m_aZSlots[0].size()-1;
 
@@ -558,7 +558,7 @@ void PieChart::createShapes()
     {
         ShapeParam aParam;
 
-        ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+        std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
         if( pSeriesList->size()<=0 )//there should be only one series in each x slot
             continue;
         VDataSeries* pSeries = (*pSeriesList)[0];
@@ -634,7 +634,7 @@ void PieChart::createShapes()
                 ///property of the current data series entry only for slices
                 ///belonging to the outer ring
                 aParam.mfExplodePercentage = 0.0;
-                bool bDoExplode = ( nExplodeableSlot == static_cast< ::std::vector< VDataSeriesGroup >::size_type >(fSlotX) );
+                bool bDoExplode = ( nExplodeableSlot == static_cast< std::vector< VDataSeriesGroup >::size_type >(fSlotX) );
                 if(bDoExplode) try
                 {
                     xPointProperties->getPropertyValue( "Offset") >>= aParam.mfExplodePercentage;

@@ -561,7 +561,7 @@ public:
     virtual AbstractSvxHpLinkDlg *          CreateSvxHpLinkDlg(vcl::Window* pParent, SfxBindings* pBindings) override;
     virtual AbstractFmSearchDialog*         CreateFmSearchDialog(vcl::Window* pParent,
                                                         const OUString& strInitialText,
-                                                        const ::std::vector< OUString >& _rContexts,
+                                                        const std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,

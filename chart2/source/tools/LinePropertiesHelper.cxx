@@ -32,7 +32,7 @@ namespace chart
 {
 
 void LinePropertiesHelper::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     // Line Properties see service drawing::LineProperties
     rOutProperties.push_back(

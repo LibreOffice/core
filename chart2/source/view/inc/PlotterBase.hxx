@@ -55,7 +55,7 @@ public:
         , const OUString& rCID
                 ) throw (css::uno::RuntimeException, std::exception);
 
-    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
+    virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix );
 

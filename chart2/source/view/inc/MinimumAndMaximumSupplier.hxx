@@ -86,7 +86,7 @@ public:
     virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) override;
 
 private:
-    typedef ::std::set< MinimumAndMaximumSupplier* > MinimumAndMaximumSupplierSet;
+    typedef std::set< MinimumAndMaximumSupplier* > MinimumAndMaximumSupplierSet;
     MinimumAndMaximumSupplierSet m_aMinimumAndMaximumSupplierList;
 
     inline MinimumAndMaximumSupplierSet::iterator begin() { return m_aMinimumAndMaximumSupplierList.begin(); }
