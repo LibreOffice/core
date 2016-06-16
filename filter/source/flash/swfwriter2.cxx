@@ -24,7 +24,6 @@
 #include <math.h>
 
 using namespace ::swf;
-using namespace ::std;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
@@ -109,8 +108,8 @@ void BitStream::writeTo( SvStream& out )
 {
     pad();
 
-    vector< sal_uInt8 >::iterator aIter( maData.begin() );
-    const vector< sal_uInt8>::iterator aEnd( maData.end() );
+    std::vector< sal_uInt8 >::iterator aIter( maData.begin() );
+    const std::vector< sal_uInt8>::iterator aEnd( maData.end() );
     while(aIter != aEnd)
     {
         out.WriteUChar( *aIter++ );
@@ -262,9 +261,9 @@ void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
     // AS: Christian, can they be negative, or is that a wasted check?
     // CL: I think so, f.e. for shapes that have the top and/or left edge outside
     //         the page origin
-    sal_uInt8 nBits1 = sal::static_int_cast<sal_uInt8>( max( getMaxBitsSigned( minX ), getMaxBitsSigned( minY ) ) );
-    sal_uInt8 nBits2 = sal::static_int_cast<sal_uInt8>( max( getMaxBitsSigned( maxX ), getMaxBitsSigned( maxY ) ) );
-    sal_uInt8 nBitsMax = max( nBits1, nBits2 );
+    sal_uInt8 nBits1 = sal::static_int_cast<sal_uInt8>( std::max( getMaxBitsSigned( minX ), getMaxBitsSigned( minY ) ) );
+    sal_uInt8 nBits2 = sal::static_int_cast<sal_uInt8>( std::max( getMaxBitsSigned( maxX ), getMaxBitsSigned( maxY ) ) );
+    sal_uInt8 nBitsMax = std::max( nBits1, nBits2 );
 
     aBits.writeUB( nBitsMax, 5 );
     aBits.writeSB( minX, nBitsMax );
@@ -337,7 +336,7 @@ Sprite::Sprite( sal_uInt16 nId )
 
 Sprite::~Sprite()
 {
-    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
+    for(std::vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
         delete *i;
 }
 
@@ -345,7 +344,7 @@ Sprite::~Sprite()
 void Sprite::write( SvStream& out )
 {
     SvMemoryStream aTmp;
-    for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
+    for(std::vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); ++i)
         (*i)->write( aTmp );
 
     if( !mnFrames )
@@ -465,7 +464,7 @@ void FlashFont::write( SvStream& out )
     sal_uInt16 nGlyphs = uInt16_( maGlyphOffsets.size() );
     sal_uInt16 nOffset = nGlyphs * sizeof( sal_uInt16 );
 
-    for(vector< sal_uInt16 >::iterator i = maGlyphOffsets.begin(); i != maGlyphOffsets.end(); ++i)
+    for(std::vector< sal_uInt16 >::iterator i = maGlyphOffsets.begin(); i != maGlyphOffsets.end(); ++i)
         aTag.addUI16( nOffset + (*i) );
 
     aTag.addBits( maGlyphData );
@@ -551,7 +550,7 @@ struct GradRecord
 // TODO: better emulation of our gradients
 void FillStyle::Impl_addGradient( Tag* pTag ) const
 {
-    vector< struct GradRecord > aGradientRecords;
+    std::vector< struct GradRecord > aGradientRecords;
     basegfx::B2DHomMatrix m(basegfx::tools::createRotateB2DHomMatrix((maGradient.GetAngle() - 900) * F_PI1800));
 
     switch( maGradient.GetStyle() )

@@ -23,7 +23,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::swf;
-using namespace ::std;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
@@ -110,7 +109,7 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
     sal_uInt32 nSize = rIn.Tell();
     rIn.Seek( STREAM_SEEK_TO_BEGIN );
 
-    Sequence< sal_Int8 > aBuffer( min( nBufferSize, nSize ) );
+    Sequence< sal_Int8 > aBuffer( std::min( nBufferSize, nSize ) );
 
     while( nSize )
     {
