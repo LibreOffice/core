@@ -47,7 +47,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
-using namespace ::std;
 
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::beans::XPropertySet;
@@ -179,7 +178,7 @@ static OString convertString( const OUString& aInput )
     return aRet;
 }
 
-static void createSlideFile( const Reference< XComponent >& xDoc, PlacewareZipFile& rZipFile, const OUString& rURL, vector< PageEntry* >& rPageEntries  ) throw( css::uno::Exception, std::exception )
+static void createSlideFile( const Reference< XComponent >& xDoc, PlacewareZipFile& rZipFile, const OUString& rURL, std::vector< PageEntry* >& rPageEntries  ) throw( css::uno::Exception, std::exception )
 {
     OString aInfo;
 
@@ -224,8 +223,8 @@ static void createSlideFile( const Reference< XComponent >& xDoc, PlacewareZipFi
         aInfo += aNewLine;
     }
 
-    vector< PageEntry* >::iterator aIter( rPageEntries.begin() );
-    vector< PageEntry* >::iterator aEnd( rPageEntries.end() );
+    std::vector< PageEntry* >::iterator aIter( rPageEntries.begin() );
+    std::vector< PageEntry* >::iterator aEnd( rPageEntries.end() );
     while( aIter != aEnd )
     {
         PageEntry* pEntry = (*aIter++);
@@ -319,7 +318,7 @@ bool PlaceWareExporter::doExport( const Reference< XComponent >& xDoc, Reference
     if( osl::File::E_None != nRC )
         return false;
 
-    vector< PageEntry* > aPageEntries;
+    std::vector< PageEntry* > aPageEntries;
 
     // Create new package...
     try
@@ -357,8 +356,8 @@ bool PlaceWareExporter::doExport( const Reference< XComponent >& xDoc, Reference
         createSlideFile( xDoc, aZipFile, rURL, aPageEntries );
 
         // add gifs to zip
-        vector< PageEntry* >::iterator aIter( aPageEntries.begin() );
-        vector< PageEntry* >::iterator aEnd( aPageEntries.end() );
+        std::vector< PageEntry* >::iterator aIter( aPageEntries.begin() );
+        std::vector< PageEntry* >::iterator aEnd( aPageEntries.end() );
         while( aIter != aEnd )
         {
             PageEntry* pEntry = (*aIter++);
@@ -384,8 +383,8 @@ bool PlaceWareExporter::doExport( const Reference< XComponent >& xDoc, Reference
     {
     }
 
-    vector< PageEntry* >::iterator aIter( aPageEntries.begin() );
-    vector< PageEntry* >::iterator aEnd( aPageEntries.end() );
+    std::vector< PageEntry* >::iterator aIter( aPageEntries.begin() );
+    std::vector< PageEntry* >::iterator aEnd( aPageEntries.end() );
     while( aIter != aEnd )
     {
         delete (*aIter++);

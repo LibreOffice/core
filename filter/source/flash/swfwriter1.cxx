@@ -39,7 +39,6 @@
 #include <memory>
 
 using namespace ::swf;
-using namespace ::std;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -175,7 +174,7 @@ void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int1
     rBits.writeUB( bFilled ? 1 : 0, 1 );        // StateFillStyle1
     rBits.writeUB( 1, 1 );          // StateMoveTo
 
-    sal_uInt16 nMoveBits = max( getMaxBitsSigned( dx ), getMaxBitsSigned( dy ) );
+    sal_uInt16 nMoveBits = std::max( getMaxBitsSigned( dx ), getMaxBitsSigned( dy ) );
 
     rBits.writeUB( nMoveBits, 5 );  // Number of bits per value
                                     // TODO: Optimize horizontal and vertical lines
@@ -193,7 +192,7 @@ void Writer::Impl_addStraightEdgeRecord( BitStream& rBits, sal_Int16 dx, sal_Int
     rBits.writeUB( 1, 1 );          // TypeFlag
     rBits.writeUB( 1, 1 );          // StraightFlag
 
-    sal_uInt16 nBits = max( getMaxBitsSigned( dx ), getMaxBitsSigned( dy ) );
+    sal_uInt16 nBits = std::max( getMaxBitsSigned( dx ), getMaxBitsSigned( dy ) );
 
     rBits.writeUB( nBits - 2, 4 );  // Number of bits per value
 
@@ -227,10 +226,10 @@ void Writer::Impl_addCurvedEdgeRecord( BitStream& rBits, sal_Int16 control_dx, s
     rBits.writeUB( 0, 1 );          // CurvedFlag
 
     sal_uInt8 nBits = static_cast<sal_uInt8>(
-        max( getMaxBitsSigned( control_dx ),
-            max( getMaxBitsSigned( control_dy ),
-                max( getMaxBitsSigned( anchor_dx ),
-                    max( getMaxBitsSigned( anchor_dy ), (sal_uInt16)3 ) ) ) ) );
+        std::max( getMaxBitsSigned( control_dx ),
+            std::max( getMaxBitsSigned( control_dy ),
+                std::max( getMaxBitsSigned( anchor_dx ),
+                    std::max( getMaxBitsSigned( anchor_dy ), (sal_uInt16)3 ) ) ) ) );
 
     rBits.writeUB( nBits - 2, 4 );  // Number of bits per value
 

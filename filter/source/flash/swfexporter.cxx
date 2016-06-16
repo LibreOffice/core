@@ -42,7 +42,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::task;
-using namespace ::std;
 using namespace ::swf;
 
 using com::sun::star::io::XOutputStream;
@@ -63,8 +62,8 @@ PageInfo::PageInfo()
 
 PageInfo::~PageInfo()
 {
-    vector<ShapeInfo*>::iterator aIter( maShapesVector.begin() );
-    const vector<ShapeInfo*>::iterator aEnd( maShapesVector.end() );
+    std::vector<ShapeInfo*>::iterator aIter( maShapesVector.begin() );
+    const std::vector<ShapeInfo*>::iterator aEnd( maShapesVector.end() );
     while( aIter != aEnd )
     {
         delete (*aIter++);
@@ -505,7 +504,7 @@ void FlashExporter::exportShapes( const Reference< XShapes >& xShapes, bool bStr
 {
     OSL_ENSURE( (xShapes->getCount() <= 0xffff), "overflow in FlashExporter::exportDrawPageContents()" );
 
-    sal_uInt16 nShapeCount = (sal_uInt16)min( xShapes->getCount(), (sal_Int32)0xffff );
+    sal_uInt16 nShapeCount = (sal_uInt16)std::min( xShapes->getCount(), (sal_Int32)0xffff );
     sal_uInt16 nShape;
 
     Reference< XShape > xShape;

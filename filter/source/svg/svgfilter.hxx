@@ -77,8 +77,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-using namespace ::std;
-
 #define SVG_EXPORT_ALLPAGES ((sal_Int32)-1)
 
 
