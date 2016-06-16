@@ -665,7 +665,7 @@ ${MYCMD} --base officecfg/registry/data/org/openoffice/Office/UI --files BaseWin
 
 ${MYCMD} --files officecfg/registry/data/org/openoffice/Office/UI.xcu
 
-${MYCMD} --base officecfg/registry/data/org/openoffice/Office --files Views.xcu WebWizard.xcu Writer.xcu
+${MYCMD} --base officecfg/registry/data/org/openoffice/Office --files Views.xcu Writer.xcu
 
 ${MYCMD} --base officecfg/registry/data/org/openoffice --files Setup.xcu System.xcu
 
