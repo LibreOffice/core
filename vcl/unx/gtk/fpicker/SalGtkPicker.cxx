@@ -182,8 +182,10 @@ gint RunDialog::run()
     if (mxToolkit.is())
         mxToolkit->removeTopWindowListener(this);
 
+#if !GTK_CHECK_VERSION(3,0,0)
     if (nStatus != 1)   //PLAY
         gtk_widget_hide( mpDialog );
+#endif
 
     return nStatus;
 }
