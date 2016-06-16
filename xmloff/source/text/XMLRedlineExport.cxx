@@ -335,19 +335,19 @@ void XMLRedlineExport::ExportChangedRegion(
         OUString sType;
         aAny >>= sType;
         XMLTokenEnum eChangeType = XML_PARAGRAPH;
-        OUString sParagraphIdx = "2", sCharStart, sCharEnd;
-        rPropSet->getPropertyValue("Start") >>= sCharStart;
-        rPropSet->getPropertyValue("End") >>= sCharEnd;
+        sal_uInt16 nParagraphIdx = 2, nCharStart, nCharEnd;
+        rPropSet->getPropertyValue("Start") >>= nCharStart;
+        rPropSet->getPropertyValue("End") >>= nCharEnd;
         if(eChangeType == XML_PARAGRAPH)
         {
-            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + sParagraphIdx);
+            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx));
             rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_PARAGRAPH);
         }
         else
         {
-            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + sParagraphIdx + "/" + sCharStart);
+            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharStart));
             if( sType == sInsert )
-                rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + sParagraphIdx + "/" + sCharEnd);
+                rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharEnd));
             rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, eChangeType);
         }
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
