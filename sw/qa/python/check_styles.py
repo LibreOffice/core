@@ -183,6 +183,22 @@ class CheckStyle(unittest.TestCase):
                 xCellStyle.getPropertyValue("foobarbaz")
         xDoc.dispose()
 
+    def test_tableStyleIsInUse(self):
+        # extend when TableStyle insertByName comes
+        xDoc = CheckStyle._uno.openEmptyWriterDoc()
+        xBodyText = xDoc.getText()
+        xCursor = xBodyText.createTextCursor()
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(1, 1)
+        xBodyText.insertTextContent(xCursor, xTable, True)
+        xDefaultStyle = xDoc.StyleFamilies.getByName("TableStyles").getByName("Default Style")
+        self.assertFalse(xDefaultStyle.isInUse())
+        xTable.setPropertyValue("TableTemplateName", "Default Style")
+        self.assertTrue(xDefaultStyle.isInUse())
+        xTable.setPropertyValue("TableTemplateName", "")
+        self.assertFalse(xDefaultStyle.isInUse())
+        xDoc.dispose()
+
     def test_CellFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xCellStyles = xDoc.StyleFamilies["CellStyles"]
