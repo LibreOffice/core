@@ -232,7 +232,8 @@ namespace sdr
 
                 // transform to world coordinates
                 aViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::LibreOfficeKit::isActive() &&
+                    comphelper::LibreOfficeKit::isLocalRendering())
                 {
                     const int TWIPS_PER_PIXEL = 15;
                     aViewRange = basegfx::B2DRange(aViewRange.getMinimum().getX(),
@@ -309,7 +310,8 @@ namespace sdr
                     drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                         rTargetOutDev, getViewInformation2D()));
 
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::LibreOfficeKit::isActive() &&
+                    comphelper::LibreOfficeKit::isLocalRendering())
                 {
                     // Restore the origin.
                     MapMode aMapMode = pOutDev->GetMapMode();
@@ -322,7 +324,8 @@ namespace sdr
                     pProcessor2D->process(xPrimitiveSequence);
                 }
 
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::LibreOfficeKit::isActive() &&
+                    comphelper::LibreOfficeKit::isLocalRendering())
                 {
                     // Restore the original map-mode.
                     pOutDev->SetMapMode(aOrigMapMode);
