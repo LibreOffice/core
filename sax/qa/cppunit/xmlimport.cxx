@@ -324,8 +324,8 @@ class XMLImportTest : public test::BootstrapFixture
 {
 private:
     OUString m_sDirPath;
-    Reference< TestDocumentHandler > m_xDocumentHandler;
-    Reference< TestFastDocumentHandler > m_xFastDocumentHandler;
+    rtl::Reference< TestDocumentHandler > m_xDocumentHandler;
+    rtl::Reference< TestFastDocumentHandler > m_xFastDocumentHandler;
     Reference< XParser > m_xParser;
     Reference< XFastParser > m_xFastParser;
     Reference< XFastTokenHandler > m_xFastTokenHandler;
@@ -352,8 +352,8 @@ void XMLImportTest::setUp()
         ::comphelper::getProcessComponentContext() );
     m_xFastParser = FastParser::create(
         ::comphelper::getProcessComponentContext() );
-    m_xParser->setDocumentHandler( m_xDocumentHandler );
-    m_xFastParser->setFastDocumentHandler( m_xFastDocumentHandler );
+    m_xParser->setDocumentHandler( m_xDocumentHandler.get() );
+    m_xFastParser->setFastDocumentHandler( m_xFastDocumentHandler.get() );
     m_xFastParser->setTokenHandler( m_xFastTokenHandler );
     m_sDirPath = m_directories.getPathFromSrc( "/sax/qa/data/" );
 }
