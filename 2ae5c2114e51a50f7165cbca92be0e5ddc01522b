@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_3756d9d2",
+        "filename": "vcl/inc/jobset.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-16T12:34:30Z",
+      "side": 1,
+      "message": "You\u0027re returning the container by value here, i.e. it gets copied every single time.\n\nThe unit test then fails because the iterors you compare in WriteJobSetup are from two different containers (two copies, since GetValueMap is called twice)\n\nBut the more general question is - why bother adding accessor functions for an internal struct?",
+      "revId": "2ae5c2114e51a50f7165cbca92be0e5ddc01522b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
