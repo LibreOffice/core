@@ -342,9 +342,9 @@ IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
         {
             static sal_uInt16 SidArray[] = {
                 SID_ATTR_PAGE_COLOR,
+                SID_ATTR_PAGE_GRADIENT,
                 SID_ATTR_PAGE_HATCH,
                 SID_ATTR_PAGE_BITMAP,
-                SID_ATTR_PAGE_GRADIENT,
                 SID_ATTR_PAGE_FILLSTYLE,
                 SID_DISPLAY_MASTER_BACKGROUND,
                 SID_DISPLAY_MASTER_OBJECTS,
