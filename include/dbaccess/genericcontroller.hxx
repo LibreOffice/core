@@ -23,52 +23,76 @@
 #include <sal/config.h>
 
 #include <deque>
+#include <exception>
+#include <functional>
 #include <map>
+#include <memory>
 #include <vector>
 
-#include <dbaccess/AsynchronousLink.hxx>
-#include <dbaccess/controllerframe.hxx>
-#include <dbaccess/dbaccessdllapi.h>
-#include <dbaccess/IController.hxx>
+#include <boost/optional.hpp>
 
+#include <com/sun/star/awt/XUserInputInterception.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
+#include <com/sun/star/frame/DispatchInformation.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/sdb/XDatabaseContext.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/awt/XUserInputInterception.hpp>
-
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/sharedmutex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
-
-#include <boost/optional.hpp>
-#include <sfx2/userinputinterception.hxx>
+#include <dbaccess/AsynchronousLink.hxx>
+#include <dbaccess/controllerframe.hxx>
+#include <dbaccess/dbaccessdllapi.h>
+#include <dbaccess/IController.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 
-#include <com/sun/star/ui/XSidebarProvider.hpp>
-
-namespace dbtools
-{
-    class SQLExceptionInfo;
-}
+namespace com { namespace sun { namespace star {
+    namespace awt { class XKeyHandler; }
+    namespace awt { class XMouseClickHandler; }
+    namespace awt { class XWindow; }
+    namespace beans { struct PropertyValue; }
+    namespace frame { class XController; }
+    namespace frame { class XDispatchProvider; }
+    namespace frame { class XFrame; }
+    namespace frame { class XFrameActionListener; }
+    namespace frame { class XModel; }
+    namespace frame { class XStatusListener; }
+    namespace frame { class XTitleChangeListener; }
+    namespace frame { struct DispatchDescriptor; }
+    namespace frame { struct FrameActionEvent; }
+    namespace lang { class XEventListener; }
+    namespace sdb { class XDatabaseContext; }
+    namespace sdbc { class XConnection; }
+    namespace sdbc { class XDataSource; }
+    namespace ui { class XSidebarProvider; }
+    namespace uno { class XComponentContext; }
+    namespace util { class XURLTransformer; }
+} } }
 
 namespace vcl { class Window; }
+class NotifyEvent;
+
 namespace dbaui
 {
     class ODataView;

@@ -20,31 +20,44 @@
 #ifndef INCLUDED_DBACCESS_DBSUBCOMPONENTCONTROLLER_HXX
 #define INCLUDED_DBACCESS_DBSUBCOMPONENTCONTROLLER_HXX
 
-#include <dbaccess/genericcontroller.hxx>
-
-#include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-
-#include <comphelper/broadcasthelper.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer.hxx>
-#include <connectivity/dbmetadata.hxx>
-#include <cppuhelper/implbase.hxx>
-
+#include <exception>
 #include <memory>
 
+#include <com/sun/star/beans/PropertyVetoException.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <cppuhelper/implbase.hxx>
+#include <dbaccess/dbaccessdllapi.h>
+#include <dbaccess/genericcontroller.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+    namespace beans { struct PropertyValue; }
+    namespace document { class XEmbeddedScripts; }
+    namespace frame { class XModel; }
+    namespace sdbc { class XConnection; }
+    namespace sdbc { class XDatabaseMetaData; }
+    namespace uno { class XComponentContext; }
+    namespace util { class XModifyListener; }
+    namespace util { class XNumberFormatter; }
+} } }
+
+namespace dbtools {
+    class DatabaseMetaData;
+    class SQLExceptionInfo;
+}
 
 namespace dbaui
 {
-
-
     //= DBSubComponentController
-
-    class DBSubComponentController;
 
     typedef ::cppu::ImplInheritanceHelper<   OGenericUnoController
                                          ,   css::document::XScriptInvocationContext

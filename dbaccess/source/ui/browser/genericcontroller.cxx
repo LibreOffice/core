@@ -47,7 +47,7 @@
 
 #include <com/sun/star/ui/XSidebarProvider.hpp>
 #include <sfx2/sidebar/UnoSidebar.hxx>
-
+#include <sfx2/userinputinterception.hxx>
 
 #include <vcl/waitobj.hxx>
 #include <svl/urihelper.hxx>

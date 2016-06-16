@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <dbaccess/dataview.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
@@ -26,8 +28,10 @@
 #include <dbaccess/IController.hxx>
 #include "UITools.hxx"
 #include <sfx2/sfx.hrc>
+#include <svtools/acceleratorexecute.hxx>
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
 
 namespace dbaui

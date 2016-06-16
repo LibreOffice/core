@@ -39,6 +39,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/interfacecontainer2.hxx>
