@@ -81,18 +81,18 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     get(m_pNumberingOnCB, "shownumbering");
     get(m_pNumberingOnFooterHeader, "showfooterheadernumbering");
 
-    OUString sIntervalName = m_pDivIntervalFT->GetAccessibleName();
-    sIntervalName += "(";
-    sIntervalName += m_pDivRowsFT->GetAccessibleName();
-    sIntervalName += ")";
+    OUString sIntervalName = m_pDivIntervalFT->GetAccessibleName()
+                             + "("
+                             + m_pDivRowsFT->GetAccessibleName()
+                             + ")";
     m_pDivIntervalNF->SetAccessibleName(sIntervalName);
 
     vcl::Window *pNumIntervalFT = get<vcl::Window>("interval");
     vcl::Window *pNumRowsFT = get<vcl::Window>("intervallines");
-    sIntervalName = pNumIntervalFT->GetAccessibleName();
-    sIntervalName += "(";
-    sIntervalName += pNumRowsFT->GetAccessibleName();
-    sIntervalName += ")";
+    sIntervalName = pNumIntervalFT->GetAccessibleName()
+                    + "("
+                    + pNumRowsFT->GetAccessibleName()
+                    + ")";
     m_pNumIntervalNF->SetAccessibleName(sIntervalName);
 
     // char styles
