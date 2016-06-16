@@ -61,6 +61,7 @@
 #include <sfx2/printer.hxx>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -4408,11 +4409,37 @@ const CellStyleNameMap& SwXTextTableStyle::GetCellStyleNameMap()
 // XStyle
 sal_Bool SAL_CALL SwXTextTableStyle::isUserDefined() throw (uno::RuntimeException, std::exception)
 {
-    return false;
+    SolarMutexGuard aGuard;
+    // only first style is not user defined
+    if (m_pDocShell->GetDoc()->GetTableStyles()[0].GetName() == m_sTableAutoFormatName)
+        return false;
+
+    return true;
 }
 
 sal_Bool SAL_CALL SwXTextTableStyle::isInUse() throw (uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
+    uno::Reference<text::XTextTablesSupplier> xTablesSupp(m_pDocShell->GetModel(), uno::UNO_QUERY);
+    if (xTablesSupp.is())
+    {
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupp->getTextTables(), uno::UNO_QUERY);
+        if (xTables.is())
+        {
+            const sal_Int32 nCount = xTables->getCount();
+            for (sal_Int32 i=0; i < nCount; ++i)
+            {
+                uno::Reference<beans::XPropertySet> xTablePropertySet;
+                xTables->getByIndex(i) >>= xTablePropertySet;
+                OUString sTableTemplateName;
+                if (xTablePropertySet->getPropertyValue("TableTemplateName") >>= sTableTemplateName)
+                {
+                    if (sTableTemplateName == m_sTableAutoFormatName)
+                        return true;
+                }
+            }
+        }
+    }
     return false;
 }
 
@@ -4427,6 +4454,7 @@ void SAL_CALL SwXTextTableStyle::setParentStyle(const OUString& /*aParentStyle*/
 //XNamed
 OUString SAL_CALL SwXTextTableStyle::getName() throw(uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
     OUString sProgName;
     SwStyleNameMapper::FillProgName(m_sTableAutoFormatName, sProgName, nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE, true);
     return m_sTableAutoFormatName;
@@ -4621,6 +4649,7 @@ css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(S
 // XStyle
 sal_Bool SAL_CALL SwXTextCellStyle::isUserDefined() throw (css::uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
     // if this cell belong to first table style then its defaut style
     if (&m_pDocShell->GetDoc()->GetTableStyles()[0] == m_pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(m_sParentStyle))
         return false;
@@ -4640,6 +4669,7 @@ OUString SAL_CALL SwXTextCellStyle::getParentStyle() throw (css::uno::RuntimeExc
 
 void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& sParentStyle) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
     // Changing parent to one which is unaware of it will lead to a something unexcpected. getName() rely on a parent.
     SAL_INFO("sw.uno", "Changing SwXTextCellStyle parent");
     m_sParentStyle = sParentStyle;
@@ -4648,6 +4678,7 @@ void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& sParentStyle) thr
 //XNamed
 OUString SAL_CALL SwXTextCellStyle::getName() throw(css::uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
     OUString sName;
 
     // if style is physical then we request a name from doc
@@ -4672,6 +4703,7 @@ OUString SAL_CALL SwXTextCellStyle::getName() throw(css::uno::RuntimeException, 
 
 void SAL_CALL SwXTextCellStyle::setName(const OUString& sName) throw(css::uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
     // if style is physical then we can not rename it.
     if (!m_bPhysical)
         m_sName = sName;
