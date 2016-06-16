@@ -355,15 +355,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
             {
                 if( pAction )
                 {
-                    if( pAction->GetType() == MetaActionType::COMMENT &&
-                        static_cast<MetaCommentAction*>(pAction)->GetComment() == "DELEGATE_PLUGGABLE_RENDERER" )
-                    {
-                        ImplDelegate2PluggableRenderer(static_cast<MetaCommentAction*>(pAction), pOut);
-                    }
-                    else
-                    {
-                        pAction->Execute( pOut );
-                    }
+                    pAction->Execute( pOut );
 
                     // flush output from time to time
                     if( i++ > nSyncCount )
@@ -448,77 +440,6 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     }
 
     return false;
-}
-
-void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut )
-{
-    OSL_ASSERT( pAct->GetComment() == "DELEGATE_PLUGGABLE_RENDERER" );
-
-    // read payload - string of service name, followed by raw render input
-    const sal_uInt8* pData = pAct->GetData();
-    const sal_uInt8* const pEndData = pData + pAct->GetDataSize();
-    if( !pData )
-        return;
-
-    OUStringBuffer aBuffer;
-    while( pData<pEndData && *pData )
-        aBuffer.append(static_cast<sal_Unicode>(*pData++));
-    const OUString aRendererServiceName=aBuffer.makeStringAndClear();
-    ++pData;
-
-    while( pData<pEndData && *pData )
-        aBuffer.append(static_cast<sal_Unicode>(*pData++));
-    const OUString aGraphicServiceName=aBuffer.makeStringAndClear();
-    ++pData;
-
-    uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    if( pData<pEndData )
-    {
-        try
-        {
-            // instantiate render service
-            uno::Sequence<uno::Any> aRendererArgs(1);
-            aRendererArgs[0] = makeAny(uno::Reference<awt::XGraphics>(pOut->CreateUnoGraphics()));
-            uno::Reference<graphic::XGraphicRenderer> xRenderer(
-                xFactory->createInstanceWithArguments(
-                    aRendererServiceName,
-                    aRendererArgs),
-                uno::UNO_QUERY );
-
-            // instantiate graphic service
-            uno::Reference<graphic::XGraphic> xGraphic(
-                xFactory->createInstance(
-                    aGraphicServiceName),
-                uno::UNO_QUERY );
-
-            uno::Reference<lang::XInitialization> xInit(
-                xGraphic, uno::UNO_QUERY);
-
-            if(xGraphic.is() && xRenderer.is() && xInit.is())
-            {
-                // delay initialization of XGraphic, to only expose
-                // XGraphic-generating services to arbitrary binary data
-                uno::Sequence< sal_Int8 > aSeq(
-                    reinterpret_cast<sal_Int8 const *>(pData), pEndData-pData );
-                uno::Sequence<uno::Any> aGraphicsArgs(1);
-                aGraphicsArgs[0] = makeAny(aSeq);
-                xInit->initialize(aGraphicsArgs);
-
-                xRenderer->render(xGraphic);
-            }
-        }
-        catch (const uno::RuntimeException&)
-        {
-            // runtime errors are fatal
-            throw;
-        }
-        catch (const uno::Exception& e)
-        {
-            // ignore errors, no way of reporting them here
-            SAL_WARN("vcl", "GDIMetaFile::ImplDelegate2PluggableRenderer:"
-                    " exception: " << e.Message);
-        }
-    }
 }
 
 void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,

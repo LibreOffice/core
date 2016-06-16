@@ -97,8 +97,6 @@ private:
                                                            const Gradient& rGrad );
 
     SAL_DLLPRIVATE bool                 ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize );
-    SAL_DLLPRIVATE void                 ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );
-
 
 protected:
 
