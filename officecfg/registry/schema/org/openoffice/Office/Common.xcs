@@ -5695,6 +5695,30 @@
         </constraints>
         <value>2</value>
       </prop>
+      <prop oor:name="SidebarIconSize" oor:type="xs:short" oor:nillable="false">
+        <!-- UIHints: Tools  Options General View -->
+        <info>
+          <desc>Specifies which size of the icons is used for the
+          sidebar.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>will let the toolbox decide about its size</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>small icons</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>large icons</desc>
+            </info>
+          </enumeration>
+        </constraints>
+      </prop>
       <prop oor:name="SymbolStyle" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
         <info>

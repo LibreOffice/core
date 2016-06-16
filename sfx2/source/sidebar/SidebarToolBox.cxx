@@ -21,13 +21,17 @@
 #include <sfx2/sidebar/ControllerFactory.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Tools.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <vcl/builderfactory.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
+#include <framework/addonsoptions.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -59,7 +63,17 @@ SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
 {
     SetBackground(Wallpaper());
     SetPaintTransparent(true);
-    SetToolboxButtonSize( TOOLBOX_BUTTONSIZE_SMALL );
+
+    ToolBoxButtonSize eSize = TOOLBOX_BUTTONSIZE_SMALL;
+
+    SvtMiscOptions aMiscOptions;
+    aMiscOptions.AddListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
+
+    sal_uInt16 nSize = aMiscOptions.GetSidebarIconSize();
+    if (nSize <= TOOLBOX_BUTTONSIZE_LARGE)
+        eSize = static_cast<ToolBoxButtonSize>(nSize);
+
+    SetToolboxButtonSize(eSize);
 
 #ifdef DEBUG
     SetText(OUString("SidebarToolBox"));
@@ -75,6 +89,9 @@ SidebarToolBox::~SidebarToolBox()
 
 void SidebarToolBox::dispose()
 {
+    SvtMiscOptions aMiscOptions;
+    aMiscOptions.RemoveListenerLink(LINK(this, SidebarToolBox, ChangedIconSizeHandler));
+
     ControllerContainer aControllers;
     aControllers.swap(maControllers);
     for (ControllerContainer::iterator iController(aControllers.begin()), iEnd(aControllers.end());
@@ -239,6 +256,48 @@ IMPL_LINK_TYPED(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
     Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
     if (xController.is())
         xController->execute((sal_Int16)pToolBox->GetModifier());
+}
+
+IMPL_LINK_NOARG_TYPED(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
+{
+    SolarMutexGuard g;
+
+    ToolBoxButtonSize eSize = TOOLBOX_BUTTONSIZE_SMALL;
+
+    SvtMiscOptions aMiscOptions;
+    sal_uInt16 nSize = aMiscOptions.GetSidebarIconSize();
+    if(nSize <= TOOLBOX_BUTTONSIZE_LARGE)
+        eSize = static_cast<ToolBoxButtonSize>(nSize);
+
+    bool bBigImages(eSize == TOOLBOX_BUTTONSIZE_LARGE);
+    SetToolboxButtonSize(eSize);
+
+    for (auto const& it : maControllers)
+    {
+        Reference<frame::XSubToolbarController> xController(it.second, UNO_QUERY);
+        if (xController.is() && xController->opensSubToolbar())
+        {
+            // The button should show the last function that was selected from the
+            // dropdown. The controller should know better than us what it was.
+            xController->updateImage();
+        }
+        else
+        {
+            OUString aCommandURL = GetItemCommand(it.first);
+            if(SfxViewFrame::Current())
+            {
+                css::uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+                Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, bBigImages, xFrame);
+                // Try also to query for add-on images before giving up and use an
+                // empty image.
+                if (!aImage)
+                    aImage = framework::AddonsOptions().GetImageFromURL(aCommandURL, bBigImages);
+                SetItemImage(it.first, aImage);
+            }
+        }
+    }
+
+    queue_resize();
 }
 
 } } // end of namespace sfx2::sidebar
