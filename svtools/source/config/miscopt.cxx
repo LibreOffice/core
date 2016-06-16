@@ -62,6 +62,8 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_EXPERIMENTALMODE         8
 #define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
 #define PROPERTYHANDLE_MACRORECORDERMODE        9
+#define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
+#define PROPERTYHANDLE_SIDEBARICONSIZE          10
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 
@@ -75,6 +77,8 @@ private:
     bool        m_bIsPluginsEnabledRO;
     sal_Int16   m_nSymbolsSize;
     bool        m_bIsSymbolsSizeRO;
+    sal_Int16   m_nSidebarIconSize;
+    bool        m_bIsSidebarIconSizeRO;
     bool        m_bIsSymbolsStyleRO;
     sal_Int16   m_nToolboxStyle;
     bool        m_bIsToolboxStyleRO;
@@ -146,7 +150,12 @@ public:
         inline sal_Int16 GetSymbolsSize()
         { return m_nSymbolsSize; }
 
+        inline sal_Int16 GetSidebarIconSize()
+        { return m_nSidebarIconSize; }
+
         void SetSymbolsSize( sal_Int16 nSet );
+
+        void SetSidebarIconSize( sal_Int16 nSet );
 
         static OUString GetIconTheme();
 
@@ -225,6 +234,8 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsPluginsEnabledRO( false )
     , m_nSymbolsSize( 0 )
     , m_bIsSymbolsSizeRO( false )
+    , m_nSidebarIconSize( 0 )
+    , m_bIsSidebarIconSizeRO( false )
     , m_bIsSymbolsStyleRO( false )
     , m_nToolboxStyle( 1 )
     , m_bIsToolboxStyleRO( false )
@@ -272,6 +283,16 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     OSL_FAIL("Wrong type of \"Misc\\SymbolSet\"!" );
                 }
                 m_bIsSymbolsSizeRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_SIDEBARICONSIZE :
+            {
+                if( !(seqValues[nProperty] >>= m_nSidebarIconSize) )
+                {
+                    OSL_FAIL("Wrong type of \"Misc\\SidebarIconSize\"!" );
+                }
+                m_bIsSidebarIconSizeRO = seqRO[nProperty];
                 break;
             }
 
@@ -404,6 +425,13 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             }
                                                         }
                                                     break;
+            case PROPERTYHANDLE_SIDEBARICONSIZE     :   {
+                                                            if( !(seqValues[nProperty] >>= m_nSidebarIconSize) )
+                                                            {
+                                                                OSL_FAIL("Wrong type of \"Misc\\SidebarIconSize\"!" );
+                                                            }
+                                                        }
+                                                    break;
             case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
                                                             if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
                                                             {
@@ -486,6 +514,13 @@ void SvtMiscOptions_Impl::SetSymbolsSize( sal_Int16 nSet )
     CallListeners();
 }
 
+void SvtMiscOptions_Impl::SetSidebarIconSize( sal_Int16 nSet )
+{
+    m_nSidebarIconSize = nSet;
+    SetModified();
+    CallListeners();
+}
+
 OUString SvtMiscOptions_Impl::GetIconTheme()
 {
     return Application::GetSettings().GetStyleSettings().DetermineIconTheme();
@@ -550,6 +585,13 @@ void SvtMiscOptions_Impl::ImplCommit()
             {
                 if ( !m_bIsSymbolsSizeRO )
                    seqValues[nProperty] <<= m_nSymbolsSize;
+                break;
+            }
+
+            case PROPERTYHANDLE_SIDEBARICONSIZE :
+            {
+                if ( !m_bIsSidebarIconSizeRO )
+                   seqValues[nProperty] <<= m_nSidebarIconSize;
                 break;
             }
 
@@ -634,7 +676,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         OUString(PROPERTYNAME_SHOWLINKWARNINGDIALOG),
         OUString(PROPERTYNAME_DISABLEUICUSTOMIZATION),
         OUString(PROPERTYNAME_EXPERIMENTALMODE),
-        OUString(PROPERTYNAME_MACRORECORDERMODE)
+        OUString(PROPERTYNAME_MACRORECORDERMODE),
+        OUString(PROPERTYNAME_SIDEBARICONSIZE)
     };
 
     // Initialize return sequence with these list ...
@@ -717,6 +760,16 @@ sal_Int16 SvtMiscOptions::GetSymbolsSize() const
 void SvtMiscOptions::SetSymbolsSize( sal_Int16 nSet )
 {
     m_pDataContainer->SetSymbolsSize( nSet );
+}
+
+sal_Int16 SvtMiscOptions::GetSidebarIconSize() const
+{
+    return m_pDataContainer->GetSidebarIconSize();
+}
+
+void SvtMiscOptions::SetSidebarIconSize( sal_Int16 nSet )
+{
+    m_pDataContainer->SetSidebarIconSize( nSet );
 }
 
 sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const

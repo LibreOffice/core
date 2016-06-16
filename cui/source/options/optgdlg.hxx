@@ -81,6 +81,7 @@ class OfaViewTabPage : public SfxTabPage
 private:
     VclPtr<MetricField>    m_pWindowSizeMF;
     VclPtr<ListBox>        m_pIconSizeLB;
+    VclPtr<ListBox>        m_pSidebarIconSizeLB;
     VclPtr<ListBox>        m_pIconStyleLB;
 
     VclPtr<CheckBox>       m_pFontAntiAliasing;
@@ -103,6 +104,7 @@ private:
     VclPtr<ListBox>        m_pMouseMiddleLB;
 
     sal_Int32      nSizeLB_InitialSelection;
+    sal_Int32      nSidebarSizeLB_InitialSelection;
     sal_Int32      nStyleLB_InitialSelection;
 
     SvtTabAppearanceCfg*    pAppearanceCfg;

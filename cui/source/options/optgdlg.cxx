@@ -612,6 +612,7 @@ void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
 OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", &rSet)
     , nSizeLB_InitialSelection(0)
+    , nSidebarSizeLB_InitialSelection(0)
     , nStyleLB_InitialSelection(0)
     , pAppearanceCfg(new SvtTabAppearanceCfg)
     , pCanvasSettings(new CanvasSettings)
@@ -620,6 +621,7 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 {
     get(m_pWindowSizeMF, "windowsize");
     get(m_pIconSizeLB, "iconsize");
+    get(m_pSidebarIconSizeLB, "sidebariconsize");
     get(m_pIconStyleLB, "iconstyle");
 
     get(m_pFontAntiAliasing, "aafont");
@@ -701,6 +703,7 @@ void OfaViewTabPage::dispose()
     pAppearanceCfg = nullptr;
     m_pWindowSizeMF.clear();
     m_pIconSizeLB.clear();
+    m_pSidebarIconSizeLB.clear();
     m_pIconStyleLB.clear();
     m_pFontAntiAliasing.clear();
     m_pAAPointLimitLabel.clear();
@@ -757,6 +760,22 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
                 OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_pIconSizeLB should not be possible!" );
         }
         aMiscOptions.SetSymbolsSize( eSet );
+    }
+
+    const sal_Int32 nSidebarSizeLB_NewSelection = m_pSidebarIconSizeLB->GetSelectEntryPos();
+    if( nSidebarSizeLB_InitialSelection != nSidebarSizeLB_NewSelection )
+    {
+        // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
+        sal_Int16 eSet = TOOLBOX_BUTTONSIZE_DONTCARE;
+        switch( nSidebarSizeLB_NewSelection )
+        {
+            case 0: eSet = TOOLBOX_BUTTONSIZE_DONTCARE;  break;
+            case 1: eSet = TOOLBOX_BUTTONSIZE_SMALL; break;
+            case 2: eSet = TOOLBOX_BUTTONSIZE_LARGE; break;
+            default:
+                OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_pSidebarIconSizeLB should not be possible!" );
+        }
+        aMiscOptions.SetSidebarIconSize( eSet );
     }
 
     const sal_Int32 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectEntryPos();
@@ -904,6 +923,10 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nSizeLB_InitialSelection = ( aMiscOptions.AreCurrentSymbolsLarge() )? 2 : 1;
     m_pIconSizeLB->SelectEntryPos( nSizeLB_InitialSelection );
     m_pIconSizeLB->SaveValue();
+    if( aMiscOptions.GetSidebarIconSize() != TOOLBOX_BUTTONSIZE_DONTCARE )
+        nSidebarSizeLB_InitialSelection = aMiscOptions.GetSidebarIconSize();
+    m_pSidebarIconSizeLB->SelectEntryPos( nSidebarSizeLB_InitialSelection );
+    m_pSidebarIconSizeLB->SaveValue();
 
     if (aMiscOptions.IconThemeWasSetAutomatically()) {
         nStyleLB_InitialSelection = 0;
