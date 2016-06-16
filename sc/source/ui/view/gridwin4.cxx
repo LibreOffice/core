@@ -826,6 +826,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                         aOrigin.getY() - aOrigin.getY() / twipFactor);
         aNew.SetOrigin(aOrigin);
         pContentDev->SetMapMode(aNew);
+        comphelper::LibreOfficeKit::setLocalRendering();
     }
 
     DrawRedraw( aOutputData, eMode, SC_LAYER_FRONT );
