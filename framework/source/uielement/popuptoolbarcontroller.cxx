@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -356,16 +357,15 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException ) override;
 
 private:
-    bool m_bSaveAsModeAllowed;
-    bool m_bSaveAsModeActive;
+    bool m_bReadOnly;
     bool m_bModified;
+    css::uno::Reference< css::frame::XStorable > m_xStorable;
     css::uno::Reference< css::util::XModifiable > m_xModifiable;
 };
 
 SaveToolbarController::SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : ImplInheritanceHelper( rxContext, ".uno:SaveAsMenu" )
-    , m_bSaveAsModeAllowed( true )
-    , m_bSaveAsModeActive( false )
+    , m_bReadOnly( false )
     , m_bModified( false )
 {
 }
@@ -377,22 +377,22 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
 
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    if ( getToolboxId( nId, &pToolBox ) && pToolBox->GetItemCommand( nId ) != m_aCommandURL )
-    {
-        m_bSaveAsModeAllowed = false;
-        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~ ToolBoxItemBits::DROPDOWN );
-    }
+    if ( !getToolboxId( nId, &pToolBox ) )
+        return;
 
     css::uno::Reference< css::frame::XController > xController( m_xFrame->getController(), css::uno::UNO_QUERY );
     if ( xController.is() )
         m_xModifiable.set( xController->getModel(), css::uno::UNO_QUERY );
 
-    if ( !m_xModifiable.is() )
-    {
+    if ( m_xModifiable.is() && pToolBox->GetItemCommand( nId ) == m_aCommandURL )
+        // Will also enable the save as only mode.
+        m_xStorable.set( m_xModifiable, css::uno::UNO_QUERY );
+    else if ( !m_xModifiable.is() )
         // Can be in table/query design.
-        m_bSaveAsModeAllowed = false;
         m_xModifiable.set( xController, css::uno::UNO_QUERY );
-    }
+    else
+        // Simple save button, without the dropdown.
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~ ToolBoxItemBits::DROPDOWN );
 }
 
 void SaveToolbarController::update()
@@ -436,7 +436,7 @@ void SaveToolbarController::updateImage()
     bool bLargeIcons = pToolBox->GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE;
     Image aImage;
 
-    if ( m_bSaveAsModeActive )
+    if ( m_bReadOnly )
     {
         aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( ".uno:SaveAs", bLargeIcons, m_xFrame );
     }
@@ -461,17 +461,19 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
-    if ( !m_bSaveAsModeAllowed )
-        pToolBox->EnableItem( nId, rEvent.IsEnabled );
-    else if ( m_bSaveAsModeActive == bool( rEvent.IsEnabled ) )
+    bool bLastReadOnly = m_bReadOnly;
+    m_bReadOnly = m_xStorable.is() && m_xStorable->isReadonly();
+    if ( bLastReadOnly != m_bReadOnly )
     {
-        m_bSaveAsModeActive = !m_bSaveAsModeActive;
         pToolBox->SetQuickHelpText( nId,
-            vcl::CommandInfoProvider::Instance().GetTooltipForCommand( rEvent.IsEnabled ? m_aCommandURL : OUString( ".uno:SaveAs" ), m_xFrame ) );
-        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~( rEvent.IsEnabled ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN ) );
-        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) |  ( rEvent.IsEnabled ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
+            vcl::CommandInfoProvider::Instance().GetTooltipForCommand( m_bReadOnly ? OUString( ".uno:SaveAs" ) : m_aCommandURL, m_xFrame ) );
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~( m_bReadOnly ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) |  ( m_bReadOnly ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN ) );
         updateImage();
     }
+
+    if ( !m_bReadOnly )
+        pToolBox->EnableItem( nId, rEvent.IsEnabled );
 }
 
 void SaveToolbarController::modified( const css::lang::EventObject& /*rEvent*/ )
@@ -487,7 +489,10 @@ void SaveToolbarController::disposing( const css::lang::EventObject& rEvent )
     throw ( css::uno::RuntimeException, std::exception )
 {
     if ( rEvent.Source == m_xModifiable )
+    {
         m_xModifiable.clear();
+        m_xStorable.clear();
+    }
     else
         PopupMenuToolbarController::disposing( rEvent );
 }
@@ -501,6 +506,7 @@ void SaveToolbarController::dispose()
         m_xModifiable->removeModifyListener( this );
         m_xModifiable.clear();
     }
+    m_xStorable.clear();
 }
 
 OUString SaveToolbarController::getImplementationName()
