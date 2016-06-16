@@ -64,11 +64,17 @@ void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
         if ( aQueryDlg->Execute() != RET_YES )
             return;
 
-        for (ThumbnailViewItem* pItem : mFilteredItemList)
+        //copy to avoid changing filtered item list during deletion
+        ThumbnailValueItemList mFilteredItemListCopy = mFilteredItemList;
+
+        for (ThumbnailViewItem* pItem : mFilteredItemListCopy)
         {
             if (pItem->isSelected())
             {
                 maDeleteTemplateHdl.Call(pItem);
+                RemoveItem(pItem->mnId);
+
+                CalculateItemPositions();
             }
         }
     }
