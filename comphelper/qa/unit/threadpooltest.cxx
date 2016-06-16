@@ -31,7 +31,7 @@ void ThreadPoolTest::testPreferredConcurrency() {
     // Check default.
     auto nThreads = comphelper::ThreadPool::getPreferredConcurrency();
     sal_Int32 nExpected = 4; // UTs are capped to 4.
-    CPPUNIT_ASSERT_EQUAL(nExpected, nThreads);
+    CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
 
 #ifndef _WIN32_WINNT
     // The result should be cached, so this should change anything.
