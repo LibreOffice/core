@@ -180,13 +180,6 @@ void WrapPropertyPanel::Initialize()
 
     aCustomEntry = mpCustomEntry->GetText();
 
-    mpRBNoWrap->SetAccessibleName(mpRBNoWrap->GetQuickHelpText());
-    mpRBWrapLeft->SetAccessibleName(mpRBWrapLeft->GetQuickHelpText());
-    mpRBWrapRight->SetAccessibleName(mpRBWrapRight->GetQuickHelpText());
-    mpRBWrapParallel->SetAccessibleName(mpRBWrapParallel->GetQuickHelpText());
-    mpRBWrapThrough->SetAccessibleName(mpRBWrapThrough->GetQuickHelpText());
-    mpRBIdealWrap->SetAccessibleName(mpRBIdealWrap->GetQuickHelpText());
-
     mpBindings->Update( FN_FRAME_NOWRAP );
     mpBindings->Update( FN_FRAME_WRAP );
     mpBindings->Update( FN_FRAME_WRAP_RIGHT );
