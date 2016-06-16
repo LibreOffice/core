@@ -351,6 +351,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     sal_Int16 nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
     sal_Int16 nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
     boost::logic::tribool obRelFlipV(boost::logic::indeterminate);
+    boost::logic::tribool obFlipH(boost::logic::indeterminate);
+    boost::logic::tribool obFlipV(boost::logic::indeterminate);
 
     bool bCustom(false);
     int const nType = initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
@@ -783,6 +785,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
         else if (rProperty.first == "fRelFlipV")
             obRelFlipV = rProperty.second.toInt32() == 1;
+        else if (rProperty.first == "fFlipH")
+            obFlipH = rProperty.second.toInt32() == 1;
+        else if (rProperty.first == "fFlipV")
+            obFlipV = rProperty.second.toInt32() == 1;
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << rProperty.first << "':'" << rProperty.second << "'");
     }
@@ -907,6 +913,17 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             xShape->setSize(aSize);
         else
             xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
+
+        if (obFlipH == true || obFlipV == true)
+        {
+            // This has to be set after position and size is set, otherwise flip will affect the position.
+            comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+            if (obFlipH == true)
+                aCustomShapeGeometry["MirroredX"] <<= true;
+            if (obFlipV == true)
+                aCustomShapeGeometry["MirroredY"] <<= true;
+            xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+        }
 
         if (rShape.nHoriOrientRelation != 0)
             xPropertySet->setPropertyValue("HoriOrientRelation", uno::makeAny(rShape.nHoriOrientRelation));

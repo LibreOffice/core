@@ -2641,6 +2641,26 @@ DECLARE_RTFIMPORT_TEST(testTdf91684, "tdf91684.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1337), getShape(1)->getSize().Height);
 }
 
+DECLARE_RTFIMPORT_TEST(testFlip, "flip.rtf")
+{
+    comphelper::SequenceAsHashMap aMap = getProperty< uno::Sequence<beans::PropertyValue> >(getShapeByName("h-and-v"), "CustomShapeGeometry");
+    // This resulted in a uno::RuntimeException, as MirroredX wasn't set at all, so could not extract void to boolean.
+    CPPUNIT_ASSERT_EQUAL(true, aMap["MirroredX"].get<bool>());
+    CPPUNIT_ASSERT_EQUAL(true, aMap["MirroredY"].get<bool>());
+
+    aMap = getProperty< uno::Sequence<beans::PropertyValue> >(getShapeByName("h-only"), "CustomShapeGeometry");
+    CPPUNIT_ASSERT_EQUAL(true, aMap["MirroredX"].get<bool>());
+    CPPUNIT_ASSERT(!aMap["MirroredY"].hasValue());
+
+    aMap = getProperty< uno::Sequence<beans::PropertyValue> >(getShapeByName("v-only"), "CustomShapeGeometry");
+    CPPUNIT_ASSERT(!aMap["MirroredX"].hasValue());
+    CPPUNIT_ASSERT_EQUAL(true, aMap["MirroredY"].get<bool>());
+
+    aMap = getProperty< uno::Sequence<beans::PropertyValue> >(getShapeByName("neither-h-nor-v"), "CustomShapeGeometry");
+    CPPUNIT_ASSERT(!aMap["MirroredX"].hasValue());
+    CPPUNIT_ASSERT(!aMap["MirroredY"].hasValue());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
