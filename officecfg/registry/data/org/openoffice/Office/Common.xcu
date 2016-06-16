@@ -323,28 +323,6 @@
           <value>private:image/3216</value>
         </prop>
       </node>
-      <node oor:name="m6" oor:op="replace">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>private:separator</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-      </node>
-      <node oor:name="m7" oor:op="replace" install:module="writer">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>service:com.sun.star.wizards.web.CallWizard?start</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="en-US">~Web Page...</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value>private:image/3216</value>
-        </prop>
-      </node>
       <node oor:name="m10" oor:op="replace">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:separator</value>

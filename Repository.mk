@@ -940,7 +940,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		Pyuno/fax \
 		Pyuno/letter \
 		Pyuno/agenda \
-		Pyuno/web \
 		Pyuno/mailmerge \
 	)) \
 	sfx2_classification \
