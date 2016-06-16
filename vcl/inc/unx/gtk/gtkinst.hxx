@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
 
+#include <sal/config.h>
+
+#include <stack>
+
 #include <unx/salinst.h>
 #include <unx/gensys.h>
 #include <headless/svpinst.hxx>
@@ -42,7 +46,7 @@ class GtkPrintWrapper;
 class GenPspGraphics;
 class GtkYieldMutex : public SalYieldMutex
 {
-    thread_local static sal_uIntPtr yieldCount;
+    thread_local static std::stack<sal_uIntPtr> yieldCounts;
 
 public:
          GtkYieldMutex() {}
