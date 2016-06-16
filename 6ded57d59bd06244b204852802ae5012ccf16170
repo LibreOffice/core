@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_94f32373",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-16T08:17:39Z",
+      "side": 1,
+      "message": "It\u0027s not that it\u0027d matter so much here (the colour lists are rather small-ish, so no observable slowdown), but it\u0027s better style not to search for the same thing twice. Do it just once and remember the position",
+      "revId": "6ded57d59bd06244b204852802ae5012ccf16170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
