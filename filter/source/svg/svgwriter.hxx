@@ -90,20 +90,20 @@ class SVGAttributeWriter
 {
 private:
 
-    vcl::Font                  maCurFont;
-    Color                      maCurLineColor;
-    Color                      maCurFillColor;
-    SVGExport&                 mrExport;
-    SVGFontExport&             mrFontExport;
-    SvXMLElementExport*        mpElemFont;
-    SvXMLElementExport*        mpElemPaint;
+    vcl::Font                               maCurFont;
+    Color                                   maCurLineColor;
+    Color                                   maCurFillColor;
+    SVGExport&                              mrExport;
+    SVGFontExport&                          mrFontExport;
+    SvXMLElementExport*                     mpElemFont;
+    SvXMLElementExport*                     mpElemPaint;
+    basegfx::B2DLineJoin                    maLineJoin;
+    com::sun::star::drawing::LineCap        maLineCap;
 
-    basegfx::B2DLineJoin maLineJoin;
-    com::sun::star::drawing::LineCap maLineCap;
 
                             SVGAttributeWriter();
 
-    static double            ImplRound( double fVal, sal_Int32 nDecs = 3 );
+    static double           ImplRound( double fVal, sal_Int32 nDecs = 3 );
 
 public:
 
@@ -125,17 +125,15 @@ public:
 
 struct SVGShapeDescriptor
 {
-    tools::PolyPolygon                 maShapePolyPoly;
-    Color                       maShapeFillColor;
-    Color                       maShapeLineColor;
-    sal_Int32                   mnStrokeWidth;
-    SvtGraphicStroke::DashArray maDashArray;
-    ::std::unique_ptr< Gradient > mapShapeGradient;
-    OUString             maId;
-
+    tools::PolyPolygon                  maShapePolyPoly;
+    Color                               maShapeFillColor;
+    Color                               maShapeLineColor;
+    sal_Int32                           mnStrokeWidth;
+    SvtGraphicStroke::DashArray         maDashArray;
+    ::std::unique_ptr< Gradient >       mapShapeGradient;
+    OUString                            maId;
     basegfx::B2DLineJoin                maLineJoin;
     com::sun::star::drawing::LineCap    maLineCap;
-
 
 
     SVGShapeDescriptor() :
@@ -179,9 +177,9 @@ class SVGTextWriter
     SVGExport&                                  mrExport;
     SVGAttributeWriter*                         mpContext;
     VclPtr<VirtualDevice>                       mpVDev;
-    bool                                    mbIsTextShapeStarted;
+    bool                                        mbIsTextShapeStarted;
     Reference<XText>                            mrTextShape;
-    OUString                             msShapeId;
+    OUString                                    msShapeId;
     Reference<XEnumeration>                     mrParagraphEnumeration;
     Reference<XTextContent>                     mrCurrentTextParagraph;
     Reference<XEnumeration>                     mrTextPortionEnumeration;
@@ -282,8 +280,6 @@ class SVGTextWriter
 
     void implRegisterInterface( const Reference< XInterface >& rxIf );
     const OUString & implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
-
-
 };
 
 
@@ -306,8 +302,8 @@ private:
     VclPtr<VirtualDevice>                       mpVDev;
     MapMode                                     maTargetMapMode;
     sal_uInt32                                  mnInnerMtfCount;
-    bool                                    mbClipAttrChanged;
-    bool                                    mbIsPlaceholderShape;
+    bool                                        mbClipAttrChanged;
+    bool                                        mbIsPlaceholderShape;
 
 
     SVGAttributeWriter*     ImplAcquireContext()
@@ -332,7 +328,7 @@ private:
     Size&                   ImplMap( const Size& rSz, Size& rDstSz ) const;
     Rectangle&              ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const;
     Polygon&                ImplMap( const Polygon& rPoly, Polygon& rDstPoly ) const;
-    tools::PolyPolygon&            ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
+    tools::PolyPolygon&     ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
 
     void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL,
                                            bool bApplyMapping = true );
@@ -370,11 +366,10 @@ private:
 
 public:
 
-    static OUString  GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine );
-    static BitmapChecksum GetChecksum( const MetaAction* pAction );
+    static OUString         GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine );
+    static BitmapChecksum   GetChecksum( const MetaAction* pAction );
 
 public:
-
                             SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport );
     virtual                 ~SVGActionWriter();
 
@@ -401,7 +396,8 @@ public:
 
     // XSVGWriter
     virtual void SAL_CALL write( const Reference<XDocumentHandler>& rxDocHandler,
-        const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
+                                 const Sequence<sal_Int8>& rMtfSeq )
+                               throw( RuntimeException, std::exception ) override;
 };
 
 #endif
