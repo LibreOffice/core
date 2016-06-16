@@ -19,6 +19,7 @@
 
 #include "XMLRedlineExport.hxx"
 #include <tools/debug.hxx>
+#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -335,19 +336,21 @@ void XMLRedlineExport::ExportChangedRegion(
         aAny = rPropSet->getPropertyValue(sRedlineType);
         OUString sType;
         aAny >>= sType;
-        XMLTokenEnum eChangeType = XML_PARAGRAPH;
-        sal_uInt16 nParagraphIdx = 2, nCharStart, nCharEnd;
-        rPropSet->getPropertyValue("Start") >>= nCharStart;
-        rPropSet->getPropertyValue("End") >>= nCharEnd;
-        aAny = rPropSet->getPropertyValue(sRedlineElementType);
+
+        sal_Int16 nParagraphIdx = 2, nCharStart, nCharEnd;
+        rPropSet->getPropertyValue("RedlineUndoStart") >>= nCharStart;
+        rPropSet->getPropertyValue("RedlineUndoEnd") >>= nCharEnd;
+
+        XMLTokenEnum eElementType = XML_PARAGRAPH;
         OUString sElementType;
+        aAny = rPropSet->getPropertyValue(sRedlineElementType);
         aAny >>= sElementType;
-        if( sElementType == "text" )
-            eChangeType = XML_TEXT;
-        OUString sParagraphIdx = "2", sCharStart, sCharEnd;
-        rPropSet->getPropertyValue("Start") >>= sCharStart;
-        rPropSet->getPropertyValue("End") >>= sCharEnd;
-        if(eChangeType == XML_PARAGRAPH)
+
+        if( sType == sFormat )
+            eElementType = XML_FORMAT_CHANGE;
+        else if( sElementType == "text" )
+            eElementType = XML_TEXT;
+        if(eElementType == XML_PARAGRAPH)
         {
             rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx));
             rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_PARAGRAPH);
@@ -355,9 +358,9 @@ void XMLRedlineExport::ExportChangedRegion(
         else
         {
             rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharStart));
-            if( sType == sInsert )
+            if( sType == sInsert || sType == sFormat )
                 rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharEnd));
-            rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, eChangeType);
+            rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, eElementType);
         }
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
                                    ConvertTypeName(sType), true, true);

@@ -3050,8 +3050,10 @@ void XMLTextParagraphExport::_exportTextGraphic(
     OUString sAutoStyle( sStyle );
     sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
     if( !sAutoStyle.isEmpty() )
+    {
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME,
                                   GetExport().EncodeStyleName( sAutoStyle ) );
+    }
     addTextFrameAttributes( rPropSet, false );
 
     // svg:transform
@@ -3291,8 +3293,10 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
                                       XML_SERVER_MAP, XML_TRUE );
 
         if( !sUStyleName.isEmpty() )
+        {
             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
               XML_STYLE_NAME, GetExport().EncodeStyleName( sUStyleName ) );
+        }
 
         if( !sVStyleName.isEmpty() )
             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
@@ -3456,7 +3460,6 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
 
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                       XML_S, false, false );
-
             nSpaceChars = 0;
         }
 

@@ -311,13 +311,18 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     }
     else if (rPropertyName == UNO_NAME_REDLINE_ELEMENT_TYPE)
     {
-        OUString sElementType = "paragraph";
-        aRet <<= sElementType;
+        SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
+        if ( 2 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
+            aRet <<= OUString("paragraph");
+        else
+            aRet <<= OUString("text");
     }
-    else if (rPropertyName == UNO_NAME_START || rPropertyName == UNO_NAME_END)
+    else if (rPropertyName == UNO_NAME_REDLINE_UNDO_START || rPropertyName == UNO_NAME_REDLINE_UNDO_END)
     {
-           sal_Int32 nStart(COMPLETE_STRING), nEnd(COMPLETE_STRING);
-           if(rPropertyName == UNO_NAME_START)
+        sal_Int32 nStart, nEnd;
+           SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
+           rRedline.CalcStartEnd(pNodeIdx->GetNode().GetIndex(), nStart, nEnd);
+           if(rPropertyName == UNO_NAME_REDLINE_UNDO_START)
                aRet <<= nStart;
            else
                aRet <<= nEnd;
@@ -328,7 +333,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
 uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
     const SwRangeRedline& rRedline, bool bIsStart ) throw()
 {
-    uno::Sequence< beans::PropertyValue > aRet(11);
+    uno::Sequence< beans::PropertyValue > aRet(13);
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
     beans::PropertyValue* pRet = aRet.getArray();
 
@@ -364,6 +369,10 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
             uno::Reference<text::XText> xRet = new SwXRedlineText(rRedline.GetDoc(), *pNodeIdx);
             pRet[nPropIdx].Name = UNO_NAME_REDLINE_TEXT;
             pRet[nPropIdx++].Value <<= xRet;
+            pRet[nPropIdx].Name = UNO_NAME_REDLINE_UNDO_START;
+            pRet[nPropIdx++].Value <<= pNodeIdx->GetNode().GetIndex();
+            pRet[nPropIdx].Name = UNO_NAME_REDLINE_UNDO_END;
+            pRet[nPropIdx++].Value <<= pNodeIdx->GetNode().EndOfSectionIndex();
         }
         else {
             OSL_FAIL("Empty section in redline portion! (end node immediately follows start node)");
