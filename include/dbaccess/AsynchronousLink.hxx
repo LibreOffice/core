@@ -20,8 +20,8 @@
 #ifndef INCLUDED_DBACCESS_ASYNCRONOUSLINK_HXX
 #define INCLUDED_DBACCESS_ASYNCRONOUSLINK_HXX
 
-#include <tools/link.hxx>
 #include <osl/mutex.hxx>
+#include <tools/link.hxx>
 
 struct ImplSVEvent;
 

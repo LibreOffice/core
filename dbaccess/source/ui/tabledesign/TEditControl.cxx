@@ -37,6 +37,7 @@
 #include <vcl/msgbox.hxx>
 #include "TableUndo.hxx"
 #include "TableController.hxx"
+#include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
 #include "SqlNameEdit.hxx"
 #include "TableRowExchange.hxx"

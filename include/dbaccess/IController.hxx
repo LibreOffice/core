@@ -20,11 +20,17 @@
 #ifndef INCLUDED_DBACCESS_ICONTROLLER_HXX
 #define INCLUDED_DBACCESS_ICONTROLLER_HXX
 
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <dbaccess/dbaccessdllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
+    namespace beans {
+        struct PropertyValue;
+    }
     namespace util {
         struct URL;
     }

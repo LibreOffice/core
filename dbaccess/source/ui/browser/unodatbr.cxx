@@ -65,6 +65,7 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XBookmarksSupplier.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
+#include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
