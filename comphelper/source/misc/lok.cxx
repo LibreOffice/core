@@ -17,7 +17,7 @@ namespace LibreOfficeKit
 
 static bool g_bActive(false);
 
-static bool g_bViewCallback(false);
+static bool g_bViewCallback(true);
 
 void setActive(bool bActive)
 {

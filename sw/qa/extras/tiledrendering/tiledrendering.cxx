@@ -26,6 +26,7 @@
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
+#include <sfx2/viewsh.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 
@@ -170,8 +171,8 @@ void SwTiledRenderingTest::testRegisterCallback()
 {
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     // Insert a character at the beginning of the document.
     pWrtShell->Insert("x");
 
@@ -340,14 +341,14 @@ void SwTiledRenderingTest::testSearch()
     comphelper::LibreOfficeKit::setActive();
 
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    size_t nNode = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+    std::size_t nNode = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
 
     // First hit, in the second paragraph, before the shape.
     lcl_search(false);
     CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
-    size_t nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
+    std::size_t nActual = pWrtShell->getShellCursor(false)->Start()->nNode.GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
     /// Make sure we get search result selection for normal find as well, not only find all.
     CPPUNIT_ASSERT(!m_aSearchResultSelection.empty());
@@ -409,7 +410,8 @@ void SwTiledRenderingTest::testSearchTextFrame()
     comphelper::LibreOfficeKit::setActive();
 
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
@@ -425,7 +427,8 @@ void SwTiledRenderingTest::testSearchTextFrame()
 void SwTiledRenderingTest::testSearchTextFrameWrapAround()
 {
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
@@ -443,8 +446,8 @@ void SwTiledRenderingTest::testDocumentSizeChanged()
     comphelper::LibreOfficeKit::setActive();
     // Get the current document size.
     SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
-    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     Size aSize = pXTextDocument->getDocumentSize();
 
     // Delete the second page and see how the size changes.
@@ -462,7 +465,8 @@ void SwTiledRenderingTest::testSearchAll()
     comphelper::LibreOfficeKit::setActive();
 
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
@@ -471,7 +475,7 @@ void SwTiledRenderingTest::testSearchAll()
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was 0; should be 2 results in the body text.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSearchResultSelection.size());
     // Writer documents are always a single part.
     CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
 
@@ -482,7 +486,8 @@ void SwTiledRenderingTest::testSearchAllNotifications()
 {
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
@@ -510,7 +515,8 @@ void SwTiledRenderingTest::testPageDownInvalidation()
         {".uno:HideWhitespace", uno::makeAny(true)},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
-    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
     comphelper::dispatchCommand(".uno:PageDown", uno::Sequence<beans::PropertyValue>());
 
     // This was 2.

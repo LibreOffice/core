@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -34,7 +33,6 @@ static int help()
 {
     fprintf(stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install's-program-directory> <path-to-document> [<options> ... ]\n\n");
     fprintf(stderr, "Options:\n\n");
-    fprintf(stderr, "--user-profile: Path to a custom user profile.\n");
     fprintf(stderr, "--background-color <color>: Set custom background color, e.g. 'yellow'.\n");
     fprintf(stderr, "--hide-page-shadow: Hide page/slide shadow.\n");
     fprintf(stderr, "--hide-whitespace: Hide whitespace between pages in text documents.\n");
@@ -1309,7 +1307,14 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pEnableEditing, -1);
     g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), nullptr);
 
-    static bool bViewCallback = getenv("LOK_VIEW_CALLBACK");
+    // UNO command dialog debugger
+    GtkToolItem* pUnoCmdDebugger = gtk_tool_button_new(nullptr, nullptr);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pUnoCmdDebugger), "dialog-question-symbolic");
+    gtk_tool_item_set_tooltip_text(pUnoCmdDebugger, "UNO Command Debugger");
+    gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pUnoCmdDebugger, -1);
+    g_signal_connect(G_OBJECT(pUnoCmdDebugger), "clicked", G_CALLBACK(unoCommandDebugger), nullptr);
+
+    static bool bViewCallback = !getenv("LOK_MODEL_CALLBACK");
     if (bViewCallback)
     {
         GtkToolItem* pNewViewButton = gtk_tool_button_new( nullptr, nullptr);
@@ -1541,16 +1546,16 @@ static void setupDocView(GtkWidget* pDocView)
 #if GLIB_CHECK_VERSION(2,40,0)
     g_assert_nonnull(pDocView);
 #endif
-    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
-    g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
-    g_signal_connect(pDocView, "command-result", G_CALLBACK(signalCommandResult), NULL);
-    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
-    g_signal_connect(pDocView, "search-result-count", G_CALLBACK(signalSearchResultCount), NULL);
-    g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
-    g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), NULL);
-    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
-    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), NULL);
-    g_signal_connect(pDocView, "formula-changed", G_CALLBACK(formulaChanged), NULL);
+    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), nullptr);
+    g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), nullptr);
+    g_signal_connect(pDocView, "command-result", G_CALLBACK(signalCommandResult), nullptr);
+    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), nullptr);
+    g_signal_connect(pDocView, "search-result-count", G_CALLBACK(signalSearchResultCount), nullptr);
+    g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), nullptr);
+    g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), nullptr);
+    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), nullptr);
+    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), nullptr);
+    g_signal_connect(pDocView, "formula-changed", G_CALLBACK(formulaChanged), nullptr);
     g_signal_connect(pDocView, "password-required", G_CALLBACK(passwordRequired), nullptr);
 }
 

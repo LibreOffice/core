@@ -2239,7 +2239,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (eStage != SECOND_INIT)
         comphelper::LibreOfficeKit::setActive();
 
-    static bool bViewCallback = getenv("LOK_VIEW_CALLBACK");
+    static bool bViewCallback = !getenv("LOK_MODEL_CALLBACK");
     comphelper::LibreOfficeKit::setViewCallback(bViewCallback);
 
     if (eStage != PRE_INIT)

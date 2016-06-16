@@ -28,6 +28,7 @@
 #include <svx/svdotable.hxx>
 
 #include <DrawDocShell.hxx>
+#include <ViewShellBase.hxx>
 #include <ViewShell.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
@@ -258,8 +259,8 @@ xmlDocPtr SdTiledRenderingTest::parseXmlDump()
 void SdTiledRenderingTest::testRegisterCallback()
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
 
     // Start text edit of the empty title shape.
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -443,14 +444,14 @@ void SdTiledRenderingTest::testSearch()
 {
     comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     xShape->setString("Aaa bbb.");
 
     lcl_search("bbb");
 
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pView = pViewShell->GetView();
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     // Did we indeed manage to select the second word?
@@ -478,7 +479,8 @@ void SdTiledRenderingTest::testSearchAll()
 {
     comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
 
     lcl_search("match", /*bFindAll=*/true);
 
@@ -498,7 +500,8 @@ void SdTiledRenderingTest::testSearchAllSelections()
 {
     comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
 
     lcl_search("third", /*bFindAll=*/true);
     // Make sure this is found on the 3rd slide.
@@ -512,7 +515,8 @@ void SdTiledRenderingTest::testSearchAllNotifications()
 {
     comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
 
     lcl_search("third", /*bFindAll=*/true);
     // Make sure that we get no notifications about selection changes during search.
@@ -526,7 +530,8 @@ void SdTiledRenderingTest::testSearchAllFollowedBySearch()
 {
     comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
 
     lcl_search("third", /*bFindAll=*/true);
     lcl_search("match" /*,bFindAll=false*/);
@@ -559,7 +564,8 @@ void SdTiledRenderingTest::testInsertDeletePage()
 {
     comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->GetViewShellBase().registerLibreOfficeKitViewCallback(&SdTiledRenderingTest::callback, this);
 
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
