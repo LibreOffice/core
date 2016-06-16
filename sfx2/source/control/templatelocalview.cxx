@@ -239,6 +239,7 @@ IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
             break;
 
         maDeleteTemplateHdl.Call(maSelectedItem);
+        reload();
     }
         break;
     case MNI_DEFAULT_TEMPLATE:
