@@ -1277,8 +1277,9 @@ static void callbackCompressionTest(const int type, const char* payload, void* d
 
 void DesktopLOKTest::testNotificationCompression()
 {
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     std::vector<std::tuple<int, std::string>> notifs;
-    std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(callbackCompressionTest, &notifs));
+    std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
 
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // 0
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Superseeded.
