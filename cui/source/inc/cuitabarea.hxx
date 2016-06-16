@@ -511,6 +511,7 @@ private:
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
 
     long CheckChanges_Impl();
+    sal_Int32 SearchHatchList(OUString aHatchName);
 
 public:
     SvxHatchTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );

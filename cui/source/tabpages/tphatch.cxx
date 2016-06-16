@@ -105,7 +105,7 @@ SvxHatchTabPage::SvxHatchTabPage
 
     // determine PoolUnit
     SfxItemPool* pPool = m_rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool?" );
+    assert( pPool && "Wo ist der Pool?" );
     m_ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // setting the slider range
@@ -212,7 +212,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
             INetURLObject   aURL( m_pHatchingList->GetPath() );
 
             aURL.Append( m_pHatchingList->GetName() );
-            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+            SAL_WARN_IF( aURL.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
 
             if ( aURL.getBase().getLength() > 18 )
             {
@@ -280,7 +280,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
                                                       SVX_RESSTR( RID_SVXSTR_HATCH ),
                                                       CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
                                                       &aWarningBoxImage );
-        DBG_ASSERT(aMessDlg, "Dialog creation failed!");
+        assert(aMessDlg && "Dialog creation failed!");
         aMessDlg->SetButtonText( SvxMessDialogButton::N1,
                                 OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
         aMessDlg->SetButtonText( SvxMessDialogButton::N2,
@@ -313,6 +313,22 @@ long SvxHatchTabPage::CheckChanges_Impl()
     return 0L;
 }
 
+sal_Int32 SvxHatchTabPage::SearchHatchList(OUString aHatchName)
+{
+    long nCount = m_pHatchingList->Count();
+    bool bValidHatchName = true;
+    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+
+    for(long i = 0;i < nCount && bValidHatchName;i++)
+    {
+        if(aHatchName == m_pHatchingList->GetHatch( i )->GetName())
+        {
+            nPos = i;
+            bValidHatchName = false;
+        }
+    }
+    return nPos;
+}
 
 bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 {
@@ -338,7 +354,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
                                  GetCoreValue( *m_pMtrDistance, m_ePoolUnit ),
                                  static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
             }
-            DBG_ASSERT( pXHatch, "XHatch konnte nicht erzeugt werden" );
+            assert( pXHatch && "XHatch konnte nicht erzeugt werden" );
             rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
             rSet->Put( XFillHatchItem( aString, *pXHatch ) );
 
@@ -501,24 +517,18 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 
     long nCount = m_pHatchingList->Count();
     long j = 1;
-    bool bDifferent = false;
+    bool bValidColorName = false;
 
-    while( !bDifferent )
+    while( !bValidColorName )
     {
-        aName  = aNewName;
-        aName += " ";
-        aName += OUString::number( j++ );
-        bDifferent = true;
-
-        for( long i = 0; i < nCount && bDifferent; i++ )
-            if( aName == m_pHatchingList->GetHatch( i )->GetName() )
-                bDifferent = false;
+        aName  = aNewName + " " + OUString::number( j++ );
+        bValidColorName = (SearchHatchList(aName) == LISTBOX_ENTRY_NOTFOUND);
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialog creation failed!");
+    assert(pFact && "Dialog creation failed!");
     std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
-    DBG_ASSERT(pDlg, "Dialog creation failed!");
+    assert(pDlg && "Dialog creation failed!");
     ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError   = 1;
 
@@ -526,13 +536,9 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
     {
         pDlg->GetName( aName );
 
-        bDifferent = true;
-
-        for( long i = 0; i < nCount && bDifferent; i++ )
-            if( aName == m_pHatchingList->GetHatch( i )->GetName() )
-                bDifferent = false;
-
-        if( bDifferent ) {
+        bValidColorName = (SearchHatchList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        if( bValidColorName )
+        {
             nError = 0;
             break;
         }
@@ -596,28 +602,20 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
     {
         OUString aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
         OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
-        OUString aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialog creation failed!");
+        assert(pFact && "Dialog creation failed!");
         std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
-        DBG_ASSERT(pDlg, "Dialog creation failed!");
+        assert(pDlg && "Dialog creation failed!");
 
-        long nCount = m_pHatchingList->Count();
         bool bLoop = true;
         while( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bool bDifferent = true;
+            sal_Int32 nHatchPos = SearchHatchList( aName );
+            bool bValidColorName = (nHatchPos == nPos) || (nHatchPos == LISTBOX_ENTRY_NOTFOUND);
 
-            for( long i = 0; i < nCount && bDifferent; i++ )
-            {
-                if( aName == m_pHatchingList->GetHatch( i )->GetName() &&
-                    aName != aOldName )
-                    bDifferent = false;
-            }
-
-            if( bDifferent )
+            if( bValidColorName )
             {
                 bLoop = false;
                 XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
@@ -796,7 +794,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickSaveHdl_Impl, Button*, void)
     while (nIndex >= 0);
 
     INetURLObject aFile(aLastDir);
-    DBG_ASSERT( aFile.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+    SAL_WARN_IF( aFile.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
 
     if( !m_pHatchingList->GetName().isEmpty() )
     {
