@@ -297,18 +297,22 @@ Sequence< OUString > SvtToolPanelOptions_Impl::GetPropertyNames()
     return Sequence< OUString >( pProperties, SAL_N_ELEMENTS( pProperties ) );
 }
 
-std::weak_ptr<SvtToolPanelOptions_Impl> m_pOptions;
+namespace {
+
+std::weak_ptr<SvtToolPanelOptions_Impl> theOptions;
+
+}
 
 SvtToolPanelOptions::SvtToolPanelOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
 
-    m_pImpl = m_pOptions.lock();
+    m_pImpl = theOptions.lock();
     if( !m_pImpl )
     {
        m_pImpl = std::make_shared<SvtToolPanelOptions_Impl>();
-       m_pOptions = m_pImpl;
+       theOptions = m_pImpl;
     }
 }
 
