@@ -180,6 +180,7 @@
                         <property name="id_column">1</property>
                         <items>
                           <item translatable="yes">Single</item>
+                          <item translatable="yes">1.15 Lines</item>
                           <item translatable="yes">1.5 Lines</item>
                           <item translatable="yes">Double</item>
                           <item translatable="yes">Proportional</item>
