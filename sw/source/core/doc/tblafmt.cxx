@@ -923,6 +923,29 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
     m_aShadow = static_cast<const SvxShadowItem&>(rSet.Get(RES_SHADOW));
 }
 
+inline bool lcl_CmpBoxFormats(const SwBoxAutoFormat* pLeftFormat1, const SwBoxAutoFormat* pRightFormat)
+{
+    return pLeftFormat1->GetBackground().GetColor() == pRightFormat->GetBackground().GetColor();
+}
+
+bool SwTableAutoFormat::FirstRowEndColumnIsRow()
+{
+    return lcl_CmpBoxFormats(aBoxAutoFormat[3], aBoxAutoFormat[2]);
+}
+
+bool SwTableAutoFormat::FirstRowStartColumnIsRow()
+{
+    return lcl_CmpBoxFormats(aBoxAutoFormat[0], aBoxAutoFormat[1]);
+}
+bool SwTableAutoFormat::LastRowEndColumnIsRow()
+{
+    return lcl_CmpBoxFormats(aBoxAutoFormat[15], aBoxAutoFormat[14]);
+}
+bool SwTableAutoFormat::LastRowStartColumnIsRow()
+{
+    return lcl_CmpBoxFormats(aBoxAutoFormat[12], aBoxAutoFormat[13]);
+}
+
 bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
 {
     sal_uInt16  nVal = 0;

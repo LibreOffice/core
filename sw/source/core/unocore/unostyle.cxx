@@ -4453,6 +4453,60 @@ void SAL_CALL SwXTextTableStyle::setName(const OUString& rName) throw(uno::Runti
     m_sTableAutoFormatName = rName;
 }
 
+//XPropertySet
+css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SwXTextTableStyle::getPropertySetInfo() throw(css::uno::RuntimeException, std::exception)
+{
+    static uno::Reference<beans::XPropertySetInfo> xRef(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_STYLE)->getPropertySetInfo());
+    return xRef;
+}
+
+void SAL_CALL SwXTextTableStyle::setPropertyValue(const OUString& /*rPropertyName*/, const css::uno::Any& /*aValue*/) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "not implemented");
+}
+
+css::uno::Any SAL_CALL SwXTextTableStyle::getPropertyValue(const OUString& rPropertyName) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    bool bIsRow = false;
+    SwTableAutoFormat* pFormat = GetTableAutoFormat();
+    if (pFormat)
+    {
+        if (rPropertyName == UNO_NAME_TABLE_FIRST_ROW_END_COLUMN)
+            bIsRow = pFormat->FirstRowEndColumnIsRow();
+        else if (rPropertyName == UNO_NAME_TABLE_FIRST_ROW_START_COLUMN)
+            bIsRow = pFormat->FirstRowStartColumnIsRow();
+        else if (rPropertyName == UNO_NAME_TABLE_LAST_ROW_END_COLUMN)
+            bIsRow = pFormat->LastRowEndColumnIsRow();
+        else if (rPropertyName == UNO_NAME_TABLE_LAST_ROW_START_COLUMN)
+            bIsRow = pFormat->LastRowStartColumnIsRow();
+        else
+            throw css::beans::UnknownPropertyException();
+    }
+
+    return uno::makeAny(bIsRow ? OUString("row") : OUString("column"));
+}
+
+void SAL_CALL SwXTextTableStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "not implemented");
+}
+
+void SAL_CALL SwXTextTableStyle::removePropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*aListener*/ ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "not implemented");
+}
+
+void SAL_CALL SwXTextTableStyle::addVetoableChangeListener( const OUString& /*PropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "not implemented");
+}
+
+void SAL_CALL SwXTextTableStyle::removeVetoableChangeListener( const OUString& /*PropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "not implemented");
+}
+
 //XNameAccess
 uno::Any SAL_CALL SwXTextTableStyle::getByName(const OUString& rName) throw(container::NoSuchElementException, lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {

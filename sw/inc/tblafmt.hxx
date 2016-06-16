@@ -300,6 +300,12 @@ public:
     void SetValueFormat( const bool bNew )  { bInclValueFormat = bNew; }
     void SetWidthHeight( const bool bNew )  { bInclWidthHeight = bNew; }
 
+    /// These methods returns what style (row or column) is applied first on given Cell
+    bool FirstRowEndColumnIsRow();
+    bool FirstRowStartColumnIsRow();
+    bool LastRowEndColumnIsRow();
+    bool LastRowStartColumnIsRow();
+
     bool Load( SvStream& rStream, const SwAfVersions& );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
 
