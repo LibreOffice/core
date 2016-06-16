@@ -107,7 +107,7 @@ namespace
     typedef ext_std::pair<gr::GlyphIterator, gr::GlyphIterator>       glyph_range_t;
     typedef ext_std::pair<gr::GlyphSetIterator, gr::GlyphSetIterator> glyph_set_range_t;
 
-    inline long round(const float n) {
+    inline long round2long(const float n) {
         return long(n + (n < 0 ? -0.5 : 0.5));
     }
 
@@ -294,8 +294,8 @@ GraphiteLayout::Glyphs::fill_from(gr::Segment & rSegment, ImplLayoutArgs &rArgs,
         fMinX = std::min(aBounds.first, fMinX);
         fMaxX = std::max(aBounds.second, fMaxX);
     }
-    long nXOffset = round(fMinX * fScaling);
-    rWidth = round(fMaxX * fScaling) - nXOffset + nDxOffset;
+    long nXOffset = round2long(fMinX * fScaling);
+    rWidth = round2long(fMaxX * fScaling) - nXOffset + nDxOffset;
     if (rWidth < 0)
     {
         // This can happen when there was no base inside the range
@@ -406,7 +406,7 @@ std::pair<float,float> GraphiteLayout::Glyphs::appendCluster(gr::Segment& rSeg,
         if (j + nDelta >= nGlyphs || j + nDelta < 0) // at rhs ltr,rtl
         {
             fNextOrigin = fSegmentAdvance;
-            nNextOrigin = round(fSegmentAdvance * fScaling + rDXOffset);
+            nNextOrigin = round2long(fSegmentAdvance * fScaling + rDXOffset);
             aBounds.second = std::max(fSegmentAdvance, aBounds.second);
         }
         else
@@ -414,7 +414,7 @@ std::pair<float,float> GraphiteLayout::Glyphs::appendCluster(gr::Segment& rSeg,
             gr::GlyphInfo aNextGlyph = *(iGlyphs.first + j + nDelta);
             fNextOrigin = std::max(aNextGlyph.attachedClusterBase()->origin(), aNextGlyph.origin());
             aBounds.second = std::max(fNextOrigin, aBounds.second);
-            nNextOrigin = round(fNextOrigin * fScaling + rDXOffset);
+            nNextOrigin = round2long(fNextOrigin * fScaling + rDXOffset);
         }
         aBounds.first = std::min(aGlyph.origin(), aBounds.first);
         if ((signed)aGlyph.firstChar() < rArgs.mnEndCharPos &&
@@ -432,8 +432,8 @@ std::pair<float,float> GraphiteLayout::Glyphs::appendCluster(gr::Segment& rSeg,
     // the origin of the first glyph of the next cluster ltr
     // rtl it is the origin of the 1st glyph of the cluster
     long nXPos = (bRtl)?
-        round(aFirstGlyph.attachedClusterBase()->origin() * fScaling) + rDXOffset :
-        round(aBounds.second * fScaling) + rDXOffset;
+        round2long(aFirstGlyph.attachedClusterBase()->origin() * fScaling) + rDXOffset :
+        round2long(aBounds.second * fScaling) + rDXOffset;
     // force the last char in range to have the width of the cluster
     if (bRtl)
     {
@@ -474,7 +474,7 @@ GraphiteLayout::Glyphs::append(gr::Segment &segment, ImplLayoutArgs &args, gr::G
     }
     long glyphId = gi.glyphID();
     long deltaOffset = 0;
-    int glyphWidth = round(nextOrigin * scaling) - round(gi.origin() * scaling);
+    int glyphWidth = round2long(nextOrigin * scaling) - round2long(gi.origin() * scaling);
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"c%d g%d gWidth%d x%f ", firstChar, (int)gi.logicalIndex(), glyphWidth, nextOrigin);
 #endif
@@ -513,11 +513,11 @@ GraphiteLayout::Glyphs::append(gr::Segment &segment, ImplLayoutArgs &args, gr::G
     nGlyphFlags |= (gi.directionLevel() & 0x1)? GlyphItem::IS_RTL_GLYPH : 0;
     GlyphItem aGlyphItem(size(),//gi.logicalIndex(),
         glyphId,
-        Point(round(gi.origin() * scaling + rDXOffset),
-            round((-gi.yOffset() * scaling) - segment.AscentOffset()* scaling)),
+        Point(round2long(gi.origin() * scaling + rDXOffset),
+            round2long((-gi.yOffset() * scaling) - segment.AscentOffset()* scaling)),
         nGlyphFlags,
         glyphWidth);
-    aGlyphItem.mnOrigWidth = round(gi.advanceWidth() * scaling);
+    aGlyphItem.mnOrigWidth = round2long(gi.advanceWidth() * scaling);
     push_back(aGlyphItem);
 
     // update the offset if this glyph was dropped
