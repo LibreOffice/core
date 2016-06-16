@@ -86,12 +86,13 @@ const sal_uInt16 SvxExtParagraphTabPage::pExtRanges[] =
 enum LineSpaceList
 {
     LLINESPACE_1    = 0,
-    LLINESPACE_15   = 1,
-    LLINESPACE_2    = 2,
-    LLINESPACE_PROP = 3,
-    LLINESPACE_MIN  = 4,
-    LLINESPACE_DURCH= 5,
-    LLINESPACE_FIX  = 6,
+    LLINESPACE_115  = 1,
+    LLINESPACE_15   = 2,
+    LLINESPACE_2    = 3,
+    LLINESPACE_PROP = 4,
+    LLINESPACE_MIN  = 5,
+    LLINESPACE_DURCH= 6,
+    LLINESPACE_FIX  = 7,
     LLINESPACE_END
 };
 
@@ -105,6 +106,11 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
         case LLINESPACE_1:
             rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
             rLineSpace.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
+            break;
+
+        case LLINESPACE_115:
+            rLineSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
+            rLineSpace.SetPropLineSpace( 115 );
             break;
 
         case LLINESPACE_15:
@@ -221,6 +227,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         switch ( nPos )
         {
             case LLINESPACE_1:
+            case LLINESPACE_115:
             case LLINESPACE_15:
             case LLINESPACE_2:
                 SetLineSpace_Impl( aSpacing, nPos );
@@ -729,6 +736,12 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
                         m_pLineDist->SelectEntryPos( LLINESPACE_1 );
                         break;
                     }
+                    // 1.15 line spacing
+                    if ( 115 == rAttr.GetPropLineSpace() )
+                    {
+                        m_pLineDist->SelectEntryPos( LLINESPACE_115 );
+                        break;
+                    }
                     // 1.5 line spacing
                     if ( 150 == rAttr.GetPropLineSpace() )
                     {
@@ -773,6 +786,7 @@ IMPL_LINK_TYPED( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void 
     switch( rBox.GetSelectEntryPos() )
     {
         case LLINESPACE_1:
+        case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
             m_pLineDistAtLabel->Enable(false);
@@ -879,6 +893,7 @@ void SvxStdParagraphTabPage::UpdateExample_Impl()
     switch ( nPos )
     {
         case LLINESPACE_1:
+        case LLINESPACE_115:
         case LLINESPACE_15:
         case LLINESPACE_2:
             m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos );
