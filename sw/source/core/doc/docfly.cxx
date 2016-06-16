@@ -171,6 +171,60 @@ SwFrameFormat* SwDoc::GetFlyNum( size_t nIdx, FlyCntType eType, bool bIgnoreText
     return pRetFormat;
 }
 
+std::vector<SwFrameFormat const*> SwDoc::GetFlyFrameFormats(
+    FlyCntType const eType, bool const bIgnoreTextBoxes)
+{
+    SwFrameFormats& rFormats = *GetSpzFrameFormats();
+    const size_t nSize = rFormats.size();
+
+    std::set<const SwFrameFormat*> aTextBoxes;
+    if (bIgnoreTextBoxes)
+        aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
+
+    std::vector<SwFrameFormat const*> ret;
+    ret.reserve(nSize);
+
+    for (size_t i = 0; i < nSize; ++i)
+    {
+        SwFrameFormat const*const pFlyFormat = rFormats[ i ];
+
+        if (bIgnoreTextBoxes && aTextBoxes.find(pFlyFormat) != aTextBoxes.end())
+        {
+            continue;
+        }
+
+        if (RES_FLYFRMFMT != pFlyFormat->Which())
+        {
+            continue;
+        }
+
+        SwNodeIndex const*const pIdx(pFlyFormat->GetContent().GetContentIdx());
+        if (pIdx && pIdx->GetNodes().IsDocNodes())
+        {
+            SwNode const*const pNd = GetNodes()[ pIdx->GetIndex() + 1 ];
+            switch (eType)
+            {
+            case FLYCNTTYPE_FRM:
+                if (!pNd->IsNoTextNode())
+                    ret.push_back(pFlyFormat);
+                break;
+            case FLYCNTTYPE_GRF:
+                if (pNd->IsGrfNode())
+                    ret.push_back(pFlyFormat);
+                break;
+            case FLYCNTTYPE_OLE:
+                if (pNd->IsOLENode())
+                    ret.push_back(pFlyFormat);
+                break;
+            default:
+                ret.push_back(pFlyFormat);
+            }
+        }
+    }
+
+    return ret;
+}
+
 static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
                             const SwFrameFormat* pFlyFormat )
 {
