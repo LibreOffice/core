@@ -309,6 +309,11 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     {
         aRet <<= !rRedline.IsDelLastPara();
     }
+    else if (rPropertyName == UNO_NAME_REDLINE_ELEMENT_TYPE)
+    {
+        OUString sElementType = "paragraph";
+        aRet <<= sElementType;
+    }
     else if (rPropertyName == UNO_NAME_START || rPropertyName == UNO_NAME_END)
     {
            sal_Int32 nStart(COMPLETE_STRING), nEnd(COMPLETE_STRING);
@@ -347,6 +352,9 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
 
     pRet[nPropIdx].Name = UNO_NAME_MERGE_LAST_PARA;
     pRet[nPropIdx++].Value <<= !rRedline.IsDelLastPara();
+
+    pRet[nPropIdx].Name = UNO_NAME_REDLINE_ELEMENT_TYPE;
+    pRet[nPropIdx++].Value <<= OUString("paragraph");
 
     SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
     if(pNodeIdx )

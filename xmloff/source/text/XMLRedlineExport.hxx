@@ -66,6 +66,7 @@ class XMLRedlineExport
     const OUString sRedlineSuccessorData;
     const OUString sRedlineText;
     const OUString sRedlineType;
+    const OUString sRedlineElementType;
     const OUString sRedlineUndoType;
     const OUString sRedlineUndoName;
     const OUString sRedlineUndoStart;

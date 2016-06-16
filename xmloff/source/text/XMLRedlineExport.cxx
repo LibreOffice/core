@@ -72,6 +72,7 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp)
 ,   sRedlineSuccessorData("RedlineSuccessorData")
 ,   sRedlineText("RedlineText")
 ,   sRedlineType("RedlineType")
+,   sRedlineElementType("RedlineElementType")
 ,   sUnknownChange("UnknownChange")
 ,   sStartRedline("StartRedline")
 ,   sEndRedline("EndRedline")
@@ -338,6 +339,14 @@ void XMLRedlineExport::ExportChangedRegion(
         sal_uInt16 nParagraphIdx = 2, nCharStart, nCharEnd;
         rPropSet->getPropertyValue("Start") >>= nCharStart;
         rPropSet->getPropertyValue("End") >>= nCharEnd;
+        aAny = rPropSet->getPropertyValue(sRedlineElementType);
+        OUString sElementType;
+        aAny >>= sElementType;
+        if( sElementType == "text" )
+            eChangeType = XML_TEXT;
+        OUString sParagraphIdx = "2", sCharStart, sCharEnd;
+        rPropSet->getPropertyValue("Start") >>= sCharStart;
+        rPropSet->getPropertyValue("End") >>= sCharEnd;
         if(eChangeType == XML_PARAGRAPH)
         {
             rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx));
