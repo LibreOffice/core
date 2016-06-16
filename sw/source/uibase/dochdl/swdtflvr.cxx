@@ -3286,7 +3286,8 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
     }
 
     bool bRet = true;
-    if (lcl_checkClassification(m_pWrtShell->GetDoc(), rShell.GetDoc()))
+    // m_pWrtShell is nullptr when the source document is closed already.
+    if (!m_pWrtShell || lcl_checkClassification(m_pWrtShell->GetDoc(), rShell.GetDoc()))
         bRet = rShell.Paste(m_pClpDocFac->GetDoc());
 
     if( bKillPaMs )
