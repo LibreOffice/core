@@ -286,18 +286,22 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
     return lDisabledItems;
 }
 
-std::weak_ptr<SvtCommandOptions_Impl> m_pCommandOptions;
+namespace {
+
+std::weak_ptr<SvtCommandOptions_Impl> g_pCommandOptions;
+
+}
 
 SvtCommandOptions::SvtCommandOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
 
-    m_pImpl = m_pCommandOptions.lock();
+    m_pImpl = g_pCommandOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtCommandOptions_Impl>();
-        m_pCommandOptions = m_pImpl;
+        g_pCommandOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_CMDOPTIONS);
     }
 }

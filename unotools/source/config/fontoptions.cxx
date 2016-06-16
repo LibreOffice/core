@@ -243,18 +243,22 @@ Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-std::weak_ptr<SvtFontOptions_Impl> m_pFontOptions;
+namespace {
+
+std::weak_ptr<SvtFontOptions_Impl> g_pFontOptions;
+
+}
 
 SvtFontOptions::SvtFontOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( impl_GetOwnStaticMutex() );
 
-    m_pImpl = m_pFontOptions.lock();
+    m_pImpl = g_pFontOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtFontOptions_Impl>();
-        m_pFontOptions = m_pImpl;
+        g_pFontOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_FONTOPTIONS);
     }
 }

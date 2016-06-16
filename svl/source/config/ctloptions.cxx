@@ -372,21 +372,25 @@ void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumer
         NotifyListeners(0);
     }
 }
-// global
-std::weak_ptr<SvtCTLOptions_Impl>  pCTLOptions;
 
-namespace { struct CTLMutex : public rtl::Static< osl::Mutex, CTLMutex > {}; }
+namespace {
+
+    // global
+    std::weak_ptr<SvtCTLOptions_Impl> g_pCTLOptions;
+
+    struct CTLMutex : public rtl::Static< osl::Mutex, CTLMutex > {};
+}
 
 SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( CTLMutex::get() );
 
-    m_pImpl = pCTLOptions.lock();
+    m_pImpl = g_pCTLOptions.lock();
     if ( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtCTLOptions_Impl>();
-        pCTLOptions = m_pImpl;
+        g_pCTLOptions = m_pImpl;
         ItemHolder2::holdConfigItem(E_CTLOPTIONS);
     }
 

@@ -523,17 +523,21 @@ void SvtHistoryOptions_Impl::DeleteItem(EHistoryType eHistory, const OUString& s
     }
 }
 
-std::weak_ptr<SvtHistoryOptions_Impl> m_pHistoryOptions;
+namespace {
+
+std::weak_ptr<SvtHistoryOptions_Impl> g_pHistoryOptions;
+
+}
 
 SvtHistoryOptions::SvtHistoryOptions()
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    m_pImpl = m_pHistoryOptions.lock();
+    m_pImpl = g_pHistoryOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtHistoryOptions_Impl>();
-        m_pHistoryOptions = m_pImpl;
+        g_pHistoryOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_HISTORYOPTIONS);
     }
 }

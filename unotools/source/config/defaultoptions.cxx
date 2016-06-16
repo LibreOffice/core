@@ -104,7 +104,11 @@ private:
 
 // global ----------------------------------------------------------------
 
-std::weak_ptr<SvtDefaultOptions_Impl>  pOptions;
+namespace {
+
+std::weak_ptr<SvtDefaultOptions_Impl> g_pOptions;
+
+}
 
 typedef OUString SvtDefaultOptions_Impl:: *PathStrPtr;
 
@@ -326,11 +330,11 @@ SvtDefaultOptions::SvtDefaultOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( lclMutex::get() );
-    pImpl = pOptions.lock();
+    pImpl = g_pOptions.lock();
     if ( !pImpl )
     {
         pImpl = std::make_shared<SvtDefaultOptions_Impl>();
-        pOptions = pImpl;
+        g_pOptions = pImpl;
         ItemHolder1::holdConfigItem(E_DEFAULTOPTIONS);
     }
 }

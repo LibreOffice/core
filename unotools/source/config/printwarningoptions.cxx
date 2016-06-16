@@ -221,18 +221,18 @@ Sequence< OUString > SvtPrintWarningOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-std::weak_ptr<SvtPrintWarningOptions_Impl> m_pPrintWarningOptions;
+std::weak_ptr<SvtPrintWarningOptions_Impl> g_pPrintWarningOptions;
 
 SvtPrintWarningOptions::SvtPrintWarningOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
 
-    m_pImpl = m_pPrintWarningOptions.lock();
+    m_pImpl = g_pPrintWarningOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtPrintWarningOptions_Impl>();
-        m_pPrintWarningOptions = m_pImpl;
+        g_pPrintWarningOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_PRINTWARNINGOPTIONS);
     }
 }

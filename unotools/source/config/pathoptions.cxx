@@ -162,7 +162,7 @@ class SvtPathOptions_Impl
 
 // global ----------------------------------------------------------------
 
-static std::weak_ptr<SvtPathOptions_Impl> pOptions;
+static std::weak_ptr<SvtPathOptions_Impl> g_pOptions;
 
 // functions -------------------------------------------------------------
 struct PropertyStruct
@@ -446,11 +446,11 @@ SvtPathOptions::SvtPathOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( lclMutex::get() );
-    pImpl = pOptions.lock();
+    pImpl = g_pOptions.lock();
     if ( !pImpl )
     {
         pImpl = std::make_shared<SvtPathOptions_Impl>();
-        pOptions = pImpl;
+        g_pOptions = pImpl;
         ItemHolder1::holdConfigItem(E_PATHOPTIONS);
     }
 }

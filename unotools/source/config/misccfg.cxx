@@ -33,7 +33,7 @@ namespace utl
 {
 class SfxMiscCfg;
 
-std::weak_ptr<SfxMiscCfg> m_pOptions;
+std::weak_ptr<SfxMiscCfg> g_pOptions;
 
 class SfxMiscCfg : public utl::ConfigItem
 {
@@ -186,11 +186,11 @@ MiscCfg::MiscCfg( )
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
-    m_pImpl = m_pOptions.lock();
+    m_pImpl = g_pOptions.lock();
     if ( !m_pImpl )
     {
         m_pImpl = std::make_shared<SfxMiscCfg>();
-        m_pOptions = m_pImpl;
+        g_pOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_MISCCFG);
     }
 

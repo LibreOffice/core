@@ -315,18 +315,22 @@ Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
     return seqPropertyNames;
 }
 
-std::weak_ptr<SvtMenuOptions_Impl> m_pMenuOptions;
+namespace {
+
+std::weak_ptr<SvtMenuOptions_Impl> g_pMenuOptions;
+
+}
 
 SvtMenuOptions::SvtMenuOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
 
-    m_pImpl = m_pMenuOptions.lock();
+    m_pImpl = g_pMenuOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtMenuOptions_Impl>();
-        m_pMenuOptions = m_pImpl;
+        g_pMenuOptions = m_pImpl;
         svtools::ItemHolder2::holdConfigItem(E_MENUOPTIONS);
     }
 }

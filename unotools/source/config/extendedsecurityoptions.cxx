@@ -239,18 +239,22 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-std::weak_ptr<SvtExtendedSecurityOptions_Impl> m_pExtendedSecurityOptions;
+namespace {
+
+std::weak_ptr<SvtExtendedSecurityOptions_Impl> g_pExtendedSecurityOptions;
+
+}
 
 SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
 
-    m_pImpl = m_pExtendedSecurityOptions.lock();
+    m_pImpl = g_pExtendedSecurityOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtExtendedSecurityOptions_Impl>();
-        m_pExtendedSecurityOptions = m_pImpl;
+        g_pExtendedSecurityOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_EXTENDEDSECURITYOPTIONS);
     }
 }

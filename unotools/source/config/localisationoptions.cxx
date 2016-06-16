@@ -218,18 +218,22 @@ Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-std::weak_ptr<SvtLocalisationOptions_Impl> m_pLocalisationOptions;
+namespace {
+
+std::weak_ptr<SvtLocalisationOptions_Impl> g_pLocalisationOptions;
+
+}
 
 SvtLocalisationOptions::SvtLocalisationOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
 
-    m_pImpl = m_pLocalisationOptions.lock();
+    m_pImpl = g_pLocalisationOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtLocalisationOptions_Impl>();
-        m_pLocalisationOptions = m_pImpl;
+        g_pLocalisationOptions = m_pImpl;
         ItemHolder1::holdConfigItem(E_LOCALISATIONOPTIONS);
     }
 }

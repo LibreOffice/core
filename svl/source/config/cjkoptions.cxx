@@ -376,20 +376,23 @@ bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
     return bReadOnly;
 }
 
-// global
-std::weak_ptr<SvtCJKOptions_Impl>  pCJKOptions;
+namespace {
 
-namespace { struct theCJKOptionsMutex : public rtl::Static< ::osl::Mutex , theCJKOptionsMutex >{}; }
+    // global
+    std::weak_ptr<SvtCJKOptions_Impl> g_pCJKOptions;
+
+    struct theCJKOptionsMutex : public rtl::Static< ::osl::Mutex , theCJKOptionsMutex >{};
+}
 
 SvtCJKOptions::SvtCJKOptions(bool bDontLoad)
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( theCJKOptionsMutex::get() );
-    pImpl = pCJKOptions.lock();
+    pImpl = g_pCJKOptions.lock();
     if ( !pImpl )
     {
         pImpl = std::make_shared<SvtCJKOptions_Impl>();
-        pCJKOptions = pImpl;
+        g_pCJKOptions = pImpl;
         ItemHolder2::holdConfigItem(E_CJKOPTIONS);
     }
 

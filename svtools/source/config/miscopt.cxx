@@ -643,18 +643,22 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-std::weak_ptr<SvtMiscOptions_Impl> m_pMiscOptions;
+namespace {
+
+std::weak_ptr<SvtMiscOptions_Impl> g_pMiscOptions;
+
+}
 
 SvtMiscOptions::SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
 
-    m_pImpl = m_pMiscOptions.lock();
+    m_pImpl = g_pMiscOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtMiscOptions_Impl>();
-        m_pMiscOptions = m_pImpl;
+        g_pMiscOptions = m_pImpl;
         svtools::ItemHolder2::holdConfigItem(E_MISCOPTIONS);
     }
 }

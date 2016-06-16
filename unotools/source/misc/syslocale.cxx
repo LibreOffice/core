@@ -34,7 +34,11 @@
 using namespace osl;
 using namespace com::sun::star;
 
-std::weak_ptr<SvtSysLocale_Impl>  pSysLocale;
+namespace {
+
+std::weak_ptr<SvtSysLocale_Impl> g_pSysLocale;
+
+}
 
 class SvtSysLocale_Impl : public utl::ConfigurationListener
 {
@@ -113,11 +117,11 @@ void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
 SvtSysLocale::SvtSysLocale()
 {
     MutexGuard aGuard( GetMutex() );
-    pImpl = pSysLocale.lock();
+    pImpl = g_pSysLocale.lock();
     if ( !pImpl )
     {
         pImpl = std::make_shared<SvtSysLocale_Impl>();
-        pSysLocale = pImpl;
+        g_pSysLocale = pImpl;
     }
 }
 

@@ -930,18 +930,22 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-std::weak_ptr<SvtSecurityOptions_Impl> m_pSecurityOptions;
+namespace {
+
+std::weak_ptr<SvtSecurityOptions_Impl> g_pSecurityOptions;
+
+}
 
 SvtSecurityOptions::SvtSecurityOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
 
-    m_pImpl = m_pSecurityOptions.lock();
+    m_pImpl = g_pSecurityOptions.lock();
     if( !m_pImpl )
     {
         m_pImpl = std::make_shared<SvtSecurityOptions_Impl>();
-        m_pSecurityOptions = m_pImpl;
+        g_pSecurityOptions = m_pImpl;
 
         ItemHolder1::holdConfigItem(E_SECURITYOPTIONS);
     }
