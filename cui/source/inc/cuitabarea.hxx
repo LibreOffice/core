@@ -429,6 +429,7 @@ private:
 
     long CheckChanges_Impl();
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
+    sal_Int32 SearchGradientList(OUString aGradientName);
 
 public:
     SvxGradientTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
@@ -511,6 +512,7 @@ private:
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
 
     long CheckChanges_Impl();
+    sal_Int32 SearchHatchList(OUString aHatchName);
 
 public:
     SvxHatchTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
