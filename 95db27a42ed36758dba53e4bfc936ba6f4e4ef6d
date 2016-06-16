@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_37f339a0",
+        "filename": "include/tools/zcodec.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "this is used to allocate arrays with new[] and as a parameter to ReadBytes so size_t is probably the best type\n\nsal_uInt32 wouldn\u0027t be too bad but it\u0027s probably a bad idea to use sal_uInt64 to allocate an array because then on 32-bit platforms it gets truncated and you could get an array that is much smaller than its \"size\" variable...\n\n(although ReadBytes actually has sal_Size paramter, i notice that sal_Size and size_t are the same size on every supported platform, so i\u0027m thinking about replacing sal_Size with size_t ...)",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_57f0bd90",
+        "filename": "include/tools/zcodec.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "this should have the same type as mnInBufSize, as both are assigned to the same variables",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_97096598",
+        "filename": "include/tools/zcodec.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "this is used to allocate arrays with new[] so size_t is probably the best type",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_7a6e94ca",
+        "filename": "include/tools/zcodec.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "this member is for a CRC, which is a kind of checksum - these have a fixed size ... if you look in ZCodec::UpdateCRC you see that it calls rtl_crc32, so for this variable sal_uInt32 is enough",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_51ae1286",
+        "filename": "include/tools/zcodec.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "this looks oddly inconsistent - shouldn\u0027t the nSize in the 3 above have the same type?\n\nthough i\u0027m not certain which type it should be, i\u0027m tending towards size_t or sal_uInt32\n\noh it returns \"long\", which is computed from the parameter... that means sal_uInt64 is too large, and size_t might also be too large, depending on platform, unless you change the return type, and all the callers too, but that sounds like another patch for another day :)",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9a7358b1",
+        "filename": "include/tools/zcodec.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "CRC -\u003e 32 bit, as above",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ba681cbc",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "sal_uLong is also deprecated, so not a good idea to introduce it.\n\ni guess this should be the same type as mnInToRead and mnInBufSize",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_772b01ec",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "this one, same as the nInToRead above",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_71ab1675",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "it looks like you\u0027re trying out every variant once :)",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b7358947",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-16T16:34:18Z",
+      "side": 1,
+      "message": "this should be same as mnInToRead, the GetBreak too",
+      "revId": "95db27a42ed36758dba53e4bfc936ba6f4e4ef6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
