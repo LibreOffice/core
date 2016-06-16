@@ -19,7 +19,6 @@ import xml.etree.ElementTree as ET
 main_xcd_discard = [
     'org.openoffice.Office/TableWizard', # huge
 
-    'org.openoffice.Office/WebWizard',
     'org.openoffice.Office.DataAccess/Drivers', # no database
     'org.openoffice.Office/Addons', # no addons
 

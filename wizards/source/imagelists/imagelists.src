@@ -16,9 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define REPORTWIZARD_BASE     1000
+
+#define REPORTWIZARD_BASE   1000
 #define FORMWIZARD_BASE     1100
-#define WEBWIZARD_BASE        1200
 
 #define    BMP_REPORT_ORIENTATION_PORTRAIT               REPORTWIZARD_BASE + 0
 Bitmap BMP_REPORT_ORIENTATION_PORTRAIT
@@ -54,60 +54,6 @@ Bitmap BMP_FORM_ARRANGETABLE
 Bitmap BMP_FORM_ARRANGEFREE
 {
     File = "formarrangefree_42.png";
-};
-
-#define    BMP_WEB_LAYOUT_TABLE3                        WEBWIZARD_BASE + 0
-Bitmap BMP_WEB_LAYOUT_TABLE3
-{
-    File = "table_3.png";
-};
-
-#define    BMP_WEB_LAYOUT_TABLE2                        WEBWIZARD_BASE + 2
-Bitmap BMP_WEB_LAYOUT_TABLE2
-{
-    File = "table_2.png";
-};
-
-#define    BMP_WEB_LAYOUT_SIMPLE                        WEBWIZARD_BASE + 4
-Bitmap BMP_WEB_LAYOUT_SIMPLE
-{
-    File = "simple.png";
-};
-
-#define    BMP_WEB_LAYOUT_DIAGONAL                        WEBWIZARD_BASE + 6
-Bitmap BMP_WEB_LAYOUT_DIAGONAL
-{
-    File = "diagonal.png";
-};
-
-#define    BMP_WEB_LAYOUT_ZIGZAG                        WEBWIZARD_BASE + 8
-Bitmap BMP_WEB_LAYOUT_ZIGZAG
-{
-    File = "zigzag.png";
-};
-
-#define    BMP_WEB_LAYOUT_FRAMELEFT                        WEBWIZARD_BASE + 10
-Bitmap BMP_WEB_LAYOUT_FRAMELEFT
-{
-    File = "frame_left.png";
-};
-
-#define    BMP_WEB_LAYOUT_FRAMERIGHT                        WEBWIZARD_BASE + 12
-Bitmap BMP_WEB_LAYOUT_FRAMERIGHT
-{
-    File = "frame_right.png";
-};
-
-#define    BMP_WEB_LAYOUT_FRAMETOP                            WEBWIZARD_BASE + 14
-Bitmap BMP_WEB_LAYOUT_FRAMETOP
-{
-    File = "frame_top.png";
-};
-
-#define    BMP_WEB_LAYOUT_FRAMEBOTTOM                            WEBWIZARD_BASE + 16
-Bitmap BMP_WEB_LAYOUT_FRAMEBOTTOM
-{
-    File = "frame_bottom.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

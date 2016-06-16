@@ -181,7 +181,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 			wizards/com/sun/star/wizards/agenda/agenda \
 			wizards/com/sun/star/wizards/fax/fax \
 			wizards/com/sun/star/wizards/letter/letter \
-			wizards/com/sun/star/wizards/web/web \
 		) \
 	) \
 	$(if $(ENABLE_CAIRO_CANVAS), \
