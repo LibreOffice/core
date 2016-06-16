@@ -77,7 +77,7 @@ private:
     ExportDocumentHandler(ExportDocumentHandler &) = delete;
     void operator =(ExportDocumentHandler &) = delete;
 
-    virtual ~ExportDocumentHandler();
+    virtual ~ExportDocumentHandler() override;
 
     ::osl::Mutex                                              m_aMutex;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;

@@ -304,7 +304,7 @@ public:
     enum AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty, SortAscending, SortDescending };
 
     ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
-    virtual ~ScGridWindow();
+    virtual ~ScGridWindow() override;
     virtual void dispose() override;
 
     virtual void    KeyInput(const KeyEvent& rKEvt) override;

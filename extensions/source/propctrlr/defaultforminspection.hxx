@@ -40,7 +40,7 @@ namespace pcr
         ::std::unique_ptr< OPropertyInfoService >   m_pInfoService;
 
     protected:
-        virtual ~DefaultFormComponentInspectorModel();
+        virtual ~DefaultFormComponentInspectorModel() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;

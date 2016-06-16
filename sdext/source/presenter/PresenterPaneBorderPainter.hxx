@@ -52,7 +52,7 @@ class PresenterPaneBorderPainter
 public:
     explicit PresenterPaneBorderPainter (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterPaneBorderPainter();
+    virtual ~PresenterPaneBorderPainter() override;
     PresenterPaneBorderPainter(const PresenterPaneBorderPainter&) = delete;
     PresenterPaneBorderPainter& operator=(const PresenterPaneBorderPainter&) = delete;
 

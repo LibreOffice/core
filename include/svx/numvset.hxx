@@ -76,7 +76,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 public:
     SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
     void init(NumberingPageType eType);
-    virtual ~SvxNumValueSet();
+    virtual ~SvxNumValueSet() override;
     virtual void dispose() override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
@@ -106,7 +106,7 @@ protected:
 
 public:
     SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
-    virtual ~SvxBmpNumValueSet();
+    virtual ~SvxBmpNumValueSet() override;
     virtual void dispose() override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;

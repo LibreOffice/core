@@ -187,7 +187,7 @@ public:
 
 protected:
 
-    virtual ~UpdateInformationProvider();
+    virtual ~UpdateInformationProvider() override;
     static OUString getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item);
     static uno::Any getConfigurationItemAny(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item);
 
@@ -233,7 +233,7 @@ public:
     {
     };
 
-    virtual ~UpdateInformationEnumeration() {};
+    virtual ~UpdateInformationEnumeration() override {};
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) override { return m_nCount < m_nNodes; };
@@ -292,7 +292,7 @@ class SingleUpdateInformationEnumeration : public ::cppu::WeakImplHelper< contai
 public:
     explicit SingleUpdateInformationEnumeration(const uno::Reference< xml::dom::XElement >& xElement)
         : m_nCount(0) { m_aEntry.UpdateDocument = xElement; };
-    virtual ~SingleUpdateInformationEnumeration() {};
+    virtual ~SingleUpdateInformationEnumeration() override {};
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) override { return 0 == m_nCount; };

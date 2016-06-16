@@ -186,7 +186,7 @@ protected:
 
 public:
     OpenGLSalGraphicsImpl(SalGraphics& pParent, SalGeometryProvider *pProvider);
-    virtual ~OpenGLSalGraphicsImpl ();
+    virtual ~OpenGLSalGraphicsImpl () override;
 
     rtl::Reference<OpenGLContext> GetOpenGLContext();
 

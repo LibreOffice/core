@@ -55,7 +55,7 @@ protected:
 public:
     SwFieldPortion( const SwFieldPortion& rField );
     SwFieldPortion( const OUString &rExpand, SwFont *pFnt = nullptr, bool bPlaceHolder = false );
-    virtual ~SwFieldPortion();
+    virtual ~SwFieldPortion() override;
 
     sal_uInt16 m_nAttrFieldType;
     void TakeNextOffset( const SwFieldPortion* pField );
@@ -178,7 +178,7 @@ public:
                      const bool bCenter,
                      const sal_uInt16 nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    virtual ~SwGrfNumPortion();
+    virtual ~SwGrfNumPortion() override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 

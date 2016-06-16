@@ -65,7 +65,7 @@ class EventMultiplexer::Implementation
 {
 public:
     explicit Implementation (ViewShellBase& rBase);
-    virtual ~Implementation();
+    virtual ~Implementation() override;
 
     void AddEventListener (
         const Link<EventMultiplexerEvent&,void>& rCallback,

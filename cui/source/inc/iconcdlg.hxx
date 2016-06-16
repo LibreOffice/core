@@ -79,7 +79,7 @@ protected:
     IconChoicePage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet );
 
 public:
-    virtual ~IconChoicePage();
+    virtual ~IconChoicePage() override;
     virtual void        dispose() override;
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
@@ -161,7 +161,7 @@ public:
     // the IconChoiceCtrl's could also be set in the Ctor
     IconChoiceDialog ( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
                        const SfxItemSet * pItemSet = nullptr );
-    virtual ~IconChoiceDialog ();
+    virtual ~IconChoiceDialog () override;
     virtual void dispose() override;
 
     // interface

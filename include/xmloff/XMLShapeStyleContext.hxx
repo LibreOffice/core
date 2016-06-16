@@ -50,7 +50,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_GRAPHICS_ID);
-    virtual ~XMLShapeStyleContext();
+    virtual ~XMLShapeStyleContext() override;
 
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,

@@ -39,7 +39,7 @@ class MotionPathTag : public SmartTag, public IPolyPolygonEditorController, publ
 {
 public:
     MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, const CustomAnimationEffectPtr& pEffect );
-    virtual ~MotionPathTag();
+    virtual ~MotionPathTag() override;
 
     SdrPathObj* getPathObj() const { return mpPathObj; }
 

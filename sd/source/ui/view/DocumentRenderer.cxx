@@ -740,7 +740,7 @@ namespace {
         {
         }
 
-        virtual ~RegularPrinterPage() {}
+        virtual ~RegularPrinterPage() override {}
 
         virtual void Print (
             Printer& rPrinter,
@@ -795,7 +795,7 @@ namespace {
         {
         }
 
-        virtual ~TiledPrinterPage() {}
+        virtual ~TiledPrinterPage() override {}
 
         virtual void Print (
             Printer& rPrinter,
@@ -880,7 +880,7 @@ namespace {
         {
         }
 
-        virtual ~BookletPrinterPage() {}
+        virtual ~BookletPrinterPage() override {}
 
         virtual void Print (
             Printer& rPrinter,
@@ -1093,7 +1093,7 @@ namespace {
         {
         }
 
-        virtual ~OutlinerPrinterPage()
+        virtual ~OutlinerPrinterPage() override
         {
             mpParaObject.reset();
         }
@@ -1172,7 +1172,7 @@ public:
         StartListening(mrBase);
     }
 
-    virtual ~Implementation()
+    virtual ~Implementation() override
     {
         EndListening(mrBase);
     }

@@ -81,7 +81,7 @@ public:
 
     /** looks like the dtor ...
     */
-    virtual ~OBookmarkContainer();
+    virtual ~OBookmarkContainer() override;
 
 // css::uno::XInterface
     virtual void SAL_CALL acquire(  ) throw() override;

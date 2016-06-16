@@ -35,7 +35,7 @@ public:
            , PlottingPositionHelper* pPosHelper = nullptr //takes ownership
            );
 
-    virtual ~VCartesianAxis();
+    virtual ~VCartesianAxis() override;
 
     virtual void createMaximumLabels() override;
     virtual void createLabels() override;

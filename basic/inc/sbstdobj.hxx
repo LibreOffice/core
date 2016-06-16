@@ -40,7 +40,7 @@ class BASIC_DLLPUBLIC SbStdPicture : public SbxObject
 protected:
     Graphic     aGraphic;
 
-   virtual ~SbStdPicture();
+   virtual ~SbStdPicture() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void    PropType( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
@@ -67,7 +67,7 @@ protected:
     sal_uInt16  nSize;
     OUString  aName;
 
-   virtual ~SbStdFont();
+   virtual ~SbStdFont() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     void    PropBold( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
@@ -101,7 +101,7 @@ class BASIC_DLLPUBLIC SbStdClipboard : public SbxObject
 {
 protected:
 
-    virtual ~SbStdClipboard();
+    virtual ~SbStdClipboard() override;
     virtual void   Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     static void    MethClear( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );

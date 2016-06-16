@@ -50,7 +50,7 @@ namespace connectivity
             virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) override;
             virtual bool        impl_supportsMixedCaseQuotedIdentifiers_throw(  ) override;
         protected:
-            virtual ~ODbaseDatabaseMetaData();
+            virtual ~ODbaseDatabaseMetaData() override;
         public:
             ODbaseDatabaseMetaData(file::OConnection* _pCon);
         };

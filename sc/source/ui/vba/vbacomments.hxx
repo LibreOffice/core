@@ -36,7 +36,7 @@ public:
         const css::uno::Reference< css::frame::XModel >& xModel,
         const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
-    virtual ~ScVbaComments() {}
+    virtual ~ScVbaComments() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

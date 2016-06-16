@@ -76,7 +76,7 @@ private:
 
 public:
     explicit ScriptProtocolHandler( const css::uno::Reference < css::uno::XComponentContext >& xContext );
-    virtual ~ScriptProtocolHandler();
+    virtual ~ScriptProtocolHandler() override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName()

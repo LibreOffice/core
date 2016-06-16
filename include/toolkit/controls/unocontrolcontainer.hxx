@@ -58,7 +58,7 @@ protected:
 public:
                 UnoControlContainer();
                 UnoControlContainer( const css::uno::Reference< css::awt::XWindowPeer >& xPeer );
-                virtual ~UnoControlContainer();
+                virtual ~UnoControlContainer() override;
 
 
     // css::lang::XComponent

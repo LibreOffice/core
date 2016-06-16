@@ -33,7 +33,7 @@ public:
         SvxRulerSupportFlags nRulerFlags,
         SfxBindings& rBindings,
         WinBits nWinStyle);
-    virtual ~SwCommentRuler ();
+    virtual ~SwCommentRuler () override;
     virtual void dispose() override;
 
     /**

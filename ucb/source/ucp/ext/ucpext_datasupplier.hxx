@@ -48,7 +48,7 @@ namespace ucb { namespace ucp { namespace ext
         void    fetchData();
 
     protected:
-        virtual ~DataSupplier();
+        virtual ~DataSupplier() override;
 
         virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;
         virtual css::uno::Reference< css::ucb::XContentIdentifier > queryContentIdentifier( sal_uInt32 nIndex ) override;

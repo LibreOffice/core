@@ -169,7 +169,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
         /**
             @short      dtor to free used memory.
          */
-        virtual ~PreventDuplicateInteraction();
+        virtual ~PreventDuplicateInteraction() override;
 
 
         /**

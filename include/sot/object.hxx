@@ -32,7 +32,7 @@ class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
     bool        bInClose;         // TRUE, in DoClose
 
 protected:
-    virtual             ~SotObject();
+    virtual             ~SotObject() override;
     virtual bool        Close();
 
 public:

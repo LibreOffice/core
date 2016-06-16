@@ -43,7 +43,7 @@ class ParaPropertyPanel
       public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    virtual ~ParaPropertyPanel();
+    virtual ~ParaPropertyPanel() override;
     virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create (

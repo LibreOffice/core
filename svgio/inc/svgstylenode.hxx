@@ -40,7 +40,7 @@ namespace svgio
             SvgStyleNode(
                 SvgDocument& rDocument,
                 SvgNode* pParent);
-            virtual ~SvgStyleNode();
+            virtual ~SvgStyleNode() override;
 
             /// #i125258# tell if this node is allowed to have a parent style (e.g. defs do not)
             virtual bool supportsParentStyle() const override;

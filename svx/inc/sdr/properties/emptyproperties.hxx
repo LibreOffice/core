@@ -56,7 +56,7 @@ namespace sdr
             EmptyProperties(const EmptyProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~EmptyProperties();
+            virtual ~EmptyProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;

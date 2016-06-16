@@ -81,7 +81,7 @@ namespace dbp
 
     public:
         explicit OGridFieldsSelection( OGridWizard* _pParent );
-        virtual ~OGridFieldsSelection();
+        virtual ~OGridFieldsSelection() override;
         virtual void dispose() override;
 
     protected:

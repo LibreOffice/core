@@ -127,7 +127,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
-            virtual ~OStatement_Base();
+            virtual ~OStatement_Base() override;
         public:
             connectivity::OSQLParseNode* getParseTree() const { return m_pParseTree;}
 

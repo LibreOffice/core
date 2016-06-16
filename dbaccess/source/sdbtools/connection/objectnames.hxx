@@ -67,7 +67,7 @@ namespace sdbtools
         virtual void SAL_CALL checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~ObjectNames();
+        virtual ~ObjectNames() override;
 
     private:
         ObjectNames( const ObjectNames& ) = delete;

@@ -95,7 +95,7 @@ namespace extensions { namespace resource
         );
 
     protected:
-        virtual ~OpenOfficeResourceBundle();
+        virtual ~OpenOfficeResourceBundle() override;
 
     public:
         // XResourceBundle

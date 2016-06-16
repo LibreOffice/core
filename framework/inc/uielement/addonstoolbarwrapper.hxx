@@ -34,7 +34,7 @@ class AddonsToolBarWrapper : public UIElementWrapperBase
 {
     public:
         AddonsToolBarWrapper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        virtual ~AddonsToolBarWrapper();
+        virtual ~AddonsToolBarWrapper() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;

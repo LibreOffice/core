@@ -63,7 +63,7 @@ public:                                             \
     explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
-    virtual         ~Class();                       \
+    virtual         ~Class() override;                       \
     virtual short   Execute() override ;
 
 #define DECL_ABSTDLG2_BASE(Class,DialogClass)       \
@@ -72,7 +72,7 @@ public:                                             \
     explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
-    virtual         ~Class();                       \
+    virtual         ~Class() override;                       \
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override; \
     long            GetResult() override;
 

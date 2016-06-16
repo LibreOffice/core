@@ -54,7 +54,7 @@ public:
         const OUString & rServiceName,
         StockVariant eVariant,
         bool bJapaneseStyle );
-    virtual ~StockChartTypeTemplate();
+    virtual ~StockChartTypeTemplate() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

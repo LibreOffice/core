@@ -144,7 +144,7 @@ private:
 
 public:
     SvxPositionSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-    virtual ~SvxPositionSizeTabPage();
+    virtual ~SvxPositionSizeTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
@@ -202,7 +202,7 @@ private:
 
 public:
          SvxAngleTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-    virtual ~SvxAngleTabPage();
+    virtual ~SvxAngleTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
@@ -255,7 +255,7 @@ private:
 
 public:
          SvxSlantTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-    virtual ~SvxSlantTabPage();
+    virtual ~SvxSlantTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );

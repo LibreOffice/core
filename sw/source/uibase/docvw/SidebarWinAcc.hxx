@@ -36,7 +36,7 @@ class SidebarWinAccessible : public VCLXWindow
         explicit SidebarWinAccessible( SwSidebarWin& rSidebarWin,
                                        SwViewShell& rViewShell,
                                        const SwSidebarItem& rSidebarItem );
-        virtual ~SidebarWinAccessible();
+        virtual ~SidebarWinAccessible() override;
 
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
                 CreateAccessibleContext() override;

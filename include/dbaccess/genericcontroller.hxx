@@ -386,7 +386,7 @@ namespace dbaui
 
         void releaseNumberForComponent();
 
-        virtual ~OGenericUnoController();
+        virtual ~OGenericUnoController() override;
 
     private:
         void fillSupportedFeatures();

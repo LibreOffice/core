@@ -50,7 +50,7 @@ protected:
 
 public:
     ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
-    virtual ~ORoadmap( );
+    virtual ~ORoadmap( ) override;
     virtual void dispose() override;
 
     void            SetRoadmapBitmap( const BitmapEx& maBitmap );

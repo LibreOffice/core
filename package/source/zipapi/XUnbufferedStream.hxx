@@ -80,7 +80,7 @@ public:
                  const css::uno::Reference < css::io::XInputStream >& xRawStream,
                  const ::rtl::Reference< EncryptionData >& rData );
 
-    virtual ~XUnbufferedStream();
+    virtual ~XUnbufferedStream() override;
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )

@@ -74,7 +74,7 @@ private:
 public:
     DlgEdHint (Kind);
     DlgEdHint (Kind, DlgEdObj* pObj);
-    virtual ~DlgEdHint();
+    virtual ~DlgEdHint() override;
 
     Kind       GetKind() const { return eKind; }
     DlgEdObj*  GetObject() const { return pDlgEdObj; }
@@ -141,7 +141,7 @@ public:
         css::uno::Reference<css::frame::XModel> const& xModel,
         css::uno::Reference<css::container::XNameContainer> xDialogModel
     );
-    virtual ~DlgEditor();
+    virtual ~DlgEditor() override;
 
     vcl::Window& GetWindow() const { return rWindow; }
 

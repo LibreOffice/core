@@ -35,7 +35,7 @@ public:
     psp::PrinterGfx         m_aPrinterGfx;
 
     PspSalInfoPrinter();
-    virtual ~PspSalInfoPrinter();
+    virtual ~PspSalInfoPrinter() override;
 
     // override all pure virtual methods
     virtual SalGraphics*            AcquireGraphics() override;
@@ -70,7 +70,7 @@ public:
     bool                    m_bIsPDFWriterJob;
 
     PspSalPrinter( SalInfoPrinter *pPrinter );
-    virtual ~PspSalPrinter();
+    virtual ~PspSalPrinter() override;
 
     // override all pure virtual methods
     virtual bool                    StartJob( const OUString* pFileName,

@@ -90,7 +90,7 @@ namespace rptui
             const css::uno::Reference< css::report::XReportControlModel>& _xHoldAlive,
             ::rptui::OReportController& _rController
         );
-        virtual ~ConditionalFormattingDialog();
+        virtual ~ConditionalFormattingDialog() override;
         virtual void dispose() override;
         // Dialog overridables
         virtual short   Execute() override;

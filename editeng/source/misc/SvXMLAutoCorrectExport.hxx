@@ -36,7 +36,7 @@ public:
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
-    virtual ~SvXMLAutoCorrectExport() {}
+    virtual ~SvXMLAutoCorrectExport() override {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) override;
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_ () override {}
@@ -56,7 +56,7 @@ public:
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
-    virtual ~SvXMLExceptionListExport() {}
+    virtual ~SvXMLExceptionListExport() override {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) override;
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_ () override {}

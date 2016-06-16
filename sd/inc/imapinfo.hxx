@@ -43,7 +43,7 @@ public:
                         SfxListener(),
                         aImageMap( rIMapInfo.aImageMap ) {};
 
-    virtual         ~SdIMapInfo() {};
+    virtual         ~SdIMapInfo() override {};
 
     virtual SdrObjUserData* Clone( SdrObject* ) const override { return new SdIMapInfo( *this ); }
 

@@ -60,7 +60,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName);
 
-    virtual ~XMLIndexTitleTemplateContext();
+    virtual ~XMLIndexTitleTemplateContext() override;
 
 protected:
 

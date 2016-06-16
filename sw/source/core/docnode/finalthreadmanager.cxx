@@ -45,7 +45,7 @@ class CancelJobsThread : public osl::Thread
         {
         }
 
-        virtual ~CancelJobsThread() {}
+        virtual ~CancelJobsThread() override {}
 
         void addJobs( std::list< css::uno::Reference< css::util::XCancellable > >& rJobs );
         bool allJobsCancelled() const;
@@ -160,7 +160,7 @@ class TerminateOfficeThread : public osl::Thread
         {
         }
 
-        virtual ~TerminateOfficeThread() {}
+        virtual ~TerminateOfficeThread() override {}
         void StopOfficeTermination();
 
     private:

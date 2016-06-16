@@ -55,7 +55,7 @@ private:
 public:
 
     OReportModel(::reportdesign::OReportDefinition* _pReportDefinition);
-    virtual ~OReportModel();
+    virtual ~OReportModel() override;
 
     virtual void        SetChanged(bool bFlg = true) override;
     virtual SdrPage*    AllocPage(bool bMasterPage) override;

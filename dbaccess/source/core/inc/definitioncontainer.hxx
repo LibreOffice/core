@@ -140,7 +140,7 @@ protected:
     const PContainerApprove& getElementApproval() const { return m_pElementApproval; }
 
 protected:
-    virtual ~ODefinitionContainer();
+    virtual ~ODefinitionContainer() override;
 
     inline const ODefinitionContainer_Impl& getDefinitions() const
     {

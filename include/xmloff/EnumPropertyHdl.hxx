@@ -35,7 +35,7 @@ private:
 
 public:
     XMLEnumPropertyHdl( const SvXMLEnumMapEntry* pEnumMap, const css::uno::Type & rType ) : mpEnumMap( pEnumMap ), mrType( rType ) {}
-    virtual ~XMLEnumPropertyHdl();
+    virtual ~XMLEnumPropertyHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

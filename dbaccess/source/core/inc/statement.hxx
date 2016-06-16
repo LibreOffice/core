@@ -60,7 +60,7 @@ protected:
     bool                m_bUseBookmarks;
     bool                m_bEscapeProcessing;
 
-    virtual ~OStatementBase();
+    virtual ~OStatementBase() override;
 
 public:
     OStatementBase(const css::uno::Reference< css::sdbc::XConnection > & _xConn,

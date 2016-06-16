@@ -111,7 +111,7 @@ public:
     ChartView(css::uno::Reference< css::uno::XComponentContext > const & xContext,
                ChartModel& rModel);
 
-    virtual ~ChartView();
+    virtual ~ChartView() override;
 
     // ___lang::XServiceInfo___
     virtual OUString SAL_CALL getImplementationName()

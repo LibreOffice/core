@@ -124,7 +124,7 @@ public:
         sal_Int32 nCommandType,
         const css::uno::Reference< css::sdbc::XConnection>& xConnection,
         css::uno::Sequence< css::uno::Any >* pSelection = nullptr);
-    virtual ~SwMailMergeDlg();
+    virtual ~SwMailMergeDlg() override;
     virtual void dispose() override;
 
     inline DBManagerOptions GetMergeType() { return nMergeType; }
@@ -145,7 +145,7 @@ class SwMailMergeCreateFromDlg : public ModalDialog
     VclPtr<RadioButton> m_pThisDocRB;
 public:
     SwMailMergeCreateFromDlg(vcl::Window* pParent);
-    virtual ~SwMailMergeCreateFromDlg();
+    virtual ~SwMailMergeCreateFromDlg() override;
     virtual void dispose() override;
     bool IsThisDocument() const
     {
@@ -158,7 +158,7 @@ class SwMailMergeFieldConnectionsDlg : public ModalDialog
     VclPtr<RadioButton> m_pUseExistingRB;
 public:
     SwMailMergeFieldConnectionsDlg(vcl::Window* pParent);
-    virtual ~SwMailMergeFieldConnectionsDlg();
+    virtual ~SwMailMergeFieldConnectionsDlg() override;
     virtual void dispose() override;
 
     bool IsUseExistingConnections() const

@@ -32,7 +32,7 @@ public:
     // After that SwTable is empty and has to be deleted.
     SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
                 bool bUpdate = true );
-    virtual ~SwDDETable();
+    virtual ~SwDDETable() override;
 
     void ChangeContent();
     bool  NoDDETable();

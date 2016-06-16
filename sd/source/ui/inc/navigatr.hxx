@@ -93,7 +93,7 @@ public:
         const SdResId& rSdResId,
         SfxBindings* pBindings);
     void SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest);
-    virtual ~SdNavigatorWin();
+    virtual ~SdNavigatorWin() override;
     virtual void                dispose() override;
 
     virtual void                KeyInput( const KeyEvent& rKEvt ) override;

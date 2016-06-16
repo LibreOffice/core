@@ -28,7 +28,7 @@ class WRITERPERFECT_DLLPUBLIC WPFTEncodingDialog : public ModalDialog
 public:
     WPFTEncodingDialog(const OUString &title, const OUString &defEncoding);
 
-    virtual ~WPFTEncodingDialog();
+    virtual ~WPFTEncodingDialog() override;
 
     OUString GetEncoding() const;
     bool hasUserCalledCancel() const

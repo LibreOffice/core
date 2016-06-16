@@ -75,7 +75,7 @@ class XFSectionStyle : public XFStyle
 public:
     XFSectionStyle();
 
-    virtual ~XFSectionStyle();
+    virtual ~XFSectionStyle() override;
 
 public:
     void    SetMarginLeft(double left);

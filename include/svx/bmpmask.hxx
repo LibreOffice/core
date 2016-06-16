@@ -134,7 +134,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
 public:
 
     SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* pParent);
-    virtual ~SvxBmpMask();
+    virtual ~SvxBmpMask() override;
     virtual void dispose() override;
 
     void                SetColor( const Color& rColor );

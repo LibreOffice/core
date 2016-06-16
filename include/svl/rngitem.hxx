@@ -55,7 +55,7 @@ private:
 public:
                                 SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream );
                                 SfxUShortRangesItem( const SfxUShortRangesItem& rItem );
-    virtual                     ~SfxUShortRangesItem();
+    virtual                     ~SfxUShortRangesItem() override;
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

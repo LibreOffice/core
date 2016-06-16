@@ -124,7 +124,7 @@ protected:
 
 public:
     VCLXWindow( bool bWithDefaultProps = false );
-    virtual ~VCLXWindow();
+    virtual ~VCLXWindow() override;
 
     virtual void SetWindow( const VclPtr< vcl::Window > &pWindow );
     template< class derived_type > VclPtr< derived_type > GetAs() const {

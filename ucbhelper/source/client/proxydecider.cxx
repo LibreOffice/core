@@ -134,7 +134,7 @@ private:
 public:
     explicit InternetProxyDecider_Impl(
         const uno::Reference< uno::XComponentContext >& rxContext );
-    virtual ~InternetProxyDecider_Impl();
+    virtual ~InternetProxyDecider_Impl() override;
 
     void dispose();
 

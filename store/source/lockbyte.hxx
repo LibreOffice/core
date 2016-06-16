@@ -104,7 +104,7 @@ public:
     storeError flush();
 
 protected:
-    virtual ~ILockBytes() {}
+    virtual ~ILockBytes() override {}
 
 private:
     /** Implementation (abstract).

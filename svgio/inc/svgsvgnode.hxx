@@ -52,7 +52,7 @@ namespace svgio
             SvgSvgNode(
                 SvgDocument& rDocument,
                 SvgNode* pParent);
-            virtual ~SvgSvgNode();
+            virtual ~SvgSvgNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;

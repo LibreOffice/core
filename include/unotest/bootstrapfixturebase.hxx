@@ -41,7 +41,7 @@ protected:
 
 public:
   BootstrapFixtureBase();
-  virtual ~BootstrapFixtureBase();
+  virtual ~BootstrapFixtureBase() override;
 
   const css::uno::Reference<css::uno::XComponentContext>&
               getComponentContext() { return m_xContext; }

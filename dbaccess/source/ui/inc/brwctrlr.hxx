@@ -216,7 +216,7 @@ namespace dbaui
     public:
 
     protected:
-        virtual ~SbaXDataBrowserController();
+        virtual ~SbaXDataBrowserController() override;
 
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures() override;

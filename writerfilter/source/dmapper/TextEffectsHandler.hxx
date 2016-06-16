@@ -44,7 +44,7 @@ private:
 
 public:
     TextEffectsHandler(sal_uInt32 aElementId);
-    virtual ~TextEffectsHandler();
+    virtual ~TextEffectsHandler() override;
 
     const boost::optional<PropertyIds>& getGrabBagPropertyId() { return maPropertyId;}
 

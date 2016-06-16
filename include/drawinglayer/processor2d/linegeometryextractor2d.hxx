@@ -50,7 +50,7 @@ namespace drawinglayer
 
         public:
             LineGeometryExtractor2D(const geometry::ViewInformation2D& rViewInformation);
-            virtual ~LineGeometryExtractor2D();
+            virtual ~LineGeometryExtractor2D() override;
 
             const basegfx::B2DPolygonVector& getExtractedHairlines() const { return maExtractedHairlines; }
             const basegfx::B2DPolyPolygonVector& getExtractedLineFills() const { return maExtractedLineFills; }

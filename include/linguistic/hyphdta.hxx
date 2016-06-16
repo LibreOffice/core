@@ -44,7 +44,7 @@ class HyphenatedWord :
 public:
     HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
                    const OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
-    virtual ~HyphenatedWord();
+    virtual ~HyphenatedWord() override;
 
     // XHyphenatedWord
     virtual OUString SAL_CALL
@@ -90,7 +90,7 @@ public:
     PossibleHyphens(const OUString &rWord, sal_Int16 nLang,
             const OUString &rHyphWord,
             const css::uno::Sequence< sal_Int16 > &rPositions);
-    virtual ~PossibleHyphens();
+    virtual ~PossibleHyphens() override;
 
     // XPossibleHyphens
     virtual OUString SAL_CALL

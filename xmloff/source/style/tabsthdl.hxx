@@ -28,7 +28,7 @@
 class XMLTabStopPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLTabStopPropHdl();
+    virtual ~XMLTabStopPropHdl() override;
 
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
 

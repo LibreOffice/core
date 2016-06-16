@@ -72,7 +72,7 @@ class DiagramWrapper : public cppu::ImplInheritanceHelper<
 {
 public:
     explicit DiagramWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~DiagramWrapper();
+    virtual ~DiagramWrapper() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

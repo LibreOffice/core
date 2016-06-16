@@ -123,7 +123,7 @@ private:
 public:
 
                                 SfxApplication();
-                                virtual ~SfxApplication();
+                                virtual ~SfxApplication() override;
     static SfxApplication*      GetOrCreate();
     static SfxApplication*      Get();
 

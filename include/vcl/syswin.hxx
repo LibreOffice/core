@@ -193,7 +193,7 @@ protected:
 
     SAL_DLLPRIVATE void DoInitialLayout();
 public:
-    virtual         ~SystemWindow();
+    virtual         ~SystemWindow() override;
     virtual void    dispose() override;
 
     virtual bool    Notify( NotifyEvent& rNEvt ) override;

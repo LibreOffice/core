@@ -57,7 +57,7 @@ public:
 private:
     PropertyNode(PropertyNode const & other);
 
-    virtual ~PropertyNode();
+    virtual ~PropertyNode() override;
 
     virtual Kind kind() const override;
 

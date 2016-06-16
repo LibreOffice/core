@@ -52,7 +52,7 @@ class DataPoint :
 {
 public:
     explicit DataPoint( const css::uno::Reference< css::beans::XPropertySet > & rParentProperties );
-    virtual ~DataPoint();
+    virtual ~DataPoint() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

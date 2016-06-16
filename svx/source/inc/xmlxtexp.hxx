@@ -41,7 +41,7 @@ public:
         const css::uno::Reference< css::container::XNameContainer > & xTable,
         css::uno::Reference< css::document::XGraphicObjectResolver >& xGrfResolver);
 
-    virtual ~SvxXMLXTableExportComponent();
+    virtual ~SvxXMLXTableExportComponent() override;
 
     static bool save( const OUString& rURL,
                       const css::uno::Reference< css::container::XNameContainer >& xTable,

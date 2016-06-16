@@ -104,7 +104,7 @@ public:
     {
     }
 
-    virtual ~ClosableReference()
+    virtual ~ClosableReference() override
     {
     }
 

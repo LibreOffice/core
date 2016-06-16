@@ -63,7 +63,7 @@ namespace sdr
                 const Color& rColor,
                 const std::vector< basegfx::B2DRange >& rRanges,
                 bool bBorder);
-            virtual ~OverlaySelection();
+            virtual ~OverlaySelection() override;
 
             // data read access
             const std::vector< basegfx::B2DRange >& getRanges() const { return maRanges; }

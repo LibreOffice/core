@@ -77,7 +77,7 @@ private:
 public:
 
     explicit JobDispatch(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~JobDispatch();
+    virtual ~JobDispatch() override;
 
     void impl_dispatchEvent  ( const OUString&                                            sEvent    ,
                                const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,

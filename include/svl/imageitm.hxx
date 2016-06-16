@@ -32,7 +32,7 @@ public:
                             static SfxPoolItem* CreateDefault();
                             SfxImageItem( sal_uInt16 nWhich = 0 );
                             SfxImageItem( const SfxImageItem& );
-    virtual                 ~SfxImageItem();
+    virtual                 ~SfxImageItem() override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

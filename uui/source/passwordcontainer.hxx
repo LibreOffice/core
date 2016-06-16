@@ -131,7 +131,7 @@ class PasswordContainerInteractionHandler :
 public:
     explicit PasswordContainerInteractionHandler(
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~PasswordContainerInteractionHandler();
+    virtual ~PasswordContainerInteractionHandler() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

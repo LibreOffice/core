@@ -73,7 +73,7 @@ class VCLSession:
 
     static void SalSessionEventProc( void* pData, SalSessionEvent* pEvent );
 
-    virtual ~VCLSession() {}
+    virtual ~VCLSession() override {}
 
     virtual void SAL_CALL addSessionManagerListener( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException, std::exception ) override;
     virtual void SAL_CALL removeSessionManagerListener( const css::uno::Reference< XSessionManagerListener>& xListener ) throw( RuntimeException, std::exception ) override;

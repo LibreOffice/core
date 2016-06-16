@@ -69,7 +69,7 @@ namespace comphelper
         virtual css::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
     protected:
-        virtual ~OPropertyStateHelper();
+        virtual ~OPropertyStateHelper() override;
 
         void firePropertyChange(sal_Int32 nHandle, const css::uno::Any& aNewValue, const css::uno::Any& aOldValue);
 
@@ -86,7 +86,7 @@ namespace comphelper
     {
     protected:
         OStatefulPropertySet();
-        virtual ~OStatefulPropertySet();
+        virtual ~OStatefulPropertySet() override;
 
     protected:
         DECLARE_XINTERFACE()

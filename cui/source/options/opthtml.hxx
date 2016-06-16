@@ -50,7 +50,7 @@ class OfaHtmlTabPage : public SfxTabPage
     DECL_LINK_TYPED(CheckBoxHdl_Impl, Button*, void);
 
 public:
-    virtual ~OfaHtmlTabPage();
+    virtual ~OfaHtmlTabPage() override;
     virtual void dispose() override;
 
     OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet);

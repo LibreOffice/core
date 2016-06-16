@@ -110,7 +110,7 @@ protected:
 public:
     /** the = 0 forces the class to be an abstract base class, but the dtor can be still called
        from subclasses */
-    virtual ~SwNode() = 0;
+    virtual ~SwNode() override = 0;
 
 #ifdef DBG_UTIL
     long GetSerial() const { return m_nSerial; }
@@ -363,7 +363,7 @@ protected:
                 SwFormatColl *pFormatColl );
     /** the = 0 forces the class to be an abstract base class, but the dtor can be still called
        from subclasses */
-    virtual ~SwContentNode() = 0;
+    virtual ~SwContentNode() override = 0;
 
     /**  Attribute-set for all auto attributes of a ContentNode.
       (e.g. TextNode or NoTextNode). */
@@ -492,7 +492,7 @@ class SW_DLLPUBLIC SwTableNode : public SwStartNode, public SwModify
     friend class SwNodes;
     SwTable* m_pTable;
 protected:
-    virtual ~SwTableNode();
+    virtual ~SwTableNode() override;
 
 public:
     SwTableNode( const SwNodeIndex & );
@@ -535,7 +535,7 @@ private:
     std::unique_ptr<SwSection> const m_pSection;
 
 protected:
-    virtual ~SwSectionNode();
+    virtual ~SwSectionNode() override;
 
 public:
     SwSectionNode(SwNodeIndex const&,

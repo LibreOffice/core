@@ -84,7 +84,7 @@ class SvtMenuOptions_Impl : public ConfigItem
 
 
          SvtMenuOptions_Impl();
-        virtual ~SvtMenuOptions_Impl();
+        virtual ~SvtMenuOptions_Impl() override;
 
         //  override methods of baseclass
 

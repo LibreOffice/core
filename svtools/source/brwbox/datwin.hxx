@@ -127,7 +127,7 @@ public:
 
 public:
                     explicit BrowserDataWin( BrowseBox* pParent );
-    virtual         ~BrowserDataWin();
+    virtual         ~BrowserDataWin() override;
     virtual void    dispose() override;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -184,7 +184,7 @@ public:
                         _nLastPos( ULONG_MAX ),
                         _pDataWin( pDataWin )
                     {}
-   virtual          ~BrowserScrollBar();
+   virtual          ~BrowserScrollBar() override;
    virtual void     dispose() override;
                     //ScrollBar( vcl::Window* pParent, const ResId& rResId );
 

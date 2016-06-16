@@ -39,7 +39,7 @@ public:
     Input(): open_(true), index_(0) {}
 
 private:
-    virtual ~Input() {}
+    virtual ~Input() override {}
 
     sal_Int32 SAL_CALL readBytes(css::uno::Sequence<sal_Int8> &, sal_Int32)
         throw (

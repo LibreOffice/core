@@ -84,7 +84,7 @@ namespace fileaccess {
             const css::uno::Reference< css::ucb::XContentIdentifier >& xContentIdentifier,
             const OUString& aUnqPath );
 
-        virtual ~BaseContent();
+        virtual ~BaseContent() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL

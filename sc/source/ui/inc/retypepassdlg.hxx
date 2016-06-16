@@ -46,7 +46,7 @@ public:
 
     ScRetypePassDlg() = delete;
     explicit ScRetypePassDlg(vcl::Window* pParent);
-    virtual ~ScRetypePassDlg();
+    virtual ~ScRetypePassDlg() override;
     virtual void dispose() override;
 
     virtual short Execute() override;
@@ -102,7 +102,7 @@ class ScRetypePassInputDlg : public ModalDialog
 public:
     ScRetypePassInputDlg() = delete;
     explicit ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProtectable* pProtected);
-    virtual ~ScRetypePassInputDlg();
+    virtual ~ScRetypePassInputDlg() override;
     virtual void dispose() override;
 
     virtual short Execute() override;

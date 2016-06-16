@@ -30,7 +30,7 @@ class ScTextImportOptionsDlg : public ModalDialog
 {
 public:
     ScTextImportOptionsDlg(vcl::Window* pParent);
-    virtual ~ScTextImportOptionsDlg();
+    virtual ~ScTextImportOptionsDlg() override;
     virtual void dispose() override;
     virtual short Execute() override;
 

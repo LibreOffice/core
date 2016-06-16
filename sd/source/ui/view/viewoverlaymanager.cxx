@@ -104,7 +104,7 @@ class ChangePlaceholderTag : public SmartTag
     friend class ImageButtonHdl;
 public:
     ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj );
-    virtual ~ChangePlaceholderTag();
+    virtual ~ChangePlaceholderTag() override;
 
     /** returns true if the SmartTag handled the event. */
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& ) override;
@@ -128,7 +128,7 @@ class ImageButtonHdl : public SmartHdl
 {
 public:
     ImageButtonHdl( const SmartTagReference& xTag, /* sal_uInt16 nSID, const Image& rImage, const Image& rImageMO, */ const Point& rPnt );
-    virtual ~ImageButtonHdl();
+    virtual ~ImageButtonHdl() override;
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
     virtual Pointer GetPointer() const override;

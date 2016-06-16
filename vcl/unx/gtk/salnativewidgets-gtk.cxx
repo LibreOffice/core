@@ -270,7 +270,7 @@ class GdkX11Pixmap : public X11Pixmap
 {
 public:
     GdkX11Pixmap( int nWidth, int nHeight, int nDepth );
-    virtual ~GdkX11Pixmap();
+    virtual ~GdkX11Pixmap() override;
 
     virtual int          GetDepth() const override;
     virtual SalX11Screen GetScreen() const override;

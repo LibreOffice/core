@@ -61,7 +61,7 @@ public:
         vcl::Window* pParentWindow,
         FrameView* pFrameView = nullptr);
 
-    virtual ~GraphicViewShell();
+    virtual ~GraphicViewShell() override;
 
     /** Override this method in order to have the layer mode always active.
     */

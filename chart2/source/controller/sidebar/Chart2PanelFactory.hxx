@@ -41,7 +41,7 @@ class ChartPanelFactory
 {
 public:
     ChartPanelFactory();
-    virtual ~ChartPanelFactory();
+    virtual ~ChartPanelFactory() override;
 
     ChartPanelFactory(const ChartPanelFactory&) = delete;
     const ChartPanelFactory& operator=(const ChartPanelFactory&) = delete;

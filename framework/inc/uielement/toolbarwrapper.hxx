@@ -37,7 +37,7 @@ class ToolBarWrapper : public css::ui::XUIFunctionListener,
 {
     public:
         ToolBarWrapper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        virtual ~ToolBarWrapper();
+        virtual ~ToolBarWrapper() override;
 
         // XInterface
         virtual void SAL_CALL acquire() throw() override;

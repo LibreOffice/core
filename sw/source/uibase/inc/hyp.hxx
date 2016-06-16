@@ -46,7 +46,7 @@ public:
     SwHyphWrapper( SwView* pVw,
                    css::uno::Reference< css::linguistic2::XHyphenator >  &rxHyph,
                    bool bStart, bool bOther, bool bSelect );
-    virtual ~SwHyphWrapper();
+    virtual ~SwHyphWrapper() override;
 };
 
 #endif

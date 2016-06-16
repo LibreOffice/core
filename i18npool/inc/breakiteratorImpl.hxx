@@ -48,7 +48,7 @@ class BreakIteratorImpl : public cppu::WeakImplHelper
 public:
     BreakIteratorImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     BreakIteratorImpl();
-    virtual ~BreakIteratorImpl();
+    virtual ~BreakIteratorImpl() override;
 
     virtual sal_Int32 SAL_CALL nextCharacters( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,

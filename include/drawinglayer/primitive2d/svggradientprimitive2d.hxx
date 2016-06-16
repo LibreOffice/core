@@ -209,7 +209,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rEnd,
                 bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod = SpreadMethod::Pad);
-            virtual ~SvgLinearGradientPrimitive2D();
+            virtual ~SvgLinearGradientPrimitive2D() override;
 
             /// data read access
             const basegfx::B2DPoint& getEnd() const { return maEnd; }
@@ -279,7 +279,7 @@ namespace drawinglayer
                 bool bUseUnitCoordinates,
                 SpreadMethod aSpreadMethod = SpreadMethod::Pad,
                 const basegfx::B2DPoint* pFocal = nullptr);
-            virtual ~SvgRadialGradientPrimitive2D();
+            virtual ~SvgRadialGradientPrimitive2D() override;
 
             /// data read access
             double getRadius() const { return mfRadius; }
@@ -393,7 +393,7 @@ namespace drawinglayer
             SvgRadialAtomPrimitive2D(
                 const basegfx::BColor& aColorA, double fScaleA,
                 const basegfx::BColor& aColorB, double fScaleB);
-            virtual ~SvgRadialAtomPrimitive2D();
+            virtual ~SvgRadialAtomPrimitive2D() override;
 
             /// data read access
             const basegfx::BColor& getColorA() const { return maColorA; }

@@ -88,7 +88,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions : public utl::detail::
     public:
 
          SvtModuleOptions();
-        virtual ~SvtModuleOptions();
+        virtual ~SvtModuleOptions() override;
 
         bool        IsModuleInstalled         (       EModule          eModule    ) const;
         OUString GetModuleName             (       EModule          eModule    ) const;

@@ -51,7 +51,7 @@ class ScMessagePool: public SfxItemPool
 public:
     ScMessagePool();
 protected:
-    virtual ~ScMessagePool();
+    virtual ~ScMessagePool() override;
 public:
 
     virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const override;

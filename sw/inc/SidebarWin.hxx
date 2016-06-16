@@ -65,7 +65,7 @@ class SwSidebarWin : public vcl::Window
                       SwPostItMgr& aMgr,
                       SwPostItBits aBits,
                       SwSidebarItem& rSidebarItem );
-        virtual ~SwSidebarWin();
+        virtual ~SwSidebarWin() override;
         virtual void dispose() override;
 
         void SetSize( const Size& rNewSize );

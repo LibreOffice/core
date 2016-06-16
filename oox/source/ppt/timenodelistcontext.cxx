@@ -179,7 +179,7 @@ namespace oox { namespace ppt {
 
             }
 
-        virtual ~SetTimeNodeContext() throw ()
+        virtual ~SetTimeNodeContext() throw () override
             {
                 if( maTo.hasValue() )
                 {
@@ -240,7 +240,7 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ~CmdTimeNodeContext() throw ()
+        virtual ~CmdTimeNodeContext() throw () override
             {
             }
 
@@ -353,7 +353,7 @@ namespace oox { namespace ppt {
                 mnPrevAc = xAttribs->getOptionalValueToken( XML_prevAc, 0 );
             }
 
-        virtual ~SequenceTimeNodeContext() throw()
+        virtual ~SequenceTimeNodeContext() throw() override
             {
             }
 
@@ -426,7 +426,7 @@ namespace oox { namespace ppt {
             , m_byColor( AnimationColorSpace::RGB, 0, 0, 0)
             {
             }
-        virtual ~AnimColorContext() throw()
+        virtual ~AnimColorContext() throw() override
             {
             }
 
@@ -555,7 +555,7 @@ namespace oox { namespace ppt {
                 mnValueType = xAttribs->getOptionalValueToken( XML_valueType, 0 );
             }
 
-        virtual ~AnimContext() throw ()
+        virtual ~AnimContext() throw () override
             {
                 ::std::list< TimeAnimationValue >::iterator iter, end;
                 int nKeyTimes = maTavList.size();
@@ -627,7 +627,7 @@ namespace oox { namespace ppt {
                     = makeAny((sal_Int16)AnimationTransformType::SCALE);
             }
 
-        virtual ~AnimScaleContext( ) throw( )
+        virtual ~AnimScaleContext( ) throw( ) override
             {
             }
 
@@ -726,7 +726,7 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ~AnimRotContext( ) throw( )
+        virtual ~AnimRotContext( ) throw( ) override
             {
             }
 
@@ -783,7 +783,7 @@ namespace oox { namespace ppt {
                 // TODO make sure the units are right. Likely not.
             }
 
-        virtual ~AnimMotionContext( ) throw()
+        virtual ~AnimMotionContext( ) throw() override
             {
             }
 
@@ -866,7 +866,7 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ~AnimEffectContext( ) throw()
+        virtual ~AnimEffectContext( ) throw() override
             {
             }
 

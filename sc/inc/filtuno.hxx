@@ -49,7 +49,7 @@ private:
 
 public:
                             ScFilterOptionsObj();
-    virtual                 ~ScFilterOptionsObj();
+    virtual                 ~ScFilterOptionsObj() override;
 
                             // XPropertyAccess
     virtual css::uno::Sequence< css::beans::PropertyValue >

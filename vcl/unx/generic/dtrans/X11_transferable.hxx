@@ -34,7 +34,7 @@ namespace x11 {
         Atom                m_aSelection;
     public:
         X11Transferable( SelectionManager& rManager, Atom selection = None );
-        virtual ~X11Transferable();
+        virtual ~X11Transferable() override;
 
         /*
          * XTransferable

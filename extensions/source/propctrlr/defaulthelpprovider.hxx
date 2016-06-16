@@ -56,7 +56,7 @@ namespace pcr
                         Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     protected:
-        virtual ~DefaultHelpProvider();
+        virtual ~DefaultHelpProvider() override;
 
         // XPropertyControlObserver
         virtual void SAL_CALL focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException, std::exception) override;

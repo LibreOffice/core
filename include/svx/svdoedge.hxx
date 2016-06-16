@@ -138,7 +138,7 @@ public:
 
 public:
     SdrEdgeObjGeoData();
-    virtual ~SdrEdgeObjGeoData();
+    virtual ~SdrEdgeObjGeoData() override;
 };
 
 
@@ -210,7 +210,7 @@ protected:
 public:
 
     SdrEdgeObj();
-    virtual ~SdrEdgeObj();
+    virtual ~SdrEdgeObj() override;
 
     SdrObjConnection& GetConnection(bool bTail1) { return *(bTail1 ? &aCon1 : &aCon2); }
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;

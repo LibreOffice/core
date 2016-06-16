@@ -72,7 +72,7 @@ namespace sdr
             CustomShapeProperties(const CustomShapeProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~CustomShapeProperties();
+            virtual ~CustomShapeProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;

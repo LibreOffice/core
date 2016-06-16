@@ -54,7 +54,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtUserOptions : public utl::detail::Op
 {
 public:
     SvtUserOptions ();
-    virtual ~SvtUserOptions ();
+    virtual ~SvtUserOptions () override;
 
     static osl::Mutex& GetInitMutex ();
 

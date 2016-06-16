@@ -40,7 +40,7 @@ private:
 public:
     SwVbaBookmark( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::frame::XModel >& rModel, const OUString& rName ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaBookmark();
+    virtual ~SwVbaBookmark() override;
 
    // Methods
     virtual OUString SAL_CALL getName() throw ( css::uno::RuntimeException, std::exception ) override;

@@ -54,7 +54,7 @@ private:
     virtual void        dispose() override;
 public:
                         HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle );
-    virtual             ~HelpTextWindow();
+    virtual             ~HelpTextWindow() override;
 
     const OUString&     GetHelpText() const { return maHelpText; }
     void                SetHelpText( const OUString& rHelpText );

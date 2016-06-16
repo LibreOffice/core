@@ -403,7 +403,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 protected:
-    virtual ~SdrObject();
+    virtual ~SdrObject() override;
 
 public:
     SdrObject();

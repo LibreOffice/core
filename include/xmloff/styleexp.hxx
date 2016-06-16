@@ -87,7 +87,7 @@ public:
         SvXMLExport& rExp,
         const OUString& rPoolStyleName,
         SvXMLAutoStylePoolP *pAutoStyleP=nullptr );
-    virtual ~XMLStyleExport();
+    virtual ~XMLStyleExport() override;
 
 //  void exportStyleFamily(
 //      const OUString& rFamily, const OUString& rXMLFamily,

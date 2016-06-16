@@ -39,7 +39,7 @@ class SwXTextDefaults :  public cppu::WeakImplHelper
 
 public:
     SwXTextDefaults ( SwDoc * pNewDoc );
-    virtual ~SwXTextDefaults ();
+    virtual ~SwXTextDefaults () override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )

@@ -63,7 +63,7 @@ class JPEGReader : public GraphicReader
 
 public:
             JPEGReader( SvStream& rStream, void* pCallData, bool bSetLogSize );
-    virtual ~JPEGReader();
+    virtual ~JPEGReader() override;
 
     ReadState   Read( Graphic& rGraphic );
     unsigned char * CreateBitmap( JPEGCreateBitmapParam& param );

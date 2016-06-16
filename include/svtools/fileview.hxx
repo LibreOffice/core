@@ -82,7 +82,7 @@ protected:
 
 public:
     SvtFileView( vcl::Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection, bool bShowType = true );
-    virtual ~SvtFileView();
+    virtual ~SvtFileView() override;
     virtual void dispose() override;
 
     virtual Size GetOptimalSize() const override;
@@ -220,7 +220,7 @@ private:
 public:
 
     QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& rName);
-    virtual ~QueryDeleteDlg_Impl();
+    virtual ~QueryDeleteDlg_Impl() override;
     virtual void dispose() override;
 
     void EnableAllButton() { m_pAllButton->Enable(); }

@@ -117,7 +117,7 @@ public:
     explicit            VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
                                       DeviceFormat eFormat);
 
-    virtual             ~VirtualDevice();
+    virtual             ~VirtualDevice() override;
     virtual void        dispose() override;
 
     virtual void        EnableRTL( bool bEnable = true ) override;

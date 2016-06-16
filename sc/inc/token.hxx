@@ -151,7 +151,7 @@ public:
     ScExternalSingleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& r );
     ScExternalSingleRefToken( const ScExternalSingleRefToken& r );
     ScExternalSingleRefToken() = delete;
-    virtual ~ScExternalSingleRefToken();
+    virtual ~ScExternalSingleRefToken() override;
 
     virtual sal_uInt16                  GetIndex() const override;
     virtual svl::SharedString GetString() const override;
@@ -171,7 +171,7 @@ public:
     ScExternalDoubleRefToken() = delete;
     ScExternalDoubleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& r );
     ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r );
-    virtual ~ScExternalDoubleRefToken();
+    virtual ~ScExternalDoubleRefToken() override;
 
     virtual sal_uInt16                 GetIndex() const override;
     virtual svl::SharedString GetString() const override;
@@ -194,7 +194,7 @@ public:
     ScExternalNameToken() = delete;
     ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedString& rName );
     ScExternalNameToken( const ScExternalNameToken& r );
-    virtual ~ScExternalNameToken();
+    virtual ~ScExternalNameToken() override;
 
     virtual sal_uInt16              GetIndex() const override;
     virtual svl::SharedString GetString() const override;
@@ -222,7 +222,7 @@ public:
     ScTableRefToken() = delete;
     ScTableRefToken( sal_uInt16 nIndex, Item eItem );
     ScTableRefToken( const ScTableRefToken& r );
-    virtual ~ScTableRefToken();
+    virtual ~ScTableRefToken() override;
 
     virtual sal_uInt16          GetIndex() const override;
     virtual void                SetIndex( sal_uInt16 n ) override;
@@ -253,7 +253,7 @@ public:
                                     FormulaToken( formula::svJumpMatrix ), pJumpMatrix( p ) {}
                                 ScJumpMatrixToken( const ScJumpMatrixToken& r ) :
                                     FormulaToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
-    virtual                     ~ScJumpMatrixToken();
+    virtual                     ~ScJumpMatrixToken() override;
     virtual ScJumpMatrix*       GetJumpMatrix() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScJumpMatrixToken(*this); }
@@ -310,7 +310,7 @@ protected:
 public:
     ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
     ScMatrixCellResultToken( const ScMatrixCellResultToken& r );
-    virtual ~ScMatrixCellResultToken();
+    virtual ~ScMatrixCellResultToken() override;
     virtual double              GetDouble() const override;
     virtual svl::SharedString GetString() const override;
     virtual const ScMatrix*     GetMatrix() const override;
@@ -337,7 +337,7 @@ public:
     ScMatrixFormulaCellToken( SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
     ScMatrixFormulaCellToken( SCCOL nC, SCROW nR );
     ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r );
-    virtual ~ScMatrixFormulaCellToken();
+    virtual ~ScMatrixFormulaCellToken() override;
 
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new ScMatrixFormulaCellToken(*this); }

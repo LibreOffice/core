@@ -27,7 +27,7 @@
 class XMLAnchorTypePropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLAnchorTypePropHdl ();
+    virtual ~XMLAnchorTypePropHdl () override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,

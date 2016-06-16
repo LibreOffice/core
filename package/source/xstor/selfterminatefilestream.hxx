@@ -41,7 +41,7 @@ protected:
 public:
     OSelfTerminateFileStream( const css::uno::Reference< css::uno::XComponentContext >& xContext, const OUString& aURL );
 
-    virtual ~OSelfTerminateFileStream();
+    virtual ~OSelfTerminateFileStream() override;
 
     void CloseStreamDeleteFile();
 

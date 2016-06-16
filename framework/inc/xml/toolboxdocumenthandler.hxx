@@ -62,7 +62,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
         };
 
         OReadToolBoxDocumentHandler( const css::uno::Reference< css::container::XIndexContainer >& rItemContainer );
-        virtual ~OReadToolBoxDocumentHandler();
+        virtual ~OReadToolBoxDocumentHandler() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()

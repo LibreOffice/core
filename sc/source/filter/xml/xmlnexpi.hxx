@@ -76,7 +76,7 @@ public:
         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
         Inserter* pInserter );
 
-    virtual ~ScXMLNamedExpressionsContext();
+    virtual ~ScXMLNamedExpressionsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -100,7 +100,7 @@ public:
         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
-    virtual ~ScXMLNamedRangeContext();
+    virtual ~ScXMLNamedRangeContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -124,7 +124,7 @@ public:
         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
-    virtual ~ScXMLNamedExpressionContext();
+    virtual ~ScXMLNamedExpressionContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

@@ -28,7 +28,7 @@ public:
 
 private:
     explicit ScTpDefaultsOptions(vcl::Window* pParent, const SfxItemSet& rCoreSet);
-    virtual ~ScTpDefaultsOptions();
+    virtual ~ScTpDefaultsOptions() override;
     virtual void dispose() override;
 
     void CheckNumSheets();

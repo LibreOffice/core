@@ -45,7 +45,7 @@ class PresenterPreviewCache
 {
 public:
     explicit PresenterPreviewCache (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterPreviewCache();
+    virtual ~PresenterPreviewCache() override;
     PresenterPreviewCache(const PresenterPreviewCache&) = delete;
     PresenterPreviewCache& operator=(const PresenterPreviewCache&) = delete;
 

@@ -82,7 +82,7 @@ public:
     //       caller must immediately call loadFromStorage/Medium!
     explicit DocumentMetadataAccess(css::uno::Reference< css::uno::XComponentContext > const & i_xContext,
                 IXmlIdRegistrySupplier const & i_rRegistrySupplier);
-    virtual ~DocumentMetadataAccess();
+    virtual ~DocumentMetadataAccess() override;
 
     // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue()

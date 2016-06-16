@@ -57,7 +57,7 @@ private:
     css::uno::Reference< css::security::XCertificate > mxCert;
 public:
     CertificateViewer( vcl::Window* pParent, const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const css::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey );
-    virtual             ~CertificateViewer();
+    virtual             ~CertificateViewer() override;
     virtual void        dispose() override;
 };
 
@@ -69,7 +69,7 @@ protected:
 public:
     CertificateViewerTP( vcl::Window* _pParent, const OString& rID,
         const OUString& rUIXMLDescription, CertificateViewer* _pDlg );
-    virtual ~CertificateViewerTP();
+    virtual ~CertificateViewerTP() override;
     virtual void dispose() override;
 };
 
@@ -86,7 +86,7 @@ private:
     VclPtr<FixedText>          m_pHintCorrespPrivKeyFI;
 public:
                         CertificateViewerGeneralTP( vcl::Window* pParent, CertificateViewer* _pDlg );
-    virtual             ~CertificateViewerGeneralTP();
+    virtual             ~CertificateViewerGeneralTP() override;
     virtual void        dispose() override;
 
     virtual void        ActivatePage() override;
@@ -108,7 +108,7 @@ private:
                                        const OUString& _rDetails, bool _bFixedWidthFont = false );
 public:
                         CertificateViewerDetailsTP( vcl::Window* pParent, CertificateViewer* _pDlg );
-    virtual             ~CertificateViewerDetailsTP();
+    virtual             ~CertificateViewerDetailsTP() override;
     virtual void        dispose() override;
 
     virtual void        ActivatePage() override;
@@ -138,7 +138,7 @@ private:
 
 public:
                         CertificateViewerCertPathTP( vcl::Window* pParent, CertificateViewer* _pDlg );
-    virtual             ~CertificateViewerCertPathTP();
+    virtual             ~CertificateViewerCertPathTP() override;
     virtual void        dispose() override;
 
     virtual void        ActivatePage() override;

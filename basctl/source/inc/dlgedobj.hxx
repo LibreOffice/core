@@ -87,7 +87,7 @@ protected:
 
 public:
 
-    virtual ~DlgEdObj();
+    virtual ~DlgEdObj() override;
     virtual void SetPage(SdrPage* pNewPage) override;
 
     void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
@@ -156,7 +156,7 @@ protected:
 
 public:
 
-    virtual ~DlgEdForm();
+    virtual ~DlgEdForm() override;
 
     DlgEditor& GetDlgEditor () const { return rDlgEditor; }
 

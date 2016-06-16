@@ -67,7 +67,7 @@ public:
         vcl::Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
-    virtual ~PageHeaderPanel();
+    virtual ~PageHeaderPanel() override;
     virtual void dispose() override;
 
 private:

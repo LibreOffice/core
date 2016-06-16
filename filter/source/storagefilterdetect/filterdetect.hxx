@@ -37,7 +37,7 @@ class StorageFilterDetect : public cppu::WeakImplHelper<
 public:
 
     explicit StorageFilterDetect (const css::uno::Reference<css::uno::XComponentContext>& xCxt);
-    virtual ~StorageFilterDetect();
+    virtual ~StorageFilterDetect() override;
 
     // XExtendedFilterDetection
     virtual OUString SAL_CALL detect(css::uno::Sequence<css::beans::PropertyValue>& rDescriptor)

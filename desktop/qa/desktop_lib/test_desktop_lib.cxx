@@ -46,7 +46,7 @@ public:
     {
     }
 
-    virtual ~DesktopLOKTest()
+    virtual ~DesktopLOKTest() override
     {
     }
 

@@ -110,7 +110,7 @@ class ImpSdrObjTextLinkUserData : public SdrObjUserData
 
 public:
     ImpSdrObjTextLinkUserData();
-    virtual ~ImpSdrObjTextLinkUserData();
+    virtual ~ImpSdrObjTextLinkUserData() override;
 
     virtual SdrObjUserData* Clone(SdrObject* pObj1) const override;
 };
@@ -323,7 +323,7 @@ protected:
     SdrTextObj(SdrObjKind eNewTextKind);
     SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect);
 
-    virtual ~SdrTextObj();
+    virtual ~SdrTextObj() override;
 
 public:
 

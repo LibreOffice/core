@@ -47,7 +47,7 @@ namespace sdr
 
         public:
             OverlayObjectCell( CellOverlayType eType, const Color& rColor, const RangeVector& rRects);
-            virtual ~OverlayObjectCell();
+            virtual ~OverlayObjectCell() override;
         };
 
     } // end of namespace overlay

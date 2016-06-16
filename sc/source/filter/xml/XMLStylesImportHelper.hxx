@@ -98,7 +98,7 @@ class ScMyStyleRanges : public SvRefBase
         const OUString* pCurrency, ScXMLImport& rImport);
 public:
     ScMyStyleRanges();
-    virtual ~ScMyStyleRanges();
+    virtual ~ScMyStyleRanges() override;
     void AddRange(const ScRange& rRange, const sal_Int16 nType);
     void AddCurrencyRange(const ScRange& rRange, const OUString* pCurrency);
     void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc);

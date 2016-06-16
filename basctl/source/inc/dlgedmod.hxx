@@ -40,7 +40,7 @@ private:
 public:
 
     DlgEdModel();
-    virtual ~DlgEdModel();
+    virtual ~DlgEdModel() override;
 
     virtual SdrPage*  AllocPage(bool bMasterPage) override;
 };

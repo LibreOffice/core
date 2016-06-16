@@ -81,7 +81,7 @@ private:
 public:
 
     SvxTextAttrPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
-    virtual ~SvxTextAttrPage();
+    virtual ~SvxTextAttrPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );

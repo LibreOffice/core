@@ -67,7 +67,7 @@ public:
     XMLTextExportPropertySetMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLExport& rExt );
-    virtual ~XMLTextExportPropertySetMapper();
+    virtual ~XMLTextExportPropertySetMapper() override;
 
     virtual void handleElementItem(
         SvXMLExport& rExport,

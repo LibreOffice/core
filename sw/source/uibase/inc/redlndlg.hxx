@@ -143,7 +143,7 @@ class SwModelessRedlineAcceptDlg : public SfxModelessDialog
 
 public:
     SwModelessRedlineAcceptDlg(SfxBindings*, SwChildWinWrapper*, vcl::Window *pParent);
-    virtual ~SwModelessRedlineAcceptDlg();
+    virtual ~SwModelessRedlineAcceptDlg() override;
     virtual void dispose() override;
 
     virtual void    Activate() override;
@@ -170,7 +170,7 @@ class SwRedlineAcceptPanel : public PanelLayout, public SfxListener
     SwRedlineAcceptDlg* mpImplDlg;
 public:
     SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
-    virtual ~SwRedlineAcceptPanel();
+    virtual ~SwRedlineAcceptPanel() override;
     virtual void dispose() override;
 
     /// We need to be a SfxListener to be able to update the list of changes when we get SFX_HINT_DOCCHANGED.

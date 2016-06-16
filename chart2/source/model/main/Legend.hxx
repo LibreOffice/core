@@ -52,7 +52,7 @@ class Legend :
 {
 public:
     explicit Legend( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~Legend();
+    virtual ~Legend() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

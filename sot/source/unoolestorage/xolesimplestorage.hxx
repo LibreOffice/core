@@ -65,7 +65,7 @@ public:
     OLESimpleStorage(css::uno::Reference<css::uno::XComponentContext> xContext,
             css::uno::Sequence<css::uno::Any> const &arguments);
 
-    virtual ~OLESimpleStorage();
+    virtual ~OLESimpleStorage() override;
 
     //  XNameContainer
 

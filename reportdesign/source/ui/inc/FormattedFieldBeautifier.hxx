@@ -46,7 +46,7 @@ namespace rptui
 
     public:
         FormattedFieldBeautifier(const OReportController & _aObserver);
-        virtual ~FormattedFieldBeautifier();
+        virtual ~FormattedFieldBeautifier() override;
 
         void    notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
         void    notifyElementInserted( const css::uno::Reference< css::uno::XInterface >& _rxElement ) override;

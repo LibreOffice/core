@@ -91,7 +91,7 @@ private:
     UnoVirtualMachine(UnoVirtualMachine &) = delete;
     void operator =(UnoVirtualMachine &) = delete;
 
-    virtual ~UnoVirtualMachine();
+    virtual ~UnoVirtualMachine() override;
 
     rtl::Reference< jvmaccess::VirtualMachine > m_virtualMachine;
     void * m_classLoader;

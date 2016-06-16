@@ -61,7 +61,7 @@ protected:
 public:
 
     Collection() {}
-    virtual ~Collection() {}
+    virtual ~Collection() override {}
 
     const T& getItem( sal_Int32 n ) const
     {

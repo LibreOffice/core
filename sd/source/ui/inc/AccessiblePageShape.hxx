@@ -59,7 +59,7 @@ public:
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
 
-    virtual ~AccessiblePageShape();
+    virtual ~AccessiblePageShape() override;
 
     /** Initialize a new shape.  See the documentation of the constructor
         for the reason of this method's existence.

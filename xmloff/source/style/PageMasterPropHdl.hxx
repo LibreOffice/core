@@ -29,7 +29,7 @@
 class XMLPMPropHdl_PageStyleLayout : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_PageStyleLayout();
+    virtual                 ~XMLPMPropHdl_PageStyleLayout() override;
     virtual bool            equals(
                                 const css::uno::Any& rAny1,
                                 const css::uno::Any& rAny2
@@ -51,7 +51,7 @@ public:
 class XMLPMPropHdl_NumFormat : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_NumFormat();
+    virtual                 ~XMLPMPropHdl_NumFormat() override;
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
                                 css::uno::Any& rValue,
@@ -69,7 +69,7 @@ public:
 class XMLPMPropHdl_NumLetterSync : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_NumLetterSync();
+    virtual                 ~XMLPMPropHdl_NumLetterSync() override;
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
                                 css::uno::Any& rValue,
@@ -87,7 +87,7 @@ public:
 class XMLPMPropHdl_PaperTrayNumber : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_PaperTrayNumber();
+    virtual                 ~XMLPMPropHdl_PaperTrayNumber() override;
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
                                 css::uno::Any& rValue,
@@ -109,7 +109,7 @@ protected:
 
 public:
     explicit XMLPMPropHdl_Print( enum ::xmloff::token::XMLTokenEnum eValue );
-    virtual                 ~XMLPMPropHdl_Print();
+    virtual                 ~XMLPMPropHdl_Print() override;
 
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
@@ -128,7 +128,7 @@ public:
 class XMLPMPropHdl_CenterHorizontal : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_CenterHorizontal();
+    virtual                 ~XMLPMPropHdl_CenterHorizontal() override;
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
                                 css::uno::Any& rValue,
@@ -144,7 +144,7 @@ public:
 class XMLPMPropHdl_CenterVertical : public XMLPropertyHandler
 {
 public:
-    virtual                 ~XMLPMPropHdl_CenterVertical();
+    virtual                 ~XMLPMPropHdl_CenterVertical() override;
     virtual bool            importXML(
                                 const OUString& rStrImpValue,
                                 css::uno::Any& rValue,

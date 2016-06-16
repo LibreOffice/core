@@ -57,7 +57,7 @@ public:
 
     PowerPointImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         throw( css::uno::RuntimeException );
-    virtual ~PowerPointImport();
+    virtual ~PowerPointImport() override;
 
     // from FilterBase
     virtual bool importDocument() override;

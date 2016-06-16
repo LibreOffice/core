@@ -185,7 +185,7 @@ public:
     SvxColumnItem(sal_uInt16 nAct = 0);
     SvxColumnItem(sal_uInt16 nActCol, sal_uInt16 nLeft, sal_uInt16 nRight = 0); // Table with borders
     SvxColumnItem(const SvxColumnItem& aItem);
-    virtual ~SvxColumnItem();
+    virtual ~SvxColumnItem() override;
 
     SvxColumnItem &operator=(const SvxColumnItem &);
 

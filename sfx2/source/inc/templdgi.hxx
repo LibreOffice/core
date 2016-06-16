@@ -283,7 +283,7 @@ protected:
 public:
 
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window*, bool );
-    virtual ~SfxCommonTemplateDialog_Impl();
+    virtual ~SfxCommonTemplateDialog_Impl() override;
 
     DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
     DECL_LINK_TYPED( MenuSelectAsyncHdl, void*, void );
@@ -375,7 +375,7 @@ public:
     friend class SfxTemplateDialog;
 
     SfxTemplateDialog_Impl( SfxBindings*, SfxTemplatePanelControl* pDlgWindow );
-    virtual ~SfxTemplateDialog_Impl();
+    virtual ~SfxTemplateDialog_Impl() override;
 
     void Initialize();
 };

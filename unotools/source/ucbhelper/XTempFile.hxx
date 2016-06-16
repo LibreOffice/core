@@ -119,7 +119,7 @@ public:
     virtual void SAL_CALL truncate()
         throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
-    virtual ~OTempFileService ();
+    virtual ~OTempFileService () override;
 };
 #endif
 

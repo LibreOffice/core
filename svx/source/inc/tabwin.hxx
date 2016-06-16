@@ -42,7 +42,7 @@ protected:
 
 public:
     FmFieldWinListBox( FmFieldWin* pParent );
-    virtual ~FmFieldWinListBox();
+    virtual ~FmFieldWinListBox() override;
     virtual void dispose() override;
 
     sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
@@ -80,7 +80,7 @@ public:
     FmFieldWin(SfxBindings *pBindings,
                SfxChildWindow *pMgr, vcl::Window* pParent);
 
-    virtual ~FmFieldWin();
+    virtual ~FmFieldWin() override;
     virtual void dispose() override;
     virtual void Resize() override;
     virtual bool Close() override;

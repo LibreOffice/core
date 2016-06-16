@@ -60,7 +60,7 @@ protected:
 public:
                                     SvtURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
                                     SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
-                                    virtual ~SvtURLBox();
+                                    virtual ~SvtURLBox() override;
     virtual void                    dispose() override;
 
     void                            SetBaseURL( const OUString& rURL );

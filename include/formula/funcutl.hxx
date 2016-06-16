@@ -48,7 +48,7 @@ public:
     RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent, vcl::Window* pShrinkModeLabel, const ResId& rResId );
     RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle = WB_BORDER );
 
-    virtual ~RefEdit();
+    virtual ~RefEdit() override;
     virtual void dispose() override;
 
     void SetRefString( const OUString& rStr );
@@ -93,7 +93,7 @@ protected:
 
 public:
     RefButton(vcl::Window* _pParent, WinBits nStyle = 0);
-    virtual ~RefButton();
+    virtual ~RefButton() override;
     virtual void dispose() override;
     void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
     void SetStartImage();

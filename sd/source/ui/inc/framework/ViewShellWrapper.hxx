@@ -71,7 +71,7 @@ public:
         ::std::shared_ptr<ViewShell> pViewShell,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
-    virtual ~ViewShellWrapper();
+    virtual ~ViewShellWrapper() override;
 
     virtual void SAL_CALL disposing() override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

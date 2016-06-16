@@ -52,7 +52,7 @@ class PaletteASE : public Palette
     void        LoadPalette();
 public:
     PaletteASE( const OUString &rFPath, const OUString &rFName );
-    virtual ~PaletteASE();
+    virtual ~PaletteASE() override;
 
     virtual const OUString&     GetName() override;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
@@ -76,7 +76,7 @@ class PaletteGPL : public Palette
     void        LoadPalette();
 public:
     PaletteGPL( const OUString &rFPath, const OUString &rFName );
-    virtual ~PaletteGPL();
+    virtual ~PaletteGPL() override;
 
     virtual const OUString&     GetName() override;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;
@@ -94,7 +94,7 @@ class PaletteSOC : public Palette
     XColorListRef   mpColorList;
 public:
     PaletteSOC( const OUString &rFPath, const OUString &rFName );
-    virtual ~PaletteSOC();
+    virtual ~PaletteSOC() override;
 
     virtual const OUString&     GetName() override;
     virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) override;

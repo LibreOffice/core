@@ -216,7 +216,7 @@ protected:
 
 public:
     FmXGridControl(const css::uno::Reference< css::uno::XComponentContext >&);
-    virtual ~FmXGridControl();
+    virtual ~FmXGridControl() override;
 
     // UNO connection
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridControl, UnoControl)
@@ -366,7 +366,7 @@ protected:
 
 public:
     FmXGridPeer(const css::uno::Reference< css::uno::XComponentContext >&);
-    virtual ~FmXGridPeer();
+    virtual ~FmXGridPeer() override;
 
     // spaeter Constructor, immer nach dem realen Constructor zu rufen !
     void Create(vcl::Window* pParent, WinBits nStyle);

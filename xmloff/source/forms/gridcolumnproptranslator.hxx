@@ -43,7 +43,7 @@ namespace xmloff
         );
 
     protected:
-        virtual ~OGridColumnPropertyTranslator();
+        virtual ~OGridColumnPropertyTranslator() override;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (css::uno::RuntimeException, std::exception) override;

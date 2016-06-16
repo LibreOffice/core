@@ -66,7 +66,7 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
-    virtual ~AreaPropertyPanel();
+    virtual ~AreaPropertyPanel() override;
 
     virtual void setFillTransparence(const XFillTransparenceItem& rItem) override;
     virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem) override;

@@ -39,7 +39,7 @@ public:
     ScXMLTrackedChangesContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLTrackedChangesContext();
+    virtual ~ScXMLTrackedChangesContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,

@@ -54,7 +54,7 @@ public:
         const css::uno::Reference< css::beans::XPropertySet > & xSceneProperties,
         const css::uno::Reference< css::frame::XModel >& xChartModel,
         const XColorListRef &pColorTable );
-    virtual ~ThreeD_SceneIllumination_TabPage();
+    virtual ~ThreeD_SceneIllumination_TabPage() override;
     virtual void dispose() override;
 
 private:

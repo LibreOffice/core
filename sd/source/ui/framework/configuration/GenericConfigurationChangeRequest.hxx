@@ -70,7 +70,7 @@ public:
         const Mode eMode)
         throw (css::lang::IllegalArgumentException);
 
-    virtual ~GenericConfigurationChangeRequest() throw();
+    virtual ~GenericConfigurationChangeRequest() throw() override;
 
     // XConfigurationChangeOperation
 

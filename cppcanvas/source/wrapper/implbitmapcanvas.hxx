@@ -37,7 +37,7 @@ namespace cppcanvas
         {
         public:
             explicit ImplBitmapCanvas( const css::uno::Reference< css::rendering::XBitmapCanvas >& rCanvas );
-            virtual ~ImplBitmapCanvas();
+            virtual ~ImplBitmapCanvas() override;
 
             virtual ::basegfx::B2ISize      getSize() const override;
 

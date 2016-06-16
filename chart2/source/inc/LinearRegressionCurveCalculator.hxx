@@ -29,7 +29,7 @@ class LinearRegressionCurveCalculator : public PolynomialRegressionCurveCalculat
 {
 public:
     LinearRegressionCurveCalculator();
-    virtual ~LinearRegressionCurveCalculator();
+    virtual ~LinearRegressionCurveCalculator() override;
 
 private:
     virtual void SAL_CALL setRegressionProperties(

@@ -95,7 +95,7 @@ public:
             const css::uno::Reference< css::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet,
             int nAllowedEvents );
-    virtual ~PropertyChgHelper();
+    virtual ~PropertyChgHelper() override;
 
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals );
 
@@ -143,7 +143,7 @@ public:
     PropertyHelper_Thes(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
-    virtual ~PropertyHelper_Thes();
+    virtual ~PropertyHelper_Thes() override;
 
     // XPropertyChangeListener
     virtual void SAL_CALL
@@ -199,7 +199,7 @@ public:
     PropertyHelper_Spell(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
-    virtual ~PropertyHelper_Spell();
+    virtual ~PropertyHelper_Spell() override;
 
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
 
@@ -273,7 +273,7 @@ public:
     PropertyHelper_Hyphen(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
             css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet);
-    virtual ~PropertyHelper_Hyphen();
+    virtual ~PropertyHelper_Hyphen() override;
 
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
 

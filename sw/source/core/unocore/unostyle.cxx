@@ -194,7 +194,7 @@ namespace sw
             StartListening(*m_pBasePool);
         }
 
-        virtual ~XStyleFamily() {};
+        virtual ~XStyleFamily() override {};
 
         //XIndexAccess
         virtual sal_Int32 SAL_CALL getCount() throw( uno::RuntimeException, std::exception ) override
@@ -303,7 +303,7 @@ protected:
 public:
     SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SfxStyleFamily::Para, bool bConditional = false);
     SwXStyle(SfxStyleSheetBasePool* pPool, SfxStyleFamily eFamily, SwDoc* pDoc, const OUString& rStyleName);
-    virtual ~SwXStyle();
+    virtual ~SwXStyle() override;
 
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -395,7 +395,7 @@ public:
                                 const OUString& rStyleName) :
         SwXStyle(&rPool, SfxStyleFamily::Frame, pDoc, rStyleName){}
     explicit SwXFrameStyle(SwDoc *pDoc);
-    virtual ~SwXFrameStyle();
+    virtual ~SwXFrameStyle() override;
 
     virtual void SAL_CALL acquire(  ) throw() override {SwXStyle::acquire();}
     virtual void SAL_CALL release(  ) throw() override {SwXStyle::release();}
@@ -422,7 +422,7 @@ public:
     SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, SfxStyleFamily eFam,
                                 const OUString& rStyleName);
     explicit SwXPageStyle(SwDocShell* pDocSh);
-    virtual ~SwXPageStyle();
+    virtual ~SwXPageStyle() override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;

@@ -1998,7 +1998,7 @@ private:
 
 public:
                     explicit ImplCFieldFloatWin( vcl::Window* pParent );
-    virtual         ~ImplCFieldFloatWin();
+    virtual         ~ImplCFieldFloatWin() override;
     virtual void    dispose() override;
 
     void            SetCalendar( Calendar* pCalendar )

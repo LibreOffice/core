@@ -49,7 +49,7 @@ public:
   DECL_STATIC_LINK_TYPED( BootstrapFixture, ImplInitFilterHdl, ConvertData&, bool );
 
   BootstrapFixture( bool bAssertOnDialog = true, bool bNeedUCB = true );
-  virtual ~BootstrapFixture();
+  virtual ~BootstrapFixture() override;
 
   virtual void setUp() override;
   virtual void tearDown() override;

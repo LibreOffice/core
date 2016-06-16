@@ -348,7 +348,7 @@ public:
         , m_nCurrentFocus(FocusState::Prev)
     {
     }
-    virtual ~CustomContainer() { disposeOnce(); }
+    virtual ~CustomContainer() override { disposeOnce(); }
     virtual void dispose() override
     {
         _pFileView.clear();

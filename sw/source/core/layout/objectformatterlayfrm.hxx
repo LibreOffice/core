@@ -51,7 +51,7 @@ class SwObjectFormatterLayFrame : public SwObjectFormatter
         virtual SwFrame& GetAnchorFrame() override;
 
     public:
-        virtual ~SwObjectFormatterLayFrame();
+        virtual ~SwObjectFormatterLayFrame() override;
 
         // #i40147# - add parameter <_bCheckForMovedFwd>.
         // Not relevant for objects anchored at layout frame.

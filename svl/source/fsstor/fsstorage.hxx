@@ -53,7 +53,7 @@ public:
                 sal_Int32 nMode,
                 css::uno::Reference< css::uno::XComponentContext > xContext );
 
-    virtual ~FSStorage();
+    virtual ~FSStorage() override;
 
     ::ucbhelper::Content* GetContent();
 

@@ -44,7 +44,7 @@ namespace dbaui
 
     public:
         DlgSize( vcl::Window * pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard = -1 );
-        virtual ~DlgSize();
+        virtual ~DlgSize() override;
         virtual void dispose() override;
         sal_Int32 GetValue();
     };

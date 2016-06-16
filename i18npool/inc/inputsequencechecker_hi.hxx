@@ -33,7 +33,7 @@ class InputSequenceChecker_hi : public InputSequenceCheckerImpl
 {
 public:
     InputSequenceChecker_hi();
-    virtual ~InputSequenceChecker_hi();
+    virtual ~InputSequenceChecker_hi() override;
 
     sal_Bool SAL_CALL checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(css::uno::RuntimeException, std::exception) override;

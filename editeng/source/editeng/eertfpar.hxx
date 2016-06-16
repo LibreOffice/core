@@ -64,7 +64,7 @@ protected:
 
 public:
     EditRTFParser(SvStream& rIn, EditSelection aCurSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine);
-    virtual ~EditRTFParser();
+    virtual ~EditRTFParser() override;
 
     virtual SvParserState   CallParser() override;
 

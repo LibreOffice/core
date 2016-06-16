@@ -40,7 +40,7 @@ private:
 protected:
 public:
     ScVbaUserForm( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
-    virtual ~ScVbaUserForm();
+    virtual ~ScVbaUserForm() override;
     static css::uno::Reference< css::awt::XControl > nestedSearch( const OUString& aPropertyName, css::uno::Reference< css::awt::XControlContainer >& xContainer );
     // XUserForm
     virtual void SAL_CALL RePaint(  ) throw (css::uno::RuntimeException, std::exception) override;

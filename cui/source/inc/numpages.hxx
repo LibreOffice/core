@@ -102,7 +102,7 @@ protected:
 public:
         SvxSingleNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-    virtual ~SvxSingleNumPickTabPage();
+    virtual ~SvxSingleNumPickTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -135,7 +135,7 @@ protected:
 public:
         SvxBulletPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-    virtual ~SvxBulletPickTabPage();
+    virtual ~SvxBulletPickTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -179,7 +179,7 @@ protected:
 public:
     SvxNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-    virtual ~SvxNumPickTabPage();
+    virtual ~SvxNumPickTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -226,7 +226,7 @@ protected:
 public:
         SvxBitmapPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-        virtual ~SvxBitmapPickTabPage();
+        virtual ~SvxBitmapPickTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -337,7 +337,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
 public:
         SvxNumOptionsTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-        virtual ~SvxNumOptionsTabPage();
+        virtual ~SvxNumOptionsTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -445,7 +445,7 @@ class SvxNumPositionTabPage : public SfxTabPage
 public:
         SvxNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-        virtual ~SvxNumPositionTabPage();
+        virtual ~SvxNumPositionTabPage() override;
     virtual void dispose() override;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;

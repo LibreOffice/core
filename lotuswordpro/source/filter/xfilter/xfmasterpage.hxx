@@ -70,7 +70,7 @@ class XFMasterPage : public XFStyle
 public:
     XFMasterPage();
 
-    virtual ~XFMasterPage();
+    virtual ~XFMasterPage() override;
 
 public:
     void    SetPageMaster(const OUString& pm);

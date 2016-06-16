@@ -39,7 +39,7 @@ class VCL_DLLPUBLIC FontMetric : public vcl::Font
 public:
     explicit            FontMetric();
                         FontMetric( const FontMetric& );  // TODO make this explicit
-    virtual             ~FontMetric();
+    virtual             ~FontMetric() override;
 
     FontType            GetType() const;
 

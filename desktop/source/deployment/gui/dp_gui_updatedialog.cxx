@@ -202,7 +202,7 @@ public:
     void stop();
 
 private:
-    virtual ~Thread();
+    virtual ~Thread() override;
 
     virtual void execute() override;
 

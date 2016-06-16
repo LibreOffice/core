@@ -35,7 +35,7 @@ class XMLTableShapeImportHelper : public XMLShapeImportHelper
 public:
 
     XMLTableShapeImportHelper( ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper=nullptr );
-    virtual ~XMLTableShapeImportHelper();
+    virtual ~XMLTableShapeImportHelper() override;
 
     static void SetLayer(css::uno::Reference<css::drawing::XShape>& rShape, sal_Int16 nLayerID, const OUString& sType);
     virtual void finishShape(css::uno::Reference< css::drawing::XShape >& rShape,

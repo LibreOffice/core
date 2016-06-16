@@ -236,7 +236,7 @@ namespace dbaccess
         virtual bool isNew( ) override;
         virtual bool isPropertyChangeNotificationEnabled() const override;
 
-        virtual ~ORowSet();
+        virtual ~ORowSet() override;
 
     public:
         explicit ORowSet(const css::uno::Reference<css::uno::XComponentContext>&);
@@ -465,7 +465,7 @@ namespace dbaccess
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) throw (css::uno::Exception, std::exception) override;
     public:
         ORowSetClone( const css::uno::Reference<css::uno::XComponentContext>& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex );
-        virtual ~ORowSetClone();
+        virtual ~ORowSetClone() override;
 
     // css::lang::XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;

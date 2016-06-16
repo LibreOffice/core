@@ -38,7 +38,7 @@ namespace dbaui
     {
     public:
         TextConnectionSettingsDialog( vcl::Window* _pParent, SfxItemSet& _rItems );
-        virtual ~TextConnectionSettingsDialog();
+        virtual ~TextConnectionSettingsDialog() override;
         virtual void dispose() override;
 
         /** initializes a set of PropertyStorage instances, which are bound to

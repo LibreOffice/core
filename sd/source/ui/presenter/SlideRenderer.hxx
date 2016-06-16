@@ -49,7 +49,7 @@ class SlideRenderer
 {
 public:
     explicit SlideRenderer (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~SlideRenderer();
+    virtual ~SlideRenderer() override;
     SlideRenderer(const SlideRenderer&) = delete;
     SlideRenderer& operator=(const SlideRenderer&) = delete;
     virtual void SAL_CALL disposing() override;

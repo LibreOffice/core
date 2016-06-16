@@ -36,7 +36,7 @@ public:
     VPolarRadiusAxis( const AxisProperties& rAxisProperties
            , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionCount );
-    virtual ~VPolarRadiusAxis();
+    virtual ~VPolarRadiusAxis() override;
 
     virtual void initPlotter(
           const css::uno::Reference< css::drawing::XShapes >& xLogicTarget

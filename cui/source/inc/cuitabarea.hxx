@@ -159,7 +159,7 @@ class SvxTransparenceTabPage : public SvxTabPage
 
 public:
     SvxTransparenceTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
-    virtual ~SvxTransparenceTabPage();
+    virtual ~SvxTransparenceTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window*, const SfxItemSet*);
@@ -279,7 +279,7 @@ private:
 
 public:
     SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~SvxAreaTabPage();
+    virtual ~SvxAreaTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
@@ -349,7 +349,7 @@ private:
 
 public:
     SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-    virtual ~SvxShadowTabPage();
+    virtual ~SvxShadowTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
@@ -432,7 +432,7 @@ private:
 
 public:
     SvxGradientTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-    virtual ~SvxGradientTabPage();
+    virtual ~SvxGradientTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
@@ -514,7 +514,7 @@ private:
 
 public:
     SvxHatchTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-    virtual ~SvxHatchTabPage();
+    virtual ~SvxHatchTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
@@ -600,7 +600,7 @@ private:
 
 public:
     SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-    virtual ~SvxBitmapTabPage();
+    virtual ~SvxBitmapTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
@@ -750,7 +750,7 @@ private:
     void UpdateModified();
 public:
     SvxColorTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~SvxColorTabPage();
+    virtual ~SvxColorTabPage() override;
     virtual void dispose() override;
 
     void    Construct();

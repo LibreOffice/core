@@ -83,7 +83,7 @@ namespace toolkit
             throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~UnoControlFormattedFieldModel();
+        virtual ~UnoControlFormattedFieldModel() override;
 
         // XComponent
         void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;

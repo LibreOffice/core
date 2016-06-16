@@ -47,7 +47,7 @@ public:
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, bool bNewColumns,
                             sal_uInt16 nNewLevel, sal_uInt16 nNewEntry, bool bNewShow );
-    virtual         ~ScUndoDoOutline();
+    virtual         ~ScUndoDoOutline() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -75,7 +75,7 @@ public:
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScOutlineTable* pNewUndoTab,
                             bool bNewColumns, bool bNewMake );
-    virtual         ~ScUndoMakeOutline();
+    virtual         ~ScUndoMakeOutline() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -99,7 +99,7 @@ public:
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                             bool bNewColumns, sal_uInt16 nNewLevel );
-    virtual         ~ScUndoOutlineLevel();
+    virtual         ~ScUndoOutlineLevel() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -126,7 +126,7 @@ public:
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                             bool bNewShow );
-    virtual         ~ScUndoOutlineBlock();
+    virtual         ~ScUndoOutlineBlock() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -150,7 +150,7 @@ public:
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab );
-    virtual         ~ScUndoRemoveAllOutlines();
+    virtual         ~ScUndoRemoveAllOutlines() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -173,7 +173,7 @@ public:
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab );
-    virtual         ~ScUndoAutoOutline();
+    virtual         ~ScUndoAutoOutline() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -197,7 +197,7 @@ public:
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
 //                          ScDBData* pNewData,
                             ScRangeName* pNewUndoRange, ScDBCollection* pNewUndoDB );
-    virtual         ~ScUndoSubTotals();
+    virtual         ~ScUndoSubTotals() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -224,7 +224,7 @@ public:
                             const ScQueryParam& rParam, ScDocument* pNewUndoDoc,
                             ScDBCollection* pNewUndoDB, const ScRange* pOld,
                             bool bSize, const ScRange* pAdvSrc );
-    virtual         ~ScUndoQuery();
+    virtual         ~ScUndoQuery() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -257,7 +257,7 @@ private:
 public:
                     ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
                                       const OUString& rName, bool bSet );
-    virtual         ~ScUndoAutoFilter();
+    virtual         ~ScUndoAutoFilter() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -272,7 +272,7 @@ class ScUndoDBData: public ScSimpleUndo
 public:
                     ScUndoDBData( ScDocShell* pNewDocShell,
                             ScDBCollection* pNewUndoColl, ScDBCollection* pNewRedoColl );
-    virtual         ~ScUndoDBData();
+    virtual         ~ScUndoDBData() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -294,7 +294,7 @@ public:
                             SCCOL nNewFormula,
                             ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                             ScDBData* pNewUndoData, ScDBData* pNewRedoData );
-    virtual         ~ScUndoImportData();
+    virtual         ~ScUndoImportData() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -325,7 +325,7 @@ public:
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
                             ScRangeName* pNewUndoRange, ScDBCollection* pNewUndoDB,
                             const ScRange* pOldQ, const ScRange* pNewQ );
-    virtual         ~ScUndoRepeatDB();
+    virtual         ~ScUndoRepeatDB() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -355,7 +355,7 @@ public:
                             ScDocument* pOldDoc, ScDocument* pNewDoc,
                             const ScDPObject* pOldObj, const ScDPObject* pNewObj,
                             bool bMove );
-    virtual         ~ScUndoDataPilot();
+    virtual         ~ScUndoDataPilot() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -380,7 +380,7 @@ public:
                                 ScDocument* pNewUndoDoc, bool bReference,
                                 SCROW nInsCount, ScOutlineTable* pTab,
                                 ScDBData* pData );
-    virtual             ~ScUndoConsolidate();
+    virtual             ~ScUndoConsolidate() override;
 
     virtual void        Undo() override;
     virtual void        Redo() override;
@@ -408,7 +408,7 @@ public:
                         ScUndoChartData( ScDocShell* pNewDocShell,
                                 const OUString& rName, const ScRangeListRef& rNew,
                                 bool bColHdr, bool bRowHdr, bool bAdd );
-    virtual             ~ScUndoChartData();
+    virtual             ~ScUndoChartData() override;
 
     virtual void        Undo() override;
     virtual void        Redo() override;
@@ -442,7 +442,7 @@ public:
                                 InsertDeleteFlags nNewFlags,
                                 ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3
                                  );
-    virtual     ~ScUndoDataForm();
+    virtual     ~ScUndoDataForm() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;

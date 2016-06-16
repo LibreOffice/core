@@ -54,7 +54,7 @@ class ScCondFormatsObj : public cppu::WeakImplHelper<css::sheet::XConditionalFor
 public:
     ScCondFormatsObj(ScDocShell* pDocShell, SCTAB nTab);
 
-    virtual ~ScCondFormatsObj();
+    virtual ~ScCondFormatsObj() override;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
@@ -87,7 +87,7 @@ class ScCondFormatObj : public cppu::WeakImplHelper<css::sheet::XConditionalForm
 public:
     ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> xCondFormats, sal_Int32 nKey);
 
-    virtual ~ScCondFormatObj();
+    virtual ~ScCondFormatObj() override;
 
     ScDocShell* getDocShell();
 
@@ -170,7 +170,7 @@ public:
 
     ScConditionEntryObj(rtl::Reference<ScCondFormatObj> xParent,
             const ScCondFormatEntry* pFormat);
-    virtual ~ScConditionEntryObj();
+    virtual ~ScConditionEntryObj() override;
 
     ScCondFormatEntry* getCoreObject();
 
@@ -228,7 +228,7 @@ class ScColorScaleFormatObj : public cppu::WeakImplHelper<css::beans::XPropertyS
 public:
 
     ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent, const ScColorScaleFormat* pFormat);
-    virtual ~ScColorScaleFormatObj();
+    virtual ~ScColorScaleFormatObj() override;
 
     // XConditionEntry
     virtual sal_Int32 SAL_CALL getType()
@@ -285,7 +285,7 @@ class ScColorScaleEntryObj : public cppu::WeakImplHelper<css::sheet::XColorScale
 public:
     ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj> xParent, size_t nPos);
 
-    virtual ~ScColorScaleEntryObj();
+    virtual ~ScColorScaleEntryObj() override;
 
     virtual css::util::Color SAL_CALL getColor()
         throw(css::uno::RuntimeException, std::exception) override;
@@ -318,7 +318,7 @@ class ScDataBarFormatObj : public cppu::WeakImplHelper<css::beans::XPropertySet,
 public:
     ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent,
             const ScDataBarFormat* pFormat);
-    virtual ~ScDataBarFormatObj();
+    virtual ~ScDataBarFormatObj() override;
 
     ScDataBarFormat* getCoreObject();
 
@@ -374,7 +374,7 @@ class ScDataBarEntryObj : public cppu::WeakImplHelper<css::sheet::XDataBarEntry>
 public:
     ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> xParent, size_t nPos);
 
-    virtual ~ScDataBarEntryObj();
+    virtual ~ScDataBarEntryObj() override;
 
     virtual sal_Int32 SAL_CALL getType()
         throw(css::uno::RuntimeException, std::exception) override;
@@ -401,7 +401,7 @@ class ScIconSetFormatObj : public cppu::WeakImplHelper<css::beans::XPropertySet,
 public:
     ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
             const ScIconSetFormat* pFormat);
-    virtual ~ScIconSetFormatObj();
+    virtual ~ScIconSetFormatObj() override;
 
     ScIconSetFormat* getCoreObject();
 
@@ -457,7 +457,7 @@ class ScIconSetEntryObj : public cppu::WeakImplHelper<css::sheet::XIconSetEntry>
 public:
     ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> xParent, size_t nPos);
 
-    virtual ~ScIconSetEntryObj();
+    virtual ~ScIconSetEntryObj() override;
 
     virtual sal_Int32 SAL_CALL getType()
         throw(css::uno::RuntimeException, std::exception) override;
@@ -485,7 +485,7 @@ public:
     ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> xParent,
             const ScCondDateFormatEntry* pFormat);
 
-    virtual ~ScCondDateFormatObj();
+    virtual ~ScCondDateFormatObj() override;
 
     ScCondDateFormatEntry* getCoreObject();
 

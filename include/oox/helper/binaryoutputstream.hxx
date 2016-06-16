@@ -149,7 +149,7 @@ public:
                             const css::uno::Reference< css::io::XOutputStream >& rxOutStrm,
                             bool bAutoClose );
 
-    virtual             ~BinaryXOutputStream();
+    virtual             ~BinaryXOutputStream() override;
 
     /** Flushes and closes the output stream. Does also close the wrapped UNO
         output stream if bAutoClose has been set to true in the constructor. */

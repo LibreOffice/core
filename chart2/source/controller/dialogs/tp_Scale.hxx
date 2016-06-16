@@ -33,7 +33,7 @@ class ScaleTabPage : public SfxTabPage
 {
 public:
     ScaleTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~ScaleTabPage();
+    virtual ~ScaleTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );

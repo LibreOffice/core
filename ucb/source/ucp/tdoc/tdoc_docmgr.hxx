@@ -112,7 +112,7 @@ namespace tdoc_ucp {
         OfficeDocumentsManager(
             const css::uno::Reference< css::uno::XComponentContext > & rxContext,
             OfficeDocumentsEventListener * pDocEventListener );
-        virtual ~OfficeDocumentsManager();
+        virtual ~OfficeDocumentsManager() override;
 
         void destroy();
 

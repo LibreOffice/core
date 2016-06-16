@@ -37,7 +37,7 @@ class AccessibleTabBarBase : public comphelper::OAccessibleExtendedComponentHelp
 {
 public:
     explicit            AccessibleTabBarBase( TabBar* pTabBar );
-    virtual             ~AccessibleTabBarBase();
+    virtual             ~AccessibleTabBarBase() override;
 
 protected:
     DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );

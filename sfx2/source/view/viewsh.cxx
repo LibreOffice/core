@@ -101,7 +101,7 @@ class SfxClipboardChangeListener : public ::cppu::WeakImplHelper<
 {
 public:
     SfxClipboardChangeListener( SfxViewShell* pView, const uno::Reference< datatransfer::clipboard::XClipboardNotifier >& xClpbrdNtfr );
-    virtual ~SfxClipboardChangeListener();
+    virtual ~SfxClipboardChangeListener() override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const lang::EventObject& rEventObject )

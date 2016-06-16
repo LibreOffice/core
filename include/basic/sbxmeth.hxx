@@ -31,7 +31,7 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_METHOD,1);
     SbxMethod( const OUString& r, SbxDataType t, bool bIsRuntimeFunction=false );
     SbxMethod( const SbxMethod& r );
-    virtual ~SbxMethod();
+    virtual ~SbxMethod() override;
     SbxMethod& operator=( const SbxMethod& r ) { SbxVariable::operator=( r ); return *this; }
     virtual SbxClassType GetClass() const override;
     bool IsRuntimeFunction() const { return mbIsRuntimeFunction; }

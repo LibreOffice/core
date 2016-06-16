@@ -127,7 +127,7 @@ private:
         typedef std::pair<sc::CellStoreType::const_iterator,size_t> PositionType;
     public:
         DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument* pDoc);
-        virtual ~DataAccessInternal();
+        virtual ~DataAccessInternal() override;
         virtual bool getCurrent(Value& rValue) override;
         virtual bool getFirst(Value& rValue) override;
         virtual bool getNext(Value& rValue) override;
@@ -155,7 +155,7 @@ private:
     {
     public:
         DataAccessMatrix(ScDBQueryParamMatrix* pParam);
-        virtual ~DataAccessMatrix();
+        virtual ~DataAccessMatrix() override;
         virtual bool getCurrent(Value& rValue) override;
         virtual bool getFirst(Value& rValue) override;
         virtual bool getNext(Value& rValue) override;

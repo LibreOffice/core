@@ -41,7 +41,7 @@ public:
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
-    virtual ~XMLChartStyleContext();
+    virtual ~XMLChartStyleContext() override;
 
     /// is called after all styles have been read to apply styles
     void FillPropertySet(

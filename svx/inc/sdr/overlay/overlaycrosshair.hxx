@@ -35,7 +35,7 @@ namespace sdr
 
         public:
             explicit OverlayCrosshairStriped(const basegfx::B2DPoint& rBasePos);
-            virtual ~OverlayCrosshairStriped();
+            virtual ~OverlayCrosshairStriped() override;
 
             // react on stripe definition change
             virtual void stripeDefinitionHasChanged() override;

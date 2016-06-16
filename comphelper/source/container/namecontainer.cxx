@@ -42,7 +42,7 @@ namespace comphelper
     {
     public:
         explicit NameContainer( css::uno::Type aType );
-        virtual ~NameContainer();
+        virtual ~NameContainer() override;
 
         // XNameContainer
         virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )

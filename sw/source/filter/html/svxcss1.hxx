@@ -242,7 +242,7 @@ public:
                     const OUString& rBaseURL,
                    sal_uInt16 nMinFixLineSp,
                    sal_uInt16 *pWhichIds=nullptr, sal_uInt16 nWhichIds=0 );
-    virtual ~SvxCSS1Parser();
+    virtual ~SvxCSS1Parser() override;
 
     bool IsIgnoreFontFamily() const { return bIgnoreFontFamily; }
     void SetIgnoreFontFamily( bool bSet ) { bIgnoreFontFamily = bSet; }

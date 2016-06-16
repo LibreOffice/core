@@ -109,7 +109,7 @@ class OLUndoExpand : public EditUndo
     void Restore( bool bUndo );
 public:
     OLUndoExpand( Outliner* pOut, sal_uInt16 nId );
-    virtual ~OLUndoExpand();
+    virtual ~OLUndoExpand() override;
     virtual void Undo() override;
     virtual void Redo() override;
 

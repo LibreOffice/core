@@ -64,7 +64,7 @@ protected:
 public:
     static  VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
 
-    virtual ~OUserAdmin();
+    virtual ~OUserAdmin() override;
     virtual void dispose() override;
     OUString GetUser();
 

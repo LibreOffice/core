@@ -60,7 +60,7 @@ class OTableGrantControl : public ::svt::EditBrowseBox
 
 public:
     OTableGrantControl( vcl::Window* pParent, WinBits nBits);
-    virtual ~OTableGrantControl();
+    virtual ~OTableGrantControl() override;
     virtual void dispose() override;
     void UpdateTables();
     void setUserName(const OUString& _sUserName);

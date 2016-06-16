@@ -60,7 +60,7 @@ namespace dbaui
         ORelationDialog(OJoinTableView* pParent,
                         const TTableConnectionData::value_type& pConnectionData,
                         bool bAllowTableSelect = false );
-        virtual ~ORelationDialog();
+        virtual ~ORelationDialog() override;
         virtual void dispose() override;
 
         virtual short Execute() override;

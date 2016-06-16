@@ -38,7 +38,7 @@ class ShapeController: public FeatureCommandDispatchBase
 
 public:
     ShapeController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, ChartController* pController );
-    virtual ~ShapeController();
+    virtual ~ShapeController() override;
 
     // late initialisation, especially for adding as listener
     virtual void initialize() override;

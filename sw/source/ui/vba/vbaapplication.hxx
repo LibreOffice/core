@@ -37,7 +37,7 @@ class SwVbaApplication : public SwVbaApplication_BASE
 {
 public:
     explicit SwVbaApplication( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
-    virtual ~SwVbaApplication();
+    virtual ~SwVbaApplication() override;
 
     // XApplication
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;

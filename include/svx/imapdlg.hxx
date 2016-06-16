@@ -137,7 +137,7 @@ public:
 
                         SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
                                     vcl::Window* pParent );
-                        virtual ~SvxIMapDlg();
+                        virtual ~SvxIMapDlg() override;
     virtual void        dispose() override;
 
     void                SetExecState( bool bEnable );

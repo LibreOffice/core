@@ -107,7 +107,7 @@ class BibConfig : public utl::ConfigItem
 
 public:
     BibConfig();
-    virtual ~BibConfig();
+    virtual ~BibConfig() override;
 
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 

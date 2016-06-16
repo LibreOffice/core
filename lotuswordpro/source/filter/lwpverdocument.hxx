@@ -74,7 +74,7 @@ public:
     void Read() override;
     virtual void RegisterStyle() override;
 private:
-    virtual ~LwpVerDocument(){}
+    virtual ~LwpVerDocument() override {}
 
     sal_uInt32 m_nTabSpacing;
 };

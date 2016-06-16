@@ -46,7 +46,7 @@ class UNOMemoryStream : public WeakImplHelper< XStream, XSeekableInputStream, XO
 {
 public:
     UNOMemoryStream();
-    virtual ~UNOMemoryStream();
+    virtual ~UNOMemoryStream() override;
 
     // XStream
     virtual Reference< XInputStream > SAL_CALL getInputStream(  ) throw (RuntimeException, std::exception) override;

@@ -28,7 +28,7 @@ public:
     JavaOptions()
         : Options() {}
 
-    virtual ~JavaOptions() {}
+    virtual ~JavaOptions() override {}
 
     bool initOptions(int ac, char* av[], bool bCmdFile=false)
             throw( IllegalArgument ) override;

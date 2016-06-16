@@ -59,7 +59,7 @@ class ChartDocumentWrapper : public ChartDocumentWrapper_Base
 {
 public:
     explicit ChartDocumentWrapper( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~ChartDocumentWrapper();
+    virtual ~ChartDocumentWrapper() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

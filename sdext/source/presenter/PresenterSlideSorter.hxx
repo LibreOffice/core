@@ -70,7 +70,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterSlideSorter();
+    virtual ~PresenterSlideSorter() override;
 
     virtual void SAL_CALL disposing() override;
 

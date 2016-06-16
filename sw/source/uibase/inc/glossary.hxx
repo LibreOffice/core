@@ -150,7 +150,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     void            ResetResumeData() {bResume = false;}
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
-    virtual ~SwGlossaryDlg();
+    virtual ~SwGlossaryDlg() override;
     virtual void dispose() override;
     OUString GetCurrGrpName() const;
     OUString GetCurrShortName() const

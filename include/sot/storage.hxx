@@ -42,7 +42,7 @@ protected:
     virtual sal_uLong       PutData( const void* pData, sal_uLong nSize ) override;
     virtual sal_uInt64      SeekPos(sal_uInt64 nPos) override;
     virtual void        FlushData() override;
-                        virtual ~SotStorageStream();
+                        virtual ~SotStorageStream() override;
 public:
                         SotStorageStream( const OUString &,
                                           StreamMode = STREAM_STD_READWRITE );
@@ -73,7 +73,7 @@ friend class SotStorageStream;
     long            m_nVersion;
 
 protected:
-                        virtual ~SotStorage();
+                        virtual ~SotStorage() override;
    void                 CreateStorage( bool bUCBStorage, StreamMode );
 public:
                         SotStorage( const OUString &,

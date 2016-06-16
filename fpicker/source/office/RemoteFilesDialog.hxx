@@ -71,7 +71,7 @@ class RemoteFilesDialog : public SvtFileDialog_Base
 {
 public:
     RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits );
-    virtual ~RemoteFilesDialog();
+    virtual ~RemoteFilesDialog() override;
 
     virtual void dispose() override;
     virtual void Resize() override;

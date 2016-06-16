@@ -81,7 +81,7 @@ class DockingWindow : public ::DockingWindow
 public:
     DockingWindow (vcl::Window* pParent);
     DockingWindow (Layout* pParent);
-    virtual ~DockingWindow();
+    virtual ~DockingWindow() override;
     virtual void dispose() override;
     void ResizeIfDocking (Point const&, Size const&);
     void ResizeIfDocking (Size const&);
@@ -168,7 +168,7 @@ protected:
 
 public:
     BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName );
-    virtual         ~BaseWindow();
+    virtual         ~BaseWindow() override;
     virtual void    dispose() override;
 
     void            Init();

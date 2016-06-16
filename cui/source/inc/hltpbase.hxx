@@ -114,7 +114,7 @@ public:
         const OUString& rUIXMLDescription,
         const SfxItemSet& rItemSet
     );
-    virtual ~SvxHyperlinkTabPageBase ();
+    virtual ~SvxHyperlinkTabPageBase () override;
     virtual void dispose() override;
 
     void    SetDocumentFrame(

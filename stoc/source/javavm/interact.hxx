@@ -54,7 +54,7 @@ private:
     InteractionRequest(InteractionRequest &) = delete;
     void operator =(const InteractionRequest&) = delete;
 
-    virtual ~InteractionRequest();
+    virtual ~InteractionRequest() override;
 
     css::uno::Any m_aRequest;
     css::uno::Sequence< css::uno::Reference<

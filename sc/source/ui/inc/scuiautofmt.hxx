@@ -27,7 +27,7 @@ public:
                     ScAutoFormat* pAutoFormat,
                     const ScAutoFormatData* pSelFormatData,
                     ScViewData *pViewData);
-    virtual ~ScAutoFormatDlg();
+    virtual ~ScAutoFormatDlg() override;
     virtual void dispose() override;
 
     sal_uInt16 GetIndex() const { return nIndex; }

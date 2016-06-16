@@ -39,7 +39,7 @@ public:
 #else
         TextToPronounce_zh(sal_uInt16 ** (*function)());
 #endif
-        virtual ~TextToPronounce_zh();
+        virtual ~TextToPronounce_zh() override;
 
         OUString SAL_CALL
         folding(const OUString & inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 > & offset)

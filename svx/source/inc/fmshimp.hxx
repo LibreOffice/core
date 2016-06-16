@@ -265,7 +265,7 @@ public:
     SAL_DLLPRIVATE FmXFormShell(FmFormShell& _rShell, SfxViewFrame* _pViewFrame);
 
 protected:
-    SAL_DLLPRIVATE virtual ~FmXFormShell();
+    SAL_DLLPRIVATE virtual ~FmXFormShell() override;
 
 // EventListener
     SAL_DLLPRIVATE virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;

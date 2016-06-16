@@ -221,7 +221,7 @@ class XMLOFF_DLLPUBLIC XMLTextPropertySetMapper : public XMLPropertySetMapper
 {
 public:
     XMLTextPropertySetMapper( TextPropMap nType, bool bForExport );
-    virtual ~XMLTextPropertySetMapper();
+    virtual ~XMLTextPropertySetMapper() override;
 
     static const XMLPropertyMapEntry* getPropertyMapForType( TextPropMap _nType );
 };

@@ -80,7 +80,7 @@ public:
     SwFieldPage(vcl::Window *pParent, const OString& rID,
         const OUString& rUIXMLDescription, const SfxItemSet *pAttrSet);
 
-    virtual ~SwFieldPage();
+    virtual ~SwFieldPage() override;
 
     virtual void        ActivatePage() override;
 

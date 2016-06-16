@@ -69,7 +69,7 @@ public:
 
      SvBaseEventDescriptor(const SvEventDescription* pSupportedMacroItems);
 
-    virtual ~SvBaseEventDescriptor();
+    virtual ~SvBaseEventDescriptor() override;
 
 
     // XNameReplace
@@ -176,7 +176,7 @@ public:
      SvEventDescriptor(css::uno::XInterface& rParent,
                       const SvEventDescription* pSupportedMacroItems);
 
-    virtual ~SvEventDescriptor();
+    virtual ~SvEventDescriptor() override;
 
 
 protected:
@@ -230,7 +230,7 @@ public:
 
      SvDetachedEventDescriptor(const SvEventDescription* pSupportedMacroItems);
 
-    virtual ~SvDetachedEventDescriptor();
+    virtual ~SvDetachedEventDescriptor() override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -278,7 +278,7 @@ public:
      SvMacroTableEventDescriptor(const SvxMacroTableDtor& aFmt,
                                 const SvEventDescription* pSupportedMacroItems);
 
-    virtual ~SvMacroTableEventDescriptor();
+    virtual ~SvMacroTableEventDescriptor() override;
 
     void copyMacrosFromTable(const SvxMacroTableDtor& aFmt);
     void copyMacrosIntoTable(SvxMacroTableDtor& aFmt);

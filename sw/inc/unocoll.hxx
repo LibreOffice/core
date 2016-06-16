@@ -269,7 +269,7 @@ class SW_DLLPUBLIC SwXTextTables : public SwCollectionBaseClass,
     public SwUnoCollection
 {
 protected:
-    virtual ~SwXTextTables();
+    virtual ~SwXTextTables() override;
 public:
     SwXTextTables(SwDoc* pDoc);
 
@@ -308,7 +308,7 @@ class SW_DLLPUBLIC SwXFrames : public SwXFramesBaseClass,
 {
     const FlyCntType    m_eType;
 protected:
-    virtual ~SwXFrames();
+    virtual ~SwXFrames() override;
 public:
     SwXFrames(SwDoc* pDoc, FlyCntType eSet);
 
@@ -337,7 +337,7 @@ public:
 class SwXTextFrames : public SwXFrames
 {
 protected:
-    virtual ~SwXTextFrames();
+    virtual ~SwXTextFrames() override;
 public:
     SwXTextFrames(SwDoc* pDoc);
 
@@ -351,7 +351,7 @@ public:
 class SwXTextGraphicObjects : public SwXFrames
 {
 protected:
-    virtual ~SwXTextGraphicObjects();
+    virtual ~SwXTextGraphicObjects() override;
 public:
         SwXTextGraphicObjects(SwDoc* pDoc);
 
@@ -365,7 +365,7 @@ public:
 class SwXTextEmbeddedObjects :  public SwXFrames
 {
 protected:
-    virtual ~SwXTextEmbeddedObjects();
+    virtual ~SwXTextEmbeddedObjects() override;
 public:
     SwXTextEmbeddedObjects(SwDoc* pDoc);
 
@@ -380,7 +380,7 @@ class SwXTextSections : public SwCollectionBaseClass,
                         public SwUnoCollection
 {
 protected:
-    virtual ~SwXTextSections();
+    virtual ~SwXTextSections() override;
 public:
     SwXTextSections(SwDoc* pDoc);
 
@@ -409,7 +409,7 @@ class SwXBookmarks : public SwCollectionBaseClass,
     public SwUnoCollection
 {
     protected:
-        virtual ~SwXBookmarks();
+        virtual ~SwXBookmarks() override;
     public:
         SwXBookmarks(SwDoc* pDoc);
 
@@ -440,7 +440,7 @@ class SwXNumberingRulesCollection : public cppu::WeakImplHelper
     public SwUnoCollection
 {
 protected:
-    virtual ~SwXNumberingRulesCollection();
+    virtual ~SwXNumberingRulesCollection() override;
 
 public:
     SwXNumberingRulesCollection( SwDoc* pDoc );
@@ -468,7 +468,7 @@ class SwXFootnotes : public SwSimpleIndexAccessBaseClass,
     const bool m_bEndnote;
 
 protected:
-    virtual ~SwXFootnotes();
+    virtual ~SwXFootnotes() override;
 public:
     SwXFootnotes(bool bEnd, SwDoc* pDoc);
 
@@ -492,7 +492,7 @@ class SwXReferenceMarks : public SwCollectionBaseClass,
     public SwUnoCollection
 {
 protected:
-    virtual ~SwXReferenceMarks();
+    virtual ~SwXReferenceMarks() override;
 public:
     SwXReferenceMarks(SwDoc* pDoc);
 

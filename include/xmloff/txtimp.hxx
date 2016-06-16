@@ -410,7 +410,7 @@ public:
             bool const bProgress = false, bool const bBlockMode = false,
             bool const bOrganizerMode = false);
 
-    virtual ~XMLTextImportHelper();
+    virtual ~XMLTextImportHelper() override;
 
     void SetCursor(
             const css::uno::Reference< css::text::XTextCursor >& rCursor );

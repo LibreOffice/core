@@ -54,7 +54,7 @@ class ChartType :
 {
 public:
     explicit ChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~ChartType();
+    virtual ~ChartType() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

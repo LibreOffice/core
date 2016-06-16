@@ -71,7 +71,7 @@ private:
 
 public:
     explicit Acceptor( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~Acceptor();
+    virtual ~Acceptor() override;
 
     void run();
 
@@ -101,7 +101,7 @@ private:
 public:
     AccInstanceProvider(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                         const css::uno::Reference< css::connection::XConnection >& rConnection);
-    virtual ~AccInstanceProvider();
+    virtual ~AccInstanceProvider() override;
 
     // XInstanceProvider
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getInstance (const OUString& aName )

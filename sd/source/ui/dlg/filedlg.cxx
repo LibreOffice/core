@@ -65,7 +65,7 @@ private:
 
 public:
                        explicit SdFileDialog_Imp( const short nDialogType );
-                       virtual ~SdFileDialog_Imp();
+                       virtual ~SdFileDialog_Imp() override;
 
     ErrCode                     Execute();
 

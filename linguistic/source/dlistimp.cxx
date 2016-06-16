@@ -75,7 +75,7 @@ class DicEvtListenerHelper :
 
 public:
     explicit DicEvtListenerHelper( const uno::Reference< XDictionaryList > &rxDicList );
-    virtual ~DicEvtListenerHelper();
+    virtual ~DicEvtListenerHelper() override;
 
     // XEventListener
     virtual void SAL_CALL

@@ -70,7 +70,7 @@ public:
     css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > GetParsingResult();
 
     explicit OFOPXMLHelper_Impl( sal_uInt16 nFormat ); // must not be created directly
-    virtual ~OFOPXMLHelper_Impl();
+    virtual ~OFOPXMLHelper_Impl() override;
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;

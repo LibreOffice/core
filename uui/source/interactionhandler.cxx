@@ -44,7 +44,7 @@ private:
 public:
     explicit UUIInteractionHandler(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
-    virtual ~UUIInteractionHandler();
+    virtual ~UUIInteractionHandler() override;
 
     UUIInteractionHandler(const UUIInteractionHandler&) = delete;
     UUIInteractionHandler& operator=(const UUIInteractionHandler&) = delete;

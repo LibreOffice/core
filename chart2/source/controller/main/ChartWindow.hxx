@@ -36,7 +36,7 @@ class ChartWindow : public vcl::Window
 {
 public:
     ChartWindow( ChartController* pController, vcl::Window* pParent, WinBits nStyle );
-    virtual ~ChartWindow();
+    virtual ~ChartWindow() override;
     virtual void dispose() override;
 
     void clear();

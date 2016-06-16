@@ -49,7 +49,7 @@ class ScTabPageSortFields : public SfxTabPage
 public:
     ScTabPageSortFields( vcl::Window*             pParent,
             const SfxItemSet&   rArgSet );
-    virtual ~ScTabPageSortFields();
+    virtual ~ScTabPageSortFields() override;
     virtual void        dispose() override;
     static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
@@ -108,7 +108,7 @@ class ScTabPageSortOptions : public SfxTabPage
 public:
     ScTabPageSortOptions( vcl::Window*            pParent,
             const SfxItemSet&  rArgSet );
-    virtual ~ScTabPageSortOptions();
+    virtual ~ScTabPageSortOptions() override;
     virtual void dispose() override;
 
 #undef SfxTabPage

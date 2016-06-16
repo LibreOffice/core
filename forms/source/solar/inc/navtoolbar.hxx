@@ -69,7 +69,7 @@ namespace frm
             const std::shared_ptr< const ICommandImageProvider >& _pImageProvider,
             const OUString & sModuleId
         );
-        virtual ~NavigationToolBar( );
+        virtual ~NavigationToolBar( ) override;
         virtual void dispose() override;
 
         /** sets the dispatcher which is to be used for the features

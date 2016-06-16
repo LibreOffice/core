@@ -35,7 +35,7 @@ private:
     OObjectListener(const OObjectListener&) = delete;
     void operator =(const OObjectListener&) = delete;
 protected:
-    virtual ~OObjectListener();
+    virtual ~OObjectListener() override;
 public:
     OObjectListener(OObjectBase* _pObject);
 

@@ -95,7 +95,7 @@ public:
     TableProperties(const TableProperties& rProps, SdrObject& rObj );
 
     // destructor
-    virtual ~TableProperties();
+    virtual ~TableProperties() override;
 
     // Clone() operator, normally just calls the local copy constructor
     BaseProperties& Clone(SdrObject& rObj) const override;
@@ -216,7 +216,7 @@ public:
     void UpdateCells( Rectangle& rArea );
 
     SdrTableObjImpl();
-    virtual ~SdrTableObjImpl();
+    virtual ~SdrTableObjImpl() override;
 
     void init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 nRows );
     void dispose();

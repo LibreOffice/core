@@ -34,7 +34,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     TextUnderlinePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
-    virtual ~TextUnderlinePopup();
+    virtual ~TextUnderlinePopup() override;
 
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };

@@ -45,7 +45,7 @@ class GalleryItem : public ::cppu::OWeakAggObject,
 public:
 
             GalleryItem( ::unogallery::GalleryTheme& rTheme, const GalleryObject& rObject );
-            virtual ~GalleryItem() throw();
+            virtual ~GalleryItem() throw() override;
 
     bool    isValid() const;
 
@@ -102,7 +102,7 @@ class GalleryDrawingModel : public SvxUnoDrawingModel
 public:
 
     explicit    GalleryDrawingModel( SdrModel* pDoc ) throw();
-    virtual     ~GalleryDrawingModel() throw();
+    virtual     ~GalleryDrawingModel() throw() override;
 
                 UNO3_GETIMPLEMENTATION_DECL( GalleryDrawingModel )
 };

@@ -70,7 +70,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtCommandOptions : public utl::detail:
         *//*-*****************************************************************************************************/
 
          SvtCommandOptions();
-        virtual ~SvtCommandOptions();
+        virtual ~SvtCommandOptions() override;
 
         /*-****************************************************************************************************
             @short      return complete specified list

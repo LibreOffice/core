@@ -99,7 +99,7 @@ public:
     */
     explicit DrawController (ViewShellBase& rBase) throw();
 
-    virtual ~DrawController() throw();
+    virtual ~DrawController() throw() override;
 
     /** Replace the currently used sub controller with the given one.  This
         new sub controller is used from now on for the view (that is the

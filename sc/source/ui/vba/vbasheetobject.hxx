@@ -45,7 +45,7 @@ public:
         const ScVbaPalette& rPalette,
         const css::uno::Any& rStart,
         const css::uno::Any& rLength ) throw (css::uno::RuntimeException);
-    virtual ~ScVbaButtonCharacters();
+    virtual ~ScVbaButtonCharacters() override;
 
     // XCharacters attributes
     virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) override;

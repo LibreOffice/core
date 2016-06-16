@@ -70,7 +70,7 @@ protected:
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 public:
     SdrItemBrowserControl(vcl::Window* pParent, WinBits nBits=WB_3DLOOK|WB_BORDER|WB_TABSTOP);
-    virtual ~SdrItemBrowserControl();
+    virtual ~SdrItemBrowserControl() override;
     virtual void dispose() override;
     void Clear();
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=nullptr);
@@ -107,7 +107,7 @@ class SdrItemBrowser: public FloatingWindow {
     DECL_LINK_TYPED(SetDirtyHdl, SdrItemBrowserControl&, void);
 public:
     SdrItemBrowser(SdrView& rView);
-    virtual ~SdrItemBrowser();
+    virtual ~SdrItemBrowser() override;
     void ForceParent();
     void SetDirty();
     void Undirty();

@@ -149,7 +149,7 @@ class SwEmbedObjectLink : public sfx2::SvBaseLink
 
 public:
     explicit            SwEmbedObjectLink(SwOLENode* pNode);
-    virtual             ~SwEmbedObjectLink();
+    virtual             ~SwEmbedObjectLink() override;
 
     virtual void        Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(

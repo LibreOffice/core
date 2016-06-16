@@ -59,7 +59,7 @@ class XMLFilter : public
 {
 public:
     explicit XMLFilter( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~XMLFilter();
+    virtual ~XMLFilter() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

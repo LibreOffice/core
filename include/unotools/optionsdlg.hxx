@@ -32,7 +32,7 @@ private:
 
 public:
                     SvtOptionsDialogOptions();
-                    virtual ~SvtOptionsDialogOptions();
+                    virtual ~SvtOptionsDialogOptions() override;
 
     bool        IsGroupHidden   (   const OUString& _rGroup ) const;
     bool        IsPageHidden    (   const OUString& _rPage,

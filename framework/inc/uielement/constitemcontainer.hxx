@@ -56,7 +56,7 @@ class FWI_DLLPUBLIC ConstItemContainer : public ::cppu::WeakImplHelper<
         ConstItemContainer();
         ConstItemContainer( const ItemContainer& rtemContainer );
         ConstItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rSourceContainer, bool bFastCopy = false );
-        virtual ~ConstItemContainer();
+        virtual ~ConstItemContainer() override;
 
         // XUnoTunnel
         static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();

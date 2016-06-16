@@ -125,7 +125,7 @@ protected:
     // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-    virtual ~OQueryDescriptor();
+    virtual ~OQueryDescriptor() override;
 public:
     OQueryDescriptor();
     explicit OQueryDescriptor(const OQueryDescriptor_Base& _rSource);

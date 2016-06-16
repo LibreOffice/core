@@ -45,7 +45,7 @@ namespace connectivity
 
             void checkColumnIndex(sal_Int32 column) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         protected:
-            virtual ~OResultSetMetaData();
+            virtual ~OResultSetMetaData() override;
         public:
             // a Constructor, that is needed for when Returning the Object is needed:
             OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,const OUString& _aTableName,OFileTable* _pTable);

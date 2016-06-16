@@ -458,7 +458,7 @@ public:
                    const OUString& rInitials,
                    const OUString& rName,
                    const DateTime& rDate);
-    virtual ~SwPostItField();
+    virtual ~SwPostItField() override;
 
     virtual OUString        Expand() const override;
     virtual SwField*        Copy() const override;

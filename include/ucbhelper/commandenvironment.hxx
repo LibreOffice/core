@@ -57,7 +57,7 @@ public:
     /**
       * Destructor.
       */
-    virtual ~CommandEnvironment();
+    virtual ~CommandEnvironment() override;
 
      // XCommandEnvironemnt
     virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler()

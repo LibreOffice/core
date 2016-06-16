@@ -45,7 +45,7 @@ class SVT_DLLPUBLIC FrameStatusListener : public css::frame::XStatusListener,
     public:
         FrameStatusListener( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                              const css::uno::Reference< css::frame::XFrame >& xFrame );
-        virtual ~FrameStatusListener();
+        virtual ~FrameStatusListener() override;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const OUString& aCommandURL );

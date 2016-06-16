@@ -390,7 +390,7 @@ public:
         , m_pLabel(nullptr)
     {
     }
-    virtual ~VclFrame();
+    virtual ~VclFrame() override;
     virtual void dispose() override;
     void set_label(const OUString &rLabel);
     OUString get_label() const;
@@ -445,7 +445,7 @@ public:
         m_pDisclosureButton->SetToggleHdl(LINK(this, VclExpander, ClickHdl));
         m_pDisclosureButton->Show();
     }
-    virtual ~VclExpander() { disposeOnce(); }
+    virtual ~VclExpander() override { disposeOnce(); }
     virtual void dispose() override;
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
@@ -478,7 +478,7 @@ class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 {
 public:
     VclScrolledWindow(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL | WB_TABSTOP );
-    virtual ~VclScrolledWindow() { disposeOnce(); }
+    virtual ~VclScrolledWindow() override { disposeOnce(); }
     virtual void dispose() override;
     virtual vcl::Window *get_child() override;
     virtual const vcl::Window *get_child() const override;
@@ -544,7 +544,7 @@ private:
     VclPtr<EventBoxHelper> m_aEventBoxHelper;
 protected:
     virtual void dispose() override;
-    virtual ~VclEventBox();
+    virtual ~VclEventBox() override;
 public:
     VclEventBox(vcl::Window* pParent)
         : VclBin(pParent)
@@ -667,7 +667,7 @@ public:
     OUString get_secondary_text() const;
     void set_primary_text(const OUString &rPrimaryString);
     void set_secondary_text(const OUString &rSecondaryString);
-    virtual ~MessageDialog();
+    virtual ~MessageDialog() override;
     virtual void dispose() override;
 
     static void SetMessagesWidths(vcl::Window *pParent, VclMultiLineEdit *pPrimaryMessage,

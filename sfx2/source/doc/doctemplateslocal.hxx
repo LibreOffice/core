@@ -46,7 +46,7 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper < css::xml::sax::XDocum
     throw( css::uno::Exception );
 
 public:
-    virtual ~DocTemplLocaleHelper();
+    virtual ~DocTemplLocaleHelper() override;
 
     // returns sequence of pairs ( GroupName, GroupUIName )
     static

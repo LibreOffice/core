@@ -42,7 +42,7 @@ namespace rptxml
                     ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
                     ,const css::uno::Reference< css::report::XSection >& _xSection
                     ,bool _bPageHeader = true);
-        virtual ~OXMLSection();
+        virtual ~OXMLSection() override;
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

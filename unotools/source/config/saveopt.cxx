@@ -97,7 +97,7 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
 
 public:
                             SvtSaveOptions_Impl();
-                            virtual ~SvtSaveOptions_Impl();
+                            virtual ~SvtSaveOptions_Impl() override;
 
     virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
@@ -770,7 +770,7 @@ private:
 
 public:
                             SvtLoadOptions_Impl();
-                            virtual ~SvtLoadOptions_Impl();
+                            virtual ~SvtLoadOptions_Impl() override;
 
     virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 

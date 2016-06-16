@@ -142,7 +142,7 @@ public:
 public:
 
     GalleryBrowser2(vcl::Window* pParent, Gallery* pGallery);
-    virtual ~GalleryBrowser2();
+    virtual ~GalleryBrowser2() override;
     virtual void dispose() override;
 
     void                SelectTheme( const OUString& rThemeName );

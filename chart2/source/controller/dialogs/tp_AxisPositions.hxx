@@ -33,7 +33,7 @@ class AxisPositionsTabPage : public SfxTabPage
 {
 public:
     AxisPositionsTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~AxisPositionsTabPage();
+    virtual ~AxisPositionsTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );

@@ -68,7 +68,7 @@ class DNDEventDispatcher: public ::cppu::WeakImplHelper<
 public:
 
     DNDEventDispatcher( vcl::Window * pTopWindow );
-    virtual ~DNDEventDispatcher();
+    virtual ~DNDEventDispatcher() override;
 
     /*
      * XDropTargetDragContext

@@ -66,7 +66,7 @@ namespace {
         PresenterScreenListener (
             const css::uno::Reference<css::uno::XComponentContext>& rxContext,
             const css::uno::Reference<css::frame::XModel2>& rxModel);
-        virtual ~PresenterScreenListener();
+        virtual ~PresenterScreenListener() override;
         PresenterScreenListener(const PresenterScreenListener&) = delete;
         PresenterScreenListener& operator=(const PresenterScreenListener&) = delete;
 

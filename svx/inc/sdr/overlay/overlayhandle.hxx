@@ -32,7 +32,7 @@ public:
                   Color& rStrokeColor,
                   Color& rFillColor);
 
-    virtual ~OverlayHandle();
+    virtual ~OverlayHandle() override;
 };
 
 }} // end of namespace sdr::overlay

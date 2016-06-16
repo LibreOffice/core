@@ -50,7 +50,7 @@ public:
     SwFormatPageDesc( const SwPageDesc *pDesc = nullptr );
     SwFormatPageDesc( const SwFormatPageDesc &rCpy );
     SwFormatPageDesc &operator=( const SwFormatPageDesc &rCpy );
-    virtual ~SwFormatPageDesc();
+    virtual ~SwFormatPageDesc() override;
 
 
     /// "Pure virtual methods" of SfxPoolItem.

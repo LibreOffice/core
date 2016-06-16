@@ -50,7 +50,7 @@ namespace dbaui
                             ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
                             ,const css::uno::Any& _aDataSourceName);
 
-        virtual ~AdvancedSettingsDialog();
+        virtual ~AdvancedSettingsDialog() override;
         virtual void dispose() override;
 
         /// determines whether or not the given data source type has any advanced setting

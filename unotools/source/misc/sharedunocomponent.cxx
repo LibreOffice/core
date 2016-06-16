@@ -84,7 +84,7 @@ namespace utl
         void    nf_closeComponent();
 
     protected:
-        virtual ~CloseableComponentImpl();
+        virtual ~CloseableComponentImpl() override;
 
         // XCloseListener overridables
         virtual void SAL_CALL queryClosing( const EventObject& Source, sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception) override;

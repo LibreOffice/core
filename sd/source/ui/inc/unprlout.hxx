@@ -45,7 +45,7 @@ public:
                          bool            bSet,
                          SdPage*         pThePage);
 
-    virtual ~SdPresentationLayoutUndoAction();
+    virtual ~SdPresentationLayoutUndoAction() override;
     virtual void Undo() override;
     virtual void Redo() override;
 

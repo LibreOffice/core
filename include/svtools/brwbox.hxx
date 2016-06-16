@@ -396,7 +396,7 @@ public:
                                BrowserMode nMode = BrowserMode::NONE );
                     BrowseBox( vcl::Window* pParent, const ResId& rId,
                                BrowserMode nMode = BrowserMode::NONE );
-    virtual         ~BrowseBox();
+    virtual         ~BrowseBox() override;
     virtual void    dispose() override;
 
     // override inherited handler

@@ -36,7 +36,7 @@ public:
     FuText(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
-    virtual ~FuText();
+    virtual ~FuText() override;
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;

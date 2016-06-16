@@ -69,7 +69,7 @@ private:
     virtual void SAL_CALL disposing() override;
 
 protected:
-    virtual ~ScAccessibleCell();
+    virtual ~ScAccessibleCell() override;
 
     using ScAccessibleCellBase::IsDefunc;
 

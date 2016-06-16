@@ -61,7 +61,7 @@ private:
 
 public:
                             ScDocOptionsObj( const ScDocOptions& rOpt );
-    virtual                 ~ScDocOptionsObj();
+    virtual                 ~ScDocOptionsObj() override;
 
     // get/setPropertyValue override to used stored options instead of document
 

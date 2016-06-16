@@ -58,7 +58,7 @@ namespace dbaui
 
     public:
         SbaXGridControl(const css::uno::Reference< css::uno::XComponentContext >&);
-        virtual ~SbaXGridControl();
+        virtual ~SbaXGridControl() override;
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl)
@@ -102,7 +102,7 @@ namespace dbaui
 
     public:
         SbaXGridPeer(const css::uno::Reference< css::uno::XComponentContext >&);
-        virtual ~SbaXGridPeer();
+        virtual ~SbaXGridPeer() override;
 
         // UNO
         virtual void SAL_CALL  acquire() throw() override { FmXGridPeer::acquire(); }
@@ -171,7 +171,7 @@ namespace dbaui
     public:
         SbaGridHeader(BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG);
         virtual void dispose() override;
-        virtual ~SbaGridHeader();
+        virtual ~SbaGridHeader() override;
     protected:
 
         // FmGridHeader overridables
@@ -224,7 +224,7 @@ namespace dbaui
 
     public:
         SbaGridControl(css::uno::Reference< css::uno::XComponentContext >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
-        virtual ~SbaGridControl();
+        virtual ~SbaGridControl() override;
         virtual void dispose() override;
 
         virtual void Command( const CommandEvent& rCEvt ) override;

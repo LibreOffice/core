@@ -29,7 +29,7 @@ namespace connectivity
             ODatabaseMetaDataResultSet::ORows& SAL_CALL getColumnRows( const OUString& tableNamePattern, const OUString& columnNamePattern ) throw( css::sdbc::SQLException );
 
         protected:
-            virtual ~ODatabaseMetaData();
+            virtual ~ODatabaseMetaData() override;
 
         public:
             explicit ODatabaseMetaData(OConnection* _pCon);

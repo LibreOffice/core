@@ -395,7 +395,7 @@ public:
     // 25
 
     explicit SwHTMLWriter( const OUString& rBaseURL );
-    virtual ~SwHTMLWriter();
+    virtual ~SwHTMLWriter() override;
 
     void Out_SwDoc( SwPaM* );       // schreibe den makierten Bereich
 

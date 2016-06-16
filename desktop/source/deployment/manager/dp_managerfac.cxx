@@ -55,7 +55,7 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 public:
-    virtual ~PackageManagerFactoryImpl();
+    virtual ~PackageManagerFactoryImpl() override;
     explicit PackageManagerFactoryImpl(
         Reference<XComponentContext> const & xComponentContext );
 

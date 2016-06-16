@@ -30,7 +30,7 @@ class VCLXAccessibleMenuSeparator : public OAccessibleMenuItemComponent
 {
 public:
     VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = nullptr );
-    virtual ~VCLXAccessibleMenuSeparator();
+    virtual ~VCLXAccessibleMenuSeparator() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;

@@ -28,7 +28,7 @@ public:
         SfxBindings* pB, SfxChildWindow* pCW,
         vcl::Window* pParent, ScViewData* pViewData );
 
-    virtual ~ScRandomNumberGeneratorDialog();
+    virtual ~ScRandomNumberGeneratorDialog() override;
     virtual void dispose() override;
 
     virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

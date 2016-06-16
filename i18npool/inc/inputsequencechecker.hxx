@@ -41,7 +41,7 @@ class InputSequenceCheckerImpl : public cppu::WeakImplHelper
 public:
     InputSequenceCheckerImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     InputSequenceCheckerImpl(const char *pServiceName);
-    virtual ~InputSequenceCheckerImpl();
+    virtual ~InputSequenceCheckerImpl() override;
 
     virtual sal_Bool SAL_CALL checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(css::uno::RuntimeException, std::exception) override;

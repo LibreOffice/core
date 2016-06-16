@@ -34,7 +34,7 @@ private:
 
 public:
     SwVbaListFormat( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextRange >& xTextRange ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaListFormat();
+    virtual ~SwVbaListFormat() override;
 
     // Methods
     virtual void SAL_CALL ApplyListTemplate( const css::uno::Reference< ::ooo::vba::word::XListTemplate >& ListTemplate, const css::uno::Any& ContinuePreviousList, const css::uno::Any& ApplyTo, const css::uno::Any& DefaultListBehavior ) throw (css::uno::RuntimeException, std::exception) override;

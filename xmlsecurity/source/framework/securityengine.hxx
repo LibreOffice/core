@@ -98,7 +98,7 @@ protected:
 
 protected:
     explicit SecurityEngine();
-    virtual ~SecurityEngine() {};
+    virtual ~SecurityEngine() override {};
 
     /*
      * perform the security operation.

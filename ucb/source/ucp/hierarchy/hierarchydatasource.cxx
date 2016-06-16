@@ -89,7 +89,7 @@ public:
     HierarchyDataAccess( const uno::Reference<
                                         uno::XInterface > & xConfigAccess,
                          bool bReadOnly );
-    virtual ~HierarchyDataAccess();
+    virtual ~HierarchyDataAccess() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

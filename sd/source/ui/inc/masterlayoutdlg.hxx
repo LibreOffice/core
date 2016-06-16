@@ -54,7 +54,7 @@ private:
 
 public:
     MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
-    virtual ~MasterLayoutDialog();
+    virtual ~MasterLayoutDialog() override;
     virtual void dispose() override;
 
     virtual short Execute() override;

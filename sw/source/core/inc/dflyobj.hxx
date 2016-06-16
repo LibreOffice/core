@@ -47,7 +47,7 @@ protected:
 public:
 
     SwFlyDrawObj();
-    virtual ~SwFlyDrawObj();
+    virtual ~SwFlyDrawObj() override;
 
     // for instantiation of this class while loading (via factory)
     virtual sal_uInt32 GetObjInventor()     const override;
@@ -79,7 +79,7 @@ public:
 
 
     SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrame* pFly);
-    virtual ~SwVirtFlyDrawObj();
+    virtual ~SwVirtFlyDrawObj() override;
 
     // override method of base class SdrVirtObj
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const override;

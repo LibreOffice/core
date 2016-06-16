@@ -978,7 +978,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlag);
 
-    virtual ~ScXMLImport() throw();
+    virtual ~ScXMLImport() throw() override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments )

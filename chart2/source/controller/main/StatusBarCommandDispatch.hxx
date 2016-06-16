@@ -49,7 +49,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         const css::uno::Reference< css::frame::XModel > & xModel,
         const css::uno::Reference< css::view::XSelectionSupplier > & xSelSupp );
-    virtual ~StatusBarCommandDispatch();
+    virtual ~StatusBarCommandDispatch() override;
 
     // late initialisation, especially for adding as listener
     virtual void initialize() override;

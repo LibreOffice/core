@@ -46,7 +46,7 @@ namespace svgio
                 SvgDocument& rDocument,
                 SvgNode* pParent,
                 bool bIsPolyline);
-            virtual ~SvgPolyNode();
+            virtual ~SvgPolyNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;

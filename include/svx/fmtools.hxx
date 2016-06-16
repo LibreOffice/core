@@ -176,7 +176,7 @@ class SAL_WARN_UNUSED FmXDisposeMultiplexer : public ::cppu::WeakImplHelper1< cs
     FmXDisposeListener* m_pListener;
     sal_Int16           m_nId;
 
-    virtual ~FmXDisposeMultiplexer();
+    virtual ~FmXDisposeMultiplexer() override;
 public:
     FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const css::uno::Reference< css::lang::XComponent>& _rxObject);
 

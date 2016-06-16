@@ -46,7 +46,7 @@ public:
 
     AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice);
 
-    virtual ~AccessibleViewForwarder();
+    virtual ~AccessibleViewForwarder() override;
 
     //=====  IAccessibleViewforwarder  ========================================
 

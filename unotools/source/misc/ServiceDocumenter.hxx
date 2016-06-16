@@ -37,7 +37,7 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
         virtual void SAL_CALL showInterfaceDocs( const ::css::uno::Reference< ::css::lang::XTypeProvider >& xTypeProvider ) throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL showCoreDocs( const ::css::uno::Reference< ::css::lang::XServiceInfo >& xService) throw (css::uno::RuntimeException, std::exception) override;
     protected:
-        virtual ~ServiceDocumenter()
+        virtual ~ServiceDocumenter() override
             {};
     private:
         css::uno::Reference< css::uno::XComponentContext> m_xContext;

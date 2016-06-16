@@ -24,7 +24,7 @@ class SvxShapeCaption : public SvxShapeText
 {
 public:
     explicit SvxShapeCaption( SdrObject* pObj ) throw();
-    virtual ~SvxShapeCaption() throw();
+    virtual ~SvxShapeCaption() throw() override;
 };
 class SvxPluginShape : public SvxOle2Shape
 {
@@ -35,7 +35,7 @@ protected:
 
 public:
     explicit SvxPluginShape( SdrObject* pObj ) throw();
-    virtual ~SvxPluginShape() throw();
+    virtual ~SvxPluginShape() throw() override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     using SvxUnoTextRangeBase::setPropertyValue;
@@ -53,7 +53,7 @@ protected:
 
 public:
     explicit SvxAppletShape( SdrObject* pObj ) throw();
-    virtual ~SvxAppletShape() throw();
+    virtual ~SvxAppletShape() throw() override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     using SvxUnoTextRangeBase::setPropertyValue;
@@ -76,7 +76,7 @@ protected:
 
 public:
     explicit SvxFrameShape( SdrObject* pObj ) throw();
-    virtual ~SvxFrameShape() throw();
+    virtual ~SvxFrameShape() throw() override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     using SvxUnoTextRangeBase::setPropertyValue;
@@ -100,7 +100,7 @@ protected:
 public:
 
     explicit SvxTableShape( SdrObject* pObj ) throw();
-    virtual ~SvxTableShape() throw();
+    virtual ~SvxTableShape() throw() override;
 };
 
 SvxUnoPropertyMapProvider& getSvxMapProvider();

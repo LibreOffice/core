@@ -39,7 +39,7 @@ public:
         vcl::Window* pParent,
         PagePropertyPanel& rPanel,
         const bool bLandscape );
-    virtual ~PageOrientationControl();
+    virtual ~PageOrientationControl() override;
     virtual void dispose() override;
 
 private:

@@ -47,7 +47,7 @@ private:
 
 public:
     explicit UcbPropertiesManager( const css::uno::Reference< css::lang::XMultiServiceFactory >&  rxSMgr );
-    virtual ~UcbPropertiesManager();
+    virtual ~UcbPropertiesManager() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

@@ -63,7 +63,7 @@ protected:
 
 public:
                     FileControl( vcl::Window* pParent, WinBits nStyle );
-    virtual         ~FileControl();
+    virtual         ~FileControl() override;
     virtual void    dispose() override;
 
     Edit&           GetEdit() { return *maEdit.get(); }

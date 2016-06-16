@@ -95,7 +95,7 @@ private:
 
 public:
     explicit            XPMReader( SvStream& rStm );
-    virtual             ~XPMReader();
+    virtual             ~XPMReader() override;
 
     ReadState           ReadXPM( Graphic& rGraphic );
 };

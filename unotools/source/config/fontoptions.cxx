@@ -48,7 +48,7 @@ class SvtFontOptions_Impl : public ConfigItem
     public:
 
          SvtFontOptions_Impl();
-        virtual ~SvtFontOptions_Impl();
+        virtual ~SvtFontOptions_Impl() override;
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

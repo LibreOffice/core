@@ -33,7 +33,7 @@ class SW_DLLPUBLIC SwFormatLineNumber: public SfxPoolItem
 
 public:
     SwFormatLineNumber();
-    virtual ~SwFormatLineNumber();
+    virtual ~SwFormatLineNumber() override;
 
     static SfxPoolItem* CreateDefault();
 

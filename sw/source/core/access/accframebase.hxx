@@ -44,7 +44,7 @@ protected:
     virtual void InvalidateCursorPos_() override;
     virtual void InvalidateFocus_() override;
 
-    virtual ~SwAccessibleFrameBase();
+    virtual ~SwAccessibleFrameBase() override;
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:

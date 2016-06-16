@@ -42,7 +42,7 @@ public:
                             AddonStatusbarItemData *pItemData,
                             sal_uInt16              nId,
                             const rtl::OUString&   aCommand );
-    virtual ~StatusbarItem();
+    virtual ~StatusbarItem() override;
 
     void SAL_CALL disposing() override;
 

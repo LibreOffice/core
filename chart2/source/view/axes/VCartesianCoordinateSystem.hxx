@@ -31,7 +31,7 @@ class VCartesianCoordinateSystem : public VCoordinateSystem
 public:
     VCartesianCoordinateSystem() = delete;
     explicit VCartesianCoordinateSystem( const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys );
-    virtual ~VCartesianCoordinateSystem();
+    virtual ~VCartesianCoordinateSystem() override;
 
     virtual void createVAxisList(
             const css::uno::Reference< css::chart2::XChartDocument> &ChartDoc

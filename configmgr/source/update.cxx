@@ -71,7 +71,7 @@ private:
     Service(const Service&) = delete;
     Service& operator=(const Service&) = delete;
 
-    virtual ~Service() {}
+    virtual ~Service() override {}
 
     virtual void SAL_CALL insertExtensionXcsFile(
         sal_Bool shared, OUString const & fileUri)

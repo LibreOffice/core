@@ -92,7 +92,7 @@ protected:
     virtual bool LoadCompleted() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual ~SbModule();
+    virtual ~SbModule() override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
                     SbModule( const OUString&, bool bCompat = false );
@@ -147,7 +147,7 @@ class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
 
 public:
     SbClassModuleObject( SbModule* pClassModule );
-    virtual ~SbClassModuleObject();
+    virtual ~SbClassModuleObject() override;
 
     // Overridden to support NameAccess etc.
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;

@@ -55,7 +55,7 @@ class LicenseView : public MultiLineEdit, public SfxListener
 
 public:
     LicenseView( vcl::Window* pParent, WinBits nStyle );
-    virtual ~LicenseView();
+    virtual ~LicenseView() override;
     virtual void dispose() override;
 
     void ScrollDown( ScrollType eScroll );
@@ -96,7 +96,7 @@ struct LicenseDialogImpl : public ModalDialog
         vcl::Window * pParent,
         const OUString & sExtensionName,
         const OUString & sLicenseText);
-    virtual ~LicenseDialogImpl() { disposeOnce(); }
+    virtual ~LicenseDialogImpl() override { disposeOnce(); }
     virtual void dispose() override;
 
     virtual void Activate() override;

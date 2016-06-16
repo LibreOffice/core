@@ -32,7 +32,7 @@ private:
 
 public:
     SwVbaSection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaSection();
+    virtual ~SwVbaSection() override;
 
     // Attributes
     virtual sal_Bool SAL_CALL getProtectedForForms() throw (css::uno::RuntimeException, std::exception) override;

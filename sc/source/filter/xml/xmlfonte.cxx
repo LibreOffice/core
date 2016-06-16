@@ -40,7 +40,7 @@ private:
 
 public:
     ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport, bool bBlockFontEmbedding );
-    virtual ~ScXMLFontAutoStylePool_Impl();
+    virtual ~ScXMLFontAutoStylePool_Impl() override;
 };
 
 void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const bool bExportDefaults)

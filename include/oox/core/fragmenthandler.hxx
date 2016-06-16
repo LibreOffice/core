@@ -91,7 +91,7 @@ class OOX_DLLPUBLIC FragmentHandler : public FragmentHandler_BASE
 {
 public:
     explicit            FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath );
-    virtual             ~FragmentHandler();
+    virtual             ~FragmentHandler() override;
 
     /** Returns the com.sun.star.xml.sax.XFastContextHandler interface of this context. */
     css::uno::Reference< css::xml::sax::XFastContextHandler >

@@ -53,7 +53,7 @@ class OfaAutoCorrDlg : public SfxTabDialog
 public:
 
     OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet *pSet);
-    virtual ~OfaAutoCorrDlg();
+    virtual ~OfaAutoCorrDlg() override;
     virtual void dispose() override;
 
     void EnableLanguage(bool bEnable);
@@ -109,7 +109,7 @@ private:
 
 public:
     OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~OfaAutocorrOptionsPage();
+    virtual ~OfaAutocorrOptionsPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -168,7 +168,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
         OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
                             const SfxItemSet& rSet );
-        virtual ~OfaSwAutoFmtOptionsPage();
+        virtual ~OfaSwAutoFmtOptionsPage() override;
         virtual void dispose() override;
 
 public:
@@ -198,7 +198,7 @@ public:
     {
     }
 
-    virtual ~AutoCorrEdit();
+    virtual ~AutoCorrEdit() override;
 
     void            SetActionHdl( const Link<AutoCorrEdit&,bool>& rLink )
                                 { aActionLink = rLink;}
@@ -275,7 +275,7 @@ private:
 
 public:
                         OfaAutocorrReplacePage( vcl::Window* pParent, const SfxItemSet& rSet );
-                        virtual ~OfaAutocorrReplacePage();
+                        virtual ~OfaAutocorrReplacePage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
@@ -334,7 +334,7 @@ private:
                                         LanguageType eNewLanguage);
 public:
                         OfaAutocorrExceptPage( vcl::Window* pParent, const SfxItemSet& rSet );
-                        virtual ~OfaAutocorrExceptPage();
+                        virtual ~OfaAutocorrExceptPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -402,7 +402,7 @@ private:
 
                         OfaQuoteTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 public:
-                        virtual ~OfaQuoteTabPage();
+                        virtual ~OfaQuoteTabPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -428,7 +428,7 @@ public:
             , m_pPage(nullptr)
         {
         }
-        virtual ~AutoCompleteMultiListBox();
+        virtual ~AutoCompleteMultiListBox() override;
         virtual void dispose() override;
         void SetPage(OfaAutoCompleteTabPage *pPage) { m_pPage = pPage; }
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
@@ -456,7 +456,7 @@ private:
                         OfaAutoCompleteTabPage( vcl::Window* pParent,
                                                 const SfxItemSet& rSet );
 public:
-    virtual ~OfaAutoCompleteTabPage();
+    virtual ~OfaAutoCompleteTabPage() override;
     virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -521,7 +521,7 @@ private:
 public:
     /// construction via Create()
     OfaSmartTagOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~OfaSmartTagOptionsTabPage();
+    virtual ~OfaSmartTagOptionsTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);

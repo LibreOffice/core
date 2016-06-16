@@ -42,7 +42,7 @@ class OConnectionURLEdit : public Edit
 
 public:
     OConnectionURLEdit(vcl::Window* pParent, WinBits _nBits,bool _bShowPrefix = false);
-    virtual ~OConnectionURLEdit();
+    virtual ~OConnectionURLEdit() override;
     virtual void dispose() override;
 
 public:

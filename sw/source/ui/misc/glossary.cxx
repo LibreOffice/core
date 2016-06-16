@@ -132,7 +132,7 @@ public:
     SwNewGlosNameDlg( vcl::Window* pParent,
                       const OUString& rOldName,
                       const OUString& rOldShort );
-    virtual ~SwNewGlosNameDlg();
+    virtual ~SwNewGlosNameDlg() override;
     virtual void dispose() override;
 
     OUString GetNewName()  const { return m_pNewName->GetText(); }

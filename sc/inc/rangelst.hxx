@@ -33,7 +33,7 @@ public:
     ScRangeList();
     ScRangeList( const ScRangeList& rList );
     ScRangeList( const ScRange& rRange );
-    virtual ~ScRangeList();
+    virtual ~ScRangeList() override;
 
     ScRangeList& operator=(const ScRangeList& rList);
     void Append( const ScRange& rRange );
@@ -107,7 +107,7 @@ typedef tools::SvRef<ScRangeList> ScRangeListRef;
 class SC_DLLPUBLIC ScRangePairList : public SvRefBase
 {
 public:
-    virtual             ~ScRangePairList();
+    virtual             ~ScRangePairList() override;
     ScRangePairList*    Clone() const;
     void                Append( const ScRangePair& rRangePair )
                         {

@@ -149,7 +149,7 @@ namespace pcr
         virtual void SAL_CALL release() throw() override;
 
     protected:
-        virtual ~CachedInspectorUI();
+        virtual ~CachedInspectorUI() override;
 
         /// determines whether the instance is already disposed
         inline bool isDisposed() const { return m_bDisposed; }

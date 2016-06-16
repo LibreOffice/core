@@ -72,7 +72,7 @@ namespace svt
         virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& _rxRequest ) throw (css::uno::RuntimeException, std::exception) override;
 
     private:
-        virtual ~OFilePickerInteractionHandler();
+        virtual ~OFilePickerInteractionHandler() override;
     };
 
 

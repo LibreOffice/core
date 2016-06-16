@@ -37,7 +37,7 @@ class WrappedScaleTextProperty : public WrappedProperty
 {
 public:
     explicit WrappedScaleTextProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedScaleTextProperty();
+    virtual ~WrappedScaleTextProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) override;

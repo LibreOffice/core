@@ -66,7 +66,7 @@ namespace dbp
                                         getFormConnection() const;
     public:
         OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription );
-        virtual ~OControlWizardPage();
+        virtual ~OControlWizardPage() override;
         virtual void dispose() override;
 
     protected:
@@ -101,7 +101,7 @@ namespace dbp
             const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
-        virtual ~OControlWizard();
+        virtual ~OControlWizard() override;
 
         // make the some base class methods public
         bool    travelNext() { return OControlWizard_Base::travelNext(); }

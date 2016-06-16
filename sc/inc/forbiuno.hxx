@@ -36,7 +36,7 @@ protected:
 
 public:
                     ScForbiddenCharsObj( ScDocShell* pDocSh );
-    virtual         ~ScForbiddenCharsObj();
+    virtual         ~ScForbiddenCharsObj() override;
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };

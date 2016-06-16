@@ -50,7 +50,7 @@ namespace pcr
 
     public:
         explicit OTabOrderDialog( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
-        virtual ~OTabOrderDialog();
+        virtual ~OTabOrderDialog() override;
 
         // XTypeProvider
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;

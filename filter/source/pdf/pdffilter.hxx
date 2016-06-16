@@ -78,7 +78,7 @@ protected:
 public:
 
     explicit    PDFFilter( const Reference< XComponentContext >& rxContext );
-    virtual     ~PDFFilter();
+    virtual     ~PDFFilter() override;
 };
 
 

@@ -104,7 +104,7 @@ public:
 
     ProgressMonitor( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual ~ProgressMonitor();
+    virtual ~ProgressMonitor() override;
 
     //  XInterface
 

@@ -77,7 +77,7 @@ public:
 
 private:
     explicit PresenterScreenJob (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterScreenJob();
+    virtual ~PresenterScreenJob() override;
 
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 };
@@ -101,7 +101,7 @@ public:
     PresenterScreen (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::frame::XModel2>& rxModel);
-    virtual ~PresenterScreen();
+    virtual ~PresenterScreen() override;
     PresenterScreen(const PresenterScreen&) = delete;
     PresenterScreen& operator=(const PresenterScreen&) = delete;
 

@@ -154,7 +154,7 @@ public:
     /** The destructor releases its children manager and text engine if
         still existent.  These are responsible to send appropriate events.
     */
-    virtual ~AccessibleShape();
+    virtual ~AccessibleShape() override;
 
     /** Initialize a new shape.  See the documentation of the constructor
         for the reason of this method's existence.

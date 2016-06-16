@@ -40,7 +40,7 @@ namespace pcr
 
     public:
         explicit InspectorHelpWindow( vcl::Window* _pParent );
-        virtual ~InspectorHelpWindow();
+        virtual ~InspectorHelpWindow() override;
         virtual void dispose() override;
 
         virtual void    SetText( const OUString& rStr ) override;

@@ -51,7 +51,7 @@ private:
 
 public:
                         SvxOutlinerForwarder( Outliner& rOutl, bool bOutlText = false );
-    virtual             ~SvxOutlinerForwarder();
+    virtual             ~SvxOutlinerForwarder() override;
 
     virtual sal_Int32   GetParagraphCount() const override;
     virtual sal_Int32   GetTextLen( sal_Int32 nParagraph ) const override;

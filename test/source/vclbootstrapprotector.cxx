@@ -48,7 +48,7 @@ public:
     Protector& operator=(const Protector&) = delete;
 
 private:
-    virtual ~Protector() {
+    virtual ~Protector() override {
         DeInitVCL();
     }
 

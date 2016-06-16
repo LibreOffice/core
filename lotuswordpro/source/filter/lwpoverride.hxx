@@ -364,7 +364,7 @@ class LwpSpacingOverride : public LwpOverride
 {
 public:
     LwpSpacingOverride();
-    virtual ~LwpSpacingOverride();
+    virtual ~LwpSpacingOverride() override;
 
     virtual LwpSpacingOverride* clone() const override;
 
@@ -474,7 +474,7 @@ class LwpAmikakeOverride : public LwpOverride
 public:
     LwpAmikakeOverride();
 
-    virtual ~LwpAmikakeOverride();
+    virtual ~LwpAmikakeOverride() override;
 
     virtual LwpAmikakeOverride* clone() const override;
 

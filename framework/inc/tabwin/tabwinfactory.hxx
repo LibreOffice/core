@@ -43,7 +43,7 @@ class TabWinFactory :  public ::cppu::WeakImplHelper< css::lang::XSingleComponen
 {
     public:
         TabWinFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        virtual ~TabWinFactory();
+        virtual ~TabWinFactory() override;
 
         //  XInterface, XTypeProvider, XServiceInfo
         DECLARE_XSERVICEINFO

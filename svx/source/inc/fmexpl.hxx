@@ -69,7 +69,7 @@ class FmNavInsertedHint : public SfxHint
 
 public:
     FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos );
-    virtual ~FmNavInsertedHint();
+    virtual ~FmNavInsertedHint() override;
 
     FmEntryData* GetEntryData() const { return pEntryData; }
     sal_uInt32 GetRelPos() const { return nPos; }
@@ -82,7 +82,7 @@ class FmNavModelReplacedHint : public SfxHint
 
 public:
     FmNavModelReplacedHint( FmEntryData* pAffectedEntryData );
-    virtual ~FmNavModelReplacedHint();
+    virtual ~FmNavModelReplacedHint() override;
 
     FmEntryData* GetEntryData() const { return pEntryData; }
 };
@@ -94,7 +94,7 @@ class FmNavRemovedHint : public SfxHint
 
 public:
     FmNavRemovedHint( FmEntryData* pInsertedEntryData );
-    virtual ~FmNavRemovedHint();
+    virtual ~FmNavRemovedHint() override;
 
     FmEntryData* GetEntryData() const { return pEntryData; }
 };
@@ -107,7 +107,7 @@ class FmNavNameChangedHint : public SfxHint
 
 public:
     FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName );
-    virtual ~FmNavNameChangedHint();
+    virtual ~FmNavNameChangedHint() override;
 
     FmEntryData*    GetEntryData() const { return pEntryData; }
     const OUString& GetNewName() const { return aNewName; }
@@ -118,7 +118,7 @@ class FmNavClearedHint : public SfxHint
 {
 public:
     FmNavClearedHint();
-    virtual ~FmNavClearedHint();
+    virtual ~FmNavClearedHint() override;
 };
 
 
@@ -127,7 +127,7 @@ class FmNavViewMarksChanged : public SfxHint
     FmFormView* pView;
 public:
     FmNavViewMarksChanged(FmFormView* pWhichView) { pView = pWhichView; }
-    virtual ~FmNavViewMarksChanged() {}
+    virtual ~FmNavViewMarksChanged() override {}
 
     const FmFormView* GetAffectedView() const { return pView; }
 };
@@ -223,7 +223,7 @@ public:
         : m_bMixedSelection(false)
     {
     }
-    virtual ~FmNavRequestSelectHint() {}
+    virtual ~FmNavRequestSelectHint() override {}
 
     void SetMixedSelection(bool bMixedSelection) { m_bMixedSelection = bMixedSelection; }
     bool IsMixedSelection() const { return m_bMixedSelection; }
@@ -247,7 +247,7 @@ public:
     );
 
     FmFormData( const FmFormData& rFormData );
-    virtual ~FmFormData();
+    virtual ~FmFormData() override;
 
     const css::uno::Reference< css::form::XForm >& GetFormIface() const { return m_xForm; }
     const css::uno::Reference< css::container::XContainer >& GetContainer() const { return m_xContainer; }
@@ -271,7 +271,7 @@ public:
         FmFormData* _pParent
     );
     FmControlData( const FmControlData& rControlData );
-    virtual ~FmControlData();
+    virtual ~FmControlData() override;
 
     const css::uno::Reference< css::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) override;
@@ -358,7 +358,7 @@ namespace svxform
 
     public:
         NavigatorTreeModel( const ImageList& _rNormalImages );
-        virtual ~NavigatorTreeModel();
+        virtual ~NavigatorTreeModel() override;
 
         void FillBranch( FmFormData* pParentData );
         void ClearBranch( FmFormData* pParentData );
@@ -485,7 +485,7 @@ namespace svxform
 
     public:
         NavigatorTree(vcl::Window* pParent );
-        virtual ~NavigatorTree();
+        virtual ~NavigatorTree() override;
         virtual void dispose() override;
 
         void Clear();
@@ -555,7 +555,7 @@ namespace svxform
     public:
         NavigatorFrame( SfxBindings *pBindings, SfxChildWindow *pMgr,
                        vcl::Window* pParent );
-        virtual ~NavigatorFrame();
+        virtual ~NavigatorFrame() override;
         virtual void dispose() override;
 
         void UpdateContent( FmFormShell* pFormShell );

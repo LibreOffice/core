@@ -448,7 +448,7 @@ private:
 public:
     WW8PLCFx_PCD(ww::WordVersion eVersion, WW8PLCFpcd* pPLCFpcd,
         WW8_CP nStartCp, bool bVer67P);
-    virtual ~WW8PLCFx_PCD();
+    virtual ~WW8PLCFx_PCD() override;
     sal_uLong GetIMax() const;
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx( sal_uLong nI ) override;
@@ -585,7 +585,7 @@ protected:
 public:
     WW8PLCFx_Fc_FKP( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
         const WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL );
-    virtual ~WW8PLCFx_Fc_FKP();
+    virtual ~WW8PLCFx_Fc_FKP() override;
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx( sal_uLong nIdx ) override;
     virtual bool SeekPos(WW8_FC nFcPos) override;
@@ -616,7 +616,7 @@ private:
 public:
     WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
         const WW8ScannerBase& rBase,  ePLCFT ePl );
-    virtual ~WW8PLCFx_Cp_FKP();
+    virtual ~WW8PLCFx_Cp_FKP() override;
     void ResetAttrStartEnd();
     sal_uLong GetPCDIMax() const;
     sal_uLong GetPCDIdx() const;
@@ -648,7 +648,7 @@ private:
 public:
     WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTablexySt, const WW8Fib& rFib,
         WW8_CP nStartCp );
-    virtual ~WW8PLCFx_SEPX();
+    virtual ~WW8PLCFx_SEPX() override;
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx( sal_uLong nIdx ) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
@@ -676,7 +676,7 @@ private:
 public:
     WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
     long nFcRef, long nLenRef, long nFcText, long nLenText, long nStruc = 0);
-    virtual ~WW8PLCFx_SubDoc();
+    virtual ~WW8PLCFx_SubDoc() override;
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx( sal_uLong nIdx ) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
@@ -704,7 +704,7 @@ private:
 
 public:
     WW8PLCFx_FLD(SvStream* pSt, const WW8Fib& rMyFib, short nType);
-    virtual ~WW8PLCFx_FLD();
+    virtual ~WW8PLCFx_FLD() override;
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx( sal_uLong nIdx ) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
@@ -734,7 +734,7 @@ private:
 
 public:
     WW8PLCFx_Book(SvStream* pTableSt,const WW8Fib& rFib);
-    virtual ~WW8PLCFx_Book();
+    virtual ~WW8PLCFx_Book() override;
     long GetIMax() const { return nIMax; }
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx( sal_uLong nI ) override;
@@ -772,7 +772,7 @@ private:
 
 public:
     WW8PLCFx_AtnBook(SvStream* pTableSt,const WW8Fib& rFib);
-    virtual ~WW8PLCFx_AtnBook();
+    virtual ~WW8PLCFx_AtnBook() override;
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx( sal_uLong nI ) override;
     virtual sal_uLong GetIdx2() const override;
@@ -802,7 +802,7 @@ private:
 
 public:
     WW8PLCFx_FactoidBook(SvStream* pTableSt,const WW8Fib& rFib);
-    virtual ~WW8PLCFx_FactoidBook();
+    virtual ~WW8PLCFx_FactoidBook() override;
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx(sal_uLong nI) override;
     virtual sal_uLong GetIdx2() const override;

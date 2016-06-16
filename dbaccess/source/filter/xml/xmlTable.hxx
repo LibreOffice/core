@@ -62,7 +62,7 @@ namespace dbaxml
                     ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     ,const OUString& _sServiceName
                     );
-        virtual ~OXMLTable();
+        virtual ~OXMLTable() override;
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

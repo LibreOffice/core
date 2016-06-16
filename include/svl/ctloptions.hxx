@@ -37,7 +37,7 @@ public:
 
     // bDontLoad is for referencing purposes only
     SvtCTLOptions( bool bDontLoad = false );
-    virtual ~SvtCTLOptions();
+    virtual ~SvtCTLOptions() override;
 
     void        SetCTLFontEnabled( bool _bEnabled );
     bool        IsCTLFontEnabled() const;

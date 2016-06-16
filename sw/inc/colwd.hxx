@@ -38,7 +38,7 @@ protected:
 
 public:
     SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc );
-    virtual ~SwTableWidthDlg();
+    virtual ~SwTableWidthDlg() override;
     virtual void dispose() override;
 };
 

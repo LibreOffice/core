@@ -42,7 +42,7 @@ class SVT_DLLPUBLIC ODocumentInfoPreview: public vcl::Window {
 public:
     ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits);
 
-    virtual ~ODocumentInfoPreview();
+    virtual ~ODocumentInfoPreview() override;
     virtual void dispose() override;
 
     virtual void Resize() override;

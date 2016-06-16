@@ -166,7 +166,7 @@ namespace reportdesign
         );
 
     protected:
-        virtual ~OReportDefinition();
+        virtual ~OReportDefinition() override;
 
         /** this function is called upon disposing the component
         */

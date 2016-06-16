@@ -55,24 +55,6 @@ bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     {
         return true;
     }
-    // It appears that the C++ standard allows overriding destructors to be
-    // marked "override," but at least some MSVC versions complain about it, so
-    // at least make sure such destructors are explicitly marked "virtual":
-    if (isa<CXXDestructorDecl>(decl)) {
-        if (!decl->isVirtualAsWritten()
-            && (rewriter == nullptr
-                || !insertTextBefore(
-                    decl->getSourceRange().getBegin(), "virtual ")))
-        {
-            report(
-                DiagnosticsEngine::Warning,
-                ("overriding destructor declaration not explicitly marked"
-                 " 'virtual'"),
-                decl->getLocation())
-                << decl->getSourceRange();
-        }
-        return true;
-    }
     std::string over(
         isInUnoIncludeFile(decl->getSourceRange().getBegin())
         ? "SAL_OVERRIDE" : "override");
@@ -150,7 +132,8 @@ bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
                     l, &l))
             {
                 n = Lexer::MeasureTokenLength(
-                    l, compiler.getSourceManager(), compiler.getLangOpts());
+                    compiler.getSourceManager().getSpellingLoc(l),
+                    compiler.getSourceManager(), compiler.getLangOpts());
             }
             l = l.getLocWithOffset(std::max<unsigned>(n, 1));
         }

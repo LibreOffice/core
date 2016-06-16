@@ -81,7 +81,7 @@ public:
     void stop();
 
 private:
-    virtual ~Writer();
+    virtual ~Writer() override;
 
     virtual void execute() override;
 

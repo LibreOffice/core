@@ -58,7 +58,7 @@ public:
         XMLChangedRegionImportContext& rChangedRegion,
         const OUString& rChangeType);
 
-    virtual ~XMLChangeInfoContext();
+    virtual ~XMLChangeInfoContext() override;
 
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;

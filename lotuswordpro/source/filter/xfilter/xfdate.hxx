@@ -71,7 +71,7 @@ class XFDate : public XFContent
 public:
     XFDate();
 
-    virtual ~XFDate();
+    virtual ~XFDate() override;
 
     virtual void    ToXml(IXFStream *pStrm) override;
 

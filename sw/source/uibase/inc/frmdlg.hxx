@@ -58,7 +58,7 @@ public:
                 const OString& sDefPage = OString(),
                 const OUString* pFormatStr  = nullptr);
 
-    virtual ~SwFrameDlg();
+    virtual ~SwFrameDlg() override;
 
     SwWrtShell*  GetWrtShell()   { return m_pWrtShell; }
 };

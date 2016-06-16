@@ -55,7 +55,7 @@ public:
         const rtl::Reference<XMLPropertyHandlerFactory>& rFactory,
         bool bForExport );
 
-    virtual ~XMLPropertySetMapper();
+    virtual ~XMLPropertySetMapper() override;
 
     void AddMapperEntry( const rtl::Reference < XMLPropertySetMapper >& rMapper );
 

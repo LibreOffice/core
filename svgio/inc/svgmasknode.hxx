@@ -46,7 +46,7 @@ namespace svgio
             SvgMaskNode(
                 SvgDocument& rDocument,
                 SvgNode* pParent);
-            virtual ~SvgMaskNode();
+            virtual ~SvgMaskNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;

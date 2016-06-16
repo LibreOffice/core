@@ -38,7 +38,7 @@ class ScConsolidateDlg : public ScAnyRefDlg
 public:
                     ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                       const SfxItemSet& rArgSet );
-                    virtual ~ScConsolidateDlg();
+                    virtual ~ScConsolidateDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

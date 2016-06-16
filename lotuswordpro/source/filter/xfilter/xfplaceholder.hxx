@@ -70,7 +70,7 @@ class XFHolderStart : public XFContent
 {
 public:
     XFHolderStart();
-    virtual ~XFHolderStart();
+    virtual ~XFHolderStart() override;
     void SetType(const OUString& sType);
     void SetDesc(const OUString& sDesc);
     void SetPrompt(const OUString& sText);
@@ -120,7 +120,7 @@ class XFHolderEnd : public XFContent
 {
 public:
     XFHolderEnd();
-    virtual ~XFHolderEnd();
+    virtual ~XFHolderEnd() override;
     void ToXml(IXFStream *pStrm) override;
 };
 

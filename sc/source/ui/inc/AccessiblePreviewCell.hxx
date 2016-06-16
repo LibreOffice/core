@@ -38,7 +38,7 @@ public:
         ScPreviewShell* pViewShell, /* const */ ScAddress& rCellAddress, sal_Int32 nIndex );
 
 protected:
-    virtual ~ScAccessiblePreviewCell();
+    virtual ~ScAccessiblePreviewCell() override;
 
     using ScAccessibleCellBase::IsDefunc;
 

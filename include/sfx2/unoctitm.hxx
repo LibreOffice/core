@@ -82,7 +82,7 @@ public:
                                 SfxOfficeDispatch( SfxDispatcher* pDispat,
                                                    const SfxSlot* pSlot,
                                                    const css::util::URL& rURL );
-                                virtual ~SfxOfficeDispatch();
+                                virtual ~SfxOfficeDispatch() override;
 
     virtual void SAL_CALL       dispatchWithNotification( const css::util::URL& aURL,
                                                           const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
@@ -132,7 +132,7 @@ public:
                                                     SfxDispatcher*                     pDispat,
                                                     const SfxSlot*                     pSlot,
                                                     const css::util::URL& rURL );
-                        virtual ~SfxDispatchController_Impl();
+                        virtual ~SfxDispatchController_Impl() override;
 
     static OUString getSlaveCommand( const css::util::URL& rURL );
 

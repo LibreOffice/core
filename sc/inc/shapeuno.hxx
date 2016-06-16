@@ -87,7 +87,7 @@ public:
                             // ctor modifies xShape parameter
                             ScShapeObj( css::uno::Reference<
                                             css::drawing::XShape > & xShape );
-    virtual                 ~ScShapeObj();
+    virtual                 ~ScShapeObj() override;
 
                             // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(

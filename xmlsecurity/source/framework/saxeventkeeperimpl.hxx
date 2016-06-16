@@ -211,7 +211,7 @@ private:
 
 public:
     SAXEventKeeperImpl();
-    virtual ~SAXEventKeeperImpl();
+    virtual ~SAXEventKeeperImpl() override;
 
     /* XSAXEventKeeper */
     virtual sal_Int32 SAL_CALL addElementCollector(  )

@@ -36,7 +36,7 @@ private:
 
 public:
     SwWebDocShell(SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED);
-    virtual ~SwWebDocShell();
+    virtual ~SwWebDocShell() override;
 
     virtual void        FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,

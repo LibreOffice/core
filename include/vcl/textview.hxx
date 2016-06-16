@@ -96,7 +96,7 @@ protected:
 
 public:
                         TextView( TextEngine* pEng, vcl::Window* pWindow );
-    virtual            ~TextView();
+    virtual            ~TextView() override;
 
     TextEngine*         GetTextEngine() const;
     vcl::Window*             GetWindow() const;

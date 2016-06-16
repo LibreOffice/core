@@ -58,7 +58,7 @@ namespace sdr
 
         public:
             ViewObjectContactOfGraphic(ObjectContact& rObjectContact, ViewContact& rViewContact);
-            virtual ~ViewObjectContactOfGraphic();
+            virtual ~ViewObjectContactOfGraphic() override;
         };
     } // end of namespace contact
 } // end of namespace sdr

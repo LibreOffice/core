@@ -362,7 +362,7 @@ public:
             get(m_pBreakNF, "wordlength");
         }
     }
-    virtual ~OptionsBreakSet() { disposeOnce(); }
+    virtual ~OptionsBreakSet() override { disposeOnce(); }
     virtual void dispose() override
     {
         m_pBeforeFrame.clear();

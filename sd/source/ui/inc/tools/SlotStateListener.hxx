@@ -58,7 +58,7 @@ public:
     /** The constructor de-registers all remaining listeners.  Usually a prior
         dispose() call should have done that already.
     */
-    virtual ~SlotStateListener();
+    virtual ~SlotStateListener() override;
 
     /** Set the callback to the given value.  Whenever one of the observed
         slots changes its state this callback is informed about it.

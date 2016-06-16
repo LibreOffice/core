@@ -36,7 +36,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
                          SwPostItBits aBits,
                          SwSidebarItem& rSidebarItem,
                          SwFormatField* aField );
-        virtual ~SwAnnotationWin();
+        virtual ~SwAnnotationWin() override;
         virtual void dispose() override;
 
         virtual void    UpdateData() override;

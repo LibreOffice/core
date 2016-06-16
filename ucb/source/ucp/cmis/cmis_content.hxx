@@ -137,7 +137,7 @@ public:
         bool bIsFolder)
             throw ( css::ucb::ContentCreationException );
 
-    virtual ~Content();
+    virtual ~Content() override;
 
     virtual css::uno::Sequence< css::beans::Property >
         getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;

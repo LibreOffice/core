@@ -46,7 +46,7 @@ public:
     SwFormatINetFormat( const OUString& rURL, const OUString& rTarget );
     SwFormatINetFormat( const SwFormatINetFormat& rAttr );
     SwFormatINetFormat();                     ///< For TypeInfo.
-    virtual ~SwFormatINetFormat();
+    virtual ~SwFormatINetFormat() override;
 
     static SfxPoolItem* CreateDefault();
 

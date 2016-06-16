@@ -39,7 +39,7 @@ class VCLXAccessibleScrollBar : public VCLXAccessibleComponent,
                                 public VCLXAccessibleScrollBar_BASE
 {
 protected:
-    virtual ~VCLXAccessibleScrollBar();
+    virtual ~VCLXAccessibleScrollBar() override;
 
     virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;

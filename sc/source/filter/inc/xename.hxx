@@ -34,7 +34,7 @@ class XclExpNameManager : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit            XclExpNameManager( const XclExpRoot& rRoot );
-    virtual             ~XclExpNameManager();
+    virtual             ~XclExpNameManager() override;
 
     /** Creates NAME records for built-in and user defined names. */
     void                Initialize();

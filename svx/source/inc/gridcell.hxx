@@ -262,7 +262,7 @@ protected:
 
 public:
     DbCellControl(DbGridColumn& _rColumn);
-    virtual ~DbCellControl();
+    virtual ~DbCellControl() override;
 
 
     vcl::Window& GetWindow() const
@@ -386,7 +386,7 @@ class DbTextField : public DbLimitedLengthField
     bool                    m_bIsSimpleEdit;
 
 protected:
-    virtual ~DbTextField( );
+    virtual ~DbTextField( ) override;
 
 public:
     DbTextField(DbGridColumn& _rColumn);
@@ -420,7 +420,7 @@ protected:
 
 public:
     DbFormattedField(DbGridColumn& _rColumn);
-    virtual ~DbFormattedField();
+    virtual ~DbFormattedField() override;
 
 
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
@@ -673,7 +673,7 @@ class DbFilterField
 
 public:
     DbFilterField(const css::uno::Reference< css::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);
-    virtual ~DbFilterField();
+    virtual ~DbFilterField() override;
 
     virtual void Init( vcl::Window& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual ::svt::CellControllerRef CreateController() const override;
@@ -724,7 +724,7 @@ private:
     ::comphelper::OInterfaceContainerHelper2   m_aMouseMotionListeners;
 
 protected:
-    virtual ~FmXGridCell();
+    virtual ~FmXGridCell() override;
 
 public:
     FmXGridCell( DbGridColumn* pColumn, DbCellControl* pControl );
@@ -875,7 +875,7 @@ protected:
     ::svt::IEditImplementation*         m_pEditImplementation;
     bool                                m_bOwnEditImplementation;
 
-    virtual ~FmXEditCell();
+    virtual ~FmXEditCell() override;
 public:
     FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl );
 
@@ -930,7 +930,7 @@ class FmXCheckBoxCell : public FmXDataCell,
     VclPtr<CheckBox>                    m_pBox;
 
 protected:
-    virtual ~FmXCheckBoxCell();
+    virtual ~FmXCheckBoxCell() override;
 
 public:
     FmXCheckBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
@@ -974,7 +974,7 @@ class FmXListBoxCell    :public FmXTextCell
     VclPtr<ListBox>                     m_pBox;
 
 protected:
-    virtual ~FmXListBoxCell();
+    virtual ~FmXListBoxCell() override;
 
 public:
     FmXListBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
@@ -1029,7 +1029,7 @@ private:
     VclPtr<ComboBox>                    m_pComboBox;
 
 protected:
-    virtual ~FmXComboBoxCell();
+    virtual ~FmXComboBoxCell() override;
 
 public:
     FmXComboBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl );
@@ -1069,7 +1069,7 @@ class FmXFilterCell :public FmXGridCell
 {
     ::comphelper::OInterfaceContainerHelper2 m_aTextListeners;
 protected:
-    virtual ~FmXFilterCell();
+    virtual ~FmXFilterCell() override;
 public:
     FmXFilterCell(DbGridColumn* pColumn = nullptr, DbCellControl* pControl = nullptr);
 

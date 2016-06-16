@@ -2114,7 +2114,7 @@ public:
                               bool bProgress ) :
                  mbProgress( bProgress ),
                  mrColXFIndexes( rColXFIndexes ) {}
-    virtual ~RowFinalizeTask() {}
+    virtual ~RowFinalizeTask() override {}
     void     push_back( XclExpRow *pRow ) { maRows.push_back( pRow ); }
     virtual void doWork() override
     {

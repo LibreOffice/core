@@ -39,7 +39,7 @@ protected:
     OUString     aDfltPropName;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
-    virtual ~SbxObject();
+    virtual ~SbxObject() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_OBJECT,1);

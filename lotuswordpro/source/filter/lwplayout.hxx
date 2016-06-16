@@ -95,7 +95,7 @@ class LwpVirtualLayout : public LwpDLNFPVList
 {
 public:
     LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpVirtualLayout(){}
+    virtual ~LwpVirtualLayout() override {}
     inline virtual sal_uInt16 GetNumCols(){return 1;}
     virtual double GetColWidth(sal_uInt16 nIndex);
     virtual double GetColGap(sal_uInt16 nIndex);
@@ -294,7 +294,7 @@ class LwpHeadLayout : public LwpVirtualLayout
 {
 public:
     LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpHeadLayout(){}
+    virtual ~LwpHeadLayout() override {}
     void RegisterStyle() override;
     rtl::Reference<LwpVirtualLayout> FindEnSuperTableLayout();
 protected:
@@ -332,7 +332,7 @@ class LwpMiddleLayout : public LwpVirtualLayout
 {
 public:
     LwpMiddleLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
-    virtual ~LwpMiddleLayout();
+    virtual ~LwpMiddleLayout() override;
     LwpLayoutGeometry* GetGeometry()
     {
         if (m_bGettingGeometry)
@@ -420,7 +420,7 @@ class LwpLayout : public LwpMiddleLayout
 {
 public:
     LwpLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
-    virtual ~LwpLayout();
+    virtual ~LwpLayout() override;
     XFColumns* GetXFColumns();
     XFColumnSep* GetColumnSep();
     LwpShadow* GetShadow();
@@ -465,7 +465,7 @@ class LwpPlacableLayout : public LwpLayout
 {
 public:
     LwpPlacableLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
-    virtual ~LwpPlacableLayout();
+    virtual ~LwpPlacableLayout() override;
     sal_uInt8 GetWrapType();
     LwpLayoutRelativity* GetRelativityPiece();
     virtual sal_uInt8 GetRelativeType() override;

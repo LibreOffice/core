@@ -58,7 +58,7 @@ private:
 
 public:
     SvtCTLOptions_Impl();
-    virtual ~SvtCTLOptions_Impl();
+    virtual ~SvtCTLOptions_Impl() override;
 
     virtual void    Notify( const Sequence< OUString >& _aPropertyNames ) override;
     void            Load();

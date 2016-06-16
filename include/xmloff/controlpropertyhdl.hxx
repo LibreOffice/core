@@ -119,7 +119,7 @@ namespace xmloff
         mutable XMLConstantsPropertyHandler*    m_pFontReliefHandler;
 
     protected:
-        virtual ~OControlPropertyHandlerFactory();
+        virtual ~OControlPropertyHandlerFactory() override;
 
     public:
         OControlPropertyHandlerFactory();

@@ -1343,7 +1343,7 @@ public:
             EndListening(const_cast<SwFormatField&>(*pField));
         }
     }
-    virtual ~FieldDocWatchingStack()
+    virtual ~FieldDocWatchingStack() override
     {
         EndListeningToAllFields();
         EndListening(m_rDocShell);

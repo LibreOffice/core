@@ -54,7 +54,7 @@ private:
     DECL_LINK_TYPED(OkButtonHandler, Button*, void);
 public:
     NewObjectDialog (vcl::Window* pParent, ObjectMode::Mode, bool bCheckName = false);
-    virtual ~NewObjectDialog();
+    virtual ~NewObjectDialog() override;
     virtual void dispose() override;
     OUString GetObjectName() const { return m_pEdit->GetText(); }
     void SetObjectName( const OUString& rName )
@@ -71,7 +71,7 @@ class GotoLineDialog : public ModalDialog
     DECL_LINK_TYPED(OkButtonHandler, Button*, void);
 public:
     explicit GotoLineDialog(vcl::Window * pParent);
-    virtual ~GotoLineDialog();
+    virtual ~GotoLineDialog() override;
     virtual void dispose() override;
     sal_Int32 GetLineNumber() const;
 };
@@ -88,7 +88,7 @@ private:
 
 public:
     explicit ExportDialog( vcl::Window * pParent );
-    virtual ~ExportDialog();
+    virtual ~ExportDialog() override;
     virtual void dispose() override;
 
     bool isExportAsPackage () const { return mbExportAsPackage; }
@@ -125,7 +125,7 @@ private:
 
 public:
     CheckBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~CheckBox();
+    virtual ~CheckBox() override;
     virtual void    dispose() override;
 
     SvTreeListEntry*    DoInsertEntry( const OUString& rStr, sal_uLong nPos = LISTBOX_APPEND );
@@ -153,7 +153,7 @@ private:
 
 public:
     explicit LibDialog(vcl::Window* pParent);
-    virtual ~LibDialog();
+    virtual ~LibDialog() override;
     virtual void dispose() override;
 
     void            SetStorageName( const OUString& rName );
@@ -173,7 +173,7 @@ private:
 
 public:
     OrganizeDialog( vcl::Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
-    virtual ~OrganizeDialog();
+    virtual ~OrganizeDialog() override;
     virtual void    dispose() override;
 
     virtual short   Execute() override;
@@ -206,7 +206,7 @@ protected:
 
 public:
     ObjectPage(vcl::Window* pParent, const OString& rName, sal_uInt16 nMode);
-    virtual ~ObjectPage();
+    virtual ~ObjectPage() override;
     virtual void dispose() override;
 
     void                SetCurrentEntry( EntryDescriptor& rDesc );
@@ -254,7 +254,7 @@ protected:
 
 public:
     explicit LibPage(vcl::Window* pParent);
-    virtual             ~LibPage();
+    virtual             ~LibPage() override;
     virtual void        dispose() override;
 
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}

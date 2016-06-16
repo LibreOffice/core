@@ -63,7 +63,7 @@ class SwMMResultSaveDialog : public SfxModalDialog
 
 public:
     SwMMResultSaveDialog(vcl::Window* pParent = nullptr);
-    virtual ~SwMMResultSaveDialog();
+    virtual ~SwMMResultSaveDialog() override;
 
     virtual void dispose() override;
 };
@@ -95,7 +95,7 @@ class SwMMResultPrintDialog : public SfxModalDialog
 
 public:
     SwMMResultPrintDialog(vcl::Window* pParent = nullptr);
-    virtual ~SwMMResultPrintDialog();
+    virtual ~SwMMResultPrintDialog() override;
 
     virtual void dispose() override;
 };
@@ -145,7 +145,7 @@ class SwMMResultEmailDialog : public SfxModalDialog
 
 public:
     SwMMResultEmailDialog(vcl::Window* pParent = nullptr);
-    virtual ~SwMMResultEmailDialog();
+    virtual ~SwMMResultEmailDialog() override;
 
     virtual void dispose() override;
 };
@@ -212,7 +212,7 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
 
 public:
     SwSendMailDialog( vcl::Window* pParent, SwMailMergeConfigItem& );
-    virtual ~SwSendMailDialog();
+    virtual ~SwSendMailDialog() override;
     virtual void        dispose() override;
 
     void                AddDocument( SwMailDescriptor& rDesc );

@@ -50,7 +50,7 @@ class Title :
 {
 public:
     explicit Title( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~Title();
+    virtual ~Title() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

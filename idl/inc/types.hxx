@@ -68,7 +68,7 @@ public:
             SvMetaType();
             SvMetaType( const OString& rTypeName );
 
-    virtual ~SvMetaType();
+    virtual ~SvMetaType() override;
 
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 

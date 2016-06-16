@@ -129,7 +129,7 @@ namespace dbaui
     public:
         OQueryController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
-        virtual ~OQueryController();
+        virtual ~OQueryController() override;
         OTableFields&   getTableFieldDesc()         { return m_vTableFieldDesc; }
         OTableFields&   getUnUsedFields()           { return m_vUnUsedFieldsDesc; }
 

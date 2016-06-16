@@ -57,7 +57,7 @@ namespace sdr
             DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~DefaultProperties();
+            virtual ~DefaultProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;

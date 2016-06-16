@@ -66,7 +66,7 @@ class CustomAnimationPane : public PanelLayout, public ICustomAnimationListContr
     friend class MotionPathTag;
 public:
     CustomAnimationPane( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame );
-    virtual ~CustomAnimationPane();
+    virtual ~CustomAnimationPane() override;
     virtual void dispose() override;
 
     // callbacks

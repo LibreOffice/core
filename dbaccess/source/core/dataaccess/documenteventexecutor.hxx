@@ -46,7 +46,7 @@ namespace dbaccess
             const css::uno::Reference< css::document::XEventsSupplier >& _rxDocument );
 
     protected:
-        virtual ~DocumentEventExecutor();
+        virtual ~DocumentEventExecutor() override;
 
         // css.document.XDocumentEventListener
         virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;

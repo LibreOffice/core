@@ -34,7 +34,7 @@ public:
                             ::oox::core::XmlFilterBase& rFilter,
                             const OUString& rFragmentPath,
                             TableStyleList& rTableStyleList );
-    virtual             ~TableStyleListFragmentHandler();
+    virtual             ~TableStyleListFragmentHandler() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) override;
 

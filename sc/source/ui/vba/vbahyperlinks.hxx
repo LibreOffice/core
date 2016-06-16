@@ -107,7 +107,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         const ScVbaHyperlinksRef& rxSheetHlinks, const ScRangeList& rScRanges ) throw (css::uno::RuntimeException);
 
-    virtual ~ScVbaHyperlinks();
+    virtual ~ScVbaHyperlinks() override;
 
     // XHyperlinks
     virtual css::uno::Reference< ov::excel::XHyperlink > SAL_CALL Add(

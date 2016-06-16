@@ -274,7 +274,7 @@ namespace rptui
         virtual sal_Bool SAL_CALL suspend(sal_Bool Suspend) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~GeometryHandler();
+        virtual ~GeometryHandler() override;
     private:
         GeometryHandler(GeometryHandler &) = delete;
         void operator =(GeometryHandler &) = delete;

@@ -96,7 +96,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterViewFactory();
+    virtual ~PresenterViewFactory() override;
 
     virtual void SAL_CALL disposing()
         throw (css::uno::RuntimeException) override;

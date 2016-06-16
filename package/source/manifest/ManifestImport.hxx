@@ -118,7 +118,7 @@ protected:
 
 public:
     ManifestImport( std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rNewVector );
-    virtual ~ManifestImport();
+    virtual ~ManifestImport() override;
     virtual void SAL_CALL startDocument(  )
         throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL endDocument(  )

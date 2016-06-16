@@ -62,7 +62,7 @@ class SheetDataContext : public WorksheetContextBase, private SheetDataContextBa
 
 public:
     explicit            SheetDataContext( WorksheetFragmentBase& rFragment );
-    virtual            ~SheetDataContext();
+    virtual            ~SheetDataContext() override;
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;

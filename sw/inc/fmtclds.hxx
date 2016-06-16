@@ -93,7 +93,7 @@ class SW_DLLPUBLIC SwFormatCol : public SfxPoolItem
 public:
     SwFormatCol();
     SwFormatCol( const SwFormatCol& );
-    virtual ~SwFormatCol();
+    virtual ~SwFormatCol() override;
     //#i120133#
     sal_Int16 GetAdjustValue() const { return m_aWidthAdjustValue; }
     void SetAdjustValue( sal_Int16 n ) { m_aWidthAdjustValue = n; }

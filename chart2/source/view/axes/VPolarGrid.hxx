@@ -39,7 +39,7 @@ public:
         , const css::uno::Sequence<
             css::uno::Reference< css::beans::XPropertySet > > & rGridPropertiesList //main grid, subgrid, subsubgrid etc
         );
-    virtual ~VPolarGrid();
+    virtual ~VPolarGrid() override;
 
     virtual void createShapes() override;
 

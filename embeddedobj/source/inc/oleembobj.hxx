@@ -295,7 +295,7 @@ public:
     OleEmbeddedObject( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 #endif
 
-    virtual ~OleEmbeddedObject();
+    virtual ~OleEmbeddedObject() override;
 
 #ifdef _WIN32
     void OnIconChanged_Impl();

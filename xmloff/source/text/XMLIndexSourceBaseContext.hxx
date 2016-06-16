@@ -98,7 +98,7 @@ public:
         css::uno::Reference<css::beans::XPropertySet> & rPropSet,
         bool bLevelFormats);
 
-    virtual ~XMLIndexSourceBaseContext();
+    virtual ~XMLIndexSourceBaseContext() override;
 
 protected:
 

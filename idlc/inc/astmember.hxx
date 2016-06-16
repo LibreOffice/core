@@ -31,7 +31,7 @@ public:
         AstType const * pType, OString const & name, AstScope * pScope):
         AstDeclaration(NT_member, name, pScope), m_pType(pType) {}
 
-    virtual ~AstMember() {}
+    virtual ~AstMember() override {}
 
     AstType const * getType() const { return m_pType; }
 

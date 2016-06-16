@@ -119,7 +119,7 @@ namespace xmloff
             const OUString& _rControlId,
             const OUString& _rReferringControls,
             const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
-        virtual ~OControlExport();
+        virtual ~OControlExport() override;
 
     protected:
         /// start the XML element
@@ -271,7 +271,7 @@ namespace xmloff
             const OUString& _rControlId,
             const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
 
-        virtual ~OColumnExport();
+        virtual ~OColumnExport() override;
 
     protected:
         // OControlExport overridables

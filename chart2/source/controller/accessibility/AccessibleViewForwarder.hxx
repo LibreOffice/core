@@ -34,7 +34,7 @@ class AccessibleViewForwarder : public ::accessibility::IAccessibleViewForwarder
 {
 public:
     AccessibleViewForwarder( AccessibleChartView* pAccChartView, vcl::Window* pWindow );
-    virtual ~AccessibleViewForwarder();
+    virtual ~AccessibleViewForwarder() override;
 
     // ________ IAccessibleViewforwarder ________
     virtual Rectangle GetVisibleArea() const override;

@@ -56,7 +56,7 @@ private:
 public:
     ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
-    virtual ~ImplDockFloatWin2();
+    virtual ~ImplDockFloatWin2() override;
     virtual void dispose() override;
 
     virtual void    Move() override;
@@ -478,7 +478,7 @@ private:
 
 public:
     ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
-    virtual ~ImplPopupFloatWin();
+    virtual ~ImplPopupFloatWin() override;
     virtual void dispose() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;

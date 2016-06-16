@@ -35,7 +35,7 @@ class DataLabelContext : public ContextBase< DataLabelModel >
 {
 public:
     explicit            DataLabelContext( ::oox::core::ContextHandler2Helper& rParent, DataLabelModel& rModel );
-    virtual             ~DataLabelContext();
+    virtual             ~DataLabelContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
@@ -50,7 +50,7 @@ class DataLabelsContext : public ContextBase< DataLabelsModel >
 {
 public:
     explicit            DataLabelsContext( ::oox::core::ContextHandler2Helper& rParent, DataLabelsModel& rModel );
-    virtual             ~DataLabelsContext();
+    virtual             ~DataLabelsContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
@@ -65,7 +65,7 @@ class PictureOptionsContext : public ContextBase< PictureOptionsModel >
 {
 public:
     explicit            PictureOptionsContext( ::oox::core::ContextHandler2Helper& rParent, PictureOptionsModel& rModel );
-    virtual             ~PictureOptionsContext();
+    virtual             ~PictureOptionsContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -79,7 +79,7 @@ class ErrorBarContext : public ContextBase< ErrorBarModel >
 {
 public:
     explicit            ErrorBarContext( ::oox::core::ContextHandler2Helper& rParent, ErrorBarModel& rModel );
-    virtual             ~ErrorBarContext();
+    virtual             ~ErrorBarContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -93,7 +93,7 @@ class TrendlineLabelContext : public ContextBase< TrendlineLabelModel >
 {
 public:
     explicit            TrendlineLabelContext( ::oox::core::ContextHandler2Helper& rParent, TrendlineLabelModel& rModel );
-    virtual             ~TrendlineLabelContext();
+    virtual             ~TrendlineLabelContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -107,7 +107,7 @@ class TrendlineContext : public ContextBase< TrendlineModel >
 {
 public:
     explicit            TrendlineContext( ::oox::core::ContextHandler2Helper& rParent, TrendlineModel& rModel );
-    virtual             ~TrendlineContext();
+    virtual             ~TrendlineContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;
@@ -122,7 +122,7 @@ class DataPointContext : public ContextBase< DataPointModel >
 {
 public:
     explicit            DataPointContext( ::oox::core::ContextHandler2Helper& rParent, DataPointModel& rModel );
-    virtual             ~DataPointContext();
+    virtual             ~DataPointContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -136,7 +136,7 @@ class SeriesContextBase : public ContextBase< SeriesModel >
 {
 public:
     explicit            SeriesContextBase( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
-    virtual             ~SeriesContextBase();
+    virtual             ~SeriesContextBase() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -148,7 +148,7 @@ class AreaSeriesContext : public SeriesContextBase
 {
 public:
     explicit            AreaSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
-    virtual             ~AreaSeriesContext();
+    virtual             ~AreaSeriesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -160,7 +160,7 @@ class BarSeriesContext : public SeriesContextBase
 {
 public:
     explicit            BarSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
-    virtual             ~BarSeriesContext();
+    virtual             ~BarSeriesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -172,7 +172,7 @@ class BubbleSeriesContext : public SeriesContextBase
 {
 public:
     explicit            BubbleSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
-    virtual             ~BubbleSeriesContext();
+    virtual             ~BubbleSeriesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -185,7 +185,7 @@ class LineSeriesContext : public SeriesContextBase
 {
 public:
     explicit            LineSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
-    virtual             ~LineSeriesContext();
+    virtual             ~LineSeriesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -198,7 +198,7 @@ class PieSeriesContext : public SeriesContextBase
 {
 public:
     explicit            PieSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
-    virtual             ~PieSeriesContext();
+    virtual             ~PieSeriesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -210,7 +210,7 @@ class RadarSeriesContext : public SeriesContextBase
 {
 public:
     explicit            RadarSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
-    virtual             ~RadarSeriesContext();
+    virtual             ~RadarSeriesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -222,7 +222,7 @@ class ScatterSeriesContext : public SeriesContextBase
 {
 public:
     explicit            ScatterSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
-    virtual             ~ScatterSeriesContext();
+    virtual             ~ScatterSeriesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -234,7 +234,7 @@ class SurfaceSeriesContext : public SeriesContextBase
 {
 public:
     explicit            SurfaceSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
-    virtual             ~SurfaceSeriesContext();
+    virtual             ~SurfaceSeriesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };

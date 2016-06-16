@@ -106,7 +106,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
 
 public:
                         VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport = nullptr );
-    virtual             ~VMLExport();
+    virtual             ~VMLExport() override;
 
     const ::sax_fastparser::FSHelperPtr&
                         GetFS() { return m_pSerializer; }

@@ -118,7 +118,7 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
                              const basegfx::B2DPoint& rSixthPos,
                              const basegfx::B2DPoint& rSeventhPos,
                              const Color& rBaseColor );
-        virtual ~AnchorOverlayObject();
+        virtual ~AnchorOverlayObject() override;
 };
 
 } } // end of namespace sw::annotation

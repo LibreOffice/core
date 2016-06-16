@@ -41,7 +41,7 @@ class OfaMSFilterTabPage : public SfxTabPage
     DECL_LINK_TYPED(LoadExcelBasicCheckHdl_Impl, Button*, void);
 public:
     OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~OfaMSFilterTabPage();
+    virtual ~OfaMSFilterTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -87,7 +87,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     VclPtr<RadioButton> aHighlightingRB;
     VclPtr<RadioButton> aShadingRB;
 
-    virtual ~OfaMSFilterTabPage2();
+    virtual ~OfaMSFilterTabPage2() override;
     virtual void dispose() override;
 
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType );

@@ -44,7 +44,7 @@ private:
                     DECL_LINK_TYPED( DoEvent_Impl, void*, void );
 
 protected:
-    virtual         ~SfxHintPoster();
+    virtual         ~SfxHintPoster() override;
 
 public:
                     SfxHintPoster(const Link<SfxRequest*,void>& rLink);

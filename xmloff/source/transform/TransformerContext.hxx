@@ -68,7 +68,7 @@ public:
     // ends. By default, nothing is done.
     // Note that virtual methods cannot be used inside destructors. Use
     // EndElement instead if this is required.
-    virtual ~XMLTransformerContext();
+    virtual ~XMLTransformerContext() override;
 
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.

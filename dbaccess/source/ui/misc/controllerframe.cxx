@@ -72,7 +72,7 @@ namespace dbaui
         void dispose();
 
     protected:
-        virtual ~FrameWindowActivationListener();
+        virtual ~FrameWindowActivationListener() override;
 
         // XTopWindowListener
         virtual void SAL_CALL windowOpened( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;

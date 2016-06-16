@@ -79,7 +79,7 @@ public:
                    const sal_uInt16 nDropHeight,
                    const sal_uInt16 nDropDescent,
                    const sal_uInt16 nDistance );
-    virtual ~SwDropPortion();
+    virtual ~SwDropPortion() override;
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
             void PaintDrop( const SwTextPaintInfo &rInf ) const;

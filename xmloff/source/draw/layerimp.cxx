@@ -52,7 +52,7 @@ class SdXMLLayerContext : public SvXMLImportContext
 {
 public:
     SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager );
-    virtual ~SdXMLLayerContext();
+    virtual ~SdXMLLayerContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;

@@ -69,7 +69,7 @@ public:
 
     SvXMLAutoStylePoolP( SvXMLExport& rExport);
 
-    virtual ~SvXMLAutoStylePoolP();
+    virtual ~SvXMLAutoStylePoolP() override;
 
     SvXMLExport& GetExport() const;
 

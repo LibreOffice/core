@@ -45,7 +45,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
-    virtual ~XMLIndexSpanEntryContext();
+    virtual ~XMLIndexSpanEntryContext() override;
 
 protected:
 

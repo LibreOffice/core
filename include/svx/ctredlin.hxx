@@ -57,7 +57,7 @@ class SAL_WARN_UNUSED SvxRedlinEntry : public SvTreeListEntry
 {
 public:
                     SvxRedlinEntry();
-        virtual     ~SvxRedlinEntry();
+        virtual     ~SvxRedlinEntry() override;
 };
 
 /// Class for the representation of Strings depending on the font.
@@ -70,7 +70,7 @@ private:
 public:
                     SvLBoxColorString( const OUString& rStr, const Color& rCol);
                     SvLBoxColorString();
-                    virtual ~SvLBoxColorString();
+                    virtual ~SvLBoxColorString() override;
 
     /** Paint function of the SvLBoxColorString class.
 
@@ -113,7 +113,7 @@ protected:
 public:
 
     SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
-    virtual ~SvxRedlinTable();
+    virtual ~SvxRedlinTable() override;
     virtual void    dispose() override;
 
     // For FilterPage only {
@@ -209,7 +209,7 @@ protected:
 
 public:
                     SvxTPFilter( vcl::Window * pParent);
-    virtual         ~SvxTPFilter();
+    virtual         ~SvxTPFilter() override;
     virtual void    dispose() override;
 
     virtual void    DeactivatePage() override;
@@ -298,7 +298,7 @@ private:
 
 public:
     SvxTPView(vcl::Window * pParent, VclBuilderContainer *pTopLevel);
-    virtual ~SvxTPView();
+    virtual ~SvxTPView() override;
     virtual void    dispose() override;
 
     void            InsertWriterHeader();
@@ -344,7 +344,7 @@ private:
 public:
                     SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTopLevel);
 
-                    virtual ~SvxAcceptChgCtr();
+                    virtual ~SvxAcceptChgCtr() override;
     virtual void    dispose() override;
 
     void            ShowFilterPage();

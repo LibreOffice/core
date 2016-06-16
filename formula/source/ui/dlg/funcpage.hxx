@@ -83,7 +83,7 @@ protected:
 public:
 
                     FuncPage( vcl::Window* pParent,const IFunctionManager* _pFunctionManager);
-    virtual         ~FuncPage();
+    virtual         ~FuncPage() override;
     virtual void    dispose() override;
 
     void            SetCategory(sal_Int32  nCat);

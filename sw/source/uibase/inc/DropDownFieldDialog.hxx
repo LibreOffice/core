@@ -49,7 +49,7 @@ class DropDownFieldDialog : public SvxStandardDialog
 public:
     DropDownFieldDialog(   vcl::Window *pParent, SwWrtShell &rSh,
                                 SwField* pField, bool bNextButton = false );
-    virtual ~DropDownFieldDialog();
+    virtual ~DropDownFieldDialog() override;
     virtual void dispose() override;
 };
 } //namespace sw

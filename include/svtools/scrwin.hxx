@@ -64,7 +64,7 @@ private:
 public:
                     ScrollableWindow( vcl::Window* pParent,
                                       ScrollableWindowFlags = ScrollableWindowFlags::DEFAULT );
-    virtual         ~ScrollableWindow();
+    virtual         ~ScrollableWindow() override;
     virtual void    dispose() override;
 
     virtual void    Resize() override;

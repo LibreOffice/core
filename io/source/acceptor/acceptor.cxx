@@ -50,7 +50,7 @@ namespace io_acceptor
     {
     public:
         explicit OAcceptor(const Reference< XComponentContext > & xCtx);
-        virtual ~OAcceptor();
+        virtual ~OAcceptor() override;
     public:
         // Methods
         virtual Reference< XConnection > SAL_CALL accept( const OUString& sConnectionDescription )

@@ -93,7 +93,7 @@ class ScDBInternalRange : public ScDBRangeBase
 {
 public:
     explicit ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange);
-    virtual ~ScDBInternalRange();
+    virtual ~ScDBInternalRange() override;
 
     const ScRange& getRange() const { return maRange;}
 
@@ -134,7 +134,7 @@ class ScDBExternalRange : public ScDBRangeBase
 {
 public:
     explicit ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat);
-    virtual ~ScDBExternalRange();
+    virtual ~ScDBExternalRange() override;
 
     virtual SCCOL getColSize() const override;
     virtual SCROW getRowSize() const override;

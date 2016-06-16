@@ -53,7 +53,7 @@ protected:
 
 public:
             BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkList );
-    virtual ~BreakPointDialog();
+    virtual ~BreakPointDialog() override;
     virtual void dispose() override;
 
     void    SetCurrentBreakPoint( BreakPoint* pBrk );

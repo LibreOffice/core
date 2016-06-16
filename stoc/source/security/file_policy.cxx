@@ -72,7 +72,7 @@ protected:
 
 public:
     explicit FilePolicy( Reference< XComponentContext > const & xComponentContext );
-    virtual ~FilePolicy();
+    virtual ~FilePolicy() override;
 
     // XPolicy impl
     virtual Sequence< Any > SAL_CALL getPermissions(

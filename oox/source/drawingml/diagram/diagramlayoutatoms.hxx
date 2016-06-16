@@ -105,7 +105,7 @@ public:
         mnRefType(-1), mnRefPointType(-1), mfFactor(1.0), mfValue(0.0), mnOperator(0)
     {}
 
-    virtual ~ConstraintAtom() { }
+    virtual ~ConstraintAtom() override { }
 
     virtual void accept( LayoutAtomVisitor& ) override;
 
@@ -151,7 +151,7 @@ class AlgAtom
 public:
     AlgAtom() : mnType(0), maMap() {}
 
-    virtual ~AlgAtom() { }
+    virtual ~AlgAtom() override { }
 
     typedef std::map<sal_Int32,sal_Int32> ParamMap;
 
@@ -177,7 +177,7 @@ class ForEachAtom
 public:
     explicit ForEachAtom(const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
 
-    virtual ~ForEachAtom() { }
+    virtual ~ForEachAtom() override { }
 
     IteratorAttr & iterator()
         { return maIter; }
@@ -194,7 +194,7 @@ class ConditionAtom
 {
 public:
     explicit ConditionAtom(const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
-    virtual ~ConditionAtom()
+    virtual ~ConditionAtom() override
         { }
     virtual void accept( LayoutAtomVisitor& ) override;
     void readElseBranch()
@@ -215,7 +215,7 @@ class ChooseAtom
     : public LayoutAtom
 {
 public:
-    virtual ~ChooseAtom()
+    virtual ~ChooseAtom() override
         { }
     virtual void accept( LayoutAtomVisitor& ) override;
 };
@@ -240,7 +240,7 @@ public:
     typedef std::array<css::uno::Any, 9> VarMap;
 
     LayoutNode() : mnChildOrder(0) {}
-    virtual ~LayoutNode() { }
+    virtual ~LayoutNode() override { }
     virtual void accept( LayoutAtomVisitor& ) override;
     VarMap & variables()
         { return mVariables; }

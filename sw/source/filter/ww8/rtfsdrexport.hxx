@@ -61,7 +61,7 @@ class RtfSdrExport : public EscherEx
 
 public:
     explicit RtfSdrExport(RtfExport& rExport);
-    virtual             ~RtfSdrExport();
+    virtual             ~RtfSdrExport() override;
 
     /// Export the sdr object as Sdr.
     ///

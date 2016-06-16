@@ -98,7 +98,7 @@ private:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         throw (std::exception);
     ModuleController (const ModuleController&) = delete;
-    virtual ~ModuleController() throw();
+    virtual ~ModuleController() throw() override;
 
     /** Load a list of URL to service mappings from the
         /org.openoffice.Office.Impress/MultiPaneGUI/Framework/ResourceFactories

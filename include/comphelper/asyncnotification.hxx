@@ -41,7 +41,7 @@ namespace comphelper
         AnyEvent();
 
     protected:
-        virtual ~AnyEvent();
+        virtual ~AnyEvent() override;
 
     private:
         AnyEvent( AnyEvent& ) = delete;
@@ -102,7 +102,7 @@ namespace comphelper
     private:
         std::unique_ptr<EventNotifierImpl>        m_xImpl;
 
-        SAL_DLLPRIVATE virtual ~AsyncEventNotifier();
+        SAL_DLLPRIVATE virtual ~AsyncEventNotifier() override;
 
         // Thread
         SAL_DLLPRIVATE virtual void execute() override;

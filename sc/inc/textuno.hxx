@@ -67,7 +67,7 @@ private:
 
 public:
                             ScHeaderFooterContentObj();
-    virtual                 ~ScHeaderFooterContentObj();
+    virtual                 ~ScHeaderFooterContentObj() override;
 
                             // for ScPageHFItem (using getImplementation)
     const EditTextObject* GetLeftEditObject() const;
@@ -157,7 +157,7 @@ private:
 public:
     ScHeaderFooterTextObj(
         css::uno::WeakReference<css::sheet::XHeaderFooterContent> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
-    virtual ~ScHeaderFooterTextObj();
+    virtual ~ScHeaderFooterTextObj() override;
 
     const EditTextObject* GetTextObject() const;
     const SvxUnoText&       GetUnoText();
@@ -240,7 +240,7 @@ class ScCellTextCursor : public SvxUnoTextCursor
 public:
                             ScCellTextCursor(const ScCellTextCursor& rOther);
                             ScCellTextCursor(ScCellObj& rText);
-        virtual                                 ~ScCellTextCursor() throw();
+        virtual                                 ~ScCellTextCursor() throw() override;
 
     ScCellObj&              GetCellObj() const  { return rTextObj; }
 
@@ -268,7 +268,7 @@ private:
 public:
                             ScHeaderFooterTextCursor(const ScHeaderFooterTextCursor& rOther);
                             ScHeaderFooterTextCursor(ScHeaderFooterTextObj& rText);
-        virtual                                 ~ScHeaderFooterTextCursor() throw();
+        virtual                                 ~ScHeaderFooterTextCursor() throw() override;
 
                             // SvxUnoTextCursor methods reimplemented here:
     virtual css::uno::Reference< css::text::XText > SAL_CALL
@@ -295,7 +295,7 @@ public:
                             ScDrawTextCursor(const ScDrawTextCursor& rOther);
                             ScDrawTextCursor( const css::uno::Reference< css::text::XText >& xParent,
                                             const SvxUnoTextBase& rText );
-    virtual                  ~ScDrawTextCursor() throw();
+    virtual                  ~ScDrawTextCursor() throw() override;
 
                             // SvxUnoTextCursor methods reimplemented here:
     virtual css::uno::Reference< css::text::XText > SAL_CALL
@@ -336,7 +336,7 @@ class ScEditEngineTextObj : public ScSimpleEditSourceHelper, public SvxUnoText
 {
 public:
                         ScEditEngineTextObj();
-        virtual                         ~ScEditEngineTextObj() throw();
+        virtual                         ~ScEditEngineTextObj() throw() override;
 
     void                SetText( const EditTextObject& rTextObject );
     EditTextObject*     CreateTextObject();
@@ -359,7 +359,7 @@ protected:
 
 public:
                             ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual                 ~ScCellTextData();
+    virtual                 ~ScCellTextData() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -382,7 +382,7 @@ class ScCellTextObj : public ScCellTextData, public SvxUnoText
 {
 public:
                 ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP);
-        virtual         ~ScCellTextObj() throw();
+        virtual         ~ScCellTextObj() throw() override;
 };
 
 #endif

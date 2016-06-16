@@ -38,7 +38,7 @@ class SwNoTextFrame: public SwContentFrame
     void PaintPicture( vcl::RenderContext*, const SwRect& ) const;
 
     virtual void DestroyImpl() override;
-    virtual ~SwNoTextFrame();
+    virtual ~SwNoTextFrame() override;
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;

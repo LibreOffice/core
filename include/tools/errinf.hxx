@@ -60,7 +60,7 @@ private:
 public:
 
                             DynamicErrorInfo(sal_uIntPtr lUserId, sal_uInt16 nMask);
-    virtual                 ~DynamicErrorInfo();
+    virtual                 ~DynamicErrorInfo() override;
 
     operator                sal_uIntPtr() const;
     sal_uInt16              GetDialogMask() const;
@@ -91,7 +91,7 @@ public:
                        const OUString & rTheArg2, sal_uInt16 nMask = 0):
         DynamicErrorInfo(nUserID, nMask), aArg1(rTheArg1), aArg2(rTheArg2) {}
 
-    virtual ~TwoStringErrorInfo() {}
+    virtual ~TwoStringErrorInfo() override {}
 
     const OUString& GetArg1() const { return aArg1; }
     const OUString& GetArg2() const { return aArg2; }

@@ -125,7 +125,7 @@ class XclImpCondFormat : protected XclImpRoot
 {
 public:
     explicit            XclImpCondFormat( const XclImpRoot& rRoot, sal_uInt32 nFormatIndex );
-    virtual             ~XclImpCondFormat();
+    virtual             ~XclImpCondFormat() override;
 
     /** Reads a CONDFMT record and initializes this conditional format. */
     void                ReadCondfmt( XclImpStream& rStrm );

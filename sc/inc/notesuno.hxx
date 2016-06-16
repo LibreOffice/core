@@ -44,7 +44,7 @@ class ScAnnotationObj : public cppu::WeakImplHelper<
 {
 public:
                             ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos);
-    virtual                 ~ScAnnotationObj();
+    virtual                 ~ScAnnotationObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

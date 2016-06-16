@@ -75,7 +75,7 @@ public:
     {
     }
 
-    virtual ~XmlFilterAdaptor() {}
+    virtual ~XmlFilterAdaptor() override {}
 
 
     // XFilter

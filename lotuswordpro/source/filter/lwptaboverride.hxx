@@ -70,7 +70,7 @@ public:
     {
     }
 
-    virtual ~LwpTabOverride()
+    virtual ~LwpTabOverride() override
     {
     }
 

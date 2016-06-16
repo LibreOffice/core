@@ -83,7 +83,7 @@ public:
 
     OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
-    virtual ~OMRCListenerMultiplexerHelper();
+    virtual ~OMRCListenerMultiplexerHelper() override;
 
     //  XInterface
 

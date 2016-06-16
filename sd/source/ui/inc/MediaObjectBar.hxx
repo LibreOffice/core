@@ -42,7 +42,7 @@ private:
 public:
 
     MediaObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);
-    virtual ~MediaObjectBar();
+    virtual ~MediaObjectBar() override;
 
     void            GetState( SfxItemSet& rSet );
     void            Execute( SfxRequest& rReq );

@@ -70,7 +70,7 @@ friend class ScVbaName;
 public:
                             ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, const OUString& rNm,
                                     css::uno::Reference< css::container::XNamed > xSheet = css::uno::Reference< css::container::XNamed > ());
-    virtual                 ~ScNamedRangeObj();
+    virtual                 ~ScNamedRangeObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -192,7 +192,7 @@ protected:
 
 public:
                             ScNamedRangesObj(ScDocShell* pDocSh);
-    virtual                 ~ScNamedRangesObj();
+    virtual                 ~ScNamedRangesObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -303,7 +303,7 @@ private:
 
 public:
                             ScGlobalNamedRangesObj(ScDocShell* pDocSh);
-    virtual                 ~ScGlobalNamedRangesObj();
+    virtual                 ~ScGlobalNamedRangesObj() override;
 };
 
 class ScLocalNamedRangesObj: public ScNamedRangesObj
@@ -319,7 +319,7 @@ private:
     css::uno::Reference< css::container::XNamed > mxSheet;
 public:
                             ScLocalNamedRangesObj(ScDocShell* pDocSh, css::uno::Reference< css::container::XNamed > xNamed );
-    virtual                 ~ScLocalNamedRangesObj();
+    virtual                 ~ScLocalNamedRangesObj() override;
 };
 
 class ScLabelRangeObj : public ::cppu::WeakImplHelper<
@@ -338,7 +338,7 @@ private:
 
 public:
                             ScLabelRangeObj(ScDocShell* pDocSh, bool bCol, const ScRange& rR);
-    virtual                 ~ScLabelRangeObj();
+    virtual                 ~ScLabelRangeObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -375,7 +375,7 @@ private:
 
 public:
                             ScLabelRangesObj(ScDocShell* pDocSh, bool bCol);
-    virtual                 ~ScLabelRangesObj();
+    virtual                 ~ScLabelRangesObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

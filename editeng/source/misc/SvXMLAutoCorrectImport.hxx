@@ -44,7 +44,7 @@ public:
         SvxAutoCorrect &rNewAutoCorrect,
         const css::uno::Reference < css::embed::XStorage >& rNewStorage);
 
-    virtual ~SvXMLAutoCorrectImport() throw ();
+    virtual ~SvXMLAutoCorrectImport() throw () override;
 };
 
 class SvXMLWordListContext : public SvXMLImportContext
@@ -59,7 +59,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    virtual ~SvXMLWordListContext();
+    virtual ~SvXMLWordListContext() override;
 };
 
 class SvXMLWordContext : public SvXMLImportContext
@@ -70,7 +70,7 @@ public:
     SvXMLWordContext ( SvXMLAutoCorrectImport& rImport, sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual ~SvXMLWordContext();
+    virtual ~SvXMLWordContext() override;
 };
 
 
@@ -89,7 +89,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > xContext,
         SvStringsISortDtor & rNewList );
 
-    virtual ~SvXMLExceptionListImport() throw ();
+    virtual ~SvXMLExceptionListImport() throw () override;
 };
 
 class SvXMLExceptionListContext : public SvXMLImportContext
@@ -104,7 +104,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    virtual ~SvXMLExceptionListContext();
+    virtual ~SvXMLExceptionListContext() override;
 };
 
 class SvXMLExceptionContext : public SvXMLImportContext
@@ -115,7 +115,7 @@ public:
     SvXMLExceptionContext ( SvXMLExceptionListImport& rImport, sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual ~SvXMLExceptionContext();
+    virtual ~SvXMLExceptionContext() override;
 };
 
 

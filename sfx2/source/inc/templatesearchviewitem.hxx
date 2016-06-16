@@ -19,7 +19,7 @@ struct TemplateSearchViewItem : public TemplateViewItem
         , mnAssocId(0)
     {}
 
-    virtual ~TemplateSearchViewItem ()
+    virtual ~TemplateSearchViewItem () override
     {}
 
     sal_uInt16 mnAssocId;    //Associated item id to the TemplateViews

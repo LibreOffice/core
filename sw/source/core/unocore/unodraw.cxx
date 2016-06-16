@@ -380,7 +380,7 @@ namespace
             typedef ::std::list< css::uno::Any > shapescontainer_t;
             shapescontainer_t m_aShapes;
         protected:
-            virtual ~SwXShapesEnumeration() {};
+            virtual ~SwXShapesEnumeration() override {};
         public:
             explicit SwXShapesEnumeration(SwXDrawPage* const pDrawPage);
 

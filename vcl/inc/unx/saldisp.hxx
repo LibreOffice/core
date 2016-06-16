@@ -200,7 +200,7 @@ public:
 
     GLX11Window();
     virtual bool Synchronize(bool bOnoff) const override;
-    virtual ~GLX11Window();
+    virtual ~GLX11Window() override;
 };
 
 class VCLPLUG_GEN_PUBLIC SalDisplay : public SalGenericDisplay
@@ -303,7 +303,7 @@ public:
 
                     SalDisplay( Display* pDisp );
 
-    virtual        ~SalDisplay();
+    virtual        ~SalDisplay() override;
 
     void            Init();
 
@@ -387,7 +387,7 @@ class VCLPLUG_GEN_PUBLIC SalX11Display : public SalDisplay
 {
 public:
              SalX11Display( Display* pDisp );
-    virtual ~SalX11Display();
+    virtual ~SalX11Display() override;
 
     virtual bool        Dispatch( XEvent *pEvent ) override;
     virtual void        Yield();

@@ -89,7 +89,7 @@ protected:
 
 public:
     explicit FileStreamWrapper_Impl(const OUString& rName);
-    virtual ~FileStreamWrapper_Impl();
+    virtual ~FileStreamWrapper_Impl() override;
 
     virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw ( IllegalArgumentException, IOException, RuntimeException, std::exception) override;
     virtual sal_Int64 SAL_CALL getPosition(  ) throw ( IOException, RuntimeException, std::exception) override;
@@ -402,7 +402,7 @@ enum RepresentModes {
 
 class UCBStorageStream_Impl : public SvRefBase, public SvStream
 {
-                                virtual ~UCBStorageStream_Impl();
+                                virtual ~UCBStorageStream_Impl() override;
 public:
 
     virtual sal_uLong           GetData( void* pData, sal_uLong nSize ) override;
@@ -466,7 +466,7 @@ typedef ::std::vector< UCBStorageElement_Impl* > UCBStorageElementList_Impl;
 
 class UCBStorage_Impl : public SvRefBase
 {
-                                virtual ~UCBStorage_Impl();
+                                virtual ~UCBStorage_Impl() override;
 public:
     UCBStorage*                 m_pAntiImpl;    // only valid if external references exists
 

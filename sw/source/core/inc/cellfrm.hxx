@@ -33,7 +33,7 @@ class SwCellFrame: public SwLayoutFrame
     const SwTableBox* m_pTabBox;
 
     virtual void DestroyImpl() override;
-    virtual ~SwCellFrame();
+    virtual ~SwCellFrame() override;
 
 protected:
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;

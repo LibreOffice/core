@@ -42,7 +42,7 @@ namespace dbp
 
     public:
         explicit OTableSelectionPage(OControlWizard* _pParent);
-        virtual ~OTableSelectionPage();
+        virtual ~OTableSelectionPage() override;
         virtual void dispose() override;
 
     protected:
@@ -75,7 +75,7 @@ namespace dbp
 
     public:
         OMaybeListSelectionPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription );
-        virtual ~OMaybeListSelectionPage();
+        virtual ~OMaybeListSelectionPage() override;
         virtual void dispose() override;
 
     protected:
@@ -106,7 +106,7 @@ namespace dbp
 
     public:
         explicit ODBFieldPage( OControlWizard* _pParent );
-        virtual ~ODBFieldPage();
+        virtual ~ODBFieldPage() override;
         virtual void dispose() override;
 
     protected:

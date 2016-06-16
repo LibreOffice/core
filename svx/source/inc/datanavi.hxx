@@ -116,7 +116,7 @@ namespace svxform
 
     public:
         DataTreeListBox( vcl::Window* pParent, WinBits nBits );
-        virtual ~DataTreeListBox();
+        virtual ~DataTreeListBox() override;
         virtual void dispose() override;
 
         virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
@@ -277,7 +277,7 @@ namespace svxform
 
     public:
         XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
-        virtual ~XFormsPage();
+        virtual ~XFormsPage() override;
         virtual void dispose() override;
 
         virtual void                Resize() override;
@@ -357,7 +357,7 @@ namespace svxform
 
     public:
         DataNavigatorWindow( vcl::Window* pParent, SfxBindings* pBindings );
-        virtual ~DataNavigatorWindow();
+        virtual ~DataNavigatorWindow() override;
         virtual void dispose() override;
 
         static void                 SetDocModified();
@@ -386,7 +386,7 @@ namespace svxform
 
     public:
         DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, vcl::Window* pParent );
-        virtual ~DataNavigator();
+        virtual ~DataNavigator() override;
         virtual void dispose() override;
 
         using Window::Update;
@@ -457,7 +457,7 @@ namespace svxform
     public:
         AddDataItemDialog(
             vcl::Window* pParent, ItemNode* _pNode, const XFormsUIHelper1_ref& _rUIHelper );
-        virtual ~AddDataItemDialog();
+        virtual ~AddDataItemDialog() override;
         virtual void dispose() override;
 
         void                InitText( DataItemType _eType );
@@ -486,7 +486,7 @@ namespace svxform
     public:
         AddConditionDialog(vcl::Window* pParent,
             const OUString& _rPropertyName, const XPropertySet_ref& _rBinding);
-        virtual ~AddConditionDialog();
+        virtual ~AddConditionDialog() override;
         virtual void dispose() override;
 
         const XFormsUIHelper1_ref& GetUIHelper() const { return m_xUIHelper; }
@@ -523,7 +523,7 @@ namespace svxform
 
     public:
         NamespaceItemDialog( AddConditionDialog* pParent, XNameContainer_ref& _rContainer );
-        virtual ~NamespaceItemDialog();
+        virtual ~NamespaceItemDialog() override;
         virtual void dispose() override;
     };
 
@@ -541,7 +541,7 @@ namespace svxform
 
     public:
         ManageNamespaceDialog(vcl::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit);
-        virtual ~ManageNamespaceDialog();
+        virtual ~ManageNamespaceDialog() override;
         virtual void dispose() override;
 
         void SetNamespace(const OUString& _rPrefix, const OUString& _rURL)
@@ -586,7 +586,7 @@ namespace svxform
     public:
         AddSubmissionDialog( vcl::Window* pParent, ItemNode* _pNode,
             const XFormsUIHelper1_ref& _rUIHelper );
-        virtual ~AddSubmissionDialog();
+        virtual ~AddSubmissionDialog() override;
         virtual void dispose() override;
 
         inline const XSubmission_ref& GetNewSubmission() const { return m_xNewSubmission; }
@@ -601,7 +601,7 @@ namespace svxform
 
     public:
         AddModelDialog( vcl::Window* pParent, bool _bEdit );
-        virtual ~AddModelDialog();
+        virtual ~AddModelDialog() override;
         virtual void dispose() override;
 
         OUString         GetName() const { return m_pNameED->GetText(); }
@@ -627,7 +627,7 @@ namespace svxform
 
     public:
         AddInstanceDialog( vcl::Window* pParent, bool _bEdit );
-        virtual ~AddInstanceDialog();
+        virtual ~AddInstanceDialog() override;
         virtual void dispose() override;
 
         OUString         GetName() const { return m_pNameED->GetText(); }

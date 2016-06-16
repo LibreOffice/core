@@ -45,7 +45,7 @@ public:
         const sal_uInt16 nColumnType,
         const bool bLandscape );
 
-    virtual ~PageColumnControl();
+    virtual ~PageColumnControl() override;
     virtual void dispose() override;
 
 private:

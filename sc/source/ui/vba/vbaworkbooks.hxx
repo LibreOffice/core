@@ -37,7 +37,7 @@ private:
     static sal_Int16& getCurrentDelim(){ static sal_Int16 nDelim = 44; return nDelim; }
 public:
     ScVbaWorkbooks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~ScVbaWorkbooks() {}
+    virtual ~ScVbaWorkbooks() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

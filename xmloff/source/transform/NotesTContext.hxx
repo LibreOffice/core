@@ -34,7 +34,7 @@ public:
                               ::xmloff::token::XMLTokenEnum m_eToken,
                               bool bPersistent  );
 
-    virtual ~XMLNotesTransformerContext();
+    virtual ~XMLNotesTransformerContext() override;
 
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,

@@ -130,7 +130,7 @@ class PageSettingsConverter : public WorkbookHelper
 {
 public:
     explicit            PageSettingsConverter( const WorkbookHelper& rHelper );
-    virtual             ~PageSettingsConverter();
+    virtual             ~PageSettingsConverter() override;
 
     /** Writes all properties to the passed property set of a page style object. */
     void                writePageSettingsProperties(

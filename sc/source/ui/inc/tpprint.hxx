@@ -32,7 +32,7 @@ class ScTpPrintOptions : public SfxTabPage
 
             ScTpPrintOptions( vcl::Window* pParent, const SfxItemSet& rCoreSet );
 public:
-    virtual ~ScTpPrintOptions();
+    virtual ~ScTpPrintOptions() override;
     virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
     virtual bool        FillItemSet( SfxItemSet* rCoreSet ) override;

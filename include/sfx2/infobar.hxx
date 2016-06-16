@@ -30,7 +30,7 @@ class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
                                   sal_uInt16 nId,
                                   SfxBindings* pBindings,
                                   SfxChildWinInfo* pInfo );
-        virtual ~SfxInfoBarContainerChild();
+        virtual ~SfxInfoBarContainerChild() override;
 
         SFX_DECL_CHILDWINDOW_WITHID( SfxInfoBarContainerChild );
 
@@ -56,7 +56,7 @@ class SfxInfoBarWindow : public vcl::Window
                           const basegfx::BColor* pForegroundColor,
                           const basegfx::BColor* pMessageColor,
                           WinBits nMessageStyle );
-        virtual ~SfxInfoBarWindow( );
+        virtual ~SfxInfoBarWindow( ) override;
         virtual void dispose() override;
 
         const OUString& getId() const { return m_sId; }
@@ -81,7 +81,7 @@ class SfxInfoBarContainerWindow : public vcl::Window
 
     public:
         SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin);
-        virtual ~SfxInfoBarContainerWindow( );
+        virtual ~SfxInfoBarContainerWindow( ) override;
         virtual void dispose() override;
 
         SfxInfoBarWindow* appendInfoBar(const OUString& sId,

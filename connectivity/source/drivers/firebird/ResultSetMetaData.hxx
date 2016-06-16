@@ -41,7 +41,7 @@ namespace connectivity
             ::rtl::Reference<Connection> m_pConnection;
             XSQLDA*         m_pSqlda;
 
-            virtual ~OResultSetMetaData();
+            virtual ~OResultSetMetaData() override;
 
             void verifyValidColumn(sal_Int32 column) throw(css::sdbc::SQLException);
         public:

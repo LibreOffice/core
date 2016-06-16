@@ -66,7 +66,7 @@ class SwColumnDlg : public SfxModalDialog
 
 public:
     SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh);
-    virtual ~SwColumnDlg();
+    virtual ~SwColumnDlg() override;
     virtual void dispose() override;
 };
 
@@ -168,7 +168,7 @@ class SwColumnPage : public SfxTabPage
 
 public:
     SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwColumnPage();
+    virtual ~SwColumnPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);

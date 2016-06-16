@@ -80,7 +80,7 @@ enum SvtFileDlgType
 class SvtFileDialogURLSelector : public MenuButton
 {
 public:
-    virtual ~SvtFileDialogURLSelector();
+    virtual ~SvtFileDialogURLSelector() override;
     virtual void dispose() override;
 private:
     VclPtr<SvtFileDialog>      m_pDlg;
@@ -103,7 +103,7 @@ private:
 
 public:
     SvtUpButton_Impl( vcl::Window* pParent, SvtFileDialog* pDlg, WinBits nBits );
-    virtual ~SvtUpButton_Impl();
+    virtual ~SvtUpButton_Impl() override;
 
 protected:
     virtual void        FillURLMenu( PopupMenu* _pMenu ) override;

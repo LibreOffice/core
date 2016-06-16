@@ -41,7 +41,7 @@ class ImageButtonToolbarController : public ComplexToolbarController
                                       ToolBox* pToolBar,
                                       sal_uInt16 nID,
                                       const OUString& aCommand );
-        virtual ~ImageButtonToolbarController();
+        virtual ~ImageButtonToolbarController() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;

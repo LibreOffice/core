@@ -151,7 +151,7 @@ public:
         mbSuccess = true;
     }
 
-    virtual ~PluginSlideChange()
+    virtual ~PluginSlideChange() override
     {
         mxFactory.clear();
 

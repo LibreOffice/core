@@ -79,7 +79,7 @@ public:
     /// Copy CTOR
     explicit CachedDataSequence( const CachedDataSequence & rSource );
 
-    virtual ~CachedDataSequence();
+    virtual ~CachedDataSequence() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()

@@ -29,7 +29,7 @@ class MovingAverageRegressionCurveCalculator : public RegressionCurveCalculator
 {
 public:
     MovingAverageRegressionCurveCalculator();
-    virtual ~MovingAverageRegressionCurveCalculator();
+    virtual ~MovingAverageRegressionCurveCalculator() override;
 
 protected:
     virtual OUString ImplGetRepresentation(

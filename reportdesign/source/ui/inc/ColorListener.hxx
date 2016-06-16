@@ -47,7 +47,7 @@ namespace rptui
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     public:
         OColorListener(vcl::Window* _pParent,const OUString& _sColorEntry);
-        virtual ~OColorListener();
+        virtual ~OColorListener() override;
         virtual void dispose() override;
 
         using Window::Notify;

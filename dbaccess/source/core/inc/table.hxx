@@ -116,7 +116,7 @@ namespace dbaccess
         ODBTable(connectivity::sdbcx::OCollection* _pTables
                 ,const css::uno::Reference< css::sdbc::XConnection >& _rxConn)
                 throw(css::sdbc::SQLException);
-        virtual ~ODBTable();
+        virtual ~ODBTable() override;
 
         // ODescriptor
         virtual void construct() override;

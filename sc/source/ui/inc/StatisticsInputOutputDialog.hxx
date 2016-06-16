@@ -32,7 +32,7 @@ public:
         vcl::Window* pParent, ScViewData* pViewData,
         const OUString& rID, const OUString& rUIXMLDescription );
 
-    virtual ~ScStatisticsInputOutputDialog();
+    virtual ~ScStatisticsInputOutputDialog() override;
     virtual void        dispose() override;
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

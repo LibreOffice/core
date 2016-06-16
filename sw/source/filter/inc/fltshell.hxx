@@ -203,7 +203,7 @@ class SW_DLLPUBLIC SwFltAnchor : public SfxPoolItem
 public:
     SwFltAnchor(SwFrameFormat* pFlyFormat);
     SwFltAnchor(const SwFltAnchor&);
-    virtual ~SwFltAnchor();
+    virtual ~SwFltAnchor() override;
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;

@@ -94,7 +94,7 @@ protected:
     inline void check();
     virtual void SAL_CALL disposing() override;
 
-    virtual ~PackageRegistryImpl();
+    virtual ~PackageRegistryImpl() override;
     PackageRegistryImpl() : t_helper( getMutex() ) {}
 
 

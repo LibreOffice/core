@@ -150,7 +150,7 @@ namespace svgio
                 SvgDocument& rDocument,
                 SvgNode* pParent,
                 const OUString& rText);
-            virtual ~SvgCharacterNode();
+            virtual ~SvgCharacterNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             void decomposeText(drawinglayer::primitive2d::Primitive2DContainer& rTarget, SvgTextPosition& rSvgTextPosition) const;

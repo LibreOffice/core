@@ -292,7 +292,7 @@ protected:
 public:
     OFormComponents(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
     OFormComponents( const OFormComponents& _cloneSource );
-    virtual ~OFormComponents();
+    virtual ~OFormComponents() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, FormComponentsBase)
 

@@ -40,7 +40,7 @@ protected:
 
 public:
     SwSplitTableDlg( vcl::Window *pParent, SwWrtShell &rSh );
-    virtual ~SwSplitTableDlg();
+    virtual ~SwSplitTableDlg() override;
     virtual void dispose() override;
 
     sal_uInt16 GetSplitMode() const { return m_nSplit; }

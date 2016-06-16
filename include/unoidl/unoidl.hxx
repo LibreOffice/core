@@ -92,7 +92,7 @@ public:
 protected:
     explicit SAL_DLLPRIVATE Entity(Sort sort): sort_(sort) {}
 
-    virtual SAL_DLLPRIVATE ~Entity() throw ();
+    virtual SAL_DLLPRIVATE ~Entity() throw () override;
 
 private:
     Sort sort_;
@@ -106,7 +106,7 @@ public:
 protected:
     SAL_DLLPRIVATE MapCursor() {}
 
-    virtual SAL_DLLPRIVATE ~MapCursor() throw();
+    virtual SAL_DLLPRIVATE ~MapCursor() throw() override;
 };
 
 class LO_DLLPUBLIC_UNOIDL ModuleEntity: public Entity {
@@ -120,7 +120,7 @@ public:
 protected:
     SAL_DLLPRIVATE ModuleEntity(): Entity(SORT_MODULE) {}
 
-    virtual SAL_DLLPRIVATE ~ModuleEntity() throw ();
+    virtual SAL_DLLPRIVATE ~ModuleEntity() throw () override;
 };
 
 class LO_DLLPUBLIC_UNOIDL PublishableEntity: public Entity {
@@ -137,7 +137,7 @@ protected:
         Entity(sort), published_(published), annotations_(annotations)
     {}
 
-    virtual SAL_DLLPRIVATE ~PublishableEntity() throw ();
+    virtual SAL_DLLPRIVATE ~PublishableEntity() throw () override;
 
 private:
     bool published_;
@@ -171,7 +171,7 @@ public:
     std::vector< Member > const & getMembers() const { return members_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~EnumTypeEntity() throw ();
+    virtual SAL_DLLPRIVATE ~EnumTypeEntity() throw () override;
 
     std::vector< Member > members_;
 };
@@ -205,7 +205,7 @@ public:
     { return directMembers_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~PlainStructTypeEntity() throw ();
+    virtual SAL_DLLPRIVATE ~PlainStructTypeEntity() throw () override;
 
     rtl::OUString directBase_;
     std::vector< Member > directMembers_;
@@ -248,7 +248,7 @@ public:
     std::vector< Member > const & getMembers() const { return members_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~PolymorphicStructTypeTemplateEntity() throw ();
+    virtual SAL_DLLPRIVATE ~PolymorphicStructTypeTemplateEntity() throw () override;
 
     std::vector< rtl::OUString > typeParameters_;
     std::vector< Member > members_;
@@ -284,7 +284,7 @@ public:
     { return directMembers_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~ExceptionTypeEntity() throw ();
+    virtual SAL_DLLPRIVATE ~ExceptionTypeEntity() throw () override;
 
     rtl::OUString directBase_;
     std::vector< Member > directMembers_;
@@ -382,7 +382,7 @@ public:
     { return directMethods_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~InterfaceTypeEntity() throw ();
+    virtual SAL_DLLPRIVATE ~InterfaceTypeEntity() throw () override;
 
     std::vector< AnnotatedReference > directMandatoryBases_;
     std::vector< AnnotatedReference > directOptionalBases_;
@@ -401,7 +401,7 @@ public:
     const rtl::OUString& getType() const { return type_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~TypedefEntity() throw ();
+    virtual SAL_DLLPRIVATE ~TypedefEntity() throw () override;
 
     rtl::OUString type_;
 };
@@ -480,7 +480,7 @@ public:
     std::vector< Member > const & getMembers() const { return members_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~ConstantGroupEntity() throw ();
+    virtual SAL_DLLPRIVATE ~ConstantGroupEntity() throw () override;
 
     std::vector< Member > members_;
 };
@@ -541,7 +541,7 @@ public:
     { return constructors_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~SingleInterfaceBasedServiceEntity() throw ();
+    virtual SAL_DLLPRIVATE ~SingleInterfaceBasedServiceEntity() throw () override;
 
     rtl::OUString base_;
     std::vector< Constructor > constructors_;
@@ -618,7 +618,7 @@ public:
     { return directProperties_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~AccumulationBasedServiceEntity() throw ();
+    virtual SAL_DLLPRIVATE ~AccumulationBasedServiceEntity() throw () override;
 
     std::vector< AnnotatedReference > directMandatoryBaseServices_;
     std::vector< AnnotatedReference > directOptionalBaseServices_;
@@ -642,7 +642,7 @@ public:
     const rtl::OUString& getBase() const { return base_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~InterfaceBasedSingletonEntity() throw ();
+    virtual SAL_DLLPRIVATE ~InterfaceBasedSingletonEntity() throw () override;
 
     rtl::OUString base_;
 };
@@ -660,7 +660,7 @@ public:
     const rtl::OUString& getBase() const { return base_; }
 
 private:
-    virtual SAL_DLLPRIVATE ~ServiceBasedSingletonEntity() throw ();
+    virtual SAL_DLLPRIVATE ~ServiceBasedSingletonEntity() throw () override;
 
     rtl::OUString base_;
 };
@@ -677,7 +677,7 @@ public:
 protected:
     SAL_DLLPRIVATE Provider() {}
 
-    virtual SAL_DLLPRIVATE ~Provider() throw ();
+    virtual SAL_DLLPRIVATE ~Provider() throw () override;
 };
 
 class LO_DLLPUBLIC_UNOIDL Manager: public salhelper::SimpleReferenceObject {
@@ -694,7 +694,7 @@ public:
     rtl::Reference< MapCursor > createCursor(rtl::OUString const & name) const;
 
 private:
-    virtual SAL_DLLPRIVATE ~Manager() throw ();
+    virtual SAL_DLLPRIVATE ~Manager() throw () override;
 
     SAL_DLLPRIVATE rtl::Reference< Provider > loadProvider(
         rtl::OUString const & uri);

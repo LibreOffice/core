@@ -32,7 +32,7 @@ class Listener
 {
 public:
     Listener( const ::rtl::Reference<Communicator>& rServer, sd::Transmitter *aTransmitter );
-    virtual ~Listener();
+    virtual ~Listener() override;
     void init( const css::uno::Reference< css::presentation::XSlideShowController >& aController );
 
     // XAnimationListener

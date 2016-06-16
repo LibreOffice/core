@@ -26,7 +26,7 @@ class XMLPageMasterPropHdlFactory : public XMLPropertyHandlerFactory
 {
 public:
                         XMLPageMasterPropHdlFactory();
-    virtual             ~XMLPageMasterPropHdlFactory();
+    virtual             ~XMLPageMasterPropHdlFactory() override;
 
     virtual const XMLPropertyHandler*
                         GetPropertyHandler( sal_Int32 nType ) const override;

@@ -23,7 +23,7 @@ class LockedCanvasContext : public oox::core::ContextHandler2
 {
 public:
     explicit LockedCanvasContext(oox::core::ContextHandler2Helper& rParent);
-    virtual ~LockedCanvasContext();
+    virtual ~LockedCanvasContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 Element, const ::oox::AttributeList& rAttribs) override;
 

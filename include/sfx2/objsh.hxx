@@ -225,7 +225,7 @@ private:
 protected:
                                 SfxObjectShell(SfxObjectCreateMode);
                                 SfxObjectShell(SfxModelFlags);    // see sfxmodelfactory.hxx
-    virtual                     ~SfxObjectShell();
+    virtual                     ~SfxObjectShell() override;
 
     void                        ModifyChanged();
     virtual bool                Close() override;

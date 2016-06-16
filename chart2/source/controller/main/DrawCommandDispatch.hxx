@@ -35,7 +35,7 @@ class DrawCommandDispatch: public FeatureCommandDispatchBase
 {
 public:
     DrawCommandDispatch( const css::uno::Reference< css::uno::XComponentContext >& rxContext, ChartController* pController );
-    virtual ~DrawCommandDispatch();
+    virtual ~DrawCommandDispatch() override;
 
     // late initialisation, especially for adding as listener
     virtual void initialize() override;

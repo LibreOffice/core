@@ -94,7 +94,7 @@ class XIMStatusWindow : public StatusWindow
     DECL_LINK_TYPED( DelayedShowHdl, void*, void );
 public:
     explicit XIMStatusWindow( bool bOn );
-    virtual ~XIMStatusWindow();
+    virtual ~XIMStatusWindow() override;
 
     virtual void setPosition( SalFrame* ) override;
     virtual void setText( const OUString & ) override;
@@ -314,7 +314,7 @@ public:
     virtual void setText( const OUString & ) override;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) override;
     virtual void toggle( bool bOn ) override;
-    virtual ~IIIMPStatusWindow() { disposeOnce(); }
+    virtual ~IIIMPStatusWindow() override { disposeOnce(); }
     virtual void dispose() override;
     void layout();
 

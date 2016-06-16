@@ -110,7 +110,7 @@ public:
     RunDialog(GtkWidget *pDialog,
         css::uno::Reference< css::awt::XExtendedToolkit > &rToolkit
         );
-    virtual ~RunDialog();
+    virtual ~RunDialog() override;
     gint run();
     void cancel();
     static GtkWindow* GetTransientFor();

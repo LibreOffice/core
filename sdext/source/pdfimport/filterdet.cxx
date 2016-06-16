@@ -57,7 +57,7 @@ public:
     FileEmitContext( const OUString&                            rOrigFile,
                      const uno::Reference< uno::XComponentContext >& xContext,
                      const pdfparse::PDFContainer*                   pTop );
-    virtual ~FileEmitContext();
+    virtual ~FileEmitContext() override;
 
     virtual bool         write( const void* pBuf, unsigned int nLen ) override;
     virtual unsigned int getCurPos() override;

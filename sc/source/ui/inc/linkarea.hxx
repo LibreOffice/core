@@ -64,7 +64,7 @@ private:
 
 public:
             ScLinkedAreaDlg( vcl::Window* pParent );
-            virtual ~ScLinkedAreaDlg();
+            virtual ~ScLinkedAreaDlg() override;
     virtual void dispose() override;
 
     void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,

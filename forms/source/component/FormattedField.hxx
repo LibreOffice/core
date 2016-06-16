@@ -153,7 +153,7 @@ class OFormattedModel
 
     public:
         explicit OFormattedControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
-        virtual ~OFormattedControl();
+        virtual ~OFormattedControl() override;
 
         DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl)
         virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) throw(css::uno::RuntimeException, std::exception) override;

@@ -35,7 +35,7 @@ namespace dbaxml
 
         OXMLDatabaseDescription( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName);
-        virtual ~OXMLDatabaseDescription();
+        virtual ~OXMLDatabaseDescription() override;
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

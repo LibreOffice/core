@@ -95,7 +95,7 @@ class SwHistorySetFormat : public SwHistoryHint
 
 public:
     SwHistorySetFormat( const SfxPoolItem* pFormatHt, sal_uLong nNode );
-    virtual ~SwHistorySetFormat();
+    virtual ~SwHistorySetFormat() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     virtual OUString GetDescription() const override;
 
@@ -123,7 +123,7 @@ class SwHistorySetText : public SwHistoryHint
 
 public:
     SwHistorySetText( SwTextAttr* pTextHt, sal_uLong nNode );
-    virtual ~SwHistorySetText();
+    virtual ~SwHistorySetText() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };
@@ -141,7 +141,7 @@ class SwHistorySetTextField : public SwHistoryHint
 
 public:
     SwHistorySetTextField( SwTextField* pTextField, sal_uLong nNode );
-    virtual ~SwHistorySetTextField();
+    virtual ~SwHistorySetTextField() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
     virtual OUString GetDescription() const override;
@@ -206,7 +206,7 @@ class SwHistorySetFootnote : public SwHistoryHint
 public:
     SwHistorySetFootnote( SwTextFootnote* pTextFootnote, sal_uLong nNode );
     SwHistorySetFootnote( const SwTextFootnote& );
-    virtual ~SwHistorySetFootnote();
+    virtual ~SwHistorySetFootnote() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
     virtual OUString GetDescription() const override;
@@ -231,7 +231,7 @@ class SwHistoryTextFlyCnt : public SwHistoryHint
 
 public:
     SwHistoryTextFlyCnt( SwFrameFormat* const pFlyFormat );
-    virtual ~SwHistoryTextFlyCnt();
+    virtual ~SwHistoryTextFlyCnt() override;
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
     SwUndoDelLayFormat* GetUDelLFormat() { return m_pUndo.get(); }
 

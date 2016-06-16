@@ -43,7 +43,7 @@ namespace logging
     {
     public:
         PlainTextFormatter();
-        virtual ~PlainTextFormatter();
+        virtual ~PlainTextFormatter() override;
 
     private:
         // XLogFormatter

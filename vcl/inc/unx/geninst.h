@@ -56,7 +56,7 @@ protected:
 
 public:
                         SalYieldMutex();
-                        virtual ~SalYieldMutex();
+                        virtual ~SalYieldMutex() override;
 
     virtual void        acquire() override;
     virtual void        release() override;
@@ -80,7 +80,7 @@ protected:
 public:
     SalGenericInstance( SalYieldMutex* pMutex )
         : mbPrinterInit( false ), mpSalYieldMutex( pMutex ) {}
-    virtual ~SalGenericInstance();
+    virtual ~SalGenericInstance() override;
 
     // Yield mutex
     virtual comphelper::SolarMutex* GetYieldMutex() override;

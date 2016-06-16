@@ -77,7 +77,7 @@ namespace io_stm {
 
     public:
         Pump();
-        virtual ~Pump();
+        virtual ~Pump() override;
 
         // XActiveDataSource
         virtual void SAL_CALL setOutputStream( const Reference< css::io::XOutputStream >& xOutput ) throw(std::exception) override;

@@ -43,7 +43,7 @@ namespace dbaccess
         OUString             m_sLabel;
         OUString             m_aDescription;     // description
 
-        virtual ~ORowSetDataColumn();
+        virtual ~ORowSetDataColumn() override;
     public:
         ORowSetDataColumn(const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
                           const css::uno::Reference < css::sdbc::XRow >& _xRow,
@@ -90,7 +90,7 @@ namespace dbaccess
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< OUString> &_rVector
                         );
-        virtual ~ORowSetDataColumns();
+        virtual ~ORowSetDataColumns() override;
         // only the name is identical to ::cppu::OComponentHelper
         virtual void SAL_CALL disposing() override;
         void assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< OUString> &_rVector);

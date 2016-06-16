@@ -41,7 +41,7 @@ public:
                     ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScDocument* pDocument,
                                  ScAddress aCursorPos );
-                    virtual ~ScSolverDlg();
+                    virtual ~ScSolverDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

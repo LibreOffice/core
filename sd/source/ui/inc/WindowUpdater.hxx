@@ -55,7 +55,7 @@ class SD_DLLPUBLIC WindowUpdater
 {
 public:
     explicit WindowUpdater();
-    virtual ~WindowUpdater() throw();
+    virtual ~WindowUpdater() throw() override;
 
     /** Add the given device to the list of devices which will be updated
         when one of the monitored values changes.

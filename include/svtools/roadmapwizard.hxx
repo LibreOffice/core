@@ -74,7 +74,7 @@ namespace svt
             vcl::Window* _pParent,
             WizardButtonFlags _nButtonFlags = WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP
         );
-        virtual ~RoadmapWizard( );
+        virtual ~RoadmapWizard( ) override;
         virtual void dispose() override;
 
         void            SetRoadmapHelpId( const OString& _rId );

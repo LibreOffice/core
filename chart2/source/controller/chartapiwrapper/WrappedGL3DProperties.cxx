@@ -55,7 +55,7 @@ public:
     WrappedGL3DProperty( const OUString& rInName, const OUString& rOutName, const uno::Any& rDefault, const std::shared_ptr<Chart2ModelContact>& pContact ) :
         WrappedProperty(rInName, rOutName), maDefault(rDefault), mpModelContact(pContact) {}
 
-    virtual ~WrappedGL3DProperty() {}
+    virtual ~WrappedGL3DProperty() override {}
 
     virtual uno::Any getPropertyValue( const uno::Reference<beans::XPropertySet>& /*xInnerPS*/ ) const
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,

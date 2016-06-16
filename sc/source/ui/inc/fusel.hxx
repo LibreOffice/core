@@ -31,7 +31,7 @@ public:
     FuSelection(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq );
 
-    virtual ~FuSelection();
+    virtual ~FuSelection() override;
                                        // Mouse- & Key-Events
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;

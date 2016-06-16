@@ -79,7 +79,7 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
 
  public:
     SvxDrawPage( SdrPage* pPage ) throw();
-    virtual ~SvxDrawPage() throw();
+    virtual ~SvxDrawPage() throw() override;
 
     // Internals
     SdrPage* GetSdrPage() const { return mpPage; }

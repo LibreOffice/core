@@ -36,7 +36,7 @@ class ImportExcel8 : public ImportExcel
 {
 public:
                             ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm );
-    virtual                 ~ImportExcel8();
+    virtual                 ~ImportExcel8() override;
 
     virtual FltError        Read() override;
 

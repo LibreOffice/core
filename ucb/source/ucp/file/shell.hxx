@@ -155,7 +155,7 @@ namespace fileaccess {
         shell( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                FileProvider* pProvider, bool bWithConfig );
 
-        virtual ~shell();
+        virtual ~shell() override;
 
 
         /**

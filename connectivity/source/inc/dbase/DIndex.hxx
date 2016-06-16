@@ -88,7 +88,7 @@ namespace connectivity
             // Closes and kills the index file and throws an error
             void impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const OUString& _sFile);
         protected:
-            virtual ~ODbaseIndex();
+            virtual ~ODbaseIndex() override;
         public:
             ODbaseIndex(ODbaseTable* _pTable);
             ODbaseIndex(ODbaseTable* _pTable,const NDXHeader& _aHeader,const OUString& Name);

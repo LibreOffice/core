@@ -35,7 +35,7 @@ class EDITENG_DLLPUBLIC SvxFormatSplitItem : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-    virtual ~SvxFormatSplitItem();
+    virtual ~SvxFormatSplitItem() override;
 
     inline SvxFormatSplitItem( const bool bSplit /*= true*/,
                             const sal_uInt16 nWh  );

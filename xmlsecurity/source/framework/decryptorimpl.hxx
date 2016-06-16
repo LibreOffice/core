@@ -61,7 +61,7 @@ private:
 
 public:
     explicit DecryptorImpl(const css::uno::Reference< css::uno::XComponentContext > & xContext);
-    virtual ~DecryptorImpl();
+    virtual ~DecryptorImpl() override;
 
     /* XDecryptionResultBroadcaster */
     virtual void SAL_CALL addDecryptionResultListener(

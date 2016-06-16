@@ -50,7 +50,7 @@ protected:
 public:
     explicit CMutationEvent();
 
-    virtual ~CMutationEvent();
+    virtual ~CMutationEvent() override;
 
     virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getRelatedNode() throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getPrevValue() throw (css::uno::RuntimeException, std::exception) override;

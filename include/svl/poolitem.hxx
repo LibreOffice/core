@@ -261,7 +261,7 @@ public:
                             static SfxPoolItem* CreateDefault();
                             explicit SfxVoidItem( sal_uInt16 nWhich );
                             SfxVoidItem( const SfxVoidItem& );
-                            virtual ~SfxVoidItem();
+                            virtual ~SfxVoidItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
@@ -285,7 +285,7 @@ public:
                             SfxSetItem( sal_uInt16 nWhich, SfxItemSet *pSet );
                             SfxSetItem( sal_uInt16 nWhich, const SfxItemSet &rSet );
                             SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = nullptr );
-                            virtual ~SfxSetItem();
+                            virtual ~SfxSetItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
 
@@ -311,7 +311,7 @@ class SVL_DLLPUBLIC SfxPoolItemHint: public SfxHint
     SfxPoolItem* pObj;
 public:
     explicit SfxPoolItemHint( SfxPoolItem* Object ) : pObj(Object) {}
-    virtual ~SfxPoolItemHint() {}
+    virtual ~SfxPoolItemHint() override {}
     SfxPoolItem* GetObject() const { return pObj; }
 };
 

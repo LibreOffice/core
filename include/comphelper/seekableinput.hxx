@@ -55,7 +55,7 @@ public:
                 const css::uno::Reference< css::io::XInputStream >& xInStream,
                 const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual ~OSeekableInputWrapper();
+    virtual ~OSeekableInputWrapper() override;
 
     static css::uno::Reference< css::io::XInputStream > CheckSeekableCanWrap(
                         const css::uno::Reference< css::io::XInputStream >& xInStream,

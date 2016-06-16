@@ -61,7 +61,7 @@ class OFSStreamContainer : public cppu::OWeakObject,
 
 public:
     explicit OFSStreamContainer( const css::uno::Reference < css::io::XStream >& xStream );
-    virtual ~OFSStreamContainer();
+    virtual ~OFSStreamContainer() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )

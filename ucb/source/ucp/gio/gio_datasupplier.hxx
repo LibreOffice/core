@@ -60,7 +60,7 @@ private:
     ResultList maResults;
 public:
     DataSupplier( const rtl::Reference< Content >& rContent, sal_Int32 nOpenMode );
-    virtual ~DataSupplier();
+    virtual ~DataSupplier() override;
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;
     virtual css::uno::Reference< css::ucb::XContentIdentifier >

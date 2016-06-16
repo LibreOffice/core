@@ -102,7 +102,7 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
     OUString getResStr( sal_Int16 resid );
     void initLocale();
 
-    virtual ~T602ImportFilterDialog();
+    virtual ~T602ImportFilterDialog() override;
 
     // XExecutableDialog
        virtual void SAL_CALL setTitle( const OUString& aTitle )
@@ -254,7 +254,7 @@ private:
     public:
         explicit T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
         explicit T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream);
-        virtual ~T602ImportFilter();
+        virtual ~T602ImportFilter() override;
 
     // XFilter
         virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )

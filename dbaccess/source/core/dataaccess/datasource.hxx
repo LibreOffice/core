@@ -86,7 +86,7 @@ private:
     ::comphelper::OInterfaceContainerHelper2       m_aFlushListeners;
 
 private:
-    virtual ~ODatabaseSource();
+    virtual ~ODatabaseSource() override;
 
 public:
     explicit ODatabaseSource( const ::rtl::Reference< ODatabaseModelImpl >& _pImpl );

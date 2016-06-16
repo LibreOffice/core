@@ -98,7 +98,7 @@ protected:
 public:
     /// returns the parent of this node
     XMLParentNode *GetParent() { return m_pParent; }
-    virtual ~XMLChildNode(){};
+    virtual ~XMLChildNode() override {};
 };
 
 typedef std::vector< XMLChildNode* > XMLChildNodeList;
@@ -120,7 +120,7 @@ protected:
     XMLParentNode( const XMLParentNode& );
 
     XMLParentNode& operator=(const XMLParentNode& rObj);
-    virtual ~XMLParentNode();
+    virtual ~XMLParentNode() override;
 
 public:
     /// returns child list of this node
@@ -152,7 +152,7 @@ public:
         const OString &rFileName // the file name, empty if created from memory stream
     );
     XMLFile( const XMLFile& rObj ) ;
-    virtual ~XMLFile();
+    virtual ~XMLFile() override;
 
     void Print( XMLNode *pCur = nullptr, sal_uInt16 nLevel = 0 );
     void SearchL10NElements( XMLChildNode *pCur, int pos = 0 );
@@ -219,7 +219,7 @@ public:
         XMLParentNode *pParent   // parent node of this element
     );
 
-    virtual ~XMLElement();
+    virtual ~XMLElement() override;
     XMLElement(const XMLElement&);
 
     XMLElement& operator=(const XMLElement& rObj);

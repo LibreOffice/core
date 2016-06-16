@@ -73,7 +73,7 @@ public:
     // Constructor of a text frame
     SdrRectObj(SdrObjKind eNewTextKind);
     SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
-    virtual ~SdrRectObj();
+    virtual ~SdrRectObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;

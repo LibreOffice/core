@@ -72,7 +72,7 @@ protected:
 
 public:
     explicit PropBrw (DialogWindowLayout&);
-    virtual ~PropBrw();
+    virtual ~PropBrw() override;
     virtual void dispose() override;
     using Window::Update;
     // note: changing the Context document to an instance other than the one given in the ctor is not supported

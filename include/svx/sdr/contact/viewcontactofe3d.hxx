@@ -47,7 +47,7 @@ protected:
 public:
     // basic constructor, used from E3dObject.
     explicit ViewContactOfE3d(E3dObject& rObj);
-    virtual ~ViewContactOfE3d();
+    virtual ~ViewContactOfE3d() override;
 
     // access to E3dObject
     const E3dObject& GetE3dObject() const

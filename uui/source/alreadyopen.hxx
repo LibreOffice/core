@@ -25,7 +25,7 @@ class AlreadyOpenQueryBox : public MessBox
 {
 public:
     AlreadyOpenQueryBox( vcl::Window* pParent, ResMgr* pResMgr, const OUString& aMessage, bool bIsStoring );
-    virtual ~AlreadyOpenQueryBox();
+    virtual ~AlreadyOpenQueryBox() override;
 };
 
 #endif

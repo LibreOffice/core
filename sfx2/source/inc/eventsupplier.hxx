@@ -60,7 +60,7 @@ class SfxEvents_Impl : public ::cppu::WeakImplHelper< css::container::XNameRepla
 public:
                                 SfxEvents_Impl( SfxObjectShell* pShell,
                                                 css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster );
-                               virtual ~SfxEvents_Impl();
+                               virtual ~SfxEvents_Impl() override;
 
     //  --- XNameReplace ---
     virtual void SAL_CALL       replaceByName( const OUString & aName, const css::uno::Any & aElement )

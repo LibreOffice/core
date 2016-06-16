@@ -43,7 +43,7 @@ public:
                              const rtl::Reference< XMLPropertySetMapper >& rMapper,
                             SvXMLExport& rExport
                             );
-    virtual             ~XMLPageMasterExportPropMapper();
+    virtual             ~XMLPageMasterExportPropMapper() override;
 
     virtual void        handleElementItem(
                             SvXMLExport& rExport,

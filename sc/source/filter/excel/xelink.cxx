@@ -50,7 +50,7 @@ public:
     /** @param nFlags  The flags to export. */
     explicit            XclExpExtNameBase( const XclExpRoot& rRoot,
                             const OUString& rName, sal_uInt16 nFlags = 0 );
-    virtual             ~XclExpExtNameBase();
+    virtual             ~XclExpExtNameBase() override;
 
     /** Returns the name string of the external name. */
     inline const OUString& GetName() const { return maName; }

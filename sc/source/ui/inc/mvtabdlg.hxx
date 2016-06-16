@@ -31,7 +31,7 @@ class ScMoveTableDlg : public ModalDialog
 {
 public:
     ScMoveTableDlg(vcl::Window* pParent, const OUString& rDefault);
-    virtual ~ScMoveTableDlg();
+    virtual ~ScMoveTableDlg() override;
     virtual void dispose() override;
 
     sal_uInt16  GetSelectedDocument     () const { return nDocument; }

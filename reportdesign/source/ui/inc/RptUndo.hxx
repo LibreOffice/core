@@ -55,7 +55,7 @@ namespace rptui
                         ,sal_uInt16 _nSlot
                         ,Action _eAction
                         ,sal_uInt16 nCommentID);
-        virtual ~OSectionUndo();
+        virtual ~OSectionUndo() override;
 
         virtual void        Undo() override;
         virtual void        Redo() override;
@@ -81,7 +81,7 @@ namespace rptui
                                 ,OReportHelper> _pMemberFunction
                             ,const css::uno::Reference< css::report::XReportDefinition >& _xReport
                             ,Action _eAction);
-        virtual ~OReportSectionUndo();
+        virtual ~OReportSectionUndo() override;
     };
 
     /** Undo action for the group header, footer

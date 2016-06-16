@@ -48,7 +48,7 @@ class BASIC_DLLPUBLIC SbMethod : public SbxMethod
     BASIC_DLLPRIVATE SbMethod( const SbMethod& );
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
-    virtual ~SbMethod();
+    virtual ~SbMethod() override;
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMETHOD,2);
@@ -78,7 +78,7 @@ public:
         : SbMethod( rName, pImplMeth->GetType(), nullptr )
         , mxImplMeth( pImplMeth )
     {}
-    virtual ~SbIfaceMapperMethod();
+    virtual ~SbIfaceMapperMethod() override;
     SbMethod* getImplMethod()
         { return mxImplMeth; }
 };

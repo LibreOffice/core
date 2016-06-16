@@ -85,7 +85,7 @@ public:
     FmParentData(FmParentData* pParent, const OUString& rText)
         : FmFilterData(pParent, rText)
     {}
-    virtual ~FmParentData();
+    virtual ~FmParentData() override;
 
     ::std::vector< FmFilterData* >& GetChildren() { return m_aChildren; }
 };
@@ -161,7 +161,7 @@ class FmFilterModel : public FmParentData
 
 public:
     FmFilterModel();
-    virtual ~FmFilterModel();
+    virtual ~FmFilterModel() override;
 
     void Update(const css::uno::Reference< css::container::XIndexAccess > & xControllers, const css::uno::Reference< css::form::runtime::XFormController > & xCurrent);
     void Clear();
@@ -243,7 +243,7 @@ class FmFilterNavigator : public SvTreeListBox, public SfxListener
 
 public:
     FmFilterNavigator( vcl::Window* pParent );
-    virtual ~FmFilterNavigator();
+    virtual ~FmFilterNavigator() override;
     virtual void dispose() override;
 
     void UpdateContent(
@@ -316,7 +316,7 @@ protected:
 public:
     FmFilterNavigatorWin( SfxBindings *pBindings, SfxChildWindow *pMgr,
                    vcl::Window* pParent );
-    virtual ~FmFilterNavigatorWin();
+    virtual ~FmFilterNavigatorWin() override;
     virtual void dispose() override;
 
     void UpdateContent( FmFormShell* pFormShell );

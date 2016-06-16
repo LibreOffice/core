@@ -62,7 +62,7 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
         };
 
         OReadStatusBarDocumentHandler( const css::uno::Reference< css::container::XIndexContainer >& aStatusBarItems );
-        virtual ~OReadStatusBarDocumentHandler();
+        virtual ~OReadStatusBarDocumentHandler() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()

@@ -40,7 +40,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         const css::uno::Reference< css::io::XOutputStream >& rOut );
 
-    virtual ~XMLBase64ImportContext();
+    virtual ~XMLBase64ImportContext() override;
 
     virtual void EndElement() override;
 

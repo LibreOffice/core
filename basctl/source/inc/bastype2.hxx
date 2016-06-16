@@ -87,7 +87,7 @@ public:
         LibraryLocation eLocation,
         EntryType eType = OBJ_TYPE_DOCUMENT
     );
-    virtual ~DocumentEntry ();
+    virtual ~DocumentEntry () override;
 
     ScriptDocument const& GetDocument() const { return m_aDocument; }
     LibraryLocation GetLocation() const { return m_eLocation; }
@@ -105,7 +105,7 @@ public:
         OUString       const& rLibName,
         EntryType eType = OBJ_TYPE_LIBRARY
     );
-    virtual ~LibEntry ();
+    virtual ~LibEntry () override;
 
     OUString const& GetLibName () const { return m_aLibName; }
 };
@@ -207,7 +207,7 @@ protected:
 public:
     TreeListBox(vcl::Window* pParent, const ResId& rRes);
     TreeListBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~TreeListBox();
+    virtual ~TreeListBox() override;
     virtual void    dispose() override;
 
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );

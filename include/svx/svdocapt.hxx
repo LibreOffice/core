@@ -76,7 +76,7 @@ private:
 public:
     SdrCaptionObj();
     SdrCaptionObj(const Rectangle& rRect, const Point& rTail);
-    virtual ~SdrCaptionObj();
+    virtual ~SdrCaptionObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;

@@ -34,7 +34,7 @@ class ContextBase : public ::oox::core::ContextHandler2
 public:
     explicit            ContextBase( ::oox::core::ContextHandler2Helper& rParent, ModelType& rModel ) :
                             ::oox::core::ContextHandler2( rParent ), mrModel( rModel ) {}
-    virtual             ~ContextBase() {}
+    virtual             ~ContextBase() override {}
 
 protected:
     ModelType&          mrModel;
@@ -46,7 +46,7 @@ class FragmentBase : public ::oox::core::FragmentHandler2
 public:
     explicit            FragmentBase( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, ModelType& rModel ) :
                             ::oox::core::FragmentHandler2( rFilter, rFragmentPath, false ), mrModel( rModel ) {}
-    virtual             ~FragmentBase() {}
+    virtual             ~FragmentBase() override {}
 
 protected:
     ModelType&          mrModel;
@@ -58,7 +58,7 @@ class ShapePrWrapperContext : public ContextBase< Shape >
 {
 public:
     explicit            ShapePrWrapperContext( ::oox::core::ContextHandler2Helper& rParent, Shape& rModel );
-    virtual             ~ShapePrWrapperContext();
+    virtual             ~ShapePrWrapperContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -71,7 +71,7 @@ class LayoutContext : public ContextBase< LayoutModel >
 {
 public:
     explicit            LayoutContext( ::oox::core::ContextHandler2Helper& rParent, LayoutModel& rModel );
-    virtual             ~LayoutContext();
+    virtual             ~LayoutContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };

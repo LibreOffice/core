@@ -155,7 +155,7 @@ private:
 public:
                             UpdateHandler( const css::uno::Reference< css::uno::XComponentContext > & rxContext,
                                            const rtl::Reference< IActionListener > & rxActionListener );
-    virtual                ~UpdateHandler();
+    virtual                ~UpdateHandler() override;
                             UpdateHandler(const UpdateHandler&) = delete;
     UpdateHandler&          operator=(const UpdateHandler&) = delete;
 

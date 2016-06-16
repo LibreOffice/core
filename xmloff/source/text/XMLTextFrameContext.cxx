@@ -121,7 +121,7 @@ public:
                                          sal_uInt16 nPrfx,
                                          const OUString& rLName,
                                          OUString& rTitleOrDesc );
-    virtual ~XMLTextFrameTitleOrDescContext_Impl();
+    virtual ~XMLTextFrameTitleOrDescContext_Impl() override;
 
     virtual void Characters( const OUString& rText ) override;
 };
@@ -156,7 +156,7 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nType,
             ParamMap &rParamMap);
-    virtual ~XMLTextFrameParam_Impl();
+    virtual ~XMLTextFrameParam_Impl() override;
 };
 
 
@@ -210,7 +210,7 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const Reference < XPropertySet >& rPropSet,
             bool bPath );
-    virtual ~XMLTextFrameContourContext_Impl();
+    virtual ~XMLTextFrameContourContext_Impl() override;
 };
 
 
@@ -425,7 +425,7 @@ public:
             css::text::TextContentAnchorType eAnchorType,
             sal_uInt16 nType,
             const css::uno::Reference<css::xml::sax::XAttributeList > & rFrameAttrList );
-    virtual ~XMLTextFrameContext_Impl();
+    virtual ~XMLTextFrameContext_Impl() override;
 
     virtual void EndElement() override;
 

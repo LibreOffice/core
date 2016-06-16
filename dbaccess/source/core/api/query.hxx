@@ -83,7 +83,7 @@ protected:
     };
 
 protected:
-    virtual ~OQuery();
+    virtual ~OQuery() override;
 
 // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;

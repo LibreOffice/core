@@ -38,7 +38,7 @@ namespace connectivity
                             public css::lang::XServiceInfo
         {
         protected:
-            virtual ~OStatement(){}
+            virtual ~OStatement() override {}
 
             XSQLDA* m_pSqlda;
 

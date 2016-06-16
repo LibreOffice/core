@@ -37,7 +37,7 @@ namespace connectivity
         static jclass theClass;
     public:
         virtual jclass getMyClass() const override;
-        virtual ~java_sql_Array();
+        virtual ~java_sql_Array() override;
         // A ctor that is needed for returning the object
         java_sql_Array( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 

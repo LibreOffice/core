@@ -32,7 +32,7 @@ class VPolarTransformation : public ::cppu::WeakImplHelper<
 {
 public:
     VPolarTransformation( const PolarPlottingPositionHelper& rPositionHelper );
-    virtual ~VPolarTransformation();
+    virtual ~VPolarTransformation() override;
 
     // ____ XTransformation ____
     /// @see css::chart2::XTransformation

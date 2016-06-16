@@ -48,7 +48,7 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             sal_Int16 nControl );
 
-    virtual ~XMLCharContext();
+    virtual ~XMLCharContext() override;
 
     // EndElement is called before a context will be destructed, but
     // after a elements context has been parsed. It may be used for actions

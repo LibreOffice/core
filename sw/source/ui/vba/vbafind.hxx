@@ -54,7 +54,7 @@ private:
 
 public:
     SwVbaFind( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaFind();
+    virtual ~SwVbaFind() override;
 
     // Attributes
     virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;

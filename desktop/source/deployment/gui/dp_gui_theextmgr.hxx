@@ -64,7 +64,7 @@ public:
 
          TheExtensionManager( const css::uno::Reference< css::awt::XWindow > &xParent,
                               const css::uno::Reference< css::uno::XComponentContext > &xContext );
-        virtual ~TheExtensionManager();
+        virtual ~TheExtensionManager() override;
 
     void createDialog( const bool bCreateUpdDlg );
     sal_Int16 execute();

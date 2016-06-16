@@ -65,7 +65,7 @@ public:
     ScStyleSheet::Usage GetUsage() const { return eUsage; }
 
 protected:
-    virtual             ~ScStyleSheet();
+    virtual             ~ScStyleSheet() override;
 
                 ScStyleSheet( const OUString&   rName,
                               ScStyleSheetPool& rPool,

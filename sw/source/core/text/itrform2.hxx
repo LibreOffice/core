@@ -158,7 +158,7 @@ public:
     {
         CtorInitTextFormatter( pTextFrame, pTextFormatInf );
     }
-    virtual ~SwTextFormatter();
+    virtual ~SwTextFormatter() override;
 
     sal_Int32 FormatLine( const sal_Int32 nStart );
 

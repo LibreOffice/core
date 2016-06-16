@@ -79,7 +79,7 @@ namespace dbaui
 
     public:
         DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0);
-        virtual ~DBTreeListBox();
+        virtual ~DBTreeListBox() override;
         virtual void dispose() override;
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }

@@ -49,7 +49,7 @@ namespace sdr
                 const basegfx::B2DPoint& rSecondPos,
                 bool bExtendedLines = false,
                 bool bShowBounds = true);
-            virtual ~OverlayRollingRectangleStriped();
+            virtual ~OverlayRollingRectangleStriped() override;
 
             // change second position
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }

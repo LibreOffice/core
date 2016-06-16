@@ -57,7 +57,7 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
          SvtMiscOptions();
-        virtual ~SvtMiscOptions();
+        virtual ~SvtMiscOptions() override;
 
         void        AddListenerLink( const Link<LinkParamNone*,void>& rLink );
         void        RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );

@@ -112,7 +112,7 @@ public:
         SbxValue( rVal ),
         bVoid(rVal.bVoid)
         {}
-    virtual ~SwSbxValue();
+    virtual ~SwSbxValue() override;
 
     bool GetBool() const;
     double GetDouble() const;

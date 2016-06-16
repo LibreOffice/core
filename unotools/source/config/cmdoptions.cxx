@@ -92,7 +92,7 @@ class SvtCommandOptions_Impl : public ConfigItem
     public:
 
          SvtCommandOptions_Impl();
-        virtual ~SvtCommandOptions_Impl();
+        virtual ~SvtCommandOptions_Impl() override;
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

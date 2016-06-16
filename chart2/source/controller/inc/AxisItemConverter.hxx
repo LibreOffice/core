@@ -43,7 +43,7 @@ public:
         ExplicitIncrementData* pIncrement = nullptr,
         const css::awt::Size* pRefSize = nullptr );
 
-    virtual ~AxisItemConverter();
+    virtual ~AxisItemConverter() override;
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const override;
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet ) override;

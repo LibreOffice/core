@@ -162,7 +162,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxStyleToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
-    virtual ~SvxStyleToolBoxControl();
+    virtual ~SvxStyleToolBoxControl() override;
 
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 
@@ -240,7 +240,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
-    virtual ~SvxColorToolBoxControl();
+    virtual ~SvxColorToolBoxControl() override;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
@@ -284,7 +284,7 @@ private:
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxSimpleUndoRedoController(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
-    virtual ~SvxSimpleUndoRedoController();
+    virtual ~SvxSimpleUndoRedoController() override;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
@@ -301,7 +301,7 @@ public:
                                     std::vector<sal_uInt16>& rCurrencyList );
     SFX_DECL_TOOLBOX_CONTROL();
     SvxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
-    virtual ~SvxCurrencyToolBoxControl();
+    virtual ~SvxCurrencyToolBoxControl() override;
     virtual void Select( sal_uInt16 nSelectModifier ) override;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,

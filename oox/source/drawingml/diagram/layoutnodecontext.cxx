@@ -158,7 +158,7 @@ public:
         {
         }
 
-    virtual ~LayoutVariablePropertySetContext()
+    virtual ~LayoutVariablePropertySetContext() override
         {
         }
 

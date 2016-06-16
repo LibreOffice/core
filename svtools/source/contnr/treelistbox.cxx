@@ -61,7 +61,7 @@ class MyEdit_Impl : public Edit
     SvInplaceEdit2* pOwner;
 public:
                  MyEdit_Impl( vcl::Window* pParent, SvInplaceEdit2* pOwner );
-    virtual     ~MyEdit_Impl() { disposeOnce(); }
+    virtual     ~MyEdit_Impl() override { disposeOnce(); }
     virtual void dispose() override { pOwner = nullptr; Edit::dispose(); }
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void LoseFocus() override;

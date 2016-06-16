@@ -76,7 +76,7 @@ namespace logging
         virtual void SAL_CALL logp( ::sal_Int32 Level, const OUString& SourceClass, const OUString& SourceMethod, const OUString& Message ) throw (RuntimeException, std::exception) override;
 
     protected:
-        virtual ~EventLogger();
+        virtual ~EventLogger() override;
 
     private:
         /** logs the given log record

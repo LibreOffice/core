@@ -60,7 +60,7 @@ private:
     ScDPFilteredCache aCacheTable;
 public:
     ScDatabaseDPData(ScDocument* pDoc, const ScDPCache& rCache);
-    virtual ~ScDatabaseDPData();
+    virtual ~ScDatabaseDPData() override;
 
     virtual long                    GetColumnCount() override;
     virtual OUString                getDimensionName(long nColumn) override;

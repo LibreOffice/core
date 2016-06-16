@@ -175,7 +175,7 @@ class OGroupManager : public ::cppu::WeakImplHelper< css::beans::XPropertyChange
 
 public:
     explicit OGroupManager(const css::uno::Reference< css::container::XContainer >& _rxContainer);
-    virtual ~OGroupManager();
+    virtual ~OGroupManager() override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) throw(css::uno::RuntimeException, std::exception) override;

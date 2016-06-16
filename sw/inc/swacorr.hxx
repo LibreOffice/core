@@ -47,7 +47,7 @@ protected:
 
 public:
     SwAutoCorrect( const SvxAutoCorrect& rACorr );
-    virtual ~SwAutoCorrect();
+    virtual ~SwAutoCorrect() override;
 };
 
 #endif

@@ -87,7 +87,7 @@ public:
     void stop();
 
 private:
-    virtual ~Thread();
+    virtual ~Thread() override;
 
     virtual void execute() override;
     void downloadExtensions();
@@ -121,7 +121,7 @@ class UpdateCommandEnv
     cssu::Reference< cssu::XComponentContext > m_xContext;
 
 public:
-    virtual ~UpdateCommandEnv();
+    virtual ~UpdateCommandEnv() override;
     UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
         ::rtl::Reference<UpdateInstallDialog::Thread>const & thread);
 

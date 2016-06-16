@@ -132,7 +132,7 @@ class ProgressCmdEnv
     void update_( uno::Any const & Status ) throw ( uno::RuntimeException );
 
 public:
-    virtual ~ProgressCmdEnv();
+    virtual ~ProgressCmdEnv() override;
 
     /** When param bAskWhenInstalling = true, then the user is asked if he
     agrees to install this extension. In case this extension is already installed
@@ -233,7 +233,7 @@ public:
     bool isBusy();
 
 private:
-    virtual ~Thread();
+    virtual ~Thread() override;
 
     virtual void execute() override;
 

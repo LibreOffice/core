@@ -30,7 +30,7 @@ class SwVbaDialog : public SwVbaDialog_BASE
 {
 public:
     SwVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):SwVbaDialog_BASE( xParent, xContext, xModel, nIndex ) {}
-    virtual ~SwVbaDialog() {}
+    virtual ~SwVbaDialog() override {}
 
     // Methods
     virtual OUString mapIndexToName( sal_Int32 nIndex ) override;

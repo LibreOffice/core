@@ -49,7 +49,7 @@ class CommandDispatch :
 {
 public:
     explicit CommandDispatch( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~CommandDispatch();
+    virtual ~CommandDispatch() override;
 
     // late initialisation, especially for adding as listener
     virtual void initialize();

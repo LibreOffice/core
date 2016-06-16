@@ -181,7 +181,7 @@ public:
     /**
       * Destructor.
       */
-    virtual ~ResultSetMetaData();
+    virtual ~ResultSetMetaData() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

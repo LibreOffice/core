@@ -83,7 +83,7 @@ namespace dbaui
         void        doEditIndexes();
         bool        doSaveDoc(bool _bSaveAs);
 
-        virtual ~OTableController();
+        virtual ~OTableController() override;
     public:
         OTableController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 

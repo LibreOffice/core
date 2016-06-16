@@ -37,7 +37,7 @@ public:
     XMLBitmapRepeatOffsetPropertyHandler( bool bX );
 
     // Just needed for virtual destruction
-    virtual ~XMLBitmapRepeatOffsetPropertyHandler();
+    virtual ~XMLBitmapRepeatOffsetPropertyHandler() override;
 
     /// Imports the given value in cas of the given XML-data-type
     virtual bool importXML(

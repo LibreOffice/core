@@ -34,7 +34,7 @@ class StgInternalStream : public SvStream
     virtual void      FlushData() override;
 public:
     StgInternalStream( BaseStorage&, const OUString&, bool );
-   virtual ~StgInternalStream();
+   virtual ~StgInternalStream() override;
     void Commit();
 };
 

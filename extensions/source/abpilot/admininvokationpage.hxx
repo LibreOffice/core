@@ -33,7 +33,7 @@ namespace abp
 
     public:
         explicit AdminDialogInvokationPage(OAddressBookSourcePilot* _pParent);
-        virtual ~AdminDialogInvokationPage();
+        virtual ~AdminDialogInvokationPage() override;
         virtual void dispose() override;
     protected:
         // TabDialog overridables

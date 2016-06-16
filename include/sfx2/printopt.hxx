@@ -91,7 +91,7 @@ protected:
 public:
 
                         SfxCommonPrintOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual             ~SfxCommonPrintOptionsTabPage();
+    virtual             ~SfxCommonPrintOptionsTabPage() override;
     virtual void        dispose() override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

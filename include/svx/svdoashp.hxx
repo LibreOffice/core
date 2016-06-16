@@ -162,7 +162,7 @@ public:
     double GetExtraTextRotation( const bool bPreRotation = false ) const;
 
     SdrObjCustomShape();
-    virtual ~SdrObjCustomShape();
+    virtual ~SdrObjCustomShape() override;
 
     /* is merging default attributes from type-shape into the SdrCustomShapeGeometryItem. If pType
     is NULL then the type is being taken from the "Type" property of the SdrCustomShapeGeometryItem.

@@ -120,7 +120,7 @@ protected:
 
 public:
     OAccessibleMenuBaseComponent( Menu* pMenu );
-    virtual ~OAccessibleMenuBaseComponent();
+    virtual ~OAccessibleMenuBaseComponent() override;
 
     void                    SetStates();
 

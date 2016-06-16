@@ -42,7 +42,7 @@ private:
 
 public:
     Controller (Shell* pViewShell);
-    virtual ~Controller();
+    virtual ~Controller() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

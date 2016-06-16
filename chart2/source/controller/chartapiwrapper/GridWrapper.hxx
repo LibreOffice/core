@@ -56,7 +56,7 @@ public:
     };
 
     GridWrapper( tGridType eType, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~GridWrapper();
+    virtual ~GridWrapper() override;
 
     static void getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDimensionIndex, bool& rbSubGrid );
 

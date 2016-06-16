@@ -22,7 +22,7 @@ class OGLManager : public ::cppu::WeakImplHelper< css::media::XManager, css::lan
 public:
 
     explicit OGLManager();
-    virtual ~OGLManager();
+    virtual ~OGLManager() override;
 
     // XManager
     virtual css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const OUString& rURL ) throw (css::uno::RuntimeException, std::exception) override;

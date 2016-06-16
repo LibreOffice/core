@@ -81,7 +81,7 @@ private:
 protected:
     bool        ErrorHdl();
     sal_uInt16  BreakHdl();
-    virtual ~StarBASIC();
+    virtual ~StarBASIC() override;
 
 public:
 

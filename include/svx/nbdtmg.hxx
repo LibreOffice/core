@@ -106,7 +106,7 @@ class  SVX_DLLPUBLIC BulletsSettings_Impl:public BulletsSettings
             : BulletsSettings(eTy)
             , cBulletChar(0)
             {}
-        virtual ~BulletsSettings_Impl(){}
+        virtual ~BulletsSettings_Impl() override {}
 };
 
 class  SVX_DLLPUBLIC GrfBulDataRelation: public BulletsSettings
@@ -124,7 +124,7 @@ class  SVX_DLLPUBLIC GrfBulDataRelation: public BulletsSettings
         pGrfObj(nullptr),
         aSize(0,0)
     {}
-    virtual ~GrfBulDataRelation(){}
+    virtual ~GrfBulDataRelation() override {}
 };
 
 class  SVX_DLLPUBLIC MixBulletsSettings_Impl
@@ -239,7 +239,7 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
     public:
         BulletsTypeMgr();
         BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr);
-        virtual ~BulletsTypeMgr() {}
+        virtual ~BulletsTypeMgr() override {}
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF) override;
@@ -261,7 +261,7 @@ class SVX_DLLPUBLIC GraphyicBulletsTypeMgr: public NBOTypeMgrBase
     public:
         GraphyicBulletsTypeMgr();
         GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTypeMgr);
-        virtual ~GraphyicBulletsTypeMgr();
+        virtual ~GraphyicBulletsTypeMgr() override;
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF) override;
@@ -282,7 +282,7 @@ class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase
     public:
         MixBulletsTypeMgr();
         MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr);
-        virtual ~MixBulletsTypeMgr() {}
+        virtual ~MixBulletsTypeMgr() override {}
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF) override;
@@ -300,7 +300,7 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
     public:
         NumberingTypeMgr();
         NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr);
-        virtual ~NumberingTypeMgr();
+        virtual ~NumberingTypeMgr() override;
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF) override;
@@ -318,7 +318,7 @@ class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
     public:
         OutlineTypeMgr();
         OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr);
-        virtual ~OutlineTypeMgr() {}
+        virtual ~OutlineTypeMgr() override {}
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF) override;

@@ -58,7 +58,7 @@ class SvFileObject : public sfx2::SvLinkSource
     DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 
 protected:
-    virtual ~SvFileObject();
+    virtual ~SvFileObject() override;
 
 public:
     SvFileObject();

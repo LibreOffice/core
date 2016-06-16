@@ -26,7 +26,7 @@ public:
     virtual void Reset(const SfxItemSet* rCoreAttrs) override;
     virtual DeactivateRC DeactivatePage(SfxItemSet* pSet = nullptr) override;
 
-    virtual ~ScTpCompatOptions();
+    virtual ~ScTpCompatOptions() override;
     virtual void dispose() override;
 private:
     explicit ScTpCompatOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs);

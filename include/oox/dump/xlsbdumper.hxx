@@ -50,7 +50,7 @@ class RecordObjectBase : public SequenceRecordObjectBase
 {
 protected:
     explicit            RecordObjectBase();
-    virtual             ~RecordObjectBase();
+    virtual             ~RecordObjectBase() override;
 
     using               SequenceRecordObjectBase::construct;
 

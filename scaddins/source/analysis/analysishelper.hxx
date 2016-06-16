@@ -488,7 +488,7 @@ public:
                                 ConvertDataClass    eClass,
                                 bool            bPrefSupport = false );
 
-    virtual                 ~ConvertDataLinear();
+    virtual                 ~ConvertDataLinear() override;
 
     virtual double          Convert( double fVal, const ConvertData& rTo,
                                 sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) override;

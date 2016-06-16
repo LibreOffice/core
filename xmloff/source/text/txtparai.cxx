@@ -312,7 +312,7 @@ public:
             sal_uInt8 nSFConvFlags
                           );
 
-    virtual ~XMLImpSpanContext_Impl();
+    virtual ~XMLImpSpanContext_Impl() override;
 
     static SvXMLImportContext *CreateChildContext(
             SvXMLImport& rImport,
@@ -347,7 +347,7 @@ public:
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace );
 
-    virtual ~XMLImpHyperlinkContext_Impl();
+    virtual ~XMLImpHyperlinkContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -478,7 +478,7 @@ public:
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace );
 
-    virtual ~XMLImpRubyBaseContext_Impl();
+    virtual ~XMLImpRubyBaseContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -545,7 +545,7 @@ public:
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace );
 
-    virtual ~XMLImpRubyContext_Impl();
+    virtual ~XMLImpRubyContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -569,7 +569,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             XMLImpRubyContext_Impl & rParent );
 
-    virtual ~XMLImpRubyTextContext_Impl();
+    virtual ~XMLImpRubyTextContext_Impl() override;
 
     virtual void Characters( const OUString& rChars ) override;
 };
@@ -708,7 +708,7 @@ public:
         XMLHints_Impl& i_rHints,
         bool & i_rIgnoreLeadingSpace );
 
-    virtual ~XMLMetaImportContextBase();
+    virtual ~XMLMetaImportContextBase() override;
 
     virtual void StartElement(
             const Reference<xml::sax::XAttributeList> & i_xAttrList) override;

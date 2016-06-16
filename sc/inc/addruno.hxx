@@ -43,7 +43,7 @@ private:
 public:
 
                             ScAddressConversionObj(ScDocShell* pDocSh, bool bIsRange);
-    virtual                 ~ScAddressConversionObj();
+    virtual                 ~ScAddressConversionObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

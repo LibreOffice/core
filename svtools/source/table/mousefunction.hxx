@@ -60,7 +60,7 @@ namespace svt { namespace table
         virtual FunctionResult  handleMouseUp( ITableControl& i_tableControl, MouseEvent const & i_event ) = 0;
 
     protected:
-        virtual ~MouseFunction() { }
+        virtual ~MouseFunction() override { }
     };
 
 

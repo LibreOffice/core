@@ -39,7 +39,7 @@ class SvxSplitTableDlg : public SvxAbstractSplittTableDialog
 
 public:
     SvxSplitTableDlg(vcl::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
-    virtual ~SvxSplitTableDlg();
+    virtual ~SvxSplitTableDlg() override;
 
     DECL_LINK_TYPED( ClickHdl, Button *, void );
 

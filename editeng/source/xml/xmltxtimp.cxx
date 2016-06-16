@@ -56,7 +56,7 @@ class SvxXMLTextImportContext : public SvXMLImportContext
 {
 public:
     SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, const uno::Reference< XText >& xText );
-    virtual ~SvxXMLTextImportContext();
+    virtual ~SvxXMLTextImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
 
@@ -108,7 +108,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const uno::Reference< XText > & rText );
 
-    virtual ~SvxXMLXTextImportComponent() throw ();
+    virtual ~SvxXMLXTextImportComponent() throw () override;
 
 private:
     const uno::Reference< XText > mxText;

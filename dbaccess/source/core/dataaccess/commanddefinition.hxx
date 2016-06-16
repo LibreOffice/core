@@ -56,7 +56,7 @@ class OCommandDefinition   : public OComponentDefinition
                             ,public OCommandDefinition_PROP
 {
 protected:
-    virtual ~OCommandDefinition();
+    virtual ~OCommandDefinition() override;
 
     inline       OCommandDefinition_Impl& getCommandDefinition()       { return dynamic_cast<       OCommandDefinition_Impl& >( *m_pImpl.get() ); }
 

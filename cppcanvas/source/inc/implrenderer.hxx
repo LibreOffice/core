@@ -168,7 +168,7 @@ static float GetSwapFloat( SvStream& rSt )
                           const GDIMetaFile&        rMtf,
                           const Parameters&         rParms );
 
-            virtual ~ImplRenderer();
+            virtual ~ImplRenderer() override;
 
             virtual bool                draw() const override;
             virtual bool                drawSubset( sal_Int32   nStartIndex,

@@ -445,7 +445,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     SwWrtShell( SwWrtShell&, vcl::Window *pWin, SwView &rShell);
     SwWrtShell( SwDoc& rDoc, vcl::Window *pWin, SwView &rShell,
                 const SwViewOption *pViewOpt = nullptr);
-    virtual ~SwWrtShell();
+    virtual ~SwWrtShell() override;
 
     bool TryRemoveIndent(); // #i23725#
 

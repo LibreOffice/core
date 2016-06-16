@@ -45,7 +45,7 @@ class ActionTriggerSeparatorPropertySet :   private cppu::BaseMutex,
 {
     public:
         ActionTriggerSeparatorPropertySet();
-        virtual ~ActionTriggerSeparatorPropertySet();
+        virtual ~ActionTriggerSeparatorPropertySet() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )

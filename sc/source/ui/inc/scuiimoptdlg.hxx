@@ -36,7 +36,7 @@ public:
                         bool                    bOnlyDbtoolsEncodings = false,
                         bool                    bImport = true );
 
-    virtual ~ScImportOptionsDlg();
+    virtual ~ScImportOptionsDlg() override;
     virtual void dispose() override;
 
     void GetImportOptions( ScImportOptions& rOptions ) const;

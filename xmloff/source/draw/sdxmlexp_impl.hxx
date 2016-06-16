@@ -163,7 +163,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         bool bIsDraw, SvXMLExportFlags nExportFlags = SvXMLExportFlags::ALL );
-    virtual ~SdXMLExport();
+    virtual ~SdXMLExport() override;
 
     void SetProgress(sal_Int32 nProg);
 

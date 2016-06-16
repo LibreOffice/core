@@ -83,7 +83,7 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 
         /** @short  standard dtor.
          */
-        virtual ~CacheUpdateListener();
+        virtual ~CacheUpdateListener() override;
 
 
         /** @short  starts listening.

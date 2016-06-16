@@ -281,7 +281,7 @@ css::task::UrlRecord find(
 
 public:
     PasswordContainer( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
-    virtual ~PasswordContainer();
+    virtual ~PasswordContainer() override;
 
     virtual void SAL_CALL add( const OUString& aUrl,
                                const OUString& aUserName,

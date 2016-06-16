@@ -51,7 +51,7 @@ private:
 
 public:
     SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaSelection();
+    virtual ~SwVbaSelection() override;
 
     // Attribute
     virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;

@@ -43,7 +43,7 @@ public:
                        sal_uInt16 nPrefix,
                        const OUString& rLocalName,
                        const css::uno::Reference<css::xforms::XModel2>& xModel );
-    virtual ~XFormsBindContext();
+    virtual ~XFormsBindContext() override;
 
     // implement SvXMLImportContext & TokenContext methods:
 

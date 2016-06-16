@@ -46,7 +46,7 @@ public:
     SvEmbedTransferHelper( const css::uno::Reference< css::embed::XEmbeddedObject >& xObj,
                            const Graphic* pGraphic,
                             sal_Int64 nAspect );
-    virtual ~SvEmbedTransferHelper();
+    virtual ~SvEmbedTransferHelper() override;
 
     void SetParentShellID( const OUString& rShellID );
 

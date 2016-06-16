@@ -28,7 +28,7 @@
 class XMLCrossedOutTypePropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLCrossedOutTypePropHdl();
+    virtual ~XMLCrossedOutTypePropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -37,7 +37,7 @@ public:
 class XMLCrossedOutStylePropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLCrossedOutStylePropHdl();
+    virtual ~XMLCrossedOutStylePropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -46,7 +46,7 @@ public:
 class XMLCrossedOutWidthPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLCrossedOutWidthPropHdl();
+    virtual ~XMLCrossedOutWidthPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -55,7 +55,7 @@ public:
 class XMLCrossedOutTextPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLCrossedOutTextPropHdl();
+    virtual ~XMLCrossedOutTextPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

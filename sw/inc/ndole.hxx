@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTextNode
 public:
     const SwOLEObj& GetOLEObj() const { return aOLEObj; }
           SwOLEObj& GetOLEObj()       { return aOLEObj; }
-    virtual ~SwOLENode();
+    virtual ~SwOLENode() override;
 
     virtual SwContentNode *SplitContentNode( const SwPosition & ) override;
 

@@ -61,7 +61,7 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    virtual ~NumberFormatPropertyPanel();
+    virtual ~NumberFormatPropertyPanel() override;
     virtual void dispose() override;
 private:
     //ui controls

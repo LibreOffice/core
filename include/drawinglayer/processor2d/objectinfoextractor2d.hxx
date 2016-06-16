@@ -44,7 +44,7 @@ namespace drawinglayer
 
         public:
             ObjectInfoPrimitiveExtractor2D(const geometry::ViewInformation2D& rViewInformation);
-            virtual ~ObjectInfoPrimitiveExtractor2D();
+            virtual ~ObjectInfoPrimitiveExtractor2D() override;
 
             const primitive2d::ObjectInfoPrimitive2D* getResult() const { return mpFound; }
         };

@@ -76,7 +76,7 @@ public:
         SfxViewFrame *pFrame,
         SfxViewShell* pOldShell);
 
-    virtual ~ViewShellBase();
+    virtual ~ViewShellBase() override;
 
     /** This method is part of the object construction.  It HAS to be called
         after the constructor has created a new object.

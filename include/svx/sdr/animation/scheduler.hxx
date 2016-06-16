@@ -113,7 +113,7 @@ namespace sdr
         public:
             // constructor/destructor
             SAL_DLLPRIVATE Scheduler();
-            virtual ~Scheduler();
+            virtual ~Scheduler() override;
 
             // From baseclass Timer, the timeout call
             virtual void Invoke() override;

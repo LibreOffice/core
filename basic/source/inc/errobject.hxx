@@ -29,7 +29,7 @@ class SbxErrObject : public SbUnoObject
     css::uno::Reference< ooo::vba::XErrObject > m_xErr;
 
     SbxErrObject( const OUString& aName_, const css::uno::Any& aUnoObj_ );
-    virtual ~SbxErrObject();
+    virtual ~SbxErrObject() override;
 
 public:
     static SbxVariableRef getErrObject();

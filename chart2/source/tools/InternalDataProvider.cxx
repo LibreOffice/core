@@ -1355,7 +1355,7 @@ public:
     explicit SplitCategoriesProvider_ForComplexDescriptions( const ::std::vector< ::std::vector< uno::Any > >& rComplexDescriptions )
         : m_rComplexDescriptions( rComplexDescriptions )
     {}
-    virtual ~SplitCategoriesProvider_ForComplexDescriptions()
+    virtual ~SplitCategoriesProvider_ForComplexDescriptions() override
     {}
 
     virtual sal_Int32 getLevelCount() const override;

@@ -101,7 +101,7 @@ public:
 
     SvXMLExportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper );
-    virtual ~SvXMLExportPropertyMapper();
+    virtual ~SvXMLExportPropertyMapper() override;
 
     // Add a ExportPropertyMapper at the end of the import mapper chain.
     // The added mapper MUST not be used outside the Mapper chain any longer,

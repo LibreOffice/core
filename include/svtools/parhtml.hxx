@@ -155,7 +155,7 @@ protected:
     // scan next token
     virtual int GetNextToken_() override;
 
-    virtual ~HTMLParser();
+    virtual ~HTMLParser() override;
 
     void FinishHeader( bool bBody ) { bIsInHeader = false; bIsInBody = bBody; }
 

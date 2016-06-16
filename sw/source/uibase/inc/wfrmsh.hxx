@@ -33,7 +33,7 @@ private:
 
 public:
              SwWebFrameShell(SwView &rView);
-    virtual ~SwWebFrameShell();
+    virtual ~SwWebFrameShell() override;
 };
 
 #endif

@@ -43,7 +43,7 @@ private:
 
 public:
                             ScDocDefaultsObj(ScDocShell* pDocSh);
-    virtual                 ~ScDocDefaultsObj();
+    virtual                 ~ScDocDefaultsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

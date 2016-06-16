@@ -196,7 +196,7 @@ private:
 public:
 
     SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType);
-    virtual ~SdPublishingDlg();
+    virtual ~SdPublishingDlg() override;
     virtual void dispose() override;
 
     void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams );

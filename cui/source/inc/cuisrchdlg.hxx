@@ -45,7 +45,7 @@ class SvxJSearchOptionsDialog : public SfxSingleTabDialog
 public:
     SvxJSearchOptionsDialog(vcl::Window *pParent,
         const SfxItemSet& rOptionsSet, sal_Int32 nInitialFlags);
-    virtual ~SvxJSearchOptionsDialog();
+    virtual ~SvxJSearchOptionsDialog() override;
     virtual void dispose() override;
 
     // Window

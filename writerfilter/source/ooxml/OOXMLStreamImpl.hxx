@@ -68,7 +68,7 @@ public:
      StreamType_t nType, bool bRepairStorage);
     OOXMLStreamImpl(OOXMLStreamImpl & rStream, const OUString & rId);
 
-    virtual ~OOXMLStreamImpl();
+    virtual ~OOXMLStreamImpl() override;
 
     virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() override;
     virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() override;

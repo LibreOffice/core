@@ -43,7 +43,7 @@ protected:
 
 public:
     explicit SvNumberFormatsSupplierServiceObject(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
-    virtual ~SvNumberFormatsSupplierServiceObject();
+    virtual ~SvNumberFormatsSupplierServiceObject() override;
 
     // XInterface
     virtual void SAL_CALL acquire() throw() override { SvNumberFormatsSupplierObj::acquire(); }

@@ -117,7 +117,7 @@ public:
 
     void SetDropCapsPage(SwDropCapsPage* pPage) { mpPage = pPage; }
 
-    virtual ~SwDropCapsPict();
+    virtual ~SwDropCapsPict() override;
     virtual void dispose() override;
 
     void UpdatePaintSettings();       // also invalidates control!

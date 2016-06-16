@@ -70,7 +70,7 @@ namespace connectivity
             css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData;
 
         protected:
-            virtual ~OEvoabPreparedStatement();
+            virtual ~OEvoabPreparedStatement() override;
 
         public:
             explicit OEvoabPreparedStatement( OEvoabConnection* _pConnection );

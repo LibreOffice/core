@@ -504,7 +504,7 @@ class SwMacroInfo : public SdrObjUserData
 {
 public:
     SwMacroInfo();
-    virtual ~SwMacroInfo();
+    virtual ~SwMacroInfo() override;
 
     virtual SdrObjUserData* Clone( SdrObject* pObj ) const override;
 

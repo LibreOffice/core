@@ -73,7 +73,7 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
 
 public:
     explicit SfxGlobalEvents_Impl(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
-    virtual ~SfxGlobalEvents_Impl();
+    virtual ~SfxGlobalEvents_Impl() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

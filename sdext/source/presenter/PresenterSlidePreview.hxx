@@ -64,7 +64,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterSlidePreview();
+    virtual ~PresenterSlidePreview() override;
     PresenterSlidePreview(const PresenterSlidePreview&) = delete;
     PresenterSlidePreview& operator=(const PresenterSlidePreview&) = delete;
     virtual void SAL_CALL disposing() override;

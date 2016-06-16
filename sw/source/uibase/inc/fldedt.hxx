@@ -42,7 +42,7 @@ class SwFieldEditDlg : public SfxSingleTabDialog
 public:
 
     SwFieldEditDlg(SwView& rVw);
-    virtual ~SwFieldEditDlg();
+    virtual ~SwFieldEditDlg() override;
     virtual void dispose() override;
 
     DECL_LINK_TYPED(OKHdl, Button*, void);

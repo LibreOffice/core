@@ -65,7 +65,7 @@ namespace rptui
         virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException) override;
     public:
         OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView);
-        virtual ~OReportWindow();
+        virtual ~OReportWindow() override;
         virtual void dispose() override;
 
         // Window overrides

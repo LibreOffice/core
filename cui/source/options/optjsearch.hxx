@@ -59,7 +59,7 @@ private:
 
 public:
                         SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxJSearchOptionsPage();
+    virtual ~SvxJSearchOptionsPage() override;
     virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 

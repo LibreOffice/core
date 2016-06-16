@@ -74,7 +74,7 @@ private:
     ImportDocumentHandler(ImportDocumentHandler &) = delete;
     void operator =(ImportDocumentHandler &) = delete;
 
-    virtual ~ImportDocumentHandler();
+    virtual ~ImportDocumentHandler() override;
 
     ::osl::Mutex                                                      m_aMutex;
     bool                                                              m_bImportedChart;

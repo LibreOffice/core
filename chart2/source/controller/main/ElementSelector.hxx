@@ -70,7 +70,7 @@ class ElementSelectorToolbarController : public ::svt::ToolboxController
 {
 public:
     explicit ElementSelectorToolbarController();
-    virtual ~ElementSelectorToolbarController();
+    virtual ~ElementSelectorToolbarController() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

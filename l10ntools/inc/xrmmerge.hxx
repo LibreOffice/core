@@ -95,7 +95,7 @@ public:
         const OString &rOutputFile,
         const OString &rFilePath
     );
-    virtual ~XRMResExport();
+    virtual ~XRMResExport() override;
 };
 
 
@@ -129,7 +129,7 @@ public:
         const OString &rOutputFile,
         const OString &rFilename
     );
-    virtual ~XRMResMerge();
+    virtual ~XRMResMerge() override;
 };
 
 #endif // INCLUDED_L10NTOOLS_INC_XRMMERGE_HXX

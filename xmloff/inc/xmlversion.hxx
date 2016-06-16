@@ -42,7 +42,7 @@ public:
         const css::uno::Sequence < css::util::RevisionTag >& rVersions,
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler );
-    virtual     ~XMLVersionListExport() {}
+    virtual     ~XMLVersionListExport() override {}
 
     sal_uInt32  exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) override;
     void        ExportAutoStyles_() override {}
@@ -68,7 +68,7 @@ public:
     XMLVersionListImport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         css::uno::Sequence < css::util::RevisionTag >& rVersions );
-    virtual ~XMLVersionListImport() throw();
+    virtual ~XMLVersionListImport() throw() override;
 
     css::uno::Sequence < css::util::RevisionTag >&
         GetList() { return maVersions; }
@@ -86,7 +86,7 @@ public:
                            const OUString& rLocalName,
                            const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
-    virtual ~XMLVersionListContext();
+    virtual ~XMLVersionListContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
@@ -110,7 +110,7 @@ public:
                           const OUString& rLocalName,
                           const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 
-    virtual ~XMLVersionContext();
+    virtual ~XMLVersionContext() override;
 };
 
 class XMLVersionListPersistence : public ::cppu::WeakImplHelper< css::document::XDocumentRevisionListPersistence, css::lang::XServiceInfo >

@@ -551,7 +551,7 @@ namespace oglcanvas
                         mnDepthId, mnTextureId, false);
             }
 
-            virtual ~BufferContextImpl()
+            virtual ~BufferContextImpl() override
             {
                 glDeleteTextures(1, &mnTextureId);
                 glDeleteRenderbuffers(1, &mnDepthId);

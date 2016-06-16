@@ -103,7 +103,7 @@ private:
     SharedTimerTask mpCurrentTask;
 
     TimerScheduler();
-    virtual ~TimerScheduler();
+    virtual ~TimerScheduler() override;
     class Deleter {public: void operator () (TimerScheduler* pScheduler) { delete pScheduler; } };
     friend class Deleter;
 

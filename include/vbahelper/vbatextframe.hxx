@@ -57,7 +57,7 @@ protected:
     void setMargin( const OUString& sMarginType, float fMargin );
 public:
     VbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
-    virtual ~VbaTextFrame() {}
+    virtual ~VbaTextFrame() override {}
     // Attributes
     virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setAutoSize( sal_Bool _autosize ) throw (css::uno::RuntimeException, std::exception) override;

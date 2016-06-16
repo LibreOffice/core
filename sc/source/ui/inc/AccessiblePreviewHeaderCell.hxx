@@ -47,7 +47,7 @@ public:
                             sal_Int32 nIndex );
 
 protected:
-    virtual ~ScAccessiblePreviewHeaderCell();
+    virtual ~ScAccessiblePreviewHeaderCell() override;
 
     using ScAccessibleContextBase::IsDefunc;
 

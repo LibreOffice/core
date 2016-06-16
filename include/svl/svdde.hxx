@@ -132,7 +132,7 @@ class SVL_DLLPUBLIC DdeLink : public DdeTransaction
 
 public:
                     DdeLink( DdeConnection&, const OUString&, long = 0 );
-    virtual        ~DdeLink();
+    virtual        ~DdeLink() override;
 
     void            SetNotifyHdl( const Link<void*,void>& rLink ) { aNotify = rLink; }
     const Link<void*,void>&   GetNotifyHdl() const { return aNotify; }

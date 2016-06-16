@@ -35,7 +35,7 @@ class DataSupplier : public ucbhelper::ResultSetDataSupplier
 
 public:
     explicit DataSupplier( const rtl::Reference< ODocumentContainer >& rxContent );
-    virtual ~DataSupplier();
+    virtual ~DataSupplier() override;
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;
     virtual css::uno::Reference< css::ucb::XContentIdentifier >

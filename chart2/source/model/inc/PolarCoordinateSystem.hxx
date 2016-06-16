@@ -31,7 +31,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         sal_Int32 nDimensionCount = 2 );
     explicit PolarCoordinateSystem( const PolarCoordinateSystem & rSource );
-    virtual ~PolarCoordinateSystem();
+    virtual ~PolarCoordinateSystem() override;
 
     // ____ XCoordinateSystem ____
     virtual OUString SAL_CALL getCoordinateSystemType()
@@ -60,7 +60,7 @@ class PolarCoordinateSystem2d : public PolarCoordinateSystem
 public:
     explicit PolarCoordinateSystem2d(
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~PolarCoordinateSystem2d();
+    virtual ~PolarCoordinateSystem2d() override;
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()
@@ -79,7 +79,7 @@ class PolarCoordinateSystem3d : public PolarCoordinateSystem
 public:
     explicit PolarCoordinateSystem3d(
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~PolarCoordinateSystem3d();
+    virtual ~PolarCoordinateSystem3d() override;
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()

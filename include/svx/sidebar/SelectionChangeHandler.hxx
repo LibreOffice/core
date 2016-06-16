@@ -51,7 +51,7 @@ public:
         const std::function<rtl::OUString ()>& rSelectionChangeCallback,
         const css::uno::Reference<css::frame::XController>& rxController,
         const sfx2::sidebar::EnumContext::Context eDefaultContext);
-    virtual ~SelectionChangeHandler();
+    virtual ~SelectionChangeHandler() override;
 
     virtual void SAL_CALL selectionChanged (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception) override;

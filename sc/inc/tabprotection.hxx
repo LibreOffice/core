@@ -83,7 +83,7 @@ public:
 
     explicit ScDocProtection();
     explicit ScDocProtection(const ScDocProtection& r);
-    virtual ~ScDocProtection();
+    virtual ~ScDocProtection() override;
 
     virtual bool isProtected() const override;
     virtual bool isProtectedWithPass() const override;
@@ -169,7 +169,7 @@ public:
 
     explicit ScTableProtection();
     explicit ScTableProtection(const ScTableProtection& r);
-    virtual ~ScTableProtection();
+    virtual ~ScTableProtection() override;
 
     virtual bool isProtected() const override;
     virtual bool isProtectedWithPass() const override;

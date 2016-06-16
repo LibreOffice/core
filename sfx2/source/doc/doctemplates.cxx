@@ -133,7 +133,7 @@ class WaitWindow_Impl : public WorkWindow
 
 public:
     WaitWindow_Impl();
-    virtual ~WaitWindow_Impl();
+    virtual ~WaitWindow_Impl() override;
     virtual void dispose() override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 };
@@ -2169,7 +2169,7 @@ class SfxDocTplService: public ::cppu::WeakImplHelper< css::lang::XLocalizable, 
 
 public:
     explicit SfxDocTplService( const css::uno::Reference < uno::XComponentContext >& xContext );
-    virtual ~SfxDocTplService();
+    virtual ~SfxDocTplService() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

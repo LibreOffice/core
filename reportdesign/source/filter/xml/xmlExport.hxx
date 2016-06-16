@@ -153,7 +153,7 @@ protected:
     virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() override;
     virtual XMLShapeExport*         CreateShapeExport() override;
 
-    virtual                 ~ORptExport(){};
+    virtual                 ~ORptExport() override {};
 public:
 
     ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag);

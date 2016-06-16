@@ -306,7 +306,7 @@ public:
       * content provider. The provider implementation removes the content
       * from a hash map.
       */
-    virtual ~ContentImplHelper();
+    virtual ~ContentImplHelper() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

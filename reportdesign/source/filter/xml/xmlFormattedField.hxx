@@ -38,7 +38,7 @@ namespace rptxml
                     ,const css::uno::Reference< css::report::XFormattedField >& _xComponent
                     ,OXMLTable* _pContainer
                     ,bool _bPageCount);
-        virtual ~OXMLFormattedField();
+        virtual ~OXMLFormattedField() override;
     };
 
 } // namespace rptxml

@@ -72,7 +72,7 @@ class ToolBarManager : public ToolbarManager_Base
                         const css::uno::Reference< css::frame::XFrame >& rFrame,
                         const OUString& rResourceName,
                         ToolBox* pToolBar );
-        virtual ~ToolBarManager();
+        virtual ~ToolBarManager() override;
 
         ToolBox* GetToolBar() const;
 

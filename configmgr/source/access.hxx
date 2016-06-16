@@ -427,7 +427,7 @@ public:
 protected:
     explicit Access(Components & components);
 
-    virtual ~Access();
+    virtual ~Access() override;
 
     virtual OUString getNameInternal() = 0;
     virtual rtl::Reference< RootAccess > getRootAccess() = 0;

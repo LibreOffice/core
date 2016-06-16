@@ -44,7 +44,7 @@ class OColumnPropertyListener:
 {
     OComponentDefinition* m_pComponent;
 protected:
-    virtual ~OColumnPropertyListener(){}
+    virtual ~OColumnPropertyListener() override {}
 public:
     explicit OColumnPropertyListener(OComponentDefinition* _pComponent) : m_pComponent(_pComponent){}
     OColumnPropertyListener(const OColumnPropertyListener&) = delete;

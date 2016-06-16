@@ -35,7 +35,7 @@ class LayoutFragmentHandler : public SlideFragmentHandler
 {
 public:
     LayoutFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pMasterPersistPtr ) throw();
-    virtual ~LayoutFragmentHandler() throw();
+    virtual ~LayoutFragmentHandler() throw() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 };

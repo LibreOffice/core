@@ -54,7 +54,7 @@ class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeData
 {
 public:
     MutableTreeDataModel();
-    virtual ~MutableTreeDataModel();
+    virtual ~MutableTreeDataModel() override;
 
     void broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >* pNodes, sal_Int32 nNodes );
 
@@ -88,7 +88,7 @@ class MutableTreeNode: public ::cppu::WeakAggImplHelper2< XMutableTreeNode, XSer
 
 public:
     MutableTreeNode( const MutableTreeDataModelRef& xModel, const Any& rValue, bool bChildrenOnDemand );
-    virtual ~MutableTreeNode();
+    virtual ~MutableTreeNode() override;
 
     void setParent( MutableTreeNode* pParent );
     void broadcast_changes();

@@ -37,7 +37,7 @@ private:
 public:
     explicit            SvxDrawOutlinerViewForwarder( OutlinerView& rOutl );
                         SvxDrawOutlinerViewForwarder( OutlinerView& rOutl, const Point& rShapePosTopLeft );
-    virtual             ~SvxDrawOutlinerViewForwarder();
+    virtual             ~SvxDrawOutlinerViewForwarder() override;
 
     virtual bool        IsValid() const override;
 

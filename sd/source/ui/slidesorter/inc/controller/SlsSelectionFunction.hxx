@@ -109,7 +109,7 @@ protected:
         SlideSorter& rSlideSorter,
         SfxRequest& rRequest);
 
-    virtual ~SelectionFunction();
+    virtual ~SelectionFunction() override;
 
 private:
     /** We use this flag to filter out the cases where MouseMotion() is called

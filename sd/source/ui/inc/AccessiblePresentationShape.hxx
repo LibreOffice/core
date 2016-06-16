@@ -34,7 +34,7 @@ public:
     AccessiblePresentationShape (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
-    virtual ~AccessiblePresentationShape();
+    virtual ~AccessiblePresentationShape() override;
 
     //=====  XServiceInfo  ====================================================
 

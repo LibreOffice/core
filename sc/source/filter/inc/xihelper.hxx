@@ -171,7 +171,7 @@ public:
     const XclImpHFConverter& operator=(const XclImpHFConverter&) = delete;
 
     explicit            XclImpHFConverter( const XclImpRoot& rRoot );
-                        virtual ~XclImpHFConverter();
+                        virtual ~XclImpHFConverter() override;
 
     /** Parses the passed string and creates three new edit engine text objects. */
     void                ParseString( const OUString& rHFString );

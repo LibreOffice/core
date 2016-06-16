@@ -99,7 +99,7 @@ protected:
 
 
 public:
-    virtual ~SvxStdParagraphTabPage();
+    virtual ~SvxStdParagraphTabPage() override;
     virtual void dispose() override;
 
     DECL_LINK_TYPED(ELRLoseFocusHdl, Control&, void);
@@ -165,7 +165,7 @@ protected:
     virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 public:
-    virtual ~SvxParaAlignTabPage();
+    virtual ~SvxParaAlignTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
@@ -200,7 +200,7 @@ class SvxExtParagraphTabPage: public SfxTabPage
     static const sal_uInt16 pExtRanges[];
 
 public:
-    virtual ~SvxExtParagraphTabPage();
+    virtual ~SvxExtParagraphTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
@@ -282,7 +282,7 @@ class SvxAsianTabPage : public SfxTabPage
     DECL_STATIC_LINK_TYPED( SvxAsianTabPage, ClickHdl_Impl, Button*, void );
 
 public:
-    virtual ~SvxAsianTabPage();
+    virtual ~SvxAsianTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,

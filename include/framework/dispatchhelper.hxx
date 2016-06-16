@@ -70,7 +70,7 @@ class FWE_DLLPUBLIC DispatchHelper : public ::cppu::WeakImplHelper< css::lang::X
         // ctor/dtor
 
                  DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        virtual ~DispatchHelper(                                                                    );
+        virtual ~DispatchHelper(                                                                    ) override;
 
         // XServiceInfo
         virtual OUString                        SAL_CALL getImplementationName              (                                   ) throw( css::uno::RuntimeException, std::exception ) override;

@@ -39,7 +39,7 @@ public:
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet = nullptr ) override;
     virtual void        DataChanged     ( const DataChangedEvent& rDCEvt ) override;
 
-    virtual         ~ScTablePage();
+    virtual         ~ScTablePage() override;
     virtual void    dispose() override;
 private:
                     ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreSet );

@@ -208,7 +208,7 @@ public:
         OUString const & implementationName,
         SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL ) throw();
 
-    virtual ~SvXMLImport() throw();
+    virtual ~SvXMLImport() throw() override;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 

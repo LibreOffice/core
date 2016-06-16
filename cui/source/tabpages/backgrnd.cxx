@@ -150,7 +150,7 @@ class BackgroundPreviewImpl : public vcl::Window
 public:
     explicit BackgroundPreviewImpl(vcl::Window* pParent);
     void setBmp(bool bBmp);
-    virtual ~BackgroundPreviewImpl();
+    virtual ~BackgroundPreviewImpl() override;
     virtual void    dispose() override;
 
     void            NotifyChange( const Color&  rColor );

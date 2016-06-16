@@ -181,7 +181,7 @@ public:
             const SwNode& rPt, sal_Int32 nPtContent, SwPaM* pRing = nullptr );
     SwPaM( const SwNode& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
     SwPaM( const SwNodeIndex& rNd, sal_Int32 nContent = 0, SwPaM* pRing = nullptr );
-    virtual ~SwPaM();
+    virtual ~SwPaM() override;
 
     /// this takes a second parameter, which indicates the Ring that
     /// the new PaM should be part of (may be null)

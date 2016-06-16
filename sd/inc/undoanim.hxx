@@ -37,7 +37,7 @@ class UndoAnimation : public SdrUndoAction
 {
 public:
     UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage );
-    virtual ~UndoAnimation();
+    virtual ~UndoAnimation() override;
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -53,7 +53,7 @@ class UndoAnimationPath : public SdrUndoAction
 {
 public:
     UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    virtual ~UndoAnimationPath();
+    virtual ~UndoAnimationPath() override;
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -70,7 +70,7 @@ class UndoTransition : public SdUndoAction
 {
 public:
     UndoTransition( SdDrawDocument* pDoc, SdPage* pThePage );
-    virtual ~UndoTransition();
+    virtual ~UndoTransition() override;
 
     virtual void Undo() override;
     virtual void Redo() override;

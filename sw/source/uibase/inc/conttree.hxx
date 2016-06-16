@@ -157,7 +157,7 @@ protected:
 
 public:
     SwContentTree(vcl::Window* pParent, const ResId& rResId);
-    virtual ~SwContentTree();
+    virtual ~SwContentTree() override;
     virtual void dispose() override;
     OUString        GetEntryAltText( SvTreeListEntry* pEntry ) const override;
     OUString        GetEntryLongDescription( SvTreeListEntry* pEntry ) const override;
@@ -331,7 +331,7 @@ protected:
 
 public:
     SwGlobalTree(vcl::Window* pParent, const ResId& rResId);
-    virtual ~SwGlobalTree();
+    virtual ~SwGlobalTree() override;
     virtual void        dispose() override;
 
     void                TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox);

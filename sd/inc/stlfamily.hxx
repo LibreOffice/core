@@ -52,7 +52,7 @@ public:
     /// creates the presentation family for the given masterpage
     SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, const SdPage* pMasterPage );
 
-    virtual ~SdStyleFamily();
+    virtual ~SdStyleFamily() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;

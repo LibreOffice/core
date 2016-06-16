@@ -1271,7 +1271,7 @@ class DurationDialog_Impl : public ModalDialog
 public:
 
     DurationDialog_Impl( vcl::Window* pParent, const util::Duration& rDuration );
-    virtual ~DurationDialog_Impl();
+    virtual ~DurationDialog_Impl() override;
     virtual void dispose() override;
     util::Duration  GetDuration() const;
 };

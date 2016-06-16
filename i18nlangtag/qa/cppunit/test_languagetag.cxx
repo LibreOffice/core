@@ -32,7 +32,7 @@ class TestLanguageTag : public CppUnit::TestFixture
 {
 public:
     TestLanguageTag() {}
-    virtual ~TestLanguageTag() {}
+    virtual ~TestLanguageTag() override {}
 
     void testAllTags();
     void testAllIsoLangEntries();

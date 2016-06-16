@@ -40,7 +40,7 @@ public:
         const OUString & rServiceName,
         StackMode eStackMode,
         sal_Int32 nDim = 2 );
-    virtual ~AreaChartTypeTemplate();
+    virtual ~AreaChartTypeTemplate() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

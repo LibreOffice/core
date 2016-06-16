@@ -84,7 +84,7 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
 
 public:
     explicit SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
-    virtual ~SmEditWindow();
+    virtual ~SmEditWindow() override;
     virtual void dispose() override;
 
     SmDocShell* GetDoc();

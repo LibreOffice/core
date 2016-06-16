@@ -76,7 +76,7 @@ class LwpParaStyle : public LwpTextStyle
 public:
     LwpParaStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
 
-    virtual ~LwpParaStyle();
+    virtual ~LwpParaStyle() override;
 
     void        Read() override;
 

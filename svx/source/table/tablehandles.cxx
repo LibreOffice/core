@@ -52,7 +52,7 @@ protected:
 
 public:
     OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible );
-    virtual ~OverlayTableEdge();
+    virtual ~OverlayTableEdge() override;
 };
 
 

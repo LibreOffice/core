@@ -30,7 +30,7 @@ class ScAccessibleStateSet : public ::cppu::WeakImplHelper< css::accessibility::
 {
 public:
     ScAccessibleStateSet();
-    virtual ~ScAccessibleStateSet();
+    virtual ~ScAccessibleStateSet() override;
 
     // XAccessibleStateSet
 

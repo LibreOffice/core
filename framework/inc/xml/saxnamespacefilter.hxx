@@ -37,7 +37,7 @@ class FWE_DLLPUBLIC SaxNamespaceFilter :
 {
     public:
         SaxNamespaceFilter( css::uno::Reference< css::xml::sax::XDocumentHandler >& rSax1DocumentHandler );
-        virtual ~SaxNamespaceFilter();
+        virtual ~SaxNamespaceFilter() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()

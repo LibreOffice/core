@@ -102,7 +102,7 @@ class JavaComponentLoader : public WeakImplHelper<XImplementationLoader, XServic
 public:
     explicit JavaComponentLoader(const css::uno::Reference<XComponentContext> & xCtx)
         throw(RuntimeException);
-    virtual ~JavaComponentLoader() throw();
+    virtual ~JavaComponentLoader() throw() override;
 
 public:
     // XServiceInfo

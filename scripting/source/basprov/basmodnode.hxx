@@ -51,7 +51,7 @@ namespace basprov
         BasicModuleNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const OUString& sScriptingContext,
             SbModule* pModule, bool isAppScript = true );
-        virtual ~BasicModuleNodeImpl();
+        virtual ~BasicModuleNodeImpl() override;
 
         // XBrowseNode
         virtual OUString SAL_CALL getName(  )

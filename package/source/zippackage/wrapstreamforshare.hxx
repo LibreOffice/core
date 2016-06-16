@@ -39,7 +39,7 @@ protected:
 public:
     WrapStreamForShare( const css::uno::Reference< css::io::XInputStream >& xInStream,
                         const rtl::Reference<SotMutexHolder>& rMutexRef );
-    virtual ~WrapStreamForShare();
+    virtual ~WrapStreamForShare() override;
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )

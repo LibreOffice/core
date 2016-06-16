@@ -35,7 +35,7 @@ public:
                             ScPreviewShell* pViewShell, bool bHeader, sal_Int32 nIndex );
 
 protected:
-    virtual ~ScAccessiblePageHeader();
+    virtual ~ScAccessiblePageHeader() override;
 
     using ScAccessibleContextBase::IsDefunc;
 

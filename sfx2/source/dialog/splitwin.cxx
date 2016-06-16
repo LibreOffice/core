@@ -114,7 +114,7 @@ public:
                             ShowFadeInHideButton();
                         }
 
-                        virtual ~SfxEmptySplitWin_Impl()
+                        virtual ~SfxEmptySplitWin_Impl() override
                         { disposeOnce(); }
    virtual void         dispose() override
                         {

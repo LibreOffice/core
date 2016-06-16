@@ -86,7 +86,7 @@ namespace drawinglayer
                 const basegfx::BColor& rEnd,
                 sal_uInt32 nSteps,
                 double fBorder);
-            virtual ~GeoTexSvxGradient();
+            virtual ~GeoTexSvxGradient() override;
 
             // compare operator
             virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;
@@ -120,7 +120,7 @@ namespace drawinglayer
                 sal_uInt32 nSteps,
                 double fBorder,
                 double fAngle);
-            virtual ~GeoTexSvxGradientLinear();
+            virtual ~GeoTexSvxGradientLinear() override;
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -150,7 +150,7 @@ namespace drawinglayer
                 sal_uInt32 nSteps,
                 double fBorder,
                 double fAngle);
-            virtual ~GeoTexSvxGradientAxial();
+            virtual ~GeoTexSvxGradientAxial() override;
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -176,7 +176,7 @@ namespace drawinglayer
                 double fBorder,
                 double fOffsetX,
                 double fOffsetY);
-            virtual ~GeoTexSvxGradientRadial();
+            virtual ~GeoTexSvxGradientRadial() override;
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -203,7 +203,7 @@ namespace drawinglayer
                 double fOffsetX,
                 double fOffsetY,
                 double fAngle);
-            virtual ~GeoTexSvxGradientElliptical();
+            virtual ~GeoTexSvxGradientElliptical() override;
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -230,7 +230,7 @@ namespace drawinglayer
                 double fOffsetX,
                 double fOffsetY,
                 double fAngle);
-            virtual ~GeoTexSvxGradientSquare();
+            virtual ~GeoTexSvxGradientSquare() override;
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -257,7 +257,7 @@ namespace drawinglayer
                 double fOffsetX,
                 double fOffsetY,
                 double fAngle);
-            virtual ~GeoTexSvxGradientRect();
+            virtual ~GeoTexSvxGradientRect() override;
 
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
@@ -291,7 +291,7 @@ namespace drawinglayer
                 const basegfx::B2DRange& rOutputRange,
                 double fDistance,
                 double fAngle);
-            virtual ~GeoTexSvxHatch();
+            virtual ~GeoTexSvxHatch() override;
 
             // compare operator
             virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;
@@ -329,7 +329,7 @@ namespace drawinglayer
                 const basegfx::B2DRange& rRange,
                 double fOffsetX = 0.0,
                 double fOffsetY = 0.0);
-            virtual ~GeoTexSvxTiled();
+            virtual ~GeoTexSvxTiled() override;
 
             // compare operator
             virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;

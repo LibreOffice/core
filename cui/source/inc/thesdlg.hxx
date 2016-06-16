@@ -42,7 +42,7 @@ class LookUpComboBox : public ComboBox
 
 public:
     LookUpComboBox(vcl::Window *pParent);
-    virtual ~LookUpComboBox();
+    virtual ~LookUpComboBox() override;
     virtual void dispose() override;
 
     DECL_LINK_TYPED( ModifyTimer_Hdl, Idle *, void );
@@ -85,7 +85,7 @@ public:
     ThesaurusAlternativesCtrl(vcl::Window* pParent);
 
     void init(SvxThesaurusDialog *pDialog);
-    virtual ~ThesaurusAlternativesCtrl();
+    virtual ~ThesaurusAlternativesCtrl() override;
     virtual void dispose() override;
 
     SvTreeListEntry *   AddEntry( sal_Int32 nVal, const OUString &rText, bool bIsHeader );
@@ -107,7 +107,7 @@ class ReplaceEdit : public Edit
 
 public:
     ReplaceEdit(vcl::Window *pParent);
-    virtual ~ReplaceEdit();
+    virtual ~ReplaceEdit() override;
     virtual void dispose() override;
 
     void init(Button *pBtn)  { m_pBtn = pBtn; }
@@ -135,7 +135,7 @@ class SvxThesaurusDialog : public SvxStandardDialog
     bool                    m_bWordFound;
 
 public:
-    virtual ~SvxThesaurusDialog();
+    virtual ~SvxThesaurusDialog() override;
     virtual void dispose() override;
 
     bool                    WordFound() const { return m_bWordFound; }

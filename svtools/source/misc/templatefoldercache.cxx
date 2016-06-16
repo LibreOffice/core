@@ -118,7 +118,7 @@ namespace svt
         }
 
     private:
-        virtual ~TemplateContent();
+        virtual ~TemplateContent() override;
 
     public:
         explicit TemplateContent( const INetURLObject& _rURL );

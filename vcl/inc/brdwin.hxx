@@ -140,7 +140,7 @@ public:
                                               BorderWindowStyle nTypeStyle = BorderWindowStyle::NONE );
                             ImplBorderWindow( vcl::Window* pParent, WinBits nStyle = 0,
                                               BorderWindowStyle nTypeStyle = BorderWindowStyle::NONE );
-    virtual                 ~ImplBorderWindow();
+    virtual                 ~ImplBorderWindow() override;
     virtual void            dispose() override;
 
     virtual void            MouseMove( const MouseEvent& rMEvt ) override;
@@ -299,7 +299,7 @@ class ImplStdBorderWindowView : public ImplBorderWindowView
 
 public:
                             ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );
-                            virtual ~ImplStdBorderWindowView();
+                            virtual ~ImplStdBorderWindowView() override;
 
     virtual bool        MouseMove( const MouseEvent& rMEvt ) override;
     virtual bool        MouseButtonDown( const MouseEvent& rMEvt ) override;

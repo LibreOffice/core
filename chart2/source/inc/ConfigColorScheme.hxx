@@ -46,7 +46,7 @@ class ConfigColorScheme :
 {
 public:
     explicit ConfigColorScheme( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    SAL_DLLPRIVATE virtual ~ConfigColorScheme();
+    SAL_DLLPRIVATE virtual ~ConfigColorScheme() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()

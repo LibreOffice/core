@@ -26,7 +26,7 @@ public:
         : StyleManager(rShell)
     {}
 
-    virtual ~CommonStyleManager()
+    virtual ~CommonStyleManager() override
     {}
 
     virtual sfx2::StylePreviewRenderer* CreateStylePreviewRenderer(

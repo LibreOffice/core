@@ -61,7 +61,7 @@ class XclImpDrawObjBase : protected XclImpRoot
 {
 public:
     explicit            XclImpDrawObjBase( const XclImpRoot& rRoot );
-    virtual             ~XclImpDrawObjBase();
+    virtual             ~XclImpDrawObjBase() override;
 
     /** Reads the BIFF3 OBJ record, returns a new drawing object. */
     static XclImpDrawObjRef ReadObj3( const XclImpRoot& rRoot, XclImpStream& rStrm );
@@ -918,7 +918,7 @@ class XclImpSimpleDffConverter : public SvxMSDffManager, protected XclImpRoot
 {
 public:
     explicit            XclImpSimpleDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm );
-    virtual             ~XclImpSimpleDffConverter();
+    virtual             ~XclImpSimpleDffConverter() override;
 
 protected:
     /** Returns a color from the Excel color palette. */
@@ -936,7 +936,7 @@ class XclImpDffConverter : public XclImpSimpleDffConverter, private oox::ole::MS
 {
 public:
     explicit            XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm );
-    virtual             ~XclImpDffConverter();
+    virtual             ~XclImpDffConverter() override;
 
     /** Initializes the internal progress bar with the passed size and starts it. */
     void                StartProgressBar( sal_Size nProgressSize );
@@ -1057,7 +1057,7 @@ class XclImpDrawing : protected XclImpRoot
 {
 public:
     explicit            XclImpDrawing( const XclImpRoot& rRoot, bool bOleObjects );
-    virtual             ~XclImpDrawing();
+    virtual             ~XclImpDrawing() override;
 
     /** Reads and returns a bitmap from the IMGDATA record. */
     static Graphic      ReadImgData( const XclImpRoot& rRoot, XclImpStream& rStrm );
@@ -1159,7 +1159,7 @@ class XclImpObjectManager : protected XclImpRoot
 {
 public:
     explicit            XclImpObjectManager( const XclImpRoot& rRoot );
-    virtual             ~XclImpObjectManager();
+    virtual             ~XclImpObjectManager() override;
 
     /** Reads the MSODRAWINGGROUP record. */
     void                ReadMsoDrawingGroup( XclImpStream& rStrm );

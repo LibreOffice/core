@@ -110,7 +110,7 @@ namespace xmloff
             sal_uInt16 _nPrefix, const OUString& _rName,
             const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer
         );
-        virtual ~OElementImport();
+        virtual ~OElementImport() override;
 
     protected:
         // SvXMLImportContext overridables

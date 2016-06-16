@@ -148,7 +148,7 @@ public:
     void InitializeTheme();
 
     Theme();
-    virtual ~Theme();
+    virtual ~Theme() override;
     Theme(const Theme&) = delete;
     Theme& operator=( const Theme& ) = delete;
 

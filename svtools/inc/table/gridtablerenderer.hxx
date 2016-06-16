@@ -53,7 +53,7 @@ namespace svt { namespace table
                 at least as long as the renderer instance lives
         */
         GridTableRenderer( ITableModel& _rModel );
-        virtual ~GridTableRenderer();
+        virtual ~GridTableRenderer() override;
 
         /** determines whether or not to paint grid lines
         */

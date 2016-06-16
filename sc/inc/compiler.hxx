@@ -353,7 +353,7 @@ public:
 
     ScCompiler( ScDocument* pDocument, const ScAddress&,ScTokenArray& rArr);
 
-    virtual ~ScCompiler();
+    virtual ~ScCompiler() override;
 
 public:
     static void DeInit();               /// all

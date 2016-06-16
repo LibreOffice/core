@@ -133,7 +133,7 @@ namespace svgio
                 SVGToken aType,
                 SvgDocument& rDocument,
                 SvgNode* pParent);
-            virtual ~SvgNode();
+            virtual ~SvgNode() override;
             SvgNode(const SvgNode&) = delete;
             SvgNode& operator=(const SvgNode&) = delete;
 

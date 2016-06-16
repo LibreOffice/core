@@ -32,7 +32,7 @@ public:
 
 public:
     FmInputRecordNoDialog(vcl::Window * pParent);
-    virtual ~FmInputRecordNoDialog();
+    virtual ~FmInputRecordNoDialog() override;
     virtual void dispose() override;
 
     void SetValue(long dNew) { m_pRecordNo->SetValue(dNew); }

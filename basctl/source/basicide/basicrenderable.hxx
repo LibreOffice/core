@@ -39,7 +39,7 @@ class Renderable :
     VclPtr<Printer> getPrinter();
 public:
     explicit Renderable (BaseWindow*);
-    virtual ~Renderable();
+    virtual ~Renderable() override;
 
     // XRenderable
     virtual sal_Int32 SAL_CALL getRendererCount (

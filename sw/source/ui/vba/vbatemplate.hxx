@@ -31,7 +31,7 @@ private:
 public:
     SwVbaTemplate( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const OUString& );
-    virtual ~SwVbaTemplate();
+    virtual ~SwVbaTemplate() override;
 
    // XTemplate
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;

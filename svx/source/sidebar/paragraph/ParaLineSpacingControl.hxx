@@ -31,7 +31,7 @@ class ParaLineSpacingControl : public SfxPopupWindow
 {
 public:
     explicit ParaLineSpacingControl(sal_uInt16 nId);
-    virtual ~ParaLineSpacingControl();
+    virtual ~ParaLineSpacingControl() override;
     virtual void dispose() override;
 
 private:

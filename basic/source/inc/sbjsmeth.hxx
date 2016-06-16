@@ -31,7 +31,7 @@ class SbJScriptMethod : public SbMethod
 {
 public:
     SbJScriptMethod( const OUString&, SbxDataType, SbModule* );
-    virtual ~SbJScriptMethod();
+    virtual ~SbJScriptMethod() override;
 
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_JSCRIPTMETH,2);
 };

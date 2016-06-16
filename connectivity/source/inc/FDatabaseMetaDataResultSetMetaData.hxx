@@ -41,7 +41,7 @@ namespace connectivity
         ::std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
 
     protected:
-        virtual ~ODatabaseMetaDataResultSetMetaData();
+        virtual ~ODatabaseMetaDataResultSetMetaData() override;
     public:
         // a Constructor, that is needed for when Returning the Object is needed:
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:

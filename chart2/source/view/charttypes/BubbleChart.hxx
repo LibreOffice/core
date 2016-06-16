@@ -33,7 +33,7 @@ public:
 
     BubbleChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount );
-    virtual ~BubbleChart();
+    virtual ~BubbleChart() override;
 
     virtual void createShapes() override;
 

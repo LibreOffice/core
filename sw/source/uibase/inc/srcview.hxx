@@ -59,7 +59,7 @@ private:
 public:
     SwSrcView(SfxViewFrame* pFrame, SfxViewShell*);
 
-    virtual ~SwSrcView();
+    virtual ~SwSrcView() override;
 
     SwDocShell*         GetDocShell();
     void                SaveContent(const OUString& rTmpFile);

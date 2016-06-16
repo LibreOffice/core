@@ -196,7 +196,7 @@ class XclExpPassHash : public XclExpRecord
 {
 public:
     XclExpPassHash(const css::uno::Sequence<sal_Int8>& aHash);
-    virtual ~XclExpPassHash();
+    virtual ~XclExpPassHash() override;
 
 private:
     virtual void    WriteBody(XclExpStream& rStrm) override;
@@ -405,7 +405,7 @@ public:
                 Else, use defined database range; used with XclExpTables.
      */
     explicit            ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const ScDBData* pDefinedData );
-    virtual             ~ExcAutoFilterRecs();
+    virtual             ~ExcAutoFilterRecs() override;
 
     void                AddObjRecs();
 

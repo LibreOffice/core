@@ -28,7 +28,7 @@ class X11SalTimer : public SalTimer
     SalXLib *mpXLib;
 public:
     X11SalTimer( SalXLib *pXLib ) : mpXLib( pXLib ) {}
-    virtual ~X11SalTimer();
+    virtual ~X11SalTimer() override;
 
     // override all pure virtual methods
     void  Start( sal_uIntPtr nMS ) override;

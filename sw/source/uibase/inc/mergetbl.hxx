@@ -34,7 +34,7 @@ protected:
 
 public:
     SwMergeTableDlg( vcl::Window *pParent, bool& rWithPrev );
-    virtual ~SwMergeTableDlg();
+    virtual ~SwMergeTableDlg() override;
     virtual void dispose() override;
 };
 

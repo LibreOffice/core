@@ -44,7 +44,7 @@ public:
 
     explicit            ScSpellDialogChildWindow( vcl::Window* pParent, sal_uInt16 nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
-    virtual             ~ScSpellDialogChildWindow();
+    virtual             ~ScSpellDialogChildWindow() override;
 
     /** This method makes the one from the base class public so that
         it can be called from the view shell when one is created.

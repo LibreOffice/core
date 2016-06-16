@@ -113,7 +113,7 @@ namespace comphelper
             );
 
     protected:
-        virtual ~OAccessibleWrapper( );
+        virtual ~OAccessibleWrapper( ) override;
 
     private:
         OAccessibleWrapper( const OAccessibleWrapper& ) = delete;
@@ -224,7 +224,7 @@ namespace comphelper
         virtual void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) throw (css::uno::RuntimeException) = 0;
 
     protected:
-        virtual ~OAccessibleContextWrapperHelper( );
+        virtual ~OAccessibleContextWrapperHelper( ) override;
 
         OAccessibleContextWrapperHelper(const OAccessibleContextWrapperHelper&) = delete;
         OAccessibleContextWrapperHelper& operator=(const OAccessibleContextWrapperHelper&) = delete;
@@ -299,7 +299,7 @@ namespace comphelper
         virtual void SAL_CALL disposing()  throw (css::uno::RuntimeException) override;
 
     protected:
-        virtual ~OAccessibleContextWrapper();
+        virtual ~OAccessibleContextWrapper() override;
 
     private:
         OAccessibleContextWrapper( const OAccessibleContextWrapper& ) = delete;
@@ -385,7 +385,7 @@ namespace comphelper
         void    implTranslateChildEventValue( const css::uno::Any& _rInValue, css::uno::Any& _rOutValue );
 
     protected:
-        virtual ~OWrappedAccessibleChildrenManager( );
+        virtual ~OWrappedAccessibleChildrenManager( ) override;
 
     private:
         OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& ) = delete;

@@ -92,7 +92,7 @@ private:
     std::shared_ptr<MasterPageContainer> mpContainer;
 
     RecentlyUsedMasterPages();
-    virtual ~RecentlyUsedMasterPages();
+    virtual ~RecentlyUsedMasterPages() override;
 
     /** Call this method after a new object has been created.
     */

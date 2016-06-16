@@ -61,7 +61,7 @@ public:
                     css::sheet::TablePageBreakData aTablePageBreakData) throw (css::uno::RuntimeException):
               ScVbaHPageBreak_BASE( xParent,xContext,xProps,aTablePageBreakData ){}
 
-    virtual ~ScVbaHPageBreak(){}
+    virtual ~ScVbaHPageBreak() override {}
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
@@ -79,7 +79,7 @@ public:
                      css::uno::Reference< css::beans::XPropertySet >& xProps,
                      css::sheet::TablePageBreakData aTablePageBreakData) throw (css::uno::RuntimeException);
 
-    virtual ~ScVbaVPageBreak();
+    virtual ~ScVbaVPageBreak() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

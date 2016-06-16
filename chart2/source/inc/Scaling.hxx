@@ -42,7 +42,7 @@ public:
     /// base is 10.0
     explicit LogarithmicScaling();
     LogarithmicScaling( double fBase );
-    virtual ~LogarithmicScaling();
+    virtual ~LogarithmicScaling() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
@@ -83,7 +83,7 @@ public:
     /// base is 10.0
     explicit ExponentialScaling();
     explicit ExponentialScaling( double fBase );
-    virtual ~ExponentialScaling();
+    virtual ~ExponentialScaling() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
@@ -123,7 +123,7 @@ public:
     explicit LinearScaling();
     /// y(x) = fSlope * x + fOffset
     LinearScaling( double fSlope, double fOffset );
-    virtual ~LinearScaling();
+    virtual ~LinearScaling() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
@@ -162,7 +162,7 @@ public:
     /// exponent 10.0
     explicit PowerScaling();
     explicit PowerScaling( double fExponent );
-    virtual ~PowerScaling();
+    virtual ~PowerScaling() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()

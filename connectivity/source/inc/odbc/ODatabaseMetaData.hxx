@@ -57,7 +57,7 @@ namespace connectivity
         protected:
             OUString getURLImpl();
             virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
-            virtual ~ODatabaseMetaData();
+            virtual ~ODatabaseMetaData() override;
 
         public:
             ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon);

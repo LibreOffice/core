@@ -48,7 +48,7 @@ class SwGrammarContact : public IGrammarContact, public SwClient
 
 public:
     SwGrammarContact();
-    virtual ~SwGrammarContact() { aTimer.Stop(); delete mpProxyList; }
+    virtual ~SwGrammarContact() override { aTimer.Stop(); delete mpProxyList; }
 
     // (pure) virtual functions of IGrammarContact
     virtual void updateCursorPosition( const SwPosition& rNewPos ) override;

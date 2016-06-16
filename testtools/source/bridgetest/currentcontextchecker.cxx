@@ -48,7 +48,7 @@ class CurrentContext:
 public:
     CurrentContext();
 
-    virtual ~CurrentContext();
+    virtual ~CurrentContext() override;
 
     CurrentContext(const CurrentContext&) = delete;
     CurrentContext& operator=(const CurrentContext&) = delete;

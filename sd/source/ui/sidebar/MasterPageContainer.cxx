@@ -120,7 +120,7 @@ public:
 
 private:
     Implementation();
-    virtual ~Implementation();
+    virtual ~Implementation() override;
 
     class Deleter { public:
         void operator() (Implementation* pObject) { delete pObject; }

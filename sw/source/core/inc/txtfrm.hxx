@@ -199,7 +199,7 @@ class SwTextFrame: public SwContentFrame
     void CalcHeightOfLastLine( const bool _bUseFont = false );
 
     virtual void DestroyImpl() override;
-    virtual ~SwTextFrame();
+    virtual ~SwTextFrame() override;
 
 protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;

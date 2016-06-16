@@ -44,7 +44,7 @@ private:
 
 public:
                             SbPropertyValues();
-    virtual                 ~SbPropertyValues();
+    virtual                 ~SbPropertyValues() override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL

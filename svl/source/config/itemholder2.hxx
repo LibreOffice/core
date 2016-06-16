@@ -36,7 +36,7 @@ class ItemHolder2 : private ItemHolderMutexBase
     public:
 
         ItemHolder2();
-        virtual ~ItemHolder2();
+        virtual ~ItemHolder2() override;
         static void holdConfigItem(EItem eItem);
 
     // uno interface

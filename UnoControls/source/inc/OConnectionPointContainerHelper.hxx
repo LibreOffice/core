@@ -39,7 +39,7 @@ public:
 
     OConnectionPointContainerHelper( ::osl::Mutex& aMutex );
 
-    virtual ~OConnectionPointContainerHelper();
+    virtual ~OConnectionPointContainerHelper() override;
 
     //  XInterface
 

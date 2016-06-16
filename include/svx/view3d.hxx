@@ -78,7 +78,7 @@ protected:
 
 public:
     E3dView(SdrModel* pModel, OutputDevice* pOut = nullptr);
-    virtual ~E3dView();
+    virtual ~E3dView() override;
 
     // Output all marked Objects on the given OutputDevice.
     virtual void DrawMarkedObj(OutputDevice& rOut) const override;

@@ -77,7 +77,7 @@ public:
                     ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
                     const ScAddress& aCursorPos, const bool bUndo);
 
-    virtual ~ScNameDefDlg();
+    virtual ~ScNameDefDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

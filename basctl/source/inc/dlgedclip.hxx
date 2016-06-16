@@ -39,7 +39,7 @@ protected:
 
 public:
     DlgEdTransferableImpl( const css::uno::Sequence< css::datatransfer::DataFlavor >& aSeqFlavors, const css::uno::Sequence< css::uno::Any >& aSeqData );
-    virtual ~DlgEdTransferableImpl();
+    virtual ~DlgEdTransferableImpl() override;
 
     // XTransferable
     virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) override;

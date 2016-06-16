@@ -112,7 +112,7 @@ class ScLinkListener : public SvtListener
     Link<const SfxHint&,void>  aLink;
 public:
                     ScLinkListener(const Link<const SfxHint&,void>& rL) : aLink(rL) {}
-    virtual         ~ScLinkListener();
+    virtual         ~ScLinkListener() override;
     virtual void Notify( const SfxHint& rHint ) override;
 };
 
@@ -229,7 +229,7 @@ protected:
 public:
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR);
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR);
-    virtual                 ~ScCellRangesBase();
+    virtual                 ~ScCellRangesBase() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
                                     throw(css::uno::RuntimeException, std::exception) override;
@@ -492,7 +492,7 @@ private:
 
 public:
                             ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
-    virtual                 ~ScCellRangesObj();
+    virtual                 ~ScCellRangesObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
                                     throw(css::uno::RuntimeException, std::exception) override;
@@ -635,7 +635,7 @@ protected:
 
 public:
                             ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScCellRangeObj();
+    virtual                 ~ScCellRangeObj() override;
 
                             // uses ObjectShell from document, if set (returns NULL otherwise)
     static css::uno::Reference<css::table::XCellRange>
@@ -841,7 +841,7 @@ public:
     static const SfxItemPropertyMap& GetCellPropertyMap();
 
                             ScCellObj(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual                 ~ScCellObj();
+    virtual                 ~ScCellObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
                                     throw(css::uno::RuntimeException, std::exception) override;
@@ -1007,7 +1007,7 @@ protected:
 
 public:
                             ScTableSheetObj(ScDocShell* pDocSh, SCTAB nTab);
-    virtual                 ~ScTableSheetObj();
+    virtual                 ~ScTableSheetObj() override;
 
     void                    InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab);
 
@@ -1249,7 +1249,7 @@ protected:
 
 public:
                             ScTableColumnObj(ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab);
-    virtual                 ~ScTableColumnObj();
+    virtual                 ~ScTableColumnObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface(
                                 const css::uno::Type & rType )
@@ -1301,7 +1301,7 @@ protected:
 
 public:
                             ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab);
-    virtual                 ~ScTableRowObj();
+    virtual                 ~ScTableRowObj() override;
 
                             // XPropertySet override due to row properties
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
@@ -1328,7 +1328,7 @@ private:
 
 public:
                             ScCellsObj(ScDocShell* pDocSh, const ScRangeList& rR);
-    virtual                 ~ScCellsObj();
+    virtual                 ~ScCellsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -1368,7 +1368,7 @@ private:
 
 public:
                             ScCellsEnumeration(ScDocShell* pDocSh, const ScRangeList& rR);
-    virtual                 ~ScCellsEnumeration();
+    virtual                 ~ScCellsEnumeration() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -1403,7 +1403,7 @@ private:
 
 public:
                             ScCellFormatsObj(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScCellFormatsObj();
+    virtual                 ~ScCellFormatsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -1451,7 +1451,7 @@ private:
 
 public:
                             ScCellFormatsEnumeration(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScCellFormatsEnumeration();
+    virtual                 ~ScCellFormatsEnumeration() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -1489,7 +1489,7 @@ private:
 
 public:
                             ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScUniqueCellFormatsObj();
+    virtual                 ~ScUniqueCellFormatsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -1530,7 +1530,7 @@ private:
 
 public:
                             ScUniqueCellFormatsEnumeration(ScDocShell* pDocShell, const ScMyRangeLists& rRangeLists);
-    virtual                 ~ScUniqueCellFormatsEnumeration();
+    virtual                 ~ScUniqueCellFormatsEnumeration() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

@@ -46,7 +46,7 @@ private:
                     ScDocument* pD );
 
 public:
-    virtual ~ScAddInListener();
+    virtual ~ScAddInListener() override;
 
     // create Listener and put it into global list
     static ScAddInListener* CreateListener(

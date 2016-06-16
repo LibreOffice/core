@@ -122,7 +122,7 @@ namespace dbaui
         OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData );
 
     public:
-        virtual ~OTableWindow();
+        virtual ~OTableWindow() override;
         virtual void dispose() override;
 
         // late Constructor, see also CreateListbox and FillListbox

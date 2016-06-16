@@ -87,7 +87,7 @@ private:
 
 public:
                             SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObjFact);
-    virtual                 ~SdModule();
+    virtual                 ~SdModule() override;
 
     SdTransferable*         pTransferClip;
     SdTransferable*         pTransferDrag;

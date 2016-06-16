@@ -69,7 +69,7 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
             bool bDefaultStyle = false );
-    virtual ~XMLTextStyleContext();
+    virtual ~XMLTextStyleContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,

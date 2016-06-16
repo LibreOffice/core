@@ -95,7 +95,7 @@ public:
 public:
     FmRecordCountListener(const css::uno::Reference< css::sdbc::XResultSet >& dbcCursor);
     // the set has to support the sdb::ResultSet service
-    virtual ~FmRecordCountListener();
+    virtual ~FmRecordCountListener() override;
 
     //  DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject)
     //  virtual sal_Bool queryInterface(css::uno::Uik aUik, css::uno::Reference< css::uno::XInterface >& rOut);

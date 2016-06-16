@@ -41,7 +41,7 @@ public:
         ::sd::DrawDocShell* pDocShell,
         vcl::Window* pWindow,
         const SfxItemSet& rInAttrs);
-    virtual ~SdPresLayoutDlg();
+    virtual ~SdPresLayoutDlg() override;
     virtual void dispose() override;
 
     void                GetAttr(SfxItemSet& rOutAttrs);

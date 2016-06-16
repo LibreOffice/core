@@ -55,7 +55,7 @@ public:
 
     // basic constructor, used from SdrObject.
     explicit ViewContactOfSdrObj(SdrObject& rObj);
-    virtual ~ViewContactOfSdrObj();
+    virtual ~ViewContactOfSdrObj() override;
 
     // Access to possible sub-hierarchy
     virtual sal_uInt32 GetObjectCount() const override;

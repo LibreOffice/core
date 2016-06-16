@@ -135,7 +135,7 @@ protected:
 
 public:
                     EditorWindow (vcl::Window* pParent, ModulWindow*);
-                    virtual ~EditorWindow();
+                    virtual ~EditorWindow() override;
     virtual void    dispose() override;
 
     ExtTextEngine*  GetEditEngine() const   { return pEditEngine.get(); }
@@ -209,7 +209,7 @@ protected:
 
 public:
     WatchTreeListBox( vcl::Window* pParent, WinBits nWinBits );
-    virtual ~WatchTreeListBox();
+    virtual ~WatchTreeListBox() override;
     virtual void    dispose() override;
 
     void            RequestingChildren( SvTreeListEntry * pParent ) override;
@@ -241,7 +241,7 @@ protected:
 
 public:
     explicit WatchWindow (Layout* pParent);
-    virtual ~WatchWindow();
+    virtual ~WatchWindow() override;
     virtual void    dispose() override;
 
     void            AddWatch( const OUString& rVName );
@@ -262,7 +262,7 @@ protected:
 
 public:
     explicit StackWindow (Layout* pParent);
-    virtual ~StackWindow();
+    virtual ~StackWindow() override;
     virtual void    dispose() override;
 
     void            UpdateCalls();
@@ -285,7 +285,7 @@ protected:
 
 public:
     explicit ComplexEditorWindow( ModulWindow* pParent );
-    virtual             ~ComplexEditorWindow();
+    virtual             ~ComplexEditorWindow() override;
     virtual void        dispose() override;
     BreakPointWindow&   GetBrkWindow()      { return *aBrkWindow.get(); }
     LineNumberWindow&   GetLineNumberWindow() { return *aLineNumberWindow.get(); }
@@ -325,7 +325,7 @@ protected:
 public:
     ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString& aModule );
 
-                    virtual ~ModulWindow();
+                    virtual ~ModulWindow() override;
     virtual void    dispose() override;
 
     virtual void    ExecuteCommand (SfxRequest& rReq) override;
@@ -417,7 +417,7 @@ class ModulWindowLayout: public Layout
 {
 public:
     ModulWindowLayout (vcl::Window* pParent, ObjectCatalog&);
-    virtual ~ModulWindowLayout();
+    virtual ~ModulWindowLayout() override;
     virtual void dispose() override;
 public:
     // Layout:
@@ -451,7 +451,7 @@ private:
     {
     public:
         SyntaxColors ();
-        virtual ~SyntaxColors ();
+        virtual ~SyntaxColors () override;
     public:
         void SetActiveEditor (EditorWindow* pEditor_) { pEditor = pEditor_; }
         void SettingsChanged ();
@@ -490,7 +490,7 @@ private:
 
 public:
     explicit CodeCompleteListBox( CodeCompleteWindow* pPar );
-    virtual ~CodeCompleteListBox();
+    virtual ~CodeCompleteListBox() override;
     virtual void dispose() override;
     void InsertSelectedEntry(); //insert the selected entry
 
@@ -513,7 +513,7 @@ private:
 
 public:
     explicit CodeCompleteWindow( EditorWindow* pPar );
-    virtual ~CodeCompleteWindow();
+    virtual ~CodeCompleteWindow() override;
     virtual void dispose() override;
 
     void InsertEntry( const OUString& aStr );

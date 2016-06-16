@@ -129,7 +129,7 @@ class SwEditRegionDlg : public SfxModalDialog
 
 public:
     SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh );
-    virtual ~SwEditRegionDlg();
+    virtual ~SwEditRegionDlg() override;
     virtual void dispose() override;
 
     void    SelectSection(const OUString& rSectionName);
@@ -180,7 +180,7 @@ class SwInsertSectionTabPage : public SfxTabPage
 
 public:
     SwInsertSectionTabPage(vcl::Window *pParent, const SfxItemSet &rAttrSet);
-    virtual ~SwInsertSectionTabPage();
+    virtual ~SwInsertSectionTabPage() override;
     virtual void dispose() override;
 
     void    SetWrtShell(SwWrtShell& rSh);
@@ -225,7 +225,7 @@ class SwSectionFootnoteEndTabPage : public SfxTabPage
 
 public:
     SwSectionFootnoteEndTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
-    virtual ~SwSectionFootnoteEndTabPage();
+    virtual ~SwSectionFootnoteEndTabPage() override;
     virtual void dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -244,7 +244,7 @@ class SwSectionIndentTabPage : public SfxTabPage
     DECL_LINK_TYPED(IndentModifyHdl, Edit&, void);
 public:
     SwSectionIndentTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
-    virtual ~SwSectionIndentTabPage();
+    virtual ~SwSectionIndentTabPage() override;
     virtual void dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -272,7 +272,7 @@ protected:
     virtual short   Ok() override;
 public:
     SwInsertSectionTabDialog(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
-    virtual ~SwInsertSectionTabDialog();
+    virtual ~SwInsertSectionTabDialog() override;
 
     void        SetSectionData(SwSectionData const& rSect);
     SwSectionData * GetSectionData() { return m_pSectionData.get(); }
@@ -291,7 +291,7 @@ protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 public:
     SwSectionPropertyTabDialog(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
-    virtual ~SwSectionPropertyTabDialog();
+    virtual ~SwSectionPropertyTabDialog() override;
 };
 
 #endif

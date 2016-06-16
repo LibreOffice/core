@@ -42,7 +42,7 @@ public:
 
     explicit SvxLineItem( const sal_uInt16 nId );
     SvxLineItem( const SvxLineItem& rCpy );
-    virtual ~SvxLineItem();
+    virtual ~SvxLineItem() override;
     SvxLineItem &operator=( const SvxLineItem& rLine );
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

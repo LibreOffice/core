@@ -55,7 +55,7 @@ private:
 public:
                                 SvNumberFormatsSupplierObj();
                                 SvNumberFormatsSupplierObj(SvNumberFormatter* pForm);
-    virtual                     ~SvNumberFormatsSupplierObj();
+    virtual                     ~SvNumberFormatsSupplierObj() override;
 
     void                        SetNumberFormatter(SvNumberFormatter* pNew);
     SvNumberFormatter*          GetNumberFormatter() const;

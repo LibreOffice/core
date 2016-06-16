@@ -38,7 +38,7 @@ class CertificateExtension_XmlSecImpl : public ::cppu::WeakImplHelper<
 
     public:
         CertificateExtension_XmlSecImpl() ;
-        virtual ~CertificateExtension_XmlSecImpl() ;
+        virtual ~CertificateExtension_XmlSecImpl() override ;
 
         //Methods from XCertificateExtension
         virtual sal_Bool SAL_CALL isCritical() throw( css::uno::RuntimeException, std::exception ) override ;

@@ -80,7 +80,7 @@ public:
     ODateTimeDialog( vcl::Window* pParent
                         ,const css::uno::Reference< css::report::XSection>& _xHoldAlive
                         ,::rptui::OReportController* _pController);
-    virtual ~ODateTimeDialog();
+    virtual ~ODateTimeDialog() override;
     virtual void dispose() override;
     virtual short   Execute() override;
 };

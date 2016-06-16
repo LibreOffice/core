@@ -32,7 +32,7 @@ class PanelTitleBar
 {
 public:
     PanelTitleBar(const OUString& rsTitle, vcl::Window* pParentWindow, Panel* pPanel);
-    virtual ~PanelTitleBar();
+    virtual ~PanelTitleBar() override;
     virtual void dispose() override;
 
     void SetMoreOptionsCommand(const OUString& rsCommandName,

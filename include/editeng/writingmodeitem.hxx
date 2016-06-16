@@ -32,7 +32,7 @@ public:
 
     SvxWritingModeItem( css::text::WritingMode eValue /*= css::text::WritingMode_LR_TB*/,
                 sal_uInt16 nWhich /*= SDRATTR_TEXTDIRECTION*/ );
-    virtual ~SvxWritingModeItem();
+    virtual ~SvxWritingModeItem() override;
 
     SvxWritingModeItem& operator=( const SvxWritingModeItem& rItem );
 

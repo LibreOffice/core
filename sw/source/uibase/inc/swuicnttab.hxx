@@ -101,7 +101,7 @@ public:
                         SwWrtShell &rShell,
                         SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
                         bool bGlobal = false);
-    virtual ~SwMultiTOXTabDialog();
+    virtual ~SwMultiTOXTabDialog() override;
     virtual void        dispose() override;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
@@ -221,7 +221,7 @@ class SwTOXSelectTabPage : public SfxTabPage
 
 public:
     SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
-    virtual ~SwTOXSelectTabPage();
+    virtual ~SwTOXSelectTabPage() override;
     virtual void        dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -284,7 +284,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
 
 public:
     SwTokenWindow(vcl::Window* pParent);
-    virtual ~SwTokenWindow();
+    virtual ~SwTokenWindow() override;
     virtual void dispose() override;
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
@@ -330,7 +330,7 @@ class SwIdxTreeListBox : public SvTreeListBox
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 public:
     SwIdxTreeListBox(vcl::Window* pPar, WinBits nStyle);
-    virtual ~SwIdxTreeListBox();
+    virtual ~SwIdxTreeListBox() override;
     virtual void dispose() override;
 
     void SetTabPage(SwTOXEntryTabPage* pPar) { pParent = pPar; }
@@ -437,7 +437,7 @@ class SwTOXEntryTabPage : public SfxTabPage
 
 public:
     SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
-    virtual ~SwTOXEntryTabPage();
+    virtual ~SwTOXEntryTabPage() override;
     virtual void dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -484,7 +484,7 @@ class SwTOXStylesTabPage : public SfxTabPage
 
 public:
     SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
-    virtual ~SwTOXStylesTabPage();
+    virtual ~SwTOXStylesTabPage() override;
     virtual void        dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;

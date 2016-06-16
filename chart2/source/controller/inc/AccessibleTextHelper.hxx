@@ -49,7 +49,7 @@ class AccessibleTextHelper :
 {
 public:
     explicit AccessibleTextHelper( DrawViewWrapper * pDrawViewWrapper );
-    virtual ~AccessibleTextHelper();
+    virtual ~AccessibleTextHelper() override;
 
     // ____ XInitialization ____
     /** Must be called at least once for this helper class to work.

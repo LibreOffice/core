@@ -405,7 +405,7 @@ protected:
     SwValueField( const SwValueField& rField );
 
 public:
-    virtual                 ~SwValueField();
+    virtual                 ~SwValueField() override;
 
     virtual SwFieldType*    ChgTyp( SwFieldType* ) override;
     virtual void            SetLanguage(sal_uInt16 nLng) override;

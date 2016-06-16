@@ -69,7 +69,7 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    virtual ~FuDraw();
+    virtual ~FuDraw() override;
 
     Pointer aNewPointer;
     Pointer aOldPointer;

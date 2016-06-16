@@ -60,7 +60,7 @@ namespace svx
 
     public:
         explicit WebConnectionInfoDialog( vcl::Window* pParent );
-        virtual ~WebConnectionInfoDialog();
+        virtual ~WebConnectionInfoDialog() override;
         virtual void dispose() override;
     };
 

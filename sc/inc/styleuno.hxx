@@ -61,7 +61,7 @@ private:
 
 public:
                             ScStyleFamiliesObj(ScDocShell* pDocSh);
-    virtual                 ~ScStyleFamiliesObj();
+    virtual                 ~ScStyleFamiliesObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -130,7 +130,7 @@ private:
 
 public:
                             ScStyleFamilyObj(ScDocShell* pDocSh, SfxStyleFamily eFam);
-    virtual                 ~ScStyleFamilyObj();
+    virtual                 ~ScStyleFamilyObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -234,7 +234,7 @@ private:
 public:
                             ScStyleObj() = delete;
                             ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName);
-    virtual                 ~ScStyleObj();
+    virtual                 ~ScStyleObj() override;
 
                             // created by getImplementation:
     bool                    IsInserted() const      { return pDocShell != nullptr; }

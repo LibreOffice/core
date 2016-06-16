@@ -38,7 +38,7 @@ class HHConvDic :
 
 public:
     HHConvDic( const OUString &rName, const OUString &rMainURL );
-    virtual ~HHConvDic();
+    virtual ~HHConvDic() override;
 
     // XConversionDictionary
     virtual void SAL_CALL addEntry( const OUString& aLeftText, const OUString& aRightText ) throw (css::lang::IllegalArgumentException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;

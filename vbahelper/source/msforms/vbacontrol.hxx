@@ -57,7 +57,7 @@ protected:
 public:
     ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pHelper );
-    virtual ~ScVbaControl();
+    virtual ~ScVbaControl() override;
     // This class will own the helper, so make sure it is allocated from
     // the heap
     void setGeometryHelper( ov::AbstractGeometryAttributes* pHelper );

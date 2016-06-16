@@ -55,7 +55,7 @@ namespace
             if (mxFrame.is())
                 mxFrame->addFrameActionListener(this);
         }
-        virtual ~FrameListener()
+        virtual ~FrameListener() override
         {
         }
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)

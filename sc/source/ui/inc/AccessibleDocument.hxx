@@ -68,7 +68,7 @@ public:
 
     DECL_LINK_TYPED( WindowChildEventListener, VclWindowEvent&, void );
 protected:
-    virtual ~ScAccessibleDocument();
+    virtual ~ScAccessibleDocument() override;
 
     using ScAccessibleDocumentBase::IsDefunc;
 

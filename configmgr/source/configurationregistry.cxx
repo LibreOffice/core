@@ -78,7 +78,7 @@ private:
     Service(const Service&) = delete;
     Service& operator=(const Service&) = delete;
 
-    virtual ~Service() {}
+    virtual ~Service() override {}
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -161,7 +161,7 @@ private:
     RegistryKey(const RegistryKey&) = delete;
     RegistryKey& operator=(const RegistryKey&) = delete;
 
-    virtual ~RegistryKey() {}
+    virtual ~RegistryKey() override {}
 
     virtual OUString SAL_CALL getKeyName()
         throw (css::uno::RuntimeException, std::exception) override;

@@ -84,7 +84,7 @@ protected:
     OUString aToolString;  // tool string copy
 
     virtual void Broadcast( sal_uInt32 );      // Broadcast-Call
-    virtual ~SbxValue();
+    virtual ~SbxValue() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
 public:
@@ -234,7 +234,7 @@ protected:
     SbxInfoRef  pInfo;              // Probably called information
     sal_uInt32 nUserData;           // User data for Call()
     SbxObject* pParent;             // Currently attached object
-    virtual ~SbxVariable();
+    virtual ~SbxVariable() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
 public:

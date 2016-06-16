@@ -64,7 +64,7 @@ public:
 
     ImpSVGDialog( vcl::Window* pParent, /*ResMgr& rResMgr,*/
                   css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
-    virtual ~ImpSVGDialog();
+    virtual ~ImpSVGDialog() override;
     virtual void dispose() override;
 
     css::uno::Sequence< css::beans::PropertyValue > GetFilterData();

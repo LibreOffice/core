@@ -84,7 +84,7 @@ private:
 
 public:
     explicit        ScrollBar( vcl::Window* pParent, WinBits nStyle = WB_VERT );
-    virtual         ~ScrollBar();
+    virtual         ~ScrollBar() override;
     virtual void    dispose() override;
 
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;

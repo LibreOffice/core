@@ -66,7 +66,7 @@ class ConfigFlush : public BaseLock
 
         /** @short  standard dtor.
          */
-        virtual ~ConfigFlush();
+        virtual ~ConfigFlush() override;
 
 
     // uno interface

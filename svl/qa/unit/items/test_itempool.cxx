@@ -19,7 +19,7 @@ class PoolItemTest : public CppUnit::TestFixture
 {
   public:
              PoolItemTest() {}
-    virtual ~PoolItemTest() {}
+    virtual ~PoolItemTest() override {}
 
     void testPool();
 

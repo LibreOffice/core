@@ -49,7 +49,7 @@ public:
     /**
     * Destructor
     */
-    virtual ~CalendarImpl();
+    virtual ~CalendarImpl() override;
 
 
     // Methods

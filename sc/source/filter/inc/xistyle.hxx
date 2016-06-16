@@ -388,7 +388,7 @@ public:
     const XclImpXF& operator=(const XclImpXF&) = delete;
 
     explicit            XclImpXF( const XclImpRoot& rRoot );
-    virtual             ~XclImpXF();
+    virtual             ~XclImpXF() override;
 
     /** Reads an XF record. */
     void                ReadXF( XclImpStream& rStrm );
@@ -619,7 +619,7 @@ public:
     const XclImpXFRangeBuffer& operator=(const XclImpXFRangeBuffer&) = delete;
 
     explicit            XclImpXFRangeBuffer( const XclImpRoot& rRoot );
-    virtual             ~XclImpXFRangeBuffer();
+    virtual             ~XclImpXFRangeBuffer() override;
 
     /** Clears all buffered data, used to set up for a new sheet. */
     void                Initialize();

@@ -330,7 +330,7 @@ public:
                             GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = nullptr );
                             GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = nullptr );
                             explicit GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr = nullptr );
-                            virtual ~GraphicObject();
+                            virtual ~GraphicObject() override;
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
     bool                    operator==( const GraphicObject& rCacheObj ) const;

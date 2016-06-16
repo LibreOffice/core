@@ -67,7 +67,7 @@ namespace sdr
                 sal_uInt16 nCenY2 = 0,
                 double fShearX = 0.0,
                 double fRotation = 0.0);
-            virtual ~OverlayAnimatedBitmapEx();
+            virtual ~OverlayAnimatedBitmapEx() override;
 
             const BitmapEx& getBitmapEx1() const { return maBitmapEx1; }
             const BitmapEx& getBitmapEx2() const { return maBitmapEx2; }

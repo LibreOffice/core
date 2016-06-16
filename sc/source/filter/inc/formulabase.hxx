@@ -597,7 +597,7 @@ public:
     explicit            OpCodeProvider(
                             const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
                             FilterType eFilter, BiffType eBiff, bool bImportFilter );
-    virtual             ~OpCodeProvider();
+    virtual             ~OpCodeProvider() override;
 
     /** Returns the structure containing all token op-codes for operators and
         special tokens used by the Calc document and its formula parser. */

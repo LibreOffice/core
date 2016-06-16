@@ -69,7 +69,7 @@ public:
           mpCharCache(nullptr),
           mpParaCache(nullptr)
     {}
-    virtual ~SwStyleManager();
+    virtual ~SwStyleManager() override;
     virtual std::shared_ptr<SfxItemSet> getAutomaticStyle( const SfxItemSet& rSet,
                                                                IStyleAccess::SwAutoStyleFamily eFamily ) override;
     virtual std::shared_ptr<SfxItemSet> getByName( const OUString& rName,

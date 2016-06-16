@@ -56,7 +56,7 @@ public:
         sal_uInt16 nChildWindowId,
         ViewShellBase& rViewShellBase,
         ::std::unique_ptr<SfxShell> && pShell);
-    virtual ~ChildWindowPane();
+    virtual ~ChildWindowPane() override;
 
     /** Hide the pane.  To make the pane visible again, call GetWindow().
     */

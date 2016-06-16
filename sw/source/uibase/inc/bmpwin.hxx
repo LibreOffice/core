@@ -42,7 +42,7 @@ private:
 
 public:
     BmpWindow(vcl::Window* pPar, WinBits nStyle);
-    virtual ~BmpWindow();
+    virtual ~BmpWindow() override;
     void MirrorVert(bool bMirror) { bVert = bMirror; Invalidate(); }
     void MirrorHorz(bool bMirror) { bHorz = bMirror; Invalidate(); }
     void SetGraphic(const Graphic& rGrf);

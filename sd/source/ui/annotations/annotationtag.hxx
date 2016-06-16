@@ -35,7 +35,7 @@ class AnnotationTag : public SmartTag
 {
 public:
     AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const css::uno::Reference< css::office::XAnnotation >& xAnnotation, Color& rColor, int nIndex, const vcl::Font& rFont );
-    virtual ~AnnotationTag();
+    virtual ~AnnotationTag() override;
 
     /// @return true if the SmartTag handled the event.
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& ) override;

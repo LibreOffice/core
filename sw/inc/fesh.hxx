@@ -252,7 +252,7 @@ public:
 
     SwFEShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = nullptr );
     SwFEShell( SwEditShell& rShell, vcl::Window *pWin );
-    virtual ~SwFEShell();
+    virtual ~SwFEShell() override;
 
     /// Copy and Paste methods for internal clipboard.
     bool Copy( SwDoc* pClpDoc, const OUString* pNewClpText = nullptr );

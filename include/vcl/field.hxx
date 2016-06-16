@@ -108,7 +108,7 @@ protected:
     SAL_DLLPRIVATE bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
 
 public:
-    virtual                 ~PatternFormatter();
+    virtual                 ~PatternFormatter() override;
 
     virtual void            Reformat() override;
 
@@ -160,7 +160,7 @@ protected:
     SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection = nullptr );
 
 public:
-    virtual                 ~NumericFormatter();
+    virtual                 ~NumericFormatter() override;
 
     virtual void            Reformat() override;
 
@@ -218,7 +218,7 @@ protected:
     SAL_DLLPRIVATE bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
 public:
-    virtual                 ~MetricFormatter();
+    virtual                 ~MetricFormatter() override;
 
     virtual void            CustomConvert() = 0;
     virtual void            Reformat() override;
@@ -263,7 +263,7 @@ protected:
     SAL_DLLPRIVATE bool     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
 
 public:
-    virtual                 ~CurrencyFormatter();
+    virtual                 ~CurrencyFormatter() override;
 
     virtual void            Reformat() override;
 
@@ -307,7 +307,7 @@ protected:
     SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:
-    virtual                 ~DateFormatter();
+    virtual                 ~DateFormatter() override;
 
     virtual void            Reformat() override;
     virtual void            ReformatAll() override;
@@ -395,7 +395,7 @@ protected:
 
 public:
 
-    virtual                 ~TimeFormatter();
+    virtual                 ~TimeFormatter() override;
 
     virtual void            Reformat() override;
     virtual void            ReformatAll() override;

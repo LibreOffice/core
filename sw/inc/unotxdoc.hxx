@@ -203,7 +203,7 @@ private:
     using SfxBaseModel::removeEventListener;
 
 protected:
-    virtual ~SwXTextDocument();
+    virtual ~SwXTextDocument() override;
 public:
     SwXTextDocument(SwDocShell* pShell);
 
@@ -481,7 +481,7 @@ class SwXLinkTargetSupplier : public cppu::WeakImplHelper
 
 public:
     SwXLinkTargetSupplier(SwXTextDocument& rxDoc);
-    virtual ~SwXLinkTargetSupplier();
+    virtual ~SwXLinkTargetSupplier() override;
 
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& Name)  throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
@@ -519,7 +519,7 @@ public:
             const OUString& rLinkDisplayName, const OUString& sSuffix);
     SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
             const OUString& rLinkDisplayName, const OUString& sSuffix);
-    virtual ~SwXLinkNameAccessWrapper();
+    virtual ~SwXLinkNameAccessWrapper() override;
 
     //XNameAccess
     virtual css::uno::Any SAL_CALL getByName(const OUString& Name)  throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
@@ -560,7 +560,7 @@ class SwXOutlineTarget : public cppu::WeakImplHelper
 
 public:
     SwXOutlineTarget(const OUString& rOutlineText);
-    virtual ~SwXOutlineTarget();
+    virtual ~SwXOutlineTarget() override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -590,7 +590,7 @@ class SwXDocumentPropertyHelper : public SvxUnoForbiddenCharsTable
     SwDoc*  m_pDoc;
 public:
     SwXDocumentPropertyHelper(SwDoc& rDoc);
-    virtual ~SwXDocumentPropertyHelper();
+    virtual ~SwXDocumentPropertyHelper() override;
     css::uno::Reference<css::uno::XInterface> GetDrawTable(short nWhich);
     void Invalidate();
 

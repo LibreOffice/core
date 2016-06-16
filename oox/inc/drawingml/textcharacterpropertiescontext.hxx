@@ -32,7 +32,7 @@ public:
     TextCharacterPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
             const ::oox::AttributeList& rAttribs,
             TextCharacterProperties& rTextCharacterProperties );
-    virtual ~TextCharacterPropertiesContext();
+    virtual ~TextCharacterPropertiesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

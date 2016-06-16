@@ -58,7 +58,7 @@ public:
                             const Reference< XComponentContext >& rxContext,
                             const Reference< XNameContainer >& rxStorage,
                             const OUString& rElementName );
-    virtual             ~OleOutputStream();
+    virtual             ~OleOutputStream() override;
 
     virtual void SAL_CALL seek( sal_Int64 nPos ) throw( IllegalArgumentException, IOException, RuntimeException, std::exception ) override;
     virtual sal_Int64 SAL_CALL getPosition() throw( IOException, RuntimeException, std::exception ) override;

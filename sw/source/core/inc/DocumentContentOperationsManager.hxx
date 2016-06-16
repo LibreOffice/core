@@ -145,7 +145,7 @@ public:
     static bool lcl_RstTextAttr( const SwNodePtr& rpNd, void* pArgs ); //originally from docfmt.cxx
 
 
-    virtual ~DocumentContentOperationsManager();
+    virtual ~DocumentContentOperationsManager() override;
 
 private:
     SwDoc& m_rDoc;

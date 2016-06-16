@@ -41,7 +41,7 @@ class XMLOFF_DLLPUBLIC AnimationsExporter : public salhelper::SimpleReferenceObj
 
 public:
     AnimationsExporter( SvXMLExport& rExport, const css::uno::Reference< css::beans::XPropertySet >& xPageProps  );
-    virtual ~AnimationsExporter();
+    virtual ~AnimationsExporter() override;
 
     void prepare( const css::uno::Reference< css::animations::XAnimationNode >& xRootNode );
     void exportAnimations( const css::uno::Reference< css::animations::XAnimationNode >& xRootNode );

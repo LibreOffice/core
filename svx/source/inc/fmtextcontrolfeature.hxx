@@ -75,7 +75,7 @@ namespace svx
         void    dispose();
 
     protected:
-        virtual ~FmTextControlFeature();
+        virtual ~FmTextControlFeature() override;
 
     protected:
         // XStatusListener

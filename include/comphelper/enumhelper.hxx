@@ -54,7 +54,7 @@ public:
     OEnumerationByName(const css::uno::Reference< css::container::XNameAccess >& _rxAccess);
     OEnumerationByName(const css::uno::Reference< css::container::XNameAccess >& _rxAccess,
                        const css::uno::Sequence< OUString >&             _aNames  );
-    virtual ~OEnumerationByName();
+    virtual ~OEnumerationByName() override;
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL nextElement(  )
@@ -80,7 +80,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByIndex : private OEnumerationLock
 
 public:
     OEnumerationByIndex(const css::uno::Reference< css::container::XIndexAccess >& _rxAccess);
-    virtual ~OEnumerationByIndex();
+    virtual ~OEnumerationByIndex() override;
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL nextElement(  )
@@ -109,7 +109,7 @@ class COMPHELPER_DLLPUBLIC OAnyEnumeration : private OEnumerationLock
 
 public:
     OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lItems);
-    virtual ~OAnyEnumeration();
+    virtual ~OAnyEnumeration() override;
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL nextElement(  )

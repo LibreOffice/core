@@ -49,7 +49,7 @@ protected:
 
 public:
     Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle = 0);
-    virtual ~Svx3DPreviewControl();
+    virtual ~Svx3DPreviewControl() override;
     virtual void dispose() override;
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
@@ -150,7 +150,7 @@ private:
 
 public:
     SvxLightCtl3D(vcl::Window* pParent);
-    virtual ~SvxLightCtl3D();
+    virtual ~SvxLightCtl3D() override;
     virtual void dispose() override;
 
     // react to size changes

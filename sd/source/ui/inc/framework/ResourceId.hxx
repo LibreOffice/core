@@ -99,7 +99,7 @@ public:
         const OUString& rsFirstAnchorURL,
         const css::uno::Sequence<OUString>& rAnchorURLs);
 
-    virtual ~ResourceId();
+    virtual ~ResourceId() override;
 
     //===== XResourceId =======================================================
 

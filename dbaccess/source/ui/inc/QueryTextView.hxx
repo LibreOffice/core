@@ -31,7 +31,7 @@ namespace dbaui
         VclPtr<OSqlEdit>   m_pEdit;
     public:
         OQueryTextView( OQueryContainerWindow* pParent );
-        virtual ~OQueryTextView();
+        virtual ~OQueryTextView() override;
         virtual void dispose() override;
 
         virtual void GetFocus() override;

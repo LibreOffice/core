@@ -301,7 +301,7 @@ public:
     SwCursorShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = nullptr );
     // disguised copy constructor
     SwCursorShell( SwCursorShell& rShell, vcl::Window *pWin );
-    virtual ~SwCursorShell();
+    virtual ~SwCursorShell() override;
 
     // create new cursor and append the old one
     virtual SwPaM & CreateNewShellCursor() override;

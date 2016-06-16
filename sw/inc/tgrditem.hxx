@@ -48,7 +48,7 @@ private:
 
 public:
     SwTextGridItem();
-    virtual ~SwTextGridItem();
+    virtual ~SwTextGridItem() override;
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

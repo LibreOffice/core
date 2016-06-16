@@ -38,7 +38,7 @@ class SwDBTablePreviewDialog : public SfxModalDialog
 public:
     SwDBTablePreviewDialog(vcl::Window* pParent,
             css::uno::Sequence< css::beans::PropertyValue>& rValues  );
-    virtual ~SwDBTablePreviewDialog();
+    virtual ~SwDBTablePreviewDialog() override;
     virtual void dispose() override;
 
 };

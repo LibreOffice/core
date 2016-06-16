@@ -37,7 +37,7 @@ protected:
     using Dialog::StartExecuteModal;
 
 public:
-    virtual ~CancelableDialog();
+    virtual ~CancelableDialog() override;
     virtual void dispose() override;
 
     void SetCancelHdl( const Link<Button*,void>& rLink );
@@ -59,7 +59,7 @@ public:
     VclPtr<FixedText> m_pPrintInfo;
 
     PrintMonitor( vcl::Window *pParent, bool modal, PrintMonitorType eType );
-    virtual ~PrintMonitor();
+    virtual ~PrintMonitor() override;
     virtual void dispose() override;
 };
 
@@ -67,7 +67,7 @@ class CreateMonitor : public CancelableDialog
 {
 public:
     CreateMonitor( vcl::Window *pParent, bool modal );
-    virtual ~CreateMonitor();
+    virtual ~CreateMonitor() override;
     virtual void dispose() override;
 
     void SetTotalCount( sal_Int32 nTotal );

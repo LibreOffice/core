@@ -56,7 +56,7 @@ protected:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuEditGluePoints();
+    virtual ~FuEditGluePoints() override;
 };
 
 } // end of namespace sd

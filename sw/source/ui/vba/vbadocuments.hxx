@@ -32,7 +32,7 @@ class SwVbaDocuments : public SwVbaDocuments_BASE
 {
 public:
     SwVbaDocuments( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~SwVbaDocuments() {}
+    virtual ~SwVbaDocuments() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

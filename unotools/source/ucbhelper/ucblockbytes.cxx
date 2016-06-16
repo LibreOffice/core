@@ -229,7 +229,7 @@ public:
             RuntimeException
         );
 
-    virtual ~Moderator();
+    virtual ~Moderator() override;
 
     enum ResultType {
         NORESULT,
@@ -342,7 +342,7 @@ public:
 
     explicit ModeratorsActiveDataStreamer(Moderator &theModerator);
 
-    virtual ~ModeratorsActiveDataStreamer();
+    virtual ~ModeratorsActiveDataStreamer() override;
 
     // XActiveDataStreamer
     virtual void SAL_CALL
@@ -378,7 +378,7 @@ public:
 
     explicit ModeratorsActiveDataSink(Moderator &theModerator);
 
-    virtual ~ModeratorsActiveDataSink();
+    virtual ~ModeratorsActiveDataSink() override;
 
     // XActiveDataSink.
     virtual void SAL_CALL
@@ -461,7 +461,7 @@ public:
 
     explicit ModeratorsInteractionHandler(Moderator &theModerator);
 
-    virtual ~ModeratorsInteractionHandler();
+    virtual ~ModeratorsInteractionHandler() override;
 
     virtual void SAL_CALL
     handle( const Reference<XInteractionRequest >& Request )

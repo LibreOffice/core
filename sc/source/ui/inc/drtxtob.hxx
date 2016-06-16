@@ -49,7 +49,7 @@ private:
 
 public:
     ScDrawTextObjectBar(ScViewData* pData);
-    virtual ~ScDrawTextObjectBar();
+    virtual ~ScDrawTextObjectBar() override;
 
     static void StateDisableItems( SfxItemSet &rSet );
 

@@ -33,7 +33,7 @@ class LimitBoxController: public svt::ToolboxController,
     public:
         explicit LimitBoxController(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-        virtual ~LimitBoxController();
+        virtual ~LimitBoxController() override;
 
         /// XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;

@@ -72,7 +72,7 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
             std::unique_ptr<SfxItemSet> * o_ppFlatSet = nullptr);
 
 protected:
-    virtual ~SwDocStyleSheet();
+    virtual ~SwDocStyleSheet() override;
 
 public:
     SwDocStyleSheet( SwDoc&                 rDoc,
@@ -176,7 +176,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 public:
     SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
                           SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
-    virtual ~SwStyleSheetIterator();
+    virtual ~SwStyleSheetIterator() override;
 
     virtual sal_uInt16 Count() override;
     virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx) override;
@@ -228,7 +228,7 @@ public:
     void InvalidateIterator();
 
 protected:
-    virtual ~SwDocStyleSheetPool();
+    virtual ~SwDocStyleSheetPool() override;
 
 private:
     SwDocStyleSheetPool( const SwDocStyleSheetPool& ) = delete;

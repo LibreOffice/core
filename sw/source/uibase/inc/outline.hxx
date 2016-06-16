@@ -70,7 +70,7 @@ public:
         SwOutlineTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
-        virtual ~SwOutlineTabDialog();
+        virtual ~SwOutlineTabDialog() override;
     virtual void        dispose() override;
 
     SwNumRule*          GetNumRule() {return pNumRule;}
@@ -121,7 +121,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 
 public:
     SwOutlineSettingsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwOutlineSettingsTabPage();
+    virtual ~SwOutlineSettingsTabPage() override;
     virtual void dispose() override;
 
     void SetWrtShell(SwWrtShell* pShell);

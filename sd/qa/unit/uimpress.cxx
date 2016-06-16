@@ -30,7 +30,7 @@ namespace {
 class Test : public CppUnit::TestFixture {
 public:
     Test();
-    virtual ~Test();
+    virtual ~Test() override;
 
     virtual void setUp() override;
     virtual void tearDown() override;

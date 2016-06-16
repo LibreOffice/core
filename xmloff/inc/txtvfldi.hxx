@@ -488,7 +488,7 @@ public:
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
-    virtual ~XMLTableFormulaImportContext();
+    virtual ~XMLTableFormulaImportContext() override;
 
 protected:
 

@@ -1059,7 +1059,7 @@ namespace
             typedef ::std::list< Any > frmcontainer_t;
             frmcontainer_t m_aFrames;
         protected:
-            virtual ~SwXFrameEnumeration() {};
+            virtual ~SwXFrameEnumeration() override {};
         public:
             SwXFrameEnumeration(const SwDoc* const pDoc);
 

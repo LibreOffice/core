@@ -28,7 +28,7 @@ class RTFLookahead : public RTFListener
 {
 public:
     RTFLookahead(SvStream& rStream, sal_Size nGroupStart);
-    virtual ~RTFLookahead();
+    virtual ~RTFLookahead() override;
     virtual RTFError dispatchDestination(RTFKeyword nKeyword) override;
     virtual RTFError dispatchFlag(RTFKeyword nKeyword) override;
     virtual RTFError dispatchSymbol(RTFKeyword nKeyword) override;

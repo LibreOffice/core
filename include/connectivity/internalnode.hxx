@@ -42,7 +42,7 @@ namespace connectivity
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
 
-        virtual ~OSQLInternalNode();
+        virtual ~OSQLInternalNode() override;
     };
 }
 

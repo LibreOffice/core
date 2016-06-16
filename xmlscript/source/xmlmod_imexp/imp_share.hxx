@@ -62,7 +62,7 @@ public:
     {
     }
 
-    virtual ~ModuleImport();
+    virtual ~ModuleImport() override;
 
     // XRoot
     virtual void SAL_CALL startDocument(
@@ -98,7 +98,7 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ModuleElement * pParent, ModuleImport * pImport );
-    virtual ~ModuleElement();
+    virtual ~ModuleElement() override;
 
     // XElement
     virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL getParent()

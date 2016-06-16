@@ -173,7 +173,7 @@ public:
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
                             bool bExportSelection, bool bIsExportVectorFormat );
-                        virtual ~ExportDialog();
+                        virtual ~ExportDialog() override;
                         virtual void dispose() override;
 };
 

@@ -189,7 +189,7 @@ protected:
     }
     void RemoveFrameFromAccessibleMap();
 
-    virtual ~SwAccessibleContext();
+    virtual ~SwAccessibleContext() override;
 
 public:
     SwAccessibleContext( SwAccessibleMap *m_pMap, sal_Int16 nRole,

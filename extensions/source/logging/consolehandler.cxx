@@ -61,7 +61,7 @@ namespace logging
     public:
         ConsoleHandler(const Reference<XComponentContext> &context,
             const css::uno::Sequence<css::uno::Any> &arguments);
-        virtual ~ConsoleHandler();
+        virtual ~ConsoleHandler() override;
 
     private:
         // XConsoleHandler

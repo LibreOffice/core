@@ -45,7 +45,7 @@ namespace svx
         SvxShowCharSetAcc*  m_pTable; // the table, which holds the characters shown by the vcl control
         css::uno::Reference< css::accessibility::XAccessible > m_xAcc; // the ref to the table
     protected:
-        virtual ~SvxShowCharSetVirtualAcc();
+        virtual ~SvxShowCharSetVirtualAcc() override;
 
         virtual void SAL_CALL disposing() override;
 
@@ -186,7 +186,7 @@ namespace svx
         }
     protected:
 
-        virtual ~SvxShowCharSetAcc();
+        virtual ~SvxShowCharSetAcc() override;
 
         // OCommonAccessibleSelection
         // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
@@ -221,7 +221,7 @@ namespace svx
     private:
         SvxShowCharSetItem* mpParent;
     protected:
-        virtual ~SvxShowCharSetItemAcc();
+        virtual ~SvxShowCharSetItemAcc() override;
 
         // OCommonAccessibleComponent
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten

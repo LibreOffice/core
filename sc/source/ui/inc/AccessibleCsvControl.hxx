@@ -46,7 +46,7 @@ public:
                                     const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                                     ScCsvControl& rControl,
                                     sal_uInt16 nRole );
-    virtual                     ~ScAccessibleCsvControl();
+    virtual                     ~ScAccessibleCsvControl() override;
 
     using ScAccessibleContextBase::disposing;
     virtual void SAL_CALL       disposing() override;
@@ -121,7 +121,7 @@ private:
 
 public:
     explicit                    ScAccessibleCsvRuler( ScCsvRuler& rRuler );
-    virtual                     ~ScAccessibleCsvRuler();
+    virtual                     ~ScAccessibleCsvRuler() override;
 
     // XAccessibleComponent -----------------------------------------------------
 
@@ -288,7 +288,7 @@ protected:
 
 public:
     explicit                    ScAccessibleCsvGrid( ScCsvGrid& rGrid );
-    virtual                     ~ScAccessibleCsvGrid();
+    virtual                     ~ScAccessibleCsvGrid() override;
 
     // XAccessibleComponent ---------------------------------------------------
 
@@ -531,7 +531,7 @@ public:
                                     ScCsvGrid& rGrid,
                                     const OUString& rCellText,
                                     sal_Int32 nRow, sal_Int32 nColumn );
-    virtual                     ~ScAccessibleCsvCell();
+    virtual                     ~ScAccessibleCsvCell() override;
 
     using ScAccessibleCsvControl::disposing;
     virtual void SAL_CALL       disposing() override;

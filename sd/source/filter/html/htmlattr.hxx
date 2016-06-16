@@ -32,7 +32,7 @@ protected:
 
 public:
     SdHtmlAttrPreview( vcl::Window* pParent, WinBits nStyle );
-    virtual ~SdHtmlAttrPreview();
+    virtual ~SdHtmlAttrPreview() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 

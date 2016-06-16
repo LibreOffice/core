@@ -47,7 +47,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLName );
-    virtual ~SchXMLDocContext();
+    virtual ~SchXMLDocContext() override;
 
 
     virtual SvXMLImportContext* CreateChildContext(
@@ -67,7 +67,7 @@ public:
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const css::uno::Reference<css::document::XDocumentProperties>& i_xDocProps);
 
-    virtual ~SchXMLFlatDocContext_Impl();
+    virtual ~SchXMLFlatDocContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
@@ -85,7 +85,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLName );
-    virtual ~SchXMLBodyContext();
+    virtual ~SchXMLBodyContext() override;
 
     virtual void EndElement() override;
     virtual SvXMLImportContext* CreateChildContext(

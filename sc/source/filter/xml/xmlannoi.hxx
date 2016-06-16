@@ -72,7 +72,7 @@ public:
                         ScXMLAnnotationData& rAnnotationData,
                         ScXMLTableRowCellContext* pCellContext);
 
-    virtual ~ScXMLAnnotationContext();
+    virtual ~ScXMLAnnotationContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

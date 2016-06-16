@@ -82,7 +82,7 @@ public:
         ScDocument* pRefUndoDoc, ScDocument* pClipDoc, InsertDeleteFlags nInsertFlag,
         bool bAsLink, bool bSkipAttrForEmptyCells);
 
-    virtual ~CopyFromClipContext();
+    virtual ~CopyFromClipContext() override;
 
     void setTabRange(SCTAB nStart, SCTAB nEnd);
 
@@ -138,7 +138,7 @@ class CopyToClipContext : public ClipContextBase
 public:
     CopyToClipContext() = delete;
     CopyToClipContext(ScDocument& rDoc, bool bKeepScenarioFlags, bool bCloneNotes);
-    virtual ~CopyToClipContext();
+    virtual ~CopyToClipContext() override;
 
     bool isKeepScenarioFlags() const;
     bool isCloneNotes() const;
@@ -150,7 +150,7 @@ class CopyToDocContext : public ClipContextBase
 
 public:
     CopyToDocContext(ScDocument& rDoc);
-    virtual ~CopyToDocContext();
+    virtual ~CopyToDocContext() override;
 
     void setStartListening( bool b );
     bool isStartListening() const;
@@ -160,7 +160,7 @@ class MixDocContext : public ClipContextBase
 {
 public:
     MixDocContext(ScDocument& rDoc);
-    virtual ~MixDocContext();
+    virtual ~MixDocContext() override;
 };
 
 }

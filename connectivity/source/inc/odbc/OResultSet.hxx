@@ -215,7 +215,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // A ctor that is needed for returning the object
             OResultSet( SQLHANDLE _pStatementHandle,OStatement_Base* pStmt);
-            virtual ~OResultSet();
+            virtual ~OResultSet() override;
 
             void construct();
 

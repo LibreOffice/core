@@ -36,7 +36,7 @@ private:
 
 public:
     SdInsertPasteDlg( vcl::Window* pWindow );
-    virtual ~SdInsertPasteDlg();
+    virtual ~SdInsertPasteDlg() override;
     virtual void dispose() override;
     bool IsInsertBefore() const;
 };

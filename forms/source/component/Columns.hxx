@@ -64,7 +64,7 @@ protected:
 public:
     OGridColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext, const OUString& _sModelName = OUString());
     explicit OGridColumn(const OGridColumn* _pOriginal );
-    virtual ~OGridColumn();
+    virtual ~OGridColumn() override;
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE)

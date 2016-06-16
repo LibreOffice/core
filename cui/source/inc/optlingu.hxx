@@ -86,7 +86,7 @@ class SvxEditModulesDlg : public ModalDialog
 
 public:
     SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rData);
-    virtual ~SvxEditModulesDlg();
+    virtual ~SvxEditModulesDlg() override;
     virtual void dispose() override;
 };
 
@@ -149,7 +149,7 @@ private:
     void                UpdateDicBox_Impl();
 
 public:
-    virtual             ~SvxLinguTabPage();
+    virtual             ~SvxLinguTabPage() override;
     virtual void        dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 

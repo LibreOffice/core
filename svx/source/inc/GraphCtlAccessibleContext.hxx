@@ -94,7 +94,7 @@ public:
     void Notify( SfxBroadcaster& aBC, const SfxHint& aHint ) override;
 
 protected:
-    virtual ~SvxGraphCtrlAccessibleContext();
+    virtual ~SvxGraphCtrlAccessibleContext() override;
 public:
     // XAccessible
     /// Return the XAccessibleContext.

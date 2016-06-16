@@ -81,7 +81,7 @@ class XFFrameStyle : public XFStyle
 public:
     XFFrameStyle();
 
-    virtual ~XFFrameStyle();
+    virtual ~XFFrameStyle() override;
 
 public:
     void    SetWrapType(enumXFWrap wrap);

@@ -81,7 +81,7 @@ public:
     /// releases our action listener
     virtual void dispose() override;
 
-    virtual ~ControllerItem();
+    virtual ~ControllerItem() override;
 
     /** Returns </TRUE> when the slot/command has not been disabled.
         Changes of this state are notified via the

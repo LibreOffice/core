@@ -52,7 +52,7 @@ public:
                     FormulaModalDialog( vcl::Window* pParent
                                             ,IFunctionManager* _pFunctionMgr
                                             ,IControlReferenceHandler* _pDlg = nullptr );
-    virtual ~FormulaModalDialog();
+    virtual ~FormulaModalDialog() override;
     virtual void dispose() override;
 
 private:
@@ -88,7 +88,7 @@ public:
                                     , vcl::Window* pParent
                                     , IFunctionManager* _pFunctionMgr
                                     , IControlReferenceHandler* _pDlg = nullptr );
-    virtual ~FormulaDlg();
+    virtual ~FormulaDlg() override;
     virtual void dispose() override;
 private:
     ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;

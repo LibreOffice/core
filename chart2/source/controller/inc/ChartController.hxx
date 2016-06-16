@@ -107,7 +107,7 @@ class ChartController   : public ::cppu::WeakImplHelper <
 public:
     ChartController() = delete;
     explicit ChartController(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-    virtual ~ChartController();
+    virtual ~ChartController() override;
 
     OUString GetContextName();
 
@@ -390,7 +390,7 @@ private:
             explicit TheModel( const css::uno::Reference<
                         css::frame::XModel > & xModel );
 
-            virtual ~TheModel();
+            virtual ~TheModel() override;
 
             void        SetOwnership( bool bGetsOwnership );
             void        addListener( ChartController* pController );

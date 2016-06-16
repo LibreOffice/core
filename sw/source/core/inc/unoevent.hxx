@@ -38,7 +38,7 @@ class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
     virtual OUString SAL_CALL getImplementationName()
         throw( css::uno::RuntimeException, std::exception ) override;
 protected:
-    virtual ~SwHyperlinkEventDescriptor();
+    virtual ~SwHyperlinkEventDescriptor() override;
 public:
 
      SwHyperlinkEventDescriptor();
@@ -66,7 +66,7 @@ public:
     SwFrameEventDescriptor( SwXTextGraphicObject& rGraphicRef );
     SwFrameEventDescriptor( SwXTextEmbeddedObject& rObjectRef );
 
-    virtual ~SwFrameEventDescriptor();
+    virtual ~SwFrameEventDescriptor() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw( css::uno::RuntimeException, std::exception ) override;
@@ -86,7 +86,7 @@ class SwFrameStyleEventDescriptor : public SvEventDescriptor
 public:
     SwFrameStyleEventDescriptor( sw::ICoreFrameStyle& rStyle );
 
-    virtual ~SwFrameStyleEventDescriptor();
+    virtual ~SwFrameStyleEventDescriptor() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw( css::uno::RuntimeException, std::exception ) override;

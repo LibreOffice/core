@@ -22,7 +22,7 @@ class GL3DBarChartType : public ChartType
 {
 public:
     explicit GL3DBarChartType( const css::uno::Reference<css::uno::XComponentContext>& xContext );
-    virtual ~GL3DBarChartType();
+    virtual ~GL3DBarChartType() override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedPropertyRoles()

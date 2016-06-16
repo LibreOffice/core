@@ -75,7 +75,7 @@ private:
 
 public:
     SvxChartOptions();
-    virtual ~SvxChartOptions();
+    virtual ~SvxChartOptions() override;
 
     const SvxChartColorTable&   GetDefaultColors();
     void                        SetDefaultColors( const SvxChartColorTable& aCol );

@@ -29,7 +29,7 @@ public:
     SdPPTFilter (
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell);
-    virtual ~SdPPTFilter();
+    virtual ~SdPPTFilter() override;
 
     /// these methods are necessary for the export to PowerPoint
     bool        Import();

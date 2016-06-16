@@ -28,7 +28,7 @@ class BarChartType : public ChartType
 {
 public:
     explicit BarChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~BarChartType();
+    virtual ~BarChartType() override;
 
     virtual OUString SAL_CALL
         getImplementationName()

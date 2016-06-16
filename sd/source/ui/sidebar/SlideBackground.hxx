@@ -57,7 +57,7 @@ public:
         ViewShellBase& rBase,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings );
-    virtual ~SlideBackground();
+    virtual ~SlideBackground() override;
     virtual void dispose() override;
     SfxBindings* GetBindings() { return mpBindings; }
     // Window

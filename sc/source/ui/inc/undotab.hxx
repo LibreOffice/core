@@ -47,7 +47,7 @@ public:
                             SCTAB nTabNum,
                             bool bApp,
                             const OUString& rNewName);
-    virtual         ~ScUndoInsertTab();
+    virtual         ~ScUndoInsertTab() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -73,7 +73,7 @@ public:
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
                             std::vector<OUString>& newNameList);
-    virtual         ~ScUndoInsertTables();
+    virtual         ~ScUndoInsertTables() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -101,7 +101,7 @@ public:
                             const std::vector<SCTAB> &theTabs,      //SCTAB nNewTab,
                             ScDocument* pUndoDocument,
                             ScRefUndoData* pRefData );
-    virtual         ~ScUndoDeleteTab();
+    virtual         ~ScUndoDeleteTab() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -126,7 +126,7 @@ public:
                             SCTAB nT,
                             const OUString& rOldName,
                             const OUString& rNewName);
-    virtual         ~ScUndoRenameTab();
+    virtual         ~ScUndoRenameTab() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -153,7 +153,7 @@ public:
                         ::std::vector< OUString>* pOldNames = nullptr,
                         ::std::vector< OUString>* pNewNames = nullptr );
 
-    virtual         ~ScUndoMoveTab();
+    virtual         ~ScUndoMoveTab() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -180,7 +180,7 @@ public:
                         ::std::vector<SCTAB>* pNewTabs,
                         ::std::vector< OUString>* pNewNames = nullptr );
 
-    virtual         ~ScUndoCopyTab();
+    virtual         ~ScUndoCopyTab() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -209,7 +209,7 @@ public:
                     ScUndoTabColor(
                             ScDocShell* pNewDocShell,
                             const ScUndoTabColorInfo::List& rUndoTabColorList);
-    virtual         ~ScUndoTabColor();
+    virtual         ~ScUndoTabColor() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -233,7 +233,7 @@ public:
                             const OUString& rN, const OUString& rC,
                             const Color& rCol, sal_uInt16 nF,
                             const ScMarkData& rMark );
-    virtual         ~ScUndoMakeScenario();
+    virtual         ~ScUndoMakeScenario() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -259,7 +259,7 @@ public:
                     ScUndoImportTab(
                             ScDocShell* pShell,
                             SCTAB nNewTab, SCTAB nNewCount );
-    virtual         ~ScUndoImportTab();
+    virtual         ~ScUndoImportTab() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -283,7 +283,7 @@ public:
                     ScUndoRemoveLink(               // Call before delete!
                             ScDocShell* pShell,
                             const OUString& rDoc );
-    virtual         ~ScUndoRemoveLink();
+    virtual         ~ScUndoRemoveLink() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -312,7 +312,7 @@ public:
                             ScDocShell* pShell,
                             const std::vector<SCTAB>& newUndoTabs,
                             bool bNewShow );
-    virtual         ~ScUndoShowHideTab();
+    virtual         ~ScUndoShowHideTab() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -334,7 +334,7 @@ class ScUndoDocProtect : public ScSimpleUndo
 {
 public:
                     ScUndoDocProtect(ScDocShell* pShell, ::std::unique_ptr<ScDocProtection> && pProtectSettings);
-    virtual         ~ScUndoDocProtect();
+    virtual         ~ScUndoDocProtect() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -356,7 +356,7 @@ class ScUndoTabProtect : public ScSimpleUndo
 public:
                     ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab,
                                      std::unique_ptr<ScTableProtection> && pProtectSettings);
-    virtual         ~ScUndoTabProtect();
+    virtual         ~ScUndoTabProtect() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -377,7 +377,7 @@ class ScUndoPrintRange : public ScSimpleUndo
 public:
                     ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
                                         ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew );
-    virtual         ~ScUndoPrintRange();
+    virtual         ~ScUndoPrintRange() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -404,7 +404,7 @@ public:
                             const Color& rOCol, const Color& rNCol,
                             sal_uInt16 nOF, sal_uInt16 nNF );
 
-    virtual         ~ScUndoScenarioFlags();
+    virtual         ~ScUndoScenarioFlags() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -432,7 +432,7 @@ public:
                             ScDocShell* pNewDocShell, const OUString& rPN,
                             const OUString& rON, const OUString& rNN );
 
-    virtual         ~ScUndoRenameObject();
+    virtual         ~ScUndoRenameObject() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -453,7 +453,7 @@ class ScUndoLayoutRTL : public ScSimpleUndo
 {
 public:
                     ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, bool bNewRTL );
-    virtual         ~ScUndoLayoutRTL();
+    virtual         ~ScUndoLayoutRTL() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;

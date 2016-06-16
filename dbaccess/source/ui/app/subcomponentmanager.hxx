@@ -43,7 +43,7 @@ namespace dbaui
     {
     public:
         SubComponentManager( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex );
-        virtual ~SubComponentManager();
+        virtual ~SubComponentManager() override;
 
         void    disposing();
 

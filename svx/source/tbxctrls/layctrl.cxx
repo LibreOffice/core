@@ -76,7 +76,7 @@ public:
                                          const OUString&            rCmd,
                                          const OUString&            rText,
                                          const Reference< XFrame >& rFrame );
-                            virtual ~TableWindow();
+                            virtual ~TableWindow() override;
     virtual void            dispose() override;
 
     void                    KeyInput( const KeyEvent& rKEvt ) override;

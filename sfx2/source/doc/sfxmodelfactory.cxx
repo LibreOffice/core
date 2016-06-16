@@ -84,7 +84,7 @@ namespace sfx2
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
 
     protected:
-        virtual ~SfxModelFactory();
+        virtual ~SfxModelFactory() override;
 
     private:
         Reference< XInterface > impl_createInstance( const SfxModelFlags _nCreationFlags ) const;

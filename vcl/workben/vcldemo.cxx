@@ -1716,7 +1716,7 @@ class DemoWin : public WorkWindow
             maDelay.Nanosec = 0;
             launch();
         }
-        virtual ~RenderThread()
+        virtual ~RenderThread() override
         {
             join();
         }
@@ -1740,7 +1740,7 @@ public:
         mrRenderer.addInvalidate(this);
         underTesting = false;
     }
-    virtual ~DemoWin()
+    virtual ~DemoWin() override
     {
         disposeOnce();
     }
@@ -1876,7 +1876,7 @@ public:
 
         Show();
     }
-    virtual ~DemoWidgets() { disposeOnce(); }
+    virtual ~DemoWidgets() override { disposeOnce(); }
     virtual void dispose() override
     {
         mpGLButton.disposeAndClear();

@@ -43,7 +43,7 @@ class OOXMLFormulaParser : public OOXMLFormulaParser_BASE
 {
 public:
     explicit            OOXMLFormulaParser();
-    virtual             ~OOXMLFormulaParser();
+    virtual             ~OOXMLFormulaParser() override;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 

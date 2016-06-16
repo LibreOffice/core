@@ -46,7 +46,7 @@ class PresentationFactoryProvider
 {
 public:
     explicit PresentationFactoryProvider (const Reference<XComponentContext>& rxContext);
-    virtual ~PresentationFactoryProvider();
+    virtual ~PresentationFactoryProvider() override;
 
     virtual void SAL_CALL disposing() override;
 
@@ -70,7 +70,7 @@ class PresentationView
 public:
     explicit PresentationView (const Reference<XResourceId>& rxViewId)
         : PresentationViewInterfaceBase(maMutex),mxResourceId(rxViewId) {};
-    virtual ~PresentationView() {};
+    virtual ~PresentationView() override {};
 
     // XView
 

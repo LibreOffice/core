@@ -1150,7 +1150,7 @@ public:
     XMLTableTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLTableTransformerContext_Impl();
+    virtual ~XMLTableTransformerContext_Impl() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
@@ -1248,7 +1248,7 @@ public:
     XMLBodyOASISTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLBodyOASISTransformerContext_Impl();
+    virtual ~XMLBodyOASISTransformerContext_Impl() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
@@ -1304,7 +1304,7 @@ public:
     XMLTabStopOASISTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLTabStopOASISTContext_Impl();
+    virtual ~XMLTabStopOASISTContext_Impl() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
@@ -1434,7 +1434,7 @@ public:
     XMLConfigItemTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLConfigItemTContext_Impl();
+    virtual ~XMLConfigItemTContext_Impl() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
@@ -1542,7 +1542,7 @@ public:
                                sal_uInt16 nPrefix,
                             XMLTokenEnum eToken );
 
-    virtual ~XMLTrackedChangesOASISTContext_Impl();
+    virtual ~XMLTrackedChangesOASISTContext_Impl() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };

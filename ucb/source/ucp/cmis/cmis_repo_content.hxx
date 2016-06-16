@@ -78,7 +78,7 @@ public:
         std::vector< libcmis::RepositoryPtr > aRepos = std::vector< libcmis::RepositoryPtr > ( ) )
             throw ( css::ucb::ContentCreationException );
 
-    virtual ~RepoContent();
+    virtual ~RepoContent() override;
 
     virtual css::uno::Sequence< css::beans::Property >
         getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;

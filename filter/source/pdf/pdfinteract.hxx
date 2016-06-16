@@ -49,7 +49,7 @@ protected:
 public:
 
                 PDFInteractionHandler();
-    virtual     ~PDFInteractionHandler();
+    virtual     ~PDFInteractionHandler() override;
 };
 
 

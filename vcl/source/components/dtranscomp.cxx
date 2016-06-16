@@ -68,7 +68,7 @@ public:
         XServiceInfo
         >( m_aMutex )
     {}
-    virtual ~GenericClipboard();
+    virtual ~GenericClipboard() override;
 
     /*
      * XServiceInfo
@@ -209,7 +209,7 @@ class ClipboardFactory : public ::cppu::WeakComponentImplHelper<
     osl::Mutex m_aMutex;
 public:
     ClipboardFactory();
-    virtual ~ClipboardFactory();
+    virtual ~ClipboardFactory() override;
 
     /*
      *  XSingleServiceFactory
@@ -273,7 +273,7 @@ class GenericDragSource : public cppu::WeakComponentImplHelper<
     osl::Mutex                          m_aMutex;
 public:
     GenericDragSource() : WeakComponentImplHelper( m_aMutex ) {}
-    virtual ~GenericDragSource();
+    virtual ~GenericDragSource() override;
 
     // XDragSource
     virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) override;
@@ -389,7 +389,7 @@ class GenericDropTarget : public cppu::WeakComponentImplHelper<
 public:
     GenericDropTarget() : WeakComponentImplHelper( m_aMutex )
     {}
-    virtual ~GenericDropTarget();
+    virtual ~GenericDropTarget() override;
 
     // XInitialization
     virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( Exception, std::exception ) override;

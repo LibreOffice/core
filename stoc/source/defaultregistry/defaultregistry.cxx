@@ -52,7 +52,7 @@ class NestedRegistryImpl    : public WeakAggImplHelper4 < XSimpleRegistry, XInit
 public:
     NestedRegistryImpl( );
 
-    virtual ~NestedRegistryImpl();
+    virtual ~NestedRegistryImpl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) override;
@@ -100,7 +100,7 @@ public:
     NestedKeyImpl( const OUString& aKeyName,
                     NestedKeyImpl* pKey);
 
-    virtual ~NestedKeyImpl();
+    virtual ~NestedKeyImpl() override;
 
     // XRegistryKey
     virtual OUString SAL_CALL getKeyName() throw(RuntimeException, std::exception) override;

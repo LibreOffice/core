@@ -71,7 +71,7 @@ namespace connectivity
                     const OUString& _rCommand = OUString(),
                     const OUString& _rSchemaName = OUString(),
                     const OUString& _rCatalogName = OUString());
-            virtual ~OView();
+            virtual ~OView() override;
 
             // ODescriptor
             virtual void construct() override;

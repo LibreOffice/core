@@ -45,7 +45,7 @@ class SdPhotoAlbumDialog : public ModalDialog
 {
 public:
     SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pActDoc);
-    virtual ~SdPhotoAlbumDialog();
+    virtual ~SdPhotoAlbumDialog() override;
     virtual void dispose() override;
 
     virtual short Execute() override;

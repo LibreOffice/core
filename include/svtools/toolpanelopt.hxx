@@ -52,7 +52,7 @@ class SVT_DLLPUBLIC SvtToolPanelOptions: public utl::detail::Options
             \sa    member m_pDataContainer
         */
         SvtToolPanelOptions();
-        virtual ~SvtToolPanelOptions();
+        virtual ~SvtToolPanelOptions() override;
 
         bool GetVisibleImpressView() const;
         void SetVisibleImpressView( bool bVisible );

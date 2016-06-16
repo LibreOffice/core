@@ -41,7 +41,7 @@ public:
         const OUString & rRefSizePropertyName,
         const css::uno::Reference<css::beans::XPropertySet>& rRefSizePropSet = css::uno::Reference<css::beans::XPropertySet>() );
 
-    virtual ~CharacterPropertyItemConverter();
+    virtual ~CharacterPropertyItemConverter() override;
 
 protected:
     virtual const sal_uInt16* GetWhichPairs() const override;

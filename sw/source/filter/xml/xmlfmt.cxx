@@ -200,7 +200,7 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLConditionContext_Impl();
+    virtual ~SwXMLConditionContext_Impl() override;
 
 
     bool IsValid() const { return 0 != nCondition; }
@@ -271,7 +271,7 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nFamily,
             SvXMLStylesContext& rStyles );
-    virtual ~SwXMLTextStyleContext_Impl();
+    virtual ~SwXMLTextStyleContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
@@ -438,7 +438,7 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStylesC,
             sal_uInt16 nFamily);
-    virtual ~SwXMLItemSetStyleContext_Impl();
+    virtual ~SwXMLItemSetStyleContext_Impl() override;
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
 
@@ -722,7 +722,7 @@ public:
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             bool bAuto );
-    virtual ~SwXMLStylesContext_Impl();
+    virtual ~SwXMLStylesContext_Impl() override;
 
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const override;
 
@@ -901,7 +901,7 @@ public:
             SwXMLImport& rImport,
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLMasterStylesContext_Impl();
+    virtual ~SwXMLMasterStylesContext_Impl() override;
     virtual void EndElement() override;
 };
 

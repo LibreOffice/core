@@ -58,7 +58,7 @@ protected:
 
 public:
                     ScDrawView( OutputDevice* pOut, ScViewData* pData );
-    virtual         ~ScDrawView();
+    virtual         ~ScDrawView() override;
 
     virtual void    MarkListHasChanged() override;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

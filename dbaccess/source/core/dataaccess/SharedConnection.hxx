@@ -50,7 +50,7 @@ namespace dbaccess
     {
     protected:
         virtual void SAL_CALL disposing() override;
-        virtual ~OSharedConnection();
+        virtual ~OSharedConnection() override;
     public:
         explicit OSharedConnection(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection);
 

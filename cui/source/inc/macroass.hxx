@@ -59,7 +59,7 @@ public:
         const SfxItemSet& rSet
     );
 
-    virtual                     ~SfxMacroTabPage();
+    virtual                     ~SfxMacroTabPage() override;
     virtual void                dispose() override;
 
     void                        AddEvent( const OUString & rEventName, sal_uInt16 nEventId );

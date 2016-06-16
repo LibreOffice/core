@@ -46,7 +46,7 @@ namespace svgio
 
         public:
             SvgDocHdl(const OUString& rAbsolutePath);
-            virtual ~SvgDocHdl();
+            virtual ~SvgDocHdl() override;
 
             // Methods XDocumentHandler
             virtual void SAL_CALL startDocument(  ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;

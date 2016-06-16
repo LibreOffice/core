@@ -257,7 +257,7 @@ public:
     ToolBox( vcl::Window* pParent, const ResId& rResId );
     ToolBox(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
-    virtual             ~ToolBox();
+    virtual             ~ToolBox() override;
     virtual void        dispose() override;
 
     virtual void        Click();

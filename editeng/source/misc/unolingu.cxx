@@ -83,7 +83,7 @@ class ThesDummy_Impl :
 
 public:
     ThesDummy_Impl() : pLocaleSeq(nullptr)  {}
-    virtual ~ThesDummy_Impl();
+    virtual ~ThesDummy_Impl() override;
 
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
@@ -434,7 +434,7 @@ class LinguMgrExitLstnr : public cppu::WeakImplHelper<XEventListener>
 
 public:
     LinguMgrExitLstnr();
-    virtual ~LinguMgrExitLstnr();
+    virtual ~LinguMgrExitLstnr() override;
 
     // lang::XEventListener
     virtual void    SAL_CALL disposing(const EventObject& rSource)

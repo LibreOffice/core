@@ -65,7 +65,7 @@ public:
                         const OUString& rLName,
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
 
-    virtual ~ScXMLContentValidationContext();
+    virtual ~ScXMLContentValidationContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -96,7 +96,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual ~ScXMLHelpMessageContext();
+    virtual ~ScXMLHelpMessageContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -124,7 +124,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual ~ScXMLErrorMessageContext();
+    virtual ~ScXMLErrorMessageContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -149,7 +149,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual ~ScXMLErrorMacroContext();
+    virtual ~ScXMLErrorMacroContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

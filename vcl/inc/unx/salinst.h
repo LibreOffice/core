@@ -45,7 +45,7 @@ protected:
 
 public:
     explicit X11SalInstance(SalYieldMutex* pMutex);
-    virtual ~X11SalInstance();
+    virtual ~X11SalInstance() override;
 
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
     virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;

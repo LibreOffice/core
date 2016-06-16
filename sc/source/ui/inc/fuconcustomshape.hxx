@@ -32,7 +32,7 @@ public:
     FuConstCustomShape(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                        SdrModel* pDoc, SfxRequest& rReq);
 
-    virtual ~FuConstCustomShape();
+    virtual ~FuConstCustomShape() override;
                                        // Mouse- & Key-Events
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;

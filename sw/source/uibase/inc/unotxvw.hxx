@@ -73,7 +73,7 @@ class SwXTextView :
         css::uno::Reference< css::awt::XControl >& xToFill  );
 
 protected:
-    virtual ~SwXTextView();
+    virtual ~SwXTextView() override;
 public:
     SwXTextView(SwView* pSwView);
 
@@ -175,7 +175,7 @@ public OTextCursorHelper
     const SfxItemPropertySet*       m_pPropSet;
 protected:
     bool        IsTextSelection( bool bAllowTables = true ) const;
-    virtual     ~SwXTextViewCursor();
+    virtual     ~SwXTextViewCursor() override;
 public:
     SwXTextViewCursor(SwView* pVw);
 

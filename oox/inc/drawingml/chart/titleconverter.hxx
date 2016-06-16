@@ -42,7 +42,7 @@ class TextConverter : public ConverterBase< TextModel >
 {
 public:
     explicit            TextConverter( const ConverterRoot& rParent, TextModel& rModel );
-    virtual             ~TextConverter();
+    virtual             ~TextConverter() override;
 
     /** Creates a data sequence object from the contained text data. */
     css::uno::Reference< css::chart2::data::XDataSequence >
@@ -69,7 +69,7 @@ class TitleConverter : public ConverterBase< TitleModel >
 {
 public:
     explicit            TitleConverter( const ConverterRoot& rParent, TitleModel& rModel );
-    virtual             ~TitleConverter();
+    virtual             ~TitleConverter() override;
 
     /** Creates a title text object and attaches it at the passed interface. */
     void                convertFromModel(
@@ -85,7 +85,7 @@ class LegendConverter : public ConverterBase< LegendModel >
 {
 public:
     explicit            LegendConverter( const ConverterRoot& rParent, LegendModel& rModel );
-    virtual             ~LegendConverter();
+    virtual             ~LegendConverter() override;
 
     /** Creates a legend object and attaches it at the passed diagram. */
     void                convertFromModel(

@@ -56,7 +56,7 @@ private:
     css::uno::Reference< css::frame::XDispatchProviderInterception > xInterception;
 
 protected:
-    virtual ~BibInterceptorHelper( );
+    virtual ~BibInterceptorHelper( ) override;
 
 public:
     BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, css::uno::Reference< css::frame::XDispatch > xDispatch);
@@ -124,7 +124,7 @@ protected:
 public:
 
         BibDataManager();
-        virtual ~BibDataManager();
+        virtual ~BibDataManager() override;
 
         virtual void                SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt)
                                                                 throw( css::uno::RuntimeException, std::exception ) override;

@@ -67,7 +67,7 @@ public:
         SwPaM&,
         bool bFullPara = false,
         bool bCalledByTableCpy = false );
-    virtual ~SwUndoDelete();
+    virtual ~SwUndoDelete() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

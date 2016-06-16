@@ -39,7 +39,7 @@ class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper< css::ta
 {
     public:
         StatusIndicatorInterfaceWrapper( const css::uno::Reference< css::lang::XComponent >& rStatusIndicatorImpl );
-        virtual ~StatusIndicatorInterfaceWrapper();
+        virtual ~StatusIndicatorInterfaceWrapper() override;
 
         //  XStatusIndicator
 

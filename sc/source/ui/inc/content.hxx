@@ -119,7 +119,7 @@ protected:
 
 public:
             ScContentTree( vcl::Window* pParent, const ResId& rResId );
-            virtual ~ScContentTree();
+            virtual ~ScContentTree() override;
     virtual void dispose() override;
 
     OUString getAltLongDescText(SvTreeListEntry* pEntry, bool isAltText) const;

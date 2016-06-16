@@ -72,7 +72,7 @@ private:
 public:
             ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
                                 const TransferableObjectDescriptor& rDesc );
-    virtual ~ScDrawTransferObj();
+    virtual ~ScDrawTransferObj() override;
 
     virtual void        AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;

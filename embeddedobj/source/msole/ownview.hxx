@@ -64,7 +64,7 @@ public:
 
     OwnView_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
                   const css::uno::Reference< css::io::XInputStream >& xStream );
-    virtual ~OwnView_Impl();
+    virtual ~OwnView_Impl() override;
 
     bool Open();
 

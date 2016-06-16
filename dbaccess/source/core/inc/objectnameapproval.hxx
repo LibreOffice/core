@@ -63,7 +63,7 @@ namespace dbaccess
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             ObjectType _eType
         );
-        virtual ~ObjectNameApproval();
+        virtual ~ObjectNameApproval() override;
 
         // IContainerApprove
         virtual void SAL_CALL approveElement( const OUString& _rName, const css::uno::Reference< css::uno::XInterface >& _rxElement ) override;

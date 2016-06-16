@@ -50,7 +50,7 @@ class SfxQueryStatus_Impl:
     public:
 
         SfxQueryStatus_Impl( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
-        virtual ~SfxQueryStatus_Impl();
+        virtual ~SfxQueryStatus_Impl() override;
         SfxQueryStatus_Impl(const SfxQueryStatus_Impl&) = delete;
         SfxQueryStatus_Impl& operator=(const SfxQueryStatus_Impl&) = delete;
 

@@ -173,7 +173,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
  public:
     SvxFontWorkDialog(SfxBindings *pBinding, SfxChildWindow *pCW,
                       vcl::Window* pParent);
-    virtual ~SvxFontWorkDialog();
+    virtual ~SvxFontWorkDialog() override;
     virtual void dispose() override;
 
     void SetColorList(const XColorListRef &pTable);

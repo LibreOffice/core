@@ -80,7 +80,7 @@ namespace svt
         void cancel();
 
     protected:
-        virtual ~AsyncPickerAction();
+        virtual ~AsyncPickerAction() override;
 
     private:
         DECL_LINK_TYPED( OnActionDone, void*, void );

@@ -49,7 +49,7 @@ protected:
 public:
 
     SwXMLWriter( const OUString& rBaseURL );
-    virtual ~SwXMLWriter();
+    virtual ~SwXMLWriter() override;
 
     virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = nullptr ) override;
 

@@ -68,7 +68,7 @@ namespace dbaui
                     OJoinTableView::OTableWindowMap*    _pTableMap,
                     const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                     bool _bAllowTableSelect);
-        virtual ~DlgQryJoin();
+        virtual ~DlgQryJoin() override;
         virtual void dispose() override;
         EJoinType GetJoinType() const { return eJoinType; };
 

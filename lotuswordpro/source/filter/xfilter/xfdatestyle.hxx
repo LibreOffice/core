@@ -84,7 +84,7 @@ class XFDateStyle : public XFStyle
 public:
     XFDateStyle();
 
-    virtual ~XFDateStyle();
+    virtual ~XFDateStyle() override;
 
 public:
     void    AddYear( bool bLongFmt = true );

@@ -48,7 +48,7 @@ namespace connectivity
                                                                                 // so we have to
 
             virtual void FileClose();
-            virtual ~OFileTable( );
+            virtual ~OFileTable( ) override;
         public:
             virtual void refreshColumns() override;
             virtual void refreshKeys() override;

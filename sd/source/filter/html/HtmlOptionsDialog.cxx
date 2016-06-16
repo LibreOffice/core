@@ -66,7 +66,7 @@ class SdHtmlOptionsDialog : public cppu::WeakImplHelper
 public:
 
     SdHtmlOptionsDialog();
-    virtual ~SdHtmlOptionsDialog();
+    virtual ~SdHtmlOptionsDialog() override;
 
     // XInterface
     virtual void SAL_CALL acquire() throw() override;

@@ -59,7 +59,7 @@ class XResultSet_impl : public Notifier,
                          const css::uno::Sequence< css::beans::Property >& seq,
                          const css::uno::Sequence< css::ucb::NumberedSortingInfo >& seqSort );
 
-        virtual ~XResultSet_impl();
+        virtual ~XResultSet_impl() override;
 
         virtual ContentEventNotifier*        cDEL() override
         {

@@ -37,7 +37,7 @@ public:
     SdrObjKind                  meKind;
 
     SdrPathObjGeoData();
-    virtual ~SdrPathObjGeoData();
+    virtual ~SdrPathObjGeoData() override;
 };
 
 
@@ -71,7 +71,7 @@ public:
 
     SdrPathObj(SdrObjKind eNewKind);
     SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness = 1.0);
-    virtual ~SdrPathObj();
+    virtual ~SdrPathObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;

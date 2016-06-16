@@ -53,7 +53,7 @@ class MyApp : public Application
 {
 public:
     MyApp();
-    virtual ~MyApp();
+    virtual ~MyApp() override;
 
     MyApp(const MyApp&) = delete;
     const MyApp& operator=(const MyApp&) = delete;

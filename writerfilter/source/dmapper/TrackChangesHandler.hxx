@@ -33,7 +33,7 @@ class TrackChangesHandler : public LoggedProperties
 
 public:
     explicit TrackChangesHandler( sal_Int32 nToken );
-    virtual ~TrackChangesHandler();
+    virtual ~TrackChangesHandler() override;
 
     /// Compute the UNO properties for the track changes object based on the received tokens.
     css::uno::Sequence<css::beans::PropertyValue> getRedlineProperties() const;

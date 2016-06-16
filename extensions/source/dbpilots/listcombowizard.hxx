@@ -100,7 +100,7 @@ namespace dbp
 
     public:
         explicit OContentTableSelection( OListComboWizard* _pParent );
-        virtual ~OContentTableSelection();
+        virtual ~OContentTableSelection() override;
         virtual void dispose() override;
 
     protected:
@@ -127,7 +127,7 @@ namespace dbp
 
     public:
         explicit OContentFieldSelection( OListComboWizard* _pParent );
-        virtual ~OContentFieldSelection();
+        virtual ~OContentFieldSelection() override;
         virtual void dispose() override;
 
     protected:
@@ -152,7 +152,7 @@ namespace dbp
 
     public:
         explicit OLinkFieldsPage( OListComboWizard* _pParent );
-        virtual ~OLinkFieldsPage();
+        virtual ~OLinkFieldsPage() override;
         virtual void dispose() override;
 
     protected:

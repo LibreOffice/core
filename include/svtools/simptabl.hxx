@@ -36,7 +36,7 @@ protected:
 
 public:
     SvSimpleTableContainer( vcl::Window* pParent, WinBits nBits = WB_BORDER );
-    virtual ~SvSimpleTableContainer();
+    virtual ~SvSimpleTableContainer() override;
     virtual void dispose() override;
 
     void SetTable(SvSimpleTable* pTable);
@@ -87,7 +87,7 @@ protected:
 public:
 
     SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
-    virtual ~SvSimpleTable();
+    virtual ~SvSimpleTable() override;
     virtual void dispose() override;
 
     void UpdateViewSize();

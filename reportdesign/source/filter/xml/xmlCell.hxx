@@ -47,7 +47,7 @@ namespace rptxml
                     ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
                     ,OXMLTable* _pContainer
                     ,OXMLCell* _pCell = nullptr);
-        virtual ~OXMLCell();
+        virtual ~OXMLCell() override;
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

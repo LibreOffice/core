@@ -95,7 +95,7 @@ protected:
     LwpRotor m_ContainerRotor;
     sal_uInt8 m_ContentOrientation;
 private:
-    virtual ~LwpLayoutGeometry();
+    virtual ~LwpLayoutGeometry() override;
 };
 
 class LwpLayoutScale : public LwpVirtualPiece
@@ -124,7 +124,7 @@ protected:
     LwpPoint m_Offset;
     sal_uInt16 m_nPlacement;
 private:
-    virtual ~LwpLayoutScale();
+    virtual ~LwpLayoutScale() override;
 };
 
 #include "lwpmargins.hxx"
@@ -143,7 +143,7 @@ protected:
     LwpMargins m_ExtMargins;
     LwpMargins m_ExtraMargins;
 private:
-    virtual ~LwpLayoutMargins();
+    virtual ~LwpLayoutMargins() override;
 };
 
 #include "lwpborderstuff.hxx"
@@ -158,7 +158,7 @@ protected:
 protected:
     LwpBorderStuff m_BorderStuff;
 private:
-    virtual ~LwpLayoutBorder();
+    virtual ~LwpLayoutBorder() override;
 };
 
 class LwpLayoutBackground : public LwpVirtualPiece
@@ -172,7 +172,7 @@ protected:
 protected:
     LwpBackgroundStuff m_BackgroundStuff;
 private:
-    virtual ~LwpLayoutBackground();
+    virtual ~LwpLayoutBackground() override;
 };
 
 class LwpExternalBorder
@@ -199,7 +199,7 @@ protected:
 protected:
     LwpExternalBorder   m_ExtranalBorder;
 private:
-    virtual ~LwpLayoutExternalBorder();
+    virtual ~LwpLayoutExternalBorder() override;
 };
 
 class LwpColumnInfo
@@ -229,7 +229,7 @@ protected:
     sal_uInt16 m_nNumCols;
     LwpColumnInfo* m_pColumns;
 private:
-    virtual ~LwpLayoutColumns();
+    virtual ~LwpLayoutColumns() override;
 };
 
 class LwpLayoutGutters : public LwpVirtualPiece
@@ -243,7 +243,7 @@ protected:
 protected:
     LwpBorderStuff m_BorderBuffer;
 private:
-    virtual ~LwpLayoutGutters();
+    virtual ~LwpLayoutGutters() override;
 };
 
 class LwpJoinStuff
@@ -302,7 +302,7 @@ protected:
 protected:
     LwpJoinStuff m_JoinStuff;
 private:
-    virtual ~LwpLayoutJoins();
+    virtual ~LwpLayoutJoins() override;
 };
 
 #include "lwpshadow.hxx"
@@ -318,7 +318,7 @@ protected:
 protected:
     LwpShadow m_Shadow;
 private:
-    virtual ~LwpLayoutShadow();
+    virtual ~LwpLayoutShadow() override;
 };
 
 class LwpLayoutRelativityGuts
@@ -374,7 +374,7 @@ protected:
 protected:
     LwpLayoutRelativityGuts m_RelGuts;
 private:
-    virtual ~LwpLayoutRelativity();
+    virtual ~LwpLayoutRelativity() override;
 };
 
 #endif

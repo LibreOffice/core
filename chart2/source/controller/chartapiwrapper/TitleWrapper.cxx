@@ -51,7 +51,7 @@ class WrappedTitleStringProperty : public WrappedProperty
 {
 public:
     explicit WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext );
-    virtual ~WrappedTitleStringProperty();
+    virtual ~WrappedTitleStringProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) override;
@@ -112,7 +112,7 @@ class WrappedStackedTextProperty : public WrappedProperty
 {
 public:
     WrappedStackedTextProperty();
-    virtual ~WrappedStackedTextProperty();
+    virtual ~WrappedStackedTextProperty() override;
 };
 
 WrappedStackedTextProperty::WrappedStackedTextProperty()

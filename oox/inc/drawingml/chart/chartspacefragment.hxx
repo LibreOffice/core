@@ -38,7 +38,7 @@ public:
                             ::oox::core::XmlFilterBase& rFilter,
                             const OUString& rFragmentPath,
                             ChartSpaceModel& rModel );
-    virtual             ~ChartSpaceFragment();
+    virtual             ~ChartSpaceFragment() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };

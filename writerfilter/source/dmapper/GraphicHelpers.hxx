@@ -34,7 +34,7 @@ class PositionHandler: public LoggedProperties
 {
 public:
     PositionHandler( std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns );
-    virtual ~PositionHandler( );
+    virtual ~PositionHandler( ) override;
     sal_Int16 orientation() const;
     sal_Int16 relation() const { return m_nRelation;}
     sal_Int32 position() const { return m_nPosition;}
@@ -53,7 +53,7 @@ class WrapHandler: public LoggedProperties
 {
 public:
     WrapHandler( );
-    virtual ~WrapHandler( );
+    virtual ~WrapHandler( ) override;
 
     sal_Int32 m_nType;
     sal_Int32 m_nSide;

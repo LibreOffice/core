@@ -40,7 +40,7 @@ class XMLSignature_NssImpl : public ::cppu::WeakImplHelper<
 {
     public:
         explicit XMLSignature_NssImpl();
-        virtual ~XMLSignature_NssImpl() ;
+        virtual ~XMLSignature_NssImpl() override ;
 
         //Methods from XXMLSignature
         virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL generate(

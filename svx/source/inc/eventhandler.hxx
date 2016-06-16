@@ -98,7 +98,7 @@ namespace sdr
         public:
             TimerEventHandler();
 
-            virtual ~TimerEventHandler();
+            virtual ~TimerEventHandler() override;
 
             // The timer when it is triggered; from class Timer
             virtual void Invoke() override;

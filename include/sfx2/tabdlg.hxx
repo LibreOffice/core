@@ -123,7 +123,7 @@ public:
     SfxTabDialog(vcl::Window* pParent,
                  const OUString& rID, const OUString& rUIXMLDescription,
                  const SfxItemSet * = nullptr, bool bEditFmt = false);
-    virtual ~SfxTabDialog();
+    virtual ~SfxTabDialog() override;
     virtual void dispose() override;
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
@@ -235,7 +235,7 @@ protected:
     void                AddItemConnection( sfx::ItemConnectionBase* pConnection );
 
 public:
-    virtual             ~SfxTabPage();
+    virtual             ~SfxTabPage() override;
     virtual void        dispose() override;
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }

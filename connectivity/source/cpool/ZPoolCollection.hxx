@@ -105,7 +105,7 @@ namespace connectivity
         void clearConnectionPools(bool _bDispose);
         void clearDesktop();
     protected:
-        virtual ~OPoolCollection();
+        virtual ~OPoolCollection() override;
     public:
 
         static css::uno::Any getNodeValue( const OUString& _rPath,

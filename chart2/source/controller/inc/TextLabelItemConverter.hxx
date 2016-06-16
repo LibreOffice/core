@@ -42,7 +42,7 @@ public:
         sal_Int32 nNumberFormat = 0,
         sal_Int32 nPercentNumberFormat = 0 );
 
-    virtual ~TextLabelItemConverter();
+    virtual ~TextLabelItemConverter() override;
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const override;
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet ) override;

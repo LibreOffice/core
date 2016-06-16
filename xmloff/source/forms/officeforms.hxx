@@ -38,7 +38,7 @@ namespace xmloff
     public:
 
         OFormsRootImport( SvXMLImport& _rImport, sal_uInt16 _nPrfx, const OUString& _rLocalName);
-        virtual ~OFormsRootImport();
+        virtual ~OFormsRootImport() override;
 
         // SvXMLImportContext overridable
         virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,

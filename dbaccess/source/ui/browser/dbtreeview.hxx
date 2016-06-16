@@ -41,7 +41,7 @@ namespace dbaui
 
         DBTreeView( vcl::Window* pParent,
                 WinBits nBits );
-        virtual ~DBTreeView();
+        virtual ~DBTreeView() override;
         virtual void dispose() override;
 
         /** sets a handler which is called when an list box entry is to be expanded.

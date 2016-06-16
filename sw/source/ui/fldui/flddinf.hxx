@@ -61,7 +61,7 @@ protected:
 public:
                         SwFieldDokInfPage(vcl::Window* pWindow, const SfxItemSet* pSet);
 
-                        virtual ~SwFieldDokInfPage();
+                        virtual ~SwFieldDokInfPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

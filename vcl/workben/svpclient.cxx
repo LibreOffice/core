@@ -108,7 +108,7 @@ public:
     virtual void Resize() override;
 
     virtual bool Close() override;
-    virtual ~MyWin() { disposeOnce(); }
+    virtual ~MyWin() override { disposeOnce(); }
     virtual void dispose() override;
 
     void parseList( const OString& rList );

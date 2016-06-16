@@ -37,7 +37,7 @@ namespace svgio
                 SVGToken aType,
                 SvgDocument& rDocument,
                 SvgNode* pParent);
-            virtual ~SvgTitleDescNode();
+            virtual ~SvgTitleDescNode() override;
 
             /// add new chars
             void concatenate(const OUString& rChars);

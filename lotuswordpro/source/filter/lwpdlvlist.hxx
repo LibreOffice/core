@@ -72,7 +72,7 @@ class LwpDLVList : public LwpObject
 public:
     LwpDLVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
 protected:
-    virtual ~LwpDLVList(){}
+    virtual ~LwpDLVList() override {}
 
     LwpObjectID m_ListPrevious;
     LwpObjectID m_ListNext;
@@ -91,7 +91,7 @@ class LwpDLNFVList : public LwpDLVList
 public:
     LwpDLNFVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
 protected:
-    virtual ~LwpDLNFVList(){}
+    virtual ~LwpDLNFVList() override {}
 
     LwpObjectID m_ChildHead;
     LwpObjectID m_ChildTail;
@@ -116,7 +116,7 @@ class LwpDLNFPVList : public LwpDLNFVList
 {
 public:
     LwpDLNFPVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDLNFPVList();
+    virtual ~LwpDLNFPVList() override;
 protected:
     bool m_bHasProperties;
     LwpPropList* m_pPropList;

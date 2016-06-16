@@ -32,7 +32,7 @@ class TableColumns : public ::cppu::WeakAggImplHelper1< css::table::XTableColumn
 {
 public:
     explicit TableColumns( const TableModelRef& xTableModel );
-    virtual ~TableColumns();
+    virtual ~TableColumns() override;
 
     void dispose();
     void throwIfDisposed() const throw (css::uno::RuntimeException);

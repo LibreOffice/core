@@ -3145,7 +3145,7 @@ namespace
                 : mrViewShell( rSh )
             {};
 
-            virtual ~SwViewObjectContactRedirector()
+            virtual ~SwViewObjectContactRedirector() override
             {}
 
             virtual drawinglayer::primitive2d::Primitive2DContainer createRedirectedPrimitive2DSequence(

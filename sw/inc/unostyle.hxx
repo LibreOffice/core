@@ -67,7 +67,7 @@ class SwXStyleFamilies :  public cppu::WeakImplHelper
 
     std::map<SfxStyleFamily, css::uno::Reference<css::container::XNameContainer>> m_vFamilies;
 protected:
-    virtual ~SwXStyleFamilies();
+    virtual ~SwXStyleFamilies() override;
 public:
     SwXStyleFamilies(SwDocShell& rDocShell);
 
@@ -130,7 +130,7 @@ class SwXAutoStyles :
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoCharStyles;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoRubyStyles;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoParaStyles;
-    virtual ~SwXAutoStyles();
+    virtual ~SwXAutoStyles() override;
 
 public:
     SwXAutoStyles(SwDocShell& rDocShell);
@@ -162,7 +162,7 @@ protected:
 
 public:
     SwXAutoStyleFamily(SwDocShell* pDocShell, IStyleAccess::SwAutoStyleFamily eFamily);
-    virtual ~SwXAutoStyleFamily();
+    virtual ~SwXAutoStyleFamily() override;
 
     //XAutoStyleFamily
     virtual css::uno::Reference< css::style::XAutoStyle > SAL_CALL insertStyle( const css::uno::Sequence< css::beans::PropertyValue >& Values ) throw (css::uno::RuntimeException, std::exception) override;
@@ -182,7 +182,7 @@ class SwXAutoStylesEnumerator : public cppu::WeakImplHelper< css::container::XEn
     SwAutoStylesEnumImpl *m_pImpl;
 public:
     SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwAutoStyleFamily eFam );
-    virtual ~SwXAutoStylesEnumerator();
+    virtual ~SwXAutoStylesEnumerator() override;
 
     //XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (css::uno::RuntimeException, std::exception) override;
@@ -210,7 +210,7 @@ private:
 public:
 
     SwXAutoStyle( SwDoc* pDoc, std::shared_ptr<SfxItemSet> pInitSet, IStyleAccess::SwAutoStyleFamily eFam );
-    virtual ~SwXAutoStyle();
+    virtual ~SwXAutoStyle() override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -326,7 +326,7 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
     SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle);
     /// Create non physical style
     SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName);
-    virtual ~SwXTextCellStyle();
+    virtual ~SwXTextCellStyle() override;
 
     /**
     * This function looks for a SwBoxAutoFormat with given name. Parses the name and returns parent name.

@@ -286,7 +286,7 @@ class OExceptionChainDialog : public ModalDialog
 
 public:
     OExceptionChainDialog( vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions );
-    virtual ~OExceptionChainDialog() { disposeOnce(); }
+    virtual ~OExceptionChainDialog() override { disposeOnce(); }
     virtual void dispose() override
     {
         m_pExceptionList.clear();

@@ -51,7 +51,7 @@ public:
         OutputDevice* pTemplate = nullptr,
         const bool bPaintFrame = true);
 
-    virtual ~PreviewRenderer();
+    virtual ~PreviewRenderer() override;
 
     /** Render a page with the given pixel size.
         Use this version when only the width of the preview is known to the

@@ -34,7 +34,7 @@ private:
 public:
     PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
             const css::uno::Reference<css::frame::XFrame> &rFrame);
-    virtual ~PanelLayout();
+    virtual ~PanelLayout() override;
     virtual void dispose() override;
 
     virtual Size GetOptimalSize() const override;

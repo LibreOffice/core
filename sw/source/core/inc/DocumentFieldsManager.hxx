@@ -86,7 +86,7 @@ public:
 
     void UpdateDBNumFields( SwDBNameInfField& rDBField, SwCalc& rCalc );
 
-    virtual ~DocumentFieldsManager();
+    virtual ~DocumentFieldsManager() override;
 
 private:
 

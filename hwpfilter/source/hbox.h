@@ -76,7 +76,7 @@ struct SkipData: public HBox
     char  *data_block;
 
     explicit SkipData(hchar);
-    virtual ~SkipData();
+    virtual ~SkipData() override;
     virtual bool Read(HWPFile &hwpf) override;
 };
 struct DateCode;
@@ -94,7 +94,7 @@ struct FieldCode : public HBox
      DateCode *m_pDate;
 
     FieldCode();
-    virtual ~FieldCode();
+    virtual ~FieldCode() override;
     virtual bool Read(HWPFile &hwpf) override;
 };
 /**
@@ -119,7 +119,7 @@ struct Bookmark: public HBox
     unsigned short    type;
 
     Bookmark();
-    virtual ~Bookmark();
+    virtual ~Bookmark() override;
     virtual bool Read(HWPFile &hwpf) override;
 };
 
@@ -322,7 +322,7 @@ struct FBox: public HBox
     FBox      *prev, *next;
 
     explicit FBox( hchar hch );
-    virtual ~FBox();
+    virtual ~FBox() override;
 };
 
 struct Table;
@@ -374,7 +374,7 @@ struct TxtBox: public FBox
     std::list<HWPPara*> caption;
 
     TxtBox();
-    virtual ~TxtBox();
+    virtual ~TxtBox() override;
 
 /**
  * @returns Count of cell.
@@ -647,7 +647,7 @@ struct Picture: public FBox
     bool ishyper;
 
     Picture();
-    virtual ~Picture();
+    virtual ~Picture() override;
 
     virtual bool Read    (HWPFile &hwpf) override;
 };
@@ -684,7 +684,7 @@ struct Hidden: public HBox
     std::list<HWPPara*> plist;
 
     Hidden();
-    virtual ~Hidden();
+    virtual ~Hidden() override;
 
     virtual bool Read(HWPFile &hwpf) override;
 };
@@ -713,7 +713,7 @@ struct HeaderFooter: public HBox
     std::list<HWPPara*> plist;
 
     HeaderFooter();
-    virtual ~HeaderFooter();
+    virtual ~HeaderFooter() override;
 
     virtual bool Read(HWPFile &hwpf) override;
 };
@@ -746,7 +746,7 @@ struct Footnote: public HBox
     std::list<HWPPara*> plist;
 
     Footnote();
-    virtual ~Footnote();
+    virtual ~Footnote() override;
 
     virtual bool Read(HWPFile &hwpf) override;
 };

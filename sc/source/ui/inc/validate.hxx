@@ -77,7 +77,7 @@ class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
     static const sal_uInt16 pValueRanges[];
 public:
     explicit                    ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet );
-    virtual                     ~ScTPValidationValue();
+    virtual                     ~ScTPValidationValue() override;
     virtual void                dispose() override;
     static VclPtr<SfxTabPage>          Create( vcl::Window* pParent, const SfxItemSet* rArgSet );
     static const sal_uInt16*    GetRanges() { return pValueRanges; }
@@ -133,7 +133,7 @@ public:
             , m_pPage(nullptr)
         {
         }
-        virtual ~ScRefButtonEx();
+        virtual ~ScRefButtonEx() override;
         virtual void dispose() override;
         void SetParentPage(ScTPValidationValue *pPage)
         {
@@ -176,7 +176,7 @@ class ScValidationDlg
 
 public:
     explicit ScValidationDlg( vcl::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = nullptr );
-    virtual                     ~ScValidationDlg();
+    virtual                     ~ScValidationDlg() override;
     virtual void                dispose() override
     {
         if( m_bOwnRefHdlr )
@@ -268,7 +268,7 @@ private:
 
 public:
             ScTPValidationHelp( vcl::Window* pParent, const SfxItemSet& rArgSet );
-            virtual ~ScTPValidationHelp();
+            virtual ~ScTPValidationHelp() override;
     virtual void dispose() override;
 
     static  VclPtr<SfxTabPage> Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );
@@ -294,7 +294,7 @@ private:
 
 public:
             ScTPValidationError( vcl::Window* pParent, const SfxItemSet& rArgSet );
-            virtual ~ScTPValidationError();
+            virtual ~ScTPValidationError() override;
     virtual void dispose() override;
 
     static  VclPtr<SfxTabPage> Create      ( vcl::Window* pParent, const SfxItemSet* rArgSet );

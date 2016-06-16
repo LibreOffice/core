@@ -65,7 +65,7 @@ private:
     EditEngine*             mpEditEngine;
     SvxTextForwarder*       mpTextForwarder;
 
-    virtual ~SvxEditEngineSourceImpl();
+    virtual ~SvxEditEngineSourceImpl() override;
 
 public:
     explicit SvxEditEngineSourceImpl( EditEngine* pEditEngine );
@@ -130,7 +130,7 @@ class SvxSimpleUnoModel : public cppu::WeakAggImplHelper4<
 {
 public:
     SvxSimpleUnoModel();
-    virtual ~SvxSimpleUnoModel();
+    virtual ~SvxSimpleUnoModel() override;
 
 
     // XMultiServiceFactory
@@ -301,7 +301,7 @@ public:
         const OUString& rFileName,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
 
-    virtual ~SvxXMLTextExportComponent();
+    virtual ~SvxXMLTextExportComponent() override;
 
     // methods without content:
     virtual void ExportAutoStyles_() override;

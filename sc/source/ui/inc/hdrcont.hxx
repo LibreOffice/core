@@ -109,7 +109,7 @@ protected:
 public:
             ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelectionEngine,
                              SCCOLROW nNewSize, bool bNewVertical, ScTabView* pTab );
-            virtual ~ScHeaderControl();
+            virtual ~ScHeaderControl() override;
 
     void    SetIgnoreMove(bool bSet)            { bIgnoreMove = bSet; }
 

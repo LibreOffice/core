@@ -85,7 +85,7 @@ public:
     }
 
     explicit UIConfigurationManager( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
-    virtual ~UIConfigurationManager();
+    virtual ~UIConfigurationManager() override;
 
     // XComponent
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;

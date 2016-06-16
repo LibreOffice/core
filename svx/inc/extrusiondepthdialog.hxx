@@ -35,7 +35,7 @@ class ExtrusionDepthDialog : public ModalDialog
 
 public:
     ExtrusionDepthDialog( vcl::Window* pParent, double fDepth, FieldUnit eDefaultUnit );
-    virtual ~ExtrusionDepthDialog();
+    virtual ~ExtrusionDepthDialog() override;
     virtual void dispose() override;
 
     double getDepth() const;

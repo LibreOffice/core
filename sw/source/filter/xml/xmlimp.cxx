@@ -125,7 +125,7 @@ public:
     SwXMLBodyContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLBodyContext_Impl();
+    virtual ~SwXMLBodyContext_Impl() override;
 
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
@@ -168,7 +168,7 @@ public:
     SwXMLDocContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLDocContext_Impl();
+    virtual ~SwXMLDocContext_Impl() override;
 
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
@@ -256,7 +256,7 @@ public:
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList,
                 const Reference< document::XDocumentProperties >& xDocProps);
-    virtual ~SwXMLOfficeDocContext_Impl();
+    virtual ~SwXMLOfficeDocContext_Impl() override;
 
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -318,7 +318,7 @@ public:
                                 sal_uInt16 nPrfx,
                                 const OUString& rLName,
                                 const Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SwXMLDocStylesContext_Impl();
+    virtual ~SwXMLDocStylesContext_Impl() override;
 
 
     virtual void EndElement() override;
@@ -942,7 +942,7 @@ class SvTextShapeImportHelper : public XMLTextShapeImportHelper
 
 public:
     explicit SvTextShapeImportHelper(SvXMLImport& rImp);
-    virtual ~SvTextShapeImportHelper();
+    virtual ~SvTextShapeImportHelper() override;
 };
 
 SvTextShapeImportHelper::SvTextShapeImportHelper(SvXMLImport& rImp) :

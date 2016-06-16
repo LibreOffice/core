@@ -211,7 +211,7 @@ class SC_DLLPUBLIC ScColorFormat : public ScFormatEntry
 {
 public:
     ScColorFormat(ScDocument* pDoc);
-    virtual ~ScColorFormat();
+    virtual ~ScColorFormat() override;
 
     const ScRangeList& GetRange() const;
 
@@ -252,7 +252,7 @@ private:
 public:
     ScColorScaleFormat(ScDocument* pDoc);
     ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
-    virtual ~ScColorScaleFormat();
+    virtual ~ScColorScaleFormat() override;
     virtual ScColorFormat* Clone(ScDocument* pDoc = nullptr) const override;
 
     Color* GetColor(const ScAddress& rAddr) const;

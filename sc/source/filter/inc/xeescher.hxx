@@ -164,7 +164,7 @@ class XclExpControlHelper : protected XclExpRoot
 {
 public:
     explicit            XclExpControlHelper( const XclExpRoot& rRoot );
-    virtual             ~XclExpControlHelper();
+    virtual             ~XclExpControlHelper() override;
 
 protected:
     /** Tries to get spreadsheet cell link and source range link from the passed shape. */
@@ -196,7 +196,7 @@ protected:
 
 public:
     explicit            XclMacroHelper( const XclExpRoot& rRoot );
-    virtual             ~XclMacroHelper();
+    virtual             ~XclMacroHelper() override;
     /** Writes an ftMacro subrecord containing a macro link, or nothing, if no macro present. */
     void                WriteMacroSubRec( XclExpStream& rStrm  );
     /** Sets the name of a macro for object of passed type
@@ -212,7 +212,7 @@ class XclExpShapeObj : public XclObjAny, public XclMacroHelper
 {
 public:
     explicit            XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > xShape, ScDocument* pDoc );
-    virtual             ~XclExpShapeObj();
+    virtual             ~XclExpShapeObj() override;
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
 };
@@ -293,7 +293,7 @@ public:
                             XclExpObjectManager& rObjMgr,
                             css::uno::Reference< css::drawing::XShape > xShape,
                             const Rectangle* pChildAnchor );
-    virtual             ~XclExpChartObj();
+    virtual             ~XclExpChartObj() override;
 
     /** Writes the OBJ record and the entire chart substream. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -383,7 +383,7 @@ class XclExpObjectManager : public XclExpRoot
 {
 public:
     explicit            XclExpObjectManager( const XclExpRoot& rRoot );
-    virtual             ~XclExpObjectManager();
+    virtual             ~XclExpObjectManager() override;
 
     /** Creates a new DFF client anchor object. Caller takes ownership! May be
         overwritten in derived  classes. */

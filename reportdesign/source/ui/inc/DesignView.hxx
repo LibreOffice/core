@@ -94,7 +94,7 @@ namespace rptui
         ODesignView(vcl::Window* pParent,
                     const css::uno::Reference< css::uno::XComponentContext >&,
                     OReportController& _rController);
-        virtual ~ODesignView();
+        virtual ~ODesignView() override;
         virtual void dispose() override;
 
         // Window overrides

@@ -93,7 +93,7 @@ namespace drawinglayer
                 const basegfx::B3DVector& rLightNormal,
                 double fShadowSlant,
                 const basegfx::B3DRange& rContained3DRange);
-            virtual ~Shadow3DExtractingProcessor();
+            virtual ~Shadow3DExtractingProcessor() override;
 
             /// data read access
             const primitive2d::Primitive2DContainer& getPrimitive2DSequence() const;

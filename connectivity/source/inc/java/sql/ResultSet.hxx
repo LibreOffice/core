@@ -97,7 +97,7 @@ namespace connectivity
                                                                 css::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const override;
-        virtual ~java_sql_ResultSet();
+        virtual ~java_sql_ResultSet() override;
     public:
         DECLARE_SERVICE_INFO();
         virtual jclass getMyClass() const override;

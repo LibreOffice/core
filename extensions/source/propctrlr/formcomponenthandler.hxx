@@ -107,7 +107,7 @@ namespace pcr
         static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
 
     protected:
-        virtual ~FormComponentPropertyHandler();
+        virtual ~FormComponentPropertyHandler() override;
 
     protected:
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;

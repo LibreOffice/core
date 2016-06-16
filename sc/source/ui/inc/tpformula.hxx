@@ -43,7 +43,7 @@ public:
 
 private:
     explicit ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& rCoreSet);
-    virtual ~ScTpFormulaOptions();
+    virtual ~ScTpFormulaOptions() override;
     virtual void dispose() override;
     void ResetSeparators();
     void OnFocusSeparatorInput(Edit* pEdit);

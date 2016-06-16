@@ -30,7 +30,7 @@ class SwVbaFont : public SwVbaFont_BASE
 {
 public:
     SwVbaFont( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPalette, css::uno::Reference< css::beans::XPropertySet > xPropertySet ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaFont(){}
+    virtual ~SwVbaFont() override {}
 
     // Attributes
     virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) throw (css::uno::RuntimeException, std::exception) override;

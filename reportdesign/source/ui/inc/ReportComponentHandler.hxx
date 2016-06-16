@@ -81,7 +81,7 @@ namespace rptui
         virtual sal_Bool SAL_CALL suspend(sal_Bool Suspend) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~ReportComponentHandler() {}
+        virtual ~ReportComponentHandler() override {}
     private:
         ReportComponentHandler(ReportComponentHandler &) = delete;
         void operator =(ReportComponentHandler &) = delete;

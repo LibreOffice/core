@@ -131,7 +131,7 @@ protected:
 
 public:
     explicit OButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
-    virtual ~OButtonControl();
+    virtual ~OButtonControl() override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()

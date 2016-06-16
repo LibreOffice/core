@@ -190,7 +190,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
-    virtual ~SdXML3DLightContext();
+    virtual ~SdXML3DLightContext() override;
 
     sal_Int32 GetDiffuseColor() { return maDiffuseColor; }
     const ::basegfx::B3DVector& GetDirection() { return maDirection; }
@@ -303,7 +303,7 @@ public:
         const css::uno::Reference< css::frame::XModel>& rModel,
     SvXMLImportPropertyMapper *pExtMapper=nullptr );
 
-    virtual ~XMLShapeImportHelper();
+    virtual ~XMLShapeImportHelper() override;
 
     SvXMLShapeContext* CreateGroupChildContext(
         SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,

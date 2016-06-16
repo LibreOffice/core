@@ -269,7 +269,7 @@ public:
 
     explicit librdf_Repository(
         uno::Reference< uno::XComponentContext > const & i_xContext);
-    virtual ~librdf_Repository();
+    virtual ~librdf_Repository() override;
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()
@@ -461,7 +461,7 @@ public:
         , m_pStream(i_pStream)
     { };
 
-    virtual ~librdf_GraphResult()
+    virtual ~librdf_GraphResult() override
     {
         ::osl::MutexGuard g(m_rMutex); // lock mutex when destroying members
         const_cast<std::shared_ptr<librdf_stream>& >(m_pStream).reset();
@@ -575,7 +575,7 @@ public:
         , m_BindingNames(i_rBindingNames)
     { };
 
-    virtual ~librdf_QuerySelectResult()
+    virtual ~librdf_QuerySelectResult() override
     {
         ::osl::MutexGuard g(m_rMutex); // lock mutex when destroying members
         const_cast<std::shared_ptr<librdf_query_results>& >(m_pQueryResult)
@@ -695,7 +695,7 @@ public:
         , m_xName(i_xName)
     { };
 
-    virtual ~librdf_NamedGraph() {}
+    virtual ~librdf_NamedGraph() override {}
 
     // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue()

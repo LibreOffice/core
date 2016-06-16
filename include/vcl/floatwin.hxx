@@ -141,7 +141,7 @@ public:
     explicit        FloatingWindow(vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN);
     explicit        FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
                                    const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
-    virtual         ~FloatingWindow();
+    virtual         ~FloatingWindow() override;
     virtual void    dispose() override;
 
     virtual bool    Notify( NotifyEvent& rNEvt ) override;

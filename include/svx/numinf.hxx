@@ -45,7 +45,7 @@ public:
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
                        const OUString& rValueStr, const sal_uInt16 nId );
     SvxNumberInfoItem( const SvxNumberInfoItem& );
-    virtual ~SvxNumberInfoItem();
+    virtual ~SvxNumberInfoItem() override;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;

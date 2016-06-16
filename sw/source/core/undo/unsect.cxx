@@ -288,7 +288,7 @@ public:
     SwUndoDelSection(
         SwSectionFormat const&, SwSection const&, SwNodeIndex const*const);
 
-    virtual ~SwUndoDelSection();
+    virtual ~SwUndoDelSection() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -396,7 +396,7 @@ public:
     SwUndoUpdateSection(
         SwSection const&, SwNodeIndex const*const, bool const bOnlyAttr);
 
-    virtual ~SwUndoUpdateSection();
+    virtual ~SwUndoUpdateSection() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

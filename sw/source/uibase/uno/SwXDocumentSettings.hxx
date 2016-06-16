@@ -66,7 +66,7 @@ protected:
         throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
 protected:
     virtual ~SwXDocumentSettings()
-        throw();
+        throw() override;
 public:
     SwXDocumentSettings( SwXTextDocument* pModel );
 

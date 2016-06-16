@@ -61,7 +61,7 @@ public:
 
     virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) override;
 
-    virtual ~DocumentDrawModelManager() {}
+    virtual ~DocumentDrawModelManager() override {}
 
 private:
 

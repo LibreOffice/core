@@ -86,7 +86,7 @@ protected:
 public:
 
     explicit StructPage(vcl::Window* pParent);
-    virtual         ~StructPage();
+    virtual         ~StructPage() override;
     virtual void    dispose() override;
 
     void            ClearStruct();

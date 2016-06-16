@@ -71,7 +71,7 @@ public:
                                 css::uno::Reference< css::script::browse::XBrowseNode >& node,
                                 css::uno::Reference< css::frame::XModel>& model  );
                             SFTreeListBox(vcl::Window* pParent);
-                    virtual ~SFTreeListBox();
+                    virtual ~SFTreeListBox() override;
     virtual void    dispose() override;
 
     SvTreeListEntry *       insertEntry(OUString const & rText, sal_uInt16 nBitmap,
@@ -99,7 +99,7 @@ private:
     VclPtr<Edit> m_pEdit;
 public:
     CuiInputDialog(vcl::Window * pParent, InputDialogMode nMode);
-    virtual ~CuiInputDialog();
+    virtual ~CuiInputDialog() override;
     virtual void dispose() override;
 
     OUString GetObjectName() const { return m_pEdit->GetText(); }
@@ -173,7 +173,7 @@ public:
                     // prob need another arg in the ctor
                     // to specify the language or provider
                     SvxScriptOrgDialog( vcl::Window* pParent, const OUString& language );
-                    virtual ~SvxScriptOrgDialog();
+                    virtual ~SvxScriptOrgDialog() override;
     virtual void    dispose() override;
 
     virtual short   Execute() override;
@@ -192,7 +192,7 @@ public:
 
     SvxScriptErrorDialog( vcl::Window* parent, css::uno::Any aException );
 
-    virtual ~SvxScriptErrorDialog();
+    virtual ~SvxScriptErrorDialog() override;
 
     short           Execute() override;
 };

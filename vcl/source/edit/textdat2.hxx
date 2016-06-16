@@ -238,7 +238,7 @@ private:
 
 public:
                 IdleFormatter();
-                virtual ~IdleFormatter();
+                virtual ~IdleFormatter() override;
 
     void        DoIdleFormat( TextView* pV, sal_uInt16 nMaxRestarts );
     void        ForceTimeout();

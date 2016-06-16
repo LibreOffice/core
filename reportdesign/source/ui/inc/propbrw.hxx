@@ -89,7 +89,7 @@ public:
     PropBrw(const css::uno::Reference< css::uno::XComponentContext >& _xORB
             ,Window* pParent
             ,ODesignView*  _pDesignView);
-    virtual ~PropBrw();
+    virtual ~PropBrw() override;
     virtual void dispose() override;
 
     virtual void LoseFocus() override;

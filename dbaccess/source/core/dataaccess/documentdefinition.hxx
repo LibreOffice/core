@@ -72,7 +72,7 @@ class ODocumentDefinition
     rtl::Reference<OEmbeddedClientHelper>                     m_pClientHelper;
 
 protected:
-    virtual ~ODocumentDefinition();
+    virtual ~ODocumentDefinition() override;
 
 public:
 

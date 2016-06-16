@@ -34,7 +34,7 @@ private:
 
 public:
     SwVbaListLevel( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, SwVbaListHelperRef pHelper, sal_Int32 nLevel ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaListLevel();
+    virtual ~SwVbaListLevel() override;
 
     // Attributes
     virtual ::sal_Int32 SAL_CALL getAlignment() throw (css::uno::RuntimeException, std::exception) override;

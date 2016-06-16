@@ -64,7 +64,7 @@ protected:
 
 public:
     ScCondFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
-    virtual ~ScCondFrmtEntry();
+    virtual ~ScCondFrmtEntry() override;
     virtual void dispose() override;
 
     virtual bool Notify( NotifyEvent& rNEvt ) override;
@@ -118,7 +118,7 @@ protected:
 public:
     ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
             const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = nullptr );
-    virtual ~ScConditionFrmtEntry();
+    virtual ~ScConditionFrmtEntry() override;
     virtual void dispose() override;
 
     virtual ScFormatEntry* GetEntry() const override;
@@ -146,7 +146,7 @@ class ScFormulaFrmtEntry : public ScCondFrmtEntry
 
 public:
     ScFormulaFrmtEntry( vcl::Window* pParent, ScDocument* PDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = nullptr );
-    virtual ~ScFormulaFrmtEntry();
+    virtual ~ScFormulaFrmtEntry() override;
     virtual void dispose() override;
 
     virtual ScFormatEntry* GetEntry() const override;
@@ -179,7 +179,7 @@ class ScColorScale2FrmtEntry : public ScCondFrmtEntry
     DECL_LINK_TYPED( EntryTypeHdl, ListBox&, void );
 public:
     ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr );
-    virtual ~ScColorScale2FrmtEntry();
+    virtual ~ScColorScale2FrmtEntry() override;
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
@@ -214,7 +214,7 @@ class ScColorScale3FrmtEntry : public ScCondFrmtEntry
     DECL_LINK_TYPED( EntryTypeHdl, ListBox&, void );
 public:
     ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr );
-    virtual ~ScColorScale3FrmtEntry();
+    virtual ~ScColorScale3FrmtEntry() override;
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
@@ -246,7 +246,7 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
     DECL_LINK_TYPED( DataBarTypeSelectHdl, ListBox&, void );
 public:
     ScDataBarFrmtEntry( vcl::Window* pParemt, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat = nullptr );
-    virtual ~ScDataBarFrmtEntry();
+    virtual ~ScDataBarFrmtEntry() override;
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
@@ -259,7 +259,7 @@ class ScDateFrmtEntry : public ScCondFrmtEntry, public SfxListener
 {
 public:
     ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat = nullptr );
-    virtual ~ScDateFrmtEntry();
+    virtual ~ScDateFrmtEntry() override;
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;
@@ -303,7 +303,7 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
 
 public:
     ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat = nullptr );
-    virtual ~ScIconSetFrmtEntry();
+    virtual ~ScIconSetFrmtEntry() override;
     virtual void dispose() override;
     virtual ScFormatEntry* GetEntry() const override;
     virtual void SetActive() override;

@@ -79,7 +79,7 @@ public:
                             SfxWorkWindow *pW, bool bWithButtons,
                             WinBits nBits = WB_BORDER | WB_SIZEABLE | WB_3DLOOK );
 
-                        virtual ~SfxSplitWindow();
+                        virtual ~SfxSplitWindow() override;
     virtual void        dispose() override;
 
     void                ReleaseWindow_Impl(SfxDockingWindow *pWin, bool bSaveConfig=true);

@@ -29,7 +29,7 @@ class BubbleDataInterpreter : public DataInterpreter
 public:
     explicit BubbleDataInterpreter(
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~BubbleDataInterpreter();
+    virtual ~BubbleDataInterpreter() override;
 
 protected:
     // ____ XDataInterpreter ____

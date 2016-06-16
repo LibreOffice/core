@@ -55,7 +55,7 @@ namespace connectivity
                             const OUString& SchemaName,
                             const OUString& TableName);
             // just to make it not inline
-            virtual ~OKeyColumn();
+            virtual ~OKeyColumn() override;
 
             virtual void construct() override;
             DECLARE_SERVICE_INFO();

@@ -63,7 +63,7 @@ public:
 
     AccessibleStateSetHelper ( const AccessibleStateSetHelper& rHelper );
 protected:
-    virtual ~AccessibleStateSetHelper();
+    virtual ~AccessibleStateSetHelper() override;
 public:
 
     //=====  XAccessibleStateSet  ==============================================

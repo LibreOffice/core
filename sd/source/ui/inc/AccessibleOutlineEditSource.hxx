@@ -53,7 +53,7 @@ namespace accessibility
             SdrView& rView,
             OutlinerView& rOutlView,
             const vcl::Window& rViewWindow );
-        virtual ~AccessibleOutlineEditSource();
+        virtual ~AccessibleOutlineEditSource() override;
 
         /// This method is disabled and always returns NULL
         virtual SvxEditSource*          Clone() const override;

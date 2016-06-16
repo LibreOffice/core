@@ -49,7 +49,7 @@ namespace connectivity
                         ,const TStringVector &_rVector
                         ,bool _bUseHardRef = true
                     );
-        virtual ~OColumnsHelper();
+        virtual ~OColumnsHelper() override;
 
         /** set the parent of the columns. Can also be <NULL/>.
             @param  _pTable

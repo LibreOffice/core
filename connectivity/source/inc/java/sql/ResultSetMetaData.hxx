@@ -39,7 +39,7 @@ namespace connectivity
 
         // Static data for the class
         static jclass theClass;
-        virtual ~java_sql_ResultSetMetaData();
+        virtual ~java_sql_ResultSetMetaData() override;
     public:
         virtual jclass getMyClass() const override;
 

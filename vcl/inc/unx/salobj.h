@@ -64,7 +64,7 @@ public:
     static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
 
     X11SalObject();
-    virtual ~X11SalObject();
+    virtual ~X11SalObject() override;
 
     // override all pure virtual methods
     virtual void                    ResetClipRegion() override;

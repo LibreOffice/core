@@ -38,7 +38,7 @@ class WRITERPERFECT_DLLPUBLIC DirectoryStream : public librevenge::RVNGInputStre
 
 public:
     explicit DirectoryStream(const css::uno::Reference<css::ucb::XContent> &xContent);
-    virtual ~DirectoryStream();
+    virtual ~DirectoryStream() override;
 
     static bool isDirectory(const css::uno::Reference<css::ucb::XContent> &xContent);
 

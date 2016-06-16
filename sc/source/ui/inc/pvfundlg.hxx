@@ -60,7 +60,7 @@ class ScDPFunctionDlg : public ModalDialog
 public:
     explicit            ScDPFunctionDlg( vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
-    virtual ~ScDPFunctionDlg();
+    virtual ~ScDPFunctionDlg() override;
     virtual void            dispose() override;
     PivotFunc               GetFuncMask() const;
     css::sheet::DataPilotFieldReference GetFieldRef() const;
@@ -102,7 +102,7 @@ public:
     explicit            ScDPSubtotalDlg( vcl::Window* pParent, ScDPObject& rDPObj,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
-    virtual             ~ScDPSubtotalDlg();
+    virtual             ~ScDPSubtotalDlg() override;
     virtual void        dispose() override;
     PivotFunc           GetFuncMask() const;
 
@@ -138,7 +138,7 @@ public:
     explicit            ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj,
                             const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
                             bool bEnableLayout );
-    virtual              ~ScDPSubtotalOptDlg();
+    virtual              ~ScDPSubtotalOptDlg() override;
     virtual void        dispose() override;
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
@@ -190,7 +190,7 @@ class ScDPShowDetailDlg : public ModalDialog
 {
 public:
     explicit            ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
-    virtual             ~ScDPShowDetailDlg();
+    virtual             ~ScDPShowDetailDlg() override;
     virtual void        dispose() override;
     virtual short       Execute() override;
 

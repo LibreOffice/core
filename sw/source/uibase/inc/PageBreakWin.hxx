@@ -34,7 +34,7 @@ class SwPageBreakWin : public SwFrameMenuButtonBase
 
 public:
     SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame );
-    virtual ~SwPageBreakWin();
+    virtual ~SwPageBreakWin() override;
     virtual void dispose() override;
 
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;

@@ -37,7 +37,7 @@ class ScChartRangeSelectionListener :
 {
 public:
     explicit ScChartRangeSelectionListener( ScTabViewShell * pViewShell );
-    virtual ~ScChartRangeSelectionListener();
+    virtual ~ScChartRangeSelectionListener() override;
 
 protected:
     // ____ XSelectionChangeListener ____

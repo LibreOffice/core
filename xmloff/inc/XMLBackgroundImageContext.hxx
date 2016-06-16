@@ -59,7 +59,7 @@ public:
         sal_Int32 nBitmapModeIdx,
         ::std::vector< XMLPropertyState > &rProps );
 
-    virtual ~XMLBackgroundImageContext();
+    virtual ~XMLBackgroundImageContext() override;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,

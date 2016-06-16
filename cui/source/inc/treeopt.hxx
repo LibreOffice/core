@@ -180,7 +180,7 @@ public:
         const css::uno::Reference< css::frame::XFrame >& _xFrame,
         bool bActivateLastSelection = true );
     OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId );
-    virtual ~OfaTreeOptionsDialog();
+    virtual ~OfaTreeOptionsDialog() override;
     virtual void dispose() override;
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );
@@ -258,7 +258,7 @@ public:
         const css::uno::Reference<
             css::awt::XContainerWindowProvider >& rProvider );
 
-    virtual ~ExtensionsTabPage();
+    virtual ~ExtensionsTabPage() override;
     virtual void dispose() override;
 
     virtual void    ActivatePage() override;

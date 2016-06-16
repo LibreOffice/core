@@ -55,7 +55,7 @@ class SmFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFi
 {
 public:
     explicit SmFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
-    virtual                 ~SmFilterDetect();
+    virtual                 ~SmFilterDetect() override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;

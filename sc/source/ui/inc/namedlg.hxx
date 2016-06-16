@@ -117,7 +117,7 @@ public:
                                ScViewData*      ptrViewData,
                                const ScAddress& aCursorPos,
                                std::map<OUString, std::unique_ptr<ScRangeName>>* pRangeMap = nullptr);
-    virtual         ~ScNameDlg();
+    virtual         ~ScNameDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

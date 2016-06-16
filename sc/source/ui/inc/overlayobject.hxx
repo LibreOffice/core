@@ -26,7 +26,7 @@ class ScOverlayDashedBorder : public sdr::overlay::OverlayObject
 {
 public:
     ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, const Color& rColor);
-    virtual ~ScOverlayDashedBorder();
+    virtual ~ScOverlayDashedBorder() override;
 
     virtual void Trigger(sal_uInt32 nTime) override;
 

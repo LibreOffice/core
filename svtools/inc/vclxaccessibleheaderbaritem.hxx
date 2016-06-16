@@ -67,7 +67,7 @@ protected:
 
 public:
     VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar, sal_Int32 _nIndexInParent );
-    virtual ~VCLXAccessibleHeaderBarItem();
+    virtual ~VCLXAccessibleHeaderBarItem() override;
 
     // XInterface
     DECLARE_XINTERFACE()

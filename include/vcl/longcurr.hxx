@@ -46,7 +46,7 @@ protected:
 
                             LongCurrencyFormatter();
 public:
-                            virtual ~LongCurrencyFormatter();
+                            virtual ~LongCurrencyFormatter() override;
 
     virtual void            Reformat() override;
     virtual void            ReformatAll() override;

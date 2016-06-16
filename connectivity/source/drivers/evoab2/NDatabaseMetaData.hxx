@@ -83,7 +83,7 @@ namespace connectivity
             virtual sal_Int32   impl_getMaxTablesInSelect_throw(  ) override;
             virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) override;
 
-            virtual ~OEvoabDatabaseMetaData();
+            virtual ~OEvoabDatabaseMetaData() override;
         public:
             inline OEvoabConnection* getOwnConnection() const { return m_pConnection; }
 

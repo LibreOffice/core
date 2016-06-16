@@ -55,7 +55,7 @@ public:
     SplashScreen *pSpl;
     ScopedVclPtr<VirtualDevice> _vdev;
     explicit SplashScreenWindow(SplashScreen *);
-    virtual ~SplashScreenWindow() { disposeOnce(); }
+    virtual ~SplashScreenWindow() override { disposeOnce(); }
     virtual void dispose() override;
     // workwindow
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
@@ -73,7 +73,7 @@ private:
     VclPtr<SplashScreenWindow> pWindow;
 
     DECL_LINK_TYPED( AppEventListenerHdl, VclSimpleEvent&, void );
-    virtual ~SplashScreen();
+    virtual ~SplashScreen() override;
     void loadConfig();
     void updateStatus();
     void SetScreenBitmap(BitmapEx &rBitmap);

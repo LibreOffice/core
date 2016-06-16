@@ -65,7 +65,7 @@ private:
 class UpdateCheckJob :
     public ::cppu::WeakImplHelper< task::XJob, lang::XServiceInfo, frame::XTerminateListener >
 {
-    virtual ~UpdateCheckJob();
+    virtual ~UpdateCheckJob() override;
 
 public:
 

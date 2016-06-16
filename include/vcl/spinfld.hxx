@@ -69,7 +69,7 @@ protected:
 public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle = 0 );
     explicit        SpinField( vcl::Window* pParent, const ResId& );
-    virtual         ~SpinField();
+    virtual         ~SpinField() override;
     virtual void    dispose() override;
 
     virtual bool    ShowDropDown( bool bShow );

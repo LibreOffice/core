@@ -69,7 +69,7 @@ public:
     { SimpleReferenceObject::operator delete(pointer); }
 
 protected:
-    virtual ~Thread();
+    virtual ~Thread() SAL_OVERRIDE;
 
     /**
        The main function executed by the thread.

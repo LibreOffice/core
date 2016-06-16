@@ -111,7 +111,7 @@ protected:
 
 public:
     explicit ODatabaseContext( const css::uno::Reference< css::uno::XComponentContext >& );
-    virtual ~ODatabaseContext();
+    virtual ~ODatabaseContext() override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;

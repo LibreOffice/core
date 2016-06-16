@@ -25,7 +25,7 @@ class SalKDEDisplay : public SalX11Display
 {
     public:
         explicit SalKDEDisplay( Display* pDisp );
-        virtual ~SalKDEDisplay();
+        virtual ~SalKDEDisplay() override;
         static SalKDEDisplay* self();
         virtual void Yield() override;
         bool checkDirectInputEvent( XEvent* ev );

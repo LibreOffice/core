@@ -134,7 +134,7 @@ protected:
     SwFlyFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
 
     virtual void DestroyImpl() override;
-    virtual ~SwFlyFrame();
+    virtual ~SwFlyFrame() override;
 
     /** method to assure that anchored object is registered at the correct
         page frame

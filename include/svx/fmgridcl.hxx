@@ -39,7 +39,7 @@ protected:
 
 public:
     FmGridHeader( BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG );
-    virtual ~FmGridHeader();
+    virtual ~FmGridHeader() override;
     virtual void dispose() override;
 
 public:

@@ -33,7 +33,7 @@ class PolarOptionsTabPage : public SfxTabPage
 
 public:
     PolarOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~PolarOptionsTabPage();
+    virtual ~PolarOptionsTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);

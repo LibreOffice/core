@@ -329,7 +329,7 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
 
 public:
     SwMailMergeWizardExecutor();
-    virtual ~SwMailMergeWizardExecutor();
+    virtual ~SwMailMergeWizardExecutor() override;
 
     void ExecuteMailMergeWizard( const SfxItemSet * pArgs );
 };

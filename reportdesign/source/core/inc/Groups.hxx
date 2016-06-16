@@ -49,7 +49,7 @@ namespace reportdesign
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
 
-        virtual ~OGroups();
+        virtual ~OGroups() override;
 
         /** this function is called upon disposing the component
         */

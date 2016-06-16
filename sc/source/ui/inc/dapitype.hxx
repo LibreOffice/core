@@ -37,7 +37,7 @@ private:
 
 public:
     ScDataPilotSourceTypeDlg(vcl::Window* pParent, bool bEnableExternal);
-    virtual ~ScDataPilotSourceTypeDlg();
+    virtual ~ScDataPilotSourceTypeDlg() override;
     virtual void dispose() override;
     bool IsDatabase() const;
     bool IsExternal() const;
@@ -61,7 +61,7 @@ private:
 public:
             ScDataPilotServiceDlg( vcl::Window* pParent,
                     const std::vector<OUString>& rServices );
-            virtual ~ScDataPilotServiceDlg();
+            virtual ~ScDataPilotServiceDlg() override;
     virtual void dispose() override;
 
     OUString  GetServiceName() const;

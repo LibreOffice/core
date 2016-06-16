@@ -37,7 +37,7 @@ public:
     XMLParagraphTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLParagraphTransformerContext();
+    virtual ~XMLParagraphTransformerContext() override;
 
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
@@ -105,7 +105,7 @@ public:
         const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken );
-    virtual ~XMLPersTextContentRNGTransformTContext();
+    virtual ~XMLPersTextContentRNGTransformTContext() override;
 
     virtual void Characters( const OUString& rChars ) override;
 };

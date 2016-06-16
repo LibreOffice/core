@@ -246,7 +246,7 @@ namespace dbaccess
         }
 
     protected:
-        virtual ~SettingsDocumentHandler()
+        virtual ~SettingsDocumentHandler() override
         {
         }
 

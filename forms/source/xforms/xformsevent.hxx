@@ -41,7 +41,7 @@ class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
             , m_cancelable(false)
         {
         }
-        virtual ~XFormsEventConcrete() {}
+        virtual ~XFormsEventConcrete() override {}
 
         virtual OUString SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() throw (css::uno::RuntimeException, std::exception) override;

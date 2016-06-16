@@ -34,7 +34,7 @@ class OOX_DLLPUBLIC ShapeContext : public ::oox::core::ContextHandler2
 {
 public:
     ShapeContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
-    virtual ~ShapeContext();
+    virtual ~ShapeContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

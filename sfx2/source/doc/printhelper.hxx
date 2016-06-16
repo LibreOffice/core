@@ -46,7 +46,7 @@ class SfxPrintHelper : public cppu::WeakImplHelper
 public:
 
     SfxPrintHelper() ;
-    virtual ~SfxPrintHelper() ;
+    virtual ~SfxPrintHelper() override ;
 
     void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;

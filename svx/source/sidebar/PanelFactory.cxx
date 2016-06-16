@@ -63,7 +63,7 @@ class PanelFactory
 {
 public:
     PanelFactory();
-    virtual ~PanelFactory();
+    virtual ~PanelFactory() override;
     PanelFactory(const PanelFactory&) = delete;
     PanelFactory& operator=(const PanelFactory&) = delete;
 

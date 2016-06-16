@@ -28,7 +28,7 @@ public:
         : AstStruct(NT_exception, name, pBaseType, pScope)
         {}
 
-    virtual ~AstException() {}
+    virtual ~AstException() override {}
 };
 
 #endif // INCLUDED_IDLC_INC_ASTEXCEPTION_HXX

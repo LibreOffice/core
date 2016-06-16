@@ -71,7 +71,7 @@ protected:
 
 public:
     explicit ImpDrawPageListWatcher(const SdrModel& rModel);
-    virtual ~ImpDrawPageListWatcher();
+    virtual ~ImpDrawPageListWatcher() override;
 };
 
 class ImpMasterPageListWatcher : public ImpPageListWatcher
@@ -82,7 +82,7 @@ protected:
 
 public:
     explicit ImpMasterPageListWatcher(const SdrModel& rModel);
-    virtual ~ImpMasterPageListWatcher();
+    virtual ~ImpMasterPageListWatcher() override;
 };
 
 #endif

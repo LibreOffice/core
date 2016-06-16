@@ -30,7 +30,7 @@ public:
     ScAccessibleDocumentBase(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
 protected:
-    virtual ~ScAccessibleDocumentBase();
+    virtual ~ScAccessibleDocumentBase() override;
 };
 
 #endif

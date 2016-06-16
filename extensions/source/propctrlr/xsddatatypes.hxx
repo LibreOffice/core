@@ -76,7 +76,7 @@ namespace pcr
         void                copyFacetsFrom( const ::rtl::Reference< XSDDataType >& _pSourceType );
 
     protected:
-        virtual ~XSDDataType();
+        virtual ~XSDDataType() override;
 
     private:
         XSDDataType( const XSDDataType& ) = delete;

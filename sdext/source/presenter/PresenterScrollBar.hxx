@@ -54,7 +54,7 @@ class PresenterScrollBar
 {
 public:
     typedef ::std::function<void (double)> ThumbMotionListener;
-    virtual ~PresenterScrollBar();
+    virtual ~PresenterScrollBar() override;
     PresenterScrollBar(const PresenterScrollBar&) = delete;
     PresenterScrollBar& operator=(const PresenterScrollBar&) = delete;
 
@@ -244,7 +244,7 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
         const ::std::function<void (double)>& rThumbMotionListener);
-    virtual ~PresenterVerticalScrollBar();
+    virtual ~PresenterVerticalScrollBar() override;
     virtual sal_Int32 GetSize() const override;
 
 protected:

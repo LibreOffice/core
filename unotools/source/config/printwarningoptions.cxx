@@ -55,7 +55,7 @@ public:
 //  constructor / destructor
 
      SvtPrintWarningOptions_Impl();
-    virtual ~SvtPrintWarningOptions_Impl();
+    virtual ~SvtPrintWarningOptions_Impl() override;
 
 //  override methods of baseclass
 

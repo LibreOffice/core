@@ -137,7 +137,7 @@ public:
     inline bool IsClipping() const { return m_bClipping; }
 
     inline SwLineLayout();
-    virtual ~SwLineLayout();
+    virtual ~SwLineLayout() override;
 
     inline SwLineLayout *GetNext() { return m_pNext; }
     inline const SwLineLayout *GetNext() const { return m_pNext; }
@@ -252,7 +252,7 @@ class SwParaPortion : public SwLineLayout
 
 public:
     SwParaPortion();
-    virtual ~SwParaPortion();
+    virtual ~SwParaPortion() override;
 
     // Resets all formatting information (except for bFlys)
     inline void FormatReset();

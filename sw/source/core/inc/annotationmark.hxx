@@ -34,7 +34,7 @@ namespace sw { namespace mark
             const SwPaM& rPaM,
             const OUString& rName );
 
-        virtual ~AnnotationMark();
+        virtual ~AnnotationMark() override;
 
         virtual void InitDoc(SwDoc* const io_Doc) override;
 

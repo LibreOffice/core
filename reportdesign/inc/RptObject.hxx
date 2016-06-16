@@ -56,7 +56,7 @@ typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexTo
         void operator =(DlgEdHint&) = delete;
     public:
         DlgEdHint( DlgEdHintKind eHint );
-        virtual ~DlgEdHint();
+        virtual ~DlgEdHint() override;
 
         inline DlgEdHintKind    GetKind() const { return eHintKind; }
     };
@@ -148,7 +148,7 @@ protected:
 
 public:
 
-    virtual ~OCustomShape();
+    virtual ~OCustomShape() override;
 
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
@@ -192,7 +192,7 @@ protected:
 
 public:
 
-    virtual ~OOle2Obj();
+    virtual ~OOle2Obj() override;
 
     virtual css::uno::Reference< css::beans::XPropertySet> getAwtComponent() override;
 
@@ -226,7 +226,7 @@ protected:
                 ,const OUString& rModelName
                 ,sal_uInt16   _nObjectType);
 
-    virtual ~OUnoObject();
+    virtual ~OUnoObject() override;
 
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;

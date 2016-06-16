@@ -732,7 +732,7 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
         SfxFrameStatusListener( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                 const css::uno::Reference< css::frame::XFrame >& xFrame,
                                 SfxPopupWindow* pCallee );
-        virtual ~SfxFrameStatusListener();
+        virtual ~SfxFrameStatusListener() override;
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event )

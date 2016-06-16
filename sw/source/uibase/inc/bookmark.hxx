@@ -83,7 +83,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
 
 public:
     SwInsertBookmarkDlg(vcl::Window* pParent, SwWrtShell& rSh, SfxRequest& rReq);
-    virtual ~SwInsertBookmarkDlg();
+    virtual ~SwInsertBookmarkDlg() override;
     virtual void dispose() override;
 };
 

@@ -59,7 +59,7 @@ class AccFrameSelector :
 public:
     explicit            AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eBorder );
 
-    virtual             ~AccFrameSelector();
+    virtual             ~AccFrameSelector() override;
 
     //XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;

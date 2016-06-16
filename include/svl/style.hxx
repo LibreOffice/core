@@ -93,7 +93,7 @@ protected:
 
     SfxStyleSheetBase( const OUString&, SfxStyleSheetBasePool*, SfxStyleFamily eFam, sal_uInt16 mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
-    virtual ~SfxStyleSheetBase();
+    virtual ~SfxStyleSheetBase() override;
     virtual void Load( SvStream&, sal_uInt16 );
     virtual void Store( SvStream& );
 
@@ -203,7 +203,7 @@ protected:
     virtual SfxStyleSheetBase*  Create( const OUString&, SfxStyleFamily, sal_uInt16 );
     virtual SfxStyleSheetBase*  Create( const SfxStyleSheetBase& );
 
-    virtual                     ~SfxStyleSheetBasePool();
+    virtual                     ~SfxStyleSheetBasePool() override;
 
     void                        StoreStyleSheet(const rtl::Reference< SfxStyleSheetBase >&);
 
@@ -279,7 +279,7 @@ protected:
     {
         assert(false);
     }
-    virtual             ~SfxStyleSheet();
+    virtual             ~SfxStyleSheet() override;
 
 };
 

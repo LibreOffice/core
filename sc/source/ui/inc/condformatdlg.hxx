@@ -73,7 +73,7 @@ private:
 
 public:
     ScCondFormatList(vcl::Window* pParent, WinBits nStyle);
-    virtual ~ScCondFormatList();
+    virtual ~ScCondFormatList() override;
     virtual void dispose() override;
 
     void init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScConditionalFormat* pFormat,
@@ -131,7 +131,7 @@ public:
                                  ScViewData* pViewData, const ScConditionalFormat* pFormat,
                                  const ScRangeList& rRange, const ScAddress& rPos,
                                  condformat::dialog::ScCondFormatDialogType eType, bool bManaged);
-    virtual ~ScCondFormatDlg();
+    virtual ~ScCondFormatDlg() override;
     virtual void dispose() override;
 
     SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;

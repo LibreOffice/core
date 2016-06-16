@@ -50,7 +50,7 @@ protected:
 
 public:
                     VCLXFont();
-                    virtual ~VCLXFont();
+                    virtual ~VCLXFont() override;
 
     void            Init( css::awt::XDevice& rxDev, const vcl::Font& rFont );
     const vcl::Font&     GetFont() const { return maFont; }

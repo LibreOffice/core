@@ -358,7 +358,7 @@ public:
 
     SvTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0 );
     SvTreeListBox( vcl::Window* pParent, const ResId& rResId );
-    virtual ~SvTreeListBox();
+    virtual ~SvTreeListBox() override;
     virtual void dispose() override;
 
     SvTreeList* GetModel() const

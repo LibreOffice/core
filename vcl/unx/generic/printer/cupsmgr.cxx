@@ -844,7 +844,7 @@ namespace
 
     public:
         RTSPWDialog(const OString& rServer, const OString& rUserName, vcl::Window* pParent);
-        virtual ~RTSPWDialog();
+        virtual ~RTSPWDialog() override;
         virtual void dispose() override;
         OString getUserName() const;
         OString getPassword() const;

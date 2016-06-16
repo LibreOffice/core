@@ -86,7 +86,7 @@ namespace ucb { namespace ucp { namespace ext
         OUString getPhysicalURL() const;
 
     protected:
-        virtual ~Content();
+        virtual ~Content() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;

@@ -290,7 +290,7 @@ protected:
     SvxRTFParser( SfxItemPool& rAttrPool,
                     SvStream& rIn,
                     css::uno::Reference< css::document::XDocumentProperties> i_xDocProps );
-    virtual ~SvxRTFParser();
+    virtual ~SvxRTFParser() override;
 
     void SetNewDoc( bool bFlag )        { bNewDoc = bFlag; }
     bool IsChkStyleAttr() const         { return bChkStyleAttr; }

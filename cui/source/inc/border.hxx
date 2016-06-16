@@ -46,7 +46,7 @@ class SvxBorderTabPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 
 public:
-    virtual ~SvxBorderTabPage();
+    virtual ~SvxBorderTabPage() override;
     virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);

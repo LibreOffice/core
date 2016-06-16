@@ -88,7 +88,7 @@ public:
 
 protected:
     /** dtor() */
-    virtual ~AccessibleTabListBox();
+    virtual ~AccessibleTabListBox() override;
 
     /** This method creates and returns an accessible table.
         @return  An AccessibleBrowseBoxTable. */

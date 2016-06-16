@@ -62,7 +62,7 @@ class SvDDELinkEditDialog : public ModalDialog
     DECL_LINK_TYPED( EditHdl_Impl, Edit&, void );
 public:
     SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* );
-    virtual ~SvDDELinkEditDialog();
+    virtual ~SvDDELinkEditDialog() override;
     virtual void dispose() override;
     OUString GetCmd() const;
 };

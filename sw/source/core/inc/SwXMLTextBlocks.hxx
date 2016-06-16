@@ -53,7 +53,7 @@ public:
     void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyText = false );
     virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false ) override;
     static OUString GeneratePackageName ( const OUString& rShort );
-    virtual ~SwXMLTextBlocks();
+    virtual ~SwXMLTextBlocks() override;
     virtual sal_uLong Delete( sal_uInt16 ) override;
     virtual sal_uLong Rename( sal_uInt16, const OUString&, const OUString& ) override;
     virtual sal_uLong CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) override;

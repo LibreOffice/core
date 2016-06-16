@@ -63,7 +63,7 @@ class PackageInformationProvider :
 {
     public:
     explicit PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
-    virtual     ~PackageInformationProvider();
+    virtual     ~PackageInformationProvider() override;
 
     // XPackageInformationProvider
     virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId )

@@ -129,7 +129,7 @@ public:
     inline Bootstrap_MacroExpander()
         : t_uno_impl( m_mutex )
         {}
-    virtual ~Bootstrap_MacroExpander();
+    virtual ~Bootstrap_MacroExpander() override;
 
     // XMacroExpander impl
     virtual OUString SAL_CALL expandMacros( OUString const & exp )

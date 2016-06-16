@@ -34,7 +34,7 @@ private:
     UnxSplashScreen( const UnxSplashScreen& ) = delete;
     UnxSplashScreen operator =( const UnxSplashScreen& ) = delete;
 
-    virtual ~UnxSplashScreen();
+    virtual ~UnxSplashScreen() override;
 
     static  UnxSplashScreen *m_pINSTANCE;
 

@@ -36,7 +36,7 @@ class OrdinalSuffixService : public cppu::WeakImplHelper
 {
     public:
         OrdinalSuffixService();
-        virtual ~OrdinalSuffixService();
+        virtual ~OrdinalSuffixService() override;
 
         // XOrdinalSuffix
         virtual css::uno::Sequence< OUString > SAL_CALL getOrdinalSuffix( sal_Int32 nNumber, const css::lang::Locale &rLocale ) throw(css::uno::RuntimeException, std::exception) override;

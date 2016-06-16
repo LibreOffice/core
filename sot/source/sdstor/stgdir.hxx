@@ -65,7 +65,7 @@ public:
     StgDirEntry(const void* pBuffer, sal_uInt32 nBufferLen,
                 sal_uInt64 nUnderlyingStreamSize, bool * pbOk);
     explicit StgDirEntry( const StgEntry& );
-    virtual ~StgDirEntry();
+    virtual ~StgDirEntry() override;
 
     void Invalidate( bool=false );          // invalidate all open entries
     void Enum( sal_Int32& );                    // enumerate entries for iteration
@@ -96,7 +96,7 @@ class StgDirStrm : public StgDataStrm
     void         SetupEntry( sal_Int32, StgDirEntry* );
 public:
     explicit StgDirStrm( StgIo& );
-    virtual ~StgDirStrm();
+    virtual ~StgDirStrm() override;
     virtual bool SetSize( sal_Int32 ) override;              // change the size
     bool         Store();
     void*        GetEntry( sal_Int32 n, bool=false );// get an entry

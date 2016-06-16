@@ -46,7 +46,7 @@ public:
 
 private:
 
-    virtual ~AtkListener();
+    virtual ~AtkListener() override;
 
     // Updates the child list held to provide the old IndexInParent on children_changed::remove
     void updateChildList(

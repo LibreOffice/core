@@ -107,7 +107,7 @@ namespace dbaui
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             sal_Int32 _nMaxColumnsInIndex
             );
-        virtual ~DbaIndexDialog();
+        virtual ~DbaIndexDialog() override;
         virtual void dispose() override;
 
         virtual void StateChanged( StateChangedType nStateChange ) override;

@@ -47,7 +47,7 @@ public:
                             SfxPrinter( SfxItemSet *pTheOptions,
                                         const JobSetup &rTheOrigJobSetup );
                             SfxPrinter( const SfxPrinter &rPrinter );
-                            virtual ~SfxPrinter();
+                            virtual ~SfxPrinter() override;
     virtual void            dispose() override;
 
     VclPtr<SfxPrinter>      Clone() const;

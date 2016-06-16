@@ -64,7 +64,7 @@ protected:
     bool                        mbHorizontal;
 public:
     VCLXPrinterPropertySet( const OUString& rPrinterName );
-    virtual ~VCLXPrinterPropertySet();
+    virtual ~VCLXPrinterPropertySet() override;
 
     Printer*                    GetPrinter() const { return mxPrinter.get(); }
     css::uno::Reference< css::awt::XDevice >  GetDevice();
@@ -112,7 +112,7 @@ class VCLXPrinter:  public VCLXPrinter_Base
     JobSetup                                      maInitJobSetup;
 public:
                     VCLXPrinter( const OUString& rPrinterName );
-                    virtual ~VCLXPrinter();
+                    virtual ~VCLXPrinter() override;
 
     // css::beans::XPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
@@ -149,7 +149,7 @@ class VCLXInfoPrinter:  public VCLXInfoPrinter_Base
 {
 public:
                         VCLXInfoPrinter( const OUString& rPrinterName );
-                        virtual ~VCLXInfoPrinter();
+                        virtual ~VCLXInfoPrinter() override;
 
     // css::beans::XPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }

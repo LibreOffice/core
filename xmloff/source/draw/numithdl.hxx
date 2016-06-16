@@ -32,7 +32,7 @@ private:
     css::uno::Reference< css::ucb::XAnyCompare > mxNumRuleCompare;
 public:
     explicit XMLNumRulePropHdl( css::uno::Reference< css::ucb::XAnyCompare > xNumRuleCompare );
-    virtual ~XMLNumRulePropHdl();
+    virtual ~XMLNumRulePropHdl() override;
 
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
 

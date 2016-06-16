@@ -62,7 +62,7 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
 
-    virtual ~ChartElementsPanel();
+    virtual ~ChartElementsPanel() override;
 
     virtual void dispose() override;
 

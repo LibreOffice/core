@@ -65,7 +65,7 @@ class OAddFieldWindowListBox: public SvTreeListBox
 
 public:
     explicit OAddFieldWindowListBox( OAddFieldWindow* _pParent );
-    virtual ~OAddFieldWindowListBox();
+    virtual ~OAddFieldWindowListBox() override;
     virtual void dispose() override;
 
     sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;

@@ -181,7 +181,7 @@ public:
                   const Reference< XContent >& rContent,
                   const Reference< XCommandEnvironment >& rEnv );
 
-    virtual ~Content_Impl();
+    virtual ~Content_Impl() override;
 
     const OUString&           getURL() const;
     Reference< XContent >          getContent();

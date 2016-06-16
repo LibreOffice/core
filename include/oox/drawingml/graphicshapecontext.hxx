@@ -60,7 +60,7 @@ class OleObjectGraphicDataContext : public ShapeContext
 {
 public:
     OleObjectGraphicDataContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pShapePtr );
-    virtual ~OleObjectGraphicDataContext();
+    virtual ~OleObjectGraphicDataContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
@@ -73,7 +73,7 @@ class DiagramGraphicDataContext
 {
 public:
     DiagramGraphicDataContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pShapePtr );
-    virtual ~DiagramGraphicDataContext();
+    virtual ~DiagramGraphicDataContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:

@@ -62,7 +62,7 @@ public:
     static SfxPoolItem* CreateDefault();
 
     SwFormatDrop();
-    virtual ~SwFormatDrop();
+    virtual ~SwFormatDrop() override;
 
     // @@@ public copy ctor, but no copy assignment?
     SwFormatDrop( const SwFormatDrop & );

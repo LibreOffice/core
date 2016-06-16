@@ -109,7 +109,7 @@ public:
 
     SwNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-    virtual ~SwNumPositionTabPage();
+    virtual ~SwNumPositionTabPage() override;
     virtual void        dispose() override;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) override;
@@ -149,7 +149,7 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
         SwSvxNumBulletTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
-        virtual ~SwSvxNumBulletTabDialog();
+        virtual ~SwSvxNumBulletTabDialog() override;
 };
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_NUM_HXX
 

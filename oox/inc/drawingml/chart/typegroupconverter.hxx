@@ -98,7 +98,7 @@ class UpDownBarsConverter : public ConverterBase< UpDownBarsModel >
 {
 public:
     explicit            UpDownBarsConverter( const ConverterRoot& rParent, UpDownBarsModel& rModel );
-    virtual             ~UpDownBarsConverter();
+    virtual             ~UpDownBarsConverter() override;
 
     /** Converts the OOXML up/down bars. */
     void                convertFromModel(
@@ -112,7 +112,7 @@ class TypeGroupConverter : public ConverterBase< TypeGroupModel >
 {
 public:
     explicit            TypeGroupConverter( const ConverterRoot& rParent, TypeGroupModel& rModel );
-    virtual             ~TypeGroupConverter();
+    virtual             ~TypeGroupConverter() override;
 
     /** Returns the type info struct that describes this chart type group. */
     const TypeGroupInfo& getTypeInfo() const { return maTypeInfo; }

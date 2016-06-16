@@ -182,7 +182,7 @@ public:
 
     ThumbnailView(vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP, bool bDisableTransientChildren = false);
 
-    virtual ~ThumbnailView();
+    virtual ~ThumbnailView() override;
     virtual void dispose() override;
 
     virtual void MouseMove(const MouseEvent& rMEvt) override;

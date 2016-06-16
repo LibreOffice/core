@@ -37,7 +37,7 @@ public:
 
     SvXMLAttrContainerItem( sal_uInt16 nWhich = 0 );
     SvXMLAttrContainerItem( const SvXMLAttrContainerItem& );
-    virtual ~SvXMLAttrContainerItem();
+    virtual ~SvXMLAttrContainerItem() override;
 
     virtual bool operator==( const SfxPoolItem& ) const override;
 

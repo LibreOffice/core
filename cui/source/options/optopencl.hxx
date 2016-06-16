@@ -71,7 +71,7 @@ private:
 
 public:
     SvxOpenCLTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxOpenCLTabPage();
+    virtual ~SvxOpenCLTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );

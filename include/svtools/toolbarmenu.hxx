@@ -51,7 +51,7 @@ public:
                 vcl::Window* pParentWindow,
                 WinBits nBits );
 
-    virtual ~ToolbarMenu();
+    virtual ~ToolbarMenu() override;
     virtual void dispose() override;
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;

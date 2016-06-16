@@ -57,7 +57,7 @@ class ScFilterDlg : public ScAnyRefDlg
 public:
                     ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  const SfxItemSet&  rArgSet );
-                    virtual ~ScFilterDlg();
+                    virtual ~ScFilterDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
@@ -163,7 +163,7 @@ class ScSpecialFilterDlg : public ScAnyRefDlg
 public:
                     ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                         const SfxItemSet&   rArgSet );
-                    virtual ~ScSpecialFilterDlg();
+                    virtual ~ScSpecialFilterDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

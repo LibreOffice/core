@@ -579,7 +579,7 @@ class SwNewUserIdxDlg : public ModalDialog
                 m_pOKPB->Enable(false);
                 m_pNameED->GrabFocus();
             }
-    virtual ~SwNewUserIdxDlg() { disposeOnce(); }
+    virtual ~SwNewUserIdxDlg() override { disposeOnce(); }
     virtual void dispose() override
     {
         m_pOKPB.clear();
@@ -1022,7 +1022,7 @@ public:
                             SwWrtShell& rSh,
                             bool bNewEntry,
                             bool bCreate);
-    virtual ~SwCreateAuthEntryDlg_Impl();
+    virtual ~SwCreateAuthEntryDlg_Impl() override;
     virtual void    dispose() override;
 
     OUString        GetEntryText(ToxAuthorityField eField) const;

@@ -107,7 +107,7 @@ public:
     DigitalSignaturesDialog( vcl::Window* pParent, css::uno::Reference<
         css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
-    virtual ~DigitalSignaturesDialog();
+    virtual ~DigitalSignaturesDialog() override;
     virtual void dispose() override;
 
     // Initialize the dialog and the security environment, returns TRUE on success

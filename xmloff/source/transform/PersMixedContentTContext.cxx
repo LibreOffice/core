@@ -32,7 +32,7 @@ class XMLPersTextTContext_Impl : public XMLTransformerContext
 public:
     XMLPersTextTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rChars );
-    virtual ~XMLPersTextTContext_Impl();
+    virtual ~XMLPersTextTContext_Impl() override;
 
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,

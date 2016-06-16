@@ -118,7 +118,7 @@ class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
 {
 public:
     explicit SdUnoForbiddenCharsTable(SdrModel* pModel);
-    virtual ~SdUnoForbiddenCharsTable();
+    virtual ~SdUnoForbiddenCharsTable() override;
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw () override;
@@ -1549,7 +1549,7 @@ public:
     bool IsPrintable( const SdrObject* pObj ) const;
 
     ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData );
-    virtual ~ImplRenderPaintProc();
+    virtual ~ImplRenderPaintProc() override;
 
     // all default implementations just call the same methods at the original. To do something
     // different, override the method and at least do what the method does.

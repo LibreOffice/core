@@ -86,7 +86,7 @@ public:
 
     // single argument ctors shall be explicit.
     explicit SwTOXMark( const SwTOXType* pTyp );
-    virtual ~SwTOXMark();
+    virtual ~SwTOXMark() override;
 
     SwTOXMark( const SwTOXMark& rCopy );
     SwTOXMark& operator=( const SwTOXMark& rCopy );
@@ -419,7 +419,7 @@ public:
     SwTOXBase( const SwTOXType* pTyp, const SwForm& rForm,
                sal_uInt16 nCreaType, const OUString& rTitle );
     SwTOXBase( const SwTOXBase& rCopy, SwDoc* pDoc = nullptr );
-    virtual ~SwTOXBase();
+    virtual ~SwTOXBase() override;
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 

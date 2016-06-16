@@ -67,7 +67,7 @@ private:
 
 public:
                             ScSheetLinkObj(ScDocShell* pDocSh, const OUString& rName);
-    virtual                 ~ScSheetLinkObj();
+    virtual                 ~ScSheetLinkObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -157,7 +157,7 @@ private:
 
 public:
                             ScSheetLinksObj(ScDocShell* pDocSh);
-    virtual                 ~ScSheetLinksObj();
+    virtual                 ~ScSheetLinksObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -217,7 +217,7 @@ private:
 
 public:
                             ScAreaLinkObj(ScDocShell* pDocSh, size_t nP);
-    virtual                 ~ScAreaLinkObj();
+    virtual                 ~ScAreaLinkObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -308,7 +308,7 @@ private:
 
 public:
                             ScAreaLinksObj(ScDocShell* pDocSh);
-    virtual                 ~ScAreaLinksObj();
+    virtual                 ~ScAreaLinksObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -369,7 +369,7 @@ private:
 public:
                             ScDDELinkObj(ScDocShell* pDocSh, const OUString& rA,
                                             const OUString& rT, const OUString& rI);
-    virtual                 ~ScDDELinkObj();
+    virtual                 ~ScDDELinkObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -425,7 +425,7 @@ private:
 
 public:
                             ScDDELinksObj(ScDocShell* pDocSh);
-    virtual                 ~ScDDELinksObj();
+    virtual                 ~ScDDELinksObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -475,7 +475,7 @@ class ScExternalSheetCacheObj : public cppu::WeakImplHelper< css::sheet::XExtern
 {
 public:
     explicit ScExternalSheetCacheObj(ScDocShell* pDocShell, ScExternalRefCache::TableTypeRef pTable, size_t nIndex);
-    virtual ~ScExternalSheetCacheObj();
+    virtual ~ScExternalSheetCacheObj() override;
 
                             // XExternalSheetCache
     virtual void SAL_CALL setCellValue(
@@ -508,7 +508,7 @@ class ScExternalDocLinkObj : public cppu::WeakImplHelper< css::sheet::XExternalD
 {
 public:
     ScExternalDocLinkObj(ScDocShell* pDocShell, ScExternalRefManager* pRefMgr, sal_uInt16 nFileId);
-    virtual ~ScExternalDocLinkObj();
+    virtual ~ScExternalDocLinkObj() override;
 
                             // XExternalDocLink
     virtual css::uno::Reference< css::sheet::XExternalSheetCache >
@@ -556,7 +556,7 @@ class ScExternalDocLinksObj : public cppu::WeakImplHelper< css::sheet::XExternal
 {
 public:
     ScExternalDocLinksObj(ScDocShell* pDocShell);
-    virtual ~ScExternalDocLinksObj();
+    virtual ~ScExternalDocLinksObj() override;
 
                             // XExternalDocLinks
     virtual css::uno::Reference< css::sheet::XExternalDocLink >

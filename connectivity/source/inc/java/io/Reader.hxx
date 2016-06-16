@@ -36,7 +36,7 @@ namespace connectivity
     protected:
     // static Data for the Class
         static jclass theClass;
-        virtual ~java_io_Reader();
+        virtual ~java_io_Reader() override;
         boost::optional<char> m_buf;
     public:
         virtual jclass getMyClass() const override;

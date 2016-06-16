@@ -86,7 +86,7 @@ class MaskSet : public ValueSet
 
 public:
     MaskSet(SvxBmpMask* pMask, vcl::Window* pParent);
-    virtual ~MaskSet() { disposeOnce(); }
+    virtual ~MaskSet() override { disposeOnce(); }
     virtual void dispose() override { pSvxBmpMask.clear(); ValueSet::dispose(); }
     virtual void Select() override;
     virtual void KeyInput( const KeyEvent& rKEvt ) override;

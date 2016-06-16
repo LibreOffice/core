@@ -107,7 +107,7 @@ public:
     /// takes ownership
     explicit SwFormatMeta( std::shared_ptr< ::sw::Meta > const & i_pMeta,
                         const sal_uInt16 i_nWhich );
-    virtual ~SwFormatMeta();
+    virtual ~SwFormatMeta() override;
 
     /// SfxPoolItem
     virtual bool             operator==( const SfxPoolItem & ) const override;
@@ -154,7 +154,7 @@ protected:
 
 public:
     explicit Meta(SwFormatMeta * const i_pFormat = nullptr);
-    virtual ~Meta();
+    virtual ~Meta() override;
 
     /// sfx2::Metadatable
     virtual ::sfx2::IXmlIdRegistry& GetRegistry() override;

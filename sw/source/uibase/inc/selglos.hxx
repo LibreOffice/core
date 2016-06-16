@@ -34,7 +34,7 @@ protected:
     DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
 public:
     SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName);
-    virtual ~SwSelGlossaryDlg();
+    virtual ~SwSelGlossaryDlg() override;
     virtual void dispose() override;
 
     void InsertGlos(const OUString &rRegion, const OUString &rGlosName)

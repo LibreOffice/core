@@ -44,7 +44,7 @@ namespace dbaccess
     {
     public:
         DocumentEvents( ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, DocumentEventsData& _rEventsData );
-        virtual ~DocumentEvents();
+        virtual ~DocumentEvents() override;
 
         DocumentEvents(const DocumentEvents&) = delete;
         const DocumentEvents& operator=(const DocumentEvents&) = delete;

@@ -44,7 +44,7 @@ public:
         CharClass*              pCharClass;
 
                                 SvtSysLocale_Impl();
-    virtual                     ~SvtSysLocale_Impl();
+    virtual                     ~SvtSysLocale_Impl() override;
 
     CharClass*                  GetCharClass();
     virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;

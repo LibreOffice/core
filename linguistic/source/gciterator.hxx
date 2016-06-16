@@ -146,7 +146,7 @@ public:
     void DequeueAndCheck();
 
     explicit GrammarCheckingIterator();
-    virtual ~GrammarCheckingIterator();
+    virtual ~GrammarCheckingIterator() override;
 
     // XProofreadingIterator
     virtual void SAL_CALL startProofreading( const css::uno::Reference< css::uno::XInterface >& xDocument, const css::uno::Reference< css::text::XFlatParagraphIteratorProvider >& xIteratorProvider ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;

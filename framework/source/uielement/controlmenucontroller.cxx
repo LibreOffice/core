@@ -179,7 +179,7 @@ class ControlMenuController :  public svt::PopupMenuControllerBase
 
 public:
     explicit ControlMenuController( const uno::Reference< uno::XComponentContext >& xContext );
-    virtual ~ControlMenuController();
+    virtual ~ControlMenuController() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

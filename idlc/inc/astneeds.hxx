@@ -28,7 +28,7 @@ public:
         : AstDeclaration(NT_needs, name, pScope)
         , m_pRealService(pRealService)
         {}
-    virtual ~AstNeeds() {}
+    virtual ~AstNeeds() override {}
 
     AstService* getRealService()
         { return m_pRealService; }

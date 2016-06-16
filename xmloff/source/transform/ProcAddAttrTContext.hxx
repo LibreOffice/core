@@ -37,7 +37,7 @@ public:
                               ::xmloff::token::XMLTokenEnum eAToken,
                               ::xmloff::token::XMLTokenEnum eVToken );
 
-    virtual ~XMLProcAddAttrTransformerContext();
+    virtual ~XMLProcAddAttrTransformerContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };

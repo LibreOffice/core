@@ -210,7 +210,7 @@ namespace svxform
         FormController( const css::uno::Reference< css::uno::XComponentContext > & _rxORB );
 
     protected:
-        virtual ~FormController();
+        virtual ~FormController() override;
 
     // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) throw ( css::uno::RuntimeException, std::exception ) override;

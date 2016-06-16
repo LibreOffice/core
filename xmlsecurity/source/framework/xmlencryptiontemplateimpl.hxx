@@ -45,7 +45,7 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper<
 
     public:
         explicit XMLEncryptionTemplateImpl();
-        virtual ~XMLEncryptionTemplateImpl();
+        virtual ~XMLEncryptionTemplateImpl() override;
 
         //Methods from XXMLEncryptionTemplate
         virtual void SAL_CALL setTemplate(

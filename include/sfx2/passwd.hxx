@@ -84,7 +84,7 @@ private:
 
 public:
     SfxPasswordDialog(vcl::Window* pParent, const OUString* pGroupText = nullptr);
-    virtual ~SfxPasswordDialog();
+    virtual ~SfxPasswordDialog() override;
     virtual void dispose() override;
 
     OUString GetUser() const

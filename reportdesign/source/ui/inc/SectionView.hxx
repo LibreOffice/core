@@ -43,7 +43,7 @@ private:
 public:
 
     OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, OReportWindow* pEditor );
-    virtual ~OSectionView();
+    virtual ~OSectionView() override;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     virtual void MarkListHasChanged() override;

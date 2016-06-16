@@ -71,7 +71,7 @@ public:
         const PopupMenuProvider& rPopupMenuProvider,
         SidebarController* rParentSidebarController);
 
-    virtual ~TabBar();
+    virtual ~TabBar() override;
     virtual void dispose() override;
 
     virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea) override;

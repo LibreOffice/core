@@ -173,7 +173,7 @@ class ColorConfigWindow_Impl
 {
 public:
     explicit ColorConfigWindow_Impl(vcl::Window* pParent);
-    virtual ~ColorConfigWindow_Impl() { disposeOnce(); }
+    virtual ~ColorConfigWindow_Impl() override { disposeOnce(); }
     virtual void dispose() override;
 
 public:
@@ -853,7 +853,7 @@ class ColorConfigCtrl_Impl : public VclVBox
     virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
 public:
     explicit ColorConfigCtrl_Impl(vcl::Window* pParent);
-    virtual ~ColorConfigCtrl_Impl();
+    virtual ~ColorConfigCtrl_Impl() override;
     virtual void dispose() override;
 
     void InitHeaderBar(const OUString &rOn, const OUString &rUIElems,

@@ -87,7 +87,7 @@ namespace accessibility
         void                    EnsureIsAlive() const throw ( css::lang::DisposedException );
 
     protected:
-        virtual ~AccessibleIconChoiceCtrlEntry();
+        virtual ~AccessibleIconChoiceCtrlEntry() override;
         /** this function is called upon disposing the component
         */
         virtual void SAL_CALL                   disposing() override;

@@ -54,7 +54,7 @@ namespace sdr
                 double fAlpha = 0.0,
                 double fShearX = 0.0,
                 double fRotation = 0.0);
-            virtual ~OverlayBitmapEx();
+            virtual ~OverlayBitmapEx() override;
 
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
 

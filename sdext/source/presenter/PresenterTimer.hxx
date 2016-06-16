@@ -111,7 +111,7 @@ private:
 
     PresenterClockTimer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterClockTimer();
+    virtual ~PresenterClockTimer() override;
 
     void CheckCurrentTime (const TimeValue& rCurrentTime);
 };

@@ -35,7 +35,7 @@ class IActionListener : public virtual salhelper::SimpleReferenceObject
     virtual void            closeAfterFailure() = 0;
 
 protected:
-    virtual ~IActionListener() {}
+    virtual ~IActionListener() override {}
 };
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_ACTIONLISTENER_HXX

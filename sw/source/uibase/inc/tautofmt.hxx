@@ -81,7 +81,7 @@ public:
     SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                         bool bSetAutoFormat = true,
                         const SwTableAutoFormat* pSelFormat = nullptr );
-    virtual ~SwAutoFormatDlg();
+    virtual ~SwAutoFormatDlg() override;
     virtual void dispose() override;
 
     void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const;

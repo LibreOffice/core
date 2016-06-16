@@ -129,7 +129,7 @@ public:
     {
     }
 
-    virtual ~SwAnnotationItem()
+    virtual ~SwAnnotationItem() override
     {
     }
 

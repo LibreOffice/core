@@ -1560,7 +1560,7 @@ public:
     {
     }
 
-    virtual ~PopupPainter() { }
+    virtual ~PopupPainter() override { }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override

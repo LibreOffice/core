@@ -95,7 +95,7 @@ protected:
 public:
     // single argument ctors shall be explicit.
     SwCursor( const SwPosition &rPos, SwPaM* pRing );
-    virtual ~SwCursor();
+    virtual ~SwCursor() override;
 
     /// this takes a second parameter, which indicates the Ring that
     /// the new cursor should be part of (may be null)
@@ -273,7 +273,7 @@ protected:
 public:
     SwTableCursor( const SwPosition &rPos, SwPaM* pRing = nullptr );
     SwTableCursor( SwTableCursor& );
-    virtual ~SwTableCursor();
+    virtual ~SwTableCursor() override;
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor ) override;

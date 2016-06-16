@@ -37,7 +37,7 @@ public:
     XMLTextTableContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName );
-    virtual ~XMLTextTableContext();
+    virtual ~XMLTextTableContext() override;
 };
 
 #endif

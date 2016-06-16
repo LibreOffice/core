@@ -45,7 +45,7 @@ private:
 public:
     SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
     void SetNormalStaticImage(const Image& rNormalStaticImage);
-    virtual ~SvxCheckListBox();
+    virtual ~SvxCheckListBox() override;
     virtual void dispose() override;
 
     void            InsertEntry         ( const OUString& rStr,

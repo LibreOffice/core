@@ -197,7 +197,7 @@ public:
     );
 
 protected:
-    virtual ~OControl();
+    virtual ~OControl() override;
 
     /** sets the control as delegator at the aggregate
 
@@ -276,7 +276,7 @@ public:
         const bool _bSetDelegator = true
     );
 
-    virtual ~OBoundControl();
+    virtual ~OBoundControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControl, OControl)
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -362,7 +362,7 @@ protected:
         const bool _bCloneAggregate = true,                             // should the aggregate of the original be cloned, too?
         const bool _bSetDelegator = true                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
-    virtual ~OControlModel();
+    virtual ~OControlModel() override;
 
     /** to be called after a OBoundControlModel (a derivee, respectively) has been cloned
 
@@ -522,7 +522,7 @@ public:
         const classname* _pOriginal, \
         const css::uno::Reference< css::uno::XComponentContext>& _rxFactory \
     ); \
-    virtual ~classname() \
+    virtual ~classname() override \
 
 
 #define IMPLEMENT_DEFAULT_CLONING( classname ) \
@@ -657,7 +657,7 @@ protected:
         const css::uno::Reference< css::uno::XComponentContext>& _rxContext
                                                             // factory to create the aggregate with
     );
-    virtual ~OBoundControlModel();
+    virtual ~OBoundControlModel() override;
 
     /// late ctor after cloning
     virtual void clonedFrom( const OControlModel* _pOriginal ) override;

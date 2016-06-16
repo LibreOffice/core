@@ -40,7 +40,7 @@ class SwSdrUndo : public SwUndo
 public:
     SwSdrUndo( SdrUndoAction* , const SdrMarkList* pMarkList );
 
-    virtual ~SwSdrUndo();
+    virtual ~SwSdrUndo() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -57,7 +57,7 @@ class SwUndoDrawGroup : public SwUndo
 public:
     SwUndoDrawGroup( sal_uInt16 nCnt );
 
-    virtual ~SwUndoDrawGroup();
+    virtual ~SwUndoDrawGroup() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -86,7 +86,7 @@ class SwUndoDrawUnGroup : public SwUndo
 public:
     SwUndoDrawUnGroup( SdrObjGroup* );
 
-    virtual ~SwUndoDrawUnGroup();
+    virtual ~SwUndoDrawUnGroup() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -102,7 +102,7 @@ private:
 public:
     SwUndoDrawUnGroupConnectToLayout();
 
-    virtual ~SwUndoDrawUnGroupConnectToLayout();
+    virtual ~SwUndoDrawUnGroupConnectToLayout() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -121,7 +121,7 @@ class SwUndoDrawDelete : public SwUndo
 public:
     SwUndoDrawDelete( sal_uInt16 nCnt );
 
-    virtual ~SwUndoDrawDelete();
+    virtual ~SwUndoDrawDelete() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

@@ -37,7 +37,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
-    virtual ~SdXMLNotesContext();
+    virtual ~SdXMLNotesContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,

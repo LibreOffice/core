@@ -40,7 +40,7 @@ class SwAccessibleDocumentBase : public SwAccessibleContext
     using SwAccessibleFrame::SetVisArea;
 
 protected:
-    virtual ~SwAccessibleDocumentBase();
+    virtual ~SwAccessibleDocumentBase() override;
 
 public:
     SwAccessibleDocumentBase( SwAccessibleMap* pInitMap );
@@ -117,7 +117,7 @@ protected:
     // This derived class additionally sets MULTISELECTABLE(1)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
 
-    virtual ~SwAccessibleDocument();
+    virtual ~SwAccessibleDocument() override;
 
 public:
     SwAccessibleDocument( SwAccessibleMap* pInitMap );

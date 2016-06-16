@@ -33,7 +33,7 @@ namespace dbaui
 
     public:
         explicit OApplicationIconControl(vcl::Window* _pParent);
-        virtual ~OApplicationIconControl();
+        virtual ~OApplicationIconControl() override;
         virtual void dispose() override;
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }

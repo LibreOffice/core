@@ -22,7 +22,7 @@ class EffectPropertiesContext : public ::oox::core::ContextHandler2
 public:
     EffectPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
             EffectProperties& rEffectProperties ) throw();
-    virtual ~EffectPropertiesContext();
+    virtual ~EffectPropertiesContext() override;
 
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;

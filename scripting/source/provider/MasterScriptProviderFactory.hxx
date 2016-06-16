@@ -51,7 +51,7 @@ private:
     const rtl::Reference< ActiveMSPList > & getActiveMSPList() const;
 
 protected:
-    virtual ~MasterScriptProviderFactory();
+    virtual ~MasterScriptProviderFactory() override;
 
 public:
     explicit MasterScriptProviderFactory(

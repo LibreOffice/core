@@ -35,7 +35,7 @@ protected:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 public:
     ScVbaPages( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPages ) throw ( css::lang::IllegalArgumentException );
-    virtual ~ScVbaPages() {}
+    virtual ~ScVbaPages() override {}
         // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;

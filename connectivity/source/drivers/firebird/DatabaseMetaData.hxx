@@ -41,7 +41,7 @@ namespace connectivity
         public:
 
             explicit ODatabaseMetaData(Connection* _pCon);
-            virtual ~ODatabaseMetaData();
+            virtual ~ODatabaseMetaData() override;
 
             // as I mentioned before this interface is really BIG
             // XDatabaseMetaData

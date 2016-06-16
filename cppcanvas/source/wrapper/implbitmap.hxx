@@ -43,7 +43,7 @@ namespace cppcanvas
             ImplBitmap( const CanvasSharedPtr& rParentCanvas,
                         const css::uno::Reference< css::rendering::XBitmap >& rBitmap );
 
-            virtual ~ImplBitmap();
+            virtual ~ImplBitmap() override;
 
             // CanvasGraphic implementation (that was not already implemented by CanvasGraphicHelper)
             virtual bool draw() const override;

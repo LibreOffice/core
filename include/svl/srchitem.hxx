@@ -97,7 +97,7 @@ public:
 
     explicit SvxSearchItem( const sal_uInt16 nId );
     SvxSearchItem( const SvxSearchItem& rItem );
-    virtual ~SvxSearchItem();
+    virtual ~SvxSearchItem() override;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

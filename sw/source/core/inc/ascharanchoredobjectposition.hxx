@@ -122,7 +122,7 @@ namespace objectpositioning
                                         const SwTwips     _nLineDescent,
                                         const SwTwips     _nLineAscentInclObjs,
                                         const SwTwips     _nLineDescentInclObjs );
-        virtual ~SwAsCharAnchoredObjectPosition();
+        virtual ~SwAsCharAnchoredObjectPosition() override;
 
         /** calculate position for object position
 

@@ -41,7 +41,7 @@ protected:
     void ResetInDoc( SwDoc* );
 
 public:
-    virtual ~SwUndoBookmark();
+    virtual ~SwUndoBookmark() override;
 
     /**
        Returns the rewriter for this undo object.
@@ -83,7 +83,7 @@ class SwUndoRenameBookmark : public SwUndo
 
 public:
     SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName );
-    virtual ~SwUndoRenameBookmark();
+    virtual ~SwUndoRenameBookmark() override;
 
 private:
     virtual SwRewriter GetRewriter() const override;

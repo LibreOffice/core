@@ -76,7 +76,7 @@ private:
 
 public:
     SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
-    virtual ~SvxTextAnimationPage();
+    virtual ~SvxTextAnimationPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );

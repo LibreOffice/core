@@ -98,7 +98,7 @@ public:
 
     XFParaStyle& operator=(const XFParaStyle& other);
 
-    virtual ~XFParaStyle();
+    virtual ~XFParaStyle() override;
 
 public:
     /**

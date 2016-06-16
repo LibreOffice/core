@@ -35,7 +35,7 @@ class SfxPickList : public SfxListener
     css::uno::Reference< css::util::XStringWidth > m_xStringLength;
 
                             SfxPickList( sal_uInt32 nMenuSize );
-                            virtual ~SfxPickList();
+                            virtual ~SfxPickList() override;
 
     /**
      * Adds the given document to the pick list (recent documents) if it satisfies

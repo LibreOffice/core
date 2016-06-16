@@ -75,7 +75,7 @@ public:
     virtual void Init();
     virtual void SAL_CALL disposing() override;
 protected:
-    virtual ~ScAccessibleContextBase();
+    virtual ~ScAccessibleContextBase() override;
 public:
 
     bool SAL_CALL isShowing(  )

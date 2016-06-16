@@ -80,7 +80,7 @@ protected:
 
 public:
     SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher);
-    virtual         ~SwInputWindow();
+    virtual         ~SwInputWindow() override;
     virtual void    dispose() override;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -101,7 +101,7 @@ public:
                         sal_uInt16 nId,
                         SfxBindings*,
                         SfxChildWinInfo*  );
-    virtual ~SwInputChild();
+    virtual ~SwInputChild() override;
     SFX_DECL_CHILDWINDOW_WITHID( SwInputChild );
     void            SetFormula( const OUString& rFormula )
                     { static_cast<SwInputWindow*>(GetWindow())->SetFormula( rFormula ); }

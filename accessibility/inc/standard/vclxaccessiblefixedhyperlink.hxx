@@ -29,7 +29,7 @@
 class VCLXAccessibleFixedHyperlink : public VCLXAccessibleTextComponent
 {
 protected:
-    virtual ~VCLXAccessibleFixedHyperlink();
+    virtual ~VCLXAccessibleFixedHyperlink() override;
 
     virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
     virtual void implGetLineBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex ) override;

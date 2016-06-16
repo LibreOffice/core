@@ -37,7 +37,7 @@ namespace sfx2
             vcl::Window* i_pParent, WinBits i_nStyle = 0
         );
 
-        virtual ~TitledDockingWindow();
+        virtual ~TitledDockingWindow() override;
         virtual void dispose() override;
 
         /** sets a title to be displayed in the docking window

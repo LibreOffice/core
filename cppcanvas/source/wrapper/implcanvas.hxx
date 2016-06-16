@@ -51,7 +51,7 @@ namespace cppcanvas
         {
         public:
             explicit ImplCanvas( const css::uno::Reference< css::rendering::XCanvas >& rCanvas );
-            virtual ~ImplCanvas();
+            virtual ~ImplCanvas() override;
 
             virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;
             virtual ::basegfx::B2DHomMatrix          getTransformation() const override;

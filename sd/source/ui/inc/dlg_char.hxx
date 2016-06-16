@@ -44,7 +44,7 @@ public:
 
             SdCharDlg( vcl::Window* pParent, const SfxItemSet* pAttr,
                         const SfxObjectShell* pDocShell );
-            virtual ~SdCharDlg() {};
+            virtual ~SdCharDlg() override {};
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DLG_CHAR_HXX

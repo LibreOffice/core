@@ -119,7 +119,7 @@ public:
 
     BaseControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual ~BaseControl();
+    virtual ~BaseControl() override;
 
     //  XInterface
 

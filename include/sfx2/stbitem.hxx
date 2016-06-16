@@ -107,7 +107,7 @@ protected:
 
 public:
                     SfxStatusBarControl( sal_uInt16 nSlotID, sal_uInt16 nId, StatusBar& rBar );
-    virtual         ~SfxStatusBarControl();
+    virtual         ~SfxStatusBarControl() override;
 
     sal_uInt16      GetSlotId() const { return nSlotId; }
     sal_uInt16      GetId() const { return nId; }

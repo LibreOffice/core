@@ -124,7 +124,7 @@ class DlgEdFuncInsert : public DlgEdFunc
 {
 public:
     DlgEdFuncInsert( OReportSection* pParent );
-    virtual ~DlgEdFuncInsert();
+    virtual ~DlgEdFuncInsert() override;
 
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
@@ -139,7 +139,7 @@ class DlgEdFuncSelect : public DlgEdFunc
 {
 public:
     DlgEdFuncSelect( OReportSection* pParent );
-    virtual ~DlgEdFuncSelect();
+    virtual ~DlgEdFuncSelect() override;
 
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;

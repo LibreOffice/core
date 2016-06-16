@@ -55,7 +55,7 @@ class AddonsToolBarFactory :  public ::cppu::WeakImplHelper< css::lang::XService
 {
 public:
     explicit AddonsToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~AddonsToolBarFactory();
+    virtual ~AddonsToolBarFactory() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

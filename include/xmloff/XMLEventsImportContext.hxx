@@ -80,7 +80,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference<css::container::XNameReplace> & xNameRepl);
 
-    virtual ~XMLEventsImportContext();
+    virtual ~XMLEventsImportContext() override;
 
     void AddEventValues(
         const OUString& rEventName,

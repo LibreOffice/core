@@ -384,7 +384,7 @@ public:
         const OUString& rLocalName,
         const Reference< XAttributeList >& xAttrList,
         AnimImpImpl* pImpl);
-    virtual ~XMLAnimationsEffectContext();
+    virtual ~XMLAnimationsEffectContext() override;
 
     virtual void EndElement() override;
 
@@ -399,7 +399,7 @@ class XMLAnimationsSoundContext : public SvXMLImportContext
 public:
 
     XMLAnimationsSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent );
-    virtual ~XMLAnimationsSoundContext();
+    virtual ~XMLAnimationsSoundContext() override;
 };
 
 

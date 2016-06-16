@@ -39,7 +39,7 @@ namespace connectivity
         static jclass theClass;
         virtual void createStatement(JNIEnv* _pEnv) override;
 
-        virtual ~java_sql_CallableStatement();
+        virtual ~java_sql_CallableStatement() override;
     public:
         DECLARE_SERVICE_INFO();
         virtual jclass getMyClass() const override;

@@ -99,7 +99,7 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
 
 public:
     explicit DocObjectWrapper( SbModule* pMod );
-    virtual ~DocObjectWrapper();
+    virtual ~DocObjectWrapper() override;
 
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
@@ -2291,7 +2291,7 @@ public:
         }
     }
 
-    virtual ~FormObjEventListenerImpl()
+    virtual ~FormObjEventListenerImpl() override
     {
         removeListener();
     }

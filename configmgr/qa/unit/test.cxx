@@ -123,7 +123,7 @@ public:
     void test();
 
 protected:
-    virtual ~RecursiveTest();
+    virtual ~RecursiveTest() override;
 
     virtual void step() const = 0;
 

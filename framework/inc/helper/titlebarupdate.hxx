@@ -78,7 +78,7 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper<
 
         // ctor/dtor
                  TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-        virtual ~TitleBarUpdate(                                                                   );
+        virtual ~TitleBarUpdate(                                                                   ) override;
 
         // XInterface, XTypeProvider
 

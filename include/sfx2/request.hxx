@@ -63,7 +63,7 @@ public:
                                             SfxCallMode nCallMode, SfxItemPool &rPool );
                         SfxRequest( sal_uInt16 nSlot, SfxCallMode nCallMode, const SfxAllItemSet& rSfxArgs );
                         SfxRequest( const SfxRequest& rOrig );
-                        virtual ~SfxRequest();
+                        virtual ~SfxRequest() override;
 
     sal_uInt16              GetSlot() const { return nSlot; }
     void                SetSlot(sal_uInt16 nNewSlot) { nSlot = nNewSlot; }

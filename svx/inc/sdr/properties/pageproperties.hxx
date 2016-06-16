@@ -47,7 +47,7 @@ namespace sdr
             PageProperties(const PageProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~PageProperties();
+            virtual ~PageProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;

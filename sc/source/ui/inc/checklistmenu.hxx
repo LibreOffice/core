@@ -48,7 +48,7 @@ public:
     };
 
     explicit ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
-    virtual ~ScMenuFloatingWindow();
+    virtual ~ScMenuFloatingWindow() override;
      void dispose() override;
 
     virtual void PopupModeEnd() override;
@@ -232,7 +232,7 @@ class ScCheckListBox : public SvTreeListBox
     public:
 
     ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
-    virtual ~ScCheckListBox() { disposeOnce(); }
+    virtual ~ScCheckListBox() override { disposeOnce(); }
     virtual void dispose() override { delete mpCheckButton; SvTreeListBox::dispose(); }
     void Init();
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
@@ -259,7 +259,7 @@ public:
     {
     }
 
-    virtual ~ScSearchEdit() {}
+    virtual ~ScSearchEdit() override {}
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     void SetTabStopsContainer( ScTabStops* pTabStops )  { mpTabStops = pTabStops; }
@@ -316,7 +316,7 @@ public:
     };
 
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc);
-    virtual ~ScCheckListMenuWindow();
+    virtual ~ScCheckListMenuWindow() override;
     virtual void dispose() override;
 
     virtual void MouseMove(const MouseEvent& rMEvt) override;
@@ -359,7 +359,7 @@ private:
     {
     public:
         CancelButton(ScCheckListMenuWindow* pParent);
-        virtual ~CancelButton();
+        virtual ~CancelButton() override;
         virtual void dispose() override;
 
         virtual void Click() override;

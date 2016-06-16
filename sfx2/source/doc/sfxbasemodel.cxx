@@ -152,7 +152,7 @@ public:
         : m_rShell(i_rDoc)
     { };
 
-    virtual ~SfxDocInfoListener_Impl();
+    virtual ~SfxDocInfoListener_Impl() override;
 
     virtual void SAL_CALL disposing( const lang::EventObject& )
         throw ( RuntimeException, std::exception ) override;

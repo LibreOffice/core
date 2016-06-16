@@ -57,7 +57,7 @@ public:
         const Reference<rendering::XCustomSprite>& rxSprite,
         const Reference<awt::XWindow>& rxBaseWindow,
         const css::geometry::RealSize2D& rSpriteSize);
-    virtual ~PresenterCustomSprite();
+    virtual ~PresenterCustomSprite() override;
     PresenterCustomSprite(const PresenterCustomSprite&) = delete;
     PresenterCustomSprite& operator=(const PresenterCustomSprite&) = delete;
     virtual void SAL_CALL disposing()

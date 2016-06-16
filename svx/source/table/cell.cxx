@@ -159,7 +159,7 @@ namespace sdr
             CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell);
 
             // destructor
-            virtual ~CellProperties();
+            virtual ~CellProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             BaseProperties& Clone(SdrObject& rObj) const override;

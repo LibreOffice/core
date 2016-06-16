@@ -44,7 +44,7 @@ namespace svgio
             SvgEllipseNode(
                 SvgDocument& rDocument,
                 SvgNode* pParent);
-            virtual ~SvgEllipseNode();
+            virtual ~SvgEllipseNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;

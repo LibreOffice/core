@@ -92,7 +92,7 @@ namespace sdr
             :   ViewContactOfSdrObj(rObj)
             {
             }
-            virtual ~VCOfSwFlyDrawObj();
+            virtual ~VCOfSwFlyDrawObj() override;
         };
 
         drawinglayer::primitive2d::Primitive2DContainer VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
@@ -271,7 +271,7 @@ namespace sdr
             :   ViewContactOfVirtObj(rObj)
             {
             }
-            virtual ~VCOfSwVirtFlyDrawObj();
+            virtual ~VCOfSwVirtFlyDrawObj() override;
 
             /// access to SwVirtFlyDrawObj
             SwVirtFlyDrawObj& GetSwVirtFlyDrawObj() const

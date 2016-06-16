@@ -36,7 +36,7 @@ namespace connectivity
         static jclass theClass;
     public:
         virtual jclass getMyClass() const override;
-        virtual ~java_sql_DriverPropertyInfo();
+        virtual ~java_sql_DriverPropertyInfo() override;
     };
 }
 

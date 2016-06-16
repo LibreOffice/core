@@ -49,7 +49,7 @@ namespace dbaui
         sal_Int16           GetWidthPixel( const HTMLOption& rOption );
         void                setTextEncoding();
         void                fetchOptions();
-        virtual ~OHTMLReader();
+        virtual ~OHTMLReader() override;
 
     public:
         OHTMLReader(SvStream& rIn,

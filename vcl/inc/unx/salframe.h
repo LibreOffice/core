@@ -162,7 +162,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     void            updateWMClass();
 public:
     X11SalFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, SystemParentData* pSystemParent = NULL );
-    virtual ~X11SalFrame();
+    virtual ~X11SalFrame() override;
 
     long            Dispatch( XEvent *pEvent );
     void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen = SalX11Screen( -1 ),

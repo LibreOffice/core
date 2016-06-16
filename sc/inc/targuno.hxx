@@ -73,7 +73,7 @@ private:
 
 public:
                             ScLinkTargetTypesObj(ScDocShell* pDocSh);
-    virtual                 ~ScLinkTargetTypesObj();
+    virtual                 ~ScLinkTargetTypesObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -108,7 +108,7 @@ private:
 
 public:
                             ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT);
-    virtual                 ~ScLinkTargetTypeObj();
+    virtual                 ~ScLinkTargetTypeObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -166,7 +166,7 @@ private:
 
 public:
                             ScLinkTargetsObj( const css::uno::Reference< css::container::XNameAccess > & rColl );
-    virtual                 ~ScLinkTargetsObj();
+    virtual                 ~ScLinkTargetsObj() override;
 
                             // css::container::XNameAccess
     virtual css::uno::Any SAL_CALL         getByName(const OUString& aName)

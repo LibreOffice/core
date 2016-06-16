@@ -71,7 +71,7 @@ public:
                          const OUString& rWndTitle,
                          vcl::Window* pParentWindow,
                          std::function<void(const OUString&, const Color&)> maColorSelectFunction);
-    virtual ~SvxColorWindow_Impl();
+    virtual ~SvxColorWindow_Impl() override;
     virtual void        dispose() override;
     void                StartSelection();
 

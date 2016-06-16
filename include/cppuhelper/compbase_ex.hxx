@@ -55,7 +55,7 @@ protected:
 public:
     /** Destructor
     */
-    virtual ~WeakComponentImplHelperBase();
+    virtual ~WeakComponentImplHelperBase() SAL_OVERRIDE;
 
     // these are here to force memory de/allocation to sal lib.
     inline static void * SAL_CALL operator new( size_t nSize )
@@ -100,7 +100,7 @@ protected:
 
     WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex );
 public:
-    virtual ~WeakAggComponentImplHelperBase();
+    virtual ~WeakAggComponentImplHelperBase() SAL_OVERRIDE;
 
     // these are here to force memory de/allocation to sal lib.
     inline static void * SAL_CALL operator new( size_t nSize )

@@ -47,7 +47,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS WrappedPropertySet :
 {
 public:
     WrappedPropertySet();
-    virtual ~WrappedPropertySet();
+    virtual ~WrappedPropertySet() override;
 
     void clearWrappedPropertySet();
 

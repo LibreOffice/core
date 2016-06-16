@@ -34,7 +34,7 @@ public:
     ChartItemPool();
     ChartItemPool(const ChartItemPool& rPool);
 protected:
-    virtual ~ChartItemPool();
+    virtual ~ChartItemPool() override;
 public:
 
     virtual SfxItemPool* Clone() const override;

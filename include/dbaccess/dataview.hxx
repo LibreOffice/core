@@ -46,7 +46,7 @@ namespace dbaui
                     IController& _rController,
                     const css::uno::Reference< css::uno::XComponentContext >& ,
                     WinBits nStyle = 0 );
-        virtual ~ODataView();
+        virtual ~ODataView() override;
         virtual void dispose() override;
 
         /// late construction

@@ -38,7 +38,7 @@ class ErrObject : public ::cppu::WeakImplHelper< vba::XErrObject,
 
 public:
     ErrObject();
-    virtual ~ErrObject();
+    virtual ~ErrObject() override;
     // Attributes
     virtual ::sal_Int32 SAL_CALL getNumber() throw (uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setNumber( ::sal_Int32 _number ) throw (uno::RuntimeException, std::exception) override;

@@ -43,7 +43,7 @@ public:
     virtual bool IsPoolFormatUsed( sal_uInt16 nId ) const override;
     virtual bool IsPoolPageDescUsed( sal_uInt16 nId ) const override;
 
-    virtual ~DocumentStylePoolManager();
+    virtual ~DocumentStylePoolManager() override;
 
 private:
 

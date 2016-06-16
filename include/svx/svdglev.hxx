@@ -41,7 +41,7 @@ class SVX_DLLPUBLIC SdrGlueEditView: public SdrPolyEditView
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
     SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
-    virtual ~SdrGlueEditView();
+    virtual ~SdrGlueEditView() override;
 
 public:
     // the parameter nThisEsc is used to hand over the direction,

@@ -38,7 +38,7 @@ class SlideFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     SlideFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation );
-    virtual ~SlideFragmentHandler();
+    virtual ~SlideFragmentHandler() override;
 
     virtual void finalizeImport() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;

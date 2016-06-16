@@ -58,7 +58,7 @@ class SimpleRegistry:
 public:
     SimpleRegistry() {}
 
-    virtual ~SimpleRegistry() {}
+    virtual ~SimpleRegistry() override {}
 
     osl::Mutex mutex_;
 

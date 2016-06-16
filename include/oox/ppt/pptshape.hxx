@@ -55,7 +55,7 @@ public:
 
     PPTShape( const oox::ppt::ShapeLocation eShapeLocation,
                 const sal_Char* pServiceType = nullptr );
-    virtual ~PPTShape();
+    virtual ~PPTShape() override;
 
     using oox::drawingml::Shape::addShape;
     // addShape is creating and inserting the corresponding XShape.

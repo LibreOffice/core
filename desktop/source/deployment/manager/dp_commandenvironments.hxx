@@ -40,7 +40,7 @@ protected:
     void handle_(bool approve, bool abort,
                  css::uno::Reference< css::task::XInteractionRequest> const & xRequest );
 public:
-    virtual ~BaseCommandEnv();
+    virtual ~BaseCommandEnv() override;
     BaseCommandEnv();
     explicit BaseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler);

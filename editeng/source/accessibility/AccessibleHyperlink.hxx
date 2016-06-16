@@ -48,7 +48,7 @@ namespace accessibility
 
     public:
         AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, sal_Int32 nP, sal_uInt16 nR, sal_Int32 nStt, sal_Int32 nEnd, const OUString& rD );
-        virtual ~AccessibleHyperlink();
+        virtual ~AccessibleHyperlink() override;
 
         // XAccessibleAction
         virtual sal_Int32 SAL_CALL getAccessibleActionCount() throw (css::uno::RuntimeException, std::exception) override;

@@ -34,7 +34,7 @@ private:
 
 public:
     SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits );
-    virtual ~SvxTextEncodingBox();
+    virtual ~SvxTextEncodingBox() override;
     virtual void dispose() override;
 
     /** Fill with all known encodings but exclude those matching one or more

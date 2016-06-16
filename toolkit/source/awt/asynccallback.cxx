@@ -63,7 +63,7 @@ private:
 
     DECL_STATIC_LINK_TYPED( AsyncCallback, Notify_Impl, void*, void );
 
-    virtual ~AsyncCallback() {}
+    virtual ~AsyncCallback() override {}
 };
 
 // com.sun.star.uno.XServiceInfo:

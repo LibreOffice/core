@@ -33,7 +33,7 @@ class ScUndoDraw: public SfxUndoAction
 
 public:
                             ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh );
-    virtual                 ~ScUndoDraw();
+    virtual                 ~ScUndoDraw() override;
 
     SfxUndoAction*          GetDrawUndo()       { return pDrawUndo; }
     void                    ForgetDrawUndo();

@@ -35,7 +35,7 @@ class SwUndoSplitNode: public SwUndo
 public:
     SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, bool bChkTable );
 
-    virtual ~SwUndoSplitNode();
+    virtual ~SwUndoSplitNode() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

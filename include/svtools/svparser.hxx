@@ -106,7 +106,7 @@ protected:
     virtual void NextToken( int nToken );
 
     // at times of SvRefBase derivation, not everybody may delete
-    virtual ~SvParser();
+    virtual ~SvParser() override;
 
     void ClearTxtConvContext();
 
@@ -237,7 +237,7 @@ public:
     /** Construction/Destruction.
     */
     SvKeyValueIterator();
-    virtual ~SvKeyValueIterator();
+    virtual ~SvKeyValueIterator() override;
     SvKeyValueIterator(const SvKeyValueIterator&) = delete;
     SvKeyValueIterator& operator=( const SvKeyValueIterator& ) = delete;
 

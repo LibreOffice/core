@@ -43,7 +43,7 @@ class ScVbaSheetObjectsBase : public ScVbaSheetObjects_BASE
 {
 public:
     explicit ScVbaSheetObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (css::uno::RuntimeException);
-    virtual ~ScVbaSheetObjectsBase();
+    virtual ~ScVbaSheetObjectsBase() override;
 
     /** Updates the collection by fetching all shapes from the draw page. */
     void collectShapes() throw (css::uno::RuntimeException);

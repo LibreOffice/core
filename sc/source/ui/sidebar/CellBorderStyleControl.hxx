@@ -47,7 +47,7 @@ private:
 
 public:
     CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);
-    virtual ~CellBorderStyleControl();
+    virtual ~CellBorderStyleControl() override;
     virtual void dispose() override;
 };
 

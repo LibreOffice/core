@@ -53,7 +53,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtLocalisationOptions : public utl::de
         *//*-*****************************************************************************************************/
 
          SvtLocalisationOptions();
-        virtual ~SvtLocalisationOptions();
+        virtual ~SvtLocalisationOptions() override;
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Localisation/AutoMnemonic"

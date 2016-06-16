@@ -43,7 +43,7 @@ public:
         , meKernelType(eKernelType)
     {}
 
-    virtual ~BitmapScaleConvolution()
+    virtual ~BitmapScaleConvolution() override
     {}
 
     virtual bool filter(Bitmap& rBitmap) override;

@@ -38,7 +38,7 @@ public:
         , m_singleInterfaceBasedService(false)
         , m_defaultConstructor(false)
         {}
-    virtual ~AstService() {}
+    virtual ~AstService() override {}
 
     virtual bool dump(RegistryKey& rKey) override;
 

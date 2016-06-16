@@ -178,7 +178,7 @@ protected:
 
 public:
     SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder);
-    virtual ~SwEntryBrowseBox();
+    virtual ~SwEntryBrowseBox() override;
     virtual void                    dispose() override;
     void                            ReadEntries(SvStream& rInStr);
     void                            WriteEntries(SvStream& rOutStr);
@@ -204,7 +204,7 @@ class SwAutoMarkDlg_Impl : public ModalDialog
 public:
     SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
                        bool bCreate);
-    virtual ~SwAutoMarkDlg_Impl();
+    virtual ~SwAutoMarkDlg_Impl() override;
     virtual void dispose() override;
 
 };
@@ -644,7 +644,7 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
 
 public:
     SwAddStylesDlg_Impl(vcl::Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
-    virtual ~SwAddStylesDlg_Impl();
+    virtual ~SwAddStylesDlg_Impl() override;
     virtual void dispose() override;
 };
 
@@ -1539,7 +1539,7 @@ public:
         m_pParent( pTokenWin )
     {
     }
-    virtual ~SwTOXEdit() { disposeOnce(); }
+    virtual ~SwTOXEdit() override { disposeOnce(); }
     virtual void dispose() override { m_pParent.clear(); Edit::dispose(); }
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
@@ -1626,7 +1626,7 @@ public:
         m_pParent(pTokenWin)
     {
     }
-    virtual ~SwTOXButton() { disposeOnce(); }
+    virtual ~SwTOXButton() override { disposeOnce(); }
     virtual void dispose() override { m_pParent.clear(); PushButton::dispose(); }
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;

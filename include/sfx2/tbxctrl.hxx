@@ -116,7 +116,7 @@ public:
                                             const css::uno::Reference< css::frame::XFrame >& rFrame,
                                             vcl::Window* pParentWindow,
                                             WinBits nBits );
-                            virtual ~SfxPopupWindow();
+                            virtual ~SfxPopupWindow() override;
     virtual void            dispose() override;
 
     virtual void            MouseMove( const MouseEvent& rMEvt ) override;
@@ -207,7 +207,7 @@ public:
                                SFX_DECL_TOOLBOX_CONTROL();
 
                                SfxToolBoxControl( sal_uInt16 nSlotID, sal_uInt16 nId, ToolBox& rBox, bool bShowStrings = false );
-    virtual                    ~SfxToolBoxControl();
+    virtual                    ~SfxToolBoxControl() override;
 
     ToolBox&                   GetToolBox() const;
     unsigned short             GetId() const;

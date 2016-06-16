@@ -173,7 +173,7 @@ class SbiProcDef : public SbiSymDef {   // procedure definition (from basic):
     bool   mbProcDecl : 1;          // true: instantiated by SbiParser::ProcDecl
 public:
     SbiProcDef( SbiParser*, const OUString&, bool bProcDecl=false );
-    virtual ~SbiProcDef();
+    virtual ~SbiProcDef() override;
     virtual SbiProcDef* GetProcDef() override;
     virtual void SetType( SbxDataType ) override;
     SbiSymPool& GetParams()         { return aParams;  }
@@ -209,7 +209,7 @@ class SbiConstDef : public SbiSymDef
     OUString aVal;
 public:
     SbiConstDef( const OUString& );
-    virtual ~SbiConstDef();
+    virtual ~SbiConstDef() override;
     virtual SbiConstDef* GetConstDef() override;
     void Set( double, SbxDataType );
     void Set( const OUString& );

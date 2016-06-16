@@ -138,7 +138,7 @@ namespace connectivity
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-        virtual ~ODatabaseMetaDataResultSet();
+        virtual ~ODatabaseMetaDataResultSet() override;
     public:
 
         virtual void    SAL_CALL acquire() throw() override;

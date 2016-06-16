@@ -28,7 +28,7 @@
 class XMLFmtBreakBeforePropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLFmtBreakBeforePropHdl();
+    virtual ~XMLFmtBreakBeforePropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -40,7 +40,7 @@ public:
 class XMLFmtBreakAfterPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLFmtBreakAfterPropHdl();
+    virtual ~XMLFmtBreakAfterPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

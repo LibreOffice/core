@@ -187,7 +187,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex) = 0;
 
 public:
-    virtual ~XPropertyList();
+    virtual ~XPropertyList() override;
 
     XPropertyListType Type() const { return meType; }
     long Count() const;
@@ -280,7 +280,7 @@ protected:
 
 public:
     XLineEndList(const OUString& rPath, const OUString& rReferer);
-    virtual ~XLineEndList();
+    virtual ~XLineEndList() override;
 
     using XPropertyList::Remove;
     XLineEndEntry* Remove(long nIndex);
@@ -303,7 +303,7 @@ protected:
 
 public:
     XDashList(const OUString& rPath, const OUString& rReferer);
-    virtual ~XDashList();
+    virtual ~XDashList() override;
 
     using XPropertyList::Replace;
     XDashEntry* Replace(XDashEntry* pEntry, long nIndex);
@@ -332,7 +332,7 @@ protected:
 
 public:
     XHatchList(const OUString& rPath, const OUString& rReferer);
-    virtual ~XHatchList();
+    virtual ~XHatchList() override;
 
     using XPropertyList::Replace;
     XHatchEntry* Replace(XHatchEntry* pEntry, long nIndex);
@@ -351,7 +351,7 @@ protected:
 
 public:
     XGradientList(const OUString& rPath, const OUString& rReferer);
-    virtual ~XGradientList();
+    virtual ~XGradientList() override;
 
     using XPropertyList::Replace;
     XGradientEntry* Replace(XGradientEntry* pEntry, long nIndex);

@@ -58,7 +58,7 @@ class RootItemContainer :   private cppu::BaseMutex,
     public:
         FWI_DLLPUBLIC RootItemContainer();
         FWI_DLLPUBLIC RootItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer );
-        virtual FWI_DLLPUBLIC ~RootItemContainer();
+        virtual FWI_DLLPUBLIC ~RootItemContainer() override;
 
         // XInterface
         virtual void SAL_CALL acquire() throw () override

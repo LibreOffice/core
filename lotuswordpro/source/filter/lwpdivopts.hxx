@@ -107,7 +107,7 @@ public:
 protected:
     void Read() override;
 private:
-    virtual ~LwpDivisionOptions();
+    virtual ~LwpDivisionOptions() override;
 
     LwpHyphenOptions m_HyphOpts;
     sal_uInt16 m_nOptionFlag;

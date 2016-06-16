@@ -53,7 +53,7 @@ class ContextChangeEventMultiplexer
 {
 public:
     ContextChangeEventMultiplexer();
-    virtual ~ContextChangeEventMultiplexer();
+    virtual ~ContextChangeEventMultiplexer() override;
     ContextChangeEventMultiplexer(const ContextChangeEventMultiplexer&) = delete;
     ContextChangeEventMultiplexer& operator=(const ContextChangeEventMultiplexer&) = delete;
 

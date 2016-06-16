@@ -153,7 +153,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XCon
         {
         }
 
-        virtual ~WeakContainerListener()
+        virtual ~WeakContainerListener() override
         {
         }
 
@@ -208,7 +208,7 @@ class WeakChangesListener : public ::cppu::WeakImplHelper<css::util::XChangesLis
         {
         }
 
-        virtual ~WeakChangesListener()
+        virtual ~WeakChangesListener() override
         {
         }
 
@@ -245,7 +245,7 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper<css::document::X
         {
         }
 
-        virtual ~WeakDocumentEventListener()
+        virtual ~WeakDocumentEventListener() override
         {
         }
 

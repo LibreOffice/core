@@ -210,7 +210,7 @@ private:
     DatabaseDataProvider(DatabaseDataProvider &) = delete;
     void operator =(DatabaseDataProvider &) = delete;
 
-    virtual ~DatabaseDataProvider() {}
+    virtual ~DatabaseDataProvider() override {}
 
     // This function is called upon disposing the component,
     // if your component needs special work when it becomes

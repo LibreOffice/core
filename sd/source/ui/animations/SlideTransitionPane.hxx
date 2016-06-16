@@ -58,7 +58,7 @@ public:
         ViewShellBase & rBase,
         SdDrawDocument* pDoc,
         const css::uno::Reference<css::frame::XFrame>& rxFrame );
-    virtual ~SlideTransitionPane();
+    virtual ~SlideTransitionPane() override;
     virtual void dispose() override;
 
     // Window

@@ -40,7 +40,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxShowCharSet : public Control
 {
 public:
                     SvxShowCharSet( vcl::Window* pParent );
-                    virtual ~SvxShowCharSet();
+                    virtual ~SvxShowCharSet() override;
     virtual void    dispose() override;
     virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
 

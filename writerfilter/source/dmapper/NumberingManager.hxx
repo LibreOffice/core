@@ -73,7 +73,7 @@ public:
         ,m_outline(false)
         {}
 
-    virtual ~ListLevel( ){ }
+    virtual ~ListLevel( ) override { }
 
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );
@@ -178,7 +178,7 @@ public:
     typedef std::shared_ptr< ListDef > Pointer;
 
     ListDef( );
-    virtual ~ListDef( );
+    virtual ~ListDef( ) override;
 
     // Accessors
     void SetAbstractDefinition( AbstractListDef::Pointer pAbstract ) { m_pAbstractDef = pAbstract; };
@@ -229,7 +229,7 @@ private:
 public:
 
     ListsManager(DomainMapper& rDMapper, const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory);
-    virtual ~ListsManager();
+    virtual ~ListsManager() override;
 
     typedef std::shared_ptr< ListsManager >  Pointer;
 

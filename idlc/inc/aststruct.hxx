@@ -38,7 +38,7 @@ public:
               const OString& name,
               AstStruct const* pBaseType,
               AstScope* pScope);
-    virtual ~AstStruct();
+    virtual ~AstStruct() override;
 
     DeclList::size_type getTypeParameterCount() const
     { return m_typeParameters.size(); }

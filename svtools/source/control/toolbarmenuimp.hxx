@@ -113,7 +113,7 @@ class ToolbarMenuAcc :
 public:
 
     explicit ToolbarMenuAcc( ToolbarMenu_Impl& rParent );
-    virtual ~ToolbarMenuAcc();
+    virtual ~ToolbarMenuAcc() override;
 
     void                FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
@@ -193,7 +193,7 @@ class ToolbarMenuEntryAcc : public ::comphelper::OBaseMutex,
 {
 public:
     explicit ToolbarMenuEntryAcc( ToolbarMenuEntry* pParent );
-    virtual ~ToolbarMenuEntryAcc();
+    virtual ~ToolbarMenuEntryAcc() override;
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;

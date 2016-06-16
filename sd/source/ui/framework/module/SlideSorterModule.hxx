@@ -37,7 +37,7 @@ public:
     SlideSorterModule (
         const css::uno::Reference<css::frame::XController>& rxController,
         const OUString& rsLeftPaneURL);
-    virtual ~SlideSorterModule();
+    virtual ~SlideSorterModule() override;
 
     virtual void SaveResourceState() override;
     // XConfigurationChangeListener

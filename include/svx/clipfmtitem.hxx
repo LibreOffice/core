@@ -37,7 +37,7 @@ public:
     static SfxPoolItem* CreateDefault();
     SvxClipboardFormatItem( sal_uInt16 nId = 0 );
     SvxClipboardFormatItem( const SvxClipboardFormatItem& );
-    virtual ~SvxClipboardFormatItem();
+    virtual ~SvxClipboardFormatItem() override;
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

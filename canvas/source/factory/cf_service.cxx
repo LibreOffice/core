@@ -85,7 +85,7 @@ class CanvasFactory
         Reference<XComponentContext> const & xContext ) const;
 
 public:
-    virtual ~CanvasFactory();
+    virtual ~CanvasFactory() override;
     explicit CanvasFactory( Reference<XComponentContext> const & xContext );
 
     // XServiceInfo

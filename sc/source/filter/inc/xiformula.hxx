@@ -34,7 +34,7 @@ class XclImpFormulaCompiler : protected XclImpRoot
 {
 public:
     explicit            XclImpFormulaCompiler( const XclImpRoot& rRoot );
-    virtual             ~XclImpFormulaCompiler();
+    virtual             ~XclImpFormulaCompiler() override;
 
     /** Creates a range list from the passed Excel token array.
         @param rStrm  Stream pointing to additional formula data (e.g. constant array data). */

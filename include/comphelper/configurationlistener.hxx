@@ -55,7 +55,7 @@ public:
     inline ConfigurationListenerProperty(const rtl::Reference< ConfigurationListener > &xListener,
                                              const OUString &rProp );
 
-    virtual inline ~ConfigurationListenerProperty();
+    virtual inline ~ConfigurationListenerProperty() override;
 
     uno_type get() const { return maValue; }
 };
@@ -74,7 +74,7 @@ public:
                     css::uno::UNO_QUERY_THROW )
     { }
 
-    virtual ~ConfigurationListener()
+    virtual ~ConfigurationListener() override
     {
         dispose();
     }

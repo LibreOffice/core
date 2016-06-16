@@ -39,7 +39,7 @@ private:
 
 public:
                 SwAnnotationShell(SwView&);
-    virtual     ~SwAnnotationShell();
+    virtual     ~SwAnnotationShell() override;
 
     static void StateDisableItems(SfxItemSet &);
     void        Exec(SfxRequest &);

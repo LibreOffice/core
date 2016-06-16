@@ -75,7 +75,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions : public utl::det
         *//*-*****************************************************************************************************/
 
          SvtDynamicMenuOptions();
-        virtual ~SvtDynamicMenuOptions();
+        virtual ~SvtDynamicMenuOptions() override;
 
         /*-****************************************************************************************************
             @short      return complete specified list

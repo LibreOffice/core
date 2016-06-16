@@ -108,7 +108,7 @@ protected:
 public:
     SvLBoxString(const OUString& rText);
     SvLBoxString();
-    virtual ~SvLBoxString();
+    virtual ~SvLBoxString() override;
 
     virtual sal_uInt16 GetType() const override;
     virtual void InitViewData(SvTreeListBox* pView,
@@ -138,7 +138,7 @@ class SvLBoxBmp : public SvLBoxItem
     Image aBmp;
 public:
     SvLBoxBmp();
-    virtual ~SvLBoxBmp();
+    virtual ~SvLBoxBmp() override;
     virtual sal_uInt16 GetType() const override;
     virtual void InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,  vcl::RenderContext& rRenderContext,
@@ -164,7 +164,7 @@ public:
     // for that kind).
     SvLBoxButton( SvLBoxButtonKind eTheKind, SvLBoxButtonData* pBData );
     SvLBoxButton();
-    virtual ~SvLBoxButton();
+    virtual ~SvLBoxButton() override;
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
                               SvViewDataItem* pViewData) override;
@@ -247,7 +247,7 @@ public:
                      Image aBmp2,
                      bool bExpanded);
     SvLBoxContextBmp();
-    virtual ~SvLBoxContextBmp();
+    virtual ~SvLBoxContextBmp() override;
 
     virtual sal_uInt16 GetType() const override;
     virtual void InitViewData(SvTreeListBox* pView,

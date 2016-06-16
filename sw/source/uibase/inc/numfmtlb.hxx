@@ -47,7 +47,7 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
 public:
     NumFormatListBox(vcl::Window* pWin, WinBits nStyle);
 
-    virtual ~NumFormatListBox();
+    virtual ~NumFormatListBox() override;
     virtual void    dispose() override;
 
     void            Clear();

@@ -66,7 +66,7 @@ public:
     explicit            InputStream(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm );
-    virtual             ~InputStream();
+    virtual             ~InputStream() override;
 
     virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
                         throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;

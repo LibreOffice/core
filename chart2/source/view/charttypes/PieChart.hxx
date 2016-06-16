@@ -37,7 +37,7 @@ public:
 
     PieChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
             , sal_Int32 nDimensionCount, bool bExcludingPositioning );
-    virtual ~PieChart();
+    virtual ~PieChart() override;
 
     /** This method creates all shapes needed for representing the pie chart.
      */

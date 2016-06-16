@@ -55,7 +55,7 @@ private:
             SdrCustomShapeGeometryItem();
             SdrCustomShapeGeometryItem( const css::uno::Sequence< css::beans::PropertyValue >& );
             SdrCustomShapeGeometryItem( SvStream& rIn, sal_uInt16 nVersion );
-            virtual ~SdrCustomShapeGeometryItem();
+            virtual ~SdrCustomShapeGeometryItem() override;
 
             virtual bool                operator==( const SfxPoolItem& ) const override;
             virtual bool GetPresentation(SfxItemPresentation ePresentation,
@@ -88,7 +88,7 @@ class SVX_DLLPUBLIC SdrCustomShapeReplacementURLItem : public SfxStringItem
 {
     public:
             SdrCustomShapeReplacementURLItem();
-            virtual ~SdrCustomShapeReplacementURLItem();
+            virtual ~SdrCustomShapeReplacementURLItem() override;
             virtual SfxPoolItem*        Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 

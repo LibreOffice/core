@@ -42,7 +42,7 @@ class KDESalFrame : public X11SalFrame
 
     public:
         KDESalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
-        virtual ~KDESalFrame();
+        virtual ~KDESalFrame() override;
 
         virtual SalGraphics* AcquireGraphics() override;
         virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;

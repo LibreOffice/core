@@ -31,7 +31,7 @@ public:
                 AstExpression* pExpr, const OString& name, AstScope* pScope);
     AstConstant(const ExprType type, AstExpression* pExpr,
                 const OString& name, AstScope* pScope);
-    virtual ~AstConstant();
+    virtual ~AstConstant() override;
 
     AstExpression* getConstValue()
         { return m_pConstValue; }

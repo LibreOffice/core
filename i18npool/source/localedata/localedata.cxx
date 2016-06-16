@@ -1329,7 +1329,7 @@ class OutlineNumbering : public cppu::WeakImplHelper < container::XIndexAccess >
     sal_Int16                         m_nCount;
 public:
     OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlineLevels, int nLevels);
-    virtual ~OutlineNumbering();
+    virtual ~OutlineNumbering() override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException, std::exception) override;

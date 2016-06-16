@@ -114,7 +114,7 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
 {
     public:
         SubstitutePathVariables_Impl();
-        virtual ~SubstitutePathVariables_Impl();
+        virtual ~SubstitutePathVariables_Impl() override;
 
         static OperatingSystem GetOperatingSystemFromString( const OUString& );
         static EnvironmentType GetEnvTypeFromString( const OUString& );
@@ -229,7 +229,7 @@ friend class SubstitutePathVariables_Impl;
 
 public:
     explicit SubstitutePathVariables(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~SubstitutePathVariables();
+    virtual ~SubstitutePathVariables() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

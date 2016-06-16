@@ -85,7 +85,7 @@ public:
                           const uno::Sequence< beans::PropertyValue >& rProps
                         );
 
-    virtual ~SfxPrinterController();
+    virtual ~SfxPrinterController() override;
     virtual void Notify( SfxBroadcaster&, const SfxHint& ) override;
 
     virtual int  getPageCount() const override;

@@ -69,7 +69,7 @@ class UNOTOOLS_DLLPUBLIC GlobalEventConfig:
 {
     public:
         GlobalEventConfig( );
-        virtual ~GlobalEventConfig( );
+        virtual ~GlobalEventConfig( ) override;
         static ::osl::Mutex& GetOwnStaticMutex();
 
         css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) throw (css::uno::RuntimeException, std::exception) override;

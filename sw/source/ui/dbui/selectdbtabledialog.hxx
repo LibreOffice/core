@@ -49,7 +49,7 @@ class SwSelectDBTableDialog : public SfxModalDialog
 public:
     SwSelectDBTableDialog(vcl::Window* pParent,
         const css::uno::Reference<css::sdbc::XConnection>& xConnection);
-    virtual ~SwSelectDBTableDialog();
+    virtual ~SwSelectDBTableDialog() override;
     virtual void dispose() override;
 
     OUString    GetSelectedTable(bool& bIsTable);

@@ -114,7 +114,7 @@ namespace slideshow
 
             virtual css::uno::Reference< css::drawing::XShape > getXShape() const override;
 
-            virtual ~DrawShape();
+            virtual ~DrawShape() override;
 
 
             // View layer methods

@@ -57,7 +57,7 @@ namespace drawinglayer
 
         public:
             AnimationEntryFixed(double fDuration, double fState = 0.0);
-            virtual ~AnimationEntryFixed();
+            virtual ~AnimationEntryFixed() override;
             virtual AnimationEntry* clone() const override;
 
             virtual bool operator==(const AnimationEntry& rCandidate) const override;
@@ -77,7 +77,7 @@ namespace drawinglayer
 
         public:
             AnimationEntryLinear(double fDuration, double fFrequency = 250.0, double fStart = 0.0, double fStop = 1.0);
-            virtual ~AnimationEntryLinear();
+            virtual ~AnimationEntryLinear() override;
             virtual AnimationEntry* clone() const override;
 
             virtual bool operator==(const AnimationEntry& rCandidate) const override;
@@ -98,7 +98,7 @@ namespace drawinglayer
 
         public:
             AnimationEntryList();
-            virtual ~AnimationEntryList();
+            virtual ~AnimationEntryList() override;
             virtual AnimationEntry* clone() const override;
 
             virtual bool operator==(const AnimationEntry& rCandidate) const override;
@@ -116,7 +116,7 @@ namespace drawinglayer
 
         public:
             AnimationEntryLoop(sal_uInt32 nRepeat = 0xffffffff);
-            virtual ~AnimationEntryLoop();
+            virtual ~AnimationEntryLoop() override;
             virtual AnimationEntry* clone() const override;
 
             virtual bool operator==(const AnimationEntry& rCandidate) const override;

@@ -86,7 +86,7 @@ public:
     virtual void SAL_CALL initialize(const uno::Sequence< uno::Any > & aArguments) throw (uno::RuntimeException, uno::Exception, std::exception) override;
 
 private:
-    virtual ~StringRepresentation() {}
+    virtual ~StringRepresentation() override {}
 
     /** converts a generic value into a string representation
 

@@ -145,7 +145,7 @@ private:
 
 public:
                                 ScDPSource( ScDPTableData* pD );
-    virtual                     ~ScDPSource();
+    virtual                     ~ScDPSource() override;
 
     ScDPTableData*          GetData()       { return pData; }
     const ScDPTableData*    GetData() const { return pData; }
@@ -267,7 +267,7 @@ private:
 
 public:
                             ScDPDimensions( ScDPSource* pSrc );
-    virtual                 ~ScDPDimensions();
+    virtual                 ~ScDPDimensions() override;
 
     void                    CountChanged();
 
@@ -323,7 +323,7 @@ class ScDPDimension : public cppu::WeakImplHelper<
 
 public:
                             ScDPDimension( ScDPSource* pSrc, long nD );
-    virtual                 ~ScDPDimension();
+    virtual                 ~ScDPDimension() override;
                             ScDPDimension(const ScDPDimension&) = delete;
     ScDPDimension&          operator=(const ScDPDimension&) = delete;
 
@@ -421,7 +421,7 @@ private:
 
 public:
                             ScDPHierarchies( ScDPSource* pSrc, long nD );
-    virtual                 ~ScDPHierarchies();
+    virtual                 ~ScDPHierarchies() override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -463,7 +463,7 @@ private:
 
 public:
                             ScDPHierarchy( ScDPSource* pSrc, long nD, long nH );
-    virtual                 ~ScDPHierarchy();
+    virtual                 ~ScDPHierarchy() override;
 
     ScDPLevels*             GetLevelsObject();
 
@@ -498,7 +498,7 @@ private:
 
 public:
                             ScDPLevels( ScDPSource* pSrc, long nD, long nH );
-    virtual                 ~ScDPLevels();
+    virtual                 ~ScDPLevels() override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -554,7 +554,7 @@ private:
 
 public:
                             ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL );
-    virtual                 ~ScDPLevel();
+    virtual                 ~ScDPLevel() override;
 
     ScDPMembers*            GetMembersObject();
 
@@ -672,7 +672,7 @@ private:
 
 public:
                             ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL );
-    virtual                 ~ScDPMembers();
+    virtual                 ~ScDPMembers() override;
 
                             // XMembersAccess
     virtual css::uno::Sequence< OUString > SAL_CALL getLocaleIndependentElementNames()
@@ -735,7 +735,7 @@ private:
 
 public:
     ScDPMember(ScDPSource* pSrc, long nD, long nH, long nL, SCROW nIndex);
-    virtual                 ~ScDPMember();
+    virtual                 ~ScDPMember() override;
     ScDPMember(const ScDPMember&) = delete;
     ScDPMember& operator=(const ScDPMember&) = delete;
 

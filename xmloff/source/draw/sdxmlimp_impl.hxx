@@ -207,7 +207,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         bool bIsDraw, SvXMLImportFlags nImportFlags );
-    virtual ~SdXMLImport() throw ();
+    virtual ~SdXMLImport() throw () override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;

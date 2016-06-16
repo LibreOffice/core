@@ -141,7 +141,7 @@ protected:
 
 public:
                                 BibGeneralPage(vcl::Window* pParent, BibDataManager* pDatMan);
-    virtual                     ~BibGeneralPage();
+    virtual                     ~BibGeneralPage() override;
     virtual void                dispose() override;
 
     inline const OUString&      GetErrorString() const;

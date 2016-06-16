@@ -34,7 +34,7 @@ private:
 public:
     SwVbaVariable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::beans::XPropertyAccess >& rUserDefined, const OUString& rName ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaVariable();
+    virtual ~SwVbaVariable() override;
 
    // XVariable
     virtual OUString SAL_CALL getName() throw ( css::uno::RuntimeException, std::exception ) override;

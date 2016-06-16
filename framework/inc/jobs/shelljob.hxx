@@ -71,7 +71,7 @@ class ShellJob : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::tas
                     so this class can't make trouble
                     related to inline/symbols etcpp.!
          */
-        virtual ~ShellJob();
+        virtual ~ShellJob() override;
 
     // uno interface
     public:

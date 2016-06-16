@@ -447,7 +447,7 @@ struct PageData
             rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize);
 
     protected:
-        virtual ~Allocator() {}
+        virtual ~Allocator() override {}
 
     private:
         /** Implementation (abstract).

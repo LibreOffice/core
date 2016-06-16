@@ -52,7 +52,7 @@ namespace dbaui
 
     public:
         OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=nullptr);
-        virtual ~OWizTypeSelectControl();
+        virtual ~OWizTypeSelectControl() override;
         virtual void dispose() override;
 
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
@@ -77,7 +77,7 @@ namespace dbaui
             , m_bPKey(false)
             , m_pParentTabPage(nullptr)
             {}
-        virtual ~OWizTypeSelectList();
+        virtual ~OWizTypeSelectList() override;
         virtual void dispose() override;
         void                    SetPKey(bool bPKey) { m_bPKey = bPKey; }
         void                    SetParentTabPage(vcl::Window* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
@@ -120,7 +120,7 @@ namespace dbaui
         virtual OUString        GetTitle() const override;
 
         OWizTypeSelect(vcl::Window* pParent, SvStream* _pStream = nullptr );
-        virtual ~OWizTypeSelect();
+        virtual ~OWizTypeSelect() override;
         virtual void dispose() override;
 
         inline void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }

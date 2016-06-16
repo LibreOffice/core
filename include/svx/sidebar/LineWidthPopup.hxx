@@ -37,7 +37,7 @@ class LineWidthPopup : public FloatingWindow
 public:
     LineWidthPopup(LinePropertyPanelBase& rParent);
     virtual void dispose() override;
-    virtual ~LineWidthPopup();
+    virtual ~LineWidthPopup() override;
 
     void SetWidthSelect (long lValue, bool bValuable, SfxMapUnit eMapUnit);
 

@@ -75,7 +75,7 @@ class LwpTextStyle : public LwpDLNFPVList
 public:
     LwpTextStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
 
-    virtual ~LwpTextStyle();
+    virtual ~LwpTextStyle() override;
 
     inline sal_uInt32 GetFinalFontID() const;
 

@@ -35,7 +35,7 @@ class GenericStatusbarController : public svt::StatusbarController
                                     const css::uno::Reference< css::frame::XFrame >& rFrame,
                                     const css::uno::Reference< css::ui::XStatusbarItem >& rxItem,
                                     AddonStatusbarItemData *pItemData );
-        virtual ~GenericStatusbarController();
+        virtual ~GenericStatusbarController() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;

@@ -62,7 +62,7 @@ public:
         throw (uno::Exception, std::exception) override;
 
 private:
-    virtual ~Factory();
+    virtual ~Factory() override;
 
     ServiceDecl const& m_rServiceDecl;
 };

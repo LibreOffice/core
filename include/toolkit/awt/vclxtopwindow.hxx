@@ -90,7 +90,7 @@ protected:
 
 public:
     VCLXTopWindow(bool bWHWND = false);
-    virtual ~VCLXTopWindow();
+    virtual ~VCLXTopWindow() override;
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

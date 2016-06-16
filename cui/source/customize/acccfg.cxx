@@ -636,7 +636,7 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
 public:
     explicit SfxAccCfgLBoxString_Impl(const OUString& sText);
 
-    virtual ~SfxAccCfgLBoxString_Impl();
+    virtual ~SfxAccCfgLBoxString_Impl() override;
 
     virtual void Paint(const Point& aPos, SvTreeListBox& rDevice, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) override;

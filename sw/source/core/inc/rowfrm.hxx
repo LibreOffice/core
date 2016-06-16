@@ -46,7 +46,7 @@ class SwRowFrame: public SwLayoutFrame
     bool m_bIsRowSpanLine;
 
     virtual void DestroyImpl() override;
-    virtual ~SwRowFrame();
+    virtual ~SwRowFrame() override;
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;

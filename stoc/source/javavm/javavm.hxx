@@ -122,7 +122,7 @@ private:
     JavaVirtualMachine(JavaVirtualMachine &) = delete;
     void operator =(const JavaVirtualMachine&) = delete;
 
-    virtual ~JavaVirtualMachine();
+    virtual ~JavaVirtualMachine() override;
 
     virtual void SAL_CALL disposing() override;
 

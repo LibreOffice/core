@@ -76,7 +76,7 @@ namespace reportdesign
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
 
-        virtual ~OReportEngineJFree();
+        virtual ~OReportEngineJFree() override;
     public:
         typedef rtl::Reference<OReportEngineJFree> TReportEngine;
 

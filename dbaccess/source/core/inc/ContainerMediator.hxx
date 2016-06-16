@@ -46,7 +46,7 @@ namespace dbaccess
         css::uno::Reference< css::container::XContainer >     m_xContainer;   // can not be weak
 
     protected:
-        virtual ~OContainerMediator();
+        virtual ~OContainerMediator() override;
 
     public:
         OContainerMediator(

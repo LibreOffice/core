@@ -48,7 +48,7 @@ protected:
         css::uno::Reference< css::frame::XModel > m_xModel;
 public:
     VbaDialogsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext, const css::uno::Reference< css::frame::XModel >& xModel ): VbaDialogsBase_BASE( xParent, xContext ), m_xModel( xModel ) {}
-    virtual ~VbaDialogsBase() {}
+    virtual ~VbaDialogsBase() override {}
 
     // XCollection
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) override;

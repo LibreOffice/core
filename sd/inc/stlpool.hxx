@@ -131,7 +131,7 @@ protected:
     virtual SfxStyleSheetBase* Create(const OUString& rName, SfxStyleFamily eFamily, sal_uInt16 nMask) override;
 
     using  SfxStyleSheetPool::Create;
-    virtual ~SdStyleSheetPool();
+    virtual ~SdStyleSheetPool() override;
 
     void AddStyleFamily( const SdPage* pPage );
     void RemoveStyleFamily( const SdPage* pPage );

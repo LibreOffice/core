@@ -179,7 +179,7 @@ class AppExitListener :
 
 public:
     AppExitListener();
-    virtual ~AppExitListener();
+    virtual ~AppExitListener() override;
 
     virtual void    AtExit() = 0;
 

@@ -171,7 +171,7 @@ public:
 
     Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
     Edit( vcl::Window* pParent, const ResId& rResId );
-    virtual ~Edit();
+    virtual ~Edit() override;
     virtual void dispose() override;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;

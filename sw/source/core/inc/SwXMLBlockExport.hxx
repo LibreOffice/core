@@ -36,7 +36,7 @@ public:
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
-    virtual ~SwXMLBlockListExport() {}
+    virtual ~SwXMLBlockListExport() override {}
     sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass) override;
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_ () override {}
@@ -55,7 +55,7 @@ public:
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
-    virtual ~SwXMLTextBlockExport() {}
+    virtual ~SwXMLTextBlockExport() override {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum /*eClass*/) override {return 0;}
     void exportDoc(const OUString & rText);
     void ExportAutoStyles_() override {}

@@ -42,7 +42,7 @@ protected:
 
 public:
     ViewObjectContactOfPageObj(ObjectContact& rObjectContact, ViewContact& rViewContact);
-    virtual ~ViewObjectContactOfPageObj();
+    virtual ~ViewObjectContactOfPageObj() override;
 };
 
 }}

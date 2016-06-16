@@ -40,7 +40,7 @@ class SwGrammarMarkUp : public SwWrongList
 public:
     SwGrammarMarkUp() : SwWrongList( WRONGLIST_GRAMMAR ) {}
 
-    virtual ~SwGrammarMarkUp();
+    virtual ~SwGrammarMarkUp() override;
     virtual SwWrongList* Clone() override;
     virtual void CopyFrom( const SwWrongList& rCopy ) override;
 

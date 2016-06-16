@@ -37,13 +37,13 @@
 class ScAccWinFocusLostHint : public SfxHint
 {
 public:
-                virtual ~ScAccWinFocusLostHint();
+                virtual ~ScAccWinFocusLostHint() override;
 };
 
 class ScAccWinFocusGotHint : public SfxHint
 {
 public:
-                virtual ~ScAccWinFocusGotHint();
+                virtual ~ScAccWinFocusGotHint() override;
 };
 
 class ScAccGridWinFocusLostHint : public ScAccWinFocusLostHint
@@ -51,7 +51,7 @@ class ScAccGridWinFocusLostHint : public ScAccWinFocusLostHint
     ScSplitPos  eOldGridWin;
 public:
                 ScAccGridWinFocusLostHint( ScSplitPos eOldGridWin );
-                virtual ~ScAccGridWinFocusLostHint();
+                virtual ~ScAccGridWinFocusLostHint() override;
 
     ScSplitPos  GetOldGridWin() const { return eOldGridWin; }
 };
@@ -61,7 +61,7 @@ class ScAccGridWinFocusGotHint : public ScAccWinFocusGotHint
     ScSplitPos  eNewGridWin;
 public:
                 ScAccGridWinFocusGotHint( ScSplitPos eNewGridWin );
-                virtual ~ScAccGridWinFocusGotHint();
+                virtual ~ScAccGridWinFocusGotHint() override;
 
     ScSplitPos  GetNewGridWin() const { return eNewGridWin; }
 };

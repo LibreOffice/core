@@ -94,7 +94,7 @@ protected:
     void resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream);
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
-    virtual ~OOXMLDocumentImpl();
+    virtual ~OOXMLDocumentImpl() override;
 
     virtual void resolve(Stream & rStream) override;
 

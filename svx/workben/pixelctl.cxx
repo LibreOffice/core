@@ -83,7 +83,7 @@ class MyWin : public WorkWindow
 
 public:
     MyWin(vcl::Window* pParent, WinBits nWinStyle);
-    virtual ~MyWin()
+    virtual ~MyWin() override
     {
         disposeOnce();
     }

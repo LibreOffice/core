@@ -29,7 +29,7 @@ class PolynomialRegressionCurveCalculator : public RegressionCurveCalculator
 {
 public:
     PolynomialRegressionCurveCalculator();
-    virtual ~PolynomialRegressionCurveCalculator();
+    virtual ~PolynomialRegressionCurveCalculator() override;
 
 protected:
     virtual OUString ImplGetRepresentation(

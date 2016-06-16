@@ -69,7 +69,7 @@ public:
         AccessibleSlideSorterView& rAccessibleSlideSorter,
         ::sd::slidesorter::SlideSorter& rSlideSorter,
         vcl::Window* pWindow);
-    virtual ~Implementation();
+    virtual ~Implementation() override;
 
     void RequestUpdateChildren();
     void Clear();

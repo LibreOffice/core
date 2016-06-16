@@ -124,7 +124,7 @@ protected:
 
 public:
     ZipPackage( const css::uno::Reference < css::uno::XComponentContext > &xContext );
-    virtual ~ZipPackage();
+    virtual ~ZipPackage() override;
     ZipFile& getZipFile() { return *m_pZipFile;}
     sal_Int32 getFormat() const { return m_nFormat; }
 

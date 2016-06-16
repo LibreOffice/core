@@ -167,7 +167,7 @@ namespace utl
             bool                AddNode(const OUString& rNode, const OUString& rNewNode);
 
         public:
-            virtual ~ConfigItem();
+            virtual ~ConfigItem() override;
 
             /** is called from the ConfigManager before application ends of from the
                 PropertyChangeListener if the sub tree broadcasts changes. */

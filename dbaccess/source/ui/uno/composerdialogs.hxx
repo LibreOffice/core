@@ -52,7 +52,7 @@ namespace dbaui
 
     protected:
         explicit ComposerDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
-        virtual ~ComposerDialog();
+        virtual ~ComposerDialog() override;
 
     public:
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()

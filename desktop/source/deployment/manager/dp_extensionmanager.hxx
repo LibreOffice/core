@@ -45,7 +45,7 @@ class ExtensionManager : private ::dp_misc::MutexHolder,
 {
 public:
     explicit ExtensionManager( css::uno::Reference< css::uno::XComponentContext >const& xContext);
-    virtual     ~ExtensionManager();
+    virtual     ~ExtensionManager() override;
 
     void check();
     void fireModified();

@@ -423,7 +423,7 @@ class MaxLabelTickIter : public TickIter
 {
 public:
     MaxLabelTickIter( TickInfoArrayType& rTickInfoVector, size_t nLongestLabelIndex );
-    virtual ~MaxLabelTickIter();
+    virtual ~MaxLabelTickIter() override;
 
     virtual TickInfo* firstInfo() override;
     virtual TickInfo* nextInfo() override;

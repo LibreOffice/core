@@ -260,7 +260,7 @@ class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
 {
 public:
     explicit WrappedAttachedAxisProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedAttachedAxisProperty();
+    virtual ~WrappedAttachedAxisProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -332,7 +332,7 @@ class WrappedSegmentOffsetProperty : public ::chart::WrappedProperty
 {
 public:
     WrappedSegmentOffsetProperty();
-    virtual ~WrappedSegmentOffsetProperty();
+    virtual ~WrappedSegmentOffsetProperty() override;
 
 protected:
     virtual Any convertInnerToOuterValue( const Any& rInnerValue ) const override;
@@ -374,7 +374,7 @@ class WrappedLineColorProperty : public WrappedSeriesAreaOrLineProperty
 {
 public:
     explicit WrappedLineColorProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
-    virtual ~WrappedLineColorProperty();
+    virtual ~WrappedLineColorProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -435,7 +435,7 @@ class WrappedLineStyleProperty : public WrappedSeriesAreaOrLineProperty
 {
 public:
     explicit WrappedLineStyleProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
-    virtual ~WrappedLineStyleProperty();
+    virtual ~WrappedLineStyleProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;

@@ -298,7 +298,7 @@ class VclGtkClipboard :
 public:
 
     explicit VclGtkClipboard(GdkAtom nSelection);
-    virtual ~VclGtkClipboard();
+    virtual ~VclGtkClipboard() override;
 
     /*
      * XServiceInfo

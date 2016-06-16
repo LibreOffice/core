@@ -185,7 +185,7 @@ public:
                         const css::uno::Reference< css::sdbc::XResultSet > &               xOrigin,
                         const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentIdentifierMapping );
 
-    virtual ~CachedContentResultSet();
+    virtual ~CachedContentResultSet() override;
 
 
     // XInterface
@@ -475,7 +475,7 @@ public:
 
     CachedContentResultSetFactory( const css::uno::Reference< css::uno::XComponentContext > & rxContext);
 
-    virtual ~CachedContentResultSetFactory();
+    virtual ~CachedContentResultSetFactory() override;
 
 
     // XInterface

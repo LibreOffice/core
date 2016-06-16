@@ -112,7 +112,7 @@ namespace connectivity
         */
         virtual OUString getRenameStart() const;
 
-        virtual ~OTableHelper();
+        virtual ~OTableHelper() override;
 
     public:
         virtual void refreshColumns() override;

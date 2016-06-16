@@ -39,7 +39,7 @@ public:
     SwFormatHeader( bool bOn = false );
     SwFormatHeader( SwFrameFormat *pHeaderFormat );
     SwFormatHeader( const SwFormatHeader &rCpy );
-    virtual ~SwFormatHeader();
+    virtual ~SwFormatHeader() override;
     SwFormatHeader& operator=( const SwFormatHeader &rCpy );
 
 
@@ -70,7 +70,7 @@ public:
     SwFormatFooter( bool bOn = false );
     SwFormatFooter( SwFrameFormat *pFooterFormat );
     SwFormatFooter( const SwFormatFooter &rCpy );
-    virtual ~SwFormatFooter();
+    virtual ~SwFormatFooter() override;
     SwFormatFooter& operator=( const SwFormatFooter &rCpy );
 
 

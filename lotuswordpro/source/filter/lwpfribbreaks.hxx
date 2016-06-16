@@ -70,7 +70,7 @@ class LwpFribPageBreak: public LwpFrib
 {
 public:
     explicit LwpFribPageBreak( LwpPara* pPara );
-    virtual ~LwpFribPageBreak();
+    virtual ~LwpFribPageBreak() override;
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     void RegisterBreakStyle(LwpPara* pPara);
     void ParseLayout();
@@ -88,14 +88,14 @@ class LwpFribLineBreak: public LwpFrib
 {
 public:
     explicit LwpFribLineBreak( LwpPara* pPara ) : LwpFrib(pPara){}
-    virtual ~LwpFribLineBreak(){}
+    virtual ~LwpFribLineBreak() override {}
 };
 
 class LwpFribColumnBreak: public LwpFrib
 {
 public:
     explicit LwpFribColumnBreak( LwpPara* pPara ) : LwpFrib(pPara){}
-    virtual ~LwpFribColumnBreak(){}
+    virtual ~LwpFribColumnBreak() override {}
     void RegisterBreakStyle(LwpPara* pPara);
 };
 

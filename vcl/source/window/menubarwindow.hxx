@@ -42,7 +42,7 @@ class DecoToolBox : public ToolBox
     using Window::ImplInit;
 public:
     explicit DecoToolBox(vcl::Window* pParent);
-    virtual ~DecoToolBox() {}
+    virtual ~DecoToolBox() override {}
 
     void    ImplInit();
 
@@ -114,7 +114,7 @@ private:
 
 public:
     explicit        MenuBarWindow( vcl::Window* pParent );
-    virtual         ~MenuBarWindow();
+    virtual         ~MenuBarWindow() override;
     virtual void    dispose() override;
 
     void    ShowButtons(bool bClose, bool bFloat, bool bHide);

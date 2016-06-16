@@ -78,7 +78,7 @@ public:
                                           SfxChildWindow *pCW,
                                           vcl::Window* pParent,
                                           const OString& rID, const OUString& rUIXMLDescription );
-                        virtual ~SfxDockingWindow();
+                        virtual ~SfxDockingWindow() override;
     virtual void        dispose() override;
 
     void                Initialize (SfxChildWinInfo* pInfo);

@@ -46,7 +46,7 @@ public:
 
     SAL_DLLPRIVATE DrawModelWrapper(
         const css::uno::Reference<css::uno::XComponentContext>& xContext );
-    SAL_DLLPRIVATE virtual ~DrawModelWrapper();
+    SAL_DLLPRIVATE virtual ~DrawModelWrapper() override;
 
     css::uno::Reference< css::lang::XMultiServiceFactory > getShapeFactory();
 

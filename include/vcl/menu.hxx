@@ -431,7 +431,7 @@ protected:
 public:
     MenuBar();
     MenuBar( const MenuBar& rMenu );
-    virtual ~MenuBar();
+    virtual ~MenuBar() override;
 
     MenuBar& operator =( const MenuBar& rMenu );
 
@@ -512,7 +512,7 @@ public:
     PopupMenu();
     PopupMenu( const PopupMenu& rMenu );
     explicit PopupMenu( const ResId& );
-    virtual ~PopupMenu();
+    virtual ~PopupMenu() override;
 
     virtual bool IsMenuBar() const override { return false; }
 

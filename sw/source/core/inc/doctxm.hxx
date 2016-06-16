@@ -70,7 +70,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 
 public:
     SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFormat & rFormat);
-    virtual ~SwTOXBaseSection();
+    virtual ~SwTOXBaseSection() override;
 
     // <_bNewTOX> : distinguish between the creation of a new table-of-content
     //              (true) or an update of a table-of-content (false)

@@ -142,7 +142,7 @@ protected:
 
 public:
     SmMathConfig();
-    virtual ~SmMathConfig();
+    virtual ~SmMathConfig() override;
 
     // utl::ConfigItem
     virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;

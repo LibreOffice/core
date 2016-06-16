@@ -72,7 +72,7 @@ public:
     {
     }
 
-    virtual ~SfxFrame_Impl() { }
+    virtual ~SfxFrame_Impl() override { }
 };
 
 #endif

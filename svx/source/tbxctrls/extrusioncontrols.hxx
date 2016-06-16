@@ -40,7 +40,7 @@ class ExtrusionDirectionWindow : public svtools::ToolbarMenu
 {
 public:
     ExtrusionDirectionWindow( svt::ToolboxController& rController, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
-    virtual ~ExtrusionDirectionWindow();
+    virtual ~ExtrusionDirectionWindow() override;
     virtual void dispose() override;
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException ) override;
@@ -157,7 +157,7 @@ private:
     void SelectHdl(void*);
 public:
     ExtrusionLightingWindow( svt::ToolboxController& rController, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
-    virtual ~ExtrusionLightingWindow();
+    virtual ~ExtrusionLightingWindow() override;
     virtual void dispose() override;
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException ) override;

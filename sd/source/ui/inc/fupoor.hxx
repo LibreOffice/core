@@ -117,7 +117,7 @@ protected:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuPoor();
+    virtual ~FuPoor() override;
 
     DECL_LINK_TYPED( DelayHdl, Timer *, void );
 

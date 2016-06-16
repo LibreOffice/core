@@ -33,7 +33,7 @@ public:
     // Constructors
     ChapterCollator( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     // Destructor
-    virtual ~ChapterCollator();
+    virtual ~ChapterCollator() override;
 
     sal_Int32 SAL_CALL compareSubstring( const OUString& s1, sal_Int32 off1, sal_Int32 len1,
         const OUString& s2, sal_Int32 off2, sal_Int32 len2) throw(css::uno::RuntimeException, std::exception) override;

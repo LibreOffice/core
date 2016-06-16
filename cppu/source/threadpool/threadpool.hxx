@@ -121,7 +121,7 @@ namespace cppu_threadpool {
     {
     public:
         ThreadPool();
-        virtual ~ThreadPool();
+        virtual ~ThreadPool() override;
 
         void dispose( sal_Int64 nDisposeId );
         void destroy( sal_Int64 nDisposeId );

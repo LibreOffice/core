@@ -41,7 +41,7 @@ class DocumentRenderer
 {
 public:
     DocumentRenderer (ViewShellBase& rBase);
-    virtual ~DocumentRenderer();
+    virtual ~DocumentRenderer() override;
 
     // XRenderable
     virtual sal_Int32 SAL_CALL getRendererCount (

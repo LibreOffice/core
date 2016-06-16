@@ -38,7 +38,7 @@ public:
                       long           nMinimum  = 0,
                       long           nFirst    = 1,
                       long           nLast     = 100 );
-    virtual ~ScMetricInputDlg();
+    virtual ~ScMetricInputDlg() override;
     virtual void dispose() override;
 
     long GetInputValue() const;

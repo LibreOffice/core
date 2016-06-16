@@ -48,7 +48,7 @@ private:
     UriAbbreviation(UriAbbreviation &) = delete;
     void operator =(UriAbbreviation &) = delete;
 
-    virtual ~UriAbbreviation() {}
+    virtual ~UriAbbreviation() override {}
 };
 
 } //    namespace framework

@@ -45,7 +45,7 @@ class DropdownToolbarController : public ComplexToolbarController
                                    sal_uInt16 nID,
                                    sal_Int32 nWidth,
                                    const OUString& aCommand );
-        virtual ~DropdownToolbarController();
+        virtual ~DropdownToolbarController() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;

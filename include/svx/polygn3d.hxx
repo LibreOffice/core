@@ -49,7 +49,7 @@ public:
         const basegfx::B3DPolyPolygon& rPolyPoly3D);
 
     E3dPolygonObj();
-    virtual ~E3dPolygonObj();
+    virtual ~E3dPolygonObj() override;
 
     const basegfx::B3DPolyPolygon& GetPolyPolygon3D() const { return aPolyPoly3D; }
     const basegfx::B3DPolyPolygon& GetPolyNormals3D() const { return aPolyNormals3D; }

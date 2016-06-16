@@ -47,7 +47,7 @@ class StockBar :
 {
 public:
     explicit StockBar( bool bRisingCourse );
-    virtual ~StockBar();
+    virtual ~StockBar() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

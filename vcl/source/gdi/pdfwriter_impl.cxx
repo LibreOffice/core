@@ -8195,7 +8195,7 @@ class PDFStreamIf :
     bool            m_bWrite;
     public:
     explicit PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
-    virtual ~PDFStreamIf();
+    virtual ~PDFStreamIf() override;
 
     virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw(std::exception) override;
     virtual void SAL_CALL flush() throw(std::exception) override;

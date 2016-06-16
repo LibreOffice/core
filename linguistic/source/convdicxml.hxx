@@ -52,7 +52,7 @@ public:
         bSuccess    ( false )
     {
     }
-    virtual ~ConvDicXMLExport()
+    virtual ~ConvDicXMLExport() override
     {
     }
 
@@ -91,7 +91,7 @@ public:
         bSuccess        = false;
     }
 
-    virtual ~ConvDicXMLImport() throw ()
+    virtual ~ConvDicXMLImport() throw () override
     {
     }
 

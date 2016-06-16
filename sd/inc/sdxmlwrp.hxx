@@ -38,7 +38,7 @@ public:
         ::sd::DrawDocShell& rDocShell,
         SdXMLFilterMode eFilterMode = SDXMLMODE_Normal,
         sal_uLong nStoreVer = SOFFICE_FILEFORMAT_8 );
-    virtual ~SdXMLFilter();
+    virtual ~SdXMLFilter() override;
 
     bool        Import( ErrCode& nError );
     bool        Export() override;

@@ -213,7 +213,7 @@ private:
 
 public:
     explicit SvXMLExportEventListener(SvXMLExport* pExport);
-    virtual                 ~SvXMLExportEventListener();
+    virtual                 ~SvXMLExportEventListener() override;
 
                             // XEventListener
     virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(css::uno::RuntimeException, std::exception) override;

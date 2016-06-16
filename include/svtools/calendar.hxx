@@ -249,7 +249,7 @@ protected:
 
 public:
                     Calendar( vcl::Window* pParent, WinBits nWinStyle = 0 );
-    virtual         ~Calendar();
+    virtual         ~Calendar() override;
     virtual void    dispose() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -352,7 +352,7 @@ private:
 
 public:
                         CalendarField( vcl::Window* pParent, WinBits nWinStyle );
-    virtual             ~CalendarField();
+    virtual             ~CalendarField() override;
     virtual void        dispose() override;
 
     virtual bool        ShowDropDown( bool bShow ) override;

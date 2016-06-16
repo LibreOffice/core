@@ -62,7 +62,7 @@ private:
 public:
                                 ExcTable( const XclExpRoot& rRoot );
                                 ExcTable( const XclExpRoot& rRoot, SCTAB nScTab );
-                                virtual ~ExcTable();
+                                virtual ~ExcTable() override;
 
     void FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList );
     void FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList );
@@ -95,7 +95,7 @@ private:
 
 public:
     explicit                    ExcDocument( const XclExpRoot& rRoot );
-    virtual                     ~ExcDocument();
+    virtual                     ~ExcDocument() override;
 
     void                ReadDoc();
     void                Write( SvStream& rSvStrm );

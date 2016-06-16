@@ -32,7 +32,7 @@ class SaveAsMenuController :  public svt::PopupMenuControllerBase
 {
 public:
     explicit SaveAsMenuController( const uno::Reference< uno::XComponentContext >& xContext );
-    virtual ~SaveAsMenuController();
+    virtual ~SaveAsMenuController() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

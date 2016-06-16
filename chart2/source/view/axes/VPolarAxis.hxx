@@ -40,7 +40,7 @@ public:
 
     virtual bool isAnythingToDraw() override;
 
-    virtual ~VPolarAxis();
+    virtual ~VPolarAxis() override;
 
 protected:
     VPolarAxis( const AxisProperties& rAxisProperties

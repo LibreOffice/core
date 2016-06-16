@@ -56,7 +56,7 @@ class UcbStore : public cppu::WeakImplHelper <
 
 public:
     explicit UcbStore( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~UcbStore();
+    virtual ~UcbStore() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -116,7 +116,7 @@ public:
     PropertySetRegistry(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Sequence< css::uno::Any >& rInitArgs);
-    virtual ~PropertySetRegistry();
+    virtual ~PropertySetRegistry() override;
 
 
     // XServiceInfo
@@ -190,7 +190,7 @@ public:
     PersistentPropertySet(
         PropertySetRegistry& rCreator,
         const OUString& rKey );
-    virtual ~PersistentPropertySet();
+    virtual ~PersistentPropertySet() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

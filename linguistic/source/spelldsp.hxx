@@ -86,7 +86,7 @@ class SpellCheckerDispatcher :
 
 public:
     explicit SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr );
-    virtual ~SpellCheckerDispatcher();
+    virtual ~SpellCheckerDispatcher() override;
 
     // XSupportedLocales (for XSpellChecker)
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales() throw(css::uno::RuntimeException, std::exception) override;

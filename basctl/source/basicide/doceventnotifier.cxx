@@ -70,7 +70,7 @@ namespace basctl
         Impl& operator=(const Impl&) = delete;
 
         Impl (DocumentEventListener&, Reference<XModel> const& rxDocument);
-        virtual ~Impl ();
+        virtual ~Impl () override;
 
         // XDocumentEventListener
         virtual void SAL_CALL documentEventOccured( const DocumentEvent& Event ) throw (RuntimeException, std::exception) override;

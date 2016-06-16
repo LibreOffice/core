@@ -65,7 +65,7 @@ public:
 
     FrameControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual ~FrameControl();
+    virtual ~FrameControl() override;
 
     //  XInterface
 

@@ -47,7 +47,7 @@ class XclExpDelegatingRecord : public XclExpRecordBase
 {
 public:
                         XclExpDelegatingRecord( XclExpRecordBase* pRecord );
-                        virtual ~XclExpDelegatingRecord();
+                        virtual ~XclExpDelegatingRecord() override;
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 private:
@@ -58,7 +58,7 @@ class XclExpXmlElementRecord : public XclExpRecordBase
 {
 public:
     explicit            XclExpXmlElementRecord(sal_Int32 nElement);
-    virtual             ~XclExpXmlElementRecord();
+    virtual             ~XclExpXmlElementRecord() override;
 
 protected:
     sal_Int32           mnElement;
@@ -68,7 +68,7 @@ class XclExpXmlStartElementRecord : public XclExpXmlElementRecord
 {
 public:
     explicit            XclExpXmlStartElementRecord(sal_Int32 nElement);
-    virtual             ~XclExpXmlStartElementRecord();
+    virtual             ~XclExpXmlStartElementRecord() override;
 
     /** Starts the element nElement */
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
@@ -78,7 +78,7 @@ class XclExpXmlEndElementRecord : public XclExpXmlElementRecord
 {
 public:
     explicit            XclExpXmlEndElementRecord(sal_Int32 nElement);
-    virtual             ~XclExpXmlEndElementRecord();
+    virtual             ~XclExpXmlEndElementRecord() override;
 
     /** Ends the element nElement */
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
@@ -88,7 +88,7 @@ class XclExpXmlStartSingleElementRecord : public XclExpXmlElementRecord
 {
 public:
     explicit            XclExpXmlStartSingleElementRecord(sal_Int32 nElement);
-    virtual             ~XclExpXmlStartSingleElementRecord();
+    virtual             ~XclExpXmlStartSingleElementRecord() override;
 
     /** Starts the single element nElement */
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
@@ -98,7 +98,7 @@ class XclExpXmlEndSingleElementRecord : public XclExpRecordBase
 {
 public:
                         XclExpXmlEndSingleElementRecord();
-    virtual             ~XclExpXmlEndSingleElementRecord();
+    virtual             ~XclExpXmlEndSingleElementRecord() override;
 
     /** Ends the single element nElement */
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
@@ -122,7 +122,7 @@ public:
                             sal_uInt16 nRecId = EXC_ID_UNKNOWN,
                             sal_Size nRecSize = 0 );
 
-    virtual             ~XclExpRecord();
+    virtual             ~XclExpRecord() override;
 
     /** Returns the current record ID. */
     inline sal_uInt16   GetRecId() const { return mnRecId; }

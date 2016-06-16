@@ -63,7 +63,7 @@ class SwContentOptPage : public SfxTabPage
     DECL_LINK_TYPED(VertRulerHdl, Button*, void);
 public:
     SwContentOptPage( vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwContentOptPage();
+    virtual ~SwContentOptPage() override;
 
     virtual void dispose() override;
 
@@ -110,7 +110,7 @@ class SwAddPrinterTabPage : public SfxTabPage
 
 public:
     SwAddPrinterTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwAddPrinterTabPage();
+    virtual ~SwAddPrinterTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
@@ -179,7 +179,7 @@ class SwStdFontTabPage : public SfxTabPage
     DECL_LINK_TYPED(LoseFocusHdl, Control&, void );
 
     SwStdFontTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwStdFontTabPage();
+    virtual ~SwStdFontTabPage() override;
     virtual void dispose() override;
 
 public:
@@ -223,7 +223,7 @@ class SwTableOptionsTabPage : public SfxTabPage
 
 public:
     SwTableOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwTableOptionsTabPage();
+    virtual ~SwTableOptionsTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
@@ -268,7 +268,7 @@ class SwShdwCursorOptionsTabPage : public SfxTabPage
 
 public:
     SwShdwCursorOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwShdwCursorOptionsTabPage();
+    virtual ~SwShdwCursorOptionsTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
@@ -311,7 +311,7 @@ protected:
 
 public:
     SwMarkPreview(vcl::Window* pParent, WinBits nWinBits);
-    virtual ~SwMarkPreview();
+    virtual ~SwMarkPreview() override;
 
     inline void SetColor(const Color& rCol) { m_aMarkCol = rCol; }
     inline void SetMarkPos(sal_uInt16 nPos) { nMarkPos = nPos; }
@@ -348,7 +348,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
 
 public:
     SwRedlineOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwRedlineOptionsTabPage();
+    virtual ~SwRedlineOptionsTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
@@ -365,7 +365,7 @@ class SwTestTabPage : public SfxTabPage
 {
 public:
     SwTestTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwTestTabPage();
+    virtual ~SwTestTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
@@ -408,7 +408,7 @@ class SwCompareOptionsTabPage : public SfxTabPage
 
 public:
     SwCompareOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwCompareOptionsTabPage();
+    virtual ~SwCompareOptionsTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );

@@ -71,7 +71,7 @@ class LwpOrderedObject : public LwpDLNFVList
 {
 public:
     LwpOrderedObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpOrderedObject(){}
+    virtual ~LwpOrderedObject() override {}
     void Read() override;
     LwpObjectID& GetPosition(){ return m_Para;}
     LwpObjectID& GetListList(){ return m_ListList;}
@@ -90,7 +90,7 @@ class LwpSection : public LwpOrderedObject
 {
 public:
     LwpSection(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpSection();
+    virtual ~LwpSection() override;
     inline LwpPageLayout* GetPageLayout();
     void Parse(IXFStream* pOutputStream) override;
     OUString GetSectionName(){return m_AtomHolder.str();}
@@ -118,7 +118,7 @@ class LwpIndexSection : public LwpSection
 {
 public:
     LwpIndexSection(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpIndexSection();
+    virtual ~LwpIndexSection() override;
     bool IsFormatRunin();
     bool IsFormatSeparator();
 protected:

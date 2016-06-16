@@ -47,7 +47,7 @@ namespace connectivity
         static css::uno::Reference< css::uno::XInterface > create( const css::uno::Reference< css::uno::XComponentContext >  & xContext);
     protected:
         ParameterSubstitution(const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
-        virtual ~ParameterSubstitution(){}
+        virtual ~ParameterSubstitution() override {}
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;

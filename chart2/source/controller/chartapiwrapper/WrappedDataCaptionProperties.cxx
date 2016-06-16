@@ -44,7 +44,7 @@ public:
 
     explicit WrappedDataCaptionProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                          tSeriesOrDiagramPropertyType ePropertyType );
-    virtual ~WrappedDataCaptionProperty();
+    virtual ~WrappedDataCaptionProperty() override;
 };
 
 namespace

@@ -50,7 +50,7 @@ public:
     SwUndoInsSection(SwPaM const&, SwSectionData const&,
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase);
 
-    virtual ~SwUndoInsSection();
+    virtual ~SwUndoInsSection() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

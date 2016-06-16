@@ -63,7 +63,7 @@ public:
     explicit SdrUnoObj(const OUString& rModelName);
     SdrUnoObj(const OUString& rModelName,
         const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
-    virtual ~SdrUnoObj();
+    virtual ~SdrUnoObj() override;
 
     virtual void SetPage(SdrPage* pNewPage) override;
     virtual void SetModel(SdrModel* pModel) override;

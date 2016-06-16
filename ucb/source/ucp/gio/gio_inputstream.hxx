@@ -38,7 +38,7 @@ private:
 
 public:
     explicit InputStream ( GFileInputStream *pStream );
-    virtual ~InputStream();
+    virtual ~InputStream() override;
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 > & aData,

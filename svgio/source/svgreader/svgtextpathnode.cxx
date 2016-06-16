@@ -64,7 +64,7 @@ namespace svgio
                 const double fBasegfxPathLength,
                 double fPosition,
                 const basegfx::B2DPoint& rTextStart);
-            virtual ~pathTextBreakupHelper();
+            virtual ~pathTextBreakupHelper() override;
 
             // read access to evtl. advanced position
             double getPosition() const { return mfPosition; }

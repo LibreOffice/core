@@ -47,7 +47,7 @@ class PropertySet
 {
 public:
     explicit PropertySet();
-    virtual ~PropertySet();
+    virtual ~PropertySet() override;
 
     virtual void SAL_CALL disposing() override;
 

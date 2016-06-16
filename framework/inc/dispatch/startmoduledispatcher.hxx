@@ -76,7 +76,7 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper<
         StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext);
 
         /** @short  does nothing real. */
-        virtual ~StartModuleDispatcher();
+        virtual ~StartModuleDispatcher() override;
 
     // uno interface
 

@@ -127,7 +127,7 @@ public:
         bool bIsFolder)
             throw ( css::ucb::ContentCreationException );
 
-    virtual ~Content();
+    virtual ~Content() override;
 
     css::uno::Reference< css::sdbc::XRow > getPropertyValuesFromGFileInfo(
         GFileInfo *pInfo, const css::uno::Reference< css::uno::XComponentContext >& rxContext,

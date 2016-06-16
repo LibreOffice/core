@@ -77,7 +77,7 @@ namespace pcr
             const OUString& _sDetailLabel = OUString(),
             const OUString& _sMasterLabel = OUString()
         );
-        virtual ~FormLinkDialog( );
+        virtual ~FormLinkDialog( ) override;
         virtual void dispose() override;
 
         // Dialog overridables

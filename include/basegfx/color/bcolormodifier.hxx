@@ -98,7 +98,7 @@ namespace basegfx
         {
         }
 
-        virtual ~BColorModifier_gray();
+        virtual ~BColorModifier_gray() override;
 
         // compare operator
         virtual bool operator==(const BColorModifier& rCompare) const override;
@@ -125,7 +125,7 @@ namespace basegfx
         {
         }
 
-        virtual ~BColorModifier_invert();
+        virtual ~BColorModifier_invert() override;
 
         // compare operator
         virtual bool operator==(const BColorModifier& rCompare) const override;
@@ -156,7 +156,7 @@ namespace basegfx
         {
         }
 
-        virtual ~BColorModifier_luminance_to_alpha();
+        virtual ~BColorModifier_luminance_to_alpha() override;
 
         // compare operator
         virtual bool operator==(const BColorModifier& rCompare) const override;
@@ -188,7 +188,7 @@ namespace basegfx
         {
         }
 
-        virtual ~BColorModifier_replace();
+        virtual ~BColorModifier_replace() override;
 
         // data access
         const ::basegfx::BColor& getBColor() const { return maBColor; }
@@ -226,7 +226,7 @@ namespace basegfx
         {
         }
 
-        virtual ~BColorModifier_interpolate();
+        virtual ~BColorModifier_interpolate() override;
 
         // data access
         const ::basegfx::BColor& getBColor() const { return maBColor; }
@@ -261,7 +261,7 @@ namespace basegfx
         {
         }
 
-        virtual ~BColorModifier_black_and_white();
+        virtual ~BColorModifier_black_and_white() override;
 
         // data access
         double getValue() const { return mfValue; }
@@ -297,7 +297,7 @@ namespace basegfx
     public:
         BColorModifier_gamma(double fValue);
 
-        virtual ~BColorModifier_gamma();
+        virtual ~BColorModifier_gamma() override;
 
         // data access
         double getValue() const { return mfValue; }
@@ -342,7 +342,7 @@ namespace basegfx
     public:
         BColorModifier_RGBLuminanceContrast(double fRed, double fGreen, double fBlue, double fLuminance, double fContrast);
 
-        virtual ~BColorModifier_RGBLuminanceContrast();
+        virtual ~BColorModifier_RGBLuminanceContrast() override;
 
         // data access
         double getRed() const { return mfRed; }

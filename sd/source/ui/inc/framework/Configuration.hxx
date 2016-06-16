@@ -80,7 +80,7 @@ public:
     */
     Configuration (const css::uno::Reference<css::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster,
         bool bBroadcastRequestEvents);
-    virtual ~Configuration();
+    virtual ~Configuration() override;
 
     virtual void SAL_CALL disposing() override;
 

@@ -68,7 +68,7 @@ namespace connectivity
             css::uno::Reference< css::sdbc::XConnection >     m_xConnection;
             css::uno::Reference< css::lang::XEventListener>   m_xListenerHelper; // forward the calls from the connection to me
 
-            virtual ~ODatabaseMetaDataBase();
+            virtual ~ODatabaseMetaDataBase() override;
 
         protected:
             virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() = 0;

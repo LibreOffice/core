@@ -90,7 +90,7 @@ protected:
 
 public:
     SdUnoSearchReplaceDescriptor(bool bReplace) throw (css::uno::RuntimeException);
-    virtual ~SdUnoSearchReplaceDescriptor() throw();
+    virtual ~SdUnoSearchReplaceDescriptor() throw() override;
 
     bool IsCaseSensitive() const { return mbCaseSensitive; }
     bool IsWords() const { return mbWords; }
@@ -126,7 +126,7 @@ protected:
 
 public:
     SdUnoFindAllAccess( css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  >& rSequence ) throw();
-    virtual ~SdUnoFindAllAccess() throw();
+    virtual ~SdUnoFindAllAccess() throw() override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override ;

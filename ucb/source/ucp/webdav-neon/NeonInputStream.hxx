@@ -52,7 +52,7 @@ class NeonInputStream : public css::io::XInputStream,
 
     public:
                  NeonInputStream();
-        virtual ~NeonInputStream();
+        virtual ~NeonInputStream() override;
 
         // Add some data to the end of the stream
         void AddToStream( const char * inBuf, sal_Int32 inLen );

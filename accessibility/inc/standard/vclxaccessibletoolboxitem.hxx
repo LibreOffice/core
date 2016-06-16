@@ -63,7 +63,7 @@ public:
     inline void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
 
 protected:
-    virtual ~VCLXAccessibleToolBoxItem();
+    virtual ~VCLXAccessibleToolBoxItem() override;
 
     virtual void SAL_CALL                   disposing() override;
 

@@ -47,7 +47,7 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper<
 
     public:
         XMLSecurityContext_NssImpl() ;
-        virtual ~XMLSecurityContext_NssImpl() ;
+        virtual ~XMLSecurityContext_NssImpl() override ;
 
         //Methods from XXMLSecurityContext
         virtual sal_Int32 SAL_CALL addSecurityEnvironment(

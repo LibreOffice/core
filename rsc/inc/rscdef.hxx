@@ -133,7 +133,7 @@ protected:
                            sal_Int32 lDefId );
                 RscDefine( sal_uLong lFileKey, const OString& rDefName,
                            RscExpression * pExpression );
-                virtual ~RscDefine();
+                virtual ~RscDefine() override;
     void        IncRef(){ nRefCount++; }
     void        DecRef();
     void        DefineToNumber();

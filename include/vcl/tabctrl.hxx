@@ -93,7 +93,7 @@ protected:
 public:
                         TabControl( vcl::Window* pParent,
                                     WinBits nStyle = WB_STDTABCONTROL );
-                        virtual ~TabControl();
+                        virtual ~TabControl() override;
     virtual void        dispose() override;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;

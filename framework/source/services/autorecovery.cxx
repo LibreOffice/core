@@ -438,7 +438,7 @@ private:
 public:
 
     explicit AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~AutoRecovery(                                                                   );
+    virtual ~AutoRecovery(                                                                   ) override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

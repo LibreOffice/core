@@ -153,7 +153,7 @@ namespace comphelper
     {
     protected:
         EnumerableMap();
-        virtual ~EnumerableMap();
+        virtual ~EnumerableMap() override;
 
         // XInitialization
         virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception) override;
@@ -283,7 +283,7 @@ namespace comphelper
         virtual Any SAL_CALL nextElement(  ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) override;
 
     protected:
-        virtual ~MapEnumeration()
+        virtual ~MapEnumeration() override
         {
             acquire();
             {

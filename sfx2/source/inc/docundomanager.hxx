@@ -108,7 +108,7 @@ namespace sfx2
 
     public:
         DocumentUndoManager( SfxBaseModel& i_document );
-        virtual ~DocumentUndoManager();
+        virtual ~DocumentUndoManager() override;
         DocumentUndoManager(const DocumentUndoManager&) = delete;
         DocumentUndoManager& operator=(const DocumentUndoManager&) = delete;
 

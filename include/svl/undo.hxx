@@ -129,7 +129,7 @@ public:
 
     SfxListUndoAction(
         const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, SfxUndoArray *pFather );
-    virtual ~SfxListUndoAction();
+    virtual ~SfxListUndoAction() override;
 
     virtual void            Undo() override;
     virtual void            UndoWithContext( SfxUndoContext& i_context ) override;
@@ -295,7 +295,7 @@ class SVL_DLLPUBLIC SfxUndoManager : public ::svl::IUndoManager
                             m_xData;
 public:
                             SfxUndoManager( size_t nMaxUndoActionCount = 20 );
-    virtual                 ~SfxUndoManager();
+    virtual                 ~SfxUndoManager() override;
 
     // IUndoManager overridables
     virtual void            SetMaxUndoActionCount( size_t nMaxUndoActionCount ) override;

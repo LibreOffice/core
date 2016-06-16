@@ -163,7 +163,7 @@ public:
 
 
      SvtOptionsDrawinglayer_Impl();
-    virtual ~SvtOptionsDrawinglayer_Impl();
+    virtual ~SvtOptionsDrawinglayer_Impl() override;
 
 
 //  override methods of baseclass

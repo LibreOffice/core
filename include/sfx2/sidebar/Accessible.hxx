@@ -46,7 +46,7 @@ class Accessible
 public:
     explicit Accessible (
         const css::uno::Reference<css::accessibility::XAccessibleContext>& rxContext);
-    virtual ~Accessible();
+    virtual ~Accessible() override;
     Accessible(const Accessible&) = delete;
     Accessible& operator=( const Accessible& ) = delete;
 

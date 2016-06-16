@@ -27,7 +27,7 @@ namespace sw
     struct SW_DLLPUBLIC DocDisposingHint final : public SfxHint
     {
         DocDisposingHint() {}
-        virtual ~DocDisposingHint();
+        virtual ~DocDisposingHint() override;
     };
 }
 
@@ -40,7 +40,7 @@ private:
 
 public:
     SwUnoCursor( const SwPosition &rPos, SwPaM* pRing = nullptr );
-    virtual ~SwUnoCursor();
+    virtual ~SwUnoCursor() override;
 
 protected:
 
@@ -86,7 +86,7 @@ class SwUnoTableCursor : public virtual SwUnoCursor, public virtual SwTableCurso
 
 public:
     SwUnoTableCursor( const SwPosition& rPos );
-    virtual ~SwUnoTableCursor();
+    virtual ~SwUnoTableCursor() override;
 
     // Does a selection of content exist in table?
     // Return value indicates if the cursor remains at its old position.

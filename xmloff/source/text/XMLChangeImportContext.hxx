@@ -62,7 +62,7 @@ public:
         /// (usually before a section or table)
         bool bIsOutsideOfParagraph = false);
 
-    virtual ~XMLChangeImportContext();
+    virtual ~XMLChangeImportContext() override;
 
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;

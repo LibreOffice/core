@@ -46,7 +46,7 @@ public:
         RangeSelectionListenerParent & rParent,
         const OUString & rInitialRange,
         const css::uno::Reference< css::frame::XModel >& xModelToLockController );
-    virtual ~RangeSelectionListener();
+    virtual ~RangeSelectionListener() override;
 
 protected:
     // ____ XRangeSelectionListener ____

@@ -58,7 +58,7 @@ private:
 public:
 
                         SvLinkSource();
-    virtual             ~SvLinkSource();
+    virtual             ~SvLinkSource() override;
 
     bool                HasDataLinks() const;
 

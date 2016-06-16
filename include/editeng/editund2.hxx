@@ -51,7 +51,7 @@ private:
 
 public:
     EditUndo(sal_uInt16 nI, EditEngine* pEE);
-    virtual ~EditUndo();
+    virtual ~EditUndo() override;
 
     EditEngine* GetEditEngine() { return mpEditEngine;}
 

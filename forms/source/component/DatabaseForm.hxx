@@ -214,7 +214,7 @@ class ODatabaseForm :public OFormComponents
 public:
     explicit ODatabaseForm(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
     ODatabaseForm( const ODatabaseForm& _cloneSource );
-    virtual ~ODatabaseForm();
+    virtual ~ODatabaseForm() override;
 
     // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(ODatabaseForm, OFormComponents)

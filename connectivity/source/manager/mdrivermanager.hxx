@@ -79,7 +79,7 @@ namespace drivermanager
     private:
         explicit OSDBCDriverManager(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
-        virtual ~OSDBCDriverManager();
+        virtual ~OSDBCDriverManager() override;
 
     public:
 

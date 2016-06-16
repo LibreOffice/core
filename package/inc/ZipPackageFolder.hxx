@@ -47,7 +47,7 @@ public:
     ZipPackageFolder( const css::uno::Reference < css::uno::XComponentContext >& xContext,
                       sal_Int32 nFormat,
                       bool bAllowRemoveOnInsert );
-    virtual ~ZipPackageFolder();
+    virtual ~ZipPackageFolder() override;
 
     const OUString& GetVersion() const { return m_sVersion; }
     void SetVersion( const OUString& aVersion ) { m_sVersion = aVersion; }

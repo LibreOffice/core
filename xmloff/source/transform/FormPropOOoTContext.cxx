@@ -47,7 +47,7 @@ public:
                            const OUString& rQName,
                            XMLTokenEnum eAttrToken );
 
-    virtual ~XMLFormPropValueTContext_Impl();
+    virtual ~XMLFormPropValueTContext_Impl() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 

@@ -62,7 +62,7 @@ class OTaskWindow : public vcl::Window
     VclPtr<PropBrw> m_pPropWin;
 public:
     explicit OTaskWindow(vcl::Window* _pParent) : Window(_pParent),m_pPropWin(nullptr){}
-    virtual ~OTaskWindow() { disposeOnce(); }
+    virtual ~OTaskWindow() override { disposeOnce(); }
     virtual void dispose() override { m_pPropWin.clear(); vcl::Window::dispose(); }
 
     inline void setPropertyBrowser(PropBrw* _pPropWin)

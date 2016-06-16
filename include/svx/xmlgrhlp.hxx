@@ -83,7 +83,7 @@ private:
 
 protected:
                                 SvXMLGraphicHelper();
-                                virtual ~SvXMLGraphicHelper();
+                                virtual ~SvXMLGraphicHelper() override;
     void                        Init( const css::uno::Reference < css::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
                                       bool bDirect );

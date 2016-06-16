@@ -51,7 +51,7 @@ public:
     explicit ChartDataWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     ChartDataWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact
         , const css::uno::Reference< css::chart::XChartData >& xNewData );
-    virtual ~ChartDataWrapper();
+    virtual ~ChartDataWrapper() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

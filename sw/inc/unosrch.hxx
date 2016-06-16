@@ -64,7 +64,7 @@ class SwXTextSearch : public cppu::WeakImplHelper
 
     bool                    bIsValueSearch :1;
 protected:
-    virtual ~SwXTextSearch();
+    virtual ~SwXTextSearch() override;
 public:
     SwXTextSearch();
 

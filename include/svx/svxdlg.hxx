@@ -273,7 +273,7 @@ class SVX_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory, 
 public:
     static SvxAbstractDialogFactory* Create();
 
-    virtual                             ~SvxAbstractDialogFactory();
+    virtual                             ~SvxAbstractDialogFactory() override;
 
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,

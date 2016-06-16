@@ -311,7 +311,7 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> xMap);
 
-    virtual ~XMLImageMapRectangleContext();
+    virtual ~XMLImageMapRectangleContext() override;
 
 protected:
     virtual void ProcessAttribute(
@@ -413,7 +413,7 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> xMap);
 
-    virtual ~XMLImageMapPolygonContext();
+    virtual ~XMLImageMapPolygonContext() override;
 
 protected:
     virtual void ProcessAttribute(
@@ -502,7 +502,7 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::container::XIndexContainer> xMap);
 
-    virtual ~XMLImageMapCircleContext();
+    virtual ~XMLImageMapCircleContext() override;
 
 protected:
     virtual void ProcessAttribute(

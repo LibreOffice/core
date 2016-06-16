@@ -124,7 +124,7 @@ namespace xmloff
             explicit OMergedPropertySetInfo( const Reference< XPropertySetInfo >& _rxMasterInfo );
 
         protected:
-            virtual ~OMergedPropertySetInfo();
+            virtual ~OMergedPropertySetInfo() override;
 
             // XPropertySetInfo
             virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties(  ) throw (css::uno::RuntimeException, std::exception) override;

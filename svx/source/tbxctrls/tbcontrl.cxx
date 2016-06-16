@@ -124,7 +124,7 @@ class SvxStyleBox_Impl : public ComboBox
 public:
     SvxStyleBox_Impl( vcl::Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
                         const Reference< XFrame >& _xFrame,const OUString& rClearFormatKey, const OUString& rMoreKey, bool bInSpecialMode );
-    virtual ~SvxStyleBox_Impl();
+    virtual ~SvxStyleBox_Impl() override;
     virtual void dispose() override;
 
     void            SetFamily( SfxStyleFamily eNewFamily );
@@ -210,7 +210,7 @@ public:
     SvxFontNameBox_Impl( vcl::Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame
         , WinBits nStyle = WB_SORT
         );
-    virtual ~SvxFontNameBox_Impl();
+    virtual ~SvxFontNameBox_Impl() override;
     virtual void dispose() override;
 
     void            FillList();
@@ -262,7 +262,7 @@ protected:
 
 public:
     SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
-    virtual ~SvxFrameWindow_Impl();
+    virtual ~SvxFrameWindow_Impl() override;
     virtual void dispose() override;
 
     void            StartSelection();
@@ -285,7 +285,7 @@ protected:
     virtual void    GetFocus() override;
 public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
-    virtual ~SvxLineWindow_Impl() { disposeOnce(); }
+    virtual ~SvxLineWindow_Impl() override { disposeOnce(); }
     virtual void dispose() override { m_aLineStyleLb.disposeAndClear(); SfxPopupWindow::dispose(); }
 };
 
@@ -309,7 +309,7 @@ public:
                           SvxCurrencyToolBoxControl *pControl,
                           OUString&     rSelectFormat,
                           LanguageType& eSelectLanguage );
-    virtual ~SvxCurrencyList_Impl() { disposeOnce(); }
+    virtual ~SvxCurrencyList_Impl() override { disposeOnce(); }
     virtual void dispose() override;
 };
 

@@ -36,7 +36,7 @@ public:
              , bool bNoArea
              , PlottingPositionHelper* pPlottingPositionHelper //takes ownership
              );
-    virtual ~NetChart();
+    virtual ~NetChart() override;
 
     virtual void createShapes() override;
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;

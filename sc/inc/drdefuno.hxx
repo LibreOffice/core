@@ -32,7 +32,7 @@ private:
 
 public:
                             ScDrawDefaultsObj(ScDocShell* pDocSh);
-    virtual                 ~ScDrawDefaultsObj() throw ();
+    virtual                 ~ScDrawDefaultsObj() throw () override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

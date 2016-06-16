@@ -30,7 +30,7 @@ private:
 public:
     AuthFallbackDlg(Window* pParent, const OUString& instructions,
                     const OUString& url);
-    virtual ~AuthFallbackDlg();
+    virtual ~AuthFallbackDlg() override;
     virtual void dispose() override;
 
     OUString GetCode() const { return m_pEDCode->GetText(); }

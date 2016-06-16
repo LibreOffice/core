@@ -169,7 +169,7 @@ namespace connectivity
 
         public:
             explicit Connection(FirebirdDriver* _pDriver);
-            virtual ~Connection();
+            virtual ~Connection() override;
 
             void construct( const ::rtl::OUString& url,
                                     const css::uno::Sequence< css::beans::PropertyValue >& info)

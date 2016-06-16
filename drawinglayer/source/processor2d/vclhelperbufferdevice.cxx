@@ -56,7 +56,7 @@ namespace
 
     public:
         VDevBuffer();
-        virtual ~VDevBuffer();
+        virtual ~VDevBuffer() override;
 
         VirtualDevice* alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bClear, bool bMonoChrome);
         void free(VirtualDevice& rDevice);

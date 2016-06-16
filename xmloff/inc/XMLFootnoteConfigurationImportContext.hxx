@@ -72,7 +72,7 @@ public:
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList);
 
-    virtual ~XMLFootnoteConfigurationImportContext();
+    virtual ~XMLFootnoteConfigurationImportContext() override;
 
     /// parse attributes
     virtual void StartElement(

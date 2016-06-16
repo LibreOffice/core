@@ -101,7 +101,7 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
     ScQueryParam();
     ScQueryParam( const ScQueryParam& r );
     ScQueryParam( const ScDBQueryParamInternal& r );
-    virtual ~ScQueryParam();
+    virtual ~ScQueryParam() override;
 
     ScQueryParam&   operator=  ( const ScQueryParam& r );
     bool            operator== ( const ScQueryParam& rOther ) const;
@@ -120,7 +120,7 @@ struct ScDBQueryParamBase : public ScQueryParamBase
     DataType        GetType() const { return meType;}
 
     ScDBQueryParamBase() = delete;
-    virtual ~ScDBQueryParamBase();
+    virtual ~ScDBQueryParamBase() override;
 
 protected:
     ScDBQueryParamBase(DataType eType);
@@ -132,7 +132,7 @@ private:
 struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTable
 {
     ScDBQueryParamInternal();
-    virtual ~ScDBQueryParamInternal();
+    virtual ~ScDBQueryParamInternal() override;
 
     virtual bool IsValidFieldIndex() const override;
 };
@@ -142,7 +142,7 @@ struct ScDBQueryParamMatrix : public ScDBQueryParamBase
     ScMatrixRef mpMatrix;
 
     ScDBQueryParamMatrix();
-    virtual ~ScDBQueryParamMatrix();
+    virtual ~ScDBQueryParamMatrix() override;
 
     virtual bool IsValidFieldIndex() const override;
 };

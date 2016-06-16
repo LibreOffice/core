@@ -77,7 +77,7 @@ class SwEscherExGlobal : public EscherExGlobal
 {
 public:
     explicit            SwEscherExGlobal();
-    virtual             ~SwEscherExGlobal();
+    virtual             ~SwEscherExGlobal() override;
 
 private:
     /** Override to create a new memory stream for picture data. */
@@ -122,7 +122,7 @@ public:
     void WriteEmptyFlyFrame(const SwFrameFormat& rFormat, sal_uInt32 nShapeId);
     virtual void WriteFrameExtraData(const SwFrameFormat&);
     virtual void WritePictures();
-    virtual ~SwBasicEscherEx();
+    virtual ~SwBasicEscherEx() override;
     //i120927,this function is added to export hyperlink info,such as graphic/frame/OLE
     bool IsRelUrl();
     OUString GetBasePath();
@@ -162,7 +162,7 @@ private:
         EscherPropertyContainer &rPropOpt) override;
 public:
     SwEscherEx( SvStream* pStrm, WW8Export& rWW8Wrt );
-    virtual ~SwEscherEx();
+    virtual ~SwEscherEx() override;
     void FinishEscher();
     virtual void WritePictures() override;
 

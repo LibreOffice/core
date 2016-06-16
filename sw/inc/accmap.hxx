@@ -127,7 +127,7 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 public:
 
     SwAccessibleMap( SwViewShell *pSh );
-    virtual ~SwAccessibleMap();
+    virtual ~SwAccessibleMap() override;
 
     css::uno::Reference<css::accessibility::XAccessible> GetDocumentView();
 

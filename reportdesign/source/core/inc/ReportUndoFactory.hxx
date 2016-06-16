@@ -34,7 +34,7 @@ namespace rptui
         OReportUndoFactory& operator=(const OReportUndoFactory&) = delete;
     public:
         OReportUndoFactory();
-        virtual ~OReportUndoFactory();
+        virtual ~OReportUndoFactory() override;
 
            // shapes
         virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject ) override;

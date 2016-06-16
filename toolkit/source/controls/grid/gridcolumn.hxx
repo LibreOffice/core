@@ -47,7 +47,7 @@ class GridColumn    :public ::cppu::BaseMutex
 public:
     GridColumn();
     GridColumn( GridColumn const & i_copySource );
-    virtual ~GridColumn();
+    virtual ~GridColumn() override;
 
     // css::awt::grid::XGridColumn
     virtual css::uno::Any SAL_CALL getIdentifier() throw (css::uno::RuntimeException, std::exception) override;

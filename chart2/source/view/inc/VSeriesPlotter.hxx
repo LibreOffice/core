@@ -121,7 +121,7 @@ class VSeriesPlotter : public PlotterBase, public MinimumAndMaximumSupplier, pub
 public:
     VSeriesPlotter() = delete;
 
-    virtual ~VSeriesPlotter();
+    virtual ~VSeriesPlotter() override;
 
     /*
     * A new series can be positioned relative to other series in a chart.

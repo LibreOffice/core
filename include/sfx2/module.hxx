@@ -70,7 +70,7 @@ private:
 public:
 
                                 SfxModule( ResMgr* pMgrP, SfxObjectFactory* pFactoryP, ... );
-                                virtual ~SfxModule();
+                                virtual ~SfxModule() override;
 
     ResMgr*                     GetResMgr();
     SfxSlotPool*                GetSlotPool() const;

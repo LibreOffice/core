@@ -28,7 +28,7 @@
 class XMLTextColumnsPropertyHandler : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLTextColumnsPropertyHandler ();
+    virtual ~XMLTextColumnsPropertyHandler () override;
 
     virtual bool equals(
             const css::uno::Any& r1,

@@ -89,7 +89,7 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    virtual ~AreaPropertyPanelBase();
+    virtual ~AreaPropertyPanelBase() override;
 
     virtual void setFillTransparence(const XFillTransparenceItem& rItem) = 0;
     virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem) = 0;

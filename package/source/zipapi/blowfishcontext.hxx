@@ -37,7 +37,7 @@ class BlowfishCFB8CipherContext : public cppu::WeakImplHelper< css::xml::crypto:
 
 public:
 
-    virtual ~BlowfishCFB8CipherContext();
+    virtual ~BlowfishCFB8CipherContext() override;
 
     static css::uno::Reference< css::xml::crypto::XCipherContext >
         Create( const css::uno::Sequence< sal_Int8 >& aDerivedKey, const css::uno::Sequence< sal_Int8 >& aInitVector, bool bEncrypt );

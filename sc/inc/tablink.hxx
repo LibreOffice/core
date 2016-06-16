@@ -47,7 +47,7 @@ public:
                     const OUString& rFilter, const OUString& rOpt, sal_uLong nRefresh );
     ScTableLink( SfxObjectShell* pShell, const OUString& rFile,
                     const OUString& rFilter, const OUString& rOpt, sal_uLong nRefresh );
-    virtual ~ScTableLink();
+    virtual ~ScTableLink() override;
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const css::uno::Any & rValue ) override;

@@ -80,7 +80,7 @@ namespace connectivity
     // Static data for the class
         static jclass theClass;
 
-        virtual ~java_sql_Connection();
+        virtual ~java_sql_Connection() override;
 
     public:
         virtual jclass getMyClass() const override;

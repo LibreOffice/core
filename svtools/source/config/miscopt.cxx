@@ -92,7 +92,7 @@ private:
 public:
 
          SvtMiscOptions_Impl();
-        virtual ~SvtMiscOptions_Impl();
+        virtual ~SvtMiscOptions_Impl() override;
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

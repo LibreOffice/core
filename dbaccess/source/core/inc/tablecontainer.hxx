@@ -94,7 +94,7 @@ namespace dbaccess
             oslInterlockedCount& _nInAppend
             );
 
-        virtual ~OTableContainer();
+        virtual ~OTableContainer() override;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_TABLECONTAINER_HXX

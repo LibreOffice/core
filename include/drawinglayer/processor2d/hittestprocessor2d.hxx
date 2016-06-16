@@ -77,7 +77,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rLogicHitPosition,
                 double fLogicHitTolerance,
                 bool bHitTextOnly);
-            virtual ~HitTestProcessor2D();
+            virtual ~HitTestProcessor2D() override;
 
             /// data read access
             const basegfx::B2DPoint& getDiscreteHitPosition() const { return maDiscreteHitPosition; }

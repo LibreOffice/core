@@ -112,7 +112,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
             // you can't delete objects of this type
-            virtual ~OEvoabResultSet();
+            virtual ~OEvoabResultSet() override;
         public:
             DECLARE_SERVICE_INFO();
 

@@ -50,7 +50,7 @@ namespace {
 class Test : public CppUnit::TestFixture {
 public:
     Test();
-    virtual ~Test();
+    virtual ~Test() override;
 
     virtual void tearDown() override;
 

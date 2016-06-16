@@ -939,7 +939,7 @@ public:
 
     /// Copy-Constructor in disguise.
     SwEditShell( SwEditShell&, vcl::Window* );
-    virtual ~SwEditShell();
+    virtual ~SwEditShell() override;
 
 private:
     SwEditShell(const SwEditShell &) = delete;

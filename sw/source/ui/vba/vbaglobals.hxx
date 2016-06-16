@@ -43,7 +43,7 @@ private:
 public:
 
     SwVbaGlobals( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& rxContext );
-    virtual ~SwVbaGlobals();
+    virtual ~SwVbaGlobals() override;
 
     // XGlobals
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;

@@ -37,7 +37,7 @@ public:
     explicit ChartDropTargetHelper(
         const css::uno::Reference< css::datatransfer::dnd::XDropTarget >& rxDropTarget,
         const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
-    virtual ~ChartDropTargetHelper();
+    virtual ~ChartDropTargetHelper() override;
 
 protected:
 

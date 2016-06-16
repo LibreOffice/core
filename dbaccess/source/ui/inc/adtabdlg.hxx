@@ -80,7 +80,7 @@ namespace dbaui
         OAddTableDlg(
             vcl::Window* _pParent,
             IAddTableDialogContext& _rContext );
-        virtual ~OAddTableDlg();
+        virtual ~OAddTableDlg() override;
         virtual void dispose() override;
 
         void Update();

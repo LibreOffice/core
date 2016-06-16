@@ -618,7 +618,7 @@ namespace sdr { namespace contact {
         }
 
     protected:
-        virtual ~ViewObjectContactOfUnoControl_Impl();
+        virtual ~ViewObjectContactOfUnoControl_Impl() override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException, std::exception) override;

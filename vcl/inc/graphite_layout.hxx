@@ -132,7 +132,7 @@ public:
     // Dummy implementation so layout can be shared between Linux/Windows
     virtual void    DrawText(SalGraphics&) const override {};
 
-    virtual ~GraphiteLayout() throw();
+    virtual ~GraphiteLayout() throw() override;
     void SetFont(gr_font * pFont) { mpFont = pFont; }
 #ifdef _WIN32
     gr_font * GetFont() { return mpFont; }

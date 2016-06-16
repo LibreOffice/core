@@ -73,7 +73,7 @@ class SvUnoImageMapObject : public OWeakAggObject,
 public:
     SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescription* pSupportedMacroItems );
     SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems );
-    virtual ~SvUnoImageMapObject() throw();
+    virtual ~SvUnoImageMapObject() throw() override;
 
     UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMapObject )
 
@@ -518,7 +518,7 @@ class SvUnoImageMap : public WeakImplHelper< XIndexContainer, XServiceInfo, XUno
 public:
     explicit SvUnoImageMap( const SvEventDescription* pSupportedMacroItems );
     SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
-    virtual ~SvUnoImageMap();
+    virtual ~SvUnoImageMap() override;
 
     bool fillImageMap( ImageMap& rMap ) const;
     static SvUnoImageMapObject* getObject( const Any& aElement ) throw( IllegalArgumentException );

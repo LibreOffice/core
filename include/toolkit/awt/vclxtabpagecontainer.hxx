@@ -42,7 +42,7 @@ class VCLXTabPageContainer : public VCLXTabPageContainer_Base
 {
 public:
     VCLXTabPageContainer();
-    virtual ~VCLXTabPageContainer();
+    virtual ~VCLXTabPageContainer() override;
 
     // css::awt::XView
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception) override;

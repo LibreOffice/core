@@ -36,7 +36,7 @@ private:
 
 public:
     HeadersFootersIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xPageStyleProps, bool bHeader ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel ), mxPageStyleProps( xPageStyleProps ), mbHeader( bHeader ) {}
-    virtual ~HeadersFootersIndexAccess(){}
+    virtual ~HeadersFootersIndexAccess() override {}
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override

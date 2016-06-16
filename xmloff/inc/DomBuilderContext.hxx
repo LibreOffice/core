@@ -58,7 +58,7 @@ public:
                        const OUString& rLocalName,
                        css::uno::Reference<css::xml::dom::XNode>& );
 
-    virtual ~DomBuilderContext();
+    virtual ~DomBuilderContext() override;
 
 
     // access to the DOM tree

@@ -73,7 +73,7 @@ namespace connectivity
                     bool _isClustered,
                     bool _bCase);
 
-            virtual ~OIndex( );
+            virtual ~OIndex( ) override;
 
             DECLARE_SERVICE_INFO();
 

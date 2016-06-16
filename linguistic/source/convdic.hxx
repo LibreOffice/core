@@ -112,7 +112,7 @@ public:
              sal_Int16 nConversionType,
              bool bBiDirectional,
              const OUString &rMainURL);
-    virtual ~ConvDic();
+    virtual ~ConvDic() override;
 
     // XConversionDictionary
     virtual OUString SAL_CALL getName(  ) throw (css::uno::RuntimeException, std::exception) override;

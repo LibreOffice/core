@@ -87,7 +87,7 @@ namespace dbp
 
     public:
         explicit ORadioSelectionPage( OControlWizard* _pParent );
-        virtual ~ORadioSelectionPage();
+        virtual ~ORadioSelectionPage() override;
         virtual void dispose() override;
 
     protected:
@@ -115,7 +115,7 @@ namespace dbp
 
     public:
         explicit ODefaultFieldSelectionPage( OControlWizard* _pParent );
-        virtual ~ODefaultFieldSelectionPage();
+        virtual ~ODefaultFieldSelectionPage() override;
         virtual void dispose() override;
 
     protected:
@@ -138,7 +138,7 @@ namespace dbp
 
     public:
         explicit OOptionValuesPage( OControlWizard* _pParent );
-        virtual ~OOptionValuesPage();
+        virtual ~OOptionValuesPage() override;
         virtual void dispose() override;
 
     protected:
@@ -173,7 +173,7 @@ namespace dbp
 
     public:
         explicit OFinalizeGBWPage( OControlWizard* _pParent );
-        virtual ~OFinalizeGBWPage();
+        virtual ~OFinalizeGBWPage() override;
         virtual void dispose() override;
 
     protected:

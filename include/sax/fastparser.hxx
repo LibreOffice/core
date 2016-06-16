@@ -50,7 +50,7 @@ class FASTSAX_DLLPUBLIC FastSaxParser
 
 public:
     FastSaxParser();
-    virtual ~FastSaxParser();
+    virtual ~FastSaxParser() override;
 
     // XFastParser
     virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) throw (css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception) override;

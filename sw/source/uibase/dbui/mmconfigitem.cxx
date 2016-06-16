@@ -157,7 +157,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 
 public:
     SwMailMergeConfigItem_Impl();
-    virtual ~SwMailMergeConfigItem_Impl();
+    virtual ~SwMailMergeConfigItem_Impl() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     const           Sequence< OUString>

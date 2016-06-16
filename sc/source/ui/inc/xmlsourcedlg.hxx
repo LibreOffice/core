@@ -57,7 +57,7 @@ class ScXMLSourceDlg : public ScAnyRefDlg
 public:
     ScXMLSourceDlg(
         SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent, ScDocument* pDoc);
-    virtual ~ScXMLSourceDlg();
+    virtual ~ScXMLSourceDlg() override;
     virtual void dispose() override;
 
     virtual bool IsRefInputMode() const override;

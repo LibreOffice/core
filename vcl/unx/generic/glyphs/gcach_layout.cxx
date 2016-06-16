@@ -330,7 +330,7 @@ private:
 
 public:
     explicit                HbLayoutEngine(ServerFont&);
-    virtual                 ~HbLayoutEngine();
+    virtual                 ~HbLayoutEngine() override;
 
     virtual bool            Layout(ServerFontLayout&, ImplLayoutArgs&) override;
 };

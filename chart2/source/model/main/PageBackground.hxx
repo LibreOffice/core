@@ -49,7 +49,7 @@ class PageBackground :
 {
 public:
     explicit PageBackground( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~PageBackground();
+    virtual ~PageBackground() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

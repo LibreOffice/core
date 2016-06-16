@@ -56,7 +56,7 @@ namespace dbaui
             const OUString& _rRelativeRoot
         );
 
-        virtual ~HierarchicalNameCheck();
+        virtual ~HierarchicalNameCheck() override;
 
         HierarchicalNameCheck(const HierarchicalNameCheck&) = delete;
         const HierarchicalNameCheck& operator=(const HierarchicalNameCheck&) = delete;
@@ -105,7 +105,7 @@ namespace dbaui
             sal_Int32 _nCommandType
         );
 
-        virtual ~DynamicTableOrQueryNameCheck();
+        virtual ~DynamicTableOrQueryNameCheck() override;
 
         DynamicTableOrQueryNameCheck(const DynamicTableOrQueryNameCheck&) = delete;
         const DynamicTableOrQueryNameCheck& operator=(const DynamicTableOrQueryNameCheck&) = delete;

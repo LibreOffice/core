@@ -131,7 +131,7 @@ protected:
     static bool     ImplEncryptStream( SvStream& rStream );
     BasicLibInfo*   FindLibInfo( StarBASIC* pBasic );
     static void     CheckModules( StarBASIC* pBasic, bool bReference );
-    virtual ~BasicManager();
+    virtual ~BasicManager() override;
 
 public:
                     BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = nullptr, OUString* pLibPath = nullptr, bool bDocMgr = false );

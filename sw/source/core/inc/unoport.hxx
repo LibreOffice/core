@@ -138,7 +138,7 @@ protected:
         const css::uno::Sequence< OUString >& rPropertyNames, bool bDirectValuesOnly )
             throw (css::uno::RuntimeException, std::exception);
 
-    virtual ~SwXTextPortion();
+    virtual ~SwXTextPortion() override;
 
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
@@ -240,7 +240,7 @@ class SwXTextPortionEnumeration
         {return *m_pUnoCursor;}
 
 protected:
-    virtual ~SwXTextPortionEnumeration();
+    virtual ~SwXTextPortionEnumeration() override;
 
 public:
     SwXTextPortionEnumeration(SwPaM& rParaCursor,
@@ -284,7 +284,7 @@ private:
 
     using SwXTextPortion::GetPropertyValue;
 
-    virtual ~SwXRedlinePortion();
+    virtual ~SwXRedlinePortion() override;
 
 public:
     SwXRedlinePortion(

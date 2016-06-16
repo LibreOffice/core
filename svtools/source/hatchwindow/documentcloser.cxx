@@ -55,7 +55,7 @@ class ODocumentCloser : public ::cppu::WeakImplHelper< css::lang::XComponent,
 
 public:
     explicit ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments);
-    virtual ~ODocumentCloser();
+    virtual ~ODocumentCloser() override;
 
 // XComponent
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;

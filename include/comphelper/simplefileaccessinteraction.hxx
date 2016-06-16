@@ -36,7 +36,7 @@ class COMPHELPER_DLLPUBLIC SimpleFileAccessInteraction : public ::ucbhelper::Int
 
 public:
     SimpleFileAccessInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler);
-    virtual ~SimpleFileAccessInteraction();
+    virtual ~SimpleFileAccessInteraction() override;
 
 private:
 

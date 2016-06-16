@@ -70,7 +70,7 @@ class AccessibleChartElement :
 public:
     AccessibleChartElement( const AccessibleElementInfo & rAccInfo,
                             bool bMayHaveChildren );
-    virtual ~AccessibleChartElement();
+    virtual ~AccessibleChartElement() override;
 
     // ________ AccessibleBase ________
     virtual bool ImplUpdateChildren() override;

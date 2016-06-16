@@ -144,7 +144,7 @@ namespace dbaccess
         void executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQL,const OUString& i_sTableName = OUString(),bool bRefetch = false);
         void executeStatement(OUStringBuffer& io_aFilter, css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
 
-        virtual ~OKeySet();
+        virtual ~OKeySet() override;
     public:
         OKeySet(const connectivity::OSQLTable& _xTable,
                 const css::uno::Reference< css::container::XIndexAccess>& _xTableKeys,

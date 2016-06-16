@@ -76,7 +76,7 @@ friend class BibFrameCtrl_Impl;
 public:
                                 BibFrameController_Impl( const css::uno::Reference< css::awt::XWindow > & xComponent,
                                                         BibDataManager* pDatMan);
-                                virtual ~BibFrameController_Impl();
+                                virtual ~BibFrameController_Impl() override;
 
 
     void                        ChangeDataSource(const css::uno::Sequence< css::beans::PropertyValue >& aArgs);

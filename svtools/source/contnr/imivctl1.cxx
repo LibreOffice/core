@@ -77,7 +77,7 @@ public:
                         const OUString& rData,
                         const Link<LinkParamNone*,void>& rNotifyEditEnd );
 
-    virtual         ~IcnViewEdit_Impl();
+    virtual         ~IcnViewEdit_Impl() override;
     virtual void    dispose() override;
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;

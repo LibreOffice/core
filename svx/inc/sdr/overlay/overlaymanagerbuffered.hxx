@@ -64,7 +64,7 @@ namespace sdr
             OverlayManagerBuffered(
                 OutputDevice& rOutputDevice,
                 bool bRefreshWithPreRendering = false);
-            virtual ~OverlayManagerBuffered();
+            virtual ~OverlayManagerBuffered() override;
 
         public:
             static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice,

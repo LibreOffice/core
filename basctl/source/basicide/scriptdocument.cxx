@@ -185,7 +185,7 @@ namespace basctl
     public:
         Impl ();
         explicit Impl(Reference<XModel> const& rxDocument);
-        virtual ~Impl();
+        virtual ~Impl() override;
 
         /** determines whether the instance refers to a valid "document" with script and
             dialog libraries

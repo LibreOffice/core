@@ -161,7 +161,7 @@ protected:
 
 public:
                     VCLXButton();
-    virtual ~VCLXButton();
+    virtual ~VCLXButton() override;
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -197,7 +197,7 @@ class VCLXImageControl : public VCLXGraphicControl
 {
 public:
                     VCLXImageControl();
-                    virtual ~VCLXImageControl();
+                    virtual ~VCLXImageControl() override;
 
     // css::awt::XLayoutConstrains
     css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -339,7 +339,7 @@ class VCLXMessageBox :  public css::awt::XMessageBox,
 {
 public:
                         VCLXMessageBox();
-                        virtual ~VCLXMessageBox();
+                        virtual ~VCLXMessageBox() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -375,7 +375,7 @@ protected:
 
 public:
     VCLXFrame();
-    virtual ~VCLXFrame();
+    virtual ~VCLXFrame() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -407,7 +407,7 @@ class TOOLKIT_DLLPUBLIC VCLXDialog :    public css::awt::XDialog2,
 {
 public:
                         VCLXDialog();
-                        virtual ~VCLXDialog();
+                        virtual ~VCLXDialog() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -449,7 +449,7 @@ class VCLXTabPage : public VCLXContainer
 {
 public:
                         VCLXTabPage();
-                        virtual ~VCLXTabPage();
+                        virtual ~VCLXTabPage() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -482,7 +482,7 @@ protected:
     void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 public:
     VCLXMultiPage();
-    virtual ~VCLXMultiPage();
+    virtual ~VCLXMultiPage() override;
 
     // css::uno::XInterface
     css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -542,7 +542,7 @@ protected:
 
 public:
     VCLXFixedHyperlink();
-    virtual ~VCLXFixedHyperlink();
+    virtual ~VCLXFixedHyperlink() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -590,7 +590,7 @@ protected:
 
 public:
                         VCLXFixedText();
-                        virtual ~VCLXFixedText();
+                        virtual ~VCLXFixedText() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -841,7 +841,7 @@ protected:
 
 public:
                         VCLXComboBox();
-    virtual ~VCLXComboBox();
+    virtual ~VCLXComboBox() override;
 
      // css::lang::XComponent
     void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -937,7 +937,7 @@ protected:
 
 public:
                     VCLXFormattedSpinField();
-                    virtual ~VCLXFormattedSpinField();
+                    virtual ~VCLXFormattedSpinField() override;
 
     void            SetFormatter( FormatterBase* pFormatter ) { mpFormatter = pFormatter; }
 
@@ -962,7 +962,7 @@ protected:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 public:
                     VCLXDateField();
-                    virtual ~VCLXDateField();
+                    virtual ~VCLXDateField() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1010,7 +1010,7 @@ protected:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 public:
                     VCLXTimeField();
-                    virtual ~VCLXTimeField();
+                    virtual ~VCLXTimeField() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1053,7 +1053,7 @@ class VCLXNumericField :    public css::awt::XNumericField,
 {
 public:
                     VCLXNumericField();
-                    virtual ~VCLXNumericField();
+                    virtual ~VCLXNumericField() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1103,7 +1103,7 @@ class VCLXMetricField : public css::awt::XMetricField,
     void CallListeners();
 public:
     VCLXMetricField();
-    virtual ~VCLXMetricField();
+    virtual ~VCLXMetricField() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1150,7 +1150,7 @@ class VCLXCurrencyField :   public css::awt::XCurrencyField,
 {
 public:
                     VCLXCurrencyField();
-                    virtual ~VCLXCurrencyField();
+                    virtual ~VCLXCurrencyField() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1196,7 +1196,7 @@ class VCLXPatternField :    public css::awt::XPatternField,
 {
 public:
                     VCLXPatternField();
-                    virtual ~VCLXPatternField();
+                    virtual ~VCLXPatternField() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1237,7 +1237,7 @@ protected:
 
 public:
                         VCLXToolBox();
-                        virtual ~VCLXToolBox();
+                        virtual ~VCLXToolBox() override;
 };
 
 #endif // INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX

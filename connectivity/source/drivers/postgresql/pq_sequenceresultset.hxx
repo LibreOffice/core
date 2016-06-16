@@ -77,7 +77,7 @@ public:
         const std::vector< std::vector< css::uno::Any > > &data,
         const css::uno::Reference< css::script::XTypeConverter > &tc,
         const ColumnMetaDataVector *pVec = nullptr);
-    virtual ~SequenceResultSet();
+    virtual ~SequenceResultSet() override;
 
 public: // XCloseable
     virtual void SAL_CALL close(  )

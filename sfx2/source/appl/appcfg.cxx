@@ -88,7 +88,7 @@ public:
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     explicit SfxEventAsyncer_Impl(const SfxEventHint& rHint);
-    virtual ~SfxEventAsyncer_Impl();
+    virtual ~SfxEventAsyncer_Impl() override;
     DECL_LINK_TYPED( IdleHdl, Idle*, void );
 };
 

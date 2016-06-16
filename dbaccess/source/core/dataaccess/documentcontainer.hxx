@@ -115,7 +115,7 @@ public:
     css::uno::Reference< css::embed::XStorage > getContainerStorage() const;
 
 protected:
-    virtual ~ODocumentContainer();
+    virtual ~ODocumentContainer() override;
 
     /** OContentHelper
     */

@@ -83,7 +83,7 @@ public:
                            const OUString& rStyleFamily,
                            bool _bControlStyle = false );
 
-    virtual ~XMLPropertiesTContext_Impl();
+    virtual ~XMLPropertiesTContext_Impl() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 

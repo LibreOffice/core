@@ -60,7 +60,7 @@ public:
                  SalFrame* pParent,
                  SalFrameStyleFlags nSalFrameStyle,
                  SystemParentData* pSystemParent = nullptr );
-    virtual ~SvpSalFrame();
+    virtual ~SvpSalFrame() override;
 
     void GetFocus();
     void LoseFocus();

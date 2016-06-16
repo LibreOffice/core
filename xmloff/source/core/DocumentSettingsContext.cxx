@@ -130,7 +130,7 @@ public:
     XMLConfigBaseContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                     css::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
-    virtual ~XMLConfigBaseContext();
+    virtual ~XMLConfigBaseContext() override;
 
     void AddPropertyValue() { maProps.push_back(maProp); }
 };
@@ -150,7 +150,7 @@ public:
                                     css::uno::Any& rAny,
                                     const OUString& rItemName,
                                     XMLConfigBaseContext* pBaseContext);
-    virtual ~XMLConfigItemContext();
+    virtual ~XMLConfigItemContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -169,7 +169,7 @@ public:
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                     css::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
-    virtual ~XMLConfigItemSetContext();
+    virtual ~XMLConfigItemSetContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -185,7 +185,7 @@ public:
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                     css::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
-    virtual ~XMLConfigItemMapNamedContext();
+    virtual ~XMLConfigItemMapNamedContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -206,7 +206,7 @@ public:
                                     css::uno::Any& rAny,
                                     const OUString& rConfigItemName,
                                     XMLConfigBaseContext* pBaseContext);
-    virtual ~XMLConfigItemMapIndexedContext();
+    virtual ~XMLConfigItemMapIndexedContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,

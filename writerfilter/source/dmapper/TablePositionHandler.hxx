@@ -81,7 +81,7 @@ public:
     }
 
     TablePositionHandler();
-    virtual ~TablePositionHandler();
+    virtual ~TablePositionHandler() override;
 
     /** Compute the UNO properties for the frame containing the table based
         on the received tokens.

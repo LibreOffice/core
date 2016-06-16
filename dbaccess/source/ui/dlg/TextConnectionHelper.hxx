@@ -44,7 +44,7 @@ namespace dbaui
     {
     public:
         OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections );
-        virtual ~OTextConnectionHelper();
+        virtual ~OTextConnectionHelper() override;
         virtual void dispose() override;
 
     private:

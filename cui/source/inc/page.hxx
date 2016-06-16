@@ -198,7 +198,7 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        FillUserData() override;
 
-    virtual ~SvxPageDescPage();
+    virtual ~SvxPageDescPage() override;
     virtual void        dispose() override;
 
     void                SetMode( SvxModeType eMType ) { eMode = eMType; }

@@ -38,7 +38,7 @@ class FileViewContainer : public vcl::Window
     {
     }
 
-    virtual ~FileViewContainer()
+    virtual ~FileViewContainer() override
     {
         disposeOnce();
     }

@@ -53,7 +53,7 @@ public:
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
-    virtual ~SpellDialogChildWindow ();
+    virtual ~SpellDialogChildWindow () override;
 
 protected:
     /** This abstract method has to be defined by a derived class.  It

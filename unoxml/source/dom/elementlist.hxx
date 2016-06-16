@@ -70,7 +70,7 @@ namespace DOM
 
         void registerListener(CElement & rElement);
 
-        virtual ~CElementListImpl();
+        virtual ~CElementListImpl() override;
 
         /**
         The number of nodes in the list.

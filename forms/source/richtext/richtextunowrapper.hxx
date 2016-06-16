@@ -42,7 +42,7 @@ namespace frm
         ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener );
 
     protected:
-        virtual ~ORichTextUnoWrapper() throw();
+        virtual ~ORichTextUnoWrapper() throw() override;
 
 
     private:
@@ -66,7 +66,7 @@ namespace frm
         virtual void                UpdateData() override;
 
     protected:
-        virtual ~RichTextEditSource();
+        virtual ~RichTextEditSource() override;
 
     private:
         RichTextEditSource( const RichTextEditSource& _rSource ) = delete;

@@ -285,7 +285,7 @@ private:
 
 public:
     WordArrayComparator( const SwTextNode *pNode1, const SwTextNode *pNode2 );
-    virtual ~WordArrayComparator();
+    virtual ~WordArrayComparator() override;
 
     virtual bool Compare( int nIdx1, int nIdx2 ) const override;
     virtual int GetLen1() const override { return nCnt1; }

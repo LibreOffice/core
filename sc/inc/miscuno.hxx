@@ -94,7 +94,7 @@ private:
 public:
                             ScIndexEnumeration(const css::uno::Reference<
                                 css::container::XIndexAccess>& rInd, const OUString& rServiceName);
-    virtual                 ~ScIndexEnumeration();
+    virtual                 ~ScIndexEnumeration() override;
 
                             // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() throw(css::uno::RuntimeException, std::exception) override;
@@ -124,7 +124,7 @@ private:
 public:
                             ScNameToIndexAccess(
                                 const css::uno::Reference< css::container::XNameAccess>& rNameObj );
-    virtual                 ~ScNameToIndexAccess();
+    virtual                 ~ScNameToIndexAccess() override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(css::uno::RuntimeException, std::exception) override;

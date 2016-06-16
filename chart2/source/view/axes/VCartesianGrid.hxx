@@ -36,7 +36,7 @@ public:
         , const css::uno::Sequence<
             css::uno::Reference< css::beans::XPropertySet > >& rGridPropertiesList //main grid, subgrid, subsubgrid etc
         );
-    virtual ~VCartesianGrid();
+    virtual ~VCartesianGrid() override;
 
     virtual void createShapes() override;
 

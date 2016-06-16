@@ -2003,7 +2003,7 @@ namespace sdr
             {
             }
 
-            virtual ~VOCOfDrawVirtObj();
+            virtual ~VOCOfDrawVirtObj() override;
         };
 
         class VCOfDrawVirtObj : public ViewContactOfVirtObj
@@ -2022,7 +2022,7 @@ namespace sdr
             :   ViewContactOfVirtObj(rObj)
             {
             }
-            virtual ~VCOfDrawVirtObj();
+            virtual ~VCOfDrawVirtObj() override;
 
             /// access to SwDrawVirtObj
             SwDrawVirtObj& GetSwDrawVirtObj() const

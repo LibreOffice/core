@@ -50,7 +50,7 @@ class TitleWrapper : public ::cppu::ImplInheritanceHelper<
 public:
     TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
                   std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~TitleWrapper();
+    virtual ~TitleWrapper() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

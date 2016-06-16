@@ -107,7 +107,7 @@ namespace rptui
     public:
         OViewsWindow(
             OReportWindow* _pReportWindow);
-        virtual ~OViewsWindow();
+        virtual ~OViewsWindow() override;
         virtual void dispose() override;
 
         // Window overrides

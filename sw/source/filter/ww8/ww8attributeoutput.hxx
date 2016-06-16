@@ -469,7 +469,7 @@ public:
     {
     }
 
-    virtual ~WW8AttributeOutput() {}
+    virtual ~WW8AttributeOutput() override {}
 
     /// Return the right export class.
     virtual WW8Export& GetExport() override { return m_rWW8Export; }

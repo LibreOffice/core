@@ -46,7 +46,7 @@ private:
 public:
     // basic constructor/destructor
     explicit PagePrimitiveExtractor(ViewObjectContactOfPageObj& rVOC);
-    virtual ~PagePrimitiveExtractor();
+    virtual ~PagePrimitiveExtractor() override;
 
     // LazyInvalidate request. Supported here to not automatically
     // invalidate the second interaction state all the time at the

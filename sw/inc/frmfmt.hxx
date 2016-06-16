@@ -65,7 +65,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) override;
 
 public:
-    virtual ~SwFrameFormat();
+    virtual ~SwFrameFormat() override;
 
     /// Destroys all Frames in aDepend (Frames are identified via dynamic_cast).
     virtual void DelFrames();
@@ -163,7 +163,7 @@ protected:
     {}
 
 public:
-    virtual ~SwFlyFrameFormat();
+    virtual ~SwFlyFrameFormat() override;
 
     /// Creates the views.
     virtual void MakeFrames() override;
@@ -244,7 +244,7 @@ protected:
     {}
 
 public:
-    virtual ~SwDrawFrameFormat();
+    virtual ~SwDrawFrameFormat() override;
 
     /** DrawObjects are removed from the arrays at the layout.
      The DrawObjects are marked as deleted. */

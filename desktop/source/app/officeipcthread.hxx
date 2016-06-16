@@ -99,7 +99,7 @@ class RequestHandler: public salhelper::SimpleReferenceObject
 
     RequestHandler();
 
-    virtual ~RequestHandler();
+    virtual ~RequestHandler() override;
 
   public:
     enum Status
@@ -135,7 +135,7 @@ class RequestHandlerController : public ::cppu::WeakImplHelper<
 {
     public:
         RequestHandlerController() {}
-        virtual ~RequestHandlerController() {}
+        virtual ~RequestHandlerController() override {}
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()

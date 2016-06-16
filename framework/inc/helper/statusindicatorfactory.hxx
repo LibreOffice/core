@@ -245,7 +245,7 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
 
     protected:
 
-        virtual ~StatusIndicatorFactory();
+        virtual ~StatusIndicatorFactory() override;
 
     // helper
     private:

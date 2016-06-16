@@ -38,7 +38,7 @@ class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
 public:
 
     SwDBFieldType(SwDoc* pDocPtr, const OUString& rColumnName, const SwDBData& rDBData);
-    virtual ~SwDBFieldType();
+    virtual ~SwDBFieldType() override;
 
     virtual OUString GetName() const override;
     virtual SwFieldType*  Copy() const override;
@@ -69,7 +69,7 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
 
 public:
     SwDBField(SwDBFieldType*, sal_uLong nFormat = 0);
-    virtual ~SwDBField();
+    virtual ~SwDBField() override;
 
     virtual SwFieldType*    ChgTyp( SwFieldType* ) override;
 

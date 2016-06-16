@@ -44,7 +44,7 @@ class XMLTableImport : public salhelper::SimpleReferenceObject
 
 public:
     XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef );
-    virtual ~XMLTableImport();
+    virtual ~XMLTableImport() override;
 
     SvXMLImportContext* CreateTableContext( sal_uInt16 nPrfx, const OUString& rLName,
                                             css::uno::Reference< css::table::XColumnRowRange >& xColumnRowRange );

@@ -62,7 +62,7 @@ protected:
         const OUString &schemaName,
         const OUString &tableName);
 
-    virtual ~Keys();
+    virtual ~Keys() override;
 
 public: // XAppend
     virtual void SAL_CALL appendByDescriptor(

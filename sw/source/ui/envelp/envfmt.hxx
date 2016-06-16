@@ -59,7 +59,7 @@ class SwEnvFormatPage : public SfxTabPage
 
 public:
     SwEnvFormatPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwEnvFormatPage();
+    virtual ~SwEnvFormatPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);

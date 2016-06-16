@@ -44,7 +44,7 @@ protected:
     ::svt::table::IAccessibleTable& _rTable
     );
 
-    virtual ~AccessibleGridControl();
+    virtual ~AccessibleGridControl() override;
 
     /** Cleans up members. */
     using AccessibleGridControlBase::disposing;
@@ -186,7 +186,7 @@ public:
     inline AccessibleGridControl*            getContext()         { return m_pContext; }
 
 protected:
-    virtual ~AccessibleGridControlAccess();
+    virtual ~AccessibleGridControlAccess() override;
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >

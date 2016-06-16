@@ -45,7 +45,7 @@ class WallFloorWrapper : public ::cppu::ImplInheritanceHelper<
 {
 public:
     WallFloorWrapper( bool bWall, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WallFloorWrapper();
+    virtual ~WallFloorWrapper() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

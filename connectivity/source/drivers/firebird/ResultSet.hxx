@@ -118,7 +118,7 @@ namespace connectivity
                        css::uno::RuntimeException);
 
             // you can't delete objects of this type
-            virtual ~OResultSet();
+            virtual ~OResultSet() override;
         public:
             DECLARE_SERVICE_INFO();
 

@@ -55,7 +55,7 @@ namespace dbaccess
         OUString                                m_sRowSetFilter;
 
         explicit OCacheSet(sal_Int32 i_nMaxRows);
-        virtual ~OCacheSet();
+        virtual ~OCacheSet() override;
 
         static void setParameter(sal_Int32 nPos
                             ,const css::uno::Reference< css::sdbc::XParameters >& _xParameter

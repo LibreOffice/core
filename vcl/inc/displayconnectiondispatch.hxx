@@ -34,7 +34,7 @@ public:
     virtual bool dispatchEvent(void * pData, int nBytes) = 0;
 
 protected:
-    virtual ~DisplayConnectionDispatch() {}
+    virtual ~DisplayConnectionDispatch() override {}
 };
 
 }

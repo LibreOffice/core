@@ -48,7 +48,7 @@ class PresenterTextView
 {
 public:
     explicit PresenterTextView (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterTextView();
+    virtual ~PresenterTextView() override;
     PresenterTextView(const PresenterTextView&) = delete;
     PresenterTextView& operator=(const PresenterTextView&) = delete;
 

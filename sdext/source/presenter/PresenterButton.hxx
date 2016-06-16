@@ -62,7 +62,7 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
         const OUString& rsConfigurationName);
-    virtual ~PresenterButton();
+    virtual ~PresenterButton() override;
     PresenterButton(const PresenterButton&) = delete;
     PresenterButton& operator=(const PresenterButton&) = delete;
 

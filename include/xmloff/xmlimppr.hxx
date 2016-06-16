@@ -70,7 +70,7 @@ public:
     SvXMLImportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLImport& rImport);
-    virtual ~SvXMLImportPropertyMapper();
+    virtual ~SvXMLImportPropertyMapper() override;
 
     // Add a ImportPropertyMapper at the end of the import mapper chain.
     // The added mapper MUST not be used outside the Mapper chain any longer,

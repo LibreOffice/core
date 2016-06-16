@@ -57,7 +57,7 @@ public:
     OComponentHelper( ::osl::Mutex & rMutex );
     /** Destructor. If this object was not disposed previously, object will be disposed manually.
     */
-    virtual ~OComponentHelper();
+    virtual ~OComponentHelper() SAL_OVERRIDE;
 
     // XAggregation
     virtual css::uno::Any SAL_CALL queryInterface(

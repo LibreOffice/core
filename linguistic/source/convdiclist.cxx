@@ -84,7 +84,7 @@ class ConvDicNameContainer :
 
 public:
     ConvDicNameContainer();
-    virtual ~ConvDicNameContainer();
+    virtual ~ConvDicNameContainer() override;
     ConvDicNameContainer(const ConvDicNameContainer&) = delete;
     ConvDicNameContainer& operator=(const ConvDicNameContainer&) = delete;
 

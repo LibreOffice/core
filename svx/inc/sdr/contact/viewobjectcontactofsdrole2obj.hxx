@@ -36,7 +36,7 @@ protected:
 
 public:
     ViewObjectContactOfSdrOle2Obj(ObjectContact& rObjectContact, ViewContact& rViewContact);
-    virtual ~ViewObjectContactOfSdrOle2Obj();
+    virtual ~ViewObjectContactOfSdrOle2Obj() override;
 };
 
 }}

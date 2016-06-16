@@ -60,7 +60,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
 protected:
-    virtual ~OCommandContainer();
+    virtual ~OCommandContainer() override;
 
     // ODefinitionContainer
     virtual css::uno::Reference< css::ucb::XContent > createObject(const OUString& _rName) override;

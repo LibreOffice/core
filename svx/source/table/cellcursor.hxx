@@ -36,7 +36,7 @@ class CellCursor : public CellCursorBase
 {
 public:
     CellCursor( const TableModelRef& xTableModel, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom );
-    virtual ~CellCursor();
+    virtual ~CellCursor() override;
 
     // XCellRange
     virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;

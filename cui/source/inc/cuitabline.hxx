@@ -201,7 +201,7 @@ public:
     void ShowSymbolControls(bool bOn);
 
     SvxLineTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~SvxLineTabPage();
+    virtual ~SvxLineTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
@@ -302,7 +302,7 @@ private:
 
 public:
     SvxLineDefTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
-    virtual ~SvxLineDefTabPage();
+    virtual ~SvxLineDefTabPage() override;
     virtual void dispose() override;
 
     void    Construct();
@@ -372,7 +372,7 @@ private:
 
 public:
     SvxLineEndDefTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~SvxLineEndDefTabPage();
+    virtual ~SvxLineEndDefTabPage() override;
     virtual void dispose() override;
 
     void    Construct();

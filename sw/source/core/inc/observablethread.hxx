@@ -41,7 +41,7 @@ class ObservableThread : public osl::Thread,
 {
     public:
 
-        virtual ~ObservableThread();
+        virtual ~ObservableThread() override;
 
         void SetListener( std::weak_ptr< IFinishedThreadListener > pThreadListener,
                           const oslInterlockedCount nThreadID );

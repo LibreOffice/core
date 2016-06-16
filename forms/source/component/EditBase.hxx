@@ -66,7 +66,7 @@ public:
         const bool _bSupportsValidation
     );
     DECLARE_DEFAULT_CLONE_CTOR( OEditBaseModel )
-    virtual ~OEditBaseModel();
+    virtual ~OEditBaseModel() override;
 
     // XPersistObject
     virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) override;

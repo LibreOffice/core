@@ -39,7 +39,7 @@ public:
 
     void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const override;
 
-    virtual ~DocumentListItemsManager();
+    virtual ~DocumentListItemsManager() override;
 
 
     //Non Interface

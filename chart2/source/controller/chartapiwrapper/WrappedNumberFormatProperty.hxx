@@ -35,7 +35,7 @@ class WrappedNumberFormatProperty : public WrappedDirectStateProperty
 {
 public:
     explicit WrappedNumberFormatProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedNumberFormatProperty();
+    virtual ~WrappedNumberFormatProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -55,7 +55,7 @@ class WrappedLinkNumberFormatProperty : public WrappedDirectStateProperty
 {
 public:
     explicit WrappedLinkNumberFormatProperty();
-    virtual ~WrappedLinkNumberFormatProperty();
+    virtual ~WrappedLinkNumberFormatProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;

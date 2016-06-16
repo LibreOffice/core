@@ -57,7 +57,7 @@ class SpinfieldControl : public SpinField
 {
     public:
         SpinfieldControl( vcl::Window* pParent, WinBits nStyle, SpinfieldToolbarController* pSpinfieldToolbarController );
-        virtual ~SpinfieldControl();
+        virtual ~SpinfieldControl() override;
         virtual void dispose() override;
 
         virtual void Up() override;

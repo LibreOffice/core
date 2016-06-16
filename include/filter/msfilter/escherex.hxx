@@ -1061,7 +1061,7 @@ class MSFILTER_DLLPUBLIC EscherExGlobal : public EscherGraphicProvider
 {
 public:
     explicit            EscherExGlobal( sal_uInt32 nGraphicProvFlags = E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
-    virtual             ~EscherExGlobal();
+    virtual             ~EscherExGlobal() override;
 
     /** Returns a new drawing ID for a new drawing container (DGCONTAINER). */
     sal_uInt32          GenerateDrawingId();
@@ -1165,7 +1165,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 
 public:
     explicit            EscherEx( const std::shared_ptr<EscherExGlobal>& rxGlobal, SvStream* pOutStrm, bool bOOXML = false );
-    virtual             ~EscherEx();
+    virtual             ~EscherEx() override;
 
     /** Creates and returns a new shape identifier, updates the internal shape
         counters and registers the identifier in the DGG cluster table. */

@@ -52,7 +52,7 @@ namespace connectivity { namespace hsqldb
         virtual void SAL_CALL alterCommand( const OUString& NewCommand ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~HView();
+        virtual ~HView() override;
 
     protected:
         // OPropertyContainer

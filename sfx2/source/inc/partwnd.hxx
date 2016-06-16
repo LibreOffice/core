@@ -48,7 +48,7 @@ public:
                                    SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SfxPartChildWnd_Impl);
-                            virtual ~SfxPartChildWnd_Impl();
+                            virtual ~SfxPartChildWnd_Impl() override;
 
     virtual bool            QueryClose() override;
 };

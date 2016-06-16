@@ -37,7 +37,7 @@ public:
     XMLRectangleMembersHdl( sal_Int32 nType );
 
     // Just needed for virtual destruction
-    virtual ~XMLRectangleMembersHdl();
+    virtual ~XMLRectangleMembersHdl() override;
 
     /// Imports the given value in cas of the given XML-data-type
     virtual bool importXML(

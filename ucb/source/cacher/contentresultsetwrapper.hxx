@@ -148,7 +148,7 @@ protected:
 
     ContentResultSetWrapper( css::uno::Reference< css::sdbc::XResultSet > xOrigin );
 
-    virtual ~ContentResultSetWrapper();
+    virtual ~ContentResultSetWrapper() override;
 
     void SAL_CALL impl_init();
     void SAL_CALL impl_deinit();
@@ -494,7 +494,7 @@ protected:
 public:
     ContentResultSetWrapperListener( ContentResultSetWrapper* pOwner );
 
-    virtual ~ContentResultSetWrapperListener();
+    virtual ~ContentResultSetWrapperListener() override;
 
 
     // XInterface

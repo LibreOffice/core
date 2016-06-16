@@ -71,7 +71,7 @@ class TagWindowAsModified :   public  ::cppu::WeakImplHelper<
 
         // ctor/dtor
                  TagWindowAsModified();
-        virtual ~TagWindowAsModified(                                                                   );
+        virtual ~TagWindowAsModified(                                                                   ) override;
 
         // XInterface, XTypeProvider
 

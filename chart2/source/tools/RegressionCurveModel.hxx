@@ -68,7 +68,7 @@ public:
     RegressionCurveModel( css::uno::Reference< css::uno::XComponentContext > const & xContext,
                           tCurveType eCurveType );
     RegressionCurveModel( const RegressionCurveModel & rOther );
-    virtual ~RegressionCurveModel();
+    virtual ~RegressionCurveModel() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -145,7 +145,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     explicit MeanValueRegressionCurve(
         const MeanValueRegressionCurve & rOther );
-    virtual ~MeanValueRegressionCurve();
+    virtual ~MeanValueRegressionCurve() override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
@@ -171,7 +171,7 @@ public:
         css::uno::XComponentContext > & xContext );
     explicit LinearRegressionCurve(
         const LinearRegressionCurve & rOther );
-    virtual ~LinearRegressionCurve();
+    virtual ~LinearRegressionCurve() override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
@@ -197,7 +197,7 @@ public:
         css::uno::XComponentContext > & xContext );
     explicit LogarithmicRegressionCurve(
         const LogarithmicRegressionCurve & rOther );
-    virtual ~LogarithmicRegressionCurve();
+    virtual ~LogarithmicRegressionCurve() override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
@@ -222,7 +222,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     explicit ExponentialRegressionCurve(
         const ExponentialRegressionCurve & rOther );
-    virtual ~ExponentialRegressionCurve();
+    virtual ~ExponentialRegressionCurve() override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
@@ -248,7 +248,7 @@ public:
         css::uno::XComponentContext > & xContext );
     explicit PotentialRegressionCurve(
         const PotentialRegressionCurve & rOther );
-    virtual ~PotentialRegressionCurve();
+    virtual ~PotentialRegressionCurve() override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
@@ -273,7 +273,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     explicit PolynomialRegressionCurve(
         const PolynomialRegressionCurve & rOther );
-    virtual ~PolynomialRegressionCurve();
+    virtual ~PolynomialRegressionCurve() override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
@@ -298,7 +298,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     explicit MovingAverageRegressionCurve(
         const MovingAverageRegressionCurve & rOther );
-    virtual ~MovingAverageRegressionCurve();
+    virtual ~MovingAverageRegressionCurve() override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()

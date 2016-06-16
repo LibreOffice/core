@@ -85,7 +85,7 @@ protected:
 
 public:
     VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt16 nPageId );
-    virtual ~VCLXAccessibleTabPage();
+    virtual ~VCLXAccessibleTabPage() override;
 
     // XInterface
     DECLARE_XINTERFACE()

@@ -48,7 +48,7 @@ private:
 
 public:
     SvUnoAttributeContainer( SvXMLAttrContainerData* pContainer = nullptr );
-    virtual ~SvUnoAttributeContainer();
+    virtual ~SvUnoAttributeContainer() override;
 
     SvXMLAttrContainerData* GetContainerImpl() const { return mpContainer; }
 

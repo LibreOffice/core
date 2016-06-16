@@ -81,7 +81,7 @@ friend class SwDropCapsPict;
 
 public:
     SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwDropCapsPage();
+    virtual ~SwDropCapsPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);

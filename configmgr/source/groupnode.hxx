@@ -49,7 +49,7 @@ public:
 private:
     GroupNode(GroupNode const & other, bool keepTemplateName);
 
-    virtual ~GroupNode();
+    virtual ~GroupNode() override;
 
     virtual Kind kind() const override;
 

@@ -35,7 +35,7 @@ class SHA1DigestContext : public cppu::WeakImplHelper< css::xml::crypto::XDigest
 
 public:
 
-    virtual ~SHA1DigestContext();
+    virtual ~SHA1DigestContext() override;
 
     static css::uno::Reference< css::xml::crypto::XDigestContext > Create();
 

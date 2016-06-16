@@ -61,7 +61,7 @@ protected:
 
 public:
              X11SalData( SalGenericDataType t, SalInstance *pInstance );
-    virtual ~X11SalData();
+    virtual ~X11SalData() override;
 
     virtual void            Init();
     virtual void            Dispose() override;

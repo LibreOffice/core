@@ -68,7 +68,7 @@ private:
 
 public:
             ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc );
-    virtual ~ScTransferObj();
+    virtual ~ScTransferObj() override;
 
     virtual void        AddSupportedFormats() override;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;

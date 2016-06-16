@@ -153,7 +153,7 @@ namespace svt
             return returnValue;
         }
 
-        virtual ~DoubleNormalization() { }
+        virtual ~DoubleNormalization() override { }
     };
 
 
@@ -167,7 +167,7 @@ namespace svt
         {
         }
 
-        virtual ~IntegerNormalization() {}
+        virtual ~IntegerNormalization() override {}
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
@@ -188,7 +188,7 @@ namespace svt
         {
         }
 
-        virtual ~BooleanNormalization() {}
+        virtual ~BooleanNormalization() override {}
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
@@ -209,7 +209,7 @@ namespace svt
         {
         }
 
-        virtual ~DateTimeNormalization() {}
+        virtual ~DateTimeNormalization() override {}
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
@@ -243,7 +243,7 @@ namespace svt
         {
         }
 
-        virtual ~DateNormalization() {}
+        virtual ~DateNormalization() override {}
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
@@ -273,7 +273,7 @@ namespace svt
         {
         }
 
-        virtual ~TimeNormalization() {}
+        virtual ~TimeNormalization() override {}
 
         virtual double convertToDouble( Any const & i_value ) const override
         {

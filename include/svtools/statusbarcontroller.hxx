@@ -48,7 +48,7 @@ class SVT_DLLPUBLIC StatusbarController :
                              const OUString& aCommandURL,
                              unsigned short       nID );
         StatusbarController();
-        virtual ~StatusbarController();
+        virtual ~StatusbarController() override;
 
         css::uno::Reference< css::frame::XFrame > getFrameInterface() const;
         css::uno::Reference< css::util::XURLTransformer > getURLTransformer() const;

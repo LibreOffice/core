@@ -401,7 +401,7 @@ public:
               nOrgWidth( rInfo.GetWidth() )
         { }
 
-    virtual ~SwDoDrawStretchCapital() {}
+    virtual ~SwDoDrawStretchCapital() override {}
 };
 
 void SwDoDrawStretchCapital::Do()

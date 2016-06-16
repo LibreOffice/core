@@ -77,7 +77,7 @@ namespace sdbtools
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception) override;
 
     protected:
-        virtual ~ConnectionTools();
+        virtual ~ConnectionTools() override;
 
     private:
         ConnectionTools( const ConnectionTools& ) = delete;

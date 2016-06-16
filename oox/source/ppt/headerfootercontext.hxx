@@ -32,7 +32,7 @@ namespace oox { namespace ppt {
         HeaderFooterContext( ::oox::core::FragmentHandler2& rParent,
             const AttributeList& rAttribs, HeaderFooter& rHeaderFooter );
 
-        virtual ~HeaderFooterContext( );
+        virtual ~HeaderFooterContext( ) override;
     };
 
 } }

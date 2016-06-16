@@ -38,7 +38,7 @@ public:
     ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             css::uno::Reference< css::frame::XModel > xModel );
     ScVbaWorkbook(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
-    virtual ~ScVbaWorkbook() {}
+    virtual ~ScVbaWorkbook() override {}
 
     // Attributes
     virtual sal_Bool SAL_CALL getProtectStructure() throw (css::uno::RuntimeException, std::exception) override;

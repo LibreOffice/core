@@ -229,7 +229,7 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
 
 public:
     explicit IntrospectionAccessStatic_Impl( Reference< XIdlReflection > xCoreReflection_ );
-    virtual ~IntrospectionAccessStatic_Impl()
+    virtual ~IntrospectionAccessStatic_Impl() override
     {
         delete[] mpOrgPropertyHandleArray;
     }
@@ -712,7 +712,7 @@ class ImplIntrospectionAccess : public IntrospectionAccessHelper
 
 public:
     ImplIntrospectionAccess( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ );
-    virtual ~ImplIntrospectionAccess();
+    virtual ~ImplIntrospectionAccess() override;
 
     // Methods from XIntrospectionAccess
     virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts()

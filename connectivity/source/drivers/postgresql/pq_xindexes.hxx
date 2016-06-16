@@ -62,7 +62,7 @@ protected:
         const OUString &schemaName,
         const OUString &tableName);
 
-    virtual ~Indexes();
+    virtual ~Indexes() override;
 
 public: // XAppend
     virtual void SAL_CALL appendByDescriptor(

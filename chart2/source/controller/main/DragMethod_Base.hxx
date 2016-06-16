@@ -33,7 +33,7 @@ public:
     DragMethod_Base( DrawViewWrapper& rDrawViewWrapper, const OUString& rObjectCID
         , const css::uno::Reference< css::frame::XModel >& xChartModel
         , ActionDescriptionProvider::ActionType eActionType = ActionDescriptionProvider::MOVE );
-    virtual ~DragMethod_Base();
+    virtual ~DragMethod_Base() override;
 
     OUString getUndoDescription() const;
 

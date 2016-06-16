@@ -82,7 +82,7 @@ private:
 public:
 
     SchXMLImportHelper();
-    virtual ~SchXMLImportHelper();
+    virtual ~SchXMLImportHelper() override;
 
     /** get the context for reading the <chart:chart> element with subelements.
         The result is stored in the XModel given if it also implements

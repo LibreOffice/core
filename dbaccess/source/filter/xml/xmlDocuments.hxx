@@ -52,7 +52,7 @@ namespace dbaxml
                     ,const OUString& _sCollectionServiceName = OUString()
                     );
 
-        virtual ~OXMLDocuments();
+        virtual ~OXMLDocuments() override;
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

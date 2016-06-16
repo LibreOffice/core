@@ -99,7 +99,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
     virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 public:
         SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent);
-        virtual ~SwMailMergeGreetingsPage();
+        virtual ~SwMailMergeGreetingsPage() override;
     virtual void dispose() override;
 
 };
@@ -115,7 +115,7 @@ class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
     DECL_LINK_TYPED(OKHdl, Button*, void);
 public:
     SwMailBodyDialog(vcl::Window* pParent);
-    virtual ~SwMailBodyDialog();
+    virtual ~SwMailBodyDialog() override;
     virtual void dispose() override;
 
     void            SetBody(const OUString& rBody ) {m_pBodyMLE->SetText(rBody);}

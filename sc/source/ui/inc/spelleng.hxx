@@ -36,7 +36,7 @@ public:
                             SfxItemPool* pEnginePool, ScViewData& rViewData,
                             ScDocument* pUndoDoc, ScDocument* pRedoDoc );
 
-    virtual             ~ScConversionEngineBase();
+    virtual             ~ScConversionEngineBase() override;
 
     /** Derived classes implement to convert all cells in the selection or sheet. */
     virtual void        ConvertAll( EditView& rEditView ) = 0;

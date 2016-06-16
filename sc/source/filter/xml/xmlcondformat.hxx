@@ -29,7 +29,7 @@ public:
     ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName );
 
-    virtual ~ScXMLConditionalFormatsContext() {}
+    virtual ~ScXMLConditionalFormatsContext() override {}
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -47,7 +47,7 @@ public:
                         const OUString& rLName,
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
 
-    virtual ~ScXMLConditionalFormatContext();
+    virtual ~ScXMLConditionalFormatContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -70,7 +70,7 @@ public:
     ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName, ScConditionalFormat* pFormat);
 
-    virtual ~ScXMLColorScaleFormatContext() {}
+    virtual ~ScXMLColorScaleFormatContext() override {}
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -90,7 +90,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat);
 
-    virtual ~ScXMLDataBarFormatContext() {}
+    virtual ~ScXMLDataBarFormatContext() override {}
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -115,7 +115,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat);
 
-    virtual ~ScXMLIconSetFormatContext() {}
+    virtual ~ScXMLIconSetFormatContext() override {}
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -132,7 +132,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleFormat* pFormat);
 
-    virtual ~ScXMLColorScaleFormatEntryContext() {}
+    virtual ~ScXMLColorScaleFormatEntryContext() override {}
 private:
 
     ScColorScaleEntry* mpFormatEntry;
@@ -148,7 +148,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleEntry*& pData);
 
-    virtual ~ScXMLFormattingEntryContext() {}
+    virtual ~ScXMLFormattingEntryContext() override {}
 };
 
 class ScXMLCondContext : public SvXMLImportContext
@@ -161,7 +161,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat);
 
-    virtual ~ScXMLCondContext() {}
+    virtual ~ScXMLCondContext() override {}
 };
 
 class ScXMLDateContext : public SvXMLImportContext
@@ -174,7 +174,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat);
 
-    virtual ~ScXMLDateContext() {}
+    virtual ~ScXMLDateContext() override {}
 };
 
 #endif

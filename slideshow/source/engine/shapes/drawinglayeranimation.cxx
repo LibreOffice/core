@@ -131,7 +131,7 @@ double ScrollTextAnimNode::GetStateAtRelativeTime(
 class ActivityImpl : public Activity
 {
 public:
-    virtual ~ActivityImpl();
+    virtual ~ActivityImpl() override;
 
     ActivityImpl(
         SlideShowContext const& rContext,

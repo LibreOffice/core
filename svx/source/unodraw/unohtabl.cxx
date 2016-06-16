@@ -36,7 +36,7 @@ class SvxUnoHatchTable : public SvxUnoNameItemTable
 {
 public:
     explicit SvxUnoHatchTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoHatchTable() throw();
+    virtual ~SvxUnoHatchTable() throw() override;
 
     virtual NameOrIndex* createItem() const throw() override;
 

@@ -35,7 +35,7 @@ class ScCalcOptionsDialog : public ModalDialog
 {
 public:
     ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig, bool bWriteConfig);
-    virtual ~ScCalcOptionsDialog();
+    virtual ~ScCalcOptionsDialog() override;
     virtual void dispose() override;
 
     DECL_LINK_TYPED( BtnAutomaticSelectHdl, RadioButton&, void );

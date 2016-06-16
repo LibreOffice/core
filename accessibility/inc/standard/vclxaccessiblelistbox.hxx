@@ -45,7 +45,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
-    virtual ~VCLXAccessibleListBox();
+    virtual ~VCLXAccessibleListBox() override;
 
     virtual bool IsValid() const override;
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;

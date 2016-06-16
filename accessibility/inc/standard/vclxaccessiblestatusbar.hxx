@@ -54,7 +54,7 @@ protected:
 
 public:
     VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow );
-    virtual ~VCLXAccessibleStatusBar();
+    virtual ~VCLXAccessibleStatusBar() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;

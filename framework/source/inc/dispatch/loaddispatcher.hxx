@@ -89,7 +89,7 @@ class LoadDispatcher : public  ::cppu::WeakImplHelper< css::frame::XNotifyingDis
 
         /** @short  used to free internal resources.
          */
-        virtual ~LoadDispatcher();
+        virtual ~LoadDispatcher() override;
 
     // uno interface
 

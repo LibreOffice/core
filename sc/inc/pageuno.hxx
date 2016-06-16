@@ -28,7 +28,7 @@ class ScPageObj : public SvxFmDrawPage
 {
 public:
     ScPageObj(SdrPage* pPage);
-    virtual ~ScPageObj() throw();
+    virtual ~ScPageObj() throw() override;
 
     virtual css::uno::Reference<css::drawing::XShape> CreateShape(SdrObject *pObj) const
         throw (css::uno::RuntimeException, std::exception) override;

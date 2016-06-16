@@ -41,7 +41,7 @@ namespace sdr
         public:
             explicit OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DContainer& rSequence);
 
-            virtual ~OverlayPrimitive2DSequenceObject();
+            virtual ~OverlayPrimitive2DSequenceObject() override;
 
             // data read access
             const drawinglayer::primitive2d::Primitive2DContainer& getSequence() const { return maSequence; }

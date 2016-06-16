@@ -68,7 +68,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::io::XInputStream >& xInStream );
 
-    virtual ~SwitchablePersistenceStream();
+    virtual ~SwitchablePersistenceStream() override;
 
     void SwitchPersistenceTo( const css::uno::Reference< css::io::XStream >& xStream );
 

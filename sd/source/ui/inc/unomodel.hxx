@@ -133,7 +133,7 @@ private:
 public:
     SdXImpressDocument( ::sd::DrawDocShell* pShell, bool bClipBoard = false ) throw();
     SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard = false ) throw();
-    virtual ~SdXImpressDocument() throw();
+    virtual ~SdXImpressDocument() throw() override;
 
     static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument* pDoc );
 
@@ -291,7 +291,7 @@ private:
 
 public:
     SdDrawPagesAccess( SdXImpressDocument&  rMyModel ) throw();
-    virtual ~SdDrawPagesAccess() throw();
+    virtual ~SdDrawPagesAccess() throw() override;
 
     // XDrawPages
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) throw(css::uno::RuntimeException, std::exception) override;
@@ -332,7 +332,7 @@ private:
 
 public:
     SdMasterPagesAccess( SdXImpressDocument& rMyModel ) throw();
-    virtual ~SdMasterPagesAccess() throw();
+    virtual ~SdMasterPagesAccess() throw() override;
 
     // XDrawPages
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex )
@@ -371,7 +371,7 @@ private:
 
 public:
     SdDocLinkTargets( SdXImpressDocument&   rMyModel ) throw();
-    virtual ~SdDocLinkTargets() throw();
+    virtual ~SdDocLinkTargets() throw() override;
 
     // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;

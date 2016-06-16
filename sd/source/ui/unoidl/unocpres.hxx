@@ -51,7 +51,7 @@ private:
 public:
     SdXCustomPresentation() throw();
     SdXCustomPresentation( SdCustomShow* mpSdCustomShow, SdXImpressDocument* pMyModel) throw();
-    virtual ~SdXCustomPresentation() throw();
+    virtual ~SdXCustomPresentation() throw() override;
 
     // internal
     SdCustomShow* GetSdCustomShow() const throw() { return mpSdCustomShow; }
@@ -112,7 +112,7 @@ private:
 
 public:
     explicit SdXCustomPresentationAccess(SdXImpressDocument& rMyModel) throw();
-    virtual ~SdXCustomPresentationAccess() throw();
+    virtual ~SdXCustomPresentationAccess() throw() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;

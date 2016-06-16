@@ -58,7 +58,7 @@ private:
 
 public:
     ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle);
-    virtual ~ContentListBox_Impl();
+    virtual ~ContentListBox_Impl() override;
     virtual void dispose() override;
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
@@ -80,7 +80,7 @@ protected:
 public:
     HelpTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
         const OString& rID, const OUString& rUIXMLDescription);
-    virtual ~HelpTabPage_Impl();
+    virtual ~HelpTabPage_Impl() override;
     virtual void dispose() override;
 
     virtual Control*    GetLastFocusControl() = 0;
@@ -95,7 +95,7 @@ private:
 
 public:
     ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin);
-    virtual ~ContentTabPage_Impl();
+    virtual ~ContentTabPage_Impl() override;
     virtual void dispose() override;
 
     virtual void        ActivatePage() override;
@@ -143,7 +143,7 @@ private:
 
 public:
     IndexTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
-    virtual ~IndexTabPage_Impl();
+    virtual ~IndexTabPage_Impl() override;
     virtual void dispose() override;
 
     virtual void        ActivatePage() override;
@@ -221,7 +221,7 @@ private:
 
 public:
     SearchTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
-    virtual ~SearchTabPage_Impl();
+    virtual ~SearchTabPage_Impl() override;
     virtual void dispose() override;
 
     virtual void        ActivatePage() override;
@@ -247,7 +247,7 @@ private:
 
 public:
     BookmarksBox_Impl(vcl::Window* pParent, WinBits nStyle);
-    virtual ~BookmarksBox_Impl();
+    virtual ~BookmarksBox_Impl() override;
     virtual void dispose() override;
 
     virtual bool        Notify( NotifyEvent& rNEvt ) override;
@@ -263,7 +263,7 @@ private:
 
 public:
     BookmarksTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
-    virtual ~BookmarksTabPage_Impl();
+    virtual ~BookmarksTabPage_Impl() override;
     virtual void dispose() override;
 
     virtual void        ActivatePage() override;
@@ -323,7 +323,7 @@ private:
 
 public:
     explicit SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
-    virtual ~SfxHelpIndexWindow_Impl();
+    virtual ~SfxHelpIndexWindow_Impl() override;
     virtual void dispose() override;
 
     virtual void        Resize() override;
@@ -462,7 +462,7 @@ private:
 
 public:
     explicit SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
-    virtual ~SfxHelpTextWindow_Impl();
+    virtual ~SfxHelpTextWindow_Impl() override;
     virtual void dispose() override;
 
     virtual void            Resize() override;
@@ -529,7 +529,7 @@ friend class SfxHelpIndexWindow_Impl;
 public:
     SfxHelpWindow_Impl( const css::uno::Reference < css::frame::XFrame2 >& rFrame,
                         vcl::Window* pParent, WinBits nBits );
-    virtual ~SfxHelpWindow_Impl();
+    virtual ~SfxHelpWindow_Impl() override;
     virtual void dispose() override;
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
@@ -567,7 +567,7 @@ private:
     VclPtr<Edit> m_pTitleED;
 public:
     SfxAddHelpBookmarkDialog_Impl( vcl::Window* pParent, bool bRename = true );
-    virtual ~SfxAddHelpBookmarkDialog_Impl();
+    virtual ~SfxAddHelpBookmarkDialog_Impl() override;
     virtual void dispose() override;
 
     void SetTitle( const OUString& rTitle );

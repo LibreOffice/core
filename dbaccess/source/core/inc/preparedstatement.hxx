@@ -46,7 +46,7 @@ namespace dbaccess
     public:
         OPreparedStatement(const css::uno::Reference< css::sdbc::XConnection > & _xConn,
                            const css::uno::Reference< css::uno::XInterface > & _xStatement);
-        virtual ~OPreparedStatement();
+        virtual ~OPreparedStatement() override;
 
     // css::lang::XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;

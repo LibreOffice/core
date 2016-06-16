@@ -49,7 +49,7 @@ public:
     ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
                     const OUString& rFilter, const OUString& rOpt,
                     const OUString& rArea, const ScRange& rDest, sal_uLong nRefresh );
-    virtual ~ScAreaLink();
+    virtual ~ScAreaLink() override;
 
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(

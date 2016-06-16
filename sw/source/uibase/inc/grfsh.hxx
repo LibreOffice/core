@@ -42,7 +42,7 @@ public:
     void GetAttrStateForRotation(SfxItemSet& rRequest);
 
     SwGrfShell(SwView &rView);
-    virtual ~SwGrfShell();
+    virtual ~SwGrfShell() override;
 };
 
 #endif

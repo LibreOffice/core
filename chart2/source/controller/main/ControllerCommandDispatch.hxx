@@ -59,7 +59,7 @@ public:
     explicit ControllerCommandDispatch(
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         ChartController* pController, CommandDispatchContainer* pContainer );
-    virtual ~ControllerCommandDispatch();
+    virtual ~ControllerCommandDispatch() override;
 
     // late initialisation, especially for adding as listener
     virtual void initialize() override;

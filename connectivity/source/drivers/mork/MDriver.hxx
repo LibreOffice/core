@@ -42,7 +42,7 @@ private:
     MorkDriver(const MorkDriver&) = delete;
     MorkDriver& operator=(const MorkDriver&) = delete;
 
-    virtual ~MorkDriver() {}
+    virtual ~MorkDriver() override {}
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;

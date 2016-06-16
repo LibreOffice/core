@@ -30,7 +30,7 @@ class SfxStringHint: public SfxSimpleHint
 public:
     SfxStringHint(sal_uInt16 nId, const OUString& rObject);
     const OUString& GetObject() const;
-    virtual ~SfxStringHint();
+    virtual ~SfxStringHint() override;
 };
 
 #endif

@@ -64,7 +64,7 @@ namespace connectivity
         public:
 
             explicit FirebirdDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
-            virtual ~FirebirdDriver();
+            virtual ~FirebirdDriver() override;
             const css::uno::Reference<css::uno::XComponentContext>& getContext() const { return m_aContext; }
 
             // OComponentHelper

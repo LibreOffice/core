@@ -91,7 +91,7 @@ private:
 
 public:
     SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxProxyTabPage();
+    virtual ~SvxProxyTabPage() override;
     virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -145,7 +145,7 @@ private:
     void                InitControls();
 
                 SvxSecurityTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual     ~SvxSecurityTabPage();
+    virtual     ~SvxSecurityTabPage() override;
     virtual void dispose() override;
 
 protected:
@@ -177,7 +177,7 @@ class SvxEMailTabPage : public SfxTabPage
 
 public:
     SvxEMailTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxEMailTabPage();
+    virtual ~SvxEMailTabPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );

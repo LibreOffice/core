@@ -118,7 +118,7 @@ namespace reportdesign
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
 
-        virtual ~OSection();
+        virtual ~OSection() override;
 
         /** this function is called upon disposing the component
         */

@@ -47,7 +47,7 @@ class XMLOFF_DLLPUBLIC XMLPropertyHandlerFactory : public salhelper::SimpleRefer
 
 public:
     XMLPropertyHandlerFactory();
-    virtual ~XMLPropertyHandlerFactory();
+    virtual ~XMLPropertyHandlerFactory() override;
 
     /**
     This method retrieves a PropertyHandler for the given XML-type.

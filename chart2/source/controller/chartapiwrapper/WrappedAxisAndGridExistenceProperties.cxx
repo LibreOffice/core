@@ -37,7 +37,7 @@ class WrappedAxisAndGridExistenceProperty : public WrappedProperty
 public:
     WrappedAxisAndGridExistenceProperty( bool bAxis, bool bMain, sal_Int32 nDimensionIndex
         , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedAxisAndGridExistenceProperty();
+    virtual ~WrappedAxisAndGridExistenceProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -204,7 +204,7 @@ class WrappedAxisTitleExistenceProperty : public WrappedProperty
 public:
     WrappedAxisTitleExistenceProperty( sal_Int32 nTitleIndex
         , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedAxisTitleExistenceProperty();
+    virtual ~WrappedAxisTitleExistenceProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -318,7 +318,7 @@ class WrappedAxisLabelExistenceProperty : public WrappedProperty
 public:
     WrappedAxisLabelExistenceProperty( bool bMain, sal_Int32 nDimensionIndex
         , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedAxisLabelExistenceProperty();
+    virtual ~WrappedAxisLabelExistenceProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;

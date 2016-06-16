@@ -32,7 +32,7 @@ class SVL_DLLPUBLIC SfxItemSetHint: public SfxHint
 
 public:
                         SfxItemSetHint( const SfxItemSet &rItemSet );
-    virtual             ~SfxItemSetHint();
+    virtual             ~SfxItemSetHint() override;
 
     const SfxItemSet&   GetItemSet() const { return *_pItemSet; }
 };

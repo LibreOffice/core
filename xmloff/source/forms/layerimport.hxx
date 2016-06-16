@@ -129,7 +129,7 @@ namespace xmloff
             const OUString& _rSubmissionID
         );
 
-        virtual ~OFormLayerXMLImport_Impl();
+        virtual ~OFormLayerXMLImport_Impl() override;
     protected:
         explicit OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
 

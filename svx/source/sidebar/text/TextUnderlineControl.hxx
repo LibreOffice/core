@@ -33,7 +33,7 @@ class TextUnderlineControl : public SfxPopupWindow
 {
 public:
     explicit TextUnderlineControl(sal_uInt16 nId);
-    virtual ~TextUnderlineControl();
+    virtual ~TextUnderlineControl() override;
     virtual void dispose() override;
 
 private:

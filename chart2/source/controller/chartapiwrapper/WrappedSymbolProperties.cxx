@@ -62,7 +62,7 @@ public:
 
     explicit WrappedSymbolTypeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                         tSeriesOrDiagramPropertyType ePropertyType );
-    virtual ~WrappedSymbolTypeProperty();
+    virtual ~WrappedSymbolTypeProperty() override;
 };
 
 class WrappedSymbolBitmapURLProperty : public WrappedSeriesOrDiagramProperty< OUString >
@@ -73,7 +73,7 @@ public:
 
     explicit WrappedSymbolBitmapURLProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                              tSeriesOrDiagramPropertyType ePropertyType );
-    virtual ~WrappedSymbolBitmapURLProperty();
+    virtual ~WrappedSymbolBitmapURLProperty() override;
 };
 
 class WrappedSymbolSizeProperty : public WrappedSeriesOrDiagramProperty< awt::Size >
@@ -86,7 +86,7 @@ public:
 
     explicit WrappedSymbolSizeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                         tSeriesOrDiagramPropertyType ePropertyType );
-    virtual ~WrappedSymbolSizeProperty();
+    virtual ~WrappedSymbolSizeProperty() override;
 };
 
 class WrappedSymbolAndLinesProperty : public WrappedSeriesOrDiagramProperty< bool >
@@ -99,7 +99,7 @@ public:
 
     explicit WrappedSymbolAndLinesProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                             tSeriesOrDiagramPropertyType ePropertyType );
-    virtual ~WrappedSymbolAndLinesProperty();
+    virtual ~WrappedSymbolAndLinesProperty() override;
 };
 
 namespace

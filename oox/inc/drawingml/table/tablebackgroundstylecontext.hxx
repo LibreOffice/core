@@ -29,7 +29,7 @@ class TableBackgroundStyleContext : public ::oox::core::ContextHandler2
 {
 public:
     TableBackgroundStyleContext( ::oox::core::ContextHandler2Helper& rParent, TableStyle& rTableStyle );
-    virtual ~TableBackgroundStyleContext();
+    virtual ~TableBackgroundStyleContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

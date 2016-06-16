@@ -82,7 +82,7 @@ public:
                  bool bRepairStorage,
                  SourceDocumentType eDocumentType,
                  utl::MediaDescriptor& rMediaDesc);
-    virtual ~DomainMapper();
+    virtual ~DomainMapper() override;
 
     // Stream
     virtual void markLastParagraphInSection() override;

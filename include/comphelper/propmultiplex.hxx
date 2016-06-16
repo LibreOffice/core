@@ -80,7 +80,7 @@ namespace comphelper
         bool                                            m_bAutoSetRelease   : 1;
 
 
-        virtual ~OPropertyChangeMultiplexer();
+        virtual ~OPropertyChangeMultiplexer() override;
     public:
         OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  css::uno::Reference< css::beans::XPropertySet>& _rxSet, bool _bAutoReleaseSet = true);
 

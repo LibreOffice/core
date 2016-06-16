@@ -42,7 +42,7 @@ class SwTextAPIEditSource : public SvxEditSource
 
 public:
                         SwTextAPIEditSource(SwDoc* pDoc);
-    virtual             ~SwTextAPIEditSource();
+    virtual             ~SwTextAPIEditSource() override;
 
     void                Dispose();
     void                SetText( OutlinerParaObject& rText );
@@ -56,7 +56,7 @@ class SwTextAPIObject : public SvxUnoText
     SwTextAPIEditSource* pSource;
 public:
                         SwTextAPIObject( SwTextAPIEditSource* p);
-    virtual             ~SwTextAPIObject() throw();
+    virtual             ~SwTextAPIObject() throw() override;
     void                DisposeEditSource() { pSource->Dispose(); }
     OutlinerParaObject* CreateText() { return pSource->CreateText(); }
     void                SetString( const OUString& rText ) { pSource->SetString( rText ); }

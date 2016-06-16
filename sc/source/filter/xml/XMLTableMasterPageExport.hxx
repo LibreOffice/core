@@ -48,7 +48,7 @@ protected:
 
 public:
     explicit XMLTableMasterPageExport( ScXMLExport& rExp );
-    virtual ~XMLTableMasterPageExport();
+    virtual ~XMLTableMasterPageExport() override;
 };
 
 #endif  //  _XMLOFF_XMLTABLEMASTERPAGEEXPORT_HXX

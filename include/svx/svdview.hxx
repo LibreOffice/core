@@ -165,7 +165,7 @@ protected:
 
 public:
     explicit SdrView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
-    virtual ~SdrView();
+    virtual ~SdrView() override;
 
     // The default value for all dispatchers is activated. If the app for example
     // wants to intervene in MouseDispatcher for special treatment, you have to

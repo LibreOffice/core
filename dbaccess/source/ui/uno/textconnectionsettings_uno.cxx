@@ -68,7 +68,7 @@ namespace dbaui
 
     protected:
         explicit OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext );
-        virtual ~OTextConnectionSettingsDialog();
+        virtual ~OTextConnectionSettingsDialog() override;
 
     public:
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()

@@ -168,7 +168,7 @@ public:
         The SbxObject may continue to exist, but can not any longer perform
         any functions and can not provide any properties.
         */
-    virtual                     ~SfxShell();
+    virtual                     ~SfxShell() override;
 
     /**
         With this virtual method, which is automatically overridden by each subclass

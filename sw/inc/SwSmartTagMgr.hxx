@@ -29,7 +29,7 @@ private:
     static SwSmartTagMgr* mpTheSwSmartTagMgr;
 
     SwSmartTagMgr( const OUString& rModuleName );
-    virtual ~SwSmartTagMgr();
+    virtual ~SwSmartTagMgr() override;
 
 public:
     static SwSmartTagMgr& Get();

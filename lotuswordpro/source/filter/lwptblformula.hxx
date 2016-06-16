@@ -165,7 +165,7 @@ class LwpFormulaFunc :public LwpFormulaArg
 {
 public:
     explicit LwpFormulaFunc(sal_uInt16 nTokenType);
-    virtual ~LwpFormulaFunc();
+    virtual ~LwpFormulaFunc() override;
 
     void AddArg(LwpFormulaArg* pArg);
 
@@ -206,7 +206,7 @@ protected:
     void ReadArguments(LwpFormulaFunc& aFunc);
     bool m_bSupported;
 private:
-    virtual ~LwpFormulaInfo();
+    virtual ~LwpFormulaInfo() override;
 
     std::vector<LwpFormulaArg*> m_aStack;
     void ReadConst();

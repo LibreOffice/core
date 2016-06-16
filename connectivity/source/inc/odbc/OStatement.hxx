@@ -145,7 +145,7 @@ namespace connectivity
                                     css::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const override;
-            virtual ~OStatement_Base();
+            virtual ~OStatement_Base() override;
 
         public:
             OStatement_Base(OConnection* _pConnection );
@@ -222,7 +222,7 @@ namespace connectivity
                             public css::lang::XServiceInfo
         {
         protected:
-            virtual ~OStatement(){}
+            virtual ~OStatement() override {}
         public:
             // A ctor that is needed for returning the object
             OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}

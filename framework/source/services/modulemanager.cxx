@@ -61,7 +61,7 @@ public:
 
     explicit ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-    virtual ~ModuleManager();
+    virtual ~ModuleManager() override;
 
     ModuleManager(const ModuleManager&) = delete;
     ModuleManager& operator=(const ModuleManager&) = delete;

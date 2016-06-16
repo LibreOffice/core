@@ -45,7 +45,7 @@ class AccessibleChartShape :
 {
 public:
     explicit AccessibleChartShape( const AccessibleElementInfo& rAccInfo );
-    virtual ~AccessibleChartShape();
+    virtual ~AccessibleChartShape() override;
 
     // ________ XServiceInfo ________
     virtual OUString SAL_CALL getImplementationName()

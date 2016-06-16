@@ -85,7 +85,7 @@ namespace connectivity
             virtual void SAL_CALL getFastPropertyValue(
                                                                 css::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const override;
-            virtual ~OStatementCommonBase();
+            virtual ~OStatementCommonBase() override;
 
             void prepareAndDescribeStatement(const OUString& sqlIn,
                                              XSQLDA*& pOutSqlda,

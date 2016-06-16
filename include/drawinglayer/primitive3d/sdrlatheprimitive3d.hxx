@@ -96,7 +96,7 @@ namespace drawinglayer
                 bool bCharacterMode,
                 bool bCloseFront,
                 bool bCloseBack);
-            virtual ~SdrLathePrimitive3D();
+            virtual ~SdrLathePrimitive3D() override;
 
             /// data read access
             const basegfx::B2DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }

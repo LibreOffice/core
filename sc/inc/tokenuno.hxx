@@ -68,7 +68,7 @@ private:
 
 public:
                             ScFormulaParserObj(ScDocShell* pDocSh);
-    virtual                 ~ScFormulaParserObj();
+    virtual                 ~ScFormulaParserObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

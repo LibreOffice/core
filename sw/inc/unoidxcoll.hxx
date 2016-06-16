@@ -28,7 +28,7 @@ class SwXDocumentIndexes
 
 private:
 
-    virtual ~SwXDocumentIndexes();
+    virtual ~SwXDocumentIndexes() override;
 
 public:
 

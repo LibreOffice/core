@@ -110,7 +110,7 @@ private:
     SAL_DLLPRIVATE void         ImplBroadcast( sal_uIntPtr nUpdatePos );
 
     SAL_DLLPRIVATE              GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry );
-    SAL_DLLPRIVATE              virtual ~GalleryTheme();
+    SAL_DLLPRIVATE              virtual ~GalleryTheme() override;
 
     GalleryTheme(GalleryTheme const &) = delete;
     void operator =(GalleryTheme const &) = delete;

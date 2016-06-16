@@ -54,7 +54,7 @@ class ComboBoxControl : public ComboBox
 {
     public:
         ComboBoxControl( vcl::Window* pParent, WinBits nStyle, ComboboxToolbarController* pComboboxToolbarController );
-        virtual ~ComboBoxControl();
+        virtual ~ComboBoxControl() override;
         virtual void dispose() override;
 
         virtual void Select() override;

@@ -170,7 +170,7 @@ private:
 public:
     explicit        ScDocShell( const ScDocShell& rDocShell );
     explicit        ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT );
-                    virtual ~ScDocShell();
+                    virtual ~ScDocShell() override;
 
 #if ENABLE_TELEPATHY
     SAL_DLLPRIVATE ScCollaboration* GetCollaboration();

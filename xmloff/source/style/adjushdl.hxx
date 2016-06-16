@@ -28,7 +28,7 @@
 class XMLParaAdjustPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLParaAdjustPropHdl();
+    virtual ~XMLParaAdjustPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -40,7 +40,7 @@ public:
 class XMLLastLineAdjustPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLLastLineAdjustPropHdl();
+    virtual ~XMLLastLineAdjustPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

@@ -53,7 +53,7 @@ class AccessibleTableShape : public AccessibleTableShape_Base, public css::acces
 {
 public:
     AccessibleTableShape( const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo );
-    virtual ~AccessibleTableShape( );
+    virtual ~AccessibleTableShape( ) override;
     AccessibleTableShape(const AccessibleTableShape&) = delete;
     AccessibleTableShape& operator=(const AccessibleTableShape&) = delete;
 
@@ -165,7 +165,7 @@ class AccessibleTableHeaderShape : public MutexOwner,
 public:
     // bRow, true means rowheader, false means columnheader
     AccessibleTableHeaderShape( AccessibleTableShape* pTable, bool bRow );
-    virtual ~AccessibleTableHeaderShape();
+    virtual ~AccessibleTableHeaderShape() override;
     AccessibleTableHeaderShape(const AccessibleTableHeaderShape&) = delete;
     AccessibleTableHeaderShape& operator=(const AccessibleTableHeaderShape&) = delete;
 

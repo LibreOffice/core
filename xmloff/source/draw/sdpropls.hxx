@@ -62,7 +62,7 @@ private:
 public:
     XMLSdPropHdlFactory( css::uno::Reference< css::frame::XModel >, SvXMLExport& rExport );
     XMLSdPropHdlFactory( css::uno::Reference< css::frame::XModel >, SvXMLImport& rImport );
-    virtual ~XMLSdPropHdlFactory();
+    virtual ~XMLSdPropHdlFactory() override;
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override;
 };
 
@@ -70,7 +70,7 @@ class XMLShapePropertySetMapper : public XMLPropertySetMapper
 {
 public:
     XMLShapePropertySetMapper(const rtl::Reference< XMLPropertyHandlerFactory >& rFactoryRef, bool bForExport);
-    virtual ~XMLShapePropertySetMapper();
+    virtual ~XMLShapePropertySetMapper() override;
 };
 
 class XMLShapeExportPropertyMapper : public SvXMLExportPropertyMapper
@@ -86,7 +86,7 @@ protected:
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
 public:
     XMLShapeExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
-    virtual ~XMLShapeExportPropertyMapper();
+    virtual ~XMLShapeExportPropertyMapper() override;
 
     virtual void        handleElementItem(
                             SvXMLExport& rExport,
@@ -119,7 +119,7 @@ protected:
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
 public:
     XMLPageExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
-    virtual ~XMLPageExportPropertyMapper();
+    virtual ~XMLPageExportPropertyMapper() override;
 
     virtual void        handleElementItem(
                             SvXMLExport& rExport,

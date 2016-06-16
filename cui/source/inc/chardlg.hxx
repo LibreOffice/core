@@ -52,7 +52,7 @@ protected:
     inline SvxFont&     GetPreviewCTLFont();
 
 public:
-    virtual ~SvxCharBasePage();
+    virtual ~SvxCharBasePage() override;
     virtual void dispose() override;
 
     using SfxTabPage::ActivatePage;
@@ -147,7 +147,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 public:
-                        virtual ~SvxCharNamePage();
+                        virtual ~SvxCharNamePage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
@@ -229,7 +229,7 @@ private:
     DECL_LINK_TYPED(ColorBoxSelectHdl_Impl, ListBox&, void);
 
 public:
-    virtual ~SvxCharEffectsPage();
+    virtual ~SvxCharEffectsPage() override;
     virtual void dispose() override;
 
     using SfxTabPage::DeactivatePage;
@@ -308,7 +308,7 @@ private:
     DECL_LINK_TYPED(    ScaleWidthModifyHdl_Impl, Edit&, void );
 
 public:
-    virtual ~SvxCharPositionPage();
+    virtual ~SvxCharPositionPage() override;
     virtual void dispose() override;
 
     using SfxTabPage::DeactivatePage;
@@ -354,7 +354,7 @@ private:
     DECL_LINK_TYPED(CharacterMapHdl_Impl, ListBox&, void );
 
 public:
-    virtual ~SvxCharTwoLinesPage();
+    virtual ~SvxCharTwoLinesPage() override;
     virtual void dispose() override;
 
     using SfxTabPage::ActivatePage;

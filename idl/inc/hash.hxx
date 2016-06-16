@@ -69,7 +69,7 @@ public:
         , bHasId(true)
     {
     }
-    virtual ~SvStringHashEntry();
+    virtual ~SvStringHashEntry() override;
 
     const OString&  GetName() const { return aName; }
     bool            HasId() const { return bHasId; }
@@ -95,7 +95,7 @@ protected:
     virtual bool equals( const OString &rElement, sal_uInt32 nIndex ) const override;
 public:
             SvStringHashTable( sal_uInt32 nMaxEntries );   // max size of hash-tabel
-            virtual ~SvStringHashTable();
+            virtual ~SvStringHashTable() override;
 
     OString GetNearString( const OString& rName ) const;
     virtual bool    IsEntry( sal_uInt32 nIndex ) const override;

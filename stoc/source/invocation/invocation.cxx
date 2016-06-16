@@ -99,7 +99,7 @@ public:
     Invocation_Impl( const Any & rAdapted, const Reference<XTypeConverter> &,
                                            const Reference<XIntrospection> &,
                                            const Reference<XIdlReflection> & );
-    virtual ~Invocation_Impl();
+    virtual ~Invocation_Impl() override;
 
     // XInterface
     virtual Any         SAL_CALL queryInterface( const Type & aType) throw( RuntimeException, std::exception ) override;
@@ -1076,7 +1076,7 @@ class InvocationService
 {
 public:
     explicit InvocationService( const Reference<XComponentContext> & xCtx );
-    virtual ~InvocationService();
+    virtual ~InvocationService() override;
 
     // XServiceInfo
     OUString                    SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) override;

@@ -35,7 +35,7 @@ public:
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;
     virtual void        Reset           ( const SfxItemSet* ) override;
 
-    virtual ~ScTabPageProtection();
+    virtual ~ScTabPageProtection() override;
     virtual void dispose() override;
 
 protected:

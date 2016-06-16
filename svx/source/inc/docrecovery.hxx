@@ -228,7 +228,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
 
 
         /** @short  TODO */
-        virtual ~RecoveryCore();
+        virtual ~RecoveryCore() override;
 
 
         /** @short  TODO */
@@ -304,7 +304,7 @@ class PluginProgressWindow : public vcl::Window
     public:
         PluginProgressWindow(      vcl::Window*                                       pParent  ,
                              const css::uno::Reference< css::lang::XComponent >& xProgress);
-        virtual ~PluginProgressWindow();
+        virtual ~PluginProgressWindow() override;
         virtual void dispose() override;
 };
 
@@ -329,7 +329,7 @@ class PluginProgress : public ::cppu::WeakImplHelper< css::task::XStatusIndicato
 
 
         /** @short  TODO */
-        virtual ~PluginProgress();
+        virtual ~PluginProgress() override;
 
 
     // uno interface
@@ -392,7 +392,7 @@ class SaveDialog : public Dialog
                     which should be shown inside this dialog.
          */
         SaveDialog(vcl::Window* pParent, RecoveryCore* pCore);
-        virtual ~SaveDialog();
+        virtual ~SaveDialog() override;
         virtual void dispose() override;
 
         DECL_LINK_TYPED(OKButtonHdl, Button*, void);
@@ -427,7 +427,7 @@ class SaveProgressDialog : public ModalDialog
          */
         SaveProgressDialog(vcl::Window*       pParent,
                            RecoveryCore* pCore  );
-        virtual ~SaveProgressDialog();
+        virtual ~SaveProgressDialog() override;
         virtual void dispose() override;
 
         /** @short  start the emergency save operation. */
@@ -526,7 +526,7 @@ class RecoveryDialog : public Dialog
         RecoveryDialog(vcl::Window*       pParent,
                        RecoveryCore* pCore  );
 
-        virtual ~RecoveryDialog();
+        virtual ~RecoveryDialog() override;
         virtual void dispose() override;
 
         // IRecoveryUpdateListener
@@ -574,7 +574,7 @@ class BrokenRecoveryDialog : public ModalDialog
         BrokenRecoveryDialog(vcl::Window*       pParent        ,
                              RecoveryCore* pCore          ,
                              bool      bBeforeRecovery);
-        virtual ~BrokenRecoveryDialog();
+        virtual ~BrokenRecoveryDialog() override;
         virtual void dispose() override;
 
 

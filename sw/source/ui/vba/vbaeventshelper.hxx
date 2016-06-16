@@ -28,7 +28,7 @@ public:
     SwVbaEventsHelper(
         const css::uno::Sequence< css::uno::Any >& rArgs,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~SwVbaEventsHelper();
+    virtual ~SwVbaEventsHelper() override;
 
 protected:
     virtual bool implPrepareEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::uno::RuntimeException) override;

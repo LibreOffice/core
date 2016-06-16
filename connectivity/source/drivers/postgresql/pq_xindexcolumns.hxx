@@ -69,7 +69,7 @@ protected:
         const OUString &indexName,
         const css::uno::Sequence< OUString > &columns );
 
-    virtual ~IndexColumns();
+    virtual ~IndexColumns() override;
 
 public: // XAppend
     virtual void SAL_CALL appendByDescriptor(

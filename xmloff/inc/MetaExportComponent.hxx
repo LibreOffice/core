@@ -34,7 +34,7 @@ public:
         OUString const & implementationName, SvXMLExportFlags nFlags
         );
 
-    virtual ~XMLMetaExportComponent();
+    virtual ~XMLMetaExportComponent() override;
 
 protected:
     // export the events off all autotexts

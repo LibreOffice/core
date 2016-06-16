@@ -32,7 +32,7 @@ private:
 
 public:
     SwWebTableShell(SwView &rView);
-    virtual ~SwWebTableShell();
+    virtual ~SwWebTableShell() override;
 };
 
 #endif

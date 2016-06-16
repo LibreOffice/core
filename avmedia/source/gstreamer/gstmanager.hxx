@@ -32,7 +32,7 @@ class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
 public:
 
     explicit Manager();
-    virtual ~Manager();
+    virtual ~Manager() override;
 
     // XManager
     virtual css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const OUString& aURL ) throw (css::uno::RuntimeException, std::exception) override;

@@ -52,7 +52,7 @@ class SVT_DLLPUBLIC SvtSlideSorterBarOptions: public utl::detail::Options
             \sa    member m_pDataContainer
         */
         SvtSlideSorterBarOptions();
-        virtual ~SvtSlideSorterBarOptions();
+        virtual ~SvtSlideSorterBarOptions() override;
 
         bool GetVisibleImpressView() const;
         void SetVisibleImpressView( bool bVisible );

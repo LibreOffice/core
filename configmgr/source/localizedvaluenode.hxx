@@ -51,7 +51,7 @@ public:
 private:
     LocalizedValueNode(LocalizedValueNode const & other);
 
-    virtual ~LocalizedValueNode();
+    virtual ~LocalizedValueNode() override;
 
     virtual Kind kind() const override;
 

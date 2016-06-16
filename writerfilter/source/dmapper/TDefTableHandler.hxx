@@ -69,7 +69,7 @@ private:
 
 public:
     TDefTableHandler();
-    virtual ~TDefTableHandler();
+    virtual ~TDefTableHandler() override;
 
     void fillCellProperties( size_t nCell, const ::std::shared_ptr< TablePropertyMap >& pCellProperties) const;
     void enableInteropGrabBag(const OUString& aName);

@@ -85,7 +85,7 @@ namespace reportdesign
         }
         cppu::IPropertyArrayHelper& getInfoHelper();
     protected:
-        virtual ~OShape();
+        virtual ~OShape() override;
     public:
         explicit OShape(css::uno::Reference< css::uno::XComponentContext > const & _xContext);
         explicit OShape(css::uno::Reference< css::uno::XComponentContext > const & _xContext

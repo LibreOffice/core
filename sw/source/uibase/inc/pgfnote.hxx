@@ -41,7 +41,7 @@ public:
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
 
-    virtual ~SwFootNotePage();
+    virtual ~SwFootNotePage() override;
     virtual void dispose() override;
 private:
 

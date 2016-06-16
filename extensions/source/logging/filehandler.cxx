@@ -83,7 +83,7 @@ namespace logging
     public:
         FileHandler(const css::uno::Reference<XComponentContext> &context,
                 const css::uno::Sequence<css::uno::Any> &arguments);
-        virtual ~FileHandler();
+        virtual ~FileHandler() override;
 
     private:
         // XLogHandler

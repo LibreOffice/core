@@ -36,7 +36,7 @@ protected:
 
 public:
     FileList() {};
-    virtual ~FileList();
+    virtual ~FileList() override;
 
     // Zuweisungsoperator
     FileList&           operator=( const FileList& rFileList );

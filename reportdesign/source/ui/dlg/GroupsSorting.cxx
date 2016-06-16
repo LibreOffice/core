@@ -113,7 +113,7 @@ class OFieldExpressionControl : public ::svt::EditBrowseBox
 
 public:
     OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent);
-    virtual ~OFieldExpressionControl();
+    virtual ~OFieldExpressionControl() override;
     virtual void dispose() override;
 
     // XContainerListener

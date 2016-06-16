@@ -43,7 +43,7 @@ private:
 
 public:
     SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxCTLOptionsPage();
+    virtual ~SvxCTLOptionsPage() override;
     virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

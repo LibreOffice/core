@@ -61,7 +61,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    virtual ~SwXDocumentIndex();
+    virtual ~SwXDocumentIndex() override;
 
     SwXDocumentIndex(SwTOXBaseSection &, SwDoc &);
 
@@ -196,7 +196,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    virtual ~SwXDocumentIndexMark();
+    virtual ~SwXDocumentIndexMark() override;
 
     SwXDocumentIndexMark(SwDoc & rDoc,
                 SwTOXType & rType, SwTOXMark & rMark);

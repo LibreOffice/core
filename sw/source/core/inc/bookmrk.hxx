@@ -99,7 +99,7 @@ namespace sw {
             {
             }
 
-            virtual ~MarkBase();
+            virtual ~MarkBase() override;
 
             const css::uno::WeakReference< css::text::XTextContent> & GetXBookmark() const
                     { return m_wXBookmark; }
@@ -150,7 +150,7 @@ namespace sw {
             void SetRefObject( SwServerObject* pObj );
 
             virtual void DeregisterFromDoc(SwDoc* const pDoc);
-            virtual ~DdeBookmark();
+            virtual ~DdeBookmark() override;
 
         private:
             tools::SvRef<SwServerObject> m_aRefObj;

@@ -38,7 +38,7 @@ namespace dbaui
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OSplitterView(vcl::Window* _pParent);
-        virtual ~OSplitterView();
+        virtual ~OSplitterView() override;
         // Window overrides
         virtual void dispose() override;
         virtual void GetFocus() override;

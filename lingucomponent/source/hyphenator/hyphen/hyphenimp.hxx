@@ -85,7 +85,7 @@ class Hyphenator :
 public:
     Hyphenator();
 
-    virtual ~Hyphenator();
+    virtual ~Hyphenator() override;
 
     // XSupportedLocales (for XHyphenator)
     virtual Sequence< Locale > SAL_CALL getLocales() throw(RuntimeException, std::exception) override;

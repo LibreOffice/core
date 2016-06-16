@@ -84,7 +84,7 @@ protected:
 
     bool IsValid() const;
 
-    virtual ~SwXCell();
+    virtual ~SwXCell() override;
 
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
@@ -167,7 +167,7 @@ class SwXTextTableRow final : public cppu::WeakImplHelper
     SwFrameFormat* GetFrameFormat() { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
     const SwFrameFormat* GetFrameFormat() const { return const_cast<SwXTextTableRow*>(this)->GetFrameFormat(); }
 protected:
-    virtual ~SwXTextTableRow();
+    virtual ~SwXTextTableRow() override;
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
@@ -272,7 +272,7 @@ public:
     SwUnoCursor&                  GetCursor();
     sw::UnoCursorPointer m_pUnoCursor;
     SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
-    virtual ~SwXTextTableCursor() { };
+    virtual ~SwXTextTableCursor() override { };
 };
 
 struct SwRangeDescriptor
@@ -305,7 +305,7 @@ private:
 
     SwXTextTable();
     SwXTextTable(SwFrameFormat& rFrameFormat);
-    virtual ~SwXTextTable();
+    virtual ~SwXTextTable() override;
 
 public:
     static css::uno::Reference<css::text::XTextTable>
@@ -426,7 +426,7 @@ private:
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
     SwXCellRange(const sw::UnoCursorPointer& pCursor, SwFrameFormat& rFrameFormat, SwRangeDescriptor& rDesc);
-    virtual ~SwXCellRange();
+    virtual ~SwXCellRange() override;
 
 public:
     static ::rtl::Reference<SwXCellRange> CreateXCellRange(
@@ -514,7 +514,7 @@ private:
     SwFrameFormat* GetFrameFormat();
     const SwFrameFormat* GetFrameFormat() const { return const_cast<SwXTableRows*>(this)->GetFrameFormat(); }
 protected:
-    virtual ~SwXTableRows();
+    virtual ~SwXTableRows() override;
 public:
     SwXTableRows(SwFrameFormat& rFrameFormat);
 
@@ -552,7 +552,7 @@ private:
     ::sw::UnoImplPtr<Impl> m_pImpl;
     SwFrameFormat* GetFrameFormat() const;
 protected:
-    virtual ~SwXTableColumns();
+    virtual ~SwXTableColumns() override;
 public:
     SwXTableColumns(SwFrameFormat& rFrameFormat);
 

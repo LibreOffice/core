@@ -241,7 +241,7 @@ class MappingDialog_Impl : public ModalDialog
 
 public:
     MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pDatMan);
-    virtual ~MappingDialog_Impl();
+    virtual ~MappingDialog_Impl() override;
     virtual void dispose() override;
 
     void    SetModified() {bModified = true;}
@@ -476,7 +476,7 @@ class DBChangeDialog_Impl : public ModalDialog
     DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
 public:
     DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* pMan );
-    virtual ~DBChangeDialog_Impl();
+    virtual ~DBChangeDialog_Impl() override;
     virtual void dispose() override;
 
     OUString     GetCurrentURL()const;

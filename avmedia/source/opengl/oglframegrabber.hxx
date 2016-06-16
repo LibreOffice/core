@@ -26,7 +26,7 @@ class OGLFrameGrabber : public FrameGrabber_BASE
 public:
 
     explicit OGLFrameGrabber( libgltf::glTFHandle& rHandle );
-    virtual ~OGLFrameGrabber();
+    virtual ~OGLFrameGrabber() override;
 
     // XFrameGrabber
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (css::uno::RuntimeException, std::exception) override;

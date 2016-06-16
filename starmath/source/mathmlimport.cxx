@@ -1754,7 +1754,7 @@ public:
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual ~SmXMLFlatDocContext_Impl();
+    virtual ~SmXMLFlatDocContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 i_nPrefix, const OUString& i_rLocalName, const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
 };

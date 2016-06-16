@@ -34,7 +34,7 @@ class BASIC_DLLPUBLIC SbProperty : public SbxProperty
     SbModule* pMod;
     bool     bInvalid;
     BASIC_DLLPRIVATE SbProperty( const OUString&, SbxDataType, SbModule* );
-    virtual ~SbProperty();
+    virtual ~SbProperty() override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICPROP,1);
     SbModule* GetModule() { return pMod; }
@@ -46,7 +46,7 @@ class BASIC_DLLPUBLIC SbProcedureProperty : public SbxProperty
 {
     bool mbSet;     // Flag for set command
 
-    virtual ~SbProcedureProperty();
+    virtual ~SbProcedureProperty() override;
 
 public:
     SbProcedureProperty( const OUString& r, SbxDataType t )

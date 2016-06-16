@@ -193,7 +193,7 @@ private:
     /// can be destroyed threadsafely, so no UnoImplPtr here
     ::rtl::Reference<SwXDocumentIndex> m_xParent;
 
-    virtual ~StyleAccess_Impl();
+    virtual ~StyleAccess_Impl() override;
 
 public:
     explicit StyleAccess_Impl(SwXDocumentIndex& rParentIdx);
@@ -238,7 +238,7 @@ private:
     /// can be destroyed threadsafely, so no UnoImplPtr here
     ::rtl::Reference<SwXDocumentIndex> m_xParent;
 
-    virtual ~TokenAccess_Impl();
+    virtual ~TokenAccess_Impl() override;
 
 public:
 

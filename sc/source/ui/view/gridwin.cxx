@@ -224,7 +224,7 @@ protected:
 public:
                 ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
-                virtual ~ScFilterListBox();
+                virtual ~ScFilterListBox() override;
     virtual void dispose() override;
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
@@ -345,7 +345,7 @@ class ScFilterFloatingWindow : public FloatingWindow
 {
 public:
     ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
-    virtual ~ScFilterFloatingWindow();
+    virtual ~ScFilterFloatingWindow() override;
     virtual void dispose() override;
 };
 

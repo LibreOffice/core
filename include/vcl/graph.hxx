@@ -126,7 +126,7 @@ public:
                     Graphic( const Animation& rAnimation );
                     Graphic( const GDIMetaFile& rMtf );
                     Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
-    virtual         ~Graphic();
+    virtual         ~Graphic() override;
 
     Graphic&        operator=( const Graphic& rGraphic );
     bool            operator==( const Graphic& rGraphic ) const;

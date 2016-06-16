@@ -46,7 +46,7 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::beans::XPropertySet> & rSectPropSet);
 
-    virtual ~XMLSectionSourceDDEImportContext();
+    virtual ~XMLSectionSourceDDEImportContext() override;
 
 protected:
 

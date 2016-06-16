@@ -107,7 +107,7 @@ namespace com { namespace sun { namespace star {
         void releaseAggregation();
 
     protected:
-        virtual ~OGeometryControlModel_Base();
+        virtual ~OGeometryControlModel_Base() override;
 
         // XAggregation
         css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _aType ) throw(css::uno::RuntimeException, std::exception) override;

@@ -42,7 +42,7 @@ namespace svx
     {
     public:
         SuggestionSet( vcl::Window* pParent );
-        virtual ~SuggestionSet();
+        virtual ~SuggestionSet() override;
         virtual void dispose() override;
 
         virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
@@ -53,7 +53,7 @@ namespace svx
     {
     public:
         SuggestionDisplay( vcl::Window* pParent, WinBits nBits );
-        virtual ~SuggestionDisplay();
+        virtual ~SuggestionDisplay() override;
         virtual void dispose() override;
 
         void DisplayListBox( bool bDisplayListBox );
@@ -139,7 +139,7 @@ namespace svx
         HangulHanjaConversionDialog(
                 vcl::Window* _pParent,
                 editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
-        virtual ~HangulHanjaConversionDialog();
+        virtual ~HangulHanjaConversionDialog() override;
         virtual void dispose() override;
 
     public:
@@ -221,7 +221,7 @@ namespace svx
         void                Init();       ///< reads settings from core and init controls
     public:
                             HangulHanjaOptionsDialog( vcl::Window* _pParent );
-        virtual             ~HangulHanjaOptionsDialog();
+        virtual             ~HangulHanjaOptionsDialog() override;
         virtual void        dispose() override;
 
         void                AddDict( const OUString& _rName, bool _bChecked );
@@ -240,7 +240,7 @@ namespace svx
         DECL_LINK_TYPED( ModifyHdl, Edit&, void );
     public:
         HangulHanjaNewDictDialog( vcl::Window* _pParent );
-        virtual ~HangulHanjaNewDictDialog();
+        virtual ~HangulHanjaNewDictDialog() override;
         virtual void dispose() override;
 
         bool GetName( OUString& _rRetName ) const;
@@ -260,7 +260,7 @@ namespace svx
         void                DoJump( bool _bUp );
     public:
                             SuggestionEdit( vcl::Window* pParent, WinBits nBits );
-        virtual             ~SuggestionEdit();
+        virtual             ~SuggestionEdit() override;
         virtual void        dispose() override;
         virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
         void init( ScrollBar* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext);
@@ -314,7 +314,7 @@ namespace svx
 
     public:
                         HangulHanjaEditDictDialog( vcl::Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );
-                        virtual ~HangulHanjaEditDictDialog();
+                        virtual ~HangulHanjaEditDictDialog() override;
         virtual void    dispose() override;
 
         void            UpdateScrollbar();

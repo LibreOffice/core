@@ -95,7 +95,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task:
         nFilterError( GRFILTER_OK )
         {}
 
-    virtual ~SdGRFFilter_ImplInteractionHdl();
+    virtual ~SdGRFFilter_ImplInteractionHdl() override;
 
     sal_uInt16 GetErrorCode() const { return nFilterError; };
 

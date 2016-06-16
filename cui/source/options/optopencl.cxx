@@ -240,7 +240,7 @@ public:
     DECL_LINK_TYPED(EditModifiedHdl, Edit&, void);
 
     ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplMatcher& rEntry, const OString& rTag);
-    virtual ~ListEntryDialog() { disposeOnce(); }
+    virtual ~ListEntryDialog() override { disposeOnce(); }
     virtual void dispose() override
     {
         mpOS.clear();

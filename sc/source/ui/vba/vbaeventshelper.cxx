@@ -116,7 +116,7 @@ class ScVbaEventListener : public ::cppu::WeakImplHelper< awt::XTopWindowListene
 {
 public:
     ScVbaEventListener( ScVbaEventsHelper& rVbaEvents, const uno::Reference< frame::XModel >& rxModel, ScDocShell* pDocShell );
-    virtual ~ScVbaEventListener();
+    virtual ~ScVbaEventListener() override;
 
     /** Starts listening to the passed document controller. */
     void startControllerListening( const uno::Reference< frame::XController >& rxController );

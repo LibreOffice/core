@@ -45,7 +45,7 @@ namespace rptui
 
     public:
         FixedTextColor(const OReportController & _aObserver);
-        virtual ~FixedTextColor();
+        virtual ~FixedTextColor() override;
 
         void    notifyPropertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
         void    notifyElementInserted( const css::uno::Reference< css::uno::XInterface >& _rxElement ) override;

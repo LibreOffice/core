@@ -71,7 +71,7 @@ namespace pcr
     public:
                                     OPropertyEditor (vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
 
-                                    virtual ~OPropertyEditor();
+                                    virtual ~OPropertyEditor() override;
         virtual void                dispose() override;
 
         void                        EnableUpdate();

@@ -153,7 +153,7 @@ public:
     ComponentContext(
         ContextEntry_Init const * pEntries, sal_Int32 nEntries,
         Reference< XComponentContext > const & xDelegate );
-    virtual ~ComponentContext();
+    virtual ~ComponentContext() override;
 
     // XComponentContext
     virtual Any SAL_CALL getValueByName( OUString const & rName )

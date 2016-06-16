@@ -98,7 +98,7 @@ public:
                            const OUString& aChartTypeServiceName,
                            tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
                            const css::awt::Size & rChartSize );
-    virtual ~SchXMLPlotAreaContext();
+    virtual ~SchXMLPlotAreaContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext* CreateChildContext(
@@ -153,7 +153,7 @@ public:
                              const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
                              sal_Int32& rIndex,
                              bool bSymbolSizeForSeriesIsMissingInFile );
-    virtual ~SchXMLDataPointContext();
+    virtual ~SchXMLDataPointContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
@@ -166,7 +166,7 @@ public:
             , sal_uInt16 nPrefix
             , const OUString& rLocalName
             , SchXMLPositionAttributesHelper& rPositioning );
-    virtual ~SchXMLCoordinateRegionContext();
+    virtual ~SchXMLCoordinateRegionContext() override;
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:
@@ -194,7 +194,7 @@ public:
                             const OUString& rLocalName,
                             css::uno::Reference< css::chart::XDiagram >& xDiagram,
                             ContextType eContextType );
-    virtual ~SchXMLWallFloorContext();
+    virtual ~SchXMLWallFloorContext() override;
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
@@ -220,7 +220,7 @@ public:
                         const OUString& rLocalName,
                         css::uno::Reference< css::chart::XDiagram >& xDiagram,
                         ContextType eContextType );
-    virtual ~SchXMLStockContext();
+    virtual ~SchXMLStockContext() override;
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
@@ -244,7 +244,7 @@ public:
         ContextType eContextType,
         tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
 
-    virtual ~SchXMLStatisticsObjectContext();
+    virtual ~SchXMLStatisticsObjectContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext* CreateChildContext(

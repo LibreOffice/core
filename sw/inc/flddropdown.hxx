@@ -39,7 +39,7 @@ public:
     /**
        Destructor
     */
-    virtual ~SwDropDownFieldType();
+    virtual ~SwDropDownFieldType() override;
 
     /**
        Create a copy of this field type.
@@ -117,7 +117,7 @@ public:
     /**
        Destructor
     */
-    virtual ~SwDropDownField();
+    virtual ~SwDropDownField() override;
 
     /**
        Returns the selected value.

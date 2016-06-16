@@ -130,7 +130,7 @@ public:
                     const ObjectPropertiesDialogParameter* pDialogParameter,
                     const ViewElementListProvider* pViewElementListProvider,
                     const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
-    virtual ~SchAttribTabDlg();
+    virtual ~SchAttribTabDlg() override;
     virtual void dispose() override;
 
     //pSymbolShapeProperties: Properties to be set on the symbollist shapes

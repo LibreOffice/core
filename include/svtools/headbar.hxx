@@ -270,7 +270,7 @@ private:
 
 public:
     HeaderBar( vcl::Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
-    virtual ~HeaderBar();
+    virtual ~HeaderBar() override;
     virtual void dispose() override;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;

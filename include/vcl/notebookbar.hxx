@@ -18,7 +18,7 @@ class NotebookBar : public Control, public VclBuilderContainer
 {
 public:
     NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame);
-    virtual ~NotebookBar();
+    virtual ~NotebookBar() override;
     virtual void dispose() SAL_OVERRIDE;
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;

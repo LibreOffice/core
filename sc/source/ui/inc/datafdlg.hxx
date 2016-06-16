@@ -54,7 +54,7 @@ private:
 
 public:
     ScDataFormDlg( vcl::Window* pParent, ScTabViewShell* pTabViewShell);
-    virtual ~ScDataFormDlg();
+    virtual ~ScDataFormDlg() override;
     virtual void dispose() override;
 
     void FillCtrls(SCROW nCurrentRow);

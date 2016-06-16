@@ -87,7 +87,7 @@ public:
                                     const OUString& rLName,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
-    virtual                     ~ScXMLDetectiveContext();
+    virtual                     ~ScXMLDetectiveContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
                                     sal_uInt16 nPrefix,
@@ -115,7 +115,7 @@ public:
                                     const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
-    virtual                     ~ScXMLDetectiveHighlightedContext();
+    virtual                     ~ScXMLDetectiveHighlightedContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
                                     sal_uInt16 nPrefix,
@@ -141,7 +141,7 @@ public:
                                     const OUString& rLName,
                                     const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList
                                     );
-    virtual                     ~ScXMLDetectiveOperationContext();
+    virtual                     ~ScXMLDetectiveOperationContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
                                     sal_uInt16 nPrefix,

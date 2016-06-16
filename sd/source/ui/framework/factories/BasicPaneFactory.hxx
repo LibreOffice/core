@@ -66,7 +66,7 @@ class BasicPaneFactory
 public:
     explicit BasicPaneFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~BasicPaneFactory();
+    virtual ~BasicPaneFactory() override;
 
     virtual void SAL_CALL disposing() override;
 

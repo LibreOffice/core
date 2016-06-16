@@ -84,7 +84,7 @@ namespace reportdesign
             l.notify();
         }
     protected:
-        virtual ~OFormattedField();
+        virtual ~OFormattedField() override;
     public:
         explicit OFormattedField(css::uno::Reference< css::uno::XComponentContext > const & _xContext);
         explicit OFormattedField(css::uno::Reference< css::uno::XComponentContext > const & _xContext

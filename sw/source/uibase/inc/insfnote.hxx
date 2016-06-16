@@ -66,7 +66,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
 
 public:
     SwInsFootNoteDlg(vcl::Window * pParent, SwWrtShell &rSh, bool bEd = false);
-    virtual ~SwInsFootNoteDlg();
+    virtual ~SwInsFootNoteDlg() override;
     virtual void dispose() override;
 
     const OUString& GetFontName() { return m_aFontName; }

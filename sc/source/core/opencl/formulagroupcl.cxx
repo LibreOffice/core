@@ -2529,7 +2529,7 @@ public:
         for (const auto & rSubArgument : mvSubArguments)
             rSubArgument->DumpInlineFun(decls, funs);
     }
-    virtual ~DynamicKernelSoPArguments()
+    virtual ~DynamicKernelSoPArguments() override
     {
         if (mpClmem2)
         {
@@ -3673,7 +3673,7 @@ class DynamicKernel : public CompiledFormula
 {
 public:
     DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize );
-    virtual ~DynamicKernel();
+    virtual ~DynamicKernel() override;
 
     static DynamicKernel* create( const ScCalcConfig& config, ScTokenArray& rCode, int nResultSize );
 

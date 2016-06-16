@@ -34,7 +34,7 @@ private:
     OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
 public:
     CellLineStyleValueSet( vcl::Window* pParent, const ResId& rResId);
-    virtual ~CellLineStyleValueSet();
+    virtual ~CellLineStyleValueSet() override;
     virtual void dispose() override;
 
     void SetUnit(const OUString* str);

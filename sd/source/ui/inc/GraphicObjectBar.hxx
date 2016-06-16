@@ -41,7 +41,7 @@ private:
 
 public:
     GraphicObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);
-    virtual ~GraphicObjectBar();
+    virtual ~GraphicObjectBar() override;
 
     void            GetAttrState( SfxItemSet& rSet );
     void            Execute( SfxRequest& rReq );

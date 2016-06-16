@@ -46,7 +46,7 @@ public:
                          SvXMLImportItemMapper& rIMap,
                          const SvXMLUnitConverter& rUnitConv );
 
-    virtual ~SvXMLItemSetContext();
+    virtual ~SvXMLItemSetContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

@@ -61,7 +61,7 @@ public:
         const bool bLandscape,
         const FieldUnit eFUnit,
         const SfxMapUnit eUnit );
-    virtual ~PageMarginControl();
+    virtual ~PageMarginControl() override;
     virtual void dispose() override;
 
 private:

@@ -184,7 +184,7 @@ namespace pcr
         UrlClickHandler( const Reference<XComponentContext>& _rContext, const Reference< XHyperlinkControl >& _rxControl );
 
     protected:
-        virtual ~UrlClickHandler();
+        virtual ~UrlClickHandler() override;
 
         // XActionListener
         virtual void SAL_CALL actionPerformed( const ActionEvent& rEvent ) throw (RuntimeException, std::exception) override;

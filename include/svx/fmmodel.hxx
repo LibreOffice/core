@@ -53,7 +53,7 @@ public:
     FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                 bool bUseExtColorTable);
 
-    virtual ~FmFormModel();
+    virtual ~FmFormModel() override;
 
     virtual SdrPage* AllocPage(bool bMasterPage) override;
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;

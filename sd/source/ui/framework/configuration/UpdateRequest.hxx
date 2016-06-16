@@ -51,7 +51,7 @@ class UpdateRequest
 {
 public:
     UpdateRequest() throw();
-    virtual ~UpdateRequest() throw();
+    virtual ~UpdateRequest() throw() override;
 
     // XConfigurationChangeOperation
 

@@ -37,7 +37,7 @@ namespace pdfi
         explicit WriterXmlOptimizer(PDFIProcessor& rProcessor) :
             m_rProcessor(rProcessor)
         {}
-        virtual ~WriterXmlOptimizer()
+        virtual ~WriterXmlOptimizer() override
         {}
 
         virtual void visit( HyperlinkElement&, const std::list< Element* >::const_iterator& ) override;
@@ -66,7 +66,7 @@ namespace pdfi
             m_rStyleContainer(rStyleContainer),
             m_rProcessor(rProcessor)
         {}
-        virtual ~WriterXmlFinalizer()
+        virtual ~WriterXmlFinalizer() override
         {}
 
         virtual void visit( HyperlinkElement&, const std::list< Element* >::const_iterator& ) override;
@@ -91,7 +91,7 @@ namespace pdfi
         explicit WriterXmlEmitter(EmitContext& rEmitContext) :
             m_rEmitContext(rEmitContext)
         {}
-        virtual ~WriterXmlEmitter()
+        virtual ~WriterXmlEmitter() override
         {}
 
         virtual void visit( HyperlinkElement&, const std::list< Element* >::const_iterator& ) override;

@@ -38,7 +38,7 @@ namespace dbaui
 
     public:
         OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar );
-        virtual ~OFieldDescGenWin();
+        virtual ~OFieldDescGenWin() override;
         virtual void dispose() override;
 
         virtual void GetFocus() override;

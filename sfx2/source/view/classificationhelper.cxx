@@ -116,7 +116,7 @@ public:
     SfxClassificationCategory* m_pCategory;
 
     SfxClassificationParser();
-    virtual ~SfxClassificationParser();
+    virtual ~SfxClassificationParser() override;
 
     virtual void SAL_CALL startDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 

@@ -93,7 +93,7 @@ namespace svxform
         void SAL_CALL dispose();
 
     protected:
-        virtual ~FormScriptListener();
+        virtual ~FormScriptListener() override;
 
     private:
         /** determines whether calling a given method at a given listener interface can be done asynchronously
@@ -147,7 +147,7 @@ namespace svxform
 
     public:
         explicit FormScriptingEnvironment( FmFormModel& _rModel );
-        virtual ~FormScriptingEnvironment();
+        virtual ~FormScriptingEnvironment() override;
         FormScriptingEnvironment(const FormScriptingEnvironment&) = delete;
         FormScriptingEnvironment& operator=(const FormScriptingEnvironment&) = delete;
 

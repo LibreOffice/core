@@ -99,7 +99,7 @@ protected:
 
 public:
                             SolverComponent();
-    virtual                 ~SolverComponent();
+    virtual                 ~SolverComponent() override;
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()

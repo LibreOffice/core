@@ -171,7 +171,7 @@ protected:
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
     SdrEditView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
-    virtual ~SdrEditView();
+    virtual ~SdrEditView() override;
 
 public:
     // each call of an undo-capable method from its view, generates an undo action.

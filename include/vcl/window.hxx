@@ -802,7 +802,7 @@ public:
     explicit                            Window( vcl::Window* pParent, WinBits nStyle = 0 );
 
                                         Window( vcl::Window* pParent, const ResId& rResId );
-    virtual                             ~Window();
+    virtual                             ~Window() override;
 
     ::OutputDevice const*               GetOutDev() const;
     ::OutputDevice*                     GetOutDev();

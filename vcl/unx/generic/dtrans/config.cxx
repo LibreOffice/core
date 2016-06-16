@@ -37,7 +37,7 @@ class DtransX11ConfigItem : public ::utl::ConfigItem
 
 public:
     DtransX11ConfigItem();
-    virtual ~DtransX11ConfigItem();
+    virtual ~DtransX11ConfigItem() override;
 
     sal_Int32 getSelectionTimeout() const { return m_nSelectionTimeout; }
 };

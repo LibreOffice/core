@@ -67,7 +67,7 @@ class BASIC_DLLPUBLIC SbClassFactory : public SbxFactory
 
 public:
     SbClassFactory();
-    virtual ~SbClassFactory();
+    virtual ~SbClassFactory() override;
 
     void AddClassModule( SbModule* pClassModule );
     void RemoveClassModule( SbModule* pClassModule );

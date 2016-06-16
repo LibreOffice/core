@@ -47,7 +47,7 @@ protected:
 public:
                     EditBox( vcl::Window* pParent, WinBits nBits );
 
-                    virtual ~EditBox();
+                    virtual ~EditBox() override;
     virtual void    dispose() override;
 
     MultiLineEdit*  GetEdit() {return pMEdit;}
@@ -64,7 +64,7 @@ class ArgEdit : public RefEdit
 {
 public:
             ArgEdit( vcl::Window* pParent, WinBits nBits );
-    virtual ~ArgEdit();
+    virtual ~ArgEdit() override;
     virtual void dispose() override;
 
     void    Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,

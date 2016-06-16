@@ -86,7 +86,7 @@ namespace svt
         OCommonPicker();
 
     protected:
-        virtual ~OCommonPicker();
+        virtual ~OCommonPicker() override;
 
         // overridables
 

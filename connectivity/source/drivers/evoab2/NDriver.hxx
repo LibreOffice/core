@@ -51,7 +51,7 @@ namespace connectivity
 
         public:
             explicit OEvoabDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
-            virtual ~OEvoabDriver();
+            virtual ~OEvoabDriver() override;
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;

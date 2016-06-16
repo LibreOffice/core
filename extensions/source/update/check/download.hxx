@@ -48,7 +48,7 @@ struct DownloadInteractionHandler : public virtual salhelper::SimpleReferenceObj
     virtual void downloadFinished(const OUString& rFileName) = 0;
 
 protected:
-    virtual ~DownloadInteractionHandler() {}
+    virtual ~DownloadInteractionHandler() override {}
 };
 
 

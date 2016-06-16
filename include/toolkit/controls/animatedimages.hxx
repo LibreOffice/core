@@ -72,7 +72,7 @@ namespace toolkit
         virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& i_listener ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-                                        virtual ~AnimatedImagesControlModel();
+                                        virtual ~AnimatedImagesControlModel() override;
 
         css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
         ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;

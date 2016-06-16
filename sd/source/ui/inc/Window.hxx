@@ -45,7 +45,7 @@ class Window
 {
 public:
     Window (vcl::Window* pParent);
-    virtual ~Window ();
+    virtual ~Window () override;
     virtual void dispose() override;
 
     void    SetViewShell (ViewShell* pViewSh);

@@ -82,7 +82,7 @@ class WeakModifyListenerAdapter :
 public:
     explicit WeakModifyListenerAdapter(
         const css::uno::WeakReference< css::util::XModifyListener > & xListener );
-    virtual ~WeakModifyListenerAdapter();
+    virtual ~WeakModifyListenerAdapter() override;
 
 protected:
     // ____ XModifyListener ____
@@ -96,7 +96,7 @@ class WeakSelectionChangeListenerAdapter :
 public:
     explicit WeakSelectionChangeListenerAdapter(
         const css::uno::Reference< css::view::XSelectionChangeListener > & xListener );
-    virtual ~WeakSelectionChangeListenerAdapter();
+    virtual ~WeakSelectionChangeListenerAdapter() override;
 
 protected:
     // ____ XSelectionChangeListener ____

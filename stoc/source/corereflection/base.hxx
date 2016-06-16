@@ -99,7 +99,7 @@ public:
 
     // ctor/ dtor
     explicit IdlReflectionServiceImpl( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~IdlReflectionServiceImpl();
+    virtual ~IdlReflectionServiceImpl() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -151,7 +151,7 @@ public:
     IdlClassImpl( IdlReflectionServiceImpl * pReflection,
                   const OUString & rName, typelib_TypeClass eTypeClass,
                   typelib_TypeDescription * pTypeDescr );
-    virtual ~IdlClassImpl();
+    virtual ~IdlClassImpl() override;
 
     // XIdlClassImpl default implementation
     virtual css::uno::TypeClass SAL_CALL getTypeClass() throw(css::uno::RuntimeException, std::exception) override;
@@ -209,7 +209,7 @@ public:
         , _nMethods( 0 )
         , _nAttributes( 0 )
         {}
-    virtual ~InterfaceIdlClassImpl();
+    virtual ~InterfaceIdlClassImpl() override;
 
     // IdlClassImpl modifications
     virtual sal_Bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -242,7 +242,7 @@ public:
         : IdlClassImpl( pReflection, rName, eTypeClass, pTypeDescr )
         , _pFields( nullptr )
         {}
-    virtual ~CompoundIdlClassImpl();
+    virtual ~CompoundIdlClassImpl() override;
 
     // IdlClassImpl modifications
     virtual sal_Bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -305,7 +305,7 @@ public:
         : IdlClassImpl( pReflection, rName, eTypeClass, pTypeDescr )
         , _pFields( nullptr )
         {}
-    virtual ~EnumIdlClassImpl();
+    virtual ~EnumIdlClassImpl() override;
 
     // IdlClassImpl modifications
     virtual css::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) throw(css::uno::RuntimeException, std::exception) override;
@@ -337,7 +337,7 @@ public:
     // ctor/ dtor
     IdlMemberImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                    typelib_TypeDescription * pTypeDescr, typelib_TypeDescription * pDeclTypeDescr );
-    virtual ~IdlMemberImpl();
+    virtual ~IdlMemberImpl() override;
 
     // XIdlMember
     virtual css::uno::Reference< css::reflection::XIdlClass > SAL_CALL getDeclaringClass() throw(css::uno::RuntimeException, std::exception) override;

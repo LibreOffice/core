@@ -41,7 +41,7 @@ namespace dbaxml
 
     public:
         explicit OXMLAutoStylePoolP(ODBExport& rXMLExport);
-        virtual ~OXMLAutoStylePoolP();
+        virtual ~OXMLAutoStylePoolP() override;
     };
 } // dbaxml
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLAUTOSTYLE_HXX

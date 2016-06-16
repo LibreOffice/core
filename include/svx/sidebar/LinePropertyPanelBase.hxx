@@ -68,7 +68,7 @@ namespace sidebar
 class SVX_DLLPUBLIC LinePropertyPanelBase : public PanelLayout
 {
 public:
-    virtual ~LinePropertyPanelBase();
+    virtual ~LinePropertyPanelBase() override;
     virtual void dispose() override;
 
     virtual void DataChanged(

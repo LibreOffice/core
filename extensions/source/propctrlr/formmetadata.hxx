@@ -85,7 +85,7 @@ namespace pcr
         DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const css::uno::Type& _rType, sal_Int32 _nPropertyId );
 
     protected:
-        virtual ~DefaultEnumRepresentation();
+        virtual ~DefaultEnumRepresentation() override;
 
     protected:
         // IPropertyEnumRepresentation implementqation

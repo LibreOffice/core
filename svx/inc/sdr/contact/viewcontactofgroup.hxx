@@ -45,7 +45,7 @@ namespace sdr
         public:
             // basic constructor, used from SdrObject.
             explicit ViewContactOfGroup(SdrObjGroup& rGroup);
-            virtual ~ViewContactOfGroup();
+            virtual ~ViewContactOfGroup() override;
 
         protected:
             // This method is responsible for creating the graphical visualisation data

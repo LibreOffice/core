@@ -33,7 +33,7 @@ namespace fileaccess {
     {
     public:
         XRow_impl( shell* pShell,const css::uno::Sequence< css::uno::Any >& aValueMap );
-        virtual ~XRow_impl();
+        virtual ~XRow_impl() override;
 
         virtual sal_Bool SAL_CALL
         wasNull(

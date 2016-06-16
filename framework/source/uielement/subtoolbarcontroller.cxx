@@ -48,7 +48,7 @@ class SubToolBarController : public ToolBarBase
     void disposeUIElement();
 public:
     explicit SubToolBarController( const css::uno::Sequence< css::uno::Any >& rxArgs );
-    virtual ~SubToolBarController();
+    virtual ~SubToolBarController() override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rxArgs ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;

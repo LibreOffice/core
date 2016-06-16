@@ -56,7 +56,7 @@ class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
          SvtMenuOptions();
-        virtual ~SvtMenuOptions();
+        virtual ~SvtMenuOptions() override;
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Menu/..."

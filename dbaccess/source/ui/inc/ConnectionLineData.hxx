@@ -46,7 +46,7 @@ namespace dbaui
         friend bool operator==(const OConnectionLineData& lhs, const OConnectionLineData& rhs);
         friend bool operator!=(const OConnectionLineData& lhs, const OConnectionLineData& rhs) { return !(lhs == rhs); }
     protected:
-        virtual ~OConnectionLineData();
+        virtual ~OConnectionLineData() override;
     public:
         OConnectionLineData();
         OConnectionLineData( const OUString& rSourceFieldName, const OUString& rDestFieldName );

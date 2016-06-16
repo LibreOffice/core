@@ -117,7 +117,7 @@ namespace connectivity
             void flushConnections();
         protected:
             /// dtor
-            virtual ~ODriverDelegator();
+            virtual ~ODriverDelegator() override;
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
 

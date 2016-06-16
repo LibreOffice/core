@@ -97,7 +97,7 @@ class ExtensionRemovedListener : public ::cppu::WeakImplHelper<css::lang::XEvent
 public:
 
     explicit ExtensionRemovedListener( ExtensionBox_Impl *pParent ) { m_pParent = pParent; }
-    virtual ~ExtensionRemovedListener();
+    virtual ~ExtensionRemovedListener() override;
 
 
     // XEventListener
@@ -168,7 +168,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     void Init();
 public:
     explicit ExtensionBox_Impl(vcl::Window* pParent);
-    virtual ~ExtensionBox_Impl();
+    virtual ~ExtensionBox_Impl() override;
     virtual void dispose() override;
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;

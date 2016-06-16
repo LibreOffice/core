@@ -206,7 +206,7 @@ public:
 
 
                         SAL_DLLPRIVATE SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
-                        SAL_DLLPRIVATE virtual ~SdDrawDocument();
+                        SAL_DLLPRIVATE virtual ~SdDrawDocument() override;
 
     SAL_DLLPRIVATE SdDrawDocument*     AllocSdDrawDocument() const;
     SAL_DLLPRIVATE virtual SdrModel*   AllocModel() const override; //forwards to AllocSdDrawDocument

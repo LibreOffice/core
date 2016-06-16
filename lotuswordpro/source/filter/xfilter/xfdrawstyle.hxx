@@ -80,7 +80,7 @@ class XFDrawStyle : public XFStyle
 public:
     XFDrawStyle();
 
-    virtual ~XFDrawStyle();
+    virtual ~XFDrawStyle() override;
 
 public:
     /**

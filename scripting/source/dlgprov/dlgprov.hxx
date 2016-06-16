@@ -111,7 +111,7 @@ namespace dlgprov
     public:
         explicit DialogProviderImpl(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-        virtual ~DialogProviderImpl();
+        virtual ~DialogProviderImpl() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  )

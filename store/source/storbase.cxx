@@ -89,7 +89,7 @@ public:
 protected:
     /** Destruction.
      */
-    virtual ~Allocator_Impl();
+    virtual ~Allocator_Impl() override;
 
 private:
     /** Representation.

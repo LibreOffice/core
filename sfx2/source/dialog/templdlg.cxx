@@ -85,7 +85,7 @@ public:
     StyleLBoxString(const OUString& sText,
                     const SfxStyleFamily& eStyleFamily);
 
-    virtual ~StyleLBoxString();
+    virtual ~StyleLBoxString() override;
 
     virtual void Paint(const Point& aPos,
                        SvTreeListBox& rDevice,

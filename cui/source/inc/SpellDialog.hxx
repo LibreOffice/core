@@ -80,7 +80,7 @@ protected:
 
 public:
     SentenceEditWindow_Impl(vcl::Window* pParent, WinBits nBits);
-    virtual ~SentenceEditWindow_Impl();
+    virtual ~SentenceEditWindow_Impl() override;
 
     void            Init(VclPtr<ToolBox> &rToolbar);
     void            SetModifyHdl(const Link<Edit&,void>& rLink) override { m_aModifyLink = rLink;}
@@ -227,7 +227,7 @@ public:
         svx::SpellDialogChildWindow* pChildWindow,
         vcl::Window * pParent,
         SfxBindings* pBindings);
-    virtual ~SpellDialog();
+    virtual ~SpellDialog() override;
     virtual void dispose() override;
 
     virtual bool    Close() override;

@@ -40,7 +40,7 @@ public:
         const OUString & rServiceName,
         StackMode eStackMode,
         sal_Int32 nNumberOfLines );
-    virtual ~ColumnLineChartTypeTemplate();
+    virtual ~ColumnLineChartTypeTemplate() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

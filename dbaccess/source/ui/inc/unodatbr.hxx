@@ -117,7 +117,7 @@ namespace dbaui
     // attribute access
     public:
         SbaTableQueryBrowser(const css::uno::Reference< css::uno::XComponentContext >& _rM);
-        virtual ~SbaTableQueryBrowser();
+        virtual ~SbaTableQueryBrowser() override;
 
         enum EntryType
         {

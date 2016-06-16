@@ -33,7 +33,7 @@ class OOXMLValue : public Value
 public:
     typedef std::shared_ptr<OOXMLValue> Pointer_t;
     OOXMLValue();
-    virtual ~OOXMLValue();
+    virtual ~OOXMLValue() override;
 
     virtual int getInt() const override;
     ;
@@ -78,7 +78,7 @@ protected:
     mutable OOXMLBinaryObjectReference::Pointer_t mpBinaryObj;
 public:
     explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t pBinaryObj);
-    virtual ~OOXMLBinaryValue();
+    virtual ~OOXMLBinaryValue() override;
 
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
 #ifdef DEBUG_WRITERFILTER
@@ -96,7 +96,7 @@ public:
     static OOXMLValue::Pointer_t Create (bool bValue);
     static OOXMLValue::Pointer_t Create (const char *pValue);
 
-    virtual ~OOXMLBooleanValue();
+    virtual ~OOXMLBooleanValue() override;
 
     virtual int getInt() const override;
     virtual css::uno::Any getAny() const override;
@@ -112,7 +112,7 @@ protected:
     OUString mStr;
 public:
     explicit OOXMLStringValue(const OUString & rStr);
-    virtual ~OOXMLStringValue();
+    virtual ~OOXMLStringValue() override;
 
     virtual css::uno::Any getAny() const override;
     virtual OUString getString() const override;
@@ -129,7 +129,7 @@ protected:
 
 public:
     explicit OOXMLInputStreamValue(css::uno::Reference<css::io::XInputStream> xInputStream);
-    virtual ~OOXMLInputStreamValue();
+    virtual ~OOXMLInputStreamValue() override;
 
     virtual css::uno::Any getAny() const override;
 #ifdef DEBUG_WRITERFILTER
@@ -187,7 +187,7 @@ class OOXMLPropertySetValue : public OOXMLValue
     OOXMLPropertySet::Pointer_t mpPropertySet;
 public:
     explicit OOXMLPropertySetValue(OOXMLPropertySet::Pointer_t pPropertySet);
-    virtual ~OOXMLPropertySetValue();
+    virtual ~OOXMLPropertySetValue() override;
 
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
 #ifdef DEBUG_WRITERFILTER
@@ -203,7 +203,7 @@ protected:
     explicit OOXMLIntegerValue(sal_Int32 nValue);
 public:
     static OOXMLValue::Pointer_t Create (sal_Int32 nValue);
-    virtual ~OOXMLIntegerValue();
+    virtual ~OOXMLIntegerValue() override;
 
     virtual int getInt() const override;
     virtual css::uno::Any getAny() const override;
@@ -220,7 +220,7 @@ protected:
 public:
     explicit OOXMLHexValue(sal_uInt32 nValue);
     explicit OOXMLHexValue(const char * pValue);
-    virtual ~OOXMLHexValue();
+    virtual ~OOXMLHexValue() override;
 
     virtual int getInt() const override;
 #ifdef DEBUG_WRITERFILTER
@@ -236,7 +236,7 @@ protected:
     sal_uInt32 mnValue;
 public:
     explicit OOXMLUniversalMeasureValue(const char * pValue);
-    virtual ~OOXMLUniversalMeasureValue();
+    virtual ~OOXMLUniversalMeasureValue() override;
 
     virtual int getInt() const override;
 #ifdef DEBUG_WRITERFILTER
@@ -251,7 +251,7 @@ protected:
     css::uno::Reference<css::drawing::XShape> mrShape;
 public:
     explicit OOXMLShapeValue(css::uno::Reference<css::drawing::XShape> rShape);
-    virtual ~OOXMLShapeValue();
+    virtual ~OOXMLShapeValue() override;
 
     virtual css::uno::Any getAny() const override;
 #ifdef DEBUG_WRITERFILTER
@@ -266,7 +266,7 @@ protected:
     css::uno::Reference< css::embed::XEmbeddedObject > component;
 public:
     explicit OOXMLStarMathValue( css::uno::Reference< css::embed::XEmbeddedObject > component );
-    virtual ~OOXMLStarMathValue();
+    virtual ~OOXMLStarMathValue() override;
 
     virtual css::uno::Any getAny() const override;
 #ifdef DEBUG_WRITERFILTER

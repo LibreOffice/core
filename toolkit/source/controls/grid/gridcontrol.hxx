@@ -134,7 +134,7 @@ public:
     using UnoControl::getPeer;
 
 protected:
-    virtual ~UnoGridControl();
+    virtual ~UnoGridControl() override;
 
 private:
     SelectionListenerMultiplexer                m_aSelectionListeners;

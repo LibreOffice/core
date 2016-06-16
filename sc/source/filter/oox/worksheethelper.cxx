@@ -213,7 +213,7 @@ public:
                             const ISegmentProgressBarRef& rxProgressBar,
                             WorksheetType eSheetType,
                             sal_Int16 nSheet );
-    virtual            ~WorksheetGlobals() {}
+    virtual            ~WorksheetGlobals() override {}
 
     /** Returns true, if this helper refers to an existing Calc sheet. */
     inline bool         isValidSheet() const { return mxSheet.is(); }

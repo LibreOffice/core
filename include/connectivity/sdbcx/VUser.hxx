@@ -64,7 +64,7 @@ namespace connectivity
             OUser(bool _bCase);
             OUser(const OUString& Name,bool _bCase);
 
-            virtual ~OUser( );
+            virtual ~OUser( ) override;
 
             DECLARE_SERVICE_INFO();
 

@@ -56,7 +56,7 @@ namespace rptxml
                     ,const OUString& rLName
                     ,const css::uno::Reference< css::report::XReportComponent >& _xComponent
                     ,OXMLTable* _pContainer);
-        virtual ~OXMLReportElementBase();
+        virtual ~OXMLReportElementBase() override;
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

@@ -31,7 +31,7 @@ private:
 
 public:
                     TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uInt32 nPara );
-                    virtual ~TextUndoDelPara();
+                    virtual ~TextUndoDelPara() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -47,7 +47,7 @@ private:
 
 public:
                     TextUndoConnectParas( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nSepPos );
-                    virtual ~TextUndoConnectParas();
+                    virtual ~TextUndoConnectParas() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -63,7 +63,7 @@ private:
 
 public:
                     TextUndoSplitPara( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nSepPos );
-                    virtual ~TextUndoSplitPara();
+                    virtual ~TextUndoSplitPara() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;

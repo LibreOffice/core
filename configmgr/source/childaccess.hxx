@@ -118,7 +118,7 @@ public:
     void commitChanges(bool valid, Modifications * globalModifications);
 
 private:
-    virtual ~ChildAccess();
+    virtual ~ChildAccess() override;
 
     virtual void addTypes(
         std::vector< css::uno::Type > * types) const override;

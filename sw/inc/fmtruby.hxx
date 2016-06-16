@@ -37,7 +37,7 @@ class SW_DLLPUBLIC SwFormatRuby : public SfxPoolItem
 public:
     SwFormatRuby( const OUString& rRubyText );
     SwFormatRuby( const SwFormatRuby& rAttr );
-    virtual ~SwFormatRuby();
+    virtual ~SwFormatRuby() override;
 
     SwFormatRuby& operator=( const SwFormatRuby& rAttr );
 

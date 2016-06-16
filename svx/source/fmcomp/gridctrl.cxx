@@ -136,7 +136,7 @@ class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
 
 public:
     GridFieldValueListener(DbGridControl& _rParent, const Reference< XPropertySet >& xField, sal_uInt16 _nId);
-    virtual ~GridFieldValueListener();
+    virtual ~GridFieldValueListener() override;
 
     virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException ) override;
 
@@ -198,7 +198,7 @@ class DisposeListenerGridBridge : public FmXDisposeListener
 
 public:
     DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject);
-    virtual ~DisposeListenerGridBridge();
+    virtual ~DisposeListenerGridBridge() override;
 
     virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) override { m_rParent.disposing(_nId, _rEvent); }
 };

@@ -75,7 +75,7 @@ namespace comphelper
         OSelectionChangeMultiplexer(const OSelectionChangeMultiplexer&) = delete;
         OSelectionChangeMultiplexer& operator=(const OSelectionChangeMultiplexer&) = delete;
     protected:
-        virtual ~OSelectionChangeMultiplexer();
+        virtual ~OSelectionChangeMultiplexer() override;
     public:
         OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  css::uno::Reference< css::view::XSelectionSupplier>& _rxSet);
 

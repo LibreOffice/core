@@ -188,7 +188,7 @@ protected:
 
 public:
     ViewTabListBox_Impl( vcl::Window* pParentWin, SvtFileView_Impl* pParent, FileViewFlags nFlags );
-    virtual ~ViewTabListBox_Impl();
+    virtual ~ViewTabListBox_Impl() override;
     virtual void dispose() override;
 
     virtual void    Resize() override;

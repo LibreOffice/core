@@ -81,7 +81,7 @@ public:
                 const Rectangle& rBounds,
                 const css::uno::Reference< css::accessibility::XAccessible >& xParent,
                 long nIndexInParent );
-    virtual ~SvxPixelCtlAccessibleChild();
+    virtual ~SvxPixelCtlAccessibleChild() override;
 
     //XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;
@@ -169,7 +169,7 @@ class SvxPixelCtlAccessible :
 
 public:
     SvxPixelCtlAccessible(SvxPixelCtl& rWindow);
-    virtual ~SvxPixelCtlAccessible();
+    virtual ~SvxPixelCtlAccessible() override;
 
     void ensureIsAlive() const throw ( css::lang::DisposedException );
 

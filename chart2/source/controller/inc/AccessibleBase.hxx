@@ -103,7 +103,7 @@ public:
     AccessibleBase( const AccessibleElementInfo & rAccInfo,
                     bool bMayHaveChildren,
                     bool bAlwaysTransparent = false );
-    virtual ~AccessibleBase();
+    virtual ~AccessibleBase() override;
 
 protected:
     // for all calls to protected methods it is assumed that the mutex is locked

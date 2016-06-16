@@ -59,7 +59,7 @@ namespace framework
 
         public:
             NewMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~NewMenuController();
+            virtual ~NewMenuController() override;
 
             // XServiceInfo
             DECLARE_XSERVICEINFO

@@ -174,7 +174,7 @@ public:
         , XMLNS_DIALOGS_UID( rOther.XMLNS_DIALOGS_UID )
         , XMLNS_SCRIPT_UID( rOther.XMLNS_SCRIPT_UID ) {}
 
-    virtual ~DialogImport();
+    virtual ~DialogImport() override;
 
     const css::uno::Reference< css::frame::XModel >& getDocOwner() { return _xDoc; }
 
@@ -214,7 +214,7 @@ public:
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport );
-    virtual ~ElementBase();
+    virtual ~ElementBase() override;
 
     // XElement
     virtual css::uno::Reference<css::xml::input::XElement> SAL_CALL getParent()

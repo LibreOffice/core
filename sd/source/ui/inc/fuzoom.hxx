@@ -43,7 +43,7 @@ public:
     virtual void Deactivate() override;      ///< deactivates the function
 
 protected:
-    virtual ~FuZoom();
+    virtual ~FuZoom() override;
 
     Point       aBeginPosPix;
     Point       aBeginPos;

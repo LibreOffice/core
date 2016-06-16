@@ -144,7 +144,7 @@ class VectorRef : public DynamicKernelArgument
 {
 public:
     VectorRef( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft, int index = 0 );
-    virtual ~VectorRef();
+    virtual ~VectorRef() override;
 
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const override;
@@ -197,7 +197,7 @@ public:
     typedef std::vector<DynamicKernelArgumentRef> SubArguments;
     virtual void GenSlidingWindowFunction( std::stringstream&,
         const std::string&, SubArguments& ) = 0;
-    virtual ~SlidingFunctionBase() { }
+    virtual ~SlidingFunctionBase() override { }
 };
 
 class Normal : public SlidingFunctionBase

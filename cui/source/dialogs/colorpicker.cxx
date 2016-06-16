@@ -184,7 +184,7 @@ class ColorFieldControl : public Control
 {
 public:
     ColorFieldControl(vcl::Window* pParent, WinBits nStyle);
-    virtual ~ColorFieldControl();
+    virtual ~ColorFieldControl() override;
 
     virtual void dispose() override;
 
@@ -595,7 +595,7 @@ class ColorSliderControl : public Control
 {
 public:
     ColorSliderControl( vcl::Window* pParent, WinBits nStyle );
-    virtual ~ColorSliderControl();
+    virtual ~ColorSliderControl() override;
     virtual void dispose() override;
 
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
@@ -866,7 +866,7 @@ class ColorPickerDialog : public ModalDialog
 {
 public:
     ColorPickerDialog(vcl::Window* pParent, sal_Int32 nColor, sal_Int16 nMode);
-    virtual ~ColorPickerDialog()
+    virtual ~ColorPickerDialog() override
     {
         disposeOnce();
     }

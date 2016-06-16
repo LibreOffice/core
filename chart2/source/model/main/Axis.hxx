@@ -55,7 +55,7 @@ class Axis :
 {
 public:
     explicit Axis( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~Axis();
+    virtual ~Axis() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

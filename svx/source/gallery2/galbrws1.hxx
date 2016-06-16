@@ -120,7 +120,7 @@ public:
                                 Gallery* pGallery,
                                 const ::std::function<sal_Bool (const KeyEvent&,Window*)>& rKeyInputHandler,
                                 const ::std::function<void ()>& rThemeSlectionHandler);
-                            virtual ~GalleryBrowser1();
+                            virtual ~GalleryBrowser1() override;
     virtual void            dispose() override;
 
     void                    SelectTheme( sal_uInt16 nThemePos ) { mpThemes->SelectEntryPos( nThemePos ); SelectThemeHdl( *mpThemes ); }

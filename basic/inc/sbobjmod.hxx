@@ -34,7 +34,7 @@
 class BASIC_DLLPUBLIC SbObjModule : public SbModule
 {
 protected:
-    virtual ~SbObjModule();
+    virtual ~SbObjModule() override;
 
 public:
     SbObjModule( const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
@@ -61,7 +61,7 @@ class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
     void InitObject();
 public:
     SbUserFormModule( const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsVBACompat );
-    virtual ~SbUserFormModule();
+    virtual ~SbUserFormModule() override;
     virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) override;
     void ResetApiObj( bool bTriggerTerminateEvent = true );
     void Unload();

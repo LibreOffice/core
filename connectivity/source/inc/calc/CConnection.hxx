@@ -47,7 +47,7 @@ namespace connectivity
 
         public:
             OCalcConnection(ODriver* _pDriver);
-            virtual ~OCalcConnection();
+            virtual ~OCalcConnection() override;
 
             virtual void construct(const OUString& _rUrl,
                                    const css::uno::Sequence< css::beans::PropertyValue >& _rInfo )

@@ -38,7 +38,7 @@ class SD_DLLPUBLIC FrameView
 public:
     FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView = nullptr );
     FrameView(const FrameView& rFrameView);
-    virtual ~FrameView();
+    virtual ~FrameView() override;
 
     void Connect();
     void Disconnect();

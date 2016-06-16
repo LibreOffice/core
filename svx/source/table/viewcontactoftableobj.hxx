@@ -43,7 +43,7 @@ namespace sdr
         public:
             // basic constructor, used from SdrObject.
             explicit ViewContactOfTableObj(sdr::table::SdrTableObj& rTextObj);
-            virtual ~ViewContactOfTableObj();
+            virtual ~ViewContactOfTableObj() override;
         };
     } // end of namespace contact
 } // end of namespace sdr

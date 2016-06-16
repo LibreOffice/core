@@ -78,7 +78,7 @@ class KDEXLib : public QObject, public SalXLib
 
     public:
         KDEXLib();
-        virtual ~KDEXLib();
+        virtual ~KDEXLib() override;
 
         virtual void Init() override;
         virtual SalYieldResult Yield( bool bWait, bool bHandleAllCurrentEvents ) override;

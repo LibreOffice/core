@@ -403,7 +403,7 @@ public:
     bool bOrganizerMode : 1;
 
     Writer();
-    virtual ~Writer();
+    virtual ~Writer() override;
 
     virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* = nullptr );
             sal_uLong Write( SwPaM&, SvStream&,  const OUString* = nullptr );

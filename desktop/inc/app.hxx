@@ -70,7 +70,7 @@ class Desktop : public Application
         };
 
                                 Desktop();
-                                virtual ~Desktop();
+                                virtual ~Desktop() override;
         virtual int             Main( ) override;
         virtual void            Init() override;
         virtual void            InitFinished() override;

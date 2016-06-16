@@ -111,7 +111,7 @@ private:
     SAL_DLLPRIVATE void         ImplDeleteCachedTheme( GalleryTheme* pTheme );
 
                                 Gallery( const OUString& rMultiPath );
-                                virtual ~Gallery();
+                                virtual ~Gallery() override;
 
 public:
 

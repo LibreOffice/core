@@ -38,7 +38,7 @@ namespace oox { namespace ppt {
     class TimeNodeContext : public ::oox::core::FragmentHandler2
     {
     public:
-        virtual ~TimeNodeContext() throw();
+        virtual ~TimeNodeContext() throw() override;
 
         static TimeNodeContext * SAL_CALL makeContext( ::oox::core::FragmentHandler2& rParent, sal_Int32  aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode );
 
@@ -56,7 +56,7 @@ class TimeNodeListContext : public ::oox::core::FragmentHandler2
 public:
     TimeNodeListContext( ::oox::core::FragmentHandler2& rParent, TimeNodePtrList & aList ) throw();
 
-    virtual ~TimeNodeListContext() throw();
+    virtual ~TimeNodeListContext() throw() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
 

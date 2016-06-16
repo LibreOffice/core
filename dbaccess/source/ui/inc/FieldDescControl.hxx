@@ -174,7 +174,7 @@ namespace dbaui
 
     public:
         OFieldDescControl( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar);
-        virtual ~OFieldDescControl();
+        virtual ~OFieldDescControl() override;
         virtual void        dispose() override;
 
         void                DisplayData(OFieldDescription* pFieldDescr );

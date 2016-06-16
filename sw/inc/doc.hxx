@@ -462,7 +462,7 @@ public:
 
     // Life cycle
     SwDoc();
-    virtual ~SwDoc();
+    virtual ~SwDoc() override;
 
     bool IsInDtor() const { return mbDtor; }
 

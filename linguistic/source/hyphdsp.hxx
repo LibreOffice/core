@@ -79,7 +79,7 @@ class HyphenatorDispatcher :
 
 public:
     explicit HyphenatorDispatcher( LngSvcMgr &rLngSvcMgr );
-    virtual ~HyphenatorDispatcher();
+    virtual ~HyphenatorDispatcher() override;
 
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL

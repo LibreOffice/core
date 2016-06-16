@@ -48,7 +48,7 @@ public:
         SdrModel& rDrawModel,
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         eGraphicObjectType eObjectType = FILLED_DATA_POINT );
-    virtual ~GraphicPropertyItemConverter();
+    virtual ~GraphicPropertyItemConverter() override;
 
 protected:
     virtual const sal_uInt16 * GetWhichPairs() const override;

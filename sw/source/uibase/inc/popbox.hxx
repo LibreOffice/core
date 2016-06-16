@@ -32,7 +32,7 @@ protected:
 
 public:
     SwHelpToolBox(SwNavigationPI* pParent, const ResId &);
-    virtual ~SwHelpToolBox();
+    virtual ~SwHelpToolBox() override;
 };
 
 

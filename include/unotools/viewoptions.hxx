@@ -119,7 +119,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions : public utl::detail::Op
 
          SvtViewOptions(       EViewType        eType     ,
                          const OUString& sViewName );
-        virtual ~SvtViewOptions();
+        virtual ~SvtViewOptions() override;
 
         /*-****************************************************************************************************
             @short      support preload of these config item

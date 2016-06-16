@@ -170,7 +170,7 @@ class SvxDummyTextSource : public SvxEditSource, public SvxTextForwarder
 public:
 
     // SvxEditSource
-    virtual ~SvxDummyTextSource();
+    virtual ~SvxDummyTextSource() override;
     virtual SvxEditSource*          Clone() const override;
     virtual SvxTextForwarder*       GetTextForwarder() override;
     virtual void                    UpdateData() override;
@@ -363,7 +363,7 @@ private:
 
 public:
     SvxUnoTextRange( const SvxUnoTextBase& rParent, bool bPortion = false ) throw();
-    virtual ~SvxUnoTextRange() throw();
+    virtual ~SvxUnoTextRange() throw() override;
 
     // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -395,7 +395,7 @@ protected:
     SvxUnoTextBase( const SvxItemPropertySet* _pSet ) throw();
     SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > xParent ) throw();
     SvxUnoTextBase( const SvxUnoTextBase& rText ) throw();
-    virtual ~SvxUnoTextBase() throw();
+    virtual ~SvxUnoTextBase() throw() override;
 
 public:
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextBase )
@@ -464,7 +464,7 @@ public:
     SvxUnoText( const SvxItemPropertySet* _pSet ) throw();
     SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > xParent ) throw();
     SvxUnoText( const SvxUnoText& rText ) throw();
-    virtual ~SvxUnoText() throw();
+    virtual ~SvxUnoText() throw() override;
 
     // Internal
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
@@ -492,7 +492,7 @@ private:
 
 public:
     SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText ) throw();
-    virtual ~SvxUnoTextContentEnumeration() throw();
+    virtual ~SvxUnoTextContentEnumeration() throw() override;
 
     // css::container::XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -526,7 +526,7 @@ protected:
 public:
     SvxUnoTextContent( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw();
     SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw();
-    virtual ~SvxUnoTextContent() throw();
+    virtual ~SvxUnoTextContent() throw() override;
 
     // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -588,7 +588,7 @@ private:
 
 public:
     SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_Int32 nPara ) throw();
-    virtual ~SvxUnoTextRangeEnumeration() throw();
+    virtual ~SvxUnoTextRangeEnumeration() throw() override;
 
     // css::container::XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -607,7 +607,7 @@ private:
 public:
     SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw();
     SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw();
-    virtual ~SvxUnoTextCursor() throw();
+    virtual ~SvxUnoTextCursor() throw() override;
 
     // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

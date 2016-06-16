@@ -49,7 +49,7 @@ public:
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             const ScPatternAttr* pOldPat, const ScPatternAttr* pNewPat,
                             const ScPatternAttr* pApplyPat );
-    virtual         ~ScUndoCursorAttr();
+    virtual         ~ScUndoCursorAttr() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -97,7 +97,7 @@ public:
         ScDocShell* pNewDocShell, const ScAddress& rPos,
         ValuesType& rOldValues, const OUString& rNewStr, EditTextObject* pObj = nullptr );
 
-    virtual ~ScUndoEnterData();
+    virtual ~ScUndoEnterData() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -125,7 +125,7 @@ public:
         ScDocShell* pNewDocShell, const ScAddress& rNewPos,
         const ScCellValue& rUndoCell, double nVal );
 
-    virtual         ~ScUndoEnterValue();
+    virtual         ~ScUndoEnterValue() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -148,7 +148,7 @@ class ScUndoSetCell : public ScSimpleUndo
 public:
     ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rOldVal, const ScCellValue& rNewVal );
 
-    virtual ~ScUndoSetCell();
+    virtual ~ScUndoSetCell() override;
 
     virtual void Undo() override;
     virtual void Redo() override;
@@ -173,7 +173,7 @@ public:
                     ScUndoPageBreak( ScDocShell* pNewDocShell,
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             bool bNewColumn, bool bNewInsert );
-    virtual         ~ScUndoPageBreak();
+    virtual         ~ScUndoPageBreak() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -197,7 +197,7 @@ class ScUndoPrintZoom: public ScSimpleUndo
 public:
                     ScUndoPrintZoom( ScDocShell* pNewDocShell, SCTAB nT,
                                     sal_uInt16 nOS, sal_uInt16 nOP, sal_uInt16 nNS, sal_uInt16 nNP );
-    virtual         ~ScUndoPrintZoom();
+    virtual         ~ScUndoPrintZoom() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -222,7 +222,7 @@ public:
     ScUndoThesaurus( ScDocShell* pNewDocShell,
                      SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                      const ScCellValue& rOldText, const ScCellValue& rNewText );
-    virtual         ~ScUndoThesaurus();
+    virtual         ~ScUndoThesaurus() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -265,7 +265,7 @@ public:
                         const ScNoteData& rNewData,
                         SdrUndoAction* pDrawUndo );
 
-    virtual         ~ScUndoReplaceNote();
+    virtual         ~ScUndoReplaceNote() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -290,7 +290,7 @@ class ScUndoShowHideNote : public ScSimpleUndo
 {
 public:
                     ScUndoShowHideNote( ScDocShell& rDocShell, const ScAddress& rPos, bool bShow );
-    virtual         ~ScUndoShowHideNote();
+    virtual         ~ScUndoShowHideNote() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -310,7 +310,7 @@ public:
                     ScUndoDetective( ScDocShell* pNewDocShell,
                                     SdrUndoAction* pDraw, const ScDetOpData* pOperation,
                                     ScDetOpList* pUndoList = nullptr );
-    virtual         ~ScUndoDetective();
+    virtual         ~ScUndoDetective() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -333,7 +333,7 @@ public:
                     //use nTab = -1 for global range names
                     ScUndoRangeNames( ScDocShell* pNewDocShell,
                                         ScRangeName* pOld, ScRangeName* pNew , SCTAB nTab = -1);
-    virtual         ~ScUndoRangeNames();
+    virtual         ~ScUndoRangeNames() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -362,7 +362,7 @@ class UndoSetCells : public ScSimpleUndo
 
 public:
     UndoSetCells( ScDocShell* pDocSh, const ScAddress& rTopPos );
-    virtual ~UndoSetCells();
+    virtual ~UndoSetCells() override;
 
     virtual void Undo() override;
     virtual void Redo() override;

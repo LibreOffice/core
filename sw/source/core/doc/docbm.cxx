@@ -844,7 +844,7 @@ namespace sw { namespace mark
                 std::shared_ptr<IMark> const& pMark, SwDoc *const pDoc)
             : m_pFieldmark(pMark), m_pDoc(pDoc)
         { }
-        virtual ~LazyFieldmarkDeleter()
+        virtual ~LazyFieldmarkDeleter() override
         {
             Fieldmark *const pFieldMark(
                     dynamic_cast<Fieldmark*>(m_pFieldmark.get()));

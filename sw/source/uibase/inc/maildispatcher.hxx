@@ -67,7 +67,7 @@ public:
         Shutdown the mail dispatcher. Every mail messages
         not yet sent will be discarded.
     */
-    virtual ~MailDispatcher();
+    virtual ~MailDispatcher() override;
 
     /**
         Enqueue a mail message for delivery. A client must

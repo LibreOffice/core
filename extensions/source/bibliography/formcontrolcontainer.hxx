@@ -40,7 +40,7 @@ namespace bib
 
     protected:
         FormControlContainer( );
-        virtual ~FormControlContainer( );
+        virtual ~FormControlContainer( ) override;
 
         bool        isFormConnected() const { return nullptr != m_pFormAdapter; }
         void        connectForm( const css::uno::Reference< css::form::XLoadable >& _rxForm );

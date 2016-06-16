@@ -57,7 +57,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
         /** @short  standard dtor.
          */
-        virtual ~FilterFactory();
+        virtual ~FilterFactory() override;
 
 
     // uno interface

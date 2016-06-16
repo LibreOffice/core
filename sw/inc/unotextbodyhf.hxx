@@ -45,7 +45,7 @@ class SwXBodyText
 
 protected:
 
-    virtual ~SwXBodyText();
+    virtual ~SwXBodyText() override;
 
 public:
 
@@ -127,7 +127,7 @@ protected:
         CreateCursor()
         throw (css::uno::RuntimeException) override;
 
-    virtual ~SwXHeadFootText();
+    virtual ~SwXHeadFootText() override;
 
     SwXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader);
 

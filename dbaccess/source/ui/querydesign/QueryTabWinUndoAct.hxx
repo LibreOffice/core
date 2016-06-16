@@ -40,7 +40,7 @@ namespace dbaui
 
     public:
         OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID);
-        virtual ~OQueryTabWinUndoAct();
+        virtual ~OQueryTabWinUndoAct() override;
 
         void SetOwnership(bool bTakeIt) { m_bOwnerOfObjects = bTakeIt; }
 

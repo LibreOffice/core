@@ -233,7 +233,7 @@ private:
     DECL_LINK_TYPED( OnStartTableWizard, void*, void );
 public:
     explicit DBContentLoader(const Reference< XComponentContext >&);
-    virtual ~DBContentLoader();
+    virtual ~DBContentLoader() override;
 
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() throw(std::exception  ) override;

@@ -273,7 +273,7 @@ protected:
     void ColUnlock()    { mbColLocked = false; }
 
     virtual void DestroyImpl();
-    virtual ~SwFrame();
+    virtual ~SwFrame() override;
 
     // Only used by SwRootFrame Ctor to get 'this' into mpRoot...
     void setRootFrame( SwRootFrame* pRoot ) { mpRoot = pRoot; }

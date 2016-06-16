@@ -90,7 +90,7 @@ public:
 
     SfxBaseController( SfxViewShell* pView ) ;
 
-    virtual ~SfxBaseController() ;
+    virtual ~SfxBaseController() override ;
 
     SAL_DLLPRIVATE void ReleaseShell_Impl();
     SAL_DLLPRIVATE void BorderWidthsChanged_Impl();

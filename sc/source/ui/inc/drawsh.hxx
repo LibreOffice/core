@@ -56,7 +56,7 @@ private:
 
 public:
                     ScDrawShell(ScViewData* pData);
-                    virtual ~ScDrawShell();
+                    virtual ~ScDrawShell() override;
 
     static void StateDisableItems( SfxItemSet &rSet );
 

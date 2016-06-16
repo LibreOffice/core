@@ -50,7 +50,7 @@ public:
     SwWrtShell &GetShell();
 
                 SwDrawTextShell(SwView &rView);
-    virtual     ~SwDrawTextShell();
+    virtual     ~SwDrawTextShell() override;
 
     virtual ::svl::IUndoManager*
                 GetUndoManager() override;

@@ -83,7 +83,7 @@ class UnoTreeListBoxImpl : public SvTreeListBox
 {
 public:
     UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pParent, WinBits nWinStyle );
-    virtual ~UnoTreeListBoxImpl();
+    virtual ~UnoTreeListBoxImpl() override;
     virtual void dispose() override;
 
     void            insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
@@ -106,7 +106,7 @@ class UnoTreeListItem : public SvLBoxString
 {
 public:
                     UnoTreeListItem();
-    virtual         ~UnoTreeListItem();
+    virtual         ~UnoTreeListItem() override;
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
     void            SetImage( const Image& rImage );
     const OUString& GetGraphicURL() const { return maGraphicURL;}
@@ -126,7 +126,7 @@ class UnoTreeListEntry : public SvTreeListEntry
 {
 public:
     UnoTreeListEntry( const Reference< XTreeNode >& xNode, TreeControlPeer* pPeer );
-    virtual ~UnoTreeListEntry();
+    virtual ~UnoTreeListEntry() override;
 
     Reference< XTreeNode > mxNode;
     TreeControlPeer* mpPeer;

@@ -169,7 +169,7 @@ class SwTrnsfrDdeLink : public ::sfx2::SvBaseLink
     using sfx2::SvBaseLink::Disconnect;
 
 protected:
-    virtual ~SwTrnsfrDdeLink();
+    virtual ~SwTrnsfrDdeLink() override;
 
 public:
     SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh );

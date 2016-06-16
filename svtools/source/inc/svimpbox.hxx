@@ -50,7 +50,7 @@ class ImpLBSelEng : public FunctionSet
 public:
     ImpLBSelEng( SvImpLBox* pImp, SelectionEngine* pSelEng,
                  SvTreeListBox* pView );
-    virtual ~ImpLBSelEng();
+    virtual ~ImpLBSelEng() override;
     void        BeginDrag() override;
     void        CreateAnchor() override;
     void        DestroyAnchor() override;

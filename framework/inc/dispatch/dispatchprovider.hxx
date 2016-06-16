@@ -96,7 +96,7 @@ class DispatchProvider: public ::cppu::WeakImplHelper< css::frame::XDispatchProv
     /* helper */
     protected:
         // Let him protected! So nobody can use us as base ...
-        virtual ~DispatchProvider();
+        virtual ~DispatchProvider() override;
 
     private:
         css::uno::Reference< css::frame::XDispatch > implts_getOrCreateDispatchHelper   (       EDispatchHelper                            eHelper                       ,

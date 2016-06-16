@@ -71,7 +71,7 @@ public:
     explicit SlideSorterView (SlideSorter& rSlideSorter);
     void Init();
 
-    virtual ~SlideSorterView();
+    virtual ~SlideSorterView() override;
     void Dispose();
 
     SlideSorterView(const SlideSorterView&) = delete;

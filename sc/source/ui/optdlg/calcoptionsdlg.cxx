@@ -365,7 +365,7 @@ struct Op : Area
     {
     }
 
-    virtual ~Op()
+    virtual ~Op() override
     {
     }
 };
@@ -387,7 +387,7 @@ struct UnOp : Op
     {
     }
 
-    virtual ~UnOp()
+    virtual ~UnOp() override
     {
     }
 
@@ -460,7 +460,7 @@ struct BinOp : Op
     {
     }
 
-    virtual ~BinOp()
+    virtual ~BinOp() override
     {
     }
 
@@ -513,7 +513,7 @@ struct Round : Area
     {
     }
 
-    virtual ~Round()
+    virtual ~Round() override
     {
     }
 
@@ -564,7 +564,7 @@ struct Normdist : Area
     {
     }
 
-    virtual ~Normdist()
+    virtual ~Normdist() override
     {
     }
 
@@ -639,7 +639,7 @@ struct Reduction : Op
     {
     }
 
-    virtual ~Reduction()
+    virtual ~Reduction() override
     {
     }
 

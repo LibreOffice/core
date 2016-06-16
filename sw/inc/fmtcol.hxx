@@ -186,7 +186,7 @@ public:
                     sal_uLong nSubCond = 0 );
     SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
                     const OUString& rSubExp );
-    virtual ~SwCollCondition();
+    virtual ~SwCollCondition() override;
 
     /// @@@ public copy ctor, but no copy assignment?
     SwCollCondition( const SwCollCondition& rCpy );
@@ -223,7 +223,7 @@ protected:
 
 public:
 
-    virtual ~SwConditionTextFormatColl();
+    virtual ~SwConditionTextFormatColl() override;
 
     const SwCollCondition* HasCondition( const SwCollCondition& rCond ) const;
     const SwFormatCollConditions& GetCondColls() const { return m_CondColls; }

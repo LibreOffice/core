@@ -372,7 +372,7 @@ public:
     static const sal_uInt16 PAGE_NOT_FOUND;
 
                     TabBar( vcl::Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
-    virtual         ~TabBar();
+    virtual         ~TabBar() override;
     virtual void    dispose() override;
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;

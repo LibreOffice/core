@@ -36,7 +36,7 @@ class SvXMLAutoCorrectTokenHandler : public
 {
 public:
     explicit SvXMLAutoCorrectTokenHandler();
-    virtual ~SvXMLAutoCorrectTokenHandler();
+    virtual ~SvXMLAutoCorrectTokenHandler() override;
 
     //XFastTokenHandler
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )

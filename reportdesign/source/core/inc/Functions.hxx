@@ -50,7 +50,7 @@ namespace reportdesign
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
 
-        virtual ~OFunctions();
+        virtual ~OFunctions() override;
 
         /** this function is called upon disposing the component
         */

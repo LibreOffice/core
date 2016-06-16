@@ -81,7 +81,7 @@ class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
     sal_Int32        m_nHeaderLength;
 public:
     XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bBmp);
-    virtual ~XInputStreamHelper();
+    virtual ~XInputStreamHelper() override;
 
     virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception) override;

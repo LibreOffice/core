@@ -99,7 +99,7 @@ public:
             const css::uno::Sequence< css::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
-    virtual ~ResultSet();
+    virtual ~ResultSet() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

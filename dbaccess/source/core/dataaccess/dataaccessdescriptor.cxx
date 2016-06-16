@@ -80,7 +80,7 @@ namespace
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
 
     protected:
-        virtual ~DataAccessDescriptor();
+        virtual ~DataAccessDescriptor() override;
 
     protected:
         // XPropertySet
@@ -211,7 +211,7 @@ namespace
         virtual Reference< XPropertySet > SAL_CALL createDataAccessDescriptor(  ) throw (RuntimeException, std::exception) override;
 
         DataAccessDescriptorFactory();
-        virtual ~DataAccessDescriptorFactory();
+        virtual ~DataAccessDescriptorFactory() override;
     };
 
     DataAccessDescriptorFactory::DataAccessDescriptorFactory()

@@ -39,7 +39,7 @@ namespace sd
     {
         public:
             explicit Communicator( IBluetoothSocket *pSocket );
-            virtual ~Communicator();
+            virtual ~Communicator() override;
 
             void presentationStarted( const css::uno::Reference<
                 css::presentation::XSlideShowController > &rController );

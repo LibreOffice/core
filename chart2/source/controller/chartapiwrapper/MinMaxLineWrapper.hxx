@@ -56,7 +56,7 @@ class MinMaxLineWrapper : public MutexContainer
 {
 public:
     explicit MinMaxLineWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~MinMaxLineWrapper();
+    virtual ~MinMaxLineWrapper() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

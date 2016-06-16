@@ -176,7 +176,7 @@ public:
     { m_base.clearFragment(); }
 
 private:
-    virtual ~UriReference() {}
+    virtual ~UriReference() override {}
 
     stoc::uriproc::UriReference m_base;
 };
@@ -300,7 +300,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual ~Factory() {}
+    virtual ~Factory() override {}
 
     css::uno::Reference< css::uri::XUriReference > clone(
         css::uno::Reference< css::uri::XUriReference > const & uriReference)

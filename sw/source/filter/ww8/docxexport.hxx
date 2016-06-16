@@ -257,7 +257,7 @@ public:
             SwPaM *pCurrentPam, SwPaM *pOriginalPam );
 
     /// Destructor.
-    virtual ~DocxExport();
+    virtual ~DocxExport() override;
 
     /// Reference to the VMLExport instance for the main document.
     oox::vml::VMLExport& VMLExporter() { return *m_pVMLExport; }

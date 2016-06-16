@@ -94,7 +94,7 @@ public:
                const css::uno::Reference< css::sdbc::XConnection> & con,
                struct ConnectionSettings *pSettings );
 
-    virtual ~Statement();
+    virtual ~Statement() override;
 public: // XInterface
     virtual void SAL_CALL acquire() throw() override { Statement_BASE::acquire(); }
     virtual void SAL_CALL release() throw() override { Statement_BASE::release(); }

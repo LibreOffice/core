@@ -54,7 +54,7 @@ public:
         ::svt::AccessibleBrowseBoxObjType eObjType );
 
 protected:
-    virtual ~AccessibleBrowseBoxTableBase();
+    virtual ~AccessibleBrowseBoxTableBase() override;
 
 public:
     // XAccessibleContext

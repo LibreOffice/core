@@ -170,7 +170,7 @@ protected:
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
 
-    virtual                 ~ODBExport(){};
+    virtual                 ~ODBExport() override {};
 public:
 
     ODBExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );

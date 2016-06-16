@@ -42,7 +42,7 @@ public:
         Stream* pStream,
         OOXMLDocumentImpl* pDocument,
         sal_Int32 nXNoteId );
-    virtual ~OOXMLFastDocumentHandler();
+    virtual ~OOXMLFastDocumentHandler() override;
 
     // css::xml::sax::XFastDocumentHandler:
     virtual void SAL_CALL startDocument()

@@ -72,7 +72,7 @@ protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
 public:
                     ScCornerButton( vcl::Window* pParent, ScViewData* pData, bool bAdditional );
-                    virtual ~ScCornerButton();
+                    virtual ~ScCornerButton() override;
 
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;

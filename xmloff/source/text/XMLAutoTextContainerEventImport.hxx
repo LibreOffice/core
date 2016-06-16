@@ -48,7 +48,7 @@ public:
         const OUString& rLName,
         const css::uno::Reference<css::container::XNameReplace > & rEvents );
 
-    virtual ~XMLAutoTextContainerEventImport();
+    virtual ~XMLAutoTextContainerEventImport() override;
 
 
 protected:

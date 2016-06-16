@@ -49,7 +49,7 @@ namespace accessibility
             ::svt::table::AccessibleTableControlObjType _eType
         );
 
-        virtual ~AccessibleGridControlCell();
+        virtual ~AccessibleGridControlCell() override;
 
     private:
         AccessibleGridControlCell( const AccessibleGridControlCell& ) = delete;

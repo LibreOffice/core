@@ -29,7 +29,7 @@ class PotentialRegressionCurveCalculator : public RegressionCurveCalculator
 {
 public:
     PotentialRegressionCurveCalculator();
-    virtual ~PotentialRegressionCurveCalculator();
+    virtual ~PotentialRegressionCurveCalculator() override;
 
 protected:
     virtual OUString ImplGetRepresentation(

@@ -47,7 +47,7 @@ class HierarchyDataSource : public cppu::OWeakObject,
 
 public:
     explicit HierarchyDataSource( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
-    virtual ~HierarchyDataSource();
+    virtual ~HierarchyDataSource() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

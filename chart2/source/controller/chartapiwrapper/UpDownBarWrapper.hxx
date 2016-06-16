@@ -55,7 +55,7 @@ class UpDownBarWrapper : public MutexContainer
 {
 public:
     UpDownBarWrapper( bool bUp, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~UpDownBarWrapper();
+    virtual ~UpDownBarWrapper() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

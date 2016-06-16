@@ -103,7 +103,7 @@ protected:
                                       const OUString& rLocalName,
                                       const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    virtual ~ODBFilter()  throw();
+    virtual ~ODBFilter()  throw() override;
 public:
 
     explicit ODBFilter( const Reference< XComponentContext >& _rxContext );

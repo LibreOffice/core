@@ -41,7 +41,7 @@ private:
 
 public:
     SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, const css::uno::Reference< css::frame::XModel >& xModel );
-    virtual ~SwVbaBookmarks() {}
+    virtual ~SwVbaBookmarks() override {}
 
     static void addBookmarkByName( const css::uno::Reference< css::frame::XModel >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange ) throw (css::uno::RuntimeException);
     // XEnumerationAccess

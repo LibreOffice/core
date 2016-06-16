@@ -49,7 +49,7 @@ protected:
 public:
 
     BibToolBarListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
-    virtual ~BibToolBarListener();
+    virtual ~BibToolBarListener() override;
 
     const OUString&          GetCommand() const { return aCommand;}
 
@@ -69,7 +69,7 @@ class BibTBListBoxListener: public BibToolBarListener
 public:
 
     BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
-    virtual ~BibTBListBoxListener();
+    virtual ~BibTBListBoxListener() override;
 
     virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
                                             throw( css::uno::RuntimeException, std::exception ) override;
@@ -81,7 +81,7 @@ class BibTBEditListener: public BibToolBarListener
 public:
 
     BibTBEditListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
-    virtual ~BibTBEditListener();
+    virtual ~BibTBEditListener() override;
 
     virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
                                             throw( css::uno::RuntimeException, std::exception ) override;
@@ -93,7 +93,7 @@ class BibTBQueryMenuListener:   public BibToolBarListener
 public:
 
     BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
-    virtual ~BibTBQueryMenuListener();
+    virtual ~BibTBQueryMenuListener() override;
 
     virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
                                             throw( css::uno::RuntimeException, std::exception ) override;
@@ -156,7 +156,7 @@ class BibToolBar:   public ToolBox
     public:
 
         BibToolBar(vcl::Window* pParent, Link<void*,void> aLink);
-        virtual ~BibToolBar();
+        virtual ~BibToolBar() override;
         virtual void dispose() override;
 
         sal_uInt16  GetChangeSourceId() const { return nTBC_BT_CHANGESOURCE; }

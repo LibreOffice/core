@@ -135,7 +135,7 @@ protected:
 public:
 
     SwNavigationPI(SfxBindings*, SfxChildWindowContext*, vcl::Window*);
-    virtual ~SwNavigationPI();
+    virtual ~SwNavigationPI() override;
     virtual void    dispose() override;
 
     void            GotoPage(); // jump to page; bindable function

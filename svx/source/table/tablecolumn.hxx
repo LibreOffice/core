@@ -38,7 +38,7 @@ class TableColumn : public TableColumnBase
     friend class TableModel;
 public:
     TableColumn( const TableModelRef& xTableModel, sal_Int32 nColumn );
-    virtual ~TableColumn();
+    virtual ~TableColumn() override;
 
     void dispose();
     void throwIfDisposed() const throw (css::uno::RuntimeException);

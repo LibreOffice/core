@@ -69,7 +69,7 @@ public:
         const css::uno::Reference<css::chart2::XChartType>& xChartType,
         OpenGLWindow* pContext);
 
-    virtual ~GL3DBarChart();
+    virtual ~GL3DBarChart() override;
 
     virtual void create3DShapes(const std::vector<std::unique_ptr<VDataSeries>>& rDataSeries,
         ExplicitCategoriesProvider& rCatProvider) override;

@@ -51,7 +51,7 @@ namespace frm
             ITextSelectionListener* _pSelectionListener
         );
 
-        virtual ~RichTextControl( );
+        virtual ~RichTextControl( ) override;
         virtual void dispose() override;
 
         /* enables the change notifications for a particular attribute

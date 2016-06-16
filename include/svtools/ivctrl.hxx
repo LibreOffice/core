@@ -241,7 +241,7 @@ protected:
 public:
 
                         SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle = WB_ICON | WB_BORDER );
-    virtual             ~SvtIconChoiceCtrl();
+    virtual             ~SvtIconChoiceCtrl() override;
     virtual void        dispose() override;
 
     void                SetStyle( WinBits nWinStyle );

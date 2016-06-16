@@ -37,7 +37,7 @@ protected:
 
 public:
     RefHint() = delete;
-    virtual ~RefHint() = 0;
+    virtual ~RefHint() override = 0;
 
     Type getType() const;
 };
@@ -51,7 +51,7 @@ class RefMovedHint : public RefHint
 public:
 
     RefMovedHint( const ScRange& rRange, const ScAddress& rMove, const sc::RefUpdateContext& rCxt );
-    virtual ~RefMovedHint();
+    virtual ~RefMovedHint() override;
 
     /**
      * Get the source range from which the references have moved.
@@ -75,7 +75,7 @@ class RefColReorderHint : public RefHint
 
 public:
     RefColReorderHint( const sc::ColRowReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 );
-    virtual ~RefColReorderHint();
+    virtual ~RefColReorderHint() override;
 
     const sc::ColRowReorderMapType& getColMap() const;
 
@@ -93,7 +93,7 @@ class RefRowReorderHint : public RefHint
 
 public:
     RefRowReorderHint( const sc::ColRowReorderMapType& rRowMap, SCTAB nTab, SCCOL nCol1, SCCOL nCol2 );
-    virtual ~RefRowReorderHint();
+    virtual ~RefRowReorderHint() override;
 
     const sc::ColRowReorderMapType& getRowMap() const;
 
@@ -106,14 +106,14 @@ class RefStartListeningHint : public RefHint
 {
 public:
     RefStartListeningHint();
-    virtual ~RefStartListeningHint();
+    virtual ~RefStartListeningHint() override;
 };
 
 class RefStopListeningHint : public RefHint
 {
 public:
     RefStopListeningHint();
-    virtual ~RefStopListeningHint();
+    virtual ~RefStopListeningHint() override;
 };
 
 }

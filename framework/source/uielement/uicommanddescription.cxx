@@ -84,7 +84,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
     osl::Mutex m_aMutex;
     public:
                                   ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
-        virtual                   ~ConfigurationAccess_UICommand();
+        virtual                   ~ConfigurationAccess_UICommand() override;
 
         // XNameAccess
         virtual css::uno::Any SAL_CALL getByName( const OUString& aName )

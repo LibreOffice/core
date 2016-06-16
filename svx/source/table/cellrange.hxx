@@ -32,7 +32,7 @@ class CellRange : public ::cppu::WeakAggImplHelper1< css::table::XCellRange >, p
 {
 public:
     CellRange( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom );
-    virtual ~CellRange();
+    virtual ~CellRange() override;
 
     // ICellRange
     virtual sal_Int32 getLeft() override;

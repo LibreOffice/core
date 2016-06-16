@@ -60,7 +60,7 @@ class SvxPopupWindowListBox: public SfxPopupWindow
 
 public:
     SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
-    virtual ~SvxPopupWindowListBox();
+    virtual ~SvxPopupWindowListBox() override;
     virtual void dispose() override;
 
     // SfxPopupWindow

@@ -101,7 +101,7 @@ class PresetPropertyBox  : public PropertySubControl
 {
 public:
     PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~PresetPropertyBox();
+    virtual ~PresetPropertyBox() override;
 
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& rPresetId ) override;
@@ -184,7 +184,7 @@ class ColorPropertyBox  : public PropertySubControl
 {
 public:
     ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~ColorPropertyBox();
+    virtual ~ColorPropertyBox() override;
 
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& rPresetId  ) override;
@@ -263,7 +263,7 @@ class FontPropertyBox : public PropertySubControl
 {
 public:
     FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~FontPropertyBox();
+    virtual ~FontPropertyBox() override;
 
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& rPresetId  ) override;
@@ -343,7 +343,7 @@ class DropdownMenuBox : public Edit
 {
 public:
     DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu );
-    virtual ~DropdownMenuBox();
+    virtual ~DropdownMenuBox() override;
     virtual void dispose() override;
 
     void Resize() override;
@@ -424,7 +424,7 @@ class CharHeightPropertyBox : public PropertySubControl
 {
 public:
     CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~CharHeightPropertyBox();
+    virtual ~CharHeightPropertyBox() override;
 
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& ) override;
@@ -507,7 +507,7 @@ class TransparencyPropertyBox : public PropertySubControl
 {
 public:
     TransparencyPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~TransparencyPropertyBox();
+    virtual ~TransparencyPropertyBox() override;
 
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& rPresetId  ) override;
@@ -607,7 +607,7 @@ class RotationPropertyBox : public PropertySubControl
 {
 public:
     RotationPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~RotationPropertyBox();
+    virtual ~RotationPropertyBox() override;
 
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& ) override;
@@ -728,7 +728,7 @@ class ScalePropertyBox : public PropertySubControl
 {
 public:
     ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~ScalePropertyBox();
+    virtual ~ScalePropertyBox() override;
 
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& ) override;
@@ -887,7 +887,7 @@ class FontStylePropertyBox : public PropertySubControl
 {
 public:
     FontStylePropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~FontStylePropertyBox();
+    virtual ~FontStylePropertyBox() override;
 
     virtual Any getValue() override;
     virtual void setValue( const Any& rValue, const OUString& ) override;
@@ -1006,7 +1006,7 @@ class CustomAnimationEffectTabPage : public TabPage
 {
 public:
     CustomAnimationEffectTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
-    virtual ~CustomAnimationEffectTabPage();
+    virtual ~CustomAnimationEffectTabPage() override;
     virtual void dispose() override;
 
     void update( STLPropertySet* pSet );
@@ -1610,7 +1610,7 @@ class CustomAnimationDurationTabPage : public TabPage
 {
 public:
     CustomAnimationDurationTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
-    virtual ~CustomAnimationDurationTabPage();
+    virtual ~CustomAnimationDurationTabPage() override;
     virtual void dispose() override;
 
     void update( STLPropertySet* pSet );
@@ -2006,7 +2006,7 @@ class CustomAnimationTextAnimTabPage : public TabPage
 {
 public:
     CustomAnimationTextAnimTabPage( vcl::Window* pParent, const STLPropertySet* pSet );
-    virtual ~CustomAnimationTextAnimTabPage();
+    virtual ~CustomAnimationTextAnimTabPage() override;
     virtual void dispose() override;
 
     void update( STLPropertySet* pSet );

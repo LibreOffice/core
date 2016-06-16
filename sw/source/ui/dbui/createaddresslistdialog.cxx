@@ -72,7 +72,7 @@ class SwAddressControl_Impl : public Control
 
 public:
     SwAddressControl_Impl(vcl::Window* pParent , WinBits nBits );
-    virtual ~SwAddressControl_Impl();
+    virtual ~SwAddressControl_Impl() override;
     virtual void dispose() override;
 
     void        SetData(SwCSVData& rDBData);

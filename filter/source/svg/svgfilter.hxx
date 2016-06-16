@@ -101,7 +101,7 @@ public:
                 const Reference< XDocumentHandler >& rxHandler,
                 const Sequence< PropertyValue >& rFilterData );
 
-    virtual ~SVGExport();
+    virtual ~SVGExport() override;
 
     bool IsUseTinyProfile() const { return mbIsUseTinyProfile; };
     bool IsEmbedFonts() const { return mbIsEmbedFonts; };
@@ -306,7 +306,7 @@ protected:
 public:
 
     explicit SVGFilter( const Reference< XComponentContext >& rxCtx );
-    virtual    ~SVGFilter();
+    virtual    ~SVGFilter() override;
 };
 
 #endif // INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX

@@ -34,7 +34,7 @@ protected:
     VclPtr<CheckBox> m_pRightBox;
 public:
     ScNameCreateDlg( vcl::Window * pParent, sal_uInt16 nFlags );
-    virtual ~ScNameCreateDlg();
+    virtual ~ScNameCreateDlg() override;
     virtual void dispose() override;
     sal_uInt16          GetFlags() const;
 };

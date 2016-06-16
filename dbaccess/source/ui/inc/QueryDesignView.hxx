@@ -75,7 +75,7 @@ namespace dbaui
 
     public:
         OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >& );
-        virtual ~OQueryDesignView();
+        virtual ~OQueryDesignView() override;
         virtual void dispose() override;
 
         virtual bool isCutAllowed() override;

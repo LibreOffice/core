@@ -53,7 +53,7 @@ private:
 
 public:
     OpenGLSalBitmap();
-    virtual ~OpenGLSalBitmap();
+    virtual ~OpenGLSalBitmap() override;
 
 public:
 

@@ -168,7 +168,7 @@ public:
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nKey,
                                     SvXMLStylesContext& rStyles );
-    virtual     ~SvXMLNumFormatContext();
+    virtual     ~SvXMLNumFormatContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,

@@ -686,7 +686,7 @@ protected:
 public:
 
                     Outliner( SfxItemPool* pPool, OutlinerMode nOutlinerMode );
-    virtual         ~Outliner();
+    virtual         ~Outliner() override;
 
     void            Init( OutlinerMode nOutlinerMode );
     OutlinerMode    GetMode() const { return nOutlinerMode; }

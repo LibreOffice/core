@@ -350,7 +350,7 @@ public:
                     css::uno::Reference<css::frame::XFrame> const& xFrame,
                     css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
                     const utl::MediaDescriptor& rMediaDescriptor);
-    virtual ~RTFDocumentImpl();
+    virtual ~RTFDocumentImpl() override;
 
     // RTFDocument
     virtual void resolve(Stream& rHandler) override;

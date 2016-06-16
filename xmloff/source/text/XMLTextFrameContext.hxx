@@ -69,7 +69,7 @@ public:
             const css::uno::Reference<
                 css::xml::sax::XAttributeList > & xAttrList,
             css::text::TextContentAnchorType eDfltAnchorType );
-    virtual ~XMLTextFrameContext();
+    virtual ~XMLTextFrameContext() override;
 
     virtual void EndElement() override;
 

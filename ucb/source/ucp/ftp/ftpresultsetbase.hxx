@@ -54,7 +54,7 @@ namespace ftp {
                       const css::uno::Reference< css::ucb::XContentProvider >&  xProvider,
                       const css::uno::Sequence< css::beans::Property >& seq);
 
-        virtual ~ResultSetBase();
+        virtual ~ResultSetBase() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL

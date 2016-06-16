@@ -50,7 +50,7 @@ namespace svt
 
     public:
         HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
-        virtual ~HyperLabel( );
+        virtual ~HyperLabel( ) override;
         virtual void dispose() override;
 
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;

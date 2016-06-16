@@ -90,7 +90,7 @@ private:
 protected:
 
                                 SvXMLEmbeddedObjectHelper();
-                                virtual ~SvXMLEmbeddedObjectHelper();
+                                virtual ~SvXMLEmbeddedObjectHelper() override;
     void                        Init( const css::uno::Reference < css::embed::XStorage >&,
                                       ::comphelper::IEmbeddedHelper& rDocPersist,
                                       SvXMLEmbeddedObjectHelperMode eCreateMode );

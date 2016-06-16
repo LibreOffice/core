@@ -123,7 +123,7 @@ private:
 class OOX_DLLPUBLIC BinaryXSeekableStream : public virtual BinaryStreamBase
 {
 public:
-    virtual             ~BinaryXSeekableStream();
+    virtual             ~BinaryXSeekableStream() override;
 
     /** Returns the size of the stream, if wrapped stream is seekable, otherwise -1. */
     virtual sal_Int64   size() const override;

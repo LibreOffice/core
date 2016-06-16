@@ -203,7 +203,7 @@ class CustomAnimationListEntryItem : public SvLBoxString
 public:
     CustomAnimationListEntryItem(const OUString& aDescription,
                                  CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent);
-    virtual ~CustomAnimationListEntryItem();
+    virtual ~CustomAnimationListEntryItem() override;
     void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem*) override;
     SvLBoxItem* Create() const override;
     void Clone(SvLBoxItem* pSource) override;
@@ -350,7 +350,7 @@ class CustomAnimationListEntry : public SvTreeListEntry
 public:
     CustomAnimationListEntry();
     explicit CustomAnimationListEntry( CustomAnimationEffectPtr pEffect );
-    virtual ~CustomAnimationListEntry();
+    virtual ~CustomAnimationListEntry() override;
 
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
@@ -375,7 +375,7 @@ class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
 public:
     explicit        CustomAnimationTriggerEntryItem( const OUString& aDescription );
-    virtual         ~CustomAnimationTriggerEntryItem();
+    virtual         ~CustomAnimationTriggerEntryItem() override;
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) override;
     SvLBoxItem*     Create() const override;
     void            Clone( SvLBoxItem* pSource ) override;

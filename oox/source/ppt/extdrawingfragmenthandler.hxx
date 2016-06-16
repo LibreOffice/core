@@ -26,7 +26,7 @@ public:
         const oox::ppt::ShapeLocation eShapeLocation,
         oox::drawingml::ShapePtr pGroupShapePtr,
         oox::drawingml::ShapePtr pShapePtr ) throw();
-    virtual ~ExtDrawingFragmentHandler() throw();
+    virtual ~ExtDrawingFragmentHandler() throw() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) override;
 

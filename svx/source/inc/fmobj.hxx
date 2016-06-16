@@ -65,7 +65,7 @@ public:
     SAL_DLLPRIVATE void ClearObjEnv();
 
 public:
-    SAL_DLLPRIVATE virtual ~FmFormObj();
+    SAL_DLLPRIVATE virtual ~FmFormObj() override;
     SAL_DLLPRIVATE virtual void SetPage(SdrPage* pNewPage) override;
 
     SAL_DLLPRIVATE virtual sal_uInt32 GetObjInventor() const override;

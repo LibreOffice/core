@@ -42,7 +42,7 @@ namespace connectivity
     protected:
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
-        virtual ~OConnectionWeakWrapper();
+        virtual ~OConnectionWeakWrapper() override;
     public:
         explicit OConnectionWeakWrapper(css::uno::Reference< css::uno::XAggregation >& _xConnection);
 

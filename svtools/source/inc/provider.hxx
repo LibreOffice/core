@@ -33,7 +33,7 @@ class GraphicProvider : public ::cppu::WeakImplHelper< css::graphic::XGraphicPro
 public:
 
     GraphicProvider();
-    virtual ~GraphicProvider();
+    virtual ~GraphicProvider() override;
 
 protected:
 

@@ -61,7 +61,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SwTbxAutoTextCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SwTbxAutoTextCtrl();
+    virtual ~SwTbxAutoTextCtrl() override;
 
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
     virtual void                StateChanged( sal_uInt16 nSID,
@@ -86,7 +86,7 @@ public:
         , m_pNaviPopup(pNaviPopup)
     {
     }
-    virtual ~SwScrollNaviToolBox();
+    virtual ~SwScrollNaviToolBox() override;
     virtual void dispose() override;
 };
 
@@ -108,7 +108,7 @@ protected:
 
 public:
     SwScrollNaviPopup( sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window *pParent );
-    virtual ~SwScrollNaviPopup();
+    virtual ~SwScrollNaviPopup() override;
     virtual void dispose() override;
 
     static OUString         GetQuickHelpText(bool bNext);
@@ -122,7 +122,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SwPreviewZoomControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SwPreviewZoomControl();
+    virtual ~SwPreviewZoomControl() override;
 
     virtual void            StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
@@ -137,7 +137,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SwJumpToSpecificPageControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SwJumpToSpecificPageControl();
+    virtual ~SwJumpToSpecificPageControl() override;
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };

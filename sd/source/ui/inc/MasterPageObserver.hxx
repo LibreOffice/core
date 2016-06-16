@@ -80,7 +80,7 @@ private:
     ::std::unique_ptr<Implementation> mpImpl;
 
     MasterPageObserver();
-    virtual ~MasterPageObserver();
+    virtual ~MasterPageObserver() override;
 
     MasterPageObserver (const MasterPageObserver&) = delete;
 

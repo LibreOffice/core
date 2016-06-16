@@ -44,7 +44,7 @@ public:
 
 protected:
                             FormulaOpCodeMapperObj(::std::unique_ptr<FormulaCompiler> && _pCompiler);
-    virtual                 ~FormulaOpCodeMapperObj();
+    virtual                 ~FormulaOpCodeMapperObj() override;
 
 private:
                             // XFormulaOpCodeMapper

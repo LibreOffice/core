@@ -42,7 +42,7 @@ public:
     CachedDynamicResultSetStub( css::uno::Reference< css::ucb::XDynamicResultSet > xOrigin
         , const css::uno::Reference< css::uno::XComponentContext > & rxContext );
 
-    virtual ~CachedDynamicResultSetStub();
+    virtual ~CachedDynamicResultSetStub() override;
 
 
     // XInterface
@@ -88,7 +88,7 @@ public:
     CachedDynamicResultSetStubFactory(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext);
 
-    virtual ~CachedDynamicResultSetStubFactory();
+    virtual ~CachedDynamicResultSetStubFactory() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

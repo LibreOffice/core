@@ -41,7 +41,7 @@ namespace dbaui
 
     public:
         OConnectionHelper( vcl::Window* pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rCoreAttrs);
-        virtual ~OConnectionHelper();
+        virtual ~OConnectionHelper() override;
         virtual void dispose() override;
         VclPtr<FixedText>           m_pFT_Connection;
         VclPtr<OConnectionURLEdit>  m_pConnectionURL;

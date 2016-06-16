@@ -62,7 +62,7 @@ public:
     };
 
     AxisWrapper( tAxisType eType, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~AxisWrapper();
+    virtual ~AxisWrapper() override;
 
     static void getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, bool& rbMainAxis );
 

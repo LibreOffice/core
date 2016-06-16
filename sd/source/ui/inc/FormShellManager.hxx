@@ -52,7 +52,7 @@ class FormShellManager
 {
 public:
     FormShellManager (ViewShellBase& rBase);
-    virtual ~FormShellManager();
+    virtual ~FormShellManager() override;
 
     /** Typically called by a ShellFactory.  It tells the
         FormShellManager which form shell to manage.

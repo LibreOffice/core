@@ -299,7 +299,7 @@ protected:
     {}
 
 public:
-    virtual ~SmStructureNode();
+    virtual ~SmStructureNode() override;
 
     virtual bool        IsVisible() const override;
 

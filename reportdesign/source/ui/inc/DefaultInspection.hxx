@@ -54,7 +54,7 @@ namespace rptui
         DefaultComponentInspectorModel(const DefaultComponentInspectorModel&) = delete;
         DefaultComponentInspectorModel& operator=(const DefaultComponentInspectorModel&) = delete;
     protected:
-        virtual ~DefaultComponentInspectorModel();
+        virtual ~DefaultComponentInspectorModel() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;

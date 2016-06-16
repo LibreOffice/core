@@ -436,7 +436,7 @@ public:
 
     ScFullMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals );
 
-    virtual ~ScFullMatrix();
+    virtual ~ScFullMatrix() override;
 
     /** Clone the matrix. */
     virtual ScMatrix* Clone() const override;
@@ -651,7 +651,7 @@ public:
 
     ScVectorRefMatrix(const formula::DoubleVectorRefToken* pToken, SCSIZE nRowStart, SCSIZE nRowSize);
 
-    virtual ~ScVectorRefMatrix();
+    virtual ~ScVectorRefMatrix() override;
 
     /** Clone the matrix. */
     virtual ScMatrix* Clone() const override;

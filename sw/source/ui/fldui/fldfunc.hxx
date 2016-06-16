@@ -88,7 +88,7 @@ protected:
 public:
                         SwFieldFuncPage(vcl::Window* pParent, const SfxItemSet* pSet);
 
-                        virtual ~SwFieldFuncPage();
+                        virtual ~SwFieldFuncPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

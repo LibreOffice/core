@@ -104,7 +104,7 @@ public:
                                        xml::sax::XAttributeList > & xAttrList,
                                const SvXMLTokenMap& rTokenMap );
 
-    virtual ~XMLTextColumnContext_Impl();
+    virtual ~XMLTextColumnContext_Impl() override;
 
     text::TextColumn& getTextColumn() { return aColumn; }
 };
@@ -184,7 +184,7 @@ public:
                                        xml::sax::XAttributeList > & xAttrList,
                                const SvXMLTokenMap& rTokenMap );
 
-    virtual ~XMLTextColumnSepContext_Impl();
+    virtual ~XMLTextColumnSepContext_Impl() override;
 
     sal_Int32 GetWidth() const { return nWidth; }
     sal_Int32 GetColor() const { return  nColor; }

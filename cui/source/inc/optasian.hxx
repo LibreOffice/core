@@ -54,7 +54,7 @@ class SvxAsianLayoutPage : public SfxTabPage
 
 public:
     SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxAsianLayoutPage();
+    virtual ~SvxAsianLayoutPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );

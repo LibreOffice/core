@@ -72,7 +72,7 @@ public:
     Default& operator=(const Default&) = delete;
 
 private:
-    virtual ~Default() {}
+    virtual ~Default() override {}
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

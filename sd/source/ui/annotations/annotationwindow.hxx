@@ -63,7 +63,7 @@ protected:
 
 public:
     AnnotationTextWindow( AnnotationWindow* pParent, WinBits nBits );
-    virtual ~AnnotationTextWindow();
+    virtual ~AnnotationTextWindow() override;
     virtual void dispose() override;
 
     void SetOutlinerView( OutlinerView* pOutlinerView ) { mpOutlinerView = pOutlinerView; }
@@ -100,7 +100,7 @@ class AnnotationWindow : public FloatingWindow
 
     public:
         AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent );
-        virtual ~AnnotationWindow();
+        virtual ~AnnotationWindow() override;
         virtual void dispose() override;
 
         void StartEdit();

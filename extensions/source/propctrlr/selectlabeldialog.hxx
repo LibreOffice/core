@@ -56,7 +56,7 @@ namespace pcr
 
     public:
         OSelectLabelDialog(vcl::Window* pParent, css::uno::Reference< css::beans::XPropertySet >  _xControlModel);
-        virtual ~OSelectLabelDialog();
+        virtual ~OSelectLabelDialog() override;
         virtual void dispose() override;
 
         css::uno::Reference< css::beans::XPropertySet >  GetSelected() const { return m_pNoAssignment->IsChecked() ? css::uno::Reference< css::beans::XPropertySet > () : m_xSelectedControl; }

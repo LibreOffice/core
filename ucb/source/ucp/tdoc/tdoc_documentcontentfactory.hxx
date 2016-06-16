@@ -35,7 +35,7 @@ class DocumentContentFactory :
 {
 public:
     explicit DocumentContentFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rXSMgr );
-    virtual ~DocumentContentFactory();
+    virtual ~DocumentContentFactory() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

@@ -45,7 +45,7 @@ protected:
         ::svt::IAccessibleTableProvider& _rBrowseBox
     );
 
-    virtual ~AccessibleBrowseBox();
+    virtual ~AccessibleBrowseBox() override;
 
     /** sets the XAccessible which created the context
 
@@ -218,7 +218,7 @@ public:
     inline AccessibleBrowseBox*            getContext()         { return m_pContext; }
 
 protected:
-    virtual ~AccessibleBrowseBoxAccess();
+    virtual ~AccessibleBrowseBoxAccess() override;
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >

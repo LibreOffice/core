@@ -67,7 +67,7 @@ public:
             , sal_Int32 nPointIndex //ignored for series
             , std::shared_ptr< Chart2ModelContact > spChart2ModelContact  );
 
-    virtual ~DataSeriesPointWrapper();
+    virtual ~DataSeriesPointWrapper() override;
 
     bool isSupportingAreaProperties();
     bool isLinesForbidden() { return !m_bLinesAllowed;}

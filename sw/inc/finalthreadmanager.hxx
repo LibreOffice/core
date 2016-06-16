@@ -65,7 +65,7 @@ private:
     FinalThreadManager(FinalThreadManager &) = delete;
     void operator =(FinalThreadManager &) = delete;
 
-    virtual ~FinalThreadManager();
+    virtual ~FinalThreadManager() override;
 
     void registerAsListenerAtDesktop();
 

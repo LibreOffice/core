@@ -28,7 +28,7 @@ public:
         AstType const * baseType, OString const & name, AstScope * scope):
         AstType(NT_typedef, name, scope), m_pBaseType(baseType) {}
 
-    virtual ~AstTypeDef() {}
+    virtual ~AstTypeDef() override {}
 
     AstType const * getBaseType() const
         { return m_pBaseType; }

@@ -32,7 +32,7 @@ private:
 
 public:
             SwFrameShell(SwView &rView);
-    virtual ~SwFrameShell();
+    virtual ~SwFrameShell() override;
 
     void    Execute(SfxRequest &);
     void    GetState(SfxItemSet &);

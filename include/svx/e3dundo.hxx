@@ -43,7 +43,7 @@ class SAL_WARN_UNUSED E3dUndoAction : public SdrUndoAction
             {
             }
 
-        virtual ~E3dUndoAction ();
+        virtual ~E3dUndoAction () override;
 
         virtual bool CanRepeat(SfxRepeatTarget&) const override;
 };
@@ -69,7 +69,7 @@ class SAL_WARN_UNUSED E3dRotateUndoAction : public E3dUndoAction
             {
             }
 
-        virtual ~E3dRotateUndoAction ();
+        virtual ~E3dRotateUndoAction () override;
 
         virtual void Undo() override;
         virtual void Redo() override;
@@ -96,7 +96,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoActi
             const SfxItemSet& rNewSet,
             const SfxItemSet& rOldSet);
 
-        virtual ~E3dAttributesUndoAction();
+        virtual ~E3dAttributesUndoAction() override;
 
         virtual bool CanRepeat(SfxRepeatTarget& rView) const override;
         virtual void Undo() override;

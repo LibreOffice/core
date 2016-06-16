@@ -47,7 +47,7 @@ public:
 
 public:
     Throbber(vcl::Window* i_parentWindow, WinBits i_style);
-    virtual ~Throbber();
+    virtual ~Throbber() override;
     virtual void dispose() override;
 
     // Properties

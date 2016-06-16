@@ -38,7 +38,7 @@ namespace sdr
             OleProperties(const OleProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~OleProperties();
+            virtual ~OleProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;

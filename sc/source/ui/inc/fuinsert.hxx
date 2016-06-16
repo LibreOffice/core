@@ -28,7 +28,7 @@ class FuInsertGraphic : public FuPoor
  public:
     FuInsertGraphic( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertGraphic();
+    virtual ~FuInsertGraphic() override;
 
     virtual void Activate() override;
     virtual void Deactivate() override;
@@ -69,7 +69,7 @@ class FuInsertMedia : public FuPoor
  public:
     FuInsertMedia( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertMedia();
+    virtual ~FuInsertMedia() override;
 
     virtual void Activate() override;
     virtual void Deactivate() override;

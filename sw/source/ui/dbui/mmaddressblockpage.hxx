@@ -79,7 +79,7 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
 
 public:
     SwMailMergeAddressBlockPage(SwMailMergeWizard* _pParent);
-    virtual ~SwMailMergeAddressBlockPage();
+    virtual ~SwMailMergeAddressBlockPage() override;
     virtual void dispose() override;
     SwMailMergeWizard* GetWizard() { return m_pWizard; }
 };
@@ -107,7 +107,7 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
 
 public:
     SwSelectAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig);
-    virtual ~SwSelectAddressBlockDialog();
+    virtual ~SwSelectAddressBlockDialog() override;
     virtual void dispose() override;
 
     void         SetAddressBlocks(const css::uno::Sequence< OUString>& rBlocks,
@@ -125,7 +125,7 @@ class DDListBox : public SvTreeListBox
     VclPtr<SwCustomizeAddressBlockDialog>   m_pParentDialog;
 public:
     DDListBox(vcl::Window* pParent, const WinBits nStyle);
-    virtual ~DDListBox();
+    virtual ~DDListBox() override;
     virtual void dispose() override;
 
     void SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
@@ -151,7 +151,7 @@ protected:
     bool            PreNotify( NotifyEvent& rNEvt ) override;
 public:
     AddressMultiLineEdit(vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER);
-    virtual ~AddressMultiLineEdit();
+    virtual ~AddressMultiLineEdit() override;
     virtual void    dispose() override;
 
     void            SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
@@ -234,7 +234,7 @@ private:
 
 public:
     SwCustomizeAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
-    virtual ~SwCustomizeAddressBlockDialog();
+    virtual ~SwCustomizeAddressBlockDialog() override;
     virtual void dispose() override;
 
     void            SetAddress(const OUString& rAddress);
@@ -266,7 +266,7 @@ public:
                 SwMailMergeConfigItem& rConfigItem,
                 const OUString& rPreview,
                 bool bIsAddressBlock);
-    virtual ~SwAssignFieldsDialog();
+    virtual ~SwAssignFieldsDialog() override;
     virtual void dispose() override;
 };
 #endif

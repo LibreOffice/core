@@ -77,7 +77,7 @@ class SwWrapTabPage: public SfxTabPage
     bool m_bDrawMode;
     bool m_bContourImage;
 
-    virtual ~SwWrapTabPage();
+    virtual ~SwWrapTabPage() override;
     virtual void dispose() override;
 
     void            ApplyImageList();

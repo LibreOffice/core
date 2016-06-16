@@ -80,7 +80,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
 
 
         /** @short  TODO */
-        virtual ~RecoveryUI();
+        virtual ~RecoveryUI() override;
 
 
         // css.lang.XServiceInfo

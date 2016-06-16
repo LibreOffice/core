@@ -37,7 +37,7 @@ public:
         m_pBtnCol->Check(bCol);
         m_pBtnRow->Check(bRow);
     }
-    virtual ~ScColRowLabelDlg() { disposeOnce(); }
+    virtual ~ScColRowLabelDlg() override { disposeOnce(); }
     virtual void dispose() override
     {
         m_pBtnRow.clear();

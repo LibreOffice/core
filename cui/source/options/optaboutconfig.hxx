@@ -67,7 +67,7 @@ private:
 
 public:
    explicit CuiAboutConfigTabPage(vcl::Window* pParent);
-   virtual ~CuiAboutConfigTabPage();
+   virtual ~CuiAboutConfigTabPage() override;
    virtual void dispose() override;
    void     InsertEntry(const OUString &rPropertyPath, const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue,
                         SvTreeListEntry *pParentEntry = nullptr, bool bInsertToPrefBox = true);
@@ -85,7 +85,7 @@ private:
 
 public:
     CuiAboutConfigValueDialog( vcl::Window* pWindow, const OUString& rValue , int limit = 0);
-    virtual ~CuiAboutConfigValueDialog();
+    virtual ~CuiAboutConfigValueDialog() override;
     virtual void dispose() override;
 
     OUString getValue()

@@ -70,7 +70,7 @@ protected:
     SfxItemSet*         GetOutputSetImpl() { return pOutputSet; }
 
 public:
-    virtual ~SfxModalDialog();
+    virtual ~SfxModalDialog() override;
     virtual void dispose() override;
     const SfxItemSet*   GetOutputItemSet() const { return pOutputSet; }
     const SfxItemSet*   GetInputItemSet() const { return pInputSet; }
@@ -92,7 +92,7 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
 protected:
     SfxModelessDialog( SfxBindings*, SfxChildWindow*,
         vcl::Window*, const OUString& rID, const OUString& rUIXMLDescription );
-    virtual ~SfxModelessDialog();
+    virtual ~SfxModelessDialog() override;
     virtual void dispose() override;
     virtual bool            Close() override;
     virtual void            Resize() override;
@@ -131,7 +131,7 @@ protected:
                                               vcl::Window* pParent,
                                               const OString& rID, const OUString& rUIXMLDescription,
                                               const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
-                            virtual ~SfxFloatingWindow();
+                            virtual ~SfxFloatingWindow() override;
     virtual void            dispose() override;
 
     virtual void            StateChanged( StateChangedType nStateChange ) override;
@@ -173,7 +173,7 @@ public:
         const OUString& rID = OUString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 
-    virtual             ~SfxSingleTabDialog();
+    virtual             ~SfxSingleTabDialog() override;
     virtual void        dispose() override;
 
     void                SetTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = nullptr, sal_uInt32 nSettingsId = 0);

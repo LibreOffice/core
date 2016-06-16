@@ -66,7 +66,7 @@ class LocaleDataImpl : public cppu::WeakImplHelper
 {
 public:
     LocaleDataImpl();
-    virtual ~LocaleDataImpl();
+    virtual ~LocaleDataImpl() override;
 
     static css::uno::Sequence< css::i18n::CalendarItem > downcastCalendarItems( const css::uno::Sequence< css::i18n::CalendarItem2 > & rCi );
     static css::i18n::Calendar downcastCalendar( const css::i18n::Calendar2 & rC );

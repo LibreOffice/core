@@ -62,7 +62,7 @@ namespace dbaccess
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~SubComponentLoader();
+        virtual ~SubComponentLoader() override;
 
     private:
         SubComponentLoader_Data*    m_pData;

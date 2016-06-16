@@ -85,7 +85,7 @@ public:
     SwFntObj( const SwSubFont &rFont, const void* pOwner,
               SwViewShell const *pSh );
 
-    virtual ~SwFntObj();
+    virtual ~SwFntObj() override;
 
     inline       vcl::Font *GetScrFont()     { return pScrFont; }
     inline       vcl::Font& GetFont()        { return aFont; }

@@ -58,7 +58,7 @@ public:
         ChartTypeTemplateProvider* pTemplateProvider,
         Dialog * pParentDialog,
         bool bHideDescription = false );
-    virtual ~DataSourceTabPage();
+    virtual ~DataSourceTabPage() override;
     virtual void dispose() override;
 
     void commitPage();

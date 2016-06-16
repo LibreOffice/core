@@ -50,7 +50,7 @@ class FontTable : public LoggedProperties, public LoggedTable
 
  public:
     FontTable();
-    virtual ~FontTable();
+    virtual ~FontTable() override;
 
     sal_uInt32          size();
     const FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
@@ -89,7 +89,7 @@ class EmbeddedFontHandler : public LoggedProperties
 {
 public:
     EmbeddedFontHandler( const OUString& fontName, const char* style );
-    virtual ~EmbeddedFontHandler();
+    virtual ~EmbeddedFontHandler() override;
 private:
     virtual void lcl_attribute( Id name, Value& val ) override;
     virtual void lcl_sprm( Sprm& rSprm ) override;

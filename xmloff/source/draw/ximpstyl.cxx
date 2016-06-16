@@ -62,7 +62,7 @@ public:
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
-    virtual ~SdXMLDrawingPagePropertySetContext();
+    virtual ~SdXMLDrawingPagePropertySetContext() override;
 
     using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
@@ -137,7 +137,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID);
-    virtual ~SdXMLDrawingPageStyleContext();
+    virtual ~SdXMLDrawingPageStyleContext() override;
 
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,

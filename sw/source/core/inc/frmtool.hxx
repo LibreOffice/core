@@ -336,7 +336,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwBorderAttrs)
 
     SwBorderAttrs( const SwModify *pOwner, const SwFrame *pConstructor );
-    virtual ~SwBorderAttrs();
+    virtual ~SwBorderAttrs() override;
 
     inline const SwAttrSet      &GetAttrSet() const { return m_rAttrSet;  }
     inline const SvxULSpaceItem &GetULSpace() const { return m_rUL;       }

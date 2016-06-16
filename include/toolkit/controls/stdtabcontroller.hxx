@@ -50,7 +50,7 @@ protected:
 
 public:
                             StdTabController();
-                            virtual ~StdTabController();
+                            virtual ~StdTabController() override;
 
     static css::uno::Reference< css::awt::XControl >  FindControl( css::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rCtrls, const css::uno::Reference< css::awt::XControlModel > & rxCtrlModel );
 

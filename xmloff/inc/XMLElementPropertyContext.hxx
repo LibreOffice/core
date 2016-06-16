@@ -45,7 +45,7 @@ public:
                                const XMLPropertyState& rProp,
                                 ::std::vector< XMLPropertyState > &rProps );
 
-    virtual ~XMLElementPropertyContext();
+    virtual ~XMLElementPropertyContext() override;
 
     virtual void EndElement() override;
 };

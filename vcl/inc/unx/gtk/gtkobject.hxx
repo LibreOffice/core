@@ -41,7 +41,7 @@ class GtkSalObject : public SalObject
     static void         signalDestroy( GtkWidget*, gpointer );
 public:
     GtkSalObject( GtkSalFrame* pParent, bool bShow = true );
-    virtual ~GtkSalObject();
+    virtual ~GtkSalObject() override;
 
     // override all pure virtual methods
     virtual void                    ResetClipRegion() override;

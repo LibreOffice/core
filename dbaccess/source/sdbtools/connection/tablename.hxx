@@ -73,7 +73,7 @@ namespace sdbtools
         virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~TableName();
+        virtual ~TableName() override;
 
     private:
         TableName( const TableName& ) = delete;

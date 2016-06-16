@@ -32,7 +32,7 @@ public:
     TitleBar (const OUString& rsTitle,
               vcl::Window* pParentWindow,
               const sidebar::Paint& rInitialBackgroundPaint);
-    virtual ~TitleBar();
+    virtual ~TitleBar() override;
     virtual void dispose() override;
 
     void SetTitle (const OUString& rsTitle);

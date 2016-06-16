@@ -116,7 +116,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
     void onGraphicChanged();
 
 public:
-    virtual ~SwGrfNode();
+    virtual ~SwGrfNode() override;
     const Graphic&          GetGrf(bool bWait = false) const;
     const GraphicObject&    GetGrfObj(bool bWait = false) const;
     const GraphicObject* GetReplacementGrfObj() const;

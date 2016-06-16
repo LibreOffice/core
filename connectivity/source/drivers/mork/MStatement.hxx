@@ -96,7 +96,7 @@ namespace connectivity
             virtual void SAL_CALL getFastPropertyValue(
                                                                 css::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const override;
-            virtual ~OCommonStatement();
+            virtual ~OCommonStatement() override;
 
         protected:
 
@@ -167,7 +167,7 @@ namespace connectivity
                             public css::lang::XServiceInfo
         {
         protected:
-            virtual ~OStatement(){}
+            virtual ~OStatement() override {}
         public:
             // a constructor, for when the object needs to be returned:
             explicit OStatement( OConnection* _pConnection);

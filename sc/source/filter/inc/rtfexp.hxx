@@ -33,7 +33,7 @@ class ScRTFExport : public ScExportBase
 public:
 
                         ScRTFExport( SvStream&, ScDocument*, const ScRange& );
-    virtual             ~ScRTFExport();
+    virtual             ~ScRTFExport() override;
 
     void                Write();
 };

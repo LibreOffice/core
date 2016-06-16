@@ -81,7 +81,7 @@ namespace dbaccess
         OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xResultSet,
                    const css::uno::Reference< css::uno::XInterface >& _xStatement,
                    bool _bCaseSensitive);
-        virtual ~OResultSet();
+        virtual ~OResultSet() override;
 
     // css::lang::XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;

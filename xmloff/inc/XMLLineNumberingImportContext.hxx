@@ -84,7 +84,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList);
 
-    virtual ~XMLLineNumberingImportContext();
+    virtual ~XMLLineNumberingImportContext() override;
 
     // to be used by child context: set separator info
     void SetSeparatorText(const OUString& sText);

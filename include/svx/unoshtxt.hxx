@@ -54,7 +54,7 @@ public:
     SvxTextEditSource( SdrObject& rObj, SdrText* pText, SdrView& rView, const vcl::Window& rViewWindow );
     SvxTextEditSource(const SvxTextEditSource&) = delete;
     SvxTextEditSource& operator=(const SvxTextEditSource&) = delete;
-    virtual ~SvxTextEditSource();
+    virtual ~SvxTextEditSource() override;
 
     virtual SvxEditSource*          Clone() const override;
     virtual SvxTextForwarder*       GetTextForwarder() override;

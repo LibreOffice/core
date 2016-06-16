@@ -45,7 +45,7 @@ public:
                                 const SdDrawDocument* pDoc,
                                 SfxMedium* pSfxMedium,
                                 const OUString& rFileName );
-                virtual ~SdInsertPagesObjsDlg();
+                virtual ~SdInsertPagesObjsDlg() override;
     virtual void dispose() override;
 
     /** returns the list

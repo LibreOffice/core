@@ -124,7 +124,7 @@ class DisposableChild : public vcl::Window
 {
 public:
     explicit DisposableChild(vcl::Window *pParent) : vcl::Window(pParent) {}
-    virtual ~DisposableChild()
+    virtual ~DisposableChild() override
     {
         disposeOnce();
     }

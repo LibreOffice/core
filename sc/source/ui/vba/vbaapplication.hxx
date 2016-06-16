@@ -44,7 +44,7 @@ protected:
 
 public:
     explicit ScVbaApplication( const css::uno::Reference< css::uno::XComponentContext >& m_xContext );
-    virtual ~ScVbaApplication();
+    virtual ~ScVbaApplication() override;
 
     /** Returns true, if VBA document events are enabled. */
     static bool getDocumentEventsEnabled();

@@ -47,7 +47,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxLineStyleToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxLineStyleToolBoxControl();
+    virtual ~SvxLineStyleToolBoxControl() override;
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) override;
@@ -65,7 +65,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxLineWidthToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxLineWidthToolBoxControl();
+    virtual ~SvxLineWidthToolBoxControl() override;
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState ) override;
@@ -112,7 +112,7 @@ public:
                       const css::uno::Reference< css::frame::XFrame >& rFrame,
                       vcl::Window* pParentWindow,
                       const OUString& rWndTitle );
-    virtual ~SvxLineEndWindow();
+    virtual ~SvxLineEndWindow() override;
     virtual void    dispose() override;
 
     void            StartSelection();
@@ -130,7 +130,7 @@ class SVX_DLLPUBLIC SvxLineEndToolBoxControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxLineEndToolBoxControl();
+    virtual ~SvxLineEndToolBoxControl() override;
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) override;

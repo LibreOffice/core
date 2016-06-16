@@ -43,7 +43,7 @@ class SVX_DLLPUBLIC SvxTableController: public sdr::SelectionController
 {
 public:
     SVX_DLLPRIVATE SvxTableController( SdrObjEditView* pView, const SdrObject* pObj );
-    SVX_DLLPRIVATE virtual ~SvxTableController();
+    SVX_DLLPRIVATE virtual ~SvxTableController() override;
 
     // from sdr::SelectionController
     SVX_DLLPRIVATE virtual bool onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;

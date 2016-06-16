@@ -18,7 +18,7 @@ class GL3DBarChartDialogController : public ChartTypeDialogController
 {
 public:
     GL3DBarChartDialogController();
-    virtual ~GL3DBarChartDialogController();
+    virtual ~GL3DBarChartDialogController() override;
 
     virtual bool shouldShow_GL3DResourceGroup() const override;
 

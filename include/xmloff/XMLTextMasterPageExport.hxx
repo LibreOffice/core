@@ -58,7 +58,7 @@ protected:
 
 public:
     XMLTextMasterPageExport( SvXMLExport& rExp );
-    virtual ~XMLTextMasterPageExport();
+    virtual ~XMLTextMasterPageExport() override;
 };
 
 #endif // INCLUDED_XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX

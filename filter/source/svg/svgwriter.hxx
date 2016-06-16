@@ -351,7 +351,7 @@ private:
 public:
     explicit SVGWriter( const Sequence<Any>& args,
                         const Reference< XComponentContext >& rxCtx );
-    virtual ~SVGWriter();
+    virtual ~SVGWriter() override;
 
     // XSVGWriter
     virtual void SAL_CALL write( const Reference<XDocumentHandler>& rxDocHandler,

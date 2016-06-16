@@ -133,7 +133,7 @@ public:
     DocumentHandlerImpl(
         Reference< xml::input::XRoot > const & xRoot,
         bool bSingleThreadedUse );
-    virtual ~DocumentHandlerImpl() throw ();
+    virtual ~DocumentHandlerImpl() throw () override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -340,7 +340,7 @@ public:
         OUString * pLocalNames, OUString * pQNames,
         Reference< xml::sax::XAttributeList > const & xAttributeList,
         DocumentHandlerImpl * pHandler );
-    virtual ~ExtendedAttributes() throw ();
+    virtual ~ExtendedAttributes() throw () override;
 
     // XAttributes
     virtual sal_Int32 SAL_CALL getLength()

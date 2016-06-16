@@ -136,7 +136,7 @@ public:
                        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
                        SwXMLTableContext *pTable );
 
-    virtual ~SwXMLTableContext();
+    virtual ~SwXMLTableContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,

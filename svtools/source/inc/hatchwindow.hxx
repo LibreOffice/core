@@ -35,7 +35,7 @@ class VCLXHatchWindow : public css::embed::XHatchWindow,
 
 public:
     VCLXHatchWindow();
-    virtual ~VCLXHatchWindow();
+    virtual ~VCLXHatchWindow() override;
 
     void initializeWindow( const css::uno::Reference< css::awt::XWindowPeer >& xParent,
                 const css::awt::Rectangle& aBounds,

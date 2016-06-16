@@ -31,7 +31,7 @@ public:
     SwFormatAutoFormat( sal_uInt16 nWhich = RES_TXTATR_AUTOFMT );
 
     /// single argument ctors shall be explicit.
-    virtual ~SwFormatAutoFormat();
+    virtual ~SwFormatAutoFormat() override;
 
     /// @@@ public copy ctor, but no copy assignment?
     SwFormatAutoFormat( const SwFormatAutoFormat& rAttr );

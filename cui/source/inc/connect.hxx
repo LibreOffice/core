@@ -64,7 +64,7 @@ private:
 public:
 
     SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
-    virtual ~SvxConnectionPage();
+    virtual ~SvxConnectionPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window*, const SfxItemSet* );

@@ -868,7 +868,7 @@ public:         // used in tables
 protected:
     // Executed for each token recognized by CallParser
     virtual void NextToken( int nToken ) override;
-    virtual ~SwHTMLParser();
+    virtual ~SwHTMLParser() override;
 
     // If the document is removed, remove the parser as well
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;

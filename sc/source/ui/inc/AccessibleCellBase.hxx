@@ -41,7 +41,7 @@ public:
         const ScAddress& rCellAddress,
         sal_Int32 nIndex);
 protected:
-    virtual ~ScAccessibleCellBase();
+    virtual ~ScAccessibleCellBase() override;
 public:
 
     virtual bool SAL_CALL isVisible()

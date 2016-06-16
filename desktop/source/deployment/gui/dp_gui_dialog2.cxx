@@ -135,7 +135,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 
 public:
     explicit ExtBoxWithBtns_Impl(vcl::Window* pParent);
-    virtual ~ExtBoxWithBtns_Impl();
+    virtual ~ExtBoxWithBtns_Impl() override;
     virtual void dispose() override;
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);

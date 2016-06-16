@@ -43,7 +43,7 @@ class SwUndoOverwrite: public SwUndo, private SwUndoSaveContent
 public:
     SwUndoOverwrite( SwDoc*, SwPosition&, sal_Unicode cIns );
 
-    virtual ~SwUndoOverwrite();
+    virtual ~SwUndoOverwrite() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -77,7 +77,7 @@ public:
     SwUndoTransliterate( const SwPaM& rPam,
                             const utl::TransliterationWrapper& rTrans );
 
-    virtual ~SwUndoTransliterate();
+    virtual ~SwUndoTransliterate() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

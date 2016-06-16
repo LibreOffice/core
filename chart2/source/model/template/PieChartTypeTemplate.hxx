@@ -41,7 +41,7 @@ public:
         css::chart2::PieChartOffsetMode eMode,
         bool bRings = false,
         sal_Int32 nDim = 2 );
-    virtual ~PieChartTypeTemplate();
+    virtual ~PieChartTypeTemplate() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

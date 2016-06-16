@@ -74,7 +74,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    virtual ~SwXTextCursor();
+    virtual ~SwXTextCursor() override;
 
 public:
 

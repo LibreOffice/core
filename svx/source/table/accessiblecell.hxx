@@ -52,7 +52,7 @@ class AccessibleCell : public AccessibleCellBase
 {
 public:
     AccessibleCell( const css::uno::Reference< css::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo);
-    virtual ~AccessibleCell();
+    virtual ~AccessibleCell() override;
     AccessibleCell(const AccessibleCell&) = delete;
     AccessibleCell& operator=(const AccessibleCell&) = delete;
 

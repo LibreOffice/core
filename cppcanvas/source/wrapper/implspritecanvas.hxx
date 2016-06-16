@@ -37,7 +37,7 @@ namespace cppcanvas
                                   css::rendering::XSpriteCanvas >& rCanvas );
             ImplSpriteCanvas(const ImplSpriteCanvas&);
 
-            virtual ~ImplSpriteCanvas();
+            virtual ~ImplSpriteCanvas() override;
 
             virtual void                    setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;
 

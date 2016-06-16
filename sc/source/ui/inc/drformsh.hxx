@@ -40,7 +40,7 @@ private:
 
 public:
     ScDrawFormShell(ScViewData* pData);
-    virtual ~ScDrawFormShell();
+    virtual ~ScDrawFormShell() override;
 };
 
 #endif

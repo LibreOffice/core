@@ -104,7 +104,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
 {
     public:
                                   ConfigurationAccess_WindowState( const OUString& aWindowStateConfigFile, const Reference< XComponentContext >& rxContext );
-        virtual                   ~ConfigurationAccess_WindowState();
+        virtual                   ~ConfigurationAccess_WindowState() override;
 
         // XNameAccess
         virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -1275,7 +1275,7 @@ class WindowStateConfiguration : private cppu::BaseMutex,
 {
 public:
     explicit WindowStateConfiguration( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~WindowStateConfiguration();
+    virtual ~WindowStateConfiguration() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

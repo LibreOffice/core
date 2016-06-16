@@ -31,7 +31,7 @@ class SIDEModel : public SfxBaseModel,
     static void notImplemented() throw ( css::io::IOException );
 public:
     explicit SIDEModel(SfxObjectShell *pObjSh = nullptr);
-    virtual ~SIDEModel();
+    virtual ~SIDEModel() override;
 
     //XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;

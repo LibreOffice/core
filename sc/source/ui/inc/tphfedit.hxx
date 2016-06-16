@@ -54,7 +54,7 @@ class SC_DLLPUBLIC ScEditWindow : public Control
 {
 public:
             ScEditWindow( vcl::Window* pParent,  WinBits nBits , ScEditWindowLocation eLoc );
-            virtual ~ScEditWindow();
+            virtual ~ScEditWindow() override;
     virtual void dispose() override;
 
     using Control::SetFont;

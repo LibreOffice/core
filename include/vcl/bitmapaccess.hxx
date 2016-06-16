@@ -84,7 +84,7 @@ class VCL_DLLPUBLIC BitmapReadAccess : public BitmapInfoAccess
 
 public:
     BitmapReadAccess(Bitmap& rBitmap);
-    virtual ~BitmapReadAccess();
+    virtual ~BitmapReadAccess() override;
 
     inline Scanline GetBuffer() const;
     inline Scanline GetScanline( long nY ) const;
@@ -167,7 +167,7 @@ class VCL_DLLPUBLIC BitmapWriteAccess : public BitmapReadAccess
 {
 public:
     BitmapWriteAccess(Bitmap& rBitmap);
-    virtual ~BitmapWriteAccess();
+    virtual ~BitmapWriteAccess() override;
 
     void CopyScanline(long nY, const BitmapReadAccess& rReadAcc);
     void CopyScanline(long nY,

@@ -58,7 +58,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtHistoryOptions : public utl::detail:
 {
 public:
     SvtHistoryOptions();
-    virtual ~SvtHistoryOptions();
+    virtual ~SvtHistoryOptions() override;
 
     /** Get max size of specified history.
 

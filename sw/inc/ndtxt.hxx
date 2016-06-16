@@ -228,7 +228,7 @@ public:
     inline       bool   HasHints() const { return m_pSwpHints != nullptr; }
     inline       SwpHints &GetOrCreateSwpHints();
 
-    virtual ~SwTextNode();
+    virtual ~SwTextNode() override;
 
     virtual sal_Int32 Len() const override;
 

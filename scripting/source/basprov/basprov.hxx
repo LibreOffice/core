@@ -67,7 +67,7 @@ namespace basprov
     public:
         explicit BasicProviderImpl(
             const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        virtual ~BasicProviderImpl();
+        virtual ~BasicProviderImpl() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  )

@@ -39,7 +39,7 @@ namespace rptxml
                     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
                     ,const css::uno::Reference< css::report::XFormatCondition >& _xComponent
                     );
-        virtual ~OXMLFormatCondition();
+        virtual ~OXMLFormatCondition() override;
         virtual void EndElement() override;
     };
 

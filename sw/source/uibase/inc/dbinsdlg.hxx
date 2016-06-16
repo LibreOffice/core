@@ -156,7 +156,7 @@ public:
         css::uno::Reference<css::sdbcx::XColumnsSupplier>,
         const SwDBData& rData  );
 
-    virtual ~SwInsertDBColAutoPilot();
+    virtual ~SwInsertDBColAutoPilot() override;
     virtual void dispose() override;
 
     void DataToDoc( const css::uno::Sequence< css::uno::Any >& rSelection,

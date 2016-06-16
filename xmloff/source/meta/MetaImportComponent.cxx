@@ -41,7 +41,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext
         ) throw();
 
-    virtual ~XMLMetaImportComponent() throw();
+    virtual ~XMLMetaImportComponent() throw() override;
 
 protected:
 

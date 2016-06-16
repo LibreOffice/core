@@ -48,7 +48,7 @@ namespace chelp
                  const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
                  Databases* pDatabases );
 
-        virtual ~Content();
+        virtual ~Content() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

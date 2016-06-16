@@ -67,7 +67,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
 
         DispatchWatcher();
 
-        virtual ~DispatchWatcher();
+        virtual ~DispatchWatcher() override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source )

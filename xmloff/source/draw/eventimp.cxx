@@ -78,7 +78,7 @@ private:
 public:
 
     SdXMLEventContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList, const Reference< XShape >& rxShape );
-    virtual ~SdXMLEventContext();
+    virtual ~SdXMLEventContext() override;
 
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,    const Reference< XAttributeList>& xAttrList ) override;
     virtual void EndElement() override;
@@ -105,7 +105,7 @@ class XMLEventSoundContext : public SvXMLImportContext
 public:
 
     XMLEventSoundContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, SdXMLEventContext* pParent );
-    virtual ~XMLEventSoundContext();
+    virtual ~XMLEventSoundContext() override;
 };
 
 

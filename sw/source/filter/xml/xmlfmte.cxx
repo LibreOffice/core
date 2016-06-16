@@ -266,7 +266,7 @@ protected:
 public:
 
     explicit SwXMLAutoStylePoolP( SvXMLExport& rExport );
-    virtual ~SwXMLAutoStylePoolP();
+    virtual ~SwXMLAutoStylePoolP() override;
 };
 
 void SwXMLAutoStylePoolP::exportStyleAttributes(

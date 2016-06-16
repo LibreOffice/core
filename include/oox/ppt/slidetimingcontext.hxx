@@ -33,7 +33,7 @@ class SlideTimingContext : public ::oox::core::FragmentHandler2
 {
 public:
     SlideTimingContext( ::oox::core::FragmentHandler2& rParent, TimeNodePtrList & aTimeNodeList ) throw();
-    virtual ~SlideTimingContext() throw();
+    virtual ~SlideTimingContext() throw() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 

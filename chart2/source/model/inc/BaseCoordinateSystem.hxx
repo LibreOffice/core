@@ -58,7 +58,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         sal_Int32 nDimensionCount = 2 );
     explicit BaseCoordinateSystem( const BaseCoordinateSystem & rSource );
-    virtual ~BaseCoordinateSystem();
+    virtual ~BaseCoordinateSystem() override;
 
     // ____ OPropertySet ____
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const

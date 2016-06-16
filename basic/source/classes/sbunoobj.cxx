@@ -3834,7 +3834,7 @@ public:
     OUString        aPrefixName;
 
     explicit BasicAllListener_Impl( const OUString& aPrefixName );
-    virtual ~BasicAllListener_Impl();
+    virtual ~BasicAllListener_Impl() override;
 
     // Methods of XAllListener
     virtual void SAL_CALL firing(const AllEventObject& Event) throw ( RuntimeException, std::exception ) override;
@@ -4259,7 +4259,7 @@ class ModuleInvocationProxy : public WeakImplHelper< XInvocation, XComponent >
 
 public:
     ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj );
-    virtual ~ModuleInvocationProxy()
+    virtual ~ModuleInvocationProxy() override
     {}
 
     // XInvocation

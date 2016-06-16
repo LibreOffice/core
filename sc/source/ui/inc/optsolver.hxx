@@ -95,7 +95,7 @@ class ScOptSolverDlg : public ScAnyRefDlg
 public:
                     ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScDocShell* pDocSh, ScAddress aCursorPos );
-                    virtual ~ScOptSolverDlg();
+                    virtual ~ScOptSolverDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;
@@ -207,7 +207,7 @@ class ScSolverProgressDialog : public ModelessDialog
 
 public:
     ScSolverProgressDialog( vcl::Window* pParent );
-    virtual ~ScSolverProgressDialog();
+    virtual ~ScSolverProgressDialog() override;
     virtual void dispose() override;
 
     void    HideTimeLimit();
@@ -220,7 +220,7 @@ class ScSolverNoSolutionDialog : public ModalDialog
 
 public:
     ScSolverNoSolutionDialog(vcl::Window* pParent, const OUString& rErrorText);
-    virtual ~ScSolverNoSolutionDialog();
+    virtual ~ScSolverNoSolutionDialog() override;
     virtual void dispose() override;
 };
 
@@ -234,7 +234,7 @@ class ScSolverSuccessDialog : public ModalDialog
 
 public:
     ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution );
-    virtual ~ScSolverSuccessDialog();
+    virtual ~ScSolverSuccessDialog() override;
     virtual void dispose() override;
 };
 

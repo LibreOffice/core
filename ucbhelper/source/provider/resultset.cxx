@@ -93,7 +93,7 @@ public:
     PropertySetInfo(
         const PropertyInfo* pProps,
         sal_Int32 nProps );
-    virtual ~PropertySetInfo();
+    virtual ~PropertySetInfo() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

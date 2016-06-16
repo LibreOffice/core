@@ -33,7 +33,7 @@ namespace connectivity
         static jclass theClass;
     public:
         virtual jclass getMyClass() const override;
-        virtual ~java_sql_SQLWarning_BASE();
+        virtual ~java_sql_SQLWarning_BASE() override;
         // A ctor that is needed for returning the object
         java_sql_SQLWarning_BASE( JNIEnv * pEnv, jobject myObj ) : java_sql_SQLException_BASE( pEnv, myObj ){}
 

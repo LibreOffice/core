@@ -142,7 +142,7 @@ class ExtMgrDialog : public ModelessDialog,
 
 public:
                     ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
-    virtual        ~ExtMgrDialog();
+    virtual        ~ExtMgrDialog() override;
     virtual void    dispose() override;
 
     virtual bool    Notify( NotifyEvent& rNEvt ) override;
@@ -211,7 +211,7 @@ class UpdateRequiredDialog : public ModalDialog,
 
 public:
                     UpdateRequiredDialog( vcl::Window * pParent, TheExtensionManager *pManager );
-    virtual        ~UpdateRequiredDialog();
+    virtual        ~UpdateRequiredDialog() override;
     virtual void    dispose() override;
 
     virtual short   Execute() override;
@@ -238,7 +238,7 @@ class ShowLicenseDialog : public ModalDialog
     VclPtr<VclMultiLineEdit> m_pLicenseText;
 public:
     ShowLicenseDialog(vcl::Window * pParent, const css::uno::Reference< css::deployment::XPackage > &xPackage);
-    virtual ~ShowLicenseDialog();
+    virtual ~ShowLicenseDialog() override;
     virtual void dispose() override;
 };
 

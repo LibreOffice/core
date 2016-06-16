@@ -139,7 +139,7 @@ class SwMailDispatcherListener_Impl : public IMailDispatcherListener
 
 public:
     explicit SwMailDispatcherListener_Impl(SwSendMailDialog& rParentDlg);
-    virtual ~SwMailDispatcherListener_Impl();
+    virtual ~SwMailDispatcherListener_Impl() override;
 
     virtual void started(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
     virtual void stopped(::rtl::Reference<MailDispatcher> xMailDispatcher) override;
@@ -224,7 +224,7 @@ class SwSendWarningBox_Impl : public MessageDialog
     VclPtr<VclMultiLineEdit> m_pDetailED;
 public:
     SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails);
-    virtual ~SwSendWarningBox_Impl() { disposeOnce(); }
+    virtual ~SwSendWarningBox_Impl() override { disposeOnce(); }
     virtual void dispose() override
     {
         m_pDetailED.clear();

@@ -150,7 +150,7 @@ public:
     XMLTypedPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLTypedPropertiesOOoTContext_Impl();
+    virtual ~XMLTypedPropertiesOOoTContext_Impl() override;
 
     using XMLPersAttrListTContext::AddAttribute;
     void AddAttribute( const OUString &sName ,
@@ -235,7 +235,7 @@ public:
                                const XMLPropTypes& rTypes,
                                bool bPersistent );
 
-    virtual ~XMLPropertiesOOoTContext_Impl();
+    virtual ~XMLPropertiesOOoTContext_Impl() override;
 
     rtl::Reference<XMLTransformerContext> CreateChildContext(
             sal_uInt16 nPrefix,

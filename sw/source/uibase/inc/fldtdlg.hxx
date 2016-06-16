@@ -48,7 +48,7 @@ class SwFieldDlg: public SfxTabDialog
 
 public:
     SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent);
-    virtual ~SwFieldDlg();
+    virtual ~SwFieldDlg() override;
 
     DECL_LINK_TYPED(OKHdl, Button*, void);
     DECL_LINK_TYPED(CancelHdl, Button*, void);

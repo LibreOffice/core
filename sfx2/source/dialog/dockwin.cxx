@@ -69,7 +69,7 @@ public:
                             SfxChildWindow* pChildWin ,
                             vcl::Window* pParent ,
                             WinBits nBits);
-    virtual             ~SfxTitleDockingWindow();
+    virtual             ~SfxTitleDockingWindow() override;
     virtual void        dispose() override;
 
     vcl::Window*        GetWrappedWindow() const { return m_pWrappedWindow; }

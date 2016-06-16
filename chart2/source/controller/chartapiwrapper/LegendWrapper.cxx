@@ -57,7 +57,7 @@ class WrappedLegendAlignmentProperty : public WrappedProperty
 {
 public:
     WrappedLegendAlignmentProperty();
-    virtual ~WrappedLegendAlignmentProperty();
+    virtual ~WrappedLegendAlignmentProperty() override;
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) override;

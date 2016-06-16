@@ -106,7 +106,7 @@ private:
 
 public:
     SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxJavaOptionsPage();
+    virtual ~SvxJavaOptionsPage() override;
     virtual void            dispose() override;
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
@@ -160,7 +160,7 @@ private:
 
 public:
     explicit SvxJavaParameterDlg( vcl::Window* pParent );
-    virtual ~SvxJavaParameterDlg();
+    virtual ~SvxJavaParameterDlg() override;
     virtual void dispose() override;
 
     virtual short           Execute() override;
@@ -196,7 +196,7 @@ private:
 
 public:
     explicit SvxJavaClassPathDlg( vcl::Window* pParent );
-    virtual ~SvxJavaClassPathDlg();
+    virtual ~SvxJavaClassPathDlg() override;
     virtual void            dispose() override;
 
     inline const OUString&  GetOldPath() const { return m_sOldPath; }

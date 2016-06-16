@@ -172,7 +172,7 @@ private:
     Bridge(const Bridge&) = delete;
     Bridge& operator=(const Bridge&) = delete;
 
-    virtual ~Bridge();
+    virtual ~Bridge() override;
 
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
     SAL_CALL getInstance(OUString const & sInstanceName)

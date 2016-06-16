@@ -76,7 +76,7 @@ class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< css::xml
 public:
     FastAttributeList( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& xTokenHandler,
                        FastTokenHandlerBase *pOptHandlerBase = nullptr );
-    virtual ~FastAttributeList();
+    virtual ~FastAttributeList() override;
 
     void clear();
     void add( sal_Int32 nToken, const sal_Char* pValue );

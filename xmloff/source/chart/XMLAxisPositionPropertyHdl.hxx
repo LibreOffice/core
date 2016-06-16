@@ -25,7 +25,7 @@ class XMLAxisPositionPropertyHdl : public XMLPropertyHandler
 {
 public:
     explicit XMLAxisPositionPropertyHdl( bool bCrossingValue );
-    virtual ~XMLAxisPositionPropertyHdl();
+    virtual ~XMLAxisPositionPropertyHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

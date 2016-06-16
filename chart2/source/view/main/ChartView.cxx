@@ -1064,7 +1064,7 @@ class GL2DRenderer : public IRenderer
 {
 public:
     explicit GL2DRenderer(ChartView* pView);
-    virtual ~GL2DRenderer();
+    virtual ~GL2DRenderer() override;
 
     virtual void update() override;
     virtual void clickedAt(const Point& rPos, sal_uInt16 nButton) override;

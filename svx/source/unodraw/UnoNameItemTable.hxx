@@ -52,7 +52,7 @@ private:
 
 public:
     SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw();
-    virtual ~SvxUnoNameItemTable() throw();
+    virtual ~SvxUnoNameItemTable() throw() override;
 
     virtual NameOrIndex* createItem() const throw() = 0;
     virtual bool isValid( const NameOrIndex* pItem ) const;

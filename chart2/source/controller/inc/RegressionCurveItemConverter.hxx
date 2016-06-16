@@ -43,7 +43,7 @@ public:
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory );
-    virtual ~RegressionCurveItemConverter();
+    virtual ~RegressionCurveItemConverter() override;
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const override;
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet ) override;

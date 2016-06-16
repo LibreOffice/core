@@ -63,7 +63,7 @@ namespace migration
 
     public:
         BasicMigration();
-        virtual ~BasicMigration();
+        virtual ~BasicMigration() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()

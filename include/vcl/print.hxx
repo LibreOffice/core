@@ -273,7 +273,7 @@ public:
                                 Printer( const JobSetup& rJobSetup );
                                 Printer( const QueueInfo& rQueueInfo );
                                 Printer( const OUString& rPrinterName );
-    virtual                     ~Printer();
+    virtual                     ~Printer() override;
     virtual void                dispose() override;
 
     static const std::vector< OUString >&

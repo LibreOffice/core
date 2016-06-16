@@ -49,7 +49,7 @@ public:
         ScDocument* pDoc,
         const ScRange& rRange);
 protected:
-    virtual ~ScAccessibleTableBase();
+    virtual ~ScAccessibleTableBase() override;
 public:
 
     using ScAccessibleContextBase::disposing;

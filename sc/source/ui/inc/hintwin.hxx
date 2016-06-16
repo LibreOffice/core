@@ -37,7 +37,7 @@ protected:
 
 public:
             ScHintWindow( vcl::Window* pParent, const OUString& rTit, const OUString& rMsg );
-            virtual ~ScHintWindow();
+            virtual ~ScHintWindow() override;
 };
 
 #endif

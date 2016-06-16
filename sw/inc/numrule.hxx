@@ -65,7 +65,7 @@ public:
     SwNumFormat( const SwNumFormat& );
     SwNumFormat( const SvxNumberFormat&, SwDoc* pDoc);
 
-    virtual ~SwNumFormat();
+    virtual ~SwNumFormat() override;
 
     SwNumFormat& operator=( const SwNumFormat& );
 

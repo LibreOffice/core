@@ -122,7 +122,7 @@ public:
             editeng/outliner.hxx.
     */
     Outliner( SdDrawDocument* pDoc, OutlinerMode nMode );
-    virtual ~Outliner();
+    virtual ~Outliner() override;
     /// Forbid copy construction and copy assignment
     Outliner(const Outliner&) = delete;
     Outliner& operator=(const Outliner&) = delete;

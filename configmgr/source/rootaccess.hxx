@@ -101,7 +101,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual ~RootAccess();
+    virtual ~RootAccess() override;
 
     virtual std::vector<OUString> getRelativePath() override;
 

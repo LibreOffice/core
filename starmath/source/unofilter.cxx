@@ -30,7 +30,7 @@ class MathTypeFilter : public cppu::WeakImplHelper
 
 public:
     MathTypeFilter();
-    virtual ~MathTypeFilter();
+    virtual ~MathTypeFilter() override;
 
     // XFilter
     virtual sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception) override;

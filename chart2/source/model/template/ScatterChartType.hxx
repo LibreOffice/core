@@ -33,7 +33,7 @@ public:
         css::chart2::CurveStyle eCurveStyle =  css::chart2::CurveStyle_LINES,
         sal_Int32 nResolution = 20,
         sal_Int32 nOrder = 3 );
-    virtual ~ScatterChartType();
+    virtual ~ScatterChartType() override;
 
     virtual OUString SAL_CALL
         getImplementationName()

@@ -55,7 +55,7 @@ private:
 
 public:
     SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon);
-    virtual ~SdrDragEntryPolyPolygon();
+    virtual ~SdrDragEntryPolyPolygon() override;
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
@@ -71,7 +71,7 @@ private:
 
 public:
     SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify);
-    virtual ~SdrDragEntrySdrObject();
+    virtual ~SdrDragEntrySdrObject() override;
 
     // #i54102# Split createPrimitive2DSequenceInCurrentState in prepareCurrentState and processing,
     // added accessors to original and clone
@@ -91,7 +91,7 @@ private:
 public:
     SdrDragEntryPrimitive2DSequence(
         const drawinglayer::primitive2d::Primitive2DContainer& rSequence);
-    virtual ~SdrDragEntryPrimitive2DSequence();
+    virtual ~SdrDragEntryPrimitive2DSequence() override;
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
@@ -105,7 +105,7 @@ private:
 
 public:
     SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag);
-    virtual ~SdrDragEntryPointGlueDrag();
+    virtual ~SdrDragEntryPointGlueDrag() override;
 
     virtual drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceInCurrentState(SdrDragMethod& rDragMethod) override;
 };
@@ -282,7 +282,7 @@ protected:
 
 public:
     SdrDragObjOwn(SdrDragView& rNewView);
-    virtual ~SdrDragObjOwn();
+    virtual ~SdrDragObjOwn() override;
 
     virtual void TakeSdrDragComment(OUString& rStr) const override;
     virtual bool BeginSdrDrag() override;

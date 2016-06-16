@@ -284,7 +284,7 @@ protected:
 public:
                     ValueSet( vcl::Window* pParent, WinBits nWinStyle );
                     ValueSet( vcl::Window* pParent, const ResId& rResId );
-    virtual         ~ValueSet();
+    virtual         ~ValueSet() override;
     virtual void    dispose() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;

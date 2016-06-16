@@ -51,7 +51,7 @@ protected:
 
 public:
     SwFmDrawPage( SdrPage* pPage );
-    virtual ~SwFmDrawPage() throw ();
+    virtual ~SwFmDrawPage() throw () override;
 
     const SdrMarkList&  PreGroup(const css::uno::Reference< css::drawing::XShapes >& rShapes);
     void                PreUnGroup(const css::uno::Reference< css::drawing::XShapeGroup >& rShapeGroup);
@@ -82,7 +82,7 @@ class SwXDrawPage : public SwXDrawPageBaseClass
     SwFmDrawPage*   pDrawPage;
 public:
     SwXDrawPage(SwDoc* pDoc);
-    virtual ~SwXDrawPage();
+    virtual ~SwXDrawPage() override;
 
     //XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception ) override;
@@ -220,7 +220,7 @@ class SwXShape : public SwXShapeBaseClass,
                    css::uno::RuntimeException);
 
 protected:
-    virtual ~SwXShape();
+    virtual ~SwXShape() override;
     //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
@@ -283,7 +283,7 @@ class SwXGroupShape :
     public css::drawing::XShapes
 {
 protected:
-    virtual ~SwXGroupShape();
+    virtual ~SwXGroupShape() override;
 public:
     SwXGroupShape(css::uno::Reference< css::uno::XInterface > & xShape);
 

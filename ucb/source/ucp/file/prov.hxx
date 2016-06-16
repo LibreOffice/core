@@ -59,7 +59,7 @@ namespace fileaccess {
     public:
 
         explicit FileProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-        virtual ~FileProvider();
+        virtual ~FileProvider() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL

@@ -39,7 +39,7 @@ class OMarkableTreeListBox : public DBTreeListBox
 
 public:
     OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0 );
-    virtual ~OMarkableTreeListBox();
+    virtual ~OMarkableTreeListBox() override;
     virtual void dispose() override;
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;

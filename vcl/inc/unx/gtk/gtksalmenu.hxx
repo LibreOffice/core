@@ -66,7 +66,7 @@ private:
 
 public:
     GtkSalMenu( bool bMenuBar );
-    virtual ~GtkSalMenu();
+    virtual ~GtkSalMenu() override;
 
     virtual bool                VisibleMenuBar() override;   // must return TRUE to actually DISPLAY native menu bars
                                                     // otherwise only menu messages are processed (eg, OLE on Windows)
@@ -132,7 +132,7 @@ class GtkSalMenuItem : public SalMenuItem
 {
 public:
     GtkSalMenuItem( const SalItemParams* );
-    virtual ~GtkSalMenuItem();
+    virtual ~GtkSalMenuItem() override;
 
     sal_uInt16          mnId;               // Item ID
     MenuItemType        mnType;             // Item type

@@ -67,7 +67,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterSlideShowView();
+    virtual ~PresenterSlideShowView() override;
     PresenterSlideShowView(const PresenterSlideShowView&) = delete;
     PresenterSlideShowView& operator=(const PresenterSlideShowView&) = delete;
 

@@ -62,7 +62,7 @@ private:
 public:
     explicit SignatureVerifierImpl( const css::uno::Reference<
         css::uno::XComponentContext >& rxContext);
-    virtual ~SignatureVerifierImpl();
+    virtual ~SignatureVerifierImpl() override;
 
     /* XSignatureVerifyResultBroadcaster */
     virtual void SAL_CALL addSignatureVerifyResultListener(

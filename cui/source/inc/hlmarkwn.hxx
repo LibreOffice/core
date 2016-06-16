@@ -43,7 +43,7 @@ private:
 
 public:
     SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~SvxHlmarkTreeLBox();
+    virtual ~SvxHlmarkTreeLBox() override;
     virtual void dispose() override;
 
     void SetParentWnd(SvxHlinkDlgMarkWnd* pParent)
@@ -92,7 +92,7 @@ protected:
 
 public:
     SvxHlinkDlgMarkWnd (SvxHyperlinkTabPageBase *pParent);
-    virtual ~SvxHlinkDlgMarkWnd();
+    virtual ~SvxHlinkDlgMarkWnd() override;
     virtual void dispose() override;
 
     bool MoveTo ( Point aNewPos );

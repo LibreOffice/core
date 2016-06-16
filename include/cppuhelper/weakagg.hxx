@@ -88,7 +88,7 @@ protected:
         Despite the fact that a RuntimeException is allowed to be thrown, you must not throw any
         exception upon destruction!
     */
-    virtual ~OWeakAggObject();
+    virtual ~OWeakAggObject() SAL_OVERRIDE;
 
     /** weak reference to delegator.
     */

@@ -40,7 +40,7 @@ private:
     GSeekable *mpStream;
 public:
     explicit Seekable( GSeekable *pStream );
-    virtual ~Seekable();
+    virtual ~Seekable() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type & type )

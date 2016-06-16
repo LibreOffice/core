@@ -29,7 +29,7 @@ public:                                             \
         : pDlg(p)                                   \
     {                                               \
     }                                               \
-    virtual         ~Class();                       \
+    virtual         ~Class() override;                       \
     virtual short   Execute() override ;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \

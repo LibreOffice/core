@@ -86,7 +86,7 @@ private:
 public:
     CachedContentResultSetStub( css::uno::Reference< css::sdbc::XResultSet > xOrigin );
 
-    virtual ~CachedContentResultSetStub();
+    virtual ~CachedContentResultSetStub() override;
 
 
     // XInterface
@@ -168,7 +168,7 @@ public:
     CachedContentResultSetStubFactory(
         const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
-    virtual ~CachedContentResultSetStubFactory();
+    virtual ~CachedContentResultSetStubFactory() override;
 
 
     // XInterface

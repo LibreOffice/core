@@ -89,7 +89,7 @@ namespace sdr
             double getDiscreteOne() const;
 
             OverlayManager(OutputDevice& rOutputDevice);
-            virtual ~OverlayManager();
+            virtual ~OverlayManager() override;
 
         public:
             static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice);

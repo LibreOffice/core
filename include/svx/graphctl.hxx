@@ -80,7 +80,7 @@ protected:
 public:
 
     GraphCtrl( vcl::Window* pParent, WinBits nStyle );
-    virtual ~GraphCtrl();
+    virtual ~GraphCtrl() override;
     virtual void dispose() override;
 
     void                SetWinStyle( WinBits nWinBits );
@@ -123,7 +123,7 @@ public:
         : rWin(rGraphWin)
     {}
 
-    virtual ~GraphCtrlUserCall()
+    virtual ~GraphCtrlUserCall() override
     {}
 
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect) override;
@@ -152,7 +152,7 @@ public:
         , rGraphCtrl(*pWindow)
     {}
 
-    virtual ~GraphCtrlView()
+    virtual ~GraphCtrlView() override
     {}
 };
 

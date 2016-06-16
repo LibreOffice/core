@@ -62,7 +62,7 @@ private:
 
 protected:
     void ThemeSelectionHasChanged();
-    virtual ~GalleryControl();
+    virtual ~GalleryControl() override;
     virtual void dispose() override;
 };
 

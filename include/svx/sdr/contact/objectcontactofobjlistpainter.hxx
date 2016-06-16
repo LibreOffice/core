@@ -39,7 +39,7 @@ protected:
 public:
     // basic constructor/destructor
     ObjectContactPainter();
-    virtual ~ObjectContactPainter();
+    virtual ~ObjectContactPainter() override;
 };
 
 // typedef for transferring SdrObject
@@ -67,7 +67,7 @@ public:
         OutputDevice& rTargetDevice,
         const SdrObjectVector& rObjects,
         const SdrPage* pProcessedPage);
-    virtual ~ObjectContactOfObjListPainter();
+    virtual ~ObjectContactOfObjListPainter() override;
 
     // Process the whole displaying
     virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) override;
@@ -102,7 +102,7 @@ public:
     ObjectContactOfPagePainter(
         const SdrPage* pPage,
         ObjectContact& rOriginalObjectContact);
-    virtual ~ObjectContactOfPagePainter();
+    virtual ~ObjectContactOfPagePainter() override;
 
     // set another page
     void SetStartPage(const SdrPage* pPage);

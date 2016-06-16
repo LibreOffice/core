@@ -42,7 +42,7 @@ namespace connectivity
 
     public:
         virtual jclass getMyClass() const override;
-        virtual ~java_sql_DatabaseMetaData();
+        virtual ~java_sql_DatabaseMetaData() override;
         // A ctor that is needed for returning the object
         java_sql_DatabaseMetaData( JNIEnv * pEnv, jobject myObj, java_sql_Connection& _rConnection );
 

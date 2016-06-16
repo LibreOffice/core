@@ -33,7 +33,7 @@ public:
     explicit            ExcelFilter(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext )
                             throw( css::uno::RuntimeException );
-    virtual             ~ExcelFilter();
+    virtual             ~ExcelFilter() override;
 
     void                registerWorkbookGlobals( WorkbookGlobals& rBookGlob );
     WorkbookGlobals&    getWorkbookGlobals() const;

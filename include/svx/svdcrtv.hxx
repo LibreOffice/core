@@ -72,7 +72,7 @@ protected:
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
     SdrCreateView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
-    virtual ~SdrCreateView();
+    virtual ~SdrCreateView() override;
 
 public:
     virtual bool IsAction() const override;

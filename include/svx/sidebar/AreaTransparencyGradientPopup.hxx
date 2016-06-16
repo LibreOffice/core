@@ -36,7 +36,7 @@ public:
     AreaTransparencyGradientPopup (
         vcl::Window* pParent,
         ::std::function<PopupControl*(PopupContainer*)> const& rControlCreator);
-    virtual ~AreaTransparencyGradientPopup();
+    virtual ~AreaTransparencyGradientPopup() override;
 
     void Rearrange (XFillFloatTransparenceItem* pItem);
 };

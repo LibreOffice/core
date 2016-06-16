@@ -74,7 +74,7 @@ namespace pcr
                         Create(const css::uno::Reference< css::uno::XComponentContext >&);
 
     protected:
-        virtual ~FormController();
+        virtual ~FormController() override;
 
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()

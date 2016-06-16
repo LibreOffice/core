@@ -30,7 +30,7 @@ namespace dbaui
     {
     public:
         explicit OQueryTabWinShowUndoAct(OQueryTableView* pOwner);
-        virtual ~OQueryTabWinShowUndoAct();
+        virtual ~OQueryTabWinShowUndoAct() override;
 
         virtual void    Undo() override;
         virtual void    Redo() override;
@@ -42,7 +42,7 @@ namespace dbaui
     {
     public:
         explicit OQueryTabWinDelUndoAct(OQueryTableView* pOwner);
-        virtual ~OQueryTabWinDelUndoAct();
+        virtual ~OQueryTabWinDelUndoAct() override;
 
         virtual void    Undo() override;
         virtual void    Redo() override;

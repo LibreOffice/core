@@ -57,7 +57,7 @@ class SwRedlineExtraData_FormatColl : public SwRedlineExtraData
 public:
     SwRedlineExtraData_FormatColl( const OUString& rColl, sal_uInt16 nPoolFormatId,
                                 const SfxItemSet* pSet = nullptr );
-    virtual ~SwRedlineExtraData_FormatColl();
+    virtual ~SwRedlineExtraData_FormatColl() override;
     virtual SwRedlineExtraData* CreateNew() const override;
     virtual void Reject( SwPaM& rPam ) const override;
     virtual bool operator == ( const SwRedlineExtraData& ) const override;
@@ -73,7 +73,7 @@ class SwRedlineExtraData_Format : public SwRedlineExtraData
 
 public:
     SwRedlineExtraData_Format( const SfxItemSet& rSet );
-    virtual ~SwRedlineExtraData_Format();
+    virtual ~SwRedlineExtraData_Format() override;
     virtual SwRedlineExtraData* CreateNew() const override;
     virtual void Reject( SwPaM& rPam ) const override;
     virtual bool operator == ( const SwRedlineExtraData& ) const override;
@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwRedlineExtraData_FormattingChanges : public SwRedlineExtraD
 
 public:
     SwRedlineExtraData_FormattingChanges( const SfxItemSet* pItemSet );
-    virtual ~SwRedlineExtraData_FormattingChanges();
+    virtual ~SwRedlineExtraData_FormattingChanges() override;
     virtual SwRedlineExtraData* CreateNew() const override;
     virtual void Reject( SwPaM& rPam ) const override;
     virtual bool operator == ( const SwRedlineExtraData& ) const override;
@@ -203,7 +203,7 @@ public:
         bDelLastPara( bDelLP ), bIsLastParaDelete( false ), bIsVisible( true )
     {}
     SwRangeRedline( const SwRangeRedline& );
-    virtual ~SwRangeRedline();
+    virtual ~SwRangeRedline() override;
 
     SwNodeIndex* GetContentIdx() const { return pContentSect; }
     // For Undo.
@@ -311,7 +311,7 @@ private:
 
 public:
     SwTableRowRedline(const SwRedlineData& rData, const SwTableLine& rTableLine);
-    virtual ~SwTableRowRedline();
+    virtual ~SwTableRowRedline() override;
 
     /** ExtraData gets copied, the pointer is therefore not taken over by
      *  the RedLineObject.*/
@@ -332,7 +332,7 @@ private:
 
 public:
     SwTableCellRedline(const SwRedlineData& rData, const SwTableBox& rTableBox);
-    virtual ~SwTableCellRedline();
+    virtual ~SwTableCellRedline() override;
 
     /** ExtraData gets copied, the pointer is therefore not taken over by
      *  the RedLineObject.*/

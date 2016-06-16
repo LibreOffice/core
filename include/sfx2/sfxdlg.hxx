@@ -114,7 +114,7 @@ namespace com { namespace sun { namespace star { namespace frame { class XFrame;
 class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialogFactory
 {
 public:
-                                        virtual ~SfxAbstractDialogFactory();    // needed for export of vtable
+                                        virtual ~SfxAbstractDialogFactory() override;    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
     virtual VclAbstractDialog*          CreateFrameDialog( const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const rtl::OUString& rParameter ) = 0;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,

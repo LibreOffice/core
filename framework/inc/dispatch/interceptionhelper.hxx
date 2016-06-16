@@ -165,7 +165,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
                    This method is protected, because its not allowed to use this class as a direct member!
                    You MUST use a dynamical instance (pointer). That's the reason for a protected dtor.
          */
-        virtual ~InterceptionHelper();
+        virtual ~InterceptionHelper() override;
 
     // uno interface
 

@@ -31,7 +31,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         sal_Int32 nDimensionCount = 2 );
     explicit CartesianCoordinateSystem( const CartesianCoordinateSystem & rSource );
-    virtual ~CartesianCoordinateSystem();
+    virtual ~CartesianCoordinateSystem() override;
 
     // ____ XCoordinateSystem ____
     virtual OUString SAL_CALL getCoordinateSystemType()
@@ -60,7 +60,7 @@ class CartesianCoordinateSystem2d : public CartesianCoordinateSystem
 public:
     explicit CartesianCoordinateSystem2d(
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~CartesianCoordinateSystem2d();
+    virtual ~CartesianCoordinateSystem2d() override;
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()
@@ -80,7 +80,7 @@ public:
     explicit CartesianCoordinateSystem3d(
         const css::uno::Reference<
             css::uno::XComponentContext > & xContext );
-    virtual ~CartesianCoordinateSystem3d();
+    virtual ~CartesianCoordinateSystem3d() override;
 
     // ____ XServiceInfo ____
     virtual OUString SAL_CALL getImplementationName()

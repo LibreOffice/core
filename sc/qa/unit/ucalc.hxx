@@ -92,7 +92,7 @@ public:
     }
 
     Test();
-    virtual ~Test();
+    virtual ~Test() override;
 
     ScDocShell& getDocShell();
 

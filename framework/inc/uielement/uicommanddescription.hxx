@@ -42,7 +42,7 @@ class UICommandDescription : private cppu::BaseMutex,
 {
     public:
         UICommandDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-        virtual ~UICommandDescription();
+        virtual ~UICommandDescription() override;
 
         virtual OUString SAL_CALL getImplementationName()
             throw (css::uno::RuntimeException, std::exception) override

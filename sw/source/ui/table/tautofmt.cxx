@@ -48,7 +48,7 @@ class AutoFormatPreview : public vcl::Window
 {
 public:
     AutoFormatPreview(vcl::Window* pParent, WinBits nStyle);
-    virtual ~AutoFormatPreview();
+    virtual ~AutoFormatPreview() override;
     virtual void dispose() override;
 
     void NotifyChange( const SwTableAutoFormat& rNewData );
@@ -102,7 +102,7 @@ class SwStringInputDlg : public ModalDialog
 public:
     SwStringInputDlg(vcl::Window* pParent, const OUString& rTitle,
                      const OUString& rEditTitle, const OUString& rDefault );
-    virtual ~SwStringInputDlg();
+    virtual ~SwStringInputDlg() override;
     virtual void dispose() override;
 
     OUString GetInputString() const;

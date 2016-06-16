@@ -50,7 +50,7 @@ class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
     SalInfoPrinter*         m_pInfoPrinter;
 public:
                             GenPspGraphics();
-    virtual                ~GenPspGraphics();
+    virtual                ~GenPspGraphics() override;
 
     void                    Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
                                   SalInfoPrinter* pInfoPrinter );

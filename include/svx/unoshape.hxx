@@ -169,7 +169,7 @@ public:
     SvxShape( SdrObject* pObj ) throw (css::uno::RuntimeException);
     SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet ) throw (css::uno::RuntimeException);
     SvxShape() throw (css::uno::RuntimeException);
-    virtual ~SvxShape() throw ();
+    virtual ~SvxShape() throw () override;
 
     // Internals
     void ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet);
@@ -335,7 +335,7 @@ protected:
 public:
     SvxShapeText( SdrObject* pObj ) throw ();
     SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
-    virtual ~SvxShapeText() throw ();
+    virtual ~SvxShapeText() throw () override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
 
@@ -368,7 +368,7 @@ class SvxShapeRect : public SvxShapeText
 {
 public:
     SvxShapeRect( SdrObject* pObj ) throw ();
-    virtual ~SvxShapeRect() throw ();
+    virtual ~SvxShapeRect() throw () override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -395,7 +395,7 @@ private:
 
 public:
     SvxShapeGroup( SdrObject* pObj,SvxDrawPage* pDrawPage ) throw ();
-    virtual ~SvxShapeGroup() throw ();
+    virtual ~SvxShapeGroup() throw () override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
 
@@ -451,7 +451,7 @@ class SvxShapeConnector : public css::drawing::XConnectorShape,
 {
 public:
     SvxShapeConnector( SdrObject* pObj ) throw();
-    virtual ~SvxShapeConnector() throw();
+    virtual ~SvxShapeConnector() throw() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -494,7 +494,7 @@ protected:
 
 public:
     SvxShapeControl( SdrObject* pObj ) throw();
-    virtual ~SvxShapeControl() throw();
+    virtual ~SvxShapeControl() throw() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -539,7 +539,7 @@ class SvxShapeDimensioning : public SvxShapeText
 {
 public:
     SvxShapeDimensioning( SdrObject* pObj ) throw();
-    virtual ~SvxShapeDimensioning() throw();
+    virtual ~SvxShapeDimensioning() throw() override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
@@ -552,7 +552,7 @@ class SvxShapeCircle : public SvxShapeText
 {
 public:
     SvxShapeCircle( SdrObject* pObj ) throw ();
-    virtual ~SvxShapeCircle() throw ();
+    virtual ~SvxShapeCircle() throw () override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
@@ -576,7 +576,7 @@ protected:
 public:
     SvxOle2Shape( SdrObject* pObj ) throw();
     SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
-    virtual ~SvxOle2Shape() throw();
+    virtual ~SvxOle2Shape() throw() override;
 
     bool createObject( const SvGlobalName &aClassName );
 
@@ -607,7 +607,7 @@ protected:
 
 public:
     SvxShapePolyPolygon( SdrObject* pObj , css::drawing::PolygonKind eNew = css::drawing::PolygonKind_LINE ) throw(css::lang::IllegalArgumentException, css::beans::PropertyVetoException);
-    virtual ~SvxShapePolyPolygon() throw();
+    virtual ~SvxShapePolyPolygon() throw() override;
 
     // Local support functions
     css::drawing::PolygonKind GetPolygonKind() const throw() { return mePolygonKind;}
@@ -637,7 +637,7 @@ public:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
     SvxShapePolyPolygonBezier( SdrObject* pObj , css::drawing::PolygonKind eNew = css::drawing::PolygonKind_PATHLINE) throw();
-    virtual ~SvxShapePolyPolygonBezier() throw();
+    virtual ~SvxShapePolyPolygonBezier() throw() override;
 
     // Local support functions
     css::drawing::PolygonKind GetPolygonKind() const throw() { return mePolygonKind;}
@@ -663,7 +663,7 @@ protected:
 
 public:
     SvxGraphicObject( SdrObject* pObj, OUString const & referer ) throw();
-    virtual ~SvxGraphicObject() throw();
+    virtual ~SvxGraphicObject() throw() override;
 
 private:
     OUString referer_;
@@ -690,7 +690,7 @@ public:
             throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
                    css::uno::RuntimeException, std::exception) override;
 
-    virtual ~Svx3DSceneObject() throw();
+    virtual ~Svx3DSceneObject() throw() override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
 
@@ -732,7 +732,7 @@ protected:
 
 public:
     Svx3DCubeObject( SdrObject* pObj ) throw();
-    virtual ~Svx3DCubeObject() throw();
+    virtual ~Svx3DCubeObject() throw() override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -750,7 +750,7 @@ protected:
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    virtual ~Svx3DSphereObject() throw();
+    virtual ~Svx3DSphereObject() throw() override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -768,7 +768,7 @@ protected:
 
 public:
     Svx3DLatheObject( SdrObject* pObj ) throw();
-    virtual ~Svx3DLatheObject() throw();
+    virtual ~Svx3DLatheObject() throw() override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -786,7 +786,7 @@ protected:
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    virtual ~Svx3DExtrudeObject() throw();
+    virtual ~Svx3DExtrudeObject() throw() override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -804,7 +804,7 @@ protected:
 
 public:
     Svx3DPolygonObject( SdrObject* pObj ) throw();
-    virtual ~Svx3DPolygonObject() throw();
+    virtual ~Svx3DPolygonObject() throw() override;
 
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -829,7 +829,7 @@ public:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
 
-    virtual ~SvxCustomShape() throw ();
+    virtual ~SvxCustomShape() throw () override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = nullptr ) override;
 
@@ -867,7 +867,7 @@ class SvxMediaShape : public SvxShape
 {
 public:
     SvxMediaShape( SdrObject* pObj, OUString const & referer ) throw();
-    virtual     ~SvxMediaShape() throw();
+    virtual     ~SvxMediaShape() throw() override;
 
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
@@ -894,7 +894,7 @@ private:
 
 public:
     SvxDummyShapeContainer( css::uno::Reference< css::drawing::XShapes > xWrappedObject );
-    virtual ~SvxDummyShapeContainer() throw();
+    virtual ~SvxDummyShapeContainer() throw() override;
 
     const css::uno::Reference< css::drawing::XShapes >& getWrappedShape()
             { return m_xDummyObject; }

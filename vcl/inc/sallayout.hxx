@@ -254,7 +254,7 @@ public:
     void SetIncomplete(bool bIncomplete);
 
 protected:
-    virtual         ~MultiSalLayout();
+    virtual         ~MultiSalLayout() override;
 
 private:
     // dummy implementations
@@ -346,7 +346,7 @@ public:
 
 protected:
                     GenericSalLayout();
-    virtual         ~GenericSalLayout();
+    virtual         ~GenericSalLayout() override;
 
     // for glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos ) override;

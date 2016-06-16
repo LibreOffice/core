@@ -72,7 +72,7 @@ class XFTableStyle : public XFStyle
 public:
     XFTableStyle();
 
-    virtual ~XFTableStyle();
+    virtual ~XFTableStyle() override;
 
 public:
     void    SetWidth(double width);

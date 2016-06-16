@@ -31,7 +31,7 @@ namespace oox { namespace ppt {
     public:
         explicit BuildListContext( ::oox::core::FragmentHandler2& rParent );
 
-        virtual ~BuildListContext( );
+        virtual ~BuildListContext( ) override;
 
         virtual void onEndElement() override;
 

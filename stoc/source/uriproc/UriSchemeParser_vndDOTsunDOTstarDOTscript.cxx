@@ -281,7 +281,7 @@ public:
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception) override;
 
 private:
-    virtual ~UrlReference() {}
+    virtual ~UrlReference() override {}
 
     sal_Int32 findParameter(OUString const & key);
 
@@ -398,7 +398,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual ~Parser() {}
+    virtual ~Parser() override {}
 };
 
 OUString Parser::getImplementationName()

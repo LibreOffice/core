@@ -36,7 +36,7 @@ protected:
     sal_uInt32      nEntries;   // number of entries in field
 public:
                     RscConst( Atom nId, sal_uInt32 nTypId );
-                    virtual ~RscConst();
+                    virtual ~RscConst() override;
     virtual RSCCLASS_TYPE   GetClassType() const override;
                     // sets the allowed values
     void            SetConstant( Atom nVarName, sal_Int32 lValue );

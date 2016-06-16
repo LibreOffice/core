@@ -43,7 +43,7 @@ public:
 
     ScDocument* getScDocument();
 
-    virtual ~ScVbaNames();
+    virtual ~ScVbaNames() override;
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

@@ -81,7 +81,7 @@ class SwFormatTablePage : public SfxTabPage
 
 public:
     SwFormatTablePage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwFormatTablePage();
+    virtual ~SwFormatTablePage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
@@ -132,7 +132,7 @@ class SwTableColumnPage : public SfxTabPage
 
 public:
     SwTableColumnPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwTableColumnPage();
+    virtual ~SwTableColumnPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
@@ -182,7 +182,7 @@ class SwTextFlowPage : public SfxTabPage
 
 public:
     SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwTextFlowPage();
+    virtual ~SwTextFlowPage() override;
     virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

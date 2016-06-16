@@ -70,7 +70,7 @@ private:
 
 public:
     ManageLanguageDialog( vcl::Window* pParent, std::shared_ptr<LocalizationMgr> _pLMgr );
-    virtual ~ManageLanguageDialog();
+    virtual ~ManageLanguageDialog() override;
     virtual void dispose() override;
 };
 
@@ -90,7 +90,7 @@ private:
 
 public:
     SetDefaultLanguageDialog(vcl::Window* pParent, std::shared_ptr<LocalizationMgr> xLMgr);
-    virtual ~SetDefaultLanguageDialog();
+    virtual ~SetDefaultLanguageDialog() override;
     virtual void dispose() override;
 
     css::uno::Sequence< css::lang::Locale >   GetLocales() const;

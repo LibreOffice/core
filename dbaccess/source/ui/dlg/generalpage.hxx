@@ -65,7 +65,7 @@ namespace dbaui
                             m_aURLPrefixes;
 
     public:
-        virtual ~OGeneralPage();
+        virtual ~OGeneralPage() override;
         virtual void dispose() override;
 
         /// set a handler which gets called every time the user selects a new type
@@ -118,7 +118,7 @@ namespace dbaui
     {
     public:
         OGeneralPageWizard( vcl::Window* pParent, const SfxItemSet& _rItems );
-        virtual ~OGeneralPageWizard();
+        virtual ~OGeneralPageWizard() override;
         virtual void dispose() override;
     public:
         enum CreationMode

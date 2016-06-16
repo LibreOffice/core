@@ -70,7 +70,7 @@ public:
                     ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                ScViewData*      ptrViewData);
 
-                    virtual ~ScHighlightChgDlg();
+                    virtual ~ScHighlightChgDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetActive() override;

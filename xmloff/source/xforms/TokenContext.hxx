@@ -47,7 +47,7 @@ public:
                   const SvXMLTokenMapEntry* pAttributes = nullptr,
                   const SvXMLTokenMapEntry* pChildren = nullptr );
 
-    virtual ~TokenContext();
+    virtual ~TokenContext() override;
 
     // implement SvXMLImportContext methods:
 

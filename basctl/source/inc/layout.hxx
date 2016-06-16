@@ -51,7 +51,7 @@ public:
     virtual void GetState (SfxItemSet&, unsigned nWhich) = 0;
     virtual void UpdateDebug (bool bBasicStopped ) = 0;
 
-    virtual ~Layout();
+    virtual ~Layout() override;
     virtual void dispose() override;
 
 protected:

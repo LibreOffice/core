@@ -4948,7 +4948,7 @@ protected:
 
 public:
     SvNullStream() : SvStream() {}
-    virtual ~SvNullStream() {}
+    virtual ~SvNullStream() override {}
 };
 
 EscherEx::EscherEx(const std::shared_ptr<EscherExGlobal>& rxGlobal, SvStream* pOutStrm, bool bOOXML)

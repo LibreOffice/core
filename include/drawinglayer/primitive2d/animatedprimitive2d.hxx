@@ -83,7 +83,7 @@ namespace drawinglayer
                 bool bIsTextAnimation);
 
             /// destructor - needed due to mpAnimationEntry
-            virtual ~AnimatedSwitchPrimitive2D();
+            virtual ~AnimatedSwitchPrimitive2D() override;
 
             /// data read access
             const animation::AnimationEntry& getAnimationEntry() const { return *mpAnimationEntry; }

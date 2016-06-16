@@ -231,7 +231,7 @@ namespace dbaccess
         bool    impl_rowDeleted();
 
     public:
-        virtual ~ORowSetBase();
+        virtual ~ORowSetBase() override;
 
     // OComponentHelper
         virtual void SAL_CALL disposing();

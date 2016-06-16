@@ -52,7 +52,7 @@ protected:
     SbxBase();
     SbxBase( const SbxBase& );
     SbxBase& operator=( const SbxBase& );
-    virtual ~SbxBase();
+    virtual ~SbxBase() override;
 
     virtual sal_uInt32 GetCreator() const { return 0;   }
     virtual sal_uInt16 GetVersion() const { return 0;   }

@@ -77,7 +77,7 @@ public:
         bool bConnectToModel,
         bool bDefaultDataInColumns );
     explicit InternalDataProvider( const InternalDataProvider & rOther );
-    virtual ~InternalDataProvider();
+    virtual ~InternalDataProvider() override;
 
     void createDefaultData();
 

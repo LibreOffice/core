@@ -37,7 +37,7 @@ class FWE_DLLPUBLIC PropertySetContainer : public css::container::XIndexContaine
 {
     public:
         PropertySetContainer();
-        virtual ~PropertySetContainer();
+        virtual ~PropertySetContainer() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )

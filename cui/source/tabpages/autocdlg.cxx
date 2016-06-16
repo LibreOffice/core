@@ -311,7 +311,7 @@ public:
     {
         get(m_pPrcntMF, "margin");
     }
-    virtual ~OfaAutoFmtPrcntSet() { disposeOnce(); }
+    virtual ~OfaAutoFmtPrcntSet() override { disposeOnce(); }
     virtual void dispose() override { m_pPrcntMF.clear(); ModalDialog::dispose(); }
 
     MetricField& GetPrcntFld()

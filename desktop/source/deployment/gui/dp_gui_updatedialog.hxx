@@ -84,7 +84,7 @@ public:
         css::deployment::XPackage > > & vExtensionList,
         std::vector< dp_gui::UpdateData > * updateData);
 
-    virtual ~UpdateDialog();
+    virtual ~UpdateDialog() override;
     virtual void dispose() override;
 
     virtual bool Close() override;

@@ -28,7 +28,7 @@ class LogarithmicRegressionCurveCalculator : public RegressionCurveCalculator
 {
 public:
     LogarithmicRegressionCurveCalculator();
-    virtual ~LogarithmicRegressionCurveCalculator();
+    virtual ~LogarithmicRegressionCurveCalculator() override;
 
 protected:
     virtual OUString ImplGetRepresentation(

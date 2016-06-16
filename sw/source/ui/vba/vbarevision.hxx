@@ -35,7 +35,7 @@ private:
 
 public:
     SwVbaRevision( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xRedlineProps ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaRevision();
+    virtual ~SwVbaRevision() override;
 
     // Methods
     virtual void SAL_CALL Accept(  ) throw (css::uno::RuntimeException, std::exception) override;

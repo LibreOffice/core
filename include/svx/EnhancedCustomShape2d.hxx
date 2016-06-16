@@ -192,7 +192,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         bool                    SetHandleControllerPosition( const sal_uInt32 nIndex, const css::awt::Point& rPosition );
 
         EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );
-        virtual ~EnhancedCustomShape2d();
+        virtual ~EnhancedCustomShape2d() override;
 
         enum SAL_DLLPRIVATE EnumFunc
         {

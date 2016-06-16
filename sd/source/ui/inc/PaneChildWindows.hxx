@@ -35,7 +35,7 @@ public:
         SfxChildWinInfo* pInfo,
         const sal_uInt16 nTitleBarResId,
         SfxChildAlignment eAlignment);
-    virtual ~PaneChildWindow();
+    virtual ~PaneChildWindow() override;
 };
 
 class LeftPaneImpressChildWindow

@@ -32,7 +32,7 @@ class ScCellCursorObj : public ScCellRangeObj,
 {
 public:
                             ScCellCursorObj(ScDocShell* pDocSh, const ScRange& rR);
-    virtual                 ~ScCellCursorObj();
+    virtual                 ~ScCellCursorObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface(
                                 const css::uno::Type & rType )

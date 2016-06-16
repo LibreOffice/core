@@ -201,7 +201,7 @@ public:
         ) const override;
 
 protected:
-    virtual ~AccessibleFactory();
+    virtual ~AccessibleFactory() override;
 };
 
 AccessibleFactory::AccessibleFactory()

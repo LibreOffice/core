@@ -389,7 +389,7 @@ public:
     {
     }
 
-    virtual ~OEvoabVersion36Helper()
+    virtual ~OEvoabVersion36Helper() override
     {
         freeContacts();
     }
@@ -535,7 +535,7 @@ public:
     {
     }
 
-    virtual ~OEvoabVersion35Helper()
+    virtual ~OEvoabVersion35Helper() override
     {
         freeContacts();
     }

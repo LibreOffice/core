@@ -73,7 +73,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
-    virtual ~XMLSectionImportContext();
+    virtual ~XMLSectionImportContext() override;
 
 protected:
 

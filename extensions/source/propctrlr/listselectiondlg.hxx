@@ -44,7 +44,7 @@ namespace pcr
             const OUString& _rPropertyName,
             const OUString& _rPropertyUIName
         );
-        virtual ~ListSelectionDialog();
+        virtual ~ListSelectionDialog() override;
         virtual void dispose() override;
 
         // Dialog overridables

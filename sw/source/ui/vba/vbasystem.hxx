@@ -48,7 +48,7 @@ private:
 
 public:
     explicit SwVbaSystem( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
-    virtual ~SwVbaSystem();
+    virtual ~SwVbaSystem() override;
 
     // XSystem
     virtual sal_Int32 SAL_CALL getCursor() throw ( css::uno::RuntimeException, std::exception ) override;

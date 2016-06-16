@@ -61,7 +61,7 @@ class SvtCJKOptions_Impl : public utl::ConfigItem
 
 public:
     SvtCJKOptions_Impl();
-    virtual ~SvtCJKOptions_Impl();
+    virtual ~SvtCJKOptions_Impl() override;
 
     virtual void    Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
     void            Load();

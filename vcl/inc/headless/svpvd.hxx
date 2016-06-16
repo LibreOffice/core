@@ -39,7 +39,7 @@ public:
         , m_pSurface(nullptr)
     {
     }
-    virtual ~SvpSalVirtualDevice();
+    virtual ~SvpSalVirtualDevice() override;
 
     // SalVirtualDevice
     virtual SalGraphics*    AcquireGraphics() override;

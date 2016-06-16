@@ -78,7 +78,7 @@ public:
              const OUString& rLName,
               const Reference< xml::sax::XAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
-    virtual ~SvxXMLListLevelStyleAttrContext_Impl();
+    virtual ~SvxXMLListLevelStyleAttrContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -96,7 +96,7 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
-    virtual ~SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl();
+    virtual ~SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl() override;
 };
 
 enum SvxXMLTextListLevelStyleAttrTokens
@@ -217,7 +217,7 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~SvxXMLListLevelStyleContext_Impl();
+    virtual ~SvxXMLListLevelStyleContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,

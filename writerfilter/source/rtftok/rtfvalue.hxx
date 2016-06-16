@@ -40,7 +40,7 @@ public:
     RTFValue(css::uno::Reference<css::io::XInputStream> const& xStream);
     RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> const& xObject);
     RTFValue(const RTFShape& aShape);
-    virtual ~RTFValue();
+    virtual ~RTFValue() override;
     void setString(const OUString& sValue);
     virtual int getInt() const override;
     virtual OUString getString() const override;

@@ -35,7 +35,7 @@ class ColorPropertySet : public ::cppu::WeakImplHelper<
 {
 public:
     explicit ColorPropertySet( sal_Int32 nColor );
-    virtual ~ColorPropertySet();
+    virtual ~ColorPropertySet() override;
 
 protected:
     // ____ XPropertySet ____

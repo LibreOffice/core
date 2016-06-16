@@ -118,7 +118,7 @@ namespace vcl
         static bool is_less( vcl::Window* left, vcl::Window* right );
 
         LazyDeletor()  { LazyDelete::addDeletor( this ); }
-        virtual ~LazyDeletor()
+        virtual ~LazyDeletor() override
         {
             SAL_INFO("vcl.lazydelete", typeid(*this).name() << std::hex << this << " deleted");
             if( s_pOneInstance == this ) // sanity check
@@ -227,7 +227,7 @@ namespace vcl
         virtual void doCleanup() override { delete m_pT; m_pT = nullptr; }
     public:
         DeleteOnDeinit( T* i_pT ) : m_pT( i_pT ) { addDeinitContainer( this ); }
-        virtual ~DeleteOnDeinit() {}
+        virtual ~DeleteOnDeinit() override {}
 
         // get contents
         T* get() { return m_pT; }
@@ -261,7 +261,7 @@ namespace vcl
     public:
         DeleteUnoReferenceOnDeinit(const css::uno::Reference<I>& r_xI ) : m_xI( r_xI ) {
             addDeinitContainer( this ); }
-        virtual ~DeleteUnoReferenceOnDeinit() {}
+        virtual ~DeleteUnoReferenceOnDeinit() override {}
 
         css::uno::Reference<I> get() { return m_xI; }
 

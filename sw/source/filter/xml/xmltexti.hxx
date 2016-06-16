@@ -42,7 +42,7 @@ public:
             bool bInsertM, bool bStylesOnlyM, bool bProgress,
             bool bBlockM, bool bOrganizerM,
             bool bPreserveRedlineMode );
-    virtual ~SwXMLTextImportHelper();
+    virtual ~SwXMLTextImportHelper() override;
 
     virtual css::uno::Reference<css::beans::XPropertySet>
             createAndInsertOLEObject( SvXMLImport& rImport,

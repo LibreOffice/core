@@ -65,7 +65,7 @@ class AxesSetConverter : public ConverterBase< AxesSetModel >
 {
 public:
     explicit            AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& rModel );
-    virtual             ~AxesSetConverter();
+    virtual             ~AxesSetConverter() override;
 
     /** Converts the axes set model to a chart2 diagram. Returns an automatic
         chart title from a single series title, if possible. */

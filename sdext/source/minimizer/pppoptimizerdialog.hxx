@@ -51,7 +51,7 @@ class PPPOptimizerDialog : public   ::cppu::WeakImplHelper<
 public:
 
     explicit PPPOptimizerDialog( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~PPPOptimizerDialog();
+    virtual ~PPPOptimizerDialog() override;
 
     // XInitialization
     void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )

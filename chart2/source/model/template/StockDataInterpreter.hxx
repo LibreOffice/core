@@ -32,7 +32,7 @@ public:
     explicit StockDataInterpreter(
         StockChartTypeTemplate::StockVariant eVariant,
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~StockDataInterpreter();
+    virtual ~StockDataInterpreter() override;
 
 protected:
     // ____ XDataInterpreter ____

@@ -55,7 +55,7 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
     public:
 
          SvtSlideSorterBarOptions_Impl();
-        virtual ~SvtSlideSorterBarOptions_Impl();
+        virtual ~SvtSlideSorterBarOptions_Impl() override;
 
         /** called for notify of configmanager
 

@@ -46,7 +46,7 @@ class MeasureHandler : public LoggedProperties
 
 public:
     MeasureHandler();
-    virtual ~MeasureHandler();
+    virtual ~MeasureHandler() override;
 
     sal_Int32 getMeasureValue() const;
 

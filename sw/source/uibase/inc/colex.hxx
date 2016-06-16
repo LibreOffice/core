@@ -59,7 +59,7 @@ public:
         , pGridItem(nullptr)
     {}
 
-    virtual ~SwPageGridExample();
+    virtual ~SwPageGridExample() override;
     virtual void dispose() override;
     void UpdateExample( const SfxItemSet& rSet );
 };

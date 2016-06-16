@@ -61,7 +61,7 @@ public:
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) throw ( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception) override;
 
 private:
-    virtual ~SequenceOutputStreamService() {};
+    virtual ~SequenceOutputStreamService() override {};
 
 
     ::osl::Mutex m_aMutex;

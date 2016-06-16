@@ -69,7 +69,7 @@ namespace sfx2
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~DocumentStorageModifyListener();
+        virtual ~DocumentStorageModifyListener() override;
 
     private:
         DocumentStorageModifyListener( const DocumentStorageModifyListener& ) = delete;

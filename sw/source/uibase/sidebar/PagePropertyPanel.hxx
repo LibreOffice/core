@@ -101,7 +101,7 @@ namespace sw { namespace sidebar {
             const css::uno::Reference< css::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
     private:
-        virtual ~PagePropertyPanel();
+        virtual ~PagePropertyPanel() override;
         virtual void dispose() override;
 
         SfxBindings* mpBindings;

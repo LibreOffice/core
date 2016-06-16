@@ -70,7 +70,7 @@ class LwpParaBorderOverride : public LwpOverride
 {
 public:
     LwpParaBorderOverride();
-    virtual ~LwpParaBorderOverride();
+    virtual ~LwpParaBorderOverride() override;
 
     virtual LwpParaBorderOverride* clone() const override;
 

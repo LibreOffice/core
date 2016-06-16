@@ -91,7 +91,7 @@ namespace svt
     public:
 
         CellController(Control* pW);
-        virtual ~CellController();
+        virtual ~CellController() override;
 
         Control& GetWindow() const { return *const_cast< CellController* >( this )->pWindow; }
 
@@ -237,7 +237,7 @@ namespace svt
     public:
         EditCellController( Edit* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
-        virtual ~EditCellController( );
+        virtual ~EditCellController( ) override;
 
         const IEditImplementation* GetEditImplementation( ) const { return m_pEditImplementation; }
               IEditImplementation* GetEditImplementation( )       { return m_pEditImplementation; }
@@ -284,7 +284,7 @@ namespace svt
 
     public:
         CheckBoxControl(vcl::Window* pParent);
-        virtual ~CheckBoxControl();
+        virtual ~CheckBoxControl() override;
         virtual void dispose() override;
 
         virtual void GetFocus() override;
@@ -588,7 +588,7 @@ namespace svt
     public:
         EditBrowseBox(vcl::Window* pParent, EditBrowseBoxFlags nBrowserFlags = EditBrowseBoxFlags::NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = BrowserMode::NONE );
         EditBrowseBox(vcl::Window* pParent, const ResId& rId, EditBrowseBoxFlags nBrowserFlags = EditBrowseBoxFlags::NONE, BrowserMode nMode = BrowserMode::NONE );
-        virtual ~EditBrowseBox();
+        virtual ~EditBrowseBox() override;
         virtual void dispose() override;
 
         bool IsEditing() const {return aController.Is();}

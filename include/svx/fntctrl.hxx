@@ -47,7 +47,7 @@ private:
 public:
                         SvxFontPrevWindow(vcl::Window* pParent, const ResId& rId);
                         SvxFontPrevWindow(vcl::Window* pParent, WinBits nStyle);
-    virtual             ~SvxFontPrevWindow();
+    virtual             ~SvxFontPrevWindow() override;
     virtual void        dispose() override;
 
     virtual void        StateChanged( StateChangedType nStateChange ) override;

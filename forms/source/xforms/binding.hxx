@@ -157,7 +157,7 @@ private:
 
 public:
     Binding();
-    virtual ~Binding();
+    virtual ~Binding() override;
 
 
     // property methods: get/set value

@@ -42,7 +42,7 @@ namespace rptxml
                     ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
                     ,const css::uno::Reference< css::report::XReportComponent >& _xComponent
                     );
-        virtual ~OXMLComponent();
+        virtual ~OXMLComponent() override;
     };
 
 } // namespace rptxml

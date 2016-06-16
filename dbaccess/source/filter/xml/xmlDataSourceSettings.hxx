@@ -30,7 +30,7 @@ namespace dbaxml
     public:
 
         OXMLDataSourceSettings( ODBFilter& rImport, sal_uInt16 nPrfx,const OUString& rLName);
-        virtual ~OXMLDataSourceSettings();
+        virtual ~OXMLDataSourceSettings() override;
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

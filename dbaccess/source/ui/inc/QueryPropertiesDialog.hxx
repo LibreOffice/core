@@ -29,7 +29,7 @@ public:
 
     QueryPropertiesDialog(
         vcl::Window* pParent, const bool bDistinct, const sal_Int64 nLimit );
-    virtual ~QueryPropertiesDialog();
+    virtual ~QueryPropertiesDialog() override;
     virtual void dispose() override;
     bool getDistinct() const;
     sal_Int64 getLimit() const;

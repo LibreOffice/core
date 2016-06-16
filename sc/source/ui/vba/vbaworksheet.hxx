@@ -70,7 +70,7 @@ public:
         const css::uno::Reference< css::frame::XModel >& xModel )throw (css::uno::RuntimeException)  ;
     ScVbaWorksheet( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
-    virtual ~ScVbaWorksheet();
+    virtual ~ScVbaWorksheet() override;
 
     const css::uno::Reference< css::frame::XModel >& getModel()
     { return mxModel; }

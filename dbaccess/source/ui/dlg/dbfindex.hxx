@@ -111,7 +111,7 @@ protected:
 
 public:
     ODbaseIndexDialog( vcl::Window * pParent, const OUString& aDataSrcName );
-    virtual ~ODbaseIndexDialog();
+    virtual ~ODbaseIndexDialog() override;
     virtual void dispose() override;
 };
 

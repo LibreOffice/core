@@ -98,7 +98,7 @@ private:
 public:
     explicit ScFormulaListener(ScFormulaCell* pCell);
     explicit ScFormulaListener(ScDocument* pDoc);
-    virtual ~ScFormulaListener();
+    virtual ~ScFormulaListener() override;
 
     void Notify( const SfxHint& rHint ) override;
 
@@ -229,7 +229,7 @@ public:
             ScConditionEntry( const ScConditionEntry& r );  // flat copy of formulas
             // true copy of formulas (for Ref-Undo):
             ScConditionEntry( ScDocument* pDocument, const ScConditionEntry& r );
-    virtual ~ScConditionEntry();
+    virtual ~ScConditionEntry() override;
 
     bool            operator== ( const ScConditionEntry& r ) const;
 
@@ -335,7 +335,7 @@ public:
                                 const OUString& rStyle );
             ScCondFormatEntry( const ScCondFormatEntry& r );
             ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
-    virtual ~ScCondFormatEntry();
+    virtual ~ScCondFormatEntry() override;
 
     bool            operator== ( const ScCondFormatEntry& r ) const;
 

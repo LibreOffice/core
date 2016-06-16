@@ -72,7 +72,7 @@ class PureTickIter : public TickIter
 {
 public:
     explicit PureTickIter( TickInfoArrayType& rTickInfoVector );
-    virtual ~PureTickIter();
+    virtual ~PureTickIter() override;
     virtual TickInfo* firstInfo() override;
     virtual TickInfo* nextInfo() override;
 
@@ -119,7 +119,7 @@ public:
         , const ::basegfx::B2DVector& rStartScreenPos, const ::basegfx::B2DVector& rEndScreenPos
         , const ::basegfx::B2DVector& rAxisLineToLabelLineShift );
 
-    virtual ~TickFactory2D();
+    virtual ~TickFactory2D() override;
 
     static sal_Int32    getTickScreenDistance( TickIter& rIter );
 

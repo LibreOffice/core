@@ -183,7 +183,7 @@ public:
     explicit PathSettings(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
     /** free all used resources ... if it was not already done. */
-    virtual ~PathSettings();
+    virtual ~PathSettings() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

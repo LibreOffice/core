@@ -83,7 +83,7 @@ namespace comphelper
         OContainerListener*     m_pListener;
         sal_Int32               m_nLockCount;
 
-        virtual ~OContainerListenerAdapter();
+        virtual ~OContainerListenerAdapter() override;
 
     public:
         OContainerListenerAdapter(OContainerListener* _pListener,

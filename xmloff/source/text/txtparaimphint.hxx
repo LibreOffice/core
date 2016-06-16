@@ -76,7 +76,7 @@ public:
         sStyleName( rStyleName )
     {
     }
-    virtual ~XMLStyleHint_Impl() {}
+    virtual ~XMLStyleHint_Impl() override {}
 
     const OUString& GetStyleName() const { return sStyleName; }
 };
@@ -94,7 +94,7 @@ public:
     {
     }
 
-    virtual ~XMLReferenceHint_Impl() {}
+    virtual ~XMLReferenceHint_Impl() override {}
 
     const OUString& GetRefName() const { return sRefName; }
 };
@@ -116,7 +116,7 @@ public:
     {
     }
 
-    virtual ~XMLHyperlinkHint_Impl()
+    virtual ~XMLHyperlinkHint_Impl() override
     {
         if (nullptr != pEvents)
             pEvents->ReleaseRef();
@@ -169,7 +169,7 @@ public:
     {
     }
 
-    virtual ~XMLIndexMarkHint_Impl() {}
+    virtual ~XMLIndexMarkHint_Impl() override {}
 
     const css::uno::Reference<css::beans::XPropertySet> & GetMark() const
         { return xIndexMarkPropSet; }
@@ -190,7 +190,7 @@ public:
     {
     }
 
-    virtual ~XMLTextFrameHint_Impl()
+    virtual ~XMLTextFrameHint_Impl() override
     {
     }
 
@@ -247,7 +247,7 @@ public:
     {
     }
 
-    virtual ~XMLDrawHint_Impl()
+    virtual ~XMLDrawHint_Impl() override
     {
     }
 

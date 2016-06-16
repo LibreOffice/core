@@ -180,7 +180,7 @@ struct SwTOXIndex : public SwTOXSortTabBase
     SwTOXIndex( const SwTextNode&, const SwTextTOXMark*, sal_uInt16 nOptions, sal_uInt8 nKeyLevel,
                 const SwTOXInternational& rIntl,
                 const css::lang::Locale& rLocale );
-    virtual ~SwTOXIndex() {}
+    virtual ~SwTOXIndex() override {}
 
     virtual void    FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const override;
     virtual sal_uInt16  GetLevel() const override;
@@ -198,7 +198,7 @@ struct SwTOXCustom : public SwTOXSortTabBase
     SwTOXCustom( const TextAndReading& rKey, sal_uInt16 nLevel,
                  const SwTOXInternational& rIntl,
                  const css::lang::Locale& rLocale );
-    virtual ~SwTOXCustom() {}
+    virtual ~SwTOXCustom() override {}
 
     virtual sal_uInt16 GetLevel() const override;
     virtual bool   operator==( const SwTOXSortTabBase& ) override;
@@ -218,7 +218,7 @@ struct SwTOXContent : public SwTOXSortTabBase
 {
     SwTOXContent( const SwTextNode&, const SwTextTOXMark*,
                 const SwTOXInternational& rIntl );
-    virtual ~SwTOXContent() {}
+    virtual ~SwTOXContent() override {}
 
     virtual void    FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const override;
     virtual sal_uInt16  GetLevel() const override;
@@ -230,7 +230,7 @@ private:
 struct SwTOXPara : public SwTOXSortTabBase
 {
     SwTOXPara( const SwContentNode&, SwTOXElement, sal_uInt16 nLevel = FORM_ALPHA_DELIMITTER, const OUString& sSeqName = OUString() );
-    virtual ~SwTOXPara() {}
+    virtual ~SwTOXPara() override {}
 
     void    SetStartIndex(sal_Int32 nSet)    { nStartIndex = nSet; }
     void    SetEndIndex(sal_Int32 nSet)      { nEndIndex = nSet; }
@@ -252,7 +252,7 @@ private:
 struct SwTOXTable : public SwTOXSortTabBase
 {
     SwTOXTable( const SwContentNode& rNd );
-    virtual ~SwTOXTable() {}
+    virtual ~SwTOXTable() override {}
 
     void    SetLevel(sal_uInt16 nSet){nLevel = nSet;}
 
@@ -274,7 +274,7 @@ private:
 
 public:
     SwTOXAuthority( const SwContentNode& rNd, SwFormatField& rField, const SwTOXInternational& rIntl );
-    virtual ~SwTOXAuthority() {}
+    virtual ~SwTOXAuthority() override {}
 
     SwFormatField& GetFieldFormat() {return m_rField;}
 

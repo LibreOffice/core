@@ -47,7 +47,7 @@ public:
         StackMode eStackMode,
         BarDirection eDirection,
         sal_Int32 nDim = 2 );
-    virtual ~BarChartTypeTemplate();
+    virtual ~BarChartTypeTemplate() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

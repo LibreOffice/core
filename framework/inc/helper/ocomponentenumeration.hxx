@@ -125,7 +125,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper< css::container::X
                         You must create it dynamical in memory and use a pointer.
         *//*-*****************************************************************************************************/
 
-        virtual ~OComponentEnumeration();
+        virtual ~OComponentEnumeration() override;
 
         /*-****************************************************************************************************
             @short      reset instance to default values

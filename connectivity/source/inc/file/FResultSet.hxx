@@ -156,7 +156,7 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-            virtual ~OResultSet();
+            virtual ~OResultSet() override;
         public:
             DECLARE_SERVICE_INFO();
             // a Constructor, that is needed for when Returning the Object is needed:

@@ -173,7 +173,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlags );
 
-    virtual ~SchXMLImport() throw ();
+    virtual ~SchXMLImport() throw () override;
 
     SvXMLImportContext* CreateStylesContext( const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );

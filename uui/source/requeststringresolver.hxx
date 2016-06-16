@@ -55,7 +55,7 @@ private:
     explicit UUIInteractionRequestStringResolver(
         css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
-    virtual ~UUIInteractionRequestStringResolver();
+    virtual ~UUIInteractionRequestStringResolver() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;

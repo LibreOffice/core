@@ -57,7 +57,7 @@ public:
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             rtl_TextEncoding eDfltEnc );
-    virtual ~XMLFontStylesContext();
+    virtual ~XMLFontStylesContext() override;
 
     const SvXMLTokenMap& GetFontStyleAttrTokenMap() const
     {

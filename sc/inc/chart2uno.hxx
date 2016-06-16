@@ -66,7 +66,7 @@ class ScChart2DataProvider : public
 public:
 
     explicit ScChart2DataProvider( ScDocument* pDoc );
-    virtual ~ScChart2DataProvider();
+    virtual ~ScChart2DataProvider() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataProvider
@@ -192,7 +192,7 @@ class ScChart2DataSource : public
 public:
 
     explicit ScChart2DataSource( ScDocument* pDoc);
-    virtual ~ScChart2DataSource();
+    virtual ~ScChart2DataSource() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataSource
@@ -241,7 +241,7 @@ public:
             const css::uno::Reference< css::chart2::data::XDataProvider >& xDP,
             ::std::vector<ScTokenRef>&& rTokens, bool bIncludeHiddenCells );
 
-    virtual ~ScChart2DataSequence();
+    virtual ~ScChart2DataSequence() override;
     ScChart2DataSequence(const ScChart2DataSequence&) = delete;
     ScChart2DataSequence& operator=(const ScChart2DataSequence&) = delete;
 
@@ -369,7 +369,7 @@ private:
     {
     public:
         ExternalRefListener(ScChart2DataSequence& rParent, ScDocument* pDoc);
-        virtual ~ExternalRefListener();
+        virtual ~ExternalRefListener() override;
         ExternalRefListener(const ExternalRefListener&) = delete;
         ExternalRefListener& operator=(const ExternalRefListener&) = delete;
 
@@ -418,7 +418,7 @@ private:
     {
     public:
         HiddenRangeListener(ScChart2DataSequence& rParent);
-        virtual ~HiddenRangeListener();
+        virtual ~HiddenRangeListener() override;
 
         virtual void notify() override;
 

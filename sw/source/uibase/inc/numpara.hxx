@@ -67,7 +67,7 @@ protected:
 
 public:
     SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwParagraphNumTabPage();
+    virtual ~SwParagraphNumTabPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent,

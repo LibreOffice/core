@@ -162,7 +162,7 @@ public:
               bool bOutOutlineOnly = false);
 
     /// Destructor.
-    virtual ~RtfExport();
+    virtual ~RtfExport() override;
 
     rtl_TextEncoding m_eDefaultEncoding;
     rtl_TextEncoding m_eCurrentEncoding;

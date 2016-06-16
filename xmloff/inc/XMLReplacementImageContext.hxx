@@ -44,7 +44,7 @@ public:
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & rAttrList,
             const css::uno::Reference< css::beans::XPropertySet >& rPropSet );
-    virtual ~XMLReplacementImageContext();
+    virtual ~XMLReplacementImageContext() override;
 
     virtual void EndElement() override;
 

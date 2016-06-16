@@ -36,7 +36,7 @@ private:
 
 public:
     ScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove = false);
-    virtual ~ScDeleteCellDlg();
+    virtual ~ScDeleteCellDlg() override;
     virtual void dispose() override;
 
     DelCellCmd GetDelCellCmd() const;

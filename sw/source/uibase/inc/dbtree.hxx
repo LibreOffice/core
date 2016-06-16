@@ -49,7 +49,7 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 
 public:
     SwDBTreeList(vcl::Window* pParent, WinBits nStyle);
-    virtual ~SwDBTreeList();
+    virtual ~SwDBTreeList() override;
     virtual void dispose() override;
     virtual Size GetOptimalSize() const override;
 

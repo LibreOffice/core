@@ -45,7 +45,7 @@ namespace dbaccess
         bool            m_bInInsert;
 
     protected:
-        virtual ~OPropertyForward();
+        virtual ~OPropertyForward() override;
 
     public:
         OPropertyForward( const css::uno::Reference< css::beans::XPropertySet>& _xSource,

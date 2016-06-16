@@ -79,7 +79,7 @@ class MediaWindowImpl : public Control, public DropTargetHelper, public DragSour
 {
 public:
     MediaWindowImpl(vcl::Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl);
-    virtual ~MediaWindowImpl();
+    virtual ~MediaWindowImpl() override;
 
     virtual void dispose() override;
 

@@ -102,7 +102,7 @@ private:
 
 public:
     explicit SmModule(SfxObjectFactory* pObjFact);
-    virtual ~SmModule();
+    virtual ~SmModule() override;
 
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
 

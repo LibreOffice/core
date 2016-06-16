@@ -33,7 +33,7 @@ public:
             ScInsertContentsDlg( vcl::Window*          pParent,
                                  InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE,
                                  const OUString*  pStrTitle = nullptr );
-            virtual ~ScInsertContentsDlg();
+            virtual ~ScInsertContentsDlg() override;
     virtual void dispose() override;
 
     InsertDeleteFlags GetInsContentsCmdBits() const;

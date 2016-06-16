@@ -41,7 +41,7 @@ namespace vcl {
         css::uno::Any                   m_aAny;
     public:
         DisplayConnection();
-        virtual ~DisplayConnection();
+        virtual ~DisplayConnection() override;
 
         void start();
         void terminate();

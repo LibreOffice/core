@@ -71,7 +71,7 @@ public:
     SvXMLMetaExport( SvXMLExport& i_rExport,
         const css::uno::Reference< css::document::XDocumentProperties>& i_rDocProps);
 
-    virtual ~SvXMLMetaExport();
+    virtual ~SvXMLMetaExport() override;
 
     /// export via XSAXWriter interface, with fallback to _MExport
     void Export();

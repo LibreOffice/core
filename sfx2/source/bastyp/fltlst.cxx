@@ -47,7 +47,7 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper<css::util::XRefreshList
         {
         }
 
-        virtual ~SfxRefreshListener()
+        virtual ~SfxRefreshListener() override
         {
         }
 

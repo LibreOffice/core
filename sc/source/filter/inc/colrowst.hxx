@@ -27,7 +27,7 @@ class XclImpColRowSettings : protected XclImpRoot
 {
 public:
     explicit            XclImpColRowSettings( const XclImpRoot& rRoot );
-    virtual             ~XclImpColRowSettings();
+    virtual             ~XclImpColRowSettings() override;
 
     void                SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec = false );
     void                SetWidthRange( SCCOL nCol1, SCCOL nCol2, sal_uInt16 nWidth );

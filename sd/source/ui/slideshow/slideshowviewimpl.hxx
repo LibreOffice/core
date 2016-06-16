@@ -218,7 +218,7 @@ public:
     using cppu::WeakComponentImplHelperBase::disposing;
 
 protected:
-    virtual ~SlideShowView() {}
+    virtual ~SlideShowView() override {}
 
 private:
     void init();

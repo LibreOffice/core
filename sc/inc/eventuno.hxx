@@ -40,7 +40,7 @@ private:
 
 public:
                             ScSheetEventsObj(ScDocShell* pDocSh, SCTAB nT);
-    virtual                 ~ScSheetEventsObj();
+    virtual                 ~ScSheetEventsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

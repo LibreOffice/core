@@ -119,7 +119,7 @@ public:
     void checkRedlining(RedlineMode_t& _rReadlineMode);
 
 
-    virtual ~DocumentRedlineManager();
+    virtual ~DocumentRedlineManager() override;
 
 private:
 

@@ -37,7 +37,7 @@ private:
 
 public:
     SwWebView(SfxViewFrame* pFrame, SfxViewShell*);
-    virtual ~SwWebView();
+    virtual ~SwWebView() override;
 };
 
 #endif

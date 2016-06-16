@@ -66,7 +66,7 @@ public:
         const css::uno::Reference<css::accessibility::XAccessible >& rxParent,
         ::sd::slidesorter::SlideSorter& rSlideSorter,
         sal_uInt16 nPageNumber);
-    virtual ~AccessibleSlideSorterObject();
+    virtual ~AccessibleSlideSorterObject() override;
 
     /** Return the page that is made accessible by the called object.
     */

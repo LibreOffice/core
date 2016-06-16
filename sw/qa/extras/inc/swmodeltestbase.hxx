@@ -188,7 +188,7 @@ public:
         maTempFile.EnableKillingFile();
     }
 
-    virtual ~SwModelTestBase()
+    virtual ~SwModelTestBase() override
     {}
 
     virtual void setUp() override

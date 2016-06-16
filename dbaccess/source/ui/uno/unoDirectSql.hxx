@@ -45,7 +45,7 @@ namespace dbaui
         css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
     protected:
         explicit ODirectSQLDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
-        virtual ~ODirectSQLDialog();
+        virtual ~ODirectSQLDialog() override;
 
     public:
         virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()

@@ -39,7 +39,7 @@ class SFX2_DLLPUBLIC SfxStatusListener : public ::cppu::WeakImplHelper2<
     public:
 
         SfxStatusListener( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
-        virtual ~SfxStatusListener();
+        virtual ~SfxStatusListener() override;
 
         // old methods from SfxControllerItem
         sal_uInt16  GetId() const { return m_nSlotID; }

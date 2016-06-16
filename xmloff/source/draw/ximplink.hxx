@@ -42,7 +42,7 @@ public:
     SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
-    virtual ~SdXMLShapeLinkContext();
+    virtual ~SdXMLShapeLinkContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,

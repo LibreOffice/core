@@ -60,7 +60,7 @@ class XclImpOutlineDataBuffer : protected XclImpRoot
 {
 public:
     explicit            XclImpOutlineDataBuffer( const XclImpRoot& rRoot, SCTAB nScTab );
-    virtual             ~XclImpOutlineDataBuffer();
+    virtual             ~XclImpOutlineDataBuffer() override;
 
     inline XclImpColRowSettings* GetColRowBuff() const { return mxColRowBuff.get(); }
     inline XclImpOutlineBuffer* GetColOutline()  const { return mxColOutlineBuff.get(); }
@@ -201,7 +201,7 @@ protected:
 public:
                             ImportExcel( XclImpRootData& rImpData, SvStream& rStrm );
 
-    virtual                 ~ImportExcel();
+    virtual                 ~ImportExcel() override;
 
     virtual FltError        Read() override;
 };

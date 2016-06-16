@@ -270,7 +270,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
                                             css::uno::Reference< css::task::XStatusIndicator > & rStatInd,
                                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );
 
-                                virtual ~PPTWriter();
+                                virtual ~PPTWriter() override;
 
         bool                IsValid() const { return mbStatus; };
 

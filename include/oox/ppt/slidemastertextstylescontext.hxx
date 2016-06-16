@@ -33,7 +33,7 @@ class SlideMasterTextStylesContext : public oox::core::FragmentHandler2
 {
 public:
     SlideMasterTextStylesContext( ::oox::core::FragmentHandler2& rParent, SlidePersistPtr pSlidePersistPtr );
-    virtual ~SlideMasterTextStylesContext();
+    virtual ~SlideMasterTextStylesContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
 protected:

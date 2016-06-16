@@ -39,7 +39,7 @@ private:
 public:
     SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& m_xContext, css::uno::Reference< css::frame::XModel > xModel );
     SwVbaDocument(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
-    virtual ~SwVbaDocument();
+    virtual ~SwVbaDocument() override;
 
     // XDocument
     virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getContent() throw ( css::uno::RuntimeException, std::exception ) override;

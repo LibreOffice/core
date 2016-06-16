@@ -94,7 +94,7 @@ private:
 
 public:
     Submission();
-    virtual ~Submission() throw();
+    virtual ~Submission() throw() override;
 
 
     // property methods: get/set value

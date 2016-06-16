@@ -56,7 +56,7 @@ public:
         SfxItemPool & rItemPool,
         const awt::Size* pRefSize,
         const uno::Reference< beans::XPropertySet > & xParentProp );
-    virtual ~FormattedStringsConverter();
+    virtual ~FormattedStringsConverter() override;
 
 protected:
     virtual const sal_uInt16 * GetWhichPairs() const override;

@@ -75,7 +75,7 @@ class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
 
 public:
     SwStdFontConfig();
-    virtual ~SwStdFontConfig();
+    virtual ~SwStdFontConfig() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 

@@ -40,7 +40,7 @@ class SFX2_DLLPUBLIC SidebarToolBox : public ToolBox
 {
 public:
     SidebarToolBox(vcl::Window* pParentWindow);
-    virtual ~SidebarToolBox();
+    virtual ~SidebarToolBox() override;
     virtual void dispose() override;
 
     using ToolBox::InsertItem;

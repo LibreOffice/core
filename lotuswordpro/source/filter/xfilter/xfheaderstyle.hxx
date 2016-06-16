@@ -76,7 +76,7 @@ class XFHeaderStyle : public XFStyle
 public:
     explicit XFHeaderStyle(bool isFooter=false);
 
-    virtual ~XFHeaderStyle();
+    virtual ~XFHeaderStyle() override;
 
 public:
     /**

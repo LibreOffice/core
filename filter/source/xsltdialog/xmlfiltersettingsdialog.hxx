@@ -49,7 +49,7 @@ public:
     explicit SvxPathControl(vcl::Window* pParent);
     HeaderBar* getHeaderBar() { return m_pHeaderBar; }
     XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
-    virtual ~SvxPathControl();
+    virtual ~SvxPathControl() override;
     virtual void dispose() override;
 
     virtual bool Notify( NotifyEvent& rNEvt ) override;
@@ -69,7 +69,7 @@ private:
 
 public:
     XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl);
-    virtual ~XMLFilterListBox();
+    virtual ~XMLFilterListBox() override;
     virtual void dispose() override;
 
     /** adds a new filter info entry to the ui filter list */
@@ -87,7 +87,7 @@ public:
     XMLFilterSettingsDialog(vcl::Window* pParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         Dialog::InitFlag eFlag = Dialog::InitFlag::Default);
-    virtual ~XMLFilterSettingsDialog();
+    virtual ~XMLFilterSettingsDialog() override;
     virtual void dispose() override;
 
     DECL_LINK_TYPED(ClickHdl_Impl, Button *, void );

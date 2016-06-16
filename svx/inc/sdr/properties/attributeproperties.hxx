@@ -61,7 +61,7 @@ namespace sdr
             virtual BaseProperties& Clone(SdrObject& rObj) const override;
 
             // destructor
-            virtual ~AttributeProperties();
+            virtual ~AttributeProperties() override;
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;

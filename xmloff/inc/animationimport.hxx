@@ -46,7 +46,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         AnimationsImportHelperImpl* mpImpl = nullptr );
-    virtual ~AnimationNodeContext();
+    virtual ~AnimationNodeContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 

@@ -40,7 +40,7 @@ namespace dbaccess
             const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
-        virtual ~StorageXMLOutputStream();
+        virtual ~StorageXMLOutputStream() override;
 
         // StorageOutputStream overridables
         virtual void close() override;
@@ -71,7 +71,7 @@ namespace dbaccess
             const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
-        virtual ~StorageXMLInputStream();
+        virtual ~StorageXMLInputStream() override;
 
         void    import(
                     const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_rHandler

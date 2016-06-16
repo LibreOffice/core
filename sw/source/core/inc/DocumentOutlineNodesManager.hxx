@@ -45,7 +45,7 @@ public:
     SwTextNode* getOutlineNode( const sal_Int32 nIdx ) const override;
     void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const override;
 
-    virtual ~DocumentOutlineNodesManager();
+    virtual ~DocumentOutlineNodesManager() override;
 
 private:
 

@@ -182,7 +182,7 @@ public:
     explicit ChangesListener(EditorWindow & editor): editor_(editor) {}
 
 private:
-    virtual ~ChangesListener() {}
+    virtual ~ChangesListener() override {}
 
     virtual void SAL_CALL disposing(lang::EventObject const &) throw (RuntimeException, std::exception) override
     {

@@ -54,7 +54,7 @@ private:
 
 public:
     ScHeaderFooterEditSource(ScHeaderFooterTextData& rData);
-    virtual ~ScHeaderFooterEditSource();
+    virtual ~ScHeaderFooterEditSource() override;
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
     virtual ScEditEngineDefaulter* GetEditEngine() override;
@@ -78,7 +78,7 @@ private:
 
 public:
     ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual ~ScCellEditSource();
+    virtual ~ScCellEditSource() override;
 
     //  GetEditEngine is needed because the forwarder doesn't have field functions
     virtual ScEditEngineDefaulter* GetEditEngine() override;
@@ -104,7 +104,7 @@ private:
     SdrObject*                  GetCaptionObj();
 public:
                                 ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual                     ~ScAnnotationEditSource();
+    virtual                     ~ScAnnotationEditSource() override;
 
     virtual SvxEditSource*      Clone() const override ;
     virtual SvxTextForwarder*   GetTextForwarder() override;
@@ -122,7 +122,7 @@ private:
 
 public:
                         ScSimpleEditSource( SvxTextForwarder* pForw );
-    virtual             ~ScSimpleEditSource();
+    virtual             ~ScSimpleEditSource() override;
 
     virtual SvxEditSource*      Clone() const override ;
     virtual SvxTextForwarder*   GetTextForwarder() override;
@@ -137,7 +137,7 @@ private:
 
 public:
                         ScAccessibilityEditSource( ::std::unique_ptr < ScAccessibleTextData > && pAccessibleCellTextData );
-    virtual             ~ScAccessibilityEditSource();
+    virtual             ~ScAccessibilityEditSource() override;
 
     virtual SvxEditSource*      Clone() const override;
     virtual SvxTextForwarder*   GetTextForwarder() override;

@@ -78,7 +78,7 @@ class XclExpPalette : public XclDefaultPalette, public XclExpRecord
 {
 public:
     explicit            XclExpPalette( const XclExpRoot& rRoot );
-    virtual             ~XclExpPalette();
+    virtual             ~XclExpPalette() override;
 
     /** Inserts the color into the list and updates weighting.
         @param nAutoDefault  The Excel palette index for automatic color.
@@ -285,7 +285,7 @@ class XclExpNumFmtBuffer : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit            XclExpNumFmtBuffer( const XclExpRoot& rRoot );
-    virtual             ~XclExpNumFmtBuffer();
+    virtual             ~XclExpNumFmtBuffer() override;
 
     /** Returns the core index of the current standard number format. */
     inline sal_uInt32   GetStandardFormat() const { return mnStdFmt; }
@@ -711,7 +711,7 @@ class XclExpDxf : public XclExpRecordBase, protected XclExpRoot
 public:
     XclExpDxf( const XclExpRoot& rRoot, XclExpCellAlign* pAlign, XclExpCellBorder* pBorder,
             XclExpDxfFont* pFont, XclExpNumFmt* pNumberFmt, XclExpCellProt* pProt, XclExpColor* pColor);
-    virtual ~XclExpDxf();
+    virtual ~XclExpDxf() override;
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
@@ -728,7 +728,7 @@ class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     XclExpDxfs( const XclExpRoot& rRoot );
-    virtual ~XclExpDxfs() {}
+    virtual ~XclExpDxfs() override {}
 
     sal_Int32 GetDxfId(const OUString& rName);
 

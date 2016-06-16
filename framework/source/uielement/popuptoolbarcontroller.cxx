@@ -61,7 +61,7 @@ typedef cppu::ImplInheritanceHelper< svt::ToolboxController,
 class PopupMenuToolbarController : public ToolBarBase
 {
 public:
-    virtual ~PopupMenuToolbarController();
+    virtual ~PopupMenuToolbarController() override;
 
     // XComponent
     virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;

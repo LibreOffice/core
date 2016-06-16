@@ -424,7 +424,7 @@ private:
 
 protected:
                                 OutputDevice();
-    virtual                     ~OutputDevice();
+    virtual                     ~OutputDevice() override;
     virtual void                dispose() override;
 
 public:

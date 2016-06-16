@@ -81,7 +81,7 @@ class DomainMapperTableManager : public TableManager
 public:
 
     DomainMapperTableManager();
-    virtual ~DomainMapperTableManager();
+    virtual ~DomainMapperTableManager() override;
 
     // use this method to avoid adding the properties for the table
     // but in the provided properties map.

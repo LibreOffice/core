@@ -61,7 +61,7 @@ private:
 public:
 
                     ImageProducer();
-                    virtual ~ImageProducer();
+                    virtual ~ImageProducer() override;
 
     void            SetImage( const OUString& rPath );
     void            SetImage( SvStream& rStm );

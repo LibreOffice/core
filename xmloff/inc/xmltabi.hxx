@@ -39,7 +39,7 @@ public:
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps );
 
-    virtual ~SvxXMLTabStopImportContext();
+    virtual ~SvxXMLTabStopImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,

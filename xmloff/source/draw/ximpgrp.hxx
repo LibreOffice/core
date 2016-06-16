@@ -39,7 +39,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes,
         bool bTemporaryShape);
-    virtual ~SdXMLGroupShapeContext();
+    virtual ~SdXMLGroupShapeContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,

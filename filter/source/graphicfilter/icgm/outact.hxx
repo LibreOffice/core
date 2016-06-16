@@ -105,7 +105,7 @@ class CGMImpressOutAct : public CGMOutAct
     void                        ImplSetTextBundle( const css::uno::Reference< css::beans::XPropertySet > & ) ;
 public:
                                 CGMImpressOutAct( CGM&, const css::uno::Reference< css::frame::XModel > & ) ;
-                                virtual ~CGMImpressOutAct() {} ;
+                                virtual ~CGMImpressOutAct() override {} ;
     virtual void                InsertPage() override ;
     virtual void                BeginGroup() override ;
     virtual void                EndGroup() override ;

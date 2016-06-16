@@ -39,7 +39,7 @@ class ThemeTable : public LoggedProperties, public LoggedTable
 
 public:
     ThemeTable();
-    virtual ~ThemeTable();
+    virtual ~ThemeTable() override;
 
     const OUString getFontNameForTheme(const Id id) const;
     static OUString getStringForTheme(const Id id);

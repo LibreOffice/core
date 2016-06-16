@@ -323,7 +323,7 @@ namespace dbaui
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
-        virtual ~OCopyTableWizard();
+        virtual ~OCopyTableWizard() override;
         virtual void        dispose() override;
 
         virtual bool        DeactivatePage() override;

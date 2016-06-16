@@ -33,7 +33,7 @@ public:
     WrappedSeriesAreaOrLineProperty( const OUString& rOuterName
         , const OUString& rInnerAreaTypeName, const OUString& rInnerLineTypeName
         , DataSeriesPointWrapper* pDataSeriesPointWrapper );
-    virtual ~WrappedSeriesAreaOrLineProperty();
+    virtual ~WrappedSeriesAreaOrLineProperty() override;
 
     virtual OUString getInnerName() const override;
 

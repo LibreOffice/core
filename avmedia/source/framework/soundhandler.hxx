@@ -74,7 +74,7 @@ class SoundHandler  :   // interfaces
 
         // constructor / destructor
                  SoundHandler();
-        virtual ~SoundHandler(                                                                        );
+        virtual ~SoundHandler(                                                                        ) override;
 
         //  XInterface, XTypeProvider, XServiceInfo
         virtual css::uno::Any  SAL_CALL queryInterface( const css::uno::Type& aType   ) throw( css::uno::RuntimeException, std::exception ) override;

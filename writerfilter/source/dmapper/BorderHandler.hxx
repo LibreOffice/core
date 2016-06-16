@@ -66,7 +66,7 @@ private:
 
 public:
     explicit BorderHandler( bool bOOXML );
-    virtual ~BorderHandler();
+    virtual ~BorderHandler() override;
 
     ::std::shared_ptr<PropertyMap>            getProperties();
     css::table::BorderLine2 getBorderLine();

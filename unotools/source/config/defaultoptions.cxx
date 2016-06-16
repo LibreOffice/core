@@ -93,7 +93,7 @@ public:
     OUString         m_aUserDictionaryPath;
 
                     SvtDefaultOptions_Impl();
-                    virtual ~SvtDefaultOptions_Impl();
+                    virtual ~SvtDefaultOptions_Impl() override;
 
     OUString         GetDefaultPath( sal_uInt16 nId ) const;
     virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;

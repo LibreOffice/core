@@ -36,7 +36,7 @@ public:
              , sal_Int32 nDimensionCount
              , bool bCategoryXAxis, bool bNoArea=false
              );
-    virtual ~AreaChart();
+    virtual ~AreaChart() override;
 
     virtual void createShapes() override;
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;

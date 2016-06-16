@@ -75,7 +75,7 @@ protected:
     css::uno::Reference< css::container::XNameAccess >  mxStyleFamily;
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
-    virtual ~SwXFrame();
+    virtual ~SwXFrame() override;
 
     SwXFrame(FlyCntType eSet,
                 const SfxItemPropertySet*    pPropSet,
@@ -176,7 +176,7 @@ protected:
         CreateCursor()
         throw (css::uno::RuntimeException) override;
 
-    virtual ~SwXTextFrame();
+    virtual ~SwXTextFrame() override;
 
     SwXTextFrame(SwDoc *pDoc);
     SwXTextFrame(SwFrameFormat& rFormat);
@@ -249,7 +249,7 @@ class SwXTextGraphicObject : public SwXTextGraphicObjectBaseClass,
 protected:
     friend class SwXFrame; // just for CreateXFrame
 
-    virtual ~SwXTextGraphicObject();
+    virtual ~SwXTextGraphicObject() override;
 
     SwXTextGraphicObject( SwDoc *pDoc );
     SwXTextGraphicObject(SwFrameFormat& rFormat);
@@ -302,7 +302,7 @@ class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass,
 protected:
     friend class SwXFrame; // just for CreateXFrame
 
-    virtual ~SwXTextEmbeddedObject();
+    virtual ~SwXTextEmbeddedObject() override;
 
     SwXTextEmbeddedObject( SwDoc *pDoc );
     SwXTextEmbeddedObject(SwFrameFormat& rFormat);
@@ -358,7 +358,7 @@ class SwXOLEListener : public cppu::WeakImplHelper
     SwFormat*       GetFormat() const    {  return const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn())); }
 public:
     SwXOLEListener(SwFormat& rOLEFormat, css::uno::Reference< css::frame::XModel > xOLE);
-    virtual ~SwXOLEListener();
+    virtual ~SwXOLEListener() override;
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;

@@ -99,7 +99,7 @@ public:
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext )
                             throw( css::uno::RuntimeException );
 
-    virtual             ~FilterBase();
+    virtual             ~FilterBase() override;
 
     /** Returns true, if filter is an import filter. */
     bool                isImportFilter() const;

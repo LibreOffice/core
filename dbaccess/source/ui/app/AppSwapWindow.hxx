@@ -43,7 +43,7 @@ namespace dbaui
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow );
-        virtual ~OApplicationSwapWindow();
+        virtual ~OApplicationSwapWindow() override;
         // Window overrides
         virtual void dispose() override;
         virtual void Resize() override;

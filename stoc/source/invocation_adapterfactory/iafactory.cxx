@@ -100,7 +100,7 @@ public:
     t_ptr_map m_receiver2adapters;
 
     explicit FactoryImpl( Reference< XComponentContext > const & xContext );
-    virtual ~FactoryImpl();
+    virtual ~FactoryImpl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

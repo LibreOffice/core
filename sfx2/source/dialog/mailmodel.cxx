@@ -90,7 +90,7 @@ class PrepareListener_Impl : public ::cppu::WeakImplHelper< css::frame::XStatusL
     bool m_bState;
 public:
         PrepareListener_Impl();
-        virtual ~PrepareListener_Impl();
+        virtual ~PrepareListener_Impl() override;
 
         // css.frame.XStatusListener
         virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent)

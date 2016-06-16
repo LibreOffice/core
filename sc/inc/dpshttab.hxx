@@ -99,7 +99,7 @@ private:
 
 public:
     ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache);
-    virtual ~ScSheetDPData();
+    virtual ~ScSheetDPData() override;
 
     virtual long                    GetColumnCount() override;
     virtual OUString                getDimensionName(long nColumn) override;

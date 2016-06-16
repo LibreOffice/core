@@ -85,7 +85,7 @@ public:
                             std::pair<OUString, OUString>& rPositionOffsets,
                             std::pair<OUString, OUString>& rAligns,
                             std::queue<OUString>& rPositivePercentages);
-    virtual ~GraphicImport();
+    virtual ~GraphicImport() override;
 
     // BinaryObj
     virtual void data(const sal_uInt8* buffer, size_t len, writerfilter::Reference<Properties>::Pointer_t ref) override;

@@ -63,7 +63,7 @@ namespace
             SwBreakDashedLine( vcl::Window* pParent, Color& ( *pColorFn )(), SwPageBreakWin* pWin ) :
                 SwDashedLine( pParent, pColorFn ),
                 m_pWin( pWin ) {};
-            virtual ~SwBreakDashedLine() { disposeOnce(); }
+            virtual ~SwBreakDashedLine() override { disposeOnce(); }
             virtual void dispose() override { m_pWin.clear(); SwDashedLine::dispose(); }
 
             virtual void MouseMove( const MouseEvent& rMEvt ) override;

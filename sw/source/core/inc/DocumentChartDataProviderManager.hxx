@@ -49,7 +49,7 @@ public:
 
     SwChartLockController_Helper & GetChartControllerHelper() override;
 
-    virtual ~DocumentChartDataProviderManager();
+    virtual ~DocumentChartDataProviderManager() override;
 
 private:
 

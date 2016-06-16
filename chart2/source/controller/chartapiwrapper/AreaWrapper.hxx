@@ -48,7 +48,7 @@ class AreaWrapper : public ::cppu::ImplInheritanceHelper<
 {
 public:
     explicit AreaWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~AreaWrapper();
+    virtual ~AreaWrapper() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

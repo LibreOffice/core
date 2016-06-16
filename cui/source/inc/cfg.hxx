@@ -187,7 +187,7 @@ public:
         const OUString& aModuleId,
         bool docConfig );
 
-    virtual ~MenuSaveInData();
+    virtual ~MenuSaveInData() override;
 
     /// methods inherited from SaveInData
     SvxEntries*         GetEntries() override;
@@ -210,7 +210,7 @@ public:
         const css::uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
         const css::uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
         const OUString& aModuleId, bool bIsDocConfig );
-    virtual ~ContextMenuSaveInData();
+    virtual ~ContextMenuSaveInData() override;
 
     SvxEntries* GetEntries() override;
     void SetEntries( SvxEntries* pNewEntries ) override;
@@ -326,7 +326,7 @@ protected:
 
 public:
     SvxMenuEntriesListBox(vcl::Window*, SvxConfigPage*);
-    virtual ~SvxMenuEntriesListBox();
+    virtual ~SvxMenuEntriesListBox() override;
     virtual void dispose() override;
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
@@ -422,7 +422,7 @@ protected:
 
 public:
 
-    virtual ~SvxConfigPage();
+    virtual ~SvxConfigPage() override;
     virtual void dispose() override;
 
     static bool     CanConfig( const OUString& rModuleId );
@@ -484,7 +484,7 @@ private:
 
 public:
     SvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet, bool bIsMenuBar = true );
-    virtual ~SvxMenuConfigPage();
+    virtual ~SvxMenuConfigPage() override;
     virtual void dispose() override;
 
     SaveInData* CreateSaveInData(
@@ -518,7 +518,7 @@ public:
     SvxMainMenuOrganizerDialog (
         vcl::Window*, SvxEntries*,
         SvxConfigEntry*, bool bCreateMenu = false );
-    virtual ~SvxMainMenuOrganizerDialog();
+    virtual ~SvxMainMenuOrganizerDialog() override;
     virtual void dispose() override;
 
     SvxEntries*     GetEntries() { return mpEntries;}
@@ -544,7 +544,7 @@ protected:
 public:
 
     SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg);
-    virtual ~SvxToolbarEntriesListBox();
+    virtual ~SvxToolbarEntriesListBox() override;
     virtual void dispose() override;
 
     virtual TriState NotifyMoving(
@@ -577,7 +577,7 @@ private:
 
 public:
     SvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
-    virtual ~SvxToolbarConfigPage();
+    virtual ~SvxToolbarConfigPage() override;
     virtual void dispose() override;
 
     void            AddFunction( SvTreeListEntry* pTarget = nullptr,
@@ -621,7 +621,7 @@ public:
         const OUString& aModuleId,
         bool docConfig );
 
-    virtual ~ToolbarSaveInData();
+    virtual ~ToolbarSaveInData() override;
 
     void            CreateToolbar( SvxConfigEntry* pToolbar );
     void            RestoreToolbar( SvxConfigEntry* pToolbar );
@@ -654,7 +654,7 @@ private:
 
 public:
     SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& rName);
-    virtual ~SvxNewToolbarDialog();
+    virtual ~SvxNewToolbarDialog() override;
     virtual void dispose() override;
 
     VclPtr<ListBox>        m_pSaveInListBox;
@@ -703,7 +703,7 @@ public:
         const css::uno::Reference< css::ui::XImageManager >& rXParentImageManager
             );
 
-    virtual ~SvxIconSelectorDialog();
+    virtual ~SvxIconSelectorDialog() override;
     virtual void dispose() override;
 
     css::uno::Reference< css::graphic::XGraphic >
@@ -737,7 +737,7 @@ private:
     VclPtr<VclMultiLineEdit>   pLineEditDescription;
 public:
     SvxIconChangeDialog(vcl::Window *pWindow, const OUString& aMessage);
-    virtual ~SvxIconChangeDialog();
+    virtual ~SvxIconChangeDialog() override;
     virtual void dispose() override;
 };
 #endif // INCLUDED_CUI_SOURCE_INC_CFG_HXX

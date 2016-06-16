@@ -40,7 +40,7 @@ public:
                                     const vcl::Font& rFont,
                                     const Color* pColor = nullptr );
 
-    virtual                     ~SvLBoxFontString();
+    virtual                     ~SvLBoxFontString() override;
 
     /** Creates a new empty list box item. */
     virtual SvLBoxItem*         Create() const override;

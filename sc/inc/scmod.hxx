@@ -121,7 +121,7 @@ private:
 
 public:
                         ScModule( SfxObjectFactory* pFact );
-    virtual            ~ScModule();
+    virtual            ~ScModule() override;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;

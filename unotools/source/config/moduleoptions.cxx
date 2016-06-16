@@ -283,7 +283,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         //  constructor / destructor
 
          SvtModuleOptions_Impl();
-        virtual ~SvtModuleOptions_Impl();
+        virtual ~SvtModuleOptions_Impl() override;
 
         //  override methods of baseclass
 

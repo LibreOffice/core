@@ -166,7 +166,7 @@ class LayoutManagerListener : public ::cppu::WeakImplHelper<
 {
     public:
         LayoutManagerListener( SfxWorkWindow* pWrkWin );
-        virtual ~LayoutManagerListener();
+        virtual ~LayoutManagerListener() override;
 
         void setFrame( const css::uno::Reference< css::frame::XFrame >& rFrame );
 

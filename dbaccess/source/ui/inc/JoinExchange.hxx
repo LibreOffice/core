@@ -40,7 +40,7 @@ namespace dbaui
         OJoinExchangeData           m_jxdSourceDescription;
         IDragTransferableListener*  m_pDragListener;
 
-        virtual ~OJoinExchObj();
+        virtual ~OJoinExchObj() override;
 
     public:
         OJoinExchObj(const OJoinExchangeData& jxdSource,bool _bFirstEntry=false);

@@ -118,7 +118,7 @@ namespace pcr
         void SetThousandsSep(bool bEnable) { getTypedControlWindow()->SetThousandsSep(bEnable); }
 
     protected:
-        virtual ~OFormattedNumericControl();
+        virtual ~OFormattedNumericControl() override;
     };
 
 
@@ -136,7 +136,7 @@ namespace pcr
         virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~OFileUrlControl();
+        virtual ~OFileUrlControl() override;
     };
 
 
@@ -146,7 +146,7 @@ namespace pcr
     {
     public:
         OTimeDurationControl( vcl::Window* pParent, WinBits nWinStyle );
-        virtual ~OTimeDurationControl();
+        virtual ~OTimeDurationControl() override;
 
         // XPropertyControl
         ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) override;

@@ -180,7 +180,7 @@ private:
 
 public:
     B3dViewport();
-    virtual ~B3dViewport();
+    virtual ~B3dViewport() override;
 
     void SetVUV(const basegfx::B3DVector& rNewVUV);
     void SetViewportValues(
@@ -214,7 +214,7 @@ public:
         const basegfx::B3DPoint& rPos = basegfx::B3DPoint(0.0, 0.0, 1.0),
         const basegfx::B3DVector& rLkAt = basegfx::B3DVector(0.0, 0.0, 0.0),
         double fFocLen = 35.0, double fBnkAng = 0.0);
-    virtual ~B3dCamera();
+    virtual ~B3dCamera() override;
 
 protected:
     void CalcNewViewportValues();

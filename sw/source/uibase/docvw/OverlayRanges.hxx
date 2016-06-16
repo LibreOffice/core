@@ -49,7 +49,7 @@ namespace sw
                 const std::vector< basegfx::B2DRange >& rRanges,
                 const bool bShowSolidBorder );
 
-            virtual ~OverlayRanges();
+            virtual ~OverlayRanges() override;
 
             // data read access
             inline const std::vector< basegfx::B2DRange >& getRanges() const

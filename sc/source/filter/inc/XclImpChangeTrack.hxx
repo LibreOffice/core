@@ -100,7 +100,7 @@ private:
 
 public:
                                 XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStream& rBookStrm );
-                                virtual ~XclImpChangeTrack();
+                                virtual ~XclImpChangeTrack() override;
 
                                 // reads extended 3D ref info following the formulas, returns sc tab nums
                                 // ( called by XclImpChTrFmlConverter::Read3DTabReference() )
@@ -153,7 +153,7 @@ private:
 
 public:
     XclImpChTrFmlConverter( XclImpRoot& rRoot, XclImpChangeTrack& rXclChTr );
-    virtual                     ~XclImpChTrFmlConverter();
+    virtual                     ~XclImpChTrFmlConverter() override;
 };
 
 #endif

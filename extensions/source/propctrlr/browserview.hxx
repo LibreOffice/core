@@ -46,7 +46,7 @@ namespace pcr
     public:
         explicit OPropertyBrowserView( vcl::Window* pParent);
 
-        virtual ~OPropertyBrowserView();
+        virtual ~OPropertyBrowserView() override;
         virtual void dispose() override;
 
         OPropertyEditor&    getPropertyBox() { return *m_pPropBox; }

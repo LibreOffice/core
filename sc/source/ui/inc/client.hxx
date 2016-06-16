@@ -39,7 +39,7 @@ private:
 
 public:
                     ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );
-    virtual         ~ScClient();
+    virtual         ~ScClient() override;
 
     void            SetGrafEdit(SdrGrafObj* pNew)   { pGrafEdit = pNew; }
     SdrOle2Obj*     GetDrawObj();

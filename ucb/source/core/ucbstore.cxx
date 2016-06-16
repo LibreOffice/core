@@ -118,7 +118,7 @@ class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
 
 public:
     explicit PropertySetInfo_Impl(PersistentPropertySet* pOwner);
-    virtual ~PropertySetInfo_Impl();
+    virtual ~PropertySetInfo_Impl() override;
 
     // XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties()

@@ -96,7 +96,7 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper<css::view::XSelectionChange
 
 public:
     SvxRubyData_Impl();
-    virtual ~SvxRubyData_Impl();
+    virtual ~SvxRubyData_Impl() override;
 
     void SetController(const Reference<XController>& xCtrl);
     Reference<XModel> GetModel()

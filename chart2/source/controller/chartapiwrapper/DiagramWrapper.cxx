@@ -1202,7 +1202,7 @@ class WrappedDataRowSourceProperty : public WrappedProperty
 {
 public:
     explicit WrappedDataRowSourceProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedDataRowSourceProperty();
+    virtual ~WrappedDataRowSourceProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -1304,7 +1304,7 @@ class WrappedStackingProperty : public WrappedProperty
 {
 public:
     WrappedStackingProperty( StackMode eStackMode, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedStackingProperty();
+    virtual ~WrappedStackingProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -1414,7 +1414,7 @@ class WrappedDim3DProperty : public WrappedProperty
 {
 public:
     explicit WrappedDim3DProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedDim3DProperty();
+    virtual ~WrappedDim3DProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -1485,7 +1485,7 @@ class WrappedVerticalProperty : public WrappedProperty
 {
 public:
     explicit WrappedVerticalProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedVerticalProperty();
+    virtual ~WrappedVerticalProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -1561,7 +1561,7 @@ class WrappedNumberOfLinesProperty : public WrappedProperty
 {
 public:
     explicit WrappedNumberOfLinesProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedNumberOfLinesProperty();
+    virtual ~WrappedNumberOfLinesProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -1715,7 +1715,7 @@ class WrappedAttributedDataPointsProperty : public WrappedProperty
 {
 public:
     explicit WrappedAttributedDataPointsProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedAttributedDataPointsProperty();
+    virtual ~WrappedAttributedDataPointsProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -1829,7 +1829,7 @@ class WrappedSolidTypeProperty : public WrappedProperty
 {
 public:
     explicit WrappedSolidTypeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedSolidTypeProperty();
+    virtual ~WrappedSolidTypeProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -1902,7 +1902,7 @@ class WrappedAutomaticSizeProperty : public WrappedProperty
 {
 public:
     WrappedAutomaticSizeProperty();
-    virtual ~WrappedAutomaticSizeProperty();
+    virtual ~WrappedAutomaticSizeProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -1974,7 +1974,7 @@ class WrappedIncludeHiddenCellsProperty : public WrappedProperty
 {
 public:
     explicit WrappedIncludeHiddenCellsProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedIncludeHiddenCellsProperty();
+    virtual ~WrappedIncludeHiddenCellsProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;

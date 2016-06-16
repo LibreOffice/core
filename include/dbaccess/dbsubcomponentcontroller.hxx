@@ -158,7 +158,7 @@ namespace dbaui
 
     protected:
         DBSubComponentController(const css::uno::Reference< css::uno::XComponentContext>& _rxORB);
-        virtual ~DBSubComponentController();
+        virtual ~DBSubComponentController() override;
 
         void                disconnect();
         virtual void        reconnect( bool _bUI );

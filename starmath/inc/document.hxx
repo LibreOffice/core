@@ -150,7 +150,7 @@ private:
 
 public:
     explicit SmDocShell( SfxModelFlags i_nSfxCreationFlags );
-    virtual     ~SmDocShell();
+    virtual     ~SmDocShell() override;
 
     static void LoadSymbols();
     static void SaveSymbols();

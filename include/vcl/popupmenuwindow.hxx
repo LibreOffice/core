@@ -29,7 +29,7 @@ private:
     ImplData* mpImplData;
 public:
     PopupMenuFloatingWindow( vcl::Window* pParent, WinBits nStyle = (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER) );
-    virtual ~PopupMenuFloatingWindow();
+    virtual ~PopupMenuFloatingWindow() override;
     virtual void dispose() override;
 
     sal_uInt16      GetMenuStackLevel() const;

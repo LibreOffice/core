@@ -160,7 +160,7 @@ public:
 
     SwSection(SectionType const eType, OUString const& rName,
                 SwSectionFormat & rFormat);
-    virtual ~SwSection();
+    virtual ~SwSection() override;
 
     bool DataEquals(SwSectionData const& rCmp) const;
 
@@ -256,7 +256,7 @@ class SwSectionFrameMoveAndDeleteHint : public SfxSimpleHint
             , mbSaveContent( bSaveContent )
         {}
 
-        virtual ~SwSectionFrameMoveAndDeleteHint()
+        virtual ~SwSectionFrameMoveAndDeleteHint() override
         {}
 
         bool IsSaveContent() const
@@ -289,7 +289,7 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
-    virtual ~SwSectionFormat();
+    virtual ~SwSectionFormat() override;
 
     // Deletes all Frames in aDepend (Frames are recognized via dynamic_cast).
     virtual void DelFrames() override;

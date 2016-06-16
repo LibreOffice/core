@@ -110,7 +110,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions : public utl::detail
         *//*-*****************************************************************************************************/
 
          SvtSecurityOptions();
-        virtual ~SvtSecurityOptions();
+        virtual ~SvtSecurityOptions() override;
 
         /*-****************************************************************************************************
             @short      returns readonly state

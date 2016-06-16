@@ -60,7 +60,7 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 
 public:
     SvtTabAppearanceCfg( );
-    virtual ~SvtTabAppearanceCfg( );
+    virtual ~SvtTabAppearanceCfg( ) override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
 

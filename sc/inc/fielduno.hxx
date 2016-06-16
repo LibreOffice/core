@@ -74,7 +74,7 @@ public:
     ScCellFieldsObj(
         const css::uno::Reference<css::text::XTextRange>& xContent,
         ScDocShell* pDocSh, const ScAddress& rPos);
-    virtual ~ScCellFieldsObj();
+    virtual ~ScCellFieldsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -138,7 +138,7 @@ private:
 
 public:
     ScHeaderFieldsObj(ScHeaderFooterTextData& rData);
-    virtual                 ~ScHeaderFieldsObj();
+    virtual                 ~ScHeaderFieldsObj() override;
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override;
@@ -229,7 +229,7 @@ public:
     ScEditFieldObj(
         const css::uno::Reference<css::text::XTextRange>& rContent,
         ScEditSource* pEditSrc, sal_Int32 eType, const ESelection& rSel);
-    virtual ~ScEditFieldObj();
+    virtual ~ScEditFieldObj() override;
 
     sal_Int32 GetFieldType() const { return meType;}
     void DeleteField();

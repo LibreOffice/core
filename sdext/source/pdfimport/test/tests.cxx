@@ -82,7 +82,7 @@ namespace
             m_bImageSeen(false)
         {}
 
-        virtual ~TestSink() {}
+        virtual ~TestSink() override {}
 
         void check()
         {

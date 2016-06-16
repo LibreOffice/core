@@ -81,7 +81,7 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
 
 public:
     explicit ExtendedColorConfig_Impl();
-    virtual ~ExtendedColorConfig_Impl();
+    virtual ~ExtendedColorConfig_Impl() override;
 
     void                            Load(const OUString& rScheme);
     void                            CommitCurrentSchemeName();

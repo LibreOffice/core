@@ -127,7 +127,7 @@ namespace drawinglayer
                 const geometry::ViewInformation3D& rViewInformation,
                 const attribute::SdrSceneAttribute& rSdrSceneAttribute,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute);
-            virtual ~DefaultProcessor3D();
+            virtual ~DefaultProcessor3D() override;
 
             /// data read access
             const attribute::SdrSceneAttribute& getSdrSceneAttribute() const { return mrSdrSceneAttribute; }

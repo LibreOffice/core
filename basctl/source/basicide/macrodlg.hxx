@@ -86,7 +86,7 @@ private:
 
 public:
                         MacroChooser( vcl::Window* pParent, bool bCreateEntries = true );
-                        virtual ~MacroChooser();
+                        virtual ~MacroChooser() override;
     virtual void        dispose() override;
 
     SbMethod*           GetMacro();

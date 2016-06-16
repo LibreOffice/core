@@ -34,7 +34,7 @@ private:
 
 public:
     SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rParent);
-    virtual ~SvxBaseAutoCorrCfg();
+    virtual ~SvxBaseAutoCorrCfg() override;
 
     void                    Load(bool bInit);
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
@@ -51,7 +51,7 @@ private:
 
 public:
     SvxSwAutoCorrCfg(SvxAutoCorrCfg& rParent);
-    virtual ~SvxSwAutoCorrCfg();
+    virtual ~SvxSwAutoCorrCfg() override;
 
     void                    Load(bool bInit);
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;

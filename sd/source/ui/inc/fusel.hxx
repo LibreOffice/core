@@ -70,7 +70,7 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    virtual ~FuSelection();
+    virtual ~FuSelection() override;
 
     bool            bTempRotation;
     bool            bSelectionChanged;

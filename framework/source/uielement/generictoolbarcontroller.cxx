@@ -315,7 +315,7 @@ class Toolbarmenu : public ::PopupMenu
 {
     public:
     Toolbarmenu();
-    virtual ~Toolbarmenu();
+    virtual ~Toolbarmenu() override;
 };
 
 Toolbarmenu::Toolbarmenu()

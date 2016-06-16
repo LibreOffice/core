@@ -228,7 +228,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
            because they should be fairly unique */
 
         Type1FontFile() : PrintFont( fonttype::Type1 ), m_nDirectory( 0 ) {}
-        virtual ~Type1FontFile();
+        virtual ~Type1FontFile() override;
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) override;
     };
 
@@ -240,7 +240,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         unsigned int  m_nTypeFlags;       // copyright bits and PS-OpenType flag
 
         TrueTypeFontFile();
-        virtual ~TrueTypeFontFile();
+        virtual ~TrueTypeFontFile() override;
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) override;
     };
 

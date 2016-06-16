@@ -48,7 +48,7 @@ public:
         const Paper ePaper,
         const bool bLandscape,
         const FieldUnit eFUnit );
-    virtual ~PageSizeControl();
+    virtual ~PageSizeControl() override;
     virtual void dispose() override;
 
 private:

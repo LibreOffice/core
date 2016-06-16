@@ -85,7 +85,7 @@ protected:
 public:
 
     GraphicFilterDialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const Graphic& rGraphic);
-    virtual ~GraphicFilterDialog();
+    virtual ~GraphicFilterDialog() override;
     virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
@@ -100,7 +100,7 @@ private:
 public:
 
     GraphicFilterSmooth( vcl::Window* pParent, const Graphic& rGraphic, double nRadius);
-    virtual ~GraphicFilterSmooth();
+    virtual ~GraphicFilterSmooth() override;
     virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
@@ -119,7 +119,7 @@ public:
 
     GraphicFilterMosaic(vcl::Window* pParent, const Graphic& rGraphic,
         sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges);
-    virtual ~GraphicFilterMosaic();
+    virtual ~GraphicFilterMosaic() override;
     virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
@@ -140,7 +140,7 @@ public:
 
     GraphicFilterSolarize( vcl::Window* pParent, const Graphic& rGraphic,
                                            sal_uInt8 nGreyThreshold, bool bInvert );
-    virtual ~GraphicFilterSolarize();
+    virtual ~GraphicFilterSolarize() override;
     virtual void dispose() override;
 
     virtual Graphic     GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
@@ -156,7 +156,7 @@ private:
 public:
     GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
                         sal_uInt16 nSepiaPercent );
-    virtual ~GraphicFilterSepia();
+    virtual ~GraphicFilterSepia() override;
     virtual void dispose() override;
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
     sal_uInt16 GetSepiaPercent() const
@@ -173,7 +173,7 @@ private:
 public:
     GraphicFilterPoster( vcl::Window* pParent, const Graphic& rGraphic,
                          sal_uInt16 nPosterColorCount );
-    virtual ~GraphicFilterPoster();
+    virtual ~GraphicFilterPoster() override;
     virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
@@ -200,7 +200,7 @@ private:
 public:
     GraphicFilterEmboss( vcl::Window* pParent, const Graphic& rGraphic,
                          RECT_POINT eLightSource );
-    virtual ~GraphicFilterEmboss();
+    virtual ~GraphicFilterEmboss() override;
     virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;

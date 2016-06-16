@@ -72,7 +72,7 @@ public:
         const OUString& rsName);
     void LateInitialization();
 
-    virtual ~AccessibleObject();
+    virtual ~AccessibleObject() override;
 
     virtual void SetWindow (
         const css::uno::Reference<css::awt::XWindow>& rxContentWindow,
@@ -237,7 +237,7 @@ class AccessibleStateSet
 {
 public:
     explicit AccessibleStateSet (const sal_Int32 nStateSet);
-    virtual ~AccessibleStateSet();
+    virtual ~AccessibleStateSet() override;
 
     static sal_uInt32 GetStateMask (const sal_Int16 nType);
 
@@ -273,7 +273,7 @@ class AccessibleRelationSet
 {
 public:
     AccessibleRelationSet();
-    virtual ~AccessibleRelationSet();
+    virtual ~AccessibleRelationSet() override;
 
     void AddRelation (
         const sal_Int16 nRelationType,
@@ -317,7 +317,7 @@ public:
         const SharedPresenterTextParagraph& rpParagraph,
         const sal_Int32 nParagraphIndex);
 
-    virtual ~AccessibleParagraph();
+    virtual ~AccessibleParagraph() override;
 
     //----- XAccessibleContext ------------------------------------------------
 

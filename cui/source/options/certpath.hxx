@@ -34,7 +34,7 @@ private:
     void AddCertPath(const OUString &rProfile, const OUString &rPath);
 public:
     explicit CertPathDialog(vcl::Window* pParent);
-    virtual ~CertPathDialog();
+    virtual ~CertPathDialog() override;
     virtual void dispose() override;
 
     OUString getDirectory() const;

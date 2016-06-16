@@ -101,7 +101,7 @@ public:
         css::uno::Reference< css::ucb::XDynamicResultSet > xOrigin
         , const css::uno::Reference< css::uno::XComponentContext > & rxContext );
 
-    virtual ~DynamicResultSetWrapper();
+    virtual ~DynamicResultSetWrapper() override;
 
 
     // XInterface
@@ -175,7 +175,7 @@ protected:
 public:
     DynamicResultSetWrapperListener( DynamicResultSetWrapper* pOwner );
 
-    virtual ~DynamicResultSetWrapperListener();
+    virtual ~DynamicResultSetWrapperListener() override;
 
 
     // XInterface

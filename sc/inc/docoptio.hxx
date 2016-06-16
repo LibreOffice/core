@@ -182,7 +182,7 @@ public:
                 ScTpCalcItem( sal_uInt16 nWhich,
                               const ScDocOptions& rOpt );
                 ScTpCalcItem( const ScTpCalcItem& rItem );
-                virtual ~ScTpCalcItem();
+                virtual ~ScTpCalcItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

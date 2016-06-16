@@ -51,7 +51,7 @@ class LegendWrapper : public ::cppu::ImplInheritanceHelper<
 {
 public:
     explicit LegendWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~LegendWrapper();
+    virtual ~LegendWrapper() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

@@ -512,7 +512,7 @@ public:
     typedef OUStringMap::const_iterator                 const_iterator;
 
 public:
-    virtual             ~NameListBase();
+    virtual             ~NameListBase() override;
 
     /** Sets a name for the specified key. */
     void                setName( sal_Int64 nKey, const String& rName );
@@ -764,7 +764,7 @@ public:
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
 
-    virtual             ~SharedConfigData();
+    virtual             ~SharedConfigData() override;
 
     const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return mxContext; }
     const StorageRef& getRootStorage() const { return mxRootStrg; }
@@ -846,7 +846,7 @@ public:
                             const StorageRef& rxRootStrg,
                             const OUString& rSysFileName );
 
-    virtual             ~Config();
+    virtual             ~Config() override;
 
     const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return mxCfgData->getContext(); }
     const StorageRef& getRootStorage() const { return mxCfgData->getRootStorage(); }
@@ -1079,7 +1079,7 @@ class StorageIterator : public Base
 {
 public:
     explicit            StorageIterator( const StorageRef& rxStrg );
-    virtual             ~StorageIterator();
+    virtual             ~StorageIterator() override;
 
     StorageIterator&    operator++();
 
@@ -1100,7 +1100,7 @@ private:
 class ObjectBase : public Base
 {
 public:
-    virtual             ~ObjectBase();
+    virtual             ~ObjectBase() override;
 
     const css::uno::Reference< css::uno::XComponentContext >&
                         getContext() const { return mxConfig->getContext(); }
@@ -1200,7 +1200,7 @@ private:
 class OutputObjectBase : public ObjectBase
 {
 public:
-    virtual             ~OutputObjectBase();
+    virtual             ~OutputObjectBase() override;
 
 
 protected:
@@ -1364,7 +1364,7 @@ void OutputObjectBase::writeHexPairItem( const String& rName, Type nData1, Type 
 class InputObjectBase : public OutputObjectBase
 {
 public:
-    virtual             ~InputObjectBase();
+    virtual             ~InputObjectBase() override;
 
 
 protected:
@@ -1704,7 +1704,7 @@ private:
 class DumperBase : public ObjectBase
 {
 public:
-    virtual             ~DumperBase();
+    virtual             ~DumperBase() override;
 
     bool                isImportEnabled() const;
     bool                isImportCancelled() const;

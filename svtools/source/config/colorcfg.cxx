@@ -75,7 +75,7 @@ class ColorConfig_Impl : public utl::ConfigItem
 
 public:
     explicit ColorConfig_Impl();
-    virtual ~ColorConfig_Impl();
+    virtual ~ColorConfig_Impl() override;
 
     void                            Load(const OUString& rScheme);
     void                            CommitCurrentSchemeName();

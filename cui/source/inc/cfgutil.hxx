@@ -108,7 +108,7 @@ class SfxConfigFunctionListBox : public SvTreeListBox
 
 public:
     SfxConfigFunctionListBox(vcl::Window*, WinBits nStyle);
-    virtual ~SfxConfigFunctionListBox();
+    virtual ~SfxConfigFunctionListBox() override;
     virtual void  dispose() override;
 
     void          ClearAll();
@@ -157,7 +157,7 @@ protected:
 
 public:
     SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~SfxConfigGroupListBox();
+    virtual ~SfxConfigGroupListBox() override;
     virtual void        dispose() override;
     void                ClearAll();
 

@@ -35,7 +35,7 @@ namespace connectivity
     protected:
     // static Data for the Class
         static jclass theClass;
-        virtual ~java_io_InputStream();
+        virtual ~java_io_InputStream() override;
     public:
         virtual jclass getMyClass() const override;
         // a Constructor, that is needed for when Returning the Object is needed:

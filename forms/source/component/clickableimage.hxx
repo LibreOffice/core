@@ -97,7 +97,7 @@ namespace frm
             const OUString& _rDefault
         );
         DECLARE_DEFAULT_CLONE_CTOR( OClickableImageBaseModel )
-        virtual ~OClickableImageBaseModel();
+        virtual ~OClickableImageBaseModel() override;
 
         // UNO Binding
         DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseModel, OControlModel)
@@ -213,7 +213,7 @@ namespace frm
         OClickableImageBaseControl(
             const css::uno::Reference< css::uno::XComponentContext>& _rxFactory,
             const OUString& _aService);
-        virtual ~OClickableImageBaseControl();
+        virtual ~OClickableImageBaseControl() override;
 
     protected:
         // UNO Binding

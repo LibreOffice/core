@@ -40,7 +40,7 @@ public:
     explicit                SystemChildWindow( vcl::Window* pParent, WinBits nStyle = 0 );
                             // create a SystemChildWindow using the given SystemWindowData
     explicit                SystemChildWindow( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow = true );
-    virtual                 ~SystemChildWindow();
+    virtual                 ~SystemChildWindow() override;
     virtual void            dispose() override;
 
     virtual const SystemEnvData* GetSystemData() const override;

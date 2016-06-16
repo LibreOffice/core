@@ -38,7 +38,7 @@ class XMLScriptContextFactory : public XMLEventContextFactory
 
 public:
     XMLScriptContextFactory();
-    virtual ~XMLScriptContextFactory();
+    virtual ~XMLScriptContextFactory() override;
 
     virtual SvXMLImportContext *
     CreateContext(SvXMLImport & rImport, /// import context

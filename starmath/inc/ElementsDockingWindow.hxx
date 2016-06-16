@@ -112,7 +112,7 @@ class SmElementsControl : public Control
 
 public:
     explicit SmElementsControl(vcl::Window *pParent);
-    virtual ~SmElementsControl();
+    virtual ~SmElementsControl() override;
     virtual void dispose() override;
 
     void setElementSetId(sal_uInt16 aSetId);
@@ -145,7 +145,7 @@ public:
     SmElementsDockingWindow( SfxBindings* pBindings,
                              SfxChildWindow* pChildWindow,
                              vcl::Window* pParent );
-    virtual ~SmElementsDockingWindow();
+    virtual ~SmElementsDockingWindow() override;
     virtual void dispose() override;
 
     virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode) override;
@@ -161,7 +161,7 @@ protected:
                                     sal_uInt16 nId,
                                     SfxBindings* pBindings,
                                     SfxChildWinInfo* pInfo );
-    virtual ~SmElementsDockingWindowWrapper();
+    virtual ~SmElementsDockingWindowWrapper() override;
 };
 
 #endif // INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX

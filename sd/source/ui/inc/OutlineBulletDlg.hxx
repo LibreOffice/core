@@ -37,7 +37,7 @@ public:
         vcl::Window* pParent,
         const SfxItemSet* pAttr,
         ::sd::View* pView );
-    virtual ~OutlineBulletDlg ();
+    virtual ~OutlineBulletDlg () override;
     virtual void dispose() override;
 
     const SfxItemSet* GetOutputItemSet() const;

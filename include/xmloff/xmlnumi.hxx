@@ -65,7 +65,7 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
             bool bOutl = false );
 
-    virtual ~SvxXMLListStyleContext();
+    virtual ~SvxXMLListStyleContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,

@@ -55,7 +55,7 @@ public:
 
 public:
     WrappedScaleProperty( tScaleProperty eScaleProperty, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
-    virtual ~WrappedScaleProperty();
+    virtual ~WrappedScaleProperty() override;
 
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList, const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 

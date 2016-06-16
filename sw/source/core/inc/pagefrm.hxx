@@ -103,7 +103,7 @@ class SwPageFrame: public SwFootnoteBossFrame
                                      bool bRightSidebar );
 
     virtual void DestroyImpl() override;
-    virtual ~SwPageFrame();
+    virtual ~SwPageFrame() override;
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;

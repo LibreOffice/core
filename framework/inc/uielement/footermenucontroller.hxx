@@ -28,7 +28,7 @@ namespace framework
     {
         public:
             FooterMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~FooterMenuController();
+            virtual ~FooterMenuController() override;
 
             // XServiceInfo
             virtual OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException, std::exception ) override;

@@ -38,7 +38,7 @@ namespace connectivity
             sal_Unicode m_cThousandDelimiter;
         public:
             OFlatConnection(ODriver*    _pDriver);
-            virtual ~OFlatConnection();
+            virtual ~OFlatConnection() override;
 
             virtual void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 

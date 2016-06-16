@@ -174,7 +174,7 @@ public:
 
     SfxBaseModel( SfxObjectShell *pObjectShell = nullptr ) ;
 
-    virtual ~SfxBaseModel() ;
+    virtual ~SfxBaseModel() override ;
 
 
     //  XInterface

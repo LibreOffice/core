@@ -36,7 +36,7 @@ class TextCharacterSpacingControl : public SfxPopupWindow
 {
 public:
     explicit TextCharacterSpacingControl(sal_uInt16 nId);
-    virtual ~TextCharacterSpacingControl();
+    virtual ~TextCharacterSpacingControl() override;
     virtual void dispose() override;
 
     short GetLastCustomState() { return mnLastCus;}

@@ -70,7 +70,7 @@ public:
     TemplateAbstractView(vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren);
     TemplateAbstractView(vcl::Window* pParent);
 
-    virtual ~TemplateAbstractView();
+    virtual ~TemplateAbstractView() override;
     virtual void dispose() override;
 
     // Fill view with new item list

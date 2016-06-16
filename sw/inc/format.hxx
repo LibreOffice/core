@@ -71,7 +71,7 @@ protected:
 
 public:
 
-    virtual ~SwFormat();
+    virtual ~SwFormat() override;
     SwFormat &operator=(const SwFormat&);
 
     /// for Querying of Writer-functions.

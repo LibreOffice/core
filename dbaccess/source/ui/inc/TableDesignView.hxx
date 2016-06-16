@@ -42,7 +42,7 @@ namespace dbaui
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OTableBorderWindow(vcl::Window* pParent);
-        virtual ~OTableBorderWindow();
+        virtual ~OTableBorderWindow() override;
         // Window overrides
         virtual void dispose() override;
         virtual void Resize() override;
@@ -76,7 +76,7 @@ namespace dbaui
         OTableDesignView(   vcl::Window* pParent,
                             const css::uno::Reference< css::uno::XComponentContext >&,
                             OTableController& _rController);
-        virtual ~OTableDesignView();
+        virtual ~OTableDesignView() override;
         virtual void dispose() override;
 
         // Window overrides

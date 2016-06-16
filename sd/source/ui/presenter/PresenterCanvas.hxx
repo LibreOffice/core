@@ -96,7 +96,7 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxSharedCanvas,
         const css::uno::Reference<css::awt::XWindow>& rxSharedWindow,
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
-    virtual ~PresenterCanvas();
+    virtual ~PresenterCanvas() override;
     PresenterCanvas(const PresenterCanvas&) = delete;
     PresenterCanvas& operator=(const PresenterCanvas&) = delete;
 

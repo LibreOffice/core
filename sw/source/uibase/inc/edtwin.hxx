@@ -290,7 +290,7 @@ public:
     SwFrameControlsManager& GetFrameControlsManager();
 
     SwEditWin(vcl::Window *pParent, SwView &);
-    virtual ~SwEditWin();
+    virtual ~SwEditWin() override;
     virtual void dispose() override;
 
     virtual void    Command( const CommandEvent& rCEvt ) override;
