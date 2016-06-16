@@ -137,7 +137,6 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/UI.xcu \
 	org/openoffice/Office/Embedding.xcu \
 	org/openoffice/Office/ExtendedColorScheme.xcu \
-	org/openoffice/Office/WebWizard.xcu \
 	org/openoffice/Office/FormWizard.xcu \
 	org/openoffice/Office/Writer.xcu \
 	org/openoffice/Office/UI/BasicIDECommands.xcu \
