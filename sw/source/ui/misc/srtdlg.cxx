@@ -148,10 +148,6 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     get(m_pLangLB, "langlb");
     get(m_pCaseCB, "matchcase");
 
-    m_pColEdt1->SetAccessibleName(m_pColLbl->GetText());
-    m_pColEdt2->SetAccessibleName(m_pColLbl->GetText());
-    m_pColEdt3->SetAccessibleName(m_pColLbl->GetText());
-
     m_pDelimEdt->SetMaxTextLen( 1 );
     if(rSh.GetSelectionType() &
             (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
@@ -169,6 +165,12 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
         m_pRowRB->Check();
         m_pColLbl->SetText(aColText);
     }
+
+    // Set accessible names here because text of m_pColLbl may be changed
+    // by the if-else block above
+    m_pColEdt1->SetAccessibleName(m_pColLbl->GetText());
+    m_pColEdt2->SetAccessibleName(m_pColLbl->GetText());
+    m_pColEdt3->SetAccessibleName(m_pColLbl->GetText());
 
     // initialise
     Link<Button*,void> aLk = LINK(this,SwSortDlg, CheckHdl);
