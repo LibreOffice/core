@@ -158,10 +158,9 @@ class SAL_WARN_UNUSED FmXDisposeListener
     friend class FmXDisposeMultiplexer;
 
     rtl::Reference<FmXDisposeMultiplexer> m_pAdapter;
-    ::osl::Mutex&   m_rMutex;
+    osl::Mutex   m_aMutex;
 
 public:
-    FmXDisposeListener(::osl::Mutex& _rMutex) : m_rMutex(_rMutex) { }
     virtual ~FmXDisposeListener();
 
     virtual void disposing(const css::lang::EventObject& _rEvent, sal_Int16 _nId) throw( css::uno::RuntimeException ) = 0;

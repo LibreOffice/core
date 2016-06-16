@@ -192,7 +192,6 @@ void GridFieldValueListener::dispose()
 
 class DisposeListenerGridBridge : public FmXDisposeListener
 {
-    osl::Mutex              m_aMutex;
     DbGridControl&          m_rParent;
     rtl::Reference<FmXDisposeMultiplexer>  m_xRealListener;
 
@@ -204,7 +203,7 @@ public:
 };
 
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject)
-    :FmXDisposeListener(m_aMutex)
+    :FmXDisposeListener()
     ,m_rParent(_rParent)
 {
 
