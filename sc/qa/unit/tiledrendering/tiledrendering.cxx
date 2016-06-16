@@ -308,18 +308,18 @@ void ScTiledRenderingTest::testDocumentSize()
 {
     comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("sort-range.ods");
-    pModelObj->registerCallback(&ScTiledRenderingTest::callback, this);
-
-    // check initial document size
-    Size aDocSize = pModelObj->getDocumentSize();
-    CPPUNIT_ASSERT(aDocSize.Width() > 0);
-    CPPUNIT_ASSERT(aDocSize.Height() > 0);
-
     ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
     CPPUNIT_ASSERT(pDocSh);
 
     ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell);
+
+    pViewShell->registerLibreOfficeKitViewCallback(&ScTiledRenderingTest::callback, this);
+
+    // check initial document size
+    Size aDocSize = pModelObj->getDocumentSize();
+    CPPUNIT_ASSERT(aDocSize.Width() > 0);
+    CPPUNIT_ASSERT(aDocSize.Height() > 0);
 
     // Set cursor column
     pViewShell->SetCursor(100, 0);
