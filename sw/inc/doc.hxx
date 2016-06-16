@@ -857,6 +857,9 @@ public:
     Iterate over Flys - for Basic-Collections. */
     size_t GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
     SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false );
+    std::vector<SwFrameFormat const*> GetFlyFrameFormats(
+            FlyCntType eType = FLYCNTTYPE_ALL,
+            bool bIgnoreTextBoxes = false);
 
     // Copy formats in own arrays and return them.
     SwFrameFormat  *CopyFrameFormat ( const SwFrameFormat& );

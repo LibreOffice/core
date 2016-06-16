@@ -556,13 +556,14 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 eType = FLYCNTTYPE_OLE;
             else if(nContentType == ContentTypeId::GRAPHIC)
                 eType = FLYCNTTYPE_GRF;
-            OSL_ENSURE(nMemberCount ==  pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true),
-                    "MemberCount differs");
             Point aNullPt;
             nMemberCount = pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
-            for(size_t i = 0; i < nMemberCount; ++i)
+            std::vector<SwFrameFormat const*> formats(pWrtShell->GetFlyFrameFormats(eType, /*bIgnoreTextBoxes=*/true));
+            SAL_WARN_IF(nMemberCount != formats.size(), "sw.ui", "MemberCount differs");
+            nMemberCount = formats.size();
+            for (size_t i = 0; i < nMemberCount; ++i)
             {
-                const SwFrameFormat* pFrameFormat = pWrtShell->GetFlyNum(i,eType,/*bIgnoreTextBoxes=*/true);
+                SwFrameFormat const*const pFrameFormat = formats[i];
                 const OUString sFrameName = pFrameFormat->GetName();
 
                 SwContent* pCnt;
