@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_97c165e7",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-16T20:40:21Z",
+      "side": 1,
+      "message": "Hehe, why not translate the message while you\u0027re at it (it means \"where is the pool?\")",
+      "revId": "f18ffa269129925f958e66161a50580e8d8e11bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f7b0f18d",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-16T20:40:21Z",
+      "side": 1,
+      "message": "\"XHatch couldn\u0027t be created\"",
+      "revId": "f18ffa269129925f958e66161a50580e8d8e11bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b7b66988",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-16T20:40:21Z",
+      "side": 1,
+      "message": "Probably bValidHatchName",
+      "revId": "f18ffa269129925f958e66161a50580e8d8e11bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_d7bbed70",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-16T20:40:21Z",
+      "side": 1,
+      "message": "Here too",
+      "revId": "f18ffa269129925f958e66161a50580e8d8e11bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
