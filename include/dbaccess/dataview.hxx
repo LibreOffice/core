@@ -19,16 +19,30 @@
 #ifndef INCLUDED_DBACCESS_DATAVIEW_HXX
 #define INCLUDED_DBACCESS_DATAVIEW_HXX
 
-#include <dbaccess/dbaccessdllapi.h>
-
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <svtools/acceleratorexecute.hxx>
-#include <sal/macros.h>
-#include <vcl/fixed.hxx>
-
 #include <memory>
 
+#include <com/sun/star/uno/Reference.hxx>
+#include <dbaccess/dbaccessdllapi.h>
+#include <rtl/ref.hxx>
+#include <tools/wintypes.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace frame { class XFrame; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace svt {
+    class AcceleratorExecute;
+}
+
+class DataChangedEvent;
 class FixedLine;
+class NotifyEvent;
+class Rectangle;
+
 namespace dbaui
 {
     class IController;
