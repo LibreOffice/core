@@ -592,16 +592,19 @@ IMPL_STATIC_LINK_TYPED(SwMailMergeWizardExecutor, DestroyWizardHdl, void*, pDial
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
 {
-    SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
-    if (pMMConfig->GetTargetView())
+    if (SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem())
     {
-        pMMConfig->GetTargetView()->GetViewFrame()->DoClose();
-        pMMConfig->SetTargetView(nullptr);
-    }
-    if (pMMConfig->GetSourceView())
-        pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().AppearWithUpdate();
+        if (pMMConfig->GetTargetView())
+        {
+            pMMConfig->GetTargetView()->GetViewFrame()->DoClose();
+            pMMConfig->SetTargetView(nullptr);
+        }
+        if (pMMConfig->GetSourceView())
+            pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().AppearWithUpdate();
 
-    pMMConfig->Commit();
+        pMMConfig->Commit();
+    }
+
     delete m_pWizard;
     m_pWizard = nullptr;
     release();
