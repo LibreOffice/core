@@ -25,6 +25,7 @@
 #include <vcl/virdev.hxx>
 
 #include <unotools/dynamicmenuoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
@@ -303,6 +304,8 @@ void BackingWindow::initControls()
     setupButton( mpImpressAllButton );
     setupButton( mpMathAllButton );
 
+    checkInstalledModules();
+
     mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
 
     // setup nice colors
@@ -379,6 +382,23 @@ void BackingWindow::setupButton( MenuButton* pButton )
 
     pButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
     pButton->SetSelectHdl(LINK(this, BackingWindow, MenuSelectHdl));
+}
+
+void BackingWindow::checkInstalledModules()
+{
+    SvtModuleOptions aModuleOpt;
+
+    mpWriterAllButton->Enable( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ));
+
+    mpCalcAllButton->Enable( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) );
+
+    mpImpressAllButton->Enable( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) );
+
+    mpDrawAllButton->Enable( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) );
+
+    mpMathAllButton->Enable(aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ));
+
+    mpDBAllButton->Enable(aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ));
 }
 
 void BackingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
