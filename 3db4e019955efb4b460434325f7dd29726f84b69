@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_2df206d3",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-17T19:42:43Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "da7fb54a_ad09b62e",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_0a87e8b5",
         "filename": "xmloff/source/style/prhdlfac.cxx",
         "patchSetId": 9
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_addd3644",
+        "filename": "xmloff/source/style/prhdlfac.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-17T19:42:43Z",
+      "side": 1,
+      "message": "moved it from XMLTextPropertyHandlerFactory to XMLPropertyHandlerFactory",
+      "parentUuid": "da7fb54a_ea0c8444",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_8a9a1813",
         "filename": "xmloff/source/table/XMLTableExport.cxx",
         "patchSetId": 9
@@ -83,6 +119,24 @@
       "side": 1,
       "message": "If \"taken\" means \"copy\u0026paste\", then again please have a function that makes the map available to multiple source files. :-)",
       "parentUuid": "da7fb54a_8a9a1813",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_0d6622ed",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-17T19:42:43Z",
+      "side": 1,
+      "message": "Was just looking there to know how elements are named. Removed that comment",
+      "parentUuid": "da7fb54a_4a049016",
       "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
