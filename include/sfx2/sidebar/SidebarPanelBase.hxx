@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_SIDEBARPANELBASE_HXX
 #define INCLUDED_SFX2_SIDEBAR_SIDEBARPANELBASE_HXX
 
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <vcl/EnumContext.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
 #include <cppuhelper/compbase5.hxx>

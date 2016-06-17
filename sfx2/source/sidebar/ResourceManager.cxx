@@ -466,42 +466,42 @@ void ResourceManager::ReadContextList (
         // application name may result in more than one value (eg
         // DrawImpress will result in two enums, one for Draw and one
         // for Impress).
-        std::vector<EnumContext::Application> aApplications;
-        EnumContext::Application eApplication (EnumContext::GetApplicationEnum(sApplicationName));
+        std::vector<vcl::EnumContext::Application> aApplications;
+        vcl::EnumContext::Application eApplication (vcl::EnumContext::GetApplicationEnum(sApplicationName));
 
-        if (eApplication == EnumContext::Application_None
-            && !sApplicationName.equals(EnumContext::GetApplicationName(EnumContext::Application_None)))
+        if (eApplication == vcl::EnumContext::Application_None
+            && !sApplicationName.equals(vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application_None)))
         {
             // Handle some special names: abbreviations that make
             // context descriptions more readable.
             if (sApplicationName == "Writer")
-                aApplications.push_back(EnumContext::Application_Writer);
+                aApplications.push_back(vcl::EnumContext::Application_Writer);
             else if (sApplicationName == "Calc")
-                aApplications.push_back(EnumContext::Application_Calc);
+                aApplications.push_back(vcl::EnumContext::Application_Calc);
             else if (sApplicationName == "Draw")
-                aApplications.push_back(EnumContext::Application_Draw);
+                aApplications.push_back(vcl::EnumContext::Application_Draw);
             else if (sApplicationName == "Impress")
-                aApplications.push_back(EnumContext::Application_Impress);
+                aApplications.push_back(vcl::EnumContext::Application_Impress);
             else if (sApplicationName == "Chart")
-                aApplications.push_back(EnumContext::Application_Chart);
+                aApplications.push_back(vcl::EnumContext::Application_Chart);
             else if (sApplicationName == "DrawImpress")
             {
                 // A special case among the special names:  it is
                 // common to use the same context descriptions for
                 // both Draw and Impress.  This special case helps to
                 // avoid duplication in the .xcu file.
-                aApplications.push_back(EnumContext::Application_Draw);
-                aApplications.push_back(EnumContext::Application_Impress);
+                aApplications.push_back(vcl::EnumContext::Application_Draw);
+                aApplications.push_back(vcl::EnumContext::Application_Impress);
             }
             else if (sApplicationName == "WriterVariants")
             {
                 // Another special case for all Writer variants.
-                aApplications.push_back(EnumContext::Application_Writer);
-                aApplications.push_back(EnumContext::Application_WriterGlobal);
-                aApplications.push_back(EnumContext::Application_WriterWeb);
-                aApplications.push_back(EnumContext::Application_WriterXML);
-                aApplications.push_back(EnumContext::Application_WriterForm);
-                aApplications.push_back(EnumContext::Application_WriterReport);
+                aApplications.push_back(vcl::EnumContext::Application_Writer);
+                aApplications.push_back(vcl::EnumContext::Application_WriterGlobal);
+                aApplications.push_back(vcl::EnumContext::Application_WriterWeb);
+                aApplications.push_back(vcl::EnumContext::Application_WriterXML);
+                aApplications.push_back(vcl::EnumContext::Application_WriterForm);
+                aApplications.push_back(vcl::EnumContext::Application_WriterReport);
             }
             else
             {
@@ -516,8 +516,8 @@ void ResourceManager::ReadContextList (
         }
 
         // Setup the actual context enum.
-        const EnumContext::Context eContext (EnumContext::GetContextEnum(sContextName));
-        if (eContext == EnumContext::Context_Unknown)
+        const vcl::EnumContext::Context eContext (vcl::EnumContext::GetContextEnum(sContextName));
+        if (eContext == vcl::EnumContext::Context_Unknown)
         {
             SAL_WARN("sfx.sidebar", "context name " << sContextName << " not recognized");
             continue;
@@ -538,15 +538,15 @@ void ResourceManager::ReadContextList (
 
 
         // Add context descriptors.
-        std::vector<EnumContext::Application>::const_iterator iApplication;
+        std::vector<vcl::EnumContext::Application>::const_iterator iApplication;
         for (iApplication = aApplications.begin(); iApplication != aApplications.end(); ++iApplication)
         {
-            if (*iApplication != EnumContext::Application_None)
+            if (*iApplication != vcl::EnumContext::Application_None)
             {
                 rContextList.AddContextDescription(
                     Context(
-                        EnumContext::GetApplicationName(*iApplication),
-                        EnumContext::GetContextName(eContext)),
+                        vcl::EnumContext::GetApplicationName(*iApplication),
+                        vcl::EnumContext::GetContextName(eContext)),
                     bIsInitiallyVisible,
                     sMenuCommand);
             }

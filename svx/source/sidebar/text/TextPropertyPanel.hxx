@@ -22,7 +22,7 @@
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <vcl/EnumContext.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <editeng/fhgtitem.hxx>
 
@@ -51,11 +51,11 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const ::sfx2::sidebar::EnumContext& rContext);
+        const vcl::EnumContext& rContext);
 
 
     virtual void HandleContextChange (
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const vcl::EnumContext& rContext) override;
 
 
     virtual void NotifyItemUpdate(
@@ -68,7 +68,7 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const ::sfx2::sidebar::EnumContext& rContext);
+        const vcl::EnumContext& rContext);
 
 private:
     //ui controls
@@ -84,7 +84,7 @@ private:
 
     SvxFontHeightItem*          mpHeightItem;
 
-    ::sfx2::sidebar::EnumContext maContext;
+    vcl::EnumContext maContext;
 };
 
 } } // end of namespace svx::sidebar

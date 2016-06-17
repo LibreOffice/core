@@ -804,5 +804,8 @@
     <glade-widget-class title="Show Text" name="cuilo-SvxShowText"
                         generic-name="ShowText" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Notebookbar with context" name="vcllo-ContextTabControl"
+                        generic-name="ContextTabControl" parent="GtkNotebook"
+                        icon-name="widget-gtk-notebook"/>
   </glade-widget-classes>
 </glade-catalog>

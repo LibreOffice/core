@@ -56,7 +56,7 @@ public:
     SfxBindings* GetBindings() { return mpBindings;}
 
     virtual void HandleContextChange (
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const vcl::EnumContext& rContext) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -107,7 +107,7 @@ private:
     ::sfx2::sidebar::ControllerItem  maIncIndentControl;
     ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
 
-    ::sfx2::sidebar::EnumContext maContext;
+    vcl::EnumContext maContext;
     SfxBindings* mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 

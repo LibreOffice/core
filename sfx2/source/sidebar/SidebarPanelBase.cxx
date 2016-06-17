@@ -104,9 +104,9 @@ void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
         = dynamic_cast<IContextChangeReceiver*>(mpControl.get());
     if (pContextChangeReceiver != nullptr)
     {
-        const EnumContext aContext(
-            EnumContext::GetApplicationEnum(rEvent.ApplicationName),
-            EnumContext::GetContextEnum(rEvent.ContextName));
+        const vcl::EnumContext aContext(
+            vcl::EnumContext::GetApplicationEnum(rEvent.ApplicationName),
+            vcl::EnumContext::GetContextEnum(rEvent.ContextName));
         pContextChangeReceiver->HandleContextChange(aContext);
     }
 }
