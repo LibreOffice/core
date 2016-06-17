@@ -94,17 +94,60 @@ static const char aOOOAttrNumberingType[] = NSPREFIX "numbering-type";
 static sal_Char const XML_UNO_NAME_NRULE_NUMBERINGTYPE[] = "NumberingType";
 static sal_Char const XML_UNO_NAME_NRULE_BULLET_CHAR[] = "BulletChar";
 
-SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport )
+
+PushFlags SVGContextHandler::getLastUsedFlags() const
+{
+    if (maStateStack.empty())
+        return PushFlags::NONE;
+
+    const PartialState& rPartialState = maStateStack.top();
+    return rPartialState.meFlags;
+}
+
+SVGState& SVGContextHandler::getCurrentState()
+{
+    return maCurrentState;
+}
+
+void SVGContextHandler::pushState( PushFlags eFlags )
+{
+    PartialState aPartialState;
+    aPartialState.meFlags = eFlags;
+
+    if (eFlags & PushFlags::FONT)
+    {
+        aPartialState.setFont( maCurrentState.aFont );
+    }
+
+    maStateStack.push( std::move(aPartialState) );
+}
+
+void SVGContextHandler::popState()
+{
+    if (maStateStack.empty())
+        return;
+
+    const PartialState& rPartialState = maStateStack.top();
+    PushFlags eFlags = rPartialState.meFlags;
+
+    if (eFlags & PushFlags::FONT)
+    {
+        maCurrentState.aFont = rPartialState.getFont( vcl::Font() );
+    }
+
+    maStateStack.pop();
+}
+
+SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport, SVGState& rCurState )
     : mrExport( rExport )
     , mrFontExport( rFontExport )
+    , mrCurrentState( rCurState )
     , mpElemFont( nullptr )
-    , mpElemPaint( nullptr )
 {
 }
 
 SVGAttributeWriter::~SVGAttributeWriter()
 {
-    delete mpElemPaint;
     delete mpElemFont;
 }
 
@@ -287,12 +330,14 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
 
 void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
 {
-    if( rFont != maCurFont )
+    vcl::Font& rCurFont = mrCurrentState.aFont;
+
+    if( rFont != rCurFont )
     {
         OUString  aFontStyle, aTextDecoration;
         sal_Int32        nFontWeight;
 
-        maCurFont = rFont;
+        rCurFont = rFont;
 
         // Font Family
         setFontFamily();
@@ -376,23 +421,25 @@ void SVGAttributeWriter::endFontSettings()
 
 void SVGAttributeWriter::setFontFamily()
 {
+    vcl::Font& rCurFont = mrCurrentState.aFont;
+
     if( mrExport.IsUsePositionedCharacters() )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontFamily, mrFontExport.GetMappedFontName( maCurFont.GetName() ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontFamily, mrFontExport.GetMappedFontName( rCurFont.GetName() ) );
     }
     else
     {
         sal_Int32       nNextTokenPos( 0 );
-        const OUString& rsFontName = maCurFont.GetName();
+        const OUString& rsFontName = rCurFont.GetName();
         OUString sFontFamily( rsFontName.getToken( 0, ';', nNextTokenPos ) );
-        FontPitch ePitch = maCurFont.GetPitch();
+        FontPitch ePitch = rCurFont.GetPitch();
         if( ePitch == PITCH_FIXED )
         {
             sFontFamily += ", monospace";
         }
         else
         {
-            FontFamily eFamily = maCurFont.GetFamily();
+            FontFamily eFamily = rCurFont.GetFamily();
             if( eFamily == FAMILY_ROMAN )
                 sFontFamily += ", serif";
             else if( eFamily == FAMILY_SWISS )
@@ -402,9 +449,9 @@ void SVGAttributeWriter::setFontFamily()
     }
 }
 
-SVGTextWriter::SVGTextWriter( SVGExport& rExport )
+SVGTextWriter::SVGTextWriter( SVGExport& rExport,  SVGAttributeWriter& rAttributeWriter  )
     :   mrExport( rExport ),
-        mpContext( nullptr ),
+        mrAttributeWriter( rAttributeWriter ),
         mpVDev( nullptr ),
         mbIsTextShapeStarted( false ),
         mrTextShape(),
@@ -1329,7 +1376,7 @@ void SVGTextWriter::implWriteBulletChars()
                             "," + OUString::number( rInfo.aPos.Y() ) + ")";
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sPosition );
 
-                mpContext->AddPaintAttr( COL_TRANSPARENT, rInfo.aColor );
+                mrAttributeWriter.AddPaintAttr( COL_TRANSPARENT, rInfo.aColor );
 
                 SvXMLElementExport aPositioningElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
@@ -1634,9 +1681,8 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     }
 
     addFontAttributes( /* isTexTContainer: */ false );
-    assert(mpContext); //invalid context object
 
-    mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
+    mrAttributeWriter.AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
     OUString sTextContent = rText;
 
@@ -1667,9 +1713,10 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mnCurMaskId( 1 ),
     mnCurPatternId( 1 ),
     mrExport( rExport ),
-    mrFontExport( rFontExport ),
-    mpContext( nullptr ),
-    maTextWriter( rExport ),
+    maContextHandler(),
+    mrCurrentState( maContextHandler.getCurrentState() ),
+    maAttributeWriter( rExport, rFontExport, mrCurrentState ),
+    maTextWriter( rExport, maAttributeWriter ),
     mnInnerMtfCount( 0 ),
     mbClipAttrChanged( false ),
     mbIsPlaceholderShape( false )
@@ -1682,7 +1729,6 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
 
 SVGActionWriter::~SVGActionWriter()
 {
-    DBG_ASSERT( !mpContext, "Not all contexts are closed" );
     mpVDev.disposeAndClear();
 }
 
@@ -1976,7 +2022,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, bool bAp
     const bool  bLineOnly = ( rShape.maShapeFillColor == Color( COL_TRANSPARENT ) ) && ( !rShape.mapShapeGradient.get() );
     Rectangle   aBoundRect( aPolyPoly.GetBoundRect() );
 
-    mpContext->AddPaintAttr( rShape.maShapeLineColor, rShape.maShapeFillColor, &aBoundRect, rShape.mapShapeGradient.get() );
+    maAttributeWriter.AddPaintAttr( rShape.maShapeLineColor, rShape.maShapeFillColor, &aBoundRect, rShape.mapShapeGradient.get() );
 
     if( !rShape.maId.isEmpty() )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, rShape.maId );
@@ -2474,7 +2520,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     }
 
 
-    mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
+    maAttributeWriter.AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
     // for each line of text there should be at least one group element
     SvXMLElementExport aSVGGElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, false );
@@ -2755,7 +2801,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pAction);
 
-                    mpContext->AddPaintAttr( pA->GetColor(), pA->GetColor() );
+                    maAttributeWriter.AddPaintAttr( pA->GetColor(), pA->GetColor() );
                     ImplWriteLine( pA->GetPoint(), pA->GetPoint(), &pA->GetColor() );
                 }
             }
@@ -2767,7 +2813,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
 
-                    mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
+                    maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
                     ImplWriteLine( pA->GetPoint(), pA->GetPoint() );
                 }
             }
@@ -2779,7 +2825,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
 
-                    mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
+                    maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
                     ImplWriteLine( pA->GetStartPoint(), pA->GetEndPoint() );
                 }
             }
@@ -2789,7 +2835,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
-                    mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
+                    maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
                     ImplWriteRect( static_cast<const MetaRectAction*>(pAction)->GetRect() );
                 }
             }
@@ -2801,7 +2847,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pAction);
 
-                    mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
+                    maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
                     ImplWriteRect( pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
                 }
             }
@@ -2814,7 +2860,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     const MetaEllipseAction*    pA = static_cast<const MetaEllipseAction*>(pAction);
                     const Rectangle&            rRect = pA->GetRect();
 
-                    mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
+                    maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
                     ImplWriteEllipse( rRect.Center(), rRect.GetWidth() >> 1, rRect.GetHeight() >> 1 );
                 }
             }
@@ -2860,7 +2906,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( aPoly.GetSize() )
                     {
-                        mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
+                        maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
                         ImplWritePolyPolygon( aPoly, false );
                     }
                 }
@@ -2876,7 +2922,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( rPoly.GetSize() )
                     {
-                        mpContext->AddPaintAttr( mpVDev->GetLineColor(), Color( COL_TRANSPARENT ) );
+                        maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), Color( COL_TRANSPARENT ) );
                         ImplAddLineAttr( pA->GetLineInfo() );
                         ImplWritePolyPolygon( rPoly, true );
                     }
@@ -2893,7 +2939,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( rPolyPoly.Count() )
                     {
-                        mpContext->AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
+                        maAttributeWriter.AddPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
                         ImplWritePolyPolygon( rPolyPoly, false );
                     }
                 }
@@ -2947,7 +2993,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         aNewLineColor.SetTransparency( sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
                         aNewFillColor.SetTransparency( sal::static_int_cast<sal_uInt8>( FRound( pA->GetTransparence() * 2.55 ) ) );
 
-                        mpContext->AddPaintAttr( aNewLineColor, aNewFillColor );
+                        maAttributeWriter.AddPaintAttr( aNewLineColor, aNewFillColor );
                         ImplWritePolyPolygon( rPolyPoly, false );
                     }
                 }
@@ -3465,7 +3511,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
-                            mpContext->SetFontAttr( aFont );
+                            maAttributeWriter.SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, nullptr, 0 );
                         }
                         else
@@ -3488,7 +3534,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
-                            mpContext->SetFontAttr( aFont );
+                            maAttributeWriter.SetFontAttr( aFont );
                             ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), nullptr, 0 );
                         }
                         maTextWriter.writeTextPortion( pA->GetRect().TopLeft(), pA->GetText() );
@@ -3510,7 +3556,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
-                            mpContext->SetFontAttr( aFont );
+                            maAttributeWriter.SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
                         }
                         else
@@ -3535,7 +3581,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         if( mrExport.IsUsePositionedCharacters() )
                         {
                             vcl::Font aFont = ImplSetCorrectFontHeight();
-                            mpContext->SetFontAttr( aFont );
+                            maAttributeWriter.SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, nullptr, pA->GetWidth() );
                         }
                         else
@@ -3627,7 +3673,6 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
     aMapMode.SetOrigin( aOffset += aMapMode.GetOrigin() );
 
     mpVDev->SetMapMode( aMapMode );
-    ImplAcquireContext();
 
     mapCurShape.reset();
 
@@ -3641,7 +3686,6 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
         mapCurShape.reset();
     }
 
-    ImplReleaseContext();
     mpVDev->Pop();
 }
 

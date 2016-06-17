@@ -57,8 +57,10 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
 
+#include <memory>
 #include <stack>
 #include <unordered_map>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -78,8 +80,61 @@ using namespace ::com::sun::star::xml::sax;
 #define SVGWRITER_NO_SHAPE_COMMENTS 0x01000000
 
 
-// - SVGAttributeWriter -
+// - SVGState -
 
+struct SVGState
+{
+    vcl::Font                               aFont;
+//  Color                                   aLineColor;
+//  Color                                   aFillColor;
+//  basegfx::B2DLineJoin                    aLineJoin;
+//  com::sun::star::drawing::LineCap        aLineCap;
+};
+
+
+// - PartialState -
+
+struct PartialState
+{
+    PushFlags                           meFlags;
+    ::std::unique_ptr<vcl::Font>        mupFont;
+
+    const vcl::Font&        getFont( const vcl::Font& rDefaultFont ) const
+                                { return mupFont ? *mupFont : rDefaultFont; }
+
+    void                    setFont( const vcl::Font& rFont )
+                                { mupFont.reset( new vcl::Font(rFont) ); }
+
+    PartialState()
+        : meFlags( PushFlags::NONE )
+    {}
+
+    PartialState(PartialState&& aPartialState)
+        : meFlags( aPartialState.meFlags )
+        , mupFont( std::move( aPartialState.mupFont ) )
+    {
+        aPartialState.meFlags = PushFlags::NONE;
+    }
+};
+
+
+// - SVGContextHandler -
+
+class SVGContextHandler
+{
+private:
+    ::std::stack<PartialState> maStateStack;
+    SVGState maCurrentState;
+
+public:
+    PushFlags getLastUsedFlags() const;
+    SVGState& getCurrentState();
+    void pushState( PushFlags eFlags );
+    void popState();
+};
+
+
+// - SVGAttributeWriter -
 
 class SVGActionWriter;
 class SVGExport;
@@ -89,13 +144,10 @@ class SVGAttributeWriter
 {
 private:
 
-    vcl::Font                               maCurFont;
-    Color                                   maCurLineColor;
-    Color                                   maCurFillColor;
     SVGExport&                              mrExport;
     SVGFontExport&                          mrFontExport;
+    SVGState&                               mrCurrentState;
     SvXMLElementExport*                     mpElemFont;
-    SvXMLElementExport*                     mpElemPaint;
 
                             SVGAttributeWriter();
 
@@ -103,7 +155,7 @@ private:
 
 public:
 
-                            SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport );
+                            SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport, SVGState& rCurState );
     virtual                 ~SVGAttributeWriter();
 
     void                    AddColorAttr( const char* pColorAttrName, const char* pColorOpacityAttrName, const Color& rColor );
@@ -171,7 +223,7 @@ class SVGTextWriter
 
   private:
     SVGExport&                                  mrExport;
-    SVGAttributeWriter*                         mpContext;
+    SVGAttributeWriter&                         mrAttributeWriter;
     VclPtr<VirtualDevice>                       mpVDev;
     bool                                        mbIsTextShapeStarted;
     Reference<XText>                            mrTextShape;
@@ -204,7 +256,7 @@ class SVGTextWriter
     vcl::Font                                   maParentFont;
 
   public:
-    explicit SVGTextWriter( SVGExport& rExport );
+    explicit SVGTextWriter( SVGExport& rExport, SVGAttributeWriter& rAttributeWriter );
     virtual ~SVGTextWriter();
 
     sal_Int32 setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nCurAction );
@@ -240,11 +292,6 @@ class SVGTextWriter
         mpTargetMapMode = &rTargetMapMode;
     }
 
-    void setContext( SVGAttributeWriter* pContext )
-    {
-        mpContext = pContext;
-    }
-
     void setTextShape( const Reference<XText>& rxText,
                        const GDIMetaFile* pTextEmbeddedBitmapMtf )
     {
@@ -278,11 +325,11 @@ private:
     sal_Int32                                   mnCurGradientId;
     sal_Int32                                   mnCurMaskId;
     sal_Int32                                   mnCurPatternId;
-    ::std::stack< SVGAttributeWriter* >         maContextStack;
     ::std::unique_ptr< SVGShapeDescriptor >     mapCurShape;
     SVGExport&                                  mrExport;
-    SVGFontExport&                              mrFontExport;
-    SVGAttributeWriter*                         mpContext;
+    SVGContextHandler                           maContextHandler;
+    SVGState&                                   mrCurrentState;
+    SVGAttributeWriter                          maAttributeWriter;
     SVGTextWriter                               maTextWriter;
     VclPtr<VirtualDevice>                       mpVDev;
     MapMode                                     maTargetMapMode;
@@ -290,22 +337,6 @@ private:
     bool                                        mbClipAttrChanged;
     bool                                        mbIsPlaceholderShape;
 
-
-    void                    ImplAcquireContext()
-    {
-        maContextStack.push( mpContext = new SVGAttributeWriter( mrExport, mrFontExport ) );
-        maTextWriter.setContext( mpContext );
-    }
-    void                    ImplReleaseContext()
-    {
-        if (!maContextStack.empty())
-        {
-            delete maContextStack.top();
-            maContextStack.pop();
-        }
-        mpContext = (maContextStack.empty() ? nullptr : maContextStack.top());
-        maTextWriter.setContext( mpContext );
-    }
 
     long                    ImplMap( sal_Int32 nVal ) const;
     Point&                  ImplMap( const Point& rPt, Point& rDstPt ) const;
