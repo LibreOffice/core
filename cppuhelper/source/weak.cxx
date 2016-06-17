@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -461,16 +462,15 @@ void WeakReferenceHelper::clear()
 {
     try
     {
-        if (m_pImpl)
+        rtl::Reference<OWeakRefListener> xImpl;
         {
-            if (m_pImpl->m_XWeakConnectionPoint.is())
-            {
-                m_pImpl->m_XWeakConnectionPoint->removeReference(
-                        static_cast<XReference*>(m_pImpl));
-                m_pImpl->m_XWeakConnectionPoint.clear();
-            }
-            m_pImpl->release();
+            MutexGuard guard(cppu::getWeakMutex());
+            xImpl = m_pImpl;
             m_pImpl = nullptr;
+        }
+        if (xImpl.is())
+        {
+            xImpl->dispose(); // call without MutexGuard
         }
     }
     catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
@@ -494,6 +494,7 @@ WeakReferenceHelper::operator= (const Reference< XInterface > & xInt)
         clear();
         if (xInt.is())
         {
+            MutexGuard guard(cppu::getWeakMutex());
             m_pImpl = new OWeakRefListener(xInt);
             m_pImpl->acquire();
         }
