@@ -67,7 +67,7 @@ bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
             report(
                 DiagnosticsEngine::Warning,
                 ("overriding destructor declaration not explicitly marked"
-                 " 'virtual'"),
+                 " 'override'"),
                 decl->getLocation())
                 << decl->getSourceRange();
         }
