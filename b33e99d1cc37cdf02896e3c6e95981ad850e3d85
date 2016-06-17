@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_6a1234b6",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-06-17T11:55:13Z",
+      "side": 1,
+      "message": "this will work only with a \"dev install\" in the build directory. It will not work for packaged / normal install builds.",
+      "revId": "b33e99d1cc37cdf02896e3c6e95981ad850e3d85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
