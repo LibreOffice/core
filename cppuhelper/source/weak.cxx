@@ -105,6 +105,12 @@ void SAL_CALL OWeakConnectionPoint::release() throw()
 
 void SAL_CALL OWeakConnectionPoint::dispose() throw(css::uno::RuntimeException)
 {
+    {
+        MutexGuard aGuard(getWeakMutex());
+        // OWeakObject is not the only owner of this, so clear m_pObject
+        // so that queryAdapted() won't use it now that it's dead
+        m_pObject = nullptr;
+    }
     Any ex;
     OInterfaceIteratorHelper aIt( m_aReferences );
     while( aIt.hasMoreElements() )
