@@ -494,8 +494,8 @@ namespace osl_Pipe
                 aPipe.close( );
                 int nRet = aPipe.send( m_pTestString1.getStr(), 3 );
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: use after close.",
-                                        OSL_PIPE_FAIL == nRet );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "#test comment#: use after close.",
+                                        nRet, OSL_PIPE_FAIL );
             }
 
         CPPUNIT_TEST_SUITE( close );

@@ -51,7 +51,7 @@ public:
     void create_002()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmInvalid, rtl_Cipher_ModeECB);
-            CPPUNIT_ASSERT_MESSAGE("create provide wrong object.", aCipher == nullptr);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
     void create_003()
         {
@@ -62,7 +62,7 @@ public:
     void create_004()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmInvalid, rtl_Cipher_ModeCBC);
-            CPPUNIT_ASSERT_MESSAGE("create provide wrong object.", aCipher == nullptr);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
     void create_005()
         {
@@ -73,17 +73,17 @@ public:
     void create_006()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmInvalid, rtl_Cipher_ModeStream);
-            CPPUNIT_ASSERT_MESSAGE("create provide wrong object.", aCipher == nullptr);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
     void create_007()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeInvalid);
-            CPPUNIT_ASSERT_MESSAGE("create provide wrong object.", aCipher == nullptr);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
     void create_008()
         {
             rtlCipher aCipher = rtl_cipher_create(rtl_Cipher_AlgorithmInvalid, rtl_Cipher_ModeInvalid);
-            CPPUNIT_ASSERT_MESSAGE("create provide wrong object.", aCipher == nullptr);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
         }
 
     // Change the following lines only, if you add, remove or rename
@@ -135,7 +135,7 @@ public:
     void createBF_004()
         {
             rtlCipher aCipher = rtl_cipher_createBF(rtl_Cipher_ModeInvalid);
-            CPPUNIT_ASSERT_MESSAGE("create provide wrong object.", aCipher == nullptr);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("create provide wrong object.", static_cast<rtlCipher>(nullptr), aCipher);
             // rtl_cipher_destroy(aCipher);
         }
     // Change the following lines only, if you add, remove or rename
@@ -178,7 +178,7 @@ public:
             pArgBuffer[0] = _nArgValue;
 
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong init", rtl_Cipher_E_None, aError);
 
             sal_uInt32     nPlainTextLen = 16;
             sal_uInt8     *pPlainTextBuffer = new sal_uInt8[ nPlainTextLen ];
@@ -190,7 +190,7 @@ public:
             memset(pCipherBuffer, 0, nCipherLen);
 
             /* rtlCipherError */ aError = rtl_cipher_encode(aCipher, pPlainTextBuffer, nPlainTextLen, pCipherBuffer, nCipherLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong encode", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong encode", rtl_Cipher_E_None, aError);
 
             sal_uInt32     nPlainText2Len = 16;
             sal_uInt8     *pPlainText2Buffer = new sal_uInt8[ nPlainText2Len ];
@@ -226,7 +226,7 @@ public:
             pArgBuffer[0] = _nArgValue;
 
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionBoth, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong init", rtl_Cipher_E_None, aError);
 
             sal_uInt32     nPlainTextLen = 16;
             sal_uInt8     *pPlainTextBuffer = new sal_uInt8[ nPlainTextLen ];
@@ -238,18 +238,18 @@ public:
             memset(pCipherBuffer, 0, nCipherLen);
 
             /* rtlCipherError */ aError = rtl_cipher_encode(aCipher, pPlainTextBuffer, nPlainTextLen, pCipherBuffer, nCipherLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong encode", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong encode", rtl_Cipher_E_None, aError);
 
             sal_uInt32     nPlainText2Len = 16;
             sal_uInt8     *pPlainText2Buffer = new sal_uInt8[ nPlainText2Len ];
             memset(pPlainText2Buffer, 0, nPlainText2Len);
 
             /* rtlCipherError */ aError = rtl_cipher_decode(aCipher, pCipherBuffer, nCipherLen, pPlainText2Buffer, nPlainText2Len);
-            CPPUNIT_ASSERT_MESSAGE("wrong decode", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong decode", rtl_Cipher_E_None, aError);
 
             sal_Int32 nCompare = memcmp(pPlainTextBuffer, pPlainText2Buffer, 16);
 
-            CPPUNIT_ASSERT_MESSAGE("compare between plain and decoded plain failed", nCompare == 0);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("compare between plain and decoded plain failed", static_cast<sal_Int32>(0), nCompare);
 
             delete [] pPlainText2Buffer;
 
@@ -395,7 +395,7 @@ public:
             pArgBuffer[0] = _nArgValue;
 
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong init", rtl_Cipher_E_None, aError);
 
             sal_uInt32     nDataLen = 16;
             sal_uInt8     *pDataBuffer = new sal_uInt8[ nDataLen ];
@@ -407,7 +407,7 @@ public:
             memset(pBuffer, 0, nLen);
 
             /* rtlCipherError */ aError = rtl_cipher_encode(aCipher, pDataBuffer, nDataLen, pBuffer, nLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong encode", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong encode", rtl_Cipher_E_None, aError);
 
             delete [] pBuffer;
             delete [] pDataBuffer;
@@ -490,7 +490,7 @@ public:
             memset(pArgBuffer, 0, nArgLen);
 
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong init", rtl_Cipher_E_None, aError);
 
             delete [] pArgBuffer;
             delete [] pKeyBuffer;
@@ -513,7 +513,7 @@ public:
             memset(pArgBuffer, 0, nArgLen);
 
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong init", rtl_Cipher_E_None, aError);
 
             delete [] pArgBuffer;
             delete [] pKeyBuffer;
@@ -535,7 +535,7 @@ public:
             pArgBuffer[0] = 1;
 
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong init", rtl_Cipher_E_None, aError);
 
             delete [] pArgBuffer;
             delete [] pKeyBuffer;
@@ -558,7 +558,7 @@ public:
             pArgBuffer[0] = 1;
 
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
-            CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong init", rtl_Cipher_E_None, aError);
 
             delete [] pArgBuffer;
             delete [] pKeyBuffer;
