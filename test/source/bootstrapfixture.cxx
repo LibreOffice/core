@@ -173,9 +173,18 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
     {
         var = "OFFICEOTRON";
     }
-    else
+    else if ( eFormat == test::ODF )
     {
         var = "ODFVALIDATOR";
+    }
+    else if ( eFormat == test::MSBINARY )
+    {
+#if HAVE_BFFVALIDATOR
+        var = "BFFVALIDATOR";
+#else
+        // Binary Format Validator is disabled
+        return;
+#endif
     }
     OUString aValidator;
     oslProcessError e = osl_getEnvironment(var.pData, &aValidator.pData);
