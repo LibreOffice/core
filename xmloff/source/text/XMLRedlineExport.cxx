@@ -341,7 +341,7 @@ void XMLRedlineExport::ExportChangedRegion(
         rPropSet->getPropertyValue("RedlineUndoStart") >>= nCharStart;
         rPropSet->getPropertyValue("RedlineUndoEnd") >>= nCharEnd;
 
-        XMLTokenEnum eElementType = XML_PARAGRAPH;
+        XMLTokenEnum eElementType = XML_TEXT;
         OUString sElementType;
         aAny = rPropSet->getPropertyValue(sRedlineElementType);
         aAny >>= sElementType;

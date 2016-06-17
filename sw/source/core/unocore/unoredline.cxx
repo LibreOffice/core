@@ -311,11 +311,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     }
     else if (rPropertyName == UNO_NAME_REDLINE_ELEMENT_TYPE)
     {
-        SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
-        if ( 2 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
-            aRet <<= OUString("paragraph");
-        else
-            aRet <<= OUString("text");
+        aRet <<= OUString("text");
     }
     else if (rPropertyName == UNO_NAME_REDLINE_UNDO_START)
     {
@@ -323,7 +319,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     }
     else if (rPropertyName == UNO_NAME_REDLINE_UNDO_END)
     {
-        aRet <<= rRedline.GetPoint()->nContent.GetNext()->GetIndex();
+        aRet <<= rRedline.GetPoint()->nContent.GetIndex();
     }
     return aRet;
 }
@@ -357,13 +353,13 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     pRet[nPropIdx++].Value <<= !rRedline.IsDelLastPara();
 
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_ELEMENT_TYPE;
-    pRet[nPropIdx++].Value <<= OUString("paragraph");
+    pRet[nPropIdx++].Value <<= OUString("text");
 
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_UNDO_START;
     pRet[nPropIdx++].Value <<= rRedline.GetPoint()->nContent.GetIndex() + 1;
 
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_UNDO_END;
-    pRet[nPropIdx++].Value <<= rRedline.GetMark()->nContent.GetIndex() + 1;
+    pRet[nPropIdx++].Value <<= rRedline.GetPoint()->nContent.GetIndex() + 1;
 
     SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
     if(pNodeIdx )
