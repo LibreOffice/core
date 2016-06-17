@@ -18,6 +18,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
+#include <tools/wintypes.hxx>
+#include <vcl/EnumContext.hxx>
 
 #include <memory>
 #include <map>
@@ -349,6 +351,8 @@ private:
     void        handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     VclPtr<vcl::Window> handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
+    std::vector<vcl::EnumContext::Context>    handleStyle(xmlreader::XmlReader &reader);
+    vcl::EnumContext::Context    getContext(xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
     static void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);

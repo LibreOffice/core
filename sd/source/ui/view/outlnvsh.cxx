@@ -47,7 +47,7 @@
 #include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <vcl/EnumContext.hxx>
 #include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -203,7 +203,7 @@ OutlineViewShell::OutlineViewShell (
 
     Construct(GetDocSh());
 
-    SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_OutlineText));
+    SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_OutlineText));
 
     m_StrOldPageName.clear();
 

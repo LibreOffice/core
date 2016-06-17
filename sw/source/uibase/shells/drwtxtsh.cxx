@@ -35,7 +35,7 @@
 #include <sfx2/bindings.hxx>
 #include <svx/fontwork.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <vcl/EnumContext.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editstat.hxx>
@@ -133,7 +133,7 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     rSh.NoEdit();
     SetName("ObjectText");
     SetHelpId(SW_DRWTXTSHELL);
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawText));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_DrawText));
 }
 
 SwDrawTextShell::~SwDrawTextShell()

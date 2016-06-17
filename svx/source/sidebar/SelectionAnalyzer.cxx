@@ -25,7 +25,7 @@
 #include "svx/fmglob.hxx"
 #include "svx/globl3d.hxx"
 
-using sfx2::sidebar::EnumContext;
+using vcl::EnumContext;
 
 
 namespace svx { namespace sidebar {

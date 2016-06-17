@@ -25,7 +25,6 @@
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
-#include <sfx2/sidebar/EnumContext.hxx>
 
 namespace svx {
 
