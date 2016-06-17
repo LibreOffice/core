@@ -310,7 +310,7 @@ void ChartAxisPanel::DataChanged(
 }
 
 void ChartAxisPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& )
+    const vcl::EnumContext& )
 {
     updateData();
 }

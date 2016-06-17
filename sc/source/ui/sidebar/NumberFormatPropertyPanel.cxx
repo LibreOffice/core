@@ -169,7 +169,7 @@ void NumberFormatPropertyPanel::DataChanged(
 }
 
 void NumberFormatPropertyPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const vcl::EnumContext& rContext)
 {
     if(maContext == rContext)
     {

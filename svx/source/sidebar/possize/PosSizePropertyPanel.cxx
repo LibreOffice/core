@@ -253,7 +253,7 @@ void PosSizePropertyPanel::DataChanged(
 }
 
 void PosSizePropertyPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const vcl::EnumContext& rContext)
 {
     if (maContext == rContext)
     {

@@ -17,42 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/objface.hxx>
-#include <sfx2/objitem.hxx>
+#ifndef INCLUDED_VCL_CONTEXTTABCTRL_HXX
+#define INCLUDED_VCL_CONTEXTTABCTRL_HXX
+
 #include <vcl/EnumContext.hxx>
-#include <wrtsh.hxx>
-#include <view.hxx>
-#include <helpid.h>
-#include <globals.hrc>
-#include <frmsh.hxx>
-#include <olesh.hxx>
+#include <vcl/tabctrl.hxx>
 
-#include <cmdid.h>
-#include <popup.hrc>
-#include <shells.hrc>
-
-#define SwOleShell
-#include <sfx2/msg.hxx>
-#include <swslots.hxx>
-
-SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell)
-
-void SwOleShell::InitInterface_Impl()
+class VCL_DLLPUBLIC ContextTabControl : public TabControl
 {
-    GetStaticInterface()->RegisterPopupMenu("oleobject");
+public:
+    ContextTabControl( vcl::Window* pParent, WinBits nStyle = WB_STDTABCONTROL );
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_OLE_TOOLBOX);
-}
+    void SetContext( vcl::EnumContext::Context eContext );
 
-SwOleShell::SwOleShell(SwView &_rView) :
-    SwFrameShell(_rView)
+private:
+    vcl::EnumContext::Context eLastContext;
+};
 
-{
-    SetName("Object");
-    SetHelpId(SW_OLESHELL);
-    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_OLE));
-}
+#endif // INCLUDED_VCL_TABCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

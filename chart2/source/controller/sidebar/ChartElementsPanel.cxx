@@ -501,7 +501,7 @@ void ChartElementsPanel::DataChanged(
 }
 
 void ChartElementsPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const vcl::EnumContext& rContext)
 {
     if(maContext == rContext)
     {
