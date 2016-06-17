@@ -1987,39 +1987,36 @@ void SmParser::DoBrace()
     }
     else
     {
-        if (TokenInGroup(TG::LBrace))
-        {
-            pLeft = new SmMathSymbolNode(m_aCurToken);
+        assert(TokenInGroup(TG::LBrace));
 
-            NextToken();
-            DoBracebody(false);
-            pBody = popOrZero(m_aNodeStack);
+        pLeft = new SmMathSymbolNode(m_aCurToken);
 
-            SmTokenType  eExpectedType = TUNKNOWN;
-            switch (pLeft->GetToken().eType)
-            {   case TLPARENT :     eExpectedType = TRPARENT;   break;
-                case TLBRACKET :    eExpectedType = TRBRACKET;  break;
-                case TLBRACE :      eExpectedType = TRBRACE;    break;
-                case TLDBRACKET :   eExpectedType = TRDBRACKET; break;
-                case TLLINE :       eExpectedType = TRLINE;     break;
-                case TLDLINE :      eExpectedType = TRDLINE;    break;
-                case TLANGLE :      eExpectedType = TRANGLE;    break;
-                case TLFLOOR :      eExpectedType = TRFLOOR;    break;
-                case TLCEIL :       eExpectedType = TRCEIL;     break;
-                default :
-                    SAL_WARN("starmath", "unknown case");
+        NextToken();
+        DoBracebody(false);
+        pBody = popOrZero(m_aNodeStack);
+
+        SmTokenType  eExpectedType = TUNKNOWN;
+        switch (pLeft->GetToken().eType)
+        {   case TLPARENT :     eExpectedType = TRPARENT;   break;
+            case TLBRACKET :    eExpectedType = TRBRACKET;  break;
+            case TLBRACE :      eExpectedType = TRBRACE;    break;
+            case TLDBRACKET :   eExpectedType = TRDBRACKET; break;
+            case TLLINE :       eExpectedType = TRLINE;     break;
+            case TLDLINE :      eExpectedType = TRDLINE;    break;
+            case TLANGLE :      eExpectedType = TRANGLE;    break;
+            case TLFLOOR :      eExpectedType = TRFLOOR;    break;
+            case TLCEIL :       eExpectedType = TRCEIL;     break;
+            default :
+                SAL_WARN("starmath", "unknown case");
             }
 
-            if (m_aCurToken.eType == eExpectedType)
-            {
+        if (m_aCurToken.eType == eExpectedType)
+        {
                 pRight = new SmMathSymbolNode(m_aCurToken);
                 NextToken();
-            }
-            else
-                eError = PE_PARENT_MISMATCH;
         }
         else
-            eError = PE_LBRACE_EXPECTED;
+            eError = PE_PARENT_MISMATCH;
     }
 
     if (eError == PE_NONE)
