@@ -1809,7 +1809,7 @@ void SmParser::DoFontAttribut()
             break;
 
         default :
-            SAL_WARN("starmath", "unknown case");
+            assert(false);
     }
 }
 
