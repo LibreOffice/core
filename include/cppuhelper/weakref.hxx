@@ -39,8 +39,14 @@ namespace uno
 
 class OWeakRefListener;
 
-/** The WeakReferenceHelper holds a weak reference to an object. This object must implement
-    the css::uno::XWeak interface.  The implementation is thread safe.
+/** The WeakReferenceHelper holds a weak reference to an object.
+
+    This object must implement the css::uno::XWeak interface.
+
+    The WeakReferenceHelper itself is *not* thread safe, just as
+    Reference itself isn't, but the implementation of the listeners etc.
+    behind it *is* thread-safe, so multiple threads can have their own
+    WeakReferences to the same XWeak object.
 */
 class CPPUHELPER_DLLPUBLIC WeakReferenceHelper
 {
@@ -116,8 +122,14 @@ protected:
     /// @endcond
 };
 
-/** The WeakReference<> holds a weak reference to an object. This object must implement
-    the css::uno::XWeak interface.  The implementation is thread safe.
+/** The WeakReference<> holds a weak reference to an object.
+
+    This object must implement the css::uno::XWeak interface.
+
+    The WeakReference itself is *not* thread safe, just as
+    Reference itself isn't, but the implementation of the listeners etc.
+    behind it *is* thread-safe, so multiple threads can have their own
+    WeakReferences to the same XWeak object.
 
     @tparam interface_type type of interface
 */

@@ -34,6 +34,7 @@ namespace cppu
 {
 
 // due to static Reflection destruction from usr, there must be a mutex leak (#73272#)
+// this is used to lock all instances of OWeakConnectionPoint and OWeakRefListener as well as OWeakObject::m_pWeakConnectionPoint
 inline static Mutex & getWeakMutex()
 {
     static Mutex * s_pMutex = nullptr;
@@ -358,7 +359,7 @@ public:
 
     /// The reference counter.
     oslInterlockedCount         m_aRefCount;
-    /// The connection point of the weak object
+    /// The connection point of the weak object, guarded by getWeakMutex()
     Reference< XAdapter >       m_XWeakConnectionPoint;
 };
 
@@ -463,12 +464,7 @@ void WeakReferenceHelper::clear()
     {
         if (m_pImpl)
         {
-            if (m_pImpl->m_XWeakConnectionPoint.is())
-            {
-                m_pImpl->m_XWeakConnectionPoint->removeReference(
-                        static_cast<XReference*>(m_pImpl));
-                m_pImpl->m_XWeakConnectionPoint.clear();
-            }
+            m_pImpl->dispose();
             m_pImpl->release();
             m_pImpl = nullptr;
         }
@@ -513,6 +509,7 @@ Reference< XInterface > WeakReferenceHelper::get() const
     {
         Reference< XAdapter > xAdp;
         {
+            // must lock to access m_XWeakConnectionPoint
             MutexGuard guard(cppu::getWeakMutex());
             if( m_pImpl && m_pImpl->m_XWeakConnectionPoint.is() )
                 xAdp = m_pImpl->m_XWeakConnectionPoint;
