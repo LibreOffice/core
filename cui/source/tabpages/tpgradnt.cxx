@@ -927,7 +927,7 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
     }
 }
 
-sal_Int32 SvxGradientTabPage::SearchGradientList(OUString aGradientName)
+sal_Int32 SvxGradientTabPage::SearchGradientList(const OUString& rGradientName)
 {
     long nCount = m_pGradientList->Count();
     bool bValidGradientName = true;
@@ -935,7 +935,7 @@ sal_Int32 SvxGradientTabPage::SearchGradientList(OUString aGradientName)
 
     for(long i = 0;i < nCount && bValidGradientName;i++)
     {
-        if(aGradientName == m_pGradientList->GetGradient( i )->GetName())
+        if(rGradientName == m_pGradientList->GetGradient( i )->GetName())
         {
             nPos = i;
             bValidGradientName = false;

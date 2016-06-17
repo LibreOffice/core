@@ -313,7 +313,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
     return 0L;
 }
 
-sal_Int32 SvxHatchTabPage::SearchHatchList(OUString aHatchName)
+sal_Int32 SvxHatchTabPage::SearchHatchList(const OUString& rHatchName)
 {
     long nCount = m_pHatchingList->Count();
     bool bValidHatchName = true;
@@ -321,7 +321,7 @@ sal_Int32 SvxHatchTabPage::SearchHatchList(OUString aHatchName)
 
     for(long i = 0;i < nCount && bValidHatchName;i++)
     {
-        if(aHatchName == m_pHatchingList->GetHatch( i )->GetName())
+        if(rHatchName == m_pHatchingList->GetHatch( i )->GetName())
         {
             nPos = i;
             bValidHatchName = false;
