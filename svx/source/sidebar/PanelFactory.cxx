@@ -114,7 +114,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     Reference<ui::XSidebar> xSidebar (aArguments.getOrDefault("Sidebar", Reference<ui::XSidebar>()));
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
-    ::sfx2::sidebar::EnumContext aContext (
+    vcl::EnumContext aContext (
         aArguments.getOrDefault("ApplicationName", OUString()),
         aArguments.getOrDefault("ContextName", OUString()));
 

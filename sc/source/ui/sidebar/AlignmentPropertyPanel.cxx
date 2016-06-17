@@ -247,7 +247,7 @@ void AlignmentPropertyPanel::DataChanged(
 }
 
 void AlignmentPropertyPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const vcl::EnumContext& rContext)
 {
     if (maContext == rContext)
     {

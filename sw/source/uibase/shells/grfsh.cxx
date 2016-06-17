@@ -31,7 +31,7 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/protitem.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <vcl/EnumContext.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/sdgluitm.hxx>
@@ -943,7 +943,7 @@ SwGrfShell::SwGrfShell(SwView &_rView) :
 {
     SetName("Graphic");
     SetHelpId(SW_GRFSHELL);
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Graphic));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Graphic));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

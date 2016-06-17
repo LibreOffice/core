@@ -24,10 +24,10 @@
 #include <editeng/lrspitem.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/EnumContext.hxx>
 #include <svx/relfld.hxx>
 #include <svtools/unitconv.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 
 using namespace com::sun::star;
 
@@ -64,7 +64,7 @@ public:
 
     void SetValue(SfxItemState eState, const SfxPoolItem* pState);
     void SetUnit(FieldUnit eUnit);
-    void SetContext(const ::sfx2::sidebar::EnumContext& eContext);
+    void SetContext(const vcl::EnumContext& eContext);
 
 private:
     VclPtr<SvxRelativeField> m_pBeforeSpacing;
@@ -73,7 +73,7 @@ private:
 
     SfxMapUnit m_eUnit;
 
-    ::sfx2::sidebar::EnumContext m_aContext;
+    vcl::EnumContext m_aContext;
 
     DECL_LINK_TYPED(ModifySpacingHdl, Edit&, void);
 };

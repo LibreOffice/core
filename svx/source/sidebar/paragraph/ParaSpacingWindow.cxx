@@ -135,7 +135,7 @@ void ParaLRSpacingWindow::dispose()
     VclVBox::dispose();
 }
 
-void ParaLRSpacingWindow::SetContext(const ::sfx2::sidebar::EnumContext& eContext)
+void ParaLRSpacingWindow::SetContext(const vcl::EnumContext& eContext)
 {
     m_aContext = eContext;
 }

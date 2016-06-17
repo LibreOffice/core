@@ -16,19 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SIDEBAR_ENUMCONTEXT_HXX
-#define INCLUDED_SFX2_SIDEBAR_ENUMCONTEXT_HXX
+#ifndef INCLUDED_VCL_ENUMCONTEXT_HXX
+#define INCLUDED_VCL_ENUMCONTEXT_HXX
 
-#include <sfx2/dllapi.h>
+#include <vcl/dllapi.h>
 
 #include <rtl/ustring.hxx>
 
 #include <vector>
 
 
-namespace sfx2 { namespace sidebar {
+namespace vcl {
 
-class SFX2_DLLPUBLIC EnumContext
+class VCL_DLLPUBLIC EnumContext
 {
 public:
     enum Application
@@ -157,10 +157,10 @@ private:
 };
 
 
-#define CombinedEnumContext(a,e) ((static_cast<sal_uInt16>(::sfx2::sidebar::EnumContext::a)<<16)\
-        | static_cast<sal_uInt16>(::sfx2::sidebar::EnumContext::e))
+#define CombinedEnumContext(a,e) ((static_cast<sal_uInt16>(::vcl::EnumContext::a)<<16)\
+        | static_cast<sal_uInt16>(::vcl::EnumContext::e))
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace vcl
 
 #endif
 
