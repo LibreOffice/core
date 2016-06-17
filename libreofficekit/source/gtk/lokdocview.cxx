@@ -127,7 +127,7 @@ struct LOKDocViewPrivateImpl
     ///@}
 
     /// View ID, returned by createView() or 0 by default.
-    int m_nViewId;
+    std::uintptr_t m_nViewId;
 
     /**
      * Contains a freshly set zoom level: logic size of a tile.
@@ -837,6 +837,7 @@ static gboolean postDocumentLoad(gpointer pData)
     g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
+    priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
@@ -2691,7 +2692,9 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOK
     // No documentLoad(), just a createView().
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pNewDocView));
     LOKDocViewPrivate& pNewPriv = getPrivate(LOK_DOC_VIEW(pNewDocView));
-    pNewPriv->m_nViewId = pDocument->pClass->createView(pDocument);
+    // Store the view id only later in postDocumentLoad(), as
+    // initializeForRendering() changes the id in Impress.
+    pDocument->pClass->createView(pDocument);
     pNewPriv->m_aRenderingArguments = pOldPriv->m_aRenderingArguments;
 
     postDocumentLoad(pNewDocView);
