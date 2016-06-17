@@ -21,6 +21,8 @@
 #define INCLUDED_FORMULA_ERRORCODES_HXX
 
 #include <rtl/math.hxx>
+#include <sal/mathconf.h>
+#include <sal/types.h>
 
 namespace formula {
 

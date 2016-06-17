@@ -20,17 +20,21 @@
 #ifndef INCLUDED_FORMULA_FORMULAHELPER_HXX
 #define INCLUDED_FORMULA_FORMULAHELPER_HXX
 
-#include <formula/IFunctionDescription.hxx>
+#include <memory>
+#include <vector>
+
 #include <formula/formuladllapi.h>
 #include <rtl/ustring.hxx>
-#include <vector>
-#include <memory>
+#include <sal/types.h>
+#include <unotools/syslocale.hxx>
 
-class SvtSysLocale;
 class CharClass;
 
 namespace formula
 {
+    class IFunctionDescription;
+    class IFunctionManager;
+
     class FORMULA_DLLPUBLIC FormulaHelper
     {
         ::std::unique_ptr<SvtSysLocale> m_pSysLocale;

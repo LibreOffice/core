@@ -20,20 +20,21 @@
 #ifndef INCLUDED_FORMULA_FORMULACOMPILER_HXX
 #define INCLUDED_FORMULA_FORMULACOMPILER_HXX
 
-#include <formula/formuladllapi.h>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
-
-#include <com/sun/star/uno/Sequence.hxx>
-
-#include <formula/opcode.hxx>
-#include <formula/grammar.hxx>
-#include <formula/token.hxx>
-#include <formula/ExternalReferenceHelper.hxx>
-
 #include <memory>
 #include <unordered_map>
+#include <vector>
+
+#include <com/sun/star/uno/Sequence.hxx>
+#include <formula/formuladllapi.h>
+#include <formula/grammar.hxx>
+#include <formula/opcode.hxx>
+#include <formula/token.hxx>
+#include <formula/types.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
+#include <tools/debug.hxx>
 
 #define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChoose) */
 #define FORMULA_MAXTOKENS     8192  /* maximum number of tokens in formula */

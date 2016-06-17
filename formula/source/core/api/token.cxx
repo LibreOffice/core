@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/sheet/FormulaToken.hpp>
 #include "formula/token.hxx"
 #include "formula/tokenarray.hxx"
 #include "formula/FormulaCompiler.hxx"

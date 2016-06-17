@@ -20,11 +20,27 @@
 #ifndef INCLUDED_FORMULA_FORMULA_HXX
 #define INCLUDED_FORMULA_FORMULA_HXX
 
-#include <sfx2/basedlgs.hxx>
 #include <memory>
+#include <utility>
+
 #include <formula/formuladllapi.h>
 #include <formula/omoduleclient.hxx>
 #include <formula/IFunctionDescription.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <sfx2/basedlgs.hxx>
+#include <tools/gen.hxx>
+#include <tools/link.hxx>
+#include <vcl/dialog.hxx>
+
+class Idle;
+class NotifyEvent;
+class SfxBindings;
+class SfxChildWindow;
+
+namespace vcl {
+    class Window;
+}
 
 namespace formula
 {
@@ -38,8 +54,6 @@ enum FormulaDlgMode { FORMULA_FORMDLG_FORMULA, FORMULA_FORMDLG_ARGS, FORMULA_FOR
 
 class FormulaDlg_Impl;
 class IControlReferenceHandler;
-class IFunctionDescription;
-class IFunctionManager;
 class FormulaHelper;
 class RefEdit;
 class RefButton;

@@ -57,6 +57,8 @@
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
+#include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
+#include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

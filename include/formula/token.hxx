@@ -22,16 +22,18 @@
 
 #include <sal/config.h>
 
+#include <cstring>
 #include <vector>
 
-#include <string.h>
-#include <formula/opcode.hxx>
-#include <tools/mempool.hxx>
-#include <formula/IFunctionDescription.hxx>
 #include <formula/formuladllapi.h>
+#include <formula/IFunctionDescription.hxx>
+#include <formula/opcode.hxx>
 #include <formula/types.hxx>
-#include <svl/sharedstring.hxx>
 #include <osl/interlck.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <svl/sharedstring.hxx>
+#include <tools/mempool.hxx>
 
 class ScJumpMatrix;
 class ScMatrix;
@@ -88,8 +90,6 @@ typedef sal_uInt8 StackVar;
 // have enum names in debugger
 typedef StackVarEnum StackVar;
 #endif
-
-class FormulaTokenArray;
 
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 {
