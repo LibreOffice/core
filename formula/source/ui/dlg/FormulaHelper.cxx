@@ -20,6 +20,7 @@
 #include <algorithm>
 
 #include "formula/formulahelper.hxx"
+#include <formula/IFunctionDescription.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/syslocale.hxx>
 

@@ -22,6 +22,7 @@
 
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <formula/formuladllapi.h>
+#include <sal/types.h>
 
 namespace formula
 {

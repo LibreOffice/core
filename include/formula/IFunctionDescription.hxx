@@ -20,15 +20,21 @@
 #ifndef INCLUDED_FORMULA_IFUNCTIONDESCRIPTION_HXX
 #define INCLUDED_FORMULA_IFUNCTIONDESCRIPTION_HXX
 
-#include <vector>
 #include <memory>
-#include <formula/formuladllapi.h>
-#include <rtl/ustring.hxx>
-#include <tools/solar.h>
-#include <com/sun/star/sheet/XFormulaParser.hpp>
-#include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
+#include <vector>
 
-class SvTreeListEntry;
+#include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace sheet { struct FormulaToken; }
+    namespace sheet { class XFormulaOpCodeMapper; }
+    namespace sheet { class XFormulaParser; }
+} } }
 
 namespace formula
 {

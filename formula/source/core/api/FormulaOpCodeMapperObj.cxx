@@ -21,6 +21,7 @@
 
 #include <utility>
 
+#include <formula/FormulaCompiler.hxx>
 #include "formula/FormulaOpCodeMapperObj.hxx"
 #include "formula/opcode.hxx"
 #include <comphelper/sequence.hxx>

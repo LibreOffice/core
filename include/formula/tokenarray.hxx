@@ -20,14 +20,24 @@
 #ifndef INCLUDED_FORMULA_TOKENARRAY_HXX
 #define INCLUDED_FORMULA_TOKENARRAY_HXX
 
-#include <com/sun/star/sheet/FormulaToken.hpp>
-#include <formula/token.hxx>
-#include <formula/ExternalReferenceHelper.hxx>
-#include <o3tl/typed_flags_set.hxx>
-
-#include <limits.h>
+#include <climits>
+#include <memory>
 #include <type_traits>
 #include <unordered_set>
+#include <unordered_map>
+#include <vector>
+
+#include <com/sun/star/uno/Sequence.hxx>
+#include <formula/formuladllapi.h>
+#include <formula/opcode.hxx>
+#include <formula/token.hxx>
+#include <o3tl/typed_flags_set.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace sheet { struct FormulaToken; }
+} } }
 
 namespace svl {
 
@@ -59,7 +69,7 @@ namespace o3tl
 namespace formula
 {
 
-class FormulaMissingContext;
+class ExternalReferenceHelper;
 
 class FORMULA_DLLPUBLIC MissingConvention
 {
