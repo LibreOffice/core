@@ -111,6 +111,8 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 
     void initializeLocalView();
 
+    void checkInstalledModules();
+
 public:
     explicit BackingWindow(vcl::Window* pParent);
     virtual ~BackingWindow();
