@@ -83,7 +83,7 @@ private:
 public:
     TestDocumentHandler() {}
     const OUString& getString() { return m_aStr; }
-    void setString( const OUString aStr ) { m_aStr = aStr; }
+    void setString( const OUString & aStr ) { m_aStr = aStr; }
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override;
