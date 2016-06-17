@@ -127,7 +127,7 @@ struct LOKDocViewPrivateImpl
     ///@}
 
     /// View ID, returned by createView() or 0 by default.
-    int m_nViewId;
+    std::uintptr_t m_nViewId;
 
     /**
      * Contains a freshly set zoom level: logic size of a tile.
@@ -831,6 +831,7 @@ static gboolean postDocumentLoad(gpointer pData)
     g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
+    priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
@@ -2685,7 +2686,10 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOK
     // No documentLoad(), just a createView().
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pNewDocView));
     LOKDocViewPrivate& pNewPriv = getPrivate(LOK_DOC_VIEW(pNewDocView));
-    pNewPriv->m_nViewId = pDocument->pClass->createView(pDocument);
+    // Store the view id only later in postDocumentLoad(), as
+    // initializeForRendering() changes the id in Impress.
+    pDocument->pClass->createView(pDocument);
+    pNewPriv->m_aRenderingArguments = pOldPriv->m_aRenderingArguments;
 
     postDocumentLoad(pNewDocView);
     return pNewDocView;
@@ -2784,12 +2788,12 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     // set properties to indicate if view can be further zoomed in/out
     bool bCanZoomIn  = priv->m_fZoom < MAX_ZOOM;
     bool bCanZoomOut = priv->m_fZoom > MIN_ZOOM;
-    if (bCanZoomIn != priv->m_bCanZoomIn)
+    if (bCanZoomIn != bool(priv->m_bCanZoomIn))
     {
         priv->m_bCanZoomIn = bCanZoomIn;
         g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_IN]);
     }
-    if (bCanZoomOut != priv->m_bCanZoomOut)
+    if (bCanZoomOut != bool(priv->m_bCanZoomOut))
     {
         priv->m_bCanZoomOut = bCanZoomOut;
         g_object_notify_by_pspec(G_OBJECT(pDocView), properties[PROP_CAN_ZOOM_OUT]);
@@ -3041,6 +3045,10 @@ lok_doc_view_copy_selection (LOKDocView* pDocView,
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
     if (!pDocument)
         return nullptr;
+
+    std::stringstream ss;
+    ss << "lok::Document::getTextSelection('" << pMimeType << "')";
+    g_info("%s", ss.str().c_str());
     return pDocument->pClass->getTextSelection(pDocument, pMimeType, pUsedMimeType);
 }
 
@@ -3064,7 +3072,12 @@ lok_doc_view_paste (LOKDocView* pDocView,
     }
 
     if (pData)
+    {
+        std::stringstream ss;
+        ss << "lok::Document::paste('" << pMimeType << "', '" << std::string(pData, nSize) << ", "<<nSize<<"')";
+        g_info("%s", ss.str().c_str());
         ret = pDocument->pClass->paste(pDocument, pMimeType, pData, nSize);
+    }
 
     return ret;
 }

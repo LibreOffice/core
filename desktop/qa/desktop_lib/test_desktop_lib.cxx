@@ -294,16 +294,17 @@ void DesktopLOKTest::testCreateView()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViews(pDocument));
 
-    int nId = pDocument->m_pDocumentClass->createView(pDocument);
+    std::uintptr_t nId0 = pDocument->m_pDocumentClass->getView(pDocument);
+    std::uintptr_t nId1 = pDocument->m_pDocumentClass->createView(pDocument);
     CPPUNIT_ASSERT_EQUAL(2, pDocument->m_pDocumentClass->getViews(pDocument));
 
     // Make sure the created view is the active one, then switch to the old
     // one.
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getView(pDocument));
-    pDocument->m_pDocumentClass->setView(pDocument, 0);
-    CPPUNIT_ASSERT_EQUAL(0, pDocument->m_pDocumentClass->getView(pDocument));
+    CPPUNIT_ASSERT_EQUAL(nId1, pDocument->m_pDocumentClass->getView(pDocument));
+    pDocument->m_pDocumentClass->setView(pDocument, nId0);
+    CPPUNIT_ASSERT_EQUAL(nId0, pDocument->m_pDocumentClass->getView(pDocument));
 
-    pDocument->m_pDocumentClass->destroyView(pDocument, nId);
+    pDocument->m_pDocumentClass->destroyView(pDocument, nId1);
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViews(pDocument));
 }
 

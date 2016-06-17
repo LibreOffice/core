@@ -392,10 +392,10 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis,
                                     int nTileTwipWidth,
                                     int nTileTwipHeight);
 static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
-static int doc_createView(LibreOfficeKitDocument* pThis);
-static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
-static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
-static int doc_getView(LibreOfficeKitDocument* pThis);
+static uintptr_t doc_createView(LibreOfficeKitDocument* pThis);
+static void doc_destroyView(LibreOfficeKitDocument* pThis, uintptr_t nId);
+static void doc_setView(LibreOfficeKitDocument* pThis, uintptr_t nId);
+static uintptr_t doc_getView(LibreOfficeKitDocument* pThis);
 static int doc_getViews(LibreOfficeKitDocument* pThis);
 static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           const char *pFontName,
@@ -1937,28 +1937,28 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
     pDoc->setClientVisibleArea(aRectangle);
 }
 
-static int doc_createView(LibreOfficeKitDocument* /*pThis*/)
+static uintptr_t doc_createView(LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
 
     return SfxLokHelper::createView();
 }
 
-static void doc_destroyView(LibreOfficeKitDocument* /*pThis*/, int nId)
+static void doc_destroyView(LibreOfficeKitDocument* /*pThis*/, uintptr_t nId)
 {
     SolarMutexGuard aGuard;
 
     SfxLokHelper::destroyView(nId);
 }
 
-static void doc_setView(LibreOfficeKitDocument* /*pThis*/, int nId)
+static void doc_setView(LibreOfficeKitDocument* /*pThis*/, uintptr_t nId)
 {
     SolarMutexGuard aGuard;
 
     SfxLokHelper::setView(nId);
 }
 
-static int doc_getView(LibreOfficeKitDocument* /*pThis*/)
+static uintptr_t doc_getView(LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
 

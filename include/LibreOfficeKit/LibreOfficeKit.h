@@ -212,13 +212,13 @@ struct _LibreOfficeKitDocumentClass
     void (*setClientVisibleArea) (LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
 
     /// @see lok::Document::createView().
-    int (*createView) (LibreOfficeKitDocument* pThis);
+    uintptr_t (*createView) (LibreOfficeKitDocument* pThis);
     /// @see lok::Document::destroyView().
-    void (*destroyView) (LibreOfficeKitDocument* pThis, int nId);
+    void (*destroyView) (LibreOfficeKitDocument* pThis, uintptr_t nId);
     /// @see lok::Document::setView().
-    void (*setView) (LibreOfficeKitDocument* pThis, int nId);
+    void (*setView) (LibreOfficeKitDocument* pThis, uintptr_t nId);
     /// @see lok::Document::getView().
-    int (*getView) (LibreOfficeKitDocument* pThis);
+    uintptr_t (*getView) (LibreOfficeKitDocument* pThis);
     /// @see lok::Document::getViews().
     int (*getViews) (LibreOfficeKitDocument* pThis);
 
