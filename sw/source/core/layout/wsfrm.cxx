@@ -1216,7 +1216,7 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
                 const SwTabFrame* pTab = FindTabFrame();
 
                 // NEW TABLES
-                if ( pTab->IsVertical() != IsVertical() ||
+                if ( (pTab && pTab->IsVertical() != IsVertical()) ||
                      pThisCell->GetLayoutRowSpan() < 1 )
                     return 0;
             }
