@@ -134,7 +134,6 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_xToolbarManager( nullptr )
 {
     // Initialize statusbar member
-    const sal_Bool bRefreshVisibility = false;
     m_aStatusBarElement.m_aType = "statusbar";
     m_aStatusBarElement.m_aName = STATUS_BAR_ALIAS;
 
@@ -151,7 +150,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, cppu::UnoType<decltype(m_bHideCurrentUI)>::get() );
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT, LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT, beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::READONLY, &m_nLockCount, cppu::UnoType<decltype(m_nLockCount)>::get()  );
     registerProperty( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, beans::PropertyAttribute::TRANSIENT, &m_bMenuBarCloseButton, cppu::UnoType<decltype(m_bMenuBarCloseButton)>::get() );
-    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<decltype(bRefreshVisibility)>::get(), &bRefreshVisibility );
+    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
     registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE, LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE, beans::PropertyAttribute::TRANSIENT, &m_bPreserveContentSize, cppu::UnoType<decltype(m_bPreserveContentSize)>::get() );
 }
 

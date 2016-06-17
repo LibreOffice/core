@@ -450,10 +450,10 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN)
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 
-    uno::Sequence< table::CellRangeAddress > aInitialPropValue;
     registerPropertyNoMember( "RelatedCellRanges",
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
-        cppu::UnoType<decltype(aInitialPropValue)>::get(), &aInitialPropValue );
+        cppu::UnoType<uno::Sequence<table::CellRangeAddress>>::get(),
+        css::uno::Any(uno::Sequence<table::CellRangeAddress>()) );
 }
 
 ScChartObj::~ScChartObj()

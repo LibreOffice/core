@@ -120,7 +120,7 @@ namespace comphelper
 
         // register the property
         OSL_ENSURE( _nAttributes & PropertyAttribute::MAYBEVOID, "PropertyBag::addVoidProperty: this is for default-void properties only!" );
-        registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, nullptr );
+        registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, css::uno::Any() );
 
         // remember the default
         m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, Any() ) );
@@ -143,7 +143,7 @@ namespace comphelper
 
         // register the property
         registerPropertyNoMember( _rName, _nHandle, _nAttributes, aPropertyType,
-            _rInitialValue.hasValue() ? _rInitialValue.getValue() : nullptr );
+            _rInitialValue );
 
         // remember the default
         m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, _rInitialValue ) );

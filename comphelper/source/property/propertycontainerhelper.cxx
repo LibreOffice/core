@@ -121,21 +121,21 @@ void OPropertyContainerHelper::registerMayBeVoidProperty(const OUString& _rName,
 
 
 void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        const Type& _rType, const void* _pInitialValue)
+        const Type& _rType, css::uno::Any const & _pInitialValue)
 {
     OSL_ENSURE(!_rType.equals(cppu::UnoType<Any>::get()),
         "OPropertyContainerHelper::registerPropertyNoMember : don't give my the type of an uno::Any ! Really can't handle this !");
-    OSL_ENSURE(_pInitialValue || ((_nAttributes & PropertyAttribute::MAYBEVOID) != 0),
-        "OPropertyContainerHelper::registerPropertyNoMember : you should not omit the initial value if the property can't be void! This will definitively crash later!");
+    OSL_ENSURE(
+        (_pInitialValue.isExtractableTo(_rType)
+         || (!_pInitialValue.hasValue()
+             && (_nAttributes & PropertyAttribute::MAYBEVOID) != 0)),
+        "bad initial value");
 
     PropertyDescription aNewProp;
     aNewProp.aProperty = Property( _rName, _nHandle, _rType, (sal_Int16)_nAttributes );
     aNewProp.eLocated = PropertyDescription::LocationType::HoldMyself;
     aNewProp.aLocation.nOwnClassVectorIndex = m_aHoldProperties.size();
-    if (_pInitialValue)
-        m_aHoldProperties.push_back(Any(_pInitialValue, _rType));
-    else
-        m_aHoldProperties.push_back(Any());
+    m_aHoldProperties.push_back(_pInitialValue);
 
     implPushBackProperty(aNewProp);
 }

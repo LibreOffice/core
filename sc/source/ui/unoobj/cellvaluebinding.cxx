@@ -56,13 +56,12 @@ namespace calc
         ,m_bListPos( _bListPos )
     {
         // register our property at the base class
-        CellAddress aInitialPropValue;
         registerPropertyNoMember(
             "BoundCell",
             PROP_HANDLE_BOUND_CELL,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
-            cppu::UnoType<decltype(aInitialPropValue)>::get(),
-            &aInitialPropValue
+            cppu::UnoType<CellAddress>::get(),
+            css::uno::Any(CellAddress())
         );
 
         // TODO: implement a ReadOnly property as required by the service,

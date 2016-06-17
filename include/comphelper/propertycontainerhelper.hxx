@@ -121,12 +121,12 @@ protected:
         @param      _nHandle            the handle of the property
         @param      _nAttributes        the attributes of the property
         @param      _rType              the type of the property
-        @param      _pInitialValue      the initial value of the property. May be null if _nAttributes includes
+        @param      _pInitialValue      the initial value of the property. May be void if _nAttributes includes
                                         the css::beans::PropertyAttribute::MAYBEVOID flag.
-                                        Else it must be a pointer to an object of the type described by _rType.
+                                        Else it must contain a value compatible with the type described by _rType.
     */
     void    registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        const css::uno::Type& _rType, const void* _pInitialValue);
+        const css::uno::Type& _rType, css::uno::Any const & _pInitialValue);
 
     /** revokes a previously registered property
         @throw  css::beans::UnknownPropertyException
