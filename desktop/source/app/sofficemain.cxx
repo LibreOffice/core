@@ -107,12 +107,6 @@ static bool dumpCallback(const wchar_t* path, const wchar_t* id,
 #endif
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
-#if defined(_WIN64) && _MSC_VER <= 1800
-    // tdf#99410: MSVC 2013 runtime library has problems with some math functions if
-    // the CPU supports them and they are disabled in the OS
-    _set_FMA3_enable(0);
-#endif
-
 #if HAVE_FEATURE_BREAKPAD
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
