@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_2a566cd2",
+        "filename": "sw/source/uibase/sidebar/PageFooterPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-17T08:02:12Z",
+      "side": 1,
+      "message": "Isn\u0027t IsChecked returning bool right away? (and casting is then not needed)\n+ you can do without intermediates: if (Foo-\u003eIsChecked() { .. }",
+      "revId": "6a0866dbb24e719745a47e6d6c35c2f1110a0cc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_4a53b0e1",
+        "filename": "sw/source/uibase/sidebar/PageHeaderPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-17T08:02:12Z",
+      "side": 1,
+      "message": "Hm, and the same here. How did this ever pass compiler plugin checks?",
+      "revId": "6a0866dbb24e719745a47e6d6c35c2f1110a0cc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
