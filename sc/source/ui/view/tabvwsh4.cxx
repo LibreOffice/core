@@ -214,7 +214,7 @@ void ScTabViewShell::Activate(bool bMDI)
 
     ContextChangeEventMultiplexer::NotifyContextChange(
         GetController(),
-        ::sfx2::sidebar::EnumContext::Context_Default);
+        vcl::EnumContext::Context_Default);
 }
 
 void ScTabViewShell::Deactivate(bool bMDI)

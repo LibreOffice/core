@@ -1049,6 +1049,25 @@ WindowType Window::GetType() const
         return 0;
 }
 
+void Window::SetContext(const std::vector<vcl::EnumContext::Context>& aContext)
+{
+    mpWindowImpl->maContext = aContext;
+}
+
+bool Window::HasContext( const vcl::EnumContext::Context& aContext ) const
+{
+    std::vector<vcl::EnumContext::Context>& v = mpWindowImpl->maContext;
+    auto aFind = std::find(v.begin(), v.end(), aContext);
+    if (aFind == v.end())
+        return false;
+    return true;
+}
+
+const std::vector< vcl::EnumContext::Context >& Window::GetContext() const
+{
+    return mpWindowImpl->maContext;
+}
+
 Dialog* Window::GetParentDialog() const
 {
     const vcl::Window *pWindow = this;

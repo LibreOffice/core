@@ -94,6 +94,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/font.hxx>
@@ -492,7 +493,6 @@
 #include <sfx2/sidebar/DeckDescriptor.hxx>
 #include <sfx2/sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/DrawHelper.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>

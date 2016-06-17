@@ -630,6 +630,9 @@ WindowImpl::WindowImpl( WindowType nType )
     mnExtendedStyle                     = 0;                         // extended style (init in ImplInitWindow)
     mnPrevExtendedStyle                 = 0;                         // prevstyle (set in SetExtendedStyle)
     mnType                              = nType;                     // type
+    std::vector< vcl::EnumContext::Context > aContext;
+    aContext.push_back( vcl::EnumContext::Context::Context_Any );
+    maContext                           = aContext;                  // context
     mnGetFocusFlags                     = GetFocusFlags::NONE;       // Flags fuer GetFocus()-Aufruf
     mnWaitCount                         = 0;                         // Wait-Count (>1 == Warte-MousePointer)
     mnPaintFlags                        = 0;                         // Flags for ImplCallPaint

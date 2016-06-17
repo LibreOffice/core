@@ -184,7 +184,7 @@ void LinePropertyPanel::NotifyItemUpdate(
 }
 
 void LinePropertyPanel::HandleContextChange(
-    const sfx2::sidebar::EnumContext& rContext)
+    const vcl::EnumContext& rContext)
 {
     if(maContext == rContext)
     {

@@ -251,6 +251,7 @@ public:
     WinBits             mnExtendedStyle;
     WinBits             mnPrevExtendedStyle;
     WindowType          mnType;
+    std::vector< vcl::EnumContext::Context > maContext;
     ControlPart         mnNativeBackground;
     sal_uInt16          mnWaitCount;
     sal_uInt16          mnPaintFlags;

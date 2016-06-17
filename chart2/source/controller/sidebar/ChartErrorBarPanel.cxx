@@ -374,7 +374,7 @@ void ChartErrorBarPanel::DataChanged(
 }
 
 void ChartErrorBarPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& )
+    const vcl::EnumContext& )
 {
     updateData();
 }

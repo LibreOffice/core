@@ -38,6 +38,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
+#include <vcl/EnumContext.hxx>
 
 class VirtualDevice;
 struct ImplSVEvent;
@@ -873,6 +874,9 @@ public:
     WinBits                             GetExtendedStyle() const;
     void                                SetType( WindowType nType );
     WindowType                          GetType() const;
+    void                                SetContext( const std::vector<vcl::EnumContext::Context>& eContext );
+    bool                                HasContext( const vcl::EnumContext::Context& eContext ) const;
+    const std::vector< vcl::EnumContext::Context >&    GetContext() const;
     bool                                IsSystemWindow() const;
     bool                                IsDockingWindow() const;
     bool                                IsDialog() const;
