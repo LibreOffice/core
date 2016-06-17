@@ -189,19 +189,13 @@ void SwVisibleCursor::_SetPosAndShow()
         {
             m_nPageLastTime = nPage;
             OString aPayload = OString::number(nPage - 1);
-            if (comphelper::LibreOfficeKit::isViewCallback())
-                m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
-            else
-                m_pCursorShell->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+            m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
         }
 
         // notify about the cursor position & size
         Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
-        if (comphelper::LibreOfficeKit::isViewCallback())
-            m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
-        else
-            m_pCursorShell->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+        m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
     }
 
     if ( !m_pCursorShell->IsCursorReadonly()  || m_pCursorShell->GetViewOptions()->IsSelectionInReadonly() )
@@ -381,18 +375,12 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
                 if (aStartRect.HasArea())
                 {
                     OString sRect = aStartRect.SVRect().toString();
-                    if (comphelper::LibreOfficeKit::isViewCallback())
-                        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
-                    else
-                        GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
+                    GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
                 }
                 if (aEndRect.HasArea())
                 {
                     OString sRect = aEndRect.SVRect().toString();
-                    if (comphelper::LibreOfficeKit::isViewCallback())
-                        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
-                    else
-                        GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
+                    GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
                 }
             }
 
@@ -405,10 +393,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
             OString sRect = comphelper::string::join("; ", aRect);
             if (!pSelectionRectangles)
             {
-                if (comphelper::LibreOfficeKit::isViewCallback())
-                    GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
-                else
-                    GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+                GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
             }
             else
                 pSelectionRectangles->push_back(sRect);
@@ -617,10 +602,7 @@ void SwShellCursor::Show()
             aRect.push_back(rSelectionRectangle);
         }
         OString sRect = comphelper::string::join("; ", aRect);
-        if (comphelper::LibreOfficeKit::isViewCallback())
-            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
-        else
-            GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
     }
 }
 

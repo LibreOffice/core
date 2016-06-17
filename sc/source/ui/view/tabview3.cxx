@@ -322,10 +322,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
                 if (pDocSh)
                 {
-                    if (comphelper::LibreOfficeKit::isViewCallback())
-                        aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
-                    else
-                        pDocSh->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                    aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
 
                     // New area extended to the right of the sheet after last column
                     // including overlapping area with aNewRowArea
@@ -337,19 +334,13 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
                     // Only invalidate if spreadsheet extended to the right
                     if (aNewColArea.getWidth())
                     {
-                        if (comphelper::LibreOfficeKit::isViewCallback())
-                            aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewColArea.toString().getStr());
-                        else
-                            pDocSh->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewColArea.toString().getStr());
+                        aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewColArea.toString().getStr());
                     }
 
                     // Only invalidate if spreadsheet extended to the bottom
                     if (aNewRowArea.getHeight())
                     {
-                        if (comphelper::LibreOfficeKit::isViewCallback())
-                            aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewRowArea.toString().getStr());
-                        else
-                            pDocSh->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewRowArea.toString().getStr());
+                        aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewRowArea.toString().getStr());
                     }
                 }
             }

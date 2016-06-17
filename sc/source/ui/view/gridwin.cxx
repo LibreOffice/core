@@ -2461,7 +2461,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             // ScGlobal::OpenURL() only understands Calc A1 style syntax.
             // Convert it to Calc A1 before calling OpenURL().
             if (pDoc->GetAddressConvention() == formula::FormulaGrammar::CONV_OOO)
-                ScGlobal::OpenURL(aUrl, aTarget, pViewData->GetDocument()->GetDrawLayer());
+                ScGlobal::OpenURL(aUrl, aTarget);
             else
             {
                 ScAddress aTempAddr;
@@ -5851,17 +5851,8 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
 void ScGridWindow::updateLibreOfficeKitCellCursor()
 {
     OString aCursor = getCellCursor(pViewData->GetZoomX(), pViewData->GetZoomY());
-    if (comphelper::LibreOfficeKit::isViewCallback())
-    {
-        ScTabViewShell* pViewShell = pViewData->GetViewShell();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
-    }
-    else
-    {
-        ScDocument* pDoc = pViewData->GetDocument();
-        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
-    }
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
 }
 
 void ScGridWindow::CursorChanged()
@@ -5904,17 +5895,8 @@ void ScGridWindow::UpdateAllOverlays()
 
 void ScGridWindow::DeleteCursorOverlay()
 {
-    if (comphelper::LibreOfficeKit::isViewCallback())
-    {
-        ScTabViewShell* pViewShell = pViewData->GetViewShell();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
-    }
-    else
-    {
-        ScDocument* pDoc = pViewData->GetDocument();
-        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
-    }
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
     mpOOCursors.reset();
 }
 
@@ -5985,7 +5967,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
  *
  * @param pLogicRects - if not 0, then don't invoke the callback, just collect the rectangles in the pointed vector.
  */
-static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pDrawLayer, const std::vector<Rectangle>& rRectangles, std::vector<Rectangle>* pLogicRects = nullptr)
+static void updateLibreOfficeKitSelection(ScViewData* pViewData, const std::vector<Rectangle>& rRectangles, std::vector<Rectangle>* pLogicRects = nullptr)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -6028,19 +6010,10 @@ static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pD
     // the selection itself
     OString aSelection = comphelper::string::join("; ", aRectangles).getStr();
 
-    if (comphelper::LibreOfficeKit::isViewCallback())
-    {
-        ScTabViewShell* pViewShell = pViewData->GetViewShell();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.getStr());
-    }
-    else
-    {
-        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
-        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
-        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.getStr());
-    }
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.getStr());
 }
 
 void ScGridWindow::UpdateCursorOverlay()
@@ -6203,7 +6176,7 @@ void ScGridWindow::UpdateCursorOverlay()
                 mpOOCursors->append(*pOverlay);
 
                 // notify the LibreOfficeKit too
-                updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
+                updateLibreOfficeKitSelection(pViewData, aPixelRects);
             }
         }
     }
@@ -6216,7 +6189,7 @@ void ScGridWindow::GetCellSelection(std::vector<Rectangle>& rLogicRects)
 {
     std::vector<Rectangle> aPixelRects;
     GetSelectionRects(aPixelRects);
-    updateLibreOfficeKitSelection(pViewData, pViewData->GetDocument()->GetDrawLayer(), aPixelRects, &rLogicRects);
+    updateLibreOfficeKitSelection(pViewData, aPixelRects, &rLogicRects);
 }
 
 void ScGridWindow::DeleteSelectionOverlay()
@@ -6280,21 +6253,13 @@ void ScGridWindow::UpdateSelectionOverlay()
             mpOOSelection->append(*pOverlay);
 
             // notify the LibreOfficeKit too
-            updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
+            updateLibreOfficeKitSelection(pViewData, aPixelRects);
         }
     }
     else
     {
-        if (comphelper::LibreOfficeKit::isViewCallback())
-        {
-            ScTabViewShell* pViewShell = pViewData->GetViewShell();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
-        }
-        else
-        {
-            ScDocument* pDoc = pViewData->GetDocument();
-            pDoc->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
-        }
+        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
     }
 
     if ( aOldMode != aDrawMode )

@@ -230,13 +230,8 @@ void SdrMarkView::ModelHasChanged()
             sSelection = aSelection.toString();
         }
 
-        if (comphelper::LibreOfficeKit::isViewCallback())
-        {
-            if(SfxViewShell* pViewShell = SfxViewShell::Current())
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sSelection.getStr());
-        }
-        else
-            GetModel()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sSelection.getStr());
+        if(SfxViewShell* pViewShell = SfxViewShell::Current())
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sSelection.getStr());
     }
 }
 
@@ -718,13 +713,8 @@ void SdrMarkView::SetMarkHandles()
                     if (bTiledRendering)
                     {
                         // Suppress handles -> empty graphic selection.
-                        if (comphelper::LibreOfficeKit::isViewCallback())
-                        {
-                            if(SfxViewShell* pViewShell = SfxViewShell::Current())
-                                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
-                        }
-                        else
-                            GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                        if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
                     }
                     return;
                 }
@@ -744,13 +734,8 @@ void SdrMarkView::SetMarkHandles()
                 if (xController.is() && xController->hasSelectedCells())
                 {
                     // The table shape has selected cells, which provide text selection already -> no graphic selection.
-                    if (comphelper::LibreOfficeKit::isViewCallback())
-                    {
-                        if(SfxViewShell* pViewShell = SfxViewShell::Current())
-                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
-                    }
-                    else
-                        GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                    if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
                     return;
                 }
             }
@@ -779,21 +764,11 @@ void SdrMarkView::SetMarkHandles()
                 sSelection = aSelection.toString();
 
                 // hide the text selection too
-                if (comphelper::LibreOfficeKit::isViewCallback())
-                {
-                    if(SfxViewShell* pViewShell = SfxViewShell::Current())
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
-                }
-                else
-                    GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
-            }
-            if (comphelper::LibreOfficeKit::isViewCallback())
-            {
                 if(SfxViewShell* pViewShell = SfxViewShell::Current())
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
             }
-            else
-                GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
+            if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
         }
 
         if (bFrmHdl)

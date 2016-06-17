@@ -824,9 +824,6 @@ void SdrModel::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, 
 
 void SdrModel::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
-    // Per-view callbacks should always invoke SfxViewShell::libreOfficeKitViewCallback().
-    assert(!comphelper::LibreOfficeKit::isViewCallback());
-
     if (mbTiledSearching)
     {
         switch (nType)
@@ -845,13 +842,11 @@ void SdrModel::libreOfficeKitCallback(int nType, const char* pPayload) const
 
 void SdrModel::setTiledSearching(bool bTiledSearching)
 {
-    assert(!comphelper::LibreOfficeKit::isViewCallback());
     mbTiledSearching = bTiledSearching;
 }
 
 bool SdrModel::isTiledSearching() const
 {
-    assert(!comphelper::LibreOfficeKit::isViewCallback());
     return mbTiledSearching;
 }
 

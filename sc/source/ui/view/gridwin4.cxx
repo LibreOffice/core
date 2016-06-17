@@ -1103,13 +1103,8 @@ void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
         sRectangle = aRectangle.toString();
     }
 
-    if (comphelper::LibreOfficeKit::isViewCallback())
-    {
-        ScTabViewShell* pViewShell = pViewData->GetViewShell();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
-    }
-    else
-        pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)

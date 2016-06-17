@@ -1020,13 +1020,8 @@ void Window::LogicInvalidate(const Rectangle* pRectangle)
             aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
         sRectangle = aRectangle.toString();
     }
-    if (comphelper::LibreOfficeKit::isViewCallback())
-    {
-        SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
-        rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
-    }
-    else
-        mpViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
+    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 } // end of namespace sd

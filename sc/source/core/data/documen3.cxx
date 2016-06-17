@@ -1305,16 +1305,11 @@ bool ScDocument::SearchAndReplace(
                                     rSearchItem, nCol, nRow );
 
                                 // notify LibreOfficeKit about changed page
-                                if ( comphelper::LibreOfficeKit::isActive() )
+                                if (comphelper::LibreOfficeKit::isActive())
                                 {
                                     OString aPayload = OString::number(nTab);
-                                    if (comphelper::LibreOfficeKit::isViewCallback())
-                                    {
-                                        if(SfxViewShell* pViewShell = SfxViewShell::Current())
-                                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
-                                    }
-                                    else
-                                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                                    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+                                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
                                 }
                             }
                         }
@@ -1341,16 +1336,11 @@ bool ScDocument::SearchAndReplace(
                                     rSearchItem, nCol, nRow );
 
                                 // notify LibreOfficeKit about changed page
-                                if ( comphelper::LibreOfficeKit::isActive() )
+                                if (comphelper::LibreOfficeKit::isActive())
                                 {
                                     OString aPayload = OString::number(nTab);
-                                    if (comphelper::LibreOfficeKit::isViewCallback())
-                                    {
-                                        if(SfxViewShell* pViewShell = SfxViewShell::Current())
-                                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
-                                    }
-                                    else
-                                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+                                    if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
                                 }
                             }
                         }

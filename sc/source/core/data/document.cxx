@@ -586,17 +586,12 @@ bool ScDocument::InsertTab(
 
         if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
         {
-            if (comphelper::LibreOfficeKit::isViewCallback())
+            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+            while (pViewShell)
             {
-                SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                while (pViewShell)
-                {
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
-                    pViewShell = SfxViewShell::GetNext(*pViewShell);
-                }
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                pViewShell = SfxViewShell::GetNext(*pViewShell);
             }
-            else
-                GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
         }
     }
 
@@ -764,19 +759,14 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 // sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
 
-                if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
+                if (comphelper::LibreOfficeKit::isActive())
                 {
-                    if (comphelper::LibreOfficeKit::isViewCallback())
+                    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                    while (pViewShell)
                     {
-                        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                        while (pViewShell)
-                        {
-                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
-                            pViewShell = SfxViewShell::GetNext(*pViewShell);
-                        }
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                        pViewShell = SfxViewShell::GetNext(*pViewShell);
                     }
-                    else
-                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
                 }
 
                 bValid = true;
@@ -866,19 +856,14 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 // sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
 
-                if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
+                if (comphelper::LibreOfficeKit::isActive())
                 {
-                    if (comphelper::LibreOfficeKit::isViewCallback())
+                    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                    while (pViewShell)
                     {
-                        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                        while (pViewShell)
-                        {
-                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
-                            pViewShell = SfxViewShell::GetNext(*pViewShell);
-                        }
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                        pViewShell = SfxViewShell::GetNext(*pViewShell);
                     }
-                    else
-                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
                 }
 
                 bValid = true;
@@ -925,17 +910,12 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool /* bUpdateRe
 
                 if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
                 {
-                    if (comphelper::LibreOfficeKit::isViewCallback())
+                    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                    while (pViewShell)
                     {
-                        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                        while (pViewShell)
-                        {
-                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
-                            pViewShell = SfxViewShell::GetNext(*pViewShell);
-                        }
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+                        pViewShell = SfxViewShell::GetNext(*pViewShell);
                     }
-                    else
-                        GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
                 }
             }
         }

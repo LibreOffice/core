@@ -1253,16 +1253,8 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     }
 
     OUString payload = aBuffer.makeStringAndClear();
-    if (comphelper::LibreOfficeKit::isViewCallback())
-    {
-        if (const SfxViewShell* pViewShell = pViewFrame->GetViewShell())
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
-    }
-    else
-    {
-        const SfxObjectShell* pObjectShell = pViewFrame->GetObjectShell();
-        pObjectShell->libreOfficeKitCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
-    }
+    if (const SfxViewShell* pViewShell = pViewFrame->GetViewShell())
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -120,15 +120,11 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
 
 void ImpEditView::registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable)
 {
-    // Per-view callbacks should always invoke ImpEditView::registerLibreOfficeKitViewCallback().
-    assert(!comphelper::LibreOfficeKit::isViewCallback());
     mpLibreOfficeKitSearchable = pSearchable;
 }
 
 void ImpEditView::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
-    // Per-view callbacks should always invoke ImpEditView::libreOfficeKitViewCallback().
-    assert(!comphelper::LibreOfficeKit::isViewCallback());
     if (mpLibreOfficeKitSearchable)
         mpLibreOfficeKitSearchable->libreOfficeKitCallback(nType, pPayload);
 }
@@ -400,10 +396,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                         aStart = OutputDevice::LogicToLogic(aStart, MAP_100TH_MM, MAP_TWIP);
                     aStart.Move(aOrigin.getX(), aOrigin.getY());
 
-                    if (comphelper::LibreOfficeKit::isViewCallback())
-                        libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
-                    else
-                        libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+                    libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
                     Rectangle& rEnd = aRectangles.back();
                     Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
@@ -411,10 +404,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                         aEnd = OutputDevice::LogicToLogic(aEnd, MAP_100TH_MM, MAP_TWIP);
                     aEnd.Move(aOrigin.getX(), aOrigin.getY());
 
-                    if (comphelper::LibreOfficeKit::isViewCallback())
-                        libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
-                    else
-                        libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+                    libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
                 }
 
                 std::vector<OString> v;
@@ -429,10 +419,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 sRectangle = comphelper::string::join("; ", v);
             }
 
-            if (comphelper::LibreOfficeKit::isViewCallback())
-                libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
-            else
-                libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
+            libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
 
             pOutWin->Pop();
         }
@@ -1029,10 +1016,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             aRect.setWidth(0);
 
             OString sRect = aRect.toString();
-            if (comphelper::LibreOfficeKit::isViewCallback())
-                libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
-            else
-                libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+            libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
         }
 
         CursorDirection nCursorDir = CursorDirection::NONE;

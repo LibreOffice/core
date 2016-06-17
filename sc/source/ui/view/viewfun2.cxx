@@ -1791,10 +1791,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             GetFrameWin()->LeaveWait();
             if (!bIsApi)
             {
-                if (comphelper::LibreOfficeKit::isViewCallback())
-                    GetViewData().GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8().getStr());
-                else
-                    rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8().getStr());
+                GetViewData().GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, pSearchItem->GetSearchString().toUtf8().getStr());
                 SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
             }
 
@@ -1823,15 +1820,9 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     }
 
     // Avoid LOK selection notifications before we have all the results.
-    if (comphelper::LibreOfficeKit::isViewCallback())
-        GetViewData().GetViewShell()->setTiledSearching(true);
-    else
-        rDoc.GetDrawLayer()->setTiledSearching(true);
+    GetViewData().GetViewShell()->setTiledSearching(true);
     MarkDataChanged();
-    if (comphelper::LibreOfficeKit::isViewCallback())
-        GetViewData().GetViewShell()->setTiledSearching(false);
-    else
-        rDoc.GetDrawLayer()->setTiledSearching(false);
+    GetViewData().GetViewShell()->setTiledSearching(false);
 
     if ( bFound )
     {
@@ -1883,13 +1874,8 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aTree);
                 OString aPayload = aStream.str().c_str();
-                if (comphelper::LibreOfficeKit::isViewCallback())
-                {
-                    SfxViewShell* pViewShell = GetViewData().GetViewShell();
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
-                }
-                else
-                    rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+                SfxViewShell* pViewShell = GetViewData().GetViewShell();
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
 
                 // Trigger LOK_CALLBACK_TEXT_SELECTION now.
                 MarkDataChanged();

@@ -946,12 +946,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     {
         pEditView[eWhich] = new EditView( pNewEngine, pWin );
 
-        if (pDoc->GetDrawLayer() && comphelper::LibreOfficeKit::isActive())
+        if (comphelper::LibreOfficeKit::isActive())
         {
-            if (comphelper::LibreOfficeKit::isViewCallback())
-                pEditView[eWhich]->registerLibreOfficeKitViewCallback(pViewShell);
-            else
-                pEditView[eWhich]->registerLibreOfficeKitCallback(pDoc->GetDrawLayer());
+            pEditView[eWhich]->registerLibreOfficeKitViewCallback(pViewShell);
         }
     }
 

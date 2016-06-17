@@ -277,13 +277,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 // If tiled rendering, let client handles URL execution and early returns.
                 if (comphelper::LibreOfficeKit::isActive())
                 {
-                    if (comphelper::LibreOfficeKit::isViewCallback())
-                    {
-                        SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
-                        rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.pURLField->GetURL().toUtf8().getStr());
-                    }
-                    else
-                        mpDoc->libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.pURLField->GetURL().toUtf8().getStr());
+                    SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
+                    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.pURLField->GetURL().toUtf8().getStr());
                     return true;
                 }
 

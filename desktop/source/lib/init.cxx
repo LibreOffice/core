@@ -1394,25 +1394,11 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     SolarMutexGuard aGuard;
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
+    std::size_t nView = SfxLokHelper::getView();
     pDocument->mpCallbackFlushHandlers[nView].reset(new CallbackFlushHandler(pThis, pCallback, pData));
 
-    if (comphelper::LibreOfficeKit::isViewCallback())
-    {
-        if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
-            pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
-    }
-    else
-    {
-        ITiledRenderable* pDoc = getTiledRenderable(pThis);
-        if (!pDoc)
-        {
-            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
-            return;
-        }
-
-        pDoc->registerCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
-    }
+    if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
+        pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
 }
 
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
@@ -1527,6 +1513,8 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
 
     bool bResult = false;
+
+    std::size_t nView = SfxLokHelper::getView();
     if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers[nView])
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
@@ -1562,7 +1550,7 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     }
 
     LibLODocument_Impl* pLib = static_cast<LibLODocument_Impl*>(pThis);
-    std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
+    std::size_t nView = SfxLokHelper::getView();
     if (pLib->mpCallbackFlushHandlers[nView])
     {
         pLib->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
@@ -2238,9 +2226,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     if (eStage != SECOND_INIT)
         comphelper::LibreOfficeKit::setActive();
-
-    static bool bViewCallback = !getenv("LOK_MODEL_CALLBACK");
-    comphelper::LibreOfficeKit::setViewCallback(bViewCallback);
 
     if (eStage != PRE_INIT)
         comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);

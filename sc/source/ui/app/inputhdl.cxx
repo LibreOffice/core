@@ -1709,18 +1709,11 @@ void ScInputHandler::UpdateActiveView()
         pTableView = nullptr;
 
     // setup the pTableView editeng for tiled rendering to get cursor and selections
-    if (pActiveViewSh && pTableView)
+    if (pTableView && pActiveViewSh)
     {
-        ScDocShell* pDocShell = pActiveViewSh->GetViewData().GetDocShell();
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (comphelper::LibreOfficeKit::isViewCallback())
-                pTableView->registerLibreOfficeKitViewCallback(pActiveViewSh);
-            else
-            {
-                ScDrawLayer *pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
-                pTableView->registerLibreOfficeKitCallback(pDrawLayer);
-            }
+            pTableView->registerLibreOfficeKitViewCallback(pActiveViewSh);
         }
     }
 
@@ -2127,17 +2120,10 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         if ( pInputWin )
             pInputWin->SetTextString( aText );
 
-        ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
-        ScDocument& rDoc = pDocSh->GetDocument();
-        if ( comphelper::LibreOfficeKit::isActive() )
+        if (comphelper::LibreOfficeKit::isActive())
         {
-            if (comphelper::LibreOfficeKit::isViewCallback())
-            {
-                if (pActiveViewSh)
-                    pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
-            }
-            else
-                rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
+            if (pActiveViewSh)
+                pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
         }
     }
 
@@ -3475,15 +3461,10 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                         if ( pInputWin )
                             pInputWin->SetTextString(aString);
-                        else if ( comphelper::LibreOfficeKit::isActive() )
+                        else if (comphelper::LibreOfficeKit::isActive())
                         {
-                            if (comphelper::LibreOfficeKit::isViewCallback())
-                            {
-                                if (pActiveViewSh)
-                                    pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
-                            }
-                            else
-                                rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
+                            if (pActiveViewSh)
+                                pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
                         }
                     }
 

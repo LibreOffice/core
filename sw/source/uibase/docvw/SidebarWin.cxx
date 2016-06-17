@@ -614,13 +614,7 @@ void SwSidebarWin::InitControls()
     if (comphelper::LibreOfficeKit::isActive())
     {
         // If there is a callback already registered, inform the new outliner view about it.
-        if (comphelper::LibreOfficeKit::isViewCallback())
-            mpOutlinerView->registerLibreOfficeKitViewCallback(&mrView);
-        else
-        {
-            SwDrawModel* pDrawModel = mrView.GetWrtShellPtr()->getIDocumentDrawModelAccess().GetDrawModel();
-            mpOutlinerView->registerLibreOfficeKitCallback(pDrawModel);
-        }
+        mpOutlinerView->registerLibreOfficeKitViewCallback(&mrView);
     }
 
     //create Scrollbars
