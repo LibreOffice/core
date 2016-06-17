@@ -1995,15 +1995,14 @@ sal_uInt16 XclExpRow::GetFirstFreeXclCol() const
 
 bool XclExpRow::IsDefaultable() const
 {
-    const sal_uInt16 nAllowedFlags = EXC_ROW_DEFAULTFLAGS | EXC_ROW_HIDDEN | EXC_ROW_UNSYNCED;
-    return !::get_flag( mnFlags, static_cast< sal_uInt16 >( ~nAllowedFlags ) ) && IsEmpty();
+    const sal_uInt16 nExpectedMask = EXC_ROW_DEFAULTFLAGS | EXC_ROW_UNSYNCED;
+    return !::get_flag( mnFlags, static_cast< sal_uInt16 >( ~nExpectedMask ) ) && IsEmpty();
 }
 
 void XclExpRow::DisableIfDefault( const XclExpDefaultRowData& rDefRowData )
 {
     mbEnabled = !IsDefaultable() ||
         (mnHeight != rDefRowData.mnHeight) ||
-        (IsHidden() != rDefRowData.IsHidden()) ||
         (IsUnsynced() != rDefRowData.IsUnsynced());
 }
 
@@ -2174,6 +2173,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     XclExpDefaultRowData aMaxDefData;
     size_t nMaxDefCount = 0;
     // only look for default format in existing rows, if there are more than unused
+    // if the row is set as hidden, then row must be created even if it is empty
     XclExpRow* pPrev = nullptr;
     typedef std::vector< XclExpRow* > XclRepeatedRows;
     XclRepeatedRows aRepeated;
