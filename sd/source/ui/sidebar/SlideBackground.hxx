@@ -69,7 +69,7 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) override;
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const vcl::EnumContext& rContext) override;
 
 private:
 
@@ -105,7 +105,7 @@ private:
     bool mbEditModeChangePending;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    ::sfx2::sidebar::EnumContext            maContext;
+    vcl::EnumContext maContext;
     bool         mbTitle;
     SfxBindings* mpBindings;
 

@@ -16,13 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <vcl/EnumContext.hxx>
 
 #include <osl/diagnose.h>
 
 #include <map>
 
-namespace sfx2 { namespace sidebar {
+namespace vcl {
 
 namespace {
 
@@ -227,6 +227,6 @@ const ::rtl::OUString& EnumContext::GetContextName (const Context eContext)
         return maContextVector[nIndex];
 }
 
-} } // end of namespace sfx2::sidebar
+} // end of namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

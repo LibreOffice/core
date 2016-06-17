@@ -97,6 +97,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbSmallInvalidate           = false;
     mpTabCtrlData               = new ImplTabCtrlData;
     mpTabCtrlData->mpListBox    = nullptr;
+    mbHideDisabledTabs          = false;
 
     ImplInitSettings( true, true, true );
 
@@ -1198,16 +1199,20 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
         while (idx < mpTabCtrlData->maItemList.size())
         {
             ImplTabItem* pItem = &mpTabCtrlData->maItemList[idx];
-            if (pItem != pCurItem)
+
+            if(!mbHideDisabledTabs || (mbHideDisabledTabs && pItem->mbEnabled))
             {
-                vcl::Region aClipRgn(rRenderContext.GetActiveClipRegion());
-                aClipRgn.Intersect(pItem->maRect);
-                if (!rRect.IsEmpty())
-                    aClipRgn.Intersect(rRect);
-                if (!aClipRgn.IsEmpty())
+                if (pItem != pCurItem)
                 {
-                    ImplDrawItem(rRenderContext, pItem, aCurRect, false/*bLayout*/,
-                                 pItem == pFirstTab, pItem == pLastTab);
+                    vcl::Region aClipRgn(rRenderContext.GetActiveClipRegion());
+                    aClipRgn.Intersect(pItem->maRect);
+                    if (!rRect.IsEmpty())
+                        aClipRgn.Intersect(rRect);
+                    if (!aClipRgn.IsEmpty())
+                    {
+                        ImplDrawItem(rRenderContext, pItem, aCurRect, false/*bLayout*/,
+                                     pItem == pFirstTab, pItem == pLastTab);
+                    }
                 }
             }
 
@@ -1756,6 +1761,11 @@ void TabControl::EnablePage( sal_uInt16 i_nPageId, bool i_bEnable )
         else if ( IsUpdateMode() )
             Invalidate();
     }
+}
+
+void TabControl::HideDisabledTabs(bool bHide)
+{
+    mbHideDisabledTabs = bHide;
 }
 
 sal_uInt16 TabControl::GetPageCount() const

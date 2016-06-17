@@ -57,6 +57,7 @@ private:
     bool                mbRestoreHelpId;
     bool                mbSmallInvalidate;
     bool                mbLayoutDirty;
+    bool                mbHideDisabledTabs;
     Link<TabControl*,void> maActivateHdl;
     Link<TabControl*,bool> maDeactivateHdl;
 
@@ -126,6 +127,7 @@ public:
     void                RemovePage( sal_uInt16 nPageId );
     void                Clear();
     void                EnablePage( sal_uInt16 nPageId, bool bEnable = true );
+    void                HideDisabledTabs(bool bHide = true);
 
     sal_uInt16          GetPagePos( sal_uInt16 nPageId ) const;
     sal_uInt16          GetPageCount() const;

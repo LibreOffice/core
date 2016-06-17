@@ -91,6 +91,7 @@
 #include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/fntstyle.hxx>
@@ -355,7 +356,6 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/Theme.hxx>

@@ -1896,6 +1896,8 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
 
     int nLevel = 1;
     stringmap aProperties;
+    std::vector<vcl::EnumContext::Context> context;
+
     while(true)
     {
         xmlreader::Span name;
@@ -1925,6 +1927,11 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                     }
                 }
             }
+            else if (name.equals("style"))
+            {
+                context = handleStyle(reader);
+                --nLevel;
+            }
             else if (name.equals("property"))
                 collectProperty(reader, sID, aProperties);
         }
@@ -1950,6 +1957,11 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         pTabControl->SetPageText(nPageId,
             OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
         pTabControl->SetPageName(nPageId, sID);
+        if (context.size() != 0)
+        {
+            TabPage* pPage = static_cast<TabPage*>(pTabControl->GetTabPage(nPageId));
+            pPage->SetContext(context);
+        }
     }
     else
         pTabControl->RemovePage(pTabControl->GetCurPageId());
@@ -3003,6 +3015,72 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
             }
         }
     }
+}
+
+std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlReader &reader)
+{
+    std::vector<vcl::EnumContext::Context> aContext;
+
+    xmlreader::Span name;
+    int nsId;
+
+    int nLevel = 1;
+
+    while(true)
+    {
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::Result::Done)
+            break;
+
+        if (res == xmlreader::XmlReader::Result::Begin)
+        {
+            ++nLevel;
+            if (name.equals("class"))
+            {
+                aContext.push_back(getContext(reader));
+            }
+        }
+
+        if (res == xmlreader::XmlReader::Result::End)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+
+    return aContext;
+}
+
+vcl::EnumContext::Context VclBuilder::getContext(xmlreader::XmlReader &reader)
+{
+    xmlreader::Span name;
+    int nsId;
+
+    while (reader.nextAttribute(&nsId, &name))
+    {
+        if (name.equals("name"))
+        {
+            name = reader.getAttributeValue(false);
+            OString sKey(name.begin, name.length);
+
+            if (sKey.startsWith("context-"))
+            {
+                OString sContext = sKey.copy(sKey.indexOf('-') + 1);
+                OUString sContext2 = OUString(sContext.getStr(), sContext.getLength(), RTL_TEXTENCODING_UTF8);
+                return vcl::EnumContext::GetContextEnum(sContext2);
+            }
+            else
+            {
+                SAL_WARN("vcl.layout", "unknown class: " << sKey.getStr());
+            }
+        }
+    }
+
+    return vcl::EnumContext::Context::Context_Any;
 }
 
 OString VclBuilder::getTranslation(const OString &rID, const OString &rProperty) const

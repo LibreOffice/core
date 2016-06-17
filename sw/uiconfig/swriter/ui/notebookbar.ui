@@ -178,7 +178,7 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkNotebook" id="notebook1">
+          <object class="vcllo-ContextTabControl" id="notebook1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
@@ -1192,6 +1192,10 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Home</property>
                 <property name="use_underline">True</property>
+                <style>
+                  <class name="context-any"/>
+                  <class name="context-Text"/>
+                </style>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -3851,23 +3855,14 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Table</property>
                 <property name="use_underline">True</property>
+                <style>
+                  <class name="context-Table"/>
+                </style>
               </object>
               <packing>
                 <property name="position">6</property>
                 <property name="tab_fill">False</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <placeholder/>
             </child>
           </object>
           <packing>
