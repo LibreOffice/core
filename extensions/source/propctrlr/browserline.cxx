@@ -244,15 +244,15 @@ namespace pcr
     }
 
 
-    void OBrowserLine::SetTitle(const OUString& _rNewTtile )
+    void OBrowserLine::SetTitle(const OUString& _rNewTitle )
     {
-        if ( GetTitle() == _rNewTtile )
+        if ( GetTitle() == _rNewTitle )
             return;
-        m_aFtTitle->SetText( _rNewTtile );
+        m_aFtTitle->SetText( _rNewTitle );
         if ( m_pControlWindow )
-            m_pControlWindow->SetAccessibleName( _rNewTtile );
+            m_pControlWindow->SetAccessibleName( _rNewTitle );
         if ( m_pBrowseButton )
-            m_pBrowseButton->SetAccessibleName( _rNewTtile );
+            m_pBrowseButton->SetAccessibleName( _rNewTitle );
         FullFillTitleString();
     }
 
