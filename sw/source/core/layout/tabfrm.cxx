@@ -4326,8 +4326,10 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
     //Only shrink as much as the content of the biggest cell allows.
     SwTwips nRealDist = nDist;
+    SwFormat* pMod = GetFormat();
+    if (pMod)
     {
-        const SwFormatFrameSize &rSz = GetFormat()->GetFrameSize();
+        const SwFormatFrameSize &rSz = pMod->GetFrameSize();
         SwTwips nMinHeight = rSz.GetHeightSizeType() == ATT_MIN_SIZE ?
                              rSz.GetHeight() :
                              0;
@@ -4361,7 +4363,8 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 Frame().Pos().X() += nReal;
         }
 
-        SwTwips nTmp = GetUpper()->Shrink( nReal, bTst );
+        SwLayoutFrame* pFrame = GetUpper();
+        SwTwips nTmp = pFrame ? pFrame->Shrink(nReal, bTst) : 0;
         if ( !bShrinkAnyway && !GetNext() && nTmp != nReal )
         {
             //The last one gets the leftover in the upper and therefore takes
