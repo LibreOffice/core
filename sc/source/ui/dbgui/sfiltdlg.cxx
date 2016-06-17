@@ -82,10 +82,6 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
 
     Init( rArgSet );
     pEdFilterArea->GrabFocus();
-
-
-    pLbCopyArea->SetAccessibleName(pBtnCopyResult->GetText());
-    pEdCopyArea->SetAccessibleName(pBtnCopyResult->GetText());
 }
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
