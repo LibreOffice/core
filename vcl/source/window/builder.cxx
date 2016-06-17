@@ -1895,6 +1895,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
 
     int nLevel = 1;
     stringmap aProperties;
+    WindowContext context = Context_All;
     while(true)
     {
         xmlreader::Span name;
@@ -1924,6 +1925,11 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                     }
                 }
             }
+            else if (name.equals("style"))
+            {
+                context = handleStyle(reader);
+                --nLevel;
+            }
             else if (name.equals("property"))
                 collectProperty(reader, sID, aProperties);
         }
@@ -1949,6 +1955,8 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         pTabControl->SetPageText(nPageId,
             OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
         pTabControl->SetPageName(nPageId, sID);
+        if(context != Context_All)
+            pTabControl->GetTabPage(nPageId)->SetContext(context);
     }
     else
         pTabControl->RemovePage(pTabControl->GetCurPageId());
@@ -2816,6 +2824,10 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
                 }
                 handleChild(pCurrentChild, reader);
             }
+            else if (name.equals("style"))
+            {
+                pCurrentChild->SetContext(handleStyle(reader));
+            }
             else if (name.equals("items"))
                 aItems = handleItems(reader, sID);
             else
@@ -3002,6 +3014,79 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
             }
         }
     }
+}
+
+WindowContext VclBuilder::handleStyle(xmlreader::XmlReader &reader)
+{
+    WindowContext nContext = 0;
+
+    xmlreader::Span name;
+    int nsId;
+
+    int nLevel = 1;
+
+    while(true)
+    {
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::Result::Done)
+            break;
+
+        if (res == xmlreader::XmlReader::Result::Begin)
+        {
+            ++nLevel;
+            if (name.equals("class"))
+            {
+                nContext |= getContext(reader);
+            }
+        }
+
+        if (res == xmlreader::XmlReader::Result::End)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+
+    if (nContext == 0)
+        nContext = Context_All;
+
+    return nContext;
+}
+
+WindowContext VclBuilder::getContext(xmlreader::XmlReader &reader)
+{
+    xmlreader::Span name;
+    int nsId;
+
+    while (reader.nextAttribute(&nsId, &name))
+    {
+        if (name.equals("name"))
+        {
+            name = reader.getAttributeValue(false);
+            OString sKey(name.begin, name.length);
+
+            if (sKey.startsWith("context-"))
+            {
+                OString sContext = sKey.copy(sKey.indexOf('-') + 1);
+                if (sContext.compareTo("table") == 0)
+                    return Context_Table;
+                else if (sContext.compareTo("text") == 0)
+                    return Context_Text;
+                else if (sContext.compareTo("all") == 0)
+                    return Context_All;
+            }
+            else
+            {
+                SAL_WARN("vcl.layout", "unknown class: " << sKey.getStr());
+            }
+        }
+    }
+
+    return (WindowContext)0;
 }
 
 OString VclBuilder::getTranslation(const OString &rID, const OString &rProperty) const

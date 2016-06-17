@@ -1192,6 +1192,10 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Home</property>
                 <property name="use_underline">True</property>
+                <style>
+                  <class name="context-all"/>
+                  <class name="context-text"/>
+                </style>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -3851,23 +3855,14 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Table</property>
                 <property name="use_underline">True</property>
+                <style>
+                  <class name="context-table"/>
+                </style>
               </object>
               <packing>
                 <property name="position">6</property>
                 <property name="tab_fill">False</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <placeholder/>
             </child>
           </object>
           <packing>

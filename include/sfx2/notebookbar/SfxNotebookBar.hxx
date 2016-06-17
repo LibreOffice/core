@@ -11,6 +11,7 @@
 #define INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX
 
 #include <sfx2/dllapi.h>
+#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
 class SfxBindings;
 
@@ -18,7 +19,7 @@ namespace sfx2 {
 
 /** Helpers for easier access to NotebookBar via the sfx2 infrastructure.
 */
-class SFX2_DLLPUBLIC SfxNotebookBar
+class SFX2_DLLPUBLIC SfxNotebookBar : public css::ui::XContextChangeEventListener
 {
 public:
     /// Function to be called from the sdi's ExecMethod.
@@ -29,6 +30,8 @@ public:
     static void StateMethod(SystemWindow* pSysWindow,
                             const css::uno::Reference<css::frame::XFrame> xFrame,
                             const OUString& rUIFile);
+
+    static void RemoveListeners(SystemWindow* pSysWindow);
 };
 
 } // namespace sfx2

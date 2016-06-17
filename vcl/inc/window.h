@@ -251,6 +251,7 @@ public:
     WinBits             mnExtendedStyle;
     WinBits             mnPrevExtendedStyle;
     WindowType          mnType;
+    WindowContext       meContext;
     ControlPart         mnNativeBackground;
     sal_uInt16          mnWaitCount;
     sal_uInt16          mnPaintFlags;

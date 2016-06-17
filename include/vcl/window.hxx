@@ -873,6 +873,8 @@ public:
     WinBits                             GetExtendedStyle() const;
     void                                SetType( WindowType nType );
     WindowType                          GetType() const;
+    void                                SetContext( WindowContext eContext );
+    WindowContext                       GetContext() const;
     bool                                IsSystemWindow() const;
     bool                                IsDockingWindow() const;
     bool                                IsDialog() const;
