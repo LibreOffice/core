@@ -39,6 +39,7 @@
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
+#include <o3tl/any.hxx>
 #include <svl/eitem.hxx>
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>
@@ -286,10 +287,9 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             {
                 if( rSubIncrements.getLength() > 0 && rSubIncrements[0].IntervalCount.hasValue())
                 {
-                    OSL_ASSERT( rSubIncrements[0].IntervalCount.getValueTypeClass() == uno::TypeClass_LONG );
                     rOutItemSet.Put( SfxInt32Item( nWhichId,
-                            *static_cast< const sal_Int32 * >(
-                                rSubIncrements[0].IntervalCount.getValue()) ));
+                            *o3tl::doAccess<sal_Int32>(
+                                rSubIncrements[0].IntervalCount) ));
                 }
                 else
                 {

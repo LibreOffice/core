@@ -19,6 +19,10 @@ $(eval $(call gb_CppunitTest_add_defs,chart2_common_functors,\
     -DOOO_DLLIMPLEMENTATION_CHARTTOOLS \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,chart2_common_functors, \
+    boost_headers \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,chart2_common_functors, \
     cppu \
     cppuhelper \

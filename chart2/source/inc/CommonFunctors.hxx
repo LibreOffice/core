@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <o3tl/any.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
@@ -56,13 +57,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public ::std::unary_function< css:
     {
         double fResult;
         ::rtl::math::setNan( & fResult );
-
-        css::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
-        if( eClass == css::uno::TypeClass_DOUBLE )
-        {
-            fResult = * static_cast< const double * >( rAny.getValue() );
-        }
-
+        rAny >>= fResult;
         return fResult;
     }
 };
@@ -74,10 +69,8 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< css:
 {
     OUString operator() ( const css::uno::Any & rAny )
     {
-        css::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
-        if( eClass == css::uno::TypeClass_DOUBLE )
+        if( auto pDouble = o3tl::tryAccess<double>(rAny) )
         {
-            const double* pDouble = static_cast< const double * >( rAny.getValue() );
             if( ::rtl::math::isNan(*pDouble) )
                 return OUString();
             return ::rtl::math::doubleToUString(
@@ -88,9 +81,9 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< css:
                 true // remove trailing zeros
                 );
         }
-        else if( eClass == css::uno::TypeClass_STRING )
+        else if( auto s = o3tl::tryAccess<OUString>(rAny) )
         {
-            return * static_cast< const OUString * >( rAny.getValue() );
+            return *s;
         }
 
         return OUString();

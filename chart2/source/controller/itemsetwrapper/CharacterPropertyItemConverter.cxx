@@ -30,6 +30,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <o3tl/any.hxx>
 #include <svl/stritem.hxx>
 
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -150,8 +151,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             }
 
             aValue = GetPropertySet()->getPropertyValue( "CharUnderlineHasColor" );
-            if( aValue.hasValue() &&
-                *static_cast< const sal_Bool * >( aValue.getValue()) )
+            if( aValue.hasValue() && *o3tl::doAccess<bool>(aValue) )
             {
                 aItem.PutValue( aValue, MID_TL_HASCOLOR );
                 bModified = true;
@@ -182,8 +182,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             }
 
             aValue = GetPropertySet()->getPropertyValue( "CharOverlineHasColor" );
-            if ( aValue.hasValue() &&
-                 *static_cast< const sal_Bool* >( aValue.getValue() ) )
+            if ( aValue.hasValue() && *o3tl::doAccess<bool>(aValue) )
             {
                 aItem.PutValue( aValue, MID_TL_HASCOLOR );
                 bModified = true;
