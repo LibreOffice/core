@@ -62,16 +62,16 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">3</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="ed_pre">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">We are sorry but it seems that LibreOffice crashed the last time.
+            <property name="label" translatable="yes">We are sorry but it seems that %PRODUCTNAME crashed the last time.
 
-You can help us fix this issue by sending the crash report to the LibreOffice crash reporting server.</property>
+You can help us fix this issue by sending the crash report to the %PRODUCTNAME crash reporting server.</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -81,19 +81,34 @@ You can help us fix this issue by sending the crash report to the LibreOffice cr
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="ed_post">
+          <object class="GtkTextView" id="ed_post">
             <property name="can_focus">False</property>
             <property name="valign">center</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">The crash report was successfully uploaded.
-You can soon find the report on crashreport.libreoffice.org.
-The report can be found by</property>
+You can soon find the report on:
+crashreport.libreoffice.org/stats/crash_details/%CRASHID</property>
             <property name="wrap">True</property>
+            <property name="selectable">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTextView" id="ed_bugreport">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Please check the report and if no bug report is connected to the crash report yet, open a new bug report at bugs.documentfoundation.org.
+Add detailed instructions on how to reproduce the crash and the shown crash ID into the crash report field.
+Thank you for your help in improving LibreOffice.</property>
+            <property name="wrap">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
