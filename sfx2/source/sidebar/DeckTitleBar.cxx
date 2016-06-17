@@ -100,9 +100,8 @@ void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 
 css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible()
 {
-    const OUString sAccessibleName(msTitle);
-    SetAccessibleName(sAccessibleName);
-    SetAccessibleDescription(sAccessibleName);
+    SetAccessibleName(msTitle);
+    SetAccessibleDescription(msTitle);
     return TitleBar::CreateAccessible();
 }
 
