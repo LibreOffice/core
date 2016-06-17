@@ -93,6 +93,7 @@ public:
     bool                        IsItemVisible( unsigned nPos );
 
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText );
+    void                        NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const Image& rImage );
     bool                        NativeSetItemCommand( unsigned nSection,
                                                       unsigned nItemPos,
                                                       sal_uInt16 nId,
