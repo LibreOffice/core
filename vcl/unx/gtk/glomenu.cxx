@@ -229,6 +229,23 @@ g_lo_menu_set_label (GLOMenu     *menu,
 }
 
 void
+g_lo_menu_set_icon (GLOMenu     *menu,
+                    gint         position,
+                    const GIcon *icon)
+{
+    g_return_if_fail (G_IS_LO_MENU (menu));
+
+    GVariant *value;
+
+    if (icon != nullptr)
+        value = g_icon_serialize (const_cast<GIcon*>(icon));
+    else
+        value = nullptr;
+
+    g_lo_menu_set_attribute_value (menu, position, G_MENU_ATTRIBUTE_ICON, value);
+}
+
+void
 g_lo_menu_set_label_to_item_in_section (GLOMenu     *menu,
                                         gint         section,
                                         gint         position,
@@ -241,6 +258,26 @@ g_lo_menu_set_label_to_item_in_section (GLOMenu     *menu,
     g_return_if_fail (model != nullptr);
 
     g_lo_menu_set_label (model, position, label);
+
+    // Notify the update.
+    g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
+
+    g_object_unref (model);
+}
+
+void
+g_lo_menu_set_icon_to_item_in_section (GLOMenu     *menu,
+                                       gint         section,
+                                       gint         position,
+                                       const GIcon *icon)
+{
+    g_return_if_fail (G_IS_LO_MENU (menu));
+
+    GLOMenu *model = g_lo_menu_get_section (menu, section);
+
+    g_return_if_fail (model != nullptr);
+
+    g_lo_menu_set_icon (model, position, icon);
 
     // Notify the update.
     g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
