@@ -648,7 +648,7 @@ void SfxBindings::Invalidate
         // Next SID
         if ( !*++pIds )
             break;
-        assert( *pIds > *(pIds-1) || "pIds unsorted" );
+        assert( *pIds > *(pIds-1) );
     }
 
     // if not enticed to start update timer
