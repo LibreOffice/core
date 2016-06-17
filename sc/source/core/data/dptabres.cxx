@@ -1313,6 +1313,8 @@ void ScDPResultMember::FillMemberResults(
     OSL_ENSURE( rPos+nSize <= pSequences->getLength(), "bumm" );
 
     bool bIsNumeric = false;
+    double fValue;
+    rtl::math::setNan(&fValue);
     OUString aName;
     if ( pMemberName )          // if pMemberName != NULL, use instead of real member name
     {
@@ -1338,6 +1340,11 @@ void ScDPResultMember::FillMemberResults(
 
         ScDPItemData::Type eType = aItemData.GetType();
         bIsNumeric = eType == ScDPItemData::Value || eType == ScDPItemData::GroupValue;
+        // IsValue() is not identical to bIsNumeric, i.e.
+        // ScDPItemData::GroupValue is excluded and not stored in the double,
+        // so even if the item is numeric the Value may be NaN.
+        if (aItemData.IsValue())
+            fValue = aItemData.GetValue();
     }
 
     const ScDPDimension*        pParentDim = GetParentDim();
@@ -1376,6 +1383,7 @@ void ScDPResultMember::FillMemberResults(
         pArray[rPos].Name    = aName;
         pArray[rPos].Caption = aCaption;
         pArray[rPos].Flags  |= sheet::MemberResultFlags::HASMEMBER;
+        pArray[rPos].Value   = fValue;
 
         //  set "continue" flag (removed for subtotals later)
         for (long i=1; i<nSize; i++)
@@ -1390,6 +1398,7 @@ void ScDPResultMember::FillMemberResults(
                 pArray[rPos+i].Name = aName;
                 pArray[rPos+i].Caption = aCaption;
                 pArray[rPos+i].Flags  |= sheet::MemberResultFlags::HASMEMBER;
+                pArray[rPos+i].Value   = fValue;
             }
         }
     }
@@ -1467,11 +1476,13 @@ void ScDPResultMember::FillMemberResults(
                     }
                 }
 
+                rtl::math::setNan(&fValue); /* TODO: any numeric value to obtain? */
                 pArray[rPos].Name    = aName;
                 pArray[rPos].Caption = aSubStr;
                 pArray[rPos].Flags = ( pArray[rPos].Flags |
                                     ( sheet::MemberResultFlags::HASMEMBER | sheet::MemberResultFlags::SUBTOTAL) ) &
                                     ~sheet::MemberResultFlags::CONTINUE;
+                pArray[rPos].Value   = fValue;
 
                 if ( nMeasure == SC_DPMEASURE_ALL )
                 {

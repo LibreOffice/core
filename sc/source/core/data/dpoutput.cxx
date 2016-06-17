@@ -81,15 +81,19 @@ struct ScDPOutLevelData
     long                                nDimPos;
     sal_uInt32 mnSrcNumFmt; /// Prevailing number format used in the source data.
     uno::Sequence<sheet::MemberResult>  aResult;
-    OUString                       maName;   /// Name is the internal field name.
-    OUString                       maCaption; /// Caption is the name visible in the output table.
+    OUString                            maName;     /// Name is the internal field name.
+    OUString                            maCaption;  /// Caption is the name visible in the output table.
+    double                              mfValue;    /// Value is the underlying numeric value, if any, or NaN
     bool                                mbHasHiddenMember:1;
     bool                                mbDataLayout:1;
     bool                                mbPageDim:1;
 
     ScDPOutLevelData() :
-        nDim(-1), nHier(-1), nLevel(-1), nDimPos(-1), mnSrcNumFmt(0), mbHasHiddenMember(false), mbDataLayout(false), mbPageDim(false)
-    {}
+        nDim(-1), nHier(-1), nLevel(-1), nDimPos(-1), mnSrcNumFmt(0), mbHasHiddenMember(false), mbDataLayout(false),
+        mbPageDim(false)
+    {
+        rtl::math::setNan(&mfValue);
+    }
 
     bool operator<(const ScDPOutLevelData& r) const
         { return nDimPos<r.nDimPos || ( nDimPos==r.nDimPos && nHier<r.nHier ) ||
@@ -493,7 +497,12 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
         bool bVisible = ScUnoHelpFunctions::GetBoolProperty(xMemPS, SC_UNO_DP_ISVISIBLE);
 
         if (bVisible)
-            aRes.push_back(sheet::MemberResult(rName, aCaption, 0));
+        {
+            /* TODO: any numeric value to obtain? */
+            double fValue;
+            rtl::math::setNan(&fValue);
+            aRes.push_back(sheet::MemberResult(rName, aCaption, 0, fValue));
+        }
     }
 
     if (aNames.getLength() == static_cast<sal_Int32>(aRes.size()))
@@ -601,6 +610,10 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 OUString aCaption = ScUnoHelpFunctions::GetStringProperty( xPropSet,
                                     SC_UNO_DP_LAYOUTNAME, aName );
 
+                                /* TODO: any numeric value to obtain? */
+                                double fValue;
+                                rtl::math::setNan(&fValue);
+
                                 bool bRowFieldHasMember = false;
                                 switch ( eDimOrient )
                                 {
@@ -613,6 +626,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pColFields[nColFieldCount].mnSrcNumFmt = nNumFmt;
                                         pColFields[nColFieldCount].maName  = aName;
                                         pColFields[nColFieldCount].maCaption= aCaption;
+                                        pColFields[nColFieldCount].mfValue = fValue;
                                         pColFields[nColFieldCount].mbHasHiddenMember = bHasHiddenMember;
                                         pColFields[nColFieldCount].mbDataLayout = bIsDataLayout;
                                         if (!lcl_MemberEmpty(pColFields[nColFieldCount].aResult))
@@ -627,6 +641,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pRowFields[nRowFieldCount].mnSrcNumFmt = nNumFmt;
                                         pRowFields[nRowFieldCount].maName  = aName;
                                         pRowFields[nRowFieldCount].maCaption= aCaption;
+                                        pRowFields[nRowFieldCount].mfValue = fValue;
                                         pRowFields[nRowFieldCount].mbHasHiddenMember = bHasHiddenMember;
                                         pRowFields[nRowFieldCount].mbDataLayout = bIsDataLayout;
                                         if (!lcl_MemberEmpty(pRowFields[nRowFieldCount].aResult))
@@ -644,6 +659,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pPageFields[nPageFieldCount].mnSrcNumFmt = nNumFmt;
                                         pPageFields[nPageFieldCount].maName  = aName;
                                         pPageFields[nPageFieldCount].maCaption= aCaption;
+                                        pPageFields[nPageFieldCount].mfValue = fValue;
                                         pPageFields[nPageFieldCount].mbHasHiddenMember = bHasHiddenMember;
                                         pPageFields[nPageFieldCount].mbPageDim = true;
                                         // no check on results for page fields
@@ -790,13 +806,20 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( nFlags & sheet::MemberResultFlags::HASMEMBER )
     {
         bool bNumeric = (nFlags & sheet::MemberResultFlags::NUMERIC) != 0;
-        ScSetStringParam aParam;
-        if (bNumeric)
-            aParam.setNumericInput();
+        if (bNumeric && rtl::math::isFinite( rData.Value))
+        {
+            pDoc->SetValue( nCol, nRow, nTab, rData.Value);
+        }
         else
-            aParam.setTextInput();
+        {
+            ScSetStringParam aParam;
+            if (bNumeric)
+                aParam.setNumericInput();
+            else
+                aParam.setTextInput();
 
-        pDoc->SetString(nCol, nRow, nTab, rData.Caption, &aParam);
+            pDoc->SetString(nCol, nRow, nTab, rData.Caption, &aParam);
+        }
     }
 
     if ( nFlags & sheet::MemberResultFlags::SUBTOTAL )
