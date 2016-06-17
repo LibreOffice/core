@@ -1511,7 +1511,8 @@ void ScXMLTableRowCellContext::EndElement()
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )
     {
         maStringValue.reset(GetFirstParagraph());
-        nCellType = util::NumberFormat::TEXT;
+        if (util::NumberFormat::UNDEFINED == nCellType)
+            nCellType = util::NumberFormat::TEXT;
     }
 
     ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
