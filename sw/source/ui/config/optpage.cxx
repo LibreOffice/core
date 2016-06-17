@@ -1796,12 +1796,6 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
     aLk = LINK(this, SwRedlineOptionsTabPage, ChangedMaskPrevHdl);
     pMarkPosLB->SetSelectHdl( aLk );
     pMarkColorLB->SetSelectHdl( aLk );
-/*
-    //solution: set different accessible name of four color box
-    pInsertColorLB->SetAccessibleName(OUString( aInsertFT.GetDisplayText()) + OUString(aInsertColorFT.GetDisplayText()));
-    pDeletedColorLB->SetAccessibleName(OUString( aDeletedFT.GetDisplayText()) + OUString( aDeletedColorFT.GetDisplayText()));
-    pChangedColorLB->SetAccessibleName(OUString( aChangedFT.GetDisplayText()) + OUString( aChangedColorFT.GetDisplayText()));
-    pMarkColorLB->SetAccessibleName(OUString( aMarkPosFT.GetDisplayText()) + OUString( aMarkColorFT.GetDisplayText()));*/
 }
 
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
