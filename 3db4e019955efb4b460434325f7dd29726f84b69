@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "da7fb54a_ad09b62e",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-17T15:00:58Z",
+      "side": 1,
+      "message": "Maybe be more technical and just say \"loext namespace\".",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_0a87e8b5",
         "filename": "xmloff/source/style/prhdlfac.cxx",
         "patchSetId": 9
@@ -13,6 +30,24 @@
       "writtenOn": "2016-06-17T13:19:35Z",
       "side": 1,
       "message": "New property handler to be able to export SwFormatVertOrient",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ea0c8444",
+        "filename": "xmloff/source/style/prhdlfac.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-17T15:00:58Z",
+      "side": 1,
+      "message": "There is a pXML_VertPos_Enum already at xmloff/source/text/txtprhdl.cxx:158, why not reuse that one? (Something similar to getSwCellStylePropertiesMap())",
+      "parentUuid": "da7fb54a_0a87e8b5",
       "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -36,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_4a049016",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-17T15:00:58Z",
+      "side": 1,
+      "message": "If \"taken\" means \"copy\u0026paste\", then again please have a function that makes the map available to multiple source files. :-)",
+      "parentUuid": "da7fb54a_8a9a1813",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_ea89e4cb",
         "filename": "xmloff/source/table/XMLTableExport.cxx",
         "patchSetId": 9
@@ -47,6 +100,24 @@
       "writtenOn": "2016-06-17T13:19:35Z",
       "side": 1,
       "message": "Changed order to match odf 1.2 schema, it will have effect on odp export.",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8d04f215",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-17T15:00:58Z",
+      "side": 1,
+      "message": "I guess this just means the order of child elements, I don\u0027t think the ODP import is sensitive to that. But minimal manual testing of ODP import/export of Impress table styles after your changes is a good idea anyway. :-)",
+      "parentUuid": "da7fb54a_ea89e4cb",
       "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
