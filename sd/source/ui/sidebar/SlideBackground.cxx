@@ -160,7 +160,7 @@ void SlideBackground::Initialize()
 }
 
 void SlideBackground::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const vcl::EnumContext& rContext)
 {
     if (maContext == rContext)
         return;
@@ -371,10 +371,10 @@ IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
         {
             if(!mbTitle)
             {
-                sfx2::sidebar::EnumContext rDrawContext(sfx2::sidebar::EnumContext::Application_Draw,
-                                                        sfx2::sidebar::EnumContext::Context_DrawPage);
-                sfx2::sidebar::EnumContext rImpressContext(sfx2::sidebar::EnumContext::Application_Impress,
-                                                        sfx2::sidebar::EnumContext::Context_DrawPage);
+                vcl::EnumContext rDrawContext(vcl::EnumContext::Application_Draw,
+                                              vcl::EnumContext::Context_DrawPage);
+                vcl::EnumContext rImpressContext(vcl::EnumContext::Application_Impress,
+                                                 vcl::EnumContext::Context_DrawPage);
                 if(maContext == rDrawContext)
                 {
                     SetPanelTitle(SD_RESSTR(STR_PAGE_NAME));

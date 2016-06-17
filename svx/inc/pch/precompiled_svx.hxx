@@ -91,6 +91,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
@@ -331,7 +332,6 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>

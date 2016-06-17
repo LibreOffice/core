@@ -29,6 +29,8 @@ public:
     static void StateMethod(SystemWindow* pSysWindow,
                             const css::uno::Reference<css::frame::XFrame> xFrame,
                             const OUString& rUIFile);
+
+    static void RemoveListeners(SystemWindow* pSysWindow);
 };
 
 } // namespace sfx2

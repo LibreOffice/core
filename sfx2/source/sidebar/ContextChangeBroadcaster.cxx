@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sidebar/ContextChangeBroadcaster.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <vcl/EnumContext.hxx>
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -58,7 +58,7 @@ void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame:
         BroadcastContextChange(
             rxFrame,
             GetModuleName(rxFrame),
-            EnumContext::GetContextName(EnumContext::Context_Default));
+            vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Default));
     }
 }
 

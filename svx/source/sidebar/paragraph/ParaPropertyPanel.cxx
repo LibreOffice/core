@@ -72,7 +72,7 @@ VclPtr<vcl::Window> ParaPropertyPanel::Create (
 }
 
 void ParaPropertyPanel::HandleContextChange (
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const vcl::EnumContext& rContext)
 {
     if (maContext == rContext)
     {
@@ -146,7 +146,7 @@ void ParaPropertyPanel::HandleContextChange (
             break;
     }
 
-    mpTBxOutline->Show( maContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application_DrawImpress );
+    mpTBxOutline->Show( maContext.GetApplication_DI() == vcl::EnumContext::Application_DrawImpress );
 }
 
 void ParaPropertyPanel::DataChanged (const DataChangedEvent& rEvent)

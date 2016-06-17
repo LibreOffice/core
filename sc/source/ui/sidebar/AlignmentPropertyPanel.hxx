@@ -50,7 +50,7 @@ public:
         const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const vcl::EnumContext& rContext) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -93,7 +93,7 @@ private:
     /// bitfield
     bool                                        mbMultiDisable : 1;
 
-    ::sfx2::sidebar::EnumContext                maContext;
+    vcl::EnumContext                            maContext;
     SfxBindings*                                mpBindings;
 
     DECL_LINK_TYPED( MFLeftIndentMdyHdl, Edit&, void );

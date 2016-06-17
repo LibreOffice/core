@@ -99,6 +99,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
@@ -413,7 +414,6 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/shell.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
