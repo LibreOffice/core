@@ -20,11 +20,22 @@
 #ifndef INCLUDED_FORMULA_FUNCUTL_HXX
 #define INCLUDED_FORMULA_FUNCUTL_HXX
 
-#include <vcl/fixed.hxx>
+#include <formula/formuladllapi.h>
+#include <rtl/ustring.hxx>
+#include <tools/link.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/idle.hxx>
-#include <formula/formuladllapi.h>
+#include <vcl/image.hxx>
+#include <vcl/vclptr.hxx>
+
+class KeyEvent;
+class ResId;
+
+namespace vcl {
+    class Window;
+}
 
 namespace formula {
 

@@ -20,17 +20,31 @@
 #ifndef INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
 #define INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
 
-#include <formula/formuladllapi.h>
-#include <cppuhelper/implbase2.hxx>
-#include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <exception>
 #include <memory>
-#include <formula/FormulaCompiler.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
+#include <cppuhelper/implbase2.hxx>
+#include <formula/formuladllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace sheet { struct FormulaOpCodeMapEntry; }
+    namespace sheet { struct FormulaToken; }
+    namespace uno { class XComponentContext; }
+    namespace uno { class XInterface; }
+} } }
 
 namespace formula
 {
+
+class FormulaCompiler;
 
 class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public ::cppu::WeakImplHelper2<
                             css::sheet::XFormulaOpCodeMapper,
