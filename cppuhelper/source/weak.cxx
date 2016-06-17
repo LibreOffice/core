@@ -111,6 +111,9 @@ void SAL_CALL OWeakConnectionPoint::dispose() throw(css::uno::RuntimeException)
     std::vector<Reference<XReference>> aCopy;
     { // only hold the mutex while we access the field
         MutexGuard aGuard(getWeakMutex());
+        // OWeakObject is not the only owner of this, so clear m_pObject
+        // so that queryAdapted() won't use it now that it's dead
+        m_pObject = nullptr;
         // other code is going to call removeReference while we are doing this, so we need a
         // copy, but since we are disposing and going away, we can just take the original data
         aCopy.swap(m_aReferences);
