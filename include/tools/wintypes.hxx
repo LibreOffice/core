@@ -316,6 +316,13 @@ enum class StandardButtonType
 
 enum class ProminentEntry { TOP, MIDDLE };
 
+typedef sal_uInt16 WindowContext;
+
+WindowContext const Context_All        = 0x001;
+WindowContext const Context_Text       = 0x002;
+WindowContext const Context_Table      = 0x004;
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

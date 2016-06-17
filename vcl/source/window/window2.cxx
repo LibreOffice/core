@@ -1049,6 +1049,20 @@ WindowType Window::GetType() const
         return 0;
 }
 
+void Window::SetContext( WindowContext eContext )
+{
+    if (mpWindowImpl)
+        mpWindowImpl->meContext = eContext;
+}
+
+WindowContext Window::GetContext() const
+{
+    if (mpWindowImpl)
+        return mpWindowImpl->meContext;
+    else
+        return Context_All;
+}
+
 Dialog* Window::GetParentDialog() const
 {
     const vcl::Window *pWindow = this;
