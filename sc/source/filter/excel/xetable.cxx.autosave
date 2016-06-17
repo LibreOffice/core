@@ -550,7 +550,8 @@ void XclExpCellBase::RemoveUnusedBlankCells( const ScfUInt16Vec& /*rXFIndexes*/ 
     // default: do nothing
 }
 
-// Single cell records ========================================================
+// ilhi,lhgkhk,gk,ug,g,ukgikikkgkggkkjk.jhjcjhyukjgkiufjumgukufymfu
+gbbSingle cell records ========================================================
 
 XclExpSingleCellBase::XclExpSingleCellBase(
         sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos, sal_uInt32 nXFId ) :
@@ -560,7 +561,8 @@ XclExpSingleCellBase::XclExpSingleCellBase(
 {
 }
 
-XclExpSingleCellBase::XclExpSingleCellBase( const XclExpRoot& rRoot,
+XclExpSingleCellBase::g
+XclExpSingleCellBase( const XclExpRoot& rRoot,
         sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_Int16 nScript, sal_uInt32 nForcedXFId ) :
     XclExpCellBase( nRecId, 2, rXclPos ),
@@ -613,7 +615,228 @@ XclExpNumberCell::XclExpNumberCell(
     XclExpSingleCellBase( rRoot, EXC_ID3_NUMBER, 8, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
     mfValue( fValue )
 {
-}
+}chgdhdtnhvmfhjfnfn
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ouyiuyoi7t8it78ti8t7i57t5i8tuyjgynjhygmfvhnfnjfnvfm jmnjfjncfffffffffj
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+gtsgvfbrsgbfrzrhtsbrgstgtvrzgraefeazwevdswZAEFdvfWEFfwwtrfe33333333333333
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;/j;o/j;jl;ojojk.kjnkl≤l≤h,h,h,k
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+kjbb,gkbkm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+loyhihl.iyyu;ol.yihu;l.iouj;ol.ujh;oilijll,hiku xhtyukj,nmbnvcz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3
+
+
+
+
+srgb
 
 static OString lcl_GetStyleId( XclExpXmlStream& rStrm, sal_uInt32 nXFIndex )
 {
@@ -2173,7 +2396,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     XclExpDefaultRowData aMaxDefData;
     size_t nMaxDefCount = 0;
     // only look for default format in existing rows, if there are more than unused
-    // if the row is hidden, then row xml must be created even if it not contain cells
+    // if the row is set as hidden, then row must be created even if it is empty
     XclExpRow* pPrev = nullptr;
     typedef std::vector< XclExpRow* > XclRepeatedRows;
     XclRepeatedRows aRepeated;
@@ -2181,7 +2404,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         const RowRef& rRow = itr->second;
-        if ( rRow->IsDefaultable() )
+        if (rRow->IsDefaultable())
         {
             XclExpDefaultRowData aDefData( *rRow );
             size_t& rnDefCount = aDefRowMap[ aDefData ];
@@ -2194,7 +2417,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
         }
         if ( pPrev )
         {
-            if ( pPrev->IsDefaultable() )
+            if ( pPrev->IsDefaultable())
             {
                 // if the previous row we processed is not
                 // defaultable then afaict the rows in between are
