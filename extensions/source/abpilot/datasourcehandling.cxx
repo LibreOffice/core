@@ -366,7 +366,8 @@ namespace abp
             OSL_ENSURE( xStorable.is(),"DataSource is no XStorable!" );
             if ( xStorable.is() )
             {
-                SfxObjectShell* pObjectShell = SfxViewFrame::Current()->GetObjectShell();
+                SfxViewFrame* pFrame = SfxViewFrame::Current();
+                SfxObjectShell* pObjectShell = pFrame ? pFrame->GetObjectShell() : nullptr;
                 OUString aOwnURL = lcl_getOwnURL(pObjectShell);
                 if (aOwnURL.isEmpty() || !rSettings.bEmbedDataSource)
                 {
