@@ -644,10 +644,24 @@ protected:
                 // too many validation errors right now
                 validate(maTempFile.GetFileName(), test::OOXML);
             }
-            else if(aFilterName == "writer8")
+            else if(aFilterName == "writer8"
+                || aFilterName == "OpenDocument Text Flat XML")
             {
                 // still a few validation errors
                 validate(maTempFile.GetFileName(), test::ODF);
+            }
+            else if(aFilterName == "MS Word 97")
+            {
+                validate(maTempFile.GetFileName(), test::MSBINARY);
+            }
+            else
+            {
+                OString aMessage("validation requested, but don't know how to validate ");
+                aMessage += filename;
+                aMessage += " (";
+                aMessage += OUStringToOString(aFilterName, RTL_TEXTENCODING_UTF8);
+                aMessage += ")";
+                CPPUNIT_FAIL(aMessage.getStr());
             }
         }
         discardDumpedLayout();
