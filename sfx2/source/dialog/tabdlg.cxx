@@ -1314,7 +1314,7 @@ std::vector<OString> SfxTabDialog::getAllPageUIXMLDescriptions() const
 {
     std::vector<OString> aRetval;
 
-    for (SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it)
+    for (SfxTabDlgData_Impl::const_iterator it = m_pImpl->aData.begin(); it != m_pImpl->aData.end(); ++it)
     {
         SfxTabPage* pCandidate = GetTabPage((*it)->nId);
 
@@ -1337,7 +1337,7 @@ std::vector<OString> SfxTabDialog::getAllPageUIXMLDescriptions() const
 
 bool SfxTabDialog::selectPageByUIXMLDescription(const OString& rUIXMLDescription)
 {
-    for (SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it)
+    for (SfxTabDlgData_Impl::const_iterator it = m_pImpl->aData.begin(); it != m_pImpl->aData.end(); ++it)
     {
         SfxTabPage* pCandidate = (*it)->pTabPage;
 
