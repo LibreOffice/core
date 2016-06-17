@@ -65,7 +65,7 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 
 public:
                     SvtHelpOptions_Impl();
-                    ~SvtHelpOptions_Impl();
+                    ~SvtHelpOptions_Impl() override;
 
     virtual void    Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void            Load( const css::uno::Sequence< OUString>& aPropertyNames);
