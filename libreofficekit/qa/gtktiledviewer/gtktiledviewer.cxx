@@ -1314,15 +1314,13 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pUnoCmdDebugger, -1);
     g_signal_connect(G_OBJECT(pUnoCmdDebugger), "clicked", G_CALLBACK(unoCommandDebugger), nullptr);
 
-    static bool bViewCallback = !getenv("LOK_MODEL_CALLBACK");
-    if (bViewCallback)
-    {
-        GtkToolItem* pNewViewButton = gtk_tool_button_new( nullptr, nullptr);
-        gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pNewViewButton), "view-continuous-symbolic");
-        gtk_tool_item_set_tooltip_text(pNewViewButton, "New View");
-        gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pNewViewButton, -1);
-        g_signal_connect(G_OBJECT(pNewViewButton), "clicked", G_CALLBACK(createView), nullptr);
-    }
+    // New view button.
+    GtkToolItem* pNewViewButton = gtk_tool_button_new( nullptr, nullptr);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pNewViewButton), "view-continuous-symbolic");
+    gtk_tool_item_set_tooltip_text(pNewViewButton, "New View");
+    gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pNewViewButton, -1);
+    g_signal_connect(G_OBJECT(pNewViewButton), "clicked", G_CALLBACK(createView), nullptr);
+
     gtk_box_pack_start(GTK_BOX(rWindow.m_pVBox), pUpperToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
     // Lower toolbar.
