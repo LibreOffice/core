@@ -351,12 +351,12 @@ class XMLImportTest : public test::BootstrapFixture
 {
 private:
     OUString m_sDirPath;
-    Reference< TestDocumentHandler > m_xDocumentHandler;
-    Reference< TestFastDocumentHandler > m_xFastDocumentHandler;
+    rtl::Reference< TestDocumentHandler > m_xDocumentHandler;
+    rtl::Reference< TestFastDocumentHandler > m_xFastDocumentHandler;
     Reference< XParser > m_xParser;
     Reference< XFastParser > m_xFastParser;
     Reference< XParser > m_xLegacyFastParser;
-    Reference< TestLegacyDocumentHandler > m_xLegacyDocumentHandler;
+    rtl::Reference< TestLegacyDocumentHandler > m_xLegacyDocumentHandler;
     Reference< XFastTokenHandler > m_xFastTokenHandler;
 
 public:
@@ -381,12 +381,12 @@ void XMLImportTest::setUp()
     m_xFastTokenHandler.set( new TestTokenHandler() );
     m_xParser = Parser::create( xContext );
     m_xFastParser = FastParser::create( xContext );
-    m_xParser->setDocumentHandler( m_xDocumentHandler );
-    m_xFastParser->setFastDocumentHandler( m_xFastDocumentHandler );
+    m_xParser->setDocumentHandler( m_xDocumentHandler.get() );
+    m_xFastParser->setFastDocumentHandler( m_xFastDocumentHandler.get() );
     m_xFastParser->setTokenHandler( m_xFastTokenHandler );
     m_xLegacyFastParser.set( xContext->getServiceManager()->createInstanceWithContext
                     ( "com.sun.star.xml.sax.LegacyFastParser", xContext ), UNO_QUERY );
-    m_xLegacyFastParser->setDocumentHandler( m_xLegacyDocumentHandler );
+    m_xLegacyFastParser->setDocumentHandler( m_xLegacyDocumentHandler.get() );
     m_sDirPath = m_directories.getPathFromSrc( "/sax/qa/data/" );
 }
 
