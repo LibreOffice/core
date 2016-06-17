@@ -65,7 +65,7 @@ public:
         const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const vcl::EnumContext& rContext) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -136,7 +136,7 @@ private:
     ::sfx2::sidebar::ControllerItem         maAutoHeightControl;
     ::sfx2::sidebar::ControllerItem         m_aMetricCtl;
 
-    ::sfx2::sidebar::EnumContext            maContext;
+    vcl::EnumContext                        maContext;
     SfxBindings*                            mpBindings;
 
     /// bitfield

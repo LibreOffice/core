@@ -9,12 +9,14 @@
 
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Control(pParent)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
+    get(m_pTabControl, "notebook1");
 }
 
 NotebookBar::~NotebookBar()
@@ -74,6 +76,33 @@ void NotebookBar::StateChanged(StateChangedType nType)
     }
 
     Control::StateChanged(nType);
+}
+
+void SAL_CALL NotebookBar::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
+        throw (css::uno::RuntimeException, std::exception)
+{
+    m_pTabControl->SetContext(vcl::EnumContext::GetContextEnum(rEvent.ContextName));
+}
+
+::css::uno::Any SAL_CALL NotebookBar::queryInterface(const ::css::uno::Type& aType)
+    throw (::css::uno::RuntimeException, ::std::exception)
+{
+    return ::cppu::queryInterface(aType, static_cast<css::ui::XContextChangeEventListener*>(this));
+}
+
+void SAL_CALL NotebookBar::acquire() throw ()
+{
+    Control::acquire();
+}
+
+void SAL_CALL NotebookBar::release() throw ()
+{
+    Control::release();
+}
+
+void SAL_CALL NotebookBar::disposing(const ::css::lang::EventObject&)
+    throw (::css::uno::RuntimeException, ::std::exception)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

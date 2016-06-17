@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_TABBAR_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_TABBAR_HXX
 
+#include <sfx2//dllapi.h>
 #include "DeckDescriptor.hxx"
 #include <sfx2/sidebar/ResourceManager.hxx>
 
