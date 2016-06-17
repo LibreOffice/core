@@ -591,7 +591,7 @@ public:
 
 protected:
     /** Constructs the outline buffer.
-        @param bRows  true = Process row ouline array; false = Process column outline array. */
+        @param bRows  true = Process row outline array; false = Process column outline array. */
     explicit            XclExpOutlineBuffer( const XclExpRoot& rRoot, bool bRows );
 
     /** Updates the current state by processing the settings at the passed Calc position. */
