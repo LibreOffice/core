@@ -18,6 +18,17 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">res/odg_32_8.png</property>
   </object>
+  <object class="GtkMenu" id="clearmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="clear_all">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Clear Recent Documents</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkMenu" id="filtermenu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -160,7 +171,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="open_recent">
+                  <object class="GtkButton" id="open_recent:clearmenu">
                     <property name="label" translatable="yes">_Recent Files</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>

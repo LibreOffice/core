@@ -59,7 +59,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     css::uno::Reference<css::datatransfer::dnd::XDropTargetListener> mxDropTargetListener;
 
     VclPtr<PushButton> mpOpenButton;
-    VclPtr<PushButton> mpRecentButton;
+    VclPtr<MenuButton> mpRecentButton;
     VclPtr<PushButton> mpRemoteButton;
     VclPtr<MenuButton> mpTemplateButton;
 
