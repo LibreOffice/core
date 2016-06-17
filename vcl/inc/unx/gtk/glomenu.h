@@ -69,10 +69,20 @@ void        g_lo_menu_set_label                                         (GLOMenu
                                                                          gint         position,
                                                                          const gchar *label);
 
+void        g_lo_menu_set_icon                                         (GLOMenu     *menu,
+                                                                        gint         position,
+                                                                        const GIcon *icon);
+
+
 void        g_lo_menu_set_label_to_item_in_section                      (GLOMenu     *menu,
                                                                          gint         section,
                                                                          gint         position,
                                                                          const gchar *label);
+
+void        g_lo_menu_set_icon_to_item_in_section                      (GLOMenu     *menu,
+                                                                        gint         section,
+                                                                        gint         position,
+                                                                        const GIcon *icon);
 
 gchar *     g_lo_menu_get_label_from_item_in_section                    (GLOMenu     *menu,
                                                                          gint         section,

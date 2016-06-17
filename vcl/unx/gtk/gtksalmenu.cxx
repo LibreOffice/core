@@ -18,6 +18,7 @@
 #include <unx/gtk/gloactiongroup.h>
 #include <vcl/floatwin.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/pngwrite.hxx>
 #include <unx/gtk/gtkinst.hxx>
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -236,6 +237,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
         // Get internal menu item values.
         OUString aText = pVCLMenu->GetItemText( nId );
+        Image aImage = pVCLMenu->GetItemImage( nId );
         bool bEnabled = pVCLMenu->IsItemEnabled( nId );
         vcl::KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
         bool bChecked = pVCLMenu->IsItemChecked( nId );
@@ -252,6 +254,8 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
         // Force updating of native menu labels.
         NativeSetItemText( nSection, nItemPos, aText );
+        if (!!aImage)
+            NativeSetItemIcon( nSection, nItemPos, aImage );
         NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == nullptr )
@@ -842,6 +846,32 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
 
     if ( aLabel )
         g_free( aLabel );
+}
+
+namespace
+{
+    void DestroyMemoryStream(gpointer data)
+    {
+        SvMemoryStream* pMemStm = reinterpret_cast<SvMemoryStream*>(data);
+        delete pMemStm;
+    }
+}
+
+void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const Image& rImage )
+{
+    SolarMutexGuard aGuard;
+
+    SvMemoryStream* pMemStm = new SvMemoryStream;
+    vcl::PNGWriter aWriter(rImage.GetBitmapEx());
+    aWriter.Write(*pMemStm);
+
+    GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
+                                                pMemStm->Seek(STREAM_SEEK_TO_END),
+                                                DestroyMemoryStream,
+                                                pMemStm);
+
+    GIcon *pIcon = g_bytes_icon_new(pBytes);
+    g_lo_menu_set_icon_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, pIcon );
 }
 
 void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName )
