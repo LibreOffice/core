@@ -337,7 +337,7 @@ void XMLRedlineExport::ExportChangedRegion(
         OUString sType;
         aAny >>= sType;
 
-        sal_Int16 nParagraphIdx = 2, nCharStart, nCharEnd;
+        sal_uInt32 nParagraphIdx = 2, nCharStart, nCharEnd;
         rPropSet->getPropertyValue("RedlineUndoStart") >>= nCharStart;
         rPropSet->getPropertyValue("RedlineUndoEnd") >>= nCharEnd;
 
