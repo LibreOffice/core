@@ -215,6 +215,8 @@ public:
 
     void testBnc762542();
 
+    void testTdf100458();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -317,6 +319,8 @@ public:
     CPPUNIT_TEST(testBnc762542);
 
     CPPUNIT_TEST(testHiddenSheetsXLSX);
+
+    CPPUNIT_TEST(testTdf100458);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3326,6 +3330,16 @@ void ScFiltersTest::testRelFormulaValidationXLS()
     checkValidationFormula(ScAddress(5, 8, 0), rDoc, "D7");
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf100458()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf100458_lost_zero_value.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(rDoc.HasValueData(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(double(0.0), rDoc.GetValue(0,0,0));
+    CPPUNIT_ASSERT(!rDoc.HasStringData(0, 0, 0));
 }
 
 ScFiltersTest::ScFiltersTest()
