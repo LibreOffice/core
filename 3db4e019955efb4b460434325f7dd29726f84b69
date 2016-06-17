@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_0a87e8b5",
+        "filename": "xmloff/source/style/prhdlfac.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-17T13:19:35Z",
+      "side": 1,
+      "message": "New property handler to be able to export SwFormatVertOrient",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8a9a1813",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-17T13:19:35Z",
+      "side": 1,
+      "message": "Extended properties by SvxBoXItem and SwFormatVertOrient",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ea89e4cb",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-17T13:19:35Z",
+      "side": 1,
+      "message": "Changed order to match odf 1.2 schema, it will have effect on odp export.",
+      "revId": "3db4e019955efb4b460434325f7dd29726f84b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
