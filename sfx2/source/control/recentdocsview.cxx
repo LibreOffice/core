@@ -232,7 +232,13 @@ void RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
 
         if (pItem && nPos == mnLastMouseDownItem)
+        {
             pItem->MouseButtonUp(rMEvt);
+
+            ThumbnailViewItem* pNewItem = ImplGetItem(nPos);
+            if(pNewItem)
+                pNewItem->setHighlight(true);
+        }
 
         mnLastMouseDownItem = THUMBNAILVIEW_ITEM_NOTFOUND;
 
