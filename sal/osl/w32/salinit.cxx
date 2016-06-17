@@ -55,6 +55,12 @@ extern "C" void invalidParameterHandler(
 
 void sal_detail_initialize(int argc, char ** argv)
 {
+#if defined(_WIN64) && _MSC_VER <= 1800
+    // tdf#99410: MSVC 2013 runtime library has problems with some math functions if
+    // the CPU supports them and they are disabled in the OS
+    _set_FMA3_enable(0);
+#endif
+
     sal_initGlobalTimer();
     // SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
     // SetDllDirectoryW(L"");
