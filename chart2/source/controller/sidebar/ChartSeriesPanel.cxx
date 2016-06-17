@@ -408,7 +408,7 @@ void ChartSeriesPanel::DataChanged(
 }
 
 void ChartSeriesPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& )
+    const vcl::EnumContext& )
 {
     updateData();
 }

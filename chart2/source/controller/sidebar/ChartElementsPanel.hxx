@@ -54,7 +54,7 @@ public:
         const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
-        const ::sfx2::sidebar::EnumContext& rContext) override;
+        const vcl::EnumContext& rContext) override;
 
     // constructor/destuctor
     ChartElementsPanel(
@@ -98,7 +98,7 @@ private:
     VclPtr<ListBox> mpLBLegendPosition;
     VclPtr<VclHBox> mpBoxLegend;
 
-    ::sfx2::sidebar::EnumContext            maContext;
+    vcl::EnumContext maContext;
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;

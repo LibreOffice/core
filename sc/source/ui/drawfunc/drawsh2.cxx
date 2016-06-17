@@ -58,7 +58,7 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
             [this] () { return this->GetSidebarContextName(); },
             GetFrame()->GetFrame().GetController(),
-            sfx2::sidebar::EnumContext::Context_Cell))
+            vcl::EnumContext::Context_Cell))
 {
     SetPool( &pViewData->GetScDrawView()->GetModel()->GetItemPool() );
     ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
@@ -395,13 +395,13 @@ void ScDrawShell::Activate (const bool bMDI)
 
     ContextChangeEventMultiplexer::NotifyContextChange(
         GetFrame()->GetFrame().GetController(),
-        ::sfx2::sidebar::EnumContext::GetContextEnum(
+        vcl::EnumContext::GetContextEnum(
             GetSidebarContextName()));
 }
 
 ::rtl::OUString ScDrawShell::GetSidebarContextName()
 {
-    return sfx2::sidebar::EnumContext::GetContextName(
+    return vcl::EnumContext::GetContextName(
         svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(
             GetDrawView()->GetMarkedObjectList()));
 }

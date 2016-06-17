@@ -689,14 +689,14 @@ void SidebarController::SwitchToDeck (
     if (aPanelContextDescriptors.empty())
     {
         // There are no panels to be displayed in the current context.
-        if (EnumContext::GetContextEnum(rContext.msContext) != EnumContext::Context_Empty)
+        if (vcl::EnumContext::GetContextEnum(rContext.msContext) != vcl::EnumContext::Context_Empty)
         {
             // Switch to the "empty" context and try again.
             SwitchToDeck(
                 rDeckDescriptor,
                 Context(
                     rContext.msApplication,
-                    EnumContext::GetContextName(EnumContext::Context_Empty)));
+                    vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Empty)));
             return;
         }
         else

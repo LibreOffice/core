@@ -492,7 +492,6 @@
 #include <sfx2/sidebar/DeckDescriptor.hxx>
 #include <sfx2/sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/DrawHelper.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>

@@ -245,7 +245,7 @@ void CellAppearancePropertyPanel::DataChanged(
     (void)rEvent;
 }
 
-void CellAppearancePropertyPanel::HandleContextChange(const ::sfx2::sidebar::EnumContext& rContext)
+void CellAppearancePropertyPanel::HandleContextChange(const vcl::EnumContext& rContext)
 {
     if (maContext == rContext)
     {

@@ -21,21 +21,19 @@
 #include "svx/sidebar/ContextChangeEventMultiplexer.hxx"
 #include "svx/svdmrkv.hxx"
 
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <vcl/EnumContext.hxx>
 #include <sfx2/shell.hxx>
 
 
 using namespace css;
 using namespace css::uno;
 
-using namespace sfx2::sidebar;
-
 namespace svx { namespace sidebar {
 
 SelectionChangeHandler::SelectionChangeHandler (
     const std::function<rtl::OUString()>& rSelectionChangeCallback,
     const Reference<css::frame::XController>& rxController,
-    const EnumContext::Context eDefaultContext)
+    const vcl::EnumContext::Context eDefaultContext)
     : SelectionChangeHandlerInterfaceBase(m_aMutex),
       maSelectionChangeCallback(rSelectionChangeCallback),
       mxController(rxController),
@@ -55,11 +53,11 @@ void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&
 {
     if (maSelectionChangeCallback)
     {
-        const EnumContext::Context eContext (
-            EnumContext::GetContextEnum(maSelectionChangeCallback()));
+        const vcl::EnumContext::Context eContext (
+            vcl::EnumContext::GetContextEnum(maSelectionChangeCallback()));
         ContextChangeEventMultiplexer::NotifyContextChange(
             mxController,
-            eContext==EnumContext::Context_Unknown
+            eContext==vcl::EnumContext::Context_Unknown
                 ? meDefaultContext
                 : eContext);
     }

@@ -43,7 +43,7 @@
 
 #include <svx/svdoashp.hxx>
 #include <svx/xtable.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
+#include <vcl/EnumContext.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/opengrf.hxx>
 #include <svx/svdograf.hxx>
@@ -538,7 +538,7 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
     SetHelpId(SW_DRAWSHELL);
     SetName("Draw");
 
-    SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Draw));
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context_Draw));
 }
 
 // Edit SfxRequests for FontWork
