@@ -26,10 +26,14 @@ CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
     get(mpBtnClose, "btn_close");
     get(mpEditPreUpload, "ed_pre");
     get(mpEditPostUpload, "ed_post");
+    get(mpFtBugReport, "ed_bugreport");
+
+    maSuccessMsg = mpEditPostUpload->GetText();
 
     mpBtnSend->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
     mpBtnCancel->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
     mpBtnClose->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
+    mpEditPostUpload->SetReadOnly(true);
 }
 
 CrashReportDialog::~CrashReportDialog()
@@ -44,6 +48,7 @@ void CrashReportDialog::dispose()
     mpBtnClose.clear();
     mpEditPreUpload.clear();
     mpEditPostUpload.clear();
+    mpFtBugReport.clear();
 
     Dialog::dispose();
 }
@@ -60,15 +65,26 @@ IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
         OUString aCrashID = OUString::createFromAscii(response.c_str());
 
         if (bSuccess)
-            mpEditPostUpload->SetText(mpEditPostUpload->GetText() + " " + aCrashID);
+        {
+            OUString aProcessedMessage = maSuccessMsg.replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=",""));
+
+            // vclbuilder seems to replace _ with ~ even in text
+            mpEditPostUpload->SetText(aProcessedMessage.replaceAll("~", "_"));
+        }
         else
-            mpEditPostUpload->SetText(mpEditPostUpload->GetText() + " Error!");
+            mpEditPostUpload->SetText("Error!");
 
         mpBtnClose->Show();
+        mpFtBugReport->Show();
         mpEditPreUpload->Hide();
         mpEditPostUpload->Show();
         mpBtnSend->Hide();
+        mpBtnSend->Disable();
         mpBtnCancel->Hide();
+        mpBtnCancel->Disable();
+        mpBtnClose->GrabFocus();
+
+        this->setOptimalLayoutSize();
     }
     else if (pBtn == mpBtnCancel.get())
     {
