@@ -620,16 +620,10 @@ bool Outliner::SearchAndReplaceAll()
     {
         // Disable selection change notifications during search all.
         SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-        if (comphelper::LibreOfficeKit::isViewCallback())
-            rSfxViewShell.setTiledSearching(true);
-        else
-            pViewShell->GetDoc()->setTiledSearching(true);
-        comphelper::ScopeGuard aGuard([pViewShell, &rSfxViewShell]()
+        rSfxViewShell.setTiledSearching(true);
+        comphelper::ScopeGuard aGuard([&rSfxViewShell]()
         {
-            if (comphelper::LibreOfficeKit::isViewCallback())
-                rSfxViewShell.setTiledSearching(false);
-            else
-                pViewShell->GetDoc()->setTiledSearching(false);
+            rSfxViewShell.setTiledSearching(false);
         });
 
         // Go to beginning/end of document.
@@ -680,10 +674,7 @@ bool Outliner::SearchAndReplaceAll()
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
             OString aPayload = aStream.str().c_str();
-            if (comphelper::LibreOfficeKit::isViewCallback())
-                rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
-            else
-                pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+            rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
         }
     }
 
@@ -693,13 +684,8 @@ bool Outliner::SearchAndReplaceAll()
     {
         // Find-all, tiled rendering and we have at least one match.
         OString aPayload = OString::number(mnStartPageIndex);
-        if (comphelper::LibreOfficeKit::isViewCallback())
-        {
-            SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-            rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
-        }
-        else
-            pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+        SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
+        rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
 
         // Emit a selection callback here:
         // 1) The original one is no longer valid, as we there was a SET_PART in between
@@ -712,13 +698,7 @@ bool Outliner::SearchAndReplaceAll()
                 aRectangles.push_back(rSelection.m_aRectangles);
         }
         OString sRectangles = comphelper::string::join("; ", aRectangles);
-        if (comphelper::LibreOfficeKit::isViewCallback())
-        {
-            SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-            rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangles.getStr());
-        }
-        else
-            pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangles.getStr());
+        rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangles.getStr());
     }
 
     mnStartPageIndex = (sal_uInt16)-1;
@@ -824,13 +804,8 @@ bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
         {
             // notify LibreOfficeKit about changed page
             OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
-            if (comphelper::LibreOfficeKit::isViewCallback())
-            {
-                SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-                rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
-            }
-            else
-                pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+            SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
+            rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
 
             // also about search result selections
             boost::property_tree::ptree aTree;
@@ -847,13 +822,7 @@ bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
             aPayload = aStream.str().c_str();
-            if (comphelper::LibreOfficeKit::isViewCallback())
-            {
-                SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-                rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
-            }
-            else
-                pViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+            rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
         }
         else
         {
@@ -1201,17 +1170,12 @@ void Outliner::ShowEndOfSearchDialog()
         if (!mbStringFound)
         {
             SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
-            if (comphelper::LibreOfficeKit::isViewCallback())
+            std::shared_ptr<ViewShell> pViewShell(mpWeakViewShell.lock());
+            if (pViewShell)
             {
-                std::shared_ptr<ViewShell> pViewShell(mpWeakViewShell.lock());
-                if (pViewShell)
-                {
-                    SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
-                    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, mpSearchItem->GetSearchString().toUtf8().getStr());
-                }
+                SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
+                rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, mpSearchItem->GetSearchString().toUtf8().getStr());
             }
-            else
-                mpDrawDocument->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND, mpSearchItem->GetSearchString().toUtf8().getStr());
         }
 
         // don't do anything else for search

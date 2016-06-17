@@ -377,20 +377,14 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (!bLast)
         UpdatePageRelativeURLs(static_cast<SdPage*>( pPage ), nPos, 1);
 
-    if (comphelper::LibreOfficeKit::isActive() &&
-        static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD)
+    if (comphelper::LibreOfficeKit::isActive() && static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD)
     {
-        if (comphelper::LibreOfficeKit::isViewCallback())
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
         {
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-            while (pViewShell)
-            {
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
-                pViewShell = SfxViewShell::GetNext(*pViewShell);
-            }
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
         }
-        else
-            libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
     }
 }
 
@@ -416,20 +410,14 @@ SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     if (!bLast)
         UpdatePageRelativeURLs(static_cast<SdPage*>(pPage), nPgNum, -1);
 
-    if (comphelper::LibreOfficeKit::isActive() &&
-        static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD)
+    if (comphelper::LibreOfficeKit::isActive() && static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD)
     {
-        if (comphelper::LibreOfficeKit::isViewCallback())
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
         {
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-            while (pViewShell)
-            {
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
-                pViewShell = SfxViewShell::GetNext(*pViewShell);
-            }
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
         }
-        else
-            libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
     }
 
     return pPage;

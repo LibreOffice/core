@@ -461,10 +461,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     }
     pOutlView->SetControlWord(nStat);
     pOutlView->SetBackgroundColor( aBackground );
-    if (comphelper::LibreOfficeKit::isViewCallback())
-        pOutlView->registerLibreOfficeKitViewCallback(SfxViewShell::Current());
-    else
-        pOutlView->registerLibreOfficeKitCallback(GetModel());
+    pOutlView->registerLibreOfficeKitViewCallback(SfxViewShell::Current());
     if (pText!=nullptr)
     {
         pOutlView->SetAnchorMode((EVAnchorMode)(pText->GetOutlinerViewAnchorMode()));
