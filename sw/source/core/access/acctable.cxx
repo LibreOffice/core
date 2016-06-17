@@ -557,15 +557,17 @@ void SwAccessibleTableData_Impl::GetRowColumnAndExtent(
                 maRows.upper_bound( rBox.Bottom() - maTabFramePos.Y() ) );
     rRow =
          static_cast< sal_Int32 >( std::distance( maRows.begin(), aStt ) );
-    rRowExtent =
-         static_cast< sal_Int32 >( std::distance( aStt, aEnd ) );
+    sal_Int32 nRowEnd =
+         static_cast< sal_Int32 >( std::distance( maRows.begin(), aEnd ) );
+    rRowExtent = nRowEnd - rRow;
 
     aStt = maColumns.lower_bound( rBox.Left() - maTabFramePos.X() );
     aEnd = maColumns.upper_bound( rBox.Right() - maTabFramePos.X() );
     rColumn =
          static_cast< sal_Int32 >( std::distance( maColumns.begin(), aStt ) );
-    rColumnExtent =
-         static_cast< sal_Int32 >( std::distance( aStt, aEnd ) );
+    sal_Int32 nColumnEnd =
+         static_cast< sal_Int32 >( std::distance( maColumns.begin(), aEnd ) );
+    rColumnExtent = nColumnEnd - rColumn;
 }
 
 class SwAccSingleTableSelHander_Impl : public SwAccTableSelHander_Impl
