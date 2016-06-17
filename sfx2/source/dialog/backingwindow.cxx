@@ -25,6 +25,7 @@
 #include <vcl/virdev.hxx>
 
 #include <unotools/dynamicmenuoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
@@ -260,6 +261,7 @@ void BackingWindow::initControls()
     mpLocalView->Hide();
 
     mpTemplateButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
+    mpRecentButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
 
     //set handlers
     mpLocalView->setCreateContextMenuHdl(LINK(this, BackingWindow, CreateContextMenuHdl));
@@ -587,43 +589,52 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
 
 IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
 {
-    initializeLocalView();
-
-    OString sId = pButton->GetCurItemIdent();
-
-    if( sId == "filter_writer" )
+    if(pButton == mpRecentButton)
     {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
+        SvtHistoryOptions().Clear(ePICKLIST);
+        mpAllRecentThumbnails->Reload();
+        return;
     }
-    else if( sId == "filter_calc" )
+    else if(pButton == mpTemplateButton)
     {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::CALC));
-    }
-    else if( sId == "filter_impress" )
-    {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::IMPRESS));
-    }
-    else if( sId == "filter_draw" )
-    {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::DRAW));
-    }
-    else if( sId == "manage" )
-    {
-        Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
+        initializeLocalView();
 
-        Sequence< css::beans::PropertyValue > aArgs(1);
-        PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = "Referer";
-        pArg[0].Value <<= OUString("private:user");
+        OString sId = pButton->GetCurItemIdent();
 
-        dispatchURL( ".uno:NewDoc", OUString(), xFrame, aArgs );
+        if( sId == "filter_writer" )
+        {
+            mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
+        }
+        else if( sId == "filter_calc" )
+        {
+            mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::CALC));
+        }
+        else if( sId == "filter_impress" )
+        {
+            mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::IMPRESS));
+        }
+        else if( sId == "filter_draw" )
+        {
+            mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::DRAW));
+        }
+        else if( sId == "manage" )
+        {
+            Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
+            Sequence< css::beans::PropertyValue > aArgs(1);
+            PropertyValue* pArg = aArgs.getArray();
+            pArg[0].Name = "Referer";
+            pArg[0].Value <<= OUString("private:user");
+
+            dispatchURL( ".uno:NewDoc", OUString(), xFrame, aArgs );
+
+        }
+
+        mpAllRecentThumbnails->Hide();
+        mpLocalView->Show();
+        mpLocalView->reload();
+        mpLocalView->GrabFocus();
     }
-
-    mpAllRecentThumbnails->Hide();
-    mpLocalView->Show();
-    mpLocalView->reload();
-    mpLocalView->GrabFocus();
 }
 
 IMPL_LINK_TYPED(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
