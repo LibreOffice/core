@@ -1,0 +1,4 @@
+impress_tests.start.start_impress
+impress_tests.start.select_page
+impress_tests.start.select_text
+impress_tests.start.select_object
