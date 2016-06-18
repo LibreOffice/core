@@ -542,7 +542,7 @@
 #define UNO_NAME_IS_IN_HEADER_FOOTER "IsInHeaderFooter"
 #define UNO_NAME_REDLINE_UNDO_START "RedlineUndoStart"
 #define UNO_NAME_REDLINE_UNDO_END "RedlineUndoEnd"
-#define UNO_NAME_REDLINE_ELEMENT_TYPE "RedlineElementType"
+#define UNO_NAME_REDLINE_UNDO_TYPE "RedlineUndoType"
 #define UNO_NAME_START_REDLINE "StartRedline"
 #define UNO_NAME_END_REDLINE "EndRedline"
 #define UNO_NAME_REDLINE_START "RedlineStart"

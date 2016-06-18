@@ -109,6 +109,8 @@ class SW_DLLPUBLIC SwRedlineData
     SwRedlineExtraData* pExtraData;
 
     OUString sComment;
+    sal_uInt32 nUndoStart;
+    sal_uInt32 nUndoEnd;
     DateTime aStamp;
     RedlineType_t eType;
     sal_uInt16 nAuthor, nSeqNo;
@@ -147,6 +149,8 @@ public:
     inline const SwRedlineData* Next() const{ return pNext; }
 
     void SetComment( const OUString& rS )     { sComment = rS; }
+    void SetUndoStart( const sal_uInt32& rUndoStart )     { nUndoStart = rUndoStart; }
+    void SetUndoEnd( const sal_uInt32& rUndoEnd )     { nUndoEnd = rUndoEnd; }
     void SetTimeStamp( const DateTime& rDT ) { aStamp = rDT; }
 
     void SetAutoFormatFlag()
@@ -237,8 +241,12 @@ public:
     RedlineType_t GetRealType( sal_uInt16 nPos = 0 ) const;
     RedlineType_t GetType( sal_uInt16 nPos = 0) const
         { return ( (RedlineType_t)(GetRealType( nPos ) & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
+    const sal_uInt32& GetUndoStart( sal_uInt16 nPos = 0 ) const;
+    const sal_uInt32& GetUndoEnd( sal_uInt16 nPos = 0 ) const;
     const OUString& GetComment( sal_uInt16 nPos = 0 ) const;
 
+    void SetUndoStart( const sal_uInt32& rUndoStart ) { pRedlineData->SetUndoStart( rUndoStart ); }
+    void SetUndoEnd( const sal_uInt32& rUndoEnd ) { pRedlineData->SetUndoEnd( rUndoEnd ); }
     void SetComment( const OUString& rS ) { pRedlineData->SetComment( rS ); }
 
     /** ExtraData gets copied, the pointer is therefore not taken over by

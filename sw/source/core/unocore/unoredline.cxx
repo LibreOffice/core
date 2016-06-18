@@ -309,17 +309,21 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     {
         aRet <<= !rRedline.IsDelLastPara();
     }
-    else if (rPropertyName == UNO_NAME_REDLINE_ELEMENT_TYPE)
+    else if (rPropertyName == UNO_NAME_REDLINE_UNDO_TYPE)
     {
-        aRet <<= OUString("text");
+        if( rRedline.GetUndoEnd() == COMPLETE_STRING || rRedline.GetUndoStart() == rRedline.GetUndoEnd()
+            || rRedline.GetUndoEnd() == 0 )
+            aRet <<= OUString("paragraph");
+        else
+            aRet <<= OUString("text");
     }
     else if (rPropertyName == UNO_NAME_REDLINE_UNDO_START)
     {
-        aRet <<= rRedline.GetPoint()->nContent.GetIndex() + 1;
+        aRet <<= rRedline.GetUndoStart();
     }
     else if (rPropertyName == UNO_NAME_REDLINE_UNDO_END)
     {
-        aRet <<= rRedline.GetPoint()->nContent.GetIndex();
+        aRet <<= rRedline.GetUndoEnd();
     }
     return aRet;
 }
@@ -352,7 +356,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     pRet[nPropIdx].Name = UNO_NAME_MERGE_LAST_PARA;
     pRet[nPropIdx++].Value <<= !rRedline.IsDelLastPara();
 
-    pRet[nPropIdx].Name = UNO_NAME_REDLINE_ELEMENT_TYPE;
+    pRet[nPropIdx].Name = UNO_NAME_REDLINE_UNDO_TYPE;
     pRet[nPropIdx++].Value <<= OUString("text");
 
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_UNDO_START;

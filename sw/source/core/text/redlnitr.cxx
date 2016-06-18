@@ -228,6 +228,8 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
         for( ; nAct < (sal_Int32)rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nAct )
         {
             rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
+            rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ]->SetUndoStart(nStart + 1);
+            rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ]->SetUndoEnd(nEnd);
 
             if( nNew < nEnd )
             {

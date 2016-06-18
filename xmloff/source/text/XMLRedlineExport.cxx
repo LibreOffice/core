@@ -73,7 +73,9 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp)
 ,   sRedlineSuccessorData("RedlineSuccessorData")
 ,   sRedlineText("RedlineText")
 ,   sRedlineType("RedlineType")
-,   sRedlineElementType("RedlineElementType")
+,   sRedlineUndoType("RedlineUndoType")
+,   sRedlineUndoStart("RedlineUndoStart")
+,   sRedlineUndoEnd("RedlineUndoEnd")
 ,   sUnknownChange("UnknownChange")
 ,   sStartRedline("StartRedline")
 ,   sEndRedline("EndRedline")
@@ -338,19 +340,19 @@ void XMLRedlineExport::ExportChangedRegion(
         aAny >>= sType;
 
         sal_uInt32 nParagraphIdx = 2, nCharStart, nCharEnd;
-        rPropSet->getPropertyValue("RedlineUndoStart") >>= nCharStart;
-        rPropSet->getPropertyValue("RedlineUndoEnd") >>= nCharEnd;
+        rPropSet->getPropertyValue(sRedlineUndoStart) >>= nCharStart;
+        rPropSet->getPropertyValue(sRedlineUndoEnd) >>= nCharEnd;
 
-        XMLTokenEnum eElementType = XML_TEXT;
-        OUString sElementType;
-        aAny = rPropSet->getPropertyValue(sRedlineElementType);
-        aAny >>= sElementType;
+        XMLTokenEnum eUndoType = XML_PARAGRAPH;
+        OUString sUndoType;
+        aAny = rPropSet->getPropertyValue(sRedlineUndoType);
+        aAny >>= sUndoType;
 
         if( sType == sFormat )
-            eElementType = XML_FORMAT_CHANGE;
-        else if( sElementType == "text" )
-            eElementType = XML_TEXT;
-        if(eElementType == XML_PARAGRAPH)
+            eUndoType = XML_FORMAT;
+        else if( sUndoType == "text" )
+            eUndoType = XML_TEXT;
+        if(eUndoType == XML_PARAGRAPH)
         {
             rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx));
             rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_PARAGRAPH);
@@ -360,7 +362,7 @@ void XMLRedlineExport::ExportChangedRegion(
             rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharStart));
             if( sType == sInsert || sType == sFormat )
                 rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharEnd));
-            rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, eElementType);
+            rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, eUndoType);
         }
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
                                    ConvertTypeName(sType), true, true);

@@ -1546,6 +1546,16 @@ const OUString& SwRangeRedline::GetComment( sal_uInt16 nPos ) const
     return GetRedlineData(nPos).sComment;
 }
 
+const sal_uInt32& SwRangeRedline::GetUndoStart( sal_uInt16 nPos ) const
+{
+    return GetRedlineData(nPos).nUndoStart;
+}
+
+const sal_uInt32& SwRangeRedline::GetUndoEnd( sal_uInt16 nPos ) const
+{
+    return GetRedlineData(nPos).nUndoEnd;
+}
+
 bool SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
 {
     if (*Start() < *rCmp.Start())
