@@ -76,7 +76,7 @@ namespace {
 OUString getObjectName(SdrObject* pObject)
 {
     if (pObject->GetName().isEmpty())
-        return OUString("Unnamed Drawinglayer object ") + OUString::number(pObject->GetOrdNum());
+        return "Unnamed Drawinglayer object " + OUString::number(pObject->GetOrdNum());
     else
         return pObject->GetName();
 }
