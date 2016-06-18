@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "da7fb54a_086610ed",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-06-18T15:02:46Z",
+      "side": 1,
+      "message": "This will do absolutely nothing in a non-debug build. So in a non-debug build, we still have the risk of writing beyond the end of the sRequest buffer.",
+      "revId": "a5a4d92b2ac10b910ce1de9dac6e97858a2390a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_5f1e19bb",
         "filename": "connectivity/source/drivers/firebird/Connection.cxx",
         "patchSetId": 3
