@@ -1027,7 +1027,6 @@ bool crashReportInfoExists()
         if (sep >= 0)
         {
             std::string key = line.substr(0, sep);
-            std::string value = line.substr(sep + 1);
             if (key == "DumpFile")
                 return true;
         }
