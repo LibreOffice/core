@@ -446,6 +446,7 @@ certain functionality.
 @li @c vcl.screensaverinhibitor
 @li @c vcl.scrollbar - Scroll Bars
 @li @c vcl.sm - Session Manager
+@li @c vcl.uitest - The UI testing framework code
 @li @c vcl.unity
 @li @c vcl.unx.print
 @li @c vcl.unx.dtrans
