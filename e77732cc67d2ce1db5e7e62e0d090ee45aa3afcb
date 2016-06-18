@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_2d07661d",
+        "filename": "include/svtools/printoptions.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-18T11:08:47Z",
+      "side": 1,
+      "message": "Having a unique_ptr and a shared_ptr point to the same thing makes no sense\n\nRather make this a shared_ptr, and drop the m_pImpl fields in the subclasses\n\nAnd then you can move the destructor logic up into this class, and drop it from the subclasses",
+      "revId": "e77732cc67d2ce1db5e7e62e0d090ee45aa3afcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
