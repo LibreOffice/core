@@ -69,13 +69,13 @@ void SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
     throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    mpUITest->executeCommand(rCommand);
+    UITest::executeCommand(rCommand);
 }
 
 css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocusWindow()
     throw (css::uno::RuntimeException, std::exception)
 {
-    std::unique_ptr<UIObject> pObj = mpUITest->getFocusTopWindow();
+    std::unique_ptr<UIObject> pObj = UITest::getFocusTopWindow();
     return new UIObjectUnoObj(std::move(pObj));
 }
 
