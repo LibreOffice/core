@@ -102,6 +102,8 @@ private:
     std::unique_ptr< XFillHatchItem > mpHatchItem;
     std::unique_ptr< XFillBitmapItem > mpBitmapItem;
 
+    bool mbEditModeChangePending;
+
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     bool         mbTitle;
