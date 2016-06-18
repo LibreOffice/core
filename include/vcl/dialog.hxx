@@ -96,7 +96,7 @@ public:
     virtual short   Execute();
     bool            IsInExecute() const { return mbInExecute; }
 
-    virtual FactoryFunction GetUITestFactory() const;
+    virtual FactoryFunction GetUITestFactory() const override;
 
     // Dialog::Execute replacement API
 public:
