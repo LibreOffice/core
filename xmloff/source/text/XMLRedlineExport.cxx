@@ -348,9 +348,7 @@ void XMLRedlineExport::ExportChangedRegion(
         aAny = rPropSet->getPropertyValue(sRedlineUndoType);
         aAny >>= sUndoType;
 
-        if( sType == sFormat )
-            eUndoType = XML_FORMAT;
-        else if( sUndoType == "text" )
+        if( sUndoType == "text" )
             eUndoType = XML_TEXT;
         if(eUndoType == XML_PARAGRAPH)
         {
@@ -362,7 +360,8 @@ void XMLRedlineExport::ExportChangedRegion(
             rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharStart));
             if( sType == sInsert || sType == sFormat )
                 rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharEnd));
-            rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, eUndoType);
+            if( sType != sFormat )
+                rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_TEXT);
         }
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
                                    ConvertTypeName(sType), true, true);

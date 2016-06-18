@@ -865,7 +865,6 @@ namespace xmloff { namespace token {
         TOKEN( "force-manual",                    XML_FORCE_MANUAL ),
         TOKEN( "foreground",                      XML_FOREGROUND ),
         TOKEN( "foreign-object",                  XML_FOREIGN_OBJECT ),
-        TOKEN( "format",                          XML_FORMAT ),
         TOKEN( "format-change",                   XML_FORMAT_CHANGE ),
         TOKEN( "format-source",                   XML_FORMAT_SOURCE ),
         TOKEN( "formatting-entry",                XML_FORMATTING_ENTRY ),
