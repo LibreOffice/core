@@ -94,6 +94,7 @@ SlideBackground::SlideBackground(
     mpGradientItem(),
     mpHatchItem(),
     mpBitmapItem(),
+    mbEditModeChangePending(false),
     mxFrame(rxFrame),
     maContext(),
     mbTitle(false),
@@ -302,6 +303,10 @@ void SlideBackground::addListener()
         tools::EventMultiplexerEvent::EID_CURRENT_PAGE |
         tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED |
         tools::EventMultiplexerEvent::EID_SHAPE_CHANGED |
+        tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL |
+        tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER |
+        tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION |
+        tools::EventMultiplexerEvent::EID_END_TEXT_EDIT |
         tools::EventMultiplexerEvent::EID_VIEW_ADDED);
 }
 
@@ -321,17 +326,29 @@ IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
         case tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
             populateMasterSlideDropdown();
             break;
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
+        case tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL:
+        case tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER:
+            mbEditModeChangePending = true;
+            break;
+        case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
+        case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
         {
-            ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
-
-            if (pMainViewShell)
+            if (mbEditModeChangePending)
             {
-                DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
-                EditMode eMode = pDrawViewShell->GetEditMode();
+                ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
 
-                if ( eMode == EM_MASTERPAGE)
-                    mpMasterSlide->Disable();
+                if (pMainViewShell)
+                {
+                    DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
+                    EditMode eMode = pDrawViewShell->GetEditMode();
+
+                    if ( eMode == EM_MASTERPAGE)
+                        mpMasterSlide->Disable();
+                    else // EM_PAGE
+                        mpMasterSlide->Enable();
+                }
+
+                mbEditModeChangePending = false;
             }
         }
         break;
@@ -405,8 +422,6 @@ void SlideBackground::updateMasterSlideSelection()
         SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
         mpMasterSlide->SelectEntry(pMasterPage->GetName());
     }
-    else
-        mpMasterSlide->SetNoSelection();
 }
 
 void SlideBackground::dispose()
