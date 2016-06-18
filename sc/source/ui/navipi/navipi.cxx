@@ -581,16 +581,15 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     //  eListMode is set from outside, Root further below
 
     aLbDocuments->SetDropDownLineCount(9);
-    OUString aOpen(" (");
-    aStrActive = aOpen;
-    aStrActive += OUString( ScResId( STR_ACTIVE ) );
-    aStrActive += ")";                                      // " (active)"
-    aStrNotActive = aOpen;
-    aStrNotActive += OUString( ScResId( STR_NOTACTIVE ) );
-    aStrNotActive += ")";                                   // " (not active)"
-    aStrHidden = aOpen;
-    aStrHidden += OUString( ScResId( STR_HIDDEN ) );
-    aStrHidden += ")";                                      // " (hidden)"
+    aStrActive    = " ("
+                  + OUString( ScResId( STR_ACTIVE ) )
+                  + ")";                                      // " (active)"
+    aStrNotActive = " ("
+                  + OUString( ScResId( STR_NOTACTIVE ) )
+                  + ")";                                   // " (not active)"
+    aStrHidden    = " ("
+                  + OUString( ScResId( STR_HIDDEN ) )
+                  + ")";                                      // " (hidden)"
 
     aTitleBase = GetText();
 
