@@ -1208,7 +1208,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         DrawBitmapEx(aDestPt, aDestSize, rBitmapEx);
         if (comphelper::LibreOfficeKit::isActive())
         {
-            EnableMapMode(true);
+            EnableMapMode();
             aDestPt.Move(-aOrigin.getX(), -aOrigin.getY());
         }
         return;
