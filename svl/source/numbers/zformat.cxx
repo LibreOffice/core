@@ -63,7 +63,7 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
 } // namespace
 
 const double D_MAX_U_LONG = (double) 0xffffffff;      // 4294967295.0
-const sal_uInt16 MAX_FRACTION_PREC = 3;
+const sal_uInt16 MAX_FRACTION_PREC = 4;
 const double D_EPS = 1.0E-2;
 
 const double D_MAX_D_BY_100  = 1.7E306;
@@ -2536,14 +2536,14 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                     double fTest = (double)x1/(double)y1;
                 while (!bStop)
                 {
-                    while (fTest > fOg)
+                    if (fTest > fOg)
                     {
-                        x1--;
+                        x1 = y1*fOg;
                         fTest = (double)x1/(double)y1;
                     }
-                    while (fTest < fUg && y1 > 1)
+                    if (fTest < fUg && y1 > 1)
                     {
-                        y1--;
+                        y1 = x1/fUg;
                         fTest = (double)x1/(double)y1;
                     }
                     if (fTest <= fOg)
