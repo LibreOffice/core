@@ -91,7 +91,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         if (rParameters.find("EXTEND") != rParameters.end())
         {
             auto itr = rParameters.find("EXTEND");
-            if (itr->second.equalsIgnoreAsciiCaseAscii("true") || itr->second == "1")
+            if (itr->second.equalsIgnoreAsciiCase("true") || itr->second == "1")
                 bExtend = true;
         }
 
