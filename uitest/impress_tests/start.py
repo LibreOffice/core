@@ -38,7 +38,7 @@ def start_impress(xContext):
 
     print(xEditWin.getChildren())
 
-    time.sleep(5)
+    time.sleep(1)
 
     ui_test.close_doc()
 
@@ -56,12 +56,12 @@ def select_page(xContext):
 
     xEditWin = xImpressDoc.getChild("impress_win")
 
-    time.sleep(10)
+    time.sleep(1)
     print(get_state_as_dict(xEditWin))
 
     xEditWin.executeAction("GOTO", mkPropertyValues({"PAGE": "2"}))
 
-    time.sleep(5)
+    time.sleep(1)
 
     print(get_state_as_dict(xEditWin))
 
@@ -81,7 +81,7 @@ def select_text(xContext):
 
     xEditWin = xImpressDoc.getChild("impress_win")
 
-    time.sleep(10)
+    time.sleep(1)
 
     print(get_state_as_dict(xEditWin))
 
@@ -102,10 +102,10 @@ def select_object(xContext):
     xEditWin = xImpressDoc.getChild("impress_win")
 
     xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
-    time.sleep(2)
+    time.sleep(1)
     xEditWin.executeAction("DESELECT", tuple())
 
-    time.sleep(4)
+    time.sleep(1)
 
     print(get_state_as_dict(xEditWin))
 
