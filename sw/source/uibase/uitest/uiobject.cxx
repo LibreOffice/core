@@ -44,14 +44,14 @@ StringMap SwEditWinUIObject::get_state()
     sal_uInt16 nPages = rWrtShell.GetPageCnt();
     aMap["Pages"] = OUString::number(nPages);
 
-    aMap["StartWord"] = OUString::number(rWrtShell.IsStartWord());
-    aMap["EndWord"] = OUString::number(rWrtShell.IsEndWord());
-    aMap["StartSentence"] = OUString::number(rWrtShell.IsStartSentence());
-    aMap["EndSentence"] = OUString::number(rWrtShell.IsEndSentence());
-    aMap["StartPara"] = OUString::number(rWrtShell.IsSttPara());
-    aMap["EndPara"] = OUString::number(rWrtShell.IsEndPara());
-    aMap["StartDoc"] = OUString::number(rWrtShell.IsStartOfDoc());
-    aMap["EndDoc"] = OUString::number(rWrtShell.IsEndOfDoc());
+    aMap["StartWord"] = OUString::boolean(rWrtShell.IsStartWord());
+    aMap["EndWord"] = OUString::boolean(rWrtShell.IsEndWord());
+    aMap["StartSentence"] = OUString::boolean(rWrtShell.IsStartSentence());
+    aMap["EndSentence"] = OUString::boolean(rWrtShell.IsEndSentence());
+    aMap["StartPara"] = OUString::boolean(rWrtShell.IsSttPara());
+    aMap["EndPara"] = OUString::boolean(rWrtShell.IsEndPara());
+    aMap["StartDoc"] = OUString::boolean(rWrtShell.IsStartOfDoc());
+    aMap["EndDoc"] = OUString::boolean(rWrtShell.IsEndOfDoc());
 
     return aMap;
 }
