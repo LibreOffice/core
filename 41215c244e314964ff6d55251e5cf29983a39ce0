@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_88a060f6",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-06-18T15:48:07Z",
+      "side": 1,
+      "message": "Same remark as the other patch: this will not work in a \"normal\" install outside of the build tree.\n\nI opened a discussion on the mailing list on how to achieve that for this file.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 1
+      },
+      "revId": "41215c244e314964ff6d55251e5cf29983a39ce0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
