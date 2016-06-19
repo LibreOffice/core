@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_4022eeba",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2315,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-19T23:29:17Z",
+      "side": 1,
+      "message": "This does not follow calc naming conventions.",
+      "revId": "aa51d283bb7de4c77899d55ac4ab869c4697142e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_a0301a09",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2341,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-19T23:29:17Z",
+      "side": 1,
+      "message": "This will fail for text that can not be represented by json strings without escaping. The big question is whether this can actually happen in a row or column header.\n\nEven worse toUtf8 should not be used on any UTF16 strings that are not controlled by the program. So you are never allowed to use toUtf8 on user strings. Use rtl::OUStringToOstring for that.",
+      "revId": "aa51d283bb7de4c77899d55ac4ab869c4697142e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_0040e655",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2348,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-19T23:29:17Z",
+      "side": 1,
+      "message": "This will cause invalid json files of there are no headers.\n\nIt is then going to remove \"[\\n\".\n\nThe correct way to handle a case like this is to have a bFirstRow \u003d true and a if (!bFirstRow) os.append(\", \");",
+      "revId": "aa51d283bb7de4c77899d55ac4ab869c4697142e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_c0351ef8",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2370,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-19T23:29:17Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "aa51d283bb7de4c77899d55ac4ab869c4697142e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_2025eac1",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2377,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-19T23:29:17Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "aa51d283bb7de4c77899d55ac4ab869c4697142e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_e03a22e7",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2379,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-19T23:29:17Z",
+      "side": 1,
+      "message": "If we need to convert all of that back to OUString again why are we not using OUStringBuffer?",
+      "revId": "aa51d283bb7de4c77899d55ac4ab869c4697142e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
