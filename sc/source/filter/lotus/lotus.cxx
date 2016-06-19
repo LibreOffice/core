@@ -51,9 +51,9 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
     if( bWithWK3 )
         eRet = aLotusImport.Read();
     else
-        eRet = 0xFFFFFFFF;  // WK1 /WKS erzwingen
+        eRet = 0xFFFFFFFF;  // force WK1 /WKS
 
-    // ACHTUNG: QUICK-HACK fuer WK1 / WKS  <->  WK3 / WK4
+    // WARNING: QUICK-HACK for WK1 / WKS  <->  WK3 / WK4
     if( eRet == 0xFFFFFFFF )
     {
         pStream->Seek( 0UL );
@@ -72,7 +72,7 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
 
     if (aContext.pLotusRoot->eFirstType == Lotus_WK3)
     {
-        // versuchen *.FM3-File zu laden
+        // try to load *.FM3 file
         INetURLObject aURL( rMedium.GetURLObject() );
         aURL.setExtension( "FM3" );
         SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ );

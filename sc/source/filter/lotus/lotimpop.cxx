@@ -126,7 +126,7 @@ bool ImportLotus::BofFm3()
 
 void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 {
-    OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record zu kurz!" );
+    OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record too short!" );
 
     sal_uInt8    nLTab, nWindow2;
     sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
