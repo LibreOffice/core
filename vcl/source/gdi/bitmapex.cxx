@@ -380,7 +380,7 @@ bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag
 
         aBitmapSize = aBitmap.GetSizePixel();
 
-        SAL_WARN_IF( !aMask || aBitmap.GetSizePixel() == aMask.GetSizePixel(), "vcl",
+        SAL_WARN_IF( !!aMask && aBitmap.GetSizePixel() != aMask.GetSizePixel(), "vcl",
                     "BitmapEx::Scale(): size mismatch for bitmap and alpha mask." );
     }
 
