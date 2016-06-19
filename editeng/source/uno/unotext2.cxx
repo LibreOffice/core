@@ -290,7 +290,7 @@ sal_Bool SAL_CALL SvxUnoTextContent::hasElements()
     }
     else
     {
-        return 0;
+        return false;
     }
 }
 

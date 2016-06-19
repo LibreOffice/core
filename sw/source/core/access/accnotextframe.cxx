@@ -260,7 +260,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
 
 // XAccesibleText
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getCaretPosition(  ) throw (css::uno::RuntimeException, std::exception){return 0;}
-sal_Bool SAL_CALL SwAccessibleNoTextFrame::setCaretPosition( sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return 0;}
+sal_Bool SAL_CALL SwAccessibleNoTextFrame::setCaretPosition( sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return false;}
 sal_Unicode SAL_CALL SwAccessibleNoTextFrame::getCharacter( sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return 0;}
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL SwAccessibleNoTextFrame::getCharacterAttributes( sal_Int32 , const css::uno::Sequence< OUString >& ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {

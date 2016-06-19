@@ -67,8 +67,8 @@ const css::uno::Reference<css::io::XObjectInputStream>& operator >> (
     _rFont.Underline = _rxInStream->readShort();
     _rFont.Strikeout = _rxInStream->readShort();
     _rFont.Orientation = static_cast< float >(_rxInStream->readDouble());
-    _rFont.Kerning = _rxInStream->readBoolean();
-    _rFont.WordLineMode = _rxInStream->readBoolean();
+    _rFont.Kerning = _rxInStream->readBoolean() != 0;
+    _rFont.WordLineMode = _rxInStream->readBoolean() != 0;
     _rFont.Type = _rxInStream->readShort();
     return _rxInStream;
 }

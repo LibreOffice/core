@@ -1520,7 +1520,7 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::ex
 }
 // XAccesibleText
 sal_Int32 SAL_CALL AccessibleShape::getCaretPosition(  ) throw (css::uno::RuntimeException, std::exception){return 0;}
-sal_Bool SAL_CALL AccessibleShape::setCaretPosition( sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return 0;}
+sal_Bool SAL_CALL AccessibleShape::setCaretPosition( sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return false;}
 sal_Unicode SAL_CALL AccessibleShape::getCharacter( sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception){return 0;}
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleShape::getCharacterAttributes( sal_Int32, const css::uno::Sequence< OUString >& ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {

@@ -31,6 +31,8 @@ public:
 
     TerminalCheck Char() const;
 
+    TerminalCheck AnyBoolean() const;
+
     TypeCheck Pointer() const;
 
     TypeCheck LvalueReference() const;

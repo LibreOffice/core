@@ -29,6 +29,22 @@ TerminalCheck TypeCheck::Char() const {
             || type_->isSpecificBuiltinType(clang::BuiltinType::Char_U)));
 }
 
+TerminalCheck TypeCheck::AnyBoolean() const {
+    if (type_->isBooleanType()) {
+        return TerminalCheck(true);
+    }
+    auto t = type_->getAs<clang::TypedefType>();
+    if (t == nullptr) {
+        return TerminalCheck(false);
+    }
+    auto n =t->getDecl()->getName();
+    return TerminalCheck(
+        n == "sal_Bool" || n == "BOOL" || n == "Boolean" || n == "FT_Bool"
+        || n == "FcBool" || n == "GLboolean" || n == "NPBool" || n == "UBool"
+        || n == "dbus_bool_t" || n == "gboolean" || n == "hb_bool_t"
+        || n == "jboolean");
+}
+
 TypeCheck TypeCheck::LvalueReference() const {
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::LValueReferenceType>();

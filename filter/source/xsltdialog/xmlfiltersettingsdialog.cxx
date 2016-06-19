@@ -1593,21 +1593,26 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
 
 OUString string_encode( const OUString & rText )
 {
+    static sal_Bool const uricNoSlash[] = {
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false,  true, false, false,  true, false,  true,  true,  //  !"#$%&'
+         true,  true,  true,  true, false,  true,  true, false,  // ()*+,-./
+         true,  true,  true,  true,  true,  true,  true,  true,  // 01234567
+         true,  true,  true, false, false,  true, false,  true,  // 89:;<=>?
+         true,  true,  true,  true,  true,  true,  true,  true,  // @ABCDEFG
+         true,  true,  true,  true,  true,  true,  true,  true,  // HIJKLMNO
+         true,  true,  true,  true,  true,  true,  true,  true,  // PQRSTUVW
+         true,  true,  true, false, false, false, false,  true,  // XYZ[\]^_
+        false,  true,  true,  true,  true,  true,  true,  true,  // `abcdefg
+         true,  true,  true,  true,  true,  true,  true,  true,  // hijklmno
+         true,  true,  true,  true,  true,  true,  true,  true,  // pqrstuvw
+         true,  true,  true, false, false, false,  true, false}; // xyz{|}~
 
-    static sal_Bool const aCharClass[] =
-    {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* UricNoSlash */
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, /* !"#$%&'()*+,-./*/
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, /*0123456789:;<=>?*/
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*@ABCDEFGHIJKLMNO*/
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /*PQRSTUVWXYZ[\]^_*/
-        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*`abcdefghijklmno*/
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /*pqrstuvwxyz{|}~ */
-    };
 
-
-    return Uri::encode( rText, aCharClass, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8 );
+    return Uri::encode( rText, uricNoSlash, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8 );
 }
 
 OUString string_decode( const OUString & rText )

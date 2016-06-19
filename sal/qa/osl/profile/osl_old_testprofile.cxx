@@ -48,7 +48,7 @@ void oldtests::test_profile()
     CPPUNIT_ASSERT(hProfile != nullptr);
     CPPUNIT_ASSERT_MESSAGE(
         "cannot write into init file",
-        osl_writeProfileBool( hProfile, "testsection", "testbool", 1 ));
+        osl_writeProfileBool( hProfile, "testsection", "testbool", true ));
     CPPUNIT_ASSERT(osl_closeProfile( hProfile ));
 
     // unsuccessful open

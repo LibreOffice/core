@@ -840,8 +840,8 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                     aFD.Underline = InStream->readShort();
                     aFD.Strikeout = InStream->readShort();
                     aFD.Orientation = (float)InStream->readDouble();
-                    aFD.Kerning = InStream->readBoolean();
-                    aFD.WordLineMode = InStream->readBoolean();
+                    aFD.Kerning = InStream->readBoolean() != 0;
+                    aFD.WordLineMode = InStream->readBoolean() != 0;
                     aFD.Type = InStream->readShort();
                     aValue <<= aFD;
                 }
@@ -955,8 +955,8 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                         pFD->Underline = InStream->readShort();
                         pFD->Strikeout = InStream->readShort();
                         pFD->Orientation = ( (float)(double)InStream->readShort() ) / 10;
-                        pFD->Kerning = InStream->readBoolean();
-                        pFD->WordLineMode = InStream->readBoolean();
+                        pFD->Kerning = InStream->readBoolean() != 0;
+                        pFD->WordLineMode = InStream->readBoolean() != 0;
                     }
                 }
                 else

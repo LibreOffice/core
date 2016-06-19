@@ -135,28 +135,31 @@ OUString parsePart(
     return buf.makeStringAndClear();
 }
 
-namespace
-{
-    OUString encodeNameOrParamFragment( OUString const & fragment )
-    {
-        static sal_Bool const aCharClass[] =
-        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* NameOrParamFragment */
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-          0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, /* !"#$%&'()*+,-./*/
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, /*0123456789:;<=>?*/
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*@ABCDEFGHIJKLMNO*/
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, /*PQRSTUVWXYZ[\]^_*/
-          0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*`abcdefghijklmno*/
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /*pqrstuvwxyz{|}~ */
-        };
+namespace {
 
-        return rtl::Uri::encode(
-            fragment,
-            aCharClass,
-            rtl_UriEncodeIgnoreEscapes,
-            RTL_TEXTENCODING_UTF8
-        );
-    }
+OUString encodeNameOrParamFragment(OUString const & fragment) {
+    static sal_Bool const nameOrParamFragment[] = {
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false,
+        false,  true, false, false,  true, false, false,  true,  //  !"#$%&'
+         true,  true,  true,  true,  true,  true,  true, false,  // ()*+,-./
+         true,  true,  true,  true,  true,  true,  true,  true,  // 01234567
+         true,  true,  true,  true, false, false, false, false,  // 89:;<=>?
+         true,  true,  true,  true,  true,  true,  true,  true,  // @ABCDEFG
+         true,  true,  true,  true,  true,  true,  true,  true,  // HIJKLMNO
+         true,  true,  true,  true,  true,  true,  true,  true,  // PQRSTUVW
+         true,  true,  true,  true, false,  true, false,  true,  // XYZ[\]^_
+        false,  true,  true,  true,  true,  true,  true,  true,  // `abcdefg
+         true,  true,  true,  true,  true,  true,  true,  true,  // hijklmno
+         true,  true,  true,  true,  true,  true,  true,  true,  // pqrstuvw
+         true,  true,  true, false, false, false,  true, false}; // xyz{|}~
+    return rtl::Uri::encode(
+        fragment, nameOrParamFragment, rtl_UriEncodeIgnoreEscapes,
+        RTL_TEXTENCODING_UTF8);
+}
+
 }
 
 bool parseSchemeSpecificPart(OUString const & part) {

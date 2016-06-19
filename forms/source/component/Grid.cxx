@@ -940,8 +940,8 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
         aFont.Underline = _rxInStream->readShort();
         aFont.Strikeout = _rxInStream->readShort();
         aFont.Orientation = ( (float)_rxInStream->readShort() ) / 10;
-        aFont.Kerning = _rxInStream->readBoolean();
-        aFont.WordLineMode = _rxInStream->readBoolean();
+        aFont.Kerning = _rxInStream->readBoolean() != 0;
+        aFont.WordLineMode = _rxInStream->readBoolean() != 0;
     }
     if ( nAnyMask & FONTSIZE )
     {

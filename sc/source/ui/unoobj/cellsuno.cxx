@@ -7066,7 +7066,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
             if (nBreak)
             {
                 aData.Position    = nCol;
-                aData.ManualBreak = (nBreak & BREAK_MANUAL);
+                aData.ManualBreak = (nBreak & BREAK_MANUAL) != 0;
                 pAry[nPos] = aData;
                 ++nPos;
             }

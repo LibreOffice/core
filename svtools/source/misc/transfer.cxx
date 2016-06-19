@@ -127,7 +127,7 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
         // this seems to be the only parameter currently that might contain such characters
         sal_Bool pToAccept[128];
         for (sal_Bool & rb : pToAccept)
-            rb = 0;
+            rb = false;
 
         const char aQuotedParamChars[] =
             "()<>@,;:/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";

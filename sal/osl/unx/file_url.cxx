@@ -64,18 +64,29 @@
 
 using namespace osl;
 
-/* a slightly modified version of Pchar in rtl/source/uri.c */
-const sal_Bool uriCharClass[128] =
-{
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* Pchar but without encoding slashes */
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* !"#$%&'()*+,-./  */
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, /* 0123456789:;<=>? */
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* @ABCDEFGHIJKLMNO */
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /* PQRSTUVWXYZ[\]^_ */
-  0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* `abcdefghijklmno */
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /* pqrstuvwxyz{|}~  */
-};
+namespace {
+
+// A slightly modified version of Pchar in rtl/source/uri.c, but without
+// encoding slashes:
+const sal_Bool uriCharClass[128] = {
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false,  true, false, false,  true, false,  true,  true,  //  !"#$%&'
+     true,  true,  true,  true,  true,  true,  true,  true,  // ()*+,-./
+     true,  true,  true,  true,  true,  true,  true,  true,  // 01234567
+     true,  true,  true, false, false,  true, false, false,  // 89:;<=>?
+     true,  true,  true,  true,  true,  true,  true,  true,  // @ABCDEFG
+     true,  true,  true,  true,  true,  true,  true,  true,  // HIJKLMNO
+     true,  true,  true,  true,  true,  true,  true,  true,  // PQRSTUVW
+     true,  true,  true, false, false, false, false,  true,  // XYZ[\]^_
+    false,  true,  true,  true,  true,  true,  true,  true,  // `abcdefg
+     true,  true,  true,  true,  true,  true,  true,  true,  // hijklmno
+     true,  true,  true,  true,  true,  true,  true,  true,  // pqrstuvw
+     true,  true,  true, false, false, false,  true, false}; // xyz{|}~
+
+}
 
 oslFileError SAL_CALL osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustrValidURL )
 {

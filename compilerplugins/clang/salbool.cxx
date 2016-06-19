@@ -16,6 +16,7 @@
 
 #include "compat.hxx"
 #include "plugin.hxx"
+#include "typecheck.hxx"
 
 namespace {
 
@@ -142,6 +143,8 @@ public:
     bool VisitCXXStaticCastExpr(CXXStaticCastExpr * expr);
 
     bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr);
+
+    bool VisitImplicitCastExpr(ImplicitCastExpr * expr);
 
     bool VisitReturnStmt(ReturnStmt const * stmt);
 
@@ -379,6 +382,53 @@ bool SalBool::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr) {
             << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
             << expr->getType() << expr->getSourceRange();
     }
+    return true;
+}
+
+bool SalBool::VisitImplicitCastExpr(ImplicitCastExpr * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    if (!isSalBool(expr->getType())) {
+        return true;
+    }
+    auto l = expr->getLocStart();
+    while (compiler.getSourceManager().isMacroArgExpansion(l)) {
+        l = compiler.getSourceManager().getImmediateMacroCallerLoc(l);
+    }
+    if (compat::isMacroBodyExpansion(compiler, l)) {
+        auto n = Lexer::getImmediateMacroName(
+            l, compiler.getSourceManager(), compiler.getLangOpts());
+        if (n == "sal_False" || n == "sal_True") {
+            return true;
+        }
+    }
+    auto e1 = expr->getSubExprAsWritten();
+    auto t = e1->getType();
+    if (!t->isFundamentalType() || loplugin::TypeCheck(t).AnyBoolean()) {
+        return true;
+    }
+    auto e2 = dyn_cast<ConditionalOperator>(e1);
+    if (e2 != nullptr) {
+        auto ic1 = dyn_cast<ImplicitCastExpr>(
+            e2->getTrueExpr()->IgnoreParens());
+        auto ic2 = dyn_cast<ImplicitCastExpr>(
+            e2->getFalseExpr()->IgnoreParens());
+        if (ic1 != nullptr && ic2 != nullptr
+            && ic1->getType()->isSpecificBuiltinType(BuiltinType::Int)
+            && (loplugin::TypeCheck(ic1->getSubExprAsWritten()->getType())
+                .AnyBoolean())
+            && ic2->getType()->isSpecificBuiltinType(BuiltinType::Int)
+            && (loplugin::TypeCheck(ic2->getSubExprAsWritten()->getType())
+                .AnyBoolean()))
+        {
+            return true;
+        }
+    }
+    report(
+        DiagnosticsEngine::Warning, "conversion from %0 to sal_Bool",
+        expr->getLocStart())
+        << t << expr->getSourceRange();
     return true;
 }
 

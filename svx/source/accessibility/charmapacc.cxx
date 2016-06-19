@@ -741,7 +741,7 @@ sal_Bool SvxShowCharSetItemAcc::doAccessibleAction ( sal_Int32 nIndex ) throw (I
     if( nIndex == 0 )
     {
         mpParent->mrParent.OutputIndex( mpParent->mnId );
-        return 1;
+        return true;
     }
     throw IndexOutOfBoundsException();
 }
