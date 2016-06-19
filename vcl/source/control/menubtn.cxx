@@ -168,4 +168,22 @@ void MenuButton::SetPopupMenu( PopupMenu* pNewMenu )
     mpMenu = pNewMenu;
 }
 
+//class MenuToggleButton ----------------------------------------------------
+
+MenuToggleButton::MenuToggleButton( vcl::Window* pParent, WinBits nWinBits )
+    : MenuButton( pParent, nWinBits )
+{
+}
+
+MenuToggleButton::~MenuToggleButton()
+{
+    disposeOnce();
+}
+
+void MenuToggleButton::SetActive( bool bSel )
+{
+    mbIsActive = bSel;
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

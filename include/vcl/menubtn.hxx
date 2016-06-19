@@ -78,6 +78,16 @@ public:
     void            SetSelectHdl( const Link<MenuButton *, void>& rLink ) { maSelectHdl = rLink; }
 };
 
+
+class VCL_DLLPUBLIC MenuToggleButton : public MenuButton
+{
+public:
+    explicit        MenuToggleButton( vcl::Window* pParent, WinBits nStyle = 0 );
+    virtual         ~MenuToggleButton();
+
+    void            SetActive( bool bSel );
+};
+
 #endif // INCLUDED_VCL_MENUBTN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

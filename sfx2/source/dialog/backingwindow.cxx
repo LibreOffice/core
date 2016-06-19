@@ -256,6 +256,7 @@ void BackingWindow::initControls()
     mpAllRecentThumbnails->mnFileTypes |= TYPE_OTHER;
     mpAllRecentThumbnails->Reload();
     mpAllRecentThumbnails->ShowTooltips( true );
+    mpRecentButton->SetActive(true);
 
     //initialize Template view
     mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
@@ -345,7 +346,7 @@ void BackingWindow::setupButton( PushButton* pButton )
     pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
 }
 
-void BackingWindow::setupButton( MenuButton* pButton )
+void BackingWindow::setupButton( MenuToggleButton* pButton )
 {
     vcl::Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
     aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
@@ -595,6 +596,9 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
         mpLocalView->Hide();
         mpAllRecentThumbnails->Show();
         mpAllRecentThumbnails->GrabFocus();
+        mpRecentButton->SetActive(true);
+        mpTemplateButton->SetActive(false);
+        mpTemplateButton->Invalidate();
     }
     else if( pButton == mpTemplateButton )
     {
@@ -604,6 +608,9 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
         mpLocalView->Show();
         mpLocalView->reload();
         mpLocalView->GrabFocus();
+        mpRecentButton->SetActive(false);
+        mpRecentButton->Invalidate();
+        mpTemplateButton->SetActive(true);
     }
 }
 
@@ -654,6 +661,9 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
         mpLocalView->Show();
         mpLocalView->reload();
         mpLocalView->GrabFocus();
+        mpRecentButton->SetActive(false);
+        mpTemplateButton->SetActive(true);
+        mpRecentButton->Invalidate();
     }
 }
 
