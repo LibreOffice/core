@@ -329,9 +329,6 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
 
-    // XUpdatable
-    virtual void SAL_CALL update() throw ( css::uno::RuntimeException, std::exception ) override;
-
     // XSubToolbarController
     // Ugly HACK to cause ToolBarManager ask our controller for updated image, in case of icon theme change.
     virtual sal_Bool SAL_CALL opensSubToolbar() throw ( css::uno::RuntimeException, std::exception ) override;
@@ -393,12 +390,6 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
     else
         // Simple save button, without the dropdown.
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~ ToolBoxItemBits::DROPDOWN );
-}
-
-void SaveToolbarController::update()
-    throw ( css::uno::RuntimeException, std::exception )
-{
-    PopupMenuToolbarController::update();
 
     if ( m_xModifiable.is() )
     {
