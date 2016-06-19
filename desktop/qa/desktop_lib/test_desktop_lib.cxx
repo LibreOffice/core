@@ -14,7 +14,6 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <basebmp/bitmapdevice.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -30,6 +29,7 @@
 #include <svl/srchitem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/tempfile.hxx>
+#include <vcl/svapp.hxx>
 
 #include <lib/init.hxx>
 
@@ -86,7 +86,11 @@ public:
     void testWriterComments();
     void testModifiedStatus();
     void testSheetOperations();
+    void testContextMenuCalc();
+    void testContextMenuWriter();
+    void testContextMenuImpress();
     void testNotificationCompression();
+
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetFonts);
@@ -107,6 +111,9 @@ public:
     CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST(testModifiedStatus);
     CPPUNIT_TEST(testSheetOperations);
+    CPPUNIT_TEST(testContextMenuCalc);
+    CPPUNIT_TEST(testContextMenuWriter);
+    CPPUNIT_TEST(testContextMenuImpress);
     CPPUNIT_TEST(testNotificationCompression);
     CPPUNIT_TEST_SUITE_END();
 
@@ -124,6 +131,10 @@ public:
     // for testModifiedStatus
     osl::Condition m_aStateChangedCondition;
     bool m_bModified;
+
+    // for testContextMenu{Calc, Writer}
+    osl::Condition m_aContextMenuCondition;
+    boost::property_tree::ptree m_aContextMenuResult;
 };
 
 LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDocumentType eType)
@@ -209,6 +220,14 @@ void DesktopLOKTest::callbackImpl(int nType, const char* pPayload)
             m_bModified = aPayload.copy(aPrefix.getLength()).toBoolean();
             m_aStateChangedCondition.set();
         }
+    }
+    break;
+    case LOK_CALLBACK_CONTEXT_MENU:
+    {
+        m_aContextMenuResult.clear();
+        std::stringstream aStream(pPayload);
+        boost::property_tree::read_json(aStream, m_aContextMenuResult);
+        m_aContextMenuCondition.set();
     }
     break;
     }
@@ -336,6 +355,7 @@ void DesktopLOKTest::testSearchCalc()
         {"SearchItem.Backward", uno::makeAny(false)},
         {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
+
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 
@@ -386,9 +406,7 @@ void DesktopLOKTest::testPaintTile()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     int nCanvasWidth = 100;
     int nCanvasHeight = 300;
-    sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(basebmp::Format::ThirtyTwoBitTcMaskBGRA,
-                                                               nCanvasWidth);
-    std::vector<unsigned char> aBuffer(nStride * nCanvasHeight);
+    std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
     int nTilePosX = 0;
     int nTilePosY = 0;
     int nTileWidth = 1000;
@@ -449,7 +467,6 @@ void DesktopLOKTest::testPasteWriterJPEG()
 {
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    OString aText("hello");
 
     OUString aFileURL;
     createFileURL(OUString::createFromAscii("paste.jpg"), aFileURL);
@@ -623,7 +640,7 @@ void DesktopLOKTest::testCommandResult()
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
     Scheduler::ProcessEventsToIdle();
-    m_aCommandResultCondition.wait(aTimeValue);
+    m_aCommandResultCondition.wait(&aTimeValue);
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
 
@@ -633,7 +650,7 @@ void DesktopLOKTest::testCommandResult()
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
     Scheduler::ProcessEventsToIdle();
-    m_aCommandResultCondition.wait(aTimeValue);
+    m_aCommandResultCondition.wait(&aTimeValue);
 
     boost::property_tree::ptree aTree;
     std::stringstream aStream(m_aCommandResult.getStr());
@@ -656,7 +673,8 @@ void DesktopLOKTest::testWriterComments()
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
     Scheduler::ProcessEventsToIdle();
-    m_aCommandResultCondition.wait(aTimeValue);
+
+    m_aCommandResultCondition.wait(&aTimeValue);
     CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
     xToolkit->reschedule();
 
@@ -696,6 +714,7 @@ void DesktopLOKTest::testModifiedStatus()
     m_bModified = false;
     m_aStateChangedCondition.reset();
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    Scheduler::ProcessEventsToIdle();
     TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
     m_aStateChangedCondition.wait(&aTimeValue);
     Scheduler::ProcessEventsToIdle();
@@ -709,6 +728,7 @@ void DesktopLOKTest::testModifiedStatus()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", "TakeOwnership"));
+    Scheduler::ProcessEventsToIdle();
     m_aStateChangedCondition.wait(&aTimeValue);
     Scheduler::ProcessEventsToIdle();
 
@@ -718,6 +738,7 @@ void DesktopLOKTest::testModifiedStatus()
     // Modify the document again
     m_aStateChangedCondition.reset();
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
+    Scheduler::ProcessEventsToIdle();
     m_aStateChangedCondition.wait(&aTimeValue);
     Scheduler::ProcessEventsToIdle();
 
@@ -785,44 +806,207 @@ void DesktopLOKTest::testNotificationCompression()
     std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(callbackCompressionTest, &notifs));
 
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // 0
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // 1
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Superseeded.
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // Should be dropped.
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 2
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // Superseeded.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 3
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // Superseeded.
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 2
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 3
     handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 4
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 5
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 6
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 7
+    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // 5
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 6
     handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // Superseeded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // Superseeded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Superseedd.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 7
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // 8
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // 9
+    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // 10
+    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // 11
+    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // 12
+    handler->queue(LOK_CALLBACK_SET_PART, "1"); // 13
+    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // Should be dropped.
+    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_SET_PART, "1"); // Should be dropped.
 
-    flushTimers();
+    Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(8), notifs.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(13), notifs.size());
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, (int)std::get<0>(notifs[0]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[0]));
+    size_t i = 0;
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[1]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[1]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[2]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[2]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[3]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[3]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[4]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[4]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_MOUSE_POINTER, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("text"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[5]));
-    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Bold"), std::get<1>(notifs[5]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[6]));
-    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[6]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[7]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[7]));
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION_START, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION_END, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CELL_CURSOR, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CURSOR_VISIBLE, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CELL_FORMULA, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("blah"), std::get<1>(notifs[i++]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_SET_PART, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), std::get<1>(notifs[i++]));
+}
+
+namespace {
+
+    void verifyContextMenuStructure(boost::property_tree::ptree& aRoot)
+    {
+        for (const auto& aItemPair: aRoot)
+        {
+            // This is an array, so no key
+            CPPUNIT_ASSERT_EQUAL(std::string(aItemPair.first.data()), std::string(""));
+
+            boost::property_tree::ptree aItemValue = aItemPair.second;
+            boost::optional<boost::property_tree::ptree&> aText = aItemValue.get_child_optional("text");
+            boost::optional<boost::property_tree::ptree&> aType = aItemValue.get_child_optional("type");
+            boost::optional<boost::property_tree::ptree&> aCommand = aItemValue.get_child_optional("command");
+            boost::optional<boost::property_tree::ptree&> aSubmenu = aItemValue.get_child_optional("menu");
+            boost::optional<boost::property_tree::ptree&> aEnabled = aItemValue.get_child_optional("enabled");
+            boost::optional<boost::property_tree::ptree&> aChecktype = aItemValue.get_child_optional("checktype");
+            boost::optional<boost::property_tree::ptree&> aChecked = aItemValue.get_child_optional("checked");
+
+            // type is omnipresent
+            CPPUNIT_ASSERT( aType );
+
+            // seperator doesn't have any other attribs
+            if ( aType.get().data() == "separator" )
+            {
+                CPPUNIT_ASSERT( !aText && !aCommand && !aSubmenu && !aEnabled && !aChecktype && !aChecked );
+            }
+            else if ( aType.get().data() == "command" )
+            {
+                CPPUNIT_ASSERT( aCommand && aText );
+            }
+            else if ( aType.get().data() == "menu")
+            {
+                CPPUNIT_ASSERT( aSubmenu && aText );
+                verifyContextMenuStructure( aSubmenu.get() );
+            }
+
+            if ( aChecktype )
+            {
+                CPPUNIT_ASSERT( aChecktype.get().data() == "radio" ||
+                                aChecktype.get().data() == "checkmark" ||
+                                aChecktype.get().data() == "auto" );
+
+                CPPUNIT_ASSERT( aChecked &&
+                                ( aChecked.get().data() == "true" || aChecked.get().data() == "false" ) );
+            }
+        }
+
+    }
+
+} // end anonymous namespace
+
+void DesktopLOKTest::testContextMenuCalc()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods", LOK_DOCTYPE_SPREADSHEET);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    // Values in twips
+    int row5 = 1150;
+    int col1 = 1100;
+
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      col1, row5,
+                                      1, 4, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    m_aContextMenuCondition.wait(&aTimeValue);
+
+    CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
+    boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
+    CPPUNIT_ASSERT( aMenu );
+    verifyContextMenuStructure( aMenu.get() );
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testContextMenuWriter()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt", LOK_DOCTYPE_TEXT);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    Point aRandomPoint(1150, 1100);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      aRandomPoint.X(), aRandomPoint.Y(),
+                                      1, 4, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    m_aContextMenuCondition.wait(&aTimeValue);
+
+    CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
+    boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
+    CPPUNIT_ASSERT( aMenu );
+    verifyContextMenuStructure( aMenu.get() );
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testContextMenuImpress()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp", LOK_DOCTYPE_PRESENTATION);
+    pDocument->pClass->initializeForRendering(pDocument, nullptr);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+
+    Point aRandomPoint(1150, 1100);
+    pDocument->pClass->postMouseEvent(pDocument,
+                                      LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      aRandomPoint.X(), aRandomPoint.Y(),
+                                      1, 4, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    m_aContextMenuCondition.wait(&aTimeValue);
+
+    CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
+    boost::optional<boost::property_tree::ptree&> aMenu = m_aContextMenuResult.get_child_optional("menu");
+    CPPUNIT_ASSERT( aMenu );
+    verifyContextMenuStructure( aMenu.get() );
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
