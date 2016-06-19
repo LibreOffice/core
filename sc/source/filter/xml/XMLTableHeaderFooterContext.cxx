@@ -25,6 +25,7 @@
 #include <comphelper/extract.hxx>
 
 #include "unonames.hxx"
+#include "textuno.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -565,10 +565,13 @@ ScPageHFItem::~ScPageHFItem()
 
 bool ScPageHFItem::QueryValue( uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
-    uno::Reference<sheet::XHeaderFooterContent> xContent =
-        new ScHeaderFooterContentObj( pLeftArea, pCenterArea, pRightArea );
+    rtl::Reference<ScHeaderFooterContentObj> xContent =
+        new ScHeaderFooterContentObj();
+    xContent->Init(pLeftArea, pCenterArea, pRightArea);
 
-    rVal <<= xContent;
+    uno::Reference<sheet::XHeaderFooterContent> xCont(xContent.get());
+
+    rVal <<= xCont;
     return true;
 }
 
