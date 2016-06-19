@@ -6286,7 +6286,7 @@ void Test::testFuncFTESTBug()
     m_pDoc->SetValue(7, 2, 0, 6.0); // H3
     m_pDoc->SetValue(8, 0, 0, 5.0); // I1
     m_pDoc->SetValue(8, 1, 0, 7.0); // I2
-    // FTest returns a wrong value: 1.09544512
+    // tdf#93329
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.9046, m_pDoc->GetValue(aPos), 10e-4);
 
     m_pDoc->DeleteTab(0);
