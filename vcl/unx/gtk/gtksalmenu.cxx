@@ -852,7 +852,7 @@ namespace
 {
     void DestroyMemoryStream(gpointer data)
     {
-        SvMemoryStream* pMemStm = reinterpret_cast<SvMemoryStream*>(data);
+        SvMemoryStream* pMemStm = static_cast<SvMemoryStream*>(data);
         delete pMemStm;
     }
 }
