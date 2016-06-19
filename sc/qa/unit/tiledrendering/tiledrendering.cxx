@@ -163,8 +163,6 @@ void ScTiledRenderingTest::testRowColumnSelections()
 {
     comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
-    //ScDocument* pDoc = pModelObj->GetDocument();
-
     uno::Sequence<beans::PropertyValue> aArgs(2);
 
     // Select the 5th row with no modifier
