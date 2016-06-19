@@ -256,6 +256,7 @@ void BackingWindow::initControls()
     mpAllRecentThumbnails->mnFileTypes |= TYPE_OTHER;
     mpAllRecentThumbnails->Reload();
     mpAllRecentThumbnails->ShowTooltips( true );
+    mpRecentButton->SetAsSelected(true);
 
     //initialize Template view
     mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
@@ -573,6 +574,11 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
         dispatchURL( "private:factory/smath" );
     else if( pButton == mpOpenButton )
     {
+        mpRecentButton->SetAsSelected(false);
+        mpTemplateButton->SetAsSelected(false);
+        mpRecentButton->Invalidate();
+        mpTemplateButton->Invalidate();
+
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
         Sequence< css::beans::PropertyValue > aArgs(1);
@@ -584,6 +590,11 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
     }
     else if( pButton == mpRemoteButton )
     {
+        mpRecentButton->SetAsSelected(false);
+        mpTemplateButton->SetAsSelected(false);
+        mpRecentButton->Invalidate();
+        mpTemplateButton->Invalidate();
+
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
         Sequence< css::beans::PropertyValue > aArgs(0);
@@ -595,6 +606,9 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
         mpLocalView->Hide();
         mpAllRecentThumbnails->Show();
         mpAllRecentThumbnails->GrabFocus();
+        mpRecentButton->SetAsSelected(true);
+        mpTemplateButton->SetAsSelected(false);
+        mpTemplateButton->Invalidate();
     }
     else if( pButton == mpTemplateButton )
     {
@@ -604,6 +618,9 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
         mpLocalView->Show();
         mpLocalView->reload();
         mpLocalView->GrabFocus();
+        mpRecentButton->SetAsSelected(false);
+        mpRecentButton->Invalidate();
+        mpTemplateButton->SetAsSelected(true);
     }
 }
 
@@ -654,6 +671,9 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
         mpLocalView->Show();
         mpLocalView->reload();
         mpLocalView->GrabFocus();
+        mpRecentButton->SetAsSelected(false);
+        mpTemplateButton->SetAsSelected(true);
+        mpRecentButton->Invalidate();
     }
 }
 

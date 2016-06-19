@@ -642,6 +642,7 @@ void PushButton::ImplInitPushButtonData()
     meState         = TRISTATE_FALSE;
     meSaveValue     = TRISTATE_FALSE;
     mnDDStyle       = PushButtonDropdownStyle::NONE;
+    mbIsSelected    = false;
     mbPressed       = false;
     mbInUserDraw    = false;
 }
@@ -951,7 +952,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     bool bNativeOK = false;
 
     // adjust style if button should be rendered 'pressed'
-    if (mbPressed)
+    if (mbPressed || mbIsSelected)
         nButtonStyle |= DrawButtonFlags::Pressed;
 
     // TODO: move this to Window class or make it a member !!!
@@ -1004,7 +1005,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
                 ImplControlValue aControlValue;
                 ControlState nState = ControlState::NONE;
 
-                if (mbPressed)
+                if (mbPressed || mbIsSelected)
                     nState |= ControlState::PRESSED;
                 if (ImplGetButtonState() & DrawButtonFlags::Pressed)
                     nState |= ControlState::PRESSED;
@@ -1018,6 +1019,12 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
                 if (IsMouseOver() && aInRect.IsInside(GetPointerPosPixel()))
                     nState |= ControlState::ROLLOVER;
 
+                if ( IsMouseOver() && aInRect.IsInside(GetPointerPosPixel()) && mbIsSelected)
+                {
+                    nState |= ControlState::ROLLOVER;
+                    nButtonStyle &= ~DrawButtonFlags::Pressed;
+                }
+
                 bNativeOK = rRenderContext.DrawNativeControl(aCtrlType, PART_BUTTON_DOWN, aInRect, nState,
                                                              aControlValue, OUString());
             }
@@ -1027,7 +1034,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     if (bNativeOK)
         return;
 
-    bool bRollOver = IsMouseOver() && aInRect.IsInside(GetPointerPosPixel());
+    bool bRollOver = (IsMouseOver() && aInRect.IsInside(GetPointerPosPixel()));
     bool bDrawMenuSep = true;
     if (GetStyle() & WB_FLATBUTTON)
     {
@@ -1040,7 +1047,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         Rectangle aCtrlRegion(aInRect);
         ControlState nState = ControlState::NONE;
 
-        if (mbPressed || IsChecked())
+        if (mbPressed || IsChecked() || mbIsSelected)
             nState |= ControlState::PRESSED;
         if (ImplGetButtonState() & DrawButtonFlags::Pressed)
             nState |= ControlState::PRESSED;
@@ -1051,8 +1058,11 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         if (Window::IsEnabled())
             nState |= ControlState::ENABLED;
 
-        if (bRollOver)
+        if (bRollOver || mbIsSelected)
             nState |= ControlState::ROLLOVER;
+
+        if (mbIsSelected && bRollOver)
+            nState &= ~ControlState::PRESSED;
 
         if (GetStyle() & WB_BEVELBUTTON)
             aControlValue.mbBevelButton = true;
@@ -1619,6 +1629,11 @@ void PushButton::SetPressed( bool bPressed )
         mbPressed = bPressed;
         CompatStateChanged( StateChangedType::Data );
     }
+}
+
+void PushButton::SetAsSelected( bool bSel )
+{
+        mbIsSelected = bSel;
 }
 
 void PushButton::EndSelection()

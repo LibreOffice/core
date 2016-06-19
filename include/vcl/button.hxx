@@ -120,6 +120,7 @@ protected:
     PushButtonDropdownStyle mnDDStyle;
     bool            mbPressed;
     bool            mbInUserDraw;
+    bool            mbIsSelected;
 
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
     SAL_DLLPRIVATE WinBits         ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
@@ -188,6 +189,8 @@ public:
 
     void            SetPressed( bool bPressed );
     bool            IsPressed() const { return mbPressed; }
+
+    void            SetAsSelected( bool bSel );
 
     void            EndSelection();
 
