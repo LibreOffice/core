@@ -180,8 +180,6 @@ void RecentDocsView::Reload()
 
             if (rRecentEntry[j].Name == "URL")
                 a >>= aURL;
-            else if (rRecentEntry[j].Name == "Title")
-                a >>= aTitle;
             //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
             else if (rRecentEntry[j].Name == "Thumbnail" && officecfg::Office::Common::History::RecentDocsThumbnail::get())
             {
@@ -197,6 +195,13 @@ void RecentDocsView::Reload()
                     aThumbnail = aReader.Read();
                 }
             }
+        }
+
+        if(!aURL.isEmpty())
+        {
+            INetURLObject  aURLObj( aURL );
+            //Remove extension from url's last segment and use it as title
+            aTitle = aURLObj.GetBase(); //DECODE_WITH_CHARSET
         }
 
         if (isAcceptedFile(aURL))
