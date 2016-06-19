@@ -283,9 +283,6 @@ void ScFilterListBox::EndInit()
 
 void ScFilterListBox::LoseFocus()
 {
-#ifndef UNX
-    Hide();
-#endif
     vcl::Window::LoseFocus();
 }
 
