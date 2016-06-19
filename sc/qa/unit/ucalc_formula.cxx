@@ -6270,6 +6270,94 @@ void Test::testFuncFTEST()
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.0110, m_pDoc->GetValue(aPos), 10e-4);
 
     m_pDoc->DeleteTab(0);
+    m_pDoc->InsertTab(0, "FTest2");
+
+    /* Summary of the following test
+       A1:A5   =  SQRT(C1*9/10)*{ 1.0, 1.0, 1.0, 1.0, 1.0 };
+       A6:A10  = -SQRT(C1*9/10)*{ 1.0, 1.0, 1.0, 1.0, 1.0 };
+       B1:B10  =  SQRT(C2*19/20)*{ 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+       B11:B20 = -SQRT(C2*19/20)*{ 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+       C1      =  POWER(1.5, D1)   ; This is going to be the sample variance of the vector A1:A10
+       C2      =  POWER(1.5, D2)   ; This is going to be the sample variance of the vector B1:B20
+       D1 and D2 are varied over { -5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 }
+
+       Result of FTEST(A1:A10;B1:B20) in Calc is compared with that from Octave's var_test() function for each value of D1 and D2.
+
+       The minimum variance ratio obtained in this way is 0.017342 and the maximum variance ratio is 57.665039
+    */
+
+    const size_t nNumParams = 11;
+    const double fParameter[nNumParams] = { -5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 };
+
+    // Results of var_test() from Octave
+    const double fResults[nNumParams][nNumParams] = {
+        { 0.9451191535603041,0.5429768686792684,0.213130093422756,0.06607644828558357,0.0169804365506927,0.003790723514148109,
+          0.0007645345628801703,0.0001435746909905777,2.566562398786942e-05,4.436218417280813e-06,7.495090956766148e-07 },
+        { 0.4360331979746912,0.9451191535603054,0.5429768686792684,0.2131300934227565,0.06607644828558357,0.0169804365506927,
+          0.003790723514148109,0.0007645345628801703,0.0001435746909905777,2.566562398786942e-05,4.436218417280813e-06 },
+        { 0.1309752286653509,0.4360331979746914,0.9451191535603058,0.5429768686792684,0.2131300934227565,0.06607644828558357,
+          0.0169804365506927,0.003790723514148109,0.0007645345628801703,0.0001435746909905777,2.566562398786942e-05 },
+        { 0.02453502500565108,0.1309752286653514,0.4360331979746914,0.9451191535603058,0.5429768686792689,0.2131300934227565,
+          0.06607644828558357,0.0169804365506927,0.003790723514148109,0.0007645345628801703,0.0001435746909905777 },
+        { 0.002886791075972228,0.02453502500565108,0.1309752286653514,0.4360331979746914,0.9451191535603041,0.5429768686792689,
+          0.2131300934227565,0.06607644828558357,0.0169804365506927,0.003790723514148109,0.0007645345628801703 },
+        { 0.0002237196492846927,0.002886791075972228,0.02453502500565108,0.1309752286653509,0.4360331979746912,0.9451191535603036,
+          0.5429768686792689,0.2131300934227565,0.06607644828558357,0.0169804365506927,0.003790723514148109 },
+        { 1.224926820153627e-05,0.0002237196492846927,0.002886791075972228,0.02453502500565108,0.1309752286653509,0.4360331979746914,
+          0.9451191535603054,0.5429768686792684,0.2131300934227565,0.06607644828558357,0.0169804365506927 },
+        { 5.109390206481379e-07,1.224926820153627e-05,0.0002237196492846927,0.002886791075972228,0.02453502500565108,
+          0.1309752286653509,0.4360331979746914,0.9451191535603058,0.5429768686792684,0.213130093422756,0.06607644828558357 },
+        { 1.739106880727093e-08,5.109390206481379e-07,1.224926820153627e-05,0.0002237196492846927,0.002886791075972228,
+          0.02453502500565086,0.1309752286653509,0.4360331979746914,0.9451191535603041,0.5429768686792684,0.2131300934227565 },
+        { 5.111255862999542e-10,1.739106880727093e-08,5.109390206481379e-07,1.224926820153627e-05,0.0002237196492846927,
+          0.002886791075972228,0.02453502500565108,0.1309752286653516,0.4360331979746914,0.9451191535603058,0.5429768686792684 },
+        { 1.354649725726631e-11,5.111255862999542e-10,1.739106880727093e-08,5.109390206481379e-07,1.224926820153627e-05,
+          0.0002237196492846927,0.002886791075972228,0.02453502500565108,0.1309752286653509,0.4360331979746914,0.9451191535603054 }
+    };
+
+    m_pDoc->SetValue(3, 0, 0, fParameter[0]); // D1
+    m_pDoc->SetValue(3, 1, 0, fParameter[0]); // D2
+    aPos.Set(2,0,0); // C1
+    m_pDoc->SetString(aPos, "=POWER(1.5;D1)" ); // C1
+    aPos.Set(2, 1, 0);     // C2
+    m_pDoc->SetString(aPos, "=POWER(1.5;D2)" ); // C2
+    for ( SCROW nRow = 0; nRow < 5; ++nRow )    // Set A1:A5  = SQRT(C1*9/10), and A6:A10 = -SQRT(C1*9/10)
+    {
+        aPos.Set(0, nRow, 0);
+        m_pDoc->SetString(aPos, "=SQRT(C1*9/10)");
+        aPos.Set(0, nRow + 5, 0);
+        m_pDoc->SetString(aPos, "=-SQRT(C1*9/10)");
+    }
+
+    for ( SCROW nRow = 0; nRow < 10; ++nRow )    // Set B1:B10  = SQRT(C2*19/20), and B11:B20 = -SQRT(C2*19/20)
+    {
+        aPos.Set(1, nRow, 0);
+        m_pDoc->SetString(aPos, "=SQRT(C2*19/20)");
+        aPos.Set(1, nRow + 10, 0);
+        m_pDoc->SetString(aPos, "=-SQRT(C2*19/20)");
+    }
+
+    aPos.Set(4, 0, 0); // E1
+    m_pDoc->SetString(aPos, "=FTEST(A1:A10;B1:B20)");
+    aPos.Set(4, 1, 0); // E2
+    m_pDoc->SetString(aPos, "=FTEST(B1:B20;A1:A10)");
+
+    ScAddress aPosRev(4, 1, 0); // E2
+    aPos.Set(4, 0, 0);  // E1
+
+    for ( size_t nFirstIdx = 0; nFirstIdx < nNumParams; ++nFirstIdx )
+    {
+        m_pDoc->SetValue(3, 0, 0, fParameter[nFirstIdx]); // Set D1
+        for ( size_t nSecondIdx = 0; nSecondIdx < nNumParams; ++nSecondIdx )
+        {
+            m_pDoc->SetValue(3, 1, 0, fParameter[nSecondIdx]); // Set D2
+            double fExpected = fResults[nFirstIdx][nSecondIdx];
+            // Here a dynamic error limit is used. This is to handle correctly when the expected value is lower than the fixed error limit of 10e-5
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", fExpected, m_pDoc->GetValue(aPos),    std::min(10e-5, fExpected*0.0001) );
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", fExpected, m_pDoc->GetValue(aPosRev), std::min(10e-5, fExpected*0.0001) );
+        }
+    }
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testFuncFTESTBug()
@@ -6286,7 +6374,7 @@ void Test::testFuncFTESTBug()
     m_pDoc->SetValue(7, 2, 0, 6.0); // H3
     m_pDoc->SetValue(8, 0, 0, 5.0); // I1
     m_pDoc->SetValue(8, 1, 0, 7.0); // I2
-    // FTest returns a wrong value: 1.09544512
+    // tdf#93329
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of FTEST failed", 0.9046, m_pDoc->GetValue(aPos), 10e-4);
 
     m_pDoc->DeleteTab(0);
