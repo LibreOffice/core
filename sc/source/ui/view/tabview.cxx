@@ -2289,15 +2289,20 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     SCROW nEndRow = 0;
     pDoc->GetTiledRenderingArea(aViewData.GetTabNo(), nEndCol, nEndRow);
 
-    boost::property_tree::ptree aRows;
+    rtl::OUStringBuffer aBuffer(256 + (50 * nEndRow) + (50 * nEndCol));
+
+    aBuffer.append("{ \"commandName\": \".uno:ViewRowColumnHeaders\",\n");
+    aBuffer.append("\"rows\": [\n");
+
     long nTotal = 0;
     long nTotalPixels = 0;
+    bool bFirstRow = true;
     for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
         // nSize will be 0 for hidden rows.
-        sal_uInt16 nSize = pDoc->GetRowHeight(nRow, aViewData.GetTabNo());
-        long nSizePixels = ScViewData::ToPixel(nSize, aViewData.GetPPTY());
-        OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
+        const sal_uInt16 nSize = pDoc->GetRowHeight(nRow, aViewData.GetTabNo());
+        const long nSizePixels = ScViewData::ToPixel(nSize, aViewData.GetPPTY());
+        const OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
 
         bool bSkip = false;
         if (!rRectangle.IsEmpty())
@@ -2310,23 +2315,27 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
         }
         if (!bSkip)
         {
-            boost::property_tree::ptree aRow;
-            aRow.put("size", OString::number((nTotalPixels + nSizePixels) / aViewData.GetPPTY()).getStr());
-            aRow.put("text", aText.toUtf8().getStr());
-            aRows.push_back(std::make_pair("", aRow));
+            if (!bFirstRow)
+                aBuffer.append(", ");
+
+            aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
+            aBuffer.append("\"size\": \"").append(OUString::number((nTotalPixels + nSizePixels) / aViewData.GetPPTY())).append("\" }");
+            bFirstRow = false;
         }
         nTotal += nSize;
         nTotalPixels += nSizePixels;
     }
 
-    boost::property_tree::ptree aCols;
+    aBuffer.append("],\n\"columns\":\n[");
+
     nTotal = 0;
     nTotalPixels = 0;
+    bFirstRow = true;
     for (SCCOL nCol = 0; nCol <= nEndCol; ++nCol)
     {
-        sal_uInt16 nSize = pDoc->GetColWidth(nCol, aViewData.GetTabNo());
-        long nSizePixels = ScViewData::ToPixel(nSize, aViewData.GetPPTX());
-        OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
+        const sal_uInt16 nSize = pDoc->GetColWidth(nCol, aViewData.GetTabNo());
+        const long nSizePixels = ScViewData::ToPixel(nSize, aViewData.GetPPTX());
+        const OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
 
         bool bSkip = false;
         if (!rRectangle.IsEmpty())
@@ -2339,22 +2348,19 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
         }
         if (!bSkip)
         {
-            boost::property_tree::ptree aCol;
-            aCol.put("size", OString::number((nTotalPixels + nSizePixels) / aViewData.GetPPTX()).getStr());
-            aCol.put("text", aText.toUtf8().getStr());
-            aCols.push_back(std::make_pair("", aCol));
+            if (!bFirstRow)
+                aBuffer.append(", ");
+
+            aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
+            aBuffer.append("\"size\": \"").append(OUString::number((nTotalPixels + nSizePixels) / aViewData.GetPPTX())).append("\" }");
+            bFirstRow = false;
         }
         nTotal += nSize;
         nTotalPixels += nSizePixels;
     }
 
-    boost::property_tree::ptree aTree;
-    aTree.put("commandName", ".uno:ViewRowColumnHeaders");
-    aTree.add_child("rows", aRows);
-    aTree.add_child("columns", aCols);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-    return OUString::fromUtf8(aStream.str().c_str());
+    aBuffer.append("]\n}");
+    return aBuffer.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
