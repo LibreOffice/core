@@ -1875,6 +1875,30 @@ NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
     OSL_ENSURE( mxNumFmts.is(), "NumberFormatFinalizer::NumberFormatFinalizer - cannot get number formats" );
 }
 
+sal_Int32 lclPosToken ( const OUString& sFormat, const OUString& sSearch, sal_Int32 nStartPos )
+{
+    sal_Int32 nLength = sFormat.getLength();
+    for ( sal_Int32 i = nStartPos; i < nLength && i >= 0 ; i++ )
+    {
+        switch(sFormat[i])
+        {
+            case '\"' : // skip text
+                i = sFormat.indexOf('\"',i+1);
+                break;
+            case '['  : // skip condition
+                i = sFormat.indexOf(']',i+1);
+                break;
+            default :
+                if ( sFormat.match(sSearch, i) )
+                    return i;
+                break;
+        }
+        if ( i < 0 )
+            i--;
+    }
+    return -2;
+}
+
 } // namespace
 
 NumberFormat::NumberFormat( const WorkbookHelper& rHelper ) :
@@ -1884,11 +1908,27 @@ NumberFormat::NumberFormat( const WorkbookHelper& rHelper ) :
 
 void NumberFormat::setFormatCode( const OUString& rFmtCode )
 {
-    // especiall for a fraction code '\ ?/?' is passed to us in xml, the '\' is not
+    // Special case for fraction code '\ ?/?', it is passed to us in xml, the '\' is not
     // an escape character but merely should be telling the formatter to display the next
     // char in the format ( afaics it does that anyhow )
+    sal_Int32 nPosEscape = 0;
+    sal_Int32 nErase = 0;
+    sal_Int32 nLastIndex = rFmtCode.getLength() - 1;
+    OUStringBuffer sFormat = rFmtCode;
 
-    maModel.maFmtCode = rFmtCode.replaceAll("\\", "");
+    while ( ( nPosEscape = lclPosToken( rFmtCode, "\\ ", nPosEscape ) ) > 0 )
+    {
+        sal_Int32 nPos = nPosEscape + 2;
+        while ( nPos < nLastIndex && ( rFmtCode[nPos] == '?' || rFmtCode[nPos] == '#' || rFmtCode[nPos] == '0' ) )
+            nPos++;
+        if ( nPos < nLastIndex && rFmtCode[nPos] == '/' )
+        {
+            sFormat.remove(nPosEscape - nErase, 1);
+            nErase ++;
+        }  // tdf#81939 preserve other escape characters
+        nPosEscape = lclPosToken( rFmtCode, ";", nPosEscape ); // skip to next format
+    }
+    maModel.maFmtCode = sFormat.makeStringAndClear();
 }
 
 void NumberFormat::setFormatCode( const Locale& rLocale, const sal_Char* pcFmtCode )
