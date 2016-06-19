@@ -368,7 +368,7 @@ namespace abp
                 SfxViewFrame* pFrame = SfxViewFrame::Current();
                 SfxObjectShell* pObjectShell = pFrame ? pFrame->GetObjectShell() : nullptr;
                 OUString aOwnURL = lcl_getOwnURL(pObjectShell);
-                if (aOwnURL.isEmpty() || !rSettings.bEmbedDataSource)
+                if (aOwnURL.isEmpty() || !rSettings.bEmbedDataSource || !pObjectShell)
                 {
                     // Cannot or should not embed.
                     xStorable->storeAsURL(m_pImpl->sName,Sequence<PropertyValue>());
