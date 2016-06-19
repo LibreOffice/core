@@ -83,6 +83,16 @@ namespace
         aDamageRect.intersect(getClipBox(cr));
         return aDamageRect;
     }
+
+    static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
+    {
+        return (a > 0) ? (c * 255 + a / 2) / a : 0;
+    }
+
+    static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
+    {
+        return (c * a + 127) / 255;
+    }
 }
 
 bool SvpSalGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& /*rBitmap*/ )
@@ -99,6 +109,28 @@ bool SvpSalGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, cons
 
 namespace
 {
+    void premultiplyBuffer(int width, int height, int stride, unsigned char* data)
+    {
+        for (int y = 0; y < height; ++y)
+        {
+            unsigned int* row = reinterpret_cast<unsigned int*>(data + y * stride);
+            for (int x = 0; x < width; ++x)
+            {
+                unsigned int px = row[x];
+                unsigned char a = (px & 0xff000000) >> 24;
+                unsigned char r = (px & 0x00ff0000) >> 16;
+                unsigned char g = (px & 0x0000ff00) >> 8;
+                unsigned char b = (px & 0x000000ff);
+
+                r = premultiply(r, a);
+                g = premultiply(g, a);
+                b = premultiply(b, a);
+
+                row[x] = (a << 24) | (r << 16) | (g << 8) | b;
+            }
+        }
+    }
+
     class SourceHelper
     {
     public:
@@ -123,7 +155,25 @@ namespace
                 source = SvpSalGraphics::createCairoSurface(aTmpBmp.GetBuffer());
             }
             else
-                source = SvpSalGraphics::createCairoSurface(rSrcBmp.GetBuffer());
+            {
+                const BitmapBuffer* pSrc = rSrcBmp.GetBuffer();
+                if (pSrc->mnColorChannelBitCount == 32)
+                {
+                    aTmpBmp.Create(rSrcBmp);
+                    source = SvpSalGraphics::createCairoSurface(aTmpBmp.GetBuffer());
+                    cairo_surface_flush(source);
+                    int w = cairo_image_surface_get_width(source);
+                    int h = cairo_image_surface_get_height(source);
+                    int stride = cairo_image_surface_get_stride(source);
+                    unsigned char* data = cairo_image_surface_get_data(source);
+                    premultiplyBuffer(w, h, stride, data);
+                    cairo_surface_mark_dirty(source);
+                }
+                else
+                {
+                    source = SvpSalGraphics::createCairoSurface(rSrcBmp.GetBuffer());
+                }
+            }
         }
         ~SourceHelper()
         {
@@ -1024,16 +1074,6 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect& rTR,
                                  const SalBitmap& rTransparentBitmap )
 {
     drawAlphaBitmap(rTR, rSourceBitmap, rTransparentBitmap);
-}
-
-static sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
-{
-    return (a > 0) ? (c * 255 + a / 2) / a : 0;
-}
-
-static sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
-{
-    return (c * a + 127) / 255;
 }
 
 void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
