@@ -52,6 +52,7 @@ public:
     void testSortAscendingDescending();
     void testPartHash();
     void testDocumentSize();
+    void testEmptyColumnSelection();
 #endif
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
@@ -60,6 +61,7 @@ public:
     CPPUNIT_TEST(testSortAscendingDescending);
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testDocumentSize);
+    CPPUNIT_TEST(testEmptyColumnSelection);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -332,6 +334,28 @@ void ScTiledRenderingTest::testDocumentSize()
     aTime = { 2 , 0 };
     aResult = m_aDocSizeCondition.wait(aTime);
     CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testEmptyColumnSelection()
+{
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("select-row-cols.ods");
+    uno::Sequence<beans::PropertyValue> aArgs(2);
+
+    // Select empty column, 1000
+    aArgs[0].Name = OUString::fromUtf8("Col");
+    aArgs[0].Value <<= static_cast<sal_Int32>(1000 - 1);
+    aArgs[1].Name = OUString::fromUtf8("Modifier");
+    aArgs[1].Value <<= static_cast<sal_uInt16>(0);
+    comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
+
+    // Get plain selection
+    OString aUsedMimeType;
+    OString aResult = pModelObj->getTextSelection("text/plain;charset=utf-8", aUsedMimeType);
+    // should be an empty string
+    CPPUNIT_ASSERT_EQUAL(OString(), aResult);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
