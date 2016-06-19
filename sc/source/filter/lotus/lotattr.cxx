@@ -171,7 +171,7 @@ void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLin
 
 const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) const
 {
-    OSL_ENSURE( nLotIndex > 0 && nLotIndex < 7,
+    SAL_WARN_IF( nLotIndex < 1 || nLotIndex > 7, "sc",
         "-LotAttrCache::GetColorItem(): caller hast to check index!" );
 
     return *ppColorItems[ nLotIndex - 1 ];
@@ -180,7 +180,7 @@ const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) cons
 const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
 {
     // color <-> index fits background, but not for fonts (0 <-> 7)!
-    OSL_ENSURE( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7, caller hast to check index!" );
+    SAL_WARN_IF( nLotIndex > 7, "sc", "*LotAttrCache::GetColor(): Index > 7, caller hast to check index!" );
 
     return pColTab[ nLotIndex ];
 }
@@ -189,7 +189,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 {
     // Actually with the current implementation of MAXROWCOUNT>=64k and nRow
     // being read as sal_uInt16 there's no chance that nRow would be invalid..
-    OSL_ENSURE( ValidRow(nRow), "*LotAttrCol::SetAttr(): ... und rums?!" );
+    SAL_WARN_IF( !ValidRow(nRow), "sc", "*LotAttrCol::SetAttr(): ... and bang?!" );
 
     std::vector<std::unique_ptr<ENTRY> >::reverse_iterator iterLast = aEntries.rbegin();
 
