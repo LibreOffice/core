@@ -2795,20 +2795,8 @@ void ScInterpreter::ScFTest()
         PushNoValue();
         return;
     }
-    double fF, fF1, fF2;
-    if (fS1 > fS2)
-    {
-        fF = fS1/fS2;
-        fF1 = fCount1-1.0;
-        fF2 = fCount2-1.0;
-    }
-    else
-    {
-        fF = fS2/fS1;
-        fF1 = fCount2-1.0;
-        fF2 = fCount1-1.0;
-    }
-    PushDouble(2.0*GetFDist(fF, fF1, fF2));
+    double fFcdf = GetFDist(fS1/fS2, fCount1-1.0, fCount2-1.0);
+    PushDouble(2.0*std::min(fFcdf, 1.0 - fFcdf));
 }
 
 void ScInterpreter::ScChiTest()
