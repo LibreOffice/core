@@ -553,7 +553,7 @@ public:
     CPPUNIT_TEST(testFuncFORMULA);
     CPPUNIT_TEST(testFuncTableRef);
     CPPUNIT_TEST(testFuncFTEST);
-    CPPUNIT_TEST_FAIL(testFuncFTESTBug);
+    CPPUNIT_TEST(testFuncFTESTBug);
     CPPUNIT_TEST(testFuncCHITEST);
     CPPUNIT_TEST(testFuncTTEST);
     CPPUNIT_TEST(testFuncSUMX2PY2);

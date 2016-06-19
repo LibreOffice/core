@@ -2808,7 +2808,8 @@ void ScInterpreter::ScFTest()
         fF1 = fCount2-1.0;
         fF2 = fCount1-1.0;
     }
-    PushDouble(2.0*GetFDist(fF, fF1, fF2));
+    double fFcdf = GetFDist(fF, fF1, fF2);
+    PushDouble(2.0*std::min(fFcdf, 1.0 - fFcdf));
 }
 
 void ScInterpreter::ScChiTest()
