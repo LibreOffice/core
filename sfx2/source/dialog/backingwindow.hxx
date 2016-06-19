@@ -59,9 +59,9 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     css::uno::Reference<css::datatransfer::dnd::XDropTargetListener> mxDropTargetListener;
 
     VclPtr<PushButton> mpOpenButton;
-    VclPtr<MenuButton> mpRecentButton;
+    VclPtr<MenuToggleButton> mpRecentButton;
     VclPtr<PushButton> mpRemoteButton;
-    VclPtr<MenuButton> mpTemplateButton;
+    VclPtr<MenuToggleButton> mpTemplateButton;
 
     VclPtr<FixedText>  mpCreateLabel;
 
@@ -93,7 +93,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     std::unique_ptr<svt::AcceleratorExecute> mpAccExec;
 
     void setupButton(PushButton* pButton);
-    void setupButton(MenuButton* pButton);
+    void setupButton(MenuToggleButton* pButton);
 
     void dispatchURL(const OUString& i_rURL,
                      const OUString& i_rTarget = OUString("_default"),
