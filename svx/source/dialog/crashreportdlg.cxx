@@ -33,7 +33,7 @@ CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
     mpBtnSend->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
     mpBtnCancel->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
     mpBtnClose->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
-    mpEditPostUpload->SetReadOnly(true);
+    mpEditPostUpload->SetReadOnly();
 }
 
 CrashReportDialog::~CrashReportDialog()
