@@ -85,6 +85,12 @@ struct SVGState
 //  Color                                   aFillColor;
 //  basegfx::B2DLineJoin                    aLineJoin;
 //  com::sun::star::drawing::LineCap        aLineCap;
+    sal_Int32                               nRegionClipPathId;
+
+    SVGState()
+        : aFont()
+        , nRegionClipPathId( 0 )
+    {}
 };
 // - PartialState -
 
@@ -92,6 +98,7 @@ struct PartialState
 {
     PushFlags                           meFlags;
     ::std::unique_ptr<vcl::Font>        mupFont;
+    sal_Int32                           mnRegionClipPathId;
 
     const vcl::Font&        getFont( const vcl::Font& rDefaultFont ) const
                                 { return mupFont ? *mupFont : rDefaultFont; }
@@ -101,13 +108,17 @@ struct PartialState
 
     PartialState()
         : meFlags( PushFlags::NONE )
+        , mupFont()
+        , mnRegionClipPathId( 0 )
     {}
 
     PartialState(PartialState&& aPartialState)
         : meFlags( aPartialState.meFlags )
         , mupFont( std::move( aPartialState.mupFont ) )
+        , mnRegionClipPathId( aPartialState.mnRegionClipPathId )
     {
         aPartialState.meFlags = PushFlags::NONE;
+        aPartialState.mnRegionClipPathId = 0;
     }
 };
 
@@ -121,7 +132,7 @@ private:
     SVGState maCurrentState;
 
 public:
-    PushFlags getLastUsedFlags() const;
+    PushFlags getPushFlags() const;
     SVGState& getCurrentState();
     void pushState( PushFlags eFlags );
     void popState();
@@ -308,6 +319,8 @@ private:
     sal_Int32                                   mnCurGradientId;
     sal_Int32                                   mnCurMaskId;
     sal_Int32                                   mnCurPatternId;
+    sal_Int32                                   mnCurClipPathId;
+    ::std::unique_ptr< SvXMLElementExport >     mpCurrentClipRegionElem;
     ::std::unique_ptr< SVGShapeDescriptor >     mapCurShape;
     SVGExport&                                  mrExport;
     SVGFontExport&                              mrFontExport;
@@ -336,6 +349,10 @@ private:
     void                    ImplWritePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bLineOnly,
                                                   bool bApplyMapping = true );
     void                    ImplWriteShape( const SVGShapeDescriptor& rShape );
+    void                    ImplCreateClipPathDef( const tools::PolyPolygon& rPolyPoly );
+    void                    ImplStartClipRegion(sal_Int32 nClipPathId);
+    void                    ImplEndClipRegion();
+    void                    ImplWriteClipPath( const tools::PolyPolygon& rPolyPoly );
     void                    ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags);
     void                    ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void                    ImplWriteGradientStop( const Color& rColor, double fOffset );

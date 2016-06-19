@@ -32,8 +32,11 @@
 #include <memory>
 
 
+static const char   aPrefixClipPathId[] = "clip_path_";
+
 static const char   aXMLElemG[] = "g";
 static const char   aXMLElemA[] = "a";
+static const char   aXMLElemClipPath[] = "clipPath";
 static const char   aXMLElemDefs[] = "defs";
 static const char   aXMLElemLine[] = "line";
 static const char   aXMLElemRect[] = "rect";
@@ -51,6 +54,8 @@ static const char   aXMLElemStop[] = "stop";
 static const char   aXMLAttrTransform[] = "transform";
 static const char   aXMLAttrStyle[] = "style";
 static const char   aXMLAttrId[] = "id";
+static const char   aXMLAttrClipPath[] = "clip-path";
+static const char   aXMLAttrClipPathUnits[] = "clipPathUnits";
 static const char   aXMLAttrD[] = "d";
 static const char   aXMLAttrX[] = "x";
 static const char   aXMLAttrY[] = "y";
@@ -95,7 +100,7 @@ static sal_Char const XML_UNO_NAME_NRULE_NUMBERINGTYPE[] = "NumberingType";
 static sal_Char const XML_UNO_NAME_NRULE_BULLET_CHAR[] = "BulletChar";
 
 
-PushFlags SVGContextHandler::getLastUsedFlags() const
+PushFlags SVGContextHandler::getPushFlags() const
 {
     if (maStateStack.empty())
         return PushFlags::NONE;
@@ -119,6 +124,11 @@ void SVGContextHandler::pushState( PushFlags eFlags )
         aPartialState.setFont( maCurrentState.aFont );
     }
 
+    if (eFlags & PushFlags::CLIPREGION)
+    {
+        aPartialState.mnRegionClipPathId = maCurrentState.nRegionClipPathId;
+    }
+
     maStateStack.push( std::move(aPartialState) );
 }
 
@@ -133,6 +143,11 @@ void SVGContextHandler::popState()
     if (eFlags & PushFlags::FONT)
     {
         maCurrentState.aFont = rPartialState.getFont( vcl::Font() );
+    }
+
+    if (eFlags & PushFlags::CLIPREGION)
+    {
+        maCurrentState.nRegionClipPathId = rPartialState.mnRegionClipPathId;
     }
 
     maStateStack.pop();
@@ -1742,6 +1757,8 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mnCurGradientId( 1 ),
     mnCurMaskId( 1 ),
     mnCurPatternId( 1 ),
+    mnCurClipPathId( 1 ),
+    mpCurrentClipRegionElem(),
     mrExport( rExport ),
     mrFontExport( rFontExport ),
     maContextHandler(),
@@ -2122,6 +2139,54 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
     ImplWritePolyPolygon( aPolyPoly, bLineOnly, false );
 }
 
+
+
+void SVGActionWriter::ImplCreateClipPathDef( const tools::PolyPolygon& rPolyPoly )
+{
+    OUString aClipPathId = aPrefixClipPathId + OUString::number( mnCurClipPathId++ );
+
+    SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
+
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aClipPathId );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrClipPathUnits, "userSpaceOnUse" );
+        SvXMLElementExport aElemClipPath( mrExport, XML_NAMESPACE_NONE, aXMLElemClipPath, true, true );
+
+        ImplWritePolyPolygon(rPolyPoly, false, true);
+    }
+}
+
+void SVGActionWriter::ImplStartClipRegion(sal_Int32 nClipPathId)
+{
+    assert(!mpCurrentClipRegionElem);
+
+    if (nClipPathId == 0)
+        return;
+
+    OUString aUrl = OUString("url(#") + aPrefixClipPathId + OUString::number( nClipPathId ) + ")";
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrClipPath, aUrl );
+    mpCurrentClipRegionElem.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true ) );
+}
+
+void SVGActionWriter::ImplEndClipRegion()
+{
+    if (mpCurrentClipRegionElem)
+    {
+        mpCurrentClipRegionElem.reset();
+    }
+}
+
+void SVGActionWriter::ImplWriteClipPath( const tools::PolyPolygon& rPolyPoly )
+{
+    ImplEndClipRegion();
+
+    if( rPolyPoly.Count() == 0 )
+        return;
+
+    ImplCreateClipPathDef(rPolyPoly);
+    mrCurrentState.nRegionClipPathId = mnCurClipPathId - 1;
+    ImplStartClipRegion( mrCurrentState.nRegionClipPathId );
+}
 
 void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                                         const Hatch* pHatch,
@@ -3614,7 +3679,37 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             case( MetaActionType::MOVECLIPREGION ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
+                const vcl::Region& rClipRegion = mpVDev->GetActiveClipRegion();
+                ImplWriteClipPath( rClipRegion.GetAsPolyPolygon() );
+
                 mbClipAttrChanged = true;
+            }
+            break;
+
+            case( MetaActionType::PUSH ):
+            {
+                const MetaPushAction*  pA = static_cast<const MetaPushAction*>(pAction);
+                PushFlags mnFlags = pA->GetFlags();
+
+                const_cast<MetaAction*>(pAction)->Execute( mpVDev );
+
+                maContextHandler.pushState( mnFlags );
+            }
+            break;
+
+            case( MetaActionType::POP ):
+            {
+                const_cast<MetaAction*>(pAction)->Execute( mpVDev );
+
+                PushFlags mnFlags = maContextHandler.getPushFlags();
+
+                maContextHandler.popState();
+
+                if( mnFlags & PushFlags::CLIPREGION )
+                {
+                    ImplEndClipRegion();
+                    ImplStartClipRegion( mrCurrentState.nRegionClipPathId );
+                }
             }
             break;
 
@@ -3627,8 +3722,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             case( MetaActionType::TEXTCOLOR ):
             case( MetaActionType::TEXTALIGN ):
             case( MetaActionType::FONT ):
-            case( MetaActionType::PUSH ):
-            case( MetaActionType::POP ):
             case( MetaActionType::LAYOUTMODE ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
@@ -3695,6 +3788,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 
     ImplWriteActions( rMtf, nWriteFlags, pElementId, pXShape, pTextEmbeddedBitmapMtf );
     maTextWriter.endTextParagraph();
+    ImplEndClipRegion();
 
     // draw open shape that doesn't have a border
     if( mapCurShape.get() )
