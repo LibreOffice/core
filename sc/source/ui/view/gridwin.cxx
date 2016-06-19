@@ -219,7 +219,6 @@ private:
     ScFilterBoxMode eMode;
 
 protected:
-    virtual void    LoseFocus() override;
     void            SelectHdl();
 
 public:
@@ -280,11 +279,6 @@ void ScFilterListBox::EndInit()
         nSel = nPos;
 
     bInit = false;
-}
-
-void ScFilterListBox::LoseFocus()
-{
-    vcl::Window::LoseFocus();
 }
 
 bool ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
