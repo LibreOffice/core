@@ -1887,8 +1887,12 @@ void NumberFormat::setFormatCode( const OUString& rFmtCode )
     // especiall for a fraction code '\ ?/?' is passed to us in xml, the '\' is not
     // an escape character but merely should be telling the formatter to display the next
     // char in the format ( afaics it does that anyhow )
-
-    maModel.maFmtCode = rFmtCode.replaceAll("\\", "");
+    sal_Int32 posEscape = rFmtCode.indexOf( "\\ ?" );
+    if ( posEscape > 0 &&
+         rFmtCode.indexOf( '/', posEscape ) > posEscape )
+        maModel.maFmtCode = rFmtCode.replaceAll("\\", "");
+    else  // tdf#81939 preserve other escape characters
+        maModel.maFmtCode = rFmtCode;
 }
 
 void NumberFormat::setFormatCode( const Locale& rLocale, const sal_Char* pcFmtCode )
