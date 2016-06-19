@@ -451,7 +451,7 @@ void OP_Note123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 void OP_HorAlign123(LotusContext& /*rContext*/, sal_uInt8 nAlignPattern, SfxItemSet& rPatternItemSet)
 {
 //      pre:  Pattern is stored in the last 3 bites of the 21st byte
-//      post: Appropriate Horizontal Alignement is set in rPattern according to the bit pattern.
+//      post: Appropriate Horizontal Alignment is set in rPattern according to the bit pattern.
 //
 //      LEFT:001, RIGHT:010, CENTER:011, JUSTIFY:110,
 //      LEFT-Text/RIGHT-NUMBER:100, DEFAULT:000
@@ -484,7 +484,7 @@ void OP_HorAlign123(LotusContext& /*rContext*/, sal_uInt8 nAlignPattern, SfxItem
 void OP_VerAlign123(LotusContext& /*rContext*/, sal_uInt8 nAlignPattern, SfxItemSet& rPatternItemSet)
 {
 //      pre:  Pattern is stored in the last 3 bites of the 22nd byte
-//      post: Appropriate Verticle Alignement is set in rPattern according to the bit pattern.
+//      post: Appropriate Vertical Alignment is set in rPattern according to the bit pattern.
 //
 //      TOP:001, MIDDLE:010, DOWN:100, DEFAULT:000
 

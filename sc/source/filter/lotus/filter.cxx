@@ -108,7 +108,7 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
 
 WKTYP ScanVersion(LotusContext &rContext, SvStream& aStream)
 {
-    // PREC:    pWKDatei:   pointer to open file
+    // PREC:    pWKFile:   pointer to open file
     // POST:    return:     type of file
     sal_uInt16 nOpcode(0), nVersNr(0), nRecLen(0);
 
