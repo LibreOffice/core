@@ -944,8 +944,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
             aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
             static const double twipFactor = 15 * 1.76388889; // 26.45833335
-            aOrigin = Point(aOrigin.getX() * twipFactor,
-                            aOrigin.getY() * twipFactor);
+            aOrigin = Point(aOrigin.getX() * twipFactor / static_cast<double>(pViewData->GetZoomX()),
+                            aOrigin.getY() * twipFactor / static_cast<double>(pViewData->GetZoomY()));
             MapMode aNew = rDevice.GetMapMode();
             aNew.SetOrigin(aOrigin);
             rDevice.SetMapMode(aNew);
