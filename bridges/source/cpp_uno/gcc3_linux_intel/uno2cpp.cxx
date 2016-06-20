@@ -50,11 +50,11 @@ static void cpp_call(
       char * pCppStackStart = pCppStack;
 
     // return
-    typelib_TypeDescription * pReturnTypeDescr = 0;
+    typelib_TypeDescription * pReturnTypeDescr = nullptr;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     assert(pReturnTypeDescr);
 
-    void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
+    void * pCppReturn = nullptr; // if != 0 && != pUnoReturn, needs reconversion
     bool bSimpleReturn = true;
 
     if (pReturnTypeDescr)
@@ -95,7 +95,7 @@ static void cpp_call(
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
-        typelib_TypeDescription * pParamTypeDescr = 0;
+        typelib_TypeDescription * pParamTypeDescr = nullptr;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
         if (!rParam.bOut
@@ -160,7 +160,7 @@ static void cpp_call(
             pCppReturn, pReturnTypeDescr, bSimpleReturn,
             reinterpret_cast<sal_Int32 *>(pCppStackStart), (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
         // NO exception occurred...
-        *ppUnoExc = 0;
+        *ppUnoExc = nullptr;
 
         // reconvert temporary params
         for ( ; nTempIndices--; )
@@ -172,7 +172,7 @@ static void cpp_call(
             {
                 if (pParams[nIndex].bOut) // inout
                 {
-                    uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
+                    uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, nullptr ); // destroy uno value
                     uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
                                             pThis->getBridge()->getCpp2Uno() );
                 }
@@ -277,7 +277,7 @@ void unoInterfaceProxyDispatch(
             cpp_call(
                 pThis, aVtableSlot,
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(pMemberDescr)->pAttributeTypeRef,
-                0, 0, // no params
+                0, nullptr, // no params
                 pReturn, pArgs, ppException );
         }
         else
@@ -289,7 +289,7 @@ void unoInterfaceProxyDispatch(
             aParam.bIn      = true;
             aParam.bOut     = false;
 
-            typelib_TypeDescriptionReference * pReturnTypeRef = 0;
+            typelib_TypeDescriptionReference * pReturnTypeRef = nullptr;
             OUString aVoidName("void");
             typelib_typedescriptionreference_new(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
@@ -319,19 +319,19 @@ void unoInterfaceProxyDispatch(
             // standard calls
         case 1: // acquire uno interface
             (*pUnoI->acquire)( pUnoI );
-            *ppException = 0;
+            *ppException = nullptr;
             break;
         case 2: // release uno interface
             (*pUnoI->release)( pUnoI );
-            *ppException = 0;
+            *ppException = nullptr;
             break;
         case 0: // queryInterface() opt
         {
-            typelib_TypeDescription * pTD = 0;
+            typelib_TypeDescription * pTD = nullptr;
             TYPELIB_DANGER_GET( &pTD, static_cast< Type * >( pArgs[0] )->getTypeLibType() );
             if (pTD)
             {
-                uno_Interface * pInterface = 0;
+                uno_Interface * pInterface = nullptr;
                 (*pThis->pBridge->getUnoEnv()->getRegisteredInterface)(
                     pThis->pBridge->getUnoEnv(),
                     reinterpret_cast<void **>(&pInterface), pThis->oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
@@ -340,10 +340,10 @@ void unoInterfaceProxyDispatch(
                 {
                     ::uno_any_construct(
                         static_cast< uno_Any * >( pReturn ),
-                        &pInterface, pTD, 0 );
+                        &pInterface, pTD, nullptr );
                     (*pInterface->release)( pInterface );
                     TYPELIB_DANGER_RELEASE( pTD );
-                    *ppException = 0;
+                    *ppException = nullptr;
                     break;
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
@@ -369,7 +369,7 @@ void unoInterfaceProxyDispatch(
 
         Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // binary identical null reference
-        ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
+        ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), nullptr );
     }
     }
 }
