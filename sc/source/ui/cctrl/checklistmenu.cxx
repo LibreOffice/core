@@ -1707,7 +1707,7 @@ void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, bool bCheck )
 SvTreeListEntry* ScCheckListBox::ShowCheckEntry( const OUString& sName, ScCheckListMember& rMember, bool bShow, bool bCheck )
 {
     SvTreeListEntry* pEntry = nullptr;
-    if ( !rMember.mbDate || ( rMember.mbDate && rMember.mpParent ) )
+    if (!rMember.mbDate || rMember.mpParent)
         pEntry = FindEntry( rMember.mpParent, sName );
 
     if ( bShow )
