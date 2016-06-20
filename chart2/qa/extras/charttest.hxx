@@ -137,18 +137,35 @@ std::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
     mxComponent->dispose();
     mxComponent = loadFromDesktop(pTempFile->GetURL(), maServiceName);
     std::cout << pTempFile->GetURL();
-    if(rFilterName == "Calc Office Open XML")
+
+    if(!mbSkipValidation)
     {
-        validate(pTempFile->GetFileName(), test::OOXML);
-    }
-    else if(rFilterName == "Office Open XML Text")
-    {
-        // validate(pTempFile->GetFileName(), test::OOXML);
-    }
-    else if(rFilterName == "calc8")
-    {
-        if(!mbSkipValidation)
+        if(rFilterName == "Calc Office Open XML")
+        {
+            validate(pTempFile->GetFileName(), test::OOXML);
+        }
+        else if(rFilterName == "Office Open XML Text")
+        {
+            validate(pTempFile->GetFileName(), test::OOXML);
+        }
+        else if(rFilterName == "calc8")
+        {
             validate(pTempFile->GetFileName(), test::ODF);
+        }
+        else if(rFilterName == "writer8")
+        {
+            validate(pTempFile->GetFileName(), test::ODF);
+        }
+        else if(rFilterName == "MS Excel 97")
+        {
+             validate(pTempFile->GetFileName(), test::MSBINARY);
+        }
+        else
+        {
+             std::stringstream ss;
+             ss << "Do not know how to validate " << rFilterName.toUtf8().getStr();
+             CPPUNIT_FAIL(ss.str());
+        }
     }
 
     CPPUNIT_ASSERT(mxComponent.is());

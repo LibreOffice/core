@@ -468,6 +468,7 @@ void Chart2ExportTest::testTrendlineOOXML()
 
 void Chart2ExportTest::testTrendlineXLS()
 {
+    mbSkipValidation = true;
     load("/chart2/qa/extras/data/ods/", "trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     reload("MS Excel 97");
@@ -760,6 +761,7 @@ void Chart2ExportTest::testAxisNumberFormatODS()
 
 void Chart2ExportTest::testDataLabelBordersDOCX()
 {
+    mbSkipValidation = true;
     struct Check
     {
         sal_Int32 mnIndex;
