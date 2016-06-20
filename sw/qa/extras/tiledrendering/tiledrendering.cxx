@@ -26,6 +26,7 @@
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/lokhelper.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 
@@ -50,6 +51,7 @@ public:
     void testSearchAllNotifications();
     void testPageDownInvalidation();
     void testPartHash();
+    void testViewCursors();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -68,6 +70,7 @@ public:
     CPPUNIT_TEST(testSearchAllNotifications);
     CPPUNIT_TEST(testPageDownInvalidation);
     CPPUNIT_TEST(testPartHash);
+    CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -487,6 +490,8 @@ void SwTiledRenderingTest::testSearchAllNotifications()
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&SwTiledRenderingTest::callback, this);
+    // Reset notification counter before search.
+    m_nSelectionBeforeSearchResult = 0;
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
@@ -534,6 +539,61 @@ void SwTiledRenderingTest::testPartHash()
     {
         CPPUNIT_ASSERT(!pXTextDocument->getPartHash(it).isEmpty());
     }
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+class ViewCallback
+{
+public:
+    bool m_bOwnCursorInvalidated;
+    bool m_bViewCursorInvalidated;
+
+    ViewCallback()
+        : m_bOwnCursorInvalidated(false),
+        m_bViewCursorInvalidated(false)
+    {
+    }
+
+    static void callback(int nType, const char* pPayload, void* pData)
+    {
+        static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    }
+
+    void callbackImpl(int nType, const char* /*pPayload*/)
+    {
+        switch (nType)
+        {
+        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        {
+            m_bOwnCursorInvalidated = true;
+        }
+        break;
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        {
+            m_bViewCursorInvalidated = true;
+        }
+        break;
+        }
+    }
+};
+
+void SwTiledRenderingTest::testViewCursors()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    createDoc("dummy.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    CPPUNIT_ASSERT(aView1.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
+    CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
+    // This failed: the cursor position of view1 was only known to view2 once
+    // it changed.
+    CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
