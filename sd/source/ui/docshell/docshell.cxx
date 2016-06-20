@@ -464,10 +464,8 @@ void DrawDocShell::ClearUndoBuffer()
         pUndoManager->Clear();
 }
 
-void DrawDocShell::libreOfficeKitCallback(int nType, const char* pPayload) const
+void DrawDocShell::libreOfficeKitCallback(int /*nType*/, const char* /*pPayload*/) const
 {
-    if (mpDoc)
-        mpDoc->libreOfficeKitCallback(nType, pPayload);
 }
 
 } // end of namespace sd

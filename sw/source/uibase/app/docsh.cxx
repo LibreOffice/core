@@ -1337,13 +1337,8 @@ bool SwDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPas
     return bRes;
 }
 
-void SwDocShell::libreOfficeKitCallback(int nType, const char* pPayload) const
+void SwDocShell::libreOfficeKitCallback(int /*nType*/, const char* /*pPayload*/) const
 {
-    if (!m_pDoc)
-        return;
-
-    SwDrawModel* pDrawModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
-    pDrawModel->libreOfficeKitCallback(nType, pPayload);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

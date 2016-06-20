@@ -571,11 +571,6 @@ public:
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) { if ( eControl == Header ) mbShowHeaderSeparator = bShow; else mbShowFooterSeparator = bShow; }
     bool IsSelectAll() { return mbSelectAll; }
 
-    /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API for Writer.
-    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
-    /// Invokes the registered callback, if there are any.
-    void libreOfficeKitCallback(int nType, const char* pPayload) const;
-
     void setOutputToWindow(bool bOutputToWindow);
     bool isOutputToWindow() const;
 

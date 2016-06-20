@@ -2417,10 +2417,8 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     SvtSaveOptions().SetWarnAlienFormat(false);
 }
 
-void SdXImpressDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
+void SdXImpressDocument::registerCallback(LibreOfficeKitCallback /*pCallback*/, void* /*pData*/)
 {
-    SolarMutexGuard aGuard;
-    mpDoc->registerLibreOfficeKitCallback(pCallback, pData);
 }
 
 void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)

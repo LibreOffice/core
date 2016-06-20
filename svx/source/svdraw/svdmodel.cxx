@@ -126,9 +126,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pDrawOutliner=nullptr;
     pHitTestOutliner=nullptr;
     pRefOutDev=nullptr;
-    mpLibreOfficeKitCallback = nullptr;
-    mpLibreOfficeKitData = nullptr;
-    mbTiledSearching = false;
     nProgressAkt=0;
     nProgressMax=0;
     nProgressOfs=0;
@@ -814,45 +811,6 @@ void SdrModel::SetRefDevice(OutputDevice* pDev)
     ImpSetOutlinerDefaults( pDrawOutliner );
     ImpSetOutlinerDefaults( pHitTestOutliner );
     RefDeviceChanged();
-}
-
-void SdrModel::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
-{
-    mpLibreOfficeKitCallback = pCallback;
-    mpLibreOfficeKitData = pData;
-}
-
-void SdrModel::libreOfficeKitCallback(int nType, const char* pPayload) const
-{
-    if (mbTiledSearching)
-    {
-        switch (nType)
-        {
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_TEXT_SELECTION_START:
-        case LOK_CALLBACK_TEXT_SELECTION_END:
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
-            return;
-        }
-    }
-
-    if (mpLibreOfficeKitCallback)
-        mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
-}
-
-void SdrModel::setTiledSearching(bool bTiledSearching)
-{
-    mbTiledSearching = bTiledSearching;
-}
-
-bool SdrModel::isTiledSearching() const
-{
-    return mbTiledSearching;
-}
-
-void* SdrModel::getLibreOfficeKitData() const
-{
-    return mpLibreOfficeKitData;
 }
 
 void SdrModel::ImpReformatAllTextObjects()

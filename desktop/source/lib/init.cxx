@@ -1465,7 +1465,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
-    std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
+    std::size_t nView = SfxLokHelper::getView();
 
     // handle potential interaction
     if (gImpl && aCommand == ".uno:Save")
