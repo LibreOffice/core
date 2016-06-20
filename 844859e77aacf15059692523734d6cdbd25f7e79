@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_631a9c19",
+        "filename": "sc/source/filter/lotus/lotattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-20T07:12:09Z",
+      "side": 1,
+      "message": "\u003e\u003d7",
+      "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_23209449",
+        "filename": "sc/source/filter/lotus/lotform.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-20T07:12:09Z",
+      "side": 1,
+      "message": "\u003e\u003d",
+      "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_431d980e",
+        "filename": "sc/source/filter/lotus/lotform.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-20T07:12:09Z",
+      "side": 1,
+      "message": "\u003e\u003d",
+      "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
