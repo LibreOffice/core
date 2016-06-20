@@ -50,7 +50,7 @@ namespace dbaui
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // UNO
-        DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, OGenericUnoController)
+        DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, SbaXDataBrowserController)
         virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
         //  virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > >  getIdlClasses();
 

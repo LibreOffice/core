@@ -500,15 +500,12 @@ public:
         throw () override
 
     {
-        osl_atomic_increment( &m_refCount );
+        t_BrowseNodeBase::acquire();
     }
     virtual void SAL_CALL release()
         throw () override
     {
-        if ( osl_atomic_decrement( &m_refCount ) == 0 )
-        {
-            delete this;
-        }
+        t_BrowseNodeBase::release();
     }
     // XTypeProvider (implemnented by base, but needs to be overridden for
     //                delegating to aggregate)
