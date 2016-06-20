@@ -16,6 +16,23 @@
       "revId": "e757c393e536a1360a53c0da54f6b1bd17d33e06",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_060e3e34",
+        "filename": "sal/osl/all/signalshared.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-20T14:31:27Z",
+      "side": 1,
+      "message": "we should remove osl_setErrorReporting (to sal/osl/unx/compat.cxx) in a follow-up commit",
+      "revId": "e757c393e536a1360a53c0da54f6b1bd17d33e06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
