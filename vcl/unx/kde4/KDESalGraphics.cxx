@@ -414,6 +414,8 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                 draw( QStyle::CC_ComboBox, &option, m_image.get(),
                       vclStateValue2StateFlag(nControlState, value) );
                 break;
+            default:
+                break;
         }
     }
     else if (type == CTRL_LISTNODE)
@@ -771,6 +773,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 case PART_WINDOW:
                     retVal = true;
                     break;
+                default:
+                    break;
             }
             break;
         }
@@ -823,6 +827,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 h = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
                 w = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
                 retVal = true;
+                break;
+            default:
                 break;
             }
             if (retVal) {
