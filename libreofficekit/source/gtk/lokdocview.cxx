@@ -2940,6 +2940,15 @@ lok_doc_view_set_document_password (LOKDocView* pDocView,
     priv->m_pOffice->pClass->setDocumentPassword(priv->m_pOffice, pURL, pPassword);
 }
 
+SAL_DLLPUBLIC_EXPORT gchar*
+lok_doc_view_get_version_info (LOKDocView* pDocView)
+{
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+
+    return priv->m_pOffice->pClass->getVersionInfo(priv->m_pOffice);
+}
+
+
 SAL_DLLPUBLIC_EXPORT gfloat
 lok_doc_view_pixel_to_twip (LOKDocView* pDocView, float fInput)
 {

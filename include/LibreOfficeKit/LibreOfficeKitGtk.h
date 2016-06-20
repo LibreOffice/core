@@ -304,6 +304,19 @@ void                            lok_doc_view_set_document_password (LOKDocView* 
                                                                     const gchar* pPassword);
 
 /**
+ * lok_doc_view_get_version_info:
+ * @pDocView: The #LOKDocView instance
+ *
+ * Get version information of underlying LOKit process
+ *
+ * Returns: string containing version information in format
+ * PRODUCT_NAME PRODUCT_VERSION PRODUCT_EXTENSION BUILD_ID
+ *
+ * Eg: LibreOffice 5.3 .0.0.alpha0 <commit hash>
+ */
+gchar*                         lok_doc_view_get_version_info       (LOKDocView* pDocView);
+
+/**
  * lok_doc_view_pixel_to_twip:
  * @pDocView: The #LOKDocView instance
  * @fInput: The value in pixels to convert to twips
