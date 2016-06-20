@@ -23,7 +23,6 @@
 
 #include <osl/diagnose.h>
 
-bool bErrorReportingEnabled = true;
 bool bInitSignal = false;
 
 namespace
@@ -158,10 +157,8 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 userSignal, void* userData)
 
 sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
 {
-    bool bOld = bErrorReportingEnabled;
-    bErrorReportingEnabled = bEnable;
-    onErrorReportingChanged(bEnable);
-    return bOld;
+    // this is part of the stable API
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
