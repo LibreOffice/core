@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_2341743a",
+        "filename": "vcl/inc/jobset.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-20T00:27:35Z",
+      "side": 1,
+      "message": "all setters are non-const - since they modify the object",
+      "revId": "49b370fd9e8293f9330c195be61c1a27fdfbe3b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
