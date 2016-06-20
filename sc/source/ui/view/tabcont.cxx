@@ -492,6 +492,8 @@ void ScTabControl::DoDrag( const vcl::Region& /* rRegion */ )
 
     pTransferObj->SetDragSource( pDocSh, aTabMark );
 
+    pTransferObj->SetSourceCursorPos( pViewData->GetCurX(), pViewData->GetCurY() );
+
     vcl::Window* pWindow = pViewData->GetActiveWin();
     SC_MOD()->SetDragObject( pTransferObj, nullptr );      // for internal D&D
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );

@@ -196,6 +196,7 @@ void ScViewFunctionSet::BeginDrag()
                 SCCOL nHandleX = (nPosX >= (SCsCOL) nStartX) ? nPosX - nStartX : 0;
                 SCROW nHandleY = (nPosY >= (SCsROW) nStartY) ? nPosY - nStartY : 0;
                 pTransferObj->SetDragHandlePos( nHandleX, nHandleY );
+                pTransferObj->SetSourceCursorPos( pViewData->GetCurX(), pViewData->GetCurY() );
                 pTransferObj->SetVisibleTab( nTab );
 
                 pTransferObj->SetDragSource( pDocSh, rMark );

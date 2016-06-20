@@ -4210,8 +4210,18 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 {
                     pView->MarkRange( aDest, false );
 
-                    SCCOL nDCol = pViewData->GetCurX() - aSource.aStart.Col() + nCorrectCursorPosCol;
-                    SCROW nDRow = pViewData->GetCurY() - aSource.aStart.Row() + nCorrectCursorPosRow;
+                    SCCOL nDCol;
+                    SCROW nDRow;
+                    if (pTransObj->WasSourceCursorInSelection())
+                    {
+                        nDCol = pTransObj->GetSourceCursorX() - aSource.aStart.Col() + nCorrectCursorPosCol;
+                        nDRow = pTransObj->GetSourceCursorY() - aSource.aStart.Row() + nCorrectCursorPosRow;
+                    }
+                    else
+                    {
+                        nDCol = 0;
+                        nDCol = 0;
+                    }
                     pView->SetCursor( aDest.aStart.Col() + nDCol, aDest.aStart.Row() + nDRow );
                 }
 

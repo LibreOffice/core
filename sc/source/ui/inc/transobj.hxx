@@ -48,6 +48,8 @@ private:
     css::uno::Reference<css::sheet::XSheetCellRanges> xDragSourceRanges;
     SCCOL                           nDragHandleX;
     SCROW                           nDragHandleY;
+    SCCOL                           nSourceCursorX;
+    SCROW                           nSourceCursorY;
     SCTAB                           nVisibleTab;
     sal_uInt16                      nDragSourceFlags;
     bool                            bDragWasInternal;
@@ -82,8 +84,11 @@ public:
     SCROW               GetNonFilteredRows() const { return nNonFiltered; }
     SCCOL               GetDragHandleX() const  { return nDragHandleX; }
     SCROW               GetDragHandleY() const  { return nDragHandleY; }
+    bool                WasSourceCursorInSelection() const;
+    SCCOL               GetSourceCursorX() const  { return nSourceCursorX; }
+    SCROW               GetSourceCursorY() const  { return nSourceCursorY; }
     SCTAB               GetVisibleTab() const   { return nVisibleTab; }
-    sal_uInt16              GetDragSourceFlags() const  { return nDragSourceFlags; }
+    sal_uInt16          GetDragSourceFlags() const  { return nDragSourceFlags; }
     bool                HasFilteredRows() const { return bHasFiltered; }
     bool                GetUseInApi() const     { return bUseInApi; }
     ScDocShell*         GetSourceDocShell();
@@ -92,6 +97,7 @@ public:
 
     void                SetDrawPersist( const SfxObjectShellRef& rRef );
     void                SetDragHandlePos( SCCOL nX, SCROW nY );
+    void                SetSourceCursorPos( SCCOL nX, SCROW nY );
     void                SetVisibleTab( SCTAB nNew );
     void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
     void                SetDragSourceFlags( sal_uInt16 nFlags );
