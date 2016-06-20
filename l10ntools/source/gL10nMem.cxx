@@ -21,7 +21,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include<rtl/character.hxx>
+#include <rtl/character.hxx>
 using namespace std;
 
 #include "gL10nMem.hxx"
@@ -871,7 +871,7 @@ bool l10nMem::locateKey(int                iLineNo,
         if (ch == ' ' || ch == '*' || ch == '+' || ch == '%')
             sUpperKey[i] = '_';
         else
-            sUpperKey[i] = toupper(sUpperKey[i]);
+            sUpperKey[i] = rtl::toAsciiUpperCase(sUpperKey[i]);
     }
 
     // Fast check, to see if next key is the one (normal with load and source without change)

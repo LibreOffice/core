@@ -39,6 +39,7 @@
 #include <libxml/catalog.h>
 
 #include <rtl/ustring.hxx>
+#include <rtl/character.hxx>
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -249,7 +250,7 @@ private:
 
 inline char tocharlower(char c)
 {
-    return static_cast<char>(tolower(c));
+    return static_cast<char>(rtl::toAsciiLowerCase(c));
 }
 
 #endif

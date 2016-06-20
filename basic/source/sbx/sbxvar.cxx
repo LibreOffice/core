@@ -30,6 +30,7 @@
 #include "sbunoobj.hxx"
 #include <math.h>
 #include <ctype.h>
+#include <rtl/character.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 using namespace com::sun::star::uno;
@@ -350,7 +351,7 @@ sal_uInt16 SbxVariable::MakeHashCode( const OUString& rName )
         {
             return 0;
         }
-        n = sal::static_int_cast< sal_uInt16 >( ( n << 3 ) + toupper( c ) );
+        n = sal::static_int_cast< sal_uInt16 >( ( n << 3 ) + rtl::toAsciiUpperCase( c ) );
     }
     return n;
 }
