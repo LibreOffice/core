@@ -70,6 +70,10 @@ using namespace ::xmloff::token;
 #define MR_E( a, p, l, t, c ) \
     M_E_( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
 
+// cell propertiess
+#define MC_E( a, p, l, t, c ) \
+    M_E_( a, p, l, (t|XML_TYPE_PROP_TABLE_CELL), c )
+
 // extensions import/export
 #define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false }
 // extensions import only
@@ -992,6 +996,27 @@ XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
     M_END()
 };
 
+
+
+XMLPropertyMapEntry aXMLCellPropMap[] =
+{
+    MC_E( "BackColor",            FO,    BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MC_E( "LeftBorder",           FO,    BORDER_LEFT,      XML_TYPE_BORDER,                                   0 ),
+    MC_E( "RightBorder",          FO,    BORDER_RIGHT,     XML_TYPE_BORDER,                                   0 ),
+    MC_E( "TopBorder",            FO,    BORDER_TOP,       XML_TYPE_BORDER,                                   0 ),
+    MC_E( "BottomBorder",         FO,    BORDER_BOTTOM,    XML_TYPE_BORDER,                                   0 ),
+    MC_E( "BorderDistance",       FO,    PADDING,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    MC_E( "LeftBorderDistance",   FO,    PADDING_LEFT,     XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    MC_E( "RightBorderDistance",  FO,    PADDING_RIGHT,    XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    MC_E( "TopBorderDistance",    FO,    PADDING_TOP,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    MC_E( "BottomBorderDistance", FO,    PADDING_BOTTOM,   XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    MC_E( "VertOrient",           STYLE, VERTICAL_ALIGN,   XML_TYPE_TEXT_VERTICAL_POS,                        0 ),
+    MC_E( "WritingMode",          STYLE, WRITING_MODE,     XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT,           0 ),
+    MC_E( "NumberFormat",         STYLE, DATA_STYLE_NAME,  XML_TYPE_NUMBER,                                   0 ),
+
+    M_END()
+};
+
 static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
 {
     XMLPropertyMapEntry *pMap = nullptr;
@@ -1035,6 +1060,9 @@ static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
         break;
     case TextPropMap::TABLE_ROW_DEFAULTS:
         pMap = aXMLTableRowDefaultsMap;
+        break;
+    case TextPropMap::CELL:
+        pMap = aXMLCellPropMap;
         break;
     }
     SAL_WARN_IF( !pMap, "xmloff", "illegal map type" );

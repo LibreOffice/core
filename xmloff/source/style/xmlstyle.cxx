@@ -671,6 +671,14 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         }
         xMapper = mxPageImpPropMapper;
         break;
+    case XML_STYLE_FAMILY_TABLE_CELL:
+        if (!mxCellImpPropMapper.is())
+        {
+            SvXMLStylesContext * pThis = const_cast<SvXMLStylesContext *>(this);
+            pThis->mxCellImpPropMapper = pThis->GetImport().GetTextImport()->GetCellImportPropertySetMapper();
+        }
+        xMapper = mxCellImpPropMapper;
+        break;
     }
 
     return xMapper;
@@ -726,6 +734,13 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
         else
             sName = "CharacterStyles";
         break;
+
+    case XML_STYLE_FAMILY_TABLE_CELL:
+        if( mxCellStyles.is() )
+            xStyles = mxCellStyles;
+        else
+            sName = "CellStyles";
+        break;
     }
     if( !xStyles.is() && !sName.isEmpty() )
     {
@@ -747,6 +762,10 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
                 case XML_STYLE_FAMILY_TEXT_TEXT:
                     const_cast<SvXMLStylesContext *>(this)->mxTextStyles = xStyles;
                     break;
+
+                case XML_STYLE_FAMILY_TABLE_CELL:
+                    const_cast<SvXMLStylesContext *>(this)->mxCellStyles = xStyles;
+                    break;
                 }
             }
         }
@@ -766,6 +785,9 @@ OUString SvXMLStylesContext::GetServiceName( sal_uInt16 nFamily ) const
     case XML_STYLE_FAMILY_TEXT_TEXT:
         sServiceName = msTextStyleServiceName;
         break;
+    case XML_STYLE_FAMILY_TABLE_CELL:
+        sServiceName = msCellStyleServiceName;
+        break;
     }
 
     return sServiceName;
@@ -777,6 +799,7 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     msParaStyleServiceName( "com.sun.star.style.ParagraphStyle" ),
     msTextStyleServiceName( "com.sun.star.style.CharacterStyle" ),
+    msCellStyleServiceName( "com.sun.star.style.CellStyle" ),
     mpImpl( new SvXMLStylesContext_Impl( bAuto ) ),
     mpStyleStylesElemTokenMap( nullptr )
 {
