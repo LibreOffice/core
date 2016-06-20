@@ -777,7 +777,7 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
     {
         aAny = xTransferable->getTransferData(aFlavor);
     }
-    catch (const datatransfer::UnsupportedFlavorException e)
+    catch (const datatransfer::UnsupportedFlavorException& e)
     {
         OSL_TRACE("Caught UnsupportedFlavorException '%s'", OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         return OString();
