@@ -868,6 +868,20 @@
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce12" table:formula="of:=ORG.OPENOFFICE.EASTERSUNDAY(-1)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>#VALUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" table:formula="of:=ISERROR([.A12])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=EASTERSUNDAY(-1)" calcext:value-type="string">
+      <text:p>=EASTERSUNDAY(-1)</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce17"/>
      <table:table-cell table:number-columns-repeated="11"/>
