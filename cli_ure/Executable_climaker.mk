@@ -15,7 +15,7 @@ $(eval $(call gb_Executable_use_package,climaker,\
 
 $(eval $(call gb_Executable_add_cxxflags,climaker,\
 	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
-	-clr \
+	-EHa -clr \
 	-LN \
 	-wd4339 \
 	-wd4715 \
