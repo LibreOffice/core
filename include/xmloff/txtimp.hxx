@@ -530,6 +530,8 @@ public:
 
     const css::uno::Reference< css::container::XNameContainer> & GetPageStyles() const;
 
+    const css::uno::Reference< css::container::XNameContainer> & GetCellStyles() const;
+
     const css::uno::Reference< css::container::XIndexReplace > &
         GetChapterNumbering() const;
 
@@ -552,6 +554,7 @@ public:
     static SvXMLImportPropertyMapper* CreateParaDefaultExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper* CreateTableDefaultExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper* CreateTableRowDefaultExtPropMapper(SvXMLImport&);
+    static SvXMLImportPropertyMapper* CreateTableCellExtPropMapper(SvXMLImport&);
 
     SvI18NMap& GetRenameMap();
 
