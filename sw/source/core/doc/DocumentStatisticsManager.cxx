@@ -49,9 +49,9 @@ namespace
         {
             if (!m_pViewShell)
                 return;
-            for(SwViewShell& rShell : m_pViewShell->GetRingContainer())
+            for (SwViewShell& rShell : m_pViewShell->GetRingContainer())
             {
-                if(rShell.IsViewLocked())
+                if (!rShell.IsViewLocked())
                 {
                     m_aViewWasUnLocked.push_back(&rShell);
                     rShell.LockView(true);
