@@ -1433,9 +1433,6 @@ int Desktop::Main()
 
         SetSplashScreenProgress(30);
 
-        // set static variable to disable crash reporting
-        osl_setErrorReporting( false );
-
         // create title string
         LanguageTag aLocale( LANGUAGE_SYSTEM);
         ResMgr* pLabelResMgr = GetDesktopResManager();
