@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_6349bcd0",
+        "filename": "unotools/source/config/defaultoptions.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-20T10:41:41Z",
+      "side": 1,
+      "message": "it looks like SAL_FINAL was replaced by just \"final\" on master since all supported compilers understand it, so best to do the same here",
+      "revId": "284ec999c3599b87e2a4faefac50725c0d207973",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
