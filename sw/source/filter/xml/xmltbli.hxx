@@ -49,6 +49,7 @@ class SwXMLTableContext : public XMLTextTableContext
 {
     OUString     m_aStyleName;
     OUString     m_aDfltCellStyleName;
+    OUString     m_aTemplateName;
 
     //! Holds basic information about a column's width.
     struct ColumnWidthInfo {

@@ -276,6 +276,7 @@ public:
     void SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPos );
     const SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos ) const;
     SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos );
+    static const SwBoxAutoFormat& GetDefaultBoxFormat();
 
     void SetName( const OUString& rNew ) { m_aName = rNew; nStrResId = USHRT_MAX; }
     const OUString& GetName() const { return m_aName; }
