@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_23541453",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-20T11:56:08Z",
+      "side": 1,
+      "message": "Maybe you also want to rename the .ui file and the widgets within. If not now, then you\u0027ll have to do it later, when you create the real bitmap tab",
+      "revId": "e3fce0a648c0ed9bddcc4b4c512a26629eaf0651",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_03ed508b",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-20T11:56:08Z",
+      "side": 1,
+      "message": "Kill most of this code with fire ...",
+      "revId": "e3fce0a648c0ed9bddcc4b4c512a26629eaf0651",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_e3e78caa",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-20T11:56:08Z",
+      "side": 1,
+      "message": "... as I don\u0027t see aXFillStyleItem (eXFS too) used anywhere else than here, so all but one cases from the above switch are then unused",
+      "revId": "e3fce0a648c0ed9bddcc4b4c512a26629eaf0651",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_43511862",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-20T11:56:08Z",
+      "side": 1,
+      "message": "And again, this case is almost identical w/ the previous one. Try to merge those two into 1 and add some ifs, for the lines that are different\n\nIt will be very hard to fix bugs in this code, when such large chunks of it are copy-n-pasted around, often without much thought",
+      "revId": "e3fce0a648c0ed9bddcc4b4c512a26629eaf0651",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
