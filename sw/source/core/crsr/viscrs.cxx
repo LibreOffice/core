@@ -52,9 +52,11 @@
 #include <overlayrangesoutline.hxx>
 
 #include <memory>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <comphelper/string.hxx>
 #include <paintfrm.hxx>
 
@@ -196,6 +198,26 @@ void SwVisibleCursor::_SetPosAndShow()
         Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
         m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+
+        if (SfxLokHelper::getViews() > 1)
+        {
+            // Notify other views about the invalidated cursor.
+            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+            while (pViewShell)
+            {
+                if (pViewShell != m_pCursorShell->GetSfxViewShell())
+                {
+                    boost::property_tree::ptree aTree;
+                    aTree.put("viewId", SfxLokHelper::getView(m_pCursorShell->GetSfxViewShell()));
+                    aTree.put("rectangle", sRect.getStr());
+                    std::stringstream aStream;
+                    boost::property_tree::write_json(aStream, aTree);
+                    OString aPayload = aStream.str().c_str();
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, aPayload.getStr());
+                }
+                pViewShell = SfxViewShell::GetNext(*pViewShell);
+            }
+        }
     }
 
     if ( !m_pCursorShell->IsCursorReadonly()  || m_pCursorShell->GetViewOptions()->IsSelectionInReadonly() )

@@ -60,16 +60,22 @@ void SfxLokHelper::setView(std::uintptr_t nId)
 
 }
 
-std::uintptr_t SfxLokHelper::getView()
+std::uintptr_t SfxLokHelper::getView(SfxViewShell *pViewShell)
 {
-    return reinterpret_cast<std::uintptr_t>(SfxViewShell::Current());
+    if (!pViewShell)
+        pViewShell = SfxViewShell::Current();
+    return reinterpret_cast<std::uintptr_t>(pViewShell);
 }
 
 std::size_t SfxLokHelper::getViews()
 {
     std::size_t nRet = 0;
 
-    SfxObjectShell* pObjectShell = SfxViewFrame::Current()->GetObjectShell();
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (!pViewFrame)
+        return nRet;
+
+    SfxObjectShell* pObjectShell = pViewFrame->GetObjectShell();
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
     for (SfxViewShell* i : rViewArr)
     {
