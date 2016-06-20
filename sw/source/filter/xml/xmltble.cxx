@@ -1095,6 +1095,10 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
                       EncodeStyleName( pTableFormat->GetName() ) );
     }
 
+    // table:table-template=
+    if (!rTable.GetTableStyleName().isEmpty())
+        AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, rTable.GetTableStyleName());
+
     sal_uInt16 nPrefix = XML_NAMESPACE_TABLE;
     if (const SwFrameFormat* pFlyFormat = rTableNd.GetFlyFormat())
     {
