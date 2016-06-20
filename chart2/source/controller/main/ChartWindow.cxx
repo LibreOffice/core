@@ -55,6 +55,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
         , m_pOpenGLWindow(nullptr)
 #endif
 {
+    set_id("chart_window");
     this->SetHelpId( HID_SCH_WIN_DOCUMENT );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
     adjustHighContrastMode();
