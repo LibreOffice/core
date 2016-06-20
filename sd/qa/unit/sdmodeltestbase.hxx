@@ -204,6 +204,10 @@ protected:
         {
             BootstrapFixture::validate(pTempFile->GetFileName(), test::OOXML);
         }
+        else if(nExportType == PPT)
+        {
+            BootstrapFixture::validate(pTempFile->GetFileName(), test::MSBINARY);
+        }
         pTempFile->EnableKillingFile();
         return loadURL(pTempFile->GetURL(), nExportType);
     }
