@@ -103,10 +103,8 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
         return true;
     }
     auto filename = compiler.getSourceManager().getFilename(spelLoc);
-    if ((filename
-         == SRCDIR "/bridges/source/cpp_uno/gcc3_linux_x86-64/share.hxx")
-        || (filename
-            == SRCDIR "/bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx"))
+    if (filename.startswith(SRCDIR "/bridges/source/cpp_uno/")
+        && filename.endswith("share.hxx"))
     {
         return true;
     }
