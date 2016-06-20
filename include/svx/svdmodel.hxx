@@ -143,7 +143,7 @@ public:
 
 struct SdrModelImpl;
 
-class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >, public OutlinerSearchable
+class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >
 {
 protected:
     std::vector<SdrPage*> maMaPag;     // master pages
@@ -168,10 +168,6 @@ protected:
     SdrOutliner*    pChainingOutliner; // an Outliner for chaining overflowing text
     sal_uIntPtr           nDefTextHgt;    // Default text height in logical units
     VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
-    LibreOfficeKitCallback mpLibreOfficeKitCallback;
-    void* mpLibreOfficeKitData;
-    /// Set if we are in the middle of a tiled search.
-    bool mbTiledSearching;
     sal_uIntPtr           nProgressAkt;   // for the
     sal_uIntPtr           nProgressMax;   // ProgressBar-
     sal_uIntPtr           nProgressOfs;   // -Handler
@@ -328,16 +324,6 @@ public:
     // ReferenceDevice for the EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
     OutputDevice*        GetRefDevice() const                   { return pRefOutDev.get(); }
-    /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API.
-    void                 registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
-    /// Gets the LOK data registered by registerLibreOfficeKitCallback().
-    void*                getLibreOfficeKitData() const;
-    /// Invokes the registered callback, if there are any.
-    void                 libreOfficeKitCallback(int nType, const char* pPayload) const override;
-    /// Set if we are doing tiled searching.
-    void                 setTiledSearching(bool bTiledSearching);
-    /// Are we doing tiled searching?
-    bool                 isTiledSearching() const;
     // If a new MapMode is set on the RefDevice (or similar)
     void                 RefDeviceChanged(); // not yet implemented
     // default font height in logical units

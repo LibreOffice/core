@@ -115,18 +115,6 @@ void SwViewShell::ToggleHeaderFooterEdit()
     GetWin()->Invalidate();
 }
 
-void SwViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
-{
-    getIDocumentDrawModelAccess().GetDrawModel()->registerLibreOfficeKitCallback(pCallback, pData);
-    if (SwPostItMgr* pPostItMgr = GetPostItMgr())
-        pPostItMgr->registerLibreOfficeKitCallback(getIDocumentDrawModelAccess().GetDrawModel());
-}
-
-void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
-{
-    getIDocumentDrawModelAccess().GetDrawModel()->libreOfficeKitCallback(nType, pPayload);
-}
-
 void SwViewShell::setOutputToWindow(bool bOutputToWindow)
 {
     mbOutputToWindow = bOutputToWindow;
