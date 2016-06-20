@@ -539,7 +539,6 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
             )
             nDelayMode = HELPDELAY_NONE;
 
-        SAL_WARN_IF( pHelpWin, "vcl", "Noch ein HelpWin ?!" );
         pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
         pSVData->maHelpData.mpHelpWin = pHelpWin;
         pHelpWin->SetStatusText( rStatusText );

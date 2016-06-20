@@ -2792,10 +2792,10 @@ static void LoadThemedImageList (const StyleSettings &rStyleSettings,
     aColorAry2[5] = rStyleSettings.GetWindowTextColor();
 
     Color aMaskColor(0x00, 0x00, 0xFF );
-        SAL_WARN_IF( sizeof(aColorAry1) != sizeof(aColorAry2), "vcl", "aColorAry1 must match aColorAry2" );
+    static_assert( sizeof(aColorAry1) == sizeof(aColorAry2), "aColorAry1 must match aColorAry2" );
     // FIXME: do we want the mask for the checkbox ?
     pList->InsertFromHorizontalBitmap (rResId, nImages, &aMaskColor,
-        aColorAry1, aColorAry2, sizeof(aColorAry1) / sizeof(Color));
+        aColorAry1, aColorAry2, SAL_N_ELEMENTS(aColorAry1));
 }
 
 Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags nFlags )
