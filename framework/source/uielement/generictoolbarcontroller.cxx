@@ -305,10 +305,8 @@ MenuToolbarController::~MenuToolbarController()
     catch( const Exception& ) {}
     if ( pMenu )
     {
-        delete pMenu;
-        pMenu = nullptr;
+        pMenu.disposeAndClear();
     }
-
 }
 
 class Toolbarmenu : public ::PopupMenu
@@ -316,6 +314,7 @@ class Toolbarmenu : public ::PopupMenu
     public:
     Toolbarmenu();
     virtual ~Toolbarmenu();
+    virtual void dispose() override;
 };
 
 Toolbarmenu::Toolbarmenu()
@@ -325,7 +324,13 @@ Toolbarmenu::Toolbarmenu()
 
 Toolbarmenu::~Toolbarmenu()
 {
+    disposeOnce();
+}
+
+void Toolbarmenu::dispose()
+{
     SAL_INFO("fwk.uielement", "destructing Toolbarmenu " << this);
+    ::PopupMenu::dispose();
 }
 
 void SAL_CALL MenuToolbarController::click() throw (RuntimeException, std::exception)
@@ -340,7 +345,7 @@ MenuToolbarController::createPopupWindow() throw (css::uno::RuntimeException, st
     {
         Reference< XDispatchProvider > xDispatch;
         Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
-        pMenu = new Toolbarmenu();
+        pMenu = VclPtr<Toolbarmenu>::Create();
         m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, true, true, false ) );
         if (m_xMenuManager.is())
         {

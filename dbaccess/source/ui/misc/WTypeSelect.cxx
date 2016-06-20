@@ -423,7 +423,7 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             if (pComEvt->IsMouseEvent())
                 ptWhere = pComEvt->GetMousePosPixel();
 
-            PopupMenu aContextMenu(ModuleRes(RID_SBA_RTF_PKEYPOPUP));
+            ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_SBA_RTF_PKEYPOPUP));
             // Should primary key checkbox be checked?
             const sal_Int32 nCount = GetEntryCount();
             bool bCheckOk = false;
@@ -443,9 +443,9 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             }
 
             if (bCheckOk)
-                aContextMenu.CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY );
+                aContextMenu->CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY );
 
-            switch( aContextMenu.Execute( this, ptWhere ) )
+            switch( aContextMenu->Execute( this, ptWhere ) )
             {
                 case SID_TABLEDESIGN_TABED_PRIMARYKEY:
                 {

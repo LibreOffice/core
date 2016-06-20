@@ -5325,20 +5325,20 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
                     if ( m_rView.GetDocShell()->IsReadOnly() )
                     {
-                        std::unique_ptr<SwReadOnlyPopup> pROPopup(new SwReadOnlyPopup( aDocPos, m_rView ));
+                        ScopedVclPtrInstance<SwReadOnlyPopup> pROPopup( aDocPos, m_rView );
 
                         ui::ContextMenuExecuteEvent aEvent;
                         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
                         aEvent.ExecutePosition.X = aPixPos.X();
                         aEvent.ExecutePosition.Y = aPixPos.Y();
-                        Menu* pMenu = nullptr;
+                        VclPtr<Menu> pMenu;
                         OUString sMenuName("private:resource/ReadonlyContextMenu");
                         if( GetView().TryContextMenuInterception( *pROPopup, sMenuName, pMenu, aEvent ) )
                         {
                             if ( pMenu )
                             {
-                                sal_uInt16 nExecId = static_cast<PopupMenu*>(pMenu)->Execute(this, aPixPos);
-                                if( !::ExecuteMenuCommand( *static_cast<PopupMenu*>(pMenu), *m_rView.GetViewFrame(), nExecId ))
+                                sal_uInt16 nExecId = static_cast<PopupMenu*>(pMenu.get())->Execute(this, aPixPos);
+                                if( !::ExecuteMenuCommand( *static_cast<PopupMenu*>(pMenu.get()), *m_rView.GetViewFrame(), nExecId ))
                                     pROPopup->Execute(this, nExecId);
                             }
                             else

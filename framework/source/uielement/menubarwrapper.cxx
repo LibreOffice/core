@@ -126,11 +126,11 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
         if ( xFrame.is() && m_xConfigSource.is() )
         {
             // Create VCL menubar which will be filled with settings data
-            MenuBar*        pVCLMenuBar = nullptr;
+            VclPtr<MenuBar> pVCLMenuBar;
             VCLXMenuBar*    pAwtMenuBar = nullptr;
             {
                 SolarMutexGuard aSolarMutexGuard;
-                pVCLMenuBar = new MenuBar();
+                pVCLMenuBar = VclPtr<MenuBar>::Create();
             }
 
             Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );

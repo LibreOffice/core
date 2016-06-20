@@ -1041,19 +1041,19 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                 }
             }
 
-            m_aPopup.EnableItem( MN_EDIT_COMMENT, pEntry && pRed &&
+            m_aPopup->EnableItem( MN_EDIT_COMMENT, pEntry && pRed &&
                                             !m_pTable->GetParent(pEntry) &&
                                             !m_pTable->NextSelected(pEntry)
 //JP 27.9.2001: make no sense if we handle readonly sections
 //                                          && pRed->HasReadonlySel()
                                             );
 
-            m_aPopup.EnableItem( MN_SUB_SORT, m_pTable->First() != nullptr );
+            m_aPopup->EnableItem( MN_SUB_SORT, m_pTable->First() != nullptr );
             sal_uInt16 nColumn = m_pTable->GetSortedCol();
             if (nColumn == 0xffff)
                 nColumn = 4;
 
-            PopupMenu *pSubMenu = m_aPopup.GetPopupMenu(MN_SUB_SORT);
+            PopupMenu *pSubMenu = m_aPopup->GetPopupMenu(MN_SUB_SORT);
             if (pSubMenu)
             {
                 for (sal_uInt16 i = MN_SORT_ACTION; i < MN_SORT_ACTION + 5; i++)
@@ -1062,7 +1062,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                 pSubMenu->CheckItem(nColumn + MN_SORT_ACTION);
             }
 
-            sal_uInt16 nRet = m_aPopup.Execute(m_pTable, aCEvt.GetMousePosPixel());
+            sal_uInt16 nRet = m_aPopup->Execute(m_pTable, aCEvt.GetMousePosPixel());
 
             switch( nRet )
             {

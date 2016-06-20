@@ -155,9 +155,9 @@ protected:
     VclPtr<TemplateAbstractView> mpCurView;
     VclPtr<TemplateLocalView> mpLocalView;
     VclPtr<TemplateRemoteView> mpRemoteView;
-    PopupMenu *mpActionMenu;
-    PopupMenu *mpRepositoryMenu;
-    PopupMenu *mpTemplateDefaultMenu;
+    VclPtr<PopupMenu> mpActionMenu;
+    VclPtr<PopupMenu> mpRepositoryMenu;
+    VclPtr<PopupMenu> mpTemplateDefaultMenu;
 
     std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelTemplates;
 

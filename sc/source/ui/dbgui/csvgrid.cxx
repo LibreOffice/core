@@ -78,7 +78,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     mpEditEngine->SetRefMapMode( MapMode( MAP_PIXEL ) );
     maEdEngSize = mpEditEngine->GetPaperSize();
 
-    maPopup.SetMenuFlags( maPopup.GetMenuFlags() | MenuFlags::NoAutoMnemonics );
+    mpPopup->SetMenuFlags( mpPopup->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
 
     EnableRTL( false ); // RTL
     InitFonts();
@@ -505,12 +505,12 @@ void ScCsvGrid::SetTypeNames( const std::vector<OUString>& rTypeNames )
     maTypeNames = rTypeNames;
     Repaint( true );
 
-    maPopup.Clear();
+    mpPopup->Clear();
     sal_uInt32 nCount = maTypeNames.size();
     sal_uInt32 nIx;
     sal_uInt16 nItemId;
     for( nIx = 0, nItemId = 1; nIx < nCount; ++nIx, ++nItemId )
-        maPopup.InsertItem( nItemId, maTypeNames[ nIx ] );
+        mpPopup->InsertItem( nItemId, maTypeNames[ nIx ] );
 
     ::std::for_each( maColStates.begin(), maColStates.end(), Func_SetType( CSV_TYPE_DEFAULT ) );
 }
@@ -582,9 +582,9 @@ void ScCsvGrid::ScrollVertRel( ScMoveMode eDir )
 
 void ScCsvGrid::ExecutePopup( const Point& rPos )
 {
-    sal_uInt16 nItemId = maPopup.Execute( this, rPos );
+    sal_uInt16 nItemId = mpPopup->Execute( this, rPos );
     if( nItemId )   // 0 = cancelled
-        Execute( CSVCMD_SETCOLUMNTYPE, maPopup.GetItemPos( nItemId ) );
+        Execute( CSVCMD_SETCOLUMNTYPE, mpPopup->GetItemPos( nItemId ) );
 }
 
 // selection handling ---------------------------------------------------------

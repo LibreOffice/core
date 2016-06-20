@@ -137,6 +137,11 @@ Menu::Menu()
 
 Menu::~Menu()
 {
+    disposeOnce();
+}
+
+void Menu::dispose()
+{
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING, ITEMPOS_INVALID );
 
     // at the window free the reference to the accessible component
@@ -144,8 +149,8 @@ Menu::~Menu()
     if ( pWindow )
     {
         MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(pWindow.get());
-        if( pFloat->pMenu == this )
-            pFloat->pMenu = nullptr;
+        if( pFloat->pMenu.get() == this )
+            pFloat->pMenu.clear();
         pWindow->SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
     }
 
@@ -176,6 +181,8 @@ Menu::~Menu()
 
     // Native-support: destroy SalMenu
     ImplSetSalMenu( nullptr );
+
+    VclReferenceBase::dispose();
 }
 
 void Menu::CreateAutoMnemonics()
@@ -503,7 +510,7 @@ void Menu::InsertItem( const ResId& rResId )
             MenuItemData* pData = GetItemList()->GetData( nItemId );
             if ( pData )
             {
-                PopupMenu* pSubMenu = new PopupMenu( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
+                VclPtr<PopupMenu> pSubMenu = VclPtr<PopupMenu>::Create( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
                 pData->pAutoSubMenu = pSubMenu;
                 // #111060# keep track of this pointer, may be it will be deleted from outside
                 pSubMenu->pRefAutoSubMenu = &pData->pAutoSubMenu;
@@ -628,7 +635,7 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
             // create auto-copy
             if ( nMode == 1 )
             {
-                PopupMenu* pNewMenu = new PopupMenu( *pSubMenu );
+                VclPtr<PopupMenu> pNewMenu = VclPtr<PopupMenu>::Create( *pSubMenu );
                 pThis->SetPopupMenu( nId, pNewMenu );
             }
             else
@@ -792,7 +799,7 @@ void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
         return;
 
     // same menu, nothing to do
-    if ( static_cast<PopupMenu*>(pData->pSubMenu) == pMenu )
+    if ( static_cast<PopupMenu*>(pData->pSubMenu.get()) == pMenu )
         return;
 
     // data exchange
@@ -819,7 +826,7 @@ PopupMenu* Menu::GetPopupMenu( sal_uInt16 nItemId ) const
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
-        return static_cast<PopupMenu*>(pData->pSubMenu);
+        return static_cast<PopupMenu*>(pData->pSubMenu.get());
     else
         return nullptr;
 }
@@ -2433,7 +2440,13 @@ MenuBar::MenuBar( const MenuBar& rMenu )
 
 MenuBar::~MenuBar()
 {
+    disposeOnce();
+}
+
+void MenuBar::dispose()
+{
     ImplDestroy( this, true );
+    Menu::dispose();
 }
 
 void MenuBar::ClosePopup(Menu *pMenu)
@@ -2758,8 +2771,14 @@ PopupMenu::PopupMenu( const PopupMenu& rMenu )
 
 PopupMenu::~PopupMenu()
 {
+    disposeOnce();
+}
+
+void PopupMenu::dispose()
+{
     if( pRefAutoSubMenu && *pRefAutoSubMenu == this )
         *pRefAutoSubMenu = nullptr;    // #111060# avoid second delete in ~MenuItemData
+    Menu::dispose();
 }
 
 void PopupMenu::ClosePopup(Menu* pMenu)
@@ -3169,7 +3188,7 @@ ImplMenuDelData::ImplMenuDelData( const Menu* pMenu )
 ImplMenuDelData::~ImplMenuDelData()
 {
     if( mpMenu )
-        const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
+        const_cast< Menu* >( mpMenu.get() )->ImplRemoveDel( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -703,22 +703,22 @@ bool SwView::ExecSpellPopup(const Point& rPt)
 
                 bRet = true;
                 m_pWrtShell->SttSelect();
-                std::unique_ptr< SwSpellPopup > pPopup;
+                ScopedVclPtr< SwSpellPopup > pPopup;
                 if (bUseGrammarContext)
                 {
                     sal_Int32 nPos = aPoint.nContent.GetIndex();
                     (void) nPos;
-                    pPopup.reset(new SwSpellPopup( m_pWrtShell, aGrammarCheckRes, nErrorInResult, aSuggestions, aParaText ));
+                    pPopup = VclPtr<SwSpellPopup>::Create( m_pWrtShell, aGrammarCheckRes, nErrorInResult, aSuggestions, aParaText ).get();
                 }
                 else
-                    pPopup.reset(new SwSpellPopup( m_pWrtShell, xAlt, aParaText ));
+                    pPopup = VclPtr<SwSpellPopup>::Create( m_pWrtShell, xAlt, aParaText ).get();
                 ui::ContextMenuExecuteEvent aEvent;
                 const Point aPixPos = GetEditWin().LogicToPixel( rPt );
 
                 aEvent.SourceWindow = VCLUnoHelper::GetInterface( m_pEditWin );
                 aEvent.ExecutePosition.X = aPixPos.X();
                 aEvent.ExecutePosition.Y = aPixPos.Y();
-                Menu* pMenu = nullptr;
+                VclPtr<Menu> pMenu;
 
                 OUString sMenuName  = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
@@ -729,8 +729,8 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if ( pMenu )
                     {
-                        const sal_uInt16 nId = static_cast<PopupMenu*>(pMenu)->Execute(m_pEditWin, aPixPos);
-                        OUString aCommand = static_cast<PopupMenu*>(pMenu)->GetItemCommand(nId);
+                        const sal_uInt16 nId = static_cast<PopupMenu*>(pMenu.get())->Execute(m_pEditWin, aPixPos);
+                        OUString aCommand = static_cast<PopupMenu*>(pMenu.get())->GetItemCommand(nId);
                         if (aCommand.isEmpty() )
                         {
                             if(!ExecuteMenuCommand(dynamic_cast<PopupMenu&>(*pMenu), *GetViewFrame(), nId ))

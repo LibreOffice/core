@@ -230,7 +230,7 @@ IMPL_LINK_NOARG_TYPED(MenuBarWindow, CloseHdl, ToolBox *, void)
         // #i106052# call close hdl asynchronously to ease handler implementation
         // this avoids still being in the handler while the DecoToolBox already
         // gets destroyed
-        Application::PostUserEvent(static_cast<MenuBar*>(pMenu)->GetCloseButtonClickHdl());
+        Application::PostUserEvent(static_cast<MenuBar*>(pMenu.get())->GetCloseButtonClickHdl());
     }
     else
     {
@@ -240,7 +240,7 @@ IMPL_LINK_NOARG_TYPED(MenuBarWindow, CloseHdl, ToolBox *, void)
             MenuBar::MenuBarButtonCallbackArg aArg;
             aArg.nId = it->first;
             aArg.bHighlight = (aCloseBtn->GetHighlightItemId() == it->first);
-            aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
+            aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu.get());
             it->second.m_aSelectLink.Call( aArg );
         }
     }
@@ -254,7 +254,7 @@ IMPL_LINK_TYPED( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
     MenuBar::MenuBarButtonCallbackArg aArg;
     aArg.nId = 0xffff;
     aArg.bHighlight = (rEvent.GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT);
-    aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
+    aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu.get());
     if( rEvent.GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT )
         aArg.nId = aCloseBtn->GetHighlightItemId();
     else if( rEvent.GetId() == VCLEVENT_TOOLBOX_HIGHLIGHTOFF )
@@ -293,7 +293,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
         if ( pItemData->bEnabled && pItemData->pSubMenu && ( nHighlightedItem != ITEMPOS_INVALID ) &&
              ( pItemData->pSubMenu != pActivePopup ) )
         {
-            pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu);
+            pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu.get());
             long nX = 0;
             MenuItemData* pData = nullptr;
             for ( sal_uLong n = 0; n < nHighlightedItem; n++ )
@@ -982,7 +982,7 @@ void MenuBarWindow::LayoutChanged()
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)
-    if (!static_cast<MenuBar*>(pMenu)->IsDisplayable() ||
+    if (!static_cast<MenuBar*>(pMenu.get())->IsDisplayable() ||
         (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar()))
     {
         nHeight = 0;
@@ -1170,7 +1170,7 @@ bool MenuBarWindow::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
         MenuBar::MenuBarButtonCallbackArg aArg;
         aArg.nId = it->first;
         aArg.bHighlight = true;
-        aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
+        aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu.get());
         return it->second.m_aSelectLink.Call( aArg );
     }
     return false;

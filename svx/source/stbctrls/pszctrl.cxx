@@ -317,10 +317,10 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
         sal_uInt32 nSelect = pImpl->nFunctionSet;
         if (!nSelect)
             nSelect = ( 1 << PSZ_FUNC_NONE );
-        FunctionPopup_Impl aMenu( nSelect );
-        if ( aMenu.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )
+        ScopedVclPtrInstance<FunctionPopup_Impl> aMenu( nSelect );
+        if ( aMenu->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )
         {
-            nSelect = aMenu.GetSelected();
+            nSelect = aMenu->GetSelected();
             if (nSelect)
             {
                 if (nSelect == (1 << PSZ_FUNC_NONE))

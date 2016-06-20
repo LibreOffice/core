@@ -250,8 +250,7 @@ void MenuBarManager::Destroy()
 
         if ( m_bDeleteMenu )
         {
-            delete m_pVCLMenu;
-            m_pVCLMenu = nullptr;
+            m_pVCLMenu.disposeAndClear();
         }
     }
 }
@@ -1190,7 +1189,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
 
         Reference< XDispatch > xDispatch;
         Reference< XStatusListener > xStatusListener;
-        PopupMenu* pPopup = pMenu->GetPopupMenu( nItemId );
+        VclPtr<PopupMenu> pPopup = pMenu->GetPopupMenu( nItemId );
         bool bItemShowMenuImages = m_bShowMenuImages;
         // overwrite the show icons on menu option?
         if (!bItemShowMenuImages)
@@ -1223,7 +1222,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 pItemHandler->xPopupMenu.set( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
                 pItemHandler->aMenuItemURL = aItemCommand;
                 m_aMenuItemHandlerVector.push_back( pItemHandler );
-                delete pPopup;
+                pPopup.disposeAndClear();
 
                 if ( bAccessibilityEnabled )
                 {
@@ -1258,7 +1257,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         AddonMenuManager::HasAddonMenuElements() )
                 {
                     // Create addon popup menu if there exist elements and this is the tools popup menu
-                    AddonMenu* pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame, m_xContext);
+                    VclPtr<AddonMenu> pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame, m_xContext);
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
                         sal_uInt16 nCount = 0;
@@ -1275,12 +1274,12 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         pPopup->SetItemCommand( ITEMID_ADDONLIST, aNewItemCommand );
                     }
                     else
-                        delete pSubMenu;
+                        pSubMenu.disposeAndClear();
                 }
 
                 if ( nItemId == ITEMID_ADDONLIST )
                 {
-                    AddonMenu* pSubMenu = dynamic_cast< AddonMenu* >( pPopup );
+                    AddonMenu* pSubMenu = dynamic_cast< AddonMenu* >( pPopup.get() );
                     if ( pSubMenu )
                     {
                         MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,pSubMenu, true, false, false );
@@ -1672,7 +1671,7 @@ void MenuBarManager::FillMenu(
 
                     if ( xIndexContainer.is() )
                     {
-                        PopupMenu* pNewPopupMenu = new PopupMenu;
+                        VclPtr<PopupMenu> pNewPopupMenu = VclPtr<PopupMenu>::Create();
                         pMenu->SetPopupMenu( nId, pNewPopupMenu );
 
                         if ( xDispatchProvider.is() )

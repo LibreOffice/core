@@ -538,7 +538,7 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
 {
 #if GTK_CHECK_VERSION(3,0,0)
     assert(mbMenuBar);
-    MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu);
+    MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
     if (!bShow)
     {
         if (mpCloseButton)

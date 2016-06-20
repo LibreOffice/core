@@ -108,7 +108,7 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame ) :
     m_pLine = VclPtr<SwBreakDashedLine>::Create( GetEditWin(), &SwViewOption::GetPageBreakColor, this );
 
     // Create the popup menu
-    m_pPopupMenu = new PopupMenu( SW_RES( MN_PAGEBREAK_BUTTON ) );
+    m_pPopupMenu = VclPtr<PopupMenu>::Create( SW_RES( MN_PAGEBREAK_BUTTON ) );
     m_pPopupMenu->SetDeactivateHdl( LINK( this, SwPageBreakWin, HideHandler ) );
     SetPopupMenu( m_pPopupMenu );
 
@@ -127,8 +127,7 @@ void SwPageBreakWin::dispose()
     m_aFadeTimer.Stop();
 
     m_pLine.disposeAndClear();
-    delete m_pPopupMenu;
-    m_pPopupMenu = nullptr;
+    m_pPopupMenu.disposeAndClear();
     delete m_pMousePt;
     m_pMousePt = nullptr;
 

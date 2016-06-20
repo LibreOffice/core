@@ -116,7 +116,7 @@ class BibToolBar:   public ToolBox
         VclPtr<ListBox>         aLBSource;
         VclPtr<FixedText>       aFtQuery;
         VclPtr<Edit>            aEdQuery;
-        PopupMenu               aPopupMenu;
+        ScopedVclPtr<PopupMenu> pPopupMenu;
         sal_uInt16              nMenuId;
         sal_uInt16              nSelMenuItem;
         OUString                aQueryField;
