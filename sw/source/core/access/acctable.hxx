@@ -301,10 +301,10 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL acquire(  ) throw () override
-        { SwAccessibleContext::acquire(); };
+        { SwAccessibleTable::acquire(); };
 
     virtual void SAL_CALL release(  ) throw () override
-        { SwAccessibleContext::release(); };
+        { SwAccessibleTable::release(); };
 
     // XAccessibleContext
 
