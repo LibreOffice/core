@@ -341,6 +341,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY";
     case LOK_CALLBACK_CONTEXT_MENU:
         return "LOK_CALLBACK_CONTEXT_MENU";
+    case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        return "LOK_CALLBACK_INVALIDATE_VIEW_CURSOR";
     }
     return nullptr;
 }
@@ -1154,6 +1156,11 @@ callback (gpointer pData)
     }
     break;
     case LOK_CALLBACK_CONTEXT_MENU:
+    {
+        // TODO: Implement me
+        break;
+    }
+    case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
     {
         // TODO: Implement me
         break;
