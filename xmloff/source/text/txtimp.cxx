@@ -545,6 +545,7 @@ struct XMLTextImportHelper::Impl
     uno::Reference<container::XNameContainer> m_xNumStyles;
     uno::Reference<container::XNameContainer> m_xFrameStyles;
     uno::Reference<container::XNameContainer> m_xPageStyles;
+    uno::Reference<container::XNameContainer> m_xCellStyles;
     uno::Reference<container::XIndexReplace> m_xChapterNumbering;
     uno::Reference<container::XNameAccess> m_xTextFrames;
     uno::Reference<container::XNameAccess> m_xGraphics;
@@ -677,6 +678,12 @@ uno::Reference<container::XNameContainer> const&
 XMLTextImportHelper::GetPageStyles() const
 {
     return m_xImpl->m_xPageStyles;
+}
+
+uno::Reference<container::XNameContainer> const&
+XMLTextImportHelper::GetCellStyles() const
+{
+    return m_xImpl->m_xCellStyles;
 }
 
 uno::Reference<container::XIndexReplace> const&
@@ -969,6 +976,13 @@ XMLTextImportHelper::XMLTextImportHelper(
             m_xImpl->m_xPageStyles.set(xFamilies->getByName(aPageStyles),
                 UNO_QUERY);
         }
+
+        const OUString aCellStyles("CellStyles");
+        if( xFamilies->hasByName( aCellStyles ) )
+        {
+            m_xImpl->m_xCellStyles.set(xFamilies->getByName(aCellStyles),
+                UNO_QUERY);
+        }
     }
 
     Reference < XTextFramesSupplier > xTFS( rModel, UNO_QUERY );
@@ -1057,6 +1071,15 @@ SvXMLImportPropertyMapper*
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::TABLE_ROW_DEFAULTS, false );
+    return new SvXMLImportPropertyMapper( pPropMapper, rImport );
+}
+
+SvXMLImportPropertyMapper*
+    XMLTextImportHelper::CreateTableCellExtPropMapper(
+        SvXMLImport& rImport )
+{
+    XMLPropertySetMapper *pPropMapper =
+        new XMLTextPropertySetMapper( TextPropMap::CELL, false );
     return new SvXMLImportPropertyMapper( pPropMapper, rImport );
 }
 

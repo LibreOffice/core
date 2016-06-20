@@ -499,6 +499,7 @@ certain functionality.
 @li @c xmloff.draw
 @li @c xmloff.forms
 @li @c xmloff.style
+@li @c xmloff.table
 @li @c xmloff.text
 @li @c xmloff.transform
 

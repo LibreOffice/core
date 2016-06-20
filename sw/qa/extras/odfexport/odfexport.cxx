@@ -816,6 +816,21 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
     CPPUNIT_ASSERT(!getProperty<OUString>(xShape, "ReplacementGraphicURL").isEmpty());
 }
 
+DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
+{
+    // Basic table styles test
+    uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xFamilies(XFamiliesSupplier->getStyleFamilies());
+    uno::Reference<container::XNameAccess> xCellFamily(xFamilies->getByName("CellStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCell1Style;
+    xCellFamily->getByName("Test style.1") >>= xCell1Style;
+
+    sal_Int64 nBackColor = 0xF0F0F0;
+    xCell1Style->getPropertyValue("BackColor") >>= nBackColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0xCC0000), nBackColor);
+    // Test more attributes
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

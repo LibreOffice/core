@@ -214,7 +214,8 @@ enum class TextPropMap {
     SHAPE_PARA = 7,
     TEXT_ADDITIONAL_DEFAULTS = 8,
     TABLE_DEFAULTS = 9,
-    TABLE_ROW_DEFAULTS = 10
+    TABLE_ROW_DEFAULTS = 10,
+    CELL = 11
 };
 
 class XMLOFF_DLLPUBLIC XMLTextPropertySetMapper : public XMLPropertySetMapper
