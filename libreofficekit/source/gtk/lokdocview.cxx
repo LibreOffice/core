@@ -72,6 +72,9 @@ struct LOKDocViewPrivateImpl
     gint m_nParts;
     /// Position and size of the visible cursor.
     GdkRectangle m_aVisibleCursor;
+    /// Position and size of the view cursors. The current view can only see
+    /// them, can't modify them. Key is the view id.
+    std::map<std::uintptr_t, GdkRectangle> m_aViewCursors;
     /// Cursor overlay is visible or hidden (for blinking).
     gboolean m_bCursorOverlayVisible;
     /// Cursor is visible or hidden (e.g. for graphic selection).
@@ -1025,6 +1028,7 @@ callback (gpointer pData)
                       priv->m_aVisibleCursor.y,
                       priv->m_aVisibleCursor.width,
                       priv->m_aVisibleCursor.height);
+        std::cerr << "debug, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR: i am " << priv->m_nViewId << ", i got " << pCallback->m_aPayload << " for myself" << std::endl;
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
@@ -1156,7 +1160,13 @@ callback (gpointer pData)
     }
     case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
     {
-        // TODO: Implement me
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        std::uintptr_t nViewId = aTree.get<std::uintptr_t>("viewId");
+        const std::string& rRectangle = aTree.get<std::string>("rectangle");
+        priv->m_aViewCursors[nViewId] = payloadToRectangle(pDocView, rRectangle.c_str());
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
     default:
@@ -1396,6 +1406,32 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
     return FALSE;
 }
 
+static const GdkRGBA& getDarkColor(std::uintptr_t nViewId)
+{
+    static std::map<std::uintptr_t, GdkRGBA> aColorMap;
+    auto it = aColorMap.find(nViewId);
+    if (it != aColorMap.end())
+        return it->second;
+
+    // Based on tools/colordata.hxx, COL_AUTHOR1_DARK..COL_AUTHOR9_DARK.
+    static std::vector<GdkRGBA> aColors =
+    {
+        {((double)198)/255, ((double)146)/255, ((double)0)/255, 0},
+        {((double)6)/255, ((double)70)/255, ((double)162)/255, 0},
+        {((double)87)/255, ((double)157)/255, ((double)28)/255, 0},
+        {((double)105)/255, ((double)43)/255, ((double)157)/255, 0},
+        {((double)197)/255, ((double)0)/255, ((double)11)/255, 0},
+        {((double)0)/255, ((double)128)/255, ((double)128)/255, 0},
+        {((double)140)/255, ((double)132)/255, ((double)0)/255, 0},
+        {((double)43)/255, ((double)85)/255, ((double)107)/255, 0},
+        {((double)209)/255, ((double)118)/255, ((double)0)/255, 0},
+    };
+    static int nColorCounter = 0;
+    GdkRGBA aColor = aColors[nColorCounter++ % aColors.size()];
+    aColorMap[nViewId] = aColor;
+    return aColorMap[nViewId];
+}
+
 static gboolean
 renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
 {
@@ -1414,6 +1450,27 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
                         twipToPixel(priv->m_aVisibleCursor.width, priv->m_fZoom),
                         twipToPixel(priv->m_aVisibleCursor.height, priv->m_fZoom));
         cairo_fill(pCairo);
+    }
+
+    // View cursors: they do not blink and are colored.
+    if (priv->m_bEdit && !priv->m_aViewCursors.empty())
+    {
+        for (auto& rPair : priv->m_aViewCursors)
+        {
+            GdkRectangle& rCursor = rPair.second;
+            if (rCursor.width < 30)
+                // Set a minimal width if it would be 0.
+                rCursor.width = 30;
+
+            const GdkRGBA& rDark = getDarkColor(priv->m_nViewId);
+            cairo_set_source_rgb(pCairo, rDark.red, rDark.green, rDark.blue);
+            cairo_rectangle(pCairo,
+                            twipToPixel(rCursor.x, priv->m_fZoom),
+                            twipToPixel(rCursor.y, priv->m_fZoom),
+                            twipToPixel(rCursor.width, priv->m_fZoom),
+                            twipToPixel(rCursor.height, priv->m_fZoom));
+            cairo_fill(pCairo);
+        }
     }
 
     if (priv->m_bEdit && priv->m_bCursorVisible && !isEmptyRectangle(priv->m_aVisibleCursor) && priv->m_aTextSelectionRectangles.empty())
