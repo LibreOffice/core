@@ -829,7 +829,7 @@ SpinFieldUIObject::~SpinFieldUIObject()
 }
 
 void SpinFieldUIObject::execute(const OUString& rAction,
-        const StringMap& /*rParameters*/)
+        const StringMap& rParameters)
 {
     if (rAction == "UP")
     {
@@ -839,6 +839,17 @@ void SpinFieldUIObject::execute(const OUString& rAction,
     {
         mxSpinField->Down();
     }
+    else if (rAction == "TYPE")
+    {
+        if (mxSpinField->GetSubEdit())
+        {
+            Edit* pSubEdit = mxSpinField->GetSubEdit();
+            EditUIObject aSubObject(pSubEdit);
+            aSubObject.execute(rAction, rParameters);
+        }
+    }
+    else
+        EditUIObject::execute(rAction, rParameters);
 }
 
 StringMap SpinFieldUIObject::get_state()
