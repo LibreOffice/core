@@ -546,6 +546,19 @@ public:
     {
         mpThis->pClass->setDocumentPassword(mpThis, pURL, pPassword);
     }
+
+    /**
+     * Get version information of the LOKit process
+     *
+     * @returns string containing version information in format:
+     * PRODUCT_NAME PRODUCT_VERSION PRODUCT_EXTENSION BUILD_ID
+     *
+     * Eg: LibreOffice 5.3 .0.0 alpha0 <commit hash>
+     */
+    inline char* getVersionInfo()
+    {
+        return mpThis->pClass->getVersionInfo(mpThis);
+    }
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
