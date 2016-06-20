@@ -1228,7 +1228,6 @@ void SdXMLStylesContext::ImpSetCellStyles() const
     {
         const OUString sCellStyleName("cell");
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sCellStyleName), uno::UNO_QUERY_THROW );
-
         ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, OUString());
     }
     catch( uno::Exception& )
