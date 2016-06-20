@@ -23,7 +23,6 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/proptypehlp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 namespace ppt
@@ -39,7 +38,7 @@ ExSoundEntry::ExSoundEntry(const OUString& rString)
             css::uno::Reference< css::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         sal_Int64 nVal = 0;
-        ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue("Size") );
+        aCnt.getPropertyValue("Size") >>= nVal;
         nFileSize = (sal_uInt32)nVal;
     }
     catch( css::uno::Exception& )
