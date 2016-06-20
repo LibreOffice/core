@@ -167,10 +167,6 @@ void ParaPropertyPanel::InitToolBoxIndent()
     mpRightIndent->SetModifyHdl( aLink );
     mpFLineIndent->SetModifyHdl( aLink );
 
-    mpLeftIndent->SetAccessibleName(mpLeftIndent->GetQuickHelpText());
-    mpRightIndent->SetAccessibleName(mpRightIndent->GetQuickHelpText());
-    mpFLineIndent->SetAccessibleName(mpFLineIndent->GetQuickHelpText());
-
     const sal_uInt16 nIdIncrement = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
     const sal_uInt16 nIdDecrement = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
     const sal_uInt16 nIdHanging   = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT);
@@ -189,8 +185,6 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     mpTopDist->SetModifyHdl(aLink);
     mpBottomDist->SetModifyHdl( aLink );
 
-    mpTopDist->SetAccessibleName(mpTopDist->GetQuickHelpText());
-    mpBottomDist->SetAccessibleName(mpBottomDist->GetQuickHelpText());
     m_eULSpaceUnit = maULSpaceControl.GetCoreMetric();
 }
 

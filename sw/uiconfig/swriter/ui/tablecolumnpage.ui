@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -17,13 +17,13 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-back</property>
-    <property name="icon-size">1</property>
+    <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="image8">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-forward</property>
-    <property name="icon-size">1</property>
+    <property name="icon_size">1</property>
   </object>
   <object class="GtkGrid" id="TableColumnPage">
     <property name="visible">True</property>
@@ -129,6 +129,11 @@
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width2:0.0cm-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Column 2 Width</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -145,6 +150,11 @@
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width3:0.00cm-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Column 3 Width</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -161,6 +171,11 @@
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width4:0.00cm-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Column 4 Width</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
@@ -177,6 +192,11 @@
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width5:0.00cm-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Column 5 Width</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">5</property>
@@ -193,6 +213,11 @@
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width6:0.00cm-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Column 6 Width</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">6</property>
@@ -294,6 +319,11 @@
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="digits">2</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="width1:0.00cm-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Column 1 Width</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

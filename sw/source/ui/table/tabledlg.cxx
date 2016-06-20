@@ -892,11 +892,6 @@ IMPL_LINK_TYPED( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
         OUString sIndex = OUString::number( aValueTable[i] + 1 );
         sEntry += sIndex;
         m_pTextArr[i]->SetText( sEntry );
-
-        //added by menghu for SODC_5143,12/12/2006
-        OUString sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH);
-        sColumnWidth = sColumnWidth.replaceFirst( "%1", sIndex );
-        m_aFieldArr[i].SetAccessibleName( sColumnWidth );
     }
 
     m_pDownBtn->Enable(aValueTable[0] > 0);

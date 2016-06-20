@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.4"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -311,8 +311,13 @@
                     <property name="tooltip_text" translatable="yes">Above Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="no">0</property>
+                    <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="aboveparaspacing-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Above Paragraph Spacing</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -354,8 +359,13 @@
                     <property name="tooltip_text" translatable="yes">Below Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="no">0</property>
+                    <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="belowparaspacing-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Below Paragraph Spacing</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -507,8 +517,13 @@
                     <property name="tooltip_text" translatable="yes">Before Text Indent</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="no">0</property>
+                    <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="beforetextindent-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Before Text Indent</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -549,8 +564,13 @@
                     <property name="tooltip_text" translatable="yes">After Text Indent</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="no">0</property>
+                    <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="aftertextindent-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">After Text Indent</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -591,8 +611,13 @@
                     <property name="tooltip_text" translatable="yes">First Line Indent</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="no">0</property>
+                    <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="firstlineindent-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">First Line Indent</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
