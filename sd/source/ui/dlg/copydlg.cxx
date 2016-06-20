@@ -60,9 +60,6 @@ CopyDlg::CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
     get(m_pLbEndColor, "end");
     get(m_pBtnSetDefault, "default");
 
-    // Set up the view data button (image and accessible name).
-    m_pBtnSetViewData->SetAccessibleName (m_pBtnSetViewData->GetQuickHelpText());
-
     // color tables
     DBG_ASSERT( mpColorList.is(), "No colortable available !" );
     m_pLbStartColor->Fill( mpColorList );

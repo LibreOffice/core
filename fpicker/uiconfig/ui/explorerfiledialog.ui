@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -77,6 +77,11 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup" translatable="yes">Connect To Server</property>
                         <property name="tooltip_text" translatable="yes">Connect To Server</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="connect_to_server-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Connect To Server</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -108,6 +113,11 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup" translatable="yes">Create New Folder</property>
                         <property name="tooltip_text" translatable="yes">Create New Folder</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="new_folder-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Create New Folder</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -156,6 +156,11 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Values from Selection</property>
                     <property name="image">image1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="viewdata-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Values from Selection</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -195,10 +200,10 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_X axis:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">x:0.00cm</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -209,10 +214,10 @@
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Y axis:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">y:0.00cm</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -223,10 +228,10 @@
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Angle:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">angle:0degrees</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -320,10 +325,10 @@
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Width:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">width:0.00cm</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -334,10 +339,10 @@
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Height:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">height:0.00cm</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -418,10 +423,10 @@
                           <object class="GtkLabel" id="label10">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Start:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">start</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -432,10 +437,10 @@
                           <object class="GtkLabel" id="endlabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_End:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">end</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>

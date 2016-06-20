@@ -108,9 +108,6 @@ void GraphicPropertyPanel::Initialize()
     mpMtrGreen->SetModifyHdl( LINK( this, GraphicPropertyPanel, GreenHdl ) );
     mpMtrBlue->SetModifyHdl( LINK( this, GraphicPropertyPanel, BlueHdl ) );
     mpMtrGamma->SetModifyHdl( LINK( this, GraphicPropertyPanel, GammaHdl ) );
-    mpMtrRed->SetAccessibleName(mpMtrRed->GetQuickHelpText());
-    mpMtrGreen->SetAccessibleName(mpMtrGreen->GetQuickHelpText());
-    mpMtrBlue->SetAccessibleName(mpMtrBlue->GetQuickHelpText());
 
     // Fix left position of some controls that may be wrong due to
     // rounding errors.
