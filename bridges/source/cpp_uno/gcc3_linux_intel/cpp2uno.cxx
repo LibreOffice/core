@@ -277,8 +277,8 @@ extern "C" void cpp_vtable_call(
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(aMemberDescr.get())->pAttributeTypeRef;
-            aParam.bIn      = sal_True;
-            aParam.bOut     = sal_False;
+            aParam.bIn      = true;
+            aParam.bOut     = false;
 
             cpp2uno_call(
                 pCppI, aMemberDescr.get(),
