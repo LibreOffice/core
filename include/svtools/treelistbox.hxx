@@ -152,10 +152,6 @@ public:
     bool    IsEditable() const { return bool(nFlags & SvLBoxTabFlags::EDITABLE); }
 };
 
-// *********************************************************************
-// ****************************** Items ********************************
-// *********************************************************************
-
 class SVT_DLLPUBLIC SvLBoxItem
 {
 public:
@@ -176,10 +172,6 @@ public:
     virtual void        Clone(SvLBoxItem* pSource) = 0;
 };
 
-// *********************************************************************
-// ****************************** SvTreeListBox ************************
-// *********************************************************************
-
 #define WB_FORCE_SELECTION          ((WinBits)0x8000)
 
 enum class DragDropMode
@@ -199,7 +191,6 @@ namespace o3tl
 {
     template<> struct typed_flags<DragDropMode> : is_typed_flags<DragDropMode, 0x003f> {};
 }
-
 
 enum class SvTreeListBoxFlags
 {
