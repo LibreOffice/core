@@ -175,21 +175,14 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
 void SAL_CALL
 DocObjectWrapper::acquire() throw ()
 {
-    osl_atomic_increment( &m_refCount );
+    OWeakObject::acquire();
     SAL_INFO("basic","DocObjectWrapper::acquire("<< OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr() << ") 0x" << this << " refcount is now " << m_refCount );
 }
 void SAL_CALL
 DocObjectWrapper::release() throw ()
 {
-    if ( osl_atomic_decrement( &m_refCount ) == 0 )
-    {
-        SAL_INFO("basic","DocObjectWrapper::release("<< OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr() << ") 0x" << this << " refcount is now " << m_refCount );
-        delete this;
-    }
-    else
-    {
-        SAL_INFO("basic","DocObjectWrapper::release("<< OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr() << ") 0x" << this << " refcount is now " << m_refCount );
-    }
+    SAL_INFO("basic","DocObjectWrapper::release("<< OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr() << ") 0x" << this << " decrementing refcount, was " << m_refCount );
+    OWeakObject::release();
 }
 
 DocObjectWrapper::~DocObjectWrapper()
