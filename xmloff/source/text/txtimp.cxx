@@ -512,6 +512,7 @@ struct XMLTextImportHelper::Impl
     rtl::Reference< SvXMLImportPropertyMapper > m_xFrameImpPrMap;
     rtl::Reference< SvXMLImportPropertyMapper > m_xSectionImpPrMap;
     rtl::Reference< SvXMLImportPropertyMapper > m_xRubyImpPrMap;
+    rtl::Reference< SvXMLImportPropertyMapper > m_xCellImpPrMap;
 
     std::unique_ptr<SvI18NMap> m_xRenameMap;
 
@@ -707,6 +708,12 @@ rtl::Reference< SvXMLImportPropertyMapper > const&
 XMLTextImportHelper::GetRubyImportPropertySetMapper() const
 {
     return m_xImpl->m_xRubyImpPrMap;
+}
+
+rtl::Reference< SvXMLImportPropertyMapper > const&
+XMLTextImportHelper::GetCellImportPropertySetMapper() const
+{
+    return m_xImpl->m_xCellImpPrMap;
 }
 
 void XMLTextImportHelper::SetInsideDeleteContext(bool const bNew)
@@ -1009,6 +1016,10 @@ XMLTextImportHelper::XMLTextImportHelper(
     pPropMapper = new XMLTextPropertySetMapper( TextPropMap::RUBY, false );
     m_xImpl->m_xRubyImpPrMap =
         new SvXMLImportPropertyMapper( pPropMapper, rImport );
+
+    pPropMapper = new XMLTextPropertySetMapper( TextPropMap::CELL, false );
+    m_xImpl->m_xCellImpPrMap =
+        new SvXMLImportPropertyMapper( pPropMapper, rImport );
 }
 
 XMLTextImportHelper::~XMLTextImportHelper()
@@ -1057,6 +1068,15 @@ SvXMLImportPropertyMapper*
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::TABLE_ROW_DEFAULTS, false );
+    return new SvXMLImportPropertyMapper( pPropMapper, rImport );
+}
+
+SvXMLImportPropertyMapper*
+    XMLTextImportHelper::CreateTableCellExtPropMapper(
+        SvXMLImport& rImport )
+{
+    XMLPropertySetMapper *pPropMapper =
+        new XMLTextPropertySetMapper( TextPropMap::CELL, false );
     return new SvXMLImportPropertyMapper( pPropMapper, rImport );
 }
 

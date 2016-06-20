@@ -546,12 +546,15 @@ public:
         GetSectionImportPropertySetMapper() const;
     rtl::Reference< SvXMLImportPropertyMapper > const&
         GetRubyImportPropertySetMapper() const;
+    rtl::Reference< SvXMLImportPropertyMapper > const&
+        GetCellImportPropertySetMapper() const;
 
     static SvXMLImportPropertyMapper *CreateShapeExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper *CreateParaExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper* CreateParaDefaultExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper* CreateTableDefaultExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper* CreateTableRowDefaultExtPropMapper(SvXMLImport&);
+    static SvXMLImportPropertyMapper* CreateTableCellExtPropMapper(SvXMLImport&);
 
     SvI18NMap& GetRenameMap();
 
