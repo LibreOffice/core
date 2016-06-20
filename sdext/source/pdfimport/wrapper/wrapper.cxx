@@ -69,6 +69,8 @@
 
 #include "rtl/bootstrap.h"
 
+#include <rtl/character.hxx>
+
 using namespace com::sun::star;
 
 namespace pdfi
@@ -469,8 +471,8 @@ sal_Int32 Parser::parseFontCheckForString(
     if (nCopyLen < nAttribLen)
         return 0;
     for (sal_Int32 i = 0; i < nAttribLen; ++i)
-        if (tolower(pCopy[i]) != pAttrib[i]
-            && toupper(pCopy[i]) != pAttrib[i])
+        if (rtl::toAsciiLowerCase(pCopy[i]) != rtl::toAsciiLowerCase(pAttrib[i])
+            && rtl::toAsciiUpperCase(pCopy[i]) != rtl::toAsciiLowerCase(pAttrib[i]))
             return 0;
     rResult.isItalic |= bItalic;
     rResult.isBold |= bBold;

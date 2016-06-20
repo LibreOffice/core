@@ -33,6 +33,7 @@
 #include "osl/time.h"
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
+#include <rtl/character.hxx>
 
 #include <tchar.h>
 #ifdef __MINGW32__
@@ -1054,7 +1055,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                 osl_acquireDirectoryItem( (oslDirectoryItem)pItemImpl );
 
                 _tcscpy( pItemImpl->cDriveString, strSysFilePath->buffer );
-                pItemImpl->cDriveString[0] = toupper( pItemImpl->cDriveString[0] );
+                pItemImpl->cDriveString[0] = rtl::toAsciiUpperCase( pItemImpl->cDriveString[0] );
 
                 if ( pItemImpl->cDriveString[_tcslen(pItemImpl->cDriveString) - 1] != '\\' )
                     _tcscat( pItemImpl->cDriveString, TEXT( "\\" ) );

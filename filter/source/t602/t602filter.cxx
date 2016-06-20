@@ -38,6 +38,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/character.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -679,14 +680,14 @@ tnode T602ImportFilter::PointCmd602(unsigned char *ch)
     char pcmd[2];
 
     // warning: uChar -> char
-    pcmd[0] = (char) toupper(*ch); inschr(*ch);
+    pcmd[0] = (char) rtl::toAsciiUpperCase(*ch); inschr(*ch);
     *ch = Readchar602();
     if (!*ch) return tnode::EEND;
     if (*ch=='\n') return tnode::EOL;
     if (!isalpha(*ch)) return (*ch<32) ? tnode::SETCH : tnode::WRITE;
 
     // warning: uChar -> char
-    pcmd[1] = (char) toupper(*ch); inschr(*ch);
+    pcmd[1] = (char) rtl::toAsciiUpperCase(*ch); inschr(*ch);
 
          if (pcmd[0]=='P' && pcmd[1]=='A') { if (pst.pars) pst.willbeeop = true; }
     else if (pcmd[0]=='C' && pcmd[1]=='P') { if (pst.pars) pst.willbeeop = true; }
@@ -761,12 +762,12 @@ void T602ImportFilter::Read602()
 
         case tnode::EXPCMD: ch = Readchar602();
             if(ch == 0) {inschr('@'); node = tnode::EEND; }
-            else if(isupper(ch)) {
+            else if(rtl::isAsciiUpperCase(ch)) {
                 cmd602[0] = ch;
                 ch = Readchar602();
                 cmd602[1] = ch;
                 cmd602[2] = '\0';
-                if(isupper(ch))
+                if(rtl::isAsciiUpperCase(ch))
                     node = tnode::SETCMD;   //nedodelano
                 else {
                     inschr('@');
