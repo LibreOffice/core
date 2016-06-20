@@ -3473,14 +3473,14 @@ bool SbaTableQueryBrowser::requestQuickHelp( const SvTreeListEntry* _pEntry, OUS
     return false;
 }
 
-PopupMenu* SbaTableQueryBrowser::getContextMenu( Control& _rControl ) const
+VclPtr<PopupMenu> SbaTableQueryBrowser::getContextMenu( Control& _rControl ) const
 {
     OSL_PRECOND( &m_pTreeView->getListBox() == &_rControl,
         "SbaTableQueryBrowser::getContextMenu: where does this come from?" );
     if ( &m_pTreeView->getListBox() != &_rControl )
         return nullptr;
 
-    return new PopupMenu( ModuleRes( MENU_BROWSER_DEFAULTCONTEXT ) );
+    return VclPtr<PopupMenu>::Create( ModuleRes( MENU_BROWSER_DEFAULTCONTEXT ) );
 }
 
 IController& SbaTableQueryBrowser::getCommandController()

@@ -784,7 +784,7 @@ public:
     void            ShowFocusRect( const SvTreeListEntry* pEntry );
     void            InitStartEntry();
 
-    virtual std::unique_ptr<PopupMenu> CreateContextMenu();
+    virtual VclPtr<PopupMenu> CreateContextMenu();
     virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
     void            EnableContextMenuHandling();

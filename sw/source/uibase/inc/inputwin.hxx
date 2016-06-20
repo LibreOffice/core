@@ -49,8 +49,8 @@ friend class InputEdit;
 
     VclPtr<Edit>        aPos;
     VclPtr<InputEdit>   aEdit;
-    PopupMenu       aPopMenu;
-    SwFieldMgr*       pMgr;
+    ScopedVclPtrInstance<PopupMenu> aPopMenu;
+    SwFieldMgr*     pMgr;
     SwWrtShell*     pWrtShell;
     SwView*         pView;
     OUString        aAktTableName, sOldFormula;

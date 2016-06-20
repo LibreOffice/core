@@ -126,7 +126,7 @@ void TemplateSearchView::Command( const CommandEvent& rCEvt )
 
 void TemplateSearchView::createContextMenu( const bool bIsDefault)
 {
-    std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);
+    ScopedVclPtrInstance<PopupMenu> pItemMenu;
     pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
     pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
 

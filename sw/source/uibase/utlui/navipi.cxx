@@ -380,7 +380,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
                 HID_NAVI_DRAG_LINK,
                 HID_NAVI_DRAG_COPY,
             };
-            std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
+            ScopedVclPtrInstance<PopupMenu> pMenu;
             for (sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); i++)
             {
                 pMenu->InsertItem( i + 1, m_aContextArr[i] );
@@ -394,13 +394,13 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
                     PopupMenuFlags::ExecuteDown );
             pBox->SetItemDown( nCurrItemId, false );
             pBox->EndSelection();
-            pMenu.reset();
+            pMenu.disposeAndClear();
             pBox->Invalidate();
         }
         break;
         case FN_OUTLINE_LEVEL:
         {
-            std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
+            ScopedVclPtrInstance<PopupMenu> pMenu;
             for (sal_uInt16 i = 101; i <= 100 + MAXLEVEL; i++)
             {
                 pMenu->InsertItem( i, OUString::number(i - 100) );
@@ -413,7 +413,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
                     pBox->GetItemRect(FN_OUTLINE_LEVEL),
                     PopupMenuFlags::ExecuteDown );
             pBox->SetItemDown( nCurrItemId, false );
-            pMenu.reset();
+            pMenu.disposeAndClear();
             pBox->EndSelection();
             pBox->Invalidate();
         }

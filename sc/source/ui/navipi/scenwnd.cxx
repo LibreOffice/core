@@ -135,11 +135,11 @@ bool ScScenarioListBox::Notify( NotifyEvent& rNEvt )
             {
                 if( !pEntry->mbProtected )
                 {
-                    ScPopupMenu aPopup( ScResId( RID_POPUP_NAVIPI_SCENARIO ) );
-                    aPopup.Execute( this, pCEvt->GetMousePosPixel() );
-                    if (aPopup.WasHit())
+                    ScopedVclPtrInstance<ScPopupMenu> aPopup( ScResId( RID_POPUP_NAVIPI_SCENARIO ) );
+                    aPopup->Execute( this, pCEvt->GetMousePosPixel() );
+                    if (aPopup->WasHit())
                     {
-                        switch( aPopup.GetSelected() )
+                        switch( aPopup->GetSelected() )
                         {
                             case RID_NAVIPI_SCENARIO_DELETE:
                                 DeleteScenario();

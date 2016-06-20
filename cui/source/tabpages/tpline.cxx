@@ -229,10 +229,14 @@ void SvxLineTabPage::dispose()
     // Symbols on a line (e.g. StarCharts), dtor new!
     if (m_pSymbolMB)
     {
-        delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
+        VclPtr<PopupMenu> p = m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
+        p.disposeAndClear(); // NoelG: dodgy
 
         if(m_pSymbolList)
-            delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
+        {
+            VclPtr<PopupMenu> p2 = m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
+            p2.disposeAndClear(); // NoelG: dodgy
+        }
         m_pSymbolMB = nullptr;
     }
 
@@ -290,7 +294,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         // Get gallery entries
         GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, m_aGrfNames);
 
-        PopupMenu* pPopup = new PopupMenu;
+        VclPtrInstance<PopupMenu> pPopup;
         sal_uInt32 i = 0;
         m_nNumMenuGalleryItems = m_aGrfNames.size();
         for(std::vector<OUString>::iterator it = m_aGrfNames.begin(); it != m_aGrfNames.end(); ++it, ++i)
@@ -363,7 +367,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
 
-        PopupMenu* pPopup = new PopupMenu;
+        VclPtrInstance<PopupMenu> pPopup;
 
         // Generate invisible square to give all symbols a
         // bitmap size, which is independent from specific glyph

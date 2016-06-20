@@ -496,12 +496,12 @@ IMPL_LINK_NOARG_TYPED( FmGridHeader, OnAsyncExecuteDrop, void*, void )
             {
                 ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
 
-                PopupMenu aInsertMenu(SVX_RES(RID_SVXMNU_COLS));
-                PopupMenu aTypeMenu;
-                PopupMenu* pMenu = aInsertMenu.GetPopupMenu(SID_FM_INSERTCOL);
+                ScopedVclPtrInstance<PopupMenu> aInsertMenu(SVX_RES(RID_SVXMNU_COLS));
+                ScopedVclPtrInstance<PopupMenu> aTypeMenu;
+                PopupMenu* pMenu = aInsertMenu->GetPopupMenu(SID_FM_INSERTCOL);
                 for (std::vector<sal_uInt16>::const_iterator iter = aPossibleTypes.begin(); iter != aPossibleTypes.end(); ++iter)
-                    SetMenuItem(aImageList, *iter, pMenu, aTypeMenu, true, 0);
-                nPreferredType = aTypeMenu.Execute(this, m_pImpl->aDropPosPixel);
+                    SetMenuItem(aImageList, *iter, pMenu, *aTypeMenu.get(), true, 0);
+                nPreferredType = aTypeMenu->Execute(this, m_pImpl->aDropPosPixel);
             }
 
             bDateNTimeCol = nPreferredType == SID_FM_TWOFIELDS_DATE_N_TIME;
@@ -657,7 +657,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     bool bMarked = nColId && static_cast<FmGridControl*>(GetParent())->isColumnMarked(nColId);
 
     ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
-    PopupMenu* pControlMenu = new PopupMenu;
+    VclPtrInstance<PopupMenu> pControlMenu;
 
     PopupMenu* pMenu = rMenu.GetPopupMenu(SID_FM_INSERTCOL);
     if (pMenu)
@@ -782,8 +782,8 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
     sal_uInt16 nPos = GetModelColumnPos(nColId);
 
     // remove and delete the menu we inserted in PreExecuteColumnContextMenu
-    PopupMenu* pControlMenu = rMenu.GetPopupMenu(SID_FM_CHANGECOL);
-    delete pControlMenu;
+    VclPtr<PopupMenu> pControlMenu = rMenu.GetPopupMenu(SID_FM_CHANGECOL);
+    pControlMenu.disposeAndClear(); // NoelG: dodgy...
 
     OUString aFieldType;
     bool    bReplace = false;
@@ -983,17 +983,17 @@ void FmGridHeader::triggerColumnContextMenu( const ::Point& _rPreferredPos )
     sal_uInt16 nColId = GetItemId( _rPreferredPos );
 
     // the menu
-    PopupMenu aContextMenu( SVX_RES( RID_SVXMNU_COLS ) );
+    ScopedVclPtrInstance<PopupMenu> aContextMenu( SVX_RES( RID_SVXMNU_COLS ) );
 
     // let derivees modify the menu
-    PreExecuteColumnContextMenu( nColId, aContextMenu );
-    aContextMenu.RemoveDisabledEntries( true, true );
+    PreExecuteColumnContextMenu( nColId, *aContextMenu );
+    aContextMenu->RemoveDisabledEntries( true, true );
 
     // execute the menu
-    sal_uInt16 nResult = aContextMenu.Execute( this, _rPreferredPos );
+    sal_uInt16 nResult = aContextMenu->Execute( this, _rPreferredPos );
 
     // let derivees handle the result
-    PostExecuteColumnContextMenu( nColId, aContextMenu, nResult );
+    PostExecuteColumnContextMenu( nColId, *aContextMenu, nResult );
 }
 
 void FmGridHeader::Command(const CommandEvent& rEvt)

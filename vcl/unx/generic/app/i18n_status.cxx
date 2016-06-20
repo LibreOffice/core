@@ -299,7 +299,7 @@ namespace vcl {
 class IIIMPStatusWindow : public StatusWindow
 {
     VclPtr<MenuButton>      m_aStatusBtn;
-    PopupMenu               m_aMenu;
+    ScopedVclPtrInstance<PopupMenu> m_aMenu;
     SalFrame*               m_pResetFocus;
     bool                    m_bShow;
     bool                    m_bOn;
@@ -338,13 +338,13 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
     layout();
 
     m_aStatusBtn->SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
-    m_aStatusBtn->SetPopupMenu( &m_aMenu );
+    m_aStatusBtn->SetPopupMenu( m_aMenu.get() );
     m_aStatusBtn->Show();
 
     const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
     int i = 1;
     for( ::std::vector< I18NStatus::ChoiceData >::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it, i++ )
-        m_aMenu.InsertItem( i, it->aString );
+        m_aMenu->InsertItem( i, it->aString );
 
     if( pParent )
     {

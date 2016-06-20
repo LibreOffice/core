@@ -162,7 +162,7 @@ private:
     VclPtr< FileViewContainer > m_pContainer;
     VclPtr< ListBox > m_pFilter_lb;
     VclPtr< AutocompleteEdit > m_pName_ed;
-    PopupMenu* m_pAddMenu;
+    VclPtr<PopupMenu> m_pAddMenu;
 
     ImageList m_aImages;
 

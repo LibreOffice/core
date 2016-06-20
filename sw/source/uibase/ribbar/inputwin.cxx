@@ -124,7 +124,7 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     aPos->SetPosSizePixel( aPosPos, aPosSize );
     aEdit->SetPosSizePixel( aEditPos, aEditSize );
 
-    aPopMenu.SetSelectHdl(LINK( this, SwInputWindow, MenuHdl ));
+    aPopMenu->SetSelectHdl(LINK( this, SwInputWindow, MenuHdl ));
 }
 
 SwInputWindow::~SwInputWindow()
@@ -350,7 +350,7 @@ IMPL_LINK_NOARG_TYPED(SwInputWindow, DropdownClickHdl, ToolBox *, void)
     {
         case FN_FORMULA_CALC :
         {
-            aPopMenu.Execute( this, GetItemRect( FN_FORMULA_CALC ), PopupMenuFlags::NoMouseUpClose );
+            aPopMenu->Execute( this, GetItemRect( FN_FORMULA_CALC ), PopupMenuFlags::NoMouseUpClose );
             break;
         default:
             break;

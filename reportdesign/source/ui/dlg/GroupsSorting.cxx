@@ -717,7 +717,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
 
             if ( nColId == HANDLE_ID )
             {
-                PopupMenu aContextMenu(ModuleRes(RID_GROUPSROWPOPUPMENU));
+                ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_GROUPSROWPOPUPMENU));
                 bool bEnable = false;
                 long nIndex = FirstSelectedRow();
                 while( nIndex >= 0 && !bEnable )
@@ -726,8 +726,8 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                         bEnable = true;
                     nIndex = NextSelectedRow();
                 }
-                aContextMenu.EnableItem( SID_DELETE, IsDeleteAllowed() && bEnable );
-                switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
+                aContextMenu->EnableItem( SID_DELETE, IsDeleteAllowed() && bEnable );
+                switch (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
                 {
                     case SID_CUT:
                         cut();

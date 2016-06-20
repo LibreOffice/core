@@ -22,7 +22,7 @@ class SwHeaderFooterWin : public SwFrameMenuButtonBase
 {
     OUString              m_sLabel;
     bool                  m_bIsHeader;
-    PopupMenu*            m_pPopupMenu;
+    VclPtr<PopupMenu>     m_pPopupMenu;
     VclPtr<vcl::Window>   m_pLine;
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;

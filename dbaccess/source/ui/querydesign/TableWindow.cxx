@@ -603,8 +603,8 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                         ptWhere = m_xTitle->GetPosPixel();
                 }
 
-                PopupMenu aContextMenu(ModuleRes(RID_MENU_JOINVIEW_TABLE));
-                switch (aContextMenu.Execute(this, ptWhere))
+                ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_MENU_JOINVIEW_TABLE));
+                switch (aContextMenu->Execute(this, ptWhere))
                 {
                     case SID_DELETE:
                         Remove();

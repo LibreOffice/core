@@ -915,7 +915,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
     if( bReadOnly && !pAnnotationWindow )
         return;
 
-    std::unique_ptr< PopupMenu > pMenu( new PopupMenu( SdResId( pAnnotationWindow ? RID_ANNOTATION_CONTEXTMENU : RID_ANNOTATION_TAG_CONTEXTMENU ) ) );
+    ScopedVclPtrInstance<PopupMenu> pMenu( SdResId( pAnnotationWindow ? RID_ANNOTATION_CONTEXTMENU : RID_ANNOTATION_TAG_CONTEXTMENU ) );
 
     SvtUserOptions aUserOptions;
     OUString sCurrentAuthor( aUserOptions.GetFullName() );

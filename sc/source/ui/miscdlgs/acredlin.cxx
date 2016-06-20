@@ -1676,9 +1676,9 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
 
     if(aCEvt.GetCommand()==CommandEventId::ContextMenu)
     {
-        ScPopupMenu aPopup(ScResId(RID_POPUP_CHANGES));
+        ScopedVclPtrInstance<ScPopupMenu> aPopup(ScResId(RID_POPUP_CHANGES));
 
-        aPopup.SetMenuFlags(MenuFlags::HideDisabledEntries);
+        aPopup->SetMenuFlags(MenuFlags::HideDisabledEntries);
 
         SvTreeListEntry* pEntry=pTheView->GetCurEntry();
         if(pEntry!=nullptr)
@@ -1687,7 +1687,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
         }
         else
         {
-            aPopup.Deactivate();
+            aPopup->Deactivate();
         }
 
         sal_uInt16 nSortedCol= pTheView->GetSortedCol();
@@ -1696,15 +1696,15 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
         {
             sal_uInt16 nItemId=nSortedCol+SC_SUB_SORT+1;
 
-            aPopup.CheckItem(nItemId);
+            aPopup->CheckItem(nItemId);
 
-            PopupMenu *pSubMenu = aPopup.GetPopupMenu(SC_SUB_SORT);
+            PopupMenu *pSubMenu = aPopup->GetPopupMenu(SC_SUB_SORT);
 
             if (pSubMenu)
                 pSubMenu->CheckItem(nItemId);
         }
 
-        aPopup.EnableItem(SC_CHANGES_COMMENT,false);
+        aPopup->EnableItem(SC_CHANGES_COMMENT,false);
 
         if(pDoc->IsDocEditable() && pEntry!=nullptr)
         {
@@ -1714,11 +1714,11 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
                 ScChangeAction* pScChangeAction=
                         static_cast<ScChangeAction*>(pEntryData->pData);
                 if(pScChangeAction!=nullptr && !pTheView->GetParent(pEntry))
-                    aPopup.EnableItem(SC_CHANGES_COMMENT);
+                    aPopup->EnableItem(SC_CHANGES_COMMENT);
             }
         }
 
-        sal_uInt16 nCommand=aPopup.Execute( this, GetPointerPosPixel() );
+        sal_uInt16 nCommand = aPopup->Execute( this, GetPointerPosPixel() );
 
         if(nCommand)
         {

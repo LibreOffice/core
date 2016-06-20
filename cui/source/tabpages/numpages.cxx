@@ -1239,7 +1239,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     pBitmapMenu->SetHighlightHdl(LINK(this, SvxNumOptionsTabPage, PopupActivateHdl_Impl));
     m_nGalleryId = pBitmapMenu->GetItemId("gallery");
     assert(m_nGalleryId != MENU_ITEM_NOTFOUND);
-    PopupMenu* pPopup = new PopupMenu;
+    VclPtrInstance<PopupMenu> pPopup;
     pBitmapMenu->SetPopupMenu(m_nGalleryId, pPopup);
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
@@ -1258,7 +1258,8 @@ void SvxNumOptionsTabPage::dispose()
 {
     if (m_pBitmapMB)
     {
-        delete m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
+        VclPtr<PopupMenu> p = m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
+        p.disposeAndClear(); // NoelG: dodgy
     }
     delete pActNum;
     pActNum = nullptr;

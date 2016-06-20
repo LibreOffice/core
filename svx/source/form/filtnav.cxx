@@ -1629,24 +1629,21 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
                     aSelectList.clear();
             }
 
-            PopupMenu aContextMenu(SVX_RES(RID_FM_FILTER_MENU));
+            ScopedVclPtrInstance<PopupMenu> aContextMenu(SVX_RES(RID_FM_FILTER_MENU));
 
             // every condition could be deleted except the first one if its the only one
-            aContextMenu.EnableItem( SID_FM_DELETE, !aSelectList.empty() );
+            aContextMenu->EnableItem( SID_FM_DELETE, !aSelectList.empty() );
 
 
             bool bEdit = dynamic_cast<FmFilterItem*>( static_cast<FmFilterData*>(pClicked->GetUserData()) ) != nullptr &&
                 IsSelected(pClicked) && GetSelectionCount() == 1;
 
-            aContextMenu.EnableItem( SID_FM_FILTER_EDIT,
-                bEdit );
-            aContextMenu.EnableItem( SID_FM_FILTER_IS_NULL,
-                bEdit );
-            aContextMenu.EnableItem( SID_FM_FILTER_IS_NOT_NULL,
-                bEdit );
+            aContextMenu->EnableItem( SID_FM_FILTER_EDIT, bEdit );
+            aContextMenu->EnableItem( SID_FM_FILTER_IS_NULL, bEdit );
+            aContextMenu->EnableItem( SID_FM_FILTER_IS_NOT_NULL, bEdit );
 
-            aContextMenu.RemoveDisabledEntries(true, true);
-            sal_uInt16 nSlotId = aContextMenu.Execute( this, aWhere );
+            aContextMenu->RemoveDisabledEntries(true, true);
+            sal_uInt16 nSlotId = aContextMenu->Execute( this, aWhere );
             switch( nSlotId )
             {
                 case SID_FM_FILTER_EDIT:

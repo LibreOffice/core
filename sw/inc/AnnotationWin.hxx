@@ -63,8 +63,8 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
         sal_uInt32 CountFollowing();
 
         SwFormatField*       mpFormatField;
-        SwPostItField*  mpField;
-        PopupMenu*      mpButtonPopup;
+        SwPostItField*       mpField;
+        VclPtr<PopupMenu>    mpButtonPopup;
 
 };
 

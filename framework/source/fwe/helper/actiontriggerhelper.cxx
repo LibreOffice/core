@@ -208,7 +208,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< X
 
                             if ( xSubContainer.is() )
                             {
-                                PopupMenu* pNewSubMenu = new PopupMenu;
+                                VclPtr<PopupMenu> pNewSubMenu = VclPtr<PopupMenu>::Create();
 
                                 // Sub menu (recursive call CreateSubMenu )
                                 InsertSubMenuItems( pNewSubMenu, nItemId, xSubContainer );
