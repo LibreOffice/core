@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_23ced483",
+        "filename": "sc/source/filter/lotus/lotattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-20T07:37:26Z",
+      "side": 1,
+      "message": "ppColorItems is declared as an array of size six (sc/source/filter/inc/lotattr.hxx), so nLotIndex outside 1--6 causes undefined behavior in the following return statement.  So nLotIndex outside 1--6 here is obviously a programming error (to be caught with an assert), not an unusual (but legitimate) event that should be logged via SAL_WARN.  Please see \u003chttps://lists.freedesktop.org/archives/libreoffice/2016-June/074564.html\u003e \"Re: [Libreoffice-commits] core.git: convert DBG_ASSERT in vcl\" for a recent discussion on how to replace ambiguous legacy OSL_ENSURE etc.",
+      "parentUuid": "ba84c18e_631a9c19",
+      "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_23209449",
         "filename": "sc/source/filter/lotus/lotform.cxx",
         "patchSetId": 2
