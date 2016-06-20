@@ -25,7 +25,6 @@
 
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>

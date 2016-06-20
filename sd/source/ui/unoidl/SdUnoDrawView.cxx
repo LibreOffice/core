@@ -30,7 +30,6 @@
 #include "pres.hxx"
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

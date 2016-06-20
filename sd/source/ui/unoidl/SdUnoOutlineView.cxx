@@ -24,7 +24,6 @@
 #include "sdpage.hxx"
 #include "unopage.hxx"
 
-#include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/unopage.hxx>
 #include <osl/mutex.hxx>

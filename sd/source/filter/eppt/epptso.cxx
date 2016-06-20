@@ -67,7 +67,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/extract.hxx>
-#include <cppuhelper/proptypehlp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/crc.h>
 #include <comphelper/classids.hxx>

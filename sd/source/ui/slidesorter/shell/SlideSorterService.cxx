@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <cppuhelper/proptypehlp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
