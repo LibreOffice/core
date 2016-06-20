@@ -41,7 +41,7 @@ class OWeakRefListener;
 
 /** The WeakReferenceHelper holds a weak reference to an object.
 
-    This object must implement the css::uno::XWeak interface.
+    That object must implement the css::uno::XWeak interface.
 
     The WeakReferenceHelper itself is *not* thread safe, just as
     Reference itself isn't, but the implementation of the listeners etc.
@@ -64,7 +64,7 @@ public:
     WeakReferenceHelper( const WeakReferenceHelper & rWeakRef );
 
     /** Initialize this reference with the hard interface reference xInt. If the implementation
-        behind xInt does not support XWeak or XInt is null then this reference will be null.
+        behind xInt does not support XWeak or xInt is null then this reference will be null.
 
         @param xInt another hard interface reference
     */
@@ -124,7 +124,7 @@ protected:
 
 /** The WeakReference<> holds a weak reference to an object.
 
-    This object must implement the css::uno::XWeak interface.
+    That object must implement the css::uno::XWeak interface.
 
     The WeakReference itself is *not* thread safe, just as
     Reference itself isn't, but the implementation of the listeners etc.
