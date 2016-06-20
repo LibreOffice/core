@@ -226,34 +226,34 @@ class SW_DLLPUBLIC SwWriteTable
 private:
     const SwTable* m_pTable;
 protected:
-    SwWriteTableCols aCols; // alle Spalten
-    SwWriteTableRows aRows; // alle Zellen
+    SwWriteTableCols m_aCols; // alle Spalten
+    SwWriteTableRows m_aRows; // alle Zellen
 
-    sal_uInt32 nBorderColor;        // Umrandungsfarbe
+    sal_uInt32 m_nBorderColor;        // Umrandungsfarbe
 
-    sal_uInt16 nCellSpacing;        // Dicke der inneren Umrandung
-    sal_uInt16 nCellPadding;        // Absatnd Umrandung-Inhalt
+    sal_uInt16 m_nCellSpacing;        // Dicke der inneren Umrandung
+    sal_uInt16 m_nCellPadding;        // Absatnd Umrandung-Inhalt
 
-    sal_uInt16 nBorder;             // Dicke der ausseren Umrandung
-    sal_uInt16 nInnerBorder;        // Dicke der inneren Umrandung
-    sal_uInt32 nBaseWidth;            // Bezugsgroesse fur Breiten SwFormatFrameSize
+    sal_uInt16 m_nBorder;             // Dicke der ausseren Umrandung
+    sal_uInt16 m_nInnerBorder;        // Dicke der inneren Umrandung
+    sal_uInt32 m_nBaseWidth;            // Bezugsgroesse fur Breiten SwFormatFrameSize
 
-    sal_uInt16 nHeadEndRow;         // letzte Zeile des Tabellen-Kopfes
+    sal_uInt16 m_nHeadEndRow;         // letzte Zeile des Tabellen-Kopfes
 
-    sal_uInt16 nLeftSub;
-    sal_uInt16 nRightSub;
+    sal_uInt16 m_nLeftSub;
+    sal_uInt16 m_nRightSub;
 
-    sal_uInt32 nTabWidth;              // Absolute/Relative Breite der Tabelle
+    sal_uInt32 m_nTabWidth;              // Absolute/Relative Breite der Tabelle
 
-    bool bRelWidths : 1;        // Breiten relativ ausgeben?
-    bool bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
+    bool m_bRelWidths : 1;        // Breiten relativ ausgeben?
+    bool m_bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
 #ifdef DBG_UTIL
     bool m_bGetLineHeightCalled : 1;
 #endif
 
-    bool bColTags : 1;
-    bool bLayoutExport : 1;
-    bool bCollectBorderWidth : 1;
+    bool m_bColTags : 1;
+    bool m_bLayoutExport : 1;
+    bool m_bCollectBorderWidth : 1;
 
     virtual bool ShouldExpandSub( const SwTableBox *pBox,
                                 bool bExpandedBefore, sal_uInt16 nDepth ) const;
@@ -279,9 +279,9 @@ protected:
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                             sal_uInt16 &rTopBorder, sal_uInt16 &rBottomBorder );
 
-    sal_uInt32 GetBaseWidth() const { return nBaseWidth; }
+    sal_uInt32 GetBaseWidth() const { return m_nBaseWidth; }
 
-    bool HasRelWidths() const { return bRelWidths; }
+    bool HasRelWidths() const { return m_bRelWidths; }
 
 public:
     static sal_uInt32 GetBoxWidth( const SwTableBox *pBox );
@@ -309,7 +309,7 @@ public:
     SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayoutInfo);
     virtual ~SwWriteTable();
 
-    const SwWriteTableRows& GetRows() const { return aRows; }
+    const SwWriteTableRows& GetRows() const { return m_aRows; }
 
     const SwTable* GetTable() const { return m_pTable; }
 };
