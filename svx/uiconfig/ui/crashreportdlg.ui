@@ -69,9 +69,9 @@
           <object class="GtkLabel" id="ed_pre">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">We are sorry but it seems that %PRODUCTNAME crashed the last time.
+            <property name="label" translatable="yes">Unfortunately it seems that %PRODUCTNAME crashed when it was last run.
 
-You can help us fix this issue by sending the crash report to the %PRODUCTNAME crash reporting server.</property>
+You can help us to fix this issue by sending an anonymous crash report to the %PRODUCTNAME crash reporting server.</property>
             <property name="wrap">True</property>
           </object>
           <packing>
@@ -86,7 +86,7 @@ You can help us fix this issue by sending the crash report to the %PRODUCTNAME c
             <property name="valign">center</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">The crash report was successfully uploaded.
-You can soon find the report on:
+You can soon find the report at:
 crashreport.libreoffice.org/stats/crash_details/%CRASHID</property>
             <property name="wrap">True</property>
             <property name="selectable">True</property>
