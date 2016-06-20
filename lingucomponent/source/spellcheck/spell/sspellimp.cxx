@@ -334,9 +334,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
 #endif
 
                     aDicts[i] = new Hunspell(aTmpaff.getStr(),aTmpdict.getStr());
-                    aDEncs[i] = RTL_TEXTENCODING_DONTKNOW;
-                    if (aDicts[i])
-                        aDEncs[i] = getTextEncodingFromCharset(aDicts[i]->get_dic_encoding());
+                    aDEncs[i] = getTextEncodingFromCharset(aDicts[i]->get_dic_encoding());
                 }
                 pMS = aDicts[i];
                 eEnc = aDEncs[i];
