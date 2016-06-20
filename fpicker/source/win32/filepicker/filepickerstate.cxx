@@ -420,7 +420,7 @@ void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUS
 
     // somewhat risky because we don't know if OUString
     // has a terminating '\0'
-    SetWindowText( hwndCtrl, reinterpret_cast<LPCTSTR>(aWinLabel.getStr( )) );
+    SetWindowTextW( hwndCtrl, reinterpret_cast<PCWSTR>(aWinLabel.getStr( )) );
 }
 
 
@@ -434,7 +434,7 @@ OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
         hwndCtrl = GetListboxLabelItem( aControlId );
 
     sal_Unicode aLabel[MAX_LABEL];
-    int nRet = GetWindowText( hwndCtrl, reinterpret_cast<LPTSTR>(aLabel), MAX_LABEL );
+    int nRet = GetWindowTextW( hwndCtrl, reinterpret_cast<PWSTR>(aLabel), MAX_LABEL );
 
     OUString ctrlLabel;
     if ( nRet )
