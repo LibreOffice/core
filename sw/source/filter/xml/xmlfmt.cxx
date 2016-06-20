@@ -699,6 +699,10 @@ class SwXMLStylesContext_Impl : public SvXMLStylesContext
 
 protected:
 
+    virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -729,6 +733,22 @@ public:
     virtual void EndElement() override;
 };
 
+SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleChildContext( sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLStyleContext* pContext = nullptr;
+
+    if(nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(rLocalName, XML_TABLE_TEMPLATE))
+    {
+        rtl::Reference<XMLTableImport> xTableImport = GetImport().GetShapeImport()->GetShapeTableImport();
+        pContext = xTableImport->CreateTableTemplateContext(nPrefix, rLocalName, xAttrList);
+    }
+    if (!pContext)
+        pContext = SvXMLStylesContext::CreateStyleChildContext(nPrefix, rLocalName, xAttrList);
+
+    return pContext;
+}
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -746,8 +766,13 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
     case XML_STYLE_FAMILY_TABLE_COLUMN:
     case XML_STYLE_FAMILY_TABLE_ROW:
     case XML_STYLE_FAMILY_TABLE_CELL:
-        pStyle = new SwXMLItemSetStyleContext_Impl( GetSwImport(), nPrefix,
-                            rLocalName, xAttrList, *this, nFamily  );
+        // Distinguish real and automatic styles.
+        if (IsAutomaticStyle())
+            pStyle = new SwXMLItemSetStyleContext_Impl(GetSwImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
+        else if (nFamily == XML_STYLE_FAMILY_TABLE_CELL) // Real cell styles are used for table-template import.
+            pStyle = new XMLPropStyleContext(GetSwImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
+        else
+            SAL_WARN("sw.xml", "Context does not exists for non automatic table, column or row style.");
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
         // As long as there are no element items, we can use the text

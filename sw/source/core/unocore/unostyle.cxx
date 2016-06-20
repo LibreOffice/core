@@ -26,6 +26,7 @@
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -4925,9 +4926,45 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
         {
             case RES_BACKGROUND:
             {
-                SvxBrushItem rBrush( m_pBoxAutoFormat->GetBackground() );
+                SvxBrushItem rBrush = m_pBoxAutoFormat->GetBackground();
                 rBrush.PutValue(aValue, 0);
                 m_pBoxAutoFormat->SetBackground(rBrush);
+                return;
+            }
+            case RES_BOX:
+            {
+                SvxBoxItem rBox = m_pBoxAutoFormat->GetBox();
+                rBox.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetBox(rBox);
+                return;
+            }
+            case RES_VERT_ORIENT:
+            {
+                SwFormatVertOrient rVertOrient = m_pBoxAutoFormat->GetVerticalAlignment();
+                rVertOrient.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetVerticalAlignment(rVertOrient);
+                return;
+            }
+            case RES_FRAMEDIR:
+            {
+                SvxFrameDirectionItem rDirItem = m_pBoxAutoFormat->GetTextOrientation();
+                rDirItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetTextOrientation(rDirItem);
+                return;
+            }
+            case RES_BOXATR_FORMAT:
+            {
+                sal_uInt32 nKey;
+                if (aValue >>= nKey)
+                {
+                    // FIXME: Its not working for old "automatic" currency formats, which are still in use by autotbl.fmt.
+                    // Scenario:
+                    // 1) Mark all styles present by default in autotbl.fmt as default.
+                    // 2) convert all currencies present in autotbl.fmt before calling this code
+                    const SvNumberformat* pNumFormat = m_pDocShell->GetDoc()->GetNumberFormatter()->GetEntry(nKey);
+                    if (pNumFormat)
+                        m_pBoxAutoFormat->SetValueFormat(pNumFormat->GetFormatstring(), pNumFormat->GetLanguage(), GetAppLanguage());
+                }
                 return;
             }
             default:
