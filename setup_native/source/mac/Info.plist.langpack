@@ -35,7 +35,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>9</string>
 	<key>CFBundleIdentifier</key>
-	<string>${BUNDLEIDENTIFIER}</string>
+	<string>[BUNDLEIDENTIFIER].langpack</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
