@@ -654,17 +654,17 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
 
         if ( ( p->m_eKind == ENABLED_UPDATE ) || ( p->m_eKind == DISABLED_UPDATE ) )
         {
-            PopupMenu aPopup;
+            ScopedVclPtrInstance<PopupMenu> aPopup;
 
             if ( p->m_bIgnored )
-                aPopup.InsertItem( CMD_ENABLE_UPDATE, m_enableUpdate );
+                aPopup->InsertItem( CMD_ENABLE_UPDATE, m_enableUpdate );
             else
             {
-                aPopup.InsertItem( CMD_IGNORE_UPDATE, m_ignoreUpdate );
-                aPopup.InsertItem( CMD_IGNORE_ALL_UPDATES, m_ignoreAllUpdates );
+                aPopup->InsertItem( CMD_IGNORE_UPDATE, m_ignoreUpdate );
+                aPopup->InsertItem( CMD_IGNORE_ALL_UPDATES, m_ignoreAllUpdates );
             }
 
-            sal_uInt16 aCmd = aPopup.Execute( this, rPos );
+            sal_uInt16 aCmd = aPopup->Execute( this, rPos );
             if ( ( aCmd == CMD_IGNORE_UPDATE ) || ( aCmd == CMD_IGNORE_ALL_UPDATES ) )
             {
                 p->m_bIgnored = true;

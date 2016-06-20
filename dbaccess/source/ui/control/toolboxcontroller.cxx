@@ -159,7 +159,7 @@ namespace dbaui
             aFind->second = Event.IsEnabled;
             if ( m_aCommandURL == aFind->first && !Event.IsEnabled )
             {
-                ::std::unique_ptr<PopupMenu> pMenu = getMenu();
+                ScopedVclPtr<PopupMenu> pMenu(getMenu());
                 sal_uInt16 nCount = pMenu->GetItemCount();
                 for (sal_uInt16 i = 0; i < nCount; ++i)
                 {
@@ -177,12 +177,12 @@ namespace dbaui
             }
         }
     }
-    ::std::unique_ptr<PopupMenu> OToolboxController::getMenu()
+    VclPtr<PopupMenu> OToolboxController::getMenu()
     {
-        ::std::unique_ptr<PopupMenu> pMenu;
+        VclPtr<PopupMenu> pMenu;
         if ( m_aStates.size() > 2 )
         {
-            pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_APP_NEW ) ) );
+            pMenu = VclPtr<PopupMenu>::Create( ModuleRes( RID_MENU_APP_NEW ) );
 
             try
             {
@@ -217,7 +217,7 @@ namespace dbaui
         }
         else
         {
-            pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_REFRESH_DATA ) ) );
+            pMenu = VclPtr<PopupMenu>::Create( ModuleRes( RID_MENU_REFRESH_DATA ) );
         }
         return pMenu;
     }
@@ -229,7 +229,7 @@ namespace dbaui
         ::osl::MutexGuard aGuard(m_aMutex);
 
         VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()).get());
-        ::std::unique_ptr<PopupMenu> pMenu = getMenu();
+        ScopedVclPtr<PopupMenu> pMenu(getMenu());
 
         sal_uInt16 nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),PopupMenuFlags::ExecuteDown);
         // "cleanup" the toolbox state

@@ -182,7 +182,7 @@ TemplateContainerItem* TemplateLocalView::getRegion(OUString const & rName)
 
 void TemplateLocalView::createContextMenu(const bool bIsDefault)
 {
-    std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);
+    ScopedVclPtrInstance<PopupMenu> pItemMenu;
     pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
     pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
 

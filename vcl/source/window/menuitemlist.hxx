@@ -33,8 +33,8 @@ struct MenuItemData
     sal_uInt16      nId;                    // SV Id
     MenuItemType    eType;                  // MenuItem-Type
     MenuItemBits    nBits;                  // MenuItem-Bits
-    Menu*           pSubMenu;               // Pointer to SubMenu
-    Menu*           pAutoSubMenu;           // Pointer to SubMenu from Resource
+    VclPtr<Menu>    pSubMenu;               // Pointer to SubMenu
+    VclPtr<Menu>    pAutoSubMenu;           // Pointer to SubMenu from Resource
     OUString        aText;                  // Menu-Text
     OUString        aHelpText;              // Help-String
     OUString        aTipHelpText;           // TipHelp-String (eg, expanded filenames)

@@ -208,7 +208,7 @@ void LayoutManager::impl_clearUpMenuBar()
     }
 
     // reset inplace menubar manager
-    Menu *pMenuBar = nullptr;
+    VclPtr<Menu> pMenuBar;
     if (m_pInplaceMenuBar)
     {
         pMenuBar = m_pInplaceMenuBar->GetMenuBar();
@@ -219,7 +219,7 @@ void LayoutManager::impl_clearUpMenuBar()
         m_xInplaceMenuBar->dispose();
         m_xInplaceMenuBar.clear();
     }
-    delete pMenuBar;
+    pMenuBar.disposeAndClear();
 
     Reference< XComponent > xComp( m_xMenuBar, UNO_QUERY );
     if ( xComp.is() )
@@ -1150,7 +1150,7 @@ throw (uno::RuntimeException, std::exception)
         SolarMutexGuard aGuard;
 
         // Reset old inplace menubar!
-        Menu *pOldMenuBar = nullptr;
+        VclPtr<Menu> pOldMenuBar;
         if (m_pInplaceMenuBar)
         {
             pOldMenuBar = m_pInplaceMenuBar->GetMenuBar();
@@ -1161,7 +1161,7 @@ throw (uno::RuntimeException, std::exception)
             m_xInplaceMenuBar->dispose();
             m_xInplaceMenuBar.clear();
         }
-        delete pOldMenuBar;
+        pOldMenuBar.disposeAndClear();
 
         m_bInplaceMenuSet = false;
 
@@ -1170,7 +1170,7 @@ throw (uno::RuntimeException, std::exception)
             OUString aModuleIdentifier;
             Reference< XDispatchProvider > xDispatchProvider;
 
-            MenuBar* pMenuBar = new MenuBar;
+            VclPtr<MenuBar> pMenuBar = VclPtr<MenuBar>::Create();
             m_pInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, true, true );
             m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
@@ -1210,7 +1210,7 @@ throw (uno::RuntimeException)
     }
 
     // Remove inplace menu bar
-    Menu *pMenuBar = nullptr;
+    VclPtr<Menu> pMenuBar;
     if (m_pInplaceMenuBar)
     {
         pMenuBar = m_pInplaceMenuBar->GetMenuBar();
@@ -1221,7 +1221,7 @@ throw (uno::RuntimeException)
         m_xInplaceMenuBar->dispose();
         m_xInplaceMenuBar.clear();
     }
-    delete pMenuBar;
+    pMenuBar.disposeAndClear();
 }
 
 void SAL_CALL LayoutManager::attachFrame( const Reference< XFrame >& xFrame )
@@ -2830,7 +2830,7 @@ throw( RuntimeException, std::exception )
         implts_destroyElements();
         impl_clearUpMenuBar();
         m_xMenuBar.clear();
-        Menu *pMenuBar = nullptr;
+        VclPtr<Menu> pMenuBar;
         if (m_pInplaceMenuBar)
         {
             pMenuBar = m_pInplaceMenuBar->GetMenuBar();
@@ -2841,7 +2841,7 @@ throw( RuntimeException, std::exception )
             m_xInplaceMenuBar->dispose();
             m_xInplaceMenuBar.clear();
         }
-        delete pMenuBar;
+        pMenuBar.disposeAndClear();
         m_xContainerWindow.clear();
         m_xContainerTopWindow.clear();
 
@@ -2894,7 +2894,7 @@ throw( RuntimeException, std::exception )
         }
         impl_clearUpMenuBar();
         m_xMenuBar.clear();
-        Menu *pMenuBar = nullptr;
+        VclPtr<Menu> pMenuBar;
         if (m_pInplaceMenuBar)
         {
             pMenuBar = m_pInplaceMenuBar->GetMenuBar();
@@ -2905,7 +2905,7 @@ throw( RuntimeException, std::exception )
             m_xInplaceMenuBar->dispose();
             m_xInplaceMenuBar.clear();
         }
-        delete pMenuBar;
+        pMenuBar.disposeAndClear();
         m_xContainerWindow.clear();
         m_xContainerTopWindow.clear();
     }

@@ -1128,8 +1128,8 @@ bool OJoinTableView::IsAddAllowed()
 
 void OJoinTableView::executePopup(const Point& _aPos, VclPtr<OTableConnection>& rSelConnection)
 {
-    PopupMenu aContextMenu( ModuleRes( RID_MENU_JOINVIEW_CONNECTION ) );
-    switch (aContextMenu.Execute(this, _aPos))
+    ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_MENU_JOINVIEW_CONNECTION ) );
+    switch (aContextMenu->Execute(this, _aPos))
     {
         case SID_DELETE:
             RemoveConnection(rSelConnection, true);

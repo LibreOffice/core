@@ -3387,8 +3387,8 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
              GetType( rCommandEvent.GetMousePosPixel(), &mxRulerImpl->nIdx ) &&
              mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle < RULER_TAB_DEFAULT )
         {
-            PopupMenu aMenu;
-            aMenu.SetSelectHdl(LINK(this, SvxRuler, TabMenuSelect));
+            ScopedVclPtrInstance<PopupMenu> aMenu;
+            aMenu->SetSelectHdl(LINK(this, SvxRuler, TabMenuSelect));
             ScopedVclPtrInstance< VirtualDevice > pDev;
             const Size aSz(ruler_tab_svx.width + 2, ruler_tab_svx.height + 2);
             pDev->SetOutputSize(aSz);
@@ -3401,26 +3401,26 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
                 sal_uInt16 nStyle = bRTL ? i|RULER_TAB_RTL : i;
                 nStyle |= static_cast<sal_uInt16>(bHorz ? WB_HORZ : WB_VERT);
                 DrawTab(*pDev, aFillColor, aPt, nStyle);
-                aMenu.InsertItem(i + 1,
+                aMenu->InsertItem(i + 1,
                                  ResId(RID_SVXSTR_RULER_START + i, DIALOG_MGR()).toString(),
                                  Image(pDev->GetBitmap(Point(), aSz), Color(COL_WHITE)));
-                aMenu.CheckItem(i + 1, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
+                aMenu->CheckItem(i + 1, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
                 pDev->SetOutputSize(aSz); // delete device
             }
-            aMenu.Execute( this, rCommandEvent.GetMousePosPixel() );
+            aMenu->Execute( this, rCommandEvent.GetMousePosPixel() );
         }
         else
         {
-            PopupMenu aMenu(ResId(RID_SVXMN_RULER, DIALOG_MGR()));
-            aMenu.SetSelectHdl(LINK(this, SvxRuler, MenuSelect));
+            ScopedVclPtrInstance<PopupMenu> aMenu(ResId(RID_SVXMN_RULER, DIALOG_MGR()));
+            aMenu->SetSelectHdl(LINK(this, SvxRuler, MenuSelect));
             FieldUnit eUnit = GetUnit();
-            const sal_uInt16 nCount = aMenu.GetItemCount();
+            const sal_uInt16 nCount = aMenu->GetItemCount();
 
             bool bReduceMetric = bool(nFlags & SvxRulerSupportFlags::REDUCED_METRIC);
             for ( sal_uInt16 i = nCount; i; --i )
             {
-                const sal_uInt16 nId = aMenu.GetItemId(i - 1);
-                aMenu.CheckItem(nId, nId == (sal_uInt16)eUnit);
+                const sal_uInt16 nId = aMenu->GetItemId(i - 1);
+                aMenu->CheckItem(nId, nId == (sal_uInt16)eUnit);
                 if( bReduceMetric )
                 {
                     if ( nId == FUNIT_M    ||
@@ -3428,19 +3428,19 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
                          nId == FUNIT_FOOT ||
                          nId == FUNIT_MILE )
                     {
-                        aMenu.RemoveItem(i - 1);
+                        aMenu->RemoveItem(i - 1);
                     }
                     else if (( nId == FUNIT_CHAR ) && !bHorz )
                     {
-                        aMenu.RemoveItem(i - 1);
+                        aMenu->RemoveItem(i - 1);
                     }
                     else if (( nId == FUNIT_LINE ) && bHorz )
                     {
-                        aMenu.RemoveItem(i - 1);
+                        aMenu->RemoveItem(i - 1);
                     }
                 }
             }
-            aMenu.Execute( this, rCommandEvent.GetMousePosPixel() );
+            aMenu->Execute( this, rCommandEvent.GetMousePosPixel() );
         }
     }
     else

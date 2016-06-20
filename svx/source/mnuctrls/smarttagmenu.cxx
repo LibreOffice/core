@@ -50,7 +50,7 @@ private:
                       sal_uInt32 nActionID ) : m_xAction( xAction ), m_xSmartTagProperties( xSmartTagProperties ), m_nActionID( nActionID ) {}
     };
     std::vector< InvokeAction > m_aInvokeActions;
-    std::vector< std::unique_ptr< PopupMenu > > m_aSubMenus;
+    std::vector< VclPtr< PopupMenu > > m_aSubMenus;
     std::unique_ptr< const SvxSmartTagItem > m_pSmartTagItem;
 };
 
@@ -61,6 +61,8 @@ SmartTagMenuController::SmartTagMenuController( const css::uno::Reference< css::
 
 SmartTagMenuController::~SmartTagMenuController()
 {
+    for (auto& i : m_aSubMenus)
+        i.disposeAndClear();
 }
 
 void SmartTagMenuController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -151,8 +153,9 @@ void SmartTagMenuController::FillMenu()
         if ( 1 < rActionComponentsSequence.getLength() )
         {
             pVCLMenu->InsertItem( nMenuId, aSmartTagCaption );
-            pSubMenu = new PopupMenu;
-            m_aSubMenus.push_back( std::unique_ptr< PopupMenu >( pSubMenu ) );
+            VclPtrInstance<PopupMenu> pMenu;
+            pSubMenu = pMenu;
+            m_aSubMenus.push_back( pMenu );
             pVCLMenu->SetPopupMenu( nMenuId++, pSubMenu );
         }
         pSubMenu->SetSelectHdl( LINK( this, SmartTagMenuController, MenuSelect ) );

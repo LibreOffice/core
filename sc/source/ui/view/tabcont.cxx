@@ -86,7 +86,7 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
 
 IMPL_LINK_TYPED(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
 {
-    PopupMenu aPopup;
+    ScopedVclPtrInstance<PopupMenu> aPopup;
 
     sal_uInt16 nCurPageId = GetCurPageId();
 
@@ -100,14 +100,14 @@ IMPL_LINK_TYPED(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
             if (pDoc->GetName(i, aString))
             {
                 sal_uInt16 nId = static_cast<sal_uInt16>(i)+1;
-                aPopup.InsertItem(nId, aString, MenuItemBits::CHECKABLE);
+                aPopup->InsertItem(nId, aString, MenuItemBits::CHECKABLE);
                 if (nId == nCurPageId)
-                    aPopup.CheckItem(nId);
+                    aPopup->CheckItem(nId);
             }
         }
     }
 
-    sal_uInt16 nItemId = aPopup.Execute( this, rEvent.GetMousePosPixel() );
+    sal_uInt16 nItemId = aPopup->Execute( this, rEvent.GetMousePosPixel() );
     SwitchToPageId(nItemId);
 }
 

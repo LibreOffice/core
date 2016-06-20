@@ -62,7 +62,7 @@ private:
 
     VclPtr<VirtualDevice>       mpBackgrDev;        /// Grid background, headers, cell texts.
     VclPtr<VirtualDevice>       mpGridDev;          /// Data grid with selection and cursor.
-    PopupMenu                   maPopup;            /// Popup menu for column types.
+    VclPtr<PopupMenu>           mpPopup;            /// Popup menu for column types.
 
     ::svtools::ColorConfig*     mpColorConfig;      /// Application color configuration.
     Color                       maBackColor;        /// Cell background color.

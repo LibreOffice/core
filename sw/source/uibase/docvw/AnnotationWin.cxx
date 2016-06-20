@@ -79,7 +79,7 @@ SwAnnotationWin::~SwAnnotationWin()
 
 void SwAnnotationWin::dispose()
 {
-    delete mpButtonPopup;
+    mpButtonPopup.disposeAndClear();
     sw::sidebarwindows::SwSidebarWin::dispose();
 }
 
@@ -220,7 +220,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
 
 VclPtr<MenuButton> SwAnnotationWin::CreateMenuButton()
 {
-    mpButtonPopup = new PopupMenu(SW_RES(MN_ANNOTATION_BUTTON));
+    mpButtonPopup = VclPtr<PopupMenu>::Create(SW_RES(MN_ANNOTATION_BUTTON));
     OUString aText = mpButtonPopup->GetItemText( FN_DELETE_NOTE_AUTHOR );
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1,GetAuthor());

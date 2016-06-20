@@ -68,7 +68,7 @@ VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
         if (pPopup)
             pPopup->Clear();
         else
-            pPopup = new PopupMenu;
+            pPopup = VclPtr<PopupMenu>::Create();
 
         sal_uInt16 nCount = pFmtItem->Count();
         for (sal_uInt16 i = 0;  i < nCount;  ++i)
@@ -134,8 +134,7 @@ void SvxClipBoardControl::DelPopup()
 {
     if(pPopup)
     {
-        delete pPopup;
-        pPopup = nullptr;
+        pPopup.disposeAndClear();
     }
 }
 

@@ -180,7 +180,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     get(mpCBXHideDlg, "hidedialogcb");
 
     // Create popup menus
-    mpActionMenu = new PopupMenu;
+    mpActionMenu = VclPtr<PopupMenu>::Create();
     mpActionMenu->InsertItem(MNI_ACTION_NEW_FOLDER,
         SfxResId(STR_CATEGORY_NEW).toString(),
         Image(SfxResId(IMG_ACTION_REFRESH)));
@@ -195,10 +195,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpActionMenu->InsertItem(MNI_ACTION_DEFAULT,SfxResId(STR_ACTION_DEFAULT).toString());
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
-    mpRepositoryMenu = new PopupMenu;
+    mpRepositoryMenu = VclPtr<PopupMenu>::Create();
     mpRepositoryMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,RepositoryMenuSelectHdl));
 
-    mpTemplateDefaultMenu = new PopupMenu;
+    mpTemplateDefaultMenu = VclPtr<PopupMenu>::Create();
     mpTemplateDefaultMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,DefaultTemplateMenuSelectHdl));
     mpActionMenu->SetPopupMenu(MNI_ACTION_DEFAULT,mpTemplateDefaultMenu);
 

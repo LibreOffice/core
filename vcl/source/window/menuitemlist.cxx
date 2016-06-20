@@ -36,9 +36,8 @@ MenuItemData::~MenuItemData()
         aUserValueReleaseFunc(nUserValue);
     if( pAutoSubMenu )
     {
-        static_cast<PopupMenu*>(pAutoSubMenu)->pRefAutoSubMenu = nullptr;
-        delete pAutoSubMenu;
-        pAutoSubMenu = nullptr;
+        static_cast<PopupMenu*>(pAutoSubMenu.get())->pRefAutoSubMenu = nullptr;
+        pAutoSubMenu.disposeAndClear();
     }
     if( pSalMenuItem )
         ImplGetSVData()->mpDefInst->DestroyMenuItem( pSalMenuItem );

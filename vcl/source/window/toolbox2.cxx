@@ -49,7 +49,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
         m_pLayoutData( nullptr )
 {
     meButtonSize = TOOLBOX_BUTTONSIZE_DONTCARE;
-    mpMenu = new PopupMenu();
+    mpMenu = VclPtr<PopupMenu>::Create();
     mnEventId = nullptr;
 
     maMenuType = ToolBoxMenuType::NONE;
@@ -73,7 +73,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
 ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
 {
     delete m_pLayoutData;
-    delete mpMenu;
+    mpMenu.disposeAndClear();
 }
 
 void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
