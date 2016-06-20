@@ -267,32 +267,8 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
         maPopupMenu.EnableItem( MN_PASTECLIPBOARD );
     }
 
-#ifdef GALLERY_USE_CLIPBOARD
-    if( maPopupMenu.IsItemEnabled( MN_PASTECLIPBOARD ) )
-    {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( this ) );
-        sal_Bool               bEnable = sal_False;
-
-        if( aDataHelper.GetFormatCount() )
-        {
-            if( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) ||
-                aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) ||
-                aDataHelper.HasFormat( SotClipboardFormatId::SIMPLE_FILE ) ||
-                aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) ||
-                aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) ||
-                aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ) )
-            {
-                bEnable = sal_True;
-            }
-        }
-
-        if( !bEnable )
-            maPopupMenu.EnableItem( MN_PASTECLIPBOARD, sal_False );
-    }
-#else
     maPopupMenu.EnableItem( MN_COPYCLIPBOARD, false );
     maPopupMenu.EnableItem( MN_PASTECLIPBOARD, false );
-#endif
 
     // update status
     css::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider(
