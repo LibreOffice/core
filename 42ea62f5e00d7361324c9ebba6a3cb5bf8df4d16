@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_43e4b80c",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-20T07:30:45Z",
+      "side": 1,
+      "message": "sCellStyleName \u003d \"CellStyles\"; is enough",
+      "revId": "42ea62f5e00d7361324c9ebba6a3cb5bf8df4d16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_63f1bccd",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-20T07:30:45Z",
+      "side": 1,
+      "message": "Same here, no need for an explicit OUString() ctor call.",
+      "revId": "42ea62f5e00d7361324c9ebba6a3cb5bf8df4d16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_83eec0ea",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-20T07:30:45Z",
+      "side": 1,
+      "message": "Same.",
+      "revId": "42ea62f5e00d7361324c9ebba6a3cb5bf8df4d16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_a3b904ef",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-20T07:30:45Z",
+      "side": 1,
+      "message": "Same.",
+      "revId": "42ea62f5e00d7361324c9ebba6a3cb5bf8df4d16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
