@@ -66,7 +66,7 @@ bool createFolderItem(OUString const & url, ComPtr<IShellItem> & folder) {
     }
 #if defined __MINGW32__
     HRESULT res = SHCreateItemFromParsingName(
-        reinterpret_cast<LPCTSTR>(path.getStr()), NULL, IID_IShellItem,
+        reinterpret_cast<PCWSTR>(path.getStr()), NULL, IID_IShellItem,
         reinterpret_cast<void **>(&folder));
 #else
     HRESULT res = SHCreateItemFromParsingName(
@@ -137,8 +137,8 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
     {
         COMDLG_FILTERSPEC aSpec;
 
-        aSpec.pszName = reinterpret_cast<LPCTSTR>(aFilter.first.getStr()) ;
-        aSpec.pszSpec = reinterpret_cast<LPCTSTR>(aFilter.second.getStr());
+        aSpec.pszName = reinterpret_cast<PCWSTR>(aFilter.first.getStr()) ;
+        aSpec.pszSpec = reinterpret_cast<PCWSTR>(aFilter.second.getStr());
 
         lList.push_back(aSpec);
     }
@@ -514,7 +514,7 @@ static void setLabelToControl(CResourceProvider& rResourceProvider, TFileDialogC
 {
     OUString aLabel = rResourceProvider.getResString(nControlId);
     aLabel = SOfficeToWindowsLabel(aLabel);
-    iCustom->SetControlLabel(nControlId, reinterpret_cast<LPCWSTR>(aLabel.getStr()) );
+    iCustom->SetControlLabel(nControlId, reinterpret_cast<PCWSTR>(aLabel.getStr()) );
 }
 
 
@@ -677,7 +677,7 @@ void VistaFilePickerImpl::impl_sta_SetTitle(const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    iDialog->SetTitle(reinterpret_cast<LPCTSTR>(sTitle.getStr()));
+    iDialog->SetTitle(reinterpret_cast<PCWSTR>(sTitle.getStr()));
 }
 
 
@@ -691,7 +691,7 @@ void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    iDialog->SetFileName(reinterpret_cast<LPCTSTR>(sFileName.getStr()));
+    iDialog->SetFileName(reinterpret_cast<PCWSTR>(sFileName.getStr()));
 }
 
 
@@ -764,7 +764,7 @@ void VistaFilePickerImpl::impl_sta_SetDefaultName(const RequestRef& rRequest)
             sFilename = sFilename.copy(0, nSepPos);
     }
 
-    iDialog->SetFileName ( reinterpret_cast<LPCTSTR>(sFilename.getStr()));
+    iDialog->SetFileName ( reinterpret_cast<PCWSTR>(sFilename.getStr()));
     m_sFilename = sFilename;
 }
 
@@ -797,7 +797,7 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
 
     if ( bValue )
     {
-        LPCWSTR lpFilterExt = lFilters[0].pszSpec;
+        PCWSTR lpFilterExt = lFilters[0].pszSpec;
 
         lpFilterExt = wcsrchr( lpFilterExt, '.' );
         if ( lpFilterExt )
@@ -934,7 +934,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                         ::std::vector< COMDLG_FILTERSPEC > lFilters = lcl_buildFilterList(m_lFilters);
                         if ( nRealIndex < lFilters.size() )
                         {
-                            LPCWSTR lpFilterExt = lFilters[nRealIndex].pszSpec;
+                            PCWSTR lpFilterExt = lFilters[nRealIndex].pszSpec;
 
                             lpFilterExt = wcsrchr( lpFilterExt, '.' );
                             if ( lpFilterExt )
@@ -948,7 +948,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 osl_getSystemPathFromFileURL( aFileURL.pData, &aSystemPath.pData );
 
                 WIN32_FIND_DATA aFindFileData;
-                HANDLE  hFind = FindFirstFile( reinterpret_cast<LPCWSTR>(aSystemPath.getStr()), &aFindFileData );
+                HANDLE  hFind = FindFirstFile( reinterpret_cast<PCWSTR>(aSystemPath.getStr()), &aFindFileData );
                 if (hFind != INVALID_HANDLE_VALUE)
                     iDialog->SetFolder(pFolder);
                 else
@@ -1102,7 +1102,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
                             for (::sal_Int32 i=0; i<lItems.getLength(); ++i)
                             {
                                 const OUString& sItem = lItems[i];
-                                hResult = iCustom->AddControlItem(nId, i, reinterpret_cast<LPCTSTR>(sItem.getStr()));
+                                hResult = iCustom->AddControlItem(nId, i, reinterpret_cast<PCWSTR>(sItem.getStr()));
                             }
                         }
                         break;
@@ -1172,7 +1172,7 @@ void VistaFilePickerImpl::impl_sta_SetControlLabel(const RequestRef& rRequest)
     TFileDialogCustomize iCustom = impl_getCustomizeInterface();
     if ( ! iCustom.is())
         return;
-    iCustom->SetControlLabel ( nId, reinterpret_cast<LPCTSTR>(sLabel.getStr()));
+    iCustom->SetControlLabel ( nId, reinterpret_cast<PCWSTR>(sLabel.getStr()));
 }
 
 
@@ -1218,7 +1218,7 @@ void VistaFilePickerImpl::impl_SetDefaultExtension( const OUString& currentFilte
             posOfSemiColon = FilterExt.getLength() - 1;
 
         FilterExt = OUString(pFirstExtStart, posOfSemiColon - posOfPoint);
-        iDialog->SetDefaultExtension ( reinterpret_cast<LPCTSTR>(FilterExt.getStr()) );
+        iDialog->SetDefaultExtension ( reinterpret_cast<PCWSTR>(FilterExt.getStr()) );
    }
 }
 
@@ -1237,10 +1237,10 @@ void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    LPCWSTR pExt = 0;
+    PCWSTR pExt = 0;
     if ( bChecked )
     {
-        pExt = reinterpret_cast<LPCTSTR>(sExt.getStr());
+        pExt = reinterpret_cast<PCWSTR>(sExt.getStr());
         pExt = wcsrchr( pExt, '.' );
         if ( pExt )
             pExt++;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tchar.h>
 #include "helppopupwindow.hxx"
 #include <osl/diagnose.h>
 
@@ -28,11 +27,11 @@ using osl::Mutex;
 namespace /* private */
 {
 
-    const LPCTSTR CURRENT_INSTANCE = TEXT("CurrInst");
+    const PCWSTR CURRENT_INSTANCE = L"CurrInst";
 
 };
 
-#define HELPPOPUPWND_CLASS_NAME TEXT("hlppopupwnd###")
+#define HELPPOPUPWND_CLASS_NAME L"hlppopupwnd###"
 
 const sal_Int32 MAX_CHARS_PER_LINE = 55;
 
@@ -109,7 +108,7 @@ void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
     // window, then we calculate the upper left corner
     // and the dimensions and resize the window
 
-    m_hwnd = CreateWindowEx(
+    m_hwnd = CreateWindowExW(
         0,
         HELPPOPUPWND_CLASS_NAME,
         NULL,
@@ -167,9 +166,9 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
     if ( m_HelpText.getLength( ) <= MAX_CHARS_PER_LINE )
         nFormat |= DT_SINGLELINE;
 
-    DrawText(
+    DrawTextW(
       hdc,
-      reinterpret_cast<LPCTSTR>(m_HelpText.getStr( )),
+      reinterpret_cast<PCWSTR>(m_HelpText.getStr( )),
       m_HelpText.getLength( ),
       lprect,
       nFormat );
@@ -334,9 +333,9 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     if ( m_HelpText.getLength( ) <= MAX_CHARS_PER_LINE )
         nFormat |= DT_SINGLELINE;
 
-    DrawText(
+    DrawTextW(
         hdc,
-        (LPWSTR)m_HelpText.getStr( ),
+        (PWSTR)m_HelpText.getStr( ),
         m_HelpText.getLength( ),
         &rect,
         nFormat );
@@ -431,7 +430,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
                     lpcs->lpCreateParams );
 
                 // connect the instance handle to the window
-                SetProp( hWnd, CURRENT_INSTANCE, pImpl );
+                SetPropW( hWnd, CURRENT_INSTANCE, pImpl );
 
                 pImpl->onCreate( hWnd );
 
@@ -443,7 +442,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
         case WM_PAINT:
             {
                 CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
-                GetProp( hWnd, CURRENT_INSTANCE ) );
+                GetPropW( hWnd, CURRENT_INSTANCE ) );
 
                 OSL_ASSERT( pImpl );
 
@@ -459,7 +458,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
             {
                 // RemoveProp returns the saved value on success
                 CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
-                    RemoveProp( hWnd, CURRENT_INSTANCE ) );
+                    RemovePropW( hWnd, CURRENT_INSTANCE ) );
 
                 OSL_ASSERT( pImpl );
 
@@ -507,7 +506,7 @@ ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
         //               if the dll is unloaded
         //     Win2000 - the window class must be unregistered manually
         //               if the dll is unloaded
-        s_ClassAtom = RegisterClassEx( &wndClsEx );
+        s_ClassAtom = RegisterClassExW( &wndClsEx );
         OSL_ASSERT(s_ClassAtom);
     }
 
@@ -539,8 +538,8 @@ void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
 
     if ( 0 == s_RegisterWndClassCount )
     {
-        if ( !UnregisterClass(
-                 (LPCTSTR)(DWORD_PTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance ) )
+        if ( !UnregisterClassW(
+                 (PCWSTR)(DWORD_PTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance ) )
         {
             OSL_FAIL( "unregister window class failed" );
         }
