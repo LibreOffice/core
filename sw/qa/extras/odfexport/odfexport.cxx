@@ -816,6 +816,9 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
     CPPUNIT_ASSERT(!getProperty<OUString>(xShape, "ReplacementGraphicURL").isEmpty());
 }
 
+DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
+{}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

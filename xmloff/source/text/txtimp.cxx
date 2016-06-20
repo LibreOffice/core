@@ -1060,6 +1060,15 @@ SvXMLImportPropertyMapper*
     return new SvXMLImportPropertyMapper( pPropMapper, rImport );
 }
 
+SvXMLImportPropertyMapper*
+    XMLTextImportHelper::CreateTableCellExtPropMapper(
+        SvXMLImport& rImport )
+{
+    XMLPropertySetMapper *pPropMapper =
+        new XMLTextPropertySetMapper( TextPropMap::CELL, false );
+    return new SvXMLImportPropertyMapper( pPropMapper, rImport );
+}
+
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
 {
     m_xImpl->m_xCursor.set(rCursor);

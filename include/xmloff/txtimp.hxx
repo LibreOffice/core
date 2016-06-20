@@ -552,6 +552,7 @@ public:
     static SvXMLImportPropertyMapper* CreateParaDefaultExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper* CreateTableDefaultExtPropMapper(SvXMLImport&);
     static SvXMLImportPropertyMapper* CreateTableRowDefaultExtPropMapper(SvXMLImport&);
+    static SvXMLImportPropertyMapper* CreateTableCellExtPropMapper(SvXMLImport&);
 
     SvI18NMap& GetRenameMap();
 
