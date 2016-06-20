@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_46cbe672",
+        "filename": "svl/qa/unit/svl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-20T23:33:13Z",
+      "side": 1,
+      "message": "Why are we not using CPPUNIT_ASSERT_EQUAL?",
+      "revId": "a83a3198562b0de38ed5895800d84e1b8140d0b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
