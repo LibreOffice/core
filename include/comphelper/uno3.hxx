@@ -169,13 +169,11 @@ namespace comphelper
     template <class iface>
     bool query_aggregation(const css::uno::Reference< css::uno::XAggregation >& _rxAggregate, css::uno::Reference<iface>& _rxOut)
     {
-        _rxOut = static_cast<iface*>(nullptr);
+        _rxOut.clear();
         if (_rxAggregate.is())
         {
-            css::uno::Any aCheck = _rxAggregate->queryAggregation(
-                cppu::UnoType<iface>::get());
-            if (aCheck.hasValue())
-                _rxOut = *static_cast<const css::uno::Reference<iface>*>(aCheck.getValue());
+            _rxAggregate->queryAggregation(cppu::UnoType<iface>::get())
+                >>= _rxOut;
         }
         return _rxOut.is();
     }

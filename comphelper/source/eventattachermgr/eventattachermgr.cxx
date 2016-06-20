@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
@@ -284,24 +287,24 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
 
                 case TypeClass_BOOLEAN:
                     // FALSE -> Return
-                    if( !(*static_cast<sal_Bool const *>(aRet.getValue())) )
+                    if( !(*o3tl::forceAccess<bool>(aRet)) )
                         return aRet;
                     break;
 
                 case TypeClass_STRING:
                     // none empty string -> return
-                    if( !(static_cast<OUString const *>(aRet.getValue()))->isEmpty() )
+                    if( !o3tl::forceAccess<OUString>(aRet)->isEmpty() )
                         return aRet;
                     break;
 
                     // none zero number -> return
-                case TypeClass_FLOAT:           if( *static_cast<float const *>(aRet.getValue()) )    return aRet; break;
-                case TypeClass_DOUBLE:          if( *static_cast<double const *>(aRet.getValue()) )   return aRet; break;
-                case TypeClass_BYTE:            if( *static_cast<sal_uInt8 const *>(aRet.getValue()) )    return aRet; break;
-                case TypeClass_SHORT:           if( *static_cast<sal_Int16 const *>(aRet.getValue()) )    return aRet; break;
-                case TypeClass_LONG:            if( *static_cast<sal_Int32 const *>(aRet.getValue()) )    return aRet; break;
-                case TypeClass_UNSIGNED_SHORT:  if( *static_cast<sal_uInt16 const *>(aRet.getValue()) )   return aRet; break;
-                case TypeClass_UNSIGNED_LONG:   if( *static_cast<sal_uInt32 const *>(aRet.getValue()) )   return aRet; break;
+                case TypeClass_FLOAT:           if( *o3tl::forceAccess<float>(aRet) )    return aRet; break;
+                case TypeClass_DOUBLE:          if( *o3tl::forceAccess<double>(aRet) )   return aRet; break;
+                case TypeClass_BYTE:            if( *o3tl::forceAccess<sal_Int8>(aRet) )    return aRet; break;
+                case TypeClass_SHORT:           if( *o3tl::forceAccess<sal_Int16>(aRet) )    return aRet; break;
+                case TypeClass_LONG:            if( *o3tl::forceAccess<sal_Int32>(aRet) )    return aRet; break;
+                case TypeClass_UNSIGNED_SHORT:  if( *o3tl::forceAccess<sal_uInt16>(aRet) )   return aRet; break;
+                case TypeClass_UNSIGNED_LONG:   if( *o3tl::forceAccess<sal_uInt32>(aRet) )   return aRet; break;
 
                 default:
                     OSL_ASSERT(false);
