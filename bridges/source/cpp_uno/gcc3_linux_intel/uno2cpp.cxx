@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-static void cpp_call(
+void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
     typelib_TypeDescriptionReference * pReturnTypeRef,
