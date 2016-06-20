@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <functional>
+#include <type_traits>
 #include <comphelper/comphelperdllapi.h>
 #include <cppu/unotype.hxx>
 
@@ -95,12 +96,9 @@ bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*o
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <class ENUMTYPE>
-bool tryPropertyValueEnum(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
+typename std::enable_if<std::is_enum<ENUMTYPE>::value, bool>::type
+tryPropertyValueEnum(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
 {
-    if (cppu::getTypeFavourUnsigned(&_rCurrentValue).getTypeClass()
-        != css::uno::TypeClass_ENUM)
-        return tryPropertyValue(_rConvertedValue, _rOldValue, _rValueToSet, _rCurrentValue);
-
     bool bModified(false);
     ENUMTYPE aNewValue;
     ::cppu::any2enum(aNewValue, _rValueToSet);
