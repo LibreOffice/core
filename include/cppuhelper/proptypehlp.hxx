@@ -65,7 +65,7 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const css::uno::Any 
         b = i16 != 0;
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
-        b = *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
     }
     else if ( css::uno::TypeClass_BYTE == tc ) {
         sal_Int8 i8 = 0;
@@ -122,7 +122,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const css::uno::Any 
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
         i = ( sal_Int64 ) b;
     }
     else if ( css::uno::TypeClass_BYTE == tc ) {
@@ -175,7 +175,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const css::uno::Any
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
         i = ( sal_uInt64 ) b;
     }
     else if ( css::uno::TypeClass_BYTE == tc ) {
@@ -219,7 +219,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const css::uno::Any 
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
         i = ( sal_Int32 ) b;
     }
     else if ( css::uno::TypeClass_BYTE == tc ) {
@@ -266,7 +266,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const css::uno::Any
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
         i = ( sal_uInt32 ) b;
     }
     else if ( css::uno::TypeClass_BYTE == tc ) {
@@ -299,7 +299,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const css::uno::Any 
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
         i = ( sal_Int16 ) b;
     }
     else if ( css::uno::TypeClass_BYTE == tc ) {
@@ -331,7 +331,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const css::uno::Any
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
         i = ( sal_Int16 ) b;
     }
     else if ( css::uno::TypeClass_BYTE == tc ) {
@@ -358,7 +358,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const css::uno::Any &
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
         i = ( sal_Int8 ) b;
     }
     else {
@@ -405,7 +405,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const css::uno::Any &a )
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
         f = ( float ) b;
     }
     else if ( css::uno::TypeClass_BYTE == tc ) {
@@ -470,7 +470,7 @@ inline void SAL_CALL convertPropertyValue( double &d , const css::uno::Any &a )
     }
     else if ( css::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *static_cast<sal_Bool const *>(a.getValue());
+        a >>= b;
         d = (double) b;
     }
     else if ( css::uno::TypeClass_BYTE == tc ) {
