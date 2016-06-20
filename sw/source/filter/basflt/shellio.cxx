@@ -49,6 +49,7 @@
 #include <undobj.hxx>
 #include <swundo.hxx>
 #include <swtable.hxx>
+#include <tblafmt.hxx>
 #include <tblsel.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
@@ -344,6 +345,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     pDoc->ChkCondColls();
     pDoc->SetAllUniqueFlyNames();
     pDoc->getIDocumentState().SetLoaded();
+    // Clear unassigned cell styles, because they aren't needed anymore.
+    pDoc->GetCellStyles().clear();
 
     pDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
     if (!bReadPageDescs)
