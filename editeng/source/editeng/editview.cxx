@@ -770,9 +770,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
     ESelection aOldSel = GetSelection();
     if ( xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, true ) )
     {
-        PopupMenu aPopupMenu( EditResId( RID_MENU_SPELL ) );
-        PopupMenu *pAutoMenu = aPopupMenu.GetPopupMenu( MN_AUTOCORR );
-        PopupMenu *pInsertMenu = aPopupMenu.GetPopupMenu( MN_INSERT );  // add word to user-dictionaries
+        ScopedVclPtrInstance<PopupMenu> aPopupMenu( EditResId( RID_MENU_SPELL ) );
+        PopupMenu *pAutoMenu = aPopupMenu->GetPopupMenu( MN_AUTOCORR );
+        PopupMenu *pInsertMenu = aPopupMenu->GetPopupMenu( MN_INSERT );  // add word to user-dictionaries
         pInsertMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );         //! necessary to retrieve the correct dictionary names later
 
         EditPaM aPaM2( aPaM );
@@ -829,24 +829,24 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             if (nGuessLangPara == LANGUAGE_NONE)
                 nGuessLangPara = nGuessLangWord;
 
-            aPopupMenu.InsertSeparator();
+            aPopupMenu->InsertSeparator();
             OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
             OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
             OUString aWordStr( EE_RESSTR( RID_STR_WORD ) );
             aWordStr = aWordStr.replaceFirst( "%x", aTmpWord );
             OUString aParaStr( EE_RESSTR( RID_STR_PARAGRAPH ) );
             aParaStr = aParaStr.replaceFirst( "%x", aTmpPara );
-            aPopupMenu.InsertItem( MN_WORDLANGUAGE, aWordStr );
-            aPopupMenu.SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
-            aPopupMenu.InsertItem( MN_PARALANGUAGE, aParaStr );
-            aPopupMenu.SetHelpId( MN_PARALANGUAGE, HID_EDITENG_SPELLER_PARALANGUAGE );
+            aPopupMenu->InsertItem( MN_WORDLANGUAGE, aWordStr );
+            aPopupMenu->SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
+            aPopupMenu->InsertItem( MN_PARALANGUAGE, aParaStr );
+            aPopupMenu->SetHelpId( MN_PARALANGUAGE, HID_EDITENG_SPELLER_PARALANGUAGE );
         }
 
         // ## Create mnemonics here
         if ( Application::IsAutoMnemonicEnabled() )
         {
-            aPopupMenu.CreateAutoMnemonics();
-            aPopupMenu.SetMenuFlags( aPopupMenu.GetMenuFlags() | MenuFlags::NoAutoMnemonics );
+            aPopupMenu->CreateAutoMnemonics();
+            aPopupMenu->SetMenuFlags( aPopupMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
         }
 
         // Replace suggestions...
@@ -860,13 +860,13 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
             {
                 OUString aAlternate( pAlt[nW] );
-                aPopupMenu.InsertItem( MN_ALTSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
+                aPopupMenu->InsertItem( MN_ALTSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
                 pAutoMenu->InsertItem( MN_AUTOSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
             }
-            aPopupMenu.InsertSeparator(OString(), nWords);
+            aPopupMenu->InsertSeparator(OString(), nWords);
         }
         else
-            aPopupMenu.RemoveItem( MN_AUTOCORR );   // delete?
+            aPopupMenu->RemoveItem( MN_AUTOCORR );   // delete?
 
         SvtLinguConfig aCfg;
 
@@ -920,18 +920,18 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             }
         }
         if ( pInsertMenu->GetItemCount() != 1)
-            aPopupMenu.EnableItem( MN_INSERT_SINGLE, false );
+            aPopupMenu->EnableItem( MN_INSERT_SINGLE, false );
         if ( pInsertMenu->GetItemCount() < 2 )
-            aPopupMenu.EnableItem( MN_INSERT, false );
+            aPopupMenu->EnableItem( MN_INSERT, false );
 
-        aPopupMenu.RemoveDisabledEntries( true, true );
+        aPopupMenu->RemoveDisabledEntries( true, true );
 
         Rectangle aTempRect = pImpEditView->pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY );
         Point aScreenPos = pImpEditView->GetWindowPos( aTempRect.TopLeft() );
         aScreenPos = pImpEditView->GetWindow()->OutputToScreenPixel( aScreenPos );
         aTempRect = pImpEditView->GetWindow()->LogicToPixel( Rectangle(aScreenPos, aTempRect.GetSize() ));
 
-        sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose );
+        sal_uInt16 nId = aPopupMenu->Execute( pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose );
         if ( nId == MN_IGNORE )
         {
             OUString aWord = pImpEditView->SpellIgnoreWord();

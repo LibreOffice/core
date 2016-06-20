@@ -230,12 +230,11 @@ namespace dbaui
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) override;
 
         // IContextMenuProvider
-        virtual PopupMenu*      getContextMenu( Control& _rControl ) const override;
-        virtual IController&    getCommandController() override;
+        virtual VclPtr<PopupMenu> getContextMenu( Control& _rControl ) const override;
+        virtual IController&      getCommandController() override;
         virtual ::comphelper::OInterfaceContainerHelper2*
-                                getContextMenuInterceptors() override;
-        virtual css::uno::Any
-                                getCurrentSelection( Control& _rControl ) const override;
+                                  getContextMenuInterceptors() override;
+        virtual css::uno::Any     getCurrentSelection( Control& _rControl ) const override;
 
         virtual void impl_initialize() override;
 

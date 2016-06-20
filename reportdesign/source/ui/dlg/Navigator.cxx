@@ -306,27 +306,27 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
             uno::Reference< report::XGroup> xGroup(pData->getContent(),uno::UNO_QUERY);
             bool bDeleteAllowed = m_rController.isEditable() && (xGroup.is() ||
                                       uno::Reference< report::XFunction>(pData->getContent(),uno::UNO_QUERY).is());
-            PopupMenu aContextMenu( ModuleRes( RID_MENU_NAVIGATOR ) );
+            ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_MENU_NAVIGATOR ) );
 
-            sal_uInt16 nCount = aContextMenu.GetItemCount();
+            sal_uInt16 nCount = aContextMenu->GetItemCount();
             for (sal_uInt16 i = 0; i < nCount; ++i)
             {
-                if ( MenuItemType::SEPARATOR != aContextMenu.GetItemType(i))
+                if ( MenuItemType::SEPARATOR != aContextMenu->GetItemType(i))
                 {
-                    sal_uInt16 nId = aContextMenu.GetItemId(i);
+                    sal_uInt16 nId = aContextMenu->GetItemId(i);
 
-                    aContextMenu.CheckItem(nId,m_rController.isCommandChecked(nId));
+                    aContextMenu->CheckItem(nId,m_rController.isCommandChecked(nId));
                     bool bEnabled = m_rController.isCommandEnabled(nId);
                     if ( nId == SID_RPT_NEW_FUNCTION )
-                        aContextMenu.EnableItem(nId,m_rController.isEditable() && (xSupplier.is() || xFunctions.is()) );
+                        aContextMenu->EnableItem(nId,m_rController.isEditable() && (xSupplier.is() || xFunctions.is()) );
                     // special condition, check for function and group
                     else if ( nId == SID_DELETE )
-                        aContextMenu.EnableItem(SID_DELETE,bDeleteAllowed);
+                        aContextMenu->EnableItem(SID_DELETE,bDeleteAllowed);
                     else
-                        aContextMenu.EnableItem(nId,bEnabled);
+                        aContextMenu->EnableItem(nId,bEnabled);
                 }
             }
-            sal_uInt16 nId = aContextMenu.Execute(this, aWhere);
+            sal_uInt16 nId = aContextMenu->Execute(this, aWhere);
             if ( nId )
             {
                 uno::Sequence< beans::PropertyValue> aArgs;

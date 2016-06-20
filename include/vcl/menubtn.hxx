@@ -36,8 +36,8 @@ private:
     friend class VclBuilder;
 
     Timer*          mpMenuTimer;
-    PopupMenu*      mpOwnMenu;
-    PopupMenu*      mpMenu;
+    VclPtr<PopupMenu> mpOwnMenu;
+    VclPtr<PopupMenu> mpMenu;
     sal_uInt16      mnCurItemId;
     sal_uInt16      mnMenuMode;
     Link<MenuButton*,void> maActivateHdl;

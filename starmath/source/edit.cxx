@@ -340,10 +340,10 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         GetParent()->ToTop();
 
         Point aPoint = rCEvt.GetMousePosPixel();
-        std::unique_ptr<PopupMenu> xPopupMenu(new PopupMenu(SmResId(RID_COMMANDMENU)));
+        VclPtr<PopupMenu> xPopupMenu = VclPtr<PopupMenu>::Create(SmResId(RID_COMMANDMENU));
 
         // added for replaceability of context menus
-        Menu* pMenu = nullptr;
+        VclPtr<Menu> pMenu;
         css::ui::ContextMenuExecuteEvent aEvent;
         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
         aEvent.ExecutePosition.X = aPoint.X();
@@ -353,7 +353,8 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         {
             if ( pMenu )
             {
-                xPopupMenu.reset(static_cast<PopupMenu*>(pMenu));
+                xPopupMenu.disposeAndClear();
+                xPopupMenu = static_cast<PopupMenu*>(pMenu.get());
             }
         }
 

@@ -126,7 +126,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper
     Image               maBubbleImage;
     VclPtr<BubbleWindow> mpBubbleWin;
     VclPtr<SystemWindow> mpIconSysWin;
-    MenuBar*            mpIconMBar;
+    VclPtr<MenuBar>     mpIconMBar;
     ResMgr*             mpUpdResMgr;
     ResMgr*             mpSfxResMgr;
     Idle                maWaitIdle;

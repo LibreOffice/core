@@ -112,8 +112,8 @@ private:
     const GalleryTheme* mpTheme;
     sal_uIntPtr         mnObjectPos;
     bool                mbPreview;
-    PopupMenu           maPopupMenu;
-    PopupMenu           maBackgroundPopup;
+    ScopedVclPtr<PopupMenu> mpPopupMenu;
+    ScopedVclPtr<PopupMenu> mpBackgroundPopup;
     VclPtr<GalleryBrowser2> mpBrowser;
 
     typedef std::map< int, CommandInfo > CommandInfoMap;
@@ -146,8 +146,7 @@ GalleryThemePopup::GalleryThemePopup(
     : mpTheme( pTheme )
     , mnObjectPos( nObjectPos )
     , mbPreview( bPreview )
-    , maPopupMenu( GAL_RES( RID_SVXMN_GALLERY2 ) )
-    , maBackgroundPopup()
+    , mpPopupMenu( VclPtr<PopupMenu>::Create(GAL_RES( RID_SVXMN_GALLERY2 )) )
     , mpBrowser( pBrowser )
 {
 
@@ -182,19 +181,19 @@ throw ( css::uno::RuntimeException, std::exception )
     {
         if ( !rEvent.IsEnabled )
         {
-            maPopupMenu.EnableItem( MN_ADD, false );
+            mpPopupMenu->EnableItem( MN_ADD, false );
         }
     }
     else if ( rURL == CMD_SID_GALLERY_BG_BRUSH )
     {
-        maBackgroundPopup.Clear();
+        mpBackgroundPopup->Clear();
         if ( rEvent.IsEnabled )
         {
             OUString sItem;
             css::uno::Sequence< OUString > sItems;
             if ( ( rEvent.State >>= sItem ) && sItem.getLength() )
             {
-                maBackgroundPopup.InsertItem( 1, sItem );
+                mpBackgroundPopup->InsertItem( 1, sItem );
             }
             else if ( ( rEvent.State >>= sItems ) && sItems.getLength() )
             {
@@ -202,7 +201,7 @@ throw ( css::uno::RuntimeException, std::exception )
                 const OUString *pEnd = pStr + sItems.getLength();
                 for ( sal_uInt16 nId = 1; pStr != pEnd; pStr++, nId++ )
                 {
-                    maBackgroundPopup.InsertItem( nId, *pStr );
+                    mpBackgroundPopup->InsertItem( nId, *pStr );
                 }
             }
         }
@@ -242,33 +241,33 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
     const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
     const bool bValidURL = ( aURL.GetProtocol() != INetProtocol::NotValid );
 
-    maPopupMenu.EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
+    mpPopupMenu->EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
 
-    maPopupMenu.EnableItem( MN_PREVIEW, bValidURL );
+    mpPopupMenu->EnableItem( MN_PREVIEW, bValidURL );
 
-    maPopupMenu.CheckItem( MN_PREVIEW, mbPreview );
+    mpPopupMenu->CheckItem( MN_PREVIEW, mbPreview );
 
     if( mpTheme->IsReadOnly() || !mpTheme->GetObjectCount() )
     {
-        maPopupMenu.EnableItem( MN_DELETE, false );
-        maPopupMenu.EnableItem( MN_TITLE, false );
+        mpPopupMenu->EnableItem( MN_DELETE, false );
+        mpPopupMenu->EnableItem( MN_TITLE, false );
 
         if( mpTheme->IsReadOnly() )
-            maPopupMenu.EnableItem( MN_PASTECLIPBOARD, false );
+            mpPopupMenu->EnableItem( MN_PASTECLIPBOARD, false );
 
         if( !mpTheme->GetObjectCount() )
-            maPopupMenu.EnableItem( MN_COPYCLIPBOARD, false );
+            mpPopupMenu->EnableItem( MN_COPYCLIPBOARD, false );
     }
     else
     {
-        maPopupMenu.EnableItem( MN_DELETE, !mbPreview );
-        maPopupMenu.EnableItem( MN_TITLE );
-        maPopupMenu.EnableItem( MN_COPYCLIPBOARD );
-        maPopupMenu.EnableItem( MN_PASTECLIPBOARD );
+        mpPopupMenu->EnableItem( MN_DELETE, !mbPreview );
+        mpPopupMenu->EnableItem( MN_TITLE );
+        mpPopupMenu->EnableItem( MN_COPYCLIPBOARD );
+        mpPopupMenu->EnableItem( MN_PASTECLIPBOARD );
     }
 
 #ifdef GALLERY_USE_CLIPBOARD
-    if( maPopupMenu.IsItemEnabled( MN_PASTECLIPBOARD ) )
+    if( mpPopupMenu.IsItemEnabled( MN_PASTECLIPBOARD ) )
     {
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( this ) );
         sal_Bool               bEnable = sal_False;
@@ -287,11 +286,11 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
         }
 
         if( !bEnable )
-            maPopupMenu.EnableItem( MN_PASTECLIPBOARD, sal_False );
+            mpPopupMenu->EnableItem( MN_PASTECLIPBOARD, sal_False );
     }
 #else
-    maPopupMenu.EnableItem( MN_COPYCLIPBOARD, false );
-    maPopupMenu.EnableItem( MN_PASTECLIPBOARD, false );
+    mpPopupMenu->EnableItem( MN_COPYCLIPBOARD, false );
+    mpPopupMenu->EnableItem( MN_PASTECLIPBOARD, false );
 #endif
 
     // update status
@@ -327,19 +326,19 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
         {}
     }
 
-    if( !maBackgroundPopup.GetItemCount() || ( eObjKind == SGA_OBJ_SVDRAW ) || ( eObjKind == SGA_OBJ_SOUND ) )
-        maPopupMenu.EnableItem( MN_BACKGROUND, false );
+    if( !mpBackgroundPopup->GetItemCount() || ( eObjKind == SGA_OBJ_SVDRAW ) || ( eObjKind == SGA_OBJ_SOUND ) )
+        mpPopupMenu->EnableItem( MN_BACKGROUND, false );
     else
     {
-        maPopupMenu.EnableItem( MN_BACKGROUND );
-        maPopupMenu.SetPopupMenu( MN_BACKGROUND, &maBackgroundPopup );
-        maBackgroundPopup.SetSelectHdl( LINK( this, GalleryThemePopup, BackgroundMenuSelectHdl ) );
+        mpPopupMenu->EnableItem( MN_BACKGROUND );
+        mpPopupMenu->SetPopupMenu( MN_BACKGROUND, mpBackgroundPopup );
+        mpBackgroundPopup->SetSelectHdl( LINK( this, GalleryThemePopup, BackgroundMenuSelectHdl ) );
     }
 
-    maPopupMenu.RemoveDisabledEntries();
+    mpPopupMenu->RemoveDisabledEntries();
 
-    maPopupMenu.SetSelectHdl( LINK( this, GalleryThemePopup, MenuSelectHdl ) );
-    maPopupMenu.Execute( pWindow, aPos );
+    mpPopupMenu->SetSelectHdl( LINK( this, GalleryThemePopup, MenuSelectHdl ) );
+    mpPopupMenu->Execute( pWindow, aPos );
 }
 
 IMPL_LINK_TYPED( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu, bool )

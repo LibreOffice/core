@@ -215,7 +215,7 @@ class MenuBarManager : public css::frame::XStatusListener                ,
         bool                                                         m_bHasMenuBar;
         OUString                                                     m_aMenuItemCommand;
         OUString                                                     m_aModuleIdentifier;
-        Menu*                                                        m_pVCLMenu;
+        VclPtr<Menu>                                                 m_pVCLMenu;
         css::uno::Reference< css::frame::XFrame >                    m_xFrame;
         css::uno::Reference< css::container::XNameAccess >           m_xUICommandLabels;
         css::uno::Reference< css::frame::XUIControllerFactory >      m_xPopupMenuControllerFactory;

@@ -1326,12 +1326,11 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
 
     // remove config entries from menu, so we have a clean menu to start with
     // remove submenu first
-    ::PopupMenu*  pItemMenu = pMenu->GetPopupMenu( 1 );
+    VclPtr<::PopupMenu>  pItemMenu = pMenu->GetPopupMenu( 1 );
     if( pItemMenu )
     {
         pItemMenu->Clear();
-        delete pItemMenu;
-        pItemMenu = nullptr;
+        pItemMenu.disposeAndClear();
         pMenu->SetPopupMenu( 1, pItemMenu );
     }
 
@@ -1412,12 +1411,12 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
 
     // popup menu for quick customization
     bool bHideDisabledEntries = !SvtMenuOptions().IsEntryHidingEnabled();
-    ::PopupMenu aQuickCustomizationMenu( FwkResId( POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION ));
+    ScopedVclPtrInstance<::PopupMenu> aQuickCustomizationMenu( FwkResId( POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION ));
 
     if ( m_pToolBar->IsCustomize() )
     {
         sal_uInt16    nPos( 0 );
-        ::PopupMenu*  pVisibleItemsPopupMenu( aQuickCustomizationMenu.GetPopupMenu( 1 ));
+        ::PopupMenu*  pVisibleItemsPopupMenu( aQuickCustomizationMenu->GetPopupMenu( 1 ));
 
         bool    bIsFloating( false );
 
@@ -1427,25 +1426,25 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
 
         if ( !bIsFloating )
         {
-            aQuickCustomizationMenu.EnableItem( MENUITEM_TOOLBAR_DOCKTOOLBAR, false );
-            aQuickCustomizationMenu.EnableItem( MENUITEM_TOOLBAR_DOCKALLTOOLBAR, false );
+            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_DOCKTOOLBAR, false );
+            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_DOCKALLTOOLBAR, false );
             Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
             if( xDockable.is() )
-                aQuickCustomizationMenu.CheckItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, xDockable->isLocked() );
+                aQuickCustomizationMenu->CheckItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, xDockable->isLocked() );
         }
         else
-            aQuickCustomizationMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false );
+            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false );
 
         if ( SvtMiscOptions().DisableUICustomization() )
         {
-            aQuickCustomizationMenu.EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, false );
-            aQuickCustomizationMenu.EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, false );
-            aQuickCustomizationMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false );
+            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, false );
+            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, false );
+            aQuickCustomizationMenu->EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false );
         }
 
         // Disable menu item CLOSE if the toolbar has no closer
         if( !(pToolBar->GetFloatStyle() & WB_CLOSEABLE) )
-            aQuickCustomizationMenu.EnableItem(MENUITEM_TOOLBAR_CLOSE, false);
+            aQuickCustomizationMenu->EnableItem(MENUITEM_TOOLBAR_CLOSE, false);
 
         // Temporary stores a Command --> Url map to update contextual menu with the
         // correct icons. The popup icons are by default the same as those in the
@@ -1486,9 +1485,9 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     }
     else
     {
-        sal_uInt16 nPos = aQuickCustomizationMenu.GetItemPos( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR );
+        sal_uInt16 nPos = aQuickCustomizationMenu->GetItemPos( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR );
         if ( nPos != MENU_ITEM_NOTFOUND )
-            aQuickCustomizationMenu.RemoveItem( nPos );
+            aQuickCustomizationMenu->RemoveItem( nPos );
     }
 
     // copy all menu items 'Visible buttons, Customize toolbar, Dock toolbar,
@@ -1497,21 +1496,21 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
         pMenu->InsertSeparator();
 
     sal_uInt16 i;
-    for( i=0; i< aQuickCustomizationMenu.GetItemCount(); i++)
+    for( i=0; i< aQuickCustomizationMenu->GetItemCount(); i++)
     {
-        sal_uInt16 nId = aQuickCustomizationMenu.GetItemId( i );
+        sal_uInt16 nId = aQuickCustomizationMenu->GetItemId( i );
         if ( MenuItemAllowed( nId ))
-            pMenu->CopyItem( aQuickCustomizationMenu, i );
+            pMenu->CopyItem( *aQuickCustomizationMenu.get(), i );
     }
 
     // set submenu to toolbar menu
-    if( aQuickCustomizationMenu.GetPopupMenu( 1 ) )
+    if( aQuickCustomizationMenu->GetPopupMenu( 1 ) )
     {
         // create an own submenu to avoid auto-delete when resource menu is deleted
-        ::PopupMenu *pItemMenu = new ::PopupMenu();
+        VclPtr<::PopupMenu> pItemMenu = VclPtr<::PopupMenu>::Create();
 
-        for( i=0; i< aQuickCustomizationMenu.GetPopupMenu( 1 )->GetItemCount(); i++)
-            pItemMenu->CopyItem( *aQuickCustomizationMenu.GetPopupMenu( 1 ), i );
+        for( i=0; i< aQuickCustomizationMenu->GetPopupMenu( 1 )->GetItemCount(); i++)
+            pItemMenu->CopyItem( *aQuickCustomizationMenu->GetPopupMenu( 1 ), i );
 
         pMenu->SetPopupMenu( 1, pItemMenu );
     }

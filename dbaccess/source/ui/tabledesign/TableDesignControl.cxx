@@ -107,13 +107,13 @@ void OTableRowView::Command(const CommandEvent& rEvt)
 
             if ( nColId == HANDLE_ID )
             {
-                PopupMenu aContextMenu(ModuleRes(RID_TABLEDESIGNROWPOPUPMENU));
+                ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_TABLEDESIGNROWPOPUPMENU));
                 long nSelectRowCount = GetSelectRowCount();
-                aContextMenu.EnableItem( SID_CUT, nSelectRowCount != 0);
-                aContextMenu.EnableItem( SID_COPY, nSelectRowCount  != 0);
-                aContextMenu.EnableItem( SID_PASTE, m_bClipboardFilled );
-                aContextMenu.EnableItem( SID_DELETE, false );
-                switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
+                aContextMenu->EnableItem( SID_CUT, nSelectRowCount != 0);
+                aContextMenu->EnableItem( SID_COPY, nSelectRowCount  != 0);
+                aContextMenu->EnableItem( SID_PASTE, m_bClipboardFilled );
+                aContextMenu->EnableItem( SID_DELETE, false );
+                switch (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
                 {
                     case SID_CUT:
                         cut();

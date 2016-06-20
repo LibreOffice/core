@@ -1096,13 +1096,13 @@ sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 // Handler for Dragging and ContextMenu
 
-std::unique_ptr<PopupMenu> SwContentTree::CreateContextMenu()
+VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
 {
-    std::unique_ptr<PopupMenu> pPop(new PopupMenu);
-    PopupMenu* pSubPop1 = new PopupMenu;
-    PopupMenu* pSubPop2 = new PopupMenu;
-    PopupMenu* pSubPop3 = new PopupMenu;
-    PopupMenu* pSubPop4 = new PopupMenu; // Edit
+    VclPtrInstance<PopupMenu> pPop;
+    VclPtrInstance<PopupMenu> pSubPop1;
+    VclPtrInstance<PopupMenu> pSubPop2;
+    VclPtrInstance<PopupMenu> pSubPop3;
+    VclPtrInstance<PopupMenu> pSubPop4; // Edit
 
     for(int i = 1; i <= MAXLEVEL; ++i)
     {

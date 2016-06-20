@@ -131,7 +131,7 @@ public:
     }
     void MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;
 
-    virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
+    virtual VclPtr<PopupMenu> CreateContextMenu() override;
 };
 
 class SfxActionListBox : public DropListBox_Impl
@@ -140,7 +140,7 @@ protected:
 public:
     SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinBits );
 
-    virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
+    virtual VclPtr<PopupMenu> CreateContextMenu() override;
     void Recalc();
 };
 
@@ -325,7 +325,7 @@ public:
     }
 
     // normally for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
-    std::unique_ptr<PopupMenu> CreateContextMenu();
+    VclPtr<PopupMenu> CreateContextMenu();
 };
 
 class DropToolBox_Impl : public ToolBox, public DropTargetHelper

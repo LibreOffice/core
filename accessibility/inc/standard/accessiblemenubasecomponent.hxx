@@ -26,6 +26,7 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <vector>
 
@@ -59,7 +60,7 @@ protected:
     typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
     AccessibleChildren      m_aAccessibleChildren;
-    Menu*                   m_pMenu;
+    VclPtr<Menu>            m_pMenu;
 
     bool                    m_bEnabled;
     bool                    m_bFocused;

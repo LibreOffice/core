@@ -56,7 +56,7 @@ VCLXMenu::~VCLXMenu()
     if ( mpMenu )
     {
         mpMenu->RemoveEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
-        delete mpMenu;
+         mpMenu.disposeAndClear();
     }
 }
 
@@ -70,9 +70,9 @@ void VCLXMenu::ImplCreateMenu( bool bPopup )
     DBG_ASSERT( !mpMenu, "CreateMenu: Menu exists!" );
 
     if ( bPopup )
-        mpMenu = new PopupMenu;
+        mpMenu = VclPtr<PopupMenu>::Create();
     else
-        mpMenu = new MenuBar;
+        mpMenu = VclPtr<MenuBar>::Create();
 
     mpMenu->AddEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
 }
@@ -526,7 +526,7 @@ throw(css::uno::RuntimeException, std::exception)
     sal_Int16 nRet = 0;
     if ( mpMenu && IsPopupMenu() )
     {
-        nRet = static_cast<PopupMenu*>(mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ),
+        nRet = static_cast<PopupMenu*>(mpMenu.get())->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ),
                                               VCLRectangle( rPos ),
                                               static_cast<PopupMenuFlags>(nFlags) | PopupMenuFlags::NoMouseUpClose );
     }
@@ -726,7 +726,7 @@ throw (css::uno::RuntimeException, std::exception)
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( mpMenu && IsPopupMenu() )
-        static_cast<PopupMenu*>( mpMenu )->EndExecute();
+        static_cast<PopupMenu*>( mpMenu.get() )->EndExecute();
 }
 
 

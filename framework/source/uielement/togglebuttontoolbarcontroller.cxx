@@ -102,21 +102,21 @@ throw (css::uno::RuntimeException, std::exception)
         ( m_eStyle == STYLE_TOGGLE_DROPDOWNBUTTON ))
     {
         // create popup menu
-        ::PopupMenu aPopup;
+        ScopedVclPtrInstance<::PopupMenu> aPopup;
         const sal_uInt32 nCount = m_aDropdownMenuList.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             OUString aLabel( m_aDropdownMenuList[i] );
-            aPopup.InsertItem( sal_uInt16( i+1 ), aLabel );
+            aPopup->InsertItem( sal_uInt16( i+1 ), aLabel );
             if ( aLabel == m_aCurrentSelection )
-                aPopup.CheckItem( sal_uInt16( i+1 ) );
+                aPopup->CheckItem( sal_uInt16( i+1 ) );
             else
-                aPopup.CheckItem( sal_uInt16( i+1 ), false );
+                aPopup->CheckItem( sal_uInt16( i+1 ), false );
         }
 
         m_pToolbar->SetItemDown( m_nID, true );
-        aPopup.SetSelectHdl( LINK( this, ToggleButtonToolbarController, MenuSelectHdl ));
-        aPopup.Execute( m_pToolbar, m_pToolbar->GetItemRect( m_nID ));
+        aPopup->SetSelectHdl( LINK( this, ToggleButtonToolbarController, MenuSelectHdl ));
+        aPopup->Execute( m_pToolbar, m_pToolbar->GetItemRect( m_nID ));
         m_pToolbar->SetItemDown( m_nID, false );
     }
 

@@ -233,8 +233,8 @@ private:
     void updateImagesPopupMenu( PopupMenu* pPopupMenu );
     void fillPopupMenu( uno::Reference< awt::XPopupMenu >& rPopupMenu );
 
-    bool            m_bShowMenuImages : 1;
-    PopupMenu*          m_pResPopupMenu;
+    bool                m_bShowMenuImages : 1;
+    VclPtr<PopupMenu>   m_pResPopupMenu;
     UrlToDispatchMap    m_aURLToDispatchMap;
 };
 
@@ -300,7 +300,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( Run
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));
     m_xPopupMenu.clear();
-    delete m_pResPopupMenu;
+    m_pResPopupMenu.disposeAndClear();
 }
 
 // XStatusListener
@@ -398,7 +398,7 @@ void ControlMenuController::impl_setPopupMenu()
             aResId.SetRT( RSC_MENU );
             if ( pResMgr->IsAvailable( aResId ))
             {
-                m_pResPopupMenu = new PopupMenu( aResId );
+                m_pResPopupMenu = VclPtr<PopupMenu>::Create( aResId );
                 updateImagesPopupMenu( m_pResPopupMenu );
             }
         }

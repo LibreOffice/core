@@ -926,7 +926,7 @@ void SidebarController::ShowPopupMenu (
     const Rectangle& rButtonBox,
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
-    std::shared_ptr<PopupMenu> pMenu = CreatePopupMenu(rMenuData);
+    VclPtr<PopupMenu> pMenu = CreatePopupMenu(rMenuData);
     pMenu->SetSelectHdl(LINK(const_cast<SidebarController*>(this), SidebarController, OnMenuItemSelected));
 
     // pass toolbox button rect so the menu can stay open on button up
@@ -935,11 +935,11 @@ void SidebarController::ShowPopupMenu (
     pMenu->Execute(mpParentWindow, aBox, PopupMenuFlags::ExecuteDown);
 }
 
-std::shared_ptr<PopupMenu> SidebarController::CreatePopupMenu (
+VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
     // Create the top level popup menu.
-    std::shared_ptr<PopupMenu> pMenu (new PopupMenu());
+    VclPtrInstance<PopupMenu> pMenu;
     FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
     if (pMenuWindow != nullptr)
     {
@@ -947,7 +947,7 @@ std::shared_ptr<PopupMenu> SidebarController::CreatePopupMenu (
     }
 
     // Create sub menu for customization (hiding of deck tabs.)
-    PopupMenu* pCustomizationMenu = new PopupMenu();
+    VclPtr<PopupMenu> pCustomizationMenu = VclPtr<PopupMenu>::Create();
 
     SidebarResource aLocalResource;
 

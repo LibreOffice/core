@@ -104,7 +104,7 @@ class SC_DLLPUBLIC ScExtIButton : public ImageButton
 private:
 
     Idle            aIdle;
-    PopupMenu*      pPopupMenu;
+    VclPtr<PopupMenu>        pPopupMenu;
     Link<ScExtIButton&,void> aMLink;
     sal_uInt16      nSelected;
     OString         aSelectedIdent;
@@ -122,6 +122,8 @@ protected:
 public:
 
     ScExtIButton(vcl::Window* pParent, WinBits nBits );
+    virtual ~ScExtIButton();
+    virtual void dispose() override;
 
     void            SetPopupMenu(PopupMenu* pPopUp);
 

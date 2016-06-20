@@ -1985,7 +1985,7 @@ IMPL_LINK_NOARG_TYPED(SlideshowImpl, ContextMenuHdl, void*, void)
     if( !mbWasPaused )
         pause();
 
-    PopupMenu* pMenu = new PopupMenu( SdResId( RID_SLIDESHOW_CONTEXTMENU ) );
+    VclPtrInstance<PopupMenu> pMenu( SdResId( RID_SLIDESHOW_CONTEXTMENU ) );
 
     // Adding button to display if in Pen  mode
     pMenu->CheckItem( CM_PEN_MODE, mbUsePen);
@@ -2098,7 +2098,7 @@ IMPL_LINK_NOARG_TYPED(SlideshowImpl, ContextMenuHdl, void*, void)
 
     pMenu->SetSelectHdl( LINK( this, SlideshowImpl, ContextMenuSelectHdl ) );
     pMenu->Execute( mpShowWindow, maPopupMousePos );
-    delete pMenu;
+    pMenu.disposeAndClear();
 
     if( mxView.is() )
         mxView->ignoreNextMouseReleased();

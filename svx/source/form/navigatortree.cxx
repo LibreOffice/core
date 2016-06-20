@@ -360,11 +360,11 @@ namespace svxform
                 FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : nullptr;
                 if( pFormShell && pFormModel )
                 {
-                    PopupMenu aContextMenu(SVX_RES(RID_FMEXPLORER_POPUPMENU));
-                    PopupMenu* pSubMenuNew = aContextMenu.GetPopupMenu( SID_FM_NEW );
+                    ScopedVclPtrInstance<PopupMenu> aContextMenu(SVX_RES(RID_FMEXPLORER_POPUPMENU));
+                    PopupMenu* pSubMenuNew = aContextMenu->GetPopupMenu( SID_FM_NEW );
 
                     // menu 'New' only exists, if only the root or only one form is selected
-                    aContextMenu.EnableItem( SID_FM_NEW, bSingleSelection && (m_nFormsSelected || m_bRootSelected) );
+                    aContextMenu->EnableItem( SID_FM_NEW, bSingleSelection && (m_nFormsSelected || m_bRootSelected) );
 
                     // 'New'\'Form' under the same terms
                     pSubMenuNew->EnableItem( SID_FM_NEW_FORM, bSingleSelection && (m_nFormsSelected || m_bRootSelected) );
@@ -375,62 +375,62 @@ namespace svxform
                     pSubMenuNew->EnableItem( SID_FM_NEW_HIDDEN, bSingleSelection && m_nFormsSelected );
 
                     // 'Delete': everything which is not root can be removed
-                    aContextMenu.EnableItem( SID_FM_DELETE, !m_bRootSelected );
+                    aContextMenu->EnableItem( SID_FM_DELETE, !m_bRootSelected );
 
                     // 'Cut', 'Copy' and 'Paste'
-                    aContextMenu.EnableItem( SID_CUT, !m_bRootSelected && implAllowExchange( DND_ACTION_MOVE ) );
-                    aContextMenu.EnableItem( SID_COPY, !m_bRootSelected && implAllowExchange( DND_ACTION_COPY ) );
-                    aContextMenu.EnableItem( SID_PASTE, implAcceptPaste( ) );
+                    aContextMenu->EnableItem( SID_CUT, !m_bRootSelected && implAllowExchange( DND_ACTION_MOVE ) );
+                    aContextMenu->EnableItem( SID_COPY, !m_bRootSelected && implAllowExchange( DND_ACTION_COPY ) );
+                    aContextMenu->EnableItem( SID_PASTE, implAcceptPaste( ) );
 
                     // TabDialog, if exactly one form
-                    aContextMenu.EnableItem( SID_FM_TAB_DIALOG, bSingleSelection && m_nFormsSelected );
+                    aContextMenu->EnableItem( SID_FM_TAB_DIALOG, bSingleSelection && m_nFormsSelected );
 
                     // in XML forms, we don't allow for the properties of a form
                     // #i36484#
                     if ( pFormShell->GetImpl()->isEnhancedForm() && !m_nControlsSelected )
-                        aContextMenu.RemoveItem( aContextMenu.GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
+                        aContextMenu->RemoveItem( aContextMenu->GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
 
                     // if the property browser is already open, we don't allow for the properties, too
                     if( pFormShell->GetImpl()->IsPropBrwOpen() )
-                        aContextMenu.RemoveItem( aContextMenu.GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
+                        aContextMenu->RemoveItem( aContextMenu->GetItemPos( SID_FM_SHOW_PROPERTY_BROWSER ) );
                     // and finally, if there's a mixed selection of forms and controls, disable the entry, too
                     else
-                        aContextMenu.EnableItem( SID_FM_SHOW_PROPERTY_BROWSER,
+                        aContextMenu->EnableItem( SID_FM_SHOW_PROPERTY_BROWSER,
                             (m_nControlsSelected && !m_nFormsSelected) || (!m_nControlsSelected && m_nFormsSelected) );
 
                     // rename, if one element and no root
-                    aContextMenu.EnableItem( SID_FM_RENAME_OBJECT, bSingleSelection && !m_bRootSelected );
+                    aContextMenu->EnableItem( SID_FM_RENAME_OBJECT, bSingleSelection && !m_bRootSelected );
 
                     // Readonly-entry is only for root
-                    aContextMenu.EnableItem( SID_FM_OPEN_READONLY, m_bRootSelected );
+                    aContextMenu->EnableItem( SID_FM_OPEN_READONLY, m_bRootSelected );
                     // the same for automatic control focus
-                    aContextMenu.EnableItem( SID_FM_AUTOCONTROLFOCUS, m_bRootSelected );
+                    aContextMenu->EnableItem( SID_FM_AUTOCONTROLFOCUS, m_bRootSelected );
 
                     // ConvertTo-Slots are enabled, if one control is selected
                     // the corresponding slot is disabled
                     if (!m_bRootSelected && !m_nFormsSelected && (m_nControlsSelected == 1))
                     {
-                        aContextMenu.SetPopupMenu( SID_FM_CHANGECONTROLTYPE, FmXFormShell::GetConversionMenu() );
+                        aContextMenu->SetPopupMenu( SID_FM_CHANGECONTROLTYPE, FmXFormShell::GetConversionMenu() );
 #if OSL_DEBUG_LEVEL > 0
                         FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
                         OSL_ENSURE( pFormShell->GetImpl()->isSolelySelected( pCurrent->GetFormComponent() ),
                             "NavigatorTree::Command: inconsistency between the navigator selection, and the selection as the shell knows it!" );
 #endif
 
-                        pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection( *aContextMenu.GetPopupMenu( SID_FM_CHANGECONTROLTYPE ) );
+                        pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection( *aContextMenu->GetPopupMenu( SID_FM_CHANGECONTROLTYPE ) );
                     }
                     else
-                        aContextMenu.EnableItem( SID_FM_CHANGECONTROLTYPE, false );
+                        aContextMenu->EnableItem( SID_FM_CHANGECONTROLTYPE, false );
 
                     // remove all disabled entries
-                    aContextMenu.RemoveDisabledEntries(true, true);
+                    aContextMenu->RemoveDisabledEntries(true, true);
 
                     // set OpenReadOnly
 
-                    aContextMenu.CheckItem( SID_FM_OPEN_READONLY, pFormModel->GetOpenInDesignMode() );
-                    aContextMenu.CheckItem( SID_FM_AUTOCONTROLFOCUS, pFormModel->GetAutoControlFocus() );
+                    aContextMenu->CheckItem( SID_FM_OPEN_READONLY, pFormModel->GetOpenInDesignMode() );
+                    aContextMenu->CheckItem( SID_FM_AUTOCONTROLFOCUS, pFormModel->GetAutoControlFocus() );
 
-                    sal_uInt16 nSlotId = aContextMenu.Execute( this, ptWhere );
+                    sal_uInt16 nSlotId = aContextMenu->Execute( this, ptWhere );
                     switch( nSlotId )
                     {
                         case SID_FM_NEW_FORM:

@@ -64,7 +64,7 @@ void TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
 
 void TemplateDefaultView::createContextMenu()
 {
-    std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);
+    ScopedVclPtrInstance<PopupMenu> pItemMenu;
     pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
     pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
     deselectItems();

@@ -187,12 +187,10 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     ,m_aBorder(VclPtr<Window>::Create(this,WB_BORDER | WB_READONLY))
     ,m_aPreview(VclPtr<OPreviewWindow>::Create(m_aBorder.get()))
     ,m_aDocumentInfo(VclPtr< ::svtools::ODocumentInfoPreview>::Create(m_aBorder.get(), WB_LEFT | WB_VSCROLL | WB_READONLY) )
+    ,m_aMenu( VclPtr<PopupMenu>::Create( ModuleRes( RID_MENU_APP_PREVIEW ) ) )
     ,m_ePreviewMode(_ePreviewMode)
 {
-
     m_aBorder->SetBorderStyle(WindowBorderStyle::MONO);
-
-    m_aMenu.reset(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 
     m_aTBPreview->SetOutStyle(TOOLBOX_STYLE_FLAT);
     m_aTBPreview->InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
@@ -242,7 +240,7 @@ void OAppDetailPageHelper::dispose()
             rpBox.disposeAndClear();
         }
     }
-    m_aMenu.reset();
+    m_aMenu.disposeAndClear();
     m_pTablePreview.disposeAndClear();
     m_aDocumentInfo.disposeAndClear();
     m_aPreview.disposeAndClear();
@@ -1153,7 +1151,7 @@ IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
     m_aTBPreview->Update();
 
     // execute the menu
-    std::unique_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
+    ScopedVclPtrInstance<PopupMenu> aMenu( ModuleRes( RID_MENU_APP_PREVIEW ) );
 
     const sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
                             , SID_DB_APP_VIEW_DOC_PREVIEW

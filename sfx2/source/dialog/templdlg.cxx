@@ -328,7 +328,7 @@ void SfxActionListBox::Recalc()
     }
 }
 
-std::unique_ptr<PopupMenu> SfxActionListBox::CreateContextMenu()
+VclPtr<PopupMenu> SfxActionListBox::CreateContextMenu()
 {
 
     if( !( GetSelectionCount() > 0 ) )
@@ -412,7 +412,7 @@ void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries_t& rEntries) const
     }
 }
 
-std::unique_ptr<PopupMenu> StyleTreeListBox_Impl::CreateContextMenu()
+VclPtr<PopupMenu> StyleTreeListBox_Impl::CreateContextMenu()
 {
     return pDialog->CreateContextMenu();
 }
@@ -2156,7 +2156,7 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnab
     EnableItem(nId, bEnable);
 }
 
-std::unique_ptr<PopupMenu> SfxCommonTemplateDialog_Impl::CreateContextMenu()
+VclPtr<PopupMenu> SfxCommonTemplateDialog_Impl::CreateContextMenu()
 {
     if ( bBindingUpdate )
     {
@@ -2164,7 +2164,7 @@ std::unique_ptr<PopupMenu> SfxCommonTemplateDialog_Impl::CreateContextMenu()
         pBindings->Update( SID_STYLE_NEW );
         bBindingUpdate = false;
     }
-    std::unique_ptr<PopupMenu> pMenu(new PopupMenu( SfxResId( MN_CONTEXT_TEMPLDLG ) ));
+    VclPtr<PopupMenu> pMenu = VclPtr<PopupMenu>::Create( SfxResId( MN_CONTEXT_TEMPLDLG ) );
     pMenu->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectHdl ) );
     pMenu->EnableItem( ID_EDIT, bCanEdit );
     pMenu->EnableItem( ID_DELETE, bCanDel );
@@ -2474,7 +2474,7 @@ IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
             ToolBoxItemBits::DROPDOWN == (pBox->GetItemBits(nEntry)&ToolBoxItemBits::DROPDOWN))
     {
         //create a popup menu in Writer
-        std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
+        ScopedVclPtrInstance<PopupMenu> pMenu;
         uno::Reference< container::XNameAccess > xNameAccess(
                 frame::theUICommandDescription::get(
                     ::comphelper::getProcessComponentContext()) );

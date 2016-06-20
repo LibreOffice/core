@@ -1951,8 +1951,8 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
 
                 if (!static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
                 {
-                    PopupMenu aContextMenu( ModuleRes( RID_QUERYCOLPOPUPMENU ) );
-                    switch (aContextMenu.Execute(this, aMenuPos))
+                    ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_QUERYCOLPOPUPMENU ) );
+                    switch (aContextMenu->Execute(this, aMenuPos))
                     {
                         case SID_DELETE:
                             RemoveField(nColId);
@@ -1968,13 +1968,13 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
             {
                 if (!static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
                 {
-                    PopupMenu aContextMenu(ModuleRes(RID_QUERYFUNCTION_POPUPMENU));
-                    aContextMenu.CheckItem( ID_QUERY_FUNCTION, m_bVisibleRow[BROW_FUNCTION_ROW]);
-                    aContextMenu.CheckItem( ID_QUERY_TABLENAME, m_bVisibleRow[BROW_TABLE_ROW]);
-                    aContextMenu.CheckItem( ID_QUERY_ALIASNAME, m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
-                    aContextMenu.CheckItem( ID_QUERY_DISTINCT, static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
+                    ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_QUERYFUNCTION_POPUPMENU));
+                    aContextMenu->CheckItem( ID_QUERY_FUNCTION, m_bVisibleRow[BROW_FUNCTION_ROW]);
+                    aContextMenu->CheckItem( ID_QUERY_TABLENAME, m_bVisibleRow[BROW_TABLE_ROW]);
+                    aContextMenu->CheckItem( ID_QUERY_ALIASNAME, m_bVisibleRow[BROW_COLUMNALIAS_ROW]);
+                    aContextMenu->CheckItem( ID_QUERY_DISTINCT, static_cast<OQueryController&>(getDesignView()->getController()).isDistinct());
 
-                    switch (aContextMenu.Execute(this, aMenuPos))
+                    switch (aContextMenu->Execute(this, aMenuPos))
                     {
                         case ID_QUERY_FUNCTION:
                             SetRowVisible(BROW_FUNCTION_ROW, !IsRowVisible(BROW_FUNCTION_ROW));

@@ -359,10 +359,10 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
     if ( nPos >= (long) getItemCount() )
         return CMD_NONE;
 
-    PopupMenu aPopup;
+    ScopedVclPtrInstance<PopupMenu> aPopup;
 
 #if ENABLE_EXTENSION_UPDATE
-    aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
+    aPopup->InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
 #endif
 
     if ( ! GetEntryData( nPos )->m_bLocked )
@@ -370,17 +370,17 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
         if ( GetEntryData( nPos )->m_bUser )
         {
             if ( GetEntryData( nPos )->m_eState == REGISTERED )
-                aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+                aPopup->InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
             else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
-                aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+                aPopup->InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
         }
-        aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+        aPopup->InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
     }
 
     if ( !GetEntryData( nPos )->m_sLicenseText.isEmpty() )
-        aPopup.InsertItem( CMD_SHOW_LICENSE, DialogHelper::getResourceString( RID_STR_SHOW_LICENSE_CMD ) );
+        aPopup->InsertItem( CMD_SHOW_LICENSE, DialogHelper::getResourceString( RID_STR_SHOW_LICENSE_CMD ) );
 
-    return (MENU_COMMAND) aPopup.Execute( this, rPos );
+    return (MENU_COMMAND) aPopup->Execute( this, rPos );
 }
 
 

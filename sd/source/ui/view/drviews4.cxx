@@ -556,15 +556,15 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 //fdo#44998 if the outliner has captured the mouse events release the lock
                 //so the SdFieldPopup can get them
                 pOLV->ReleaseMouse();
-                SdFieldPopup aFieldPopup( pFldItem->GetField(), eLanguage );
+                ScopedVclPtrInstance<SdFieldPopup> aFieldPopup( pFldItem->GetField(), eLanguage );
 
                 if ( rCEvt.IsMouseEvent() )
                     aMPos = rCEvt.GetMousePosPixel();
                 else
                     aMPos = Point( 20, 20 );
-                aFieldPopup.Execute( pWin, aMPos );
+                aFieldPopup->Execute( pWin, aMPos );
 
-                std::unique_ptr<SvxFieldData> pField(aFieldPopup.GetField());
+                std::unique_ptr<SvxFieldData> pField(aFieldPopup->GetField());
                 if( pField )
                 {
                     SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
@@ -876,7 +876,7 @@ void DrawViewShell::ShowSnapLineContextMenu (
     const Point& rMouseLocation)
 {
     const SdrHelpLine& rHelpLine (rPageView.GetHelpLines()[nSnapLineIndex]);
-    std::unique_ptr<PopupMenu> pMenu (new PopupMenu ());
+    ScopedVclPtrInstance<PopupMenu> pMenu;
 
     if (rHelpLine.GetKind() == SDRHELPLINE_POINT)
     {

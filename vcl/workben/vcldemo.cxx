@@ -1812,8 +1812,8 @@ public:
 
 class DemoWidgets : public WorkWindow
 {
-    MenuBar *mpBar;
-    PopupMenu *mpPopup;
+    VclPtr<MenuBar> mpBar;
+    VclPtr<PopupMenu> mpPopup;
 
     VclPtr<VclBox> mpBox;
     VclPtr<ToolBox> mpToolbox;
@@ -1867,9 +1867,9 @@ public:
         mpGLButton->Show();
         mpHBox->Show();
 
-        mpBar = new MenuBar();
+        mpBar = VclPtr<MenuBar>::Create();
         mpBar->InsertItem(0,"File");
-        mpPopup = new PopupMenu();
+        mpPopup = VclPtr<PopupMenu>::Create();
         mpPopup->InsertItem(0,"Item");
         mpBar->SetPopupMenu(0, mpPopup);
         SetMenuBar(mpBar);
@@ -1886,8 +1886,8 @@ public:
         mpToolbox.disposeAndClear();
         mpButton.disposeAndClear();
         mpBox.disposeAndClear();
-        delete mpPopup;
-        delete mpBar;
+        mpPopup.disposeAndClear();
+        mpBar.disposeAndClear();
         WorkWindow::dispose();
     }
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override

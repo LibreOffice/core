@@ -22,6 +22,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <vcl/vclptr.hxx>
 #include "apitools.hxx"
 #include "moduledbu.hxx"
 
@@ -41,7 +42,7 @@ namespace dbaui
         TCommandState   m_aStates;
         sal_uInt16      m_nToolBoxId;
 
-        ::std::unique_ptr<PopupMenu> getMenu();
+        VclPtr<PopupMenu> getMenu();
     public:
         OToolboxController(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 

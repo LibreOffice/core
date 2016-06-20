@@ -581,15 +581,15 @@ IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ShowContextMenuHdl, void*, void)
 
     if( !aExecVector.empty() )
     {
-        PopupMenu aMenu( GAL_RES( RID_SVXMN_GALLERY1 ) );
+        ScopedVclPtrInstance<PopupMenu> aMenu( GAL_RES( RID_SVXMN_GALLERY1 ) );
 
-        aMenu.EnableItem( MN_ACTUALIZE, ::std::find( aExecVector.begin(), aExecVector.end(), MN_ACTUALIZE ) != aExecVector.end() );
-        aMenu.EnableItem( MN_RENAME, ::std::find( aExecVector.begin(), aExecVector.end(), MN_RENAME ) != aExecVector.end() );
-        aMenu.EnableItem( MN_DELETE, ::std::find( aExecVector.begin(), aExecVector.end(), MN_DELETE ) != aExecVector.end() );
-        aMenu.EnableItem( MN_ASSIGN_ID, ::std::find( aExecVector.begin(), aExecVector.end(), MN_ASSIGN_ID ) != aExecVector.end() );
-        aMenu.EnableItem( MN_PROPERTIES, ::std::find( aExecVector.begin(), aExecVector.end(), MN_PROPERTIES ) != aExecVector.end() );
-        aMenu.SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
-        aMenu.RemoveDisabledEntries();
+        aMenu->EnableItem( MN_ACTUALIZE, ::std::find( aExecVector.begin(), aExecVector.end(), MN_ACTUALIZE ) != aExecVector.end() );
+        aMenu->EnableItem( MN_RENAME, ::std::find( aExecVector.begin(), aExecVector.end(), MN_RENAME ) != aExecVector.end() );
+        aMenu->EnableItem( MN_DELETE, ::std::find( aExecVector.begin(), aExecVector.end(), MN_DELETE ) != aExecVector.end() );
+        aMenu->EnableItem( MN_ASSIGN_ID, ::std::find( aExecVector.begin(), aExecVector.end(), MN_ASSIGN_ID ) != aExecVector.end() );
+        aMenu->EnableItem( MN_PROPERTIES, ::std::find( aExecVector.begin(), aExecVector.end(), MN_PROPERTIES ) != aExecVector.end() );
+        aMenu->SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
+        aMenu->RemoveDisabledEntries();
 
         const Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
         Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectEntryPos() ).Center() );
@@ -597,7 +597,7 @@ IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ShowContextMenuHdl, void*, void)
         aSelPos.X() = std::max( std::min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() );
         aSelPos.Y() = std::max( std::min( aSelPos.Y(), aThemesRect.Bottom() ), aThemesRect.Top() );
 
-        aMenu.Execute( this, aSelPos );
+        aMenu->Execute( this, aSelPos );
     }
 }
 

@@ -383,21 +383,21 @@ void BibToolBar::Click()
 
 void BibToolBar::ClearFilterMenu()
 {
-    aPopupMenu.Clear();
+    pPopupMenu->Clear();
     nMenuId=0;
 }
 sal_uInt16 BibToolBar::InsertFilterItem(const OUString& aMenuEntry)
 {
     nMenuId++;
-    aPopupMenu.InsertItem(nMenuId,aMenuEntry);
+    pPopupMenu->InsertItem(nMenuId,aMenuEntry);
 
     return nMenuId;
 }
 void BibToolBar::SelectFilterItem(sal_uInt16    nId)
 {
-    aPopupMenu.CheckItem(nId);
+    pPopupMenu->CheckItem(nId);
     nSelMenuItem=nId;
-    aQueryField = MnemonicGenerator::EraseAllMnemonicChars( aPopupMenu.GetItemText(nId) );
+    aQueryField = MnemonicGenerator::EraseAllMnemonicChars( pPopupMenu->GetItemText(nId) );
 }
 
 void BibToolBar::EnableSourceList(bool bFlag)
@@ -490,15 +490,15 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, MenuHdl, ToolBox*, void)
         EndSelection();     // vor SetDropMode (SetDropMode ruft SetItemImage)
 
         SetItemDown(nTBC_BT_AUTOFILTER, true);
-        nId = aPopupMenu.Execute(this, GetItemRect(nTBC_BT_AUTOFILTER));
+        nId = pPopupMenu->Execute(this, GetItemRect(nTBC_BT_AUTOFILTER));
 
 
         if(nId>0)
         {
-            aPopupMenu.CheckItem(nSelMenuItem,false);
-            aPopupMenu.CheckItem(nId);
+            pPopupMenu->CheckItem(nSelMenuItem,false);
+            pPopupMenu->CheckItem(nId);
             nSelMenuItem=nId;
-            aQueryField = MnemonicGenerator::EraseAllMnemonicChars( aPopupMenu.GetItemText(nId) );
+            aQueryField = MnemonicGenerator::EraseAllMnemonicChars( pPopupMenu->GetItemText(nId) );
             Sequence<PropertyValue> aPropVal(2);
             PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
             pPropertyVal[0].Name = "QueryText";

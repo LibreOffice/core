@@ -93,7 +93,7 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu &&
             !GetStatusBar().GetItemText( GetId() ).isEmpty() )
     {
-        SwTemplatePopup_Impl aPop;
+        ScopedVclPtrInstance<SwTemplatePopup_Impl> aPop;
         {
             SwView* pView = ::GetActiveView();
             SwWrtShell* pWrtShell;
@@ -111,12 +111,12 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                     SfxStyleSheetBase* pStyle = pPool->First();
                     while( pStyle )
                     {
-                        aPop.InsertItem( ++nCount, pStyle->GetName() );
+                        aPop->InsertItem( ++nCount, pStyle->GetName() );
                         pStyle = pPool->Next();
                     }
 
-                    aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-                    const sal_uInt16 nCurrId = aPop.GetCurId();
+                    aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
+                    const sal_uInt16 nCurrId = aPop->GetCurId();
                     if( nCurrId != USHRT_MAX)
                     {
                         // looks a bit awkward, but another way is not possible

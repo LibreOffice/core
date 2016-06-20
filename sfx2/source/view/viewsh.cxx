@@ -1765,7 +1765,7 @@ void Change( Menu* pMenu, SfxViewShell* pView )
 }
 
 
-bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, Menu*& rpOut, ui::ContextMenuExecuteEvent aEvent )
+bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, VclPtr<Menu>& rpOut, ui::ContextMenuExecuteEvent aEvent )
 {
     rpOut = nullptr;
     bool bModified = false;
@@ -1820,7 +1820,7 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuI
     if ( bModified )
     {
         // container was modified, create a new window out of it
-        rpOut = new PopupMenu;
+        rpOut = VclPtr<PopupMenu>::Create();
         ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer( rpOut, aEvent.ActionTriggerContainer );
 
         Change( rpOut, this );

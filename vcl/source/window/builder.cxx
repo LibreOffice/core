@@ -531,7 +531,7 @@ void VclBuilder::disposeBuilder()
     for (std::vector<MenuAndId>::reverse_iterator aI = m_aMenus.rbegin(),
          aEnd = m_aMenus.rend(); aI != aEnd; ++aI)
     {
-        delete aI->m_pMenu;
+        aI->m_pMenu.disposeAndClear();
     }
     m_aMenus.clear();
     m_pParent.clear();
@@ -2435,7 +2435,7 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
 
 void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
 {
-    PopupMenu *pCurrentMenu = new PopupMenu;
+    VclPtr<PopupMenu> pCurrentMenu = VclPtr<PopupMenu>::Create();
 
     int nLevel = 1;
 
@@ -3458,5 +3458,12 @@ void VclBuilder::mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rT
 VclBuilder::ParserState::ParserState()
     : m_nLastToolbarId(0)
 {}
+
+VclBuilder::MenuAndId::MenuAndId(const OString &rId, PopupMenu *pMenu)
+            : m_sID(rId)
+            , m_pMenu(pMenu)
+{};
+
+VclBuilder::MenuAndId::~MenuAndId() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

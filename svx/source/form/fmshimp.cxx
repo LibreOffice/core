@@ -1040,10 +1040,10 @@ void FmXFormShell::ForceUpdateSelection()
 }
 
 
-PopupMenu* FmXFormShell::GetConversionMenu()
+VclPtr<PopupMenu> FmXFormShell::GetConversionMenu()
 {
 
-    PopupMenu* pNewMenu = new PopupMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
+    VclPtrInstance<PopupMenu> pNewMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
 
     ImageList aImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL) );
     for ( size_t i = 0; i < SAL_N_ELEMENTS(nConvertSlots); ++i )

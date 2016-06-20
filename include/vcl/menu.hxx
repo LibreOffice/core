@@ -28,6 +28,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/vclreferencebase.hxx>
 #include <vcl/vclevent.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -104,7 +105,7 @@ namespace o3tl
 struct ImplMenuDelData
 {
     ImplMenuDelData* mpNext;
-    const Menu* mpMenu;
+    VclPtr<const Menu> mpMenu;
 
     explicit ImplMenuDelData( const Menu* );
     ~ImplMenuDelData();
@@ -121,7 +122,7 @@ struct MenuLogo
 
 typedef void (*MenuUserDataReleaseFunction)(sal_uLong);
 
-class VCL_DLLPUBLIC Menu : public Resource
+class VCL_DLLPUBLIC Menu : public Resource, public VclReferenceBase
 {
     friend class MenuBar;
     friend class MenuBarWindow;
@@ -134,7 +135,7 @@ private:
     ImplMenuDelData* mpFirstDel;
     MenuItemList* pItemList; // Liste mit den MenuItems
     MenuLogo* pLogo;
-    Menu* pStartedFrom;
+    VclPtr<Menu> pStartedFrom;
     VclPtr<vcl::Window> pWindow;
 
     Link<Menu*, bool> aActivateHdl;       // Active-Handler
@@ -230,6 +231,7 @@ protected:
 
 public:
     virtual ~Menu();
+    virtual void dispose() override;
 
     void Activate();
     void Deactivate();
@@ -432,6 +434,7 @@ public:
     MenuBar();
     MenuBar( const MenuBar& rMenu );
     virtual ~MenuBar();
+    virtual void dispose() override;
 
     MenuBar& operator =( const MenuBar& rMenu );
 
@@ -467,7 +470,7 @@ public:
     {
         sal_uInt16 nId;    // Id of the button
         bool bHighlight;   // highlight on/off
-        MenuBar* pMenuBar; // menubar the button belongs to
+        VclPtr<MenuBar> pMenuBar; // menubar the button belongs to
     };
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
@@ -498,7 +501,7 @@ class VCL_DLLPUBLIC PopupMenu : public Menu
     friend struct MenuItemData;
 
 private:
-    Menu** pRefAutoSubMenu; // keeps track if a pointer to this Menu is stored in the MenuItemData
+    VclPtr<Menu>* pRefAutoSubMenu; // keeps track if a pointer to this Menu is stored in the MenuItemData
 
     SAL_DLLPRIVATE MenuFloatingWindow * ImplGetFloatingWindow() const;
 
@@ -513,6 +516,7 @@ public:
     PopupMenu( const PopupMenu& rMenu );
     explicit PopupMenu( const ResId& );
     virtual ~PopupMenu();
+    virtual void dispose() override;
 
     virtual bool IsMenuBar() const override { return false; }
 

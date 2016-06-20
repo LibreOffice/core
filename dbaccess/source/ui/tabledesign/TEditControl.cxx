@@ -1361,10 +1361,10 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                             if ( !IsColumnSelected( nColId ) )
                                 SelectColumnId( nColId );
 
-                            PopupMenu aContextMenu( ModuleRes( RID_QUERYCOLPOPUPMENU ) );
-                            aContextMenu.EnableItem( SID_DELETE, false );
-                            aContextMenu.RemoveDisabledEntries(true, true);
-                            switch ( aContextMenu.Execute( this, aMenuPos ) )
+                            ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_QUERYCOLPOPUPMENU ) );
+                            aContextMenu->EnableItem( SID_DELETE, false );
+                            aContextMenu->RemoveDisabledEntries(true, true);
+                            switch ( aContextMenu->Execute( this, aMenuPos ) )
                             {
                                 case ID_BROWSER_COLWIDTH:
                                     adjustBrowseBoxColumnWidth( this, nColId );
@@ -1375,18 +1375,18 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                 }
                 else
                 {
-                    PopupMenu aContextMenu(ModuleRes(RID_TABLEDESIGNROWPOPUPMENU));
+                    ScopedVclPtrInstance<PopupMenu> aContextMenu(ModuleRes(RID_TABLEDESIGNROWPOPUPMENU));
 
-                    aContextMenu.EnableItem( SID_CUT, IsCutAllowed(nRow) );
-                    aContextMenu.EnableItem( SID_COPY, IsCopyAllowed(nRow) );
-                    aContextMenu.EnableItem( SID_PASTE, IsPasteAllowed(nRow) );
-                    aContextMenu.EnableItem( SID_DELETE, IsDeleteAllowed(nRow) );
-                    aContextMenu.EnableItem( SID_TABLEDESIGN_TABED_PRIMARYKEY, IsPrimaryKeyAllowed(nRow) );
-                    aContextMenu.EnableItem( SID_TABLEDESIGN_INSERTROWS, IsInsertNewAllowed(nRow) );
-                    aContextMenu.CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY, IsRowSelected(GetCurRow()) && IsPrimaryKey() );
+                    aContextMenu->EnableItem( SID_CUT, IsCutAllowed(nRow) );
+                    aContextMenu->EnableItem( SID_COPY, IsCopyAllowed(nRow) );
+                    aContextMenu->EnableItem( SID_PASTE, IsPasteAllowed(nRow) );
+                    aContextMenu->EnableItem( SID_DELETE, IsDeleteAllowed(nRow) );
+                    aContextMenu->EnableItem( SID_TABLEDESIGN_TABED_PRIMARYKEY, IsPrimaryKeyAllowed(nRow) );
+                    aContextMenu->EnableItem( SID_TABLEDESIGN_INSERTROWS, IsInsertNewAllowed(nRow) );
+                    aContextMenu->CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY, IsRowSelected(GetCurRow()) && IsPrimaryKey() );
 
                     // remove all the disable entries
-                    aContextMenu.RemoveDisabledEntries(true, true);
+                    aContextMenu->RemoveDisabledEntries(true, true);
 
                     if( SetDataPtr(m_nDataPos) )
                         pDescrWin->SaveData( pActRow->GetActFieldDescr() );
@@ -1394,7 +1394,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     // All actions which change the number of rows must be run asynchronously
                     // otherwise there may be problems between the Context menu and the Browser
                     m_nDataPos = GetCurRow();
-                    switch (aContextMenu.Execute(this, aMenuPos))
+                    switch (aContextMenu->Execute(this, aMenuPos))
                     {
                         case SID_CUT:
                             cut();

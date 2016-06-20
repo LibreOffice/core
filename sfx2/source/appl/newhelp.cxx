@@ -1249,8 +1249,8 @@ bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt->GetCommand() == CommandEventId::ContextMenu )
         {
-            PopupMenu aMenu( SfxResId( MENU_HELP_BOOKMARKS ) );
-            sal_uInt16 nId = aMenu.Execute( this, pCEvt->GetMousePosPixel() );
+            ScopedVclPtrInstance<PopupMenu> aMenu( SfxResId( MENU_HELP_BOOKMARKS ) );
+            sal_uInt16 nId = aMenu->Execute( this, pCEvt->GetMousePosPixel() );
             if ( nId != MENU_ITEM_NOTFOUND )
                 DoAction( nId );
             bRet = true;
@@ -2339,50 +2339,50 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             else
                 aPos = Point( pTextWin->GetPosPixel().X() + 20, 20 );
             aPos.Y() += pTextWin->GetPosPixel().Y();
-            PopupMenu aMenu;
+            ScopedVclPtrInstance<PopupMenu> aMenu;
             if ( bIsIndexOn )
-                aMenu.InsertItem( TBI_INDEX, aIndexOffText, Image( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ) );
+                aMenu->InsertItem( TBI_INDEX, aIndexOffText, Image( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ) );
             else
-                aMenu.InsertItem( TBI_INDEX, aIndexOnText,  Image( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON  ) ) );
+                aMenu->InsertItem( TBI_INDEX, aIndexOnText,  Image( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON  ) ) );
 
-            aMenu.SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
-            aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_BACKWARD,
+            aMenu->SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
+            aMenu->InsertSeparator();
+            aMenu->InsertItem( TBI_BACKWARD,
                               SfxResId( STR_HELP_BUTTON_PREV  ).toString(),
                               Image(  SfxResId( IMG_HELP_TOOLBOX_PREV ) )
             );
-            aMenu.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
-            aMenu.EnableItem( TBI_BACKWARD, pHelpWin->HasHistoryPredecessor() );
-            aMenu.InsertItem( TBI_FORWARD,
+            aMenu->SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
+            aMenu->EnableItem( TBI_BACKWARD, pHelpWin->HasHistoryPredecessor() );
+            aMenu->InsertItem( TBI_FORWARD,
                               SfxResId( STR_HELP_BUTTON_NEXT ).toString(),
                               Image(  SfxResId( IMG_HELP_TOOLBOX_NEXT ) )
             );
-            aMenu.SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
-            aMenu.EnableItem( TBI_FORWARD, pHelpWin->HasHistorySuccessor() );
-            aMenu.InsertItem( TBI_START,
+            aMenu->SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
+            aMenu->EnableItem( TBI_FORWARD, pHelpWin->HasHistorySuccessor() );
+            aMenu->InsertItem( TBI_START,
                               SfxResId( STR_HELP_BUTTON_START ).toString(),
                               Image(  SfxResId( IMG_HELP_TOOLBOX_START ) )
             );
-            aMenu.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
-            aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_PRINT,
+            aMenu->SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
+            aMenu->InsertSeparator();
+            aMenu->InsertItem( TBI_PRINT,
                               SfxResId( STR_HELP_BUTTON_PRINT ).toString(),
                               Image(  SfxResId( IMG_HELP_TOOLBOX_PRINT ) )
             );
-            aMenu.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
-            aMenu.InsertItem( TBI_BOOKMARKS,
+            aMenu->SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
+            aMenu->InsertItem( TBI_BOOKMARKS,
                               SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ).toString(),
                               Image(  SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS  ) )
              );
-            aMenu.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
-            aMenu.InsertItem( TBI_SEARCHDIALOG,
+            aMenu->SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+            aMenu->InsertItem( TBI_SEARCHDIALOG,
                               SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ).toString(),
                               Image(  SfxResId( IMG_HELP_TOOLBOX_SEARCHDIALOG ) )
             );
-            aMenu.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
-            aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_SELECTIONMODE, SfxResId( STR_HELP_MENU_TEXT_SELECTION_MODE ).toString() );
-            aMenu.SetHelpId( TBI_SELECTIONMODE, HID_HELP_TEXT_SELECTION_MODE );
+            aMenu->SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
+            aMenu->InsertSeparator();
+            aMenu->InsertItem( TBI_SELECTIONMODE, SfxResId( STR_HELP_MENU_TEXT_SELECTION_MODE ).toString() );
+            aMenu->SetHelpId( TBI_SELECTIONMODE, HID_HELP_TEXT_SELECTION_MODE );
             URL aURL;
             aURL.Complete = ".uno:SelectTextMode";
             Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
@@ -2396,26 +2396,26 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 FeatureStateEvent rEvent = pStateListener->GetStateEvent();
                 bool bCheck = false;
                 rEvent.State >>= bCheck;
-                aMenu.CheckItem(TBI_SELECTIONMODE, bCheck);
+                aMenu->CheckItem(TBI_SELECTIONMODE, bCheck);
             }
-            aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_COPY,
+            aMenu->InsertSeparator();
+            aMenu->InsertItem( TBI_COPY,
                               SfxResId(STR_HELP_MENU_TEXT_COPY).toString(),
                               Image(  SfxResId( IMG_HELP_TOOLBOX_COPY   ) )
                 );
-            aMenu.SetHelpId( TBI_COPY, ".uno:Copy" );
-            aMenu.EnableItem( TBI_COPY, HasSelection() );
+            aMenu->SetHelpId( TBI_COPY, ".uno:Copy" );
+            aMenu->EnableItem( TBI_COPY, HasSelection() );
 
             if ( bIsDebug )
             {
-                aMenu.InsertSeparator();
-                aMenu.InsertItem( TBI_SOURCEVIEW, SfxResId(STR_HELP_BUTTON_SOURCEVIEW).toString() );
+                aMenu->InsertSeparator();
+                aMenu->InsertItem( TBI_SOURCEVIEW, SfxResId(STR_HELP_BUTTON_SOURCEVIEW).toString() );
             }
 
             if( ! SvtMenuOptions().IsEntryHidingEnabled() )
-                aMenu.SetMenuFlags( aMenu.GetMenuFlags() | MenuFlags::HideDisabledEntries );
+                aMenu->SetMenuFlags( aMenu->GetMenuFlags() | MenuFlags::HideDisabledEntries );
 
-            sal_uInt16 nId = aMenu.Execute( this, aPos );
+            sal_uInt16 nId = aMenu->Execute( this, aPos );
             pHelpWin->DoAction( nId );
             bDone = true;
         }

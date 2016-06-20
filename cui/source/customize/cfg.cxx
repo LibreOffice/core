@@ -3134,7 +3134,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pMoveDownButton->Enable();
     m_pMoveUpButton->Enable();
 
-    PopupMenu* pMenu = new PopupMenu( CUI_RES( MODIFY_TOOLBAR ) );
+    VclPtrInstance<PopupMenu> pMenu( CUI_RES( MODIFY_TOOLBAR ) );
     pMenu->SetMenuFlags(
         pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
@@ -3142,8 +3142,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pModifyTopLevelButton->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, ToolbarSelectHdl ) );
 
-    PopupMenu* pEntry = new PopupMenu(
-        CUI_RES( MODIFY_TOOLBAR_CONTENT ) );
+    VclPtrInstance<PopupMenu> pEntry( CUI_RES( MODIFY_TOOLBAR_CONTENT ) );
     pEntry->SetMenuFlags(
         pEntry->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 

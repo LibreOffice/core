@@ -86,7 +86,7 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
     {
         Link<Menu*,bool> aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
 
-        pPopup = new PopupMenu;
+        pPopup = VclPtr<PopupMenu>::Create();
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         const size_t nGroupCount = pGlossaryList->GetGroupCount();
         for(size_t i = 1; i <= nGroupCount; ++i)
@@ -98,7 +98,7 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
                 sal_uInt16 nIndex = static_cast<sal_uInt16>(100*i);
                 // but insert without extension
                 pPopup->InsertItem( i, sTitle);
-                PopupMenu* pSub = new PopupMenu;
+                PopupMenu* pSub = VclPtr<PopupMenu>::Create();
                 pSub->SetSelectHdl(aLnk);
                 pPopup->SetPopupMenu(i, pSub);
                 for(sal_uInt16 j = 0; j < nBlockCount; j++)
@@ -164,11 +164,10 @@ void SwTbxAutoTextCtrl::DelPopup()
     {
         for( sal_uInt16 i = 0; i < pPopup->GetItemCount(); i ++ )
         {
-            PopupMenu* pSubPopup = pPopup->GetPopupMenu(pPopup->GetItemId(i));
-            delete pSubPopup;
+            VclPtr<PopupMenu> pSubPopup = pPopup->GetPopupMenu(pPopup->GetItemId(i));
+            pSubPopup.disposeAndClear(); // NoelG: dodgy
         }
-        delete pPopup;
-        pPopup = nullptr;
+        pPopup.disposeAndClear();
     }
 }
 

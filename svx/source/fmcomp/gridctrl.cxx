@@ -2827,11 +2827,11 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
 
 void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredPos )
 {
-    PopupMenu aContextMenu( SVX_RES( RID_SVXMNU_ROWS ) );
+    ScopedVclPtrInstance<PopupMenu> aContextMenu( SVX_RES( RID_SVXMNU_ROWS ) );
 
-    PreExecuteRowContextMenu( (sal_uInt16)_nRow, aContextMenu );
-    aContextMenu.RemoveDisabledEntries( true, true );
-    PostExecuteRowContextMenu( (sal_uInt16)_nRow, aContextMenu, aContextMenu.Execute( this, _rPreferredPos ) );
+    PreExecuteRowContextMenu( (sal_uInt16)_nRow, *aContextMenu.get() );
+    aContextMenu->RemoveDisabledEntries( true, true );
+    PostExecuteRowContextMenu( (sal_uInt16)_nRow, *aContextMenu.get(), aContextMenu->Execute( this, _rPreferredPos ) );
 
     // TODO: why this weird cast to sal_uInt16? What if we really have more than 65535 lines?
     // -> change this to sal_uInt32
@@ -2872,9 +2872,9 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             }
             else if (canCopyCellText(nRow, nColId))
             {
-                PopupMenu aContextMenu(SVX_RES(RID_SVXMNU_CELL));
-                aContextMenu.RemoveDisabledEntries(true, true);
-                switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
+                ScopedVclPtrInstance<PopupMenu> aContextMenu(SVX_RES(RID_SVXMNU_CELL));
+                aContextMenu->RemoveDisabledEntries(true, true);
+                switch (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
                 {
                     case SID_COPY:
                         copyCellText(nRow, nColId);

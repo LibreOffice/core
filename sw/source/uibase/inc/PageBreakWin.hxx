@@ -22,7 +22,7 @@ class SwPageFrame;
   */
 class SwPageBreakWin : public SwFrameMenuButtonBase
 {
-    PopupMenu*            m_pPopupMenu;
+    VclPtr<PopupMenu>     m_pPopupMenu;
     VclPtr<vcl::Window>   m_pLine;
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;

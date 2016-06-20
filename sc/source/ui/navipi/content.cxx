@@ -579,16 +579,16 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
             {
                 //  Drag-Drop Modus
 
-                PopupMenu aPop;
-                ScPopupMenu aDropMenu( ScResId( RID_POPUP_DROPMODE ) );
-                aDropMenu.CheckItem( RID_DROPMODE_URL + pParentWindow->GetDropMode() );
-                aPop.InsertItem( 1, pParentWindow->GetStrDragMode() );
-                aPop.SetPopupMenu( 1, &aDropMenu );
+                ScopedVclPtrInstance<PopupMenu> aPop;
+                ScopedVclPtrInstance<ScPopupMenu> aDropMenu( ScResId( RID_POPUP_DROPMODE ) );
+                aDropMenu->CheckItem( RID_DROPMODE_URL + pParentWindow->GetDropMode() );
+                aPop->InsertItem( 1, pParentWindow->GetStrDragMode() );
+                aPop->SetPopupMenu( 1, aDropMenu.get() );
 
                 //  angezeigtes Dokument
 
-                ScPopupMenu aDocMenu;
-                aDocMenu.SetMenuFlags( aDocMenu.GetMenuFlags() | MenuFlags::NoAutoMnemonics );
+                ScopedVclPtrInstance<ScPopupMenu> aDocMenu;
+                aDocMenu->SetMenuFlags( aDocMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
                 sal_uInt16 i=0;
                 sal_uInt16 nPos=0;
                 //  geladene Dokumente
@@ -604,14 +604,14 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                             aEntry += pParentWindow->aStrActive;
                         else
                             aEntry += pParentWindow->aStrNotActive;
-                        aDocMenu.InsertItem( ++i, aEntry );
+                        aDocMenu->InsertItem( ++i, aEntry );
                         if ( !bHiddenDoc && aName == aManualDoc )
                             nPos = i;
                     }
                     pSh = SfxObjectShell::GetNext( *pSh );
                 }
                 //  "aktives Fenster"
-                aDocMenu.InsertItem( ++i, pParentWindow->aStrActiveWin );
+                aDocMenu->InsertItem( ++i, pParentWindow->aStrActiveWin );
                 if (!bHiddenDoc && aManualDoc.isEmpty())
                     nPos = i;
                 //  verstecktes Dokument
@@ -619,28 +619,28 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 {
                     OUString aEntry = aHiddenTitle;
                     aEntry += pParentWindow->aStrHidden;
-                    aDocMenu.InsertItem( ++i, aEntry );
+                    aDocMenu->InsertItem( ++i, aEntry );
                     if (bHiddenDoc)
                         nPos = i;
                 }
-                aDocMenu.CheckItem( nPos );
-                aPop.InsertItem( 2, pParentWindow->GetStrDisplay() );
-                aPop.SetPopupMenu( 2, &aDocMenu );
+                aDocMenu->CheckItem( nPos );
+                aPop->InsertItem( 2, pParentWindow->GetStrDisplay() );
+                aPop->SetPopupMenu( 2, aDocMenu.get() );
 
                 //  ausfuehren
 
-                aPop.Execute( this, rCEvt.GetMousePosPixel() );
+                aPop->Execute( this, rCEvt.GetMousePosPixel() );
 
-                if ( aDropMenu.WasHit() )               //  Drag-Drop Modus
+                if ( aDropMenu->WasHit() )               //  Drag-Drop Modus
                 {
-                    sal_uInt16 nId = aDropMenu.GetSelected();
+                    sal_uInt16 nId = aDropMenu->GetSelected();
                     if ( nId >= RID_DROPMODE_URL && nId <= RID_DROPMODE_COPY )
                         pParentWindow->SetDropMode( nId - RID_DROPMODE_URL );
                 }
-                else if ( aDocMenu.WasHit() )           //  angezeigtes Dokument
+                else if ( aDocMenu->WasHit() )           //  angezeigtes Dokument
                 {
-                    sal_uInt16 nId = aDocMenu.GetSelected();
-                    OUString aName = aDocMenu.GetItemText(nId);
+                    sal_uInt16 nId = aDocMenu->GetSelected();
+                    OUString aName = aDocMenu->GetItemText(nId);
                     SelectDoc( aName );
                 }
             }

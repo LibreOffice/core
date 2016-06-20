@@ -156,12 +156,9 @@ private:
     struct MenuAndId
     {
         OString m_sID;
-        PopupMenu *m_pMenu;
-        MenuAndId(const OString &rId, PopupMenu *pMenu)
-            : m_sID(rId)
-            , m_pMenu(pMenu)
-        {
-        }
+        VclPtr<PopupMenu> m_pMenu;
+        MenuAndId(const OString &rId, PopupMenu *pMenu);
+        ~MenuAndId();
     };
     std::vector<MenuAndId> m_aMenus;
 

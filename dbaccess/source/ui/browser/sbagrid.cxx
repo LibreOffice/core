@@ -650,7 +650,7 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
     bool bColAttrs = (nColId != (sal_uInt16)-1) && (nColId != 0);
     if ( bColAttrs && !bDBIsReadOnly)
     {
-        PopupMenu aNewItems(ModuleRes(RID_SBA_GRID_COLCTXMENU));
+        ScopedVclPtrInstance<PopupMenu> aNewItems(ModuleRes(RID_SBA_GRID_COLCTXMENU));
         sal_uInt16 nPos = 0;
         sal_uInt16 nModelPos = static_cast<SbaGridControl*>(GetParent())->GetModelColumnPos(nColId);
         Reference< XPropertySet >  xField = static_cast<SbaGridControl*>(GetParent())->getField(nModelPos);
@@ -669,14 +669,14 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
             case DataType::REF:
                 break;
             default:
-                rMenu.InsertItem(ID_BROWSER_COLATTRSET, aNewItems.GetItemText(ID_BROWSER_COLATTRSET), MenuItemBits::NONE, OString(), nPos++);
-                rMenu.SetHelpId(ID_BROWSER_COLATTRSET, aNewItems.GetHelpId(ID_BROWSER_COLATTRSET));
+                rMenu.InsertItem(ID_BROWSER_COLATTRSET, aNewItems->GetItemText(ID_BROWSER_COLATTRSET), MenuItemBits::NONE, OString(), nPos++);
+                rMenu.SetHelpId(ID_BROWSER_COLATTRSET, aNewItems->GetHelpId(ID_BROWSER_COLATTRSET));
                 rMenu.InsertSeparator(OString(), nPos++);
             }
         }
 
-        rMenu.InsertItem(ID_BROWSER_COLWIDTH, aNewItems.GetItemText(ID_BROWSER_COLWIDTH), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_COLWIDTH, aNewItems.GetHelpId(ID_BROWSER_COLWIDTH));
+        rMenu.InsertItem(ID_BROWSER_COLWIDTH, aNewItems->GetItemText(ID_BROWSER_COLWIDTH), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.SetHelpId(ID_BROWSER_COLWIDTH, aNewItems->GetHelpId(ID_BROWSER_COLWIDTH));
         rMenu.InsertSeparator(OString(), nPos++);
     }
 }
@@ -751,23 +751,23 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 {
     FmGridControl::PreExecuteRowContextMenu(nRow, rMenu);
 
-    PopupMenu aNewItems(ModuleRes(RID_SBA_GRID_ROWCTXMENU));
+    ScopedVclPtrInstance<PopupMenu> aNewItems(ModuleRes(RID_SBA_GRID_ROWCTXMENU));
     sal_uInt16 nPos = 0;
 
     if (!IsReadOnlyDB())
     {
-        rMenu.InsertItem(ID_BROWSER_TABLEATTR, aNewItems.GetItemText(ID_BROWSER_TABLEATTR), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_TABLEATTR, aNewItems.GetHelpId(ID_BROWSER_TABLEATTR));
+        rMenu.InsertItem(ID_BROWSER_TABLEATTR, aNewItems->GetItemText(ID_BROWSER_TABLEATTR), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.SetHelpId(ID_BROWSER_TABLEATTR, aNewItems->GetHelpId(ID_BROWSER_TABLEATTR));
 
-        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems.GetItemText(ID_BROWSER_ROWHEIGHT), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems.GetHelpId(ID_BROWSER_ROWHEIGHT));
+        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems->GetItemText(ID_BROWSER_ROWHEIGHT), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems->GetHelpId(ID_BROWSER_ROWHEIGHT));
         rMenu.InsertSeparator(OString(), nPos++);
     }
 
     if ( GetSelectRowCount() > 0 )
     {
-        rMenu.InsertItem(ID_BROWSER_COPY, aNewItems.GetItemText(SID_COPY), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_COPY, aNewItems.GetHelpId(SID_COPY));
+        rMenu.InsertItem(ID_BROWSER_COPY, aNewItems->GetItemText(SID_COPY), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.SetHelpId(ID_BROWSER_COPY, aNewItems->GetHelpId(SID_COPY));
 
         rMenu.InsertSeparator(OString(), nPos++);
     }

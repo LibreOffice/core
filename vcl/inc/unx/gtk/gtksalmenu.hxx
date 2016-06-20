@@ -51,7 +51,7 @@ private:
     GtkWidget*                      mpMenuBarContainerWidget;
     GtkWidget*                      mpMenuBarWidget;
     GtkWidget*                      mpCloseButton;
-    Menu*                           mpVCLMenu;
+    VclPtr<Menu>                    mpVCLMenu;
     GtkSalMenu*                     mpParentSalMenu;
     GtkSalFrame*                    mpFrame;
 

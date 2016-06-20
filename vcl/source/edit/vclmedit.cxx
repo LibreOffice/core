@@ -818,7 +818,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        PopupMenu* pPopup = Edit::CreatePopupMenu();
+        VclPtr<PopupMenu> pPopup = Edit::CreatePopupMenu();
         if ( !mpExtTextView->HasSelection() )
         {
             pPopup->EnableItem( SV_MENU_EDIT_CUT, false );
@@ -857,7 +857,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         }
 //      pPopup->RemoveDisabledEntries();
         sal_uInt16 n = pPopup->Execute( this, aPos );
-        Edit::DeletePopupMenu( pPopup );
+        pPopup.disposeAndClear();
         switch ( n )
         {
             case SV_MENU_EDIT_UNDO:     mpExtTextView->Undo();

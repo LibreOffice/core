@@ -118,8 +118,8 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     if( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        PopupMenu aPopupMenu( ResId( RID_SVXMNU_XMLSECSTATBAR, DIALOG_MGR() ) );
-        if( aPopupMenu.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )
+        ScopedVclPtrInstance<PopupMenu> aPopupMenu( ResId( RID_SVXMNU_XMLSECSTATBAR, DIALOG_MGR() ) );
+        if( aPopupMenu->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )
         {
             css::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), 0 );

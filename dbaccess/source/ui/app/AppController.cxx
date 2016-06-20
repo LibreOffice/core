@@ -2331,9 +2331,9 @@ bool OApplicationController::interceptUserInput( const NotifyEvent& _rEvent )
     return OGenericUnoController::interceptUserInput( _rEvent );
 }
 
-PopupMenu* OApplicationController::getContextMenu( Control& /*_rControl*/ ) const
+VclPtr<PopupMenu> OApplicationController::getContextMenu( Control& /*_rControl*/ ) const
 {
-    return new PopupMenu( ModuleRes( RID_MENU_APP_EDIT ) );
+    return VclPtr<PopupMenu>::Create( ModuleRes( RID_MENU_APP_EDIT ) );
 }
 
 IController& OApplicationController::getCommandController()

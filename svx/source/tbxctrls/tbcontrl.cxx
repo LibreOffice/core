@@ -27,6 +27,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/vclptr.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svl/style.hxx>
@@ -162,7 +163,7 @@ private:
     OUString                        sDefaultStyle;
     bool                            bInSpecialMode;
     VclPtr<MenuButton>              m_pButtons[MAX_STYLES_ENTRIES];
-    PopupMenu                       m_aMenu;
+    ScopedVclPtr<PopupMenu>         m_pMenu;
 
     void            ReleaseFocus();
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
@@ -353,9 +354,9 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     , aClearFormatKey( rClearFormatKey )
     , aMoreKey( rMoreKey )
     , bInSpecialMode( bInSpec )
-    , m_aMenu ( SVX_RES( RID_SVX_STYLE_MENU ) )
+    , m_pMenu( VclPtr<PopupMenu>::Create(SVX_RES( RID_SVX_STYLE_MENU )) )
 {
-    m_aMenu.SetSelectHdl( LINK( this, SvxStyleBox_Impl, MenuSelectHdl ) );
+    m_pMenu->SetSelectHdl( LINK( this, SvxStyleBox_Impl, MenuSelectHdl ) );
     for(VclPtr<MenuButton> & rpButton : m_pButtons)
         rpButton = nullptr;
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
@@ -785,7 +786,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
                         {
                             m_pButtons[nId] = VclPtr<MenuButton>::Create(pParent, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
                             m_pButtons[nId]->SetSizePixel(Size(BUTTON_WIDTH, rRect.GetHeight()));
-                            m_pButtons[nId]->SetPopupMenu(&m_aMenu);
+                            m_pButtons[nId]->SetPopupMenu(m_pMenu);
                         }
                         m_pButtons[nId]->SetPosPixel(Point(rRect.GetWidth() - BUTTON_WIDTH, rRect.getY()));
                         m_pButtons[nId]->Show();

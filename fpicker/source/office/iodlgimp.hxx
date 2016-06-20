@@ -84,7 +84,7 @@ public:
     virtual void dispose() override;
 private:
     VclPtr<SvtFileDialog>      m_pDlg;
-    PopupMenu*          m_pMenu;
+    VclPtr<PopupMenu>          m_pMenu;
 
 protected:
     inline        SvtFileDialog*  GetDialogParent()       { return m_pDlg; }

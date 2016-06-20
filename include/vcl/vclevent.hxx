@@ -222,14 +222,14 @@ public:
 class VCL_DLLPUBLIC VclMenuEvent : public VclSimpleEvent
 {
 private:
-    Menu* pMenu;
+    VclPtr<Menu> pMenu;
     sal_uInt16 mnPos;
 
 public:
-    VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
-    virtual ~VclMenuEvent() {}
+    VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos );
+    virtual ~VclMenuEvent();
 
-    Menu* GetMenu() const { return pMenu; }
+    Menu* GetMenu() const;
     sal_uInt16 GetItemPos() const { return mnPos; }
 };
 

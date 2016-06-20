@@ -71,8 +71,8 @@ private:
         AddButtonEntry() : m_nId( 0 ) {}
     };
 
-    Menu*           pMenu;
-    PopupMenu*      pActivePopup;
+    VclPtr<Menu>           pMenu;
+    VclPtr<PopupMenu>      pActivePopup;
     sal_uInt16      nHighlightedItem;
     sal_uInt16      nRolloveredItem;
     VclPtr<vcl::Window> xSaveFocusId;

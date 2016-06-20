@@ -33,11 +33,11 @@
 class MenuFloatingWindow : public FloatingWindow, public MenuWindow
 {
     friend void Menu::ImplFillLayoutData() const;
-    friend Menu::~Menu();
+    friend void Menu::dispose();
 
 private:
-    Menu* pMenu;
-    PopupMenu* pActivePopup;
+    VclPtr<Menu> pMenu;
+    VclPtr<PopupMenu> pActivePopup;
     Timer aHighlightChangedTimer;
     Timer aSubmenuCloseTimer;
     Timer aScrollTimer;

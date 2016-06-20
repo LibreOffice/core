@@ -1479,9 +1479,9 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
         if ( pBrk )
         {
             // test if break point is enabled...
-            PopupMenu aBrkPropMenu( IDEResId( RID_POPUP_BRKPROPS ) );
-            aBrkPropMenu.CheckItem( RID_ACTIV, pBrk->bEnabled );
-            switch ( aBrkPropMenu.Execute( this, aPos ) )
+            ScopedVclPtrInstance<PopupMenu> aBrkPropMenu( IDEResId( RID_POPUP_BRKPROPS ) );
+            aBrkPropMenu->CheckItem( RID_ACTIV, pBrk->bEnabled );
+            switch ( aBrkPropMenu->Execute( this, aPos ) )
             {
                 case RID_ACTIV:
                 {
@@ -1502,8 +1502,8 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
         }
         else
         {
-            PopupMenu aBrkListMenu( IDEResId( RID_POPUP_BRKDLG ) );
-            switch ( aBrkListMenu.Execute( this, aPos ) )
+            ScopedVclPtrInstance<PopupMenu> aBrkListMenu( IDEResId( RID_POPUP_BRKDLG ) );
+            switch ( aBrkListMenu->Execute( this, aPos ) )
             {
                 case RID_BRKDLG:
                 {

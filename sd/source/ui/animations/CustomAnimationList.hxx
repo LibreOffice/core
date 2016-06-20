@@ -76,7 +76,7 @@ public:
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
-    virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
+    virtual VclPtr<PopupMenu> CreateContextMenu() override;
     virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;

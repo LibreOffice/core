@@ -119,7 +119,7 @@ namespace svxform
         virtual ~DataTreeListBox();
         virtual void dispose() override;
 
-        virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
+        virtual VclPtr<PopupMenu> CreateContextMenu() override;
         virtual void            ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) override;
         virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt ) override;
         virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt ) override;

@@ -477,14 +477,14 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     {
         OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
         uno::Reference<frame::XFrame> xFrame = rController.getFrame();
-        PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );
+        ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_MENU_REPORT ) );
         uno::Reference< report::XReportDefinition> xReportDefinition = getSection()->getReportDefinition();
 
-        lcl_insertMenuItemImages(aContextMenu,rController,xReportDefinition,xFrame);
+        lcl_insertMenuItemImages(*aContextMenu.get(),rController,xReportDefinition,xFrame);
 
         Point aPos = _rCEvt.GetMousePosPixel();
         m_pView->EndAction();
-        const sal_uInt16 nId = aContextMenu.Execute(this, aPos);
+        const sal_uInt16 nId = aContextMenu->Execute(this, aPos);
         if ( nId )
         {
             uno::Sequence< beans::PropertyValue> aArgs;

@@ -352,9 +352,9 @@ public:
     void SetMenuSelectHdl( const Link<MenuButton *, void>& rLink ) { mpDropdownButton->SetSelectHdl( rLink ); }
 
 private:
-    VclPtr<Edit> mpSubControl;
+    VclPtr<Edit>        mpSubControl;
     VclPtr<MenuButton>  mpDropdownButton;
-    PopupMenu*   mpMenu;
+    VclPtr<PopupMenu>   mpMenu;
 };
 
 DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
@@ -380,7 +380,7 @@ void DropdownMenuBox::dispose()
 {
     SetSubEdit(nullptr);
     mpDropdownButton.disposeAndClear();
-    delete mpMenu;
+    mpMenu.disposeAndClear();
     mpSubControl.disposeAndClear();
     Edit::dispose();
 }
@@ -436,7 +436,7 @@ public:
 private:
     DECL_LINK_TYPED( EditModifyHdl, Edit&, void );
     VclPtr<DropdownMenuBox> mpControl;
-    PopupMenu* mpMenu;
+    VclPtr<PopupMenu> mpMenu;
     VclPtr<MetricField> mpMetric;
     Link<LinkParamNone*,void> maModifyHdl;
 };
@@ -449,7 +449,7 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Windo
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 1000 );
 
-    mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSIZE_POPUP ) );
+    mpMenu = VclPtr<PopupMenu>::Create(SdResId( RID_CUSTOMANIMATION_FONTSIZE_POPUP ) );
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, CharHeightPropertyBox, implMenuSelectHdl ));
     mpControl->SetModifyHdl( LINK( this, CharHeightPropertyBox, EditModifyHdl ) );
@@ -521,7 +521,7 @@ public:
 
 private:
     VclPtr<DropdownMenuBox>   mpControl;
-    PopupMenu*                mpMenu;
+    VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
     Link<LinkParamNone*,void> maModifyHdl;
 };
@@ -535,7 +535,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 100 );
 
-    mpMenu = new PopupMenu();
+    mpMenu = VclPtr<PopupMenu>::Create();
     for( sal_Int32 i = 25; i < 101; i += 25 )
     {
         OUString aStr(unicode::formatPercent(i,
@@ -621,7 +621,7 @@ public:
 
 private:
     VclPtr<DropdownMenuBox>   mpControl;
-    PopupMenu*                mpMenu;
+    VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
     Link<LinkParamNone*,void> maModifyHdl;
 };
@@ -636,7 +636,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
     mpMetric->SetMin( -10000 );
     mpMetric->SetMax( 10000 );
 
-    mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_ROTATION_POPUP ) );
+    mpMenu = VclPtr<PopupMenu>::Create(SdResId( RID_CUSTOMANIMATION_ROTATION_POPUP ) );
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
@@ -742,7 +742,7 @@ public:
 
 private:
     VclPtr<DropdownMenuBox>   mpControl;
-    PopupMenu*                mpMenu;
+    VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
     Link<LinkParamNone*,void> maModifyHdl;
     int                       mnDirection;
@@ -757,7 +757,7 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 10000 );
 
-    mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_SCALE_POPUP ) );
+    mpMenu = VclPtr<PopupMenu>::Create(SdResId( RID_CUSTOMANIMATION_SCALE_POPUP ) );
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
@@ -900,7 +900,7 @@ public:
 
 private:
     VclPtr<DropdownMenuBox>   mpControl;
-    PopupMenu*                mpMenu;
+    VclPtr<PopupMenu>         mpMenu;
     VclPtr<Edit>              mpEdit;
     Link<LinkParamNone*,void> maModifyHdl;
 
@@ -916,7 +916,7 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window*
     mpEdit.set( VclPtr<Edit>::Create( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY) );
     mpEdit->SetText( SD_RESSTR(STR_CUSTOMANIMATION_SAMPLE) );
 
-    mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSTYLE_POPUP ) );
+    mpMenu = VclPtr<PopupMenu>::Create(SdResId( RID_CUSTOMANIMATION_FONTSTYLE_POPUP ) );
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpEdit, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, FontStylePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX );

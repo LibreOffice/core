@@ -33,7 +33,7 @@ class SvxClipboardFormatItem;
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
 {
     SfxPoolItem*            pClipboardFmtItem;
-    PopupMenu*              pPopup;
+    VclPtr<PopupMenu>       pPopup;
     bool                    bDisabled;
 
     void                    DelPopup();

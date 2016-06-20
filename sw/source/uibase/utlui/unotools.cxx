@@ -448,18 +448,18 @@ static const sal_Int16 nZoomValues[] =
 
 void SwOneExampleFrame::CreatePopup(const Point& rPt)
 {
-    PopupMenu aPop;
-    PopupMenu aSubPop1;
+    ScopedVclPtrInstance<PopupMenu> aPop;
+    ScopedVclPtrInstance<PopupMenu> aSubPop1;
     ResStringArray& rArr = aMenuRes.GetMenuArray();
 
-    aPop.InsertItem(ITEM_UP,   rArr.GetString(rArr.FindIndex(ST_MENU_UP )));
-    aPop.InsertItem(ITEM_DOWN, rArr.GetString(rArr.FindIndex(ST_MENU_DOWN )));
+    aPop->InsertItem(ITEM_UP,   rArr.GetString(rArr.FindIndex(ST_MENU_UP )));
+    aPop->InsertItem(ITEM_DOWN, rArr.GetString(rArr.FindIndex(ST_MENU_DOWN )));
 
     Link<Menu*,bool> aSelLk = LINK(this, SwOneExampleFrame, PopupHdl );
-    aPop.SetSelectHdl(aSelLk);
+    aPop->SetSelectHdl(aSelLk);
     if(EX_SHOW_ONLINE_LAYOUT == nStyleFlags)
     {
-        aPop.InsertItem(ITEM_ZOOM, rArr.GetString(rArr.FindIndex(ST_MENU_ZOOM   )));
+        aPop->InsertItem(ITEM_ZOOM, rArr.GetString(rArr.FindIndex(ST_MENU_ZOOM   )));
 
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
@@ -472,15 +472,14 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         {
             OUString sTemp = unicode::formatPercent(nZoomValues[i],
                 Application::GetSettings().GetUILanguageTag());
-            aSubPop1.InsertItem( ITEM_ZOOM + i + 1, sTemp);
+            aSubPop1->InsertItem( ITEM_ZOOM + i + 1, sTemp);
             if(nZoom == nZoomValues[i])
-                aSubPop1.CheckItem(ITEM_ZOOM + i + 1);
+                aSubPop1->CheckItem(ITEM_ZOOM + i + 1);
         }
-        aPop.SetPopupMenu( ITEM_ZOOM, &aSubPop1 );
-        aSubPop1.SetSelectHdl(aSelLk);
+        aPop->SetPopupMenu( ITEM_ZOOM, aSubPop1.get() );
+        aSubPop1->SetSelectHdl(aSelLk);
     }
-    aPop.Execute( aTopWindow.get(), rPt );
-
+    aPop->Execute( aTopWindow.get(), rPt );
 }
 
 IMPL_LINK_TYPED(SwOneExampleFrame, PopupHdl, Menu*, pMenu, bool )

@@ -98,20 +98,20 @@ void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
         mnState = pItem->GetValue();
 
-        SelectionTypePopup aPop( mnState );
-        GetStatusBar().SetQuickHelpText( GetId(), aPop.GetItemText( state_to_id( mnState ) ) );
+        ScopedVclPtrInstance<SelectionTypePopup> aPop( mnState );
+        GetStatusBar().SetQuickHelpText( GetId(), aPop->GetItemText( state_to_id( mnState ) ) );
     }
 }
 
 
 bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 {
-    SelectionTypePopup aPop( mnState );
+    ScopedVclPtrInstance<SelectionTypePopup> aPop( mnState );
     StatusBar& rStatusbar = GetStatusBar();
 
-    if ( aPop.Execute( &rStatusbar, rEvt.GetPosPixel() ) )
+    if ( aPop->Execute( &rStatusbar, rEvt.GetPosPixel() ) )
     {
-        sal_uInt16 nNewState = id_to_state( aPop.GetCurItemId() );
+        sal_uInt16 nNewState = id_to_state( aPop->GetCurItemId() );
         if ( nNewState != mnState )
         {
             mnState = nNewState;
