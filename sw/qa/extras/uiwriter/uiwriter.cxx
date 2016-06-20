@@ -148,6 +148,7 @@ public:
     void testTdf69282WithMirror();
     void testTdf78742();
     void testUnoParagraph();
+    void testTdf72788();
     void testTdf60967();
     void testSearchWithTransliterate();
     void testTdf73660();
@@ -249,6 +250,7 @@ public:
     CPPUNIT_TEST(testTdf69282WithMirror);
     CPPUNIT_TEST(testTdf78742);
     CPPUNIT_TEST(testUnoParagraph);
+    CPPUNIT_TEST(testTdf72788);
     CPPUNIT_TEST(testTdf60967);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf73660);
@@ -1824,6 +1826,66 @@ void SwUiWriterTest::testUnoParagraph()
     xSecondPara->setString("This is modified text in paragraph two");
     //testing the changes
     CPPUNIT_ASSERT_EQUAL(OUString("This is modified text in paragraph two"), xSecondPara->getString());
+}
+
+void SwUiWriterTest::testTdf72788()
+{
+    //Create a new empty Writer document
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
+    //Insert some text - two paragraphs
+    rIDCO.InsertString(*pCursor, "this is text");
+    //Position of word              9876543210
+    //Position of word            0123456789
+    //Change Paragraph
+    pWrtShell->SplitNode();
+    //Insert second paragraph
+    rIDCO.InsertString(*pCursor, "more text");
+    //Position of word            012345678
+    //Make the following selection *bold*
+    //this[is text
+    //more] text
+    //Move cursor back
+    for (int i = 0; i < 5; i++) {
+        pCursor->Move(fnMoveBackward);
+    }
+    //Start selection
+    pCursor->SetMark();
+    for (int i = 0; i < 12; i++) {
+        pCursor->Move(fnMoveBackward);
+    }
+    //Check the text selection
+    CPPUNIT_ASSERT_EQUAL(OUString("is textmore"), pCursor->GetText());
+    //Apply a *Bold* attribute to selection
+    SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+    rIDCO.InsertPoolItem(*pCursor, aWeightItem);
+    SfxItemSet aSet( pDoc->GetAttrPool(), RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT);
+    //Add selected text's attributes to aSet
+    pCursor->GetNode().GetTextNode()->GetAttr(aSet, 5, 12);
+    SfxPoolItem const * pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
+    //Check that bold is active on the selection and it's in aSet
+    CPPUNIT_ASSERT_EQUAL((*pPoolItem == aWeightItem), true);
+    //Make selection to remove formatting in first paragraph
+    //[this is text
+    //]more text
+    pWrtShell->SttDoc();
+    //Start selection
+    pCursor->SetMark();
+    for (int i = 0; i < 13; i++) {
+        pCursor->Move(fnMoveForward);
+    }
+    //Clear all the Direct Formatting ( Ctrl + M )
+    SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
+    SwIndex aSt( pTextNode, 0 );
+    sal_Int32 nEnd = pTextNode->Len();
+    pTextNode->RstTextAttr(aSt, nEnd - aSt.GetIndex(), 0, nullptr, false, false);
+    //Incase of Regression RstTextAttr() call will result to infinite recursion
+    //Check that bold is removed in first paragraph
+    pTextNode->GetAttr(aSet, 5, 12);
+    SfxPoolItem const * pPoolItem2 = aSet.GetItem(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT_EQUAL((*pPoolItem2 != aWeightItem), true);
 }
 
 void SwUiWriterTest::testTdf60967()
