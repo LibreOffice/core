@@ -82,6 +82,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/module.hxx>
@@ -467,6 +468,7 @@ static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t features);
 static void                    lo_setDocumentPassword(LibreOfficeKit* pThis,
                                                        const char* pURL,
                                                        const char* pPassword);
+static char*                   lo_getVersionInfo(LibreOfficeKit* pThis);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : maThread(0)
@@ -487,6 +489,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->getFilterTypes = lo_getFilterTypes;
         m_pOfficeClass->setOptionalFeatures = lo_setOptionalFeatures;
         m_pOfficeClass->setDocumentPassword = lo_setDocumentPassword;
+        m_pOfficeClass->getVersionInfo = lo_getVersionInfo;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -1854,6 +1857,15 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
     LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     assert(pLib->mInteractionMap.find(OString(pURL)) != pLib->mInteractionMap.end());
     pLib->mInteractionMap.find(OString(pURL))->second->SetPassword(pPassword);
+}
+
+static char* lo_getVersionInfo(LibreOfficeKit* /*pThis*/)
+{
+    const OString sVersionStr = OUStringToOString(ReplaceStringHookProc("%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION %BUILDID"), RTL_TEXTENCODING_UTF8);
+
+    char* pVersion = static_cast<char*>(malloc(sVersionStr.getLength() + 1));
+    strcpy(pVersion, sVersionStr.getStr());
+    return pVersion;
 }
 
 static void force_c_locale()
