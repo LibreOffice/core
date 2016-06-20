@@ -1626,29 +1626,32 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, OUStri
         sArgs.remove( 0, 1 );
         sArgs.remove( sArgs.getLength() - 1, 1 );
 
-        sQuotedArgs = "(";
+        OUStringBuffer aBuff;
         OUString sArgs2 = sArgs.makeStringAndClear();
         sal_Int32 nCount = comphelper::string::getTokenCount(sArgs2, ',');
+
+        aBuff.append("(");
         for (sal_Int32 n = 0; n < nCount; ++n)
         {
-            sQuotedArgs += "\"";
-            sQuotedArgs += sArgs2.getToken(n, ',');
-            sQuotedArgs += "\"";
+            aBuff.append( "\"" );
+            aBuff.append( sArgs2.getToken(n, ',') );
+            aBuff.append( "\"" );
+
             if ( n < nCount - 1 )
             {
-                sQuotedArgs += ",";
+                aBuff.append( "," );
             }
         }
+        aBuff.append( ")" );
 
-        sQuotedArgs += ")";
+        sQuotedArgs = aBuff.makeStringAndClear();
     }
 
     // add quoted arguments and do the call
-    OUString sCall;
-    sCall += "[";
-    sCall += pMethod->GetName();
-    sCall += sQuotedArgs;
-    sCall += "]";
+    OUString sCall = "["
+                   + pMethod->GetName()
+                   + sQuotedArgs
+                   + "]";
 
     SbxVariable* pRet = pMethod->GetParent()->Execute( sCall );
     if ( pRet && ( pRet != pMethod ) )
