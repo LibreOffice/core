@@ -151,7 +151,7 @@ class VCL_DLLPUBLIC SystemWindow
     class ImplData;
 
 private:
-    MenuBar*        mpMenuBar;
+    VclPtr<MenuBar> mpMenuBar;
     Size            maOrgSize;
     Size            maRollUpOutSize;
     Size            maMinOutSize;

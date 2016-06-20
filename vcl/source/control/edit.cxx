@@ -1976,7 +1976,7 @@ void Edit::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        PopupMenu* pPopup = Edit::CreatePopupMenu();
+        VclPtr<PopupMenu> pPopup = Edit::CreatePopupMenu();
 
         if ( !maSelection.Len() )
         {
@@ -2036,7 +2036,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
         sal_uInt16 n = pPopup->Execute( this, aPos );
-        Edit::DeletePopupMenu( pPopup );
+        pPopup.disposeAndClear();
         SetSelection( aSaveSel );
         switch ( n )
         {
@@ -2827,13 +2827,13 @@ FncGetSpecialChars Edit::GetGetSpecialCharsFunction()
     return pImplFncGetSpecialChars;
 }
 
-PopupMenu* Edit::CreatePopupMenu()
+VclPtr<PopupMenu> Edit::CreatePopupMenu()
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( ! pResMgr )
-        return new PopupMenu();
+        return VclPtr<PopupMenu>::Create();
 
-    PopupMenu* pPopup = new PopupMenu( ResId( SV_RESID_MENU_EDIT, *pResMgr ) );
+    VclPtrInstance<PopupMenu> pPopup( ResId( SV_RESID_MENU_EDIT, *pResMgr ) );
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if ( rStyleSettings.GetHideDisabledMenuItems() )
         pPopup->SetMenuFlags( MenuFlags::HideDisabledEntries );
@@ -2850,11 +2850,6 @@ PopupMenu* Edit::CreatePopupMenu()
         pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, vcl::KeyCode( KEY_S, true, true, false, false ) );
     }
     return pPopup;
-}
-
-void Edit::DeletePopupMenu( PopupMenu* pMenu )
-{
-    delete pMenu;
 }
 
 // css::datatransfer::dnd::XDragGestureListener

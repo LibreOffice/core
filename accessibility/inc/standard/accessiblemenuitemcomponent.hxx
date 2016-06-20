@@ -31,7 +31,7 @@ class OAccessibleMenuItemComponent : public OAccessibleMenuBaseComponent
     friend class OAccessibleMenuBaseComponent;
 
 protected:
-    Menu*                   m_pParent;
+    VclPtr<Menu>            m_pParent;
     sal_uInt16              m_nItemPos;
     OUString                m_sAccessibleName;
     OUString                m_sItemText;

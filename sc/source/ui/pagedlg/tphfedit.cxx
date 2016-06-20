@@ -345,6 +345,17 @@ ScExtIButton::ScExtIButton(vcl::Window* pParent, WinBits nBits )
     SetDropDown(PushButtonDropdownStyle::Toolbox);
 }
 
+ScExtIButton::~ScExtIButton()
+{
+    disposeOnce();
+}
+
+void ScExtIButton::dispose()
+{
+    pPopupMenu.clear();
+    ImageButton::dispose();
+}
+
 VCL_BUILDER_FACTORY_ARGS(ScExtIButton, 0 /* WB_BORDER|WB_TABSTOP */)
 
 void ScExtIButton::SetPopupMenu(PopupMenu* pPopUp)

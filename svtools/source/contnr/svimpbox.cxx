@@ -2917,11 +2917,13 @@ static void lcl_DeleteSubPopups(PopupMenu* pPopup)
 {
     for(sal_uInt16 i = 0; i < pPopup->GetItemCount(); i++)
     {
-        PopupMenu* pSubPopup = pPopup->GetPopupMenu( pPopup->GetItemId( i ));
+        VclPtr<PopupMenu> pSubPopup = pPopup->GetPopupMenu( pPopup->GetItemId( i ));
         if(pSubPopup)
         {
             lcl_DeleteSubPopups(pSubPopup);
-            delete pSubPopup;
+            // NoelG: this looks very dodgy to me, we are attempting to delete this, but we leave a dangling pointer
+            // in the PopupMenu class?
+            pSubPopup.disposeAndClear();
         }
     }
 }
@@ -3017,8 +3019,8 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
         }
 
         {
-            std::unique_ptr<PopupMenu> pPopup = pView->CreateContextMenu();
-            if( pPopup.get() )
+            VclPtr<PopupMenu> pPopup = pView->CreateContextMenu();
+            if( pPopup )
             {
                 // do action for selected entry in popup menu
                 sal_uInt16 nMenuAction = pPopup->Execute( pView, aPopupPos );

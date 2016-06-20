@@ -104,7 +104,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         if( !pDoc )
             return;
 
-        SdTemplatePopup_Impl aPop;
+        ScopedVclPtrInstance<SdTemplatePopup_Impl> aPop;
         {
             const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
 
@@ -113,11 +113,11 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PK_STANDARD);
                 if( pMaster )
-                    aPop.InsertItem( ++nCount, pMaster->GetName() );
+                    aPop->InsertItem( ++nCount, pMaster->GetName() );
             }
-            aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
+            aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
 
-            sal_uInt16 nCurrId = aPop.GetCurId()-1;
+            sal_uInt16 nCurrId = aPop->GetCurId()-1;
             if( nCurrId < nMasterCount )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PK_STANDARD);

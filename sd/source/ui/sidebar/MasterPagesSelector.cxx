@@ -221,7 +221,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 }
 
                 // Setup the menu.
-                std::unique_ptr<PopupMenu> pMenu (new PopupMenu(GetContextMenuResId()));
+                ScopedVclPtrInstance<PopupMenu> pMenu(GetContextMenuResId());
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if (pMenuWindow != nullptr)
                     pMenuWindow->SetPopupModeFlags(

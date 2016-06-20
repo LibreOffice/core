@@ -132,7 +132,7 @@ struct ImplToolBoxPrivateData
     ToolBoxButtonSize   meButtonSize;
 
     // the optional custom menu
-    PopupMenu*      mpMenu;
+    VclPtr<PopupMenu>   mpMenu;
     ToolBoxMenuType maMenuType;
     ImplSVEvent *   mnEventId;
 

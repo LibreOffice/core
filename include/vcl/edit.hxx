@@ -265,8 +265,7 @@ public:
     static void                 SetGetSpecialCharsFunction( FncGetSpecialChars fn );
     static FncGetSpecialChars   GetGetSpecialCharsFunction();
 
-    static PopupMenu*   CreatePopupMenu();
-    static void         DeletePopupMenu( PopupMenu* pMenu );
+    static VclPtr<PopupMenu>    CreatePopupMenu();
 
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;

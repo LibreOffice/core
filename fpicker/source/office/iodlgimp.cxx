@@ -91,7 +91,7 @@ SvtFileDialogFilter_Impl::~SvtFileDialogFilter_Impl()
 SvtFileDialogURLSelector::SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId )
     :MenuButton ( _pParent, nBits )
     ,m_pDlg     ( _pDlg )
-    ,m_pMenu    ( new PopupMenu )
+    ,m_pMenu    ( VclPtr<PopupMenu>::Create() )
 {
     SetStyle( GetStyle() | WB_NOPOINTERFOCUS | WB_RECTSTYLE | WB_SMALLSTYLE );
     SetModeImage( _pDlg->GetButtonImage( _nButtonId ) );
@@ -107,7 +107,7 @@ SvtFileDialogURLSelector::~SvtFileDialogURLSelector()
 
 void SvtFileDialogURLSelector::dispose()
 {
-    delete m_pMenu;
+    m_pMenu.disposeAndClear();
     m_pDlg.clear();
     MenuButton::dispose();
 }

@@ -70,7 +70,7 @@ class GenericToolbarController : public svt::ToolboxController
 class MenuToolbarController : public GenericToolbarController
 {
     css::uno::Reference< css::container::XIndexAccess > m_xMenuDesc;
-    PopupMenu*                                          pMenu;
+    VclPtr<PopupMenu>                                   pMenu;
     css::uno::Reference< css::lang::XComponent >        m_xMenuManager;
     OUString                                            m_aModuleIdentifier;
     public:

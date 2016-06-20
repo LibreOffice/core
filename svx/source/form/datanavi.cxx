@@ -220,10 +220,9 @@ namespace svxform
         pTransferable->StartDrag( this, DND_ACTION_COPY );
     }
 
-    std::unique_ptr<PopupMenu> DataTreeListBox::CreateContextMenu()
+    VclPtr<PopupMenu> DataTreeListBox::CreateContextMenu()
     {
-        std::unique_ptr<PopupMenu> pMenu(
-            new PopupMenu( SVX_RES( RID_MENU_DATANAVIGATOR ) ));
+        VclPtrInstance<PopupMenu> pMenu( SVX_RES( RID_MENU_DATANAVIGATOR ) );
         if ( DGTInstance == m_eGroup )
             pMenu->RemoveItem( pMenu->GetItemPos( m_nAddId ) );
         else

@@ -573,12 +573,12 @@ DECLARE_ODFIMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt")
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     OUString aParaText;
     uno::Reference<linguistic2::XSpellAlternatives> xAlt;
-    SwSpellPopup aPopup(pWrtShell, xAlt, aParaText);
+    ScopedVclPtrInstance<SwSpellPopup> aPopup(pWrtShell, xAlt, aParaText);
     // Make sure that if we show the spellcheck popup menu (for the current
     // document, which contains redlines), then the last two entries will be
     // always 'go to next/previous change'.
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_NEXT_CHANGE), aPopup.GetItemId(aPopup.GetItemCount() - 2));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_PREV_CHANGE), aPopup.GetItemId(aPopup.GetItemCount() - 1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_NEXT_CHANGE), aPopup->GetItemId(aPopup->GetItemCount() - 2));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_PREV_CHANGE), aPopup->GetItemId(aPopup->GetItemCount() - 1));
 }
 
 DECLARE_ODFIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.odt")

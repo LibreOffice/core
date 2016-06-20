@@ -420,7 +420,7 @@ public:
     SAL_DLLPRIVATE void startFiltering();
     SAL_DLLPRIVATE void stopFiltering(bool bSave);
 
-    SAL_DLLPRIVATE static PopupMenu* GetConversionMenu();
+    SAL_DLLPRIVATE static VclPtr<PopupMenu> GetConversionMenu();
         // ein Menue, das alle ControlConversion-Eintraege enthaelt
 
     /// checks whether a given control conversion slot can be applied to the current selection

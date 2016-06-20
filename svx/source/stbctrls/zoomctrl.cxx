@@ -142,15 +142,15 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     if ( CommandEventId::ContextMenu == rCEvt.GetCommand() && bool(nValueSet) )
     {
-        ZoomPopup_Impl aPop( nZoom, nValueSet );
+        ScopedVclPtrInstance<ZoomPopup_Impl> aPop( nZoom, nValueSet );
         StatusBar& rStatusbar = GetStatusBar();
 
-        if ( aPop.Execute( &rStatusbar, rCEvt.GetMousePosPixel() ) && ( nZoom != aPop.GetZoom() || !nZoom ) )
+        if ( aPop->Execute( &rStatusbar, rCEvt.GetMousePosPixel() ) && ( nZoom != aPop->GetZoom() || !nZoom ) )
         {
-            nZoom = aPop.GetZoom();
+            nZoom = aPop->GetZoom();
             SvxZoomItem aZoom( SvxZoomType::PERCENT, nZoom, GetId() );
 
-            switch( aPop.GetCurId() )
+            switch( aPop->GetCurId() )
             {
             case ZOOM_OPTIMAL:      aZoom.SetType( SvxZoomType::OPTIMAL ); break;
             case ZOOM_PAGE_WIDTH:   aZoom.SetType( SvxZoomType::PAGEWIDTH ); break;

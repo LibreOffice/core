@@ -53,8 +53,14 @@ using namespace ::sfx2;
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
 {
+    disposeOnce();
+}
+
+void SwReadOnlyPopup::dispose()
+{
     delete pImageMap;
     delete pTargetURL;
+    PopupMenu::dispose();
 }
 
 void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis )

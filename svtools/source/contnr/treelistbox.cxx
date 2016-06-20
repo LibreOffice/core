@@ -3724,7 +3724,7 @@ void SvTreeListBox::InitStartEntry()
         pImpl->pStartEntry = GetModel()->First();
 }
 
-std::unique_ptr<PopupMenu> SvTreeListBox::CreateContextMenu()
+VclPtr<PopupMenu> SvTreeListBox::CreateContextMenu()
 {
     return nullptr;
 }

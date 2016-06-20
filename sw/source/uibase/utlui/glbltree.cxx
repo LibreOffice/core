@@ -330,16 +330,16 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-std::unique_ptr<PopupMenu> SwGlobalTree::CreateContextMenu()
+VclPtr<PopupMenu> SwGlobalTree::CreateContextMenu()
 {
-    std::unique_ptr<PopupMenu> pPop;
+    VclPtr<PopupMenu> pPop;
     if(pActiveShell &&
         !pActiveShell->GetView().GetDocShell()->IsReadOnly())
     {
         const sal_uInt16 nEnableFlags = GetEnableFlags();
-        pPop.reset(new PopupMenu);
-        PopupMenu* pSubPop1 = new PopupMenu;
-        PopupMenu* pSubPop2 = new PopupMenu;
+        pPop = VclPtr<PopupMenu>::Create();
+        VclPtrInstance<PopupMenu> pSubPop1;
+        VclPtrInstance<PopupMenu> pSubPop2;
 
         for (sal_uInt16 i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
@@ -394,7 +394,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
     const sal_uInt16 nEnableFlags = GetEnableFlags();
     if(FN_GLOBAL_OPEN == nTbxId)
     {
-        std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
+        ScopedVclPtrInstance<PopupMenu> pMenu;
         for (sal_uInt16 i = CTX_INSERT_ANY_INDEX; i <= CTX_INSERT_TEXT; i++)
         {
             pMenu->InsertItem( i, aContextStrings[STR_INDEX  - STR_GLOBAL_CONTEXT_FIRST - CTX_INSERT_ANY_INDEX + i] );
@@ -406,13 +406,13 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
         pMenu->EnableItem(CTX_INSERT_NEW_FILE,  0 != (nEnableFlags & ENABLE_INSERT_FILE));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
         pMenu->Execute(pBox, pBox->GetItemRect(nTbxId));
-        pMenu.reset();
+        pMenu.disposeAndClear();
         pBox->EndSelection();
         pBox->Invalidate();
     }
     else if(FN_GLOBAL_UPDATE == nTbxId)
     {
-        std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
+        ScopedVclPtrInstance<PopupMenu> pMenu;
         for (sal_uInt16 i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
             pMenu->InsertItem( i, aContextStrings[STR_UPDATE_SEL - STR_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
@@ -421,7 +421,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
         pMenu->EnableItem(CTX_UPDATE_SEL, 0 != (nEnableFlags & ENABLE_UPDATE_SEL));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
         pMenu->Execute(pBox, pBox->GetItemRect(nTbxId));
-        pMenu.reset();
+        pMenu.disposeAndClear();
         pBox->EndSelection();
         pBox->Invalidate();
     }

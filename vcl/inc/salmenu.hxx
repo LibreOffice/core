@@ -32,7 +32,7 @@ struct SalItemParams
     sal_uInt16      nId;                    // item Id
     MenuItemType    eType;                  // MenuItem-Type
     MenuItemBits    nBits;                  // MenuItem-Bits
-    Menu*           pMenu;                  // Pointer to Menu
+    VclPtr<Menu>    pMenu;                  // Pointer to Menu
     OUString        aText;                  // Menu-Text
     Image           aImage;                 // Image
 };

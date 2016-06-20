@@ -19,6 +19,7 @@
 
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
+#include <vcl/menu.hxx>
 
 #include "svdata.hxx"
 #include "vcleventlisteners.hxx"
@@ -89,5 +90,18 @@ VclWindowEvent::VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat ) : V
 }
 
 VclWindowEvent::~VclWindowEvent() {}
+
+VclMenuEvent::VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos )
+    : VclSimpleEvent(n), pMenu(pM), mnPos(nPos)
+{}
+
+VclMenuEvent::~VclMenuEvent()
+{}
+
+Menu* VclMenuEvent::GetMenu() const
+{
+    return pMenu;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

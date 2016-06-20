@@ -551,9 +551,9 @@ namespace
     }
 }
 
-std::unique_ptr<PopupMenu> DBTreeListBox::CreateContextMenu()
+VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
 {
-    ::std::unique_ptr< PopupMenu > pContextMenu;
+    VclPtr< PopupMenu > pContextMenu;
 
     if ( !m_pContextMenuProvider )
         return pContextMenu;
@@ -621,7 +621,7 @@ std::unique_ptr<PopupMenu> DBTreeListBox::CreateContextMenu()
     if ( bModifiedMenu )
     {
         // the interceptor(s) modified the menu description => create a new PopupMenu
-        PopupMenu* pModifiedMenu = new PopupMenu;
+        VclPtrInstance<PopupMenu> pModifiedMenu;
         ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
             pModifiedMenu, aEvent.ActionTriggerContainer );
         aEvent.ActionTriggerContainer.clear();

@@ -22,6 +22,7 @@
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <vcl/vclptr.hxx>
 #include <com/sun/star/container/XContainer.hpp>
 
 class SvTreeListEntry;
@@ -74,7 +75,7 @@ namespace dbaui
             The control itself will, using the controller provided by getCommandController,
             disable menu entries as needed.
         */
-        virtual PopupMenu*      getContextMenu( Control& _rControl ) const = 0;
+        virtual VclPtr<PopupMenu> getContextMenu( Control& _rControl ) const = 0;
 
         /** returns the controller which is responsible for providing states of certain features,
             and executing them.

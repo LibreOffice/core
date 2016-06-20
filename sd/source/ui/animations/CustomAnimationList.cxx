@@ -906,10 +906,9 @@ bool CustomAnimationList::DoubleClickHdl()
     return false;
 }
 
-std::unique_ptr<PopupMenu> CustomAnimationList::CreateContextMenu()
+VclPtr<PopupMenu> CustomAnimationList::CreateContextMenu()
 {
-    std::unique_ptr<PopupMenu> pMenu(
-        new PopupMenu(SdResId( RID_EFFECT_CONTEXTMENU )));
+    VclPtrInstance<PopupMenu> pMenu(SdResId( RID_EFFECT_CONTEXTMENU ));
 
     sal_Int16 nNodeType = -1;
     sal_Int16 nEntries = 0;

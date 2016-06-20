@@ -294,7 +294,7 @@ IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
         case TBI_DRAGTYPE:
         {
             // Popup menu is created depending if the document is saved or not
-            PopupMenu *pMenu = new PopupMenu;
+            ScopedVclPtrInstance<PopupMenu> pMenu;
 
             static const char* aHIDs[] =
             {
@@ -331,13 +331,12 @@ IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 
             pMenu->Execute( this, maToolbox->GetItemRect( nId ), PopupMenuFlags::ExecuteDown );
             pBox->EndSelection();
-            delete pMenu;
         }
         break;
 
         case TBI_SHAPE_FILTER:
         {
-            PopupMenu *pMenu = new PopupMenu;
+            ScopedVclPtrInstance<PopupMenu> pMenu;
 
             pMenu->InsertItem(
                 nShowNamedShapesFilter,
@@ -354,7 +353,6 @@ IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 
             pMenu->Execute( this, maToolbox->GetItemRect( nId ), PopupMenuFlags::ExecuteDown );
             pBox->EndSelection();
-            delete pMenu;
         }
         break;
     }
