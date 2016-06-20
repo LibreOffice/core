@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tchar.h>
 #include "dibpreview.hxx"
 #include <osl/diagnose.h>
 
@@ -37,10 +36,10 @@ using ::com::sun::star::lang::IllegalArgumentException;
 
 namespace /* private */
 {
-    const LPCTSTR CURRENT_INSTANCE = TEXT("CurrInst");
+    const PCWSTR CURRENT_INSTANCE = L"CurrInst";
 };
 
-#define PREVIEWWND_CLASS_NAME TEXT("DIBPreviewWnd###")
+#define PREVIEWWND_CLASS_NAME L"DIBPreviewWnd###"
 
 
 // static member initialization
@@ -61,10 +60,10 @@ CDIBPreview::CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow) :
     if (bShowWindow)
         dwStyle |= WS_VISIBLE;
 
-    m_Hwnd = CreateWindowEx(
+    m_Hwnd = CreateWindowExW(
         WS_EX_CLIENTEDGE,
         PREVIEWWND_CLASS_NAME,
-        TEXT(""),
+        L"",
         dwStyle,
         0, 0, 0, 0,
         parent,
@@ -276,7 +275,7 @@ LRESULT CALLBACK CDIBPreview::WndProc(
             OSL_ASSERT(lpcs->lpCreateParams);
 
             // connect the instance handle to the window
-            SetProp(hWnd, CURRENT_INSTANCE, lpcs->lpCreateParams);
+            SetPropW(hWnd, CURRENT_INSTANCE, lpcs->lpCreateParams);
         }
         break;
 
@@ -286,7 +285,7 @@ LRESULT CALLBACK CDIBPreview::WndProc(
         {
             // RemoveProp returns the saved value on success
             if (reinterpret_cast<CDIBPreview*>(
-                    RemoveProp(hWnd, CURRENT_INSTANCE)) == NULL)
+                    RemovePropW(hWnd, CURRENT_INSTANCE)) == NULL)
             {
                 OSL_ASSERT(false);
             }
@@ -296,7 +295,7 @@ LRESULT CALLBACK CDIBPreview::WndProc(
     case WM_PAINT:
     {
         CDIBPreview* pImpl = reinterpret_cast<CDIBPreview*>(
-            GetProp(hWnd, CURRENT_INSTANCE));
+            GetPropW(hWnd, CURRENT_INSTANCE));
 
         OSL_ASSERT(pImpl);
 
@@ -345,7 +344,7 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
         //               if the dll is unloaded
         //     Win2000 - the window class must be unregistered manually
         //               if the dll is unloaded
-        s_ClassAtom = RegisterClassEx(&wndClsEx);
+        s_ClassAtom = RegisterClassExW(&wndClsEx);
         if (0 == s_ClassAtom)
         {
             SAL_WARN("fpicker", "Could not register preview window class");
@@ -381,7 +380,7 @@ void SAL_CALL CDIBPreview::UnregisterDibPreviewWindowClass()
 
     if (0 == s_RegisterDibPreviewWndCount)
     {
-        UnregisterClass((LPCTSTR)(DWORD_PTR)MAKELONG(s_ClassAtom,0),m_Instance);
+        UnregisterClassW((PCWSTR)(DWORD_PTR)MAKELONG(s_ClassAtom,0),m_Instance);
         s_ClassAtom = 0;
     }
 }

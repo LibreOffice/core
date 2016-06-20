@@ -43,7 +43,6 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
-#include <tchar.h>
 #include <officecfg/Office/Common.hxx>
 
 #ifdef _MSC_VER

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tchar.h>
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 #include "controlaccess.hxx"
@@ -186,13 +185,12 @@ CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass
 CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
 {
     CTRL_CLASS aCtrlClass = UNKNOWN;
-    const size_t nClassNameSize = 256;
-    TCHAR aClassName[nClassNameSize];
+    WCHAR aClassName[256];
 
-    int nRet = GetClassName(hwndCtrl,aClassName,nClassNameSize);
+    int nRet = GetClassNameW(hwndCtrl,aClassName,SAL_N_ELEMENTS(aClassName));
     if (nRet)
     {
-        if (0 == _tcsicmp(aClassName,TEXT("button")))
+        if (0 == _wcsicmp(aClassName,L"button"))
         {
             // button means many things so we have
             // to find out what button it is
@@ -202,8 +200,8 @@ CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
             else if (((lBtnStyle & BS_PUSHBUTTON) == 0) || (lBtnStyle & BS_DEFPUSHBUTTON))
                 aCtrlClass = PUSHBUTTON;
         }
-        else if (0 == _tcsicmp(aClassName,TEXT("listbox")) ||
-                  0 == _tcsicmp(aClassName,TEXT("combobox")))
+        else if (0 == _wcsicmp(aClassName,L"listbox") ||
+                  0 == _wcsicmp(aClassName,L"combobox"))
             aCtrlClass = LISTBOX;
     }
 

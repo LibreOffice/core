@@ -184,7 +184,7 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
     sal_Int32 nPos;
     aPosition >>= nPos;
 
-    LRESULT lRet = SendMessage( hwnd, CB_DELETESTRING, nPos, 0 );
+    LRESULT lRet = SendMessageW( hwnd, CB_DELETESTRING, nPos, 0 );
 
     // if the return value is CB_ERR the given
     // index was not correct
