@@ -379,19 +379,27 @@ sub create_package
             $destfile = $subdir . "/" . $iconfile;
             installer::systemactions::copy_one_file($iconfileref, $destfile);
 
-            my $installname = "Info.plist";
             my $infoplistfile = $ENV{'SRCDIR'} . "/setup_native/source/mac/Info.plist.langpack";
             if (! -f $infoplistfile) { installer::exiter::exit_program("ERROR: Could not find Apple script Info.plist: $infoplistfile!", "create_package"); }
-            $destfile = $contentsfolder . "/" . $installname;
-            installer::systemactions::copy_one_file($infoplistfile, $destfile);
-
+            $destfile = "$contentsfolder/Info.plist";
             # Replacing variables in Info.plist
-            $scriptfilecontent = installer::files::read_file($destfile);
+            $scriptfilecontent = installer::files::read_file($infoplistfile);
             # replace_one_variable_in_shellscript($scriptfilecontent, $volume_name, "FULLPRODUCTNAME" );
             replace_one_variable_in_shellscript($scriptfilecontent, $volume_name_classic_app, "FULLAPPPRODUCTNAME" ); # OpenOffice.org Language Pack
+            replace_one_variable_in_shellscript($scriptfilecontent, $ENV{'MACOSX_BUNDLE_IDENTIFIER'}, "BUNDLEIDENTIFIER" );
             installer::files::save_file($destfile, $scriptfilecontent);
 
             chdir $localfrom;
+
+            if ( defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" ) {
+                my @lp_sign = ('codesign', '--verbose', '--sign', $ENV{'MACOSX_CODESIGNING_IDENTITY'}, '--deep', $appfolder);
+                if (system(@lp_sign) == 0) {
+                    $infoline = "Success: \"@lp_sign\" executed successfully!\n";
+                } else {
+                    $infoline = "ERROR: Could not codesign the languagepack using \"@lp_sign\"!\n";
+                }
+                push( @installer::globals::logfileinfo, $infoline);
+            }
         }
         elsif ($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev')
         {
