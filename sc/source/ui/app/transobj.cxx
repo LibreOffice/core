@@ -119,6 +119,8 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     aObjDesc( rDesc ),
     nDragHandleX( 0 ),
     nDragHandleY( 0 ),
+    nSourceCursorX( MAXCOL + 1 ),
+    nSourceCursorY( MAXROW + 1 ),
     nDragSourceFlags( 0 ),
     bDragWasInternal( false ),
     bUsedForLink( false ),
@@ -522,6 +524,19 @@ void ScTransferObj::SetDragHandlePos( SCCOL nX, SCROW nY )
 {
     nDragHandleX = nX;
     nDragHandleY = nY;
+}
+
+void ScTransferObj::SetSourceCursorPos( SCCOL nX, SCROW nY )
+{
+    nSourceCursorX = nX;
+    nSourceCursorY = nY;
+}
+
+bool ScTransferObj::WasSourceCursorInSelection() const
+{
+    return
+        nSourceCursorX >= aBlock.aStart.Col() && nSourceCursorX <= aBlock.aEnd.Col() &&
+        nSourceCursorY >= aBlock.aStart.Row() && nSourceCursorY <= aBlock.aEnd.Row();
 }
 
 void ScTransferObj::SetVisibleTab( SCTAB nNew )
