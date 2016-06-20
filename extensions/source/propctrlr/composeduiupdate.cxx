@@ -211,14 +211,13 @@ namespace pcr
 
     void SAL_CALL CachedInspectorUI::acquire() throw()
     {
-        osl_atomic_increment( &m_refCount );
+        CachedInspectorUI_Base::acquire();
     }
 
 
     void SAL_CALL CachedInspectorUI::release() throw()
     {
-        if ( 0 == osl_atomic_decrement( &m_refCount ) )
-            delete this;
+        CachedInspectorUI_Base::release();
     }
 
 
