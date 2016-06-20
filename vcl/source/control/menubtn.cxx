@@ -52,12 +52,13 @@ void MenuButton::ExecuteMenu()
 
     if ( mpMenu )
     {
-        Point aPos( 0, 1 );
         Size aSize = GetSizePixel();
+        int nPaddingRight = aSize.Width()/15;
+        Point aPos (aSize.Width() - nPaddingRight, aSize.Height());
         Rectangle aRect( aPos, aSize );
         SetPressed( true );
         EndSelection();
-        mnCurItemId = mpMenu->Execute( this, aRect, PopupMenuFlags::ExecuteDown );
+        mnCurItemId = mpMenu->Execute( this, aRect, PopupMenuFlags::ExecuteLeft );
         SetPressed( false );
         if ( mnCurItemId )
         {
