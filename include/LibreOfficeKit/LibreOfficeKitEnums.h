@@ -312,6 +312,23 @@ typedef enum
      */
     LOK_CALLBACK_CONTEXT_MENU,
 
+    /**
+     * The size and/or the position of the view cursor changed. A view cursor
+     * is a cursor of an other view, the current view can't change it.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     * The payload format:
+     *
+     * {
+     *     "viewId": "..."
+     *     "rectangle": "..."
+     * }
+     *
+     * - viewId is a value returned earlier by lok::Document::createView()
+     * - rectangle uses the format of LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR
+     */
+    LOK_CALLBACK_INVALIDATE_VIEW_CURSOR,
+
 }
 LibreOfficeKitCallbackType;
 
