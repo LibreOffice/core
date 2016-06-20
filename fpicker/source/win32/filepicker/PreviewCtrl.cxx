@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tchar.h>
 #include "PreviewCtrl.hxx"
 #include <osl/diagnose.h>
 
@@ -31,7 +30,7 @@
 #include <ocidl.h>
 #include <olectl.h>
 
-#define PREVIEWWND_CLASS_NAME TEXT("PreviewWnd###")
+#define PREVIEWWND_CLASS_NAME L"PreviewWnd###"
 
 #define HIMETRIC_INCH 2540
 
@@ -235,16 +234,16 @@ CFilePreview::CFilePreview(
     //               if the dll is unloaded
     //     Win2000 - the window class must be unregistered manually
     //               if the dll is unloaded
-    m_atomPrevWndClass = RegisterClassEx(&wndClsEx);
+    m_atomPrevWndClass = RegisterClassExW(&wndClsEx);
     if ( !m_atomPrevWndClass )
         throw CPreviewException( );
 
     // create the preview window in invisible state
     sal_uInt32 dwStyle = bShow ? (WS_CHILD | WS_VISIBLE) : WS_CHILD;
-    m_hwnd = CreateWindowEx(
+    m_hwnd = CreateWindowExW(
         WS_EX_CLIENTEDGE,
         PREVIEWWND_CLASS_NAME,
-        TEXT(""),
+        L"",
         dwStyle,
         ulCorner.x,
         ulCorner.y,
@@ -263,8 +262,8 @@ CFilePreview::CFilePreview(
 CFilePreview::~CFilePreview( )
 {
     // unregister preview window class
-    sal_Bool bRet = UnregisterClass(
-        (LPCTSTR)(DWORD_PTR)MAKELONG( m_atomPrevWndClass, 0 ),
+    sal_Bool bRet = UnregisterClassW(
+        (PCWSTR)(DWORD_PTR)MAKELONG( m_atomPrevWndClass, 0 ),
         m_hInstance );
     SAL_WARN_IF( !bRet, "fpicker", "Unregister preview window class failed" );
 }
@@ -469,7 +468,7 @@ sal_Bool CFilePreview::loadFile( const OUString& aFileName )
     sal_uInt32  fszExtra;
     sal_uInt32  fsize;
 
-    hFile = CreateFile(
+    hFile = CreateFileW(
         aFileName.getStr( ),
         GENERIC_READ,
         0,

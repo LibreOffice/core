@@ -730,7 +730,7 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
     //#105996 let vcl know that now a system window is active
     BOOL const ret = PostMessage(
         HWND_BROADCAST,
-        RegisterWindowMessage(TEXT("SYSTEM_WINDOW_ACTIVATED")),
+        RegisterWindowMessageW(L"SYSTEM_WINDOW_ACTIVATED"),
         0,
         0);
     SAL_WARN_IF(0 == ret, "fpicker", "ERROR: PostMessage() failed!");
@@ -891,7 +891,7 @@ void SAL_CALL CWinFileOpenImpl::SetDefaultExtension()
         }
         else
         {
-            SendMessage(m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, reinterpret_cast<LPARAM>(TEXT("")));
+            SendMessage(m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, reinterpret_cast<LPARAM>(L""));
         }
     }
 
@@ -914,7 +914,7 @@ void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName()
         HWND hFileNameBox = GetDlgItem(m_hwndFileOpenDlg, cmb13);
         if (!hFileNameBox)
             hFileNameBox = GetDlgItem(m_hwndFileOpenDlg, edt1);
-        SetWindowText(hFileNameBox, reinterpret_cast<LPCTSTR>(m_defaultName.getStr()));
+        SetWindowTextW(hFileNameBox, reinterpret_cast<PCWSTR>(m_defaultName.getStr()));
     }
 
     m_bInitialSelChanged = sal_False;

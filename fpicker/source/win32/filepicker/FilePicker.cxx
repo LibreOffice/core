@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tchar.h>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/interfacecontainer.h>
@@ -43,7 +42,7 @@ using namespace com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 
-#define FILE_PICKER_DLL_NAME  TEXT("fps.dll")
+#define FILE_PICKER_DLL_NAME  L"fps.dll"
 
 
 // helper functions
@@ -69,7 +68,7 @@ CFilePicker::CFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xSer
     m_xServiceMgr(xServiceMgr),
     m_aAsyncEventNotifier(rBHelper)
 {
-    HINSTANCE hInstance = GetModuleHandle(FILE_PICKER_DLL_NAME);
+    HINSTANCE hInstance = GetModuleHandleW(FILE_PICKER_DLL_NAME);
     SAL_WARN_IF( !hInstance, "fpicker", "The name of the service dll must have changed" );
 
     // create a default FileOpen dialog without any additional ui elements

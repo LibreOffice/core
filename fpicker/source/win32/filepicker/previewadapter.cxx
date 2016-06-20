@@ -18,7 +18,6 @@
  */
 
 
-#include <tchar.h>
 #include "previewadapter.hxx"
 
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
