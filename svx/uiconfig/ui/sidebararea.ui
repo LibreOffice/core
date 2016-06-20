@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
+  <!-- interface-requires LibreOffice 1.0 -->
   <requires lib="gtk+" version="3.0"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
@@ -46,6 +46,8 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -118,6 +120,8 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -141,13 +145,15 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkToolbar" id="selectgradient">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
+                <property name="halign">start</property>
                 <child>
                   <object class="GtkMenuToolButton" id="gradient">
                     <property name="visible">True</property>
@@ -167,54 +173,9 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="transtype">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the type of transparency to apply.</property>
-                <property name="tooltip_text" translatable="yes">Select the type of transparency to apply.</property>
-                <items>
-                  <item translatable="yes">None</item>
-                  <item translatable="yes">Solid</item>
-                  <item translatable="yes">Linear</item>
-                  <item translatable="yes">Axial</item>
-                  <item translatable="yes">Radial</item>
-                  <item translatable="yes">Ellipsoid</item>
-                  <item translatable="yes">Quadratic</item>
-                  <item translatable="yes">Square</item>
-                </items>
-                <accessibility>
-                  <relation type="labelled-by" target="transparencylabel"/>
-                </accessibility>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="transtype-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Transparency Type</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="transparencylabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Transparency</property>
-                <property name="tooltip_text" translatable="yes">Transparency</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Transparency:</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="top_attach">5</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -228,6 +189,8 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -246,6 +209,8 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -271,6 +236,93 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="transtype">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Select the type of transparency to apply.</property>
+                <property name="tooltip_text" translatable="yes">Select the type of transparency to apply.</property>
+                <items>
+                  <item translatable="yes">None</item>
+                  <item translatable="yes">Solid</item>
+                  <item translatable="yes">Linear</item>
+                  <item translatable="yes">Axial</item>
+                  <item translatable="yes">Radial</item>
+                  <item translatable="yes">Ellipsoid</item>
+                  <item translatable="yes">Quadratic</item>
+                  <item translatable="yes">Square</item>
+                </items>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="transtype-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Transparency Type</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="transparencylabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Transparency</property>
+                <property name="tooltip_text" translatable="yes">Transparency</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Transparency:</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="bmpimport">
+                <property name="label" translatable="yes">_Import</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="svxlo-SvxFillAttrBox" id="fillbitmap">
+                <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Select the effect to apply.</property>
+                <property name="tooltip_text" translatable="yes">Select the effect to apply.</property>
+                <accessibility>
+                  <relation type="labelled-by" target="filllabel"/>
+                </accessibility>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="fillbitmap-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Hatching/Bitmap</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -302,6 +354,7 @@
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
                 <property name="width">3</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -326,6 +379,8 @@
               <packing>
                 <property name="left_attach">3</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
           </object>
@@ -339,6 +394,8 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
       </packing>
     </child>
   </object>

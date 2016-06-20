@@ -136,6 +136,8 @@ protected:
     VclPtr<ToolBox>                                            mpBTNGradient;
     VclPtr<MetricField>                                        mpMTRAngle;
     VclPtr<ListBox>                                            mpGradientStyle;
+    VclPtr<SvxFillAttrBox>                                     mpLbFillBitmap;
+    VclPtr<PushButton>                                         mpBmpImport;
 
     std::unique_ptr< XFillStyleItem >               mpStyleItem;
     std::unique_ptr< XFillColorItem >               mpColorItem;
@@ -165,6 +167,7 @@ protected:
     DECL_LINK_TYPED(ChangeTrgrTypeHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(ModifyTransparentHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(ModifyTransSliderHdl, Slider*, void);
+    DECL_LINK_TYPED(ClickImportBitmapHdl, Button*, void);
 
     // for transparency gradient
     VclPtr<PopupControl> CreateTransparencyGradientControl (PopupContainer* pParent);
