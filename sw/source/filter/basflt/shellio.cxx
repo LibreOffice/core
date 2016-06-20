@@ -58,6 +58,7 @@
 #include <swerror.h>
 #include <paratr.hxx>
 #include <pausethreadstarting.hxx>
+#include <tblafmt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -344,6 +345,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     pDoc->ChkCondColls();
     pDoc->SetAllUniqueFlyNames();
     pDoc->getIDocumentState().SetLoaded();
+    pDoc->GetCellStyles().clear();
 
     pDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
     if (!bReadPageDescs)

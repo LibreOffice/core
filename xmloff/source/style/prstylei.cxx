@@ -385,8 +385,6 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 
         if( bOverwrite || bNew )
         {
-            Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
-
             rtl::Reference < XMLPropertySetMapper > xPrMap;
             if( xImpPrMap.is() )
                 xPrMap = xImpPrMap->getPropertySetMapper();
@@ -409,17 +407,20 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                         if( xPropSetInfo->hasPropertyByName( rPrName ) )
                             aNameSet.insert( rPrName );
                     }
-
-                    nCount = aNameSet.size();
-                    Sequence<OUString> aNames( comphelper::containerToSequence<OUString>(aNameSet) );
-                    Sequence < PropertyState > aStates( xPropState->getPropertyStates(aNames) );
-                    const PropertyState *pStates = aStates.getConstArray();
-                    OUString* pNames = aNames.getArray();
-
-                    for( i = 0; i < nCount; i++ )
+                    Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+                    if (xPropState.is())
                     {
-                        if( PropertyState_DIRECT_VALUE == *pStates++ )
-                            xPropState->setPropertyToDefault( pNames[i] );
+                        nCount = aNameSet.size();
+                        Sequence<OUString> aNames( comphelper::containerToSequence<OUString>(aNameSet) );
+                        Sequence < PropertyState > aStates( xPropState->getPropertyStates(aNames) );
+                        const PropertyState *pStates = aStates.getConstArray();
+                        OUString* pNames = aNames.getArray();
+
+                        for( i = 0; i < nCount; i++ )
+                        {
+                            if( PropertyState_DIRECT_VALUE == *pStates++ )
+                                xPropState->setPropertyToDefault( pNames[i] );
+                        }
                     }
                 }
             }

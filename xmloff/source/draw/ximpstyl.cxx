@@ -1175,6 +1175,7 @@ void SdXMLStylesContext::EndElement()
         }
 
     }
+    // SAL_ DEBUG("SdXMLStylesContext");
 }
 
 // set master-page styles (all with family="presentation" and a special
@@ -1228,7 +1229,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
     {
         const OUString sCellStyleName("cell");
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sCellStyleName), uno::UNO_QUERY_THROW );
-
+        // pewnie cos bede musial dodac tu cell styles sd rzeniesc do sw?
         ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, OUString());
     }
     catch( uno::Exception& )

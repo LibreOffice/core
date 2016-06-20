@@ -154,6 +154,7 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
 {
     const OUString msParaStyleServiceName;
     const OUString msTextStyleServiceName;
+    const OUString msCellStyleServiceName;
 
     std::unique_ptr<SvXMLStylesContext_Impl> mpImpl;
     SvXMLTokenMap           *mpStyleStylesElemTokenMap;
@@ -162,6 +163,8 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
     css::uno::Reference< css::container::XNameContainer > mxParaStyles;
 
     css::uno::Reference< css::container::XNameContainer > mxTextStyles;
+
+    css::uno::Reference< css::container::XNameContainer > mxCellStyles;
 
     css::uno::Reference< css::style::XAutoStyleFamily > mxParaAutoStyles;
 
@@ -172,7 +175,7 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
     rtl::Reference < SvXMLImportPropertyMapper > mxShapeImpPropMapper;
     mutable rtl::Reference < SvXMLImportPropertyMapper > mxChartImpPropMapper;
     mutable rtl::Reference < SvXMLImportPropertyMapper > mxPageImpPropMapper;
-
+    rtl::Reference < SvXMLImportPropertyMapper > mxCellImpPropMapper;
     SAL_DLLPRIVATE const SvXMLTokenMap& GetStyleStylesElemTokenMap();
 
     SvXMLStylesContext(SvXMLStylesContext &) = delete;

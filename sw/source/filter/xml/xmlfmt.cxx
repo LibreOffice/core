@@ -51,6 +51,8 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 
+#include <xmloff/table/XMLTableImport.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -463,6 +465,7 @@ void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
                                            const OUString& rLocalName,
                                            const OUString& rValue )
 {
+    // SAL _DEBUG("nPrefixKey:"+OUString::number(nPrefixKey)+",rLocalName:"+rLocalName+",rValue:"+rValue);
     if( XML_NAMESPACE_STYLE == nPrefixKey )
     {
         if ( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
@@ -521,6 +524,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: unknown family" );
         break;
     }
+
     if( pItemSet )
         pContext = GetSwImport().CreateTableItemImportContext(
                                 nPrefix, rLName, xAttrList, GetFamily(),
@@ -699,6 +703,10 @@ class SwXMLStylesContext_Impl : public SvXMLStylesContext
 
 protected:
 
+    virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -729,6 +737,22 @@ public:
     virtual void EndElement() override;
 };
 
+SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleChildContext( sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLStyleContext* pContext = nullptr;
+
+    if(nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(rLocalName, XML_TABLE_TEMPLATE))
+    {
+        rtl::Reference<XMLTableImport> xTableImport = GetImport().GetShapeImport()->GetShapeTableImport();
+        pContext = xTableImport->CreateTableTemplateContext(nPrefix, rLocalName, xAttrList);
+    }
+    if (!pContext)
+        pContext = SvXMLStylesContext::CreateStyleChildContext(nPrefix, rLocalName, xAttrList);
+
+    return pContext;
+}
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -746,8 +770,13 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
     case XML_STYLE_FAMILY_TABLE_COLUMN:
     case XML_STYLE_FAMILY_TABLE_ROW:
     case XML_STYLE_FAMILY_TABLE_CELL:
-        pStyle = new SwXMLItemSetStyleContext_Impl( GetSwImport(), nPrefix,
-                            rLocalName, xAttrList, *this, nFamily  );
+        // Distinguis real and automatic styles.
+        if (IsAutomaticStyle())
+            pStyle = new SwXMLItemSetStyleContext_Impl(GetSwImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
+        else if (nFamily == XML_STYLE_FAMILY_TABLE_CELL) // Real cell styles are used for table-template import.
+            pStyle = new XMLPropStyleContext(GetSwImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
+        else
+            SAL_WARN("sw.xml", "Context does not exists for non automatic table, column or row style.");
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
         // As long as there are no element items, we can use the text
@@ -943,6 +972,7 @@ SvXMLImportContext *SwXMLImport::CreateStylesContext(
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         bool bAuto )
 {
+    // posledzic to kto ustawia bAuto
     SvXMLStylesContext *pContext =
         new SwXMLStylesContext_Impl( *this, rLocalName,
                                        xAttrList, bAuto );

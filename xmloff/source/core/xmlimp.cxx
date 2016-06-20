@@ -1560,6 +1560,7 @@ void SvXMLImport::SetStyles( SvXMLStylesContext *pStyles )
 
 void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
 {
+    // maybe something here if its auto style?
     if (pAutoStyles && mxNumberStyles.is() && (mnImportFlags & SvXMLImportFlags::CONTENT) )
     {
         uno::Reference<xml::sax::XAttributeList> xAttrList;

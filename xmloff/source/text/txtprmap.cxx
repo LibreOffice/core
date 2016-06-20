@@ -992,6 +992,30 @@ XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
     M_END()
 };
 
+#define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
+#define CMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
+#define RMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
+#define CELLMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_CELL,context)
+#define MAP_END { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false }
+
+XMLPropertyMapEntry aXMLCellPropMap[] =
+{
+    CELLMAP( "BackColor",            XML_NAMESPACE_FO,    XML_BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    CELLMAP( "LeftBorder",           XML_NAMESPACE_FO,    XML_BORDER_LEFT,      XML_TYPE_BORDER,                                   0 ),
+    CELLMAP( "RightBorder",          XML_NAMESPACE_FO,    XML_BORDER_RIGHT,     XML_TYPE_BORDER,                                   0 ),
+    CELLMAP( "TopBorder",            XML_NAMESPACE_FO,    XML_BORDER_TOP,       XML_TYPE_BORDER,                                   0 ),
+    CELLMAP( "BottomBorder",         XML_NAMESPACE_FO,    XML_BORDER_BOTTOM,    XML_TYPE_BORDER,                                   0 ),
+    CELLMAP( "BorderDistance",       XML_NAMESPACE_FO,    XML_PADDING,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    CELLMAP( "LeftBorderDistance",   XML_NAMESPACE_FO,    XML_PADDING_LEFT,     XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    CELLMAP( "RightBorderDistance",  XML_NAMESPACE_FO,    XML_PADDING_RIGHT,    XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    CELLMAP( "TopBorderDistance",    XML_NAMESPACE_FO,    XML_PADDING_TOP,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    CELLMAP( "BottomBorderDistance", XML_NAMESPACE_FO,    XML_PADDING_BOTTOM,   XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+    CELLMAP( "VertOrient",           XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN,   XML_TYPE_TEXT_VERTICAL_POS,                        0 ),
+    CELLMAP( "WritingMode",          XML_NAMESPACE_STYLE, XML_WRITING_MODE,     XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT,           0 ),
+    CELLMAP( "NumberFormat",         XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,  XML_TYPE_NUMBER,                                   0 ),
+    MAP_END
+};
+
 static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
 {
     XMLPropertyMapEntry *pMap = nullptr;
@@ -1035,6 +1059,9 @@ static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
         break;
     case TextPropMap::TABLE_ROW_DEFAULTS:
         pMap = aXMLTableRowDefaultsMap;
+        break;
+    case TextPropMap::CELL:
+        pMap = aXMLCellPropMap;
         break;
     }
     SAL_WARN_IF( !pMap, "xmloff", "illegal map type" );

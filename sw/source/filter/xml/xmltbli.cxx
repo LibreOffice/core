@@ -1319,6 +1319,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
                 aName = rValue;
             else if( IsXMLToken( aLocalName, XML_DEFAULT_CELL_STYLE_NAME ) )
                 m_aDfltCellStyleName = rValue;
+            else if( IsXMLToken( aLocalName, XML_TABLE_TEMPLATE ) )
+                m_aTemplateName = rValue;
         }
         else if ( (XML_NAMESPACE_XML == nPrefix) &&
                  IsXMLToken( aLocalName, XML_ID ) )
@@ -2661,6 +2663,8 @@ void SwXMLTableContext::MakeTable()
 
     m_pTableNode->GetTable().SetRowsToRepeat( m_nHeaderRows );
     m_pTableNode->GetTable().SetTableModel( !m_bHasSubTables );
+
+    m_pTableNode->GetTable().SetTableStyleName(m_aTemplateName);
 
     const SfxItemSet *pAutoItemSet = nullptr;
     if( !m_aStyleName.isEmpty() &&

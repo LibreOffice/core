@@ -86,6 +86,8 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
     for( sal_Int16 i=0; i < nAttr; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        // SAL _DEBUG("SvXMLImportItemMapper::importXML, rAttrName:"+rAttrName);
+
         OUString aLocalName, aPrefix, aNamespace;
         sal_uInt16 nPrefix =
             rNamespaceMap.GetKeyByAttrName( rAttrName, &aPrefix, &aLocalName,
@@ -94,6 +96,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
             continue;
 
         const OUString& rValue = xAttrList->getValueByIndex( i );
+        // SAL_ DEBUG("SvXMLImportItemMapper::importXML, rValue:"+rValue);
 
         // find a map entry for this attribute
         SvXMLItemMapEntry* pEntry = mrMapEntries->getByName( nPrefix, aLocalName );
