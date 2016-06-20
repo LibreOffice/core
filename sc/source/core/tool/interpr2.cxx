@@ -305,7 +305,14 @@ void ScInterpreter::ScEasterSunday()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         sal_Int16 nDay, nMonth, nYear;
-        nYear = (sal_Int16) ::rtl::math::approxFloor( GetDouble() );
+        double x = rtl::math::approxFloor( GetDouble() );
+        if (x <= sal_Int32(SAL_MIN_INT16) - 1
+            || x >= sal_Int32(SAL_MAX_INT16) + 1)
+        {
+            PushIllegalArgument();
+            return;
+        }
+        nYear = static_cast<sal_Int16>(x);
         if ( nYear < 100 )
             nYear = pFormatter->ExpandTwoDigitYear( nYear );
         if (nYear < 1583 || nYear > 9956)
