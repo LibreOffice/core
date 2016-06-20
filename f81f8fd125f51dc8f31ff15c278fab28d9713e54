@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_2620a249",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-20T20:59:42Z",
+      "side": 1,
+      "message": "Compare explicitly to 0 or even better to GRFILTER_OK constant. \n\nI\u0027ve seen other code doing this too, but let\u0027s not get into bad habit of misusing integers as 0 \u003d\u003e false, everything else \u003d\u003e true",
+      "revId": "f81f8fd125f51dc8f31ff15c278fab28d9713e54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_461da60e",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-20T20:59:42Z",
+      "side": 1,
+      "message": "I\u0027d rather use filename (instead of Bitmap 1..N) as initial value here ... see e.g. cui/*/tpbitmap.cxx how\u0027s that done",
+      "revId": "f81f8fd125f51dc8f31ff15c278fab28d9713e54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_661aaa19",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-20T20:59:42Z",
+      "side": 1,
+      "message": "Sure the new entry is always going to be at the end of the list?",
+      "revId": "f81f8fd125f51dc8f31ff15c278fab28d9713e54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
