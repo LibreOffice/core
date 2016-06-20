@@ -140,29 +140,30 @@ void Test::testNumberFormat()
     const char* pFraction[] = {
         "# \?/\?",
         "# \?\?/\?\?",
-#if 0
-// TODO: Followings aren't in range of NF_FRACTION_START and NF_FRACTION_END
-// see enum NfIndexTableOffset in svl/inc/svl/zforlist.hxx
-        "# \?/4",
-        "# \?\?/100",
-#endif
         nullptr
     };
 
-#if 0 // TODO: Find out why on some systems the last two currency format codes differ.
+// Followings aren't in range of NF_FRACTION_START and NF_FRACTION_END
+// see enum NfIndexTableOffset in svl/inc/svl/zforlist.hxx
+    const char* pFractionExt[] = {
+        "# \?/4",
+        "# \?\?/100",
+        nullptr
+    };
+
     const char* pCurrency[] = {
+        "$#,##0;-$#,##0",
+        "$#,##0.00;-$#,##0.00",
         "$#,##0;[RED]-$#,##0",
         "$#,##0.00;[RED]-$#,##0.00",
         "#,##0.00 CCC",
         "$#,##0.--;[RED]-$#,##0.--",
-        "$#,##0;-$#,##0",
-        "$#,##0;-$#,##0",
-        0
+        nullptr
     };
-#endif
 
-#if 0 // TODO: This currently fails
     const char* pDate[] = {
+        "M/D/YY",
+        "NNNNMMMM DD, YYYY",
         "MM/DD/YY",
         "MM/DD/YYYY",
         "MMM D, YY",
@@ -182,11 +183,8 @@ void Test::testNumberFormat()
         "MMMM",
         "QQ YY",
         "WW",
-        "MM/DD/YY",
-        "WW",
-        0
+        nullptr
     };
-#endif
 
     const char* pTime[] = {
         "HH:MM",
@@ -199,13 +197,11 @@ void Test::testNumberFormat()
         nullptr
     };
 
-#if 0 // TODO: This currently fails
     const char* pDateTime[] = {
         "MM/DD/YY HH:MM AM/PM",
-        "MM/DD/YY HH:MM AM/PM",
-        0
+        "MM/DD/YYYY HH:MM:SS",
+        nullptr
     };
-#endif
 
     const char* pBoolean[] = {
         "BOOLEAN",
@@ -227,16 +223,11 @@ void Test::testNumberFormat()
         { NF_SCIENTIFIC_START, NF_SCIENTIFIC_END, 2, pScientific },
         { NF_PERCENT_START, NF_PERCENT_END, 2, pPercent },
         { NF_FRACTION_START, NF_FRACTION_END, 2, pFraction },
-#if 0 // TODO: Find out why on some systems the last two currency format codes differ.
+        { NF_FRACTION_3, NF_FRACTION_4, 2, pFractionExt },
         { NF_CURRENCY_START, NF_CURRENCY_END, 6, pCurrency },
-#endif
-#if 0 // TODO: This currently fails
         { NF_DATE_START, NF_DATE_END, 21, pDate },
-#endif
         { NF_TIME_START, NF_TIME_END, 7, pTime },
-#if 0 // TODO: This currently fails
         { NF_DATETIME_START, NF_DATETIME_END, 2, pDateTime },
-#endif
         { NF_BOOLEAN, NF_BOOLEAN, 1, pBoolean },
         { NF_TEXT, NF_TEXT, 1, pText }
     };
@@ -260,7 +251,8 @@ void Test::testNumberFormat()
             CPPUNIT_ASSERT_MESSAGE("Number format entry is expected, but doesn't exist.", p);
             OUString aCode = p->GetFormatstring();
             bool bEqual = aCode.equalsAscii(aTests[i].pCodes[j-nStart]);
-            CPPUNIT_ASSERT_MESSAGE("Unexpected number format code.", bEqual);
+            OUString aMessage = "Unexpected number format code: \""+aCode+"\" not equal to aTests["+OUString::number(i)+"].pCodes["+OUString::number(j-nStart)+"]";
+            CPPUNIT_ASSERT_MESSAGE(aMessage.toUtf8().getStr(), bEqual);
         }
     }
 
