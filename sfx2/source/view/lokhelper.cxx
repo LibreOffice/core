@@ -60,7 +60,7 @@ void SfxLokHelper::setView(std::uintptr_t nId)
 
 }
 
-std::uintptr_t SfxLokHelper::getView(SfxViewShell *pViewShell)
+std::uintptr_t SfxLokHelper::getView(SfxViewShell* pViewShell)
 {
     if (!pViewShell)
         pViewShell = SfxViewShell::Current();

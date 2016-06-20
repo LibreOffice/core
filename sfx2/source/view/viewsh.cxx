@@ -1602,6 +1602,15 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
 {
     pImp->m_pLibreOfficeKitViewCallback = pCallback;
     pImp->m_pLibreOfficeKitViewData = pData;
+
+    // Ask other views to send their cursor position to the new view.
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        pViewShell->ShowCursor(false);
+        pViewShell->ShowCursor();
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
 }
 
 void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
