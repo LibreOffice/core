@@ -75,6 +75,9 @@ struct _LibreOfficeKitClass
     void (*setDocumentPassword) (LibreOfficeKit* pThis,
             char const* pURL,
             char const* pPassword);
+
+    /// @see lok::Office::getVersionInfo().
+    char* (*getVersionInfo) (LibreOfficeKit* pThis);
 #endif
 
 };
