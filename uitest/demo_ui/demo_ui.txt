@@ -8,3 +8,6 @@ demo_ui.listbox.select_entry_pos
 demo_ui.listbox.select_entry_text
 demo_ui.tabdialog.select_tab_page_pos
 demo_ui.tabdialog.select_tab_page_name
+demo_ui.spinfield.up
+demo_ui.spinfield.down
+demo_ui.spinfield.text
