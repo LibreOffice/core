@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_a34ca477",
+        "filename": "vcl/inc/jobset.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-20T00:26:26Z",
+      "side": 1,
+      "message": "this is more idiomatic c++, and saves a copy",
+      "revId": "b695fd936b2be379ca62be1f4833102454fe100c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_e356ac05",
+        "filename": "vcl/source/gdi/jobset.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-20T00:26:26Z",
+      "side": 1,
+      "message": "Just passes the reference here, instead of copying the container",
+      "revId": "b695fd936b2be379ca62be1f4833102454fe100c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
