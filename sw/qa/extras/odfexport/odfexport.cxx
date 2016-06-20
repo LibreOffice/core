@@ -816,6 +816,46 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
     CPPUNIT_ASSERT(!getProperty<OUString>(xShape, "ReplacementGraphicURL").isEmpty());
 }
 
+DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
+{
+    // Table styles basic graphic test.
+    // Doesn't cover all attributes.
+    uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xFamilies(XFamiliesSupplier->getStyleFamilies());
+    uno::Reference<container::XNameAccess> xCellFamily(xFamilies->getByName("CellStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCell1Style;
+    xCellFamily->getByName("Test style.1") >>= xCell1Style;
+
+    sal_Int64 nInt64 = 0xF0F0F0;
+    sal_Int32 nInt32 = 0xF0F0F0;
+    table::BorderLine2 oBorder;
+
+    xCell1Style->getPropertyValue("BackColor") >>= nInt64;
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0xCC0000), nInt64);
+    xCell1Style->getPropertyValue("WritingMode") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nInt32);
+    xCell1Style->getPropertyValue("VertOrient") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nInt32);
+    xCell1Style->getPropertyValue("BorderDistance") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(97), nInt32);
+    xCell1Style->getPropertyValue("LeftBorderDistance") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(97), nInt32);
+    xCell1Style->getPropertyValue("RightBorderDistance") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(97), nInt32);
+    xCell1Style->getPropertyValue("TopBorderDistance") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(97), nInt32);
+    xCell1Style->getPropertyValue("BottomBorderDistance") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(97), nInt32);
+    xCell1Style->getPropertyValue("RightBorder") >>= oBorder;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), oBorder.Color);
+    xCell1Style->getPropertyValue("LeftBorder") >>= oBorder;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), oBorder.Color);
+    xCell1Style->getPropertyValue("TopBorder") >>= oBorder;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), oBorder.Color);
+    xCell1Style->getPropertyValue("BottomBorder") >>= oBorder;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), oBorder.Color);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -709,6 +709,14 @@ SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos )
     return *pFormat;
 }
 
+const SwBoxAutoFormat& SwTableAutoFormat::GetDefaultBoxFormat()
+{
+    if(!pDfltBoxAutoFormat)
+        pDfltBoxAutoFormat = new SwBoxAutoFormat();
+
+    return *pDfltBoxAutoFormat;
+}
+
 void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
                                     const SfxItemSet& rSet,
                                     UpdateFlags eFlags,
@@ -847,7 +855,11 @@ void SwTableAutoFormat::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
             rSet.Put( rChg.GetBackground() );
 
         rSet.Put(rChg.GetTextOrientation());
-        rSet.Put(rChg.GetVerticalAlignment());
+
+        // Do not put a VertAlign when it has default value.
+        // It prevents the export of default value by automatic cell-styles export.
+        if (rChg.GetVerticalAlignment().GetVertOrient() != GetDefaultBoxFormat().GetVerticalAlignment().GetVertOrient())
+            rSet.Put(rChg.GetVerticalAlignment());
 
         if( IsValueFormat() && pNFormatr )
         {
