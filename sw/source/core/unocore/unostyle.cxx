@@ -26,6 +26,7 @@
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -4925,9 +4926,45 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
         {
             case RES_BACKGROUND:
             {
-                SvxBrushItem rBrush( m_pBoxAutoFormat->GetBackground() );
+                SvxBrushItem rBrush = m_pBoxAutoFormat->GetBackground();
                 rBrush.PutValue(aValue, 0);
                 m_pBoxAutoFormat->SetBackground(rBrush);
+                return;
+            }
+            case RES_BOX:
+            {
+                SvxBoxItem rBox = m_pBoxAutoFormat->GetBox();
+                rBox.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetBox(rBox);
+                return;
+            }
+            case RES_VERT_ORIENT:
+            {
+                SwFormatVertOrient rVertOrient = m_pBoxAutoFormat->GetVerticalAlignment();
+                rVertOrient.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetVerticalAlignment(rVertOrient);
+                return;
+            }
+            case RES_FRAMEDIR:
+            {
+                SvxFrameDirectionItem rDirItem = m_pBoxAutoFormat->GetTextOrientation();
+                rDirItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetTextOrientation(rDirItem);
+                return;
+            }
+            case RES_BOXATR_FORMAT:
+            {
+                sal_uInt32 nKey;
+                if (aValue >>= nKey)
+                {
+                    // FIXME: Its not working for old "automatic" currency formats, which are still in use by autotbl.fmt.
+                    // Scenario:
+                    // 1) Mark all styles present by default in autotbl.fmt as default.
+                    // 2) convert all currencies present in autotbl.fmt before calling this code
+                    const SvNumberformat* pNumFormat = m_pDocShell->GetDoc()->GetNumberFormatter()->GetEntry(nKey);
+                    if (pNumFormat)
+                        m_pBoxAutoFormat->SetValueFormat(pNumFormat->GetFormatstring(), pNumFormat->GetLanguage(), GetAppLanguage());
+                }
                 return;
             }
             default:
@@ -5012,6 +5049,61 @@ void SAL_CALL SwXTextCellStyle::addVetoableChangeListener( const OUString& /*Pro
 void SAL_CALL SwXTextCellStyle::removeVetoableChangeListener( const OUString& /*PropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     SAL_WARN("sw.uno", "not implemented");
+}
+
+//XPropertyState
+css::beans::PropertyState SAL_CALL SwXTextCellStyle::getPropertyState(const OUString& rPropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    uno::Sequence<OUString> aNames { rPropertyName };
+    uno::Sequence<beans::PropertyState> aStates = getPropertyStates(aNames);
+    return aStates.getConstArray()[0];
+}
+
+css::uno::Sequence<css::beans::PropertyState> SAL_CALL SwXTextCellStyle::getPropertyStates(const css::uno::Sequence<OUString>& aPropertyNames) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
+    beans::PropertyState* pStates = aRet.getArray();
+    const SwBoxAutoFormat& rDefaultBoxFormat = SwTableAutoFormat::GetDefaultBoxFormat();
+    const SfxItemPropertyMap& rMap = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CELL_STYLE)->getPropertyMap();
+    const OUString* pNames = aPropertyNames.getConstArray();
+    for(sal_Int32 i=0; i < aPropertyNames.getLength(); ++i)
+    {
+        const OUString sPropName = pNames[i];
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
+        if(pEntry)
+        {
+            switch(pEntry->nWID)
+            {
+                case RES_VERT_ORIENT:
+                    if (m_pBoxAutoFormat->GetVerticalAlignment() == rDefaultBoxFormat.GetVerticalAlignment())
+                        pStates[i] = beans::PropertyState_DEFAULT_VALUE;
+                    break;
+                default:
+                    // falltrough to DIRECT_VALUE, to export properties for which getPropertyStates is not implemented
+                    pStates[i] = beans::PropertyState_DIRECT_VALUE;
+            }
+        }
+        else
+        {
+            SAL_WARN("sw.uno", "SwXTextCellStyle unknown property:" + sPropName);
+            throw css::beans::UnknownPropertyException();
+        }
+    }
+    return aRet;
+}
+
+void SAL_CALL SwXTextCellStyle::setPropertyToDefault(const OUString& /*PropertyName*/) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "not implemented");
+}
+
+css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyDefault(const OUString& /*aPropertyName*/) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "not implemented");
+    uno::Any aRet;
+    return aRet;
 }
 
 //XServiceInfo
