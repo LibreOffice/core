@@ -89,8 +89,13 @@ Connection::Connection(FirebirdDriver*    _pDriver)
     , m_bIsAutoCommit(false)
     , m_bIsReadOnly(false)
     , m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ)
+#if SAL_TYPES_SIZEOFPOINTER == 8
     , m_aDBHandle(0)
     , m_aTransactionHandle(0)
+#else
+    , m_aDBHandle(nullptr)
+    , m_aTransactionHandle(nullptr)
+#endif
     , m_xCatalog(nullptr)
     , m_xMetaData(nullptr)
     , m_aStatements()
@@ -773,7 +778,7 @@ void Connection::disposing()
         isc_rollback_transaction(status, &m_aTransactionHandle);
     }
 
-    if (m_aDBHandle != 0)
+    if (m_aDBHandle)
     {
         if (isc_detach_database(status, &m_aDBHandle))
         {

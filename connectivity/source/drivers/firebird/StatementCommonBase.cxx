@@ -47,7 +47,11 @@ OStatementCommonBase::OStatementCommonBase(Connection* _pConnection)
     : OStatementCommonBase_Base(m_aMutex),
       OPropertySetHelper(OStatementCommonBase_Base::rBHelper),
       m_pConnection(_pConnection),
-      m_aStatementHandle( 0 )
+#if SAL_TYPES_SIZEOFPOINTER == 8
+      m_aStatementHandle(0)
+#else
+      m_aStatementHandle(nullptr)
+#endif
 {
 }
 

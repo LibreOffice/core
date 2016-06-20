@@ -33,7 +33,11 @@ Blob::Blob(isc_db_handle* pDatabaseHandle,
     m_pDatabaseHandle(pDatabaseHandle),
     m_pTransactionHandle(pTransactionHandle),
     m_blobID(aBlobID),
+#if SAL_TYPES_SIZEOFPOINTER == 8
     m_blobHandle(0),
+#else
+    m_blobHandle(nullptr),
+#endif
     m_bBlobOpened(false),
     m_nBlobLength(0),
     m_nBlobPosition(0)
@@ -103,7 +107,11 @@ void Blob::closeBlob()
             evaluateStatusVector(m_statusVector, "isc_close_blob", *this);
 
         m_bBlobOpened = false;
+#if SAL_TYPES_SIZEOFPOINTER == 8
         m_blobHandle = 0;
+#else
+        m_blobHandle = nullptr;
+#endif
     }
 }
 

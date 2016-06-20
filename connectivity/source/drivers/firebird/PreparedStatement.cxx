@@ -485,7 +485,11 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+#if SAL_TYPES_SIZEOFPOINTER == 8
     isc_blob_handle aBlobHandle = 0;
+#else
+    isc_blob_handle aBlobHandle = nullptr;
+#endif
     ISC_QUAD aBlobId;
 
     openBlobForWriting(aBlobHandle, aBlobId);
@@ -585,7 +589,11 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+#if SAL_TYPES_SIZEOFPOINTER == 8
     isc_blob_handle aBlobHandle = 0;
+#else
+    isc_blob_handle aBlobHandle = nullptr;
+#endif
     ISC_QUAD aBlobId;
 
     openBlobForWriting(aBlobHandle, aBlobId);
