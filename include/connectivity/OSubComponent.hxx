@@ -72,11 +72,13 @@ namespace connectivity
         }
         void relase_ChildImpl()
         {
+#if 0
             ::connectivity::release(m_pDerivedImplementation->m_refCount,
                                     m_pDerivedImplementation->WEAK::rBHelper,
                                     m_xParent,
                                     m_pDerivedImplementation);
 
+#endif
             m_pDerivedImplementation->WEAK::release();
         }
     };
