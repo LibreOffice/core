@@ -1039,7 +1039,6 @@ callback (gpointer pData)
                       priv->m_aVisibleCursor.y,
                       priv->m_aVisibleCursor.width,
                       priv->m_aVisibleCursor.height);
-        std::cerr << "debug, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR: i am " << priv->m_nViewId << ", i got " << pCallback->m_aPayload << " for myself" << std::endl;
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
