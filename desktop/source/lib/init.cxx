@@ -2007,7 +2007,15 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
 
 static char* lo_getVersionInfo(LibreOfficeKit* /*pThis*/)
 {
-    const OString sVersionStr = OUStringToOString(ReplaceStringHookProc("%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION %BUILDID"), RTL_TEXTENCODING_UTF8);
+    const OUString sVersionStrTemplate(
+        "{ "
+        "\"ProductName\": \"%PRODUCTNAME\", "
+        "\"ProductVersion\": \"%PRODUCTVERSION\", "
+        "\"ProductExtension\": \"%PRODUCTEXTENSION\", "
+        "\"BuildId\": \"%BUILDID\" "
+        "}"
+    );
+    const OString sVersionStr = OUStringToOString(ReplaceStringHookProc(sVersionStrTemplate), RTL_TEXTENCODING_UTF8);
 
     char* pVersion = static_cast<char*>(malloc(sVersionStr.getLength() + 1));
     strcpy(pVersion, sVersionStr.getStr());
