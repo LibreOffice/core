@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_e9dccd48",
+        "filename": "vcl/source/gdi/jobset.cxx",
+        "patchSetId": 31
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-21T20:05:54Z",
+      "side": 0,
+      "message": "So this case is currently unhandled - a default-constructed JobSetup results in just this zero Int16 written.\n\nUse the same static instance trick as elsewhere for the special case default-construction (not as efficient as the nullptr here, but the object is not a very numerous one)",
+      "revId": "bae8b7e7562f81b64f1d8ceed99f150a2bd83423",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
