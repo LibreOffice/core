@@ -751,13 +751,9 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
 
 BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 {
+    // TODO: AllocateUserData();
     if (!m_pUserBuffer.get())
-//  || m_pContextBuffer.get() && (m_pUserBuffer.get() != m_pContextBuffer.get()) )
-    {
-        // fprintf(stderr,"ASB::Acq(%dx%d,d=%d)\n",mnWidth,mnHeight,mnBits);
-        // TODO: AllocateUserData();
         return nullptr;
-    }
 
     BitmapBuffer* pBuffer = new BitmapBuffer;
     pBuffer->mnWidth = mnWidth;
