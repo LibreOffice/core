@@ -686,7 +686,7 @@ void ScEasterSunday();
 sal_uInt16 GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
         ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ] );
 sal_uInt16 GetWeekendAndHolidayMasks_MS( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
-        ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ] );
+        ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ], bool bWorkdayFunction );
 static inline sal_Int16 GetDayOfWeek( sal_Int32 n );
 void ScNetWorkdays( bool bOOXML_Version );
 void ScWorkday_MS();
