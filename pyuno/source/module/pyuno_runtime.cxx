@@ -22,6 +22,7 @@
 
 #include "pyuno_impl.hxx"
 
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/module.h>
@@ -378,7 +379,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     case typelib_TypeClass_CHAR:
     {
-        sal_Unicode c = *static_cast<sal_Unicode const *>(a.getValue());
+        sal_Unicode c = *o3tl::forceAccess<sal_Unicode>(a);
         return PyRef( PyUNO_char_new( c , *this ), SAL_NO_ACQUIRE );
     }
     case typelib_TypeClass_BOOLEAN:
@@ -491,15 +492,12 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             throw RuntimeException( buf.makeStringAndClear() );
         }
 
-        if( css::uno::TypeClass_EXCEPTION == a.getValueTypeClass() )
+        if( auto e = o3tl::tryAccess<css::uno::Exception>(a) )
         {
             // add the message in a standard python way !
             PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
 
-            // assuming that the Message is always the first member, wuuuu
-            void const *pData = a.getValue();
-            OUString message = *static_cast<OUString const *>(pData);
-            PyRef pymsg = ustring2PyString( message );
+            PyRef pymsg = ustring2PyString( e->Message );
             PyTuple_SetItem( args.get(), 0 , pymsg.getAcquired() );
             // the exception base functions want to have an "args" tuple,
             // which contains the message

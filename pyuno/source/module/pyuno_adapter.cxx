@@ -18,6 +18,8 @@
  */
 #include "pyuno_impl.hxx"
 
+#include <o3tl/any.hxx>
+
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -87,7 +89,7 @@ void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
         PyErr_Fetch(reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject**>(&excValue), reinterpret_cast<PyObject**>(&excTraceback));
         Any unoExc( runtime.extractUnoException( excType, excValue, excTraceback ) );
         throw InvocationTargetException(
-            static_cast<css::uno::Exception const *>(unoExc.getValue())->Message,
+            o3tl::doAccess<css::uno::Exception>(unoExc)->Message,
             Reference<XInterface>(), unoExc );
     }
 }

@@ -18,6 +18,8 @@
  */
 #include "pyuno_impl.hxx"
 
+#include <o3tl/any.hxx>
+
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -220,13 +222,14 @@ Type PyType2Type( PyObject * o ) throw(RuntimeException )
         buf.append( "type " ).append(name).append( " is unknown" );
         throw RuntimeException( buf.makeStringAndClear() );
     }
-    if( desc.get()->eTypeClass != (typelib_TypeClass) *static_cast<sal_Int32 const *>(enumValue.getValue()) )
+    css::uno::TypeClass tc = *o3tl::doAccess<css::uno::TypeClass>(enumValue);
+    if( static_cast<css::uno::TypeClass>(desc.get()->eTypeClass) != tc )
     {
         OUStringBuffer buf;
         buf.append( "pyuno.checkType: " ).append(name).append( " is a " );
         buf.appendAscii( typeClassToString( (TypeClass) desc.get()->eTypeClass) );
         buf.append( ", but type got construct with typeclass " );
-        buf.appendAscii( typeClassToString( (TypeClass) *static_cast<sal_Int32 const *>(enumValue.getValue()) ) );
+        buf.appendAscii( typeClassToString( tc ) );
         throw RuntimeException( buf.makeStringAndClear() );
     }
     return desc.get()->pWeakRef;

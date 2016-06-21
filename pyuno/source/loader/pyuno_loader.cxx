@@ -22,6 +22,8 @@
 
 #include <pyuno.hxx>
 
+#include <o3tl/any.hxx>
+
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -71,8 +73,8 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
         css::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
         OUStringBuffer buf;
         buf.append( "python-loader:" );
-        if( a.hasValue() )
-            buf.append( static_cast<css::uno::Exception const *>(a.getValue())->Message );
+        if( auto e = o3tl::tryAccess<css::uno::Exception>(a) )
+            buf.append( e->Message );
         throw RuntimeException( buf.makeStringAndClear() );
     }
 }
