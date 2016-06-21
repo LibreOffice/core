@@ -237,14 +237,13 @@ public:
     void SAL_CALL operator delete( void * ) throw();
 };
 
-typedef cppu::WeakImplHelper
-<
+typedef cppu::ImplInheritanceHelper
+<   SwXFrame,
     css::text::XTextContent,
     css::document::XEventsSupplier
 >
 SwXTextGraphicObjectBaseClass;
-class SwXTextGraphicObject : public SwXTextGraphicObjectBaseClass,
-                            public SwXFrame
+class SwXTextGraphicObject : public SwXTextGraphicObjectBaseClass
 {
 protected:
     friend class SwXFrame; // just for CreateXFrame
@@ -258,14 +257,6 @@ public:
 
     static css::uno::Reference<css::text::XTextContent>
         CreateXTextGraphicObject(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL acquire(  ) throw() override;
-    virtual void SAL_CALL release(  ) throw() override;
-
-    //XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XTextContent
     virtual void SAL_CALL attach(const css::uno::Reference< css::text::XTextRange > & xTextRange) throw( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
@@ -288,15 +279,14 @@ public:
 };
 
 class SwOLENode;
-typedef cppu::WeakImplHelper
-<
+typedef cppu::ImplInheritanceHelper
+<   SwXFrame,
     css::text::XTextContent,
     css::document::XEmbeddedObjectSupplier2,
     css::document::XEventsSupplier
->SwXTextEmbeddedObjectBaseClass;
+> SwXTextEmbeddedObjectBaseClass;
 
-class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass,
-                                public SwXFrame
+class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass
 {
     css::uno::Reference<css::util::XModifyListener> m_xOLEListener;
 protected:
@@ -311,14 +301,6 @@ public:
 
     static css::uno::Reference<css::text::XTextContent>
         CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL acquire(  ) throw() override;
-    virtual void SAL_CALL release(  ) throw() override;
-
-    //XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XTextContent
     virtual void SAL_CALL attach(const css::uno::Reference< css::text::XTextRange > & xTextRange) throw( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;

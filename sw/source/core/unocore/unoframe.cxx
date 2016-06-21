@@ -3400,70 +3400,26 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
     return aRet;
 }
 
-SwXTextGraphicObject::SwXTextGraphicObject( SwDoc *pDoc ) :
-    SwXFrame(FLYCNTTYPE_GRF, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_GRAPHIC), pDoc)
+SwXTextGraphicObject::SwXTextGraphicObject( SwDoc *pDoc )
+    : SwXTextGraphicObjectBaseClass(FLYCNTTYPE_GRF,
+            aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_GRAPHIC), pDoc)
 {
 }
 
-SwXTextGraphicObject::SwXTextGraphicObject(SwFrameFormat& rFormat) :
-    SwXFrame(rFormat, FLYCNTTYPE_GRF, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_GRAPHIC))
+SwXTextGraphicObject::SwXTextGraphicObject(SwFrameFormat& rFormat)
+    : SwXTextGraphicObjectBaseClass(rFormat, FLYCNTTYPE_GRF,
+            aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_GRAPHIC))
 {
-
 }
 
 SwXTextGraphicObject::~SwXTextGraphicObject()
 {
-
 }
 
 uno::Reference<text::XTextContent>
 SwXTextGraphicObject::CreateXTextGraphicObject(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
 {
     return CreateXFrame<text::XTextContent, SwXTextGraphicObject>(rDoc, pFrameFormat);
-}
-
-void SAL_CALL SwXTextGraphicObject::acquire(  )throw()
-{
-    SwXFrame::acquire();
-}
-
-void SAL_CALL SwXTextGraphicObject::release(  )throw()
-{
-    SwXFrame::release();
-}
-
-::uno::Any SAL_CALL SwXTextGraphicObject::queryInterface( const uno::Type& aType )
-    throw(uno::RuntimeException, std::exception)
-{
-    ::uno::Any aRet = SwXFrame::queryInterface(aType);
-    if(aRet.getValueType() == cppu::UnoType<void>::get())
-        aRet = SwXTextGraphicObjectBaseClass::queryInterface(aType);
-    return aRet;
-}
-
-uno::Sequence< uno::Type > SAL_CALL
-    SwXTextGraphicObject::getTypes(  ) throw(uno::RuntimeException, std::exception)
-{
-    uno::Sequence< uno::Type > aGraphicTypes = SwXTextGraphicObjectBaseClass::getTypes();
-    uno::Sequence< uno::Type > aFrameTypes = SwXFrame::getTypes();
-
-    long nIndex = aGraphicTypes.getLength();
-    aGraphicTypes.realloc(
-        aGraphicTypes.getLength() +
-        aFrameTypes.getLength());
-
-    uno::Type* pGraphicTypes = aGraphicTypes.getArray();
-    const uno::Type* pFrameTypes = aFrameTypes.getConstArray();
-    long nPos;
-    for(nPos = 0; nPos <aFrameTypes.getLength(); nPos++)
-        pGraphicTypes[nIndex++] = pFrameTypes[nPos];
-
-    return aGraphicTypes;
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 void SwXTextGraphicObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
@@ -3533,69 +3489,26 @@ uno::Reference<container::XNameReplace> SAL_CALL
 }
 
 SwXTextEmbeddedObject::SwXTextEmbeddedObject( SwDoc *pDoc )
-    : SwXFrame(FLYCNTTYPE_OLE, aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT), pDoc)
+    : SwXTextEmbeddedObjectBaseClass(FLYCNTTYPE_OLE,
+            aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT), pDoc)
     , m_xOLEListener(nullptr)
-{ }
-
-SwXTextEmbeddedObject::SwXTextEmbeddedObject(SwFrameFormat& rFormat) :
-    SwXFrame(rFormat, FLYCNTTYPE_OLE, aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT))
 {
+}
 
+SwXTextEmbeddedObject::SwXTextEmbeddedObject(SwFrameFormat& rFormat)
+    : SwXTextEmbeddedObjectBaseClass(rFormat, FLYCNTTYPE_OLE,
+            aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT))
+{
 }
 
 SwXTextEmbeddedObject::~SwXTextEmbeddedObject()
 {
-
 }
 
 uno::Reference<text::XTextContent>
 SwXTextEmbeddedObject::CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
 {
     return CreateXFrame<text::XTextContent, SwXTextEmbeddedObject>(rDoc, pFrameFormat);
-}
-
-void SAL_CALL SwXTextEmbeddedObject::acquire()throw()
-{
-    SwXFrame::acquire();
-}
-
-void SAL_CALL SwXTextEmbeddedObject::release()throw()
-{
-    SwXFrame::release();
-}
-
-::uno::Any SAL_CALL SwXTextEmbeddedObject::queryInterface( const uno::Type& aType )
-    throw( uno::RuntimeException, std::exception)
-{
-    ::uno::Any aRet = SwXFrame::queryInterface(aType);
-    if(aRet.getValueType() == cppu::UnoType<void>::get())
-        aRet = SwXTextEmbeddedObjectBaseClass::queryInterface(aType);
-    return aRet;
-}
-
-uno::Sequence< uno::Type > SAL_CALL SwXTextEmbeddedObject::getTypes(  ) throw(uno::RuntimeException, std::exception)
-{
-    uno::Sequence< uno::Type > aTextEmbeddedTypes = SwXTextEmbeddedObjectBaseClass::getTypes();
-    uno::Sequence< uno::Type > aFrameTypes = SwXFrame::getTypes();
-
-    long nIndex = aTextEmbeddedTypes.getLength();
-    aTextEmbeddedTypes.realloc(
-        aTextEmbeddedTypes.getLength() +
-        aFrameTypes.getLength());
-
-    uno::Type* pTextEmbeddedTypes = aTextEmbeddedTypes.getArray();
-
-    const uno::Type* pFrameTypes = aFrameTypes.getConstArray();
-    long nPos;
-    for(nPos = 0; nPos <aFrameTypes.getLength(); nPos++)
-        pTextEmbeddedTypes[nIndex++] = pFrameTypes[nPos];
-
-    return aTextEmbeddedTypes;
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 void SwXTextEmbeddedObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
