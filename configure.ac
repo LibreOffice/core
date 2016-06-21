@@ -10530,7 +10530,7 @@ AC_SUBST([COLLADA2GLTF_LIBS])
 AC_SUBST([SYSTEM_COLLADA2GLTF])
 
 if test "$enable_dconf" != no; then
-    PKG_CHECK_MODULES([DCONF], [dconf], [], [
+    PKG_CHECK_MODULES([DCONF], [dconf >= 0.15.2], [], [
         if test "$enable_dconf" = yes; then
             AC_MSG_ERROR([dconf not found])
         else
