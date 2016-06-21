@@ -33,6 +33,7 @@
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/layout.hxx>
+#include <svl/fstathelper.hxx>
 #include <config_folders.h>
 
 using namespace com::sun::star;
@@ -355,6 +356,19 @@ void SfxClassificationHelper::Impl::parsePolicy()
     uno::Reference<uno::XComponentContext> xComponentContext = comphelper::getProcessComponentContext();
     SvtPathOptions aOptions;
     OUString aPath = aOptions.GetClassificationPath();
+
+    // See if there is a localized variant next to the configured XML.
+    OUString aExtension(".xml");
+    if (aPath.endsWith(aExtension))
+    {
+        OUString aBase = aPath.copy(0, aPath.getLength() - aExtension.getLength());
+        const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();
+        // Expected format is "<original path>_xx-XX.xml".
+        OUString aLocalized = aBase + "_" + rLanguageTag.getBcp47() + aExtension;
+        if (FStatHelper::IsDocument(aLocalized))
+            aPath = aLocalized;
+    }
+
     SvStream* pStream = utl::UcbStreamHelper::CreateStream(aPath, StreamMode::READ);
     uno::Reference<io::XInputStream> xInputStream(new utl::OStreamWrapper(*pStream));
     xml::sax::InputSource aParserInput;
