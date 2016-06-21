@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_493779e3",
+        "filename": "dbaccess/source/ui/misc/WCopyTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-21T12:12:12Z",
+      "side": 0,
+      "message": "Can you set this width request in the rtfcopytabledialog.ui file?",
+      "revId": "002697221215e009cdf20fd5c12b50350b8a2128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
