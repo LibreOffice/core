@@ -3272,10 +3272,6 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     SvtSaveOptions().SetWarnAlienFormat(false);
 }
 
-void SwXTextDocument::registerCallback(LibreOfficeKitCallback /*pCallback*/, void* /*pData*/)
-{
-}
-
 void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;

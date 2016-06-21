@@ -102,15 +102,6 @@ public:
     virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) = 0;
 
     /**
-     * Registers a callback that will be invoked whenever the tiled renderer
-     * wants to notify the client about an event.
-     *
-     * @param pCallBack is the callback function
-     * @param pData is private data of the client that will be sent back when the callback is invoked
-     */
-    virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) = 0;
-
-    /**
      * Posts a keyboard event on the document.
      *
      * @see lok::Document::postKeyEvent().

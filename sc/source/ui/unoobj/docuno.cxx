@@ -552,10 +552,6 @@ Size ScModelObj::getDocumentSize()
     return aSize;
 }
 
-void ScModelObj::registerCallback(LibreOfficeKitCallback /*pCallback*/, void* /*pData*/)
-{
-}
-
 void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
