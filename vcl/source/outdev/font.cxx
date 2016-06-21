@@ -961,10 +961,11 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
     case DefaultFontType::CTL_HEADING:   s = "DefaultFontType::CTL_HEADING"; break;
     case DefaultFontType::CTL_DISPLAY:   s = "DefaultFontType::CTL_DISPLAY"; break;
     }
-    fprintf( stderr, "   OutputDevice::GetDefaultFont() Type=\"%s\" lang=%d flags=%ld FontName=\"%s\"\n",
-         s, eLang, nFlags,
-         OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr()
-         );
+    SAL_INFO("vcl.gdi",
+             "OutputDevice::GetDefaultFont() Type=\"" << s
+             << "\" lang=" << eLang
+             << " flags=" << nFlags
+             << " FontName=\"" << OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr());
 #endif
 
     return aFont;
