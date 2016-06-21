@@ -16,6 +16,24 @@
       "revId": "49b370fd9e8293f9330c195be61c1a27fdfbe3b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_0611deac",
+        "filename": "vcl/inc/jobset.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2016-06-21T08:07:01Z",
+      "side": 1,
+      "message": "Hello Thorsten,\nMy initial approach was to set all setters to constant and use a const_cast inside them so we could get rid of ImplGetData() in jobset.hxx and only use ImplGetConstData() along the code. Don\u0027t you think this would work?",
+      "parentUuid": "ba84c18e_2341743a",
+      "revId": "49b370fd9e8293f9330c195be61c1a27fdfbe3b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
