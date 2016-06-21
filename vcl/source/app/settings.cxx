@@ -2410,7 +2410,7 @@ ImplMiscData::ImplMiscData()
     // Should we display any windows?
 
     // need to hardly mask here for now, needs to be adapted of course...
-    mbPseudoHeadless = false; // getenv("VCL_HIDE_WINDOWS") || comphelper::LibreOfficeKit::isActive();
+    mbPseudoHeadless = getenv("VCL_HIDE_WINDOWS") || comphelper::LibreOfficeKit::isActive();
 }
 
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )

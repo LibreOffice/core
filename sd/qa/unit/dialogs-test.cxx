@@ -670,14 +670,6 @@ void SdDialogsTest::openAnyDialog()
 
         if (pDlg)
         {
-            if (false)
-            {
-                const Application::DialogCancelMode aOriginalDialogCancelMode(Application::GetDialogCancelMode());
-                Application::SetDialogCancelMode(Application::DialogCancelMode::Off);
-                pDlg->Execute();
-                Application::SetDialogCancelMode(aOriginalDialogCancelMode);
-            }
-
             dumpDialogToPath(*pDlg, aTempTargetPath + OUString::number(a));
             delete pDlg;
         }
