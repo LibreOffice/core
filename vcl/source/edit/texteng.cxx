@@ -1915,7 +1915,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
         pSelStart = !bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
         pSelEnd = bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
     }
-    SAL_WARN_IF( !pPaintRange || ( pPaintRange->GetStart() < pPaintRange->GetEnd() ), "vcl", "ImpPaint: Paint-Range?!" );
+    SAL_WARN_IF( pPaintRange && !(pPaintRange->GetStart() < pPaintRange->GetEnd()), "vcl", "ImpPaint: Paint-Range?!" );
 
     const StyleSettings& rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
 
