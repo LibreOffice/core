@@ -323,6 +323,17 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/turtle.py \
 	Lib/types.py \
 	Lib/typing.py \
+	Lib/unittest/case.py \
+	Lib/unittest/__init__.py \
+	Lib/unittest/loader.py \
+	Lib/unittest/__main__.py \
+	Lib/unittest/main.py \
+	Lib/unittest/mock.py \
+	Lib/unittest/result.py \
+	Lib/unittest/runner.py \
+	Lib/unittest/signals.py \
+	Lib/unittest/suite.py \
+	Lib/unittest/util.py \
 	Lib/uu.py \
 	Lib/uuid.py \
 	Lib/warnings.py \
