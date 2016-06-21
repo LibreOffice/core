@@ -868,8 +868,8 @@ void SdXMLMasterPageContext::EndElement()
     if(!msName.isEmpty() && GetSdImport().GetShapeImport()->GetStylesContext())
     {
         SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
-        if( dynamic_cast<const SdXMLStylesContext*>(pContext) !=  nullptr )
-            static_cast<SdXMLStylesContext*>(pContext)->SetMasterPageStyles(*this);
+        if (SdXMLStylesContext* pSdContext = dynamic_cast<SdXMLStylesContext*>(pContext))
+            pSdContext->SetMasterPageStyles(*this);
     }
 
     SdXMLGenericPageContext::EndElement();
@@ -1137,18 +1137,15 @@ void SdXMLStylesContext::EndElement()
         for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
         {
             const SvXMLStyleContext* pStyle = GetStyle(a);
-            if(pStyle && dynamic_cast<const XMLShapeStyleContext*>(pStyle) !=  nullptr)
+            if (const XMLShapeStyleContext* pDocStyle = dynamic_cast<const XMLShapeStyleContext*>(pStyle))
             {
-                const XMLShapeStyleContext* pDocStyle = static_cast<const XMLShapeStyleContext*>(pStyle);
-
                 SvXMLStylesContext* pStylesContext = GetSdImport().GetShapeImport()->GetStylesContext();
-                if( pStylesContext )
+                if (pStylesContext)
                 {
                     pStyle = pStylesContext->FindStyleChildContext(pStyle->GetFamily(), pStyle->GetParentName());
 
-                    if(pStyle && dynamic_cast<const XMLShapeStyleContext*>(pStyle) !=  nullptr)
+                    if (const XMLShapeStyleContext* pParentStyle = dynamic_cast<const XMLShapeStyleContext*>(pStyle))
                     {
-                        const XMLShapeStyleContext* pParentStyle = static_cast<const XMLShapeStyleContext*>(pStyle);
                         if(pParentStyle->GetStyle().is())
                         {
                             const_cast<XMLShapeStyleContext*>(pDocStyle)->SetStyle(pParentStyle->GetStyle());
@@ -1445,10 +1442,9 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
     for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
     {
         const SvXMLStyleContext* pStyle = GetStyle(a);
-        if(pStyle && dynamic_cast<const SdXMLPresentationPageLayoutContext*>(pStyle) !=  nullptr)
+        if (const SdXMLPresentationPageLayoutContext* pContext = dynamic_cast<const SdXMLPresentationPageLayoutContext*>(pStyle))
         {
-            xLayouts->insertByName( pStyle->GetName(), uno::makeAny(
-            (sal_Int32)static_cast<const SdXMLPresentationPageLayoutContext*>(pStyle)->GetTypeId() ) );
+            xLayouts->insertByName(pStyle->GetName(), uno::makeAny((sal_Int32)pContext->GetTypeId()));
         }
     }
 
