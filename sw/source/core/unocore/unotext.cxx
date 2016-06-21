@@ -1735,7 +1735,7 @@ SwXText::convertToTextFrame(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    xRet = &rNewFrame;
+    xRet = xNewFrame;
     if (bParaBeforeInserted || bParaAfterInserted)
     {
         const uno::Reference<text::XTextCursor> xFrameTextCursor =

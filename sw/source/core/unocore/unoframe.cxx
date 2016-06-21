@@ -3422,35 +3422,6 @@ SwXTextGraphicObject::CreateXTextGraphicObject(SwDoc & rDoc, SwFrameFormat *cons
     return CreateXFrame<text::XTextContent, SwXTextGraphicObject>(rDoc, pFrameFormat);
 }
 
-void SwXTextGraphicObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
-{
-    SwXFrame::attach(xTextRange);
-}
-
-uno::Reference< text::XTextRange >  SwXTextGraphicObject::getAnchor() throw( uno::RuntimeException, std::exception )
-{
-    SolarMutexGuard aGuard;
-    return SwXFrame::getAnchor();
-}
-
-void SwXTextGraphicObject::dispose() throw( uno::RuntimeException, std::exception )
-{
-    SolarMutexGuard aGuard;
-    SwXFrame::dispose();
-}
-
-void SwXTextGraphicObject::addEventListener(const uno::Reference< lang::XEventListener > & aListener)
-                                                    throw( uno::RuntimeException, std::exception )
-{
-    SwXFrame::addEventListener(aListener);
-}
-
-void SwXTextGraphicObject::removeEventListener(const uno::Reference< lang::XEventListener > & aListener)
-                                                    throw( uno::RuntimeException, std::exception )
-{
-    SwXFrame::removeEventListener(aListener);
-}
-
 OUString SwXTextGraphicObject::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXTextGraphicObject");
@@ -3509,33 +3480,6 @@ uno::Reference<text::XTextContent>
 SwXTextEmbeddedObject::CreateXTextEmbeddedObject(SwDoc & rDoc, SwFrameFormat *const pFrameFormat)
 {
     return CreateXFrame<text::XTextContent, SwXTextEmbeddedObject>(rDoc, pFrameFormat);
-}
-
-void SwXTextEmbeddedObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
-{
-    SwXFrame::attach(xTextRange);
-}
-
-uno::Reference< text::XTextRange >  SwXTextEmbeddedObject::getAnchor() throw( uno::RuntimeException, std::exception )
-{
-    SolarMutexGuard aGuard;
-    return SwXFrame::getAnchor();
-}
-
-void SwXTextEmbeddedObject::dispose() throw( uno::RuntimeException, std::exception )
-{
-    SolarMutexGuard aGuard;
-    SwXFrame::dispose();
-}
-
-void SwXTextEmbeddedObject::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException, std::exception )
-{
-    SwXFrame::addEventListener(aListener);
-}
-
-void SwXTextEmbeddedObject::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException, std::exception )
-{
-    SwXFrame::removeEventListener(aListener);
 }
 
 uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject() throw( uno::RuntimeException, std::exception )
