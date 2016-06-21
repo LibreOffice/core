@@ -52,6 +52,24 @@
       "revId": "002697221215e009cdf20fd5c12b50350b8a2128",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_89eee1ea",
+        "filename": "dbaccess/source/ui/misc/WCopyTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-06-21T20:52:27Z",
+      "side": 0,
+      "message": "Setting it in the .ui file and still keeping this line sounds odd. Nonetheless, I tried both cases with multiple combinations of values.\n\nIt seems like the widget from the .ui file is child of what is being constructed in the .cxx file\u0027s construct() method. (I may be mistaken though.)",
+      "parentUuid": "ba84c18e_29af95e4",
+      "revId": "002697221215e009cdf20fd5c12b50350b8a2128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
