@@ -182,10 +182,8 @@ void SvIdlParser::ReadStruct()
     xStruct->SetType( MetaTypeType::Struct );
     xStruct->SetName( ReadIdentifier() );
     Read( '{' );
-    sal_uInt32 nBeginPos = 0; // can not happen with Tell
-    while( nBeginPos != rInStm.Tell() )
+    while( true )
     {
-        nBeginPos = rInStm.Tell();
         tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
         xAttr->aType = ReadKnownType();
         xAttr->SetName(ReadIdentifier());
@@ -293,25 +291,20 @@ void SvIdlParser::ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMet
 
 void SvIdlParser::ReadInterfaceOrShellEntry(SvMetaClass& rClass)
 {
-    sal_uInt32  nTokPos = rInStm.Tell();
-    SvToken&    rTok = rInStm.GetToken_Next();
-
-    if( rTok.Is( SvHash_import() ) )
+    if( ReadIf( SvHash_import() ) )
     {
         SvMetaClass * pClass = ReadKnownClass();
         SvClassElement aEle(pClass);
-        rTok = rInStm.GetToken();
+        SvToken& rTok = rInStm.GetToken();
         if( rTok.IsString() )
         {
             aEle.SetPrefix( rTok.GetString() );
             rInStm.GetToken_Next();
         }
         rClass.aClassElementList.push_back( aEle );
-        return;
     }
     else
     {
-        rInStm.Seek( nTokPos );
         SvMetaType * pType = rBase.ReadKnownType( rInStm );
         tools::SvRef<SvMetaAttribute> xAttr;
         bool bOk = false;
@@ -335,10 +328,8 @@ void SvIdlParser::ReadInterfaceOrShellEntry(SvMetaClass& rClass)
             if( !xAttr->GetSlotId().IsSet() )
                 xAttr->SetSlotId( SvIdentifier(rBase.GetUniqueId()) );
             rClass.aAttrList.push_back( xAttr );
-            return;
         }
     }
-    rInStm.Seek( nTokPos );
 }
 
 bool SvIdlParser::ReadInterfaceOrShellSlot(SvMetaSlot& rSlot)
@@ -402,20 +393,22 @@ void SvIdlParser::ReadInterfaceOrShellMethodOrAttribute( SvMetaAttribute& rAttr 
     tools::SvRef<SvMetaType> xT(new SvMetaType() );
     xT->SetRef(rAttr.GetType() );
     rAttr.aType = xT;
-    sal_uInt32 nBeginPos = 0; // can not happen with Tell
-    while( nBeginPos != rInStm.Tell() )
-    {
-        nBeginPos = rInStm.Tell();
-        tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
-        if( xAttr->ReadSvIdl( rBase, rInStm ) )
-        {
-            if( xAttr->Test( rInStm ) )
-                rAttr.aType->GetAttrList().push_back( xAttr );
-        }
-        ReadIfDelimiter();
-    }
-    Read( ')' );
     rAttr.aType->SetType( MetaTypeType::Method );
+    if (!ReadIf(')'))
+    {
+        while (true)
+        {
+            tools::SvRef<SvMetaAttribute> xAttr( new SvMetaAttribute() );
+            if( !xAttr->ReadSvIdl( rBase, rInStm ) )
+                throw SvParseException(rInStm, "ReadSvIdl in method argument parsing failed");
+            if( !xAttr->Test( rInStm ) )
+                throw SvParseException(rInStm, "test in method argument parsing failed");
+            rAttr.aType->GetAttrList().push_back( xAttr );
+            if (!ReadIfDelimiter())
+                break;
+        }
+        Read(')');
+    }
 }
 
 SvMetaClass * SvIdlParser::ReadKnownClass()
@@ -433,9 +426,7 @@ SvMetaType * SvIdlParser::ReadKnownType()
     for( const auto& aType : rBase.GetTypeList() )
     {
         if( aType->GetName() == aName )
-        {
             return aType;
-        }
     }
     throw SvParseException( rInStm, "wrong typedef: ");
 }
