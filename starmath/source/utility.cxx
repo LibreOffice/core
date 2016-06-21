@@ -17,20 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/builderfactory.hxx>
-#include <tools/tenccvt.hxx>
-#include <osl/thread.h>
-
-#include <tools/stream.hxx>
 
 #include "starmath.hrc"
 
 #include "utility.hxx"
 #include "dialog.hxx"
 #include "view.hxx"
-#include "smdll.hxx"
 
 
 // return pointer to active SmViewShell, if this is not possible
