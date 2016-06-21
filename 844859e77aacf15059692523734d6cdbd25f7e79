@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_691a7d19",
+        "filename": "sc/source/filter/lotus/lotform.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2016-06-21T19:33:57Z",
+      "side": 1,
+      "message": "hmm, based on stephans comment should these OSL_ENSURE rather be replaced by the assert function?",
+      "parentUuid": "ba84c18e_23209449",
+      "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_431d980e",
         "filename": "sc/source/filter/lotus/lotform.cxx",
         "patchSetId": 2
@@ -65,6 +83,24 @@
       "writtenOn": "2016-06-20T07:12:09Z",
       "side": 1,
       "message": "\u003e\u003d",
+      "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_491db90e",
+        "filename": "sc/source/filter/lotus/lotform.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2016-06-21T19:33:57Z",
+      "side": 1,
+      "message": "Surely the condition nAnz \u003c 2 must be correct here. If the comment is true that ocIndex needs at least w parameters!? Warn if condition is true right? So if nAnz is less than 2 then warn.",
+      "parentUuid": "ba84c18e_431d980e",
       "revId": "844859e77aacf15059692523734d6cdbd25f7e79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
