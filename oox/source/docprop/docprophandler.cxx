@@ -305,7 +305,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
         if ( xAttribs.is() && xAttribs->hasAttribute( XML_name ) )
             m_aCustomPropertyName = xAttribs->getValue( XML_name );
     }
-    else if ( m_nState && m_nInBlock && m_nInBlock == 2 && getNamespace( nElement ) == NMSP_officeDocPropsVT )
+    else if ( m_nState && m_nInBlock == 2 && getNamespace( nElement ) == NMSP_officeDocPropsVT )
     {
         m_nType = nElement;
     }
