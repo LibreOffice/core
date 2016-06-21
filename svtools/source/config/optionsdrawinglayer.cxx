@@ -156,7 +156,7 @@ class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
 public:
     SvtOptionsDrawinglayer_Impl();
-    ~SvtOptionsDrawinglayer_Impl();
+    ~SvtOptionsDrawinglayer_Impl() override;
 
     virtual void Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
