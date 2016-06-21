@@ -21,6 +21,9 @@
 #ifndef INCLUDED_STOC_SOURCE_COREREFLECTION_BASE_HXX
 #define INCLUDED_STOC_SOURCE_COREREFLECTION_BASE_HXX
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <uno/mapping.hxx>
@@ -366,9 +369,9 @@ inline bool extract(
                 reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
                 reinterpret_cast< uno_ReleaseFunc >(css::uno::cpp_release) );
         }
-        else if (rObj.getValueTypeClass() == css::uno::TypeClass_TYPE)
+        else if (auto t = o3tl::tryAccess<css::uno::Type>(rObj))
         {
-            rDest = pRefl->forType( static_cast< const css::uno::Type * >( rObj.getValue() )->getTypeLibType() );
+            rDest = pRefl->forType( t->getTypeLibType() );
             return rDest.is();
         }
     }

@@ -24,6 +24,7 @@
 #if !(defined(MACOSX) || defined(IOS) || defined(FREEBSD))
 #include <malloc.h>
 #endif
+#include <o3tl/any.hxx>
 #include <rtl/alloc.h>
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>
@@ -189,9 +190,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
         (*pUnoI->pDispatcher)( pUnoI, getTypeDescr(), pReturn, nullptr, &pExc );
         (*pUnoI->release)( pUnoI );
 
-        checkException(
-            pExc,
-            *static_cast< Reference< XInterface > const * >(rObj.getValue()));
+        checkException(pExc, *o3tl::doAccess<Reference<XInterface>>(rObj));
         Any aRet;
         uno_any_destruct(
             &aRet, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
@@ -277,17 +276,14 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
             (*pUnoI->release)( pUnoI );
 
             uno_destructData( pArg, pTD, nullptr );
-            checkException(
-                pExc,
-                *static_cast< Reference< XInterface > const * >(
-                    rObj.getValue()));
+            checkException(pExc, *o3tl::doAccess<Reference<XInterface>>(rObj));
             return;
         }
         (*pUnoI->release)( pUnoI );
 
         throw IllegalArgumentException(
             "illegal value given!",
-            *static_cast<const Reference< XInterface > *>(rObj.getValue()), 1 );
+            *o3tl::doAccess<Reference<XInterface>>(rObj), 1 );
     }
     throw IllegalArgumentException(
         "illegal destination object given!",
@@ -575,19 +571,20 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
           css::reflection::InvocationTargetException,
           css::uno::RuntimeException, std::exception)
 {
-    if (rObj.getValueTypeClass() == TypeClass_INTERFACE)
+    if (auto ifc = o3tl::tryAccess<css::uno::Reference<css::uno::XInterface>>(
+            rObj))
     {
         // acquire()/ release()
         if (rtl_ustr_ascii_compare( getTypeDescr()->pTypeName->buffer,
                                     "com.sun.star.uno.XInterface::acquire" ) == 0)
         {
-            (*static_cast<const Reference< XInterface > *>(rObj.getValue()))->acquire();
+            (*ifc)->acquire();
             return Any();
         }
         else if (rtl_ustr_ascii_compare( getTypeDescr()->pTypeName->buffer,
                                          "com.sun.star.uno.XInterface::release" ) == 0)
         {
-            (*static_cast<const Reference< XInterface > *>(rObj.getValue()))->release();
+            (*ifc)->release();
             return Any();
         }
     }
@@ -603,7 +600,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             (*pUnoI->release)( pUnoI );
             throw IllegalArgumentException(
                 "arguments len differ!",
-                *static_cast<const Reference< XInterface > *>(rObj.getValue()), 1 );
+                *o3tl::doAccess<Reference<XInterface>>(rObj), 1 );
         }
 
         Any * pCppArgs = rArgs.getArray();
@@ -677,7 +674,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 {
                     IllegalArgumentException aExc(
                         "cannot coerce argument type during corereflection call!",
-                        *static_cast<const Reference< XInterface > *>(rObj.getValue()), (sal_Int16)nPos );
+                        *o3tl::doAccess<Reference<XInterface>>(rObj), (sal_Int16)nPos );
 
                     // cleanup
                     while (nPos--)
@@ -714,7 +711,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             TYPELIB_DANGER_RELEASE( pReturnType );
 
             InvocationTargetException aExc;
-            aExc.Context = *static_cast<const Reference< XInterface > *>(rObj.getValue());
+            aExc.Context = *o3tl::doAccess<Reference<XInterface>>(rObj);
             aExc.Message = "exception occurred during invocation!";
             uno_any_destruct(
                 &aExc.TargetException,

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
@@ -1111,12 +1114,10 @@ sal_Bool OServiceManager::has( const Any & Element )
         return m_ImplementationMap.find( xEle ) !=
             m_ImplementationMap.end();
     }
-    else if (Element.getValueTypeClass() == TypeClass_STRING)
+    else if (auto implName = o3tl::tryAccess<OUString>(Element))
     {
-        OUString const & implName =
-            *static_cast< OUString const * >(Element.getValue());
         MutexGuard aGuard( m_mutex );
-        return m_ImplementationNameMap.find( implName ) !=
+        return m_ImplementationNameMap.find( *implName ) !=
             m_ImplementationNameMap.end();
     }
     return false;
@@ -1160,7 +1161,7 @@ void OServiceManager::insert( const Any & Element )
         for( sal_Int32 i = 0; i < aServiceNames.getLength(); i++ )
         {
             m_ServiceMap.insert( HashMultimap_OWString_Interface::value_type(
-                pArray[i], *static_cast<Reference<XInterface > const *>(Element.getValue()) ) );
+                pArray[i], *o3tl::doAccess<Reference<XInterface>>(Element) ) );
         }
     }
     }
@@ -1190,17 +1191,15 @@ void OServiceManager::remove( const Any & Element )
     {
         xEle.set( Element, UNO_QUERY_THROW );
     }
-    else if (Element.getValueTypeClass() == TypeClass_STRING)
+    else if (auto implName = o3tl::tryAccess<OUString>(Element))
     {
-        OUString const & implName =
-            *static_cast< OUString const * >(Element.getValue());
         MutexGuard aGuard( m_mutex );
         HashMap_OWString_Interface::const_iterator const iFind(
-            m_ImplementationNameMap.find( implName ) );
+            m_ImplementationNameMap.find( *implName ) );
         if (iFind == m_ImplementationNameMap.end())
         {
             throw NoSuchElementException(
-                "element is not in: " + implName,
+                "element is not in: " + *implName,
                 static_cast< OWeakObject * >(this) );
         }
         xEle = iFind->second;

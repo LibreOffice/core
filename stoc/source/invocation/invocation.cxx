@@ -360,14 +360,10 @@ Any Invocation_Impl::getMaterial() throw(RuntimeException, std::exception)
 void Invocation_Impl::setMaterial( const Any& rMaterial )
 {
     // set the material first and only once
-    Reference<XInterface> xObj;
-
-    if (rMaterial.getValueType().getTypeClass() == TypeClass_INTERFACE)
-        xObj = *static_cast<Reference<XInterface> const *>(rMaterial.getValue());
     _aMaterial = rMaterial;
 
     // First do this outside the guard
-    _xDirect.set( xObj, UNO_QUERY );
+    _xDirect.set( rMaterial, UNO_QUERY );
 
     if( _xDirect.is() )
     {

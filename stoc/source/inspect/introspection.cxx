@@ -25,6 +25,7 @@
 #include <map>
 #include <set>
 
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -383,16 +384,14 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
 //void IntrospectionAccessStatic_Impl::setPropertyValueByIndex( Any& obj, sal_Int32 nSequenceIndex, const Any& aValue) const
 {
     // Is the passed object something that fits?
-    TypeClass eObjType = obj.getValueType().getTypeClass();
-
     Reference<XInterface> xInterface;
-    if( eObjType == TypeClass_INTERFACE )
+    if( !(obj >>= xInterface) )
     {
-        xInterface = *static_cast<Reference<XInterface> const *>(obj.getValue());
-    }
-    else if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
-    {
-        throw IllegalArgumentException();
+        TypeClass eObjType = obj.getValueType().getTypeClass();
+        if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
+        {
+            throw IllegalArgumentException();
+        }
     }
 
     // Test flags
@@ -412,8 +411,8 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
             bool bUseCopy = false;
             Any aRealValue;
 
-            TypeClass eValType = aValue.getValueType().getTypeClass();
-            if( eValType == TypeClass_INTERFACE )
+            if( auto valInterface = o3tl::tryAccess<
+                    css::uno::Reference<css::uno::XInterface>>(aValue) )
             {
                 Type aPropType = rProp.Type;
                 OUString aTypeName( aPropType.getTypeName() );
@@ -421,11 +420,10 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
                 //Reference<XIdlClass> xPropClass = rProp.Type;
                 if( xPropClass.is() && xPropClass->getTypeClass() == TypeClass_INTERFACE )
                 {
-                    Reference<XInterface> valInterface = *static_cast<Reference<XInterface> const *>(aValue.getValue());
-                    if( valInterface.is() )
+                    if( valInterface->is() )
                     {
                         //Any queryInterface( const Type& rType );
-                        aRealValue = valInterface->queryInterface( aPropType );
+                        aRealValue = (*valInterface)->queryInterface( aPropType );
                         if( aRealValue.hasValue() )
                             bUseCopy = true;
                     }
@@ -525,17 +523,15 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
     Any aRet;
 
     // Is there anything suitable in the passed object?
-    TypeClass eObjType = obj.getValueType().getTypeClass();
-
     Reference<XInterface> xInterface;
-    if( eObjType == TypeClass_INTERFACE )
+    if( !(obj >>= xInterface) )
     {
-        xInterface = *static_cast<Reference<XInterface> const *>(obj.getValue());
-    }
-    else if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
-    {
-        // throw IllegalArgumentException();
-        return aRet;
+        TypeClass eObjType = obj.getValueType().getTypeClass();
+        if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
+        {
+            // throw IllegalArgumentException();
+            return aRet;
+        }
     }
 
     switch( maMapTypeSeq[ nSequenceIndex ] )
@@ -831,9 +827,7 @@ ImplIntrospectionAccess::ImplIntrospectionAccess
         : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ ) //, maAdapter()
 {
     // Save object as an interface if possible
-    TypeClass eType = maInspectedObject.getValueType().getTypeClass();
-    if( eType == TypeClass_INTERFACE )
-        mxIface = *static_cast<Reference<XInterface> const *>(maInspectedObject.getValue());
+    maInspectedObject >>= mxIface;
 
     mnLastPropertyConcept = -1;
     mnLastMethodConcept = -1;
@@ -1699,12 +1693,9 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     if( eType != TypeClass_INTERFACE && eType != TypeClass_STRUCT  && eType != TypeClass_EXCEPTION )
         return css::uno::Reference<css::beans::XIntrospectionAccess>();
 
-    Reference<XInterface> x;
-    if( eType == TypeClass_INTERFACE )
+    if( auto x = o3tl::tryAccess<Reference<XInterface>>(aToInspectObj) )
     {
-        // Get the interface out of the Any
-        x = *static_cast<Reference<XInterface> const *>(aToInspectObj.getValue());
-        if( !x.is() )
+        if( !x->is() )
             return css::uno::Reference<css::beans::XIntrospectionAccess>();
     }
 
@@ -1721,7 +1712,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     // Look for interfaces XTypeProvider and PropertySet
     if( eType == TypeClass_INTERFACE )
     {
-        xTypeProvider.set( x, UNO_QUERY );
+        xTypeProvider.set( aToInspectObj, UNO_QUERY );
         if( xTypeProvider.is() )
         {
             SupportedTypesSeq = comphelper::sequenceToContainer<std::vector<Type>>(xTypeProvider->getTypes());
@@ -1733,7 +1724,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
             SupportedTypesSeq = { aToInspectObj.getValueType() };
         }
         // Now try to get the PropertySetInfo
-        xPropSet.set( x, UNO_QUERY );
+        xPropSet.set( aToInspectObj, UNO_QUERY );
         if( xPropSet.is() )
             xPropSetInfo = xPropSet->getPropertySetInfo();
 
@@ -1791,7 +1782,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         if( xPropSet.is() && xPropSetInfo.is() )
         {
             // Is there also a FastPropertySet?
-            Reference<XFastPropertySet> xDummy( x, UNO_QUERY );
+            Reference<XFastPropertySet> xDummy( aToInspectObj, UNO_QUERY );
             bool bFast = pAccess->mbFastPropSet = xDummy.is();
 
             Sequence<Property> aPropSeq = xPropSetInfo->getProperties();
