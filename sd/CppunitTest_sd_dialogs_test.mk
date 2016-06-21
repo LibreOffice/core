@@ -61,7 +61,7 @@ $(eval $(call gb_CppunitTest_use_external,sd_dialogs_test,boost_headers))
 $(eval $(call gb_CppunitTest_use_sdk_api,sd_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_ure,sd_dialogs_test))
-$(eval $(call gb_CppunitTest_use_vcl_non_headless,sd_dialogs_test))
+$(eval $(call gb_CppunitTest_use_vcl_non_headless_with_windows,sd_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_rdb,sd_dialogs_test,services))
 
