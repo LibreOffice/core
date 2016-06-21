@@ -400,7 +400,43 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks_MS(
     }
 
     if ( nParamCount >= 3 )
-        aWeekendDays = GetString().getString();
+    {
+        if ( !IsMissing() )
+        {
+            switch ( GetStackType() )
+            {
+                case svDoubleRef :
+                case svExternalDoubleRef :
+                    return errNoValue;
+                    break;
+
+                default :
+                    {
+                        double fDouble;
+                        svl::SharedString aSharedString;
+                        bool bDouble = GetDoubleOrString( fDouble, aSharedString);
+                        if ( bDouble )
+                        {
+                            if ( fDouble >= 1.0 && fDouble <= 17 )
+                                aWeekendDays = OUString::number( fDouble );
+                            else
+                                return errNoValue;
+                        }
+                        else
+                        {
+                            if ( !( aSharedString.isEmpty() || aSharedString.getLength() != 7 ||
+                                    aSharedString.getString() == "1111111" ) )
+                                aWeekendDays = aSharedString.getString();
+                            else
+                                return errNoValue;
+                        }
+                    }
+                    break;
+            }
+        }
+        else
+            Pop();
+    }
 
     for ( int i = 0; i < 7; i++ )
         bWeekendMask[ i] = false;
@@ -560,10 +596,15 @@ void ScInterpreter::ScWorkday_MS()
                 if ( nDays > 0 )
                 {
                     size_t nRef = 0;
+                    //skip holidays before/on start date
+                    while ( nRef < nMax && nSortArray.at( nRef ) <= nDate )
+                        nRef++;
+
                     while ( nDays )
                     {
                         while ( nRef < nMax && nSortArray.at( nRef ) < nDate )
                             nRef++;
+
                         if ( !( nRef < nMax && nSortArray.at( nRef ) == nDate ) || nRef >= nMax )
                              nDays--;
 
@@ -575,10 +616,15 @@ void ScInterpreter::ScWorkday_MS()
                 else
                 {
                     sal_Int16 nRef = nMax - 1;
+                    //skip holidays after/on start date
+                    while ( nRef >= 0 && nSortArray.at( nRef ) >= nDate )
+                        nRef--;
+
                     while ( nDays )
                     {
                         while ( nRef >= 0 && nSortArray.at( nRef ) > nDate )
                             nRef--;
+
                         if ( !( nRef >= 0 && nSortArray.at( nRef ) == nDate ) || nRef < 0 )
                              nDays++;
 
