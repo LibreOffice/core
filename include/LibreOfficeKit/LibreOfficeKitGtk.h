@@ -307,12 +307,15 @@ void                            lok_doc_view_set_document_password (LOKDocView* 
  * lok_doc_view_get_version_info:
  * @pDocView: The #LOKDocView instance
  *
- * Get version information of underlying LOKit process
+ * Get version information of the LOKit process
  *
- * Returns: string containing version information in format
- * PRODUCT_NAME PRODUCT_VERSION PRODUCT_EXTENSION BUILD_ID
+ * Returns: JSON string containing version information in format:
+ * {ProductName: <>, ProductVersion: <>, ProductExtension: <>, BuildId: <>}
  *
- * Eg: LibreOffice 5.3 .0.0.alpha0 <commit hash>
+ * Eg: {"ProductName": "LibreOffice",
+ * "ProductVersion": "5.3",
+ * "ProductExtension": ".0.0.alpha0",
+ * "BuildId": "<full 40 char git hash>"}
  */
 gchar*                         lok_doc_view_get_version_info       (LOKDocView* pDocView);
 
