@@ -89,6 +89,9 @@ struct LOKDocViewPrivateImpl
     guint32 m_nKeyModifier;
     /// Rectangles of the current text selection.
     std::vector<GdkRectangle> m_aTextSelectionRectangles;
+    /// Rectangles of view selections. The current view can only see
+    /// them, can't modify them. Key is the view id.
+    std::map<std::uintptr_t, std::vector<GdkRectangle>> m_aTextViewSelectionRectangles;
     /// Position and size of the selection start (as if there would be a cursor caret there).
     GdkRectangle m_aTextSelectionStart;
     /// Position and size of the selection end.
@@ -1173,7 +1176,13 @@ callback (gpointer pData)
     }
     case LOK_CALLBACK_TEXT_VIEW_SELECTION:
     {
-        // TODO: Implement me
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        std::uintptr_t nViewId = aTree.get<std::uintptr_t>("viewId");
+        const std::string& rSelection = aTree.get<std::string>("selection");
+        priv->m_aTextViewSelectionRectangles[nViewId] = payloadToRectangles(pDocView, rSelection.c_str());
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
     default:
@@ -1469,7 +1478,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
                 // Set a minimal width if it would be 0.
                 rCursor.width = 30;
 
-            const GdkRGBA& rDark = getDarkColor(priv->m_nViewId);
+            const GdkRGBA& rDark = getDarkColor(rPair.first);
             cairo_set_source_rgb(pCairo, rDark.red, rDark.green, rDark.blue);
             cairo_rectangle(pCairo,
                             twipToPixel(rCursor.x, priv->m_fZoom),
@@ -1531,6 +1540,23 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
             }
             renderHandle(pDocView, pCairo, priv->m_aTextSelectionEnd, priv->m_pHandleEnd, priv->m_aHandleEndRect);
             g_free (handleEndPath);
+        }
+    }
+
+    // Selections of other views.
+    for (std::pair<const std::uintptr_t, std::vector<GdkRectangle>>& rPair : priv->m_aTextViewSelectionRectangles)
+    {
+        for (GdkRectangle& rRectangle : rPair.second)
+        {
+            const GdkRGBA& rDark = getDarkColor(rPair.first);
+            // 75% transparency.
+            cairo_set_source_rgba(pCairo, rDark.red, rDark.green, rDark.blue, 0.25);
+            cairo_rectangle(pCairo,
+                            twipToPixel(rRectangle.x, priv->m_fZoom),
+                            twipToPixel(rRectangle.y, priv->m_fZoom),
+                            twipToPixel(rRectangle.width, priv->m_fZoom),
+                            twipToPixel(rRectangle.height, priv->m_fZoom));
+            cairo_fill(pCairo);
         }
     }
 
