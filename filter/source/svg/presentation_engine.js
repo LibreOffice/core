@@ -4081,6 +4081,10 @@ var aAttributeMap =
                                 'get':          'getOpacity',
                                 'set':          'setOpacity'                    },
 
+        'rotate':           {   'type':         NUMBER_PROPERTY,
+                                'get':          'getRotationAngle',
+                                'set':          'setRotationAngle'              },
+
         'width':            {   'type':         NUMBER_PROPERTY,
                                 'get':          'getWidth',
                                 'set':          'setWidth',
@@ -8801,6 +8805,7 @@ AnimatedElement.prototype.initElement = function()
     this.nCenterY = this.nBaseCenterY;
     this.nScaleFactorX = 1.0;
     this.nScaleFactorY = 1.0;
+    this.nRotationAngle = 0.0;
 
     // add a transform attribute of type matrix
     this.aActiveElement.setAttribute( 'transform', makeMatrixString( 1, 0, 0, 1, 0, 0 ) );
@@ -8944,6 +8949,7 @@ AnimatedElement.prototype.saveState = function( nAnimationNodeId )
     aState.nCenterY = this.nCenterY;
     aState.nScaleFactorX = this.nScaleFactorX;
     aState.nScaleFactorY = this.nScaleFactorY;
+    aState.nRotationAngle = this.nRotationAngle;
 
 };
 
@@ -8975,6 +8981,7 @@ AnimatedElement.prototype.restoreState = function( nAnimationNodeId )
         this.nCenterY = aState.nCenterY;
         this.nScaleFactorX = aState.nScaleFactorX;
         this.nScaleFactorY = aState.nScaleFactorY;
+        this.nRotationAngle = aState.nRotationAngle;
     }
     return bRet;
 };
@@ -9136,6 +9143,7 @@ AnimatedElement.prototype.setWidth = function( nNewWidth )
 
     this.aTMatrix = document.documentElement.createSVGMatrix()
         .translate( this.nCenterX, this.nCenterY )
+        .rotate(this.nRotationAngle)
         .scaleNonUniform( nScaleFactorX, this.nScaleFactorY )
         .translate( -this.nBaseCenterX, -this.nBaseCenterY );
     this.updateTransformAttribute();
@@ -9160,6 +9168,7 @@ AnimatedElement.prototype.setHeight = function( nNewHeight )
 
     this.aTMatrix = document.documentElement.createSVGMatrix()
         .translate( this.nCenterX, this.nCenterY )
+        .rotate(this.nRotationAngle)
         .scaleNonUniform( this.nScaleFactorX, nScaleFactorY )
         .translate( -this.nBaseCenterX, -this.nBaseCenterY );
     this.updateTransformAttribute();
@@ -9175,6 +9184,23 @@ AnimatedElement.prototype.getOpacity = function()
 AnimatedElement.prototype.setOpacity = function( nValue )
 {
     this.aActiveElement.setAttribute( 'opacity', nValue );
+};
+
+AnimatedElement.prototype.getRotationAngle = function()
+{
+    return this.nRotationAngle;
+};
+
+AnimatedElement.prototype.setRotationAngle = function( nNewRotAngle )
+{
+    this.aTMatrix = document.documentElement.createSVGMatrix()
+        .translate( this.nCenterX, this.nCenterY )
+        .rotate(nNewRotAngle)
+        .scaleNonUniform( this.nScaleFactorX, this.nScaleFactorY )
+        .translate( -this.nBaseCenterX, -this.nBaseCenterY );
+    this.updateTransformAttribute();
+
+    this.nRotationAngle = nNewRotAngle;
 };
 
 AnimatedElement.prototype.getVisibility = function()
