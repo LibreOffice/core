@@ -50,8 +50,6 @@ struct MenuItemData
     bool            bEnabled;               // Enabled
     bool            bVisible;               // Visible (note: this flag will not override MenuFlags::HideDisabledEntries when true)
     bool            bIsTemporary;           // Temporary inserted ('No selection possible')
-    bool            bMirrorMode;
-    long            nItemImageAngle;
     Size            aSz;                    // only temporarily valid
     OUString        aAccessibleName;        // accessible name
 
@@ -69,8 +67,6 @@ struct MenuItemData
         , bEnabled(false)
         , bVisible(false)
         , bIsTemporary(false)
-        , bMirrorMode(false)
-        , nItemImageAngle(0)
         , pSalMenuItem(nullptr)
     {
     }
@@ -88,8 +84,6 @@ struct MenuItemData
         , bEnabled(false)
         , bVisible(false)
         , bIsTemporary(false)
-        , bMirrorMode(false)
-        , nItemImageAngle(0)
         , pSalMenuItem(nullptr)
     {
     }

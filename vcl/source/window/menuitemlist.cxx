@@ -73,8 +73,6 @@ MenuItemData* MenuItemList::Insert(
     pData->bEnabled         = true;
     pData->bVisible         = true;
     pData->bIsTemporary     = false;
-    pData->bMirrorMode      = false;
-    pData->nItemImageAngle  = 0;
 
     SalItemParams aSalMIData;
     aSalMIData.nId = nId;
@@ -109,8 +107,6 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     pData->bEnabled         = true;
     pData->bVisible         = true;
     pData->bIsTemporary     = false;
-    pData->bMirrorMode      = false;
-    pData->nItemImageAngle  = 0;
 
     SalItemParams aSalMIData;
     aSalMIData.nId = 0;
