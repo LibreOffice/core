@@ -150,7 +150,11 @@ std::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
         if(!mbSkipValidation)
             validate(pTempFile->GetFileName(), test::ODF);
     }
-
+    else if(rFilterName == "MS Excel 97")
+    {
+        if(!mbSkipValidation)
+            validate(pTempFile->GetFileName(), test::MSBINARY);
+    }
     CPPUNIT_ASSERT(mxComponent.is());
     return pTempFile;
 }
