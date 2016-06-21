@@ -17,17 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/globname.hxx>
-#include <vcl/status.hxx>
-#include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/whiter.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
-#include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
 #include "smmod.hxx"
@@ -42,8 +36,6 @@
 
 #define SmModule
 #include "smslots.hxx"
-
-#include <svx/xmlsecctrl.hxx>
 
 
 SmResId::SmResId( sal_uInt16 nId )
