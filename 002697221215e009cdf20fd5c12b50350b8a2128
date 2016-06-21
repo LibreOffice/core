@@ -34,6 +34,24 @@
       "revId": "002697221215e009cdf20fd5c12b50350b8a2128",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_29af95e4",
+        "filename": "dbaccess/source/ui/misc/WCopyTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-21T13:46:15Z",
+      "side": 0,
+      "message": "Did you try setting the width request in the .ui file *and* remove this line, or did you keep this line?\nI guess this overrides anything you have in the .ui file.",
+      "parentUuid": "ba84c18e_e9a4cd09",
+      "revId": "002697221215e009cdf20fd5c12b50350b8a2128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
