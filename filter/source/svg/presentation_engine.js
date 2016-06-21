@@ -4000,11 +4000,12 @@ aFillModeOutMap = [ 'inherit', 'remove', 'freeze', 'hold', 'transition', 'auto' 
 
 
 // Additive Modes
-var ADDITIVE_MODE_BASE          = 0;
-var ADDITIVE_MODE_SUM           = 1;
-var ADDITIVE_MODE_REPLACE       = 2;
-var ADDITIVE_MODE_MULTIPLY      = 3;
-var ADDITIVE_MODE_NONE          = 4;
+var ADDITIVE_MODE_UNKNOWN       = 0;
+var ADDITIVE_MODE_BASE          = 1;
+var ADDITIVE_MODE_SUM           = 2;
+var ADDITIVE_MODE_REPLACE       = 3;
+var ADDITIVE_MODE_MULTIPLY      = 4;
+var ADDITIVE_MODE_NONE          = 5;
 
 aAddittiveModeInMap = {
     'base'          : ADDITIVE_MODE_BASE,
@@ -4014,7 +4015,7 @@ aAddittiveModeInMap = {
     'none'          : ADDITIVE_MODE_NONE
 };
 
-aAddittiveModeOutMap = [ 'base', 'sum', 'replace', 'multiply', 'none' ];
+aAddittiveModeOutMap = [ 'unknown', 'base', 'sum', 'replace', 'multiply', 'none' ];
 
 
 // Accumulate Modes
@@ -4024,10 +4025,11 @@ var ACCUMULATE_MODE_SUM         = 1;
 aAccumulateModeOutMap = [ 'none', 'sum' ];
 
 // Calculation Modes
-var CALC_MODE_DISCRETE          = 0;
-var CALC_MODE_LINEAR            = 1;
-var CALC_MODE_PACED             = 2;
-var CALC_MODE_SPLINE            = 3;
+var CALC_MODE_UNKNOWN           = 0
+var CALC_MODE_DISCRETE          = 1;
+var CALC_MODE_LINEAR            = 2;
+var CALC_MODE_PACED             = 3;
+var CALC_MODE_SPLINE            = 4;
 
 aCalcModeInMap = {
     'discrete'      : CALC_MODE_DISCRETE,
@@ -4036,7 +4038,7 @@ aCalcModeInMap = {
     'spline'        : CALC_MODE_SPLINE
 };
 
-aCalcModeOutMap = [ 'discrete', 'linear', 'paced', 'spline' ];
+aCalcModeOutMap = [ 'unknown', 'discrete', 'linear', 'paced', 'spline' ];
 
 
 // Color Spaces
@@ -12101,7 +12103,7 @@ function createValueListActivity( aActivityParamSet, aAnimationNode, aAnimation,
 {
     var aAnimatedElement = aAnimationNode.getAnimatedElement();
     var aOperatorSet = aOperatorSetMap[ eValueType ];
-    assert( aOperatorSet, 'createFromToByActivity: no operator set found' );
+    assert( aOperatorSet, 'createValueListActivity: no operator set found' );
 
     var aValueSet = aAnimationNode.getValues();
 
