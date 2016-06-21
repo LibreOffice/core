@@ -189,7 +189,7 @@ const size_t nKnownParameter = SAL_N_ELEMENTS(KnownParameter);
 bool isKnownParameter(const char* aParameterName)
 {
     for (size_t i = 0; i < nKnownParameter; i++)
-        if (_tcsicmp(aParameterName, KnownParameter[i]) == 0)
+        if (_stricmp(aParameterName, KnownParameter[i]) == 0)
             return true;
 
     return false;
@@ -206,29 +206,29 @@ void initParameter(int argc, char* argv[])
             continue;
         }
 
-        if ((_tcsicmp(argv[i], TEXT("--mapi-dialog")) == 0))
+        if ((_stricmp(argv[i], "--mapi-dialog") == 0))
         {
             gMapiFlags |= MAPI_DIALOG;
         }
-        else if ((_tcsicmp(argv[i], TEXT("--mapi-logon-ui")) == 0))
+        else if ((_stricmp(argv[i], "--mapi-logon-ui") == 0))
         {
             gMapiFlags |= MAPI_LOGON_UI;
         }
         else if ((i+1) < argc) // is the value of a parameter available too?
         {
-            if (_tcsicmp(argv[i], TEXT("--to")) == 0)
+            if (_stricmp(argv[i], "--to") == 0)
                 gTo.push_back(prefixEmailAddress(argv[i+1]));
-            else if (_tcsicmp(argv[i], TEXT("--cc")) == 0)
+            else if (_stricmp(argv[i], "--cc") == 0)
                 gCc.push_back(prefixEmailAddress(argv[i+1]));
-            else if (_tcsicmp(argv[i], TEXT("--bcc")) == 0)
+            else if (_stricmp(argv[i], "--bcc") == 0)
                 gBcc.push_back(prefixEmailAddress(argv[i+1]));
-            else if (_tcsicmp(argv[i], TEXT("--from")) == 0)
+            else if (_stricmp(argv[i], "--from") == 0)
                 gFrom = prefixEmailAddress(argv[i+1]);
-            else if (_tcsicmp(argv[i], TEXT("--subject")) == 0)
+            else if (_stricmp(argv[i], "--subject") == 0)
                 gSubject = argv[i+1];
-            else if (_tcsicmp(argv[i], TEXT("--body")) == 0)
+            else if (_stricmp(argv[i], "--body") == 0)
                 gBody = argv[i+1];
-            else if ((_tcsicmp(argv[i], TEXT("--attach")) == 0))
+            else if ((_stricmp(argv[i], "--attach") == 0))
                 gAttachments.push_back(argv[i+1]);
 
             i++;

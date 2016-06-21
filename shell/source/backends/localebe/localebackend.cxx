@@ -36,13 +36,13 @@
 
 OUString ImplGetLocale(LCID lcid)
 {
-    TCHAR buffer[8];
-    LPTSTR cp = buffer;
+    CHAR buffer[8];
+    PSTR cp = buffer;
 
-    cp += GetLocaleInfo( lcid, LOCALE_SISO639LANGNAME , buffer, 4 );
+    cp += GetLocaleInfoA( lcid, LOCALE_SISO639LANGNAME , buffer, 4 );
     if( cp > buffer )
     {
-        if( 0 < GetLocaleInfo( lcid, LOCALE_SISO3166CTRYNAME, cp, buffer + 8 - cp) )
+        if( 0 < GetLocaleInfoA( lcid, LOCALE_SISO3166CTRYNAME, cp, buffer + 8 - cp) )
             // #i50822# minus character must be written before cp
             *(cp - 1) = '-';
 
