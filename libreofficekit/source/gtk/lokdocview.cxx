@@ -346,6 +346,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_CONTEXT_MENU";
     case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
         return "LOK_CALLBACK_INVALIDATE_VIEW_CURSOR";
+    case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        return "LOK_CALLBACK_TEXT_VIEW_SELECTION";
     }
     return nullptr;
 }
@@ -1167,6 +1169,11 @@ callback (gpointer pData)
         const std::string& rRectangle = aTree.get<std::string>("rectangle");
         priv->m_aViewCursors[nViewId] = payloadToRectangle(pDocView, rRectangle.c_str());
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+        break;
+    }
+    case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+    {
+        // TODO: Implement me
         break;
     }
     default:

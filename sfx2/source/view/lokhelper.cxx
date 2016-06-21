@@ -8,6 +8,9 @@
  */
 
 #include <sfx2/lokhelper.hxx>
+
+#include <boost/property_tree/json_parser.hpp>
+
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -84,6 +87,28 @@ std::size_t SfxLokHelper::getViews()
     }
 
     return nRet;
+}
+
+void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload)
+{
+    if (SfxLokHelper::getViews() <= 1)
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if (pViewShell != pThisView)
+        {
+            boost::property_tree::ptree aTree;
+            aTree.put("viewId", SfxLokHelper::getView(pThisView));
+            aTree.put(rKey.getStr(), rPayload.getStr());
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            OString aPayload = aStream.str().c_str();
+            pViewShell->libreOfficeKitViewCallback(nType, aPayload.getStr());
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

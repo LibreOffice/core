@@ -552,7 +552,7 @@ public:
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
-        m_bViewCursorInvalidated(false)
+          m_bViewCursorInvalidated(false)
     {
     }
 

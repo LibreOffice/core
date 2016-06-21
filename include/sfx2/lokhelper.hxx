@@ -13,6 +13,7 @@
 #include <sfx2/dllapi.h>
 #include <cstddef>
 #include <cstdint>
+#include <rtl/string.hxx>
 
 class SfxViewShell;
 
@@ -29,6 +30,9 @@ public:
     static std::uintptr_t getView(SfxViewShell* pViewShell = nullptr);
     /// Get the number of views of the current object shell.
     static std::size_t getViews();
+
+    /// Invoke the LOK callback of all views except pThisView, with a payload of rKey-rPayload.
+    static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
 };
 
 #endif

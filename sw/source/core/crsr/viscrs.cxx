@@ -198,26 +198,7 @@ void SwVisibleCursor::_SetPosAndShow()
         Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
         m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
-
-        if (SfxLokHelper::getViews() > 1)
-        {
-            // Notify other views about the invalidated cursor.
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-            while (pViewShell)
-            {
-                if (pViewShell != m_pCursorShell->GetSfxViewShell())
-                {
-                    boost::property_tree::ptree aTree;
-                    aTree.put("viewId", SfxLokHelper::getView(m_pCursorShell->GetSfxViewShell()));
-                    aTree.put("rectangle", sRect.getStr());
-                    std::stringstream aStream;
-                    boost::property_tree::write_json(aStream, aTree);
-                    OString aPayload = aStream.str().c_str();
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, aPayload.getStr());
-                }
-                pViewShell = SfxViewShell::GetNext(*pViewShell);
-            }
-        }
+        SfxLokHelper::notifyOtherViews(m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
     }
 
     if ( !m_pCursorShell->IsCursorReadonly()  || m_pCursorShell->GetViewOptions()->IsSelectionInReadonly() )
@@ -416,6 +397,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
             if (!pSelectionRectangles)
             {
                 GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+                SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
             }
             else
                 pSelectionRectangles->push_back(sRect);
@@ -625,6 +607,7 @@ void SwShellCursor::Show()
         }
         OString sRect = comphelper::string::join("; ", aRect);
         GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+        SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
 }
 
