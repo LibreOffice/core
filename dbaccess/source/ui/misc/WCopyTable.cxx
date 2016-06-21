@@ -637,7 +637,7 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefa
 
 void OCopyTableWizard::construct()
 {
-    SetSizePixel(Size(580, 350));
+    SetSizePixel(Size(700, 350));
 
     AddButton( m_pbHelp = VclPtr<HelpButton>::Create(this, WB_TABSTOP) );
     AddButton( m_pbCancel = VclPtr<CancelButton>::Create(this, WB_TABSTOP) );
