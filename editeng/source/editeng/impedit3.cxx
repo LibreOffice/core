@@ -1848,7 +1848,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                 pNode->GetString(), nBreakPos, GetLocale( EditPaM( pNode, nBreakPos ) ), css::i18n::WordType::DICTIONARY_WORD, true);
             sal_Int32 nWordStart = nBreakPos;
             sal_Int32 nWordEnd = aBoundary.endPos;
-            DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
+            DBG_ASSERT( nWordEnd >= nWordStart, "Start >= End?" );
 
             sal_Int32 nWordLen = nWordEnd - nWordStart;
             if ( ( nWordEnd >= nMaxBreakPos ) && ( nWordLen > 3 ) )
