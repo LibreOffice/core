@@ -31,6 +31,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 #include "controldata.hxx"
 #include "svdata.hxx"
@@ -2191,6 +2192,11 @@ std::vector<sal_uInt16> TabControl::GetPageIDs() const
     }
 
     return aIDs;
+}
+
+FactoryFunction TabControl::GetUITestFactory() const
+{
+    return TabControlUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

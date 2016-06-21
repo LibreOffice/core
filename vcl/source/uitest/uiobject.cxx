@@ -871,4 +871,52 @@ std::unique_ptr<UIObject> SpinFieldUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new SpinFieldUIObject(pSpinField));
 }
 
+TabControlUIObject::TabControlUIObject(VclPtr<TabControl> xTabControl):
+    WindowUIObject(xTabControl),
+    mxTabControl(xTabControl)
+{
+}
+
+TabControlUIObject::~TabControlUIObject()
+{
+}
+
+void TabControlUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "SELECT")
+    {
+        if (rParameters.find("POS") != rParameters.end())
+        {
+            auto itr = rParameters.find("POS");
+            sal_uInt32 nPos = itr->second.toUInt32();
+            std::vector<sal_uInt16> aIds = mxTabControl->GetPageIDs();
+            mxTabControl->SelectTabPage(aIds[nPos]);
+        }
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+StringMap TabControlUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+
+    return aMap;
+}
+
+OUString TabControlUIObject::get_name() const
+{
+    return OUString("TabControlUIObject");
+}
+
+std::unique_ptr<UIObject> TabControlUIObject::create(vcl::Window* pWindow)
+{
+    TabControl* pTabControl = dynamic_cast<TabControl*>(pWindow);
+    assert(pTabControl);
+    return std::unique_ptr<UIObject>(new TabControlUIObject(pTabControl));
+}
+
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

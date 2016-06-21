@@ -19,6 +19,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/tabctrl.hxx>
 
 #include <vcl/dllapi.h>
 
@@ -315,6 +316,28 @@ public:
 
     SpinFieldUIObject(VclPtr<SpinField> xEdit);
     virtual ~SpinFieldUIObject();
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
+class UITEST_DLLPUBLIC TabControlUIObject : public WindowUIObject
+{
+private:
+    VclPtr<TabControl> mxTabControl;
+
+public:
+
+    TabControlUIObject(VclPtr<TabControl> mxTabControl);
+    virtual ~TabControlUIObject();
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;

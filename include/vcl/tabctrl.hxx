@@ -191,6 +191,8 @@ public:
 
     std::vector<sal_uInt16> GetPageIDs() const;
 
+    virtual FactoryFunction GetUITestFactory() const override;
+
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 };
 
