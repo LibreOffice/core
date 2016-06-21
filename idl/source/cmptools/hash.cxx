@@ -26,6 +26,8 @@
 #include <hash.hxx>
 #include <tools/debug.hxx>
 
+#include <rtl/character.hxx>
+
 SvStringHashEntry::~SvStringHashEntry() { };
 
 SvHashTable::SvHashTable( sal_uInt32 nMaxEntries )
@@ -121,7 +123,7 @@ sal_uInt32 SvStringHashTable::HashFunc( const OString& rElement ) const
     int nShift = 0;
     while( *pStr )
     {
-        if( isupper( *pStr ) )
+        if( rtl::isAsciiUpperCase( *pStr ) )
             nHash ^= sal_uInt32(*pStr - 'A' + 26) << nShift;
         else
             nHash ^= sal_uInt32(*pStr - 'a') << nShift;

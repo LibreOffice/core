@@ -38,6 +38,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/character.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -761,12 +762,12 @@ void T602ImportFilter::Read602()
 
         case tnode::EXPCMD: ch = Readchar602();
             if(ch == 0) {inschr('@'); node = tnode::EEND; }
-            else if(isupper(ch)) {
+            else if(rtl::isAsciiUpperCase(ch)) {
                 cmd602[0] = ch;
                 ch = Readchar602();
                 cmd602[1] = ch;
                 cmd602[2] = '\0';
-                if(isupper(ch))
+                if(rtl::isAsciiUpperCase(ch))
                     node = tnode::SETCMD;   //nedodelano
                 else {
                     inschr('@');
