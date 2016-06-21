@@ -12,6 +12,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtfskipdestination.hxx>
+#include <rtl/character.hxx>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 
 using namespace com::sun::star;
@@ -169,7 +170,7 @@ int RTFTokenizer::asHex(char ch)
         ret = ch - '0';
     else
     {
-        if (islower(ch))
+        if (rtl::isAsciiLowerCase(ch))
         {
             if (ch < 'a' || ch > 'f')
                 return -1;
