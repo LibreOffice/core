@@ -226,7 +226,7 @@ void SwTiledRenderingTest::testSetTextSelection()
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the second word.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
-    // Create a selection by on the word.
+    // Create a selection on the word.
     pWrtShell->SelWrd();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // Did we indeed manage to select the second word?
@@ -549,10 +549,14 @@ class ViewCallback
 public:
     bool m_bOwnCursorInvalidated;
     bool m_bViewCursorInvalidated;
+    bool m_bOwnSelectionSet;
+    bool m_bViewSelectionSet;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
-          m_bViewCursorInvalidated(false)
+          m_bViewCursorInvalidated(false),
+          m_bOwnSelectionSet(false),
+          m_bViewSelectionSet(false)
     {
     }
 
@@ -575,6 +579,16 @@ public:
             m_bViewCursorInvalidated = true;
         }
         break;
+        case LOK_CALLBACK_TEXT_SELECTION:
+        {
+            m_bOwnSelectionSet = true;
+        }
+        break;
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        {
+            m_bViewSelectionSet = true;
+        }
+        break;
         }
     }
 };
@@ -583,7 +597,7 @@ void SwTiledRenderingTest::testViewCursors()
 {
     comphelper::LibreOfficeKit::setActive();
 
-    createDoc("dummy.fodt");
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     ViewCallback aView1;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     SfxLokHelper::createView();
@@ -595,6 +609,27 @@ void SwTiledRenderingTest::testViewCursors()
     // This failed: the cursor position of view1 was only known to view2 once
     // it changed.
     CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
+
+    // Make sure that aView1 gets a view-only selection notification, while
+    // aView2 gets a real selection notification.
+    aView1.m_bOwnSelectionSet = false;
+    aView1.m_bViewSelectionSet = false;
+    aView2.m_bOwnSelectionSet = false;
+    aView2.m_bViewSelectionSet = false;
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    // Move the cursor into the second word.
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    // Create a selection on the word.
+    pWrtShell->SelWrd();
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    // Did we indeed manage to select the second word?
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), pShellCursor->GetText());
+    CPPUNIT_ASSERT(!aView1.m_bOwnSelectionSet);
+    // This failed, aView1 did not get notification about selection changes in
+    // aView2.
+    CPPUNIT_ASSERT(aView1.m_bViewSelectionSet);
+    CPPUNIT_ASSERT(aView2.m_bOwnSelectionSet);
+    CPPUNIT_ASSERT(!aView2.m_bViewSelectionSet);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
