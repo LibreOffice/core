@@ -369,7 +369,33 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks_MS(
     }
 
     if ( nParamCount >= 3 )
-        aWeekendDays = GetString().getString();
+    {
+        switch (GetStackType())
+        {
+            case svSingleRef :
+                {
+                    ScAddress aAdr;
+                    PopSingleRef( aAdr );
+                    ScRefCellValue aCell( *pDok, aAdr );
+                    if ( !aCell.hasEmptyValue() )
+                    {
+                        svl::SharedString aStr;
+                        GetCellString( aStr, aCell );
+                        aWeekendDays = aStr.getString();
+                    }
+                    else
+                        return errNoValue;
+
+                }
+                break;
+            case svDoubleRef :
+                return errNoValue;
+                break;
+            default :
+                aWeekendDays = GetString().getString();
+                break;
+        }
+    }
 
     for ( int i = 0; i < 7; i++ )
         bWeekendMask[ i] = false;
@@ -417,16 +443,21 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks_MS(
                     nErr = errIllegalArgument;
                 break;
             case 7 :
-                // Weekend days defined by string
-                for ( int i = 0; i < 7 && !nErr; i++ )
+                if ( aWeekendDays != "1111111" )
                 {
-                    switch ( aWeekendDays[ i ] )
+                    // Weekend days defined by string
+                    for ( int i = 0; i < 7 && !nErr; i++ )
                     {
-                        case '0' : bWeekendMask[ i ] = false; break;
-                        case '1' : bWeekendMask[ i ] = true;  break;
-                        default  : nErr = errIllegalArgument; break;
+                        switch ( aWeekendDays[ i ] )
+                        {
+                            case '0' : bWeekendMask[ i ] = false; break;
+                            case '1' : bWeekendMask[ i ] = true;  break;
+                            default  : nErr = errIllegalArgument; break;
+                        }
                     }
                 }
+                else
+                    nErr = errIllegalArgument;
                 break;
             default :
                 nErr = errIllegalArgument;
@@ -516,10 +547,15 @@ void ScInterpreter::ScWorkday_MS()
                 if ( nDays > 0 )
                 {
                     size_t nRef = 0;
+                    //skip holidays before/on start date
+                    while ( nRef < nMax && nSortArray.at( nRef ) <= nDate )
+                        nRef++;
+
                     while ( nDays )
                     {
                         while ( nRef < nMax && nSortArray.at( nRef ) < nDate )
                             nRef++;
+
                         if ( !( nRef < nMax && nSortArray.at( nRef ) == nDate ) || nRef >= nMax )
                              nDays--;
 
@@ -531,10 +567,15 @@ void ScInterpreter::ScWorkday_MS()
                 else
                 {
                     sal_Int16 nRef = nMax - 1;
+                    //skip holidays after/on start date
+                    while ( nRef >= 0 && nSortArray.at( nRef ) >= nDate )
+                        nRef--;
+
                     while ( nDays )
                     {
                         while ( nRef >= 0 && nSortArray.at( nRef ) > nDate )
                             nRef--;
+
                         if ( !( nRef >= 0 && nSortArray.at( nRef ) == nDate ) || nRef < 0 )
                              nDays++;
 
