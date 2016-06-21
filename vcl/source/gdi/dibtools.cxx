@@ -40,9 +40,9 @@
 
 typedef sal_Int32 FXPT2DOT30;
 
-// Avoid conflict with wingdi.h
 namespace
 {
+
 struct CIEXYZ
 {
     FXPT2DOT30      aXyzX;
@@ -143,20 +143,17 @@ struct DIBV5Header : public DIBInfoHeader
     ~DIBV5Header()
     {}
 };
-}
-namespace
-{
-    inline sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
-    {
-        return ( nInputCount <= 1 ) ? 1 :
-               ( nInputCount <= 4 ) ? 4 :
-               ( nInputCount <= 8 ) ? 8 : 24;
-    }
 
-    inline bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
-    {
-        return (ScanlineFormat::N16BitTcLsbMask == nScanlineFormat) || (ScanlineFormat::N32BitTcMask == nScanlineFormat);
-    }
+inline sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
+{
+    return ( nInputCount <= 1 ) ? 1 :
+           ( nInputCount <= 4 ) ? 4 :
+           ( nInputCount <= 8 ) ? 8 : 24;
+}
+
+inline bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
+{
+    return (ScanlineFormat::N16BitTcLsbMask == nScanlineFormat) || (ScanlineFormat::N32BitTcMask == nScanlineFormat);
 }
 
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown, bool bMSOFormat)
@@ -1630,6 +1627,8 @@ bool ImplWriteDIB(
 
     return bRet;
 }
+
+} // unnamed namespace
 
 bool ReadDIB(
     Bitmap& rTarget,
