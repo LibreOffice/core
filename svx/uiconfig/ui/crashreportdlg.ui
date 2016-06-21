@@ -102,7 +102,7 @@ crashreport.libreoffice.org/stats/crash_details/%CRASHID</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Please check the report and if no bug report is connected to the crash report yet, open a new bug report at bugs.documentfoundation.org.
 Add detailed instructions on how to reproduce the crash and the shown crash ID into the crash report field.
-Thank you for your help in improving LibreOffice.</property>
+Thank you for your help in improving %PRODUCTNAME.</property>
             <property name="wrap">True</property>
           </object>
           <packing>
