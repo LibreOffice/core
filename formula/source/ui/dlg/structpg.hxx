@@ -35,7 +35,7 @@ namespace formula
 {
 
 class IFormulaToken;
-class   StructListBox : public SvTreeListBox
+class StructListBox : public SvTreeListBox
 {
 private:
 
