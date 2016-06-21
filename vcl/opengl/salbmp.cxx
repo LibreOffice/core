@@ -412,7 +412,48 @@ void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int 
     rTexture = OpenGLTexture (nWidth, nHeight, nFormat, nType, pData);
 }
 
-}
+// Write color information for 1 and 4 bit palette bitmap scanlines.
+class ScanlineWriter
+{
+    BitmapPalette& maPalette;
+    sal_uInt8 mnColorsPerByte; // number of colors that are stored in one byte
+    sal_uInt8 mnColorBitSize;  // number of bits a color takes
+    sal_uInt8 mnColorBitMask;  // bit mask used to isolate the color
+    sal_uInt8* mpCurrentScanline;
+    long mnX;
+
+public:
+    ScanlineWriter(BitmapPalette& aPalette, sal_Int8 nColorsPerByte)
+        : maPalette(aPalette)
+        , mnColorsPerByte(nColorsPerByte)
+        , mnColorBitSize(8 / mnColorsPerByte) // bit size is number of bit in a byte divided by number of colors per byte (8 / 2 = 4 for 4-bit)
+        , mnColorBitMask((1 << mnColorBitSize) - 1) // calculate the bit mask from the bit size
+        , mpCurrentScanline(nullptr)
+        , mnX(0)
+    {}
+
+    inline void writeRGB(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB)
+    {
+        // calculate to which index we will write
+        long nScanlineIndex = mnX / mnColorsPerByte;
+
+        // calculate the number of shifts to get the color information to the right place
+        long nShift = (8 - mnColorBitSize) - ((mnX % mnColorsPerByte) * mnColorBitSize);
+
+        sal_uInt16 nColorIndex = maPalette.GetBestIndex(BitmapColor(nR, nG, nB));
+        mpCurrentScanline[nScanlineIndex] &= ~(mnColorBitMask << nShift); // clear
+        mpCurrentScanline[nScanlineIndex] |= (nColorIndex & mnColorBitMask) << nShift; // set
+        mnX++;
+    }
+
+    inline void nextLine(sal_uInt8* pScanline)
+    {
+        mnX = 0;
+        mpCurrentScanline = pScanline;
+    }
+};
+
+} // end anonymous namespace
 
 Size OpenGLSalBitmap::GetSize() const
 {
@@ -559,43 +600,43 @@ bool OpenGLSalBitmap::ReadTexture()
 #endif
         return true;
     }
-    else if (mnBits == 1)
-    {   // convert buffers from 24-bit RGB to 1-bit Mask
+    else if (mnBits == 1 || mnBits == 4)
+    {   // convert buffers from 24-bit RGB to 1 or 4-bit buffer
         std::vector<sal_uInt8> aBuffer(mnWidth * mnHeight * 3);
 
         sal_uInt8* pBuffer = aBuffer.data();
         determineTextureFormat(24, nFormat, nType);
         maTexture.Read(nFormat, nType, pBuffer);
+        sal_uInt16 nSourceBytesPerRow = lclBytesPerRow(24, mnWidth);
 
-        int nShift = 7;
-        size_t nIndex = 0;
-
-        sal_uInt8* pCurrent = pBuffer;
+        std::unique_ptr<ScanlineWriter> pWriter;
+        switch(mnBits)
+        {
+            case 1:
+                pWriter.reset(new ScanlineWriter(maPalette, 8));
+                break;
+            case 4:
+            default:
+                pWriter.reset(new ScanlineWriter(maPalette, 2));
+                break;
+        }
 
         for (int y = 0; y < mnHeight; ++y)
         {
+            sal_uInt8* pSource = &pBuffer[y * nSourceBytesPerRow];
+            sal_uInt8* pDestination = &pData[y * mnBytesPerRow];
+
+            pWriter->nextLine(pDestination);
+
             for (int x = 0; x < mnWidth; ++x)
             {
-                if (nShift < 0)
-                {
-                    nShift = 7;
-                    nIndex++;
-                    pData[nIndex] = 0;
-                }
+                // read source
+                sal_uInt8 nR = *pSource++;
+                sal_uInt8 nG = *pSource++;
+                sal_uInt8 nB = *pSource++;
 
-                sal_uInt8 nR = *pCurrent++;
-                sal_uInt8 nG = *pCurrent++;
-                sal_uInt8 nB = *pCurrent++;
-
-                if (nR > 0 && nG > 0 && nB > 0)
-                {
-                    pData[nIndex] |= (1 << nShift);
-                }
-                nShift--;
+                pWriter->writeRGB(nR, nG, nB);
             }
-            nShift = 7;
-            nIndex++;
-            pData[nIndex] = 0;
         }
         return true;
     }
@@ -604,7 +645,6 @@ bool OpenGLSalBitmap::ReadTexture()
              << mnWidth << "x" << mnHeight << "- unimplemented bit depth: "
              << mnBits);
     return false;
-
 }
 
 sal_uInt16 OpenGLSalBitmap::GetBitCount() const
