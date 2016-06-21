@@ -59,10 +59,12 @@ using namespace ::com::sun::star;
 #define PTWAINMSG               MSG*
 #define FIXTODOUBLE( nFix )     ((double)nFix.Whole+(double)nFix.Frac/65536.)
 #define FIXTOLONG( nFix )       ((long)floor(FIXTODOUBLE(nFix)+0.5))
-
-#if defined(_WIN32)
-#define TWAIN_LIBNAME           "TWAIN_32.DLL"
 #define TWAIN_FUNCNAME          "DSM_Entry"
+
+#if defined(_WIN64)
+#    define TWAIN_LIBNAME           "TWAIN_64.DLL"
+#else
+#    define TWAIN_LIBNAME           "TWAIN_32.DLL"
 #endif
 
 enum TwainState
