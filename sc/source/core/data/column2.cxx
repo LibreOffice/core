@@ -2988,29 +2988,29 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
         maBroadcasters.set_empty(nRow, nRow);
 }
 
-void ScColumn::StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtListener& rLst )
+void ScColumn::StartListening( sc::StartListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rLst )
 {
-    if (!ValidRow(nRow))
+    if (!ValidRow(rAddress.Row()))
         return;
 
-    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
+    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(rAddress.Tab(), rAddress.Col());
     if (!p)
         return;
 
     sc::BroadcasterStoreType::iterator& it = p->miBroadcasterPos;
-    std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(it, nRow);
+    std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(it, rAddress.Row());
     it = aPos.first; // store the block position for next iteration.
-    startListening(maBroadcasters, it, aPos.second, nRow, rLst);
+    startListening(maBroadcasters, it, aPos.second, rAddress.Row(), rLst);
 }
 
-void ScColumn::EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener )
+void ScColumn::EndListening( sc::EndListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rListener )
 {
-    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
+    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(rAddress.Tab(), rAddress.Col());
     if (!p)
         return;
 
     sc::BroadcasterStoreType::iterator& it = p->miBroadcasterPos;
-    std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(it, nRow);
+    std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(it, rAddress.Row());
     it = aPos.first; // store the block position for next iteration.
     if (it->type != sc::element_type_broadcaster)
         return;
@@ -3021,7 +3021,7 @@ void ScColumn::EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListe
     rListener.EndListening(*pBC);
     if (!pBC->HasListeners())
         // There is no more listeners for this cell. Add it to the purge list for later purging.
-        rCxt.addEmptyBroadcasterPosition(nTab, nCol, nRow);
+        rCxt.addEmptyBroadcasterPosition(rAddress.Tab(), rAddress.Col(), rAddress.Row());
 }
 
 namespace {
