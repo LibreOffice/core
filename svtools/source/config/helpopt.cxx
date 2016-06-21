@@ -61,7 +61,7 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 
     static Sequence< OUString > GetPropertyNames();
 
-    virtual void    ImplCommit() SAL_FINAL override;
+    virtual void    ImplCommit() final override;
 
 public:
                     SvtHelpOptions_Impl();
