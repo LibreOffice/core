@@ -19,6 +19,7 @@
 
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
@@ -952,8 +953,8 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aProp
         if (aPropertyName == PROPERTYNAME_NOZERO)
         {
             //  operator >>= shouldn't be used for bool (?)
-            if ( aValue.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-                pFormatter->SetNoZero( *static_cast<sal_Bool const *>(aValue.getValue()) );
+            if ( auto b = o3tl::tryAccess<bool>(aValue) )
+                pFormatter->SetNoZero( *b );
         }
         else if (aPropertyName == PROPERTYNAME_NULLDATE)
         {

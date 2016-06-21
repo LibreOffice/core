@@ -50,18 +50,11 @@ enum SfxItemKind {
 inline bool Any2Bool( const css::uno::Any&rValue )
 {
     bool bValue = false;
-    if( rValue.hasValue() )
+    if( !(rValue >>= bValue) )
     {
-        if( rValue.getValueType() == cppu::UnoType<bool>::get() )
-        {
-            bValue = *static_cast<sal_Bool const *>(rValue.getValue());
-        }
-        else
-        {
-            sal_Int32 nNum = 0;
-            if( rValue >>= nNum )
-                bValue = nNum != 0;
-        }
+        sal_Int32 nNum = 0;
+        if( rValue >>= nNum )
+            bValue = nNum != 0;
     }
 
     return bValue;

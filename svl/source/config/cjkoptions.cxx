@@ -19,6 +19,7 @@
 
 #include <svl/cjkoptions.hxx>
 
+#include <o3tl/any.hxx>
 #include <svl/languageoptions.hxx>
 #include <i18nlangtag/lang.h>
 #include <unotools/configitem.hxx>
@@ -179,7 +180,7 @@ void SvtCJKOptions_Impl::Load()
         {
             if( pValues[nProp].hasValue() )
             {
-                bool bValue = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
+                bool bValue = *o3tl::doAccess<bool>(pValues[nProp]);
                 switch ( nProp )
                 {
                     case 0: { bCJKFont = bValue; bROCJKFont = pROStates[nProp]; } break;

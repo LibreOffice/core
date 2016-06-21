@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <o3tl/any.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -198,7 +200,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
     if( rEntry.aType.getTypeClass() == TypeClass_ENUM &&
          rAny.getValueTypeClass() == TypeClass_LONG )
     {
-        sal_Int32 nTmp = *static_cast<sal_Int32 const *>(rAny.getValue());
+        sal_Int32 nTmp = *o3tl::forceAccess<sal_Int32>(rAny);
         rAny.setValue( &nTmp, rEntry.aType );
     }
 }
