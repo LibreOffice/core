@@ -1103,20 +1103,20 @@ void ScTable::EndListening( const ScAddress& rAddress, SvtListener* pListener )
     aCol[rAddress.Col()].EndListening( *pListener, rAddress.Row() );
 }
 
-void ScTable::StartListening( sc::StartListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener )
+void ScTable::StartListening( sc::StartListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rListener )
 {
-    if (!ValidCol(nCol))
+    if (!ValidCol(rAddress.Col()))
         return;
 
-    aCol[nCol].StartListening(rCxt, nRow, rListener);
+    aCol[rAddress.Col()].StartListening(rCxt, rAddress, rListener);
 }
 
-void ScTable::EndListening( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener )
+void ScTable::EndListening( sc::EndListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rListener )
 {
-    if (!ValidCol(nCol))
+    if (!ValidCol(rAddress.Col()))
         return;
 
-    aCol[nCol].EndListening(rCxt, nRow, rListener);
+    aCol[rAddress.Col()].EndListening(rCxt, rAddress, rListener);
 }
 
 void ScTable::SetPageStyle( const OUString& rName )

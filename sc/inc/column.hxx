@@ -527,8 +527,8 @@ public:
 
     void        StartListening( SvtListener& rLst, SCROW nRow );
     void        EndListening( SvtListener& rLst, SCROW nRow );
-    void StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
-    void EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
+    void StartListening( sc::StartListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rListener );
+    void EndListening( sc::EndListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rListener );
     void StartListeners( sc::StartListeningContext& rCxt, bool bAll );
     void        SetDirtyIfPostponed();
     void BroadcastRecalcOnRefMove();

@@ -313,7 +313,7 @@ void ScDocument::StartListeningCell(
     if (!pTab)
         return;
 
-    pTab->StartListening(rCxt, rPos.Col(), rPos.Row(), rListener);
+    pTab->StartListening(rCxt, rPos, rListener);
 }
 
 void ScDocument::EndListeningCell(
@@ -323,7 +323,7 @@ void ScDocument::EndListeningCell(
     if (!pTab)
         return;
 
-    pTab->EndListening(rCxt, rPos.Col(), rPos.Row(), rListener);
+    pTab->EndListening(rCxt, rPos, rListener);
 }
 
 void ScDocument::EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells )
