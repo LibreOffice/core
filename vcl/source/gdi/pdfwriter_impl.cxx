@@ -2410,7 +2410,7 @@ const sal_Char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr
 
 #if OSL_DEBUG_LEVEL > 1
     if( it == aAttributeStrings.end() )
-        fprintf( stderr, "invalid PDFWriter::StructAttribute %d\n", eAttr );
+        SAL_INFO("vcl.pdfwriter", "invalid PDFWriter::StructAttribute " << eAttr);
 #endif
 
     return it != aAttributeStrings.end() ? it->second : "";
@@ -2455,7 +2455,7 @@ const sal_Char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeV
 
 #if OSL_DEBUG_LEVEL > 1
     if( it == aValueStrings.end() )
-        fprintf( stderr, "invalid PDFWriter::StructAttributeValue %d\n", eVal );
+        SAL_INFO("vcl.pdfwriter", "invalid PDFWriter::StructAttributeValue " << eVal);
 #endif
 
     return it != aValueStrings.end() ? it->second : "";
@@ -2531,7 +2531,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
             {
                 OSL_FAIL( "unresolved link id for Link structure" );
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "unresolved link id %" SAL_PRIdINT32 " for Link structure\n", nLink );
+                SAL_INFO("vcl.pdfwriter", "unresolved link id " << nLink << " for Link structure");
                 {
                     OStringBuffer aLine( "unresolved link id " );
                     aLine.append( nLink );
@@ -2638,7 +2638,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                 {
                     OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
+                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::emitStructure: invalid child structure elemnt with id " << *it);
 #endif
                 }
             }
@@ -2647,7 +2647,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         {
             OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
+            SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::emitStructure: invalid child structure id " << *it);
 #endif
         }
     }
@@ -4022,7 +4022,7 @@ bool PDFWriterImpl::emitFonts()
                 }
                 else
                 {
-                    fprintf( stderr, "PDF: CreateFontSubset result in not yet supported format=%d\n",aSubsetInfo.m_nFontType);
+                    SAL_INFO("vcl.pdfwriter", "PDF: CreateFontSubset result in not yet supported format=" << aSubsetInfo.m_nFontType);
                     aLine.append( "0 >>\nstream\n" );
                 }
 
@@ -4331,7 +4331,7 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
     if( nDestID < 0 || nDestID >= (sal_Int32)m_aDests.size() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "ERROR: invalid dest %d requested\n", (int)nDestID );
+        SAL_INFO("vcl.pdfwriter", "ERROR: invalid dest " << (int)nDestID << " requested");
 #endif
         return false;
     }
@@ -8178,8 +8178,10 @@ void PDFWriterImpl::sortWidgets()
         {
             SAL_WARN( "vcl", "wrong number of sorted annotations" );
             #if OSL_DEBUG_LEVEL > 0
-            fprintf( stderr, "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions on page nr %ld\n"
-                     "    %ld sorted and %ld unsorted\n", (long int)it->first, (long int)it->second.aSortedAnnots.size(), (long int)nAnnots );
+            SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions "
+                     "on page nr " << (long int)it->first << ", " <<
+                     (long int)it->second.aSortedAnnots.size() << " sorted and " <<
+                     (long int)nAnnots << " unsorted");
             #endif
         }
     }
@@ -12375,10 +12377,9 @@ void PDFWriterImpl::beginStructureElementMCSeq()
 
         // update the element's content list
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "beginning marked content id %" SAL_PRIdINT32 " on page object %" SAL_PRIdINT32 ", structure first page = %" SAL_PRIdINT32 "\n",
-                 nMCID,
-                 m_aPages[ m_nCurrentPage ].m_nPageObject,
-                 rEle.m_nFirstPageObject );
+        SAL_INFO("vcl.pdfwriter", "beginning marked content id " << nMCID << " on page object "
+                 << m_aPages[ m_nCurrentPage ].m_nPageObject << ", structure first page = "
+                 << rEle.m_nFirstPageObject);
 #endif
         rEle.m_aKids.push_back( PDFStructureElementKid( nMCID, m_aPages[m_nCurrentPage].m_nPageObject ) );
         // update the page's mcid parent list
@@ -12591,7 +12592,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                 {
                     OSL_FAIL( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
+                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::addInternalStructureContainer: invalid child structure elemnt with id " << *it );
 #endif
                 }
             }
@@ -12600,7 +12601,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         {
             OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
+            SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::addInternalStructureContainer: invalid child structure id " << *it );
 #endif
         }
     }
@@ -12883,12 +12884,12 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
         m_aStructure[ m_nCurrentStructElement ].m_aAttributes[ eAttr ] = PDFStructureAttribute( eVal );
 #if OSL_DEBUG_LEVEL > 1
     else if( m_nCurrentStructElement > 0 && m_bEmitStructure )
-        fprintf( stderr, "rejecting setStructureAttribute( %s, %s ) on %s (%s) element\n",
-                 getAttributeTag( eAttr ),
-                 getAttributeValueTag( eVal ),
-                 getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ),
-                 m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr()
-                 );
+        SAL_INFO("vcl.pdfwriter",
+                 "rejecting setStructureAttribute( " << getAttributeTag( eAttr )
+                 << ", " << getAttributeValueTag( eVal )
+                 << " ) on " << getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType )
+                 << " (" << m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr()
+                 << ") element");
 #endif
 
     return bInsert;
@@ -13017,11 +13018,12 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
         m_aStructure[ m_nCurrentStructElement ].m_aAttributes[ eAttr ] = PDFStructureAttribute( nValue );
 #if OSL_DEBUG_LEVEL > 1
     else if( m_nCurrentStructElement > 0 && m_bEmitStructure )
-        fprintf( stderr, "rejecting setStructureAttributeNumerical( %s, %d ) on %s (%s) element\n",
-                 getAttributeTag( eAttr ),
-                 (int)nValue,
-                 getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ),
-                 m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr() );
+        SAL_INFO("vcl.pdfwriter",
+                 "rejecting setStructureAttributeNumerical( " << getAttributeTag( eAttr )
+                 << ", " << (int)nValue
+                 << " ) on " << getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType )
+                 << " (" << m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr()
+                 << ") element");
 #endif
 
     return bInsert;
@@ -13103,7 +13105,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
             int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
             const OUString& rVal = m_aWidgets[nKidIndex].m_aOnValue;
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "OnValue: %s\n", OUStringToOString( rVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_INFO("vcl.pdfwriter", "OnValue: " << OUStringToOString( rVal, RTL_TEXTENCODING_UTF8 ).getStr());
             #endif
             if( aOnValues.find( rVal ) == aOnValues.end() )
             {
@@ -13117,7 +13119,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
         if( ! bIsUnique )
         {
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "enforcing unique OnValues\n" );
+            SAL_INFO("vcl.pdfwriter", "enforcing unique OnValues" );
             #endif
             // make unique by using ascending OnValues
             for( int nKid = 0; nKid < nChildren; nKid++ )
@@ -13148,7 +13150,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
                 }
                 #if OSL_DEBUG_LEVEL > 1
                 else
-                    fprintf( stderr, "error: RadioButton without \"Yes\" stream\n" );
+                    SAL_INFO("vcl.pdfwriter", "error: RadioButton without \"Yes\" stream" );
                 #endif
             }
             // update selected radio button
