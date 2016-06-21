@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_a9a005a7",
+        "filename": "svx/source/dialog/SvxNumOptionsTabPageHelper.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-21T22:04:38Z",
+      "side": 1,
+      "message": "Doesn\u0027t have to be a member function as it doesn\u0027t modify this object, so you can happily put it into anonymous local namespace (\u0027lcl_\u0027 prefix usually denotes that) ... \n\nOr is there anything else outside this file using it? If so, please remove lcl_ prefix",
+      "revId": "475238c048076e16d37d4f4f3dd55224170e8102",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
