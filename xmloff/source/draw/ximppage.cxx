@@ -361,48 +361,42 @@ void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
         {
             const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
 
-            if( pContext && dynamic_cast<const SdXMLStylesContext *>( pContext) != nullptr)
+            if (const SdXMLStylesContext* pStyles = dynamic_cast<const SdXMLStylesContext *>(pContext))
             {
-                const SdXMLStylesContext* pStyles = static_cast<const SdXMLStylesContext*>(pContext);
-                if(pStyles)
+                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, rStyleName);
+
+                if (const XMLPropStyleContext* pPropStyle = dynamic_cast<const XMLPropStyleContext*>(pStyle))
                 {
-                    const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
-                        XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, rStyleName);
-
-                    if(pStyle && dynamic_cast<const XMLPropStyleContext*>(pStyle))
+                    Reference <beans::XPropertySet> xPropSet1(mxShapes, uno::UNO_QUERY);
+                    if(xPropSet1.is())
                     {
-                        const XMLPropStyleContext* pPropStyle = static_cast<const XMLPropStyleContext*>(pStyle);
+                        Reference< beans::XPropertySet > xPropSet( xPropSet1 );
+                        Reference< beans::XPropertySet > xBackgroundSet;
 
-                        Reference <beans::XPropertySet> xPropSet1(mxShapes, uno::UNO_QUERY);
-                        if(xPropSet1.is())
+                        const OUString aBackground("Background");
+                        if( xPropSet1->getPropertySetInfo()->hasPropertyByName( aBackground ) )
                         {
-                            Reference< beans::XPropertySet > xPropSet( xPropSet1 );
-                            Reference< beans::XPropertySet > xBackgroundSet;
-
-                            const OUString aBackground("Background");
-                            if( xPropSet1->getPropertySetInfo()->hasPropertyByName( aBackground ) )
+                            Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
+                            if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
                             {
-                                Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
-                                if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
+                                Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
+                                if(xServiceFact.is())
                                 {
-                                    Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
-                                    if(xServiceFact.is())
-                                    {
-                                        xBackgroundSet.set(xServiceFact->createInstance("com.sun.star.drawing.Background"), UNO_QUERY);
-                                    }
+                                    xBackgroundSet.set(xServiceFact->createInstance("com.sun.star.drawing.Background"), UNO_QUERY);
                                 }
-
-                                if( xBackgroundSet.is() )
-                                    xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xBackgroundSet );
                             }
 
-                            if(xPropSet.is())
-                            {
-                                const_cast<XMLPropStyleContext*>(pPropStyle)->FillPropertySet(xPropSet);
+                            if( xBackgroundSet.is() )
+                                xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xBackgroundSet );
+                        }
 
-                                if( xBackgroundSet.is() )
-                                    xPropSet1->setPropertyValue( aBackground, uno::makeAny( xBackgroundSet ) );
-                            }
+                        if(xPropSet.is())
+                        {
+                            const_cast<XMLPropStyleContext*>(pPropStyle)->FillPropertySet(xPropSet);
+
+                            if( xBackgroundSet.is() )
+                                xPropSet1->setPropertyValue( aBackground, uno::makeAny( xBackgroundSet ) );
                         }
                     }
                 }
@@ -424,21 +418,16 @@ void SdXMLGenericPageContext::SetLayout()
 
         const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
 
-        if( pContext && dynamic_cast<const SdXMLStylesContext *>( pContext ) != nullptr)
+        if (const SdXMLStylesContext* pStyles = dynamic_cast<const SdXMLStylesContext *>(pContext))
         {
-            const SdXMLStylesContext* pStyles = static_cast<const SdXMLStylesContext*>(pContext);
-            if(pStyles)
+            const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
+
+            if (const SdXMLPresentationPageLayoutContext* pLayout = dynamic_cast<const SdXMLPresentationPageLayoutContext*>(pStyle))
             {
-                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
-
-                if(pStyle && dynamic_cast<const SdXMLPresentationPageLayoutContext*>( pStyle) != nullptr)
-                {
-                    const SdXMLPresentationPageLayoutContext* pLayout = static_cast<const SdXMLPresentationPageLayoutContext*>(pStyle);
-                    nType = pLayout->GetTypeId();
-                }
+                nType = pLayout->GetTypeId();
             }
-
         }
+
         if( -1 == nType )
         {
             Reference< container::XNameAccess > xPageLayouts( GetSdImport().getPageLayouts() );
@@ -484,7 +473,7 @@ void SdXMLGenericPageContext::DeleteAllShapes()
 
 void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
 {
-    if( GetSdImport().GetShapeImport()->GetStylesContext() )
+    if (GetSdImport().GetShapeImport()->GetStylesContext())
     {
         // look for PageMaster with this name
 
@@ -493,19 +482,18 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
 
         const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : nullptr;
 
-        if(pStyle && dynamic_cast<const SdXMLPageMasterContext*>(pStyle) != nullptr)
+        if (const SdXMLPageMasterContext* pPageMaster = dynamic_cast<const SdXMLPageMasterContext*>(pStyle))
         {
-            const SdXMLPageMasterContext* pPageMaster = static_cast<const SdXMLPageMasterContext*>(pStyle);
             const SdXMLPageMasterStyleContext* pPageMasterContext = pPageMaster->GetPageMasterStyle();
 
-            if(pPageMasterContext)
+            if (pPageMasterContext)
             {
                 Reference< drawing::XDrawPage > xMasterPage(GetLocalShapesContext(), uno::UNO_QUERY);
-                if(xMasterPage.is())
+                if (xMasterPage.is())
                 {
                     // set sizes for this masterpage
                     Reference <beans::XPropertySet> xPropSet(xMasterPage, uno::UNO_QUERY);
-                    if(xPropSet.is())
+                    if (xPropSet.is())
                     {
                         xPropSet->setPropertyValue("BorderBottom", Any(pPageMasterContext->GetBorderBottom()));
                         xPropSet->setPropertyValue("BorderLeft", Any(pPageMasterContext->GetBorderLeft()));
@@ -518,7 +506,6 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
                 }
             }
         }
-
     }
 }
 
