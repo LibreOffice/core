@@ -300,12 +300,12 @@ namespace /* private */
 
 STDAPI DllRegisterServer()
 {
-    TCHAR ModuleFileName[MAX_PATH];
+    WCHAR ModuleFileName[MAX_PATH];
 
-    GetModuleFileName(
-        GetModuleHandle(MODULE_NAME),
+    GetModuleFileNameW(
+        GetModuleHandleW(MODULE_NAME),
         ModuleFileName,
-        sizeof(ModuleFileName));
+        sizeof(ModuleFileName)/sizeof(ModuleFileName[0]));
 
     std::string module_path = WStringToString(ModuleFileName);
     HRESULT hr = S_OK;
@@ -380,13 +380,13 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
         return E_NOINTERFACE;
 
     if ( rclsid == CLSID_INFOTIP_HANDLER )
-        OutputDebugStringFormat( "DllGetClassObject: Create CLSID_INFOTIP_HANDLER\n" );
+        OutputDebugStringFormatA( "DllGetClassObject: Create CLSID_INFOTIP_HANDLER\n" );
     else if ( rclsid == CLSID_COLUMN_HANDLER )
-        OutputDebugStringFormat( "DllGetClassObject: Create CLSID_COLUMN_HANDLER\n" );
+        OutputDebugStringFormatA( "DllGetClassObject: Create CLSID_COLUMN_HANDLER\n" );
     else if ( rclsid == CLSID_PROPERTYSHEET_HANDLER )
-        OutputDebugStringFormat( "DllGetClassObject: Create CLSID_PROPERTYSHEET_HANDLER\n" );
+        OutputDebugStringFormatA( "DllGetClassObject: Create CLSID_PROPERTYSHEET_HANDLER\n" );
     else if ( rclsid == CLSID_THUMBVIEWER_HANDLER )
-        OutputDebugStringFormat( "DllGetClassObject: Create CLSID_THUMBVIEWER_HANDLER\n" );
+        OutputDebugStringFormatA( "DllGetClassObject: Create CLSID_THUMBVIEWER_HANDLER\n" );
 
     IUnknown* pUnk = new CClassFactory(rclsid);
     *ppv = pUnk;

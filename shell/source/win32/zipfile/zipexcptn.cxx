@@ -82,14 +82,14 @@ Win32Exception::~Win32Exception() throw()
 */
 const char* Win32Exception::what() const throw()
 {
-    FormatMessage(
+    FormatMessageA(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         GetErrorCode(),
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        (LPTSTR) &m_MsgBuff,
+        (LPSTR) &m_MsgBuff,
         0,
         NULL);
 

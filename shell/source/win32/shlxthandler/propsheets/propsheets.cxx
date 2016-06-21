@@ -56,14 +56,14 @@
 CPropertySheet::CPropertySheet(long RefCnt) :
     m_RefCnt(RefCnt)
 {
-    OutputDebugStringFormat("CPropertySheet::CTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
+    OutputDebugStringFormatA("CPropertySheet::CTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
     InterlockedIncrement(&g_DllRefCnt);
 }
 
 
 CPropertySheet::~CPropertySheet()
 {
-    OutputDebugStringFormat("CPropertySheet::DTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
+    OutputDebugStringFormatA("CPropertySheet::DTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
     InterlockedDecrement(&g_DllRefCnt);
 }
 
@@ -98,14 +98,14 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
 
 ULONG STDMETHODCALLTYPE CPropertySheet::AddRef()
 {
-    OutputDebugStringFormat("CPropertySheet::AddRef [%d]", m_RefCnt );
+    OutputDebugStringFormatA("CPropertySheet::AddRef [%d]", m_RefCnt );
     return InterlockedIncrement(&m_RefCnt);
 }
 
 
 ULONG STDMETHODCALLTYPE CPropertySheet::Release()
 {
-    OutputDebugStringFormat("CPropertySheet::Release [%d]", m_RefCnt );
+    OutputDebugStringFormatA("CPropertySheet::Release [%d]", m_RefCnt );
     long refcnt = InterlockedDecrement(&m_RefCnt);
 
     if (0 == refcnt)
@@ -136,12 +136,12 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
             NULL,
             0)))
     {
-        UINT size = DragQueryFile( reinterpret_cast<HDROP>(medium.hGlobal), 0, 0, 0 );
+        UINT size = DragQueryFileW( reinterpret_cast<HDROP>(medium.hGlobal), 0, 0, 0 );
         if ( size != 0 )
         {
-            TCHAR * buffer = new TCHAR[ size + 1 ];
-            UINT result_size = DragQueryFile( reinterpret_cast<HDROP>(medium.hGlobal),
-                                              0, buffer, size + 1 );
+            WCHAR * buffer = new WCHAR[ size + 1 ];
+            UINT result_size = DragQueryFileW( reinterpret_cast<HDROP>(medium.hGlobal),
+                                               0, buffer, size + 1 );
             if ( result_size != 0 )
             {
                 std::wstring fname = getShortPathName( buffer );
@@ -192,7 +192,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
     // add the summary property page
     psp.dwSize      = sizeof(PROPSHEETPAGE);
     psp.dwFlags     = PSP_DEFAULT | PSP_USETITLE | PSP_USECALLBACK;
-    psp.hInstance   = GetModuleHandle(MODULE_NAME);
+    psp.hInstance   = GetModuleHandleW(MODULE_NAME);
     psp.lParam      = reinterpret_cast<LPARAM>(this);
     psp.pfnCallback = reinterpret_cast<LPFNPSPCALLBACK>(CPropertySheet::PropPageSummaryCallback);
 

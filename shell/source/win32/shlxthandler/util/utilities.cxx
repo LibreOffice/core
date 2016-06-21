@@ -28,7 +28,7 @@
 
 
 const size_t MAX_RES_STRING = 1024;
-const wchar_t SPACE_CHAR = _T(' ');
+const wchar_t SPACE_CHAR = L' ';
 
 static std::wstring StringToWString(const std::string& String, int codepage)
 {
@@ -91,7 +91,7 @@ std::wstring GetResString(int ResId)
 
     int rc = LoadStringW( GetModuleHandleW(MODULE_NAME), ResId, szResStr, sizeof(szResStr) );
 
-    OutputDebugStringFormat( "GetResString: read %d chars\n", rc );
+    OutputDebugStringFormatA( "GetResString: read %d chars\n", rc );
     // OSL_ENSURE(rc, "String resource not found");
 
     return std::wstring(szResStr);
@@ -153,12 +153,12 @@ bool HasOnlySpaces(const std::wstring& String)
 std::wstring getShortPathName( const std::wstring& aLongName )
 {
     std::wstring shortName = aLongName;
-    long         length    = GetShortPathName( aLongName.c_str(), NULL, 0 );
+    long         length    = GetShortPathNameW( aLongName.c_str(), NULL, 0 );
 
     if ( length != 0 )
     {
-        TCHAR* buffer = new TCHAR[ length+1 ];
-        length = GetShortPathName( aLongName.c_str(), buffer, length );
+        WCHAR* buffer = new WCHAR[ length+1 ];
+        length = GetShortPathNameW( aLongName.c_str(), buffer, length );
         if ( length != 0 )
             shortName = std::wstring( buffer );
         delete [] buffer;

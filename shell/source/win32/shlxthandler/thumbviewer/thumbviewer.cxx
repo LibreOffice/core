@@ -57,7 +57,7 @@ namespace internal
        id is 2000 */
     void LoadSignetImageFromResource(ZipFile::ZipContentBuffer_t& buffer)
     {
-        HRSRC hrc = FindResource(g_hModule, TEXT("#2000"), RT_RCDATA);
+        HRSRC hrc = FindResourceW(g_hModule, L"#2000", RT_RCDATA);
         DWORD size = SizeofResource(g_hModule, hrc);
         HGLOBAL hglob = LoadResource(g_hModule, hrc);
         char* data = reinterpret_cast<char*>(LockResource(hglob));
@@ -464,7 +464,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
     }
     catch(std::exception&)
     {
-        OutputDebugStringFormat( "CThumbviewer Extract ERROR!\n" );
+        OutputDebugStringFormatA( "CThumbviewer Extract ERROR!\n" );
         hr = E_FAIL;
     }
     return hr;

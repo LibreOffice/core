@@ -113,7 +113,7 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale );
 
 
 #ifdef DEBUG
-inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
+inline void OutputDebugStringFormatA( LPCSTR pFormat, ... )
 {
     CHAR    buffer[1024];
     va_list args;
@@ -124,7 +124,7 @@ inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
     OutputDebugStringA( buffer );
 }
 #else
-static inline void OutputDebugStringFormat( LPCSTR, ... )
+static inline void OutputDebugStringFormatA( LPCSTR, ... )
 {
 }
 #endif
