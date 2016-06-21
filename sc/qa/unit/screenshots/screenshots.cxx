@@ -30,8 +30,10 @@
 #include <docuno.hxx>
 #include <scabstdlg.hxx>
 #include <reffact.hxx>
+#include <scui_def.hxx>
 
 #include <sc.hrc>
+#include <scresid.hxx>
 
 using namespace css;
 
@@ -162,6 +164,43 @@ void ScScreenshotTest::testOpeningSomeDialog()
 
     pDlg7->Execute();
 
+    // just fake some flags
+    sal_uInt16 nFlags = NAME_LEFT | NAME_TOP;
+    std::unique_ptr<AbstractScNameCreateDlg> pDlg8( pFact->CreateScNameCreateDlg(
+           pViewShell->GetDialogParent(), nFlags));
+    CPPUNIT_ASSERT( pDlg8 != nullptr );
+
+    pDlg8->Execute();
+
+    //FIXME: translatable string here
+    const OUString aDefaultSheetName("Sheet1");
+    const OString aEmpty("");
+    std::unique_ptr<AbstractScStringInputDlg> pDlg9( pFact->CreateScStringInputDlg(
+           pViewShell->GetDialogParent(), OUString(ScResId(SCSTR_APDTABLE)), OUString(ScResId(SCSTR_NAME)),
+           aDefaultSheetName, aEmpty, aEmpty));
+    CPPUNIT_ASSERT( pDlg9 != nullptr );
+
+    pDlg9->Execute();
+
+    std::unique_ptr<AbstractScTabBgColorDlg> pDlg10( pFact->CreateScTabBgColorDlg(
+           pViewShell->GetDialogParent(), OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
+           OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)), Color(0xff00ff), ".uno:TabBgColor"));
+    CPPUNIT_ASSERT( pDlg10 != nullptr );
+
+    pDlg10->Execute();
+
+    std::unique_ptr<AbstractScTextImportOptionsDlg> pDlg11( pFact->CreateScTextImportOptionsDlg());
+    CPPUNIT_ASSERT( pDlg11 != nullptr );
+
+    pDlg11->Execute();
+
+    //FIXME: looks butt-ugly w/ empty file, move it elsewhere, where
+    //we actually have some data
+    std::unique_ptr<AbstractScDataFormDlg> pDlg12( pFact->CreateScDataFormDlg(
+           pViewShell->GetDialogParent(), pViewShell));
+    CPPUNIT_ASSERT( pDlg12 != nullptr );
+
+    pDlg12->Execute();
 }
 
 #endif
