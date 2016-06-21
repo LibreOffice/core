@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_a6dcb219",
+        "filename": "svtools/source/config/slidesorterbaropt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-21T06:39:57Z",
+      "side": 1,
+      "message": "need to move the \"IsModified...Commit\" stuff into the _Impl class destructor",
+      "revId": "b5d8a2304c9bb6ee77e903444c799105a2c2b6a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
