@@ -152,7 +152,7 @@ static const PPTXLayoutInfo aLayoutInfo[LAYOUT_SIZE] = {
     { 16, "Title, 2 Content over Content", "twoObjOverTx" },      // not exactly, but close
     { 14, "Title, Content over Content", "objOverTx" },           // not exactly, but close
     { 18, "Title, 4 Content", "fourObj" },
-    { 33, "Title, 6 Content", "blank" }                           // not defined => blank
+    { 34, "Title, 6 Content", "blank" }                           // not defined => blank
 };
 
 int PowerPointExport::GetPPTXLayoutId( int nOffset )
