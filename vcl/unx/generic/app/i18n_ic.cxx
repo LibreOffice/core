@@ -511,12 +511,6 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    char pBuf[ 128 ];
-    fprintf( stderr, "selected inputmethod style = %s\n",
-             GetMethodName(mnPreeditStyle | mnStatusStyle, pBuf, sizeof(pBuf)) );
-#endif
-
     return (mnPreeditStyle != 0) && (mnStatusStyle != 0) ;
 }
 

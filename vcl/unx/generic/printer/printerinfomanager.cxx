@@ -1156,7 +1156,7 @@ void SystemQueueInfo::run()
         OStringBuffer aCmdLine( 128 );
         aCmdLine.append( rParm.pQueueCommand );
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
+        fprintf( stderr, "trying print queue command \"%s\" ... ", rParm.pQueueCommand );
         #endif
         aCmdLine.append( " 2>/dev/null" );
         FILE *pPipe;

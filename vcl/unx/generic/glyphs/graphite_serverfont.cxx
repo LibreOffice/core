@@ -69,7 +69,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
         rServerFont.GetFontSelData().maTargetName, RTL_TEXTENCODING_UTF8 );
 #ifdef DEBUG
     printf("GraphiteServerFontLayout %lx %s size %d %f\n", (long unsigned int)this, name.getStr(),
-        rServerFont.GetMetricsFT().x_ppem,
+        rServerFont.GetFtFace()->size->metrics.x_ppem,
         rServerFont.GetFontSelData().mfExactHeight);
 #endif
     sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
@@ -80,15 +80,14 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
             rServerFont.GetGraphiteFace()->face(), aFeat, aLang);
 #ifdef DEBUG
         if (mpFeatures)
-            printf("GraphiteServerFontLayout %s/%s/%s %x language %d features %d errors\n",
+            printf("GraphiteServerFontLayout %s/%s/%s %x language\n",
                 OUStringToOString( rServerFont.GetFontSelData().GetFamilyName(),
                 RTL_TEXTENCODING_UTF8 ).getStr(),
                 OUStringToOString( rServerFont.GetFontSelData().maTargetName,
                 RTL_TEXTENCODING_UTF8 ).getStr(),
                 OUStringToOString( rServerFont.GetFontSelData().maSearchName,
                 RTL_TEXTENCODING_UTF8 ).getStr(),
-                rServerFont.GetFontSelData().meLanguage,
-                (int)mpFeatures->numFeatures(), mpFeatures->parseErrors());
+                rServerFont.GetFontSelData().meLanguage);
 #endif
     }
     else

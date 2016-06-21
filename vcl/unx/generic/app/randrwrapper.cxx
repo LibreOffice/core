@@ -169,7 +169,7 @@ void SalDisplay::processRandREvent( XEvent* pEvent )
                     pWrapper->XRRFreeScreenConfigInfo( pConfig );
 
                     #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "screen %d changed to size %dx%d\n", (int)i, (int)pTargetSize->width, (int)pTargetSize->height );
+                    fprintf( stderr, "screen %d changed to size %dx%d\n", (int)nId, (int)pTargetSize->width, (int)pTargetSize->height );
                     #endif
                 }
             }
