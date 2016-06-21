@@ -50,6 +50,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
+#include <limits>
 #include <string.h>
 #include <math.h>
 
@@ -191,7 +192,16 @@ void ScInterpreter::ScGetDayOfWeek()
     {
         short nFlag;
         if (nParamCount == 2)
-            nFlag = (short) ::rtl::math::approxFloor(GetDouble());
+        {
+            double x = rtl::math::approxFloor(GetDouble());
+            if (x > double(std::numeric_limits<short>::min()) - 1
+                && x < double(std::numeric_limits<short>::max()) + 1)
+            {
+                nFlag = static_cast<short>(x);
+            }
+            else
+                nFlag = -1; // cause error in switch below
+        }
         else
             nFlag = 1;
 
@@ -248,7 +258,24 @@ void ScInterpreter::ScGetWeekOfYear()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        short nFlag = (nParamCount == 1) ? 1 : (short) ::rtl::math::approxFloor(GetDouble());
+        short nFlag;
+        if (nParamCount == 1)
+        {
+            nFlag = 1;
+        }
+        else
+        {
+            double x = rtl::math::approxFloor(GetDouble());
+            if (x > double(std::numeric_limits<short>::min()) - 1
+                && x < double(std::numeric_limits<short>::max()) + 1)
+            {
+                nFlag = static_cast<short>(x);
+            }
+            else
+            {
+                nFlag = -1; // cause error in switch below
+            }
+        }
 
         Date aDate = *(pFormatter->GetNullDate());
         aDate += (long)::rtl::math::approxFloor(GetDouble());
