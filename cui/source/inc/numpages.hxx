@@ -358,19 +358,6 @@ public:
     ListBox&            GetCharFmtListBox() {return *m_pCharFmtLB;}
     void                SetModified(bool bRepaint = true);
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
-
-    /** Get the numberings provided by the i18n framework (CTL, Asian, ...) and
-        add them to the listbox. Extended numbering schemes present in the
-        resource and already in the listbox but not offered by the i18n
-        framework per configuration are removed.
-
-        @param nDoNotRemove
-            A value that shall not be removed, i.e. the ugly 0x88
-            (SVX_NUM_BITMAP|0x80)
-            Pass ::std::numeric_limits<sal_uInt16>::max() if there is no such
-            restriction.
-     */
-    static void         GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotRemove );
 };
 
 

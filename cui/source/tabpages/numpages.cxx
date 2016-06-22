@@ -80,6 +80,7 @@
 #include <comphelper/string.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <svx/SvxNumOptionsTabPageHelper.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -106,13 +107,6 @@ static const sal_Char cPrefix[] = "Prefix";
 static const sal_Char cSuffix[] = "Suffix";
 static const sal_Char cBulletChar[] = "BulletChar";
 static const sal_Char cBulletFontName[] = "BulletFontName";
-
-static Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
-{
-    Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
-    Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
-    return xRet;
-}
 
 static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
@@ -196,7 +190,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(vcl::Window* pParent,
     m_pExamplesVS->SetSelectHdl(LINK(this, SvxSingleNumPickTabPage, NumSelectHdl_Impl));
     m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxSingleNumPickTabPage, DoubleClickHdl_Impl));
 
-    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
+    Reference<XDefaultNumberingProvider> xDefNum = SvxNumOptionsTabPageHelper::GetNumberingProvider();
     if(xDefNum.is())
     {
         Sequence< Sequence< PropertyValue > > aNumberings;
@@ -558,7 +552,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
     m_pExamplesVS->SetSelectHdl(LINK(this, SvxNumPickTabPage, NumSelectHdl_Impl));
     m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
 
-    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
+    Reference<XDefaultNumberingProvider> xDefNum = SvxNumOptionsTabPageHelper::GetNumberingProvider();
     if(xDefNum.is())
     {
         Sequence<Reference<XIndexAccess> > aOutlineAccess;
@@ -1088,64 +1082,6 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, voi
     }
 }
 
-// static
-void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotRemove )
-{
-
-    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
-    Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
-
-    // Extended numbering schemes present in the resource but not offered by
-    // the i18n framework per configuration must be removed from the listbox.
-    // Do not remove a special entry matching nDoNotRemove.
-    const sal_uInt16 nDontRemove = SAL_MAX_UINT16;
-    ::std::vector< sal_uInt16> aRemove( rFmtLB.GetEntryCount(), nDontRemove);
-    for (size_t i=0; i<aRemove.size(); ++i)
-    {
-        sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(
-                sal::static_int_cast< sal_Int32 >(i)));
-        if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N && nEntryData != nDoNotRemove)
-            aRemove[i] = nEntryData;
-    }
-    if(xInfo.is())
-    {
-        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
-        const sal_Int16* pTypes = aTypes.getConstArray();
-        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
-        {
-            sal_Int16 nCurrent = pTypes[nType];
-            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
-            {
-                bool bInsert = true;
-                for(sal_Int32 nEntry = 0; nEntry < rFmtLB.GetEntryCount(); nEntry++)
-                {
-                    sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(nEntry));
-                    if(nEntryData == (sal_uInt16) nCurrent)
-                    {
-                        bInsert = false;
-                        aRemove[nEntry] = nDontRemove;
-                        break;
-                    }
-                }
-                if(bInsert)
-                {
-                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
-                    sal_Int32 nPos = rFmtLB.InsertEntry(aIdent);
-                    rFmtLB.SetEntryData(nPos, reinterpret_cast<void*>((sal_uLong)nCurrent));
-                }
-            }
-        }
-    }
-    for (unsigned short i : aRemove)
-    {
-        if (i != nDontRemove)
-        {
-            sal_Int32 nPos = rFmtLB.GetEntryPos( reinterpret_cast<void*>((sal_uLong)i));
-            rFmtLB.RemoveEntry( nPos);
-        }
-    }
-}
-
 // tabpage numbering options
 SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet)
@@ -1246,7 +1182,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
 
     // Get advanced numbering types from the component.
     // Watch out for the ugly 0x88/*SVX_NUM_BITMAP|0x80*/ to not remove that.
-    GetI18nNumbering( *m_pFmtLB, (SVX_NUM_BITMAP | 0x80));
+    SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_pFmtLB, (SVX_NUM_BITMAP | 0x80));
 }
 
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
