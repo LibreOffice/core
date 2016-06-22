@@ -31,7 +31,7 @@ StringMap TreeListUIObject::get_state()
 void TreeListUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    if (rAction == "")
+    if (rAction.isEmpty())
     {
     }
     else
