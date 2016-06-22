@@ -63,7 +63,6 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
 } // namespace
 
 const double D_MAX_U_LONG = (double) 0xffffffff;      // 4294967295.0
-const sal_uInt16 MAX_FRACTION_PREC = 3;
 const double D_EPS = 1.0E-2;
 
 const double D_MAX_D_BY_100  = 1.7E306;
@@ -2452,7 +2451,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const sal_uInt16 nAnz = NumFor[nIx].GetCount();
     OUStringBuffer sStr, sFrac, sDiv; // Strings, value for
-    sal_uLong nFrac, nDiv;            // Integral part
+    sal_uLong nFrac=0, nDiv=1;        // Integral part
     bool bSign = false;               // Numerator and denominator
 
     if (fNumber < 0)
@@ -2478,169 +2477,42 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     }
 
     sal_uLong nBasis = ((sal_uLong)floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
-    sal_uLong x0, y0, x1, y1;
+    sal_uLong nFracPrev = 1, nDivPrev = 0, nFracNext, nDivNext, nPartialDenom;
+    double fRemainder = fNumber;
+    sal_Int32 nCount = 0;
 
-    if (rInfo.nCntExp <= MAX_FRACTION_PREC)
+    // Use continued fraction representation of fNumber
+    // See https://en.wikipedia.org/wiki/Continued_fraction#Best_rational_approximations
+    while ( fRemainder > 0.0 && nCount < 1000 )
     {
-        bool bUpperHalf;
-
-        if (fNumber > 0.5)
+        nCount++;
+        double fTemp = 1.0 / fRemainder;
+        nPartialDenom = (sal_uLong) floor(fTemp);
+        fRemainder = fTemp - (double)nPartialDenom;
+        nDivNext = nPartialDenom * nDiv + nDivPrev;
+        if ( nDivNext <= nBasis )  // continue loop
         {
-            bUpperHalf = true;
-            fNumber -= (fNumber - 0.5) * 2.0;
+            nFracNext = nPartialDenom * nFrac + nFracPrev;
+            nFracPrev = nFrac;
+            nFrac = nFracNext;
+            nDivPrev = nDiv;
+            nDiv = nDivNext;
         }
-        else
+        else // calculate collateral fraction and exit
         {
-            bUpperHalf = false;
-        }
-        // Find entry to Farey sequence:
-        x0 = (sal_uLong) floor(fNumber*nBasis); // e.g.: 2/9 <= x < 3/9
-        if (x0 == 0)                            // => x0 = 2
-        {
-            y0 = 1;
-            x1 = 1;
-            y1 = nBasis;
-        }
-        else if (x0 == (nBasis-1)/2)    // (b-1)/2, 1/2
-        {                               // is ok (nBasis is odd)
-            y0 = nBasis;
-            x1 = 1;
-            y1 = 2;
-        }
-        else if (x0 == 1)
-        {
-            y0 = nBasis;                //  1/n; 1/(n-1)
-            x1 = 1;
-            y1 = nBasis - 1;
-        }
-        else
-        {
-            y0 = nBasis;                // e.g.: 2/9   2/8
-            x1 = x0;
-            y1 = nBasis - 1;
-            double fUg = (double) x0 / (double) y0;
-            double fOg = (double) x1 / (double) y1;
-            sal_uLong nGgt = ImpGGT(y0, x0);       // x0/y0 kuerzen
-            x0 /= nGgt;
-            y0 /= nGgt;                     // Nest:
-            sal_uLong x2 = 0;
-            sal_uLong y2 = 0;
-            bool bStop = false;
-            while (!bStop)
+            sal_uLong nCollat = (nBasis - nDivPrev) / nDiv;
+            if ( 2 * nCollat >= nPartialDenom )
             {
-#ifdef __GNUC__
-                // #i21648# GCC over-optimizes something resulting
-                // in wrong fTest values throughout the loops.
-                volatile
-#endif
-                    double fTest = (double)x1/(double)y1;
-                while (!bStop)
+                sal_uLong nFracTest = nCollat * nFrac + nFracPrev;
+                sal_uLong nDivTest  = nCollat * nDiv  + nDivPrev;
+                double fSign = ((double)nFrac > fNumber * (double)nDiv)?1.0:-1.0;
+                if ( fSign * ( double(nFrac * nDivTest + nDiv * nFracTest) - 2.0 * double(nDiv * nDivTest) * fNumber ) > 0.0 )
                 {
-                    while (fTest > fOg)
-                    {
-                        x1--;
-                        fTest = (double)x1/(double)y1;
-                    }
-                    while (fTest < fUg && y1 > 1)
-                    {
-                        y1--;
-                        fTest = (double)x1/(double)y1;
-                    }
-                    if (fTest <= fOg)
-                    {
-                        fOg = fTest;
-                        bStop = true;
-                    }
-                    else if (y1 == 1)
-                    {
-                        bStop = true;
-                    }
-                } // of while
-                nGgt = ImpGGT(y1, x1); // Shorten x1/y1
-                x2 = x1 / nGgt;
-                y2 = y1 / nGgt;
-                if (x2*y0 - x0*y2 == 1 || y1 <= 1) // Test for x2/y2
-                    bStop = true;                  // Next Farey number
-                else
-                {
-                    y1--;
-                    bStop = false;
+                    nFrac = nFracTest;
+                    nDiv  = nDivTest;
                 }
-            } // of while
-            x1 = x2;
-            y1 = y2;
-        } // of else
-
-        double fup, flow;
-
-        flow = (double)x0/(double)y0;
-        fup  = (double)x1/(double)y1;
-        while (fNumber > fup)
-        {
-            sal_uLong x2 = ((y0+nBasis)/y1)*x1 - x0; // Next Farey number
-            sal_uLong y2 = ((y0+nBasis)/y1)*y1 - y0;
-
-            x0 = x1;
-            y0 = y1;
-            x1 = x2;
-            y1 = y2;
-            flow = fup;
-            fup  = (double)x1/(double)y1;
-        }
-        if (fNumber - flow < fup - fNumber)
-        {
-            nFrac = x0;
-            nDiv  = y0;
-        }
-        else
-        {
-            nFrac = x1;
-            nDiv  = y1;
-        }
-        if (bUpperHalf) // Recover original
-        {
-            if (nFrac == 0 && nDiv == 1) // 1/1
-            {
-                fNum += 1.0;
             }
-            else
-            {
-                nFrac = nDiv - nFrac;
-            }
-        }
-    }
-    else // Large denominator
-    {    // 0,1234->123/1000
-        sal_uLong nGgt;
-
-        nDiv = 10000000;
-        nFrac = ((sal_uLong)floor(0.5 + fNumber * 10000000.0));
-        nGgt = ImpGGT(nDiv, nFrac);
-        if (nGgt > 1)
-        {
-            nDiv  /= nGgt;
-            nFrac /= nGgt;
-        }
-        if (nDiv > nBasis)
-        {
-            nGgt = ImpGGTRound(nDiv, nFrac);
-            if (nGgt > 1)
-            {
-                nDiv  /= nGgt;
-                nFrac /= nGgt;
-            }
-        }
-        if (nDiv > nBasis)
-        {
-            nDiv = nBasis;
-            nFrac = ((sal_uLong)floor(0.5 + fNumber *
-                                      pow(10.0,rInfo.nCntExp)));
-            nGgt = ImpGGTRound(nDiv, nFrac);
-            if (nGgt > 1)
-            {
-                nDiv  /= nGgt;
-                nFrac /= nGgt;
-            }
+            fRemainder = 0.0; // exit loop
         }
     }
 
