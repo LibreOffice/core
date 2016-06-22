@@ -343,6 +343,7 @@ public:
 
     void InsertAutoFormat(size_t i, std::unique_ptr<SwTableAutoFormat> pFormat);
     void EraseAutoFormat(size_t i);
+    void EraseAutoFormat(const OUString& rName);
     std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(size_t i);
 
     /// Find table style with the provided name, return nullptr when not found.

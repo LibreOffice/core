@@ -254,12 +254,16 @@ class SwXTextTableStyle : public cppu::WeakImplHelper
 <
     css::style::XStyle,
     css::beans::XPropertySet,
-    css::container::XNameAccess,
+    css::container::XNameContainer,
     css::lang::XServiceInfo
 >
 {
     SwDocShell* m_pDocShell;
-    OUString m_sTableAutoFormatName;
+    SwTableAutoFormat* m_pTableAutoFormat;
+    /// Stores SwTableAutoFormat when this is not a physical style.
+    std::unique_ptr<SwTableAutoFormat> m_pTableAutoFormat_Impl;
+    /// If true, then it points to a core object, if false, then this is a created, but not-yet-inserted format.
+    bool m_bPhysical;
 
     enum {
         FIRST_ROW_STYLE = 0,
@@ -282,11 +286,20 @@ class SwXTextTableStyle : public cppu::WeakImplHelper
         STYLE_COUNT
     };
 
-    SwTableAutoFormat* GetTableAutoFormat();
+    /// Fills m_aCellStyles with SwXTextCellStyles pointing to children of this style.
+    void UpdateCellStylesMapping();
     static const CellStyleNameMap& GetCellStyleNameMap();
     css::uno::Reference<css::style::XStyle> m_aCellStyles[STYLE_COUNT];
 public:
+    SwXTextTableStyle(SwDocShell* pDocShell, SwTableAutoFormat* pTableAutoFormat);
+    /// Create non physical style
     SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
+
+    /// This function looks for a SwTableAutoFormat with given name. Returns nullptr if could not be found.
+    static SwTableAutoFormat* GetTableAutoFormat(SwDocShell* pDocShell, const OUString& sName);
+    /// Returns box format assigned to this style
+    SwTableAutoFormat* GetTableFormat();
+    void SetPhysical();
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
@@ -312,6 +325,11 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName(const OUString& rName) throw(css::uno::RuntimeException, std::exception) override;
 
+    //XNameContainer
+    virtual void SAL_CALL insertByName(const OUString& rName, const css::uno::Any& aElement) throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL replaceByName(const OUString& rName, const css::uno::Any& aElement) throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeByName(const OUString& rName) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
@@ -335,15 +353,17 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
 {
     SwDocShell* m_pDocShell;
     SwBoxAutoFormat* m_pBoxAutoFormat;
-    OUString m_sParentStyle; // used when style is physical
-    OUString m_sName;   // used when style is not physical
-    bool m_bPhysical; // delete a m_pBoxAutoFormat when changing from false to true!
+    /// Stores SwBoxAutoFormat when this is not a physical style.
+    std::shared_ptr<SwBoxAutoFormat> m_pBoxAutoFormat_Impl;
+    OUString m_sParentStyle;
+    OUString m_sName;
+    /// If true, then it points to a core object, if false, then this is a created, but not-yet-inserted format.
+    bool m_bPhysical;
 
  public:
     SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle);
     /// Create non physical style
     SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName);
-    virtual ~SwXTextCellStyle();
 
     /**
     * This function looks for a SwBoxAutoFormat with given name. Parses the name and returns parent name.
@@ -355,7 +375,10 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
     static SwBoxAutoFormat* GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName = nullptr);
     /// returns box format assigned to this style
     SwBoxAutoFormat* GetBoxFormat();
+    /// Sets the addres of SwBoxAutoFormat this style is bound to. Usable only when style is physical.
+    void SetBoxFormat(SwBoxAutoFormat* pBoxFormat);
     void SetPhysical();
+    bool IsPhysical();
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
