@@ -20,6 +20,8 @@ UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
 
 UIObjectUnoObj::~UIObjectUnoObj()
 {
+    SolarMutexGuard aGuard;
+    mpObj.reset();
 }
 
 css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(const OUString& rID)
