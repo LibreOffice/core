@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_746c109d",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-22T20:59:50Z",
+      "side": 1,
+      "message": "oh, you\u0027ve found \"ssize_t\" - the signed size_t!\n\nunfortunately we can\u0027t use it in LO code - *unlike* size_t it is defined not by the C/C++ languages, but by POSIX, and hence it does not exist on Windows (so it can only be used in \"unx\" directories that are not built on Windows).",
+      "revId": "6c8ddea1c968baee9d7fcd509857b60ed07ee0a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
