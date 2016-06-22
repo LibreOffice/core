@@ -27,7 +27,8 @@ double SAL_CALL AnalysisAddIn::getAmordegrc( const css::uno::Reference< css::bea
     double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal,
     double fPer, double fRate, const css::uno::Any& rOB ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception )
 {
-    if( nDate > nFirstPer || fRate <= 0.0 || fRestVal > fCost )
+    if( nDate > nFirstPer || fRate <= 0.0 || fRestVal > fCost ||
+        fCost <= 0.0 || fRestVal < 0 || fPer < 0 )
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetAmordegrc( GetNullDate( xOpt ), fCost, nDate, nFirstPer, fRestVal, fPer, fRate, getDateMode( xOpt, rOB ) );
