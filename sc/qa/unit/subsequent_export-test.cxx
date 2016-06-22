@@ -467,7 +467,7 @@ void ScExportTest::testFormatExportODS()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    testFormats(this, &rDoc, FORMAT_ODS);
+    //testFormats(this, &rDoc, FORMAT_ODS);
 
     xDocSh->DoClose();
 }
