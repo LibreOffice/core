@@ -1136,10 +1136,27 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
     }
 
+    //Handle the special condition of repeated continuous breaks.
+    //If a new style has actually been created, force it to become the follow style.
+    if( m_nBreakType == -2 )
+    {
+        SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
+        if( pLastContext && m_aFollowPageStyle.is() && !rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders() )
+        {
+            uno::Reference<beans::XPropertySet> xPrevStyle = pLastContext->GetPageStyle(rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), m_bTitlePage);
+            if( xPrevStyle.is() )
+                xPrevStyle->setPropertyValue("FollowStyle", uno::makeAny(m_sFollowPageStyleName));
+            m_sFirstPageStyleName = "";
+            m_sFollowPageStyleName = "";
+        }
+
+        m_nBreakType = static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous);
+    }
+
     // depending on the break type no page styles should be created
     // If the section type is missing, but we have columns, then this should be
     // handled as a continuous section break.
-    if(m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) || (m_nBreakType == -1 && m_nColumnCount > 0))
+    if(m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) || (m_nBreakType <= -1 && m_nColumnCount > 0))
     {
         //todo: insert a section or access the already inserted section
         uno::Reference< beans::XPropertySet > xSection =
