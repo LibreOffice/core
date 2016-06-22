@@ -125,7 +125,17 @@ BitmapBuffer* ImplCreateDIB(
             {
                 size_t size = pDIB->mnScanlineSize * pDIB->mnHeight;
                 pDIB->mpBits = new sal_uInt8[size];
-                std::memset(pDIB->mpBits, 0, size);
+#ifdef __SANITIZE_ADDRESS__
+                if (!pDIB->mpBits)
+                {   // can only happen with ASAN allocator_may_return_null=1
+                    delete pDIB;
+                    pDIB = nullptr;
+                }
+                else
+#endif
+                {
+                    std::memset(pDIB->mpBits, 0, size);
+                }
             }
             catch (const std::bad_alloc&)
             {
