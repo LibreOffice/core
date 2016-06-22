@@ -1721,8 +1721,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
-            // Ignore continuous section break at the end of the document, if the previous section had the same type as well
-            // It makes the importer lose margin settings with no benefit
+            // Repeated continuous section breaks at the end of the document cause problems (lost margin settings),
+            // but just ignoring the breaks causes other problems (added page breaks).
             SectionPropertyMap* pLastContext = m_pImpl->GetLastSectionContext();
             int nPrevBreakType = NS_ooxml::LN_Value_ST_SectionMark_continuous;
             bool bHasPrevSection = false;
@@ -1733,6 +1733,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             }
             if (m_pImpl->GetParaSectpr() || nIntValue != static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) || (bHasPrevSection && nPrevBreakType != nIntValue))
                 pSectionContext->SetBreakType( nIntValue );
+            else if( bHasPrevSection )
+            {
+                //flag the repeated continuous break as special so it can be handled separately
+                pSectionContext->SetBreakType( -2 );
+            } //else{} the very first continous break is ignored (default breaktype -1)
         }
         break;
     case NS_ooxml::LN_EG_SectPrContents_titlePg:
