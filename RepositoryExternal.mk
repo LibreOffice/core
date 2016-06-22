@@ -2001,6 +2001,39 @@ endef
 endif # SYSTEM_PAGEMAKER
 
 
+ifneq ($(SYSTEM_ZMF),)
+
+define gb_LinkTarget__use_zmf
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(ZMF_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ZMF_LIBS))
+
+endef
+gb_ExternalProject__use_zmf :=
+
+else # !SYSTEM_ZMF
+
+define gb_LinkTarget__use_zmf
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libzmf)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libzmf)/src/lib/.libs/libzmf-0.0$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libzmf)
+
+endef
+define gb_ExternalProject__use_zmf
+$(call gb_ExternalProject_use_external_project,$(1),libzmf)
+
+endef
+
+endif # SYSTEM_ZMF
+
+
 ifneq ($(SYSTEM_VISIO),)
 
 define gb_LinkTarget__use_visio
