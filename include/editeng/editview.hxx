@@ -183,8 +183,6 @@ public:
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
 
-    /// Register a LOK model callback.
-    void registerLibreOfficeKitCallback(OutlinerSearchable *pSearchable);
     /// Register a LOK view callback.
     void registerLibreOfficeKitViewCallback(OutlinerViewCallable *pCallable);
 
