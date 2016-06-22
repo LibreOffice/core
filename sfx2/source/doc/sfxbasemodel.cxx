@@ -146,10 +146,10 @@ class SfxDocInfoListener_Impl : public ::cppu::WeakImplHelper<
 {
 
 public:
-    SfxObjectShell& m_rShell;
+    SfxObjectShellRef m_pShell;
 
-    explicit SfxDocInfoListener_Impl( SfxObjectShell& i_rDoc )
-        : m_rShell(i_rDoc)
+    explicit SfxDocInfoListener_Impl( const SfxObjectShellRef& i_rDoc )
+        : m_pShell(i_rDoc)
     { };
 
     virtual ~SfxDocInfoListener_Impl();
@@ -168,7 +168,7 @@ void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
     SolarMutexGuard aSolarGuard;
 
     // notify changes to the SfxObjectShell
-    m_rShell.FlushDocInfo();
+    m_pShell->FlushDocInfo();
 }
 
 void SAL_CALL SfxDocInfoListener_Impl::disposing( const lang::EventObject& )
@@ -811,7 +811,7 @@ IMPL_SfxBaseModel_DataContainer::impl_setDocumentProperties(
     {
         Reference<util::XModifyBroadcaster> const xMB(
             m_xDocumentProperties, UNO_QUERY_THROW);
-        xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pObjectShell));
+        xMB->addModifyListener(new SfxDocInfoListener_Impl(m_pObjectShell));
     }
 }
 
