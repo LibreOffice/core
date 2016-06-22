@@ -30,14 +30,10 @@ class SimpleWriterTest(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        print(xWriterDoc.getChildren())
 
         xWriterEdit = xWriterDoc.getChild("writer_edit")
-        print(xWriterEdit.getState())
 
         xWriterEdit.executeAction("SET", mkPropertyValues({"ZOOM": "200"}))
-
-        time.sleep(2)
 
         self.ui_test.close_doc()
 
@@ -50,8 +46,6 @@ class SimpleWriterTest(UITestCase):
 
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "This is my first writer text written through the UI testing"}))
 
-        time.sleep(2)
-
         self.ui_test.close_doc()
 
     def test_goto_first_page(self):
@@ -62,14 +56,11 @@ class SimpleWriterTest(UITestCase):
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         state = get_state_as_dict(xWriterEdit)
-        print(state)
         while state["CurrentPage"] is "1":
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
             state = get_state_as_dict(xWriterEdit)
 
         xWriterEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
-        print(state)
-        time.sleep(2)
 
         self.ui_test.close_doc()
 
@@ -83,14 +74,7 @@ class SimpleWriterTest(UITestCase):
 
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "This is my first writer text written through the UI testing"}))
 
-        time.sleep(2)
-        print(get_state_as_dict(xWriterEdit))
-
         xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "4"}))
-
-        print(get_state_as_dict(xWriterEdit))
-
-        time.sleep(2)
 
         self.ui_test.close_doc()
 

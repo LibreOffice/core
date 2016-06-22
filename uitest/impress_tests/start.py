@@ -29,15 +29,9 @@ class SimpleImpressTest(UITestCase):
         self.ui_test.create_doc_in_start_center("impress")
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
-        print(get_state_as_dict(xImpressDoc))
-        print(xImpressDoc.getChildren())
 
         xEditWin = xImpressDoc.getChild("impress_win")
         xEditWin.executeAction("SET", mkPropertyValues({"ZOOM": "200"}))
-
-        print(xEditWin.getChildren())
-
-        time.sleep(1)
 
         self.ui_test.close_doc()
 
@@ -46,19 +40,10 @@ class SimpleImpressTest(UITestCase):
         self.ui_test.create_doc_in_start_center("impress")
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
-        print(get_state_as_dict(xImpressDoc))
-        print(xImpressDoc.getChildren())
 
         xEditWin = xImpressDoc.getChild("impress_win")
 
-        time.sleep(1)
-        print(get_state_as_dict(xEditWin))
-
         xEditWin.executeAction("GOTO", mkPropertyValues({"PAGE": "2"}))
-
-        time.sleep(1)
-
-        print(get_state_as_dict(xEditWin))
 
         self.ui_test.close_doc()
 
@@ -67,14 +52,8 @@ class SimpleImpressTest(UITestCase):
         self.ui_test.create_doc_in_start_center("impress")
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
-        print(get_state_as_dict(xImpressDoc))
-        print(xImpressDoc.getChildren())
 
         xEditWin = xImpressDoc.getChild("impress_win")
-
-        time.sleep(1)
-
-        print(get_state_as_dict(xEditWin))
 
         self.ui_test.close_doc()
 
@@ -83,18 +62,11 @@ class SimpleImpressTest(UITestCase):
         self.ui_test.create_doc_in_start_center("impress")
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
-        print(get_state_as_dict(xImpressDoc))
-        print(xImpressDoc.getChildren())
 
         xEditWin = xImpressDoc.getChild("impress_win")
 
         xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
-        time.sleep(1)
         xEditWin.executeAction("DESELECT", tuple())
-
-        time.sleep(1)
-
-        print(get_state_as_dict(xEditWin))
 
         self.ui_test.close_doc()
 
