@@ -103,6 +103,12 @@ public:
     ~XMLRedlineExport();
 
     /// export a change
+    void ExportUndoChange(
+        /// PropertySet of RedlinePortion
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet,
+        const sal_uInt32& rParaIdx,
+        bool bAutoStyle);
+
     void ExportChange(
         /// PropertySet of RedlinePortion
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet,
@@ -145,6 +151,14 @@ public:
         bool bStart);
 
 private:
+    /// export the change mark contained in the text body
+    void ExportUndoChangeInline(
+        /// PropertySet of RedlinePortion
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet, const sal_uInt32& rParaIdx);
+
+    void ExportChangeInline(
+        /// PropertySet of RedlinePortion
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export the auto styles used in this change
     void ExportChangeAutoStyle(
@@ -162,6 +176,9 @@ private:
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export an change-info element (from a PropertySet)
+    void ExportUndoChangeInfo(
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet, const sal_uInt32& rParaIdx);
+
     void ExportChangeInfo(
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 

@@ -495,7 +495,9 @@ void SwXMLExport::ExportUndo_()
 {
     SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_UNDO,
                                 true, true );
-    GetTextParagraphExport()->exportTrackedChanges( false );
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    GetTextParagraphExport()->exportUndoText( xText, bShowProgress );
 }
 
 namespace

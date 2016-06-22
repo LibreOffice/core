@@ -102,6 +102,17 @@ XMLRedlineExport::~XMLRedlineExport()
     aChangeMap.clear();
 }
 
+void XMLRedlineExport::ExportUndoChange(
+    const Reference<XPropertySet> & rPropSet,
+    const sal_uInt32& rParaIdx,
+    bool bAutoStyle)
+{
+    if (!bAutoStyle)
+    {
+        ExportUndoChangeInfo(rPropSet, rParaIdx);
+    }
+
+}
 
 void XMLRedlineExport::ExportChange(
     const Reference<XPropertySet> & rPropSet,
@@ -119,6 +130,11 @@ void XMLRedlineExport::ExportChange(
         if (pCurrentChangesList != nullptr)
             ExportChangeAutoStyle(rPropSet);
     }
+    else
+    {
+        ExportChangeInline(rPropSet);
+    }
+
 }
 
 
@@ -198,7 +214,6 @@ void XMLRedlineExport::SetCurrentXText()
 {
     pCurrentChangesList = nullptr;
 }
-
 
 void XMLRedlineExport::ExportChangesListElements()
 {
@@ -324,14 +339,105 @@ void XMLRedlineExport::ExportChangesListAutoStyles()
     }
 }
 
+void XMLRedlineExport::ExportUndoChangeInline(
+    const Reference<XPropertySet> & rPropSet, const sal_uInt32& rParaIdx)
+{
+    // determine element name (depending on collapsed, start/end)
+    {
+        {
+            Any aAny;
+            aAny = rPropSet->getPropertyValue(sRedlineType);
+            OUString sType;
+            aAny >>= sType;
+
+            sal_uInt32 nParagraphIdx = rParaIdx, nCharStart, nCharEnd;
+            rPropSet->getPropertyValue(sRedlineUndoStart) >>= nCharStart;
+            rPropSet->getPropertyValue(sRedlineUndoEnd) >>= nCharEnd;
+            if(sType == sDelete)
+                nParagraphIdx++;
+
+            XMLTokenEnum eUndoType = XML_PARAGRAPH;
+            OUString sUndoType;
+            aAny = rPropSet->getPropertyValue(sRedlineUndoType);
+            aAny >>= sUndoType;
+
+            if( sUndoType == "text" )
+                eUndoType = XML_TEXT;
+            if(eUndoType == XML_PARAGRAPH)
+            {
+                rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx));
+                rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_PARAGRAPH);
+            }
+            else
+            {
+                rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharStart));
+                if( sType == sInsert || sType == sFormat )
+                    rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharEnd));
+                rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, eUndoType);
+            }
+            SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
+                                    ConvertTypeName(sType), true, true);
+
+            // get XText from the redline and export (if the XText exists)
+            aAny = rPropSet->getPropertyValue(sRedlineText);
+            Reference<XText> xText;
+            aAny >>= xText;
+            if (xText.is())
+            {
+                rExport.GetTextParagraphExport()->exportText(xText);
+                // default parameters: bProgress, bExportParagraph ???
+            }
+        }
+    }
+}
+
+void XMLRedlineExport::ExportChangeInline(
+    const Reference<XPropertySet> & rPropSet)
+{
+    // determine element name (depending on collapsed, start/end)
+    enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
+    Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
+    bool bCollapsed = *static_cast<sal_Bool const *>(aAny.getValue());
+    if (bCollapsed)
+    {
+        eElement = XML_CHANGE;
+    }
+    else
+    {
+        aAny = rPropSet->getPropertyValue(sIsStart);
+        const bool bStart = *static_cast<sal_Bool const *>(aAny.getValue());
+        eElement = bStart ? XML_CHANGE_START : XML_CHANGE_END;
+    }
+
+    if (XML_TOKEN_INVALID != eElement)
+    {
+        // we always need the ID
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_CHANGE_ID,
+                             GetRedlineID(rPropSet));
+
+        // export the element (no whitespace because we're in the text body)
+        SvXMLElementExport aChangeElem(rExport, XML_NAMESPACE_TEXT,
+                                       eElement, false, false);
+    }
+}
+
+
 void XMLRedlineExport::ExportChangedRegion(
     const Reference<XPropertySet> & rPropSet)
 {
+    // Redline-ID
+    rExport.AddAttributeIdLegacy(XML_NAMESPACE_TEXT, GetRedlineID(rPropSet));
+
     // merge-last-paragraph
     Any aAny = rPropSet->getPropertyValue(sMergeLastPara);
     if( ! *static_cast<sal_Bool const *>(aAny.getValue()) )
         rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_MERGE_LAST_PARAGRAPH,
                              XML_FALSE);
+
+    // export change region element
+    SvXMLElementExport aChangedRegion(rExport, XML_NAMESPACE_TEXT,
+                                      XML_CHANGED_REGION, true, true);
+
 
     // scope for (first) change element
     {
@@ -441,6 +547,30 @@ const OUString XMLRedlineExport::GetRedlineID(
     return sBuf.makeStringAndClear();
 }
 
+void XMLRedlineExport::ExportUndoChangeInfo(
+    const Reference<XPropertySet> & rPropSet, const sal_uInt32& rParaIdx)
+{
+    {
+        Any aAny = rPropSet->getPropertyValue(sRedlineAuthor);
+        OUString sAuthor;
+        aAny >>= sAuthor;
+        if (!sAuthor.isEmpty())
+        {
+            rExport.AddAttribute(XML_NAMESPACE_DC, XML_CREATOR, sAuthor);
+        }
+
+        aAny = rPropSet->getPropertyValue(sRedlineDateTime);
+        util::DateTime aDateTime;
+        aAny >>= aDateTime;
+        OUStringBuffer sBuf;
+        ::sax::Converter::convertDateTime(sBuf, aDateTime, nullptr);
+        rExport.AddAttribute(XML_NAMESPACE_DC, XML_DATE, sBuf.makeStringAndClear());
+
+        SvXMLElementExport aChange(rExport, XML_NAMESPACE_OFFICE,
+                                    XML_CHANGE, true, true);
+        ExportUndoChangeInline(rPropSet, rParaIdx);
+    }
+}
 
 void XMLRedlineExport::ExportChangeInfo(
     const Reference<XPropertySet> & rPropSet)

@@ -92,6 +92,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 
     /// may be NULL (if no redlines should be exported; e.g. in block mode)
     XMLRedlineExport            *pRedlineExport;
+    sal_uInt32                  nParaIdx;
 
     bool                        bProgress;
 
@@ -246,6 +247,11 @@ public:
         const css::uno::Reference< css::beans::XPropertyState > & rPropState,
         const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
 
+    void exportUndoTextRangeEnumeration(
+        const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
+        const sal_uInt32& rParaIdx,
+        bool bAutoStyles, bool bProgress,
+        bool bPrvChrIsSpc = true );
     void exportTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
         bool bAutoStyles, bool bProgress,
@@ -268,6 +274,11 @@ protected:
 
     void exportNumStyles( bool bUsed );
 
+    void exportUndoText(
+        const css::uno::Reference <
+            css::text::XText > & rText,
+        bool bAutoStyles, bool bProgress, bool bExportParagraph, TextPNS eExtensionNS = TextPNS::ODF );
+
     void exportText(
         const css::uno::Reference <
             css::text::XText > & rText,
@@ -278,6 +289,15 @@ protected:
         const css::uno::Reference< css::text::XTextSection > & rBaseSection,
         bool bAutoStyles, bool bProgress, bool bExportParagraph, TextPNS eExtensionNS = TextPNS::ODF );
 
+    bool exportUndoTextContentEnumeration(
+        const css::uno::Reference< css::container::XEnumeration > & rContentEnum,
+        bool bAutoStyles,
+        const css::uno::Reference< css::text::XTextSection > & rBaseSection,
+        bool bProgress,
+        bool bExportParagraph = true,
+        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr,
+        bool bExportLevels = true,
+        TextPNS eExtensionNS = TextPNS::ODF);
     bool exportTextContentEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rContentEnum,
         bool bAutoStyles,
@@ -286,6 +306,13 @@ protected:
         bool bExportParagraph = true,
         const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr,
         bool bExportLevels = true,
+        TextPNS eExtensionNS = TextPNS::ODF);
+    void exportUndoParagraph(
+        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const sal_uInt32& rParaIdx,
+        bool bAutoStyles, bool bProgress,
+        bool bExportParagraph,
+        MultiPropertySetHelper& rPropSetHelper,
         TextPNS eExtensionNS = TextPNS::ODF);
     void exportParagraph(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
@@ -531,7 +558,25 @@ public:
     void exportTitleAndDescription( const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
                                     const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
 
+    void setParaIdx(sal_uInt32 rParaIdx)
+    {
+        nParaIdx = rParaIdx;
+    }
+
+    sal_uInt32 getParaIdx()
+    {
+        return nParaIdx;
+    }
+
     // This method exports the given XText
+    void exportUndoText(
+        const css::uno::Reference< css::text::XText > & rText,
+        bool bIsProgress = false,
+        bool bExportParagraph = true, TextPNS eExtensionNS = TextPNS::ODF)
+    {
+        exportUndoText( rText, false, bIsProgress, bExportParagraph, eExtensionNS );
+    }
+
     void exportText(
         const css::uno::Reference< css::text::XText > & rText,
         bool bIsProgress = false,
