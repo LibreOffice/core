@@ -798,18 +798,17 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
                                                      ? mxWallFloorSupplier->getWall()
                                                      : mxWallFloorSupplier->getFloor(),
                                                      uno::UNO_QUERY );
-        if( xProp.is())
+        if (xProp.is())
         {
-            if( !sAutoStyleName.isEmpty())
+            if (!sAutoStyleName.isEmpty())
             {
                 const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-                if( pStylesCtxt )
+                if (pStylesCtxt)
                 {
-                    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                        SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
+                    SvXMLStyleContext* pStyle = const_cast<SvXMLStyleContext*>(pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName));
 
-                    if( pStyle && dynamic_cast< const XMLPropStyleContext*>(pStyle) !=  nullptr)
-                        const_cast<XMLPropStyleContext*>( static_cast<const XMLPropStyleContext*>( pStyle ) )->FillPropertySet( xProp );
+                    if (XMLPropStyleContext* pPropStyle = dynamic_cast<XMLPropStyleContext*>(pStyle))
+                        pPropStyle->FillPropertySet(xProp);
                 }
             }
         }
@@ -870,16 +869,16 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
                     xProp = mxStockPropProvider->getMinMaxLine();
                     break;
             }
-            if( xProp.is())
+
+            if (xProp.is())
             {
                 const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-                if( pStylesCtxt )
+                if (pStylesCtxt)
                 {
-                    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                        SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
+                    SvXMLStyleContext* pStyle = const_cast<SvXMLStyleContext*>(pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName));
 
-                    if( pStyle && dynamic_cast< const XMLPropStyleContext*>(pStyle) !=  nullptr)
-                        const_cast<XMLPropStyleContext*>( static_cast<const XMLPropStyleContext*>( pStyle ) )->FillPropertySet( xProp );
+                    if (XMLPropStyleContext* pPropStyle = dynamic_cast<XMLPropStyleContext*>(pStyle))
+                        pPropStyle->FillPropertySet(xProp);
                 }
             }
         }
