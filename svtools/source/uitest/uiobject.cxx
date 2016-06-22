@@ -95,7 +95,7 @@ StringMap TreeListEntryUIObject::get_state()
     return aMap;
 }
 
-void TreeListEntryUIObject::execute(const OUString& rAction, const StringMap& rParameters)
+void TreeListEntryUIObject::execute(const OUString& rAction, const StringMap& /*rParameters*/)
 {
     if (rAction == "COLLAPSE")
     {
