@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_093ad136",
+        "filename": "framework/source/fwe/classes/addonsoptions.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-22T07:31:54Z",
+      "side": 1,
+      "message": "rather make this a non-static method and use the m_pImpl field",
+      "revId": "299eedbd4401a88b2bccd8ec69d4f1e25c41961e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
