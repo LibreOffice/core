@@ -10,6 +10,6 @@
 $(eval $(call gb_UITest_UITest,writer_demo))
 
 $(eval $(call gb_UITest_add_modules,writer_demo,$(SRCDIR)/uitest,\
-	writer_tests/writer_demo.txt \
+	writer_tests/ \
 ))
 # vim: set noet sw=4 ts=4:

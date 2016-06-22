@@ -9,6 +9,8 @@ from uitest_helper import UITest, get_state_as_dict
 
 from helper import mkPropertyValues
 
+from UITestCase import UITestCase
+
 import time
 
 try:
@@ -21,89 +23,75 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-def start_writer(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+class SimpleWriterTest(UITestCase):
 
-    ui_test = UITest(xUITest, xContext)
+    def test_start_writer(self):
 
-    ui_test.create_doc_in_start_center("writer")
+        self.ui_test.create_doc_in_start_center("writer")
 
-    xWriterDoc = xUITest.getTopFocusWindow()
-    print(xWriterDoc.getChildren())
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        print(xWriterDoc.getChildren())
 
-    xWriterEdit = xWriterDoc.getChild("writer_edit")
-    print(xWriterEdit.getState())
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        print(xWriterEdit.getState())
 
-    xWriterEdit.executeAction("SET", mkPropertyValues({"ZOOM": "200"}))
+        xWriterEdit.executeAction("SET", mkPropertyValues({"ZOOM": "200"}))
 
-    time.sleep(2)
+        time.sleep(2)
 
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
-def type_text(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+    def test_type_text(self):
 
-    ui_test = UITest(xUITest, xContext)
+        self.ui_test.create_doc_in_start_center("writer")
 
-    ui_test.create_doc_in_start_center("writer")
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-    xWriterDoc = xUITest.getTopFocusWindow()
-    xWriterEdit = xWriterDoc.getChild("writer_edit")
+        xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "This is my first writer text written through the UI testing"}))
 
-    xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "This is my first writer text written through the UI testing"}))
+        time.sleep(2)
 
-    time.sleep(2)
+        self.ui_test.close_doc()
 
-    ui_test.close_doc()
+    def test_goto_first_page(self):
 
-def goto_first_page(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        self.ui_test.create_doc_in_start_center("writer")
 
-    ui_test = UITest(xUITest, xContext)
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-    ui_test.create_doc_in_start_center("writer")
-
-    xWriterDoc = xUITest.getTopFocusWindow()
-    xWriterEdit = xWriterDoc.getChild("writer_edit")
-
-    state = get_state_as_dict(xWriterEdit)
-    print(state)
-    while state["CurrentPage"] is "1":
-        xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
         state = get_state_as_dict(xWriterEdit)
+        print(state)
+        while state["CurrentPage"] is "1":
+            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            state = get_state_as_dict(xWriterEdit)
 
-    xWriterEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
-    print(state)
-    time.sleep(2)
+        xWriterEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
+        print(state)
+        time.sleep(2)
 
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 
-def select_text(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+    def test_select_text(self):
 
-    ui_test = UITest(xUITest, xContext)
+        self.ui_test.create_doc_in_start_center("writer")
 
-    ui_test.create_doc_in_start_center("writer")
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-    xWriterDoc = xUITest.getTopFocusWindow()
-    xWriterEdit = xWriterDoc.getChild("writer_edit")
+        xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "This is my first writer text written through the UI testing"}))
 
-    xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "This is my first writer text written through the UI testing"}))
+        time.sleep(2)
+        print(get_state_as_dict(xWriterEdit))
 
-    time.sleep(2)
-    print(get_state_as_dict(xWriterEdit))
+        xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "4"}))
 
-    xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "4"}))
+        print(get_state_as_dict(xWriterEdit))
 
-    print(get_state_as_dict(xWriterEdit))
+        time.sleep(2)
 
-    time.sleep(2)
-
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
