@@ -588,11 +588,6 @@ Color EditView::GetBackgroundColor() const
     return pImpEditView->GetBackgroundColor();
 }
 
-void EditView::registerLibreOfficeKitCallback(OutlinerSearchable *pSearchable)
-{
-    pImpEditView->registerLibreOfficeKitCallback(pSearchable);
-}
-
 void EditView::registerLibreOfficeKitViewCallback(OutlinerViewCallable *pCallable)
 {
     pImpEditView->registerLibreOfficeKitViewCallback(pCallable);

@@ -290,8 +290,6 @@ class SwPostItMgr: public SfxListener
 
         void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
         void PaintTile(OutputDevice& rRenderContext, const Rectangle& rRect);
-        /// Informs already created annotations about a newly registered LOK callback.
-        void registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable);
 };
 
 #endif

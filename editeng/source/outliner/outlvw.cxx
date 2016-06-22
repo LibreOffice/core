@@ -1426,11 +1426,6 @@ void OutlinerView::SetBackgroundColor( const Color& rColor )
     pEditView->SetBackgroundColor( rColor );
 }
 
-void OutlinerView::registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable)
-{
-    pEditView->registerLibreOfficeKitCallback(pSearchable);
-}
-
 void OutlinerView::registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable)
 {
     pEditView->registerLibreOfficeKitViewCallback(pCallable);
@@ -1459,10 +1454,6 @@ OUString OutlinerView::GetSurroundingText() const
 Selection OutlinerView::GetSurroundingTextSelection() const
 {
     return pEditView->GetSurroundingTextSelection();
-}
-
-OutlinerSearchable::~OutlinerSearchable()
-{
 }
 
 // ===== some code for thesaurus sub menu within context menu
