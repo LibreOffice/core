@@ -1314,7 +1314,7 @@ void SdImportTest::testTdf93124()
                     ++nNonWhiteCount;
             }
         }
-        CPPUNIT_ASSERT_MESSAGE("Tdf93124: vertical alignment of text is incorrect!", nNonWhiteCount>100);
+        CPPUNIT_ASSERT_MESSAGE("Tdf93124: vertical alignment of text is incorrect!", nNonWhiteCount>50);
     }
     xDocShRef->DoClose();
 }
