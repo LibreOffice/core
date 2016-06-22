@@ -58,13 +58,7 @@ $(packimages_DIR)/commandimagelist.ilst :
 
 $(packimages_DIR)/sorted.lst : \
 		$(SRCDIR)/postprocess/packimages/image-sort.lst \
-		$(call gb_Postprocess_get_target,AllResources) \
 		$(call gb_Postprocess_get_target,AllUIConfigs)
-	$(info images_*.zip imagelist deps: $(shell ls \
-		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
-		$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_JAVA),$(SRCDIR)/connectivity/source/drivers/hsqldb/hsqlui.ilst)) \
-		$(call gb_Helper_get_imagelists) \
-	)) \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SRCDIR)/solenv/bin/image-sort.pl \
