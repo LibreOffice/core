@@ -1880,7 +1880,7 @@ void SwUiWriterTest::testTdf72788()
     SwTextNode* pTextNode = pCursor->GetNode().GetTextNode();
     SwIndex aSt( pTextNode, 0 );
     sal_Int32 nEnd = pTextNode->Len();
-    pTextNode->RstTextAttr(aSt, nEnd - aSt.GetIndex(), 0, nullptr, false, false);
+    pTextNode->RstTextAttr(aSt, nEnd - aSt.GetIndex());
     //Incase of Regression RstTextAttr() call will result to infinite recursion
     //Check that bold is removed in first paragraph
     pTextNode->GetAttr(aSet, 5, 12);
