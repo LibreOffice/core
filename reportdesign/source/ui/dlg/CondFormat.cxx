@@ -500,7 +500,10 @@ namespace rptui
             }
             case MouseNotifyEvent::GETFOCUS:
             {
-                if ( m_bDeletingCondition )
+                if (m_bDeletingCondition)
+                    break;
+
+                if (!m_pConditionPlayground) //e.g. during dispose
                     break;
 
                 const vcl::Window* pGetFocusWindow( _rNEvt.GetWindow() );
