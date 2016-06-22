@@ -106,8 +106,8 @@ private:
     std::unique_ptr< InitUpdateCheckJobThread > m_pInitThread;
 
     void handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp );
+    void terminateAndJoinThread();
 };
-
 
 InitUpdateCheckJobThread::InitUpdateCheckJobThread(
             const uno::Reference< uno::XComponentContext > &xContext,
@@ -154,7 +154,6 @@ void InitUpdateCheckJobThread::setTerminating() {
 UpdateCheckJob::~UpdateCheckJob()
 {
 }
-
 
 uno::Sequence< OUString >
 UpdateCheckJob::getServiceNames()
@@ -281,6 +280,7 @@ void SAL_CALL UpdateCheckJob::disposing( lang::EventObject const & rEvt )
 
     if ( shutDown && m_xDesktop.is() )
     {
+        terminateAndJoinThread();
         m_xDesktop->removeTerminateListener( this );
         m_xDesktop.clear();
     }
@@ -293,19 +293,23 @@ void SAL_CALL UpdateCheckJob::queryTermination( lang::EventObject const & )
 {
 }
 
-
-void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
-    throw ( uno::RuntimeException, std::exception )
+void UpdateCheckJob::terminateAndJoinThread()
 {
     if ( m_pInitThread.get() != nullptr )
     {
         m_pInitThread->setTerminating();
         m_pInitThread->join();
+        m_pInitThread.reset();
     }
 }
 
-} // anonymous namespace
+void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
+    throw ( uno::RuntimeException, std::exception )
+{
+    terminateAndJoinThread();
+}
 
+} // anonymous namespace
 
 static uno::Reference<uno::XInterface> SAL_CALL
 createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
