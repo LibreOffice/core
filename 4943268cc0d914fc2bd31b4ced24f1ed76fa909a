@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_c91629a7",
+        "filename": "vcl/source/control/menubtn.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-22T07:43:18Z",
+      "side": 1,
+      "message": "too much indentation",
+      "revId": "4943268cc0d914fc2bd31b4ced24f1ed76fa909a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
