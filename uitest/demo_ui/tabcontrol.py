@@ -43,8 +43,6 @@ class TabControlTest(UITestCase):
         xTabs = xFunctionDlg.getChild("tabs")
         xTabs.executeAction("SELECT", mkPropertyValues({"POS":"1"}))
 
-        time.sleep(1)
-
         xCancelBtn = xFunctionDlg.getChild("cancel")
         xCancelBtn.executeAction("CLICK", tuple())
 

@@ -50,11 +50,7 @@ class TreeListTest(UITestCase):
 
         xTreeEntry.executeAction("COLLAPSE", tuple())
 
-        time.sleep(1)
-
         xTreeEntry.executeAction("EXPAND", tuple())
-
-        time.sleep(1)
 
         xCancelBtn = xFunctionDlg.getChild("cancel")
         xCancelBtn.executeAction("CLICK", tuple())
