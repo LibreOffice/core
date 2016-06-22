@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_29b0758b",
+        "filename": "fpicker/source/win32/filepicker/WinFileOpenImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-22T10:14:29Z",
+      "side": 1,
+      "message": "this should be SendMessageW, no?\n\ni\u0027m actually surprised since it does not take a string parameter but msdn says that SendMessageW is a thing.\n\n https://msdn.microsoft.com/en-us/library/windows/desktop/ms644950(v\u003dvs.85).aspx",
+      "revId": "44dde0d0a31acd34fe8041af1186692d3b1cedb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_89a7c14e",
+        "filename": "fpicker/source/win32/filepicker/customcontrolfactory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-22T10:14:29Z",
+      "side": 1,
+      "message": "i guess you could use SAL_N_ELEMENTS here to get rid of the extra variable.",
+      "revId": "44dde0d0a31acd34fe8041af1186692d3b1cedb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
