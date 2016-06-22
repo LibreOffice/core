@@ -98,7 +98,7 @@ namespace xmloff
 
     OElementExport::~OElementExport()
     {
-        implEndElement();
+        delete m_pXMLElement;
     }
 
     void OElementExport::doExport()
@@ -246,7 +246,8 @@ namespace xmloff
 
     OControlExport::~OControlExport()
     {
-        implEndElement();
+        // end the outer element if it exists
+        delete m_pOuterElement;
     }
 
     void OControlExport::exportOuterAttributes()
@@ -1971,7 +1972,6 @@ namespace xmloff
 
     OColumnExport::~OColumnExport()
     {
-        implEndElement();
     }
 
     void OColumnExport::exportServiceNameAttribute()

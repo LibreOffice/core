@@ -79,7 +79,7 @@ private:
     /** helper to allow us listen to the configuration without a cyclic dependency */
     css::uno::Reference<css::container::XContainerListener> m_xConfigListener;
 
-    virtual void SAL_CALL disposing() override;
+    virtual void SAL_CALL disposing() final override;
 
 public:
 

@@ -148,7 +148,7 @@ public:
     virtual bool        SetSize( sal_uLong nNewSize ) override;
     virtual sal_uLong   GetSize() const override;
     virtual void        CopyTo( BaseStorageStream * pDestStm ) override;
-    virtual bool        Commit() override;
+    virtual bool        Commit() final override;
     virtual bool        Validate( bool=false ) const override;
     virtual bool        ValidateMode( StreamMode ) const override;
     virtual bool        Equals( const BaseStorageStream& rStream ) const override;
@@ -172,7 +172,7 @@ public:
     static bool                 IsStorageFile( const OUString & rFileName );
     static bool                 IsStorageFile( SvStream* );
 
-    virtual const OUString&     GetName() const override;
+    virtual const OUString&     GetName() const final override;
     virtual bool                IsRoot() const override { return bIsRoot; }
     virtual void                SetClassId( const ClsId& ) override;
     virtual const ClsId&        GetClassId() const override;
@@ -185,7 +185,7 @@ public:
     virtual OUString            GetUserName() override;
     virtual void                FillInfoList( SvStorageInfoList* ) const override;
     virtual bool                CopyTo( BaseStorage* pDestStg ) const override;
-    virtual bool                Commit() override;
+    virtual bool                Commit() final override;
     virtual bool                Revert() override;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
                                             StreamMode = STREAM_STD_READWRITE,
@@ -288,7 +288,7 @@ public:
     virtual OUString            GetUserName() override;
     virtual void                FillInfoList( SvStorageInfoList* ) const override;
     virtual bool                CopyTo( BaseStorage* pDestStg ) const override;
-    virtual bool                Commit() override;
+    virtual bool                Commit() final override;
     virtual bool                Revert() override;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
                                             StreamMode = STREAM_STD_READWRITE,

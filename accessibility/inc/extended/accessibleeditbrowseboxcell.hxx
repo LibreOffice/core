@@ -81,7 +81,7 @@ namespace accessibility
         virtual void SAL_CALL disposing() override;
 
         // XComponent/OComponentProxyAggregationHelper (needs to be disambiguated)
-        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) final override;
 
         // OAccessibleContextWrapperHelper();
         void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) throw (css::uno::RuntimeException) override;

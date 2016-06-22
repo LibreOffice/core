@@ -354,7 +354,7 @@ public:
     void impl_readAll();
 
 private:
-    virtual void SAL_CALL disposing() override;
+    virtual void SAL_CALL disposing() final override;
 
     OUString getStringProperty(const OUString& p1)
         throw(css::uno::RuntimeException);

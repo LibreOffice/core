@@ -66,7 +66,7 @@ protected:
     rtl::Reference<ConfigurationAccess_ControllerFactory>    m_pConfigAccess;
 
 private:
-    virtual void SAL_CALL disposing() override;
+    virtual void SAL_CALL disposing() final override;
 };
 
 UIControllerFactory::UIControllerFactory(

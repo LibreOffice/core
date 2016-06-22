@@ -112,7 +112,7 @@ namespace accessibility
         virtual void SAL_CALL                   disposing() override;
 
         // ListBoxAccessible/XComponent
-        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) final override;
 
         // OCommonAccessibleText
         virtual OUString                        implGetText() override;

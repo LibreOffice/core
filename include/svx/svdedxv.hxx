@@ -186,7 +186,7 @@ public:
     // (in place of SDRENDTEXTEDIT_BEDELETED), which says, the obj should be
     // deleted.
     virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false);
-    virtual bool IsTextEdit() const override;
+    virtual bool IsTextEdit() const final override;
 
     // This method returns sal_True, if the point rHit is inside the
     // objectspace or the OutlinerView.
