@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_f41f4059",
+        "filename": "basic/source/sbx/sbxvalue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-22T13:48:41Z",
+      "side": 0,
+      "message": "seems suspicious to remove this - this is the only place broadcasting that, and there is  SbxAlias::Notify receiving it",
+      "revId": "1ad4575723a91883b8c179e247fd06d822ca7f84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
