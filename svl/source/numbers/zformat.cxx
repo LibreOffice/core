@@ -62,9 +62,7 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
 
 } // namespace
 
-const double D_MAX_U_LONG = (double) 0xffffffff;      // 4294967295.0
-const sal_uInt16 MAX_FRACTION_PREC = 3;
-const double D_EPS = 1.0E-2;
+const double D_MAX_U_INT32 = (double) 0xffffffff;      // 4294967295.0
 
 const double D_MAX_D_BY_100  = 1.7E306;
 const double D_MIN_M_BY_1000 = 2.3E-305;
@@ -1941,44 +1939,6 @@ void SvNumberformat::GetOutputString(const OUString& sString,
     OutString = sOutBuff.makeStringAndClear();
 }
 
-sal_uLong SvNumberformat::ImpGGT(sal_uLong x, sal_uLong y)
-{
-    if (y == 0)
-    {
-        return x;
-    }
-    else
-    {
-        sal_uLong z = x%y;
-        while (z)
-        {
-            x = y;
-            y = z;
-            z = x%y;
-        }
-        return y;
-    }
-}
-
-sal_uLong SvNumberformat::ImpGGTRound(sal_uLong x, sal_uLong y)
-{
-    if (y == 0)
-    {
-        return x;
-    }
-    else
-    {
-        sal_uLong z = x%y;
-        while ((double)z/(double)y > D_EPS)
-        {
-            x = y;
-            y = z;
-            z = x%y;
-        }
-        return y;
-    }
-}
-
 namespace {
 
 void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
@@ -2435,7 +2395,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const sal_uInt16 nAnz = NumFor[nIx].GetCount();
     OUStringBuffer sStr, sFrac, sDiv; // Strings, value for
-    sal_uLong nFrac, nDiv;            // Integral part
+    sal_uInt64 nFrac=0, nDiv=1;       // Integral part
     bool bSign = false;               // Numerator and denominator
 
     if (fNumber < 0)
@@ -2448,7 +2408,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     double fNum = floor(fNumber); // Integral part
 
     fNumber -= fNum; // Fractional part
-    if (fNum > D_MAX_U_LONG || rInfo.nCntExp > 9) // Too large
+    if (fNum > D_MAX_U_INT32 || rInfo.nCntExp > 9) // Too large
     {
         sBuff = rScan.GetErrorString();
         return false;
@@ -2460,177 +2420,10 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         return false;
     }
 
-    sal_uLong nBasis = ((sal_uLong)floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
-    sal_uLong x0, y0, x1, y1;
-
-    if (rInfo.nCntExp <= MAX_FRACTION_PREC)
-    {
-        bool bUpperHalf;
-
-        if (fNumber > 0.5)
-        {
-            bUpperHalf = true;
-            fNumber -= (fNumber - 0.5) * 2.0;
-        }
-        else
-        {
-            bUpperHalf = false;
-        }
-        // Find entry to Farey sequence:
-        x0 = (sal_uLong) floor(fNumber*nBasis); // e.g.: 2/9 <= x < 3/9
-        if (x0 == 0)                            // => x0 = 2
-        {
-            y0 = 1;
-            x1 = 1;
-            y1 = nBasis;
-        }
-        else if (x0 == (nBasis-1)/2)    // (b-1)/2, 1/2
-        {                               // is ok (nBasis is odd)
-            y0 = nBasis;
-            x1 = 1;
-            y1 = 2;
-        }
-        else if (x0 == 1)
-        {
-            y0 = nBasis;                //  1/n; 1/(n-1)
-            x1 = 1;
-            y1 = nBasis - 1;
-        }
-        else
-        {
-            y0 = nBasis;                // e.g.: 2/9   2/8
-            x1 = x0;
-            y1 = nBasis - 1;
-            double fUg = (double) x0 / (double) y0;
-            double fOg = (double) x1 / (double) y1;
-            sal_uLong nGgt = ImpGGT(y0, x0);       // x0/y0 kuerzen
-            x0 /= nGgt;
-            y0 /= nGgt;                     // Nest:
-            sal_uLong x2 = 0;
-            sal_uLong y2 = 0;
-            bool bStop = false;
-            while (!bStop)
-            {
-#ifdef __GNUC__
-                // #i21648# GCC over-optimizes something resulting
-                // in wrong fTest values throughout the loops.
-                volatile
-#endif
-                    double fTest = (double)x1/(double)y1;
-                while (!bStop)
-                {
-                    while (fTest > fOg)
-                    {
-                        x1--;
-                        fTest = (double)x1/(double)y1;
-                    }
-                    while (fTest < fUg && y1 > 1)
-                    {
-                        y1--;
-                        fTest = (double)x1/(double)y1;
-                    }
-                    if (fTest <= fOg)
-                    {
-                        fOg = fTest;
-                        bStop = true;
-                    }
-                    else if (y1 == 1)
-                    {
-                        bStop = true;
-                    }
-                } // of while
-                nGgt = ImpGGT(y1, x1); // Shorten x1/y1
-                x2 = x1 / nGgt;
-                y2 = y1 / nGgt;
-                if (x2*y0 - x0*y2 == 1 || y1 <= 1) // Test for x2/y2
-                    bStop = true;                  // Next Farey number
-                else
-                {
-                    y1--;
-                    bStop = false;
-                }
-            } // of while
-            x1 = x2;
-            y1 = y2;
-        } // of else
-
-        double fup, flow;
-
-        flow = (double)x0/(double)y0;
-        fup  = (double)x1/(double)y1;
-        while (fNumber > fup)
-        {
-            sal_uLong x2 = ((y0+nBasis)/y1)*x1 - x0; // Next Farey number
-            sal_uLong y2 = ((y0+nBasis)/y1)*y1 - y0;
-
-            x0 = x1;
-            y0 = y1;
-            x1 = x2;
-            y1 = y2;
-            flow = fup;
-            fup  = (double)x1/(double)y1;
-        }
-        if (fNumber - flow < fup - fNumber)
-        {
-            nFrac = x0;
-            nDiv  = y0;
-        }
-        else
-        {
-            nFrac = x1;
-            nDiv  = y1;
-        }
-        if (bUpperHalf) // Recover original
-        {
-            if (nFrac == 0 && nDiv == 1) // 1/1
-            {
-                fNum += 1.0;
-            }
-            else
-            {
-                nFrac = nDiv - nFrac;
-            }
-        }
-    }
-    else // Large denominator
-    {    // 0,1234->123/1000
-        sal_uLong nGgt;
-
-        nDiv = 10000000;
-        nFrac = ((sal_uLong)floor(0.5 + fNumber * 10000000.0));
-        nGgt = ImpGGT(nDiv, nFrac);
-        if (nGgt > 1)
-        {
-            nDiv  /= nGgt;
-            nFrac /= nGgt;
-        }
-        if (nDiv > nBasis)
-        {
-            nGgt = ImpGGTRound(nDiv, nFrac);
-            if (nGgt > 1)
-            {
-                nDiv  /= nGgt;
-                nFrac /= nGgt;
-            }
-        }
-        if (nDiv > nBasis)
-        {
-            nDiv = nBasis;
-            nFrac = ((sal_uLong)floor(0.5 + fNumber *
-                                      pow(10.0,rInfo.nCntExp)));
-            nGgt = ImpGGTRound(nDiv, nFrac);
-            if (nGgt > 1)
-            {
-                nDiv  /= nGgt;
-                nFrac /= nGgt;
-            }
-        }
-    }
-
     if( sal_Int32 nForcedDiv = lcl_GetDenominatorString(rInfo, nAnz).toInt32() )
-    {
-        nDiv = (sal_uLong) nForcedDiv;
-        nFrac = (sal_uLong)floor ( fNumber * nDiv );
+    {   // Forced Denominator
+        nDiv = (sal_uInt64) nForcedDiv;
+        nFrac = (sal_uInt64)floor ( fNumber * nDiv );
         double fFracNew = (double)nFrac / (double)nDiv;
         double fFracNew1 = (double)(nFrac + 1) / (double)nDiv;
         double fDiff = fNumber - fFracNew;
@@ -2644,17 +2437,57 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
             fNum = fNum + 1.0;
         }
     }
+    else // Calculated Denominator
+    {
+        sal_uInt64 nBasis = ((sal_uInt64)floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
+        sal_uInt64 nFracPrev = 1L, nDivPrev = 0, nFracNext, nDivNext, nPartialDenom;
+        double fRemainder = fNumber, fTemp;
+
+        // Use continued fraction representation of fNumber
+        // See https://en.wikipedia.org/wiki/Continued_fraction#Best_rational_approximations
+        while ( fRemainder > 0.0 )
+        {
+            fTemp = 1.0 / fRemainder;                    // 64bits precision required when fRemainder is very weak
+            nPartialDenom = (sal_uInt64) floor(fTemp);   // due to floating point notation with double precision
+            fRemainder = fTemp - (double)nPartialDenom;
+            nDivNext = nPartialDenom * nDiv + nDivPrev;
+            if ( nDivNext <= nBasis )  // continue loop
+            {
+                nFracNext = nPartialDenom * nFrac + nFracPrev;
+                nFracPrev = nFrac;
+                nFrac = nFracNext;
+                nDivPrev = nDiv;
+                nDiv = nDivNext;
+            }
+            else // calculate collateral fraction and exit
+            {
+                sal_uInt64 nCollat = (nBasis - nDivPrev) / nDiv;
+                if ( 2 * nCollat >= nPartialDenom )
+                {
+                    sal_uInt64 nFracTest = nCollat * nFrac + nFracPrev;
+                    sal_uInt64 nDivTest  = nCollat * nDiv  + nDivPrev;
+                    double fSign = ((double)nFrac > fNumber * (double)nDiv)?1.0:-1.0;
+                    if ( fSign * ( double(nFrac * nDivTest + nDiv * nFracTest) - 2.0 * double(nDiv * nDivTest) * fNumber ) > 0.0 )
+                    {
+                        nFrac = nFracTest;
+                        nDiv  = nDivTest;
+                    }
+                }
+                fRemainder = 0.0; // exit while loop
+            }
+        }
+    }
 
     if (rInfo.nCntPre == 0) // Improper fraction
     {
         double fNum1 = fNum * (double)nDiv + (double)nFrac;
 
-        if (fNum1 > D_MAX_U_LONG)
+        if (fNum1 > D_MAX_U_INT32)
         {
             sBuff = rScan.GetErrorString();
             return false;
         }
-        nFrac = (sal_uLong) floor(fNum1);
+        nFrac = (sal_uInt64) floor(fNum1);
     }
     else if (fNum == 0.0 && nFrac != 0)
     {
@@ -2794,12 +2627,12 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     {
         bSign = false; // Not -00:00:00
     }
-    if( floor( fTime ) > D_MAX_U_LONG )
+    if( floor( fTime ) > D_MAX_U_INT32 )
     {
         sBuff = rScan.GetErrorString();
         return false;
     }
-    sal_uLong nSeconds = (sal_uLong)floor( fTime );
+    sal_uInt32 nSeconds = (sal_uInt32)floor( fTime );
 
     OUStringBuffer sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                                                           rtl_math_StringFormat_F, int(nCntPost), '.'));
@@ -2821,7 +2654,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     }
 
     sal_Int32 nSecPos = 0; // For figure by figure processing
-    sal_uLong nHour, nMin, nSec;
+    sal_uInt32 nHour, nMin, nSec;
     if (!rInfo.bThousand) // No [] format
     {
         nHour = (nSeconds/3600) % 24;
@@ -3581,7 +3414,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     }
     sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
 
-    sal_uLong nSeconds = (sal_uLong)floor( fTime );
+    sal_uInt32 nSeconds = (sal_uInt32)floor( fTime );
     OUStringBuffer sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                                                   rtl_math_StringFormat_F, int(nCntPost), '.'));
     sSecStr.stripStart('0');
@@ -3602,7 +3435,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     }
 
     sal_Int32 nSecPos = 0; // For figure by figure processing
-    sal_uLong nHour, nMin, nSec;
+    sal_uInt32 nHour, nMin, nSec;
     if (!rInfo.bThousand) // [] format
     {
         nHour = (nSeconds/3600) % 24;
