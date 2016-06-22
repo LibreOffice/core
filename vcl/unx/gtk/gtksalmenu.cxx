@@ -859,6 +859,7 @@ namespace
 
 void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const Image& rImage )
 {
+#if GLIB_CHECK_VERSION(2,38,0)
     SolarMutexGuard aGuard;
 
     SvMemoryStream* pMemStm = new SvMemoryStream;
@@ -874,6 +875,11 @@ void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const 
     g_lo_menu_set_icon_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, pIcon );
     g_object_unref(pIcon);
     g_bytes_unref(pBytes);
+#else
+    (void)nSection;
+    (void)nItemPos;
+    (void)rImage;
+#endif
 }
 
 void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName )
