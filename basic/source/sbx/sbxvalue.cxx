@@ -170,7 +170,6 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
 
 SbxValue::~SbxValue()
 {
-    Broadcast( SBX_HINT_DYING );
     SetFlag( SbxFlagBits::Write );
     SbxValue::Clear();
 }

@@ -106,7 +106,7 @@ public:
     //  XComponent
 
     virtual void SAL_CALL dispose()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+        throw ( css::uno::RuntimeException, std::exception ) final override;
 
     virtual void SAL_CALL addEventListener(
             const css::uno::Reference< css::lang::XEventListener >& xListener )

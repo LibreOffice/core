@@ -66,7 +66,7 @@ public:
                             Size& rSize,
                             bool bMask = false ) override;
 
-    void            Destroy() override;
+    void            Destroy() final override;
 
     Size            GetSize() const override;
     sal_uInt16      GetBitCount() const override;

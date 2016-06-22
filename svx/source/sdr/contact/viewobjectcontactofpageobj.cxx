@@ -54,7 +54,7 @@ public:
     virtual void setLazyInvalidate(ViewObjectContact& rVOC) override;
 
     // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism
-    virtual void Invoke() override;
+    virtual void Invoke() final override;
 
     // get primitive visualization
     drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceForPage(const DisplayInfo& rDisplayInfo);

@@ -49,7 +49,7 @@ public:
     {
         return mpDIB;
     }
-    virtual void            Destroy() override;
+    virtual void            Destroy() final override;
     virtual Size            GetSize() const override;
     virtual sal_uInt16      GetBitCount() const override;
 

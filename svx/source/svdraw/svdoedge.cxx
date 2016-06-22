@@ -181,8 +181,8 @@ SdrEdgeObj::SdrEdgeObj()
 
 SdrEdgeObj::~SdrEdgeObj()
 {
-    DisconnectFromNode(true);
-    DisconnectFromNode(false);
+    SdrEdgeObj::DisconnectFromNode(true);
+    SdrEdgeObj::DisconnectFromNode(false);
     delete pEdgeTrack;
 }
 
