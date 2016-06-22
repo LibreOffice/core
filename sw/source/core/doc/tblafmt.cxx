@@ -930,20 +930,19 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
 
 bool SwTableAutoFormat::FirstRowEndColumnIsRow()
 {
-    return *aBoxAutoFormat[3] == *aBoxAutoFormat[2];
+    return GetBoxFormat(3) == GetBoxFormat(2);
 }
-
 bool SwTableAutoFormat::FirstRowStartColumnIsRow()
 {
-    return *aBoxAutoFormat[0] == *aBoxAutoFormat[1];
+    return GetBoxFormat(0) == GetBoxFormat(1);
 }
 bool SwTableAutoFormat::LastRowEndColumnIsRow()
 {
-    return *aBoxAutoFormat[15] == *aBoxAutoFormat[14];
+    return GetBoxFormat(14) == GetBoxFormat(15);
 }
 bool SwTableAutoFormat::LastRowStartColumnIsRow()
 {
-    return *aBoxAutoFormat[12] == *aBoxAutoFormat[13];
+    return GetBoxFormat(12) == GetBoxFormat(13);
 }
 
 bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
@@ -1154,6 +1153,19 @@ void SwTableAutoFormatTable::InsertAutoFormat(size_t const i, std::unique_ptr<Sw
 void SwTableAutoFormatTable::EraseAutoFormat(size_t const i)
 {
     m_pImpl->m_AutoFormats.erase(m_pImpl->m_AutoFormats.begin() + i);
+}
+
+void SwTableAutoFormatTable::EraseAutoFormat(const OUString& rName)
+{
+    for (size_t i=0; i<m_pImpl->m_AutoFormats.size(); ++i)
+    {
+        if (m_pImpl->m_AutoFormats[i]->GetName() == rName)
+        {
+            m_pImpl->m_AutoFormats.erase(m_pImpl->m_AutoFormats.begin() + i);
+            return;
+        }
+    }
+    SAL_INFO("sw.core", "SwTableAutoFormatTable::EraseAutoFormat, SwTableAutoFormat with given name not found");
 }
 
 std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(size_t const i)
@@ -1410,6 +1422,7 @@ void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)
     {
         if (m_aCellStyles[i].first == sName)
         {
+            delete m_aCellStyles[i].second;
             m_aCellStyles.erase(m_aCellStyles.begin() + i);
             return;
         }
