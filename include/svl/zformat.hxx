@@ -555,9 +555,6 @@ private:
                          double& fLimit,
                          SvNumberformatLimitOps eOp);
 
-    SVL_DLLPRIVATE sal_uLong ImpGGT(sal_uLong x, sal_uLong y);
-    SVL_DLLPRIVATE sal_uLong ImpGGTRound(sal_uLong x, sal_uLong y);
-
     // Helper function for number strings
     // append string symbols, insert leading 0 or ' ', or ...
     SVL_DLLPRIVATE bool ImpNumberFill( OUStringBuffer& sStr,
