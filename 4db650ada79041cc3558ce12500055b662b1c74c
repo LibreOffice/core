@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_a9ed6590",
+        "filename": "vcl/source/gdi/jobset.cxx",
+        "patchSetId": 32
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-22T08:51:20Z",
+      "side": 1,
+      "message": "This case now never happens - since the impl object is handled by the cow_wrapper. you\u0027ll need another way to tell this \"I\u0027m a default object\" apart, one suggestion was this static_instance trick you used in other patches.",
+      "revId": "4db650ada79041cc3558ce12500055b662b1c74c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
