@@ -585,6 +585,7 @@ export SYSTEM_WPD=@SYSTEM_WPD@
 export SYSTEM_WPG=@SYSTEM_WPG@
 export SYSTEM_WPS=@SYSTEM_WPS@
 export SYSTEM_ZLIB=@SYSTEM_ZLIB@
+export SYSTEM_ZMF=@SYSTEM_ZMF@
 export TARFILE_LOCATION=@TARFILE_LOCATION@
 export TDE_CFLAGS=$(gb_SPACE)@TDE_CFLAGS@
 export TDE_LIBS=$(gb_SPACE)@TDE_LIBS@
@@ -655,6 +656,8 @@ export XRENDER_LIBS=$(gb_SPACE)@XRENDER_LIBS@
 export XSLTPROC=@XSLTPROC@
 export ZLIB_CFLAGS=$(gb_SPACE)@ZLIB_CFLAGS@
 export ZLIB_LIBS=$(gb_SPACE)@ZLIB_LIBS@
+export ZMF_CFLAGS=$(gb_SPACE)@ZMF_CFLAGS@
+export ZMF_LIBS=$(gb_SPACE)@ZMF_LIBS@
 
 # lang-related stuff
 include $(BUILDDIR)/config_$(gb_Side)_lang.mk
