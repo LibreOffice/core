@@ -7873,6 +7873,11 @@ dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libpagemaker],[PAGEMAKER],[libpagemaker-0.0])
 
 dnl ===================================================================
+dnl Check for system libzmf
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([libzmf],[ZMF],[libzmf-0.0])
+
+dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.1])
