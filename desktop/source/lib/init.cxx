@@ -2007,7 +2007,7 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
 
 static char* lo_getVersionInfo(LibreOfficeKit* /*pThis*/)
 {
-    const OUString sVersionStrTemplate(
+    static const OUString sVersionStrTemplate(
         "{ "
         "\"ProductName\": \"%PRODUCTNAME\", "
         "\"ProductVersion\": \"%PRODUCTVERSION\", "
