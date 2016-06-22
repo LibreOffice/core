@@ -94,7 +94,6 @@ if __name__ == '__main__':
         usage()
         sys.exit()
     test_suite = get_test_suite(opts)
-    print(test_suite)
 
     unittest.TextTestRunner().run(test_suite)
 
