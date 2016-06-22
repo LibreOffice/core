@@ -918,6 +918,18 @@ void XStyleFamily::insertByName(const OUString& rName, const uno::Any& rElement)
         m_pDocShell->GetDoc()->GetCellStyles().AddBoxFormat(*pNewStyle->GetBoxFormat(), sStyleName);
         pNewStyle->SetPhysical();
     }
+    else if (nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE == m_rEntry.m_aPoolId)
+    {
+        // handle table style
+        uno::Reference<style::XStyle> xStyle = rElement.get<uno::Reference<style::XStyle>>();
+        SwXTextTableStyle* pNewStyle = dynamic_cast<SwXTextTableStyle*>(xStyle.get());
+        if (!pNewStyle)
+            throw lang::IllegalArgumentException();
+
+        pNewStyle->setName(sStyleName); // insertByName sets the element name
+        m_pDocShell->GetDoc()->GetTableStyles().AddAutoFormat(*pNewStyle->GetTableFormat());
+        pNewStyle->SetPhysical();
+    }
     else
     {
         uno::Reference<lang::XUnoTunnel> xStyleTunnel = rElement.get<uno::Reference<lang::XUnoTunnel>>();
@@ -974,14 +986,25 @@ void XStyleFamily::replaceByName(const OUString& rName, const uno::Any& rElement
             if (!pStyleToReplaceWith)
                 throw lang::IllegalArgumentException();
 
-            // copy box style by value
-            *pBoxAutoFormat = *pStyleToReplaceWith->GetBoxFormat();
             pStyleToReplaceWith->setName(rName);
+            *pBoxAutoFormat = *pStyleToReplaceWith->GetBoxFormat();
             pStyleToReplaceWith->SetPhysical();
-            // box assign operator does not copy reference to a xobject, we need to set it manually
-            uno::Reference<style::XStyle> xCellStyle(pStyleToReplaceWith);
-            pBoxAutoFormat->SetXObject(xCellStyle);
-            // to handle unassigned styles, because their names aren't generated automatically
+        }
+    }
+    else if (nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE == m_rEntry.m_aPoolId)
+    {
+        // handle table styles
+        SwTableAutoFormat* pTableAutoFormat = SwXTextTableStyle::GetTableAutoFormat(m_pDocShell, rName);
+        if (pTableAutoFormat)
+        {
+            uno::Reference<style::XStyle> xStyle = rElement.get<uno::Reference<style::XStyle>>();
+            SwXTextTableStyle* pStyleToReplaceWith = dynamic_cast<SwXTextTableStyle*>(xStyle.get());
+            if (!pStyleToReplaceWith)
+                throw lang::IllegalArgumentException();
+
+            pStyleToReplaceWith->setName(rName);
+            *pTableAutoFormat = *pStyleToReplaceWith->GetTableFormat();
+            pStyleToReplaceWith->SetPhysical();
         }
     }
     else
@@ -1020,6 +1043,11 @@ void XStyleFamily::removeByName(const OUString& rName) throw( container::NoSuchE
     {
         // handle cell style
         m_pDocShell->GetDoc()->GetCellStyles().RemoveBoxFormat(rName);
+    }
+    else if (nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE == m_rEntry.m_aPoolId)
+    {
+        // handle table style
+        m_pDocShell->GetDoc()->GetTableStyles().EraseAutoFormat(rName);
     }
     else
         m_pBasePool->Remove(pBase);
@@ -4320,50 +4348,35 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (uno::
     return aRet;
 }
 
-SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName) :
-    m_pDocShell(pDocShell), m_sTableAutoFormatName(rTableAutoFormatName)
+SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, SwTableAutoFormat* pTableAutoFormat) :
+    m_pDocShell(pDocShell), m_pTableAutoFormat(pTableAutoFormat), m_pTableAutoFormat_Impl(nullptr), m_bPhysical(true)
 {
-    SwTableAutoFormat *pAutoFormat = GetTableAutoFormat();
+    UpdateCellStylesMapping();
+}
 
-    if (pAutoFormat)
-    {
-        const std::vector<sal_Int32> aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-        assert(aTableTemplateMap.size() == STYLE_COUNT && "can not map SwTableAutoFormat to a SwXTextTableStyle");
-        for (sal_Int32 i=0; i<STYLE_COUNT; ++i)
-        {
-            SwBoxAutoFormat* pBoxFormat = &pAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
-            uno::Reference<style::XStyle> xCellStyle(pBoxFormat->GetXObject(), uno::UNO_QUERY);
-            if (!xCellStyle.is())
-            {
-                xCellStyle.set(new SwXTextCellStyle(m_pDocShell, pBoxFormat, m_sTableAutoFormatName));
-                pBoxFormat->SetXObject(xCellStyle);
-            }
-            m_aCellStyles[i] = xCellStyle;
-        }
-    }
+SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName) :
+    m_pDocShell(pDocShell), m_pTableAutoFormat_Impl(new SwTableAutoFormat(rTableAutoFormatName)), m_bPhysical(false)
+{
+    m_pTableAutoFormat = m_pTableAutoFormat_Impl.get();
+    UpdateCellStylesMapping();
 }
 
 uno::Reference<style::XStyle> SwXTextTableStyle::CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName)
 {
     SolarMutexGuard aGuard;
     uno::Reference<style::XStyle> xTextTableStyle;
-    const size_t nStyles = pDocShell->GetDoc()->GetTableStyles().size();
-    for(size_t i=0; i < nStyles; ++i)
+    SwTableAutoFormat* pAutoFormat = GetTableAutoFormat(pDocShell, rTableAutoFormatName);
+    if (pAutoFormat && pAutoFormat->GetName() == rTableAutoFormatName)
     {
-        SwTableAutoFormat* pAutoFormat = &pDocShell->GetDoc()->GetTableStyles()[i];
-        if (pAutoFormat->GetName() == rTableAutoFormatName)
+        xTextTableStyle.set(pAutoFormat->GetXObject(), uno::UNO_QUERY);
+        if (!xTextTableStyle.is())
         {
-            xTextTableStyle.set(pAutoFormat->GetXObject(), uno::UNO_QUERY);
-            if (!xTextTableStyle.is())
-            {
-                xTextTableStyle.set(new SwXTextTableStyle(pDocShell, rTableAutoFormatName));
-                pAutoFormat->SetXObject(xTextTableStyle);
-            }
-            break;
+            xTextTableStyle.set(new SwXTextTableStyle(pDocShell, pAutoFormat));
+            pAutoFormat->SetXObject(xTextTableStyle);
         }
     }
 
-    // If corresponding AutoFormat doesn't exist create a XStyle but don't register it.
+    // If corresponding AutoFormat doesn't exist create a non physical style.
     if (!xTextTableStyle.is())
     {
         xTextTableStyle.set(new SwXTextTableStyle(pDocShell, rTableAutoFormatName));
@@ -4373,17 +4386,21 @@ uno::Reference<style::XStyle> SwXTextTableStyle::CreateXTextTableStyle(SwDocShel
     return xTextTableStyle;
 }
 
-SwTableAutoFormat* SwXTextTableStyle::GetTableAutoFormat()
+void SwXTextTableStyle::UpdateCellStylesMapping()
 {
-    const size_t nStyles = m_pDocShell->GetDoc()->GetTableStyles().size();
-    for(size_t i=0; i < nStyles; ++i)
+    const std::vector<sal_Int32> aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+    assert(aTableTemplateMap.size() == STYLE_COUNT && "can not map SwTableAutoFormat to a SwXTextTableStyle");
+    for (sal_Int32 i=0; i<STYLE_COUNT; ++i)
     {
-        SwTableAutoFormat* pAutoFormat = &m_pDocShell->GetDoc()->GetTableStyles()[i];
-        if (pAutoFormat->GetName() == m_sTableAutoFormatName)
-            return pAutoFormat;
+        SwBoxAutoFormat* pBoxFormat = &m_pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
+        uno::Reference<style::XStyle> xCellStyle(pBoxFormat->GetXObject(), uno::UNO_QUERY);
+        if (!xCellStyle.is())
+        {
+            xCellStyle.set(new SwXTextCellStyle(m_pDocShell, pBoxFormat, m_pTableAutoFormat->GetName()));
+            pBoxFormat->SetXObject(xCellStyle);
+        }
+        m_aCellStyles[i] = xCellStyle;
     }
-    SAL_WARN("sw.uno", "lost SwTableAutoFormat and SwXTextTableStyle integrity");
-    return nullptr;
 }
 
 const CellStyleNameMap& SwXTextTableStyle::GetCellStyleNameMap()
@@ -4415,12 +4432,66 @@ const CellStyleNameMap& SwXTextTableStyle::GetCellStyleNameMap()
     return aMap;
 }
 
+SwTableAutoFormat* SwXTextTableStyle::GetTableFormat()
+{
+    return m_pTableAutoFormat;
+}
+
+SwTableAutoFormat* SwXTextTableStyle::GetTableAutoFormat(SwDocShell* pDocShell, const OUString& sName)
+{
+    const size_t nStyles = pDocShell->GetDoc()->GetTableStyles().size();
+    for(size_t i=0; i < nStyles; ++i)
+    {
+        SwTableAutoFormat* pAutoFormat = &pDocShell->GetDoc()->GetTableStyles()[i];
+        if (pAutoFormat->GetName() == sName)
+        {
+            return pAutoFormat;
+        }
+    }
+    // not found
+    return nullptr;
+}
+
+void SwXTextTableStyle::SetPhysical()
+{
+    if (!m_bPhysical)
+    {
+        // find table format in doc
+        SwTableAutoFormat* pTableAutoFormat = GetTableAutoFormat(m_pDocShell, m_pTableAutoFormat->GetName());
+        if (pTableAutoFormat)
+        {
+            m_bPhysical = true;
+            /// take care of children, make SwXTextCellStyles use new core SwBoxAutoFormats
+            const std::vector<sal_Int32> aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+            for (size_t i=0; i<aTableTemplateMap.size(); ++i)
+            {
+                SwBoxAutoFormat* pOldBoxFormat = &m_pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
+                uno::Reference<style::XStyle> xCellStyle(pOldBoxFormat->GetXObject(), uno::UNO_QUERY);
+                if (!xCellStyle.is())
+                {
+                    SwXTextCellStyle* pStyle = dynamic_cast<SwXTextCellStyle*>(xCellStyle.get());
+                    SwBoxAutoFormat* pNewBoxFormat = &pTableAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
+                    pStyle->SetBoxFormat(pNewBoxFormat);
+                    pNewBoxFormat->SetXObject(uno::Reference<style::XStyle>(xCellStyle));
+                }
+            }
+            m_pTableAutoFormat_Impl = nullptr;
+            m_pTableAutoFormat = pTableAutoFormat;
+            m_pTableAutoFormat->SetXObject(uno::Reference<style::XStyle>(this));
+        }
+        else
+            SAL_WARN("sw.uno", "setting style physical, but SwTableAutoFormat in document not found");
+    }
+    else
+        SAL_WARN("sw.uno", "calling SetPhysical on a physical SwXTextTableStyle");
+}
+
 // XStyle
 sal_Bool SAL_CALL SwXTextTableStyle::isUserDefined() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     // only first style is not user defined
-    if (m_pDocShell->GetDoc()->GetTableStyles()[0].GetName() == m_sTableAutoFormatName)
+    if (m_pDocShell->GetDoc()->GetTableStyles()[0].GetName() == m_pTableAutoFormat->GetName())
         return false;
 
     return true;
@@ -4429,6 +4500,9 @@ sal_Bool SAL_CALL SwXTextTableStyle::isUserDefined() throw (uno::RuntimeExceptio
 sal_Bool SAL_CALL SwXTextTableStyle::isInUse() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
+    if (!m_bPhysical)
+        return false;
+
     uno::Reference<text::XTextTablesSupplier> xTablesSupp(m_pDocShell->GetModel(), uno::UNO_QUERY);
     if (!xTablesSupp.is())
         return false;
@@ -4444,7 +4518,7 @@ sal_Bool SAL_CALL SwXTextTableStyle::isInUse() throw (uno::RuntimeException, std
         xTables->getByIndex(i) >>= xTablePropertySet;
         OUString sTableTemplateName;
         if (xTablePropertySet.is() && (xTablePropertySet->getPropertyValue("TableTemplateName") >>= sTableTemplateName)
-            && sTableTemplateName == m_sTableAutoFormatName)
+            && sTableTemplateName == m_pTableAutoFormat->GetName())
             return true;
     }
 
@@ -4464,29 +4538,14 @@ OUString SAL_CALL SwXTextTableStyle::getName() throw(uno::RuntimeException, std:
 {
     SolarMutexGuard aGuard;
     OUString sProgName;
-    SwStyleNameMapper::FillProgName(m_sTableAutoFormatName, sProgName, nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE, true);
-    return m_sTableAutoFormatName;
+    SwStyleNameMapper::FillProgName(m_pTableAutoFormat->GetName(), sProgName, nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE, true);
+    return sProgName;
 }
 
 void SAL_CALL SwXTextTableStyle::setName(const OUString& rName) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    const size_t nStyles = m_pDocShell->GetDoc()->GetTableStyles().size();
-    for(size_t i=0; i < nStyles; ++i)
-    {
-        SwTableAutoFormat* pAutoFormat = &m_pDocShell->GetDoc()->GetTableStyles()[i];
-        if (pAutoFormat->GetName() == rName)
-        {
-            SAL_INFO("sw.uno", "SwXTextTableStyle with given name already exists");
-            return;
-        }
-    }
-
-    SwTableAutoFormat* pAutoFormat = GetTableAutoFormat();
-    if (pAutoFormat)
-        pAutoFormat->SetName(rName);
-
-    m_sTableAutoFormatName = rName;
+    m_pTableAutoFormat->SetName(rName);
 }
 
 //XPropertySet
@@ -4505,20 +4564,17 @@ css::uno::Any SAL_CALL SwXTextTableStyle::getPropertyValue(const OUString& rProp
 {
     SolarMutexGuard aGuard;
     bool bIsRow = false;
-    SwTableAutoFormat* pFormat = GetTableAutoFormat();
-    if (pFormat)
-    {
-        if (rPropertyName == UNO_NAME_TABLE_FIRST_ROW_END_COLUMN)
-            bIsRow = pFormat->FirstRowEndColumnIsRow();
-        else if (rPropertyName == UNO_NAME_TABLE_FIRST_ROW_START_COLUMN)
-            bIsRow = pFormat->FirstRowStartColumnIsRow();
-        else if (rPropertyName == UNO_NAME_TABLE_LAST_ROW_END_COLUMN)
-            bIsRow = pFormat->LastRowEndColumnIsRow();
-        else if (rPropertyName == UNO_NAME_TABLE_LAST_ROW_START_COLUMN)
-            bIsRow = pFormat->LastRowStartColumnIsRow();
-        else
-            throw css::beans::UnknownPropertyException();
-    }
+
+    if (rPropertyName == UNO_NAME_TABLE_FIRST_ROW_END_COLUMN)
+        bIsRow = m_pTableAutoFormat->FirstRowEndColumnIsRow();
+    else if (rPropertyName == UNO_NAME_TABLE_FIRST_ROW_START_COLUMN)
+        bIsRow = m_pTableAutoFormat->FirstRowStartColumnIsRow();
+    else if (rPropertyName == UNO_NAME_TABLE_LAST_ROW_END_COLUMN)
+        bIsRow = m_pTableAutoFormat->LastRowEndColumnIsRow();
+    else if (rPropertyName == UNO_NAME_TABLE_LAST_ROW_START_COLUMN)
+        bIsRow = m_pTableAutoFormat->LastRowStartColumnIsRow();
+    else
+        throw css::beans::UnknownPropertyException();
 
     return uno::makeAny(bIsRow ? OUString("row") : OUString("column"));
 }
@@ -4569,6 +4625,53 @@ sal_Bool SAL_CALL SwXTextTableStyle::hasByName(const OUString& rName) throw(css:
     return iter != rMap.end();
 }
 
+//XNameContainer
+void SAL_CALL SwXTextTableStyle::insertByName(const OUString& /*Name*/, const uno::Any& /*Element*/) throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "not implemented");
+}
+
+void SAL_CALL SwXTextTableStyle::replaceByName(const OUString& rName, const uno::Any& rElement) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    const CellStyleNameMap& rMap = GetCellStyleNameMap();
+    CellStyleNameMap::const_iterator iter = rMap.find(rName);
+    if(iter == rMap.end())
+        throw container::NoSuchElementException();
+    const sal_Int32 nCellStyle = iter->second;
+
+    uno::Reference<style::XStyle> xStyle = rElement.get<uno::Reference<style::XStyle>>();
+    if (!xStyle.is())
+        throw lang::IllegalArgumentException();
+
+    SwXTextCellStyle* pStyleToReplaceWith = dynamic_cast<SwXTextCellStyle*>(xStyle.get());
+    // replace only with physical ...
+    if (pStyleToReplaceWith && !pStyleToReplaceWith->IsPhysical())
+        throw lang::IllegalArgumentException();
+
+    // ... unassigned cell styles
+    if (!m_pDocShell->GetDoc()->GetCellStyles().GetBoxFormat(xStyle->getName()))
+        throw lang::IllegalArgumentException();
+
+    const auto& rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+    const sal_Int32 nBoxFormat = rTableTemplateMap[nCellStyle];
+
+    // move SwBoxAutoFormat to dest. SwTableAutoFormat
+    m_pTableAutoFormat->SetBoxFormat(*pStyleToReplaceWith->GetBoxFormat(), nBoxFormat);
+    // make SwXTextCellStyle use new, moved SwBoxAutoFormat
+    pStyleToReplaceWith->SetBoxFormat(&m_pTableAutoFormat->GetBoxFormat(nBoxFormat));
+    m_pTableAutoFormat->GetBoxFormat(nBoxFormat).SetXObject(xStyle);
+    // remove unassigned SwBoxAutoFormat, which is not anymore in use anyways
+    m_pDocShell->GetDoc()->GetCellStyles().RemoveBoxFormat(xStyle->getName());
+    // make this SwXTextTableStyle use new SwXTextCellStyle
+    m_aCellStyles[nCellStyle] = xStyle;
+}
+
+void SAL_CALL SwXTextTableStyle::removeByName(const OUString& /*Name*/) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "not implemented");
+}
+
 //XElementAccess
 uno::Type SAL_CALL SAL_CALL SwXTextTableStyle::getElementType() throw(uno::RuntimeException, std::exception)
 {
@@ -4598,20 +4701,20 @@ css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceName
 
 // SwXTextCellStyle
 SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle) :
-    m_pDocShell(pDocShell), m_pBoxAutoFormat(pBoxAutoFormat), m_sParentStyle(sParentStyle), m_bPhysical(true)
+    m_pDocShell(pDocShell),
+    m_pBoxAutoFormat(pBoxAutoFormat),
+    m_pBoxAutoFormat_Impl(nullptr),
+    m_sParentStyle(sParentStyle),
+    m_bPhysical(true)
 { }
 
 SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName) :
-    m_pDocShell(pDocShell), m_sName(sName), m_bPhysical(false)
+    m_pDocShell(pDocShell),
+    m_pBoxAutoFormat_Impl(new SwBoxAutoFormat()),
+    m_sName(sName),
+    m_bPhysical(false)
 {
-    // m_bPhysical=false will help to take care deleting it
-    m_pBoxAutoFormat = new SwBoxAutoFormat();
-}
-
-SwXTextCellStyle::~SwXTextCellStyle()
-{
-     if (!m_bPhysical)
-         delete m_pBoxAutoFormat;
+    m_pBoxAutoFormat = m_pBoxAutoFormat_Impl.get();
 }
 
 SwBoxAutoFormat* SwXTextCellStyle::GetBoxFormat()
@@ -4619,15 +4722,23 @@ SwBoxAutoFormat* SwXTextCellStyle::GetBoxFormat()
     return m_pBoxAutoFormat;
 }
 
+void SwXTextCellStyle::SetBoxFormat(SwBoxAutoFormat* pBoxFormat)
+{
+    if (m_bPhysical)
+        m_pBoxAutoFormat = pBoxFormat;
+    else
+        SAL_INFO("sw.uno", "trying to call SwXTextCellStyle::SetBoxFormat on non physical style");
+}
+
 void SwXTextCellStyle::SetPhysical()
 {
     if (!m_bPhysical)
     {
-        m_bPhysical = true;
-        delete m_pBoxAutoFormat;
         SwBoxAutoFormat* pBoxAutoFormat = GetBoxAutoFormat(m_pDocShell, m_sName, &m_sParentStyle);
         if (pBoxAutoFormat)
         {
+            m_bPhysical = true;
+            m_pBoxAutoFormat_Impl = nullptr;
             m_pBoxAutoFormat = pBoxAutoFormat;
             m_pBoxAutoFormat->SetXObject(uno::Reference<style::XStyle>(this));
         }
@@ -4636,6 +4747,11 @@ void SwXTextCellStyle::SetPhysical()
     }
     else
         SAL_WARN("sw.uno", "calling SetPhysical on a physical SwXTextCellStyle");
+}
+
+bool SwXTextCellStyle::IsPhysical()
+{
+    return m_bPhysical;
 }
 
 SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName)
