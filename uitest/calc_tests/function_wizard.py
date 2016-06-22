@@ -10,6 +10,8 @@ from uitest_helper import UITest
 from helper import mkPropertyValues
 import time
 
+from UITestCase import UITestCase
+
 try:
     import pyuno
     import uno
@@ -20,25 +22,21 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-# tdf#98427
-def open_function_wizard(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+class FunctionWizardTest(UITestCase):
+    # tdf#98427
+    def test_open_function_wizard(self):
+        self.ui_test.create_doc_in_start_center("calc")
 
-    ui_test = UITest(xUITest, xContext)
+        self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
 
-    ui_test.create_doc_in_start_center("calc")
+        xFunctionDlg = self.xUITest.getTopFocusWindow()
 
-    ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
+        xArrayChkBox = xFunctionDlg.getChild("array")
+        xArrayChkBox.executeAction("CLICK", tuple())
 
-    xFunctionDlg = xUITest.getTopFocusWindow()
+        xCancelBtn = xFunctionDlg.getChild("cancel")
+        xCancelBtn.executeAction("CLICK", tuple())
 
-    xArrayChkBox = xFunctionDlg.getChild("array")
-    xArrayChkBox.executeAction("CLICK", tuple())
-
-    xCancelBtn = xFunctionDlg.getChild("cancel")
-    xCancelBtn.executeAction("CLICK", tuple())
-
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

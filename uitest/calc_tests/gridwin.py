@@ -9,8 +9,6 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
-from uihelper.calc import enter_text_to_cell
-
 from UITestCase import UITestCase
 
 import time
@@ -25,36 +23,22 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-class GridWindowTest(UITestCase):
+class GridWinTest(UITestCase):
 
-    def test_input(self):
-
-        self.ui_test.create_doc_in_start_center("calc")
-        xTopWindow = self.xUITest.getTopFocusWindow()
-
-        xGridWindow = xTopWindow.getChild("grid_window")
-
-        enter_text_to_cell(xGridWindow, "C3", "=A1")
-        enter_text_to_cell(xGridWindow, "A1", "2")
-
-        time.sleep(2)
-
-        self.ui_test.close_doc()
-
-    def test_special_keys(self):
+    def test_select_object(self):
 
         self.ui_test.create_doc_in_start_center("calc")
-        xTopWindow = self.xUITest.getTopFocusWindow()
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWindow = xCalcDoc.getChild("grid_window")
 
-        xGridWindow = xTopWindow.getChild("grid_window")
-
-        selectProps = mkPropertyValues({"CELL": "C3"})
+        selectProps = mkPropertyValues({"CELL": "B10"})
         xGridWindow.executeAction("SELECT", selectProps)
 
-        typeProps = mkPropertyValues({"KEYCODE": "CTRL+DOWN"})
-        xGridWindow.executeAction("TYPE", typeProps)
+        xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
 
-        time.sleep(2)
+        xGridWindow.executeAction("ACTIVATE", tuple())
+
+        xGridWindow.executeAction("DESELECT", tuple())
 
         self.ui_test.close_doc()
 

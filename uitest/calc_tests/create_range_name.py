@@ -9,6 +9,8 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
+from UITestCase import UITestCase
+
 try:
     import pyuno
     import uno
@@ -19,54 +21,48 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-def create_range_name(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+class CreateRangeNameTest(UITestCase):
 
-    ui_test = UITest(xUITest, xContext)
+    def test_create_range_name(self):
 
-    ui_test.create_doc_in_start_center("calc")
+        self.ui_test.create_doc_in_start_center("calc")
 
-    ui_test.execute_modeless_dialog_through_command(".uno:AddName")
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
 
-    xAddNameDlg = xUITest.getTopFocusWindow()
+        xAddNameDlg = self.xUITest.getTopFocusWindow()
 
-    props = {"TEXT": "simpleRangeName"}
-    actionProps = mkPropertyValues(props)
+        props = {"TEXT": "simpleRangeName"}
+        actionProps = mkPropertyValues(props)
 
-    xEdit = xAddNameDlg.getChild("edit")
-    xEdit.executeAction("TYPE", actionProps)
-    xAddBtn = xAddNameDlg.getChild("add")
-    xAddBtn.executeAction("CLICK", tuple())
+        xEdit = xAddNameDlg.getChild("edit")
+        xEdit.executeAction("TYPE", actionProps)
+        xAddBtn = xAddNameDlg.getChild("add")
+        xAddBtn.executeAction("CLICK", tuple())
 
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
-def create_local_range_name(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+    def test_create_local_range_name(self):
 
-    ui_test = UITest(xUITest, xContext)
+        self.ui_test.create_doc_in_start_center("calc")
 
-    ui_test.create_doc_in_start_center("calc")
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
 
-    ui_test.execute_modeless_dialog_through_command(".uno:AddName")
+        xAddNameDlg = self.xUITest.getTopFocusWindow()
 
-    xAddNameDlg = xUITest.getTopFocusWindow()
+        props = {"TEXT": "simpleRangeName"}
+        actionProps = mkPropertyValues(props)
 
-    props = {"TEXT": "simpleRangeName"}
-    actionProps = mkPropertyValues(props)
+        xEdit = xAddNameDlg.getChild("edit")
+        xEdit.executeAction("TYPE", actionProps)
 
-    xEdit = xAddNameDlg.getChild("edit")
-    xEdit.executeAction("TYPE", actionProps)
+        xScope = xAddNameDlg.getChild("scope")
+        props = {"POS": "1"}
+        scopeProps = mkPropertyValues(props)
+        xScope.executeAction("SELECT", scopeProps)
 
-    xScope = xAddNameDlg.getChild("scope")
-    props = {"POS": "1"}
-    scopeProps = mkPropertyValues(props)
-    xScope.executeAction("SELECT", scopeProps)
+        xAddBtn = xAddNameDlg.getChild("add")
+        xAddBtn.executeAction("CLICK", tuple())
 
-    xAddBtn = xAddNameDlg.getChild("add")
-    xAddBtn.executeAction("CLICK", tuple())
-
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
