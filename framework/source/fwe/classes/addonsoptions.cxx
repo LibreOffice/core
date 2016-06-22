@@ -203,7 +203,6 @@ class AddonsOptions_Impl : public ConfigItem
         const MergeStatusbarInstructionContainer&       GetMergeStatusbarInstructions() const { return m_aCachedStatusbarMergingInstructions;}
         void                                            ReadConfigurationData();
 
-
     private:
         enum ImageSize
         {
@@ -469,7 +468,6 @@ bool AddonsOptions_Impl::GetMergeToolbarInstructions(
     else
         return false;
 }
-
 
 //  public method
 
@@ -1471,43 +1469,30 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString&
     return lResult;
 }
 
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-
-AddonsOptions_Impl*     AddonsOptions::m_pDataContainer = nullptr;
-sal_Int32               AddonsOptions::m_nRefCount      = 0;
-
-//  constructor
+namespace{
+    //global
+    std::weak_ptr<AddonsOptions_Impl> g_pAddonsOptions;
+}
 
 AddonsOptions::AddonsOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
-    ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
-    if( m_pDataContainer == nullptr )
+
+    m_pImpl = g_pAddonsOptions.lock();
+    if( !m_pImpl )
     {
-        m_pDataContainer = new AddonsOptions_Impl;
+        m_pImpl = std::make_shared<AddonsOptions_Impl>();
+        g_pAddonsOptions = m_pImpl;
     }
 }
-
-//  destructor
 
 AddonsOptions::~AddonsOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
-    --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
-    if( m_nRefCount <= 0 )
-    {
-        delete m_pDataContainer;
-        m_pDataContainer = nullptr;
-    }
+
+    m_pImpl.reset();
 }
 
 //  public method
@@ -1515,7 +1500,7 @@ AddonsOptions::~AddonsOptions()
 bool AddonsOptions::HasAddonsMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->HasAddonsMenu();
+    return m_pImpl->HasAddonsMenu();
 }
 
 //  public method
@@ -1523,7 +1508,7 @@ bool AddonsOptions::HasAddonsMenu() const
 sal_Int32 AddonsOptions::GetAddonsToolBarCount() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetAddonsToolBarCount();
+    return m_pImpl->GetAddonsToolBarCount();
 }
 
 //  public method
@@ -1531,7 +1516,7 @@ sal_Int32 AddonsOptions::GetAddonsToolBarCount() const
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetAddonsMenu();
+    return m_pImpl->GetAddonsMenu();
 }
 
 //  public method
@@ -1539,7 +1524,7 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenu() cons
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenuBarPart() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetAddonsMenuBarPart();
+    return m_pImpl->GetAddonsMenuBarPart();
 }
 
 //  public method
@@ -1547,7 +1532,7 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenuBarPart
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsToolBarPart( sal_uInt32 nIndex ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetAddonsToolBarPart( nIndex );
+    return m_pImpl->GetAddonsToolBarPart( nIndex );
 }
 
 //  public method
@@ -1555,7 +1540,7 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsToolBarPart
 const OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetAddonsToolbarResourceName( nIndex );
+    return m_pImpl->GetAddonsToolbarResourceName( nIndex );
 }
 
 //  public method
@@ -1563,7 +1548,7 @@ const OUString AddonsOptions::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) 
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsHelpMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetAddonsHelpMenu();
+    return m_pImpl->GetAddonsHelpMenu();
 }
 
 //  public method
@@ -1571,7 +1556,7 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsHelpMenu() 
 const MergeMenuInstructionContainer& AddonsOptions::GetMergeMenuInstructions() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMergeMenuInstructions();
+    return m_pImpl->GetMergeMenuInstructions();
 }
 
 //  public method
@@ -1581,14 +1566,14 @@ bool AddonsOptions::GetMergeToolbarInstructions(
     MergeToolbarInstructionContainer& rToolbarInstructions ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMergeToolbarInstructions(
+    return m_pImpl->GetMergeToolbarInstructions(
         rToolbarName, rToolbarInstructions );
 }
 
 const MergeStatusbarInstructionContainer& AddonsOptions::GetMergeStatusbarInstructions() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetMergeStatusbarInstructions();
+    return m_pImpl->GetMergeStatusbarInstructions();
 }
 
 //  public method
@@ -1596,7 +1581,7 @@ const MergeStatusbarInstructionContainer& AddonsOptions::GetMergeStatusbarInstru
 Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetImageFromURL( aURL, bBig, bNoScale );
+    return m_pImpl->GetImageFromURL( aURL, bBig, bNoScale );
 }
 
 //  public method
@@ -1628,10 +1613,10 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED( AddonsOptions, Notify, void*, void )
+IMPL_LINK_NOARG_TYPED( AddonsOptions, Notify, void*, void )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->ReadConfigurationData();
+    m_pImpl->ReadConfigurationData();
 }
 
 }
