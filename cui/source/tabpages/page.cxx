@@ -59,7 +59,7 @@
 #include <svx/xdef.hxx>
 #include <svx/unobrushitemhelper.hxx>
 
-#include <numpages.hxx>
+#include <svx/SvxNumOptionsTabPageHelper.hxx>
 
 // static ----------------------------------------------------------------
 
@@ -352,7 +352,7 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     m_pLandscapeBtn->SetAccessibleRelationMemberOf(m_pOrientationFT);
 
     // Get the i18n framework numberings and add them to the listbox.
-    SvxNumOptionsTabPage::GetI18nNumbering( *m_pNumberFormatBox, ::std::numeric_limits<sal_uInt16>::max());
+    SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_pNumberFormatBox, ::std::numeric_limits<sal_uInt16>::max());
 }
 
 
