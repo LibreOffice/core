@@ -1122,6 +1122,24 @@ void PNGReaderImpl::ImplApplyFilter()
     memcpy( mpScanPrior, mpInflateInBuf, mnScansize );
 }
 
+namespace
+{
+    void SanitizePaletteIndexes(sal_uInt8* pEntries, int nLen, BitmapWriteAccess* pAcc)
+    {
+        sal_uInt16 nPaletteEntryCount = pAcc->GetPaletteEntryCount();
+        for (int nX = 0; nX < nLen; ++nX)
+        {
+            if (pEntries[nX] >= nPaletteEntryCount)
+            {
+                SAL_WARN("vcl.gdi", "invalid colormap index: "
+                          << static_cast<unsigned int>(pEntries[nX]) << ", colormap len is: "
+                          << nPaletteEntryCount);
+                pEntries[nX] = pEntries[nX] % nPaletteEntryCount;
+            }
+        }
+    }
+}
+
 // ImplDrawScanlines draws the complete Scanline (nY) into the target bitmap
 // In interlace mode the parameter nXStart and nXAdd append to the currently used pass
 
@@ -1137,7 +1155,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     // => TODO; also do this for nX here instead of in the ImplSet*Pixel() methods
     const sal_uInt32 nY = mnYpos >> mnPreviewShift;
 
-    const sal_uInt8* pTmp = mpInflateInBuf + 1;
+    sal_uInt8* pTmp = mpInflateInBuf + 1;
     if ( mpAcc->HasPalette() ) // alphachannel is not allowed by pictures including palette entries
     {
         switch ( mpAcc->GetBitCount() )
@@ -1304,6 +1322,8 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         if( nXAdd == 1 && mnPreviewShift == 0 )  // copy raw line data if possible
                         {
                             int nLineBytes = maOrigSize.Width();
+                            if (mbPalette)
+                                SanitizePaletteIndexes(pTmp, nLineBytes, mpAcc);
                             mpAcc->CopyScanline( nY, pTmp, ScanlineFormat::N8BitPal, nLineBytes );
                         }
                         else
