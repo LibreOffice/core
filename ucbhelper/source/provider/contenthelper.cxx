@@ -152,10 +152,8 @@ void SAL_CALL ContentImplHelper::release()
     rtl::Reference< ContentProviderImplHelper > xKeepProviderAlive(
         m_xProvider );
 
-    {
-        osl::MutexGuard aGuard( m_xProvider->m_aMutex );
-        OWeakObject::release();
-    }
+    osl::MutexGuard aGuard( m_xProvider->m_aMutex );
+    OWeakObject::release();
 }
 
 uno::Any SAL_CALL ContentImplHelper::queryInterface( const uno::Type & rType )
