@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_f425805c",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2183,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-22T23:04:38Z",
+      "side": 1,
+      "message": "I\u0027m not a fan of unrelated formatting changes in bug fixes.",
+      "revId": "9c75679ac9b757024b0b5e91167cc512a33b8b0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_142bc431",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2196,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-22T23:04:38Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "9c75679ac9b757024b0b5e91167cc512a33b8b0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_541d4c0e",
+        "filename": "sc/source/filter/inc/xetable.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-06-22T23:04:38Z",
+      "side": 1,
+      "message": "Again a change that does not belong into this commit.",
+      "revId": "9c75679ac9b757024b0b5e91167cc512a33b8b0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
