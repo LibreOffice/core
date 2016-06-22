@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_a92ac5e5",
+        "filename": "sw/uiconfig/swriter/ui/gotopagedialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-22T07:30:49Z",
+      "side": 1,
+      "message": "The title looks like copy pasta :)",
+      "revId": "0295ae66e8528b43bfe48e6e1bb26b747d85d913",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
