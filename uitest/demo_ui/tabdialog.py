@@ -11,44 +11,40 @@ from helper import mkPropertyValues
 
 import time
 
-def select_tab_page_pos(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+from UITestCase import UITestCase
 
-    ui_test = UITest(xUITest, xContext)
+class TabDialogTest(UITestCase):
 
-    ui_test.create_doc_in_start_center("calc")
+    def test_select_tab_page_pos(self):
 
-    ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-    xCellsDlg = xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("calc")
 
-    props = {"POS": "1"}
-    propsUNO = mkPropertyValues(props)
-    xCellsDlg.executeAction("SELECT", propsUNO)
+        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+        xCellsDlg = self.xUITest.getTopFocusWindow()
 
-    xOkBtn = xCellsDlg.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
+        props = {"POS": "1"}
+        propsUNO = mkPropertyValues(props)
+        xCellsDlg.executeAction("SELECT", propsUNO)
 
-    ui_test.close_doc()
+        xOkBtn = xCellsDlg.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-def select_tab_page_name(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        self.ui_test.close_doc()
 
-    ui_test = UITest(xUITest, xContext)
+    def test_select_tab_page_name(self):
 
-    ui_test.create_doc_in_start_center("calc")
+        self.ui_test.create_doc_in_start_center("calc")
 
-    ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-    xCellsDlg = xUITest.getTopFocusWindow()
+        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+        xCellsDlg = self.xUITest.getTopFocusWindow()
 
-    props = {"NAME": "Borders"}
-    propsUNO = mkPropertyValues(props)
-    xCellsDlg.executeAction("SELECT", propsUNO)
+        props = {"NAME": "Borders"}
+        propsUNO = mkPropertyValues(props)
+        xCellsDlg.executeAction("SELECT", propsUNO)
 
-    xOkBtn = xCellsDlg.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn = xCellsDlg.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

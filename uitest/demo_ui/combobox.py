@@ -9,25 +9,25 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
-def select_entry_pos(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+from UITestCase import UITestCase
 
-    ui_test = UITest(xUITest, xContext)
+class ComboBoxTest(UITestCase):
 
-    ui_test.create_doc_in_start_center("calc")
+    def test_select_entry_pos(self):
 
-    ui_test.execute_modeless_dialog_through_command(".uno:AddName")
-    xAddNameDlg = xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("calc")
 
-    scopeCB = xAddNameDlg.getChild("scope")
-    props = {"POS": "1"}
-    actionProps = mkPropertyValues(props)
-    scopeCB.executeAction("SELECT", actionProps)
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
+        xAddNameDlg = self.xUITest.getTopFocusWindow()
 
-    xCancelBtn = xAddNameDlg.getChild("cancel")
-    xCancelBtn.executeAction("CLICK", tuple())
+        scopeCB = xAddNameDlg.getChild("scope")
+        props = {"POS": "1"}
+        actionProps = mkPropertyValues(props)
+        scopeCB.executeAction("SELECT", actionProps)
 
-    ui_test.close_doc()
+        xCancelBtn = xAddNameDlg.getChild("cancel")
+        xCancelBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

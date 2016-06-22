@@ -9,6 +9,8 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
+from UITestCase import UITestCase
+
 import time
 
 try:
@@ -21,22 +23,20 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-def toggle_checkbox(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+class CheckBoxTest(UITestCase):
 
-    ui_test = UITest(xUITest, xContext)
+    def test_toggle_checkbox(self):
 
-    ui_test.create_doc_in_start_center("calc")
+        self.ui_test.create_doc_in_start_center("calc")
 
-    ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-    xCellsDlg = xUITest.getTopFocusWindow()
-    xNegativeNumRedCB = xCellsDlg.getChild("negnumred")
-    xNegativeNumRedCB.executeAction("CLICK",tuple())
+        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+        xCellsDlg = self.xUITest.getTopFocusWindow()
+        xNegativeNumRedCB = xCellsDlg.getChild("negnumred")
+        xNegativeNumRedCB.executeAction("CLICK",tuple())
 
-    okBtn = xCellsDlg.getChild("ok")
-    okBtn.executeAction("CLICK", tuple())
+        okBtn = xCellsDlg.getChild("ok")
+        okBtn.executeAction("CLICK", tuple())
 
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

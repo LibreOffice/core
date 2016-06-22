@@ -14,6 +14,8 @@ from uihelper.calc import enter_text_to_cell
 
 from uitest_helper import get_state_as_dict
 
+from UITestCase import UITestCase
+
 try:
     import pyuno
     import uno
@@ -24,41 +26,39 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-def expand(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+class TreeListTest(UITestCase):
 
-    ui_test = UITest(xUITest, xContext)
+    def test_expand(self):
 
-    ui_test.create_doc_in_start_center("calc")
+        self.ui_test.create_doc_in_start_center("calc")
 
-    xCalcDoc = xUITest.getTopFocusWindow()
-    xGridWindow = xCalcDoc.getChild("grid_window")
-    enter_text_to_cell(xGridWindow, "B2", "=2+3+4")
-    xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWindow = xCalcDoc.getChild("grid_window")
+        enter_text_to_cell(xGridWindow, "B2", "=2+3+4")
+        xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
 
-    ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
+        self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
 
-    xFunctionDlg = xUITest.getTopFocusWindow()
+        xFunctionDlg = self.xUITest.getTopFocusWindow()
 
-    xTabs = xFunctionDlg.getChild("tabs")
-    xTabs.executeAction("SELECT", mkPropertyValues({"POS":"1"}))
+        xTabs = xFunctionDlg.getChild("tabs")
+        xTabs.executeAction("SELECT", mkPropertyValues({"POS":"1"}))
 
-    xTreelist = xTabs.getChild("struct")
+        xTreelist = xTabs.getChild("struct")
 
-    xTreeEntry = xTreelist.getChild('0')
+        xTreeEntry = xTreelist.getChild('0')
 
-    xTreeEntry.executeAction("COLLAPSE", tuple())
+        xTreeEntry.executeAction("COLLAPSE", tuple())
 
-    time.sleep(1)
+        time.sleep(1)
 
-    xTreeEntry.executeAction("EXPAND", tuple())
+        xTreeEntry.executeAction("EXPAND", tuple())
 
-    time.sleep(1)
+        time.sleep(1)
 
-    xCancelBtn = xFunctionDlg.getChild("cancel")
-    xCancelBtn.executeAction("CLICK", tuple())
+        xCancelBtn = xFunctionDlg.getChild("cancel")
+        xCancelBtn.executeAction("CLICK", tuple())
 
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

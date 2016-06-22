@@ -9,6 +9,8 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
+from UITestCase import UITestCase
+
 try:
     import pyuno
     import uno
@@ -19,26 +21,24 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-def type_text(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+class EditTest(UITestCase):
 
-    ui_test = UITest(xUITest, xContext)
+    def test_type_text(self):
 
-    ui_test.create_doc_in_start_center("calc")
+        self.ui_test.create_doc_in_start_center("calc")
 
-    ui_test.execute_modeless_dialog_through_command(".uno:AddName")
-    xAddNameDlg = xUITest.getTopFocusWindow()
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
+        xAddNameDlg = self.xUITest.getTopFocusWindow()
 
-    xEdit = xAddNameDlg.getChild("edit")
+        xEdit = xAddNameDlg.getChild("edit")
 
-    props = {"TEXT": "simpleRangeName"}
-    actionProps = mkPropertyValues(props)
-    xEdit.executeAction("TYPE", actionProps)
+        props = {"TEXT": "simpleRangeName"}
+        actionProps = mkPropertyValues(props)
+        xEdit.executeAction("TYPE", actionProps)
 
-    xAddBtn = xAddNameDlg.getChild("cancel")
-    xAddBtn.executeAction("CLICK", tuple())
+        xAddBtn = xAddNameDlg.getChild("cancel")
+        xAddBtn.executeAction("CLICK", tuple())
 
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

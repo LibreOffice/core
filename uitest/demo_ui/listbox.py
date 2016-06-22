@@ -9,47 +9,43 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
-def select_entry_pos(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+from UITestCase import UITestCase
 
-    ui_test = UITest(xUITest, xContext)
+class ListBoxTest(UITestCase):
 
-    ui_test.create_doc_in_start_center("calc")
+    def test_select_entry_pos(self):
 
-    ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-    xCellsDlg = xUITest.getTopFocusWindow()
+        self.ui_test.create_doc_in_start_center("calc")
 
-    categoryLB = xCellsDlg.getChild("categorylb")
-    props = {"POS": "4"}
-    actionProps = mkPropertyValues(props)
-    categoryLB.executeAction("SELECT", actionProps)
+        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+        xCellsDlg = self.xUITest.getTopFocusWindow()
 
-    xOkBtn = xCellsDlg.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
+        categoryLB = xCellsDlg.getChild("categorylb")
+        props = {"POS": "4"}
+        actionProps = mkPropertyValues(props)
+        categoryLB.executeAction("SELECT", actionProps)
 
-    ui_test.close_doc()
+        xOkBtn = xCellsDlg.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-def select_entry_text(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        self.ui_test.close_doc()
 
-    ui_test = UITest(xUITest, xContext)
+    def test_select_entry_text(self):
 
-    ui_test.create_doc_in_start_center("calc")
+        self.ui_test.create_doc_in_start_center("calc")
 
-    ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-    xCellsDlg = xUITest.getTopFocusWindow()
+        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
+        xCellsDlg = self.xUITest.getTopFocusWindow()
 
-    categoryLB = xCellsDlg.getChild("categorylb")
-    props = {"TEXT": "Time"}
+        categoryLB = xCellsDlg.getChild("categorylb")
+        props = {"TEXT": "Time"}
 
-    actionProps = mkPropertyValues(props)
-    categoryLB.executeAction("SELECT", actionProps)
+        actionProps = mkPropertyValues(props)
+        categoryLB.executeAction("SELECT", actionProps)
 
-    xOkBtn = xCellsDlg.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn = xCellsDlg.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

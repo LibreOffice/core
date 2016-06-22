@@ -9,6 +9,8 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
+from UITestCase import UITestCase
+
 import time
 
 try:
@@ -21,53 +23,43 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-def select_cell(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+class GridWinTest(UITestCase):
 
-    ui_test = UITest(xUITest, xContext)
+    def test_select_cell(self):
 
-    ui_test.create_doc_in_start_center("calc")
-    xCalcDoc = xUITest.getTopFocusWindow()
-    xGridWindow = xCalcDoc.getChild("grid_window")
+        self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWindow = xCalcDoc.getChild("grid_window")
 
-    selectProps = mkPropertyValues({"CELL": "B10"})
-    xGridWindow.executeAction("SELECT", selectProps)
+        selectProps = mkPropertyValues({"CELL": "B10"})
+        xGridWindow.executeAction("SELECT", selectProps)
 
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
-def select_range(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+    def test_select_range(self):
 
-    ui_test = UITest(xUITest, xContext)
+        self.ui_test.create_doc_in_start_center("calc")
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWindow = xCalcDoc.getChild("grid_window")
 
-    ui_test.create_doc_in_start_center("calc")
-    xCalcDoc = xUITest.getTopFocusWindow()
-    xGridWindow = xCalcDoc.getChild("grid_window")
+        selectProps = mkPropertyValues({"RANGE": "B10:C20"})
+        xGridWindow.executeAction("SELECT", selectProps)
 
-    selectProps = mkPropertyValues({"RANGE": "B10:C20"})
-    xGridWindow.executeAction("SELECT", selectProps)
+        self.ui_test.close_doc()
 
-    ui_test.close_doc()
+    def test_extend_range(self):
 
-def extend_range(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        self.ui_test.create_doc_in_start_center("calc")
+        xTopWindow = self.xUITest.getTopFocusWindow()
 
-    ui_test = UITest(xUITest, xContext)
+        xGridWindow = xTopWindow.getChild("grid_window")
 
-    ui_test.create_doc_in_start_center("calc")
-    xTopWindow = xUITest.getTopFocusWindow()
+        selectProps = mkPropertyValues({"RANGE": "B10:C20"})
+        xGridWindow.executeAction("SELECT", selectProps)
 
-    xGridWindow = xTopWindow.getChild("grid_window")
+        select2Props = mkPropertyValues({"RANGE": "D3:F5", "EXTEND": "true"})
+        xGridWindow.executeAction("SELECT", select2Props)
 
-    selectProps = mkPropertyValues({"RANGE": "B10:C20"})
-    xGridWindow.executeAction("SELECT", selectProps)
-
-    select2Props = mkPropertyValues({"RANGE": "D3:F5", "EXTEND": "true"})
-    xGridWindow.executeAction("SELECT", select2Props)
-
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
