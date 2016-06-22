@@ -15,6 +15,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <mutex>
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
@@ -43,6 +44,9 @@
 #define MAX_ZOOM 5.0f
 // Minimum Zoom allowed
 #define MIN_ZOOM 0.25f
+
+/// This is expected to be locked during setView(), doSomethingElse() LOK calls.
+std::mutex g_aLOKMutex;
 
 /// Private struct used by this GObject type
 struct LOKDocViewPrivateImpl
@@ -581,6 +585,7 @@ postKeyEventInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -842,6 +847,7 @@ static gboolean postDocumentLoad(gpointer pData)
     LOKDocView* pLOKDocView = static_cast<LOKDocView*>(pData);
     LOKDocViewPrivate& priv = getPrivate(pLOKDocView);
 
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -851,6 +857,7 @@ static gboolean postDocumentLoad(gpointer pData)
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
+    aGuard.unlock();
     g_timeout_add(600, handleTimeout, pLOKDocView);
 
     float zoom = priv->m_fZoom;
@@ -1733,6 +1740,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     GdkPoint aPoint;
     GError* error = nullptr;
 
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -1758,6 +1766,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
         priv->m_pDocument->pClass->setTextSelection(priv->m_pDocument, LOK_SETTEXTSELECTION_END, pixelToTwip(aPoint.x, priv->m_fZoom), pixelToTwip(aPoint.y, priv->m_fZoom));
         return FALSE;
     }
+    aGuard.unlock();
     for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
     {
         if (priv->m_bInDragGraphicHandles[i])
@@ -1832,6 +1841,7 @@ setGraphicSelectionInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
+    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -1855,6 +1865,7 @@ setClientZoomInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
+    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
     priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
                                              pLOEvent->m_nTilePixelWidth,
                                              pLOEvent->m_nTilePixelHeight,
@@ -1870,6 +1881,7 @@ postMouseEventInThread(gpointer data)
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
+    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -1898,6 +1910,7 @@ openDocumentInThread (gpointer data)
     LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
+    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
     if ( priv->m_pDocument )
     {
         priv->m_pDocument->pClass->destroy( priv->m_pDocument );
@@ -1927,11 +1940,13 @@ setPartInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPart = pLOEvent->m_nPart;
 
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setPart( priv->m_pDocument, nPart );
+    aGuard.unlock();
 
     lok_doc_view_reset_view(pDocView);
 }
@@ -1945,6 +1960,7 @@ setPartmodeInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPartMode = pLOEvent->m_nPartMode;
 
+    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -1967,6 +1983,7 @@ setEditInThread(gpointer data)
     else if (priv->m_bEdit && !bEdit)
     {
         g_info("lok_doc_view_set_edit: leaving edit mode");
+        std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
         std::stringstream ss;
         ss << "lok::Document::setView(" << priv->m_nViewId << ")";
         g_info("%s", ss.str().c_str());
@@ -1986,6 +2003,7 @@ postCommandInThread (gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
+    std::lock_guard<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -2036,6 +2054,7 @@ paintTileInThread (gpointer data)
     aTileRectangle.x = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileY;
     aTileRectangle.y = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileX;
 
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -2055,6 +2074,7 @@ paintTileInThread (gpointer data)
                                          aTileRectangle.x, aTileRectangle.y,
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom),
                                          pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom));
+    aGuard.unlock();
 
     g_timer_elapsed(aTimer, &nElapsedMs);
     ss << " rendered in " << (nElapsedMs / 1000.) << " milliseconds";
@@ -2935,6 +2955,7 @@ lok_doc_view_get_parts (LOKDocView* pDocView)
     if (!priv->m_pDocument)
         return -1;
 
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -2949,6 +2970,7 @@ lok_doc_view_get_part (LOKDocView* pDocView)
     if (!priv->m_pDocument)
         return -1;
 
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
@@ -2992,6 +3014,7 @@ lok_doc_view_get_part_name (LOKDocView* pDocView, int nPart)
     if (!priv->m_pDocument)
         return nullptr;
 
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
