@@ -185,7 +185,7 @@ protected:
     /// Return the object's current bounding box relative to the parent object.
     Rectangle GetBoundingBox() throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL disposing() override;
+    virtual void SAL_CALL disposing() final override;
 
 private:
     SdrObject* getSdrObject( sal_Int32 nIndex )

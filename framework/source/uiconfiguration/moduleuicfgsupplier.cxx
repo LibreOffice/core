@@ -89,7 +89,7 @@ public:
         throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual void SAL_CALL disposing() override;
+    virtual void SAL_CALL disposing() final override;
 
     typedef std::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager2 >, OUStringHash > ModuleToModuleCfgMgr;
 

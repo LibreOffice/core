@@ -533,7 +533,7 @@ protected:
         throw(css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual void SAL_CALL disposing() override;
+    virtual void SAL_CALL disposing() final override;
 
     /** @short  open the underlying configuration.
 

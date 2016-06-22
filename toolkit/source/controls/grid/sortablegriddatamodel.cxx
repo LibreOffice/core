@@ -125,7 +125,7 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL acquire(  ) throw () override;
+    virtual void SAL_CALL acquire(  ) throw () final override;
     virtual void SAL_CALL release(  ) throw () override;
 
     // XTypeProvider
