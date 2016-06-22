@@ -1,0 +1,13 @@
+    <node oor:name="ZMF Document" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>org.libreoffice.comp.Draw.ZMFImportFilter</value></prop>
+        <prop oor:name="UserData"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Zoner Callisto/Draw</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>draw_ZMF_Document</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+    </node>

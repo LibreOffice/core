@@ -49,4 +49,9 @@
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
+  <implementation name="org.libreoffice.comp.Draw.ZMFImportFilter"
+      constructor="org_libreoffice_comp_Draw_ZMFImportFilter_get_implementation">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
 </component>
