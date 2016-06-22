@@ -2671,9 +2671,6 @@ void XMLTextParagraphExport::exportUndoTextRangeEnumeration(
                 if (nullptr != pRedlineExport)
                     pRedlineExport->ExportUndoChange(xPropSet, rParaIdx, bAutoStyles);
             }
-            else {
-                OSL_FAIL("unknown text portion type");
-            }
         }
     }
 
