@@ -259,7 +259,8 @@ class SwXTextTableStyle : public cppu::WeakImplHelper
 >
 {
     SwDocShell* m_pDocShell;
-    OUString m_sTableAutoFormatName;
+    SwTableAutoFormat* m_pTableAutoFormat;
+    bool m_bPhysical; // delete a m_pTableAutoFormat when changing from false to true!
 
     enum {
         FIRST_ROW_STYLE = 0,
@@ -282,11 +283,20 @@ class SwXTextTableStyle : public cppu::WeakImplHelper
         STYLE_COUNT
     };
 
-    SwTableAutoFormat* GetTableAutoFormat();
+    void UpdateCellStylesMapping();
     static const CellStyleNameMap& GetCellStyleNameMap();
     css::uno::Reference<css::style::XStyle> m_aCellStyles[STYLE_COUNT];
 public:
+    SwXTextTableStyle(SwDocShell* pDocShell, SwTableAutoFormat* pTableAutoFormat);
+    /// Create non physical style
     SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
+    ~SwXTextTableStyle();
+
+    /// This function looks for a SwTableAutoFormat with given name. Returns nullptr if could not be found.
+    static SwTableAutoFormat* GetTableAutoFormat(SwDocShell* pDocShell, const OUString& sName);
+    /// returns box format assigned to this style
+    SwTableAutoFormat* GetTableFormat();
+    void SetPhysical();
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
@@ -334,9 +344,9 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
 >
 {
     SwDocShell* m_pDocShell;
-    SwBoxAutoFormat* m_pBoxAutoFormat;
-    OUString m_sParentStyle; // used when style is physical
-    OUString m_sName;   // used when style is not physical
+    SwBoxAutoFormat* m_pBoxAutoFormat; // used when style is not physical
+    OUString m_sParentStyle;
+    OUString m_sName;
     bool m_bPhysical; // delete a m_pBoxAutoFormat when changing from false to true!
 
  public:
@@ -356,6 +366,7 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
     /// returns box format assigned to this style
     SwBoxAutoFormat* GetBoxFormat();
     void SetPhysical();
+    friend void SwXTextTableStyle::SetPhysical();
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
