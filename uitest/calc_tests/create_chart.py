@@ -69,13 +69,9 @@ class CalcChartUIDemo(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
 
         xChartDlg = self.xUITest.getTopFocusWindow()
-        print(xChartDlg.getChildren())
-        time.sleep(2)
 
         xOkBtn = xChartDlg.getChild("finish")
         xOkBtn.executeAction("CLICK", tuple())
-
-        time.sleep(2)
 
         self.ui_test.close_doc()
 
@@ -88,30 +84,18 @@ class CalcChartUIDemo(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
 
         xChartDlg = self.xUITest.getTopFocusWindow()
-        print(xChartDlg.getChildren())
-        time.sleep(2)
 
         xNextBtn = xChartDlg.getChild("next")
         xNextBtn.executeAction("CLICK", tuple())
 
-        print(xChartDlg.getChildren())
-
-        time.sleep(2)
-
         xDataInRows = xChartDlg.getChild("RB_DATAROWS")
         xDataInRows.executeAction("CLICK", tuple())
-
-        time.sleep(2)
 
         xDataInCols = xChartDlg.getChild("RB_DATACOLS")
         xDataInCols.executeAction("CLICK", tuple())
 
-        time.sleep(2)
-
         xCancelBtn = xChartDlg.getChild("finish")
         xCancelBtn.executeAction("CLICK", tuple())
-
-        time.sleep(5)
 
         self.ui_test.close_doc()
 
@@ -154,12 +138,8 @@ class CalcChartUIDemo(UITestCase):
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-        time.sleep(2)
-
         xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
         xGridWindow.executeAction("ACTIVATE", tuple())
-
-        time.sleep(2)
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
@@ -187,7 +167,6 @@ class CalcChartUIDemo(UITestCase):
         xGridWindow.executeAction("ACTIVATE", tuple())
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
-        print(xCalcDoc.getChildren())
         self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

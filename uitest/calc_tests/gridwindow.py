@@ -37,8 +37,6 @@ class GridWindowTest(UITestCase):
         enter_text_to_cell(xGridWindow, "C3", "=A1")
         enter_text_to_cell(xGridWindow, "A1", "2")
 
-        time.sleep(2)
-
         self.ui_test.close_doc()
 
     def test_special_keys(self):
@@ -53,8 +51,6 @@ class GridWindowTest(UITestCase):
 
         typeProps = mkPropertyValues({"KEYCODE": "CTRL+DOWN"})
         xGridWindow.executeAction("TYPE", typeProps)
-
-        time.sleep(2)
 
         self.ui_test.close_doc()
 
