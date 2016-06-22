@@ -623,8 +623,9 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color* pExtColor)
 
             if (pWriteAcc->HasPalette())
             {
-                const sal_uInt16 nOldCount = 1 << GetBitCount();
                 const BitmapPalette& rOldPalette = pReadAcc->GetPalette();
+                const sal_uInt16 nOldCount = rOldPalette.GetEntryCount();
+                assert(nOldCount <= (1 << GetBitCount()));
 
                 aPalette.SetEntryCount(1 << nBitCount);
 
