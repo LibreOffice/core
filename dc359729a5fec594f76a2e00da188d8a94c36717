@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_6977dd02",
+        "filename": "extensions/source/propctrlr/composeduiupdate.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-22T08:10:14Z",
+      "side": 1,
+      "message": "surely for changes like this, where we are now just calling the superclass method, we should just drop the method altogether?",
+      "revId": "dc359729a5fec594f76a2e00da188d8a94c36717",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
