@@ -270,8 +270,6 @@ public:
     void        SetBackgroundColor( const Color& rColor );
     Color       GetBackgroundColor();
 
-    /// Registers a LOK model callback.
-    void registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable);
     /// Registers a LOK view callback.
     void registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable);
 
@@ -375,16 +373,7 @@ public:
     void        SetEndCutPasteLinkHdl(const Link<LinkParamNone*,void> &rLink) { aEndCutPasteLink = rLink; }
 };
 
-/// Interface class to not depend on SdrModel in editeng.
-class EDITENG_DLLPUBLIC OutlinerSearchable
-{
-public:
-    virtual ~OutlinerSearchable();
-
-    virtual void libreOfficeKitCallback(int nType, const char* pPayload) const = 0;
-};
-
-/// Interface class to not depend on SfxViewShell in editeng, meant to replace OutlinerSearchable at the end.
+/// Interface class to not depend on SfxViewShell in editeng.
 class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI OutlinerViewCallable
 {
 public:
