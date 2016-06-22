@@ -9,6 +9,8 @@ from uitest_helper import UITest, get_state_as_dict
 
 from helper import mkPropertyValues
 
+from UITestCase import UITestCase
+
 import time
 
 try:
@@ -21,94 +23,79 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-def start_impress(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+class SimpleImpressTest(UITestCase):
+    def test_start_impress(self):
 
-    ui_test = UITest(xUITest, xContext)
+        self.ui_test.create_doc_in_start_center("impress")
 
-    ui_test.create_doc_in_start_center("impress")
+        xImpressDoc = self.xUITest.getTopFocusWindow()
+        print(get_state_as_dict(xImpressDoc))
+        print(xImpressDoc.getChildren())
 
-    xImpressDoc = xUITest.getTopFocusWindow()
-    print(get_state_as_dict(xImpressDoc))
-    print(xImpressDoc.getChildren())
+        xEditWin = xImpressDoc.getChild("impress_win")
+        xEditWin.executeAction("SET", mkPropertyValues({"ZOOM": "200"}))
 
-    xEditWin = xImpressDoc.getChild("impress_win")
-    xEditWin.executeAction("SET", mkPropertyValues({"ZOOM": "200"}))
+        print(xEditWin.getChildren())
 
-    print(xEditWin.getChildren())
+        time.sleep(1)
 
-    time.sleep(1)
+        self.ui_test.close_doc()
 
-    ui_test.close_doc()
+    def test_select_page(self):
 
-def select_page(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        self.ui_test.create_doc_in_start_center("impress")
 
-    ui_test = UITest(xUITest, xContext)
+        xImpressDoc = self.xUITest.getTopFocusWindow()
+        print(get_state_as_dict(xImpressDoc))
+        print(xImpressDoc.getChildren())
 
-    ui_test.create_doc_in_start_center("impress")
+        xEditWin = xImpressDoc.getChild("impress_win")
 
-    xImpressDoc = xUITest.getTopFocusWindow()
-    print(get_state_as_dict(xImpressDoc))
-    print(xImpressDoc.getChildren())
+        time.sleep(1)
+        print(get_state_as_dict(xEditWin))
 
-    xEditWin = xImpressDoc.getChild("impress_win")
+        xEditWin.executeAction("GOTO", mkPropertyValues({"PAGE": "2"}))
 
-    time.sleep(1)
-    print(get_state_as_dict(xEditWin))
+        time.sleep(1)
 
-    xEditWin.executeAction("GOTO", mkPropertyValues({"PAGE": "2"}))
+        print(get_state_as_dict(xEditWin))
 
-    time.sleep(1)
+        self.ui_test.close_doc()
 
-    print(get_state_as_dict(xEditWin))
+    def test_select_text(self):
 
-    ui_test.close_doc()
+        self.ui_test.create_doc_in_start_center("impress")
 
-def select_text(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        xImpressDoc = self.xUITest.getTopFocusWindow()
+        print(get_state_as_dict(xImpressDoc))
+        print(xImpressDoc.getChildren())
 
-    ui_test = UITest(xUITest, xContext)
+        xEditWin = xImpressDoc.getChild("impress_win")
 
-    ui_test.create_doc_in_start_center("impress")
+        time.sleep(1)
 
-    xImpressDoc = xUITest.getTopFocusWindow()
-    print(get_state_as_dict(xImpressDoc))
-    print(xImpressDoc.getChildren())
+        print(get_state_as_dict(xEditWin))
 
-    xEditWin = xImpressDoc.getChild("impress_win")
+        self.ui_test.close_doc()
 
-    time.sleep(1)
+    def test_select_object(self):
 
-    print(get_state_as_dict(xEditWin))
+        self.ui_test.create_doc_in_start_center("impress")
 
-    ui_test.close_doc()
+        xImpressDoc = self.xUITest.getTopFocusWindow()
+        print(get_state_as_dict(xImpressDoc))
+        print(xImpressDoc.getChildren())
 
-def select_object(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        xEditWin = xImpressDoc.getChild("impress_win")
 
-    ui_test = UITest(xUITest, xContext)
+        xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
+        time.sleep(1)
+        xEditWin.executeAction("DESELECT", tuple())
 
-    ui_test.create_doc_in_start_center("impress")
+        time.sleep(1)
 
-    xImpressDoc = xUITest.getTopFocusWindow()
-    print(get_state_as_dict(xImpressDoc))
-    print(xImpressDoc.getChildren())
+        print(get_state_as_dict(xEditWin))
 
-    xEditWin = xImpressDoc.getChild("impress_win")
-
-    xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
-    time.sleep(1)
-    xEditWin.executeAction("DESELECT", tuple())
-
-    time.sleep(1)
-
-    print(get_state_as_dict(xEditWin))
-
-    ui_test.close_doc()
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
