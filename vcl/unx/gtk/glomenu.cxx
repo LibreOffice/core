@@ -248,6 +248,10 @@ g_lo_menu_set_icon (GLOMenu     *menu,
     else
         value = nullptr;
 
+#ifndef G_MENU_ATTRIBUTE_ICON
+#    define G_MENU_ATTRIBUTE_ICON "icon"
+#endif
+
     g_lo_menu_set_attribute_value (menu, position, G_MENU_ATTRIBUTE_ICON, value);
 }
 
