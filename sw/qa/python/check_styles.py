@@ -171,6 +171,7 @@ class CheckStyle(unittest.TestCase):
         vEmptyDocStyles = ['Default Style']
         self.__test_StyleFamily(xTableStyles, vEmptyDocStyles, "SwXTextTableStyle")
         self.__test_StyleFamilyIndex(xTableStyles, vEmptyDocStyles, "SwXTextTableStyle")
+        self.__test_StyleFamilyInsert(xDoc, xTableStyles, vEmptyDocStyles, "com.sun.star.style.TableStyle", "com.sun.star.style.CharacterStyle")
         for sStyleName in vEmptyDocStyles:
             self.assertIsNotNone(xTableStyles.getByName(sStyleName))
         #check SwXTextCellStyles
@@ -184,7 +185,6 @@ class CheckStyle(unittest.TestCase):
         xDoc.dispose()
 
     def test_tableStyleIsInUse(self):
-        # extend when TableStyle insertByName comes
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xBodyText = xDoc.getText()
         xCursor = xBodyText.createTextCursor()
@@ -201,6 +201,14 @@ class CheckStyle(unittest.TestCase):
         xTable.setPropertyValue("TableTemplateName", "")
         self.assertFalse(xDefaultTableStyle.isInUse())
         self.assertFalse(xDefaultCellStyle.isInUse())
+        xTableStyle = xDoc.createInstance("com.sun.star.style.TableStyle")
+        self.assertFalse(xTableStyle.isInUse())
+        xDoc.StyleFamilies.getByName("TableStyles").insertByName("Test Table Style", xTableStyle)
+        self.assertFalse(xTableStyle.isInUse())
+        xTable.setPropertyValue("TableTemplateName", "Test Table Style")
+        self.assertTrue(xTableStyle.isInUse())
+        xTable.setPropertyValue("TableTemplateName", "")
+        self.assertFalse(xTableStyle.isInUse())
         xDoc.dispose()
 
     def test_CellFamily(self):
@@ -210,7 +218,12 @@ class CheckStyle(unittest.TestCase):
         self.__test_StyleFamily(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
         self.__test_StyleFamilyIndex(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
         self.__test_StyleFamilyInsert(xDoc, xCellStyles, vEmptyDocStyles, "com.sun.star.style.CellStyle", "com.sun.star.style.CharacterStyle")
-        #add more tests when TableStyles will support insertByName
+        xTableStyle = xDoc.createInstance("com.sun.star.style.TableStyle")
+        xCellStyle = xTableStyle.getByName("first-row")
+        xDoc.StyleFamilies.getByName("TableStyles").insertByName("Test Table Style", xTableStyle)
+        self.assertEqual(xTableStyle.getByName("first-row"), xCellStyle)
+        self.assertEqual(xTableStyle.getByName("first-row"), xDoc.StyleFamilies.getByName("TableStyles").getByName("Test Table Style").getByName("first-row"))
+        #add more tests when TableStyles will support replaceByName
         xDoc.dispose()
 
 if __name__ == '__main__':
