@@ -5,25 +5,23 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-import time
-
 from uitest_helper import UITest
 
-def test_about_dlg(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+from UITestCase import UITestCase
 
-    ui_test = UITest(xUITest, xContext)
+class AboutDlgTest(UITestCase):
 
-    ui_test.create_doc_in_start_center("calc")
+    def test_about_dlg(self):
 
-    ui_test.execute_dialog_through_command(".uno:About")
+        self.ui_test.create_doc_in_start_center("calc")
 
-    xAboutDlg = xUITest.getTopFocusWindow()
+        self.ui_test.execute_dialog_through_command(".uno:About")
 
-    xCloseBtn = xAboutDlg.getChild("close")
-    xCloseBtn.executeAction("CLICK", tuple())
+        xAboutDlg = self.xUITest.getTopFocusWindow()
 
-    ui_test.close_doc()
+        xCloseBtn = xAboutDlg.getChild("close")
+        xCloseBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,6 +9,8 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
+from UITestCase import UITestCase
+
 import time
 
 try:
@@ -21,199 +23,171 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-def add_content_to_cell(gridwin, cell, content):
-    selectProps = mkPropertyValues({"CELL": cell})
-    gridwin.executeAction("SELECT", selectProps)
+class CalcChartUIDemo(UITestCase):
 
-    contentProps = mkPropertyValues({"TEXT": content})
-    gridwin.executeAction("TYPE", contentProps)
+    def add_content_to_cell(self, gridwin, cell, content):
+        selectProps = mkPropertyValues({"CELL": cell})
+        gridwin.executeAction("SELECT", selectProps)
 
+        contentProps = mkPropertyValues({"TEXT": content})
+        gridwin.executeAction("TYPE", contentProps)
 
-def fill_spreadsheet(xUITest):
-    xCalcDoc = xUITest.getTopFocusWindow()
-    xGridWindow = xCalcDoc.getChild("grid_window")
+    def fill_spreadsheet(self):
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWindow = xCalcDoc.getChild("grid_window")
 
-    add_content_to_cell(xGridWindow, "A1", "col1")
-    add_content_to_cell(xGridWindow, "B1", "col2")
-    add_content_to_cell(xGridWindow, "C1", "col3")
-    add_content_to_cell(xGridWindow, "A2", "1")
-    add_content_to_cell(xGridWindow, "B2", "3")
-    add_content_to_cell(xGridWindow, "C2", "5")
+        self.add_content_to_cell(xGridWindow, "A1", "col1")
+        self.add_content_to_cell(xGridWindow, "B1", "col2")
+        self.add_content_to_cell(xGridWindow, "C1", "col3")
+        self.add_content_to_cell(xGridWindow, "A2", "1")
+        self.add_content_to_cell(xGridWindow, "B2", "3")
+        self.add_content_to_cell(xGridWindow, "C2", "5")
 
-    xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C2"}))
+        xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C2"}))
 
-def cancel_immediately(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+    def test_cancel_immediately(self):
 
-    ui_test = UITest(xUITest, xContext)
+        self.ui_test.create_doc_in_start_center("calc")
 
-    ui_test.create_doc_in_start_center("calc")
+        self.fill_spreadsheet()
 
-    fill_spreadsheet(xUITest)
+        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
 
-    ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
+        xChartDlg = self.xUITest.getTopFocusWindow()
 
-    xChartDlg = xUITest.getTopFocusWindow()
+        xCancelBtn = xChartDlg.getChild("cancel")
+        xCancelBtn.executeAction("CLICK", tuple())
 
-    xCancelBtn = xChartDlg.getChild("cancel")
-    xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_doc()
 
-    ui_test.close_doc()
+    def test_create_from_first_page(self):
 
-def create_from_first_page(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        self.ui_test.create_doc_in_start_center("calc")
 
-    ui_test = UITest(xUITest, xContext)
+        self.fill_spreadsheet()
 
-    ui_test.create_doc_in_start_center("calc")
+        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
 
-    fill_spreadsheet(xUITest)
+        xChartDlg = self.xUITest.getTopFocusWindow()
+        print(xChartDlg.getChildren())
+        time.sleep(2)
 
-    ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
+        xOkBtn = xChartDlg.getChild("finish")
+        xOkBtn.executeAction("CLICK", tuple())
 
-    xChartDlg = xUITest.getTopFocusWindow()
-    print(xChartDlg.getChildren())
-    time.sleep(2)
+        time.sleep(2)
 
-    xOkBtn = xChartDlg.getChild("finish")
-    xOkBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_doc()
 
-    time.sleep(2)
+    def test_create_from_second_page(self):
 
-    ui_test.close_doc()
+        self.ui_test.create_doc_in_start_center("calc")
 
-def create_from_second_page(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        self.fill_spreadsheet()
 
-    ui_test = UITest(xUITest, xContext)
+        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
 
-    ui_test.create_doc_in_start_center("calc")
+        xChartDlg = self.xUITest.getTopFocusWindow()
+        print(xChartDlg.getChildren())
+        time.sleep(2)
 
-    fill_spreadsheet(xUITest)
+        xNextBtn = xChartDlg.getChild("next")
+        xNextBtn.executeAction("CLICK", tuple())
 
-    ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
+        print(xChartDlg.getChildren())
 
-    xChartDlg = xUITest.getTopFocusWindow()
-    print(xChartDlg.getChildren())
-    time.sleep(2)
+        time.sleep(2)
 
-    xNextBtn = xChartDlg.getChild("next")
-    xNextBtn.executeAction("CLICK", tuple())
+        xDataInRows = xChartDlg.getChild("RB_DATAROWS")
+        xDataInRows.executeAction("CLICK", tuple())
 
-    print(xChartDlg.getChildren())
+        time.sleep(2)
 
-    time.sleep(2)
+        xDataInCols = xChartDlg.getChild("RB_DATACOLS")
+        xDataInCols.executeAction("CLICK", tuple())
 
-    xDataInRows = xChartDlg.getChild("RB_DATAROWS")
-    xDataInRows.executeAction("CLICK", tuple())
+        time.sleep(2)
 
-    time.sleep(2)
+        xCancelBtn = xChartDlg.getChild("finish")
+        xCancelBtn.executeAction("CLICK", tuple())
 
-    xDataInCols = xChartDlg.getChild("RB_DATACOLS")
-    xDataInCols.executeAction("CLICK", tuple())
+        time.sleep(5)
 
-    time.sleep(2)
+        self.ui_test.close_doc()
 
-    xCancelBtn = xChartDlg.getChild("finish")
-    xCancelBtn.executeAction("CLICK", tuple())
+    def test_deselect_chart(self):
+        self.ui_test.create_doc_in_start_center("calc")
 
-    time.sleep(5)
+        self.fill_spreadsheet()
 
-    ui_test.close_doc()
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWindow = xCalcDoc.getChild("grid_window")
 
-def deselect_chart(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
 
-    ui_test = UITest(xUITest, xContext)
+        xChartDlg = self.xUITest.getTopFocusWindow()
 
-    ui_test.create_doc_in_start_center("calc")
+        xNextBtn = xChartDlg.getChild("finish")
+        xNextBtn.executeAction("CLICK", tuple())
 
-    fill_spreadsheet(xUITest)
+        xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-    xCalcDoc = xUITest.getTopFocusWindow()
-    xGridWindow = xCalcDoc.getChild("grid_window")
+        time.sleep(2)
 
-    ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
+        self.ui_test.close_doc()
 
-    xChartDlg = xUITest.getTopFocusWindow()
+    def test_activate_chart(self):
 
-    xNextBtn = xChartDlg.getChild("finish")
-    xNextBtn.executeAction("CLICK", tuple())
+        self.ui_test.create_doc_in_start_center("calc")
 
-    xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
+        self.fill_spreadsheet()
 
-    time.sleep(2)
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWindow = xCalcDoc.getChild("grid_window")
 
-    ui_test.close_doc()
+        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
 
-def activate_chart(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        xChartDlg = self.xUITest.getTopFocusWindow()
 
-    ui_test = UITest(xUITest, xContext)
+        xNextBtn = xChartDlg.getChild("finish")
+        xNextBtn.executeAction("CLICK", tuple())
 
-    ui_test.create_doc_in_start_center("calc")
+        xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-    fill_spreadsheet(xUITest)
+        time.sleep(2)
 
-    xCalcDoc = xUITest.getTopFocusWindow()
-    xGridWindow = xCalcDoc.getChild("grid_window")
+        xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+        xGridWindow.executeAction("ACTIVATE", tuple())
 
-    ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
+        time.sleep(2)
 
-    xChartDlg = xUITest.getTopFocusWindow()
+        xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-    xNextBtn = xChartDlg.getChild("finish")
-    xNextBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_doc()
 
-    xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
+    def select_chart_element(self):
 
-    time.sleep(2)
+        self.ui_test.create_doc_in_start_center("calc")
 
-    xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    xGridWindow.executeAction("ACTIVATE", tuple())
+        self.fill_spreadsheet()
 
-    time.sleep(2)
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        xGridWindow = xCalcDoc.getChild("grid_window")
 
-    xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
+        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
 
-    ui_test.close_doc()
+        xChartDlg = self.xUITest.getTopFocusWindow()
 
-def select_chart_element(xContext):
-    xUITest = xContext.ServiceManager.createInstanceWithContext(
-            "org.libreoffice.uitest.UITest", xContext)
+        xNextBtn = xChartDlg.getChild("finish")
+        xNextBtn.executeAction("CLICK", tuple())
 
-    ui_test = UITest(xUITest, xContext)
+        xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
-    ui_test.create_doc_in_start_center("calc")
+        xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+        xGridWindow.executeAction("ACTIVATE", tuple())
 
-    fill_spreadsheet(xUITest)
-
-    xCalcDoc = xUITest.getTopFocusWindow()
-    xGridWindow = xCalcDoc.getChild("grid_window")
-
-    ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-
-    xChartDlg = xUITest.getTopFocusWindow()
-
-    xNextBtn = xChartDlg.getChild("finish")
-    xNextBtn.executeAction("CLICK", tuple())
-
-    xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
-
-    time.sleep(2)
-
-    xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    xGridWindow.executeAction("ACTIVATE", tuple())
-
-    time.sleep(2)
-    xCalcDoc = xUITest.getTopFocusWindow()
-    print(xCalcDoc.getChildren())
-    time.sleep(1)
-    ui_test.close_doc()
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        print(xCalcDoc.getChildren())
+        self.ui_test.close_doc()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

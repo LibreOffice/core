@@ -1,0 +1,101 @@
+# -*- Mode: python; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+import sys
+import getopt
+import os
+import unittest
+import calc_tests
+import importlib
+import importlib.machinery
+
+from UITestCase import UITestCase
+
+from connection import PersistentConnection, OfficeConnection
+
+def parseArgs(argv):
+    (optlist,args) = getopt.getopt(argv[1:], "hr",
+            ["help", "soffice=", "userdir=", "dir="])
+    return (dict(optlist), args)
+
+def usage():
+    message = """usage: {program} [option]... [task_file]..."
+ -h | --help:      print usage information
+ {connection_params}
+ the 'task_file' parameters should be
+  full absolute pathnames, not URLs."""
+    print(message.format(program = os.path.basename(sys.argv[0]), \
+        connection_params = OfficeConnection.getHelpText()))
+
+
+def find_test_files(dir_path):
+    valid_files = []
+    for f in os.listdir(dir_path):
+        file_path = os.path.join(dir_path, f)
+
+        # don't go through the sub-directories
+        if not os.path.isfile(file_path):
+            continue
+
+        # ignore any non .py files
+        if not os.path.splitext(file_path)[1] == ".py":
+            continue
+
+        # ignore the __init__.py file
+        # it is obviously not a test file
+        if f is "__init__.py":
+            continue
+
+        valid_files.append(file_path)
+
+    return valid_files
+
+def get_classes_of_module(module):
+    md = module.__dict__
+    return [ md[c] for c in md if (
+            isinstance(md[c], type) and md[c].__module__ == module.__name__ ) ]
+
+def get_test_case_classes_of_module(module):
+    classes = get_classes_of_module(module)
+    return [ c for c in classes if issubclass(c, UITestCase) ]
+
+def get_test_suite(opts):
+    test_loader = unittest.TestLoader()
+    test_suite = unittest.TestSuite()
+
+    valid_test_files = find_test_files(opts['--dir'])
+    for test_file in valid_test_files:
+        module_name = os.path.splitext(os.path.split(test_file)[1])[0]
+        loader = importlib.machinery.SourceFileLoader(module_name, test_file)
+        mod = loader.load_module()
+        classes = get_test_case_classes_of_module(mod)
+        for c in classes:
+            test_names = test_loader.getTestCaseNames(c)
+            for test_name in test_names:
+                obj = c(test_name, opts)
+                test_suite.addTest(obj)
+
+    return test_suite
+
+
+if __name__ == '__main__':
+    (opts,args) = parseArgs(sys.argv)
+    if "-h" in opts or "--help" in opts:
+        usage()
+        sys.exit()
+    elif not "--soffice" in opts:
+        usage()
+        sys.exit(1)
+    elif not "--dir" in opts:
+        usage()
+        sys.exit()
+    test_suite = get_test_suite(opts)
+    print(test_suite)
+
+    unittest.TextTestRunner().run(test_suite)
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab: */

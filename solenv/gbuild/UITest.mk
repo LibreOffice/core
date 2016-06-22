@@ -21,7 +21,7 @@ gb_UITest_EXECUTABLE_GDB := $(PYTHON_FOR_BUILD)
 gb_UITest_DEPS :=
 endif
 
-gb_UITest_COMMAND := $(gb_UITest_EXECUTABLE) $(SRCDIR)/uitest/main.py
+gb_UITest_COMMAND := $(gb_UITest_EXECUTABLE) $(SRCDIR)/uitest/test_main.py
 
 .PHONY : $(call gb_UITest_get_clean_target,%)
 $(call gb_UITest_get_clean_target,%) :
@@ -52,13 +52,12 @@ $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
 		$(gb_UITest_COMMAND) \
 		--soffice=path:$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice \
 		--userdir=$(call gb_Helper_make_url,$(dir $(call gb_UITest_get_target,$*))user) \
-		--file=$(SRCDIR)/uitest/$(strip $(MODULES)) \
-		$(if $(gb_CppunitTest__interactive),, \
-			> $@.log 2>&1 \
-			|| ($(if $(value gb_CppunitTest_postprocess), \
-					RET=$$?; \
-					$(call gb_CppunitTest_postprocess,$(gb_UITest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
-				cat $@.log; $(gb_UITest_UNITTESTFAILED) Python $*))))
+		--dir=$(SRCDIR)/uitest/$(strip $(MODULES)) \
+		> $@.log 2>&1 \
+		|| ($(if $(value gb_CppunitTest_postprocess), \
+				RET=$$?; \
+				$(call gb_CppunitTest_postprocess,$(gb_UITest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
+			cat $@.log; $(gb_UITest_UNITTESTFAILED) Python $*)))
 
 # always use udkapi and URE services
 define gb_UITest_UITest
