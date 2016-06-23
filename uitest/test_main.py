@@ -95,6 +95,12 @@ if __name__ == '__main__':
         sys.exit()
     test_suite = get_test_suite(opts)
 
-    unittest.TextTestRunner().run(test_suite)
+    result = unittest.TextTestRunner(verbosity=2).run(test_suite)
+    print("Tests run: %d" % result.testsRun)
+    print("Tests failed: %d" % len(result.failures))
+    print("Tests errors: %d" % len(result.errors))
+    if not result.wasSuccessful():
+        sys.exit(1)
+    sys.exit(0)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
