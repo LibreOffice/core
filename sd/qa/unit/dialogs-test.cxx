@@ -32,6 +32,7 @@
 
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <osl/file.hxx>
 
 #include "sdabstdlg.hxx"
 #include <vcl/pngwrite.hxx>
@@ -58,6 +59,8 @@
 //#include "ViewShellBase.hxx"
 
 using namespace ::com::sun::star;
+
+static const char* SCREENSHOT_DIRECTORY = "/workdir/screenshots";
 
 /// Test opening a dialog in sd
 class SdDialogsTest : public test::BootstrapFixture, public unotest::MacrosTest
@@ -135,6 +138,10 @@ void SdDialogsTest::setUp()
     mpFact = SdAbstractDialogFactory::Create();
     mxComponent = loadFromDesktop("private:factory/simpress", "com.sun.star.presentation.PresentationDocument");
     CPPUNIT_ASSERT(mxComponent.is());
+
+    osl::FileBase::RC err = osl::Directory::create( m_directories.getURLFromSrc( SCREENSHOT_DIRECTORY ) );
+    CPPUNIT_ASSERT_MESSAGE( "Failed to create screenshot directory", (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
+
     mpImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(mpImpressDocument);
 }
@@ -601,6 +608,7 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
 
 void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rPath)
 {
+
     // for dumping, a lossless format is needed. It may be seen if the created data
     // will be further modified/reduced, but for a input creating step it is
     // unavoidable to use a lossless format initially
@@ -633,7 +641,10 @@ void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rP
 
         if (!aScreenshot.IsEmpty())
         {
-            SvFileStream aNew(rPath + OUString(".png"), StreamMode::WRITE | StreamMode::TRUNC);
+            const OUString aPath = rPath + ".png";
+            SvFileStream aNew(aPath, StreamMode::WRITE | StreamMode::TRUNC);
+            CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to create " + aPath, RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen() );
+
             vcl::PNGWriter aPNGWriter(aScreenshot);
             aPNGWriter.Write(aNew);
         }
@@ -642,20 +653,7 @@ void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rP
 
 void SdDialogsTest::openAnyDialog()
 {
-// activate for debug using attach
-//    while (true)
-//    {
-//        Sound::Beep();
-//    }
-
-    // current target for png's is defined here
-    const OUString aTempTargetPath(
-#ifdef _WIN32
-        "c:\\test_dlgF_"
-#else
-        "~/test_dlgF_"
-#endif
-        );
+    const OUString aTempTargetPath = m_directories.getPathFromSrc( SCREENSHOT_DIRECTORY );
 
     // example for SfxTabDialog: 5
     // example for TabDialog: 23
@@ -670,7 +668,7 @@ void SdDialogsTest::openAnyDialog()
 
         if (pDlg)
         {
-            dumpDialogToPath(*pDlg, aTempTargetPath + OUString::number(a));
+            dumpDialogToPath(*pDlg, aTempTargetPath + "/" + OUString::number(a));
             delete pDlg;
         }
     }
