@@ -61,9 +61,6 @@ class XMLValueImportHelper
     const bool bSetStyle;   /// should PrepareField set NumberFormat?
     const bool bSetFormula; /// should PrepareField set Formula?
 
-    const bool bStringDefault;  /// default: string-value = content
-    const bool bFormulaDefault; /// default: formula = content
-
 public:
     XMLValueImportHelper(
         SvXMLImport& rImprt,                    /// XML Import

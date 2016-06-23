@@ -1165,10 +1165,7 @@ XMLValueImportHelper::XMLValueImportHelper(
         bSetType(bType),
         bSetValue(bValue),
         bSetStyle(bStyle),
-        bSetFormula(bFormula),
-
-        bStringDefault(true),
-        bFormulaDefault(true)
+        bSetFormula(bFormula)
 {
 }
 
@@ -1316,7 +1313,7 @@ void XMLValueImportHelper::PrepareField(
 
     if (bSetFormula)
     {
-        aAny <<= (!bFormulaOK && bFormulaDefault) ? sDefault : sFormula;
+        aAny <<= !bFormulaOK ? sDefault : sFormula;
         xPropertySet->setPropertyValue(sPropertyContent, aAny);
     }
 
@@ -1338,7 +1335,7 @@ void XMLValueImportHelper::PrepareField(
     {
         if (bStringType)
         {
-            aAny <<= (!bStringValueOK && bStringDefault) ? sDefault : sValue;
+            aAny <<= !bStringValueOK ? sDefault : sValue;
             xPropertySet->setPropertyValue(sPropertyContent, aAny);
         }
         else

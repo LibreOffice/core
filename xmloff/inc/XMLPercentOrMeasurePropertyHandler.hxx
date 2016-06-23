@@ -27,8 +27,6 @@
 */
 class XMLPercentOrMeasurePropertyHandler : public XMLPropertyHandler
 {
-private:
-    bool mbPercent;
 public:
     XMLPercentOrMeasurePropertyHandler();
     virtual ~XMLPercentOrMeasurePropertyHandler ();
