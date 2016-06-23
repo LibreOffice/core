@@ -205,17 +205,6 @@ public:
         mpParentNode = parent;
     }
 
-    /** Get the index of a child node
-     *
-     * Returns -1, if pSubNode isn't a subnode of this.
-     */
-    int IndexOfSubNode(SmNode* pSubNode){
-        sal_uInt16 nSize = GetNumSubNodes();
-        for(sal_uInt16 i = 0; i < nSize; i++)
-            if(pSubNode == GetSubNode(i))
-                return i;
-        return -1;
-    }
     /** Set the token for this node */
     void SetToken(SmToken& token){
         maNodeToken = token;
@@ -312,6 +301,19 @@ public:
             void SetSubNodes(const SmNodeArray &rNodeArray);
 
     virtual void  GetAccessibleText( OUStringBuffer &rText ) const override;
+
+    /** Get the index of a child node
+     *
+     * Returns -1, if pSubNode isn't a subnode of this.
+     */
+    int IndexOfSubNode(SmNode* pSubNode)
+    {
+        sal_uInt16 nSize = GetNumSubNodes();
+        for(sal_uInt16 i = 0; i < nSize; i++)
+            if(pSubNode == GetSubNode(i))
+                return i;
+        return -1;
+    }
 
     void SetSubNode(size_t nIndex, SmNode* pNode)
     {
