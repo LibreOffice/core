@@ -192,7 +192,6 @@ public:
     static SfxChildWindow* CreateChildWindow( sal_uInt16, vcl::Window*, SfxBindings*, SfxChildWinInfo&);
     void                SetHideNotDelete( bool bOn );
     bool                IsHideNotDelete() const;
-    bool                IsHideAtToggle() const;
     bool                IsVisible() const;
     void                SetWantsFocus( bool );
     bool                WantsFocus() const;

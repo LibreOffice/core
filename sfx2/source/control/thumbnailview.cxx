@@ -133,7 +133,6 @@ void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
 void ThumbnailView::ImplInit()
 {
     mpScrBar = nullptr;
-    mnHeaderHeight = 0;
     mnItemWidth = 0;
     mnItemHeight = 0;
     mnItemPadding = 0;
@@ -297,11 +296,11 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         mnCols = 1;
 
     // calculate maximum number of visible rows
-    mnVisLines = (sal_uInt16)((aWinSize.Height()-mnHeaderHeight) / (mnItemHeight));
+    mnVisLines = (sal_uInt16)(aWinSize.Height() / mnItemHeight);
 
     // calculate empty space
     long nHSpace = aWinSize.Width()-nScrBarWidth - mnCols*mnItemWidth;
-    long nVSpace = aWinSize.Height()-mnHeaderHeight - mnVisLines*mnItemHeight;
+    long nVSpace = aWinSize.Height() - mnVisLines*mnItemHeight;
     long nHItemSpace = nHSpace / (mnCols+1);
     long nVItemSpace = nVSpace / (mnVisLines+1);
 
@@ -322,12 +321,12 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     long nItemHeightOffset = mnItemHeight + nVItemSpace;
     long nHiddenLines = (static_cast<long>(
         ( mnLines - 1 ) * nItemHeightOffset * nScrollRatio ) -
-        nVItemSpace - mnHeaderHeight) /
+        nVItemSpace ) /
         nItemHeightOffset;
 
     // calculate offsets
     long nStartX = nHItemSpace;
-    long nStartY = nVItemSpace + mnHeaderHeight;
+    long nStartY = nVItemSpace;
 
     // calculate and draw items
     long x = nStartX;
@@ -411,8 +410,8 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         mbScroll = mnLines > mnVisLines;
 
 
-        Point aPos( aWinSize.Width() - nScrBarWidth, mnHeaderHeight );
-        Size aSize( nScrBarWidth, aWinSize.Height() - mnHeaderHeight );
+        Point aPos( aWinSize.Width() - nScrBarWidth, 0 );
+        Size aSize( nScrBarWidth, aWinSize.Height() );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
         mpScrBar->SetRangeMax( (nCurCount+mnCols-1)*mnFineness/mnCols);

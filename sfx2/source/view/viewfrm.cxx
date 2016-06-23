@@ -259,31 +259,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 return;
             }
         }
-
-        // If only a reload of the graphics for one or more child frames
-        // should be made
-        SfxFrame& rFrame = GetFrame();
-        if ( pParent == &rFrame && rFrame.GetChildFrameCount() )
-        {
-            bool bReloadAvailable = false;
-            SfxFrameIterator aIter( rFrame, false );
-            SfxFrame *pChild = aIter.FirstFrame();
-            while ( pChild )
-            {
-                SfxFrame *pNext = aIter.NextFrame( *pChild );
-                SfxObjectShell *pShell = pChild->GetCurrentDocument();
-                if( pShell && pShell->Get_Impl()->bReloadAvailable )
-                {
-                    bReloadAvailable = true;
-                    pChild->GetCurrentViewFrame()->ExecuteSlot( rReq );
-                }
-                pChild = pNext;
-            }
-
-            // The top level frame itself has no graphics!
-            if ( bReloadAvailable )
-                return;
-        }
     }
     else
     {
@@ -870,31 +845,13 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
 
             case SID_RELOAD:
             {
-                SfxFrame* pFrame = &GetTopFrame();
-
                 if ( !pSh || !pSh->CanReload_Impl() || pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
                     rSet.DisableItem(nWhich);
                 else
                 {
                     // If any ChildFrame is reloadable, the slot is enabled,
                     // so you can perfom CTRL-Reload
-                    bool bReloadAvailable = false;
-                    SfxFrameIterator aFrameIter( *pFrame, true );
-                    for( SfxFrame* pNextFrame = aFrameIter.FirstFrame();
-                            pFrame;
-                            pNextFrame = pNextFrame ?
-                                aFrameIter.NextFrame( *pNextFrame ) : nullptr )
-                    {
-                        SfxObjectShell *pShell = pFrame->GetCurrentDocument();
-                        if( pShell && pShell->Get_Impl()->bReloadAvailable )
-                        {
-                            bReloadAvailable = true;
-                            break;
-                        }
-                        pFrame = pNextFrame;
-                    }
-
-                    rSet.Put( SfxBoolItem( nWhich, bReloadAvailable));
+                    rSet.Put( SfxBoolItem( nWhich, false));
                 }
 
                 break;
@@ -1373,7 +1330,6 @@ IMPL_LINK_NOARG_TYPED(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 {
     m_pImpl->bResizeInToOut = true;
-    m_pImpl->bDontOverwriteResizeInToOut = false;
     m_pImpl->bObjLocked = false;
     m_pImpl->pFocusWin = nullptr;
     m_pImpl->pActiveChild = nullptr;
@@ -1611,8 +1567,7 @@ SfxViewFrame* SfxViewFrame::GetParentViewFrame_Impl() const
 
 void SfxViewFrame::ForceOuterResize_Impl()
 {
-    if ( !m_pImpl->bDontOverwriteResizeInToOut )
-        m_pImpl->bResizeInToOut = true;
+    m_pImpl->bResizeInToOut = true;
 }
 
 bool SfxViewFrame::IsResizeInToOut_Impl() const

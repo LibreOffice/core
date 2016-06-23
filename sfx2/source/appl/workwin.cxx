@@ -1295,7 +1295,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
     {
         SfxChildWindow *pChildWin = pCW->pWin;
         bool bCreate = false;
-        if ( pCW->nId && !pCW->bDisabled  && (pCW->aInfo.nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE || IsVisible_Impl( pCW->nVisibility ) ) )
+        if ( pCW->nId && (pCW->aInfo.nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE || IsVisible_Impl( pCW->nVisibility ) ) )
         {
             // In the context is an appropriate ChildWindow allowed;
             // it is also turned on?
@@ -1493,7 +1493,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
     // No status bar, if no ID is required or when in FullScreenView or
     // if disabled
     if ( aStatBar.nId && IsDockingAllowed() && bInternalDockingAllowed && bShowStatusBar &&
-         ( (aStatBar.bOn && !bIsFullScreen) || aStatBar.bTemp ) )
+         aStatBar.bOn && !bIsFullScreen )
     {
         // Id has changed, thus create a suitable Statusbarmanager, this takes
         // over the  current status bar;
@@ -1876,16 +1876,9 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, bool bSetFocus)
                     if ( pChild->QueryClose() )
                     {
                         pCW->bCreate = false;
-                        if ( pChild->IsHideAtToggle() )
-                        {
-                            ShowChildWindow_Impl( nId, false, bSetFocus );
-                        }
-                        else
-                        {
-                            // The Window should be switched off
-                            pChild->SetVisible_Impl( false );
-                            RemoveChildWin_Impl( pCW );
-                        }
+                        // The Window should be switched off
+                        pChild->SetVisible_Impl( false );
+                        RemoveChildWin_Impl( pCW );
                     }
                 }
                 else

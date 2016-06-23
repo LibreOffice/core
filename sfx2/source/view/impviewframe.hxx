@@ -40,7 +40,6 @@ struct SfxViewFrame_Impl
     sal_uInt16          nDocViewNo;
     sal_uInt16          nCurViewId;
     bool            bResizeInToOut:1;
-    bool            bDontOverwriteResizeInToOut:1;
     bool            bObjLocked:1;
     bool            bReloading:1;
     bool            bIsDowning:1;
@@ -58,7 +57,6 @@ struct SfxViewFrame_Impl
         , nDocViewNo(0)
         , nCurViewId(0)
         , bResizeInToOut(false)
-        , bDontOverwriteResizeInToOut(false)
         , bObjLocked(false)
         , bReloading(false)
         , bIsDowning(false)

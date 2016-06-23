@@ -240,7 +240,6 @@ public:
 SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 : aInterceptorContainer( aMutex )
 ,   m_bControllerSet(false)
-,   m_nPrinterLocks(0)
 ,   m_bCanPrint(nFlags & SfxViewShellFlags::CAN_PRINT)
 ,   m_bHasPrintOptions(nFlags & SfxViewShellFlags::HAS_PRINTOPTIONS)
 ,   m_bIsShowView(!(nFlags & SfxViewShellFlags::NO_SHOW))
@@ -709,7 +708,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             case SID_SETUPPRINTER:
             case SID_PRINTER_NAME:
             {
-                bool bEnabled = pImpl->m_bCanPrint && !pImpl->m_nPrinterLocks
+                bool bEnabled = pImpl->m_bCanPrint
                               && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
                 if ( bEnabled )
                 {

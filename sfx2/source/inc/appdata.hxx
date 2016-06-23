@@ -103,7 +103,6 @@ public:
     SfxProgress*                        pProgress;
 
     sal_uInt16                              nDocModalMode;              // counts documents in modal mode
-    sal_uInt16                              nAutoTabPageId;
     sal_uInt16                              nRescheduleLocks;
     sal_uInt16                              nInReschedule;
 

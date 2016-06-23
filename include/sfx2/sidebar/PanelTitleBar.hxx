@@ -53,7 +53,7 @@ protected:
 private:
     bool mbIsLeftButtonDown;
     VclPtr<Panel> mpPanel;
-    const sal_uInt16 mnMenuItemIndex;
+    static const sal_uInt16 mnMenuItemIndex = 1;
     css::uno::Reference<css::frame::XFrame> mxFrame;
     OUString msMoreOptionsCommand;
 };
