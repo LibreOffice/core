@@ -6,6 +6,7 @@
 #
 
 import unittest
+import time
 
 from uitest_helper import UITest
 
@@ -25,8 +26,11 @@ class UITestCase(unittest.TestCase):
                 "org.libreoffice.uitest.UITest", self.xContext)
 
         self.ui_test = UITest(self.xUITest, self.xContext)
+        self.startTime = time.time()
 
     def tearDown(self):
+        t = time.time() - self.startTime
+        print("Execution time for %s: %.3f" % (self.id(), t))
         self.connection.tearDown()
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
