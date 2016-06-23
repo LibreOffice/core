@@ -157,7 +157,7 @@ size_t VectorRef::GetWindowSize() const
     }
     else
     {
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
 }
 

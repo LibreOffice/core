@@ -48,7 +48,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -62,7 +62,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -76,10 +76,10 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -101,7 +101,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -117,7 +117,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -178,7 +178,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -192,7 +192,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -206,10 +206,10 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -232,7 +232,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -248,7 +248,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -309,7 +309,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -323,7 +323,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -337,10 +337,10 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -362,7 +362,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -378,7 +378,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -439,7 +439,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -453,7 +453,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -467,10 +467,10 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -493,7 +493,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -509,7 +509,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -574,7 +574,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -588,7 +588,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -602,10 +602,10 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -628,7 +628,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -644,7 +644,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -679,7 +679,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -695,7 +695,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -759,7 +759,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -773,7 +773,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -787,10 +787,10 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -813,7 +813,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -829,7 +829,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -864,7 +864,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -880,7 +880,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -942,7 +942,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -956,7 +956,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -970,10 +970,10 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -996,7 +996,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -1012,7 +1012,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -1074,7 +1074,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -1088,7 +1088,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -1102,10 +1102,10 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -1128,7 +1128,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -1144,7 +1144,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -1179,7 +1179,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -1195,7 +1195,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -1259,7 +1259,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -1273,7 +1273,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -1287,10 +1287,10 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -1313,7 +1313,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -1329,7 +1329,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -1364,7 +1364,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -1380,7 +1380,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -1442,7 +1442,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -1456,7 +1456,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=DBL_MIN;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -1470,10 +1470,10 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -1496,7 +1496,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -1512,7 +1512,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";
@@ -1573,7 +1573,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
         dataRow = pCurDVR1->GetArrayLength();
     }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     if(vSubArguments[dataCol]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -1587,7 +1587,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
          ss << "        tmp"<<dataCol<<"=DBL_MIN;\n";
      }
     else
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     int conditionCol = 0;
     int conditionRow = 0;
     if(vSubArguments[dataCol + 1]->GetFormulaToken()->GetType() ==
@@ -1601,10 +1601,10 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
         conditionRow = pCurDVR2->GetArrayLength();
     }
     else{
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     if(dataCol!=conditionCol)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
     if(dataCol > 0 && dataRow > 0)
     {
         formula::FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
@@ -1627,7 +1627,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = 0; i < dataCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "        if(isNan(tmp"<<i<<"))\n";
@@ -1643,7 +1643,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
             for(int i = dataCol + 1; i < dataCol + 1 + conditionCol; ++i){
                 if(vSubArguments[i]->GetFormulaToken()->GetType() !=
                         formula::svDoubleVectorRef)
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
                 ss << "                if(!isNan(tmp"<<i<<")){\n";

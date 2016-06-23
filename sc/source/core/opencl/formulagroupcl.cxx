@@ -203,7 +203,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
     }
     else
     {
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
     }
     // Obtain cl context
     ::opencl::KernelEnv kEnv;
@@ -280,7 +280,7 @@ public:
     {
         std::stringstream ss;
         if (GetFormulaToken()->GetType() != formula::svString)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         FormulaToken* Tok = GetFormulaToken();
         ss << Tok->GetString().getString().toAsciiUpperCase().hashCode() << "U";
         return ss.str();
@@ -301,7 +301,7 @@ public:
         }
         else
         {
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         }
 
         // Pass the scalar result back to the rest of the formula kernel
@@ -336,7 +336,7 @@ public:
     virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
     {
         if (GetFormulaToken()->GetType() != formula::svDouble)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         return mSymName;
     }
     virtual size_t GetWindowSize() const override
@@ -347,7 +347,7 @@ public:
     {
         FormulaToken* Tok = GetFormulaToken();
         if (Tok->GetType() != formula::svDouble)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         return Tok->GetDouble();
     }
     /// Create buffer and pass the buffer to a given kernel
@@ -963,7 +963,7 @@ public:
     {
         FormulaToken* t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         mpDVR = static_cast<const formula::DoubleVectorRefToken*>(t);
         bIsStartFixed = mpDVR->IsStartFixed();
         bIsEndFixed = mpDVR->IsEndFixed();
@@ -1263,7 +1263,7 @@ public:
     {
         FormulaToken* t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         mpDVR = static_cast<const formula::DoubleVectorRefToken*>(t);
         bIsStartFixed = mpDVR->IsStartFixed();
         bIsEndFixed = mpDVR->IsEndFixed();
@@ -1493,7 +1493,7 @@ public:
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
         // create clmem buffer
         if (mpDVR->GetArrays()[Base::mnIndex].mpNumericArray == nullptr)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         double* pHostBuffer = const_cast<double*>(
             mpDVR->GetArrays()[Base::mnIndex].mpNumericArray);
         size_t szHostBuffer = nInput * sizeof(double);
@@ -1854,7 +1854,7 @@ public:
                     ((!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                         || (pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()))
                     )
-                    throw Unhandled();
+                    throw Unhandled(__FILE__, __LINE__);
             }
         }
         ss << ") {\n";
@@ -2498,7 +2498,7 @@ public:
         else
         {
             if (mvSubArguments.size() != 2)
-                throw Unhandled();
+                throw Unhandled(__FILE__, __LINE__);
             bool bArgument1_NeedNested =
                 mvSubArguments[0]->GetFormulaToken()->GetType()
                 != formula::svSingleVectorRef;
@@ -2612,10 +2612,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
     {
         FormulaTreeNodeRef rChild = ft->Children[i];
         if (!rChild)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         FormulaToken* pChild = rChild->GetFormulaToken();
         if (!pChild)
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         OpCode opc = pChild->GetOpCode();
         std::stringstream tmpname;
         tmpname << s << "_" << i;
@@ -2658,7 +2658,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             {
                                 // Can't handle
                                 SAL_INFO("sc.opencl", "Strings but can't do that.");
-                                throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str());
+                                throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
                             }
                             else
                             {
@@ -2770,7 +2770,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 else
                 {
                     SAL_INFO("sc.opencl", "Fallback case, rejecting for OpenCL");
-                    throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str());
+                    throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
                 }
                 break;
             case ocDiv:
@@ -3660,11 +3660,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             new OpGestep, nResultSize));
                 }
                 else
-                    throw UnhandledToken("unhandled opcode");
+                    throw UnhandledToken("unhandled opcode", __FILE__, __LINE__);
                 break;
 
             default:
-                throw UnhandledToken("unhandled opcode");
+                throw UnhandledToken("unhandled opcode", __FILE__, __LINE__);
         }
     }
 }
@@ -4033,13 +4033,35 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
     }
     catch (const UnhandledToken& ut)
     {
-        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled token: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
+        SAL_INFO("sc.opencl", "Dynamic formula compiler: UnhandledToken: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
+        delete pDynamicKernel;
+        return nullptr;
+    }
+    catch (const OpenCLError& oce)
+    {
+        // I think OpenCLError exceptions are actually exceptional (unexpected), so do use SAL_WARN
+        // here.
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCLError from " << oce.mFunction << ": " << ::opencl::errorString(oce.mError) << "at " << oce.mFile << ":" << oce.mLineNumber);
+
+        // OpenCLError used to go to the catch-all below, and not delete pDynamicKernel. Was that
+        // intentional, should we not do it here then either?
+        delete pDynamicKernel;
+        return nullptr;
+    }
+    catch (const Unhandled& uh)
+    {
+        SAL_INFO("sc.opencl", "Dynamic formula compiler: Unhandled at " << uh.mFile << ":" << uh.mLineNumber);
+
+        // Unhandled used to go to the catch-all below, and not delete pDynamicKernel. Was that
+        // intentional, should we not do it here then either?
         delete pDynamicKernel;
         return nullptr;
     }
     catch (...)
     {
-        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled compiler error");
+        // FIXME: Do we really want to catch random exceptions here?
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: unexpected exception");
+        // FIXME: Not deleting pDynamicKernel here!?, is that intentional?
         return nullptr;
     }
     return pDynamicKernel;
@@ -4149,22 +4171,22 @@ public:
         }
         catch (const UnhandledToken& ut)
         {
-            SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled token: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
+            SAL_INFO("sc.opencl", "Dynamic formula compiler: UnhandledToken: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
             return CLInterpreterResult();
         }
         catch (const OpenCLError& oce)
         {
-            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error from " << oce.mFunction << ": " << ::opencl::errorString(oce.mError) << " at " << oce.mFile << ":" << oce.mLineNumber);
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCLError from " << oce.mFunction << ": " << ::opencl::errorString(oce.mError) << " at " << oce.mFile << ":" << oce.mLineNumber);
             return CLInterpreterResult();
         }
         catch (const Unhandled& uh)
         {
-            SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled case at " << uh.mFile << ":" << uh.mLineNumber);
+            SAL_INFO("sc.opencl", "Dynamic formula compiler: Unhandled at " << uh.mFile << ":" << uh.mLineNumber);
             return CLInterpreterResult();
         }
         catch (...)
         {
-            SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled compiler error");
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: unexpected exception");
             return CLInterpreterResult();
         }
 

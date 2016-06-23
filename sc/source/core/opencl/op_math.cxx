@@ -592,7 +592,7 @@ void OpSumIfs::GenSlidingWindowFunction(std::stringstream &ss,
         else if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
             ss << "    int offset = get_group_id(1);\n";
         else
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         // actually unreachable
         ss << "    int lidx = get_local_id(0);\n";
         ss << "    __local double shm_buf[256];\n";
@@ -2658,7 +2658,7 @@ void OpConvert::GenSlidingWindowFunction(
         (arg1==108&&arg2==5584)||
         (arg1==5665&&arg2==268206)||
         (arg1==268206&&arg2==5665)) )
-        throw Unhandled();
+        throw Unhandled(__FILE__, __LINE__);
 
     FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
@@ -2813,7 +2813,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
         loopTimes = paraOneWidth;
         if(paraOneWidth > 1)
         {
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         }
     }
 
@@ -2827,7 +2827,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
         paraTwoWidth = pCurDVR1->GetArrays().size();
         if(paraTwoWidth > 1)
         {
-            throw Unhandled();
+            throw Unhandled(__FILE__, __LINE__);
         }
         ss << "    i = ";
         if (!pCurDVR1->IsStartFixed() && pCurDVR1->IsEndFixed()) {
@@ -2859,7 +2859,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
             unsigned paraThreeWidth = pCurDVR2->GetArrays().size();
              if(paraThreeWidth > 1)
             {
-                throw Unhandled();
+                throw Unhandled(__FILE__, __LINE__);
             }
         }
     }
