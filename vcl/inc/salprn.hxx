@@ -37,7 +37,6 @@ struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
     OUString               maDriver;
     OUString               maLocation;
     OUString               maComment;
-    PrintQueueFlags        mnStatus;
     sal_uLong              mnJobs;
     OUString*              mpSysData;
 

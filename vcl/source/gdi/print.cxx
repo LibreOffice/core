@@ -364,7 +364,6 @@ QueueInfo::~QueueInfo()
 
 SalPrinterQueueInfo::SalPrinterQueueInfo()
 {
-    mnStatus    = PrintQueueFlags::NONE;
     mnJobs      = QUEUE_JOBS_DONTKNOW;
     mpSysData   = nullptr;
 }
@@ -469,7 +468,7 @@ const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStat
         pInfo->mpQueueInfo->maDriver        = pInfo->mpSalQueueInfo->maDriver;
         pInfo->mpQueueInfo->maLocation      = pInfo->mpSalQueueInfo->maLocation;
         pInfo->mpQueueInfo->maComment       = pInfo->mpSalQueueInfo->maComment;
-        pInfo->mpQueueInfo->mnStatus        = pInfo->mpSalQueueInfo->mnStatus;
+        pInfo->mpQueueInfo->mnStatus        = PrintQueueFlags::NONE;
         pInfo->mpQueueInfo->mnJobs          = pInfo->mpSalQueueInfo->mnJobs;
         return pInfo->mpQueueInfo;
     }

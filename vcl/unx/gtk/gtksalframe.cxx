@@ -784,14 +784,6 @@ GtkSalFrame::~GtkSalFrame()
         gdk_region_destroy( m_pRegion );
     }
 
-    if( m_hBackgroundPixmap )
-    {
-        XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
-                                    widget_get_xid(m_pWindow),
-                                    None );
-        XFreePixmap( getDisplay()->GetDisplay(), m_hBackgroundPixmap );
-    }
-
     delete m_pIMHandler;
 
     GtkWidget *pEventWidget = getMouseEventWidget();
@@ -972,7 +964,6 @@ void GtkSalFrame::InitCommon()
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
     m_bSendModChangeOnRelease = false;
     m_pIMHandler        = nullptr;
-    m_hBackgroundPixmap = None;
     m_nExtStyle         = 0;
     m_pRegion           = nullptr;
     m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
@@ -1057,7 +1048,7 @@ void GtkSalFrame::InitCommon()
     */
     XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
                                 widget_get_xid(m_pWindow),
-                                m_hBackgroundPixmap );
+                                None );
 }
 
 /*  Sadly gtk_window_set_accept_focus exists only since gtk 2.4
@@ -3289,7 +3280,7 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
         if( aWin != None )
             XSetWindowBackgroundPixmap( GtkSalFrame::getDisplay()->GetDisplay(),
                                         aWin,
-                                        pThis->m_hBackgroundPixmap );
+                                        None );
     }
     if( ! pThis->m_pParent )
     {
@@ -3433,12 +3424,10 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
     vcl::DeletionListener aDel( m_pFrame );
 
     SalExtTextInputEvent aEmptyEv;
-    aEmptyEv.mnTime             = 0;
     aEmptyEv.mpTextAttr         = nullptr;
     aEmptyEv.maText.clear();
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
-    aEmptyEv.mbOnlyCursor       = False;
     m_pFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void*>(&aEmptyEv) );
     if( ! aDel.isDeleted() )
         m_pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
@@ -3620,12 +3609,10 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pTex
             (pThis->m_aInputEvent.mpTextAttr != nullptr) ||
             pThis->m_bPreeditJustChanged;
 
-        pThis->m_aInputEvent.mnTime             = 0;
         pThis->m_aInputEvent.mpTextAttr         = nullptr;
         pThis->m_aInputEvent.maText             = OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 );
         pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.getLength();
         pThis->m_aInputEvent.mnCursorFlags      = 0;
-        pThis->m_aInputEvent.mbOnlyCursor       = False;
 
         pThis->m_aInputFlags.clear();
 
@@ -3709,11 +3696,9 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     pThis->m_bPreeditJustChanged = true;
 
     bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != nullptr;
-    pThis->m_aInputEvent.mnTime             = 0;
     pThis->m_aInputEvent.maText             = pText ? OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 ) : OUString();
     pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
     pThis->m_aInputEvent.mnCursorFlags      = 0;
-    pThis->m_aInputEvent.mbOnlyCursor       = False;
 
     pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, (int)pThis->m_aInputEvent.maText.getLength() ), ExtTextInputAttr::NONE );
 

@@ -724,7 +724,6 @@ private:
 
     sal_uInt32      nSkipActions;
     sal_uInt32      nCurrentAction;
-    sal_uInt32      nUnicodeEscapeAction;
 
     WMF_EXTERNALHEADER* pExternalHeader;
 

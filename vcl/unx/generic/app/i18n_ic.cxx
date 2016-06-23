@@ -42,12 +42,10 @@ static void sendEmptyCommit( SalFrame* pFrame )
     vcl::DeletionListener aDel( pFrame );
 
     SalExtTextInputEvent aEmptyEv;
-    aEmptyEv.mnTime             = 0;
     aEmptyEv.mpTextAttr         = nullptr;
     aEmptyEv.maText.clear();
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
-    aEmptyEv.mbOnlyCursor       = False;
     pFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void*>(&aEmptyEv) );
     if( ! aDel.isDeleted() )
         pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
@@ -159,11 +157,9 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
     maClientData.aText.pUnicodeBuffer       = nullptr;
     maClientData.aText.pCharStyle           = nullptr;
-    maClientData.aInputEv.mnTime            = 0;
     maClientData.aInputEv.mpTextAttr        = nullptr;
     maClientData.aInputEv.mnCursorPos       = 0;
     maClientData.aInputEv.mnCursorFlags     = 0;
-    maClientData.aInputEv.mbOnlyCursor      = false;
 
     SalI18N_InputMethod *pInputMethod;
     pInputMethod = vcl_sal::getSalDisplay(GetGenericData())->GetInputMethod();
@@ -526,12 +522,10 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
     {
         SalExtTextInputEvent aTextEvent;
 
-        aTextEvent.mnTime        = 0;
         aTextEvent.mpTextAttr    = nullptr;
         aTextEvent.mnCursorPos   = nLength;
         aTextEvent.maText        = OUString(pText, nLength);
         aTextEvent.mnCursorFlags = 0;
-        aTextEvent.mbOnlyCursor  = False;
 
         maClientData.pFrame->CallCallback(SalEvent::ExtTextInput,    static_cast<void*>(&aTextEvent));
         maClientData.pFrame->CallCallback(SalEvent::EndExtTextInput, nullptr);

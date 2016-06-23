@@ -311,7 +311,6 @@ void X11SalData::PushXErrorLevel( bool bIgnore )
     XErrorStackEntry& rEnt = m_aXErrorHandlerStack.back();
     rEnt.m_bWas = false;
     rEnt.m_bIgnore = bIgnore;
-    rEnt.m_nLastErrorRequest = 0;
     rEnt.m_aHandler = XSetErrorHandler( XErrorHdl );
 }
 

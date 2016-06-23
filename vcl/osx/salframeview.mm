@@ -1072,12 +1072,10 @@ private:
             else
             {
                 SalExtTextInputEvent aEvent;
-                aEvent.mnTime           = mpFrame->mnLastEventTime;
                 aEvent.maText           = aInsertString;
                 aEvent.mpTextAttr       = nullptr;
                 aEvent.mnCursorPos      = aInsertString.getLength();
                 aEvent.mnCursorFlags    = 0;
-                aEvent.mbOnlyCursor     = FALSE;
                 mpFrame->CallCallback( SalEvent::ExtTextInput, &aEvent );
                 if( AquaSalFrame::isAlive( mpFrame ) )
                     mpFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
@@ -1086,12 +1084,10 @@ private:
         else
         {
             SalExtTextInputEvent aEvent;
-            aEvent.mnTime           = mpFrame->mnLastEventTime;
             aEvent.maText.clear();
             aEvent.mpTextAttr       = nullptr;
             aEvent.mnCursorPos      = 0;
             aEvent.mnCursorFlags    = 0;
-            aEvent.mbOnlyCursor     = FALSE;
             mpFrame->CallCallback( SalEvent::ExtTextInput, &aEvent );
             if( AquaSalFrame::isAlive( mpFrame ) )
                 mpFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
@@ -1605,8 +1601,6 @@ private:
 
     int len = [aString length];
     SalExtTextInputEvent aInputEvent;
-    aInputEvent.mnTime = mpFrame->mnLastEventTime;
-    aInputEvent.mbOnlyCursor = FALSE;
     if( len > 0 ) {
         NSString *pString = [aString string];
         OUString aInsertString( GetOUString( pString ) );

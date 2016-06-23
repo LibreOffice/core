@@ -4989,10 +4989,8 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
 
     // Init Event
     SalExtTextInputEvent    aEvt;
-    aEvt.mnTime             = GetMessageTime();
     aEvt.mpTextAttr         = NULL;
     aEvt.mnCursorPos        = 0;
-    aEvt.mbOnlyCursor       = FALSE;
     aEvt.mnCursorFlags      = 0;
 
     // If we get a result string, then we handle this input
@@ -5131,10 +5129,8 @@ static bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
         if ( !lParam )
         {
             SalExtTextInputEvent aEvt;
-            aEvt.mnTime             = GetMessageTime();
             aEvt.mpTextAttr         = NULL;
             aEvt.mnCursorPos        = 0;
-            aEvt.mbOnlyCursor       = FALSE;
             aEvt.mnCursorFlags      = 0;
             pFrame->CallCallback( SalEvent::ExtTextInput, (void*)&aEvt );
             pFrame->CallCallback( SalEvent::EndExtTextInput, (void*)NULL );

@@ -161,12 +161,10 @@ struct SalWheelMouseEvent
 
 struct SalExtTextInputEvent
 {
-    sal_uInt64          mnTime;         // Time in ms, when event is created
     OUString            maText;         // Text
     const ExtTextInputAttr* mpTextAttr;     // Text-Attribute
     sal_Int32           mnCursorPos;    // Cursor-Position
     sal_uInt8           mnCursorFlags;  // EXTTEXTINPUT_CURSOR_xxx
-    bool                mbOnlyCursor;   // true: Only Cursor-Position has been changed
 };
 
 struct SalExtTextInputPosEvent
