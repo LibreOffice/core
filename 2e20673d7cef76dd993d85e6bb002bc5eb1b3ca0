@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_0f2571aa",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-23T12:17:00Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be a bit more clean to use two pointers here, an std::unique_ptr\u003c\u003e for the not-yet-inserted format, and a bare pointer for the inserted-and-not-owning format? Just a suggestion, to avoid the need for a manual delete.",
+      "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_ef1f6d59",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-23T12:17:00Z",
+      "side": 1,
+      "message": "I guess m_bPhysical means: if true, then it points to a core object, if false, then this is a created, but not-yet-inserted format. If this description if correct, please add it as a doxygen comment, so the next reader doesn\u0027t have to guess. :-)",
+      "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_8f1a616d",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-23T12:17:00Z",
+      "side": 1,
+      "message": "A one-liner doxygen comment about what this member function does (what mapping it updates) would be nice.",
+      "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_6f1d1d66",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-23T12:17:00Z",
+      "side": 1,
+      "message": "Hmm, why is this necessary? It would be better to make the private interface it uses (as a friend) public for readability reasons.",
+      "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_af2565af",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-23T12:17:00Z",
+      "side": 1,
+      "message": "Can\u0027t you use m_AutoFormats[i] here as well, to be consistent with the previous line?",
+      "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
