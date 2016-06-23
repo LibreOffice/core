@@ -210,6 +210,7 @@ class GtkSalFrame : public SalFrame
 #if GTK_CHECK_VERSION(3,0,0)
     OUString                        m_aTooltip;
     Rectangle                       m_aHelpArea;
+    guint32                         m_nLastScrollEventTime;
     long                            m_nWidthRequest;
     long                            m_nHeightRequest;
     cairo_region_t*                 m_pRegion;
@@ -277,7 +278,7 @@ class GtkSalFrame : public SalFrame
     static gboolean     signalKey( GtkWidget*, GdkEventKey*, gpointer );
     static gboolean     signalDelete( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalWindowState( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
+    static gboolean     signalScroll( GtkWidget*, GdkEventScroll* pEvent, gpointer );
     static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
     static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
     static void         signalDestroy( GtkWidget*, gpointer );
