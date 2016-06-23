@@ -19,8 +19,15 @@
 #ifndef INCLUDED_SVX_CONNCTRL_HXX
 #define INCLUDED_SVX_CONNCTRL_HXX
 
-#include <vcl/ctrl.hxx>
+#include <sal/types.h>
 #include <svx/svxdllapi.h>
+#include <tools/gen.hxx>
+#include <tools/wintypes.hxx>
+#include <vcl/ctrl.hxx>
+#include <vcl/event.hxx>
+#include <vcl/outdev.hxx>
+
+namespace vcl { class Window; }
 
 class SfxItemSet;
 class SdrEdgeObj;

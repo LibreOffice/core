@@ -19,12 +19,16 @@
 #ifndef INCLUDED_SVX_ALGITEM_HXX
 #define INCLUDED_SVX_ALGITEM_HXX
 
-#include <svx/svxids.hrc>
+#include <com/sun/star/uno/Any.hxx>
+#include <editeng/svxenum.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
-#include <editeng/svxenum.hxx>
 #include <svx/svxdllapi.h>
 
+class IntlWrapper;
+class SfxItemPool;
 class SvStream;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem

@@ -20,13 +20,18 @@
 #ifndef INCLUDED_SVX_CHARTHELPER_HXX
 #define INCLUDED_SVX_CHARTHELPER_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <svx/svxdllapi.h>
+#include <com/sun/star/uno/Reference.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <sal/types.h>
+#include <svx/svxdllapi.h>
+
+namespace com { namespace sun { namespace star {
+    namespace chart2 { class XDiagram; }
+    namespace embed { class XEmbeddedObject; }
+    namespace frame { class XModel; }
+} } }
+
+namespace basegfx { class B2DRange; }
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC ChartHelper
 {

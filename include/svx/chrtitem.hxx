@@ -19,8 +19,16 @@
 #ifndef INCLUDED_SVX_CHRTITEM_HXX
 #define INCLUDED_SVX_CHRTITEM_HXX
 
+#include <com/sun/star/uno/Any.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <svl/eitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
+
+class IntlWrapper;
+class SfxItemPool;
+class SvStream;
 
 enum SvxChartStyle
 {

@@ -20,12 +20,17 @@
 #ifndef INCLUDED_SVX_ACCESSIBLESHAPEINFO_HXX
 #define INCLUDED_SVX_ACCESSIBLESHAPEINFO_HXX
 
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <svx/IAccessibleParent.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <svx/svxdllapi.h>
 
+namespace com { namespace sun { namespace star {
+    namespace accessibility { class XAccessible; }
+    namespace drawing { class XShape; }
+} } }
+
 namespace accessibility {
+
+class IAccessibleParent;
 
 /** @descr
         This class is a container for the information specific for a single

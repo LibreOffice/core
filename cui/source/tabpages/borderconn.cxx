@@ -19,6 +19,7 @@
 
 #include "borderconn.hxx"
 #include <svx/frmsel.hxx>
+#include <svx/svxids.hrc>
 #include "editeng/lineitem.hxx"
 #include <editeng/boxitem.hxx>
 #include <svx/algitem.hxx>

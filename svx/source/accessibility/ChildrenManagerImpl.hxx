@@ -26,6 +26,7 @@
 #include <editeng/AccessibleContextBase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
+#include <tools/gen.hxx>
 #include <vector>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>

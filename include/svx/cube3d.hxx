@@ -20,8 +20,17 @@
 #ifndef INCLUDED_SVX_CUBE3D_HXX
 #define INCLUDED_SVX_CUBE3D_HXX
 
+#include <basegfx/point/b3dpoint.hxx>
+#include <basegfx/vector/b3dvector.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <svx/obj3d.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
+
+namespace sdr { namespace contact { class ViewContact; } }
+
+class E3dDefaultAttributes;
 
 /*************************************************************************
 |*

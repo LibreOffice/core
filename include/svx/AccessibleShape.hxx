@@ -21,33 +21,55 @@
 #ifndef INCLUDED_SVX_ACCESSIBLESHAPE_HXX
 #define INCLUDED_SVX_ACCESSIBLESHAPE_HXX
 
-#include <editeng/AccessibleContextBase.hxx>
-#include <editeng/AccessibleComponentBase.hxx>
-#include <svx/IAccessibleViewForwarderListener.hxx>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <exception>
+
+#include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleGroupPosition.hpp>
-#include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <svx/AccessibleTextHelper.hxx>
+#include <editeng/AccessibleContextBase.hxx>
+#include <editeng/AccessibleComponentBase.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <svx/AccessibleShapeTreeInfo.hxx>
+#include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/ChildrenManager.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace accessibility { class XAccessible; }
+    namespace accessibility { class XAccessibleEventListener; }
+    namespace accessibility { class XAccessibleHyperlink; }
+    namespace accessibility { class XAccessibleRelationSet; }
+    namespace accessibility { class XAccessibleStateSet; }
+    namespace beans { struct PropertyValue; }
+    namespace document { struct EventObject; }
+    namespace drawing { class XShape; }
+    namespace uno { class XInterface; }
+} } }
 
 class SdrObject;
 
 namespace accessibility {
 
 class AccessibleShapeInfo;
-class AccessibleShapeTreeInfo;
+class AccessibleTextHelper;
+class ChildrenManager;
 class IAccessibleParent;
+class IAccessibleViewForwarder;
 
 /** This base class provides a base implementation for all shapes.  For more
     detailed documentation about the methods refer to the descriptions of

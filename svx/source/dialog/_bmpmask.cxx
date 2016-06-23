@@ -19,13 +19,16 @@
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/field.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/toolbox.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
 
 #include <svx/dialmgr.hxx>
+#include <svx/dlgctrl.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/dialogs.hrc>
 #include <bmpmask.hrc>
