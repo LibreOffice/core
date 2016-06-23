@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_cf78e992",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-23T13:42:19Z",
+      "side": 1,
+      "message": "This is a virtual dtor, please mark it \u0027override\u0027.",
+      "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_6f1d1d66",
         "filename": "sw/inc/unostyle.hxx",
         "patchSetId": 5
