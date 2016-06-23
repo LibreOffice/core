@@ -465,17 +465,13 @@ void SchXMLAxisContext::CreateAxis()
         if( !m_aAutoStyleName.isEmpty())
         {
             const SvXMLStylesContext* pStylesCtxt = m_rImportHelper.GetAutoStylesContext();
-            if( pStylesCtxt )
+            if (pStylesCtxt)
             {
-                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    SchXMLImportHelper::GetChartFamilyID(), m_aAutoStyleName );
+                SvXMLStyleContext* pStyle = const_cast<SvXMLStyleContext*>(pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(), m_aAutoStyleName));
 
-                if( pStyle && dynamic_cast<const XMLPropStyleContext*>( pStyle) !=  nullptr)
+                if (XMLPropStyleContext * pPropStyleContext = dynamic_cast<XMLPropStyleContext*>(pStyle))
                 {
-                    // note: SvXMLStyleContext::FillPropertySet is not const
-                    XMLPropStyleContext * pPropStyleContext = const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
-                    if( pPropStyleContext )
-                        pPropStyleContext->FillPropertySet( m_xAxisProps );
+                    pPropStyleContext->FillPropertySet(m_xAxisProps);
 
                     if( m_bAdaptWrongPercentScaleValues && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y )
                     {
@@ -498,7 +494,7 @@ void SchXMLAxisContext::CreateAxis()
                         if( xAxisSuppl.is() )
                         {
                             Reference< beans::XPropertySet > xXAxisProp( xAxisSuppl->getAxis(0), uno::UNO_QUERY );
-                            const_cast<XMLPropStyleContext*>( static_cast< const XMLPropStyleContext* >( pStyle ))->FillPropertySet( xXAxisProp );
+                            pPropStyleContext->FillPropertySet(xXAxisProp);
                         }
 
                         //set scale data of added x axis back to default
