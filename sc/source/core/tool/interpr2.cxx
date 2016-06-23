@@ -1528,7 +1528,8 @@ void ScInterpreter::ScDB()
     double nRest = GetDouble();
     double nValue = GetDouble();
     if (nMonths < 1.0 || nMonths > 12.0 || nTimeLength > 1200.0 || nRest < 0.0 ||
-        nPeriod > (nTimeLength + 1.0) || nRest > nValue || nValue < 0.0)
+        nPeriod > (nTimeLength + 1.0) || nRest > nValue || nValue <= 0.0 ||
+        nTimeLength <= 0 || nPeriod <= 0 )
     {
         PushIllegalArgument();
         return;
