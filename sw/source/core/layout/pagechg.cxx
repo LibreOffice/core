@@ -1763,8 +1763,10 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
 
     // note: pSortedObj elements may be removed and inserted from
     // MoveObjectIfActive(), invalidating iterators
-    for (SwAnchoredObject* pAnchoredObj : *pSortedObj)
+    // DO NOT CONVERT THIS TO A C++11 FOR LOOP, IT DID NOT WORK THE LAST 2 TIMES
+    for (size_t i = 0; i < pSortedObj->size(); ++i)
     {
+        SwAnchoredObject *const pAnchoredObj = (*pSortedObj)[i];
         const SwFrameFormat& rObjFormat = pAnchoredObj->GetFrameFormat();
         const SwFormatAnchor& rAnchor = rObjFormat.GetAnchor();
 
