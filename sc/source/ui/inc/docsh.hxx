@@ -422,8 +422,6 @@ public:
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     void SnapVisArea( Rectangle& rRect ) const;
-
-    virtual void libreOfficeKitCallback(int nType, const char* pPayload) const override;
 };
 
 void UpdateAcceptChangesDialog();

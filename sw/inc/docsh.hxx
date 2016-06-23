@@ -308,8 +308,6 @@ public:
     virtual void    SetChangeRecording( bool bActivate ) override;
     virtual bool    SetProtectionPassword( const OUString &rPassword ) override;
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
-
-    virtual void libreOfficeKitCallback(int nType, const char* pPayload) const override;
 };
 
 /** Find the right DocShell and create a new one:

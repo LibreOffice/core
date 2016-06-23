@@ -464,10 +464,6 @@ void DrawDocShell::ClearUndoBuffer()
         pUndoManager->Clear();
 }
 
-void DrawDocShell::libreOfficeKitCallback(int /*nType*/, const char* /*pPayload*/) const
-{
-}
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

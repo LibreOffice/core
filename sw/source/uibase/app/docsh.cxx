@@ -1337,8 +1337,4 @@ bool SwDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPas
     return bRes;
 }
 
-void SwDocShell::libreOfficeKitCallback(int /*nType*/, const char* /*pPayload*/) const
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -305,7 +305,6 @@ certain functionality.
 @li @c sfx.doc
 @li @c sfx.notify
 @li @c sfx.sidebar
-@li @c sfx.tiledrendering
 @li @c sfx.view
 
 @section slideshow

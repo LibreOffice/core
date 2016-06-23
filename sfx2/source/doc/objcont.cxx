@@ -652,9 +652,4 @@ bool SfxObjectShell::IsModifyPasswordEntered()
     return pImp->m_bModifyPasswordEntered;
 }
 
-void SfxObjectShell::libreOfficeKitCallback(int /*nType*/, const char* /*pPayload*/) const
-{
-    SAL_INFO("sfx.tiledrendering", "SfxObjectShell::libreOfficeKitCallback interface not overridden for SfxObjectShell subclass typeId: " << typeid(*this).name());
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

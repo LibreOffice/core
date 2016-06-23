@@ -723,13 +723,6 @@ public:
     SAL_DLLPRIVATE void CancelCheckOut( );
     SAL_DLLPRIVATE void CheckIn( );
     SAL_DLLPRIVATE css::uno::Sequence< css::document::CmisVersion > GetCmisVersions();
-
-    /**
-     * Interface shared by document shell. Allow LOK calls from sfx.
-     * Default behavior doesn't do anything. relevant SfxObjectShells should override
-     * the default behavior and implements LOK calls.
-     */
-    virtual void libreOfficeKitCallback(int nType, const char* pPayload) const;
 };
 
 #define SFX_GLOBAL_CLASSID \
