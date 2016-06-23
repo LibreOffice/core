@@ -397,7 +397,6 @@ private:
 
     /// bitfield
     mutable bool                    mbMap : 1;
-    mutable bool                    mbMapIsDefault : 1;
     mutable bool                    mbClipRegion : 1;
     mutable bool                    mbBackground : 1;
     mutable bool                    mbOutput : 1;

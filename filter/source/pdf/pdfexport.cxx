@@ -651,13 +651,6 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             // check if PDF/A, which does not allow encryption
             if( aContext.Version != vcl::PDFWriter::PDF_A_1 )
             {
-                // set values needed in encryption
-                // set encryption level, fixed, but here it can set by the UI if needed.
-                // true is 128 bit, false 40
-                // note that in 40 bit mode the UI needs reworking, since the current UI is meaningfull only for
-                // 128bit security mode
-                aContext.Encryption.Security128bit = true;
-
                 // set check for permission change password
                 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
                 if( mbRestrictPermissions && (xEnc.is() || !aPermissionPassword.isEmpty()) )
@@ -711,7 +704,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aContext.Encryption.CanCopyOrExtract                = mbCanCopyOrExtract;
                 aContext.Encryption.CanExtractForAccessibility  = mbCanExtractForAccessibility;
                 if( mbEncrypt && ! xEnc.is() )
-                    xEnc = vcl::PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword, aContext.Encryption.Security128bit );
+                    xEnc = vcl::PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword, true/*bSecurity128bit*/ );
                 if( mbEncrypt && !aPermissionPassword.isEmpty() && ! aPreparedPermissionPassword.getLength() )
                     aPreparedPermissionPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aPermissionPassword );
             }

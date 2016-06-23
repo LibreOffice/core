@@ -842,7 +842,6 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 void FixedImage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    mbInUserDraw = false;
     Control::ImplInit( pParent, nStyle, nullptr );
     ApplySettings(*this);
 }

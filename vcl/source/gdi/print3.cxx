@@ -1128,7 +1128,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     for( int nSubPage = 0; nSubPage < nSubPages; nSubPage++ )
     {
         // map current sub page to real page
-        int nPage = (i_nFilteredPage * nSubPages + nSubPage) / rMPS.nRepeat;
+        int nPage = i_nFilteredPage * nSubPages + nSubPage;
         if( nSubPage == nSubPages-1 ||
             nPage == nDocPages-1 )
         {
@@ -1198,7 +1198,7 @@ int PrinterController::getFilteredPageCount()
     int nDiv = mpImplData->maMultiPage.nRows * mpImplData->maMultiPage.nColumns;
     if( nDiv < 1 )
         nDiv = 1;
-    return (getPageCountProtected() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
+    return (getPageCountProtected() + (nDiv-1)) / nDiv;
 }
 
 DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )

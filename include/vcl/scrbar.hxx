@@ -57,7 +57,6 @@ private:
     sal_uInt16      mnDragDraw;
     sal_uInt16      mnStateFlags;
     ScrollType      meScrollType;
-    ScrollType      meDDScrollType;
     bool            mbCalcSize;
     bool            mbFullDrag;
     Link<ScrollBar*,void>       maScrollHdl;

@@ -85,7 +85,6 @@ OutputDevice::OutputDevice() :
     meOutDevType                    = OUTDEV_DONTKNOW;
     meOutDevViewType                = OUTDEV_VIEWTYPE_DONTKNOW;
     mbMap                           = false;
-    mbMapIsDefault                  = true;
     mbClipRegion                    = false;
     mbBackground                    = false;
     mbOutput                        = true;

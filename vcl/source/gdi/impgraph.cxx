@@ -573,7 +573,7 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
         {
             aRetBmpEx.Scale(
                 rParameters.getSizePixel(),
-                rParameters.getScaleHighQuality() ? BmpScaleFlag::Interpolate : BmpScaleFlag::Fast);
+                BmpScaleFlag::Fast);
         }
     }
     else if( ( meType != GraphicType::Default ) && ImplIsSupportedGraphic() )

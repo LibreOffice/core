@@ -659,7 +659,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 
     bool bFloatMode = false;
 
-    if ( GetOuterRect().IsInside( rPos ) && !IsDockingPrevented() )
+    if ( GetOuterRect().IsInside( rPos ) )
     {
         // Mouse within OuterRect: calculate Alignment and Rectangle
         SfxChildAlignment eAlign = CalcAlignment(rPos, rRect);

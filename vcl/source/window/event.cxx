@@ -653,7 +653,6 @@ NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWindow,
     mpWindow    = pWindow;
     mpData      = const_cast<void*>(pEvent);
     mnEventType  = nEventType;
-    mnRetValue  = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

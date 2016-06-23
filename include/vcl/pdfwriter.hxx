@@ -341,12 +341,10 @@ public:
     struct CheckBoxWidget : public AnyWidget
     {
         bool                Checked;
-        bool                ButtonIsLeft;
 
         CheckBoxWidget()
                 : AnyWidget( vcl::PDFWriter::CheckBox ),
-                  Checked( false ),
-                  ButtonIsLeft( true )
+                  Checked( false )
         {}
 
         virtual AnyWidget* Clone() const override
@@ -359,14 +357,12 @@ public:
     {
         bool                Selected;
         sal_Int32           RadioGroup;
-        bool                ButtonIsLeft;
         OUString       OnValue; // the value of the radio button if it is selected
 
         RadioButtonWidget()
                 : AnyWidget( vcl::PDFWriter::RadioButton ),
                   Selected( false ),
-                  RadioGroup( 0 ),
-                  ButtonIsLeft( true )
+                  RadioGroup( 0 )
         {}
 
         virtual AnyWidget* Clone() const override
@@ -431,13 +427,11 @@ public:
     // note: PDF only supports dropdown comboboxes
     struct ComboBoxWidget : public AnyWidget
     {
-        bool                            Sort;
         std::vector<OUString>      Entries;
         // set the current value in AnyWidget::Text
 
         ComboBoxWidget()
-                : AnyWidget( vcl::PDFWriter::ComboBox ),
-                  Sort( false )
+                : AnyWidget( vcl::PDFWriter::ComboBox )
         {}
 
         virtual AnyWidget* Clone() const override
@@ -448,14 +442,8 @@ public:
 
     struct SignatureWidget: public AnyWidget
     {
-        // Use Sig prefix for members to avoid conflict with
-        // the Location member of the AnyWidget which specifies the coordinates
-        // of the signature
-        bool                             SigHidden;
-
         SignatureWidget()
-                : AnyWidget( vcl::PDFWriter::Signature ),
-                  SigHidden( true )
+                : AnyWidget( vcl::PDFWriter::Signature )
         {}
 
         virtual AnyWidget* Clone() const override
@@ -506,7 +494,6 @@ The following structure describes the permissions used in PDF security
     struct PDFEncryptionProperties
     {
 
-        bool Security128bit; // true to select 128 bit encryption, false for 40 bit
         //for both 40 and 128 bit security, see 3.5.2 PDF v 1.4 table 3.15, v 1.5 and v 1.6 table 3.20.
         bool CanPrintTheDocument;
         bool CanModifyTheContent;
@@ -531,7 +518,6 @@ The following structure describes the permissions used in PDF security
 
         //permission default set for 128 bit, accessibility only
         PDFEncryptionProperties() :
-            Security128bit              ( true ),
             CanPrintTheDocument         ( false ),
             CanModifyTheContent         ( false ),
             CanCopyOrExtract            ( false ),
@@ -589,7 +575,6 @@ The following structure describes the permissions used in PDF security
          */
         PDFWriter::ExportDataFormat     SubmitFormat;
         bool                            AllowDuplicateFieldNames;
-        bool                            FieldsUseSystemFonts;
         /* the following data members are used to customize the PDF viewer
            preferences
          */
@@ -640,7 +625,6 @@ The following structure describes the permissions used in PDF security
                 Tagged( false ),
                 SubmitFormat( PDFWriter::FDF ),
                 AllowDuplicateFieldNames( false ),
-                FieldsUseSystemFonts( true ),
                 PDFDocumentMode( PDFWriter::ModeDefault ),
                 PDFDocumentAction( PDFWriter::ActionDefault ),
                 Zoom( 100 ),

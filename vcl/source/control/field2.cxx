@@ -767,7 +767,6 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
 
 PatternFormatter::PatternFormatter()
 {
-    mnFormatFlags       = 0;
     mbSameMask          = true;
     mbInPattKeyInput    = false;
 }
@@ -798,14 +797,14 @@ OUString PatternFormatter::GetString() const
     if ( !GetField() )
         return OUString();
     else
-        return ImplPatternReformat( GetField()->GetText(), m_aEditMask, maLiteralMask, mnFormatFlags );
+        return ImplPatternReformat( GetField()->GetText(), m_aEditMask, maLiteralMask, 0/*nFormatFlags*/ );
 }
 
 void PatternFormatter::Reformat()
 {
     if ( GetField() )
     {
-        ImplSetText( ImplPatternReformat( GetField()->GetText(), m_aEditMask, maLiteralMask, mnFormatFlags ) );
+        ImplSetText( ImplPatternReformat( GetField()->GetText(), m_aEditMask, maLiteralMask, 0/*nFormatFlags*/ ) );
         if ( !mbSameMask && IsStrictFormat() && !GetField()->IsReadOnly() )
             GetField()->SetInsertMode( false );
     }
@@ -829,7 +828,7 @@ bool PatternField::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplPatternProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
-                                         IsStrictFormat(), GetFormatFlags(),
+                                         IsStrictFormat(), 0/*nFormatFlags*/,
                                          ImplIsSameMask(), ImplGetInPattKeyInput() ) )
             return true;
     }
@@ -855,7 +854,7 @@ void PatternField::Modify()
     if ( !ImplGetInPattKeyInput() )
     {
         if ( IsStrictFormat() )
-            ImplPatternProcessStrictModify( GetField(), GetEditMask(), GetLiteralMask(), GetFormatFlags(), ImplIsSameMask() );
+            ImplPatternProcessStrictModify( GetField(), GetEditMask(), GetLiteralMask(), 0/*nFormatFlags*/, ImplIsSameMask() );
         else
             MarkToBeReformatted( true );
     }
@@ -881,7 +880,7 @@ bool PatternBox::PreNotify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplPatternProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
-                                         IsStrictFormat(), GetFormatFlags(),
+                                         IsStrictFormat(), 0/*nFormatFlags*/,
                                          ImplIsSameMask(), ImplGetInPattKeyInput() ) )
             return true;
     }
@@ -907,7 +906,7 @@ void PatternBox::Modify()
     if ( !ImplGetInPattKeyInput() )
     {
         if ( IsStrictFormat() )
-            ImplPatternProcessStrictModify( GetField(), GetEditMask(), GetLiteralMask(), GetFormatFlags(), ImplIsSameMask() );
+            ImplPatternProcessStrictModify( GetField(), GetEditMask(), GetLiteralMask(), 0/*nFormatFlags*/, ImplIsSameMask() );
         else
             MarkToBeReformatted( true );
     }
@@ -922,7 +921,7 @@ void PatternBox::ReformatAll()
     const sal_Int32 nEntryCount = GetEntryCount();
     for ( sal_Int32 i=0; i < nEntryCount; ++i )
     {
-        aStr = ImplPatternReformat( GetEntry( i ), GetEditMask(), GetLiteralMask(), GetFormatFlags() );
+        aStr = ImplPatternReformat( GetEntry( i ), GetEditMask(), GetLiteralMask(), 0/*nFormatFlags*/ );
         RemoveEntryAt(i);
         InsertEntry( aStr, i );
     }

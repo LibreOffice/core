@@ -4842,25 +4842,20 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rEdit, rWidget, rSettings );
-    sal_Int32 nBest = m_aContext.FieldsUseSystemFonts ? getSystemFont( aFont ): getBestBuiltinFont( aFont );
+    sal_Int32 nBest = getSystemFont( aFont );
 
     // prepare DA string
     OStringBuffer aDA( 32 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetFieldTextColor() ), aDA );
     aDA.append( ' ' );
-    if( m_aContext.FieldsUseSystemFonts )
-    {
-        aDA.append( "/F" );
-        aDA.append( nBest );
+    aDA.append( "/F" );
+    aDA.append( nBest );
 
-        OStringBuffer aDR( 32 );
-        aDR.append( "/Font " );
-        aDR.append( getFontDictObject() );
-        aDR.append( " 0 R" );
-        rEdit.m_aDRDict = aDR.makeStringAndClear();
-    }
-    else
-        aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    OStringBuffer aDR( 32 );
+    aDR.append( "/Font " );
+    aDR.append( getFontDictObject() );
+    aDR.append( " 0 R" );
+    rEdit.m_aDRDict = aDR.makeStringAndClear();
     aDA.append( ' ' );
     m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aFont.GetFontHeight() ), aDA );
     aDA.append( " Tf" );
@@ -4894,7 +4889,7 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rBox, rWidget, rSettings );
-    sal_Int32 nBest = m_aContext.FieldsUseSystemFonts ? getSystemFont( aFont ): getBestBuiltinFont( aFont );
+    sal_Int32 nBest = getSystemFont( aFont );
 
     beginRedirect( pListBoxStream, rBox.m_aRect );
     OStringBuffer aAppearance( 64 );
@@ -4917,19 +4912,14 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     // prepare DA string
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetFieldTextColor() ), aDA );
     aDA.append( ' ' );
-    if( m_aContext.FieldsUseSystemFonts )
-    {
-        aDA.append( "/F" );
-        aDA.append( nBest );
+    aDA.append( "/F" );
+    aDA.append( nBest );
 
-        OStringBuffer aDR( 32 );
-        aDR.append( "/Font " );
-        aDR.append( getFontDictObject() );
-        aDR.append( " 0 R" );
-        rBox.m_aDRDict = aDR.makeStringAndClear();
-    }
-    else
-        aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    OStringBuffer aDR( 32 );
+    aDR.append( "/Font " );
+    aDR.append( getFontDictObject() );
+    aDR.append( " 0 R" );
+    rBox.m_aDRDict = aDR.makeStringAndClear();
     aDA.append( ' ' );
     m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aFont.GetFontHeight() ), aDA );
     aDA.append( " Tf" );
@@ -4960,7 +4950,6 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
         nDelta = 1;
 
     Rectangle aCheckRect, aTextRect;
-    if( rWidget.ButtonIsLeft )
     {
         aCheckRect.Left()   = rBox.m_aRect.Left() + nDelta;
         aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
@@ -4976,26 +4965,6 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
         }
 
         aTextRect.Left()    = rBox.m_aRect.Left() + aCheckRect.GetWidth()+5*nDelta;
-        aTextRect.Top()     = rBox.m_aRect.Top();
-        aTextRect.Right()   = aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta;
-        aTextRect.Bottom()  = rBox.m_aRect.Bottom();
-    }
-    else
-    {
-        aCheckRect.Left()   = rBox.m_aRect.Right() - nDelta - aFontSize.Height();
-        aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
-        aCheckRect.Right()  = aCheckRect.Left() + aFontSize.Height();
-        aCheckRect.Bottom() = aCheckRect.Top() + aFontSize.Height();
-
-        // #i74206# handle small controls without text area
-        while( aCheckRect.GetWidth() > rBox.m_aRect.GetWidth() && aCheckRect.GetWidth() > nDelta )
-        {
-            aCheckRect.Left()   += nDelta;
-            aCheckRect.Top()    += nDelta/2;
-            aCheckRect.Bottom() -= nDelta - (nDelta/2);
-        }
-
-        aTextRect.Left()    = rBox.m_aRect.Left();
         aTextRect.Top()     = rBox.m_aRect.Top();
         aTextRect.Right()   = aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta;
         aTextRect.Bottom()  = rBox.m_aRect.Bottom();
@@ -5085,7 +5054,6 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
         nDelta = 1;
 
     Rectangle aCheckRect, aTextRect;
-    if( rWidget.ButtonIsLeft )
     {
         aCheckRect.Left()   = rBox.m_aRect.Left() + nDelta;
         aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
@@ -5101,26 +5069,6 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
         }
 
         aTextRect.Left()    = rBox.m_aRect.Left() + aCheckRect.GetWidth()+5*nDelta;
-        aTextRect.Top()     = rBox.m_aRect.Top();
-        aTextRect.Right()   = aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta;
-        aTextRect.Bottom()  = rBox.m_aRect.Bottom();
-    }
-    else
-    {
-        aCheckRect.Left()   = rBox.m_aRect.Right() - nDelta - aFontSize.Height();
-        aCheckRect.Top()    = rBox.m_aRect.Top() + (rBox.m_aRect.GetHeight()-aFontSize.Height())/2;
-        aCheckRect.Right()  = aCheckRect.Left() + aFontSize.Height();
-        aCheckRect.Bottom() = aCheckRect.Top() + aFontSize.Height();
-
-        // #i74206# handle small controls without text area
-        while( aCheckRect.GetWidth() > rBox.m_aRect.GetWidth() && aCheckRect.GetWidth() > nDelta )
-        {
-            aCheckRect.Left()   += nDelta;
-            aCheckRect.Top()    += nDelta/2;
-            aCheckRect.Bottom() -= nDelta - (nDelta/2);
-        }
-
-        aTextRect.Left()    = rBox.m_aRect.Left();
         aTextRect.Top()     = rBox.m_aRect.Top();
         aTextRect.Right()   = aTextRect.Left() + rBox.m_aRect.GetWidth() - aCheckRect.GetWidth()-6*nDelta;
         aTextRect.Bottom()  = rBox.m_aRect.Bottom();
@@ -7961,10 +7909,7 @@ bool PDFWriterImpl::emitTrailer()
             aLineS.append( " 0 obj\n"
                            "<</Filter/Standard/V " );
             // check the version
-            if( m_aContext.Encryption.Security128bit )
-                aLineS.append( "2/Length 128/R 3" );
-            else
-                aLineS.append( "1/R 2" );
+            aLineS.append( "2/Length 128/R 3" );
 
             // emit the owner password, must not be encrypted
             aLineS.append( "/O(" );
@@ -13320,8 +13265,6 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aValue         = rBox.Text;
         rNewWidget.m_aListEntries   = rBox.Entries;
         rNewWidget.m_nFlags |= 0x00060000; // combo and edit flag
-        if( rBox.Sort )
-            rNewWidget.m_nFlags |= 0x00080000;
 
         PDFWriter::ListBoxWidget aLBox;
         aLBox.Name              = rBox.Name;
@@ -13336,7 +13279,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         aLBox.TextFont          = rBox.TextFont;
         aLBox.TextColor         = rBox.TextColor;
         aLBox.DropDown          = true;
-        aLBox.Sort              = rBox.Sort;
+        aLBox.Sort              = false;
         aLBox.MultiSelect       = false;
         aLBox.Entries           = rBox.Entries;
 
@@ -13365,11 +13308,9 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 #if !defined(ANDROID) && !defined(IOS)
     else if( rControl.getType() == PDFWriter::Signature)
     {
-        const PDFWriter::SignatureWidget& rSig = static_cast<const PDFWriter::SignatureWidget&>(rControl);
-        sigHidden = rSig.SigHidden;
+        sigHidden = true;
 
-        if ( sigHidden )
-            rNewWidget.m_aRect = Rectangle(0, 0, 0, 0);
+        rNewWidget.m_aRect = Rectangle(0, 0, 0, 0);
 
         m_nSignatureObject = createObject();
         rNewWidget.m_aValue = OUString::number( m_nSignatureObject );

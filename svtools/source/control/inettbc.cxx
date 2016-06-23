@@ -1101,8 +1101,7 @@ bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
 
 IMPL_LINK_NOARG_TYPED(SvtURLBox, AutoCompleteHdl_Impl, Edit&, void)
 {
-    if ( GetSubEdit()->GetAutocompleteAction() == AutocompleteAction::KeyInput )
-        TryAutoComplete();
+    TryAutoComplete();
 }
 
 bool SvtURLBox::Notify( NotifyEvent &rEvt )

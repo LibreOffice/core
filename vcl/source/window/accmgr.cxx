@@ -88,7 +88,6 @@ void ImplAccelManager::EndSequence()
 
     for (Accelerator* pTempAccel : *mpSequenceList)
     {
-        pTempAccel->mbIsCancel = false;
         pTempAccel->mpDel = nullptr;
     }
 

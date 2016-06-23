@@ -237,57 +237,47 @@ void SplitWindow::ImplDrawBorder(vcl::RenderContext& rRenderContext)
     long nDX = mnDX;
     long nDY = mnDY;
 
-    if (mbNoAlign)
+    switch (meAlign)
     {
-        DecorationView aDecoView(&rRenderContext);
-        Point aTmpPoint;
-        Rectangle aRect(aTmpPoint, Size(nDX, nDY));
-        aDecoView.DrawFrame(aRect, DrawFrameStyle::DoubleIn);
-    }
-    else
-    {
-        switch (meAlign)
-        {
-        case WindowAlign::Bottom:
-            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-            rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
-            rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
+    case WindowAlign::Bottom:
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
+        rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
 
-            rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
-            rRenderContext.DrawLine(Point(0, 1), Point(nDX - 1, 1));
-            rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
-            break;
-        case WindowAlign::Top:
-            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-            rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
-            rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
+        rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+        rRenderContext.DrawLine(Point(0, 1), Point(nDX - 1, 1));
+        rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
+        break;
+    case WindowAlign::Top:
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
+        rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
 
-            rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
-            rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
-            rRenderContext.DrawLine(Point(0, 1), Point(nDX - 1, 1));
-            break;
-        case WindowAlign::Left:
-            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-            rRenderContext.DrawLine(Point(nDX - 2, 0), Point(nDX - 2, nDY - 2));
-            rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
-            rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 2, nDY - 2));
+        rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+        rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
+        rRenderContext.DrawLine(Point(0, 1), Point(nDX - 1, 1));
+        break;
+    case WindowAlign::Left:
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        rRenderContext.DrawLine(Point(nDX - 2, 0), Point(nDX - 2, nDY - 2));
+        rRenderContext.DrawLine(Point(0, 0), Point(nDX - 1, 0));
+        rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 2, nDY - 2));
 
-            rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
-            rRenderContext.DrawLine(Point(nDX - 1, 0), Point(nDX - 1, nDY - 1));
-            rRenderContext.DrawLine(Point(0, 1), Point(nDX - 3, 1));
-            rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 2, nDY - 1));
-            break;
-        default:
-            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-            rRenderContext.DrawLine(Point(0, 0), Point( 0, nDY - 2));
-            rRenderContext.DrawLine(Point(0, 0), Point( nDX - 1, 0));
-            rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
+        rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+        rRenderContext.DrawLine(Point(nDX - 1, 0), Point(nDX - 1, nDY - 1));
+        rRenderContext.DrawLine(Point(0, 1), Point(nDX - 3, 1));
+        rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 2, nDY - 1));
+        break;
+    default:
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        rRenderContext.DrawLine(Point(0, 0), Point( 0, nDY - 2));
+        rRenderContext.DrawLine(Point(0, 0), Point( nDX - 1, 0));
+        rRenderContext.DrawLine(Point(0, nDY - 2), Point(nDX - 1, nDY - 2));
 
-            rRenderContext.SetLineColor( rStyleSettings.GetLightColor());
-            rRenderContext.DrawLine(Point(1, 1), Point(1, nDY - 3));
-            rRenderContext.DrawLine(Point(1, 1), Point(nDX - 1, 1));
-            rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
-        }
+        rRenderContext.SetLineColor( rStyleSettings.GetLightColor());
+        rRenderContext.DrawLine(Point(1, 1), Point(1, nDY - 3));
+        rRenderContext.DrawLine(Point(1, 1), Point(nDX - 1, 1));
+        rRenderContext.DrawLine(Point(0, nDY - 1), Point(nDX - 1, nDY - 1));
     }
 }
 
@@ -1339,7 +1329,6 @@ void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbFadeInPressed         = false;
     mbFadeOutPressed        = false;
     mbFadeNoButtonMode      = false;
-    mbNoAlign               = false;
 
     if ( nStyle & WB_NOSPLITDRAW )
     {
@@ -1349,7 +1338,7 @@ void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     if ( nStyle & WB_BORDER )
     {
-        ImplCalcBorder( meAlign, mbNoAlign, mnLeftBorder, mnTopBorder,
+        ImplCalcBorder( meAlign, false/*bNoAlign*/, mnLeftBorder, mnTopBorder,
                         mnRightBorder, mnBottomBorder );
     }
     else
@@ -3168,37 +3157,29 @@ sal_uInt16 SplitWindow::GetItemCount( sal_uInt16 nSetId ) const
 
 void SplitWindow::ImplNewAlign()
 {
-    if ( mbNoAlign )
+    switch ( meAlign )
     {
+    case WindowAlign::Top:
+        mbHorz        = true;
+        mbBottomRight = false;
+        break;
+    case WindowAlign::Bottom:
+        mbHorz        = true;
+        mbBottomRight = true;
+        break;
+    case WindowAlign::Left:
         mbHorz        = false;
         mbBottomRight = false;
-    }
-    else
-    {
-        switch ( meAlign )
-        {
-        case WindowAlign::Top:
-            mbHorz        = true;
-            mbBottomRight = false;
-            break;
-        case WindowAlign::Bottom:
-            mbHorz        = true;
-            mbBottomRight = true;
-            break;
-        case WindowAlign::Left:
-            mbHorz        = false;
-            mbBottomRight = false;
-            break;
-        case WindowAlign::Right:
-            mbHorz        = false;
-            mbBottomRight = true;
-            break;
-        }
+        break;
+    case WindowAlign::Right:
+        mbHorz        = false;
+        mbBottomRight = true;
+        break;
     }
 
     if ( mnWinStyle & WB_BORDER )
     {
-        ImplCalcBorder( meAlign, mbNoAlign, mnLeftBorder, mnTopBorder,
+        ImplCalcBorder( meAlign, false/*bNoAlign*/, mnLeftBorder, mnTopBorder,
                         mnRightBorder, mnBottomBorder );
     }
 

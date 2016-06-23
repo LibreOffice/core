@@ -362,7 +362,6 @@ private:
     VclPtr<vcl::Window>     mpWindow;
     void*                   mpData;
     MouseNotifyEvent        mnEventType;
-    long                    mnRetValue;
 
 public:
                             NotifyEvent( MouseNotifyEvent nEventType,

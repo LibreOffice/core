@@ -30,9 +30,6 @@ void AutocompleteEdit::ClearEntries()
 
 IMPL_LINK_NOARG_TYPED(AutocompleteEdit, AutoCompleteHdl_Impl, Edit&, void)
 {
-    if( GetAutocompleteAction() != AutocompleteAction::KeyInput )
-        return;
-
     if( Application::AnyInput( VclInputFlags::KEYBOARD ) )
         return;
 

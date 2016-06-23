@@ -152,7 +152,6 @@ class VCL_DLLPUBLIC FixedImage : public Control
 {
 private:
     Image           maImage;
-    bool            mbInUserDraw;
 
 private:
     using Control::ImplInitSettings;

@@ -181,7 +181,6 @@ private:
     size_t          mnPos;
     bool            mbIsInAnimation;
     bool            mbLoopTerminated;
-    bool            mbIsWaiting;
 
     SAL_DLLPRIVATE void ImplRestartTimer( sal_uLong nTimeout );
     DECL_DLLPRIVATE_LINK_TYPED( ImplTimeoutHdl, Timer*, void );

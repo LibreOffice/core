@@ -342,13 +342,7 @@ IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplPopupModeEndHdl, FloatingWindow*, void
 IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
 {
     Selection           aSel = rEdit.GetSelection();
-    AutocompleteAction  eAction = rEdit.GetAutocompleteAction();
 
-    /* If there is no current selection do not auto complete on
-       Tab/Shift-Tab since then we would not cycle to the next field.
-    */
-    if ( aSel.Len() ||
-         ((eAction != AutocompleteAction::TabForward) && (eAction != AutocompleteAction::TabBackward)) )
     {
         OUString    aFullText = rEdit.GetText();
         OUString    aStartText = aFullText.copy( 0, (sal_Int32)aSel.Max() );
@@ -358,16 +352,6 @@ IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
             nStart = 0;
 
         bool bForward = true;
-        if ( eAction == AutocompleteAction::TabForward )
-            nStart++;
-        else if ( eAction == AutocompleteAction::TabBackward )
-        {
-            bForward = false;
-            if (nStart)
-                nStart = nStart - 1;
-            else if (m_pImplLB->GetEntryList()->GetEntryCount())
-                nStart = m_pImplLB->GetEntryList()->GetEntryCount()-1;
-        }
 
         sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
         if (!m_isMatchCase)

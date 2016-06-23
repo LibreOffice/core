@@ -334,7 +334,7 @@ void DockingWindow::Hide ()
 
 bool DockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
-    if (!IsDockingPrevented() && aDockingRect.IsInside(rPos))
+    if (aDockingRect.IsInside(rPos))
     {
         rRect.SetSize(aDockingRect.GetSize());
         return false; // dock

@@ -4631,7 +4631,7 @@ bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
     }
 
     Rectangle aIntersection = maOutDockRect.GetIntersection( aDockingRect );
-    if ( !aIntersection.IsEmpty() && !IsDockingPrevented() )
+    if ( !aIntersection.IsEmpty() )
     {
         Rectangle   aInRect = maInDockRect;
         Size aDockSize;
