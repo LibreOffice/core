@@ -2732,22 +2732,29 @@ if test "$with_export_validation" = yes; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_EXPORT_VALIDATION)
 
-    if test "$build_os" = "cygwin"; then
-        # In case of CygWin it will be executed from Windows,
-        # so we need to run bash and absolute path to validator
-        # so instead of "odfvalidator" it will be
-        # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-        AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
-        if test -z "$ODFVALIDATOR"; then
-            AC_MSG_ERROR([odfvalidator not found, but required by --with-export-validation])
+    AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
+    if test -z "$ODFVALIDATOR"; then
+        # remember to download the ODF toolkit with validator later
+        AC_MSG_NOTICE([no odfvalidator found, will download it])
+        BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
+        ODFVALIDATOR="bin/odfvalidator.sh"
+
+        # and fetch name of odfvalidator jar name from download.lst
+        ODFVALIDATOR_JAR=`sed -ne "s/export *ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" download.lst`
+        AC_SUBST(ODFVALIDATOR_JAR)
+
+        if test -z "$ODFVALIDATOR_JAR"; then
+            AC_MSG_ERROR([odfvalidator jar location is not determined (--with-export-validation)])
         fi
-        ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
-    else
-        AC_CHECK_PROGS(ODFVALIDATOR, odfvalidator)
-        if test -z "$ODFVALIDATOR"; then
-            AC_MSG_ERROR([odfvalidator not found, but required by --with-export-validation])
+
+        if test "$build_os" = "cygwin"; then
+            # In case of CygWin it will be executed from Windows,
+            # so we need to run bash and absolute path to validator
+            # so instead of "odfvalidator" it will be
+            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+            ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
         fi
-	fi
+    fi
     AC_SUBST(ODFVALIDATOR)
 
     if test "$build_os" = "cygwin"; then
@@ -4665,6 +4672,7 @@ if test "$cross_compiling" = "yes"; then
         Makefile.in \
         lo.xcent.in \
         bin/bffvalidator.sh.in \
+        bin/odfvalidator.sh.in \
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in \
@@ -13000,6 +13008,7 @@ AC_CONFIG_FILES([config_host.mk
                  Makefile
                  lo.xcent
                  bin/bffvalidator.sh
+                 bin/odfvalidator.sh
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist
                  ios/lo.xcconfig])
