@@ -50,7 +50,6 @@ class VCLPLUG_GEN_PUBLIC X11SalData : public SalGenericData
     {
         bool            m_bIgnore;
         bool            m_bWas;
-        unsigned int    m_nLastErrorRequest;
         XErrorHandler   m_aHandler;
     };
     std::vector< XErrorStackEntry > m_aXErrorHandlerStack;

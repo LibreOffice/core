@@ -43,7 +43,6 @@ private:
     bool            mbIgnoreTab;
     bool            mbActivePopup;
     bool            mbSelectOnTab;
-    bool            mbTextSelectable;
 
 public:
     explicit        TextWindow( vcl::Window* pParent );
@@ -709,7 +708,6 @@ TextWindow::TextWindow( vcl::Window* pParent ) : Window( pParent )
     mbIgnoreTab = false;
     mbActivePopup = false;
     mbSelectOnTab = true;
-    mbTextSelectable = true;
 
     SetPointer( Pointer( PointerStyle::Text ) );
 
@@ -750,9 +748,6 @@ void TextWindow::MouseMove( const MouseEvent& rMEvt )
 
 void TextWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( !mbTextSelectable )
-        return;
-
     mbInMBDown = true;  // so that GetFocus does not select everything
     mpExtTextView->MouseButtonDown( rMEvt );
     GrabFocus();

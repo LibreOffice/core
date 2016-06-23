@@ -78,7 +78,6 @@ private:
     VclPtr<vcl::Window> xSaveFocusId;
     bool            mbAutoPopup;
     bool            bIgnoreFirstMove;
-    bool            bStayActive;
     bool            mbHideAccel;
     bool            mbMenuKey;
 

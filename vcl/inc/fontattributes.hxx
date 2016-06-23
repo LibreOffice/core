@@ -42,7 +42,6 @@ public:
     FontItalic          GetItalic() const                           { return meItalic; }
     FontPitch           GetPitch() const                            { return mePitch; }
     FontWidth           GetWidthType() const                        { return meWidthType; }
-    TextAlign           GetAlignment() const                        { return meAlign; }
     rtl_TextEncoding    GetCharSet() const                          { return meCharSet; }
 
     bool                IsSymbolFont() const                        { return mbSymbolFlag; }
@@ -86,7 +85,6 @@ private:
     FontPitch           mePitch;                    // Pitch Type
     FontWidth           meWidthType;                // Width Type
     FontItalic          meItalic;                   // Slant Type
-    TextAlign           meAlign;                    // Text alignment
     rtl_TextEncoding    meCharSet;                  // RTL_TEXTENCODING_SYMBOL or RTL_TEXTENCODING_UNICODE
     bool                mbSymbolFlag;               // Is font a symbol?
 

@@ -149,7 +149,6 @@ protected:
     bool                    m_bEqualWorkAreas;
     ::std::vector< Rectangle >
                             m_aWMWorkAreas;
-    bool                    m_bTransientBehaviour;
     bool                    m_bEnableAlwaysOnTopWorks;
     bool                    m_bLegacyPartialFullscreen;
     int                     m_nWinGravity;
@@ -296,13 +295,6 @@ public:
     { return m_nWinGravity; }
     int getInitWinGravity() const
     { return m_nInitWinGravity; }
-
-    /*
-     *  expected behaviour is that the WM will not allow transient
-     *  windows to get stacked behind the windows they are transient for
-     */
-    bool isTransientBehaviourAsExpected() const
-    { return m_bTransientBehaviour; }
 
     /*
      *  changes the transient hint of a window to reference frame
