@@ -43,40 +43,33 @@ namespace fileaccess {
 
         // XInterface
         virtual css::uno::Any SAL_CALL
-        queryInterface(
-            const css::uno::Type& aType )
+        queryInterface( const css::uno::Type& aType )
             throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
-        acquire(
-            void )
+        acquire()
             throw() override;
 
         virtual void SAL_CALL
-        release(
-            void )
+        release()
             throw() override;
 
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-        getTypes(
-            void )
+        getTypes()
             throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-        getImplementationId(
-            void )
+        getImplementationId()
             throw( css::uno::RuntimeException, std::exception ) override;
 
         // XContentIdentifier
         virtual OUString SAL_CALL
-        getContentIdentifier(
-            void )
+        getContentIdentifier()
             throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual OUString SAL_CALL
-        getContentProviderScheme(
-            void )
+        getContentProviderScheme()
             throw( css::uno::RuntimeException, std::exception ) override;
 
     private:

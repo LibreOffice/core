@@ -63,11 +63,11 @@ class XStream_impl :  public cppu::WeakImplHelper<
         // XStream
 
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
-        getInputStream(  )
+        getInputStream()
             throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL
-        getOutputStream(  )
+        getOutputStream()
             throw( css::uno::RuntimeException, std::exception ) override;
 
 
@@ -100,23 +100,20 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
 
         void SAL_CALL
-        skipBytes(
-            sal_Int32 nBytesToSkip )
+        skipBytes( sal_Int32 nBytesToSkip )
             throw( css::io::NotConnectedException,
                    css::io::BufferSizeExceededException,
                    css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
         sal_Int32 SAL_CALL
-        available(
-            void )
+        available()
             throw( css::io::NotConnectedException,
                    css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
         void SAL_CALL
-        closeInput(
-            void )
+        closeInput()
             throw( css::io::NotConnectedException,
                    css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
@@ -124,21 +121,18 @@ class XStream_impl :  public cppu::WeakImplHelper<
         // XSeekable
 
         void SAL_CALL
-        seek(
-            sal_Int64 location )
+        seek( sal_Int64 location )
             throw( css::lang::IllegalArgumentException,
                    css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
         sal_Int64 SAL_CALL
-        getPosition(
-            void )
+        getPosition()
             throw( css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
         sal_Int64 SAL_CALL
-        getLength(
-            void )
+        getLength()
             throw( css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
@@ -162,8 +156,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
 
         void SAL_CALL
-        closeOutput(
-            void )
+        closeOutput()
             throw( css::io::NotConnectedException,
                    css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
@@ -187,8 +180,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
         // Implementation methods
 
         void SAL_CALL
-        closeStream(
-            void )
+        closeStream()
             throw( css::io::NotConnectedException,
                    css::io::IOException,
                    css::uno::RuntimeException );

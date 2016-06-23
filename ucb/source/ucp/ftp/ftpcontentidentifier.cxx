@@ -81,8 +81,7 @@ FTPContentIdentifier::getImplementationId()
 
 
 Sequence<Type> SAL_CALL
-FTPContentIdentifier::getTypes(
-    void )
+FTPContentIdentifier::getTypes()
     throw(RuntimeException, std::exception)
 {
     static cppu::OTypeCollection* pCollection = nullptr;

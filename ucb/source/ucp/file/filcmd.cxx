@@ -42,8 +42,7 @@ XCommandInfo_impl::~XCommandInfo_impl()
 
 
 void SAL_CALL
-XCommandInfo_impl::acquire(
-                 void )
+XCommandInfo_impl::acquire()
   throw()
 {
   OWeakObject::acquire();
@@ -51,8 +50,7 @@ XCommandInfo_impl::acquire(
 
 
 void SAL_CALL
-XCommandInfo_impl::release(
-    void )
+XCommandInfo_impl::release()
   throw()
 {
     OWeakObject::release();
@@ -60,8 +58,7 @@ XCommandInfo_impl::release(
 
 
 uno::Any SAL_CALL
-XCommandInfo_impl::queryInterface(
-                    const uno::Type& rType )
+XCommandInfo_impl::queryInterface( const uno::Type& rType )
   throw( uno::RuntimeException, std::exception )
 {
     uno::Any aRet = cppu::queryInterface( rType,
@@ -71,8 +68,7 @@ XCommandInfo_impl::queryInterface(
 
 
 uno::Sequence< CommandInfo > SAL_CALL
-XCommandInfo_impl::getCommands(
-    void )
+XCommandInfo_impl::getCommands()
     throw( uno::RuntimeException, std::exception )
 {
     return m_pMyShell->m_sCommandInfo;

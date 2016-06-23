@@ -146,8 +146,7 @@ namespace ucbhelper
 
 
     sal_Int64 SAL_CALL
-    FdInputStream::getPosition(
-        void )
+    FdInputStream::getPosition()
         throw( IOException,
                RuntimeException, std::exception )
     {
@@ -161,11 +160,8 @@ namespace ucbhelper
     }
 
 
-    sal_Int64 SAL_CALL FdInputStream::getLength(
-        void
-    ) throw(
-        IOException,RuntimeException, std::exception
-    )
+    sal_Int64 SAL_CALL FdInputStream::getLength()
+        throw( IOException,RuntimeException, std::exception )
     {
         return m_nLength;
     }

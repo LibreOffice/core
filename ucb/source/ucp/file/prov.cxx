@@ -134,8 +134,7 @@ sal_Bool SAL_CALL FileProvider::supportsService(const OUString& ServiceName )
 }
 
 Sequence< OUString > SAL_CALL
-FileProvider::getSupportedServiceNames(
-                       void )
+FileProvider::getSupportedServiceNames()
   throw( RuntimeException, std::exception )
 {
     return fileaccess::shell::getSupportedServiceNames_static();
@@ -263,29 +262,24 @@ public:
 
     // XInterface
     virtual Any SAL_CALL
-    queryInterface(
-        const Type& aType )
+    queryInterface( const Type& aType )
         throw( RuntimeException, std::exception) override;
 
     virtual void SAL_CALL
-    acquire(
-        void )
+    acquire()
         throw() override;
 
     virtual void SAL_CALL
-    release(
-        void )
+    release()
         throw() override;
 
 
     virtual Sequence< Property > SAL_CALL
-    getProperties(
-        void )
+    getProperties()
         throw( RuntimeException, std::exception ) override;
 
     virtual Property SAL_CALL
-    getPropertyByName(
-        const OUString& aName )
+    getPropertyByName( const OUString& aName )
         throw( UnknownPropertyException,
                RuntimeException, std::exception) override;
 
@@ -326,8 +320,7 @@ XPropertySetInfoImpl2::~XPropertySetInfoImpl2()
 
 
 void SAL_CALL
-XPropertySetInfoImpl2::acquire(
-    void )
+XPropertySetInfoImpl2::acquire()
     throw()
 {
     OWeakObject::acquire();
@@ -335,8 +328,7 @@ XPropertySetInfoImpl2::acquire(
 
 
 void SAL_CALL
-XPropertySetInfoImpl2::release(
-    void )
+XPropertySetInfoImpl2::release()
     throw()
 {
     OWeakObject::release();
@@ -344,8 +336,7 @@ XPropertySetInfoImpl2::release(
 
 
 Any SAL_CALL
-XPropertySetInfoImpl2::queryInterface(
-    const Type& rType )
+XPropertySetInfoImpl2::queryInterface( const Type& rType )
     throw( RuntimeException, std::exception )
 {
     Any aRet = cppu::queryInterface( rType,
@@ -355,8 +346,7 @@ XPropertySetInfoImpl2::queryInterface(
 
 
 Property SAL_CALL
-XPropertySetInfoImpl2::getPropertyByName(
-    const OUString& aName )
+XPropertySetInfoImpl2::getPropertyByName( const OUString& aName )
     throw( UnknownPropertyException,
            RuntimeException, std::exception)
 {
@@ -369,8 +359,7 @@ XPropertySetInfoImpl2::getPropertyByName(
 
 
 Sequence< Property > SAL_CALL
-XPropertySetInfoImpl2::getProperties(
-    void )
+XPropertySetInfoImpl2::getProperties()
     throw( RuntimeException, std::exception )
 {
     return m_seq;

@@ -51,8 +51,7 @@ FileContentIdentifier::~FileContentIdentifier()
 
 
 void SAL_CALL
-FileContentIdentifier::acquire(
-    void )
+FileContentIdentifier::acquire()
     throw()
 {
     OWeakObject::acquire();
@@ -60,8 +59,7 @@ FileContentIdentifier::acquire(
 
 
 void SAL_CALL
-FileContentIdentifier::release(
-                void )
+FileContentIdentifier::release()
   throw()
 {
   OWeakObject::release();
@@ -69,8 +67,7 @@ FileContentIdentifier::release(
 
 
 uno::Any SAL_CALL
-FileContentIdentifier::queryInterface(
-    const uno::Type& rType )
+FileContentIdentifier::queryInterface( const uno::Type& rType )
     throw( uno::RuntimeException, std::exception )
 {
     uno::Any aRet = cppu::queryInterface( rType,
@@ -89,8 +86,7 @@ FileContentIdentifier::getImplementationId()
 
 
 uno::Sequence< uno::Type > SAL_CALL
-FileContentIdentifier::getTypes(
-    void )
+FileContentIdentifier::getTypes()
     throw( uno::RuntimeException, std::exception )
 {
     static cppu::OTypeCollection* pCollection = nullptr;
@@ -110,8 +106,7 @@ FileContentIdentifier::getTypes(
 
 OUString
 SAL_CALL
-FileContentIdentifier::getContentIdentifier(
-    void )
+FileContentIdentifier::getContentIdentifier()
     throw( uno::RuntimeException, std::exception )
 {
     return m_aContentId;
@@ -119,8 +114,7 @@ FileContentIdentifier::getContentIdentifier(
 
 
 OUString SAL_CALL
-FileContentIdentifier::getContentProviderScheme(
-    void )
+FileContentIdentifier::getContentProviderScheme()
     throw( uno::RuntimeException, std::exception )
 {
     return m_aProviderScheme;

@@ -62,18 +62,15 @@ namespace fileaccess {
             throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual css::uno::Any SAL_CALL
-        queryInterface(
-            const css::uno::Type& rType )
+        queryInterface( const css::uno::Type& rType )
             throw( css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
-        acquire(
-            void )
+        acquire()
             throw() override;
 
         virtual void SAL_CALL
-        release(
-            void )
+        release()
             throw() override;
 
         virtual sal_Int32 SAL_CALL
@@ -95,43 +92,37 @@ namespace fileaccess {
                    css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
-        skipBytes(
-            sal_Int32 nBytesToSkip )
+        skipBytes( sal_Int32 nBytesToSkip )
             throw( css::io::NotConnectedException,
                    css::io::BufferSizeExceededException,
                    css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int32 SAL_CALL
-        available(
-            void )
+        available()
             throw( css::io::NotConnectedException,
                    css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
-        closeInput(
-            void )
+        closeInput()
             throw( css::io::NotConnectedException,
                    css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
-        seek(
-            sal_Int64 location )
+        seek( sal_Int64 location )
             throw( css::lang::IllegalArgumentException,
                    css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int64 SAL_CALL
-        getPosition(
-            void )
+        getPosition()
             throw( css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 
         virtual sal_Int64 SAL_CALL
-        getLength(
-            void )
+        getLength()
             throw( css::io::IOException,
                    css::uno::RuntimeException, std::exception ) override;
 

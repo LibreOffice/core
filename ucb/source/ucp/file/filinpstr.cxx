@@ -82,8 +82,7 @@ XTYPEPROVIDER_IMPL_3( XInputStream_impl,
 
 
 uno::Any SAL_CALL
-XInputStream_impl::queryInterface(
-    const uno::Type& rType )
+XInputStream_impl::queryInterface( const uno::Type& rType )
     throw( uno::RuntimeException, std::exception)
 {
     uno::Any aRet = cppu::queryInterface( rType,
@@ -95,8 +94,7 @@ XInputStream_impl::queryInterface(
 
 
 void SAL_CALL
-XInputStream_impl::acquire(
-    void )
+XInputStream_impl::acquire()
     throw()
 {
     OWeakObject::acquire();
@@ -104,8 +102,7 @@ XInputStream_impl::acquire(
 
 
 void SAL_CALL
-XInputStream_impl::release(
-    void )
+XInputStream_impl::release()
     throw()
 {
     OWeakObject::release();
@@ -154,8 +151,7 @@ XInputStream_impl::readSomeBytes(
 
 
 void SAL_CALL
-XInputStream_impl::skipBytes(
-    sal_Int32 nBytesToSkip )
+XInputStream_impl::skipBytes( sal_Int32 nBytesToSkip )
     throw( io::NotConnectedException,
            io::BufferSizeExceededException,
            io::IOException,
@@ -166,8 +162,7 @@ XInputStream_impl::skipBytes(
 
 
 sal_Int32 SAL_CALL
-XInputStream_impl::available(
-    void )
+XInputStream_impl::available()
     throw( io::NotConnectedException,
            io::IOException,
            uno::RuntimeException, std::exception)
@@ -177,8 +172,7 @@ XInputStream_impl::available(
 
 
 void SAL_CALL
-XInputStream_impl::closeInput(
-    void )
+XInputStream_impl::closeInput()
     throw( io::NotConnectedException,
            io::IOException,
            uno::RuntimeException, std::exception )
@@ -194,8 +188,7 @@ XInputStream_impl::closeInput(
 
 
 void SAL_CALL
-XInputStream_impl::seek(
-    sal_Int64 location )
+XInputStream_impl::seek( sal_Int64 location )
     throw( lang::IllegalArgumentException,
            io::IOException,
            uno::RuntimeException, std::exception )
@@ -208,8 +201,7 @@ XInputStream_impl::seek(
 
 
 sal_Int64 SAL_CALL
-XInputStream_impl::getPosition(
-    void )
+XInputStream_impl::getPosition()
     throw( io::IOException,
            uno::RuntimeException, std::exception )
 {
@@ -220,8 +212,7 @@ XInputStream_impl::getPosition(
 }
 
 sal_Int64 SAL_CALL
-XInputStream_impl::getLength(
-    void )
+XInputStream_impl::getLength()
     throw( io::IOException,
            uno::RuntimeException, std::exception )
 {
