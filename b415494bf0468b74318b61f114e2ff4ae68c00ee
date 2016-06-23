@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_2fdb15ef",
+        "filename": "sw/source/core/layout/pagechg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1766,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-23T20:16:48Z",
+      "side": 1,
+      "message": "apparently this comment wasn\u0027t obvious enough, i\u0027ve added it when i reverted the previous conversion here :)",
+      "revId": "b415494bf0468b74318b61f114e2ff4ae68c00ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
