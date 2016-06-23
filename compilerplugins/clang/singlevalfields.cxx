@@ -96,7 +96,6 @@ public:
     bool VisitCXXConstructorDecl( const CXXConstructorDecl* );
 private:
     void niceName(const FieldDecl*, MyFieldInfo&);
-    std::string fullyQualifiedName(const FunctionDecl*);
     std::string getExprValue(const Expr*);
     bool isInterestingType(const QualType&);
     const FunctionDecl* get_top_FunctionDecl_from_Stmt(const Stmt&);
@@ -110,32 +109,6 @@ void SingleValFields::niceName(const FieldDecl* fieldDecl, MyFieldInfo& aInfo)
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( fieldDecl->getLocation() );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
     aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
-}
-
-std::string SingleValFields::fullyQualifiedName(const FunctionDecl* functionDecl)
-{
-    std::string ret = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
-    ret += " ";
-    if (isa<CXXMethodDecl>(functionDecl)) {
-        const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
-        ret += recordDecl->getQualifiedNameAsString();
-        ret += "::";
-    }
-    ret += functionDecl->getNameAsString() + "(";
-    bool bFirst = true;
-    for (const ParmVarDecl *pParmVarDecl : functionDecl->params()) {
-        if (bFirst)
-            bFirst = false;
-        else
-            ret += ",";
-        ret += pParmVarDecl->getType().getCanonicalType().getAsString();
-    }
-    ret += ")";
-    if (isa<CXXMethodDecl>(functionDecl) && dyn_cast<CXXMethodDecl>(functionDecl)->isConst()) {
-        ret += " const";
-    }
-
-    return ret;
 }
 
 bool SingleValFields::VisitFieldDecl( const FieldDecl* fieldDecl )
