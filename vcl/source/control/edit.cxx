@@ -296,7 +296,6 @@ void Edit::ImplInitEditData()
     mnMaxTextLen            = EDIT_NOLIMIT;
     mnWidthInChars          = -1;
     mnMaxWidthChars         = -1;
-    meAutocompleteAction    = AutocompleteAction::KeyInput;
     mbModified              = false;
     mbInternModified        = false;
     mbReadOnly              = false;
@@ -1642,7 +1641,6 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     {
                         if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
                         {
-                            meAutocompleteAction = AutocompleteAction::KeyInput;
                             maAutocompleteHdl.Call(*this);
                         }
                     }
@@ -1704,32 +1702,6 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             }
             break;
 
-            /* #i101255# disable autocomplete tab forward/backward
-               users expect tab/shift-tab to move the focus to other controls
-               not suddenly to cycle the autocompletion
-            case KEY_TAB:
-            {
-                if ( !mbReadOnly && !autocompleteSignal.empty() &&
-                     maSelection.Min() && (maSelection.Min() == maText.Len()) &&
-                     !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() )
-                {
-                    // Kein Autocomplete wenn alles Selektiert oder Edit leer, weil dann
-                    // keine vernuenftige Tab-Steuerung!
-                    if ( rKEvt.GetKeyCode().IsShift() )
-                        meAutocompleteAction = AutocompleteAction::TabBackward;
-                    else
-                        meAutocompleteAction = AutocompleteAction::TabForward;
-
-                    autocompleteSignal( this );
-
-                    // Wurde nichts veraendert, dann TAB fuer DialogControl
-                    if ( GetSelection().Len() )
-                        bDone = true;
-                }
-            }
-            break;
-            */
-
             default:
             {
                 if ( IsCharInput( rKEvt ) )
@@ -1742,7 +1714,6 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         {
                             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
                             {
-                                meAutocompleteAction = AutocompleteAction::KeyInput;
                                 maAutocompleteHdl.Call(*this);
                             }
                         }
@@ -2100,7 +2071,6 @@ void Edit::Command( const CommandEvent& rCEvt )
         {
             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
             {
-                meAutocompleteAction = AutocompleteAction::KeyInput;
                 maAutocompleteHdl.Call(*this);
             }
         }

@@ -590,8 +590,6 @@ namespace toolkitform
 
                 // entries
                 getStringItemVector( xModelProps, pComboWidget->Entries );
-                // same reasoning as above
-                pComboWidget->Sort = false;
             }
 
 

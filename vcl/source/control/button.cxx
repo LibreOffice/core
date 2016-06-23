@@ -644,7 +644,6 @@ void PushButton::ImplInitPushButtonData()
     mnDDStyle       = PushButtonDropdownStyle::NONE;
     mbIsActive    = false;
     mbPressed       = false;
-    mbInUserDraw    = false;
 }
 
 namespace

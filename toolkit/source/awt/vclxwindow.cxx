@@ -747,8 +747,8 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
                     aEvent.MousePos.X = pData->maMousePos.X();
                     aEvent.MousePos.Y = pData->maMousePos.Y();
-                    aEvent.bLiveMode = pData->mbLivemode;
-                    aEvent.bInteractive = pData->mbInteractive;
+                    aEvent.bLiveMode = false;
+                    aEvent.bInteractive = true;
 
                     mpImpl->getDockableWindowListeners().notifyEach( &XDockableWindowListener::startDocking, aEvent );
                 }
@@ -768,8 +768,8 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aEvent.TrackingRectangle = AWTRectangle( pData->maTrackRect );
                     aEvent.MousePos.X = pData->maMousePos.X();
                     aEvent.MousePos.Y = pData->maMousePos.Y();
-                    aEvent.bLiveMode = pData->mbLivemode;
-                    aEvent.bInteractive = pData->mbInteractive;
+                    aEvent.bLiveMode = false;
+                    aEvent.bInteractive = true;
 
                     Reference< XDockableWindowListener > xFirstListener;
                     ::comphelper::OInterfaceIteratorHelper2 aIter( mpImpl->getDockableWindowListeners() );

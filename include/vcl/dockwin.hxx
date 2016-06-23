@@ -32,11 +32,9 @@ struct DockingData
     Point       maMousePos;     // in
     Rectangle   maTrackRect;    // in/out
     bool        mbFloating;     // out
-    bool        mbLivemode;     // in
-    bool        mbInteractive;  // in
 
     DockingData( const Point& rPt, const Rectangle& rRect, bool b) :
-        maMousePos( rPt ), maTrackRect( rRect ), mbFloating( b ), mbLivemode( false ), mbInteractive( true )
+        maMousePos( rPt ), maTrackRect( rRect ), mbFloating( b )
         {};
 };
 
@@ -101,8 +99,6 @@ private:
     sal_Int32       mnDockBottom;
     WinBits         mnFloatBits;
     bool            mbDockCanceled:1,
-                    mbFloatPrevented:1,
-                    mbDockable:1,
                     mbDocking:1,
                     mbLastFloatMode:1,
                     mbStartFloat:1,
@@ -152,7 +148,6 @@ public:
     void            SetMaxOutputSizePixel( const Size& rSize );
 
     bool            IsDocking() const { return mbDocking; }
-    bool            IsDockable() const { return mbDockable; }
     bool            IsDockingCanceled() const { return mbDockCanceled; }
 
     void            SetFloatingMode( bool bFloatMode );
@@ -225,21 +220,18 @@ private:
     long            mnTrackY;
     long            mnTrackWidth;
     long            mnTrackHeight;
-    sal_Int32           mnDockLeft;
-    sal_Int32           mnDockTop;
-    sal_Int32           mnDockRight;
-    sal_Int32           mnDockBottom;
+    sal_Int32       mnDockLeft;
+    sal_Int32       mnDockTop;
+    sal_Int32       mnDockRight;
+    sal_Int32       mnDockBottom;
     WinBits         mnFloatBits;
     Idle            maLayoutIdle;
     bool            mbDockCanceled:1,
-                    mbDockPrevented:1,
-                    mbFloatPrevented:1,
                     mbDockable:1,
                     mbDocking:1,
                     mbDragFull:1,
                     mbLastFloatMode:1,
                     mbStartFloat:1,
-                    mbTrackDock:1,
                     mbPinned:1,
                     mbRollUp:1,
                     mbDockBtn:1,
@@ -313,7 +305,6 @@ public:
     bool            IsDocking() const { return mbDocking; }
     bool            IsDockable() const { return mbDockable; }
     bool            IsDockingCanceled() const { return mbDockCanceled; }
-    bool            IsDockingPrevented() const { return mbDockPrevented; }
 
     void            SetFloatingMode( bool bFloatMode );
     bool            IsFloatingMode() const;

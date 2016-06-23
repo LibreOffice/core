@@ -119,7 +119,6 @@ protected:
     TriState        meSaveValue;
     PushButtonDropdownStyle mnDDStyle;
     bool            mbPressed;
-    bool            mbInUserDraw;
     bool            mbIsActive;
 
     SAL_DLLPRIVATE void            ImplInitPushButtonData();

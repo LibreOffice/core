@@ -1481,7 +1481,6 @@ void PrintDialog::updateNup()
     PrinterController::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;
     aMPS.nColumns      = nCols;
-    aMPS.nRepeat       = 1;
     aMPS.nLeftMargin   =
     aMPS.nTopMargin    =
     aMPS.nRightMargin  =

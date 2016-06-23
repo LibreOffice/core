@@ -127,7 +127,6 @@ void Accelerator::ImplInit()
 {
     mnCurId             = 0;
     mnCurRepeat         = 0;
-    mbIsCancel          = false;
     mpDel               = nullptr;
 }
 
@@ -304,7 +303,6 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
     maCurKeyCode    = vcl::KeyCode();
     mnCurId         = 0;
     mnCurRepeat     = 0;
-    mbIsCancel      = false;
 
     // delete and copy tables
     ImplDeleteData();

@@ -83,8 +83,7 @@ private:
                         mbAutoHidePressed:1,
                         mbFadeInPressed:1,
                         mbFadeOutPressed:1,
-                        mbFadeNoButtonMode:1,
-                        mbNoAlign:1;
+                        mbFadeNoButtonMode:1;
     Link<SplitWindow*,void>  maSplitHdl;
 
     using Window::ImplInit;

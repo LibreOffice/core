@@ -1277,7 +1277,7 @@ sal_Int32 PDFWriterImpl::computeAccessPermissions( const vcl::PDFWriter::PDFEncr
     - for 40 bit security the unused bit must be set to 1, since they are not used
     - for 128 bit security the same bit must be preset to 0 and set later if needed
     according to the table 3.15, pdf v 1.4 */
-    sal_Int32 nAccessPermissions = ( i_rProperties.Security128bit ) ? 0xfffff0c0 : 0xffffffc0 ;
+    sal_Int32 nAccessPermissions = 0xfffff0c0;
 
     /* check permissions for 40 bit security case */
     nAccessPermissions |= ( i_rProperties.CanPrintTheDocument ) ?  1 << 2 : 0;
@@ -1287,16 +1287,13 @@ sal_Int32 PDFWriterImpl::computeAccessPermissions( const vcl::PDFWriter::PDFEncr
     o_rKeyLength = SECUR_40BIT_KEY;
     o_rRC4KeyLength = SECUR_40BIT_KEY+5; // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 5
 
-    if( i_rProperties.Security128bit )
-    {
-        o_rKeyLength = SECUR_128BIT_KEY;
-        o_rRC4KeyLength = 16; // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 16, thus maximum
-        // permitted value is 16
-        nAccessPermissions |= ( i_rProperties.CanFillInteractive ) ?         1 << 8 : 0;
-        nAccessPermissions |= ( i_rProperties.CanExtractForAccessibility ) ? 1 << 9 : 0;
-        nAccessPermissions |= ( i_rProperties.CanAssemble ) ?                1 << 10 : 0;
-        nAccessPermissions |= ( i_rProperties.CanPrintFull ) ?               1 << 11 : 0;
-    }
+    o_rKeyLength = SECUR_128BIT_KEY;
+    o_rRC4KeyLength = 16; // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 16, thus maximum
+    // permitted value is 16
+    nAccessPermissions |= ( i_rProperties.CanFillInteractive ) ?         1 << 8 : 0;
+    nAccessPermissions |= ( i_rProperties.CanExtractForAccessibility ) ? 1 << 9 : 0;
+    nAccessPermissions |= ( i_rProperties.CanAssemble ) ?                1 << 10 : 0;
+    nAccessPermissions |= ( i_rProperties.CanPrintFull ) ?               1 << 11 : 0;
     return nAccessPermissions;
 }
 
@@ -1368,18 +1365,15 @@ bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vc
             rtl_digest_getMD5( aDigest, nMD5Sum, sizeof( nMD5Sum ) );
 
             //step 6, only if 128 bit
-            if( io_rProperties.Security128bit )
+            for( sal_Int32 i = 0; i < 50; i++ )
             {
-                for( sal_Int32 i = 0; i < 50; i++ )
+                nError = rtl_digest_updateMD5( aDigest, &nMD5Sum, sizeof( nMD5Sum ) );
+                if( nError != rtl_Digest_E_None )
                 {
-                    nError = rtl_digest_updateMD5( aDigest, &nMD5Sum, sizeof( nMD5Sum ) );
-                    if( nError != rtl_Digest_E_None )
-                    {
-                        bSuccess =  false;
-                        break;
-                    }
-                    rtl_digest_getMD5( aDigest, nMD5Sum, sizeof( nMD5Sum ) );
+                    bSuccess =  false;
+                    break;
                 }
+                rtl_digest_getMD5( aDigest, nMD5Sum, sizeof( nMD5Sum ) );
             }
         }
         else
@@ -1514,52 +1508,38 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
             for( sal_Int32 i = i_nKeyLength, y = 0; y < 5 ; y++ )
                 io_rProperties.EncryptionKey[i++] = 0;
 
-            if( !io_rProperties.Security128bit )
+            //or 3.5, for 128 bit security
+            //step6, initialize the last 16 bytes of the encrypted user password to 0
+            for(sal_uInt32 i = MD5_DIGEST_SIZE; i < sal_uInt32(io_rProperties.UValue.size()); i++)
+                io_rProperties.UValue[i] = 0;
+            //steps 2 and 3
+            if (rtl_digest_updateMD5( aDigest, s_nPadString, sizeof( s_nPadString ) ) != rtl_Digest_E_None
+                || rtl_digest_updateMD5( aDigest, &io_rProperties.DocumentIdentifier[0], sal_Int32(io_rProperties.DocumentIdentifier.size()) ) != rtl_Digest_E_None)
             {
-                //3.4
-                //step 2 and 3
-                rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                        &io_rProperties.EncryptionKey[0], 5 , // key and key length
-                                        nullptr, 0 ); //destination data area
-                // encrypt the user password using the key set above, save for later use
-                rtl_cipher_encodeARCFOUR( aCipher, s_nPadString, sizeof( s_nPadString ), // the data to be encrypted
-                                          &io_rProperties.UValue[0], sal_Int32(io_rProperties.UValue.size()) ); //encrypted data, stored in class data member
+                bSuccess = false;
             }
-            else
+
+            sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
+            rtl_digest_getMD5( aDigest, nMD5Sum, sizeof(nMD5Sum) );
+            //Step 4
+            rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
+                                    &io_rProperties.EncryptionKey[0], SECUR_128BIT_KEY, nullptr, 0 ); //destination data area
+            rtl_cipher_encodeARCFOUR( aCipher, nMD5Sum, sizeof( nMD5Sum ), // the data to be encrypted
+                                      &io_rProperties.UValue[0], sizeof( nMD5Sum ) ); //encrypted data, stored in class data member
+            //step 5
+            sal_uInt32 i, y;
+            sal_uInt8 nLocalKey[SECUR_128BIT_KEY];
+
+            for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1
             {
-                //or 3.5, for 128 bit security
-                //step6, initialize the last 16 bytes of the encrypted user password to 0
-                for(sal_uInt32 i = MD5_DIGEST_SIZE; i < sal_uInt32(io_rProperties.UValue.size()); i++)
-                    io_rProperties.UValue[i] = 0;
-                //steps 2 and 3
-                if (rtl_digest_updateMD5( aDigest, s_nPadString, sizeof( s_nPadString ) ) != rtl_Digest_E_None
-                    || rtl_digest_updateMD5( aDigest, &io_rProperties.DocumentIdentifier[0], sal_Int32(io_rProperties.DocumentIdentifier.size()) ) != rtl_Digest_E_None)
-                {
-                    bSuccess = false;
-                }
+                for( y = 0; y < sizeof( nLocalKey ) ; y++ )
+                    nLocalKey[y] = (sal_uInt8)( io_rProperties.EncryptionKey[y] ^ i );
 
-                sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
-                rtl_digest_getMD5( aDigest, nMD5Sum, sizeof(nMD5Sum) );
-                //Step 4
                 rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                        &io_rProperties.EncryptionKey[0], SECUR_128BIT_KEY, nullptr, 0 ); //destination data area
-                rtl_cipher_encodeARCFOUR( aCipher, nMD5Sum, sizeof( nMD5Sum ), // the data to be encrypted
-                                          &io_rProperties.UValue[0], sizeof( nMD5Sum ) ); //encrypted data, stored in class data member
-                //step 5
-                sal_uInt32 i, y;
-                sal_uInt8 nLocalKey[SECUR_128BIT_KEY];
-
-                for( i = 1; i <= 19; i++ ) // do it 19 times, start with 1
-                {
-                    for( y = 0; y < sizeof( nLocalKey ) ; y++ )
-                        nLocalKey[y] = (sal_uInt8)( io_rProperties.EncryptionKey[y] ^ i );
-
-                    rtl_cipher_initARCFOUR( aCipher, rtl_Cipher_DirectionEncode,
-                                            nLocalKey, SECUR_128BIT_KEY, // key and key length
-                                            nullptr, 0 ); //destination data area, on init can be NULL
-                    rtl_cipher_encodeARCFOUR( aCipher, &io_rProperties.UValue[0], SECUR_128BIT_KEY, // the data to be encrypted
-                                              &io_rProperties.UValue[0], SECUR_128BIT_KEY ); // encrypted data, can be the same as the input, encrypt "in place"
-                }
+                                        nLocalKey, SECUR_128BIT_KEY, // key and key length
+                                        nullptr, 0 ); //destination data area, on init can be NULL
+                rtl_cipher_encodeARCFOUR( aCipher, &io_rProperties.UValue[0], SECUR_128BIT_KEY, // the data to be encrypted
+                                          &io_rProperties.UValue[0], SECUR_128BIT_KEY ); // encrypted data, can be the same as the input, encrypt "in place"
             }
         }
         else

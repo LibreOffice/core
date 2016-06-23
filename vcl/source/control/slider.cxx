@@ -55,7 +55,6 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnLineSize          = 1;
     mnPageSize          = 1;
     mnDelta             = 0;
-    mnDragDraw          = 0;
     mnStateFlags        = 0;
     meScrollType        = SCROLL_DONTKNOW;
     mbCalcSize          = true;

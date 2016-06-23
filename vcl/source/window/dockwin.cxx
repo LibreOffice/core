@@ -318,14 +318,11 @@ void DockingWindow::ImplInitDockingWindowData()
     mnDockBottom   = 0;
     mnFloatBits    = 0;
     mbDockCanceled  = false;
-    mbDockPrevented = false;
-    mbFloatPrevented = false;
     mbDockable     = false;
     mbDocking      = false;
     mbDragFull     = false;
     mbLastFloatMode = false;
     mbStartFloat   = false;
-    mbTrackDock    = false;
     mbPinned       = false;
     mbRollUp       = false;
     mbDockBtn      = false;
@@ -532,8 +529,6 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             if ( mbDragFull )
                 StartDocking();
             bool bFloatMode = Docking( aFramePos, aTrackRect );
-            mbDockPrevented = false;
-            mbFloatPrevented = false;
             if ( mbLastFloatMode != bFloatMode )
             {
                 if ( bFloatMode )

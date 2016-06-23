@@ -507,7 +507,6 @@ void Printer::ImplInitData()
     mpInfoPrinter       = nullptr;
     mpPrinter           = nullptr;
     mpDisplayDev        = nullptr;
-    mbIsQueuePrinter    = false;
     mpPrinterOptions    = new PrinterOptions;
 
     // Add printer to the list

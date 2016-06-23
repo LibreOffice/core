@@ -95,9 +95,8 @@ private:
     OString                m_aEditMask;
     OUString               maFieldString;
     OUString               maLiteralMask;
-    sal_uInt16             mnFormatFlags;
     bool                   mbSameMask;
-    bool               mbInPattKeyInput;
+    bool                   mbInPattKeyInput;
 
 protected:
                             PatternFormatter();
@@ -116,8 +115,6 @@ public:
     const OString& GetEditMask() const { return m_aEditMask; }
     const OUString&        GetLiteralMask() const  { return maLiteralMask; }
 
-    sal_uInt16              GetFormatFlags() const { return mnFormatFlags; }
-
     void                    SetString( const OUString& rStr );
     OUString                GetString() const;
 };
@@ -133,9 +130,8 @@ protected:
     sal_Int64               mnLastValue;
     sal_Int64               mnMin;
     sal_Int64               mnMax;
-    sal_Int64               mnCorrectedValue;
-    sal_uInt16                  mnType;
-    sal_uInt16                  mnDecimalDigits;
+    sal_uInt16              mnType;
+    sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;
     bool                    mbShowTrailingZeros;
     bool                    mbWrapOnLimits;

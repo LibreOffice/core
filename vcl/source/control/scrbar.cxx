@@ -90,7 +90,6 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnDragDraw          = 0;
     mnStateFlags        = 0;
     meScrollType        = SCROLL_DONTKNOW;
-    meDDScrollType      = SCROLL_DONTKNOW;
     mbCalcSize          = true;
     mbFullDrag          = false;
 

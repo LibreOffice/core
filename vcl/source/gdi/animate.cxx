@@ -66,8 +66,7 @@ Animation::Animation() :
     mnLoops             ( 0 ),
     mnPos               ( 0 ),
     mbIsInAnimation     ( false ),
-    mbLoopTerminated    ( false ),
-    mbIsWaiting         ( false )
+    mbLoopTerminated    ( false )
 {
     maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
 }
@@ -78,8 +77,7 @@ Animation::Animation( const Animation& rAnimation ) :
     mnLoopCount         ( rAnimation.mnLoopCount ),
     mnPos               ( rAnimation.mnPos ),
     mbIsInAnimation     ( false ),
-    mbLoopTerminated    ( rAnimation.mbLoopTerminated ),
-    mbIsWaiting         ( rAnimation.mbIsWaiting )
+    mbLoopTerminated    ( rAnimation.mbLoopTerminated )
 {
 
     for(const AnimationBitmap* i : rAnimation.maList)
@@ -114,7 +112,6 @@ Animation& Animation::operator=( const Animation& rAnimation )
     mnLoopCount = rAnimation.mnLoopCount;
     mnPos = rAnimation.mnPos;
     mbLoopTerminated = rAnimation.mbLoopTerminated;
-    mbIsWaiting = rAnimation.mbIsWaiting;
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
 
     return *this;
