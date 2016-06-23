@@ -1345,7 +1345,6 @@ RTFPlainAttrMapIds::RTFPlainAttrMapIds( const SfxItemPool& rPool )
     nCTLWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, false );
     nEmphasis = rPool.GetTrueWhich( SID_ATTR_CHAR_EMPHASISMARK, false );
     nTwoLines = rPool.GetTrueWhich( SID_ATTR_CHAR_TWO_LINES, false );
-    nRuby = 0; //rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_RUBY, sal_False );
     nCharScaleX = rPool.GetTrueWhich( SID_ATTR_CHAR_SCALEWIDTH, false );
     nHorzVert = rPool.GetTrueWhich( SID_ATTR_CHAR_ROTATED, false );
     nRelief = rPool.GetTrueWhich( SID_ATTR_CHAR_RELIEF, false );

@@ -57,11 +57,9 @@ EditRTFParser::EditRTFParser(
     aRTFMapMode(MAP_TWIP)
 {
     aCurSel         = aSel;
-    eDestCharSet    = RTL_TEXTENCODING_DONTKNOW;
     nDefFont        = 0;
     nDefTab         = 0;
     nLastAction     = 0;
-    nDefFontHeight  = 0;
 
     SetInsPos(EditPosition(mpEditEngine, &aCurSel));
 
