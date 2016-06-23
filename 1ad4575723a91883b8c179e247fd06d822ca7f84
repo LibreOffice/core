@@ -16,6 +16,24 @@
       "revId": "1ad4575723a91883b8c179e247fd06d822ca7f84",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_34952840",
+        "filename": "basic/source/sbx/sbxvalue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-23T04:55:38Z",
+      "side": 0,
+      "message": "in this case, since we\u0027re in the destructor, we call SbxValue::Broadcast, which is a no-op\n\nMaybe I should break changes like this into their own commits,with more explanation",
+      "parentUuid": "ba84c18e_f41f4059",
+      "revId": "1ad4575723a91883b8c179e247fd06d822ca7f84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
