@@ -1,0 +1,17 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+    <node oor:name="pdf_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>pdf_Portable_Document_Format</value></prop>
+        <prop oor:name="FormatName"><value>SVIPDF</value></prop>
+        <prop oor:name="RealFilterName"><value>PDF - Portable Document Format</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PDF - Portable Document Format</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

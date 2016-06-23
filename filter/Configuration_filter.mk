@@ -837,6 +837,7 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	pcd_Import_Base16 \
 	pct_Import \
 	pcx_Import \
+	pdf_Import \
 	pgm_Import \
 	png_Export \
 	png_Import \
