@@ -52,7 +52,7 @@ $(filter 32,$(words $(shell echo $(1) | sed -e 's/./& /g')))
 endef
 
 define fetch_Download__subst_var
-$(subst _DLL,_MD5SUM,$(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(1))))
+$(subst _DLL,_MD5SUM,$(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(subst _JAR,_MD5SUM,$(1)))))
 endef
 
 # fetch_Download_item url variable-name
@@ -215,6 +215,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	$(foreach item, \
 		$(call fetch_Optional,DBGHELP,DBGHELP_DLL) \
 		$(call fetch_Optional,ODK,UNOWINREG_DLL) \
+		$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional_pack,BARCODE_EXTENSION_PACK) \
