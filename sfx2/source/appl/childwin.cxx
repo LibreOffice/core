@@ -61,7 +61,6 @@ struct SfxChildWindow_Impl
     SfxChildWinFactory* pFact;
     bool                bHideNotDelete;
     bool                bVisible;
-    bool                bHideAtToggle;
     bool                bWantsFocus;
     SfxModule*          pContextModule;
     SfxWorkWindow*      pWorkWin;
@@ -162,7 +161,6 @@ SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
 {
     pImpl->pFact = nullptr;
     pImpl->bHideNotDelete = false;
-    pImpl->bHideAtToggle = false;
     pImpl->bWantsFocus = true;
     pImpl->bVisible = true;
     pImpl->pContextModule = nullptr;
@@ -556,11 +554,6 @@ void SfxChildWindow::SetHideNotDelete( bool bOn )
 bool SfxChildWindow::IsHideNotDelete() const
 {
     return pImpl->bHideNotDelete;
-}
-
-bool SfxChildWindow::IsHideAtToggle() const
-{
-    return pImpl->bHideAtToggle;
 }
 
 void SfxChildWindow::SetWantsFocus( bool bSet )

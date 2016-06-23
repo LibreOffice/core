@@ -42,7 +42,7 @@ protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
 private:
-    const sal_uInt16 mnCloserItemIndex;
+    static const sal_uInt16 mnCloserItemIndex = 1;
     const std::function<void()> maCloserAction;
     bool mbIsCloserVisible;
 };

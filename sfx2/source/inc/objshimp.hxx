@@ -80,7 +80,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bIsSaving:1,
                         bPasswd:1,
                         bIsNamedVisible:1,
-                        bIsTemplate:1,
                         bIsAbortingImport:1,  // Import operation should be canceled.
                         bImportDone : 1, // Import finished already? For auto reload of Docs.
                         bInPrepareClose : 1,
@@ -115,7 +114,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     SfxLoadedFlags      nFlagsInProgress;
     bool                bModalMode;
     bool                bRunningMacro;
-    bool                bReloadAvailable;
     sal_uInt16          nAutoLoadLocks;
     SfxObjectShellFlags eFlags;
     bool                bReadOnlyUI;

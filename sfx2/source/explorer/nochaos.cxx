@@ -35,7 +35,7 @@ class CntItemPool;
 
 class CntStaticPoolDefaults_Impl
 {
-    sal_uInt32        m_nItems;
+    static const sal_uInt32  m_nItems = 1;
     SfxPoolItem** m_ppDefaults;
     SfxItemInfo*  m_pItemInfos;
 
@@ -179,8 +179,7 @@ CntStaticPoolDefaults_Impl::~CntStaticPoolDefaults_Impl()
 
 
 CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
-: m_nItems( 1 ),
-  m_ppDefaults( new SfxPoolItem* [ m_nItems ] ),
+: m_ppDefaults( new SfxPoolItem* [ m_nItems ] ),
   m_pItemInfos( new SfxItemInfo  [ m_nItems ] )
 {
     memset( m_ppDefaults, 0, sizeof( SfxPoolItem* ) * m_nItems );

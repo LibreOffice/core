@@ -55,14 +55,12 @@ struct SfxObjectUI_Impl
 {
     sal_uInt16  nPos;
     sal_uInt32  nResId;
-    bool        bVisible;
     bool        bContext;
     sal_uInt32  nFeature;
 
     SfxObjectUI_Impl(sal_uInt16 n, sal_uInt32 nId, sal_uInt32 nFeat) :
         nPos(n),
         nResId(nId),
-        bVisible(true),
         bContext(false),
         nFeature(nFeat)
     {
@@ -541,7 +539,7 @@ bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
 
     assert( nNo<pImplData->aObjectBars.size() );
 
-    return pImplData->aObjectBars[nNo]->bVisible;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

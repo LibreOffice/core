@@ -41,7 +41,6 @@ DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
                             vcl::Window* pParentWindow,
                             const std::function<void()>& rCloserAction)
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint())
-    , mnCloserItemIndex(1)
     , maCloserAction(rCloserAction)
     , mbIsCloserVisible(false)
 {

@@ -32,8 +32,7 @@ namespace sfx2 { namespace sidebar {
 
 TabItem::TabItem (vcl::Window* pParentWindow)
     : ImageRadioButton(pParentWindow),
-      mbIsLeftButtonDown(false),
-      mePaintType(PT_Theme)
+      mbIsLeftButtonDown(false)
 {
     SetStyle(GetStyle() | WB_TABSTOP | WB_DIALOGCONTROL | WB_NOPOINTERFOCUS);
     SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());
@@ -42,16 +41,11 @@ TabItem::TabItem (vcl::Window* pParentWindow)
 #endif
 }
 
-void TabItem::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
+void TabItem::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*UpdateArea*/)
 {
-    switch (mePaintType)
-    {
-        case PT_Theme:
-        default:
-        {
-            const bool bIsSelected (IsChecked());
-            const bool bIsHighlighted (IsMouseOver() || HasFocus());
-            DrawHelper::DrawRoundedRectangle(
+    const bool bIsSelected (IsChecked());
+    const bool bIsHighlighted (IsMouseOver() || HasFocus());
+    DrawHelper::DrawRoundedRectangle(
                 rRenderContext,
                 Rectangle(Point(0,0), GetSizePixel()),
                 Theme::GetInteger(Theme::Int_ButtonCornerRadius),
@@ -62,17 +56,11 @@ void TabItem::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdate
                     ? Theme::GetPaint(Theme::Paint_TabItemBackgroundHighlight)
                     : Theme::GetPaint(Theme::Paint_TabItemBackgroundNormal));
 
-            const Image aIcon(Button::GetModeImage());
-            const Size aIconSize (aIcon.GetSizePixel());
-            const Point aIconLocation((GetSizePixel().Width() - aIconSize.Width()) / 2,
-                                      (GetSizePixel().Height() - aIconSize.Height()) / 2);
-            rRenderContext.DrawImage(aIconLocation, aIcon, IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
-            break;
-        }
-        case PT_Native:
-            Button::Paint(rRenderContext, rUpdateArea);
-            break;
-    }
+    const Image aIcon(Button::GetModeImage());
+    const Size aIconSize (aIcon.GetSizePixel());
+    const Point aIconLocation((GetSizePixel().Width() - aIconSize.Width()) / 2,
+                              (GetSizePixel().Height() - aIconSize.Height()) / 2);
+    rRenderContext.DrawImage(aIconLocation, aIcon, IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
 }
 
 void TabItem::MouseMove(const MouseEvent& rEvent)
