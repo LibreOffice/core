@@ -19,16 +19,32 @@
 #ifndef INCLUDED_SVX_CHARMAP_HXX
 #define INCLUDED_SVX_CHARMAP_HXX
 
-#include <vcl/ctrl.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/vclptr.hxx>
 #include <map>
 #include <memory>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <sal/types.h>
 #include <svx/svxdllapi.h>
+#include <tools/gen.hxx>
+#include <tools/link.hxx>
+#include <vcl/ctrl.hxx>
+#include <vcl/event.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace accessibility { class XAccessible; }
+} } }
+
+namespace vcl { class Font; }
 
 #define COLUMN_COUNT    16
 #define ROW_COUNT        8
+
+class CommandEvent;
+class ScrollBar;
 
 namespace svx
 {

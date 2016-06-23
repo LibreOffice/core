@@ -38,6 +38,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <svtools/svlbitm.hxx>
 #include "svtools/treelistentry.hxx"
 
 #define HHC editeng::HangulHanjaConversion

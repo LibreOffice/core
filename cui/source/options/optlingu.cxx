@@ -49,6 +49,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svtools/treelistbox.hxx>
 #include "svtools/treelistentry.hxx"
 #include <svtools/langhelp.hxx>

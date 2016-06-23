@@ -20,15 +20,15 @@
 #ifndef INCLUDED_SVX_CLIPBOARDCTL_HXX
 #define INCLUDED_SVX_CLIPBOARDCTL_HXX
 
+#include <sal/types.h>
 #include <sfx2/tbxctrl.hxx>
-#include <sfx2/ctrlitem.hxx>
 #include <svl/poolitem.hxx>
-
-
 #include <svx/svxdllapi.h>
+#include <vcl/vclptr.hxx>
 
 class PopupMenu;
-class SvxClipboardFormatItem;
+class SfxModule;
+class ToolBox;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
 {

@@ -19,9 +19,14 @@
 #ifndef INCLUDED_SVX_AFFINEMATRIXITEM_HXX
 #define INCLUDED_SVX_AFFINEMATRIXITEM_HXX
 
-#include <svx/svxdllapi.h>
-#include <svl/poolitem.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <sal/types.h>
+#include <svl/poolitem.hxx>
+#include <svx/svxdllapi.h>
+
+class SfxItemPool;
+class SvStream;
 
 class SVX_DLLPUBLIC AffineMatrixItem : public SfxPoolItem
 {

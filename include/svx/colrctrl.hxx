@@ -19,16 +19,26 @@
 #ifndef INCLUDED_SVX_COLRCTRL_HXX
 #define INCLUDED_SVX_COLRCTRL_HXX
 
+#include <sal/types.h>
 #include <sfx2/dockwin.hxx>
-#include <sfx2/childwin.hxx>
-#include <svx/SvxColorValueSet.hxx>
-#include <svtools/transfer.hxx>
 #include <svl/lstner.hxx>
-#include <svx/svxdllapi.h>
+#include <svtools/transfer.hxx>
+#include <svtools/valueset.hxx>
+#include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>
+#include <tools/gen.hxx>
+#include <tools/link.hxx>
+#include <tools/wintypes.hxx>
+#include <vcl/event.hxx>
 #include <vcl/vclptr.hxx>
 
-class SvData;
+namespace vcl { class Window; }
+
+class CommandEvent;
+class SfxBindings;
+class SfxBroadcaster;
+class SfxChildWindow;
+class SfxHint;
 
 /*************************************************************************
 |*

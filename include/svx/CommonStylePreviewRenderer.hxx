@@ -10,12 +10,18 @@
 #ifndef INCLUDED_SVX_COMMONSTYLEPREVIEWRENDERER_HXX
 #define INCLUDED_SVX_COMMONSTYLEPREVIEWRENDERER_HXX
 
-#include <vcl/outdev.hxx>
-#include <rsc/rscsfx.hxx>
-#include <editeng/svxfont.hxx>
-#include <svx/svxdllapi.h>
+#include <memory>
 
+#include <sfx2/objsh.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
+#include <svx/svxdllapi.h>
+#include <rtl/ustring.hxx>
+#include <tools/color.hxx>
+#include <tools/gen.hxx>
+
+class OutputDevice;
+class SfxStyleSheetBase;
+class SvxFont;
 
 namespace svx
 {

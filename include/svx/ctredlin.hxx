@@ -20,21 +20,46 @@
 #ifndef INCLUDED_SVX_CTREDLIN_HXX
 #define INCLUDED_SVX_CTREDLIN_HXX
 
-#include <svtools/headbar.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <svx/svxdllapi.h>
 #include <svtools/simptabl.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtabbx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
+#include <tools/color.hxx>
+#include <tools/contnr.hxx>
+#include <tools/date.hxx>
 #include <tools/datetime.hxx>
-#include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <tools/link.hxx>
+#include <tools/time.hxx>
+#include <tools/wintypes.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/image.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
-#include <unotools/textsearch.hxx>
-#include <svx/svxdllapi.h>
+
+namespace utl {
+    class SearchParam;
+    class TextSearch;
+}
+
+namespace vcl { class Window; }
+
+class Button;
+class CheckBox;
+class DateField;
+class Edit;
+class FixedText;
+class ListBox;
+class Point;
+class PushButton;
+class SvViewDataEntry;
+class TimeField;
+struct SvSortData;
 
 enum class SvxRedlinDateMode
 {

@@ -19,10 +19,19 @@
 #ifndef INCLUDED_SVX_CHECKLBX_HXX
 #define INCLUDED_SVX_CHECKLBX_HXX
 
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <svtools/treelistbox.hxx>
-#include <svtools/svlbitm.hxx>
-
 #include <svx/svxdllapi.h>
+#include <tools/contnr.hxx>
+#include <tools/solar.h>
+#include <tools/wintypes.hxx>
+#include <vcl/event.hxx>
+#include <vcl/window.hxx>
+
+class Image;
+class SvLBoxButtonData;
+class SvTreeListEntry;
 
 // class SvxCheckListBox -------------------------------------------------
 
