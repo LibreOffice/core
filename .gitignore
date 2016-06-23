@@ -56,6 +56,7 @@
 /configure
 /lo.xcent
 /bin/bffvalidator.sh
+/bin/odfvalidator.sh
 /Makefile
 /NEWS
 /TODO
