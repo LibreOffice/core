@@ -346,7 +346,6 @@ class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication :
     bool m_bCanSetPassword : 1;
     bool m_bCanSetAccount  : 1;
     bool m_bCanUseSystemCredentials     : 1;
-    bool m_bDefaultUseSystemCredentials : 1;
     bool m_bUseSystemCredentials        : 1;
 
 public:
@@ -530,7 +529,6 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_bCanSetPassword( bCanSetPassword ),
   m_bCanSetAccount( bCanSetAccount ),
   m_bCanUseSystemCredentials( bCanUseSystemCredentials ),
-  m_bDefaultUseSystemCredentials( false ),
   m_bUseSystemCredentials( false )
 {
 }

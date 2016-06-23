@@ -758,7 +758,7 @@ InteractionSupplyAuthentication::canUseSystemCredentials(
         sal_Bool& Default )
     throw ( uno::RuntimeException, std::exception )
 {
-    Default = m_bDefaultUseSystemCredentials;
+    Default = false;
     return m_bCanUseSystemCredentials;
 }
 
