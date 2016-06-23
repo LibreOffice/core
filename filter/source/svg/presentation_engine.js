@@ -6196,6 +6196,11 @@ BaseContainerNode.prototype.appendChildNode = function( aAnimationNode )
         this.aChildrenArray.push( aAnimationNode );
 };
 
+BaseContainerNode.prototype.removeAllChildrenNodes = function()
+{
+    this.aChildrenArray = [];
+};
+
 BaseContainerNode.prototype.init_st = function()
 {
     this.nLeftIterations = this.getRepeatCount();
@@ -7216,7 +7221,8 @@ function createAnimationNode( aElement, aParentNode, aNodeContext )
             {
                 if( !createChildNode( aChildrenArray[i], aCreatedContainer, aNodeContext ) )
                 {
-                    return null;
+                    aCreatedContainer.removeAllChildrenNodes();
+                    break;
                 }
             }
         }
