@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_f4b5807e",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-23T10:15:54Z",
+      "side": 1,
+      "message": "Why did you change the right-hand-sides of the two inequality comparisons?  Either leave them alone, or drop the second comparison completely.",
+      "revId": "9b9e5cfd2fa629b2e1dc4a193e48a4a4e8d34126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
