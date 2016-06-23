@@ -58,9 +58,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/ClarisWksStyleManager \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksTable \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksText \
+	UnpackedTarball/libmwaw/src/lib/CricketDrawParser \
 	UnpackedTarball/libmwaw/src/lib/DocMkrParser \
 	UnpackedTarball/libmwaw/src/lib/DocMkrText \
 	UnpackedTarball/libmwaw/src/lib/EDocParser \
+	UnpackedTarball/libmwaw/src/lib/FreeHandParser \
 	UnpackedTarball/libmwaw/src/lib/FullWrtGraph \
 	UnpackedTarball/libmwaw/src/lib/FullWrtParser \
 	UnpackedTarball/libmwaw/src/lib/FullWrtStruct \
@@ -86,6 +88,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/MWAWChart \
 	UnpackedTarball/libmwaw/src/lib/MWAWDebug \
 	UnpackedTarball/libmwaw/src/lib/MWAWDocument \
+	UnpackedTarball/libmwaw/src/lib/MWAWEntry \
 	UnpackedTarball/libmwaw/src/lib/MWAWFont \
 	UnpackedTarball/libmwaw/src/lib/MWAWFontConverter \
 	UnpackedTarball/libmwaw/src/lib/MWAWFontSJISConverter \
@@ -97,13 +100,16 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/MWAWHeader \
 	UnpackedTarball/libmwaw/src/lib/MWAWInputStream \
 	UnpackedTarball/libmwaw/src/lib/MWAWList \
+	UnpackedTarball/libmwaw/src/lib/MWAWListener \
 	UnpackedTarball/libmwaw/src/lib/MWAWOLEParser \
 	UnpackedTarball/libmwaw/src/lib/MWAWPageSpan \
 	UnpackedTarball/libmwaw/src/lib/MWAWParagraph \
 	UnpackedTarball/libmwaw/src/lib/MWAWParser \
+	UnpackedTarball/libmwaw/src/lib/MWAWPict \
 	UnpackedTarball/libmwaw/src/lib/MWAWPictBitmap \
 	UnpackedTarball/libmwaw/src/lib/MWAWPictData \
 	UnpackedTarball/libmwaw/src/lib/MWAWPictMac \
+	UnpackedTarball/libmwaw/src/lib/MWAWPosition \
 	UnpackedTarball/libmwaw/src/lib/MWAWPresentationListener \
 	UnpackedTarball/libmwaw/src/lib/MWAWPrinter \
 	UnpackedTarball/libmwaw/src/lib/MWAWPropertyHandler \
@@ -127,12 +133,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/MacWrtParser \
 	UnpackedTarball/libmwaw/src/lib/MacWrtProParser \
 	UnpackedTarball/libmwaw/src/lib/MacWrtProStructures \
+	UnpackedTarball/libmwaw/src/lib/MaxWrtParser \
 	UnpackedTarball/libmwaw/src/lib/MarinerWrtGraph \
 	UnpackedTarball/libmwaw/src/lib/MarinerWrtParser \
 	UnpackedTarball/libmwaw/src/lib/MarinerWrtText \
 	UnpackedTarball/libmwaw/src/lib/MindWrtParser \
 	UnpackedTarball/libmwaw/src/lib/MoreParser \
 	UnpackedTarball/libmwaw/src/lib/MoreText \
+	UnpackedTarball/libmwaw/src/lib/MouseWrtParser \
 	UnpackedTarball/libmwaw/src/lib/MsWks3Text \
 	UnpackedTarball/libmwaw/src/lib/MsWks4Text \
 	UnpackedTarball/libmwaw/src/lib/MsWks4Zone \
@@ -171,6 +179,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/SuperPaintParser \
 	UnpackedTarball/libmwaw/src/lib/TeachTxtParser \
 	UnpackedTarball/libmwaw/src/lib/WingzParser \
+	UnpackedTarball/libmwaw/src/lib/WriteNowEntry \
 	UnpackedTarball/libmwaw/src/lib/WriteNowParser \
 	UnpackedTarball/libmwaw/src/lib/WriteNowText \
 	UnpackedTarball/libmwaw/src/lib/WriterPlsParser \
