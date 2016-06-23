@@ -137,6 +137,7 @@ static sal_uInt16 aWndFunc(
             SAL_WARN( "svtools.misc", "Unknown MessBox return value" );
             break;
     }
+    pBox.disposeAndClear();
     return nRet;
 }
 
