@@ -369,7 +369,6 @@ class SaveDialog : public Dialog
 {
     // member
     private:
-        VclPtr<FixedText>      m_pTitleFT;
         VclPtr<ListBox>        m_pFileListLB;
         VclPtr<OKButton>       m_pOkBtn;
         RecoveryCore*   m_pCore;
@@ -493,7 +492,6 @@ class RecoveryDialog : public Dialog
 {
     // member
     private:
-        VclPtr<FixedText>      m_pTitleFT;
         VclPtr<FixedText>      m_pDescrFT;
         VclPtr<vcl::Window>    m_pProgrParent;
         VclPtr<RecovDocList>   m_pFileListLB;
