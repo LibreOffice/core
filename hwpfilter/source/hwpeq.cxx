@@ -421,7 +421,7 @@ void make_keyword( char *keyword, const char *token)
     if( (token[0] & 0x80) || rtl::isAsciiLowerCase(token[0]) || strlen(token) < 2 )
         return;
 
-    int capital = rtl::isAsciiUpperCase(keyword[1]);
+    bool capital = rtl::isAsciiUpperCase(keyword[1]);
     for( ptr = keyword + 2; *ptr && result; ptr++ )
     {
         if( (*ptr & 0x80) ||
