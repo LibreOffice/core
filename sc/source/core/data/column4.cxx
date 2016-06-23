@@ -701,7 +701,7 @@ void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
         maCellNotes.position(nEndRow);
     sc::CellNoteStoreType::const_iterator itEnd = aEndPos.first;
 
-    std::for_each(it, itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
+    std::for_each(it, ++itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
 }
 
 namespace {
