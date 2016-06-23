@@ -102,13 +102,12 @@ void View::rename( const OUString& newName )
 
     OUString newTableName;
     OUString newSchemaName;
-    //changing schema + dot + table-name to "schema"."table-name"
     // OOo2.0 passes schema + dot + new-table-name while
     // OO1.1.x passes new Name without schema
     // in case name contains a dot, it is interpreted as schema.tablename
-    if( newName.indexOf( "\".\"" ) >= 0 )
+    if( newName.indexOf( '.' ) >= 0 )
     {
-        splitDoubleQuoteEscapedIdentifiers( newName, &newSchemaName, &newTableName );
+        splitConcatenatedIdentifier( newName, &newSchemaName, &newTableName );
     }
     else
     {

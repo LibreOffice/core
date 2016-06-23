@@ -463,20 +463,6 @@ void splitSQL( const OString & sql, OStringVector &vec )
 
 }
 
-void splitDoubleQuoteEscapedIdentifiers( const OUString & source, OUString *first, OUString *second)
-{
-    int a = source.indexOf("\".\"");
-    OString tempstring = OUStringToOString(source , RTL_TEXTENCODING_UTF8);
-    if(a > 0)
-    {
-        //remove start and end double quote as well as escaped double quotes
-        *first =OStringToOUString(OString(&tempstring.getStr()[1],a-2) , RTL_TEXTENCODING_UTF8);
-        *first=first->replaceAll("\"\"","\"");
-        *second =OStringToOUString(OString(&tempstring.getStr()[a+2],source.getLength()-a-2) , RTL_TEXTENCODING_UTF8);
-        *second=second->replaceAll("\"\"","\"");
-    }
-}
-
 void tokenizeSQL( const OString & sql, OStringVector &vec  )
 {
     int length = sql.getLength();
