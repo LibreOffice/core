@@ -1051,6 +1051,7 @@ void GtkSalFrame::InitCommon()
     m_bSpanMonitorsWhenFullscreen = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
+    m_nLastScrollEventTime = GDK_CURRENT_TIME;
     m_bSendModChangeOnRelease = false;
     m_pIMHandler        = nullptr;
     m_hBackgroundPixmap = None;
@@ -2659,10 +2660,14 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEventScroll* pEvent, gpointer
 {
     UpdateLastInputEventTime(pEvent->time);
 
-    if (pEvent->direction != GDK_SCROLL_SMOOTH)
-        return false;
-
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+
+    // gnome#726878 check for duplicate legacy scroll event
+    if (pEvent->direction != GDK_SCROLL_SMOOTH &&
+        pThis->m_nLastScrollEventTime == pEvent->time)
+    {
+        return false;
+    }
 
     SalWheelMouseEvent aEvent;
 
@@ -2674,36 +2679,76 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEventScroll* pEvent, gpointer
     aEvent.mnY = (sal_uLong)pEvent->y;
     aEvent.mnCode = GetMouseModCode( pEvent->state );
 
-    // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
-    // equating to 3 scroll lines and a delta of 120. So scale the delta here
-    // by 120 where a single mouse wheel click is an incoming delta_x of 1
-    // and divide that by 40 to get the number of scrollines
-    if (pEvent->delta_x != 0.0)
+    switch (pEvent->direction)
     {
-        aEvent.mnDelta = -pEvent->delta_x * 120;
-        aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
-        if (aEvent.mnDelta == 0)
-            aEvent.mnDelta = aEvent.mnNotchDelta;
-        aEvent.mbHorz = true;
-        aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
-        if (aEvent.mnScrollLines == 0)
-            aEvent.mnScrollLines = 1;
+        case GDK_SCROLL_SMOOTH:
+            pThis->m_nLastScrollEventTime = pEvent->time;
 
-        pThis->CallCallback(SalEvent::WheelMouse, &aEvent);
-    }
+            // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
+            // equating to 3 scroll lines and a delta of 120. So scale the delta here
+            // by 120 where a single mouse wheel click is an incoming delta_x of 1
+            // and divide that by 40 to get the number of scrollines
+            if (pEvent->delta_x != 0.0)
+            {
+                aEvent.mnDelta = -pEvent->delta_x * 120;
+                aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
+                if (aEvent.mnDelta == 0)
+                    aEvent.mnDelta = aEvent.mnNotchDelta;
+                aEvent.mbHorz = true;
+                aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
+                if (aEvent.mnScrollLines == 0)
+                    aEvent.mnScrollLines = 1;
 
-    if (pEvent->delta_y != 0.0)
-    {
-        aEvent.mnDelta = -pEvent->delta_y * 120;
-        aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
-        if (aEvent.mnDelta == 0)
-            aEvent.mnDelta = aEvent.mnNotchDelta;
-        aEvent.mbHorz = false;
-        aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
-        if (aEvent.mnScrollLines == 0)
-            aEvent.mnScrollLines = 1;
+                pThis->CallCallback(SalEvent::WheelMouse, &aEvent);
+            }
 
-        pThis->CallCallback(SalEvent::WheelMouse, &aEvent);
+            if (pEvent->delta_y != 0.0)
+            {
+                aEvent.mnDelta = -pEvent->delta_y * 120;
+                aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
+                if (aEvent.mnDelta == 0)
+                    aEvent.mnDelta = aEvent.mnNotchDelta;
+                aEvent.mbHorz = false;
+                aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
+                if (aEvent.mnScrollLines == 0)
+                    aEvent.mnScrollLines = 1;
+
+                pThis->CallCallback(SalEvent::WheelMouse, &aEvent);
+            }
+
+            break;
+
+        case GDK_SCROLL_UP:
+            aEvent.mnDelta = 120;
+            aEvent.mnNotchDelta = 1;
+            aEvent.mnScrollLines = 3;
+            aEvent.mbHorz = false;
+            pThis->CallCallback(SalEvent::WheelMouse, &aEvent);
+            break;
+
+        case GDK_SCROLL_DOWN:
+            aEvent.mnDelta = -120;
+            aEvent.mnNotchDelta = -1;
+            aEvent.mnScrollLines = 3;
+            aEvent.mbHorz = false;
+            pThis->CallCallback(SalEvent::WheelMouse, &aEvent);
+            break;
+
+        case GDK_SCROLL_LEFT:
+            aEvent.mnDelta = 120;
+            aEvent.mnNotchDelta = 1;
+            aEvent.mnScrollLines = 3;
+            aEvent.mbHorz = true;
+            pThis->CallCallback(SalEvent::WheelMouse, &aEvent);
+            break;
+
+        case GDK_SCROLL_RIGHT:
+            aEvent.mnDelta = -120;
+            aEvent.mnNotchDelta = -1;
+            aEvent.mnScrollLines = 3;
+            aEvent.mbHorz = true;
+            pThis->CallCallback(SalEvent::WheelMouse, &aEvent);
+            break;
     }
 
     return true;
