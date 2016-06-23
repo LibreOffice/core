@@ -14,7 +14,7 @@ gb_UITest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 ifeq ($(SYSTEM_PYTHON),)
 gb_UITest_EXECUTABLE := $(gb_Python_INSTALLED_EXECUTABLE)
 gb_UITest_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE_GDB)
-gb_UITest_DEPS ?= $(call gb_Package_get_target,python3) $(call gb_Package_get_target,python_shell)
+gb_UITest_DEPS ?= $(call gb_Package_get_target,python3)
 else
 gb_UITest_EXECUTABLE := $(PYTHON_FOR_BUILD)
 gb_UITest_EXECUTABLE_GDB := $(PYTHON_FOR_BUILD)
