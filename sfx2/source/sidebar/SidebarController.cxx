@@ -108,7 +108,6 @@ SidebarController::SidebarController (
       maAsynchronousDeckSwitch(),
       mbIsDeckRequestedOpen(),
       mbIsDeckOpen(),
-      mbCanDeckBeOpened(true),
       mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width()),
       maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
       mxReadOnlyModeDispatch(),
@@ -349,18 +348,13 @@ void SidebarController::NotifyResize()
         mnSavedSidebarWidth = nWidth;
 
     bool bIsDeckVisible;
-    if (mbCanDeckBeOpened)
-    {
-        const bool bIsOpening (nWidth > mnWidthOnSplitterButtonDown);
-        if (bIsOpening)
-            bIsDeckVisible = nWidth >= nTabBarDefaultWidth + gnWidthOpenThreshold;
-        else
-            bIsDeckVisible = nWidth >= nTabBarDefaultWidth + gnWidthCloseThreshold;
-        mbIsDeckRequestedOpen = bIsDeckVisible;
-        UpdateCloseIndicator(!bIsDeckVisible);
-    }
+    const bool bIsOpening (nWidth > mnWidthOnSplitterButtonDown);
+    if (bIsOpening)
+        bIsDeckVisible = nWidth >= nTabBarDefaultWidth + gnWidthOpenThreshold;
     else
-        bIsDeckVisible = false;
+        bIsDeckVisible = nWidth >= nTabBarDefaultWidth + gnWidthCloseThreshold;
+    mbIsDeckRequestedOpen = bIsDeckVisible;
+    UpdateCloseIndicator(!bIsDeckVisible);
 
     if (mpCurrentDeck)
     {

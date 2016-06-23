@@ -42,10 +42,6 @@ public:
 
 private:
     bool mbIsLeftButtonDown;
-    enum PaintType {
-        PT_Native,
-        PT_Theme
-    } mePaintType;
 };
 
 } } // end of namespace sfx2::sidebar

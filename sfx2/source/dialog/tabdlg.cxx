@@ -559,12 +559,6 @@ void SfxTabDialog::Start_Impl()
 
         if ( USHRT_MAX != m_nAppPageId )
             nActPage = m_nAppPageId;
-        else
-        {
-            sal_uInt16 nAutoTabPageId = SfxGetpApp()->Get_Impl()->nAutoTabPageId;
-            if ( nAutoTabPageId )
-                nActPage = nAutoTabPageId;
-        }
 
         if ( TAB_PAGE_NOTFOUND == m_pTabCtrl->GetPagePos( nActPage ) )
             nActPage = m_pTabCtrl->GetPageId( 0 );

@@ -297,7 +297,6 @@ protected:
     ThumbnailValueItemList mFilteredItemList; ///< Cache to store the filtered items
     ThumbnailValueItemList::iterator mpStartSelRange;
     VclPtr<ScrollBar> mpScrBar;
-    long mnHeaderHeight;
     long mnItemWidth;
     long mnItemHeight;
     long mnItemPadding;

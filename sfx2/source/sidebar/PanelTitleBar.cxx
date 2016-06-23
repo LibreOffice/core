@@ -46,7 +46,6 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
       mbIsLeftButtonDown(false),
       mpPanel(pPanel),
-      mnMenuItemIndex(1),
       mxFrame(),
       msMoreOptionsCommand()
 {

@@ -31,45 +31,33 @@ namespace sfx2 { namespace sidebar {
 
 MenuButton::MenuButton (vcl::Window* pParentWindow)
     : CheckBox(pParentWindow),
-      mbIsLeftButtonDown(false),
-      mePaintType(PT_Theme)
+      mbIsLeftButtonDown(false)
 {
 #ifdef DEBUG
     SetText(OUString("MenuButton"));
 #endif
 }
 
-void MenuButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
+void MenuButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateArea*/)
 {
-    switch (mePaintType)
-    {
-        case PT_Theme:
-        default:
-        {
-            const bool bIsSelected (IsChecked());
-            const bool bIsHighlighted (IsMouseOver() || HasFocus());
-            DrawHelper::DrawRoundedRectangle(
-                        rRenderContext,
-                        Rectangle(Point(0,0), GetSizePixel()),
-                        3,
-                        (bIsHighlighted || bIsSelected
-                            ? Theme::GetColor(Theme::Color_TabItemBorder)
-                            : Color(0xffffffff)),
-                        (bIsHighlighted
-                            ? Theme::GetPaint(Theme::Paint_TabItemBackgroundHighlight)
-                            : Theme::GetPaint(Theme::Paint_TabItemBackgroundNormal)));
+    const bool bIsSelected (IsChecked());
+    const bool bIsHighlighted (IsMouseOver() || HasFocus());
+    DrawHelper::DrawRoundedRectangle(
+                rRenderContext,
+                Rectangle(Point(0,0), GetSizePixel()),
+                3,
+                (bIsHighlighted || bIsSelected
+                    ? Theme::GetColor(Theme::Color_TabItemBorder)
+                    : Color(0xffffffff)),
+                (bIsHighlighted
+                    ? Theme::GetPaint(Theme::Paint_TabItemBackgroundHighlight)
+                    : Theme::GetPaint(Theme::Paint_TabItemBackgroundNormal)));
 
-            const Image aIcon(Button::GetModeImage());
-            const Size aIconSize(aIcon.GetSizePixel());
-            const Point aIconLocation((GetSizePixel().Width() - aIconSize.Width()) / 2,
-                                      (GetSizePixel().Height() - aIconSize.Height()) / 2);
-            rRenderContext.DrawImage(aIconLocation, aIcon);
-            break;
-        }
-        case PT_Native:
-            Button::Paint(rRenderContext, rUpdateArea);
-            break;
-    }
+    const Image aIcon(Button::GetModeImage());
+    const Size aIconSize(aIcon.GetSizePixel());
+    const Point aIconLocation((GetSizePixel().Width() - aIconSize.Width()) / 2,
+                              (GetSizePixel().Height() - aIconSize.Height()) / 2);
+    rRenderContext.DrawImage(aIconLocation, aIcon);
 }
 
 void MenuButton::MouseMove (const MouseEvent& rEvent)

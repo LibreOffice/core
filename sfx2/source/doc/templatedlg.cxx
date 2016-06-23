@@ -162,7 +162,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     : ModalDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
       maSelTemplates(cmpSelectionItems),
       mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
-      mbIsSynced(false),
       maRepositories()
 {
     get(mpSearchFilter, "search_filter");
@@ -1461,31 +1460,27 @@ bool SfxTemplateManagerDlg::insertRepository(const OUString &rName, const OUStri
 
     maRepositories.push_back(pItem);
 
-    mbIsSynced = false;
     return true;
 }
 
 void SfxTemplateManagerDlg::syncRepositories() const
 {
-    if (!mbIsSynced)
+    uno::Reference < uno::XComponentContext > pContext(comphelper::getProcessComponentContext());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(pContext));
+
+    size_t nSize = maRepositories.size();
+    uno::Sequence<OUString> aUrls(nSize);
+    uno::Sequence<OUString> aNames(nSize);
+
+    for(size_t i = 0; i < nSize; ++i)
     {
-        uno::Reference < uno::XComponentContext > pContext(comphelper::getProcessComponentContext());
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(pContext));
-
-        size_t nSize = maRepositories.size();
-        uno::Sequence<OUString> aUrls(nSize);
-        uno::Sequence<OUString> aNames(nSize);
-
-        for(size_t i = 0; i < nSize; ++i)
-        {
-            aUrls[i] = maRepositories[i]->getURL();
-            aNames[i] = maRepositories[i]->maTitle;
-        }
-
-        officecfg::Office::Common::Misc::TemplateRepositoryUrls::set(aUrls, batch);
-        officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch);
-        batch->commit();
+        aUrls[i] = maRepositories[i]->getURL();
+        aNames[i] = maRepositories[i]->maTitle;
     }
+
+    officecfg::Office::Common::Misc::TemplateRepositoryUrls::set(aUrls, batch);
+    officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch);
+    batch->commit();
 }
 
 static bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )

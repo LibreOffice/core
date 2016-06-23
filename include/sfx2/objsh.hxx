@@ -413,8 +413,6 @@ public:
     void                        ClearHeaderAttributesForSourceViewHack();
     void                        SetHeaderAttributesForSourceViewHack();
 
-    bool                        IsTemplate() const;
-
     bool                        IsQueryLoadTemplate() const;
     bool                        IsUseUserData() const;
     bool                        IsUseThumbnailSave() const;
