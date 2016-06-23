@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_2fe79513",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-06-23T16:12:06Z",
+      "side": 1,
+      "message": "I should change this to \"SetBreakType(...)\".  But first I\u0027ll wait for any additional comments on this scary patch.",
+      "revId": "8b89b410b274a4b9b5759c5c749540e0d1314474",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
