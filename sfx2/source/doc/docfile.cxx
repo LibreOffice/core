@@ -1625,10 +1625,10 @@ bool SfxMedium::StorageCommit_Impl()
                                 OSL_ENSURE( !pImpl->m_aName.isEmpty(), "The exception _must_ contain the temporary URL!\n" );
                             }
                         }
-
-                        if ( !GetError() )
-                            SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
                     }
+
+                    if (!GetError())
+                        SetError( ERRCODE_IO_GENERAL, OSL_LOG_PREFIX );
                 }
                 catch ( const uno::Exception& )
                 {

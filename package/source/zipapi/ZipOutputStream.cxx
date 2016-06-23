@@ -183,11 +183,6 @@ void ZipOutputStream::finish()
     // consume all processed entries
     consumeAllScheduledThreadEntries();
 
-    if (m_aDeflateException.hasValue())
-    {   // throw once all threads are finished and m_aEntries can be released
-        ::cppu::throwException(m_aDeflateException);
-    }
-
     sal_Int32 nOffset= static_cast < sal_Int32 > (m_aChucker.GetPosition());
     for (ZipEntry* p : m_aZipList)
     {
@@ -197,6 +192,11 @@ void ZipOutputStream::finish()
     writeEND( nOffset, static_cast < sal_Int32 > (m_aChucker.GetPosition()) - nOffset);
     m_xStream->flush();
     m_aZipList.clear();
+
+    if (m_aDeflateException.hasValue())
+    {   // throw once all threads are finished and m_aEntries can be released
+        ::cppu::throwException(m_aDeflateException);
+    }
 }
 
 const css::uno::Reference< css::io::XOutputStream >& ZipOutputStream::getStream()
