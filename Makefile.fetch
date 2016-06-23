@@ -215,6 +215,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,ODK,UNOWINREG_DLL) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
 	$(foreach item, \
+		$(call fetch_Optional,ODFTOOLKIT,ODFTOOLKIT_TARBALL) \
+	,$(call fetch_Download_item,http://www-eu.apache.org/dist/incubator/odftoolkit/binaries/,$(item)))
+	$(foreach item, \
 		$(call fetch_Optional_pack,BARCODE_EXTENSION_PACK) \
 		$(call fetch_Optional_pack,DIAGRAM_EXTENSION_PACK) \
 		$(call fetch_Optional_pack,HUNART_EXTENSION_PACK) \

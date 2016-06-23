@@ -1,0 +1,6 @@
+ODF Toolkit [https://incubator.apache.org/odftoolkit/conformance/ODFValidator.html]
+
+Is used for validation of ODF export in tests.
+
+File is taken from 
+[http://www-eu.apache.org/dist/incubator/odftoolkit/binaries/]

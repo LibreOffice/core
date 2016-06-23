@@ -2739,13 +2739,17 @@ if test "$with_export_validation" = yes; then
         # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
         AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
         if test -z "$ODFVALIDATOR"; then
-            AC_MSG_ERROR([odfvalidator not found, but required by --with-export-validation])
+            # remember to download the ODF toolkit with validator later
+            BUILD_TYPE="$BUILD_TYPE ODFTOOLKIT"
+            ODFVALIDATOR="`pwd`/odfvalidator.sh"
         fi
         ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
     else
         AC_CHECK_PROGS(ODFVALIDATOR, odfvalidator)
         if test -z "$ODFVALIDATOR"; then
-            AC_MSG_ERROR([odfvalidator not found, but required by --with-export-validation])
+            # remember to download the ODF toolkit with validator later
+            BUILD_TYPE="$BUILD_TYPE ODFTOOLKIT"
+            ODFVALIDATOR="`pwd/odfvalidator.sh`"
         fi
 	fi
     AC_SUBST(ODFVALIDATOR)
