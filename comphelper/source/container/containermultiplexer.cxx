@@ -90,7 +90,6 @@ namespace comphelper
             const  Reference< XContainer >& _rxContainer)
         :m_xContainer(_rxContainer)
         ,m_pListener(_pListener)
-        ,m_nLockCount(0)
     {
         if (m_pListener)
             m_pListener->setAdapter(this);
@@ -138,8 +137,7 @@ namespace comphelper
         if (m_pListener)
         {
              // tell the listener
-            if (!locked())
-                m_pListener->_disposing(_rSource);
+            m_pListener->_disposing(_rSource);
             // disconnect the listener
             if ( m_pListener )
                 m_pListener->setAdapter(nullptr);
@@ -152,21 +150,21 @@ namespace comphelper
 
     void SAL_CALL OContainerListenerAdapter::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
     {
-        if (m_pListener && !locked())
+        if (m_pListener)
             m_pListener->_elementInserted(_rEvent);
     }
 
 
     void SAL_CALL OContainerListenerAdapter::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
     {
-        if (m_pListener && !locked())
+        if (m_pListener)
             m_pListener->_elementRemoved(_rEvent);
     }
 
 
     void SAL_CALL OContainerListenerAdapter::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
     {
-        if (m_pListener && !locked())
+        if (m_pListener)
             m_pListener->_elementReplaced(_rEvent);
     }
 
