@@ -205,8 +205,7 @@ void XResultSet_impl::isFinalChanged()
 
 
 bool SAL_CALL
-XResultSet_impl::OneMore(
-    void )
+XResultSet_impl::OneMore()
     throw( sdbc::SQLException,
            uno::RuntimeException,
            std::exception )
@@ -284,8 +283,7 @@ XResultSet_impl::OneMore(
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::next(
-    void )
+XResultSet_impl::next()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -298,8 +296,7 @@ XResultSet_impl::next(
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::isBeforeFirst(
-    void )
+XResultSet_impl::isBeforeFirst()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -308,8 +305,7 @@ XResultSet_impl::isBeforeFirst(
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::isAfterLast(
-    void )
+XResultSet_impl::isAfterLast()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -318,8 +314,7 @@ XResultSet_impl::isAfterLast(
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::isFirst(
-    void )
+XResultSet_impl::isFirst()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -328,8 +323,7 @@ XResultSet_impl::isFirst(
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::isLast(
-    void  )
+XResultSet_impl::isLast()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception)
 {
@@ -341,8 +335,7 @@ XResultSet_impl::isLast(
 
 
 void SAL_CALL
-XResultSet_impl::beforeFirst(
-    void  )
+XResultSet_impl::beforeFirst()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception)
 {
@@ -351,8 +344,7 @@ XResultSet_impl::beforeFirst(
 
 
 void SAL_CALL
-XResultSet_impl::afterLast(
-    void  )
+XResultSet_impl::afterLast()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -363,8 +355,7 @@ XResultSet_impl::afterLast(
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::first(
-    void  )
+XResultSet_impl::first()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception)
 {
@@ -374,8 +365,7 @@ XResultSet_impl::first(
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::last(
-    void  )
+XResultSet_impl::last()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -387,8 +377,7 @@ XResultSet_impl::last(
 
 
 sal_Int32 SAL_CALL
-XResultSet_impl::getRow(
-    void )
+XResultSet_impl::getRow()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception)
 {
@@ -423,8 +412,7 @@ sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::relative(
-    sal_Int32 row )
+XResultSet_impl::relative( sal_Int32 row )
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception)
 {
@@ -440,8 +428,7 @@ XResultSet_impl::relative(
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::previous(
-    void )
+XResultSet_impl::previous()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception)
 {
@@ -454,8 +441,7 @@ XResultSet_impl::previous(
 
 
 void SAL_CALL
-XResultSet_impl::refreshRow(
-    void )
+XResultSet_impl::refreshRow()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception)
 {
@@ -465,8 +451,7 @@ XResultSet_impl::refreshRow(
 
 
 sal_Bool SAL_CALL
-XResultSet_impl::rowUpdated(
-    void )
+XResultSet_impl::rowUpdated()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -474,8 +459,7 @@ XResultSet_impl::rowUpdated(
 }
 
 sal_Bool SAL_CALL
-XResultSet_impl::rowInserted(
-    void  )
+XResultSet_impl::rowInserted()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -483,8 +467,7 @@ XResultSet_impl::rowInserted(
 }
 
 sal_Bool SAL_CALL
-XResultSet_impl::rowDeleted(
-    void  )
+XResultSet_impl::rowDeleted()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -493,8 +476,7 @@ XResultSet_impl::rowDeleted(
 
 
 uno::Reference< uno::XInterface > SAL_CALL
-XResultSet_impl::getStatement(
-    void  )
+XResultSet_impl::getStatement()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {
@@ -505,8 +487,7 @@ XResultSet_impl::getStatement(
 // XCloseable
 
 void SAL_CALL
-XResultSet_impl::close(
-    void )
+XResultSet_impl::close()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception)
 {
@@ -521,8 +502,7 @@ XResultSet_impl::close(
 
 
 OUString SAL_CALL
-XResultSet_impl::queryContentIdentifierString(
-    void )
+XResultSet_impl::queryContentIdentifierString()
     throw( uno::RuntimeException, std::exception )
 {
     uno::Reference< ucb::XContentIdentifier > xContentId
@@ -536,8 +516,7 @@ XResultSet_impl::queryContentIdentifierString(
 
 
 uno::Reference< ucb::XContentIdentifier > SAL_CALL
-XResultSet_impl::queryContentIdentifier(
-    void )
+XResultSet_impl::queryContentIdentifier()
     throw( uno::RuntimeException, std::exception )
 {
     if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
@@ -553,8 +532,7 @@ XResultSet_impl::queryContentIdentifier(
 
 
 uno::Reference< ucb::XContent > SAL_CALL
-XResultSet_impl::queryContent(
-    void )
+XResultSet_impl::queryContent()
     throw( uno::RuntimeException, std::exception )
 {
     if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
@@ -674,8 +652,7 @@ XResultSet_impl::getCapabilities()
 
 // XResultSetMetaDataSupplier
 uno::Reference< sdbc::XResultSetMetaData > SAL_CALL
-XResultSet_impl::getMetaData(
-    void )
+XResultSet_impl::getMetaData()
     throw( sdbc::SQLException,
            uno::RuntimeException, std::exception )
 {

@@ -89,8 +89,7 @@ XRow_impl::~XRow_impl()
 
 
 sal_Bool SAL_CALL
-XRow_impl::wasNull(
-           void )
+XRow_impl::wasNull()
   throw( sdbc::SQLException,
      uno::RuntimeException, std::exception)
 {

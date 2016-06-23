@@ -169,8 +169,7 @@ XStream_impl::readSomeBytes(
 
 
 void SAL_CALL
-XStream_impl::skipBytes(
-    sal_Int32 nBytesToSkip )
+XStream_impl::skipBytes( sal_Int32 nBytesToSkip )
     throw( io::NotConnectedException,
            io::BufferSizeExceededException,
            io::IOException,
@@ -181,8 +180,7 @@ XStream_impl::skipBytes(
 
 
 sal_Int32 SAL_CALL
-XStream_impl::available(
-    void )
+XStream_impl::available()
     throw( io::NotConnectedException,
            io::IOException,
            uno::RuntimeException, std::exception)
@@ -211,8 +209,7 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 
 
 void SAL_CALL
-XStream_impl::closeStream(
-    void )
+XStream_impl::closeStream()
     throw( io::NotConnectedException,
            io::IOException,
            uno::RuntimeException )
@@ -232,8 +229,7 @@ XStream_impl::closeStream(
 }
 
 void SAL_CALL
-XStream_impl::closeInput(
-    void )
+XStream_impl::closeInput()
     throw( io::NotConnectedException,
            io::IOException,
            uno::RuntimeException, std::exception )
@@ -247,8 +243,7 @@ XStream_impl::closeInput(
 
 
 void SAL_CALL
-XStream_impl::closeOutput(
-    void )
+XStream_impl::closeOutput()
     throw( io::NotConnectedException,
            io::IOException,
            uno::RuntimeException, std::exception )
@@ -262,8 +257,7 @@ XStream_impl::closeOutput(
 
 
 void SAL_CALL
-XStream_impl::seek(
-    sal_Int64 location )
+XStream_impl::seek( sal_Int64 location )
     throw( lang::IllegalArgumentException,
            io::IOException,
            uno::RuntimeException, std::exception )
@@ -276,8 +270,7 @@ XStream_impl::seek(
 
 
 sal_Int64 SAL_CALL
-XStream_impl::getPosition(
-    void )
+XStream_impl::getPosition()
     throw( io::IOException,
            uno::RuntimeException, std::exception )
 {
@@ -288,8 +281,7 @@ XStream_impl::getPosition(
 }
 
 sal_Int64 SAL_CALL
-XStream_impl::getLength(
-    void )
+XStream_impl::getLength()
     throw( io::IOException,
            uno::RuntimeException, std::exception )
 {

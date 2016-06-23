@@ -577,8 +577,7 @@ BaseContent::addProperty(
 
 
 void SAL_CALL
-BaseContent::removeProperty(
-    const OUString& Name )
+BaseContent::removeProperty( const OUString& Name )
     throw( beans::UnknownPropertyException,
            beans::NotRemoveableException,
            RuntimeException, std::exception)
@@ -595,8 +594,7 @@ BaseContent::removeProperty(
 
 
 Sequence< ContentInfo > SAL_CALL
-BaseContent::queryCreatableContentsInfo(
-    void )
+BaseContent::queryCreatableContentsInfo()
     throw( RuntimeException, std::exception )
 {
     return m_pMyShell->queryCreatableContentsInfo();
@@ -604,8 +602,7 @@ BaseContent::queryCreatableContentsInfo(
 
 
 Reference< XContent > SAL_CALL
-BaseContent::createNewContent(
-    const ContentInfo& Info )
+BaseContent::createNewContent( const ContentInfo& Info )
     throw( RuntimeException, std::exception )
 {
     // Check type.
@@ -695,8 +692,7 @@ BaseContent::removePropertySetInfoChangeListener(
 
 
 Reference< XInterface > SAL_CALL
-BaseContent::getParent(
-    void )
+BaseContent::getParent()
     throw( RuntimeException, std::exception )
 {
     OUString ParentUnq = getParentName( m_aUncPath );

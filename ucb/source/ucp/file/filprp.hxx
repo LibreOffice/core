@@ -38,13 +38,11 @@ class XPropertySetInfo_impl : public cppu::WeakImplHelper<
         virtual ~XPropertySetInfo_impl();
 
         virtual css::uno::Sequence< css::beans::Property > SAL_CALL
-        getProperties(
-            void )
+        getProperties()
             throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual css::beans::Property SAL_CALL
-        getPropertyByName(
-            const OUString& aName )
+        getPropertyByName( const OUString& aName )
             throw( css::beans::UnknownPropertyException,
                    css::uno::RuntimeException, std::exception) override;
 

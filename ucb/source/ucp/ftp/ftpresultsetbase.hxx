@@ -58,24 +58,20 @@ namespace ftp {
 
         // XInterface
         virtual css::uno::Any SAL_CALL
-        queryInterface(
-            const css::uno::Type& aType )
+        queryInterface( const css::uno::Type& aType )
             throw( css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
-        acquire(
-            void )
+        acquire()
             throw() override;
 
         virtual void SAL_CALL
-        release(
-            void )
+        release()
             throw() override;
 
         // XComponent
         virtual void SAL_CALL
-        dispose(
-            void )
+        dispose()
             throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
@@ -102,8 +98,7 @@ namespace ftp {
         }
 
         virtual OUString SAL_CALL
-        getString(
-            sal_Int32 columnIndex )
+        getString( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -115,8 +110,7 @@ namespace ftp {
         }
 
         virtual sal_Bool SAL_CALL
-        getBoolean(
-            sal_Int32 columnIndex )
+        getBoolean( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -127,8 +121,7 @@ namespace ftp {
         }
 
         virtual sal_Int8 SAL_CALL
-        getByte(
-            sal_Int32 columnIndex )
+        getByte( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -139,8 +132,7 @@ namespace ftp {
         }
 
         virtual sal_Int16 SAL_CALL
-        getShort(
-            sal_Int32 columnIndex )
+        getShort( sal_Int32 columnIndex )
             throw(
                 css::sdbc::SQLException,
                 css::uno::RuntimeException, std::exception) override
@@ -152,8 +144,7 @@ namespace ftp {
         }
 
         virtual sal_Int32 SAL_CALL
-        getInt(
-            sal_Int32 columnIndex )
+        getInt( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception ) override
         {
@@ -164,8 +155,7 @@ namespace ftp {
         }
 
         virtual sal_Int64 SAL_CALL
-        getLong(
-            sal_Int32 columnIndex )
+        getLong( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -176,8 +166,7 @@ namespace ftp {
         }
 
         virtual float SAL_CALL
-        getFloat(
-            sal_Int32 columnIndex )
+        getFloat( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception ) override
         {
@@ -188,8 +177,7 @@ namespace ftp {
         }
 
         virtual double SAL_CALL
-        getDouble(
-            sal_Int32 columnIndex )
+        getDouble( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception ) override
         {
@@ -200,8 +188,7 @@ namespace ftp {
         }
 
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-        getBytes(
-            sal_Int32 columnIndex )
+        getBytes( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception ) override
         {
@@ -212,8 +199,7 @@ namespace ftp {
         }
 
         virtual css::util::Date SAL_CALL
-        getDate(
-            sal_Int32 columnIndex )
+        getDate( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -224,8 +210,7 @@ namespace ftp {
         }
 
         virtual css::util::Time SAL_CALL
-        getTime(
-            sal_Int32 columnIndex )
+        getTime( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -236,8 +221,7 @@ namespace ftp {
         }
 
         virtual css::util::DateTime SAL_CALL
-        getTimestamp(
-            sal_Int32 columnIndex )
+        getTimestamp( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -249,8 +233,7 @@ namespace ftp {
 
 
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
-        getBinaryStream(
-            sal_Int32 columnIndex )
+        getBinaryStream( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -261,8 +244,7 @@ namespace ftp {
         }
 
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
-        getCharacterStream(
-            sal_Int32 columnIndex )
+        getCharacterStream( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -273,8 +255,7 @@ namespace ftp {
         }
 
         virtual css::uno::Any SAL_CALL
-        getObject(
-            sal_Int32 columnIndex,
+        getObject( sal_Int32 columnIndex,
             const css::uno::Reference< css::container::XNameAccess >& typeMap )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
@@ -286,8 +267,7 @@ namespace ftp {
         }
 
         virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL
-        getRef(
-            sal_Int32 columnIndex )
+        getRef( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -298,8 +278,7 @@ namespace ftp {
         }
 
         virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL
-        getBlob(
-            sal_Int32 columnIndex )
+        getBlob( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -310,8 +289,7 @@ namespace ftp {
         }
 
         virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL
-        getClob(
-            sal_Int32 columnIndex )
+        getClob( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -322,8 +300,7 @@ namespace ftp {
         }
 
         virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL
-        getArray(
-            sal_Int32 columnIndex )
+        getArray( sal_Int32 columnIndex )
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override
         {
@@ -338,8 +315,7 @@ namespace ftp {
         // XResultSet
 
         virtual sal_Bool SAL_CALL
-        next(
-            void )
+        next()
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override;
 
@@ -379,14 +355,12 @@ namespace ftp {
                    css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Bool SAL_CALL
-        last(
-            void  )
+        last()
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override;
 
         virtual sal_Int32 SAL_CALL
-        getRow(
-            void  )
+        getRow()
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException, std::exception) override;
 

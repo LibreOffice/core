@@ -88,25 +88,21 @@ namespace fileaccess {
 
         // XInterface
         virtual css::uno::Any SAL_CALL
-        queryInterface(
-            const css::uno::Type& aType )
+        queryInterface( const css::uno::Type& aType )
             throw( css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
-        acquire(
-            void )
+        acquire()
             throw() override;
 
         virtual void SAL_CALL
-        release(
-            void )
+        release()
             throw() override;
 
 
         // XComponent
         virtual void SAL_CALL
-        dispose(
-            void )
+        dispose()
             throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
@@ -156,8 +152,7 @@ namespace fileaccess {
                    css::uno::RuntimeException, std::exception ) override;
 
         virtual void SAL_CALL
-        abort(
-            sal_Int32 CommandId )
+        abort( sal_Int32 CommandId )
             throw( css::uno::RuntimeException, std::exception ) override;
 
 
@@ -206,8 +201,7 @@ namespace fileaccess {
                    css::uno::RuntimeException, std::exception) override;
 
         virtual void SAL_CALL
-        removeProperty(
-            const OUString& Name )
+        removeProperty( const OUString& Name )
             throw( css::beans::UnknownPropertyException,
                    css::beans::NotRemoveableException,
                    css::uno::RuntimeException, std::exception ) override;
@@ -228,20 +222,17 @@ namespace fileaccess {
         // XContentCreator
 
         virtual css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
-        queryCreatableContentsInfo(
-            void )
+        queryCreatableContentsInfo()
             throw( css::uno::RuntimeException, std::exception ) override;
 
         virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
-        createNewContent(
-            const css::ucb::ContentInfo& Info )
+        createNewContent( const css::ucb::ContentInfo& Info )
             throw( css::uno::RuntimeException, std::exception ) override;
 
 
         // XChild
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-        getParent(
-            void ) throw( css::uno::RuntimeException, std::exception ) override;
+        getParent() throw( css::uno::RuntimeException, std::exception ) override;
 
         // Not supported
         virtual void SAL_CALL
