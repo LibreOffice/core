@@ -20,18 +20,22 @@
 #ifndef INCLUDED_SVX_ACCESSIBLESHAPETREEINFO_HXX
 #define INCLUDED_SVX_ACCESSIBLESHAPETREEINFO_HXX
 
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <svx/IAccessibleViewForwarder.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/vclptr.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace accessibility { class XAccessibleComponent; }
+    namespace document { class XEventBroadcaster; }
+    namespace frame { class XController; }
+} } }
 
 class SdrView;
 namespace vcl { class Window; }
 
 namespace accessibility {
+
+class IAccessibleViewForwarder;
 
 /** This class bundles all information that is passed down the tree of
     accessible shapes so that each shape has access to that info.

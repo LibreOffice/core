@@ -20,18 +20,39 @@
 #ifndef INCLUDED_SVX_ACCESSIBLECONTROLSHAPE_HXX
 #define INCLUDED_SVX_ACCESSIBLECONTROLSHAPE_HXX
 
+#include <exception>
+
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/util/XModeChangeListener.hpp>
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <svx/AccessibleShape.hxx>
 
-#include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
-#include <com/sun/star/util/XModeChangeBroadcaster.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
-#include <cppuhelper/implbase4.hxx>
-#include <comphelper/uno3.hxx>
-
-namespace com { namespace sun { namespace star { namespace awt {
-    class XControl;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace accessibility { class XAccessible; }
+    namespace accessibility { class XAccessibleContext; }
+    namespace accessibility { struct AccessibleEventObject; }
+    namespace accessibility { class XAccessibleRelationSet; }
+    namespace awt { class XControl; }
+    namespace beans { class XPropertySet; }
+    namespace beans { class XPropertySetInfo; }
+    namespace beans { struct PropertyChangeEvent; }
+    namespace container { struct ContainerEvent; }
+    namespace lang { class XComponent; }
+    namespace lang { class XTypeProvider; }
+    namespace uno { class XAggregation; }
+    namespace util { struct ModeChangeEvent; }
+} } }
 
 namespace comphelper
 {
@@ -40,6 +61,9 @@ namespace comphelper
 
 class SdrObject;
 namespace accessibility {
+
+    class AccessibleShapeInfo;
+    class AccessibleShapeTreeInfo;
 
     typedef ::cppu::ImplHelper4 <   css::beans::XPropertyChangeListener
                                 ,   css::util::XModeChangeListener

@@ -54,6 +54,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -67,6 +68,7 @@
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
+#include <svx/IAccessibleParent.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/viewfrm.hxx>

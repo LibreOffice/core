@@ -27,6 +27,7 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 #include <o3tl/make_unique.hxx>
 

@@ -32,6 +32,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <svtools/fmtfield.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 #include "document.hxx"
 

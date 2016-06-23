@@ -21,18 +21,19 @@
 #define INCLUDED_SVX_ACCESSIBLETEXTHELPER_HXX
 
 #include <memory>
-#include <sal/types.h>
-#include <tools/gen.hxx>
+#include <vector>
+
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <sal/types.h>
 #include <svx/svxdllapi.h>
 
+namespace com { namespace sun { namespace star {
+    namespace accessibility { class XAccessible; }
+    namespace accessibility { class XAccessibleEventListener; }
+    namespace awt { struct Point; }
+} } }
 
-class SvxTextForwarder;
-class SvxViewForwarder;
+class Point;
 class SvxEditSource;
 
 namespace accessibility

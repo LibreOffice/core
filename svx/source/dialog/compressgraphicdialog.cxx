@@ -18,11 +18,13 @@
  */
 
 #include <dlgunit.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/slider.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/dialmgr.hxx>

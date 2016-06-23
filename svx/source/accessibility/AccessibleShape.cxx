@@ -35,6 +35,10 @@
 #include <editeng/outlobj.hxx>
 #include <rtl/ref.hxx>
 #include <editeng/unoedsrc.hxx>
+#include <svx/AccessibleTextHelper.hxx>
+#include <svx/ChildrenManager.hxx>
+#include <svx/IAccessibleParent.hxx>
+#include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>

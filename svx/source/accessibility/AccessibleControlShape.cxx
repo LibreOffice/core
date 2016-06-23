@@ -22,10 +22,12 @@
 #include "svx/DescriptionGenerator.hxx"
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/processfactory.hxx>
@@ -33,6 +35,7 @@
 #include <comphelper/types.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <svx/IAccessibleParent.hxx>
 #include <svx/svdouno.hxx>
 #include "svx/unoapi.hxx"
 #include <svx/ShapeTypeHandler.hxx>
