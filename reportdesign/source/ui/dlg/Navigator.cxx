@@ -266,7 +266,6 @@ void NavigatorTree::dispose()
         pCurrent = Next(pCurrent);
     }
     m_pReportListener->dispose();
-    m_pSelectionListener->dispose();
     SvTreeListBox::dispose();
 }
 
