@@ -359,14 +359,12 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
 
     // build the SalExtTextInputEvent and send it up
 
-    pPreeditData->aInputEv.mnTime = 0;
     pPreeditData->aInputEv.mpTextAttr = Preedit_FeedbackToSAL(
         pPreeditData->aText.pCharStyle, pPreeditData->aText.nLength, pPreeditData->aInputFlags);
     pPreeditData->aInputEv.mnCursorPos = call_data->caret;
     pPreeditData->aInputEv.maText = OUString(pPreeditData->aText.pUnicodeBuffer,
                                 pPreeditData->aText.nLength);
     pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
-    pPreeditData->aInputEv.mbOnlyCursor = False;
 
     if ( pPreeditData->eState == PreeditStatus::Active && pPreeditData->pFrame )
         pPreeditData->pFrame->CallCallback(SalEvent::ExtTextInput, static_cast<void*>(&pPreeditData->aInputEv));

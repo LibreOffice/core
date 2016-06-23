@@ -125,7 +125,6 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     nRolloveredItem = ITEMPOS_INVALID;
     mbAutoPopup = true;
     bIgnoreFirstMove = true;
-    bStayActive = false;
     SetMBWHideAccel(true);
     SetMBWMenuKey(false);
 
@@ -452,31 +451,26 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
     if ( ( nHighlightedItem == ITEMPOS_INVALID ) && ( n != ITEMPOS_INVALID ) )
     {
         ImplGetSVData()->maWinData.mbNoDeactivate = true;
-        if( !bStayActive )
-        {
-            // #105406# avoid saving the focus when we already have the focus
-            bool bNoSaveFocus = (this == ImplGetSVData()->maWinData.mpFocusWin.get() );
+        // #105406# avoid saving the focus when we already have the focus
+        bool bNoSaveFocus = (this == ImplGetSVData()->maWinData.mpFocusWin.get() );
 
-            if( xSaveFocusId != nullptr )
+        if( xSaveFocusId != nullptr )
+        {
+            if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
             {
-                if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
-                {
-                    xSaveFocusId = nullptr;
-                    if( !bNoSaveFocus )
-                        xSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
-                }
-                else {
-                    ; // do nothing: we 're activated again from taskpanelist, focus was already saved
-                }
-            }
-            else
-            {
-                if( !bNoSaveFocus )
+                 xSaveFocusId = nullptr;
+                 if( !bNoSaveFocus )
                     xSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+            }
+            else {
+                ; // do nothing: we 're activated again from taskpanelist, focus was already saved
             }
         }
         else
-            bStayActive = false;
+        {
+            if( !bNoSaveFocus )
+                xSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+        }
         pMenu->bInCallback = true;  // set here if Activate overridden
         pMenu->Activate();
         pMenu->bInCallback = false;

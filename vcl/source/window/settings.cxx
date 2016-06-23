@@ -68,7 +68,7 @@ void Window::SetSettings( const AllSettings& rSettings, bool bChild )
         DataChanged( aDCEvt );
     }
 
-    if ( bChild || mpWindowImpl->mbChildNotify )
+    if ( bChild )
     {
         vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
@@ -133,7 +133,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
         CallEventListeners( VCLEVENT_WINDOW_DATACHANGED, &aDCEvt);
     }
 
-    if ( bChild || mpWindowImpl->mbChildNotify )
+    if ( bChild )
     {
         vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )

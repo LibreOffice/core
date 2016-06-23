@@ -1053,7 +1053,6 @@ void GtkSalFrame::InitCommon()
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
     m_bSendModChangeOnRelease = false;
     m_pIMHandler        = nullptr;
-    m_hBackgroundPixmap = None;
     m_nExtStyle         = 0;
     m_pRegion           = nullptr;
     m_pDropTarget       = nullptr;
@@ -3579,12 +3578,10 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
     vcl::DeletionListener aDel( m_pFrame );
 
     SalExtTextInputEvent aEmptyEv;
-    aEmptyEv.mnTime             = 0;
     aEmptyEv.mpTextAttr         = nullptr;
     aEmptyEv.maText.clear();
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
-    aEmptyEv.mbOnlyCursor       = False;
     m_pFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void*>(&aEmptyEv) );
     if( ! aDel.isDeleted() )
         m_pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
@@ -3766,12 +3763,10 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* /*pContext*/, gchar* 
             (pThis->m_aInputEvent.mpTextAttr != nullptr) ||
             pThis->m_bPreeditJustChanged;
 
-        pThis->m_aInputEvent.mnTime             = 0;
         pThis->m_aInputEvent.mpTextAttr         = nullptr;
         pThis->m_aInputEvent.maText             = OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 );
         pThis->m_aInputEvent.mnCursorPos        = pThis->m_aInputEvent.maText.getLength();
         pThis->m_aInputEvent.mnCursorFlags      = 0;
-        pThis->m_aInputEvent.mbOnlyCursor       = False;
 
         pThis->m_aInputFlags.clear();
 
@@ -3846,11 +3841,9 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     pThis->m_bPreeditJustChanged = true;
 
     bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != nullptr;
-    pThis->m_aInputEvent.mnTime             = 0;
     pThis->m_aInputEvent.maText             = pText ? OUString( pText, strlen(pText), RTL_TEXTENCODING_UTF8 ) : OUString();
     pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
     pThis->m_aInputEvent.mnCursorFlags      = 0;
-    pThis->m_aInputEvent.mbOnlyCursor       = False;
 
     pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, (int)pThis->m_aInputEvent.maText.getLength() ), ExtTextInputAttr::NONE );
 

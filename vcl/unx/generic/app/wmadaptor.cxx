@@ -221,7 +221,6 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 
 WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         m_pSalDisplay( pDisplay ),
-        m_bTransientBehaviour( true ),
         m_bEnableAlwaysOnTopWorks( false ),
         m_bLegacyPartialFullscreen( false ),
         m_nWinGravity( StaticGravity ),
@@ -335,7 +334,6 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
         WMAdaptor( pSalDisplay )
 {
     // currently all _NET WMs do transient like expected
-    m_bTransientBehaviour = true;
 
     Atom                aRealType   = None;
     int                 nFormat     = 8;
@@ -525,7 +523,6 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         m_bValid( false )
 {
     // currently all Gnome WMs do transient like expected
-    m_bTransientBehaviour = true;
 
     Atom                aRealType   = None;
     int                 nFormat     = 8;

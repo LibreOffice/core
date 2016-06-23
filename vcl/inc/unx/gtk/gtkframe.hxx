@@ -180,7 +180,6 @@ class GtkSalFrame : public SalFrame
     GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
     GdkNativeWindow                 m_aForeignTopLevelWindow;
-    Pixmap                          m_hBackgroundPixmap;
     SalFrameStyleFlags              m_nStyle;
     SalExtStyle                     m_nExtStyle;
     GtkSalFrame*                    m_pParent;
@@ -381,7 +380,6 @@ public:
     GdkNativeWindow getForeignParentWindow() const { return m_aForeignParentWindow; }
     GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }
     GdkNativeWindow getForeignTopLevelWindow() const { return m_aForeignTopLevelWindow; }
-    Pixmap getBackgroundPixmap() const { return m_hBackgroundPixmap; }
     const SalX11Screen& getXScreenNumber() const { return m_nXScreen; }
     int          GetDisplayScreen() const { return maGeometry.nDisplayScreenNumber; }
     void updateScreenNumber();

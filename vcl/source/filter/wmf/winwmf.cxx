@@ -1296,7 +1296,6 @@ void WMFReader::ReadWMF()
 
     nSkipActions = 0;
     nCurrentAction = 0;
-    nUnicodeEscapeAction = 0;
 
     pEMFStream.reset();
     nEMFRecCount    = 0;
@@ -1796,7 +1795,6 @@ WMFReader::WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
     , nEMFSize(0)
     , nSkipActions(0)
     , nCurrentAction(0)
-    , nUnicodeEscapeAction(0)
     , pExternalHeader(pExtHeader)
 {}
 

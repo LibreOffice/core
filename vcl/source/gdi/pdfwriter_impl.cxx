@@ -1721,7 +1721,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_nNextFID( 1 ),
         m_nInheritedPageWidth( 595 ),  // default A4
         m_nInheritedPageHeight( 842 ), // default A4
-        m_eInheritedOrientation( PDFWriter::Portrait ),
         m_nCurrentPage( -1 ),
         m_nCatalogObject(0),
         m_nSignatureObject( -1 ),
@@ -5578,16 +5577,6 @@ bool PDFWriterImpl::emitCatalog()
     aLine.append( getResourceDictObj() );
     aLine.append( " 0 R\n" );
 
-    switch( m_eInheritedOrientation )
-    {
-        case PDFWriter::Landscape: aLine.append( "/Rotate 90\n" );break;
-        case PDFWriter::Seascape: aLine.append( "/Rotate -90\n" );break;
-
-        case PDFWriter::Inherit: // actually Inherit would be a bug, but insignificant
-        case PDFWriter::Portrait:
-        default:
-            break;
-    }
     sal_Int32 nMediaBoxWidth = 0;
     sal_Int32 nMediaBoxHeight = 0;
     if( m_aPages.empty() ) // sanity check, this should not happen
@@ -11096,9 +11085,6 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             switch( rObject.m_aBitmap.GetTransparentType() )
             {
                 case TransparentType::NONE:
-                    // comes from drawMask function
-                    if( aBitmap.GetBitCount() == 1 && rObject.m_bDrawMask )
-                        bMask = true;
                     break;
                 case TransparentType::Color:
                     aTransparentColor = rObject.m_aBitmap.GetTransparentColor();
@@ -11524,7 +11510,6 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
         m_aBitmaps.front().m_nObject    = createObject();
-        m_aBitmaps.front().m_bDrawMask  = false;
         it = m_aBitmaps.begin();
     }
 
@@ -12213,23 +12198,6 @@ void PDFWriterImpl::setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent 
     {
         nNewParent = 0;
     }
-    // remove item from previous parent
-    sal_Int32 nParentID = m_aOutline[ nItem ].m_nParentID;
-    if( nParentID >= 0 && nParentID < (sal_Int32)m_aOutline.size() )
-    {
-        PDFOutlineEntry& rParent = m_aOutline[ nParentID ];
-
-        for( std::vector<sal_Int32>::iterator it = rParent.m_aChildren.begin();
-             it != rParent.m_aChildren.end(); ++it )
-        {
-            if( *it == nItem )
-            {
-                rParent.m_aChildren.erase( it );
-                break;
-            }
-        }
-    }
-
     // insert item to new parent's list of children
     m_aOutline[ nNewParent ].m_aChildren.push_back( nItem );
 }

@@ -63,7 +63,7 @@ class Font2
 Font2::Font2(const PrinterGfx &rGfx)
 {
     mpFont[0] = rGfx.GetFontID();
-    mpFont[1] = rGfx.getFallbackID();
+    mpFont[1] = 0; // fallback ID
 
     PrintFontManager &rMgr = PrintFontManager::get();
     mbSymbol = mpFont[0] != -1 &&

@@ -194,11 +194,9 @@ public:
         BitmapID    m_aID;
         BitmapEx    m_aBitmap;
         sal_Int32   m_nObject;
-        bool        m_bDrawMask;
 
         BitmapEmit()
             : m_nObject(0)
-            , m_bDrawMask(false)
         {
         }
     };
@@ -356,7 +354,6 @@ public:
 
     struct PDFOutlineEntry
     {
-        sal_Int32                   m_nParentID;
         sal_Int32                   m_nObject;
         sal_Int32                   m_nParentObject;
         sal_Int32                   m_nNextObject;
@@ -366,8 +363,7 @@ public:
         sal_Int32                   m_nDestID;
 
         PDFOutlineEntry()
-                : m_nParentID( -1 ),
-                  m_nObject( 0 ),
+                : m_nObject( 0 ),
                   m_nParentObject( 0 ),
                   m_nNextObject( 0 ),
                   m_nPrevObject( 0 ),
@@ -638,7 +634,6 @@ private:
 
     sal_Int32                           m_nInheritedPageWidth;  // in inch/72
     sal_Int32                           m_nInheritedPageHeight; // in inch/72
-    PDFWriter::Orientation              m_eInheritedOrientation;
     sal_Int32                           m_nCurrentPage;
 
     sal_Int32                           m_nCatalogObject;

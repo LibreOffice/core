@@ -346,7 +346,6 @@ private:
     const U8* mpReadEnd;
 
     U8*     mpWritePtr;
-    bool    mbSawError;
     bool    mbNeedClose;
     bool    mbIgnoreHints;
     sal_Int32 mnCntrMask;
@@ -416,7 +415,6 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     , mpReadPtr(nullptr)
     , mpReadEnd(nullptr)
     , mpWritePtr(nullptr)
-    , mbSawError(false)
     , mbNeedClose(false)
     , mbIgnoreHints(false)
     , mnCntrMask(0)
@@ -1212,7 +1210,6 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
     writeType1Val( 0); // TODO: aSubsetterContext.getLeftSideBearing();
     writeType1Val( 1000/*###getCharWidth()###*/);
     writeTypeOp( TYPE1OP::HSBW);
-mbSawError = false;
 mbNeedClose = false;
 mbIgnoreHints = false;
 mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;//#######
@@ -1223,23 +1220,6 @@ mnCntrMask = 0;
 //      writeTypeOp( TYPE1OP::CLOSEPATH);
 //  if( bSubRoutine)
 //      writeTypeOp( TYPE1OP::RETURN);
-if( mbSawError) {
-    mpWritePtr = pT1Ops+4;
-     // create an "idiotproof" charstring
-    writeType1Val( 0);
-    writeType1Val( 800);
-    writeTypeOp( TYPE1OP::HSBW);
-    writeType1Val( 50);
-    writeTypeOp( TYPE1OP::HMOVETO);
-    writeType1Val( 650);
-    writeType1Val( 100);
-    writeTypeOp( TYPE1OP::RLINETO);
-    writeType1Val( -350);
-    writeType1Val( 700);
-    writeTypeOp( TYPE1OP::RLINETO);
-    writeTypeOp( TYPE1OP::CLOSEPATH);
-    writeTypeOp( TYPE1OP::ENDCHAR);
-}
 #else // useful for manually encoding charstrings
     mpWritePtr = pT1Ops;
     mpWritePtr += sprintf( (char*)mpWritePtr, "OOo_\x8b\x8c\x0c\x10\x0b");
@@ -1714,7 +1694,6 @@ public:
     void        emitValVector( const char* pLineHead, const char* pLineTail, const std::vector<ValType>&);
 private:
     FILE*       mpFileOut;
-    bool        mbCloseOutfile;
     char        maBuffer[MAX_T1OPS_SIZE];   // TODO: dynamic allocation
     int         mnEECryptR;
 public:
@@ -1727,7 +1706,6 @@ public:
 
 Type1Emitter::Type1Emitter( FILE* pOutFile, bool bPfbSubset)
 :   mpFileOut( pOutFile)
-,   mbCloseOutfile( false)
 ,   maBuffer{}
 ,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
 ,   mpPtr( maBuffer)
@@ -1741,8 +1719,6 @@ Type1Emitter::~Type1Emitter()
 {
     if( !mpFileOut)
         return;
-    if( mbCloseOutfile )
-        fclose( mpFileOut);
     mpFileOut = nullptr;
 }
 
