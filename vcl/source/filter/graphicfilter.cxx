@@ -41,6 +41,7 @@
 #include <vcl/wmf.hxx>
 #include <vcl/settings.hxx>
 #include "igif/gifread.hxx"
+#include "ipdf/pdfread.hxx"
 #include "jpeg/jpeg.hxx"
 #include "ixbm/xbmread.hxx"
 #include "ixpm/xpmread.hxx"
@@ -759,6 +760,16 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
              sFirstBytes[ 7 ] == 'v' && sFirstBytes[ 11 ] == 'l' && sFirstBytes[ 12 ] == 'm'))
         {
             rFormatExtension = "MOV";
+            return true;
+        }
+    }
+
+    if (!bTest || rFormatExtension.startsWith("PDF"))
+    {
+        if ((sFirstBytes[0] == '%' && sFirstBytes[1] == 'P' && sFirstBytes[2] == 'D' &&
+             sFirstBytes[3] == 'F' && sFirstBytes[4] == '-'))
+        {
+            rFormatExtension = "PDF";
             return true;
         }
     }
@@ -1684,6 +1695,11 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 }
                 break;
             }
+        }
+        else if (aFilterName == IMP_PDF)
+        {
+            if (!ImportPDF(rIStream, rGraphic))
+                nStatus = GRFILTER_FILTERERROR;
         }
         else
             nStatus = GRFILTER_FILTERERROR;
