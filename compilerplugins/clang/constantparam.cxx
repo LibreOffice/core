@@ -16,8 +16,7 @@
 #include "compat.hxx"
 
 /*
- Find methods with default params, where the callers never specify the default param i.e.
- might as well remove it.
+  Find params on methods where the param is only ever passed as a single constant value.
 
  The process goes something like this:
   $ make check
