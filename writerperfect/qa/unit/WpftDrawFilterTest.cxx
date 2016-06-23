@@ -34,6 +34,10 @@ void WpftDrawFilterTest::test()
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional
     {
         {"ClarisDraw.hqx", REQUIRE_MWAW_VERSION(0, 3, 5)},
+        {"CricketDraw_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
+        {"CricketDraw_1.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
+        {"FreeHand_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
+        {"FreeHand_2.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
         {"MacDraft_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 5)},
         {"MacDraft_5.5.drw", REQUIRE_MWAW_VERSION(0, 3, 6)},
         {"MacDraw_0.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},

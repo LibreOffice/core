@@ -41,6 +41,8 @@ void WpftWriterFilterTest::test()
     };
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional
     {
+        {"MaxWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
+        {"MouseWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8)},
         {"RagTime_2.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},
         {"RagTime_3.2.hqx", REQUIRE_MWAW_VERSION(0, 3, 2)},
         {"RagTime_5.5.rag", REQUIRE_MWAW_VERSION(0, 3, 6)},
