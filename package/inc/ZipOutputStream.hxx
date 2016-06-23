@@ -40,6 +40,7 @@ class ZipOutputStream
     ZipEntry            *m_pCurrentEntry;
     comphelper::ThreadPool &m_rSharedThreadPool;
     std::vector< ZipOutputEntry* > m_aEntries;
+    ::css::uno::Any m_aDeflateException;
 
 public:
     ZipOutputStream(
