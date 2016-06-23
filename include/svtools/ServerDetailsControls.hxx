@@ -37,7 +37,6 @@ class DetailsContainer
         VclPtr<FixedText>      m_pFTPort;
         VclPtr<Edit>           m_pEDRoot;
         VclPtr<FixedText>      m_pFTRoot;
-        bool                   m_bIsActive;
 
     public:
         DetailsContainer( VclBuilderContainer* pBuilder );

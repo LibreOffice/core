@@ -65,7 +65,6 @@ class SvtAccessibilityOptions_Impl
 {
 private:
     css::uno::Reference< css::container::XNameAccess > m_xCfg;
-    bool                                               bIsModified;
 
 public:
     SvtAccessibilityOptions_Impl();
@@ -109,8 +108,6 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
                 s_sAccessibility,
                 ::comphelper::EConfigurationModes::Standard ),
             css::uno::UNO_QUERY);
-
-        bIsModified = false;
     }
     catch(const css::uno::Exception& ex)
     {

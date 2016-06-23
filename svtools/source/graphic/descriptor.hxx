@@ -110,7 +110,6 @@ private:
     sal_uInt16              mnBitsPerPixel;
     bool                    mbTransparent;
     bool                    mbAlpha;
-    bool                    mbAnimated;
 
     GraphicDescriptor( const GraphicDescriptor& rDescriptor ) = delete;
 

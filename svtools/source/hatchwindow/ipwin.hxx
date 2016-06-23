@@ -31,7 +31,6 @@ class SvResizeHelper
     Rectangle   aOuter;
     short       nGrab; // -1 no Grab,  0 - 7, 8 = Move, see FillHandle...
     Point       aSelPos;
-    bool        bResizeable;
 public:
     SvResizeHelper();
 

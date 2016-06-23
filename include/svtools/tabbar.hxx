@@ -328,8 +328,6 @@ private:
     bool            mbEditCanceled : 1;
     bool            mbDropPos : 1;
     bool            mbInSelect : 1;
-    bool            mbSelColor : 1;
-    bool            mbSelTextColor : 1;
     bool            mbMirrored : 1;
     bool            mbScrollAlwaysEnabled : 1;
 

@@ -208,7 +208,6 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
     Link<SvtIconChoiceCtrl*,void>  _aClickIconHdl;
     KeyEvent*                      _pCurKeyEvent;
     std::unique_ptr<SvxIconChoiceCtrl_Impl>        _pImpl;
-    bool                           _bAutoFontColor;
 
 protected:
 
@@ -296,8 +295,6 @@ public:
 #ifdef DBG_UTIL
     void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = nullptr );
 #endif
-
-    bool                AutoFontColor () { return _bAutoFontColor; }
 
     Point               GetPixelPos( const Point& rPosLogic ) const;
     void                SetSelectionMode( SelectionMode eMode );

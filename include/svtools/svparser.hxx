@@ -63,14 +63,6 @@ protected:
     sal_uInt32 nNextCh;                // current character codepoint in UTF32 for the "lex"
 
 
-    bool                bDownloadingFile : 1; // true: An external file is
-                                        // currently being loaded, i.e.
-                                        // all DataAvailable Links must
-                                        // be ignored.
-                                        // If none of the following
-                                        // flags is set, the stream
-                                        // is read as ANSI, but returned
-                                        // as CharSet DONTKNOW.
     bool                bUCS2BSrcEnc : 1;   // or as big-endian UCS2
     bool                bSwitchToUCS2 : 1;  // switching is allowed
 
@@ -141,8 +133,6 @@ public:
     void SaveState( int nToken );
     void RestoreState();
     virtual void Continue( int nToken );
-
-    inline bool IsDownloadingFile() const { return bDownloadingFile; }
 
     // Set/get source encoding. The UCS2BEncoding flag is valid if source
     // encoding is UCS2. It specifies a big endian encoding.

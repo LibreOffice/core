@@ -1552,23 +1552,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const Rectangle& rRect,
     {
         OUString aText = SvtIconChoiceCtrl::GetEntryText(pEntry, false);
 
-        Color aOldFontColor = rRenderContext.GetTextColor();
-        if (pView->AutoFontColor())
-        {
-            Color aBkgColor(rRenderContext.GetBackground().GetColor());
-            Color aFontColor;
-            sal_uInt16 nColor = (aBkgColor.GetRed() + aBkgColor.GetGreen() + aBkgColor.GetBlue()) / 3;
-            if (nColor > 127)
-                aFontColor.SetColor(COL_BLACK);
-            else
-                aFontColor.SetColor(COL_WHITE);
-            rRenderContext.SetTextColor(aFontColor);
-        }
-
         rRenderContext.DrawText(rRect, aText, nCurTextDrawFlags);
-
-        if (pView->AutoFontColor())
-            rRenderContext.SetTextColor(aOldFontColor);
 
         if (pEntry->IsFocused())
         {

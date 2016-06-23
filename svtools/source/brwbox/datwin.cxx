@@ -43,18 +43,12 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     rDev.SetFillColor( aColFace );
     rDev.DrawRect( aRect );
 
-    if( rDev.GetOutDevType() == OUTDEV_WINDOW )
+    if( rDev.GetOutDevType() != OUTDEV_WINDOW )
     {
-        vcl::Window *pWin = static_cast<vcl::Window*>( &rDev );
-        if( bPressed )
-            pWin->DrawSelectionBackground( aRect, 0, true, false );
-    }
-    else
-    {
-        rDev.SetLineColor( bPressed ? aColShadow : aColLight );
+        rDev.SetLineColor( aColLight );
         rDev.DrawLine( aRect.TopLeft(), Point( aRect.Right(), aRect.Top() ) );
         rDev.DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom() - 1 ) );
-        rDev.SetLineColor( bPressed ? aColLight : aColShadow );
+        rDev.SetLineColor( aColShadow );
         rDev.DrawLine( aRect.BottomRight(), Point( aRect.Right(), aRect.Top() ) );
         rDev.DrawLine( aRect.BottomRight(), Point( aRect.Left(), aRect.Bottom() ) );
     }

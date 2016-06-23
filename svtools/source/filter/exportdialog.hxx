@@ -124,7 +124,6 @@ private:
 
     bool                mbIsPixelFormat;
     bool                mbExportSelection;
-    bool                mbPreserveAspectRatio;
 
     sal_Int32           mnInitialResolutionUnit;
 
