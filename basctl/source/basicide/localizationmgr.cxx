@@ -171,10 +171,10 @@ OUString implCreatePureResourceId
       const Reference< XStringResourceManager >& xStringResourceManager )
 {
     sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-    OUString aPureIdStr = OUString::number( nUniqueId );
-    aPureIdStr += aDot;
-    aPureIdStr += aDialogName;
-    aPureIdStr += aDot;
+    OUString aPureIdStr = OUString::number( nUniqueId )
+                        + aDot
+                        + aDialogName
+                        + aDot;
     if( !aCtrlName.isEmpty() )
     {
         aPureIdStr += aCtrlName;
@@ -402,10 +402,10 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         aIdStrings.realloc( nPropStringCount );
                         OUString* pIdStrings = aIdStrings.getArray();
 
-                        OUString aIdStrBase = aDot;
-                        aIdStrBase += aCtrlName;
-                        aIdStrBase += aDot;
-                        aIdStrBase += aPropName;
+                        OUString aIdStrBase = aDot
+                                            + aCtrlName
+                                            + aDot
+                                            + aPropName;
 
                         const Locale* pLocales = aLocaleSeq.getConstArray();
                         sal_Int32 i;
@@ -420,8 +420,8 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             }
 
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-                            OUString aPureIdStr = OUString::number( nUniqueId );
-                            aPureIdStr += aIdStrBase;
+                            OUString aPureIdStr = OUString::number( nUniqueId )
+                                                + aIdStrBase;
 
                             // Set Id for all locales
                             for( sal_Int32 iLocale = 0 ; iLocale < nLocaleCount ; iLocale++ )
@@ -430,8 +430,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 xStringResourceManager->setStringForLocale( aPureIdStr, aPropStr, rLocale );
                             }
 
-                            OUString aPropIdStr = aEsc;
-                            aPropIdStr += aPureIdStr;
+                            OUString aPropIdStr = aEsc + aPureIdStr;
                             pIdStrings[i] = aPropIdStr;
                         }
                         xPropertySet->setPropertyValue( aPropName, Any(aIdStrings) );
@@ -499,10 +498,10 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         aIdStrings.realloc( nPropStringCount );
                         OUString* pIdStrings = aIdStrings.getArray();
 
-                        OUString aIdStrBase = aDot;
-                        aIdStrBase += aCtrlName;
-                        aIdStrBase += aDot;
-                        aIdStrBase += aPropName;
+                        OUString aIdStrBase = aDot
+                                            + aCtrlName
+                                            + aDot
+                                            + aPropName;
 
                         const Locale* pLocales = aLocaleSeq.getConstArray();
                         sal_Int32 i;
@@ -512,8 +511,8 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
 
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-                            OUString aPureIdStr = OUString::number( nUniqueId );
-                            aPureIdStr += aIdStrBase;
+                            OUString aPureIdStr = OUString::number( nUniqueId )
+                                                + aIdStrBase;
 
                             // Set Id for all locales
                             for( sal_Int32 iLocale = 0 ; iLocale < nLocaleCount ; iLocale++ )
@@ -532,8 +531,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 {}
                             }
 
-                            OUString aPropIdStr = aEsc;
-                            aPropIdStr += aPureIdStr;
+                            OUString aPropIdStr = aEsc + aPureIdStr;
                             pIdStrings[i] = aPropIdStr;
                         }
                         xPropertySet->setPropertyValue( aPropName, Any(aIdStrings) );
@@ -545,10 +543,10 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         aIdStrings.realloc( nPropStringCount );
                         OUString* pIdStrings = aIdStrings.getArray();
 
-                        OUString aIdStrBase = aDot;
-                        aIdStrBase += aCtrlName;
-                        aIdStrBase += aDot;
-                        aIdStrBase += aPropName;
+                        OUString aIdStrBase = aDot
+                                            + aCtrlName
+                                            + aDot
+                                            + aPropName;
 
                         const Locale& rDefaultLocale = xSourceStringResolver->getDefaultLocale();
 
@@ -560,8 +558,8 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
 
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-                            OUString aPureIdStr = OUString::number( nUniqueId );
-                            aPureIdStr += aIdStrBase;
+                            OUString aPureIdStr = OUString::number( nUniqueId )
+                                                + aIdStrBase;
 
                             // Set Id for all locales
                             for( sal_Int32 iLocale = 0 ; iLocale < nLocaleCount ; iLocale++ )
@@ -582,8 +580,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 xStringResourceManager->setStringForLocale( aPureIdStr, aResStr, rLocale );
                             }
 
-                            OUString aPropIdStr = aEsc;
-                            aPropIdStr += aPureIdStr;
+                            OUString aPropIdStr = aEsc + aPureIdStr;
                             pIdStrings[i] = aPropIdStr;
                         }
                         xPropertySet->setPropertyValue( aPropName, Any(aIdStrings) );
