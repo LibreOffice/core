@@ -98,7 +98,12 @@ void ZipOutputStream::consumeScheduledThreadEntry(ZipOutputEntry* pCandidate)
     //Any exceptions thrown in the threads were caught and stored for now
     ::css::uno::Any aCaughtException(pCandidate->getParallelDeflateException());
     if (aCaughtException.hasValue())
-        ::cppu::throwException(aCaughtException);
+    {
+        m_aDeflateException = aCaughtException; // store it for later throwing
+        // the exception handler in DeflateThread should have cleaned temp file
+        delete pCandidate;
+        return;
+    }
 
     writeLOC(pCandidate->getZipEntry(), pCandidate->isEncrypt());
 
@@ -187,6 +192,11 @@ void ZipOutputStream::finish()
     writeEND( nOffset, static_cast < sal_Int32 > (m_aChucker.GetPosition()) - nOffset);
     m_xStream->flush();
     m_aZipList.clear();
+
+    if (m_aDeflateException.hasValue())
+    {   // throw once all threads are finished and m_aEntries can be released
+        ::cppu::throwException(m_aDeflateException);
+    }
 }
 
 css::uno::Reference< css::io::XOutputStream > ZipOutputStream::getStream()

@@ -486,6 +486,17 @@ private:
         catch (const uno::Exception&)
         {
             mpEntry->setParallelDeflateException(::cppu::getCaughtException());
+            try
+            {
+                if (mpEntry->m_xOutStream.is())
+                    mpEntry->closeBufferFile();
+                if (!mpEntry->m_aTempURL.isEmpty())
+                    mpEntry->deleteBufferFile();
+            }
+            catch (uno::Exception const&)
+            {
+            }
+            mpEntry->setFinished();
         }
     }
 };
