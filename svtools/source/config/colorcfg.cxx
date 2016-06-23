@@ -67,7 +67,6 @@ ColorConfig_Impl*    ColorConfig::m_pImpl = nullptr;
 class ColorConfig_Impl : public utl::ConfigItem
 {
     ColorConfigValue m_aConfigValues[ColorConfigEntryCount];
-    bool             m_bEditMode;
     OUString         m_sLoadedScheme;
     bool             m_bAutoDetectSystemHC;
 
@@ -192,15 +191,11 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
 
 ColorConfig_Impl::ColorConfig_Impl() :
     ConfigItem("Office.UI/ColorScheme"),
-    m_bEditMode(false),
     m_bAutoDetectSystemHC(true)
 {
-    if(!m_bEditMode)
-    {
-        //try to register on the root node - if possible
-        uno::Sequence < OUString > aNames(1);
-        EnableNotification( aNames );
-    }
+    //try to register on the root node - if possible
+    uno::Sequence < OUString > aNames(1);
+    EnableNotification( aNames );
 
     if (!utl::ConfigManager::IsAvoidConfig())
         Load(OUString());

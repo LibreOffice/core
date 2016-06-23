@@ -38,7 +38,6 @@ class ButtonFrame
     Rectangle   aRect;
     Rectangle   aInnerRect;
     OUString    aText;
-    bool        bPressed;
     bool        m_bDrawDisabled;
 
 public:
@@ -49,7 +48,6 @@ public:
                 ,aInnerRect( Point( aRect.Left()+1, aRect.Top()+1 ),
                             Size( aRect.GetWidth()-2, aRect.GetHeight()-2 ) )
                 ,aText(rText)
-                ,bPressed(false)
                 ,m_bDrawDisabled(_bDrawDisabled)
             {
             }

@@ -982,7 +982,6 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         //ObjectDescriptor was already filly from the old DocShell.
         //Now adjust it. Thus in GetData the first query can still
         //be answered with delayed rendering.
-        m_aObjDesc.mbCanLink = false;
         Size aSz( OLESIZE );
         m_aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
 
@@ -1076,7 +1075,6 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
     //ObjectDescriptor was already filled from the old DocShell.
     //Now adjust it. Thus in GetData the first query can still
     //be answered with delayed rendering.
-    m_aObjDesc.mbCanLink = false;
     Size aSz( OLESIZE );
     m_aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
 
@@ -3096,7 +3094,6 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         //ObjectDescriptor was already filled from the old DocShell.
         //Now adjust it. Thus in GetData the first query can still
         //be answered with delayed rendering.
-        m_aObjDesc.mbCanLink = false;
         m_aObjDesc.maDragStartPos = rSttPos;
         m_aObjDesc.maSize = OutputDevice::LogicToLogic( Size( OLESIZE ),
                                                 MAP_TWIP, MAP_100TH_MM );

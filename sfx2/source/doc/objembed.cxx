@@ -165,7 +165,6 @@ void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescrip
     rDesc.maSize = OutputDevice::LogicToLogic( GetVisArea().GetSize(), GetMapUnit(), MAP_100TH_MM );
     rDesc.maDragStartPos = Point();
     rDesc.maDisplayName.clear();
-    rDesc.mbCanLink = false;
 }
 
 

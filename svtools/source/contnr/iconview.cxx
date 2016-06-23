@@ -139,7 +139,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
 
         Wallpaper aWallpaper = rRenderContext.GetBackground();
 
-        if (pViewDataEntry->IsHighlighted() && !pViewDataEntry->IsCursored())
+        if (pViewDataEntry->IsHighlighted())
         {
             Color aNewWallColor = rSettings.GetHighlightColor();
             if (!bInUse)

@@ -67,7 +67,6 @@ namespace svt
         oslInterlockedCount                                  m_aRefCount;
         css::uno::Reference< css::uno::XCurrentContext >     m_xNextContext;
         css::uno::Reference< css::task::XInteractionHandler> m_xHandler;
-        bool                                                 m_bShowErrorsOnce;
     };
 }
 

@@ -71,7 +71,6 @@ SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     , eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
     , nNextChPos(0)
     , nNextCh(0)
-    , bDownloadingFile(false)
     , bUCS2BSrcEnc(false)
     , bSwitchToUCS2(false)
     , bRTF_InTextRead(false)
@@ -621,11 +620,6 @@ IMPL_LINK_NOARG_TYPED( SvParser, NewDataRead, LinkParamNone*, void )
     switch( eState )
     {
     case SVPAR_PENDING:
-        // if file is loaded we are not allowed to continue
-        // instead should ignore the call.
-        if( IsDownloadingFile() )
-            break;
-
         eState = SVPAR_WORKING;
         RestoreState();
 

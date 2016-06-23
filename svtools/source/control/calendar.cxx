@@ -159,7 +159,6 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mnWinStyle              = nWinStyle;
     mnFirstYear             = 0;
     mnLastYear              = 0;
-    mnRequestYear           = 0;
     mbCalc                  = true;
     mbFormat                = true;
     mbDrag                  = false;
@@ -172,7 +171,6 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbPrevIn                = false;
     mbNextIn                = false;
     mbDirect                = false;
-    mbInSelChange           = false;
     mbTravelSelect          = false;
     mbScrollDateRange       = false;
     mbSelLeft               = false;
@@ -473,7 +471,6 @@ void Calendar::ImplFormat()
         mnFirstYear = nNewFirstYear;
         mnLastYear = nNewLastYear;
     }
-    mnRequestYear = 0;
 
     mbFormat = false;
 }
@@ -1098,10 +1095,6 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
     bool bNewSel = *pOldSel != *mpSelectTable;
     if ( (maCurDate != aOldDate) || bNewSel )
     {
-        if ( bNewSel )
-        {
-            mbInSelChange = false;
-        }
         HideFocus();
         if ( bNewSel )
             ImplUpdateSelection( pOldSel.get() );
@@ -1493,7 +1486,6 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             SetCurDate( aNewDate );
             mbDirect = false;
             maAnchorDate = aOldAnchorDate;
-            mbInSelChange = false;
             ImplUpdateSelection( pOldSel.get() );
         }
         else
@@ -1662,8 +1654,7 @@ void Calendar::SelectDate( const Date& rDate, bool bSelect )
 
     std::unique_ptr<IntDateSet> pOldSel;
 
-    if ( !mbInSelChange )
-        pOldSel.reset(new IntDateSet( *mpSelectTable ));
+    pOldSel.reset(new IntDateSet( *mpSelectTable ));
 
     ImplCalendarSelectDate( mpSelectTable, rDate, bSelect );
 
@@ -1675,8 +1666,7 @@ void Calendar::SetNoSelection()
 {
     std::unique_ptr<IntDateSet> pOldSel;
 
-    if ( !mbInSelChange )
-        pOldSel.reset(new IntDateSet( *mpSelectTable ));
+    pOldSel.reset(new IntDateSet( *mpSelectTable ));
 
     ImplCalendarClearSelectDate( mpSelectTable );
 

@@ -236,7 +236,6 @@ private:
     bool            mbScroll : 1;
     bool            mbFullMode : 1;
     bool            mbEdgeBlending : 1;
-    bool            mbIsTransientChildrenDisabled : 1;
     bool            mbHasVisibleItems : 1;
 
     friend class ValueSetAcc;

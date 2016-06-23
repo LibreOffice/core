@@ -74,12 +74,10 @@ struct TransferableObjectDescriptor
     sal_uInt32          mnOle2Misc;
     OUString            maTypeName;
     OUString            maDisplayName;
-    bool                mbCanLink;
 
     TransferableObjectDescriptor()
         : mnViewAspect(css::embed::Aspects::MSOLE_CONTENT)
         , mnOle2Misc(0)
-        , mbCanLink(false)
     {}
 
     SVT_DLLPUBLIC friend SvStream&  WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );

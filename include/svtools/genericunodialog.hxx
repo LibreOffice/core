@@ -74,7 +74,6 @@ namespace svt
     protected:
         VclPtr<Dialog>              m_pDialog;                  /// the dialog to execute
         bool                        m_bExecuting : 1;           /// we're currently executing the dialog
-        bool                        m_bCanceled : 1;            /// endDialog was called while we were executing
         bool                        m_bTitleAmbiguous : 1;      /// m_sTitle has not been set yet
         bool                        m_bInitialized : 1;         /// has "initialize" been called?
         bool                        m_bNeedInitialization : 1;  /// do we need to be initialized before any other API call is allowed?

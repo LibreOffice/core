@@ -1540,7 +1540,6 @@ void SdPageObjsTLB::AddShapeToTransferable (
         aObjectDescriptor.maDisplayName = pDocShell->GetMedium()->GetURLObject().GetURLNoPass();
     else
         aObjectDescriptor.maDisplayName.clear();
-    aObjectDescriptor.mbCanLink = false;
 
     rTransferable.SetStartPos(aDragPos);
     rTransferable.SetObjectDescriptor( aObjectDescriptor );

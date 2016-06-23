@@ -60,8 +60,7 @@ GraphicDescriptor::GraphicDescriptor() :
     meType( GraphicType::NONE ),
     mnBitsPerPixel ( 0 ),
     mbTransparent ( false ),
-    mbAlpha( false ),
-    mbAnimated( false )
+    mbAlpha( false )
 {
 }
 
@@ -150,7 +149,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
             maSize100thMM = aDescriptor.GetSize_100TH_MM();
             mnBitsPerPixel = aDescriptor.GetBitsPerPixel();
             mbTransparent = ( graphic::GraphicType::VECTOR == cType );
-            mbAlpha = mbAnimated = false;
+            mbAlpha = false;
         }
     }
 }
@@ -425,7 +424,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
             case UnoGraphicProperty::Animated:
             {
-                *pValues <<= mpGraphic ? mpGraphic->IsAnimated() : mbAnimated;
+                *pValues <<= mpGraphic && mpGraphic->IsAnimated();
             }
             break;
         }

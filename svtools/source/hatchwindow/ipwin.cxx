@@ -34,7 +34,6 @@
 SvResizeHelper::SvResizeHelper()
     : aBorder( 5, 5 )
     , nGrab( -1 )
-    , bResizeable( true )
 {
 }
 
@@ -121,15 +120,12 @@ void SvResizeHelper::Draw(vcl::RenderContext& rRenderContext)
     sal_uInt16 i;
     for (i = 0; i < 4; i++)
         rRenderContext.DrawRect(aMoveRects[i]);
-    if (bResizeable)
-    {
-        // draw handles
-        rRenderContext.SetFillColor(aColBlack);
-        Rectangle aRects[ 8 ];
-        FillHandleRectsPixel(aRects);
-        for (i = 0; i < 8; i++)
-            rRenderContext.DrawRect( aRects[ i ] );
-    }
+    // draw handles
+    rRenderContext.SetFillColor(aColBlack);
+    Rectangle aRects[ 8 ];
+    FillHandleRectsPixel(aRects);
+    for (i = 0; i < 8; i++)
+        rRenderContext.DrawRect( aRects[ i ] );
     rRenderContext.Pop();
 }
 
@@ -175,14 +171,11 @@ short SvResizeHelper::SelectMove( vcl::Window * pWin, const Point & rPos )
 {
     if( -1 == nGrab )
     {
-        if( bResizeable )
-        {
-            Rectangle aRects[ 8 ];
-            FillHandleRectsPixel( aRects );
-            for( sal_uInt16 i = 0; i < 8; i++ )
-                if( aRects[ i ].IsInside( rPos ) )
-                    return i;
-        }
+        Rectangle aRects[ 8 ];
+        FillHandleRectsPixel( aRects );
+        for( sal_uInt16 i = 0; i < 8; i++ )
+            if( aRects[ i ].IsInside( rPos ) )
+                return i;
         // Move-Rect overlaps Handles
         Rectangle aMoveRects[ 4 ];
         FillMoveRectsPixel( aMoveRects );

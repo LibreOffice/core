@@ -190,7 +190,6 @@ private:
     WinBits         mnWinStyle;
     sal_uInt16      mnFirstYear;
     sal_uInt16      mnLastYear;
-    sal_uInt16      mnRequestYear;
     bool            mbCalc:1,
                     mbFormat:1,
                     mbDrag:1,
@@ -203,7 +202,6 @@ private:
                     mbPrevIn:1,
                     mbNextIn:1,
                     mbDirect:1,
-                    mbInSelChange:1,
                     mbTravelSelect:1,
                     mbScrollDateRange:1,
                     mbSelLeft:1,
