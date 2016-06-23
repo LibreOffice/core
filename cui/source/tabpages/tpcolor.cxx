@@ -45,6 +45,9 @@
 #include <cuitabline.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <osl/file.hxx>
+#include <svx/Palette.hxx>
+
 
 using namespace com::sun::star;
 
@@ -92,31 +95,6 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, EmbedToggleHdl_Impl, CheckBox&, void)
 {
     SetEmbed( m_pBoxEmbed->IsChecked() );
 }
-
-void SvxColorTabPage::UpdateTableName()
-{
-    // Truncate the name if necessary ...
-    OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
-    aString += ": ";
-
-    XPropertyListRef pList = GetList();
-    if( !pList.is() )
-        return;
-
-    INetURLObject aURL( pList->GetPath() );
-    aURL.Append( pList->GetName() );
-
-    if ( aURL.getBase().getLength() > 18 )
-    {
-        aString += aURL.getBase().copy( 0, 15 );
-        aString += "...";
-    }
-    else
-        aString += aURL.getBase();
-
-    m_pTableName->SetText( aString );
-}
-
 
 IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickLoadHdl_Impl, Button*, void)
 {
@@ -171,7 +149,6 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickLoadHdl_Impl, Button*, void)
                     SetColorList(pList);
 
                 bLoaded = true;
-                UpdateTableName();
 
                 AddState( ChangeType::CHANGED );
                 SetModified( false );
@@ -241,7 +218,6 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickSaveHdl_Impl, Button*, void)
 
         if( pList->Save() )
         {
-            UpdateTableName();
             AddState( ChangeType::SAVED );
             SetModified( false );
         }
@@ -324,8 +300,8 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     get(m_pBoxEmbed, "embed");
     get(m_pBtnLoad, "load");
     get(m_pBtnSave, "save");
-    get(m_pTableName, "colortableft");
 
+    get(m_pSelectPalette, "paletteselector");
     get(m_pLbColor, "colorlb");
     get(m_pValSetColorList, "colorset");
     Size aSize = LogicToPixel(Size(94 , 117), MAP_APPFONT);
@@ -369,9 +345,8 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
 
     m_pBtnLoad->SetClickHdl( LINK( this, SvxColorTabPage, ClickLoadHdl_Impl ) );
     m_pBtnSave->SetClickHdl( LINK( this, SvxColorTabPage, ClickSaveHdl_Impl ) );
-
+    m_pLbColor->Hide();
     SetEmbed( GetEmbed() );
-    UpdateTableName();
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -383,6 +358,10 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
     // set handler
+    LoadPalettes();
+    FillPaletteLB();
+    m_pSelectPalette->SetSelectHdl(
+        LINK(this, SvxColorTabPage, SelectPaletteLBHdl_Impl) );
     m_pLbColor->SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectColorLBHdl_Impl ) );
     m_pValSetColorList->SetSelectHdl(
@@ -432,7 +411,6 @@ void SvxColorTabPage::dispose()
     m_pBoxEmbed.clear();
     m_pBtnLoad.clear();
     m_pBtnSave.clear();
-    m_pTableName.clear();
     m_pLbColor.clear();
     m_pValSetColorList.clear();
     m_pCtlPreviewOld.clear();
@@ -473,6 +451,72 @@ void SvxColorTabPage::ImpColorCountChanged()
     m_pValSetColorList->SetColCount(SvxColorValueSet::getColumnCount());
 }
 
+void SvxColorTabPage::LoadPalettes()
+{
+    m_Palettes.clear();
+    OUString aPalPaths = SvtPathOptions().GetPalettePath();
+
+    std::stack<OUString> aDirs;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        aDirs.push(aPalPaths.getToken(0, ';', nIndex));
+    }
+    while (nIndex >= 0);
+
+    std::set<OUString> aNames;
+    //try all entries palette path list user first, then
+    //system, ignoring duplicate file names
+    while (!aDirs.empty())
+    {
+        OUString aPalPath = aDirs.top();
+        aDirs.pop();
+
+        osl::Directory aDir(aPalPath);
+        osl::DirectoryItem aDirItem;
+        osl::FileStatus aFileStat( osl_FileStatus_Mask_FileName |
+                                   osl_FileStatus_Mask_FileURL  |
+                                   osl_FileStatus_Mask_Type     );
+        if( aDir.open() == osl::FileBase::E_None )
+        {
+            while( aDir.getNextItem(aDirItem) == osl::FileBase::E_None )
+            {
+                aDirItem.getFileStatus(aFileStat);
+                if(aFileStat.isRegular() || aFileStat.isLink())
+                {
+                    OUString aFName = aFileStat.getFileName();
+                    if (aNames.find(aFName) == aNames.end())
+                    {
+                        std::unique_ptr<Palette> pPalette;
+                        if( aFName.endsWithIgnoreAsciiCase(".gpl") )
+                            pPalette.reset(new PaletteGPL(aFileStat.getFileURL(), aFName));
+                        else if( aFName.endsWithIgnoreAsciiCase(".soc") )
+                            pPalette.reset(new PaletteSOC(aFileStat.getFileURL(), aFName));
+                        else if ( aFName.endsWithIgnoreAsciiCase(".ase") )
+                            pPalette.reset(new PaletteASE(aFileStat.getFileURL(), aFName));
+
+                        if( pPalette && pPalette->IsValid() )
+                            m_Palettes.push_back( std::move(pPalette) );
+                        aNames.insert(aFName);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void SvxColorTabPage::FillPaletteLB()
+{
+    m_pSelectPalette->Clear();
+
+    m_pSelectPalette->InsertEntry( SVX_RESSTR( RID_SVXSTR_DEFAULT_PAL ) );
+    for (auto const& it : m_Palettes)
+    {
+        m_pSelectPalette->InsertEntry( (*it).GetName() );
+    }
+    m_pSelectPalette->InsertEntry( SVX_RESSTR ( RID_SVXSTR_DOC_COLORS ) );
+    m_pSelectPalette->SelectEntryPos(0);    // Select the default palette
+}
 
 void SvxColorTabPage::Construct()
 {
@@ -481,7 +525,6 @@ void SvxColorTabPage::Construct()
         m_pLbColor->Fill(pColorList);
         m_pValSetColorList->addEntriesForXColorList(*pColorList);
         ImpColorCountChanged();
-        UpdateTableName();
     }
 }
 
@@ -895,6 +938,45 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
     UpdateModified();
 }
 
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectPaletteLBHdl_Impl, ListBox&, void)
+{
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    sal_Int32 nPos = m_pSelectPalette->GetSelectEntryPos();
+    if( nPos == 0 )
+    {
+        XColorListRef pColorList;
+
+        if ( pDocSh )
+        {
+            const SfxPoolItem* pItem = nullptr;
+            if ( nullptr != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
+                pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+        }
+
+        if ( !pColorList.is() )
+            pColorList = XColorList::CreateStdColorList();
+
+
+        if ( pColorList.is() )
+        {
+            m_pValSetColorList->Clear();
+            m_pValSetColorList->addEntriesForXColorList(*pColorList);
+        }
+    }
+    else if( nPos == m_pSelectPalette->GetEntryCount() - 1 )
+    {
+        // Add doc colors to palette
+        std::set<Color> aColors = pDocSh->GetDocColors();
+        m_pValSetColorList->Clear();
+        m_pValSetColorList->addEntriesForColorSet(aColors, SVX_RESSTR( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
+    }
+    else
+    {
+        m_Palettes[nPos-1]->LoadColorSet( *m_pValSetColorList );
+    }
+
+}
+
 
 IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectColorLBHdl_Impl, ListBox&, void)
 {
@@ -919,15 +1001,12 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, void)
     sal_Int32 nPos = m_pValSetColorList->GetSelectItemId();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        m_pLbColor->SelectEntryPos( nPos - 1 );
+        Color aColor = m_pValSetColorList->GetItemColor( nPos );
 
-        rXFSet.Put( XFillColorItem( OUString(),
-                                    m_pLbColor->GetSelectEntryColor() ) );
+        rXFSet.Put( XFillColorItem( OUString(), aColor ) );
         m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreviewNew->Invalidate();
-
-        XColorEntry* pEntry = pColorList->GetColor(nPos-1);
-        ChangeColor(pEntry->GetColor());
+        ChangeColor(aColor);
     }
 }
 
