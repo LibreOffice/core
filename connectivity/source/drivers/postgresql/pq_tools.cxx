@@ -465,7 +465,6 @@ void splitSQL( const OString & sql, OStringVector &vec )
 
 void splitDoubleQuoteEscapedIdentifiers( const OUString & source, OUString *first, OUString *second)
 {
-    OStringVector vec;
     int a = source.indexOf("\".\"");
     OString tempstring = OUStringToOString(source , RTL_TEXTENCODING_UTF8);
     if(a > 0)
