@@ -10130,6 +10130,70 @@ DelayEvent.prototype.charge = function()
 
 
 
+function WakeupEvent( aTimer, aActivityQueue )
+{
+    WakeupEvent.superclass.constructor.call( this );
+
+    this.aTimer = new ElapsedTime( aTimer );;
+    this.nNextTime = 0.0;
+    this.aActivity = null;
+    this.aActivityQueue = aActivityQueue;
+}
+extend( WakeupEvent, Event );
+
+
+WakeupEvent.prototype.clone = function()
+{
+    var aWakeupEvent = new WakeupEvent( this.aTimer.getTimeBase(), this.aActivityQueue );
+    aWakeupEvent.nNextTime = this.nNextTime;
+    aWakeupEvent.aActivity = this.aActivity;
+    return aWakeupEvent;
+};
+
+WakeupEvent.prototype.dispose = function()
+{
+    this.aActivity = null;
+};
+
+WakeupEvent.prototype.fire = function()
+{
+    if( !this.aActivity )
+        return false;
+
+    return this.aActivityQueue.addActivity( this.aActivity );
+};
+
+WakeupEvent.prototype.isCharged = function()
+{
+    // this event won't expire, we fire every time we're
+    // re-inserted into the event queue.
+    return true;
+};
+
+WakeupEvent.prototype.getActivationTime = function( nCurrentTime )
+{
+    var nElapsedTime = this.aTimer.getElapsedTime();
+
+    return Math.max( nCurrentTime, nCurrentTime - nElapsedTime + this.nNextTime );
+};
+
+WakeupEvent.prototype.start = function()
+{
+    this.aTimer.reset();
+};
+
+WakeupEvent.prototype.setNextTimeout = function( nNextTime )
+{
+    this.nNextTime = nNextTime;
+};
+
+WakeupEvent.prototype.setActivity = function( aActivity )
+{
+    this.aActivity = aActivity;
+};
+
+
+
 function makeEvent( aFunctor )
 {
     return new DelayEvent( aFunctor, 0.0 );
@@ -10803,7 +10867,7 @@ aInterpolatorHandler.getInterpolator = function( eCalcMode, eValueType, eValueSu
     else
     {
         log( 'aInterpolatorHandler.getInterpolator: not found any valid interpolator for calc mode '
-             + aCalcModeOutMap[eCalcMode]  + 'and value type ' + aValueTypeOutMap[eValueType]  );
+             + aCalcModeOutMap[eCalcMode]  + ' and value type ' + aValueTypeOutMap[eValueType]  );
         return null;
     }
 };
@@ -10983,6 +11047,31 @@ aOperatorSetMap[ COLOR_PROPERTY ].scale = function( k, v )
     return r;
 };
 
+// enum operators
+aOperatorSetMap[ ENUM_PROPERTY ] = {};
+
+aOperatorSetMap[ ENUM_PROPERTY ].equal = function( a, b )
+{
+    return ( a === b );
+};
+
+aOperatorSetMap[ ENUM_PROPERTY ].add = function( a, b )
+{
+    return a;
+};
+
+aOperatorSetMap[ ENUM_PROPERTY ].scale = function( k, v )
+{
+    return v;
+};
+
+// string operators
+aOperatorSetMap[ STRING_PROPERTY ] = aOperatorSetMap[ ENUM_PROPERTY ];
+
+// bool operators
+aOperatorSetMap[ BOOL_PROPERTY ] = aOperatorSetMap[ ENUM_PROPERTY ];
+
+
 
 
 /**********************************************************************************************
@@ -10993,6 +11082,7 @@ aOperatorSetMap[ COLOR_PROPERTY ].scale = function( k, v )
 function ActivityParamSet()
 {
     this.aEndEvent = null;
+    this.aWakeupEvent = null;
     this.aTimerEventQueue = null;
     this.aActivityQueue = null;
     this.nMinDuration = undefined;
@@ -11314,6 +11404,148 @@ ActivityBase.prototype.performEnd = function()
 
 
 
+function DiscreteActivityBase( aCommonParamSet )
+{
+    DiscreteActivityBase.superclass.constructor.call( this, aCommonParamSet );
+
+    this.aOriginalWakeupEvent = aCommonParamSet.aWakeupEvent;
+    this.aOriginalWakeupEvent.setActivity( this );
+    this.aWakeupEvent = this.aOriginalWakeupEvent;
+    this.aWakeupEvent = aCommonParamSet.aWakeupEvent;
+    this.aDiscreteTimes = aCommonParamSet.aDiscreteTimes;
+    // Simple duration of activity
+    this.nMinSimpleDuration = aCommonParamSet.nMinDuration;
+    // Actual number of frames shown until now.
+    this.nCurrPerformCalls = 0;
+}
+extend( DiscreteActivityBase, ActivityBase );
+
+
+DiscreteActivityBase.prototype.activate = function( aEndElement )
+{
+    DiscreteActivityBase.superclass.activate.call( this, aEndElement );
+
+    this.aWakeupEvent = this.aOriginalWakeupEvent;
+    this.aWakeupEvent.setNextTimeout( 0 );
+    this.nCurrPerformCalls = 0;
+};
+
+DiscreteActivityBase.prototype.startAnimation = function()
+{
+    this.aWakeupEvent.start();
+};
+
+DiscreteActivityBase.prototype.calcFrameIndex = function( nCurrCalls, nVectorSize )
+{
+    if( this.isAutoReverse() )
+    {
+        // every full repeat run consists of one
+        // forward and one backward traversal.
+        var nFrameIndex = nCurrCalls % (2 * nVectorSize);
+
+        // nFrameIndex values >= nVectorSize belong to
+        // the backward traversal
+        if( nFrameIndex >= nVectorSize )
+            nFrameIndex = 2*nVectorSize - nFrameIndex; // invert sweep
+
+        return nFrameIndex;
+    }
+    else
+    {
+        return nCurrCalls % nVectorSize;
+    }
+};
+
+DiscreteActivityBase.prototype.calcRepeatCount = function( nCurrCalls, nVectorSize )
+{
+    if( this.isAutoReverse() )
+    {
+        return Math.floor( nCurrCalls / (2*nVectorSize) ); // we've got 2 cycles per repeat
+    }
+    else
+    {
+        return Math.floor( nCurrCalls / nVectorSize );
+    }
+};
+
+DiscreteActivityBase.prototype.performDiscreteHook = function( nFrame, nRepeatCount )
+{
+    throw ( 'DiscreteActivityBase.performDiscreteHook: abstract method invoked' );
+};
+
+DiscreteActivityBase.prototype.perform = function()
+{
+    // call base class, for start() calls and end handling
+    if( !SimpleContinuousActivityBase.superclass.perform.call( this ) )
+        return false; // done, we're ended
+
+    var nVectorSize = this.aDiscreteTimes.length;
+
+    var nFrameIndex = this.calcFrameIndex(this.nCurrPerformCalls, nVectorSize);
+    var nRepeatCount = this.calcRepeatCount( this.nCurrPerformCalls, nVectorSize );
+    this.performDiscreteHook( nFrameIndex, nRepeatCount );
+
+    // one more frame successfully performed
+    ++this.nCurrPerformCalls;
+
+    // calc currently reached repeat count
+    var nCurrRepeat = this.nCurrPerformCalls / nVectorSize;
+
+    // if auto-reverse is specified, halve the
+    // effective repeat count, since we pass every
+    // repeat run twice: once forward, once backward.
+    if( this.isAutoReverse() )
+        nCurrRepeat /= 2;
+
+    // schedule next frame, if either repeat is indefinite
+    // (repeat forever), or we've not yet reached the requested
+    // repeat count
+    if( !this.isRepeatCountValid() || nCurrRepeat < this.getRepeatCount() )
+    {
+        // add wake-up event to queue (modulo vector size, to cope with repeats).
+
+        // repeat is handled locally, only apply acceleration/deceleration.
+        // Scale time vector with simple duration, offset with full repeat
+        // times.
+
+        // Note that calcAcceleratedTime() is only applied to the current repeat's value,
+        // not to the total resulting time. This is in accordance with the SMIL spec.
+
+        nFrameIndex = this.calcFrameIndex(this.nCurrPerformCalls, nVectorSize);
+        var nCurrentRepeatTime = this.aDiscreteTimes[nFrameIndex];
+        nRepeatCount = this.calcRepeatCount( this.nCurrPerformCalls, nVectorSize );
+        var nNextTimeout = this.nMinSimpleDuration * ( nRepeatCount + this.calcAcceleratedTime( nCurrentRepeatTime ) );
+        this.aWakeupEvent.setNextTimeout( nNextTimeout );
+
+        this.getEventQueue().addEvent( this.aWakeupEvent );
+    }
+    else
+    {
+        // release event reference (relation to wake up event is circular!)
+        this.aWakeupEvent = null;
+
+        // done with this activity
+        this.endActivity();
+    }
+
+    return false; // remove from queue, will be added back by the wakeup event.
+};
+
+DiscreteActivityBase.prototype.dispose = function()
+{
+    // dispose event
+    if( this.aWakeupEvent )
+        this.aWakeupEvent.dispose();
+
+    // release references
+    this.aWakeupEvent = null;
+
+    DiscreteActivityBase.superclass.dispose.call(this);
+};
+
+
+
+
 function SimpleContinuousActivityBase( aCommonParamSet )
 {
     SimpleContinuousActivityBase.superclass.constructor.call( this, aCommonParamSet );
@@ -11545,9 +11777,9 @@ ContinuousKeyTimeActivityBase.prototype.activate = function( aEndElement )
     this.aLerper.reset();
 };
 
-ContinuousKeyTimeActivityBase.prototype.performHook = function( nIndex, nFractionalIndex, nRepeatCount )
+ContinuousKeyTimeActivityBase.prototype.performContinuousHook = function( nIndex, nFractionalIndex, nRepeatCount )
 {
-    throw ( 'ContinuousKeyTimeActivityBase.performHook: abstract method invoked' );
+    throw ( 'ContinuousKeyTimeActivityBase.performContinuousHook: abstract method invoked' );
 };
 
 ContinuousKeyTimeActivityBase.prototype.simplePerform = function( nSimpleTime, nRepeatCount )
@@ -11556,7 +11788,7 @@ ContinuousKeyTimeActivityBase.prototype.simplePerform = function( nSimpleTime, n
 
     var aLerpResult = this.aLerper.lerp( nAlpha );
 
-    this.performHook( aLerpResult.nIndex, aLerpResult.nLerp, nRepeatCount );
+    this.performContinuousHook( aLerpResult.nIndex, aLerpResult.nLerp, nRepeatCount );
 };
 
 
@@ -11570,14 +11802,14 @@ function ContinuousActivityBase( aCommonParamSet )
 extend( ContinuousActivityBase, SimpleContinuousActivityBase );
 
 
-ContinuousActivityBase.prototype.performHook = function( nModifiedTime, nRepeatCount )
+ContinuousActivityBase.prototype.performContinuousHook = function( nModifiedTime, nRepeatCount )
 {
-    throw ( 'ContinuousActivityBase.performHook: abstract method invoked' );
+    throw ( 'ContinuousActivityBase.performContinuousHook: abstract method invoked' );
 };
 
 ContinuousActivityBase.prototype.simplePerform = function( nSimpleTime, nRepeatCount )
 {
-    this.performHook( this.calcAcceleratedTime( nSimpleTime ), nRepeatCount );
+    this.performContinuousHook( this.calcAcceleratedTime( nSimpleTime ), nRepeatCount );
 };
 
 
@@ -11617,7 +11849,7 @@ SimpleActivity.prototype.endAnimation = function()
 
 };
 
-SimpleActivity.prototype.performHook = function( nModifiedTime, nRepeatCount )
+SimpleActivity.prototype.performContinuousHook = function( nModifiedTime, nRepeatCount )
 {
     // nRepeatCount is not used
 
@@ -11625,7 +11857,7 @@ SimpleActivity.prototype.performHook = function( nModifiedTime, nRepeatCount )
         return;
 
     var nT = 1.0 - this.nDirection + nModifiedTime * ( 2.0*this.nDirection - 1.0 );
-    //ANIMDBG.print( 'SimpleActivity.performHook: nT = ' + nT );
+    //ANIMDBG.print( 'SimpleActivity.performContinuousHook: nT = ' + nT );
     this.aAnimation.perform( nT );
 };
 
@@ -11764,12 +11996,12 @@ function FromToByActivityTemplate( BaseType ) // template parameter
             this.aAnimation.end();
     };
 
-    // performHook override for ContinuousActivityBase
-    FromToByActivity.prototype.performHook = function( nModifiedTime, nRepeatCount )
+    // perform hook override for ContinuousActivityBase
+    FromToByActivity.prototype.performContinuousHook = function( nModifiedTime, nRepeatCount )
     {
         if( this.isDisposed() || !this.aAnimation  )
         {
-            log( 'FromToByActivity.performHook: activity disposed or not valid animation' );
+            log( 'FromToByActivity.performContinuousHook: activity disposed or not valid animation' );
             return;
         }
 
@@ -11831,6 +12063,18 @@ function FromToByActivityTemplate( BaseType ) // template parameter
 
     };
 
+    // perform hook override for DiscreteActivityBase
+    FromToByActivity.prototype.performDiscreteHook = function( nFrame, nRepeatCount )
+    {
+        if (this.isDisposed() || !this.aAnimation) {
+            log('FromToByActivity.performDiscreteHook: activity disposed or not valid animation');
+            return;
+        }
+
+
+
+    };
+
     FromToByActivity.prototype.performEnd = function()
     {
         if( this.aAnimation )
@@ -11853,6 +12097,8 @@ function FromToByActivityTemplate( BaseType ) // template parameter
 
 // FromToByActivity< ContinuousActivityBase > instantiation
 var LinearFromToByActivity = instantiate( FromToByActivityTemplate, ContinuousActivityBase );
+// FromToByActivity< DiscreteActivityBase > instantiation
+var DiscreteFromToByActivity = instantiate( FromToByActivityTemplate, DiscreteActivityBase );
 
 
 
@@ -11925,17 +12171,17 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
             this.aAnimation.end();
     };
 
-    // performHook override for ContinuousKeyTimeActivityBase base
-    ValueListActivity.prototype.performHook = function( nIndex, nFractionalIndex, nRepeatCount )
+    // perform hook override for ContinuousKeyTimeActivityBase base
+    ValueListActivity.prototype.performContinuousHook = function( nIndex, nFractionalIndex, nRepeatCount )
     {
         if( this.isDisposed() || !this.aAnimation  )
         {
-            log( 'ValueListActivity.performHook: activity disposed or not valid animation' );
+            log( 'ValueListActivity.performContinuousHook: activity disposed or not valid animation' );
             return;
         }
 
         assert( ( nIndex + 1 ) < this.aValueList.length,
-                'ValueListActivity.performHook: assertion (nIndex + 1 < this.aValueList.length) failed' );
+                'ValueListActivity.performContinuousHook: assertion (nIndex + 1 < this.aValueList.length) failed' );
 
         // interpolate between nIndex and nIndex+1 values
 
@@ -11947,6 +12193,32 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
         {
             aValue = this.add( aValue, this.scale( nRepeatCount, this.aLastValue ) );
             //aValue = aValue + nRepeatCount * this.aLastValue;
+        }
+
+        aValue = this.aFormula ? this.aFormula( aValue ) : aValue;
+        this.aAnimation.perform( aValue );
+    };
+
+    // perform hook override for DiscreteActivityBase base
+    ValueListActivity.prototype.performDiscreteHook = function( nFrame, nRepeatCount )
+    {
+        if( this.isDisposed() || !this.aAnimation  )
+        {
+            log( 'ValueListActivity.performDiscreteHook: activity disposed or not valid animation' );
+            return;
+        }
+
+        assert( nFrame < this.aValueList.length,
+               'ValueListActivity.performDiscreteHook: assertion ( nFrame < this.aValueList.length) failed' );
+
+        // this is discrete, thus no lerp here.
+        var aValue = this.aValueList[nFrame];
+
+        if( this.bCumulative )
+        {
+            aValue = this.add( aValue, this.scale( nRepeatCount, this.aLastValue ) );
+            // for numbers:   aValue = aValue + nRepeatCount * this.aLastValue;
+            // for enums, bools or strings:   aValue = aValue;
         }
 
         aValue = this.aFormula ? this.aFormula( aValue ) : aValue;
@@ -11974,6 +12246,8 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
 
 //  ValueListActivity< ContinuousKeyTimeActivityBase > instantiation
 var LinearValueListActivity = instantiate( ValueListActivityTemplate, ContinuousKeyTimeActivityBase );
+//  ValueListActivity< DiscreteActivityBase > instantiation
+var DiscreteValueListActivity = instantiate( ValueListActivityTemplate, DiscreteActivityBase );
 
 
 
@@ -12047,8 +12321,17 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
         switch( eCalcMode )
         {
             case CALC_MODE_DISCRETE:
-                log( 'createActivity: discrete calculation case not yet implemented' );
-                break;
+                aActivityParamSet.aWakeupEvent =
+                        new WakeupEvent( aActivityParamSet.aTimerEventQueue.getTimer(),
+                                         aActivityParamSet.aActivityQueue );
+
+                return createValueListActivity( aActivityParamSet,
+                                                aAnimationNode,
+                                                aAnimation,
+                                                aInterpolator,
+                                                DiscreteValueListActivity,
+                                                bAccumulate,
+                                                eValueType );
 
             default:
                 log( 'createActivity: unexpected calculation mode: ' + eCalcMode );
@@ -12074,6 +12357,16 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
         {
             case CALC_MODE_DISCRETE:
                 log( 'createActivity: discrete calculation case not yet implemented' );
+                aActivityParamSet.aWakeupEvent =
+                        new WakeupEvent( aActivityParamSet.aTimerEventQueue.getTimer(),
+                                         aActivityParamSet.aActivityQueue );
+                return createFromToByActivity(  aActivityParamSet,
+                                                aAnimationNode,
+                                                aAnimation,
+                                                aInterpolator,
+                                                DiscreteFromToByActivity,
+                                                bAccumulate,
+                                                eValueType );
                 break;
 
             default:
