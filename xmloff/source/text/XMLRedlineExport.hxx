@@ -109,19 +109,6 @@ public:
         const sal_uInt32& rParaIdx,
         bool bAutoStyle);
 
-    void ExportChange(
-        /// PropertySet of RedlinePortion
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet,
-        bool bAutoStyle);
-
-    /// export the list of changes (complete list minus recorded changed)
-    void ExportChangesList(bool bAutoStyles);
-
-    /// export the list of changes (recorded changes for this XText only)
-    void ExportChangesList(
-        const css::uno::Reference<css::text::XText> & rText,
-        bool bAutoStyles);
-
     /// set the current XText for which changes should be recorded.
     /// An empty XText means: don't record changes
     void SetCurrentXText(
@@ -156,42 +143,12 @@ private:
         /// PropertySet of RedlinePortion
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet, const sal_uInt32& rParaIdx);
 
-    void ExportChangeInline(
-        /// PropertySet of RedlinePortion
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
-
-    /// export the auto styles used in this change
-    void ExportChangeAutoStyle(
-        /// PropertySet of RedlinePortion
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
-
-    /// export the changes list (<text:tracked-changes>)
-    void ExportChangesListElements();
-
-    /// export the auto styles needed by the changes list
-    void ExportChangesListAutoStyles();
-
-    /// export the changed-region element
-    void ExportChangedRegion(
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
-
     /// export an change-info element (from a PropertySet)
     void ExportUndoChangeInfo(
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet, const sal_uInt32& rParaIdx);
 
-    void ExportChangeInfo(
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
-
-    /// export an change-info element (from PropertyValues)
-    void ExportChangeInfo(
-        const css::uno::Sequence<css::beans::PropertyValue> & rValues);
-
     /// convert the change type from API to XML names
     const OUString ConvertTypeName(const OUString& sApiName);
-
-    /// Get ID string!
-    const OUString GetRedlineID(
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// write a comment string as sequence of <text:p> elements
     void WriteComment(const OUString& rComment);

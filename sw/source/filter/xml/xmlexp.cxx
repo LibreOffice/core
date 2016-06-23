@@ -497,7 +497,7 @@ void SwXMLExport::ExportUndo_()
                                 true, true );
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
-    GetTextParagraphExport()->exportUndoText( xText, bShowProgress );
+    GetTextParagraphExport()->exportTrackedChanges( xText, bShowProgress );
 }
 
 namespace

@@ -74,6 +74,7 @@ void XMLTextMasterPageExport::exportHeaderFooterContent(
 
     // tracked changes (end of XText)
     GetExport().GetTextParagraphExport()->recordTrackedChangesNoXText();
+    GetExport().GetTextParagraphExport()->exportTrackedChanges( rText );
 }
 
 void XMLTextMasterPageExport::exportMasterPageContent(

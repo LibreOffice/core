@@ -250,8 +250,7 @@ public:
     void exportUndoTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
         const sal_uInt32& rParaIdx,
-        bool bAutoStyles, bool bProgress,
-        bool bPrvChrIsSpc = true );
+        bool bAutoStyles );
     void exportTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
         bool bAutoStyles, bool bProgress,
@@ -277,7 +276,7 @@ protected:
     void exportUndoText(
         const css::uno::Reference <
             css::text::XText > & rText,
-        bool bAutoStyles, bool bProgress, bool bExportParagraph, TextPNS eExtensionNS = TextPNS::ODF );
+        bool bAutoStyles, bool bProgress );
 
     void exportText(
         const css::uno::Reference <
@@ -293,11 +292,7 @@ protected:
         const css::uno::Reference< css::container::XEnumeration > & rContentEnum,
         bool bAutoStyles,
         const css::uno::Reference< css::text::XTextSection > & rBaseSection,
-        bool bProgress,
-        bool bExportParagraph = true,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr,
-        bool bExportLevels = true,
-        TextPNS eExtensionNS = TextPNS::ODF);
+        bool bProgress);
     bool exportTextContentEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rContentEnum,
         bool bAutoStyles,
@@ -311,9 +306,7 @@ protected:
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         const sal_uInt32& rParaIdx,
         bool bAutoStyles, bool bProgress,
-        bool bExportParagraph,
-        MultiPropertySetHelper& rPropSetHelper,
-        TextPNS eExtensionNS = TextPNS::ODF);
+        MultiPropertySetHelper& rPropSetHelper);
     void exportParagraph(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress,
@@ -498,15 +491,6 @@ public:
     /// export all declarations
     void exportUsedDeclarations();
 
-    /// Export the list of change information (enclosed by <tracked-changes>)
-    /// (or the necessary automatic styles)
-    void exportTrackedChanges(bool bAutoStyle);
-
-    /// Export the list of change information (enclosed by <tracked-changes>)
-    /// (or the necessary automatic styles)
-    void exportTrackedChanges(const css::uno::Reference< css::text::XText > & rText,
-                              bool bAutoStyle );
-
     /// Record tracked changes for this particular XText
     /// (empty reference stop recording)
     /// This should be used if tracked changes for e.g. footers are to
@@ -569,12 +553,11 @@ public:
     }
 
     // This method exports the given XText
-    void exportUndoText(
+    void exportTrackedChanges(
         const css::uno::Reference< css::text::XText > & rText,
-        bool bIsProgress = false,
-        bool bExportParagraph = true, TextPNS eExtensionNS = TextPNS::ODF)
+        bool bIsProgress = false)
     {
-        exportUndoText( rText, false, bIsProgress, bExportParagraph, eExtensionNS );
+        exportUndoText( rText, false, bIsProgress );
     }
 
     void exportText(

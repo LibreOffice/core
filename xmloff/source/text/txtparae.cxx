@@ -1632,9 +1632,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
 void XMLTextParagraphExport::exportUndoText(
         const Reference < XText > & rText,
         bool bAutoStyles,
-        bool bIsProgress,
-        bool bExportParagraph,
-        TextPNS eExtensionNS)
+        bool bIsProgress)
 {
     if( bAutoStyles )
         GetExport().GetShapeExport(); // make sure the graphics styles family
@@ -1644,13 +1642,9 @@ void XMLTextParagraphExport::exportUndoText(
     Reference < XPropertySet > xPropertySet( rText, UNO_QUERY );
     Reference < XTextSection > xBaseSection;
 
-    // #97718# footnotes don't supply paragraph enumerations in some cases
-    // This is always a bug, but at least we don't want to crash.
     DBG_ASSERT( xParaEnum.is(), "We need a paragraph enumeration" );
     if( ! xParaEnum.is() )
         return;
-
-    bool bExportLevels = true;
 
     if (xPropertySet.is())
     {
@@ -1662,21 +1656,6 @@ void XMLTextParagraphExport::exportUndoText(
             {
                 xPropertySet->getPropertyValue(sTextSection) >>= xBaseSection ;
             }
-
-/* #i35937#
-            // for applications that use the outliner we need to check if
-            // the current text object needs the level information exported
-            if( !bAutoStyles )
-            {
-                // fixme: move string to class member, couldn't do now because
-                //        of no incompatible build
-                OUString sHasLevels( "HasLevels" );
-                if (xInfo->hasPropertyByName( sHasLevels ) )
-                {
-                    xPropertySet->getPropertyValue(sHasLevels) >>= bExportLevels;
-                }
-            }
-*/
         }
     }
 
@@ -1684,8 +1663,7 @@ void XMLTextParagraphExport::exportUndoText(
     // exporting the text content enumeration
     if( !bAutoStyles && (pRedlineExport != nullptr) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, true );
-    exportUndoTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
-                                  bIsProgress, bExportParagraph, nullptr, bExportLevels, eExtensionNS );
+    exportUndoTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection, bIsProgress);
     if( !bAutoStyles && (pRedlineExport != nullptr) )
         pRedlineExport->ExportStartOrEndRedline( xPropertySet, false );
 }
@@ -1787,20 +1765,13 @@ bool XMLTextParagraphExport::exportUndoTextContentEnumeration(
         const Reference < XEnumeration > & rContEnum,
         bool bAutoStyles,
         const Reference < XTextSection > & rBaseSection,
-        bool bIsProgress,
-        bool bExportParagraph,
-        const Reference < XPropertySet > *pRangePropSet,
-        bool bExportLevels, TextPNS eExtensionNS )
+        bool bIsProgress)
 {
     DBG_ASSERT( rContEnum.is(), "No enumeration to export!" );
     bool bHasMoreElements = rContEnum->hasMoreElements();
     if( !bHasMoreElements )
         return false;
 
-    XMLTextNumRuleInfo aPrevNumInfo;
-    XMLTextNumRuleInfo aNextNumInfo;
-
-    bool bHasContent = false;
     Reference<XTextSection> xCurrentTextSection(rBaseSection);
 
     MultiPropertySetHelper aPropSetHelper(
@@ -1826,46 +1797,15 @@ bool XMLTextParagraphExport::exportUndoTextContentEnumeration(
         Reference<XServiceInfo> xServiceInfo( xTxtCntnt, UNO_QUERY );
         if( xServiceInfo->supportsService( sParagraphService ) )
         {
-            if( bExportLevels )
-            {
-                if( bAutoStyles )
-                {
-                    exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
-                                                aPrevNumInfo, aNextNumInfo,
-                                                bAutoStyles );
-                }
-                else
-                {
-                    /* Pass list auto style pool to <XMLTextNumRuleInfo> instance
-                       Pass info about request to export <text:number> element
-                       to <XMLTextNumRuleInfo> instance (#i69627#)
-                    */
-                    aNextNumInfo.Set( xTxtCntnt,
-                                      GetExport().writeOutlineStyleAsNormalListStyle(),
-                                      GetListAutoStylePool(),
-                                      GetExport().exportTextNumberElement() );
-
-                    exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
-                                                TEXT_SECTION, xTxtCntnt,
-                                                aPrevNumInfo, aNextNumInfo,
-                                                bAutoStyles );
-                }
-            }
-
             // if we found a mute section: skip all section content
             if (pSectionExport->IsMuteSection(xCurrentTextSection))
             {
-                // Make sure headings are exported anyway.
-                if( !bAutoStyles )
-                    pSectionExport->ExportMasterDocHeadingDummies();
-
                 while (rContEnum->hasMoreElements() &&
                        pSectionExport->IsInSection( xCurrentTextSection,
                                                     xTxtCntnt, true ))
                 {
                     xTxtCntnt.set(rContEnum->nextElement(), uno::UNO_QUERY);
                     aPropSetHelper.resetValues();
-                    aNextNumInfo.Reset();
                 }
                 // the first non-mute element still needs to be processed
                 bHoldElement =
@@ -1875,80 +1815,11 @@ bool XMLTextParagraphExport::exportUndoTextContentEnumeration(
             else
             {
                 setParaIdx(getParaIdx() + 1);
-                exportUndoParagraph( xTxtCntnt, getParaIdx(), bAutoStyles, bIsProgress,
-                                 bExportParagraph, aPropSetHelper, eExtensionNS );
+                exportUndoParagraph( xTxtCntnt, getParaIdx(), bAutoStyles, bIsProgress, aPropSetHelper );
             }
-            bHasContent = true;
         }
-        else if( xServiceInfo->supportsService( sTableService ) )
-        {
-            if( !bAutoStyles )
-            {
-                aNextNumInfo.Reset();
-            }
-
-            exportListAndSectionChange( xCurrentTextSection, xTxtCntnt,
-                                        aPrevNumInfo, aNextNumInfo,
-                                        bAutoStyles );
-
-            if (! pSectionExport->IsMuteSection(xCurrentTextSection))
-            {
-                // export start + end redlines (for wholly redlined tables)
-                if ((! bAutoStyles) && (nullptr != pRedlineExport))
-                    pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, true);
-
-                exportTable( xTxtCntnt, bAutoStyles, bIsProgress  );
-
-                if ((! bAutoStyles) && (nullptr != pRedlineExport))
-                    pRedlineExport->ExportStartOrEndRedline(xTxtCntnt, false);
-            }
-            else if( !bAutoStyles )
-            {
-                // Make sure headings are exported anyway.
-                pSectionExport->ExportMasterDocHeadingDummies();
-            }
-
-            bHasContent = true;
-        }
-        else if( xServiceInfo->supportsService( sTextFrameService ) )
-        {
-            exportTextFrame( xTxtCntnt, bAutoStyles, bIsProgress, true, pRangePropSet );
-        }
-        else if( xServiceInfo->supportsService( sTextGraphicService ) )
-        {
-            exportTextGraphic( xTxtCntnt, bAutoStyles, pRangePropSet );
-        }
-        else if( xServiceInfo->supportsService( sTextEmbeddedService ) )
-        {
-            exportTextEmbedded( xTxtCntnt, bAutoStyles, pRangePropSet );
-        }
-        else if( xServiceInfo->supportsService( sShapeService ) )
-        {
-            exportShape( xTxtCntnt, bAutoStyles, pRangePropSet );
-        }
-        else
-        {
-            DBG_ASSERT( !xTxtCntnt.is(), "unknown text content" );
-        }
-
-        if( !bAutoStyles )
-        {
-            aPrevNumInfo = aNextNumInfo;
-        }
-
         bHasMoreElements = rContEnum->hasMoreElements();
     }
-
-    if( bExportLevels && bHasContent && !bAutoStyles )
-    {
-        aNextNumInfo.Reset();
-
-        // close open lists and sections; no new styles
-        exportListAndSectionChange( xCurrentTextSection, rBaseSection,
-                                    aPrevNumInfo, aNextNumInfo,
-                                    bAutoStyles );
-    }
-
     return true;
 }
 
@@ -2122,11 +1993,9 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
 
 void XMLTextParagraphExport::exportUndoParagraph(
         const Reference < XTextContent > & rTextContent, const sal_uInt32& rParaIdx,
-        bool bAutoStyles, bool bIsProgress, bool bExportParagraph,
-        MultiPropertySetHelper& rPropSetHelper, TextPNS eExtensionNS)
+        bool bAutoStyles, bool bIsProgress,
+        MultiPropertySetHelper& rPropSetHelper)
 {
-    sal_Int16 nOutlineLevel = -1;
-
     if( bIsProgress )
     {
         ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();
@@ -2140,185 +2009,6 @@ void XMLTextParagraphExport::exportUndoParagraph(
     // check for supported properties
     if( !rPropSetHelper.checkedProperties() )
         rPropSetHelper.hasProperties( xPropSet->getPropertySetInfo() );
-
-//  if( xMultiPropSet.is() )
-//      rPropSetHelper.getValues( xMultiPropSet );
-//  else
-//      rPropSetHelper.getValues( xPropSet );
-
-    if( bExportParagraph )
-    {
-        if( bAutoStyles )
-        {
-            Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, rPropSetHelper, xPropSet );
-        }
-        else
-        {
-            // xml:id for RDF metadata
-            GetExport().AddAttributeXmlId(rTextContent);
-            GetExport().AddAttributesRDFa(rTextContent);
-
-            OUString sStyle;
-            if( rPropSetHelper.hasProperty( PARA_STYLE_NAME ) )
-            {
-                if( xMultiPropSet.is() )
-                    rPropSetHelper.getValue( PARA_STYLE_NAME,
-                                                    xMultiPropSet ) >>= sStyle;
-                else
-                    rPropSetHelper.getValue( PARA_STYLE_NAME,
-                                                    xPropSet ) >>= sStyle;
-            }
-
-            if( rTextContent.is() )
-            {
-                const OUString& rIdentifier = GetExport().getInterfaceToIdentifierMapper().getIdentifier( rTextContent );
-                if( !rIdentifier.isEmpty() )
-                {
-                    // FIXME: this is just temporary until EditEngine
-                    // paragraphs implement XMetadatable.
-                    // then that must be used and not the mapper, because
-                    // when both can be used we get two xml:id!
-                    uno::Reference<rdf::XMetadatable> const xMeta(rTextContent,
-                        uno::UNO_QUERY);
-                    OSL_ENSURE(!xMeta.is(), "paragraph that implements "
-                        "XMetadatable used in interfaceToIdentifierMapper?");
-                    GetExport().AddAttributeIdLegacy(XML_NAMESPACE_TEXT,
-                        rIdentifier);
-                }
-            }
-
-            OUString sAutoStyle( sStyle );
-            sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet, sStyle );
-            if( !sAutoStyle.isEmpty() )
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                              GetExport().EncodeStyleName( sAutoStyle ) );
-
-            if( rPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME ) )
-            {
-                OUString sCondStyle;
-                if( xMultiPropSet.is() )
-                    rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME,
-                                                     xMultiPropSet ) >>= sCondStyle;
-                else
-                    rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME,
-                                                     xPropSet ) >>= sCondStyle;
-                if( sCondStyle != sStyle )
-                {
-                    sCondStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet,
-                                          sCondStyle );
-                    if( !sCondStyle.isEmpty() )
-                        GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                                  XML_COND_STYLE_NAME,
-                              GetExport().EncodeStyleName( sCondStyle ) );
-                }
-            }
-
-            if( rPropSetHelper.hasProperty( PARA_OUTLINE_LEVEL ) )
-            {
-                if( xMultiPropSet.is() )
-                    rPropSetHelper.getValue( PARA_OUTLINE_LEVEL,
-                                                     xMultiPropSet ) >>= nOutlineLevel;
-                else
-                    rPropSetHelper.getValue( PARA_OUTLINE_LEVEL,
-                                                     xPropSet ) >>= nOutlineLevel;
-
-                if( 0 < nOutlineLevel )
-                {
-                    OUStringBuffer sTmp;
-                    sTmp.append( sal_Int32( nOutlineLevel) );
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                              XML_OUTLINE_LEVEL,
-                                  sTmp.makeStringAndClear() );
-
-                    if( rPropSetHelper.hasProperty( NUMBERING_IS_NUMBER ) )
-                    {
-                        bool bIsNumber = false;
-                        if( xMultiPropSet.is() )
-                            rPropSetHelper.getValue(
-                                       NUMBERING_IS_NUMBER, xMultiPropSet ) >>= bIsNumber;
-                        else
-                            rPropSetHelper.getValue(
-                                       NUMBERING_IS_NUMBER, xPropSet ) >>= bIsNumber;
-
-                        OUString sListStyleName;
-                        if( xMultiPropSet.is() )
-                            rPropSetHelper.getValue(
-                                       PARA_NUMBERING_STYLENAME, xMultiPropSet ) >>= sListStyleName;
-                        else
-                            rPropSetHelper.getValue(
-                                       PARA_NUMBERING_STYLENAME, xPropSet ) >>= sListStyleName;
-
-                        bool bAssignedtoOutlineStyle = false;
-                        {
-                            Reference< XChapterNumberingSupplier > xCNSupplier( GetExport().GetModel(), UNO_QUERY );
-
-                            OUString sOutlineName;
-                            if (xCNSupplier.is())
-                            {
-                                Reference< XIndexReplace > xNumRule ( xCNSupplier->getChapterNumberingRules() );
-                                DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
-
-                                if (xNumRule.is())
-                                {
-                                    Reference< XPropertySet > xNumRulePropSet( xNumRule, UNO_QUERY );
-                                    xNumRulePropSet->getPropertyValue(
-                                        "Name" ) >>= sOutlineName;
-                                    bAssignedtoOutlineStyle = ( sListStyleName == sOutlineName );
-                                }
-                            }
-                        }
-
-                        if( ! bIsNumber && bAssignedtoOutlineStyle )
-                            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                                      XML_IS_LIST_HEADER,
-                                                      XML_TRUE );
-                    }
-
-                    {
-                        bool bIsRestartNumbering = false;
-
-                        Reference< XPropertySetInfo >
-                        xPropSetInfo(xMultiPropSet.is() ?
-                                     xMultiPropSet->getPropertySetInfo():
-                                     xPropSet->getPropertySetInfo());
-
-                        if (xPropSetInfo->
-                            hasPropertyByName("ParaIsNumberingRestart"))
-                        {
-                            xPropSet->getPropertyValue("ParaIsNumberingRestart")
-                                >>= bIsRestartNumbering;
-                        }
-
-                        if (bIsRestartNumbering)
-                        {
-                            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                                     XML_RESTART_NUMBERING,
-                                                     XML_TRUE);
-
-                            if (xPropSetInfo->
-                                hasPropertyByName("NumberingStartValue"))
-                            {
-                                sal_Int32 nStartValue = 0;
-
-                                xPropSet->getPropertyValue("NumberingStartValue")
-                                    >>= nStartValue;
-
-                                OUStringBuffer sTmpStartValue;
-
-                                sTmpStartValue.append(nStartValue);
-
-                                GetExport().
-                                    AddAttribute(XML_NAMESPACE_TEXT,
-                                                 XML_START_VALUE,
-                                                 sTmpStartValue.
-                                                 makeStringAndClear());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     Reference < XEnumerationAccess > xEA( rTextContent, UNO_QUERY );
     Reference < XEnumeration > xTextEnum;
@@ -2362,20 +2052,10 @@ void XMLTextParagraphExport::exportUndoParagraph(
                                     xContentEnum, bAutoStyles, xSection,
                                     bIsProgress );
         if ( bHasPortions )
-            exportUndoTextRangeEnumeration( xTextEnum, rParaIdx, bAutoStyles, bIsProgress );
+            exportUndoTextRangeEnumeration( xTextEnum, rParaIdx, bAutoStyles );
     }
     else
-    {
-        bool bPrevCharIsSpace = true;
-        enum XMLTokenEnum eElem =
-            0 < nOutlineLevel ? XML_H : XML_P;
-        if( bHasContentEnum )
-            bPrevCharIsSpace = !exportUndoTextContentEnumeration(
-                                    xContentEnum, bAutoStyles, xSection,
-                                    bIsProgress );
-        exportUndoTextRangeEnumeration( xTextEnum, rParaIdx, bAutoStyles, bIsProgress,
-                                     bPrevCharIsSpace );
-    }
+        exportUndoTextRangeEnumeration( xTextEnum, rParaIdx, bAutoStyles );
 }
 
 void XMLTextParagraphExport::exportParagraph(
@@ -2641,20 +2321,8 @@ void XMLTextParagraphExport::exportParagraph(
 void XMLTextParagraphExport::exportUndoTextRangeEnumeration(
         const Reference < XEnumeration > & rTextEnum,
         const sal_uInt32& rParaIdx,
-        bool bAutoStyles, bool bIsProgress,
-        bool bPrvChrIsSpc )
+        bool bAutoStyles )
 {
-    static const char sMeta[] = "InContentMetadata";
-    static const char sFieldMarkName[] = "__FieldMark_";
-    static const char sAnnotation[] = "Annotation";
-    static const char sAnnotationEnd[] = "AnnotationEnd";
-
-    bool bPrevCharIsSpace = bPrvChrIsSpc;
-
-    /* This is  used for exporting to strict OpenDocument 1.2, in which case traditional
-     * bookmarks are used instead of fieldmarks. */
-    FieldmarkType openFieldMark = NONE;
-
     while( rTextEnum->hasMoreElements() )
     {
         Reference<XPropertySet> xPropSet(rTextEnum->nextElement(), UNO_QUERY);
@@ -2673,9 +2341,6 @@ void XMLTextParagraphExport::exportUndoTextRangeEnumeration(
             }
         }
     }
-
-// now that there are nested enumerations for meta(-field), this may be valid!
-//  DBG_ASSERT( !bOpenRuby, "Red Alert: Ruby still open!" );
 }
 
 void XMLTextParagraphExport::exportTextRangeEnumeration(
@@ -2778,8 +2443,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sRedline))
             {
-                if (nullptr != pRedlineExport)
-                    pRedlineExport->ExportChange(xPropSet, bAutoStyles);
+                continue;
             }
             else if (sType.equals(sRuby))
             {
@@ -4094,20 +3758,6 @@ void XMLTextParagraphExport::exportTextDeclarations(
 void XMLTextParagraphExport::exportUsedDeclarations()
 {
     pFieldExport->SetExportOnlyUsedFieldDeclarations( false/*bOnlyUsed*/ );
-}
-
-void XMLTextParagraphExport::exportTrackedChanges(bool bAutoStyles)
-{
-    if (nullptr != pRedlineExport)
-        pRedlineExport->ExportChangesList( bAutoStyles );
-}
-
-void XMLTextParagraphExport::exportTrackedChanges(
-    const Reference<XText> & rText,
-    bool bAutoStyle)
-{
-    if (nullptr != pRedlineExport)
-        pRedlineExport->ExportChangesList(rText, bAutoStyle);
 }
 
 void XMLTextParagraphExport::recordTrackedChangesForXText(
