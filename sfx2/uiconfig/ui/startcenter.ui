@@ -171,7 +171,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="open_recent:clearmenu">
+                  <object class="GtkToggleButton" id="open_recent:clearmenu">
                     <property name="label" translatable="yes">_Recent Files</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -190,7 +190,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="templates_all:filtermenu">
+                  <object class="GtkToggleButton" id="templates_all:filtermenu">
                     <property name="label" translatable="yes">T_emplates</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>

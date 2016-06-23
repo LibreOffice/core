@@ -942,6 +942,22 @@ namespace
         return xWindow;
     }
 
+    VclPtr<Button> extractStockAndBuildMenuToggleButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+    {
+        WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
+
+        nBits |= extractRelief(rMap);
+
+        VclPtr<Button> xWindow = VclPtr<MenuToggleButton>::Create(pParent, nBits);
+
+        if (extractStock(rMap))
+        {
+            xWindow->SetText(getStockText(extractLabel(rMap)));
+        }
+
+        return xWindow;
+    }
+
     OString extractUnit(const OString& sPattern)
     {
         OString sUnit(sPattern);
@@ -1366,6 +1382,17 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xButton = extractStockAndBuildMenuButton(pParent, rMap);
             m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
         }
+        xButton->SetImageAlign(ImageAlign::Left); //default to left
+        setupFromActionName(xButton, rMap, m_xFrame);
+        xWindow = xButton;
+    }
+    else if (name == "GtkToggleButton")
+    {
+        VclPtr<Button> xButton;
+        OString sMenu = extractCustomProperty(rMap);
+        assert(sMenu.getLength() && "not implemented yet");
+        xButton = extractStockAndBuildMenuToggleButton(pParent, rMap);
+        m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
         xButton->SetImageAlign(ImageAlign::Left); //default to left
         setupFromActionName(xButton, rMap, m_xFrame);
         xWindow = xButton;
