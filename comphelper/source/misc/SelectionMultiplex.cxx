@@ -32,8 +32,6 @@ using namespace ::com::sun::star::view;
 
 OSelectionChangeListener::~OSelectionChangeListener()
 {
-    if (m_pAdapter)
-        m_pAdapter->dispose();
 }
 
 
@@ -65,7 +63,6 @@ OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListene
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
             ,m_nLockCount(0)
-            ,m_bListening(false)
 {
     m_pListener->setAdapter(this);
     osl_atomic_increment(&m_refCount);
@@ -94,23 +91,6 @@ void OSelectionChangeMultiplexer::unlock()
 }
 
 
-void OSelectionChangeMultiplexer::dispose()
-{
-    if (m_bListening)
-    {
-        Reference< XSelectionChangeListener> xPreventDelete(this);
-
-        m_xSet->removeSelectionChangeListener(xPreventDelete);
-
-        m_pListener->setAdapter(nullptr);
-
-        m_pListener = nullptr;
-        m_bListening = false;
-
-        m_xSet = nullptr;
-    }
-}
-
 // XEventListener
 
 void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSource) throw( RuntimeException, std::exception)
@@ -126,7 +106,6 @@ void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSour
     }
 
     m_pListener = nullptr;
-    m_bListening = false;
 
     m_xSet = nullptr;
 }
