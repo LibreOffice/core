@@ -100,6 +100,9 @@ public:
     void SetAutoStylesContext( SvXMLStylesContext* pAutoStyles ) { mpAutoStyles = pAutoStyles; }
     SvXMLStylesContext* GetAutoStylesContext() const { return mpAutoStyles; }
 
+    /// Fill in the autostyle.
+    void FillAutoStyle(const OUString& rAutoStyleName, const css::uno::Reference<css::beans::XPropertySet>& rProp);
+
     const css::uno::Reference< css::chart::XChartDocument >& GetChartDocument()
         { return mxChartDoc; }
 

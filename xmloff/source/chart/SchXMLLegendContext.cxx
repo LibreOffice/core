@@ -198,15 +198,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     xLegendProps->setPropertyValue("FillStyle", uno::makeAny( drawing::FillStyle_NONE ));
 
     // set auto-styles for Legend
-    const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-    if( pStylesCtxt )
-    {
-        const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-            SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
-
-        if( pStyle && dynamic_cast< const XMLPropStyleContext*>(pStyle) !=  nullptr)
-            const_cast<XMLPropStyleContext*>( static_cast<const XMLPropStyleContext*>( pStyle ) )->FillPropertySet( xLegendProps );
-    }
+    mrImportHelper.FillAutoStyle(sAutoStyleName, xLegendProps);
 }
 
 SchXMLLegendContext::~SchXMLLegendContext()

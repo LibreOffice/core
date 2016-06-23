@@ -26,10 +26,11 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/prstylei.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
@@ -138,6 +139,21 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     }
 
     return pContext;
+}
+
+void SchXMLImportHelper::FillAutoStyle(const OUString& rAutoStyleName, const uno::Reference<beans::XPropertySet>& rProp)
+{
+    if (!rProp.is())
+        return;
+
+    const SvXMLStylesContext* pStylesCtxt = GetAutoStylesContext();
+    if (pStylesCtxt)
+    {
+        SvXMLStyleContext* pStyle = const_cast<SvXMLStyleContext*>(pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(), rAutoStyleName));
+
+        if (XMLPropStyleContext* pPropStyle = dynamic_cast<XMLPropStyleContext*>(pStyle))
+            pPropStyle->FillPropertySet(rProp);
+    }
 }
 
 // get various token maps

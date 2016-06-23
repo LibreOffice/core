@@ -219,18 +219,8 @@ void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajo
         // the line color is black as default, in the model it is a light gray
         xGridProp->setPropertyValue("LineColor",
                                      uno::makeAny( COL_BLACK ));
-        if( !sAutoStyleName.isEmpty())
-        {
-            const SvXMLStylesContext* pStylesCtxt = m_rImportHelper.GetAutoStylesContext();
-            if( pStylesCtxt )
-            {
-                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
-
-                if( pStyle && dynamic_cast<const XMLPropStyleContext*>( pStyle) !=  nullptr)
-                    const_cast<XMLPropStyleContext*>( static_cast< const XMLPropStyleContext* >( pStyle ))->FillPropertySet( xGridProp );
-            }
-        }
+        if (!sAutoStyleName.isEmpty())
+            m_rImportHelper.FillAutoStyle(sAutoStyleName, xGridProp);
     }
 }
 

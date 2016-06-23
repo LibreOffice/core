@@ -364,19 +364,8 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     }
 
     // set auto-styles for Area
-    uno::Reference< beans::XPropertySet > xProp( mrImportHelper.GetChartDocument()->getArea(), uno::UNO_QUERY );
-    if( xProp.is())
-    {
-        const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-        if( pStylesCtxt )
-        {
-            const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
-
-            if( pStyle && dynamic_cast< const XMLPropStyleContext*>(pStyle) !=  nullptr)
-                const_cast<XMLPropStyleContext*>( static_cast< const XMLPropStyleContext* >( pStyle ) )->FillPropertySet( xProp );
-        }
-    }
+    uno::Reference<beans::XPropertySet> xProp(mrImportHelper.GetChartDocument()->getArea(), uno::UNO_QUERY);
+    mrImportHelper.FillAutoStyle(sAutoStyleName, xProp);
 }
 
 namespace
@@ -1183,19 +1172,8 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
         if( bHasXPosition && bHasYPosition )
             mxTitleShape->setPosition( aPosition );
 
-        uno::Reference< beans::XPropertySet > xProp( mxTitleShape, uno::UNO_QUERY );
-        if( xProp.is())
-        {
-            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-            if( pStylesCtxt )
-            {
-                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    SchXMLImportHelper::GetChartFamilyID(), msAutoStyleName );
-
-                if( pStyle && dynamic_cast< const XMLPropStyleContext*>(pStyle) !=  nullptr)
-                    const_cast<XMLPropStyleContext*>( static_cast< const XMLPropStyleContext* >( pStyle ) )->FillPropertySet( xProp );
-            }
-        }
+        uno::Reference<beans::XPropertySet> xProp(mxTitleShape, uno::UNO_QUERY);
+        mrImportHelper.FillAutoStyle(msAutoStyleName, xProp);
     }
 }
 
