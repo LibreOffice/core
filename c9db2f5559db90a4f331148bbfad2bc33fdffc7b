@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_342528c2",
+        "filename": "configure.ac",
+        "patchSetId": 14
+      },
+      "lineNbr": 8785,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-06-23T10:59:37Z",
+      "side": 1,
+      "message": "-Engine12 looks incorrect. It should probably be completely removed, since libEngine12 is dlopen()ed at runtime.\n\nElse, if that link is necessary, it probably is something like \"-lEngine12\".",
+      "range": {
+        "startLine": 8785,
+        "startChar": 34,
+        "endLine": 8785,
+        "endChar": 43
+      },
+      "revId": "c9db2f5559db90a4f331148bbfad2bc33fdffc7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
