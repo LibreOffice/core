@@ -50,7 +50,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 
 else # MAKE_RESTARTS
 
-all: check-if-root build
+all: build
 
 check-if-root:
 	@if test `id -u` = 0; then \
@@ -240,9 +240,9 @@ fetch:
 endif
 
 #
-# Bootstap
+# Bootstrap
 #
-bootstrap: compilerplugins
+bootstrap: check-if-root compilerplugins
 
 #
 # Build
