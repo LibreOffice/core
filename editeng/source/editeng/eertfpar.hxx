@@ -34,13 +34,11 @@ class EditRTFParser : public SvxRTFParser
 private:
     EditSelection       aCurSel;
     EditEngine*         mpEditEngine;
-    rtl_TextEncoding    eDestCharSet;
     MapMode             aRTFMapMode;
     MapMode             aEditMapMode;
 
     sal_uInt16              nDefFont;
     sal_uInt16              nDefTab;
-    sal_uInt16              nDefFontHeight;
     sal_uInt8               nLastAction;
 
 protected:

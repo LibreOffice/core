@@ -317,7 +317,6 @@ class SvxNodeNum
     sal_uInt16 nLevelVal[ SVX_MAX_NUM ];    // Numbers of all levels
     sal_uInt16 nSetValue;                   // predetermined number
     sal_uInt8  nMyLevel;                     // Current Level
-    bool       bStartNum;                     // Restart numbering
 
 public:
     explicit inline SvxNodeNum( sal_uInt16 nSetVal = USHRT_MAX );
@@ -331,7 +330,7 @@ public:
 };
 
 SvxNodeNum::SvxNodeNum( sal_uInt16 nSetVal )
-    : nSetValue( nSetVal ), nMyLevel( 0 ), bStartNum( false )
+    : nSetValue( nSetVal ), nMyLevel( 0 )
 {
     memset( nLevelVal, 0, sizeof( nLevelVal ) );
 }
@@ -342,7 +341,6 @@ inline SvxNodeNum& SvxNodeNum::operator=( const SvxNodeNum& rCpy )
     {
         nSetValue = rCpy.nSetValue;
         nMyLevel = rCpy.nMyLevel;
-        bStartNum = rCpy.bStartNum;
 
         memcpy( nLevelVal, rCpy.nLevelVal, sizeof( nLevelVal ) );
     }

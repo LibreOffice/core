@@ -148,7 +148,6 @@ struct RTFPlainAttrMapIds
             nTwoLines,
             nCharScaleX,
             nHorzVert,
-            nRuby,
             nRelief,
             nHidden
             ;
