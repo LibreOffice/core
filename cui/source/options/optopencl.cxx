@@ -167,6 +167,9 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
     {
         maConfig.set();
         bModified = true;
+
+        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VclMessageType::Info);
+        aWarnBox->Execute();
     }
 
     if (bModified)
