@@ -278,7 +278,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
             if (!functionDecl) {
                 break;
             }
-            bool bFound = false;
             for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
                 if (i >= functionDecl->getNumParams()) // can happen in template code
                     break;
@@ -289,7 +288,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
                         assignValue = "?";
                         bPotentiallyAssignedTo = true;
                     }
-                    bFound = true;
                     break;
                 }
             }
@@ -299,7 +297,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         {
             const CXXConstructExpr* consExpr = dyn_cast<CXXConstructExpr>(parent);
             const CXXConstructorDecl* consDecl = consExpr->getConstructor();
-            bool bFound = false;
             for (unsigned i = 0; i < consExpr->getNumArgs(); ++i) {
                 if (i >= consDecl->getNumParams()) // can happen in template code
                     break;
@@ -310,7 +307,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
                         assignValue = "?";
                         bPotentiallyAssignedTo = true;
                     }
-                    bFound = true;
                     break;
                 }
             }
