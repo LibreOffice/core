@@ -631,7 +631,6 @@ SaveDialog::SaveDialog(vcl::Window* pParent, RecoveryCore* pCore)
         "svx/ui/docrecoverysavedialog.ui")
     , m_pCore(pCore)
 {
-    get(m_pTitleFT, "title");
     get(m_pFileListLB, "filelist");
     m_pFileListLB->set_height_request(m_pFileListLB->GetTextHeight() * 10);
     m_pFileListLB->set_width_request(m_pFileListLB->approximate_char_width() * 72);
@@ -643,8 +642,6 @@ SaveDialog::SaveDialog(vcl::Window* pParent, RecoveryCore* pCore)
     m_pCore->doEmergencySavePrepare();
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    m_pTitleFT->SetBackground(rStyleSettings.GetWindowColor());
-    m_pTitleFT->set_height_request(m_pTitleFT->get_preferred_size().Height() + 48);
 
     m_pOkBtn->SetClickHdl( LINK( this, SaveDialog, OKButtonHdl ) );
     m_pFileListLB->SetControlBackground( rStyleSettings.GetDialogColor() );
@@ -671,7 +668,6 @@ SaveDialog::~SaveDialog()
 
 void SaveDialog::dispose()
 {
-    m_pTitleFT.clear();
     m_pFileListLB.clear();
     m_pOkBtn.clear();
     Dialog::dispose();
@@ -867,7 +863,6 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     , m_bWaitForCore(false)
     , m_bWasRecoveryStarted(false)
 {
-    get(m_pTitleFT, "title");
     get(m_pDescrFT, "desc");
     get(m_pProgrParent, "progress");
     m_pProgrParent->set_height_request(LogicToPixel(Size(0, PROGR_HEIGHT), MAP_APPFONT).Height());
@@ -888,8 +883,6 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     m_xProgress.set(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    m_pTitleFT->SetBackground(rStyleSettings.GetWindowColor());
-    m_pTitleFT->set_height_request(m_pTitleFT->get_preferred_size().Height() + 48);
 
     m_pFileListLB->SetBackground( rStyleSettings.GetDialogColor() );
 
@@ -927,7 +920,6 @@ RecoveryDialog::~RecoveryDialog()
 void RecoveryDialog::dispose()
 {
     m_pFileListLB.disposeAndClear();
-    m_pTitleFT.clear();
     m_pDescrFT.clear();
     m_pProgrParent.clear();
     m_pNextBtn.clear();
