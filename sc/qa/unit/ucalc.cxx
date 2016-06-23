@@ -5259,6 +5259,12 @@ void Test::testNoteCopyPaste()
     CPPUNIT_ASSERT(pNote);
     CPPUNIT_ASSERT_EQUAL(OUString("Note2"), pNote->GetText());
 
+    // Test that GetNotesInRange includes the end of its range
+    // and so can find the note
+    std::vector<sc::NoteEntry> aNotes;
+    m_pDoc->GetNotesInRange(ScRange(1,7,0), aNotes);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aNotes.size());
+
     m_pDoc->DeleteTab(0);
 }
 

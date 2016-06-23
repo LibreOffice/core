@@ -3600,7 +3600,17 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                 if (bAdd)
                     aMarkData.SetMultiMarkArea(aIter.GetPos());
             }
+        }
 
+        if (nContentFlags & sheet::CellFlags::ANNOTATION)
+        {
+            std::vector<sc::NoteEntry> aNotes;
+            rDoc.GetNotesInRange(aRanges, aNotes);
+
+            for (const auto& i : aNotes)
+            {
+                aMarkData.SetMultiMarkArea(i.maPos);
+            }
         }
 
         ScRangeList aNewRanges;
