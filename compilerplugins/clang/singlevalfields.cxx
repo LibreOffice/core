@@ -90,6 +90,8 @@ public:
     }
 
     bool shouldVisitTemplateInstantiations () const { return true; }
+    // to catch compiler-generated constructors
+    bool shouldVisitImplicitCode() const { return true; }
 
     bool VisitFieldDecl( const FieldDecl* );
     bool VisitMemberExpr( const MemberExpr* );
