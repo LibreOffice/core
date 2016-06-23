@@ -2725,96 +2725,6 @@ dnl ENABLE_JAVA="TRUE" if we want there to be *run-time* (and build-time) suppor
 dnl ENABLE_JAVA="" indicate no Java support at all
 
 dnl ===================================================================
-dnl Export file validation
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable export file validation])
-if test "$with_export_validation" = yes; then
-    AC_MSG_RESULT([yes])
-    AC_DEFINE(HAVE_EXPORT_VALIDATION)
-
-    if test "$build_os" = "cygwin"; then
-        # In case of CygWin it will be executed from Windows,
-        # so we need to run bash and absolute path to validator
-        # so instead of "odfvalidator" it will be
-        # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-        AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
-        if test -z "$ODFVALIDATOR"; then
-            AC_MSG_ERROR([odfvalidator not found, but required by --with-export-validation])
-        fi
-        ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
-    else
-        AC_CHECK_PROGS(ODFVALIDATOR, odfvalidator)
-        if test -z "$ODFVALIDATOR"; then
-            AC_MSG_ERROR([odfvalidator not found, but required by --with-export-validation])
-        fi
-	fi
-    AC_SUBST(ODFVALIDATOR)
-
-    if test "$build_os" = "cygwin"; then
-        # In case of CygWin it will be executed from Windows,
-        # so we need to run bash and absolute path to validator
-        # so instead of "officeotron" it will be
-        # something like "bash.exe C:\cygwin\opt\lo\bin\officeotron"
-        AC_PATH_PROGS(OFFICEOTRON, officeotron)
-        if test -z "$OFFICEOTRON"; then
-            AC_MSG_ERROR([officeotron not found, but required by --with-export-validation])
-        fi
-        OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
-    else
-        AC_CHECK_PROGS(OFFICEOTRON, officeotron)
-        if test -z "$OFFICEOTRON"; then
-            AC_MSG_ERROR([officeotron not found, but required by --with-export-validation])
-        fi
-    fi
-    OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-    if test 0"$OFFICEOTRON_VER" -lt 704; then
-        AC_MSG_ERROR([officeotron too old])
-    fi
-    AC_SUBST(OFFICEOTRON)
-
-else
-    AC_MSG_RESULT([no])
-fi
-
-AC_MSG_CHECKING([for Microsoft Binary File Format Validator])
-if test "$with_bffvalidator" != "no"; then
-    AC_DEFINE(HAVE_BFFVALIDATOR)
-
-    if test "$with_export_validation" != "yes"; then
-        AC_MSG_ERROR([Please enable export validation (-with-export-validation)!])
-    fi
-
-    if test "$with_bffvalidator" = "yes"; then
-        BFFVALIDATOR=`win_short_path_for_make "$PROGRAMFILES/Microsoft Office/BFFValidator/BFFValidator.exe"`
-    else
-        BFFVALIDATOR="$with_bffvalidator"
-    fi
-
-    if test "$build_os" = "cygwin"; then
-        if test -n "$BFFVALIDATOR" -a -e "`cygpath $BFFVALIDATOR`"; then
-            AC_MSG_RESULT($BFFVALIDATOR)
-        else
-            AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
-        fi
-    elif test -n "$BFFVALIDATOR"; then
-        # We are not in CygWin but need to run Windows binary with wine
-        AC_PATH_PROGS(WINE, wine)
-
-        # so swap in a shell wrapper that converts paths transparently
-        BFFVALIDATOR_EXE="$BFFVALIDATOR"
-        BFFVALIDATOR="$SRC_ROOT/bin/bffvalidator.sh"
-        AC_SUBST(BFFVALIDATOR_EXE)
-        AC_MSG_RESULT($BFFVALIDATOR)
-    else
-        AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
-    fi
-    AC_SUBST(BFFVALIDATOR)
-else
-    AC_MSG_RESULT([no])
-fi
-
-
-dnl ===================================================================
 dnl Check OS X SDK and compiler
 dnl ===================================================================
 
@@ -4605,6 +4515,86 @@ AC_SUBST(WORKDIR)
 AC_SUBST(PLATFORMID)
 AC_SUBST(WINDOWS_X64)
 AC_DEFINE_UNQUOTED(WORKDIR,"$WORKDIR")
+
+dnl ===================================================================
+dnl Export file validation
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable export file validation])
+if test "$with_export_validation" = yes; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(HAVE_EXPORT_VALIDATION)
+
+    AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
+    if test -z "$ODFVALIDATOR"; then
+        # remember to download the ODF toolkit with validator later
+        BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
+        ODFVALIDATOR="$WORKDIR/odfvalidator.sh"
+		AC_MSG_RESULT($ODFVALIDATOR)
+        if test "$build_os" = "cygwin"; then
+            # In case of CygWin it will be executed from Windows,
+            # so we need to run bash and absolute path to validator
+            # so instead of "odfvalidator" it will be
+            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+            ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
+        fi
+    fi
+    AC_SUBST(ODFVALIDATOR)
+
+    if test "$build_os" = "cygwin"; then
+        # In case of CygWin it will be executed from Windows,
+        # so we need to run bash and absolute path to validator
+        # so instead of "officeotron" it will be
+        # something like "bash.exe C:\cygwin\opt\lo\bin\officeotron"
+        AC_PATH_PROGS(OFFICEOTRON, officeotron)
+        if test -z "$OFFICEOTRON"; then
+            AC_MSG_ERROR([officeotron not found, but required by --with-export-validation])
+        fi
+        OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
+    else
+        AC_CHECK_PROGS(OFFICEOTRON, officeotron)
+        if test -z "$OFFICEOTRON"; then
+            AC_MSG_ERROR([officeotron not found, but required by --with-export-validation])
+        fi
+    fi
+    OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+    if test 0"$OFFICEOTRON_VER" -lt 704; then
+        AC_MSG_ERROR([officeotron too old])
+    fi
+    AC_SUBST(OFFICEOTRON)
+
+else
+    AC_MSG_RESULT([no])
+fi
+
+AC_MSG_CHECKING([for Microsoft Binary File Format Validator])
+if test "$with_bffvalidator" != "no"; then
+    AC_DEFINE(HAVE_BFFVALIDATOR)
+
+    if test "$with_export_validation" != "yes"; then
+        AC_MSG_ERROR([Please enable export validation (-with-export-validation)!])
+    fi
+
+    if test "$with_bffvalidator" = "yes"; then
+        BFFVALIDATOR=`win_short_path_for_make "$PROGRAMFILES/Microsoft Office/BFFValidator/BFFValidator.exe"`
+    else
+        BFFVALIDATOR="$with_bffvalidator"
+    fi
+
+    if test "$build_os" = "cygwin"; then
+        if test -n "$BFFVALIDATOR" -a -e "`cygpath $BFFVALIDATOR`"; then
+            AC_MSG_RESULT($BFFVALIDATOR)
+        else
+            AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
+        fi
+    elif test -n "$BFFVALIDATOR" -a -e "$BFFVALIDATOR"; then
+        AC_MSG_RESULT($BFFVALIDATOR)
+    else
+        AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
+    fi
+    AC_SUBST(BFFVALIDATOR)
+else
+    AC_MSG_RESULT([no])
+fi
 
 dnl ===================================================================
 dnl Test which package format to use
