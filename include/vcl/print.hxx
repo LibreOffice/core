@@ -205,7 +205,6 @@ private:
     bool                        mbPrintFile;
     bool                        mbInPrintPage;
     bool                        mbNewJobSetup;
-    bool                        mbIsQueuePrinter;
 
     SAL_DLLPRIVATE void         ImplInitData();
     SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
@@ -407,7 +406,6 @@ public:
         // all metrics in 100th mm
         int                             nRows;
         int                             nColumns;
-        int                             nRepeat;
         Size                            aPaperSize;
         long                            nLeftMargin;
         long                            nTopMargin;
@@ -419,7 +417,7 @@ public:
         NupOrderType                    nOrder;
 
         MultiPageSetup()
-             : nRows( 1 ), nColumns( 1 ), nRepeat( 1 ), aPaperSize( 21000, 29700 )
+             : nRows( 1 ), nColumns( 1 ), aPaperSize( 21000, 29700 )
              , nLeftMargin( 0 ), nTopMargin( 0 )
              , nRightMargin( 0 ), nBottomMargin( 0 )
              , nHorizontalSpacing( 0 ), nVerticalSpacing( 0 )

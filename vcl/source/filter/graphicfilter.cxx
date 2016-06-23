@@ -1152,7 +1152,6 @@ void GraphicFilter::ImplInit()
     }
 
     pErrorEx = new FilterErrorEx;
-    bAbort = false;
 }
 
 sal_uLong GraphicFilter::ImplSetError( sal_uLong nError, const SvStream* pStm )
@@ -1381,7 +1380,6 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         else
             nStreamBegin = rIStream.Tell();
 
-        bAbort = false;
         nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
         // if pending, return GRFILTER_OK in order to request more bytes
         if( rIStream.GetError() == ERRCODE_IO_PENDING )
@@ -1770,9 +1768,6 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     // Set error code or try to set native buffer
     if( nStatus != GRFILTER_OK )
     {
-        if( bAbort )
-            nStatus = GRFILTER_ABORT;
-
         ImplSetError( nStatus, &rIStream );
         rIStream.Seek( nStreamBegin );
         rGraphic.Clear();
@@ -1864,7 +1859,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 #ifndef DISABLE_DYNLOADING
     OUString aExternalFilterName(pConfig->GetExternalFilterName(nFormat, true));
 #endif
-    bAbort              = false;
     sal_uInt16      nStatus = GRFILTER_OK;
     GraphicType eType;
     Graphic     aGraphic( rGraphic );
@@ -2134,9 +2128,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
     }
     if( nStatus != GRFILTER_OK )
     {
-        if( bAbort )
-            nStatus = GRFILTER_ABORT;
-
         ImplSetError( nStatus, &rOStm );
     }
     return nStatus;

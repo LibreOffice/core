@@ -43,7 +43,6 @@ private:
     vcl::KeyCode            maCurKeyCode;
     sal_uInt16              mnCurId;
     sal_uInt16              mnCurRepeat;
-    bool                    mbIsCancel;
     bool*                   mpDel;
 
     SAL_DLLPRIVATE  void    ImplInit();

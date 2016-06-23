@@ -32,7 +32,6 @@ class VCL_DLLPUBLIC MoreButton : public PushButton
 {
 private:
     ImplMoreButtonData* mpMBData;
-    sal_uLong           mnDelta;
     MapUnit             meUnit;
     bool                mbState;
 

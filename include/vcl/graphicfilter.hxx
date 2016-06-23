@@ -239,7 +239,6 @@ protected:
     OUString       aFilterPath;
     FilterConfigCache*  pConfig;
     FilterErrorEx*      pErrorEx;
-    bool            bAbort;
     bool            bUseConfig;
     long                nExpGraphHint;
 

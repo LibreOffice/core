@@ -505,7 +505,6 @@ void NumericFormatter::ImplInit()
     mnLastValue         = 0;
     mnMin               = 0;
     mnMax               = SAL_MAX_INT64;
-    mnCorrectedValue    = 0;
     mnDecimalDigits     = 2;
     mnType              = FORMAT_NUMERIC;
     mbThousandSep       = true;
@@ -1596,7 +1595,7 @@ void MetricFormatter::Reformat()
 sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
 {
     // convert to requested units
-    return MetricField::ConvertValue( mnCorrectedValue, mnBaseValue, GetDecimalDigits(),
+    return MetricField::ConvertValue( 0/*nCorrectedValue*/, mnBaseValue, GetDecimalDigits(),
                                       meUnit, eOutUnit );
 }
 

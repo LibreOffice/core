@@ -643,7 +643,6 @@ void PushButton::ImplInitPushButtonData()
     meSaveValue     = TRISTATE_FALSE;
     mnDDStyle       = PushButtonDropdownStyle::NONE;
     mbPressed       = false;
-    mbInUserDraw    = false;
 }
 
 namespace

@@ -72,7 +72,6 @@ TextEngine::TextEngine()
     , mpIMEInfos {nullptr}
     , mpLocaleDataWrapper {nullptr}
     , maTextColor {COL_BLACK}
-    , mnFixCharWidth100 {0}
     , mnMaxTextLen {0}
     , mnMaxTextWidth {0}
     , mnCharHeight {0}
@@ -199,7 +198,6 @@ void TextEngine::SetFont( const vcl::Font& rFont )
         if ( !mnDefTab )
             mnDefTab = 1;
         mnCharHeight = mpRefDev->GetTextHeight();
-        mnFixCharWidth100 = 0;
 
         FormatFullDoc();
         UpdateViews();
@@ -1206,20 +1204,11 @@ long TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_I
     SAL_WARN_IF( nTabPos != -1 && nTabPos < (nPortionStart+nLen), "vcl", "CalcTextWidth: Tab!" );
 #endif
 
-    long nWidth;
-    if ( mnFixCharWidth100 )
-    {
-        nWidth = static_cast<long>(nLen)*mnFixCharWidth100/100;
-    }
-    else
-    {
-        vcl::Font aFont;
-        SeekCursor( nPara, nPortionStart+1, aFont, nullptr );
-        mpRefDev->SetFont( aFont );
-        TextNode* pNode = mpDoc->GetNodes()[ nPara ];
-        nWidth = mpRefDev->GetTextWidth( pNode->GetText(), nPortionStart, nLen );
-
-    }
+    vcl::Font aFont;
+    SeekCursor( nPara, nPortionStart+1, aFont, nullptr );
+    mpRefDev->SetFont( aFont );
+    TextNode* pNode = mpDoc->GetNodes()[ nPara ];
+    long nWidth = mpRefDev->GetTextWidth( pNode->GetText(), nPortionStart, nLen );
     return nWidth;
 }
 

@@ -113,7 +113,6 @@ private:
 
     vcl::Font           maFont;
     Color               maTextColor;
-    sal_uInt16          mnFixCharWidth100;
 
     sal_Int32           mnMaxTextLen;
     long                mnMaxTextWidth;

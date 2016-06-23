@@ -49,7 +49,6 @@ private:
     ImplTabCtrlData*    mpTabCtrlData;
     long                mnLastWidth;
     long                mnLastHeight;
-    long                mnBtnSize;
     long                mnMaxPageWidth;
     sal_uInt16          mnActPageId;
     sal_uInt16          mnCurPageId;

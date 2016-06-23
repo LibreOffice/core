@@ -119,7 +119,6 @@ protected:
     TriState        meSaveValue;
     PushButtonDropdownStyle mnDDStyle;
     bool            mbPressed;
-    bool            mbInUserDraw;
 
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
     SAL_DLLPRIVATE WinBits         ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );

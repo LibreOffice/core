@@ -88,7 +88,6 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     mnLastWidth                 = 0;
     mnLastHeight                = 0;
-    mnBtnSize                   = 0;
     mnMaxPageWidth              = 0;
     mnActPageId                 = 0;
     mnCurPageId                 = 0;

@@ -186,8 +186,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockingHdl, void*, void)
         }
     }
 
-    if( mpDockWin->IsDockable() &&
-        mpDockWin->GetWindow()->IsVisible() &&
+    if( mpDockWin->GetWindow()->IsVisible() &&
         (tools::Time::GetSystemTicks() - mnLastTicks > 500) &&
         ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) &&
         !(aState.mnState & KEY_MOD1) && // i43499 CTRL disables docking now
@@ -799,8 +798,6 @@ ImplDockingWindowWrapper::ImplDockingWindowWrapper( const vcl::Window *pWindow )
     , mnDockBottom(0)
     , mnFloatBits(WB_BORDER | WB_CLOSEABLE | WB_SIZEABLE | (pWindow->GetStyle() & DOCKWIN_FLOATSTYLES))
     , mbDockCanceled(false)
-    , mbFloatPrevented(false)
-    , mbDockable(true)
     , mbDocking(false)
     , mbLastFloatMode(false)
     , mbStartFloat(false)
@@ -828,9 +825,6 @@ ImplDockingWindowWrapper::~ImplDockingWindowWrapper()
 
 bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
 {
-    if ( !mbDockable )
-        return false;
-
     if( !mbStartDockingEnabled )
         return false;
 
@@ -926,7 +920,6 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
 
             bool bFloatMode = Docking( aPos, aTrackRect );
 
-            mbFloatPrevented = false;
             if ( mbLastFloatMode != bFloatMode )
             {
                 if ( bFloatMode )

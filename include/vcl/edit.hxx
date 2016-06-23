@@ -62,8 +62,6 @@ public:
     virtual ~TextFilter();
 };
 
-enum class AutocompleteAction { KeyInput, TabForward, TabBackward };
-
 class Timer;
 
 class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
@@ -84,7 +82,6 @@ private:
     sal_Int32           mnMaxTextLen;
     sal_Int32           mnWidthInChars;
     sal_Int32           mnMaxWidthChars;
-    AutocompleteAction  meAutocompleteAction;
     sal_Unicode         mcEchoChar;
     bool                mbModified:1,
                         mbInternModified:1,
@@ -249,7 +246,6 @@ public:
 
     void                SetAutocompleteHdl( const Link<Edit&,void>& rLink ) { maAutocompleteHdl = rLink; }
     const Link<Edit&,void>& GetAutocompleteHdl() const { return maAutocompleteHdl; }
-    AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }
 
     virtual Size        CalcMinimumSize() const;
     virtual Size        CalcMinimumSizeForText(const OUString &rString) const;
