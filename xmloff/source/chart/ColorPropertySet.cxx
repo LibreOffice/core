@@ -88,7 +88,6 @@ ColorPropertySet::ColorPropertySet( sal_Int32 nColor ) :
         // note: length of FillColor and LineColor is 9
         m_aColorPropName( "FillColor", 9, RTL_TEXTENCODING_ASCII_US ),
         m_nColor( nColor ),
-        m_bIsFillColor( true ),
         m_nDefaultColor( 0x0099ccff )  // blue 8
 {}
 
@@ -101,7 +100,7 @@ Reference< XPropertySetInfo > SAL_CALL ColorPropertySet::getPropertySetInfo()
     throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xInfo.is())
-        m_xInfo.set( new lcl_ColorPropertySetInfo( m_bIsFillColor ));
+        m_xInfo.set( new lcl_ColorPropertySetInfo( true/*bIsFillColor*/ ));
 
     return m_xInfo;
 }

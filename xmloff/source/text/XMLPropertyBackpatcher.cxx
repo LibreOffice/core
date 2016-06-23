@@ -34,8 +34,6 @@ template<class A>
 XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
     const OUString& sPropName)
 :   sPropertyName(sPropName)
-,   bDefaultHandling(false)
-,   bPreserveProperty(false)
 ,   sPreservePropertyName()
 {
 }
@@ -70,28 +68,11 @@ void XMLPropertyBackpatcher<A>::ResolveId(
         //    (and preserve Property, if appropriate)
         Any aAny;
         aAny <<= aValue;
-        if (bPreserveProperty)
+        for(BackpatchListType::iterator aIter = pList->begin();
+            aIter != pList->end();
+            ++aIter)
         {
-            // preserve version
-            for(BackpatchListType::iterator aIter = pList->begin();
-                aIter != pList->end();
-                ++aIter)
-            {
-                Reference<XPropertySet> xProp = (*aIter);
-                Any aPres = xProp->getPropertyValue(sPreservePropertyName);
-                xProp->setPropertyValue(sPropertyName, aAny);
-                xProp->setPropertyValue(sPreservePropertyName, aPres);
-            }
-        }
-        else
-        {
-            // without preserve
-            for(BackpatchListType::iterator aIter = pList->begin();
-                aIter != pList->end();
-                ++aIter)
-            {
-                (*aIter)->setPropertyValue(sPropertyName, aAny);
-            }
+            (*aIter)->setPropertyValue(sPropertyName, aAny);
         }
 
         // c) delete list
@@ -137,10 +118,6 @@ void XMLPropertyBackpatcher<A>::SetProperty(
 template<class A>
 void XMLPropertyBackpatcher<A>::SetDefault()
 {
-    if (bDefaultHandling)
-    {
-        // not implemented yet
-    }
 }
 
 // force instantiation of templates
