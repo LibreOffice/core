@@ -99,6 +99,7 @@ if __name__ == '__main__':
     print("Tests run: %d" % result.testsRun)
     print("Tests failed: %d" % len(result.failures))
     print("Tests errors: %d" % len(result.errors))
+    print("Tests skipped: %d" % len(result.skipped))
     if not result.wasSuccessful():
         sys.exit(1)
     sys.exit(0)
