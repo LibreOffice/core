@@ -44,19 +44,16 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
     aInterceptedRequest.Handle = HANDLE_INTERACTIVEIOEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::InteractiveIOException();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
     aInterceptedRequest.Handle = HANDLE_UNSUPPORTEDDATASINKEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::UnsupportedDataSinkException();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
     aInterceptedRequest.Handle = HANDLE_AUTHENTICATIONREQUESTEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::AuthenticationRequest();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionApprove>::get();
-    aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
     setInterceptedHandler(xHandler);

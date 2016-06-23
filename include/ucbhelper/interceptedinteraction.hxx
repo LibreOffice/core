@@ -64,23 +64,6 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             css::uno::Type Continuation;
 
 
-            /** @short  specify, if both interactions must have the same type
-                        or can be derived from.
-
-                @descr  Interaction base on exceptions - and exceptions are real types.
-                        So they can be checked in its type. These parameter "MatchExact"
-                        influence the type-check in the following way:
-                            TRUE  => the exception will be intercepted only
-                                     if it supports exactly the same type ...
-                                     or
-                            FALSE => derived exceptions will be intercepted too.
-
-                @attention  This parameter does not influence the check of the continuation
-                            type! The continuation must be matched exactly every time ...
-             */
-            bool MatchExact;
-
-
             /** @short  its an unique identifier, which must be managed by the outside code.
 
                 @descr  If there is a derived class, which overwrites the InterceptedInteraction::intercepted()
@@ -98,7 +81,6 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
              */
             InterceptedRequest()
             {
-                MatchExact = false;
                 Handle     = INVALID_HANDLE;
             }
 
