@@ -36,7 +36,6 @@ class XMLFormPropValueTContext_Impl : public XMLTransformerContext
 {
     OUString m_aAttrQName;
     OUString m_aCharacters;
-    bool m_bPersistent;
     bool m_bIsVoid;
 
 public:
@@ -65,7 +64,6 @@ XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
         XMLTransformerBase& rTransformer,
         const OUString& rQName ) :
     XMLTransformerContext( rTransformer, rQName ),
-    m_bPersistent( true ),
     m_bIsVoid( false )
 {
 }
@@ -77,7 +75,6 @@ XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
     XMLTransformerContext( rTransformer, rQName ),
     m_aAttrQName( rTransformer.GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_OFFICE, GetXMLToken(eAttrToken) ) ),
-    m_bPersistent( true ),
     m_bIsVoid( false )
 {
 }
@@ -106,20 +103,6 @@ void XMLFormPropValueTContext_Impl::StartElement(
 
 void XMLFormPropValueTContext_Impl::EndElement()
 {
-    if( !m_bPersistent )
-    {
-        XMLMutableAttributeList *pMutableAttrList =
-            new XMLMutableAttributeList;
-        Reference< XAttributeList > xAttrList( pMutableAttrList );
-        pMutableAttrList->AddAttribute( m_aAttrQName,
-                                        m_aCharacters );
-
-        OUString aElemQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_FORM, GetXMLToken(XML_LIST_VALUE) ) );
-        GetTransformer().GetDocHandler()->startElement( aElemQName,
-                                                    xAttrList );
-        GetTransformer().GetDocHandler()->endElement( aElemQName );
-    }
 }
 
 void XMLFormPropValueTContext_Impl::Characters( const OUString& rChars )
@@ -129,7 +112,7 @@ void XMLFormPropValueTContext_Impl::Characters( const OUString& rChars )
 
 bool XMLFormPropValueTContext_Impl::IsPersistent() const
 {
-    return m_bPersistent;
+    return true;
 }
 
 XMLFormPropOOoTransformerContext::XMLFormPropOOoTransformerContext(

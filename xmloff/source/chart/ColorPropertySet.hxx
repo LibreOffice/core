@@ -102,7 +102,6 @@ private:
     css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
     OUString  m_aColorPropName;
     sal_Int32        m_nColor;
-    bool             m_bIsFillColor;
     sal_Int32        m_nDefaultColor;
 };
 
