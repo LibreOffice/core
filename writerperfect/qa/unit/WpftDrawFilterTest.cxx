@@ -50,6 +50,7 @@ void WpftDrawFilterTest::test()
     doTest("com.sun.star.comp.Draw.VisioImportFilter", "/writerperfect/qa/unit/data/draw/libvisio/");
     doTest("com.sun.star.comp.Draw.WPGImportFilter", "/writerperfect/qa/unit/data/draw/libwpg/");
     doTest("org.libreoffice.comp.Draw.PageMakerImportFilter", "/writerperfect/qa/unit/data/draw/libpagemaker/");
+    doTest("org.libreoffice.comp.Draw.ZMFImportFilter", "/writerperfect/qa/unit/data/draw/libzmf/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftDrawFilterTest);
