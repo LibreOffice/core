@@ -189,7 +189,6 @@ private:
     */
     ::boost::optional<bool> mbIsDeckRequestedOpen;
     ::boost::optional<bool> mbIsDeckOpen;
-    bool mbCanDeckBeOpened;
 
     /** Before the deck is closed the sidebar width is saved into this variable,
         so that it can be restored when the deck is reopened.

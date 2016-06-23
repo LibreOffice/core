@@ -256,12 +256,6 @@ void SfxObjectShell::ResetError()
 }
 
 
-bool SfxObjectShell::IsTemplate() const
-{
-    return pImpl->bIsTemplate;
-}
-
-
 void SfxObjectShell::EnableSetModified( bool bEnable )
 {
 #ifdef DBG_UTIL
@@ -792,7 +786,6 @@ OUString SfxObjectShell::GetTitle
         bRecur = true;
 
         OUString aTitle;
-        SfxObjectShell *pThis = const_cast<SfxObjectShell*>(this);
 
         if ( pMed )
         {
@@ -804,18 +797,11 @@ OUString SfxObjectShell::GetTitle
         if ( aTitle.isEmpty() )
             aTitle = GetTitle( SFX_TITLE_FILENAME );
 
-        if ( IsTemplate() )
-            pThis->SetTitle( aTitle );
         bRecur = false;
         return aTitle;
     }
     else if (SFX_TITLE_APINAME == nMaxLength )
         return GetAPIName();
-
-    // Special case templates:
-    if( IsTemplate() && !pImpl->aTitle.isEmpty() &&
-         ( nMaxLength == SFX_TITLE_CAPTION || nMaxLength == SFX_TITLE_PICKLIST ) )
-        return pImpl->aTitle;
 
     // Picklist/Caption is mapped
     if ( pMed && ( nMaxLength == SFX_TITLE_CAPTION || nMaxLength == SFX_TITLE_PICKLIST ) )

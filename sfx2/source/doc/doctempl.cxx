@@ -119,8 +119,6 @@ class DocTempl_EntryData_Impl
     OUString            maTitle;
     OUString            maOwnURL;
     OUString            maTargetURL;
-    bool            mbIsOwner   : 1;
-    bool            mbDidConvert: 1;
 
 private:
     RegionData_Impl*    GetParent() const { return mpParent; }
@@ -1231,8 +1229,6 @@ DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
     mpParent    = pParent;
     maTitle     = SfxDocumentTemplates::ConvertResourceString(
                   STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, rTitle );
-    mbIsOwner   = false;
-    mbDidConvert= false;
 }
 
 

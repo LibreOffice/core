@@ -164,7 +164,6 @@ protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference< css::frame::XDesktop2 > mxDesktop;
 
-    bool mbIsSynced; ///< Tells whether maRepositories is synchronized with the user config
     std::vector<TemplateRepository*> maRepositories; ///< Stores the remote repositories for templates
 };
 

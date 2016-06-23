@@ -62,18 +62,16 @@ struct SfxObjectBar_Impl
 };
 
 
-// This struct makes all relevant Informationen available of the status bar
+// This struct makes all relevant Information available of the status bar
 
 struct SfxStatBar_Impl
 {
     sal_uInt16              nId;
     bool                    bOn;
-    bool                    bTemp;
 
     SfxStatBar_Impl() :
         nId(0),
-        bOn(true),
-        bTemp(false)
+        bOn(true)
     {}
 };
 
@@ -122,7 +120,6 @@ struct SfxChildWin_Impl
     SfxChild_Impl*                  pCli;          // != 0 at direct Children
     sal_uInt16                      nVisibility;
     bool                            bEnable;
-    bool                            bDisabled;
 
     SfxChildWin_Impl( sal_uInt32 nID ) :
         nSaveId((sal_uInt16) (nID & 0xFFFF) ),
@@ -132,8 +129,7 @@ struct SfxChildWin_Impl
         bCreate(false),
         pCli(nullptr),
         nVisibility( SFX_VISIBILITY_UNVISIBLE ),
-        bEnable( true ),
-        bDisabled( false )
+        bEnable( true )
     {}
 };
 
