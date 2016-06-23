@@ -39,35 +39,30 @@ SimpleFileAccessInteraction::SimpleFileAccessInteraction(
     aInterceptedRequest.Handle = HANDLE_INTERACTIVEIOEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::InteractiveIOException();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
     //intercept internal error
     aInterceptedRequest.Handle = HANDLE_UNSUPPORTEDDATASINKEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::UnsupportedDataSinkException();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
     //intercept network error exception (WebDAV ucp provider)
     aInterceptedRequest.Handle = HANDLE_INTERACTIVENETWORKEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::InteractiveNetworkException();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
     //intercept certificate validation request (WebDAV ucp provider)
     aInterceptedRequest.Handle = HANDLE_CERTIFICATEREQUEST;
     aInterceptedRequest.Request <<= css::ucb::CertificateValidationRequest();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
     //intercept authentication request (WebDAV ucp provider)
     aInterceptedRequest.Handle = HANDLE_AUTHENTICATIONREQUEST;
     aInterceptedRequest.Request <<= css::ucb::AuthenticationRequest();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionApprove>::get();
-    aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
     setInterceptedHandler(xHandler);

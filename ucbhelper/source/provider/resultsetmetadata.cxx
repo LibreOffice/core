@@ -83,8 +83,7 @@ ResultSetMetaData::ResultSetMetaData(
                         const Sequence< Property >& rProps )
 : m_pImpl( new ResultSetMetaData_Impl( rProps.getLength() ) ),
   m_xContext( rxContext ),
-  m_aProps( rProps ),
-  m_bReadOnly( true )
+  m_aProps( rProps )
 {
 }
 
@@ -95,8 +94,7 @@ ResultSetMetaData::ResultSetMetaData(
                         const std::vector< ResultSetColumnData >& rColumnData )
 : m_pImpl( new ResultSetMetaData_Impl( rColumnData ) ),
   m_xContext( rxContext ),
-  m_aProps( rProps ),
-  m_bReadOnly( true )
+  m_aProps( rProps )
 {
     OSL_ENSURE( rColumnData.size() == sal_uInt32( rProps.getLength() ),
                 "ResultSetMetaData ctor - different array sizes!" );
@@ -180,64 +178,34 @@ sal_Bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 column )
+sal_Bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
-    /*
-        Checks whether the value stored in column can be used in a
-        WHERE clause.
-     */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return false;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].isSearchable;
+    return false;
 }
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 column )
+sal_Bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
-    /*
-        Checks whether column is a cash value.
-     */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return false;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].isCurrency;
+    return false;
 }
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::isNullable( sal_Int32 column )
+sal_Int32 SAL_CALL ResultSetMetaData::isNullable( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
-    /*
-        Checks whether a NULL can be stored in column.
-        Possible values: see com/sun/star/sdbc/ColumnValue.idl
-     */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return ColumnValue::NULLABLE;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].isNullable;
+    return ColumnValue::NULLABLE;
 }
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 column )
+sal_Bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
-    /*
-        Checks whether the value stored in column is a signed number.
-     */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return false;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].isSigned;
+    return false;
 }
 
 
@@ -310,37 +278,18 @@ OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 column )
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::getPrecision( sal_Int32 column )
+sal_Int32 SAL_CALL ResultSetMetaData::getPrecision( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
-    /*
-        For number types, getprecision gets the number of decimal digits
-        in column.
-        For character types, it gets the maximum length in characters for
-        column.
-        For binary types, it gets the maximum length in bytes for column.
-     */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return -1;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].precision;
+    return -1;
 }
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::getScale( sal_Int32 column )
+sal_Int32 SAL_CALL ResultSetMetaData::getScale( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
-    /*
-        Gets the number of digits to the right of the decimal point for
-        values in column.
-     */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return 0;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].scale;
+    return 0;
 }
 
 
@@ -507,46 +456,26 @@ OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 column )
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 column )
+sal_Bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
-    if ( m_pImpl->m_bGlobalReadOnlyValue )
-        return m_bReadOnly;
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return true;
-
-    // autoincrement==true => readonly
-    return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement ||
-           m_pImpl->m_aColumnData[ column - 1 ].isReadOnly;
+    return true;
 }
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 column )
+sal_Bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
-    if ( m_pImpl->m_bGlobalReadOnlyValue )
-        return !m_bReadOnly;
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return false;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].isWritable;
+    return false;
 }
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
+sal_Bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
-    if ( m_pImpl->m_bGlobalReadOnlyValue )
-        return !m_bReadOnly;
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return false;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].isDefinitelyWritable;
+    return false;
 }
 
 
