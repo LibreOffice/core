@@ -30,8 +30,7 @@ namespace svt
 
 JavaContext::JavaContext( const Reference< XCurrentContext > & ctx)
     : m_aRefCount(0),
-      m_xNextContext( ctx ),
-      m_bShowErrorsOnce(true)
+      m_xNextContext( ctx )
 {
 }
 
@@ -69,7 +68,7 @@ Any SAL_CALL JavaContext::getValueByName( const OUString& Name) throw (RuntimeEx
         {
             osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
             if (!m_xHandler.is())
-                m_xHandler.set( new JavaInteractionHandler(m_bShowErrorsOnce));
+                m_xHandler.set( new JavaInteractionHandler(true/*bShowErrorsOnce*/));
         }
         retVal = makeAny(m_xHandler);
 

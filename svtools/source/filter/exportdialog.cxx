@@ -538,7 +538,6 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     , maOriginalSize(awt::Size(0, 0))
     , mbIsPixelFormat(bIsPixelFormat)
     , mbExportSelection(bExportSelection)
-    , mbPreserveAspectRatio(true)
 {
     get(mpMfSizeX, "widthmf-nospin");
     get(mpMfSizeY, "heightmf-nospin");
@@ -1018,8 +1017,7 @@ IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
         Size aDest( LogicToLogic( aSource, aSourceMapMode, MAP_100TH_MM ) );
 
         maSize.Width = aDest.Width();
-        if ( mbPreserveAspectRatio )
-            maSize.Height = aDest.Height();
+        maSize.Height = aDest.Height();
     }
     updateControls();
 }
@@ -1051,8 +1049,7 @@ IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
         Size aDest( LogicToLogic( aSource, aSourceMapMode, MAP_100TH_MM ) );
 
         maSize.Height = aDest.Height();
-        if ( mbPreserveAspectRatio )
-            maSize.Width = aDest.Width();
+        maSize.Width = aDest.Width();
     }
     updateControls();
 }

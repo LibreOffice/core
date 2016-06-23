@@ -187,7 +187,6 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObje
     aObjDesc.maSize = GetAllMarkedRect().GetSize();
     aObjDesc.maDragStartPos = rDragPos;
     aObjDesc.maDisplayName = aDisplayName;
-    aObjDesc.mbCanLink = false;
 
     pTransferable->SetStartPos( rDragPos );
     pTransferable->SetObjectDescriptor( aObjDesc );

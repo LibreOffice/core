@@ -68,7 +68,6 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
     TDisplayNames       m_aComponentDisplayNames;
     ::std::vector<TComponents::iterator> m_aConfigValuesPos;
 
-    bool            m_bEditMode;
     OUString        m_sLoadedScheme;
     bool            m_bIsBroadcastEnabled;
     static bool     m_bLockBroadcast;
@@ -197,15 +196,11 @@ bool ExtendedColorConfig_Impl::m_bLockBroadcast = false;
 bool ExtendedColorConfig_Impl::m_bBroadcastWhenUnlocked = false;
 ExtendedColorConfig_Impl::ExtendedColorConfig_Impl() :
     ConfigItem(OUString("Office.ExtendedColorScheme")),
-    m_bEditMode(false),
     m_bIsBroadcastEnabled(true)
 {
-    if(!m_bEditMode)
-    {
-        //try to register on the root node - if possible
-        uno::Sequence < OUString > aNames(1);
-        EnableNotification( aNames );
-    }
+    //try to register on the root node - if possible
+    uno::Sequence < OUString > aNames(1);
+    EnableNotification( aNames );
     Load(OUString());
 
     ::Application::AddEventListener( LINK(this, ExtendedColorConfig_Impl, DataChangedEventListener) );

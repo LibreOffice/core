@@ -41,7 +41,6 @@ FileControl::FileControl( vcl::Window* pParent, WinBits nStyle ) :
     mnInternalFlags( FileControlMode_Internal::ORIGINALBUTTONTEXT )
 {
     maButton->SetClickHdl( LINK( this, FileControl, ButtonHdl ) );
-    mbOpenDlg = true;
 
     maButton->Show();
     maEdit->Show();

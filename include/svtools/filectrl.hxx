@@ -47,7 +47,6 @@ private:
     VclPtr<PushButton> maButton;
 
     OUString        maButtonText;
-    bool            mbOpenDlg;
 
     FileControlMode_Internal    mnInternalFlags;
 

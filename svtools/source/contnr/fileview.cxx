@@ -175,7 +175,6 @@ private:
     bool                    mbResizeDisabled        : 1;
     bool                    mbAutoResize            : 1;
     bool                    mbEnableDelete          : 1;
-    bool                    mbEnableRename          : 1;
     bool                    mbShowHeader;
 
     void            DeleteEntries();
@@ -486,7 +485,6 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     mbResizeDisabled    ( false ),
     mbAutoResize        ( false ),
     mbEnableDelete      ( false ),
-    mbEnableRename      ( true ),
     mbShowHeader        ( !(nFlags & FileViewFlags::SHOW_NONE) )
 {
     Size aBoxSize = pParentWin->GetSizePixel();
@@ -630,7 +628,7 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 VclPtr<PopupMenu> ViewTabListBox_Impl::CreateContextMenu()
 {
     bool bEnableDelete = mbEnableDelete;
-    bool bEnableRename = mbEnableRename;
+    bool bEnableRename = true;
 
     if ( bEnableDelete || bEnableRename )
     {

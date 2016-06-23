@@ -2854,7 +2854,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         bool bSelTab = bool(nFlags & SvLBoxTabFlags::SHOW_SELECTION);
         sal_uInt16 nItemType = pItem->GetType();
 
-        if (pViewDataEntry->IsHighlighted() && bSelTab && !pViewDataEntry->IsCursored())
+        if (pViewDataEntry->IsHighlighted() && bSelTab)
         {
             Color aNewWallColor = rSettings.GetHighlightColor();
             if (!bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP)
@@ -2960,19 +2960,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
 
         nCurItem++;
         nCurTab++;
-    }
-    if (pViewDataEntry->IsCursored() && !HasFocus())
-    {
-        // cursor emphasis
-        rRenderContext.SetFillColor();
-        Color aOldLineColor = rRenderContext.GetLineColor();
-        rRenderContext.SetLineColor(Color(COL_BLACK));
-        aRect = GetFocusRect(&rEntry, nLine);
-        aRect.Top()++;
-        aRect.Bottom()--;
-        rRenderContext.DrawRect(aRect);
-        rRenderContext.SetLineColor(aOldLineColor);
-        rRenderContext.SetFillColor(aBackupColor);
     }
 
     if (bCurFontIsSel)

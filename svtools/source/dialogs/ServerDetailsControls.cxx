@@ -32,8 +32,7 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder ) :
-    m_bIsActive ( true )
+DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder )
 {
     pBuilder->get( m_pDetailsGrid, "Details" );
     pBuilder->get( m_pHostBox, "HostDetails" );
@@ -52,7 +51,7 @@ DetailsContainer::~DetailsContainer( )
 
 void DetailsContainer::show( bool )
 {
-    m_pDetailsGrid->Enable( m_bIsActive );
+    m_pDetailsGrid->Enable();
 
     m_pEDHost->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
     m_pEDPort->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );

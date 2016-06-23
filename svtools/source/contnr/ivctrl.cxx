@@ -74,9 +74,7 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
 
     _pCurKeyEvent   ( nullptr ),
-    _pImpl           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) ),
-    _bAutoFontColor ( false )
-
+    _pImpl           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) )
 {
     SetLineColor();
     _pImpl->InitSettings();
