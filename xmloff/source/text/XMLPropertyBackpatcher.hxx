@@ -61,12 +61,6 @@ class XMLPropertyBackpatcher
     /// name of property that gets set or backpatched
      OUString sPropertyName;
 
-    /// should a default value be set for unresolved properties
-    bool bDefaultHandling;
-
-    /// should the sPreservePropertyName be preserved
-    bool bPreserveProperty;
-
     /// name of the property to preserve
     OUString sPreservePropertyName;
 
@@ -113,7 +107,7 @@ public:
 
     /// set default (if bDefaultHandling) for unresolved names
     /// called by destructor
-    void SetDefault();
+    static void SetDefault();
 
 };
 

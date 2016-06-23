@@ -33,7 +33,6 @@ using namespace ::com::sun::star::uno;
 
 
 XMLPercentOrMeasurePropertyHandler::XMLPercentOrMeasurePropertyHandler()
-: mbPercent( false )
 {
 }
 
@@ -46,21 +45,13 @@ bool XMLPercentOrMeasurePropertyHandler::importXML(
     Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
-    if( (rStrImpValue.indexOf( '%' ) != -1) != mbPercent )
+    if( (rStrImpValue.indexOf( '%' ) != -1))
         return false;
 
     sal_Int32 nValue;
 
-    if( mbPercent )
-    {
-        if (!::sax::Converter::convertPercent( nValue, rStrImpValue ))
-            return false;
-    }
-    else
-    {
-        if (!rUnitConverter.convertMeasureToCore( nValue, rStrImpValue ))
-            return false;
-    }
+    if (!rUnitConverter.convertMeasureToCore( nValue, rStrImpValue ))
+        return false;
 
     rValue <<= nValue;
     return true;
@@ -77,14 +68,7 @@ bool XMLPercentOrMeasurePropertyHandler::exportXML(
     if( !(rValue >>= nValue ) )
         return false;
 
-    if( mbPercent )
-    {
-        ::sax::Converter::convertPercent( aOut, nValue );
-    }
-    else
-    {
-        rUnitConverter.convertMeasureToXML( aOut, nValue );
-    }
+    rUnitConverter.convertMeasureToXML( aOut, nValue );
 
     rStrExpValue = aOut.makeStringAndClear();
     return true;

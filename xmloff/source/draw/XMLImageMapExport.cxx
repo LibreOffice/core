@@ -66,8 +66,7 @@ XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
     msTarget("Target"),
     msURL("URL"),
     msTitle("Title"),
-    mrExport(rExp),
-    mbWhiteSpace(true)
+    mrExport(rExp)
 {
 }
 
@@ -100,7 +99,7 @@ void XMLImageMapExport::Export(
             // image map container element
             SvXMLElementExport aImageMapElement(
                 mrExport, XML_NAMESPACE_DRAW, XML_IMAGE_MAP,
-                mbWhiteSpace, mbWhiteSpace);
+                true/*bWhiteSpace*/, true/*bWhiteSpace*/);
 
             // iterate over image map elements and call ExportMapEntry(...)
             // for each
@@ -226,14 +225,14 @@ void XMLImageMapExport::ExportMapEntry(
         DBG_ASSERT(XML_TOKEN_INVALID != eType,
                    "No name?! How did this happen?");
         SvXMLElementExport aAreaElement(mrExport, XML_NAMESPACE_DRAW, eType,
-                                        mbWhiteSpace, mbWhiteSpace);
+                                        true/*bWhiteSpace*/, true/*bWhiteSpace*/);
 
         // title property (as <svg:title> element)
         OUString sTitle;
         rPropertySet->getPropertyValue(msTitle) >>= sTitle;
         if(!sTitle.isEmpty())
         {
-            SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, mbWhiteSpace, false);
+            SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SVG, XML_TITLE, true/*bWhiteSpace*/, false);
             mrExport.Characters(sTitle);
         }
 
@@ -242,13 +241,13 @@ void XMLImageMapExport::ExportMapEntry(
         rPropertySet->getPropertyValue(msDescription) >>= sDescription;
         if (!sDescription.isEmpty())
         {
-            SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC, mbWhiteSpace, false);
+            SvXMLElementExport aDesc(mrExport, XML_NAMESPACE_SVG, XML_DESC, true/*bWhiteSpace*/, false);
             mrExport.Characters(sDescription);
         }
 
         // export events attached to this
         Reference<XEventsSupplier> xSupplier(rPropertySet, UNO_QUERY);
-        mrExport.GetEventExport().Export(xSupplier, mbWhiteSpace);
+        mrExport.GetEventExport().Export(xSupplier);
     }
     // else: no service info -> can't determine type -> ignore entry
 }
