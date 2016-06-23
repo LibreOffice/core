@@ -2855,10 +2855,9 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     return true;
 }
 
-gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
+gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEventScroll* pSEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    GdkEventScroll* pSEvent = reinterpret_cast<GdkEventScroll*>(pEvent);
 
     static sal_uLong        nLines = 0;
     if( ! nLines )
