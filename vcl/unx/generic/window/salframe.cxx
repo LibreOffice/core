@@ -767,7 +767,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     mhShellWindow               = None;
     mhStackingWindow            = None;
     mhForeignParent             = None;
-    mhBackgroundPixmap          = None;
     m_bSetFocusOnMap            = false;
 
     pGraphics_                  = nullptr;
@@ -778,7 +777,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
 
     nKeyCode_                   = 0;
     nKeyState_                  = 0;
-    nCompose_                   = -1;
     mbSendExtKeyModChange       = false;
     mnExtKeyMod                 = 0;
 
@@ -834,12 +832,6 @@ X11SalFrame::~X11SalFrame()
         delete [] m_pClipRectangles;
         m_pClipRectangles = nullptr;
         m_nCurClipRect = m_nMaxClipRect = 0;
-    }
-
-    if( mhBackgroundPixmap )
-    {
-        XSetWindowBackgroundPixmap( GetXDisplay(), GetWindow(), None );
-        XFreePixmap( GetXDisplay(), mhBackgroundPixmap );
     }
 
     if( mhStackingWindow )
@@ -1376,10 +1368,6 @@ void X11SalFrame::ToTop( SalFrameToTop nFlags )
     if( ! (nFlags & SalFrameToTop::GrabFocusOnly) )
     {
         XRaiseWindow( GetXDisplay(), aToTopWindow );
-        if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected() )
-            for( std::list< X11SalFrame* >::const_iterator it = maChildren.begin();
-                 it != maChildren.end(); ++it )
-                (*it)->ToTop( nFlags & ~SalFrameToTop::GrabFocus );
     }
 
     if( ( ( nFlags & SalFrameToTop::GrabFocus ) || ( nFlags & SalFrameToTop::GrabFocusOnly ) )
@@ -2863,12 +2851,10 @@ void X11SalFrame::beginUnicodeSequence()
     {
         ExtTextInputAttr nTextAttr = ExtTextInputAttr::Underline;
         SalExtTextInputEvent aEv;
-        aEv.mnTime          = 0;
         aEv.maText          = rSeq;
         aEv.mpTextAttr      = &nTextAttr;
         aEv.mnCursorPos     = 0;
         aEv.mnCursorFlags   = 0;
-        aEv.mbOnlyCursor    = false;
 
         CallCallback(SalEvent::ExtTextInput, static_cast<void*>(&aEv));
     }
@@ -2892,12 +2878,10 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
             std::vector<ExtTextInputAttr> attribs( rSeq.getLength(), ExtTextInputAttr::Underline );
 
             SalExtTextInputEvent aEv;
-            aEv.mnTime          = 0;
             aEv.maText          = rSeq;
             aEv.mpTextAttr      = &attribs[0];
             aEv.mnCursorPos     = 0;
             aEv.mnCursorFlags   = 0;
-            aEv.mbOnlyCursor    = false;
 
             CallCallback(SalEvent::ExtTextInput, static_cast<void*>(&aEv));
             bRet = true;
@@ -2924,12 +2908,10 @@ bool X11SalFrame::endUnicodeSequence()
         {
             ExtTextInputAttr nTextAttr = ExtTextInputAttr::Underline;
             SalExtTextInputEvent aEv;
-            aEv.mnTime          = 0;
             aEv.maText          = OUString( sal_Unicode(nValue) );
             aEv.mpTextAttr      = &nTextAttr;
             aEv.mnCursorPos     = 0;
             aEv.mnCursorFlags   = 0;
-            aEv.mbOnlyCursor    = false;
             CallCallback(SalEvent::ExtTextInput, static_cast<void*>(&aEv));
         }
     }
@@ -3432,8 +3414,7 @@ void X11SalFrame::RestackChildren( ::Window* pTopLevelWindows, int nTopLevelWind
 
 void X11SalFrame::RestackChildren()
 {
-    if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected()
-        && !maChildren.empty() )
+    if( !maChildren.empty() )
     {
         ::Window aRoot, aParent, *pChildren = nullptr;
         unsigned int nChildren;
@@ -3873,8 +3854,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                 break;
 
             case KeyRelease:
-                if( -1 == nCompose_ )
-                    nRet = HandleKeyEvent( &pEvent->xkey );
+                nRet = HandleKeyEvent( &pEvent->xkey );
             break;
 
             case ButtonPress:

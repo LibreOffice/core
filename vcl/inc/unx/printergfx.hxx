@@ -196,14 +196,11 @@ private:
     std::list< GlyphSet > maPS3Font;
 
     sal_Int32       mnFontID;
-    sal_Int32       mnFallbackID;
     sal_Int32       mnTextAngle;
-    bool           mbTextVertical;
+    bool            mbTextVertical;
     PrintFontManager& mrFontMgr;
 
     /* bitmap drawing implementation */
-
-    bool    mbCompressBmp;
 
     void    DrawPS1GrayImage      (const PrinterBmp& rBitmap, const Rectangle& rArea);
     void    writePS2ImageHeader   (const Rectangle& rArea, psp::ImageType nType);
@@ -235,7 +232,6 @@ private:
                                   CharacterMetric *p_bbox);
     fontID          getCharMetric (const Font2 &rFont, sal_Unicode n_char,
                                    CharacterMetric *p_bbox);
-    fontID          getFallbackID () const { return mnFallbackID; }
 
 public:
     /* graphics status update */

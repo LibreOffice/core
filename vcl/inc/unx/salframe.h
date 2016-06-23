@@ -70,8 +70,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     ::Window        mhStackingWindow;
     // window to listen for CirculateNotify events
 
-    Pixmap          mhBackgroundPixmap;
-
     Cursor          hCursor_;
     int             nCaptured_;         // is captured
 
@@ -80,7 +78,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
 
     sal_uInt16      nKeyCode_;          // last key code
     sal_uInt16      nKeyState_;         // last key state
-    int             nCompose_;          // compose state
     bool            mbSendExtKeyModChange;
     sal_uInt16      mnExtKeyMod;
 

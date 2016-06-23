@@ -95,11 +95,9 @@ PrinterGfx::PrinterGfx()
     , mpPageHeader(nullptr)
     , mpPageBody(nullptr)
     , mnFontID(0)
-    , mnFallbackID(0)
     , mnTextAngle(0)
     , mbTextVertical(false)
     , mrFontMgr(PrintFontManager::get())
-    , mbCompressBmp(true)
     , maFillColor(0xff,0,0)
     , maTextColor(0,0,0)
     , maLineColor(0, 0xff, 0)
@@ -129,7 +127,6 @@ PrinterGfx::Clear()
     maLineColor                     = PrinterColor();
     maFillColor                     = PrinterColor();
     maTextColor                     = PrinterColor();
-    mbCompressBmp                   = true;
     mnDpi                           = 300;
     mnDepth                         = 24;
     mnPSLevel                       = 2;

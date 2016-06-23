@@ -674,15 +674,12 @@ WindowImpl::WindowImpl( WindowType nType )
     mbOverlapVisible                    = false;                     // true: Hide called for visible window from ImplHideAllOverlapWindow()
     mbDisabled                          = false;                     // true: Enable( false ) called
     mbInputDisabled                     = false;                     // true: EnableInput( false ) called
-    mbDropDisabled                      = false;                     // true: Drop is enabled
     mbNoUpdate                          = false;                     // true: SetUpdateMode( false ) called
     mbNoParentUpdate                    = false;                     // true: SetParentUpdateMode( false ) called
     mbActive                            = false;                     // true: Window Active
-    mbParentActive                      = false;                     // true: OverlapActive from Parent
     mbReallyVisible                     = false;                     // true: this and all parents to an overlapped window are visible
     mbReallyShown                       = false;                     // true: this and all parents to an overlapped window are shown
     mbInInitShow                        = false;                     // true: we are in InitShow
-    mbChildNotify                       = false;                     // true: ChildNotify
     mbChildPtrOverwrite                 = false;                     // true: PointerStyle overwrites Child-Pointer
     mbNoPtrVisible                      = false;                     // true: ShowPointer( false ) called
     mbMouseMove                         = false;                     // true: BaseMouseMove called
@@ -2490,7 +2487,7 @@ void Window::Enable( bool bEnable, bool bChild )
         CallEventListeners( bEnable ? VCLEVENT_WINDOW_ENABLED : VCLEVENT_WINDOW_DISABLED );
     }
 
-    if ( bChild || mpWindowImpl->mbChildNotify )
+    if ( bChild )
     {
         vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
@@ -2563,7 +2560,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
         mpWindowImpl->mpFrameData->mpFocusWin == this )
         pSVData->maWinData.mpFocusWin = this;
 
-    if ( bChild || mpWindowImpl->mbChildNotify )
+    if ( bChild )
     {
         vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
@@ -2662,7 +2659,7 @@ void Window::AlwaysEnableInput( bool bAlways, bool bChild )
         mpWindowImpl->meAlwaysInputMode = AlwaysInputNone;
     }
 
-    if ( bChild || mpWindowImpl->mbChildNotify )
+    if ( bChild )
     {
         vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
@@ -2691,7 +2688,7 @@ void Window::AlwaysDisableInput( bool bAlways, bool bChild )
         mpWindowImpl->meAlwaysInputMode = AlwaysInputNone;
     }
 
-    if ( bChild || mpWindowImpl->mbChildNotify )
+    if ( bChild )
     {
         vcl::Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
