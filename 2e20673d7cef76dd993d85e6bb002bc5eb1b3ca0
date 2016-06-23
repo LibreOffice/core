@@ -101,6 +101,24 @@
       "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_0f5c9124",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-23T15:57:38Z",
+      "side": 1,
+      "message": "I think vector::erase() has to use iterator.",
+      "parentUuid": "ba84c18e_af2565af",
+      "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
