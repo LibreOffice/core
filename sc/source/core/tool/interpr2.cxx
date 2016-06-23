@@ -2085,14 +2085,18 @@ void ScInterpreter::ScCumPrinc()
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
         double fInterest, fZzr, fBw, fStart, fEnd, fF;
-        fF      = GetDouble();
+        if ( GetRawStackType() == svMissing )
+            fF = -1.0;
+        else
+            fF = GetDouble();
         fEnd   = ::rtl::math::approxFloor(GetDouble());
         fStart = ::rtl::math::approxFloor(GetDouble());
         fBw     = GetDouble();
         fZzr    = GetDouble();
         fInterest   = GetDouble();
         if (fStart < 1.0 || fEnd < fStart || fInterest <= 0.0 ||
-            fEnd > fZzr  || fZzr <= 0.0 || fBw <= 0.0)
+            fEnd > fZzr  || fZzr <= 0.0 || fBw <= 0.0 ||
+            ( fF != 0.0 && fF != 1.0 ) )
             PushIllegalArgument();
         else
         {
