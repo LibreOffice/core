@@ -20,10 +20,18 @@
 #ifndef INCLUDED_SVX_CONTDLG_HXX
 #define INCLUDED_SVX_CONTDLG_HXX
 
+#include "sal/types.h"
+
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/ctrlitem.hxx>
 #include <sfx2/childwin.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/poly.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
+
+class Rectangle;
+class SfxBindings;
+class SfxModule;
 
 /*************************************************************************
 |*

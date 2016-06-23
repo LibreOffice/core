@@ -19,12 +19,17 @@
 #ifndef INCLUDED_SVX_CLIPFMTITEM_HXX
 #define INCLUDED_SVX_CLIPFMTITEM_HXX
 
+#include <climits>
+#include <memory>
+
+#include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <sot/formats.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
-#include <memory>
 
+class SfxItemPool;
 struct SvxClipboardFormatItem_Impl;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipboardFormatItem : public SfxPoolItem

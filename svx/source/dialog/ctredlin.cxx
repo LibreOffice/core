@@ -19,7 +19,9 @@
 
 #include <o3tl/make_unique.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/field.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>

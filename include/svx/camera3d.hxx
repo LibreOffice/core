@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVX_CAMERA3D_HXX
 #define INCLUDED_SVX_CAMERA3D_HXX
 
+#include <basegfx/point/b3dpoint.hxx>
+#include <sal/types.h>
 #include <svx/viewpt3d.hxx>
 #include <svx/svxdllapi.h>
 

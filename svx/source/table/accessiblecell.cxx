@@ -34,6 +34,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/outlobj.hxx>
+#include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>
 #include <o3tl/make_unique.hxx>

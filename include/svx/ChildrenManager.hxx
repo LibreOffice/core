@@ -22,17 +22,25 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ref.hxx>
 #include <svx/IAccessibleViewForwarderListener.hxx>
-#include <svx/AccessibleShapeTreeInfo.hxx>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <svx/svxdllapi.h>
+
+namespace com { namespace sun { namespace star {
+     namespace accessibility { class XAccessible; }
+     namespace drawing { class XShape; }
+     namespace drawing { class XShapes; }
+} } }
 
 namespace accessibility {
 
 class AccessibleContextBase;
+class AccessibleShapeTreeInfo;
 class ChildrenManagerImpl;
+class IAccessibleViewForwarder;
 
 /** The AccessibleChildrenManager class acts as a cache of the
     accessible objects of the currently visible shapes of a draw page and as

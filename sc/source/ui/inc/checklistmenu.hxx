@@ -15,6 +15,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svx/checklbx.hxx>
 
 #include <memory>

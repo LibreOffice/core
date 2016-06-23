@@ -19,17 +19,30 @@
 #ifndef INCLUDED_SVX_COMPRESSGRAPHICDIALOG_HXX
 #define INCLUDED_SVX_COMPRESSGRAPHICDIALOG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/slider.hxx>
-#include <sfx2/bindings.hxx>
+#include <sal/types.h>
 #include <svx/svxdllapi.h>
+#include <tools/gen.hxx>
+#include <tools/link.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/vclptr.hxx>
 
+namespace vcl { class Window; }
+
+class Button;
+class CheckBox;
+class ComboBox;
+class Edit;
+class FixedText;
+class ListBox;
+class NumericField;
+class PushButton;
+class RadioButton;
 class SdrGrafObj;
+class SfxBindings;
+class Slider;
+class SvStream;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC CompressGraphicsDialog : public ModalDialog
 {

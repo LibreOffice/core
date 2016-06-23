@@ -20,9 +20,8 @@
 #ifndef INCLUDED_SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 #define INCLUDED_SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 
-#include <svx/svxdllapi.h>
-
 #include <rtl/ustring.hxx>
+#include <svx/svxdllapi.h>
 
 
 /** This class provides localized descriptions for some basic actions done with objects.

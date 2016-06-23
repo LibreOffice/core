@@ -11,10 +11,12 @@
 #define INCLUDED_SVX_COMMONSTYLEMANAGER_HXX
 
 #include <sfx2/StyleManager.hxx>
-
-#include <vcl/outdev.hxx>
+#include <sfx2/StylePreviewRenderer.hxx>
 #include <svx/svxdllapi.h>
-#include <rsc/rscsfx.hxx>
+
+class OutputDevice;
+class SfxObjectShell;
+class SfxStyleSheetBase;
 
 namespace svx
 {

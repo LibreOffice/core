@@ -23,6 +23,7 @@
 #include <tools/helpers.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
+#include <sfx2/ctrlitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/miscopt.hxx>
