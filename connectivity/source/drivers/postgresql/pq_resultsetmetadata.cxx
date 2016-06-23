@@ -212,9 +212,7 @@ void ResultSetMetaData::checkTable()
             {
                 const OUString name   (getTableName ( 1 ));
                 const OUString schema (getSchemaName( 1 ));
-                const OUString EscapedName (name.replaceAll("\"","\"\"" ));
-                const OUString EscapedSchema ( schema.replaceAll("\"","\"\""));
-                const OUString composedName( schema.isEmpty() ? name : ("\"" + EscapedSchema + "\".\"" + EscapedName + "\"") );
+                const OUString composedName( schema.isEmpty() ? name : (schema + "." + name) );
                 tables->getByName( composedName ) >>= m_table;
             }
         }

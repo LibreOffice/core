@@ -111,7 +111,6 @@ OUString array2String( const css::uno::Sequence< css::uno::Any > &seq );
 css::uno::Reference< css::sdbc::XConnection > extractConnectionFromStatement(
     const css::uno::Reference< css::uno::XInterface > & stmt );
 
-void splitDoubleQuoteEscapedIdentifiers( const OUString & source, OUString *first, OUString *second);
 void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUString *second);
 
 

@@ -38,7 +38,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XTABLES_HXX
 
 #include "pq_xcontainer.hxx"
-#include "connectivity/dbtools.hxx"
+
 namespace pq_sdbc_driver
 {
 
