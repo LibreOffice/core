@@ -19,15 +19,30 @@
 #ifndef INCLUDED_SVX_BMPMASK_HXX
 #define INCLUDED_SVX_BMPMASK_HXX
 
+#include <sal/types.h>
+#include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
-#include <vcl/graph.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/xtable.hxx>
+#include <tools/color.hxx>
+#include <vcl/animate.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/vclptr.hxx>
 
-#include <svx/dlgctrl.hxx>
+namespace vcl { class Window; }
+
+class CheckBox;
+class ColorLB;
+class MetricField;
+class PushButton;
+class SfxBindings;
+class SfxModule;
+class ToolBox;
 
 /*************************************************************************
 |*

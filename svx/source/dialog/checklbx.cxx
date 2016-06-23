@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 #include <svx/checklbx.hxx>
 #include <svx/dialmgr.hxx>

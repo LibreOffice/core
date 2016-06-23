@@ -45,6 +45,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/AccessibleShape.hxx>
+#include <svx/IAccessibleParent.hxx>
+#include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svx/unoshape.hxx>

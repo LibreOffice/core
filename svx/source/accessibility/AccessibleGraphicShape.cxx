@@ -24,6 +24,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
 
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <cppuhelper/queryinterface.hxx>
 
 using namespace ::accessibility;
