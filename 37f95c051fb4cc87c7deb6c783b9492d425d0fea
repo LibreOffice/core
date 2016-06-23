@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_74f2509c",
+        "filename": "include/svx/AccessibleControlShape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-06-23T08:13:29Z",
+      "side": 1,
+      "message": "comes with XAccessibleEventListener.hpp and others",
+      "range": {
+        "startLine": 28,
+        "startChar": 28,
+        "endLine": 28,
+        "endChar": 39
+      },
+      "revId": "37f95c051fb4cc87c7deb6c783b9492d425d0fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_f498206d",
+        "filename": "include/svx/AccessibleControlShape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-06-23T08:13:29Z",
+      "side": 1,
+      "message": "XAccessibleEventListener.hpp is included above",
+      "range": {
+        "startLine": 44,
+        "startChar": 36,
+        "endLine": 44,
+        "endChar": 60
+      },
+      "revId": "37f95c051fb4cc87c7deb6c783b9492d425d0fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_149e6456",
+        "filename": "include/svx/AccessibleControlShape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-06-23T08:13:29Z",
+      "side": 1,
+      "message": "XContainerListener.hpp is included above",
+      "range": {
+        "startLine": 51,
+        "startChar": 32,
+        "endLine": 51,
+        "endChar": 50
+      },
+      "revId": "37f95c051fb4cc87c7deb6c783b9492d425d0fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_143ae436",
+        "filename": "include/svx/AccessibleShape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-06-23T08:13:29Z",
+      "side": 1,
+      "message": "comes with XAccessibleHypertext.hpp via XAccessibleText.hpp include",
+      "range": {
+        "startLine": 26,
+        "startChar": 37,
+        "endLine": 26,
+        "endChar": 48
+      },
+      "revId": "37f95c051fb4cc87c7deb6c783b9492d425d0fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_d42f9cf4",
+        "filename": "include/svx/AccessibleShape.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-06-23T08:13:29Z",
+      "side": 1,
+      "message": "already forward declared in XAccessibleHypertext.hpp",
+      "range": {
+        "startLine": 55,
+        "startChar": 36,
+        "endLine": 55,
+        "endChar": 56
+      },
+      "revId": "37f95c051fb4cc87c7deb6c783b9492d425d0fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
