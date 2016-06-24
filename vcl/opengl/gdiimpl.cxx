@@ -249,6 +249,15 @@ void OpenGLSalGraphicsImpl::PostDraw()
     OpenGLZone::leave();
 }
 
+void OpenGLSalGraphicsImpl::PostBatchDraw()
+{
+    if (IsOffscreen())
+        return;
+
+    if (!mpFlush->IsActive())
+        mpFlush->Start();
+}
+
 void OpenGLSalGraphicsImpl::ApplyProgramMatrices(float fPixelOffset)
 {
     mpProgram->ApplyMatrix(GetWidth(), GetHeight(), fPixelOffset);
@@ -1519,6 +1528,7 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor,
 void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture& rTexture, SalColor aMaskColor, const SalTwoRect& rPosAry)
 {
     mpAccumulatedTextures->insert(rTexture, aMaskColor, rPosAry);
+    PostBatchDraw();
 }
 
 void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
