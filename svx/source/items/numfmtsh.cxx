@@ -642,7 +642,7 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
             case CAT_FRACTION       :eOffsetStart=NF_FRACTION_START;
                                      eOffsetEnd=NF_FRACTION_END;
                                      nSelPos = FillEListWithFormats_Impl( rList, nSelPos, eOffsetStart, eOffsetEnd);
-                                     nSelPos = FillEListWithFormats_Impl( rList, nSelPos, NF_FRACTION_3, NF_FRACTION_4);
+                                     nSelPos = FillEListWithFormats_Impl( rList, nSelPos, NF_FRACTION_3D, NF_FRACTION_100);
                                      return;
             case CAT_BOOLEAN        :eOffsetStart=NF_BOOLEAN;
                                      eOffsetEnd=NF_BOOLEAN;

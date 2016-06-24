@@ -67,7 +67,7 @@ using namespace ::std;
 #define ZF_STANDARD_TIME        40
 #define ZF_STANDARD_DATETIME    50
 #define ZF_STANDARD_SCIENTIFIC  60
-#define ZF_STANDARD_FRACTION    70
+#define ZF_STANDARD_FRACTION    65
 
 // Additional builtin formats not fitting into the first 10 of a category (TLOT
 // = The Legacy Of Templin; unfortunately TLOT intended only 10 builtin formats
@@ -104,8 +104,8 @@ static sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD_SCIENTIFIC + 1, // NF_SCIENTIFIC_000E00
     ZF_STANDARD_PERCENT, // NF_PERCENT_INT
     ZF_STANDARD_PERCENT + 1, // NF_PERCENT_DEC2
-    ZF_STANDARD_FRACTION, // NF_FRACTION_1
-    ZF_STANDARD_FRACTION + 1, // NF_FRACTION_2
+    ZF_STANDARD_FRACTION, // NF_FRACTION_1D
+    ZF_STANDARD_FRACTION + 1, // NF_FRACTION_2D
     ZF_STANDARD_CURRENCY, // NF_CURRENCY_1000INT
     ZF_STANDARD_CURRENCY + 1, // NF_CURRENCY_1000DEC2
     ZF_STANDARD_CURRENCY + 2, // NF_CURRENCY_1000INT_RED
@@ -144,8 +144,13 @@ static sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD_DATETIME + 1, // NF_DATETIME_SYS_DDMMYYYY_HHMMSS
     ZF_STANDARD_LOGICAL, // NF_BOOLEAN
     ZF_STANDARD_TEXT, // NF_TEXT
-    ZF_STANDARD_FRACTION + 2, // NF_FRACTION_3
-    ZF_STANDARD_FRACTION + 3, // NF_FRACTION_4
+    ZF_STANDARD_FRACTION + 2, // NF_FRACTION_3D
+    ZF_STANDARD_FRACTION + 3, // NF_FRACTION_2
+    ZF_STANDARD_FRACTION + 4, // NF_FRACTION_4
+    ZF_STANDARD_FRACTION + 5, // NF_FRACTION_8
+    ZF_STANDARD_FRACTION + 6, // NF_FRACTION_16
+    ZF_STANDARD_FRACTION + 7, // NF_FRACTION_10
+    ZF_STANDARD_FRACTION + 8, // NF_FRACTION_100
     ZF_STANDARD_DATETIME + 2 // NF_DATETIME_ISO_YYYYMMDD_HHMMSS
 };
 
@@ -2596,23 +2601,49 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
      // # ?/?
     aSingleFormatCode.Code = "# ?/?";
     ImpInsertFormat( aSingleFormatCode,
-                     CLOffset + ZF_STANDARD_FRACTION /* NF_FRACTION_1 */ );
+                     CLOffset + ZF_STANDARD_FRACTION /* NF_FRACTION_1D */ );
 
     // # ??/??
     //! "??/" would be interpreted by the compiler as a trigraph for '\'
     aSingleFormatCode.Code = "# ?\?/?\?";
     ImpInsertFormat( aSingleFormatCode,
-                     CLOffset + ZF_STANDARD_FRACTION+1 /* NF_FRACTION_2 */ );
+                     CLOffset + ZF_STANDARD_FRACTION+1 /* NF_FRACTION_2D */ );
+
+    // # ???/???
+    //! "??/" would be interpreted by the compiler as a trigraph for '\'
+    aSingleFormatCode.Code = "# ?\?\?/?\?\?";
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + ZF_STANDARD_FRACTION+2 /* NF_FRACTION_3D */ );
+
+    // # ?/2
+    aSingleFormatCode.Code = "# ?/2";
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + ZF_STANDARD_FRACTION+3 /* NF_FRACTION_2 */ );
 
     // # ?/4
     aSingleFormatCode.Code = "# ?/4";
     ImpInsertFormat( aSingleFormatCode,
-                     CLOffset + ZF_STANDARD_FRACTION+2 /* NF_FRACTION_3 */ );
+                     CLOffset + ZF_STANDARD_FRACTION+4 /* NF_FRACTION_4 */ );
+
+    // # ?/8
+    aSingleFormatCode.Code = "# ?/8";
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + ZF_STANDARD_FRACTION+5 /* NF_FRACTION_8 */ );
+
+    // # ??/16
+    aSingleFormatCode.Code = "# ?\?/16";
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + ZF_STANDARD_FRACTION+6 /* NF_FRACTION_16 */ );
+
+    // # ??/10
+    aSingleFormatCode.Code = "# ?\?/10";
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + ZF_STANDARD_FRACTION+7 /* NF_FRACTION_10 */ );
 
     // # ??/100
     aSingleFormatCode.Code = "# ?\?/100";
     ImpInsertFormat( aSingleFormatCode,
-                     CLOffset + ZF_STANDARD_FRACTION+3 /* NF_FRACTION_4 */ );
+                     CLOffset + ZF_STANDARD_FRACTION+8 /* NF_FRACTION_100 */ );
 
 
     // Week of year
