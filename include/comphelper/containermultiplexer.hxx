@@ -67,17 +67,12 @@ namespace comphelper
         void setAdapter(OContainerListenerAdapter* _pAdapter);
     };
 
-
-    //= OContainerListenerAdapter
-    class SAL_DLLPUBLIC_TEMPLATE OContainerListenerAdapter_BASE
-        : public cppu::WeakImplHelper<css::container::XContainerListener> {};
-
     class COMPHELPER_DLLPUBLIC OContainerListenerAdapter
-        : public OContainerListenerAdapter_BASE
+        : public cppu::WeakImplHelper<css::container::XContainerListener>
     {
         friend class OContainerListener;
 
-    protected:
+    private:
         css::uno::Reference< css::container::XContainer >
                                 m_xContainer;
         OContainerListener*     m_pListener;

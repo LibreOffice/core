@@ -216,7 +216,6 @@ merge comphelper::NameContainerImpl with comphelper::NameContainer
 merge comphelper::OAccessibleContextHelper with comphelper::OCommonAccessibleComponent
 merge comphelper::OAnyEnumeration_BASE with comphelper::OAnyEnumeration
 merge comphelper::OComponentProxyAggregation with comphelper::OAccessibleWrapper
-merge comphelper::OContainerListenerAdapter_BASE with comphelper::OContainerListenerAdapter
 merge comphelper::OProxyAggregation with comphelper::OComponentProxyAggregationHelper
 merge comphelper::OSeekableInputWrapper_BASE with comphelper::OSeekableInputWrapper
 merge comphelper::PropertySetInfo_BASE with comphelper::PropertySetInfo
