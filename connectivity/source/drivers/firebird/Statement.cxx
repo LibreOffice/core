@@ -125,11 +125,18 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     if (aErr)
         SAL_WARN("connectivity.firebird", "isc_dsql_execute failed");
 
+    OStringVector vec;
+    tokenizeSQL( OUStringToOString(sql, RTL_TEXTENCODING_UTF8), vec );
+    OUString sourceTable =
+            OStringToOUString(
+            extractSingleTableFromSelect( vec ), RTL_TEXTENCODING_UTF8);
+
     m_xResultSet = new OResultSet(m_pConnection.get(),
                                   m_aMutex,
                                   uno::Reference< XInterface >(*this),
                                   m_aStatementHandle,
-                                  m_pSqlda);
+                                  m_pSqlda,
+                                  sourceTable);
 
     // TODO: deal with cleanup
 

@@ -40,6 +40,7 @@ namespace connectivity
         protected:
             ::rtl::Reference<Connection> m_pConnection;
             XSQLDA*         m_pSqlda;
+            OUString        m_sTableName;
 
             virtual ~OResultSetMetaData();
 
@@ -47,9 +48,11 @@ namespace connectivity
         public:
             // a constructor, which is required for returning objects:
             OResultSetMetaData(Connection* pConnection,
-                               XSQLDA* pSqlda)
+                               XSQLDA* pSqlda,
+                               const OUString & rTableName)
                 : m_pConnection(pConnection)
                 , m_pSqlda(pSqlda)
+                , m_sTableName(rTableName)
             {}
 
             virtual sal_Int32 SAL_CALL getColumnCount()
