@@ -13,7 +13,7 @@
     <property name="step_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="distanceadjustment">
-    <property name="lower">0.3</property>
+    <property name="lower">0.29999999999999999</property>
     <property name="upper">99</property>
     <property name="step_increment">100</property>
   </object>
@@ -302,6 +302,9 @@
                   </packing>
                 </child>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -310,20 +313,6 @@
                     <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">6</property>
-                    <child>
-                      <object class="svxlo-HatchingLB" id="hatchingslb:border">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="svxlo-SvxXRectPreview" id="previewctl">
                         <property name="visible">True</property>
@@ -338,7 +327,35 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="svxlo-HatchingLB" id="hatchingslb:border">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="entry_text_column">0</property>
+                        <property name="id_column">1</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="svxcorelo-SvxPresetListBox" id="hatchpresetlist">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -347,7 +364,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -455,7 +472,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>

@@ -30,6 +30,7 @@
 #include <svx/tabarea.hxx>
 #include <svx/hexcolorcontrol.hxx>
 #include <svx/SvxColorValueSet.hxx>
+#include <svx/SvxPresetListBox.hxx>
 
 class SdrModel;
 class SdrView;
@@ -390,6 +391,7 @@ private:
     VclPtr<MetricField>        m_pMtrColorFrom;
     VclPtr<ColorLB>            m_pLbColorTo;
     VclPtr<MetricField>        m_pMtrColorTo;
+    VclPtr<SvxPresetListBox>   m_pGradientLB;
     VclPtr<GradientLB>         m_pLbGradients;
     VclPtr<NumericField>       m_pMtrIncrement;
     VclPtr<Slider>             m_pSliderIncrement;
@@ -473,6 +475,7 @@ private:
     VclPtr<ColorLB>            m_pLbLineColor;
     VclPtr<ColorLB>            m_pLbBackgroundColor;
     VclPtr<HatchingLB>         m_pLbHatchings;
+    VclPtr<SvxPresetListBox>   m_pHatchLB;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;

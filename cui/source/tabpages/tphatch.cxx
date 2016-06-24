@@ -43,6 +43,7 @@
 #include "paragrph.hrc"
 #include <svx/dialogs.hrc>
 
+
 using namespace com::sun::star;
 
 SvxHatchTabPage::SvxHatchTabPage
@@ -73,6 +74,7 @@ SvxHatchTabPage::SvxHatchTabPage
     get(m_pLbLineType, "linetypelb");
     get(m_pLbLineColor, "linecolorlb");
     get(m_pLbBackgroundColor, "backgroundcolorlb");
+    get(m_pHatchLB , "hatchpresetlist");
     get(m_pLbHatchings, "hatchingslb");
     Size aSize = getDrawListBoxOptimalSize(this);
     m_pLbHatchings->set_width_request(aSize.Width());
@@ -107,7 +109,6 @@ SvxHatchTabPage::SvxHatchTabPage
     SfxItemPool* pPool = m_rOutAttrs.GetPool();
     assert( pPool && "Where is the pool?" );
     m_ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
-
     // setting the slider range
     m_pSliderAngle->SetRange(Range(0,359));
 
@@ -115,7 +116,7 @@ SvxHatchTabPage::SvxHatchTabPage
     m_rXFSet.Put( m_aXFStyleItem );
     m_rXFSet.Put( m_aXHatchItem );
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-
+    m_pLbHatchings->Hide();
     m_pLbHatchings->SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl_Impl ) );
 
     Link<Edit&,void> aLink = LINK( this, SvxHatchTabPage, ModifiedEditHdl_Impl );
@@ -153,6 +154,7 @@ void SvxHatchTabPage::dispose()
     m_pLbLineType.clear();
     m_pLbLineColor.clear();
     m_pLbBackgroundColor.clear();
+    m_pHatchLB.clear();
     m_pLbHatchings.clear();
     m_pCtlPreview.clear();
     m_pBtnAdd.clear();
@@ -169,6 +171,7 @@ void SvxHatchTabPage::Construct()
     m_pLbLineColor->Fill( m_pColorList );
     m_pLbBackgroundColor->Fill( m_pColorList );
     m_pLbHatchings->Fill( m_pHatchingList );
+    m_pHatchLB->FillPresetListBox(*m_pHatchingList);
 }
 
 

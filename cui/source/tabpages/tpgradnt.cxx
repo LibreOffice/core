@@ -80,6 +80,7 @@ SvxGradientTabPage::SvxGradientTabPage
     get(m_pMtrColorFrom,   "colorfrommtr");
     get(m_pLbColorTo,      "colortolb");
     get(m_pMtrColorTo,     "colortomtr");
+    get(m_pGradientLB,     "gradientpresetlist");
     get(m_pLbGradients,    "gradientslb");
     Size aSize = getDrawListBoxOptimalSize(this);
     m_pLbGradients->set_width_request(aSize.Width());
@@ -113,6 +114,7 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
     // set handler
+    m_pLbGradients->Hide();
     m_pLbGradients->SetSelectHdl(
         LINK( this, SvxGradientTabPage, ChangeGradientHdl_Impl ) );
     m_pBtnAdd->SetClickHdl( LINK( this, SvxGradientTabPage, ClickAddHdl_Impl ) );
@@ -183,7 +185,7 @@ void SvxGradientTabPage::Construct()
 {
     m_pLbColorFrom->Fill( m_pColorList );
     m_pLbColorTo->CopyEntries( *m_pLbColorFrom );
-
+    m_pGradientLB->FillPresetListBox(*m_pGradientList);
     m_pLbGradients->Fill( m_pGradientList );
 }
 
