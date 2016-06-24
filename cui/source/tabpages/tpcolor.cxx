@@ -305,7 +305,6 @@ struct SvxColorTabPageShadow
 
 SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", &rInAttrs)
-    , meType( XCOLOR_LIST )
     , mpTopDlg( GetParentDialog() )
     , pShadow             ( new SvxColorTabPageShadow() )
     , rOutAttrs           ( rInAttrs )

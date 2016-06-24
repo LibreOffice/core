@@ -59,7 +59,6 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_nPageType           ( 0 ),
     m_nDlgType            ( 0 ),
     m_pbAreaTP            ( nullptr ),
-    m_bDisable            ( false ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
 {
@@ -186,12 +185,6 @@ void SvxShadowTabPage::dispose()
 void SvxShadowTabPage::Construct()
 {
     m_pLbShadowColor->Fill( m_pColorList );
-
-    if( m_bDisable )
-    {
-        m_pTsbShowShadow->Disable();
-        m_pGridShadow->Disable();
-    }
 }
 
 
@@ -268,106 +261,103 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     bool                bModified = false;
 
-    if( !m_bDisable )
+    const SfxPoolItem*  pOld = nullptr;
+
+    if( m_pTsbShowShadow->IsValueChangedFromSaved() )
     {
-        const SfxPoolItem*  pOld = nullptr;
-
-        if( m_pTsbShowShadow->IsValueChangedFromSaved() )
+        TriState eState = m_pTsbShowShadow->GetState();
+        assert(eState != TRISTATE_INDET);
+            // given how m_pTsbShowShadow is set up and saved in Reset(),
+            // eState == TRISTATE_INDET would imply
+            // !IsValueChangedFromSaved()
+        SdrOnOffItem aItem( makeSdrShadowItem(eState == TRISTATE_TRUE) );
+        pOld = GetOldItem( *rAttrs, SDRATTR_SHADOW );
+        if ( !pOld || !( *static_cast<const SdrOnOffItem*>(pOld) == aItem ) )
         {
-            TriState eState = m_pTsbShowShadow->GetState();
-            assert(eState != TRISTATE_INDET);
-                // given how m_pTsbShowShadow is set up and saved in Reset(),
-                // eState == TRISTATE_INDET would imply
-                // !IsValueChangedFromSaved()
-            SdrOnOffItem aItem( makeSdrShadowItem(eState == TRISTATE_TRUE) );
-            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOW );
-            if ( !pOld || !( *static_cast<const SdrOnOffItem*>(pOld) == aItem ) )
-            {
-                rAttrs->Put( aItem );
-                bModified = true;
-            }
+            rAttrs->Put( aItem );
+            bModified = true;
         }
+    }
 
-        // shadow removal
-        // a bit intricate inquiry whether there was something changed,
-        // as the items can't be displayed directly on controls
-        sal_Int32 nX = 0L, nY = 0L;
-        sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, m_ePoolUnit );
+    // shadow removal
+    // a bit intricate inquiry whether there was something changed,
+    // as the items can't be displayed directly on controls
+    sal_Int32 nX = 0L, nY = 0L;
+    sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, m_ePoolUnit );
 
-        switch( m_pCtlPosition->GetActualRP() )
+    switch( m_pCtlPosition->GetActualRP() )
+    {
+        case RP_LT: nX = nY = -nXY;      break;
+        case RP_MT: nY = -nXY;           break;
+        case RP_RT: nX = nXY; nY = -nXY; break;
+        case RP_LM: nX = -nXY;           break;
+        case RP_RM: nX = nXY;            break;
+        case RP_LB: nX = -nXY; nY = nXY; break;
+        case RP_MB: nY = nXY;            break;
+        case RP_RB: nX = nY = nXY;       break;
+        case RP_MM: break;
+    }
+
+    // If the values of the shadow distances==SfxItemState::DONTCARE and the displayed
+    // string in the respective MetricField=="", then the comparison of the old
+    // and the new distance values would return a wrong result because in such a
+    // case the new distance values would match the default values of the MetricField !!!!
+    if ( !m_pMtrDistance->IsEmptyFieldValue()                                  ||
+         m_rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE ||
+         m_rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE    )
+    {
+        sal_Int32 nOldX = 9876543; // impossible value, so DontCare
+        sal_Int32 nOldY = 9876543;
+        if( m_rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE &&
+            m_rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE )
         {
-            case RP_LT: nX = nY = -nXY;      break;
-            case RP_MT: nY = -nXY;           break;
-            case RP_RT: nX = nXY; nY = -nXY; break;
-            case RP_LM: nX = -nXY;           break;
-            case RP_RM: nX = nXY;            break;
-            case RP_LB: nX = -nXY; nY = nXY; break;
-            case RP_MB: nY = nXY;            break;
-            case RP_RB: nX = nY = nXY;       break;
-            case RP_MM: break;
+            nOldX = static_cast<const SdrMetricItem&>( m_rOutAttrs.
+                                Get( SDRATTR_SHADOWXDIST ) ).GetValue();
+            nOldY = static_cast<const SdrMetricItem&>( m_rOutAttrs.
+                                Get( SDRATTR_SHADOWYDIST ) ).GetValue();
         }
-
-        // If the values of the shadow distances==SfxItemState::DONTCARE and the displayed
-        // string in the respective MetricField=="", then the comparison of the old
-        // and the new distance values would return a wrong result because in such a
-        // case the new distance values would match the default values of the MetricField !!!!
-        if ( !m_pMtrDistance->IsEmptyFieldValue()                                  ||
-             m_rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE ||
-             m_rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE    )
+        SdrMetricItem aXItem( makeSdrShadowXDistItem(nX) );
+        pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWXDIST );
+        if ( nX != nOldX &&
+            ( !pOld || !( *static_cast<const SdrMetricItem*>(pOld) == aXItem ) ) )
         {
-            sal_Int32 nOldX = 9876543; // impossible value, so DontCare
-            sal_Int32 nOldY = 9876543;
-            if( m_rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE &&
-                m_rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE )
-            {
-                nOldX = static_cast<const SdrMetricItem&>( m_rOutAttrs.
-                                    Get( SDRATTR_SHADOWXDIST ) ).GetValue();
-                nOldY = static_cast<const SdrMetricItem&>( m_rOutAttrs.
-                                    Get( SDRATTR_SHADOWYDIST ) ).GetValue();
-            }
-            SdrMetricItem aXItem( makeSdrShadowXDistItem(nX) );
-            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWXDIST );
-            if ( nX != nOldX &&
-                ( !pOld || !( *static_cast<const SdrMetricItem*>(pOld) == aXItem ) ) )
-            {
-                rAttrs->Put( aXItem );
-                bModified = true;
-            }
-            SdrMetricItem aYItem( makeSdrShadowYDistItem(nY) );
-            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWYDIST );
-            if ( nY != nOldY &&
-                ( !pOld || !( *static_cast<const SdrMetricItem*>(pOld) == aYItem ) ) )
-            {
-                rAttrs->Put( aYItem );
-                bModified = true;
-            }
+            rAttrs->Put( aXItem );
+            bModified = true;
         }
-
-        // ShadowColor
-        sal_Int32 nPos = m_pLbShadowColor->GetSelectEntryPos();
-        if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-            m_pLbShadowColor->IsValueChangedFromSaved() )
+        SdrMetricItem aYItem( makeSdrShadowYDistItem(nY) );
+        pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWYDIST );
+        if ( nY != nOldY &&
+            ( !pOld || !( *static_cast<const SdrMetricItem*>(pOld) == aYItem ) ) )
         {
-            XColorItem aItem(makeSdrShadowColorItem(m_pLbShadowColor->GetSelectEntryColor()));
-            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWCOLOR );
-            if ( !pOld || !( *static_cast<const XColorItem*>(pOld) == aItem ) )
-            {
-                rAttrs->Put( aItem );
-                bModified = true;
-            }
+            rAttrs->Put( aYItem );
+            bModified = true;
         }
+    }
 
-        // transparency
-        sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
-        if( m_pMtrTransparent->IsValueChangedFromSaved() )
+    // ShadowColor
+    sal_Int32 nPos = m_pLbShadowColor->GetSelectEntryPos();
+    if( nPos != LISTBOX_ENTRY_NOTFOUND &&
+        m_pLbShadowColor->IsValueChangedFromSaved() )
+    {
+        XColorItem aItem(makeSdrShadowColorItem(m_pLbShadowColor->GetSelectEntryColor()));
+        pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWCOLOR );
+        if ( !pOld || !( *static_cast<const XColorItem*>(pOld) == aItem ) )
         {
-            SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
-            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWTRANSPARENCE );
-            if ( !pOld || !( *static_cast<const SdrPercentItem*>(pOld) == aItem ) )
-            {
-                rAttrs->Put( aItem );
-                bModified = true;
-            }
+            rAttrs->Put( aItem );
+            bModified = true;
+        }
+    }
+
+    // transparency
+    sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
+    if( m_pMtrTransparent->IsValueChangedFromSaved() )
+    {
+        SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
+        pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWTRANSPARENCE );
+        if ( !pOld || !( *static_cast<const SdrPercentItem*>(pOld) == aItem ) )
+        {
+            rAttrs->Put( aItem );
+            bModified = true;
         }
     }
 
@@ -379,103 +369,100 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 
 void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 {
-    if( !m_bDisable )
+    // all objects can have a shadow
+    // at the moment there are only 8 possible positions where a shadow can be set
+
+    // has a shadow been set?
+    if( rAttrs->GetItemState( SDRATTR_SHADOW ) != SfxItemState::DONTCARE )
     {
-        // all objects can have a shadow
-        // at the moment there are only 8 possible positions where a shadow can be set
+        m_pTsbShowShadow->EnableTriState( false );
 
-        // has a shadow been set?
-        if( rAttrs->GetItemState( SDRATTR_SHADOW ) != SfxItemState::DONTCARE )
-        {
-            m_pTsbShowShadow->EnableTriState( false );
-
-            if( static_cast<const SdrOnOffItem&>( rAttrs->Get( SDRATTR_SHADOW ) ).GetValue() )
-                m_pTsbShowShadow->SetState( TRISTATE_TRUE );
-            else
-            {
-                m_pTsbShowShadow->SetState( TRISTATE_FALSE );
-            }
-        }
+        if( static_cast<const SdrOnOffItem&>( rAttrs->Get( SDRATTR_SHADOW ) ).GetValue() )
+            m_pTsbShowShadow->SetState( TRISTATE_TRUE );
         else
-            m_pTsbShowShadow->SetState( TRISTATE_INDET );
-
-        // distance (only 8 possible positions),
-        // so there is only one item evaluated
-
-        if( rAttrs->GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE &&
-            rAttrs->GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE )
         {
-            sal_Int32 nX = static_cast<const SdrMetricItem&>( rAttrs->Get( SDRATTR_SHADOWXDIST ) ).GetValue();
-            sal_Int32 nY = static_cast<const SdrMetricItem&>( rAttrs->Get( SDRATTR_SHADOWYDIST ) ).GetValue();
+            m_pTsbShowShadow->SetState( TRISTATE_FALSE );
+        }
+    }
+    else
+        m_pTsbShowShadow->SetState( TRISTATE_INDET );
 
+    // distance (only 8 possible positions),
+    // so there is only one item evaluated
+
+    if( rAttrs->GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE &&
+        rAttrs->GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE )
+    {
+        sal_Int32 nX = static_cast<const SdrMetricItem&>( rAttrs->Get( SDRATTR_SHADOWXDIST ) ).GetValue();
+        sal_Int32 nY = static_cast<const SdrMetricItem&>( rAttrs->Get( SDRATTR_SHADOWYDIST ) ).GetValue();
+
+        if( nX != 0 )
+            SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, m_ePoolUnit );
+        else
+            SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, m_ePoolUnit );
+
+        // setting the shadow control
+        if     ( nX <  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_LT );
+        else if( nX == 0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_MT );
+        else if( nX >  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_RT );
+        else if( nX <  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RP_LM );
+        // there's no center point anymore
+        else if( nX == 0L && nY == 0L ) m_pCtlPosition->SetActualRP( RP_RB );
+        else if( nX >  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RP_RM );
+        else if( nX <  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RP_LB );
+        else if( nX == 0L && nY >  0L ) m_pCtlPosition->SetActualRP( RP_MB );
+        else if( nX >  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RP_RB );
+    }
+    else
+    {
+        // determine default-distance
+        SfxItemPool* pPool = m_rOutAttrs.GetPool();
+        const SdrMetricItem* pXDistItem = static_cast<const SdrMetricItem*>(&pPool->GetDefaultItem(SDRATTR_SHADOWXDIST));
+        const SdrMetricItem* pYDistItem = static_cast<const SdrMetricItem*>(&pPool->GetDefaultItem(SDRATTR_SHADOWYDIST));
+        if (pXDistItem && pYDistItem)
+        {
+            sal_Int32 nX = pXDistItem->GetValue();
+            sal_Int32 nY = pYDistItem->GetValue();
             if( nX != 0 )
                 SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, m_ePoolUnit );
             else
                 SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, m_ePoolUnit );
-
-            // setting the shadow control
-            if     ( nX <  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_LT );
-            else if( nX == 0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_MT );
-            else if( nX >  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RP_RT );
-            else if( nX <  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RP_LM );
-            // there's no center point anymore
-            else if( nX == 0L && nY == 0L ) m_pCtlPosition->SetActualRP( RP_RB );
-            else if( nX >  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RP_RM );
-            else if( nX <  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RP_LB );
-            else if( nX == 0L && nY >  0L ) m_pCtlPosition->SetActualRP( RP_MB );
-            else if( nX >  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RP_RB );
-        }
-        else
-        {
-            // determine default-distance
-            SfxItemPool* pPool = m_rOutAttrs.GetPool();
-            const SdrMetricItem* pXDistItem = static_cast<const SdrMetricItem*>(&pPool->GetDefaultItem(SDRATTR_SHADOWXDIST));
-            const SdrMetricItem* pYDistItem = static_cast<const SdrMetricItem*>(&pPool->GetDefaultItem(SDRATTR_SHADOWYDIST));
-            if (pXDistItem && pYDistItem)
-            {
-                sal_Int32 nX = pXDistItem->GetValue();
-                sal_Int32 nY = pYDistItem->GetValue();
-                if( nX != 0 )
-                    SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, m_ePoolUnit );
-                else
-                    SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, m_ePoolUnit );
-            }
-
-            // Tristate, e. g. multiple objects have been marked of which some have a shadow and some don't.
-            // The text (which shall be displayed) of the MetricFields is set to "" and serves as an
-            // identification in the method FillItemSet for the fact that the distance value was NOT changed !!!!
-            m_pMtrDistance->SetText( "" );
-            m_pCtlPosition->SetActualRP( RP_MM );
         }
 
-        if( rAttrs->GetItemState( SDRATTR_SHADOWCOLOR ) != SfxItemState::DONTCARE )
-        {
-            m_pLbShadowColor->SelectEntry( static_cast<const XColorItem&>( rAttrs->Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
-        }
-        else
-            m_pLbShadowColor->SetNoSelection();
-
-        if( rAttrs->GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SfxItemState::DONTCARE )
-        {
-            sal_uInt16 nTransp = static_cast<const SdrPercentItem&>( rAttrs->Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
-            m_pMtrTransparent->SetValue( nTransp );
-        }
-        else
-            m_pMtrTransparent->SetText( "" );
-
-        //aCtlPosition
-        m_pMtrDistance->SaveValue();
-        m_pLbShadowColor->SaveValue();
-        m_pTsbShowShadow->SaveValue();
-
-        // #66832# This field was not saved, but used to determine changes.
-        // Why? Seems to be the error.
-        // It IS the error.
-        m_pMtrTransparent->SaveValue();
-
-        ClickShadowHdl_Impl( nullptr );
-        ModifyShadowHdl_Impl( *m_pMtrTransparent );
+        // Tristate, e. g. multiple objects have been marked of which some have a shadow and some don't.
+        // The text (which shall be displayed) of the MetricFields is set to "" and serves as an
+        // identification in the method FillItemSet for the fact that the distance value was NOT changed !!!!
+        m_pMtrDistance->SetText( "" );
+        m_pCtlPosition->SetActualRP( RP_MM );
     }
+
+    if( rAttrs->GetItemState( SDRATTR_SHADOWCOLOR ) != SfxItemState::DONTCARE )
+    {
+        m_pLbShadowColor->SelectEntry( static_cast<const XColorItem&>( rAttrs->Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
+    }
+    else
+        m_pLbShadowColor->SetNoSelection();
+
+    if( rAttrs->GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SfxItemState::DONTCARE )
+    {
+        sal_uInt16 nTransp = static_cast<const SdrPercentItem&>( rAttrs->Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
+        m_pMtrTransparent->SetValue( nTransp );
+    }
+    else
+        m_pMtrTransparent->SetText( "" );
+
+    //aCtlPosition
+    m_pMtrDistance->SaveValue();
+    m_pLbShadowColor->SaveValue();
+    m_pTsbShowShadow->SaveValue();
+
+    // #66832# This field was not saved, but used to determine changes.
+    // Why? Seems to be the error.
+    // It IS the error.
+    m_pMtrTransparent->SaveValue();
+
+    ClickShadowHdl_Impl( nullptr );
+    ModifyShadowHdl_Impl( *m_pMtrTransparent );
 }
 
 

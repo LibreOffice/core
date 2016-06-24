@@ -229,7 +229,6 @@ SvxMacroTabPage_::SvxMacroTabPage_(vcl::Window* pParent, const OString& rID,
     : SfxTabPage( pParent, rID, rUIXMLDescription, &rAttrSet ),
     m_xAppEvents(nullptr),
     m_xDocEvents(nullptr),
-    bReadOnly(false),
     bDocModified(false),
     bAppEvents(false),
     bInitialized(false)
