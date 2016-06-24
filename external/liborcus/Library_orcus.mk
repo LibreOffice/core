@@ -65,6 +65,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/measurement \
 	UnpackedTarball/liborcus/src/liborcus/odf_helper \
 	UnpackedTarball/liborcus/src/liborcus/odf_namespace_types \
+	UnpackedTarball/liborcus/src/liborcus/odf_number_formatting_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_para_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_styles_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_styles \

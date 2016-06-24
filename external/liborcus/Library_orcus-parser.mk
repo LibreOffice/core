@@ -39,12 +39,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus-parser,\
 	UnpackedTarball/liborcus/src/parser/css_types \
 	UnpackedTarball/liborcus/src/parser/csv_parser_base \
 	UnpackedTarball/liborcus/src/parser/exception \
+	UnpackedTarball/liborcus/src/parser/json_global \
 	UnpackedTarball/liborcus/src/parser/json_parser_base \
+	UnpackedTarball/liborcus/src/parser/json_parser_thread \
 	UnpackedTarball/liborcus/src/parser/parser_base \
 	UnpackedTarball/liborcus/src/parser/parser_global \
 	UnpackedTarball/liborcus/src/parser/pstring \
 	UnpackedTarball/liborcus/src/parser/sax_parser_base \
 	UnpackedTarball/liborcus/src/parser/sax_token_parser \
+	UnpackedTarball/liborcus/src/parser/sax_token_parser_thread \
 	UnpackedTarball/liborcus/src/parser/stream \
 	UnpackedTarball/liborcus/src/parser/string_pool \
 	UnpackedTarball/liborcus/src/parser/tokens \
