@@ -34,7 +34,6 @@ using namespace ::xmloff::token;
 
 class XMLFormPropValueTContext_Impl : public XMLTransformerContext
 {
-    OUString m_aAttrQName;
     OUString m_aCharacters;
     bool m_bIsVoid;
 
@@ -42,9 +41,6 @@ public:
     // element content persistence only
     XMLFormPropValueTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
-    XMLFormPropValueTContext_Impl( XMLTransformerBase& rTransformer,
-                           const OUString& rQName,
-                           XMLTokenEnum eAttrToken );
 
     virtual ~XMLFormPropValueTContext_Impl();
 
@@ -64,17 +60,6 @@ XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
         XMLTransformerBase& rTransformer,
         const OUString& rQName ) :
     XMLTransformerContext( rTransformer, rQName ),
-    m_bIsVoid( false )
-{
-}
-
-XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
-        XMLTransformerBase& rTransformer,
-        const OUString& rQName,
-        XMLTokenEnum eAttrToken ) :
-    XMLTransformerContext( rTransformer, rQName ),
-    m_aAttrQName( rTransformer.GetNamespaceMap().GetQNameByKey(
-                    XML_NAMESPACE_OFFICE, GetXMLToken(eAttrToken) ) ),
     m_bIsVoid( false )
 {
 }
@@ -145,8 +130,7 @@ rtl::Reference<XMLTransformerContext> XMLFormPropOOoTransformerContext::CreateCh
         if( m_bIsList )
         {
             pContext.set(new XMLFormPropValueTContext_Impl( GetTransformer(),
-                                                          rQName,
-                                                          m_eValueToken ));
+                                                          rQName ));
         }
         else if( !m_xValueContext.is() )
         {
