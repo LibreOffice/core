@@ -128,6 +128,20 @@ inline clang::QualType getReturnType(clang::FunctionDecl const & decl) {
 #endif
 }
 
+#if CLANG_VERSION >= 30900
+inline clang::ArrayRef<clang::ParmVarDecl *> parameters(
+    clang::FunctionDecl const & decl)
+{
+    return decl.parameters();
+}
+#else
+inline clang::FunctionDecl::param_const_range parameters(
+    clang::FunctionDecl const & decl)
+{
+    return decl.params();
+}
+#endif
+
 inline clang::QualType getReturnType(clang::FunctionProtoType const & type) {
 #if CLANG_VERSION >= 30500
     return type.getReturnType();
