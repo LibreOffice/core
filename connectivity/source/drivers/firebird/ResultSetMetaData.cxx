@@ -21,12 +21,18 @@
 #include "Util.hxx"
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::firebird;
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::uno;
+
+using com::sun::star::beans::XPropertySet;
+using com::sun::star::container::XNameAccess;
 
 OResultSetMetaData::~OResultSetMetaData()
 {
@@ -141,8 +147,32 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
-    // Supported internally but no way of determining this here.
-    (void) column;
+    if( !m_sTableName.isEmpty() )
+    {
+        OUString sColumnName = getColumnName( column );
+
+        OUString sSql = "SELECT RDB$SYSTEM_FLAG FROM RDB$RELATION_FIELDS "
+                   "WHERE RDB$RELATION_NAME = '" + m_sTableName + "' AND "
+                   "RDB$FIELD_NAME = '"+ sColumnName +"'";
+
+        Reference<XResultSet> xRes =
+                m_pConnection->createStatement()->executeQuery(sSql);
+        Reference<XRow> xRow ( xRes, UNO_QUERY);
+        if(xRes->next())
+        {
+            int iSystemFlag = xRow->getShort(1);
+            if(iSystemFlag == 6) // IDENTITY
+                return true;
+        }
+        else
+        {
+            SAL_WARN("connectivity.firebird","Column '"
+                    << sColumnName
+                    << "' not found in database");
+
+            return false;
+        }
+    }
     return false;
 }
 
