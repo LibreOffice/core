@@ -829,8 +829,8 @@ static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
     EXC_NUMFMT_OFFSET(   9, NF_PERCENT_INT ),           // 0%
     EXC_NUMFMT_OFFSET(  10, NF_PERCENT_DEC2 ),          // 0.00%
     EXC_NUMFMT_OFFSET(  11, NF_SCIENTIFIC_000E00 ),     // 0.00E+00
-    EXC_NUMFMT_OFFSET(  12, NF_FRACTION_1 ),            // # ?/?
-    EXC_NUMFMT_OFFSET(  13, NF_FRACTION_2 ),            // # ??/??
+    EXC_NUMFMT_OFFSET(  12, NF_FRACTION_1D ),            // # ?/?
+    EXC_NUMFMT_OFFSET(  13, NF_FRACTION_2D ),            // # ??/??
 
     // 14...22 date and time formats
     EXC_NUMFMT_OFFSET(  14, NF_DATE_SYS_DDMMYYYY ),

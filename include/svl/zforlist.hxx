@@ -100,9 +100,9 @@ enum NfIndexTableOffset
     NF_PERCENT_END = NF_PERCENT_DEC2,
 
     NF_FRACTION_START,
-    NF_FRACTION_1 = NF_FRACTION_START,      // # ?/?
-    NF_FRACTION_2,                          // # ??/??
-    NF_FRACTION_END = NF_FRACTION_2,
+    NF_FRACTION_1D = NF_FRACTION_START,      // # ?/?
+    NF_FRACTION_2D,                          // # ??/??
+    NF_FRACTION_END = NF_FRACTION_2D,
 
     NF_NUMERIC_END = NF_FRACTION_END,
 
@@ -172,12 +172,17 @@ enum NfIndexTableOffset
     // SvxNumberFormatShell::FillEListWithStd_Impl(), otherwise they will not
     // be be listed at all. Yes that is ugly.
 
-    NF_FRACTION_3 = NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS,    // # ?/4
-    NF_FRACTION_4,                          // # ?/100
+    NF_FRACTION_3D = NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS,    // # ???/???
+    NF_FRACTION_2,                          // # ?/2
+    NF_FRACTION_4,                          // # ?/4
+    NF_FRACTION_8,                          // # ?/8
+    NF_FRACTION_16,                         // # ??/16
+    NF_FRACTION_10,                         // # ??/10
+    NF_FRACTION_100,                        // # ??/100
 
     NF_DATETIME_ISO_YYYYMMDD_HHMMSS,        // 1997-10-08 01:23:45          ISO (with blank instead of T)
 
-    NF_INDEX_TABLE_ENTRIES                  // == 53, reserved up to 59 to not use in i18npool locale data.
+    NF_INDEX_TABLE_ENTRIES                  // == 59, reserved up to 59 to not use in i18npool locale data.
 };
 
 

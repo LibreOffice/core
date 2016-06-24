@@ -146,7 +146,12 @@ void Test::testNumberFormat()
 // Followings aren't in range of NF_FRACTION_START and NF_FRACTION_END
 // see enum NfIndexTableOffset in svl/inc/svl/zforlist.hxx
     const char* pFractionExt[] = {
+        "# \?\?\?/\?\?\?",
+        "# \?/2",
         "# \?/4",
+        "# \?/8",
+        "# \?\?/16",
+        "# \?\?/10",
         "# \?\?/100",
         nullptr
     };
@@ -223,7 +228,7 @@ void Test::testNumberFormat()
         { NF_SCIENTIFIC_START, NF_SCIENTIFIC_END, 2, pScientific },
         { NF_PERCENT_START, NF_PERCENT_END, 2, pPercent },
         { NF_FRACTION_START, NF_FRACTION_END, 2, pFraction },
-        { NF_FRACTION_3, NF_FRACTION_4, 2, pFractionExt },
+        { NF_FRACTION_3D, NF_FRACTION_100, 7, pFractionExt },
         { NF_CURRENCY_START, NF_CURRENCY_END, 6, pCurrency },
         { NF_DATE_START, NF_DATE_END, 21, pDate },
         { NF_TIME_START, NF_TIME_END, 7, pTime },
