@@ -2607,18 +2607,18 @@ void SbiRuntime::StepSTDERROR()
 {
     pError = nullptr; bError = true;
     pInst->aErrorMsg.clear();
-    pInst->nErr = 0L;
+    pInst->nErr = 0;
     pInst->nErl = 0;
-    nError = 0L;
+    nError = 0;
     SbxErrObject::getUnoErrObject()->Clear();
 }
 
 void SbiRuntime::StepNOERROR()
 {
     pInst->aErrorMsg.clear();
-    pInst->nErr = 0L;
+    pInst->nErr = 0;
     pInst->nErl = 0;
-    nError = 0L;
+    nError = 0;
     SbxErrObject::getUnoErrObject()->Clear();
     bError = false;
 }
