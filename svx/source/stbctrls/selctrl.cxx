@@ -109,12 +109,12 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
     ScopedVclPtrInstance<SelectionTypePopup> aPop( mnState );
     StatusBar& rStatusbar = GetStatusBar();
 
-    if ( aPop->Execute( &rStatusbar, rEvt.GetPosPixel() ) )
+    if ( aPop->Execute( &rStatusbar, rEvt.GetPosPixel() ) && !(rEvt.IsLeft()) )
     {
         sal_uInt16 nNewState = id_to_state( aPop->GetCurItemId() );
         if ( nNewState != mnState )
         {
-            mnState = nNewState+1;
+            mnState = nNewState;
 
             css::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), mnState );
