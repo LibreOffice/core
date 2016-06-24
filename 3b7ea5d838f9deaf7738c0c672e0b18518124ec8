@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_7aaa391b",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4461,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-24T23:40:33Z",
+      "side": 0,
+      "message": "Ah good catch - which makes me wonder, why not move mpFieldItem into the pImpl, too?",
+      "parentUuid": "ba84c18e_3ab0b18b",
+      "revId": "3b7ea5d838f9deaf7738c0c672e0b18518124ec8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_7c0e9435",
         "filename": "filter/source/msfilter/svdfppt.cxx",
         "patchSetId": 1
