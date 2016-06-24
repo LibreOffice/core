@@ -517,7 +517,6 @@ namespace drawinglayer
             const SdrTextObj& rTextObj = rText.GetObject();
 
             // Save chaining attributes
-            bool bToBeChained = rTextObj.IsToBeChained();
             bool bChainable = rTextObj.IsChainable();
 
 
@@ -580,7 +579,7 @@ namespace drawinglayer
                     bInEditMode,
                     static_cast<const SdrTextFixedCellHeightItem&>(rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue(),
                     bWrongSpell,
-                    bToBeChained,
+                    false/*bToBeChained*/,
                     bChainable);
             }
 

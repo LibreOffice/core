@@ -32,7 +32,6 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
     mpTextChain = mpTargetLink->GetTextChain();
     mpNextLink = mpTargetLink->GetNextLinkInChain();
-    bCheckedFlowEvents = false;
 
     bUnderflow = bOverflow = false;
 

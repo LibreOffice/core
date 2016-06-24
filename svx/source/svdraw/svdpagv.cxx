@@ -824,10 +824,7 @@ bool SdrPageView::EnterGroup(SdrObject* pObj)
         GetView().AdjustMarkHdl();
 
         // invalidate only when view wants to visualize group entering
-        if(GetView().DoVisualizeEnteredGroup())
-        {
-            InvalidateAllWin();
-        }
+        InvalidateAllWin();
 
         if (bGlueInvalidate)
         {
@@ -870,8 +867,7 @@ void SdrPageView::LeaveOneGroup()
         GetView().AdjustMarkHdl();
 
         // invalidate only if view wants to visualize group entering
-        if(GetView().DoVisualizeEnteredGroup())
-            InvalidateAllWin();
+        InvalidateAllWin();
 
         if(bGlueInvalidate)
             GetView().GlueInvalidate();
@@ -908,8 +904,7 @@ void SdrPageView::LeaveAllGroup()
         GetView().AdjustMarkHdl();
 
         // invalidate only when view wants to visualize group entering
-        if(GetView().DoVisualizeEnteredGroup())
-            InvalidateAllWin();
+        InvalidateAllWin();
 
         if(bGlueInvalidate)
             GetView().GlueInvalidate();

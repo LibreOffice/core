@@ -82,8 +82,6 @@ private:
 
     TextChain *mpTextChain;
 
-    bool bCheckedFlowEvents;
-
     bool bUnderflow;
     bool bOverflow;
 };

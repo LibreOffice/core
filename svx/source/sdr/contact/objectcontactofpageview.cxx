@@ -348,8 +348,7 @@ namespace sdr
         // test if visualizing of entered groups is switched on at all
         bool ObjectContactOfPageView::DoVisualizeEnteredGroup() const
         {
-            SdrView& rView = GetPageWindow().GetPageView().GetView();
-            return rView.DoVisualizeEnteredGroup();
+            return true;
         }
 
         // get active group's (the entered group) ViewContact

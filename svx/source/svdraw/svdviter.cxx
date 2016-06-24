@@ -31,8 +31,6 @@
 void SdrViewIter::ImpInitVars()
 {
     mnListenerNum = 0L;
-    mnPageViewNum = 0L;
-    mnOutDevNum = 0L;
     mpAktView = nullptr;
 }
 

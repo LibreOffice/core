@@ -32,7 +32,6 @@ namespace svx
     class SVX_DLLPUBLIC ToolboxAccess
     {
     private:
-        bool                                                    m_bDocking;
         OUString                                         m_sToolboxResName;
         css::uno::Reference<
             css::frame::XLayoutManager >   m_xLayouter;

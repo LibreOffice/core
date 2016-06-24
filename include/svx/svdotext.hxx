@@ -227,9 +227,6 @@ protected:
     SdrTextObj *mpNextInChain = nullptr;
     SdrTextObj *mpPrevInChain = nullptr;
 
-    // indicating the for its text to be chained to another text box
-    bool mbToBeChained : 1;
-
     // Fuer beschriftete Zeichenobjekte ist bTextFrame=FALSE. Der Textblock
     // wird dann hoizontal und vertikal an aRect zentriert. Bei bTextFrame=
     // sal_True wird der Text in aRect hineinformatiert. Der eigentliche Textrahmen
@@ -237,7 +234,6 @@ protected:
     bool                        bTextFrame : 1;
     bool                        bPortionInfoChecked : 1; // Fuer Optimierung von Textobjekten
     bool                        bNoShear : 1;            // Obj darf nicht gesheart werden   (->Graf+Ole+TextFrame)
-    bool                        bNoRotate : 1;           // Obj darf nicht gedreht werden    (->Ole)
     bool                        bNoMirror : 1;           // Obj darf nicht gespiegelt werden (->Ole,TextFrame)
     bool                        bTextSizeDirty : 1;
 
@@ -253,9 +249,6 @@ protected:
     // - Interaktives Resize in Einfach- oder Mehrfachselektion
     // - Positions+Groesse Dialog
     bool                        bDisableAutoWidthOnDragging : 1;
-
-    // Allow text suppression
-    bool                        mbTextHidden : 1;
 
     // Flag for allowing text animation. Default is sal_true.
     bool                        mbTextAnimationAllowed : 1;
@@ -356,7 +349,6 @@ public:
     bool IsFitToSize() const;
 
     // Chaining
-    bool IsToBeChained() const;
     SdrTextObj *GetNextLinkInChain() const;
     void SetNextLinkInChain(SdrTextObj *);
     SdrTextObj *GetPrevLinkInChain() const;

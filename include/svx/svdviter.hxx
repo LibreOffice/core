@@ -69,8 +69,6 @@ class SVX_DLLPUBLIC SdrViewIter
     SdrView*                                            mpAktView;
 
     size_t                                              mnListenerNum;
-    sal_uInt32                                          mnPageViewNum;
-    sal_uInt32                                          mnOutDevNum;
 
     // bitfield
     bool                                                mbNoMasterPage : 1;

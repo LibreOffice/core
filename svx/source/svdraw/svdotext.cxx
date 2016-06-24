@@ -91,17 +91,12 @@ SdrTextObj::SdrTextObj()
     bTextFrame=false;
     bPortionInfoChecked=false;
     bNoShear=false;
-    bNoRotate=false;
     bNoMirror=false;
     bDisableAutoWidthOnDragging=false;
 
     mbInEditMode = false;
-    mbTextHidden = false;
     mbTextAnimationAllowed = true;
     maTextEditOffset = Point(0, 0);
-
-    // chaining
-    mbToBeChained = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
@@ -119,19 +114,14 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
     bTextFrame=false;
     bPortionInfoChecked=false;
     bNoShear=false;
-    bNoRotate=false;
     bNoMirror=false;
     bDisableAutoWidthOnDragging=false;
     ImpJustifyRect(maRect);
 
     mbInEditMode = false;
-    mbTextHidden = false;
     mbTextAnimationAllowed = true;
     mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
-
-    // chaining
-    mbToBeChained = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
@@ -147,18 +137,13 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
     bTextFrame=true;
     bPortionInfoChecked=false;
     bNoShear=true;
-    bNoRotate=false;
     bNoMirror=true;
     bDisableAutoWidthOnDragging=false;
 
     mbInEditMode = false;
-    mbTextHidden = false;
     mbTextAnimationAllowed = true;
     mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
-
-    // chaining
-    mbToBeChained = false;
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
@@ -175,16 +160,11 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
     bTextFrame=true;
     bPortionInfoChecked=false;
     bNoShear=true;
-    bNoRotate=false;
     bNoMirror=true;
     bDisableAutoWidthOnDragging=false;
     ImpJustifyRect(maRect);
 
-    // chaining
-    mbToBeChained = false;
-
     mbInEditMode = false;
-    mbTextHidden = false;
     mbTextAnimationAllowed = true;
     mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
@@ -1103,7 +1083,6 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
 
     // Not all of the necessary parameters were copied yet.
     bNoShear = rObj.bNoShear;
-    bNoRotate = rObj.bNoRotate;
     bNoMirror = rObj.bNoMirror;
     bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
 
@@ -1526,12 +1505,6 @@ void SdrTextObj::ForceOutlinerParaObject()
 
         pText->ForceOutlinerParaObject( nOutlMode );
     }
-}
-
-// chaining
-bool SdrTextObj::IsToBeChained() const
-{
-    return mbToBeChained;
 }
 
 TextChain *SdrTextObj::GetTextChain() const
