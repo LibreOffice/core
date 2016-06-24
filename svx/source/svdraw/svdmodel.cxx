@@ -126,35 +126,23 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pDrawOutliner=nullptr;
     pHitTestOutliner=nullptr;
     pRefOutDev=nullptr;
-    nProgressAkt=0;
-    nProgressMax=0;
-    nProgressOfs=0;
     pDefaultStyleSheet=nullptr;
     mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj = nullptr;
     pLinkManager=nullptr;
     pUndoStack=nullptr;
     pRedoStack=nullptr;
     nMaxUndoCount=16;
-    mnUniqueCommentID=0;
     pAktUndoGroup=nullptr;
     nUndoLevel=0;
     mbUndoEnabled=true;
-    nProgressPercent=0;
-    nLoadVersion=0;
     bExtColorTable=false;
     mbChanged = false;
-    bInfoChanged=false;
     bPagNumsDirty=false;
     bMPgNumsDirty=false;
     bTransportContainer = false;
-    bSavePortable=false;
-    bSaveCompressed=false;
-    bSaveNative=false;
     bSwapGraphics=false;
     nSwapGraphicsMode=SdrSwapGraphicsMode::DEFAULT;
-    bSaveOLEPreview=false;
     bPasteResize=false;
-    bNoBitmapCaching=false;
     bReadOnly=false;
     nStreamNumberFormat=SvStreamEndian::BIG;
     nDefaultTabulator=0;
@@ -168,8 +156,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbKernAsianPunctuation = false;
     mbAddExtLeading = false;
     mnHandoutPageCount = 0;
-    nReserveUInt6 = 0;
-    nReserveUInt7 = 0;
 
     mbDisableTextEditUsesCommonUndoManager = false;
 

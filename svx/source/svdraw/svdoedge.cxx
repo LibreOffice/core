@@ -57,12 +57,8 @@ void SdrObjConnection::ResetVars()
 {
     pObj=nullptr;
     nConId=0;
-    nXDist=0;
-    nYDist=0;
     bBestConn=true;
     bBestVertex=true;
-    bXDistOvr=false;
-    bYDistOvr=false;
     bAutoVertex=false;
     bAutoCorner=false;
 }

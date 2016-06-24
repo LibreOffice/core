@@ -334,17 +334,11 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
         {
             const Graphic* pGraphic = pOle->GetGraphic();
 
-            // if there isn't already a preview graphic set, check if we need to generate
-            // one if model says so
-            if( pGraphic == nullptr && !pOle->IsEmptyPresObj() && mpModel->IsSaveOLEPreview() )
-                pGraphic = pOle->GetGraphic();
-
             if( pGraphic )
             {
                 GraphicObject aObj( *pGraphic );
                 aURL = UNO_NAME_GRAPHOBJ_URLPREFIX;
-                aURL += OStringToOUString(aObj.GetUniqueID(),
-                    RTL_TEXTENCODING_ASCII_US);
+                aURL += OStringToOUString(aObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
             }
         }
         rValue <<= aURL;

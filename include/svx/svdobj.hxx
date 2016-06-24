@@ -315,9 +315,7 @@ protected:
     // object is only pointing to another one
     bool                        bVirtObj : 1;
     bool                        bSnapRectDirty : 1;
-    bool                        bNetLock : 1;   // ni
     bool                        bInserted : 1;  // only if set to true, there are RepaintBroadcast & SetModify
-    bool                        bGrouped : 1;   // member of a group object?
 
     // the following flags will be streamed
     bool                        bMovProt : 1;   // if true, the position is protected

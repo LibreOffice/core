@@ -308,9 +308,7 @@ SdrObject::SdrObject() :
 {
     bVirtObj         =false;
     bSnapRectDirty   =true;
-    bNetLock         =false;
     bInserted        =false;
-    bGrouped         =false;
     bMovProt         =false;
     bSizProt         =false;
     bNoPrint         =false;
@@ -1723,9 +1721,9 @@ OString SdrObject::stringify() const
             append(bNoPrint).
             append(bSizProt).
             append(bMovProt).
-            append(bGrouped).
+            append(false).
             append(bInserted).
-            append(bNetLock).
+            append(false).
             append(bVirtObj).
             //append(maBLIPSizeRectangle).
             append(mnLayerID);
