@@ -60,7 +60,20 @@
 
 using namespace ::com::sun::star;
 
-static const char* SCREENSHOT_DIRECTORY = "/workdir/screenshots";
+static const char* SCREENSHOT_DIRECTORY = "/workdir/screenshots/";
+
+namespace {
+    void splitHelpId( OString& rHelpId, OUString& rDirname, OUString &rBasename )
+    {
+       sal_Int32 nIndex = rHelpId.lastIndexOf( '/' );
+
+       if( nIndex > 0 )
+            rDirname = OStringToOUString( rHelpId.copy( 0, nIndex ), RTL_TEXTENCODING_UTF8 );
+
+       if( rHelpId.getLength() > nIndex+1 )
+            rBasename= OStringToOUString( rHelpId.copy( nIndex+1 ), RTL_TEXTENCODING_UTF8 );
+    }
+}
 
 /// Test opening a dialog in sd
 class SdDialogsTest : public test::BootstrapFixture, public unotest::MacrosTest
@@ -641,9 +654,18 @@ void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rP
 
         if (!aScreenshot.IsEmpty())
         {
-            const OUString aPath = rPath + ".png";
-            SvFileStream aNew(aPath, StreamMode::WRITE | StreamMode::TRUNC);
-            CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to create " + aPath, RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen() );
+            OString aScreenshotId = rDlg.GetScreenshotId();
+            OUString aDirname, aBasename;
+            splitHelpId( aScreenshotId, aDirname, aBasename );
+            aDirname = OUString::createFromAscii( SCREENSHOT_DIRECTORY ) + aDirname;
+
+            osl::FileBase::RC err = osl::Directory::createPath( m_directories.getURLFromSrc( aDirname ));
+            CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to create " + aDirname, RTL_TEXTENCODING_UTF8).getStr(),
+                                    (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
+
+            OUString aFullPath = m_directories.getSrcRootPath() + aDirname + "/" + aBasename + ".png";
+            SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
+            CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to open " + OUString::number(aNew.GetErrorCode()), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen() );
 
             vcl::PNGWriter aPNGWriter(aScreenshot);
             aPNGWriter.Write(aNew);

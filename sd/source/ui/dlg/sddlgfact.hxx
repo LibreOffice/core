@@ -32,6 +32,7 @@ public:                                                 \
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const override; \
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
     virtual Bitmap createScreenshot() const override;   \
+    virtual OString GetScreenshotId() const;   \
     virtual         ~Class();                           \
     virtual short   Execute() override ;
 
@@ -39,6 +40,7 @@ public:                                                 \
 std::vector<OString> Class::getAllPageUIXMLDescriptions() const { return pDlg->getAllPageUIXMLDescriptions(); } \
 bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) { return pDlg->selectPageByUIXMLDescription(rUIXMLDescription); } \
 Bitmap Class::createScreenshot() const { return pDlg->createScreenshot();} \
+OString Class::GetScreenshotId() const { return pDlg->GetScreenshotId();} \
 Class::~Class()                                     \
 {                                                   \
 }                                                   \
