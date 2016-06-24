@@ -71,7 +71,7 @@ protected:
     css::uno::Reference< css::util::XModifiable > m_xModifiable;
     EventsHash m_appEventsHash;
     EventsHash m_docEventsHash;
-    bool bReadOnly, bDocModified, bAppEvents, bInitialized;
+    bool bDocModified, bAppEvents, bInitialized;
     EventDisplayNames aDisplayNames;
 
     SvxMacroTabPage_( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemSet );

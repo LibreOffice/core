@@ -246,7 +246,6 @@ private:
                         m_xEventHdl;
     css::uno::Reference< css::awt::XContainerWindowProvider >
                         m_xWinProvider;
-    bool                m_bIsWindowHidden;
 
     void                CreateDialogWithHandler();
     bool                DispatchAction( const OUString& rAction );
