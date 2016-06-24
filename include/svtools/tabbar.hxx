@@ -302,8 +302,6 @@ private:
     std::unique_ptr<TabBar_Impl> mpImpl;
 
     OUString        maEditText;
-    Color           maSelColor;
-    Color           maSelTextColor;
     Size            maWinSize;
     long            mnMaxPageWidth;
     long            mnCurMaxWidth;
