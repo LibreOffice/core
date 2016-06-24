@@ -123,7 +123,6 @@ class ProgressCmdEnv
 
     DialogHelper*   m_pDialogHelper;
     OUString        m_sTitle;
-    bool            m_bAborted;
     bool            m_bWarnUser;
     sal_Int32       m_nCurrentProgress;
 
@@ -147,7 +146,6 @@ public:
         : m_xContext( rContext )
         , m_pDialogHelper( pDialogHelper )
         , m_sTitle( rTitle )
-        , m_bAborted( false )
         , m_bWarnUser( false )
         , m_nCurrentProgress(0)
         {}
@@ -158,7 +156,6 @@ public:
     void stopProgress();
     void progressSection( const OUString &rText,
                           const uno::Reference< task::XAbortChannel > &xAbortChannel = nullptr );
-    inline bool isAborted() const { return m_bAborted; }
     inline void setWarnUser( bool bNewVal ) { m_bWarnUser = bNewVal; }
 
     // XCommandEnvironment
@@ -295,26 +292,20 @@ void ProgressCmdEnv::progressSection( const OUString &rText,
                                       const uno::Reference< task::XAbortChannel > &xAbortChannel )
 {
     m_xAbortChannel = xAbortChannel;
-    if (! m_bAborted)
+    m_nCurrentProgress = 0;
+    if ( m_pDialogHelper )
     {
-        m_nCurrentProgress = 0;
-        if ( m_pDialogHelper )
-        {
-            m_pDialogHelper->updateProgress( rText, xAbortChannel );
-            m_pDialogHelper->updateProgress( 5 );
-        }
+        m_pDialogHelper->updateProgress( rText, xAbortChannel );
+        m_pDialogHelper->updateProgress( 5 );
     }
 }
 
 
 void ProgressCmdEnv::updateProgress()
 {
-    if ( ! m_bAborted )
-    {
-        long nProgress = ((m_nCurrentProgress*5) % 100) + 5;
-        if ( m_pDialogHelper )
-            m_pDialogHelper->updateProgress( nProgress );
-    }
+    long nProgress = ((m_nCurrentProgress*5) % 100) + 5;
+    if ( m_pDialogHelper )
+        m_pDialogHelper->updateProgress( nProgress );
 }
 
 
@@ -730,7 +721,7 @@ void ExtensionCmdQueue::Thread::execute()
         // addExtension is called, which then blocks the main thread, then we deadlock.
         bool bStartProgress = true;
 
-        while ( !currentCmdEnv->isAborted() && --nSize >= 0 )
+        while ( --nSize >= 0 )
         {
             {
                 osl::MutexGuard aGuard( m_mutex );

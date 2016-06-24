@@ -27,12 +27,10 @@ namespace dbaui
     class OSQLNameChecker
     {
         OUString m_sAllowedChars;
-        bool        m_bOnlyUpperCase;
         bool        m_bCheck;           // true when we should check for invalid chars
     public:
         OSQLNameChecker(const OUString& _rAllowedChars)
             :m_sAllowedChars(_rAllowedChars)
-            ,m_bOnlyUpperCase(false)
             ,m_bCheck(true)
         {
         }

@@ -93,13 +93,12 @@ protected:
     OUString            m_aDSN;
     TableInfoList       m_aTableInfoList;
     TableIndexList      m_aFreeIndexList;
-    bool                m_bCaseSensitiv;
 
     void        Init();
     void        SetCtrls();
     bool    GetTable(const OUString& rName, TableInfoList::iterator& _rPosition);
 
-    OTableIndex implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, bool _bMustExist);
+    static OTableIndex implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, bool _bMustExist);
     static void implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);
 
     OTableIndex RemoveFreeIndex( const OUString& _rName, bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, *m_pLB_FreeIndexes, _bMustExist); }

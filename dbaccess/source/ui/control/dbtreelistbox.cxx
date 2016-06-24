@@ -59,7 +59,6 @@ DBTreeListBox::DBTreeListBox( vcl::Window* pParent, WinBits nWinStyle )
     ,m_pDragedEntry(nullptr)
     ,m_pActionListener(nullptr)
     ,m_pContextMenuProvider( nullptr )
-    ,m_bHandleEnterKey(false)
 {
     init();
 }
@@ -339,7 +338,7 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
 
     if ( KEY_RETURN == nCode )
     {
-        bHandled = m_bHandleEnterKey;
+        bHandled = false;
         m_aEnterKeyHdl.Call(this);
         // this is a HACK. If the data source browser is opened in the "beamer", while the main frame
         //

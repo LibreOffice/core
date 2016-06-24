@@ -44,7 +44,6 @@ const OString aGroupIdent("dBase III");
 ODbaseIndexDialog::ODbaseIndexDialog(vcl::Window * pParent, const OUString& aDataSrcName)
     : ModalDialog(pParent, "DBaseIndexDialog", "dbaccess/ui/dbaseindexdialog.ui")
     , m_aDSN(aDataSrcName)
-    , m_bCaseSensitiv(true)
 {
     get(m_pPB_OK, "ok");
     get(m_pCB_Tables, "table");
@@ -103,16 +102,8 @@ bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iterator
             ++_rPosition
         )
     {
-        if (m_bCaseSensitiv)
-        {
-            if (_rPosition->aTableName == _rName)
-                return true;
-        }
-        else
-        {
-            if (_rPosition->aTableName.equalsIgnoreAsciiCase(_rName))
-                return true;
-        }
+        if (_rPosition->aTableName == _rName)
+            return true;
     }
     return false;
 }
@@ -138,7 +129,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableInde
             ++aSearch, ++nPos
         )
     {
-        if ( m_bCaseSensitiv ? aSearch->GetIndexFileName() == _rName : aSearch->GetIndexFileName().equalsIgnoreAsciiCase(_rName) )
+        if ( aSearch->GetIndexFileName() == _rName )
         {
             aReturn = *aSearch;
 
