@@ -114,7 +114,7 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
         sal_uInt16 nNewState = id_to_state( aPop->GetCurItemId() );
         if ( nNewState != mnState )
         {
-            mnState = nNewState;
+            mnState = nNewState+1;
 
             css::uno::Any a;
             SfxUInt16Item aState( GetSlotId(), mnState );
