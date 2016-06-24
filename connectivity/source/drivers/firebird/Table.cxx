@@ -196,7 +196,9 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     if (bIsAutoIncrementChanged)
     {
-        // TODO: changeType
+        // TODO changing autoincrement is not supported in firebird
+        // TODO if the column is empty, replace the column with an
+        // autoincremented one
     }
 
     if (bDefaultChanged)
