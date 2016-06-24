@@ -1013,6 +1013,7 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-failed", G_CALLBACK(signalDragFailed), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-data-delete", G_CALLBACK(signalDragDelete), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "drag-data-get", G_CALLBACK(signalDragDataGet), this ));
+    m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "scroll-event", G_CALLBACK(signalScroll), this ));
 
     g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
     g_signal_connect( G_OBJECT(m_pFixedContainer), "size-allocate", G_CALLBACK(sizeAllocated), this );
@@ -1038,7 +1039,6 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pWindow), "key-release-event", G_CALLBACK(signalKey), this );
     g_signal_connect( G_OBJECT(m_pWindow), "delete-event", G_CALLBACK(signalDelete), this );
     g_signal_connect( G_OBJECT(m_pWindow), "window-state-event", G_CALLBACK(signalWindowState), this );
-    g_signal_connect( G_OBJECT(m_pWindow), "scroll-event", G_CALLBACK(signalScroll), this );
     g_signal_connect( G_OBJECT(m_pWindow), "leave-notify-event", G_CALLBACK(signalCrossing), this );
     g_signal_connect( G_OBJECT(m_pWindow), "enter-notify-event", G_CALLBACK(signalCrossing), this );
     g_signal_connect( G_OBJECT(m_pWindow), "visibility-notify-event", G_CALLBACK(signalVisibility), this );
@@ -1051,7 +1051,6 @@ void GtkSalFrame::InitCommon()
     m_bSpanMonitorsWhenFullscreen = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
-    m_nLastScrollEventTime = GDK_CURRENT_TIME;
     m_bSendModChangeOnRelease = false;
     m_pIMHandler        = nullptr;
     m_hBackgroundPixmap = None;
@@ -2658,13 +2657,6 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEventScroll* pEvent, gpointer
 
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    // gnome#726878 check for duplicate legacy scroll event
-    if (pEvent->direction != GDK_SCROLL_SMOOTH &&
-        pThis->m_nLastScrollEventTime == pEvent->time)
-    {
-        return false;
-    }
-
     SalWheelMouseEvent aEvent;
 
     aEvent.mnTime = pEvent->time;
@@ -2678,8 +2670,6 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEventScroll* pEvent, gpointer
     switch (pEvent->direction)
     {
         case GDK_SCROLL_SMOOTH:
-            pThis->m_nLastScrollEventTime = pEvent->time;
-
             // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
             // equating to 3 scroll lines and a delta of 120. So scale the delta here
             // by 120 where a single mouse wheel click is an incoming delta_x of 1
