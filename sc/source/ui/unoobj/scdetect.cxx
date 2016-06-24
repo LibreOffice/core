@@ -219,12 +219,35 @@ static bool lcl_MayBeDBase( SvStream& rStream )
     if ( nSize < nEmptyDbf )
         return false;
 
+    // count of records at 4
+    rStream.Seek(4);
+    sal_uInt32 nRecords(0);
+    rStream.ReadUInt32(nRecords);
+
     // length of header starts at 8
     rStream.Seek(8);
     sal_uInt16 nHeaderLen;
     rStream.ReadUInt16( nHeaderLen );
 
+    // size of record at 10
+    sal_uInt16 nRecordSize(0);
+    rStream.ReadUInt16(nRecordSize);
+
     if ( nHeaderLen < nEmptyDbf || nSize < nHeaderLen )
+        return false;
+
+    // see DTable.cxx ODbaseTable::readHeader()
+    if (0 == nRecordSize)
+        return false;
+
+    // see DTable.cxx ODbaseTable::construct() line 546
+    if (0 == nRecords)
+    {
+        nRecords = (nSize - nHeaderLen) / nRecordSize;
+    }
+
+    // tdf#84834 sanity check of size
+    if (0 == nRecords || nSize < nHeaderLen + nRecords * sal_uInt64(nRecordSize))
         return false;
 
     // Last byte of header must be 0x0d, this is how it's specified.
