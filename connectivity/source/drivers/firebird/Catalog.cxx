@@ -16,10 +16,13 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-Catalog::Catalog(const uno::Reference< XConnection >& rConnection):
+Catalog::Catalog(const uno::Reference< XConnection >& rConnection
+                ,sdbcx::OCollection* pTables
+                ):
     OCatalog(rConnection),
     m_xConnection(rConnection)
 {
+    m_pTables = pTables;
 }
 
 //----- OCatalog -------------------------------------------------------------

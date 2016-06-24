@@ -21,12 +21,17 @@
 #include "Util.hxx"
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 
 using namespace connectivity::firebird;
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::uno;
+
+using com::sun::star::beans::XPropertySet;
+using com::sun::star::container::XNameAccess;
 
 OResultSetMetaData::~OResultSetMetaData()
 {
@@ -141,9 +146,34 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
-    // Supported internally but no way of determining this here.
-    (void) column;
-    return false;
+    bool ret = false;
+
+    Reference< XPropertySet > xColumn;
+    if( !m_sTableName.isEmpty() )
+    {
+        OUString columnName = getColumnName( column );
+
+        Reference< XNameAccess > xTables = m_pConnection->getTables();
+
+        if(xTables.is())
+        {
+            Reference< XPropertySet > xTable;
+            xTables->getByName( m_sTableName ) >>= xTable;
+
+            Reference< XColumnsSupplier > supplier( xTable, UNO_QUERY );
+            if( supplier.is() )
+            {
+                Reference< XNameAccess > columns = supplier->getColumns();
+                if( columns.is() && columns->hasByName( columnName ) )
+                {
+                    columns->getByName( columnName ) >>= xColumn;
+                    xColumn->getPropertyValue("IsAutoIncrement") >>= ret;
+                }
+            }
+        }
+    }
+
+    return ret;
 }
 
 

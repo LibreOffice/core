@@ -16,6 +16,7 @@ namespace connectivity
 {
     namespace firebird
     {
+
         class Catalog: public ::connectivity::sdbcx::OCatalog
         {
         protected:
@@ -23,7 +24,9 @@ namespace connectivity
                 m_xConnection;
 
         public:
-            explicit Catalog(const css::uno::Reference< css::sdbc::XConnection >& rConnection);
+            explicit Catalog(const css::uno::Reference< css::sdbc::XConnection >& rConnection,
+                             sdbcx::OCollection* pTables
+                            );
 
             // OCatalog
             virtual void refreshTables() override;

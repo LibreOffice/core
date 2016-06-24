@@ -21,9 +21,9 @@
 #include "Connection.hxx"
 #include "DatabaseMetaData.hxx"
 #include "Driver.hxx"
+#include "Tables.hxx"
 #include "PreparedStatement.hxx"
 #include "Statement.hxx"
-#include "Tables.hxx"
 #include "Util.hxx"
 
 #include <stdexcept>
@@ -94,6 +94,7 @@ Connection::Connection(FirebirdDriver*    _pDriver)
     , m_aTransactionHandle(0)
     , m_xCatalog(nullptr)
     , m_xMetaData(nullptr)
+    , m_xTables(nullptr)
     , m_aStatements()
 {
 }
@@ -784,6 +785,13 @@ void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >& typeMap)
     (void) typeMap;
 }
 
+//----- XTablesSupplier-----------------------------------------------------------
+Reference< XNameAccess > Connection::getTables()
+        throw (css::uno::RuntimeException, std::exception)
+{
+    MutexGuard aGuard( m_aMutex );
+    return m_xTables.get();
+}
 //----- XCloseable -----------------------------------------------------------
 void SAL_CALL Connection::close(  ) throw(SQLException, RuntimeException, std::exception)
 {
@@ -961,7 +969,7 @@ uno::Reference< XTablesSupplier > Connection::createCatalog()
     }
     else
     {
-        xCatalog = new Catalog(this);
+        xCatalog = new Catalog(this, m_xTables.get());
         m_xCatalog = xCatalog;
         return m_xCatalog;
     }
