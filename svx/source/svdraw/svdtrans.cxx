@@ -690,41 +690,6 @@ void GetMeterOrInch(MapUnit eMU, short& rnKomma, long& rnMul, long& rnDiv, bool&
     rbInch=bInch;
 }
 
-void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, bool& rbMetr, bool& rbInch)
-{
-    rnMul=1; rnDiv=1;
-    short nKomma=0;
-    bool bMetr = false, bInch = false;
-    switch (eFU) {
-        case FUNIT_NONE     : break;
-        // metrically
-        case FUNIT_100TH_MM : bMetr = true; nKomma=5; break;
-        case FUNIT_MM       : bMetr = true; nKomma=3; break;
-        case FUNIT_CM       : bMetr = true; nKomma=2; break;
-        case FUNIT_M        : bMetr = true; nKomma=0; break;
-        case FUNIT_KM       : bMetr = true; nKomma=-3; break;
-        // Inch
-        case FUNIT_TWIP     : bInch = true; rnDiv=144; nKomma=1; break;  // 1Twip = 1/1440"
-        case FUNIT_POINT    : bInch = true; rnDiv=72; break;   // 1Pt   = 1/72"
-        case FUNIT_PICA     : bInch = true; rnDiv=6; break;    // 1Pica = 1/6"  ?
-        case FUNIT_INCH     : bInch = true; break;             // 1"    = 1"
-        case FUNIT_FOOT     : bInch = true; rnMul=12; break;   // 1Ft   = 12"
-        case FUNIT_MILE     : bInch = true; rnMul=6336; nKomma=-1; break; // 1mile = 63360"
-        // others
-        case FUNIT_CUSTOM   : break;
-        case FUNIT_PERCENT  : nKomma=2; break;
-        // TODO: Add code to handle the following (added to remove warning)
-        case FUNIT_CHAR     : break;
-        case FUNIT_LINE     : break;
-        case FUNIT_PIXEL    : break;
-        case FUNIT_DEGREE   : break;
-        case FUNIT_SECOND   : break;
-        case FUNIT_MILLISECOND   : break;
-    } // switch
-    rnKomma=nKomma;
-    rbMetr=bMetr;
-    rbInch=bInch;
-}
 
 void SdrFormatter::Undirty()
 {
@@ -732,16 +697,8 @@ void SdrFormatter::Undirty()
     long nMul1,nDiv1,nMul2,nDiv2;
     short nKomma1,nKomma2;
     // first: normalize to m or in
-    if (!bSrcFU) {
-        GetMeterOrInch(eSrcMU,nKomma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
-    } else {
-        GetMeterOrInch(eSrcFU,nKomma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
-    }
-    if (!bDstFU) {
-        GetMeterOrInch(eDstMU,nKomma2,nMul2,nDiv2,bDstMetr,bDstInch);
-    } else {
-        GetMeterOrInch(eDstFU,nKomma2,nMul2,nDiv2,bDstMetr,bDstInch);
-    }
+    GetMeterOrInch(eSrcMU,nKomma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
+    GetMeterOrInch(eDstMU,nKomma2,nMul2,nDiv2,bDstMetr,bDstInch);
     nMul1*=nDiv2;
     nDiv1*=nMul2;
     nKomma1=nKomma1-nKomma2;

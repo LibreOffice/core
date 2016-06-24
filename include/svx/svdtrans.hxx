@@ -282,13 +282,9 @@ class SVX_DLLPUBLIC SdrFormatter {
     long      nMul_;
     long      nDiv_;
     short     nKomma_;
-    bool      bSrcFU;
-    bool      bDstFU;
     bool      bDirty;
     MapUnit   eSrcMU;
     MapUnit   eDstMU;
-    FieldUnit eSrcFU;
-    FieldUnit eDstFU;
 private:
     SVX_DLLPRIVATE void Undirty();
     SVX_DLLPRIVATE void ForceUndirty() const { if (bDirty) const_cast<SdrFormatter*>(this)->Undirty(); }
@@ -297,13 +293,9 @@ public:
         : nMul_(0)
         , nDiv_(0)
         , nKomma_(0)
-        , bSrcFU(false)
-        , bDstFU(false)
         , bDirty(true)
         , eSrcMU(eSrc)
         , eDstMU(eDst)
-        , eSrcFU(FUNIT_NONE)
-        , eDstFU(FUNIT_NONE)
     {
     }
     void TakeStr(long nVal, OUString& rStr) const;

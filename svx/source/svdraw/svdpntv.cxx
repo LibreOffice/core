@@ -175,7 +175,6 @@ void SdrPaintView::ImpClearVars()
     mnMinMovLog=0;
     mpActualOutDev=nullptr;
     mpDragWin=nullptr;
-    mbRestoreColors=true;
     mpDefaultStyleSheet=nullptr;
     mbSomeObjChgdFlag=false;
     mnGraphicManagerDrawMode = GraphicManagerDrawFlags::STANDARD;
@@ -206,9 +205,6 @@ SdrPaintView::SdrPaintView(SdrModel* pModel, OutputDevice* pOut)
     {
         AddWindowToPaintView(pOut, nullptr);
     }
-
-    // flag to visualize groups
-    mbVisualizeEnteredGroup = true;
 
     maColorConfig.AddListener(this);
     onChangeColorConfig();

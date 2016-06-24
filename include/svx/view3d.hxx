@@ -63,8 +63,6 @@ protected:
     // Migrate selections
     Impl3DMirrorConstructOverlay*                   mpMirrorOverlay;
 
-    bool                        bDoubleSided;
-
     void InitView();
 
     void ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);

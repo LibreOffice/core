@@ -1531,7 +1531,6 @@ void E3dView::InitView ()
     nVDefaultSegments        = 12;
     aDefaultLightColor       = RGB_Color(COL_WHITE);
     aDefaultAmbientColor     = RGB_Color(COL_BLACK);
-    bDoubleSided             = false;
     mpMirrorOverlay          = nullptr;
 }
 

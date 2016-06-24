@@ -124,7 +124,6 @@ protected:
     bool                        bMoveOnlyDragging : 1;       // only move objects while Resize/Rotate/...
     bool                        bSlantButShear : 1;          // use slant instead of shear
     bool                        bCrookNoContortion : 1;      // no contorsion while Crook
-    bool                        bHlplFixed : 1;              // sal_True= fixed auxiliary lines, so it isn't movable
     bool                        bEliminatePolyPoints : 1;
 
 protected:

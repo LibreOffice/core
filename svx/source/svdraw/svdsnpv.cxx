@@ -196,7 +196,6 @@ SdrSnapView::SdrSnapView(SdrModel* pModel1, OutputDevice* pOut)
     , bMoveOnlyDragging(false)
     , bSlantButShear(false)
     , bCrookNoContortion(false)
-    , bHlplFixed(false)
     , bEliminatePolyPoints(false)
 {
 }
@@ -518,25 +517,22 @@ bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV)
 {
     bool bRet(false);
 
-    if(!bHlplFixed)
+    BrkAction();
+
+    if(pPV && nHelpLineNum < pPV->GetHelpLines().GetCount())
     {
-        BrkAction();
+        const SdrHelpLineList& rHelpLines = pPV->GetHelpLines();
+        const SdrHelpLine& rHelpLine = rHelpLines[nHelpLineNum];
+        Point aHelpLinePos = rHelpLine.GetPos();
+        basegfx::B2DPoint aStartPos(aHelpLinePos.X(), aHelpLinePos.Y());
 
-        if(pPV && nHelpLineNum < pPV->GetHelpLines().GetCount())
-        {
-            const SdrHelpLineList& rHelpLines = pPV->GetHelpLines();
-            const SdrHelpLine& rHelpLine = rHelpLines[nHelpLineNum];
-            Point aHelpLinePos = rHelpLine.GetPos();
-            basegfx::B2DPoint aStartPos(aHelpLinePos.X(), aHelpLinePos.Y());
+        DBG_ASSERT(nullptr == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists a ImplHelpLineOverlay (!)");
+        mpHelpLineOverlay = new ImplHelpLineOverlay(*this, aStartPos, pPV, nHelpLineNum, rHelpLine.GetKind());
 
-            DBG_ASSERT(nullptr == mpHelpLineOverlay, "SdrSnapView::BegDragHelpLine: There exists a ImplHelpLineOverlay (!)");
-            mpHelpLineOverlay = new ImplHelpLineOverlay(*this, aStartPos, pPV, nHelpLineNum, rHelpLine.GetKind());
+        maDragStat.Reset(GetSnapPos(aHelpLinePos, pPV));
+        maDragStat.SetMinMove(ImpGetMinMovLogic(-3, nullptr));
 
-            maDragStat.Reset(GetSnapPos(aHelpLinePos, pPV));
-            maDragStat.SetMinMove(ImpGetMinMovLogic(-3, nullptr));
-
-            bRet = true;
-        }
+        bRet = true;
     }
 
     return bRet;

@@ -333,8 +333,7 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
     SetRectsDirty();
 
     // Turn off ratio
-    if(aCamera.GetAspectMapping() == AS_NO_MAPPING)
-        GetCameraSet().SetRatio(0.0);
+    GetCameraSet().SetRatio(0.0);
 
     // Set Imaging geometry
     basegfx::B3DPoint aVRP(aCamera.GetViewPoint());

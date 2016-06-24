@@ -107,7 +107,7 @@ void ObjectContact::ProcessDisplay(DisplayInfo& /*rDisplayInfo*/)
 // test if visualizing of entered groups is switched on at all
 bool ObjectContact::DoVisualizeEnteredGroup() const
 {
-    // Don not do that as default
+    // Do not do that as default
     return false;
 }
 

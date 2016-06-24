@@ -169,16 +169,12 @@ protected:
     bool                        mbGlueVisible2 : 1;   // Also show glue points for GluePointEdit
     bool                        mbGlueVisible3 : 1;   // Also show glue points for EdgeTool
     bool                        mbGlueVisible4 : 1;   // Show glue points, if one edge is selected
-    bool                        mbRestoreColors : 1;  // Pens and Brushes are reset
     bool                        mbSomeObjChgdFlag : 1;
     bool                        mbSwapAsynchron : 1;
     bool                        mbPrintPreview : 1;
 
     // These bools manage, the status that is displayed
     //
-    // Enter/Leave group: default is true, but is set to false in
-    // e.g. Chart, where we'd get Ghost effects when rendering
-    bool                        mbVisualizeEnteredGroup : 1;
     bool                        mbAnimationPause : 1;
 
     // Flag which decides if buffered output for this view is allowed. When
@@ -293,9 +289,6 @@ public:
 
     // Data read access on logic HitTolerance and MinMoveTolerance
     sal_uInt16 getHitTolLog() const { return mnHitTolLog; }
-
-    // Flag for group visualization
-    bool DoVisualizeEnteredGroup() const { return mbVisualizeEnteredGroup; }
 
     // Using the DragState we can tell e.g. which distance was
     // already dragged
