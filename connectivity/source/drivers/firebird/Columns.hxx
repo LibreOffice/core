@@ -20,11 +20,12 @@ namespace connectivity
     {
         class Columns: public ::connectivity::OColumnsHelper
         {
+        protected:
+            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
         public:
             Columns(Table& rTable,
                     ::osl::Mutex& rMutex,
                     const ::connectivity::TStringVector &_rVector);
-
         };
 
     } // namespace firebird
