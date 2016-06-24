@@ -38,7 +38,6 @@ public:
         : pList(nullptr)
     {
         eq = _eq;
-        isHwpEQ = 1;
         trim();
     }
     virtual ~Formula(){ }
@@ -77,7 +76,6 @@ private:
      Reference< XAttributeList > rList;
      AttributeListImpl *pList;
      char *eq;
-     int isHwpEQ;
 };
 
 #endif

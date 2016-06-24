@@ -65,14 +65,13 @@ gz_stream *gz_open(HStream & _stream)
     s->stream.zfree = nullptr;
     s->stream.opaque = nullptr;
     s->stream.next_in = s->inbuf = Z_NULL;
-    s->stream.next_out = s->outbuf = Z_NULL;
+    s->stream.next_out = Z_NULL;
     s->stream.avail_in = s->stream.avail_out = 0;
 //s->_inputstream = NULL;
     s->z_err = Z_OK;
     s->z_eof = 0;
     s->crc = crc32(0L, Z_NULL, 0);
     s->msg = nullptr;
-    s->transparent = 0;
 
     s->mode = 'r';
 
@@ -142,7 +141,6 @@ local int destroy(gz_stream * s)
         err = s->z_err;
 
     TRYFREE(s->inbuf);
-    TRYFREE(s->outbuf);
     TRYFREE(s);
     return err;
 }
@@ -173,29 +171,6 @@ int gz_read(gz_stream * file, voidp buf, unsigned len)
 
     while (s->stream.avail_out != 0)
     {
-        if (s->transparent)
-        {
-/* Copy first the lookahead bytes: */
-            uInt n = s->stream.avail_in;
-
-            if (n > s->stream.avail_out)
-                n = s->stream.avail_out;
-            if (n > 0)
-            {
-                memcpy(s->stream.next_out, s->stream.next_in, n);
-                next_out += n;
-                s->stream.next_out = next_out;
-                s->stream.next_in += n;
-                s->stream.avail_out -= n;
-                s->stream.avail_in -= n;
-            }
-            if (s->stream.avail_out > 0)
-            {
-                s->stream.avail_out -=
-                    s->_inputstream->readBytes(next_out, s->stream.avail_out);
-            }
-            return (int) (len - s->stream.avail_out);
-        }
         if (s->stream.avail_in == 0 && !s->z_eof)
         {
 
@@ -261,7 +236,7 @@ int gz_flush(gz_stream * file, int flush)
     return Z_ERRNO;
       }
       */
-            s->stream.next_out = s->outbuf;
+            s->stream.next_out = nullptr;
             s->stream.avail_out = Z_BUFSIZE;
         }
         if (done)

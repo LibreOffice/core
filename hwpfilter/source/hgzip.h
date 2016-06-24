@@ -46,10 +46,6 @@ struct gz_stream
  */
     Byte     *inbuf;
 /**
- * Output buffer
- */
-    Byte     *outbuf;
-/**
  * Crc32 of uncompressed data
  */
     uLong    crc;
@@ -57,10 +53,6 @@ struct gz_stream
  * Stream
  */
     char     *msg;
-/**
- * It becomes one when the input file type is not gz file
- */
-    int      transparent;
 /**
  * 'w' or 'r'
  */

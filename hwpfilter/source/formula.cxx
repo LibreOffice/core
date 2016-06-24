@@ -571,57 +571,53 @@ void Formula::parse()
 {
      Node *res = nullptr;
      if( !eq ) return;
-     if( isHwpEQ ){
-          MzString a;
-         // fprintf(stderr,"\n\n[BEFORE]\n[%s]\n",eq);
-          eq2latex(a,eq);
 
-          int idx=a.find(sal::static_int_cast<char>(0xff));
-          while(idx){
-                //printf("idx = [%d]\n",idx);
-                a.replace(idx,0x20);
-                if((idx = a.find(sal::static_int_cast<char>(0xff),idx+1)) < 0)
-                     break;
-          }
+     MzString a;
+     // fprintf(stderr,"\n\n[BEFORE]\n[%s]\n",eq);
+     eq2latex(a,eq);
 
-          char *buf = static_cast<char *>(malloc(a.length()+1));
-          bool bStart = false;
-          int i, j;
-          for( i = 0, j=0 ; i < a.length() ; i++){ // rtrim and ltrim 32 10 13
-                if( bStart ){
+     int idx=a.find(sal::static_int_cast<char>(0xff));
+     while(idx){
+           //printf("idx = [%d]\n",idx);
+           a.replace(idx,0x20);
+           if((idx = a.find(sal::static_int_cast<char>(0xff),idx+1)) < 0)
+                break;
+     }
+
+     char *buf = static_cast<char *>(malloc(a.length()+1));
+     bool bStart = false;
+     int i, j;
+     for( i = 0, j=0 ; i < a.length() ; i++){ // rtrim and ltrim 32 10 13
+           if( bStart ){
+                buf[j++] = a[i];
+           }
+           else{
+                if( a[i] != 32 && a[i] != 10 && a[i] != 13){
+                     bStart = true;
                      buf[j++] = a[i];
                 }
-                else{
-                     if( a[i] != 32 && a[i] != 10 && a[i] != 13){
-                          bStart = true;
-                          buf[j++] = a[i];
-                     }
-                }
-          }
-          buf[j] = 0;
-          for( i = j-1 ; i >= 0 ; i++ ){
-                if( buf[i] == 32 || buf[i] == 10 || buf[i] == 13 ){
-                     buf[i] = 0;
-                }
-                else
-                     break;
-          }
-         // fprintf(stderr,"\n\n[RESULT]\n[%s]\n",a.c_str());
-          if( buf[0] != '\0' )
-                res = mainParse( a.c_str() );
-          else
-                res = nullptr;
-          free(buf);
+           }
      }
-     else{
-          res = mainParse( eq );
+     buf[j] = 0;
+     for( i = j-1 ; i >= 0 ; i++ ){
+           if( buf[i] == 32 || buf[i] == 10 || buf[i] == 13 ){
+                buf[i] = 0;
+           }
+           else
+                break;
      }
+     // fprintf(stderr,"\n\n[RESULT]\n[%s]\n",a.c_str());
+     if( buf[0] != '\0' )
+           res = mainParse( a.c_str() );
+     else
+           res = nullptr;
+     free(buf);
 
      if( res ){
           makeMathML( res );
      }
      int count = nodelist.size();
-     for( int i = 0 ; i < count ; i++ ){
+     for( i = 0 ; i < count ; i++ ){
          const Node *tmpNode = nodelist.front();
          nodelist.pop_front();
          delete tmpNode;
