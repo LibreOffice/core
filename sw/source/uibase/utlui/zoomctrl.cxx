@@ -43,10 +43,11 @@ SwZoomControl::~SwZoomControl()
 void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
-    if(SfxItemState::DEFAULT == eState && dynamic_cast< const SfxStringItem *>( pState ) !=  nullptr)
+    const SfxStringItem* pItem = nullptr;
+    if (SfxItemState::DEFAULT == eState && (pItem = dynamic_cast<const SfxStringItem*>(pState)))
     {
-        sPreviewZoom = static_cast<const SfxStringItem*>(pState)->GetValue();
-        GetStatusBar().SetItemText( GetId(), sPreviewZoom );
+        sPreviewZoom = pItem->GetValue();
+        GetStatusBar().SetItemText(GetId(), sPreviewZoom);
     }
     else
     {
@@ -57,15 +58,15 @@ void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 void SwZoomControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    if(sPreviewZoom.isEmpty())
+    if (sPreviewZoom.isEmpty())
         SvxZoomStatusBarControl::Paint(rUsrEvt);
     else
-        GetStatusBar().SetItemText( GetId(), sPreviewZoom );
+        GetStatusBar().SetItemText(GetId(), sPreviewZoom);
 }
 
 void SwZoomControl::Command( const CommandEvent& rCEvt )
 {
-    if(sPreviewZoom.isEmpty())
+    if (sPreviewZoom.isEmpty())
         SvxZoomStatusBarControl::Command(rCEvt);
 }
 
