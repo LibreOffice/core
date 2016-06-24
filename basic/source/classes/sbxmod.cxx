@@ -2726,7 +2726,6 @@ SbUserFormModule::Find( const OUString& rName, SbxClassType t )
 SbProperty::SbProperty( const OUString& r, SbxDataType t, SbModule* p )
         : SbxProperty( r, t ), pMod( p )
 {
-    bInvalid = false;
 }
 
 SbProperty::~SbProperty()

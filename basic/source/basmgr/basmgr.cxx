@@ -34,6 +34,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
@@ -107,16 +108,13 @@ struct BasicManagerImpl
 
     // Save stream data
     SvMemoryStream*  mpManagerStream;
-    SvMemoryStream** mppLibStreams;
-    sal_Int32        mnLibStreamCount;
+    std::vector<std::unique_ptr<SvMemoryStream>> maLibStreams;
 
     std::vector<std::unique_ptr<BasicLibInfo>> aLibs;
     OUString         aBasicLibPath;
 
     BasicManagerImpl()
         : mpManagerStream( nullptr )
-        , mppLibStreams( nullptr )
-        , mnLibStreamCount( 0 )
     {}
     ~BasicManagerImpl();
 };
@@ -124,12 +122,6 @@ struct BasicManagerImpl
 BasicManagerImpl::~BasicManagerImpl()
 {
     delete mpManagerStream;
-    if( mppLibStreams )
-    {
-        for( sal_Int32 i = 0 ; i < mnLibStreamCount ; i++ )
-            delete mppLibStreams[i];
-        delete[] mppLibStreams;
-    }
 }
 
 
@@ -539,13 +531,12 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         if( xBasicStorage.Is() && !xBasicStorage->GetError() )
         {
             sal_uInt16 nLibs = GetLibCount();
-            mpImpl->mppLibStreams = new SvMemoryStream*[ nLibs ];
             for( sal_uInt16 nL = 0; nL < nLibs; nL++ )
             {
                 BasicLibInfo& rInfo = *mpImpl->aLibs[nL];
                 tools::SvRef<SotStorageStream> xBasicStream = xBasicStorage->OpenSotStream( rInfo.GetLibName(), eStreamReadMode );
-                mpImpl->mppLibStreams[nL] = new SvMemoryStream();
-                xBasicStream->ReadStream( *( mpImpl->mppLibStreams[nL] ) );
+                mpImpl->maLibStreams.push_back(o3tl::make_unique<SvMemoryStream>());
+                xBasicStream->ReadStream( *mpImpl->maLibStreams.back() );
             }
         }
     }
