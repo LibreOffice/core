@@ -21,12 +21,18 @@
 #include "Util.hxx"
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::firebird;
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::uno;
+
+using com::sun::star::beans::XPropertySet;
+using com::sun::star::container::XNameAccess;
 
 OResultSetMetaData::~OResultSetMetaData()
 {
@@ -141,8 +147,27 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
-    // Supported internally but no way of determining this here.
-    (void) column;
+    if( !m_sTableName.isEmpty() )
+    {
+        OUString sColumnName = getColumnName( column );
+
+        OUString sTriggerName("trg_" + m_sTableName
+                              + "_" + sColumnName);
+
+        OUString sSql = "SELECT RDB$TRIGGER_NAME FROM RDB$TRIGGERS "
+                   "WHERE RDB$TRIGGER_NAME = '" + sTriggerName + "'";
+
+        Reference<XResultSet> xRes =
+                m_pConnection->createStatement()->executeQuery(sSql);
+        if(xRes->next()) // if there is a trigger
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     return false;
 }
 

@@ -196,7 +196,42 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     if (bIsAutoIncrementChanged)
     {
-        // TODO: changeType
+        bool bIsAutoIncrement = false;
+        rDescriptor->getPropertyValue("IsAutoIncrement") >>= bIsAutoIncrement;
+
+        OUString sSql;
+        const OUString sGeneratorName("gen_" + getName() + "_" + rColName);
+        const OUString sTriggerName("trg_" + getName() + "_" + rColName);
+
+        if(bIsAutoIncrement)
+        {
+            // create a generator and a trigger
+            sSql = "CREATE SEQUENCE " + sGeneratorName;
+            getConnection()->createStatement()->execute(sSql);
+            sSql =  "ALTER SEQUENCE " + sGeneratorName + " RESTART WITH 0";
+            getConnection()->createStatement()->execute(sSql);
+
+            const OUString sQuote = getConnection()->getMetaData()
+                    ->getIdentifierQuoteString();
+
+            sSql = "CREATE TRIGGER " +sTriggerName +
+                   " ACTIVE BEFORE INSERT POSITION 0 ON "+ dbtools::quoteName(sQuote,getName()) +
+                   " AS "
+                   "BEGIN "
+                   "if (NEW." + dbtools::quoteName(sQuote,rColName) +" is NULL) then NEW."+
+                   dbtools::quoteName(sQuote,rColName) +
+                   " = GEN_ID("+sGeneratorName+", 1); "
+                   "END";
+            getConnection()->createStatement()->execute(sSql);
+        }
+        else
+        {
+            // turn autoIncrement off
+            sSql = "DROP GENERATOR " + sGeneratorName;
+            getConnection()->createStatement()->execute(sSql);
+            sSql = "DROP TRIGGER " + sTriggerName;
+            getConnection()->createStatement()->execute(sSql);
+        }
     }
 
     if (bDefaultChanged)
