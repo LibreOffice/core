@@ -130,7 +130,7 @@ public:
     virtual bool        IsVisible() const;
 
     virtual sal_uInt16      GetNumSubNodes() const;
-    virtual SmNode *    GetSubNode(sal_uInt16 nIndex);
+    virtual SmNode *    GetSubNode(sal_uInt16 nIndex) = 0;
             const SmNode * GetSubNode(sal_uInt16 nIndex) const
             {
                 return const_cast<SmNode *>(this)->GetSubNode(nIndex);

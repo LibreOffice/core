@@ -88,12 +88,6 @@ sal_uInt16 SmNode::GetNumSubNodes() const
 }
 
 
-SmNode * SmNode::GetSubNode(sal_uInt16 /*nIndex*/)
-{
-    return nullptr;
-}
-
-
 const SmNode * SmNode::GetLeftMost() const
     //  returns leftmost node of current subtree.
     //! (this assumes the one with index 0 is always the leftmost subnode
