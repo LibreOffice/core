@@ -46,7 +46,7 @@ Includes::Includes(
     m_includeSequence(dependencies.hasSequenceDependency()),
     m_includeType(dependencies.hasTypeDependency()),
     m_includeCppuMacrosHxx(false), m_includeCppuUnotypeHxx(false),
-    m_includeOslDoublecheckedlockingH(false), m_includeOslMutexHxx(false),
+    m_includeOslMutexHxx(false),
     m_includeRtlStrbufHxx(false), m_includeRtlStringH(false),
     m_includeRtlTextencH(false), m_includeRtlUstrbufHxx(false),
     m_includeRtlUstringH(false),
@@ -209,10 +209,6 @@ void Includes::dump(FileStream & out, OUString const * companionHdl) {
     if (m_includeCppuUnotypeHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
         out << ("#include \"cppu/unotype.hxx\"\n");
-    }
-    if (m_includeOslDoublecheckedlockingH) {
-        dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#include \"osl/doublecheckedlocking.h\"\n");
     }
     if (m_includeOslMutexHxx) {
         dumpEmptyLineBeforeFirst(out, &first);

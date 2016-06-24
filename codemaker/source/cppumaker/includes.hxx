@@ -81,7 +81,6 @@ private:
     bool m_includeType;
     bool m_includeCppuMacrosHxx;
     bool m_includeCppuUnotypeHxx;
-    bool m_includeOslDoublecheckedlockingH;
     bool m_includeOslMutexHxx;
     bool m_includeRtlStrbufHxx;
     bool m_includeRtlStringH;
