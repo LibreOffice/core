@@ -976,7 +976,6 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
         return;
     }
 
-    ImplTabBarItem* pItem;
     sal_uInt16 nSelId = GetPageId(rMEvt.GetPosPixel());
 
     if (!rMEvt.IsLeft())
@@ -984,9 +983,6 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
         Window::MouseButtonDown(rMEvt);
         if (nSelId > 0 && nSelId != mnCurPageId)
         {
-            sal_uInt16 nPos = GetPagePos( nSelId );
-            pItem = mpImpl->mpItemList[nPos];
-
             if (ImplDeactivatePage())
             {
                 SetCurPageId(nSelId);
@@ -1010,7 +1006,6 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
         if (nSelId)
         {
             sal_uInt16  nPos = GetPagePos(nSelId);
-            pItem = mpImpl->mpItemList[nPos];
 
             bool bSelectTab = false;
 
@@ -1036,7 +1031,7 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
                     n = 0;
                     while (n < nCurPos)
                     {
-                        pItem = mpImpl->mpItemList[n];
+                        auto pItem = mpImpl->mpItemList[n];
                         if (n < nPos)
                             bSelect = false;
                         else
@@ -1062,7 +1057,7 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
                     n = nCurPos;
                     while (n < nCount)
                     {
-                        pItem = mpImpl->mpItemList[n];
+                        auto pItem = mpImpl->mpItemList[n];
 
                         if (n <= nPos)
                             bSelect = true;
@@ -1118,7 +1113,7 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
             if (nSelId != mnCurPageId)
             {
                 sal_uInt16 nPos = GetPagePos(nSelId);
-                pItem = mpImpl->mpItemList[nPos];
+                auto pItem = mpImpl->mpItemList[nPos];
 
                 if (!pItem->mbSelect)
                 {
