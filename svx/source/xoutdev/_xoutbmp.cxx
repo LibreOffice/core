@@ -39,6 +39,8 @@
 #define FORMAT_JPG  "jpg"
 #define FORMAT_PNG  "png"
 
+using namespace com::sun::star;
+
 GraphicFilter* XOutBitmap::pGrfFilter = nullptr;
 
 Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr )
@@ -169,6 +171,24 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 {
                     nErr = GRFILTER_OK;
                 }
+            }
+        }
+
+        // Write PDF data in original form if possible.
+        if (rGraphic.getPdfData().hasElements() && rFilterName.equalsIgnoreAsciiCase("pdf"))
+        {
+            if (!(nFlags & XOutFlags::DontAddExtension))
+                aURL.setExtension(rFilterName);
+
+            rFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
+            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::WRITE|StreamMode::SHARE_DENYNONE|StreamMode::TRUNC);
+            if (SvStream* pOutStream = aMedium.GetOutStream())
+            {
+                uno::Sequence<sal_Int8> aPdfData = rGraphic.getPdfData();
+                pOutStream->WriteBytes(aPdfData.getConstArray(), aPdfData.getLength());
+                aMedium.Commit();
+                if (!aMedium.GetError())
+                    nErr = GRFILTER_OK;
             }
         }
 

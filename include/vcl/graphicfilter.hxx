@@ -82,6 +82,7 @@ namespace o3tl
 #define EXP_EMF                 "SVEMF"
 #define EXP_JPEG                "SVEJPEG"
 #define EXP_SVG                 "SVESVG"
+#define EXP_PDF                 "SVEPDF"
 #define EXP_PNG                 "SVEPNG"
 
 #define BMP_SHORTNAME           "BMP"

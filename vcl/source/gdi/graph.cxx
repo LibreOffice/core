@@ -593,6 +593,17 @@ const SvgDataPtr& Graphic::getSvgData() const
     return mpImpGraphic->getSvgData();
 }
 
+void Graphic::setPdfData(const uno::Sequence<sal_Int8>& rPdfData)
+{
+    ImplTestRefCount();
+    mpImpGraphic->maPdfData = rPdfData;
+}
+
+const uno::Sequence<sal_Int8>& Graphic::getPdfData() const
+{
+    return mpImpGraphic->maPdfData;
+}
+
 namespace {
 
 struct Id: public rtl::Static<cppu::OImplementationId, Id> {};
