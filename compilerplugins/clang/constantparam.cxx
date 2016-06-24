@@ -122,7 +122,7 @@ MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, int par
     }
     aInfo.nameAndParams += functionDecl->getNameAsString() + "(";
     bool bFirst = true;
-    for (const ParmVarDecl *pParmVarDecl : functionDecl->params()) {
+    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
         if (bFirst)
             bFirst = false;
         else

@@ -79,7 +79,7 @@ std::string niceName(const CXXMethodDecl* functionDecl)
         + "::" + functionDecl->getNameAsString()
         + "(";
     bool bFirst = true;
-    for (const ParmVarDecl *pParmVarDecl : functionDecl->params()) {
+    for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
         if (bFirst)
             bFirst = false;
         else
