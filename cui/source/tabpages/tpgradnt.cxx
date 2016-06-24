@@ -113,6 +113,7 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
     // set handler
+    m_pLbGradients->Hide();
     m_pLbGradients->SetSelectHdl(
         LINK( this, SvxGradientTabPage, ChangeGradientHdl_Impl ) );
     m_pBtnAdd->SetClickHdl( LINK( this, SvxGradientTabPage, ClickAddHdl_Impl ) );
@@ -183,7 +184,6 @@ void SvxGradientTabPage::Construct()
 {
     m_pLbColorFrom->Fill( m_pColorList );
     m_pLbColorTo->CopyEntries( *m_pLbColorFrom );
-
     m_pLbGradients->Fill( m_pGradientList );
 }
 
