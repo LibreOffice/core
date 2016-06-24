@@ -51,6 +51,8 @@
 #define GRAPHIC_FORMAT_50           static_cast<sal_uInt32>(COMPAT_FORMAT( 'G', 'R', 'F', '5' ))
 #define NATIVE_FORMAT_50            static_cast<sal_uInt32>(COMPAT_FORMAT( 'N', 'A', 'T', '5' ))
 
+using namespace com::sun::star;
+
 struct ImpSwapFile
 {
     INetURLObject   aSwapURL;
@@ -132,6 +134,7 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mpAnimation = nullptr;
 
     maSvgData = rImpGraphic.maSvgData;
+    maPdfData = rImpGraphic.maPdfData;
 }
 
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
@@ -256,6 +259,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
             mpGfxLink = nullptr;
 
         maSvgData = rImpGraphic.maSvgData;
+        maPdfData = rImpGraphic.maPdfData;
     }
 
     return *this;
@@ -304,6 +308,10 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
                         }
                     }
                 }
+                else if (maPdfData.hasElements())
+                {
+                    bRet = maPdfData == rImpGraphic.maPdfData;
+                }
                 else if( mpAnimation )
                 {
                     if( rImpGraphic.mpAnimation && ( *rImpGraphic.mpAnimation == *mpAnimation ) )
@@ -349,6 +357,7 @@ void ImpGraphic::ImplClearGraphics( bool bCreateSwapInfo )
     }
 
     maSvgData.reset();
+    maPdfData = uno::Sequence<sal_Int8>();
 }
 
 void ImpGraphic::ImplClear()

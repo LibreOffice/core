@@ -87,6 +87,9 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
         case GfxLinkType::NativeSvg:
             aExtension = "svg";
             break;
+        case GfxLinkType::NativePdf:
+            aExtension = "pdf";
+            break;
         default:
             break;
     }

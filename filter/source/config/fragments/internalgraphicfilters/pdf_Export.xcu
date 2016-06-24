@@ -1,0 +1,17 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+    <node oor:name="pdf_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>pdf_Portable_Document_Format</value></prop>
+        <prop oor:name="FormatName"><value>SVEPDF</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PDF - Portable Document Format</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
+    </node>
