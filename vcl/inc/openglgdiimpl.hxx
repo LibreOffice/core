@@ -169,6 +169,8 @@ public:
     // operations to do after painting
     void PostDraw();
 
+    void PostBatchDraw();
+
 protected:
     bool AcquireContext(bool bForceCreate = false);
     bool ReleaseContext();
