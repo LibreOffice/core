@@ -31,7 +31,6 @@ SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
     eScanType = SbxVARIANT;
     nErrors  = 0;
     nBufPos  = 0;
-    nCurCol1 = 0;
     nSavedCol1 = 0;
     nColLock = 0;
     nLine    = 0;

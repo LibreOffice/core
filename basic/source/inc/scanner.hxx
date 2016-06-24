@@ -45,7 +45,6 @@ protected:
     OUString aError;
     SbxDataType eScanType;
     double nVal;                        // numeric value
-    sal_Int32 nCurCol1;
     sal_Int32 nSavedCol1;
     sal_Int32 nCol;
     sal_Int32 nErrors;

@@ -21,7 +21,6 @@ class Coverage : public test::BootstrapFixture
 {
 private:
     int  m_nb_tests_ok;
-    int  m_nb_tests_skipped;
     OUString m_sCurrentTest;
     void process_directory(const OUString& sDirName);
     void run_test(const OUString& sFileName);
@@ -48,13 +47,12 @@ public:
 Coverage::Coverage()
     : BootstrapFixture(true, false)
     , m_nb_tests_ok(0)
-    , m_nb_tests_skipped(0)
 {
 }
 
 Coverage::~Coverage()
 {
-    fprintf(stderr,"basic coverage Summary : skipped:%d pass:%d\n", m_nb_tests_skipped, m_nb_tests_ok );
+    fprintf(stderr,"basic coverage Summary : pass:%d\n", m_nb_tests_ok );
 }
 
 void Coverage::test_failed()
