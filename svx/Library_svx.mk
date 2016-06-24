@@ -241,6 +241,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/tbxctrls/tbxcolor \
     svx/source/tbxctrls/tbxdrctl \
     svx/source/tbxctrls/verttexttbxctrl \
+    svx/source/uitest/uiobject \
     svx/source/unodraw/recoveryui \
     svx/source/unodraw/unoctabl \
     svx/source/unodraw/UnoNamespaceMap \

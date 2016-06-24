@@ -33,6 +33,8 @@
 #include <svx/svxdlg.hxx>
 
 #include "charmapacc.hxx"
+#include "uiobject.hxx"
+
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -743,6 +745,11 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
 sal_Int32 SvxShowCharSet::getMaxCharCount() const
 {
     return mxFontCharMap->GetCharCount();
+}
+
+FactoryFunction SvxShowCharSet::GetUITestFactory() const
+{
+    return SvxShowCharSetUIObject::create;
 }
 
 // TODO: should be moved into Font Attributes stuff

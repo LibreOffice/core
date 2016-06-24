@@ -74,6 +74,8 @@ public:
 
     virtual void    Resize() override;
 
+    virtual FactoryFunction GetUITestFactory() const override;
+
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
