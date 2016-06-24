@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_1a0e8d34",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-24T06:40:09Z",
+      "side": 1,
+      "message": "Did you mean iter \u003d m_pImpl-\u003em_AutoFormats.erase(iter);? See e.g. http://stackoverflow.com/a/3938847",
+      "revId": "ce25954d5194dc952ce14c6bd8b2622e7a8cfba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_3a13515e",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-24T06:40:09Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "ce25954d5194dc952ce14c6bd8b2622e7a8cfba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
