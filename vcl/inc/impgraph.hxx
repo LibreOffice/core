@@ -51,6 +51,7 @@ private:
     bool                mbSwapUnderway;
     bool                mbDummyContext;
     SvgDataPtr          maSvgData;
+    css::uno::Sequence<sal_Int8> maPdfData;
 
 private:
 

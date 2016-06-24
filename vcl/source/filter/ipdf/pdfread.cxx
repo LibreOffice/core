@@ -101,6 +101,13 @@ VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 
     rGraphic = aMtf;
 
+    // Save the original PDF stream for later use.
+    rStream.Seek(STREAM_SEEK_TO_END);
+    uno::Sequence<sal_Int8> aPdfData(rStream.Tell());
+    rStream.Seek(STREAM_SEEK_TO_BEGIN);
+    rStream.ReadBytes(aPdfData.getArray(), aPdfData.getLength());
+    rGraphic.setPdfData(aPdfData);
+
     return true;
 }
 
