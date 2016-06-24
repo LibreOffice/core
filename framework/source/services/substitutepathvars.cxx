@@ -524,6 +524,7 @@ const OUString& SubstitutePathVariables_Impl::GetHostName()
     {
         oslSocketResult aSocketResult;
         m_aHost = osl::SocketAddr::getLocalHostname( &aSocketResult ).toAsciiLowerCase();
+        m_bHostRetrieved = true;
     }
 
     return m_aHost;

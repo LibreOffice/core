@@ -1128,7 +1128,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     m_bDeleteMenu       = bDelete;
     m_bDeleteChildren   = bDeleteChildren;
     m_pVCLMenu          = pMenu;
-    m_bInitialized      = false;
     m_bIsBookmarkMenu   = false;
     m_xDispatchProvider = rDispatchProvider;
 
@@ -1896,7 +1895,6 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,boo
     m_bDeleteChildren   = bDeleteChildren;
     m_pVCLMenu          = pAddonMenu;
     m_xFrame            = rFrame;
-    m_bInitialized      = false;
     m_bIsBookmarkMenu   = true;
     m_bShowMenuImages   = true;
 

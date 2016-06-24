@@ -175,7 +175,6 @@ namespace framework
             bool                                                                            m_bReadOnly;
             bool                                                                            m_bInitialized;
             bool                                                                            m_bModified;
-            bool                                                                            m_bConfigRead;
             bool                                                                            m_bDisposed;
    };
 }

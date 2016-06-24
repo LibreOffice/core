@@ -111,7 +111,6 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
         };
 
         bool                                                      m_bStatusBarStartFound;
-        bool                                                      m_bStatusBarEndFound;
         bool                                                      m_bStatusBarItemStartFound;
         StatusBarHashMap                                          m_aStatusBarMap;
         css::uno::Reference< css::container::XIndexContainer >    m_aStatusBarItems;

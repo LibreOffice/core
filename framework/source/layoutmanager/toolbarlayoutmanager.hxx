@@ -291,7 +291,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         bool                                                                 m_bStoreWindowState;
         bool                                                                 m_bGlobalSettings;
         bool                                                                 m_bDockingInProgress;
-        bool                                                                 m_bVisible;
         bool                                                                 m_bLayoutInProgress;
         bool                                                                 m_bToolbarCreation;
 };

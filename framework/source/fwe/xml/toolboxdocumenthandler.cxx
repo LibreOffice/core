@@ -166,7 +166,6 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_nHashCode_Style_Image         = OUString( ATTRIBUTE_ITEMSTYLE_IMAGE ).hashCode();
 
     m_bToolBarStartFound            = false;
-    m_bToolBarEndFound              = false;
     m_bToolBarItemStartFound        = false;
     m_bToolBarSpaceStartFound       = false;
     m_bToolBarBreakStartFound       = false;
@@ -188,8 +187,7 @@ throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
-    if (( m_bToolBarStartFound && !m_bToolBarEndFound ) ||
-        ( !m_bToolBarStartFound && m_bToolBarEndFound )     )
+    if ( m_bToolBarStartFound )
     {
         OUString aErrorMessage = getErrorLineString();
         aErrorMessage += "No matching start or end element 'toolbar' found!";

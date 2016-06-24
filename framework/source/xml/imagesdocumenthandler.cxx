@@ -128,10 +128,8 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     m_bImageContainerStartFound     = false;
     m_bImageContainerEndFound       = false;
     m_bImagesStartFound             = false;
-    m_bImagesEndFound               = false;
     m_bImageStartFound              = false;
     m_bExternalImagesStartFound     = false;
-    m_bExternalImagesEndFound       = false;
     m_bExternalImageStartFound      = false;
 }
 

@@ -170,7 +170,6 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     }
 
     m_bStatusBarStartFound          = false;
-    m_bStatusBarEndFound            = false;
     m_bStatusBarItemStartFound      = false;
 }
 
@@ -189,8 +188,7 @@ throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
-    if (( m_bStatusBarStartFound && !m_bStatusBarEndFound ) ||
-        ( !m_bStatusBarStartFound && m_bStatusBarEndFound )     )
+    if ( m_bStatusBarStartFound )
     {
         OUString aErrorMessage = getErrorLineString();
         aErrorMessage += "No matching start or end element 'statusbar' found!";

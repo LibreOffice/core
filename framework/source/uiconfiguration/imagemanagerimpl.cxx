@@ -514,7 +514,6 @@ ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext
     , m_bReadOnly( true )
     , m_bInitialized( false )
     , m_bModified( false )
-    , m_bConfigRead( false )
     , m_bDisposed( false )
 {
     for ( vcl::ImageType n : o3tl::enumrange<vcl::ImageType>() )
@@ -540,7 +539,6 @@ void ImageManagerImpl::dispose()
         m_xUserConfigStorage.clear();
         m_xUserImageStorage.clear();
         m_xUserRootCommit.clear();
-        m_bConfigRead = false;
         m_bModified = false;
         m_bDisposed = true;
 
