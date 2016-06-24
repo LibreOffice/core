@@ -68,9 +68,6 @@ namespace svt
             ,public ::comphelper::OMutexAndBroadcastHelper
             ,public ::comphelper::OPropertyContainer
     {
-    private:
-        ::osl::Mutex                    m_aExecutionMutex;  /// access safety for execute/cancel
-
     protected:
         VclPtr<Dialog>              m_pDialog;                  /// the dialog to execute
         bool                        m_bExecuting : 1;           /// we're currently executing the dialog
