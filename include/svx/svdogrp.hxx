@@ -44,7 +44,6 @@ protected:
 
     SdrObjList*                 pSub;    // Subliste (Kinder)
     Point                       aRefPoint; // Referenzpunkt innerhalb der Objektgruppe
-    bool                        bRefPoint; // Ist ein RefPoint gesetzt?
 
 public:
     SdrObjGroup();

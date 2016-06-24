@@ -128,7 +128,6 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
 void SdrMarkView::ImpClearVars()
 {
     meDragMode=SDRDRAG_MOVE;
-    mbRefHdlShownOnly=false;
     meEditMode=SDREDITMODE_EDIT;
     meEditMode0=SDREDITMODE_EDIT;
     mbDesignMode=false;
@@ -144,8 +143,6 @@ void SdrMarkView::ImpClearVars()
     mbMarkHandlesHidden = false;
     mbMrkPntDirty=false;
     mbMarkHdlWhenTextEdit=false;
-    mbMarkableObjCountDirty=false; // not yet implemented
-    mnMarkableObjCount=0;          // not yet implemented
 
     // Migrate selections
     BrkMarkObj();

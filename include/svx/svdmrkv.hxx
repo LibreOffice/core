@@ -117,16 +117,14 @@ protected:
     Rectangle                   maMarkedPointsRect;
     Rectangle                   maMarkedGluePointsRect;
 
-    sal_uInt16                      mnFrameHandlesLimit;
+    sal_uInt16                  mnFrameHandlesLimit;
     sal_uIntPtr                 mnInsPointNum;      // Number of the InsPoint
-    sal_uIntPtr                     mnMarkableObjCount;
 
     SdrDragMode                 meDragMode;      // Persistent
     SdrViewEditMode             meEditMode;      // Persistent
     SdrViewEditMode             meEditMode0;     // Persistent
 
     //HMHbool                       bHdlShown : 1;
-    bool                        mbRefHdlShownOnly : 1;     // Axis of reflextion during dragging (ni)
     bool                        mbDesignMode : 1;          // DesignMode for SdrUnoObj
     bool                        mbForceFrameHandles : 1;   // Persistent - FrameDrag also for single objects
     bool                        mbPlusHdlAlways : 1;       // Persistent
@@ -135,7 +133,6 @@ protected:
     bool                        mbMarkedObjRectDirty : 1;
     bool                        mbMrkPntDirty : 1;
     bool                        mbMarkedPointsRectsDirty : 1;
-    bool                        mbMarkableObjCountDirty : 1;
 
     // flag to completely disable handles at the view
     bool                        mbMarkHandlesHidden : 1;

@@ -48,15 +48,11 @@ class SdrObjConnection
 protected:
     Point                       aObjOfs;       // Wird beim Draggen eines Knotens gesetzt
     SdrObject*                  pObj;          // Referenziertes Objekt
-    long                        nXDist;        // Hor. Objektabstand wenn bXDistOvr=TRUE
-    long                        nYDist;        // Vert. Objektabstand wenn bYDistOvr=TRUE
-    sal_uInt16                      nConId;        // Konnektornummer
+    sal_uInt16                  nConId;        // Konnektornummer
 
     // bitfield
     bool                        bBestConn : 1;   // sal_True= es wird der guenstigste Konnektor gesucht
     bool                        bBestVertex : 1; // sal_True= es wird der guenstigste Scheitelpunkt zum konnekten gesucht
-    bool                        bXDistOvr : 1;   // sal_True= Hor. Objektabstand wurde gedragt (Overwrite)
-    bool                        bYDistOvr : 1;   // sal_True= Vert. Objektabstand wurde gedragt (Overwrite)
     bool                        bAutoVertex : 1; // AutoConnector am Scheitelpunkt nCon
     bool                        bAutoCorner : 1; // AutoConnector am Eckpunkt nCon
 

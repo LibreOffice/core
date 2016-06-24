@@ -168,9 +168,6 @@ protected:
     SdrOutliner*    pChainingOutliner; // an Outliner for chaining overflowing text
     sal_uIntPtr           nDefTextHgt;    // Default text height in logical units
     VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
-    sal_uIntPtr           nProgressAkt;   // for the
-    sal_uIntPtr           nProgressMax;   // ProgressBar-
-    sal_uIntPtr           nProgressOfs;   // -Handler
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
     SfxStyleSheet*  pDefaultStyleSheet;
     SfxStyleSheet* mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj; // #i119287#
@@ -179,26 +176,18 @@ protected:
     std::deque<SfxUndoAction*>* pRedoStack;
     SdrUndoGroup*       pAktUndoGroup;  // for deeper
     sal_uInt16          nUndoLevel;     // undo nesting
-    sal_uInt16          nProgressPercent; // for the ProgressBar-Handler
-    sal_uInt16          nLoadVersion;   // version number of the loaded file
     bool                bMyPool:1;        // to clean up pMyPool from 303a
     bool                bUIOnlyKomma:1; // see eUIUnit
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
     bool                bExtColorTable:1; // ne separate ColorTable
     bool                mbChanged:1;
-    bool                bInfoChanged:1;
     bool                bPagNumsDirty:1;
     bool                bMPgNumsDirty:1;
     bool                bTransportContainer:1;  // doc is temporary object container, no display (e.g. clipboard)
-    bool                bSavePortable:1;  // save metafiles portably
-    bool                bNoBitmapCaching:1;   // cache bitmaps for screen output
     bool                bReadOnly:1;
     bool                bTransparentTextFrames:1;
-    bool                bSaveCompressed:1;
     bool                bSwapGraphics:1;
     bool                bPasteResize:1; // Objects are being resized due to Paste with different MapMode
-    bool                bSaveOLEPreview:1;      // save preview metafile of OLE objects
-    bool                bSaveNative:1;
     bool                bStarDrawPreviewMode:1;
     bool                mbDisableTextEditUsesCommonUndoManager:1;
     SvStreamEndian      nStreamNumberFormat;
@@ -207,12 +196,6 @@ protected:
 
     TextChain*          pTextChain;
 
-
-// sdr::Comment interface
-private:
-    // the next unique comment ID, used for counting added comments. Initialized
-    // to 0. UI shows one more due to the fact that 0 is a no-no for users.
-    sal_uInt32                                          mnUniqueCommentID;
 
 public:
     sal_uInt16          nStarDrawPreviewMasterPageNum;
@@ -225,8 +208,6 @@ public:
     std::unique_ptr<SdrModelImpl>       mpImpl;
     sal_uInt16          mnCharCompressType;
     sal_uInt16          mnHandoutPageCount;
-    sal_uInt16          nReserveUInt6;
-    sal_uInt16          nReserveUInt7;
     bool                mbModelLocked;
     bool                mbKernAsianPunctuation;
     bool                mbAddExtLeading;
@@ -427,8 +408,6 @@ public:
     void            SetSwapGraphics();
     void            SetSwapGraphicsMode(SdrSwapGraphicsMode nMode) { nSwapGraphicsMode = nMode; }
     SdrSwapGraphicsMode GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
-
-    bool            IsSaveOLEPreview() const          { return bSaveOLEPreview; }
 
     // Text frames without filling can be select with a mouse click by default (sal_False).
     // With this flag set to true you can hit them only in the area in which text is to be

@@ -72,7 +72,6 @@ SdrObjGroup::SdrObjGroup()
     pSub=new SdrObjList(nullptr,nullptr);
     pSub->SetOwnerObj(this);
     pSub->SetListKind(SDROBJLIST_GROUPOBJ);
-    bRefPoint=false;
     bClosedObj=false;
 }
 
@@ -265,7 +264,6 @@ SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
 
     // copy local parameters
     aRefPoint  = rObj.aRefPoint;
-    bRefPoint  = rObj.bRefPoint;
     return *this;
 }
 
