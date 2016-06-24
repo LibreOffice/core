@@ -236,7 +236,7 @@ void XmlFilterBase::checkDocumentProperties(const Reference<XDocumentProperties>
     if (!aValue.startsWithIgnoreAsciiCase("12."))
         return;
 
-    SAL_WARN("oox", "a MSO 2007 document");
+    SAL_INFO("oox", "a MSO 2007 document");
     mbMSO2007 = true;
 }
 
