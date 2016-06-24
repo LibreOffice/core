@@ -238,47 +238,6 @@ public:
     }
 };
 
-//We want to use gtk_clipboard_get_owner own owner-change to distinguish between
-//us gaining the clipboard ownership vs losing it. To do that we need to use
-//gtk_clipboard_set_with_owner and to do that we need a GObject, so define
-//one here for that purpose and just give it a VclGtkClipboard* member
-class VclGtkClipboard;
-
-struct ClipboardOwner
-{
-    GObject parent_instance;
-
-    /* instance members */
-    VclGtkClipboard* m_pThis;
-};
-
-struct ClipboardOwnerClass
-{
-  GObjectClass parent_class;
-
-  /* class members */
-};
-
-#define CLIPBOARD_OWNER_OBJECT           (clipboard_owner_get_type ())
-#define CLIPBOARD_OWNER(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), CLIPBOARD_OWNER_OBJECT, ClipboardOwner))
-
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
-#endif
-G_DEFINE_TYPE(ClipboardOwner, clipboard_owner, G_TYPE_OBJECT);
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
-
-static void clipboard_owner_class_init (ClipboardOwnerClass *)
-{
-}
-
-static void clipboard_owner_init(ClipboardOwner *)
-{
-}
-
 class VclGtkClipboard :
         public cppu::WeakComponentImplHelper<
         datatransfer::clipboard::XSystemClipboard,
@@ -287,9 +246,8 @@ class VclGtkClipboard :
 {
     GdkAtom                                                  m_nSelection;
     osl::Mutex                                               m_aMutex;
-    ClipboardOwner*                                          m_pOwner;
-    gulong                                                   m_nOwnerChangedSignalId;
-    Reference<css::datatransfer::XTransferable>              m_aContents;
+    Reference<css::datatransfer::XTransferable>              m_aOurContents;
+    Reference<css::datatransfer::XTransferable>              m_aSystemContents;
     Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::list< Reference<css::datatransfer::clipboard::XClipboardListener> > m_aListeners;
     std::vector<GtkTargetEntry> m_aGtkTargets;
@@ -349,7 +307,6 @@ public:
 
     void ClipboardGet(GtkClipboard *clipboard, GtkSelectionData *selection_data, guint info);
     void ClipboardClear(GtkClipboard *clipboard);
-    void OwnerChanged(GtkClipboard *clipboard, GdkEvent *event);
 };
 
 OUString VclGtkClipboard::getImplementationName() throw( RuntimeException, std::exception )
@@ -370,33 +327,17 @@ sal_Bool VclGtkClipboard::supportsService( const OUString& ServiceName ) throw( 
 
 Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents() throw( RuntimeException, std::exception )
 {
-    if (G_OBJECT(m_pOwner) != gtk_clipboard_get_owner(gtk_clipboard_get(m_nSelection)) &&
-        !m_aContents.is())
-    {
-        //tdf#93887 This is the system clipboard/selection. We fetch it when we are not
-        //the owner of the clipboard and have not already fetched it.
-        m_aContents = new GtkClipboardTransferable(m_nSelection);
-    }
-    return m_aContents;
+    if (!m_aSystemContents.is())
+        m_aSystemContents= new GtkClipboardTransferable(m_nSelection);
+    return m_aSystemContents;
 }
 
 void VclGtkClipboard::ClipboardGet(GtkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
                                    guint info)
 {
-    if (!m_aContents.is())
+    if (!m_aOurContents.is())
         return;
-    m_aConversionHelper.setSelectionData(m_aContents, selection_data, info);
-}
-
-void VclGtkClipboard::OwnerChanged(GtkClipboard* clipboard, GdkEvent* /*event*/)
-{
-    if (G_OBJECT(m_pOwner) != gtk_clipboard_get_owner(clipboard))
-    {
-        //null out m_aContents to return control to the system-one which
-        //will be retrieved if getContents is called again
-        setContents(Reference<css::datatransfer::XTransferable>(),
-                    Reference<css::datatransfer::clipboard::XClipboardOwner>());
-    }
+    m_aConversionHelper.setSelectionData(m_aOurContents, selection_data, info);
 }
 
 void VclGtkClipboard::ClipboardClear(GtkClipboard * /*clipboard*/)
@@ -488,20 +429,14 @@ namespace
                           guint info,
                           gpointer user_data_or_owner)
     {
-        VclGtkClipboard* pThis = CLIPBOARD_OWNER(user_data_or_owner)->m_pThis;
+        VclGtkClipboard* pThis = reinterpret_cast<VclGtkClipboard*>(user_data_or_owner);
         pThis->ClipboardGet(clipboard, selection_data, info);
     }
 
     void ClipboardClearFunc(GtkClipboard *clipboard, gpointer user_data_or_owner)
     {
-        VclGtkClipboard* pThis = CLIPBOARD_OWNER(user_data_or_owner)->m_pThis;
+        VclGtkClipboard* pThis = reinterpret_cast<VclGtkClipboard*>(user_data_or_owner);
         pThis->ClipboardClear(clipboard);
-    }
-
-    void handle_owner_change(GtkClipboard *clipboard, GdkEvent *event, gpointer user_data)
-    {
-        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data);
-        pThis->OwnerChanged(clipboard, event);
     }
 }
 
@@ -511,11 +446,6 @@ VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
         (m_aMutex)
     , m_nSelection(nSelection)
 {
-    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
-    m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
-                                               G_CALLBACK(handle_owner_change), this);
-    m_pOwner = CLIPBOARD_OWNER(g_object_new(CLIPBOARD_OWNER_OBJECT, nullptr));
-    m_pOwner->m_pThis = this;
 }
 
 void VclGtkClipboard::flushClipboard()
@@ -532,9 +462,6 @@ void VclGtkClipboard::flushClipboard()
 
 VclGtkClipboard::~VclGtkClipboard()
 {
-    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
-    g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
-    g_object_unref(m_pOwner);
     ClipboardClear(nullptr);
 }
 
@@ -586,28 +513,26 @@ void VclGtkClipboard::setContents(
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
-    Reference< datatransfer::XTransferable > xOldContents( m_aContents );
-    m_aContents = xTrans;
+    Reference< datatransfer::XTransferable > xOldContents(m_aOurContents);
+    m_aOurContents = xTrans;
     m_aOwner = xClipboardOwner;
 
     std::list< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
 
-    if (m_aContents.is())
+    //if there was a previous gtk_clipboard_set_with_data call then
+    //ClipboardClearFunc will be called now
+    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    gtk_clipboard_clear(clipboard);
+
+    if (m_aOurContents.is())
     {
         css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTrans->getTransferDataFlavors();
         std::vector<GtkTargetEntry> aGtkTargets(m_aConversionHelper.FormatsToGtk(aFormats));
         if (!aGtkTargets.empty())
         {
-            //if there was a previous gtk_clipboard_set_with_data call then
-            //ClipboardClearFunc will be called now
-            GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
-            if(G_OBJECT(m_pOwner) == gtk_clipboard_get_owner(clipboard))
-                gtk_clipboard_clear(clipboard);
-            //use with_owner with m_pOwner so we can distinguish in handle_owner_change
-            //if we have gained or lost ownership of the clipboard
-            gtk_clipboard_set_with_owner(clipboard, aGtkTargets.data(), aGtkTargets.size(),
-                                        ClipboardGetFunc, ClipboardClearFunc, G_OBJECT(m_pOwner));
+            gtk_clipboard_set_with_data(clipboard, aGtkTargets.data(), aGtkTargets.size(),
+                                        ClipboardGetFunc, ClipboardClearFunc, this);
             gtk_clipboard_set_can_store(clipboard, aGtkTargets.data(), aGtkTargets.size());
         }
 
