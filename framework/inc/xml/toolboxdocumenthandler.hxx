@@ -111,7 +111,6 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
         };
 
         bool                                                      m_bToolBarStartFound : 1;
-        bool                                                      m_bToolBarEndFound : 1;
         bool                                                      m_bToolBarItemStartFound : 1;
         bool                                                      m_bToolBarSpaceStartFound : 1;
         bool                                                      m_bToolBarBreakStartFound : 1;

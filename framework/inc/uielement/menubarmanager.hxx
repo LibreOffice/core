@@ -203,7 +203,6 @@ class MenuBarManager : public css::frame::XStatusListener                ,
         void             SetHdl();
 
         bool                                                         m_bDisposed;
-        bool                                                         m_bInitialized;
         bool                                                         m_bDeleteMenu;
         bool                                                         m_bDeleteChildren;
         bool                                                         m_bActive;

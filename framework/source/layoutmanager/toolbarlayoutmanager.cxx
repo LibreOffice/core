@@ -65,7 +65,6 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_bStoreWindowState( false ),
     m_bGlobalSettings( false ),
     m_bDockingInProgress( false ),
-    m_bVisible( true ),
     m_bLayoutInProgress( false ),
     m_bToolbarCreation( false )
 {
@@ -711,11 +710,7 @@ void ToolbarLayoutManager::refreshToolbarsVisibility( bool bAutomaticToolbars )
 {
     UIElementVector aUIElementVector;
 
-    SolarMutexClearableGuard aReadLock;
-    bool bVisible( m_bVisible );
-    aReadLock.clear();
-
-    if ( !bVisible || !bAutomaticToolbars )
+    if ( !bAutomaticToolbars )
         return;
 
     implts_getUIElementVectorCopy( aUIElementVector );

@@ -118,10 +118,8 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax:
         bool                                                m_bImageContainerStartFound;
         bool                                                m_bImageContainerEndFound;
         bool                                                m_bImagesStartFound;
-        bool                                                m_bImagesEndFound;
         bool                                                m_bImageStartFound;
         bool                                                m_bExternalImagesStartFound;
-        bool                                                m_bExternalImagesEndFound;
         bool                                                m_bExternalImageStartFound;
         sal_Int32                                           m_nHashMaskModeBitmap;
         sal_Int32                                           m_nHashMaskModeColor;
