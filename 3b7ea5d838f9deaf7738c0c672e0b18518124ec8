@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba84c18e_3ab0b18b",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4461,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2016-06-24T23:31:56Z",
+      "side": 0,
+      "message": "You also removed the check for self-assignment",
+      "revId": "3b7ea5d838f9deaf7738c0c672e0b18518124ec8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_7c0e9435",
         "filename": "filter/source/msfilter/svdfppt.cxx",
         "patchSetId": 1
