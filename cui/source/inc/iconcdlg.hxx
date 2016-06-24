@@ -48,7 +48,6 @@ struct IconChoicePageData
     CreatePage fnCreatePage;    ///< pointer to the factory
     GetPageRanges fnGetRanges;  ///< pointer to the ranges-function
     VclPtr<IconChoicePage> pPage;      ///< the TabPage itself
-    bool bOnDemand;         ///< Flag: ItemSet onDemand
     bool bRefresh;          ///< Flag: page has to be newly initialized
 
     // constructor
@@ -57,7 +56,6 @@ struct IconChoicePageData
           fnCreatePage  ( fnPage ),
           fnGetRanges   ( fnRanges ),
           pPage         ( nullptr ),
-          bOnDemand     ( false ),
           bRefresh      ( false )
     {}
 };
@@ -123,8 +121,6 @@ private:
     SfxItemSet*             pExampleSet;
     sal_uInt16*                 pRanges;
 
-    bool                    bHideResetBtn;
-    bool                    bModal;
     bool                    bInOK;
     bool                    bItemsReset;
 
