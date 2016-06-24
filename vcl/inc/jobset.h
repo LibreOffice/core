@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/prntypes.hxx>
 #include <unordered_map>
+#include <memory>
 
 // see com.sun.star.portal.client.JobSetupSystem.idl:
 #define JOBSETUP_SYSTEM_WINDOWS     1
@@ -32,24 +33,23 @@
 class ImplJobSetup
 {
 private:
-    sal_uInt16      mnSystem;           //< System - JOBSETUP_SYSTEM_xxxx
-    OUString        maPrinterName;      //< Printer-Name
-    OUString        maDriver;           //< Driver-Name
-    Orientation     meOrientation;      //< Orientation
-    DuplexMode      meDuplexMode;       //< Duplex
-    sal_uInt16      mnPaperBin;         //< paper bin / in tray
-    Paper           mePaperFormat;      //< paper format
-    long            mnPaperWidth;       //< paper width (100th mm)
-    long            mnPaperHeight;      //< paper height (100th mm)
-    sal_uInt32      mnDriverDataLen;    //< length of system specific data
-    sal_uInt8*      mpDriverData;       //< system specific data (will be streamed a byte block)
-    bool            mbPapersizeFromSetup;
+    sal_uInt16                 mnSystem;           //< System - JOBSETUP_SYSTEM_xxxx
+    OUString                   maPrinterName;      //< Printer-Name
+    OUString                   maDriver;           //< Driver-Name
+    Orientation                meOrientation;      //< Orientation
+    DuplexMode                 meDuplexMode;       //< Duplex
+    sal_uInt16                 mnPaperBin;         //< paper bin / in tray
+    Paper                      mePaperFormat;      //< paper format
+    long                       mnPaperWidth;       //< paper width (100th mm)
+    long                       mnPaperHeight;      //< paper height (100th mm)
+    sal_uInt32                 mnDriverDataLen;    //< length of system specific data
+    std::unique_ptr<sal_uInt8> mpDriverData;       //< system specific data (will be streamed a byte block)
     std::unordered_map< OUString, OUString, OUStringHash > maValueMap;
+    bool                       mbPapersizeFromSetup;
 
 public:
     ImplJobSetup();
     ImplJobSetup( const ImplJobSetup& rJobSetup );
-    ~ImplJobSetup();
 
     bool operator==( const ImplJobSetup& rImplJobSetup ) const;
 
@@ -83,7 +83,7 @@ public:
     sal_uInt32       GetDriverDataLen() const { return mnDriverDataLen; }
     void             SetDriverDataLen(sal_uInt32 nDriverDataLen);
 
-    const sal_uInt8* GetDriverData() const { return mpDriverData; }
+    const sal_uInt8* GetDriverData() const { return mpDriverData.get(); }
     void             SetDriverData(sal_uInt8* pDriverData);
 
     bool             GetPapersizeFromSetup() const { return mbPapersizeFromSetup; }
