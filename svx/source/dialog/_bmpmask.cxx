@@ -567,24 +567,28 @@ void SvxBmpMask::PipetteClicked()
         m_pCbx1->Check();
         pData->CbxHdl(m_pCbx1);
         m_pQSet1->SetItemColor( 1, aPipetteColor );
+        m_pQSet1->SetFormat();
     }
     else if( m_pQSet2->GetSelectItemId() == 1 )
     {
         m_pCbx2->Check();
         pData->CbxHdl(m_pCbx2);
         m_pQSet2->SetItemColor( 1, aPipetteColor );
+        m_pQSet2->SetFormat();
     }
     else if( m_pQSet3->GetSelectItemId() == 1 )
     {
         m_pCbx3->Check();
         pData->CbxHdl(m_pCbx3);
         m_pQSet3->SetItemColor( 1, aPipetteColor );
+        m_pQSet3->SetFormat();
     }
     else if( m_pQSet4->GetSelectItemId() == 1 )
     {
         m_pCbx4->Check();
         pData->CbxHdl(m_pCbx4);
         m_pQSet4->SetItemColor( 1, aPipetteColor );
+        m_pQSet4->SetFormat();
     }
 
     m_pTbxPipette->CheckItem( m_pTbxPipette->GetItemId(0), false );
