@@ -126,8 +126,6 @@ private:
     sal_uInt16          eActObj;
     bool                bFirstDraw;
     Size                aGridSize;
-    bool                bGridVisible;
-    bool                bGridSnap;
     bool                bCreateOK;
     Rectangle           aPaintRect;
     bool                bDialogModelChanged;

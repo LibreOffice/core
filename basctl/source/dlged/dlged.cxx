@@ -192,8 +192,6 @@ DlgEditor::DlgEditor (
     ,eActObj( OBJ_DLG_PUSHBUTTON )
     ,bFirstDraw(false)
     ,aGridSize( 100, 100 )  // 100TH_MM
-    ,bGridVisible(false)
-    ,bGridSnap(true)
     ,bCreateOK(true)
     ,bDialogModelChanged(false)
     ,aMarkIdle("basctl DlgEditor Mark")
@@ -233,8 +231,8 @@ DlgEditor::DlgEditor (
 
     pDlgEdView->SetGridCoarse( aGridSize );
     pDlgEdView->SetSnapGridWidth(Fraction(aGridSize.Width(), 1), Fraction(aGridSize.Height(), 1));
-    pDlgEdView->SetGridSnap( bGridSnap );
-    pDlgEdView->SetGridVisible( bGridVisible );
+    pDlgEdView->SetGridSnap( true );
+    pDlgEdView->SetGridVisible( false );
     pDlgEdView->SetDragStripes(false);
 
     pDlgEdView->SetDesignMode();
