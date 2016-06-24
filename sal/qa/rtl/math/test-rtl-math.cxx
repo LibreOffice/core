@@ -155,7 +155,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(-1.0,res);
         rtl::math::setNan( &x);
         res = rtl::math::erf(x);
-        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(res));
         x = 3.0;
         res = rtl::math::erf(-x);
         CPPUNIT_ASSERT_DOUBLES_EQUAL( -rtl::math::erf(x), res, 1E-12);
@@ -174,7 +174,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(2.0,res);
         rtl::math::setNan( &x);
         res = rtl::math::erfc(x);
-        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(res));
         x = 3.0;
         res = rtl::math::erfc(-x);
         CPPUNIT_ASSERT_DOUBLES_EQUAL( 2.0 - rtl::math::erfc(x), res, 1E-12);
@@ -197,7 +197,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(-1.0,res);
         rtl::math::setNan( &x);
         res = rtl::math::expm1(x);
-        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(res));
     }
 
     void test_log1p() {
@@ -223,7 +223,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(true, rtl::math::isNan(res));
         rtl::math::setNan( &x);
         res = rtl::math::log1p(x);
-        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(x));
+        CPPUNIT_ASSERT_EQUAL(true,rtl::math::isNan(res));
     }
 
     CPPUNIT_TEST_SUITE(Test);
