@@ -133,9 +133,9 @@ protected:
     SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
     SAL_DLLPRIVATE bool            IsImage() const { return Button::HasImage(); }
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE                 PushButton( const PushButton & );
-    SAL_DLLPRIVATE                 PushButton& operator=( const PushButton & );
+                                   PushButton( const PushButton & ) = delete;
+                                   PushButton& operator=( const PushButton & )
+                                       = delete;
 
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
 
