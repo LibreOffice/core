@@ -429,13 +429,13 @@ namespace
                           guint info,
                           gpointer user_data_or_owner)
     {
-        VclGtkClipboard* pThis = reinterpret_cast<VclGtkClipboard*>(user_data_or_owner);
+        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
         pThis->ClipboardGet(clipboard, selection_data, info);
     }
 
     void ClipboardClearFunc(GtkClipboard *clipboard, gpointer user_data_or_owner)
     {
-        VclGtkClipboard* pThis = reinterpret_cast<VclGtkClipboard*>(user_data_or_owner);
+        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
         pThis->ClipboardClear(clipboard);
     }
 }
