@@ -2150,18 +2150,12 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                         bOk = true;
                     } else if (bVertex && !bUserFnd) {
                         nConNum=nConNum-nConAnz;
-                        if (rPV.GetView().IsAutoVertexConnectors()) {
-                            SdrGluePoint aPt(pObj->GetVertexGluePoint(nConNum));
-                            aConPos=aPt.GetAbsolutePos(*pObj);
-                            bOk = true;
-                        } else i+=3;
+                        SdrGluePoint aPt(pObj->GetVertexGluePoint(nConNum));
+                        aConPos=aPt.GetAbsolutePos(*pObj);
+                        bOk = true;
                     } else if (bCorner && !bUserFnd) {
                         nConNum-=nConAnz+4;
-                        if (rPV.GetView().IsAutoCornerConnectors()) {
-                            SdrGluePoint aPt(pObj->GetCornerGluePoint(nConNum));
-                            aConPos=aPt.GetAbsolutePos(*pObj);
-                            bOk = true;
-                        } else i+=3;
+                        i+=3;
                     }
                     else if (bCenter && !bUserFnd && !bEdge)
                     {

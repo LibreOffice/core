@@ -59,7 +59,6 @@ void SdrDragView::ImpClearVars()
     mbDragSpecial=false;
     mpCurrentSdrDragMethod=nullptr;
     mbDragStripes=false;
-    mbMirrRefDragObj=true;
     mbDragWithCopy=false;
     mpInsPointUndo=nullptr;
     mbInsGluePoint=false;
@@ -68,14 +67,9 @@ void SdrDragView::ImpClearVars()
     mnDragXorPolyLimit=100;
     mnDragXorPointLimit=500;
     mbNoDragXorPolys=false;
-    mbAutoVertexCon=true;
-    mbAutoCornerCon=false;
-    mbRubberEdgeDragging=true;
-    mbDetailedEdgeDragging=true;
     mnDetailedEdgeDraggingLimit=10;
     mbResizeAtCenter=false;
     mbCrookAtCenter=false;
-    mbMouseHideWhileDraggingPoints=false;
 
     // init using default
     mbSolidDragging = getOptionsDrawinglayer().IsSolidDragCreate();

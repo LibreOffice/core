@@ -64,10 +64,9 @@ SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel&
 class SVX_DLLPUBLIC SdrEngineDefaults
 {
 friend class SdrAttrObj;
-    Color      aFontColor;
+    Color            aFontColor;
     sal_uIntPtr      nFontHeight;
-    MapUnit    eMapUnit;
-    Fraction   aMapFraction;
+    Fraction         aMapFraction;
 
 private:
     static SdrEngineDefaults& GetDefaults();
@@ -87,7 +86,7 @@ public:
     // The MapMode is needed for the global Outliner.
     // Incidentally, every newly instantiated SdrModel is assigned this MapMode by default.
     // Default MapUnit is MAP_100TH_MM
-    static MapUnit    GetMapUnit()                         { return GetDefaults().eMapUnit; }
+    static MapUnit    GetMapUnit()                         { return MAP_100TH_MM; }
 
     // Default MapFraction is 1/1.
     static Fraction   GetMapFraction()                     { return GetDefaults().aMapFraction; }

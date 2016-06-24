@@ -70,7 +70,6 @@
 void SdrObjEditView::ImpClearVars()
 {
     bQuickTextEditMode=true;
-    bMacroMode=true;
     pTextEditOutliner=nullptr;
     pTextEditOutlinerView=nullptr;
     pTextEditPV=nullptr;
