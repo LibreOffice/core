@@ -74,13 +74,14 @@ SwTemplateControl::~SwTemplateControl()
 void SwTemplateControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if( eState != SfxItemState::DEFAULT || dynamic_cast< const SfxVoidItem *>( pState ) !=  nullptr )
-        GetStatusBar().SetItemText( GetId(), OUString() );
-    else if ( dynamic_cast< const SfxStringItem *>( pState ) !=  nullptr )
+    const SfxStringItem* pItem = nullptr;
+    if (SfxItemState::DEFAULT == eState && (pItem = dynamic_cast<const SfxStringItem*>(pState)))
     {
-        sTemplate = static_cast<const SfxStringItem*>(pState)->GetValue();
-        GetStatusBar().SetItemText( GetId(), sTemplate );
+        sTemplate = pItem->GetValue();
+        GetStatusBar().SetItemText(GetId(), sTemplate);
     }
+    else
+        GetStatusBar().SetItemText(GetId(), OUString());
 }
 
 void SwTemplateControl::Paint( const UserDrawEvent&  )
