@@ -106,16 +106,23 @@ public:
             {
                 // note: this is only sometimes a CXXMethodDecl
                 FunctionDecl const*const pCalled(pCallExpr->getDirectCallee());
-                if (pCalled->getName() == "release"
-//this never works  && pCalled == pOverridden
-                    && (pCalled->getParent() == pOverridden->getParent()
-                        // allow this convenient shortcut
-                        || loplugin::TypeCheck(QualType(pMethodDecl->getParent()->getTypeForDecl(), 0)).Class("OWeakObject").Namespace("cppu")
-                        || loplugin::TypeCheck(QualType(pMethodDecl->getParent()->getTypeForDecl(), 0)).Class("OWeakAggObject").Namespace("cppu")))
+                if (pCalled->getName() == "release")
                 {
-                    return true;
+//this never works  && pCalled == pOverridden
+                    if (pCalled->getParent() == pOverridden->getParent())
+                    {
+                        return true;
+                    }
+                    // Allow this convenient shortcut:
+                    auto td = dyn_cast<TypeDecl>(pCalled->getParent());
+                    if (td != nullptr
+                        && (loplugin::TypeCheck(QualType(td->getTypeForDecl(), 0)).Class("OWeakObject").Namespace("cppu")
+                            || loplugin::TypeCheck(QualType(td->getTypeForDecl(), 0)).Class("OWeakAggObject").Namespace("cppu")))
+                    {
+                        return true;
+                    }
                 }
-                if (pCalled->getName() == "relase_ChildImpl") // FIXME remove this lunacy
+                else if (pCalled->getName() == "relase_ChildImpl") // FIXME remove this lunacy
                 {
                     return true;
                 }
