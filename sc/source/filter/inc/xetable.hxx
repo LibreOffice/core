@@ -747,6 +747,7 @@ private:
     sal_uInt16          mnWidth;            /// Excel width of the column.
     sal_uInt16          mnScWidth;          /// Calc width of the column.
     sal_uInt16          mnFlags;            /// Additional column flags.
+    sal_uInt8           mnOutlineLevel;     /// Outline Level of column (for OOXML)
     sal_uInt16          mnFirstXclCol;      /// Index to first column.
     sal_uInt16          mnLastXclCol;       /// Index to last column.
 };
@@ -898,7 +899,7 @@ private:
     sal_uInt16          mnHeight;           /// Row height in twips.
     sal_uInt16          mnFlags;            /// Flags for the ROW record.
     sal_uInt16          mnXFIndex;          /// Default row formatting.
-    sal_uInt16          mnOutlineLevel;     /// Outline Level (for OOXML)
+    sal_uInt8           mnOutlineLevel;     /// Outline Level of row (for OOXML)
     sal_uInt32          mnXclRowRpt;
     sal_uInt32          mnCurrentRow;
     bool                mbAlwaysEmpty;      /// true = Do not add blank cells in Finalize().

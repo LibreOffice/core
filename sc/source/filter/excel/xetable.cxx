@@ -1587,6 +1587,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     mnWidth( 0 ),
     mnScWidth( 0 ),
     mnFlags( 0 ),
+    mnOutlineLevel( 0 ),
     mnFirstXclCol( static_cast< sal_uInt16 >( nScCol ) ),
     mnLastXclCol( static_cast< sal_uInt16 >( nScCol ) )
 {
@@ -1613,6 +1614,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     rOutlineBfr.Update( nScCol );
     ::set_flag( mnFlags, EXC_COLINFO_COLLAPSED, rOutlineBfr.IsCollapsed() );
     ::insert_value( mnFlags, rOutlineBfr.GetLevel(), 8, 3 );
+    mnOutlineLevel = rOutlineBfr.GetLevel();
 }
 
 sal_uInt16 XclExpColinfo::ConvertXFIndexes()
@@ -1666,9 +1668,9 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
             XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ),
             XML_customWidth,    XclXmlUtils::ToPsz( mbCustomWidth ),
             XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
-            XML_max,            OString::number(  (nLastXclCol+1) ).getStr(),
-            XML_min,            OString::number(  (mnFirstXclCol+1) ).getStr(),
-            // OOXTODO: XML_outlineLevel,
+            XML_outlineLevel,   OString::number( mnOutlineLevel ).getStr(),
+            XML_max,            OString::number( (nLastXclCol + 1) ).getStr(),
+            XML_min,            OString::number( (mnFirstXclCol + 1) ).getStr(),
             // OOXTODO: XML_phonetic,
             XML_style,          lcl_GetStyleId( rStrm, maXFId.mnXFIndex ).getStr(),
             XML_width,          OString::number( (double) (mnScWidth / (double)sc::TwipsToHMM( GetCharWidth() )) ).getStr(),
@@ -2009,7 +2011,8 @@ sal_uInt16 XclExpRow::GetFirstFreeXclCol() const
 bool XclExpRow::IsDefaultable() const
 {
     const sal_uInt16 nFlagsAlwaysMarkedAsDefault = EXC_ROW_DEFAULTFLAGS | EXC_ROW_UNSYNCED;
-    return !::get_flag( mnFlags, static_cast< sal_uInt16 >( ~nFlagsAlwaysMarkedAsDefault ) ) && IsEmpty();
+    return !::get_flag( mnFlags, static_cast< sal_uInt16 >( ~nFlagsAlwaysMarkedAsDefault ) ) &&
+           IsEmpty();
 }
 
 void XclExpRow::DisableIfDefault( const XclExpDefaultRowData& rDefRowData )
@@ -2339,10 +2342,13 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
         itr = maRowMap.find(nFrom);
         if ( itr == maRowMap.end() )
         {
-            // only create RowMap entries for rows that differ from previous,
-            // the row is hidden (tdf#98106) or if it is the desired row
+            // only create RowMap entries if it is first row in spreadsheet,
+            // if it is the desired row, for rows that height differ from previous,
+            // if row is collapsed, has outline level (tdf#100347), or row is hidden (tdf#98106).
             if ( !nFrom || ( nFrom == nXclRow ) ||
                  ( rDoc.GetRowHeight(nFrom, nScTab, false) != rDoc.GetRowHeight(nFrom - 1, nScTab, false) ) ||
+                 ( maOutlineBfr.IsCollapsed() ) ||
+                 ( maOutlineBfr.GetLevel() != 0 ) ||
                  ( rDoc.RowHidden(nFrom, nScTab) ) )
             {
                 RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty));
