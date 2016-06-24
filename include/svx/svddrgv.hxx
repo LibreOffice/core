@@ -48,9 +48,7 @@ protected:
     bool                        mbDragLimit : 1;      // Limit on SnapRect instead of BoundRect
     bool                        mbDragHdl : 1;        // TRUE: RefPt is slid
     bool                        mbDragStripes : 1;    // Persistent
-    bool                        mbMirrRefDragObj : 1; // Persistent - During the drag, show the mirror axis of the mirrored objects as Xor
     bool                        mbSolidDragging : 1;  // allow solid create/drag of objects
-    bool                        mbMouseHideWhileDraggingPoints : 1;
     bool                        mbResizeAtCenter : 1;
     bool                        mbCrookAtCenter : 1;
     bool                        mbDragWithCopy : 1;
@@ -58,10 +56,6 @@ protected:
     bool                        mbInsObjPointMode : 1;
     bool                        mbInsGluePointMode : 1;
     bool                        mbNoDragXorPolys : 1;
-    bool                        mbAutoVertexCon : 1;  // automatic generation of connectors at the vertices
-    bool                        mbAutoCornerCon : 1;  // automatic generation of connectors at the corners
-    bool                        mbRubberEdgeDragging : 1;
-    bool                        mbDetailedEdgeDragging : 1;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
@@ -145,14 +139,6 @@ public:
     void SetDragStripes(bool bOn);
     bool IsDragStripes() const { return mbDragStripes; }
 
-    // hide handles during dragging
-    //HMHvoid SetDragHdlHide(bool bOn);
-    //HMHBOOL IsDragHdlHide() const { return bNoDragHdl; }
-
-    // Hide the mouse when dragging polygon points or glue points.
-    // Default=false
-    bool IsMouseHideWhileDraggingPoints() const { return mbMouseHideWhileDraggingPoints; }
-
     // As a general rule, the contours of the selected objects
     // are displayed as Xor-polygons. If this flag is set, only one
     // Xor-Frame is drawn (e.g. in case of multiple selection).
@@ -177,32 +163,6 @@ public:
 
     void SetSolidDragging(bool bOn);
     bool IsSolidDragging() const;
-
-    // Dragging/Creation of connectors:
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Stick Connectors to vertices
-    // Default=true=Yes
-    bool IsAutoVertexConnectors() const { return mbAutoVertexCon; }
-
-    // Stick Connectors to Corners
-    // Default=false=No
-    bool IsAutoCornerConnectors() const { return mbAutoCornerCon; }
-
-    // Dragging of connected objects (Nodes):
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // DetailedEdgeDraggingLimit: like RubberEdgeDraggingLimit,
-    // but this limit refers to the detailed depiction, i.e. not
-    // only rubber bands but total recalculations are visible while
-    // dragging. This detailed depiction is only possible in MoveDrag.
-    // Default value: 10
-    bool IsDetailedEdgeDragging() const { return mbDetailedEdgeDragging; }
-
-    // EdgeDraggingLimit: If more than nEdgeObjCount edges are affected,
-    // they are not shown in the interactive dragging.
-    // This here talks about the "rubber bands", which take less computing time
-    // than the complete recalculations in the DetailedEdgeDragging.
-    // default value: 100
-    bool IsRubberEdgeDragging() const { return mbRubberEdgeDragging; }
 
     // Connector handling is thus as follows (when using default settings):
     // - If at most 10 Connectors are affected, they are recalculated

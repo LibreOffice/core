@@ -391,7 +391,6 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
 SdrEngineDefaults::SdrEngineDefaults():
     aFontColor(COL_AUTO),
     nFontHeight(847),             // 847/100mm = ca. 24 Point
-    eMapUnit(MAP_100TH_MM),
     aMapFraction(1,1)
 {
 }

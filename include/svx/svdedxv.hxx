@@ -84,7 +84,6 @@ protected:
     bool                        bTextEditOnlyOneView : 1;  // a single OutlinerView (f. spellchecking)
     bool                        bTextEditNewObj : 1;       // current edited object was just recreated
     bool                        bQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
-    bool                        bMacroMode : 1;            // persistent(->CrtV). Default=TRUE
     bool                        bMacroDown : 1;
 
     rtl::Reference< sdr::SelectionController > mxSelectionController;
@@ -242,9 +241,6 @@ public:
 
     // Object-MacroModus (e.g. rect as button or sth. like that):
 
-    // Persistent. Default TRUE. SvDraw evaluates the flag e.g. at SdrView::GetPreferredPointer().
-    // Has only effect, if the document has draw-objects with macrofunctionality (SdrObject::HasMacro()==sal_True).
-    bool IsMacroMode() const { return bMacroMode; }
     bool BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin);
     void BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin) { BegMacroObj(rPnt,-2,pObj,pPV,pWin); }
     void MovMacroObj(const Point& rPnt);

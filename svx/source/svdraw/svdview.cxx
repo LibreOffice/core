@@ -18,6 +18,7 @@
  */
 
 #include <editeng/eeitem.hxx>
+#include <editeng/outlobj.hxx>
 
 #include "svx/svdstr.hrc"
 #include "svdglob.hxx"
@@ -398,7 +399,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     {
         eHit=SDRHIT_HELPLINE; // help line in foreground hit: can be moved now
     }
-    if (IsMacroMode() && eHit==SDRHIT_UNMARKEDOBJECT)
+    if (eHit==SDRHIT_UNMARKEDOBJECT)
     {
         bool bRoot=pObj->HasMacro();
         bool bDeep=pObj!=pHitObj && pHitObj->HasMacro();
@@ -443,7 +444,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         }
     }
     // check for URL field
-    if (IsMacroMode() && eHit==SDRHIT_UNMARKEDOBJECT)
+    if (eHit==SDRHIT_UNMARKEDOBJECT)
     {
         SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pHitObj );
         if (pTextObj!=nullptr && pTextObj->HasText())
@@ -934,7 +935,6 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
     }
     return bRet;
 }
-#include <editeng/outlobj.hxx>
 
 Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier, bool bLeftDown) const
 {
@@ -945,9 +945,6 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     }
     if (mpCurrentSdrDragMethod)
     {
-        if ((IsDraggingPoints() || IsDraggingGluePoints()) && IsMouseHideWhileDraggingPoints())
-            return Pointer(PointerStyle::Null);
-
         return mpCurrentSdrDragMethod->GetSdrDragPointer();
     }
     if (IsMarkObj() || IsMarkPoints() || IsMarkGluePoints() || IsSetPageOrg()) return Pointer(PointerStyle::Arrow);

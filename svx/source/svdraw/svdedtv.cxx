@@ -61,8 +61,6 @@ void SdrEditView::ImpResetPossibilityFlags()
     bOneOrMoreMovable       =false;
     bMoreThanOneNoMovRot    =false;
     bContortionPossible     =false;
-    bAllPolys               =false;
-    bOneOrMorePolys         =false;
     bMoveAllowed            =false;
     bResizeFreeAllowed      =false;
     bResizePropAllowed      =false;

@@ -96,8 +96,6 @@ protected:
     bool                        bOneOrMoreMovable : 1;        // at least one object is moveable
     bool                        bMoreThanOneNoMovRot : 1;     // more then one object is not movable nor turnable (Crook)
     bool                        bContortionPossible : 1;      // all polygones (grouped if necessary)
-    bool                        bAllPolys : 1;                // all polygones (not grouped)
-    bool                        bOneOrMorePolys : 1;          // at least one polygon (not grouped)
     bool                        bMoveAllowed : 1;
     bool                        bResizeFreeAllowed : 1;
     bool                        bResizePropAllowed : 1;

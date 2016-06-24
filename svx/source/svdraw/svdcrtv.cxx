@@ -80,31 +80,28 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
             maObjects.append(*pNew);
 
             // glue points
-            if(rView.IsAutoVertexConnectors())
+            for(sal_uInt16 i(0); i < 4; i++)
             {
-                for(sal_uInt16 i(0); i < 4; i++)
-                {
-                    SdrGluePoint aGluePoint(rObject.GetVertexGluePoint(i));
-                    const Point& rPosition = aGluePoint.GetAbsolutePos(rObject);
+                SdrGluePoint aGluePoint(rObject.GetVertexGluePoint(i));
+                const Point& rPosition = aGluePoint.GetAbsolutePos(rObject);
 
-                    basegfx::B2DPoint aTopLeft(rPosition.X() - aHalfLogicSize.Width(), rPosition.Y() - aHalfLogicSize.Height());
-                    basegfx::B2DPoint aBottomRight(rPosition.X() + aHalfLogicSize.Width(), rPosition.Y() + aHalfLogicSize.Height());
+                basegfx::B2DPoint aTopLeft(rPosition.X() - aHalfLogicSize.Width(), rPosition.Y() - aHalfLogicSize.Height());
+                basegfx::B2DPoint aBottomRight(rPosition.X() + aHalfLogicSize.Width(), rPosition.Y() + aHalfLogicSize.Height());
 
-                    basegfx::B2DPolygon aTempPoly;
-                    aTempPoly.append(aTopLeft);
-                    aTempPoly.append(basegfx::B2DPoint(aBottomRight.getX(), aTopLeft.getY()));
-                    aTempPoly.append(aBottomRight);
-                    aTempPoly.append(basegfx::B2DPoint(aTopLeft.getX(), aBottomRight.getY()));
-                    aTempPoly.setClosed(true);
+                basegfx::B2DPolygon aTempPoly;
+                aTempPoly.append(aTopLeft);
+                aTempPoly.append(basegfx::B2DPoint(aBottomRight.getX(), aTopLeft.getY()));
+                aTempPoly.append(aBottomRight);
+                aTempPoly.append(basegfx::B2DPoint(aTopLeft.getX(), aBottomRight.getY()));
+                aTempPoly.setClosed(true);
 
-                    basegfx::B2DPolyPolygon aTempPolyPoly;
-                    aTempPolyPoly.append(aTempPoly);
+                basegfx::B2DPolyPolygon aTempPolyPoly;
+                aTempPolyPoly.append(aTempPoly);
 
-                    pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                        aTempPolyPoly);
-                    xTargetOverlay->add(*pNew);
-                    maObjects.append(*pNew);
-                }
+                pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                    aTempPolyPoly);
+                xTargetOverlay->add(*pNew);
+                maObjects.append(*pNew);
             }
         }
     }

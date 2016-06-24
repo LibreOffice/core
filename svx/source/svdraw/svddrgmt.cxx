@@ -841,11 +841,6 @@ bool SdrDragMethod::DoAddConnectorOverlays()
         return false;
     }
 
-    if(!getSdrDragView().IsRubberEdgeDragging() && !getSdrDragView().IsDetailedEdgeDragging())
-    {
-        return false;
-    }
-
     if(getSdrDragView().IsDraggingPoints() || getSdrDragView().IsDraggingGluePoints())
     {
         return false;
@@ -854,13 +849,6 @@ bool SdrDragMethod::DoAddConnectorOverlays()
     if(!getMoveOnly() && !(
         dynamic_cast<const SdrDragMove*>(this) != nullptr || dynamic_cast<const SdrDragResize*>(this) != nullptr ||
         dynamic_cast<const SdrDragRotate*>(this) != nullptr || dynamic_cast<const SdrDragMirror*>(this) != nullptr ))
-    {
-        return false;
-    }
-
-    const bool bDetail(getSdrDragView().IsDetailedEdgeDragging() && getMoveOnly());
-
-    if(!bDetail && !getSdrDragView().IsRubberEdgeDragging())
     {
         return false;
     }
@@ -877,7 +865,7 @@ bool SdrDragMethod::DoAddConnectorOverlays()
 drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverlays()
 {
     drawinglayer::primitive2d::Primitive2DContainer aRetval;
-    const bool bDetail(getSdrDragView().IsDetailedEdgeDragging() && getMoveOnly());
+    const bool bDetail(getMoveOnly());
     const SdrMarkList& rMarkedNodes = getSdrDragView().GetEdgesOfMarkedNodes();
 
     for(size_t a = 0; a < rMarkedNodes.GetMarkCount(); ++a)
