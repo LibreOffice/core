@@ -119,6 +119,24 @@
       "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_8f03410f",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-24T06:34:56Z",
+      "side": 1,
+      "message": "Ah OK, but then the I would suggest to use iterators in the whole for() loop, like:\n\n for (auto it \u003d m_pImpl-\u003em_Autoformats.begin(); it !\u003d m_pImpl-\u003em_Autoformats.end(); ++it)\n\nand get rid of this size_t i double-booking. :-)",
+      "parentUuid": "ba84c18e_0f5c9124",
+      "revId": "2e20673d7cef76dd993d85e6bb002bc5eb1b3ca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
