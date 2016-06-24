@@ -101,6 +101,7 @@ private:
     std::string getExprValue(const Expr*);
     bool isInterestingType(const QualType&);
     const FunctionDecl* get_top_FunctionDecl_from_Stmt(const Stmt&);
+    void checkCallExpr(const Stmt* child, const CallExpr* callExpr, std::string& assignValue, bool& bPotentiallyAssignedTo);
 };
 
 void SingleValFields::niceName(const FieldDecl* fieldDecl, MyFieldInfo& aInfo)
@@ -239,33 +240,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         }
         else if (isa<CallExpr>(parent))
         {
-            const CallExpr* callExpr = dyn_cast<CallExpr>(parent);
-            if (callExpr->getCallee() == child) {
-                break;
-            }
-            const FunctionDecl* functionDecl;
-            if (isa<CXXMemberCallExpr>(callExpr)) {
-                functionDecl = dyn_cast<CXXMemberCallExpr>(callExpr)->getMethodDecl();
-            }
-            else {
-                functionDecl = callExpr->getDirectCallee();
-            }
-            if (!functionDecl) {
-                break;
-            }
-            for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
-                if (i >= functionDecl->getNumParams()) // can happen in template code
-                    break;
-                if (callExpr->getArg(i) == child) {
-                    const ParmVarDecl* parmVarDecl = functionDecl->getParamDecl(i);
-                    QualType qt = parmVarDecl->getType().getDesugaredType(compiler.getASTContext());
-                    if (!qt.isConstQualified() && qt->isReferenceType()) {
-                        assignValue = "?";
-                        bPotentiallyAssignedTo = true;
-                    }
-                    break;
-                }
-            }
+            checkCallExpr(child, dyn_cast<CallExpr>(parent), assignValue, bPotentiallyAssignedTo);
             break;
         }
         else if (isa<CXXConstructExpr>(parent))
@@ -353,6 +328,62 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
 bool SingleValFields::isInterestingType(const QualType& qt) {
    return qt.isCXX11PODType(compiler.getASTContext());
 }
+
+void SingleValFields::checkCallExpr(const Stmt* child, const CallExpr* callExpr, std::string& assignValue, bool& bPotentiallyAssignedTo)
+{
+    if (callExpr->getCallee() == child) {
+        return;
+    }
+    const FunctionDecl* functionDecl;
+    if (isa<CXXMemberCallExpr>(callExpr)) {
+        functionDecl = dyn_cast<CXXMemberCallExpr>(callExpr)->getMethodDecl();
+    } else {
+        functionDecl = callExpr->getDirectCallee();
+    }
+    if (functionDecl) {
+        for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
+            if (i >= functionDecl->getNumParams()) // can happen in template code
+                break;
+            if (callExpr->getArg(i) == child) {
+                const ParmVarDecl* parmVarDecl = functionDecl->getParamDecl(i);
+                QualType qt = parmVarDecl->getType().getDesugaredType(compiler.getASTContext());
+                if (!qt.isConstQualified() && qt->isReferenceType()) {
+                    assignValue = "?";
+                    bPotentiallyAssignedTo = true;
+                }
+                break;
+            }
+        }
+        return;
+    }
+    // check for function pointers
+    const FieldDecl* calleeFieldDecl = dyn_cast_or_null<FieldDecl>(callExpr->getCalleeDecl());
+    if (!calleeFieldDecl) {
+        return;
+    }
+    QualType qt = calleeFieldDecl->getType().getDesugaredType(compiler.getASTContext());
+    if (!qt->isPointerType()) {
+        return;
+    }
+    qt = qt->getPointeeType().getDesugaredType(compiler.getASTContext());
+    const FunctionProtoType* proto = qt->getAs<FunctionProtoType>();
+    if (!proto) {
+        return;
+    }
+    for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
+        if (i >= proto->getNumParams()) // can happen in template code
+            break;
+        if (callExpr->getArg(i) == child) {
+            QualType qt = proto->getParamTypes()[i].getDesugaredType(compiler.getASTContext());
+            if (!qt.isConstQualified() && qt->isReferenceType()) {
+                assignValue = "?";
+                bPotentiallyAssignedTo = true;
+            }
+            break;
+        }
+    }
+}
+
 
 std::string SingleValFields::getExprValue(const Expr* arg)
 {
