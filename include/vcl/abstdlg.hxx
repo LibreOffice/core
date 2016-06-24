@@ -39,6 +39,7 @@ public:
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
     virtual Bitmap createScreenshot() const;
+    virtual OString GetScreenshotId() const { return OString(); };
 };
 
 class VCL_DLLPUBLIC VclAbstractDialog2
