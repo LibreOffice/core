@@ -68,8 +68,6 @@ namespace dbaui
         Link<LinkParamNone*,void>   m_aDeleteHandler;       // called when someone press DELETE Key
         Link<DBTreeListBox*,void>   m_aEnterKeyHdl;
 
-        bool                        m_bHandleEnterKey;
-
     private:
         void init();
         DECL_LINK_TYPED( OnTimeOut, Timer*, void );

@@ -41,7 +41,7 @@ namespace dbaui
             sal_Int32 nMatch = 0;
             for (sal_Int32 i = nMatch; i < _sToCheck.getLength(); ++i)
             {
-                if ( !isCharOk( _sToCheck[i], i == 0, m_bOnlyUpperCase, m_sAllowedChars ) )
+                if ( !isCharOk( _sToCheck[i], i == 0, false/*bOnlyUpperCase*/, m_sAllowedChars ) )
                 {
                     _rsCorrected += _sToCheck.copy(nMatch, i - nMatch);
                     bCorrected = true;

@@ -30,7 +30,6 @@ namespace dbaui
         VclPtr<Splitter>                m_pSplitter;
         VclPtr<vcl::Window>             m_pLeft;
         VclPtr<vcl::Window>             m_pRight;
-        bool                            m_bVertical;
 
         void ImplInitSettings();
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );

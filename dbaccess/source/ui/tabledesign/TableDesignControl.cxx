@@ -41,7 +41,6 @@ OTableRowView::OTableRowView(vcl::Window* pParent)
     ,m_nDataPos(-1)
     ,m_nCurrentPos(-1)
     ,m_nCurUndoActId(0)
-    ,m_bClipboardFilled(false)
 {
 
 }
@@ -111,7 +110,7 @@ void OTableRowView::Command(const CommandEvent& rEvt)
                 long nSelectRowCount = GetSelectRowCount();
                 aContextMenu->EnableItem( SID_CUT, nSelectRowCount != 0);
                 aContextMenu->EnableItem( SID_COPY, nSelectRowCount  != 0);
-                aContextMenu->EnableItem( SID_PASTE, m_bClipboardFilled );
+                aContextMenu->EnableItem( SID_PASTE, false );
                 aContextMenu->EnableItem( SID_DELETE, false );
                 switch (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
                 {
