@@ -2155,9 +2155,7 @@ ExtensionsTabPage::ExtensionsTabPage(
 
     m_sPageURL          ( rPageURL ),
     m_sEventHdl         ( rEvtHdl ),
-    m_xWinProvider      ( rProvider ),
-    m_bIsWindowHidden   ( false )
-
+    m_xWinProvider      ( rProvider )
 {
 }
 
@@ -2272,7 +2270,6 @@ void ExtensionsTabPage::ActivatePage()
     if ( m_xPage.is() )
     {
         m_xPage->setVisible( true );
-        m_bIsWindowHidden = false;
     }
 }
 

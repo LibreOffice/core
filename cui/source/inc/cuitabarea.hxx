@@ -337,8 +337,6 @@ private:
     sal_uInt16          m_nDlgType;
     bool*               m_pbAreaTP;
 
-    bool                m_bDisable;
-
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
     SfxMapUnit          m_ePoolUnit;
@@ -647,7 +645,7 @@ class SvxColorTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    XPropertyListType   meType;
+    static const XPropertyListType meType = XCOLOR_LIST;
 
     VclPtr<Window>             mpTopDlg;
     VclPtr<CheckBox>           m_pBoxEmbed;
