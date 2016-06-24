@@ -257,6 +257,15 @@ void OpenGLSalGraphicsImpl::PostDraw()
     OpenGLZone::leave();
 }
 
+void OpenGLSalGraphicsImpl::PostBatchDraw()
+{
+    if (IsOffscreen())
+        return;
+
+    if (!mpFlush->IsActive())
+        mpFlush->Start();
+}
+
 void OpenGLSalGraphicsImpl::ApplyProgramMatrices(float fPixelOffset)
 {
     mpProgram->ApplyMatrix(GetWidth(), GetHeight(), fPixelOffset);
@@ -1265,6 +1274,7 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor,
 void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture& rTexture, SalColor aMaskColor, const SalTwoRect& rPosAry)
 {
     mpRenderList->addDrawTextureWithMaskColor(rTexture, aMaskColor, rPosAry);
+    PostBatchDraw();
 }
 
 bool OpenGLSalGraphicsImpl::FlushLinesOrTriangles(DrawShaderType eType, RenderParameters& rParameters)
@@ -1465,24 +1475,28 @@ void OpenGLSalGraphicsImpl::drawPixel(long nX, long nY)
 {
     VCL_GL_INFO("::drawPixel: (" << nX << ", " << nY << ")");
     mpRenderList->addDrawPixel(nX, nY, mnLineColor);
+    PostBatchDraw();
 }
 
 void OpenGLSalGraphicsImpl::drawPixel(long nX, long nY, SalColor nSalColor)
 {
     VCL_GL_INFO("::drawPixel: (" << nX << ", " << nY << ")");
     mpRenderList->addDrawPixel(nX, nY, nSalColor);
+    PostBatchDraw();
 }
 
 void OpenGLSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
 {
     VCL_GL_INFO("::drawLine (" << nX1 << ", " << nY1 << ") (" << nX2 << ", " << nY2 << ")");
     mpRenderList->addDrawLine(nX1, nY1, nX2, nY2, mnLineColor, mrParent.getAntiAliasB2DDraw());
+    PostBatchDraw();
 }
 
 void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     VCL_GL_INFO("::drawRect (" << nX << ", " << nY << ") [" << nWidth << ", " << nHeight << "]");
     mpRenderList->addDrawRectangle(nX, nY, nWidth, nHeight, 0.0, mnLineColor, mnFillColor);
+    PostBatchDraw();
 }
 
 void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -1535,6 +1549,7 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPoly
 {
     VCL_GL_INFO("::drawPolyPolygon " << rPolyPolygon.getB2DRange());
     mpRenderList->addDrawPolyPolygon(rPolyPolygon, fTransparency, mnLineColor, mnFillColor, mrParent.getAntiAliasB2DDraw());
+    PostBatchDraw();
     return true;
 }
 
@@ -1546,6 +1561,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(const basegfx::B2DPolygon& rPolygon, do
 
     mpRenderList->addDrawPolyLine(rPolygon, fTransparency, rLineWidth, eLineJoin, eLineCap,
                                   fMiterMinimumAngle, mnLineColor, mrParent.getAntiAliasB2DDraw());
+    PostBatchDraw();
     return true;
 }
 
@@ -1661,6 +1677,7 @@ void OpenGLSalGraphicsImpl::drawMask(
     assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBitmap));
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     mpRenderList->addDrawTextureWithMaskColor(rBitmap.GetTexture(), nMaskColor, rPosAry);
+    PostBatchDraw();
 }
 
 SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long nHeight )
@@ -1891,6 +1908,7 @@ bool OpenGLSalGraphicsImpl::drawAlphaRect(
 {
     VCL_GL_INFO("::drawAlphaRect (" << nX << ", " << nY << ") [" << nWidth << ", " << nHeight << "]");
     mpRenderList->addDrawRectangle(nX, nY, nWidth, nHeight, double(nTransparency / 100.0), mnLineColor, mnFillColor);
+    PostBatchDraw();
     return true;
 }
 
