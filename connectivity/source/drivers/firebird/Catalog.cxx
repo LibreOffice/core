@@ -16,10 +16,14 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-Catalog::Catalog(const uno::Reference< XConnection >& rConnection):
+Catalog::Catalog(const uno::Reference< XConnection >& rConnection
+                ):
     OCatalog(rConnection),
-    m_xConnection(rConnection)
+    m_xConnection(rConnection){}
+
+void Catalog::setTables(sdbcx::OCollection* pTables)
 {
+    m_pTables = pTables;
 }
 
 //----- OCatalog -------------------------------------------------------------
@@ -42,14 +46,10 @@ void Catalog::refreshTables()
 
     fillNames(xTables, aTableNames);
 
-    if (!m_pTables)
-        m_pTables = new Tables(m_xConnection->getMetaData(),
-                               *this,
-                               m_aMutex,
-                               aTableNames);
-    else
+    if (m_pTables)
         m_pTables->reFill(aTableNames);
-
+    else
+        SAL_WARN("connectivity.firebird", "Tables in Catalog are used but not initialized");
 }
 
 void Catalog::refreshViews()

@@ -55,13 +55,14 @@ namespace connectivity
         typedef ::cppu::WeakComponentImplHelper< css::document::XDocumentEventListener,
                                                  css::lang::XServiceInfo,
                                                  css::sdbc::XConnection,
-                                                 css::sdbc::XWarningsSupplier
+                                                 css::sdbc::XWarningsSupplier,
+                                                 css::sdbcx::XTablesSupplier
                                                > Connection_BASE;
 
         class OStatementCommonBase;
         class FirebirdDriver;
         class ODatabaseMetaData;
-
+        class Tables;
 
         typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
         typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
@@ -170,6 +171,9 @@ namespace connectivity
                                 m_xCatalog;
             css::uno::WeakReference< css::sdbc::XDatabaseMetaData >
                                 m_xMetaData;
+
+            ::rtl::Reference<Tables>            m_xTables;
+
             /** Statements owned by this connection. */
             OWeakRefArray       m_aStatements;
 
@@ -277,6 +281,8 @@ namespace connectivity
             virtual void SAL_CALL clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
             // XDocumentEventListener
             virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
+            // XTablesSupplier
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) throw (css::uno::RuntimeException, std::exception) override;
             // css.lang.XEventListener
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
