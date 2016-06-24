@@ -19,7 +19,7 @@ from connection import PersistentConnection, OfficeConnection
 
 def parseArgs(argv):
     (optlist,args) = getopt.getopt(argv[1:], "hr",
-            ["help", "soffice=", "userdir=", "dir="])
+            ["help", "soffice=", "userdir=", "dir=", "file="])
     return (dict(optlist), args)
 
 def usage():
@@ -63,22 +63,24 @@ def get_test_case_classes_of_module(module):
     classes = get_classes_of_module(module)
     return [ c for c in classes if issubclass(c, UITestCase) ]
 
-def get_test_suite(opts):
+def add_tests_for_file(test_file, test_suite):
     test_loader = unittest.TestLoader()
+    module_name = os.path.splitext(os.path.split(test_file)[1])[0]
+    loader = importlib.machinery.SourceFileLoader(module_name, test_file)
+    mod = loader.load_module()
+    classes = get_test_case_classes_of_module(mod)
+    for c in classes:
+        test_names = test_loader.getTestCaseNames(c)
+        for test_name in test_names:
+            obj = c(test_name, opts)
+            test_suite.addTest(obj)
+
+def get_test_suite_for_dir(opts):
     test_suite = unittest.TestSuite()
 
     valid_test_files = find_test_files(opts['--dir'])
     for test_file in valid_test_files:
-        module_name = os.path.splitext(os.path.split(test_file)[1])[0]
-        loader = importlib.machinery.SourceFileLoader(module_name, test_file)
-        mod = loader.load_module()
-        classes = get_test_case_classes_of_module(mod)
-        for c in classes:
-            test_names = test_loader.getTestCaseNames(c)
-            for test_name in test_names:
-                obj = c(test_name, opts)
-                test_suite.addTest(obj)
-
+        add_tests_for_file(test_file, test_suite)
     return test_suite
 
 
@@ -90,10 +92,14 @@ if __name__ == '__main__':
     elif not "--soffice" in opts:
         usage()
         sys.exit(1)
-    elif not "--dir" in opts:
+    elif "--dir" in opts:
+        test_suite = get_test_suite_for_dir(opts)
+    elif "--file" in opts:
+        test_suite = unittest.TestSuite()
+        add_tests_for_file(opts['--file'], test_suite)
+    else:
         usage()
         sys.exit()
-    test_suite = get_test_suite(opts)
 
     result = unittest.TextTestRunner(verbosity=2).run(test_suite)
     print("Tests run: %d" % result.testsRun)
