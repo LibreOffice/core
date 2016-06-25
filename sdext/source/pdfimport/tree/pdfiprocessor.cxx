@@ -68,7 +68,6 @@ namespace pdfi
     m_aIdToGC(),
     m_aGCToId(),
     m_aImages(),
-    m_eTextDirection( LrTb ),
     m_nPages(0),
     m_nNextZOrder( 1 ),
     m_xStatusIndicator( xStat ),
@@ -706,13 +705,7 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
         aChildren.push_back( pEle->Children.front() );
         pEle->Children.pop_front();
     }
-    switch( m_eTextDirection )
-    {
-        case LrTb:
-        default:
-        std::stable_sort( aChildren.begin(), aChildren.end(), lr_tb_sort );
-        break;
-    }
+    std::stable_sort( aChildren.begin(), aChildren.end(), lr_tb_sort );
     int nChildren = aChildren.size();
     for( int i = 0; i < nChildren; i++ )
         pEle->Children.push_back( aChildren[i] );

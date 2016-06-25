@@ -264,11 +264,7 @@ namespace {
     {
     public:
         TimeFormatter();
-        OUString FormatTime (const oslDateTime& rTime);
-    private:
-        bool mbIs24HourFormat;
-        bool mbIsAmPmFormat;
-        bool mbIsShowSeconds;
+        static OUString FormatTime (const oslDateTime& rTime);
     };
 
     class TimeLabel : public Label
@@ -306,7 +302,6 @@ namespace {
             const SharedElementMode& rpSelectedMode,
             const SharedElementMode& rpDisabledMode) override;
     private:
-        TimeFormatter maTimeFormatter;
         CurrentTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual ~CurrentTimeLabel();
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) override;
@@ -1798,9 +1793,6 @@ geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanv
 //===== TimeFormatter =========================================================
 
 TimeFormatter::TimeFormatter()
-    : mbIs24HourFormat(true),
-      mbIsAmPmFormat(false),
-      mbIsShowSeconds(true)
 {
 }
 
@@ -1812,11 +1804,7 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
     const sal_Int32 nMinutes (sal::static_int_cast<sal_Int32>(rTime.Minutes));
     const sal_Int32 nSeconds(sal::static_int_cast<sal_Int32>(rTime.Seconds));
     // Hours
-    if (mbIs24HourFormat)
-        sText.append(OUString::number(nHours));
-    else
-        sText.append(OUString::number(
-            sal::static_int_cast<sal_Int32>(nHours>12 ? nHours-12 : nHours)));
+    sText.append(OUString::number(nHours));
 
     sText.append(":");
 
@@ -1827,21 +1815,11 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
     sText.append(sMinutes);
 
     // Seconds
-    if (mbIsShowSeconds)
-    {
-        sText.append(":");
-        const OUString sSeconds (OUString::number(nSeconds));
-        if (sSeconds.getLength() == 1)
-            sText.append("0");
-        sText.append(sSeconds);
-    }
-    if (mbIsAmPmFormat)
-    {
-        if (rTime.Hours < 12)
-            sText.append("am");
-        else
-            sText.append("pm");
-    }
+    sText.append(":");
+    const OUString sSeconds (OUString::number(nSeconds));
+    if (sSeconds.getLength() == 1)
+        sText.append("0");
+    sText.append(sSeconds);
     return sText.makeStringAndClear();
 }
 
@@ -1881,14 +1859,13 @@ CurrentTimeLabel::~CurrentTimeLabel()
 
 CurrentTimeLabel::CurrentTimeLabel (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
-    : TimeLabel(rpToolBar),
-      maTimeFormatter()
+    : TimeLabel(rpToolBar)
 {
 }
 
 void CurrentTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
 {
-    SetText(maTimeFormatter.FormatTime(rCurrentTime));
+    SetText(TimeFormatter::FormatTime(rCurrentTime));
     Invalidate(false);
 }
 
@@ -1899,7 +1876,7 @@ void CurrentTimeLabel::SetModes (
     const SharedElementMode& rpDisabledMode)
 {
     TimeLabel::SetModes(rpNormalMode, rpMouseOverMode, rpSelectedMode, rpDisabledMode);
-    SetText(maTimeFormatter.FormatTime(PresenterClockTimer::GetCurrentTime()));
+    SetText(TimeFormatter::FormatTime(PresenterClockTimer::GetCurrentTime()));
 }
 
 //===== PresentationTimeLabel =================================================
@@ -1956,7 +1933,7 @@ void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
         oslDateTime aElapsedDateTime;
         if (osl_getDateTimeFromTimeValue(&aElapsedTimeValue, &aElapsedDateTime))
         {
-            SetText(maTimeFormatter.FormatTime(aElapsedDateTime));
+            SetText(TimeFormatter::FormatTime(aElapsedDateTime));
             Invalidate(false);
         }
     }
@@ -1973,7 +1950,7 @@ void PresentationTimeLabel::SetModes (
     oslDateTime aStartDateTime;
     if (osl_getDateTimeFromTimeValue(&maStartTimeValue, &aStartDateTime))
     {
-        SetText(maTimeFormatter.FormatTime(aStartDateTime));
+        SetText(TimeFormatter::FormatTime(aStartDateTime));
     }
 }
 
