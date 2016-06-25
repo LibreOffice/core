@@ -1,0 +1,16 @@
+diff -ur breakpad.org/src/processor/stackwalk_common.cc breakpad/src/processor/stackwalk_common.cc
+--- breakpad.org/src/processor/stackwalk_common.cc	2016-06-25 01:38:53.282302964 +0200
++++ breakpad/src/processor/stackwalk_common.cc	2016-06-25 01:42:58.463821357 +0200
+@@ -767,9 +767,11 @@
+        ++module_sequence) {
+     const CodeModule *module = modules->GetModuleAtSequence(module_sequence);
+     uint64_t base_address = module->base_address();
+-    printf("Module%c%s%c%s%c%s%c%s%c0x%08" PRIx64 "%c0x%08" PRIx64 "%c%d\n",
++    printf("Module%c%s%c%s%c%s%c%s%c%s%c0x%08" PRIx64 "%c0x%08" PRIx64 "%c%d\n",
+            kOutputSeparator,
+            StripSeparator(PathnameStripper::File(module->code_file())).c_str(),
++           kOutputSeparator,
++           StripSeparator(PathnameStripper::File(module->code_identifier())).c_str(),
+            kOutputSeparator, StripSeparator(module->version()).c_str(),
+            kOutputSeparator,
+            StripSeparator(PathnameStripper::File(module->debug_file())).c_str(),
