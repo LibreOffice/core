@@ -127,9 +127,12 @@ public:
 
     virtual             ~SmNode();
 
-    virtual bool        IsVisible() const;
+    /**
+     * Returns true if this is a instance of SmVisibleNode's subclass, false otherwise.
+     */
+    virtual bool        IsVisible() const = 0;
 
-    virtual sal_uInt16      GetNumSubNodes() const;
+    virtual sal_uInt16      GetNumSubNodes() const = 0;
     virtual SmNode *    GetSubNode(sal_uInt16 nIndex) = 0;
             const SmNode * GetSubNode(sal_uInt16 nIndex) const
             {
