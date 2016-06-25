@@ -199,7 +199,6 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
         // Depending on a property we may have to check that the mouse is no
         // just over the page object but over the preview area.
         if (pDescriptorAtPoint
-            && mrSlideSorter.GetProperties()->IsOnlyPreviewTriggersMouseOver()
             && ! pDescriptorAtPoint->HasState(PageDescriptor::ST_Selected))
         {
             // Make sure that the mouse is over the preview area.

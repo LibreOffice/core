@@ -65,7 +65,6 @@ Window::Window(vcl::Window* pParent)
       mnMinZoom(MIN_ZOOM),
       mnMaxZoom(MAX_ZOOM),
       mbMinZoomAutoCalc(false),
-      mbCalcMinZoomByMinSide(true),
       mbCenterAllowed(true),
       mnTicks (0),
       mpViewShell(nullptr),
@@ -161,11 +160,7 @@ void Window::CalcMinZoom()
                 * (double) ZOOM_MULTIPLICATOR / (double) maViewSize.Height());
 
             // Decide whether to take the larger or the smaller factor.
-            sal_uLong nFact;
-            if (mbCalcMinZoomByMinSide)
-                nFact = std::min(nX, nY);
-            else
-                nFact = std::max(nX, nY);
+            sal_uLong nFact = std::min(nX, nY);
 
             // The factor is tansfomed according to the current zoom factor.
             nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;

@@ -45,10 +45,6 @@ private:
     XDashListRef          pDashList;
     XLineEndListRef       pLineEndList;
 
-    sal_uInt16              nPageType;
-    sal_uInt16              nDlgType;
-    sal_uInt16              nPos;
-
     sal_uInt16            mnLine;
     sal_uInt16            mnArea;
     sal_uInt16            mnShadow;
@@ -64,11 +60,6 @@ private:
     sal_uInt16            mnTab;
     sal_uInt16            mnAsian;
     sal_uInt16            mnAlign;
-
-    ChangeType          nColorTableState;
-    ChangeType          nBitmapListState;
-    ChangeType          nGradientListState;
-    ChangeType          nHatchingListState;
 
     PresentationObjects ePO;
 

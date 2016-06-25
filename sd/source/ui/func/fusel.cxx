@@ -87,7 +87,6 @@ FuSelection::FuSelection (
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
       bTempRotation(false),
       bSelectionChanged(false),
-      bHideAndAnimate(false),
       pHdl(nullptr),
       bSuppressChangesOfSelection(false),
       bMirrorSide0(false),
@@ -129,9 +128,6 @@ FuSelection::~FuSelection()
 
 bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // Hack for #?????#
-    bHideAndAnimate = false;
-
     pHdl = nullptr;
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
     bool bWaterCan = SD_MOD()->GetWaterCan();
@@ -627,15 +623,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     // (and deselect others) as a preparation for showing the context
     // menu.
     const bool bSelectionOnly = rMEvt.IsRight();
-
-    if (bHideAndAnimate)
-    {
-        // Animation is still running -> return immediately
-        bHideAndAnimate = false;
-        pHdl = nullptr;
-        mpWindow->ReleaseMouse();
-        return true;
-    }
 
     if (aDragTimer.IsActive() )
     {

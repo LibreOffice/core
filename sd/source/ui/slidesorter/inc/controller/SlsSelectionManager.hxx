@@ -111,21 +111,11 @@ private:
 
     ::std::vector<Link<LinkParamNone*,void>> maSelectionChangeListeners;
 
-    /** When this flag is set then on the next call to Paint() the selection
-        is moved into the visible area.
-    */
-    bool mbIsMakeSelectionVisiblePending;
-
     /** The insertion position is only temporarily valid.  Negative values
         indicate that the explicit insertion position is not valid.  In this
         case GetInsertionPosition() calculates it from the current selection.
     */
     sal_Int32 mnInsertionPosition;
-
-    /** Animation id for a scroll animation the will eventually set the top
-        and left of the visible area to maRequestedTopLeft.
-    */
-    Animator::AnimationId mnAnimationId;
 
     std::shared_ptr<SelectionObserver> mpSelectionObserver;
 

@@ -69,8 +69,6 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
     OUString        aNewBookmark;
     sal_uInt16          nOldVerb;
     sal_uInt16          nNewVerb;
-    sal_uLong           nOldPresOrder;
-    sal_uLong           nNewPresOrder;
 
     bool            bInfoCreated;
 
@@ -109,8 +107,6 @@ public:
         , eNewClickAction(css::presentation::ClickAction_NONE)
         , nOldVerb(0)
         , nNewVerb(0)
-        , nOldPresOrder(0)
-        , nNewPresOrder(0)
         , bInfoCreated(bCreated)
     {
     }

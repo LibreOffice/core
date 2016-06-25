@@ -220,7 +220,6 @@ private:
     std::shared_ptr<cache::PageCache> mpPreviewCache;
     std::shared_ptr<LayeredDevice> mpLayeredDevice;
     Range maVisiblePageRange;
-    bool mbModelChangedWhileModifyEnabled;
     Size maPreviewSize;
     bool mbPreciousFlagUpdatePending;
     Layouter::Orientation meOrientation;

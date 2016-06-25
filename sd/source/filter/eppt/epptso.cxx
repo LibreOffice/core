@@ -2232,11 +2232,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 {
                     SvMemoryStream* pTmp = nullptr;
 
-                    if ( bEffect && !mbUseNewAnimations )
-                    {
-                        pTmp = new SvMemoryStream( 0x200, 0x200 );
-                        ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
-                    }
                     if ( eCa != css::presentation::ClickAction_NONE )
                     {
                         if ( !pTmp )
@@ -3185,11 +3180,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             else if ( (mType == "drawing.Table") || (mType == "presentation.Table") )
             {
                 SvMemoryStream* pTmp = nullptr;
-                if ( bEffect && !mbUseNewAnimations )
-                {
-                    pTmp = new SvMemoryStream( 0x200, 0x200 );
-                    ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
-                }
                 if ( eCa != css::presentation::ClickAction_NONE )
                 {
                     if ( !pTmp )
@@ -3279,8 +3269,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 eAe = eTe;
                         }
                     }
-                    if ( !mbUseNewAnimations  )
-                        ImplWriteObjectEffect( *pClientData, eAe, eTe, ++nEffectCount );
                 }
 
                 if ( eCa != css::presentation::ClickAction_NONE )

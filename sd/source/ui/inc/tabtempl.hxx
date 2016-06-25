@@ -42,13 +42,7 @@ private:
     XDashListRef          pDashList;
     XLineEndListRef       pLineEndList;
 
-    sal_uInt16              nPageType;
-    sal_uInt16              nDlgType;
-    sal_uInt16              nPos;
-    ChangeType          nColorTableState;
     ChangeType          nBitmapListState;
-    ChangeType          nGradientListState;
-    ChangeType          nHatchingListState;
 
     sal_uInt16 m_nLineId;
     sal_uInt16 m_nAreaId;

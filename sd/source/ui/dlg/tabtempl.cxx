@@ -99,14 +99,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     else
         RemoveTabPage("asiantypo");
 
-    nDlgType = 1;
-    nPageType = 0;
-    nPos = 0;
-
-    nColorTableState = ChangeType::NONE;
     nBitmapListState = ChangeType::NONE;
-    nGradientListState = ChangeType::NONE;
-    nHatchingListState = ChangeType::NONE;
 }
 
 void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
@@ -117,7 +110,7 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SvxColorListItem(pColorList,SID_COLOR_TABLE));
         aSet.Put (SvxDashListItem(pDashList,SID_DASH_LIST));
         aSet.Put (SvxLineEndListItem(pLineEndList,SID_LINEEND_LIST));
-        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nAreaId)
@@ -126,22 +119,22 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
         aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
         aSet.Put (SvxBitmapListItem(pBitmapList,SID_BITMAP_LIST));
-        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
-        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
-        aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,nPos));
+        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
+        aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,0));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nShadowId)
     {
         aSet.Put (SvxColorListItem(pColorList,SID_COLOR_TABLE));
-        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
-        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nTransparencyId)
     {
-        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
-        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nFontId)

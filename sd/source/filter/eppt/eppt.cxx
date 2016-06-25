@@ -76,7 +76,6 @@ PPTWriter::PPTWriter( tools::SvRef<SotStorage>& rSvStorage,
     PPTWriterBase           ( rXModel, rXStatInd ),
     mnCnvrtFlags            ( nCnvrtFlags ),
     mbStatus                ( false ),
-    mbUseNewAnimations      ( true ),
     mnStatMaxValue          ( 0 ),
     mnLatestStatValue       ( 0 ),
     mnTextStyle( 0 ),
@@ -320,27 +319,24 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
 
     SvMemoryStream aBinaryTagData10Atom;
     ImplExportComments( mXDrawPage, aBinaryTagData10Atom );
-    if ( mbUseNewAnimations )
+    SvMemoryStream amsofbtAnimGroup;
+    ppt::AnimationExporter aExporter( aSolverContainer, maSoundCollection );
+    aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
+    sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
+    if ( nmsofbtAnimGroupSize )
     {
-        SvMemoryStream amsofbtAnimGroup;
-        ppt::AnimationExporter aExporter( aSolverContainer, maSoundCollection );
-        aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
-        sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
-        if ( nmsofbtAnimGroupSize )
         {
-            {
-                EscherExAtom aMagic2( aBinaryTagData10Atom, 0x2eeb );
-                aBinaryTagData10Atom.WriteUInt32( 0x01c45df9 )
-                                    .WriteUInt32( 0xe1471b30 );
-            }
-            {
-                EscherExAtom aMagic( aBinaryTagData10Atom, 0x2b00 );
-                aBinaryTagData10Atom.WriteUInt32( 0 );
-            }
-            aBinaryTagData10Atom.WriteBytes(amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell());
-            {
-                EscherExContainer aMagic2( aBinaryTagData10Atom, 0x2b02 );
-            }
+            EscherExAtom aMagic2( aBinaryTagData10Atom, 0x2eeb );
+            aBinaryTagData10Atom.WriteUInt32( 0x01c45df9 )
+                                .WriteUInt32( 0xe1471b30 );
+        }
+        {
+            EscherExAtom aMagic( aBinaryTagData10Atom, 0x2b00 );
+            aBinaryTagData10Atom.WriteUInt32( 0 );
+        }
+        aBinaryTagData10Atom.WriteBytes(amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell());
+        {
+            EscherExContainer aMagic2( aBinaryTagData10Atom, 0x2b02 );
         }
     }
     if ( aBinaryTagData10Atom.Tell() )

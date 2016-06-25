@@ -27,20 +27,12 @@ VisualState::VisualState (const sal_Int32 nPageId)
     : mnPageId(nPageId),
       meCurrentVisualState(VS_None),
       meOldVisualState(VS_None),
-      mnStateAnimationId(controller::Animator::NotAnAnimationId),
-      maLocationOffset(0,0),
-      mnLocationAnimationId(controller::Animator::NotAnAnimationId)
+      maLocationOffset(0,0)
 {
 }
 
 VisualState::~VisualState()
 {
-    if (mnStateAnimationId != controller::Animator::NotAnAnimationId
-         || mnLocationAnimationId != controller::Animator::NotAnAnimationId)
-    {
-        OSL_ASSERT(mnStateAnimationId == controller::Animator::NotAnAnimationId);
-        OSL_ASSERT(mnLocationAnimationId == controller::Animator::NotAnAnimationId);
-    }
 }
 
 void VisualState::SetVisualState (const State eState)

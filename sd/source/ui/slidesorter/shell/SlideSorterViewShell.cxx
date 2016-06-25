@@ -401,7 +401,7 @@ void SlideSorterViewShell::FuTemporary (SfxRequest& rRequest)
                 mpImpl->ProcessModifyPageSlot (
                     rRequest,
                     pCurrentPage,
-                    mpSlideSorter->GetModel().GetPageType());
+                    PK_STANDARD);
             Cancel();
             rRequest.Done ();
         }

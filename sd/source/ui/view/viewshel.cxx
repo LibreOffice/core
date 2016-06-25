@@ -143,7 +143,6 @@ SfxViewFrame* ViewShell::GetViewFrame() const
 
 ViewShell::ViewShell( SfxViewFrame*, vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
 :   SfxShell(&rViewShellBase)
-,   mbCenterAllowed(true)
 ,   mpParentWindow(pParentWindow)
 {
     construct();
@@ -209,7 +208,7 @@ void ViewShell::construct()
 
     GetParentWindow()->SetBackground (Wallpaper());
     mpContentWindow->SetBackground (Wallpaper());
-    mpContentWindow->SetCenterAllowed(mbCenterAllowed);
+    mpContentWindow->SetCenterAllowed(true);
     mpContentWindow->SetViewShell(this);
     mpContentWindow->SetPosSizePixel(
         GetParentWindow()->GetPosPixel(),GetParentWindow()->GetSizePixel());

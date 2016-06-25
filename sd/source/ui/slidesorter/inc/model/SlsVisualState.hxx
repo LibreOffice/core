@@ -56,10 +56,8 @@ public:
 private:
     State meCurrentVisualState;
     State meOldVisualState;
-    sal_Int32 mnStateAnimationId;
 
     Point maLocationOffset;
-    sal_Int32 mnLocationAnimationId;
 };
 
 } } } // end of namespace ::sd::slidesorter::model
