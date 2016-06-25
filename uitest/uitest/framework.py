@@ -10,7 +10,7 @@ import time
 
 from uitest_helper import UITest
 
-from connection import PersistentConnection, OfficeConnection
+from libreoffice.connection import PersistentConnection, OfficeConnection
 
 class UITestCase(unittest.TestCase):
 

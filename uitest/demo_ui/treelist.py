@@ -14,7 +14,7 @@ from uihelper.calc import enter_text_to_cell
 
 from uitest_helper import get_state_as_dict
 
-from UITestCase import UITestCase
+from uitest.framework import UITestCase
 
 try:
     import pyuno

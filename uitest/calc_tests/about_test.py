@@ -7,7 +7,7 @@
 
 from uitest_helper import UITest
 
-from UITestCase import UITestCase
+from uitest.framework import UITestCase
 
 class AboutDlgTest(UITestCase):
 

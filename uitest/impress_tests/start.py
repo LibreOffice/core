@@ -9,7 +9,7 @@ from uitest_helper import UITest, get_state_as_dict
 
 from helper import mkPropertyValues
 
-from UITestCase import UITestCase
+from uitest.framework import UITestCase
 
 import time
 

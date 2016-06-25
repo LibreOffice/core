@@ -8,7 +8,7 @@
 from uitest_helper import UITest
 
 from helper import mkPropertyValues
-from UITestCase import UITestCase
+from uitest.framework import UITestCase
 
 import time
 

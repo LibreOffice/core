@@ -11,7 +11,7 @@ from helper import mkPropertyValues
 
 from uihelper.calc import enter_text_to_cell
 
-from UITestCase import UITestCase
+from uitest.framework import UITestCase
 
 import time
 

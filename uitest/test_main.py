@@ -13,9 +13,9 @@ import calc_tests
 import importlib
 import importlib.machinery
 
-from UITestCase import UITestCase
+from uitest.framework import UITestCase
 
-from connection import PersistentConnection, OfficeConnection
+from libreoffice.connection import OfficeConnection
 
 def parseArgs(argv):
     (optlist,args) = getopt.getopt(argv[1:], "hr",

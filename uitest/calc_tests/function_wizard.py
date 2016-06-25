@@ -10,7 +10,7 @@ from uitest_helper import UITest
 from helper import mkPropertyValues
 import time
 
-from UITestCase import UITestCase
+from uitest.framework import UITestCase
 
 try:
     import pyuno
