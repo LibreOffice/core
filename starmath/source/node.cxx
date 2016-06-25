@@ -76,18 +76,6 @@ SmNode::~SmNode()
 }
 
 
-bool SmNode::IsVisible() const
-{
-    return false;
-}
-
-
-sal_uInt16 SmNode::GetNumSubNodes() const
-{
-    return 0;
-}
-
-
 const SmNode * SmNode::GetLeftMost() const
     //  returns leftmost node of current subtree.
     //! (this assumes the one with index 0 is always the leftmost subnode
