@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_75e7aa40",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2812,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-06-25T20:43:19Z",
+      "side": 1,
+      "message": "think that\u0027s what the condition above is trying to do (and fails miserably).\n\ncould be wrong thou\n\ngnumeric about this\nhttps://git.gnome.org/browse/gnumeric/tree/plugins/fn-stat/functions.c\n\u003e\tp \u003d pf (varx / vary, nx - 1, ny - 1, FALSE, FALSE);\n\u003e\tif (p \u003e 0.5) {\n\u003e\t\t/*\n\u003e\t\t * We need the other tail and 1-p might not be very accurate.\n\u003e\t\t */\n\u003e\t\tp \u003d pf (varx / vary, nx - 1, ny - 1, TRUE, FALSE);\n\u003e\t}",
+      "range": {
+        "startLine": 2812,
+        "startChar": 19,
+        "endLine": 2812,
+        "endChar": 47
+      },
+      "revId": "67696e42ce3388091fa04341ecaf042a454df4a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
