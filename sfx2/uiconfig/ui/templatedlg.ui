@@ -263,20 +263,6 @@
                     <property name="position">3</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="sfxlo-TemplateRemoteView" id="remote_view">
-                        <property name="can_focus">True</property>
-                        <property name="no_show_all">True</property>
-                        <property name="margin">0</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                      </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -300,20 +286,6 @@
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
-                        <child>
-                          <object class="GtkToolButton" id="repository">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">repository</property>
-                            <property name="label" translatable="yes">Repository</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionview026.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
                         <child>
                           <object class="GtkToolButton" id="action_menu">
                             <property name="visible">True</property>
