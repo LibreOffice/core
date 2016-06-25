@@ -25,6 +25,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -365,6 +366,22 @@ DECLARE_OOXMLEXPORT_TEST(testColumnBreak_ColumnCountIsZero,"fdo74153.docx")
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:br","type","column");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf90697_complexBreaksHeaders,"tdf90697_complexBreaksHeaders.docx")
+{
+// This is a complex document using many types of section breaks and re-defined headers.
+// Paragraphs 44-47 were in two columns
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(45), "TextSection");
+    CPPUNIT_ASSERT(xTextSection.is());
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
+
+// after that, the section break should switch things back to one column.
+    xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(50), "TextSection");
+    CPPUNIT_ASSERT(xTextSection.is());
+    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testIndentation, "test_indentation.docx")
