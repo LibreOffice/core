@@ -158,7 +158,6 @@ class SwStdFontTabPage : public SfxTabPage
     bool    m_bSetLabelDefault :1;
     bool    m_bIdxDefault     :1;
     bool    m_bSetIdxDefault  :1;
-    bool    m_bDeletePrinter :1;
 
     bool    m_bListHeightDefault    :1;
     bool    m_bSetListHeightDefault :1;

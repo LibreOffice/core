@@ -43,7 +43,6 @@ class SW_DLLPUBLIC SwTableFUNC
 {
     SwFrameFormat    *pFormat;
     SwWrtShell  *pSh;
-    bool        bCopy;
     SwTabCols   aCols;
 
 private:

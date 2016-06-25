@@ -549,7 +549,6 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
     m_bSetLabelDefault(true),
     m_bIdxDefault(false),
     m_bSetIdxDefault(true),
-    m_bDeletePrinter(false),
 
     m_bListHeightDefault    (false),
     m_bSetListHeightDefault (false),
@@ -611,8 +610,6 @@ SwStdFontTabPage::~SwStdFontTabPage()
 void SwStdFontTabPage::dispose()
 {
     delete m_pFontList;
-    if (m_bDeletePrinter)
-        m_pPrt.disposeAndClear();
     m_pLabelFT.clear();
     m_pStandardBox.clear();
     m_pStandardHeightLB.clear();
@@ -801,11 +798,6 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     m_pLabelFT->SetText(m_pLabelFT->GetText().replaceFirst("%1", sToReplace));
 
     const SfxPoolItem* pItem;
-
-    if (m_bDeletePrinter)
-    {
-        m_pPrt.disposeAndClear();
-    }
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))
     {

@@ -82,7 +82,6 @@ private:
     sal_uInt16          nStartLine;
     rtl_TextEncoding eSourceEncoding;
     bool            bReadonly;
-    bool            bDoSyntaxHighlight;
     bool            bHighlighting;
 
     Idle            aSyntaxIdle;

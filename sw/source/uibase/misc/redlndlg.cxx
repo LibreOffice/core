@@ -159,7 +159,6 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     m_sFormatCollSet     (SW_RES(STR_REDLINE_FMTCOLLSET)),
     m_sAutoFormat     (SW_RES(STR_REDLINE_AUTOFMT)),
     m_bOnlyFormatedRedlines( false ),
-    m_bHasReadonlySel ( false ),
     m_bRedlnAutoFormat   (bAutoFormat),
     m_bInhibitActivate( false ),
     m_aInserted       (SW_RES(IMG_REDLINE_INSERTED)),
@@ -273,7 +272,6 @@ void SwRedlineAcceptDlg::InitAuthors()
     sal_uInt16 nCount = pSh->GetRedlineCount();
 
     m_bOnlyFormatedRedlines = true;
-    m_bHasReadonlySel = false;
     bool bIsNotFormated = false;
     sal_uInt16 i;
 
@@ -322,8 +320,8 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     m_pTPView->EnableAccept( bEnable && bSel );
     m_pTPView->EnableReject( bEnable && bIsNotFormated && bSel );
-    m_pTPView->EnableAcceptAll( bEnable && !m_bHasReadonlySel );
-    m_pTPView->EnableRejectAll( bEnable && !m_bHasReadonlySel &&
+    m_pTPView->EnableAcceptAll( bEnable );
+    m_pTPView->EnableRejectAll( bEnable &&
                                 !m_bOnlyFormatedRedlines );
 }
 
@@ -1008,7 +1006,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     bool bEnable = !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
     m_pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
     m_pTPView->EnableReject( bEnable && bSel && bIsNotFormated /*&& !bReadonlySel*/ );
-    m_pTPView->EnableRejectAll( bEnable && !m_bOnlyFormatedRedlines && !m_bHasReadonlySel );
+    m_pTPView->EnableRejectAll( bEnable && !m_bOnlyFormatedRedlines );
 }
 
 IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)

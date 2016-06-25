@@ -197,10 +197,7 @@ bool SwContent::IsProtect() const
 
 bool SwPostItContent::IsProtect() const
 {
-    if (mbPostIt)
-        return pField->IsProtect();
-    else
-        return false;
+    return pField->IsProtect();
 }
 
 bool SwURLFieldContent::IsProtect() const
@@ -3159,18 +3156,12 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, EditEntryMode nMode)
             m_pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             if(nMode == EditEntryMode::DELETE)
             {
-                if (static_cast<SwPostItContent*>(pCnt)->IsPostIt())
-                {
-                    m_pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(nullptr);
-                    m_pActiveShell->DelRight();
-                }
+                m_pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(nullptr);
+                m_pActiveShell->DelRight();
             }
             else
             {
-                if (static_cast<SwPostItContent*>(pCnt)->IsPostIt())
-                    nSlot = FN_POSTIT;
-                else
-                    nSlot = FN_REDLINE_COMMENT;
+                nSlot = FN_POSTIT;
             }
         break;
         case ContentTypeId::INDEX:
@@ -3314,12 +3305,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         break;
         case ContentTypeId::POSTIT:
             m_pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
-            if (static_cast<SwPostItContent*>(pCnt)->IsPostIt())
-                m_pActiveShell->GotoFormatField(*static_cast<SwPostItContent*>(pCnt)->GetPostIt());
-            else
-                m_pActiveShell->GetView().GetDocShell()->GetWrtShell()->GotoRedline(
-                        m_pActiveShell->GetView().GetDocShell()->GetWrtShell()->FindRedlineOfData(static_cast<SwPostItContent*>(pCnt)->GetRedline()->GetRedlineData()));
-
+            m_pActiveShell->GotoFormatField(*static_cast<SwPostItContent*>(pCnt)->GetPostIt());
         break;
         case ContentTypeId::DRAWOBJECT:
         {
