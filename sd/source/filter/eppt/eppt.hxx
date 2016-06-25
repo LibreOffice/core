@@ -157,7 +157,6 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 {
         sal_uInt32                      mnCnvrtFlags;
         bool                        mbStatus;
-        bool                        mbUseNewAnimations;
         sal_uInt32                      mnStatMaxValue;
         sal_uInt32                      mnLatestStatValue;
 

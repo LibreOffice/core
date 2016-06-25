@@ -251,7 +251,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_ASSIGN_LAYOUT:
         {
-            pShell->mpImpl->AssignLayout( rRequest, mrSlideSorter.GetModel().GetPageType() );
+            pShell->mpImpl->AssignLayout( rRequest, PK_STANDARD );
             rRequest.Done ();
         }
         break;
@@ -674,14 +674,9 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         }
     }
 
-    PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
-    if ((eEditMode == EM_MASTERPAGE) && (ePageKind != PK_HANDOUT))
+    if (eEditMode == EM_MASTERPAGE)
     {
         rSet.DisableItem(SID_ASSIGN_LAYOUT);
-    }
-
-    if ((eEditMode == EM_MASTERPAGE) || (ePageKind==PK_NOTES))
-    {
         rSet.DisableItem(SID_INSERTPAGE);
     }
 
@@ -868,57 +863,53 @@ void SlotManager::ShowSlideShow( SfxRequest& rReq)
 
 void SlotManager::RenameSlide()
 {
-    PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
     View* pDrView = &mrSlideSorter.GetView();
 
-    if (ePageKind==PK_STANDARD || ePageKind==PK_NOTES)
+    if ( pDrView->IsTextEdit() )
     {
-        if ( pDrView->IsTextEdit() )
-        {
-            pDrView->SdrEndTextEdit();
-        }
+        pDrView->SdrEndTextEdit();
+    }
 
-        SdPage* pSelectedPage = nullptr;
-        model::PageEnumeration aSelectedPages (
+    SdPage* pSelectedPage = nullptr;
+    model::PageEnumeration aSelectedPages (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
-        if (aSelectedPages.HasMoreElements())
-            pSelectedPage = aSelectedPages.GetNextElement()->GetPage();
-        if (pSelectedPage != nullptr)
-        {
-            OUString aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
-            OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
-            OUString aPageName = pSelectedPage->GetName();
+    if (aSelectedPages.HasMoreElements())
+        pSelectedPage = aSelectedPages.GetNextElement()->GetPage();
+    if (pSelectedPage != nullptr)
+    {
+        OUString aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
+        OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
+        OUString aPageName = pSelectedPage->GetName();
 
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialog creation failed!");
-            std::unique_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialog creation failed!");
+        std::unique_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
                 mrSlideSorter.GetContentWindow(),
                 aPageName, aDescr));
-            DBG_ASSERT(aNameDlg, "Dialog creation failed!");
-            aNameDlg->SetText( aTitle );
-            aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
-            aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+        DBG_ASSERT(aNameDlg, "Dialog creation failed!");
+        aNameDlg->SetText( aTitle );
+        aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
+        aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
-            if( aNameDlg->Execute() == RET_OK )
+        if( aNameDlg->Execute() == RET_OK )
+        {
+            OUString aNewName;
+            aNameDlg->GetName( aNewName );
+            if (aNewName != aPageName)
             {
-                OUString aNewName;
-                aNameDlg->GetName( aNewName );
-                if (aNewName != aPageName)
-                {
-                    bool bResult =
+                bool bResult =
                         RenameSlideFromDrawViewShell(
                           pSelectedPage->GetPageNum()/2, aNewName );
-                    DBG_ASSERT( bResult, "Couldn't rename slide" );
-                }
+                DBG_ASSERT( bResult, "Couldn't rename slide" );
             }
-            aNameDlg.reset();
-
-            // Tell the slide sorter about the name change (necessary for
-            // accessibility.)
-            mrSlideSorter.GetController().PageNameHasChanged(
-                (pSelectedPage->GetPageNum()-1)/2, aPageName);
         }
+        aNameDlg.reset();
+
+        // Tell the slide sorter about the name change (necessary for
+        // accessibility.)
+        mrSlideSorter.GetController().PageNameHasChanged(
+                (pSelectedPage->GetPageNum()-1)/2, aPageName);
     }
 }
 
@@ -946,7 +937,6 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         return false;
 
     SdPage* pPageToRename = nullptr;
-    PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
 
     ::svl::IUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
 
@@ -976,19 +966,16 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
             // rename
             pPageToRename->SetName( rName );
 
-            if( ePageKind == PK_STANDARD )
-            {
-                // also rename notes-page
-                SdPage* pNotesPage = pDocument->GetSdPage( nPageId, PK_NOTES );
-                if (pNotesPage != nullptr)
-                    pNotesPage->SetName (rName);
-            }
+            // also rename notes-page
+            SdPage* pNotesPage = pDocument->GetSdPage( nPageId, PK_NOTES );
+            if (pNotesPage != nullptr)
+                pNotesPage->SetName (rName);
         }
     }
     else
     {
         // rename MasterPage -> rename LayoutTemplate
-        pPageToRename = pDocument->GetMasterSdPage( nPageId, ePageKind );
+        pPageToRename = pDocument->GetMasterSdPage( nPageId, PK_STANDARD );
         if (pPageToRename != nullptr)
         {
             const OUString aOldLayoutName( pPageToRename->GetLayoutName() );
@@ -1048,7 +1035,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
         {
             pNewPage = pShell->CreateOrDuplicatePage (
                 rRequest,
-                mrSlideSorter.GetModel().GetPageType(),
+                PK_STANDARD,
                 nInsertionIndex>=0
                     ? mrSlideSorter.GetModel().GetPageDescriptor(nInsertionIndex)->GetPage()
                         : nullptr);

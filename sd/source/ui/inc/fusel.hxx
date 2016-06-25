@@ -74,7 +74,6 @@ protected:
 
     bool            bTempRotation;
     bool            bSelectionChanged;
-    bool            bHideAndAnimate;
     SdrHdl*         pHdl;
     bool            bSuppressChangesOfSelection;
     bool            bMirrorSide0;

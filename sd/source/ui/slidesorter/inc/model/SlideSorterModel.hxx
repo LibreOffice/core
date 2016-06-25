@@ -74,7 +74,6 @@ public:
     bool SetEditMode (EditMode eEditMode);
 
     EditMode GetEditMode() const { return meEditMode;}
-    PageKind GetPageType() const { return mePageKind;}
 
     /** Return the number of slides in the document regardless of whether
         they are visible or not or whether they are hidden or not.
@@ -208,7 +207,6 @@ private:
     mutable ::osl::Mutex maMutex;
     SlideSorter& mrSlideSorter;
     css::uno::Reference<css::container::XIndexAccess> mxSlides;
-    PageKind mePageKind;
     EditMode meEditMode;
     mutable ::std::vector<SharedPageDescriptor> maPageDescriptors;
 

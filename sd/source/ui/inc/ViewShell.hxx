@@ -476,8 +476,6 @@ protected:
     Size        maViewSize;
     Size        maScrBarWH;
 
-    bool        mbCenterAllowed;          // will be forwarded to window
-
     bool        mbStartShowWithDialog;    // presentation is started by dialog
     sal_uInt16      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
     sal_uInt16      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.

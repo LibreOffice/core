@@ -162,7 +162,6 @@ protected:
         depending on the current zoom factor.  Its default value is now false.
     */
     bool mbMinZoomAutoCalc;
-    bool mbCalcMinZoomByMinSide;
     bool mbCenterAllowed;
     long mnTicks;
 

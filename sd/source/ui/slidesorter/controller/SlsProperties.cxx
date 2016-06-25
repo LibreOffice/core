@@ -35,7 +35,6 @@ Properties::Properties()
       maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor()),
       maHighlightColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
       mbIsUIReadOnly(false),
-      mbIsOnlyPreviewTriggersMouseOver(true),
       mbIsHighContrastModeActive(
           Application::GetSettings().GetStyleSettings().GetHighContrastMode())
 {

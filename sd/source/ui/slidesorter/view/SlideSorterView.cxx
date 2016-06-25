@@ -140,7 +140,6 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       mpPreviewCache(),
       mpLayeredDevice(new LayeredDevice(rSlideSorter.GetContentWindow())),
       maVisiblePageRange(-1,-1),
-      mbModelChangedWhileModifyEnabled(true),
       maPreviewSize(0,0),
       mbPreciousFlagUpdatePending(true),
       meOrientation(Layouter::GRID),
@@ -747,10 +746,6 @@ void SlideSorterView::DragFinished (sal_Int8 nDropAction)
 
 void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 {
-    ::sd::DrawDocShell* pDocShell = mrModel.GetDocument()->GetDocSh();
-    if (pDocShell!=nullptr && pDocShell->IsEnableSetModified())
-        mbModelChangedWhileModifyEnabled = true;
-
     ::sd::View::Notify(rBroadcaster, rHint);
 }
 

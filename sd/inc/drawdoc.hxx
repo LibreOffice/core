@@ -135,16 +135,12 @@ namespace sd
 // SdDrawDocument
 class SD_DLLPUBLIC SdDrawDocument : public FmFormModel
 {
-private:
-    OUString msDocAccTitle;
 public:
     SAL_DLLPRIVATE void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
     SAL_DLLPRIVATE const OUString& getDocAccTitle() const { return msDocAccTitle; }
-private:
-    bool bReadOnly;
-public:
     SAL_DLLPRIVATE bool getDocReadOnly() const { return bReadOnly; }
 private:
+    OUString            msDocAccTitle;
     ::sd::Outliner*     mpOutliner;          ///< local outliner for outline mode
     ::sd::Outliner*     mpInternalOutliner;  ///< internal outliner for creation of text objects
     Timer*              mpWorkStartupTimer;

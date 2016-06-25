@@ -45,7 +45,6 @@ void SdAnimationPrmsUndoAction::Undo()
             pInfo->meClickAction = eOldClickAction;
             pInfo->SetBookmark( aOldBookmark );
             pInfo->mnVerb        = nOldVerb;
-            pInfo->mnPresOrder   = nOldPresOrder;
 
             pInfo->meSecondEffect    = eOldSecondEffect;
             pInfo->meSecondSpeed     = eOldSecondSpeed;
@@ -82,7 +81,6 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->meClickAction = eNewClickAction;
     pInfo->SetBookmark( aNewBookmark );
     pInfo->mnVerb        = nNewVerb;
-    pInfo->mnPresOrder   = nNewPresOrder;
 
     pInfo->meSecondEffect    = eNewSecondEffect;
     pInfo->meSecondSpeed     = eNewSecondSpeed;

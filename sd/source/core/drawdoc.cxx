@@ -152,7 +152,6 @@ PresentationSettings::PresentationSettings( const PresentationSettings& r )
 
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 : FmFormModel( !utl::ConfigManager::IsAvoidConfig() ? SvtPathOptions().GetPalettePath() : OUString(), nullptr, pDrDocSh )
-, bReadOnly(false)
 , mpOutliner(nullptr)
 , mpInternalOutliner(nullptr)
 , mpWorkStartupTimer(nullptr)

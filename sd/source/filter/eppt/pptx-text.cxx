@@ -1276,7 +1276,6 @@ struct ImplTextObj
     int             mnInstance;
     std::vector<ParagraphObj*> maList;
     bool        mbHasExtendedBullets;
-    bool        mbFixedCellHeightUsed;
 
     explicit ImplTextObj( int nInstance );
     ~ImplTextObj();
@@ -1288,7 +1287,6 @@ ImplTextObj::ImplTextObj( int nInstance )
     mnTextSize = 0;
     mnInstance = nInstance;
     mbHasExtendedBullets = false;
-    mbFixedCellHeightUsed = false;
 }
 
 ImplTextObj::~ImplTextObj()

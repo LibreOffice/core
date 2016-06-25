@@ -62,17 +62,13 @@ namespace sd { namespace slidesorter { namespace controller {
 SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mrController(rSlideSorter.GetController()),
-      mbIsMakeSelectionVisiblePending(true),
       mnInsertionPosition(-1),
-      mnAnimationId(Animator::NotAnAnimationId),
       mpSelectionObserver(new SelectionObserver(rSlideSorter))
 {
 }
 
 SelectionManager::~SelectionManager()
 {
-    if (mnAnimationId != Animator::NotAnAnimationId)
-        mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
 }
 
 void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
@@ -219,8 +215,6 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
 
 void SelectionManager::SelectionHasChanged ()
 {
-    mbIsMakeSelectionVisiblePending = true;
-
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
     if (pViewShell != nullptr)
     {
