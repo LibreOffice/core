@@ -244,24 +244,27 @@ IMPL_LINK_NOARG_TYPED(PageFormatPanel, PaperModifyMarginHdl, ListBox&, void)
     switch ( mpMarginSelectBox->GetSelectEntryPos() )
     {
         case 0:
-            SetNarrow(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            SetNone(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
             break;
         case 1:
-            SetModerate(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            SetNarrow(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
             break;
         case 2:
-            SetNormal075(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            SetModerate(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
             break;
         case 3:
-            SetNormal100(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            SetNormal075(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
             break;
         case 4:
-            SetNormal125(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            SetNormal100(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
             break;
         case 5:
-            SetWide(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            SetNormal125(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
             break;
         case 6:
+            SetWide(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            break;
+        case 7:
             SetMirrored(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
             break;
         default:
@@ -335,39 +338,44 @@ void PageFormatPanel::UpdateMarginBox()
     mnPageBottomMargin = mpPageULMarginItem->GetLower();
 
     bool bMirrored = (mpPageItem->GetPageUsage() == SVX_PAGE_MIRROR);
-    if( IsNarrow(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    if( IsNone(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
         mpMarginSelectBox->SelectEntryPos(0);
         mpMarginSelectBox->RemoveEntry(aCustomEntry);
     }
-    else if( IsModerate(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    else if( IsNarrow(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
         mpMarginSelectBox->SelectEntryPos(1);
         mpMarginSelectBox->RemoveEntry(aCustomEntry);
     }
-    else if( IsNormal075(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    else if( IsModerate(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
         mpMarginSelectBox->SelectEntryPos(2);
         mpMarginSelectBox->RemoveEntry(aCustomEntry);
     }
-    else if( IsNormal100(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    else if( IsNormal075(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
         mpMarginSelectBox->SelectEntryPos(3);
         mpMarginSelectBox->RemoveEntry(aCustomEntry);
     }
-    else if( IsNormal125(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    else if( IsNormal100(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
         mpMarginSelectBox->SelectEntryPos(4);
         mpMarginSelectBox->RemoveEntry(aCustomEntry);
     }
-    else if( IsWide(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    else if( IsNormal125(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
         mpMarginSelectBox->SelectEntryPos(5);
         mpMarginSelectBox->RemoveEntry(aCustomEntry);
     }
-    else if( IsMirrored(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    else if( IsWide(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
         mpMarginSelectBox->SelectEntryPos(6);
+        mpMarginSelectBox->RemoveEntry(aCustomEntry);
+    }
+    else if( IsMirrored(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    {
+        mpMarginSelectBox->SelectEntryPos(7);
         mpMarginSelectBox->RemoveEntry(aCustomEntry);
     }
     else
