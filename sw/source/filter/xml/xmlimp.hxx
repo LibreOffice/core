@@ -85,7 +85,6 @@ class SwXMLImport: public SvXMLImport
                                             // existing styles will be
                                             // overwritten.
     bool                m_bBlock : 1;     // Load text block
-    bool                m_bShowProgress : 1;
     bool                m_bOrganizerMode : 1;
     bool                m_bInititedXForms : 1;
     bool                m_bPreserveRedlineMode;

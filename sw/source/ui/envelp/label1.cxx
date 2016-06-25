@@ -235,7 +235,6 @@ SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
         "modules/swriter/ui/cardmediumpage.ui", &rSet)
     , pDBManager(nullptr)
     , aItem(static_cast<const SwLabItem&>(rSet.Get(FN_LABEL)))
-    , m_bLabel(false)
 {
     WaitObject aWait( pParent );
 
@@ -321,7 +320,6 @@ void SwLabPage::SetToBusinessCard()
     m_pSheetButton->SetHelpId(HID_BUSINESS_FMT_PAGE_SHEET);
     m_pMakeBox->SetHelpId(HID_BUSINESS_FMT_PAGE_BRAND);
     m_pTypeBox->SetHelpId(HID_BUSINESS_FMT_PAGE_TYPE);
-    m_bLabel = false;
     m_pAddressFrame->Hide();
 };
 

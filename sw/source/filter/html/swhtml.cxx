@@ -299,11 +299,9 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_pTempViewFrame(nullptr)
 {
     m_nEventId = nullptr;
-    m_bUpperSpace = m_bViewCreated = m_bChkJumpMark =
-    m_bSetCursor = false;
+    m_bUpperSpace = m_bViewCreated = m_bChkJumpMark = false;
 
     m_eScriptLang = HTML_SL_UNKNOWN;
-    m_bAnyStarBasic = true;
 
     rCursor.DeleteMark();
     m_pPam = &rCursor; // re-use existing cursor: avoids spurious ~SwIndexReg assert
@@ -2583,17 +2581,6 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
     if( !m_pActionViewShell || (bChkAction && !m_pActionViewShell->ActionPend()) )
         return m_pActionViewShell;
 
-    if( m_bSetCursor )
-    {
-        // set the cursor to the doc begin in all CursorEditShells
-        for(SwViewShell& rSh : m_pActionViewShell->GetRingContainer())
-        {
-            if( dynamic_cast<const SwCursorShell *>(&rSh) != nullptr )
-                static_cast<SwCursorShell*>(&rSh)->SttEndDoc(true);
-        }
-
-        m_bSetCursor = false;
-    }
     if( dynamic_cast< const SwEditShell *>( m_pActionViewShell ) !=  nullptr )
     {
         //Schon gescrollt?, dann dafuer sorgen, dass die View sich nicht bewegt!

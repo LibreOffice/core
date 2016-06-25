@@ -3280,7 +3280,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
 
         int nLclIdctHint = 0xFF;
         if (nScript == i18n::ScriptType::WEAK)
-            nLclIdctHint = m_nIdctHint;
+            nLclIdctHint = 0;
         else if (nScript == MSASCII) // Force weak chars in ascii range to use LATIN font
             nLclIdctHint = 0;
 
@@ -4233,8 +4233,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_nSwNumLevel(0xff)
     , m_nWwNumType(0xff)
     , m_nListLevel(WW8ListManager::nMaxLevel)
-    , m_nPgChpDelim(0)
-    , m_nPgChpLevel(0)
     , m_bNewDoc(bNewDoc)
     , m_bSkipImages(bSkipImages)
     , m_bReadNoTable(false)
@@ -4273,7 +4271,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_bParaAutoAfter(false)
     , m_bDropCap(false)
     , m_nDropCap(0)
-    , m_nIdctHint(0)
     , m_bBidi(false)
     , m_bReadTable(false)
     , m_bLoadingTOXCache(false)

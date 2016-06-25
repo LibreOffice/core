@@ -783,7 +783,6 @@ public:
     SwSection *mpSection;
     SwPageDesc *mpPage;
     SvxFrameDirection meDir;
-    short mLinkId;
 
     sal_uInt32 nPgWidth;
     sal_uInt32 nPgLeft;
@@ -1291,9 +1290,6 @@ private:
     sal_uInt8 m_nWwNumType;            // outline / number / enumeration
     sal_uInt8 m_nListLevel;
 
-    sal_uInt8 m_nPgChpDelim;           // ChapterDelim from PageNum
-    sal_uInt8 m_nPgChpLevel;           // ChapterLevel of Heading from PageNum
-
     bool m_bNewDoc;          // new document?
     bool m_bSkipImages;      // skip images for text extraction/indexing
     bool m_bReadNoTable;        // no tables
@@ -1348,7 +1344,6 @@ private:
     bool m_bDropCap;
     sal_Int32 m_nDropCap;
 
-    int m_nIdctHint;
     bool m_bBidi;
     bool m_bReadTable;
     std::shared_ptr<SwPaM> m_pTableEndPaM;

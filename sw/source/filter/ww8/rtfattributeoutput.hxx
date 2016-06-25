@@ -507,11 +507,6 @@ private:
      */
     OStringBuffer m_aStylesEnd;
 
-    /*
-     * We just get a "end of strike" mark at the end of strike, store here what to finish: single or double strike.
-     */
-    bool m_bStrikeDouble;
-
     sal_Int32 m_nNextAnnotationMarkId;
     sal_Int32 m_nCurrentAnnotationMarkId;
     /// Maps annotation mark names to ID's.

@@ -26,7 +26,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFileURL ) throw ( uno::RuntimeException ) :
-    SwVbaAddin_BASE( rParent, rContext ), msFileURL( rFileURL ), mbAutoload( true ), mbInstalled( true )
+    SwVbaAddin_BASE( rParent, rContext ), msFileURL( rFileURL ), mbInstalled( true )
 {
 }
 
@@ -57,7 +57,7 @@ OUString SAL_CALL SwVbaAddin::getPath() throw (uno::RuntimeException, std::excep
 
 sal_Bool SAL_CALL SwVbaAddin::getAutoload() throw (uno::RuntimeException, std::exception)
 {
-    return mbAutoload;
+    return true;
 }
 
 sal_Bool SAL_CALL SwVbaAddin::getInstalled() throw (uno::RuntimeException, std::exception)
