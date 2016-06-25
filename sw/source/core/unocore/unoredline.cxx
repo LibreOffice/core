@@ -311,11 +311,13 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     }
     else if (rPropertyName == UNO_NAME_REDLINE_UNDO_TYPE)
     {
+        OUString sType;
         if( rRedline.GetUndoEnd() == COMPLETE_STRING || rRedline.GetUndoStart() == rRedline.GetUndoEnd()
             || rRedline.GetUndoEnd() == 0 )
-            aRet <<= OUString("paragraph");
+            sType = "paragraph";
         else
-            aRet <<= OUString("text");
+            sType = "text";
+        aRet <<= sType;
     }
     else if (rPropertyName == UNO_NAME_REDLINE_UNDO_START)
     {

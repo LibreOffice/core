@@ -104,12 +104,12 @@ XMLRedlineExport::~XMLRedlineExport()
 
 void XMLRedlineExport::ExportUndoChange(
     const Reference<XPropertySet> & rPropSet,
-    const sal_uInt32& rParaIdx,
+    sal_uInt32 nParaIdx,
     bool bAutoStyle)
 {
     if (!bAutoStyle)
     {
-        ExportUndoChangeInfo(rPropSet, rParaIdx);
+        ExportUndoChangeInfo(rPropSet, nParaIdx);
     }
 }
 
@@ -141,39 +141,42 @@ void XMLRedlineExport::SetCurrentXText()
     pCurrentChangesList = nullptr;
 }
 
-void XMLRedlineExport::ExportUndoChangeInline(
-    const Reference<XPropertySet> & rPropSet, const sal_uInt32& rParaIdx)
+void XMLRedlineExport::ExportUndoChangedRegion(
+    const Reference<XPropertySet> & rPropSet, sal_uInt32 nParaIdx)
 {
     {
         Any aAny = rPropSet->getPropertyValue(sRedlineType);
         OUString sType;
         aAny >>= sType;
 
-        sal_uInt32 nParagraphIdx = rParaIdx, nCharStart, nCharEnd;
+        sal_uInt32 nCharStart, nCharEnd;
+        sal_uInt32 nTextDelCount = rExport.GetTextParagraphExport()->getTextDelCount();
         rPropSet->getPropertyValue(sRedlineUndoStart) >>= nCharStart;
         rPropSet->getPropertyValue(sRedlineUndoEnd) >>= nCharEnd;
+        nCharStart -= nTextDelCount;
+        nCharEnd -= nTextDelCount;
 
-        XMLTokenEnum eUndoType = XML_TEXT;
         OUString sUndoType;
         aAny = rPropSet->getPropertyValue(sRedlineUndoType);
         aAny >>= sUndoType;
 
         if( sUndoType == "paragraph" )
         {
-            eUndoType = XML_PARAGRAPH;
-            nParagraphIdx++;
-        }
-        if(eUndoType == XML_PARAGRAPH)
-        {
-            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx));
+            nParaIdx++;
+            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParaIdx));
             rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_PARAGRAPH);
         }
         else
         {
-            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharStart));
+            rExport.AddAttribute(XML_NAMESPACE_C, XML_START, "/" + rtl::OUString::number(nParaIdx) + "/" + rtl::OUString::number(nCharStart));
             if( sType == sInsert || sType == sFormat )
-                rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + rtl::OUString::number(nParagraphIdx) + "/" + rtl::OUString::number(nCharEnd));
-            rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, eUndoType);
+                rExport.AddAttribute(XML_NAMESPACE_C, XML_END, "/" + rtl::OUString::number(nParaIdx) + "/" + rtl::OUString::number(nCharEnd));
+            else
+                rExport.GetTextParagraphExport()->setTextDelCount( rExport.GetTextParagraphExport()->getTextDelCount() + nCharEnd - nCharStart + 1 );
+            if( sType == sFormat )
+                rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_FORMAT_CHANGE);
+            else
+                rExport.AddAttribute(XML_NAMESPACE_DC, XML_TYPE, XML_TEXT);
         }
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
                                 ConvertTypeName(sType), true, true);
@@ -213,7 +216,7 @@ const OUString XMLRedlineExport::ConvertTypeName(
 }
 
 void XMLRedlineExport::ExportUndoChangeInfo(
-    const Reference<XPropertySet> & rPropSet, const sal_uInt32& rParaIdx)
+    const Reference<XPropertySet> & rPropSet, sal_uInt32 nParaIdx)
 {
     Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
     bool bCollapsed = *static_cast<sal_Bool const *>(aAny.getValue());
@@ -238,7 +241,7 @@ void XMLRedlineExport::ExportUndoChangeInfo(
 
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_OFFICE,
                                     XML_CHANGE, true, true);
-        ExportUndoChangeInline(rPropSet, rParaIdx);
+        ExportUndoChangedRegion(rPropSet, nParaIdx);
     }
 }
 

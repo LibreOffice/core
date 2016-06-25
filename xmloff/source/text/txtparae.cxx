@@ -1163,6 +1163,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pIndexMarkExport( nullptr ),
     pRedlineExport( nullptr ),
     nParaIdx(0),
+    nParaDelCount(0),
+    nTextDelCount(0),
     bProgress( false ),
     bBlock( false ),
     bOpenRuby( false ),
@@ -1816,6 +1818,7 @@ bool XMLTextParagraphExport::exportUndoTextContentEnumeration(
             {
                 setParaIdx(getParaIdx() + 1);
                 exportUndoParagraph( xTxtCntnt, getParaIdx(), bAutoStyles, bIsProgress, aPropSetHelper );
+                setTextDelCount(0);
             }
         }
         bHasMoreElements = rContEnum->hasMoreElements();
@@ -1992,7 +1995,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
 }
 
 void XMLTextParagraphExport::exportUndoParagraph(
-        const Reference < XTextContent > & rTextContent, const sal_uInt32& rParaIdx,
+        const Reference < XTextContent > & rTextContent, sal_uInt32 nParaIdx,
         bool bAutoStyles, bool bIsProgress,
         MultiPropertySetHelper& rPropSetHelper)
 {
@@ -2052,10 +2055,10 @@ void XMLTextParagraphExport::exportUndoParagraph(
                                     xContentEnum, bAutoStyles, xSection,
                                     bIsProgress );
         if ( bHasPortions )
-            exportUndoTextRangeEnumeration( xTextEnum, rParaIdx, bAutoStyles );
+            exportUndoTextRangeEnumeration( xTextEnum, nParaIdx, bAutoStyles );
     }
     else
-        exportUndoTextRangeEnumeration( xTextEnum, rParaIdx, bAutoStyles );
+        exportUndoTextRangeEnumeration( xTextEnum, nParaIdx, bAutoStyles );
 }
 
 void XMLTextParagraphExport::exportParagraph(
@@ -2320,7 +2323,7 @@ void XMLTextParagraphExport::exportParagraph(
 
 void XMLTextParagraphExport::exportUndoTextRangeEnumeration(
         const Reference < XEnumeration > & rTextEnum,
-        const sal_uInt32& rParaIdx,
+        sal_uInt32 nParagraphIdx,
         bool bAutoStyles )
 {
     while( rTextEnum->hasMoreElements() )
@@ -2337,7 +2340,7 @@ void XMLTextParagraphExport::exportUndoTextRangeEnumeration(
             if (sType.equals(sRedline))
             {
                 if (nullptr != pRedlineExport)
-                    pRedlineExport->ExportUndoChange(xPropSet, rParaIdx, bAutoStyles);
+                    pRedlineExport->ExportUndoChange(xPropSet, nParaIdx, bAutoStyles);
             }
         }
     }

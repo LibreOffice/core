@@ -114,6 +114,7 @@ class SW_DLLPUBLIC SwRedlineData
     DateTime aStamp;
     RedlineType_t eType;
     sal_uInt16 nAuthor, nSeqNo;
+    OUString sUndoType;
 
 public:
     SwRedlineData( RedlineType_t eT, sal_uInt16 nAut );
@@ -151,6 +152,7 @@ public:
     void SetComment( const OUString& rS )     { sComment = rS; }
     void SetUndoStart( const sal_uInt32& rUndoStart )     { nUndoStart = rUndoStart; }
     void SetUndoEnd( const sal_uInt32& rUndoEnd )     { nUndoEnd = rUndoEnd; }
+    void SetUndoType( const OUString& rUndoType )       { sUndoType = rUndoType; }
     void SetTimeStamp( const DateTime& rDT ) { aStamp = rDT; }
 
     void SetAutoFormatFlag()
@@ -166,7 +168,8 @@ public:
                         pNext->CanCombine( *rCmp.pNext ))) &&
                     (( !pExtraData && !rCmp.pExtraData ) ||
                         ( pExtraData && rCmp.pExtraData &&
-                            *pExtraData == *rCmp.pExtraData ));
+                            *pExtraData == *rCmp.pExtraData )) &&
+                            nUndoEnd == rCmp.nUndoStart - 1;
         }
 
     // ExtraData gets copied, the pointer is therefore not taken over by
@@ -247,6 +250,7 @@ public:
 
     void SetUndoStart( const sal_uInt32& rUndoStart ) { pRedlineData->SetUndoStart( rUndoStart ); }
     void SetUndoEnd( const sal_uInt32& rUndoEnd ) { pRedlineData->SetUndoEnd( rUndoEnd ); }
+    void SetUndoType( const OUString& rUndoType ) { pRedlineData->SetUndoType( rUndoType ); }
     void SetComment( const OUString& rS ) { pRedlineData->SetComment( rS ); }
 
     /** ExtraData gets copied, the pointer is therefore not taken over by

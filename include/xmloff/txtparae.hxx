@@ -93,6 +93,8 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     /// may be NULL (if no redlines should be exported; e.g. in block mode)
     XMLRedlineExport            *pRedlineExport;
     sal_uInt32                  nParaIdx;
+    sal_uInt32                  nParaDelCount;
+    sal_uInt32                  nTextDelCount;
 
     bool                        bProgress;
 
@@ -249,7 +251,7 @@ public:
 
     void exportUndoTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
-        const sal_uInt32& rParaIdx,
+        sal_uInt32 nParagraphIdx,
         bool bAutoStyles );
     void exportTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
@@ -304,7 +306,7 @@ protected:
         TextPNS eExtensionNS = TextPNS::ODF);
     void exportUndoParagraph(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
-        const sal_uInt32& rParaIdx,
+        sal_uInt32 nParaIdx,
         bool bAutoStyles, bool bProgress,
         MultiPropertySetHelper& rPropSetHelper);
     void exportParagraph(
@@ -542,9 +544,9 @@ public:
     void exportTitleAndDescription( const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
                                     const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
 
-    void setParaIdx(sal_uInt32 rParaIdx)
+    void setParaIdx(sal_uInt32 nParagraphIdx)
     {
-        nParaIdx = rParaIdx;
+        nParaIdx = nParagraphIdx;
     }
 
     sal_uInt32 getParaIdx()
@@ -552,6 +554,25 @@ public:
         return nParaIdx;
     }
 
+    void setTextDelCount(sal_uInt32 nTextDeleteCount )
+    {
+        nTextDelCount = nTextDeleteCount;
+    }
+
+    sal_uInt32 getTextDelCount()
+    {
+        return nTextDelCount;
+    }
+
+    void setParaDelCount(sal_uInt32 nParagraphDelCount)
+    {
+        nParaDelCount = nParagraphDelCount;
+    }
+
+    sal_uInt32 getParaDelCount()
+    {
+        return nParaDelCount;
+    }
     // This method exports the given XText
     void exportTrackedChanges(
         const css::uno::Reference< css::text::XText > & rText,

@@ -106,7 +106,7 @@ public:
     void ExportUndoChange(
         /// PropertySet of RedlinePortion
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet,
-        const sal_uInt32& rParaIdx,
+        sal_uInt32 nParaIdx,
         bool bAutoStyle);
 
     /// set the current XText for which changes should be recorded.
@@ -139,13 +139,13 @@ public:
 
 private:
     /// export the change mark contained in the text body
-    void ExportUndoChangeInline(
+    void ExportUndoChangedRegion(
         /// PropertySet of RedlinePortion
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet, const sal_uInt32& rParaIdx);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet, sal_uInt32 nParaIdx);
 
     /// export an change-info element (from a PropertySet)
     void ExportUndoChangeInfo(
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet, const sal_uInt32& rParaIdx);
+        const css::uno::Reference<css::beans::XPropertySet> & rPropSet, sal_uInt32 nParaIdx);
 
     /// convert the change type from API to XML names
     const OUString ConvertTypeName(const OUString& sApiName);
