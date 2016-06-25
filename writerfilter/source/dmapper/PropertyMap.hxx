@@ -293,6 +293,13 @@ public:
                                                                const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory,
                                                                bool bFirst);
 
+    void SwitchToPageStyle( css::uno::Reference<css::beans::XPropertySet> const& xStyle, const OUString sPageStyleName )
+        throw ( css::beans::UnknownPropertyException,
+                css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception );
+
     void SetBorder(BorderPosition ePos, sal_Int32 nLineDistance, const css::table::BorderLine2& rBorderLine, bool bShadow);
     void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
 

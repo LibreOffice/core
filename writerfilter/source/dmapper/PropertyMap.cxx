@@ -557,6 +557,18 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
     return xRet;
 }
 
+void SectionPropertyMap::SwitchToPageStyle( uno::Reference< beans::XPropertySet > const& xStyle, const OUString sPageStyleName )
+throw ( css::beans::UnknownPropertyException,
+        css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException, std::exception )
+{
+    if( xStyle.is() && !sPageStyleName.isEmpty() )
+    {
+        xStyle->setPropertyValue( getPropertyName(PROP_PAGE_DESC_NAME), uno::makeAny(sPageStyleName) );
+    }
+}
 
 void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const table::BorderLine2& rBorderLine, bool bShadow )
 {
@@ -1154,7 +1166,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 try
                 {
-                    xRangeProperties->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::makeAny(aName));
+                    if( m_bIsFirstSection )
+                        SwitchToPageStyle( xRangeProperties, aName );
                     uno::Reference<beans::XPropertySet> xPageStyle (rDM_Impl.GetPageStyles()->getByName(aName), uno::UNO_QUERY_THROW);
                     HandleMarginsHeaderFooter(rDM_Impl);
                     if (rDM_Impl.IsNewDoc())
@@ -1352,10 +1365,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 }
 
                 if (xRangeProperties.is() && rDM_Impl.IsNewDoc())
-                    xRangeProperties->setPropertyValue(
-                        getPropertyName( PROP_PAGE_DESC_NAME ),
-                        uno::makeAny( m_bTitlePage ?  m_sFirstPageStyleName
-                                      : m_sFollowPageStyleName ));
+                    SwitchToPageStyle( xRangeProperties, m_bTitlePage ?  m_sFirstPageStyleName : m_sFollowPageStyleName );
 
                 if(m_bPageNoRestart || m_nPageNumber >= 0)
                 {
