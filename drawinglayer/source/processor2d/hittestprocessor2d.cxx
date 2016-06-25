@@ -47,7 +47,6 @@ namespace drawinglayer
             mfDiscreteHitTolerance(0.0),
             mbHit(false),
             mbHitToleranceUsed(false),
-            mbUseInvisiblePrimitiveContent(true),
             mbHitTextOnly(bHitTextOnly)
         {
             // init hit tolerance
@@ -506,10 +505,7 @@ namespace drawinglayer
 
                     if(!rChildren.empty())
                     {
-                        if(getUseInvisiblePrimitiveContent())
-                        {
-                            process(rChildren);
-                        }
+                        process(rChildren);
                     }
 
                     break;
