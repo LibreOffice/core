@@ -991,6 +991,10 @@ DECLARE_OOXMLIMPORT_TEST(testN780843, "n780843.docx")
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
     CPPUNIT_ASSERT_EQUAL(OUString("shown footer"), xFooter->getString());
+
+    xPara = getParagraph(1);
+    aStyleName = getProperty<OUString>(xPara, "PageStyleName");
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aStyleName);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testShadow, "imgshadow.docx")
