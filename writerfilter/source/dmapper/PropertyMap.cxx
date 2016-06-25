@@ -1140,7 +1140,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 try
                 {
-                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(aName));
+                    if( m_bIsFirstSection )
+                        xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(aName));
+
                     uno::Reference<beans::XPropertySet> xPageStyle (rDM_Impl.GetPageStyles()->getByName(aName), uno::UNO_QUERY_THROW);
                     HandleMarginsHeaderFooter(rDM_Impl);
                     if (rDM_Impl.IsNewDoc())
