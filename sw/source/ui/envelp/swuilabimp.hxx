@@ -45,8 +45,6 @@ class SwLabPage : public SfxTabPage
     VclPtr<ListBox>          m_pHiddenSortTypeBox;
     VclPtr<FixedText>        m_pFormatInfo;
 
-    bool        m_bLabel;
-
     DECL_LINK_TYPED(AddrHdl, Button*, void);
     DECL_LINK_TYPED(DatabaseHdl, ListBox&, void );
     DECL_LINK_TYPED(FieldHdl, Button *, void);

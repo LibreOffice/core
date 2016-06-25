@@ -28,7 +28,6 @@ class SwVbaAddin : public SwVbaAddin_BASE
 {
 private:
     OUString msFileURL;
-    bool mbAutoload;
     bool mbInstalled;
 
 public:

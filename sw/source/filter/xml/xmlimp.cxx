@@ -409,7 +409,6 @@ SwXMLImport::SwXMLImport(
     m_bLoadDoc( true ),
     m_bInsert( false ),
     m_bBlock( false ),
-    m_bShowProgress( true ),
     m_bOrganizerMode( false ),
     m_bInititedXForms( false ),
     m_bPreserveRedlineMode( true ),
@@ -978,7 +977,7 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
     return new SwXMLTextImportHelper( GetModel(), *this, getImportInfo(),
                                       IsInsertMode(),
-                                      IsStylesOnlyMode(), m_bShowProgress,
+                                      IsStylesOnlyMode(), true/*bShowProgress*/,
                                       IsBlockMode(), IsOrganizerMode(),
                                       m_bPreserveRedlineMode );
 }

@@ -2206,10 +2206,7 @@ void RtfAttributeOutput::CharCrossedOut(const SvxCrossedOutItem& rCrossedOut)
     switch (rCrossedOut.GetStrikeout())
     {
     case STRIKEOUT_NONE:
-        if (!m_bStrikeDouble)
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_STRIKE);
-        else
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_STRIKED);
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_STRIKE);
         m_aStyles.append((sal_Int32)0);
         break;
     case STRIKEOUT_DOUBLE:
@@ -3484,7 +3481,6 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
     : m_rExport(rExport),
       m_nStyleId(0),
       m_nListId(0),
-      m_bStrikeDouble(false),
       m_nNextAnnotationMarkId(0),
       m_nCurrentAnnotationMarkId(-1),
       m_bTableCellOpen(false),

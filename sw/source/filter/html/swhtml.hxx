@@ -436,7 +436,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
                                 // Flag um doppeltes init durch Rekursion
                                 // zu verhindern.
     bool m_bViewCreated : 1;      // die View wurde schon erzeugt (asynchron)
-    bool m_bSetCursor : 1;          // Cursor wieder auf den Anfang setzen
     bool m_bSetModEnabled : 1;
 
     bool m_bInFloatingFrame : 1;  // Wir sind in einen Floating Frame
@@ -453,7 +452,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     bool m_bNoParSpace : 1;
     // 16
 
-    bool m_bAnyStarBasic : 1;     // gibt es ueberhaupt ein StarBasic-Modul
     bool m_bInNoEmbed : 1;        // Wir sind in einem NOEMBED-Bereich
 
     bool m_bInTitle : 1;          // Wir sind im Titel
