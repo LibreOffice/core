@@ -104,7 +104,6 @@ public:
         bool mbIsSprite;
         Activator maActivator;
         css::awt::Point maCalloutAnchorLocation;
-        bool mbHasCalloutAnchor;
 
         void SetActivationState (const bool bIsActive);
     };

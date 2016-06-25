@@ -191,8 +191,6 @@ namespace pdfi
 
         ImageContainer                     m_aImages;
 
-        DocumentTextDirecion               m_eTextDirection;
-
         sal_Int32                          m_nPages;
         sal_Int32                          m_nNextZOrder;
         css::uno::Reference<

@@ -36,7 +36,6 @@ PresenterSprite::PresenterSprite()
       maSize(0,0),
       maLocation(0,0),
       mbIsVisible(false),
-      mnPriority(0),
       mnAlpha(1.0)
 {
 }
@@ -143,7 +142,7 @@ void PresenterSprite::ProvideSprite()
                 rendering::CompositeOperation::SOURCE)
                 );
             mxSprite->setAlpha(mnAlpha);
-            mxSprite->setPriority(mnPriority);
+            mxSprite->setPriority(0);
             if (mbIsVisible)
                 mxSprite->show();
         }

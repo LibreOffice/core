@@ -744,12 +744,6 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
                 {
                     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
                         mpPaneContainer->FindPaneId(xPane->getResourceId()));
-
-                    // When there is a call out anchor location set then tell the
-                    // window about it.
-                    if (pDescriptor->mbHasCalloutAnchor)
-                        pDescriptor->mxPane->SetCalloutAnchor(
-                            pDescriptor->maCalloutAnchorLocation);
                 }
             }
             else if (rEvent.ResourceId->isBoundTo(mxMainPaneId,AnchorBindingMode_INDIRECT))
