@@ -16,6 +16,7 @@ def main():
     if len(sys.argv) != 4:
         print(sys.argv)
         print("Invalid number of parameters")
+        print("Usage: upload-symbols.py symbols.zip config.ini \"long explanation\"")
         sys.exit(1)
 
     upload_url = "http://crashreport.libreoffice.org/upload/"
