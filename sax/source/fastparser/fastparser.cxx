@@ -1054,6 +1054,8 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             {
                     DefineNamespace( OString( XML_CAST( namespaces[ i ] )),
                         OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
+                    rEvent.mxAttributes->addUnknown( "xmlns", OString( XML_CAST( namespaces[ i ] )),
+                        OString( XML_CAST( namespaces[ i + 1 ] ) ) );
             }
             else
             {

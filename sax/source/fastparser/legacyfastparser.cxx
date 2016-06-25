@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
 #include <sax/fastparser.hxx>
+#include <unordered_map>
 
 using namespace std;
 using namespace ::cppu;
@@ -85,9 +86,15 @@ public:
 class CallbackDocumentHandler : public WeakImplHelper< XFastDocumentHandler >
 {
 private:
+    typedef std::unordered_map< OUString, OUString,
+        OUStringHash > NamespaceMap;
     Reference< XDocumentHandler > m_xDocumentHandler;
+    NamespaceMap m_aNamespaceMap;
+    const OUString& getNamespacePrefix( const OUString& rNamespaceURL );
+    const OUString aEmptyNS;
+    const OUString aNamespaceDecl;
 public:
-    CallbackDocumentHandler( Reference< XDocumentHandler > xDocumentHandler )
+    CallbackDocumentHandler( Reference< XDocumentHandler > xDocumentHandler ) : aEmptyNS(""), aNamespaceDecl("xmlns")
     { m_xDocumentHandler.set( xDocumentHandler ); }
 
     // XFastDocumentHandler
@@ -106,9 +113,19 @@ public:
 
 };
 
+const OUString& CallbackDocumentHandler::getNamespacePrefix( const OUString& rNamespaceURL )
+{
+    NamespaceMap::iterator aIter( m_aNamespaceMap.find( rNamespaceURL ) );
+    if( aIter != m_aNamespaceMap.end() )
+        return (*aIter).second;
+    else
+        return aEmptyNS;
+}
+
 void SAL_CALL CallbackDocumentHandler::startDocument()
         throw (SAXException, RuntimeException, exception)
 {
+    m_aNamespaceMap.clear();
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->startDocument();
 }
@@ -139,22 +156,47 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& Name
     {
         OUString elementName;
         rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
-        if ( !Namespace.isEmpty() )
-            elementName =  Namespace + ":" + Name;
-        else
-            elementName = Name;
-
         Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
         sal_uInt16 len = unknownAttribs.getLength();
+
+        for (sal_uInt16 i = 0; i < len; i++)
+        {
+            OUString& rAttrNamespaceURL = unknownAttribs[i].NamespaceURL;
+            if (rAttrNamespaceURL == aNamespaceDecl)
+            {
+                OUString& rAttrValue = unknownAttribs[i].Value;
+                OUString& rAttrName = unknownAttribs[i].Name;
+                rAttrList->AddAttribute( aNamespaceDecl + ":" + rAttrName, "CDATA", rAttrValue);
+                m_aNamespaceMap[rAttrValue] = rAttrName;
+            }
+        }
+
+        elementName = Name;
+        if ( !Namespace.isEmpty() )
+        {
+            const OUString& rNamespacePrefix = getNamespacePrefix(Namespace);
+            if ( !rNamespacePrefix.isEmpty() )
+                elementName =  rNamespacePrefix + ":" + Name;
+            else
+                rAttrList->AddAttribute( aNamespaceDecl, "CDATA", Namespace);
+        }
+
         for (sal_uInt16 i = 0; i < len; i++)
         {
             OUString& rAttrValue = unknownAttribs[i].Value;
             OUString sAttrName = unknownAttribs[i].Name;
             OUString& rAttrNamespaceURL = unknownAttribs[i].NamespaceURL;
-            if ( !rAttrNamespaceURL.isEmpty() )
-                sAttrName = rAttrNamespaceURL + ":" + sAttrName;
 
-            rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
+            if (rAttrNamespaceURL != aNamespaceDecl)
+            {
+                if ( !rAttrNamespaceURL.isEmpty() )
+                {
+                    const OUString& rAttrNamespacePrefix = getNamespacePrefix( rAttrNamespaceURL );
+                    if ( !rAttrNamespacePrefix.isEmpty() )
+                        sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
+                }
+                rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
+            }
         }
         m_xDocumentHandler->startElement( elementName, rAttrList.get() );
     }
@@ -171,11 +213,13 @@ void SAL_CALL CallbackDocumentHandler::endUnknownElement( const OUString& Namesp
 {
     if ( m_xDocumentHandler.is() )
     {
-        OUString elementName;
+        OUString elementName = Name;
         if ( !Namespace.isEmpty() )
-            elementName = Namespace + ":" + Name;
-        else
-            elementName = Name;
+        {
+            const OUString& rNamespacePrefix = getNamespacePrefix( Namespace );
+            if ( !rNamespacePrefix.isEmpty() )
+                elementName =  rNamespacePrefix + ":" + Name;
+        }
         m_xDocumentHandler->endElement( elementName );
     }
 }

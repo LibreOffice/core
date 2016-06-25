@@ -262,6 +262,8 @@ void SAL_CALL TestFastDocumentHandler::startUnknownElement( const OUString& Name
         OUString& rAttrValue = unknownAttribs[i].Value;
         OUString& rAttrName = unknownAttribs[i].Name;
         OUString& rAttrNamespaceURL = unknownAttribs[i].NamespaceURL;
+        if (rAttrNamespaceURL == "xmlns")
+            continue;
         if ( !rAttrNamespaceURL.isEmpty() )
             m_aStr = m_aStr + rAttrNamespaceURL + ":" + rAttrName + rAttrValue;
         else
@@ -320,33 +322,6 @@ public:
     }
 };
 
-class TestLegacyDocumentHandler : public TestDocumentHandler
-{
-public:
-    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endElement( const OUString& aName ) throw (SAXException, RuntimeException, exception) override;
-};
-
-void SAL_CALL TestLegacyDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs )
-        throw( SAXException, RuntimeException, exception )
-{
-    setString( getString() + aName );
-    sal_uInt16 len = xAttribs->getLength();
-    for (sal_uInt16 i = 0; i < len; i++)
-    {
-        OUString sAttrName = xAttribs->getNameByIndex(i);
-        OUString sAttrValue = xAttribs->getValueByIndex(i);
-        setString( getString() + sAttrName + sAttrValue );
-    }
-}
-
-
-void SAL_CALL TestLegacyDocumentHandler::endElement( const OUString& aName )
-    throw( SAXException, RuntimeException, exception )
-{
-    setString( getString() + aName );
-}
-
 class XMLImportTest : public test::BootstrapFixture
 {
 private:
@@ -356,7 +331,7 @@ private:
     Reference< XParser > m_xParser;
     Reference< XFastParser > m_xFastParser;
     Reference< XParser > m_xLegacyFastParser;
-    rtl::Reference< TestLegacyDocumentHandler > m_xLegacyDocumentHandler;
+    rtl::Reference< TestDocumentHandler > m_xLegacyDocumentHandler;
     Reference< XFastTokenHandler > m_xFastTokenHandler;
 
 public:
@@ -377,7 +352,7 @@ void XMLImportTest::setUp()
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     m_xDocumentHandler.set( new TestDocumentHandler() );
     m_xFastDocumentHandler.set( new TestFastDocumentHandler() );
-    m_xLegacyDocumentHandler.set( new TestLegacyDocumentHandler() );
+    m_xLegacyDocumentHandler.set( new TestDocumentHandler() );
     m_xFastTokenHandler.set( new TestTokenHandler() );
     m_xParser = Parser::create( xContext );
     m_xFastParser = FastParser::create( xContext );
@@ -401,7 +376,7 @@ void XMLImportTest::parse()
                             "multiplens.xml", "multiplepfx.xml",
                             "nstoattributes.xml", "nestedns.xml"};
 
-    for (sal_uInt16 i = 0; i < sizeof( fileNames ) / sizeof( string ); i++)
+    for (sal_uInt16 i = 0; i < sizeof( fileNames ) / sizeof( OUString ); i++)
     {
         InputSource source;
         source.sSystemId    = "internal";
