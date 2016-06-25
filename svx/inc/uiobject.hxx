@@ -11,7 +11,7 @@
 
 class SvxShowCharSet;
 
-class SvxShowCharSetUIObject : WindowUIObject
+class SvxShowCharSetUIObject : public WindowUIObject
 {
     VclPtr<SvxShowCharSet> mxCharSet;
 
