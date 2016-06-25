@@ -25,8 +25,6 @@ class Edit;
 class PopupMenu;
 class TemplateAbstractView;
 class TemplateLocalView;
-class TemplateRemoteView;
-class TemplateRepository;
 class TemplateSearchView;
 class ThumbnailView;
 class ThumbnailViewItem;
@@ -77,7 +75,6 @@ protected:
     DECL_LINK_TYPED(TVItemStateHdl, const ThumbnailViewItem*, void);
 
     DECL_LINK_TYPED(MenuSelectHdl, Menu*, bool);
-    DECL_LINK_TYPED(RepositoryMenuSelectHdl, Menu*, bool);
     DECL_LINK_TYPED(DefaultTemplateMenuSelectHdl, Menu*, bool);
 
     DECL_LINK_TYPED(OpenRegionHdl, void*, void);
@@ -101,8 +98,6 @@ protected:
     void OnCategoryRename();
     void OnCategoryDelete();
 
-    void createRepositoryMenu ();
-
     void createDefaultTemplateMenu ();
 
     // Exchange view between local/online view.
@@ -116,8 +111,6 @@ protected:
 
     void localMoveTo (sal_uInt16 nMenuId);
 
-    void remoteMoveTo (const sal_uInt16 nMenuId);
-
     /**
      *
      * Move search result templates stored in the filesystem to another folder.
@@ -125,15 +118,6 @@ protected:
      **/
 
     void localSearchMoveTo (sal_uInt16 nMenuId);
-
-    // Remote repositories handling methods
-    void loadRepositories ();
-
-    const std::vector<TemplateRepository*>& getRepositories () const { return maRepositories; }
-
-    bool insertRepository (const OUString &rName, const OUString &rURL);
-
-    void syncRepositories () const;
 
     /// Return filter according to the currently selected application filter.
     FILTER_APPLICATION getCurrentApplicationFilter();
@@ -152,19 +136,14 @@ protected:
     VclPtr<CheckBox> mpCBXHideDlg;
     VclPtr<ToolBox> mpActionBar;
     VclPtr<TemplateSearchView> mpSearchView;
-    VclPtr<TemplateAbstractView> mpCurView;
     VclPtr<TemplateLocalView> mpLocalView;
-    VclPtr<TemplateRemoteView> mpRemoteView;
     VclPtr<PopupMenu> mpActionMenu;
-    VclPtr<PopupMenu> mpRepositoryMenu;
     VclPtr<PopupMenu> mpTemplateDefaultMenu;
 
     std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelTemplates;
 
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference< css::frame::XDesktop2 > mxDesktop;
-
-    std::vector<TemplateRepository*> maRepositories; ///< Stores the remote repositories for templates
 };
 
 //  class SfxTemplateCategoryDialog -------------------------------------------------------------------
