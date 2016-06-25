@@ -91,7 +91,6 @@ class SwPostItContent : public SwContent
 {
     const SwFormatField*     pField;
     SwRangeRedline*     pRedline;
-    bool                mbPostIt;
 public:
     SwPostItContent( const SwContentType* pCnt,
                             const OUString& rName,
@@ -100,13 +99,11 @@ public:
         : SwContent(pCnt, rName, nYPos)
         , pField(pFormatField)
         , pRedline(nullptr)
-        , mbPostIt(true)
     {}
 
     const SwFormatField* GetPostIt() const  { return pField; }
     SwRangeRedline* GetRedline() { return pRedline; }
     virtual bool    IsProtect()     const override;
-    bool            IsPostIt()   const {return mbPostIt; }
 };
 
 class SwGraphicContent : public SwContent

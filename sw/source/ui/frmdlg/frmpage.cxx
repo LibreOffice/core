@@ -2627,7 +2627,6 @@ BmpWindow::BmpWindow(vcl::Window* pPar, WinBits nStyle)
     , bHorz(false)
     , bVert(false)
     , bGraphic(false)
-    , bLeftAlign(false)
 {
 }
 
@@ -2675,8 +2674,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         else
             aPntSz.Width() = aPntSz.Height() * nRelGrf /100;
 
-        if (!bLeftAlign)
-            aPntPos.X() += nWidth - aPntSz.Width() ;
+        aPntPos.X() += nWidth - aPntSz.Width() ;
     }
 
     // #i119307# clear window background, the graphic might have transparency

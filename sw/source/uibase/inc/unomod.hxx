@@ -133,7 +133,7 @@ protected:
     SwView*                     pView;
     SwViewOption*       mpViewOption;
     const SwViewOption*         mpConstViewOption;
-    bool                    bObjectValid:1, bWeb:1, mbApplyZoom;
+    bool                    bObjectValid:1, mbApplyZoom;
 
     FieldUnit   eHRulerUnit;
     bool    mbApplyHRulerMetric;

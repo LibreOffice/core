@@ -34,7 +34,6 @@ private:
     bool        bHorz : 1;
     bool        bVert : 1;
     bool        bGraphic : 1;
-    bool        bLeftAlign : 1;
 
     virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) override;
 

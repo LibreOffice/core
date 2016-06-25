@@ -541,7 +541,6 @@ SwXViewSettings::SwXViewSettings(SwView* pVw)
     , mpViewOption(nullptr)
     , mpConstViewOption(nullptr)
     , bObjectValid(true)
-    , bWeb(false)
     , mbApplyZoom(false)
     , eHRulerUnit(FUNIT_CM)
     , mbApplyHRulerMetric(false)
@@ -573,7 +572,7 @@ void SwXViewSettings::_preSetValues ()
         pVOpt = pView->GetWrtShell().GetViewOptions();
     }
     else
-        pVOpt = SW_MOD()->GetViewOption(bWeb);
+        pVOpt = SW_MOD()->GetViewOption(false);
 
     mpViewOption = new SwViewOption (*pVOpt);
     mbApplyZoom = false;
@@ -804,14 +803,13 @@ void SwXViewSettings::_postSetValues()
     else
     {
         if(mbApplyHRulerMetric)
-            SW_MOD()->ApplyRulerMetric( (FieldUnit)eHRulerUnit, true, bWeb );
+            SW_MOD()->ApplyRulerMetric( (FieldUnit)eHRulerUnit, true, false );
         if(mbApplyVRulerMetric)
-            SW_MOD()->ApplyRulerMetric( (FieldUnit)eVRulerUnit, false, bWeb );
+            SW_MOD()->ApplyRulerMetric( (FieldUnit)eVRulerUnit, false, false );
     }
 
     SW_MOD()->ApplyUsrPref( *mpViewOption, pView, pView ? SvViewOpt::DestViewOnly
-                                                  : bWeb ? SvViewOpt::DestWeb
-                                                          : SvViewOpt::DestText );
+                                                  : SvViewOpt::DestText );
 
     delete mpViewOption;
     mpViewOption = nullptr;
@@ -829,7 +827,7 @@ void SwXViewSettings::_preGetValues ()
         mpConstViewOption = pView->GetWrtShell().GetViewOptions();
     }
     else
-        mpConstViewOption = SW_MOD()->GetViewOption(bWeb);
+        mpConstViewOption = SW_MOD()->GetViewOption(false);
 }
 
 void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
@@ -948,7 +946,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             }
             else
             {
-                const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( bWeb );
+                const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( false );
                 rValue <<= (sal_Int32)pUsrPref->GetHScrollMetric();
             }
             bBool = false;
@@ -964,7 +962,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             }
             else
             {
-                const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( bWeb );
+                const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( false );
                 rValue <<= (sal_Int32)pUsrPref->GetVScrollMetric();
             }
             bBool = false;

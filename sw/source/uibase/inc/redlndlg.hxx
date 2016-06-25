@@ -81,7 +81,6 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     Link<SvTreeListBox*,void> m_aOldSelectHdl;
     Link<SvTreeListBox*,void> m_aOldDeselectHdl;
     bool                    m_bOnlyFormatedRedlines;
-    bool                    m_bHasReadonlySel;
     bool                    m_bRedlnAutoFormat;
 
     // prevent update dialog data during longer operations (cf #102657#)

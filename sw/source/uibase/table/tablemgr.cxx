@@ -168,18 +168,12 @@ void SwTableFUNC::InitTabCols()
 
 SwTableFUNC::SwTableFUNC(SwWrtShell *pShell)
     : pFormat(pShell->GetTableFormat()),
-      pSh(pShell),
-      bCopy(false)
+      pSh(pShell)
 {
-    // if applicable copy the format for edit
-    if( pFormat && bCopy )
-        pFormat = new SwFrameFormat( *pFormat );
 }
 
 SwTableFUNC::~SwTableFUNC()
 {
-    if(bCopy)
-        delete pFormat;
 }
 
 void SwTableFUNC::UpdateChart()

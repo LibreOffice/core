@@ -249,7 +249,6 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
     nCurTextWidth(0),
     nStartLine(USHRT_MAX),
     eSourceEncoding(osl_getThreadTextEncoding()),
-    bDoSyntaxHighlight(true),
     bHighlighting(false),
     aSyntaxIdle("sw uibase SwSrcEditWindow Syntax")
 {
@@ -674,7 +673,7 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
 
 void SwSrcEditWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
 {
-    if ( !bHighlighting && bDoSyntaxHighlight )
+    if ( !bHighlighting )
     {
         aSyntaxLineTable.insert( nPara );
         aSyntaxIdle.Start();

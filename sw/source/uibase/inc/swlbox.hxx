@@ -34,7 +34,6 @@ class SW_DLLPUBLIC SwBoxEntry
 {
     friend class SwComboBox;
 
-    bool    bNew : 1;
     OUString    aName;
 
 public:

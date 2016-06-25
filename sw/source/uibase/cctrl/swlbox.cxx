@@ -23,19 +23,16 @@
 #include <swlbox.hxx>
 
 //     Description: ListboxElement
-SwBoxEntry::SwBoxEntry() :
-    bNew(false)
+SwBoxEntry::SwBoxEntry()
 {
 }
 
 SwBoxEntry::SwBoxEntry(const OUString& aNam) :
-    bNew(false),
     aName(aNam)
 {
 }
 
 SwBoxEntry::SwBoxEntry(const SwBoxEntry& rOld) :
-    bNew(rOld.bNew),
     aName(rOld.aName)
 {
 }
@@ -78,20 +75,12 @@ void SwComboBox::RemoveEntryAt(sal_Int32 const nPos)
         return;
 
     // Remove old element
-    SwBoxEntry const& rEntry = m_EntryList[nPos];
     ComboBox::RemoveEntryAt(nPos);
 
     // Don't add new entries to the list
-    if (rEntry.bNew)
-    {
-        m_EntryList.erase(m_EntryList.begin() + nPos);
-    }
-    else
-    {
-        // add to DelEntryLst
-        m_DelEntryList.push_back(m_EntryList[nPos]);
-        m_EntryList.erase(m_EntryList.begin() + nPos);
-    }
+    // add to DelEntryLst
+    m_DelEntryList.push_back(m_EntryList[nPos]);
+    m_EntryList.erase(m_EntryList.begin() + nPos);
 }
 
 const SwBoxEntry& SwComboBox::GetSwEntry(sal_Int32 const nPos) const

@@ -48,7 +48,6 @@ private:
     double                          mfDiscreteLineWidth;
 
     // bitfield
-    bool                            mbShadow : 1;
     bool                            mbLineSolid : 1;
 
 protected:
@@ -70,7 +69,6 @@ public:
         maAnchorState(aAnchorState),
         maColor(rColor),
         mfDiscreteLineWidth(fDiscreteLineWidth),
-        mbShadow(false),
         mbLineSolid(bLineSolid)
     {}
 
@@ -81,7 +79,6 @@ public:
     AnchorState getAnchorState() const { return maAnchorState; }
     const basegfx::BColor& getColor() const { return maColor; }
     double getDiscreteLineWidth() const { return mfDiscreteLineWidth; }
-    bool getShadow() const { return mbShadow; }
     bool getLineSolid() const { return mbLineSolid; }
 
     virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const override;
@@ -148,47 +145,6 @@ drawinglayer::primitive2d::Primitive2DContainer AnchorPrimitive::create2DDecompo
         }
     }
 
-    if(!aRetval.empty() && getShadow())
-    {
-        // shadow is only for triangle and line start, and in upper left
-        // and lower right direction, in different colors
-        const double fColorChange(20.0 / 255.0);
-        const basegfx::B3DTuple aColorChange(fColorChange, fColorChange, fColorChange);
-        basegfx::BColor aLighterColor(getColor() + aColorChange);
-        basegfx::BColor aDarkerColor(getColor() - aColorChange);
-
-        aLighterColor.clamp();
-        aDarkerColor.clamp();
-
-        // create shadow sequence
-        drawinglayer::primitive2d::Primitive2DContainer aShadows(2);
-        basegfx::B2DHomMatrix aTransform;
-
-        aTransform.set(0, 2, -getDiscreteUnit());
-        aTransform.set(1, 2, -getDiscreteUnit());
-
-        aShadows[0] = drawinglayer::primitive2d::Primitive2DReference(
-            new drawinglayer::primitive2d::ShadowPrimitive2D(
-                aTransform,
-                aLighterColor,
-                aRetval));
-
-        aTransform.set(0, 2, getDiscreteUnit());
-        aTransform.set(1, 2, getDiscreteUnit());
-
-        aShadows[1] = drawinglayer::primitive2d::Primitive2DReference(
-            new drawinglayer::primitive2d::ShadowPrimitive2D(
-                aTransform,
-                aDarkerColor,
-                aRetval));
-
-        // add shadow before geometry to make it be proccessed first
-        const drawinglayer::primitive2d::Primitive2DContainer aTemporary(aRetval);
-
-        aRetval = aShadows;
-        aRetval.append(aTemporary);
-    }
-
     if ( AS_ALL == maAnchorState ||
          AS_END == maAnchorState )
     {
@@ -217,7 +173,6 @@ bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
             && getAnchorState() == rCompare.getAnchorState()
             && getColor() == rCompare.getColor()
             && getDiscreteLineWidth() == rCompare.getDiscreteLineWidth()
-            && getShadow() == rCompare.getShadow()
             && getLineSolid() == rCompare.getLineSolid());
     }
 
