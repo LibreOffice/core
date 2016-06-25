@@ -2042,23 +2042,6 @@ OUString lcl_GetNumeratorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 n
     return aNumeratorString.makeStringAndClear();
 }
 
-// TODO: More optimizations?
-void lcl_ForcedDenominator(sal_uLong &nFrac, sal_uLong &nDiv, sal_uLong nForcedDiv)
-{
-    double fFrac = (double)nFrac / (double)nDiv;
-    double fMultiplier = (double)nForcedDiv / (double)nDiv;
-    nFrac = (sal_uLong)( (double)nFrac * fMultiplier );
-
-    double fFracNew = (double)nFrac / (double)nForcedDiv;
-    double fFracNew1 = (double)(nFrac + 1) / (double)nForcedDiv;
-    double fDiff = fFrac - fFracNew;
-    if( fDiff > ( fFracNew1 - fFrac ) )
-    {
-        nFrac++;
-    }
-    nDiv = nForcedDiv;
-}
-
 }
 
 OUString SvNumberformat::GetDenominatorString( sal_uInt16 nNumFor ) const
@@ -2646,7 +2629,15 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 
     if( sal_Int32 nForcedDiv = lcl_GetDenominatorString(NumFor[nIx].Info(), nAnz).toInt32() )
     {
-        lcl_ForcedDenominator(nFrac, nDiv, nForcedDiv);
+        nDiv = (sal_uLong) nForcedDiv;
+        nFrac = (sal_uLong)floor ( fNumber * nDiv );
+        double fFracNew = (double)nFrac / (double)nDiv;
+        double fFracNew1 = (double)(nFrac + 1) / (double)nDiv;
+        double fDiff = fNumber - fFracNew;
+        if( fDiff > ( fFracNew1 - fNumber ) )
+        {
+            nFrac++;
+        }
         if( nFrac >= nDiv )
         {
             nFrac = nDiv = 0;
