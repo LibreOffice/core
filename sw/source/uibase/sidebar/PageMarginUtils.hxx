@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cmath>
+#define SWPAGE_NO_MARGIN       0
 #define SWPAGE_NARROW_VALUE    720
 #define SWPAGE_MODERATE_LR     1080
 #define SWPAGE_NORMAL_VALUE    1136
@@ -26,6 +27,26 @@
 #define SWPAGE_UNIT_THRESHOLD  5
 
 namespace sw { namespace sidebar{
+
+bool IsNone( const long nPageLeftMargin, const long nPageRightMargin,
+               const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
+{
+    return( std::abs(nPageLeftMargin - SWPAGE_NO_MARGIN) <= SWPAGE_UNIT_THRESHOLD &&
+        std::abs(nPageRightMargin - SWPAGE_NO_MARGIN ) <= SWPAGE_UNIT_THRESHOLD &&
+        std::abs(nPageTopMargin - SWPAGE_NO_MARGIN) <= SWPAGE_UNIT_THRESHOLD &&
+        std::abs(nPageBottomMargin - SWPAGE_NO_MARGIN) <= SWPAGE_UNIT_THRESHOLD &&
+        !bMirrored );
+}
+
+void SetNone( long& nPageLeftMargin, long& nPageRightMargin,
+                long& nPageTopMargin, long& nPageBottomMargin, bool& bMirrored)
+{
+    nPageLeftMargin = SWPAGE_NO_MARGIN;
+    nPageRightMargin = SWPAGE_NO_MARGIN;
+    nPageTopMargin = SWPAGE_NO_MARGIN;
+    nPageBottomMargin = SWPAGE_NO_MARGIN;
+    bMirrored = false;
+}
 
 bool IsNarrow( const long nPageLeftMargin, const long nPageRightMargin,
                const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
