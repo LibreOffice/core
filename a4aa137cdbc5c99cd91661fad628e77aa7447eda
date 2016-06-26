@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_55f54681",
+        "filename": "sfx2/source/view/frmload.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-06-26T15:28:38Z",
+      "side": 1,
+      "message": "Just a simplification: const bExternalModel has been assigned to xModel.is() above, and xModel hasn\u0027t been modified.",
+      "range": {
+        "startLine": 671,
+        "startChar": 14,
+        "endLine": 671,
+        "endChar": 28
+      },
+      "revId": "a4aa137cdbc5c99cd91661fad628e77aa7447eda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

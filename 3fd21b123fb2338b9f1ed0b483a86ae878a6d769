@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_75f24a9c",
+        "filename": "svx/source/svdraw/svdotextdecomposition.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-06-26T15:28:38Z",
+      "side": 0,
+      "message": "A typo correction",
+      "range": {
+        "startLine": 920,
+        "startChar": 15,
+        "endLine": 920,
+        "endChar": 32
+      },
+      "revId": "3fd21b123fb2338b9f1ed0b483a86ae878a6d769",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
