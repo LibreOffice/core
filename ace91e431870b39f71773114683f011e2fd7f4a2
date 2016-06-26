@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_15b9fee9",
+        "filename": "vcl/source/gdi/jobset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-26T06:16:43Z",
+      "side": 1,
+      "message": "strictly speaking unnecessary, because we\u0027ve already checked that the lengths are the same",
+      "revId": "ace91e431870b39f71773114683f011e2fd7f4a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
