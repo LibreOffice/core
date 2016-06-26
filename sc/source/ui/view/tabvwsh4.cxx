@@ -1666,7 +1666,6 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     bDontSwitch(false),
     bInFormatDialog(false),
     bReadOnly(false),
-    bChartAreaValid(false),
     bForceFocusOnCurCell(false),
     nCurRefDlgId(0),
     pAccessibilityBroadcaster(nullptr),
@@ -1815,7 +1814,7 @@ bool ScTabViewShell::GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SC
     rSource = aChartSource;
     rDest   = aChartPos;
     rTab    = nChartDestTab;
-    return bChartAreaValid;
+    return false;
 }
 
 ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()

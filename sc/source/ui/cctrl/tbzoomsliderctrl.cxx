@@ -100,7 +100,6 @@ struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
     Image                    maSliderButton;
     Image                    maIncreaseButton;
     Image                    maDecreaseButton;
-    bool                     mbValuesSet;
     bool                     mbOmitPaint;
 
     explicit ScZoomSliderWnd_Impl( sal_uInt16 nCurrentZoom ) :
@@ -113,10 +112,8 @@ struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
         maSliderButton(),
         maIncreaseButton(),
         maDecreaseButton(),
-        mbValuesSet( true ),
         mbOmitPaint( false )
         {
-
         }
 };
 
@@ -244,8 +241,6 @@ void ScZoomSliderWnd::dispose()
 
 void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( !mpImpl->mbValuesSet )
-        return ;
     Size aSliderWindowSize = GetOutputSizePixel();
 
     const Point aPoint = rMEvt.GetPosPixel();
@@ -300,9 +295,6 @@ void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScZoomSliderWnd::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( !mpImpl->mbValuesSet )
-        return ;
-
     Size aSliderWindowSize   = GetOutputSizePixel();
     const long nControlWidth = aSliderWindowSize.Width();
     const short nButtons     = rMEvt.GetButtons();

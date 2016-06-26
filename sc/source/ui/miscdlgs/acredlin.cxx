@@ -100,7 +100,6 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
         aUnknown("Unknown"),
         bAcceptEnableFlag(true),
         bRejectEnableFlag(true),
-        bNeedsUpdate(false),
         bIgnoreMsg(false),
         bNoSelection(false),
         bHasFilterEntry(false),
@@ -178,7 +177,6 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
         pDoc=nullptr;
 
     bNoSelection=false;
-    bNeedsUpdate=false;
     bIgnoreMsg=false;
     nAcceptCount=0;
     nRejectCount=0;
@@ -750,19 +748,11 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
 
 bool ScAcceptChgDlg::PreNotify( NotifyEvent& rNEvt )
 {
-    if(rNEvt.GetType()==MouseNotifyEvent::GETFOCUS && bNeedsUpdate)
-    {
-        ClearView();
-        UpdateView();
-        bNoSelection=false;
-    }
-
     return SfxModelessDialog::PreNotify(rNEvt);
 }
 
 void ScAcceptChgDlg::UpdateView()
 {
-    bNeedsUpdate=false;
     SvTreeListEntry* pParent=nullptr;
     ScChangeTrack* pChanges=nullptr;
     const ScChangeAction* pScChangeAction=nullptr;

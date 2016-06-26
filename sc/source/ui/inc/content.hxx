@@ -102,7 +102,6 @@ class ScContentTree : public SvTreeListBox
     DECL_LINK_TYPED( ExecDragHdl, void*, void );
 public:
     SvTreeListEntry* pTmpEntry;
-    bool m_bFirstPaint;
 
 protected:
 

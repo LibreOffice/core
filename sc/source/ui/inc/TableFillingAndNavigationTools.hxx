@@ -60,7 +60,6 @@ public:
     ScAddress mCurrentAddress;
     ScAddress mMinimumAddress;
     ScAddress mMaximumAddress;
-    bool      mTrackRange;
 
     AddressWalker(ScAddress aInitialAddress);
 

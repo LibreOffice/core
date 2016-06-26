@@ -72,7 +72,6 @@ private:
     ScPatternAttr*  pApplyPattern;
     std::shared_ptr<EditTextObject> pOldEditData;
     std::shared_ptr<EditTextObject> pNewEditData;
-    bool            bIsAutomatic;
 
     void            DoChange( const ScPatternAttr* pWhichPattern, const std::shared_ptr<EditTextObject>& pEditData ) const;
 };

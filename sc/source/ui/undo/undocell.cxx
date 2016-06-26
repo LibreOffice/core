@@ -76,8 +76,7 @@ ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
     nRow( nNewRow ),
     nTab( nNewTab ),
     pOldEditData( static_cast<EditTextObject*>(nullptr) ),
-    pNewEditData( static_cast<EditTextObject*>(nullptr) ),
-    bIsAutomatic( false )
+    pNewEditData( static_cast<EditTextObject*>(nullptr) )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
     pNewPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pNewPat ) ));
@@ -141,17 +140,6 @@ void ScUndoCursorAttr::Undo()
 {
     BeginUndo();
     DoChange(pOldPattern, pOldEditData);
-
-    if ( bIsAutomatic )
-    {
-        // if automatic formatting is reversed, then
-        // automatic formatting should also not continue to be done
-
-        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-        if (pViewShell)
-            pViewShell->ForgetFormatArea();
-    }
-
     EndUndo();
 }
 

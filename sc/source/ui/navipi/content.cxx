@@ -134,7 +134,6 @@ ScContentTree::ScContentTree( vcl::Window* pParent, const ResId& rResId ) :
     SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
 
     pTmpEntry= nullptr;
-    m_bFirstPaint=true;
 
     SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }

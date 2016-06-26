@@ -133,8 +133,6 @@ void ScTabPageSortFields::Init()
     OSL_ENSURE( pViewData, "ViewData not found!" );
 
     nFieldArr.push_back( 0 );
-    nFirstCol = 0;
-    nFirstRow = 0;
 
     // Create three sort key dialogs by default
     for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
@@ -269,9 +267,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
         if ( pDlg && bSortByRows != pDlg->GetByRows() )
         {
             for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-                aNewSortData.maKeyState[i].nField = ( bSortByRows ?
-                        static_cast<SCCOLROW>(nFirstRow) :
-                        static_cast<SCCOLROW>(nFirstCol) );
+                aNewSortData.maKeyState[i].nField = 0;
         }
         else
         {

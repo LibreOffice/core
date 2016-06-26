@@ -84,10 +84,7 @@ private:
     bool              bUsedShortCut;
 
     InsertDeleteFlags nShortCutInsContentsCmdBits;
-    ScPasteFunc       nShortCutFormulaCmdBits;
-    bool              bShortCutSkipEmptyCells;
     bool              bShortCutTranspose;
-    bool              bShortCutIsLink;
     InsCellCmd        nShortCutMoveMode;
 
     static bool         bPreviousAllCheck;

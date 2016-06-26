@@ -65,8 +65,7 @@ using namespace com::sun::star;
 
 FuSelection::FuSelection(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq ) :
-    FuDraw(pViewSh, pWin, pViewP, pDoc, rReq),
-    bVCAction(false)
+    FuDraw(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
 
@@ -103,7 +102,6 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         return true;
     }
 
-    bVCAction = false;
     bIsInDragMode = false;      //  irgendwo muss es ja zurueckgesetzt werden (#50033#)
 
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
@@ -315,8 +313,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (!bIsInDragMode)
     {
-        if (!bVCAction)                 // VC rufen selber CaptureMouse
-            pWindow->CaptureMouse();
+        // VC rufen selber CaptureMouse
+        pWindow->CaptureMouse();
         ForcePointer(&rMEvt);
     }
 
@@ -349,13 +347,6 @@ bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 
         ForceScroll(aPix);
         pView->MovAction(aPnt);
-        bReturn = true;
-    }
-
-    // Ein VCControl ist aktiv
-    // Event an den Manager weiterleiten
-    if( bVCAction )
-    {
         bReturn = true;
     }
 
@@ -552,14 +543,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else if ( TestDetective( pView->GetSdrPageView(), aPnt ) )
             bReturn = true;
-    }
-
-    // Ein VCControl ist aktiv
-    // Event an den Manager weiterleiten
-    if( bVCAction )
-    {
-        bVCAction = false;
-        bReturn = true;
     }
 
     ForcePointer(&rMEvt);
