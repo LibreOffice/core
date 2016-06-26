@@ -56,7 +56,7 @@ void DialControlBmp::CopyBackground( const DialControlBmp& rSrc )
     SetSize(rSrc.maRect.GetSize());
     mbEnabled = rSrc.mbEnabled;
     Point aPos;
-    DrawBitmapEx( aPos, rSrc.GetBitmapEx( aPos, maRect.GetSize() ) );
+    DrawOutDev(aPos, maRect.GetSize(), aPos, maRect.GetSize(), rSrc);
 }
 
 void DialControlBmp::DrawBackground( const Size& rSize, bool bEnabled )
@@ -144,7 +144,7 @@ const Color& DialControlBmp::GetButtonFillColor( bool bMain ) const
 void DialControlBmp::Init()
 {
     SetSettings(mrParent.GetSettings());
-    SetBackground();
+    SetBackground(Wallpaper(COL_WHITE));
 }
 
 void DialControlBmp::SetSize( const Size& rSize )
@@ -276,7 +276,7 @@ void DialControl::Resize()
 void DialControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     Point aPos;
-    rRenderContext.DrawBitmapEx(aPos, mpImpl->mxBmpBuffered->GetBitmapEx(aPos, mpImpl->maWinSize));
+    rRenderContext.DrawOutDev(aPos, mpImpl->maWinSize, aPos, mpImpl->maWinSize, *mpImpl->mxBmpBuffered.get());
 }
 
 void DialControl::StateChanged( StateChangedType nStateChange )
