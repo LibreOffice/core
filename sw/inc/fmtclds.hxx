@@ -34,8 +34,6 @@ class SwColumn
     sal_uInt16 m_nWish;   /**< Desired width, borders included.
                          It is inversely proportional to the ratio of
                          desired width environment / current width column. */
-    sal_uInt16 m_nUpper;  ///< Top border.
-    sal_uInt16 m_nLower;  ///< Bottom border.
     sal_uInt16 m_nLeft;   ///< Left border.
     sal_uInt16 m_nRight;  ///< Right border.
 
@@ -49,8 +47,6 @@ public:
     void SetRight( sal_uInt16  nNew ) { m_nRight = nNew; }
 
     sal_uInt16 GetWishWidth() const { return m_nWish;  }
-    sal_uInt16 GetUpper() const { return m_nUpper; }
-    sal_uInt16 GetLower() const { return m_nLower; }
     sal_uInt16 GetLeft () const { return m_nLeft; }
     sal_uInt16 GetRight() const { return m_nRight; }
 

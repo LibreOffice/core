@@ -282,7 +282,6 @@ class SW_DLLPUBLIC SwForm
     TOXTypes    m_eType;
     sal_uInt16      m_nFormMaxLevel;
 
-    bool    m_bGenerateTabPos : 1;
     bool    m_bIsRelTabPos : 1;
     bool    m_bCommaSeparated : 1;
 

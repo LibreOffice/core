@@ -390,8 +390,8 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
             if ( bAdjustAttributes )
             {
                 SvxULSpaceItem aUL( pSet->GetULSpace() );
-                aUL.SetUpper( pC->GetUpper());
-                aUL.SetLower( pC->GetLower());
+                aUL.SetUpper(0);
+                aUL.SetLower(0);
 
                 static_cast<SwLayoutFrame*>(pCol)->GetFormat()->SetFormatAttr( aLR );
                 static_cast<SwLayoutFrame*>(pCol)->GetFormat()->SetFormatAttr( aUL );

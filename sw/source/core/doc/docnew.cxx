@@ -280,7 +280,6 @@ SwDoc::SwDoc()
 #endif
     mbContainsAtPageObjWithContentAnchor(false), //#i119292#, fdo#37024
 
-    mbReadOnly(false),
     meDocType(DOCTYPE_NATIVE)
 {
     //UUUU The DrawingLayer ItemPool which is used as 2nd pool for Writer documents' pool

@@ -848,7 +848,7 @@ SwRangeRedline::SwRangeRedline(RedlineType_t eTyp, const SwPaM& rPam )
     pRedlineData( new SwRedlineData( eTyp, GetDoc()->getIDocumentRedlineAccess().GetRedlineAuthor() ) ),
     pContentSect( nullptr )
 {
-    bDelLastPara = bIsLastParaDelete = false;
+    bDelLastPara = false;
     bIsVisible = true;
     if( !rPam.HasMark() )
         DeleteMark();
@@ -859,7 +859,7 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
     pRedlineData( new SwRedlineData( rData )),
     pContentSect( nullptr )
 {
-    bDelLastPara = bIsLastParaDelete = false;
+    bDelLastPara = false;
     bIsVisible = true;
     if( !rPam.HasMark() )
         DeleteMark();
@@ -870,7 +870,7 @@ SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPosition& rP
     pRedlineData( new SwRedlineData( rData )),
     pContentSect( nullptr )
 {
-    bDelLastPara = bIsLastParaDelete = false;
+    bDelLastPara = false;
     bIsVisible = true;
 }
 
@@ -879,7 +879,7 @@ SwRangeRedline::SwRangeRedline( const SwRangeRedline& rCpy )
     pRedlineData( new SwRedlineData( *rCpy.pRedlineData )),
     pContentSect( nullptr )
 {
-    bDelLastPara = bIsLastParaDelete = false;
+    bDelLastPara = false;
     bIsVisible = true;
     if( !rCpy.HasMark() )
         DeleteMark();

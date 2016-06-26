@@ -193,7 +193,6 @@ struct SwMergeDescriptor
      * @defgroup print Mail merge to Printer
      * @addtogroup print
      * @{ */
-    bool                                                bPrintAsync;
     css::uno::Sequence<  css::beans::PropertyValue >    aPrintOptions;
     /** @} */
 
@@ -208,7 +207,6 @@ struct SwMergeDescriptor
         bCreateSingleFile( false ),
         bSendAsHTML( true ),
         bSendAsAttachment( false ),
-        bPrintAsync( false ),
         pMailMergeConfigItem( nullptr )
     {
         if( nType == DBMGR_MERGE_SHELL )

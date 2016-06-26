@@ -1438,7 +1438,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
                     lcl_PreparePrinterOptions( rMergeDescriptor.aPrintOptions, false, aOptions );
 
-                    pWorkView->StartPrint( aOptions, bIsMergeSilent, rMergeDescriptor.bPrintAsync );
+                    pWorkView->StartPrint( aOptions, bIsMergeSilent, false/*bPrintAsync*/ );
                     // some GetPrinter functions have a true default, so keep the false
                     SfxPrinter* pDocPrt = pWorkView->GetPrinter();
                     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : SfxViewShell::GetJobSetup();
@@ -1577,7 +1577,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             // print the target document
             uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
             lcl_PreparePrinterOptions( rMergeDescriptor.aPrintOptions, true, aOptions );
-            pTargetView->ExecPrint( aOptions, bIsMergeSilent, rMergeDescriptor.bPrintAsync );
+            pTargetView->ExecPrint( aOptions, bIsMergeSilent, false/*bPrintAsync*/ );
         }
 
         if( IsMergeOk() && bMT_SHELL )

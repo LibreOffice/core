@@ -218,7 +218,6 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     m_bCommaSeparated(false)
 {
     //bHasFirstTabPos =
-    m_bGenerateTabPos = false;
     m_bIsRelTabPos = true;
 
     // The table of contents has a certain number of headlines + headings
@@ -330,7 +329,6 @@ SwForm& SwForm::operator=(const SwForm& rForm)
     m_nFormMaxLevel = rForm.m_nFormMaxLevel;
 //  nFirstTabPos = rForm.nFirstTabPos;
 //  bHasFirstTabPos = rForm.bHasFirstTabPos;
-    m_bGenerateTabPos = rForm.m_bGenerateTabPos;
     m_bIsRelTabPos = rForm.m_bIsRelTabPos;
     m_bCommaSeparated = rForm.m_bCommaSeparated;
     for(sal_uInt16 i=0; i < m_nFormMaxLevel; ++i)

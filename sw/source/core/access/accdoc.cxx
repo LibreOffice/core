@@ -220,15 +220,10 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleName()
                 sFileName = pDocSh->GetTitle( SFX_TITLE_APINAME );
             }
         }
-        OUString sReadOnly;
-        if(pDoc->getDocReadOnly())
-        {
-            sReadOnly = GetResource( STR_ACCESS_DOC_WORDPROCESSING_READONLY );
-        }
 
         if ( !sFileName.isEmpty() )
         {
-            sAccName = sFileName + sReadOnly + " - " + sAccName;
+            sAccName = sFileName + " - " + sAccName;
         }
     }
 

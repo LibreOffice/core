@@ -61,7 +61,7 @@ sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
 SwNodes::SwNodes( SwDoc* pDocument )
     : m_vIndices(nullptr), m_pMyDoc( pDocument )
 {
-    m_bInNodesDel = m_bInDelUpdOutline = m_bInDelUpdNum = false;
+    m_bInNodesDel = m_bInDelUpdOutline = false;
 
     OSL_ENSURE( m_pMyDoc, "in which Doc am I?" );
 
