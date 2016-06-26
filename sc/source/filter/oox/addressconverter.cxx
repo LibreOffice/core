@@ -46,26 +46,6 @@ const sal_Int32 OOX_MAXCOL          = static_cast< sal_Int32 >( (1 << 14) - 1 );
 const sal_Int32 OOX_MAXROW          = static_cast< sal_Int32 >( (1 << 20) - 1 );
 const sal_Int16 OOX_MAXTAB          = static_cast< sal_Int16 >( (1 << 15) - 1 );
 
-const sal_Int32 BIFF2_MAXCOL        = 255;
-const sal_Int32 BIFF2_MAXROW        = 16383;
-const sal_Int16 BIFF2_MAXTAB        = 0;
-
-const sal_Int32 BIFF3_MAXCOL        = BIFF2_MAXCOL;
-const sal_Int32 BIFF3_MAXROW        = BIFF2_MAXROW;
-const sal_Int16 BIFF3_MAXTAB        = BIFF2_MAXTAB;
-
-const sal_Int32 BIFF4_MAXCOL        = BIFF3_MAXCOL;
-const sal_Int32 BIFF4_MAXROW        = BIFF3_MAXROW;
-const sal_Int16 BIFF4_MAXTAB        = 32767;
-
-const sal_Int32 BIFF5_MAXCOL        = BIFF4_MAXCOL;
-const sal_Int32 BIFF5_MAXROW        = BIFF4_MAXROW;
-const sal_Int16 BIFF5_MAXTAB        = BIFF4_MAXTAB;
-
-const sal_Int32 BIFF8_MAXCOL        = BIFF5_MAXCOL;
-const sal_Int32 BIFF8_MAXROW        = 65535;
-const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
-
 } // namespace
 
 
@@ -124,45 +104,8 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     mbTabOverflow( false )
 {
     maDConChars.set( 0xFFFF, '\x01', 0xFFFF, '\x02', 0xFFFF );
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:
-            initializeMaxPos( OOX_MAXTAB, OOX_MAXCOL, OOX_MAXROW );
-            maLinkChars.set( 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF );
-        break;
-        case FILTER_BIFF: switch( getBiff() )
-        {
-            case BIFF2:
-                initializeMaxPos( BIFF2_MAXTAB, BIFF2_MAXCOL, BIFF2_MAXROW );
-                maLinkChars.set( 0xFFFF, '\x01', '\x02', 0xFFFF, 0xFFFF );
-            break;
-            case BIFF3:
-                initializeMaxPos( BIFF3_MAXTAB, BIFF3_MAXCOL, BIFF3_MAXROW );
-                maLinkChars.set( 0xFFFF, '\x01', '\x02', 0xFFFF, 0xFFFF );
-            break;
-            case BIFF4:
-                initializeMaxPos( BIFF4_MAXTAB, BIFF4_MAXCOL, BIFF4_MAXROW );
-                maLinkChars.set( 0xFFFF, '\x01', '\x02', 0xFFFF, '\x00' );
-            break;
-            case BIFF5:
-                initializeMaxPos( BIFF5_MAXTAB, BIFF5_MAXCOL, BIFF5_MAXROW );
-                maLinkChars.set( '\x04', '\x01', '\x02', '\x03', '\x00' );
-            break;
-            case BIFF8:
-                initializeMaxPos( BIFF8_MAXTAB, BIFF8_MAXCOL, BIFF8_MAXROW );
-                maLinkChars.set( '\x04', '\x01', 0xFFFF, '\x02', '\x00' );
-            break;
-            case BIFF_UNKNOWN:
-                initializeMaxPos( 0, 0, 0 );
-                maLinkChars.set( 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF );
-            break;
-        }
-        break;
-        case FILTER_UNKNOWN:
-            initializeMaxPos( 0, 0, 0 );
-            maLinkChars.set( 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF );
-        break;
-    }
+    initializeMaxPos( OOX_MAXTAB, OOX_MAXCOL, OOX_MAXROW );
+    maLinkChars.set( 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF );
 }
 
 bool AddressConverter::parseOoxAddress2d(

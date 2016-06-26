@@ -128,8 +128,6 @@ public:
     inline FilterBase&  getBaseFilter() const { return mrBaseFilter; }
     /** Returns the filter progress bar. */
     inline SegmentProgressBar& getProgressBar() const { return *mxProgressBar; }
-    /** Returns the file type of the current filter. */
-    inline FilterType   getFilterType() const { return meFilterType; }
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
     inline bool         isWorkbookFile() const { return mbWorkbook; }
     /** Returns the VBA project storage. */
@@ -270,7 +268,6 @@ private:
     Reference< XSpreadsheetDocument > mxDoc;    /// Document model.
     FilterBase&         mrBaseFilter;           /// Base filter object.
     ExcelFilter&        mrExcelFilter;          /// Base object for registration of this structure.
-    FilterType          meFilterType;           /// File type of the filter.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
     StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
     sal_Int16           mnCurrSheet;            /// Current sheet index in Calc document.
@@ -308,7 +305,6 @@ private:
     BiffCodecHelperPtr  mxCodecHelper;          /// Encoder/decoder helper.
     BiffType            meBiff;                 /// BIFF version for BIFF import/export.
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
-    bool                mbHasCodePage;          /// True = CODEPAGE record exists in imported stream.
     ScDocument* mpDoc;
     ScDocShell* mpDocShell;
     std::unique_ptr<ScDocumentImport> mxDocImport;
@@ -317,7 +313,6 @@ private:
 WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),
     mrExcelFilter( rFilter ),
-    meFilterType( FILTER_OOXML ),
     mpOoxFilter( &rFilter ),
     meBiff( BIFF_UNKNOWN ),
     mpDoc(nullptr),
@@ -540,7 +535,6 @@ void WorkbookGlobals::initialize()
     mnCurrSheet = -1;
     mbWorkbook = true;
     meTextEnc = osl_getThreadTextEncoding();
-    mbHasCodePage = false;
 
     // the spreadsheet document
     mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
@@ -622,19 +616,6 @@ void WorkbookGlobals::initialize()
     {
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_SAVE_DOC) ) );
     }
-    // filter specific
-    switch( getFilterType() )
-    {
-        case FILTER_BIFF:
-            mxCodecHelper.reset( new BiffCodecHelper( *this ) );
-        break;
-
-        case FILTER_OOXML:
-        break;
-
-        case FILTER_UNKNOWN:
-        break;
-    }
 }
 
 void WorkbookGlobals::finalize()
@@ -680,11 +661,6 @@ WorkbookHelper::~WorkbookHelper()
 FilterBase& WorkbookHelper::getBaseFilter() const
 {
     return mrBookGlob.getBaseFilter();
-}
-
-FilterType WorkbookHelper::getFilterType() const
-{
-    return mrBookGlob.getFilterType();
 }
 
 SegmentProgressBar& WorkbookHelper::getProgressBar() const
@@ -983,7 +959,6 @@ PageSettingsConverter& WorkbookHelper::getPageSettingsConverter() const
 
 XmlFilterBase& WorkbookHelper::getOoxFilter() const
 {
-    OSL_ENSURE( mrBookGlob.getFilterType() == FILTER_OOXML, "WorkbookHelper::getOoxFilter - invalid call" );
     return mrBookGlob.getOoxFilter();
 }
 

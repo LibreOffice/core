@@ -274,9 +274,6 @@ public:
     /** returns the ExtLst entries that need to be filled */
     inline ExtLst&      getExtLst() { return maExtLst; }
 
-    /** Returns the BIFF drawing page for this sheet (BIFF2-BIFF8 only). */
-    inline BiffSheetDrawing& getBiffDrawing() const { return *mxBiffDrawing; }
-
     /** Sets a column or row page break described in the passed struct. */
     void                setPageBreak( const PageBreakModel& rModel, bool bRowBreak );
     /** Inserts the hyperlink URL into the spreadsheet. */
@@ -452,17 +449,7 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
     maDefRowModel.mbCollapsed = false;
 
     // buffers
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:
-            mxVmlDrawing.reset( new VmlDrawing( *this ) );
-        break;
-        case FILTER_BIFF:
-            mxBiffDrawing.reset( new BiffSheetDrawing( *this ) );
-        break;
-        case FILTER_UNKNOWN:
-        break;
-    }
+    mxVmlDrawing.reset( new VmlDrawing( *this ) );
 
     // prepare progress bars
     if( mxProgressBar.get() )
@@ -1364,24 +1351,11 @@ void WorksheetGlobals::finalizeDrawings()
     PropertySet aRangeProp( getCellRange( CellRangeAddress( getSheetIndex(), 0, 0, mrMaxApiPos.Col(), mrMaxApiPos.Row() ) ) );
     aRangeProp.getProperty( maDrawPageSize, PROP_Size );
 
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:
-            // import DML and VML
-            if( !maDrawingPath.isEmpty() )
-                importOoxFragment( new DrawingFragment( *this, maDrawingPath ) );
-            if( !maVmlDrawingPath.isEmpty() )
-                importOoxFragment( new VmlDrawingFragment( *this, maVmlDrawingPath ) );
-        break;
-
-        case FILTER_BIFF:
-            // convert BIFF3-BIFF5 drawing objects, or import and convert DFF stream
-            getBiffDrawing().finalizeImport();
-        break;
-
-        case FILTER_UNKNOWN:
-        break;
-    }
+    // import DML and VML
+    if( !maDrawingPath.isEmpty() )
+        importOoxFragment( new DrawingFragment( *this, maDrawingPath ) );
+    if( !maVmlDrawingPath.isEmpty() )
+        importOoxFragment( new VmlDrawingFragment( *this, maVmlDrawingPath ) );
 
     // comments (after callout shapes have been imported from VML/DFF)
     maComments.finalizeImport();

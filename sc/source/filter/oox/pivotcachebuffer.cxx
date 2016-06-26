@@ -1356,7 +1356,7 @@ void PivotCache::finalizeExternalSheetSource()
     /*  If pivot cache is based on external sheet data, try to restore sheet
         data from cache records. No support for external defined names or tables,
         sheet name and path to cache records fragment (OOXML only) are required. */
-    bool bHasRelation = (getFilterType() == FILTER_BIFF) || !maDefModel.maRelId.isEmpty();
+    bool bHasRelation = !maDefModel.maRelId.isEmpty();
     if( bHasRelation && maSheetSrcModel.maDefName.isEmpty() && !maSheetSrcModel.maSheet.isEmpty() )
         prepareSourceDataSheet();
 }
@@ -1403,67 +1403,25 @@ void PivotCacheBuffer::registerPivotCacheFragment( sal_Int32 nCacheId, const OUS
 
 PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
 {
-    switch( getFilterType() )
-    {
-        /*  OOXML/BIFF12 filter: On first call for the cache ID, the pivot
-            cache object is created and inserted into maCaches. Then, the cache
-            definition fragment is read and the cache is returned. On
-            subsequent calls, the created cache will be found in maCaches and
-            returned immediately. */
-        case FILTER_OOXML:
-        {
-            // try to find an imported pivot cache
-            if( PivotCache* pCache = maCaches.get( nCacheId ).get() )
-                return pCache;
+    /*  OOXML/BIFF12 filter: On first call for the cache ID, the pivot
+        cache object is created and inserted into maCaches. Then, the cache
+        definition fragment is read and the cache is returned. On
+        subsequent calls, the created cache will be found in maCaches and
+        returned immediately. */
+    // try to find an imported pivot cache
+    if( PivotCache* pCache = maCaches.get( nCacheId ).get() )
+        return pCache;
 
-            // check if a fragment path exists for the passed cache identifier
-            FragmentPathMap::iterator aIt = maFragmentPaths.find( nCacheId );
-            if( aIt == maFragmentPaths.end() )
-                return nullptr;
+    // check if a fragment path exists for the passed cache identifier
+    FragmentPathMap::iterator aIt = maFragmentPaths.find( nCacheId );
+    if( aIt == maFragmentPaths.end() )
+        return nullptr;
 
-            /*  Import the cache fragment. This may create a dummy data sheet
-                for external sheet sources. */
-            PivotCache& rCache = createPivotCache( nCacheId );
-            importOoxFragment( new PivotCacheDefinitionFragment( *this, aIt->second, rCache ) );
-            return &rCache;
-        }
-
-        /*  BIFF filter: Pivot table provides 0-based index into list of pivot
-            cache source links (PIVOTCACHE/PCDSOURCE/... record blocks in
-            workbook stream). First, this index has to be resolved to the cache
-            identifier that is used to manage the cache stream names (the
-            maFragmentPaths member). The cache object itself exists already
-            before the first call for the cache source index, because source data
-            link is part of workbook data, not of the cache stream. To detect
-            subsequent calls with an already initialized cache, the entry in
-            maFragmentPaths will be removed after reading the cache stream. */
-        case FILTER_BIFF:
-        {
-            /*  Resolve cache index to cache identifier and try to find pivot
-                cache. Cache must exist already for a valid cache index. */
-            nCacheId = ContainerHelper::getVectorElement( maCacheIds, nCacheId, -1 );
-            PivotCache* pCache = maCaches.get( nCacheId ).get();
-            if( !pCache )
-                return nullptr;
-
-            /*  Try to find fragment path entry (stream name). If missing, the
-                stream has been read already, and the cache can be returned. */
-            FragmentPathMap::iterator aIt = maFragmentPaths.find( nCacheId );
-            if( aIt != maFragmentPaths.end() )
-            {
-                /*  Import the cache stream. This may create a dummy data sheet
-                    for external sheet sources. */
-                BiffPivotCacheFragment( *this, aIt->second, *pCache ).importFragment();
-                // remove the fragment entry to mark that the cache is initialized
-                maFragmentPaths.erase( aIt );
-            }
-            return pCache;
-        }
-
-        case FILTER_UNKNOWN:
-            OSL_FAIL( "PivotCacheBuffer::importPivotCacheFragment - unknown filter type" );
-    }
-    return nullptr;
+    /*  Import the cache fragment. This may create a dummy data sheet
+        for external sheet sources. */
+    PivotCache& rCache = createPivotCache( nCacheId );
+    importOoxFragment( new PivotCacheDefinitionFragment( *this, aIt->second, rCache ) );
+    return &rCache;
 }
 
 PivotCache& PivotCacheBuffer::createPivotCache( sal_Int32 nCacheId )

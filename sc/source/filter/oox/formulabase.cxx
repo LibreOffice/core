@@ -1616,7 +1616,7 @@ TokenToRangeListState lclProcessClose( sal_Int32& ornParenLevel )
 } // namespace
 
 FormulaProcessorBase::FormulaProcessorBase( const WorkbookHelper& rHelper ) :
-    OpCodeProvider( rHelper.getBaseFilter().getModelFactory(), rHelper.getFilterType(), rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
+    OpCodeProvider( rHelper.getBaseFilter().getModelFactory(), FILTER_OOXML, rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
     ApiOpCodes( getOpCodes() ),
     WorkbookHelper( rHelper )
 {
