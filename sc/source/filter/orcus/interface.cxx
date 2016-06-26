@@ -30,6 +30,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
+#include <editeng/lcolitem.hxx>
 
 #include <formula/token.hxx>
 #include <tools/datetime.hxx>
@@ -765,6 +766,7 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
 
     rSet.Put(SvxColorItem(maColor, ATTR_FONT_COLOR));
     rSet.Put(SvxUnderlineItem(meUnderline, ATTR_FONT_UNDERLINE));
+    rSet.Put(SvxColorItem(maUnderlineColor, ATTR_FONT_UNDERLINE));
 }
 
 void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
@@ -949,6 +951,7 @@ void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
     {
         case orcus::spreadsheet::underline_t::single_line:
         case orcus::spreadsheet::underline_t::single_accounting:
+        case orcus::spreadsheet::underline_t::solid:
             maCurrentFont.meUnderline = LINESTYLE_SINGLE;
             break;
         case orcus::spreadsheet::underline_t::double_line:
@@ -958,12 +961,61 @@ void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
         case orcus::spreadsheet::underline_t::none:
             maCurrentFont.meUnderline = LINESTYLE_NONE;
             break;
+        case orcus::spreadsheet::underline_t::dotted:
+            maCurrentFont.meUnderline = LINESTYLE_DOTTED;
+            break;
+        case orcus::spreadsheet::underline_t::dash:
+            maCurrentFont.meUnderline = LINESTYLE_DASH;
+            break;
+        case orcus::spreadsheet::underline_t::long_dash:
+            maCurrentFont.meUnderline = LINESTYLE_LONGDASH;
+            break;
+        case orcus::spreadsheet::underline_t::dot_dash:
+            maCurrentFont.meUnderline = LINESTYLE_DASHDOT;
+            break;
+        case orcus::spreadsheet::underline_t::dot_dot_dot_dash:
+            maCurrentFont.meUnderline = LINESTYLE_DASHDOTDOT; // dot-dot-dot-dash is absent from underline types in libo
+            break;
+        case orcus::spreadsheet::underline_t::wave:
+            maCurrentFont.meUnderline = LINESTYLE_WAVE;
+            break;
+        default:
+            ;
     }
 }
 
-void ScOrcusStyles::set_font_underline_width(orcus::spreadsheet::underline_width_t /* e */)
+void ScOrcusStyles::set_font_underline_width(orcus::spreadsheet::underline_width_t e )
 {
-
+    if (e == orcus::spreadsheet::underline_width_t::bold)
+    {
+        switch(maCurrentFont.meUnderline)
+        {
+            case LINESTYLE_NONE:
+            case LINESTYLE_SINGLE:
+                maCurrentFont.meUnderline = LINESTYLE_BOLD;
+                break;
+            case LINESTYLE_DOTTED:
+                maCurrentFont.meUnderline = LINESTYLE_BOLDDOTTED;
+                break;
+            case LINESTYLE_DASH:
+                maCurrentFont.meUnderline = LINESTYLE_BOLDDASH;
+                break;
+            case LINESTYLE_LONGDASH:
+                maCurrentFont.meUnderline = LINESTYLE_BOLDLONGDASH;
+                break;
+            case LINESTYLE_DASHDOT:
+                maCurrentFont.meUnderline = LINESTYLE_BOLDDASHDOT;
+                break;
+            case LINESTYLE_DASHDOTDOT:
+                maCurrentFont.meUnderline = LINESTYLE_BOLDDASHDOTDOT;
+                break;
+            case LINESTYLE_WAVE:
+                maCurrentFont.meUnderline = LINESTYLE_BOLDWAVE;
+                break;
+            default:
+                ;
+        }
+    }
 }
 
 void ScOrcusStyles::set_font_underline_mode(orcus::spreadsheet::underline_mode_t /* e */)
@@ -971,17 +1023,31 @@ void ScOrcusStyles::set_font_underline_mode(orcus::spreadsheet::underline_mode_t
 
 }
 
-void ScOrcusStyles::set_font_underline_type(orcus::spreadsheet::underline_type_t /* e */)
+void ScOrcusStyles::set_font_underline_type(orcus::spreadsheet::underline_type_t  e )
 {
-
+    if (e == orcus::spreadsheet::underline_type_t::double_type)
+    {
+        switch(maCurrentFont.meUnderline)
+        {
+            case LINESTYLE_NONE:
+            case LINESTYLE_SINGLE:
+                maCurrentFont.meUnderline = LINESTYLE_DOUBLE;
+                break;
+            case LINESTYLE_WAVE:
+                maCurrentFont.meUnderline = LINESTYLE_DOUBLEWAVE;
+                break;
+            default:
+                ;
+        }
+    }
 }
 
-void ScOrcusStyles::set_font_underline_color(orcus::spreadsheet::color_elem_t /*alpha*/,
-            orcus::spreadsheet::color_elem_t /*red*/,
-            orcus::spreadsheet::color_elem_t /*green*/,
-            orcus::spreadsheet::color_elem_t /*blue*/)
+void ScOrcusStyles::set_font_underline_color(orcus::spreadsheet::color_elem_t alpha,
+            orcus::spreadsheet::color_elem_t red,
+            orcus::spreadsheet::color_elem_t green,
+            orcus::spreadsheet::color_elem_t blue)
 {
-
+    maCurrentFont.maUnderlineColor = Color(alpha, red, green, blue);
 }
 
 void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,

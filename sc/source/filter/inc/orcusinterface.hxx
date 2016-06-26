@@ -255,7 +255,9 @@ private:
         OUString maName;
         double mnSize;
         Color maColor;
+
         FontLineStyle meUnderline;
+        Color maUnderlineColor;
 
         font();
 
