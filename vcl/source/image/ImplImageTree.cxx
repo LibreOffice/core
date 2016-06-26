@@ -45,6 +45,8 @@
 #include <vcl/svapp.hxx>
 #include <vcldemo-debug.hxx>
 
+#include <vcl/filter/PngReader.hxx>
+
 #include <vcl/BitmapProcessor.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/pngwrite.hxx>
@@ -146,9 +148,8 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
 
     if (rPath.endsWith(".png"))
     {
-        vcl::PNGReader aPNGReader(*xStream);
-        aPNGReader.SetIgnoreGammaChunk( true );
-        rBitmap = aPNGReader.Read();
+        vcl::PngReader aPNGReader(*xStream);
+        aPNGReader.Read(rBitmap);
     }
     else if (rPath.endsWith(".svg"))
     {
