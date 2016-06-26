@@ -152,7 +152,6 @@ private:
 
     bool                    bIsActive;
 
-    bool                    bChartAreaValid; // if chart is drawn
     bool                    bForceFocusOnCurCell; // #i123629#
 
     ScRangeListRef          aChartSource;

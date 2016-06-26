@@ -50,7 +50,6 @@ ScPrivatSplit::ScPrivatSplit(vcl::Window* pParent, const ResId& rResId)
 
     aWinPointer=GetPointer();
 
-    aMovingFlag=false;
     aWinPointer=Pointer(PointerStyle::VSplit);
     SetPointer(aWinPointer);
 }

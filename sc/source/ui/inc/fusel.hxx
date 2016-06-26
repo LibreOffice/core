@@ -44,9 +44,6 @@ public:
 
     void    ActivateNoteHandles(SdrObject* pObj);
 
-protected:
-    bool            bVCAction;
-
 private:
     bool TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
 

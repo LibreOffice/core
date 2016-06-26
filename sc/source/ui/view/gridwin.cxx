@@ -211,11 +211,9 @@ private:
     VclPtr<ScGridWindow>   pGridWin;
     SCCOL           nCol;
     SCROW           nRow;
-    bool            bButtonDown;
     bool            bInit;
     bool            bCancelled;
     bool            bInSelect;
-    bool            mbListHasDates;
     sal_uLong           nSel;
     ScFilterBoxMode eMode;
 
@@ -238,7 +236,6 @@ public:
     bool            IsInInit() const        { return bInit; }
     void            SetCancelled()          { bCancelled = true; }
     bool            IsInSelect() const      { return bInSelect; }
-    bool            HasDates() const        { return mbListHasDates; }
 };
 
 //  ListBox in a FloatingWindow (pParent)
@@ -248,11 +245,9 @@ ScFilterListBox::ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
     pGridWin( pGrid ),
     nCol( nNewCol ),
     nRow( nNewRow ),
-    bButtonDown( false ),
     bInit( true ),
     bCancelled( false ),
     bInSelect( false ),
-    mbListHasDates(false),
     nSel( 0 ),
     eMode( eNewMode )
 {
@@ -322,13 +317,10 @@ void ScFilterListBox::SelectHdl()
         if ( LISTBOX_ENTRY_NOTFOUND != nPos )
         {
             nSel = nPos;
-            if (!bButtonDown)
-            {
-                // #i81298# set bInSelect flag, so the box isn't deleted from modifications within FilterSelect
-                bInSelect = true;
-                pGridWin->FilterSelect( nSel );
-                bInSelect = false;
-            }
+            // #i81298# set bInSelect flag, so the box isn't deleted from modifications within FilterSelect
+            bInSelect = true;
+            pGridWin->FilterSelect( nSel );
+            bInSelect = false;
         }
     }
 }
@@ -465,7 +457,6 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             nDragEndX( -1 ),
             nDragEndY( -1 ),
             meDragInsertMode( INS_NONE ),
-            nCurrentPointer( 0 ),
             aComboButton( this ),
             aCurMousePos( 0,0 ),
             nPaintCount( 0 ),
@@ -1244,7 +1235,7 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
             ExecDataSelect(nCol, nRow, aString);
             break;
         case SC_FILTERBOX_FILTER:
-            ExecFilter(nSel, nCol, nRow, aString, mpFilterBox->HasDates());
+            ExecFilter(nSel, nCol, nRow, aString, false/*bHasDates*/);
             break;
         case SC_FILTERBOX_SCENARIO:
             pViewData->GetView()->UseScenario(aString);
@@ -1401,7 +1392,6 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
 
 void ScGridWindow::SetPointer( const Pointer& rPointer )
 {
-    nCurrentPointer = 0;
     Window::SetPointer( rPointer );
 }
 

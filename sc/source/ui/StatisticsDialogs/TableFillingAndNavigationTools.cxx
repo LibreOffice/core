@@ -93,8 +93,7 @@ void FormulaTemplate::applyNumber(const OUString& aVariable, sal_Int32 aValue)
 AddressWalker::AddressWalker(ScAddress aInitialAddress) :
     mCurrentAddress(aInitialAddress),
     mMinimumAddress(aInitialAddress),
-    mMaximumAddress(aInitialAddress),
-    mTrackRange(true)
+    mMaximumAddress(aInitialAddress)
 {
     mAddressStack.push_back(mCurrentAddress);
 }
@@ -132,21 +131,15 @@ void AddressWalker::nextColumn()
 {
     mCurrentAddress.IncCol();
 
-    if (mTrackRange)
-    {
-        if(mMaximumAddress.Col() < mCurrentAddress.Col())
-            mMaximumAddress.SetCol(mCurrentAddress.Col());
-    }
+    if(mMaximumAddress.Col() < mCurrentAddress.Col())
+        mMaximumAddress.SetCol(mCurrentAddress.Col());
 }
 
 void AddressWalker::nextRow()
 {
     mCurrentAddress.IncRow();
-    if (mTrackRange)
-    {
-        if(mMaximumAddress.Row() < mCurrentAddress.Row())
-            mMaximumAddress.SetRow(mCurrentAddress.Row());
-    }
+    if(mMaximumAddress.Row() < mCurrentAddress.Row())
+        mMaximumAddress.SetRow(mCurrentAddress.Row());
 }
 
 void AddressWalker::push(SCCOL aRelativeCol, SCROW aRelativeRow, SCTAB aRelativeTab)

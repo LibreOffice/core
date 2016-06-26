@@ -27,7 +27,6 @@ class ScPrivatSplit : public Control
 private:
 
         Link<ScPrivatSplit&,void> aCtrModifiedLink;
-        bool                aMovingFlag;
         Pointer             aWinPointer;
         short               nOldX;
         short               nOldY;

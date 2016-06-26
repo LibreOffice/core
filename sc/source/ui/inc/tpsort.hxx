@@ -79,8 +79,6 @@ private:
     sal_uInt16          nFieldCount;
     sal_uInt16          nSortKeyCount;
 
-    SCCOL               nFirstCol;
-    SCROW               nFirstRow;
     bool                bHasHeader;
     bool                bSortByRows;
 

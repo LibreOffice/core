@@ -166,8 +166,6 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     SCROW                   nDragEndY;
     InsCellCmd              meDragInsertMode;
 
-    sal_uInt16              nCurrentPointer;
-
     ScDDComboBoxButton      aComboButton;
 
     Point                   aCurMousePos;
