@@ -575,6 +575,9 @@ private:
     void            DeleteSelectedContent() override;
     void            DeleteSelectedTopLevel() override;
 
+    VclPtrInstance<PopupMenu>                  m_pMenu;
+    VclPtrInstance<PopupMenu>                  m_pEntry;
+
 public:
     SvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
     virtual ~SvxToolbarConfigPage();

@@ -3090,6 +3090,8 @@ bool SvxConfigEntry::IsRenamable()
 
 SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     : SvxConfigPage(pParent, rSet)
+    , m_pMenu(CUI_RES(MODIFY_TOOLBAR))
+    , m_pEntry(CUI_RES(MODIFY_TOOLBAR_CONTENT))
 {
     SetHelpId( HID_SVX_CONFIG_TOOLBAR );
 
@@ -3134,19 +3136,17 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pMoveDownButton->Enable();
     m_pMoveUpButton->Enable();
 
-    VclPtrInstance<PopupMenu> pMenu( CUI_RES( MODIFY_TOOLBAR ) );
-    pMenu->SetMenuFlags(
-        pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
+    m_pMenu->SetMenuFlags(
+        m_pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
-    m_pModifyTopLevelButton->SetPopupMenu( pMenu );
+    m_pModifyTopLevelButton->SetPopupMenu( m_pMenu );
     m_pModifyTopLevelButton->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, ToolbarSelectHdl ) );
 
-    VclPtrInstance<PopupMenu> pEntry( CUI_RES( MODIFY_TOOLBAR_CONTENT ) );
-    pEntry->SetMenuFlags(
-        pEntry->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
+    m_pEntry->SetMenuFlags(
+        m_pEntry->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
-    m_pModifyCommandButton->SetPopupMenu( pEntry );
+    m_pModifyCommandButton->SetPopupMenu(m_pEntry);
     m_pModifyCommandButton->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, EntrySelectHdl ) );
 
@@ -3183,6 +3183,9 @@ void SvxToolbarConfigPage::dispose()
         delete pData;
     }
     m_pSaveInListBox->Clear();
+
+    m_pEntry.disposeAndClear();
+    m_pMenu.disposeAndClear();
 
     SvxConfigPage::dispose();
 }
