@@ -22,6 +22,30 @@
       "revId": "67696e42ce3388091fa04341ecaf042a454df4a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_35e7e213",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2812,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2016-06-26T05:23:18Z",
+      "side": 1,
+      "message": "1) A few octave calculations to show that \nletting variance ratio (first arg) greater than 1 by swapping the variances/degree of freedoms do not always ensure that f-distribution gives a result \u003c\u003d 0.5. \n\n\u003e\u003e f\u003d 2\n\u003e\u003e fcdf(f, 2, 1)\nans \u003d  0.55279\n\u003e\u003e fcdf(1/f, 1, 2)\nans \u003d  0.44721\n\n\u003e\u003e f \u003d 1.1667\nf \u003d  1.1667\n\u003e\u003e fcdf(f, 2, 1)\nans \u003d  0.45228\n\u003e\u003e fcdf(1/f, 1, 2)\nans \u003d  0.54772\n\nHence my change and above conditional statements are not doing the same. In fact I am not sure why the original author thought that by making variance ratio greater than 1.0 given to f distribution function will return value \u003c\u003d 0.5, and hence can just double that result to produce two tail result.\n\nSo I think we could remove the if - else statements to swap variances.\n\n2) Taking (1 - fFcdf) might be less accurate and we could improve by returning  2.0*std::min( GetFDist(fF, fF1, fF2), GetFDist(1/fF, fF2, fF1) ) like gnumeric does, but at the cost of 2 calls to GetFDist() instead of one. I chose to use 1 - fFcdf as R and octave does that way(See commit message), and I have used them at my work before.\n\nI will check for testcases for ftest in R/Octave and add them to ucalc test cases.",
+      "parentUuid": "ba84c18e_75e7aa40",
+      "range": {
+        "startLine": 2812,
+        "startChar": 19,
+        "endLine": 2812,
+        "endChar": 47
+      },
+      "revId": "67696e42ce3388091fa04341ecaf042a454df4a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
