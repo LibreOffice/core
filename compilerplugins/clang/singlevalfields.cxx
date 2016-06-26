@@ -191,8 +191,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
         return true;
 
     const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(get_top_FunctionDecl_from_Stmt(*memberExpr));
-    if (methodDecl && (methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator()
-                       || dyn_cast<CXXDestructorDecl>(methodDecl)))
+    if (methodDecl && (methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator()))
        return true;
 
     // walk up the tree until we find something interesting
