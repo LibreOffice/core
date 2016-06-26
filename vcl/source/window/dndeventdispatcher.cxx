@@ -90,9 +90,9 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
-    Point location( dtde.LocationX, dtde.LocationY );
+    //Point location( dtde.LocationX, dtde.LocationY );
 
-    vcl::Window* pChildWindow = findTopLevelWindow(location);
+    vcl::Window* pChildWindow = findTopLevelWindow( Point( dtde.LocationX, dtde.LocationY ) );
 
     // handle the case that drop is in an other vcl window than the last dragOver
     if( pChildWindow != m_pCurrentWindow.get() )
@@ -101,14 +101,14 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
         fireDragExitEvent( m_pCurrentWindow );
 
         fireDragEnterEvent( pChildWindow, static_cast < XDropTargetDragContext * > (this),
-            dtde.DropAction, location, dtde.SourceActions, m_aDataFlavorList );
+            dtde.DropAction, Point( dtde.LocationX, dtde.LocationY ), dtde.SourceActions, m_aDataFlavorList );
     }
 
     sal_Int32 nListeners = 0;
 
     // send drop event to the child window
     nListeners = fireDropEvent( pChildWindow, dtde.Context, dtde.DropAction,
-        location, dtde.SourceActions, dtde.Transferable );
+        Point( dtde.LocationX, dtde.LocationY ), dtde.SourceActions, dtde.Transferable );
 
     // reject drop if no listeners found
     if( nListeners == 0 ) {
@@ -125,16 +125,16 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
     throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
-    Point location( dtdee.LocationX, dtdee.LocationY );
+    //Point location( dtdee.LocationX, dtdee.LocationY );
 
-    vcl::Window * pChildWindow = findTopLevelWindow(location);
+    vcl::Window * pChildWindow = findTopLevelWindow( Point( dtdee.LocationX, dtdee.LocationY ) );
 
     // assume pointer write operation to be atomic
     designate_currentwindow(pChildWindow);
     m_aDataFlavorList = dtdee.SupportedDataFlavors;
 
     // fire dragEnter on listeners of current window
-    sal_Int32 nListeners = fireDragEnterEvent( pChildWindow, dtdee.Context, dtdee.DropAction, location,
+    sal_Int32 nListeners = fireDragEnterEvent( pChildWindow, dtdee.Context, dtdee.DropAction, Point( dtdee.LocationX, dtdee.LocationY ),
         dtdee.SourceActions, dtdee.SupportedDataFlavors );
 
     // reject drag if no listener found
@@ -162,10 +162,10 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
-    Point location( dtde.LocationX, dtde.LocationY );
+    //Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
 
-    vcl::Window * pChildWindow = findTopLevelWindow(location);
+    vcl::Window * pChildWindow = findTopLevelWindow( Point( dtde.LocationX, dtde.LocationY ) );
 
     if( pChildWindow != m_pCurrentWindow.get() )
     {
@@ -176,13 +176,13 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
         designate_currentwindow(pChildWindow);
 
         // fire dragEnter on listeners of current window
-        nListeners = fireDragEnterEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
+        nListeners = fireDragEnterEvent( pChildWindow, dtde.Context, dtde.DropAction, Point( dtde.LocationX, dtde.LocationY ),
             dtde.SourceActions, m_aDataFlavorList );
     }
     else
     {
         // fire dragOver on listeners of current window
-        nListeners = fireDragOverEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
+        nListeners = fireDragOverEvent( pChildWindow, dtde.Context, dtde.DropAction, Point( dtde.LocationX, dtde.LocationY ),
             dtde.SourceActions );
     }
 
@@ -199,10 +199,10 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
-    Point location( dtde.LocationX, dtde.LocationY );
+    //Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
 
-    vcl::Window* pChildWindow = findTopLevelWindow(location);
+    vcl::Window* pChildWindow = findTopLevelWindow( Point( dtde.LocationX, dtde.LocationY ) );
 
     if( pChildWindow != m_pCurrentWindow.get() )
     {
@@ -213,13 +213,13 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
         designate_currentwindow(pChildWindow);
 
         // fire dragEnter on listeners of current window
-        nListeners = fireDragEnterEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
+        nListeners = fireDragEnterEvent( pChildWindow, dtde.Context, dtde.DropAction, Point( dtde.LocationX, dtde.LocationY ),
             dtde.SourceActions, m_aDataFlavorList );
     }
     else
     {
         // fire dropActionChanged on listeners of current window
-        nListeners = fireDropActionChangedEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
+        nListeners = fireDropActionChangedEvent( pChildWindow, dtde.Context, dtde.DropAction, Point( dtde.LocationX, dtde.LocationY ),
             dtde.SourceActions );
     }
 
@@ -236,11 +236,11 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
-    Point origin( dge.DragOriginX, dge.DragOriginY );
+    //Point origin( dge.DragOriginX, dge.DragOriginY );
 
-    vcl::Window* pChildWindow = findTopLevelWindow(origin);
+    vcl::Window* pChildWindow = findTopLevelWindow(Point( dge.DragOriginX, dge.DragOriginY ));
 
-    fireDragGestureEvent( pChildWindow, dge.DragSource, dge.Event, origin, dge.DragAction );
+    fireDragGestureEvent( pChildWindow, dge.DragSource, dge.Event, Point( dge.DragOriginX, dge.DragOriginY ), dge.DragAction );
 }
 
 void SAL_CALL DNDEventDispatcher::disposing( const EventObject& )
