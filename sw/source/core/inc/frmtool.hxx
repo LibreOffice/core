@@ -181,8 +181,6 @@ protected:
     bool     mbHadFollow;
     bool     mbInvaKeep;
     bool     mbValidSize;
-    // #i49383#
-    bool mbFrameDeleted;
 
 public:
     SwFrameNotify( SwFrame *pFrame );

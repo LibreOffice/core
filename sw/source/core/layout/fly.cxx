@@ -76,8 +76,6 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     m_bAtCnt( false ),
     m_bLayout( false ),
     m_bAutoPosition( false ),
-    m_bNoShrink( false ),
-    m_bLockDeleteContent( false ),
     m_bValidContentPos( false )
 {
     mnFrameType = SwFrameType::Fly;
@@ -292,10 +290,6 @@ void SwFlyFrame::Unchain()
 // OD 2004-01-19 #110582#
 void SwFlyFrame::DeleteCnt()
 {
-    // #110582#-2
-    if ( IsLockDeleteContent() )
-        return;
-
     SwFrame* pFrame = m_pLower;
     while ( pFrame )
     {
@@ -1867,7 +1861,7 @@ SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
 
 SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
 {
-    if( Lower() && !IsColLocked() && !HasFixSize() && !IsNoShrink() )
+    if( Lower() && !IsColLocked() && !HasFixSize() )
     {
         SWRECTFN( this )
         SwTwips nHeight = (Frame().*fnRect->fnGetHeight)();

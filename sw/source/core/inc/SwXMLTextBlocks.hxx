@@ -34,7 +34,6 @@ class SvxMacroTableDtor;
 class SwXMLTextBlocks : public SwImpBlocks
 {
 protected:
-    bool                    bAutocorrBlock;
     SfxObjectShellRef       xDocShellRef;
     sal_uInt16              nFlags;
     OUString                aPackageName;

@@ -168,9 +168,7 @@ private:
     const bool mbAutomatic;
 
     sal_uLong mnCurrentNode;    // used for non-automatic mode
-    sal_uLong mnStartNode;      // used for non-automatic mode
     sal_uLong mnEndNode;        // used for non-automatic mode
-    bool mbWrapped;     // used for non-automatic mode
 };
 
 #endif

@@ -399,7 +399,6 @@ void SwFrame::InvalidatePage( const SwPageFrame *pPage ) const
                     {
                         if ( pFly->IsFlyInContentFrame() )
                         {   pPage->InvalidateFlyInCnt();
-                            static_cast<const SwFlyInContentFrame*>(pFly)->InvalidateContent();
                             pFly->GetAnchorFrame()->InvalidatePage();
                         }
                         else
@@ -420,7 +419,6 @@ void SwFrame::InvalidatePage( const SwPageFrame *pPage ) const
                     if ( pFly->IsFlyInContentFrame() )
                     {
                         pPage->InvalidateFlyInCnt();
-                        static_cast<const SwFlyInContentFrame*>(pFly)->InvalidateLayout();
                         pFly->GetAnchorFrame()->InvalidatePage();
                     }
                     else

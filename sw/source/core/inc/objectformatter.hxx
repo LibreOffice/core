@@ -41,10 +41,6 @@ class SwObjectFormatter
         // page frame, at which the floating screen objects are registered.
         const SwPageFrame& mrPageFrame;
 
-        // boolean, indicating that only as-character anchored objects have to
-        // be formatted.
-        bool mbFormatOnlyAsCharAnchored;
-
         // value of document compatibility option 'Consider wrapping style on
         // object positioning'
         const bool mbConsiderWrapOnObjPos;
@@ -99,11 +95,6 @@ class SwObjectFormatter
         inline SwLayAction* GetLayAction()
         {
             return mpLayAction;
-        }
-
-        inline bool FormatOnlyAsCharAnchored() const
-        {
-            return mbFormatOnlyAsCharAnchored;
         }
 
         /** performs the intrinsic format of a given floating screen object and its content.

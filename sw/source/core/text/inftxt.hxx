@@ -510,7 +510,6 @@ class SwTextFormatInfo : public SwTextPaintInfo
 
     sal_Int16  m_nMinLeading;     // minimum number of chars before hyphenation point
     sal_Int16  m_nMinTrailing;    // minimum number of chars after hyphenation point
-    sal_Int16  m_nMinWordLength;  // minimum length of word to be hyphenated
 
     bool m_bFull : 1;             // Line is full
     bool m_bFootnoteDone : 1;          // Footnote already formatted

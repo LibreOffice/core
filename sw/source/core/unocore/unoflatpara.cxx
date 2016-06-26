@@ -344,9 +344,7 @@ SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType
       mnType( nType ),
       mbAutomatic( bAutomatic ),
       mnCurrentNode( 0 ),
-      mnStartNode( 0 ),
-      mnEndNode( rDoc.GetNodes().Count() ),
-      mbWrapped( false )
+      mnEndNode( rDoc.GetNodes().Count() )
 {
     //mnStartNode = mnCurrentNode = get node from current cursor TODO!
 
@@ -458,10 +456,10 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
             if ( pRet )
                 break;
 
-            if ( mnCurrentNode == mnEndNode && !mbWrapped )
+            if ( mnCurrentNode == mnEndNode )
             {
                 mnCurrentNode = 0;
-                mnEndNode = mnStartNode;
+                mnEndNode = 0;
             }
         }
     }

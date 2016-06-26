@@ -111,11 +111,6 @@ protected:
     bool m_bLayout :1;       ///< FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
     bool m_bAutoPosition :1; ///< FLY_AT_CHAR, anchored at character
 
-    bool m_bNoShrink :1;     ///< temporary forbid shrinking to avoid loops
-    // If true, the content of the fly frame will not be deleted when it
-    // is moved to an invisible layer.
-    bool m_bLockDeleteContent :1;
-
     friend class SwNoTextFrame; // is allowed to call NotifyBackground
 
     Point m_aContentPos;        // content area's position relatively to Frame
@@ -203,8 +198,6 @@ public:
     bool IsNotifyBack() const { return m_bNotifyBack; }
     void SetNotifyBack()      { m_bNotifyBack = true; }
     void ResetNotifyBack()    { m_bNotifyBack = false; }
-    bool IsNoShrink()   const { return m_bNoShrink; }
-    bool IsLockDeleteContent()  const { return m_bLockDeleteContent; }
 
     bool IsClipped()        const   { return m_bHeightClipped || m_bWidthClipped; }
     bool IsHeightClipped()  const   { return m_bHeightClipped; }

@@ -67,7 +67,6 @@ class SwDropPortion : public SwTextPortion
     sal_uInt16 nDropDescent;    // Distance to the next line
     sal_uInt16 nDistance;       // Distance to the text
     sal_uInt16 nFix;            // Fixed position
-    short nX;               // X PaintOffset
     short nY;               // Y Offset
 
     bool FormatText( SwTextFormatInfo &rInf );

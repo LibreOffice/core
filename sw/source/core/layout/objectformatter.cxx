@@ -136,7 +136,6 @@ SwObjectFormatter::SwObjectFormatter( const SwPageFrame& _rPageFrame,
                                       SwLayAction* _pLayAction,
                                       const bool _bCollectPgNumOfAnchors )
     : mrPageFrame( _rPageFrame ),
-      mbFormatOnlyAsCharAnchored( false ),
       mbConsiderWrapOnObjPos( _rPageFrame.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ),
       mpLayAction( _pLayAction ),
       // --> #i26945#
@@ -298,14 +297,6 @@ void SwObjectFormatter::FormatObjContent( SwAnchoredObject& _rAnchoredObj )
 */
 void SwObjectFormatter::FormatObj_( SwAnchoredObject& _rAnchoredObj )
 {
-    // check, if only as-character anchored object have to be formatted, and
-    // check the anchor type
-    if ( FormatOnlyAsCharAnchored() &&
-         !(_rAnchoredObj.GetFrameFormat().GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
-    {
-        return;
-    }
-
     // collect anchor object and its 'anchor' page number, if requested
     if ( mpPgNumAndTypeOfAnchors )
     {

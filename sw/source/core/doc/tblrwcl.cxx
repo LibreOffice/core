@@ -203,12 +203,11 @@ struct CR_SetLineHeight
     SwTwips nMaxSpace, nMaxHeight;
     TableChgMode nMode;
     sal_uInt16 nLines;
-    bool bBigger, bTop, bSplittBox, bAnyBoxFnd;
+    bool bBigger, bTop;
 
     CR_SetLineHeight( sal_uInt16 eType, SwTableNode* pTNd )
         : pTableNd( pTNd ), pUndo( nullptr ),
-        nMaxSpace( 0 ), nMaxHeight( 0 ), nLines( 0 ),
-        bSplittBox( false ), bAnyBoxFnd( false )
+        nMaxSpace( 0 ), nMaxHeight( 0 ), nLines( 0 )
     {
         bTop = nsTableChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) || nsTableChgWidthHeightType::WH_CELL_TOP == ( eType & 0xff );
         bBigger = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_BIGGER );
@@ -220,8 +219,7 @@ struct CR_SetLineHeight
         : pTableNd( rCpy.pTableNd ), pUndo( rCpy.pUndo ),
         nMaxSpace( rCpy.nMaxSpace ), nMaxHeight( rCpy.nMaxHeight ),
         nMode( rCpy.nMode ), nLines( rCpy.nLines ),
-        bBigger( rCpy.bBigger ), bTop( rCpy.bTop ),
-        bSplittBox( rCpy.bSplittBox ), bAnyBoxFnd( rCpy.bAnyBoxFnd )
+        bBigger( rCpy.bBigger ), bTop( rCpy.bTop )
     {}
 
     SwUndoTableNdsChg* CreateUndo( SwUndoId nUndoType )
