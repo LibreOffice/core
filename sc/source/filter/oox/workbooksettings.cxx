@@ -181,17 +181,9 @@ void WorkbookSettings::finalizeImport()
 {
     // default settings
     PropertySet aPropSet( getDocument() );
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:
-        case FILTER_BIFF:
-            aPropSet.setProperty( PROP_IgnoreCase,          true );     // always in Excel
-            aPropSet.setProperty( PROP_RegularExpressions,  false );    // not supported in Excel
-            aPropSet.setProperty( PROP_Wildcards,           true );     // always in Excel
-        break;
-        case FILTER_UNKNOWN:
-        break;
-    }
+    aPropSet.setProperty( PROP_IgnoreCase,          true );     // always in Excel
+    aPropSet.setProperty( PROP_RegularExpressions,  false );    // not supported in Excel
+    aPropSet.setProperty( PROP_Wildcards,           true );     // always in Excel
 
     // write protection
     if( maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) ) try

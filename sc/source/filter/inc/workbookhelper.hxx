@@ -127,8 +127,6 @@ public:
 
     /** Returns the base filter object (base class of all filters). */
     ::oox::core::FilterBase& getBaseFilter() const;
-    /** Returns the file type of the current filter. */
-    FilterType          getFilterType() const;
     /** Returns the filter progress bar. */
     SegmentProgressBar& getProgressBar() const;
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */

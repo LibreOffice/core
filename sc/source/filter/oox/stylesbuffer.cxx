@@ -102,7 +102,6 @@ namespace {
 
 // OOXML predefined color indexes (also used in BIFF3-BIFF8)
 const sal_Int32 OOX_COLOR_USEROFFSET        = 0;        /// First user defined color in palette (OOXML/BIFF12).
-const sal_Int32 BIFF_COLOR_USEROFFSET       = 8;        /// First user defined color in palette (BIFF3-BIFF8).
 
 // OOXML font family (also used in BIFF)
 const sal_Int32 OOX_FONTFAMILY_NONE         = 0;
@@ -233,9 +232,7 @@ ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
 
 sal_Int32 ExcelGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
 {
-    if( getFilterType() == FILTER_OOXML )
-        return getTheme().getColorByToken( nToken );
-    return GraphicHelper::getSchemeColor( nToken );
+    return getTheme().getColorByToken( nToken );
 }
 
 sal_Int32 ExcelGraphicHelper::getPaletteColor( sal_Int32 nPaletteIdx ) const
@@ -349,33 +346,6 @@ namespace {
 #define PALETTE_EGA_COLORS_DARK \
             0x800000, 0x008000, 0x000080, 0x808000, 0x800080, 0x008080, 0xC0C0C0, 0x808080
 
-/** Default color table for BIFF2. */
-static const sal_Int32 spnDefColors2[] =
-{
-/*  0 */    PALETTE_EGA_COLORS_LIGHT
-};
-
-/** Default color table for BIFF3/BIFF4. */
-static const sal_Int32 spnDefColors3[] =
-{
-/*  0 */    PALETTE_EGA_COLORS_LIGHT,
-/*  8 */    PALETTE_EGA_COLORS_LIGHT,
-/* 16 */    PALETTE_EGA_COLORS_DARK
-};
-
-/** Default color table for BIFF5. */
-static const sal_Int32 spnDefColors5[] =
-{
-/*  0 */    PALETTE_EGA_COLORS_LIGHT,
-/*  8 */    PALETTE_EGA_COLORS_LIGHT,
-/* 16 */    PALETTE_EGA_COLORS_DARK,
-/* 24 */    0x8080FF, 0x802060, 0xFFFFC0, 0xA0E0E0, 0x600080, 0xFF8080, 0x0080C0, 0xC0C0FF,
-/* 32 */    0x000080, 0xFF00FF, 0xFFFF00, 0x00FFFF, 0x800080, 0x800000, 0x008080, 0x0000FF,
-/* 40 */    0x00CFFF, 0x69FFFF, 0xE0FFE0, 0xFFFF80, 0xA6CAF0, 0xDD9CB3, 0xB38FEE, 0xE3E3E3,
-/* 48 */    0x2A6FF9, 0x3FB8CD, 0x488436, 0x958C41, 0x8E5E42, 0xA0627A, 0x624FAC, 0x969696,
-/* 56 */    0x1D2FBE, 0x286676, 0x004500, 0x453E01, 0x6A2813, 0x85396A, 0x4A3285, 0x424242
-};
-
 /** Default color table for BIFF8/BIFF12/OOXML. */
 static const sal_Int32 spnDefColors8[] =
 {
@@ -399,26 +369,8 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
     , mnAppendIndex(0)
 {
     // default colors
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:
-            maColors.insert( maColors.begin(), spnDefColors8, ::std::end(spnDefColors8) );
-            mnAppendIndex = OOX_COLOR_USEROFFSET;
-        break;
-        case FILTER_BIFF:
-            switch( getBiff() )
-            {
-                case BIFF2: maColors.insert( maColors.begin(), spnDefColors2, ::std::end(spnDefColors2) );  break;
-                case BIFF3:
-                case BIFF4: maColors.insert( maColors.begin(), spnDefColors3, ::std::end(spnDefColors3) );  break;
-                case BIFF5: maColors.insert( maColors.begin(), spnDefColors5, ::std::end(spnDefColors5) );  break;
-                case BIFF8: maColors.insert( maColors.begin(), spnDefColors8, ::std::end(spnDefColors8) );  break;
-                case BIFF_UNKNOWN: break;
-            }
-            mnAppendIndex = BIFF_COLOR_USEROFFSET;
-        break;
-        case FILTER_UNKNOWN: break;
-    }
+    maColors.insert( maColors.begin(), spnDefColors8, ::std::end(spnDefColors8) );
+    mnAppendIndex = OOX_COLOR_USEROFFSET;
 }
 
 void ColorPalette::importPaletteColor( const AttributeList& rAttribs )
@@ -1216,14 +1168,8 @@ void Alignment::finalizeImport()
         maApiData.mnVerJustifyMethod = css::table::CellJustifyMethod::DISTRIBUTE;
 
     /*  indentation: expressed as number of blocks of 3 space characters in
-        OOXML/BIFF12, and as multiple of 10 points in BIFF8. */
-    sal_Int32 nIndent = 0;
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:  nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, UNIT_SPACE );  break;
-        case FILTER_BIFF:   nIndent = getUnitConverter().scaleToMm100( 10.0 * maModel.mnIndent, UNIT_POINT ); break;
-        case FILTER_UNKNOWN: break;
-    }
+        OOXML. */
+    sal_Int32 nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, UNIT_SPACE );
     if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
         maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );
 
@@ -2226,9 +2172,9 @@ Xf::createPattern( bool bSkipPoolDefs )
         if( !maModel.mbProtUsed )
             maModel.mbProtUsed = !rStyleData.mbProtUsed || !(maProtection.getApiData() == pStyleXf->maProtection.getApiData());
         if( !maModel.mbBorderUsed )
-            maModel.mbBorderUsed = !rStyleData.mbBorderUsed || !rStyles.equalBorders( maModel.mnBorderId, rStyleData.mnBorderId );
+            maModel.mbBorderUsed = !rStyleData.mbBorderUsed || !StylesBuffer::equalBorders( maModel.mnBorderId, rStyleData.mnBorderId );
         if( !maModel.mbAreaUsed )
-            maModel.mbAreaUsed = !rStyleData.mbAreaUsed || !rStyles.equalFills( maModel.mnFillId, rStyleData.mnFillId );
+            maModel.mbAreaUsed = !rStyleData.mbAreaUsed || !StylesBuffer::equalFills( maModel.mnFillId, rStyleData.mnFillId );
     }
     // cell protection
     if( maModel.mbProtUsed )
@@ -2625,13 +2571,7 @@ void CellStyleBuffer::finalizeImport()
 
     /*  First, reserve style names that are built-in in Calc. This causes that
         imported cell styles get different unused names and thus do not try to
-        overwrite these built-in styles. For BIFF4 workbooks (which contain a
-        separate list of cell styles per sheet), reserve all existing styles if
-        current sheet is not the first sheet (this styles buffer will be
-        constructed again for every new sheet). This will create unique names
-        for styles in different sheets with the same name. Assuming that the
-        BIFF4W import filter is never used to import from clipboard... */
-    bool bReserveAll = (getFilterType() == FILTER_BIFF) && (getBiff() == BIFF4) && isWorkbookFile() && (getCurrentSheetIndex() > 0);
+        overwrite these built-in styles. */
     try
     {
         // unfortunately, com.sun.star.style.StyleFamily does not implement XEnumerationAccess...
@@ -2639,7 +2579,7 @@ void CellStyleBuffer::finalizeImport()
         for( sal_Int32 nIndex = 0, nCount = xStyleFamilyIA->getCount(); nIndex < nCount; ++nIndex )
         {
             Reference< XStyle > xStyle( xStyleFamilyIA->getByIndex( nIndex ), UNO_QUERY_THROW );
-            if( bReserveAll || !xStyle->isUserDefined() )
+            if( !xStyle->isUserDefined() )
             {
                 // create an empty entry by using ::std::map<>::operator[]
                 aCellStyles[ xStyle->getName() ];
@@ -2659,13 +2599,10 @@ void CellStyleBuffer::finalizeImport()
             continue;
 
         OUString aStyleName = lclCreateStyleName( rModel );
-        /*  If a builtin style entry already exists, and we do not reserve all
-            existing styles, we just stick with the last definition and ignore
+        /*  If a builtin style entry already exists,
+            we just stick with the last definition and ignore
             the preceding ones. */
-        if( bReserveAll && (aCellStyles.find( aStyleName ) != aCellStyles.end()) )
-            aConflictNameStyles.push_back( *aIt );
-        else
-            aCellStyles[ aStyleName ] = *aIt;
+        aCellStyles[ aStyleName ] = *aIt;
     }
 
     /*  Calculate names of user defined styles. Store styles with reserved
@@ -2939,53 +2876,21 @@ const FontModel& StylesBuffer::getDefaultFontModel() const
     return xDefFont.get() ? xDefFont->getModel() : getTheme().getDefaultFontModel();
 }
 
-bool StylesBuffer::equalBorders( sal_Int32 nBorderId1, sal_Int32 nBorderId2 ) const
+bool StylesBuffer::equalBorders( sal_Int32 nBorderId1, sal_Int32 nBorderId2 )
 {
     if( nBorderId1 == nBorderId2 )
         return true;
 
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:
-            // in OOXML, borders are assumed to be unique
-            return false;
-
-        case FILTER_BIFF:
-        {
-            // in BIFF, a new border entry has been created for every XF
-            const Border* pBorder1 = maBorders.get( nBorderId1 ).get();
-            const Border* pBorder2 = maBorders.get( nBorderId2 ).get();
-            return pBorder1 && pBorder2 && (pBorder1->getApiData() == pBorder2->getApiData());
-        }
-
-        case FILTER_UNKNOWN:
-        break;
-    }
+    // in OOXML, borders are assumed to be unique
     return false;
 }
 
-bool StylesBuffer::equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 ) const
+bool StylesBuffer::equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 )
 {
     if( nFillId1 == nFillId2 )
         return true;
 
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:
-            // in OOXML, fills are assumed to be unique
-            return false;
-
-        case FILTER_BIFF:
-        {
-            // in BIFF, a new fill entry has been created for every XF
-            const Fill* pFill1 = maFills.get( nFillId1 ).get();
-            const Fill* pFill2 = maFills.get( nFillId2 ).get();
-            return pFill1 && pFill2 && (pFill1->getApiData() == pFill2->getApiData());
-        }
-
-        case FILTER_UNKNOWN:
-        break;
-    }
+    // in OOXML, fills are assumed to be unique
     return false;
 }
 

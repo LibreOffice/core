@@ -299,10 +299,6 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
     if( /*maModel.mbHidden ||*/ maModel.mbFunction || maModel.mbVBName )
         return;
 
-    // skip BIFF names without stream position (e.g. BIFF3-BIFF4 internal 3D references)
-    if( getFilterType() == FILTER_BIFF )
-        return;
-
     // convert original name to final Calc name (TODO: filter invalid characters from model name)
     maCalcName = isBuiltinName() ? lclGetPrefixedName( mcBuiltinId ) : maModel.maName;
 
@@ -350,7 +346,6 @@ void DefinedName::convertFormula()
         return;
 
     // convert and set formula of the defined name
-    if ( getFilterType() == FILTER_OOXML )
     {
         std::unique_ptr<ScTokenArray> pTokenArray = getScTokens();
         mpScRangeData->SetCode( *pTokenArray );

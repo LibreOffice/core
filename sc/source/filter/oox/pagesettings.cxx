@@ -567,18 +567,17 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     }
                     break;
                     case 'Z':   // file path (without file name), OOXML, BIFF12, and BIFF8 only
-                        if( (getFilterType() == FILTER_OOXML) || ((getFilterType() == FILTER_BIFF) && (getBiff() == BIFF8)) )
-                        {
-                            Reference<text::XTextContent> xContent = createField( maFileNameService );
-                            PropertySet aPropSet( xContent );
-                            // FilenameDisplayFormat::PATH not supported by Calc
-                            aPropSet.setProperty( PROP_FileFormat, css::text::FilenameDisplayFormat::FULL );
-                            appendField( xContent );
-                            /*  path only is not supported -- if we find a '&Z&F'
-                                combination for path/name, skip the '&F' part */
-                            if( (pcChar + 2 < pcEnd) && (pcChar[ 1 ] == '&') && ((pcChar[ 2 ] == 'f') || (pcChar[ 2 ] == 'F')) )
-                                pcChar += 2;
-                        }
+                    {
+                        Reference<text::XTextContent> xContent = createField( maFileNameService );
+                        PropertySet aPropSet( xContent );
+                        // FilenameDisplayFormat::PATH not supported by Calc
+                        aPropSet.setProperty( PROP_FileFormat, css::text::FilenameDisplayFormat::FULL );
+                        appendField( xContent );
+                        /*  path only is not supported -- if we find a '&Z&F'
+                            combination for path/name, skip the '&F' part */
+                        if( (pcChar + 2 < pcEnd) && (pcChar[ 1 ] == '&') && ((pcChar[ 2 ] == 'f') || (pcChar[ 2 ] == 'F')) )
+                            pcChar += 2;
+                    }
                     break;
                     case 'D':   // date
                     {
@@ -635,7 +634,7 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     break;
 
                     case 'K':   // text color (not in BIFF)
-                        if( (getFilterType() == FILTER_OOXML) && (pcChar + 6 < pcEnd) )
+                        if( pcChar + 6 < pcEnd )
                         {
                             setAttributes();
                             // eat the following 6 characters

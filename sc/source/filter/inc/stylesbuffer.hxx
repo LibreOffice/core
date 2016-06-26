@@ -864,9 +864,9 @@ public:
     const FontModel&    getDefaultFontModel() const;
 
     /** Returns true, if the specified borders are equal. */
-    bool                equalBorders( sal_Int32 nBorderId1, sal_Int32 nBorderId2 ) const;
+    static bool         equalBorders( sal_Int32 nBorderId1, sal_Int32 nBorderId2 );
     /** Returns true, if the specified fills are equal. */
-    bool                equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 ) const;
+    static bool         equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 );
 
     /** Returns the default style sheet for unused cells. */
     OUString     getDefaultStyleName() const;
