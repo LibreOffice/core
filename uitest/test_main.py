@@ -13,13 +13,15 @@ import calc_tests
 import importlib
 import importlib.machinery
 
+import uitest.config
+
 from uitest.framework import UITestCase
 
 from libreoffice.connection import OfficeConnection
 
 def parseArgs(argv):
-    (optlist,args) = getopt.getopt(argv[1:], "hr",
-            ["help", "soffice=", "userdir=", "dir=", "file="])
+    (optlist,args) = getopt.getopt(argv[1:], "hdr",
+            ["help", "debug", "soffice=", "userdir=", "dir=", "file="])
     return (dict(optlist), args)
 
 def usage():
@@ -100,6 +102,9 @@ if __name__ == '__main__':
     else:
         usage()
         sys.exit()
+
+    if "-d" in opts or "--debug" in opts:
+        uitest.config.use_sleep = True
 
     result = unittest.TextTestRunner(verbosity=2).run(test_suite)
     print("Tests run: %d" % result.testsRun)

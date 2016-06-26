@@ -10,7 +10,7 @@ from uitest_helper import UITest
 from helper import mkPropertyValues
 from uitest.framework import UITestCase
 
-import time
+from uitest.debug import sleep
 
 class CharDialogText(UITestCase):
 
@@ -21,13 +21,13 @@ class CharDialogText(UITestCase):
         xCharDialog = self.xUITest.getTopFocusWindow()
         print(xCharDialog.getChildren())
 
-        time.sleep(5)
+        sleep(5)
 
         xCharSet = xCharDialog.getChild("showcharset")
 
         xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "2", "ROW": "2"}))
 
-        time.sleep(5)
+        sleep(5)
 
         xCancelBtn = xCharDialog.getChild("cancel")
         xCancelBtn.executeAction("CLICK", tuple())
