@@ -694,7 +694,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             rIDDA.setPrintData( aPrtData );
             // #i25686# printing should not be done asynchronously to prevent dangling offices
             // when mail merge is called as command line macro
-            aMergeDesc.bPrintAsync = false;
             aMergeDesc.aPrintOptions = m_aPrintSettings;
             aMergeDesc.bCreateSingleFile = false;
         }

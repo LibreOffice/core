@@ -781,8 +781,6 @@ void SwFormatPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SwColumn::SwColumn() :
     m_nWish ( 0 ),
-    m_nUpper( 0 ),
-    m_nLower( 0 ),
     m_nLeft ( 0 ),
     m_nRight( 0 )
 {
@@ -792,17 +790,15 @@ bool SwColumn::operator==( const SwColumn &rCmp ) const
 {
     return  m_nWish    == rCmp.GetWishWidth() &&
             GetLeft()  == rCmp.GetLeft() &&
-            GetRight() == rCmp.GetRight() &&
-            GetUpper() == rCmp.GetUpper() &&
-            GetLower() == rCmp.GetLower();
+            GetRight() == rCmp.GetRight();
 }
 
 void SwColumn::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("swColumn"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWish"), BAD_CAST(OString::number(m_nWish).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUpper"), BAD_CAST(OString::number(m_nUpper).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLower"), BAD_CAST(OString::number(m_nLower).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUpper"), BAD_CAST(OString::number(0).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLower"), BAD_CAST(OString::number(0).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeft"), BAD_CAST(OString::number(m_nLeft).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRight"), BAD_CAST(OString::number(m_nRight).getStr()));
     xmlTextWriterEndElement(pWriter);

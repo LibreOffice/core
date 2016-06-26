@@ -446,7 +446,6 @@ private:
     SwFormat *MakeTextFormatColl_(const OUString &, SwFormat *, bool, bool );
 
 private:
-    bool mbReadOnly;
     OUString msDocAccTitle;
 
     void InitTOXTypes();
@@ -589,7 +588,6 @@ public:
 
     //End of Interfaces
 
-    bool getDocReadOnly() const { return mbReadOnly; }
     void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
     const OUString& getDocAccTitle() const { return msDocAccTitle; }
 

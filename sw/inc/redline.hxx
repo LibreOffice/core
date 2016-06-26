@@ -184,7 +184,6 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     SwRedlineData* pRedlineData;
     SwNodeIndex* pContentSect;
     bool bDelLastPara : 1;
-    bool bIsLastParaDelete : 1;
     bool bIsVisible : 1;
 
     void MoveToSection();
@@ -200,7 +199,7 @@ public:
     SwRangeRedline(SwRedlineData* pData, const SwPosition& rPos,
                bool bDelLP) :
         SwPaM( rPos ), pRedlineData( pData ), pContentSect( nullptr ),
-        bDelLastPara( bDelLP ), bIsLastParaDelete( false ), bIsVisible( true )
+        bDelLastPara( bDelLP ), bIsVisible( true )
     {}
     SwRangeRedline( const SwRangeRedline& );
     virtual ~SwRangeRedline();

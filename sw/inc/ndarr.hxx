@@ -111,7 +111,6 @@ class SW_DLLPUBLIC SwNodes
     bool m_bInNodesDel : 1;           /**< In Case of recursive calling.
                                            Do not update Num/Outline. */
     bool m_bInDelUpdOutline : 1;         ///< Flag for updating of Outline.
-    bool m_bInDelUpdNum : 1;          ///< Flag for updating of Outline.
 
     // Actions on the nodes.
     static void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
