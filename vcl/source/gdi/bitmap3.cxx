@@ -1072,6 +1072,11 @@ void Bitmap::ImplAdaptBitCount(Bitmap& rNew) const
                 rNew.Convert(BMP_CONVERSION_24BIT);
                 break;
             }
+            case 32:
+            {
+                rNew.Convert(BMP_CONVERSION_32BIT);
+                break;
+            }
             default:
             {
                 OSL_ENSURE(false, "BitDepth adaption failed (!)");
