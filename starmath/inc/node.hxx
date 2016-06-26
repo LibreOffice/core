@@ -114,12 +114,11 @@ class SmNode : public SmRect
     FontAttribute   mnAttributes;
     bool            mbIsPhantom;
     bool            mbIsSelected;
+    // index in accessible text; -1 if not (yet) applicable
+    sal_Int32       mnAccIndex;
 
 protected:
     SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
-
-    // index in accessible text -1 if not (yet) applicable
-    sal_Int32       mnAccIndex;
 
 public:
     SmNode(const SmNode&) = delete;
@@ -174,6 +173,7 @@ public:
 
     virtual void    GetAccessibleText( OUStringBuffer &rText ) const = 0;
     sal_Int32       GetAccessibleIndex() const { return mnAccIndex; }
+    void            SetAccessibleIndex(sal_Int32 nAccIndex) { mnAccIndex = nAccIndex; }
     const SmNode *  FindNodeWithAccessibleIndex(sal_Int32 nAccIndex) const;
 
     sal_uInt16  GetRow() const    { return sal::static_int_cast<sal_uInt16>(maNodeToken.nRow); }

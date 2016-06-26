@@ -429,7 +429,7 @@ void SmStructureNode::GetAccessibleText( OUStringBuffer &rText ) const
                    [&rText](SmNode *pNode)
         {
             if (pNode->IsVisible())
-                static_cast<SmStructureNode *>(pNode)->mnAccIndex = rText.getLength();
+                pNode->SetAccessibleIndex(rText.getLength());
             pNode->GetAccessibleText( rText );
         });
 }
