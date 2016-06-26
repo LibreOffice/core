@@ -167,7 +167,6 @@ class SW_DLLPUBLIC SwFont
     bool m_bFontChg        :1;
     bool m_bOrgChg        :1;  // nOrgHeight/Ascent are invalid
     bool m_bURL           :1;
-    bool m_bPaintWrong    :1;  // flag for spelling mistakes
     bool m_bGreyWave      :1;  // for the extended TextInput: gray waveline
     bool m_bNoColorReplace  :1;  // Replacement without colormanipulation
 
@@ -990,12 +989,11 @@ public:
     sal_uInt16 nGetStretchTextSize;
     sal_uInt16 nDrawStretchText;
     sal_uInt16 nChangeFont;
-    sal_uInt16 nGetFontMetric;
 
     inline void Reset()
     {
         nGetTextSize = nDrawText = nGetStretchTextSize =
-        nDrawStretchText = nChangeFont = nGetFontMetric = 0;
+        nDrawStretchText = nChangeFont = 0;
     }
 
     inline SvStatistics() { Reset(); }

@@ -31,7 +31,7 @@
 SwFlyInContentFrame::SwFlyInContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
     SwFlyFrame( pFormat, pSib, pAnch )
 {
-    m_bInCnt = bInvalidLayout = bInvalidContent = true;
+    m_bInCnt = true;
     SwTwips nRel = pFormat->GetVertOrient().GetPos();
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;

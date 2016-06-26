@@ -110,14 +110,6 @@ SwFrame& SwObjectFormatterTextFrame::GetAnchorFrame()
 bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                            const bool _bCheckForMovedFwd )
 {
-    // check, if only as-character anchored object have to be formatted, and
-    // check the anchor type
-    if ( FormatOnlyAsCharAnchored() &&
-         !(_rAnchoredObj.GetFrameFormat().GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
-    {
-        return true;
-    }
-
     // consider, if the layout action has to be
     // restarted due to a delete of a page frame.
     if ( GetLayAction() && GetLayAction()->IsAgain() )

@@ -1350,7 +1350,6 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
     //! needs to be done in this order
     m_nMinLeading     = 2;
     m_nMinTrailing    = 2;
-    m_nMinWordLength  = 0;
     m_bAutoHyph = InitHyph();
 
     m_bIgnoreFly = false;
@@ -1495,7 +1494,6 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
 
     m_nMinLeading = 0;
     m_nMinTrailing = 0;
-    m_nMinWordLength = 0;
     m_bFull = false;
     m_bFootnoteDone = true;
     m_bErgoDone = true;

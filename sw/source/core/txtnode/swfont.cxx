@@ -699,7 +699,6 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         m_bBlink = false;
     }
     m_bPaintBlank = false;
-    m_bPaintWrong = false;
     OSL_ENSURE( m_aSub[SwFontScript::Latin].IsTransparent(), "SwFont: Transparent revolution" );
 }
 
@@ -729,7 +728,6 @@ SwFont::SwFont( const SwFont &rFont )
     m_bFontChg = rFont.m_bFontChg;
     m_bOrgChg = rFont.m_bOrgChg;
     m_bPaintBlank = rFont.m_bPaintBlank;
-    m_bPaintWrong = false;
     m_bURL = rFont.m_bURL;
     m_bGreyWave = rFont.m_bGreyWave;
     m_bNoColorReplace = rFont.m_bNoColorReplace;
@@ -747,7 +745,6 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     m_nMetaCount = 0;
     m_nInputFieldCount = 0;
     m_bPaintBlank = false;
-    m_bPaintWrong = false;
     m_bURL = false;
     m_bGreyWave = false;
     m_bNoColorReplace = false;
@@ -948,7 +945,6 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     m_bFontChg = rFont.m_bFontChg;
     m_bOrgChg = rFont.m_bOrgChg;
     m_bPaintBlank = rFont.m_bPaintBlank;
-    m_bPaintWrong = false;
     m_bURL = rFont.m_bURL;
     m_bGreyWave = rFont.m_bGreyWave;
     m_bNoColorReplace = rFont.m_bNoColorReplace;

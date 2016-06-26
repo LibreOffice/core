@@ -57,7 +57,6 @@ void SwXMLTextBlocks::ResetBlockMode ( )
 
 SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     : SwImpBlocks(rFile)
-    , bAutocorrBlock(false)
     , nFlags(0)
 {
     SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
@@ -101,7 +100,6 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
 
 SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg, const OUString& rName )
     : SwImpBlocks( rName )
-    , bAutocorrBlock(false)
     , nFlags(0)
 {
     SwDocShell* pDocSh = new SwDocShell ( SfxObjectCreateMode::INTERNAL );
@@ -460,8 +458,6 @@ bool SwXMLTextBlocks::PutMuchEntries( bool bOn )
 
 sal_uLong SwXMLTextBlocks::OpenFile( bool bRdOnly )
 {
-    if( bAutocorrBlock )
-        return 0;
     sal_uLong nRet = 0;
     try
     {
@@ -480,12 +476,9 @@ sal_uLong SwXMLTextBlocks::OpenFile( bool bRdOnly )
 
 void SwXMLTextBlocks::CloseFile()
 {
-    if ( !bAutocorrBlock )
-    {
-        if (bInfoChanged)
-            WriteInfo();
-        ResetBlockMode();
-    }
+    if (bInfoChanged)
+        WriteInfo();
+    ResetBlockMode();
 }
 
 void SwXMLTextBlocks::SetIsTextOnly( const OUString& rShort, bool bNewValue )

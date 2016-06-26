@@ -172,9 +172,6 @@ class SwFlyInContentFrame : public SwFlyFrame
 {
     Point aRef;  // relative to this point AbsPos is being calculated
 
-    bool bInvalidLayout :1;
-    bool bInvalidContent  :1;
-
     virtual void DestroyImpl() override;
     virtual ~SwFlyInContentFrame();
 
@@ -196,10 +193,6 @@ public:
     const Point &GetRefPoint() const { return aRef; }
     const Point GetRelPos() const;
 
-    inline void InvalidateLayout() const;
-    inline void InvalidateContent() const;
-    bool IsInvalid() const { return (bInvalidLayout || bInvalidContent); }
-
     // (26.11.93, see tabfrm.hxx, but might also be valid for others)
     // For creation of a Fly after a FlyCnt was created _and_ inserted.
     // Must be called by creator because can be pasted only after creation.
@@ -217,16 +210,6 @@ public:
     // position is calculated during the format of the anchor frame
     virtual void ActionOnInvalidation( const InvalidationType _nInvalid ) override;
 };
-
-inline void SwFlyInContentFrame::InvalidateLayout() const
-{
-    const_cast<SwFlyInContentFrame*>(this)->bInvalidLayout = true;
-}
-inline void SwFlyInContentFrame::InvalidateContent() const
-{
-    const_cast<SwFlyInContentFrame*>(this)->bInvalidContent = true;
-}
-
 
 #endif
 

@@ -1919,8 +1919,6 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
                 SwRect aRepaint( const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->AutoSpell_( pContentNode, nTextPos ) );
                 // tdf#92036 PENDING should stop idle spell checking
                 bPageValid = bPageValid && (SwTextNode::WrongState::TODO != pTextNode->GetWrongDirty());
-                if( !bPageValid )
-                    bAllValid = false;
                 if ( aRepaint.HasArea() )
                     pImp->GetShell()->InvalidateWindows( aRepaint );
                 if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))
@@ -1948,8 +1946,6 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
                 try {
                     const SwRect aRepaint( const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->SmartTagScan( pContentNode, nTextPos ) );
                     bPageValid = bPageValid && !pTextNode->IsSmartTagDirty();
-                    if( !bPageValid )
-                        bAllValid = false;
                     if ( aRepaint.HasArea() )
                         pImp->GetShell()->InvalidateWindows( aRepaint );
                 } catch( const css::uno::RuntimeException& e) {

@@ -84,8 +84,7 @@ SwFrameNotify::SwFrameNotify( SwFrame *pF ) :
     maFrame( pF->Frame() ),
     maPrt( pF->Prt() ),
     mbInvaKeep( false ),
-    mbValidSize( pF->GetValidSizeFlag() ),
-    mbFrameDeleted( false )     // #i49383#
+    mbValidSize( pF->GetValidSizeFlag() )
 {
     if ( pF->IsTextFrame() )
     {
@@ -103,12 +102,6 @@ SwFrameNotify::SwFrameNotify( SwFrame *pF ) :
 
 SwFrameNotify::~SwFrameNotify()
 {
-    // #i49383#
-    if ( mbFrameDeleted )
-    {
-        return;
-    }
-
     SWRECTFN( mpFrame )
     const bool bAbsP = POS_DIFF( maFrame, mpFrame->Frame() );
     const bool bChgWidth =
@@ -451,12 +444,6 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrame& _rLayoutFrame )
 
 SwLayNotify::~SwLayNotify()
 {
-    // #i49383#
-    if ( mbFrameDeleted )
-    {
-        return;
-    }
-
     SwLayoutFrame *pLay = GetLay();
     SWRECTFN( pLay )
     bool bNotify = false;
@@ -636,12 +623,6 @@ SwFlyNotify::SwFlyNotify( SwFlyFrame *pFlyFrame ) :
 
 SwFlyNotify::~SwFlyNotify()
 {
-    // #i49383#
-    if ( mbFrameDeleted )
-    {
-        return;
-    }
-
     SwFlyFrame *pFly = GetFly();
     if ( pFly->IsNotifyBack() )
     {
@@ -769,12 +750,6 @@ SwContentNotify::SwContentNotify( SwContentFrame *pContentFrame ) :
 
 SwContentNotify::~SwContentNotify()
 {
-    // #i49383#
-    if ( mbFrameDeleted )
-    {
-        return;
-    }
-
     SwContentFrame *pCnt = GetCnt();
     if ( bSetCompletePaintOnInvalidate )
         pCnt->SetCompletePaint();

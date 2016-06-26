@@ -65,11 +65,6 @@ public:
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
-
-private:
-    bool mbContainsInputFieldStart;
-    bool mbContainsInputFieldEnd;
-    bool ContainsOnlyDummyChars() const;
 };
 
 class SwHolePortion : public SwLinePortion

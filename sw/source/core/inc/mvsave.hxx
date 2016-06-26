@@ -58,8 +58,6 @@ namespace sw { namespace mark
             OUString m_aName;
             OUString m_aShortName;
             vcl::KeyCode m_aCode;
-            bool m_bSavePos;
-            bool m_bSaveOtherPos;
             IDocumentMarkAccess::MarkType m_eOrigBkmType;
             sal_uLong m_nNode1;
             sal_uLong m_nNode2;

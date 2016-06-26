@@ -108,7 +108,6 @@ SwDropPortion::SwDropPortion( const sal_uInt16 nLineCnt,
     nDropDescent(nDrpDescent),
     nDistance(nDist),
     nFix(0),
-    nX(0),
     nY(0)
 {
     SetWhichPor( POR_DROP );
@@ -303,7 +302,7 @@ void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
     const SwTwips nOldPosY  = rInf.Y();
     const SwTwips nOldPosX  = rInf.X();
     const SwParaPortion *pPara = rInf.GetParaPortion();
-    const Point aOutPos( nOldPosX + nX, nOldPosY - pPara->GetAscent()
+    const Point aOutPos( nOldPosX, nOldPosY - pPara->GetAscent()
                          - pPara->GetRealHeight() + pPara->Height() );
     // make good for retouching
 
@@ -312,7 +311,6 @@ void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
 
     // for background
     const_cast<SwDropPortion*>(this)->Height( nDropHeight + nDropDescent );
-    const_cast<SwDropPortion*>(this)->Width( Width() - nX );
     const_cast<SwDropPortion*>(this)->SetAscent( nDropHeight );
 
     // Always adapt Clipregion to us, never set it off using the existing ClipRect

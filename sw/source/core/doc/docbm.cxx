@@ -1199,8 +1199,6 @@ SaveBookmark::SaveBookmark(
     : m_aName(rBkmk.GetName())
     , m_aShortName()
     , m_aCode()
-    , m_bSavePos(true)
-    , m_bSaveOtherPos(true)
     , m_eOrigBkmType(IDocumentMarkAccess::GetType(rBkmk))
 {
     const IBookmark* const pBookmark = dynamic_cast< const IBookmark* >(&rBkmk);
@@ -1219,24 +1217,18 @@ SaveBookmark::SaveBookmark(
     m_nNode1 = rBkmk.GetMarkPos().nNode.GetIndex();
     m_nContent1 = rBkmk.GetMarkPos().nContent.GetIndex();
 
-    if(m_bSavePos)
-    {
-        m_nNode1 -= rMvPos.GetIndex();
-        if(pIdx && !m_nNode1)
-            m_nContent1 -= pIdx->GetIndex();
-    }
+    m_nNode1 -= rMvPos.GetIndex();
+    if(pIdx && !m_nNode1)
+        m_nContent1 -= pIdx->GetIndex();
 
     if(rBkmk.IsExpanded())
     {
         m_nNode2 = rBkmk.GetOtherMarkPos().nNode.GetIndex();
         m_nContent2 = rBkmk.GetOtherMarkPos().nContent.GetIndex();
 
-        if(m_bSaveOtherPos)
-        {
-            m_nNode2 -= rMvPos.GetIndex();
-            if(pIdx && !m_nNode2)
-                m_nContent2 -= pIdx->GetIndex();
-        }
+        m_nNode2 -= rMvPos.GetIndex();
+        if(pIdx && !m_nNode2)
+            m_nContent2 -= pIdx->GetIndex();
     }
     else
     {
@@ -1258,35 +1250,19 @@ void SaveBookmark::SetInDoc(
     {
         aPam.SetMark();
 
-        if(m_bSaveOtherPos)
-        {
-            aPam.GetMark()->nNode += m_nNode2;
-            if(pIdx && !m_nNode2)
-                aPam.GetMark()->nContent += m_nContent2;
-            else
-                aPam.GetMark()->nContent.Assign(aPam.GetContentNode(false), m_nContent2);
-        }
+        aPam.GetMark()->nNode += m_nNode2;
+        if(pIdx && !m_nNode2)
+            aPam.GetMark()->nContent += m_nContent2;
         else
-        {
-            aPam.GetMark()->nNode = m_nNode2;
             aPam.GetMark()->nContent.Assign(aPam.GetContentNode(false), m_nContent2);
-        }
     }
 
-    if(m_bSavePos)
-    {
-        aPam.GetPoint()->nNode += m_nNode1;
+    aPam.GetPoint()->nNode += m_nNode1;
 
-        if(pIdx && !m_nNode1)
-            aPam.GetPoint()->nContent += m_nContent1;
-        else
-            aPam.GetPoint()->nContent.Assign(aPam.GetContentNode(), m_nContent1);
-    }
+    if(pIdx && !m_nNode1)
+        aPam.GetPoint()->nContent += m_nContent1;
     else
-    {
-        aPam.GetPoint()->nNode = m_nNode1;
         aPam.GetPoint()->nContent.Assign(aPam.GetContentNode(), m_nContent1);
-    }
 
     if(!aPam.HasMark()
         || CheckNodesRange(aPam.GetPoint()->nNode, aPam.GetMark()->nNode, true))

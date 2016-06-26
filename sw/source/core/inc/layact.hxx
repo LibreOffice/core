@@ -186,7 +186,6 @@ class SwLayIdle
     SwContentNode *pContentNode;    // The current cursor position is saved here
     sal_Int32  nTextPos;
     bool        bPageValid;     // Were we able to evaluate everything on the whole page?
-    bool        bAllValid;      // Were we able to evaluate everything?
 
 #ifdef DBG_UTIL
     bool m_bIndicator;
