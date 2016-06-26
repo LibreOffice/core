@@ -32,7 +32,6 @@ void MenuButton::ImplInitMenuButtonData()
 
     mpMenuTimer     = nullptr;
     mpMenu          = nullptr;
-    mpOwnMenu       = nullptr;
     mnCurItemId     = 0;
     mnMenuMode      = 0;
 }
@@ -88,7 +87,6 @@ MenuButton::~MenuButton()
 void MenuButton::dispose()
 {
     delete mpMenuTimer;
-    mpOwnMenu.disposeAndClear();
     PushButton::dispose();
 }
 
