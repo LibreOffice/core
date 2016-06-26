@@ -122,6 +122,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	icuuc \
 	lcms2 \
 	mdds_headers \
+	png \
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_use_externals,vcl,\
@@ -373,6 +374,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/jpeg/JpegReader \
     vcl/source/filter/jpeg/JpegWriter \
     vcl/source/filter/jpeg/JpegTransform \
+    vcl/source/filter/png/PngReader \
     vcl/source/filter/wmf/emfwr \
     vcl/source/filter/wmf/enhwmf \
     vcl/source/filter/wmf/winmtf \
