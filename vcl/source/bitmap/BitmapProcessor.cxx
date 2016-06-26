@@ -77,7 +77,25 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
 
     BitmapEx aReturnBitmap;
 
-    if (rBitmapEx.IsTransparent())
+    if (rBitmapEx.GetBitmap().GetBitCount() == 32)
+    {
+        if (pRead && pGrey && pGreyAlpha)
+        {
+            for (long nY = 0; nY < aSize.Height(); ++nY)
+            {
+                for (long nX = 0; nX < aSize.Width(); ++nX)
+                {
+                    BitmapColor aColor = pRead->GetPixel(nY, nX);
+                    const sal_uInt8 nLum(aColor.GetLuminance());
+                    const sal_uInt8 nAlpha(std::min(aColor.GetAlpha() + 178ul, 255ul));
+                    BitmapColor aGreyValue(nLum, nLum, nLum, nAlpha);
+                    pGrey->SetPixel(nY, nX, aGreyValue);
+                }
+            }
+        }
+        aReturnBitmap = BitmapEx(aGrey);
+    }
+    else if (rBitmapEx.IsTransparent())
     {
         AlphaMask aBitmapAlpha(rBitmapEx.GetAlpha());
         BitmapReadAccess* pReadAlpha(aBitmapAlpha.AcquireReadAccess());
