@@ -11,7 +11,7 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
-from uihelper.calc import enter_text_to_cell
+from uitest.uihelper.calc import enter_text_to_cell
 
 from uitest.framework import UITestCase
 
