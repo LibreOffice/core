@@ -86,12 +86,23 @@ namespace svx
         if ((maCurColor != aColor) || (aColor == COL_BLACK) ||
             bSizeChanged || bDisplayModeChanged || bForceUpdate )
         {
+            BitmapEx aSource(aImage.GetBitmapEx());
+            BitmapEx aBmpEx;
+
             // create an empty bitmap, and copy the original bitmap inside
             // (so that it grows in case the original bitmap was smaller)
             sal_uInt8 nAlpha = 255;
-            BitmapEx aBmpEx(Bitmap(aItemSize, 24), AlphaMask(aItemSize, &nAlpha));
 
-            BitmapEx aSource(aImage.GetBitmapEx());
+            if (aSource.GetBitmap().GetBitCount() == 32)
+            {
+                aBmpEx = BitmapEx(Bitmap(aItemSize, 32));
+
+            }
+            else
+            {
+                aBmpEx = BitmapEx(Bitmap(aItemSize, 24), AlphaMask(aItemSize, &nAlpha));
+            }
+
             long nWidth = std::min(aItemSize.Width(), aSource.GetSizePixel().Width());
             long nHeight = std::min(aItemSize.Height(), aSource.GetSizePixel().Height());
 
