@@ -7,7 +7,7 @@
 
 import time
 
-from helper import EventListener
+from libreoffice.uno.eventlistener import EventListener
 
 from helper import convert_property_values_to_dict
 

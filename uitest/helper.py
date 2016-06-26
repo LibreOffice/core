@@ -18,44 +18,6 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
-try:
-    from com.sun.star.document import XDocumentEventListener
-except ImportError:
-    print("UNO API class not found: try to set URE_BOOTSTRAP variable")
-    print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
-    raise
-
-class EventListener(XDocumentEventListener,unohelper.Base):
-
-    def __init__(self, xContext, eventNames):
-        self.xGEB = xContext.ServiceManager.createInstanceWithContext(
-            "com.sun.star.frame.GlobalEventBroadcaster", xContext)
-        self.xContext = xContext
-        self.executed = False
-        self.eventExecuted = []
-        if isinstance(eventNames, str):
-            self.eventNames = [eventNames]
-        elif isinstance(eventNames, list):
-            self.eventNames = eventNames
-
-    def __enter__(self):
-        self.xGEB.addDocumentEventListener(self)
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self.xGEB.removeDocumentEventListener(self)
-
-    def documentEventOccured(self, event):
-        if event.EventName in self.eventNames:
-            self.executed = True
-            self.eventExecuted.append(event.EventName)
-
-    def hasExecuted(self, eventName):
-        return eventName in self.eventExecuted
-
-    def disposing(event):
-        pass
-
 def mkPropertyValue(name, value):
     """ Create a UNO ProertyValue from two input values.
     """
