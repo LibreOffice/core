@@ -211,7 +211,7 @@ void OReportSection::fill()
     const Fraction aY(aGridSizeFine.B());
     m_pView->SetSnapGridWidth(aX, aY);
 
-    m_pView->SetGridSnap( pDesignView->isGridSnap() );
+    m_pView->SetGridSnap( true );
     m_pView->SetGridFront( false );
     m_pView->SetDragStripes( true );
     m_pView->SetPageVisible();

@@ -49,7 +49,6 @@ namespace rptui
         OUString                                      m_sSearchString;
         OUString                                      m_sFormula;
         bool                                          m_bPreEvaluated;
-        bool                                          m_bDeepTraversing;
 
         const OUString& getName() const { return m_sName; }
     } ;

@@ -53,7 +53,6 @@ public:
     ::std::vector< uno::Reference< container::XChild> > m_aSections;
     ::osl::Mutex                                        m_aMutex;
     oslInterlockedCount                                 m_nLocks;
-    bool                                                m_bReadOnly;
 
     explicit OXReportControllerObserverImpl();
     OXReportControllerObserverImpl(const OXReportControllerObserverImpl&) = delete;
@@ -63,7 +62,6 @@ public:
 
     OXReportControllerObserverImpl::OXReportControllerObserverImpl()
             :m_nLocks(0)
-            ,m_bReadOnly(false)
     {
     }
 
@@ -234,10 +232,7 @@ void OXReportControllerObserver::TogglePropertyListening(const uno::Reference< u
     uno::Reference< beans::XPropertySet >  xSet(Element, uno::UNO_QUERY);
     if (xSet.is())
     {
-        if (!m_pImpl->m_bReadOnly)
-            xSet->addPropertyChangeListener( OUString(), this );
-        else
-            xSet->removePropertyChangeListener( OUString(), this );
+        xSet->addPropertyChangeListener( OUString(), this );
     }
 }
 
@@ -285,16 +280,13 @@ void OXReportControllerObserver::switchListening( const uno::Reference< uno::XIn
 
     try
     {
-        if ( !m_pImpl->m_bReadOnly )
+        uno::Reference< beans::XPropertySet > xProps( _rxObject, uno::UNO_QUERY );
+        if ( xProps.is() )
         {
-            uno::Reference< beans::XPropertySet > xProps( _rxObject, uno::UNO_QUERY );
-            if ( xProps.is() )
-            {
-                if ( _bStartListening )
-                    xProps->addPropertyChangeListener( OUString(), this );
-                else
-                    xProps->removePropertyChangeListener( OUString(), this );
-            }
+            if ( _bStartListening )
+                xProps->addPropertyChangeListener( OUString(), this );
+            else
+                xProps->removePropertyChangeListener( OUString(), this );
         }
 
         uno::Reference< util::XModifyBroadcaster > xBroadcaster( _rxObject, uno::UNO_QUERY );

@@ -1898,7 +1898,6 @@ void GeometryHandler::loadDefaultFunctions()
     if ( m_aDefaultFunctions.empty() )
     {
         m_aCounterFunction.m_bPreEvaluated = false;
-        m_aCounterFunction.m_bDeepTraversing = false;
         m_aCounterFunction.m_sName = ModuleRes(RID_STR_F_COUNTER);
         m_aCounterFunction.m_sFormula = "rpt:[%FunctionName] + 1";
         m_aCounterFunction.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*";
@@ -1906,7 +1905,6 @@ void GeometryHandler::loadDefaultFunctions()
         m_aCounterFunction.m_sInitialFormula.Value = "rpt:1";
 
         DefaultFunction aDefault;
-        aDefault.m_bDeepTraversing = false;
 
         aDefault.m_bPreEvaluated = true;
 
@@ -2124,7 +2122,7 @@ void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,const O
 
     m_xFunction->setFormula(sFormula);
     m_xFunction->setPreEvaluated(_aFunction.m_bPreEvaluated);
-    m_xFunction->setDeepTraversing(_aFunction.m_bDeepTraversing);
+    m_xFunction->setDeepTraversing(false);
     if ( _aFunction.m_sInitialFormula.IsPresent )
     {
         beans::Optional< OUString> aInitialFormula = _aFunction.m_sInitialFormula;
