@@ -538,6 +538,8 @@ public:
 
     static void                 KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
         guint* pGdkKeyCode, GdkModifierType *pGdkModifiers);
+
+    static guint32              GetLastInputEventTime();
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()
