@@ -360,7 +360,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
     else
     {
         nButton = 0;
-        nTime = gtk_get_current_event_time();
+        nTime = GtkSalFrame::GetLastInputEventTime();
     }
 
     VclPtr<vcl::Window> xParent = pWin->ImplGetWindowImpl()->mpRealParent;
