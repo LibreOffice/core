@@ -1233,7 +1233,7 @@ OString SfxTabDialog::GetScreenshotId() const
         vcl::Window* pToplevelBox = pActiveTabPage->GetWindow( GetWindowType::FirstChild );
 
         if ( pToplevelBox )
-            aScreenshotId = aScreenshotId + OString("#") + pToplevelBox->GetHelpId();
+            aScreenshotId = pToplevelBox->GetHelpId();
     }
 
     return aScreenshotId;
