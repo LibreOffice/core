@@ -50,7 +50,6 @@
 
 #include <string>
 #include <algorithm>
-#include <boost/property_tree/json_parser.hpp>
 
 #include <basegfx/tools/zoomtools.hxx>
 
