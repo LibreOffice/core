@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include "osl/diagnose.hxx"
 #include <osl/time.h>
@@ -592,12 +593,9 @@ static bool performTest(
                     xLBT->getNullPolyType().member == Type(),
                     "getNullPolyType");
                 Any nullAny(xLBT->getNullPolyAny().member);
+                auto ifc = o3tl::tryAccess<Reference<XInterface>>(nullAny);
                 bRet &= check(
-                    (((nullAny.getValueTypeName() ==
-                       "com.sun.star.uno.XInterface") &&
-                      !static_cast< Reference< XInterface > const * >(
-                          nullAny.getValue())->is())
-                     || nullAny == Any()),
+                    !nullAny.hasValue() || (ifc && !ifc->is()),
                     "getNullPolyAny");
                 bRet &= check(
                     xLBT->getNullPolySequence().member.getLength() == 0,
