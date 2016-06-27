@@ -149,7 +149,6 @@ SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 n
     pBBSet(nullptr),
     // bitfield
     mbDisableQueryBox(false),
-    mbEnableBackgroundSelector(true),
     mbEnableDrawingLayerFillStyles(false)
 {
     get(m_pCntSharedBox,"checkSameLR");
@@ -668,7 +667,7 @@ IMPL_LINK_NOARG_TYPED(SvxHFPage, BackgroundHdl, Button*, void)
         SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg(
             this,
             *pBBSet,
-            mbEnableBackgroundSelector,
+            true/*EnableBackgroundSelector*/,
             mbEnableDrawingLayerFillStyles);
 
         DBG_ASSERT(pDlg,"Dialog creation failed!");

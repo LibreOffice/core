@@ -386,7 +386,6 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 SvxNumValueSet::SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits)
     : ValueSet(pParent, nWinBits)
     , ePageType(NumberingPageType::BULLET)
-    , bHTMLMode(false)
     , pVDev(nullptr)
 {
 }
@@ -396,7 +395,6 @@ VCL_BUILDER_FACTORY_ARGS(SvxNumValueSet, WB_TABSTOP)
 void SvxNumValueSet::init(NumberingPageType eType)
 {
     ePageType = eType;
-    bHTMLMode = false;
     pVDev = nullptr;
 
     SetColCount( 4 );

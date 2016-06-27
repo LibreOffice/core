@@ -153,7 +153,6 @@ class FontPrevWin_Impl
     bool mbSelection : 1;
     bool mbGetSelection : 1;
     bool mbUseResText : 1;
-    bool mbPreviewBackgroundToCharacter : 1;
     bool mbTwoLines : 1;
     bool mbUseFontNameAsText : 1;
     bool mbTextInited : 1;
@@ -175,7 +174,6 @@ public:
         mbSelection(false),
         mbGetSelection(false),
         mbUseResText(false),
-        mbPreviewBackgroundToCharacter(false),
         mbTwoLines(false),
         mbUseFontNameAsText(false),
         mbTextInited(false)
@@ -1302,7 +1300,7 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
 
     // Background
     bool bTransparent;
-    nWhich = rSet.GetPool()->GetWhich(pImpl->mbPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR);
+    nWhich = SID_ATTR_BRUSH_CHAR;
     if (ISITEMSET)
     {
          const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>( rSet.Get( nWhich ) );
@@ -1320,15 +1318,12 @@ void SvxFontPrevWindow::Init(const SfxItemSet& rSet)
     rCTLFont.SetTransparent( bTransparent );
 
     Color aBackCol( COL_TRANSPARENT );
-    if (!pImpl->mbPreviewBackgroundToCharacter)
+    nWhich = rSet.GetPool()->GetWhich( SID_ATTR_BRUSH );
+    if (ISITEMSET)
     {
-        nWhich = rSet.GetPool()->GetWhich( SID_ATTR_BRUSH );
-        if (ISITEMSET)
-        {
-            const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>(rSet.Get(nWhich));
-            if (GPOS_NONE == rBrush.GetGraphicPos())
-                aBackCol = rBrush.GetColor();
-        }
+        const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>(rSet.Get(nWhich));
+        if (GPOS_NONE == rBrush.GetGraphicPos())
+            aBackCol = rBrush.GetColor();
     }
     SetBackColor(aBackCol);
 

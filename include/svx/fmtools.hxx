@@ -173,7 +173,6 @@ class SAL_WARN_UNUSED FmXDisposeMultiplexer : public ::cppu::WeakImplHelper1< cs
 {
     css::uno::Reference< css::lang::XComponent>       m_xObject;
     FmXDisposeListener* m_pListener;
-    sal_Int16           m_nId;
 
     virtual ~FmXDisposeMultiplexer();
 public:

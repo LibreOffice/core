@@ -197,7 +197,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine
     typedef std::vector<svxform::ControlTextWrapper*> ControlTextSuppliers;
     ControlTextSuppliers    m_aControlTexts;
 
-    bool                    m_bUsingTextComponents;
     CursorWrapper           m_xOriginalIterator;
     CursorWrapper           m_xClonedIterator;
 

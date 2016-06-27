@@ -344,11 +344,6 @@ protected:
     void impl_dispose();
 
 private:
-    /** Names of new accessible objects are disambiguated with this index.
-        It gets increased every time a new object is created and (at the
-        moment) never reset.
-    */
-    sal_Int32 mnNewNameIndex;
 
     ChildrenManagerImpl (const ChildrenManagerImpl&) = delete;
     ChildrenManagerImpl& operator= (const ChildrenManagerImpl&) = delete;

@@ -87,12 +87,6 @@ private:
     // #i72889# flag if this is only a temporary target for repaint, default is false
     bool                                                mbTemporaryTarget : 1;
 
-    /** Remember whether the mxOverlayManager supports buffering.  Using
-        this flags expensive dynamic_casts on mxOverlayManager in order to
-        detect this.
-    */
-    bool mbUseBuffer;
-
     // helpers
     void impCreateOverlayManager();
 

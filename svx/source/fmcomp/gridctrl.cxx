@@ -961,10 +961,8 @@ DbGridControl::DbGridControl(
             ,m_nLastRowId(-1)
             ,m_bDesignMode(false)
             ,m_bRecordCountFinal(false)
-            ,m_bMultiSelection(true)
             ,m_bNavigationBar(true)
             ,m_bSynchDisplay(true)
-            ,m_bForceROController(false)
             ,m_bHandle(true)
             ,m_bFilterMode(false)
             ,m_bWantDestruction(false)
@@ -1553,10 +1551,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
                 m_nMode |= BrowserMode::HIDECURSOR;
         }
 
-        if ( m_bMultiSelection )
-            m_nMode |= BrowserMode::MULTISELECTION;
-        else
-            m_nMode &= ~BrowserMode::MULTISELECTION;
+        m_nMode |= BrowserMode::MULTISELECTION;
 
         adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars );
 
@@ -2932,7 +2927,7 @@ CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId
         bool bInsert = (m_xCurrentRow->IsNew() && (m_nOptions & OPT_INSERT));
         bool bUpdate = (!m_xCurrentRow->IsNew() && (m_nOptions & OPT_UPDATE));
 
-        if ((bInsert && !pColumn->IsAutoValue()) || bUpdate || m_bForceROController)
+        if ((bInsert && !pColumn->IsAutoValue()) || bUpdate)
         {
             pReturn = &pColumn->GetController();
             if (pReturn)

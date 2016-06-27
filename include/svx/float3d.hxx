@@ -186,8 +186,6 @@ private:
     // ItemSet used to remember set 2d attributes
     SfxItemSet*         mpRemember2DAttributes;
 
-    bool                bOnly3DChanged;
-
     DECL_LINK_TYPED( ClickViewTypeHdl, Button*, void );
     DECL_LINK_TYPED( ClickUpdateHdl, Button*, void );
     DECL_LINK_TYPED( ClickAssignHdl, Button*, void );

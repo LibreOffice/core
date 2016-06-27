@@ -58,7 +58,6 @@ enum class NumberingPageType
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
     NumberingPageType ePageType;
-    bool            bHTMLMode;
     Rectangle       aOrgRect;
     VclPtr<VirtualDevice> pVDev;
 

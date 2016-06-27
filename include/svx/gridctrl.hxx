@@ -282,11 +282,9 @@ private:
 
     bool                m_bDesignMode : 1;      // default = sal_False
     bool                m_bRecordCountFinal : 1;
-    bool                m_bMultiSelection   : 1;
     bool                m_bNavigationBar      : 1;
 
     bool                m_bSynchDisplay : 1;
-    bool                m_bForceROController : 1;
     bool                m_bHandle : 1;
     bool                m_bFilterMode : 1;
     bool                m_bWantDestruction : 1;

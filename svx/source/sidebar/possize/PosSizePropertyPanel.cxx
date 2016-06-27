@@ -59,7 +59,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mpView(nullptr),
     mlOldWidth(1),
     mlOldHeight(1),
-    meRP(RP_LT),
     maAnchorPos(),
     mlRotX(0),
     mlRotY(0),
@@ -80,7 +79,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     m_aMetricCtl(SID_ATTR_METRIC, *pBindings, *this),
     maContext(),
     mpBindings(pBindings),
-    mbMtrPosXMirror(false),
     mbSizeProtected(false),
     mbPositionProtected(false),
     mbAutoWidth(false),
@@ -825,7 +823,7 @@ void PosSizePropertyPanel::executeSize()
         // put Width & Height to itemset
         SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, (sal_uInt32) lWidth);
         SfxUInt32Item aHeightItem( SID_ATTR_TRANSFORM_HEIGHT, (sal_uInt32) lHeight);
-        SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, (sal_uInt16)meRP);
+        SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, (sal_uInt16)RP_LT);
         const sal_Int32 nCombinedContext(maContext.GetCombinedContext_DI());
 
         if( nCombinedContext == CombinedEnumContext(Application_WriterVariants, Context_Graphic)
@@ -856,8 +854,6 @@ void PosSizePropertyPanel::executePosX()
     if ( mpMtrPosX->IsValueModified())
     {
         long lX = GetCoreValue( *mpMtrPosX, mePoolUnit );
-        if( mbMtrPosXMirror )
-            lX = -lX;
         long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();

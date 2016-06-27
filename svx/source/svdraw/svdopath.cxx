@@ -248,7 +248,6 @@ struct ImpPathCreateUser  : public SdrDragStatUserData
     long                    nCircRelAngle;
     bool                    bBezier;
     bool                    bBezHasCtrl0;
-    bool                    bCurve;
     bool                    bCircle;
     bool                    bAngleSnap;
     bool                    bLine;
@@ -261,15 +260,14 @@ struct ImpPathCreateUser  : public SdrDragStatUserData
 
 public:
     ImpPathCreateUser(): nCircRadius(0),nCircStAngle(0),nCircRelAngle(0),
-        bBezier(false),bBezHasCtrl0(false),bCurve(false),bCircle(false),bAngleSnap(false),bLine(false),bLine90(false),bRect(false),
+        bBezier(false),bBezHasCtrl0(false),bCircle(false),bAngleSnap(false),bLine(false),bLine90(false),bRect(false),
         bMixedCreate(false),nBezierStartPoint(0),eStartKind(OBJ_NONE),eAktKind(OBJ_NONE) { }
 
-    void ResetFormFlags() { bBezier=false; bCurve=false; bCircle=false; bLine=false; bRect=false; }
-    bool IsFormFlag() const { return bBezier || bCurve || bCircle || bLine || bRect; }
+    void ResetFormFlags() { bBezier=false; bCircle=false; bLine=false; bRect=false; }
+    bool IsFormFlag() const { return bBezier || bCircle || bLine || bRect; }
     XPolygon GetFormPoly() const;
     void CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, bool bMouseDown);
     XPolygon GetBezierPoly() const;
-    static XPolygon GetCurvePoly() { return XPolygon(); }
     void CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
     XPolygon GetCirclePoly() const;
     void CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
@@ -282,7 +280,6 @@ public:
 XPolygon ImpPathCreateUser::GetFormPoly() const
 {
     if (bBezier) return GetBezierPoly();
-    if (bCurve)  return GetCurvePoly();
     if (bCircle) return GetCirclePoly();
     if (bLine)   return GetLinePoly();
     if (bRect)   return GetRectPoly();
@@ -2251,7 +2248,7 @@ bool SdrPathObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         {
             SdrView* pView = rStat.GetView();
 
-            if(pView && pView->IsAutoClosePolys() && !pView->IsUseIncompatiblePathCreateInterface())
+            if(pView && !pView->IsUseIncompatiblePathCreateInterface())
             {
                 OutputDevice* pOut = pView->GetFirstOutputDevice();
 

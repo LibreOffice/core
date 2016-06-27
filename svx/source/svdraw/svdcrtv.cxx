@@ -193,11 +193,9 @@ void SdrCreateView::ImpClearVars()
     nAktIdent=OBJ_NONE;
     pAktCreate=nullptr;
     pCreatePV=nullptr;
-    bAutoTextEdit=false;
     b1stPointAsCenter=false;
     aAktCreatePointer=Pointer(PointerStyle::Cross);
     bUseIncompatiblePathCreateInterface=false;
-    bAutoClosePolys=true;
     nAutoCloseDistPix=5;
     nFreeHandMinDistPix=10;
 
@@ -592,7 +590,6 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 {
     bool bRet=false;
     SdrObject* pObjMerk=pAktCreate;
-    SdrPageView* pPVMerk=pCreatePV;
 
     if (pAktCreate!=nullptr)
     {
@@ -687,14 +684,6 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 ShowCreateObj();
                 maDragStat.ResetMinMoved(); // NextPoint is at MovCreateObj()
                 bRet=true;
-            }
-        }
-        if (bRet && pObjMerk!=nullptr && IsTextEditAfterCreate())
-        {
-            SdrTextObj* pText=dynamic_cast<SdrTextObj*>( pObjMerk );
-            if (pText!=nullptr && pText->IsTextFrame())
-            {
-                SdrBeginTextEdit(pText, pPVMerk, nullptr, true);
             }
         }
     }

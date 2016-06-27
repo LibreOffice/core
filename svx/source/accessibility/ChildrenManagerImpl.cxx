@@ -65,7 +65,6 @@ ChildrenManagerImpl::ChildrenManagerImpl (
       mxParent (rxParent),
       maShapeTreeInfo (rShapeTreeInfo),
       mrContext (rContext),
-      mnNewNameIndex(1),
       mpFocusedShape(nullptr)
 {
 }
@@ -538,10 +537,6 @@ void ChildrenManagerImpl::ClearAccessibleShapeList()
         AccessibleEventId::INVALIDATE_ALL_CHILDREN,
         uno::Any(),
         uno::Any());
-
-    // There are no accessible shapes left so the index assigned to new
-    // accessible shapes can be reset.
-    mnNewNameIndex = 1;
 
     // Now the objects in the local lists can be safely disposed without
     // having problems with callers that want to update their child lists.

@@ -52,7 +52,6 @@ private:
     ::Color             aBackgroundColor;
     long                nCol;
     long                nLine;
-    bool                bInitialKeyInput;
     bool                m_bMod1;
     Reference< XFrame > mxFrame;
     OUString       maCommand;
@@ -107,7 +106,6 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
     , aTableButton( VclPtr<PushButton>::Create(this) )
     , nCol( 0 )
     , nLine( 0 )
-    , bInitialKeyInput(false)
     , m_bMod1(false)
     , mxFrame( rFrame )
     , maCommand( rCmd )
@@ -221,15 +219,6 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
         }
         if ( bHandled )
         {
-            //make sure that a table can initially be created
-            if(bInitialKeyInput)
-            {
-                bInitialKeyInput = false;
-                if(!nNewLine)
-                    nNewLine = 1;
-                if(!nNewCol)
-                    nNewCol = 1;
-            }
             Update( nNewCol, nNewLine );
         }
     }

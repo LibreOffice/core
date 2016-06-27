@@ -174,7 +174,6 @@ namespace drawinglayer
             bool                                        mbBottomIsOutside : 1;
             bool                                        mbRightIsOutside : 1;
             bool                                        mbTopIsOutside : 1;
-            bool                                        mbInTwips : 1;
 
         protected:
             // local decomposition.
@@ -216,8 +215,7 @@ namespace drawinglayer
                 mbLeftIsOutside(bLeftIsOutside),
                 mbBottomIsOutside(bBottomIsOutside),
                 mbRightIsOutside(bRightIsOutside),
-                mbTopIsOutside(bTopIsOutside),
-                mbInTwips(true)
+                mbTopIsOutside(bTopIsOutside)
             {
             }
 
@@ -231,7 +229,6 @@ namespace drawinglayer
             bool getBottomIsOutside() const { return mbBottomIsOutside; }
             bool getRightIsOutside() const { return mbRightIsOutside; }
             bool getTopIsOutside() const { return mbTopIsOutside; }
-            bool getInTwips() const { return mbInTwips; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
@@ -291,7 +288,7 @@ namespace drawinglayer
         {
             Primitive2DContainer xRetval(4);
             sal_uInt32 nInsert(0);
-            const double fTwipsToMM(getInTwips() ? (127.0 / 72.0) : 1.0);
+            const double fTwipsToMM(127.0 / 72.0);
 
             if(!getLeftLine().isEmpty())
             {
@@ -300,7 +297,7 @@ namespace drawinglayer
                 basegfx::B2DPoint aEnd(getTransform() * basegfx::B2DPoint(0.0, 1.0));
 
                 // Move the left border to the left.
-                double fOffset = getChangedValue(getLeftLine().GetDistance(), getInTwips());
+                double fOffset = getChangedValue(getLeftLine().GetDistance(), true/*InTwips*/);
                 aStart += basegfx::B2DPoint(-fOffset,-fOffset);
                 aEnd += basegfx::B2DPoint(-fOffset,fOffset);
 
@@ -314,9 +311,9 @@ namespace drawinglayer
                     xRetval[nInsert++] = Primitive2DReference(new BorderLinePrimitive2D(
                         aStart,
                         aEnd,
-                        getChangedValue(getLeftLine().GetOutWidth(), getInTwips()),
-                        getChangedValue(getLeftLine().GetDistance(), getInTwips()),
-                        getChangedValue(getLeftLine().GetInWidth(), getInTwips()),
+                        getChangedValue(getLeftLine().GetOutWidth(), true/*InTwips*/),
+                        getChangedValue(getLeftLine().GetDistance(), true/*InTwips*/),
+                        getChangedValue(getLeftLine().GetInWidth(), true/*InTwips*/),
                         fExtendIS * fTwipsToMM,
                         fExtendIE * fTwipsToMM,
                         fExtendOS * fTwipsToMM,
@@ -345,9 +342,9 @@ namespace drawinglayer
                     xRetval[nInsert++] = Primitive2DReference(new BorderLinePrimitive2D(
                         aStart,
                         aEnd,
-                        getChangedValue(getBottomLine().GetOutWidth(), getInTwips()),
-                        getChangedValue(getBottomLine().GetDistance(), getInTwips()),
-                        getChangedValue(getBottomLine().GetInWidth(), getInTwips()),
+                        getChangedValue(getBottomLine().GetOutWidth(), true/*InTwips*/),
+                        getChangedValue(getBottomLine().GetDistance(), true/*InTwips*/),
+                        getChangedValue(getBottomLine().GetInWidth(), true/*InTwips*/),
                         fExtendIS * fTwipsToMM,
                         fExtendIE * fTwipsToMM,
                         fExtendOS * fTwipsToMM,
@@ -376,9 +373,9 @@ namespace drawinglayer
                     xRetval[nInsert++] = Primitive2DReference(new BorderLinePrimitive2D(
                         aStart,
                         aEnd,
-                        getChangedValue(getRightLine().GetOutWidth(), getInTwips()),
-                        getChangedValue(getRightLine().GetDistance(), getInTwips()),
-                        getChangedValue(getRightLine().GetInWidth(), getInTwips()),
+                        getChangedValue(getRightLine().GetOutWidth(), true/*InTwips*/),
+                        getChangedValue(getRightLine().GetDistance(), true/*InTwips*/),
+                        getChangedValue(getRightLine().GetInWidth(), true/*InTwips*/),
                         fExtendOS * fTwipsToMM,
                         fExtendOE * fTwipsToMM,
                         fExtendIS * fTwipsToMM,
@@ -398,7 +395,7 @@ namespace drawinglayer
                 basegfx::B2DPoint aEnd(getTransform() * basegfx::B2DPoint(1.0, 0.0));
 
                 // Move the top border up a bit.
-                double fOffset = getChangedValue(getTopLine().GetDistance(), getInTwips());
+                double fOffset = getChangedValue(getTopLine().GetDistance(), true/*InTwips*/);
                 aStart += basegfx::B2DPoint(-fOffset,-fOffset);
                 aEnd += basegfx::B2DPoint(fOffset,-fOffset);
 
@@ -412,9 +409,9 @@ namespace drawinglayer
                     xRetval[nInsert++] = Primitive2DReference(new BorderLinePrimitive2D(
                         aStart,
                         aEnd,
-                        getChangedValue(getTopLine().GetOutWidth(), getInTwips()),
-                        getChangedValue(getTopLine().GetDistance(), getInTwips()),
-                        getChangedValue(getTopLine().GetInWidth(), getInTwips()),
+                        getChangedValue(getTopLine().GetOutWidth(), true/*InTwips*/),
+                        getChangedValue(getTopLine().GetDistance(), true/*InTwips*/),
+                        getChangedValue(getTopLine().GetInWidth(), true/*InTwips*/),
                         fExtendOS * fTwipsToMM,
                         fExtendOE * fTwipsToMM,
                         fExtendIS * fTwipsToMM,
@@ -453,8 +450,7 @@ namespace drawinglayer
                     && getLeftIsOutside() == rCompare.getLeftIsOutside()
                     && getBottomIsOutside() == rCompare.getBottomIsOutside()
                     && getRightIsOutside() == rCompare.getRightIsOutside()
-                    && getTopIsOutside() == rCompare.getTopIsOutside()
-                    && getInTwips() == rCompare.getInTwips());
+                    && getTopIsOutside() == rCompare.getTopIsOutside());
             }
 
             return false;
