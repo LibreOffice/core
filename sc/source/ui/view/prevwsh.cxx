@@ -947,6 +947,9 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
         pSeq[2].Name = "PageNumber";
         pSeq[2].Value <<= pPreview->GetPageNo();
     }
+
+    // Common SdrModel processing
+    GetDocument().GetDrawLayer()->WriteUserDataSequence(rSeq);
 }
 
 void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq)
@@ -972,7 +975,9 @@ void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyV
                     if (pSeq->Value >>= nTemp)
                         pPreview->SetPageNo(nTemp);
                 }
-            }
+                // Fallback to common SdrModel processing
+                else GetDocument().GetDrawLayer()->ReadUserDataSequenceValue(pSeq);
+        }
         }
     }
 }
