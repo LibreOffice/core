@@ -136,6 +136,11 @@ interface OutlineView
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
+    SID_EMOJI_CONTROL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporaryModify ;
+        StateMethod = GetMenuState ;
+    ]
     FN_INSERT_SOFT_HYPHEN // status(final|play)
     [
         ExecMethod = FuTemporaryModify ;

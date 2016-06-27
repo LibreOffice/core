@@ -21,6 +21,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/documentinfopage \
 	sfx2/uiconfig/ui/documentpropertiesdialog \
 	sfx2/uiconfig/ui/editdurationdialog \
+	sfx2/uiconfig/ui/emojicontrol \
 	sfx2/uiconfig/ui/errorfindemaildialog \
 	sfx2/uiconfig/ui/floatingrecord \
 	sfx2/uiconfig/ui/helpbookmarkpage \

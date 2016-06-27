@@ -35,6 +35,7 @@ interface TableText
     SID_CLIPBOARD_FORMAT_ITEMS [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
     SID_SELECTALL       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_EMOJI_CONTROL   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     FID_INSERT_NAME     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_THES            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
