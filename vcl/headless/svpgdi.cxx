@@ -1125,9 +1125,15 @@ SalColor SvpSalGraphics::getPixel( long nX, long nY )
     unsigned char *surface_data = cairo_image_surface_get_data(m_pSurface);
     unsigned char *row = surface_data + (nStride*nY);
     unsigned char *data = row + (nX * 4);
+# if defined OSL_BIGENDIAN
+    sal_uInt8 b = unpremultiply(data[3], data[0]);
+    sal_uInt8 g = unpremultiply(data[2], data[0]);
+    sal_uInt8 r = unpremultiply(data[1], data[0]);
+#else
     sal_uInt8 b = unpremultiply(data[0], data[3]);
     sal_uInt8 g = unpremultiply(data[1], data[3]);
     sal_uInt8 r = unpremultiply(data[2], data[3]);
+#endif
     return MAKE_SALCOLOR(r, g, b);
 }
 
