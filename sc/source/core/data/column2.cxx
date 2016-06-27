@@ -2336,7 +2336,7 @@ bool appendToBlock(
                 rCxt.ensureStrArray(rColArray, nArrayLen);
 
                 for (; itData != itDataEnd; ++itData, ++nPos)
-                    (*rColArray.mpStrArray)[nPos] = itData->getDataIgnoreCase();
+                    (*rColArray.mpStrArray)[nPos] = itData->getData();
             }
             break;
             case sc::element_type_edittext:
@@ -2348,7 +2348,7 @@ bool appendToBlock(
                 for (; itData != itDataEnd; ++itData, ++nPos)
                 {
                     OUString aStr = ScEditUtil::GetString(**itData, pDoc);
-                    (*rColArray.mpStrArray)[nPos] = rPool.intern(aStr).getDataIgnoreCase();
+                    (*rColArray.mpStrArray)[nPos] = rPool.intern(aStr).getData();
                 }
             }
             break;
@@ -2449,7 +2449,7 @@ void copyFirstStringBlock(
             sc::string_block::iterator itEnd = it;
             std::advance(itEnd, nLen);
             for (; it != itEnd; ++it, ++itArray)
-                *itArray = it->getDataIgnoreCase();
+                *itArray = it->getData();
         }
         break;
         case sc::element_type_edittext:
@@ -2463,7 +2463,7 @@ void copyFirstStringBlock(
             {
                 EditTextObject* pText = *it;
                 OUString aStr = ScEditUtil::GetString(*pText, &rDoc);
-                *itArray = rPool.intern(aStr).getDataIgnoreCase();
+                *itArray = rPool.intern(aStr).getData();
             }
         }
         break;
