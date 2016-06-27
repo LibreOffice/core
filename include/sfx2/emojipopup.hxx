@@ -16,32 +16,26 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <sfx2/emojipopup.hxx>
-#include <sfx2/emojicontrol.hxx>
-#include <unotools/viewoptions.hxx>
-#include <vcl/toolbox.hxx>
 
-SFX_IMPL_TOOLBOX_CONTROL(EmojiPopup, SfxVoidItem);
+#ifndef INCLUDED_SFX2_INC_EMOJIPOPUP_HXX
+#define INCLUDED_SFX2_INC_EMOJIPOPUP_HXX
 
-EmojiPopup::EmojiPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
-    : SfxToolBoxControl(nSlotId, nId, rTbx)
+#include <sfx2/tbxctrl.hxx>
+#include <sfx2/dllapi.h>
+
+#include <functional>
+
+class SFX2_DLLPUBLIC EmojiPopup : public SfxToolBoxControl
 {
-    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
-}
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
 
-EmojiPopup::~EmojiPopup()
-{
-}
+    EmojiPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    virtual ~EmojiPopup();
 
-VclPtr<SfxPopupWindow> EmojiPopup::CreatePopupWindow()
-{
-    VclPtr<SfxEmojiControl> pControl = VclPtr<SfxEmojiControl>::Create(GetSlotId());
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
+};
 
-    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoAppFocusClose);
-
-    SetPopupWindow(pControl);
-
-    return pControl;
-}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
