@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_07b6358a",
+        "filename": "sw/uiconfig/swriter/ui/optredlinepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-06-27T13:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba84c18e_87fc0540",
+      "revId": "df8456d90df33ff9734db9db4904900b0b14fecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_a7f90950",
         "filename": "sw/uiconfig/swriter/ui/optredlinepage.ui",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-06-27T13:34:51Z",
       "side": 1,
       "message": "and Color of Deletions",
+      "revId": "df8456d90df33ff9734db9db4904900b0b14fecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_27bb3974",
+        "filename": "sw/uiconfig/swriter/ui/optredlinepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-06-27T13:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba84c18e_a7f90950",
       "revId": "df8456d90df33ff9734db9db4904900b0b14fecb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_47b03d8c",
+        "filename": "sw/uiconfig/swriter/ui/optredlinepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-06-27T13:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba84c18e_c7944dea",
+      "revId": "df8456d90df33ff9734db9db4904900b0b14fecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_e7995121",
         "filename": "sw/uiconfig/swriter/ui/optredlinepage.ui",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2016-06-27T13:34:51Z",
       "side": 1,
       "message": "Color of Mark",
+      "revId": "df8456d90df33ff9734db9db4904900b0b14fecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_87aa4518",
+        "filename": "sw/uiconfig/swriter/ui/optredlinepage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2016-06-27T13:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba84c18e_e7995121",
       "revId": "df8456d90df33ff9734db9db4904900b0b14fecb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
