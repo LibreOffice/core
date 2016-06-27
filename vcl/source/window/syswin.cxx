@@ -65,35 +65,27 @@ SystemWindow::ImplData::~ImplData()
     delete mpTaskPaneList;
 }
 
-void SystemWindow::Init()
+SystemWindow::SystemWindow(WindowType nType)
+    : Window(nType)
+    , mbPinned(false)
+    , mbRollUp(false)
+    , mbRollFunc(false)
+    , mbDockBtn(false)
+    , mbHideBtn(false)
+    , mbSysChild(false)
+    , mbIsCalculatingInitialLayoutSize(false)
+    , mbInitialLayoutDone(false)
+    , mnMenuBarMode(MenuBarMode::Normal)
+    , mnIcon(0)
+    , mpImplData(new ImplData)
+    , mbIsDefferedInit(false)
 {
-    mpImplData          = new ImplData;
     mpWindowImpl->mbSysWin            = true;
     mpWindowImpl->mnActivateMode      = ActivateModeFlags::GrabFocus;
-
-    mpMenuBar           = nullptr;
-    mbPinned            = false;
-    mbRollUp            = false;
-    mbRollFunc          = false;
-    mbDockBtn           = false;
-    mbHideBtn           = false;
-    mbSysChild          = false;
-    mbIsCalculatingInitialLayoutSize = false;
-    mbInitialLayoutDone = false;
-    mnMenuBarMode       = MenuBarMode::Normal;
-    mnIcon              = 0;
-    mpDialogParent      = nullptr;
 
     //To-Do, reuse maResizeTimer
     maLayoutIdle.SetPriority(SchedulerPriority::RESIZE);
     maLayoutIdle.SetIdleHdl( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
-}
-
-SystemWindow::SystemWindow(WindowType nType)
-    : Window(nType)
-    , mbIsDefferedInit(false)
-{
-    Init();
 }
 
 void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
