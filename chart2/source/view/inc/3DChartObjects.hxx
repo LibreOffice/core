@@ -66,7 +66,6 @@ public:
 
     virtual void render() override;
 private:
-    bool mbRoundedCorners;
     glm::mat4 maPos;
     Color maColor; // RGBA fill color
 };

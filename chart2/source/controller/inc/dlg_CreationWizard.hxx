@@ -46,8 +46,6 @@ public:
 
     CreationWizard() = delete;
 
-    bool isClosable() { /*@todo*/ return m_bIsClosable;}
-
     // TabPageNotifiable
     virtual void setInvalidPage( TabPage * pTabPage ) override;
     virtual void setValidPage( TabPage * pTabPage ) override;
@@ -64,11 +62,9 @@ private:
 
     css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
     css::uno::Reference< css::uno::XComponentContext>    m_xCC;
-    bool m_bIsClosable;
     ChartTypeTemplateProvider*   m_pTemplateProvider;
     std::unique_ptr<DialogModel> m_pDialogModel;
 
-    WizardState m_nFirstState;
     WizardState m_nLastState;
 
     TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;

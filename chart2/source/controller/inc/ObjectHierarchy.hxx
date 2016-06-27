@@ -100,7 +100,6 @@ private:
     ObjectHierarchy::tOID m_aCurrentOID;
     css::uno::Reference< css::chart2::XChartDocument > m_xChartDocument;
     ExplicitValueProvider * m_pExplicitValueProvider;
-    bool m_bStepDownInDiagram;
 };
 
 } //  namespace chart

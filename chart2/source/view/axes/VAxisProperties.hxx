@@ -75,7 +75,6 @@ struct AxisLabelProperties final
     double               fRotationAngleDegree;
 
     sal_Int32   nRhythm; //show only each nth label with n==nRhythm
-    bool        bRhythmIsFix; //states whether the given rhythm is fix or may be changed
 
     //methods:
     void init( const css::uno::Reference< css::chart2::XAxis >&  xAxisModel );

@@ -371,7 +371,6 @@ AxisLabelProperties::AxisLabelProperties()
                         , bStackCharacters( false )
                         , fRotationAngleDegree( 0.0 )
                         , nRhythm( 1 )
-                        , bRhythmIsFix(false)
 {
 
 }
