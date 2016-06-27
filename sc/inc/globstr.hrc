@@ -140,7 +140,6 @@
 #define STR_UNKNOWN_FILTER          94
 
 #define STR_DATABASE_NOTFOUND       95
-#define STR_DATABASE_ABORTED        96
 
 #define STR_UNDO_PRINTRANGES        97
 

@@ -393,10 +393,6 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "The query '#' could not be opened." ;
     };
-    String STR_DATABASE_ABORTED
-    {
-        Text [ en-US ] = "Database import terminated." ;
-    };
     String STR_PROGRESS_IMPORT
     {
         Text [ en-US ] = "# records imported..." ;

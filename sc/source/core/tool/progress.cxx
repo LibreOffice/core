@@ -37,7 +37,6 @@ static ScProgress theDummyInterpretProgress;
 SfxProgress*    ScProgress::pGlobalProgress = nullptr;
 sal_uLong       ScProgress::nGlobalRange = 0;
 sal_uLong       ScProgress::nGlobalPercent = 0;
-bool            ScProgress::bGlobalNoUserBreak = true;
 ScProgress*     ScProgress::pInterpretProgress = &theDummyInterpretProgress;
 ScProgress*     ScProgress::pOldInterpretProgress = nullptr;
 sal_uLong       ScProgress::nInterpretProgress = 0;
@@ -111,7 +110,6 @@ ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
         pGlobalProgress = pProgress;
         nGlobalRange = nRange;
         nGlobalPercent = 0;
-        bGlobalNoUserBreak = true;
     }
 }
 
@@ -130,7 +128,6 @@ ScProgress::~ScProgress()
         pGlobalProgress = nullptr;
         nGlobalRange = 0;
         nGlobalPercent = 0;
-        bGlobalNoUserBreak = true;
     }
 }
 

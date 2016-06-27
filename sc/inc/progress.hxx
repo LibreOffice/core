@@ -42,7 +42,6 @@ private:
     static  SfxProgress*    pGlobalProgress;
     static  sal_uLong        nGlobalRange;
     static  sal_uLong       nGlobalPercent;
-    static  bool            bGlobalNoUserBreak;
     static  ScProgress*     pInterpretProgress;
     static  ScProgress*     pOldInterpretProgress;
     static  sal_uLong       nInterpretProgress;
@@ -63,7 +62,6 @@ private:
                                 }
 
 public:
-    static  bool            IsUserBreak() { return !bGlobalNoUserBreak; }
     static  void            CreateInterpretProgress( ScDocument* pDoc,
                                                     bool bWait = true );
     static  ScProgress*     GetInterpretProgress() { return pInterpretProgress; }
@@ -80,47 +78,37 @@ public:
                             ScProgress();
 #endif
 
-            bool            SetStateText( sal_uLong nVal, const OUString &rVal )
+            void            SetStateText( sal_uLong nVal, const OUString &rVal )
                                 {
                                     if ( pProgress )
                                     {
                                         CalcGlobalPercent( nVal );
-                                        if ( !pProgress->SetStateText( nVal, rVal ) )
-                                            bGlobalNoUserBreak = false;
-                                        return bGlobalNoUserBreak;
+                                        pProgress->SetStateText( nVal, rVal );
                                     }
-                                    return true;
                                 }
-            bool            SetState( sal_uLong nVal, sal_uLong nNewRange = 0 )
+            void            SetState( sal_uLong nVal, sal_uLong nNewRange = 0 )
                                 {
                                     if ( pProgress )
                                     {
                                         if ( nNewRange )
                                             nGlobalRange = nNewRange;
                                         CalcGlobalPercent( nVal );
-                                        if ( !pProgress->SetState( nVal, nNewRange ) )
-                                            bGlobalNoUserBreak = false;
-                                        return bGlobalNoUserBreak;
+                                        pProgress->SetState( nVal, nNewRange );
                                     }
-                                    return true;
                                 }
-            bool            SetStateCountDown( sal_uLong nVal )
+            void            SetStateCountDown( sal_uLong nVal )
                                 {
                                     if ( pProgress )
                                     {
                                         CalcGlobalPercent( nGlobalRange - nVal );
-                                        if ( !pProgress->SetState( nGlobalRange - nVal ) )
-                                            bGlobalNoUserBreak = false;
-                                        return bGlobalNoUserBreak;
+                                        pProgress->SetState( nGlobalRange - nVal );
                                     }
-                                    return true;
                                 }
-            bool            SetStateOnPercent( sal_uLong nVal )
+            void            SetStateOnPercent( sal_uLong nVal )
                                 {   /// only if percentage increased
                                     if ( nGlobalRange && (nVal * 100 /
                                             nGlobalRange) > nGlobalPercent )
-                                        return SetState( nVal );
-                                    return true;
+                                        SetState( nVal );
                                 }
             void            SetStateCountDownOnPercent( sal_uLong nVal )
                                 {   /// only if percentage increased

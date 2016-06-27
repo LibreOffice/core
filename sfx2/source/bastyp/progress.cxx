@@ -208,7 +208,7 @@ void SfxProgress::Stop()
         pImpl->Enable_Impl();
 }
 
-bool SfxProgress::SetStateText
+void SfxProgress::SetStateText
 (
     sal_uLong       nNewVal,     /* New value for the progress-bar */
     const OUString& rNewVal     /* Status as Text */
@@ -216,10 +216,10 @@ bool SfxProgress::SetStateText
 
 {
     pImpl->aStateText = rNewVal;
-    return SetState( nNewVal );
+    SetState( nNewVal );
 }
 
-bool SfxProgress::SetState
+void SfxProgress::SetState
 (
     sal_uLong   nNewVal,    /* new value for the progress bar */
 
@@ -228,18 +228,10 @@ bool SfxProgress::SetState
 /*  [Description]
 
     Setting the current status, after a time delay Reschedule is called.
-
-    [Return value]
-
-    bool                TRUE
-                        Proceed with the action
-
-                        FALSE
-                        Cancel action
 */
 
 {
-    if( pImpl->pActiveProgress ) return true;
+    if( pImpl->pActiveProgress ) return;
 
     nVal = nNewVal;
 
@@ -300,8 +292,6 @@ bool SfxProgress::SetState
     {
         pImpl->xStatusInd->setValue( nNewVal );
     }
-
-    return true;
 }
 
 

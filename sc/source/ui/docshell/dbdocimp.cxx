@@ -346,12 +346,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                 aText += OUString::number( nInserted );
                                 aText += aPict.getToken(1,'#');
 
-                                if (!aProgress.SetStateText( 0, aText ))    // stopped by user?
-                                {
-                                    bEnd = true;
-                                    bSuccess = false;
-                                    nErrStringId = STR_DATABASE_ABORTED;
-                                }
+                                aProgress.SetStateText( 0, aText );
                             }
                         }
                         else        // past the end of the spreadsheet

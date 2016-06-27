@@ -1013,11 +1013,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
             //! error handling and recovery of old
             //! ScDocShell::SbaSdbExport is still missing!
 
-            if ( !aProgress.SetStateOnPercent( nDocRow - nFirstRow ) )
-            {   // UserBreak
-                nErr = SCERR_EXPORT_DATA;
-                break;
-            }
+            aProgress.SetStateOnPercent( nDocRow - nFirstRow );
         }
 
         comphelper::disposeComponent( xRowSet );

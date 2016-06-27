@@ -456,8 +456,6 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
                 else
                     pCell = nullptr;
             }
-            if ( ScProgress::IsUserBreak() )
-                pCell = nullptr;
         }
         if ( bProgress )
             ScProgress::DeleteInterpretProgress();
