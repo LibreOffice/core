@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_67d8e1f0",
+        "filename": "include/sfx2/objsh.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-27T14:03:15Z",
+      "side": 1,
+      "message": "Ah right, my bad - missed the visibility change, then it makes sense to rename, correct.",
+      "parentUuid": "ba84c18e_8777a501",
+      "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_87f24599",
         "filename": "sfx2/source/view/frmload.cxx",
         "patchSetId": 8
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Oh, I\u0027m afraid your proposal could result in much more intrusive (and less manageable) patch.\nThe idea is that the default behaviour is the new one, so \"using legacy processing\" should be false by default. It should be so both on creating new files, as well as when importing foreign file types. Only when we open old ODFs, which don\u0027t contain the new setting explicitly, shall we have legacy processing by default.",
       "parentUuid": "ba84c18e_a7ef49af",
+      "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_277259e6",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-27T14:03:15Z",
+      "side": 1,
+      "message": "That\u0027s where we seem to disagree. I\u0027d like the behaviour to stay the old one, for all document loads, for minimal user surprise.\n\nIf an import filter needs to change behaviour to fix a bug, they can set that flag then deliberately.",
+      "parentUuid": "ba84c18e_c7c60d16",
       "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
