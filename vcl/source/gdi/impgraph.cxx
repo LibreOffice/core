@@ -1406,6 +1406,10 @@ BitmapChecksum ImpGraphic::ImplGetChecksum() const
 
             default:
                 nRet = maMetaFile.GetChecksum();
+                if (maPdfData.hasElements())
+                    // Include the PDF data in the checksum, so a metafile with
+                    // and without PDF data is considered to be different.
+                    nRet = vcl_get_checksum(nRet, maPdfData.getConstArray(), maPdfData.getLength());
             break;
         }
     }
