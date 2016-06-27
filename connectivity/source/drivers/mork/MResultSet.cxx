@@ -1248,7 +1248,7 @@ void SAL_CALL OResultSet::executeQuery() throw( css::sdbc::SQLException,
                 {
                     OValueRow aSearchRow = new OValueVector( m_aRow->get().size() );
 
-                    for(sal_Int32 i : m_pKeySet->get())
+                    for(sal_Int32 & i : m_pKeySet->get())
                     {
                         fetchRow( i );        // Fills m_aRow
                         if ( matchRow( m_aRow, aSearchRow ) )
