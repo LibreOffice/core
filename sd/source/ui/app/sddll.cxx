@@ -91,6 +91,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/emojipopup.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <comphelper/processfactory.hxx>
@@ -238,6 +239,8 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
+
+    EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );
 }
 
 void SdDLL::Init()

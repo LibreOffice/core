@@ -103,6 +103,11 @@ interface TextDrawText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_EMOJI_CONTROL
+    [
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     FN_INSERT_STRING
     [
             ExecMethod = ExecDraw ;

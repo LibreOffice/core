@@ -5506,6 +5506,13 @@
           be open at the same time. NIL will be interpreted as infinite!</desc>
         </info>
       </prop>
+      <prop oor:name="EmojiFont" oor:type="xs:string" oor:nillable="false">
+        <!-- UIHints: Emoji Control -->
+        <info>
+          <desc>Special font for rendering of emojis</desc>
+        </info>
+        <value>Noto Emoji</value>
+      </prop>
       <prop oor:name="PluginsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: ? -->
         <!-- OldLocation: soffice.ini -->

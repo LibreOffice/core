@@ -85,6 +85,7 @@
 #define SID_EXTENDEDHELP                    (SID_SFX_START + 402)
 #define SID_HELPBALLOONS                    (SID_SFX_START + 403)
 #define SID_HELPTIPS                        (SID_SFX_START + 404)
+#define SID_EMOJI_CONTROL                   (SID_SFX_START + 405)
 #define SID_HELPMENU                        (SID_SFX_START + 410)
 #define SID_SEND_FEEDBACK                   (SID_SFX_START + 421)
 #define SID_SHOW_LICENSE                    (SID_SFX_START + 1683)
