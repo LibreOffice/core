@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
+#include <o3tl/any.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -437,7 +438,7 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
 
     Reference< XTreeNode > xTempNode;
 
-    const Reference< XTreeNode > *pNodes = nullptr;
+    Sequence<Reference<XTreeNode>> pNodes;
     sal_Int32 nCount = 0;
 
     if( rSelection.hasValue() )
@@ -450,18 +451,17 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
                 if( xTempNode.is() )
                 {
                     nCount = 1;
-                    pNodes = &xTempNode;
+                    pNodes = {xTempNode};
                 }
                 break;
             }
         case TypeClass_SEQUENCE:
             {
-                if( rSelection.getValueType() == cppu::UnoType<Sequence< Reference< XTreeNode > >>::get() )
+                if( auto rSeq = o3tl::tryAccess<Sequence<Reference<XTreeNode>>>(
+                        rSelection) )
                 {
-                    const Sequence< Reference< XTreeNode > >& rSeq( *static_cast<const Sequence< Reference< XTreeNode > > *>(rSelection.getValue()) );
-                    nCount = rSeq.getLength();
-                    if( nCount )
-                        pNodes = rSeq.getConstArray();
+                    nCount = rSeq->getLength();
+                    pNodes = *rSeq;
                 }
                 break;
             }
@@ -476,13 +476,10 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
     if( bSetSelection )
         rTree.SelectAll( false );
 
-    if( pNodes && nCount )
+    for( sal_Int32 i = 0; i != nCount; ++i )
     {
-        while( nCount-- )
-        {
-            UnoTreeListEntry* pEntry = getEntry( *pNodes++ );
-            rTree.Select( pEntry, bSelect );
-        }
+        UnoTreeListEntry* pEntry = getEntry( pNodes[i] );
+        rTree.Select( pEntry, bSelect );
     }
 }
 

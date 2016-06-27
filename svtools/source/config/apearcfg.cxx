@@ -20,6 +20,7 @@
 
 #include <svtools/apearcfg.hxx>
 
+#include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -71,7 +72,7 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                             nDragMode = (DragMode)nTmp;
                         break;
                     }
-                    case  2: bMenuMouseFollow = *static_cast<sal_Bool const *>(pValues->getValue()); break; //"Menu/FollowMouse",
+                    case  2: bMenuMouseFollow = *o3tl::doAccess<bool>(*pValues); break; //"Menu/FollowMouse",
                     case  3:
                     {
                         short nTmp;
@@ -81,7 +82,7 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                     }
                     case  4: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
 #if defined( UNX )
-                    case  5: bFontAntialiasing = *static_cast<sal_Bool const *>(pValues->getValue()); break;    // "FontAntialising/Enabled",
+                    case  5: bFontAntialiasing = *o3tl::doAccess<bool>(*pValues); break;    // "FontAntialising/Enabled",
                     case  6: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
 #endif
                 }
