@@ -452,6 +452,9 @@ void DrawViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Pro
     rSequence.realloc( nIndex + 1 );
     rSequence[nIndex].Name = sUNO_View_ZoomOnPage ;
     rSequence[nIndex].Value <<= mbZoomOnPage;
+
+    // Common SdrModel processing
+    GetDocSh()->GetDoc()->WriteUserDataSequence(rSequence, bBrowse);
 }
 
 void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse )
@@ -472,6 +475,8 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
                 mbZoomOnPage = bZoomPage;
             }
         }
+        // Fallback to common SdrModel processing
+        else GetDocSh()->GetDoc()->ReadUserDataSequenceValue(pValue);
     }
 
     if( mpFrameView->GetPageKind() != mePageKind )
