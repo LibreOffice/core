@@ -37,6 +37,8 @@ class ScOrcusFactory;
 class ScRangeData;
 class SfxItemSet;
 
+typedef sal_Int16 SvxBorderStyle;
+
 namespace com { namespace sun { namespace star { namespace task {
 
 class XStatusIndicator;
@@ -283,7 +285,9 @@ private:
     {
         struct border_line
         {
+            SvxBorderStyle mestyle;
             Color maColor;
+            double mnWidth;
         };
         std::map<orcus::spreadsheet::border_direction_t, border_line> border_lines;
 
