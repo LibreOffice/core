@@ -41,7 +41,6 @@ struct CommentModel
     sal_Int32           mnTHA;              /// Horizontal Alignment
     sal_Int32           mnTVA;              /// Vertical Alignment
     css::awt::Rectangle maAnchor;           /// Anchor parameters
-    bool                mbVisible;          /// True = comment is always shown (BIFF2-BIFF8 only).
 
     explicit            CommentModel();
 };

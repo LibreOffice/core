@@ -439,7 +439,6 @@ private:
 
     XclExpPivotCacheList maPCacheList;      /// List of all pivot caches.
     XclExpPivotTableList maPTableList;      /// List of all pivot tables.
-    bool                mbShareCaches;      /// true = Tries to share caches between tables.
 };
 
 #endif

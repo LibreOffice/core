@@ -355,7 +355,6 @@ private:
     bool                mbAutoScale;    /// Auto scale text
     bool                mbLocked;       /// Position & Size locked
     bool                mbAutoFill;     /// Auto Fill Style
-    bool                mbAutoLine;     /// Auto Line Style
     bool                mbColHidden;    /// Column containing the comment is hidden
     bool                mbRowHidden;    /// Row containing the comment is hidden
     Rectangle           maCommentFrom;  /// From and From Offset

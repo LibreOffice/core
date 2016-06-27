@@ -157,16 +157,6 @@ bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
     return false;
 }
 
-bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
-{
-    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index has to be >0!" );
-
-    if (!nExcIndex || nExcIndex > maEntries.size() )
-        return false;
-
-    return maEntries[ nExcIndex -1 ].bLink;
-}
-
 void ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, OUString& rAppl, OUString& rDoc ) const
 {
     OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index has to be >0!" );

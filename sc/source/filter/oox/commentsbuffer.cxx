@@ -89,7 +89,6 @@ CommentModel::CommentModel()
     , mbRowHidden(false)
     , mnTHA(0)
     , mnTVA(0)
-    , mbVisible( false )
 {
 }
 
@@ -180,7 +179,7 @@ void Comment::finalizeImport()
                 }
             break;
             case FILTER_BIFF:
-                bVisible = maModel.mbVisible;
+                bVisible = false;
             break;
             case FILTER_UNKNOWN:
             break;

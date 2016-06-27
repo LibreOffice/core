@@ -33,7 +33,7 @@ class FormCache;
 
 struct LotusContext
 {
-    const sal_uInt16 nBOF;
+    static const sal_uInt16 nBOF = 0x0000;
     WKTYP            eTyp;          // type of file being processed
     bool             bEOF;          // shows end of file
     rtl_TextEncoding eCharVon;
@@ -51,8 +51,7 @@ struct LotusContext
     FormCache*       pValueFormCache; // -> in memory.cxx initialisiert
 
     LotusContext()
-        : nBOF(0x0000)
-        , eTyp(eWK_UNKNOWN)
+        : eTyp(eWK_UNKNOWN)
         , bEOF(false)
         , eCharVon(RTL_TEXTENCODING_DONTKNOW)
         , pDoc(nullptr)
