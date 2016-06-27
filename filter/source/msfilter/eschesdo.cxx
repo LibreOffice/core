@@ -69,13 +69,7 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
     , mpPicStrm(nullptr)
     , mpHostAppData(nullptr)
     , mnPagesWritten(0)
-    , mnShapeMasterBody(0)
-    , mnIndices(0)
-    , mnOutlinerCount(0)
-    , mnStatMaxValue(0)
-    , mnEffectCount(0)
     , mbIsTitlePossible(false)
-    , mbStatusIndicator(false)
 {
 }
 
@@ -526,7 +520,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 aPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
                 aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
                 aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
-                aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                aPropOpt.AddOpt( ESCHER_Prop_hspMaster, 0 );
             }
             else
             {
@@ -592,7 +586,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 aPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
                 aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
                 aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
-                aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                aPropOpt.AddOpt( ESCHER_Prop_hspMaster, 0 );
             }
             else
             {
@@ -812,9 +806,6 @@ sal_uInt32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShap
 
 bool ImplEESdrWriter::ImplInitPageValues()
 {
-    mnIndices = 0;
-    mnOutlinerCount = 0;                // die outline objects must be in accordance with the layout.
-    mnEffectCount = 0;
     mbIsTitlePossible = true;       // With more than one title PowerPoint will fail.
 
     return true;
@@ -832,11 +823,6 @@ void ImplEESdrWriter::ImplWritePage(
         if( nPer != nLastPer )
         {
             nLastPer = nPer;
-            sal_uInt32 nValue = mnPagesWritten * 5 + nPer;
-            if( nValue > mnStatMaxValue )
-                nValue = mnStatMaxValue;
-            if( mbStatusIndicator )
-                mXStatusIndicator->setValue( nValue );
         }
 
         ImplEESdrObject aObj( *this, *o3tl::doAccess<Reference<XShape>>(

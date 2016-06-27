@@ -33,7 +33,6 @@ class CGMBitmapDescriptor
         BitmapWriteAccess*      mpAcc;
         bool                mbStatus;
         bool                mbVMirror;
-        bool                mbHMirror;
         sal_uInt32              mnDstBitsPerPixel;
         sal_uInt32              mnScanSize;         // bytes per line
         FloatPoint              mnP, mnQ, mnR;
@@ -52,7 +51,6 @@ class CGMBitmapDescriptor
             , mpAcc(nullptr)
             , mbStatus(false)
             , mbVMirror(false)
-            , mbHMirror(false)
             , mnDstBitsPerPixel(0)
             , mnScanSize(0)
             , mndx(0.0)

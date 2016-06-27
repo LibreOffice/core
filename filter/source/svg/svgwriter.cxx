@@ -439,7 +439,6 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport )
   mbIsURLField( false ),
   msUrl(),
   mbIsPlaceholderShape( false ),
-  mbIWS( false ),
   maCurrentFont(),
   maParentFont()
 {
@@ -1699,7 +1698,6 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mrFontExport( rFontExport ),
     mpContext( nullptr ),
     maTextWriter( rExport ),
-    mnInnerMtfCount( 0 ),
     mbClipAttrChanged( false ),
     mbIsPlaceholderShape( false )
 {
@@ -2687,10 +2685,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
     // need a counter for the actions written per shape to avoid double ID
     // generation
     sal_Int32 nEntryCount(0);
-
-    if( mnInnerMtfCount )
-        nWriteFlags |= SVGWRITER_NO_SHAPE_COMMENTS;
-
 
 #if OSL_DEBUG_LEVEL > 0
     bool bIsTextShape = false;

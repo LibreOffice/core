@@ -537,8 +537,6 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
         BmpMirrorFlags nMirr = BmpMirrorFlags::NONE;
         if ( pBmpDesc->mbVMirror )
             nMirr |= BmpMirrorFlags::Vertical;
-        if ( pBmpDesc->mbHMirror )
-            nMirr |= BmpMirrorFlags::Horizontal;
         if ( nMirr != BmpMirrorFlags::NONE )
             pBmpDesc->mpBitmap->Mirror( nMirr );
 

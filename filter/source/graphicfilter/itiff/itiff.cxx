@@ -47,7 +47,6 @@ private:
 
     bool                bStatus;                    // Whether until now no error occurred
     Animation               aAnimation;
-    sal_uLong               nLastPercent;
 
     SvStream*               pTIFF;                      // the TIFF file that should be read
     Bitmap                  aBitmap;
@@ -125,7 +124,6 @@ public:
 
     TIFFReader()
         : bStatus(false)
-        , nLastPercent(0)
         , pTIFF(nullptr)
         , pAcc(nullptr)
         , nDstBitsPerPixel(0)
@@ -1177,7 +1175,6 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
     sal_uInt32 nFirstIfd(0), nDataLen;
 
     bStatus = true;
-    nLastPercent = 0;
 
     pTIFF = &rTIFF;
     nMaxPos = nOrigPos = pTIFF->Tell();

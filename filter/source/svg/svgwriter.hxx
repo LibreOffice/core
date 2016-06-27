@@ -183,7 +183,7 @@ class SVGTextWriter
     OUString                                    msUrl;
     OUString                                    msHyperlinkIdList;
     bool                                        mbIsPlaceholderShape;
-    bool                                        mbIWS;
+    static const bool                           mbIWS = false;
     vcl::Font                                   maCurrentFont;
     vcl::Font                                   maParentFont;
 
@@ -268,7 +268,6 @@ private:
     SVGTextWriter                               maTextWriter;
     VclPtr<VirtualDevice>                       mpVDev;
     MapMode                                     maTargetMapMode;
-    sal_uInt32                                  mnInnerMtfCount;
     bool                                    mbClipAttrChanged;
     bool                                    mbIsPlaceholderShape;
 

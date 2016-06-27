@@ -123,17 +123,7 @@ protected:
 
     sal_uInt32              mnPagesWritten;
 
-    sal_uInt32              mnShapeMasterBody;
-
-    // per page values
-    sal_uInt32              mnIndices;
-    sal_uInt32              mnOutlinerCount;
-    sal_uInt32              mnStatMaxValue;
-
-    sal_uInt16              mnEffectCount;
-
     bool                    mbIsTitlePossible;
-    bool                    mbStatusIndicator;
 
 
     explicit ImplEESdrWriter( EscherEx& rEx );

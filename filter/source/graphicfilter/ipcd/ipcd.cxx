@@ -45,8 +45,6 @@ private:
 
     bool bStatus;
 
-    sal_uLong               nLastPercent;
-
     SvStream &m_rPCD;
     BitmapWriteAccess*  mpAcc;
 
@@ -78,7 +76,6 @@ public:
 
     explicit PCDReader(SvStream &rStream)
         : bStatus(false)
-        , nLastPercent(0)
         , m_rPCD(rStream)
         , mpAcc(nullptr)
         , nOrientation(0)
@@ -101,7 +98,6 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
     Bitmap       aBmp;
 
     bStatus      = true;
-    nLastPercent = 0;
 
     // is it a PCD file with a picture? ( sets bStatus == sal_False, if that's not the case):
     CheckPCDImagePacFile();
