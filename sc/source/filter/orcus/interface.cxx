@@ -31,6 +31,9 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/lcolitem.hxx>
+#include <editeng/charhiddenitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/prntitem.hxx>
 
 #include <formula/token.hxx>
 #include <tools/datetime.hxx>
@@ -786,9 +789,13 @@ ScOrcusStyles::protection::protection():
 {
 }
 
-void ScOrcusStyles::protection::applyToItemSet(SfxItemSet& /*rSet*/) const
+void ScOrcusStyles::protection::applyToItemSet(SfxItemSet& rSet) const
 {
-    (void)this; // loplugin:staticmethods
+    rSet.Put(SvxCharHiddenItem(mbHidden, ATTR_PROTECTION));
+
+    if (mbLocked)
+        rSet.Put(SvxProtectItem(ATTR_PROTECTION));
+    rSet.Put(SvxPrintItem(ATTR_PROTECTION, mbPrintContent));
 }
 
 ScOrcusStyles::border::border()
@@ -1187,14 +1194,14 @@ void ScOrcusStyles::set_cell_locked(bool b)
     maCurrentProtection.mbLocked = b;
 }
 
-void ScOrcusStyles::set_cell_print_content(bool /* b */)
+void ScOrcusStyles::set_cell_print_content(bool b )
 {
-
+    maCurrentProtection.mbPrintContent = b;
 }
 
-void ScOrcusStyles::set_cell_formula_hidden(bool /* b */)
+void ScOrcusStyles::set_cell_formula_hidden(bool b )
 {
-
+    maCurrentProtection.mbFormulaHidden = b;
 }
 
 size_t ScOrcusStyles::commit_cell_protection()
