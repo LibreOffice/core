@@ -64,6 +64,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
     mpBackgrDev( VclPtr<VirtualDevice>::Create() ),
     mpGridDev( VclPtr<VirtualDevice>::Create() ),
+    mpPopup( VclPtr<PopupMenu>::Create() ),
     mpColorConfig( nullptr ),
     mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), true ) ),
     maHeaderFont( GetFont() ),
@@ -95,6 +96,7 @@ void ScCsvGrid::dispose()
     OSL_ENSURE(mpColorConfig, "the object hasn't been initialized properly");
     if (mpColorConfig)
         mpColorConfig->RemoveListener(this);
+    mpPopup.disposeAndClear();
     mpBackgrDev.disposeAndClear();
     mpGridDev.disposeAndClear();
     ScCsvControl::dispose();
