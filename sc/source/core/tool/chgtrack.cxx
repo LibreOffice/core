@@ -2120,7 +2120,6 @@ void ScChangeTrack::Init()
     nEndLastCut = 0;
     nLastMerge = 0;
     eMergeState = SC_CTMS_NONE;
-    bLoadSave = false;
     bInDelete = false;
     bInDeleteTop = false;
     bInDeleteUndo = false;
@@ -2273,9 +2272,6 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
 
 void ScChangeTrack::SetUser( const OUString& rUser )
 {
-    if ( IsLoadSave() )
-        return ; // Do not destroy the Collection
-
     maUser = rUser;
     maUserCollection.insert(maUser);
 }
