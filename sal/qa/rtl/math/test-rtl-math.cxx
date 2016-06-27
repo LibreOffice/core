@@ -86,6 +86,20 @@ public:
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_OutOfRange, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), end);
         CPPUNIT_ASSERT_EQUAL(rtl::math::isInf(res), true);
+
+        res = rtl::math::stringToDouble(
+                rtl::OUString(".5"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), end);
+        CPPUNIT_ASSERT_EQUAL(0.5, res);
+
+        res = rtl::math::stringToDouble(
+                rtl::OUString("5."),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), end);
+        CPPUNIT_ASSERT_EQUAL(5.0, res);
     }
 
     void test_stringToDouble_bad() {
@@ -94,6 +108,27 @@ public:
         double res = rtl::math::stringToDouble(
             rtl::OUString("  +Efoo"),
             '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        res = rtl::math::stringToDouble(
+                rtl::OUString("."),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        res = rtl::math::stringToDouble(
+                rtl::OUString(" +.Efoo"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        res = rtl::math::stringToDouble(
+                rtl::OUString(" +,.Efoo"),
+                '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);
         CPPUNIT_ASSERT_EQUAL(0.0, res);
