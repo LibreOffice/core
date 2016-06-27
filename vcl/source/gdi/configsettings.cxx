@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <o3tl/any.hxx>
 
 using namespace utl;
 using namespace vcl;
@@ -111,9 +112,8 @@ void SettingsConfigItem::getValues()
         const Any* pValue = aValues.getConstArray();
         for( int i = 0; i < aValues.getLength(); i++, pValue++ )
         {
-            if( pValue->getValueTypeClass() == TypeClass_STRING )
+            if( auto pLine = o3tl::tryAccess<OUString>(*pValue) )
             {
-                const OUString* pLine = static_cast<const OUString*>(pValue->getValue());
                 if( !pLine->isEmpty() )
                     m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
 #if OSL_DEBUG_LEVEL > 2

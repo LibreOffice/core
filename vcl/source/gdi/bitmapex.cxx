@@ -21,6 +21,7 @@
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 
+#include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
@@ -792,7 +793,7 @@ bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas 
     {
         // 0 means get BitmapEx
         uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
-        std::unique_ptr<BitmapEx> xBitmapEx(reinterpret_cast<BitmapEx*>( *static_cast<const sal_Int64*>(aAny.getValue())));
+        std::unique_ptr<BitmapEx> xBitmapEx(reinterpret_cast<BitmapEx*>(*o3tl::doAccess<sal_Int64>(aAny)));
         if( xBitmapEx )
         {
             *this = *xBitmapEx;
