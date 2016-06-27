@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_ca9a94c5",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-27T17:14:19Z",
+      "side": 1,
+      "message": "This is the change in shared code.",
+      "revId": "7df799756a3e710398b29b2eef3b4f1f2a6f0392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
