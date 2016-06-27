@@ -321,8 +321,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     XclExpRecord( EXC_ID_HLINK ),
     maScPos( rScPos ),
     mxVarData( new SvMemoryStream ),
-    mnFlags( 0 ),
-    mbSetDisplay( true )
+    mnFlags( 0 )
 {
     const OUString& rUrl = rUrlField.GetURL();
     const OUString& rRepr = rUrlField.GetRepresentation();
@@ -514,9 +513,7 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : nullptr,
             // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip
-            XML_display,            mbSetDisplay
-                                       ? XclXmlUtils::ToOString(m_Repr).getStr()
-                                       : nullptr,
+            XML_display,            XclXmlUtils::ToOString(m_Repr).getStr(),
             FSEND );
 }
 

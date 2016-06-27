@@ -131,7 +131,6 @@ private:
     sal_uInt32          mnFlags;            /// Option flags.
     XclExpStringRef     mxTextMark;         /// Location within m_Repr
     OUString            msTarget;           /// Target URL
-    bool                mbSetDisplay;       /// True if display attribute it written
 };
 
 typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;

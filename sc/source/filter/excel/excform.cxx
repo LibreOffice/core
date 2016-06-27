@@ -184,7 +184,6 @@ void ImportExcel::Formula(
 ExcelToSc::ExcelToSc( XclImpRoot& rRoot ) :
     ExcelConverterBase(rRoot.GetDocImport().getDoc().GetSharedStringPool(), 512),
     XclImpRoot( rRoot ),
-    bExternName( false ),
     maFuncProv( rRoot ),
     meBiff( rRoot.GetBiff() )
 {
@@ -219,8 +218,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     ScSingleRefData     aSRD;
     ScComplexRefData        aCRD;
     ExtensionTypeVec    aExtensions;
-
-    bExternName = false;
 
     if( eStatus != ConvOK )
     {
@@ -711,25 +708,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 sal_uInt16 nUINT16 = aIn.ReaduInt16();
                 if( nINT16 >= 0 )
                 {
-                    const ExtName* pExtName = rR.pExtNameBuff->GetNameByIndex( nINT16, nUINT16 );
-                    if( pExtName && pExtName->IsDDE() &&
-                        rR.pExtSheetBuff->IsLink( ( sal_uInt16 ) nINT16 ) )
-                    {
-                        OUString        aAppl, aExtDoc;
-                        TokenId         nPar1, nPar2;
-
-                        rR.pExtSheetBuff->GetLink( ( sal_uInt16 ) nINT16 , aAppl, aExtDoc );
-                        nPar1 = aPool.Store( aAppl );
-                        nPar2 = aPool.Store( aExtDoc );
-                        nMerk0 = aPool.Store( pExtName->aName );
-                        aPool   << ocDde << ocOpen << nPar1 << ocSep << nPar2 << ocSep
-                                << nMerk0 << ocClose;
-
-                        GetDoc().CreateDdeLink( aAppl, aExtDoc, pExtName->aName, SC_DDE_DEFAULT, ScMatrixRef() );
-                    }
-                    else
-                        aPool << ocBad;
-
+                    aPool << ocBad;
                     aPool >> aStack;
                 }
                 else
@@ -898,11 +877,6 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
         pErgebnis = aPool[ aStack.Get() ];
         eRet = ConvErrCount;
     }
-    else if( bExternName )
-    {
-        pErgebnis = aPool[ aStack.Get() ];
-        eRet = ConvErrExternal;
-    }
     else if( bArrayFormula )
     {
         pErgebnis = nullptr;
@@ -938,8 +912,6 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_
     ScComplexRefData    aCRD;
     aCRD.Ref1.SetAbsTab(aEingPos.Tab());
     aCRD.Ref2.SetAbsTab(aEingPos.Tab());
-
-    bExternName = false;
 
     if( eStatus != ConvOK )
     {
@@ -1345,8 +1317,6 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_
         eRet = ConvErrNi;
     else if( aIn.GetRecPos() != nEndPos )
         eRet = ConvErrCount;
-    else if( bExternName )
-        eRet = ConvErrExternal;
     else
         eRet = ConvOK;
 

@@ -966,8 +966,6 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     ScSingleRefData         aSRD;
     ScComplexRefData            aCRD;
 
-    bExternName = false;
-
     if( eStatus != ConvOK )
     {
         aIn.Ignore( nFormulaLen );
@@ -1291,8 +1289,6 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
         eRet = ConvErrNi;
     else if( aIn.GetRecPos() != nEndPos )
         eRet = ConvErrCount;
-    else if( bExternName )
-        eRet = ConvErrExternal;
     else
         eRet = ConvOK;
 

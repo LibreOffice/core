@@ -35,7 +35,6 @@ protected:
     enum ExtensionType { EXTENSION_ARRAY, EXTENSION_NLR, EXTENSION_MEMAREA };
     typedef ::std::vector< ExtensionType >          ExtensionTypeVec;
 
-    bool                    bExternName;    // external name was found
     static const sal_uInt16 nRowMask;
 
     XclFunctionProvider maFuncProv;
