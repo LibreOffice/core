@@ -1508,10 +1508,7 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                         DoFontAttribut();
 
                     SmNode* pTmp = popOrZero(m_aNodeStack);
-
-                    // check if casting in following line is ok
-                    OSL_ENSURE(pTmp && !pTmp->IsVisible(), "Sm : Ooops...");
-
+                    assert(pTmp && !pTmp->IsVisible());
                     aStack.push(static_cast<SmStructureNode *>(pTmp));
                 }
 
