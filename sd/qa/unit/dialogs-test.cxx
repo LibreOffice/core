@@ -108,6 +108,7 @@ private:
     /// central methods: dialog creation and dumping to target directory (path)
     VclAbstractDialog* createDialogByID(sal_uInt32 nID);
     void dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rPath);
+    void saveScreenshot( VclAbstractDialog& rDlg);
 
 public:
     SdDialogsTest();
@@ -619,6 +620,30 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
     return pRetval;
 }
 
+void SdDialogsTest::saveScreenshot(VclAbstractDialog& rDlg)
+{
+    const Bitmap aScreenshot(rDlg.createScreenshot());
+
+    if (!aScreenshot.IsEmpty())
+    {
+        OString aScreenshotId = rDlg.GetScreenshotId();
+        OUString aDirname, aBasename;
+        splitHelpId( aScreenshotId, aDirname, aBasename );
+        aDirname = OUString::createFromAscii( SCREENSHOT_DIRECTORY ) + aDirname;
+
+        osl::FileBase::RC err = osl::Directory::createPath( m_directories.getURLFromSrc( aDirname ));
+        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to create " + aDirname, RTL_TEXTENCODING_UTF8).getStr(),
+                                (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
+
+        OUString aFullPath = m_directories.getSrcRootPath() + aDirname + "/" + aBasename + ".png";
+        SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
+        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to open " + OUString::number(aNew.GetErrorCode()), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen() );
+
+        vcl::PNGWriter aPNGWriter(aScreenshot);
+        aPNGWriter.Write(aNew);
+    }
+}
+
 void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rPath)
 {
 
@@ -633,14 +658,7 @@ void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rP
         {
             if (rDlg.selectPageByUIXMLDescription(aPageDescriptions[a]))
             {
-                const Bitmap aScreenshot(rDlg.createScreenshot());
-
-                if (!aScreenshot.IsEmpty())
-                {
-                    SvFileStream aNew(rPath + OUString("_") + OUString::number(a) + OUString(".png"), StreamMode::WRITE | StreamMode::TRUNC);
-                    vcl::PNGWriter aPNGWriter(aScreenshot);
-                    aPNGWriter.Write(aNew);
-                }
+               saveScreenshot( rDlg );
             }
             else
             {
@@ -650,26 +668,7 @@ void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rP
     }
     else
     {
-        const Bitmap aScreenshot(rDlg.createScreenshot());
-
-        if (!aScreenshot.IsEmpty())
-        {
-            OString aScreenshotId = rDlg.GetScreenshotId();
-            OUString aDirname, aBasename;
-            splitHelpId( aScreenshotId, aDirname, aBasename );
-            aDirname = OUString::createFromAscii( SCREENSHOT_DIRECTORY ) + aDirname;
-
-            osl::FileBase::RC err = osl::Directory::createPath( m_directories.getURLFromSrc( aDirname ));
-            CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to create " + aDirname, RTL_TEXTENCODING_UTF8).getStr(),
-                                    (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
-
-            OUString aFullPath = m_directories.getSrcRootPath() + aDirname + "/" + aBasename + ".png";
-            SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
-            CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to open " + OUString::number(aNew.GetErrorCode()), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen() );
-
-            vcl::PNGWriter aPNGWriter(aScreenshot);
-            aPNGWriter.Write(aNew);
-        }
+        saveScreenshot( rDlg );
     }
 }
 
