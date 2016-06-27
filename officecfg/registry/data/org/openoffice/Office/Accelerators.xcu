@@ -1182,6 +1182,8 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:SelectAll</value>
+            <value xml:lang="zh-TW" install:module="unxwnt">.uno:SelectColumn</value>
+            <value xml:lang="zh-CN" install:module="unxwnt">.uno:SelectColumn</value>
           </prop>
         </node>
         <node oor:name="SPACE_SHIFT_MOD3" oor:op="replace">
