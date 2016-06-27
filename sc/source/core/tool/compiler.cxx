@@ -2762,6 +2762,32 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             }
         }
     }
+    else if (mxSymbols->isPODF())
+    {
+        // PODF names are ODF 1.0/1.1 and also used in API XFunctionAccess.
+        // We can't rename them in
+        // formula/source/core/resource/core_resource.src but can add
+        // additional names to be recognized here so they match the UI names if
+        // those are renamed.
+        struct FunctionName
+        {
+            const sal_Char* pName;
+            OpCode          eOp;
+        };
+        static const FunctionName aPodfAliases[] = {
+            { "EFFECT",  ocEffect }      // EFFECTIVE -> EFFECT
+        };
+        for (const FunctionName& rPodfAlias : aPodfAliases)
+        {
+            if (rName.equalsIgnoreAsciiCaseAscii( rPodfAlias.pName))
+            {
+                maRawToken.SetOpCode( rPodfAlias.eOp);
+                bFound = true;
+                break;  // for
+            }
+        }
+    }
+
     if (!bFound)
     {
         OUString aIntName;

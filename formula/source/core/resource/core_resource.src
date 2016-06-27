@@ -896,6 +896,9 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
 // DO NOT CHANGE NAMES! Only add functions.
 // These English names are used internally to store/load ODF v1.0/v1.1 and for
 // API XFunctionAccess.
+// If there is a reason for another name for some function then add an
+// *additional* name to be recognized to sc/source/core/tool/compiler.cxx
+// ScCompiler::IsOpCode() in the else if (mxSymbols->isPODF()) block.
 Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
 {
     String SC_OPCODE_IF { Text = "IF" ; };
