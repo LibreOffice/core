@@ -1574,7 +1574,6 @@ void ScFormulaCell::Interpret()
                         !rRecursionHelper.IsDoingIteration()) ||
                     bIterationFromRecursion || bResumeIteration)
             {
-                ScFormulaCell* pIterCell = this; // scope for debug convenience
                 bool & rDone = rRecursionHelper.GetConvergingReference();
                 rDone = false;
                 if (!bIterationFromRecursion && bResumeIteration)
@@ -1589,7 +1588,7 @@ void ScFormulaCell::Interpret()
                                 rRecursionHelper.GetIterationStart()); aIter !=
                             aOldStart; ++aIter)
                     {
-                        pIterCell = (*aIter).pCell;
+                        ScFormulaCell* pIterCell = (*aIter).pCell;
                         pIterCell->bIsIterCell = true;
                     }
                     // Mark older cells dirty again, in case they converted
@@ -1601,7 +1600,7 @@ void ScFormulaCell::Interpret()
                                 aOldStart); aIter !=
                             rRecursionHelper.GetIterationEnd(); ++aIter)
                     {
-                        pIterCell = (*aIter).pCell;
+                        ScFormulaCell* pIterCell = (*aIter).pCell;
                         if (pIterCell->nSeenInIteration == nIteration)
                         {
                             if (!pIterCell->bDirty || aIter == aOldStart)
@@ -1626,7 +1625,7 @@ void ScFormulaCell::Interpret()
                                 rRecursionHelper.GetIterationStart()); aIter !=
                             rRecursionHelper.GetIterationEnd(); ++aIter)
                     {
-                        pIterCell = (*aIter).pCell;
+                        ScFormulaCell* pIterCell = (*aIter).pCell;
                         pIterCell->bIsIterCell = true;
                     }
                 }
@@ -1641,7 +1640,7 @@ void ScFormulaCell::Interpret()
                             rRecursionHelper.GetIterationEnd() &&
                             !rRecursionHelper.IsInReturn(); ++aIter)
                     {
-                        pIterCell = (*aIter).pCell;
+                        ScFormulaCell* pIterCell = (*aIter).pCell;
                         if (pIterCell->IsDirtyOrInTableOpDirty() &&
                                 rRecursionHelper.GetIteration() !=
                                 pIterCell->GetSeenInIteration())
@@ -1667,7 +1666,7 @@ void ScFormulaCell::Interpret()
                                 aIter != rRecursionHelper.GetIterationEnd();
                                 ++aIter)
                         {
-                            pIterCell = (*aIter).pCell;
+                            ScFormulaCell* pIterCell = (*aIter).pCell;
                             pIterCell->bIsIterCell = false;
                             pIterCell->nSeenInIteration = 0;
                             pIterCell->bRunning = (*aIter).bOldRunning;
@@ -1680,7 +1679,7 @@ void ScFormulaCell::Interpret()
                                 aIter != rRecursionHelper.GetIterationEnd();
                                 ++aIter)
                         {
-                            pIterCell = (*aIter).pCell;
+                            ScFormulaCell* pIterCell = (*aIter).pCell;
                             pIterCell->bIsIterCell = false;
                             pIterCell->nSeenInIteration = 0;
                             pIterCell->bRunning = (*aIter).bOldRunning;
