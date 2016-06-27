@@ -127,7 +127,6 @@ certain functionality.
 @li @c sc.filter - Calc filter
 @li @c sc.opencl - OpenCL-related stuff in general
 @li @c sc.opencl.source - Generated OpenCL source code
-@li @c sc.opencl.thread - Background thread to compile OpenCL kernels
 @li @c sc.orcus
 @li @c sc.orcus.autofilter
 @li @c sc.orcus.condformat
