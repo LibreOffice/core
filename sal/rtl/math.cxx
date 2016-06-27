@@ -669,7 +669,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
     bool bDone = false;
 
     // #i112652# XMLSchema-2
-    if (3 >= (pEnd - p))
+    if (3 <= (pEnd - p))
     {
         if ((CharT('N') == p[0]) && (CharT('a') == p[1])
             && (CharT('N') == p[2]))
