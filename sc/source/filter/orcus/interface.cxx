@@ -805,13 +805,13 @@ SvxBoxItemLine getDirection(os::border_direction_t dir)
             return SvxBoxItemLine::RIGHT;
         break;
         case os::border_direction_t::left:
-            return SvxBoxItemLine::RIGHT;
+            return SvxBoxItemLine::LEFT;
         break;
         case os::border_direction_t::top:
-            return SvxBoxItemLine::RIGHT;
+            return SvxBoxItemLine::TOP;
         break;
         case os::border_direction_t::bottom:
-            return SvxBoxItemLine::RIGHT;
+            return SvxBoxItemLine::BOTTOM;
         break;
         default:
         break;
