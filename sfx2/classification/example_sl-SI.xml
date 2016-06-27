@@ -9,59 +9,59 @@
         <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:non-business" Name="Non-Business">
             <baf:LabelingRules/>
             <baf:ImpactLevel>
-                <baf:Scale>Vlada RS</baf:Scale>
+                <baf:Scale>UK-Cabinet</baf:Scale>
                 <baf:ConfidentalityValue>0</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:general-business" Name="General Business">
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:general-business" Name="Splošno poslovanje">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
-                    <baf:Identifier>Dokument: glava</baf:Identifier>
+                    <baf:Identifier>Document: Header</baf:Identifier>
                     <baf:Value>Stopnja zaupnosti: splošno poslovanje</baf:Value>
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
             <baf:ImpactLevel>
-                <baf:Scale>Vlada RS</baf:Scale>
+                <baf:Scale>UK-Cabinet</baf:Scale>
                 <baf:ConfidentalityValue>1</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:confidential" Name="Confidential">
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:confidential" Name="Zaupno">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
-                    <baf:Identifier>Dokument: glava</baf:Identifier>
+                    <baf:Identifier>Document: Header</baf:Identifier>
                     <baf:Value>Stopnja zaupnosti: zaupno</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
-                    <baf:Identifier>Dokument: noga</baf:Identifier>
+                    <baf:Identifier>Document: Footer</baf:Identifier>
                     <baf:Value>Ta vsebina ima oznako zaupno. Ne razširjajte je zunaj brez  poslovne odobritve.</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
-                    <baf:Identifier>Dokument: vodni žig</baf:Identifier>
+                    <baf:Identifier>Document: Watermark</baf:Identifier>
                     <baf:Value>Zaupno</baf:Value>
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
             <baf:ImpactLevel>
-                <baf:Scale>Vlada RS</baf:Scale>
+                <baf:Scale>UK-Cabinet</baf:Scale>
                 <baf:ConfidentalityValue>2</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:internal-only" Name="Internal Only">
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:internal-only" Name="Interno">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
-                    <baf:Identifier>Dokument: glava</baf:Identifier>
+                    <baf:Identifier>Document: Header</baf:Identifier>
                     <baf:Value>Stopnja zaupnosti: interno</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
-                    <baf:Identifier>Dokument: noga</baf:Identifier>
+                    <baf:Identifier>Document: Footer</baf:Identifier>
                     <baf:Value>Ta vsebina ima oznako interno. Ne razširjajte je izven podjetja.</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
-                    <baf:Identifier>Dokument: vodni žig</baf:Identifier>
+                    <baf:Identifier>Document: Watermark</baf:Identifier>
                     <baf:Value>Interno</baf:Value>
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
             <baf:ImpactLevel>
-                <baf:Scale>Vlada RS</baf:Scale>
+                <baf:Scale>UK-Cabinet</baf:Scale>
                 <baf:ConfidentalityValue>3</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
