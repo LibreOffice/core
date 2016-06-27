@@ -4303,22 +4303,28 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     aGIFStream.WriteBytes(pString, strlen(pString));
                     nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aGIFStream,
                         rFilter.GetExportFormatNumberForShortName( "GIF" ) );
-                    css::uno::Sequence< css::beans::PropertyValue > aFilterData( 1 );
-                    css::uno::Sequence< css::beans::PropertyValue > aAdditionalChunkSequence( 1 );
-                    sal_uInt32 nGIFSreamLen = aGIFStream.Tell();
-                    css::uno::Sequence< sal_Int8 > aGIFSeq( nGIFSreamLen );
-                    sal_Int8* pSeq = aGIFSeq.getArray();
-                    aGIFStream.Seek( STREAM_SEEK_TO_BEGIN );
-                    aGIFStream.ReadBytes(pSeq, nGIFSreamLen);
-                    css::beans::PropertyValue aChunkProp, aFilterProp;
-                    aChunkProp.Name = "msOG";
-                    aChunkProp.Value <<= aGIFSeq;
-                    aAdditionalChunkSequence[ 0 ] = aChunkProp;
-                    aFilterProp.Name = "AdditionalChunks";
-                    aFilterProp.Value <<= aAdditionalChunkSequence;
-                    aFilterData[ 0 ] = aFilterProp;
-                    nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aStream,
-                        rFilter.GetExportFormatNumberForShortName( "PNG" ), &aFilterData );
+                    SAL_WARN_IF(
+                        nErrCode != ERRCODE_NONE, "filter.ms",
+                        "ExportGraphic to GIF failed with " << nErrCode);
+                    if (nErrCode == ERRCODE_NONE)
+                    {
+                        css::uno::Sequence< css::beans::PropertyValue > aFilterData( 1 );
+                        css::uno::Sequence< css::beans::PropertyValue > aAdditionalChunkSequence( 1 );
+                        sal_uInt32 nGIFSreamLen = aGIFStream.Tell();
+                        css::uno::Sequence< sal_Int8 > aGIFSeq( nGIFSreamLen );
+                        sal_Int8* pSeq = aGIFSeq.getArray();
+                        aGIFStream.Seek( STREAM_SEEK_TO_BEGIN );
+                        aGIFStream.ReadBytes(pSeq, nGIFSreamLen);
+                        css::beans::PropertyValue aChunkProp, aFilterProp;
+                        aChunkProp.Name = "msOG";
+                        aChunkProp.Value <<= aGIFSeq;
+                        aAdditionalChunkSequence[ 0 ] = aChunkProp;
+                        aFilterProp.Name = "AdditionalChunks";
+                        aFilterProp.Value <<= aAdditionalChunkSequence;
+                        aFilterData[ 0 ] = aFilterProp;
+                        nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aStream,
+                                                          rFilter.GetExportFormatNumberForShortName( "PNG" ), &aFilterData );
+                    }
                 }
                 if ( nErrCode == ERRCODE_NONE )
                 {
