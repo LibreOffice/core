@@ -37,8 +37,10 @@
 //which is internal in that case, to swap the rgb components so that
 //cairo then matches the OpenGL GL_RGBA format so we can use it there
 //where we don't have GL_BGRA support.
-#ifdef ANDROID
+#if defined ANDROID
 #   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcRgba | ScanlineFormat::TopDown)
+#elif defined OSL_BIGENDIAN
+#   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown)
 #else
 #   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcBgra | ScanlineFormat::TopDown)
 #endif
