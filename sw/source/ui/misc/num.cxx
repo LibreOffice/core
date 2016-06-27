@@ -103,8 +103,6 @@ SwNumPositionTabPage::SwNumPositionTabPage(vcl::Window* pParent,
     SetExchangeSupport();
     m_pPreviewWIN->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
 
-    m_pStandardPB->SetAccessibleRelationMemberOf(m_pPositionFrame->get_label_widget());
-
     m_pRelativeCB->Check();
     m_pAlignLB->SetSelectHdl(LINK(this, SwNumPositionTabPage, EditModifyHdl));
     m_pAlign2LB->SetSelectHdl(LINK(this, SwNumPositionTabPage, EditModifyHdl));
