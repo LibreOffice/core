@@ -190,7 +190,8 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     if (ignoreLocation(memberExpr) || !isInterestingType(fieldDecl->getType()))
         return true;
 
-    const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(get_top_FunctionDecl_from_Stmt(*memberExpr));
+    const FunctionDecl* parentFunctionDecl = get_top_FunctionDecl_from_Stmt(*memberExpr);
+    const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(parentFunctionDecl);
     if (methodDecl && (methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator()))
        return true;
 
@@ -200,7 +201,20 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     bool bPotentiallyAssignedTo = false;
     bool bDump = false;
     std::string assignValue;
-    do {
+
+    // check for field being returned by non-const ref eg. Foo& getFoo() { return f; }
+    if (parent && isa<ReturnStmt>(parent)) {
+        const Stmt* parent2 = parentStmt(parent);
+        if (parent2 && isa<CompoundStmt>(parent2)) {
+            QualType qt = parentFunctionDecl->getReturnType().getDesugaredType(compiler.getASTContext());
+            if (!qt.isConstQualified() && qt->isReferenceType()) {
+                assignValue = "?";
+                bPotentiallyAssignedTo = true;
+            }
+        }
+    }
+
+    while (!bPotentiallyAssignedTo) {
         // check for field being accessed by a reference variable e.g. Foo& f = m.foo;
         auto parentsList = compiler.getASTContext().getParents(*child);
         auto it = parentsList.begin();
@@ -303,7 +317,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
             bDump = true;
             break;
         }
-    } while (true);
+    }
     if (bDump)
     {
         report(
