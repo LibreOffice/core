@@ -238,7 +238,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_PPMT { Text = "PPMT" ; };
     String SC_OPCODE_CUM_IPMT { Text = "CUMIPMT" ; };
     String SC_OPCODE_CUM_PRINC { Text = "CUMPRINC" ; };
-    String SC_OPCODE_EFFECTIVE { Text = "EFFECT" ; };
+    String SC_OPCODE_EFFECT { Text = "EFFECT" ; };
     String SC_OPCODE_NOMINAL { Text = "NOMINAL" ; };
     String SC_OPCODE_SUB_TOTAL { Text = "SUBTOTAL" ; };
     String SC_OPCODE_DB_SUM { Text = "DSUM" ; };
@@ -678,7 +678,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_PPMT { Text = "PPMT" ; };
     String SC_OPCODE_CUM_IPMT { Text = "CUMIPMT" ; };
     String SC_OPCODE_CUM_PRINC { Text = "CUMPRINC" ; };
-    String SC_OPCODE_EFFECTIVE { Text = "EFFECT" ; };
+    String SC_OPCODE_EFFECT { Text = "EFFECT" ; };
     String SC_OPCODE_NOMINAL { Text = "NOMINAL" ; };
     String SC_OPCODE_SUB_TOTAL { Text = "SUBTOTAL" ; };
     String SC_OPCODE_DB_SUM { Text = "DSUM" ; };
@@ -1118,7 +1118,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_PPMT { Text = "PPMT" ; };
     String SC_OPCODE_CUM_IPMT { Text = "CUMIPMT" ; };
     String SC_OPCODE_CUM_PRINC { Text = "CUMPRINC" ; };
-    String SC_OPCODE_EFFECTIVE { Text = "EFFECTIVE" ; };
+    String SC_OPCODE_EFFECT { Text = "EFFECTIVE" ; };
     String SC_OPCODE_NOMINAL { Text = "NOMINAL" ; };
     String SC_OPCODE_SUB_TOTAL { Text = "SUBTOTAL" ; };
     String SC_OPCODE_DB_SUM { Text = "DSUM" ; };
@@ -2142,7 +2142,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "CUMPRINC" ;
     };
-    String SC_OPCODE_EFFECTIVE
+    String SC_OPCODE_EFFECT
     {
         Text [ en-US ] = "EFFECT" ;
     };

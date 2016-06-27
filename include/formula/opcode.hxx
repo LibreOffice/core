@@ -278,7 +278,7 @@ enum OpCode : sal_uInt16
         ocPpmt              = SC_OPCODE_PPMT,
         ocCumIpmt           = SC_OPCODE_CUM_IPMT,
         ocCumPrinc          = SC_OPCODE_CUM_PRINC,
-        ocEffective         = SC_OPCODE_EFFECTIVE,
+        ocEffect            = SC_OPCODE_EFFECT,
         ocNominal           = SC_OPCODE_NOMINAL,
         ocSubTotal          = SC_OPCODE_SUB_TOTAL,
         ocRawSubtract       = SC_OPCODE_RAWSUBTRACT,

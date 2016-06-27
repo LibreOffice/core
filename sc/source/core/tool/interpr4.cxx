@@ -3999,7 +3999,7 @@ StackVar ScInterpreter::Interpret()
                 case ocPpmt             : ScPpmt();                     break;
                 case ocCumIpmt          : ScCumIpmt();                  break;
                 case ocCumPrinc         : ScCumPrinc();                 break;
-                case ocEffective        : ScEffective();                break;
+                case ocEffect           : ScEffect();                   break;
                 case ocNominal          : ScNominal();                  break;
                 case ocSubTotal         : ScSubTotal();                 break;
                 case ocAggregate        : ScAggregate();                break;

@@ -109,7 +109,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocIRR:
         case ocMIRR:
         case ocRRI:
-        case ocEffective:
+        case ocEffect:
         case ocNominal:
         case ocPercentSign:
             return css::util::NumberFormat::PERCENT;

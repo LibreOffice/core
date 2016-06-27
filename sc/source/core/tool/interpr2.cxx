@@ -2121,7 +2121,7 @@ void ScInterpreter::ScCumPrinc()
     }
 }
 
-void ScInterpreter::ScEffective()
+void ScInterpreter::ScEffect()
 {
     nFuncFmtType = css::util::NumberFormat::PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )

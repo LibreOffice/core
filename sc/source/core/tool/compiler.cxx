@@ -2750,7 +2750,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             OpCode          eOp;
         };
         static const FunctionName aOoxmlAliases[] = {
-            { "EFFECTIVE",  ocEffective }   // EFFECTIVE -> EFFECT
+            { "EFFECTIVE",  ocEffect }      // EFFECTIVE -> EFFECT
         };
         for (const FunctionName& rOoxmlAlias : aOoxmlAliases)
         {
