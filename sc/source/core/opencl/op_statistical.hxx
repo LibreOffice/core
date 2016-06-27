@@ -201,13 +201,10 @@ public:
 class OpGeoMean: public CheckVariables
 {
 public:
-    OpGeoMean(): CheckVariables(), mNeedReductionKernel(true) {}
+    OpGeoMean(): CheckVariables() {}
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) override;
     virtual std::string BinFuncName() const override { return "GeoMean"; }
-    bool NeedReductionKernel() const { return mNeedReductionKernel; }
-protected:
-    bool mNeedReductionKernel;
 };
 
 class OpHarMean: public Normal

@@ -40,7 +40,6 @@ private:
     bool bInCreate:1;
     bool bInEdit:1;
     bool bAddUndo:1;
-    bool bDoPaint:1;
 
 public:
     ScTableLink( ScDocShell* pDocSh, const OUString& rFile,
