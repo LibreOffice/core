@@ -663,7 +663,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_PPMT { Text = "PPMT" ; };
     String SC_OPCODE_CUM_IPMT { Text = "CUMIPMT" ; };
     String SC_OPCODE_CUM_PRINC { Text = "CUMPRINC" ; };
-    String SC_OPCODE_EFFECTIVE { Text = "EFFECTIVE" ; };
+    String SC_OPCODE_EFFECTIVE { Text = "EFFECT" ; };
     String SC_OPCODE_NOMINAL { Text = "NOMINAL" ; };
     String SC_OPCODE_SUB_TOTAL { Text = "SUBTOTAL" ; };
     String SC_OPCODE_DB_SUM { Text = "DSUM" ; };

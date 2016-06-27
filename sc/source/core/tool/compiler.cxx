@@ -2672,6 +2672,28 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             }
         }
     }
+    else if (mxSymbols->isOOXML())
+    {
+        // OOXML names that are not written in the current mapping but to be
+        // recognized as old versions wrote them.
+        struct FunctionName
+        {
+            const sal_Char* pName;
+            OpCode          eOp;
+        };
+        static const FunctionName aOoxmlAliases[] = {
+            { "EFFECTIVE",  ocEffective }   // EFFECTIVE -> EFFECT
+        };
+        for (const FunctionName& rOoxmlAlias : aOoxmlAliases)
+        {
+            if (rName.equalsIgnoreAsciiCaseAscii( rOoxmlAlias.pName))
+            {
+                maRawToken.SetOpCode( rOoxmlAlias.eOp);
+                bFound = true;
+                break;  // for
+            }
+        }
+    }
     if (!bFound)
     {
         OUString aIntName;
