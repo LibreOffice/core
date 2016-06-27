@@ -1903,6 +1903,24 @@ SfxBoolItem HelpTip SID_HELPTIPS
 ]
 
 
+SfxVoidItem EmojiControl SID_EMOJI_CONTROL
+
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_SPECIAL;
+]
+
+
 SfxVoidItem HideCurPage SID_BASICIDE_HIDECURPAGE
 ()
 [

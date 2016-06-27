@@ -188,6 +188,7 @@ interface CellSelection
     FID_INPUTLINE_BLOCK     [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_INPUTLINE_MATRIX    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_CHARMAP [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
+    SID_EMOJI_CONTROL [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
 
     SID_INSERT_POSTIT   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
     SID_EDIT_POSTIT   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]

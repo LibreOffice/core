@@ -63,6 +63,7 @@
  <toolbar:toolbaritem xlink:href=".uno:GoalSeekDialog" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
+ <toolbar:toolbaritem xlink:href=".uno:EmojiControl" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:visible="false"/>
