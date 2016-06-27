@@ -31,7 +31,10 @@
 #include "clipparam.hxx"
 #include "compiler.hxx"
 #include "interpre.hxx"
+#include <formula/FormulaCompiler.hxx>
 #include <formula/compiler.hrc>
+#include <formula/grammar.hxx>
+#include <formula/opcode.hxx>
 #include <formulagroup.hxx>
 #include "rechead.hxx"
 #include "parclass.hxx"
@@ -1330,6 +1333,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
     {
         if (ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly && ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->end())
         {
+            SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
             meVectorState = FormulaVectorDisabled;
             return;
         }
@@ -1338,6 +1342,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         // interpreter blacklist is more strict than the OpenCL one
         if (ScCalcConfig::isSwInterpreterEnabled() && (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) && ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
         {
+            SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables S/W interpreter for formula group");
             meVectorState = FormulaVectorDisabled;
             return;
         }
@@ -1526,6 +1531,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             // Don't change the state.
             break;
             default:
+                SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
                 meVectorState = FormulaVectorDisabled;
         }
     }
@@ -1565,6 +1571,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case svSubroutine:
             case svUnknown:
                 // We don't support vectorization on these.
+                SAL_INFO("sc.opencl", "opcode ocPush: variable type disables vectorisation for formula group");
                 meVectorState = FormulaVectorDisabled;
             break;
             default:
@@ -1575,6 +1582,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly &&
         ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->end())
     {
+        SAL_INFO("sc.opencl", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables vectorisation for formula group");
         meVectorState = FormulaVectorDisabled;
     }
     // only when openCL interpreter is not enabled - the assumption is that
@@ -1584,6 +1592,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         (dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(sc::FormulaGroupInterpreter::getStatic()) != nullptr) &&
         ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpSwInterpreterSubsetOpCodes->end())
     {
+        SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables S/W interpreter for formula group");
         meVectorState = FormulaVectorDisabled;
     }
 }
