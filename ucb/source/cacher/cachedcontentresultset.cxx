@@ -27,6 +27,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <rtl/ustring.hxx>
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -286,13 +287,12 @@ const Any& SAL_CALL CachedContentResultSet::CCRS_Cache
         else
             m_xContentIdentifierMapping.clear();
     }
-    const Sequence< Any >& rRow =
-        (* static_cast< const Sequence< Any > * >
-        (getRowAny( nRow ).getValue() ));
+    auto & rowAny = getRowAny(nRow);
+    auto rRow = o3tl::doAccess<Sequence<Any>>(rowAny);
 
-    if( nColumnIndex > rRow.getLength() )
+    if( nColumnIndex > rRow->getLength() )
         throw SQLException();
-    return rRow[nColumnIndex-1];
+    return (*rRow)[nColumnIndex-1];
 }
 
 const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
@@ -309,8 +309,7 @@ const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
             rRow <<= m_xContentIdentifierMapping->mapContentIdentifierString( aValue );
             remindMapped( nRow );
         }
-        return (* static_cast< const OUString * >
-                (getRowAny( nRow ).getValue() ));
+        return *o3tl::doAccess<OUString>(getRowAny(nRow));
     }
     catch(const SQLException&)
     {
@@ -332,8 +331,7 @@ const Reference< XContentIdentifier >& SAL_CALL CachedContentResultSet::CCRS_Cac
             rRow <<= m_xContentIdentifierMapping->mapContentIdentifier( aValue );
             remindMapped( nRow );
         }
-        return (* static_cast< const Reference< XContentIdentifier > * >
-                (getRowAny( nRow ).getValue() ));
+        return *o3tl::doAccess<Reference<XContentIdentifier>>(getRowAny(nRow));
     }
     catch(const SQLException&)
     {
@@ -355,8 +353,7 @@ const Reference< XContent >& SAL_CALL CachedContentResultSet::CCRS_Cache
             rRow <<= m_xContentIdentifierMapping->mapContent( aValue );
             remindMapped( nRow );
         }
-        return (* static_cast< const Reference< XContent > * >
-                (getRowAny( nRow ).getValue() ));
+        return *o3tl::doAccess<Reference<XContent>>(getRowAny(nRow));
     }
     catch (const SQLException&)
     {
