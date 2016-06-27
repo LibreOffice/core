@@ -85,6 +85,7 @@
 #include <svx/formatpaintbrushctrl.hxx>
 #include "tbzoomsliderctrl.hxx"
 #include <svx/zoomsliderctrl.hxx>
+#include <sfx2/emojipopup.hxx>
 
 #include <svx/xmlsecctrl.hxx>
 // Child windows
@@ -193,6 +194,8 @@ void ScDLL::Init()
     SvxVertTextTbxCtrl::RegisterControl(SID_TEXTDIRECTION_TOP_TO_BOTTOM,    pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
+
+    EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );
 
     // Media Controller
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );

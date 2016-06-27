@@ -63,6 +63,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertFootnote" toolbar:helpid="20399"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertEndnote"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
+ <toolbar:toolbaritem xlink:href=".uno:EmojiControl" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>

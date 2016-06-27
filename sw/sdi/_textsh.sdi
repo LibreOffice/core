@@ -170,6 +170,11 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_EMOJI_CONTROL
+    [
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     FN_INSERT_PAGEHEADER    // status(final|play|rec)
     [
         ExecMethod = Execute ;
