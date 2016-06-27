@@ -303,6 +303,8 @@ private:
     {
         bool mbHidden;
         bool mbLocked;
+        bool mbPrintContent;
+        bool mbFormulaHidden;
 
         protection();
         void applyToItemSet(SfxItemSet& rSet) const;
