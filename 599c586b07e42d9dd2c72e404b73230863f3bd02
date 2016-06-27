@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_474bdd2b",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-06-27T07:21:47Z",
+      "side": 1,
+      "message": "Or \u0026\u0026 IsInSct().  There exist cases where columns exist, and are not in sections, so it might be a valid test.\n\nOr \u0026\u0026 false.  Making this particular phrase ALWAYS false also works and doesn\u0027t cause any unit test failures. The code exists from the creation of *OpenOffice* IsColBreak() in flowfrm.cxx.\n\nSo, I\u0027m open to any advice on which choice is better since I have no idea what the original purpose was, and no idea which option is best.",
+      "range": {
+        "startLine": 1171,
+        "startChar": 76,
+        "endLine": 1171,
+        "endChar": 109
+      },
+      "revId": "599c586b07e42d9dd2c72e404b73230863f3bd02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
