@@ -1939,6 +1939,35 @@ SvxNumType SdrModel::GetPageNumType() const
     return SVX_ARABIC;
 }
 
+void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* /*pValue*/)
+{
+    // TODO: Read common model-level values
+}
+
+template <typename T>
+inline void addPair(std::vector< std::pair< OUString, Any > >& aUserData, const OUString& name, const T val)
+{
+    aUserData.push_back(std::pair< OUString, Any >(name, css::uno::makeAny(val)));
+}
+
+void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues, bool /*bBrowse*/)
+{
+    std::vector< std::pair< OUString, Any > > aUserData;
+    // TODO: addPair(aUserData, "PropName", PropValue);
+
+    const sal_Int32 nOldLength = rValues.getLength();
+    rValues.realloc(nOldLength + aUserData.size());
+
+    css::beans::PropertyValue* pValue = &(rValues.getArray()[nOldLength]);
+
+    for (const auto &aIter : aUserData)
+    {
+        pValue->Name = aIter.first;
+        pValue->Value = aIter.second;
+        ++pValue;
+    }
+}
+
 const SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum) const
 {
     DBG_ASSERT(nPgNum < maPages.size(), "SdrModel::GetPage: Access out of range (!)");
