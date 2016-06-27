@@ -473,6 +473,7 @@ OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
         { "jpg", "image/jpeg" },
         { "tif", "image/tiff" },
         { "svg", "image/svg+xml" },
+        { "pdf", "application/pdf" },
         { "wmf", "image/x-wmf" },
         { "eps", "image/x-eps" },
         { "bmp", "image/bmp" },
@@ -691,6 +692,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                             else
                                 aExtension = ".svg";
                             break;
+                        case GfxLinkType::NativePdf: aExtension = ".pdf"; break;
 
                         default:
                             aExtension = ".grf";
