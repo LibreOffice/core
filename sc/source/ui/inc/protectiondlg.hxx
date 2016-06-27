@@ -27,6 +27,8 @@
 #include <vcl/layout.hxx>
 #include <svx/checklbx.hxx>
 
+#include "scdllapi.h"
+
 namespace vcl { class Window; }
 class ScTableProtection;
 
@@ -34,7 +36,7 @@ class ScTableProtectionDlg : public ModalDialog
 {
 public:
     ScTableProtectionDlg() = delete;
-    explicit ScTableProtectionDlg(vcl::Window* pParent);
+    explicit SC_DLLPUBLIC ScTableProtectionDlg(vcl::Window* pParent);
     virtual ~ScTableProtectionDlg();
     virtual void dispose() override;
 
