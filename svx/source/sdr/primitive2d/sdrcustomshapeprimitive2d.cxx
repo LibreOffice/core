@@ -50,7 +50,7 @@ namespace drawinglayer
                         attribute::SdrLineAttribute(),
                         false,
                         getWordWrap(),
-                        isForceTextClipToTextRange()));
+                        false/*ForceTextClipToTextRange*/));
             }
 
             // add shadow
@@ -86,8 +86,7 @@ namespace drawinglayer
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
             mbWordWrap(bWordWrap),
-            mb3DShape(b3DShape),
-            mbForceTextClipToTextRange(false)
+            mb3DShape(b3DShape)
         {
         }
 
@@ -101,8 +100,7 @@ namespace drawinglayer
                     && getSubPrimitives() == rCompare.getSubPrimitives()
                     && getTextBox() == rCompare.getTextBox()
                     && getWordWrap() == rCompare.getWordWrap()
-                    && get3DShape() == rCompare.get3DShape()
-                    && isForceTextClipToTextRange() == rCompare.isForceTextClipToTextRange());
+                    && get3DShape() == rCompare.get3DShape());
             }
 
             return false;

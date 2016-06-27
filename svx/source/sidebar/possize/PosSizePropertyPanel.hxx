@@ -113,7 +113,6 @@ private:
     const SdrView*                          mpView;
     sal_uInt32                              mlOldWidth;
     sal_uInt32                              mlOldHeight;
-    RECT_POINT                              meRP;
     Point                                   maAnchorPos;    //anchor position
     long                                    mlRotX;
     long                                    mlRotY;
@@ -140,7 +139,6 @@ private:
     SfxBindings*                            mpBindings;
 
     /// bitfield
-    bool                                    mbMtrPosXMirror : 1;
     bool                                    mbSizeProtected : 1;
     bool                                    mbPositionProtected : 1;
     bool                                    mbAutoWidth : 1;

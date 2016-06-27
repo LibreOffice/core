@@ -54,7 +54,6 @@ protected:
     bool                        bAutoTextEdit : 1; // Textedit after we start the creation of a text frame
     bool                        b1stPointAsCenter : 1;
     bool                        bUseIncompatiblePathCreateInterface : 1;
-    bool                        bAutoClosePolys : 1;
 
     void ImpClearConnectMarker();
 
@@ -121,25 +120,11 @@ public:
     // Only the length of the tip is dragged
     bool BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz, OutputDevice* pOut=nullptr, short nMinMov=-3, SdrPageView* pPV=nullptr);
 
-    // If TextEditAfterCreate is sal_True (the default),
-    // then after the creation of a TextFrame object (OBJ_TEXT,
-    // OBJ_TEXTEXT, OBJ_OUTLINERTEXT, OBJ_TITLETEXT, OBJ_CAPTION)
-    // automatically start a TextEdit (SdrObjEditView: SdrBeginTextEdit)
-    bool IsTextEditAfterCreate() const { return bAutoTextEdit; }
-
     // Create a circle/rectangle/text frame with the first Point being
     // the center of the object instead of the upper-left corner.
     // Persistent flag. Default = FALSE.
     bool IsCreate1stPointAsCenter() const { return b1stPointAsCenter; }
     void SetCreate1stPointAsCenter(bool bOn) { b1stPointAsCenter = bOn; }
-
-    // For polylines (OBJ_PLIN) and freehand lines (OBJ_FREELINE). If this
-    // Flag is sal_True, these two types of objects are implicitly closed, and
-    // converted to Polygon (OBJ_POLY) or freehand fill (OBJ_FREEFILL) if
-    // the distance between the start point and end point of the
-    // Object <= nAutoCloseDistPix pixels.
-    // Default = TRUE.
-    bool IsAutoClosePolys() const { return bAutoClosePolys; }
 
     // Default = 5 Pixel
     sal_uInt16 GetAutoCloseDistPix() const { return sal_uInt16(nAutoCloseDistPix); }

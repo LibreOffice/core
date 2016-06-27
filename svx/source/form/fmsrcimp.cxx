@@ -322,8 +322,6 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< css::container::XI
 
 OUString FmSearchEngine::FormatField(const FieldInfo& rField)
 {
-    DBG_ASSERT(!m_bUsingTextComponents, "FmSearchEngine::FormatField : im UsingTextComponents-Mode bitte FormatField(sal_Int32) benutzen !");
-
     if (!m_xFormatter.is())
         return OUString();
     // sonst werden Datumsflder zum Beispiel zu irgendeinem Default-Wert formatiert
@@ -355,37 +353,20 @@ OUString FmSearchEngine::FormatField(const FieldInfo& rField)
 
 OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 {
-    if (m_bUsingTextComponents)
+    DBG_ASSERT((sal_uInt32)nWhich < m_aControlTexts.size(), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
+    DBG_ASSERT(m_aControlTexts[nWhich] != nullptr, "FmSearchEngine::FormatField(sal_Int32) : invalid object in array !");
+    DBG_ASSERT(m_aControlTexts[nWhich]->getControl().is(), "FmSearchEngine::FormatField : invalid control !");
+
+    if (m_nCurrentFieldIndex != -1)
     {
-        DBG_ASSERT((sal_uInt32)nWhich < m_aControlTexts.size(), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
-        DBG_ASSERT(m_aControlTexts[nWhich] != nullptr, "FmSearchEngine::FormatField(sal_Int32) : invalid object in array !");
-        DBG_ASSERT(m_aControlTexts[nWhich]->getControl().is(), "FmSearchEngine::FormatField : invalid control !");
-
-        if (m_nCurrentFieldIndex != -1)
-        {
-            DBG_ASSERT((nWhich == 0) || (nWhich == m_nCurrentFieldIndex), "FmSearchEngine::FormatField : Parameter nWhich ist ungueltig");
-            // analoge Situation wie unten
-            nWhich = m_nCurrentFieldIndex;
-        }
-
-        DBG_ASSERT((nWhich >= 0) && ((sal_uInt32)nWhich < m_aControlTexts.size()),
-            "FmSearchEngine::FormatField : invalid argument nWhich !");
-        return m_aControlTexts[m_nCurrentFieldIndex == -1 ? nWhich : m_nCurrentFieldIndex]->getCurrentText();
+        DBG_ASSERT((nWhich == 0) || (nWhich == m_nCurrentFieldIndex), "FmSearchEngine::FormatField : Parameter nWhich ist ungueltig");
+        // analoge Situation wie unten
+        nWhich = m_nCurrentFieldIndex;
     }
-    else
-    {
-        if (m_nCurrentFieldIndex != -1)
-        {
-            DBG_ASSERT((nWhich == 0) || (nWhich == m_nCurrentFieldIndex), "FmSearchEngine::FormatField : Parameter nWhich ist ungueltig");
-            // ich bin im single-field-modus, da ist auch die richtige Feld-Nummer erlaubt, obwohl dann der richtige css::sdbcx::Index
-            // fuer meinen Array-Zugriff natuerlich 0 ist
-            nWhich = 0;
-        }
 
-        DBG_ASSERT((nWhich>=0) && (nWhich < (m_arrUsedFields.end() - m_arrUsedFields.begin())),
-            "FmSearchEngine::FormatField : Parameter nWhich ist ungueltig");
-        return FormatField(m_arrUsedFields[nWhich]);
-    }
+    DBG_ASSERT((nWhich >= 0) && ((sal_uInt32)nWhich < m_aControlTexts.size()),
+        "FmSearchEngine::FormatField : invalid argument nWhich !");
+    return m_aControlTexts[m_nCurrentFieldIndex == -1 ? nWhich : m_nCurrentFieldIndex]->getCurrentText();
 }
 
 
@@ -664,7 +645,6 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
     ,m_aStringCompare( _rxContext )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
-    ,m_bUsingTextComponents(true)
     ,m_xOriginalIterator(xCursor)
     ,m_xClonedIterator(m_xOriginalIterator, true)
     ,m_eSearchForType(SEARCHFOR_STRING)
@@ -860,36 +840,31 @@ void FmSearchEngine::SetFormatterUsing(bool bSet)
         return;
     m_bFormatter = bSet;
 
-    if (m_bUsingTextComponents)
+    // ich benutzte keinen Formatter, sondern TextComponents -> der SearchIterator muss angepasst werden
+    try
     {
-        // ich benutzte keinen Formatter, sondern TextComponents -> der SearchIterator muss angepasst werden
-        try
+        if (m_bFormatter)
         {
-            if (m_bFormatter)
-            {
-                DBG_ASSERT(m_xSearchCursor == m_xClonedIterator, "FmSearchEngine::SetFormatterUsing : inkonsistenter Zustand !");
-                m_xSearchCursor = m_xOriginalIterator;
-                m_xSearchCursor.moveToBookmark(m_xClonedIterator.getBookmark());
-                    // damit ich mit dem neuen Iterator wirklich dort weitermache, wo ich vorher aufgehoert habe
-            }
-            else
-            {
-                DBG_ASSERT(m_xSearchCursor == m_xOriginalIterator, "FmSearchEngine::SetFormatterUsing : inkonsistenter Zustand !");
-                m_xSearchCursor = m_xClonedIterator;
-                m_xSearchCursor.moveToBookmark(m_xOriginalIterator.getBookmark());
-            }
+            DBG_ASSERT(m_xSearchCursor == m_xClonedIterator, "FmSearchEngine::SetFormatterUsing : inkonsistenter Zustand !");
+            m_xSearchCursor = m_xOriginalIterator;
+            m_xSearchCursor.moveToBookmark(m_xClonedIterator.getBookmark());
+                // damit ich mit dem neuen Iterator wirklich dort weitermache, wo ich vorher aufgehoert habe
         }
-        catch( const Exception& )
+        else
         {
-            DBG_UNHANDLED_EXCEPTION();
+            DBG_ASSERT(m_xSearchCursor == m_xOriginalIterator, "FmSearchEngine::SetFormatterUsing : inkonsistenter Zustand !");
+            m_xSearchCursor = m_xClonedIterator;
+            m_xSearchCursor.moveToBookmark(m_xOriginalIterator.getBookmark());
         }
-
-        // ich muss die Fields neu binden, da der Textaustausch eventuell ueber diese Fields erfolgt und sich der unterliegende Cursor
-        // geaendert hat
-        RebuildUsedFields(m_nCurrentFieldIndex, true);
     }
-    else
-        InvalidatePreviousLoc();
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    // ich muss die Fields neu binden, da der Textaustausch eventuell ueber diese Fields erfolgt und sich der unterliegende Cursor
+    // geaendert hat
+    RebuildUsedFields(m_nCurrentFieldIndex, true);
 }
 
 
@@ -1098,7 +1073,6 @@ void FmSearchEngine::SwitchToContext(const Reference< css::sdbc::XResultSet > & 
     m_xSearchCursor = xCursor;
     m_xOriginalIterator = xCursor;
     m_xClonedIterator = CursorWrapper(m_xOriginalIterator, true);
-    m_bUsingTextComponents = true;
 
     fillControlTexts(arrFields);
 

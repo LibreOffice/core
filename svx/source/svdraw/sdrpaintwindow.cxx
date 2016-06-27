@@ -196,7 +196,7 @@ void SdrPaintWindow::impCreateOverlayManager()
         {
             vcl::Window& rWindow = dynamic_cast<vcl::Window&>(GetOutputDevice());
             // decide which OverlayManager to use
-            if(GetPaintView().IsBufferedOverlayAllowed() && mbUseBuffer && !rWindow.SupportsDoubleBuffering())
+            if(GetPaintView().IsBufferedOverlayAllowed() && !rWindow.SupportsDoubleBuffering())
             {
                 // buffered OverlayManager, buffers its background and refreshes from there
                 // for pure overlay changes (no system redraw). The 3rd parameter specifies
@@ -242,8 +242,7 @@ SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, 
     mpWindow(pWindow),
     mrPaintView(rNewPaintView),
     mpPreRenderDevice(nullptr),
-    mbTemporaryTarget(false), // #i72889#
-    mbUseBuffer(true)
+    mbTemporaryTarget(false) // #i72889#
 {
 }
 

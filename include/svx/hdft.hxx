@@ -90,7 +90,6 @@ protected:
     SfxItemSet*      pBBSet;
     /// bitfield
     bool            mbDisableQueryBox : 1;
-    bool            mbEnableBackgroundSelector : 1;
     bool            mbEnableDrawingLayerFillStyles : 1;
 
     void            InitHandler();

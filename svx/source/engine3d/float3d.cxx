@@ -99,7 +99,6 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , mpImpl(new Svx3DWinImpl())
     , ePoolUnit(SFX_MAPUNIT_MM)
     , mpRemember2DAttributes(nullptr)
-    , bOnly3DChanged(false)
 {
     get(m_pBtnGeo, "geometry");
     get(m_pBtnRepresentation, "representation");
@@ -1521,55 +1520,52 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         }
     }
 
-    if( !bUpdate && !bOnly3DChanged )
+    if( !bUpdate )
     {
         // however the 2D attributes may be different. Compare these and decide
 
         bUpdate = true;
     }
 
-    if( bUpdate || bOnly3DChanged )
+    // Update preview
+    SfxItemSet aSet(rAttrs);
+
+    // set LineStyle hard to drawing::LineStyle_NONE when it's not set so that
+    // the default (drawing::LineStyle_SOLID) is not used for 3d preview
+    if(SfxItemState::SET != aSet.GetItemState(XATTR_LINESTYLE, false))
+        aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
+
+    // set FillColor hard to WHITE when it's SfxItemState::DONTCARE so that
+    // the default (Blue7) is not used for 3d preview
+    if(SfxItemState::DONTCARE == aSet.GetItemState(XATTR_FILLCOLOR, false))
+        aSet.Put(XFillColorItem(OUString(), Color(COL_WHITE)));
+
+    m_pCtlPreview->Set3DAttributes(aSet);
+    m_pCtlLightPreview->GetSvx3DLightControl().Set3DAttributes(aSet);
+
+    // try to select light corresponding to active button
+    sal_uInt32 nNumber(0xffffffff);
+
+    if(m_pBtnLight1->IsChecked())
+        nNumber = 0;
+    else if(m_pBtnLight2->IsChecked())
+        nNumber = 1;
+    else if(m_pBtnLight3->IsChecked())
+        nNumber = 2;
+    else if(m_pBtnLight4->IsChecked())
+        nNumber = 3;
+    else if(m_pBtnLight5->IsChecked())
+        nNumber = 4;
+    else if(m_pBtnLight6->IsChecked())
+        nNumber = 5;
+    else if(m_pBtnLight7->IsChecked())
+        nNumber = 6;
+    else if(m_pBtnLight8->IsChecked())
+        nNumber = 7;
+
+    if(nNumber != 0xffffffff)
     {
-        // Update preview
-        SfxItemSet aSet(rAttrs);
-
-        // set LineStyle hard to drawing::LineStyle_NONE when it's not set so that
-        // the default (drawing::LineStyle_SOLID) is not used for 3d preview
-        if(SfxItemState::SET != aSet.GetItemState(XATTR_LINESTYLE, false))
-            aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
-
-        // set FillColor hard to WHITE when it's SfxItemState::DONTCARE so that
-        // the default (Blue7) is not used for 3d preview
-        if(SfxItemState::DONTCARE == aSet.GetItemState(XATTR_FILLCOLOR, false))
-            aSet.Put(XFillColorItem(OUString(), Color(COL_WHITE)));
-
-        m_pCtlPreview->Set3DAttributes(aSet);
-        m_pCtlLightPreview->GetSvx3DLightControl().Set3DAttributes(aSet);
-
-        // try to select light corresponding to active button
-        sal_uInt32 nNumber(0xffffffff);
-
-        if(m_pBtnLight1->IsChecked())
-            nNumber = 0;
-        else if(m_pBtnLight2->IsChecked())
-            nNumber = 1;
-        else if(m_pBtnLight3->IsChecked())
-            nNumber = 2;
-        else if(m_pBtnLight4->IsChecked())
-            nNumber = 3;
-        else if(m_pBtnLight5->IsChecked())
-            nNumber = 4;
-        else if(m_pBtnLight6->IsChecked())
-            nNumber = 5;
-        else if(m_pBtnLight7->IsChecked())
-            nNumber = 6;
-        else if(m_pBtnLight8->IsChecked())
-            nNumber = 7;
-
-        if(nNumber != 0xffffffff)
-        {
-            m_pCtlLightPreview->GetSvx3DLightControl().SelectLight(nNumber);
-        }
+        m_pCtlLightPreview->GetSvx3DLightControl().SelectLight(nNumber);
     }
 
     // handle state of converts possible
@@ -2718,20 +2714,6 @@ void Svx3DWin::UpdatePreview()
 {
     if( pModel == nullptr )
         pModel = new FmFormModel();
-
-    if(bOnly3DChanged)
-    {
-        // Execute slot
-        SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
-        if (pDispatcher != nullptr)
-        {
-            SfxBoolItem aItem( SID_3D_STATE, true );
-            pDispatcher->ExecuteList(SID_3D_STATE,
-                SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aItem });
-        }
-        // Reset Flag
-        bOnly3DChanged = false;
-    }
 
     // Get Itemset
     SfxItemSet aSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END);

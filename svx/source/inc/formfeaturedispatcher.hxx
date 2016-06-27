@@ -45,7 +45,6 @@ namespace svx
         css::uno::Any                       m_aLastKnownState;
         const sal_Int16                     m_nFormFeature;
         bool                                m_bLastKnownEnabled;
-        bool                                m_bDisposed;
 
     public:
         /** constructs the dispatcher
@@ -97,16 +96,6 @@ namespace svx
                 );
 
     private:
-        /** checks whether our instance is alive
-
-            If the instance already received a <member>dispose</member> call, then a
-            <type scope="css::lang">DisposedException</type> is thrown.
-
-            @precond
-                our Mutex is locked - else calling the method would not make sense, since
-                its result could be out-of-date as soon as it's returned to the caller.
-        */
-        void    checkAlive() const;
 
         /** retrieves the current status of our feature, in a format which can be used
             for UNO notifications

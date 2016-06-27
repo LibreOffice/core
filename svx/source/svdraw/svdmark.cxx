@@ -313,7 +313,6 @@ SdrMarkList& SdrMarkList::operator=(const SdrMarkList& rLst)
     maPointName = rLst.maPointName;
     mbPointNameOk = rLst.mbPointNameOk;
     maGluePointName = rLst.maGluePointName;
-    mbGluePointNameOk = rLst.mbGluePointNameOk;
     mbSorted = rLst.mbSorted;
     return *this;
 }
