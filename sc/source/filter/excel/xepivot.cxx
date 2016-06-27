@@ -1623,8 +1623,7 @@ void XclExpPivotRecWrapper::Save( XclExpStream& rStrm )
 } // namespace
 
 XclExpPivotTableManager::XclExpPivotTableManager( const XclExpRoot& rRoot ) :
-    XclExpRoot( rRoot ),
-    mbShareCaches( true )
+    XclExpRoot( rRoot )
 {
 }
 
@@ -1671,22 +1670,19 @@ const XclExpPivotCache* XclExpPivotTableManager::CreatePivotCache( const ScDPObj
         (i.e. grouping info, calculated fields). If the passed DataPilot object
         or the found cache contains this data, do not share the cache with
         multiple pivot tables. */
-    if( mbShareCaches )
+    if( const ScDPSaveData* pSaveData = rDPObj.GetSaveData() )
     {
-        if( const ScDPSaveData* pSaveData = rDPObj.GetSaveData() )
+        const ScDPDimensionSaveData* pDimSaveData = pSaveData->GetExistingDimensionData();
+        // no dimension save data at all or save data does not contain grouping info
+        if( !pDimSaveData || !pDimSaveData->HasGroupDimensions() )
         {
-            const ScDPDimensionSaveData* pDimSaveData = pSaveData->GetExistingDimensionData();
-            // no dimension save data at all or save data does not contain grouping info
-            if( !pDimSaveData || !pDimSaveData->HasGroupDimensions() )
+            // check all existing pivot caches
+            for( size_t nPos = 0, nSize = maPCacheList.GetSize(); nPos < nSize; ++nPos )
             {
-                // check all existing pivot caches
-                for( size_t nPos = 0, nSize = maPCacheList.GetSize(); nPos < nSize; ++nPos )
-                {
-                    XclExpPivotCacheRef xPCache = maPCacheList.GetRecord( nPos );
-                    // pivot cache does not have grouping info and source data is equal
-                    if( !xPCache->HasAddFields() && xPCache->HasEqualDataSource( rDPObj ) )
-                        return xPCache.get();
-                }
+                XclExpPivotCacheRef xPCache = maPCacheList.GetRecord( nPos );
+                // pivot cache does not have grouping info and source data is equal
+                if( !xPCache->HasAddFields() && xPCache->HasEqualDataSource( rDPObj ) )
+                    return xPCache.get();
             }
         }
     }

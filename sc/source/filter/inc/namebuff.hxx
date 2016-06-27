@@ -184,14 +184,13 @@ class ExtSheetBuffer : public ExcRoot
 {
 private:
     struct Cont
-        {
+    {
         OUString      aFile;
         OUString      aTab;
         sal_uInt16    nTabNum;    // 0xFFFF -> not set yet
                                 // 0xFFFE -> tried to set, but failed
                                 // 0xFFFD -> should be in the same workbook, but not found
         bool          bSWB;
-        bool          bLink;
                     Cont( const OUString& rFilePathAndName, const OUString& rTabName,
                         const bool bSameWB ) :
                         aFile( rFilePathAndName ),
@@ -199,9 +198,8 @@ private:
                     {
                         nTabNum = 0xFFFF;   // -> table not created yet
                         bSWB = bSameWB;
-                        bLink = false;
                     }
-        };
+    };
 
     std::vector<Cont> maEntries;
 
@@ -212,7 +210,6 @@ public:
                         const OUString& rTabName, const bool bSameWorkbook = false );
 
     bool            GetScTabIndex( sal_uInt16 nExcSheetIndex, sal_uInt16& rIn_LastTab_Out_ScIndex );
-    bool            IsLink( const sal_uInt16 nExcSheetIndex ) const;
     void            GetLink( const sal_uInt16 nExcSheetIndex, OUString &rAppl, OUString &rDoc ) const;
 
     void            Reset();

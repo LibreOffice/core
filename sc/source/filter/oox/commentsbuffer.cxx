@@ -89,7 +89,6 @@ CommentModel::CommentModel()
     , mbRowHidden(false)
     , mnTHA(0)
     , mnTVA(0)
-    , mbVisible( false )
 {
 }
 
