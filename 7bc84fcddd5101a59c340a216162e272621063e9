@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_475e7d46",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-06-27T14:18:33Z",
+      "side": 1,
+      "message": "But the old behaviour IS the bug. I only wanted to keep it to avoid existing documents to look different (actually, I intended to just fix the bug, but was advised to keep a compatibility flag). So, importing/creating new documents with old behaviour just aggravates the problem. The problem is visible not in some imported document, but also in created from scratch (the tdf bug shows that).",
+      "parentUuid": "ba84c18e_277259e6",
+      "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_c72a8de7",
         "filename": "svx/source/svdraw/svdotextdecomposition.cxx",
         "patchSetId": 8
