@@ -50,6 +50,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/modctrl.hxx>
+#include <sfx2/emojipopup.hxx>
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
@@ -335,6 +336,8 @@ void SwDLL::RegisterControls()
     SwViewLayoutControl::RegisterControl( SID_ATTR_VIEWLAYOUT, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
+
+    EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );
 
     SvxIMapDlgChildWindow::RegisterChildWindow( false, pMod );
     SvxSearchDialogWrapper::RegisterChildWindow( false, pMod );
