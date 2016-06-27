@@ -2698,7 +2698,6 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
                 // Cannot embed, as embedded data source would need the URL of the parent document.
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
-                aTempFile.EnableKillingFile();
                 OUString sTmpName = aTempFile.GetURL();
                 xStore->storeAsURL(sTmpName, uno::Sequence<beans::PropertyValue>());
             }
