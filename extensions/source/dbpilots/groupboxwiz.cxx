@@ -200,8 +200,6 @@ namespace dbp
         m_pExistingRadios->EnableMultiSelection(true);
 
         getDialog()->defaultButton(m_pMoveRight.get());
-
-        m_pExistingRadios->SetAccessibleRelationMemberOf(m_pExistingRadios);
     }
 
     ORadioSelectionPage::~ORadioSelectionPage()
@@ -389,8 +387,6 @@ namespace dbp
         get(m_pOptions, "radiobuttons");
 
         m_pOptions->SetSelectHdl(LINK(this, OOptionValuesPage, OnOptionSelected));
-
-        m_pOptions->SetAccessibleRelationMemberOf(m_pOptions);
     }
 
     OOptionValuesPage::~OOptionValuesPage()
