@@ -432,24 +432,10 @@ DECLARE_OOXMLIMPORT_TEST(testN750255, "n750255.docx")
 
 /*
 Column break without columns on the page is a page break, so check those paragraphs
-are on page 2 (page style 'Converted1') and page 3 (page style 'Converted2')
-enum = ThisComponent.Text.createEnumeration
-enum.nextElement
-para1 = enum.nextElement
-xray para1.String
-xray para1.PageStyleName
-para2 = enum.nextElement
-xray para2.String
-xray para2.PageStyleName
+are on page 2 and page 3
 */
-    // get the 2nd and 3rd paragraph
-    uno::Reference<uno::XInterface> paragraph1(getParagraph( 2, "one" ));
-    uno::Reference<uno::XInterface> paragraph2(getParagraph( 3, "two" ));
-    OUString pageStyle1 = getProperty< OUString >( paragraph1, "PageStyleName" );
-    OUString pageStyle2 = getProperty< OUString >( paragraph2, "PageStyleName" );
-    CPPUNIT_ASSERT_EQUAL( OUString( "Converted1" ), pageStyle1 );
-    CPPUNIT_ASSERT_EQUAL( OUString( "Converted2" ), pageStyle2 );
-
+    CPPUNIT_ASSERT_EQUAL( OUString("one"), parseDump("/root/page[2]/body/txt/text()") );
+    CPPUNIT_ASSERT_EQUAL( OUString("two"), parseDump("/root/page[3]/body/txt/text()") );
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN652364, "n652364.docx")
