@@ -161,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_ea2af87d",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-27T16:04:34Z",
+      "side": 1,
+      "message": "Sure, I get that. Did you look into SfxBaseModel? With that change, every new document would indeed have your flag cleared.\n\nIt\u0027s a much safer change, since now you cannot miss any import.",
+      "parentUuid": "ba84c18e_475e7d46",
+      "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_c72a8de7",
         "filename": "svx/source/svdraw/svdotextdecomposition.cxx",
         "patchSetId": 8
