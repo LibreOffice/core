@@ -755,7 +755,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
     const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
-    const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());
+    const bool bVerticalWriting(pOutlinerParaObject->IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if((rSdrAutofitTextPrimitive.getWordWrap() || IsTextFrame()))
@@ -763,12 +763,12 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
         rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
     }
 
-    if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg)
+    if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWriting)
     {
         rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
     }
 
-    if(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg)
+    if(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWriting)
     {
         rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
     }
@@ -776,7 +776,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     rOutliner.SetPaperSize(aNullSize);
     rOutliner.SetUpdateMode(true);
     rOutliner.SetText(*pOutlinerParaObject);
-    ImpAutoFitText(rOutliner,aAnchorTextSize,bVerticalWritintg);
+    ImpAutoFitText(rOutliner,aAnchorTextSize,bVerticalWriting);
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
@@ -826,7 +826,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     // translate relative to given primitive to get same rotation and shear
     // as the master shape we are working on. For vertical, use the top-right
     // corner
-    const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
+    const double fStartInX(bVerticalWriting ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
     aNewTransformA.translate(fStartInX, aAdjustTranslate.getY());
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
@@ -917,7 +917,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
-    const bool bVerticalWritintg(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
+    const bool bVerticalWriting(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if(bIsCell)
@@ -931,7 +931,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         // #i106214# This was not completely correct; to still measure the real
         // text height to allow vertical adjust (and vice versa for VerticalWritintg)
         // only one aspect has to be set, but the other one to zero
-        if(bVerticalWritintg)
+        if(bVerticalWriting)
         {
             // measure the horizontal text size
             rOutliner.SetMinAutoPaperSize(Size(0, aAnchorTextSize.Height()));
@@ -949,8 +949,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     else
     {
         // check if block text is used (only one of them can be true)
-        const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
-        const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
+        const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWriting);
+        const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWriting);
 
         // set minimal paper size horizontally/vertically if needed
         if(bHorizontalIsBlock)
@@ -1003,7 +1003,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // formatted to the left edge (or top edge when vertical) of the draw object.
     if(!IsTextFrame() && !bIsCell)
     {
-        if(aAnchorTextRange.getWidth() < aOutlinerScale.getX() && !bVerticalWritintg)
+        if(aAnchorTextRange.getWidth() < aOutlinerScale.getX() && !bVerticalWriting)
         {
             // Horizontal case here. Correct only if eHAdj == SDRTEXTHORZADJUST_BLOCK,
             // else the alignment is wanted.
@@ -1013,7 +1013,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             }
         }
 
-        if(aAnchorTextRange.getHeight() < aOutlinerScale.getY() && bVerticalWritintg)
+        if(aAnchorTextRange.getHeight() < aOutlinerScale.getY() && bVerticalWriting)
         {
             // Vertical case here. Correct only if eHAdj == SDRTEXTVERTADJUST_BLOCK,
             // else the alignment is wanted.
@@ -1061,7 +1061,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // Translate relative to given primitive to get same rotation and shear
     // as the master shape we are working on. For vertical, use the top-right
     // corner
-    const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
+    const double fStartInX(bVerticalWriting ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
     const basegfx::B2DTuple aAdjOffset(fStartInX, aAdjustTranslate.getY());
     basegfx::B2DHomMatrix aNewTransformA(basegfx::tools::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
 
@@ -1493,7 +1493,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
 
-    const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());
+    const bool bVerticalWriting(pOutlinerParaObject->IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if(IsTextFrame())
@@ -1501,12 +1501,12 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
     }
 
-    if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg)
+    if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWriting)
     {
         rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
     }
 
-    if(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg)
+    if(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWriting)
     {
         rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
     }
@@ -1570,7 +1570,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     // translate relative to given primitive to get same rotation and shear
     // as the master shape we are working on. For vertical, use the top-right
     // corner
-    const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
+    const double fStartInX(bVerticalWriting ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
     aNewTransformA.translate(fStartInX, aAdjustTranslate.getY());
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
