@@ -179,6 +179,11 @@ interface _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_EMOJI_CONTROL
+    [
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_ATTR_PARA_LRSPACE
     [
         ExecMethod = Exec;

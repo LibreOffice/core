@@ -44,6 +44,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EmojiControl" />
  <toolbar:toolbaritem xlink:href=".uno:SpellingAndGrammarDialog" toolbar:helpid="20622"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false" toolbar:helpid="12021"/>
  <toolbar:toolbaritem xlink:href=".uno:ControlCodes" toolbar:helpid="20224"/>
