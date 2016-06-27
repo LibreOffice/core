@@ -125,7 +125,6 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mnZoom                      ( 100 ),
     mnInitialPage               ( 1 ),
     mnPDFPageLayout             ( 0 ),
-    mbFirstPageLeft             ( false ),
 
     mbEncrypt                   ( false ),
     mbRestrictPermissions       ( false ),
@@ -646,7 +645,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     break;
             }
 
-            aContext.FirstPageLeft = mbFirstPageLeft;
+            aContext.FirstPageLeft = false;
 
             // check if PDF/A, which does not allow encryption
             if( aContext.Version != vcl::PDFWriter::PDF_A_1 )

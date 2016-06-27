@@ -96,7 +96,6 @@ class PSWriter
 private:
     bool                mbStatus;
     sal_uLong           mnLevelWarning;     // number of embedded eps files which was not exported
-    sal_uLong           mnLastPercent;      // the number with which pCallback was called the last time
     sal_uInt32          mnLatestPush;       // offset to streamposition, where last push was done
 
     long                mnLevel;            // dialog options
@@ -111,7 +110,6 @@ private:
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
     double              nBoundingX1;        // this represents the bounding box
-    double              nBoundingY1;
     double              nBoundingX2;
     double              nBoundingY2;
 
@@ -126,7 +124,6 @@ private:
     bool                bTextFillColor;
     Color               aTextFillColor;
     Color               aBackgroundColor;
-    bool                bRegionChanged;
     TextAlign           eTextAlign;
 
     double                      fLineWidth;
@@ -137,7 +134,6 @@ private:
 
     vcl::Font           maFont;
     vcl::Font           maLastFont;
-    sal_uInt8           nChrSet;
     sal_uInt8           nNextChrSetId;      // first unused ChrSet-Id
 
     PSLZWCTreeNode*     pTable;             // LZW compression data
@@ -236,7 +232,6 @@ public:
 PSWriter::PSWriter()
     : mbStatus(false)
     , mnLevelWarning(0)
-    , mnLastPercent(0)
     , mnLatestPush(0)
     , mnLevel(0)
     , mbGrayScale(false)
@@ -248,7 +243,6 @@ PSWriter::PSWriter()
     , pAMTF(nullptr)
     , pVDev()
     , nBoundingX1(0)
-    , nBoundingY1(0)
     , nBoundingX2(0)
     , nBoundingY2(0)
     , pGDIStack(nullptr)
@@ -262,7 +256,6 @@ PSWriter::PSWriter()
     , bTextFillColor(false)
     , aTextFillColor()
     , aBackgroundColor()
-    , bRegionChanged(false)
     , eTextAlign()
     , fLineWidth(0)
     , fMiterLimit(0)
@@ -271,7 +264,6 @@ PSWriter::PSWriter()
     , aDashArray()
     , maFont()
     , maLastFont()
-    , nChrSet(0)
     , nNextChrSetId(0)
     , pTable(nullptr)
     , pPrefix(nullptr)
@@ -299,7 +291,6 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     mbStatus = true;
     mnPreview = 0;
     mnLevelWarning = 0;
-    mnLastPercent = 0;
     mnLatestPush = 0xEFFFFFFE;
 
     if ( pFilterConfigItem )
@@ -410,7 +401,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         pMTF = pAMTF;
     }
     pVDev->SetMapMode( pMTF->GetPrefMapMode() );
-    nBoundingX1 = nBoundingY1 = 0;
+    nBoundingX1 = 0;
     nBoundingX2 = pMTF->GetPrefSize().Width();
     nBoundingY2 = pMTF->GetPrefSize().Height();
 
@@ -428,9 +419,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     eJoinType = SvtGraphicStroke::joinMiter;
     aBackgroundColor = Color( COL_WHITE );
     eTextAlign = ALIGN_BASELINE;
-    bRegionChanged = false;
 
-    nChrSet = 0x00;
     nNextChrSetId = 1;
 
     if( pMTF->GetActionSize() )
@@ -1073,7 +1062,6 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 pGS->bTextFillCol = bTextFillColor;
                 pGS->aTextFillCol = aTextFillColor;
                 pGS->aBackgroundCol = aBackgroundColor;
-                bRegionChanged = false;
                 pGS->aFont = maFont;
                 mnLatestPush = mpPS->Tell();
                 ImplWriteLine( "gs" );

@@ -81,7 +81,6 @@ private:
     sal_Int32           mnZoom;
     sal_Int32           mnInitialPage;
     sal_Int32           mnPDFPageLayout;
-    bool                mbFirstPageLeft;
 
     bool                mbEncrypt;
     bool                mbRestrictPermissions;
