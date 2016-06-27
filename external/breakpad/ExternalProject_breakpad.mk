@@ -22,7 +22,7 @@ else # !ifeq($(COM),MSC)
 
 $(call gb_ExternalProject_get_state_target,breakpad,build) :
 	$(call gb_ExternalProject_run,build,\
-		./configure \
+		CXX_FLAGS="-O2" ./configure \
 		&& $(MAKE) \
 	)
 
