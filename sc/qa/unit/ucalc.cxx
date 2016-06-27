@@ -2126,7 +2126,7 @@ void Test::testFunctionLists()
         "DB",
         "DDB",
         "DURATION",
-        "EFFECTIVE",
+        "EFFECT",
         "FV",
         "IPMT",
         "IRR",

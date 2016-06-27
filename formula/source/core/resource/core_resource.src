@@ -2144,7 +2144,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_EFFECTIVE
     {
-        Text [ en-US ] = "EFFECTIVE" ;
+        Text [ en-US ] = "EFFECT" ;
     };
     String SC_OPCODE_NOMINAL
     {
