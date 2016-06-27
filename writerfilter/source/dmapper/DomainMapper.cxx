@@ -3272,8 +3272,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
             if( pContext && pContext->GetFootnote().is() )
             {
-                if( !pContext->GetFootnoteSymbol() )
-                    pContext->GetFootnote()->setLabel( sText );
+                pContext->GetFootnote()->setLabel( sText );
                 //otherwise ignore sText
             }
             else if( m_pImpl->IsOpenFieldCommand() )

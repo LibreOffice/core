@@ -215,7 +215,6 @@ private:
     // These members are used for import only
     AbstractListDef::Pointer                            m_pCurrentDefinition;
     NumPicBullet::Pointer                               m_pCurrentNumPicBullet;
-    bool                                                m_bIsLFOImport;
 
     AbstractListDef::Pointer    GetAbstractList( sal_Int32 nId );
 

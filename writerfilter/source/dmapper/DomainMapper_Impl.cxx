@@ -200,7 +200,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bTextInserted(false),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
-        m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
@@ -613,7 +612,6 @@ uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
             aRet.push_back(rStop);
     }
     m_aCurrentTabStops.clear();
-    m_nCurrentTabStopIndex = 0;
     return comphelper::containerToSequence(aRet);
 }
 
@@ -1580,22 +1578,9 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
             uno::UNO_QUERY_THROW );
         uno::Reference< text::XFootnote > xFootnote( xFootnoteText, uno::UNO_QUERY_THROW );
         pTopContext->SetFootnote( xFootnote );
-        if( pTopContext->GetFootnoteSymbol() != 0)
-        {
-            xFootnote->setLabel( OUString( pTopContext->GetFootnoteSymbol() ) );
-        }
         FontTablePtr pFontTable = GetFontTable();
         uno::Sequence< beans::PropertyValue > aFontProperties;
-        if( pFontTable && pTopContext->GetFootnoteFontId() >= 0 && pFontTable->size() > (size_t)pTopContext->GetFootnoteFontId() )
-        {
-            const FontEntry::Pointer_t pFontEntry(pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId())));
-            PropertyMapPtr aFontProps( new PropertyMap );
-            aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pFontEntry->sFontName  ));
-            aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
-            aFontProps->Insert(PROP_CHAR_FONT_PITCH, uno::makeAny( pFontEntry->nPitchRequest  ));
-            aFontProperties = aFontProps->GetPropertyValues();
-        }
-        else if(!pTopContext->GetFootnoteFontName().isEmpty())
+        if(!pTopContext->GetFootnoteFontName().isEmpty())
         {
             PropertyMapPtr aFontProps( new PropertyMap );
             aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pTopContext->GetFootnoteFontName()  ));

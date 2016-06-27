@@ -39,9 +39,7 @@ using namespace ::com::sun::star::security ;
 using ::com::sun::star::security::XCertificateExtension ;
 
 
-SanExtensionImpl::SanExtensionImpl() :
-m_critical( false )
-{
+SanExtensionImpl::SanExtensionImpl() {
 }
 
 SanExtensionImpl::~SanExtensionImpl() {
@@ -50,7 +48,7 @@ SanExtensionImpl::~SanExtensionImpl() {
 
 //Methods from XCertificateExtension
 sal_Bool SAL_CALL SanExtensionImpl::isCritical() throw( css::uno::RuntimeException, std::exception ) {
-    return m_critical ;
+    return false;
 }
 
 css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionId() throw( css::uno::RuntimeException, std::exception ) {

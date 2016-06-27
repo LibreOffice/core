@@ -71,7 +71,6 @@ class DomainMapperTableManager : public TableManager
     bool m_bTableSizeTypeInserted;
     /// Table layout algorithm, IOW if we should consider fixed column width or not.
     sal_uInt32 m_nLayoutType;
-    sal_Int32 m_nMaxFixedWidth;
 
     std::unique_ptr<TablePropertiesHandler> m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
