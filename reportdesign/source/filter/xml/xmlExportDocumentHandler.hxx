@@ -91,7 +91,6 @@ private:
     sal_Int32                                                 m_nColumnCount;
     bool m_bTableRowsStarted;
     bool m_bFirstRowExported;
-    bool m_bExportChar;
     bool m_bCountColumnHeader;
 };
 

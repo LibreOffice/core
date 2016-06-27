@@ -73,7 +73,6 @@ namespace rptui
         sal_uInt16                          m_eActObj;
         Size                                m_aGridSizeCoarse;
         Size                                m_aGridSizeFine;
-        bool                                m_bGridSnap;
         bool                                m_bDeleted;
 
 
@@ -166,7 +165,6 @@ namespace rptui
 
         const Size&     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
         const Size&     getGridSizeFine() const { return m_aGridSizeFine; }
-        inline bool     isGridSnap() const { return m_bGridSnap; }
         void            setGridSnap(bool bOn);
         void            setDragStripes(bool bOn);
         /** turns the grid on or off

@@ -76,7 +76,6 @@ ExportDocumentHandler::ExportDocumentHandler(uno::Reference< uno::XComponentCont
     ,m_nColumnCount(0)
     ,m_bTableRowsStarted(false)
     ,m_bFirstRowExported(false)
-    ,m_bExportChar(false)
     ,m_bCountColumnHeader(false)
 {
 }
@@ -274,11 +273,6 @@ void SAL_CALL ExportDocumentHandler::characters(const OUString & aChars) throw (
     if ( !(m_bTableRowsStarted || m_bFirstRowExported) )
     {
         m_xDelegatee->characters(aChars);
-    }
-    else if ( m_bExportChar )
-    {
-        static const char s_sZero[] = "0";
-        m_xDelegatee->characters(s_sZero);
     }
 }
 
