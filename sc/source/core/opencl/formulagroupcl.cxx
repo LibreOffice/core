@@ -2630,6 +2630,19 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     const formula::DoubleVectorRefToken* pDVR =
                         static_cast<const formula::DoubleVectorRefToken*>(pChild);
 
+                    // FIXME: The Right Thing to do would be to compare the accumulated kernel
+                    // parameter size against the CL_DEVICE_MAX_PARAMETER_SIZE of the device, but
+                    // let's just do this sanity check for now. The kernel compilation will
+                    // hopefully fail anyway if the size of parameters exceeds the limit and this
+                    // sanity check is just to make us bail out a bit earlier.
+
+                    // The number 50 comes from the fact that the minimum size of
+                    // CL_DEVICE_MAX_PARAMETER_SIZE is 256, which for 32-bit code probably means 64
+                    // of them. Round down a bit.
+
+                    if (pDVR->GetArrays().size() > 50)
+                        throw UnhandledToken(pChild, ("Kernel would have ridiculously many parameters (" + std::to_string(2 + pDVR->GetArrays().size()) + ")").c_str());
+
                     for (size_t j = 0; j < pDVR->GetArrays().size(); ++j)
                     {
                         SAL_INFO("sc.opencl", "i=" << i << " j=" << j <<
