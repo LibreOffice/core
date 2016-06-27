@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <o3tl/any.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <tools/debug.hxx>
 #include <tools/solar.h>
@@ -113,9 +114,9 @@ void    SvtAppFilterOptions_Impl::Load()
     const Any* pValues = aValues.getConstArray();
 
     if(pValues[0].hasValue())
-        bLoadVBA = *static_cast<sal_Bool const *>(pValues[0].getValue());
+        bLoadVBA = *o3tl::doAccess<bool>(pValues[0]);
     if(pValues[1].hasValue())
-        bSaveVBA = *static_cast<sal_Bool const *>(pValues[1].getValue());
+        bSaveVBA = *o3tl::doAccess<bool>(pValues[1]);
 }
 
 class SvtWriterFilterOptions_Impl : public SvtAppFilterOptions_Impl
@@ -161,7 +162,7 @@ void SvtWriterFilterOptions_Impl::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     if(pValues[0].hasValue())
-        bLoadExecutable = *static_cast<sal_Bool const *>(pValues[0].getValue());
+        bLoadExecutable = *o3tl::doAccess<bool>(pValues[0]);
 }
 
 class SvtCalcFilterOptions_Impl : public SvtAppFilterOptions_Impl
@@ -207,7 +208,7 @@ void SvtCalcFilterOptions_Impl::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     if(pValues[0].hasValue())
-        bLoadExecutable = *static_cast<sal_Bool const *>(pValues[0].getValue());
+        bLoadExecutable = *o3tl::doAccess<bool>(pValues[0]);
 }
 
 struct SvtFilterOptions_Impl
@@ -392,7 +393,7 @@ void SvtFilterOptions::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                bool bVal = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
+                bool bVal = *o3tl::doAccess<bool>(pValues[nProp]);
                 sal_uLong nFlag = lcl_GetFlag(nProp);
                 pImpl->SetFlag( nFlag, bVal);
             }

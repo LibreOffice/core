@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <unotools/misccfg.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/configmgr.hxx>
@@ -141,9 +144,9 @@ void SfxMiscCfg::Load()
             {
                 switch(nProp)
                 {
-                    case  0: bPaperSize        = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;      //"Print/Warning/PaperSize",
-                    case  1: bPaperOrientation = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;     //"Print/Warning/PaperOrientation",
-                    case  2: bNotFound         = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;   //"Print/Warning/NotFound",
+                    case  0: bPaperSize        = *o3tl::doAccess<bool>(pValues[nProp]); break;      //"Print/Warning/PaperSize",
+                    case  1: bPaperOrientation = *o3tl::doAccess<bool>(pValues[nProp]);  break;     //"Print/Warning/PaperOrientation",
+                    case  2: bNotFound         = *o3tl::doAccess<bool>(pValues[nProp]);  break;   //"Print/Warning/NotFound",
                     case  3: pValues[nProp] >>= nYear2000;break;                                    //"DateFormat/TwoDigitYear",
                 }
             }
