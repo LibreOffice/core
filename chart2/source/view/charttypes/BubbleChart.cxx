@@ -47,7 +47,6 @@ BubbleChart::BubbleChart( const uno::Reference<XChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount, false )
         , m_bShowNegativeValues(false)
-        , m_bBubbleSizeAsArea(true)
         , m_fBubbleSizeScaling(1.0)
         , m_fMaxLogicBubbleSize( 0.0 )
         , m_fBubbleSizeFactorToScreen( 1.0 )
@@ -133,11 +132,8 @@ drawing::Direction3D BubbleChart::transformToScreenBubbleSize( double fLogicSize
 
     double fMaxRadius = fMaxSize;
     double fRaduis = fLogicSize;
-    if( m_bBubbleSizeAsArea )
-    {
-        fMaxRadius = sqrt( fMaxSize / F_PI );
-        fRaduis = sqrt( fLogicSize / F_PI );
-    }
+    fMaxRadius = sqrt( fMaxSize / F_PI );
+    fRaduis = sqrt( fLogicSize / F_PI );
 
     aRet.DirectionX = m_fBubbleSizeScaling * m_fBubbleSizeFactorToScreen * fRaduis / fMaxRadius;
     aRet.DirectionY = aRet.DirectionX;

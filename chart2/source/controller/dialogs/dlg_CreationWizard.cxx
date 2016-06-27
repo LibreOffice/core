@@ -52,9 +52,7 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
                   )
                 , m_xChartModel(xChartModel,uno::UNO_QUERY)
                 , m_xCC( xContext )
-                , m_bIsClosable(true)
                 , m_pTemplateProvider(nullptr)
-                , m_nFirstState(STATE_FIRST)
                 , m_nLastState(STATE_LAST)
                 , m_aTimerTriggeredControllerLock( xChartModel )
                 , m_bCanTravel( true )
@@ -150,7 +148,7 @@ svt::WizardTypes::WizardState CreationWizard::determineNextState( WizardState nC
 void CreationWizard::enterState(WizardState nState)
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    enableButtons( WizardButtonFlags::PREVIOUS, bool( nState > m_nFirstState ) );
+    enableButtons( WizardButtonFlags::PREVIOUS, bool( nState > STATE_FIRST ) );
     enableButtons( WizardButtonFlags::NEXT, bool( nState < m_nLastState ) );
     if( isStateEnabled( nState ))
         svt::RoadmapWizard::enterState(nState);

@@ -776,8 +776,6 @@ bool VCartesianAxis::createTextShapes(
                     // Increment the visible tick intervals (if that's
                     // allowed) and start over.
 
-                    if( rAxisLabelProperties.bRhythmIsFix )
-                        continue;
                     rAxisLabelProperties.nRhythm++;
                     removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
                     return false;
@@ -872,15 +870,6 @@ bool VCartesianAxis::createTextShapes(
                         return false;
                     }
 
-                    if( rAxisLabelProperties.bRhythmIsFix )
-                    {
-                        // Tick interval is fixed.  We have no choice but to
-                        // remove this label.
-                        xTarget->remove(pTickInfo->xTextShape);
-                        pTickInfo->xTextShape = nullptr;
-                        continue;
-                    }
-
                     // Try incrementing the tick interval and start over.
                     rAxisLabelProperties.nRhythm++;
                     removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
@@ -956,8 +945,6 @@ bool VCartesianAxis::createTextShapesSimple(
                 // This tick overlaps with its neighbor. Increment the visible
                 // tick intervals (if that's allowed) and start over.
 
-                if( rAxisLabelProperties.bRhythmIsFix )
-                    continue;
                 rAxisLabelProperties.nRhythm++;
                 removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
                 return false;
@@ -1012,15 +999,6 @@ bool VCartesianAxis::createTextShapesSimple(
                     removeTextShapesFromTicks();
                     rAxisLabelProperties.nRhythm = 1;
                     return false;
-                }
-
-                if( rAxisLabelProperties.bRhythmIsFix )
-                {
-                    // Tick interval is fixed.  We have no choice but to
-                    // remove this label.
-                    xTarget->remove(pTickInfo->xTextShape);
-                    pTickInfo->xTextShape = nullptr;
-                    continue;
                 }
 
                 // Try incrementing the tick interval and start over.

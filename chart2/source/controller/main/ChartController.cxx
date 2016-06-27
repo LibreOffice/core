@@ -101,7 +101,6 @@ using ::com::sun::star::uno::Sequence;
 ChartController::ChartController(uno::Reference<uno::XComponentContext> const & xContext) :
     m_aLifeTimeManager( nullptr ),
     m_bSuspended( false ),
-    m_bCanClose( true ),
     m_xCC(xContext), //@todo is it allowed to hold this context??
     m_xFrame( nullptr ),
     m_aModelMutex(),
@@ -947,7 +946,7 @@ void SAL_CALL ChartController::removeEventListener(
 // util::XCloseListener
 void SAL_CALL ChartController::queryClosing(
     const lang::EventObject& rSource,
-    sal_Bool bGetsOwnership )
+    sal_Bool /*bGetsOwnership*/ )
         throw(util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     //do not use the m_aControllerMutex here because this call is not allowed to block
@@ -963,19 +962,7 @@ void SAL_CALL ChartController::queryClosing(
         return;
     }
 
-    if( !m_bCanClose )//@todo try acquire mutex
-    {
-        if( bGetsOwnership )
-        {
-            aModelRef->SetOwnership( bGetsOwnership );
-        }
-
-        throw util::CloseVetoException();
-    }
-    else
-    {
-        //@ todo prepare to closing model -> don't start any further hindering actions
-    }
+    //@ todo prepare to closing model -> don't start any further hindering actions
 }
 
 void SAL_CALL ChartController::notifyClosing(

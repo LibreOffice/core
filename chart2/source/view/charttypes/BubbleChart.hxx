@@ -56,7 +56,6 @@ private: //methods
 private: //member
 
     bool   m_bShowNegativeValues;//input parameter
-    bool   m_bBubbleSizeAsArea;//input parameter
     double m_fBubbleSizeScaling;//input parameter
 
     double m_fMaxLogicBubbleSize;//calculated values
