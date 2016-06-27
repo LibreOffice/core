@@ -59,9 +59,13 @@ namespace
         {
             return 1020;
         }
-        if(rString.endsWith(".svg"))
+        if(rString.endsWith(".pdf"))
         {
             return 1030;
+        }
+        if(rString.endsWith(".svg"))
+        {
+            return 1040;
         }
 
         return nRetval;

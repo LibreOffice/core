@@ -809,6 +809,13 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
     getUserDefineAttribute(uno::makeAny(xCellC1), "proName", "v3");
 }
 
+DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // This failed, pdf+svm replacement graphics pair didn't survive an ODT roundtrip.
+    CPPUNIT_ASSERT(!getProperty<OUString>(xShape, "ReplacementGraphicURL").isEmpty());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
