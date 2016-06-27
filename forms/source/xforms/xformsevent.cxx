@@ -51,7 +51,7 @@ css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventC
 
 css::xml::dom::events::PhaseType SAL_CALL XFormsEventConcrete::getEventPhase() throw (RuntimeException, std::exception)
 {
-    return m_phase;
+    return css::xml::dom::events::PhaseType_CAPTURING_PHASE;
 }
 
 sal_Bool SAL_CALL XFormsEventConcrete::getBubbles() throw (RuntimeException, std::exception)

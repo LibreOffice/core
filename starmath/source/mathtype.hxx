@@ -72,7 +72,6 @@ public:
         , nCurSize(0)
         , nLastSize(0)
         , nSpec(0)
-        , bIsSilent(false)
         , bIsReInterpBrace(false)
         , nPostSup(0)
         , nPostlSup(0)
@@ -100,7 +99,6 @@ public:
         , nCurSize(0)
         , nLastSize(0)
         , nSpec(0)
-        , bIsSilent(false)
         , bIsReInterpBrace(false)
         , nPostSup(0)
         , nPostlSup(0)
@@ -180,7 +178,7 @@ private:
     sal_Int16 nCurSize;
     sal_Int16 nLastSize;
     sal_uInt8 nSpec;
-    bool  bIsSilent, bIsReInterpBrace;
+    bool  bIsReInterpBrace;
     OUString  sPost;
     sal_Int32 nPostSup;
     sal_Int32 nPostlSup;

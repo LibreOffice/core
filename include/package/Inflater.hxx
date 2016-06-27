@@ -32,7 +32,7 @@ class DLLPUBLIC_PACKAGE Inflater
     typedef struct z_stream_s z_stream;
 
 protected:
-    bool                    bFinished, bSetParams, bNeedDict;
+    bool                    bFinished, bNeedDict;
     sal_Int32               nOffset, nLength, nLastInflateError;
     z_stream*               pStream;
     css::uno::Sequence < sal_Int8 >  sInBuffer;

@@ -353,7 +353,6 @@ RscFile::RscFile()
 {
     bLoaded  = false;
     bIncFile = false;
-    bDirty   = false;
     bScanned = false;
 }
 

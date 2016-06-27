@@ -403,7 +403,6 @@ public:
     struct ListBoxWidget : public AnyWidget
     {
         bool                            DropDown;
-        bool                            Sort;
         bool                            MultiSelect;
         std::vector<OUString>      Entries;
         std::vector<sal_Int32>          SelectedEntries;
@@ -414,7 +413,6 @@ public:
         ListBoxWidget()
                 : AnyWidget( vcl::PDFWriter::ListBox ),
                   DropDown( false ),
-                  Sort( false ),
                   MultiSelect( false )
         {}
 

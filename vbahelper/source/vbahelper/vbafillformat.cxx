@@ -31,7 +31,6 @@ ScVbaFillFormat::ScVbaFillFormat( const uno::Reference< XHelperInterface >& xPar
     m_xPropertySet.set( xShape, uno::UNO_QUERY_THROW );
     m_nFillStyle = drawing::FillStyle_SOLID;
     m_nForeColor = 0;
-    m_nBackColor = 0;
     m_nGradientAngle = 0;
 }
 

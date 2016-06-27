@@ -127,7 +127,6 @@ void ImpSvNumberInputScan::Reset()
     nStringScanSign = 0;
     nMatchedAllStrings = nMatchedVirgin;
     nMayBeIso8601 = 0;
-    nTimezonePos = 0;
     nMayBeMonthDate = 0;
     nAcceptedDatePattern = -2;
     nDatePatternStart = 0;
@@ -918,23 +917,6 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     sal_uInt16 nSecond = 0;
     double fSecond100 = 0.0;
     sal_uInt16 nStartIndex = nIndex;
-
-    if (nTimezonePos)
-    {
-        // find first timezone number index and adjust count
-        for (sal_uInt16 j=0; j<nAnzNums; ++j)
-        {
-            if (nNums[j] == nTimezonePos)
-            {
-                // nAnz is not total count, but count of time relevant strings.
-                if (nStartIndex < j && j - nStartIndex < nAnz)
-                {
-                    nAnz = j - nStartIndex;
-                }
-                break;  // for
-            }
-        }
-    }
 
     if (nDecPos == 2 && (nAnz == 3 || nAnz == 2)) // 20:45.5 or 45.5
     {

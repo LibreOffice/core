@@ -1493,7 +1493,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
     // No status bar, if no ID is required or when in FullScreenView or
     // if disabled
     if ( aStatBar.nId && IsDockingAllowed() && bInternalDockingAllowed && bShowStatusBar &&
-         aStatBar.bOn && !bIsFullScreen )
+         !bIsFullScreen )
     {
         // Id has changed, thus create a suitable Statusbarmanager, this takes
         // over the  current status bar;

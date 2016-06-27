@@ -516,7 +516,6 @@ const OUString & SotStorage::GetName() const
 {
     if( m_aName.isEmpty() )
     {
-        DBG_ASSERT( Owner(), "must be owner" );
         if( m_pOwnStg )
             const_cast<SotStorage *>(this)->m_aName = m_pOwnStg->GetName();
     }
@@ -527,7 +526,6 @@ void SotStorage::SetClass( const SvGlobalName & rName,
                            SotClipboardFormatId nOriginalClipFormat,
                            const OUString & rUserTypeName )
 {
-    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         m_pOwnStg->SetClass( rName, nOriginalClipFormat, rUserTypeName );
     else
@@ -537,7 +535,6 @@ void SotStorage::SetClass( const SvGlobalName & rName,
 SvGlobalName SotStorage::GetClassName()
 {
     SvGlobalName aGN;
-    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         aGN = m_pOwnStg->GetClassName();
     else
@@ -548,7 +545,6 @@ SvGlobalName SotStorage::GetClassName()
 SotClipboardFormatId SotStorage::GetFormat()
 {
     SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
-    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         nFormat = m_pOwnStg->GetFormat();
     else
@@ -559,7 +555,6 @@ SotClipboardFormatId SotStorage::GetFormat()
 OUString SotStorage::GetUserName()
 {
     OUString aName;
-    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         aName = m_pOwnStg->GetUserName();
     else
@@ -569,15 +564,12 @@ OUString SotStorage::GetUserName()
 
 void SotStorage::FillInfoList( SvStorageInfoList * pFillList ) const
 {
-    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         m_pOwnStg->FillInfoList( pFillList );
 }
 
 bool SotStorage::CopyTo( SotStorage * pDestStg )
 {
-    DBG_ASSERT( Owner(), "must be owner" );
-    DBG_ASSERT( pDestStg->Owner(), "must be owner" );
     if( m_pOwnStg && pDestStg->m_pOwnStg )
     {
         m_pOwnStg->CopyTo( pDestStg->m_pOwnStg );
@@ -593,7 +585,6 @@ bool SotStorage::CopyTo( SotStorage * pDestStg )
 
 bool SotStorage::Commit()
 {
-    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         if( !m_pOwnStg->Commit() )
@@ -609,7 +600,6 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
                                               StreamMode nMode )
 {
     SotStorageStream * pStm = nullptr;
-    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         // volle Ole-Patches einschalten
@@ -634,7 +624,6 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
                                          StreamMode nMode,
                                          bool transacted )
 {
-    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         nMode |= StreamMode::SHARE_DENYALL;
@@ -657,7 +646,6 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
 
 bool SotStorage::IsStorage( const OUString & rEleName ) const
 {
-    DBG_ASSERT( Owner(), "must be owner" );
     // ein bisschen schneller
     if( m_pOwnStg )
         return m_pOwnStg->IsStorage( rEleName );
@@ -667,7 +655,6 @@ bool SotStorage::IsStorage( const OUString & rEleName ) const
 
 bool SotStorage::IsStream( const OUString & rEleName ) const
 {
-    DBG_ASSERT( Owner(), "must be owner" );
     // ein bisschen schneller
     if( m_pOwnStg )
         return m_pOwnStg->IsStream( rEleName );
@@ -677,7 +664,6 @@ bool SotStorage::IsStream( const OUString & rEleName ) const
 
 bool SotStorage::IsContained( const OUString & rEleName ) const
 {
-    DBG_ASSERT( Owner(), "must be owner" );
     // ein bisschen schneller
     if( m_pOwnStg )
         return m_pOwnStg->IsContained( rEleName );
@@ -687,7 +673,6 @@ bool SotStorage::IsContained( const OUString & rEleName ) const
 
 bool SotStorage::Remove( const OUString & rEleName )
 {
-    DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         m_pOwnStg->Remove( rEleName );
@@ -702,8 +687,6 @@ bool SotStorage::Remove( const OUString & rEleName )
 bool SotStorage::CopyTo( const OUString & rEleName,
                          SotStorage * pNewSt, const OUString & rNewName )
 {
-    DBG_ASSERT( Owner(), "must be owner" );
-    DBG_ASSERT( pNewSt->Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         m_pOwnStg->CopyTo( rEleName, pNewSt->m_pOwnStg, rNewName );

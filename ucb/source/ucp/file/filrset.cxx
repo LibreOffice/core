@@ -58,7 +58,6 @@ XResultSet_impl::XResultSet_impl( shell* pMyShell,
     , m_pDisposeEventListeners( nullptr )
     , m_pRowCountListeners( nullptr )
     , m_pIsFinalListeners( nullptr )
-    , m_bStatic( false )
     , m_nErrorCode( TASKHANDLER_NO_ERROR )
     , m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
@@ -610,8 +609,6 @@ XResultSet_impl::connectToCache(
            uno::RuntimeException, std::exception )
 {
     if( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( THROW_WHERE );
-    if( m_bStatic )
         throw ucb::ListenerAlreadySetException( THROW_WHERE );
 
     uno::Reference< ucb::XSourceInitialization > xTarget(

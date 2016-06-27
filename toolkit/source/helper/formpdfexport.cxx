@@ -563,9 +563,6 @@ namespace toolkitform
 
                 // entries
                 getStringItemVector( xModelProps, pListWidget->Entries );
-                // since we explicitly list the entries in the order in which they appear, they should not be
-                // resorted by the PDF viewer
-                pListWidget->Sort = false;
 
                 // get selected items
                 Sequence< sal_Int16 > aSelectIndices;

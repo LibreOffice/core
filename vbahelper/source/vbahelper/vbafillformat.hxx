@@ -34,7 +34,6 @@ private:
     css::uno::Reference< ov::msforms::XColorFormat > m_xColorFormat;
     css::drawing::FillStyle m_nFillStyle;
     sal_Int32 m_nForeColor;
-    sal_Int32 m_nBackColor;
     sal_Int16 m_nGradientAngle;
 private:
     void setFillStyle( css::drawing::FillStyle nFillStyle ) throw (css::uno::RuntimeException);

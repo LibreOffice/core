@@ -109,7 +109,6 @@ private:
     Size                    maSize100thMM;
     sal_uInt16              mnBitsPerPixel;
     bool                    mbTransparent;
-    bool                    mbAlpha;
 
     GraphicDescriptor( const GraphicDescriptor& rDescriptor ) = delete;
 

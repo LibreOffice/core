@@ -91,14 +91,8 @@ private:
     // of visible viewport area (logical coordinates)
     Rectangle             maSetBound;
 
-    // Method of keeping defined aspect ratio
-    // default: Base3DRatioGrow
-    Base3DRatio           meRatio;
-
     // Flags
     bool mbPerspective              : 1;
-    bool mbWorldToViewValid         : 1;
-    bool mbInvTransObjectToEyeValid : 1;
     bool mbObjectToDeviceValid      : 1;
     bool mbProjectionValid          : 1;
 
@@ -206,8 +200,6 @@ private:
     basegfx::B3DVector  aLookAt;
     double                  fFocalLength;
     double                  fBankAngle;
-
-    bool                    bUseFocalLength         : 1;
 
 public:
     B3dCamera(

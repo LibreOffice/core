@@ -564,7 +564,6 @@ class XResultSet_impl : public Notifier,
         comphelper::OInterfaceContainerHelper2*   m_pIsFinalListeners;
 
         css::uno::Reference< css::ucb::XDynamicResultSetListener >       m_xListener;
-        bool                            m_bStatic;
 
         sal_Int32                                          m_nErrorCode;
         sal_Int32                                          m_nMinorErrorCode;

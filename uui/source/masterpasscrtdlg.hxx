@@ -49,7 +49,6 @@ public:
 
 private:
     ResMgr*                                         pResourceMgr;
-    sal_uInt16                                      nMinLen;
 };
 
 #endif // INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX

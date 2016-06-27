@@ -204,7 +204,6 @@ friend class RscFileTab;
 public:
     bool            bLoaded;    // whether the file is loaded
     bool            bScanned;   // whether the file searches for include
-    bool            bDirty;     // dirty-flag
     OString         aFileName;  // file name
     OString         aPathName;  // file path and name
     RscDefineList   aDefLst;    // list of defines

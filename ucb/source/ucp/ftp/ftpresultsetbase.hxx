@@ -495,7 +495,6 @@ namespace ftp {
                                             m_xProvider;
         sal_Int32                           m_nRow;
         bool                                m_nWasNull;
-        bool                                m_bRowCountFinal;
 
         typedef std::vector< css::uno::Reference<css::ucb::XContentIdentifier > >
                                             IdentSet;

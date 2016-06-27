@@ -166,7 +166,6 @@ bool StgCompObjStream::Store()
 StgOleStream::StgOleStream( BaseStorage& rStg, bool bWr )
     : StgInternalStream( rStg, OUString("\1Ole"), bWr )
 {
-    m_nFlags = 0;
 }
 
 bool StgOleStream::Store()
@@ -176,7 +175,7 @@ bool StgOleStream::Store()
 
     Seek( 0L );
     WriteInt32( 0x02000001 );         // OLE version, format
-    WriteInt32( m_nFlags );             // Object flags
+    WriteInt32( 0 );             // Object flags
     WriteInt32( 0 );                  // Update Options
     WriteInt32( 0 );                  // reserved
     WriteInt32( 0 );                 // Moniker 1

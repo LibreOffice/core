@@ -57,7 +57,6 @@ struct ImplConfigData
     sal_uIntPtr     mnDataUpdateId;
     sal_uIntPtr     mnTimeStamp;
     LineEnd         meLineEnd;
-    sal_uInt16      mnRefCount;
     bool            mbModified;
     bool            mbRead;
     bool            mbIsUTF8BOM;
@@ -588,7 +587,6 @@ static ImplConfigData* ImplGetConfigData( const OUString& rFileName )
     pData->mpFirstGroup     = nullptr;
     pData->mnDataUpdateId   = 0;
     pData->meLineEnd        = LINEEND_CRLF;
-    pData->mnRefCount       = 0;
     pData->mbRead           = false;
     pData->mbIsUTF8BOM      = false;
     ImplReadConfig( pData );

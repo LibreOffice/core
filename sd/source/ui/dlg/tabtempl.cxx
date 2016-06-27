@@ -98,8 +98,6 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
         m_nAsianTypoId = AddTabPage("asiantypo", RID_SVXPAGE_PARA_ASIAN);
     else
         RemoveTabPage("asiantypo");
-
-    nBitmapListState = ChangeType::NONE;
 }
 
 void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
