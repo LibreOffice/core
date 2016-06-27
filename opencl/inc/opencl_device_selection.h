@@ -45,7 +45,12 @@ enum ds_status
 enum class DeviceType
 {
     None,
+    // NativeCPU means the traditional Calc interpreter code path. (That also includes the so-called
+    // "software interpreter", but note that it definitely does not mean *exclusively* that.)
     NativeCPU,
+    // OpenCLDevice means an OpenCL device as supplied by an OpenCL platform, which might well be
+    // implemented using code that runs on the CPU (and not a GPU). On Windows, OpenCL platforms
+    // typically provide two devices, one for the GPU and one for the CPU.
     OpenCLDevice
 };
 
