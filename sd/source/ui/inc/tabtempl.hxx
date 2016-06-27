@@ -42,8 +42,6 @@ private:
     XDashListRef          pDashList;
     XLineEndListRef       pLineEndList;
 
-    ChangeType          nBitmapListState;
-
     sal_uInt16 m_nLineId;
     sal_uInt16 m_nAreaId;
     sal_uInt16 m_nShadowId;

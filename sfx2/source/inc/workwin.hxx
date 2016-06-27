@@ -67,11 +67,9 @@ struct SfxObjectBar_Impl
 struct SfxStatBar_Impl
 {
     sal_uInt16              nId;
-    bool                    bOn;
 
     SfxStatBar_Impl() :
-        nId(0),
-        bOn(true)
+        nId(0)
     {}
 };
 

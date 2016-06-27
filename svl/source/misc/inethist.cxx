@@ -48,7 +48,6 @@ class INetURLHistory_Impl
         */
         sal_uInt32 m_nMagic;
         sal_uInt16 m_nNext;
-        sal_uInt16 m_nMBZ;
 
         /** Initialization.
         */
@@ -56,7 +55,6 @@ class INetURLHistory_Impl
         {
             m_nMagic = INETHIST_MAGIC_HEAD;
             m_nNext  = 0;
-            m_nMBZ   = 0;
         }
     };
 
@@ -66,7 +64,6 @@ class INetURLHistory_Impl
         */
         sal_uInt32 m_nHash;
         sal_uInt16 m_nLru;
-        sal_uInt16 m_nMBZ;
 
         /** Initialization.
         */
@@ -74,7 +71,6 @@ class INetURLHistory_Impl
         {
             m_nHash = 0;
             m_nLru  = nLru;
-            m_nMBZ  = 0;
         }
 
         /** Comparison.

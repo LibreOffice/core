@@ -320,7 +320,6 @@ private:
     bool            mbFormat : 1;
     bool            mbFirstFormat : 1;
     bool            mbSizeFormat : 1;
-    bool            mbAutoMaxWidth : 1;
     bool            mbInSwitching : 1;
     bool            mbAutoEditMode : 1;
     bool            mbEditCanceled : 1;

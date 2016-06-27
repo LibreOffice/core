@@ -559,7 +559,6 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mbFormat        = true;
     mbFirstFormat   = true;
     mbSizeFormat    = true;
-    mbAutoMaxWidth  = true;
     mbInSwitching   = false;
     mbAutoEditMode  = false;
     mbEditCanceled  = false;
@@ -688,14 +687,12 @@ bool TabBar::ImplCalcWidth()
 
     if (mnMaxPageWidth)
         mnCurMaxWidth = mnMaxPageWidth;
-    else if (mbAutoMaxWidth)
+    else
     {
         mnCurMaxWidth = mnLastOffX - mnOffX;
         if (mnCurMaxWidth < 1)
             mnCurMaxWidth = 1;
     }
-    else
-        mnCurMaxWidth = 0;
 
     bool bChanged = false;
     for (ImplTabBarItem* pItem : mpImpl->mpItemList)

@@ -151,18 +151,14 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnCount()
 
 
 // virtual
-sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 column )
+sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ )
     throw( SQLException, RuntimeException, std::exception )
 {
     /*
         Checks whether column is automatically numbered, which makes it
         read-only.
      */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return false;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement;
+    return false;
 }
 
 

@@ -38,7 +38,6 @@ ResultSetBase::ResultSetBase(
       m_xProvider( xProvider ),
       m_nRow( -1 ),
       m_nWasNull( true ),
-      m_bRowCountFinal( true ),
       m_sProperty( seq ),
       m_pDisposeEventListeners( nullptr ),
       m_pRowCountListeners( nullptr ),
@@ -502,7 +501,7 @@ uno::Any SAL_CALL ResultSetBase::getPropertyValue(
 {
     if( PropertyName == "IsRowCountFinal" )
     {
-        return uno::Any(m_bRowCountFinal);
+        return uno::Any(true);
     }
     else if ( PropertyName == "RowCount" )
     {

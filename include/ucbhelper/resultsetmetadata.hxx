@@ -51,9 +51,6 @@ namespace ucbhelper
  */
 struct ResultSetColumnData
 {
-    /** @see ResultSetMetaData::isAutoIncrement */
-    bool        isAutoIncrement;
-
     /** @see ResultSetMetaData::isCaseSensitive */
     bool        isCaseSensitive;
 
@@ -85,8 +82,7 @@ struct ResultSetColumnData
 //       may heavily depend on the behaviour of the default constructor.
 
 ResultSetColumnData::ResultSetColumnData()
-: isAutoIncrement( false ),
-  isCaseSensitive( true ),
+: isCaseSensitive( true ),
   columnDisplaySize( 16 )
 {
 }

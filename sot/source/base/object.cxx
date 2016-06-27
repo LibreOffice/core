@@ -21,7 +21,6 @@
 
 SotObject::SotObject()
     : nOwnerLockCount( 0 )
-    , bOwner      ( true )
     , bInClose    ( false )
 {
 }

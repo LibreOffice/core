@@ -13217,8 +13217,6 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aValue           = rLstBox.Text;
         if( rLstBox.DropDown )
             rNewWidget.m_nFlags |= 0x00020000;
-        if( rLstBox.Sort )
-            rNewWidget.m_nFlags |= 0x00080000;
         if( rLstBox.MultiSelect && !rLstBox.DropDown && (int)m_aContext.Version > (int)PDFWriter::PDF_1_3 )
             rNewWidget.m_nFlags |= 0x00200000;
 
@@ -13247,7 +13245,6 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         aLBox.TextFont          = rBox.TextFont;
         aLBox.TextColor         = rBox.TextColor;
         aLBox.DropDown          = true;
-        aLBox.Sort              = false;
         aLBox.MultiSelect       = false;
         aLBox.Entries           = rBox.Entries;
 

@@ -31,6 +31,8 @@ struct ImplBtnDlgItem
     bool                    mbOwnButton;
     long                    mnSepSize;
     VclPtr<PushButton>      mpPushButton;
+
+    ImplBtnDlgItem() : mnId(0), mbOwnButton(false), mnSepSize(0) {}
 };
 
 void ButtonDialog::ImplInitButtonDialogData()

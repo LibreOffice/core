@@ -46,6 +46,13 @@ for fieldInfo, assignValues in fieldAssignDict.iteritems():
     # if it contains anything other than this set, ignore it
     if len(assignValues - set(["0", "1", "-1", "nullptr"])) > 0:
         continue
+    # ignore things which are locally declared but are actually redeclarations of things from 3rd party code
+    parentClass = fieldInfo[0]
+    if parentClass == "_mwmhints":
+        continue
+    # ignore things which are representations of on-disk structures
+    if parentClass in ["SEPr", "WW8Dop", ]:
+        continue
     v0 = fieldInfo[0] + " " + fieldInfo[1]
     v1 = (",".join(assignValues))
     v2 = ""

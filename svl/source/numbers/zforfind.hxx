@@ -128,7 +128,6 @@ private:
                                                 // default 18
                                                 // number <= nYear2000 => 20xx
                                                 // number >  nYear2000 => 19xx
-    sal_uInt16  nTimezonePos;                   // Index of timezone separator (+1)
 
     /** State of ISO 8601 detection.
 

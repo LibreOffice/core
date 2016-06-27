@@ -235,7 +235,6 @@ private:
 
     SharedBitmapDescriptor mpBackground;
 
-    bool mbIsInModifyNotification;
     bool mbIsForcedPaintPending;
     bool mbIsPaintPending;
     OUString msClickToExitPresentationText;

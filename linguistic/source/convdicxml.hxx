@@ -77,7 +77,6 @@ class ConvDicXMLImport : public SvXMLImport
 
     sal_Int16       nLanguage;          // language of the dictionary
     sal_Int16       nConversionType;    // conversion type the dictionary is used for
-    bool        bSuccess;
 
 public:
 
@@ -88,7 +87,6 @@ public:
     {
         nLanguage       = LANGUAGE_NONE;
         nConversionType = -1;
-        bSuccess        = false;
     }
 
     virtual ~ConvDicXMLImport() throw ()

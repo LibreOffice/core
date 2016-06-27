@@ -46,10 +46,6 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
     bool bInsertFooterFirst;
     bool bHeaderInserted;
     bool bFooterInserted;
-    bool bHeaderLeftInserted;
-    bool bFooterLeftInserted;
-    bool bHeaderFirstInserted;
-    bool bFooterFirstInserted;
 
     SAL_DLLPRIVATE css::uno::Reference< css::style::XStyle > Create();
 protected:

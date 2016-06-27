@@ -56,7 +56,7 @@ protected:
     sal_Int32 mnBlockSize;
     css::uno::Reference< css::xml::crypto::XCipherContext > m_xCipherContext;
     ZipUtils::Inflater maInflater;
-    bool mbRawStream, mbWrappedRaw, mbFinished;
+    bool mbRawStream, mbWrappedRaw;
     sal_Int16 mnHeaderToRead;
     sal_Int64 mnZipCurrent, mnZipEnd, mnZipSize, mnMyCurrent;
     CRC32 maCRC;

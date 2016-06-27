@@ -112,10 +112,7 @@ struct FactoryInfo
             sDefaultFilter.clear();
             nIcon                       = 0;
             bChangedTemplateFile        = false;
-            bChangedWindowAttributes    = false;
-            bChangedEmptyDocumentURL    = false;
             bChangedDefaultFilter       = false;
-            bChangedIcon                = false;
             bDefaultFilterReadonly      = false;
         }
 
@@ -147,37 +144,16 @@ struct FactoryInfo
 
                 ++nRealyChanged;
             }
-            if( bChangedWindowAttributes )
-            {
-                lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_WINDOWATTRIBUTES;
-                lProperties[nRealyChanged].Value <<= sWindowAttributes;
-                ++nRealyChanged;
-            }
-            if( bChangedEmptyDocumentURL )
-            {
-                lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_EMPTYDOCUMENTURL;
-                lProperties[nRealyChanged].Value <<= sEmptyDocumentURL;
-                ++nRealyChanged;
-            }
             if( bChangedDefaultFilter )
             {
                 lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_DEFAULTFILTER;
                 lProperties[nRealyChanged].Value <<= sDefaultFilter;
                 ++nRealyChanged;
             }
-            if( bChangedIcon )
-            {
-                lProperties[nRealyChanged].Name    = sNodeBase + PROPERTYNAME_ICON;
-                lProperties[nRealyChanged].Value <<= nIcon;
-                ++nRealyChanged;
-            }
 
             // Don't forget to reset changed flags! Otherwise we save it again and again and ...
             bChangedTemplateFile        = false;
-            bChangedWindowAttributes    = false;
-            bChangedEmptyDocumentURL    = false;
             bChangedDefaultFilter       = false;
-            bChangedIcon                = false;
 
             lProperties.realloc( nRealyChanged );
             return lProperties;
@@ -254,10 +230,7 @@ struct FactoryInfo
         sal_Int32    nIcon;
 
         bool            bChangedTemplateFile        :1;
-        bool            bChangedWindowAttributes    :1;
-        bool            bChangedEmptyDocumentURL    :1;
         bool            bChangedDefaultFilter       :1;
-        bool            bChangedIcon                :1;
         bool            bDefaultFilterReadonly      :1;
 
         css::uno::Reference< css::util::XStringSubstitution >  xSubstVars;

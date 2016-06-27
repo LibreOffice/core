@@ -59,8 +59,7 @@ struct Node
 {
     Node*   pPrev;
     RSCINST aInst;
-    sal_uInt32  nTupelRec;  // Rekursionstiefe fuer Tupel
-    Node() { pPrev = nullptr; nTupelRec = 0; }
+    Node() { pPrev = nullptr; }
 };
 
 class ObjectStack

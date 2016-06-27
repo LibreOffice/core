@@ -31,7 +31,8 @@ The process goes something like this:
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around
 to get it to work :-)
 
-@TODO we don't spot fields that have been zero-initialised via calloc or rtl_allocateZeroMemory
+@TODO we don't spot fields that have been zero-initialised via calloc or rtl_allocateZeroMemory or memset
+@TODO calls to lambdas (see FIXME near CXXOperatorCallExpr)
 
 */
 
@@ -96,12 +97,15 @@ public:
     bool VisitFieldDecl( const FieldDecl* );
     bool VisitMemberExpr( const MemberExpr* );
     bool VisitCXXConstructorDecl( const CXXConstructorDecl* );
+    bool VisitImplicitCastExpr( const ImplicitCastExpr* );
+//    bool VisitUnaryExprOrTypeTraitExpr( const UnaryExprOrTypeTraitExpr* );
 private:
     void niceName(const FieldDecl*, MyFieldInfo&);
     std::string getExprValue(const Expr*);
     bool isInterestingType(const QualType&);
     const FunctionDecl* get_top_FunctionDecl_from_Stmt(const Stmt&);
     void checkCallExpr(const Stmt* child, const CallExpr* callExpr, std::string& assignValue, bool& bPotentiallyAssignedTo);
+    void markAllFields(const RecordDecl* recordDecl);
 };
 
 void SingleValFields::niceName(const FieldDecl* fieldDecl, MyFieldInfo& aInfo)
@@ -178,7 +182,82 @@ const FunctionDecl* SingleValFields::get_top_FunctionDecl_from_Stmt(const Stmt& 
   return nullptr;
 }
 
+/**
+ * Check for calls to methods where a pointer to something is cast to a pointer to void.
+ * At which case it could have anything written to it.
+ */
+bool SingleValFields::VisitImplicitCastExpr( const ImplicitCastExpr* castExpr )
+{
+    QualType qt = castExpr->getType().getDesugaredType(compiler.getASTContext());
+    if (qt.isNull()) {
+        return true;
+    }
+    if ( qt.isConstQualified() || !qt->isPointerType()
+         || !qt->getAs<clang::PointerType>()->getPointeeType()->isVoidType() ) {
+        return true;
+    }
+    const Expr* subExpr = castExpr->getSubExpr();
+    qt = subExpr->getType();
+    if (!qt->isPointerType()) {
+        return true;
+    }
+    qt = qt->getPointeeType();
+    if (!qt->isRecordType()) {
+        return true;
+    }
+    const RecordDecl* recordDecl = qt->getAs<RecordType>()->getDecl();
+    markAllFields(recordDecl);
+    return true;
+}
 
+void SingleValFields::markAllFields(const RecordDecl* recordDecl)
+{
+    for(auto fieldDecl = recordDecl->field_begin();
+        fieldDecl != recordDecl->field_end(); ++fieldDecl)
+    {
+        if (isInterestingType(fieldDecl->getType())) {
+            MyFieldAssignmentInfo aInfo;
+            niceName(*fieldDecl, aInfo);
+            aInfo.value = "?";
+            assignedSet.insert(aInfo);
+        }
+        else if (fieldDecl->getType()->isRecordType()) {
+            markAllFields(fieldDecl->getType()->getAs<RecordType>()->getDecl());
+        }
+    }
+    const CXXRecordDecl* cxxRecordDecl = dyn_cast<CXXRecordDecl>(recordDecl);
+    if (!cxxRecordDecl || !cxxRecordDecl->hasDefinition()) {
+        return;
+    }
+    for (auto it = cxxRecordDecl->bases_begin(); it != cxxRecordDecl->bases_end(); ++it)
+    {
+        QualType qt = it->getType();
+        if (qt->isRecordType())
+            markAllFields(qt->getAs<RecordType>()->getDecl());
+    }
+}
+
+/**
+ * Check for usage of sizeof(T) where T is a record.
+ * Means we can't touch the size of the class by removing fields.
+ *
+ * @FIXME this could be tightened up. In some contexts e.g. "memset(p,sizeof(T),0)" we could emit a "set to zero"
+ */
+ /*
+bool SingleValFields::VisitUnaryExprOrTypeTraitExpr( const UnaryExprOrTypeTraitExpr* expr )
+{
+    if (expr->getKind() != UETT_SizeOf || !expr->isArgumentType()) {
+        return true;
+    }
+    QualType qt = expr->getArgumentType();
+    if (!qt->isRecordType()) {
+        return true;
+    }
+    const RecordDecl* recordDecl = qt->getAs<RecordType>()->getDecl();
+    markAllFields(recordDecl);
+    return true;
+}
+*/
 bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
 {
     const ValueDecl* decl = memberExpr->getMemberDecl();
@@ -250,6 +329,13 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
             }
             child = parent;
             parent = parentStmt(parent);
+        }
+        else if (isa<CXXOperatorCallExpr>(parent))
+        {
+            // FIXME need to handle this properly
+            assignValue = "?";
+            bPotentiallyAssignedTo = true;
+            break;
         }
         else if (isa<CallExpr>(parent))
         {
@@ -403,7 +489,6 @@ std::string SingleValFields::getExprValue(const Expr* arg)
     if (!arg)
         return "?";
     arg = arg->IgnoreParenCasts();
-//    arg->dump();
     // workaround bug in clang
     if (isa<ParenListExpr>(arg))
         return "?";

@@ -222,9 +222,6 @@ private:
     // Flag to remember if this is a simple scrolling text
     bool                                        mbScrollIn;
 
-    // start time for this animation
-    sal_uInt32                                  mnStartTime;
-
     // The AnimationDirection
     drawing::TextAnimationDirection             meDirection;
 
@@ -419,14 +416,6 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
         {
             fZeroRelative = 0.0;
             fOneRelative = 1.0;
-        }
-
-        if(mnStartTime)
-        {
-            // Start time loop
-            ScrollTextAnimNode aStartNode(
-                mnStartTime, 1L, 0.0, 0.0, mnStartTime, false);
-            maVector.push_back(aStartNode);
         }
 
         if(IsVisibleWhenStarted())
@@ -751,7 +740,6 @@ ActivityImpl::ActivityImpl(
       meAnimKind(drawing::TextAnimationKind_NONE),
       mbVisibleWhenStopped(false),
       mbVisibleWhenStarted(false),
-      mnStartTime(0L),
       mnStepWidth(0)
 {
     // get doctreenode:

@@ -672,7 +672,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
          so this special case must be handled in the
          character handler case 2:
          */
-        if ((nRecord == CHAR) && (!bIsSilent) && (!bOpenString))
+        if ((nRecord == CHAR) && (!bOpenString))
         {
             bOpenString=true;
             nTextStart = rRet.getLength();
