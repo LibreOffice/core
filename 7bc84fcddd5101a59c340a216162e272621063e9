@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_27033975",
+        "filename": "include/sfx2/objsh.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-27T13:04:05Z",
+      "side": 1,
+      "message": "that change looks unrelated?",
+      "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_87f24599",
+        "filename": "sfx2/source/view/frmload.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-27T13:04:05Z",
+      "side": 1,
+      "message": "another unrelated change?",
+      "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_a7ef49af",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-27T13:04:05Z",
+      "side": 1,
+      "message": "Please have the default the other way around. Also saves you quite some explicit settings.\n\nThen, instead set the compat flag to false at the point where new documents are created, e.g. inside SfxBaseModel::initNew()",
+      "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_c72a8de7",
+        "filename": "svx/source/svdraw/svdotextdecomposition.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-27T13:04:05Z",
+      "side": 1,
+      "message": "Unrelated change",
+      "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
