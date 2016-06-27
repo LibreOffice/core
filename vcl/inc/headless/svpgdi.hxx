@@ -39,10 +39,22 @@
 //where we don't have GL_BGRA support.
 #if defined ANDROID
 #   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcRgba | ScanlineFormat::TopDown)
+#   define SVP_CAIRO_BLUE 1
+#   define SVP_CAIRO_GREEN 2
+#   define SVP_CAIRO_RED 0
+#   define SVP_CAIRO_ALPHA 3
 #elif defined OSL_BIGENDIAN
 #   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown)
+#   define SVP_CAIRO_BLUE 3
+#   define SVP_CAIRO_GREEN 2
+#   define SVP_CAIRO_RED 1
+#   define SVP_CAIRO_ALPHA 0
 #else
 #   define SVP_CAIRO_FORMAT (ScanlineFormat::N32BitTcBgra | ScanlineFormat::TopDown)
+#   define SVP_CAIRO_BLUE 0
+#   define SVP_CAIRO_GREEN 1
+#   define SVP_CAIRO_RED 2
+#   define SVP_CAIRO_ALPHA 3
 #endif
 
 struct BitmapBuffer;
