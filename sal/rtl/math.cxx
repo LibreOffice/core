@@ -694,6 +694,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
         while (p != pEnd && (*p == CharT('0') || *p == cGroupSeparator))
             ++p;
 
+        CharT const * pFirstSignificant = p;
         long nValExp = 0;       // carry along exponent of mantissa
 
         // integer part of mantissa
@@ -741,7 +742,19 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             if ( fFrac != 0.0 )
                 fVal += rtl::math::pow10Exp( fFrac, nFracExp );
             else if ( nValExp < 0 )
+            {
+                if (pFirstSignificant + 1 == p)
+                {
+                    // No digit at all, only separator(s) without integer or
+                    // fraction part. Bail out. No number. No error.
+                    if (pStatus != nullptr)
+                        *pStatus = eStatus;
+                    if (pParsedEnd != nullptr)
+                        *pParsedEnd = pBegin;
+                    return fVal;
+                }
                 nValExp = 0;    // no digit other than 0 after decimal point
+            }
         }
 
         if ( nValExp > 0 )
