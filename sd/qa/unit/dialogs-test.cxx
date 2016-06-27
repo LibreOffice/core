@@ -107,7 +107,7 @@ private:
 
     /// central methods: dialog creation and dumping to target directory (path)
     VclAbstractDialog* createDialogByID(sal_uInt32 nID);
-    void dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rPath);
+    void dumpDialogToPath(VclAbstractDialog& rDlg);
     void saveScreenshot( VclAbstractDialog& rDlg);
 
 public:
@@ -644,7 +644,7 @@ void SdDialogsTest::saveScreenshot(VclAbstractDialog& rDlg)
     }
 }
 
-void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg, const OUString& rPath)
+void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg)
 {
 
     // for dumping, a lossless format is needed. It may be seen if the created data
@@ -689,7 +689,7 @@ void SdDialogsTest::openAnyDialog()
 
         if (pDlg)
         {
-            dumpDialogToPath(*pDlg, aTempTargetPath + "/" + OUString::number(a));
+            dumpDialogToPath(*pDlg);
             delete pDlg;
         }
     }
