@@ -24,9 +24,9 @@ diff -ur breakpad.org/src/processor/stackwalk_common.cc breakpad/src/processor/s
             kOutputSeparator, base_address + module->size() - 1,
             kOutputSeparator,
 -           main_module != NULL && base_address == main_address ? 1 : 0);
-+           main_module != NULL && base_address == main_address ? 1 : 0),
++           main_module != NULL && base_address == main_address ? 1 : 0,
 +           kOutputSeparator,
-+           StripSeparator(PathnameStripper::File(module->code_identifier())).c_str();
++           StripSeparator(PathnameStripper::File(module->code_identifier())).c_str());
    }
  }
  
