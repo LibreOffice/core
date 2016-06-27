@@ -63,28 +63,28 @@ public:
                 rtl::OUString("NaN"),
                 '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
-        CPPUNIT_ASSERT_EQUAL(3, end);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), end);
         CPPUNIT_ASSERT_EQUAL(rtl::math::isNan(res), true);
 
         res = rtl::math::stringToDouble(
                 rtl::OUString("NaN1.23"),
                 '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
-        CPPUNIT_ASSERT_EQUAL(3, end);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), end);
         CPPUNIT_ASSERT_EQUAL(rtl::math::isNan(res), true);
 
         res = rtl::math::stringToDouble(
                 rtl::OUString("INF"),
                 '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_OutOfRange, status);
-        CPPUNIT_ASSERT_EQUAL(3, end);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), end);
         CPPUNIT_ASSERT_EQUAL(rtl::math::isInf(res), true);
 
         res = rtl::math::stringToDouble(
                 rtl::OUString("INF1.23"),
                 '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_OutOfRange, status);
-        CPPUNIT_ASSERT_EQUAL(3, end);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), end);
         CPPUNIT_ASSERT_EQUAL(rtl::math::isInf(res), true);
     }
 
