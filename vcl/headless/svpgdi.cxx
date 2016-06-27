@@ -1059,9 +1059,9 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
         unsigned char *data = row + (rTR.mnSrcX * 4);
         for (sal_Int32 x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
         {
-            sal_uInt8 b = unpremultiply(data[0], data[3]);
-            sal_uInt8 g = unpremultiply(data[1], data[3]);
-            sal_uInt8 r = unpremultiply(data[2], data[3]);
+            sal_uInt8 b = unpremultiply(data[SVP_CAIRO_BLUE], data[SVP_CAIRO_ALPHA]);
+            sal_uInt8 g = unpremultiply(data[SVP_CAIRO_GREEN], data[SVP_CAIRO_ALPHA]);
+            sal_uInt8 r = unpremultiply(data[SVP_CAIRO_RED], data[SVP_CAIRO_ALPHA]);
             if (r == 0 && g == 0 && b == 0)
             {
                 data[0] = SALCOLOR_BLUE(nMaskColor);
@@ -1125,15 +1125,9 @@ SalColor SvpSalGraphics::getPixel( long nX, long nY )
     unsigned char *surface_data = cairo_image_surface_get_data(m_pSurface);
     unsigned char *row = surface_data + (nStride*nY);
     unsigned char *data = row + (nX * 4);
-# if defined OSL_BIGENDIAN
-    sal_uInt8 b = unpremultiply(data[3], data[0]);
-    sal_uInt8 g = unpremultiply(data[2], data[0]);
-    sal_uInt8 r = unpremultiply(data[1], data[0]);
-#else
-    sal_uInt8 b = unpremultiply(data[0], data[3]);
-    sal_uInt8 g = unpremultiply(data[1], data[3]);
-    sal_uInt8 r = unpremultiply(data[2], data[3]);
-#endif
+    sal_uInt8 b = unpremultiply(data[SVP_CAIRO_BLUE], data[SVP_CAIRO_ALPHA]);
+    sal_uInt8 g = unpremultiply(data[SVP_CAIRO_GREEN], data[SVP_CAIRO_ALPHA]);
+    sal_uInt8 r = unpremultiply(data[SVP_CAIRO_RED], data[SVP_CAIRO_ALPHA]);
     return MAKE_SALCOLOR(r, g, b);
 }
 
@@ -1342,15 +1336,15 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
             unsigned char *xor_data = xor_row + (nExtentsLeft * 4);
             for (sal_Int32 x = nExtentsLeft; x < nExtentsRight; ++x)
             {
-                sal_uInt8 b = unpremultiply(true_data[0], true_data[3]) ^
-                              unpremultiply(xor_data[0], xor_data[3]);
-                sal_uInt8 g = unpremultiply(true_data[1], true_data[3]) ^
-                              unpremultiply(xor_data[1], xor_data[3]);
-                sal_uInt8 r = unpremultiply(true_data[2], true_data[3]) ^
-                              unpremultiply(xor_data[2], xor_data[3]);
-                true_data[0] = premultiply(b, true_data[3]);
-                true_data[1] = premultiply(g, true_data[3]);
-                true_data[2] = premultiply(r, true_data[3]);
+                sal_uInt8 b = unpremultiply(true_data[SVP_CAIRO_BLUE], true_data[SVP_CAIRO_ALPHA]) ^
+                              unpremultiply(xor_data[SVP_CAIRO_BLUE], xor_data[SVP_CAIRO_ALPHA]);
+                sal_uInt8 g = unpremultiply(true_data[SVP_CAIRO_GREEN], true_data[SVP_CAIRO_ALPHA]) ^
+                              unpremultiply(xor_data[SVP_CAIRO_GREEN], xor_data[SVP_CAIRO_ALPHA]);
+                sal_uInt8 r = unpremultiply(true_data[SVP_CAIRO_RED], true_data[SVP_CAIRO_ALPHA]) ^
+                              unpremultiply(xor_data[SVP_CAIRO_RED], xor_data[SVP_CAIRO_ALPHA]);
+                true_data[0] = premultiply(b, true_data[SVP_CAIRO_ALPHA]);
+                true_data[1] = premultiply(g, true_data[SVP_CAIRO_ALPHA]);
+                true_data[2] = premultiply(r, true_data[SVP_CAIRO_ALPHA]);
                 true_data+=4;
                 xor_data+=4;
             }
