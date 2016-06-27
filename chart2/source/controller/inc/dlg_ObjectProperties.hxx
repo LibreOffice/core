@@ -108,7 +108,6 @@ class SchAttribTabDlg : public SfxTabDialog
 private:
     ObjectType               eObjectType;
     sal_uInt16                   nDlgType;
-    sal_uInt16                   nPageType;
 
     const ObjectPropertiesDialogParameter * const        m_pParameter;
     const ViewElementListProvider* const                 m_pViewElementListProvider;

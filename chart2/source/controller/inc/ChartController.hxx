@@ -426,7 +426,6 @@ private:
     mutable ::apphelper::LifeTimeManager m_aLifeTimeManager;
 
     bool m_bSuspended;
-    bool m_bCanClose;
 
     css::uno::Reference< css::uno::XComponentContext> m_xCC;
 

@@ -327,7 +327,6 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
     : SfxTabDialog(pParent, "AttributeDialog", "modules/schart/ui/attributedialog.ui", pAttr)
     , eObjectType(pDialogParameter->getObjectType())
     , nDlgType(nNoArrowNoShadowDlg)
-    , nPageType(0)
     , m_pParameter( pDialogParameter )
     , m_pViewElementListProvider( pViewElementListProvider )
     , m_pNumberFormatter(nullptr)
@@ -504,7 +503,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
             aSet.Put (SvxColorListItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
             aSet.Put (SvxDashListItem(m_pViewElementListProvider->GetDashList(),SID_DASH_LIST));
             aSet.Put (SvxLineEndListItem(m_pViewElementListProvider->GetLineEndList(),SID_LINEEND_LIST));
-            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
 
             if( m_pParameter->HasSymbolProperties() )
@@ -523,13 +522,13 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
             aSet.Put(SvxGradientListItem(m_pViewElementListProvider->GetGradientList(),SID_GRADIENT_LIST));
             aSet.Put(SvxHatchListItem(m_pViewElementListProvider->GetHatchList(),SID_HATCH_LIST));
             aSet.Put(SvxBitmapListItem(m_pViewElementListProvider->GetBitmapList(),SID_BITMAP_LIST));
-            aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+            aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,0));
             aSet.Put(SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             rPage.PageCreated(aSet);
             break;
 
         case RID_SVXPAGE_TRANSPARENCE:
-            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             rPage.PageCreated(aSet);
             break;

@@ -697,8 +697,7 @@ ObjectKeyNavigation::ObjectKeyNavigation(
     ExplicitValueProvider * pExplicitValueProvider /* = 0 */ ) :
         m_aCurrentOID( rCurrentOID ),
         m_xChartDocument( xChartDocument ),
-        m_pExplicitValueProvider( pExplicitValueProvider ),
-        m_bStepDownInDiagram( true )
+        m_pExplicitValueProvider( pExplicitValueProvider )
 {
     if ( !m_aCurrentOID.isValid() )
     {
@@ -749,7 +748,7 @@ void ObjectKeyNavigation::setCurrentSelection( const ObjectHierarchy::tOID& rOID
 
 bool ObjectKeyNavigation::first()
 {
-    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, m_bStepDownInDiagram );
+    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, true/*StepDownInDiagram*/ );
     ObjectHierarchy::tChildContainer aSiblings( aHierarchy.getSiblings( getCurrentSelection() ) );
     bool bResult = !aSiblings.empty();
     if( bResult )
@@ -761,7 +760,7 @@ bool ObjectKeyNavigation::first()
 
 bool ObjectKeyNavigation::last()
 {
-    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, m_bStepDownInDiagram );
+    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, true/*StepDownInDiagram*/ );
     ObjectHierarchy::tChildContainer aSiblings( aHierarchy.getSiblings( getCurrentSelection() ) );
     bool bResult = !aSiblings.empty();
     if( bResult )
@@ -773,7 +772,7 @@ bool ObjectKeyNavigation::last()
 
 bool ObjectKeyNavigation::next()
 {
-    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, m_bStepDownInDiagram );
+    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, true/*StepDownInDiagram*/ );
     ObjectHierarchy::tChildContainer aSiblings( aHierarchy.getSiblings( getCurrentSelection() ) );
     bool bResult = !aSiblings.empty();
     if( bResult )
@@ -793,7 +792,7 @@ bool ObjectKeyNavigation::next()
 
 bool ObjectKeyNavigation::previous()
 {
-    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, m_bStepDownInDiagram );
+    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, true/*StepDownInDiagram*/ );
     ObjectHierarchy::tChildContainer aSiblings( aHierarchy.getSiblings( getCurrentSelection()));
     bool bResult = !aSiblings.empty();
     if( bResult )
@@ -813,7 +812,7 @@ bool ObjectKeyNavigation::previous()
 
 bool ObjectKeyNavigation::up()
 {
-    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, m_bStepDownInDiagram );
+    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, true/*StepDownInDiagram*/ );
     bool bResult = !ObjectHierarchy::isRootNode( getCurrentSelection());
     if( bResult )
         setCurrentSelection( aHierarchy.getParent( getCurrentSelection()));
@@ -822,7 +821,7 @@ bool ObjectKeyNavigation::up()
 
 bool ObjectKeyNavigation::down()
 {
-    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, m_bStepDownInDiagram );
+    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, true/*StepDownInDiagram*/ );
     bool bResult = aHierarchy.hasChildren( getCurrentSelection());
     if( bResult )
     {
@@ -835,7 +834,7 @@ bool ObjectKeyNavigation::down()
 
 bool ObjectKeyNavigation::veryFirst()
 {
-    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, m_bStepDownInDiagram );
+    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, true/*StepDownInDiagram*/ );
     ObjectHierarchy::tChildContainer aChildren( aHierarchy.getTopLevelChildren());
     bool bResult = !aChildren.empty();
     if( bResult )
@@ -845,7 +844,7 @@ bool ObjectKeyNavigation::veryFirst()
 
 bool ObjectKeyNavigation::veryLast()
 {
-    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, m_bStepDownInDiagram );
+    ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider, true/*StepDownInDiagram*/ );
     ObjectHierarchy::tChildContainer aChildren( aHierarchy.getTopLevelChildren());
     bool bResult = !aChildren.empty();
     if( bResult )

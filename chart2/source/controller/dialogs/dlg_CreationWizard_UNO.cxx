@@ -161,14 +161,6 @@ uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId() t
 // XTerminateListener
 void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& /*Event*/ ) throw( frame::TerminationVetoException, uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aSolarGuard;
-
-    // we will never give a veto here
-    if( m_pDialog && !m_pDialog->isClosable() )
-    {
-        m_pDialog->ToTop();
-        throw frame::TerminationVetoException();
-    }
 }
 
 void SAL_CALL CreationWizardUnoDlg::notifyTermination( const lang::EventObject& /*Event*/ ) throw (uno::RuntimeException, std::exception)
