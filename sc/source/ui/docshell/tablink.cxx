@@ -65,8 +65,7 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
     aOptions(rOpt),
     bInCreate( false ),
     bInEdit( false ),
-    bAddUndo( true ),
-    bDoPaint( true )
+    bAddUndo( true )
 {
     pImpl->m_pDocSh = pDocSh;
 }
@@ -82,8 +81,7 @@ ScTableLink::ScTableLink(SfxObjectShell* pShell, const OUString& rFile,
     aOptions(rOpt),
     bInCreate( false ),
     bInEdit( false ),
-    bAddUndo( true ),
-    bDoPaint( true )
+    bAddUndo( true )
 {
     pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
     SetRefreshHandler( LINK( this, ScTableLink, RefreshHdl ) );
@@ -381,12 +379,9 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     //  Paint (koennen mehrere Tabellen sein)
 
-    if (bDoPaint)
-    {
-        pImpl->m_pDocSh->PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
-                                    PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS );
-        aModificator.SetDocumentModified();
-    }
+    pImpl->m_pDocSh->PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
+                                PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS );
+    aModificator.SetDocumentModified();
 
     if (bNotFound)
     {

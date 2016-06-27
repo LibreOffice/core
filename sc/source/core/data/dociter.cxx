@@ -1081,9 +1081,7 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
             rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
         }
     }
-    nNumFormat = 0; // Initialized in GetNumberFormat
     pAttrArray = nullptr;
-    nAttrEndRow = 0;
 }
 
 void ScQueryCellIterator::InitPos()
@@ -2171,12 +2169,9 @@ void ScHorizontalCellIterator::SkipInvalid()
 ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
         const ScRange& rRange ) :
     pDoc( pDocument ),
-    nNumFmtIndex(0),
     nEndTab( rRange.aEnd.Tab() ),
-    nNumFmtType( css::util::NumberFormat::UNDEFINED ),
     bNumValid( false ),
-    bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
-    bTextAsZero( false )
+    bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() )
 {
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -2253,27 +2248,10 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
                         bNumValid = false;
                         bFound = true;
                     }
-                    else if ( bTextAsZero )
-                    {
-                        rValue = 0.0;
-                        bNumValid = false;
-                        bFound = true;
-                    }
                 }
                 break;
             case CELLTYPE_STRING :
             case CELLTYPE_EDIT :
-                {
-                    if ( bTextAsZero )
-                    {
-                        rErr = 0;
-                        rValue = 0.0;
-                        nNumFmtType = css::util::NumberFormat::NUMBER;
-                        nNumFmtIndex = 0;
-                        bNumValid = true;
-                        bFound = true;
-                    }
-                }
                 break;
             default: ;   // nothing
         }
@@ -2297,7 +2275,6 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     nRow = nStartRow;
     nCol = nStartCol;
     bRowEmpty = false;
-    bRepeatedRow = false;
 
     pIndices    = new SCSIZE[nEndCol-nStartCol+1];
     pNextEnd    = new SCROW[nEndCol-nStartCol+1];

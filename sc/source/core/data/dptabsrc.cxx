@@ -626,9 +626,7 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
     for (; it != itEnd; ++it)
     {
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
-        long nHierarchy = pDim->getUsedHierarchy();
-        if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
-            nHierarchy = 0;
+        long nHierarchy = 0;
         ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
         long nCount = pLevels->getCount();
 
@@ -904,9 +902,7 @@ void ScDPSource::CreateRes_Impl()
     for (it = maPageDims.begin(), itEnd = maPageDims.end(); it != itEnd; ++it)
     {
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(*it);
-        long nHierarchy = pDim->getUsedHierarchy();
-        if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
-            nHierarchy = 0;
+        long nHierarchy = 0;
 
         ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
         long nCount = pLevels->getCount();
@@ -1017,9 +1013,7 @@ void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*>
         OSL_ENSURE( pDim->getOrientation() == nOrientation, "orientations are wrong" );
 
         ScDPHierarchies* pHiers = pDim->GetHierarchiesObject();
-        long nHierarchy = pDim->getUsedHierarchy();
-        if ( nHierarchy >= pHiers->getCount() )
-            nHierarchy = 0;
+        long nHierarchy = 0;
         ScDPHierarchy* pHier = pHiers->getByIndex(nHierarchy);
         ScDPLevels* pLevels = pHier->GetLevelsObject();
         long nLevCount = pLevels->getCount();
@@ -1324,7 +1318,6 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
 ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     pSource( pSrc ),
     nDim( nD ),
-    nUsedHier( 0 ),
     nFunction( SUBTOTAL_FUNC_SUM ),     // sum is default
     mpLayoutName(nullptr),
     mpSubtotalName(nullptr),
@@ -1435,9 +1428,7 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
 
         long nLevel = 0;
 
-        long nHierarchy = getUsedHierarchy();
-        if ( nHierarchy >= GetHierarchiesObject()->getCount() )
-            nHierarchy = 0;
+        long nHierarchy = 0;
         ScDPLevels* pLevels = GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
         long nLevCount = pLevels->getCount();
         if ( nLevel < nLevCount )
@@ -1581,7 +1572,7 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
     if ( aPropertyName == SC_UNO_DP_POSITION )
         aRet <<= (sal_Int32) getPosition();
     else if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
-        aRet <<= (sal_Int32) getUsedHierarchy();
+        aRet <<= (sal_Int32) 0;
     else if ( aPropertyName == SC_UNO_DP_ORIENTATION )
     {
         sheet::DataPilotFieldOrientation eVal = (sheet::DataPilotFieldOrientation)getOrientation();
@@ -1673,11 +1664,6 @@ ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
     ppHiers( nullptr )
 {
     //TODO: hold pSource
-
-    //  date columns have 3 hierarchies (flat/quarter/week), other columns only one
-
-    // #i52547# don't offer the incomplete date hierarchy implementation
-    nHierCount = 1;
 }
 
 ScDPHierarchies::~ScDPHierarchies()
@@ -1743,7 +1729,7 @@ sal_Bool SAL_CALL ScDPHierarchies::hasElements() throw(uno::RuntimeException, st
 
 // end of XNameAccess implementation
 
-long ScDPHierarchies::getCount() const
+long ScDPHierarchies::getCount()
 {
     return nHierCount;
 }

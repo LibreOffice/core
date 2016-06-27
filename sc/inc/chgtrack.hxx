@@ -897,7 +897,6 @@ class ScChangeTrack : public utl::ConfigurationListener
     sal_uLong               nEndLastCut;
     sal_uLong               nLastMerge;
     ScChangeTrackMergeState eMergeState;
-    bool bLoadSave:1;
     bool bInDelete:1;
     bool bInDeleteUndo:1;
     bool bInDeleteTop:1;
@@ -1012,7 +1011,6 @@ public:
     ScChangeAction* GetLastSaved() const;
     ScChangeActionContent** GetContentSlots() const { return ppContentSlots; }
 
-    bool IsLoadSave() const { return bLoadSave; }
     const ScRange&      GetInDeleteRange() const
                             { return aInDeleteRange; }
     bool IsInDelete() const { return bInDelete; }

@@ -269,11 +269,9 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     std::unique_ptr<ScQueryParam> mpParam;
     ScDocument*     pDoc;
     const ScAttrArray*  pAttrArray;
-    sal_uLong           nNumFormat;
     SCTAB           nTab;
     SCCOL           nCol;
     SCROW           nRow;
-    SCROW           nAttrEndRow;
     sal_uInt8            nStopOnMismatch;
     sal_uInt8            nTestEqualCondition;
     bool            bAdvanceQuery;
@@ -456,16 +454,13 @@ private:
     const ScAttrArray        *pAttrArray;
     ScHorizontalCellIterator *pCellIter;
     sal_uLong                 nNumFormat;     // for CalcAsShown
-    sal_uLong                 nNumFmtIndex;
     SCTAB                     nEndTab;
     SCCOL                     nCurCol;
     SCROW                     nCurRow;
     SCTAB                     nCurTab;
     SCROW                     nAttrEndRow;
-    short                     nNumFmtType;
     bool                      bNumValid;
     bool                      bCalcAsShown;
-    bool                      bTextAsZero;
 
 public:
 
@@ -495,7 +490,6 @@ private:
     SCCOL                   nCol;
     SCROW                   nRow;
     bool                    bRowEmpty;
-    bool                    bRepeatedRow;
     SCROW                   nMinNextEnd;
 
     void InitForNextRow(bool bInitialization);

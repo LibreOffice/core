@@ -51,7 +51,7 @@ class SC_DLLPUBLIC ScDocOptions
     mutable bool bFormulaWildcardsEnabled;///< wildcards in formulas enabled, only when reading settings
     bool       bWriteCalcConfig;        ///< (subset of) Calc config will be written to user's profile
 
-    const utl::SearchParam::SearchType eSearchTypeUnknown = static_cast<utl::SearchParam::SearchType>(-1);
+    static const utl::SearchParam::SearchType eSearchTypeUnknown = static_cast<utl::SearchParam::SearchType>(-1);
 
 public:
                 ScDocOptions();
