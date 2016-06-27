@@ -951,7 +951,6 @@ void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
     {
         case orcus::spreadsheet::underline_t::single_line:
         case orcus::spreadsheet::underline_t::single_accounting:
-        case orcus::spreadsheet::underline_t::solid:
             maCurrentFont.meUnderline = LINESTYLE_SINGLE;
             break;
         case orcus::spreadsheet::underline_t::double_line:
@@ -1109,9 +1108,48 @@ void ScOrcusStyles::set_border_style(orcus::spreadsheet::border_direction_t /*di
 }
 
 void ScOrcusStyles::set_border_style(
-    orcus::spreadsheet::border_direction_t /*dir*/, orcus::spreadsheet::border_style_t /*style*/)
+    orcus::spreadsheet::border_direction_t dir, orcus::spreadsheet::border_style_t style)
 {
-    // implement later
+    border::border_line& current_line = maCurrentBorder.border_lines[dir];
+    switch (style)
+    {
+        case orcus::spreadsheet::border_style_t::unknown:
+        case orcus::spreadsheet::border_style_t::none:
+        case orcus::spreadsheet::border_style_t::solid:
+        case orcus::spreadsheet::border_style_t::hair:
+        case orcus::spreadsheet::border_style_t::medium:
+        case orcus::spreadsheet::border_style_t::thick:
+        case orcus::spreadsheet::border_style_t::thin:
+            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::SOLID;
+            break;
+        case orcus::spreadsheet::border_style_t::dash_dot:
+            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASH_DOT;
+            break;
+        case orcus::spreadsheet::border_style_t::dash_dot_dot:
+            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASH_DOT_DOT;
+            break;
+        case orcus::spreadsheet::border_style_t::dashed:
+            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASHED;
+            break;
+        case orcus::spreadsheet::border_style_t::dotted:
+            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DOTTED;
+            break;
+        case orcus::spreadsheet::border_style_t::double_border:
+            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DOUBLE;
+            break;
+        case orcus::spreadsheet::border_style_t::medium_dash_dot:
+        case orcus::spreadsheet::border_style_t::slant_dash_dot:
+            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASH_DOT;
+            break;
+        case orcus::spreadsheet::border_style_t::medium_dash_dot_dot:
+            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASH_DOT_DOT;
+            break;
+        case orcus::spreadsheet::border_style_t::medium_dashed:
+            current_line.mestyle = ::com::sun::star::table::BorderLineStyle::DASHED;
+            break;
+        default:
+            ;
+    }
 }
 
 void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t dir,
@@ -1124,9 +1162,10 @@ void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t dir,
     current_line.maColor = Color(alpha, red, green, blue);
 }
 
-void ScOrcusStyles::set_border_width(orcus::spreadsheet::border_direction_t /* dir */, orcus::length_t /* width */)
+void ScOrcusStyles::set_border_width(orcus::spreadsheet::border_direction_t  dir, orcus::length_t  width )
 {
-
+    border::border_line& current_line = maCurrentBorder.border_lines[dir];
+    current_line.mnWidth = translateToInternal(width.value, width.unit);
 }
 
 size_t ScOrcusStyles::commit_border()
