@@ -275,12 +275,12 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     else
     {
         // the mediatype is not known
-        OUString aMsg(OSL_THIS_FUNC);
-        aMsg += ":";
-        aMsg += OUString::number(__LINE__);
-        aMsg += ": unknown media type '";
-        aMsg += aMediaType;
-        aMsg += "'";
+        OUString aMsg = OUString(OSL_THIS_FUNC)
+                      + ":"
+                      + OUString::number(__LINE__)
+                      + ": unknown media type '"
+                      + aMediaType
+                      + "'";
         throw beans::IllegalTypeException(aMsg);
     }
 
@@ -479,11 +479,11 @@ bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSeg
 
     if ( !aSegment.isEmpty() && nPathLen >= nSegLen )
     {
-        OUString aEndSegment( "/" );
-        aEndSegment += aSegment;
+        OUString aEndSegment = "/"
+                             + aSegment;
 
-        OUString aInternalSegment( aEndSegment );
-        aInternalSegment += "/";
+        OUString aInternalSegment = aEndSegment
+                                  + "/";
 
         if ( aPath.indexOf( aInternalSegment ) >= 0 )
             bResult = true;
