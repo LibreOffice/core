@@ -155,9 +155,6 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
     {
         officecfg::Office::Common::Misc::UseSwInterpreter::set(mpUseSwInterpreter->IsChecked(), batch);
         bModified = true;
-
-        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
-        aWarnBox->Execute();
     }
 
     if (mpUseOpenCL->IsValueChangedFromSaved())
@@ -167,13 +164,14 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
     {
         maConfig.set();
         bModified = true;
-
-        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
-        aWarnBox->Execute();
     }
 
     if (bModified)
+    {
+        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
+        aWarnBox->Execute();
         batch->commit();
+    }
 
     return bModified;
 }
