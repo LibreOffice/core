@@ -79,6 +79,8 @@ $(eval $(call gb_Library_use_libraries,sfx,\
 $(eval $(call gb_Library_use_externals,sfx,\
     boost_headers \
     libxml2 \
+    orcus \
+    orcus-parser\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
@@ -159,6 +161,8 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/thumbnailviewitem \
     sfx2/source/control/thumbnailviewacc \
     sfx2/source/control/thumbnailview \
+    sfx2/source/control/emojiviewitem \
+    sfx2/source/control/emojiview \
     sfx2/source/control/unoctitm \
     sfx2/source/dialog/alienwarn \
     sfx2/source/dialog/backingcomp \
@@ -231,6 +235,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/sfxmodelfactory \
     sfx2/source/doc/syspath \
     sfx2/source/doc/zoomitem \
+    sfx2/source/doc/emojidlg \
     sfx2/source/doc/templatedlg \
     sfx2/source/doc/saveastemplatedlg \
     sfx2/source/explorer/nochaos \
