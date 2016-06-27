@@ -54,9 +54,7 @@ namespace writerfilter {
 namespace dmapper{
 
 
-PropertyMap::PropertyMap() :
-    m_cFootnoteSymbol( 0 ),
-    m_nFootnoteFontId( -1 )
+PropertyMap::PropertyMap()
 {
 }
 
@@ -416,7 +414,6 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     ,m_nHeaderTop( 1270 ) //720 twip
     ,m_nHeaderBottom( 1270 )//720 twip
     ,m_nDzaGutter( 0 )
-    ,m_bGutterRTL( false )
     ,m_nGridType(0)
     ,m_nGridLinePitch( 1 )
     ,m_nDxtCharSpace( 0 )
@@ -1019,10 +1016,7 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
     if( m_nDzaGutter > 0 )
     {
         //todo: iGutterPos from DocProperties are missing
-        if( m_bGutterRTL )
-            m_nRightMargin += m_nDzaGutter;
-        else
-            m_nLeftMargin += m_nDzaGutter;
+        m_nLeftMargin += m_nDzaGutter;
     }
     Insert(PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin  ));
     Insert(PROP_RIGHT_MARGIN, uno::makeAny( m_nRightMargin ));

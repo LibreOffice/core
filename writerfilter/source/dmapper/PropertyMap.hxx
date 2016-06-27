@@ -111,8 +111,6 @@ class PropertyMap
 
     //marks context as footnote context - ::text( ) events contain either the footnote character or can be ignored
     //depending on sprmCSymbol
-    sal_Unicode                                                                 m_cFootnoteSymbol; // 0 == invalid
-    sal_Int32                                                                   m_nFootnoteFontId; // negative values are invalid ids
     OUString                                                             m_sFootnoteFontName;
     css::uno::Reference<css::text::XFootnote> m_xFootnote;
 
@@ -155,10 +153,6 @@ public:
 
     const css::uno::Reference<css::text::XFootnote>& GetFootnote() const { return m_xFootnote; }
     void SetFootnote(css::uno::Reference<css::text::XFootnote> const& xF) { m_xFootnote = xF; }
-
-    sal_Unicode GetFootnoteSymbol() const { return m_cFootnoteSymbol;}
-
-    sal_Int32   GetFootnoteFontId() const { return m_nFootnoteFontId;}
 
     const OUString&      GetFootnoteFontName() const { return m_sFootnoteFontName;}
 
@@ -223,7 +217,6 @@ class SectionPropertyMap : public PropertyMap
     sal_Int32                               m_nHeaderBottom;
 
     sal_Int32                               m_nDzaGutter;
-    bool                                    m_bGutterRTL;
 
     sal_Int32                               m_nGridType;
     sal_Int32                               m_nGridLinePitch;

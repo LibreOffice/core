@@ -45,7 +45,6 @@ public:
     };
 
 private:
-    sal_Int8        m_nCurrentBorderPosition;
     //values of the current border
     sal_Int32       m_nLineWidth;
     sal_Int32       m_nLineType;

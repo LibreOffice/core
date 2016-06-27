@@ -404,7 +404,6 @@ private:
     PropertyMapPtr           m_pLastCharacterContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
-    sal_uInt32                      m_nCurrentTabStopIndex;
     OUString                 m_sCurrentParaStyleId;
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos

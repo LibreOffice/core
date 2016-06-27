@@ -34,7 +34,6 @@ using namespace ::com::sun::star;
 
 BorderHandler::BorderHandler( bool bOOXML ) :
 LoggedProperties("BorderHandler"),
-m_nCurrentBorderPosition( BORDER_TOP ),
 m_nLineWidth(15), // Word default, in twips
 m_nLineType(0),
 m_nLineColor(0),
@@ -167,7 +166,7 @@ PropertyMapPtr  BorderHandler::getProperties()
     };
     PropertyMapPtr pPropertyMap(new PropertyMap);
     // don't fill in default properties
-    if( m_bOOXML || m_nCurrentBorderPosition )
+    if( m_bOOXML )
     {
         for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
         {

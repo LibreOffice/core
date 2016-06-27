@@ -667,7 +667,6 @@ ListsManager::ListsManager(DomainMapper& rDMapper,
     , LoggedTable("ListsManager")
     , m_rDMapper(rDMapper)
     , m_xFactory(xFactory)
-    , m_bIsLFOImport(false)
 {
 }
 
@@ -1085,27 +1084,13 @@ void ListsManager::lcl_entry( int /* pos */,
     }
     else
     {
-        if ( m_bIsLFOImport )
-        {
-            // Create ListDef's
-            OSL_ENSURE( !m_pCurrentDefinition.get(), "current entry has to be NULL here");
-            ListDef::Pointer pList( new ListDef() );
-            m_pCurrentDefinition = pList;
-            ref->resolve(*this);
-            //append it to the table
-            m_aLists.push_back( pList );
-            m_pCurrentDefinition = AbstractListDef::Pointer();
-        }
-        else
-        {
-            // Create AbstractListDef's
-            OSL_ENSURE( !m_pCurrentDefinition.get(), "current entry has to be NULL here");
-            m_pCurrentDefinition.reset( new AbstractListDef( ) );
-            ref->resolve(*this);
-            //append it to the table
-            m_aAbstractLists.push_back( m_pCurrentDefinition );
-            m_pCurrentDefinition = AbstractListDef::Pointer();
-        }
+        // Create AbstractListDef's
+        OSL_ENSURE( !m_pCurrentDefinition.get(), "current entry has to be NULL here");
+        m_pCurrentDefinition.reset( new AbstractListDef( ) );
+        ref->resolve(*this);
+        //append it to the table
+        m_aAbstractLists.push_back( m_pCurrentDefinition );
+        m_pCurrentDefinition = AbstractListDef::Pointer();
     }
 }
 

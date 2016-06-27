@@ -238,7 +238,6 @@ public:
     sal_Int32           nCurrentBorderLine;
 
     bool            bIsGraphic;
-    bool            bIsBitmap;
 
     bool            bHoriFlip;
     bool            bVertFlip;
@@ -299,7 +298,6 @@ public:
         ,eColorMode( drawing::ColorMode_STANDARD )
         ,nCurrentBorderLine(BORDER_TOP)
         ,bIsGraphic(false)
-        ,bIsBitmap(false)
         ,bHoriFlip(false)
         ,bVertFlip(false)
         ,bSizeProtected(false)
@@ -1367,7 +1365,7 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
         beans::PropertyValues aMediaProperties( 1 );
         aMediaProperties[0].Name = getPropertyName(PROP_INPUT_STREAM);
 
-        uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, m_pImpl->bIsBitmap );
+        uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, false/*bIsBitmap*/ );
         aMediaProperties[0].Value <<= xIStream;
 
         uno::Reference<beans::XPropertySet> xPropertySet;
