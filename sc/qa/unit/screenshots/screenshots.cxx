@@ -27,13 +27,17 @@
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
+#include <sharedocdlg.hxx>
+#include <protectiondlg.hxx>
 #include <docuno.hxx>
 #include <scabstdlg.hxx>
 #include <reffact.hxx>
 #include <scui_def.hxx>
+#include <impex.hxx>
 
 #include <sc.hrc>
 #include <scresid.hxx>
+#include <scitems.hxx>
 
 using namespace css;
 
@@ -201,6 +205,30 @@ void ScScreenshotTest::testOpeningSomeDialog()
     CPPUNIT_ASSERT( pDlg12 != nullptr );
 
     pDlg12->Execute();
+
+    const OUString aCsv("some, strings, here, separated, by, commas");
+    ScImportStringStream aStream( aCsv );
+    std::unique_ptr<AbstractScImportAsciiDlg> pDlg13( pFact->CreateScImportAsciiDlg(
+           OUString(), &aStream, SC_PASTETEXT ));
+    CPPUNIT_ASSERT( pDlg13 != nullptr );
+
+    pDlg13->Execute();
+
+    ScopedVclPtrInstance<ScShareDocumentDlg> pDlg14( pViewShell->GetDialogParent(), &rViewData );
+    CPPUNIT_ASSERT( pDlg14 != nullptr );
+
+    pDlg14->Execute();
+
+    std::unique_ptr<AbstractScMoveTableDlg> pDlg15( pFact->CreateScMoveTableDlg(
+           pViewShell->GetDialogParent(), aDefaultSheetName));
+    CPPUNIT_ASSERT( pDlg15 != nullptr );
+
+    pDlg15->Execute();
+
+    ScopedVclPtrInstance<ScTableProtectionDlg> pDlg16(pViewShell->GetDialogParent());
+    CPPUNIT_ASSERT( pDlg16 != nullptr );
+
+    pDlg16->Execute();
 }
 
 #endif
