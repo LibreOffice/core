@@ -152,10 +152,17 @@ namespace cairocanvas
                             sal_uInt32 *pPix = reinterpret_cast<sal_uInt32 *>(pSrc + nStride * y);
                             for( unsigned long x = 0; x < (unsigned long) aSize.Width(); x++ )
                             {
+#if defined OSL_BIGENDIAN
+                                sal_uInt8 nB = (*pPix >> 24);
+                                sal_uInt8 nG = (*pPix >> 16) & 0xff;
+                                sal_uInt8 nR = (*pPix >> 8) & 0xff;
+                                sal_uInt8 nAlpha = *pPix & 0xff;
+#else
                                 sal_uInt8 nAlpha = (*pPix >> 24);
                                 sal_uInt8 nR = (*pPix >> 16) & 0xff;
                                 sal_uInt8 nG = (*pPix >> 8) & 0xff;
                                 sal_uInt8 nB = *pPix & 0xff;
+#endif
                                 if( nAlpha != 0 && nAlpha != 255 )
                                 {
                                     // Cairo uses pre-multiplied alpha - we do not => re-multiply
