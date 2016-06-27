@@ -2018,6 +2018,11 @@ void GtkSalFrame::SetAlwaysOnTop( bool bOnTop )
 
 static guint32 nLastUserInputTime = GDK_CURRENT_TIME;
 
+guint32 GtkSalFrame::GetLastInputEventTime()
+{
+    return nLastUserInputTime;
+}
+
 static void UpdateLastInputEventTime(guint32 nUserInputTime)
 {
     nLastUserInputTime = nUserInputTime;
@@ -2032,9 +2037,9 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
         else if( IS_WIDGET_MAPPED( m_pWindow ) )
         {
             if (!(nFlags & SalFrameToTop::GrabFocusOnly))
-                gtk_window_present_with_time(GTK_WINDOW(m_pWindow), nLastUserInputTime);
+                gtk_window_present_with_time(GTK_WINDOW(m_pWindow), GetLastInputEventTime());
             else
-                gdk_window_focus(widget_get_window(m_pWindow), nLastUserInputTime);
+                gdk_window_focus(widget_get_window(m_pWindow), GetLastInputEventTime());
         }
         else
         {
