@@ -453,6 +453,12 @@ bool initOpenCLRunEnv( GPUEnv *gpuInfo )
 
     clGetDeviceInfo(gpuInfo->mpDevID, CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, sizeof(cl_uint),
                     &gpuInfo->mnPreferredVectorWidthFloat, nullptr);
+    SAL_INFO("opencl", "CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT=" << gpuInfo->mnPreferredVectorWidthFloat);
+
+    size_t nMaxParameterSize;
+    clGetDeviceInfo(gpuInfo->mpDevID, CL_DEVICE_MAX_PARAMETER_SIZE, sizeof(size_t),
+                    &nMaxParameterSize, nullptr);
+    SAL_INFO("opencl", "CL_DEVICE_MAX_PARAMETER_SIZE=" << nMaxParameterSize);
 
     return false;
 }
