@@ -96,7 +96,6 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     rDialog.get(m_pTypeFT, "typeft");
     rDialog.get(m_pTypeDCB, "typecb");
     rDialog.get(m_pNewBT, "new");
-    m_pNewBT->SetAccessibleRelationMemberOf(m_pFrame->get_label_widget());
     rDialog.get(m_pEntryED, "entryed");
     rDialog.get(m_pPhoneticFT0, "phonetic0ft");
     rDialog.get(m_pPhoneticED0, "phonetic0ed");

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -134,10 +134,10 @@
                       <object class="GtkLabel" id="numalign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Numbering alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numalignlb</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -159,12 +159,12 @@
                       <object class="GtkLabel" id="numdist">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Minimum space between
 numbering and text:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">right</property>
                         <property name="mnemonic_widget">numdistmf:0.00cm</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -188,10 +188,10 @@ numbering and text:</property>
                       <object class="GtkLabel" id="numberingwidth">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Width of numbering:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numberingwidthmf:0.00cm</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -230,10 +230,10 @@ numbering and text:</property>
                       <object class="GtkLabel" id="indent">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Indent:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">indentmf:0.00cm</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -257,10 +257,10 @@ numbering and text:</property>
                       <object class="GtkLabel" id="indentat">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Indent at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">indentatmf:0.00cm</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -283,10 +283,10 @@ numbering and text:</property>
                       <object class="GtkLabel" id="num2align">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Numbering alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">num2alignlb</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -307,10 +307,10 @@ numbering and text:</property>
                       <object class="GtkLabel" id="alignedat">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Aligned at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">alignedatmf:0.00cm</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -333,10 +333,10 @@ numbering and text:</property>
                       <object class="GtkLabel" id="at">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">atmf:0.00cm</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -371,10 +371,10 @@ numbering and text:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Numbering followed by:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">numfollowedbylb</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -419,6 +419,9 @@ numbering and text:</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="valign">end</property>
+                <accessibility>
+                  <relation type="member-of" target="label10"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left_attach">1</property>

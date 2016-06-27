@@ -449,9 +449,6 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     SetExchangeSupport();
 
-    VclFrame *pSpacing = get<VclFrame>("spacing");
-    m_pBtnNext->SetAccessibleRelationMemberOf(pSpacing->get_label_widget());
-
     m_pDefaultVS->SetColCount( 5 );
 
     for (int i = 0; i < 5; ++i)
