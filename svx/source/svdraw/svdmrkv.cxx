@@ -52,6 +52,7 @@
 
 #include <editeng/editdata.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
