@@ -125,7 +125,7 @@
         // if an item from submenu was selected. the corresponding Window does not exist because
         // we use native popup menus, so we have to set the selected menuitem directly
         // incidentally this of course works for top level popup menus, too
-        PopupMenu * pPopupMenu = dynamic_cast<PopupMenu *>(mpMenuItem->mpVCLMenu);
+        PopupMenu * pPopupMenu = dynamic_cast<PopupMenu *>(mpMenuItem->mpVCLMenu.get());
         if( pPopupMenu )
         {
             // FIXME: revise this ugly code

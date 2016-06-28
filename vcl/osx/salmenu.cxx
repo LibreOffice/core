@@ -257,7 +257,6 @@ void AquaSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 AquaSalMenu::AquaSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
     mpMenu( nil ),
-    mpVCLMenu( nullptr ),
     mpFrame( nullptr ),
     mpParentSalMenu( nullptr )
 {

@@ -88,7 +88,7 @@ public:
 
     bool                    mbMenuBar;          // true - Menubar, false - Menu
     NSMenu*                 mpMenu;             // The Carbon reference to this menu
-    Menu*                   mpVCLMenu;          // the corresponding vcl Menu object
+    VclPtr<Menu>            mpVCLMenu;          // the corresponding vcl Menu object
     const AquaSalFrame*     mpFrame;            // the frame to dispatch the menu events to
     AquaSalMenu*            mpParentSalMenu;    // the parent menu that contains us (and perhaps has a frame)
 
@@ -103,7 +103,7 @@ public:
     virtual ~AquaSalMenuItem();
 
     sal_uInt16          mnId;                 // Item ID
-    Menu*               mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
+    VclPtr<Menu>        mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
     AquaSalMenu*        mpParentMenu;         // The menu in which this menu item is inserted
     AquaSalMenu*        mpSubMenu;            // Sub menu of this item (if defined)
     NSMenuItem*         mpMenuItem;           // The NSMenuItem
