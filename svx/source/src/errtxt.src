@@ -124,7 +124,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_CLASS_READ
     {
-        Text [ en-US ] = "Read-Error" ;
+        Text [ en-US ] = "Read Error" ;
     };
     String ERRCODE_CLASS_WRITE
     {
