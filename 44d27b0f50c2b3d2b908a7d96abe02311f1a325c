@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_9d17f4ec",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2061,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T18:24:26Z",
+      "side": 1,
+      "message": "Same as for CUMIPMT, why svEmptyCell?",
+      "range": {
+        "startLine": 2061,
+        "startChar": 43,
+        "endLine": 2061,
+        "endChar": 79
+      },
+      "revId": "44d27b0f50c2b3d2b908a7d96abe02311f1a325c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_bdd2f832",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2062,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T18:24:26Z",
+      "side": 1,
+      "message": "Ditto, -1.0",
+      "range": {
+        "startLine": 2062,
+        "startChar": 17,
+        "endLine": 2062,
+        "endChar": 19
+      },
+      "revId": "44d27b0f50c2b3d2b908a7d96abe02311f1a325c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_ddd7bc21",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2072,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T18:24:26Z",
+      "side": 1,
+      "message": "Ditto, 0.0 and 1.0, yadda yadda ;-)",
+      "range": {
+        "startLine": 2072,
+        "startChar": 14,
+        "endLine": 2072,
+        "endChar": 32
+      },
+      "revId": "44d27b0f50c2b3d2b908a7d96abe02311f1a325c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
