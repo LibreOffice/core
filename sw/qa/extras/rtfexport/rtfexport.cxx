@@ -1012,34 +1012,75 @@ DECLARE_RTFEXPORT_TEST(testCustomDocProps, "custom-doc-props.rtf")
 
 DECLARE_RTFEXPORT_TEST(testTdf65642, "tdf65642.rtf")
 {
+
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(
+        xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     // The second page's numbering type: this was style::NumberingType::ARABIC.
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_UPPER_LETTER_N, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_UPPER_LETTER_N, getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), "NumberingType"));
     // The second page's restart value: this was 0.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), getProperty<sal_Int32>(getParagraph(2), "PageNumberOffset"));
 }
 
 DECLARE_RTFEXPORT_TEST(testPgnlcltr, "pgnlcltr.rtf")
 {
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(
+        xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     // The second page's numbering type: this was style::NumberingType::ARABIC.
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_LOWER_LETTER_N, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_LOWER_LETTER_N, getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), "NumberingType"));
 }
 
 DECLARE_RTFEXPORT_TEST(testPgnucrm, "pgnucrm.rtf")
 {
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(
+        xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     // The second page's numbering type: this was style::NumberingType::ARABIC.
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::ROMAN_UPPER, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::ROMAN_UPPER, getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), "NumberingType"));
 }
 
 DECLARE_RTFEXPORT_TEST(testPgnlcrm, "pgnlcrm.rtf")
 {
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(
+        xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     // The second page's numbering type: this was style::NumberingType::ARABIC.
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::ROMAN_LOWER, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::ROMAN_LOWER, getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), "NumberingType"));
 }
 
 DECLARE_RTFEXPORT_TEST(testPgndec, "pgndec.rtf")
 {
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(
+        xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     // The second page's numbering type: this was style::NumberingType::ROMAN_LOWER.
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::ARABIC, getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Converted1"), "NumberingType"));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::ARABIC, getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), "NumberingType"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf98806, "tdf98806.rtf")
