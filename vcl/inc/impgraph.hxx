@@ -42,7 +42,7 @@ private:
     ImpSwapInfo         maSwapInfo;
     Animation*          mpAnimation;
     GraphicReader*      mpContext;
-    ImpSwapFile*        mpSwapFile;
+    std::shared_ptr<ImpSwapFile> mpSwapFile;
     GfxLink*            mpGfxLink;
     GraphicType         meType;
     mutable sal_uLong   mnSizeBytes;

@@ -39,6 +39,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <vcl/dibtools.hxx>
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
@@ -58,7 +59,7 @@ using namespace com::sun::star;
 struct ImpSwapFile
 {
     INetURLObject   aSwapURL;
-    sal_uLong           nRefCount;
+    ~ImpSwapFile();
 };
 
 class ReaderData
@@ -96,7 +97,6 @@ Size GraphicReader::GetPreviewSize() const
 ImpGraphic::ImpGraphic() :
         mpAnimation     ( nullptr ),
         mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
@@ -119,9 +119,6 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mbSwapUnderway  ( false ),
         mbDummyContext  ( rImpGraphic.mbDummyContext )
 {
-    if( mpSwapFile )
-        mpSwapFile->nRefCount++;
-
     if( rImpGraphic.mpGfxLink )
         mpGfxLink = new GfxLink( *rImpGraphic.mpGfxLink );
     else
@@ -143,7 +140,6 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
         mpAnimation     ( nullptr ),
         mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
@@ -158,7 +154,6 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maEx            ( rBitmapEx ),
         mpAnimation     ( nullptr ),
         mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
@@ -172,7 +167,6 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
 :   mpAnimation( nullptr ),
     mpContext( nullptr ),
-    mpSwapFile( nullptr ),
     mpGfxLink( nullptr ),
     meType( rSvgDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
     mnSizeBytes( 0UL ),
@@ -188,7 +182,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         maEx            ( rAnimation.GetBitmapEx() ),
         mpAnimation     ( new Animation( rAnimation ) ),
         mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( GraphicType::Bitmap ),
         mnSizeBytes     ( 0UL ),
@@ -203,7 +196,6 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         maMetaFile      ( rMtf ),
         mpAnimation     ( nullptr ),
         mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( GraphicType::GdiMetafile ),
         mnSizeBytes     ( 0UL ),
@@ -248,9 +240,6 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         {
             mbSwapOut = rImpGraphic.mbSwapOut;
             mpSwapFile = rImpGraphic.mpSwapFile;
-
-            if( mpSwapFile )
-                mpSwapFile->nRefCount++;
         }
 
         delete mpGfxLink;
@@ -362,42 +351,33 @@ void ImpGraphic::ImplClearGraphics( bool bCreateSwapInfo )
     maPdfData = uno::Sequence<sal_Int8>();
 }
 
+ImpSwapFile::~ImpSwapFile()
+{
+    try
+    {
+        ::ucbhelper::Content aCnt( aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
+            css::uno::Reference< css::ucb::XCommandEnvironment >(),
+            comphelper::getProcessComponentContext() );
+
+        aCnt.executeCommand( "delete", css::uno::makeAny( true ) );
+    }
+    catch( const css::ucb::ContentCreationException& )
+    {
+    }
+    catch( const css::uno::RuntimeException& )
+    {
+    }
+    catch( const css::ucb::CommandAbortedException& )
+    {
+    }
+    catch( const css::uno::Exception& )
+    {
+    }
+}
+
 void ImpGraphic::ImplClear()
 {
-    if( mpSwapFile )
-    {
-        if( mpSwapFile->nRefCount > 1 )
-            mpSwapFile->nRefCount--;
-        else
-        {
-            try
-            {
-                ::ucbhelper::Content aCnt( mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                     css::uno::Reference< css::ucb::XCommandEnvironment >(),
-                                     comphelper::getProcessComponentContext() );
-
-                aCnt.executeCommand( "delete",
-                                     css::uno::makeAny( true ) );
-            }
-            catch( const css::ucb::ContentCreationException& )
-            {
-            }
-            catch( const css::uno::RuntimeException& )
-            {
-            }
-            catch( const css::ucb::CommandAbortedException& )
-            {
-            }
-            catch( const css::uno::Exception& )
-            {
-            }
-
-            delete mpSwapFile;
-        }
-
-        mpSwapFile = nullptr;
-    }
-
+    mpSwapFile.reset();
     mbSwapOut = false;
 
     // cleanup
@@ -1194,8 +1174,7 @@ bool ImpGraphic::ImplSwapOut()
 
                 if( ( bRet = ImplSwapOut( xOStm.get() ) ) )
                 {
-                    mpSwapFile = new ImpSwapFile;
-                    mpSwapFile->nRefCount = 1;
+                    mpSwapFile = o3tl::make_unique<ImpSwapFile>();
                     mpSwapFile->aSwapURL = aTmpURL;
                 }
                 else
@@ -1293,38 +1272,7 @@ bool ImpGraphic::ImplSwapIn()
                 bRet = ImplSwapIn( xIStm.get() );
                 xIStm.reset();
 
-                if( mpSwapFile )
-                {
-                    if( mpSwapFile->nRefCount > 1 )
-                        mpSwapFile->nRefCount--;
-                    else
-                    {
-                        try
-                        {
-                            ::ucbhelper::Content aCnt( aSwapURL,
-                                                 css::uno::Reference< css::ucb::XCommandEnvironment >(),
-                                                 comphelper::getProcessComponentContext() );
-
-                            aCnt.executeCommand( "delete", css::uno::makeAny( true ) );
-                        }
-                        catch( const css::ucb::ContentCreationException& )
-                        {
-                        }
-                        catch( const css::uno::RuntimeException& )
-                        {
-                        }
-                        catch( const css::ucb::CommandAbortedException& )
-                        {
-                        }
-                        catch( const css::uno::Exception& )
-                        {
-                        }
-
-                        delete mpSwapFile;
-                    }
-
-                    mpSwapFile = nullptr;
-                }
+                mpSwapFile.reset();
             }
         }
     }
