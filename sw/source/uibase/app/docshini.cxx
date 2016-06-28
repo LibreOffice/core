@@ -88,6 +88,7 @@
 #include <swerror.h>
 #include <globals.hrc>
 #include <unochart.hxx>
+#include <drawdoc.hxx>
 
 #include <svx/CommonStyleManager.hxx>
 
@@ -490,6 +491,15 @@ void SwDocShell::ReactivateModel()
 bool  SwDocShell::Load( SfxMedium& rMedium )
 {
     bool bRet = false;
+
+    // If this is an ODF file being loaded, then by default, use legacy processing
+    // for tdf#99729 (if required, it will be overriden in *::ReadUserDataSequence())
+    if (IsOwnStorageFormat(rMedium))
+    {
+        if (m_pDoc && m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
+            m_pDoc->getIDocumentDrawModelAccess().GetDrawModel()->SetAnchoredTextOverflowLegacy(true);
+    }
+
     if( SfxObjectShell::Load( rMedium ))
     {
         SAL_INFO( "sw.ui", "after SfxInPlaceObject::Load" );
