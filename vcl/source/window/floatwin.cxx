@@ -814,7 +814,7 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
     SetTitleType( mnOldTitle );
 
     // set ToolBox again to normal
-    if ( mpImplData->mpBox )
+    if (mpImplData && mpImplData->mpBox)
     {
         mpImplData->mpBox->ImplFloatControl( false, this );
         mpImplData->mpBox = nullptr;
