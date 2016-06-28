@@ -626,7 +626,7 @@ public:
 
     SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( bool bFullContent ) const;
 
-    bool IsOwnStorageFormat(const SfxMedium &) const;
+    static bool IsOwnStorageFormat(const SfxMedium &);
 
     SAL_DLLPRIVATE bool IsPackageStorageFormat_Impl(const SfxMedium &) const;
 

@@ -972,7 +972,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 }
 
 
-bool SfxObjectShell::IsOwnStorageFormat(const SfxMedium &rMedium) const
+bool SfxObjectShell::IsOwnStorageFormat(const SfxMedium &rMedium)
 {
     return !rMedium.GetFilter() || // Embedded
            ( rMedium.GetFilter()->IsOwnFormat() &&
