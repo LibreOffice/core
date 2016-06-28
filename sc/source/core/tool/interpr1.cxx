@@ -1960,9 +1960,13 @@ void ScInterpreter::ScIsLogical()
         }
         break;
         case svMatrix:
-            // TODO: we don't have type information for arrays except
-            // numerical/string.
-        // Fall through
+        {
+            double fVal;
+            svl::SharedString aStr;
+            ScMatValType nMatValType = GetDoubleOrStringFromMatrix( fVal, aStr);
+            bRes = (nMatValType == SC_MATVAL_BOOLEAN);
+        }
+        break;
         default:
             PopError();
             if ( !nGlobalError )
