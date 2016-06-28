@@ -10,9 +10,9 @@
 #include <string>
 #include <iostream>
 
-#include "plugin.hxx"
+#include "check.hxx"
 #include "compat.hxx"
-#include "typecheck.hxx"
+#include "plugin.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 /**
@@ -110,7 +110,6 @@ bool containsXInterfaceSubclass(const QualType& qType) {
 }
 
 static std::vector<std::string> PROBABLY_GOOD_TEMPLATES = {
-    "(anonymous namespace)::FindUnoInstanceHint",
     "abp::OMultiInstanceAutoRegistration",
     "com::sun::star::uno::Reference",
     "com::sun::star::uno::WeakReference",
@@ -191,6 +190,11 @@ bool containsXInterfaceSubclass(const Type* pType0) {
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
+            if (loplugin::DeclCheck(pTemplate).Struct("FindUnoInstanceHint")
+                .AnonymousNamespace().GlobalNamespace())
+            {
+                return false;
+            }
             std::string aName = pTemplate->getQualifiedNameAsString();
             if (std::find(PROBABLY_GOOD_TEMPLATES.begin(), PROBABLY_GOOD_TEMPLATES.end(), aName) != PROBABLY_GOOD_TEMPLATES.end())
                 return false;

@@ -10,9 +10,9 @@
 #include <string>
 #include <set>
 
-#include "plugin.hxx"
+#include "check.hxx"
 #include "compat.hxx"
-#include "typecheck.hxx"
+#include "plugin.hxx"
 
 // Find places where various things are passed by value.
 // It's not very efficient, because we generally end up copying it twice - once into the parameter and
@@ -244,22 +244,31 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
                               functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
         return;
     }
+    loplugin::DeclCheck dc(functionDecl);
     std::string aFunctionName = functionDecl->getQualifiedNameAsString();
     // function is passed as parameter to another function
-    if (aFunctionName == "GDIMetaFile::ImplColMonoFnc"
-        || aFunctionName == "editeng::SvxBorderLine::darkColor"
+    if (dc.Function("ImplColMonoFnc").Class("GDIMetaFile").GlobalNamespace()
+        || (dc.Function("darkColor").Class("SvxBorderLine").Namespace("editeng")
+            .GlobalNamespace())
         || aFunctionName.compare(0, 8, "xforms::") == 0)
         return;
     // not sure how to exclude this yet, returns copy of one of it's params
-    if (aFunctionName == "sameDistColor" || aFunctionName == "sameColor"
-        || aFunctionName == "pcr::(anonymous namespace)::StringIdentity::operator()"
+    if (dc.Function("sameDistColor").GlobalNamespace()
+        || dc.Function("sameColor").GlobalNamespace()
+        || (dc.Operator(OO_Call).Struct("StringIdentity").AnonymousNamespace()
+            .Namespace("pcr").GlobalNamespace())
         || aFunctionName == "matop::COp<type-parameter-0-0, svl::SharedString>::operator()"
-        || aFunctionName == "slideshow::internal::accumulate"
-        || aFunctionName == "slideshow::internal::lerp")
+        || (dc.Function("accumulate").Namespace("internal")
+            .Namespace("slideshow").GlobalNamespace())
+        || (dc.Function("lerp").Namespace("internal").Namespace("slideshow")
+            .GlobalNamespace()))
         return;
     // depends on a define
-    if (aFunctionName == "SfxObjectShell::GetSharedFileURL")
+    if (dc.Function("GetSharedFileURL").Class("SfxObjectShell")
+        .GlobalNamespace())
+    {
         return;
+    }
     mbInsideFunctionDecl = true;
     mbFoundDisqualifier = false;
     TraverseStmt(functionDecl->getBody());

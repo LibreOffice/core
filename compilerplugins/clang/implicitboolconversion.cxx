@@ -15,9 +15,9 @@
 #include <string>
 #include <vector>
 
+#include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
-#include "typecheck.hxx"
 
 #if CLANG_VERSION < 30700
 
