@@ -162,6 +162,14 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
                                        [in] long nNumberFormatKey,
                                        [in] long nFormulaLength );
 
+    /** Set the names of X and Y variables of the equation to replace "x" and "f(x)" in representation
+
+        @param aXName string of the name of X variable
+        @param aYName string of the name of Y variable
+    */
+    void setXYNames( [in] string aXName,
+                     [in] string aYName );
+
 };
 
 } ; // chart2

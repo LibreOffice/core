@@ -45,7 +45,8 @@ RegressionCurveCalculator::RegressionCurveCalculator() :
         mDegree(2),
         mForceIntercept(false),
         mInterceptValue(0.0),
-        mPeriod(2)
+        mPeriod(2),
+        mXName("x"), mYName("f(x)")
 {
     rtl::math::setNan( &m_fCorrelationCoeffitient );
     rtl::math::setNan( &mInterceptValue );
@@ -209,6 +210,19 @@ void RegressionCurveCalculator::addStringToEquation(
     }
     aStrEquation.append( aAddString );
     nLineLength += aAddString.getLength();
+}
+
+void SAL_CALL RegressionCurveCalculator::setXYNames( const OUString& aXName, const OUString& aYName )
+    throw (uno::RuntimeException, std::exception)
+{
+    if ( aXName.isEmpty() )
+        mXName = OUString ("x");
+    else
+        mXName = aXName;
+    if ( aYName.isEmpty() )
+        mYName = OUString ("f(x)");
+    else
+        mYName = aYName;
 }
 
 } //  namespace chart

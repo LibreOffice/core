@@ -237,7 +237,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     sal_Int32 nNumberFormatKey, sal_Int32* pFormulaMaxWidth /* = nullptr */ ) const
 {
-    OUStringBuffer aBuf( "f(x) = " );
+    OUStringBuffer aBuf( mYName + " = " );
 
     sal_Int32 nValueLength=0;
     sal_Int32 aLastIndex = mCoefficients.size() - 1;
@@ -264,7 +264,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
                 nCharMin += 3; // " + "
             if ( i > 0 )
             {
-                 nCharMin += 1; // "x"
+                 nCharMin += mXName.getLength(); // "x"
                 if ( i > 1 )
                     nCharMin +=1; // "^i"
                 if ( i >= 10 )
@@ -308,7 +308,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
 
         if(i > 0)
         {
-            aTmpBuf.append( "x" );
+            aTmpBuf.append( mXName );
             if (i > 1)
             {
                 if (i < 10) // simple case if only one digit
@@ -326,7 +326,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         }
         addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
     }
-    if ( aBuf.toString() == "f(x) = " )
+    if ( aBuf.toString().equals( OUString( mYName + " = ") ) )
         aBuf.append( "0" );
 
     return aBuf.makeStringAndClear();

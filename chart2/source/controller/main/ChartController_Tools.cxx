@@ -709,6 +709,8 @@ bool ChartController::executeDispatch_Delete()
                     {
                         ControllerLockGuardUNO aCtlLockGuard( xModel );
                         xEqProp->setPropertyValue( "ShowEquation", uno::makeAny( false ));
+                        xEqProp->setPropertyValue( "XName", uno::makeAny( OUString("x") ));
+                        xEqProp->setPropertyValue( "YName", uno::makeAny( OUString("f(x)") ));
                         xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( false ));
                     }
                     bReturn = true;
