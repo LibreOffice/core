@@ -775,6 +775,21 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                         return true;
                                     }
                                 }
+                                auto loc = expr->getArg(0)->getLocStart();
+                                while (compiler.getSourceManager()
+                                       .isMacroArgExpansion(loc))
+                                {
+                                    loc = compiler.getSourceManager()
+                                        .getImmediateMacroCallerLoc(loc);
+                                }
+                                if (compat::isMacroBodyExpansion(compiler, loc)
+                                    && (Lexer::getImmediateMacroName(
+                                            loc, compiler.getSourceManager(),
+                                            compiler.getLangOpts())
+                                        == "OSL_THIS_FUNC"))
+                                {
+                                    return true;
+                                }
                                 report(
                                     DiagnosticsEngine::Warning,
                                     ("elide construction of " + qname + " with "
