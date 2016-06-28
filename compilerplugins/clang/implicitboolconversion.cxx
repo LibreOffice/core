@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+#include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
 

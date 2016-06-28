@@ -12,8 +12,10 @@
 #include <iostream>
 #include <fstream>
 #include <set>
-#include "plugin.hxx"
+
+#include "check.hxx"
 #include "compat.hxx"
+#include "plugin.hxx"
 
 /**
 comparing floating point numbers using == or != is a bad idea.
@@ -40,25 +42,6 @@ private:
     EState meState = EState::None;
 };
 
-const std::set<std::string> whitelist {
-    "rtl::math::approxEqual",
-    "(anonymous namespace)::doubleToString",
-    "(anonymous namespace)::stringToDouble",
-    "rtl_math_round",
-    "rtl_math_approxValue",
-    "rtl_math_asinh",
-    "rtl_math_acosh",
-    "cppu::_equalSequence", // cppu/source/uno/eq.hxx
-    "cppu::_equalData", // cppu/source/uno/eq.hxx
-    "xmlscript::equalFont", // xmlscript/source/xmldlg_imexp/xmldlg_export.cxx
-
-    // these might need fixing
-    "basegfx::tools::getSmallestDistancePointToPolygon", // basegfx/source/polygon/b2dpolygontools.cxx
-    "basegfx::tools::getSmallestDistancePointToPolyPolygon", // basegfx/source/polygon/b2dpolypolygontools.cxx
-    "bridge_test::performTest", // testtools/source/bridgetest/bridgetest.cxx
-    "bridge_test::equals",
-    "(anonymous namespace)::lcl_getNANInsteadDBL_MIN", // chart2/source/controller/chartapiwrapper/ChartDataWrapper.cxx
-};
 bool FpComparison::TraverseFunctionDecl(FunctionDecl* function)
 {
     bool bIgnore = ignore(function);
@@ -87,8 +70,35 @@ bool FpComparison::ignore(FunctionDecl* function)
         return true;
     }
     // ignore known good functions
-    std::string s = function->getQualifiedNameAsString();
-    if (whitelist.find(s) != whitelist.end()) {
+    loplugin::DeclCheck dc(function);
+    if ((dc.Function("approxEqual").Namespace("math").Namespace("rtl")
+         .GlobalNamespace())
+        || dc.Function("doubleToString").AnonymousNamespace().GlobalNamespace()
+        || dc.Function("stringToDouble").AnonymousNamespace().GlobalNamespace()
+        || dc.Function("rtl_math_round").GlobalNamespace()
+        || dc.Function("rtl_math_approxValue").GlobalNamespace()
+        || dc.Function("rtl_math_asinh").GlobalNamespace()
+        || dc.Function("rtl_math_acosh").GlobalNamespace()
+        || dc.Function("_equalSequence").Namespace("cppu").GlobalNamespace()
+            // cppu/source/uno/eq.hxx
+        || dc.Function("_equalData").Namespace("cppu").GlobalNamespace()
+            // cppu/source/uno/eq.hxx
+        || dc.Function("equalFont").Namespace("xmlscript").GlobalNamespace()
+            // xmlscript/source/xmldlg_imexp/xmldlg_export.cxx
+        // These might need fixing:
+        || (dc.Function("getSmallestDistancePointToPolygon").Namespace("tools")
+            .Namespace("basegfx").GlobalNamespace())
+            // basegfx/source/polygon/b2dpolygontools.cxx
+        || (dc.Function("getSmallestDistancePointToPolyPolygon")
+            .Namespace("tools").Namespace("basegfx").GlobalNamespace())
+            // basegfx/source/polygon/b2dpolypolygontools.cxx
+        || dc.Function("performTest").Namespace("bridge_test").GlobalNamespace()
+            // testtools/source/bridgetest/bridgetest.cxx
+        || dc.Function("equals").Namespace("bridge_test").GlobalNamespace()
+        || (dc.Function("lcl_getNANInsteadDBL_MIN").AnonymousNamespace()
+            .GlobalNamespace()))
+            // chart2/source/controller/chartapiwrapper/ChartDataWrapper.cxx
+    {
         return true;
     }
 //    cout << "xxx " + function->getQualifiedNameAsString() << endl;

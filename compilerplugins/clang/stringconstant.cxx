@@ -15,9 +15,9 @@
 #include <string>
 #include <iostream>
 
+#include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
-#include "typecheck.hxx"
 
 // Define a "string constant" to be a constant expression either of type "array
 // of N char" where each array element is a non-NUL ASCII character---except
