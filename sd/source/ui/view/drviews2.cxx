@@ -926,10 +926,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
-                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
+                const SdrGrafObj* pObj = dynamic_cast<const SdrGrafObj*>(rMarkList.GetMark(0)->GetMarkedSdrObj());
+                if (pObj && (pObj->GetGraphicType() == GraphicType::Bitmap || pObj->GetGraphicObject().GetGraphic().getPdfData().hasElements()))
                 {
-                    GraphicObject aGraphicObject( static_cast<SdrGrafObj*>( pObj )->GetGraphicObject() );
+                    GraphicObject aGraphicObject(pObj->GetGraphicObject());
                     {
                         GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), "" );
                     }
