@@ -45,24 +45,24 @@ struct LeftRightMarginScale
     long Right;
 
 
-     /** specifies a first line indent relative to TextLeft.
+     /** specifies a first line indent relative to TextLeft in 1/100th mm.
      */
     long FirstLine;
 
 
-    /** specifies a scale value for the left margin.
+    /** specifies a scale value for the left margin in percent.
      */
-    short ScaleLeft;
+    long ScaleLeft;
 
 
-    /** specifies a scale value for the right margin.
+    /** specifies a scale value for the right margin in percent.
      */
-    short ScaleRight;
+    long ScaleRight;
 
 
-    /** specifies a scale value for the first line margin.
+    /** specifies a scale value for the first line margin in percent.
      */
-    short ScaleFirstLine;
+    long ScaleFirstLine;
 
 
     /** specifies if the automatic calculation of the first line indent occurs.
