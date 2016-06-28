@@ -96,6 +96,8 @@ private:
     ScDocShellRef xDocSh;
     ScTabViewShell* pViewShell;
     ScAbstractDialogFactory* pFact;
+
+    std::unique_ptr<ScImportStringStream> pStream;
 };
 
 ScScreenshotTest::ScScreenshotTest()
@@ -138,6 +140,9 @@ void ScScreenshotTest::initializeWithDoc(const char* pName)
 
     pFact = ScAbstractDialogFactory::Create();
     CPPUNIT_ASSERT_MESSAGE("Failed to create dialog factory", pFact);
+
+    const OUString aCsv("some, strings, here, separated, by, commas");
+    pStream.reset( new ScImportStringStream( aCsv) );
 }
 
 VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
@@ -240,13 +245,11 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
             break;
         }
 
-        //case 12:
-        //{
-        //    const OUString aCsv("some, strings, here, separated, by, commas");
-        //    ScImportStringStream aStream( aCsv );
-        //    pReturnDialog = pFact->CreateScImportAsciiDlg( OUString(), &aStream, SC_PASTETEXT );
-        //    break;
-        //}
+        case 13:
+        {
+            pReturnDialog = pFact->CreateScImportAsciiDlg( OUString(), pStream.get(), SC_PASTETEXT );
+            break;
+        }
            //ScopedVclPtrInstance<ScShareDocumentDlg> pDlg14( pViewShell->GetDialogParent(), &rViewData );
             //ScopedVclPtrInstance<ScTableProtectionDlg> pDlg16(pViewShell->GetDialogParent());
         default:
@@ -290,7 +293,7 @@ void ScScreenshotTest::testOpeningModalDialogs()
 {
     initializeWithDoc("empty.ods");
 
-    const sal_uInt32 nDialogs = 13;
+    const sal_uInt32 nDialogs = 14;
 
     for ( sal_uInt32 i = 0; i < nDialogs; i++ )
     {
