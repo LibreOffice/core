@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_fd5720c8",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1993,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T17:04:54Z",
+      "side": 1,
+      "message": "Why not accept svEmptyCell? In numeric context that is usually treated as 0, and btw only created if it is a result of an expression that returns an empty cell. This IMHO is wrong.",
+      "range": {
+        "startLine": 1993,
+        "startChar": 43,
+        "endLine": 1993,
+        "endChar": 78
+      },
+      "revId": "028426c830e704d942e398ca1fcb807132b0215a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_7d6cf09c",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1994,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T17:04:54Z",
+      "side": 1,
+      "message": "When assigning values to doubles please use the form with decimals to clarify, so\n\n fF \u003d -1.0;",
+      "range": {
+        "startLine": 1994,
+        "startChar": 17,
+        "endLine": 1994,
+        "endChar": 19
+      },
+      "revId": "028426c830e704d942e398ca1fcb807132b0215a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_9d69b48e",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2005,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T17:04:54Z",
+      "side": 1,
+      "message": "When comparing doubles with constants please use the form with decimals to clarify, so\n\n fF !\u003d 0.0 \u0026\u0026 fF !\u003d 1.0",
+      "range": {
+        "startLine": 2005,
+        "startChar": 14,
+        "endLine": 2005,
+        "endChar": 32
+      },
+      "revId": "028426c830e704d942e398ca1fcb807132b0215a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
