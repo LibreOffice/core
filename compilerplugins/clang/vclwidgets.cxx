@@ -205,9 +205,11 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     if (pCompoundStatement) {
         bool bFoundDisposeOnce = false;
         int nNumExtraStatements = 0;
-        for(auto const * x : pCompoundStatement->body())
+        for (auto i = pCompoundStatement->body_begin();
+             i != pCompoundStatement->body_end(); ++i)
         {
-            const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(x);
+            const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(
+                *i);
             if (pCallExpr) {
                 if( const FunctionDecl* func = pCallExpr->getDirectCallee()) {
                     if( func->getNumParams() == 0 && func->getIdentifier() != NULL
@@ -217,7 +219,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
                 }
             }
             // checking for ParenExpr is a hacky way to ignore assert statements in older versions of clang (i.e. <= 3.2)
-            if (!pCallExpr && !dyn_cast<ParenExpr>(x))
+            if (!pCallExpr && !dyn_cast<ParenExpr>(*i))
                 nNumExtraStatements++;
         }
         bOk = bFoundDisposeOnce && nNumExtraStatements == 0;

@@ -12,6 +12,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "clang/AST/Attr.h"
+
 #include "plugin.hxx"
 #include "compat.hxx"
 

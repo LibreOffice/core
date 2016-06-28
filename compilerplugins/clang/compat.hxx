@@ -323,6 +323,27 @@ inline auto getAsTagDecl(clang::Type const& t) -> clang::TagDecl *
 #endif
 }
 
+inline bool isStdNamespace(clang::DeclContext const & context) {
+#if CLANG_VERSION >= 30500
+    return context.isStdNamespace();
+#else
+    // cf. lib/AST/DeclBase.cpp:
+    if (!context.isNamespace()) {
+        return false;
+    }
+    const clang::NamespaceDecl *ND = clang::cast<clang::NamespaceDecl>(
+        &context);
+    if (ND->isInline()) {
+        return isStdNamespace(*ND->getParent());
+    }
+    if (!context.getParent()->getRedeclContext()->isTranslationUnit()) {
+        return false;
+    }
+    const clang::IdentifierInfo *II = ND->getIdentifier();
+    return II && II->isStr("std");
+#endif
+}
+
 }
 
 #endif
