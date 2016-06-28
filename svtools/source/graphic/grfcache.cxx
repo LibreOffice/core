@@ -34,6 +34,8 @@
 
 #define MAX_BMP_EXTENT  4096
 
+using namespace com::sun::star;
+
 static const char aHexData[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 class GraphicID
@@ -155,6 +157,7 @@ private:
 
     // SvgData support
     SvgDataPtr          maSvgData;
+    uno::Sequence<sal_Int8> maPdfData;
 
     bool                ImplInit( const GraphicObject& rObj );
     void                ImplFillSubstitute( Graphic& rSubstitute );
@@ -247,6 +250,8 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
             case GraphicType::GdiMetafile:
             {
                 mpMtf = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
+                if (rGraphic.getPdfData().hasElements())
+                    maPdfData = rGraphic.getPdfData();
             }
             break;
 
@@ -293,6 +298,8 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     else if( mpMtf )
     {
         rSubstitute = *mpMtf;
+        if (maPdfData.hasElements())
+            rSubstitute.setPdfData(maPdfData);
     }
     else
     {
@@ -379,6 +386,7 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
 
         // #119176# also reset SvgData
         maSvgData.reset();
+        maPdfData = uno::Sequence<sal_Int8>();
     }
 }
 
