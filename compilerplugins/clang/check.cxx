@@ -7,8 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cassert>
+
+#include "check.hxx"
 #include "compat.hxx"
-#include "typecheck.hxx"
 
 namespace loplugin {
 
@@ -72,7 +74,15 @@ TypeCheck TypeCheck::NotSubstTemplateTypeParmType() const {
         ? *this : TypeCheck();
 }
 
-TerminalCheck NamespaceCheck::GlobalNamespace() const {
+ContextCheck DeclCheck::Operator(clang::OverloadedOperatorKind op) const {
+    assert(op != clang::OO_None);
+    auto f = llvm::dyn_cast_or_null<clang::FunctionDecl>(decl_);
+    return ContextCheck(
+        f != nullptr && f->getOverloadedOperator() == op
+        ? f->getDeclContext() : nullptr);
+}
+
+TerminalCheck ContextCheck::GlobalNamespace() const {
     return TerminalCheck(
         context_ != nullptr
         && ((compat::isLookupContext(*context_)
@@ -80,14 +90,14 @@ TerminalCheck NamespaceCheck::GlobalNamespace() const {
             ->isTranslationUnit()));
 }
 
-TerminalCheck NamespaceCheck::StdNamespace() const {
+TerminalCheck ContextCheck::StdNamespace() const {
     return TerminalCheck(
         context_ != nullptr && compat::isStdNamespace(*context_));
 }
 
-NamespaceCheck NamespaceCheck::AnonymousNamespace() const {
+ContextCheck ContextCheck::AnonymousNamespace() const {
     auto n = llvm::dyn_cast_or_null<clang::NamespaceDecl>(context_);
-    return NamespaceCheck(
+    return ContextCheck(
         n != nullptr && n->isAnonymousNamespace() ? n->getParent() : nullptr);
 }
 

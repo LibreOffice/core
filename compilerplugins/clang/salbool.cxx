@@ -14,9 +14,9 @@
 
 #include "clang/AST/Attr.h"
 
+#include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
-#include "typecheck.hxx"
 
 namespace {
 

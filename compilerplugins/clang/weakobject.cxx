@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "check.hxx"
 #include "plugin.hxx"
-#include "typecheck.hxx"
 
 /* OWeakObject::release() disposes weak references.  If that isn't done
  * because a sub-class improperly overrides release() then
