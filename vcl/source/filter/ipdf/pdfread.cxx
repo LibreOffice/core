@@ -85,7 +85,7 @@ VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 
     uno::Reference<beans::XPropertySet> xFirstPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
     uno::Sequence<sal_Int8> aSequence;
-    if (!(xFirstPage->getPropertyValue("Preview") >>= aSequence))
+    if (!(xFirstPage->getPropertyValue("PreviewMetafile") >>= aSequence))
         return false;
 
     if (!aSequence.hasElements())
@@ -96,8 +96,7 @@ VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     aPreviewStream.WriteBytes(aSequence.getArray(), aSequence.getLength());
     aPreviewStream.Seek(0);
     GDIMetaFile aMtf;
-    if (!ConvertWMFToGDIMetaFile(aPreviewStream, aMtf))
-        return false;
+    aMtf.Read(aPreviewStream);
 
     rGraphic = aMtf;
 
