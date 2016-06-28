@@ -2301,21 +2301,16 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
             SetError( errNoValue);
     }
 
-    if (nMatValType == SC_MATVAL_VALUE)
-        rDouble = nMatVal.fVal;
-    else if (nMatValType == SC_MATVAL_BOOLEAN)
-    {
-        rDouble = nMatVal.fVal;
-        nMatValType = SC_MATVAL_VALUE;
-    }
-    else
-        rString = nMatVal.GetString();
-
     if (ScMatrix::IsValueType( nMatValType))
     {
+        rDouble = nMatVal.fVal;
         sal_uInt16 nError = nMatVal.GetError();
         if (nError)
             SetError( nError);
+    }
+    else
+    {
+        rString = nMatVal.GetString();
     }
 
     return nMatValType;
