@@ -216,7 +216,9 @@ private:
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
 
     bool                        CloseInternal();
-private:
+
+    SAL_DLLPRIVATE static bool IsOwnStorageFormat(const SfxMedium &);
+
     SAL_DLLPRIVATE void UpdateTime_Impl(const css::uno::Reference<
         css::document::XDocumentProperties> & i_xDocProps);
 
@@ -625,8 +627,6 @@ public:
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash );
 
     SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( bool bFullContent ) const;
-
-    static bool IsOwnStorageFormat(const SfxMedium &);
 
     SAL_DLLPRIVATE bool IsPackageStorageFormat_Impl(const SfxMedium &) const;
 
