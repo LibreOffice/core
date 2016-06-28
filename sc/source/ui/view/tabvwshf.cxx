@@ -740,8 +740,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                                                 GetDialogParent(),
                                                                 OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
                                                                 OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)),
-                                                                aTabBgColor,
-                                                                ".uno:TabBgColor"));
+                                                                aTabBgColor));
                     while ( !bDone && nRet == RET_OK )
                     {
                         nRet = pDlg->Execute();

@@ -216,7 +216,7 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
         {
             pReturnDialog = pFact->CreateScTabBgColorDlg( pViewShell->GetDialogParent(),
                                 OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
-                                OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)), Color(0xff00ff), ".uno:TabBgColor" );
+                                OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)), Color(0xff00ff) );
             break;
         }
 

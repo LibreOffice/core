@@ -36,8 +36,7 @@
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
 ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,
-    const OUString& rTabBgColorNoColorText, const Color& rDefaultColor,
-    const OString& sHelpId)
+    const OUString& rTabBgColorNoColorText, const Color& rDefaultColor)
     : ModalDialog(pParent, "TabColorDialog", "modules/scalc/ui/tabcolordialog.ui")
     , m_aTabBgColor(rDefaultColor)
     , m_aTabBgColorNoColorText(rTabBgColorNoColorText)
@@ -48,7 +47,6 @@ ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,
     m_pTabBgColorSet->SetColCount(SvxColorValueSet::getColumnCount());
     get(m_pBtnOk, "ok");
 
-    SetHelpId( sHelpId );
     this->SetText( rTitle );
     this->SetStyle(GetStyle() | WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL | WB_SYSTEMWINDOW | WB_STANDALONE | WB_HIDE);
 
