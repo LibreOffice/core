@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "clang/AST/Attr.h"
+
 #include "plugin.hxx"
 #include "compat.hxx"
 

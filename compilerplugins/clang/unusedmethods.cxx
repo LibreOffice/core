@@ -12,6 +12,9 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+
+#include "clang/AST/Attr.h"
+
 #include "plugin.hxx"
 #include "compat.hxx"
 
@@ -292,7 +295,7 @@ gotfunc:
     }
 
     // Now do the checks necessary for the "unused return value" analysis
-    if (calleeFunctionDecl->getReturnType()->isVoidType()) {
+    if (compat::getReturnType(*calleeFunctionDecl)->isVoidType()) {
         return true;
     }
     if (!parent) {

@@ -9,6 +9,7 @@
 
 #include <algorithm>
 
+#include "clang/AST/Attr.h"
 #include "clang/AST/CXXInheritance.h"
 
 #include "plugin.hxx"

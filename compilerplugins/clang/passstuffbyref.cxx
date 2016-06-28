@@ -122,7 +122,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         return;
     }
 
-    const QualType type = functionDecl->getReturnType().getDesugaredType(compiler.getASTContext());
+    const QualType type = compat::getReturnType(*functionDecl).getDesugaredType(compiler.getASTContext());
     if (type->isReferenceType() || type->isIntegralOrEnumerationType() || type->isPointerType()
         || type->isTemplateTypeParmType() || type->isDependentType() || type->isBuiltinType()
         || type->isScalarType())
