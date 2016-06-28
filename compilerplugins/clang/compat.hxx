@@ -128,19 +128,34 @@ inline clang::QualType getReturnType(clang::FunctionDecl const & decl) {
 #endif
 }
 
+
 #if CLANG_VERSION >= 30900
 inline clang::ArrayRef<clang::ParmVarDecl *> parameters(
     clang::FunctionDecl const & decl)
 {
     return decl.parameters();
 }
-#else
+#elif CLANG_VERSION >= 30500
 inline clang::FunctionDecl::param_const_range parameters(
     clang::FunctionDecl const & decl)
 {
     return decl.params();
 }
+#else
+struct FunctionDeclParamsWrapper
+{
+    clang::FunctionDecl const & decl;
+    FunctionDeclParamsWrapper(clang::FunctionDecl const & _decl) : decl(_decl) {}
+    clang::FunctionDecl::param_const_iterator begin() const { return decl.param_begin(); }
+    clang::FunctionDecl::param_const_iterator end() const { return decl.param_end(); }
+};
+inline FunctionDeclParamsWrapper parameters(
+    clang::FunctionDecl const & decl)
+{
+    return FunctionDeclParamsWrapper(decl);
+}
 #endif
+
 
 inline clang::QualType getReturnType(clang::FunctionProtoType const & type) {
 #if CLANG_VERSION >= 30500
