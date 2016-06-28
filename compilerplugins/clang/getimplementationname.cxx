@@ -20,8 +20,8 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
+#include "check.hxx"
 #include "plugin.hxx"
-#include "typecheck.hxx"
 #include "clang/Frontend/CompilerInstance.h"
 
 namespace {
