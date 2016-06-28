@@ -969,8 +969,18 @@ uno::Reference< XTablesSupplier > Connection::createCatalog()
     }
     else
     {
-        xCatalog = new Catalog(this, m_xTables.get());
+        Catalog* aCatalog = new Catalog(this);
+        xCatalog = aCatalog;
         m_xCatalog = xCatalog;
+
+        TStringVector aTableName;
+
+        m_xTables = new Tables(this->getMetaData(),
+                               *aCatalog,
+                               m_aMutex,
+                               aTableName);
+        aCatalog->setTables(m_xTables.get());
+
         return m_xCatalog;
     }
 

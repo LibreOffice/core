@@ -24,9 +24,9 @@ namespace connectivity
                 m_xConnection;
 
         public:
-            explicit Catalog(const css::uno::Reference< css::sdbc::XConnection >& rConnection,
-                             sdbcx::OCollection* pTables
-                            );
+            explicit Catalog(const css::uno::Reference< css::sdbc::XConnection >& rConnection);
+
+            void setTables(sdbcx::OCollection* pTables);
 
             // OCatalog
             virtual void refreshTables() override;

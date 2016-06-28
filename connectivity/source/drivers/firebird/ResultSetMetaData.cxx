@@ -22,6 +22,7 @@
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::firebird;
 
@@ -146,34 +147,28 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
-    bool ret = false;
-
-    Reference< XPropertySet > xColumn;
     if( !m_sTableName.isEmpty() )
     {
-        OUString columnName = getColumnName( column );
+        OUString sColumnName = getColumnName( column );
 
-        Reference< XNameAccess > xTables = m_pConnection->getTables();
+        OUString sTriggerName("trg_" + m_sTableName
+                              + "_" + sColumnName);
 
-        if(xTables.is())
+        OUString sSql = "SELECT RDB$TRIGGER_NAME FROM RDB$TRIGGERS "
+                   "WHERE RDB$TRIGGER_NAME = '" + sTriggerName + "'";
+
+        Reference<XResultSet> xRes =
+                m_pConnection->createStatement()->executeQuery(sSql);
+        if(xRes->next()) // if there is a trigger
         {
-            Reference< XPropertySet > xTable;
-            xTables->getByName( m_sTableName ) >>= xTable;
-
-            Reference< XColumnsSupplier > supplier( xTable, UNO_QUERY );
-            if( supplier.is() )
-            {
-                Reference< XNameAccess > columns = supplier->getColumns();
-                if( columns.is() && columns->hasByName( columnName ) )
-                {
-                    columns->getByName( columnName ) >>= xColumn;
-                    xColumn->getPropertyValue("IsAutoIncrement") >>= ret;
-                }
-            }
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
-
-    return ret;
+    return false;
 }
 
 
