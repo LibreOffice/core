@@ -659,7 +659,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     pImpl->bModelInitialized = false;
 
     //TODO/LATER: make a clear strategy how to handle "UsesStorage" etc.
-    bool bOwnStorageFormat = IsOwnStorageFormat_Impl( *pMedium );
+    bool bOwnStorageFormat = IsOwnStorageFormat( *pMedium );
     bool bHasStorage = IsPackageStorageFormat_Impl( *pMedium );
     if ( pMedium->GetFilter() )
     {
@@ -835,7 +835,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             )
             FinishedLoading( SfxLoadedFlags::MAINDOCUMENT );
 
-        if( IsOwnStorageFormat_Impl(*pMed) && pMed->GetFilter() )
+        if( IsOwnStorageFormat(*pMed) && pMed->GetFilter() )
         {
         }
         Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
@@ -972,7 +972,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 }
 
 
-bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
+bool SfxObjectShell::IsOwnStorageFormat(const SfxMedium &rMedium) const
 {
     return !rMedium.GetFilter() || // Embedded
            ( rMedium.GetFilter()->IsOwnFormat() &&
@@ -1119,8 +1119,8 @@ bool SfxObjectShell::SaveTo_Impl
 
     bool bStorageBasedSource = IsPackageStorageFormat_Impl( *pMedium );
     bool bStorageBasedTarget = IsPackageStorageFormat_Impl( rMedium );
-    bool bOwnSource = IsOwnStorageFormat_Impl( *pMedium );
-    bool bOwnTarget = IsOwnStorageFormat_Impl( rMedium );
+    bool bOwnSource = IsOwnStorageFormat( *pMedium );
+    bool bOwnTarget = IsOwnStorageFormat( rMedium );
 
     // Examine target format to determine whether to query if any password
     // protected libraries exceed the size we can handler
