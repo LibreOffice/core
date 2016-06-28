@@ -34,14 +34,14 @@ bool PrivateBase::VisitCXXRecordDecl(CXXRecordDecl const * decl) {
     {
         return true;
     }
-    for (auto const & i: decl->bases()) {
-        if (i.getAccessSpecifierAsWritten() == AS_none) {
+    for (auto i = decl->bases_begin(); i != decl->bases_end(); ++i) {
+        if (i->getAccessSpecifierAsWritten() == AS_none) {
             report(
                 DiagnosticsEngine::Warning,
                 "base class is private by default; explicitly give an access"
                     " specifier",
-                i.getLocStart())
-                << i.getSourceRange();
+                i->getLocStart())
+                << i->getSourceRange();
         }
     }
     return true;

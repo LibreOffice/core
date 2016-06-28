@@ -98,10 +98,11 @@ public:
         }
         CompoundStmt const*const pCompoundStatement(
                 dyn_cast<CompoundStmt>(pMethodDecl->getBody()));
-        for (auto const pStmt : pCompoundStatement->body())
+        for (auto i = pCompoundStatement->body_begin();
+             i != pCompoundStatement->body_end(); ++i)
         {
             // note: this is not a CXXMemberCallExpr
-            CallExpr const*const pCallExpr(dyn_cast<CallExpr>(pStmt));
+            CallExpr const*const pCallExpr(dyn_cast<CallExpr>(*i));
             if (pCallExpr)
             {
                 // note: this is only sometimes a CXXMethodDecl

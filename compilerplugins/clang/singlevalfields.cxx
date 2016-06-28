@@ -258,7 +258,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     if (parent && isa<ReturnStmt>(parent)) {
         const Stmt* parent2 = parentStmt(parent);
         if (parent2 && isa<CompoundStmt>(parent2)) {
-            QualType qt = parentFunction->getReturnType().getDesugaredType(compiler.getASTContext());
+            QualType qt = compat::getReturnType(*parentFunction).getDesugaredType(compiler.getASTContext());
             if (!qt.isConstQualified() && qt->isReferenceType()) {
                 assignValue = "?";
                 bPotentiallyAssignedTo = true;
@@ -443,10 +443,10 @@ void SingleValFields::checkCallExpr(const Stmt* child, const CallExpr* callExpr,
         return;
     }
     for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
-        if (i >= proto->getNumParams()) // can happen in template code
+        if (i >= compat::getNumParams(*proto)) // can happen in template code
             break;
         if (callExpr->getArg(i) == child) {
-            QualType qt = proto->getParamTypes()[i].getDesugaredType(compiler.getASTContext());
+            QualType qt = compat::getParamType(*proto, i).getDesugaredType(compiler.getASTContext());
             if (!qt.isConstQualified() && qt->isReferenceType()) {
                 assignValue = "?";
                 bPotentiallyAssignedTo = true;

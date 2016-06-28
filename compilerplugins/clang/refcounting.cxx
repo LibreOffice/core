@@ -427,7 +427,7 @@ bool RefCounting::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (methodDecl && methodDecl->size_overridden_methods() > 0) {
             return true;
     }
-    checkUnoReference(functionDecl->getReturnType(), functionDecl, "", "return");
+    checkUnoReference(compat::getReturnType(*functionDecl), functionDecl, "", "return");
     return true;
 }
 

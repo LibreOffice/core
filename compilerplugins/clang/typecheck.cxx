@@ -81,7 +81,8 @@ TerminalCheck NamespaceCheck::GlobalNamespace() const {
 }
 
 TerminalCheck NamespaceCheck::StdNamespace() const {
-    return TerminalCheck(context_ != nullptr && context_->isStdNamespace());
+    return TerminalCheck(
+        context_ != nullptr && compat::isStdNamespace(*context_));
 }
 
 }

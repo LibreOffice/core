@@ -21,7 +21,9 @@
 
 #if CLANG_VERSION < 30700
 
-template<> struct std::iterator_traits<ExprIterator> {
+namespace std {
+
+template<> struct iterator_traits<ExprIterator> {
     typedef std::ptrdiff_t difference_type;
     typedef Expr * value_type;
     typedef Expr const ** pointer;
@@ -29,13 +31,15 @@ template<> struct std::iterator_traits<ExprIterator> {
     typedef std::random_access_iterator_tag iterator_category;
 };
 
-template<> struct std::iterator_traits<ConstExprIterator> {
+template<> struct iterator_traits<ConstExprIterator> {
     typedef std::ptrdiff_t difference_type;
     typedef Expr const * value_type;
     typedef Expr const ** pointer;
     typedef Expr const & reference;
     typedef std::random_access_iterator_tag iterator_category;
 };
+
+}
 
 #endif
 
