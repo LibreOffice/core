@@ -1930,12 +1930,6 @@ void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* /*pVal
     // TODO: Read common model-level values
 }
 
-template <typename T>
-inline void addPair(std::vector< std::pair< OUString, Any > >& aUserData, const OUString& name, const T val)
-{
-    aUserData.push_back(std::pair< OUString, Any >(name, css::uno::makeAny(val)));
-}
-
 void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues, bool /*bBrowse*/)
 {
     std::vector< std::pair< OUString, Any > > aUserData;
