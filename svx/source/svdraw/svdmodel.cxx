@@ -103,6 +103,8 @@ struct SdrModelImpl
 {
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
+
+    bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
 };
 
 
@@ -112,6 +114,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mpImpl.reset(new SdrModelImpl);
     mpImpl->mpUndoManager=nullptr;
     mpImpl->mpUndoFactory=nullptr;
+    mpImpl->mbAnchoredTextOverflowLegacy = false;
     mbInDestruction = false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
@@ -1900,6 +1903,16 @@ void SdrModel::SetAddExtLeading( bool bEnabled )
     }
 }
 
+void SdrModel::SetAnchoredTextOverflowLegacy(bool bEnabled)
+{
+    mpImpl->mbAnchoredTextOverflowLegacy = bEnabled;
+}
+
+bool SdrModel::IsAnchoredTextOverflowLegacy() const
+{
+    return mpImpl->mbAnchoredTextOverflowLegacy;
+}
+
 void SdrModel::ReformatAllTextObjects()
 {
     ImpReformatAllTextObjects();
@@ -1939,9 +1952,16 @@ SvxNumType SdrModel::GetPageNumType() const
     return SVX_ARABIC;
 }
 
-void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* /*pValue*/)
+void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* pValue)
 {
-    // TODO: Read common model-level values
+    bool bBool = false;
+    if (pValue->Name == "AnchoredTextOverflowLegacy")
+    {
+        if (pValue->Value >>= bBool)
+        {
+            mpImpl->mbAnchoredTextOverflowLegacy = bBool;
+        }
+    }
 }
 
 template <typename T>
@@ -1953,7 +1973,7 @@ inline void addPair(std::vector< std::pair< OUString, Any > >& aUserData, const 
 void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues, bool /*bBrowse*/)
 {
     std::vector< std::pair< OUString, Any > > aUserData;
-    // TODO: addPair(aUserData, "PropName", PropValue);
+    addPair(aUserData, "AnchoredTextOverflowLegacy", IsAnchoredTextOverflowLegacy());
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());

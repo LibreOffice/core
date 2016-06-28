@@ -972,14 +972,24 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             // 'measurement' of the real size of block text would not work
             Size aMaxAutoPaperSize(aAnchorTextSize);
 
-            if(bHorizontalIsBlock)
+            // Usual processing - always grow in one of directions
+            bool bAllowGrowVertical = !bVerticalWriting;
+            bool bAllowGrowHorizontal = bVerticalWriting;
+            // Compatibility mode for tdf#99729
+            if (this->pModel->IsAnchoredTextOverflowLegacy())
             {
-                // allow to grow vertical for horizontal blocks
+                bAllowGrowVertical = bHorizontalIsBlock;
+                bAllowGrowHorizontal = bVerticalIsBlock;
+            }
+
+            if (bAllowGrowVertical)
+            {
+                // allow to grow vertical for horizontal texts
                 aMaxAutoPaperSize.setHeight(1000000);
             }
-            else if(bVerticalIsBlock)
+            else if (bAllowGrowHorizontal)
             {
-                // allow to grow horizontal for vertical blocks
+                // allow to grow horizontal for vertical texts
                 aMaxAutoPaperSize.setWidth(1000000);
             }
 
