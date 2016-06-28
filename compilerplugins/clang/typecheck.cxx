@@ -59,6 +59,12 @@ TerminalCheck NamespaceCheck::StdNamespace() const {
         context_ != nullptr && compat::isStdNamespace(*context_));
 }
 
+NamespaceCheck NamespaceCheck::AnonymousNamespace() const {
+    auto n = llvm::dyn_cast_or_null<clang::NamespaceDecl>(context_);
+    return NamespaceCheck(
+        n != nullptr && n->isAnonymousNamespace() ? n->getParent() : nullptr);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
