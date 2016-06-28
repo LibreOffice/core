@@ -31,8 +31,7 @@ public:
     ScTabBgColorDlg( vcl::Window* pParent,
                      const OUString& rTitle,
                      const OUString& rTabBgColorNoColorText,
-                     const Color& rDefaultColor,
-                     const OString& nHelpId );
+                     const Color& rDefaultColor );
     virtual ~ScTabBgColorDlg();
     virtual void dispose() override;
 
