@@ -986,16 +986,15 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
                     }
                     if ( !aDupes.isEmpty() )
                     {
-                        OUStringBuffer aMsg(aDupes.getLength() + xSeq[j].formatKey.getLength() + 100);
-                        aMsg.append("XML locale data FormatElement formatindex dupe: ");
-                        aMsg.append(OUString::number(nIdx));
-                        aMsg.append("\nFormatElements: ");
-                        aMsg.append(OUString::number( j ));
-                        aMsg.append("(");
-                        aMsg.append( xSeq[j].formatKey );
-                        aMsg.append( ") ");
-                        aMsg.append(aDupes.makeStringAndClear());
-                        LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg.makeStringAndClear() ));
+                        OUString aMsg = "XML locale data FormatElement formatindex dupe: "
+                                      + OUString::number(nIdx)
+                                      + "\nFormatElements: "
+                                      + OUString::number( j )
+                                      + "("
+                                      + xSeq[j].formatKey
+                                      + ") "
+                                      + aDupes.makeStringAndClear();
+                        LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg ));
                     }
                 }
             }
@@ -1891,10 +1890,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
                     break;
                 default:
                 {
-                    OUString aMsg("SvNumberFormatter::ImpInsertFormat: dup format code, index ");
-                    aMsg += OUString::number( rCode.Index );
-                    aMsg += "\n";
-                    aMsg += rCode.Code;
+                    OUString aMsg = "SvNumberFormatter::ImpInsertFormat: dup format code, index "
+                                  + OUString::number( rCode.Index )
+                                  + "\n"
+                                  + rCode.Code;
                     LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
                 }
                 }
@@ -1906,10 +1905,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
         {
             if (LocaleDataWrapper::areChecksEnabled())
             {
-                OUString aMsg( "SvNumberFormatter::ImpInsertFormat: too many format codes, index ");
-                aMsg += OUString::number( rCode.Index );
-                aMsg += "\n";
-                aMsg +=  rCode.Code;
+                OUString aMsg =  "SvNumberFormatter::ImpInsertFormat: too many format codes, index "
+                              + OUString::number( rCode.Index )
+                              + "\n"
+                              +  rCode.Code;
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
             }
             delete pFormat;
@@ -1920,12 +1919,12 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const css::i18n::NumberForma
     {
         if (LocaleDataWrapper::areChecksEnabled())
         {
-            OUString aMsg( "ImpInsertFormat: can't insert number format key pos: ");
-            aMsg += OUString::number( nPos );
-            aMsg += ", code index ";
-            aMsg += OUString::number( rCode.Index );
-            aMsg += "\n";
-            aMsg += rCode.Code;
+            OUString aMsg = "ImpInsertFormat: can't insert number format key pos: "
+                          + OUString::number( nPos )
+                          + ", code index "
+                          + OUString::number( rCode.Index )
+                          + "\n"
+                          + rCode.Code;
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
         }
         else
@@ -2053,8 +2052,8 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
                 || nTabOff == NF_CURRENCY_1000INT_RED
                 || nTabOff == NF_CURRENCY_1000DEC2_CCC))
     {   // currency entries with decimals might not exist, e.g. Italian Lira
-        OUString aMsg( "SvNumberFormatter::ImpGetFormatCodeIndex: not found: " );
-        aMsg += OUString::number( nTabOff );
+        OUString aMsg = "SvNumberFormatter::ImpGetFormatCodeIndex: not found: "
+                      + OUString::number( nTabOff );
         LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo(aMsg));
     }
     if ( nLen )
@@ -2088,11 +2087,9 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
     {   // we need at least _some_ format
         rSeq.realloc(1);
         rSeq[0] = css::i18n::NumberFormatCode();
-        rSeq[0].Code = OUStringBuffer().
-            append('0').
-            append(GetNumDecimalSep()).
-            append("############").
-            makeStringAndClear();
+        rSeq[0].Code = OUString('0')
+                     + GetNumDecimalSep()
+                     + "############";
     }
     return 0;
 }
@@ -3880,10 +3877,9 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
                                                         const NfCurrencyEntry& rCurr,
                                                         bool bBank ) const
 {
-    OUString aRed = OUStringBuffer().
-        append('[').
-        append(pFormatScanner->GetRedString()).
-        append(']').makeStringAndClear();
+    OUString aRed = "["
+                  + pFormatScanner->GetRedString()
+                  + "]";
 
     sal_uInt16 nDefault = 0;
     if ( bBank )
@@ -3892,18 +3888,16 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         OUString aPositiveBank = rCurr.BuildPositiveFormatString(true, *xLocaleData);
         OUString aNegativeBank = rCurr.BuildNegativeFormatString(true, *xLocaleData );
 
-        OUStringBuffer format1(aPositiveBank);
-        format1.append(';');
-        format1.append(aNegativeBank);
-        rStrArr.push_back(format1.makeStringAndClear());
+        OUString format1 = aPositiveBank
+                         + ";"
+                         + aNegativeBank;
+        rStrArr.push_back(format1);
 
-        OUStringBuffer format2(aPositiveBank);
-        format2.append(';');
-
-        format2.append(aRed);
-
-        format2.append(aNegativeBank);
-        rStrArr.push_back(format2.makeStringAndClear());
+        OUString format2 = aPositiveBank
+                         + ";"
+                         + aRed
+                         + aNegativeBank;
+        rStrArr.push_back(format2);
 
         nDefault = rStrArr.size() - 1;
     }
@@ -3913,11 +3907,11 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         // duplicates if no decimals in currency.
         OUString aPositive = rCurr.BuildPositiveFormatString(false, *xLocaleData );
         OUString aNegative = rCurr.BuildNegativeFormatString(false, *xLocaleData );
-        OUStringBuffer format1;
-        OUStringBuffer format2;
-        OUStringBuffer format3;
-        OUStringBuffer format4;
-        OUStringBuffer format5;
+        OUString format1;
+        OUString format2;
+        OUString format3;
+        OUString format4;
+        OUString format5;
         if (rCurr.GetDigits())
         {
             OUString aPositiveNoDec = rCurr.BuildPositiveFormatString(false, *xLocaleData, 0);
@@ -3925,44 +3919,44 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
             OUString aPositiveDashed = rCurr.BuildPositiveFormatString(false, *xLocaleData, 2);
             OUString aNegativeDashed = rCurr.BuildNegativeFormatString(false, *xLocaleData, 2);
 
-            format1.append(aPositiveNoDec);
-            format1.append(';');
-            format1.append(aNegativeNoDec);
+            format1 = aPositiveNoDec
+                    + ";"
+                    + aNegativeNoDec;
 
-            format3.append(aPositiveNoDec);
-            format3.append(';');
-            format3.append(aRed);
-            format3.append(aNegativeNoDec);
+            format3 = aPositiveNoDec
+                    + ";"
+                    + aRed
+                    + aNegativeNoDec;
 
-            format5.append(aPositiveDashed);
-            format5.append(';');
-            format5.append(aRed);
-            format5.append(aNegativeDashed);
+            format5 = aPositiveDashed
+                    + ";"
+                    + aRed
+                    + aNegativeDashed;
         }
 
-        format2.append(aPositive);
-        format2.append(';');
-        format2.append(aNegative);
+        format2 = aPositive
+                + ";"
+                + aNegative;
 
-        format4.append(aPositive);
-        format4.append(';');
-        format4.append(aRed);
-        format4.append(aNegative);
+        format4 = aPositive
+                + ";"
+                + aRed
+                + aNegative;
 
         if (rCurr.GetDigits())
         {
-            rStrArr.push_back(format1.makeStringAndClear());
+            rStrArr.push_back(format1);
         }
-        rStrArr.push_back(format2.makeStringAndClear());
+        rStrArr.push_back(format2);
         if (rCurr.GetDigits())
         {
-            rStrArr.push_back(format3.makeStringAndClear());
+            rStrArr.push_back(format3);
         }
-        rStrArr.push_back(format4.makeStringAndClear());
+        rStrArr.push_back(format4);
         nDefault = rStrArr.size() - 1;
         if (rCurr.GetDigits())
         {
-            rStrArr.push_back(format5.makeStringAndClear());
+            rStrArr.push_back(format5);
         }
     }
     return nDefault;
