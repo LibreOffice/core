@@ -21,6 +21,13 @@ namespace loplugin {
 class NamespaceCheck;
 class TerminalCheck;
 
+namespace detail {
+
+template<std::size_t N> NamespaceCheck checkRecordDecl(
+    clang::Decl const * decl, clang::TagTypeKind tag, char const (& id)[N]);
+
+}
+
 class TypeCheck {
 public:
     explicit TypeCheck(clang::QualType type): type_(type) {}
@@ -59,13 +66,30 @@ public:
 
     TerminalCheck StdNamespace() const;
 
+    NamespaceCheck AnonymousNamespace() const;
+
 private:
-    friend class TypeCheck;
+    friend TypeCheck;
+    template<std::size_t N> friend NamespaceCheck detail::checkRecordDecl(
+        clang::Decl const * decl, clang::TagTypeKind tag, char const (& id)[N]);
 
     explicit NamespaceCheck(clang::DeclContext const * context = nullptr):
         context_(context) {}
 
     clang::DeclContext const * const context_;
+};
+
+class DeclCheck {
+public:
+    explicit DeclCheck(clang::Decl const * decl): decl_(decl) {}
+
+    explicit operator bool() const { return decl_ != nullptr; }
+
+    template<std::size_t N> inline NamespaceCheck Struct(char const (& id)[N])
+        const;
+
+private:
+    clang::Decl const * const decl_;
 };
 
 class TerminalCheck {
@@ -81,19 +105,30 @@ private:
     bool const satisfied_;
 };
 
+namespace detail {
+
+template<std::size_t N> NamespaceCheck checkRecordDecl(
+    clang::Decl const * decl, clang::TagTypeKind tag, char const (& id)[N])
+{
+    auto r = llvm::dyn_cast_or_null<clang::RecordDecl>(decl);
+    if (r != nullptr && r->getTagKind() == tag) {
+        auto const i = r->getIdentifier();
+        if (i != nullptr && i->isStr(id)) {
+            return NamespaceCheck(r->getDeclContext());
+        }
+    }
+    return NamespaceCheck();
+}
+
+}
+
 template<std::size_t N> NamespaceCheck TypeCheck::Class(char const (& id)[N])
     const
 {
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::RecordType>();
         if (t != nullptr) {
-            auto const d = t->getDecl();
-            if (d->isClass()) {
-                auto const i = d->getIdentifier();
-                if (i != nullptr && i->isStr(id)) {
-                    return NamespaceCheck(d->getDeclContext());
-                }
-            }
+            return detail::checkRecordDecl(t->getDecl(), clang::TTK_Class, id);
         }
     }
     return NamespaceCheck();
@@ -112,6 +147,12 @@ template<std::size_t N> NamespaceCheck NamespaceCheck::Namespace(
         }
     }
     return NamespaceCheck();
+}
+
+template<std::size_t N> NamespaceCheck DeclCheck::Struct(char const (& id)[N])
+    const
+{
+    return detail::checkRecordDecl(decl_, clang::TTK_Struct, id);
 }
 
 }

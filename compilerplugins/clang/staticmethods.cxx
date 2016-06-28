@@ -9,8 +9,9 @@
 
 #include "clang/AST/Attr.h"
 
-#include "plugin.hxx"
 #include "compat.hxx"
+#include "plugin.hxx"
+#include "typecheck.hxx"
 
 /*
   Look for member functions that can be static
@@ -118,12 +119,14 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     }
     // can't change it because in debug mode it can't be static
     // sal/cpprt/operators_new_delete.cxx
-    if (aParentName == "(anonymous namespace)::AllocatorTraits") {
+    auto dc = loplugin::DeclCheck(pCXXMethodDecl->getParent());
+    if (dc.Struct("AllocatorTraits").AnonymousNamespace().GlobalNamespace()) {
         return true;
     }
     // in this case, the code is taking the address of the member function
     // shell/source/unix/sysshell/recently_used_file_handler.cxx
-    if (aParentName == "(anonymous namespace)::recently_used_item") {
+    if (dc.Struct("recently_used_item").AnonymousNamespace().GlobalNamespace())
+    {
         return true;
     }
     // the unotools and svl config code stuff is doing weird stuff with a reference-counted statically allocated pImpl class
