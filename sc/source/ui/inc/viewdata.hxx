@@ -144,8 +144,7 @@ private:
                     ScViewDataTable();
 
     void            WriteUserDataSequence(
-                        css::uno::Sequence <css::beans::PropertyValue>& rSettings,
-                        const ScViewData& rViewData, SCTAB nTab ) const;
+                        css::uno::Sequence <css::beans::PropertyValue>& rSettings ) const;
 
     void            ReadUserDataSequence(
                         const css::uno::Sequence <css::beans::PropertyValue>& rSettings,

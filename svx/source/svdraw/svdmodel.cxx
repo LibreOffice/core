@@ -1927,7 +1927,7 @@ SvxNumType SdrModel::GetPageNumType() const
 
 void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* /*pValue*/)
 {
-    // TODO: Read common model-level values
+    (void) this; // TODO: Read common model-level values
 }
 
 void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues, bool /*bBrowse*/)

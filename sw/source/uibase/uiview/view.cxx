@@ -1494,7 +1494,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     rSequence = comphelper::containerToSequence(aVector);
 
     // Common SdrModel processing
-    GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->WriteUserDataSequence(rSequence);
+    SdrModel::WriteUserDataSequence(rSequence);
 }
 
 void SwView::ShowCursor( bool bOn )
