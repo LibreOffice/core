@@ -179,6 +179,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_8aadec8a",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-06-28T02:32:46Z",
+      "side": 1,
+      "message": "\u003e SfxBaseModel\nI\u0027m sorry, I don\u0027t see how does it fit here. Could you please elaborate, or point to a code? Unfortunately, I\u0027m not familiar with that class.\nI would be very thankful, because placing the code to most appropriate place is a must.",
+      "parentUuid": "ba84c18e_ea2af87d",
+      "revId": "7bc84fcddd5101a59c340a216162e272621063e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_c72a8de7",
         "filename": "svx/source/svdraw/svdotextdecomposition.cxx",
         "patchSetId": 8
