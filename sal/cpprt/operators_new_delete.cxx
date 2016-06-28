@@ -40,7 +40,7 @@ struct AllocatorTraits
         : m_signature (s)
     {}
 
-    std::size_t size (std::size_t n) const
+    static std::size_t size (std::size_t n)
     {
         n = std::max(n, std::size_t(1));
 #if OSL_DEBUG_LEVEL > 0
@@ -105,7 +105,7 @@ static void default_handler()
 static void* allocate (
     std::size_t n, AllocatorTraits const & rTraits)
 {
-    n = rTraits.size (n);
+    n = AllocatorTraits::size (n);
     for (;;)
     {
         void * p = rtl_allocateMemory (sal_Size(n));

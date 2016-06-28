@@ -117,12 +117,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (aParentName == "BitmapInfoAccess") {
         return true;
     }
-    // can't change it because in debug mode it can't be static
-    // sal/cpprt/operators_new_delete.cxx
     auto dc = loplugin::DeclCheck(pCXXMethodDecl->getParent());
-    if (dc.Struct("AllocatorTraits").AnonymousNamespace().GlobalNamespace()) {
-        return true;
-    }
     // in this case, the code is taking the address of the member function
     // shell/source/unix/sysshell/recently_used_file_handler.cxx
     if (dc.Struct("recently_used_item").AnonymousNamespace().GlobalNamespace())
