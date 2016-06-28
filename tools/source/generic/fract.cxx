@@ -182,7 +182,6 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
     if ( HasOverflowValue() )
     {
         mpImpl->valid = false;
-        SAL_WARN( "tools.fraction", "'operator *=' detected overflow" );
     }
 
     return *this;
