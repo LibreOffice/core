@@ -17,7 +17,9 @@ BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
     const Size aSize(rBitmapEx.GetSizePixel());
 
     Bitmap aBitmap(rBitmapEx.GetBitmap());
-    Bitmap aDarkBitmap(aSize, 24);
+    int nBitcount = aBitmap.GetBitCount() == 32 ? 32 : 24;
+
+    Bitmap aDarkBitmap(aSize, nBitcount);
 
     BitmapReadAccess* pRead(aBitmap.AcquireReadAccess());
     BitmapWriteAccess* pWrite(aDarkBitmap.AcquireWriteAccess());
