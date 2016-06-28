@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_dd033c0c",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T13:22:43Z",
+      "side": 1,
+      "message": "Just for explanation why: an empty cell by Excel likely is treated as numeric 0 as usual, but 0 is not in the set of defined weekend arguments.\n\nThis does not cover the case though where the referenced cell contains a formula which returns an empty string.",
+      "revId": "b98f3005bbcbf292a1f14798d523f291d5e32e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_1d0e8434",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T13:22:43Z",
+      "side": 1,
+      "message": "Probably svExternalSingleRef would needed to be handled similar to svSingleRef.",
+      "revId": "b98f3005bbcbf292a1f14798d523f291d5e32e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_fd08002b",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T13:22:43Z",
+      "side": 1,
+      "message": "Probably svExternalDoubleRef needs to be added here.\n\nAlso, I\u0027d like to see the argument pop\u0027ed from the stack to treat all argument types equal.",
+      "revId": "b98f3005bbcbf292a1f14798d523f291d5e32e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_3d13485e",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T13:22:43Z",
+      "side": 1,
+      "message": "This doesn\u0027t cover the case where a literal \"\" empty string was passed as 3rd argument, which also should result in error, and does in Excel.",
+      "revId": "b98f3005bbcbf292a1f14798d523f291d5e32e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_5d100c4f",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T13:22:43Z",
+      "side": 1,
+      "message": "Given all the above, this could be entirely simplified to\n\n switch (GetStackType())\n {\n     case svDoubleRef:\n     case svExternalDoubleRef:\n         Pop();\n         return errNoValue;\n     default:\n         aWeekendDays \u003d GetString().getString();\n         if (aWeekendDays.empty())\n             return errNoValue;\n }\n\nHowever, simply obtaining a string doesn\u0027t do what Excel does. Here a numeric value 1 and a text string \"1\" are treated equally, but Excel for a string \"1\" returns an error.\n\nActually we have to differentiate whether a numeric or text argument was given and the bWeekendMask handling below has to be changed accordingly.\n\nI lately added ScInterpreter::GetDoubleOrString() to handle such situations, which the default case above could use.",
+      "revId": "b98f3005bbcbf292a1f14798d523f291d5e32e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
