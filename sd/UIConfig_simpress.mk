@@ -104,6 +104,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/customanimationspanel \
+	sd/uiconfig/simpress/ui/customanimationspanelhorizontal \
 	sd/uiconfig/simpress/ui/customanimationproperties \
 	sd/uiconfig/simpress/ui/customanimationeffecttab \
 	sd/uiconfig/simpress/ui/customanimationtimingtab \

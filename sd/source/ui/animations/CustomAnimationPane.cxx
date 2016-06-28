@@ -133,12 +133,36 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
     mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND ),
     mnFreeformPathPos( LISTBOX_ENTRY_NOTFOUND ),
+    mbHorizontal( false ),
     maLateInitTimer()
+{
+    initialize();
+}
+
+CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
+                                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                          bool )
+:   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanelhorizontal.ui", rxFrame ),
+    mrBase( rBase ),
+    mpCustomAnimationPresets(nullptr),
+    mnPropertyType( nPropertyTypeNone ),
+    mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
+    mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND ),
+    mnFreeformPathPos( LISTBOX_ENTRY_NOTFOUND ),
+    mbHorizontal( true ),
+    maLateInitTimer()
+{
+    initialize();
+}
+
+void CustomAnimationPane::initialize()
 {
     // load resources
     get(mpPBAddEffect, "add_effect");
     get(mpPBRemoveEffect, "remove_effect");
-    get(mpFTEffect, "effect_label");
+
+    if(!mbHorizontal)
+      get(mpFTEffect, "effect_label");
 
     get(mpFTStart, "start_effect");
     get(mpLBStart, "start_effect_list");
@@ -189,7 +213,8 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpLBCategory->SetSelectHdl( LINK(this, CustomAnimationPane, UpdateAnimationLB) );
 
-    maStrModify = mpFTEffect->GetText();
+    if(!mbHorizontal)
+      maStrModify = mpFTEffect->GetText();
 
     // get current controller and initialize listeners
     try
@@ -232,7 +257,8 @@ void CustomAnimationPane::dispose()
 
     mpPBAddEffect.clear();
     mpPBRemoveEffect.clear();
-    mpFTEffect.clear();
+    if(!mbHorizontal)
+      mpFTEffect.clear();
     mpFTStart.clear();
     mpLBStart.clear();
     mpFTProperty.clear();
@@ -529,7 +555,7 @@ void CustomAnimationPane::updateControls()
 
         OUString aTemp( maStrModify );
 
-        if( !aUIName.isEmpty() )
+        if( !mbHorizontal && !aUIName.isEmpty() )
         {
             aTemp += " " + aUIName;
             mpFTEffect->SetText( aTemp );
@@ -652,7 +678,8 @@ void CustomAnimationPane::updateControls()
         mpFTDuration->Enable(false);
         mpCBXDuration->Enable(false);
         mpCBXDuration->SetNoSelection();
-        mpFTEffect->SetText( maStrModify );
+        if(!mbHorizontal)
+            mpFTEffect->SetText( maStrModify );
     }
 
     bool bEnableUp = true;
@@ -874,16 +901,19 @@ void CustomAnimationPane::DataChanged (const DataChangedEvent& rEvent)
 
 void CustomAnimationPane::UpdateLook()
 {
-    const Wallpaper aBackground (
-        ::sfx2::sidebar::Theme::GetWallpaper(
-            ::sfx2::sidebar::Theme::Paint_PanelBackground));
-    SetBackground(aBackground);
-    if (mpFTStart != nullptr)
-        mpFTStart->SetBackground(aBackground);
-    if (mpFTProperty != nullptr)
-        mpFTProperty->SetBackground(aBackground);
-    if (mpFTDuration != nullptr)
-        mpFTDuration->SetBackground(aBackground);
+    if( !mbHorizontal )
+    {
+        Wallpaper aBackground (
+            ::sfx2::sidebar::Theme::GetWallpaper(
+                ::sfx2::sidebar::Theme::Paint_PanelBackground));
+        SetBackground(aBackground);
+        if (mpFTStart != nullptr)
+            mpFTStart->SetBackground(aBackground);
+        if (mpFTProperty != nullptr)
+            mpFTProperty->SetBackground(aBackground);
+        if (mpFTDuration != nullptr)
+            mpFTDuration->SetBackground(aBackground);
+    }
 }
 
 void addValue( STLPropertySet* pSet, sal_Int32 nHandle, const Any& rValue )
