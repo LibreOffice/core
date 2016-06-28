@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_4a020440",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-28T08:48:30Z",
+      "side": 1,
+      "message": "Please replace all those c-style casts with static_cast\u003csal_Int32\u003e",
+      "revId": "7e8b1b5f57ddf5c7e4cc4e7f7047ff76fbc339ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_ca9454ea",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-28T08:48:30Z",
+      "side": 1,
+      "message": "You can as well factor \u0027if (pSh)\u0027 out ...",
+      "revId": "7e8b1b5f57ddf5c7e4cc4e7f7047ff76fbc339ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_0a9f1c04",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-28T08:48:30Z",
+      "side": 1,
+      "message": "The following 3 lines ...",
+      "revId": "7e8b1b5f57ddf5c7e4cc4e7f7047ff76fbc339ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_ea991821",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-28T08:48:30Z",
+      "side": 1,
+      "message": "... since here, you\u0027re testing for its existence again",
+      "revId": "7e8b1b5f57ddf5c7e4cc4e7f7047ff76fbc339ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_6a86e8ba",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-28T08:48:30Z",
+      "side": 1,
+      "message": "... are identical with those 3 lines, except for the name of variables. So please factor them out",
+      "revId": "7e8b1b5f57ddf5c7e4cc4e7f7047ff76fbc339ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_aaf9d04f",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-28T08:48:30Z",
+      "side": 1,
+      "message": "static_cast\u003csal_uInt16\u003e",
+      "revId": "7e8b1b5f57ddf5c7e4cc4e7f7047ff76fbc339ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_8afc0c40",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-28T08:48:30Z",
+      "side": 1,
+      "message": "static_cast\u003csal_Int32\u003e",
+      "revId": "7e8b1b5f57ddf5c7e4cc4e7f7047ff76fbc339ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
