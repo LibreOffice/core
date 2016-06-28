@@ -157,6 +157,7 @@ public:
     void testTdf80224();
     void testTdf92527();
     void testTdf99224();
+    void testEmbeddedPdf();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testFdo90607);
@@ -212,6 +213,7 @@ public:
     CPPUNIT_TEST(testExtFileField);
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf99224);
+    CPPUNIT_TEST(testEmbeddedPdf);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1719,6 +1721,18 @@ void SdExportTest::testTdf99224()
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
     // This was 0: the image with text was lost on export.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
+    xShell->DoClose();
+}
+
+void SdExportTest::testEmbeddedPdf()
+{
+    sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/embedded-pdf.odp"), ODP);
+    xShell = saveAndReload(xShell, ODP);
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    OUString aReplacementGraphicURL;
+    xShape->getPropertyValue("ReplacementGraphicURL") >>= aReplacementGraphicURL;
+    CPPUNIT_ASSERT(!aReplacementGraphicURL.isEmpty());
     xShell->DoClose();
 }
 
