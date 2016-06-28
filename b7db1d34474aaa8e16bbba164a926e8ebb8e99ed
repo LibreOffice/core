@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_1de20404",
+        "filename": "include/svx/flagsdef.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T18:42:16Z",
+      "side": 1,
+      "message": "I\u0027d rather continue to use the negative value for currencies, because it displays the [RED] and ()-parentheses formats for negative amounts.",
+      "revId": "b7db1d34474aaa8e16bbba164a926e8ebb8e99ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_3de7c813",
+        "filename": "include/svx/flagsdef.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-28T18:42:16Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be 0.0 as it is also used with CAT_USERDEFINED, that previously displayed DEFAULT_NUMVALUE \u003d 1234.56789\n\nEither continue to use 1234.56789 for SVX_NUMVAL_NOVALUE or use SVX_NUMVAL_STANDARD for CAT_USERDEFINED (might be best) or create an additional SVX_NUMVAL_USERDEFINED or some such.",
+      "revId": "b7db1d34474aaa8e16bbba164a926e8ebb8e99ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
