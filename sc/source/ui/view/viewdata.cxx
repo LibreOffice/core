@@ -112,7 +112,7 @@ ScViewDataTable::~ScViewDataTable()
 {
 }
 
-void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings) const
+void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData, SCTAB /*nTab*/) const
 {
     rSettings.realloc(SC_TABLE_VIEWSETTINGS_COUNT);
     beans::PropertyValue* pSettings = rSettings.getArray();
@@ -161,7 +161,7 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     }
 
     // Common SdrModel processing
-    SdrModel::WriteUserDataSequence(rSettings);
+    rViewData.GetDocument()->GetDrawLayer()->WriteUserDataSequence(rSettings);
 }
 
 void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>& aSettings, ScViewData& rViewData, SCTAB nTab, bool& rHasZoom )
@@ -2655,7 +2655,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             if (maTabData[nTab])
             {
                 uno::Sequence <beans::PropertyValue> aTableViewSettings;
-                maTabData[nTab]->WriteUserDataSequence(aTableViewSettings);
+                maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
                 OUString sTabName;
                 GetDocument()->GetName( nTab, sTabName );
                 try
@@ -2735,7 +2735,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     }
 
     // Common SdrModel processing
-    SdrModel::WriteUserDataSequence(rSettings);
+    GetDocument()->GetDrawLayer()->WriteUserDataSequence(rSettings);
 }
 
 void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>& rSettings)
