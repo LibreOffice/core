@@ -60,6 +60,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
+#include <editeng/formatbreakitem.hxx>
 
 #include <docary.hxx>
 #include <numrule.hxx>
@@ -510,8 +511,19 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
         }
     }
     else if (TXT_MAINTEXT == m_nTextTyp && rEndNode.StartOfSectionNode()->IsTableNode())
-        // End node of a table: see if a section break should be written after the table.
-        AttrOutput().SectionBreaks(rEndNode);
+    {
+        //Avoid corrupting docx - the only page-break that works here is section page-break.
+        SwNodeIndex aNextIndex( rEndNode, 1 );
+        if (aNextIndex.GetNode().IsContentNode())
+        {
+            const SwContentNode* pNode = aNextIndex.GetNode().GetContentNode();
+            const SwFormatPageDesc &rPageDesc = sw::util::ItemGet<SwFormatPageDesc>(*pNode, RES_PAGEDESC);
+            const SvxFormatBreakItem &rBreak = sw::util::ItemGet<SvxFormatBreakItem>(*pNode, RES_BREAK);
+            if ( rPageDesc.GetRegisteredIn() || !rBreak.GetBreak() == SVX_BREAK_PAGE_BEFORE )
+                // End node of a table: see if a section break should be written after the table.
+                AttrOutput().SectionBreaks(rEndNode);
+        }
+    }
 }
 
 void DocxExport::OutputGrfNode( const SwGrfNode& )
