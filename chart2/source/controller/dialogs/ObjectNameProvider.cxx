@@ -567,6 +567,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         sal_Int32 aPeriod = 2;
                         bool bForceIntercept = false;
                         double aInterceptValue = 0.0;
+                        OUString aXName ("x"), aYName ("f(x)");
                         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
                         const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
                         assert(aNumDecimalSep.getLength() > 0);
@@ -580,8 +581,17 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                                 xProperties->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
                                 if (bForceIntercept)
                                         xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
+                                uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
+                                if( xEqProp.is())
+                                {
+                                    if ( !(xEqProp->getPropertyValue( "XName") >>= aXName) )
+                                        aXName = "x";
+                                    if ( !(xEqProp->getPropertyValue( "YName") >>= aYName) )
+                                        aYName = "f(x)";
+                                }
                         }
                         xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, 2);
+                        xCalculator->setXYNames ( aXName, aYName );
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
                         // change text for Moving Average

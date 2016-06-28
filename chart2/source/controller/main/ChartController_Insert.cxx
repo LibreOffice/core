@@ -537,6 +537,8 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
                     ActionDescriptionProvider::INSERT, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
                 m_xUndoManager );
             xEqProp->setPropertyValue( "ShowEquation", uno::makeAny( true ));
+            xEqProp->setPropertyValue( "XName", uno::makeAny( OUString("x") ));
+            xEqProp->setPropertyValue( "YName", uno::makeAny( OUString("f(x)") ));
             xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( bInsertR2 ));
             aUndoGuard.commit();
         }

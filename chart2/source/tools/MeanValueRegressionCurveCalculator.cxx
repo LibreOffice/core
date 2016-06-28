@@ -121,7 +121,7 @@ OUString MeanValueRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     sal_Int32 nNumberFormatKey, sal_Int32* pFormulaLength /* = nullptr */ ) const
 {
-    OUString aBuf = "f(x) = ";
+    OUString aBuf = OUString(mYName + " = ");
     if ( pFormulaLength )
     {
         *pFormulaLength -= aBuf.getLength();

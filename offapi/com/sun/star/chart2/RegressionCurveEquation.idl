@@ -42,6 +42,8 @@ service RegressionCurveEquation
     service       ::com::sun::star::style::CharacterProperties;
 
     [property]             boolean                                     ShowEquation;
+    [property]             string                                      XName;
+    [property]             string                                      YName;
     [property]             boolean                                     ShowCorrelationCoefficient;
 
     [property, maybevoid]  ::com::sun::star::chart2::RelativePosition  RelativePosition;
