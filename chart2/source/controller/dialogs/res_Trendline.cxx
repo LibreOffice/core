@@ -60,6 +60,8 @@ TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet&
     pTabPage->get(m_pCB_SetIntercept,"setIntercept");
     pTabPage->get(m_pFmtFld_InterceptValue,"interceptValue");
     pTabPage->get(m_pCB_ShowEquation,"showEquation");
+    pTabPage->get(m_pEE_XName,"entry_Xname");
+    pTabPage->get(m_pEE_YName,"entry_Yname");
     pTabPage->get(m_pCB_ShowCorrelationCoeff,"showCorrelationCoefficient");
     pTabPage->get(m_pFI_Linear,"imageLinear");
     pTabPage->get(m_pFI_Logarithmic,"imageLogarithmic");
@@ -81,6 +83,8 @@ TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet&
     m_pNF_Degree->SetModifyHdl( aLink2 );
     m_pNF_Period->SetModifyHdl( aLink2 );
     m_pFmtFld_InterceptValue->SetModifyHdl( aLink2 );
+
+    m_pCB_ShowEquation->SetToggleHdl( LINK(this, TrendlineResources, ShowEquation ) );
 
     Reset( rInAttrs );
     UpdateControlStates();
@@ -120,6 +124,24 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     else
     {
         m_pEE_Name->SetText("");
+    }
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_XNAME, true, &pPoolItem ) == SfxItemState::SET )
+    {
+        OUString aName = static_cast< const SfxStringItem* >(pPoolItem)->GetValue();
+        m_pEE_XName->SetText(aName);
+    }
+    else
+    {
+        m_pEE_XName->SetText("x");
+    }
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_YNAME, true, &pPoolItem ) == SfxItemState::SET )
+    {
+        OUString aName = static_cast< const SfxStringItem* >(pPoolItem)->GetValue();
+        m_pEE_YName->SetText(aName);
+    }
+    else
+    {
+        m_pEE_YName->SetText("f(x)");
     }
 
     SfxItemState aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem );
@@ -254,6 +276,14 @@ bool TrendlineResources::FillItemSet(SfxItemSet* rOutAttrs) const
 
     OUString aName = m_pEE_Name->GetText();
     rOutAttrs->Put(SfxStringItem(SCHATTR_REGRESSION_CURVE_NAME, aName));
+    aName = m_pEE_XName->GetText();
+    if ( aName.isEmpty() )
+        aName = "x";
+    rOutAttrs->Put(SfxStringItem(SCHATTR_REGRESSION_XNAME, aName));
+    aName = m_pEE_YName->GetText();
+    if ( aName.isEmpty() )
+        aName = "f(x)";
+    rOutAttrs->Put(SfxStringItem(SCHATTR_REGRESSION_YNAME, aName));
 
     sal_Int32 aDegree = m_pNF_Degree->GetValue();
     rOutAttrs->Put(SfxInt32Item( SCHATTR_REGRESSION_DEGREE, aDegree ) );
@@ -314,6 +344,8 @@ void TrendlineResources::UpdateControlStates()
     }
     m_pCB_ShowEquation->Enable( !bMovingAverage );
     m_pCB_ShowCorrelationCoeff->Enable( !bMovingAverage );
+    m_pEE_XName->Enable( !bMovingAverage && m_pCB_ShowEquation->IsChecked() );
+    m_pEE_YName->Enable( !bMovingAverage && m_pCB_ShowEquation->IsChecked() );
 }
 
 IMPL_LINK_TYPED( TrendlineResources, ChangeValue, Edit&, rNumericField, void)
@@ -353,6 +385,16 @@ void TrendlineResources::SetNumFormatter( SvNumberFormatter* pFormatter )
 void TrendlineResources::SetNbPoints( sal_Int32 nNbPoints )
 {
     m_nNbPoints = nNbPoints;
+    UpdateControlStates();
+}
+
+IMPL_LINK_TYPED( TrendlineResources, ShowEquation, CheckBox&, rCheckBox, void)
+{
+    if( &rCheckBox == m_pCB_ShowEquation )
+    {
+        m_pEE_XName->Enable( m_pCB_ShowEquation->IsChecked() );
+        m_pEE_YName->Enable( m_pCB_ShowEquation->IsChecked() );
+    }
     UpdateControlStates();
 }
 

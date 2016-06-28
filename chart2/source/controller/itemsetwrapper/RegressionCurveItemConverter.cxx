@@ -230,6 +230,20 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
         }
         break;
 
+        case SCHATTR_REGRESSION_XNAME:
+        {
+            uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
+            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xEqProp, "XName");
+        }
+        break;
+
+        case SCHATTR_REGRESSION_YNAME:
+        {
+            uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
+            bChanged = lclConvertToPropertySet<OUString, SfxStringItem>(rItemSet, nWhichId, xEqProp, "YName");
+        }
+        break;
+
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
             uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
@@ -305,6 +319,18 @@ void RegressionCurveItemConverter::FillSpecialItem(sal_uInt16 nWhichId, SfxItemS
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
             lclConvertToItemSet<bool, SfxBoolItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "ShowEquation");
+        }
+        break;
+
+        case SCHATTR_REGRESSION_XNAME:
+        {
+            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "XName");
+        }
+        break;
+
+        case SCHATTR_REGRESSION_YNAME:
+        {
+            lclConvertToItemSet<OUString, SfxStringItem>(rOutItemSet, nWhichId, xCurve->getEquationProperties(), "YName");
         }
         break;
 

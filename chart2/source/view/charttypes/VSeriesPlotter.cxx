@@ -1251,6 +1251,15 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
         xEquationProperties->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey;
         bool bResizeEquation = true;
         sal_Int32 nMaxIteration = 2;
+        if ( bShowEquation )
+        {
+            OUString aXName, aYName;
+            if ( !(xEquationProperties->getPropertyValue( "XName" ) >>= aXName) )
+                aXName = OUString( "x" );
+            if ( !(xEquationProperties->getPropertyValue( "YName" ) >>= aYName) )
+                aYName = OUString( "f(x)" );
+            xRegressionCurveCalculator->setXYNames( aXName, aYName );
+        }
 
         for ( sal_Int32 nCountIteration = 0; bResizeEquation && nCountIteration < nMaxIteration ; nCountIteration++ )
         {

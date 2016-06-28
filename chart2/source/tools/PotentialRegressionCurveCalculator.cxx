@@ -146,12 +146,12 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
     sal_Int32 nNumberFormatKey, sal_Int32* pFormulaMaxWidth /* = nullptr */ ) const
 {
     bool bHasIntercept = !rtl::math::approxEqual( fabs(m_fIntercept), 1.0 );
-    OUStringBuffer aBuf( "f(x) = ");
+    OUStringBuffer aBuf( mYName + " = " );
     sal_Int32 nLineLength = aBuf.getLength();
     sal_Int32 nValueLength=0;
     if ( pFormulaMaxWidth && *pFormulaMaxWidth > 0 ) // count nValueLength
     {
-        sal_Int32 nCharMin = nLineLength + 4;  // 4 = "x^" + 2 extra characters
+        sal_Int32 nCharMin = nLineLength + mXName.getLength() + 3;  // 3 = "^" + 2 extra characters
         if ( m_fIntercept != 0.0 && m_fSlope != 0.0 )
         {
             if ( m_fIntercept < 0.0 )
@@ -187,7 +187,7 @@ OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
         }
         if( m_fSlope != 0.0 )  // add slope value
         {
-            aTmpBuf.append( "x^" );
+            aTmpBuf.append( mXName + "^" );
             aTmpBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope, pValueLength ));
         }
         addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );

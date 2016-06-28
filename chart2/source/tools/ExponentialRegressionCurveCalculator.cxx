@@ -162,12 +162,12 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     bool bHasLogSlope = !rtl::math::approxEqual( fabs(m_fLogSlope), 1.0 );
     bool bHasIntercept = !rtl::math::approxEqual( fIntercept, 1.0 ) && fIntercept != 0.0;
 
-    OUStringBuffer aBuf( "f(x) = " );
+    OUStringBuffer aBuf( mYName + " = " );
     sal_Int32 nLineLength = aBuf.getLength();
     sal_Int32 nValueLength=0;
     if ( pFormulaMaxWidth && *pFormulaMaxWidth > 0 )
     {          // count characters different from coefficients
-        sal_Int32 nCharMin = nLineLength + 11;  // 11 = "exp( ", " x )" + 2 extra characters
+        sal_Int32 nCharMin = nLineLength + 10 + mXName.getLength();  // 10 = "exp( ", " x )" + 2 extra characters
         if ( m_fSign < 0.0 )
             nCharMin += 2;
         if ( fIntercept == 0.0 || ( !bHasSlope && m_fLogIntercept != 0.0 ) )
@@ -219,7 +219,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
             aTmpBuf.append( aValueString + " " );
         }
     }
-    aTmpBuf.append( "x )");
+    aTmpBuf.append( mXName + " )");
     addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
 
     return aBuf.makeStringAndClear();

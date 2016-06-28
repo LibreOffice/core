@@ -52,6 +52,8 @@ static const char lcl_aServiceName[] =  "com.sun.star.chart2.RegressionEquation"
 enum
 {
     PROP_EQUATION_SHOW,
+    PROP_EQUATION_XNAME,
+    PROP_EQUATION_YNAME,
     PROP_EQUATION_SHOW_CORRELATION_COEFF,
     PROP_EQUATION_REF_PAGE_SIZE,
     PROP_EQUATION_REL_POS,
@@ -65,6 +67,20 @@ void lcl_AddPropertiesToVector(
         Property( "ShowEquation",
                   PROP_EQUATION_SHOW,
                   cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "XName",
+                  PROP_EQUATION_XNAME,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "YName",
+                  PROP_EQUATION_YNAME,
+                  cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -113,6 +129,8 @@ private:
         ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW, false );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_XNAME, OUString("x") );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_YNAME, OUString("f(x)") );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
         //::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SEPARATOR, OUString( '\n' ));
 
