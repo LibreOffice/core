@@ -447,8 +447,7 @@ public:
     virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  vcl::Window* pParent,
                                                                 const OUString& rTitle, //Dialog Title
                                                                 const OUString& rTabBgColorNoColorText, //Label for no tab color
-                                                                const Color& rDefaultColor, //Currently selected Color
-                                                                const OString& ) = 0;
+                                                                const Color& rDefaultColor ) = 0; //Currently selected Color
 
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( bool                    bAscii = true,
                                                                     const ScImportOptions*  pOptions = nullptr,
