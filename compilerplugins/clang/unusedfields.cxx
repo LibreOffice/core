@@ -210,8 +210,15 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
     if (!fieldDecl) {
         return true;
     }
+
     MyFieldInfo fieldInfo = niceName(fieldDecl);
-    touchedSet.insert(fieldInfo);
+
+    // ignore move/copy operator, it's self->self
+    const FunctionDecl* parentFunction = parentFunctionDecl(memberExpr);
+    const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(parentFunction);
+    if (!methodDecl || !(methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator())) {
+        touchedSet.insert(fieldInfo);
+    }
 
   // for the write-only analysis
 

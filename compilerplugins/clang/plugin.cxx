@@ -75,6 +75,33 @@ Stmt* Plugin::parentStmt( Stmt* stmt )
     return const_cast< Stmt* >( parents[ stmt ] );
     }
 
+static const Decl* getDeclContext(ASTContext& context, const Stmt* stmt)
+    {
+    auto it = context.getParents(*stmt).begin();
+
+    if (it == context.getParents(*stmt).end())
+          return nullptr;
+
+    const Decl *aDecl = it->get<Decl>();
+    if (aDecl)
+          return aDecl;
+
+    const Stmt *aStmt = it->get<Stmt>();
+    if (aStmt)
+        return getDeclContext(context, aStmt);
+
+    return nullptr;
+    }
+
+const FunctionDecl* Plugin::parentFunctionDecl( const Stmt* stmt )
+    {
+    const Decl *decl = getDeclContext(compiler.getASTContext(), stmt);
+    if (decl)
+        return static_cast<const FunctionDecl*>(decl->getNonClosureContext());
+
+    return nullptr;
+    }
+
 
 bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const {
     StringRef name {

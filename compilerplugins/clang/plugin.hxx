@@ -69,6 +69,7 @@ class Plugin
         */
         const Stmt* parentStmt( const Stmt* stmt );
         Stmt* parentStmt( Stmt* stmt );
+        const FunctionDecl* parentFunctionDecl( const Stmt* stmt );
         /**
          Checks if the location is inside an UNO file, more specifically, if it forms part of the URE stable interface,
          which is not allowed to be changed.

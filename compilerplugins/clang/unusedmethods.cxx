@@ -221,33 +221,6 @@ void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl, std::
 // prevent recursive templates from blowing up the stack
 static std::set<std::string> traversedFunctionSet;
 
-const Decl* get_DeclContext_from_Stmt(ASTContext& context, const Stmt& stmt)
-{
-  auto it = context.getParents(stmt).begin();
-
-  if (it == context.getParents(stmt).end())
-      return nullptr;
-
-  const Decl *aDecl = it->get<Decl>();
-  if (aDecl)
-      return aDecl;
-
-  const Stmt *aStmt = it->get<Stmt>();
-  if (aStmt)
-      return get_DeclContext_from_Stmt(context, *aStmt);
-
-  return nullptr;
-}
-
-static const FunctionDecl* get_top_FunctionDecl_from_Stmt(ASTContext& context, const Stmt& stmt)
-{
-  const Decl *decl = get_DeclContext_from_Stmt(context, stmt);
-  if (decl)
-      return static_cast<const FunctionDecl*>(decl->getNonClosureContext());
-
-  return nullptr;
-}
-
 bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 {
     // Note that I don't ignore ANYTHING here, because I want to get calls to my code that result
@@ -285,9 +258,9 @@ gotfunc:
     CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
     if (calleeMethodDecl && calleeMethodDecl->getAccess() == AS_public)
     {
-        const FunctionDecl* parentFunctionDecl = get_top_FunctionDecl_from_Stmt(compiler.getASTContext(), *expr);
-        if (parentFunctionDecl && parentFunctionDecl != calleeFunctionDecl) {
-            calledFromOutsideSet.insert(niceName(parentFunctionDecl));
+        const FunctionDecl* parentFunction = parentFunctionDecl(expr);
+        if (parentFunction && parentFunction != calleeFunctionDecl) {
+            calledFromOutsideSet.insert(niceName(parentFunction));
         }
     }
 

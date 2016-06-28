@@ -155,33 +155,6 @@ bool SingleValFields::VisitCXXConstructorDecl( const CXXConstructorDecl* decl )
     return true;
 }
 
-const Decl* get_DeclContext_from_Stmt(ASTContext& context, const Stmt& stmt)
-{
-  auto it = context.getParents(stmt).begin();
-
-  if (it == context.getParents(stmt).end())
-      return nullptr;
-
-  const Decl *aDecl = it->get<Decl>();
-  if (aDecl)
-      return aDecl;
-
-  const Stmt *aStmt = it->get<Stmt>();
-  if (aStmt)
-      return get_DeclContext_from_Stmt(context, *aStmt);
-
-  return nullptr;
-}
-
-const FunctionDecl* SingleValFields::get_top_FunctionDecl_from_Stmt(const Stmt& stmt)
-{
-  const Decl *decl = get_DeclContext_from_Stmt(compiler.getASTContext(), stmt);
-  if (decl)
-      return static_cast<const FunctionDecl*>(decl->getNonClosureContext());
-
-  return nullptr;
-}
-
 /**
  * Check for calls to methods where a pointer to something is cast to a pointer to void.
  * At which case it could have anything written to it.
@@ -269,8 +242,8 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     if (ignoreLocation(memberExpr) || !isInterestingType(fieldDecl->getType()))
         return true;
 
-    const FunctionDecl* parentFunctionDecl = get_top_FunctionDecl_from_Stmt(*memberExpr);
-    const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(parentFunctionDecl);
+    const FunctionDecl* parentFunction = parentFunctionDecl(memberExpr);
+    const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(parentFunction);
     if (methodDecl && (methodDecl->isCopyAssignmentOperator() || methodDecl->isMoveAssignmentOperator()))
        return true;
 
@@ -285,7 +258,7 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     if (parent && isa<ReturnStmt>(parent)) {
         const Stmt* parent2 = parentStmt(parent);
         if (parent2 && isa<CompoundStmt>(parent2)) {
-            QualType qt = parentFunctionDecl->getReturnType().getDesugaredType(compiler.getASTContext());
+            QualType qt = parentFunction->getReturnType().getDesugaredType(compiler.getASTContext());
             if (!qt.isConstQualified() && qt->isReferenceType()) {
                 assignValue = "?";
                 bPotentiallyAssignedTo = true;
