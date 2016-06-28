@@ -270,6 +270,8 @@ ViewShellBase::ViewShellBase (
 */
 ViewShellBase::~ViewShellBase()
 {
+    sfx2::SfxNotebookBar::CloseMethod(GetFrame()->GetBindings());
+
     rtl::Reference<SlideShow> xSlideShow(SlideShow::GetSlideShow(*this));
     if (xSlideShow.is() && xSlideShow->dependsOn(this))
         SlideShow::Stop(*this);
@@ -770,8 +772,6 @@ bool ViewShellBase::PrepareClose (bool bUI)
 
     if (bResult)
     {
-        sfx2::SfxNotebookBar::CloseMethod(GetFrame()->GetBindings());
-
         mpImpl->mbIsClosing = true;
 
         // Forward call to main sub shell.
