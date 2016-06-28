@@ -34,7 +34,7 @@ class SlideTransitionBox : public VclVBox
 
 public:
     SlideTransitionBox(vcl::Window* pParent);
-    ~SlideTransitionBox();
+    ~SlideTransitionBox() override;
 
     virtual void dispose() override;
     virtual void StateChanged(StateChangedType nStateChange) override;
