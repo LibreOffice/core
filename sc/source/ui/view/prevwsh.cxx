@@ -949,7 +949,7 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
     }
 
     // Common SdrModel processing
-    SdrModel::WriteUserDataSequence(rSeq);
+    GetDocument().GetDrawLayer()->WriteUserDataSequence(rSeq);
 }
 
 void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq)
@@ -977,7 +977,7 @@ void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyV
                 }
                 // Fallback to common SdrModel processing
                 else GetDocument().GetDrawLayer()->ReadUserDataSequenceValue(pSeq);
-        }
+            }
         }
     }
 }

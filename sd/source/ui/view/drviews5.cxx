@@ -454,7 +454,7 @@ void DrawViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Pro
     rSequence[nIndex].Value <<= mbZoomOnPage;
 
     // Common SdrModel processing
-    SdrModel::WriteUserDataSequence(rSequence, bBrowse);
+    GetDocSh()->GetDoc()->WriteUserDataSequence(rSequence, bBrowse);
 }
 
 void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence, bool bBrowse )

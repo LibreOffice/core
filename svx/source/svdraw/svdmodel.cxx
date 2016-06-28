@@ -1933,7 +1933,8 @@ void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* /*pVal
 void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues, bool /*bBrowse*/)
 {
     std::vector< std::pair< OUString, Any > > aUserData;
-    // TODO: addPair(aUserData, "PropName", PropValue);
+    (void) this;
+    // TODO: Write common model-level properties (e.g. to settings.xml)
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());
