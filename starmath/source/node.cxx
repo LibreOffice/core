@@ -1144,12 +1144,13 @@ void SmBinDiagonalNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // Both arguments have to get into the SubNodes before the Operator so that clicking
     // within the GraphicWindow sets the FormulaCursor correctly (cf. SmRootNode)
     SmNode *pLeft  = GetSubNode(0),
-           *pRight = GetSubNode(1);
+           *pRight = GetSubNode(1),
+           *pLine  = GetSubNode(2);
     assert(pLeft);
     assert(pRight);
+    assert(pLine && pLine->GetType() == NPOLYLINE);
 
-    OSL_ENSURE(GetSubNode(2)->GetType() == NPOLYLINE, "Sm : wrong node type");
-    SmPolyLineNode *pOper = static_cast<SmPolyLineNode *>(GetSubNode(2));
+    SmPolyLineNode *pOper = static_cast<SmPolyLineNode *>(pLine);
     assert(pOper);
 
     //! some routines being called extract some info from the OutputDevice's
