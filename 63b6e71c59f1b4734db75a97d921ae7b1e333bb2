@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_4a0cc442",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1936,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-28T12:33:38Z",
+      "side": 1,
+      "message": "Please make it clear why this will need to be non-static; a call to non-member addPair doesn\u0027t explain that.  (So that in the future, should the need to make this non-static never arise after all, maintainers can understand how to clean this up.)",
+      "revId": "63b6e71c59f1b4734db75a97d921ae7b1e333bb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
