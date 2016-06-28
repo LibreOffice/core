@@ -64,7 +64,9 @@ public:                                             \
                      : pDlg(p)                      \
                      {}                             \
     virtual         ~Class();                       \
-    virtual short   Execute() override ;
+    virtual short   Execute() override ;            \
+    virtual Bitmap  createScreenshot() const override; \
+    virtual OString GetScreenshotId() const; \
 
 #define DECL_ABSTDLG2_BASE(Class,DialogClass)       \
     ScopedVclPtr<DialogClass> pDlg;                 \
@@ -83,6 +85,14 @@ Class::~Class()                                     \
 short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
+}                                                   \
+Bitmap Class::createScreenshot() const              \
+{                                                   \
+    return pDlg->createScreenshot();                \
+}                                                   \
+OString Class::GetScreenshotId() const              \
+{                                                   \
+    return pDlg->GetScreenshotId();                 \
 }
 
 #define IMPL_ABSTDLG2_BASE(Class)                   \
