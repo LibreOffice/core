@@ -543,6 +543,10 @@ public:
     void SetAddExtLeading( bool bEnabled );
     bool IsAddExtLeading() const { return mbAddExtLeading; }
 
+    // tdf#99729 compatibility flag
+    void SetAnchoredTextOverflowLegacy(bool bEnabled);
+    bool IsAnchoredTextOverflowLegacy() const;
+
     void ReformatAllTextObjects();
 
     SdrOutliner* createOutliner( OutlinerMode nOutlinerMode );
@@ -551,8 +555,8 @@ public:
     bool IsWriter() const { return !bMyPool; }
 
     // Used as a fallback in *::ReadUserDataSequence() to process common properties
-    static void ReadUserDataSequenceValue(const css::beans::PropertyValue *pValue);
-    static void WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues, bool bBrowse = false);
+    void ReadUserDataSequenceValue(const css::beans::PropertyValue *pValue);
+    void WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues, bool bBrowse = false);
 
     /** returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType GetPageNumType() const;
