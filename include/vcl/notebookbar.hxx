@@ -13,13 +13,13 @@
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/contexttabctrl.hxx>
-#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <vcl/EnumContext.hxx>
+#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
 /// This implements Widget Layout-based notebook-like menu bar.
-class NotebookBar : public Control, public VclBuilderContainer,
-                    public css::ui::XContextChangeEventListener
+class NotebookBar : public Control, public VclBuilderContainer
 {
+friend class NotebookBarContextChangeEventListener;
 public:
     NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame);
     virtual ~NotebookBar();
@@ -30,20 +30,12 @@ public:
 
     virtual void StateChanged(StateChangedType nType) override;
 
-    // XContextChangeEventListener
-    virtual void SAL_CALL notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
-
-    virtual ::css::uno::Any SAL_CALL queryInterface(const ::css::uno::Type& aType)
-        throw (::css::uno::RuntimeException, ::std::exception) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
-    virtual void SAL_CALL disposing(const ::css::lang::EventObject&)
-        throw (::css::uno::RuntimeException, ::std::exception) override;
-
+    const css::uno::Reference<css::ui::XContextChangeEventListener>& getContextChangeEventListener() const { return m_pEventListener; }
 private:
+    css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
     VclPtr<ContextTabControl> m_pTabControl;
 };
+
 
 #endif // INCLUDED_VCL_NOTEBOOKBAR_HXX
 

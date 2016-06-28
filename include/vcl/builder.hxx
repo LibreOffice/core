@@ -351,8 +351,8 @@ private:
     void        handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     VclPtr<vcl::Window> handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
-    std::vector<vcl::EnumContext::Context>    handleStyle(xmlreader::XmlReader &reader);
-    vcl::EnumContext::Context    getContext(xmlreader::XmlReader &reader);
+    static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader);
+    static vcl::EnumContext::Context getContext(xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
     static void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);

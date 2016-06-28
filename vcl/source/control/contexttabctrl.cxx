@@ -39,7 +39,7 @@ void ContextTabControl::SetContext( vcl::EnumContext::Context eContext )
             TabPage* pPage = static_cast<TabPage*>(GetChild(nChild));
 
             if (pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Context_Any))
-                EnablePage(nChild + 1, true);
+                EnablePage(nChild + 1);
             else
                 EnablePage(nChild + 1, false);
 
