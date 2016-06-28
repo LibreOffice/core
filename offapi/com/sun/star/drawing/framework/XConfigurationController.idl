@@ -126,7 +126,7 @@ interface XResource;
     The ResourceId and ResourceObject members are not set.</p></li>
     <li>ResourceActivation is sent when a resource is
     activated, i.e. when a new object of a resource is created (or taken
-    from a cash).</p>
+    from a cache).</p>
     <p>The ResourceId and ResourceObject
     members are set to the XResourceId and object reference of
     the activated resource.</p></li>
