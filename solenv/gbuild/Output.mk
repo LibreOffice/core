@@ -62,6 +62,7 @@ KNOWN_TERM:=Eterm aterm gnome kterm linux putty rxvt rxvt-unicode screen xterm x
 KNOWN_TERM+=$(patsubst %,%-color,$(KNOWN_TERM))
 KNOWN_TERM+=$(patsubst %-color,%-256color,$(KNOWN_TERM))
 KNOWN_TERM+=$(patsubst %-color,%+256color,$(KNOWN_TERM))
+KNOWN_TERM+=$(patsubst %,screen.%,$(KNOWN_TERM))
 ifneq ($(strip $(gb_COLOR)),)
 ifneq ($(filter $(TERM),$(KNOWN_TERM)),)
 
