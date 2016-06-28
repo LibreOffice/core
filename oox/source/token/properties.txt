@@ -564,5 +564,7 @@ Width
 Wildcards
 WritingMode
 XLA1Representation
+XName
+YName
 ZoomType
 ZoomValue

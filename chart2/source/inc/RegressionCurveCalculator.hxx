@@ -60,6 +60,7 @@ protected:
     bool  mForceIntercept;
     double    mInterceptValue;
     sal_Int32 mPeriod;
+    OUString mXName, mYName;
 
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL setRegressionProperties(
@@ -97,6 +98,10 @@ protected:
     virtual OUString SAL_CALL getFormattedRepresentation(
         const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumFmtSupplier,
         sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength )
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    virtual void SAL_CALL setXYNames(
+        const OUString& aXName, const OUString& aYName )
         throw (css::uno::RuntimeException, std::exception) override;
 };
 
