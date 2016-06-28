@@ -1382,6 +1382,8 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 
 IMPL_LINK_TYPED(SvxColorWindow_Impl, SelectHdl, ValueSet*, pColorSet, void)
 {
+    VclPtr<SvxColorWindow_Impl> xThis(this);
+
     Color aColor = pColorSet->GetItemColor( pColorSet->GetSelectItemId() );
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
@@ -1413,6 +1415,8 @@ IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, SelectPaletteHdl, ListBox&, void)
 
 IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, AutoColorClickHdl, Button*, void)
 {
+    VclPtr<SvxColorWindow_Impl> xThis(this);
+
     Color aColor;
     switch ( theSlotId )
     {
@@ -1444,6 +1448,8 @@ IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, AutoColorClickHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, OpenPickerClickHdl, Button*, void)
 {
+    VclPtr<SvxColorWindow_Impl> xThis(this);
+
     if ( IsInPopupMode() )
         EndPopupMode();
     mrPaletteManager.PopupColorPicker(maCommand);
@@ -1691,6 +1697,8 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
 IMPL_LINK_NOARG_TYPED(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 {
+    VclPtr<SvxFrameWindow_Impl> xThis(this);
+
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
@@ -1790,10 +1798,13 @@ IMPL_LINK_NOARG_TYPED(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     aBorderInner.QueryValue( a );
     aArgs[1].Value = a;
 
-    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-        This instance may be deleted in the meantime (i.e. when a dialog is opened
-        while in Dispatch()), accessing members will crash in this case. */
-    aFrameSet->SetNoSelection();
+    if (aFrameSet)
+    {
+        /* #i33380# Moved the following line above the Dispatch() call.
+           This instance may be deleted in the meantime (i.e. when a dialog is opened
+           while in Dispatch()), accessing members will crash in this case. */
+        aFrameSet->SetNoSelection();
+    }
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                  ".uno:SetBorderStyle",
@@ -1984,6 +1995,8 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
 
 IMPL_LINK_NOARG_TYPED(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
 {
+    VclPtr<SvxCurrencyList_Impl> xThis(this);
+
     if ( IsInPopupMode() )
         EndPopupMode();
 
@@ -1998,6 +2011,8 @@ IMPL_LINK_NOARG_TYPED(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
 
 IMPL_LINK_NOARG_TYPED(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
 {
+    VclPtr<SvxLineWindow_Impl> xThis(this);
+
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
     SvxBorderStyle  nStyle = SvxBorderStyle( m_aLineStyleLb->GetSelectEntryStyle() );
 
