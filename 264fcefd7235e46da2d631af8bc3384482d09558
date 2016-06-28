@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_ea3598f7",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-28T11:26:42Z",
+      "side": 1,
+      "message": "and now pColorListItem can be null",
+      "revId": "264fcefd7235e46da2d631af8bc3384482d09558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_0a3b9cec",
+        "filename": "svx/source/sidebar/area/AreaPropertyPanelBase.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-28T11:26:42Z",
+      "side": 1,
+      "message": "so you can get a crash here",
+      "revId": "264fcefd7235e46da2d631af8bc3384482d09558",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
