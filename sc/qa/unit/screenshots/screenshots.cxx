@@ -20,9 +20,11 @@
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <osl/conditn.hxx>
+#include <osl/file.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
+#include <vcl/pngwrite.hxx>
 
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
@@ -43,7 +45,22 @@ using namespace css;
 
 #if !defined(WNT) && !defined(MACOSX)
 static const char* DATA_DIRECTORY = "/sc/qa/unit/screenshots/data/";
+static const char* SCREENSHOT_DIRECTORY = "/workdir/screenshots/";
 #endif
+
+namespace {
+    void splitHelpId( OString& rHelpId, OUString& rDirname, OUString &rBasename )
+    {
+        sal_Int32 nIndex = rHelpId.lastIndexOf( '/' );
+
+        if( nIndex > 0 )
+            rDirname = OStringToOUString( rHelpId.copy( 0, nIndex ), RTL_TEXTENCODING_UTF8 );
+
+        if( rHelpId.getLength() > nIndex+1 )
+            rBasename= OStringToOUString( rHelpId.copy( nIndex+1 ), RTL_TEXTENCODING_UTF8 );
+    }
+}
+
 
 class ScScreenshotTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
@@ -53,24 +70,32 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
 #if !defined(WNT) && !defined(MACOSX)
-    void testOpeningSomeDialog();
+    void testOpeningModalDialogs();
     //void testOpeningModelessDialogs();
 #endif
 
     CPPUNIT_TEST_SUITE(ScScreenshotTest);
 #if !defined(WNT) && !defined(MACOSX)
-    CPPUNIT_TEST(testOpeningSomeDialog);
+    CPPUNIT_TEST(testOpeningModalDialogs);
     //CPPUNIT_TEST(testOpeningModelessDialogs);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
 #if !defined(WNT) && !defined(MACOSX)
-    ScModelObj* createDoc(const char* pName);
+    void initializeWithDoc(const char* pName);
+
+    VclAbstractDialog* createDialogByID( sal_uInt32 nID);
+    void dumpDialogToPath( VclAbstractDialog& rDialog );
+    void saveScreenshot( VclAbstractDialog& rDialog );
 
 #endif
 
     uno::Reference<lang::XComponent> mxComponent;
+    SfxObjectShell* pFoundShell;
+    ScDocShellRef xDocSh;
+    ScTabViewShell* pViewShell;
+    ScAbstractDialogFactory* pFact;
 };
 
 ScScreenshotTest::ScScreenshotTest()
@@ -82,6 +107,9 @@ void ScScreenshotTest::setUp()
     test::BootstrapFixture::setUp();
 
     mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
+
+    osl::FileBase::RC err = osl::Directory::create( m_directories.getURLFromSrc( SCREENSHOT_DIRECTORY ) );
+    CPPUNIT_ASSERT_MESSAGE( "Failed to create screenshot directory", (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
 }
 
 void ScScreenshotTest::tearDown()
@@ -93,142 +121,183 @@ void ScScreenshotTest::tearDown()
 }
 
 #if !defined(WNT) && !defined(MACOSX)
-ScModelObj* ScScreenshotTest::createDoc(const char* pName)
+void ScScreenshotTest::initializeWithDoc(const char* pName)
 {
     if (mxComponent.is())
         mxComponent->dispose();
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(pName), "com.sun.star.sheet.SpreadsheetDocument");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
-    return pModelObj;
-}
 
-void ScScreenshotTest::testOpeningSomeDialog()
-{
-    ScModelObj* pModelObj = createDoc("empty.ods");
-    ScDocument* pDoc = pModelObj->GetDocument();
-
-    // display insert sheet dialog
-    //uno::Sequence<beans::PropertyValue> aArgs;
-    //comphelper::dispatchCommand(".uno:Insert", aArgs);
-
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
 
-    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(xDocSh != nullptr);
 
-    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    pViewShell = xDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell != nullptr);
 
-    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-    CPPUNIT_ASSERT( pFact != nullptr );
+    pFact = ScAbstractDialogFactory::Create();
+    CPPUNIT_ASSERT_MESSAGE("Failed to create dialog factory", pFact);
+}
 
-    ScViewData& rViewData = pViewShell->GetViewData();
-    SCTAB nTabSelCount = rViewData.GetMarkData().GetSelectCount();
-    std::unique_ptr<AbstractScInsertTableDlg> pDlg( pFact->CreateScInsertTableDlg(
-           pViewShell->GetDialogParent(), rViewData, nTabSelCount, false));
-    CPPUNIT_ASSERT( pDlg != nullptr );
-
-    pDlg->Execute();
-
-    std::unique_ptr<AbstractScDeleteCellDlg> pDlg2( pFact->CreateScDeleteCellDlg(
-           pViewShell->GetDialogParent(), false));
-    CPPUNIT_ASSERT( pDlg2 != nullptr );
-
-    pDlg2->Execute();
-
-    std::unique_ptr<AbstractScInsertContentsDlg> pDlg3( pFact->CreateScInsertContentsDlg(
-           pViewShell->GetDialogParent()));
-    CPPUNIT_ASSERT( pDlg3 != nullptr );
-
-    pDlg3->Execute();
-
-    std::unique_ptr<AbstractScColRowLabelDlg> pDlg4( pFact->CreateScColRowLabelDlg(
-           pViewShell->GetDialogParent(), true, false));
-    CPPUNIT_ASSERT( pDlg4 != nullptr );
-
-    pDlg4->Execute();
-
-    std::unique_ptr<AbstractScDataPilotDatabaseDlg> pDlg5( pFact->CreateScDataPilotDatabaseDlg(
-           pViewShell->GetDialogParent()));
-    CPPUNIT_ASSERT( pDlg5 != nullptr );
-
-    pDlg5->Execute();
-
-    std::unique_ptr<AbstractScDataPilotSourceTypeDlg> pDlg6( pFact->CreateScDataPilotSourceTypeDlg(
-           pViewShell->GetDialogParent(), true));
-    CPPUNIT_ASSERT( pDlg6 != nullptr );
-
-    pDlg6->Execute();
-
-    std::unique_ptr<AbstractScDeleteContentsDlg> pDlg7( pFact->CreateScDeleteContentsDlg(
-           pViewShell->GetDialogParent()));
-    CPPUNIT_ASSERT( pDlg7 != nullptr );
-
-    pDlg7->Execute();
-
-    // just fake some flags
-    sal_uInt16 nFlags = NAME_LEFT | NAME_TOP;
-    std::unique_ptr<AbstractScNameCreateDlg> pDlg8( pFact->CreateScNameCreateDlg(
-           pViewShell->GetDialogParent(), nFlags));
-    CPPUNIT_ASSERT( pDlg8 != nullptr );
-
-    pDlg8->Execute();
-
-    //FIXME: translatable string here
+VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
+{
+    VclAbstractDialog *pReturnDialog = nullptr;
+    ////FIXME: translatable string here
     const OUString aDefaultSheetName("Sheet1");
-    const OString aEmpty("");
-    std::unique_ptr<AbstractScStringInputDlg> pDlg9( pFact->CreateScStringInputDlg(
-           pViewShell->GetDialogParent(), OUString(ScResId(SCSTR_APDTABLE)), OUString(ScResId(SCSTR_NAME)),
-           aDefaultSheetName, aEmpty, aEmpty));
-    CPPUNIT_ASSERT( pDlg9 != nullptr );
 
-    pDlg9->Execute();
+    switch ( nID )
+    {
+        case 0:
+        {
+            ScViewData& rViewData = pViewShell->GetViewData();
+            SCTAB nTabSelCount = rViewData.GetMarkData().GetSelectCount();
 
-    std::unique_ptr<AbstractScTabBgColorDlg> pDlg10( pFact->CreateScTabBgColorDlg(
-           pViewShell->GetDialogParent(), OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
-           OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)), Color(0xff00ff), ".uno:TabBgColor"));
-    CPPUNIT_ASSERT( pDlg10 != nullptr );
+            pReturnDialog = pFact->CreateScInsertTableDlg(
+                   pViewShell->GetDialogParent(), rViewData, nTabSelCount, false);
 
-    pDlg10->Execute();
+            break;
+        }
 
-    std::unique_ptr<AbstractScTextImportOptionsDlg> pDlg11( pFact->CreateScTextImportOptionsDlg());
-    CPPUNIT_ASSERT( pDlg11 != nullptr );
+        case 1:
+        {
+            pReturnDialog = pFact->CreateScDeleteCellDlg( pViewShell->GetDialogParent(), false );
+            break;
+        }
 
-    pDlg11->Execute();
+        case 2:
+        {
+            pReturnDialog = pFact->CreateScInsertContentsDlg( pViewShell->GetDialogParent() );
+            break;
+        }
 
-    //FIXME: looks butt-ugly w/ empty file, move it elsewhere, where
-    //we actually have some data
-    std::unique_ptr<AbstractScDataFormDlg> pDlg12( pFact->CreateScDataFormDlg(
-           pViewShell->GetDialogParent(), pViewShell));
-    CPPUNIT_ASSERT( pDlg12 != nullptr );
+        case 3:
+        {
+            pReturnDialog = pFact->CreateScColRowLabelDlg( pViewShell->GetDialogParent(), true, false );
+            break;
+        }
 
-    pDlg12->Execute();
+        case 4:
+        {
+            pReturnDialog = pFact->CreateScDataPilotDatabaseDlg( pViewShell->GetDialogParent() );
+            break;
+        }
+        case 5:
+        {
 
-    const OUString aCsv("some, strings, here, separated, by, commas");
-    ScImportStringStream aStream( aCsv );
-    std::unique_ptr<AbstractScImportAsciiDlg> pDlg13( pFact->CreateScImportAsciiDlg(
-           OUString(), &aStream, SC_PASTETEXT ));
-    CPPUNIT_ASSERT( pDlg13 != nullptr );
+            pReturnDialog = pFact->CreateScDataPilotSourceTypeDlg(pViewShell->GetDialogParent(), true );
+            break;
+        }
 
-    pDlg13->Execute();
+        case 6:
+        {
+            pReturnDialog = pFact->CreateScDeleteContentsDlg( pViewShell->GetDialogParent() );
+            break;
+        }
 
-    ScopedVclPtrInstance<ScShareDocumentDlg> pDlg14( pViewShell->GetDialogParent(), &rViewData );
-    CPPUNIT_ASSERT( pDlg14 != nullptr );
+        case 7:
+        {
+            //// just fake some flags
+            sal_uInt16 nFlags = NAME_LEFT | NAME_TOP;
+            pReturnDialog = pFact->CreateScNameCreateDlg( pViewShell->GetDialogParent(), nFlags );
+            break;
+        }
 
-    pDlg14->Execute();
+        case 8:
+        {
+            const OString aEmpty("");
+            pReturnDialog = pFact->CreateScStringInputDlg( pViewShell->GetDialogParent(),
+                                OUString(ScResId(SCSTR_APDTABLE)), OUString(ScResId(SCSTR_NAME)),
+                                aDefaultSheetName, aEmpty, aEmpty );
+            break;
+        }
 
-    std::unique_ptr<AbstractScMoveTableDlg> pDlg15( pFact->CreateScMoveTableDlg(
-           pViewShell->GetDialogParent(), aDefaultSheetName));
-    CPPUNIT_ASSERT( pDlg15 != nullptr );
+        case 9:
+        {
+            pReturnDialog = pFact->CreateScTabBgColorDlg( pViewShell->GetDialogParent(),
+                                OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
+                                OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)), Color(0xff00ff), ".uno:TabBgColor" );
+            break;
+        }
 
-    pDlg15->Execute();
+        case 10:
+        {
+            pReturnDialog = pFact->CreateScTextImportOptionsDlg();
+            break;
+        }
 
-    ScopedVclPtrInstance<ScTableProtectionDlg> pDlg16(pViewShell->GetDialogParent());
-    CPPUNIT_ASSERT( pDlg16 != nullptr );
+        case 11:
+        {
+            ////FIXME: looks butt-ugly w/ empty file, move it elsewhere, where
+            ////we actually have some data
+            pReturnDialog = pFact->CreateScDataFormDlg( pViewShell->GetDialogParent(), pViewShell );
+            break;
+        }
 
-    pDlg16->Execute();
+        case 12:
+        {
+            pReturnDialog = pFact->CreateScMoveTableDlg( pViewShell->GetDialogParent(), aDefaultSheetName );
+            break;
+        }
+
+        //case 12:
+        //{
+        //    const OUString aCsv("some, strings, here, separated, by, commas");
+        //    ScImportStringStream aStream( aCsv );
+        //    pReturnDialog = pFact->CreateScImportAsciiDlg( OUString(), &aStream, SC_PASTETEXT );
+        //    break;
+        //}
+           //ScopedVclPtrInstance<ScShareDocumentDlg> pDlg14( pViewShell->GetDialogParent(), &rViewData );
+            //ScopedVclPtrInstance<ScTableProtectionDlg> pDlg16(pViewShell->GetDialogParent());
+        default:
+            break;
+    }
+
+    //CPPUNIT_ASSERT_MESSAGE( "Failed to create dialog", pReturnDialog );
+    return pReturnDialog;
+}
+
+void ScScreenshotTest::saveScreenshot( VclAbstractDialog& rDialog )
+{
+     const Bitmap aScreenshot(rDialog.createScreenshot());
+
+     if (!aScreenshot.IsEmpty())
+     {
+         OString aScreenshotId = rDialog.GetScreenshotId();
+         OUString aDirname, aBasename;
+         splitHelpId( aScreenshotId, aDirname, aBasename );
+         aDirname = OUString::createFromAscii( SCREENSHOT_DIRECTORY ) + aDirname;
+
+         osl::FileBase::RC err = osl::Directory::createPath( m_directories.getURLFromSrc( aDirname ));
+         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to create " + aDirname, RTL_TEXTENCODING_UTF8).getStr(),
+                         (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
+
+         OUString aFullPath = m_directories.getSrcRootPath() + aDirname + "/" + aBasename + ".png";
+         SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
+         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to open " + OUString::number(aNew.GetErrorCode()), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen() );
+
+         vcl::PNGWriter aPNGWriter(aScreenshot);
+         aPNGWriter.Write(aNew);
+     }
+}
+
+void ScScreenshotTest::dumpDialogToPath( VclAbstractDialog& rDialog )
+{
+    saveScreenshot( rDialog );
+}
+
+void ScScreenshotTest::testOpeningModalDialogs()
+{
+    initializeWithDoc("empty.ods");
+
+    const sal_uInt32 nDialogs = 13;
+
+    for ( sal_uInt32 i = 0; i < nDialogs; i++ )
+    {
+        VclAbstractDialog *pDialog = createDialogByID( i );
+
+        dumpDialogToPath( *pDialog );
+    }
 }
 
 #endif
