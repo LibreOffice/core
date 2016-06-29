@@ -107,20 +107,19 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (aFilename == SRCDIR "/include/svl/svdde.hxx") {
         return true;
     }
-    std::string aParentName = pCXXMethodDecl->getParent()->getQualifiedNameAsString();
+    auto cdc = loplugin::DeclCheck(pCXXMethodDecl->getParent());
     // special case having something to do with static initialisation
     // sal/osl/all/utility.cxx
-    if (aParentName == "osl::OGlobalTimer") {
+    if (cdc.Class("OGlobalTimer").Namespace("osl").GlobalNamespace()) {
         return true;
     }
     // leave the TopLeft() method alone for consistency with the other "corner" methods
-    if (aParentName == "BitmapInfoAccess") {
+    if (cdc.Class("BitmapInfoAccess").GlobalNamespace()) {
         return true;
     }
-    auto dc = loplugin::DeclCheck(pCXXMethodDecl->getParent());
     // in this case, the code is taking the address of the member function
     // shell/source/unix/sysshell/recently_used_file_handler.cxx
-    if (dc.Struct("recently_used_item").AnonymousNamespace().GlobalNamespace())
+    if (cdc.Struct("recently_used_item").AnonymousNamespace().GlobalNamespace())
     {
         return true;
     }
@@ -139,53 +138,88 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
     // classes that have static data and some kind of weird reference-counting trick in its constructor
-    if (aParentName == "LinguOptions" || aParentName == "svtools::EditableExtendedColorConfig"
-        || aParentName == "svtools::ExtendedColorConfig" || aParentName == "SvtMiscOptions"
-        || aParentName == "SvtAccessibilityOptions" || aParentName == "svtools::ColorConfig"
-        || aParentName == "SvtOptionsDrawinglayer" || aParentName == "SvtMenuOptions"
-        || aParentName == "SvtToolPanelOptions" || aParentName == "SvtSlideSorterBarOptions"
-        || aParentName == "connectivity::SharedResources"
-        || aParentName == "svxform::OParseContextClient"
-        || aParentName == "frm::OLimitedFormats" )
+    if (cdc.Class("LinguOptions").GlobalNamespace()
+        || (cdc.Class("EditableExtendedColorConfig").Namespace("svtools")
+            .GlobalNamespace())
+        || (cdc.Class("ExtendedColorConfig").Namespace("svtools")
+            .GlobalNamespace())
+        || cdc.Class("SvtMiscOptions").GlobalNamespace()
+        || cdc.Class("SvtAccessibilityOptions").GlobalNamespace()
+        || cdc.Class("ColorConfig").Namespace("svtools").GlobalNamespace()
+        || cdc.Class("SvtOptionsDrawinglayer").GlobalNamespace()
+        || cdc.Class("SvtMenuOptions").GlobalNamespace()
+        || cdc.Class("SvtToolPanelOptions").GlobalNamespace()
+        || cdc.Class("SvtSlideSorterBarOptions").GlobalNamespace()
+        || (cdc.Class("SharedResources").Namespace("connectivity")
+            .GlobalNamespace())
+        || (cdc.Class("OParseContextClient").Namespace("svxform")
+            .GlobalNamespace())
+        || cdc.Class("OLimitedFormats").Namespace("frm").GlobalNamespace())
     {
         return true;
     }
-    std::string fqn = aParentName + "::" + pCXXMethodDecl->getNameAsString();
+    auto fdc = loplugin::DeclCheck(pCXXMethodDecl);
     // only empty on Linux, not on windows
-    if (fqn == "OleEmbeddedObject::GetVisualRepresentationInNativeFormat_Impl"
-        || fqn == "OleEmbeddedObject::GetRidOfComponent"
-        || fqn == "connectivity::mozab::ProfileAccess::isProfileLocked"
-        || startsWith(fqn, "SbxDecimal::")
-        || fqn == "SbiDllMgr::Call" || fqn == "SbiDllMgr::FreeDll"
-        || fqn == "SfxApplication::InitializeDde" || fqn == "SfxApplication::RemoveDdeTopic"
-        || fqn == "ScannerManager::ReleaseData") {
+    if ((fdc.Function("GetVisualRepresentationInNativeFormat_Impl")
+         .Class("OleEmbeddedObject").GlobalNamespace())
+        || (fdc.Function("GetRidOfComponent").Class("OleEmbeddedObject")
+            .GlobalNamespace())
+        || (fdc.Function("isProfileLocked").Class("ProfileAccess")
+            .Namespace("mozab").Namespace("connectivity").GlobalNamespace())
+        || cdc.Class("SbxDecimal").GlobalNamespace()
+        || fdc.Function("Call").Class("SbiDllMgr").GlobalNamespace()
+        || fdc.Function("FreeDll").Class("SbiDllMgr").GlobalNamespace()
+        || (fdc.Function("InitializeDde").Class("SfxApplication")
+            .GlobalNamespace())
+        || (fdc.Function("RemoveDdeTopic").Class("SfxApplication")
+            .GlobalNamespace())
+        || (fdc.Function("ReleaseData").Class("ScannerManager")
+            .GlobalNamespace()))
+    {
         return true;
     }
     // debugging stuff
-    if (fqn == "chart::InternalData::dump") {
+    if (fdc.Function("dump").Class("InternalData").Namespace("chart")
+        .GlobalNamespace())
+    {
         return true;
     }
     // used in a function-pointer-table
-    if (startsWith(fqn, "SbiRuntime::Step") || startsWith(fqn, "oox::xls::OoxFormulaParserImpl::")
-        || startsWith(fqn, "SwTableFormula::")
-        || startsWith(fqn, "oox::xls::BiffFormulaParserImpl::")
-        || fqn == "SwWW8ImplReader::Read_F_Shape"
-        || fqn == "SwWW8ImplReader::Read_Majority") {
+    if ((cdc.Class("SbiRuntime").GlobalNamespace()
+         && startsWith(pCXXMethodDecl->getNameAsString(), "Step"))
+        || (cdc.Class("OoxFormulaParserImpl").Namespace("xls").Namespace("oox")
+            .GlobalNamespace())
+        || cdc.Class("SwTableFormula").GlobalNamespace()
+        || (cdc.Class("BiffFormulaParserImpl").Namespace("xls").Namespace("oox")
+            .GlobalNamespace())
+        || (fdc.Function("Read_F_Shape").Class("SwWW8ImplReader")
+            .GlobalNamespace())
+        || (fdc.Function("Read_Majority").Class("SwWW8ImplReader")
+            .GlobalNamespace()))
+    {
         return true;
     }
     // have no idea why this can't be static, but 'make check' fails with it so...
-    if (fqn == "oox::drawingml::Shape::resolveRelationshipsOfTypeFromOfficeDoc") {
+    if (fdc.Function("resolveRelationshipsOfTypeFromOfficeDoc").Class("Shape")
+        .Namespace("drawingml").Namespace("oox").GlobalNamespace())
+    {
         return true;
     }
     // template magic
-    if (fqn == "ColumnBatch::getValue" || startsWith(fqn, "TitleImpl::")
-        || fqn == "ooo::vba::DefaultReturnHelper::getDefaultPropertyName") {
+    if (fdc.Function("getValue").Class("ColumnBatch").GlobalNamespace()
+        || cdc.Class("TitleImpl").GlobalNamespace()
+        || (fdc.Function("getDefaultPropertyName").Class("DefaultReturnHelper")
+            .Namespace("vba").Namespace("ooo").GlobalNamespace()))
+    {
         return true;
     }
     // depends on config options
-    if (fqn == "psp::PrintFontManager::autoInstallFontLangSupport"
-        || fqn == "GtkSalFrame::AllocateFrame"
-        || fqn == "GtkSalFrame::TriggerPaintEvent") {
+    if ((fdc.Function("autoInstallFontLangSupport").Class("PrintFontManager")
+         .Namespace("psp").GlobalNamespace())
+        || fdc.Function("AllocateFrame").Class("GtkSalFrame").GlobalNamespace()
+        || (fdc.Function("TriggerPaintEvent").Class("GtkSalFrame::")
+            .GlobalNamespace()))
+    {
         return true;
     }
 
@@ -197,7 +231,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
 
     report(
         DiagnosticsEngine::Warning,
-        "this method can be declared static " + fqn,
+        "this member function can be declared static",
         pCXXMethodDecl->getCanonicalDecl()->getLocation())
       << pCXXMethodDecl->getCanonicalDecl()->getSourceRange();
     FunctionDecl const * def;
