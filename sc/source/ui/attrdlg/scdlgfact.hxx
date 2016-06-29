@@ -65,6 +65,8 @@ public:                                             \
                      {}                             \
     virtual         ~Class();                       \
     virtual short   Execute() override ;            \
+    std::vector<OString> getAllPageUIXMLDescriptions() const; \
+    bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
     virtual Bitmap  createScreenshot() const override; \
     virtual OString GetScreenshotId() const; \
 
@@ -85,6 +87,14 @@ Class::~Class()                                     \
 short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
+}                                                   \
+std::vector<OString> Class::getAllPageUIXMLDescriptions() const \
+{                                                   \
+    return pDlg->getAllPageUIXMLDescriptions();     \
+}                                                   \
+bool Class::selectPageByUIXMLDescription(const OString& rUIXMLDescription) \
+{                                                   \
+   return pDlg->selectPageByUIXMLDescription(rUIXMLDescription);  \
 }                                                   \
 Bitmap Class::createScreenshot() const              \
 {                                                   \
