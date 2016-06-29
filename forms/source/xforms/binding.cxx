@@ -1281,7 +1281,7 @@ css::uno::Reference<css::util::XCloneable> SAL_CALL Binding::createClone()
 
 #define REGISTER_BOOL_PROPERTY_RO( property )   \
     registerProperty( PROPERTY_RO( property, sal_Bool ), \
-    new BooleanPropertyAccessor< Binding, bool >( this, nullptr, &Binding::get##property ) );
+    new BooleanPropertyAccessor< Binding >( this, nullptr, &Binding::get##property ) );
 
 void Binding::initializePropertySet()
 {

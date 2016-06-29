@@ -631,7 +631,7 @@ css::uno::Reference<css::container::XSet> Model::getSubmissions()
 
 #define REGISTER_BOOL_PROPERTY( property )   \
     registerProperty( PROPERTY( property, sal_Bool ), \
-    new BooleanPropertyAccessor< Model, bool >( this, &Model::set##property, &Model::get##property ) );
+    new BooleanPropertyAccessor< Model >( this, &Model::set##property, &Model::get##property ) );
 
 void Model::initializePropertySet()
 {

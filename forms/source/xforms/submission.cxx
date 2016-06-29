@@ -327,7 +327,7 @@ Model* Submission::getModelImpl() const
 
 #define REGISTER_PROPERTY_BOOL( property )   \
     registerProperty( PROPERTY( property, bool ), \
-    new BooleanPropertyAccessor< Submission, bool >( this, &Submission::set##property, &Submission::get##property ) );
+    new BooleanPropertyAccessor< Submission >( this, &Submission::set##property, &Submission::get##property ) );
 
 void Submission::initializePropertySet()
 {
