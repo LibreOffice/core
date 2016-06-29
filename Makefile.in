@@ -88,7 +88,10 @@ define gb_Top_GbuildModuleRules
 $(1): bootstrap fetch
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(IWYU_OPTION) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
 
-$(1).build $(1).check $(1).clean $(1).showdeliverables $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target)):
+$(1).build $(1).check $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target)): bootstrap fetch
+	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
+
+$(1).clean $(1).showdeliverables:
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).all: bootstrap fetch
