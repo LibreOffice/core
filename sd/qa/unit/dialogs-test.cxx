@@ -91,9 +91,10 @@ private:
     ::sd::DrawDocShell*                     mpDocShell;
     ::sd::ViewShell*                        mpViewShell;
     ::sd::DrawView*                         mpDrawView;
-    const SfxItemSet*                       mpSfxItemSetFromSdrObject;
-    const SfxItemSet*                       mpEmptySfxItemSet;
-    SfxItemSet*                             mpEmptyFillStyleSfxItemSet;
+
+    std::unique_ptr<SfxItemSet>             mpSfxItemSetFromSdrObject;
+    std::unique_ptr<SfxItemSet>             mpEmptySfxItemSet;
+    std::unique_ptr<SfxItemSet>             mpEmptyFillStyleSfxItemSet;
 
     /// helpers
     SdAbstractDialogFactory* getSdAbstractDialogFactory();
@@ -162,20 +163,10 @@ void SdDialogsTest::setUp()
 
 void SdDialogsTest::tearDown()
 {
-    if (mpEmptySfxItemSet)
-    {
-        delete mpEmptySfxItemSet;
-    }
-
-    if (mpEmptyFillStyleSfxItemSet)
-    {
-        delete mpEmptyFillStyleSfxItemSet;
-    }
-
-    if (mxComponent.is())
-    {
-        mxComponent->dispose();
-    }
+    //if (mxComponent.is())
+    //{
+    //    mxComponent->dispose();
+    //}
 
     test::BootstrapFixture::tearDown();
 }
@@ -233,7 +224,7 @@ const SfxItemSet& SdDialogsTest::getSfxItemSetFromSdrObject()
         CPPUNIT_ASSERT(pSdPage);
         SdrObject* pSdrObj = pSdPage->GetObj(0);
         CPPUNIT_ASSERT(pSdrObj);
-        mpSfxItemSetFromSdrObject = &pSdrObj->GetMergedItemSet();
+        mpSfxItemSetFromSdrObject.reset( new SfxItemSet( pSdrObj->GetMergedItemSet() ) );
         CPPUNIT_ASSERT(mpSfxItemSetFromSdrObject);
     }
 
@@ -247,7 +238,7 @@ const SfxItemSet& SdDialogsTest::getEmptySfxItemSet()
         // needs an SfxItemSet, use the one from the 1st object
         SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
         CPPUNIT_ASSERT(pDrawDoc);
-        mpEmptySfxItemSet = new SfxItemSet(pDrawDoc->GetItemPool());
+        mpEmptySfxItemSet.reset( new SfxItemSet(pDrawDoc->GetItemPool()) );
         CPPUNIT_ASSERT(mpEmptySfxItemSet);
     }
 
@@ -260,7 +251,7 @@ const SfxItemSet& SdDialogsTest::getEmptyFillStyleSfxItemSet()
     {
         SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
         CPPUNIT_ASSERT(pDrawDoc);
-        mpEmptyFillStyleSfxItemSet = new SfxItemSet(pDrawDoc->GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+        mpEmptyFillStyleSfxItemSet.reset( new SfxItemSet(pDrawDoc->GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST) );
         CPPUNIT_ASSERT(mpEmptyFillStyleSfxItemSet);
         mpEmptyFillStyleSfxItemSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
     }
@@ -685,12 +676,11 @@ void SdDialogsTest::openAnyDialog()
     // loop and dump all Dialogs from SD for now
     for (sal_uInt32 a(nStartValue); a < nEndValue; a++)
     {
-        VclAbstractDialog* pDlg = createDialogByID(a);
+        std::unique_ptr<VclAbstractDialog> pDlg( createDialogByID(a) );
 
         if (pDlg)
         {
             dumpDialogToPath(*pDlg);
-            delete pDlg;
         }
     }
 
