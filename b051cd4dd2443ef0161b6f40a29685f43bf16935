@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_bd2af8e5",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-29T08:29:51Z",
+      "side": 1,
+      "message": "please set pOldPointAry to nullptr here, don\u0027t like leaving dangling pointers around.\nNote that this not something we need to do in a destructor, but here it make sense.",
+      "revId": "b051cd4dd2443ef0161b6f40a29685f43bf16935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_dd2fbcf4",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-29T08:29:51Z",
+      "side": 1,
+      "message": "and set pOldPointAry to nullptr here",
+      "revId": "b051cd4dd2443ef0161b6f40a29685f43bf16935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_bd5f5874",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-29T08:29:51Z",
+      "side": 1,
+      "message": "uuurgh, this is icky, we\u0027re going to create the object twice because we\u0027re changing the nResize field.",
+      "revId": "b051cd4dd2443ef0161b6f40a29685f43bf16935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_dd641c4b",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-29T08:29:51Z",
+      "side": 1,
+      "message": "here we are going to copy twice - once for the call to Resize(), and then because we\u0027re modifying nPoints.",
+      "revId": "b051cd4dd2443ef0161b6f40a29685f43bf16935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_fd59e08f",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-29T08:29:51Z",
+      "side": 1,
+      "message": "create and then immediately copy",
+      "revId": "b051cd4dd2443ef0161b6f40a29685f43bf16935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_1d5f6473",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-29T08:29:51Z",
+      "side": 1,
+      "message": "create and then immediately copy",
+      "revId": "b051cd4dd2443ef0161b6f40a29685f43bf16935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_1d3a0437",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-29T08:29:51Z",
+      "side": 1,
+      "message": "I don\u0027t understand the point of this method? Are you trying to bypass the cow_wrappers\u0027 copy behaviour here? In which case it makes more sense to mark the CheckPointDelete() method as const, and make the relevant fields that CheckPointDelete() needs to access mutable.",
+      "revId": "b051cd4dd2443ef0161b6f40a29685f43bf16935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
