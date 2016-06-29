@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_606527e0",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-06-29T14:18:58Z",
+      "side": 1,
+      "message": "An empty argument makes Excel return a result, with the default weekend.\nAn argument of 0 and an argument containing a reference to an empty cell make Excel return #NUM!.\nAn argument containing a reference to a cell with a string ([LEFT(\"a\";0)] and [\u00273]) and an argument containing an empty string (\"\") make Excel return #VALUE!.\n\nThis patch handles a reference to a string ([LEFT(\"a\";0)] and [\u00273]) not the same as Excel, Calc returns a value in these cases.",
+      "parentUuid": "ba84c18e_dd033c0c",
+      "revId": "b98f3005bbcbf292a1f14798d523f291d5e32e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_1d0e8434",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 2
@@ -81,6 +99,24 @@
       "writtenOn": "2016-06-28T13:22:43Z",
       "side": 1,
       "message": "Given all the above, this could be entirely simplified to\n\n switch (GetStackType())\n {\n     case svDoubleRef:\n     case svExternalDoubleRef:\n         Pop();\n         return errNoValue;\n     default:\n         aWeekendDays \u003d GetString().getString();\n         if (aWeekendDays.empty())\n             return errNoValue;\n }\n\nHowever, simply obtaining a string doesn\u0027t do what Excel does. Here a numeric value 1 and a text string \"1\" are treated equally, but Excel for a string \"1\" returns an error.\n\nActually we have to differentiate whether a numeric or text argument was given and the bWeekendMask handling below has to be changed accordingly.\n\nI lately added ScInterpreter::GetDoubleOrString() to handle such situations, which the default case above could use.",
+      "revId": "b98f3005bbcbf292a1f14798d523f291d5e32e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_e09f77b2",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-06-29T14:18:58Z",
+      "side": 1,
+      "message": "I will see what I can do to simplify the patch and to make it produce the same results as Excel.",
+      "parentUuid": "ba84c18e_5d100c4f",
       "revId": "b98f3005bbcbf292a1f14798d523f291d5e32e82",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
