@@ -242,6 +242,9 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
                          const Graphic &rGrf, SwFlyFrameAttrMgr *pFrameMgr,
                          sal_uInt16 nAnchorType )
 {
+    SetFirstStateofGraphic( rGrf );
+    SetFirstSizeofGraphic( rGrf.GetSizePixel());
+
     ResetCursorStack();
     if ( !CanInsert() )
         return;
