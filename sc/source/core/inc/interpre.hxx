@@ -410,6 +410,8 @@ bool IsMissing();
 sal_Int32 GetInt32();
 /// if GetDouble() not within int16 limits sets nGlobalError and returns 0
 sal_Int16 GetInt16();
+/// if GetDouble() not within uint32 limits sets nGlobalError and returns 0
+sal_uInt32 GetUInt32();
 bool GetBool() { return GetDouble() != 0.0; }
 /// returns TRUE if double (or error, check nGlobalError), else FALSE
 bool GetDoubleOrString( double& rValue, svl::SharedString& rString );

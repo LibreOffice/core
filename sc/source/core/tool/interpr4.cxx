@@ -2115,6 +2115,17 @@ sal_Int16 ScInterpreter::GetInt16()
     return static_cast<sal_Int16>(fVal);
 }
 
+sal_uInt32 ScInterpreter::GetUInt32()
+{
+    double fVal = rtl::math::approxFloor( GetDouble());
+    if (fVal < 0.0 || fVal > SAL_MAX_UINT32)
+    {
+        SetError( errIllegalArgument);
+        return 0;
+    }
+    return static_cast<sal_uInt32>(fVal);
+}
+
 bool ScInterpreter::GetDoubleOrString( double& rDouble, svl::SharedString& rString )
 {
     bool bDouble = true;
