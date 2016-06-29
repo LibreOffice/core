@@ -217,6 +217,8 @@ private:
 
     bool                        CloseInternal();
 
+    SAL_DLLPRIVATE static bool IsOwnStorageFormat(const SfxMedium &);
+
     SAL_DLLPRIVATE void UpdateTime_Impl(const css::uno::Reference<
         css::document::XDocumentProperties> & i_xDocProps);
 
@@ -624,9 +626,7 @@ public:
     virtual void    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash );
 
-    static bool IsOwnStorageFormat(const SfxMedium &);
-
-    SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl(bool bFullContent) const;
+    SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( bool bFullContent ) const;
 
     SAL_DLLPRIVATE bool IsPackageStorageFormat_Impl(const SfxMedium &) const;
 

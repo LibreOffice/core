@@ -557,14 +557,6 @@ bool ScDocShell::Load( SfxMedium& rMedium )
     //  -> initialize the others from options (before loading)
     InitOptions(true);
 
-    // If this is an ODF file being loaded, then by default, use legacy processing
-    // for tdf#99729 (if required, it will be overriden in *::ReadUserDataSequence())
-    if (IsOwnStorageFormat(rMedium))
-    {
-        if (aDocument.GetDrawLayer())
-            aDocument.GetDrawLayer()->SetAnchoredTextOverflowLegacy(true);
-    }
-
     GetUndoManager()->Clear();
 
     bool bRet = SfxObjectShell::Load( rMedium );

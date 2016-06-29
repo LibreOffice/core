@@ -103,8 +103,6 @@ struct SdrModelImpl
 {
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
-
-    bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
 };
 
 
@@ -114,7 +112,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mpImpl.reset(new SdrModelImpl);
     mpImpl->mpUndoManager=nullptr;
     mpImpl->mpUndoFactory=nullptr;
-    mpImpl->mbAnchoredTextOverflowLegacy = false;
     mbInDestruction = false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
@@ -1889,16 +1886,6 @@ void SdrModel::SetAddExtLeading( bool bEnabled )
     }
 }
 
-void SdrModel::SetAnchoredTextOverflowLegacy(bool bEnabled)
-{
-    mpImpl->mbAnchoredTextOverflowLegacy = bEnabled;
-}
-
-bool SdrModel::IsAnchoredTextOverflowLegacy() const
-{
-    return mpImpl->mbAnchoredTextOverflowLegacy;
-}
-
 void SdrModel::ReformatAllTextObjects()
 {
     ImpReformatAllTextObjects();
@@ -1938,28 +1925,16 @@ SvxNumType SdrModel::GetPageNumType() const
     return SVX_ARABIC;
 }
 
-void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* pValue)
+void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* /*pValue*/)
 {
-    bool bBool = false;
-    if (pValue->Name == "AnchoredTextOverflowLegacy")
-    {
-        if (pValue->Value >>= bBool)
-        {
-            mpImpl->mbAnchoredTextOverflowLegacy = bBool;
-        }
-    }
-}
-
-template <typename T>
-inline void addPair(std::vector< std::pair< OUString, Any > >& aUserData, const OUString& name, const T val)
-{
-    aUserData.push_back(std::pair< OUString, Any >(name, css::uno::makeAny(val)));
+    (void) this; // TODO: Read common model-level values
 }
 
 void SdrModel::WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues, bool /*bBrowse*/)
 {
     std::vector< std::pair< OUString, Any > > aUserData;
-    addPair(aUserData, "AnchoredTextOverflowLegacy", IsAnchoredTextOverflowLegacy());
+    (void) this;
+    // TODO: Write common model-level properties (e.g. to settings.xml)
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc(nOldLength + aUserData.size());
