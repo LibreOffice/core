@@ -167,7 +167,7 @@ bool SvStringHashTable::Insert( const OString& rName, sal_uInt32 * pIndex )
         return false;
 
     if( !IsEntry( *pIndex ) )
-        pEntries[ *pIndex ] = SvStringHashEntry( rName, *pIndex );
+        pEntries[ *pIndex ] = SvStringHashEntry( rName );
     return true;
 }
 

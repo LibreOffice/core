@@ -2817,7 +2817,6 @@ SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
     if( this == &rObj )
         return *this;
     SdrTextObj::operator=( rObj );
-    aName = rObj.aName;
     fObjectRotation = rObj.fObjectRotation;
     InvalidateRenderGeometry();
     return *this;

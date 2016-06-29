@@ -111,12 +111,10 @@ struct PackedTexture
 {
     std::unique_ptr<ImplOpenGLTexture> mpTexture;
     std::unique_ptr<Node> mpRootNode;
-    int mnDeallocatedArea;
 
     PackedTexture(int nWidth, int nHeight)
         : mpTexture(new ImplOpenGLTexture(nWidth, nHeight, true))
         , mpRootNode(new Node(nWidth, nHeight))
-        , mnDeallocatedArea(0)
     {}
 };
 
