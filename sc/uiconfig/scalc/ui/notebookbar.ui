@@ -237,8 +237,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkButton" id="Paste">
-                            <property name="width_request">70</property>
+                          <object class="vcllo-SmallButton" id="Paste">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -296,8 +295,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="FormatPaintbrush">
-                            <property name="width_request">130</property>
+                          <object class="vcllo-SmallButton" id="FormatPaintbrush">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1379,8 +1377,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="DataDataPilotRun">
-                        <property name="width_request">130</property>
+                      <object class="vcllo-SmallButton" id="DataDataPilotRun">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1418,8 +1415,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="InsertGraphic">
-                        <property name="width_request">60</property>
+                      <object class="vcllo-SmallButton" id="InsertGraphic">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1435,8 +1431,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="InsertAVMedia">
-                        <property name="width_request">110</property>
+                      <object class="vcllo-SmallButton" id="InsertAVMedia">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1452,8 +1447,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="InsertObjectChart">
-                        <property name="width_request">60</property>
+                      <object class="vcllo-SmallButton" id="InsertObjectChart">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1503,8 +1497,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="EditHeaderAndFooter">
-                    <property name="width_request">150</property>
+                  <object class="vcllo-SmallButton" id="EditHeaderAndFooter">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -1520,8 +1513,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="InsertAnnotation">
-                    <property name="width_request">80</property>
+                  <object class="vcllo-SmallButton" id="InsertAnnotation">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -1537,8 +1529,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="HyperlinkDialog">
-                    <property name="width_request">80</property>
+                  <object class="vcllo-SmallButton" id="HyperlinkDialog">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -1566,8 +1557,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="DrawText">
-                    <property name="width_request">70</property>
+                  <object class="vcllo-SmallButton" id="DrawText">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -1599,8 +1589,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="InsertSymbol">
-                        <property name="width_request">130</property>
+                      <object class="vcllo-SmallButton" id="InsertSymbol">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1616,8 +1605,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="InsertObjectStarMath">
-                        <property name="width_request">70</property>
+                      <object class="vcllo-SmallButton" id="InsertObjectStarMath">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1665,8 +1653,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="PageFormatDialog">
-                        <property name="width_request">100</property>
+                      <object class="vcllo-SmallButton" id="PageFormatDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1682,8 +1669,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="EditPrintArea">
-                        <property name="width_request">120</property>
+                      <object class="vcllo-SmallButton" id="EditPrintArea">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1764,8 +1750,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="BringToFront">
-                        <property name="width_request">100</property>
+                      <object class="vcllo-SmallButton" id="BringToFront">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1781,8 +1766,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="SendToBack">
-                        <property name="width_request">100</property>
+                      <object class="vcllo-SmallButton" id="SendToBack">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1798,8 +1782,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="FormatGroup">
-                        <property name="width_request">70</property>
+                      <object class="vcllo-SmallButton" id="FormatGroup">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1815,8 +1798,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="FormatUngroup">
-                        <property name="width_request">70</property>
+                      <object class="vcllo-SmallButton" id="FormatUngroup">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -1986,8 +1968,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="DataSort1">
-                        <property name="width_request">60</property>
+                      <object class="vcllo-SmallButton" id="DataSort1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2003,8 +1984,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="DataFilterAutoFilter">
-                        <property name="width_request">80</property>
+                      <object class="vcllo-SmallButton" id="DataFilterAutoFilter">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2249,8 +2229,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="SpellDialog">
-                        <property name="width_request">70</property>
+                      <object class="vcllo-SmallButton" id="SpellDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2266,8 +2245,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="SpellOnline">
-                        <property name="width_request">180</property>
+                      <object class="vcllo-SmallButton" id="SpellOnline">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2283,8 +2261,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="ThesaurusDialog">
-                        <property name="width_request">80</property>
+                      <object class="vcllo-SmallButton" id="ThesaurusDialog">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2323,8 +2300,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="InsertAnnotation1">
-                        <property name="width_request">80</property>
+                      <object class="vcllo-SmallButton" id="InsertAnnotation1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2447,8 +2423,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="Protect">
-                        <property name="width_request">105</property>
+                      <object class="vcllo-SmallButton" id="Protect">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2464,8 +2439,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="ToolProtectionDocument">
-                        <property name="width_request">145</property>
+                      <object class="vcllo-SmallButton" id="ToolProtectionDocument">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2597,7 +2571,6 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="ToggleSheetGrid2">
-                        <property name="width_request">250</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2651,8 +2624,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="Zoom">
-                        <property name="width_request">70</property>
+                      <object class="vcllo-SmallButton" id="Zoom">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2733,8 +2705,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkButton" id="SplitWindow">
-                        <property name="width_request">100</property>
+                      <object class="vcllo-SmallButton" id="SplitWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2750,8 +2721,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="FreezePanes">
-                        <property name="width_request">200</property>
+                      <object class="vcllo-SmallButton" id="FreezePanes">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
