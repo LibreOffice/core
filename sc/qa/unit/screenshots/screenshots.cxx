@@ -339,7 +339,7 @@ void ScScreenshotTest::testOpeningModalDialogs()
 
     for ( sal_uInt32 i = 0; i < nDialogs; i++ )
     {
-        VclAbstractDialog *pDialog = createDialogByID( i );
+        std::unique_ptr<VclAbstractDialog> pDialog( createDialogByID( i ) );
 
         dumpDialogToPath( *pDialog );
     }
