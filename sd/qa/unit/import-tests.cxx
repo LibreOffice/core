@@ -68,6 +68,9 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <sfx2/frame.hxx>
+#include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 
 using namespace ::com::sun::star;
 
@@ -117,6 +120,7 @@ public:
     void testTdf93097();
     void testTdf62255();
     void testTdf93124();
+    void testTdf99729();
     void testTdf89927();
     void testTdf93868();
     void testTdf95932();
@@ -167,6 +171,7 @@ public:
     CPPUNIT_TEST(testTdf93097);
     CPPUNIT_TEST(testTdf62255);
     CPPUNIT_TEST(testTdf93124);
+    CPPUNIT_TEST(testTdf99729);
     CPPUNIT_TEST(testTdf89927);
     CPPUNIT_TEST(testTdf93868);
     CPPUNIT_TEST(testTdf95932);
@@ -1317,6 +1322,81 @@ void SdImportTest::testTdf93124()
         CPPUNIT_ASSERT_MESSAGE("Tdf93124: vertical alignment of text is incorrect!", nNonWhiteCount>50);
     }
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf99729()
+{
+    const char* filenames[] = { "/sd/qa/unit/data/odp/tdf99729-new.odp", "/sd/qa/unit/data/odp/tdf99729-legacy.odp" };
+    int nonwhitecounts[] = { 0, 0 };
+    for (unsigned int i = 0; i < sizeof(filenames)/sizeof(filenames[0]); ++i)
+    {
+        // 1st check for new behaviour - having AnchoredTextOverflowLegacy compatibility flag set to false in settings.xml
+        sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(filenames[i]), ODP);
+
+        const css::uno::Reference< css::frame::XFrame > xFrame = SfxFrame::CreateBlankFrame();
+        CPPUNIT_ASSERT(xFrame.is());
+        const css::uno::Reference< css::frame::XModel2 > xModel(xDocShRef->GetModel(), css::uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xModel.is());
+        const css::uno::Reference< css::frame::XController2 > xController(xModel->createViewController(
+            "Default",
+            css::uno::Sequence< css::beans::PropertyValue >(),
+            xFrame
+            ), css::uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xController.is());
+        xController->attachModel(xModel.get());
+        xModel->connectController(xController.get());
+        xFrame->setComponent(xController->getComponentWindow(), xController.get());
+        xController->attachFrame(xFrame);
+        xModel->setCurrentController(xController.get());
+
+        uno::Reference < uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        CPPUNIT_ASSERT(xContext.is());
+        uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
+        CPPUNIT_ASSERT(xGraphicExporter.is());
+
+        uno::Sequence< beans::PropertyValue > aFilterData(2);
+        aFilterData[0].Name = "PixelWidth";
+        aFilterData[0].Value <<= (sal_Int32)(320);
+        aFilterData[1].Name = "PixelHeight";
+        aFilterData[1].Value <<= (sal_Int32)(240);
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+
+        uno::Sequence< beans::PropertyValue > aDescriptor(3);
+        aDescriptor[0].Name = "URL";
+        aDescriptor[0].Value <<= aTempFile.GetURL();
+        aDescriptor[1].Name = "FilterName";
+        aDescriptor[1].Value <<= OUString("PNG");
+        aDescriptor[2].Name = "FilterData";
+        aDescriptor[2].Value <<= aFilterData;
+
+        uno::Reference< lang::XComponent > xPage(getPage(0, xDocShRef), uno::UNO_QUERY);
+        xGraphicExporter->setSourceDocument(xPage);
+        xGraphicExporter->filter(aDescriptor);
+
+        SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+        vcl::PNGReader aPNGReader(aFileStream);
+        BitmapEx aBMPEx = aPNGReader.Read();
+        Bitmap aBMP = aBMPEx.GetBitmap();
+        BitmapReadAccess* pRead = aBMP.AcquireReadAccess();
+        for (long nX = 154; nX < (154 + 12); ++nX)
+        {
+            for (long nY = 16; nY < (16 + 96); ++nY)
+            {
+                const Color aColor = pRead->GetColor(nY, nX);
+                if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
+                    ++nonwhitecounts[i];
+            }
+        }
+        xController->dispose();
+        xFrame->dispose();
+    }
+    // The numbers 1-9 should be above the Text Box in rectangle 154,16 - 170,112.
+    // If text alignment is wrong, the rectangle will be white.
+    CPPUNIT_ASSERT_MESSAGE("Tdf99729: vertical alignment of text is incorrect!", nonwhitecounts[0]>200); // it was 245 at my testing
+    // The numbers 1-9 should be below the Text Box -> rectangle 154,16 - 170,112 should be white.
+    CPPUNIT_ASSERT_MESSAGE("Tdf99729: legacy vertical alignment of text is incorrect!", nonwhitecounts[1] == 0);
 }
 
 void SdImportTest::testTdf89927()
