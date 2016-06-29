@@ -154,7 +154,8 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     : ModalDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
-      maSelTemplates(cmpSelectionItems)
+      maSelTemplates(cmpSelectionItems),
+      mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) )
 {
     get(mpSearchFilter, "search_filter");
     get(mpCBApp, "filter_application");
