@@ -246,8 +246,8 @@ class VclGtkClipboard :
 {
     GdkAtom                                                  m_nSelection;
     osl::Mutex                                               m_aMutex;
-    Reference<css::datatransfer::XTransferable>              m_aOurContents;
-    Reference<css::datatransfer::XTransferable>              m_aSystemContents;
+    gulong                                                   m_nOwnerChangedSignalId;
+    Reference<css::datatransfer::XTransferable>              m_aContents;
     Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::list< Reference<css::datatransfer::clipboard::XClipboardListener> > m_aListeners;
     std::vector<GtkTargetEntry> m_aGtkTargets;
@@ -307,6 +307,7 @@ public:
 
     void ClipboardGet(GtkClipboard *clipboard, GtkSelectionData *selection_data, guint info);
     void ClipboardClear(GtkClipboard *clipboard);
+    void OwnerPossiblyChanged(GtkClipboard *clipboard, GdkEvent *event);
 };
 
 OUString VclGtkClipboard::getImplementationName() throw( RuntimeException, std::exception )
@@ -327,17 +328,79 @@ sal_Bool VclGtkClipboard::supportsService( const OUString& ServiceName ) throw( 
 
 Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents() throw( RuntimeException, std::exception )
 {
-    if (!m_aSystemContents.is())
-        m_aSystemContents= new GtkClipboardTransferable(m_nSelection);
-    return m_aSystemContents;
+    if (!m_aContents.is())
+    {
+        //tdf#93887 This is the system clipboard/selection. We fetch it when we are not
+        //the owner of the clipboard and have not already fetched it.
+        m_aContents = new GtkClipboardTransferable(m_nSelection);
+    }
+
+    return m_aContents;
 }
 
 void VclGtkClipboard::ClipboardGet(GtkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
                                    guint info)
 {
-    if (!m_aOurContents.is())
+    if (!m_aContents.is())
         return;
-    m_aConversionHelper.setSelectionData(m_aOurContents, selection_data, info);
+    m_aConversionHelper.setSelectionData(m_aContents, selection_data, info);
+}
+
+namespace
+{
+    const OString& getPID()
+    {
+        static OString sPID;
+        if (!sPID.getLength())
+        {
+            oslProcessIdentifier aProcessId = 0;
+            oslProcessInfo info;
+            info.Size = sizeof (oslProcessInfo);
+            if (osl_getProcessInfo(nullptr, osl_Process_IDENTIFIER, &info) == osl_Process_E_None)
+                aProcessId = info.Ident;
+            sPID = OString::number(aProcessId);
+        }
+        return sPID;
+    }
+}
+
+void VclGtkClipboard::OwnerPossiblyChanged(GtkClipboard* clipboard, GdkEvent* /*event*/)
+{
+    if (!m_aContents.is())
+        return;
+
+    //if gdk_display_supports_selection_notification is not supported, e.g. like
+    //right now under wayland, then you only get owner-changed nofications at
+    //opportune times when the selection might have changed. So here
+    //we see if the selection supports a dummy selection type identifying
+    //our pid, in which case it's us.
+    bool bSelf = false;
+
+    OString sTunnel = "application/x-libreoffice-internal-id-" + getPID();
+    GdkAtom *targets;
+    gint n_targets;
+    if (gtk_clipboard_wait_for_targets(clipboard, &targets, &n_targets))
+    {
+        for (gint i = 0; i < n_targets && !bSelf; ++i)
+        {
+            gchar* pName = gdk_atom_name(targets[i]);
+            if (strcmp(pName, sTunnel.getStr()) == 0)
+            {
+                bSelf = true;
+            }
+            g_free(pName);
+        }
+
+        g_free(targets);
+    }
+
+    if (!bSelf)
+    {
+        //null out m_aContents to return control to the system-one which
+        //will be retrieved if getContents is called again
+        setContents(Reference<css::datatransfer::XTransferable>(),
+                    Reference<css::datatransfer::clipboard::XClipboardOwner>());
+    }
 }
 
 void VclGtkClipboard::ClipboardClear(GtkClipboard * /*clipboard*/)
@@ -438,6 +501,12 @@ namespace
         VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data_or_owner);
         pThis->ClipboardClear(clipboard);
     }
+
+    void handle_owner_change(GtkClipboard *clipboard, GdkEvent *event, gpointer user_data)
+    {
+        VclGtkClipboard* pThis = static_cast<VclGtkClipboard*>(user_data);
+        pThis->OwnerPossiblyChanged(clipboard, event);
+    }
 }
 
 VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
@@ -446,6 +515,9 @@ VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
         (m_aMutex)
     , m_nSelection(nSelection)
 {
+    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    m_nOwnerChangedSignalId = g_signal_connect(clipboard, "owner-change",
+                                               G_CALLBACK(handle_owner_change), this);
 }
 
 void VclGtkClipboard::flushClipboard()
@@ -462,6 +534,8 @@ void VclGtkClipboard::flushClipboard()
 
 VclGtkClipboard::~VclGtkClipboard()
 {
+    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
     ClipboardClear(nullptr);
 }
 
@@ -513,24 +587,27 @@ void VclGtkClipboard::setContents(
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
-    Reference< datatransfer::XTransferable > xOldContents(m_aOurContents);
-    m_aOurContents = xTrans;
+    Reference< datatransfer::XTransferable > xOldContents( m_aContents );
+    m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
     std::list< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
 
-    //if there was a previous gtk_clipboard_set_with_data call then
-    //ClipboardClearFunc will be called now
-    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
-    gtk_clipboard_clear(clipboard);
-
-    if (m_aOurContents.is())
+    if (m_aContents.is())
     {
         css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTrans->getTransferDataFlavors();
         std::vector<GtkTargetEntry> aGtkTargets(m_aConversionHelper.FormatsToGtk(aFormats));
         if (!aGtkTargets.empty())
         {
+            GtkTargetEntry aEntry;
+            OString sTunnel = "application/x-libreoffice-internal-id-" + getPID();
+            aEntry.target = g_strdup(sTunnel.getStr());
+            aEntry.flags = 0;
+            aEntry.info = 0;
+            aGtkTargets.push_back(aEntry);
+
+            GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
             gtk_clipboard_set_with_data(clipboard, aGtkTargets.data(), aGtkTargets.size(),
                                         ClipboardGetFunc, ClipboardClearFunc, this);
             gtk_clipboard_set_can_store(clipboard, aGtkTargets.data(), aGtkTargets.size());
