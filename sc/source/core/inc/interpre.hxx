@@ -406,6 +406,10 @@ double GetDoubleFromMatrix(const ScMatrixRef& pMat);
 double GetDouble();
 double GetDoubleWithDefault(double nDefault);
 bool IsMissing();
+/// if GetDouble() not within int32 limits sets nGlobalError and returns 0
+sal_Int32 GetInt32();
+/// if GetDouble() not within int16 limits sets nGlobalError and returns 0
+sal_Int16 GetInt16();
 bool GetBool() { return GetDouble() != 0.0; }
 /// returns TRUE if double (or error, check nGlobalError), else FALSE
 bool GetDoubleOrString( double& rValue, svl::SharedString& rString );

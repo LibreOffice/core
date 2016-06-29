@@ -2093,6 +2093,28 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
     return nResultVal;
 }
 
+sal_Int32 ScInterpreter::GetInt32()
+{
+    double fVal = rtl::math::approxFloor( GetDouble());
+    if (fVal < SAL_MIN_INT32 || fVal > SAL_MAX_INT32)
+    {
+        SetError( errIllegalArgument);
+        return 0;
+    }
+    return static_cast<sal_Int32>(fVal);
+}
+
+sal_Int16 ScInterpreter::GetInt16()
+{
+    double fVal = rtl::math::approxFloor( GetDouble());
+    if (fVal < SAL_MIN_INT16 || fVal > SAL_MAX_INT16)
+    {
+        SetError( errIllegalArgument);
+        return 0;
+    }
+    return static_cast<sal_Int16>(fVal);
+}
+
 bool ScInterpreter::GetDoubleOrString( double& rDouble, svl::SharedString& rString )
 {
     bool bDouble = true;
