@@ -216,8 +216,14 @@ void ScDataFormDlg::dispose()
     m_pBtnNext.clear();
     m_pBtnClose.clear();
     m_pSlider.clear();
-    m_pGrid.clear();
     m_pFixedText.clear();
+    for ( auto aFTIter = maFixedTexts.begin(); aFTIter != maFixedTexts.end(); ++aFTIter )
+        aFTIter->disposeAndClear();
+    for ( auto aEditIter = maEdits.begin(); aEditIter != maEdits.end(); ++aEditIter )
+        aEditIter->disposeAndClear();
+    maFixedTexts.clear();
+    maEdits.clear();
+    m_pGrid.clear();
     ModalDialog::dispose();
 }
 
