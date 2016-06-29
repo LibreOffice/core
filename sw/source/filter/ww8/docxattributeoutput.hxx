@@ -810,6 +810,10 @@ private:
     // beginning of the next paragraph
     DocxColBreakStatus m_nColBreakStatus;
 
+    // Remember that a page break has to be opened at the
+    // beginning of the next paragraph
+    bool m_bPostponedPageBreak;
+
     std::vector<ww8::Frame> m_aFramesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
 

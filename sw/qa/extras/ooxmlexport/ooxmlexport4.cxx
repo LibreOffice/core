@@ -942,6 +942,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92521, "tdf92521.odt")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf99090_pgbrkAfterTable, "tdf99090_pgbrkAfterTable.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        // There should be a regular page break that's in the middle of the document: right after the table.
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
