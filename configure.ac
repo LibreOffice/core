@@ -2796,7 +2796,14 @@ if test "$with_bffvalidator" != "no"; then
         else
             AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
         fi
-    elif test -n "$BFFVALIDATOR" -a -e "$BFFVALIDATOR"; then
+    elif test -n "$BFFVALIDATOR"; then
+        # We are not in CygWin but need to run Windows binary with wine
+        AC_PATH_PROGS(WINE, wine)
+
+        # so swap in a shell wrapper that converts paths transparently
+        BFFVALIDATOR_EXE="$BFFVALIDATOR"
+        BFFVALIDATOR="$SRC_ROOT/bin/bffvalidator.sh"
+        AC_SUBST(BFFVALIDATOR_EXE)
         AC_MSG_RESULT($BFFVALIDATOR)
     else
         AC_MSG_ERROR([bffvalidator not found, but required by --with-bffvalidator])
@@ -4657,6 +4664,7 @@ if test "$cross_compiling" = "yes"; then
         config_host_lang.mk.in \
         Makefile.in \
         lo.xcent.in \
+        bin/bffvalidator.sh.in \
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in \
@@ -12991,6 +12999,7 @@ AC_CONFIG_FILES([config_host.mk
                  config_host_lang.mk
                  Makefile
                  lo.xcent
+                 bin/bffvalidator.sh
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist
                  ios/lo.xcconfig])

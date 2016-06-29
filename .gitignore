@@ -55,6 +55,7 @@
 /config_build_lang.mk
 /configure
 /lo.xcent
+/bin/bffvalidator.sh
 /Makefile
 /NEWS
 /TODO
