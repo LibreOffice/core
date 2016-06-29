@@ -109,47 +109,6 @@ bool containsXInterfaceSubclass(const QualType& qType) {
     return containsXInterfaceSubclass(qType.getTypePtr());
 }
 
-static std::vector<std::string> PROBABLY_GOOD_TEMPLATES = {
-    "abp::OMultiInstanceAutoRegistration",
-    "com::sun::star::uno::Reference",
-    "com::sun::star::uno::WeakReference",
-    "com::sun::star::uno::Sequence",
-    "accessibility::WeakCppRef",
-    "dba::OAutoRegistration",
-    "dbp::OMultiInstanceAutoRegistration",
-    "dbaui::OMultiInstanceAutoRegistration",
-    "dbaxml::OMultiInstanceAutoRegistration",
-    "io_acceptor::ReferenceEqual",
-    "io_acceptor::ReferenceHash",
-    "comphelper::OAutoRegistration",
-    "comphelper::OInterfaceCompare",
-    "comphelper::WeakBag",
-    "comphelper::service_decl::class_",
-    "comphelper::service_decl::vba_service_class_",
-    "comphelper::service_decl::inheritingClass_",
-    "comphelper::module::OAutoRegistration",
-    "comphelper::mem_fun1_t",
-    "comphelper::OSimpleListenerContainer",
-    "dbmm::OAutoRegistration",
-    "pcr::OAutoRegistration",
-    "logging::ComponentMethodGuard",
-    "logging::OAutoRegistration",
-    "rtl::Reference",
-    "sdbtools::OAutoRegistration",
-    "stoc_connector::ReferenceEqual",
-    "stoc_connector::ReferenceHash",
-    "std::__1::mem_fun_t",
-    "std::__1::mem_fun1_t",
-    "std::mem_fun_t",
-    "std::mem_fun1_t",
-    "SwIterator",
-    "toolkit::InitGuard",
-    "utl::SharedUNOComponent",
-    "utl::OAutoRegistration",
-    "vcl::DeleteUnoReferenceOnDeinit",
-    "xmloff::OInterfaceCompare",
-};
-
 bool containsXInterfaceSubclass(const Type* pType0) {
     if (!pType0)
         return false;
@@ -190,14 +149,80 @@ bool containsXInterfaceSubclass(const Type* pType0) {
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
-            if (loplugin::DeclCheck(pTemplate).Struct("FindUnoInstanceHint")
-                .AnonymousNamespace().GlobalNamespace())
+            // Probably good templates:
+            loplugin::DeclCheck dc(pTemplate);
+            if ((dc.Struct("FindUnoInstanceHint").AnonymousNamespace()
+                 .GlobalNamespace())
+                || (dc.Class("OMultiInstanceAutoRegistration").Namespace("abp")
+                    .GlobalNamespace())
+                || (dc.Class("Reference").Namespace("uno").Namespace("star")
+                    .Namespace("sun").Namespace("com").GlobalNamespace())
+                || (dc.Class("WeakReference").Namespace("uno").Namespace("star")
+                    .Namespace("sun").Namespace("com").GlobalNamespace())
+                || (dc.Class("Sequence").Namespace("uno").Namespace("star")
+                    .Namespace("sun").Namespace("com").GlobalNamespace())
+                || (dc.Class("WeakCppRef").Namespace("accessibility")
+                    .GlobalNamespace())
+                || (dc.Class("OAutoRegistration").Namespace("dba")
+                    .GlobalNamespace())
+                || (dc.Class("OMultiInstanceAutoRegistration").Namespace("dbp")
+                    .GlobalNamespace())
+                || (dc.Class("OMultiInstanceAutoRegistration")
+                    .Namespace("dbaui").GlobalNamespace())
+                || (dc.Class("OMultiInstanceAutoRegistration")
+                    .Namespace("dbaxml").GlobalNamespace())
+                || (dc.Struct("ReferenceEqual").Namespace("io_acceptor")
+                    .GlobalNamespace())
+                || (dc.Struct("ReferenceHash").Namespace("io_acceptor")
+                    .GlobalNamespace())
+                || (dc.Class("OAutoRegistration").Namespace("comphelper")
+                    .GlobalNamespace())
+                || (dc.Struct("OInterfaceCompare").Namespace("comphelper")
+                    .GlobalNamespace())
+                || dc.Class("WeakBag").Namespace("comphelper").GlobalNamespace()
+                || (dc.Struct("class_").Namespace("service_decl")
+                    .Namespace("comphelper").GlobalNamespace())
+                || (dc.Struct("vba_service_class_").Namespace("service_decl")
+                    .Namespace("comphelper").GlobalNamespace())
+                || (dc.Struct("inheritingClass_").Namespace("service_decl")
+                    .Namespace("comphelper").GlobalNamespace())
+                || (dc.Class("OAutoRegistration").Namespace("module")
+                    .Namespace("comphelper").GlobalNamespace())
+                || (dc.Class("mem_fun1_t").Namespace("comphelper")
+                    .GlobalNamespace())
+                || (dc.Class("OSimpleListenerContainer").Namespace("comphelper")
+                    .GlobalNamespace())
+                || (dc.Class("OAutoRegistration").Namespace("dbmm")
+                    .GlobalNamespace())
+                || (dc.Class("OAutoRegistration").Namespace("pcr")
+                    .GlobalNamespace())
+                || (dc.Class("ComponentMethodGuard").Namespace("logging")
+                    .GlobalNamespace())
+                || (dc.Class("OAutoRegistration").Namespace("logging")
+                    .GlobalNamespace())
+                || dc.Class("Reference").Namespace("rtl").GlobalNamespace()
+                || (dc.Class("OAutoRegistration").Namespace("sdbtools")
+                    .GlobalNamespace())
+                || (dc.Struct("ReferenceEqual").Namespace("stoc_connector")
+                    .GlobalNamespace())
+                || (dc.Struct("ReferenceHash").Namespace("stoc_connector")
+                    .GlobalNamespace())
+                || dc.Class("mem_fun_t").StdNamespace()
+                || dc.Class("mem_fun1_t").StdNamespace()
+                || dc.Class("SwIterator").GlobalNamespace()
+                || (dc.Class("InitGuard").Namespace("toolkit")
+                    .GlobalNamespace())
+                || (dc.Class("SharedUNOComponent").Namespace("utl")
+                    .GlobalNamespace())
+                || (dc.Class("OAutoRegistration").Namespace("utl")
+                    .GlobalNamespace())
+                || (dc.Class("DeleteUnoReferenceOnDeinit").Namespace("vcl")
+                    .GlobalNamespace())
+                || (dc.Struct("OInterfaceCompare").Namespace("xmloff")
+                    .GlobalNamespace()))
             {
                 return false;
             }
-            std::string aName = pTemplate->getQualifiedNameAsString();
-            if (std::find(PROBABLY_GOOD_TEMPLATES.begin(), PROBABLY_GOOD_TEMPLATES.end(), aName) != PROBABLY_GOOD_TEMPLATES.end())
-                return false;
             for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
                 const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
                 if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
