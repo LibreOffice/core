@@ -78,7 +78,7 @@ struct LOKDocViewPrivateImpl
     GdkRectangle m_aVisibleCursor;
     /// Position and size of the view cursors. The current view can only see
     /// them, can't modify them. Key is the view id.
-    std::map<std::uintptr_t, GdkRectangle> m_aViewCursors;
+    std::map<int, GdkRectangle> m_aViewCursors;
     /// Cursor overlay is visible or hidden (for blinking).
     gboolean m_bCursorOverlayVisible;
     /// Cursor is visible or hidden (e.g. for graphic selection).
@@ -95,7 +95,7 @@ struct LOKDocViewPrivateImpl
     std::vector<GdkRectangle> m_aTextSelectionRectangles;
     /// Rectangles of view selections. The current view can only see
     /// them, can't modify them. Key is the view id.
-    std::map<std::uintptr_t, std::vector<GdkRectangle>> m_aTextViewSelectionRectangles;
+    std::map<int, std::vector<GdkRectangle>> m_aTextViewSelectionRectangles;
     /// Position and size of the selection start (as if there would be a cursor caret there).
     GdkRectangle m_aTextSelectionStart;
     /// Position and size of the selection end.
@@ -137,7 +137,7 @@ struct LOKDocViewPrivateImpl
     ///@}
 
     /// View ID, returned by createView() or 0 by default.
-    std::uintptr_t m_nViewId;
+    int m_nViewId;
 
     /**
      * Contains a freshly set zoom level: logic size of a tile.
@@ -1174,7 +1174,7 @@ callback (gpointer pData)
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
-        std::uintptr_t nViewId = aTree.get<std::uintptr_t>("viewId");
+        int nViewId = aTree.get<int>("viewId");
         const std::string& rRectangle = aTree.get<std::string>("rectangle");
         priv->m_aViewCursors[nViewId] = payloadToRectangle(pDocView, rRectangle.c_str());
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
@@ -1185,7 +1185,7 @@ callback (gpointer pData)
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
-        std::uintptr_t nViewId = aTree.get<std::uintptr_t>("viewId");
+        int nViewId = aTree.get<int>("viewId");
         const std::string& rSelection = aTree.get<std::string>("selection");
         priv->m_aTextViewSelectionRectangles[nViewId] = payloadToRectangles(pDocView, rSelection.c_str());
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
@@ -1428,9 +1428,9 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
     return FALSE;
 }
 
-static const GdkRGBA& getDarkColor(std::uintptr_t nViewId)
+static const GdkRGBA& getDarkColor(int nViewId)
 {
-    static std::map<std::uintptr_t, GdkRGBA> aColorMap;
+    static std::map<int, GdkRGBA> aColorMap;
     auto it = aColorMap.find(nViewId);
     if (it != aColorMap.end())
         return it->second;
@@ -1550,7 +1550,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     // Selections of other views.
-    for (std::pair<const std::uintptr_t, std::vector<GdkRectangle>>& rPair : priv->m_aTextViewSelectionRectangles)
+    for (std::pair<const int, std::vector<GdkRectangle>>& rPair : priv->m_aTextViewSelectionRectangles)
     {
         for (GdkRectangle& rRectangle : rPair.second)
         {

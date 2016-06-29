@@ -17,23 +17,42 @@
 
 #include <shellimpl.hxx>
 
-std::uintptr_t SfxLokHelper::createView()
+namespace
+{
+
+/// Assigns a view ID to a view shell.
+int shellToView(SfxViewShell* pViewShell)
+{
+    // Deleted view shells are not removed from this map, so view IDs are not
+    // reused when deleting, then creating a view.
+    static std::map<SfxViewShell*, int> aViewMap;
+    auto it = aViewMap.find(pViewShell);
+    if (it != aViewMap.end())
+        return it->second;
+
+    int nViewId = aViewMap.size();
+    aViewMap[pViewShell] = nViewId;
+    return nViewId;
+}
+}
+
+int SfxLokHelper::createView()
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     SfxRequest aRequest(pViewFrame, SID_NEWWINDOW);
     pViewFrame->ExecView_Impl(aRequest);
 
-    return reinterpret_cast<std::uintptr_t>(SfxViewShell::Current());
+    return shellToView(SfxViewShell::Current());
 }
 
-void SfxLokHelper::destroyView(std::uintptr_t nId)
+void SfxLokHelper::destroyView(int nId)
 {
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
     for (std::size_t i = 0; i < rViewArr.size(); ++i)
     {
         SfxViewShell* pViewShell = rViewArr[i];
-        if (reinterpret_cast<std::uintptr_t>(pViewShell) == nId)
+        if (shellToView(pViewShell) == nId)
         {
             SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
             SfxRequest aRequest(pViewFrame, SID_CLOSEWIN);
@@ -43,14 +62,14 @@ void SfxLokHelper::destroyView(std::uintptr_t nId)
     }
 }
 
-void SfxLokHelper::setView(std::uintptr_t nId)
+void SfxLokHelper::setView(int nId)
 {
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
     for (std::size_t i = 0; i < rViewArr.size(); ++i)
     {
         SfxViewShell* pViewShell = rViewArr[i];
-        if (reinterpret_cast<std::uintptr_t>(pViewShell) == nId)
+        if (shellToView(pViewShell) == nId)
         {
             if (pViewShell == SfxViewShell::Current())
                 return;
@@ -63,11 +82,11 @@ void SfxLokHelper::setView(std::uintptr_t nId)
 
 }
 
-std::uintptr_t SfxLokHelper::getView(SfxViewShell* pViewShell)
+int SfxLokHelper::getView(SfxViewShell* pViewShell)
 {
     if (!pViewShell)
         pViewShell = SfxViewShell::Current();
-    return reinterpret_cast<std::uintptr_t>(pViewShell);
+    return shellToView(pViewShell);
 }
 
 std::size_t SfxLokHelper::getViews()
