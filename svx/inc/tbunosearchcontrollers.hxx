@@ -117,6 +117,8 @@ public:
 
 private:
 
+    void textfieldChanged();
+
     VclPtr<FindTextFieldControl> m_pFindTextFieldControl;
 
     sal_uInt16 m_nDownSearchId; // item position of findbar
