@@ -186,7 +186,7 @@ public final class PropertySetMixin {
        @param newValue the property value corresponding to the new
        attribute value.  This is only used as
        <code>com.sun.star.beans.PropertyChangeEvent.NewValue</code>, which is
-       rather useless, anyway (see &ldquo;Using the Observer Pattern&rdquo: in
+       rather useless, anyway (see &ldquo;Using the Observer Pattern&rdquo;: in
        <a href="http://tools.openoffice.org/CodingGuidelines.sxw">
        <cite>OpenOffice.org Coding Guidelines</cite></a>), <em>unless</em> the
        attribute that is going to be set is constrained.  If the attribute

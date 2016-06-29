@@ -98,8 +98,8 @@ public interface ITypeDescription {
     /**
      * Gets the (UNO) type name.
      *
-     * <p>The following table lists how UNO types map to type names:</p>
      * <table>
+     *   <caption>Mapping from UNO types to type names</caption>
      *   <thead>
      *     <tr><th>UNO type</th><th>type name</th></tr>
      *   </thead>
@@ -114,15 +114,15 @@ public interface ITypeDescription {
      *     </tr>
      *     <tr><td>LONG</td><td><code>"long"</code></td></tr>
      *     <tr><td>UNSIGNED LONG</td><td><code>"unsigned long"</code></td></tr>
-     *     <tr><td>HYPER</td><td></td><code>"hyper"</code></tr>
+     *     <tr><td>HYPER</td><td></td><td><code>"hyper"</code></td></tr>
      *     <tr>
-     *       <td>UNSIGNED HYPER</td><td></td><code>"unsigned hyper"</code>
+     *       <td>UNSIGNED HYPER</td><td></td><td><code>"unsigned hyper"</code></td>
      *     </tr>
-     *     <tr><td>FLOAT</td><td></td><code>"float"</code></tr>
-     *     <tr><td>DOUBLE</td><td></td><code>"double"</code></tr>
-     *     <tr><td>STRING</td><td></td><code>"string"</code></tr>
-     *     <tr><td>TYPE</td><td></td><code>"type"</code></tr>
-     *     <tr><td>ANY</td><td></td><code>"any"</code></tr>
+     *     <tr><td>FLOAT</td><td></td><td><code>"float"</code></td></tr>
+     *     <tr><td>DOUBLE</td><td></td><td><code>"double"</code></td></tr>
+     *     <tr><td>STRING</td><td></td><td><code>"string"</code></td></tr>
+     *     <tr><td>TYPE</td><td></td><td><code>"type"</code></td></tr>
+     *     <tr><td>ANY</td><td></td><td><code>"any"</code></td></tr>
      *     <tr>
      *       <td>sequence type of base type <var>T</var></td>
      *       <td><code>"[]"</code> followed by type name for <var>T</var></td>
@@ -143,7 +143,7 @@ public interface ITypeDescription {
      *       <td>interface type named <var>N</var></td>
      *       <td><var>N</var> (see below)</td>
      *     </tr>
-     *   <tbody>
+     *   </tbody>
      * </table>
      * <p>For a UNO type named <var>N</var>, consisting of a sequence of module
      * names <var>M<sub>1</sub></var>, ..., <var>M<sub>n</sub></var> followed by

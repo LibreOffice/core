@@ -24,7 +24,7 @@ package com.sun.star.comp.helper;
     The first one is commonly used for singleton objects of the component
     context, that are raised on first-time retrieval of the key.
     You have to pass a com.sun.star.lang.XSingleComponentFactory
-    or string (=> service name) object for this.
+    or string (service name) object for this.
     </p>
 */
 public class ComponentContextEntry

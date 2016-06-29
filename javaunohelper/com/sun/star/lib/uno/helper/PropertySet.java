@@ -117,7 +117,7 @@ XMultiPropertySet
      *  initialization of the inheriting class (i.e. within the contructor)
      *  @param name The property's name (Property.Name).
      *  @param handle The property's handle (Property.Handle).
-     *  @param Type The property's type (Property.Type).
+     *  @param type The property's type (Property.Type).
      *  @param attributes The property's attributes (Property.Attributes).
      *  @param id Identifies the property's storage.
      */
@@ -135,8 +135,7 @@ XMultiPropertySet
      *  Registration has to occur during
      *  initialization of the inheriting class (i.e. within the contructor).
      *  @param name The property's name (Property.Name).
-     *  @param handle The property's handle (Property.Handle).
-     *  @param Type The property's type (Property.Type).
+     *  @param type The property's type (Property.Type).
      *  @param attributes The property's attributes (Property.Attributes).
      *  @param id Identifies the property's storage.
      */
@@ -558,11 +557,11 @@ XMultiPropertySet
      *  {@link #setFastPropertyValue XFastPropertySet.setFastPropertyValue}
      *  and {@link #setPropertyValues XMultiPropertySet.setPropertyValues}.
      *  If this method fails, that is, it returns false or throws an exception, then no listeners are notified and the
-     *  property value, that was intended to be changed, remains untouched.<br /> This method does not have to deal with property attributes, such as
+     *  property value, that was intended to be changed, remains untouched.<p> This method does not have to deal with property attributes, such as
      *  PropertyAttribute.READONLY or PropertyAttribute.MAYBEVOID. The processing of these attributes occurs
-     *  in the calling methods.<br />
+     *  in the calling methods.<p>
      *  Only if this method returns successfully further processing, such
-     *  as listener notification and finally the modifiction of the property's value, will occur.<br />
+     *  as listener notification and finally the modifiction of the property's value, will occur.<p>
      *
      *  The actual modification of a property's value is done by {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast}
      *  which is called subsequent to convertPropertyValue.
@@ -588,10 +587,10 @@ XMultiPropertySet
      *  Then, no conversion is necessary, since they can hold all possible values. However, if
      *  the member is an Object and <em>setVal</em> is an Any then the object contained in the any is assigned to
      *  the member. The extra type information which exists as Type object in the Any will get lost. If this is not
-     *  intended then use an Any variable rather then an Object.<br />
+     *  intended then use an Any variable rather then an Object.<p>
      *  If a member is an Object or Any and the argument <em>setVal</em> is an Object, other than String or array,
      *  then it is presumed to be an UNO object and queried for XInterface. If successful, the out-param <em>newVal</em>
-     *  returns the XInterface.<br />
+     *  returns the XInterface.<p>
      *  If a member is an UNO interface, then <em>setVal</em> is queried for this interface and the result is returned.
      *  If <em>setVal</em> is null then <em>newVal</em> will be null too after return.
      *  <p>
@@ -788,7 +787,7 @@ XMultiPropertySet
      *  If a property has the READONLY attribute set, and one of the setter methods, such as setPropertyValue, has been
      *  called, then this method is not going to be called.
      *  @param property the property for which the new value is set
-     *  @param value the new value for the property.
+     *  @param newVal the new value for the property.
      *  @throws com.sun.star.lang.WrappedTargetException An exception, which has to be made known to the caller,
      *  occurred during the setting of the value.
      */

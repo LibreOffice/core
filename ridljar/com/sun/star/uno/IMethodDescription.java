@@ -47,7 +47,7 @@ public interface IMethodDescription extends IMemberDescription {
     boolean isConst();
 
     /**
-     * Gives any array of <code>ITypeDescription> of
+     * Gives any array of <code>ITypeDescription</code> of
      * the [in] parameters.
      * <p>
      * @return  the in parameters
@@ -55,7 +55,7 @@ public interface IMethodDescription extends IMemberDescription {
     ITypeDescription[] getInSignature();
 
     /**
-     * Gives any array of <code>ITypeDescription> of
+     * Gives any array of <code>ITypeDescription</code> of
      * the [out] parameters.
      * <p>
      * @return  the out parameters

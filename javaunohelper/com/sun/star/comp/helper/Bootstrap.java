@@ -145,7 +145,7 @@ public class Bootstrap {
      * Bootstraps a servicemanager with the jurt base components registered.
      * <p>
      * @return     a freshly boostrapped service manager
-     * @see        com.sun.star.lang.ServiceManager
+     * @see        "com.sun.star.lang.ServiceManager"
      */
     static public XMultiServiceFactory createSimpleServiceManager() throws Exception
     {

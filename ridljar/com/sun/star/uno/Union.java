@@ -22,7 +22,7 @@ package com.sun.star.uno;
  * The Union class is the base class for all classes generated
  * as java binding for the IDL type union.
  * <p>
- * Note: The idl type <code>union<code> is currently not fully
+ * Note: The idl type <code>union</code> is currently not fully
  * integrated into the UNO framework, so don't use it.
  */
 public class Union {
