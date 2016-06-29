@@ -142,6 +142,12 @@ public:
                     // sw/source/core/text/blink.cxx, _TextFinit()
                 || name == "s_pIconCache"
                     // sd/source/ui/tools/IconCache.cxx, leaked
+                || name == "maInstanceMap"
+                    // sd/source/ui/framework/tools/FrameworkHelper.cxx, would
+                    // leak ViewShellBase* keys if that map is not empty at exit
+                || name == "theAddInAsyncTbl"
+                    // sc/source/core/tool/adiasync.cxx, would leak
+                    // ScAddInAsync* keys if that set is not empty at exit
                ) // these variables appear unproblematic
             {
                 return true;
