@@ -51,6 +51,8 @@
 #define GRAPHIC_FORMAT_50           static_cast<sal_uInt32>(COMPAT_FORMAT( 'G', 'R', 'F', '5' ))
 #define NATIVE_FORMAT_50            static_cast<sal_uInt32>(COMPAT_FORMAT( 'N', 'A', 'T', '5' ))
 
+const sal_uInt32 nPdfMagic((sal_uInt32('p') << 24) | (sal_uInt32('d') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
+
 using namespace com::sun::star;
 
 struct ImpSwapFile
@@ -1553,11 +1555,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                         rIStm.ResetError();
                         rIStm.ReadUInt32( nMagic );
 
-                        if (nSvgMagic != nMagic)
-                        {
-                            rIStm.SetError(nOrigError);
-                        }
-                        else
+                        if (nSvgMagic == nMagic)
                         {
                             sal_uInt32 nSvgDataArrayLength(0);
                             rIStm.ReadUInt32(nSvgDataArrayLength);
@@ -1580,6 +1578,24 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                                 }
                             }
                         }
+                        else if (nMagic == nPdfMagic)
+                        {
+                            // Stream in PDF data.
+                            sal_uInt32 nPdfDataLength = 0;
+                            rIStm.ReadUInt32(nPdfDataLength);
+
+                            if (nPdfDataLength)
+                            {
+                                uno::Sequence<sal_Int8> aPdfData(nPdfDataLength);
+                                rIStm.ReadBytes(aPdfData.getArray(), nPdfDataLength);
+                                if (!rIStm.GetError())
+                                    rImpGraphic.maPdfData = aPdfData;
+                            }
+                        }
+                        else
+                        {
+                            rIStm.SetError(nOrigError);
+                        }
 
                         rIStm.Seek(nStmPos1);
                     }
@@ -1601,7 +1617,8 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
         {
             if( ( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50 ) &&
                 ( rOStm.GetCompressMode() & SvStreamCompressFlags::NATIVE ) &&
-                rImpGraphic.mpGfxLink && rImpGraphic.mpGfxLink->IsNative() )
+                rImpGraphic.mpGfxLink && rImpGraphic.mpGfxLink->IsNative() &&
+                !rImpGraphic.maPdfData.hasElements())
             {
                 // native format
                 rOStm.WriteUInt32( NATIVE_FORMAT_50 );
@@ -1656,6 +1673,13 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 
                     default:
                     {
+                        if (rImpGraphic.maPdfData.hasElements())
+                        {
+                            // Stream out PDF data.
+                            rOStm.WriteUInt32(nPdfMagic);
+                            rOStm.WriteUInt32(rImpGraphic.maPdfData.getLength());
+                            rOStm.WriteBytes(rImpGraphic.maPdfData.getConstArray(), rImpGraphic.maPdfData.getLength());
+                        }
                         if( rImpGraphic.ImplIsSupportedGraphic() )
                             WriteGDIMetaFile( rOStm, rImpGraphic.maMetaFile );
                     }

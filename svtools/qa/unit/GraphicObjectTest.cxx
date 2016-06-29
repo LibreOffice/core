@@ -41,6 +41,7 @@ public:
     void testSizeBasedAutoSwap();
     void testTdf88836();
     void testTdf88935();
+    void testPdf();
 
 
     virtual void setUp() override
@@ -59,6 +60,7 @@ private:
     CPPUNIT_TEST(testSizeBasedAutoSwap);
     CPPUNIT_TEST(testTdf88836);
     CPPUNIT_TEST(testTdf88935);
+    CPPUNIT_TEST(testPdf);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -303,6 +305,38 @@ void GraphicObjectTest::testTdf88935()
         CPPUNIT_ASSERT(!pGraphObj1->IsSwappedOut());
         CPPUNIT_ASSERT(!pGraphObj2->IsSwappedOut());
     }
+
+    xComponent->dispose();
+}
+
+void GraphicObjectTest::testPdf()
+{
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(m_directories.getURLFromSrc("svtools/qa/unit/data/pdf.odt"), "com.sun.star.text.TextDocument");
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument*>(xComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
+    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwNodes& aNodes = pDoc->GetNodes();
+
+    // Find images
+    GraphicObject* pGraphicObject = nullptr;
+    for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
+    {
+        if( aNodes[nIndex]->IsGrfNode() )
+        {
+            SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
+            CPPUNIT_ASSERT(pGrfNode);
+            pGraphicObject = const_cast<GraphicObject*>(&pGrfNode->GetGrfObj());
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Missing image", pGraphicObject);
+
+    CPPUNIT_ASSERT(pGraphicObject->GetGraphic().getPdfData().hasElements());
+    pGraphicObject->SwapOut();
+    pGraphicObject->SwapIn();
+    // This failed, swap out + swap in lost the PDF data.
+    CPPUNIT_ASSERT(pGraphicObject->GetGraphic().getPdfData().hasElements());
 
     xComponent->dispose();
 }
