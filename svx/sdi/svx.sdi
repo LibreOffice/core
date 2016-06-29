@@ -4763,6 +4763,23 @@ SfxVoidItem InsertImage SID_INSERT_IMAGE
     GroupId = GID_INSERT;
 ]
 
+SfxVoidItem ResetImage SID_RESET_IMAGE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
 
 SfxVoidItem InsertMath SID_INSERT_MATH
 ()
