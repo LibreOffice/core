@@ -21,6 +21,7 @@
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 class Point;
 class Rectangle;
@@ -50,10 +51,7 @@ class ImpXPolygon;
 class SVX_DLLPUBLIC XPolygon
 {
 protected:
-    ImpXPolygon*    pImpXPolygon;
-
-    // check ImpXPolygon-ReferenceCount and decouple if necessary
-    void    CheckReference();
+    o3tl::cow_wrapper< ImpXPolygon > pImpXPolygon;
 
     // auxiliary functions for Bezier conversion
     void    SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT);

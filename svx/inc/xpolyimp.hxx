@@ -35,7 +35,6 @@ public:
     sal_uInt16          nSize;
     sal_uInt16          nResize;
     sal_uInt16          nPoints;
-    sal_uInt16          nRefCount;
 
     ImpXPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize=16 );
     ImpXPolygon( const ImpXPolygon& rImpXPoly );
@@ -43,14 +42,7 @@ public:
 
     bool operator==(const ImpXPolygon& rImpXPoly) const;
 
-    void CheckPointDelete()
-    {
-        if ( bDeleteOldPoints )
-        {
-            delete[] reinterpret_cast<char*>(pOldPointAry);
-            bDeleteOldPoints = false;
-        }
-    }
+    void CheckPointDelete() const;
 
     void Resize( sal_uInt16 nNewSize, bool bDeletePoints = true );
     void InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount );
