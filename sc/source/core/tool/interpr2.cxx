@@ -190,17 +190,15 @@ void ScInterpreter::ScGetDayOfWeek()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        short nFlag;
+        sal_Int16 nFlag;
         if (nParamCount == 2)
         {
-            double x = rtl::math::approxFloor(GetDouble());
-            if (x > double(std::numeric_limits<short>::min()) - 1
-                && x < double(std::numeric_limits<short>::max()) + 1)
+            nFlag = GetInt16();
+            if (nGlobalError)
             {
-                nFlag = static_cast<short>(x);
+                PushError( nGlobalError);
+                return;
             }
-            else
-                nFlag = -1; // cause error in switch below
         }
         else
             nFlag = 1;
@@ -258,22 +256,18 @@ void ScInterpreter::ScGetWeekOfYear()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        short nFlag;
+        sal_Int16 nFlag;
         if (nParamCount == 1)
         {
             nFlag = 1;
         }
         else
         {
-            double x = rtl::math::approxFloor(GetDouble());
-            if (x > double(std::numeric_limits<short>::min()) - 1
-                && x < double(std::numeric_limits<short>::max()) + 1)
+            nFlag = GetInt16();
+            if (nGlobalError)
             {
-                nFlag = static_cast<short>(x);
-            }
-            else
-            {
-                nFlag = -1; // cause error in switch below
+                PushError( nGlobalError);
+                return;
             }
         }
 
@@ -332,14 +326,12 @@ void ScInterpreter::ScEasterSunday()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         sal_Int16 nDay, nMonth, nYear;
-        double x = rtl::math::approxFloor( GetDouble() );
-        if (x <= sal_Int32(SAL_MIN_INT16) - 1
-            || x >= sal_Int32(SAL_MAX_INT16) + 1)
+        nYear = GetInt16();
+        if (nGlobalError)
         {
-            PushIllegalArgument();
+            PushError( nGlobalError);
             return;
         }
-        nYear = static_cast<sal_Int16>(x);
         if ( nYear < 100 )
             nYear = pFormatter->ExpandTwoDigitYear( nYear );
         if (nYear < 1583 || nYear > 9956)
