@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_3d8988cb",
+        "filename": "sw/source/uibase/shells/grfsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-06-29T09:36:03Z",
+      "side": 1,
+      "message": "to get path and filter name here maybe i need use an item set in Get/SetFirstStateofGraphic? Am i right?",
+      "range": {
+        "startLine": 516,
+        "startChar": 37,
+        "endLine": 516,
+        "endChar": 59
+      },
+      "revId": "cbf00fc4e927bf8092be3cf541f105c219ed8c2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_1da4c455",
+        "filename": "sw/source/uibase/shells/grfsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-06-29T09:36:03Z",
+      "side": 1,
+      "message": "I need help about for resizing the image. rWrtSh.GetAnyCurRect.SSize(rWrtSh.GetFirstStateofGraphic()) doesn\u0027t work here becaouse SwRect is const and SSize is non-const. Is there suggestion?",
+      "range": {
+        "startLine": 517,
+        "startChar": 16,
+        "endLine": 519,
+        "endChar": 42
+      },
+      "revId": "cbf00fc4e927bf8092be3cf541f105c219ed8c2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
