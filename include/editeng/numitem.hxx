@@ -315,11 +315,10 @@ public:
 class SvxNodeNum
 {
     sal_uInt16 nLevelVal[ SVX_MAX_NUM ];    // Numbers of all levels
-    sal_uInt16 nSetValue;                   // predetermined number
-    sal_uInt8  nMyLevel;                     // Current Level
+    sal_uInt8  nMyLevel;                    // Current Level
 
 public:
-    explicit inline SvxNodeNum( sal_uInt16 nSetVal = USHRT_MAX );
+    explicit inline SvxNodeNum();
     inline SvxNodeNum& operator=( const SvxNodeNum& rCpy );
 
     sal_uInt8 GetLevel() const                  { return nMyLevel; }
@@ -329,8 +328,8 @@ public:
           sal_uInt16* GetLevelVal()             { return nLevelVal; }
 };
 
-SvxNodeNum::SvxNodeNum( sal_uInt16 nSetVal )
-    : nSetValue( nSetVal ), nMyLevel( 0 )
+SvxNodeNum::SvxNodeNum()
+    : nMyLevel( 0 )
 {
     memset( nLevelVal, 0, sizeof( nLevelVal ) );
 }
@@ -339,7 +338,6 @@ inline SvxNodeNum& SvxNodeNum::operator=( const SvxNodeNum& rCpy )
 {
     if ( &rCpy != this)
     {
-        nSetValue = rCpy.nSetValue;
         nMyLevel = rCpy.nMyLevel;
 
         memcpy( nLevelVal, rCpy.nLevelVal, sizeof( nLevelVal ) );

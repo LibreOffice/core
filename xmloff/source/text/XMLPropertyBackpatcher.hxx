@@ -61,9 +61,6 @@ class XMLPropertyBackpatcher
     /// name of property that gets set or backpatched
      OUString sPropertyName;
 
-    /// name of the property to preserve
-    OUString sPreservePropertyName;
-
     /// backpatch list type
     typedef ::std::vector<
                 css::uno::Reference<css::beans::XPropertySet> > BackpatchListType;

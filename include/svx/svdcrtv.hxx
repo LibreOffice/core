@@ -51,7 +51,6 @@ protected:
     sal_uInt32                  nAktInvent;     // set the current ones
     sal_uInt16                  nAktIdent;      // Obj for re-creating
 
-    bool                        bAutoTextEdit : 1; // Textedit after we start the creation of a text frame
     bool                        b1stPointAsCenter : 1;
     bool                        bUseIncompatiblePathCreateInterface : 1;
 
