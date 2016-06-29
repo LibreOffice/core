@@ -509,6 +509,13 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
 
         switch( nSlot )
         {
+            case SID_RESET_IMAGE:
+            {
+                SwWrtShell &rWrtSh = GetShell();
+                rWrtSh.GetObjRect().SSize(rWrtSh.GetFirstSizeofGraphic());
+                rWrtSh.ReplaceSdrObj(OUString(), OUString(), &rWrtSh.GetFirstStateofGraphic());
+                break;
+            }
             case SID_FLIP_VERTICAL:
             case SID_FLIP_HORIZONTAL:
             {

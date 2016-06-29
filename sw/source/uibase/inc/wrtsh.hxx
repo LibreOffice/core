@@ -301,6 +301,12 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    SplitNode( bool bAutoFormat = false );
     bool    CanInsert();
 
+    // reset image
+    void              SetFirstStateofGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
+    const Graphic&    GetFirstStateofGraphic() const { return aGraphic; }
+    void              SetFirstSizeofGraphic( Size aSize ){ aGraphicSize = aSize; }
+    const Size&       GetFirstSizeofGraphic() const { return aGraphicSize; }
+
     // indexes
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = nullptr);
     bool    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = nullptr);
@@ -522,6 +528,9 @@ private:
 
     SwView  &m_rView;
     SwNavigationMgr m_aNavigationMgr;
+
+    Graphic aGraphic;
+    Size  aGraphicSize;
 
     Point   m_aDest;
     bool    m_bDestOnStack;
