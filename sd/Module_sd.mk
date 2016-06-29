@@ -46,6 +46,10 @@ $(eval $(call gb_Module_add_check_targets,sd,\
 ))
 endif
 
+$(eval $(call gb_Module_add_slowcheck_targets,sd, \
+    CppunitTest_sd_dialogs_test \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     JunitTest_sd_unoapi \
 ))
