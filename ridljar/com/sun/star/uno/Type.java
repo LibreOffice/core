@@ -199,7 +199,7 @@ public class Type {
      *
      * <p>In certain cases, one Java class corresponds to two UNO types (e.g.,
      * the Java class <code>short[].class</code> corresponds to both a sequence
-     * of <codde>SHORT</code> and a sequence of <code>UNSIGNED SHORT</code> in
+     * of <code>SHORT</code> and a sequence of <code>UNSIGNED SHORT</code> in
      * UNO).  In such ambiguous cases, the parameter <code>alternative</code>
      * controls which UNO type is chosen:</p>
      * <ul>
