@@ -1517,15 +1517,11 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( MetaActionType::WALLPAPER ):
             case( MetaActionType::TEXTLINE ):
             case( MetaActionType::GRADIENTEX ):
-            {
-                // !!! >>> we don't want to support these actions
-            }
+                // Explicitly ignored cases
             break;
 
             default:
-                OSL_FAIL(OStringBuffer(
-                    "EMFWriter::ImplWriteActions: unsupported MetaAction #" ).
-                     append(static_cast<sal_Int32>(nType)).getStr());
+                // TODO: Implement more cases as necessary. Let's not bother with a warning.
             break;
         }
     }

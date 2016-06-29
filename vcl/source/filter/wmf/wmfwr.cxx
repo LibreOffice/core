@@ -1609,41 +1609,14 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     break;
                 }
 
-                // Unsupported Actions
-                case MetaActionType::MASK:
-                case MetaActionType::MASKSCALE:
-                case MetaActionType::MASKSCALEPART:
-                {
-                    OSL_FAIL( "Unsupported action: MetaMask...Action!" );
-                }
-                break;
-
                 case MetaActionType::CLIPREGION:
-                break;
-
-                case MetaActionType::ISECTREGIONCLIPREGION:
-                {
-                    OSL_FAIL( "Unsupported action: MetaISectRegionClipRegionAction!" );
-                }
-                break;
-
-                case MetaActionType::MOVECLIPREGION:
-                {
-                    OSL_FAIL( "Unsupported action: MetaMoveClipRegionAction!" );
-                }
-                break;
-
                 case MetaActionType::TEXTLANGUAGE:
-                    SAL_FALLTHROUGH;
-                case( MetaActionType::COMMENT ): // ignore
+                case MetaActionType::COMMENT:
+                    // Explicitly ignored cases
                 break;
 
                 default:
-                {
-                    OSL_FAIL(OStringBuffer(
-                        "WMFWriter::WriteRecords: unsupported MetaAction #" ).
-                         append(static_cast<sal_Int32>(pMA->GetType())).getStr());
-                }
+                    // TODO: Implement more cases as necessary. Let's not bother with a warning.
                 break;
           }
 
