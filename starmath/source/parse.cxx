@@ -460,7 +460,7 @@ void SmParser::NextToken()
             --aRes.EndPos;
         }
         sal_Int32 n = aRes.EndPos - nRealStart;
-        OSL_ENSURE( n >= 0, "length < 0" );
+        assert(n >= 0);
         m_aCurToken.eType      = TNUMBER;
         m_aCurToken.cMathChar  = '\0';
         m_aCurToken.nGroup     = TG::NONE;
@@ -482,7 +482,7 @@ void SmParser::NextToken()
     else if (aRes.TokenType & KParseType::IDENTNAME)
     {
         sal_Int32 n = aRes.EndPos - nRealStart;
-        OSL_ENSURE( n >= 0, "length < 0" );
+        assert(n >= 0);
         OUString aName( m_aBufferString.copy( nRealStart, n ) );
         const SmTokenTableEntry *pEntry = GetTokenTableEntry( aName );
 
