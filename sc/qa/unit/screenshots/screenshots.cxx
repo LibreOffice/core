@@ -24,6 +24,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
+#include <svx/numinf.hxx>
 #include <vcl/pngwrite.hxx>
 
 #include <tabvwsh.hxx>
@@ -36,6 +37,7 @@
 #include <reffact.hxx>
 #include <scui_def.hxx>
 #include <impex.hxx>
+#include <patattr.hxx>
 
 #include <sc.hrc>
 #include <scresid.hxx>
@@ -98,6 +100,7 @@ private:
     ScAbstractDialogFactory* pFact;
 
     std::unique_ptr<ScImportStringStream> pStream;
+    std::unique_ptr<SfxItemSet> pItemSet;
 };
 
 ScScreenshotTest::ScScreenshotTest()
@@ -250,6 +253,26 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
             pReturnDialog = pFact->CreateScImportAsciiDlg( OUString(), pStream.get(), SC_PASTETEXT );
             break;
         }
+        case 14:
+        {
+            ScViewData& rViewData = pViewShell->GetViewData();
+            ScDocument *pDoc = rViewData.GetDocument();
+
+            const ScPatternAttr *pAttr = pViewShell->GetSelectionPattern();
+            std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
+
+            pItemSet.reset( new SfxItemSet( pAttr->GetItemSet() ) );
+            pItemSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
+                           pAttr->GetNumberFormat( pDoc->GetFormatTable() ) ) );
+
+            pNumberInfoItem.reset( pViewShell->MakeNumberInfoItem(pDoc, &rViewData) );
+
+            pItemSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
+            pItemSet->Put(*pNumberInfoItem );
+
+            pReturnDialog = pFact->CreateScAttrDlg( pViewShell->GetDialogParent(), pItemSet.get() );
+            break;
+        }
            //ScopedVclPtrInstance<ScShareDocumentDlg> pDlg14( pViewShell->GetDialogParent(), &rViewData );
             //ScopedVclPtrInstance<ScTableProtectionDlg> pDlg16(pViewShell->GetDialogParent());
         default:
@@ -286,14 +309,33 @@ void ScScreenshotTest::saveScreenshot( VclAbstractDialog& rDialog )
 
 void ScScreenshotTest::dumpDialogToPath( VclAbstractDialog& rDialog )
 {
-    saveScreenshot( rDialog );
+   const std::vector<OString> aPageDescriptions(rDialog.getAllPageUIXMLDescriptions());
+
+   if (aPageDescriptions.size())
+   {
+      for (sal_uInt32 a(0); a < aPageDescriptions.size(); a++)
+      {
+          if (rDialog.selectPageByUIXMLDescription(aPageDescriptions[a]))
+          {
+              saveScreenshot( rDialog );
+          }
+          else
+          {
+              CPPUNIT_ASSERT(false);
+          }
+      }
+   }
+   else
+   {
+      saveScreenshot( rDialog );
+   }
 }
 
 void ScScreenshotTest::testOpeningModalDialogs()
 {
     initializeWithDoc("empty.ods");
 
-    const sal_uInt32 nDialogs = 14;
+    const sal_uInt32 nDialogs = 15;
 
     for ( sal_uInt32 i = 0; i < nDialogs; i++ )
     {
