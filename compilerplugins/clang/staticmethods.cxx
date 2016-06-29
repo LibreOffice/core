@@ -217,7 +217,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if ((fdc.Function("autoInstallFontLangSupport").Class("PrintFontManager")
          .Namespace("psp").GlobalNamespace())
         || fdc.Function("AllocateFrame").Class("GtkSalFrame").GlobalNamespace()
-        || (fdc.Function("TriggerPaintEvent").Class("GtkSalFrame::")
+        || (fdc.Function("TriggerPaintEvent").Class("GtkSalFrame")
             .GlobalNamespace()))
     {
         return true;
