@@ -57,7 +57,6 @@ public:
     bool                        mbSecondSoundOn;   ///< for object fading.
     bool                        mbSecondPlayFull;  ///< for object fading.
     sal_uInt16                  mnVerb;            ///< for OLE object
-    sal_uLong                   mnPresOrder;
     SdrObject&                  mrObject;
 
     void           SetBookmark( const OUString& rBookmark );
