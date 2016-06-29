@@ -52,19 +52,16 @@ class SvStringHashEntry : public SvRefBase
 {
 friend class SvStringHashTable;
     OString     aName;
-    sal_uInt32  nHashId;
     sal_uLong   nValue;
     bool        bHasId;
 public:
     SvStringHashEntry()
-        : nHashId(0)
-        , nValue(0)
+        : nValue(0)
         , bHasId(false)
     {
     }
-    SvStringHashEntry( const OString& rName, sal_uInt32 nIdx )
+    SvStringHashEntry( const OString& rName )
         : aName(rName)
-        , nHashId(nIdx)
         , nValue(0)
         , bHasId(true)
     {
@@ -80,7 +77,6 @@ public:
     SvStringHashEntry & operator = ( const SvStringHashEntry & rRef )
         { SvRefBase::operator=( rRef );
           aName   = rRef.aName;
-          nHashId = rRef.nHashId;
           nValue  = rRef.nValue;
           bHasId  = rRef.bHasId;
           return *this;

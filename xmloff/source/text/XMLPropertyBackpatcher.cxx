@@ -34,7 +34,6 @@ template<class A>
 XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
     const OUString& sPropName)
 :   sPropertyName(sPropName)
-,   sPreservePropertyName()
 {
 }
 

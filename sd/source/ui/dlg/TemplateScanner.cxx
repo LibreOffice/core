@@ -357,7 +357,6 @@ TemplateScanner::State TemplateScanner::ScanFolder()
         FolderDescriptor aDescriptor (*mpFolderDescriptors->begin());
         mpFolderDescriptors->erase(mpFolderDescriptors->begin());
 
-        OUString sTitle (aDescriptor.msTitle);
         OUString aId (aDescriptor.msContentIdentifier);
 
         maFolderContent = ::ucbhelper::Content (aId, aDescriptor.mxFolderEnvironment, comphelper::getProcessComponentContext());
@@ -365,7 +364,7 @@ TemplateScanner::State TemplateScanner::ScanFolder()
         {
             // Scan the folder and insert it into the list of template
             // folders.
-            mpTemplateDirectory = new TemplateDir (sTitle);
+            mpTemplateDirectory = new TemplateDir;
             mpTemplateDirectory->EnableSorting(mbEntrySortingEnabled);
             // Continue with scanning all entries in the folder.
             eNextState = INITIALIZE_ENTRY_SCAN;

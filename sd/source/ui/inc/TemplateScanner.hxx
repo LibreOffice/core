@@ -72,11 +72,10 @@ private:
 class TemplateDir
 {
 public:
-    TemplateDir (const OUString& rsRegion )
-        :   msRegion(rsRegion), maEntries(),
+    TemplateDir()
+        :   maEntries(),
             mbSortingEnabled(false), mpEntryCompare(nullptr) {}
 
-    OUString msRegion;
     ::std::vector<TemplateEntry*> maEntries;
 
     void EnableSorting(bool bSortingEnabled = true);
