@@ -111,7 +111,7 @@ public:
     // get the result of this expression as string/bool/...
     // (Results will be based on the last call of evaluate(..). The caller
     // must call evaluate to ensure current results.)
-    css::uno::Reference<css::xml::xpath::XXPathObject> getXPath() const { return mxResult;}
+    css::uno::Reference<css::xml::xpath::XXPathObject> const & getXPath() const { return mxResult;}
     bool getBool( bool bDefault = false ) const;
     OUString getString() const;
 

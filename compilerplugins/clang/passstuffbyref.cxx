@@ -243,13 +243,19 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         return;
     }
     loplugin::DeclCheck dc(functionDecl);
-    std::string aFunctionName = functionDecl->getQualifiedNameAsString();
     // function is passed as parameter to another function
     if (dc.Function("ImplColMonoFnc").Class("GDIMetaFile").GlobalNamespace()
         || (dc.Function("darkColor").Class("SvxBorderLine").Namespace("editeng")
             .GlobalNamespace())
-        || aFunctionName.compare(0, 8, "xforms::") == 0)
+        || (dc.MemberFunction().Class("Binding").Namespace("xforms")
+            .GlobalNamespace())
+        || (dc.MemberFunction().Class("Model").Namespace("xforms")
+            .GlobalNamespace())
+        || (dc.MemberFunction().Class("Submission").Namespace("xforms")
+            .GlobalNamespace()))
+    {
         return;
+    }
     // not sure how to exclude this yet, returns copy of one of it's params
     if (dc.Function("sameDistColor").GlobalNamespace()
         || dc.Function("sameColor").GlobalNamespace()
@@ -278,7 +284,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
             DiagnosticsEngine::Warning,
             "rather return %0 from function %1 %2 by const& than by value, to avoid unnecessary copying",
             functionDecl->getSourceRange().getBegin())
-        << type.getAsString() << aFunctionName << type->getTypeClassName() << functionDecl->getSourceRange();
+        << type.getAsString() << functionDecl->getQualifiedNameAsString() << type->getTypeClassName() << functionDecl->getSourceRange();
 
     // display the location of the class member declaration so I don't have to search for it by hand
     if (functionDecl->getSourceRange().getBegin() != functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
