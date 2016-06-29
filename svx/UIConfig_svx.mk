@@ -24,6 +24,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/compressgraphicdialog \
 	svx/uiconfig/ui/crashreportdlg \
 	svx/uiconfig/ui/datanavigator \
+	svx/uiconfig/ui/defaultshapespanel \
 	svx/uiconfig/ui/deleteheaderdialog \
 	svx/uiconfig/ui/deletefooterdialog \
 	svx/uiconfig/ui/docking3deffects \
@@ -63,7 +64,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/redlineviewpage \
 	svx/uiconfig/ui/savemodifieddialog \
 	svx/uiconfig/ui/sidebararea \
-    svx/uiconfig/ui/sidebarshadow \
+	svx/uiconfig/ui/sidebarshadow \
 	svx/uiconfig/ui/sidebargraphic \
 	svx/uiconfig/ui/sidebarline \
 	svx/uiconfig/ui/sidebarparagraph \

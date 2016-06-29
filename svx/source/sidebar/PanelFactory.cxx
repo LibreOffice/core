@@ -25,6 +25,7 @@
 #include "graphic/GraphicPropertyPanel.hxx"
 #include "line/LinePropertyPanel.hxx"
 #include "possize/PosSizePropertyPanel.hxx"
+#include "shapes/DefaultShapesPanel.hxx"
 #include "GalleryControl.hxx"
 #include "EmptyPanel.hxx"
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -166,6 +167,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (rsResourceURL.endsWith("/PosSizePropertyPanel"))
     {
         pControl = PosSizePropertyPanel::Create(pParentWindow, xFrame, pBindings, xSidebar);
+    }
+    else if (rsResourceURL.endsWith("/DefaultShapesPanel"))
+    {
+        pControl = DefaultShapesPanel::Create(pParentWindow, xFrame);
     }
     else if (rsResourceURL.endsWith("/GalleryPanel"))
     {

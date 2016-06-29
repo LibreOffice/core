@@ -30,7 +30,7 @@
 #include "NavigatorWrapper.hxx"
 #include "SlideTransitionPanel.hxx"
 #include "TableDesignPanel.hxx"
-#include <SlideBackground.hxx>
+#include "SlideBackground.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
