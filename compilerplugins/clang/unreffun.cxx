@@ -33,15 +33,9 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     if (decl->isExternC()) {
         return true;
     }
-#if CLANG_VERSION >= 30300
     if (decl->isInExternCContext()) {
         return true;
     }
-#else
-    if (decl->getCanonicalDecl()->getDeclContext()->isExternCContext()) {
-        return true;
-    }
-#endif
     return false;
 }
 
@@ -134,13 +128,13 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     {
         return true;
     }
-    compat::LinkageInfo info(canon->getLinkageAndVisibility());
-    if (compat::getLinkage(info) == ExternalLinkage
+    LinkageInfo info(canon->getLinkageAndVisibility());
+    if (info.getLinkage() == ExternalLinkage
         && hasCLanguageLinkageType(canon) && canon->isDefined()
-        && ((decl == canon && compat::getVisibility(info) == DefaultVisibility)
+        && ((decl == canon && info.getVisibility() == DefaultVisibility)
             || ((canon->hasAttr<ConstructorAttr>()
                  || canon->hasAttr<DestructorAttr>())
-                && compat::getVisibility(info) == HiddenVisibility)))
+                && info.getVisibility() == HiddenVisibility)))
     {
         return true;
     }

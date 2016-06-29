@@ -146,8 +146,8 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
                        && isVoidPointer(
                            dyn_cast<CXXStaticCastExpr>(e)->getSubExpr()
                            ->IgnoreParenImpCasts()->getType())
-                       && !compat::isMacroBodyExpansion(
-                           compiler, e->getLocStart()))
+                       && !compiler.getSourceManager().isMacroBodyExpansion(
+                           e->getLocStart()))
             {
                 report(
                     DiagnosticsEngine::Warning,
@@ -223,13 +223,13 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
                 loc = compiler.getSourceManager().getImmediateMacroCallerLoc(
                     loc);
             }
-            if (compat::isMacroBodyExpansion(compiler, loc)) {
+            if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
                 auto loc2 = expr->getLocEnd();
                 while (compiler.getSourceManager().isMacroArgExpansion(loc2)) {
                     loc2 = compiler.getSourceManager()
                         .getImmediateMacroCallerLoc(loc2);
                 }
-                if (compat::isMacroBodyExpansion(compiler, loc2)) {
+                if (compiler.getSourceManager().isMacroBodyExpansion(loc2)) {
                     //TODO: check loc, loc2 are in same macro body expansion
                     loc = compiler.getSourceManager().getSpellingLoc(loc);
                 }

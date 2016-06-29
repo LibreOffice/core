@@ -224,15 +224,9 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     if (decl->isExternC()) {
         return true;
     }
-#if CLANG_VERSION >= 30300
     if (decl->isInExternCContext()) {
         return true;
     }
-#else
-    if (decl->getCanonicalDecl()->getDeclContext()->isExternCContext()) {
-        return true;
-    }
-#endif
     return false;
 }
 

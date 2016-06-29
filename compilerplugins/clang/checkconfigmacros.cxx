@@ -34,13 +34,6 @@ class CheckConfigMacros
     public:
         explicit CheckConfigMacros( const InstantiationData& data );
         virtual void run() override;
-#if CLANG_VERSION < 30300
-        virtual void MacroDefined( const Token& macroToken, const MacroInfo* info ) override;
-        virtual void MacroUndefined( const Token& macroToken, const MacroInfo* info ) override;
-        virtual void Ifdef( SourceLocation location, const Token& macroToken ) override;
-        virtual void Ifndef( SourceLocation location, const Token& macroToken ) override;
-        virtual void Defined( const Token& macroToken ) override;
-#else
         virtual void MacroDefined( const Token& macroToken, const MacroDirective* info ) override;
 #if CLANG_VERSION < 30700
         virtual void MacroUndefined( const Token& macroToken, const MacroDirective* info ) override;
@@ -57,7 +50,6 @@ class CheckConfigMacros
         virtual void Defined( const Token& macroToken, const MacroDirective* info, SourceRange Range ) override;
 #else
         virtual void Defined( const Token& macroToken, const MacroDefinition& info, SourceRange Range ) override;
-#endif
 #endif
         enum { isPPCallback = true };
     private:
@@ -76,15 +68,9 @@ void CheckConfigMacros::run()
     // nothing, only check preprocessor usage
     }
 
-#if CLANG_VERSION < 30300
-void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroInfo* info )
-    {
-    SourceLocation location = info->getDefinitionLoc();
-#else
 void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirective* info )
     {
     SourceLocation location = info->getLocation();
-#endif
     const char* filename = compiler.getSourceManager().getPresumedLoc( location ).getFilename();
     if( filename != NULL
         && ( strncmp( filename, BUILDDIR "/config_host/", strlen( BUILDDIR "/config_host/" )) == 0
@@ -95,9 +81,7 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
         }
     }
 
-#if CLANG_VERSION < 30300
-void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroInfo* )
-#elif CLANG_VERSION < 30700
+#if CLANG_VERSION < 30700
 void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroDirective* )
 #else
 void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroDefinition& )
@@ -106,9 +90,7 @@ void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroDefi
     configMacros.erase( macroToken.getIdentifierInfo()->getName());
     }
 
-#if CLANG_VERSION < 30300
-void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken )
-#elif CLANG_VERSION < 30700
+#if CLANG_VERSION < 30700
 void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken, const MacroDirective* )
 #else
 void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken, const MacroDefinition& )
@@ -117,9 +99,7 @@ void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken,
     checkMacro( macroToken, location );
     }
 
-#if CLANG_VERSION < 30300
-void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken )
-#elif CLANG_VERSION < 30700
+#if CLANG_VERSION < 30700
 void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken, const MacroDirective* )
 #else
 void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken, const MacroDefinition& )
@@ -128,9 +108,7 @@ void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken
     checkMacro( macroToken, location );
     }
 
-#if CLANG_VERSION < 30300
-void CheckConfigMacros::Defined( const Token& macroToken )
-#elif CLANG_VERSION < 30400
+#if CLANG_VERSION < 30400
 void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* )
 #elif CLANG_VERSION < 30700
 void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* , SourceRange )

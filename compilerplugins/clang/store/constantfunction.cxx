@@ -440,7 +440,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     }
 
     std::string aImmediateMacro = "";
-    if (compat::isMacroBodyExpansion(compiler, pFunctionDecl->getLocStart()) ) {
+    if (compiler.getSourceManager().isMacroBodyExpansion(pFunctionDecl->getLocStart()) ) {
         StringRef name { Lexer::getImmediateMacroName(
                 pFunctionDecl->getLocStart(), compiler.getSourceManager(), compiler.getLangOpts()) };
         aImmediateMacro = name;

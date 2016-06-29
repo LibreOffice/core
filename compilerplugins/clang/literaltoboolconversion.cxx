@@ -93,7 +93,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
-        if (compat::isMacroBodyExpansion(compiler, loc)) {
+        if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
             StringRef name { Lexer::getImmediateMacroName(
                 loc, compiler.getSourceManager(), compiler.getLangOpts()) };
             if (name == "sal_False" || name == "sal_True") {

@@ -33,7 +33,7 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
         return true;
     }
     if (functionDecl->isDefined() || functionDecl->isPure()
-      || (compat::getLinkage(functionDecl->getLinkageAndVisibility())
+      || (functionDecl->getLinkageAndVisibility().getLinkage()
           != ExternalLinkage)) {
         return true;
     }

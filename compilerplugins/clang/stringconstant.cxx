@@ -62,7 +62,7 @@ bool hasOverloads(FunctionDecl const * decl, unsigned arguments) {
         ctx = ctx->getParent();
     }
     auto res = ctx->lookup(decl->getDeclName());
-    for (auto d = compat::begin(res); d != compat::end(res); ++d) {
+    for (auto d = res.begin(); d != res.end(); ++d) {
         FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
         if (f != nullptr && f->getMinRequiredArguments() <= arguments
             && f->getNumParams() >= arguments)
@@ -782,7 +782,8 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                     loc = compiler.getSourceManager()
                                         .getImmediateMacroCallerLoc(loc);
                                 }
-                                if (compat::isMacroBodyExpansion(compiler, loc)
+                                if ((compiler.getSourceManager()
+                                     .isMacroBodyExpansion(loc))
                                     && (Lexer::getImmediateMacroName(
                                             loc, compiler.getSourceManager(),
                                             compiler.getLangOpts())
@@ -1119,7 +1120,7 @@ void StringConstant::reportChange(
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
-        if (compat::isMacroBodyExpansion(compiler, loc)) {
+        if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
             loc = compiler.getSourceManager().getSpellingLoc(loc);
         }
         unsigned n = Lexer::MeasureTokenLength(

@@ -32,20 +32,6 @@ bool isSalBoolArray(QualType type) {
             || isSalBoolArray(t->getElementType()));
 }
 
-// Clang 3.2 FunctionDecl::isInlined doesn't work as advertised ("Determine
-// whether this function should be inlined, because it is either marked 'inline'
-// or 'constexpr' or is a member function of a class that was defined in the
-// class body.") but mis-classifies salhelper::Timer's isTicking, isExpired, and
-// expiresBefore members as defined in salhelper/source/timer.cxx as inlined:
-bool isInlined(FunctionDecl const & decl) {
-#if CLANG_VERSION >= 30300
-    return decl.isInlined();
-#else
-    (void)decl;
-    return false;
-#endif
-}
-
 // It appears that, given a function declaration, there is no way to determine
 // the language linkage of the function's type, only of the function's name
 // (via FunctionDecl::isExternC); however, in a case like
@@ -61,15 +47,9 @@ bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     if (decl->isExternC()) {
         return true;
     }
-#if CLANG_VERSION >= 30300
     if (decl->isInExternCContext()) {
         return true;
     }
-#else
-    if (decl->getCanonicalDecl()->getDeclContext()->isExternCContext()) {
-        return true;
-    }
-#endif
     return false;
 }
 
@@ -94,7 +74,7 @@ OverrideKind getOverrideKind(FunctionDecl const * decl) {
 bool hasBoolOverload(FunctionDecl const * decl, bool mustBeDeleted) {
     unsigned n = decl->getNumParams();
     auto res = decl->getDeclContext()->lookup(decl->getDeclName());
-    for (auto d = compat::begin(res); d != compat::end(res); ++d) {
+    for (auto d = res.begin(); d != res.end(); ++d) {
         FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
         if (f != nullptr && (!mustBeDeleted || f->isDeleted())) {
             if (f->getNumParams() == n) {
@@ -298,7 +278,7 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
-        if (compat::isMacroBodyExpansion(compiler, loc)) {
+        if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
             StringRef name { Lexer::getImmediateMacroName(
                 loc, compiler.getSourceManager(), compiler.getLangOpts()) };
             if (name == "sal_False" || name == "sal_True") {
@@ -396,7 +376,7 @@ bool SalBool::VisitImplicitCastExpr(ImplicitCastExpr * expr) {
     while (compiler.getSourceManager().isMacroArgExpansion(l)) {
         l = compiler.getSourceManager().getImmediateMacroCallerLoc(l);
     }
-    if (compat::isMacroBodyExpansion(compiler, l)) {
+    if (compiler.getSourceManager().isMacroBodyExpansion(l)) {
         auto n = Lexer::getImmediateMacroName(
             l, compiler.getSourceManager(), compiler.getLangOpts());
         if (n == "sal_False" || n == "sal_True") {
@@ -495,7 +475,7 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
                   || (isInUnoIncludeFile(
                           compiler.getSourceManager().getSpellingLoc(
                               f->getNameInfo().getLoc()))
-                      && (!isInlined(*f) || f->hasAttr<DeprecatedAttr>()
+                      && (!f->isInlined() || f->hasAttr<DeprecatedAttr>()
                           || decl->getType()->isReferenceType()
                           || hasBoolOverload(f, false)))
                   || f->isDeleted() || hasBoolOverload(f, true)))
@@ -672,7 +652,7 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
                  || (isInUnoIncludeFile(
                          compiler.getSourceManager().getSpellingLoc(
                              f->getNameInfo().getLoc()))
-                     && (!isInlined(*f) || f->hasAttr<DeprecatedAttr>()))))
+                     && (!f->isInlined() || f->hasAttr<DeprecatedAttr>()))))
         {
             SourceLocation loc { decl->getLocStart() };
             SourceLocation l { compiler.getSourceManager().getExpansionLoc(

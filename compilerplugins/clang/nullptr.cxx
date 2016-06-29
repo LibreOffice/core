@@ -67,8 +67,6 @@ private:
 
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
 
-    bool isMacroBodyExpansion(SourceLocation location) const;
-
     void visitCXXCtorInitializer(CXXCtorInitializer const * init);
 
     void handleZero(Expr const * expr);
@@ -218,15 +216,6 @@ bool Nullptr::isFromCIncludeFile(SourceLocation spellingLocation) const {
             .endswith(".h"));
 }
 
-bool Nullptr::isMacroBodyExpansion(SourceLocation location) const {
-#if CLANG_VERSION >= 30300
-    return compiler.getSourceManager().isMacroBodyExpansion(location);
-#else
-    return location.isMacroID()
-        && !compiler.getSourceManager().isMacroArgExpansion(location);
-#endif
-}
-
 void Nullptr::visitCXXCtorInitializer(CXXCtorInitializer const * init) {
     if (!init->isWritten()) {
         return;
@@ -273,7 +262,7 @@ void Nullptr::handleNull(
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
-        if (isMacroBodyExpansion(loc)) {
+        if (compiler.getSourceManager().isMacroBodyExpansion(loc)) {
             if (Lexer::getImmediateMacroName(
                     loc, compiler.getSourceManager(), compiler.getLangOpts())
                 == "NULL")
@@ -336,7 +325,8 @@ void Nullptr::rewriteOrWarn(
             locStart = compiler.getSourceManager()
                 .getImmediateMacroCallerLoc(locStart);
         }
-        if (compiler.getLangOpts().CPlusPlus && isMacroBodyExpansion(locStart)
+        if (compiler.getLangOpts().CPlusPlus
+            && compiler.getSourceManager().isMacroBodyExpansion(locStart)
             && (Lexer::getImmediateMacroName(
                     locStart, compiler.getSourceManager(),
                     compiler.getLangOpts())
@@ -350,7 +340,8 @@ void Nullptr::rewriteOrWarn(
             locEnd = compiler.getSourceManager()
                 .getImmediateMacroCallerLoc(locEnd);
         }
-        if (compiler.getLangOpts().CPlusPlus && isMacroBodyExpansion(locEnd)
+        if (compiler.getLangOpts().CPlusPlus
+            && compiler.getSourceManager().isMacroBodyExpansion(locEnd)
             && (Lexer::getImmediateMacroName(
                     locEnd, compiler.getSourceManager(),
                     compiler.getLangOpts())

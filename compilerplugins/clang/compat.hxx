@@ -90,28 +90,6 @@ inline bool forallBases(
 #endif
 }
 
-#if CLANG_VERSION >= 30300
-typedef clang::LinkageInfo LinkageInfo;
-#else
-typedef clang::NamedDecl::LinkageInfo LinkageInfo;
-#endif
-
-inline clang::Linkage getLinkage(LinkageInfo const & info) {
-#if CLANG_VERSION >= 30300
-    return info.getLinkage();
-#else
-    return info.linkage();
-#endif
-}
-
-inline clang::Visibility getVisibility(LinkageInfo const & info) {
-#if CLANG_VERSION >= 30300
-    return info.getVisibility();
-#else
-    return info.visibility();
-#endif
-}
-
 inline bool isFirstDecl(clang::FunctionDecl const & decl) {
 #if CLANG_VERSION >= 30400
     return decl.isFirstDecl();
@@ -251,30 +229,6 @@ inline std::unique_ptr<llvm::raw_fd_ostream> create_raw_fd_ostream(
 #endif
 }
 
-#if CLANG_VERSION >= 30700
-typedef clang::DeclContext::lookup_result DeclContextLookupResult;
-typedef clang::DeclContext::lookup_iterator DeclContextLookupIterator;
-#else
-typedef clang::DeclContext::lookup_const_result DeclContextLookupResult;
-typedef clang::DeclContext::lookup_const_iterator DeclContextLookupIterator;
-#endif
-
-inline DeclContextLookupIterator begin(DeclContextLookupResult const & result) {
-#if CLANG_VERSION >= 30300
-    return result.begin();
-#else
-    return result.first;
-#endif
-}
-
-inline DeclContextLookupIterator end(DeclContextLookupResult const & result) {
-#if CLANG_VERSION >= 30300
-    return result.end();
-#else
-    return result.second;
-#endif
-}
-
 inline void addPPCallbacks(
     clang::Preprocessor & preprocessor, clang::PPCallbacks * C)
 {
@@ -300,16 +254,6 @@ inline bool isMacroArgExpansion(
             .getExpansion().getExpansionLocStart();
     }
     return b;
-#endif
-}
-
-inline bool isMacroBodyExpansion(clang::CompilerInstance& compiler, clang::SourceLocation location)
-{
-#if CLANG_VERSION >= 30300
-    return compiler.getSourceManager().isMacroBodyExpansion(location);
-#else
-    return location.isMacroID()
-        && !compiler.getSourceManager().isMacroArgExpansion(location);
 #endif
 }
 
