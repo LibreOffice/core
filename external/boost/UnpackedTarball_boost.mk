@@ -64,6 +64,7 @@ boost_patches += boost.wunused.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0
 boost_patches += boost.signal2.Wshadow.warnings.patch
 boost_patches += boost.boost_static_assert_unused_attribute.patch.0
+boost_patches += boost.function.Wplacement-new.patch.1
 
 boost_patches += ubsan.patch.0
 boost_patches += rtti.patch.0
