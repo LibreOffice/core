@@ -1028,6 +1028,8 @@
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
 #define SID_SVX_FIRSTFREE                               (SID_EDIT_POSTIT + 1)
 
+#define SID_RESET_IMAGE                                 (SID_SVX_FIRSTFREE + 1)
+
 // Overflow check for slot IDs
 
 #if SID_SVX_FIRSTFREE > SID_SVX_END

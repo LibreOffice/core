@@ -18,6 +18,12 @@
 
 interface BaseTextGraphic
 {
+    SID_RESET_IMAGE
+    [
+        ExecMethod = ExecAttr ;
+        StateMethod = GetAttrState ;
+    ]
+
     SID_FLIP_VERTICAL
     [
         ExecMethod = ExecAttr ;
