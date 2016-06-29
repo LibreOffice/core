@@ -86,6 +86,7 @@
 #include <calbck.hxx>
 #include <attrhint.hxx>
 #include <memory>
+#include <unoparagraph.hxx>
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
@@ -4923,8 +4924,6 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
     if ( pHint && pHint->GetId() == RES_CONDTXTFMTCOLL && &rModify == GetRegisteredIn() )
         ChkCondColl();
 }
-
-#include <unoparagraph.hxx>
 
 uno::Reference< rdf::XMetadatable >
 SwTextNode::MakeUnoObject()

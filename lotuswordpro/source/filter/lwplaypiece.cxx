@@ -59,8 +59,10 @@
  ************************************************************************/
 
 #include "lwplaypiece.hxx"
-
+#include "lwpstyledef.hxx"
 #include "lwpfilehdr.hxx"
+
+
 LwpRotor::LwpRotor()
     : m_nRotation(0)
 {}
@@ -345,7 +347,6 @@ LwpJoinStuff::LwpJoinStuff()
 LwpJoinStuff::~LwpJoinStuff()
 {}
 
-#include "lwpstyledef.hxx"
 void LwpJoinStuff:: Read(LwpObjectStream *pStrm)
 {
     m_nWidth = pStrm->QuickReadInt32();

@@ -38,6 +38,10 @@
 #endif  /* !MACOSX && !IOS */
 #endif  /* LINUX || SOLARIS || NETBSD || MACOSX || IOS */
 
+#if defined(MACOSX) || defined(IOS)
+#include "system.hxx"
+#endif
+
 #include <string.h>
 
 namespace {
@@ -838,7 +842,6 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 }
 
 #if defined(MACOSX) || defined(IOS)
-#include "system.hxx"
 
 /*****************************************************************************
  return the current process locale

@@ -937,10 +937,48 @@ namespace xforms
     }
 
 
-#define DATATYPES_INCLUDED_BY_MASTER_HEADER
-#include "datatypes_impl.hxx"
-#undef DATATYPES_INCLUDED_BY_MASTER_HEADER
+template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
+ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::ODerivedDataType( const OUString& _rName, sal_Int16 _nTypeClass )
+    :SUPERCLASS( _rName, _nTypeClass )
+    ,m_bPropertiesRegistered( false )
+{
+}
 
+
+template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
+::cppu::IPropertyArrayHelper* ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::createArrayHelper( ) const
+{
+    css::uno::Sequence< css::beans::Property > aProps;
+    ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::describeProperties( aProps );
+    return new ::cppu::OPropertyArrayHelper( aProps );
+}
+
+
+template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getPropertySetInfo() throw( css::uno::RuntimeException )
+{
+        return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
+}
+
+
+template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
+::cppu::IPropertyArrayHelper& SAL_CALL ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getInfoHelper()
+{
+    if ( !m_bPropertiesRegistered )
+    {
+        this->registerProperties();
+        m_bPropertiesRegistered = true;
+    }
+
+    return *ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getArrayHelper();
+}
+
+
+template< typename VALUE_TYPE >
+OValueLimitedType< VALUE_TYPE >::OValueLimitedType( const OUString& _rName, sal_Int16 _nTypeClass )
+    :OValueLimitedType_Base( _rName, _nTypeClass )
+{
+}
 
 } // namespace xforms
 

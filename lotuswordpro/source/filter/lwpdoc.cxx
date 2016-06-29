@@ -65,6 +65,7 @@
 #include "lwpsilverbullet.hxx"
 #include "lwplayout.hxx"
 #include "lwppagelayout.hxx"
+#include "lwpverdocument.hxx"
 #include "xfilter/xfstylemanager.hxx"
 #include <osl/thread.h>
 
@@ -385,7 +386,6 @@ void LwpDocument::RegisterFootnoteStyles()
 /**
 * @descr   Register default para styles
 */
-#include "lwpverdocument.hxx"
 void LwpDocument::RegisterDefaultParaStyles()
 {
     if(!IsChildDoc())

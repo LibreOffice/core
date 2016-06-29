@@ -114,7 +114,7 @@
 #include <stringhint.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
-
+#include "printhelper.hxx"
 #include <sfx2/sfxresid.hxx>
 
 
@@ -3851,7 +3851,6 @@ void SAL_CALL SfxBaseModel::removeStorageChangeListener(
                                     cppu::UnoType<document::XStorageChangeListener>::get(), xListener );
 }
 
-#include "printhelper.hxx"
 bool SfxBaseModel::impl_getPrintHelper()
 {
     if ( m_pData->m_xPrintable.is() )

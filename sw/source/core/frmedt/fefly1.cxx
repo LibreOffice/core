@@ -72,6 +72,8 @@
 #include <ndole.hxx>
 #include <editeng/opaqitem.hxx>
 #include <fefly.hxx>
+#include <fmtcnct.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -1811,8 +1813,6 @@ static sal_uInt16 SwFormatGetPageNum(const SwFlyFrameFormat * pFormat)
 
     return aResult;
 }
-
-#include <fmtcnct.hxx>
 
 void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
                                       const OUString & rReference,

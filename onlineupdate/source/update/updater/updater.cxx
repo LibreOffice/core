@@ -57,6 +57,14 @@
 #include <onlineupdate/mozilla/Compiler.h>
 #include <onlineupdate/mozilla/Types.h>
 
+#ifdef _WIN32
+#include "nsWindowsRestart.cxx"
+#include "nsWindowsHelpers.h"
+#include "uachelper.h"
+#include "pathhash.h"
+#endif
+
+
 // Amount of the progress bar to use in each of the 3 update stages,
 // should total 100.0.
 #define PROGRESS_PREPARE_SIZE 20.0f
@@ -1792,13 +1800,6 @@ PatchIfFile::Finish(int status)
 }
 
 //-----------------------------------------------------------------------------
-
-#ifdef _WIN32
-#include "nsWindowsRestart.cxx"
-#include "nsWindowsHelpers.h"
-#include "uachelper.h"
-#include "pathhash.h"
-#endif
 
 static void
 LaunchCallbackApp(const NS_tchar *workingDir,

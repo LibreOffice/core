@@ -28,6 +28,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
@@ -646,8 +647,6 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, bool& rAny3D,
         }
     }
 }
-
-#include <editeng/eeitem.hxx>
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 {

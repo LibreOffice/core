@@ -57,6 +57,7 @@
 #include "lwpfont.hxx"
 #include "xfilter/xfstylemanager.hxx"
 #include "xfilter/xffontfactory.hxx"
+#include "xfilter/xftextstyle.hxx"
 
 void LwpFontAttrEntry::Read(LwpObjectStream *pStrm)
 {
@@ -444,8 +445,6 @@ void LwpFontManager::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 
 }
-
-#include "xfilter/xftextstyle.hxx"
 
 /*
 VO_PARASTYLE call this method to add its style to XFStyleManager based on the fontID
