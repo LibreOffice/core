@@ -89,6 +89,8 @@ namespace
             eRet = SymbolType::IMAGE;
         return eRet;
     }
+
+    void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame);
 }
 
 void VclBuilder::loadTranslations(const LanguageTag &rLanguageTag, const OUString& rUri)
@@ -1782,6 +1784,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             {
                 VclPtr<vcl::Window> xParent(pParent);
                 pFunction(xWindow, xParent, rMap);
+                if (xWindow->GetType() == WINDOW_PUSHBUTTON)
+                    setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
             }
         }
     }

@@ -25,6 +25,7 @@
 #include <vcl/image.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -3940,6 +3941,12 @@ void DisclosureButton::KeyInput( const KeyEvent& rKEvt )
     }
     else
         CheckBox::KeyInput( rKEvt );
+}
+
+VCL_BUILDER_DECL_FACTORY(SmallButton)
+{
+    (void)rMap;
+    rRet = VclPtr<PushButton>::Create(pParent, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_FLATBUTTON|WB_SMALLSTYLE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
