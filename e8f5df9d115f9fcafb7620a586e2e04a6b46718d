@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_3d26e816",
+        "filename": "sfx2/Package_classification.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-29T08:00:48Z",
+      "side": 1,
+      "message": "Please put this in an own Makefile, maybe Package_emoji.mk. You might need to register it somewhere else, grep for Package_classification.",
+      "revId": "e8f5df9d115f9fcafb7620a586e2e04a6b46718d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
