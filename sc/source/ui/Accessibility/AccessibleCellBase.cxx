@@ -38,6 +38,8 @@
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
+#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <editeng/brushitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -358,8 +360,6 @@ OUString SAL_CALL ScAccessibleCellBase::GetNote()
     return sNote;
 }
 
-#include <com/sun/star/table/ShadowFormat.hpp>
-
 OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
                                         throw (css::uno::RuntimeException, std::exception)
 {
@@ -440,8 +440,6 @@ OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
     sShadowAttrs += sOuterSplit;
     return sShadowAttrs;
 }
-
-#include <com/sun/star/table/BorderLine.hpp>
 
 OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
                                         throw (css::uno::RuntimeException, std::exception)

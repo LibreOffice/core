@@ -30,6 +30,7 @@
 #include "fontmap.hxx"
 #include "formula.h"
 #include "cspline.h"
+#include "datecode.h"
 
 #include <iostream>
 #include <locale.h>
@@ -3281,8 +3282,6 @@ void HwpReader::makeBookmark(Bookmark * hbox)
     }
 }
 
-
-#include "datecode.h"
 
 void HwpReader::makeDateFormat(DateCode * hbox)
 {

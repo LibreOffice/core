@@ -61,6 +61,7 @@
 #include "lwplayout.hxx"
 #include "lwpusewhen.hxx"
 #include "lwptools.hxx"
+#include "lwplaypiece.hxx"
 #include "xfilter/xfcolumns.hxx"
 #include "lwpstory.hxx"
 #include "lwpparastyle.hxx"
@@ -635,8 +636,6 @@ rtl::Reference<LwpObject> LwpMiddleLayout::GetBasedOnStyle()
     }
     return xRet;
 }
-
-#include "lwplaypiece.hxx"
 
 /**
 * @descr:   Get the geometry of current layout

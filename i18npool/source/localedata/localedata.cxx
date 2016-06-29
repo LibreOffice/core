@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <localedata.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -1298,9 +1300,6 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale ) thro
 }
 
 // OutlineNumbering helper class
-
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <cppuhelper/implbase.hxx>
 
 namespace com{ namespace sun{ namespace star{ namespace lang {
     struct  Locale;

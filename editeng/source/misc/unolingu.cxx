@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
@@ -757,8 +758,6 @@ uno::Reference< XDictionary >  SvxGetChangeAllList()
 {
     return LinguMgr::GetChangeAllList();
 }
-
-#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
 SvxAlternativeSpelling SvxGetAltSpelling(
         const css::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord )

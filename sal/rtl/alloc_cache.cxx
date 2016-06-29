@@ -29,6 +29,10 @@
 #include <string.h>
 #include <stdio.h>
 
+#if defined(SAL_UNX)
+#include <sys/time.h>
+#endif
+
 /* ================================================================= *
  *
  * cache internals.
@@ -1296,8 +1300,6 @@ rtl_secureZeroMemory (void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
     while (Bytes--)
         *p++ = 0;
 }
-
-#include <sys/time.h>
 
 static void *
 rtl_cache_wsupdate_all (void * arg);

@@ -32,6 +32,7 @@
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtGui/QClipboard>
 #include <QtCore/QThread>
+#include <QtGui/QFrame>
 
 #include "unx/i18n_im.hxx"
 #include "unx/i18n_xkb.hxx"
@@ -425,8 +426,6 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
     return NULL;
 #endif
 }
-
-#include <QtGui/QFrame>
 
 int KDEXLib::getFrameWidth()
 {

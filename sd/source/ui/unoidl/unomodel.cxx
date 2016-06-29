@@ -32,6 +32,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <editeng/unofield.hxx>
 #include <notifydocumentevent.hxx>
@@ -604,8 +605,6 @@ sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
 
     return mpDoc && mpDoc->isLocked();
 }
-
-#include <comphelper/processfactory.hxx>
 
 uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewData() throw( uno::RuntimeException, std::exception )
 {

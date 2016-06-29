@@ -34,6 +34,8 @@
 #include <osl/mutex.hxx>
 #include <vcl/fltcall.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/wmf.hxx>
+#include <vcl/cvtgrf.hxx>
 
 #include <svx/svdpool.hxx>
 
@@ -49,14 +51,20 @@
 #include <svx/svdoashp.hxx>
 #include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
+#include <svx/svdopath.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/tools/unotools.hxx>
-
 #include <comphelper/servicehelper.hxx>
-#include <vcl/wmf.hxx>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <svx/svdograf.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+
 
 #include <memory>
 
@@ -1004,7 +1012,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() th
 {
     return SvxShapeText::getSupportedServiceNames();
 }
-#include <svx/svdopath.hxx>
 
 
 SvxShapePolyPolygon::SvxShapePolyPolygon( SdrObject* pObj , drawing::PolygonKind eNew )
@@ -1385,16 +1392,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 {
     return SvxShapeText::getSupportedServiceNames();
 }
-
-#include <com/sun/star/awt/XBitmap.hpp>
-#include <vcl/cvtgrf.hxx>
-#include <svx/svdograf.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/fcontnr.hxx>
-
-#include <toolkit/helper/vclunohelper.hxx>
-
 
 SvxGraphicObject::SvxGraphicObject( SdrObject* pObj, OUString const & referer ) throw()
 :   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_GRAPHICOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) ), referer_(referer)

@@ -39,6 +39,22 @@
 #include <txtrfmrk.hxx>
 #include <hints.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/rdf/Statement.hpp>
+#include <com/sun/star/rdf/URI.hpp>
+#include <com/sun/star/rdf/URIs.hpp>
+#include <com/sun/star/rdf/XLiteral.hpp>
+#include <com/sun/star/rdf/XRepositorySupplier.hpp>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <unometa.hxx>
+#include <unotext.hxx>
+#include <unoport.hxx>
+#include <txtatr.hxx>
+#include <fmtmeta.hxx>
+#include <docsh.hxx>
+#include <cppuhelper/weak.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -507,15 +523,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 {
     OSL_FAIL("SwXReferenceMark::removeVetoableChangeListener(): not implemented");
 }
-
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <unometa.hxx>
-#include <unotext.hxx>
-#include <unoport.hxx>
-#include <txtatr.hxx>
-#include <fmtmeta.hxx>
-#include <docsh.hxx>
-#include <cppuhelper/weak.hxx>
 
 class SwXMetaText : public cppu::OWeakObject, public SwXText
 {
@@ -1499,14 +1506,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 {
     OSL_FAIL("SwXMetaField::removeVetoableChangeListener(): not implemented");
 }
-
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/rdf/Statement.hpp>
-#include <com/sun/star/rdf/URI.hpp>
-#include <com/sun/star/rdf/URIs.hpp>
-#include <com/sun/star/rdf/XLiteral.hpp>
-#include <com/sun/star/rdf/XRepositorySupplier.hpp>
-#include <comphelper/processfactory.hxx>
 
 static uno::Reference<rdf::XURI> const&
 lcl_getURI(const bool bPrefix)
