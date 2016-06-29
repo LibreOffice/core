@@ -44,9 +44,7 @@ class CheckConfigMacros
         virtual void Ifdef( SourceLocation location, const Token& macroToken, const MacroDefinition& info ) override;
         virtual void Ifndef( SourceLocation location, const Token& macroToken, const MacroDefinition& info ) override;
 #endif
-#if CLANG_VERSION < 30400
-        virtual void Defined( const Token& macroToken, const MacroDirective* info ) override;
-#elif CLANG_VERSION < 30700
+#if CLANG_VERSION < 30700
         virtual void Defined( const Token& macroToken, const MacroDirective* info, SourceRange Range ) override;
 #else
         virtual void Defined( const Token& macroToken, const MacroDefinition& info, SourceRange Range ) override;
@@ -108,9 +106,7 @@ void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken
     checkMacro( macroToken, location );
     }
 
-#if CLANG_VERSION < 30400
-void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* )
-#elif CLANG_VERSION < 30700
+#if CLANG_VERSION < 30700
 void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* , SourceRange )
 #else
 void CheckConfigMacros::Defined( const Token& macroToken, const MacroDefinition& , SourceRange )

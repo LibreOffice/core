@@ -16,7 +16,6 @@
 #include <iostream>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Define a "string constant" to be a constant expression either of type "array

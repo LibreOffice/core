@@ -12,7 +12,6 @@
 #include <map>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 // Idea from tml.

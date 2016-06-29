@@ -11,7 +11,6 @@
 #include <iostream>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 // Check for calls to OutputDevice methods that are not passing through RenderContext

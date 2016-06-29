@@ -527,8 +527,7 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
                     // where the function would still implicitly override and
                     // cause a compilation error due to the incompatible return
                     // type):
-                    if (!((compat::isInMainFile(
-                               compiler.getSourceManager(),
+                    if (!((compiler.getSourceManager().isInMainFile(
                                compiler.getSourceManager().getSpellingLoc(
                                    dyn_cast<FunctionDecl>(
                                        decl->getDeclContext())
@@ -587,8 +586,7 @@ bool SalBool::VisitFieldDecl(FieldDecl const * decl) {
     {
         TagDecl const * td = dyn_cast<TagDecl>(decl->getDeclContext());
         assert(td != nullptr);
-        if (!(((td->isStruct() || td->isUnion())
-               && compat::isExternCContext(*td))
+        if (!(((td->isStruct() || td->isUnion()) && td->isExternCContext())
               || isInUnoIncludeFile(
                   compiler.getSourceManager().getSpellingLoc(
                       decl->getLocation()))))
@@ -679,8 +677,7 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
             // rewriter had a chance to act upon the definition (but use the
             // heuristic of assuming pure virtual functions do not have
             // definitions):
-            if (!((compat::isInMainFile(
-                       compiler.getSourceManager(),
+            if (!((compiler.getSourceManager().isInMainFile(
                        compiler.getSourceManager().getSpellingLoc(
                            decl->getNameInfo().getLoc()))
                    || f->isDefined() || f->isPure())
@@ -729,7 +726,7 @@ bool SalBool::TraverseStaticAssertDecl(StaticAssertDecl * decl) {
 }
 
 bool SalBool::isFromCIncludeFile(SourceLocation spellingLocation) const {
-    return !compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
+    return !compiler.getSourceManager().isInMainFile(spellingLocation)
         && (StringRef(
                 compiler.getSourceManager().getPresumedLoc(spellingLocation)
                 .getFilename())
@@ -737,7 +734,7 @@ bool SalBool::isFromCIncludeFile(SourceLocation spellingLocation) const {
 }
 
 bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
-    if (!compat::isInMainFile(compiler.getSourceManager(), spellingLocation)) {
+    if (!compiler.getSourceManager().isInMainFile(spellingLocation)) {
         return false;
     }
     auto f = compiler.getSourceManager().getFilename(spellingLocation);

@@ -25,7 +25,6 @@
 
 #include "clang/Sema/Sema.h"
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {

@@ -11,7 +11,6 @@
 #include <cstdlib>
 #include <set>
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -209,7 +208,7 @@ bool Nullptr::isInLokIncludeFile(SourceLocation spellingLocation) const {
 }
 
 bool Nullptr::isFromCIncludeFile(SourceLocation spellingLocation) const {
-    return !compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
+    return !compiler.getSourceManager().isInMainFile(spellingLocation)
         && (StringRef(
                 compiler.getSourceManager().getPresumedLoc(spellingLocation)
                 .getFilename())

@@ -9,7 +9,6 @@
 
 #include "clang/Lex/Lexer.h"
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -50,7 +49,7 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
 bool LiteralToBoolConversion::isFromCIncludeFile(
     SourceLocation spellingLocation) const
 {
-    return !compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
+    return !compiler.getSourceManager().isInMainFile(spellingLocation)
         && (StringRef(
                 compiler.getSourceManager().getPresumedLoc(spellingLocation)
                 .getFilename())

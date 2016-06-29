@@ -11,7 +11,6 @@
 #include <string>
 #include <iostream>
 #include "plugin.hxx"
-#include "compat.hxx"
 #include <fstream>
 
 /**

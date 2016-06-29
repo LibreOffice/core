@@ -12,7 +12,6 @@
 #include <iostream>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 // Check that we're not unnecessarily copying variables in a range based for loop

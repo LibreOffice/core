@@ -10,7 +10,6 @@
 #include <string>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 
 // Having an extern prototype for a method in a module and not actually declaring that method is dodgy.
 //
@@ -54,7 +53,8 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (functionName == "gdk_x11_screen_get_screen_number") {
         return true;
     }
-    if (!compat::isInMainFile( compiler.getSourceManager(), functionDecl->getLocation())) {
+    if (!compiler.getSourceManager().isInMainFile(functionDecl->getLocation()))
+    {
         return true;
     }
     StringRef fileName { compiler.getSourceManager().getFilename(functionDecl->getLocation()) };

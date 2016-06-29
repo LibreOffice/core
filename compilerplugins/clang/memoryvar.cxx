@@ -13,7 +13,6 @@
 #include <set>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 // Check for local variables that we are calling delete on

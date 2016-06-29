@@ -13,7 +13,6 @@
 #include <fstream>
 #include <set>
 #include "plugin.hxx"
-#include "compat.hxx"
 
 /**
   Check for calls to CPPUNIT_ASSERT when it should be using CPPUNIT_ASSERT_EQUALS

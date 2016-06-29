@@ -13,7 +13,6 @@
 #include <fstream>
 #include <set>
 #include "plugin.hxx"
-#include "compat.hxx"
 
 /**
   Find calls to "delete x" where x is a field on an object.

@@ -17,7 +17,6 @@
 #include <clang/Lex/Lexer.h>
 
 #include "pluginhandler.hxx"
-#include "compat.hxx"
 
 /*
 Base classes for plugin actions.
@@ -106,7 +105,7 @@ const FunctionDecl* Plugin::parentFunctionDecl( const Stmt* stmt )
 bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const {
     StringRef name {
         compiler.getSourceManager().getFilename(spellingLocation) };
-    return compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
+    return compiler.getSourceManager().isInMainFile(spellingLocation)
         ? (name == SRCDIR "/cppu/source/cppu/compat.cxx"
            || name == SRCDIR "/cppuhelper/source/compat.cxx"
            || name == SRCDIR "/sal/osl/all/compat.cxx")

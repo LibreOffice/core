@@ -234,9 +234,10 @@ bool InlineSimpleMemberFunctions::rewrite(const CXXMethodDecl * functionDecl) {
     // definition (in a main file only processed later) to fail
     // with a "mismatch" error before the rewriter had a chance
     // to act upon the definition.
-    if (!compat::isInMainFile( compiler.getSourceManager(),
-               compiler.getSourceManager().getSpellingLoc(
-                   functionDecl->getNameInfo().getLoc()))) {
+    if (!compiler.getSourceManager().isInMainFile(
+            compiler.getSourceManager().getSpellingLoc(
+                functionDecl->getNameInfo().getLoc())))
+    {
         return false;
     }
 

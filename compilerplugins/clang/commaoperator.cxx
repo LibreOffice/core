@@ -13,7 +13,6 @@
 #include <fstream>
 #include <set>
 #include "plugin.hxx"
-#include "compat.hxx"
 
 /**
 the comma operator is best used sparingly

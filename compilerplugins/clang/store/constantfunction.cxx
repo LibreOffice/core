@@ -8,7 +8,6 @@
  */
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include <iostream>
 
 /*

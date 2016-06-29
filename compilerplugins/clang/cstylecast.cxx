@@ -10,7 +10,6 @@
 #include <cassert>
 #include <string>
 #include "plugin.hxx"
-#include "compat.hxx"
 
 //
 // We don't like using C-style casts in C++ code
@@ -76,7 +75,7 @@ bool areSimilar(QualType type1, QualType type2) {
 }
 
 bool hasCLanguageLinkageType(FunctionDecl const * decl) {
-    return decl->isExternC() || compat::isInExternCContext(*decl);
+    return decl->isExternC() || decl->isInExternCContext();
 }
 
 QualType resolvePointers(QualType type) {

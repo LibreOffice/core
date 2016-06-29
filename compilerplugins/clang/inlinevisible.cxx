@@ -13,7 +13,6 @@
 #include "clang/AST/Attr.h"
 #include "clang/Sema/SemaInternal.h" // warn_unused_function
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {

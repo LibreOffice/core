@@ -13,7 +13,6 @@
 #include "clang/AST/Attr.h"
 #include "clang/Sema/SemaInternal.h" // warn_unused_function
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -111,10 +110,8 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
         //TODO: is that the first?
     if (canon->isDeleted() || canon->isReferenced()
         || !(canon->isDefined()
-             ? decl->isThisDeclarationADefinition()
-             : compat::isFirstDecl(*decl))
-        || !compat::isInMainFile(
-            compiler.getSourceManager(), canon->getLocation())
+             ? decl->isThisDeclarationADefinition() : decl->isFirstDecl())
+        || !compiler.getSourceManager().isInMainFile(canon->getLocation())
         || isInUnoIncludeFile(
             compiler.getSourceManager().getSpellingLoc(
                 canon->getNameInfo().getLoc()))
@@ -141,19 +138,15 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
     report(
         DiagnosticsEngine::Warning,
         (canon->isDefined()
-#if CLANG_VERSION >= 30400
          ? (canon->isExternallyVisible()
             ? "Unreferenced externally visible function%0 definition"
             : "Unreferenced externally invisible function%0 definition")
-#else
-         ? "Unreferenced function%0 definition"
-#endif
          : "Unreferenced function%0 declaration"),
         decl->getLocation())
         << (decl->getTemplatedKind() == FunctionDecl::TK_FunctionTemplate
             ? " template" : "")
         << decl->getSourceRange();
-    if (canon->isDefined() && !compat::isFirstDecl(*decl)) {
+    if (canon->isDefined() && !decl->isFirstDecl()) {
         report(
             DiagnosticsEngine::Note, "first declaration is here",
             canon->getLocation())

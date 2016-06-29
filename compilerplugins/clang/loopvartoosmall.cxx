@@ -11,7 +11,6 @@
 #include <iostream>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 // Idea from bubli. Check that the index variable in a for loop is able to cover the range

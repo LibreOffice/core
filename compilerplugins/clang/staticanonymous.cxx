@@ -6,7 +6,7 @@
  *
  */
 #include "plugin.hxx"
-#include "compat.hxx"
+
 /*
 This is a compile check.
 
@@ -45,7 +45,7 @@ bool StaticAnonymous::VisitFunctionDecl( FunctionDecl* func )
         return true;
     if( func -> isInAnonymousNamespace () )
     {
-      if ( !isa<CXXMethodDecl>(func) && !compat::isInExternCContext(*func) )
+      if ( !isa<CXXMethodDecl>(func) && !func->isInExternCContext() )
          {
             if(func-> getStorageClass() == SC_Static)
                {

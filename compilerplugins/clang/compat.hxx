@@ -32,14 +32,6 @@
 
 #include "config_clang.h"
 
-#if CLANG_VERSION >= 30400
-#define LO_COMPILERPLUGINS_CLANG_COMPAT_HAVE_isAtEndOfImmediateMacroExpansion \
-    true
-#else
-#define LO_COMPILERPLUGINS_CLANG_COMPAT_HAVE_isAtEndOfImmediateMacroExpansion \
-    false
-#endif
-
 // Compatibility wrapper to abstract over (trivial) changes in the Clang API:
 namespace compat {
 
@@ -49,30 +41,6 @@ inline bool isLookupContext(clang::DeclContext const & ctxt) {
 #else
     return !ctxt.isFunctionOrMethod()
         && ctxt.getDeclKind() != clang::Decl::LinkageSpec;
-#endif
-}
-
-inline bool isExternCContext(clang::DeclContext const & ctxt) {
-#if CLANG_VERSION >= 30400
-    return ctxt.isExternCContext();
-#else
-    for (clang::DeclContext const * c = &ctxt;
-         c->getDeclKind() != clang::Decl::TranslationUnit; c = c->getParent())
-    {
-        if (c->getDeclKind() == clang::Decl::LinkageSpec) {
-            return llvm::cast<clang::LinkageSpecDecl>(c)->getLanguage()
-                == clang::LinkageSpecDecl::lang_c;
-        }
-    }
-    return false;
-#endif
-}
-
-inline bool isInExternCContext(clang::FunctionDecl const & decl) {
-#if CLANG_VERSION >= 30400
-    return decl.isInExternCContext();
-#else
-    return isExternCContext(*decl.getCanonicalDecl()->getDeclContext());
 #endif
 }
 
@@ -87,14 +55,6 @@ inline bool forallBases(
     return decl.forallBases(BaseMatches, AllowShortCircuit);
 #else
     return decl.forallBases(BaseMatches, callbackParam, AllowShortCircuit);
-#endif
-}
-
-inline bool isFirstDecl(clang::FunctionDecl const & decl) {
-#if CLANG_VERSION >= 30400
-    return decl.isFirstDecl();
-#else
-    return decl.isFirstDeclaration();
 #endif
 }
 
@@ -186,16 +146,6 @@ inline unsigned getBuiltinCallee(clang::CallExpr const & expr) {
     return expr.getBuiltinCallee();
 #else
     return expr.isBuiltinCall();
-#endif
-}
-
-inline bool isInMainFile(
-    clang::SourceManager const & manager, clang::SourceLocation Loc)
-{
-#if CLANG_VERSION >= 30400
-    return manager.isInMainFile(Loc);
-#else
-    return manager.isFromMainFile(Loc);
 #endif
 }
 

@@ -15,7 +15,6 @@
 
 #include "clang/AST/Attr.h"
 
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -46,7 +45,7 @@ bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     // As a heuristic, ignore declarations where the name is spelled out in an
     // ignored location; that e.g. handles uses of the Q_OBJECT macro from
     // external QtCore/qobjectdefs.h:
-    if (ignoreLocation(decl) || !compat::isFirstDecl(*decl)
+    if (ignoreLocation(decl) || !decl->isFirstDecl()
         || decl->begin_overridden_methods() == decl->end_overridden_methods()
         || decl->hasAttr<OverrideAttr>()
         || ignoreLocation(
@@ -76,7 +75,6 @@ bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     std::string over(
         isInUnoIncludeFile(decl->getSourceRange().getBegin())
         ? "SAL_OVERRIDE" : "override");
-#if LO_COMPILERPLUGINS_CLANG_COMPAT_HAVE_isAtEndOfImmediateMacroExpansion
     if (rewriter != nullptr) {
         // In  void MACRO(...);  getSourceRange().getEnd() would (erroneously?)
         // point at "MACRO" rather than ")", so make the loop always terminate
@@ -163,7 +161,6 @@ bool Override::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
             return true;
         }
     }
-#endif
     report(
         DiagnosticsEngine::Warning,
         ("overriding virtual function declaration not marked '%0'"),

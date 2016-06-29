@@ -33,9 +33,6 @@ public:
     { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitCXXMethodDecl(CXXMethodDecl const * decl);
-
-private:
-    bool isInMainFile(SourceLocation spellingLocation) const;
 };
 
 bool StdException::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
@@ -150,7 +147,7 @@ found:
                 // (but use the heuristic of assuming pure virtual functions do
                 // not have definitions):
                 if (rewriter != nullptr
-                    && (isInMainFile(
+                    && (compiler.getSourceManager().isInMainFile(
                             compiler.getSourceManager().getSpellingLoc(loc))
                         || decl->isDefined() || decl->isPure())
                     && insertTextAfterToken(
@@ -182,14 +179,6 @@ found:
         DiagnosticsEngine::Note, "overridden declaration is here",
         over->getLocStart());
     return true;
-}
-
-bool StdException::isInMainFile(SourceLocation spellingLocation) const {
-#if CLANG_VERSION >= 30400
-    return compiler.getSourceManager().isInMainFile(spellingLocation);
-#else
-    return compiler.getSourceManager().isFromMainFile(spellingLocation);
-#endif
 }
 
 loplugin::Plugin::Registration<StdException> X("stdexception", true);
