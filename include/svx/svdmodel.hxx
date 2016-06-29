@@ -544,6 +544,10 @@ public:
     void SetAddExtLeading( bool bEnabled );
     bool IsAddExtLeading() const { return mbAddExtLeading; }
 
+    // tdf#99729 compatibility flag
+    void SetAnchoredTextOverflowLegacy(bool bEnabled);
+    bool IsAnchoredTextOverflowLegacy() const;
+
     void ReformatAllTextObjects();
 
     SdrOutliner* createOutliner( OutlinerMode nOutlinerMode );
