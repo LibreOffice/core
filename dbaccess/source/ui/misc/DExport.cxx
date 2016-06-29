@@ -641,13 +641,13 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
         sal_Int32 nCount = 2;
         while(m_aDestColumns.find(sName) != m_aDestColumns.end())
         {
-            sName = aAlias;
-            sName += OUString::number(++nPos);
+            sName = aAlias
+                  + OUString::number(++nPos);
             if(nMaxNameLen && sName.getLength() > nMaxNameLen)
             {
                 aAlias = aAlias.copy(0,::std::min<sal_Int32>( nMaxNameLen-nCount, aAlias.getLength() ));
-                sName = aAlias;
-                sName += OUString::number(nPos);
+                sName = aAlias
+                      + OUString::number(nPos);
                 ++nCount;
             }
         }
@@ -749,9 +749,9 @@ void ODatabaseExport::showErrorDialog(const css::sdbc::SQLException& e)
 {
     if(!m_bDontAskAgain)
     {
-        OUString aMsg(e.Message);
-        aMsg += "\n";
-        aMsg += ModuleRes( STR_QRY_CONTINUE );
+        OUString aMsg = e.Message
+                      + "\n"
+                      + OUString(ModuleRes( STR_QRY_CONTINUE ));
         ScopedVclPtrInstance< OSQLWarningBox > aBox( nullptr, aMsg, WB_YES_NO | WB_DEF_NO );
 
         if (aBox->Execute() == RET_YES)
@@ -807,11 +807,12 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
                                                        ,const Reference<XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumns)
 {
-    OUString aSql("INSERT INTO ");
     OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::EComposeRule::InDataManipulation, false, false, true );
 
-    aSql += sComposedTableName;
-    aSql += " ( ";
+    OUString aSql = "INSERT INTO "
+                  + sComposedTableName
+                  + " ( ";
+
     // set values and column names
     OUString aValues(" VALUES ( ");
 
