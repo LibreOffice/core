@@ -2999,7 +2999,7 @@ struct COp {};
 template <typename T>
 struct COp<T, svl::SharedString>
 {
-    svl::SharedString operator()(char, T /*aOp*/, double /*a*/, double /*b*/, const svl::SharedString& rString) const
+    const svl::SharedString& operator()(char, T /*aOp*/, double /*a*/, double /*b*/, const svl::SharedString& rString) const
     {
         return rString;
     }
