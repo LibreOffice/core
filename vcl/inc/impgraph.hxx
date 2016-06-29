@@ -40,7 +40,7 @@ private:
     GDIMetaFile         maMetaFile;
     BitmapEx            maEx;
     ImpSwapInfo         maSwapInfo;
-    Animation*          mpAnimation;
+    std::unique_ptr<Animation> mpAnimation;
     GraphicReader*      mpContext;
     std::shared_ptr<ImpSwapFile> mpSwapFile;
     GfxLink*            mpGfxLink;

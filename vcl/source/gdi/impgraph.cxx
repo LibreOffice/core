@@ -95,7 +95,6 @@ Size GraphicReader::GetPreviewSize() const
 }
 
 ImpGraphic::ImpGraphic() :
-        mpAnimation     ( nullptr ),
         mpContext       ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( GraphicType::NONE ),
@@ -126,11 +125,9 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
 
     if( rImpGraphic.mpAnimation )
     {
-        mpAnimation = new Animation( *rImpGraphic.mpAnimation );
+        mpAnimation = o3tl::make_unique<Animation>( *rImpGraphic.mpAnimation );
         maEx = mpAnimation->GetBitmapEx();
     }
-    else
-        mpAnimation = nullptr;
 
     maSvgData = rImpGraphic.maSvgData;
     maPdfData = rImpGraphic.maPdfData;
@@ -138,7 +135,6 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
 
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
-        mpAnimation     ( nullptr ),
         mpContext       ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
@@ -152,7 +148,6 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
 
 ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maEx            ( rBitmapEx ),
-        mpAnimation     ( nullptr ),
         mpContext       ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
@@ -180,7 +175,7 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
 
 ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         maEx            ( rAnimation.GetBitmapEx() ),
-        mpAnimation     ( new Animation( rAnimation ) ),
+        mpAnimation     ( o3tl::make_unique<Animation>( rAnimation ) ),
         mpContext       ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( GraphicType::Bitmap ),
@@ -194,7 +189,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
 
 ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         maMetaFile      ( rMtf ),
-        mpAnimation     ( nullptr ),
         mpContext       ( nullptr ),
         mpGfxLink       ( nullptr ),
         meType          ( GraphicType::GdiMetafile ),
@@ -223,16 +217,15 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         meType = rImpGraphic.meType;
         mnSizeBytes = rImpGraphic.mnSizeBytes;
 
-        delete mpAnimation;
+        mpAnimation.reset();
 
         if ( rImpGraphic.mpAnimation )
         {
-            mpAnimation = new Animation( *rImpGraphic.mpAnimation );
+            mpAnimation = o3tl::make_unique<Animation>( *rImpGraphic.mpAnimation );
             maEx = mpAnimation->GetBitmapEx();
         }
         else
         {
-            mpAnimation = nullptr;
             maEx = rImpGraphic.maEx;
         }
 
@@ -337,8 +330,7 @@ void ImpGraphic::ImplClearGraphics( bool bCreateSwapInfo )
     if( mpAnimation )
     {
         mpAnimation->Clear();
-        delete mpAnimation;
-        mpAnimation = nullptr;
+        mpAnimation.reset();
     }
 
     if( mpGfxLink )
@@ -1469,8 +1461,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                     if( !rIStm.GetError() && ( 0x5344414e == nMagic1 ) && ( 0x494d4931 == nMagic2 ) )
                     {
-                        delete rImpGraphic.mpAnimation;
-                        rImpGraphic.mpAnimation = new Animation;
+                        rImpGraphic.mpAnimation = o3tl::make_unique<Animation>();
                         ReadAnimation( rIStm, *rImpGraphic.mpAnimation );
 
                         // #108077# manually set loaded BmpEx to Animation
