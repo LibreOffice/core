@@ -32,6 +32,36 @@
 
 #include <limits>
 
+namespace {
+
+double GetDefaultValNum( const short nType )
+{
+    switch( nType )
+    {
+        case css::util::NumberFormat::NUMBER:
+            return fSvxNumValConst[SVX_NUMVAL_STANDARD];
+        case css::util::NumberFormat::CURRENCY:
+            return fSvxNumValConst[SVX_NUMVAL_CURRENCY];
+        case css::util::NumberFormat::PERCENT:
+            return fSvxNumValConst[SVX_NUMVAL_PERCENT];
+        case css::util::NumberFormat::DATE:
+        case css::util::NumberFormat::DATETIME:
+            return fSvxNumValConst[SVX_NUMVAL_DATE];
+        case css::util::NumberFormat::TIME:
+            return fSvxNumValConst[SVX_NUMVAL_TIME];
+        case css::util::NumberFormat::SCIENTIFIC:
+            return fSvxNumValConst[SVX_NUMVAL_SCIENTIFIC];
+        case css::util::NumberFormat::FRACTION:
+            return fSvxNumValConst[SVX_NUMVAL_FRACTION];
+        case css::util::NumberFormat::LOGICAL:
+            return fSvxNumValConst[SVX_NUMVAL_BOOLEAN];
+        default: break;
+    }
+    return fSvxNumValConst[SVX_NUMVAL_NOVALUE];
+}
+
+}
+
 SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumFormatter,
                                               sal_uInt32           nFormatKey,
                                               SvxNumberValueType   eNumValType,
@@ -403,33 +433,6 @@ void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
             rCatLbPos = CAT_USERDEFINED;
     }
 
-}
-
-
-double SvxNumberFormatShell::GetDefaultValNum( const short nType ) const
-{
-    switch( nType )
-    {
-        case css::util::NumberFormat::NUMBER:
-            return fSvxNumValConst[SVX_NUMVAL_STANDARD];
-        case css::util::NumberFormat::CURRENCY:
-            return fSvxNumValConst[SVX_NUMVAL_CURRENCY];
-        case css::util::NumberFormat::PERCENT:
-            return fSvxNumValConst[SVX_NUMVAL_PERCENT];
-        case css::util::NumberFormat::DATE:
-        case css::util::NumberFormat::DATETIME:
-            return fSvxNumValConst[SVX_NUMVAL_DATE];
-        case css::util::NumberFormat::TIME:
-            return fSvxNumValConst[SVX_NUMVAL_TIME];
-        case css::util::NumberFormat::SCIENTIFIC:
-            return fSvxNumValConst[SVX_NUMVAL_SCIENTIFIC];
-        case css::util::NumberFormat::FRACTION:
-            return fSvxNumValConst[SVX_NUMVAL_FRACTION];
-        case css::util::NumberFormat::LOGICAL:
-            return fSvxNumValConst[SVX_NUMVAL_BOOLEAN];
-        default: break;
-    }
-    return fSvxNumValConst[SVX_NUMVAL_NOVALUE];
 }
 
 

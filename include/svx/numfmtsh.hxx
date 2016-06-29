@@ -130,8 +130,6 @@ public:
 
     sal_uInt16          GetFormatIntegerDigits( const OUString&  rFormat ) const;
 
-    double              GetDefaultValNum( const short nType ) const;
-
     void                MakePreviewString( const OUString& rFormatStr,
                                            OUString&       rPreviewStr,
                                            Color*&         rpFontColor );
