@@ -263,7 +263,6 @@ namespace {
     class TimeFormatter
     {
     public:
-        TimeFormatter();
         static OUString FormatTime (const oslDateTime& rTime);
     };
 
@@ -319,7 +318,6 @@ namespace {
             const SharedElementMode& rpDisabledMode) override;
         virtual void restart() override;
     private:
-        TimeFormatter maTimeFormatter;
         TimeValue maStartTimeValue;
         PresentationTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
         virtual ~PresentationTimeLabel();
@@ -1792,10 +1790,6 @@ geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanv
 
 //===== TimeFormatter =========================================================
 
-TimeFormatter::TimeFormatter()
-{
-}
-
 OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
 {
     OUStringBuffer sText;
@@ -1897,7 +1891,6 @@ PresentationTimeLabel::~PresentationTimeLabel()
 PresentationTimeLabel::PresentationTimeLabel (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
     : TimeLabel(rpToolBar),
-      maTimeFormatter(),
       maStartTimeValue()
 {
     restart();

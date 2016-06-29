@@ -145,7 +145,6 @@ protected:
     // and object sizes
     virtual void AdaptTextMinSize() override;
 
-    OUString      aName;
     Size          m_aSuggestedTextFrameSize;
 
 public:
