@@ -1,0 +1,16 @@
+GCC 6 warns about function_buffer::data
+
+--- boost/boost/function/function_base.hpp.orig2	2016-06-29 13:54:55.270121431 +0200
++++ boost/boost/function/function_base.hpp	2016-06-29 13:58:50.343103199 +0200
+@@ -37,6 +37,11 @@
+ #include <boost/function_equal.hpp>
+ #include <boost/function/function_fwd.hpp>
+ 
++#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 600)
++# pragma GCC diagnostic push
++# pragma GCC diagnostic ignored "-Wplacement-new="
++#endif
++
+ #if defined(BOOST_MSVC)
+ #   pragma warning( push )
+ #   pragma warning( disable : 4793 ) // complaint about native code generation
