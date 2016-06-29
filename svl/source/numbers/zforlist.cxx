@@ -2087,9 +2087,7 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
     {   // we need at least _some_ format
         rSeq.realloc(1);
         rSeq[0] = css::i18n::NumberFormatCode();
-        rSeq[0].Code = OUString('0')
-                     + GetNumDecimalSep()
-                     + "############";
+        rSeq[0].Code = "0" + GetNumDecimalSep() + "############";
     }
     return 0;
 }
