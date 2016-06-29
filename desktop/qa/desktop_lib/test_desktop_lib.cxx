@@ -92,6 +92,7 @@ public:
     void testNotificationCompression();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
+    CPPUNIT_TEST(testModifiedStatus);
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetFonts);
     CPPUNIT_TEST(testCreateView);
@@ -109,7 +110,6 @@ public:
     CPPUNIT_TEST(testCellCursor);
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testWriterComments);
-    CPPUNIT_TEST(testModifiedStatus);
     CPPUNIT_TEST(testSheetOperations);
     CPPUNIT_TEST(testContextMenuCalc);
     CPPUNIT_TEST(testContextMenuWriter);
@@ -718,6 +718,7 @@ void DesktopLOKTest::testModifiedStatus()
     TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
     m_aStateChangedCondition.wait(&aTimeValue);
     Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessEventsToIdle();
 
     // This was false, there was no callback about the modified status change.
     CPPUNIT_ASSERT(m_bModified);
@@ -731,6 +732,7 @@ void DesktopLOKTest::testModifiedStatus()
     Scheduler::ProcessEventsToIdle();
     m_aStateChangedCondition.wait(&aTimeValue);
     Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessEventsToIdle();
 
     // There was no callback about the modified status change.
     CPPUNIT_ASSERT(!m_bModified);
@@ -740,6 +742,7 @@ void DesktopLOKTest::testModifiedStatus()
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
     Scheduler::ProcessEventsToIdle();
     m_aStateChangedCondition.wait(&aTimeValue);
+    Scheduler::ProcessEventsToIdle();
     Scheduler::ProcessEventsToIdle();
 
     // There was no callback about the modified status change.

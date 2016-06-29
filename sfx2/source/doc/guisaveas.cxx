@@ -257,6 +257,7 @@ class ModelData_Impl
     uno::Reference< frame::XModel > m_xModel;
     uno::Reference< frame::XStorable > m_xStorable;
     uno::Reference< frame::XStorable2 > m_xStorable2;
+    uno::Reference< util::XModifiable > m_xModifiable;
 
     OUString m_aModuleName;
     ::comphelper::SequenceAsHashMap* m_pDocumentPropsHM;
@@ -278,6 +279,7 @@ public:
     uno::Reference< frame::XModel > GetModel();
     uno::Reference< frame::XStorable > GetStorable();
     uno::Reference< frame::XStorable2 > GetStorable2();
+    uno::Reference< util::XModifiable > GetModifiable();
 
     ::comphelper::SequenceAsHashMap& GetMediaDescr() { return m_aMediaDescrHM; }
 
@@ -414,6 +416,19 @@ uno::Reference< frame::XStorable2 > ModelData_Impl::GetStorable2()
     }
 
     return m_xStorable2;
+}
+
+
+uno::Reference< util::XModifiable > ModelData_Impl::GetModifiable()
+{
+    if ( !m_xModifiable.is() )
+    {
+        m_xModifiable.set( m_xModel, uno::UNO_QUERY );
+        if ( !m_xModifiable.is() )
+            throw uno::RuntimeException();
+    }
+
+    return m_xModifiable;
 }
 
 
@@ -683,7 +698,9 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     OUString aFailOnWarningString("FailOnWarning");
 
     if ( GetMediaDescr().find( aVersionCommentString ) != GetMediaDescr().end() )
+    {
         aAcceptedArgs[ aVersionCommentString ] = GetMediaDescr()[ aVersionCommentString ];
+    }
     if ( GetMediaDescr().find( aAuthorString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aAuthorString ] = GetMediaDescr()[ aAuthorString ];
     if ( GetMediaDescr().find( aInteractionHandlerString ) != GetMediaDescr().end() )
