@@ -60,6 +60,28 @@
           <value>100</value>
         </prop>
       </node>
+
+      <node oor:name="ShapesDeck" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Shapes</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ShapesDeck</value>
+        </prop>
+        <prop oor:name="IconURL" oor:type="xs:string">
+          <value>private:graphicrepository/cmd/lc_basicshapes.png</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Draw, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>200</value>
+        </prop>
+      </node>
+
+
       <node oor:name="GalleryDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Gallery</value>
@@ -687,6 +709,33 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
+        </prop>
+      </node>
+
+      <node oor:name="ShapesPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Default</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ShapesPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ShapesDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            DrawImpress, DrawPage,        visible  ;
+            DrawImpress, default,         visible  ;
+            DrawImpress, HandoutPage,     visible  ;
+            DrawImpress, NotesPage,       visible  ;
+            DrawImpress, SlidesorterPage, visible  ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SdPanelFactory/ShapesPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
         </prop>
       </node>
 
