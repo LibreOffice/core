@@ -665,8 +665,6 @@ void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg)
 
 void SdDialogsTest::openAnyDialog()
 {
-    const OUString aTempTargetPath = m_directories.getPathFromSrc( SCREENSHOT_DIRECTORY );
-
     // example for SfxTabDialog: 5
     // example for TabDialog: 23
     // example for self-adapted wizard: 0
