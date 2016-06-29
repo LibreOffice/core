@@ -130,7 +130,7 @@ void SvxOpenCLTabPage::EnableOpenCLHdl(VclFrame* pFrame, bool aEnable)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxOpenCLTabPage, EnableOpenCLHdl, Button*, void)
+IMPL_STATIC_LINK_NOARG_TYPED(SvxOpenCLTabPage, EnableOpenCLHdl, Button*, void)
 {
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

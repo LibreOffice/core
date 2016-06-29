@@ -36,7 +36,7 @@ private:
 
     VclPtr<FixedText> clUsed;
 
-    DECL_LINK_TYPED(EnableOpenCLHdl, Button*, void);
+    DECL_STATIC_LINK_TYPED(SvxOpenCLTabPage, EnableOpenCLHdl, Button*, void);
 
     static void EnableOpenCLHdl(VclFrame* pFrame, bool aEnable);
 
