@@ -450,15 +450,9 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< c
         {
             OUString sItemCommand = pToolBox->GetItemCommand(i);
             if ( sItemCommand == COMMAND_DOWNSEARCH )
-            {
-                pToolBox->EnableItem(i, false);
                 m_nDownSearchId = i;
-            }
             else if ( sItemCommand == COMMAND_UPSEARCH )
-            {
-                pToolBox->EnableItem(i, false);
                 m_nUpSearchId = i;
-            }
         }
     }
 
@@ -497,29 +491,24 @@ void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::Featur
     {
         m_pFindTextFieldControl->Remember_Impl(m_pFindTextFieldControl->GetText());
     }
+    // enable up/down buttons in case there is already text (from the search history)
+    textfieldChanged();
 }
 
 IMPL_LINK_NOARG_TYPED(FindTextToolbarController, EditModifyHdl, Edit&, void)
 {
+    textfieldChanged();
+}
+
+void FindTextToolbarController::textfieldChanged() {
     // enable or disable item DownSearch/UpSearch of findbar
     vcl::Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
     ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);
     if ( pToolBox && m_pFindTextFieldControl )
     {
-        if (!m_pFindTextFieldControl->GetText().isEmpty())
-        {
-            if ( !pToolBox->IsItemEnabled(m_nDownSearchId) )
-                pToolBox->EnableItem(m_nDownSearchId);
-            if ( !pToolBox->IsItemEnabled(m_nUpSearchId) )
-                pToolBox->EnableItem(m_nUpSearchId);
-        }
-        else
-        {
-            if ( pToolBox->IsItemEnabled(m_nDownSearchId) )
-                pToolBox->EnableItem(m_nDownSearchId, false);
-            if ( pToolBox->IsItemEnabled(m_nUpSearchId) )
-                pToolBox->EnableItem(m_nUpSearchId, false);
-        }
+        bool enable = !m_pFindTextFieldControl->GetText().isEmpty();
+        pToolBox->EnableItem(m_nDownSearchId, enable);
+        pToolBox->EnableItem(m_nUpSearchId, enable);
     }
 }
 
