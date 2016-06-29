@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <sfx2/objsh.hxx>
 
 #include "adiasync.hxx"
@@ -28,23 +32,12 @@
 #include <osl/thread.h>
 
 ScAddInAsyncs theAddInAsyncTbl;
-static ScAddInAsync aSeekObj;
 
 extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 {
     ScAddInAsync::CallBack( sal_uLong( nHandle ), pData );
 }
-}
-
-ScAddInAsync::ScAddInAsync() :
-    SvtBroadcaster(),
-    pDocs( nullptr ),
-    mpFuncData( nullptr ),
-    nHandle( 0 ),
-    meType( ParamType::NONE ),
-    bValid( false )
-{   // nur fuer aSeekObj !
 }
 
 ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, LegacyFuncData* pFuncData, ScDocument* pDoc) :
@@ -62,25 +55,22 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, LegacyFuncData* pFuncData, ScDocu
 
 ScAddInAsync::~ScAddInAsync()
 {
-    // aSeekObj does not have that, handle 0 does not exist otherwise
-    if ( nHandle )
-    {
-        // in dTor because of theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
-        mpFuncData->Unadvice( (double)nHandle );
-        if ( meType == ParamType::PTR_STRING && pStr )      // include type comparison because of union
-            delete pStr;
-        delete pDocs;
-    }
+    // in dTor because of theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
+    mpFuncData->Unadvice( (double)nHandle );
+    if ( meType == ParamType::PTR_STRING && pStr )      // include type comparison because of union
+        delete pStr;
+    delete pDocs;
 }
 
 ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
 {
     ScAddInAsync* pRet = nullptr;
-    aSeekObj.nHandle = nHandleP;
-    ScAddInAsyncs::iterator it = theAddInAsyncTbl.find( &aSeekObj );
+    ScAddInAsyncs::iterator it = std::find_if(
+        theAddInAsyncTbl.begin(), theAddInAsyncTbl.end(),
+        [nHandleP](ScAddInAsync const * el)
+            { return el->nHandle == nHandleP; });
     if ( it != theAddInAsyncTbl.end() )
         pRet = *it;
-    aSeekObj.nHandle = 0;
     return pRet;
 }
 

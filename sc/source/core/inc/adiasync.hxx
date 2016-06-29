@@ -50,8 +50,6 @@ public:
     // cTor only if ScAddInAsync::Get fails.
     // nIndex: Index from FunctionCollection
     ScAddInAsync(sal_uLong nHandle, LegacyFuncData* pFuncData, ScDocument* pDoc);
-                    // default-cTor only for that single, global aSeekObj!
-                    ScAddInAsync();
     virtual         ~ScAddInAsync();
     static ScAddInAsync*    Get( sal_uLong nHandle );
     static void     CallBack( sal_uLong nHandle, void* pData );
