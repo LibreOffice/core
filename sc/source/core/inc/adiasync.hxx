@@ -70,7 +70,7 @@ struct CompareScAddInAsync
 {
   bool operator()( ScAddInAsync* const& lhs, ScAddInAsync* const& rhs ) const { return (*lhs)<(*rhs); }
 };
-class ScAddInAsyncs : public std::set<ScAddInAsync*, CompareScAddInAsync> {};
+using ScAddInAsyncs = std::set<ScAddInAsync*, CompareScAddInAsync>;
 
 extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
 
