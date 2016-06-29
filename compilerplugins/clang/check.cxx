@@ -82,6 +82,11 @@ ContextCheck DeclCheck::Operator(clang::OverloadedOperatorKind op) const {
         ? f->getDeclContext() : nullptr);
 }
 
+ContextCheck DeclCheck::MemberFunction() const {
+    auto m = llvm::dyn_cast_or_null<clang::CXXMethodDecl>(decl_);
+    return ContextCheck(m == nullptr ? nullptr : m->getParent());
+}
+
 TerminalCheck ContextCheck::GlobalNamespace() const {
     return TerminalCheck(
         context_ != nullptr

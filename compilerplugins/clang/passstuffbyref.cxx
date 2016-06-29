@@ -73,10 +73,6 @@ private:
     std::vector<FDecl> functionDecls_;
 };
 
-bool startswith(const std::string& rStr, const char* pSubStr) {
-    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-}
-
 bool PassStuffByRef::TraverseFunctionDecl(FunctionDecl * decl) {
     return traverseAnyFunctionDecl(
         decl, &RecursiveASTVisitor::TraverseFunctionDecl);
@@ -207,8 +203,10 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
         return;
     }
     // these functions are passed as parameters to another function
-    std::string aFunctionName = functionDecl->getQualifiedNameAsString();
-    if (startswith(aFunctionName, "slideshow::internal::ShapeAttributeLayer")) {
+    if (loplugin::DeclCheck(functionDecl).MemberFunction()
+        .Class("ShapeAttributeLayer").Namespace("internal")
+        .Namespace("slideshow").GlobalNamespace())
+    {
         return;
     }
     assert(!functionDecls_.empty());

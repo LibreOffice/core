@@ -73,6 +73,8 @@ public:
 
     ContextCheck Operator(clang::OverloadedOperatorKind op) const;
 
+    ContextCheck MemberFunction() const;
+
 private:
     clang::Decl const * const decl_;
 };
