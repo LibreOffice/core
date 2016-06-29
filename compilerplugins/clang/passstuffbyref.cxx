@@ -257,7 +257,6 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         || dc.Function("sameColor").GlobalNamespace()
         || (dc.Operator(OO_Call).Struct("StringIdentity").AnonymousNamespace()
             .Namespace("pcr").GlobalNamespace())
-        || aFunctionName == "matop::COp<type-parameter-0-0, svl::SharedString>::operator()"
         || (dc.Function("accumulate").Namespace("internal")
             .Namespace("slideshow").GlobalNamespace())
         || (dc.Function("lerp").Namespace("internal").Namespace("slideshow")
