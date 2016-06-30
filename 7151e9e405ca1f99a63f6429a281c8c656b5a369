@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_606a871c",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-30T06:56:48Z",
+      "side": 1,
+      "message": "needs to surrounded by {}",
+      "revId": "7151e9e405ca1f99a63f6429a281c8c656b5a369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_80778b01",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-30T06:56:48Z",
+      "side": 1,
+      "message": "creating the Impl twice here, because of the modification of nPoints.\nProbably easiest to delay assigning it as in the original code.",
+      "revId": "7151e9e405ca1f99a63f6429a281c8c656b5a369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
