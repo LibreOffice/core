@@ -313,7 +313,7 @@ void SAL_CALL SidebarController::requestLayout()
     throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nMinimalWidth = 0;
-    if (mpCurrentDeck)
+    if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
     {
         mpCurrentDeck->RequestLayout();
         nMinimalWidth = mpCurrentDeck->GetMinimalWidth();
@@ -361,7 +361,7 @@ void SidebarController::NotifyResize()
     else
         bIsDeckVisible = false;
 
-    if (mpCurrentDeck)
+    if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
     {
         SfxSplitWindow* pSplitWindow = GetSplitWindow();
         WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WindowAlign::Right;
@@ -395,7 +395,7 @@ void SidebarController::NotifyResize()
 
     // Determine if the closer of the deck can be shown.
     sal_Int32 nMinimalWidth = 0;
-    if (mpCurrentDeck)
+    if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
     {
         DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
         if (pTitleBar != nullptr && pTitleBar->IsVisible())
