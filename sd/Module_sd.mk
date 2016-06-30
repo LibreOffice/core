@@ -30,6 +30,7 @@ $(eval $(call gb_Module_add_check_targets,sd,\
 	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
 		CppunitTest_sd_uimpress) \
     CppunitTest_sd_import_tests \
+    CppunitTest_sd_export_ooxml \
     CppunitTest_sd_export_tests \
     CppunitTest_sd_filters_test \
     CppunitTest_sd_misc_tests \

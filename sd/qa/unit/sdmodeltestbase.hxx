@@ -19,6 +19,7 @@
 #include "drawdoc.hxx"
 #include "../source/ui/inc/DrawDocShell.hxx"
 #include "unotools/tempfile.hxx"
+#include <tools/color.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfile.hxx>
@@ -355,6 +356,25 @@ protected:
         return xField;
     }
 };
+
+CPPUNIT_NS_BEGIN
+
+template<> struct assertion_traits<Color>
+{
+    static bool equal( const Color& c1, const Color& c2 )
+    {
+        return c1 == c2;
+    }
+
+    static std::string toString( const Color& c )
+    {
+        OStringStream ost;
+        ost << static_cast<unsigned int>(c.GetColor());
+        return ost.str();
+    }
+};
+
+CPPUNIT_NS_END
 
 #endif
 
