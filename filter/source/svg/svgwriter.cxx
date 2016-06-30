@@ -1734,7 +1734,6 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mnCurClipPathId( 1 ),
     mpCurrentClipRegionElem(),
     mrExport( rExport ),
-    mrFontExport( rFontExport ),
     maContextHandler(),
     mrCurrentState( maContextHandler.getCurrentState() ),
     maAttributeWriter( rExport, rFontExport, mrCurrentState ),

@@ -353,7 +353,6 @@ private:
     ::std::unique_ptr< SvXMLElementExport >     mpCurrentClipRegionElem;
     ::std::unique_ptr< SVGShapeDescriptor >     mapCurShape;
     SVGExport&                                  mrExport;
-    SVGFontExport&                              mrFontExport;
     SVGContextHandler                           maContextHandler;
     SVGState&                                   mrCurrentState;
     SVGAttributeWriter                          maAttributeWriter;
