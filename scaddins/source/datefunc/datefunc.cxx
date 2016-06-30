@@ -591,6 +591,9 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffWeeks(
         sal_Int32 nStartDate, sal_Int32 nEndDate,
         sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
+    if (nMode != 0 && nMode != 1)
+        throw lang::IllegalArgumentException();
+
     sal_Int32 nNullDate = GetNullDate( xOptions );
 
     sal_Int32 nDays1 = nStartDate + nNullDate;
@@ -628,6 +631,9 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffMonths(
         sal_Int32 nStartDate, sal_Int32 nEndDate,
         sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
+    if (nMode != 0 && nMode != 1)
+        throw lang::IllegalArgumentException();
+
     sal_Int32 nNullDate = GetNullDate( xOptions );
 
     sal_Int32 nDays1 = nStartDate + nNullDate;
@@ -673,6 +679,9 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDiffYears(
         sal_Int32 nStartDate, sal_Int32 nEndDate,
         sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
+    if (nMode != 0 && nMode != 1)
+        throw lang::IllegalArgumentException();
+
     if ( nMode != 1 )
         return getDiffMonths( xOptions, nStartDate, nEndDate, nMode ) / 12;
 
