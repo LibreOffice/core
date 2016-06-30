@@ -286,8 +286,9 @@ class SmStructureNode : public SmNode
     SmNodeArray  aSubNodes;
 
 protected:
-    SmStructureNode(SmNodeType eNodeType, const SmToken &rNodeToken)
-    :   SmNode(eNodeType, rNodeToken)
+    SmStructureNode(SmNodeType eNodeType, const SmToken &rNodeToken, size_t nSize = 0)
+        : SmNode(eNodeType, rNodeToken)
+        , aSubNodes(nSize)
     {}
 
 public:
@@ -296,7 +297,6 @@ public:
     virtual bool        IsVisible() const override;
 
     virtual sal_uInt16      GetNumSubNodes() const override;
-            void        SetNumSubNodes(sal_uInt16 nSize) { aSubNodes.resize(nSize); }
 
     using   SmNode::GetSubNode;
     virtual SmNode *    GetSubNode(sal_uInt16 nIndex) override;
@@ -745,9 +745,8 @@ class SmUnHorNode : public SmStructureNode
 {
 public:
     explicit SmUnHorNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NUNHOR, rNodeToken)
+        : SmStructureNode(NUNHOR, rNodeToken, 2)
     {
-        SetNumSubNodes(2);
     }
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -775,9 +774,8 @@ protected:
 
 public:
     explicit SmRootNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NROOT, rNodeToken)
+        : SmStructureNode(NROOT, rNodeToken, 3)
     {
-        SetNumSubNodes(3);
     }
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -805,9 +803,8 @@ class SmDynIntegralNode : public SmStructureNode
 {
 public:
     explicit SmDynIntegralNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NDYNINT, rNodeToken)
+        : SmStructureNode(NDYNINT, rNodeToken, 2)
     {
-        SetNumSubNodes(2);
     }
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -836,9 +833,8 @@ class SmBinHorNode : public SmStructureNode
 {
 public:
     explicit SmBinHorNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NBINHOR, rNodeToken)
+        : SmStructureNode(NBINHOR, rNodeToken, 3)
     {
-        SetNumSubNodes(3);
     }
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -869,9 +865,8 @@ class SmBinVerNode : public SmStructureNode
 {
 public:
     explicit SmBinVerNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NBINVER, rNodeToken)
+        : SmStructureNode(NBINVER, rNodeToken, 3)
     {
-        SetNumSubNodes(3);
     }
 
     virtual const SmNode * GetLeftMost() const override;
@@ -956,9 +951,8 @@ class SmSubSupNode : public SmStructureNode
 
 public:
     explicit SmSubSupNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NSUBSUP, rNodeToken)
+        : SmStructureNode(NSUBSUP, rNodeToken, 1 + SUBSUP_NUM_ENTRIES)
     {
-        SetNumSubNodes(1 + SUBSUP_NUM_ENTRIES);
         bUseLimits = false;
     }
 
@@ -1007,9 +1001,8 @@ class SmBraceNode : public SmStructureNode
 {
 public:
     explicit SmBraceNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NBRACE, rNodeToken)
+        : SmStructureNode(NBRACE, rNodeToken, 3)
     {
-        SetNumSubNodes(3);
     }
 
     SmMathSymbolNode* OpeningBrace();
@@ -1083,10 +1076,9 @@ public:
 };
 
 
-inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken) :
-    SmStructureNode(NVERTICAL_BRACE, rNodeToken)
+inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken)
+    : SmStructureNode(NVERTICAL_BRACE, rNodeToken, 3)
 {
-    SetNumSubNodes(3);
 }
 
 
@@ -1104,9 +1096,8 @@ class SmOperNode : public SmStructureNode
 {
 public:
     explicit SmOperNode(const SmToken &rNodeToken)
-    :   SmStructureNode(NOPER, rNodeToken)
+        : SmStructureNode(NOPER, rNodeToken, 2)
     {
-        SetNumSubNodes(2);
     }
 
     SmNode *       GetSymbol();
