@@ -147,8 +147,8 @@ namespace xforms
 
         Repository::iterator aTypePos = implLocate( typeName );
         if ( aTypePos->second->getIsBasic() )
-            throw VetoException("This is a built-in type and cannot be removed.", *this );
-            // TODO: localize this error message
+            // "This is a built-in type and cannot be removed."
+            throw VetoException(FRM_RES_STRING( RID_STR_XFORMS_CANT_REMOVE_TYPE ), *this );
 
         m_aRepository.erase( aTypePos );
     }

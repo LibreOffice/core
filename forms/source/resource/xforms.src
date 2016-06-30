@@ -184,4 +184,9 @@ String RID_STR_XFORMS_BINDING_UI_NAME
     Text [ en-US ] = "Binding" ;
 };
 
+String RID_STR_XFORMS_CANT_REMOVE_TYPE
+{
+    Text [ en-US ] = "This is a built-in type and cannot be removed." ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

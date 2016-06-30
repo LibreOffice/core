@@ -90,6 +90,8 @@
 #define RID_STR_FEATURE_NOT_EXECUTABLE          ( RID_FRM_STRINGS_START + 58 )
 #define RID_STR_FEATURE_UNKNOWN                 ( RID_FRM_STRINGS_START + 59 )
 
+#define RID_STR_XFORMS_CANT_REMOVE_TYPE         ( RID_FRM_STRINGS_START + 60 )
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
