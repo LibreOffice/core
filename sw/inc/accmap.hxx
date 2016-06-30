@@ -185,7 +185,8 @@ public:
     void A11yDispose( const SwFrame* pFrame,
                       const SdrObject* pObj,
                       vcl::Window* pWindow,
-                      bool bRecursive = false );
+                      bool bRecursive = false,
+                      bool bCanSkipInvisible = true );
 
     void InvalidatePosOrSize( const SwFrame* pFrame,
                               const SdrObject* pObj,

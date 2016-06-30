@@ -375,7 +375,7 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                 }
                 else
                 {
-                    rImp.DisposeAccessibleObj( pAnchoredObj->GetDrawObj() );
+                    rImp.DisposeAccessibleObj(pAnchoredObj->GetDrawObj(), true);
                     rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
                 }
             }
@@ -411,7 +411,7 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                     }
                     else
                     {
-                        rImp.DisposeAccessibleObj( pAnchoredObj->GetDrawObj() );
+                        rImp.DisposeAccessibleObj(pAnchoredObj->GetDrawObj(), true);
                         rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
                     }
                 }
@@ -621,7 +621,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
                 }
                 else
                 {
-                    rImp.DisposeAccessibleObj( pTmpObj );
+                    rImp.DisposeAccessibleObj(pTmpObj, true);
                     rImp.AddAccessibleObj( pTmpObj );
                 }
             }
@@ -640,7 +640,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     else
     {
         // adjustments for accessibility API
-        rImp.DisposeAccessibleObj( pObj );
+        rImp.DisposeAccessibleObj(pObj, true);
         rImp.AddAccessibleObj( pObj );
     }
 

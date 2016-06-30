@@ -147,8 +147,8 @@ protected:
 
     // Dispose children of the specified SwFrame. The SwFrame might belong to
     // the current object or to any other child or grandchild.
-    void DisposeChildren( const SwFrame *pFrame,
-                          bool bRecursive );
+    void DisposeChildren(const SwFrame *pFrame,
+                         bool bRecursive, bool bCanSkipInvisible);
 
     void DisposeShape( const SdrObject *pObj,
                                 ::accessibility::AccessibleShape *pAccImpl );
@@ -315,10 +315,10 @@ public:
     // thread safe C++ interface
 
     // The object is not visible an longer and should be destroyed
-    virtual void Dispose( bool bRecursive = false );
+    virtual void Dispose(bool bRecursive = false, bool bCanSkipInvisible = true);
 
     // The child object is not visible an longer and should be destroyed
-    virtual void DisposeChild( const sw::access::SwAccessibleChild& rFrameOrObj, bool bRecursive );
+    virtual void DisposeChild(const sw::access::SwAccessibleChild& rFrameOrObj, bool bRecursive, bool bCanSkipInvisible);
 
     // The object has been moved by the layout
     virtual void InvalidatePosOrSize( const SwRect& rFrame );

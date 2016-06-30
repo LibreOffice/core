@@ -393,8 +393,9 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrame* _pFrame,
     }
 }
 
-void SwAccessibleContext::DisposeChildren( const SwFrame *pFrame,
-                                           bool bRecursive )
+void SwAccessibleContext::DisposeChildren(const SwFrame *pFrame,
+                                          bool bRecursive,
+                                          bool bCanSkipInvisible)
 {
     const SwAccessibleChildSList aVisList( GetVisArea(), *pFrame, *(GetMap()) );
     SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
@@ -410,7 +411,7 @@ void SwAccessibleContext::DisposeChildren( const SwFrame *pFrame,
             if( xAccImpl.is() )
                 xAccImpl->Dispose( bRecursive );
             else if( bRecursive )
-                DisposeChildren( pLower, bRecursive );
+                DisposeChildren(pLower, bRecursive, bCanSkipInvisible);
         }
         else if ( rLower.GetDrawObject() )
         {
@@ -422,7 +423,7 @@ void SwAccessibleContext::DisposeChildren( const SwFrame *pFrame,
         }
         else if ( rLower.GetWindow() )
         {
-            DisposeChild( rLower, false );
+            DisposeChild(rLower, false, bCanSkipInvisible);
         }
         ++aIter;
     }
@@ -1032,7 +1033,7 @@ void SwAccessibleContext::ScrolledInShape( const SdrObject* ,
     }
 }
 
-void SwAccessibleContext::Dispose( bool bRecursive )
+void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     SolarMutexGuard aGuard;
 
@@ -1044,7 +1045,7 @@ void SwAccessibleContext::Dispose( bool bRecursive )
 
     // dispose children
     if( bRecursive )
-        DisposeChildren( GetFrame(), bRecursive );
+        DisposeChildren(GetFrame(), bRecursive, bCanSkipInvisible);
 
     // get parent
     uno::Reference< XAccessible > xParent( GetWeakParent() );
@@ -1083,12 +1084,13 @@ void SwAccessibleContext::Dispose( bool bRecursive )
 }
 
 void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrameOrObj,
-                                        bool bRecursive )
+                                        bool bRecursive, bool bCanSkipInvisible )
 {
     SolarMutexGuard aGuard;
 
-    if ( IsShowing( *(GetMap()), rChildFrameOrObj ) ||
+    if ( !bCanSkipInvisible ||
          rChildFrameOrObj.AlwaysIncludeAsChild() ||
+         IsShowing( *(GetMap()), rChildFrameOrObj ) ||
          !SwAccessibleChild( GetFrame() ).IsVisibleChildrenOnly() )
     {
         // If the object could have existed before, than there is nothing to do,
@@ -1119,7 +1121,7 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrameOrOb
         }
     }
     else if( bRecursive && rChildFrameOrObj.GetSwFrame() )
-        DisposeChildren( rChildFrameOrObj.GetSwFrame(), bRecursive );
+        DisposeChildren(rChildFrameOrObj.GetSwFrame(), bRecursive, bCanSkipInvisible);
 }
 
 void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )

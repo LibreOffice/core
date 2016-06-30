@@ -300,15 +300,16 @@ void SwViewShellImp::UpdateAccessible()
         GetAccessibleMap().GetDocumentView();
 }
 
-void SwViewShellImp::DisposeAccessible( const SwFrame *pFrame,
-                                   const SdrObject *pObj,
-                                   bool bRecursive )
+void SwViewShellImp::DisposeAccessible(const SwFrame *pFrame,
+                                       const SdrObject *pObj,
+                                       bool bRecursive,
+                                       bool bCanSkipInvisible)
 {
     OSL_ENSURE( !pFrame || pFrame->IsAccessibleFrame(), "frame is not accessible" );
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
         if( rTmp.Imp()->IsAccessible() )
-            rTmp.Imp()->GetAccessibleMap().A11yDispose( pFrame, pObj, nullptr, bRecursive );
+            rTmp.Imp()->GetAccessibleMap().A11yDispose( pFrame, pObj, nullptr, bRecursive, bCanSkipInvisible );
     }
 }
 

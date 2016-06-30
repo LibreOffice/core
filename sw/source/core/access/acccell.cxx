@@ -263,13 +263,13 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
     return aRet;
 }
 
-void SwAccessibleCell::Dispose( bool bRecursive )
+void SwAccessibleCell::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     const SwFrame *pParent = GetParent( SwAccessibleChild(GetFrame()), IsInPagePreview() );
     ::rtl::Reference< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, false ) );
     if( xAccImpl.is() )
-        xAccImpl->DisposeChild( SwAccessibleChild(GetFrame()), bRecursive );
+        xAccImpl->DisposeChild(SwAccessibleChild(GetFrame()), bRecursive, bCanSkipInvisible);
     SwAccessibleContext::Dispose( bRecursive );
 }
 
