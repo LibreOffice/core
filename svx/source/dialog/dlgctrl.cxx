@@ -771,7 +771,7 @@ Point SvxPixelCtl::IndexToPoint(long nIndex) const
     return aPtTl;
 }
 
-long SvxPixelCtl::GetFoucsPosIndex() const
+long SvxPixelCtl::GetFocusPosIndex() const
 {
     return aFocusPosition.getX() + aFocusPosition.getY() * nLines ;
 }
@@ -795,7 +795,7 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
     if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
         static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, RP_MM ); // RectPoint ist dummy
 
-    return GetFoucsPosIndex();
+    return GetFocusPosIndex();
 
 }
 
@@ -1006,7 +1006,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
         }
         if(m_xAccess.is())
         {
-            long nIndex = GetFoucsPosIndex();
+            long nIndex = GetFocusPosIndex();
             switch(nCode)
             {
             case KEY_LEFT:
@@ -1039,7 +1039,7 @@ void SvxPixelCtl::GetFocus()
 
     if(m_pAccess)
     {
-        m_pAccess->NotifyChild(GetFoucsPosIndex(),true,false);
+        m_pAccess->NotifyChild(GetFocusPosIndex(),true,false);
     }
 
     Control::GetFocus();

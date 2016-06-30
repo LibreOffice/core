@@ -329,7 +329,7 @@ sal_Bool SAL_CALL SvxPixelCtlAccessible::isAccessibleChildSelected( sal_Int32 nC
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
 
-    return mrPixelCtl.GetFoucsPosIndex() == nChildIndex;
+    return mrPixelCtl.GetFocusPosIndex() == nChildIndex;
 }
 
 void SAL_CALL SvxPixelCtlAccessible::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)
@@ -704,7 +704,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SvxPixelCtlAccessibleChild::getAc
         pStateSetHelper->AddState( AccessibleStateType::SHOWING );
         pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
 
-        long nIndex = mrParentWindow.GetFoucsPosIndex();
+        long nIndex = mrParentWindow.GetFocusPosIndex();
         if ( nIndex == mnIndexInParent)
         {
             pStateSetHelper->AddState( AccessibleStateType::SELECTED );
