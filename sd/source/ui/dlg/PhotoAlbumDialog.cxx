@@ -56,6 +56,8 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
     get(pInsTypeCombo, "opt_combo");
     get(pASRCheck, "asr_check");
     get(pCapCheck, "cap_check");
+    get(pInsertAsLinkCheck, "insert_as_link_check");
+
     pCancelBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CancelHdl));
     pCreateBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CreateHdl));
 
@@ -92,6 +94,7 @@ void SdPhotoAlbumDialog::dispose()
     pInsTypeCombo.clear();
     pASRCheck.clear();
     pCapCheck.clear();
+    pInsertAsLinkCheck.clear();
     ModalDialog::dispose();
 }
 
@@ -119,6 +122,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
         // determine if to use Captions (use TitleObject) and choose the correct AutoLayout
         // from the beginning
         const bool bCreateCaptions(pCapCheck->IsChecked());
+        const bool bInsertAsLink(pInsertAsLinkCheck->IsChecked());
         const AutoLayout aAutoLayout(bCreateCaptions ? AUTOLAYOUT_TITLE_ONLY : AUTOLAYOUT_NONE);
 
         // get the option
@@ -145,7 +149,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                     uno::UNO_QUERY);
 
                 Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                if (bInsertAsLink)
+                    xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl));
+                else
+                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                 ::awt::Size aPageSize;
 
@@ -220,7 +227,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    if (bInsertAsLink)
+                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl1));
+                    else
+                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -255,7 +265,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    if (bInsertAsLink)
+                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl2));
+                    else
+                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -335,7 +348,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    if (bInsertAsLink)
+                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl1));
+                    else
+                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -369,7 +385,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    if (bInsertAsLink)
+                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl2));
+                    else
+                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -404,7 +423,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    if (bInsertAsLink)
+                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl3));
+                    else
+                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
@@ -438,7 +460,10 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                         uno::UNO_QUERY);
 
                     Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+                    if (bInsertAsLink)
+                        xProps->setPropertyValue("GraphicURL", ::uno::Any(sUrl4));
+                    else
+                        xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
 
                     ::awt::Point aPicPos;
 
