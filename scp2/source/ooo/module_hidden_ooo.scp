@@ -109,6 +109,7 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	gid_File_Fnt_OpenSans,
 	gid_File_Fnt_SourceSans,
 	gid_File_Fnt_SourceCode,
+    gid_File_Fnt_NotoEmoji,
 	gid_File_FcLocal_Conf);
 End
 #endif
