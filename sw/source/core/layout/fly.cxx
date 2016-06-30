@@ -2154,8 +2154,8 @@ void SwFrame::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
     if( pSh )
     {
         SwRootFrame* pLayout = getRootFrame();
-        if( pLayout && pLayout->IsAnyShellAccessible() )
-        pSh->Imp()->DisposeAccessibleObj( _rToRemoveObj.GetDrawObj() );
+        if (pLayout && pLayout->IsAnyShellAccessible())
+            pSh->Imp()->DisposeAccessibleObj(_rToRemoveObj.GetDrawObj(), false);
     }
 
     // deregister from page frame

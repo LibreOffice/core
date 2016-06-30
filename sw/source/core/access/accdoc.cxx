@@ -375,14 +375,14 @@ SwAccessibleDocument::~SwAccessibleDocument()
         pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
 }
 
-void SwAccessibleDocument::Dispose( bool bRecursive )
+void SwAccessibleDocument::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     OSL_ENSURE( GetFrame() && GetMap(), "already disposed" );
 
     vcl::Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : nullptr;
     if( pWin )
         pWin->RemoveChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
-    SwAccessibleContext::Dispose( bRecursive );
+    SwAccessibleContext::Dispose(bRecursive, bCanSkipInvisible);
 }
 
 IMPL_LINK_TYPED( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEvent, void )

@@ -1391,18 +1391,18 @@ void SwAccessibleTable::InvalidatePosOrSize( const SwRect& rOldBox )
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
 
-void SwAccessibleTable::Dispose( bool bRecursive )
+void SwAccessibleTable::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     SolarMutexGuard aGuard;
 
     if( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
 
-    SwAccessibleContext::Dispose( bRecursive );
+    SwAccessibleContext::Dispose(bRecursive, bCanSkipInvisible);
 }
 
 void SwAccessibleTable::DisposeChild( const SwAccessibleChild& rChildFrameOrObj,
-                                      bool bRecursive )
+                                      bool bRecursive, bool bCanSkipInvisible )
 {
     SolarMutexGuard aGuard;
 
@@ -1421,7 +1421,7 @@ void SwAccessibleTable::DisposeChild( const SwAccessibleChild& rChildFrameOrObj,
     // about its change. We then must not call the superclass
     uno::Reference< XAccessible > xAcc( GetMap()->GetContext( pFrame, false ) );
     if( !xAcc.is() )
-        SwAccessibleContext::DisposeChild( rChildFrameOrObj, bRecursive );
+        SwAccessibleContext::DisposeChild( rChildFrameOrObj, bRecursive, bCanSkipInvisible );
 }
 
 void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChildFrameOrObj,

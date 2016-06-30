@@ -2244,7 +2244,8 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
 void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
                                    const SdrObject *pObj,
                                    vcl::Window* pWindow,
-                                   bool bRecursive )
+                                   bool bRecursive,
+                                   bool bCanSkipInvisible )
 {
     SwAccessibleChild aFrameOrObj( pFrame, pObj, pWindow );
 
@@ -2355,7 +2356,7 @@ void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
             // be broadcasted at the end of the action to give the table
             // a chance to generate a single table change event.
 
-            xParentAccImpl->DisposeChild( aFrameOrObj, bRecursive );
+            xParentAccImpl->DisposeChild( aFrameOrObj, bRecursive, bCanSkipInvisible );
         }
         else if( xShapeAccImpl.is() )
         {

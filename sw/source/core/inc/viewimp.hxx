@@ -225,10 +225,10 @@ public:
 
     /// Remove a frame from the accessible view
     void DisposeAccessible( const SwFrame *pFrame, const SdrObject *pObj,
-                            bool bRecursive );
+                            bool bRecursive, bool bCanSkipInvisible );
     inline void DisposeAccessibleFrame( const SwFrame *pFrame,
                                bool bRecursive = false );
-    inline void DisposeAccessibleObj( const SdrObject *pObj );
+    inline void DisposeAccessibleObj( const SdrObject *pObj, bool bCanSkipInvisible );
 
     /// Move a frame's position in the accessible view
     void MoveAccessible( const SwFrame *pFrame, const SdrObject *pObj,
@@ -278,12 +278,12 @@ inline SwAccessibleMap& SwViewShellImp::GetAccessibleMap()
 inline void SwViewShellImp::DisposeAccessibleFrame( const SwFrame *pFrame,
                                bool bRecursive )
 {
-    DisposeAccessible( pFrame, nullptr, bRecursive );
+    DisposeAccessible( pFrame, nullptr, bRecursive, true );
 }
 
-inline void SwViewShellImp::DisposeAccessibleObj( const SdrObject *pObj )
+inline void SwViewShellImp::DisposeAccessibleObj( const SdrObject *pObj, bool bCanSkipInvisible )
 {
-    DisposeAccessible( nullptr, pObj, false );
+    DisposeAccessible( nullptr, pObj, false, bCanSkipInvisible );
 }
 
 inline void SwViewShellImp::MoveAccessibleFrame( const SwFrame *pFrame,
