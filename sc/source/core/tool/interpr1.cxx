@@ -489,7 +489,7 @@ void ScInterpreter::ScChooseJump()
         break;
         default:
         {
-            double nJumpIndex = ::rtl::math::approxFloor( GetDouble() );
+            sal_Int16 nJumpIndex = GetInt16();
             if (!nGlobalError && (nJumpIndex >= 1) && (nJumpIndex < nJumpCount))
             {
                 aCode.Jump( pJump[ (short) nJumpIndex ], pJump[ nJumpCount ] );
@@ -3410,12 +3410,11 @@ void ScInterpreter::ScUnichar()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        double dVal = ::rtl::math::approxFloor( GetDouble() );
-        if (dVal < 0 || !rtl::isUnicodeCodePoint(dVal))
+        sal_uInt32 nCodePoint = GetUInt32();
+        if (nGlobalError || !rtl::isUnicodeCodePoint(nCodePoint))
             PushIllegalArgument();
         else
         {
-            sal_uInt32 nCodePoint = static_cast<sal_uInt32>( dVal );
             OUString aStr( &nCodePoint, 1 );
             PushString( aStr );
         }
@@ -6635,8 +6634,8 @@ void ScInterpreter::ScSubTotal()
     {
         // We must fish the 1st parameter deep from the stack! And push it on top.
         const FormulaToken* p = pStack[ sp - nParamCount ];
-        PushTempToken( *p );
-        int nFunc = (int) ::rtl::math::approxFloor( GetDouble() );
+        PushTempToken( *p );    /* TODO: use FormulaTokenRef instead */
+        sal_Int32 nFunc = GetInt32();
         mnSubTotalFlags |= SUBTOTAL_IGN_NESTED_ST_AG | SUBTOTAL_IGN_FILTERED;
         if (nFunc > 100)
         {
@@ -6646,7 +6645,7 @@ void ScInterpreter::ScSubTotal()
             nFunc -= 100;
         }
 
-        if ( nFunc < 1 || nFunc > 11 )
+        if ( nGlobalError || nFunc < 1 || nFunc > 11 )
             PushIllegalArgument();  // simulate return on stack, not SetError(...)
         else
         {
@@ -6682,14 +6681,14 @@ void ScInterpreter::ScAggregate()
     {
         // fish the 1st parameter from the stack and push it on top.
         const FormulaToken* p = pStack[ sp - nParamCount ];
-        PushTempToken( *p );
-        int nFunc = ( int ) ::rtl::math::approxFloor( GetDouble() );
+        PushTempToken( *p );    /* TODO: use FormulaTokenRef instead */
+        sal_Int32 nFunc = GetInt32();
         // fish the 2nd parameter from the stack and push it on top.
         const FormulaToken* p2 = pStack[ sp - ( nParamCount - 1 ) ];
-        PushTempToken( *p2 );
-        int nOption = ( int ) ::rtl::math::approxFloor( GetDouble() );
+        PushTempToken( *p2 );   /* TODO: use FormulaTokenRef instead */
+        sal_Int32 nOption = GetInt32();
 
-        if ( nFunc < 1 || nFunc > 19 )
+        if ( nGlobalError || nFunc < 1 || nFunc > 19 )
             PushIllegalArgument();
         else
         {
@@ -7341,7 +7340,7 @@ void ScInterpreter::ScAddressFunc()
     ScRefFlags  nFlags = ScRefFlags::COL_ABS | ScRefFlags::ROW_ABS;   // default
     if( nParamCount >= 3 )
     {
-        sal_uInt16 n = (sal_uInt16) ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0));
+        sal_Int32 n = GetInt32WithDefault(1);
         switch ( n )
         {
             default :
@@ -7360,8 +7359,8 @@ void ScInterpreter::ScAddressFunc()
     }
     nFlags |= ScRefFlags::VALID | ScRefFlags::ROW_VALID | ScRefFlags::COL_VALID;
 
-    SCCOL nCol = (SCCOL) ::rtl::math::approxFloor(GetDouble());
-    SCROW nRow = (SCROW) ::rtl::math::approxFloor(GetDouble());
+    SCCOL nCol = (SCCOL) GetInt16();
+    SCROW nRow = (SCROW) GetInt32();
     if( eConv == FormulaGrammar::CONV_XL_R1C1 )
     {
         // YUCK!  The XL interface actually treats rel R1C1 refs differently
@@ -7374,7 +7373,7 @@ void ScInterpreter::ScAddressFunc()
 
     --nCol;
     --nRow;
-    if(!ValidCol( nCol) || !ValidRow( nRow))
+    if (nGlobalError || !ValidCol( nCol) || !ValidRow( nRow))
     {
         PushIllegalArgument();
         return;
@@ -7418,13 +7417,18 @@ void ScInterpreter::ScOffset()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 5 ) )
     {
-        long nColNew = -1, nRowNew = -1, nColPlus, nRowPlus;
+        sal_Int32 nColNew = -1, nRowNew = -1, nColPlus, nRowPlus;
         if (nParamCount == 5)
-            nColNew = (long) ::rtl::math::approxFloor(GetDouble());
+            nColNew = GetInt32();
         if (nParamCount >= 4)
-            nRowNew = (long) ::rtl::math::approxFloor(GetDoubleWithDefault( -1.0 ));
-        nColPlus = (long) ::rtl::math::approxFloor(GetDouble());
-        nRowPlus = (long) ::rtl::math::approxFloor(GetDouble());
+            nRowNew = GetInt32WithDefault(-1);
+        nColPlus = GetInt32();
+        nRowPlus = GetInt32();
+        if (nGlobalError)
+        {
+            PushError( nGlobalError);
+            return;
+        }
         SCCOL nCol1(0);
         SCROW nRow1(0);
         SCTAB nTab1(0);
@@ -7565,27 +7569,27 @@ void ScInterpreter::ScIndex()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 4 ) )
     {
-        long nArea;
+        sal_uInt32 nArea;
         size_t nAreaCount;
         SCCOL nCol;
         SCROW nRow;
         if (nParamCount == 4)
-            nArea = (long) ::rtl::math::approxFloor(GetDouble());
+            nArea = GetUInt32();
         else
             nArea = 1;
         if (nParamCount >= 3)
-            nCol = (SCCOL) ::rtl::math::approxFloor(GetDouble());
+            nCol = (SCCOL) GetInt16();
         else
             nCol = 0;
         if (nParamCount >= 2)
-            nRow = (SCROW) ::rtl::math::approxFloor(GetDouble());
+            nRow = (SCROW) GetInt32();
         else
             nRow = 0;
         if (GetStackType() == svRefList)
             nAreaCount = (sp ? pStack[sp-1]->GetRefList()->size() : 0);
         else
             nAreaCount = 1;     // one reference or array or whatever
-        if (nAreaCount == 0 || (size_t)nArea > nAreaCount)
+        if (nGlobalError || nAreaCount == 0 || (size_t)nArea > nAreaCount)
         {
             PushError( errNoRef);
             return;
