@@ -725,6 +725,10 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
             addCustomControl( CHECKBOX_PREVIEW );
             break;
 
+        case FILEOPEN_PREVIEW:
+            addCustomControl( CHECKBOX_PREVIEW );
+            break;
+
         default:
             throw lang::IllegalArgumentException(
                     OUString( "Unknown template" ),

@@ -724,6 +724,12 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
             sendAppendControlCommand( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             break;
 
+        case FILEOPEN_PREVIEW:
+            sendCommand( aTypeOpen );
+
+            sendAppendControlCommand( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW );
+            break;
+
         default:
             throw lang::IllegalArgumentException(
                     OUString( "Unknown template" ),

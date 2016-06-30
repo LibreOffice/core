@@ -523,6 +523,13 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
             nFeatures        |= FEATURE_AUTOEXTENSION;
         }
         break;
+
+        case css::ui::dialogs::TemplateDescription::FILEOPEN_PREVIEW :
+        {
+            bFileOpenDialog  = sal_True;
+            nFeatures        |= FEATURE_PREVIEW;
+        }
+        break;
     }
     css::uno::Reference<css::awt::XWindow> xParentWindow;
     if(lArguments.getLength() > 1)
