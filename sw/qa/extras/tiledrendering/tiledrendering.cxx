@@ -53,6 +53,7 @@ public:
     void testPageDownInvalidation();
     void testPartHash();
     void testViewCursors();
+    void testMissingInvalidation();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -72,6 +73,7 @@ public:
     CPPUNIT_TEST(testPageDownInvalidation);
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testViewCursors);
+    CPPUNIT_TEST(testMissingInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -551,12 +553,14 @@ public:
     bool m_bViewCursorInvalidated;
     bool m_bOwnSelectionSet;
     bool m_bViewSelectionSet;
+    bool m_bTilesInvalidated;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
           m_bViewCursorInvalidated(false),
           m_bOwnSelectionSet(false),
-          m_bViewSelectionSet(false)
+          m_bViewSelectionSet(false),
+          m_bTilesInvalidated(false)
     {
     }
 
@@ -569,6 +573,11 @@ public:
     {
         switch (nType)
         {
+        case LOK_CALLBACK_INVALIDATE_TILES:
+        {
+            m_bTilesInvalidated = true;
+        }
+        break;
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
             m_bOwnCursorInvalidated = true;
@@ -592,6 +601,44 @@ public:
         }
     }
 };
+
+void SwTiledRenderingTest::testMissingInvalidation()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Create two views.
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    int nView2 = SfxLokHelper::getView();
+
+    // First view: put the cursor into the first word.
+    SfxLokHelper::setView(nView1);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    // Second view: select the first word.
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT(pXTextDocument->GetDocShell()->GetWrtShell() != pWrtShell);
+    pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->SelWrd();
+
+    // Now delete the selected word and make sure both views are invalidated.
+    aView1.m_bTilesInvalidated = false;
+    aView2.m_bTilesInvalidated = false;
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+    CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
 
 void SwTiledRenderingTest::testViewCursors()
 {

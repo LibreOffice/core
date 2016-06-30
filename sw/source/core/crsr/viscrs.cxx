@@ -186,7 +186,9 @@ void SwVisibleCursor::_SetPosAndShow()
     {
         // notify about page number change (if that happened)
         sal_uInt16 nPage, nVirtPage;
-        const_cast<SwCursorShell*>(m_pCursorShell)->GetPageNum(nPage, nVirtPage);
+        // bCalcFrame=false is important to avoid calculating the layout when
+        // we're in the middle of doing that already.
+        const_cast<SwCursorShell*>(m_pCursorShell)->GetPageNum(nPage, nVirtPage, /*bAtCursorPos=*/true, /*bCalcFrame=*/false);
         if (nPage != m_nPageLastTime)
         {
             m_nPageLastTime = nPage;
