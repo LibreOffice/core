@@ -196,6 +196,7 @@ void OJoinTableView::dispose()
     m_pSelectedConn.clear();
     m_pLastFocusTabWin.clear();
     m_pView.clear();
+    m_vTableConnection.clear();
     vcl::Window::dispose();
 }
 

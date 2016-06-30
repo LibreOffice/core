@@ -85,6 +85,8 @@ void CompressGraphicsDialog::dispose()
     m_pQualityMF.clear();
     m_pBtnCalculate.clear();
     m_pInterpolationCombo.clear();
+    m_pCompressionSlider.clear();
+    m_pQualitySlider.clear();
     ModalDialog::dispose();
 }
 

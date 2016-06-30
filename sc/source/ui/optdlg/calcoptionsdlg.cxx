@@ -142,6 +142,10 @@ ScCalcOptionsDialog::~ScCalcOptionsDialog()
 
 void ScCalcOptionsDialog::dispose()
 {
+    mpEmptyAsZero.clear();
+    mpConversion.clear();
+    mpSyntax.clear();
+    mpCurrentDocOnly.clear();
     mpUseOpenCL.clear();
     mpSpinButton.clear();
     mpEditField.clear();

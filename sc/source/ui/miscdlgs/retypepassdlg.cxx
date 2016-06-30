@@ -60,6 +60,7 @@ void ScRetypePassDlg::dispose()
     mpTextDocStatus.clear();
     mpBtnRetypeDoc.clear();
     mpSheetsBox.clear();
+    maSheets.clear();
     ModalDialog::dispose();
 }
 

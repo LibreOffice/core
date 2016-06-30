@@ -49,6 +49,7 @@ void NotebookBar::dispose()
 {
     disposeBuilder();
     m_pEventListener.clear();
+    m_pTabControl.clear();
     Control::dispose();
 }
 

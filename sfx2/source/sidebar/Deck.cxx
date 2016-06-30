@@ -82,6 +82,7 @@ void Deck::dispose()
     for (VclPtr<Panel> & rpPanel : aPanels)
         rpPanel.disposeAndClear();
 
+    maPanels.clear(); // just to keep the loplugin:vclwidgets happy
     mpTitleBar.disposeAndClear();
     mpFiller.disposeAndClear();
     mpVerticalScrollBar.disposeAndClear();

@@ -190,6 +190,7 @@ void BackingWindow::dispose()
         mxDropTargetListener.clear();
     }
     disposeBuilder();
+    maDndWindows.clear();
     mpOpenButton.clear();
     mpRemoteButton.clear();
     mpRecentButton.clear();

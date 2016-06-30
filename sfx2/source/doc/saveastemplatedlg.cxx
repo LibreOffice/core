@@ -66,6 +66,7 @@ void SfxSaveAsTemplateDialog::dispose()
     mpLBCategory.clear();
     mpTemplateNameEdit.clear();
     mpOKButton.clear();
+    mpCBXDefault.clear();
 
     ModalDialog::dispose();
 }

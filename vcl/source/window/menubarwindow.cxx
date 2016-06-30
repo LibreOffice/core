@@ -170,6 +170,9 @@ void MenuBarWindow::dispose()
     aHideBtn.disposeAndClear();
     aFloatBtn.disposeAndClear();
     aCloseBtn.disposeAndClear();
+    pMenu.clear();
+    pActivePopup.clear();
+    xSaveFocusId.clear();
 
     Window::dispose();
 }

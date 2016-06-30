@@ -2055,6 +2055,7 @@ void MessageDialog::dispose()
     m_pGrid.disposeAndClear();
     m_pOwnedActionArea.disposeAndClear();
     m_pOwnedContentArea.disposeAndClear();
+    m_aResponses.clear();
     Dialog::dispose();
 }
 

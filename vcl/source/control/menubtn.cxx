@@ -87,6 +87,7 @@ MenuButton::~MenuButton()
 void MenuButton::dispose()
 {
     delete mpMenuTimer;
+    mpMenu.clear();
     PushButton::dispose();
 }
 

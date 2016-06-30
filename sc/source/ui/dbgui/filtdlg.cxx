@@ -156,6 +156,10 @@ void ScFilterDlg::dispose()
     pBtnDestPers.clear();
     pFtDbAreaLabel.clear();
     pFtDbArea.clear();
+    maValueEdArr.clear();
+    maFieldLbArr.clear();
+    maCondLbArr.clear();
+    maConnLbArr.clear();
     ScAnyRefDlg::dispose();
 }
 

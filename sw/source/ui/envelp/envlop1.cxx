@@ -156,6 +156,7 @@ void SwEnvDlg::dispose()
 {
     delete pAddresseeSet;
     delete pSenderSet;
+    pPrinter.clear();
     SfxTabDialog::dispose();
 }
 

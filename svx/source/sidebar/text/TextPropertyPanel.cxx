@@ -84,6 +84,7 @@ void TextPropertyPanel::dispose()
     mpToolBoxSpacing.clear();
     mpToolBoxFontColorSw.clear();
     mpToolBoxFontColor.clear();
+    mpToolBoxBackgroundColor.clear();
 
     maFontSizeControl.dispose();
 

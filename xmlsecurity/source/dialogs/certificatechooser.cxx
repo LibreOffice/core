@@ -89,6 +89,7 @@ void CertificateChooser::dispose()
     m_pCertLB.disposeAndClear();
     m_pViewBtn.clear();
     m_pOKBtn.clear();
+    m_pDescriptionED.clear();
     ModalDialog::dispose();
 }
 

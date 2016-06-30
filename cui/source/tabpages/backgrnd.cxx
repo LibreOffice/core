@@ -417,6 +417,7 @@ void SvxBackgroundTabPage::dispose()
     m_pTblLBox.clear();
     m_pBackGroundColorFrame.clear();
     m_pBackgroundColorSet.clear();
+    m_pBackGroundColorLabelFT.clear();
     m_pPreviewWin1.clear();
     m_pBtnPreview.clear();
     m_pBitmapContainer.clear();

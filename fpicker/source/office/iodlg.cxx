@@ -527,6 +527,7 @@ void SvtFileDialog::dispose()
     _pCbSelection.clear();
     _pPbPlay.clear();
     _pPrevWin.clear();
+    m_aDisabledControls.clear();
     ModalDialog::dispose();
 }
 
