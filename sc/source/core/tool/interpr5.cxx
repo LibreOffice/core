@@ -513,8 +513,15 @@ void ScInterpreter::ScMatValue()
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         // 0 to count-1
-        SCSIZE nR = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
-        SCSIZE nC = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
+        // Theoretically we could have GetSize() instead of GetUInt32(), but
+        // really, practically ...
+        SCSIZE nR = static_cast<SCSIZE>(GetUInt32());
+        SCSIZE nC = static_cast<SCSIZE>(GetUInt32());
+        if (nGlobalError)
+        {
+            PushError( nGlobalError);
+            return;
+        }
         switch (GetStackType())
         {
             case svSingleRef :
@@ -606,8 +613,8 @@ void ScInterpreter::ScEMat()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        SCSIZE nDim = static_cast<SCSIZE>(::rtl::math::approxFloor(GetDouble()));
-        if (nDim == 0)
+        SCSIZE nDim = static_cast<SCSIZE>(GetUInt32());
+        if (nGlobalError || nDim == 0)
             PushIllegalArgument();
         else if (!ScMatrix::IsSizeAllocatable( nDim, nDim))
             PushError( errMatrixSize);
