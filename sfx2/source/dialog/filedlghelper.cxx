@@ -435,6 +435,7 @@ bool FileDialogHelper_Impl::isInOpenMode() const
         case FILEOPEN_PLAY:
         case FILEOPEN_READONLY_VERSION:
         case FILEOPEN_LINK_PREVIEW:
+        case FILEOPEN_PREVIEW:
             bRet = true;
     }
 
@@ -828,6 +829,7 @@ static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
         case FILEOPEN_PLAY:
         case FILEOPEN_READONLY_VERSION:
         case FILEOPEN_LINK_PREVIEW:
+        case FILEOPEN_PREVIEW:
             return OPEN;
         case FILESAVE_SIMPLE:
         case FILESAVE_AUTOEXTENSION_PASSWORD:
@@ -1013,6 +1015,14 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION;
                 mbHasAutoExt = true;
                 mbIsSaveDlg = true;
+                break;
+
+            case FILEOPEN_PREVIEW:
+                nTemplateDescription = TemplateDescription::FILEOPEN_PREVIEW;
+                mbHasPreview = true;
+                // aPreviewTimer
+                maPreviewIdle.SetPriority( SchedulerPriority::LOWEST );
+                maPreviewIdle.SetIdleHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 
             default:

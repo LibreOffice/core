@@ -216,6 +216,9 @@ void ControlHelper::initialize( sal_Int16 nTemplateId )
         case FILESAVE_AUTOEXTENSION:
             m_bToggleVisibility[AUTOEXTENSION] = true;
             break;
+        case FILEOPEN_PREVIEW:
+            m_bToggleVisibility[PREVIEW] = true;
+            break;
     }
 
     createControls();

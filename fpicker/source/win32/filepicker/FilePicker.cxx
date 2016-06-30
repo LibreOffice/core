@@ -562,6 +562,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
         break;
 
     case FILEOPEN_LINK_PREVIEW:
+    case FILEOPEN_PREVIEW: //FIXME: FILEOPEN_PREVIEW needs an own template, no idea how to create one
         winResTemplateId = TMPL2000_FILEOPEN_LINK_PREVIEW_BOX_SIMPLE_ID;
         break;
 

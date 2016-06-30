@@ -204,7 +204,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 
         default:
             throw uno::RuntimeException(
-                      "The dialog returned with an unknown result!", 
+                      "The dialog returned with an unknown result!",
                       static_cast<XFilePicker*>( static_cast<XFilePicker3*>( this ) ));
             break;
     }
@@ -288,7 +288,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles() thro
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
     uno::Sequence< rtl::OUString > aSelectedFiles(nFiles);
-    
+
     for(long nIndex = 0; nIndex < nFiles; nIndex += 1)
     {
         NSURL *url = [files objectAtIndex:nIndex];
@@ -482,6 +482,9 @@ throw( uno::Exception, uno::RuntimeException )
             break;
         case FILESAVE_AUTOEXTENSION:
             m_nDialogType = NAVIGATIONSERVICES_SAVE;
+            break;
+        case FILEOPEN_PREVIEW:
+            m_nDialogType = NAVIGATIONSERVICES_OPEN;
             break;
         default:
             throw lang::IllegalArgumentException("Unknown template",
