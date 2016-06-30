@@ -524,6 +524,7 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
     switch (nTemplate)
     {
         case css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE :
+        case css::ui::dialogs::TemplateDescription::FILEOPEN_PREVIEW :
         case css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE :
             aGUID = CLIENTID_FILEDIALOG_SIMPLE;
             break;

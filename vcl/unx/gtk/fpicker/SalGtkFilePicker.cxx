@@ -1681,6 +1681,12 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
             OSL_TRACE( "7all true" );
             // TODO
                 break;
+        case FILEOPEN_PREVIEW:
+            eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
+            first_button_text = GTK_STOCK_OPEN;
+            mbToggleVisibility[PREVIEW] = true;
+            // TODO
+                break;
         default:
                 throw lang::IllegalArgumentException(
                 OUString( "Unknown template" ),

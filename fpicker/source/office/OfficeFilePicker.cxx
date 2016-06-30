@@ -277,6 +277,10 @@ PickerFlags SvtFilePicker::getPickerFlags()
     {
         nBits = PickerFlags::Open | PickerFlags::InsertAsLink | PickerFlags::ShowPreview;
     }
+    else if ( m_nServiceType == TemplateDescription::FILEOPEN_PREVIEW )
+    {
+        nBits = PickerFlags::Open | PickerFlags::ShowPreview;
+    }
     if ( m_bMultiSelection && ( nBits & PickerFlags::Open ) )
         nBits |= PickerFlags::MultiSelection;
 

@@ -114,6 +114,15 @@ published constants TemplateDescription
     */
     const short FILESAVE_AUTOEXTENSION                         = 10;
 
+    /** A FileOpen dialog with additional controls.
+        <ul>
+            <li>A checkbox "Show Preview"</li>
+            <li>A window for displaying a file preview</li>
+        </ul>
+
+        @since LibreOffice 5.3
+    */
+    const short FILEOPEN_PREVIEW                               = 11;
 };
 
 
