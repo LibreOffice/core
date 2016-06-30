@@ -82,7 +82,7 @@ protected:
 };
 
 //This test gives errors due to ATL
-#if HAVE_FEATURE_ATL
+#if HAVE_FEATURE_ATL || !defined(_WIN32)
 DECLARE_OOXMLEXPORT_TEST(testfdo81381, "fdo81381.docx")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))

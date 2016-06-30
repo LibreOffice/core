@@ -149,7 +149,7 @@ public:
     void testFdo90607();
     void testTdf91378();
 //This test gives errors due to ATL
-#if HAVE_FEATURE_ATL
+#if HAVE_FEATURE_ATL || !defined(_WIN32)
     void testBnc822341();
 #endif
     void testMathObject();
@@ -194,7 +194,7 @@ public:
     CPPUNIT_TEST(testTransparentBackground);
     CPPUNIT_TEST(testTdf91378);
 //This test gives errors due to ATL
-#if HAVE_FEATURE_ATL
+#if HAVE_FEATURE_ATL || !defined(_WIN32)
     CPPUNIT_TEST(testBnc822341);
 #endif
     CPPUNIT_TEST(testMathObject);
@@ -1135,7 +1135,7 @@ void SdExportTest::testTdf91378()
 }
 
 //This test gives errors due to ATL
-#if HAVE_FEATURE_ATL
+#if HAVE_FEATURE_ATL || !defined(_WIN32)
 void SdExportTest::testBnc822341()
 {
     // Check import / export of embedded text document
