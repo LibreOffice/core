@@ -130,38 +130,43 @@ static sal_uInt16 GetMouseModCode( guint state )
 static sal_uInt16 GetKeyCode( guint keyval )
 {
     sal_uInt16 nCode = 0;
-    if( keyval >= GDK_0 && keyval <= GDK_9 )
-        nCode = KEY_0 + (keyval-GDK_0);
-    else if( keyval >= GDK_KP_0 && keyval <= GDK_KP_9 )
-        nCode = KEY_0 + (keyval-GDK_KP_0);
-    else if( keyval >= GDK_A && keyval <= GDK_Z )
-        nCode = KEY_A + (keyval-GDK_A );
-    else if( keyval >= GDK_a && keyval <= GDK_z )
-        nCode = KEY_A + (keyval-GDK_a );
-    else if( keyval >= GDK_F1 && keyval <= GDK_F26 )
+    if( keyval >= GDK_KEY_0 && keyval <= GDK_KEY_9 )
+        nCode = KEY_0 + (keyval-GDK_KEY_0);
+    else if( keyval >= GDK_KEY_KP_0 && keyval <= GDK_KEY_KP_9 )
+        nCode = KEY_0 + (keyval-GDK_KEY_KP_0);
+    else if( keyval >= GDK_KEY_A && keyval <= GDK_KEY_Z )
+        nCode = KEY_A + (keyval-GDK_KEY_A );
+    else if( keyval >= GDK_KEY_a && keyval <= GDK_KEY_z )
+        nCode = KEY_A + (keyval-GDK_KEY_a );
+    else if( keyval >= GDK_KEY_F1 && keyval <= GDK_KEY_F26 )
+      // KEY_F26 is the last function key known to keycodes.hxx
     {
         if( GetGtkSalData()->GetGtkDisplay()->IsNumLockFromXS() )
         {
-            nCode = KEY_F1 + (keyval-GDK_F1);
+            nCode = KEY_F1 + (keyval-GDK_KEY_F1);
         }
         else
         {
             switch( keyval )
             {
                 // - - - - - Sun keyboard, see vcl/unx/source/app/saldisp.cxx
-                case GDK_L2:
+                // althopugh GDK_KEY_F1 ... GDK_KEY_L10 are known to
+                // gdk/gdkkeysyms.h, they are unlikely to be generated
+                // except possibly by Solaris systems
+                // this whole section needs review
+                case GDK_KEY_L2:
                     if( GetGtkSalData()->GetGtkDisplay()->GetServerVendor() == vendor_sun )
                         nCode = KEY_REPEAT;
                     else
                         nCode = KEY_F12;
                     break;
-                case GDK_L3:            nCode = KEY_PROPERTIES; break;
-                case GDK_L4:            nCode = KEY_UNDO;       break;
-                case GDK_L6:            nCode = KEY_COPY;       break; // KEY_F16
-                case GDK_L8:            nCode = KEY_PASTE;      break; // KEY_F18
-                case GDK_L10:           nCode = KEY_CUT;        break; // KEY_F20
+                case GDK_KEY_L3:            nCode = KEY_PROPERTIES; break;
+                case GDK_KEY_L4:            nCode = KEY_UNDO;       break;
+                case GDK_KEY_L6:            nCode = KEY_COPY;       break; // KEY_F16
+                case GDK_KEY_L8:            nCode = KEY_PASTE;      break; // KEY_F18
+                case GDK_KEY_L10:           nCode = KEY_CUT;        break; // KEY_F20
                 default:
-                    nCode = KEY_F1 + (keyval-GDK_F1);           break;
+                    nCode = KEY_F1 + (keyval-GDK_KEY_F1);           break;
             }
         }
     }
@@ -169,68 +174,74 @@ static sal_uInt16 GetKeyCode( guint keyval )
     {
         switch( keyval )
         {
-            case GDK_KP_Down:
-            case GDK_Down:          nCode = KEY_DOWN;       break;
-            case GDK_KP_Up:
-            case GDK_Up:            nCode = KEY_UP;         break;
-            case GDK_KP_Left:
-            case GDK_Left:          nCode = KEY_LEFT;       break;
-            case GDK_KP_Right:
-            case GDK_Right:         nCode = KEY_RIGHT;      break;
-            case GDK_KP_Begin:
-            case GDK_KP_Home:
-            case GDK_Begin:
-            case GDK_Home:          nCode = KEY_HOME;       break;
-            case GDK_KP_End:
-            case GDK_End:           nCode = KEY_END;        break;
-            case GDK_KP_Page_Up:
-            case GDK_Page_Up:       nCode = KEY_PAGEUP;     break;
-            case GDK_KP_Page_Down:
-            case GDK_Page_Down:     nCode = KEY_PAGEDOWN;   break;
-            case GDK_KP_Enter:
-            case GDK_Return:        nCode = KEY_RETURN;     break;
-            case GDK_Escape:        nCode = KEY_ESCAPE;     break;
-            case GDK_ISO_Left_Tab:
-            case GDK_KP_Tab:
-            case GDK_Tab:           nCode = KEY_TAB;        break;
-            case GDK_BackSpace:     nCode = KEY_BACKSPACE;  break;
-            case GDK_KP_Space:
-            case GDK_space:         nCode = KEY_SPACE;      break;
-            case GDK_KP_Insert:
-            case GDK_Insert:        nCode = KEY_INSERT;     break;
-            case GDK_KP_Delete:
-            case GDK_Delete:        nCode = KEY_DELETE;     break;
-            case GDK_plus:
-            case GDK_KP_Add:        nCode = KEY_ADD;        break;
-            case GDK_minus:
-            case GDK_KP_Subtract:   nCode = KEY_SUBTRACT;   break;
-            case GDK_asterisk:
-            case GDK_KP_Multiply:   nCode = KEY_MULTIPLY;   break;
-            case GDK_slash:
-            case GDK_KP_Divide:     nCode = KEY_DIVIDE;     break;
-            case GDK_period:        nCode = KEY_POINT;      break;
-            case GDK_decimalpoint:  nCode = KEY_POINT;      break;
-            case GDK_comma:         nCode = KEY_COMMA;      break;
-            case GDK_less:          nCode = KEY_LESS;       break;
-            case GDK_greater:       nCode = KEY_GREATER;    break;
-            case GDK_KP_Equal:
-            case GDK_equal:         nCode = KEY_EQUAL;      break;
-            case GDK_Find:          nCode = KEY_FIND;       break;
-            case GDK_Menu:          nCode = KEY_CONTEXTMENU;break;
-            case GDK_Help:          nCode = KEY_HELP;       break;
-            case GDK_Undo:          nCode = KEY_UNDO;       break;
-            case GDK_Redo:          nCode = KEY_REPEAT;     break;
-            case GDK_KP_Decimal:
-            case GDK_KP_Separator:  nCode = KEY_DECIMAL;    break;
-            case GDK_asciitilde:    nCode = KEY_TILDE;      break;
-            case GDK_leftsinglequotemark:
-            case GDK_quoteleft: nCode = KEY_QUOTELEFT;      break;
-            case GDK_bracketleft:  nCode = KEY_BRACKETLEFT;  break;
-            case GDK_bracketright: nCode = KEY_BRACKETRIGHT; break;
-            case GDK_semicolon:    nCode = KEY_SEMICOLON;   break;
-            case GDK_quoteright:   nCode = KEY_QUOTERIGHT;  break;
+            case GDK_KEY_KP_Down:
+            case GDK_KEY_Down:          nCode = KEY_DOWN;       break;
+            case GDK_KEY_KP_Up:
+            case GDK_KEY_Up:            nCode = KEY_UP;         break;
+            case GDK_KEY_KP_Left:
+            case GDK_KEY_Left:          nCode = KEY_LEFT;       break;
+            case GDK_KEY_KP_Right:
+            case GDK_KEY_Right:         nCode = KEY_RIGHT;      break;
+            case GDK_KEY_KP_Begin:
+            case GDK_KEY_KP_Home:
+            case GDK_KEY_Begin:
+            case GDK_KEY_Home:          nCode = KEY_HOME;       break;
+            case GDK_KEY_KP_End:
+            case GDK_KEY_End:           nCode = KEY_END;        break;
+            case GDK_KEY_KP_Page_Up:
+            case GDK_KEY_Page_Up:       nCode = KEY_PAGEUP;     break;
+            case GDK_KEY_KP_Page_Down:
+            case GDK_KEY_Page_Down:     nCode = KEY_PAGEDOWN;   break;
+            case GDK_KEY_KP_Enter:
+            case GDK_KEY_Return:        nCode = KEY_RETURN;     break;
+            case GDK_KEY_Escape:        nCode = KEY_ESCAPE;     break;
+            case GDK_KEY_ISO_Left_Tab:
+            case GDK_KEY_KP_Tab:
+            case GDK_KEY_Tab:           nCode = KEY_TAB;        break;
+            case GDK_KEY_BackSpace:     nCode = KEY_BACKSPACE;  break;
+            case GDK_KEY_KP_Space:
+            case GDK_KEY_space:         nCode = KEY_SPACE;      break;
+            case GDK_KEY_KP_Insert:
+            case GDK_KEY_Insert:        nCode = KEY_INSERT;     break;
+            case GDK_KEY_KP_Delete:
+            case GDK_KEY_Delete:        nCode = KEY_DELETE;     break;
+            case GDK_KEY_plus:
+            case GDK_KEY_KP_Add:        nCode = KEY_ADD;        break;
+            case GDK_KEY_minus:
+            case GDK_KEY_KP_Subtract:   nCode = KEY_SUBTRACT;   break;
+            case GDK_KEY_asterisk:
+            case GDK_KEY_KP_Multiply:   nCode = KEY_MULTIPLY;   break;
+            case GDK_KEY_slash:
+            case GDK_KEY_KP_Divide:     nCode = KEY_DIVIDE;     break;
+            case GDK_KEY_period:        nCode = KEY_POINT;      break;
+            case GDK_KEY_decimalpoint:  nCode = KEY_POINT;      break;
+            case GDK_KEY_comma:         nCode = KEY_COMMA;      break;
+            case GDK_KEY_less:          nCode = KEY_LESS;       break;
+            case GDK_KEY_greater:       nCode = KEY_GREATER;    break;
+            case GDK_KEY_KP_Equal:
+            case GDK_KEY_equal:         nCode = KEY_EQUAL;      break;
+            case GDK_KEY_Find:          nCode = KEY_FIND;       break;
+            case GDK_KEY_Menu:          nCode = KEY_CONTEXTMENU;break;
+            case GDK_KEY_Help:          nCode = KEY_HELP;       break;
+            case GDK_KEY_Undo:          nCode = KEY_UNDO;       break;
+            case GDK_KEY_Redo:          nCode = KEY_REPEAT;     break;
+            //   GDK_KEY_Cancel occurs on Sun keyboards;
+            //   translating to KEY_ESCAPE is a possible compromise
+            case GDK_KEY_Cancel:        nCode = KEY_ESCAPE;     break;
+            //   but if would be far better to invent a new KeyCode and then
+         // case GDK_KEY_Cancel:        nCode = KEY_CANCEL;     break;
+            case GDK_KEY_KP_Decimal:
+            case GDK_KEY_KP_Separator:  nCode = KEY_DECIMAL;    break;
+            case GDK_KEY_asciitilde:    nCode = KEY_TILDE;      break;
+            case GDK_KEY_leftsinglequotemark:
+            case GDK_KEY_quoteleft:    nCode = KEY_QUOTELEFT;    break;
+            case GDK_KEY_bracketleft:  nCode = KEY_BRACKETLEFT;  break;
+            case GDK_KEY_bracketright: nCode = KEY_BRACKETRIGHT; break;
+            case GDK_KEY_semicolon:    nCode = KEY_SEMICOLON;    break;
+            case GDK_KEY_quoteright:   nCode = KEY_QUOTERIGHT;   break;
             // some special cases, also see saldisp.cxx
             // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
+            // These can be found in ap_keysym.h
             case 0x1000FF02: // apXK_Copy
                 nCode = KEY_COPY;
                 break;
@@ -245,10 +256,12 @@ static sal_uInt16 GetKeyCode( guint keyval )
                 break;
             // Exit, Save
             // - - - - - - - - - - - - - - D E C - - - - - - - - - - - - - 0x1000
+            // These can be found in DECkeysym.h
             case 0x1000FF00:
                 nCode = KEY_DELETE;
                 break;
             // - - - - - - - - - - - - - -  H P  - - - - - - - - - - - - - 0x1000
+            // These can be found in HPkeysym.h
             case 0x1000FF73: // hpXK_DeleteChar
                 nCode = KEY_DELETE;
                 break;
@@ -258,6 +271,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
                 break;
             // - - - - - - - - - - - - - - I B M - - - - - - - - - - - - -
             // - - - - - - - - - - - - - - O S F - - - - - - - - - - - - - 0x1004
+            // These also can be found in HPkeysym.h
             case 0x1004FF02: // osfXK_Copy
                 nCode = KEY_COPY;
                 break;
@@ -281,6 +295,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
             // - - - - - - - - - - - - - - S G I - - - - - - - - - - - - - 0x1007
             // - - - - - - - - - - - - - - S N I - - - - - - - - - - - - -
             // - - - - - - - - - - - - - - S U N - - - - - - - - - - - - - 0x1005
+            // These can be found in Sunkeysym.h
             case 0x1005FF10: // SunXK_F36
                 nCode = KEY_F11;
                 break;
@@ -305,6 +320,15 @@ static sal_uInt16 GetKeyCode( guint keyval )
             case 0x1005FF75: // SunXK_Cut
                 nCode = KEY_CUT;
                 break;
+            // - - - - - - - - - - - - - X F 8 6 - - - - - - - - - - - - - 0x1008
+            // These can be found in XF86keysym.h
+            // but more importantly they are also available GTK/Gdk version 3
+            // and hence are already provided in gdk/gdkkeysyms.h, and hence
+            // in gdk/gdk.h
+            case GDK_KEY_Copy:          nCode = KEY_COPY;  break; // 0x1008ff57
+            case GDK_KEY_Cut:           nCode = KEY_CUT;   break; // 0x1008ff58
+            case GDK_KEY_Open:          nCode = KEY_OPEN;  break; // 0x1008ff6b
+            case GDK_KEY_Paste:         nCode = KEY_PASTE; break; // 0x1008ff6d
         }
     }
 
