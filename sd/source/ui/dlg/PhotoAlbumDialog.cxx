@@ -501,7 +501,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, FileHdl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
+        css::ui::dialogs::TemplateDescription::FILEOPEN_PREVIEW,
         FileDialogFlags::Graphic | FileDialogFlags::MultiSelection
     );
     // Read configuration
