@@ -1021,16 +1021,63 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     {
         aBuffer.append(OUString::boolean(aEvent.IsEnabled));
     }
-    else if (aEvent.FeatureURL.Path == "AssignLayout")
+    else if (aEvent.FeatureURL.Path == "AssignLayout" ||
+             aEvent.FeatureURL.Path == "StatusSelectionMode" ||
+             aEvent.FeatureURL.Path == "Signature")
     {
-        sal_Int32 nLayout = 0;
-        aEvent.State >>= nLayout;
-        aBuffer.append(nLayout);
+        sal_Int32 aInt32;
+        aBuffer.append(aEvent.IsEnabled ?
+                       (aEvent.State >>= aInt32) ?
+                       OUString::number(aInt32) :
+                       OUString() :
+                       OUString());
+    }
+    else if (aEvent.FeatureURL.Path == "StatusDocPos" ||
+             aEvent.FeatureURL.Path == "RowColSelCount" ||
+             aEvent.FeatureURL.Path == "StatusPageStyle" ||
+             aEvent.FeatureURL.Path == "StateTableCell")
+
+    {
+        OUString aString;
+        aBuffer.append(aEvent.IsEnabled ?
+                       (aEvent.State >>= aString) ?
+                       aString :
+                       OUString() :
+                       OUString());
+    }
+    else if (aEvent.FeatureURL.Path == "InsertMode")
+    {
+        sal_Bool aBool;
+        aBuffer.append(aEvent.IsEnabled ?
+                       (aEvent.State >>= aBool) ?
+                       OUString::boolean(aBool) :
+                       OUString() :
+                       OUString());
+    }
+    else if (aEvent.FeatureURL.Path == "Position")
+    {
+        css::awt::Point aPoint;
+        aBuffer.append(aEvent.IsEnabled ?
+                       (aEvent.State >>= aPoint) ?
+                       OUString::number(aPoint.X) + " / " + OUString::number(aPoint.Y) :
+                       OUString() :
+                       OUString());
+    }
+    else if (aEvent.FeatureURL.Path == "StatusBarFunc" ||
+             aEvent.FeatureURL.Path == "Size")
+    {
+        css::awt::Size aSize;
+        aBuffer.append(aEvent.IsEnabled ?
+                       (aEvent.State >>= aSize) ?
+                       OUString::number(aSize.Width) + " x " + OUString::number(aSize.Height) :
+                       OUString() :
+                       OUString());
     }
     else
     {
         return;
     }
+
     OUString payload = aBuffer.makeStringAndClear();
     if (const SfxViewShell* pViewShell = pViewFrame->GetViewShell())
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
