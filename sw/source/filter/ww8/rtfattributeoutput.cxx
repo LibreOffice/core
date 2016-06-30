@@ -1961,8 +1961,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
         {
             if (const SdrUnoObj* pFormObj = dynamic_cast< const SdrUnoObj*>(pObject))
             {
-                uno::Reference< awt::XControlModel > xControlModel =
-                    pFormObj->GetUnoControlModel();
+                const uno::Reference<awt::XControlModel>& xControlModel = pFormObj->GetUnoControlModel();
                 uno::Reference< lang::XServiceInfo > xInfo(xControlModel, uno::UNO_QUERY);
                 if (xInfo.is())
                 {
