@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <i18nutil/unicode.hxx>
 #include <tools/debug.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -66,6 +67,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/zoomitem.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/pathoptions.hxx>
@@ -1021,16 +1023,37 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     {
         aBuffer.append(OUString::boolean(aEvent.IsEnabled));
     }
-    else if (aEvent.FeatureURL.Path == "AssignLayout")
+    else if (aEvent.FeatureURL.Path == "AssignLayout" ||
+             aEvent.FeatureURL.Path == "StatusSelectionMode" ||
+             aEvent.FeatureURL.Path == "Signature")
     {
-        sal_Int32 nLayout = 0;
-        aEvent.State >>= nLayout;
-        aBuffer.append(nLayout);
+        aBuffer.append(aEvent.IsEnabled ? OUString::number(aEvent.State.get<sal_Int32>()) : OUString());
+    }
+    else if (aEvent.FeatureURL.Path == "StatusDocPos" ||
+             aEvent.FeatureURL.Path == "RowColSelCount" ||
+             aEvent.FeatureURL.Path == "StatusPageStyle")
+    {
+        aBuffer.append(aEvent.IsEnabled ? aEvent.State.get<OUString>() : OUString());
+    }
+    else if (aEvent.FeatureURL.Path == "InsertMode")
+    {
+        aBuffer.append(aEvent.IsEnabled ? OUString::boolean(aEvent.State.get<sal_Bool>()) : OUString());
+    }
+    else if (aEvent.FeatureURL.Path == "Zoom")
+    {
+        SvxZoomItem aZoom;
+
+        aBuffer.append(aEvent.IsEnabled ?
+                       aZoom.PutValue(aEvent.State, 0) ?
+                       OUString(unicode::formatPercent(aZoom.GetValue(), Application::GetSettings().GetUILanguageTag())) :
+                       OUString() :
+                       OUString());
     }
     else
     {
         return;
     }
+
     OUString payload = aBuffer.makeStringAndClear();
     if (const SfxViewShell* pViewShell = pViewFrame->GetViewShell())
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
