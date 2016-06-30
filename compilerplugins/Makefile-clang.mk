@@ -25,8 +25,7 @@ CLANGCXXFLAGS=-O2 -Wall -Wextra -Wundef -g
 # Clang headers require these.
 CLANGDEFS=-D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-rtti
 # All include locations needed.
-CLANGINCLUDES=$(if $(filter /usr,$(CLANGDIR)),,-isystem $(CLANGDIR)/include) \
-			  -isystem $(CLANGDIR)/tools/clang/include
+CLANGINCLUDES=$(if $(filter /usr,$(CLANGDIR)),,-isystem $(CLANGDIR)/include)
 
 # Clang/LLVM libraries are intentionally not linked in, they are usually built as static libraries, which means the resulting
 # plugin would be big (even though the clang binary already includes it all) and it'd be necessary to explicitly specify
