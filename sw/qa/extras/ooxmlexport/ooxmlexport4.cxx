@@ -490,7 +490,7 @@ DECLARE_OOXMLEXPORT_TEST(testAbi11739, "abi11739.docx")
 }
 
 //This test gives error due to ATL
-#if HAVE_FEATURE_ATL
+#if HAVE_FEATURE_ATL || !defined(_WIN32)
 DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
 {
     // check there are two objects and they are FrameShapes
@@ -558,7 +558,7 @@ DECLARE_OOXMLEXPORT_TEST(testPageBreak,"fdo74566.docx")
 }
 
 //This test gives errors due to ATL
-#if HAVE_FEATURE_ATL
+#if HAVE_FEATURE_ATL || !defined(_WIN32)
 DECLARE_OOXMLEXPORT_TEST(testOleObject, "test_ole_object.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
@@ -737,7 +737,7 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx"
 }
 
 //This features gives error due to ATL
-#if HAVE_FEATURE_ATL
+#if HAVE_FEATURE_ATL || !defined(_WIN32)
 DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
 {
     // fdo#76015 : Document contains oleobject in header xml.
@@ -917,7 +917,7 @@ DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
 }
 
 //This feature gives error due to ATL
-#if HAVE_FEATURE_ATL
+#if HAVE_FEATURE_ATL || !defined(_WIN32)
 DECLARE_OOXMLEXPORT_TEST(testEmbeddedExcelChart, "EmbeddedExcelChart.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
