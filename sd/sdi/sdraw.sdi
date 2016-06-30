@@ -4720,7 +4720,7 @@ SfxVoidItem PhotoAlbumDialog SID_PHOTOALBUM
     RecordAbsolute = FALSE,
     RecordPerItem;
 
-    AccelConfig = FALSE,
+    AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
