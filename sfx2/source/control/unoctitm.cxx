@@ -942,7 +942,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
 
     OUStringBuffer aBuffer;
     aBuffer.append(aEvent.FeatureURL.Complete);
-    aBuffer.append("=");
+    aBuffer.append(static_cast<sal_Unicode>('='));
 
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "CenterPara" ||
@@ -1021,16 +1021,62 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     {
         aBuffer.append(OUString::boolean(aEvent.IsEnabled));
     }
-    else if (aEvent.FeatureURL.Path == "AssignLayout")
+    else if (aEvent.FeatureURL.Path == "AssignLayout" ||
+             aEvent.FeatureURL.Path == "StatusSelectionMode" ||
+             aEvent.FeatureURL.Path == "Signature")
     {
-        sal_Int32 nLayout = 0;
-        aEvent.State >>= nLayout;
-        aBuffer.append(nLayout);
+        sal_Int32 aInt32;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aInt32))
+        {
+            aBuffer.append(OUString::number(aInt32));
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "StatusDocPos" ||
+             aEvent.FeatureURL.Path == "RowColSelCount" ||
+             aEvent.FeatureURL.Path == "StatusPageStyle" ||
+             aEvent.FeatureURL.Path == "StateTableCell")
+    {
+        OUString aString;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aString))
+        {
+            aBuffer.append(aString);
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "InsertMode")
+    {
+        sal_Bool aBool;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aBool))
+        {
+            aBuffer.append(OUString::boolean(aBool));
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "Position")
+    {
+        css::awt::Point aPoint;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aPoint))
+        {
+            aBuffer.append(OUString::number(aPoint.X) + OUString(" / ") + OUString::number(aPoint.Y));
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "StatusBarFunc" ||
+             aEvent.FeatureURL.Path == "Size")
+    {
+        css::awt::Size aSize;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aSize))
+        {
+            aBuffer.append(OUString::number(aSize.Width) + OUString(" x ") + OUString::number(aSize.Height));
+        }
     }
     else
     {
         return;
     }
+
     OUString payload = aBuffer.makeStringAndClear();
     if (const SfxViewShell* pViewShell = pViewFrame->GetViewShell())
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
