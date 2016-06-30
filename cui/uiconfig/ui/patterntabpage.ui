@@ -13,7 +13,7 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">res/sc05502.png</property>
   </object>
-  <object class="GtkBox" id="BitmapTabPage">
+  <object class="GtkBox" id="PatternTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
@@ -239,7 +239,6 @@
                       <object class="GtkGrid" id="grid4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
                         <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkButton" id="BTN_LOAD">
@@ -278,21 +277,6 @@
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="FT_BITMAPS_HIDDEN">
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Bitmap</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
                       <packing>

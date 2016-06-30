@@ -52,7 +52,7 @@ using namespace com::sun::star;
 SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& rInAttrs) :
 
     SvxTabPage          ( pParent,
-                          "BitmapTabPage",
+                          "PatternTabPage",
                           "cui/ui/patterntabpage.ui",
                           rInAttrs ),
     m_rOutAttrs           ( rInAttrs ),
