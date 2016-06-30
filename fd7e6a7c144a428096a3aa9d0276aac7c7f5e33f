@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_9bc8dc76",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-06-30T15:55:26Z",
+      "side": 1,
+      "message": "I had to add svDouble separately to \u0027catch\u0027 the empty argument, which is allowed by Excel.\nWhen using GetStringOrDouble() I could not detect whether the argument was empty.\n\n**I now see that I could have used ScInterpreter::IsMissing before the switch statement, or possibly getRawStackType() in the switch statement (and not case svDouble). I\u0027ll wait with changing this till you\u0027ve commented on the patch set.**",
+      "revId": "fd7e6a7c144a428096a3aa9d0276aac7c7f5e33f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
