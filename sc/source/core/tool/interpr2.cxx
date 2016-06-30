@@ -126,21 +126,21 @@ void ScInterpreter::ScGetActTime()
 void ScInterpreter::ScGetYear()
 {
     Date aDate = *(pFormatter->GetNullDate());
-    aDate += (long) ::rtl::math::approxFloor(GetDouble());
+    aDate += (long) GetInt32();
     PushDouble( (double) aDate.GetYear() );
 }
 
 void ScInterpreter::ScGetMonth()
 {
     Date aDate = *(pFormatter->GetNullDate());
-    aDate += (long) ::rtl::math::approxFloor(GetDouble());
+    aDate += (long) GetInt32();
     PushDouble( (double) aDate.GetMonth() );
 }
 
 void ScInterpreter::ScGetDay()
 {
     Date aDate = *(pFormatter->GetNullDate());
-    aDate += (long)::rtl::math::approxFloor(GetDouble());
+    aDate += (long) GetInt32();
     PushDouble((double) aDate.GetDay());
 }
 
@@ -192,19 +192,12 @@ void ScInterpreter::ScGetDayOfWeek()
     {
         sal_Int16 nFlag;
         if (nParamCount == 2)
-        {
             nFlag = GetInt16();
-            if (nGlobalError)
-            {
-                PushError( nGlobalError);
-                return;
-            }
-        }
         else
             nFlag = 1;
 
         Date aDate = *(pFormatter->GetNullDate());
-        aDate += (long)::rtl::math::approxFloor(GetDouble());
+        aDate += (long) GetInt32();
         int nVal = (int) aDate.GetDayOfWeek();  // MONDAY = 0
         switch (nFlag)
         {
@@ -243,10 +236,10 @@ void ScInterpreter::ScWeeknumOOo()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        short nFlag = (short) ::rtl::math::approxFloor(GetDouble());
+        sal_Int16 nFlag = GetInt16();
 
         Date aDate = *(pFormatter->GetNullDate());
-        aDate += (long)::rtl::math::approxFloor(GetDouble());
+        aDate += (long) GetInt32();
         PushInt( (int) aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY ));
     }
 }
@@ -258,21 +251,12 @@ void ScInterpreter::ScGetWeekOfYear()
     {
         sal_Int16 nFlag;
         if (nParamCount == 1)
-        {
             nFlag = 1;
-        }
         else
-        {
             nFlag = GetInt16();
-            if (nGlobalError)
-            {
-                PushError( nGlobalError);
-                return;
-            }
-        }
 
         Date aDate = *(pFormatter->GetNullDate());
-        aDate += (long)::rtl::math::approxFloor(GetDouble());
+        aDate += (long) GetInt32();
 
         sal_Int32 nMinimumNumberOfDaysInWeek;
         DayOfWeek eFirstDayOfWeek;
@@ -315,7 +299,7 @@ void ScInterpreter::ScGetIsoWeekOfYear()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         Date aDate = *(pFormatter->GetNullDate());
-        aDate += (long)::rtl::math::approxFloor(GetDouble());
+        aDate += (long) GetInt32();
         PushInt( (int) aDate.GetWeekOfYear() );
     }
 }
@@ -507,8 +491,15 @@ void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
             PushError( nErr );
         else
         {
-            sal_uInt32 nDate2 = ( sal_uInt32 )::rtl::math::approxFloor( GetDouble() ) + nNullDate;
-            sal_uInt32 nDate1 = ( sal_uInt32 )::rtl::math::approxFloor( GetDouble() ) + nNullDate;
+            sal_uInt32 nDate2 = GetUInt32();
+            sal_uInt32 nDate1 = GetUInt32();
+            if (nGlobalError || (nDate1 > SAL_MAX_UINT32 - nNullDate) || nDate2 > (SAL_MAX_UINT32 - nNullDate))
+            {
+                PushIllegalArgument();
+                return;
+            }
+            nDate2 += nNullDate;
+            nDate1 += nNullDate;
 
             sal_Int32 nCnt = 0;
             size_t nRef = 0;
@@ -552,8 +543,14 @@ void ScInterpreter::ScWorkday_MS()
             PushError( nErr );
         else
         {
-            sal_Int32 nDays = ::rtl::math::approxFloor( GetDouble() );
-            sal_uInt32 nDate = ( sal_uInt32 )::rtl::math::approxFloor( GetDouble() ) + nNullDate;
+            sal_Int32 nDays = GetInt32();
+            sal_uInt32 nDate = GetUInt32();
+            if (nGlobalError || (nDate > SAL_MAX_UINT32 - nNullDate))
+            {
+                PushIllegalArgument();
+                return;
+            }
+            nDate += nNullDate;
 
             if ( !nDays )
                 PushDouble( ( double ) ( nDate - nNullDate ) );
@@ -601,10 +598,10 @@ void ScInterpreter::ScGetDate()
     nFuncFmtType = css::util::NumberFormat::DATE;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        sal_Int16 nDay   = (sal_Int16) ::rtl::math::approxFloor(GetDouble());
-        sal_Int16 nMonth = (sal_Int16) ::rtl::math::approxFloor(GetDouble());
-        sal_Int16 nYear  = (sal_Int16) ::rtl::math::approxFloor(GetDouble());
-        if (nYear < 0)
+        sal_Int16 nDay   = GetInt16();
+        sal_Int16 nMonth = GetInt16();
+        sal_Int16 nYear  = GetInt16();
+        if (nGlobalError || nYear < 0)
             PushIllegalArgument();
         else
         {
@@ -931,11 +928,11 @@ void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
             fVal = ::rtl::math::round( GetDouble(), 0, eMode );
         else
         {
-            sal_Int32 nDec = (sal_Int32) ::rtl::math::approxFloor(GetDouble());
-            if( nDec < -20 || nDec > 20 )
+            sal_Int16 nDec = GetInt16();
+            if ( nGlobalError || nDec < -20 || nDec > 20 )
                 PushIllegalArgument();
             else
-                fVal = ::rtl::math::round( GetDouble(), (short)nDec, eMode );
+                fVal = ::rtl::math::round( GetDouble(), nDec, eMode );
         }
         PushDouble(fVal);
     }
@@ -2496,7 +2493,15 @@ void ScInterpreter::ScDde()
     {
         sal_uInt8 nMode = SC_DDE_DEFAULT;
         if (nParamCount == 4)
-            nMode = (sal_uInt8) ::rtl::math::approxFloor(GetDouble());
+        {
+            sal_uInt32 nTmp = GetUInt32();
+            if (nGlobalError || nTmp > SAL_MAX_UINT8)
+            {
+                PushIllegalArgument();
+                return;
+            }
+            nMode = (sal_uInt8) nTmp;
+        }
         OUString aItem  = GetString().getString();
         OUString aTopic = GetString().getString();
         OUString aAppl  = GetString().getString();
