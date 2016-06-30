@@ -81,12 +81,12 @@ std::string convertLazy(rtl::OUString const & s16) {
         s8.getStr(), static_cast< std::string::size_type >(s8.getLength()));
 }
 
-#if defined TIMETESTS
 //Output how long each test took
 class TimingListener
     : public CppUnit::TestListener
 {
 public:
+    TimingListener() = default;
     TimingListener(const TimingListener&) = delete;
     TimingListener& operator=(const TimingListener&) = delete;
 
@@ -98,14 +98,13 @@ public:
     void endTest( CppUnit::Test *test ) override
     {
         sal_uInt32 nEndTime = osl_getGlobalTimer();
-        std::cout << test->getName() << ": " << nEndTime-m_nStartTime
-            << "ms" << std::endl;
+        std::cout << test->getName() << " finished in: "
+            << nEndTime-m_nStartTime << "ms" << std::endl;
     }
 
 private:
     sal_uInt32 m_nStartTime;
 };
-#endif
 
 #ifdef UNX
 #include <stdlib.h>
@@ -275,10 +274,8 @@ public:
             LogFailuresAsTheyHappen logger;
             result.addListener(&logger);
 
-#ifdef TIMETESTS
             TimingListener timer;
             result.addListener(&timer);
-#endif
 
 #ifdef UNX
             EyecatcherListener eye;
