@@ -66,6 +66,7 @@ private:
     VclPtr<ListBox>    pInsTypeCombo;
     VclPtr<CheckBox>   pASRCheck;
     VclPtr<CheckBox>   pCapCheck;
+    VclPtr<CheckBox>   pInsertAsLinkCheck;
 
     SdDrawDocument* pDoc;
     GraphicFilter* mpGraphicFilter;
