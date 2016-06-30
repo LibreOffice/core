@@ -1018,10 +1018,9 @@ sal_uInt16 GetLineIntersectionPoint(Point &rResult,
 
 
 SmBinDiagonalNode::SmBinDiagonalNode(const SmToken &rNodeToken)
-:   SmStructureNode(NBINDIAGONAL, rNodeToken)
+    : SmStructureNode(NBINDIAGONAL, rNodeToken, 3)
 {
     bAscending = false;
-    SetNumSubNodes(3);
 }
 
 
