@@ -406,14 +406,13 @@ double GetDoubleFromMatrix(const ScMatrixRef& pMat);
 double GetDouble();
 double GetDoubleWithDefault(double nDefault);
 bool IsMissing();
-/// if GetDouble() not within int32 limits sets nGlobalError and returns 0
+/** if GetDouble() not within int32 limits sets nGlobalError and returns SAL_MAX_INT32 */
 sal_Int32 GetInt32();
-/** if GetDoubleWithDefault() not within int32 limits sets nGlobalError and
-    returns nDefault */
+/** if GetDoubleWithDefault() not within int32 limits sets nGlobalError and returns SAL_MAX_INT32 */
 sal_Int32 GetInt32WithDefault( sal_Int32 nDefault );
-/// if GetDouble() not within int16 limits sets nGlobalError and returns 0
+/** if GetDouble() not within int16 limits sets nGlobalError and returns SAL_MAX_INT16 */
 sal_Int16 GetInt16();
-/// if GetDouble() not within uint32 limits sets nGlobalError and returns 0
+/** if GetDouble() not within uint32 limits sets nGlobalError and returns SAL_MAX_UINT32 */
 sal_uInt32 GetUInt32();
 bool GetBool() { return GetDouble() != 0.0; }
 /// returns TRUE if double (or error, check nGlobalError), else FALSE

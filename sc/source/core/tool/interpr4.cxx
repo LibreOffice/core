@@ -2099,7 +2099,7 @@ sal_Int32 ScInterpreter::GetInt32()
     if (fVal < SAL_MIN_INT32 || fVal > SAL_MAX_INT32)
     {
         SetError( errIllegalArgument);
-        return 0;
+        return SAL_MAX_INT32;
     }
     return static_cast<sal_Int32>(fVal);
 }
@@ -2110,7 +2110,7 @@ sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
     if (fVal < SAL_MIN_INT32 || fVal > SAL_MAX_INT32)
     {
         SetError( errIllegalArgument);
-        return nDefault;
+        return SAL_MAX_INT32;
     }
     return static_cast<sal_Int32>(fVal);
 }
@@ -2121,7 +2121,7 @@ sal_Int16 ScInterpreter::GetInt16()
     if (fVal < SAL_MIN_INT16 || fVal > SAL_MAX_INT16)
     {
         SetError( errIllegalArgument);
-        return 0;
+        return SAL_MAX_INT16;
     }
     return static_cast<sal_Int16>(fVal);
 }
@@ -2132,7 +2132,7 @@ sal_uInt32 ScInterpreter::GetUInt32()
     if (fVal < 0.0 || fVal > SAL_MAX_UINT32)
     {
         SetError( errIllegalArgument);
-        return 0;
+        return SAL_MAX_UINT32;
     }
     return static_cast<sal_uInt32>(fVal);
 }
