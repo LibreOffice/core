@@ -842,10 +842,6 @@ static gboolean postDocumentLoad(gpointer pData)
     LOKDocViewPrivate& priv = getPrivate(pLOKDocView);
 
     std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
-    std::stringstream ss;
-    ss << "lok::Document::setView(" << priv->m_nViewId << ")";
-    g_info("%s", ss.str().c_str());
-    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
     priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
