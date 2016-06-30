@@ -51,7 +51,7 @@ size_t sqlTypeLen ( SQLSMALLINT _nType )
     case SQL_C_FLOAT:
         return sizeof(SQLREAL);
     case SQL_C_DOUBLE:
-        OSL_ENSURE(sizeof(SQLDOUBLE) == sizeof(SQLFLOAT), "SQLDOUBLE/SQLFLOAT confusion");
+        static_assert(sizeof(SQLDOUBLE) == sizeof(SQLFLOAT), "SQLDOUBLE/SQLFLOAT confusion");
         return sizeof(SQLDOUBLE);
     case SQL_C_BIT:
         return sizeof(SQLCHAR);
