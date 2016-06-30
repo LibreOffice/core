@@ -62,6 +62,9 @@ STD_FONT_FILELIST(gid_File_Fnt_SourceCode, "fonts_sourcecode.filelist")
 STD_FONT_FILELIST(gid_File_Fnt_Carlito, "fonts_carlito.filelist")
 STD_FONT_FILELIST(gid_File_Fnt_Caladea, "fonts_caladea.filelist")
 
+// Noto Emoji font
+STD_FONT_FILELIST(gid_File_Fnt_NotoEmoji, "fonts_notoemoji.filelist")
+
 #endif
 
 // fontconfig updates to allow proper use of local fonts
