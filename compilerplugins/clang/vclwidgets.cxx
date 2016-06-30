@@ -12,6 +12,7 @@
 
 #include "plugin.hxx"
 #include "compat.hxx"
+#include "check.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 // Final goal: Checker for VCL widget references. Makes sure that VCL Window subclasses are properly referenced counted and dispose()'ed.
@@ -371,6 +372,52 @@ bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl)
     return true;
 }
 
+
+static void findDisposeAndClearStatements(std::set<const FieldDecl*>& aVclPtrFields, const Stmt *pStmt)
+{
+    if (!pStmt)
+        return;
+    if (isa<CompoundStmt>(pStmt)) {
+        const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pStmt);
+        for(const Stmt* pStmt : pCompoundStatement->body()) {
+            findDisposeAndClearStatements(aVclPtrFields, pStmt);
+        }
+        return;
+    }
+    if (isa<ForStmt>(pStmt)) {
+        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<ForStmt>(pStmt)->getBody());
+        return;
+    }
+    if (isa<IfStmt>(pStmt)) {
+        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<IfStmt>(pStmt)->getThen());
+        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<IfStmt>(pStmt)->getElse());
+        return;
+    }
+    if (!isa<CallExpr>(pStmt)) return;
+    const CallExpr *pCallExpr = dyn_cast<CallExpr>(pStmt);
+
+    if (!pCallExpr->getDirectCallee()) return;
+    if (!isa<CXXMethodDecl>(pCallExpr->getDirectCallee())) return;
+    const CXXMethodDecl *pCalleeMethodDecl = dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee());
+    if (pCalleeMethodDecl->getNameAsString() != "disposeAndClear"
+        && pCalleeMethodDecl->getNameAsString() != "clear")
+            return;
+
+    if (!pCallExpr->getCallee()) return;
+
+    if (!isa<MemberExpr>(pCallExpr->getCallee())) return;
+    const MemberExpr *pCalleeMemberExpr = dyn_cast<MemberExpr>(pCallExpr->getCallee());
+
+    if (!pCalleeMemberExpr->getBase()) return;
+    if (!isa<MemberExpr>(pCalleeMemberExpr->getBase())) return;
+    const MemberExpr *pCalleeMemberExprBase = dyn_cast<MemberExpr>(pCalleeMemberExpr->getBase());
+
+    const FieldDecl* xxx = dyn_cast_or_null<FieldDecl>(pCalleeMemberExprBase->getMemberDecl());
+    if (xxx)
+        aVclPtrFields.erase(xxx);
+}
+
+
 bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
 {
     if (ignoreLocation(functionDecl)) {
@@ -398,6 +445,55 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
                   << functionDecl->getSourceRange();
            }
         }
+    }
+
+    // check dispose method to make sure we are actually disposing all of the VclPtr fields
+    // FIXME this is not exhaustive. We should enable shouldVisitTemplateInstantiations and look deeper inside type declarations
+    if (pMethodDecl && pMethodDecl->isInstance() && pMethodDecl->getBody()
+        && pMethodDecl->param_size()==0
+        && pMethodDecl->getNameAsString() == "dispose"
+        && isDerivedFromWindow(pMethodDecl->getParent()) )
+    {
+        std::string methodParent = pMethodDecl->getParent()->getNameAsString();
+        if (methodParent == "VirtualDevice" || methodParent == "Breadcrumb")
+            return true;
+
+        std::set<const FieldDecl*> aVclPtrFields;
+        for(const auto& fieldDecl : pMethodDecl->getParent()->fields()) {
+            auto const type = loplugin::TypeCheck(fieldDecl->getType());
+            if (type.Class("VclPtr").GlobalNamespace()) {
+               aVclPtrFields.insert(fieldDecl);
+            } else if (type.Class("vector").StdNamespace()
+                       || type.Class("map").StdNamespace()
+                       || type.Class("list").StdNamespace()
+                       || type.Class("set").StdNamespace())
+            {
+                const RecordType* recordType = dyn_cast_or_null<RecordType>(fieldDecl->getType()->getUnqualifiedDesugaredType());
+                if (recordType) {
+                    auto d = dyn_cast<ClassTemplateSpecializationDecl>(recordType->getDecl());
+                    if (d && d->getTemplateArgs().size()>0) {
+                        auto const type = loplugin::TypeCheck(d->getTemplateArgs()[0].getAsType());
+                        if (type.Class("VclPtr").GlobalNamespace()) {
+                            aVclPtrFields.insert(fieldDecl);
+                        }
+                    }
+                }
+            }
+        }
+        if (!aVclPtrFields.empty()) {
+            findDisposeAndClearStatements( aVclPtrFields, pMethodDecl->getBody() );
+            if (!aVclPtrFields.empty()) {
+                //pMethodDecl->dump();
+                std::string aMessage = BASE_REF_COUNTED_CLASS " subclass dispose() method does not call disposeAndClear() or clear() on the following field(s): ";
+                for(auto s : aVclPtrFields)
+                    aMessage += ", " + s->getNameAsString();
+                report(
+                    DiagnosticsEngine::Warning,
+                    aMessage,
+                    functionDecl->getLocStart())
+                  << functionDecl->getSourceRange();
+           }
+       }
     }
 
     return true;

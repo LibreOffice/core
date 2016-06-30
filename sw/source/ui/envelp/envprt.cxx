@@ -80,6 +80,7 @@ void SwEnvPrtPage::dispose()
     m_pDownField.clear();
     m_pPrinterInfo.clear();
     m_pPrtSetup.clear();
+    pPrt.clear();
     SfxTabPage::dispose();
 }
 

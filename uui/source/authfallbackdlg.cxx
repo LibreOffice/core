@@ -56,6 +56,7 @@ void AuthFallbackDlg::dispose()
     m_pEDCode.clear();
     m_pBTOk.clear();
     m_pBTCancel.clear();
+    m_pFTGooglePrefixLabel.clear();
     ModalDialog::dispose();
 }
 

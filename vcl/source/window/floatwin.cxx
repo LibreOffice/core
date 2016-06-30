@@ -201,11 +201,7 @@ void FloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 FloatingWindow::~FloatingWindow()
 {
     disposeOnce();
-
-    // Unfortunately the vclwidgets clang plug-in says: "OutputDevice
-    // subclass should have nothing in its destructor but a call to
-    // disposeOnce()."
-    // assert (!mnPostId);
+    assert (!mnPostId);
 }
 
 void FloatingWindow::dispose()
@@ -230,6 +226,7 @@ void FloatingWindow::dispose()
 
     mpNextFloat.clear();
     mpFirstPopupModeWin.clear();
+    mxPrevFocusWin.clear();
     SystemWindow::dispose();
 }
 

@@ -309,6 +309,7 @@ void SwMMResultPrintDialog::dispose()
     m_pToFT.clear();
     m_pToNF.clear();
     m_pOKButton.clear();
+    m_pTempPrinter.clear();
 
     SfxModalDialog::dispose();
 }
@@ -371,6 +372,7 @@ void SwMMResultEmailDialog::dispose()
     m_pToFT.clear();
     m_pToNF.clear();
     m_pOKButton.clear();
+    m_pSendAsPB.clear();
 
     SfxModalDialog::dispose();
 }

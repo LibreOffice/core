@@ -355,6 +355,7 @@ void RemoteFilesDialog::dispose()
     m_pNewFolder.clear();
     m_pIconView_btn.clear();
     m_pListView_btn.clear();
+    m_pAddMenu.clear();
 
     ModalDialog::dispose();
 }

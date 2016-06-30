@@ -311,6 +311,7 @@ void SvxPersonalizationTabPage::dispose()
     m_pExtensionPersonaPreview.clear();
     m_pPersonaList.clear();
     m_pExtensionLabel.clear();
+    m_pAppliedThemeLabel.clear();
     SfxTabPage::dispose();
 }
 

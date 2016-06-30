@@ -249,6 +249,7 @@ void ScImportOptionsDlg::dispose()
 {
     delete pFieldSepTab;
     delete pTextSepTab;
+    m_pEncGrid.clear();
     m_pFieldFrame.clear();
     m_pFtCharset.clear();
     m_pLbCharset.clear();

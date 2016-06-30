@@ -128,6 +128,9 @@ void PlaceEditDialog::dispose()
     m_pBTDelete.clear();
     m_pEDPassword.clear();
     m_pFTPasswordLabel.clear();
+    m_pCBPassword.clear();
+    m_pBTRepoRefresh.clear();
+    m_pTypeGrid.clear();
     ModalDialog::dispose();
 }
 

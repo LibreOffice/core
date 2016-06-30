@@ -570,6 +570,7 @@ void SmFontTypeDialog::dispose()
     m_pFixedFont.clear();
     m_pMenuButton.clear();
     m_pDefaultButton.clear();
+    pFontListDev.clear();
     ModalDialog::dispose();
 }
 
@@ -1576,6 +1577,7 @@ void SmSymbolDialog::dispose()
     m_pSymbolDisplay.clear();
     m_pGetBtn.clear();
     m_pEditBtn.clear();
+    pFontListDev.clear();
     ModalDialog::dispose();
 }
 

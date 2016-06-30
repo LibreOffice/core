@@ -581,6 +581,7 @@ void SwColumnPage::dispose()
     m_pTextDirectionLB.clear();
     m_pPgeExampleWN.clear();
     m_pFrameExampleWN.clear();
+    m_aPercentFieldsMap.clear();
     SfxTabPage::dispose();
 }
 

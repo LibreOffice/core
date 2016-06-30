@@ -622,6 +622,7 @@ void SwStdFontTabPage::dispose()
     m_pIdxBox.clear();
     m_pIndexHeightLB.clear();
     m_pStandardPB.clear();
+    m_pPrt.clear();
     SfxTabPage::dispose();
 }
 

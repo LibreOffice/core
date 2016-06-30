@@ -286,6 +286,8 @@ void SfxTemplateManagerDlg::dispose()
     mpActionBar.clear();
     mpSearchView.clear();
     mpLocalView.clear();
+    mpActionMenu.clear();
+    mpTemplateDefaultMenu.clear();
 
     ModalDialog::dispose();
 }
@@ -1314,6 +1316,8 @@ void SfxTemplateCategoryDialog::dispose()
     mpLBCategory.clear();
     mpNewCategoryEdit.clear();
     mpOKButton.clear();
+    mpSelectLabel.clear();
+    mpCreateLabel.clear();
 
     ModalDialog::dispose();
 }

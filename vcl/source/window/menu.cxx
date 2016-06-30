@@ -182,6 +182,8 @@ void Menu::dispose()
     // Native-support: destroy SalMenu
     ImplSetSalMenu( nullptr );
 
+    pStartedFrom.clear();
+    pWindow.clear();
     VclReferenceBase::dispose();
 }
 

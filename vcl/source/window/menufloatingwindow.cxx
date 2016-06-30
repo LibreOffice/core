@@ -115,7 +115,9 @@ MenuFloatingWindow::~MenuFloatingWindow()
 void MenuFloatingWindow::dispose()
 {
     doShutdown();
-
+    pMenu.clear();
+    pActivePopup.clear();
+    xSaveFocusId.clear();
     FloatingWindow::dispose();
 }
 

@@ -112,6 +112,7 @@ void SystemWindow::dispose()
     mpWindowImpl->mbSysWin = false;
     disposeBuilder();
     mpDialogParent.clear();
+    mpMenuBar.clear();
     Window::dispose();
 }
 

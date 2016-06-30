@@ -1746,6 +1746,7 @@ void ImpPDFTabSigningPage::dispose()
     mpEdSignLocation.clear();
     mpEdSignContactInfo.clear();
     mpEdSignReason.clear();
+    mpLBSignTSA.clear();
     SfxTabPage::dispose();
 }
 

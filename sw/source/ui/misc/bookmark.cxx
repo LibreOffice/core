@@ -331,6 +331,7 @@ void SwInsertBookmarkDlg::dispose()
     m_pDeleteBtn.clear();
     m_pGotoBtn.clear();
     m_pEditBox.clear();
+    m_pRenameBtn.clear();
     SvxStandardDialog::dispose();
 }
 
