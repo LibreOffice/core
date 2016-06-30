@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_607447cf",
+        "filename": "cui/source/tabpages/tabarea.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-30T08:56:30Z",
+      "side": 1,
+      "message": "Wasn\u0027t this meant to be \u0026mnPageType?",
+      "revId": "9ec875bf691ad3c06723d6a9846bdb34bebedb29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_80814b92",
+        "filename": "cui/source/tabpages/tabarea.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-30T08:56:30Z",
+      "side": 1,
+      "message": "Similarly \u0026mnPos?",
+      "revId": "9ec875bf691ad3c06723d6a9846bdb34bebedb29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_e04e9795",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-30T08:56:30Z",
+      "side": 1,
+      "message": "Is this still needed? From the comment in tparea.cxx, it looks like this code is here to make sure the area tabpage is big enough when fill is set to \u0027Bitmap\u0027.\n\nSince we\u0027re in a separate tab page now, maybe we can rely upon layouting code to get its size right and kill this code?",
+      "revId": "9ec875bf691ad3c06723d6a9846bdb34bebedb29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_00445b72",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-30T08:56:30Z",
+      "side": 1,
+      "message": "Those are all regular metric/numeric fields, no custom widgets, right? \n\nPlease move setting those attributes to .ui file, where possible",
+      "revId": "9ec875bf691ad3c06723d6a9846bdb34bebedb29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
