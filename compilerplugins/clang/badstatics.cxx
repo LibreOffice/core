@@ -148,6 +148,8 @@ public:
                 || name == "theAddInAsyncTbl"
                     // sc/source/core/tool/adiasync.cxx, would leak
                     // ScAddInAsync* keys if that set is not empty at exit
+                || name == "g_aWindowList"
+                    //vcl/unx/gtk/a11y/atkutil.cxx, asserted empty at exit
                ) // these variables appear unproblematic
             {
                 return true;

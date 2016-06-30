@@ -44,6 +44,7 @@
 #include <gtk/gtk.h>
 #include <config_version.h>
 
+#include <cassert>
 #include <set>
 
 using namespace ::com::sun::star;
@@ -483,7 +484,19 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
 
 /*****************************************************************************/
 
-static std::set< VclPtr<vcl::Window> > g_aWindowList;
+namespace {
+
+struct WindowList {
+    ~WindowList() { assert(list.empty()); };
+        // needs to be empty already on DeInitVCL, but at least check it's empty
+        // on exit
+
+    std::set< VclPtr<vcl::Window> > list;
+};
+
+WindowList g_aWindowList;
+
+}
 
 static void handle_get_focus(::VclWindowEvent const * pEvent)
 {
@@ -534,9 +547,9 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
     }
     else
     {
-        if( g_aWindowList.find(pWindow) == g_aWindowList.end() )
+        if( g_aWindowList.list.find(pWindow) == g_aWindowList.list.end() )
         {
-            g_aWindowList.insert(pWindow);
+            g_aWindowList.list.insert(pWindow);
             try
             {
                 aDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
@@ -628,7 +641,7 @@ void WindowEventHandler(void *, VclSimpleEvent& rEvent)
             break;
 
         case VCLEVENT_OBJECT_DYING:
-            g_aWindowList.erase( static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow() );
+            g_aWindowList.list.erase( static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow() );
             SAL_FALLTHROUGH;
         case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
             handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
