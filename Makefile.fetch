@@ -178,6 +178,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,MORE_FONTS,FONT_PTSERIF_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_SOURCECODE_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_SOURCESANS_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_NOTOEMOJI_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,MYSQLCPPCONN,MYSQLCPPCONN_TARBALL) \

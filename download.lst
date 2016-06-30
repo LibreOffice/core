@@ -51,6 +51,7 @@ export FONT_OPENSANS_TARBALL := 7a15edea7d415ac5150ea403e27401fd-open-sans-font-
 export FONT_PTSERIF_TARBALL := c3c1a8ba7452950636e871d25020ce0d-pt-serif-font-1.0000W.tar.gz
 export FONT_SOURCECODE_TARBALL := 0279a21fab6f245e85a6f85fea54f511-source-code-font-1.009.tar.gz
 export FONT_SOURCESANS_TARBALL := edc4d741888bc0d38e32dbaa17149596-source-sans-pro-2.010R-ro-1.065R-it.tar.gz
+export FONT_NOTOEMOJI_TARBALL := 61f45f3d6cb7f874aecbe6cdc8ba26a2-NotoEmoji-unhinted.tar.gz
 export FREEHAND_MD5SUM := 8cf70c5dc4d24d2dc4a107f509d2d6d7
 export FREEHAND_TARBALL := libfreehand-0.1.1.tar.bz2
 export FREETYPE_TARBALL := dbf2caca1d3afd410a29217a9809d397-freetype-2.4.8.tar.bz2
