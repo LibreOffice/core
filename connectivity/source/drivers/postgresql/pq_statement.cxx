@@ -143,7 +143,7 @@ static ::cppu::IPropertyArrayHelper & getStatementPropertyArrayHelper()
                         OUString("ResultSetType"), 8,
                         ::cppu::UnoType<sal_Int32>::get() , 0 )
                 };
-            OSL_ASSERT( sizeof(aTable)/ sizeof(Property)  == STATEMENT_SIZE );
+            static_assert( SAL_N_ELEMENTS(aTable) == STATEMENT_SIZE, "wrong number of elements" );
             static ::cppu::OPropertyArrayHelper arrayHelper( aTable, STATEMENT_SIZE, true );
             pArrayHelper = &arrayHelper;
         }

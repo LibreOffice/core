@@ -125,7 +125,7 @@ static ::cppu::IPropertyArrayHelper & getPreparedStatementPropertyArrayHelper()
                         OUString("ResultSetType"), 8,
                         ::cppu::UnoType<sal_Int32>::get() , 0 )
                 };
-            OSL_ASSERT( sizeof(aTable)/ sizeof(Property)  == PREPARED_STATEMENT_SIZE );
+            static_assert( SAL_N_ELEMENTS(aTable) == PREPARED_STATEMENT_SIZE, "wrong number of elements" );
             static ::cppu::OPropertyArrayHelper arrayHelper( aTable, PREPARED_STATEMENT_SIZE, true );
             pArrayHelper = &arrayHelper;
         }
