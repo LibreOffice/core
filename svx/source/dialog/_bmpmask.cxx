@@ -420,37 +420,34 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pLbColor4->SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
     m_pLbColorTrans->Disable();
 
+    OUString sColorPalette (BMP_RESID( RID_SVXDLG_BMPMASK_STR_PALETTE));
+    OUString sColorPaletteN;
+
     m_pQSet1->SetStyle( m_pQSet1->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     m_pQSet1->SetColCount();
     m_pQSet1->SetLineCount( 1 );
-    OUString sColorPalette (BMP_RESID( RID_SVXDLG_BMPMASK_STR_PALETTE));
-    OUString sColorPaletteN;
-    sColorPaletteN = sColorPalette;
-    sColorPaletteN += " 1";
+    sColorPaletteN = sColorPalette + " 1";
     m_pQSet1->InsertItem( 1, aPipetteColor, sColorPaletteN);
     m_pQSet1->SelectItem( 1 );
 
     m_pQSet2->SetStyle( m_pQSet2->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     m_pQSet2->SetColCount();
     m_pQSet2->SetLineCount( 1 );
-    sColorPaletteN = sColorPalette;
-    sColorPaletteN += " 2";
+    sColorPaletteN = sColorPalette + " 2";
     m_pQSet2->InsertItem( 1, aPipetteColor, sColorPaletteN);
     m_pQSet2->SelectItem( 0 );
 
     m_pQSet3->SetStyle( m_pQSet3->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     m_pQSet3->SetColCount();
     m_pQSet3->SetLineCount( 1 );
-    sColorPaletteN = sColorPalette;
-    sColorPaletteN += " 3";
+    sColorPaletteN = sColorPalette + " 3";
     m_pQSet3->InsertItem( 1, aPipetteColor, sColorPaletteN);
     m_pQSet3->SelectItem( 0 );
 
     m_pQSet4->SetStyle( m_pQSet4->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     m_pQSet4->SetColCount();
     m_pQSet4->SetLineCount( 1 );
-    sColorPaletteN = sColorPalette;
-    sColorPaletteN += " 4";
+    sColorPaletteN = sColorPalette + " 4";
     m_pQSet4->InsertItem( 1, aPipetteColor, sColorPaletteN);
     m_pQSet4->SelectItem( 0 );
 
@@ -1130,17 +1127,14 @@ void SvxBmpMask::SetAccessibleNames()
     // set the accessible name for valueset
     OUString sColorPalette (BMP_RESID( RID_SVXDLG_BMPMASK_STR_PALETTE));
     OUString sColorPaletteN;
-    sColorPaletteN = sColorPalette;
-    sColorPaletteN += " 1";
+
+    sColorPaletteN = sColorPalette + " 1";
     m_pQSet1->SetText (sColorPaletteN);
-    sColorPaletteN = sColorPalette;
-    sColorPaletteN += " 2";
+    sColorPaletteN = sColorPalette + " 2";
     m_pQSet2->SetText (sColorPaletteN);
-    sColorPaletteN = sColorPalette;
-    sColorPaletteN += " 3";
+    sColorPaletteN = sColorPalette + " 3";
     m_pQSet3->SetText (sColorPaletteN);
-    sColorPaletteN = sColorPalette;
-    sColorPaletteN += " 4";
+    sColorPaletteN = sColorPalette + " 4";
     m_pQSet4->SetText (sColorPaletteN);
 }
 

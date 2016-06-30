@@ -644,7 +644,7 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    OUString sDescription = SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE );
+    OUString sDescription;
 
     const OUString aCharStr( mpParent->maText);
     sal_Int32 nStrIndex = 0;
@@ -660,7 +660,10 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
     }
     if( c < 256 )
         snprintf( buf+6, 10, " (%" SAL_PRIuUINT32 ")", c );
-    sDescription += " " + OUString(buf, strlen(buf), RTL_TEXTENCODING_ASCII_US);
+
+    sDescription = SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE )
+                 + " "
+                 + OUString(buf, strlen(buf), RTL_TEXTENCODING_ASCII_US);
 
     return sDescription;
 }

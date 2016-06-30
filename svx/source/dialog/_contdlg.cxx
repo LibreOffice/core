@@ -545,9 +545,9 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, MousePosHdl, GraphCtrl*, pWnd, void )
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
-    aStr = GetUnitString( rMousePos.X(), eFieldUnit, cSep );
-    aStr += " / ";
-    aStr += GetUnitString( rMousePos.Y(), eFieldUnit, cSep );
+    aStr = GetUnitString( rMousePos.X(), eFieldUnit, cSep )
+         + " / "
+         + GetUnitString( rMousePos.Y(), eFieldUnit, cSep );
 
     m_pStbStatus->SetItemText( 2, aStr );
 }
@@ -560,9 +560,9 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
-    aStr = GetUnitString( rSize.Width(), eFieldUnit, cSep );
-    aStr += " x ";
-    aStr += GetUnitString( rSize.Height(), eFieldUnit, cSep );
+    aStr = GetUnitString( rSize.Width(), eFieldUnit, cSep )
+         + " x "
+         + GetUnitString( rSize.Height(), eFieldUnit, cSep );
 
     m_pStbStatus->SetItemText( 3, aStr );
 }

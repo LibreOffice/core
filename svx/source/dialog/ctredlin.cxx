@@ -436,13 +436,13 @@ void SvxTPView::InsertWriterHeader()
     m_pViewData->SetTabs(pTabs);
 
     OUString aStrTab('\t');
-    OUString aString(get<FixedText>("action")->GetText());
-    aString += aStrTab;
-    aString += get<FixedText>("author")->GetText();
-    aString += aStrTab;
-    aString += get<FixedText>("date")->GetText();
-    aString += aStrTab;
-    aString += get<FixedText>("comment")->GetText();
+    OUString aString = get<FixedText>("action")->GetText()
+                     + aStrTab
+                     + get<FixedText>("author")->GetText()
+                     + aStrTab
+                     + get<FixedText>("date")->GetText()
+                     + aStrTab
+                     + get<FixedText>("comment")->GetText();
     m_pViewData->ClearHeader();
     m_pViewData->InsertHeaderEntry(aString);
 }
@@ -453,15 +453,15 @@ void SvxTPView::InsertCalcHeader()
     m_pViewData->SetTabs(pTabs);
 
     OUString aStrTab('\t');
-    OUString aString(get<FixedText>("action")->GetText());
-    aString += aStrTab;
-    aString += get<FixedText>("position")->GetText();
-    aString += aStrTab;
-    aString += get<FixedText>("author")->GetText();
-    aString += aStrTab;
-    aString += get<FixedText>("date")->GetText();
-    aString += aStrTab;
-    aString += get<FixedText>("comment")->GetText();
+    OUString aString = get<FixedText>("action")->GetText()
+                     + aStrTab
+                     + get<FixedText>("position")->GetText()
+                     + aStrTab
+                     + get<FixedText>("author")->GetText()
+                     + aStrTab
+                     + get<FixedText>("date")->GetText()
+                     + aStrTab
+                     + get<FixedText>("comment")->GetText();
     m_pViewData->ClearHeader();
     m_pViewData->InsertHeaderEntry(aString);
 }
