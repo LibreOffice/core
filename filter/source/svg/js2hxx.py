@@ -20,7 +20,7 @@
 
 import os, sys
 
-MAX_LINES = 200
+MAX_LINES = 150
 VARIABLE_NAME = 'aSVGScript'
 
 def get_var_decl(n):
