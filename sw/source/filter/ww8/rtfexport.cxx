@@ -318,24 +318,24 @@ void RtfExport::DoComboBox(const OUString& /*rName*/,
 void RtfExport::DoFormText(const SwInputField* pField)
 {
     OUString sResult = pField->ExpandField(true);
-    OUString sHelp(pField->GetHelp());
+    const OUString& rHelp = pField->GetHelp();
     OUString sName = pField->GetPar2();
-    OUString sStatus = pField->GetToolTip();
+    const OUString& rStatus = pField->GetToolTip();
     m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_FIELD "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST "{ FORMTEXT }");
     m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD " {" OOO_STRING_SVTOOLS_RTF_FFTYPE "0");
-    if (!sHelp.isEmpty())
+    if (!rHelp.isEmpty())
         m_pAttrOutput->RunText().append(OOO_STRING_SVTOOLS_RTF_FFOWNHELP);
-    if (!sStatus.isEmpty())
+    if (!rStatus.isEmpty())
         m_pAttrOutput->RunText().append(OOO_STRING_SVTOOLS_RTF_FFOWNSTAT);
     m_pAttrOutput->RunText().append(OOO_STRING_SVTOOLS_RTF_FFTYPETXT  "0");
 
     if (!sName.isEmpty())
         m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ").append(msfilter::rtfutil::OutString(sName, m_eDefaultEncoding)).append("}");
-    if (!sHelp.isEmpty())
-        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ").append(msfilter::rtfutil::OutString(sHelp, m_eDefaultEncoding)).append("}");
+    if (!rHelp.isEmpty())
+        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ").append(msfilter::rtfutil::OutString(rHelp, m_eDefaultEncoding)).append("}");
     m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " ").append(msfilter::rtfutil::OutString(sResult, m_eDefaultEncoding)).append("}");
-    if (!sStatus.isEmpty())
-        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ").append(msfilter::rtfutil::OutString(sStatus, m_eDefaultEncoding)).append("}");
+    if (!rStatus.isEmpty())
+        m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ").append(msfilter::rtfutil::OutString(rStatus, m_eDefaultEncoding)).append("}");
     m_pAttrOutput->RunText().append("}}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
     m_pAttrOutput->RunText().append(msfilter::rtfutil::OutString(sResult, m_eDefaultEncoding)).append("}}");
 }

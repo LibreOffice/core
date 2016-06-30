@@ -181,7 +181,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
         {
             uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
             oox::OptValue<OUString> presetShapeName = rAttribs.getString(XML_prst);
-            OUString preset = presetShapeName.get();
+            const OUString& preset = presetShapeName.get();
             comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
             aCustomShapeGeometry["PresetTextWarp"] = uno::makeAny(preset);
             xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
