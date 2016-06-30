@@ -22,6 +22,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_ptserif \
 	ExternalPackage_sourcecode \
 	ExternalPackage_sourcesans \
+	ExternalPackage_symbola \
 	UnpackedTarball_caladea \
 	UnpackedTarball_carlito \
 	UnpackedTarball_dejavu \
@@ -33,6 +34,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_ptserif \
 	UnpackedTarball_sourcecode \
 	UnpackedTarball_sourcesans \
+	UnpackedTarball_symbola \
 ))
 
 # vim: set noet sw=4 ts=4:
