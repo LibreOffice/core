@@ -1064,7 +1064,7 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
 
     OUStringBuffer aBuffer;
     aBuffer.append(aEvent.FeatureURL.Complete);
-    aBuffer.append("=");
+    aBuffer.append(static_cast<sal_Unicode>('='));
 
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "CenterPara" ||
@@ -1143,16 +1143,74 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     {
         aBuffer.append(OUString::boolean(aEvent.IsEnabled));
     }
-    else if (aEvent.FeatureURL.Path == "AssignLayout")
+    else if (aEvent.FeatureURL.Path == "AssignLayout" ||
+             aEvent.FeatureURL.Path == "StatusSelectionMode" ||
+             aEvent.FeatureURL.Path == "Signature" ||
+             aEvent.FeatureURL.Path == "SelectionMode")
     {
-        sal_Int32 nLayout = 0;
-        aEvent.State >>= nLayout;
-        aBuffer.append(nLayout);
+        sal_Int32 aInt32;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aInt32))
+        {
+            aBuffer.append(OUString::number(aInt32));
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "StatusDocPos" ||
+             aEvent.FeatureURL.Path == "RowColSelCount" ||
+             aEvent.FeatureURL.Path == "StatusPageStyle" ||
+             aEvent.FeatureURL.Path == "StateTableCell" ||
+             aEvent.FeatureURL.Path == "StatePageNumber" ||
+             aEvent.FeatureURL.Path == "StateWordCount" ||
+             aEvent.FeatureURL.Path == "PageStyleName" ||
+             aEvent.FeatureURL.Path == "PageStatus" ||
+             aEvent.FeatureURL.Path == "LayoutStatus" ||
+             aEvent.FeatureURL.Path == "Context")
+    {
+        OUString aString;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aString))
+        {
+            aBuffer.append(aString);
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "InsertMode" ||
+             aEvent.FeatureURL.Path == "WrapText" ||
+             aEvent.FeatureURL.Path == "ToggleMergeCells" ||
+             aEvent.FeatureURL.Path == "NumberFormatCurrency" ||
+             aEvent.FeatureURL.Path == "NumberFormatPercent" ||
+             aEvent.FeatureURL.Path == "NumberFormatDate")
+    {
+        sal_Bool aBool;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aBool))
+        {
+            aBuffer.append(OUString::boolean(aBool));
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "Position")
+    {
+        css::awt::Point aPoint;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aPoint))
+        {
+            aBuffer.append(OUString::number(aPoint.X) + OUString(" / ") + OUString::number(aPoint.Y));
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "StatusBarFunc" ||
+             aEvent.FeatureURL.Path == "Size")
+    {
+        css::awt::Size aSize;
+
+        if (aEvent.IsEnabled && (aEvent.State >>= aSize))
+        {
+            aBuffer.append(OUString::number(aSize.Width) + OUString(" x ") + OUString::number(aSize.Height));
+        }
     }
     else
     {
         return;
     }
+
     OUString payload = aBuffer.makeStringAndClear();
     objSh->libreOfficeKitCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
 }

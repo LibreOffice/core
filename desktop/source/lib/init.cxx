@@ -796,7 +796,25 @@ static void doc_iniUnoCommands ()
         OUString(".uno:EntireColumn"),
         OUString(".uno:EntireCell"),
         OUString(".uno:MergeCells"),
-        OUString(".uno:AssignLayout")
+        OUString(".uno:AssignLayout"),
+        OUString(".uno:StatusDocPos"),
+        OUString(".uno:RowColSelCount"),
+        OUString(".uno:StatusPageStyle"),
+        OUString(".uno:InsertMode"),
+        OUString(".uno:StatusSelectionMode"),
+        OUString(".uno:StateTableCell"),
+        OUString(".uno:StatusBarFunc"),
+        OUString(".uno:StatePageNumber"),
+        OUString(".uno:StateWordCount"),
+        OUString(".uno:SelectionMode"),
+        OUString(".uno:PageStatus"),
+        OUString(".uno:LayoutStatus"),
+        OUString(".uno:Context"),
+        OUString(".uno:WrapText"),
+        OUString(".uno:ToggleMergeCells"),
+        OUString(".uno:NumberFormatCurrency"),
+        OUString(".uno:NumberFormatPercent"),
+        OUString(".uno:NumberFormatDate")
     };
 
     util::URL aCommandURL;
