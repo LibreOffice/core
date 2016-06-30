@@ -843,12 +843,11 @@ OUString SvxPixelCtlAccessibleChild::GetName()
     sal_Int32 nXIndex = mnIndexInParent % mrParentWindow.GetLineCount();
     sal_Int32 nYIndex = mnIndexInParent / mrParentWindow.GetLineCount();
 
-    OUString str;
-    str += "(";
-    str += OUString::number(nXIndex);
-    str += ",";
-    str += OUString::number(nYIndex);
-    str += ")";
+    OUString str = "("
+                 + OUString::number(nXIndex)
+                 + ","
+                 + OUString::number(nYIndex)
+                 + ")";
     return str;
 }
 
