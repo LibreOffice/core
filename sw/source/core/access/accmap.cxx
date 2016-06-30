@@ -2241,10 +2241,10 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
     }
 }
 
-void SwAccessibleMap::Dispose( const SwFrame *pFrame,
-                               const SdrObject *pObj,
-                               vcl::Window* pWindow,
-                               bool bRecursive )
+void SwAccessibleMap::A11yDispose( const SwFrame *pFrame,
+                                   const SdrObject *pObj,
+                                   vcl::Window* pWindow,
+                                   bool bRecursive )
 {
     SwAccessibleChild aFrameOrObj( pFrame, pObj, pWindow );
 
@@ -3189,7 +3189,7 @@ bool SwAccessibleMap::ReplaceChild (
     // Also get keep parent.
     uno::Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
     pCurrentChild = nullptr;  // will be released by dispose
-    Dispose( nullptr, pObj, nullptr );
+    A11yDispose( nullptr, pObj, nullptr );
 
     {
         osl::MutexGuard aGuard( maMutex );

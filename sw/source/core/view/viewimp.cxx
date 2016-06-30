@@ -308,7 +308,7 @@ void SwViewShellImp::DisposeAccessible( const SwFrame *pFrame,
     for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
         if( rTmp.Imp()->IsAccessible() )
-            rTmp.Imp()->GetAccessibleMap().Dispose( pFrame, pObj, nullptr, bRecursive );
+            rTmp.Imp()->GetAccessibleMap().A11yDispose( pFrame, pObj, nullptr, bRecursive );
     }
 }
 

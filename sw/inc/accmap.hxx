@@ -182,10 +182,10 @@ public:
     void RemoveContext( const SdrObject *pObj );
 
     // Dispose frame and its children if bRecursive is set
-    void Dispose( const SwFrame* pFrame,
-                  const SdrObject* pObj,
-                  vcl::Window* pWindow,
-                  bool bRecursive = false );
+    void A11yDispose( const SwFrame* pFrame,
+                      const SdrObject* pObj,
+                      vcl::Window* pWindow,
+                      bool bRecursive = false );
 
     void InvalidatePosOrSize( const SwFrame* pFrame,
                               const SdrObject* pObj,

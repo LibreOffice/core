@@ -2182,7 +2182,7 @@ void SwPostItMgr::DisconnectSidebarWinFromFrame( const SwFrame& rFrame,
         if ( bRemoved &&
              mpWrtShell->GetAccessibleMap() )
         {
-            mpWrtShell->GetAccessibleMap()->Dispose( nullptr, nullptr, &rSidebarWin );
+            mpWrtShell->GetAccessibleMap()->A11yDispose( nullptr, nullptr, &rSidebarWin );
         }
     }
 }
