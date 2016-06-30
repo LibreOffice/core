@@ -2104,6 +2104,17 @@ sal_Int32 ScInterpreter::GetInt32()
     return static_cast<sal_Int32>(fVal);
 }
 
+sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
+{
+    double fVal = rtl::math::approxFloor( GetDoubleWithDefault( nDefault));
+    if (fVal < SAL_MIN_INT32 || fVal > SAL_MAX_INT32)
+    {
+        SetError( errIllegalArgument);
+        return nDefault;
+    }
+    return static_cast<sal_Int32>(fVal);
+}
+
 sal_Int16 ScInterpreter::GetInt16()
 {
     double fVal = rtl::math::approxFloor( GetDouble());

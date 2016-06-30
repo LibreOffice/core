@@ -408,6 +408,9 @@ double GetDoubleWithDefault(double nDefault);
 bool IsMissing();
 /// if GetDouble() not within int32 limits sets nGlobalError and returns 0
 sal_Int32 GetInt32();
+/** if GetDoubleWithDefault() not within int32 limits sets nGlobalError and
+    returns nDefault */
+sal_Int32 GetInt32WithDefault( sal_Int32 nDefault );
 /// if GetDouble() not within int16 limits sets nGlobalError and returns 0
 sal_Int16 GetInt16();
 /// if GetDouble() not within uint32 limits sets nGlobalError and returns 0
