@@ -55,6 +55,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <comcore.hrc>
+#include <svx/charthelper.hxx>
 
 #include <deque>
 
@@ -122,6 +123,10 @@ void SAL_CALL SwOLEListener_Impl::stateChanged( const lang::EventObject&, ::sal_
     {
         if (g_pOLELRU_Cache)
             g_pOLELRU_Cache->RemoveObj( *mpObj );
+    }
+    else if(mpObj && nNewState == embed::EmbedStates::RUNNING)
+    {
+        mpObj->resetBufferedData();
     }
 }
 
@@ -640,6 +645,8 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     pOLENd( 0 ),
     pListener( 0 ),
     xOLERef( xObj )
+    m_aPrimitive2DSequence(),
+    m_aRange()
 {
     xOLERef.Lock( true );
     if ( xObj.is() )
@@ -654,6 +661,8 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     pOLENd( 0 ),
     pListener( 0 ),
     aName( rString )
+    m_aPrimitive2DSequence(),
+    m_aRange()
 {
     xOLERef.Lock( true );
     xOLERef.SetViewAspect( nAspect );
@@ -898,6 +907,34 @@ OUString SwOLEObj::GetDescription()
         return SW_RESSTR(STR_CHART);
 
     return SW_RESSTR(STR_OLE);
+}
+
+drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAsPrimitive2DSequence(basegfx::B2DRange& rRange)
+{
+    if(m_aPrimitive2DSequence.empty() && m_aRange.isEmpty() && xOLERef.is() && xOLERef.IsChart())
+    {
+        const uno::Reference< frame::XModel > aXModel(xOLERef->getComponent(), uno::UNO_QUERY);
+
+        if(aXModel.is())
+        {
+            m_aPrimitive2DSequence = ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
+                aXModel,
+                m_aRange);
+        }
+    }
+
+    if(!m_aPrimitive2DSequence.empty() && !m_aRange.isEmpty())
+    {
+        rRange = m_aRange;
+    }
+
+    return m_aPrimitive2DSequence;
+}
+
+void SwOLEObj::resetBufferedData()
+{
+    m_aPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer();
+    m_aRange.reset();
 }
 
 SwOLELRUCache::SwOLELRUCache()
