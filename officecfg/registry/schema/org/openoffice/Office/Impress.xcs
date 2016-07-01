@@ -604,10 +604,10 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] New document -->
           <info>
-            <desc>Indicates whether to show the autopilot when creating a new presentation.</desc>
-            <label>Start with AutoPilots</label>
+            <desc>Indicates whether to show the template selection when creating a new presentation.</desc>
+            <label>Start with Template Manager</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="Layout" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Other/New_Doc -->
