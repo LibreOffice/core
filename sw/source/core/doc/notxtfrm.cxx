@@ -69,7 +69,6 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svtools/embedhlp.hxx>
-#include <svx/charthelper.hxx>
 #include <dview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -999,29 +998,23 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
 
         if(bIsChart)
         {
-            const uno::Reference< frame::XModel > aXModel(pOLENd->GetOLEObj().GetOleRef()->getComponent(), uno::UNO_QUERY);
+            basegfx::B2DRange aSourceRange;
+            const drawinglayer::primitive2d::Primitive2DContainer aSequence(
+                pOLENd->GetOLEObj().tryToGetChartContentAsPrimitive2DSequence(
+                    aSourceRange,
+                    bPrn));
 
-            if(aXModel.is())
+            if(!aSequence.empty() && !aSourceRange.isEmpty())
             {
-                basegfx::B2DRange aSourceRange;
+                const basegfx::B2DRange aTargetRange(
+                    aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
+                    aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
 
-                const drawinglayer::primitive2d::Primitive2DSequence aSequence(
-                    ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
-                        aXModel,
-                        aSourceRange));
-
-                if(aSequence.hasElements() && !aSourceRange.isEmpty())
-                {
-                    const basegfx::B2DRange aTargetRange(
-                        aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
-                        aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
-
-                    bDone = paintUsingPrimitivesHelper(
-                        *pOut,
-                        aSequence,
-                        aSourceRange,
-                        aTargetRange);
-                }
+                bDone = paintUsingPrimitivesHelper(
+                    *pOut,
+                    aSequence,
+                    aSourceRange,
+                    aTargetRange);
             }
         }
 
