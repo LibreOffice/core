@@ -56,7 +56,7 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
     for (sal_Int32 i = 0; i < BookmarkTable::aForbiddenChars.getLength(); i++)
     {
         const sal_Int32 nTmpLen = sTmp.getLength();
-        sTmp = comphelper::string::remove(sTmp, BookmarkTable::aForbiddenChars[i]);
+        sTmp = sTmp.replaceAll(OUString(BookmarkTable::aForbiddenChars[i]), "");
         if (sTmp.getLength() != nTmpLen)
            sMsg += OUString(BookmarkTable::aForbiddenChars[i]);
     }

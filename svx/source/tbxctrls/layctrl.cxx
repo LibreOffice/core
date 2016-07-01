@@ -628,7 +628,7 @@ void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     if (nCol)
         aText = OUString::number(nCol);
     else
-        aText = comphelper::string::remove(Button::GetStandardText(StandardButtonType::Cancel), '~');
+        aText = Button::GetStandardText(StandardButtonType::Cancel).replaceAll("~", "");
 
     Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
     rRenderContext.DrawText(Point((aSize.Width() - aTextSize.Width()) / 2, aSize.Height() - nTextHeight + 2), aText);

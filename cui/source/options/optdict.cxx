@@ -73,7 +73,7 @@ static OUString getNormDicEntry_Impl(const OUString &rText)
         }
         aTmp = aTmp2.makeStringAndClear();
     }
-    return comphelper::string::remove(aTmp, '=');
+    return aTmp.replaceAll("=", "");
 }
 
 // Compare Dictionary Entry  result

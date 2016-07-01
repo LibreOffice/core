@@ -1931,7 +1931,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
         IDocumentMarkAccess::const_iterator_t ppMark;
         IDocumentMarkAccess* const pMarkAccess = m_pWrtShell->getIDocumentMarkAccess();
         if( -1 != nPos )
-            sCmp = comphelper::string::remove(sMark.copy(nPos + 1), ' ');
+            sCmp = sMark.copy(nPos + 1).replaceAll(" ", "");
 
         if( !sCmp.isEmpty() )
         {

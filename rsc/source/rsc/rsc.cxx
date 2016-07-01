@@ -894,7 +894,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                         aLine = comphelper::string::stripStart(aLine, ' ');
                         aLine = comphelper::string::stripStart(aLine, '\t');
-                        aLine = comphelper::string::remove(aLine, ';');
+                        aLine = aLine.replaceAll(";", "");
 
                         if (comphelper::string::isdigitAsciiString(aLine))
                         {

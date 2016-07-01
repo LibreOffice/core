@@ -970,7 +970,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long
     do
     {
         OUString aLine = rText.getToken(0, '\n', nPos);
-        aLine = comphelper::string::remove(aLine, '\r');
+        aLine = aLine.replaceAll("\r", "");
 
         aSize = GetTextLineSize(rDevice, aLine);
 
@@ -1054,7 +1054,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     do
     {
         OUString aLine = rText.getToken(0, '\n', nPos);
-        aLine = comphelper::string::remove(aLine, '\r');
+        aLine = aLine.replaceAll("\r", "");
         aSize = GetTextLineSize(rDevice, aLine);
         if (aSize.Width() > MaxWidth)
         {

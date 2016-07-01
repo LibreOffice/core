@@ -237,7 +237,7 @@ FieldUnitStringList* ImplGetCleanedFieldUnits()
             for( size_t i = 0; i < nUnits; ++i )
             {
                 OUString aUnit( (*pUnits)[i].first );
-                aUnit = comphelper::string::remove(aUnit, ' ');
+                aUnit = aUnit.replaceAll(" ", "");
                 aUnit = aUnit.toAsciiLowerCase();
                 std::pair< OUString, FieldUnit > aElement( aUnit, (*pUnits)[i].second );
                 pSVData->maCtrlData.mpCleanUnitStrings->push_back( aElement );

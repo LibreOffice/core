@@ -510,7 +510,7 @@ void lcl_GetColumnTypes(
             if ( nToken > 1 )
             {
                 aFieldName = aString.getToken( 0, ',' );
-                aString = comphelper::string::remove(aString, ' ');
+                aString = aString.replaceAll(" ", "");
                 switch ( aString.getToken( 1, ',' )[0] )
                 {
                     case 'L' :

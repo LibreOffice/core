@@ -441,8 +441,7 @@ OUString FontList::GetStyleName(const FontMetric& rInfo) const
     else
     {
         // Translate StyleName to localized name
-        OUString aCompareStyleName = aStyleName.toAsciiLowerCase();
-        aCompareStyleName = comphelper::string::remove(aCompareStyleName, ' ');
+        OUString aCompareStyleName = aStyleName.toAsciiLowerCase().replaceAll(" ", "");
         if (aCompareStyleName == "bold")
             aStyleName = maBold;
         else if (aCompareStyleName == "bolditalic")

@@ -398,7 +398,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                 // remove all special characters (replace them with blanks)
                 if( !sText.isEmpty() )
                 {
-                    sText = comphelper::string::remove(sText, 0xad);
+                    sText = sText.replaceAll(OUString(sal_Unicode(0xad)), "");
                     OUStringBuffer aBuf(sText);
                     const sal_Int32 l = aBuf.getLength();
                     for (sal_Int32 i=0; i<l; ++i)
