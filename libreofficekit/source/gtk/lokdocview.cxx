@@ -131,8 +131,6 @@ struct LOKDocViewPrivateImpl
 
     /// @name Graphic handles.
     ///@{
-    /// Bitmap of a graphic selection handle.
-    cairo_surface_t* m_pGraphicHandle;
     /// Rectangle of a graphic selection handle, to know if the user clicked on it or not.
     GdkRectangle m_aGraphicHandleRects[8];
     /// If we are in the middle of a drag of a graphic selection handle.
@@ -189,7 +187,6 @@ struct LOKDocViewPrivateImpl
         m_pHandleEnd(nullptr),
         m_aHandleEndRect({0, 0, 0, 0}),
         m_bInDragEndHandle(false),
-        m_pGraphicHandle(nullptr),
         m_nViewId(0),
         m_nTileSizeTwips(0),
         m_aVisibleArea({0, 0, 0, 0}),
@@ -1264,19 +1261,15 @@ renderHandle(LOKDocView* pDocView,
     rRectangle.height = nHandleHeight * fHandleScale;
 }
 
-/// Renders pHandle around an rSelection rectangle on pCairo.
+/// Renders handles around an rSelection rectangle on pCairo.
 static void
 renderGraphicHandle(LOKDocView* pDocView,
                     cairo_t* pCairo,
-                    const GdkRectangle& rSelection,
-                    cairo_surface_t* pHandle)
+                    const GdkRectangle& rSelection)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    int nHandleWidth, nHandleHeight;
+    int nHandleWidth = 9, nHandleHeight = 9;
     GdkRectangle aSelection;
-
-    nHandleWidth = cairo_image_surface_get_width(pHandle);
-    nHandleHeight = cairo_image_surface_get_height(pHandle);
 
     aSelection.x = twipToPixel(rSelection.x, priv->m_fZoom);
     aSelection.y = twipToPixel(rSelection.y, priv->m_fZoom);
@@ -1326,11 +1319,9 @@ renderGraphicHandle(LOKDocView* pDocView,
         priv->m_aGraphicHandleRects[i].width = nHandleWidth;
         priv->m_aGraphicHandleRects[i].height = nHandleHeight;
 
-        cairo_save (pCairo);
-        cairo_translate(pCairo, x, y);
-        cairo_set_source_surface(pCairo, pHandle, 0, 0);
-        cairo_paint(pCairo);
-        cairo_restore (pCairo);
+        cairo_set_source_rgb(pCairo, 0, 0, 0);
+        cairo_rectangle(pCairo, x, y, nHandleWidth, nHandleHeight);
+        cairo_fill(pCairo);
     }
 }
 
@@ -1589,16 +1580,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     if (!isEmptyRectangle(priv->m_aGraphicSelection))
-    {
-        gchar* handleGraphicPath = g_strconcat (priv->m_aLOPath, CURSOR_HANDLE_DIR, "handle_graphic.png", nullptr);
-        if (!priv->m_pGraphicHandle)
-        {
-            priv->m_pGraphicHandle = cairo_image_surface_create_from_png(handleGraphicPath);
-            assert(cairo_surface_status(priv->m_pGraphicHandle) == CAIRO_STATUS_SUCCESS);
-        }
-        renderGraphicHandle(pDocView, pCairo, priv->m_aGraphicSelection, priv->m_pGraphicHandle);
-        g_free (handleGraphicPath);
-    }
+        renderGraphicHandle(pDocView, pCairo, priv->m_aGraphicSelection);
 
     // Draw the cell cursor.
     if (!isEmptyRectangle(priv->m_aCellCursor))
@@ -3117,8 +3099,6 @@ lok_doc_view_reset_view(LOKDocView* pDocView)
     memset(&priv->m_aHandleEndRect, 0, sizeof(priv->m_aHandleEndRect));
     priv->m_bInDragEndHandle = false;
 
-    cairo_surface_destroy(priv->m_pGraphicHandle);
-    priv->m_pGraphicHandle = nullptr;
     memset(&priv->m_aGraphicHandleRects, 0, sizeof(priv->m_aGraphicHandleRects));
     memset(&priv->m_bInDragGraphicHandles, 0, sizeof(priv->m_bInDragGraphicHandles));
 

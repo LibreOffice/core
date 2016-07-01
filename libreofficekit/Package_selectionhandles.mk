@@ -13,7 +13,6 @@ $(eval $(call gb_Package_add_files,libreofficekit_selectionhandles,$(LIBO_SHARE_
 	handle_image_start.png \
 	handle_image_middle.png \
 	handle_image_end.png \
-	handle_graphic.png \
 ))
 
 # vim: set noet sw=4 ts=4:
