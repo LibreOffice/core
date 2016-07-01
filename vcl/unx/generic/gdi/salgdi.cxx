@@ -829,6 +829,11 @@ bool X11SalGraphics::drawPolyLine(
                 }
             }
 
+            if(rPolygon.isClosed() && !bNoJoin)
+            {
+                cairo_close_path(cr);
+            }
+
             cairo_stroke(cr);
         }
 
