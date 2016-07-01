@@ -478,6 +478,7 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL");
     m_states.emplace(LOK_CALLBACK_MOUSE_POINTER, "NIL");
     m_states.emplace(LOK_CALLBACK_CELL_CURSOR, "NIL");
+    m_states.emplace(LOK_CALLBACK_CELL_VIEW_CURSOR, "NIL");
     m_states.emplace(LOK_CALLBACK_CELL_FORMULA, "NIL");
     m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
     m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
@@ -580,6 +581,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_GRAPHIC_SELECTION:
         case LOK_CALLBACK_MOUSE_POINTER:
         case LOK_CALLBACK_CELL_CURSOR:
+        case LOK_CALLBACK_CELL_VIEW_CURSOR:
         case LOK_CALLBACK_CELL_FORMULA:
         case LOK_CALLBACK_CURSOR_VISIBLE:
         case LOK_CALLBACK_SET_PART:

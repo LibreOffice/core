@@ -102,6 +102,9 @@ struct LOKDocViewPrivateImpl
     GdkRectangle m_aTextSelectionEnd;
     GdkRectangle m_aGraphicSelection;
     GdkRectangle m_aCellCursor;
+    /// Position and size of the cell view cursors. The current view can only
+    //see / them, can't modify them. Key is the view id.
+    std::map<int, GdkRectangle> m_aCellViewCursors;
     gboolean m_bInDragGraphicSelection;
 
     /// @name Start/middle/end handle.
@@ -355,7 +358,12 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_INVALIDATE_VIEW_CURSOR";
     case LOK_CALLBACK_TEXT_VIEW_SELECTION:
         return "LOK_CALLBACK_TEXT_VIEW_SELECTION";
+    case LOK_CALLBACK_CELL_VIEW_CURSOR:
+        return "LOK_CALLBACK_CELL_VIEW_CURSOR";
+    case LOK_CALLBACK_CELL_FORMULA:
+        return "LOK_CALLBACK_CELL_FORMULA";
     }
+    g_assert(false);
     return nullptr;
 }
 
@@ -1187,6 +1195,24 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
+    case LOK_CALLBACK_CELL_VIEW_CURSOR:
+    {
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        int nViewId = aTree.get<int>("viewId");
+        const std::string& rRectangle = aTree.get<std::string>("rectangle");
+        if (rRectangle != "EMPTY")
+            priv->m_aCellViewCursors[nViewId] = payloadToRectangle(pDocView, rRectangle.c_str());
+        else
+        {
+            auto it = priv->m_aCellViewCursors.find(nViewId);
+            if (it != priv->m_aCellViewCursors.end())
+                priv->m_aCellViewCursors.erase(it);
+        }
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+        break;
+    }
     default:
         g_assert(false);
         break;
@@ -1574,6 +1600,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         g_free (handleGraphicPath);
     }
 
+    // Draw the cell cursor.
     if (!isEmptyRectangle(priv->m_aCellCursor))
     {
         cairo_set_source_rgb(pCairo, 0, 0, 0);
@@ -1586,6 +1613,22 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
                         // priv->m_aCellCursor.y - 1,
                         // priv->m_aCellCursor.width + 2,
                         // priv->m_aCellCursor.height + 2);
+        cairo_set_line_width(pCairo, 2.0);
+        cairo_stroke(pCairo);
+    }
+
+    // Cell view cursors: they are colored.
+    for (auto& rPair : priv->m_aCellViewCursors)
+    {
+        GdkRectangle& rCursor = rPair.second;
+
+        const GdkRGBA& rDark = getDarkColor(rPair.first);
+        cairo_set_source_rgb(pCairo, rDark.red, rDark.green, rDark.blue);
+        cairo_rectangle(pCairo,
+                        twipToPixel(rCursor.x, priv->m_fZoom),
+                        twipToPixel(rCursor.y, priv->m_fZoom),
+                        twipToPixel(rCursor.width, priv->m_fZoom),
+                        twipToPixel(rCursor.height, priv->m_fZoom));
         cairo_set_line_width(pCairo, 2.0);
         cairo_stroke(pCairo);
     }
