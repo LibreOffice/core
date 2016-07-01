@@ -1896,9 +1896,10 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
 }
 
 void impAddB2DPolygonToGDIPlusGraphicsPathReal(
-    Gdiplus::GraphicsPath& rGraphicsPath,
+    Gdiplus::GpPath *pPath,
     const basegfx::B2DPolygon& rPolygon,
-    bool bNoLineJoin)
+    bool bNoLineJoin,
+    const basegfx::B2DVector* pLineWidths)
 {
     sal_uInt32 nCount(rPolygon.count());
 
@@ -1908,56 +1909,85 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
         const bool bControls(rPolygon.areControlPointsUsed());
         basegfx::B2DPoint aCurr(rPolygon.getB2DPoint(0));
 
-        for(sal_uInt32 a(0); a < nEdgeCount; a++)
+        if(nEdgeCount)
         {
-            const sal_uInt32 nNextIndex((a + 1) % nCount);
-            const basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
-            const bool b1stControlPointUsed(bControls && rPolygon.isNextControlPointUsed(a));
-            const bool b2ndControlPointUsed(bControls && rPolygon.isPrevControlPointUsed(nNextIndex));
-
-            if(b1stControlPointUsed || b2ndControlPointUsed)
+            for(sal_uInt32 a(0); a < nEdgeCount; a++)
             {
-                basegfx::B2DPoint aCa(rPolygon.getNextControlPoint(a));
-                basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
+                const sal_uInt32 nNextIndex((a + 1) % nCount);
+                const basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
+                const bool b1stControlPointUsed(bControls && rPolygon.isNextControlPointUsed(a));
+                const bool b2ndControlPointUsed(bControls && rPolygon.isPrevControlPointUsed(nNextIndex));
 
-                // tdf#99165 MS Gdiplus cannot handle creating correct extra geometry for fat lines
-                // with LineCap or LineJoin when a bezier segment starts or ends trivial, e.g. has
-                // no 1st or 2nd control point, despite that these are mathematicaly correct definitions
-                // (basegfx can handle that). To solve, create replacement vectors to thre resp. next
-                // control point with 1/3rd of length (the default control vector for these cases).
-                // Only one of this can happen here, else the is(Next|Prev)ControlPointUsed wopuld have
-                // both been false.
-                // Caution: This error (and it's correction) might be necessary for other graphical
-                // sub-systems in a similar way
-                if(!b1stControlPointUsed)
+                if(b1stControlPointUsed || b2ndControlPointUsed)
                 {
-                    aCa = aCurr + ((aCb - aCurr) * 0.3);
+                    basegfx::B2DPoint aCa(rPolygon.getNextControlPoint(a));
+                    basegfx::B2DPoint aCb(rPolygon.getPrevControlPoint(nNextIndex));
+
+                    // tdf#99165 MS Gdiplus cannot handle creating correct extra geometry for fat lines
+                    // with LineCap or LineJoin when a bezier segment starts or ends trivial, e.g. has
+                    // no 1st or 2nd control point, despite that these are mathematicaly correct definitions
+                    // (basegfx can handle that). To solve, create replacement vectors to thre resp. next
+                    // control point with 1/3rd of length (the default control vector for these cases).
+                    // Only one of this can happen here, else the is(Next|Prev)ControlPointUsed wopuld have
+                    // both been false.
+                    // Caution: This error (and it's correction) might be necessary for other graphical
+                    // sub-systems in a similar way
+                    if(!b1stControlPointUsed)
+                    {
+                        aCa = aCurr + ((aCb - aCurr) * 0.3);
+                    }
+                    else if(!b2ndControlPointUsed)
+                    {
+                        aCb = aNext + ((aCa - aNext) * 0.3);
+                    }
+
+                    Gdiplus::DllExports::GdipAddPathBezier(
+                        pPath,
+                        aCurr.getX(), aCurr.getY(),
+                        aCa.getX(), aCa.getY(),
+                        aCb.getX(), aCb.getY(),
+                        aNext.getX(), aNext.getY());
                 }
-                else if(!b2ndControlPointUsed)
+                else
                 {
-                    aCb = aNext + ((aCa - aNext) * 0.3);
+                    if(pLineWidths && aCurr.equal(aNext))
+                    {
+                        // For lines with no length Gdiplus unfortunately paints nothing,
+                        // independent of LineCaps being set. This differs from e.g. SVG
+                        // and other systems. To get geometry created, add some offset,
+                        // based on line width to have something relative to current metrics
+                        if(!basegfx::fTools::equalZero(pLineWidths->getX()))
+                        {
+                            Gdiplus::DllExports::GdipAddPathLine(
+                                pPath,
+                                aCurr.getX(), aCurr.getY(),
+                                aNext.getX() + (pLineWidths->getX() * 0.1), aNext.getY());
+                        }
+                        else
+                        {
+                            Gdiplus::DllExports::GdipAddPathLine(
+                                pPath,
+                                aCurr.getX(), aCurr.getY(),
+                                aNext.getX(), aNext.getY() + (pLineWidths->getY() * 0.1));
+                        }
+                    }
+                    else
+                    {
+                        Gdiplus::DllExports::GdipAddPathLine(
+                            pPath,
+                            aCurr.getX(), aCurr.getY(),
+                            aNext.getX(), aNext.getY());
+                    }
                 }
 
-                rGraphicsPath.AddBezier(
-                    static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
-                    static_cast< Gdiplus::REAL >(aCa.getX()), static_cast< Gdiplus::REAL >(aCa.getY()),
-                    static_cast< Gdiplus::REAL >(aCb.getX()), static_cast< Gdiplus::REAL >(aCb.getY()),
-                    static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
-            }
-            else
-            {
-                rGraphicsPath.AddLine(
-                    static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
-                    static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
-            }
-
-            if(a + 1 < nEdgeCount)
-            {
-                aCurr = aNext;
-
-                if(bNoLineJoin)
+                if(a + 1 < nEdgeCount)
                 {
-                    rGraphicsPath.StartFigure();
+                    aCurr = aNext;
+
+                    if(bNoLineJoin)
+                    {
+                        Gdiplus::DllExports::GdipStartPathFigure(pPath);
+                    }
                 }
             }
         }
@@ -1984,9 +2014,8 @@ bool WinSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPo
                 aGraphicsPath.StartFigure();
             }
 
-            impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolyPolygon.getB2DPolygon(a), false);
-
-            aGraphicsPath.CloseFigure();
+            impAddB2DPolygonToGDIPlusGraphicsPathReal(pPath, rPolyPolygon.getB2DPolygon(a), false, 0);
+            Gdiplus::DllExports::GdipClosePathFigure(pPath);
         }
 
         if(mrParent.getAntiAliasB2DDraw())
@@ -2098,7 +2127,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
             }
         }
 
-        impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolygon, bNoLineJoin);
+        impAddB2DPolygonToGDIPlusGraphicsPathReal(pPath, rPolygon, bNoLineJoin, &rLineWidths);
 
         if(rPolygon.isClosed() && !bNoLineJoin)
         {
