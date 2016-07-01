@@ -2057,6 +2057,56 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
                 if ( bApplySVGD )
                 {
+                    // tdf#83360 use path data only when redundant data of start and end point coordinates of
+                    // path start/end and connector start/end is equal. This is to avoid using erraneous
+                    // or inconsistent path data at import of foreign formats. Office itself always
+                    // writes out a consistent data set. Not using it when there is inconsistency
+                    // is okay since the path data is redundant, buffered data just to avoid recalculation
+                    // of the connector's layout at load time, no real information would be lost.
+                    // A 'connected' end has prio to direct coordinate data in Start/EndPosition
+                    // to the path data (which should have the start/end redundant in the path)
+                    const drawing::PolyPolygonBezierCoords* pSource = static_cast< const drawing::PolyPolygonBezierCoords* >(maPath.getValue());
+                    const sal_uInt32 nSequenceCount(pSource->Coordinates.getLength());
+                    bool bStartEqual(false);
+                    bool bEndEqual(false);
+
+                    if(nSequenceCount)
+                    {
+                        const drawing::PointSequence& rStartSeq = pSource->Coordinates[0];
+                        const sal_uInt32 nStartCount = rStartSeq.getLength();
+
+                        if(nStartCount)
+                        {
+                            const awt::Point& rStartPoint = rStartSeq.getConstArray()[0];
+
+                            if(rStartPoint.X == maStart.X && rStartPoint.Y == maStart.Y)
+                            {
+                                bStartEqual = true;
+                            }
+                        }
+
+                        const drawing::PointSequence& rEndSeq = pSource->Coordinates[nSequenceCount - 1];
+                        const sal_uInt32 nEndCount = rEndSeq.getLength();
+
+                        if(nEndCount)
+                        {
+                            const awt::Point& rEndPoint = rEndSeq.getConstArray()[nEndCount - 1];
+
+                            if(rEndPoint.X == maEnd.X && rEndPoint.Y == maEnd.Y)
+                            {
+                                bEndEqual = true;
+                            }
+                        }
+                    }
+
+                    if(!bStartEqual || !bEndEqual)
+                    {
+                        bApplySVGD = false;
+                    }
+                }
+
+                if ( bApplySVGD )
+                {
                     assert(maPath.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get());
                     xProps->setPropertyValue("PolyPolygonBezier", maPath);
                 }
