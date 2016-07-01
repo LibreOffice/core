@@ -281,8 +281,7 @@ OUString VCLXAccessibleStatusBar::getImplementationName() throw (RuntimeExceptio
 
 Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleStatusBar" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleStatusBar" };
 }
 
 

@@ -335,8 +335,7 @@ OUString VCLXAccessibleTabControl::getImplementationName() throw (RuntimeExcepti
 
 Sequence< OUString > VCLXAccessibleTabControl::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleTabControl" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleTabControl" };
 }
 
 
