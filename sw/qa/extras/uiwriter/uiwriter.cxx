@@ -1031,7 +1031,6 @@ void SwUiWriterTest::testAutoCorr()
     //AutoCorrect with change style to bolt
     pWrtShell->Insert("Bolt");
     pWrtShell->AutoCorrect(corr, cIns);
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     const uno::Reference< text::XTextRange > xRun = getRun(getParagraph(1), 2);
     CPPUNIT_ASSERT_EQUAL(OUString("Bolt"), xRun->getString());
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun, "CharFontName"));
