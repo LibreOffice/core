@@ -20,15 +20,16 @@
 #define INCLUDED_SW_INC_NDOLE_HXX
 
 #include <ndnotxt.hxx>
-
 #include <svtools/embedhlp.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 class SwGrfFormatColl;
 class SwDoc;
 class SwOLENode;
-
 class SwOLEListener_Impl;
 class SwEmbedObjectLink;
+class DeflateData;
+
 class SW_DLLPUBLIC SwOLEObj
 {
     friend class SwOLENode;
@@ -44,6 +45,7 @@ class SW_DLLPUBLIC SwOLEObj
     // eventually buffered data if it is a chart OLE
     drawinglayer::primitive2d::Primitive2DContainer     m_aPrimitive2DSequence;
     basegfx::B2DRange                                   m_aRange;
+    class DeflateData*                                  m_aDeflateData;
 
     SwOLEObj( const SwOLEObj& rObj ) = delete;
 
@@ -69,7 +71,9 @@ public:
 
     // try to get OLE visualization in form of a Primitive2DSequence
     // and the corresponding B2DRange. This data may be locally buffered
-    drawinglayer::primitive2d::Primitive2DContainer tryToGetChartContentAsPrimitive2DSequence(basegfx::B2DRange& rRange);
+    drawinglayer::primitive2d::Primitive2DContainer tryToGetChartContentAsPrimitive2DSequence(
+        basegfx::B2DRange& rRange,
+        bool bSynchron);
     void resetBufferedData();
 };
 
