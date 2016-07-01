@@ -45,7 +45,7 @@ namespace connectivity
         class OCommonStatement;
         typedef ::connectivity::OSubComponent< OCommonStatement, OCommonStatement_IBASE >  OCommonStatement_SBASE;
 
-        class OCommonStatement  :public comphelper::OBaseMutex
+        class OCommonStatement  :public cppu::BaseMutex
                                 ,public OCommonStatement_IBASE
                                 ,public ::cppu::OPropertySetHelper
                                 ,public ::comphelper::OPropertyArrayUsageHelper< OCommonStatement >

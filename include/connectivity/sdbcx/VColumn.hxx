@@ -25,7 +25,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -43,7 +43,7 @@ namespace connectivity
 
 
         class OOO_DLLPUBLIC_DBTOOLS OColumn :
-                                    public comphelper::OBaseMutex,
+                                    public cppu::BaseMutex,
                                     public OColumn_BASE,
                                     public OColumnDescriptor_BASE,
                                     public OColumn_PROP,

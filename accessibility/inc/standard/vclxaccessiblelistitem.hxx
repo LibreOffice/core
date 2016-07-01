@@ -28,7 +28,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase6.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 
 // forward ---------------------------------------------------------------
@@ -56,7 +56,7 @@ typedef ::cppu::WeakAggComponentImplHelper6< css::accessibility::XAccessible
 
 /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
 */
-class VCLXAccessibleListItem : public ::comphelper::OBaseMutex,
+class VCLXAccessibleListItem : public ::cppu::BaseMutex,
                                public ::comphelper::OCommonAccessibleText,
                                public VCLXAccessibleListItem_BASE
 {

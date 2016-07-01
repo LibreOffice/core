@@ -25,8 +25,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <comphelper/comphelperdllapi.h>
 
@@ -176,7 +176,7 @@ namespace comphelper
 
     //= OComponentProxyAggregation
 
-    class COMPHELPER_DLLPUBLIC OComponentProxyAggregation   :public OBaseMutex
+    class COMPHELPER_DLLPUBLIC OComponentProxyAggregation : public cppu::BaseMutex
                                         ,public cppu::WeakComponentImplHelperBase
                                         ,public OComponentProxyAggregationHelper
     {

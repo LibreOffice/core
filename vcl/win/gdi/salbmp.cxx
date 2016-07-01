@@ -26,7 +26,7 @@
 #include <win/salbmp.h>
 #include <string.h>
 #include <vcl/timer.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <map>
 
 #if defined _MSC_VER
@@ -73,7 +73,7 @@ struct Comparator
 typedef ::std::map< WinSalBitmap*, sal_uInt32, Comparator > EntryMap;
 static const sal_uInt32 nDefaultCycles(60);
 
-class GdiPlusBuffer : protected comphelper::OBaseMutex, public Timer
+class GdiPlusBuffer : protected cppu::BaseMutex, public Timer
 {
 private:
     EntryMap        maEntries;

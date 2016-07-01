@@ -30,6 +30,7 @@
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "file/FStatement.hxx"
 #include <connectivity/CommonTools.hxx>
@@ -37,7 +38,6 @@
 #include "file/fanalyzer.hxx"
 #include "file/FTable.hxx"
 #include "file/filedllapi.hxx"
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/StdTypeDefs.hxx>
 #include "TSortIndex.hxx"
 #include "TSkipDeletedSet.hxx"
@@ -61,7 +61,7 @@ namespace connectivity
                                                   css::lang::XUnoTunnel> OResultSet_BASE;
 
         class OOO_DLLPUBLIC_FILE OResultSet :
-                            public  comphelper::OBaseMutex,
+                            public  cppu::BaseMutex,
                             public  ::connectivity::IResultSetHelper,
                             public  OResultSet_BASE,
                             public  ::comphelper::OPropertyContainer,

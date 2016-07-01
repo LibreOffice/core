@@ -54,7 +54,7 @@ struct PopupMenuControllerBaseDispatchInfo
 };
 
 PopupMenuControllerBase::PopupMenuControllerBase( const Reference< XComponentContext >& xContext ) :
-    ::comphelper::OBaseMutex(),
+    ::cppu::BaseMutex(),
     PopupMenuControllerBaseType(m_aMutex),
     m_bInitialized( false )
 {

@@ -24,9 +24,11 @@
 #include <com/sun/star/report/Function.hpp>
 #include "ReportControlModel.hxx"
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ReportHelperDefines.hxx"
+
+
 namespace reportdesign
 {
     typedef ::cppu::PropertySetMixin<        css::report::XFormattedField    > FormattedFieldPropertySet;
@@ -37,7 +39,7 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class OFormattedField : public comphelper::OBaseMutex,
+    class OFormattedField : public cppu::BaseMutex,
                             public FormattedFieldBase,
                             public FormattedFieldPropertySet
     {

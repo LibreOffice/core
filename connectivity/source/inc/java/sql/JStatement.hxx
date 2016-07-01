@@ -29,11 +29,11 @@
 #include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/broadcasthelper.hxx>
 
 #include <java/sql/Connection.hxx>
 #include "java/sql/ConnectionLog.hxx"
@@ -50,7 +50,7 @@ namespace connectivity
 
     //************ Class: java.sql.Statement
 
-    class java_sql_Statement_Base : public comphelper::OBaseMutex,
+    class java_sql_Statement_Base : public cppu::BaseMutex,
                                     public  java_sql_Statement_BASE,
                                     public  java_lang_Object,
                                     public  ::cppu::OPropertySetHelper,

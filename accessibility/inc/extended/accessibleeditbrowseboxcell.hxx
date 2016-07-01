@@ -96,7 +96,7 @@ namespace accessibility
 
     // XAccessible providing an EditBrowseBoxTableCell
     class EditBrowseBoxTableCellAccess:
-        public comphelper::OBaseMutex,
+        public cppu::BaseMutex,
         public cppu::WeakComponentImplHelper<css::accessibility::XAccessible>
     {
     protected:

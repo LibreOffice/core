@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWVIEWIMPL_HXX
 
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -163,7 +163,7 @@ typedef ::cppu::WeakComponentImplHelper< css::presentation::XSlideShowView,
                                             css::awt::XMouseListener,
                                             css::awt::XMouseMotionListener > SlideShowView_Base;
 
-class SlideShowView : public ::comphelper::OBaseMutex,
+class SlideShowView : public ::cppu::BaseMutex,
                     public SlideShowView_Base
 {
 public:

@@ -21,6 +21,7 @@
 #define INCLUDED_FPICKER_SOURCE_OFFICE_COMMONPICKER_HXX
 
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/ui/dialogs/XControlInformation.hpp>
 #include <com/sun/star/ui/dialogs/XControlAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -28,7 +29,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
@@ -52,7 +52,7 @@ namespace svt
     /** implements common functionality for the 2 UNO picker components
     */
     class OCommonPicker
-                    :public ::comphelper::OBaseMutex
+                    :public ::cppu::BaseMutex
                     ,public OCommonPicker_Base
                     ,public ::comphelper::OPropertyContainer
                     ,public ::comphelper::OPropertyArrayUsageHelper< OCommonPicker >

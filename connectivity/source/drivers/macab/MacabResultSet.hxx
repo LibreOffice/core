@@ -30,6 +30,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 namespace connectivity
 {
@@ -52,7 +53,7 @@ namespace connectivity
                                                       css::lang::XServiceInfo> MacabResultSet_BASE;
         class MacabRecords;
 
-        class MacabResultSet : public   comphelper::OBaseMutex,
+        class MacabResultSet : public   cppu::BaseMutex,
                              public MacabResultSet_BASE,
                              public ::cppu::OPropertySetHelper,
                              public comphelper::OPropertyArrayUsageHelper<MacabResultSet>

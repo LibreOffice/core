@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/listenernotification.hxx>
 
 #include <vector>
@@ -49,7 +49,7 @@ namespace pcr
     /** implements an <type>XPropertyHandler</type> which composes its information
         from a set of other property handlers
     */
-    class PropertyComposer  :public ::comphelper::OBaseMutex
+    class PropertyComposer  :public ::cppu::BaseMutex
                             ,public PropertyComposer_Base
                             ,public IPropertyExistenceCheck
     {

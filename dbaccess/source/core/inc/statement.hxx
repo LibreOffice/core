@@ -32,15 +32,14 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "apitools.hxx"
-#include <comphelper/broadcasthelper.hxx>
-
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include "apitools.hxx"
 
 
 //  OStatementBase
 
-class OStatementBase :  public comphelper::OBaseMutex,
+class OStatementBase :  public cppu::BaseMutex,
                         public OSubComponent,
                         public ::cppu::OPropertySetHelper,
                         public ::comphelper::OPropertyArrayUsageHelper < OStatementBase >,

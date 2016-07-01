@@ -24,7 +24,7 @@
 
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
 
 
@@ -95,7 +95,7 @@ namespace drawinglayer
             instance and copying or changing values is not intended. The idea is to hold all data
             needed for visualisation of this primitive in unchangeable form.
 
-            It is derived from comphelper::OBaseMutex to have a Mutex at hand; in a base
+            It is derived from cppu::BaseMutex to have a Mutex at hand; in a base
             implementation this may not be needed, but e.g. when buffering at last decomposition
             in a local member, multiple threads may try to decompose at the same time, so locking
             is needed to avoid race conditions seen from the UNO object implementation.
@@ -157,7 +157,7 @@ namespace drawinglayer
             in their get2DDecomposition/getB2DRange implementations.
          */
         class DRAWINGLAYER_DLLPUBLIC BasePrimitive2D
-        :   protected comphelper::OBaseMutex,
+        :   protected cppu::BaseMutex,
             public BasePrimitive2DImplBase
         {
             BasePrimitive2D(const BasePrimitive2D&) = delete;

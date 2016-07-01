@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <unordered_map>
 
@@ -39,7 +39,7 @@ namespace svt
 class SVT_DLLPUBLIC FrameStatusListener : public css::frame::XStatusListener,
                             public css::frame::XFrameActionListener,
                             public css::lang::XComponent,
-                            public ::comphelper::OBaseMutex,
+                            public ::cppu::BaseMutex,
                             public ::cppu::OWeakObject
 {
     public:

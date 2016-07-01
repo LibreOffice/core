@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <cppuhelper/compbase9.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <svtools/treelistentry.hxx>
 #include <tools/gen.hxx>
@@ -68,7 +68,7 @@ namespace accessibility
                                                 , css::lang::XServiceInfo > AccessibleListBoxEntry_BASE;
 
     /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
-    class AccessibleListBoxEntry:public ::comphelper::OBaseMutex
+    class AccessibleListBoxEntry:public ::cppu::BaseMutex
                                    ,public AccessibleListBoxEntry_BASE
                                 ,public ::comphelper::OCommonAccessibleText
                                 ,public ListBoxAccessibleBase

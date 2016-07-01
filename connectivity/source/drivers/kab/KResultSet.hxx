@@ -52,7 +52,7 @@ namespace connectivity
                                                       css::sdbc::XColumnLocate,
                                                       css::lang::XServiceInfo> KabResultSet_BASE;
 
-        class KabResultSet : public comphelper::OBaseMutex,
+        class KabResultSet : public cppu::BaseMutex,
                              public KabResultSet_BASE,
                              public ::cppu::OPropertySetHelper,
                              public comphelper::OPropertyArrayUsageHelper<KabResultSet>

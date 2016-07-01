@@ -55,7 +55,7 @@ namespace dbaccess
     class ODBTableDecorator;
     typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTableDecorator >  ODBTableDecorator_PROP;
 
-    class ODBTableDecorator :public comphelper::OBaseMutex
+    class ODBTableDecorator :public cppu::BaseMutex
                             ,public OTableDescriptor_BASE
                             ,public ODataSettings //ODataSettings_Base
                             ,public IColumnFactory

@@ -21,10 +21,10 @@
 #define INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX
 
 #include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <memory>
 
@@ -83,7 +83,7 @@ namespace comphelper
     /** helper class for implementing an AccessibleContext
     */
     class COMPHELPER_DLLPUBLIC OAccessibleContextHelper
-                :public ::comphelper::OBaseMutex
+                :public ::cppu::BaseMutex
                 ,public OAccessibleContextHelper_Base
     {
     private:

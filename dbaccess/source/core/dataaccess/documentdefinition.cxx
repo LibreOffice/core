@@ -159,7 +159,7 @@ namespace dbaccess
 
     // OEmbedObjectHolder
     typedef ::cppu::WeakComponentImplHelper<   embed::XStateChangeListener > TEmbedObjectHolder;
-    class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
+    class OEmbedObjectHolder :   public ::cppu::BaseMutex
                                 ,public TEmbedObjectHolder
     {
         Reference< XEmbeddedObject >    m_xBroadCaster;
