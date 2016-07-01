@@ -433,6 +433,7 @@ bool FileDialogHelper_Impl::isInOpenMode() const
         case FILEOPEN_SIMPLE:
         case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
         case FILEOPEN_PLAY:
+        case FILEOPEN_LINK_PLAY:
         case FILEOPEN_READONLY_VERSION:
         case FILEOPEN_LINK_PREVIEW:
         case FILEOPEN_PREVIEW:
@@ -827,6 +828,7 @@ static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
         case FILEOPEN_SIMPLE:
         case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
         case FILEOPEN_PLAY:
+        case FILEOPEN_LINK_PLAY:
         case FILEOPEN_READONLY_VERSION:
         case FILEOPEN_LINK_PREVIEW:
         case FILEOPEN_PREVIEW:
@@ -996,6 +998,10 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
             case FILEOPEN_PLAY:
                 nTemplateDescription = TemplateDescription::FILEOPEN_PLAY;
+                break;
+
+            case FILEOPEN_LINK_PLAY:
+                nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PLAY;
                 break;
 
             case FILEOPEN_READONLY_VERSION:
