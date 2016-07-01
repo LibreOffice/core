@@ -827,5 +827,8 @@
     <glade-widget-class title="Button with small padding" name="vcllo-SmallButton"
                         generic-name="SmallButton" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
+    <glade-widget-class title="Horizontal box hiding childs depending on its priorities" name="sfxlo-PriorityHBox"
+                        generic-name="PriorityHBox" parent="GtkBox"
+                        icon-name="widget-gtk-box"/>
   </glade-widget-classes>
 </glade-catalog>
