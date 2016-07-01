@@ -98,6 +98,15 @@ OUString SAL_CALL AnimationsImport_getImplementationName() throw()
     return OUString( "xmloff::AnimationsImport" );
 }
 
+static ::rtl::OUString
+lcl_GetMediaReference(SvXMLImport const& rImport, ::rtl::OUString const& rURL)
+{
+    if (rImport.IsPackageURL(rURL))
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:")) + rURL;
+
+    return rImport.GetAbsoluteReference(rURL);
+}
+
 namespace xmloff
 {
 
@@ -872,7 +881,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 if( nNodeType == AnimationNodeType::AUDIO )
                 {
                     Reference< XAudio > xAudio( mxNode, UNO_QUERY_THROW );
-                    xAudio->setSource( makeAny( GetImport().GetAbsoluteReference( rValue ) ) );
+                    xAudio->setSource( makeAny(lcl_GetMediaReference(GetImport(), rValue)) );
                     break;
                 }
                 SAL_FALLTHROUGH;
