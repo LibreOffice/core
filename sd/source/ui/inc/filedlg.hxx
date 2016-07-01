@@ -50,6 +50,7 @@ public:
     ErrCode Execute();
     OUString GetPath() const;
     void SetPath( const OUString& rPath );
+    bool IsInsertAsLinkSelected();
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
