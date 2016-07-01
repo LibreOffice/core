@@ -664,54 +664,75 @@ namespace svgio
 
                     if(basegfx::fTools::more(fStrokeWidth, 0.0))
                     {
-                        // get LineJoin, LineCap and stroke array
-                        const basegfx::B2DLineJoin aB2DLineJoin(StrokeLinejoinToB2DLineJoin(getStrokeLinejoin()));
-                        const css::drawing::LineCap aLineCap(StrokeLinecapToDrawingLineCap(getStrokeLinecap()));
-                        ::std::vector< double > aDashArray;
-
-                        if(!getStrokeDasharray().empty())
-                        {
-                            aDashArray = solveSvgNumberVector(getStrokeDasharray(), mrOwner);
-                        }
-
-                        // todo: Handle getStrokeDashOffset()
-
-                        // convert svg:stroke-miterlimit to LineAttrute:mfMiterMinimumAngle
-                        // The default needs to be set explicitly, because svg default <> Draw default
-                        double fMiterMinimumAngle;
-                        if (getStrokeMiterLimit().isSet())
-                        {
-                            fMiterMinimumAngle = 2.0 * asin(1.0/getStrokeMiterLimit().getNumber());
-                        }
-                        else
-                        {
-                            fMiterMinimumAngle = 2.0 * asin(0.25); // 1.0/default 4.0
-                        }
-
-                        // prepare line attribute
                         drawinglayer::primitive2d::Primitive2DReference aNewLinePrimitive;
 
-                        const drawinglayer::attribute::LineAttribute aLineAttribute(
-                            pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0),
-                            fStrokeWidth,
-                            aB2DLineJoin,
-                            aLineCap,
-                            fMiterMinimumAngle);
-
-                        if(aDashArray.empty())
+                        // if we have a line with two identical points it is not really a line,
+                        // but used by SVG sometimes to paint a single dot.In that case, create
+                        // the geometry for a single dot
+                        if(1 == rPath.count())
                         {
-                            aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                                rPath,
-                                aLineAttribute);
+                            const basegfx::B2DPolygon aSingle(rPath.getB2DPolygon(0));
+
+                            if(2 == aSingle.count() && aSingle.getB2DPoint(0).equal(aSingle.getB2DPoint(1)))
+                            {
+                                aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                    basegfx::B2DPolyPolygon(
+                                        basegfx::tools::createPolygonFromCircle(
+                                            aSingle.getB2DPoint(0),
+                                            fStrokeWidth * (1.44 * 0.5))),
+                                    pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0));
+                            }
                         }
-                        else
-                        {
-                            const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashArray);
 
-                            aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                                rPath,
-                                aLineAttribute,
-                                aStrokeAttribute);
+                        if(!aNewLinePrimitive.is())
+                        {
+                            // get LineJoin, LineCap and stroke array
+                            const basegfx::B2DLineJoin aB2DLineJoin(StrokeLinejoinToB2DLineJoin(getStrokeLinejoin()));
+                            const css::drawing::LineCap aLineCap(StrokeLinecapToDrawingLineCap(getStrokeLinecap()));
+                            ::std::vector< double > aDashArray;
+
+                            if(!getStrokeDasharray().empty())
+                            {
+                                aDashArray = solveSvgNumberVector(getStrokeDasharray(), mrOwner);
+                            }
+
+                            // convert svg:stroke-miterlimit to LineAttrute:mfMiterMinimumAngle
+                            // The default needs to be set explicitely, because svg default <> Draw default
+                            double fMiterMinimumAngle;
+                            if (getStrokeMiterLimit().isSet())
+                            {
+                                fMiterMinimumAngle = 2.0 * asin(1.0/getStrokeMiterLimit().getNumber());
+                            }
+                            else
+                            {
+                                fMiterMinimumAngle = 2.0 * asin(0.25); // 1.0/default 4.0
+                            }
+
+                            // todo: Handle getStrokeDashOffset()
+
+                            // prepare line attribute
+                            const drawinglayer::attribute::LineAttribute aLineAttribute(
+                                pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0),
+                                fStrokeWidth,
+                                aB2DLineJoin,
+                                aLineCap,
+                                fMiterMinimumAngle);
+
+                            if(aDashArray.empty())
+                            {
+                                aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                                    rPath,
+                                    aLineAttribute);
+                            }
+                            else
+                            {
+                                const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(aDashArray);
+
+                                aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                                    rPath,
+                                    aLineAttribute,
+                                    aStrokeAttribute);
+                            }
                         }
 
                         if(pStrokeGradient || pStrokePattern)
