@@ -742,8 +742,8 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
-                OUString aProcName("Property Get ");
-                aProcName += pProcProperty->GetName();
+                OUString aProcName = "Property Get "
+                                   + pProcProperty->GetName();
 
                 SbxVariable* pMethVar = Find( aProcName, SbxClassType::Method );
                 if( pMethVar )
@@ -784,14 +784,14 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     pProcProperty->setSet( false );
 
-                    OUString aProcName("Property Set ");
-                    aProcName += pProcProperty->GetName();
+                    OUString aProcName = "Property Set "
+                                       + pProcProperty->GetName();
                     pMethVar = Find( aProcName, SbxClassType::Method );
                 }
                 if( !pMethVar ) // Let
                 {
-                    OUString aProcName("Property Let " );
-                    aProcName += pProcProperty->GetName();
+                    OUString aProcName = "Property Let "
+                                       + pProcProperty->GetName();
                     pMethVar = Find( aProcName, SbxClassType::Method );
                 }
 
@@ -1871,8 +1871,8 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
-                OUString aProcName("Property Get ");
-                aProcName += pProcProperty->GetName();
+                OUString aProcName = "Property Get "
+                                   + pProcProperty->GetName();
 
                 SbxVariable* pMeth = Find( aProcName, SbxClassType::Method );
                 if( pMeth )
@@ -1913,14 +1913,14 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                 {
                     pProcProperty->setSet( false );
 
-                    OUString aProcName("Property Set " );
-                    aProcName += pProcProperty->GetName();
+                    OUString aProcName = "Property Set "
+                                       + pProcProperty->GetName();
                     pMeth = Find( aProcName, SbxClassType::Method );
                 }
                 if( !pMeth )    // Let
                 {
-                    OUString aProcName("Property Let " );
-                    aProcName += pProcProperty->GetName();
+                    OUString aProcName = "Property Let "
+                                       + pProcProperty->GetName();
                     pMeth = Find( aProcName, SbxClassType::Method );
                 }
 

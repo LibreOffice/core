@@ -284,8 +284,8 @@ void PropBrw::implSetNewObjectSequence
     {
         xObjectInspector->inspect( _rObjectSeq );
 
-        OUString aText = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES);
-        aText += IDE_RESSTR(RID_STR_BRWTITLE_MULTISELECT);
+        OUString aText = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES)
+                       + IDE_RESSTR(RID_STR_BRWTITLE_MULTISELECT);
         SetText( aText );
     }
 }

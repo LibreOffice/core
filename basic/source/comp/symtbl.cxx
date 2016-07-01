@@ -160,9 +160,9 @@ void SbiSymPool::Add( SbiSymDef* pDef )
             OUString aName( pDef->aName );
             if( pDef->IsStatic() )
             {
-                aName = pParser->aGblStrings.Find( nProcId );
-                aName += ":";
-                aName += pDef->aName;
+                aName = pParser->aGblStrings.Find( nProcId )
+                      + ":"
+                      + pDef->aName;
             }
             pDef->nId = rStrings.Add( aName );
         }

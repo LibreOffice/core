@@ -69,8 +69,8 @@ void VBATest::testMiscVBAFunctions()
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
     {
-        OUString sMacroURL( sMacroPathURL );
-        sMacroURL += OUString::createFromAscii( macroSource[ i ] );
+        OUString sMacroURL = sMacroPathURL
+                           + OUString::createFromAscii( macroSource[ i ] );
 
         MacroSnippet myMacro;
         myMacro.LoadSourceFromFile( sMacroURL );
@@ -133,16 +133,16 @@ void VBATest::testMiscOLEStuff()
 
     uno::Sequence< uno::Any > aArgs(1);
     // path to test document
-    OUString sPath = m_directories.getPathFromSrc("/basic/qa/vba_tests/data/");
-    sPath += "ADODBdata.xls";
+    OUString sPath = m_directories.getPathFromSrc("/basic/qa/vba_tests/data/")
+                   + "ADODBdata.xls";
     sPath = sPath.replaceAll( "/", "\\" );
 
     aArgs[ 0 ] = uno::makeAny( sPath );
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
     {
-        OUString sMacroURL( sMacroPathURL );
-        sMacroURL += OUString::createFromAscii( macroSource[ i ] );
+        OUString sMacroURL = sMacroPathURL
+                           + OUString::createFromAscii( macroSource[ i ] );
         MacroSnippet myMacro;
         myMacro.LoadSourceFromFile( sMacroURL );
         SbxVariableRef pReturn = myMacro.Run( aArgs );

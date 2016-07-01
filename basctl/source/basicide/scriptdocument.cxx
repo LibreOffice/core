@@ -1269,8 +1269,8 @@ namespace basctl
         sal_Int32 i = 1;
         while ( !bValid )
         {
-            aObjectName = aBaseName;
-            aObjectName += OUString::number( i );
+            aObjectName = aBaseName
+                        + OUString::number( i );
 
             if ( aUsedNamesCheck.find( aObjectName ) == aUsedNamesCheck.end() )
                 bValid = true;

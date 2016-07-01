@@ -747,18 +747,18 @@ void LibPage::InsertLib()
     // filter
     OUString aTitle(IDEResId(RID_STR_BASIC).toString());
     OUString aFilter;
-    aFilter =  "*.sbl;*.xlc;*.xlb" ;        // library files
-    aFilter += ";*.sdw;*.sxw;*.odt" ;       // text
-    aFilter += ";*.vor;*.stw;*.ott" ;       // text template
-    aFilter += ";*.sgl;*.sxg;*.odm" ;       // master document
-    aFilter += ";*.oth" ;                   // html document template
-    aFilter += ";*.sdc;*.sxc;*.ods" ;       // spreadsheet
-    aFilter += ";*.stc;*.ots" ;             // spreadsheet template
-    aFilter += ";*.sda;*.sxd;*.odg" ;       // drawing
-    aFilter += ";*.std;*.otg" ;             // drawing template
-    aFilter += ";*.sdd;*.sxi;*.odp" ;       // presentation
-    aFilter += ";*.sti;*.otp" ;             // presentation template
-    aFilter += ";*.sxm;*.odf" ;             // formula
+    aFilter =  OUString("*.sbl;*.xlc;*.xlb")        // library files
+            + ";*.sdw;*.sxw;*.odt"        // text
+            + ";*.vor;*.stw;*.ott"        // text template
+            + ";*.sgl;*.sxg;*.odm"        // master document
+            + ";*.oth"                    // html document template
+            + ";*.sdc;*.sxc;*.ods"        // spreadsheet
+            + ";*.stc;*.ots"              // spreadsheet template
+            + ";*.sda;*.sxd;*.odg"        // drawing
+            + ";*.std;*.otg"              // drawing template
+            + ";*.sdd;*.sxi;*.odp"        // presentation
+            + ";*.sti;*.otp"              // presentation template
+            + ";*.sxm;*.odf" ;            // formula
     xFP->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
@@ -1271,8 +1271,8 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         const OUString strFullPath = "FullPath" ;
         const OUString strBasicMediaType = "application/vnd.sun.star.basic-library" ;
 
-        OUString fullPath = aLibName;
-        fullPath += "/" ;
+        OUString fullPath = aLibName
+                          + "/" ;
         auto attribs(::comphelper::InitPropertySequence({
             { strFullPath, makeAny(fullPath) },
             { strMediaType, makeAny(strBasicMediaType) }

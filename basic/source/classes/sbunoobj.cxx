@@ -3396,9 +3396,9 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
         else
         {
             // expand fully qualified name
-            OUString aNewName = GetName();
-            aNewName += ".";
-            aNewName += rName;
+            OUString aNewName = GetName()
+                              + "."
+                              + rName;
 
             // get CoreReflection
             Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
@@ -3808,8 +3808,8 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         Any aRetAny;
         if( xContextToUse.is() )
         {
-            OUString aSingletonName( "/singletons/" );
-            aSingletonName += GetName();
+            OUString aSingletonName = "/singletons/"
+                                    + GetName();
             Reference < XInterface > xRet;
             xContextToUse->getValueByName( aSingletonName ) >>= xRet;
             aRetAny <<= xRet;
@@ -4306,9 +4306,9 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
 
     SolarMutexGuard guard;
 
-    OUString aPropertyFunctionName( "Property Set " );
-    aPropertyFunctionName += m_aPrefix;
-    aPropertyFunctionName += rProperty;
+    OUString aPropertyFunctionName = "Property Set "
+                                   + m_aPrefix
+                                   + rProperty;
 
     SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxClassType::Method );
     SbMethod* pMeth = p != nullptr ? dynamic_cast<SbMethod*>( p ) : nullptr;
@@ -4345,9 +4345,9 @@ Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
     }
     SolarMutexGuard guard;
 
-    OUString aPropertyFunctionName( "Property Get " );
-    aPropertyFunctionName += m_aPrefix;
-    aPropertyFunctionName += rProperty;
+    OUString aPropertyFunctionName = "Property Get "
+                                   + m_aPrefix
+                                   + rProperty;
 
     SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxClassType::Method );
     SbMethod* pMeth = p != nullptr ? dynamic_cast<SbMethod*>( p ) : nullptr;
@@ -4390,8 +4390,8 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
     {
         return aRet;
     }
-    OUString aFunctionName = m_aPrefix;
-    aFunctionName += rFunction;
+    OUString aFunctionName = m_aPrefix
+                           + rFunction;
 
     bool bSetRescheduleBack = false;
     bool bOldReschedule = true;
