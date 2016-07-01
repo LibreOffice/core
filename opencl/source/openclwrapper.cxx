@@ -859,6 +859,11 @@ const char* errorString(cl_int nError)
 #undef CASE
 }
 
+bool GPUEnv::isOpenCLEnabled()
+{
+    return gpuEnv.mpDevID;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
