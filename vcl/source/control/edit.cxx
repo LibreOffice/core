@@ -771,8 +771,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 OUString Edit::ImplGetValidString( const OUString& rString ) const
 {
     OUString aValidString( rString );
-    aValidString = comphelper::string::remove(aValidString, '\n');
-    aValidString = comphelper::string::remove(aValidString, '\r');
+    aValidString = aValidString.replaceAll("\n", "").replaceAll("\r", "");
     aValidString = aValidString.replace('\t', ' ');
     return aValidString;
 }
@@ -2324,7 +2323,7 @@ OUString TextFilter::filter(const OUString &rText)
     OUString sTemp(rText);
     for (sal_Int32 i = 0; i < sForbiddenChars.getLength(); ++i)
     {
-        sTemp = comphelper::string::remove(sTemp, sForbiddenChars[i]);
+        sTemp = sTemp.replaceAll(OUString(sForbiddenChars[i]), "");
     }
     return sTemp;
 }

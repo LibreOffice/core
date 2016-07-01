@@ -125,8 +125,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
                     while( -1 != n )
                     {
                         OUString s( sTopics.getToken( 0, '\t', n ));
-                        s = comphelper::string::remove(s, '\n');
-                        s = comphelper::string::remove(s, '\r');
+                        s = s.replaceAll("\n", "").replaceAll("\r", "");
                         if( !hText1 || s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
                         {
                             DdeString aDStr( pInst->hDdeInstSvr, s );

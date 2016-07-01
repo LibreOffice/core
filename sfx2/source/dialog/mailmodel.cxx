@@ -914,15 +914,12 @@ bool CreateFromAddress_Impl( OUString& rFrom )
         }
         rFrom += comphelper::string::strip(aName, ' ');
         // remove illegal characters
-        rFrom = comphelper::string::remove(rFrom, '<');
-        rFrom = comphelper::string::remove(rFrom, '>');
-        rFrom = comphelper::string::remove(rFrom, '@');
+        rFrom = rFrom.replaceAll("<", "").replaceAll(">", "").replaceAll("@", "");
     }
     OUString aEmailName = aUserCFG.GetEmail();
 
     // remove illegal characters
-    aEmailName = comphelper::string::remove(aEmailName, '<');
-    aEmailName = comphelper::string::remove(aEmailName, '>');
+    aEmailName = aEmailName.replaceAll("<", "").replaceAll(">", "");
 
     if ( !aEmailName.isEmpty() )
     {

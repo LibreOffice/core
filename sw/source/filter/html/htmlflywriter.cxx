@@ -1969,8 +1969,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
     OUString aURL( rURL.copy( 1 ) );
 
     // nPos-1+1/3 (-1 wg. Erase)
-    OUString sCmp(comphelper::string::remove(aURL.copy(bEncoded ? nPos+2 : nPos),
-        ' '));
+    OUString sCmp = aURL.copy(bEncoded ? nPos+2 : nPos).replaceAll(" ","");
     if( sCmp.isEmpty() )
         return;
 

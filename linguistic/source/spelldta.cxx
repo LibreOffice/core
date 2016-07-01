@@ -96,7 +96,7 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
                 if (pEntries[k].is())
                 {
                     // remove characters used to determine hyphenation positions
-                    aEntryTxt = comphelper::string::remove(pEntries[k]->getDictionaryWord(), '=');
+                    aEntryTxt = pEntries[k]->getDictionaryWord().replaceAll("=", "");
                 }
                 if (!aEntryTxt.isEmpty()  &&  aEntryTxt.getLength() > 1  &&  LevDistance( rText, aEntryTxt ) <= 2)
                     rDicListProps.push_back( aEntryTxt );

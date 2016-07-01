@@ -2975,7 +2975,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     if( nPos < 2 )
         return;
 
-    OUString sCmp(comphelper::string::remove(aURL.copy(nPos+1), ' '));
+    OUString sCmp = aURL.copy(nPos+1).replaceAll(" ", "");
     if( sCmp.isEmpty() )
         return;
 

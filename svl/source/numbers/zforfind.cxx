@@ -2915,7 +2915,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // S
              !bFirst && (nSign < 0) && pFormat->IsSecondSubformatRealNegative() )
         {
             // simply negated twice? --1
-            aString = comphelper::string::remove(aString, ' ');
+            aString = aString.replaceAll(" ", "");
             if ( (aString.getLength() == 1) && (aString[0] == '-') )
             {
                 bFound = true;

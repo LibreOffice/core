@@ -2216,7 +2216,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
     assert((&rComboBox == pOldSymbols || &rComboBox == pSymbols) && "Sm : wrong ComboBox");
 
     // trim SymbolName (no blanks)
-    OUString  aNormName(comphelper::string::remove(rSymbolName, ' '));
+    OUString  aNormName = rSymbolName.replaceAll(" ", "");
     // and remove possible deviations within the input
     rComboBox.SetText(aNormName);
 
