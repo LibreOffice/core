@@ -645,8 +645,10 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     bool  bIsPostfix = GetToken().eType == TFACT;
 
-    SmNode *pOper = GetSubNode(bIsPostfix ? 1 : 0),
-           *pBody = GetSubNode(bIsPostfix ? 0 : 1);
+    SmNode *pNode0 = GetSubNode(0),
+           *pNode1 = GetSubNode(1);
+    SmNode *pOper = bIsPostfix ? pNode1 : pNode0,
+           *pBody = bIsPostfix ? pNode0 : pNode1;
     assert(pOper);
     assert(pBody);
 
@@ -654,25 +656,14 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pOper->Arrange(rDev, rFormat);
     pBody->Arrange(rDev, rFormat);
 
-    Point  aPos = pOper->AlignTo(*pBody, bIsPostfix ? RectPos::Right : RectPos::Left,
-                        RectHorAlign::Center, RectVerAlign::Baseline);
-    // add a bit space between operator and argument
-    // (worst case -{1 over 2} where - and over have almost no space inbetween)
-    long  nDelta = pOper->GetFont().GetFontSize().Height() / 20;
-    if (bIsPostfix)
-        aPos.X() += nDelta;
-    else
-        aPos.X() -= nDelta;
-    pOper->MoveTo(aPos);
+    long nDist = (pOper->GetRect().GetWidth() * rFormat.GetDistance(DIS_HORIZONTAL)) / 100L;
 
-    SmRect::operator = (*pBody);
-    long  nOldBot = GetBottom();
+    SmRect::operator = (*pNode0);
 
-    ExtendBy(*pOper, RectCopyMBL::Xor);
-
-    // workaround for Bug 50865: "a^2 a^+2" have different baselines
-    // for exponents (if size of exponent is large enough)
-    SetBottom(nOldBot);
+    Point aPos = pNode1->AlignTo(*this, RectPos::Right, RectHorAlign::Center, RectVerAlign::Baseline);
+    aPos.X() += nDist;
+    pNode1->MoveTo(aPos);
+    ExtendBy(*pNode1, RectCopyMBL::Xor);
 }
 
 
