@@ -47,20 +47,17 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 {
     get(mpUseSwInterpreter, "useswinterpreter");
     get(mpUseOpenCL, "useopencl");
-    get(clUsed,"openclused");
+    get(mpOclUsed,"openclused");
+    get(mpOclNotUsed,"openclnotused");
 
     mpUseSwInterpreter->Check(officecfg::Office::Common::Misc::UseSwInterpreter::get());
 
     mpUseOpenCL->Check(maConfig.mbUseOpenCL);
     mpUseOpenCL->SetClickHdl(LINK(this, SvxOpenCLTabPage, EnableOpenCLHdl));
 
-    cl_device_id idTest=opencl::gpuEnv.mpDevID;
-    if(!idTest)
-    {
-    clUsed->SetText("Yes");
-    }else{
-    clUsed->SetText("No");
-    }
+    bool bCLUsed = opencl::GPUEnv::isOpenCLEnabled();
+    mpOclUsed->Show(bCLUsed);
+    mpOclNotUsed->Show(!bCLUsed);
 }
 
 SvxOpenCLTabPage::~SvxOpenCLTabPage()
