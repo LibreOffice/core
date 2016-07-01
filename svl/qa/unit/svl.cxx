@@ -1099,6 +1099,21 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "54:23:03 02/01/00";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
+    {  // tdf#99996: better algorithm for fraction representation
+        sCode = "# ?/???";
+        sExpected = "-575 540/697";
+        checkPreviewString(aFormatter, sCode, -575.774749601315, eLang, sExpected);
+    }
+    {  // tdf#100594: forced denominator
+        sCode = "# ?/100";
+        sExpected = " 6/100";
+        checkPreviewString(aFormatter, sCode, 0.06, eLang, sExpected);
+    }
+    {  // tdf#100754: forced denominator with text after fraction
+        sCode = "# ?/16\" inch\"";
+        sExpected = "2 6/16 inch";
+        checkPreviewString(aFormatter, sCode, 2.379, eLang, sExpected);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
