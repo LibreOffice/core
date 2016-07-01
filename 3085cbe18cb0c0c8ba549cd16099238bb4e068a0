@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba84c18e_f6ed7d26",
+        "filename": "svx/inc/xpolyimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-07-01T08:03:32Z",
+      "side": 1,
+      "message": "Why declaring Resize const? FWICT it\u0027s only used in non-const contexts anyway?",
+      "revId": "3085cbe18cb0c0c8ba549cd16099238bb4e068a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_167ca171",
         "filename": "svx/source/xoutdev/_xpoly.cxx",
         "patchSetId": 2
