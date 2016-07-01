@@ -347,6 +347,70 @@ void SAL_CALL TestLegacyDocumentHandler::endElement( const OUString& aName )
     setString( getString() + aName );
 }
 
+class NSDocumentHandler : public cppu::WeakImplHelper< XDocumentHandler >
+{
+private:
+    OUString resolveNamespace( const OUString& rName );
+    OUString getNamespaceValue( const OUString& rNamespacePrefix );
+
+public:
+    NSDocumentHandler() {}
+
+    // XDocumentHandler
+    virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override {}
+    virtual void SAL_CALL endDocument() throw (SAXException, RuntimeException, exception) override {}
+    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL endElement( const OUString& /* aName */ ) throw (SAXException, RuntimeException, exception) override {}
+    virtual void SAL_CALL characters( const OUString& /* aChars */ ) throw (SAXException, RuntimeException, exception) override {}
+    virtual void SAL_CALL ignorableWhitespace( const OUString& /* aWhitespaces */ ) throw (SAXException, RuntimeException, exception) override {}
+    virtual void SAL_CALL processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ ) throw (SAXException, RuntimeException, exception) override {}
+    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& /* xLocator */ ) throw (SAXException, RuntimeException, exception) override {}
+};
+
+void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >&/* xAttribs */ )
+        throw( SAXException, RuntimeException, exception )
+{
+    if (! (aName == "office:document" || aName == "office:body" || aName == "office:text" ||
+        aName == "text:p" || aName == "note:p") )
+        CPPUNIT_ASSERT(false);
+
+    OUString sResolvedName = resolveNamespace(aName);
+    if (! ( sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:office:1.0:document" ||
+        sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:office:1.0:body" ||
+        sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:office:1.0:text" ||
+        sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:text:1.0:p") )
+        CPPUNIT_ASSERT(false);
+}
+
+OUString NSDocumentHandler::resolveNamespace( const OUString& aName )
+{
+    int index;
+    if (( index = aName.indexOf( ':' )) > 0 )
+    {
+        if ( aName.getLength() > index + 1 )
+        {
+            OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) );
+            aAttributeName += ":";
+            aAttributeName += aName.copy( index + 1 );
+            return aAttributeName;
+        }
+    }
+    return aName;
+}
+
+OUString NSDocumentHandler::getNamespaceValue( const OUString& rNamespacePrefix )
+{
+    OUString aNamespaceURI;
+    if (rNamespacePrefix == "office")
+        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+    else if (rNamespacePrefix == "text")
+        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+    else if (rNamespacePrefix == "note")
+        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+    return aNamespaceURI;
+}
+
+
 class XMLImportTest : public test::BootstrapFixture
 {
 private:
@@ -365,9 +429,11 @@ public:
 
     XMLImportTest() : BootstrapFixture(true, false) {}
     void parse();
+    void testIllegalNamespaceUse();
 
     CPPUNIT_TEST_SUITE( XMLImportTest );
     CPPUNIT_TEST( parse );
+    CPPUNIT_TEST( testIllegalNamespaceUse );
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -423,6 +489,18 @@ void XMLImportTest::parse()
         // OString o = OUStringToOString( Str, RTL_TEXTENCODING_ASCII_US );
         // CPPUNIT_ASSERT_MESSAGE( string(o.pData->buffer), false );
     }
+}
+
+void XMLImportTest::testIllegalNamespaceUse()
+{
+    rtl::Reference< NSDocumentHandler > m_xNSDocumentHandler;
+    m_xNSDocumentHandler.set( new NSDocumentHandler() );
+    m_xParser->setDocumentHandler( m_xNSDocumentHandler.get() );
+    InputSource source;
+    source.sSystemId    = "internal";
+
+    source.aInputStream = createStreamFromFile( m_sDirPath + "multiplepfx.xml" );
+    m_xParser->parseStream(source);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( XMLImportTest );
