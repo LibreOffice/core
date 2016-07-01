@@ -40,8 +40,24 @@ namespace drawinglayer
                     }
                     default :
                     {
-                        // process recursively
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        // we look for an encapsulated primitive, so do not decompose primitives
+                        // based on GroupPrimitive2D, just visit their children. It may be that more
+                        // group-like primitives need to be added here, but all primitives with
+                        // grouping functionality should be implemented based on the GroupPrimitive2D
+                        // class and have their main content accessible as children
+                        const primitive2d::GroupPrimitive2D* pGroupPrimitive2D = dynamic_cast< const primitive2d::GroupPrimitive2D* >(&rCandidate);
+
+                        if(pGroupPrimitive2D)
+                        {
+                            // process group children recursively
+                            process(pGroupPrimitive2D->getChildren());
+                        }
+                        else
+                        {
+                            // do not process recursively, we *only* want to find existing
+                            // ObjectInfoPrimitive2D entries
+                        }
+
                         break;
                     }
                 }
