@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
+#include <test/screenshot_test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -55,32 +55,13 @@
 #include <comphelper/processfactory.hxx>
 #include <unotest/macros_test.hxx>
 
-//#include "DrawController.hxx"
-//#include "ViewShellBase.hxx"
-
 using namespace ::com::sun::star;
 
-static const char* SCREENSHOT_DIRECTORY = "/workdir/screenshots/";
-
-namespace {
-    void splitHelpId( OString& rHelpId, OUString& rDirname, OUString &rBasename )
-    {
-       sal_Int32 nIndex = rHelpId.lastIndexOf( '/' );
-
-       if( nIndex > 0 )
-            rDirname = OStringToOUString( rHelpId.copy( 0, nIndex ), RTL_TEXTENCODING_UTF8 );
-
-       if( rHelpId.getLength() > nIndex+1 )
-            rBasename= OStringToOUString( rHelpId.copy( nIndex+1 ), RTL_TEXTENCODING_UTF8 );
-    }
-}
-
 /// Test opening a dialog in sd
-class SdDialogsTest : public test::BootstrapFixture, public unotest::MacrosTest
+class SdDialogsTest : public ScreenshotTest
 {
 private:
     /// Document and ComponentContext
-    uno::Reference<uno::XComponentContext>  mxComponentContext;
     uno::Reference<lang::XComponent>        mxComponent;
 
     /// initially created SdAbstractDialogFactory and pointer to document
@@ -106,17 +87,14 @@ private:
     const SfxItemSet& getEmptySfxItemSet();
     const SfxItemSet& getEmptyFillStyleSfxItemSet();
 
-    /// central methods: dialog creation and dumping to target directory (path)
+    /// central method: dialog creation and dumping to target directory (path)
     VclAbstractDialog* createDialogByID(sal_uInt32 nID);
-    void dumpDialogToPath(VclAbstractDialog& rDlg);
-    void saveScreenshot( VclAbstractDialog& rDlg);
 
 public:
     SdDialogsTest();
     ~SdDialogsTest();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     // try to open a dialog
     void openAnyDialog();
@@ -127,8 +105,7 @@ public:
 };
 
 SdDialogsTest::SdDialogsTest()
-:   mxComponentContext(),
-    mxComponent(),
+:   mxComponent(),
     mpFact(nullptr),
     mpImpressDocument(nullptr),
     mpDocShell(nullptr),
@@ -146,29 +123,14 @@ SdDialogsTest::~SdDialogsTest()
 
 void SdDialogsTest::setUp()
 {
-    test::BootstrapFixture::setUp();
+    ScreenshotTest::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
     mpFact = SdAbstractDialogFactory::Create();
     mxComponent = loadFromDesktop("private:factory/simpress", "com.sun.star.presentation.PresentationDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
-    osl::FileBase::RC err = osl::Directory::create( m_directories.getURLFromSrc( SCREENSHOT_DIRECTORY ) );
-    CPPUNIT_ASSERT_MESSAGE( "Failed to create screenshot directory", (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
-
     mpImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(mpImpressDocument);
-}
-
-void SdDialogsTest::tearDown()
-{
-    //if (mxComponent.is())
-    //{
-    //    mxComponent->dispose();
-    //}
-
-    test::BootstrapFixture::tearDown();
 }
 
 SdAbstractDialogFactory* SdDialogsTest::getSdAbstractDialogFactory()
@@ -609,58 +571,6 @@ VclAbstractDialog* SdDialogsTest::createDialogByID(sal_uInt32 nID)
     }
 
     return pRetval;
-}
-
-void SdDialogsTest::saveScreenshot(VclAbstractDialog& rDlg)
-{
-    const Bitmap aScreenshot(rDlg.createScreenshot());
-
-    if (!aScreenshot.IsEmpty())
-    {
-        OString aScreenshotId = rDlg.GetScreenshotId();
-        OUString aDirname, aBasename;
-        splitHelpId( aScreenshotId, aDirname, aBasename );
-        aDirname = OUString::createFromAscii( SCREENSHOT_DIRECTORY ) + aDirname;
-
-        osl::FileBase::RC err = osl::Directory::createPath( m_directories.getURLFromSrc( aDirname ));
-        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to create " + aDirname, RTL_TEXTENCODING_UTF8).getStr(),
-                                (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
-
-        OUString aFullPath = m_directories.getSrcRootPath() + aDirname + "/" + aBasename + ".png";
-        SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
-        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to open " + OUString::number(aNew.GetErrorCode()), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen() );
-
-        vcl::PNGWriter aPNGWriter(aScreenshot);
-        aPNGWriter.Write(aNew);
-    }
-}
-
-void SdDialogsTest::dumpDialogToPath(VclAbstractDialog& rDlg)
-{
-
-    // for dumping, a lossless format is needed. It may be seen if the created data
-    // will be further modified/reduced, but for a input creating step it is
-    // unavoidable to use a lossless format initially
-    const std::vector<OString> aPageDescriptions(rDlg.getAllPageUIXMLDescriptions());
-
-    if (aPageDescriptions.size())
-    {
-        for (sal_uInt32 a(0); a < aPageDescriptions.size(); a++)
-        {
-            if (rDlg.selectPageByUIXMLDescription(aPageDescriptions[a]))
-            {
-               saveScreenshot( rDlg );
-            }
-            else
-            {
-                CPPUNIT_ASSERT(false);
-            }
-        }
-    }
-    else
-    {
-        saveScreenshot( rDlg );
-    }
 }
 
 void SdDialogsTest::openAnyDialog()

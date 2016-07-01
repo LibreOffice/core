@@ -7,9 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
-#include <test/xmltesttools.hxx>
+#include <test/screenshot_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/dispatchcommand.hxx>
@@ -45,53 +43,26 @@
 
 using namespace css;
 
-#if !defined(WNT) && !defined(MACOSX)
 static const char* DATA_DIRECTORY = "/sc/qa/unit/screenshots/data/";
-static const char* SCREENSHOT_DIRECTORY = "/workdir/screenshots/";
-#endif
 
-namespace {
-    void splitHelpId( OString& rHelpId, OUString& rDirname, OUString &rBasename )
-    {
-        sal_Int32 nIndex = rHelpId.lastIndexOf( '/' );
-
-        if( nIndex > 0 )
-            rDirname = OStringToOUString( rHelpId.copy( 0, nIndex ), RTL_TEXTENCODING_UTF8 );
-
-        if( rHelpId.getLength() > nIndex+1 )
-            rBasename= OStringToOUString( rHelpId.copy( nIndex+1 ), RTL_TEXTENCODING_UTF8 );
-    }
-}
-
-
-class ScScreenshotTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
+class ScScreenshotTest : public ScreenshotTest
 {
 public:
     ScScreenshotTest();
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
 
-#if !defined(WNT) && !defined(MACOSX)
     void testOpeningModalDialogs();
     //void testOpeningModelessDialogs();
-#endif
 
     CPPUNIT_TEST_SUITE(ScScreenshotTest);
-#if !defined(WNT) && !defined(MACOSX)
     CPPUNIT_TEST(testOpeningModalDialogs);
     //CPPUNIT_TEST(testOpeningModelessDialogs);
-#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-#if !defined(WNT) && !defined(MACOSX)
     void initializeWithDoc(const char* pName);
 
     VclAbstractDialog* createDialogByID( sal_uInt32 nID);
-    void dumpDialogToPath( VclAbstractDialog& rDialog );
-    void saveScreenshot( VclAbstractDialog& rDialog );
 
-#endif
 
     uno::Reference<lang::XComponent> mxComponent;
     SfxObjectShell* pFoundShell;
@@ -107,25 +78,6 @@ ScScreenshotTest::ScScreenshotTest()
 {
 }
 
-void ScScreenshotTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-
-    osl::FileBase::RC err = osl::Directory::create( m_directories.getURLFromSrc( SCREENSHOT_DIRECTORY ) );
-    CPPUNIT_ASSERT_MESSAGE( "Failed to create screenshot directory", (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
-}
-
-void ScScreenshotTest::tearDown()
-{
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-#if !defined(WNT) && !defined(MACOSX)
 void ScScreenshotTest::initializeWithDoc(const char* pName)
 {
     if (mxComponent.is())
@@ -283,54 +235,6 @@ VclAbstractDialog* ScScreenshotTest::createDialogByID( sal_uInt32 nID )
     return pReturnDialog;
 }
 
-void ScScreenshotTest::saveScreenshot( VclAbstractDialog& rDialog )
-{
-     const Bitmap aScreenshot(rDialog.createScreenshot());
-
-     if (!aScreenshot.IsEmpty())
-     {
-         OString aScreenshotId = rDialog.GetScreenshotId();
-         OUString aDirname, aBasename;
-         splitHelpId( aScreenshotId, aDirname, aBasename );
-         aDirname = OUString::createFromAscii( SCREENSHOT_DIRECTORY ) + aDirname;
-
-         osl::FileBase::RC err = osl::Directory::createPath( m_directories.getURLFromSrc( aDirname ));
-         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to create " + aDirname, RTL_TEXTENCODING_UTF8).getStr(),
-                         (err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST) );
-
-         OUString aFullPath = m_directories.getSrcRootPath() + aDirname + "/" + aBasename + ".png";
-         SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
-         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Failed to open " + OUString::number(aNew.GetErrorCode()), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen() );
-
-         vcl::PNGWriter aPNGWriter(aScreenshot);
-         aPNGWriter.Write(aNew);
-     }
-}
-
-void ScScreenshotTest::dumpDialogToPath( VclAbstractDialog& rDialog )
-{
-   const std::vector<OString> aPageDescriptions(rDialog.getAllPageUIXMLDescriptions());
-
-   if (aPageDescriptions.size())
-   {
-      for (sal_uInt32 a(0); a < aPageDescriptions.size(); a++)
-      {
-          if (rDialog.selectPageByUIXMLDescription(aPageDescriptions[a]))
-          {
-              saveScreenshot( rDialog );
-          }
-          else
-          {
-              CPPUNIT_ASSERT(false);
-          }
-      }
-   }
-   else
-   {
-      saveScreenshot( rDialog );
-   }
-}
-
 void ScScreenshotTest::testOpeningModalDialogs()
 {
     initializeWithDoc("empty.ods");
@@ -344,8 +248,6 @@ void ScScreenshotTest::testOpeningModalDialogs()
         dumpDialogToPath( *pDialog );
     }
 }
-
-#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScScreenshotTest);
 
