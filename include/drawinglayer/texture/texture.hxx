@@ -324,6 +324,9 @@ namespace drawinglayer
             double                          mfOffsetX;
             double                          mfOffsetY;
 
+        private:
+            sal_Int32 iterateTiles(::std::vector< basegfx::B2DHomMatrix >* pMatrices) const;
+
         public:
             GeoTexSvxTiled(
                 const basegfx::B2DRange& rRange,
@@ -334,7 +337,8 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;
 
-            void appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices);
+            void appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices) const;
+            sal_uInt32 getNumberOfTiles() const;
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
