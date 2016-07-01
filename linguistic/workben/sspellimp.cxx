@@ -229,8 +229,7 @@ Reference< XSpellAlternatives >
                     aAlt2( aTmp );
             aAlt1.SearchAndReplaceAll( (sal_Unicode) 'x', (sal_Unicode) 'u');
             aAlt1.SearchAndReplaceAll( (sal_Unicode) 'X', (sal_Unicode) 'U');
-            aAlt2 = comphelper::string::remove(aAlt2, 'x');
-            aAlt2 = comphelper::string::remove(aAlt2, 'X');
+            aAlt2 = aAlt2.replaceAll("x", "").replaceAll("X", "");
             pStr[0] = aAlt1;
             pStr[1] = aAlt2;
 

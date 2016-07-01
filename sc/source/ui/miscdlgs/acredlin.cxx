@@ -304,7 +304,7 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     ScChangeActionType eType=pScChangeAction->GetType();
     OUString aDesc;
 
-    OUString aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+    OUString aComment = pScChangeAction->GetComment().replaceAll("\n", "");
 
     if(eType==SC_CAT_CONTENT)
     {
@@ -429,7 +429,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
         bIsGenerated = true;
     }
 
-    OUString aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+    OUString aComment = pScChangeAction->GetComment().replaceAll("\n", "");
 
     if (!aDesc.isEmpty())
     {
@@ -600,7 +600,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
             aString += "\t";
         }
 
-        OUString aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+        OUString aComment = pScChangeAction->GetComment().replaceAll("\n", "");
 
         if (!aDesc.isEmpty())
         {
@@ -715,7 +715,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
         aString += "\t";
     }
 
-    OUString aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+    OUString aComment = pScChangeAction->GetComment().replaceAll("\n", "");
 
     if(!aDesc.isEmpty())
     {

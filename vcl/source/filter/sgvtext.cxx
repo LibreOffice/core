@@ -1109,7 +1109,7 @@ void SgfFontLst::ReadList()
 
         for (i=0;i<Anz;i++)
         {
-            FID = comphelper::string::remove(aCfg.GetKeyName(i), ' ');
+            FID = aCfg.GetKeyName(i).replaceAll(" ", "");
             Dsc = aCfg.ReadKey( i );
             if (comphelper::string::isdigitAsciiString(FID))
             {

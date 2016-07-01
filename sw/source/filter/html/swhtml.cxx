@@ -377,8 +377,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
                 OUString sCmp;
                 if (nPos)
                 {
-                    sCmp = comphelper::string::remove(
-                        m_sJmpMark.copy(nPos + 1), ' ');
+                    sCmp = m_sJmpMark.copy(nPos + 1).replaceAll(" ", "");
                 }
 
                 if( !sCmp.isEmpty() )
@@ -5386,8 +5385,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
         aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
         return;
 
-    aContent = comphelper::string::remove(aContent, '\r');
-    aContent = comphelper::string::remove(aContent, '\n');
+    aContent = aContent.replaceAll("\r", "").replaceAll("\n", "");
 
     if( aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_sdendnote ) )
     {

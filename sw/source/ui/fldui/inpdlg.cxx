@@ -130,7 +130,7 @@ void SwFieldInputDlg::StateChanged( StateChangedType nType )
 // Close
 void SwFieldInputDlg::Apply()
 {
-    OUString aTmp(comphelper::string::remove(m_pEditED->GetText(), '\r'));
+    OUString aTmp = m_pEditED->GetText().replaceAll("\r", "");
     rSh.StartAllAction();
     bool bModified = false;
     if(pInpField)

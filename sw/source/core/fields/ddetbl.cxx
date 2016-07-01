@@ -108,7 +108,7 @@ void SwDDETable::ChangeContent()
     // access to DDEFieldType
     SwDDEFieldType* pDDEType = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
 
-    OUString aExpand = comphelper::string::remove(pDDEType->GetExpansion(), '\r');
+    OUString aExpand = pDDEType->GetExpansion().replaceAll("\r", "");
     sal_Int32 nExpandTokenPos = 0;
 
     for( size_t n = 0; n < m_aLines.size(); ++n )

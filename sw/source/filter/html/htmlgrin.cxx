@@ -1162,7 +1162,7 @@ ANCHOR_SETEVENT:
         sal_Int32 nPos = sDecoded.lastIndexOf( cMarkSeparator );
         if( nPos != -1 )
         {
-            OUString sCmp(comphelper::string::remove(sDecoded.copy(nPos+1), ' '));
+            OUString sCmp= sDecoded.copy(nPos+1).replaceAll(" ","");
             if( !sCmp.isEmpty() )
             {
                 sCmp = sCmp.toAsciiLowerCase();

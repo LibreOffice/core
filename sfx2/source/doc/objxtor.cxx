@@ -970,7 +970,7 @@ OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
         aFact = aFact.copy( 0, nPos );
         aParam = aParam.copy(1);
     }
-    aFact = comphelper::string::remove(aFact, '4');
+    aFact = aFact.replaceAll("4", "");
     aFact = aFact.toAsciiLowerCase();
 
     // HACK: sometimes a real document service name is given here instead of

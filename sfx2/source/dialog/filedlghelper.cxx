@@ -1328,8 +1328,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
     if (pFilter)
     {
         sExtension = pFilter->GetDefaultExtension ();
-        sExtension = comphelper::string::remove(sExtension, '*');
-        sExtension = comphelper::string::remove(sExtension, '.');
+        sExtension = sExtension.replaceAll("*", "").replaceAll(".", "");
     }
 
     // a) the new way (optional!)

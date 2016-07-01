@@ -204,7 +204,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
         {
             OUString aOutStr( aStr.copy( nStrPos, nNextAttr - nStrPos ) );
             if ( !bExportSoftHyphens )
-                aOutStr = comphelper::string::remove(aOutStr, CHAR_SOFTHYPHEN);
+                aOutStr = aOutStr.replaceAll(OUString(CHAR_SOFTHYPHEN), "");
 
             rWrt.Strm().WriteUnicodeOrByteText( aOutStr );
         }

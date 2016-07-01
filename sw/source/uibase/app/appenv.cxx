@@ -78,7 +78,7 @@
 OUString InsertLabEnvText( SwWrtShell& rSh, SwFieldMgr& rFieldMgr, const OUString& rText )
 {
     OUString sRet;
-    OUString aText(comphelper::string::remove(rText, '\r'));
+    OUString aText = rText.replaceAll("\r", "");
 
     sal_Int32 nTokenPos = 0;
     while( -1 != nTokenPos )

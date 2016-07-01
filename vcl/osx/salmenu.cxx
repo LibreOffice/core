@@ -638,7 +638,7 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem *>(i_pSalMenuItem);
 
     // Delete mnemonics
-    OUString aText( comphelper::string::remove(i_rText, '~') );
+    OUString aText = i_rText.replaceAll("~", "");
 
     /* #i90015# until there is a correct solution
        strip out any appended (.*) in menubar entries
@@ -867,7 +867,7 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     mpMenuItem( nil )
 {
     // Delete mnemonics
-    OUString aText( comphelper::string::remove(pItemData->aText, '~') );
+    OUString aText = pItemData->aText.replaceAll("~", "");
 
     if (pItemData->eType == MenuItemType::SEPARATOR)
     {

@@ -606,7 +606,7 @@ bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStru
                 aString = aString.copy(0, nLength-1);
             }
 
-            aString = comphelper::string::remove(aString, '\n');
+            aString = aString.replaceAll("\n", "");
             OUString aStrResult;
 
             if ( CalcValue(aString, aStrResult ) )
