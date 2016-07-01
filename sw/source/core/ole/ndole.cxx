@@ -649,18 +649,27 @@ class DeflateData
 {
 private:
     friend class DeflateThread;
+    friend class SwOLEObj;
 
-    const uno::Reference< frame::XModel >               maXModel;
+    uno::Reference< frame::XModel >                     maXModel;
     drawinglayer::primitive2d::Primitive2DContainer     maPrimitive2DSequence;
     basegfx::B2DRange                                   maRange;
+
+    // set from the WorkerThread when done
     std::atomic< bool>                                  mbFinished;
+
+    // evtl.set from the SwOLEObj destructor when a WorkerThread is still active
+    // since it is not possible to kill it - let it terminate and delete the
+    // data working on itself
+    std::atomic< bool>                                  mbKilled;
 
 public:
     DeflateData(const uno::Reference< frame::XModel >& rXModel)
     :   maXModel(rXModel),
         maPrimitive2DSequence(),
         maRange(),
-        mbFinished(false)
+        mbFinished(false),
+        mbKilled(false)
     {
     }
 
@@ -681,11 +690,14 @@ public:
 
     void waitFinished()
     {
-        const TimeValue aTimeValue(0, 100000); // 1/10th second
-
-        while(!mbFinished)
+        while(!mbFinished && !mbKilled)
         {
-            osl_waitThread(&aTimeValue);
+            // need to wait until the load in progress is finished.
+            // to do so, Application::Yield() is needed since the execution
+            // here means that the SolarMutex is locked, but the
+            // WorkerThreads need it to be able to continue and finish
+            // the running import
+            Application::Yield();
         }
     }
 };
@@ -694,6 +706,7 @@ public:
 
 class DeflateThread : public comphelper::ThreadTask
 {
+    // the data to work on
     DeflateData&            mrDeflateData;
 
 public:
@@ -707,13 +720,23 @@ private:
     {
         try
         {
+            // load the chart data and get the primitives
             mrDeflateData.maPrimitive2DSequence = ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
                 mrDeflateData.maXModel,
                 mrDeflateData.maRange);
+
+            // model no longer needed and done
+            mrDeflateData.maXModel.clear();
             mrDeflateData.mbFinished = true;
         }
         catch (const uno::Exception&)
         {
+        }
+
+        if(mrDeflateData.mbKilled)
+        {
+            // need to cleanup myself - data will not be used
+            delete &mrDeflateData;
         }
     }
 };
@@ -726,7 +749,7 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     xOLERef( xObj ),
     m_aPrimitive2DSequence(),
     m_aRange(),
-    m_aDeflateData(nullptr)
+    m_pDeflateData(nullptr)
 {
     xOLERef.Lock();
     if ( xObj.is() )
@@ -743,7 +766,7 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     aName( rString ),
     m_aPrimitive2DSequence(),
     m_aRange(),
-    m_aDeflateData(nullptr)
+    m_pDeflateData(nullptr)
 {
     xOLERef.Lock();
     xOLERef.SetViewAspect( nAspect );
@@ -751,10 +774,12 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
 
 SwOLEObj::~SwOLEObj()
 {
-    if(m_aDeflateData)
+    if(m_pDeflateData)
     {
-        m_aDeflateData->waitFinished();
-        delete m_aDeflateData;
+        // set flag so that the worker thread will delete m_pDeflateData
+        // when finished and forget about it
+        m_pDeflateData->mbKilled = true;
+        m_pDeflateData = nullptr;
     }
 
     if( pListener )
@@ -998,19 +1023,22 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
     basegfx::B2DRange& rRange,
     bool bSynchron)
 {
-    if(m_aDeflateData)
+    if(m_pDeflateData)
     {
         if(bSynchron)
         {
-            m_aDeflateData->waitFinished();
+            // data in high quality is requested, wait until the data is available
+            // since a WorkerThread was already started to load it
+            m_pDeflateData->waitFinished();
         }
 
-        if(m_aDeflateData->isFinished())
+        if(m_pDeflateData->isFinished())
         {
-            m_aPrimitive2DSequence = m_aDeflateData->getSequence();
-            m_aRange = m_aDeflateData->getRange();
-            delete m_aDeflateData;
-            m_aDeflateData = nullptr;
+            // copy the result data and cleanup
+            m_aPrimitive2DSequence = m_pDeflateData->getSequence();
+            m_aRange = m_pDeflateData->getRange();
+            delete m_pDeflateData;
+            m_pDeflateData = nullptr;
         }
     }
 
@@ -1022,18 +1050,24 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
         {
             static bool bAnynchronousLoadingAllowed = true;
 
-            if(bSynchron || !bAnynchronousLoadingAllowed)
+            if(bSynchron ||
+                !bAnynchronousLoadingAllowed ||
+                0 == comphelper::ThreadPool::getSharedOptimalPool().getWorkerCount())
             {
+                // load chart synchron in this Thread
                 m_aPrimitive2DSequence = ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
                     aXModel,
                     m_aRange);
             }
             else
             {
-                if(!m_aDeflateData)
+                // if not yet setup, initiate and start a WorkerThread to load the chart
+                // and it's primitives asynchron. If it already works, returning nothing
+                // is okay (preview will be reused)
+                if(!m_pDeflateData)
                 {
-                    m_aDeflateData = new DeflateData(aXModel);
-                    DeflateThread* pNew = new DeflateThread(*m_aDeflateData);
+                    m_pDeflateData = new DeflateData(aXModel);
+                    DeflateThread* pNew = new DeflateThread(*m_pDeflateData);
                     comphelper::ThreadPool::getSharedOptimalPool().pushTask(pNew);
                 }
             }
@@ -1042,6 +1076,7 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
 
     if(!m_aPrimitive2DSequence.empty() && !m_aRange.isEmpty())
     {
+        // when we have data, also copy the buffered Range data as output
         rRange = m_aRange;
     }
 
@@ -1053,11 +1088,12 @@ void SwOLEObj::resetBufferedData()
     m_aPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer();
     m_aRange.reset();
 
-    if(m_aDeflateData)
+    if(m_pDeflateData)
     {
-        m_aDeflateData->waitFinished();
-        delete m_aDeflateData;
-        m_aDeflateData = nullptr;
+        // load is in progress, wait until finished and cleanup without using it
+        m_pDeflateData->waitFinished();
+        delete m_pDeflateData;
+        m_pDeflateData = nullptr;
     }
 }
 
