@@ -21,7 +21,7 @@
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_TEXTLAYOUT_HXX
 
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -41,7 +41,7 @@ namespace dxcanvas
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XTextLayout,
                                              css::lang::XServiceInfo > TextLayout_Base;
 
-    class TextLayout : public ::comphelper::OBaseMutex,
+    class TextLayout : public ::cppu::BaseMutex,
                        public TextLayout_Base
     {
     public:

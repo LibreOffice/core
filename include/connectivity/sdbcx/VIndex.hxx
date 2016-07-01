@@ -25,8 +25,8 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sdbcx/VTypeDef.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
@@ -44,7 +44,7 @@ namespace connectivity
         typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndex> OIndex_PROP;
 
         class OOO_DLLPUBLIC_DBTOOLS OIndex :
-                                    public comphelper::OBaseMutex,
+                                    public cppu::BaseMutex,
                                     public ODescriptor_BASE,
                                     public IRefreshableColumns,
                                     public OIndex_PROP,

@@ -25,8 +25,8 @@
 #include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
@@ -45,7 +45,7 @@ namespace connectivity
                                                  css::lang::XServiceInfo> OUser_BASE;
 
         class OOO_DLLPUBLIC_DBTOOLS OUser :
-                        public comphelper::OBaseMutex,
+                        public cppu::BaseMutex,
                         public OUser_BASE,
                         public IRefreshableGroups,
                         public ::comphelper::OPropertyArrayUsageHelper<OUser>,

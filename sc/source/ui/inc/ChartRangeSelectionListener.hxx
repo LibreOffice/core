@@ -20,7 +20,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CHARTRANGESELECTIONLISTENER_HXX
 
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -32,7 +32,7 @@ typedef ::cppu::WeakComponentImplHelper<
     ScChartRangeSelectionListener_Base;
 
 class ScChartRangeSelectionListener :
-    public comphelper::OBaseMutex,
+    public cppu::BaseMutex,
     public ScChartRangeSelectionListener_Base
 {
 public:

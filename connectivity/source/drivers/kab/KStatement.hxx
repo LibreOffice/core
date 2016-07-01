@@ -43,7 +43,7 @@ namespace connectivity
         // Class KabCommonStatement
         // is a base class for the normal statement and for the prepared statement
 
-        class KabCommonStatement :  public comphelper::OBaseMutex,
+        class KabCommonStatement :  public cppu::BaseMutex,
                         public  KabCommonStatement_BASE,
                         public  ::cppu::OPropertySetHelper,
                         public  comphelper::OPropertyArrayUsageHelper<KabCommonStatement>

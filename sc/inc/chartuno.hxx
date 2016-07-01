@@ -113,7 +113,7 @@ typedef ::cppu::WeakComponentImplHelper<
 typedef ::comphelper::OPropertyContainer ScChartObj_PBase;
 typedef ::comphelper::OPropertyArrayUsageHelper< ScChartObj > ScChartObj_PABase;
 
-class ScChartObj : public ::comphelper::OBaseMutex
+class ScChartObj : public ::cppu::BaseMutex
                   ,public ScChartObj_Base
                   ,public ScChartObj_PBase
                   ,public ScChartObj_PABase

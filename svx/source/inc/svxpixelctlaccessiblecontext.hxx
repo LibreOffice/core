@@ -38,7 +38,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/compbase5.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <svx/rectenum.hxx>
@@ -63,7 +63,7 @@ typedef ::cppu::WeakAggComponentImplHelper5<
             SvxPixelCtlAccessibleChild_BASE;
 
 class SvxPixelCtlAccessibleChild :
-    public ::comphelper::OBaseMutex,
+    public ::cppu::BaseMutex,
     public SvxPixelCtlAccessibleChild_BASE
 {
     SvxPixelCtl& mrParentWindow;
@@ -162,7 +162,7 @@ typedef ::cppu::WeakAggComponentImplHelper6<
             SvxPixelCtlAccessible_BASE;
 
 class SvxPixelCtlAccessible :
-    public ::comphelper::OBaseMutex,
+    public ::cppu::BaseMutex,
     public SvxPixelCtlAccessible_BASE
 {
     SvxPixelCtl& mrPixelCtl;

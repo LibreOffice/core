@@ -11,7 +11,7 @@
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASFONT_HXX
 
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
@@ -27,7 +27,7 @@ namespace oglcanvas
 
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvasFont > CanvasFontBaseT;
 
-    class CanvasFont : public ::comphelper::OBaseMutex,
+    class CanvasFont : public ::cppu::BaseMutex,
                        public CanvasFontBaseT
     {
     public:

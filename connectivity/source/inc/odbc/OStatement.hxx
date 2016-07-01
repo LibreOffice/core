@@ -30,6 +30,7 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include "odbc/OFunctions.hxx"
@@ -37,7 +38,6 @@
 #include "odbc/odbcbasedllapi.hxx"
 #include <list>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/broadcasthelper.hxx>
 
 namespace connectivity
 {
@@ -56,7 +56,7 @@ namespace connectivity
         //************ Class: java.sql.Statement
 
         class OOO_DLLPUBLIC_ODBCBASE OStatement_Base :
-                                        public comphelper::OBaseMutex,
+                                        public cppu::BaseMutex,
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>

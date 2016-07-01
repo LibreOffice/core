@@ -23,10 +23,10 @@
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
@@ -55,7 +55,7 @@ namespace calc
     typedef ::comphelper::OPropertyArrayUsageHelper< OCellValueBinding >
                                                     OCellValueBinding_PABase;
 
-    class OCellValueBinding :public ::comphelper::OBaseMutex
+    class OCellValueBinding :public ::cppu::BaseMutex
                             ,public OCellValueBinding_Base      // order matters! before OCellValueBinding_PBase, so rBHelper gets initialized
                             ,public OCellValueBinding_PBase
                             ,public OCellValueBinding_PABase

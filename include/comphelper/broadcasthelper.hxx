@@ -44,15 +44,6 @@ namespace comphelper
         const ::cppu::OBroadcastHelper& GetBroadcastHelper() const  { return m_aBHelper; }
 
     };
-
-    // base class for all classes who are derived from OPropertySet and from OComponent
-    // @deprecated, you should use cppu::BaseMutex instead (cppuhelper/basemutex.hxx)
-
-    class OBaseMutex
-    {
-    protected:
-        mutable ::osl::Mutex m_aMutex;
-    };
 }
 
 #endif // INCLUDED_COMPHELPER_BROADCASTHELPER_HXX

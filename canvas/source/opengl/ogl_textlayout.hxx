@@ -11,7 +11,7 @@
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_TEXTLAYOUT_HXX
 
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/rendering/XTextLayout.hpp>
 
@@ -26,7 +26,7 @@ namespace oglcanvas
 {
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XTextLayout > TextLayoutBaseT;
 
-    class TextLayout : public ::comphelper::OBaseMutex,
+    class TextLayout : public ::cppu::BaseMutex,
                        public TextLayoutBaseT
     {
     public:

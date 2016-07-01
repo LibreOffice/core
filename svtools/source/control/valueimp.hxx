@@ -25,7 +25,7 @@
 #include <vcl/image.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -78,7 +78,7 @@ typedef ::cppu::WeakComponentImplHelper<
     ValueSetAccComponentBase;
 
 class ValueSetAcc :
-    public ::comphelper::OBaseMutex,
+    public ::cppu::BaseMutex,
     public ValueSetAccComponentBase
 {
 public:

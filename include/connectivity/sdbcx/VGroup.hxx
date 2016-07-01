@@ -28,7 +28,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
@@ -48,7 +48,7 @@ namespace connectivity
                                                    css::lang::XServiceInfo> OGroup_BASE;
 
         class OOO_DLLPUBLIC_DBTOOLS OGroup :
-                        public comphelper::OBaseMutex,
+                        public cppu::BaseMutex,
                         public OGroup_BASE,
                         public IRefreshableUsers,
                         public ::comphelper::OPropertyArrayUsageHelper<OGroup>,
