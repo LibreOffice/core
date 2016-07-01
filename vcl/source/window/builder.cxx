@@ -20,6 +20,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/fixedhyper.hxx>
+#include <vcl/IPrioritable.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
@@ -1960,7 +1961,8 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
             }
             else if (name.equals("style"))
             {
-                context = handleStyle(reader);
+                int nPriority = 0;
+                context = handleStyle(reader, nPriority);
                 --nLevel;
             }
             else if (name.equals("property"))
@@ -2862,6 +2864,13 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
             }
             else if (name.equals("items"))
                 aItems = handleItems(reader, sID);
+            else if (name.equals("style"))
+            {
+                int nPriority = 0;
+                handleStyle(reader, nPriority);
+                if (nPriority != 0)
+                    dynamic_cast<vcl::IPrioritable*>(pCurrentChild.get())->SetPriority(nPriority);
+            }
             else
             {
                 ++nLevel;
@@ -3048,7 +3057,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
     }
 }
 
-std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlReader &reader)
+std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlReader &reader, int &nPriority)
 {
     std::vector<vcl::EnumContext::Context> aContext;
 
@@ -3070,7 +3079,24 @@ std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlRea
             ++nLevel;
             if (name.equals("class"))
             {
-                aContext.push_back(getContext(reader));
+                OString classStyle = getStyleClass(reader);
+
+                if (classStyle.startsWith("context-"))
+                {
+                    OString sContext = classStyle.copy(classStyle.indexOf('-') + 1);
+                    OUString sContext2 = OUString(sContext.getStr(), sContext.getLength(), RTL_TEXTENCODING_UTF8);
+                    aContext.push_back(vcl::EnumContext::GetContextEnum(sContext2));
+                }
+                else if (classStyle.startsWith("priority-"))
+                {
+                    OString aPriority = classStyle.copy(classStyle.indexOf('-') + 1);
+                    OUString aPriority2 = OUString(aPriority.getStr(), aPriority.getLength(), RTL_TEXTENCODING_UTF8);
+                    nPriority = aPriority2.toInt32();
+                }
+                else
+                {
+                    SAL_WARN("vcl.layout", "unknown class: " << classStyle.getStr());
+                }
             }
         }
 
@@ -3086,32 +3112,22 @@ std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlRea
     return aContext;
 }
 
-vcl::EnumContext::Context VclBuilder::getContext(xmlreader::XmlReader &reader)
+OString VclBuilder::getStyleClass(xmlreader::XmlReader &reader)
 {
     xmlreader::Span name;
     int nsId;
+    OString aRet;
 
     while (reader.nextAttribute(&nsId, &name))
     {
         if (name.equals("name"))
         {
             name = reader.getAttributeValue(false);
-            OString sKey(name.begin, name.length);
-
-            if (sKey.startsWith("context-"))
-            {
-                OString sContext = sKey.copy(sKey.indexOf('-') + 1);
-                OUString sContext2 = OUString(sContext.getStr(), sContext.getLength(), RTL_TEXTENCODING_UTF8);
-                return vcl::EnumContext::GetContextEnum(sContext2);
-            }
-            else
-            {
-                SAL_WARN("vcl.layout", "unknown class: " << sKey.getStr());
-            }
+            aRet = OString (name.begin, name.length);
         }
     }
 
-    return vcl::EnumContext::Context::Context_Any;
+    return aRet;
 }
 
 OString VclBuilder::getTranslation(const OString &rID, const OString &rProperty) const

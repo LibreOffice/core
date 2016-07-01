@@ -14,13 +14,15 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/IPrioritable.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <set>
 
-class VCL_DLLPUBLIC VclContainer : public vcl::Window
+class VCL_DLLPUBLIC VclContainer : public vcl::Window,
+                                   public vcl::IPrioritable
 {
 public:
     VclContainer(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN);

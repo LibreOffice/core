@@ -11,6 +11,7 @@
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/IPrioritable.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -20,6 +21,7 @@
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WINDOW_CONTAINER)
+    , IPrioritable()
     , m_bLayoutDirty(true)
 {
     ImplInit(pParent, nStyle, nullptr);
