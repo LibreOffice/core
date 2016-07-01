@@ -450,7 +450,7 @@ void Entity::startElement( Event *pEvent )
         }
         // swap the reference we own in to avoid referencing thrash.
         maContextStack.top().mxContext.set( static_cast<XFastContextHandler *>( xContext.get() ) );
-        xContext.set( nullptr, UNO_REF_NO_ACQUIRE );
+        xContext.set( nullptr, SAL_NO_ACQUIRE );
     }
     catch (const Exception&)
     {

@@ -882,7 +882,7 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
             binaryToCppMapping_.mapInterface(
                 *static_cast< uno_Interface ** >(ret.getValue(ifc)),
                 ifc.get())),
-        css::uno::UNO_REF_NO_ACQUIRE);
+        SAL_NO_ACQUIRE);
 }
 
 OUString Bridge::getName() throw (css::uno::RuntimeException, std::exception) {
