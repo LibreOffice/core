@@ -2151,7 +2151,7 @@ void SVGActionWriter::ImplCreateClipPathDef( const tools::PolyPolygon& rPolyPoly
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrClipPathUnits, "userSpaceOnUse" );
         SvXMLElementExport aElemClipPath( mrExport, XML_NAMESPACE_NONE, aXMLElemClipPath, true, true );
 
-        ImplWritePolyPolygon(rPolyPoly, false, true);
+        ImplWritePolyPolygon(rPolyPoly, false);
     }
 }
 
