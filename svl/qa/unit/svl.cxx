@@ -1099,6 +1099,11 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "54:23:03 02/01/00";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
+    {  // tdf#100594: forced denominator
+        sCode = "# ?/100";
+        sExpected = " 6/100";
+        checkPreviewString(aFormatter, sCode, 0.06, eLang, sExpected);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
