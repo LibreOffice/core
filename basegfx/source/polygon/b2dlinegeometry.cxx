@@ -955,6 +955,14 @@ namespace basegfx
                         }
                     }
                 }
+                else
+                {
+                    // point count, but no edge count -> single point
+                    aRetval.append(
+                        createPolygonFromCircle(
+                            aCandidate.getB2DPoint(0),
+                            fHalfLineWidth));
+                }
 
                 return aRetval;
             }
