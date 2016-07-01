@@ -2095,7 +2095,11 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
 
 sal_Int32 ScInterpreter::GetInt32()
 {
-    double fVal = rtl::math::approxFloor( GetDouble());
+    double fVal = GetDouble();
+    if (fVal > 0.0)
+        fVal = rtl::math::approxFloor( fVal);
+    else if (fVal < 0.0)
+        fVal = rtl::math::approxCeil( fVal);
     if (fVal < SAL_MIN_INT32 || fVal > SAL_MAX_INT32)
     {
         SetError( errIllegalArgument);
@@ -2106,7 +2110,11 @@ sal_Int32 ScInterpreter::GetInt32()
 
 sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 {
-    double fVal = rtl::math::approxFloor( GetDoubleWithDefault( nDefault));
+    double fVal = GetDoubleWithDefault( nDefault);
+    if (fVal > 0.0)
+        fVal = rtl::math::approxFloor( fVal);
+    else if (fVal < 0.0)
+        fVal = rtl::math::approxCeil( fVal);
     if (fVal < SAL_MIN_INT32 || fVal > SAL_MAX_INT32)
     {
         SetError( errIllegalArgument);
@@ -2117,7 +2125,11 @@ sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 
 sal_Int16 ScInterpreter::GetInt16()
 {
-    double fVal = rtl::math::approxFloor( GetDouble());
+    double fVal = GetDouble();
+    if (fVal > 0.0)
+        fVal = rtl::math::approxFloor( fVal);
+    else if (fVal < 0.0)
+        fVal = rtl::math::approxCeil( fVal);
     if (fVal < SAL_MIN_INT16 || fVal > SAL_MAX_INT16)
     {
         SetError( errIllegalArgument);
