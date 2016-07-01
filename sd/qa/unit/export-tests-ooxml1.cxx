@@ -165,22 +165,6 @@ public:
                 reinterpret_cast<xmlChar const *>(namespaces[i].pURI));
         }
     }
-
-    xmlDocPtr parseExport(utl::TempFile & rTempFile, OUString const& rStreamName)
-    {
-        OUString const url(rTempFile.GetURL());
-        uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(
-            packages::zip::ZipFileAccess::createWithURL(
-                comphelper::getComponentContext(m_xSFactory), url));
-        uno::Reference<io::XInputStream> const xInputStream(
-            xZipNames->getByName(rStreamName), uno::UNO_QUERY);
-        std::unique_ptr<SvStream> const pStream(
-            utl::UcbStreamHelper::CreateStream(xInputStream, true));
-        xmlDocPtr const pXmlDoc = parseXmlStream(pStream.get());
-        pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(
-            reinterpret_cast<xmlChar const *>(OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr())));
-        return pXmlDoc;
-    }
 };
 
 namespace {
@@ -797,47 +781,6 @@ void SdOOXMLExportTest1::testTableCellBorder()
     CPPUNIT_ASSERT_EQUAL(util::Color(45296), aBorderLine.Color);
 
     xDocShRef->DoClose();
-}
-
-bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> xDoc, sal_Int32 nSlideNumber,
-                           sal_Int16 nExpectedTransitionType, sal_Int16 nExpectedTransitionSubType,
-                           bool bExpectedDirection = true)
-{
-    sal_Int32 nSlideIndex = nSlideNumber - 1;
-
-    CPPUNIT_ASSERT_MESSAGE("Slide/Page index out of range", nSlideIndex < xDoc->getDrawPages()->getCount());
-
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(nSlideIndex), uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
-
-    sal_Int16 nTransitionType = 0;
-    xPropSet->getPropertyValue("TransitionType") >>= nTransitionType;
-
-    if (nExpectedTransitionType != nTransitionType)
-    {
-        std::cerr << "Transition type: " << nTransitionType << " " << nExpectedTransitionType << std::endl;
-        return false;
-    }
-
-    sal_Int16 nTransitionSubtype = 0;
-    xPropSet->getPropertyValue("TransitionSubtype") >>= nTransitionSubtype;
-    if (nExpectedTransitionSubType != nTransitionSubtype)
-    {
-        std::cerr << "Transition Subtype: " << nTransitionSubtype << " " << nExpectedTransitionSubType << std::endl;
-        return false;
-    }
-
-    bool bDirection = false;
-    xPropSet->getPropertyValue("TransitionDirection") >>= bDirection;
-
-    if (bExpectedDirection != bDirection)
-    {
-        std::cerr << "Transition Direction: " << (bExpectedDirection ? "normal" : "reversed")
-                  << " "                      << (bDirection ? "normal" : "reversed") << std::endl;
-        return false;
-    }
-
-    return true;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
