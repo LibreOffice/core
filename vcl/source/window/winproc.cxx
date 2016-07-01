@@ -364,10 +364,6 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             const OutputDevice *pChildWinOutDev = pChild->GetOutDev();
             pChildWinOutDev->ReMirror( aMousePos );
         }
-        // no mouse messages to system object windows ?
-        // !!!KA: Is it OK to comment this out? !!!
-//        if ( pChild->ImplGetWindowImpl()->mpSysObj )
-//            return false;
 
         // no mouse messages to disabled windows
         // #106845# if the window was disabled during capturing we have to pass the mouse events to release capturing
