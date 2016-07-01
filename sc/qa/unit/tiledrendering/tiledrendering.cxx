@@ -12,7 +12,6 @@
 #include <test/xmltesttools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/dispatchcommand.hxx>
@@ -28,6 +27,7 @@
 #include <svl/srchitem.hxx>
 
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
@@ -36,7 +36,10 @@
 
 using namespace css;
 
-static const char* DATA_DIRECTORY = "/sc/qa/unit/tiledrendering/data/";
+namespace
+{
+
+const char* DATA_DIRECTORY = "/sc/qa/unit/tiledrendering/data/";
 
 class ScTiledRenderingTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
@@ -49,12 +52,14 @@ public:
     void testSortAscendingDescending();
     void testPartHash();
     void testDocumentSize();
+    void testViewCursors();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
     CPPUNIT_TEST(testSortAscendingDescending);
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testDocumentSize);
+    CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -323,6 +328,63 @@ void ScTiledRenderingTest::testDocumentSize()
     CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+class ViewCallback
+{
+public:
+    bool m_bOwnCursorInvalidated;
+    bool m_bViewCursorInvalidated;
+
+    ViewCallback()
+        : m_bOwnCursorInvalidated(false),
+          m_bViewCursorInvalidated(false)
+    {
+    }
+
+    static void callback(int nType, const char* pPayload, void* pData)
+    {
+        static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    }
+
+    void callbackImpl(int nType, const char* /*pPayload*/)
+    {
+        switch (nType)
+        {
+        case LOK_CALLBACK_CELL_CURSOR:
+        {
+            m_bOwnCursorInvalidated = true;
+        }
+        break;
+        case LOK_CALLBACK_CELL_VIEW_CURSOR:
+        {
+            m_bViewCursorInvalidated = true;
+        }
+        break;
+        }
+    }
+};
+
+
+void ScTiledRenderingTest::testViewCursors()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("select-row-cols.ods");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
+    Scheduler::ProcessEventsToIdle();
+    SfxLokHelper::destroyView(SfxLokHelper::getView());
+    CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTiledRenderingTest);
