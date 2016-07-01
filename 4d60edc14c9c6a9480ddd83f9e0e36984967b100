@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_36b525cd",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-01T10:35:25Z",
+      "side": 1,
+      "message": "Nitpick: instead of a long block and a one line else statement it\u0027s easier to read\n\n if (IsMissing())\n     Pop();\n else\n {\n     ...\n }",
+      "revId": "4d60edc14c9c6a9480ddd83f9e0e36984967b100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_56caa950",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-01T10:35:25Z",
+      "side": 1,
+      "message": "We have a problem here that makes the networkdays.intl.fods test fail for good reason, because in NETWORKDAYS.INTL \"1111111\" is allowed and the result is 0 in Excel.\n\nSo this GetWeekendAndHolidayMasks_MS() functions needs a parameter for which function it is called.",
+      "range": {
+        "startLine": 428,
+        "startChar": 36,
+        "endLine": 428,
+        "endChar": 74
+      },
+      "revId": "4d60edc14c9c6a9480ddd83f9e0e36984967b100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_16b021dd",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-01T10:35:25Z",
+      "side": 1,
+      "message": "Nitpick: not inverting the condition would be easier to read.. so\n\n if (aSharedString.isEmpty() || aSharedString.getLength() !\u003d 7 || aSharedString.getString() \u003d\u003d \"1111111\")\n     return errNoValue;\n else\n     aWeekendDays \u003d aSharedString.getString();",
+      "range": {
+        "startLine": 427,
+        "startChar": 0,
+        "endLine": 431,
+        "endChar": 50
+      },
+      "revId": "4d60edc14c9c6a9480ddd83f9e0e36984967b100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
