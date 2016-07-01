@@ -630,15 +630,6 @@ public:
     void    SetPtrnChgd( ChangeType* pIn ) { m_pnPatternListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
     void    ChangeColor_Impl();
-    /** Return a label that is associated with the given control.  This
-        label is used to the determine the name for the control.
-        @param pLabeled
-            The control for which to return a label.
-        @return
-            Return a label control that provides a name for the specified
-            control.
-    */
-    virtual vcl::Window* GetParentLabeledBy( const vcl::Window* pLabeled ) const override;
 };
 
 /************************************************************************/
