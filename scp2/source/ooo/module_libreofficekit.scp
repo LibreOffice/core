@@ -19,8 +19,7 @@ Module gid_Module_Libreofficekit
     Files = (
         gid_File_Dat_HandleImageStart,
         gid_File_Dat_HandleImageMiddle,
-        gid_File_Dat_HandleImageEnd,
-        gid_File_Dat_HandleGraphic);
+        gid_File_Dat_HandleImageEnd);
 End
 
 Directory gid_Dir_Share_Libreofficekit
@@ -47,13 +46,6 @@ File gid_File_Dat_HandleImageEnd
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Libreofficekit;
     Name = "handle_image_end.png";
-    Styles = (PACKED);
-End
-
-File gid_File_Dat_HandleGraphic
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Libreofficekit;
-    Name = "handle_graphic.png";
     Styles = (PACKED);
 End
 #endif
