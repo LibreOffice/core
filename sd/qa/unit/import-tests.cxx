@@ -557,13 +557,6 @@ void SdImportTest::testFdo72998()
     xDocShRef->DoClose();
 }
 
-// FIXME copypasta
-std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
-{
-    rStrm << "Color: R:" << rColor.GetRed() << " G:" << rColor.GetGreen() << " B: " << rColor.GetBlue();
-    return rStrm;
-}
-
 void SdImportTest::testFdo77027()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/fdo77027.odp"), ODP);
