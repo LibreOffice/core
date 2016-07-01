@@ -329,7 +329,7 @@ typedef enum
     LOK_CALLBACK_INVALIDATE_VIEW_CURSOR,
 
     /**
-     * The the text selection in one of the other views has changed.
+     * The text selection in one of the other views has changed.
      *
      * The payload format:
      *
@@ -342,6 +342,21 @@ typedef enum
      * - selection uses the format of LOK_CALLBACK_TEXT_SELECTION.
      */
     LOK_CALLBACK_TEXT_VIEW_SELECTION,
+
+    /**
+     * The cell cursor in one of the other views has changed.
+     *
+     * The payload format:
+     *
+     * {
+     *     "viewId": "..."
+     *     "rectangle": "..."
+     * }
+     *
+     * - viewId is a value returned earlier by lok::Document::createView()
+     * - rectangle uses the format of LOK_CALLBACK_CELL_CURSOR.
+     */
+    LOK_CALLBACK_CELL_VIEW_CURSOR,
 
 }
 LibreOfficeKitCallbackType;

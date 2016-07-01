@@ -137,6 +137,7 @@
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -5722,6 +5723,7 @@ void ScGridWindow::updateLibreOfficeKitCellCursor()
     OString aCursor = getCellCursor(pViewData->GetZoomX(), pViewData->GetZoomY());
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, aCursor.getStr());
+    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
 }
 
 void ScGridWindow::CursorChanged()
@@ -5766,6 +5768,7 @@ void ScGridWindow::DeleteCursorOverlay()
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY");
+    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY");
     mpOOCursors.reset();
 }
 
