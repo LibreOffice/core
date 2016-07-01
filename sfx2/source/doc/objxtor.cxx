@@ -97,6 +97,7 @@
 #include "appbaslib.hxx"
 #include <sfx2/sfxbasemodel.hxx>
 #include <shellimpl.hxx>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
 
@@ -622,6 +623,8 @@ bool SfxObjectShell::PrepareClose
             return false;
     }
 
+    if ( pFrame )
+        sfx2::SfxNotebookBar::CloseMethod(pFrame->GetBindings());
     pImpl->bPreparedForClose = true;
     return true;
 }
