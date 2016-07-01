@@ -2097,13 +2097,22 @@ sal_Int32 ScInterpreter::GetInt32()
 {
     double fVal = GetDouble();
     if (fVal > 0.0)
-        fVal = rtl::math::approxFloor( fVal);
-    else if (fVal < 0.0)
-        fVal = rtl::math::approxCeil( fVal);
-    if (fVal < SAL_MIN_INT32 || fVal > SAL_MAX_INT32)
     {
-        SetError( errIllegalArgument);
-        return SAL_MAX_INT32;
+        fVal = rtl::math::approxFloor( fVal);
+        if (fVal > SAL_MAX_INT32)
+        {
+            SetError( errIllegalArgument);
+            return SAL_MAX_INT32;
+        }
+    }
+    else if (fVal < 0.0)
+    {
+        fVal = rtl::math::approxCeil( fVal);
+        if (fVal < SAL_MIN_INT32)
+        {
+            SetError( errIllegalArgument);
+            return SAL_MAX_INT32;
+        }
     }
     return static_cast<sal_Int32>(fVal);
 }
@@ -2112,13 +2121,22 @@ sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 {
     double fVal = GetDoubleWithDefault( nDefault);
     if (fVal > 0.0)
-        fVal = rtl::math::approxFloor( fVal);
-    else if (fVal < 0.0)
-        fVal = rtl::math::approxCeil( fVal);
-    if (fVal < SAL_MIN_INT32 || fVal > SAL_MAX_INT32)
     {
-        SetError( errIllegalArgument);
-        return SAL_MAX_INT32;
+        fVal = rtl::math::approxFloor( fVal);
+        if (fVal > SAL_MAX_INT32)
+        {
+            SetError( errIllegalArgument);
+            return SAL_MAX_INT32;
+        }
+    }
+    else if (fVal < 0.0)
+    {
+        fVal = rtl::math::approxCeil( fVal);
+        if (fVal < SAL_MIN_INT32)
+        {
+            SetError( errIllegalArgument);
+            return SAL_MAX_INT32;
+        }
     }
     return static_cast<sal_Int32>(fVal);
 }
@@ -2127,13 +2145,22 @@ sal_Int16 ScInterpreter::GetInt16()
 {
     double fVal = GetDouble();
     if (fVal > 0.0)
-        fVal = rtl::math::approxFloor( fVal);
-    else if (fVal < 0.0)
-        fVal = rtl::math::approxCeil( fVal);
-    if (fVal < SAL_MIN_INT16 || fVal > SAL_MAX_INT16)
     {
-        SetError( errIllegalArgument);
-        return SAL_MAX_INT16;
+        fVal = rtl::math::approxFloor( fVal);
+        if (fVal > SAL_MAX_INT16)
+        {
+            SetError( errIllegalArgument);
+            return SAL_MAX_INT16;
+        }
+    }
+    else if (fVal < 0.0)
+    {
+        fVal = rtl::math::approxCeil( fVal);
+        if (fVal < SAL_MIN_INT16)
+        {
+            SetError( errIllegalArgument);
+            return SAL_MAX_INT16;
+        }
     }
     return static_cast<sal_Int16>(fVal);
 }
