@@ -261,14 +261,14 @@ static bool getTextProperty_Impl( Content& rContent,
 
 OUString SfxDocumentTemplates::GetFullRegionName
 (
-    sal_uInt16 nIdx                     // vcl::Region Index
+    sal_uInt16 nIdx                     // Region Index
 )   const
 
 /*  [Description]
 
     Returns the logical name of a region and its path
 
-    [Return value]                 Reference to the vcl::Region name
+    [Return value]                 Reference to the Region name
 
 */
 
@@ -296,7 +296,7 @@ OUString SfxDocumentTemplates::GetFullRegionName
 
 OUString SfxDocumentTemplates::GetRegionName
 (
-    sal_uInt16 nIdx                 // vcl::Region Index
+    sal_uInt16 nIdx                 // Region Index
 )   const
 
 /*  [Description]
@@ -305,7 +305,7 @@ OUString SfxDocumentTemplates::GetRegionName
 
     [Return value]
 
-    const String&                   Reference to the vcl::Region name
+    const String&                   Reference to the Region name
 
 */
 {
@@ -349,7 +349,7 @@ sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
 
 sal_uInt16 SfxDocumentTemplates::GetCount
 (
-    sal_uInt16 nRegion              /* vcl::Region index whose number is
+    sal_uInt16 nRegion              /* Region index whose number is
                                    to be determined */
 
 )   const
@@ -379,7 +379,7 @@ sal_uInt16 SfxDocumentTemplates::GetCount
 
 OUString SfxDocumentTemplates::GetName
 (
-    sal_uInt16 nRegion,     //  vcl::Region Index, in which the entry lies
+    sal_uInt16 nRegion,     //  Region Index, in which the entry lies
     sal_uInt16 nIdx         //  Index of the entry
 )   const
 
@@ -415,7 +415,7 @@ OUString SfxDocumentTemplates::GetName
 
 OUString SfxDocumentTemplates::GetPath
 (
-    sal_uInt16  nRegion,    //  vcl::Region Index, in which the entry lies
+    sal_uInt16  nRegion,    //  Region Index, in which the entry lies
     sal_uInt16  nIdx        //  Index of the entry
 )   const
 
@@ -502,9 +502,9 @@ OUString SfxDocumentTemplates::ConvertResourceString (
 
 bool SfxDocumentTemplates::CopyOrMove
 (
-    sal_uInt16  nTargetRegion,      //  Target vcl::Region Index
+    sal_uInt16  nTargetRegion,      //  Target Region Index
     sal_uInt16  nTargetIdx,         //  Target position Index
-    sal_uInt16  nSourceRegion,      //  Source vcl::Region Index
+    sal_uInt16  nSourceRegion,      //  Source Region Index
     sal_uInt16  nSourceIdx,         /*  Index to be copied / to moved template */
     bool        bMove               //  Copy / Move
 )
@@ -607,9 +607,9 @@ bool SfxDocumentTemplates::CopyOrMove
 
 bool SfxDocumentTemplates::Move
 (
-    sal_uInt16 nTargetRegion,       //  Target vcl::Region Index
+    sal_uInt16 nTargetRegion,       //  Target Region Index
     sal_uInt16 nTargetIdx,          //  Target position Index
-    sal_uInt16 nSourceRegion,       //  Source vcl::Region Index
+    sal_uInt16 nSourceRegion,       //  Source Region Index
     sal_uInt16 nSourceIdx           /*  Index to be copied / to moved template */
 )
 
@@ -636,9 +636,9 @@ bool SfxDocumentTemplates::Move
 
 bool SfxDocumentTemplates::Copy
 (
-    sal_uInt16 nTargetRegion,       //  Target vcl::Region Index
+    sal_uInt16 nTargetRegion,       //  Target Region Index
     sal_uInt16 nTargetIdx,          //  Target position Index
-    sal_uInt16 nSourceRegion,       //  Source vcl::Region Index
+    sal_uInt16 nSourceRegion,       //  Source Region Index
     sal_uInt16 nSourceIdx           /*  Index to be copied / to moved template */
 )
 
@@ -666,7 +666,7 @@ bool SfxDocumentTemplates::Copy
 
 bool SfxDocumentTemplates::CopyTo
 (
-    sal_uInt16          nRegion,    //  vcl::Region of the template to be exported
+    sal_uInt16          nRegion,    //  Region of the template to be exported
     sal_uInt16          nIdx,       //  Index of the template to be exported
     const OUString&     rName       /*  File name under which the template is to
                                     be created */
@@ -737,7 +737,7 @@ bool SfxDocumentTemplates::CopyTo
 
 bool SfxDocumentTemplates::CopyFrom
 (
-    sal_uInt16      nRegion,        /*  vcl::Region in which the template is to be
+    sal_uInt16      nRegion,        /*  Region in which the template is to be
                                     imported */
     sal_uInt16      nIdx,           //  Index of the new template in this Region
     OUString&       rName           /*  File name of the template to be imported
@@ -880,7 +880,7 @@ bool SfxDocumentTemplates::CopyFrom
 
 bool SfxDocumentTemplates::Delete
 (
-    sal_uInt16 nRegion,             //  vcl::Region Index
+    sal_uInt16 nRegion,             //  Region Index
     sal_uInt16 nIdx                 /*  Index of the entry or USHRT_MAX,
                                     if a directory is meant. */
 )
@@ -944,7 +944,7 @@ bool SfxDocumentTemplates::Delete
 bool SfxDocumentTemplates::InsertDir
 (
     const OUString&     rText,      //  the logical name of the new Region
-    sal_uInt16          nRegion     //  vcl::Region Index
+    sal_uInt16          nRegion     //  Region Index
 )
 
 /*  [Description]
@@ -1062,7 +1062,7 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
 
 bool SfxDocumentTemplates::GetFull
 (
-    const OUString &rRegion,      // vcl::Region Name
+    const OUString &rRegion,      // Region Name
     const OUString &rName,        // Template Name
     OUString &rPath               // Out: Path + File name
 )
@@ -1118,7 +1118,7 @@ bool SfxDocumentTemplates::GetFull
 bool SfxDocumentTemplates::GetLogicNames
 (
     const OUString &rPath,            // Full Path to the template
-    OUString &rRegion,                // Out: vcl::Region name
+    OUString &rRegion,                // Out: Region name
     OUString &rName                   // Out: Template name
 ) const
 
@@ -1515,7 +1515,7 @@ void SfxDocTemplate_Impl::DeleteRegion( size_t nIndex )
 }
 
 
-/*  AddRegion adds a vcl::Region to the RegionList
+/*  AddRegion adds a Region to the RegionList
 */
 void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
                                      Content& rContent )
