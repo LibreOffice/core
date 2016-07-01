@@ -720,9 +720,20 @@ namespace drawinglayer
                 && mfOffsetY == pCompare->mfOffsetY);
         }
 
-        void GeoTexSvxTiled::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
+        sal_uInt32 GeoTexSvxTiled::getNumberOfTiles() const
+        {
+            return iterateTiles(nullptr);
+        }
+
+        void GeoTexSvxTiled::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices) const
+        {
+            iterateTiles(&rMatrices);
+        }
+
+        sal_Int32 GeoTexSvxTiled::iterateTiles(::std::vector< basegfx::B2DHomMatrix >* pMatrices) const
         {
             const double fWidth(maRange.getWidth());
+            sal_Int32 nTiles = 0;
 
             if(!basegfx::fTools::equalZero(fWidth))
             {
@@ -774,12 +785,19 @@ namespace drawinglayer
                             for(double fPosY((nPosX % 2) ? fStartY - fHeight + (mfOffsetY * fHeight) : fStartY);
                                 basegfx::fTools::less(fPosY, 1.0); fPosY += fHeight)
                             {
-                                rMatrices.push_back(
-                                    basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                        fWidth,
-                                        fHeight,
-                                        fPosX,
-                                        fPosY));
+                                if(pMatrices)
+                                {
+                                    pMatrices->push_back(
+                                        basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                            fWidth,
+                                            fHeight,
+                                            fPosX,
+                                            fPosY));
+                                }
+                                else
+                                {
+                                    nTiles++;
+                                }
                             }
                         }
                     }
@@ -790,17 +808,26 @@ namespace drawinglayer
                             for(double fPosX((nPosY % 2) ? fStartX - fWidth + (mfOffsetX * fWidth) : fStartX);
                                 basegfx::fTools::less(fPosX, 1.0); fPosX += fWidth)
                             {
-                                rMatrices.push_back(
-                                    basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                        fWidth,
-                                        fHeight,
-                                        fPosX,
-                                        fPosY));
+                                if(pMatrices)
+                                {
+                                    pMatrices->push_back(
+                                        basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                            fWidth,
+                                            fHeight,
+                                            fPosX,
+                                            fPosY));
+                                }
+                                else
+                                {
+                                    nTiles++;
+                                }
                             }
                         }
                     }
                 }
             }
+
+            return nTiles;
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
