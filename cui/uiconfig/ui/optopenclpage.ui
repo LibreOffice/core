@@ -58,25 +58,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Will OpenCL be used?</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="openclused">
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes">OpenCL is available for use.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -85,10 +70,16 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkLabel" id="openclnotused">
+                <property name="visible">False</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">OpenCL is not used.</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
             </child>
           </object>
         </child>

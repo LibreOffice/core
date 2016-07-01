@@ -34,7 +34,8 @@ private:
     VclPtr<CheckBox> mpUseSwInterpreter;
     VclPtr<CheckBox> mpUseOpenCL;
 
-    VclPtr<FixedText> clUsed;
+    VclPtr<FixedText> mpOclUsed;
+    VclPtr<FixedText> mpOclNotUsed;
 
     DECL_STATIC_LINK_TYPED(SvxOpenCLTabPage, EnableOpenCLHdl, Button*, void);
 
