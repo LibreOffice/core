@@ -269,6 +269,10 @@ PickerFlags SvtFilePicker::getPickerFlags()
     {
         nBits = PickerFlags::Open | PickerFlags::PlayButton;
     }
+    else if ( m_nServiceType == TemplateDescription::FILEOPEN_LINK_PLAY )
+    {
+        nBits = PickerFlags::Open | PickerFlags::InsertAsLink | PickerFlags::PlayButton;
+    }
     else if ( m_nServiceType == TemplateDescription::FILEOPEN_READONLY_VERSION )
     {
         nBits = PickerFlags::Open | PickerFlags::ReadOnly | PickerFlags::ShowVersions;

@@ -704,6 +704,13 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
             sendAppendControlCommand( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY );
             break;
 
+        case FILEOPEN_LINK_PLAY:
+            sendCommand( aTypeOpen );
+
+            sendAppendControlCommand( ExtendedFilePickerElementIds::CHECKBOX_LINK );
+            sendAppendControlCommand( ExtendedFilePickerElementIds::PUSHBUTTON_PLAY );
+            break;
+
         case FILEOPEN_READONLY_VERSION:
             sendCommand( aTypeOpen );
 

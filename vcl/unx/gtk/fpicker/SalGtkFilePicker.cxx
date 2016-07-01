@@ -1662,6 +1662,13 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
             mbButtonVisibility[PLAY] = true;
             // TODO
                 break;
+        case FILEOPEN_LINK_PLAY:
+            eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
+            first_button_text = GTK_STOCK_OPEN;
+            mbToggleVisibility[LINK] = true;
+            mbButtonVisibility[PLAY] = true;
+            // TODO
+                break;
         case FILEOPEN_READONLY_VERSION:
             eAction = GTK_FILE_CHOOSER_ACTION_OPEN;
             first_button_text = GTK_STOCK_OPEN;

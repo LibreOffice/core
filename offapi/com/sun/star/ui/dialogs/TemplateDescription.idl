@@ -123,6 +123,16 @@ published constants TemplateDescription
         @since LibreOffice 5.3
     */
     const short FILEOPEN_PREVIEW                               = 11;
+
+    /** A FileOpen dialog with additional controls.
+        <ul>
+            <li>A checkbox "Insert as link"</li>
+            <li>A push button "Play"</li>
+        </ul>
+
+        @since LibreOffice 5.3
+    */
+    const short FILEOPEN_LINK_PLAY                             = 12;
 };
 
 

@@ -474,6 +474,9 @@ throw( uno::Exception, uno::RuntimeException )
         case FILEOPEN_PLAY:
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
             break;
+        case FILEOPEN_LINK_PLAY:
+            m_nDialogType = NAVIGATIONSERVICES_OPEN;
+            break;
         case FILEOPEN_READONLY_VERSION:
             m_nDialogType = NAVIGATIONSERVICES_OPEN;
             break;

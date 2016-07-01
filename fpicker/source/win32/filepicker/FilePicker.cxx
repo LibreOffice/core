@@ -554,6 +554,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
         break;
 
     case FILEOPEN_PLAY:
+    case FILEOPEN_LINK_PLAY: //FIXME: FILEOPEN_LINK_PLAY needs an own template, no idea how to create one
         winResTemplateId = TMPL2000_PLAY_PUSHBUTTON;
         break;
 
