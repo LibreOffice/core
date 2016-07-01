@@ -1048,7 +1048,9 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
 
         if(aXModel.is())
         {
-            static bool bAnynchronousLoadingAllowed = true;
+            // due to some problems in test cases with the SharedOptimalPool,
+            // I need to deactivate this for now
+            static bool bAnynchronousLoadingAllowed = false;
 
             if(bSynchron ||
                 !bAnynchronousLoadingAllowed ||
