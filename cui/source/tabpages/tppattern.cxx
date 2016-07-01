@@ -864,13 +864,4 @@ void SvxPatternTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT )
     }
 }
 
-
-vcl::Window* SvxPatternTabPage::GetParentLabeledBy( const vcl::Window* pLabeled ) const
-{
-    if (pLabeled == m_pLbPatterns)
-        return m_pLbPatternsHidden.get();
-    else
-        return SvxTabPage::GetParentLabeledBy (pLabeled);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
