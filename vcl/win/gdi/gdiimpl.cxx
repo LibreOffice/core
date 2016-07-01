@@ -1896,10 +1896,9 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
 }
 
 void impAddB2DPolygonToGDIPlusGraphicsPathReal(
-    Gdiplus::GpPath *pPath,
+    Gdiplus::GraphicsPath& rGraphicsPath,
     const basegfx::B2DPolygon& rPolygon,
-    bool bNoLineJoin,
-    const basegfx::B2DVector* pLineWidths)
+    bool bNoLineJoin)
 {
     sal_uInt32 nCount(rPolygon.count());
 
@@ -1941,43 +1940,17 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
                         aCb = aNext + ((aCa - aNext) * 0.3);
                     }
 
-                    Gdiplus::DllExports::GdipAddPathBezier(
-                        pPath,
-                        aCurr.getX(), aCurr.getY(),
-                        aCa.getX(), aCa.getY(),
-                        aCb.getX(), aCb.getY(),
-                        aNext.getX(), aNext.getY());
+                    rGraphicsPath.AddBezier(
+                        static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                        static_cast< Gdiplus::REAL >(aCa.getX()), static_cast< Gdiplus::REAL >(aCa.getY()),
+                        static_cast< Gdiplus::REAL >(aCb.getX()), static_cast< Gdiplus::REAL >(aCb.getY()),
+                        static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
                 }
                 else
                 {
-                    if(pLineWidths && aCurr.equal(aNext))
-                    {
-                        // For lines with no length Gdiplus unfortunately paints nothing,
-                        // independent of LineCaps being set. This differs from e.g. SVG
-                        // and other systems. To get geometry created, add some offset,
-                        // based on line width to have something relative to current metrics
-                        if(!basegfx::fTools::equalZero(pLineWidths->getX()))
-                        {
-                            Gdiplus::DllExports::GdipAddPathLine(
-                                pPath,
-                                aCurr.getX(), aCurr.getY(),
-                                aNext.getX() + (pLineWidths->getX() * 0.1), aNext.getY());
-                        }
-                        else
-                        {
-                            Gdiplus::DllExports::GdipAddPathLine(
-                                pPath,
-                                aCurr.getX(), aCurr.getY(),
-                                aNext.getX(), aNext.getY() + (pLineWidths->getY() * 0.1));
-                        }
-                    }
-                    else
-                    {
-                        Gdiplus::DllExports::GdipAddPathLine(
-                            pPath,
-                            aCurr.getX(), aCurr.getY(),
-                            aNext.getX(), aNext.getY());
-                    }
+                    rGraphicsPath.AddLine(
+                        static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                        static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
                 }
 
                 if(a + 1 < nEdgeCount)
@@ -1986,7 +1959,7 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
 
                     if(bNoLineJoin)
                     {
-                        Gdiplus::DllExports::GdipStartPathFigure(pPath);
+                        rGraphicsPath.StartFigure();
                     }
                 }
             }
@@ -2014,8 +1987,9 @@ bool WinSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPo
                 aGraphicsPath.StartFigure();
             }
 
-            impAddB2DPolygonToGDIPlusGraphicsPathReal(pPath, rPolyPolygon.getB2DPolygon(a), false, 0);
-            Gdiplus::DllExports::GdipClosePathFigure(pPath);
+            impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolyPolygon.getB2DPolygon(a), false);
+
+            aGraphicsPath.CloseFigure();
         }
 
         if(mrParent.getAntiAliasB2DDraw())
@@ -2127,7 +2101,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
             }
         }
 
-        impAddB2DPolygonToGDIPlusGraphicsPathReal(pPath, rPolygon, bNoLineJoin, &rLineWidths);
+        impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolygon, bNoLineJoin);
 
         if(rPolygon.isClosed() && !bNoLineJoin)
         {
