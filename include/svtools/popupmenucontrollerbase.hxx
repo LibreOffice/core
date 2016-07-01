@@ -38,7 +38,7 @@
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/compbase7.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 
@@ -55,7 +55,7 @@ namespace svt
                         css::frame::XDispatchProvider      ,
                         css::frame::XDispatch > PopupMenuControllerBaseType;
 
-    class SVT_DLLPUBLIC PopupMenuControllerBase : protected ::comphelper::OBaseMutex,   // Struct for right initialization of mutex member! Must be first of baseclasses.
+    class SVT_DLLPUBLIC PopupMenuControllerBase : protected ::cppu::BaseMutex,   // Struct for right initialization of mutex member! Must be first of baseclasses.
                                                   public PopupMenuControllerBaseType
     {
         public:

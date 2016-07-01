@@ -23,7 +23,7 @@
 #include <com/sun/star/report/XFunctionsSupplier.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <list>
 
@@ -35,7 +35,7 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class OFunctions : public comphelper::OBaseMutex,
+    class OFunctions : public cppu::BaseMutex,
                     public FunctionsBase
     {
         typedef ::std::list< css::uno::Reference< css::report::XFunction > >  TFunctions;

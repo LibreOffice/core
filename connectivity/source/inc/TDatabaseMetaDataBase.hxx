@@ -22,7 +22,7 @@
 
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <functional>
@@ -31,7 +31,7 @@
 namespace connectivity
 {
         class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataBase :
-                                        public  comphelper::OBaseMutex,
+                                        public  cppu::BaseMutex,
                                         public ::cppu::WeakImplHelper< css::sdbc::XDatabaseMetaData2,
                                                                        css::lang::XEventListener>
         {

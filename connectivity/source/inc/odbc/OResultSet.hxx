@@ -105,7 +105,7 @@ namespace connectivity
         typedef ::std::map< css::uno::Sequence<sal_Int8>, sal_Int32,TBookmarkPosMapCompare > TBookmarkPosMap;
 
         class OOO_DLLPUBLIC_ODBCBASE OResultSet :
-                            public  comphelper::OBaseMutex,
+                            public  cppu::BaseMutex,
                             public  ::connectivity::IResultSetHelper,
                             public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,

@@ -41,7 +41,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/compbase7.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
 #include <vcl/vclptr.hxx>
@@ -68,7 +68,7 @@ typedef ::cppu::WeakAggComponentImplHelper6<
             css::lang::XServiceInfo >
             SvxRectCtlAccessibleContext_Base;
 
-class SvxRectCtlAccessibleContext : public ::comphelper::OBaseMutex, public SvxRectCtlAccessibleContext_Base
+class SvxRectCtlAccessibleContext : public ::cppu::BaseMutex, public SvxRectCtlAccessibleContext_Base
 {
 public:
     // internal

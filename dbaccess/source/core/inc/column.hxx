@@ -39,13 +39,13 @@
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/TColumnsHelper.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -61,7 +61,7 @@ namespace dbaccess
                                                css::container::XNamed
                                            >   OColumnBase;
 
-    class OColumn   :public comphelper::OBaseMutex
+    class OColumn   :public cppu::BaseMutex
                     ,public OColumnBase
                     ,public ::comphelper::OPropertyContainer
                     ,public IPropertyContainer  // convenience for the derived class which also derive from OColumnSettings

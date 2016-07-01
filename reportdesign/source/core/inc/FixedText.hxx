@@ -24,7 +24,7 @@
 #include <com/sun/star/report/XFixedText.hpp>
 #include "ReportControlModel.hxx"
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ReportHelperDefines.hxx"
 
@@ -39,7 +39,7 @@ namespace reportdesign
      * \ingroup reportdesign_api
      *
      */
-    class OFixedText :  public comphelper::OBaseMutex,
+    class OFixedText :  public cppu::BaseMutex,
                             public FixedTextBase,
                             public FixedTextPropertySet
     {

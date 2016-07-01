@@ -23,13 +23,13 @@
 
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sdbcx/VTypeDef.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <memory>
 
@@ -60,7 +60,7 @@ namespace connectivity
         class OCollection;
 
         class OOO_DLLPUBLIC_DBTOOLS OKey :
-                                public comphelper::OBaseMutex,
+                                public cppu::BaseMutex,
                                 public ODescriptor_BASE,
                                 public IRefreshableColumns,
                                 public ::comphelper::OIdPropertyArrayUsageHelper<OKey>,

@@ -30,6 +30,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include "file/FConnection.hxx"
@@ -38,7 +39,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/propertycontainer.hxx>
 #include "file/fanalyzer.hxx"
-#include <comphelper/broadcasthelper.hxx>
 #include "TSortIndex.hxx"
 
 namespace connectivity
@@ -55,7 +55,7 @@ namespace connectivity
         //************ Class: java.sql.Statement
 
         class OOO_DLLPUBLIC_FILE OStatement_Base :
-                                        public  comphelper::OBaseMutex,
+                                        public  cppu::BaseMutex,
                                         public  OStatement_BASE,
                                         public  ::comphelper::OPropertyContainer,
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>

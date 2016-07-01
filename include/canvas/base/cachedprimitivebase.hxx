@@ -26,7 +26,7 @@
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <cppuhelper/compbase2.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <canvas/canvastoolsdllapi.h>
 
@@ -41,7 +41,7 @@ namespace canvas
         the XCachedPrimitive interface.
      */
     class CANVASTOOLS_DLLPUBLIC CachedPrimitiveBase:
-        public comphelper::OBaseMutex, public CachedPrimitiveBase_Base
+        public cppu::BaseMutex, public CachedPrimitiveBase_Base
     {
     public:
 

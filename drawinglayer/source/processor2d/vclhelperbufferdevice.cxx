@@ -29,7 +29,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/stream.hxx>
 #include <vcl/timer.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/dibtools.hxx>
 
@@ -40,7 +40,7 @@ namespace
 {
     typedef ::std::vector< VclPtr<VirtualDevice> > aBuffers;
 
-    class VDevBuffer : public Timer, protected comphelper::OBaseMutex
+    class VDevBuffer : public Timer, protected cppu::BaseMutex
     {
     private:
         // available buffers

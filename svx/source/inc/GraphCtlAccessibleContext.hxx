@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <osl/mutex.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <svl/lstner.hxx>
 
 #include <set>
@@ -78,7 +78,7 @@ typedef ::cppu::WeakAggComponentImplHelper7<
                 SvxGraphCtrlAccessibleContext_Base;
 
 class SvxGraphCtrlAccessibleContext:
-    private comphelper::OBaseMutex, public SvxGraphCtrlAccessibleContext_Base,
+    private cppu::BaseMutex, public SvxGraphCtrlAccessibleContext_Base,
     public SfxListener, public accessibility::IAccessibleViewForwarder
 {
 public:

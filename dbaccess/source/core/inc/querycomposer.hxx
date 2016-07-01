@@ -27,10 +27,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
 #include "apitools.hxx"
-#include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
 
@@ -42,7 +42,7 @@ namespace dbaccess
                                     css::sdbcx::XColumnsSupplier,
                                     css::lang::XServiceInfo    > OQueryComposer_BASE;
 
-    class OQueryComposer :  public ::comphelper::OBaseMutex,
+    class OQueryComposer :  public ::cppu::BaseMutex,
                             public OSubComponent,
                             public OQueryComposer_BASE
     {

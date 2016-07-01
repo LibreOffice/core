@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 class EditView;
 
@@ -34,7 +34,7 @@ namespace frm
     typedef ::cppu::WeakImplHelper <   css::frame::XDispatch
                                     >   ORichTextFeatureDispatcher_Base;
 
-    class ORichTextFeatureDispatcher    :public ::comphelper::OBaseMutex
+    class ORichTextFeatureDispatcher    :public ::cppu::BaseMutex
                                         ,public ORichTextFeatureDispatcher_Base
     {
     private:

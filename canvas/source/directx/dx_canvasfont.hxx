@@ -21,7 +21,7 @@
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_CANVASFONT_HXX
 
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -45,7 +45,7 @@ namespace dxcanvas
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvasFont,
                                              css::lang::XServiceInfo > CanvasFont_Base;
 
-    class CanvasFont : public ::comphelper::OBaseMutex,
+    class CanvasFont : public ::cppu::BaseMutex,
                        public CanvasFont_Base
     {
     public:

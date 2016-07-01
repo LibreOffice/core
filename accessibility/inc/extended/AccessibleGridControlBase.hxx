@@ -26,7 +26,7 @@
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/compbase4.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -62,7 +62,7 @@ typedef ::cppu::WeakAggComponentImplHelper4<
     implements basic functionality for various Accessibility interfaces and
     the event broadcaster and contains the osl::Mutex. */
 class AccessibleGridControlBase :
-    public ::comphelper::OBaseMutex,
+    public ::cppu::BaseMutex,
     public AccessibleGridControlImplHelper
 {
 public:

@@ -28,10 +28,10 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/component.hxx>
 
@@ -43,7 +43,7 @@ namespace frm
 
 typedef ::cppu::WeakAggComponentImplHelper2 <   css::lang::XUnoTunnel
                                             ,   css::util::XCloneable > OGridColumn_BASE;
-class OGridColumn   :public ::comphelper::OBaseMutex
+class OGridColumn   :public ::cppu::BaseMutex
                     ,public OGridColumn_BASE
                     ,public OPropertySetAggregationHelper
                     ,public OCloneableAggregation

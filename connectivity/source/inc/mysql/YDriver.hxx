@@ -29,8 +29,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/CommonTools.hxx>
 
 
@@ -57,7 +57,7 @@ namespace connectivity
         /** delegates all calls to the orignal driver and extend the existing one with the SDBCX layer.
 
         */
-        class ODriverDelegator : public ::comphelper::OBaseMutex
+        class ODriverDelegator : public ::cppu::BaseMutex
                                 ,public ODriverDelegator_BASE
         {
             TJDBCDrivers                                              m_aJdbcDrivers; // all jdbc drivers

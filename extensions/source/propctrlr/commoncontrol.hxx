@@ -23,7 +23,7 @@
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -107,7 +107,7 @@ namespace pcr
             a class which is derived from vcl::Window
     */
     template < class TControlInterface, class TControlWindow >
-    class CommonBehaviourControl    :public ::comphelper::OBaseMutex
+    class CommonBehaviourControl    :public ::cppu::BaseMutex
                                     ,public ::cppu::WeakComponentImplHelper< TControlInterface >
                                     ,public CommonBehaviourControlHelper
     {

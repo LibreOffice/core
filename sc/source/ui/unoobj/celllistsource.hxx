@@ -22,10 +22,10 @@
 
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -53,7 +53,7 @@ namespace calc
     typedef ::comphelper::OPropertyArrayUsageHelper< OCellListSource >
                                                     OCellListSource_PABase;
 
-    class OCellListSource :public ::comphelper::OBaseMutex
+    class OCellListSource :public ::cppu::BaseMutex
                             ,public OCellListSource_Base      // order matters! before OCellListSource_PBase, so rBHelper gets initialized
                             ,public OCellListSource_PBase
                             ,public OCellListSource_PABase

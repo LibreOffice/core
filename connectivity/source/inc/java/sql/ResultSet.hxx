@@ -54,7 +54,7 @@ namespace connectivity
                                                   css::lang::XServiceInfo> java_sql_ResultSet_BASE;
 
     class java_sql_Connection;
-    class java_sql_ResultSet :  public comphelper::OBaseMutex,
+    class java_sql_ResultSet :  public cppu::BaseMutex,
                                 public  java_sql_ResultSet_BASE,
                                 public  java_lang_Object,
                                 public  ::cppu::OPropertySetHelper,

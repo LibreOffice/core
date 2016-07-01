@@ -24,9 +24,9 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper< presentation::XSlideShowView > ViewBase;
-class View : public ::comphelper::OBaseMutex,
+class View : public ::cppu::BaseMutex,
              public ViewBase
 {
 public:
@@ -202,7 +202,7 @@ private:
 
 typedef ::cppu::WeakComponentImplHelper< drawing::XDrawPage,
                                           beans::XPropertySet > SlideBase;
-class DummySlide : public ::comphelper::OBaseMutex,
+class DummySlide : public ::cppu::BaseMutex,
                    public SlideBase
 {
 public:

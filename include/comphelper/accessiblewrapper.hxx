@@ -33,10 +33,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -238,7 +238,7 @@ namespace comphelper
                                             >   OAccessibleContextWrapper_CBase;
 
     class COMPHELPER_DLLPUBLIC OAccessibleContextWrapper
-                    :public OBaseMutex
+                    :public cppu::BaseMutex
                     ,public OAccessibleContextWrapper_CBase
                     ,public OAccessibleContextWrapperHelper
     {

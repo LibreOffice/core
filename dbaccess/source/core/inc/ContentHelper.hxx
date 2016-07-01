@@ -32,8 +32,8 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -80,7 +80,7 @@ namespace dbaccess
 
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
         PropertyChangeListenerContainer;
-    typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
+    typedef ::cppu::BaseMutex    OContentHelper_MBASE;
     typedef ::cppu::WeakComponentImplHelper<   css::ucb::XContent
                                            ,   css::ucb::XCommandProcessor
                                            ,   css::lang::XServiceInfo

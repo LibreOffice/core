@@ -26,6 +26,7 @@
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
@@ -51,7 +52,7 @@ namespace connectivity
                                                ,   css::sdb::application::XTableUIProvider
                                                >   OHsqlConnection_BASE;
 
-        class OHsqlConnection   :public ::comphelper::OBaseMutex
+        class OHsqlConnection   :public cppu::BaseMutex
                                 ,public OHsqlConnection_BASE
                                 ,public OConnectionWrapper
                                 ,public IMethodGuardAccess

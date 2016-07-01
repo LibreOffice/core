@@ -25,7 +25,7 @@
 #include <vcl/menu.hxx>
 
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -107,7 +107,7 @@ typedef ::cppu::WeakComponentImplHelper<
     ToolbarMenuAccComponentBase;
 
 class ToolbarMenuAcc :
-    public ::comphelper::OBaseMutex,
+    public ::cppu::BaseMutex,
     public ToolbarMenuAccComponentBase
 {
 public:
@@ -188,7 +188,7 @@ typedef ::cppu::WeakComponentImplHelper< css::accessibility::XAccessible,
                                                      css::accessibility::XAccessibleContext,
                                                      css::accessibility::XAccessibleComponent > ToolbarMenuEntryAccBase;
 
-class ToolbarMenuEntryAcc : public ::comphelper::OBaseMutex,
+class ToolbarMenuEntryAcc : public ::cppu::BaseMutex,
                             public ToolbarMenuEntryAccBase
 {
 public:
