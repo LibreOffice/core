@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_5113935c",
+        "filename": "sw/qa/extras/odfimport/odfimport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-01T15:02:09Z",
+      "side": 1,
+      "message": "odfexport is a superset of odfimport, so I would suggest not touching odfimport here, and move all the test code to odfexport. The only difference between the two suites is that import does import only, while export does import-export-import, as described in sw/qa/extras/README",
+      "revId": "06562d450e7567392d2fd23e6cc82f0ad5b5bd1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_d125e3ae",
+        "filename": "xmloff/source/table/XMLTableImport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-01T15:02:09Z",
+      "side": 1,
+      "message": "xmloff.table is not a known log area, though I think it makes sense to introduce one. Can you please add it to include/sal/log-areas.dox, please?",
+      "revId": "06562d450e7567392d2fd23e6cc82f0ad5b5bd1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_7110974f",
+        "filename": "xmloff/source/table/XMLTableImport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-01T15:02:09Z",
+      "side": 1,
+      "message": "Can you make this \"else if\" a single line? Surrounding code never breaks it into two.",
+      "revId": "06562d450e7567392d2fd23e6cc82f0ad5b5bd1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
