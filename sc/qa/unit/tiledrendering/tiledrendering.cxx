@@ -381,6 +381,8 @@ void ScTiledRenderingTest::testViewCursors()
     Scheduler::ProcessEventsToIdle();
     SfxLokHelper::destroyView(SfxLokHelper::getView());
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
+    mxComponent->dispose();
+    mxComponent.clear();
 
     comphelper::LibreOfficeKit::setActive(false);
 }
