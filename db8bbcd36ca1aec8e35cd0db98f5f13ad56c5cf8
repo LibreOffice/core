@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_3181af4b",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-07-01T16:08:32Z",
+      "side": 1,
+      "message": "could you also adjust the text here (autopilot -\u003e template selection)?",
+      "revId": "db8bbcd36ca1aec8e35cd0db98f5f13ad56c5cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
