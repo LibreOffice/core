@@ -2639,13 +2639,9 @@ void ScInterpreter::ScExternal()
             {
                 case SC_ADDINARG_INTEGER:
                     {
-                        double fVal = GetDouble();
-                        double fInt = (fVal >= 0.0) ? ::rtl::math::approxFloor( fVal ) :
-                                                      ::rtl::math::approxCeil( fVal );
-                        if ( fInt >= LONG_MIN && fInt <= LONG_MAX )
-                            aParam <<= (sal_Int32)fInt;
-                        else
-                            SetError(errIllegalArgument);
+                        sal_Int32 nVal = GetInt32();
+                        if (!nGlobalError)
+                            aParam <<= nVal;
                     }
                     break;
 
@@ -2664,18 +2660,13 @@ void ScInterpreter::ScExternal()
                         case svString:
                         case svSingleRef:
                             {
-                                double fVal = GetDouble();
-                                double fInt = (fVal >= 0.0) ? ::rtl::math::approxFloor( fVal ) :
-                                                              ::rtl::math::approxCeil( fVal );
-                                if ( fInt >= LONG_MIN && fInt <= LONG_MAX )
+                                sal_Int32 nVal = GetInt32();
+                                if (!nGlobalError)
                                 {
-                                    sal_Int32 nIntVal = (long)fInt;
-                                    uno::Sequence<sal_Int32> aInner( &nIntVal, 1 );
+                                    uno::Sequence<sal_Int32> aInner( &nVal, 1 );
                                     uno::Sequence< uno::Sequence<sal_Int32> > aOuter( &aInner, 1 );
                                     aParam <<= aOuter;
                                 }
-                                else
-                                    SetError(errIllegalArgument);
                             }
                             break;
                         case svDoubleRef:
