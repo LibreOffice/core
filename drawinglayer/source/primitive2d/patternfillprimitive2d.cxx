@@ -31,8 +31,8 @@
 
 using namespace com::sun::star;
 
-#define MAXIMUM_SQUARE_LENGTH (164.0)
-#define MINIMUM_SQUARE_LENGTH (32.0)
+#define MAXIMUM_SQUARE_LENGTH (186.0)
+#define MINIMUM_SQUARE_LENGTH (16.0)
 #define MINIMUM_TILES_LENGTH (3)
 
 namespace drawinglayer
@@ -257,56 +257,57 @@ namespace drawinglayer
 
         Primitive2DContainer PatternFillPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(0 == mnDiscreteWidth || 0 == mnDiscreteHeight)
-            {
-                // Currently no buffering is used. Check if the resulting discrete sizes
-                // in the current situation would be good for buffering from now on
-                PatternFillPrimitive2D* pThat = const_cast< PatternFillPrimitive2D* >(this);
+            // The existing bufferd decomposition uses a buffer in the remembered
+            // size or none if sizes are zero. Get new needed sizes which depend on
+            // the given ViewInformation
+            bool bResetBuffering = false;
+            sal_uInt32 nW(0);
+            sal_uInt32 nH(0);
+            calculateNeededDiscreteBufferSize(nW, nH, rViewInformation);
+            const bool bBufferingCurrentlyUsed(0 != mnDiscreteWidth && 0 != mnDiscreteHeight);
+            const bool bBufferingNextUsed(0 != nW && 0 != nH);
 
-                calculateNeededDiscreteBufferSize(pThat->mnDiscreteWidth, pThat->mnDiscreteHeight, rViewInformation);
-            }
-            else
+            if(bBufferingNextUsed)
             {
-                // The existing bufferd decomposition uses a buffer in the remembered
-                // size. Get new needed sizes which depend on the given ViewInformation
-                sal_uInt32 nW(0);
-                sal_uInt32 nH(0);
-                calculateNeededDiscreteBufferSize(nW, nH, rViewInformation);
-
-                if(0 != nW && 0 != nH)
+                // buffering is now possible
+                if(bBufferingCurrentlyUsed)
                 {
-                    // buffering is possible - check if reset is needed
-                    bool bResetBuffering = false;
-
                     if(nW > mnDiscreteWidth || nH > mnDiscreteHeight)
                     {
                         // Higher resolution is needed than used in the existing buffered
-                        // decomposition
+                        // decomposition - create new one
                         bResetBuffering = true;
                     }
                     else if(double(nW * nH) / double(mnDiscreteWidth * mnDiscreteHeight) <= 0.5)
                     {
                         // Size has shrunk for 50% or more - it's worth to refresh the buffering
+                        // to spare some ressources
                         bResetBuffering = true;
-                    }
-
-                    if(bResetBuffering)
-                    {
-                        PatternFillPrimitive2D* pThat = const_cast< PatternFillPrimitive2D* >(this);
-                        pThat->mnDiscreteWidth = nW;
-                        pThat->mnDiscreteHeight = nH;
-                        pThat->setBuffered2DDecomposition(Primitive2DContainer());
                     }
                 }
                 else
                 {
-                    // no buffering wanted or possible - clear decomposition to create a
-                    // new, unbuffered one
-                    PatternFillPrimitive2D* pThat = const_cast< PatternFillPrimitive2D* >(this);
-                    pThat->mnDiscreteWidth = 0;
-                    pThat->mnDiscreteHeight = 0;
-                    pThat->setBuffered2DDecomposition(Primitive2DContainer());
+                    // currently no buffering used - reset evtl. unbuffered
+                    // decomposition to start buffering
+                    bResetBuffering = true;
                 }
+            }
+            else
+            {
+                // buffering is no longer possible
+                if(bBufferingCurrentlyUsed)
+                {
+                    // reset decomposition to allow creation of unbuffered one
+                    bResetBuffering = true;
+                }
+            }
+
+            if(bResetBuffering)
+            {
+                PatternFillPrimitive2D* pThat = const_cast< PatternFillPrimitive2D* >(this);
+                pThat->mnDiscreteWidth = nW;
+                pThat->mnDiscreteHeight = nH;
+                pThat->setBuffered2DDecomposition(Primitive2DContainer());
             }
 
             // call parent
