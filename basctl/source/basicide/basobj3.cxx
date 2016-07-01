@@ -96,10 +96,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
             aOUSource = aOUSource.copy( 0, nSourceLen-1 );
     }
 
-    OUString aSubStr;
-    aSubStr = "Sub " ;
-    aSubStr += aMacroName;
-    aSubStr += "\n\nEnd Sub" ;
+    OUString aSubStr = "Sub " + aMacroName + "\n\nEnd Sub";
 
     aOUSource += aSubStr;
 

@@ -746,19 +746,18 @@ void LibPage::InsertLib()
 
     // filter
     OUString aTitle(IDEResId(RID_STR_BASIC).toString());
-    OUString aFilter;
-    aFilter =  "*.sbl;*.xlc;*.xlb" ;        // library files
-    aFilter += ";*.sdw;*.sxw;*.odt" ;       // text
-    aFilter += ";*.vor;*.stw;*.ott" ;       // text template
-    aFilter += ";*.sgl;*.sxg;*.odm" ;       // master document
-    aFilter += ";*.oth" ;                   // html document template
-    aFilter += ";*.sdc;*.sxc;*.ods" ;       // spreadsheet
-    aFilter += ";*.stc;*.ots" ;             // spreadsheet template
-    aFilter += ";*.sda;*.sxd;*.odg" ;       // drawing
-    aFilter += ";*.std;*.otg" ;             // drawing template
-    aFilter += ";*.sdd;*.sxi;*.odp" ;       // presentation
-    aFilter += ";*.sti;*.otp" ;             // presentation template
-    aFilter += ";*.sxm;*.odf" ;             // formula
+    OUString aFilter = "*.sbl;*.xlc;*.xlb" ;        // library files
+                     + ";*.sdw;*.sxw;*.odt" ;       // text
+                     + ";*.vor;*.stw;*.ott" ;       // text template
+                     + ";*.sgl;*.sxg;*.odm" ;       // master document
+                     + ";*.oth" ;                   // html document template
+                     + ";*.sdc;*.sxc;*.ods" ;       // spreadsheet
+                     + ";*.stc;*.ots" ;             // spreadsheet template
+                     + ";*.sda;*.sxd;*.odg" ;       // drawing
+                     + ";*.std;*.otg" ;             // drawing template
+                     + ";*.sdd;*.sxi;*.odp" ;       // presentation
+                     + ";*.sti;*.otp" ;             // presentation template
+                     + ";*.sxm;*.odf" ;             // formula
     xFP->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
@@ -893,9 +892,7 @@ void LibPage::InsertLib()
                                          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
                                     {
                                         OUString aErrStr( IDE_RESSTR(RID_STR_REPLACELIB) );
-                                        aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                        aErrStr += "\n";
-                                        aErrStr += IDE_RESSTR(RID_STR_LIBISREADONLY);
+                                        aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" + IDE_RESSTR(RID_STR_LIBISREADONLY);
                                         ScopedVclPtrInstance<MessageDialog>::Create(this, aErrStr)->Execute();
                                         continue;
                                     }
@@ -910,9 +907,7 @@ void LibPage::InsertLib()
                                         aErrStr = IDE_RESSTR(RID_STR_REFNOTPOSSIBLE);
                                     else
                                         aErrStr = IDE_RESSTR(RID_STR_IMPORTNOTPOSSIBLE);
-                                    aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                    aErrStr += "\n" ;
-                                    aErrStr += IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED);
+                                    aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" + IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED);
                                     ScopedVclPtrInstance<MessageDialog>::Create(this, aErrStr)->Execute();
                                     continue;
                                 }
