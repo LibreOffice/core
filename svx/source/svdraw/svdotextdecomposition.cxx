@@ -686,6 +686,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     aPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(fabs(aScale.getX()), fabs(aScale.getY())));
 
     // prepare outliner
+    SolarMutexGuard aSolarGuard;
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     const Size aNullSize;
     rOutliner.SetPaperSize(aNullSize);
@@ -737,6 +738,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
 
     // prepare outliner
     const SfxItemSet& rTextItemSet = rSdrAutofitTextPrimitive.getSdrText()->GetItemSet();
+    SolarMutexGuard aSolarGuard;
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     SdrTextVertAdjust eVAdj = GetTextVerticalAdjust(rTextItemSet);
     SdrTextHorzAdjust eHAdj = GetTextHorizontalAdjust(rTextItemSet);
@@ -871,6 +873,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // prepare outliner
     const bool bIsCell(rSdrBlockTextPrimitive.getCellText());
+    SolarMutexGuard aSolarGuard;
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     SdrTextHorzAdjust eHAdj = rSdrBlockTextPrimitive.getSdrTextHorzAdjust();
     SdrTextVertAdjust eVAdj = rSdrBlockTextPrimitive.getSdrTextVertAdjust();
@@ -1122,6 +1125,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     aAnchorTextRange.expand(aTranslate + aScale);
 
     // prepare outliner
+    SolarMutexGuard aSolarGuard;
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     const EEControlBits nOriginalControlWord(rOutliner.GetControlWord());
     const Size aNullSize;
@@ -1481,6 +1485,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
     // prepare outliner
     const SfxItemSet& rTextItemSet = rSdrChainedTextPrimitive.getSdrText()->GetItemSet();
+    SolarMutexGuard aSolarGuard;
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
 
     SdrTextVertAdjust eVAdj = GetTextVerticalAdjust(rTextItemSet);

@@ -85,7 +85,6 @@ namespace
     ImpTimedRefDev::~ImpTimedRefDev()
     {
         OSL_ENSURE(0L == mnUseCount, "destruction of a still used ImpTimedRefDev (!)");
-        const SolarMutexGuard aGuard;
         mpVirDev.disposeAndClear();
     }
 
@@ -152,7 +151,8 @@ namespace drawinglayer
         }
 
         TextLayouterDevice::TextLayouterDevice()
-        :   mrDevice(acquireGlobalVirtualDevice())
+        :   maSolarGuard(),
+            mrDevice(acquireGlobalVirtualDevice())
         {
         }
 
