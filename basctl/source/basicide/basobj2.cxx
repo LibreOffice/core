@@ -289,12 +289,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
             }
 
             // name
-            OUString aName;
-            aName += pBasic->GetName();
-            aName += ".";
-            aName += pModule->GetName();
-            aName += ".";
-            aName += pMethod->GetName();
+            OUString aName = pBasic->GetName() + "." + pModule->GetName() + "." + pMethod->GetName();
 
             // location
             OUString aLocation;
@@ -342,12 +337,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
             // script URL
             if ( !bError )
             {
-                aScriptURL = "vnd.sun.star.script:" ;
-                aScriptURL += aName;
-                aScriptURL += "?language=" ;
-                aScriptURL += "Basic";
-                aScriptURL += "&location=" ;
-                aScriptURL += aLocation;
+                aScriptURL = "vnd.sun.star.script:" + aName + "?language=Basic&location=" + aLocation;
             }
 
             if ( !rxLimitToDocument.is() )

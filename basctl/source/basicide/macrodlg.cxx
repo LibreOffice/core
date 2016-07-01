@@ -497,11 +497,7 @@ IMPL_LINK_TYPED( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
     m_pMacroBox->Clear();
     if ( pModule )
     {
-        OUString aStr = m_aMacrosInTxtBaseStr;
-        aStr += " " ;
-        aStr += pModule->GetName();
-
-        m_pMacrosInTxt->SetText( aStr );
+        m_pMacrosInTxt->SetText( m_aMacrosInTxtBaseStr + " " + pModule->GetName() );
 
         // The macros should be called in the same order that they
         // are written down in the module.
