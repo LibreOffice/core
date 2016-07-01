@@ -93,7 +93,7 @@ bool OQueryTableWindow::Init()
         sAliasName += "_" + OUString::number(m_nAliasNum);
     }
 
-    sAliasName = comphelper::string::remove(sAliasName, '"');
+    sAliasName = sAliasName.replaceAll("\"", "");
     SetAliasName(sAliasName);
         // SetAliasName passes it as WinName, hence it uses the base class
     // reset the title

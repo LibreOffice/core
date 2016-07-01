@@ -34,7 +34,6 @@ class TestString: public CppUnit::TestFixture
 {
 public:
     void testNatural();
-    void testRemove();
     void testStripStart();
     void testStripEnd();
     void testStrip();
@@ -47,7 +46,6 @@ public:
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testNatural);
-    CPPUNIT_TEST(testRemove);
     CPPUNIT_TEST(testStripStart);
     CPPUNIT_TEST(testStripEnd);
     CPPUNIT_TEST(testStrip);
@@ -276,20 +274,6 @@ void TestString::testNatural()
     CPPUNIT_ASSERT(
         compareNatural("apple10apple", "apple10apple", xCollator, xBI, lang::Locale()) == 0
     );
-}
-
-void TestString::testRemove()
-{
-    OString aIn("abc");
-    OString aOut;
-
-    aOut = ::comphelper::string::remove(aIn, 'b');
-    CPPUNIT_ASSERT(aOut == "ac");
-
-    aIn = "aaa";
-
-    aOut = ::comphelper::string::remove(aIn, 'a');
-    CPPUNIT_ASSERT(aOut.isEmpty());
 }
 
 void TestString::testStripStart()

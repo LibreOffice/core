@@ -50,34 +50,6 @@ inline bool equals(const OUString& rIn, sal_Unicode c)
 
 /** Removes all occurrences of a character from within the source string
 
-    @deprecated  Use OString::replaceAll(OString(c), OString())
-    instead.
-
-    @param rIn      The input OString
-    @param c        The character to be removed
-
-    @return         The resulting OString
- */
-inline OString remove(const OString &rIn,
-    sal_Char c)
-{ return rIn.replaceAll(OString(c), OString()); }
-
-/** Removes all occurrences of a character from within the source string
-
-    @deprecated  Use
-    OUString::replaceAll(OUString(c), OUString()) instead.
-
-    @param rIn      The input OUString
-    @param c        The character to be removed
-
-    @return         The resulting OUString
- */
-inline OUString remove(const OUString &rIn,
-    sal_Unicode c)
-{ return rIn.replaceAll(OUString(c), ""); }
-
-/** Removes all occurrences of a character from within the source string
-
     @param rIn      The input OUStringBuffer
     @param c        The character to be removed
 

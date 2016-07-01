@@ -1501,7 +1501,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             }
         }
 
-        aDocProperty = comphelper::string::remove(aDocProperty, '"');
+        aDocProperty = aDocProperty.replaceAll("\"", "");
 
         /*
         There are up to 26 fields that may be meant by 'DocumentProperty'.
@@ -1691,7 +1691,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             }
         }
 
-        aData = comphelper::string::remove(aData, '"');
+        aData = aData.replaceAll("\"", "");
     }
 
     SwDocInfoField aField( static_cast<SwDocInfoFieldType*>(

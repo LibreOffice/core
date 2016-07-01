@@ -627,7 +627,7 @@ static void lcl_FormatPostIt(
     aStr = pField->GetPar2();
 #if defined(_WIN32)
     // Throw out all CR in Windows
-    aStr = comphelper::string::remove(aStr, '\r');
+    aStr = aStr.replaceAll("\r", "");
 #endif
     pIDCO->InsertString( aPam, aStr );
 }

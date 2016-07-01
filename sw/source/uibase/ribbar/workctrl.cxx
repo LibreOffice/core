@@ -416,7 +416,7 @@ void    SwZoomBox_Impl::Select()
 {
     if ( !IsTravelSelect() )
     {
-        OUString sEntry(comphelper::string::remove(GetText(), '%'));
+        OUString sEntry = GetText().replaceAll("%", "");
         SvxZoomItem aZoom(SvxZoomType::PERCENT,100);
         if(sEntry == SVX_RESSTR( RID_SVXSTR_ZOOM_PAGE_WIDTH ) )
             aZoom.SetType(SvxZoomType::PAGEWIDTH);

@@ -1165,7 +1165,7 @@ namespace sfx2
             if ( !_bForOpen )
             {
                 // show '*' in extensions only when opening a document
-                sExt = comphelper::string::remove(sExt, '*');
+                sExt = sExt.replaceAll("*", "");
             }
             sRet += sOpenBracket;
             sRet += sExt;

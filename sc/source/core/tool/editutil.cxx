@@ -63,7 +63,7 @@ ScEditUtil::ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
 OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
 {
     // underscore is used in function argument names
-    OUString aRet = comphelper::string::remove(rOld, '_') +
+    OUString aRet = rOld.replaceAll("_", "") +
         "=()+-*/^&<>" +
         ScCompiler::GetNativeSymbol(ocSep); // argument separator is localized.
     return aRet;

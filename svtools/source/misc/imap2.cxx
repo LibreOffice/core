@@ -248,7 +248,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL  
 {
     OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');
-    aStr = comphelper::string::remove(aStr, ';');
+    aStr = aStr.replaceAll(";", "");
     aStr = aStr.toAsciiLowerCase();
 
     const char* pStr = aStr.getStr();
@@ -389,7 +389,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL )
 {
     OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');
-    aStr = comphelper::string::remove(aStr, ';');
+    aStr = aStr.replaceAll(";", "");
     aStr = aStr.toAsciiLowerCase();
 
     const char* pStr = aStr.getStr();

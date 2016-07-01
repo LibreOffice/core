@@ -1191,7 +1191,7 @@ OUString SwHTMLWriter::convertHyperlinkHRefValue(const OUString& rURL)
     sal_Int32 nPos = sURL.lastIndexOf(cMarkSeparator);
     if (nPos != -1)
     {
-        OUString sCompare(comphelper::string::remove(sURL.copy(nPos + 1), ' '));
+        OUString sCompare = sURL.copy(nPos + 1).replaceAll(" ", "");
         if (!sCompare.isEmpty())
         {
             sCompare = sCompare.toAsciiLowerCase();

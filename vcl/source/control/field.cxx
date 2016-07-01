@@ -1087,8 +1087,7 @@ static FieldUnit ImplStringToMetric(const OUString &rMetricString)
     if( pList )
     {
         // return FieldUnit
-        OUString aStr(rMetricString.toAsciiLowerCase());
-        aStr = string::remove(aStr, ' ');
+        OUString aStr = rMetricString.toAsciiLowerCase().replaceAll(" ", "");
         for( FieldUnitStringList::const_iterator it = pList->begin(); it != pList->end(); ++it )
         {
             if ( it->first == aStr )
