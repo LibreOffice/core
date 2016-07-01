@@ -794,6 +794,7 @@ bool X11SalGraphics::drawPolyLine(
             const bool bSnapPoints(!getAntiAliasB2DDraw());
             static basegfx::B2DHomMatrix aHalfPointTransform(basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5));
             basegfx::B2DCubicBezier aEdge;
+            basegfx::B2DPoint aStart;
 
             for(sal_uInt32 i = 0; i < nEdgeCount; ++i)
             {
@@ -808,7 +809,7 @@ bool X11SalGraphics::drawPolyLine(
 
                 if(!i || bNoJoin)
                 {
-                    const basegfx::B2DPoint aStart(aEdge.getStartPoint());
+                    aStart = aEdge.getStartPoint();
                     cairo_move_to(cr, aStart.getX(), aStart.getY());
                 }
 
@@ -816,8 +817,23 @@ bool X11SalGraphics::drawPolyLine(
 
                 if(aEdge.isBezier())
                 {
-                    const basegfx::B2DPoint aCP1(aEdge.getControlPointA());
-                    const basegfx::B2DPoint aCP2(aEdge.getControlPointB());
+                    basegfx::B2DPoint aCP1(aEdge.getControlPointA());
+                    basegfx::B2DPoint aCP2(aEdge.getControlPointB());
+
+                    // tdf#99165 cairo has problems in creating the evtl. needed
+                    // miter graphics (and maybe others) when empty control points
+                    // are used, so fallback to the mathematical 'default' control
+                    // points in that case
+                    if(aStart.equal(aCP1))
+                    {
+                        aCP1 = aStart + ((aCP2 - aStart) * 0.3);
+                    }
+
+                    if(aEnd.equal(aCP2))
+                    {
+                        aCP2 = aEnd + ((aCP1 - aEnd) * 0.3);
+                    }
+
                     cairo_curve_to(cr,
                         aCP1.getX(), aCP1.getY(),
                         aCP2.getX(), aCP2.getY(),
@@ -827,6 +843,8 @@ bool X11SalGraphics::drawPolyLine(
                 {
                     cairo_line_to(cr, aEnd.getX(), aEnd.getY());
                 }
+
+                aStart = aEnd;
             }
 
             if(rPolygon.isClosed() && !bNoJoin)
