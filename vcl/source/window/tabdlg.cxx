@@ -268,6 +268,8 @@ vcl::Window* findTabControl(vcl::Window* pCurrent)
 
         pChild = pChild->GetWindow(GetWindowType::Next);
     }
+
+    return nullptr;
 }
 
 std::vector<OString> TabDialog::getAllPageUIXMLDescriptions() const

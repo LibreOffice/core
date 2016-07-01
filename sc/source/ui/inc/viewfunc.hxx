@@ -70,7 +70,7 @@ public:
                     ScViewFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
                     ~ScViewFunc();
 
-    const ScPatternAttr*    GetSelectionPattern ();
+    SC_DLLPUBLIC const ScPatternAttr*    GetSelectionPattern ();
     void                    GetSelectionFrame   ( SvxBoxItem&       rLineOuter,
                                                   SvxBoxInfoItem&   rLineInner );
 
