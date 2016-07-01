@@ -36,9 +36,7 @@
 
 using namespace css;
 
-#if !defined(WNT) && !defined(MACOSX)
 static const char* DATA_DIRECTORY = "/sc/qa/unit/tiledrendering/data/";
-#endif
 
 class ScTiledRenderingTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
@@ -47,42 +45,32 @@ public:
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
-#if !defined(WNT) && !defined(MACOSX)
     void testRowColumnSelections();
     void testSortAscendingDescending();
     void testPartHash();
     void testDocumentSize();
-#endif
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
-#if !defined(WNT) && !defined(MACOSX)
     CPPUNIT_TEST(testRowColumnSelections);
     CPPUNIT_TEST(testSortAscendingDescending);
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testDocumentSize);
-#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-#if !defined(WNT) && !defined(MACOSX)
     ScModelObj* createDoc(const char* pName);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
 
     /// document size changed callback.
     osl::Condition m_aDocSizeCondition;
-#endif
 
     uno::Reference<lang::XComponent> mxComponent;
-#if !defined(WNT) && !defined(MACOSX)
     // TODO various test-related members - when needed
-#endif
 };
 
 ScTiledRenderingTest::ScTiledRenderingTest()
-#if !defined(WNT) && !defined(MACOSX)
     // TODO various test-related members - when needed
-#endif
 {
 }
 
@@ -101,7 +89,6 @@ void ScTiledRenderingTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-#if !defined(WNT) && !defined(MACOSX)
 ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
 {
     if (mxComponent.is())
@@ -337,8 +324,6 @@ void ScTiledRenderingTest::testDocumentSize()
 
     comphelper::LibreOfficeKit::setActive(false);
 }
-
-#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTiledRenderingTest);
 

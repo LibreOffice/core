@@ -47,8 +47,13 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_filters_test \
 	CppunitTest_sc_rangelst_test \
 	CppunitTest_sc_core \
-	CppunitTest_sc_tiledrendering \
 ))
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Module_add_check_targets,sc,\
+    CppunitTest_sc_tiledrendering \
+))
+endif
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_condformats \
