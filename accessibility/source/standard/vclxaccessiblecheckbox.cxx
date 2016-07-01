@@ -164,8 +164,7 @@ OUString VCLXAccessibleCheckBox::getImplementationName() throw (RuntimeException
 
 Sequence< OUString > VCLXAccessibleCheckBox::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleCheckBox" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleCheckBox" };
 }
 
 

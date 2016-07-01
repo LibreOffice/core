@@ -263,8 +263,7 @@ sal_Bool VCLXAccessibleTabPage::supportsService( const OUString& rServiceName ) 
 
 Sequence< OUString > VCLXAccessibleTabPage::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleTabPage" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleTabPage" };
 }
 
 

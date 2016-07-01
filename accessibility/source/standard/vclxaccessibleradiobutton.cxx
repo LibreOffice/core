@@ -142,8 +142,7 @@ OUString VCLXAccessibleRadioButton::getImplementationName() throw (RuntimeExcept
 
 Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleRadioButton" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleRadioButton" };
 }
 
 

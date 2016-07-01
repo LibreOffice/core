@@ -184,8 +184,7 @@ OUString VCLXAccessibleEdit::getImplementationName() throw (RuntimeException, st
 
 Sequence< OUString > VCLXAccessibleEdit::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleEdit" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleEdit" };
 }
 
 

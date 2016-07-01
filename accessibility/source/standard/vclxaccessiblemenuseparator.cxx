@@ -53,8 +53,7 @@ OUString VCLXAccessibleMenuSeparator::getImplementationName() throw (RuntimeExce
 
 Sequence< OUString > VCLXAccessibleMenuSeparator::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames { "com.sun.star.awt.AccessibleMenuSeparator" };
-    return aNames;
+    return { "com.sun.star.awt.AccessibleMenuSeparator" };
 }
 
 
