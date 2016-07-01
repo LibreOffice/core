@@ -34,6 +34,7 @@
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <avmedia/mediaitem.hxx>
 #include <svtools/controldims.hrc>
 #include <svx/gallery.hxx>
 #include <unotools/pathoptions.hxx>
@@ -640,7 +641,7 @@ void SlideTransitionPane::updateControls()
         mpCBX_duration->SetValue( (aEffect.mfDuration)*100.0 );
     }
 
-    if( aEffect.mbSoundAmbiguous )
+    /*if( aEffect.mbSoundAmbiguous )
     {
         mpLB_SOUND->SetNoSelection();
         maCurrentSoundFile.clear();
@@ -665,7 +666,7 @@ void SlideTransitionPane::updateControls()
         {
             mpLB_SOUND->SelectEntryPos( 0 );
         }
-    }
+    }*/
 
     if( aEffect.mbLoopSoundAmbiguous )
     {
@@ -743,8 +744,18 @@ void SlideTransitionPane::openSoundFileDialog()
            aFileDialog.Execute() == ERRCODE_NONE )
     {
         aFile = aFileDialog.GetPath();
+
+        bool bLink = aFileDialog.IsInsertAsLinkSelected();
+        OUString realPath = aFile;
         tSoundListType::size_type nPos = 0;
-        bValidSoundFile = lcl_findSoundInList( maSoundList, aFile, nPos );
+        if (!bLink) {
+            bValidSoundFile = ::avmedia::EmbedMedia(mxModel, aFile, realPath);
+            maCurrentSoundFile = realPath;
+        }
+        else  {
+            bValidSoundFile = lcl_findSoundInList( maSoundList, realPath, nPos );
+        }
+
 
         if( bValidSoundFile )
         {
@@ -753,10 +764,10 @@ void SlideTransitionPane::openSoundFileDialog()
         else // not in sound list
         {
             // try to insert into gallery
-            if( GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aFile ) )
+            if( GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, realPath ) )
             {
                 updateSoundList();
-                bValidSoundFile = lcl_findSoundInList( maSoundList, aFile, nPos );
+                bValidSoundFile = lcl_findSoundInList( maSoundList, realPath, nPos );
                 DBG_ASSERT( bValidSoundFile, "Adding sound to gallery failed" );
 
                 bQuitLoop = true;
@@ -764,7 +775,7 @@ void SlideTransitionPane::openSoundFileDialog()
             else
             {
                 OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
-                aStrWarning = aStrWarning.replaceFirst("%", aFile);
+                aStrWarning = aStrWarning.replaceFirst("%", realPath);
                 ScopedVclPtrInstance< WarningBox > aWarningBox( nullptr, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
                 aWarningBox->SetModalInputMode (true);
                 bQuitLoop = (aWarningBox->Execute() != RET_RETRY);
@@ -773,12 +784,12 @@ void SlideTransitionPane::openSoundFileDialog()
             }
         }
 
-        if( bValidSoundFile )
+        //if( bValidSoundFile )
             // skip first three entries in list
-            mpLB_SOUND->SelectEntryPos( nPos + 3 );
+        //    mpLB_SOUND->SelectEntryPos( nPos + 3 );
     }
 
-    if( ! bValidSoundFile )
+    /*if( ! bValidSoundFile )
     {
         if( !maCurrentSoundFile.isEmpty() )
         {
@@ -790,7 +801,7 @@ void SlideTransitionPane::openSoundFileDialog()
         }
         else
             mpLB_SOUND->SelectEntryPos( 0 );  // NONE
-    }
+    }*/
 }
 
 impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() const
@@ -874,7 +885,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     }
 
     // sound
-    if( mpLB_SOUND->IsEnabled())
+    /*if( mpLB_SOUND->IsEnabled())
     {
         maCurrentSoundFile.clear();
         if( mpLB_SOUND->GetSelectEntryCount() > 0 )
@@ -894,7 +905,12 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
                 maCurrentSoundFile = aResult.maSound;
             }
         }
-    }
+    }*/
+
+    aResult.maSound = maCurrentSoundFile;
+    aResult.mbSoundAmbiguous = false;
+    aResult.mbSoundOn = true;
+    aResult.mbStopSound = false;
 
     // sound loop
     if( mpCB_LOOP_SOUND->IsEnabled() )
