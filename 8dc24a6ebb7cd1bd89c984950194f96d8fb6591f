@@ -16,6 +16,23 @@
       "revId": "8dc24a6ebb7cd1bd89c984950194f96d8fb6591f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_5602a93f",
+        "filename": "sw/source/filter/xml/xmlfmt.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-01T12:32:55Z",
+      "side": 1,
+      "message": "This static seems to be the root cause, the testcase detects it, as it does an import-export-import cycle, so it contains two imports, and that way the first cell style family outlives the document it was created for, finally blows up during the second import.",
+      "revId": "8dc24a6ebb7cd1bd89c984950194f96d8fb6591f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
