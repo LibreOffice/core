@@ -40,6 +40,7 @@
 #include "basegfx/matrix/b2dhommatrixtools.hxx"
 #include "basegfx/polygon/b2dpolypolygoncutter.hxx"
 #include "basegfx/polygon/b2dtrapezoid.hxx"
+#include <basegfx/curve/b2dcubicbezier.hxx>
 
 #include <vcl/jobdata.hxx>
 #include <vcl/virdev.hxx>
@@ -79,6 +80,11 @@ X11SalGraphics::X11SalGraphics():
     m_aXRenderPicture(0),
     pPaintRegion_(nullptr),
     mpClipRegion(nullptr),
+#if ENABLE_CAIRO_CANVAS
+    maClipRegion(),
+    mnPenColor(SALCOLOR_NONE),
+    mnFillColor(SALCOLOR_NONE),
+#endif // ENABLE_CAIRO_CANVAS
     pFontGC_(nullptr),
     nTextPixel_(0),
     hBrush_(None),
@@ -354,26 +360,43 @@ void X11SalGraphics::ResetClipRegion()
 
 bool X11SalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
+    maClipRegion = i_rClip;
     return mxImpl->setClipRegion( i_rClip );
 }
 
 void X11SalGraphics::SetLineColor()
 {
+#if ENABLE_CAIRO_CANVAS
+    mnPenColor = SALCOLOR_NONE;
+#endif // ENABLE_CAIRO_CANVAS
+
     mxImpl->SetLineColor();
 }
 
 void X11SalGraphics::SetLineColor( SalColor nSalColor )
 {
+#if ENABLE_CAIRO_CANVAS
+    mnPenColor = nSalColor;
+#endif // ENABLE_CAIRO_CANVAS
+
     mxImpl->SetLineColor( nSalColor );
 }
 
 void X11SalGraphics::SetFillColor()
 {
+#if ENABLE_CAIRO_CANVAS
+    mnFillColor = SALCOLOR_NONE;
+#endif // ENABLE_CAIRO_CANVAS
+
     mxImpl->SetFillColor();
 }
 
 void X11SalGraphics::SetFillColor( SalColor nSalColor )
 {
+#if ENABLE_CAIRO_CANVAS
+    mnFillColor = nSalColor;
+#endif // ENABLE_CAIRO_CANVAS
+
     mxImpl->SetFillColor( nSalColor );
 }
 
@@ -555,8 +578,133 @@ css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rS
 // draw a poly-polygon
 bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
 {
+    if(fTransparency >= 1.0)
+    {
+        return true;
+    }
+
+    const sal_uInt32 nPolyCount(rOrigPolyPoly.count());
+
+    if(nPolyCount <= 0)
+    {
+        return true;
+    }
+
+    if(SALCOLOR_NONE == mnFillColor && SALCOLOR_NONE == mnPenColor)
+    {
+        return true;
+    }
+
+#if ENABLE_CAIRO_CANVAS
+    static bool bUseCairoForPolygons = false;
+
+    if(bUseCairoForPolygons && SupportsCairo())
+    {
+        // snap to raster if requested
+        basegfx::B2DPolyPolygon aPolyPoly(rOrigPolyPoly);
+        const bool bSnapPoints(!getAntiAliasB2DDraw());
+
+        if(bSnapPoints)
+        {
+            aPolyPoly = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aPolyPoly);
+        }
+
+        cairo_t* cr = getCairoContext();
+        clipRegion(cr);
+
+        for(sal_uInt32 a(0); a < nPolyCount; ++a)
+        {
+            const basegfx::B2DPolygon aPolygon(aPolyPoly.getB2DPolygon(a));
+            const sal_uInt32 nPointCount(aPolygon.count());
+
+            if(nPointCount)
+            {
+                const sal_uInt32 nEdgeCount(aPolygon.isClosed() ? nPointCount : nPointCount - 1);
+
+                if(nEdgeCount)
+                {
+                    basegfx::B2DCubicBezier aEdge;
+
+                    for(sal_uInt32 b = 0; b < nEdgeCount; ++b)
+                    {
+                        aPolygon.getBezierSegment(b, aEdge);
+
+                        if(!b)
+                        {
+                            const basegfx::B2DPoint aStart(aEdge.getStartPoint());
+                            cairo_move_to(cr, aStart.getX(), aStart.getY());
+                        }
+
+                        const basegfx::B2DPoint aEnd(aEdge.getEndPoint());
+
+                        if(aEdge.isBezier())
+                        {
+                            const basegfx::B2DPoint aCP1(aEdge.getControlPointA());
+                            const basegfx::B2DPoint aCP2(aEdge.getControlPointB());
+                            cairo_curve_to(cr,
+                                aCP1.getX(), aCP1.getY(),
+                                aCP2.getX(), aCP2.getY(),
+                                aEnd.getX(), aEnd.getY());
+                        }
+                        else
+                        {
+                            cairo_line_to(cr, aEnd.getX(), aEnd.getY());
+                        }
+                    }
+
+                    cairo_close_path(cr);
+                }
+            }
+        }
+
+        if(SALCOLOR_NONE != mnFillColor)
+        {
+            cairo_set_source_rgba(cr,
+                SALCOLOR_RED(mnFillColor)/255.0,
+                SALCOLOR_GREEN(mnFillColor)/255.0,
+                SALCOLOR_BLUE(mnFillColor)/255.0,
+                1.0 - fTransparency);
+            cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+            cairo_fill_preserve(cr);
+        }
+
+        if(SALCOLOR_NONE != mnPenColor)
+        {
+            cairo_set_source_rgba(cr,
+                    SALCOLOR_RED(mnPenColor)/255.0,
+                    SALCOLOR_GREEN(mnPenColor)/255.0,
+                    SALCOLOR_BLUE(mnPenColor)/255.0,
+                    1.0 - fTransparency);
+            cairo_stroke_preserve(cr);
+        }
+
+        releaseCairoContext(cr);
+        return true;
+    }
+#endif // ENABLE_CAIRO_CANVAS
+
     return mxImpl->drawPolyPolygon( rOrigPolyPoly, fTransparency );
 }
+
+#if ENABLE_CAIRO_CANVAS
+void X11SalGraphics::clipRegion(cairo_t* cr)
+{
+    if(!maClipRegion.IsEmpty())
+    {
+        RectangleVector aRectangles;
+        maClipRegion.GetRegionRectangles(aRectangles);
+
+        if (!aRectangles.empty())
+        {
+            for (RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+            {
+                cairo_rectangle(cr, aRectIter->Left(), aRectIter->Top(), aRectIter->GetWidth(), aRectIter->GetHeight());
+            }
+            cairo_clip(cr);
+        }
+    }
+}
+#endif // ENABLE_CAIRO_CANVAS
 
 bool X11SalGraphics::drawPolyLine(
     const basegfx::B2DPolygon& rPolygon,
@@ -566,6 +714,129 @@ bool X11SalGraphics::drawPolyLine(
     css::drawing::LineCap eLineCap,
     double fMiterMinimumAngle)
 {
+    const int nPointCount(rPolygon.count());
+
+    if(nPointCount <= 0)
+    {
+        return true;
+    }
+
+    if(fTransparency >= 1.0)
+    {
+        return true;
+    }
+
+#if ENABLE_CAIRO_CANVAS
+    static bool bUseCairoForFatLines = true;
+
+    if(bUseCairoForFatLines && SupportsCairo())
+    {
+        cairo_t* cr = getCairoContext();
+        clipRegion(cr);
+        cairo_line_join_t eCairoLineJoin(CAIRO_LINE_JOIN_MITER);
+        bool bNoJoin(false);
+
+        switch(eLineJoin)
+        {
+            case basegfx::B2DLineJoin::Bevel:
+                eCairoLineJoin = CAIRO_LINE_JOIN_BEVEL;
+                break;
+            case basegfx::B2DLineJoin::Round:
+                eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
+                break;
+            case basegfx::B2DLineJoin::NONE:
+                bNoJoin = true;
+                SAL_FALLTHROUGH;
+            case basegfx::B2DLineJoin::Miter:
+                eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
+                break;
+        }
+
+        // setup cap attribute
+        cairo_line_cap_t eCairoLineCap(CAIRO_LINE_CAP_BUTT);
+        switch(eLineCap)
+        {
+            default: // css::drawing::LineCap_BUTT:
+            {
+                eCairoLineCap = CAIRO_LINE_CAP_BUTT;
+                break;
+            }
+            case css::drawing::LineCap_ROUND:
+            {
+                eCairoLineCap = CAIRO_LINE_CAP_ROUND;
+                break;
+            }
+            case css::drawing::LineCap_SQUARE:
+            {
+                eCairoLineCap = CAIRO_LINE_CAP_SQUARE;
+                break;
+            }
+        }
+
+        cairo_set_source_rgba(cr,
+            SALCOLOR_RED(mnPenColor)/255.0,
+            SALCOLOR_GREEN(mnPenColor)/255.0,
+            SALCOLOR_BLUE(mnPenColor)/255.0,
+            1.0 - fTransparency);
+        cairo_set_line_join(cr, eCairoLineJoin);
+        cairo_set_line_cap(cr, eCairoLineCap);
+        cairo_set_line_width(cr, (fabs(rLineWidth.getX()) + fabs(rLineWidth.getY())) * 0.5);
+
+        if(CAIRO_LINE_JOIN_MITER == eCairoLineJoin)
+        {
+            cairo_set_miter_limit(cr, 15.0);
+        }
+
+        const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nPointCount : nPointCount - 1);
+
+        if(nEdgeCount)
+        {
+            const bool bSnapPoints(!getAntiAliasB2DDraw());
+            static basegfx::B2DHomMatrix aHalfPointTransform(basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5));
+            basegfx::B2DCubicBezier aEdge;
+
+            for(sal_uInt32 i = 0; i < nEdgeCount; ++i)
+            {
+                rPolygon.getBezierSegment(i, aEdge);
+
+                aEdge.transform(aHalfPointTransform);
+
+                if(bSnapPoints)
+                {
+                    aEdge.fround();
+                }
+
+                if(!i || bNoJoin)
+                {
+                    const basegfx::B2DPoint aStart(aEdge.getStartPoint());
+                    cairo_move_to(cr, aStart.getX(), aStart.getY());
+                }
+
+                const basegfx::B2DPoint aEnd(aEdge.getEndPoint());
+
+                if(aEdge.isBezier())
+                {
+                    const basegfx::B2DPoint aCP1(aEdge.getControlPointA());
+                    const basegfx::B2DPoint aCP2(aEdge.getControlPointB());
+                    cairo_curve_to(cr,
+                        aCP1.getX(), aCP1.getY(),
+                        aCP2.getX(), aCP2.getY(),
+                        aEnd.getX(), aEnd.getY());
+                }
+                else
+                {
+                    cairo_line_to(cr, aEnd.getX(), aEnd.getY());
+                }
+            }
+
+            cairo_stroke(cr);
+        }
+
+        releaseCairoContext(cr);
+        return true;
+    }
+#endif // ENABLE_CAIRO_CANVAS
+
     return mxImpl->drawPolyLine( rPolygon, fTransparency, rLineWidth,
             eLineJoin, eLineCap, fMiterMinimumAngle );
 }

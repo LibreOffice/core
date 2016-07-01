@@ -267,6 +267,10 @@ public:
     virtual css::uno::Any           GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
     virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const override;
 
+#if ENABLE_CAIRO_CANVAS
+    void clipRegion(cairo_t* cr);
+#endif // ENABLE_CAIRO_CANVAS
+
     bool TryRenderCachedNativeControl(ControlCacheKey& aControlCacheKey,
                                       int nX, int nY);
 
@@ -330,6 +334,11 @@ protected:
 
     Region                          pPaintRegion_;
     Region                          mpClipRegion;
+#if ENABLE_CAIRO_CANVAS
+    vcl::Region                     maClipRegion;
+    SalColor                        mnPenColor;
+    SalColor                        mnFillColor;
+#endif // ENABLE_CAIRO_CANVAS
 
     GC                              pFontGC_;       // Font attributes
     Pixel                           nTextPixel_;

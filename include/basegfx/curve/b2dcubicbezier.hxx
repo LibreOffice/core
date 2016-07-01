@@ -33,6 +33,7 @@ namespace basegfx
 {
     class BASEGFX_DLLPUBLIC B2DCubicBezier
     {
+    private:
         B2DPoint                                        maStartPoint;
         B2DPoint                                        maEndPoint;
         B2DPoint                                        maControlPointA;
@@ -187,6 +188,12 @@ namespace basegfx
             sense to use reserve(4) at the vector as preparation.
         */
         void getAllExtremumPositions(::std::vector< double >& rResults) const;
+
+        /// apply transformation given in matrix form
+        void transform(const basegfx::B2DHomMatrix& rMatrix);
+
+        /// fround content
+        void fround();
     };
 } // end of namespace basegfx
 
