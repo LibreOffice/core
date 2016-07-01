@@ -2162,7 +2162,7 @@ void SVGActionWriter::ImplStartClipRegion(sal_Int32 nClipPathId)
     if (nClipPathId == 0)
         return;
 
-    OUString aUrl = OUString("url(#") + aPrefixClipPathId + OUString::number( nClipPathId ) + ")";
+    OUString aUrl = OUStringLiteral("url(#") + aPrefixClipPathId + OUString::number( nClipPathId ) + ")";
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrClipPath, aUrl );
     mpCurrentClipRegionElem.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true ) );
 }
