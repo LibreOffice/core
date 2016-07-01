@@ -713,9 +713,10 @@ public:
 
     void waitFinished()
     {
-        if(!mbFinished)
+        const TimeValue aTimeValue(0, 100000); // 1/10th second
+
+        while(!mbFinished)
         {
-            const TimeValue aTimeValue(0, 100000); // 1/10th second
             osl_waitThread(&aTimeValue);
         }
     }
