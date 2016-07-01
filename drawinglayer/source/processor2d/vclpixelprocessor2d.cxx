@@ -182,16 +182,18 @@ namespace drawinglayer
 
         bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency)
         {
-            basegfx::B2DPolygon aLocalPolygon(rSource.getB2DPolygon());
-
-            if(!aLocalPolygon.count())
+            if(!rSource.getB2DPolygon().count())
             {
                 // no geometry, done
                 return true;
             }
 
-            aLocalPolygon = basegfx::tools::simplifyCurveSegments(aLocalPolygon);
+            // get geometry data, prepare hairline data
+            basegfx::B2DPolygon aLocalPolygon(rSource.getB2DPolygon());
             basegfx::B2DPolyPolygon aHairLinePolyPolygon;
+
+            // simplify curve segments
+            aLocalPolygon = basegfx::tools::simplifyCurveSegments(aLocalPolygon);
 
             if(rSource.getStrokeAttribute().isDefault() || 0.0 == rSource.getStrokeAttribute().getFullDotDashLen())
             {
