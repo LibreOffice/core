@@ -2156,12 +2156,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     // sal_uInt32  nGroupLevel = 0;
 
     sal_uInt32  nInstance, nGroups, nShapes, nShapeCount, nPer, nLastPer, nIndices, nOlePictureId;
-    sal_Int32  nEffectCount;
     css::awt::Point   aTextRefPoint;
 
     ResetGroupTable( nShapes = mXShapes->getCount() );
 
-    nIndices = nInstance = nLastPer = nShapeCount = nEffectCount = 0;
+    nIndices = nInstance = nLastPer = nShapeCount = 0;
 
     bool bIsTitlePossible = true;           // powerpoint is not able to handle more than one title
 
@@ -2204,9 +2203,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             bool bMediaClickAction = false;
             css::presentation::AnimationEffect eAe;
             css::presentation::AnimationEffect eTe;
-
-            if ( ImplGetPropertyValue( "PresentationOrder" ) )
-                nEffectCount = *o3tl::doAccess<sal_Int32>(mAny);
 
             bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
             css::presentation::ClickAction eCa = css::presentation::ClickAction_NONE;
