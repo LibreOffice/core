@@ -27,7 +27,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -1403,7 +1403,7 @@ void ColorPickerDialog::setColorComponent( sal_uInt16 nComp, double dValue )
 
 typedef ::cppu::WeakComponentImplHelper< XServiceInfo, XExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
 
-class ColorPicker : protected ::comphelper::OBaseMutex,    // Struct for right initialization of mutex member! Must be first of baseclasses.
+class ColorPicker : protected ::cppu::BaseMutex,    // Struct for right initialization of mutex member! Must be first of baseclasses.
                     public ColorPickerBase
 {
 public:

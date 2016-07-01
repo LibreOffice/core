@@ -28,9 +28,9 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include "ado/AConnection.hxx"
 #include <list>
 #include "ado/Awrapado.hxx"
@@ -49,7 +49,7 @@ namespace connectivity
 
         //************ Class: java.sql.Statement
 
-        class OStatement_Base       :   public comphelper::OBaseMutex,
+        class OStatement_Base       :   public cppu::BaseMutex,
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>,

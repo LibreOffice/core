@@ -34,7 +34,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "ado/AStatement.hxx"
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace connectivity
@@ -57,7 +57,7 @@ namespace connectivity
                                                   css::sdbcx::XDeleteRows,
                                                   css::lang::XServiceInfo> OResultSet_BASE;
 
-        class OResultSet :  public comphelper::OBaseMutex,
+        class OResultSet :  public cppu::BaseMutex,
                             public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>

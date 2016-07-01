@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase5.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <vcl/vclptr.hxx>
@@ -60,7 +60,7 @@ typedef ::cppu::WeakAggComponentImplHelper5<
             css::lang::XServiceInfo >
             SvtRulerAccessible_Base;
 
-class SvtRulerAccessible : public ::comphelper::OBaseMutex, public SvtRulerAccessible_Base
+class SvtRulerAccessible : public ::cppu::BaseMutex, public SvtRulerAccessible_Base
 {
 public:
     //=====  internal  ========================================================

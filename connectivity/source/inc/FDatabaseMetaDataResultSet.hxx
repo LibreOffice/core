@@ -36,12 +36,12 @@
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 namespace connectivity
@@ -60,7 +60,7 @@ namespace connectivity
     //  typedef ORefVector<ORow>            ORows;
 
     class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSet :
-                                        public comphelper::OBaseMutex,
+                                        public cppu::BaseMutex,
                                         public  ODatabaseMetaDataResultSet_BASE,
                                         public  ::comphelper::OPropertyContainer,
                                         public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>

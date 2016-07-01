@@ -23,8 +23,8 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <basegfx/range/b3drange.hxx>
 
 
@@ -93,7 +93,7 @@ namespace drawinglayer
             That's all for 3D!
          */
         class DRAWINGLAYER_DLLPUBLIC BasePrimitive3D
-        :   protected comphelper::OBaseMutex,
+        :   protected cppu::BaseMutex,
             public BasePrimitive3DImplBase
         {
             BasePrimitive3D(const BasePrimitive3D&) = delete;

@@ -67,7 +67,7 @@ namespace connectivity
         typedef ::std::allocator< TVoidPtr >    TVoidAlloc;
         typedef ::std::vector<TVoidPtr>         TVoidVector;
 
-        class OResultSet :  public  comphelper::OBaseMutex,
+        class OResultSet :  public  cppu::BaseMutex,
                             public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>

@@ -71,10 +71,10 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/propshlp.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/propshlp.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
@@ -126,7 +126,7 @@ namespace svxform
                                                     >   FormController_BASE;
 
     class ColumnInfoCache;
-    class FormController :public ::comphelper::OBaseMutex
+    class FormController :public ::cppu::BaseMutex
                                         ,public FormController_BASE
                                         ,public ::cppu::OPropertySetHelper
                                         ,public DispatchInterceptor

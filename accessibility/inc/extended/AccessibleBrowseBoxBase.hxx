@@ -28,7 +28,7 @@
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/compbase5.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -69,7 +69,7 @@ typedef ::cppu::WeakAggComponentImplHelper5<
     implements basic functionality for various Accessibility interfaces and
     the event broadcaster and contains the osl::Mutex. */
 class AccessibleBrowseBoxBase :
-    public ::comphelper::OBaseMutex,
+    public ::cppu::BaseMutex,
     public AccessibleBrowseBoxImplHelper
 {
 public:
@@ -286,7 +286,7 @@ protected:
     void ensureIsAlive() const
         throw ( css::lang::DisposedException );
 
-    /** @return  The osl::Mutex member provided by the class OBaseMutex. */
+    /** @return  The osl::Mutex member provided by the class BaseMutex. */
     inline ::osl::Mutex& getOslMutex();
 
     /** Changes the name of the object (flat assignment, no notify).

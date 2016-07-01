@@ -42,6 +42,7 @@
 #include <com/sun/star/sdb/XRowsChangeBroadcaster.hpp>
 
 #include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <connectivity/paramwrapper.hxx>
 #include <connectivity/FValue.hxx>
@@ -64,7 +65,7 @@ namespace dbaccess
                                                     >   ORowSet_BASE1;
 
     class OTableContainer;
-    class ORowSet : public comphelper::OBaseMutex
+    class ORowSet : public cppu::BaseMutex
                     , public ORowSet_BASE1
                     , public ORowSetBase
                     , public ::comphelper::OPropertyArrayUsageHelper<ORowSet>
@@ -444,7 +445,7 @@ namespace dbaccess
 
     //  ORowSetClone
 
-    class ORowSetClone : public comphelper::OBaseMutex
+    class ORowSetClone : public cppu::BaseMutex
                          ,public OSubComponent
                          ,public ORowSetBase
                          ,public ::comphelper::OPropertyArrayUsageHelper < ORowSetClone >

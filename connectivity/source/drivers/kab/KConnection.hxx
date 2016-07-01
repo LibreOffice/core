@@ -28,7 +28,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <shell/kde_headers.h>
 
@@ -54,7 +54,7 @@ namespace connectivity
         typedef OMetaConnection_BASE                KabConnection_BASE; // implements basics and text encoding
         typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
 
-        class KabConnection : public comphelper::OBaseMutex,
+        class KabConnection : public cppu::BaseMutex,
                             public KabConnection_BASE,
                             public OSubComponent<KabConnection, KabConnection_BASE>
         {

@@ -33,11 +33,11 @@
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "odbc/OStatement.hxx"
 #include "odbc/ODatabaseMetaData.hxx"
 #include "odbc/odbcbasedllapi.hxx"
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/StdTypeDefs.hxx>
 
 namespace connectivity
@@ -56,7 +56,7 @@ namespace connectivity
                                                    css::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
         class OOO_DLLPUBLIC_ODBCBASE ODatabaseMetaDataResultSet :
-                                    public comphelper::OBaseMutex,
+                                    public cppu::BaseMutex,
                                     public  ODatabaseMetaDataResultSet_BASE,
                                     public  ::cppu::OPropertySetHelper,
                                     public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>

@@ -21,8 +21,8 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONWRAPPER_HXX
 
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/ConnectionWrapper.hxx>
 
@@ -35,7 +35,7 @@ namespace connectivity
 
     typedef ::cppu::WeakComponentImplHelper< css::sdbc::XConnection > OConnectionWeakWrapper_BASE;
 
-    class OConnectionWeakWrapper : public ::comphelper::OBaseMutex
+    class OConnectionWeakWrapper : public ::cppu::BaseMutex
                                  , public OConnectionWeakWrapper_BASE
                                  , public OConnectionWrapper
     {

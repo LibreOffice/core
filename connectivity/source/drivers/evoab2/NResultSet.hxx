@@ -74,7 +74,7 @@ namespace connectivity
                                                >   OResultSet_BASE;
 
 
-        class OEvoabResultSet   :public comphelper::OBaseMutex
+        class OEvoabResultSet   :public cppu::BaseMutex
                                 ,public OResultSet_BASE
                                 ,public ::comphelper::OPropertyContainer
                                 ,public ::comphelper::OPropertyArrayUsageHelper<OEvoabResultSet>

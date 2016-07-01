@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase8.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <tools/gen.hxx>
 #include <vcl/vclptr.hxx>
@@ -57,7 +57,7 @@ namespace accessibility
                                                 , css::lang::XEventListener > AccessibleIconChoiceCtrlEntry_BASE;
 
     /** the class AccessibleListBoxEntry represents the class for an accessible object of a listbox entry */
-    class AccessibleIconChoiceCtrlEntry :   public ::comphelper::OBaseMutex,
+    class AccessibleIconChoiceCtrlEntry :   public ::cppu::BaseMutex,
                                        public AccessibleIconChoiceCtrlEntry_BASE,
                                     public ::comphelper::OCommonAccessibleText
     {

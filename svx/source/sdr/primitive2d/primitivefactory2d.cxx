@@ -38,7 +38,7 @@ typedef cppu::WeakComponentImplHelper< css::graphic::XPrimitiveFactory2D, css::l
 
 // base class for C++ implementation of css::graphic::XPrimitiveFactory2D
 class PrimitiveFactory2D
-    :   protected comphelper::OBaseMutex,
+    :   protected cppu::BaseMutex,
         public PrimitiveFactory2DImplBase
 {
 public:

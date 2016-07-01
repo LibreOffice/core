@@ -24,6 +24,7 @@
 #include <tools/gen.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -38,7 +39,6 @@
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 
 #include <comphelper/accessibletexthelper.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <editeng/AccessibleParaManager.hxx>
 #include <editeng/AccessibleImageBullet.hxx>
 #include <editeng/unoedprx.hxx>
@@ -58,7 +58,7 @@ namespace accessibility
 
     /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
      */
-    class EDITENG_DLLPUBLIC AccessibleEditableTextPara : public ::comphelper::OBaseMutex, public AccessibleTextParaInterfaceBase, public ::comphelper::OCommonAccessibleText
+    class EDITENG_DLLPUBLIC AccessibleEditableTextPara : public ::cppu::BaseMutex, public AccessibleTextParaInterfaceBase, public ::comphelper::OCommonAccessibleText
     {
 
     protected:

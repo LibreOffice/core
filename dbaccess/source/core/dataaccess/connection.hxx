@@ -68,7 +68,7 @@ typedef cppu::ImplHelper13  <   css::container::XChild
 
 class ODatabaseSource;
 // OConnection
-class OConnection           :public ::comphelper::OBaseMutex
+class OConnection           :public ::cppu::BaseMutex
                             ,public OSubComponent
                             ,public ::connectivity::OConnectionWrapper
                             ,public OConnection_Base

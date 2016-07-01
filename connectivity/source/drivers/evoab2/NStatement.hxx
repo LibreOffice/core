@@ -27,10 +27,10 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/FValue.hxx>
@@ -137,7 +137,7 @@ namespace connectivity
         class OCommonStatement;
         typedef OSubComponent< OCommonStatement, OCommonStatement_IBase >   OStatement_CBase;
 
-        class OCommonStatement  :public comphelper::OBaseMutex
+        class OCommonStatement  :public cppu::BaseMutex
                                 ,public OCommonStatement_IBase
                                 ,public ::comphelper::OPropertyContainer
                                 ,public ::comphelper::OPropertyArrayUsageHelper< OCommonStatement >

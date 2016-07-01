@@ -30,7 +30,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <tools/gen.hxx>
 #include <unordered_map>
 
@@ -39,7 +39,7 @@ namespace svt
 
 class SVT_DLLPUBLIC StatusbarController :
                             public css::frame::XStatusbarController,
-                            public ::comphelper::OBaseMutex,
+                            public ::cppu::BaseMutex,
                             public ::cppu::OWeakObject
 {
     public:

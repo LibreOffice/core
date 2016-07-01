@@ -40,7 +40,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 namespace dbaccess
 {
@@ -58,7 +58,7 @@ namespace dbaccess
 
     //  OResultSet
 
-    class OResultSet :  public comphelper::OBaseMutex,
+    class OResultSet :  public cppu::BaseMutex,
                         public OResultSetBase,
                         public ::cppu::OPropertySetHelper,
                         public ::comphelper::OPropertyArrayUsageHelper < OResultSet >

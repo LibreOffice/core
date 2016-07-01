@@ -24,7 +24,7 @@
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
 #include <cppuhelper/compbase2.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <canvas/canvastoolsdllapi.h>
@@ -43,7 +43,7 @@ namespace canvas
     typedef ::cppu::WeakComponentImplHelper2< css::rendering::XParametricPolyPolygon2D,
                                                    css::lang::XServiceInfo > ParametricPolyPolygon_Base;
 
-    class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon : public ::comphelper::OBaseMutex,
+    class CANVASTOOLS_DLLPUBLIC ParametricPolyPolygon : public ::cppu::BaseMutex,
                                   public ParametricPolyPolygon_Base
     {
     public:

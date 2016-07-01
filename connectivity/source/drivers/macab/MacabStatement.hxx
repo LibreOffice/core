@@ -29,6 +29,7 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
 
 namespace connectivity
@@ -44,7 +45,7 @@ namespace connectivity
         // Class MacabCommonStatement
         // is a base class for the normal statement and for the prepared statement
 
-        class MacabCommonStatement :    public comphelper::OBaseMutex,
+        class MacabCommonStatement :    public cppu::BaseMutex,
                         public  MacabCommonStatement_BASE,
                         public  ::cppu::OPropertySetHelper,
                         public  comphelper::OPropertyArrayUsageHelper<MacabCommonStatement>

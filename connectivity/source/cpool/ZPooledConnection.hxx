@@ -20,9 +20,9 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLEDCONNECTION_HXX
 
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 
 
@@ -35,7 +35,7 @@ namespace connectivity
     typedef ::cppu::WeakComponentImplHelper<    css::sdbc::XPooledConnection
                                                ,css::lang::XEventListener>    OPooledConnection_Base;
 
-    class OPooledConnection : public ::comphelper::OBaseMutex
+    class OPooledConnection : public ::cppu::BaseMutex
                              ,public OPooledConnection_Base
     {
         css::uno::Reference< css::sdbc::XConnection >             m_xRealConnection;  // the connection fom driver

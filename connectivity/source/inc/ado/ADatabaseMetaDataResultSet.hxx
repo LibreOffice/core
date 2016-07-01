@@ -30,9 +30,9 @@
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "ado/AStatement.hxx"
-#include <comphelper/broadcasthelper.hxx>
 #include <connectivity/StdTypeDefs.hxx>
 
 namespace connectivity
@@ -50,7 +50,7 @@ namespace connectivity
                                                    css::sdbc::XCloseable,
                                                    css::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
-        class ODatabaseMetaDataResultSet :  public comphelper::OBaseMutex,
+        class ODatabaseMetaDataResultSet :  public cppu::BaseMutex,
                                     public  ODatabaseMetaDataResultSet_BASE,
                                     public  ::cppu::OPropertySetHelper,
                                     public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>

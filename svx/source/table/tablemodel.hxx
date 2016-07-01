@@ -26,7 +26,7 @@
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <comphelper/broadcasthelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <comphelper/listenernotification.hxx>
 #include "celltypes.hxx"
 
@@ -51,7 +51,7 @@ protected:
 
 typedef ::cppu::WeakComponentImplHelper< css::table::XTable, css::util::XBroadcaster > TableModelBase;
 
-class TableModel : public ::comphelper::OBaseMutex,
+class TableModel : public ::cppu::BaseMutex,
                    public TableModelBase,
                    public ICellRange
 {
