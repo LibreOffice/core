@@ -69,7 +69,7 @@ private:
 
 public:
 
-                                SfxModule( ResMgr* pMgrP, SfxObjectFactory* pFactoryP, ... );
+                                SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pFactoryList);
                                 virtual ~SfxModule();
 
     ResMgr*                     GetResMgr();

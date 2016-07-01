@@ -103,16 +103,15 @@ ResMgr* SfxModule::GetResMgr()
     return pResMgr;
 }
 
-SfxModule::SfxModule( ResMgr* pMgrP, SfxObjectFactory* pFactoryP, ... )
+SfxModule::SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pFactoryList )
     : pResMgr( pMgrP ), pImpl(nullptr)
 {
     Construct_Impl();
-    va_list pVarArgs;
-    va_start( pVarArgs, pFactoryP );
-    for ( SfxObjectFactory *pArg = pFactoryP; pArg;
-         pArg = va_arg( pVarArgs, SfxObjectFactory* ) )
-        pArg->SetModule_Impl( this );
-    va_end(pVarArgs);
+    for (auto pFactory : pFactoryList)
+    {
+        if (pFactory)
+            pFactory->SetModule_Impl( this );
+    }
 }
 
 void SfxModule::Construct_Impl()

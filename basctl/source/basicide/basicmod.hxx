@@ -31,7 +31,7 @@ class Module : public SfxModule
     static Module* mpModule;
 public:
     Module ( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
-        SfxModule( pMgr, pObjFact, nullptr )
+        SfxModule( pMgr, {pObjFact} )
     { }
 public:
     static Module*& Get () { return mpModule; }
