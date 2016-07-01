@@ -358,6 +358,22 @@ typedef enum
      */
     LOK_CALLBACK_CELL_VIEW_CURSOR,
 
+    /**
+     * The size and/or the position of a graphic selection in one of the other
+     * views has changed.
+     *
+     * The payload format:
+     *
+     * {
+     *     "viewId": "..."
+     *     "selection": "..."
+     * }
+     *
+     * - viewId is a value returned earlier by lok::Document::createView()
+     * - selection uses the format of LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_GRAPHIC_VIEW_SELECTION,
+
 }
 LibreOfficeKitCallbackType;
 

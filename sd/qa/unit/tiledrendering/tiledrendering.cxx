@@ -12,6 +12,7 @@
 #include <test/xmltesttools.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/lokhelper.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
@@ -62,6 +63,7 @@ public:
     void testPartHash();
     void testResizeTable();
     void testResizeTableColumn();
+    void testViewCursors();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -81,6 +83,7 @@ public:
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testResizeTable);
     CPPUNIT_TEST(testResizeTableColumn);
+    CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -803,6 +806,71 @@ void SdTiledRenderingTest::testResizeTableColumn()
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn2, nActualColumn2);
     xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+class ViewCallback
+{
+public:
+    bool m_bGraphicSelectionInvalidated;
+    bool m_bGraphicViewSelectionInvalidated;
+
+    ViewCallback()
+        : m_bGraphicSelectionInvalidated(false),
+          m_bGraphicViewSelectionInvalidated(false)
+    {
+    }
+
+    static void callback(int nType, const char* pPayload, void* pData)
+    {
+        static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    }
+
+    void callbackImpl(int nType, const char* /*pPayload*/)
+    {
+        switch (nType)
+        {
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+        {
+            m_bGraphicSelectionInvalidated = true;
+        }
+        break;
+        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        {
+            m_bGraphicViewSelectionInvalidated = true;
+        }
+        break;
+        }
+    }
+};
+
+void SdTiledRenderingTest::testViewCursors()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Create two views.
+    SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Select the shape in the second view.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+
+    // First view notices that there was a selection change in the other view.
+    CPPUNIT_ASSERT(aView1.m_bGraphicViewSelectionInvalidated);
+    // Second view notices that there was a selection change in its own view.
+    CPPUNIT_ASSERT(aView2.m_bGraphicSelectionInvalidated);
+    mxComponent->dispose();
+    mxComponent.clear();
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
