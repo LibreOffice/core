@@ -53,6 +53,7 @@
 #include <editeng/editdata.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/viewsh.hxx>
 
 using namespace com::sun::star;
@@ -714,7 +715,10 @@ void SdrMarkView::SetMarkHandles()
                     {
                         // Suppress handles -> empty graphic selection.
                         if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                        {
                             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
+                        }
                     }
                     return;
                 }
@@ -735,7 +739,10 @@ void SdrMarkView::SetMarkHandles()
                 {
                     // The table shape has selected cells, which provide text selection already -> no graphic selection.
                     if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                    {
                         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY");
+                    }
                     return;
                 }
             }
@@ -768,7 +775,10 @@ void SdrMarkView::SetMarkHandles()
                     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
             }
             if(SfxViewShell* pViewShell = SfxViewShell::Current())
+            {
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
+                SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
+            }
         }
 
         if (bFrmHdl)

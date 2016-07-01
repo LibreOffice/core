@@ -1620,9 +1620,11 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
         switch (nType)
         {
         case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
         case LOK_CALLBACK_TEXT_SELECTION_START:
         case LOK_CALLBACK_TEXT_SELECTION_END:
         case LOK_CALLBACK_GRAPHIC_SELECTION:
+        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
             return;
         }
     }

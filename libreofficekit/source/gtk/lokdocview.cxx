@@ -101,9 +101,12 @@ struct LOKDocViewPrivateImpl
     /// Position and size of the selection end.
     GdkRectangle m_aTextSelectionEnd;
     GdkRectangle m_aGraphicSelection;
+    /// Position and size of the graphic view selections. The current view can only
+    /// see them, can't modify them. Key is the view id.
+    std::map<int, GdkRectangle> m_aGraphicViewSelections;
     GdkRectangle m_aCellCursor;
     /// Position and size of the cell view cursors. The current view can only
-    //see / them, can't modify them. Key is the view id.
+    /// see them, can't modify them. Key is the view id.
     std::map<int, GdkRectangle> m_aCellViewCursors;
     gboolean m_bInDragGraphicSelection;
 
@@ -323,6 +326,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_CURSOR_VISIBLE";
     case LOK_CALLBACK_GRAPHIC_SELECTION:
         return "LOK_CALLBACK_GRAPHIC_SELECTION";
+    case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        return "LOK_CALLBACK_GRAPHIC_VIEW_SELECTION";
     case LOK_CALLBACK_CELL_CURSOR:
         return "LOK_CALLBACK_CELL_CURSOR";
     case LOK_CALLBACK_HYPERLINK_CLICKED:
@@ -1102,6 +1107,25 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
+    case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+    {
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        int nViewId = aTree.get<int>("viewId");
+        const std::string& rRectangle = aTree.get<std::string>("selection");
+        if (rRectangle != "EMPTY")
+            priv->m_aGraphicViewSelections[nViewId] = payloadToRectangle(pDocView, rRectangle.c_str());
+        else
+        {
+            auto it = priv->m_aGraphicViewSelections.find(nViewId);
+            if (it != priv->m_aGraphicViewSelections.end())
+                priv->m_aGraphicViewSelections.erase(it);
+        }
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+        break;
+    }
+    break;
     case LOK_CALLBACK_CELL_CURSOR:
     {
         if (pCallback->m_aPayload != "EMPTY")
@@ -1265,7 +1289,8 @@ renderHandle(LOKDocView* pDocView,
 static void
 renderGraphicHandle(LOKDocView* pDocView,
                     cairo_t* pCairo,
-                    const GdkRectangle& rSelection)
+                    const GdkRectangle& rSelection,
+                    const GdkRGBA& rColor)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     int nHandleWidth = 9, nHandleHeight = 9;
@@ -1319,7 +1344,7 @@ renderGraphicHandle(LOKDocView* pDocView,
         priv->m_aGraphicHandleRects[i].width = nHandleWidth;
         priv->m_aGraphicHandleRects[i].height = nHandleHeight;
 
-        cairo_set_source_rgb(pCairo, 0, 0, 0);
+        cairo_set_source_rgb(pCairo, rColor.red, rColor.green, rColor.blue);
         cairo_rectangle(pCairo, x, y, nHandleWidth, nHandleHeight);
         cairo_fill(pCairo);
     }
@@ -1580,7 +1605,17 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     }
 
     if (!isEmptyRectangle(priv->m_aGraphicSelection))
-        renderGraphicHandle(pDocView, pCairo, priv->m_aGraphicSelection);
+    {
+        GdkRGBA aBlack{0, 0, 0, 0};
+        renderGraphicHandle(pDocView, pCairo, priv->m_aGraphicSelection, aBlack);
+    }
+
+    // Graphic selections of other views.
+    for (std::pair<const int, GdkRectangle>& rPair : priv->m_aGraphicViewSelections)
+    {
+        const GdkRGBA& rDark = getDarkColor(rPair.first);
+        renderGraphicHandle(pDocView, pCairo, rPair.second, rDark);
+    }
 
     // Draw the cell cursor.
     if (!isEmptyRectangle(priv->m_aCellCursor))
