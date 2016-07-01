@@ -528,32 +528,6 @@ public:
     inline RegError getUnicodeListValue(const rtl::OUString& keyName,
                                               RegistryValueList<sal_Unicode*>& rValueList);
 
-    /** used to create a link.
-
-        @deprecated Links are no longer supported.
-
-        @return RegError::INVALID_LINK
-     */
-    inline RegError createLink(const rtl::OUString& linkName,
-                               const rtl::OUString& linkTarget);
-
-    /** used to delete a link.
-
-        @deprecated Links are no longer supported.
-
-        @return RegError::INVALID_LINK
-     */
-    inline RegError deleteLink(const rtl::OUString& linkName);
-
-    /** used to return the target of a link.
-
-        @deprecated Links are no longer supported.
-
-        @return RegError::INVALID_LINK
-     */
-    inline RegError getLinkTarget(const rtl::OUString& linkName,
-                                    rtl::OUString& rLinkTarget) const;
-
     /** resolves a keyname.
 
         @param[in]  keyName specifies the name of the key which will be resolved relative to this key.
@@ -963,33 +937,6 @@ inline RegError RegistryKey::getUnicodeListValue(const rtl::OUString& keyName,
         } else
             return RegError::INVALID_KEY;
     }
-
-inline RegError RegistryKey::createLink(const rtl::OUString& ,
-                                        const rtl::OUString& )
-    {
-        if (m_registry.isValid())
-            return RegError::INVALID_LINK; // links are no longer supported
-        else
-            return RegError::INVALID_KEY;
-    }
-
-inline RegError RegistryKey::deleteLink(const rtl::OUString& )
-    {
-        if (m_registry.isValid())
-            return RegError::INVALID_LINK; // links are no longer supported
-        else
-            return RegError::INVALID_KEY;
-    }
-
-inline RegError RegistryKey::getLinkTarget(const rtl::OUString& ,
-                                                 rtl::OUString& ) const
-    {
-        if (m_registry.isValid())
-            return RegError::INVALID_LINK; // links are no longer supported
-        else
-            return RegError::INVALID_KEY;
-    }
-
 
 inline RegError RegistryKey::getResolvedKeyName(const rtl::OUString& keyName,
                                                       rtl::OUString& rResolvedName) const
