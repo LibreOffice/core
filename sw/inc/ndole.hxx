@@ -41,6 +41,10 @@ class SW_DLLPUBLIC SwOLEObj
     svt::EmbeddedObjectRef xOLERef;
     OUString aName;
 
+    // eventually buffered data if it is a chart OLE
+    drawinglayer::primitive2d::Primitive2DContainer     m_aPrimitive2DSequence;
+    basegfx::B2DRange                                   m_aRange;
+
     SwOLEObj( const SwOLEObj& rObj ) = delete;
 
     void SetNode( SwOLENode* pNode );
@@ -62,6 +66,11 @@ public:
     const OUString& GetCurrentPersistName() const { return aName; }
     OUString GetStyleString();
     bool IsOleRef() const;  ///< To avoid unnecessary loading of object.
+
+    // try to get OLE visualization in form of a Primitive2DSequence
+    // and the corresponding B2DRange. This data may be locally buffered
+    drawinglayer::primitive2d::Primitive2DContainer tryToGetChartContentAsPrimitive2DSequence(basegfx::B2DRange& rRange);
+    void resetBufferedData();
 };
 
 // SwOLENode
