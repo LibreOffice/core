@@ -3242,29 +3242,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 .WriteUInt32( nOlePictureId );
                     nOlePictureId = 0;
                 }
-                if ( bEffect )
+                if ( bEffect && !pClientData )
                 {
-                    if ( !pClientData )
-                        pClientData = new SvMemoryStream( 0x200, 0x200 );
-
-                    // check if it is sensible to replace the object effect with text effect,
-                    // because in Impress there is the possibility to use a compound effect,
-                    // e.g. the object effect is an AnimationEffect_FADE_FROM_LEFT and the
-                    // text effect is a AnimationEffect_FADE_FROM_TOP, in PowerPoint there
-                    // can be used only one effect
-                    if ( mnTextSize && ( eTe != css::presentation::AnimationEffect_NONE )
-                        && ( eAe != css::presentation::AnimationEffect_NONE )
-                            && ( eTe != eAe ) )
-                    {
-                        sal_uInt32 nFillStyleFlags, nLineStyleFlags;
-                        if ( aPropOpt.GetOpt( ESCHER_Prop_fNoFillHitTest, nFillStyleFlags )
-                            && aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineStyleFlags ) )
-                        {
-                            // there is no fillstyle and also no linestyle
-                            if ( ! ( ( nFillStyleFlags & 0x10 ) + ( nLineStyleFlags & 9 ) ) )
-                                eAe = eTe;
-                        }
-                    }
+                    pClientData = new SvMemoryStream( 0x200, 0x200 );
                 }
 
                 if ( eCa != css::presentation::ClickAction_NONE )
