@@ -732,7 +732,7 @@ void SlideTransitionPane::openSoundFileDialog()
     OUString aFile;
     DBG_ASSERT( mpLB_SOUND->GetSelectEntryPos() == 2,
                 "Dialog should only open when \"Other sound\" is selected" );
-    aFile = SvtPathOptions().GetGraphicPath();
+    aFile = SvtPathOptions().GetWorkPath();
 
     aFileDialog.SetPath( aFile );
 
