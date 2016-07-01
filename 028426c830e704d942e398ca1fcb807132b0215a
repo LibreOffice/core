@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_362b6532",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1993,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-07-01T09:54:12Z",
+      "side": 1,
+      "message": "Yes, you\u0027re right. I checked with references to empty cells in Excel and this is treated as 0.\nRemoved second condition.",
+      "parentUuid": "ba84c18e_fd5720c8",
+      "range": {
+        "startLine": 1993,
+        "startChar": 43,
+        "endLine": 1993,
+        "endChar": 78
+      },
+      "revId": "028426c830e704d942e398ca1fcb807132b0215a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_7d6cf09c",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_961a7116",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1994,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-07-01T09:54:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba84c18e_7d6cf09c",
+      "range": {
+        "startLine": 1994,
+        "startChar": 17,
+        "endLine": 1994,
+        "endChar": 19
+      },
+      "revId": "028426c830e704d942e398ca1fcb807132b0215a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_9d69b48e",
         "filename": "sc/source/core/tool/interpr2.cxx",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2016-06-28T17:04:54Z",
       "side": 1,
       "message": "When comparing doubles with constants please use the form with decimals to clarify, so\n\n fF !\u003d 0.0 \u0026\u0026 fF !\u003d 1.0",
+      "range": {
+        "startLine": 2005,
+        "startChar": 14,
+        "endLine": 2005,
+        "endChar": 32
+      },
+      "revId": "028426c830e704d942e398ca1fcb807132b0215a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_b61775ec",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2005,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-07-01T09:54:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba84c18e_9d69b48e",
       "range": {
         "startLine": 2005,
         "startChar": 14,
