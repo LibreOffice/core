@@ -47,6 +47,8 @@
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmap.hxx>
+
+#include <opencl/openclwrapper.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -312,6 +314,17 @@ OUString AboutDialog::GetVersionString()
         }
         sVersion += m_aLocaleStr.replaceAll("$LOCALE", aLocaleStr);
     }
+
+    OUString aCalcMode = "Calc: "; // Calc calculation mode
+    bool bSWInterp = officecfg::Office::Common::Misc::UseSwInterpreter::get();
+    bool bOpenCL = opencl::GPUEnv::isOpenCLEnabled();
+    if (bOpenCL)
+        aCalcMode += "CL";
+    else if (bSWInterp)
+        aCalcMode += "group";
+    else
+        aCalcMode += "single";
+    sVersion += "; " + aCalcMode;
 
     return sVersion;
 }

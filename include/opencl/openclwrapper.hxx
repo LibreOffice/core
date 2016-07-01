@@ -37,7 +37,7 @@ struct KernelEnv
     cl_program mpkProgram;
 };
 
-struct GPUEnv
+struct OPENCL_DLLPUBLIC GPUEnv
 {
     //share vb in all modules in hb library
     cl_platform_id mpPlatformID;
@@ -50,9 +50,12 @@ struct GPUEnv
     bool mnKhrFp64Flag;
     bool mnAmdFp64Flag;
     cl_uint mnPreferredVectorWidthFloat;
+
+    static bool isOpenCLEnabled();
 };
 
 extern OPENCL_DLLPUBLIC GPUEnv gpuEnv;
+
 OPENCL_DLLPUBLIC bool generatBinFromKernelSource( cl_program program, const char * clFileName );
 OPENCL_DLLPUBLIC bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
 OPENCL_DLLPUBLIC void setKernelEnv( KernelEnv *envInfo );
