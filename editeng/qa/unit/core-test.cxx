@@ -340,6 +340,28 @@ void Test::testAutocorrect()
 
         CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
     }
+
+    {
+        OUString sInput("Test. test");
+        sal_Unicode cNextChar(' ');
+        OUString sExpected("Test. Test ");
+
+        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+
+        CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
+    }
+
+    {
+        OUString sInput("Test. \x01 test");
+        sal_Unicode cNextChar(' ');
+        OUString sExpected("Test. \x01 test ");
+
+        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+
+        CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
+    }
 }
 
 namespace {

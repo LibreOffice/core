@@ -102,6 +102,12 @@ static inline bool IsWordDelim( const sal_Unicode c )
             cNonBreakingSpace == c || 0x2011 == c || 0x1 == c;
 }
 
+static inline bool IsAutoCapitalizeWordDelim( const sal_Unicode c )
+{
+    return ' ' == c || '\t' == c || 0x0a == c ||
+            cNonBreakingSpace == c || 0x2011 == c;
+}
+
 static inline bool IsLowerLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
@@ -855,9 +861,9 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
 
     if( !bAtStart ) // Still no beginning of a paragraph?
     {
-        if ( IsWordDelim( *pStr ) )
+        if (IsAutoCapitalizeWordDelim(*pStr))
         {
-            while( ! ( bAtStart = (pStart == pStr--) ) && IsWordDelim( *pStr ) )
+            while (!(bAtStart = (pStart == pStr--)) && IsAutoCapitalizeWordDelim(*pStr))
                 ;
         }
         // Asian full stop, full width full stop, full width exclamation mark
@@ -888,7 +894,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
 
         do {            // overwrite all blanks
             --pStr;
-            if( !IsWordDelim( *pStr ))
+            if (!IsAutoCapitalizeWordDelim(*pStr))
                 break;
         } while( ! ( bAtStart = (pStart == pStr) ) );
 
@@ -983,7 +989,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
                 else
                     bAlphaFnd = true;
             }
-            else if( bAlphaFnd || IsWordDelim( *pTmpStr ) )
+            else if (bAlphaFnd || IsAutoCapitalizeWordDelim(*pTmpStr))
                 break;
 
             if( pTmpStr == pStart )
@@ -999,7 +1005,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     bool bNumericOnly = '0' <= *(pStr+1) && *(pStr+1) <= '9';
 
     // Search for the beginning of the word
-    while( !IsWordDelim( *pStr ))
+    while (!IsAutoCapitalizeWordDelim(*pStr))
     {
         if( bNumericOnly && rCC.isLetter( aText, pStr - pStart ) )
             bNumericOnly = false;
@@ -1013,7 +1019,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     if( bNumericOnly )      // consists of only numbers, then not
         return false;
 
-    if( IsWordDelim( *pStr ))
+    if (IsAutoCapitalizeWordDelim(*pStr))
         ++pStr;
 
     OUString sWord;
