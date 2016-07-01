@@ -916,9 +916,7 @@ void Shell::GetState(SfxItemSet &rSet)
                             else
                                 aLocale = pCurMgr->getStringResourceManager()->getDefaultLocale();
 
-                            aLangStr += aLocale.Language;
-                            aLangStr += aLocale.Country;
-                            aLangStr += aLocale.Variant;
+                            aLangStr += aLocale.Language + aLocale.Country + aLocale.Variant;
                         }
                         aItemStr = aLangStr;
                     }
