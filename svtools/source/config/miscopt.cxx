@@ -746,12 +746,12 @@ void SvtMiscOptions::SetSymbolsSize( sal_Int16 nSet )
 
 sal_Int16 SvtMiscOptions::GetSidebarIconSize() const
 {
-    return m_pDataContainer->GetSidebarIconSize();
+    return m_pImpl->GetSidebarIconSize();
 }
 
 void SvtMiscOptions::SetSidebarIconSize( sal_Int16 nSet )
 {
-    m_pDataContainer->SetSidebarIconSize( nSet );
+    m_pImpl->SetSidebarIconSize( nSet );
 }
 
 sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
