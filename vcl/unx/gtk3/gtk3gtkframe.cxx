@@ -1290,13 +1290,6 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     //FIXME: Handling embedded windows, is going to be fun ...
 }
 
-void GtkSalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
-{
-    (void) this; // loplugin:staticmethods
-    (void)i_nTimeCode;
-    //FIXME: no askForXEmbedFocus for gtk3 yet
-}
-
 void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
 {
     if( nStyle != m_nExtStyle && ! isChild() )
@@ -1450,8 +1443,6 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
                 if( m_pParent )
                     m_pParent->EndExtTextInput(EndExtTextInputFlags::NONE);
             }
-            if( m_bWindowIsGtkPlug )
-                askForXEmbedFocus( 0 );
         }
         else
         {
@@ -2609,13 +2600,6 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
          */
         if( m_nFloats < 1 || bClosePopups )
             gdk_display_pointer_ungrab( GtkSalFrame::getGdkDisplay(), GDK_CURRENT_TIME );
-    }
-
-    if( pThis->m_bWindowIsGtkPlug &&
-        pEvent->type == GDK_BUTTON_PRESS &&
-        pEvent->button == 1 )
-    {
-        pThis->askForXEmbedFocus( pEvent->time );
     }
 
     // --- RTL --- (mirror mouse pos)

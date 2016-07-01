@@ -268,6 +268,7 @@ class GtkSalFrame : public SalFrame
 #endif
 #else
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
+    void askForXEmbedFocus( sal_Int32 nTimecode );
 #endif
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
@@ -334,7 +335,6 @@ class GtkSalFrame : public SalFrame
 
     void setMinMaxSize();
     void createNewWindow( ::Window aParent, bool bXEmbed, SalX11Screen nXScreen );
-    void askForXEmbedFocus( sal_Int32 nTimecode );
 
     void AllocateFrame();
     void TriggerPaintEvent();
