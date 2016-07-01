@@ -207,7 +207,7 @@ void SdFileDialog_Imp::CheckSelectionState()
     }
 }
 
-SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType    ) :
+SdFileDialog_Imp::SdFileDialog_Imp( const short nDialogType ) :
     FileDialogHelper( nDialogType ),
     mnPlaySoundEvent( nullptr ),
     mbUsableSelection( false ),
@@ -222,7 +222,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType    ) :
 
     if( mxControlAccess.is() )
     {
-        if( nDialogType == css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY )
+        if( nDialogType == css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY )
         {
             try
             {
@@ -269,7 +269,7 @@ ErrCode SdFileDialog_Imp::Execute()
 
 // these are simple forwarders
 SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
-    mpImpl( new SdFileDialog_Imp( css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY ) )
+    mpImpl( new SdFileDialog_Imp( css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY ) )
 {
     OUString aDescr;
     aDescr = SD_RESSTR(STR_ALL_FILES);
@@ -312,6 +312,16 @@ OUString SdOpenSoundFileDialog::GetPath() const
 void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 {
     mpImpl->SetDisplayDirectory( rPath );
+}
+
+// WIP, please don't remove, dear Clang plugins
+bool SdOpenSoundFileDialog::IsInsertAsLinkSelected()
+{
+    bool bInsertAsLinkSelected = false;
+    css::uno::Reference<css::ui::dialogs::XFilePicker2> const xFilePicker(mpImpl->GetFilePicker());
+    css::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> const xControlAccess(xFilePicker, css::uno::UNO_QUERY_THROW);
+    xControlAccess->getValue(css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bInsertAsLinkSelected;
+    return bInsertAsLinkSelected;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
