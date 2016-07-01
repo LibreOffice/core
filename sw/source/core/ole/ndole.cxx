@@ -58,7 +58,8 @@
 #include <vcl/graphicfilter.hxx>
 #include <comcore.hrc>
 #include <svx/charthelper.hxx>
-
+#include <comphelper/threadpool.hxx>
+#include <atomic>
 #include <deque>
 
 using namespace utl;
@@ -674,13 +675,89 @@ void SwOLENode::SetChanged()
         }
     }
 }
+//////////////////////////////////////////////////////////////////////////////
+
+class DeflateData
+{
+private:
+    friend class DeflateThread;
+
+    const uno::Reference< frame::XModel >               maXModel;
+    drawinglayer::primitive2d::Primitive2DContainer     maPrimitive2DSequence;
+    basegfx::B2DRange                                   maRange;
+    std::atomic< bool>                                  mbFinished;
+
+public:
+    DeflateData(const uno::Reference< frame::XModel >& rXModel)
+    :   maXModel(rXModel),
+        maPrimitive2DSequence(),
+        maRange(),
+        mbFinished(false)
+    {
+    }
+
+    const drawinglayer::primitive2d::Primitive2DContainer& getSequence() const
+    {
+        return maPrimitive2DSequence;
+    }
+
+    const basegfx::B2DRange& getRange() const
+    {
+        return maRange;
+    }
+
+    bool isFinished() const
+    {
+        return mbFinished;
+    }
+
+    void waitFinished()
+    {
+        if(!mbFinished)
+        {
+            const TimeValue aTimeValue(0, 100000); // 1/10th second
+            osl_waitThread(&aTimeValue);
+        }
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+class DeflateThread : public comphelper::ThreadTask
+{
+    DeflateData&            mrDeflateData;
+
+public:
+    DeflateThread(DeflateData& rDeflateData)
+    :   mrDeflateData(rDeflateData)
+    {
+    }
+
+private:
+    virtual void doWork() override
+    {
+        try
+        {
+            mrDeflateData.maPrimitive2DSequence = ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
+                mrDeflateData.maXModel,
+                mrDeflateData.maRange);
+            mrDeflateData.mbFinished = true;
+        }
+        catch (const uno::Exception&)
+        {
+        }
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////////
 
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     pOLENd( nullptr ),
     pListener( nullptr ),
     xOLERef( xObj ),
     m_aPrimitive2DSequence(),
-    m_aRange()
+    m_aRange(),
+    m_aDeflateData(nullptr)
 {
     xOLERef.Lock();
     if ( xObj.is() )
@@ -696,7 +773,8 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     pListener( nullptr ),
     aName( rString ),
     m_aPrimitive2DSequence(),
-    m_aRange()
+    m_aRange(),
+    m_aDeflateData(nullptr)
 {
     xOLERef.Lock();
     xOLERef.SetViewAspect( nAspect );
@@ -704,6 +782,12 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
 
 SwOLEObj::~SwOLEObj()
 {
+    if(m_aDeflateData)
+    {
+        m_aDeflateData->waitFinished();
+        delete m_aDeflateData;
+    }
+
     if( pListener )
     {
         if ( xOLERef.is() )
@@ -941,17 +1025,49 @@ OUString SwOLEObj::GetDescription()
     return SW_RESSTR(STR_OLE);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAsPrimitive2DSequence(basegfx::B2DRange& rRange)
+drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAsPrimitive2DSequence(
+    basegfx::B2DRange& rRange,
+    bool bSynchron)
 {
+    if(m_aDeflateData)
+    {
+        if(bSynchron)
+        {
+            m_aDeflateData->waitFinished();
+        }
+
+        if(m_aDeflateData->isFinished())
+        {
+            m_aPrimitive2DSequence = m_aDeflateData->getSequence();
+            m_aRange = m_aDeflateData->getRange();
+            delete m_aDeflateData;
+            m_aDeflateData = nullptr;
+        }
+    }
+
     if(m_aPrimitive2DSequence.empty() && m_aRange.isEmpty() && xOLERef.is() && xOLERef.IsChart())
     {
         const uno::Reference< frame::XModel > aXModel(xOLERef->getComponent(), uno::UNO_QUERY);
 
         if(aXModel.is())
         {
-            m_aPrimitive2DSequence = ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
-                aXModel,
-                m_aRange);
+            static bool bAnynchronousLoadingAllowed = true;
+
+            if(bSynchron || !bAnynchronousLoadingAllowed)
+            {
+                m_aPrimitive2DSequence = ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
+                    aXModel,
+                    m_aRange);
+            }
+            else
+            {
+                if(!m_aDeflateData)
+                {
+                    m_aDeflateData = new DeflateData(aXModel);
+                    DeflateThread* pNew = new DeflateThread(*m_aDeflateData);
+                    comphelper::ThreadPool::getSharedOptimalPool().pushTask(pNew);
+                }
+            }
         }
     }
 
@@ -967,6 +1083,13 @@ void SwOLEObj::resetBufferedData()
 {
     m_aPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer();
     m_aRange.reset();
+
+    if(m_aDeflateData)
+    {
+        m_aDeflateData->waitFinished();
+        delete m_aDeflateData;
+        m_aDeflateData = nullptr;
+    }
 }
 
 SwOLELRUCache::SwOLELRUCache()

@@ -1036,7 +1036,8 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             basegfx::B2DRange aSourceRange;
             const drawinglayer::primitive2d::Primitive2DContainer aSequence(
                 pOLENd->GetOLEObj().tryToGetChartContentAsPrimitive2DSequence(
-                    aSourceRange));
+                    aSourceRange,
+                    bPrn));
 
             if(!aSequence.empty() && !aSourceRange.isEmpty())
             {
