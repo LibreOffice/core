@@ -563,7 +563,6 @@ private:
     VclPtr<SvxPixelCtl>        m_pCtlPixel;
     VclPtr<ColorLB>            m_pLbColor;
     VclPtr<ColorLB>            m_pLbBackgroundColor;
-    VclPtr<FixedText>          m_pLbPatternsHidden;
     VclPtr<PatternLB>          m_pLbPatterns;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
