@@ -135,13 +135,18 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
 
     evaluateStatusVector(m_statusVector, sql, *this);
 
-    if (isDDLStatement())
+    if (isDDLStatement() || getStatementChangeCount() > 0)
     {
+        try
+        {
         m_pConnection->commit();
-        m_pConnection->notifyDatabaseModified();
-    }
-    else if (getStatementChangeCount() > 0)
-    {
+        }
+        catch(const SQLException&)
+        {
+            SAL_INFO("connectivity.firebird", "Commit after execution failed. Rolling back");
+            m_pConnection->rollback();
+            throw;
+        }
         m_pConnection->notifyDatabaseModified();
     }
 
