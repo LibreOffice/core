@@ -168,7 +168,7 @@ public:
 
     void Move(const Point &rPosition);
     void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
-    virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat);
+    virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) = 0;
     virtual void CreateTextFromNode(OUString &rText);
 
     virtual void    GetAccessibleText( OUStringBuffer &rText ) const = 0;

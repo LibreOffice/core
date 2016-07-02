@@ -252,11 +252,6 @@ void SmNode::Move(const Point& rPosition)
 }
 
 
-void SmNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
-{
-    ForEachNonNull(this, [&rDev, &rFormat](SmNode *pNode){pNode->Arrange(rDev, rFormat);});
-}
-
 void SmNode::CreateTextFromNode(OUString &rText)
 {
     sal_uInt16  nSize = GetNumSubNodes();
