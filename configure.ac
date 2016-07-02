@@ -360,10 +360,10 @@ if test -n "$with_android_ndk"; then
     case $ANDROID_NDK_VERSION in
     r9*|r10*)
         ;;
-    11.1.*)
+    11.1.*|12.1.*)
         ;;
     *)
-        AC_MSG_ERROR([Unsupported NDK version $ANDROID_NDK_VERSION, only r9*, r10* and 11.1.* versions are supported])
+        AC_MSG_ERROR([Unsupported NDK version $ANDROID_NDK_VERSION, only r9*, r10*, 11.1.* and 12.1.* are supported])
         ;;
     esac
 
