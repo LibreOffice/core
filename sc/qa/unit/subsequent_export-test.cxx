@@ -109,6 +109,7 @@ public:
     void testFormatExportODS();
 
     void testHiddenEmptyRowsXLSX();
+    void testLandscapeOrientationXLSX();
 
     void testInlineArrayXLS();
     void testEmbeddedChartXLS();
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testCellNoteExportXLS);
     CPPUNIT_TEST(testFormatExportODS);
     CPPUNIT_TEST(testHiddenEmptyRowsXLSX);
+    CPPUNIT_TEST(testLandscapeOrientationXLSX);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST(testFormulaReferenceXLS);
@@ -470,6 +472,21 @@ void ScExportTest::testHiddenEmptyRowsXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "hidden", "true");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]", "hidden", "true");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]", "hidden", "false");
+}
+
+void ScExportTest::testLandscapeOrientationXLSX()
+{
+    //tdf#48767 - Landscape page orientation is not loaded from .xlsx format with MS Excel, after export with Libre Office
+    ScDocShellRef xShell = loadDoc("hidden-empty-rows.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    // the usePrinterDefaults cannot be saved to allow opening sheets in Landscape mode via MS Excel
+    assertXPathNoAttribute(pSheet, "/x:worksheet/x:pageSetup", "usePrinterDefaults");
+    assertXPath(pSheet, "/x:worksheet/x:pageSetup", "orientation", "landscape");
 }
 
 void ScExportTest::testDataBarExportXLSX()
