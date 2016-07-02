@@ -59,6 +59,9 @@ public class ExtsdDocumentsProvider implements IExternalDocumentProvider,
         String internalSDPath = internalSD.getAbsolutePath();
 
         for (File option: options) {
+            // Returned paths may be null if a storage device is unavailable.
+            if (null == option) { continue; }
+
             String optionPath = option.getAbsolutePath();
 
             if(optionPath.contains(internalSDPath))
