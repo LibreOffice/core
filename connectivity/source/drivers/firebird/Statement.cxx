@@ -137,7 +137,16 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
 
     if (isDDLStatement())
     {
+        try
+        {
         m_pConnection->commit();
+        }
+        catch(const SQLException&)
+        {
+            SAL_INFO("connectivity.firebird", "DDL statement failed. Rolling back");
+            m_pConnection->rollback();
+            throw;
+        }
         m_pConnection->notifyDatabaseModified();
     }
     else if (getStatementChangeCount() > 0)
