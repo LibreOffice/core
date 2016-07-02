@@ -77,7 +77,6 @@ SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& r
     get(m_pLbBackgroundColor,"LB_BACKGROUND_COLOR");
     get(m_pCtlPreview,"CTL_PREVIEW");
     get(m_pLbPatterns,"LB_PATTERN");
-    get(m_pLbPatternsHidden,"FT_BITMAPS_HIDDEN");
     get(m_pBtnAdd,"BTN_ADD");
     get(m_pBtnModify,"BTN_MODIFY");
     get(m_pBtnDelete,"BTN_DELETE");
@@ -129,7 +128,6 @@ void SvxPatternTabPage::dispose()
     m_pCtlPixel.clear();
     m_pLbColor.clear();
     m_pLbBackgroundColor.clear();
-    m_pLbPatternsHidden.clear();
     m_pLbPatterns.clear();
     m_pCtlPreview.clear();
     m_pBtnAdd.clear();

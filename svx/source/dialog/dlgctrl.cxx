@@ -1527,7 +1527,7 @@ VCL_BUILDER_DECL_FACTORY(PatternLB)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    VclPtrInstance<BitmapLB> pListBox(pParent, nWinStyle);
+    VclPtrInstance<PatternLB> pListBox(pParent, nWinStyle);
     pListBox->EnableAutoSize(true);
     rRet = pListBox;
 }
