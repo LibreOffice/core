@@ -168,8 +168,7 @@ public:
                         pNext->CanCombine( *rCmp.pNext ))) &&
                     (( !pExtraData && !rCmp.pExtraData ) ||
                         ( pExtraData && rCmp.pExtraData &&
-                            *pExtraData == *rCmp.pExtraData )) &&
-                            nUndoEnd == rCmp.nUndoStart - 1;
+                            *pExtraData == *rCmp.pExtraData ));
         }
 
     // ExtraData gets copied, the pointer is therefore not taken over by
