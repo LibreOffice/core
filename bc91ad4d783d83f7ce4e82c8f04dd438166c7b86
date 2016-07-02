@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_91db5b1b",
+        "filename": "sfx2/source/appl/module.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-02T20:35:30Z",
+      "side": 1,
+      "message": "if this check really necessary? I know it duplicates the logic from the original code, but it seems suspect to me.",
+      "revId": "bc91ad4d783d83f7ce4e82c8f04dd438166c7b86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
