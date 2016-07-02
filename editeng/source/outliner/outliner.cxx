@@ -1497,6 +1497,8 @@ void Outliner::ParaAttribsChanged( sal_Int32 nPara )
         if ( pParaList->GetParagraphCount() == pEditEngine->GetParagraphCount() )
         {
             Paragraph* pPara = pParaList->GetParagraph( nPara );
+            // tdf#100734: force update of bullet
+            pPara->Invalidate();
             const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL ) );
             if ( pPara && pPara->GetDepth() != rLevel.GetValue() )
             {
