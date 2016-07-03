@@ -36,7 +36,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
 /**
- * The <code>ServiceManager</code> class is an implmentation of the
+ * The <code>ServiceManager</code> class is an implementation of the
  * <code>ServiceManager</code>the central class needed for implementing or using
  * UNO components in Java.
  *

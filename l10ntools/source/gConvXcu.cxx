@@ -87,7 +87,7 @@ void convert_xcu::startCollectData(char *syyText)
     // locate object name
     nL = sTag.find("xml:lang=\"");
     if (nL != (int)string::npos) {
-        // test langauge
+        // test language
         nL += 10;
         if (sTag.substr(nL,5) == "en-US")
             mbNoCollectingData = false;

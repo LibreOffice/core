@@ -1592,7 +1592,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         # we remove existing '.pro' and '.pro.user' files
         self.remove_qt_files()
 
-        # for .pro files, we must explicitely list all files (.c, .h)
+        # for .pro files, we must explicitly list all files (.c, .h)
         # so we can't reuse directly the same method than for kde integration.
         self.build_data_libs()
 

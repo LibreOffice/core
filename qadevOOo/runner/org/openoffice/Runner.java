@@ -108,7 +108,7 @@ public class Runner
             }
         }
 
-        // ----- check path variables separatly -----
+        // ----- check path variables separately -----
         String sDelim = System.getProperty("path.separator");
         bEmergencyStop |= checkPathVariable("java.library.path", sDelim);
         bEmergencyStop |= checkPathVariable("java.class.path", sDelim);

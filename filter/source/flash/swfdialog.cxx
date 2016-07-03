@@ -131,7 +131,7 @@ VclPtr<Dialog> SWFDialog::createDialog( vcl::Window* pParent )
     if (mxSrcDoc.is())
     {
 /*      TODO: From the controller we may get information what page is visible and what shapes
-              are selected, if we optionaly want to limit output to that
+              are selected, if we optionally want to limit output to that
         Any aSelection;
 
         try

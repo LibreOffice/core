@@ -105,7 +105,7 @@ public:
 
        For example "bin/java.exe". You need
        to implement this function in a derived class, if
-       the paths differ.  this implmentation provides for
+       the paths differ.  this implementation provides for
        Windows "bin/java.exe" and for Unix "bin/java".
        The paths are relative file URLs. That is, they always
        contain '/' even on windows. The paths are relative

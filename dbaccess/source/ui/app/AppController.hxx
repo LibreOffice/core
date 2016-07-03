@@ -289,7 +289,7 @@ namespace dbaui
 
         /** opens a uno dialog withthe currently selected data source as initialize argument
             @param  _sServiceName
-                The serivce name of the dialog to be executed.
+                The service name of the dialog to be executed.
         */
         void openDialog(const OUString& _sServiceName);
 

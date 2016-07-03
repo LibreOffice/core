@@ -2079,7 +2079,7 @@ LanguageTag & LanguageTag::makeFallback()
 
 
 /* TODO: maybe this now could take advantage of the mnOverride field in
- * isolang.cxx entries and search for kSAME instead of harcoded special
+ * isolang.cxx entries and search for kSAME instead of hardcoded special
  * fallbacks. Though iterating through those tables would be slower and even
  * then there would be some special cases, but we wouldn't lack entries that
  * were missed out. */
