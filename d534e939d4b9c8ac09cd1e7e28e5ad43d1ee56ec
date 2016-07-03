@@ -16,6 +16,24 @@
       "revId": "d534e939d4b9c8ac09cd1e7e28e5ad43d1ee56ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_d1ede38f",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 17
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-03T17:39:35Z",
+      "side": 0,
+      "message": "Ah, I remember now, it *always* uses system ICU. OK, is good.",
+      "parentUuid": "ba84c18e_91e51baa",
+      "revId": "d534e939d4b9c8ac09cd1e7e28e5ad43d1ee56ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
