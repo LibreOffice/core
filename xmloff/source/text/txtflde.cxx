@@ -1900,7 +1900,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         // export only used masters
         DBG_ASSERT(nullptr != pUsedMasters,
                    "field masters must be recorded in order to be "
-                   "written out separatly" );
+                   "written out separately" );
         if (nullptr != pUsedMasters)
         {
             map<Reference<XText>, set<OUString> > ::iterator aMapIter =

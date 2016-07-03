@@ -137,7 +137,7 @@ $(SAMPLE_CLASS_OUT)/%/manifest.xml :
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_COMPONENTS)$(QM)"/$(CSEP)>> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
-# rule for component pacakge file
+# rule for component package file
 $(COMP_PACKAGE) : $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))

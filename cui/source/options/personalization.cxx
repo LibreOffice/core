@@ -151,7 +151,7 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     if( searchTerm.isEmpty( ) )
         return;
 
-    // 15 results so that invalid and duplicate search results whose names can't be retreived can be skipped
+    // 15 results so that invalid and duplicate search results whose names can't be retrieved can be skipped
     OUString rSearchURL = "https://services.addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/15";
 
     if ( searchTerm.startsWith( "https://addons.mozilla.org/" ) )

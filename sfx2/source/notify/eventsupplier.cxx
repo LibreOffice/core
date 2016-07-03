@@ -368,7 +368,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShe
             else if ( aProperties[ nIndex ].Name == PROP_MACRO_NAME )
                 aProperties[ nIndex ].Value >>= aMacroName;
             else {
-                OSL_FAIL("Unknown propery value!");
+                OSL_FAIL("Unknown property value!");
             }
             nIndex += 1;
         }

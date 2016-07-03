@@ -95,7 +95,7 @@ public class DocumentConverter {
             } else {
                 // Converting the document to the favoured type
                 try {
-                    // Composing the URL by replacing all backslashs
+                    // Composing the URL by replacing all backslashes
                     String sUrl = "file:///"
                         + entries[ i ].getAbsolutePath().replace( '\\', '/' );
 

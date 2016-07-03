@@ -521,7 +521,7 @@ namespace basegfx
                     // Solve by using tooling.
                     // Remark: This nearly never happens due to curve preparations to extreme points
                     // and maximum angle turning, but I constructed a test case and checked that it is
-                    // working propery.
+                    // working property.
                     const B2DPolyPolygon aTemp(tools::solveCrossovers(aBezierPolygon));
                     const sal_uInt32 nTempCount(aTemp.count());
 

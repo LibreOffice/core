@@ -5590,7 +5590,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nOffsDgg( nOffsDgg_ ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we fist check if the
      nGroupShapeFlags(0),                   // ensure initialization here, as some corrupted
-                                            // files may yield to this being unitialized
+                                            // files may yield to this being uninitialized
      maBaseURL( rBaseURL ),
      mnCurMaxShapeId(0),
      mnDrawingsSaved(0),

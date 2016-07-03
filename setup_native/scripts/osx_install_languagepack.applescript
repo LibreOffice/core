@@ -19,7 +19,7 @@
 This script is meant to
 	1) Identify installed instances of the product
 	2) check whether the user has write-access (and if not
-	ask for authentification)
+	ask for authentication)
 	3) install the shipped tarball
 *)
 

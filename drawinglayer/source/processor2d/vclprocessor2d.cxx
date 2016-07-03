@@ -829,7 +829,7 @@ namespace drawinglayer
             {
                 // Get preferred Metafile output size. When it's very equal to the output size, it's probably
                 // a rounding error somewhere, so correct it to get a 1:1 output without single pixel scalings
-                // of the Metafile (esp. for contaned Bitmaps, e.g 3D charts)
+                // of the Metafile (esp. for contained Bitmaps, e.g 3D charts)
                 const Size aPrefSize(mpOutputDevice->LogicToPixel(aMetaFile.GetPrefSize(), aMetaFile.GetPrefMapMode()));
 
                 if(aPrefSize.getWidth() && (aPrefSize.getWidth() - 1 == aDestSize.getWidth() || aPrefSize.getWidth() + 1 == aDestSize.getWidth()))
@@ -1295,7 +1295,7 @@ namespace drawinglayer
                     if(!bDone && rPolygonStrokeCandidate.getB2DPolygon().count() > 1000)
                     {
                         // #i101491# If the polygon complexity uses more than a given amount, do
-                        // use OuputDevice::DrawPolyLine directly; this will avoid buffering all
+                        // use OutputDevice::DrawPolyLine directly; this will avoid buffering all
                         // decompositions in primitives (memory) and fallback to old line painting
                         // for very complex polygons, too
                         for(sal_uInt32 a(0); a < nCount; a++)

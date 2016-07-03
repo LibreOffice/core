@@ -147,7 +147,7 @@
                         <xsl:for-each select="/*/office:body">
                             <!-- Check if this style is being used in the body -->
                             <xsl:if test="key('elementUsingStyle', ../@style:name)">
-                                <!-- Check every master-page-name if it is not emtpy and return as ';' separated list  -->
+                                <!-- Check every master-page-name if it is not empty and return as ';' separated list  -->
                                 <xsl:if test="string-length(../@style:master-page-name) &gt; 0"><xsl:value-of select="../@style:master-page-name"/>;</xsl:if>
                             </xsl:if>
                         </xsl:for-each>
