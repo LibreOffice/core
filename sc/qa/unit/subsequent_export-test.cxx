@@ -171,6 +171,7 @@ public:
     void testHeaderImage();
 
     void testTdf88657();
+    void testEscapeCharInNumberFormatXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -247,6 +248,7 @@ public:
     CPPUNIT_TEST(testHeaderImage);
 
     CPPUNIT_TEST(testTdf88657);
+    CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3321,6 +3323,33 @@ void ScExportTest::testConditionalFormatRangeListXLSX()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "F4 F10");
+}
+
+void ScExportTest::testEscapeCharInNumberFormatXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf81939.", FORMAT_XLSX);
+    CPPUNIT_ASSERT( xDocSh.Is() );
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
+    CPPUNIT_ASSERT( xDocSh.Is() );
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    const sal_Unicode cEuro (8364);  // € symbol
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "00\\ 00\\ 00\\ 00\\ 00");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode", "00\\.00\\.00\\.000\\.0");   // tdf#81939
+    // "_-* #,##0\ _€_-;\-* #,##0\ _€_-;_-* "- "_€_-;_-@_-" // tdf#81222
+    OUString rFormatStrExpected ( "_-* #,##0\\ _" + OUString(cEuro) + "_-;\\-* #,##0\\ _" +
+            OUString(cEuro) + "_-;_-* \"- \"_" + OUString(cEuro) + "_-;_-@_-" );
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[4]", "formatCode", rFormatStrExpected );
+    // "_-* #,##0" €"_-;\-* #,##0" €"_-;_-* "- €"_-;_-@_-");
+    rFormatStrExpected = "_-* #,##0\" " + OUString(cEuro) + "\"_-;\\-* #,##0\" " +
+            OUString(cEuro) + "\"_-;_-* \"- " + OUString(cEuro) + "\"_-;_-@_-";
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[5]", "formatCode", rFormatStrExpected );
+    // remove escape char in fraction
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[6]", "formatCode", "# ?/?;[RED]\\-# #/#####");
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
