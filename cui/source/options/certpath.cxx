@@ -205,9 +205,8 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
         pEntry = m_pCertPathList->Next(pEntry);
     }
 
-    OUStringBuffer sEntry;
-    sEntry.append('\t').append(rProfile).append('\t').append(rPath);
-    pEntry = m_pCertPathList->InsertEntry(sEntry.makeStringAndClear());
+    OUString sEntry( "\t" + rProfile + "\t" + rPath );
+    pEntry = m_pCertPathList->InsertEntry(sEntry);
     OUString* pCertPath = new OUString(rPath);
     pEntry->SetUserData(pCertPath);
     m_pCertPathList->SetCheckButtonState(pEntry, SvButtonState::Checked);
