@@ -1676,7 +1676,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 {
                     OUString sDiv;
                     sal_uInt16 j = i;
-                    while(j < nAnzStrings)
+                    while(j < nAnzStrings && sStrArray[j][0] >= '0' && sStrArray[j][0] <= '9')
                     {
                         sDiv += sStrArray[j++];
                     }
