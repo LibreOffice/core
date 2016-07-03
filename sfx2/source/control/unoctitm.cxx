@@ -1039,7 +1039,10 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
              aEvent.FeatureURL.Path == "StateTableCell" ||
              aEvent.FeatureURL.Path == "StatePageNumber" ||
              aEvent.FeatureURL.Path == "StateWordCount" ||
-             aEvent.FeatureURL.Path == "PageStyleName")
+             aEvent.FeatureURL.Path == "PageStyleName" ||
+             aEvent.FeatureURL.Path == "PageStatus" ||
+             aEvent.FeatureURL.Path == "LayoutStatus" ||
+             aEvent.FeatureURL.Path == "Context")
     {
         OUString aString;
 
