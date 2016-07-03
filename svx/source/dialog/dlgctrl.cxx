@@ -808,7 +808,7 @@ SvxPixelCtl::SvxPixelCtl(vcl::Window* pParent, sal_uInt16 nNumber)
     assert(nLines); // can't have no lines
     SetPixelColor( Color( COL_BLACK ) );
     SetBackgroundColor( Color( COL_WHITE ) );
-    SetLineColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
+    SetLineColor( Color( COL_LIGHTGRAY ) );
 
     nSquares = nLines * nLines;
     pPixel = new sal_uInt16[ nSquares ];
