@@ -328,69 +328,17 @@ namespace drawinglayer
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
 
-            static bool bCheckTrapezoidDecomposition(false);
-            static bool bShowOutlinesThere(false);
-            if(bCheckTrapezoidDecomposition)
+            if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
             {
-                // clip against discrete ViewPort
-                const basegfx::B2DRange& rDiscreteViewport = getViewInformation2D().getDiscreteViewport();
-                basegfx::B2DPolyPolygon aLocalPolyPolygon(basegfx::tools::clipPolygonOnRange(
-                    aLocalPolygon, rDiscreteViewport, true, false));
-
-                if(aLocalPolyPolygon.count())
-                {
-                    // subdivide
-                    aLocalPolyPolygon = basegfx::tools::adaptiveSubdivideByDistance(
-                        aLocalPolyPolygon, 0.5);
-
-                    // trapezoidize
-                    static double fLineWidth(2.0);
-                    basegfx::B2DTrapezoidVector aB2DTrapezoidVector;
-                    basegfx::tools::createLineTrapezoidFromB2DPolyPolygon(aB2DTrapezoidVector, aLocalPolyPolygon, fLineWidth);
-
-                    const sal_uInt32 nCount(aB2DTrapezoidVector.size());
-
-                    if(nCount)
-                    {
-                        basegfx::BColor aInvPolygonColor(aHairlineColor);
-                        aInvPolygonColor.invert();
-
-                        for(sal_uInt32 a(0); a < nCount; a++)
-                        {
-                            const basegfx::B2DPolygon aTempPolygon(aB2DTrapezoidVector[a].getB2DPolygon());
-
-                            if(bShowOutlinesThere)
-                            {
-                                mpOutputDevice->SetFillColor(Color(aHairlineColor));
-                                mpOutputDevice->SetLineColor();
-                            }
-
-                            mpOutputDevice->DrawPolygon(aTempPolygon);
-
-                            if(bShowOutlinesThere)
-                            {
-                                mpOutputDevice->SetFillColor();
-                                mpOutputDevice->SetLineColor(Color(aInvPolygonColor));
-                                mpOutputDevice->DrawPolyLine(aTempPolygon, 0.0);
-                            }
-                        }
-                    }
-                }
+                // #i98289#
+                // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
+                // allows to suppress AntiAliasing for pure horizontal or vertical lines. This is done since
+                // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
+                // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
+                aLocalPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
             }
-            else
-            {
-                if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
-                {
-                    // #i98289#
-                    // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
-                    // allows to suppress AntiAliasing for pure horizontal or vertical lines. This is done since
-                    // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
-                    // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
-                    aLocalPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
-                }
 
-                mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
-            }
+            mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
         }
 
         // direct draw of transformed BitmapEx primitive
@@ -429,14 +377,11 @@ namespace drawinglayer
         {
             const attribute::FillGraphicAttribute& rFillGraphicAttribute(rFillBitmapCandidate.getFillGraphic());
             bool bPrimitiveAccepted(false);
-            static bool bTryTilingDirect = true;
 
             // #121194# when tiling is used and content is bitmap-based, do direct tiling in the
             // renderer on pixel base to ensure tight fitting. Do not do this when
             // the fill is rotated or sheared.
-
-            // override static bool (for debug) and tiling is active
-            if(bTryTilingDirect && rFillGraphicAttribute.getTiling())
+            if(rFillGraphicAttribute.getTiling())
             {
                 // content is bitmap(ex)
                 //
@@ -490,8 +435,7 @@ namespace drawinglayer
                                 // in vcl many times, create a size-optimized version
                                 const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
                                 BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
-                                static bool bEnablePreScaling(true);
-                                const bool bPreScaled(bEnablePreScaling && nBWidth * nBHeight < (250 * 250));
+                                const bool bPreScaled(nBWidth * nBHeight < (250 * 250));
 
                                 // ... but only up to a maximum size, else it gets too expensive
                                 if(bPreScaled)
@@ -915,44 +859,34 @@ namespace drawinglayer
         // unified sub-transparence. Draw to VDev first.
         void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate)
         {
-            static bool bForceToDecomposition(false);
-
             if(!rTransCandidate.getChildren().empty())
             {
-                if(bForceToDecomposition)
+                if(0.0 == rTransCandidate.getTransparence())
                 {
-                    // use decomposition
-                    process(rTransCandidate.get2DDecomposition(getViewInformation2D()));
+                    // no transparence used, so just use the content
+                    process(rTransCandidate.getChildren());
                 }
-                else
+                else if(rTransCandidate.getTransparence() > 0.0 && rTransCandidate.getTransparence() < 1.0)
                 {
-                    if(0.0 == rTransCandidate.getTransparence())
+                    // transparence is in visible range
+                    basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
+                    aRange.transform(maCurrentTransformation);
+                    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+
+                    if(aBufferDevice.isVisible())
                     {
-                        // no transparence used, so just use the content
+                        // remember last OutDev and set to content
+                        OutputDevice* pLastOutputDevice = mpOutputDevice;
+                        mpOutputDevice = &aBufferDevice.getContent();
+
+                        // paint content to it
                         process(rTransCandidate.getChildren());
-                    }
-                    else if(rTransCandidate.getTransparence() > 0.0 && rTransCandidate.getTransparence() < 1.0)
-                    {
-                        // transparence is in visible range
-                        basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
-                        aRange.transform(maCurrentTransformation);
-                        impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
 
-                        if(aBufferDevice.isVisible())
-                        {
-                            // remember last OutDev and set to content
-                            OutputDevice* pLastOutputDevice = mpOutputDevice;
-                            mpOutputDevice = &aBufferDevice.getContent();
+                        // back to old OutDev
+                        mpOutputDevice = pLastOutputDevice;
 
-                            // paint content to it
-                            process(rTransCandidate.getChildren());
-
-                            // back to old OutDev
-                            mpOutputDevice = pLastOutputDevice;
-
-                            // dump buffer to outdev using given transparence
-                            aBufferDevice.paint(rTransCandidate.getTransparence());
-                        }
+                        // dump buffer to outdev using given transparence
+                        aBufferDevice.paint(rTransCandidate.getTransparence());
                     }
                 }
             }
@@ -1051,13 +985,6 @@ namespace drawinglayer
         // marker
         void VclProcessor2D::RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkArrayCandidate)
         {
-            static bool bCheckCompleteMarkerDecompose(false);
-            if(bCheckCompleteMarkerDecompose)
-            {
-                process(rMarkArrayCandidate.get2DDecomposition(getViewInformation2D()));
-                return;
-            }
-
             // get data
             const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
             const sal_uInt32 nCount(rPositions.size());
