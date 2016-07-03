@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_d19403ea",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-03T17:57:06Z",
+      "side": 1,
+      "message": "I\u0027d suggest either:\n - computing the size of the needed buffer at runtime and allocating it dynamically (pay attention that it is freed in all cases, even if exception is thrown, etc)\n - use a std::string or an rtl::O(U)String to make all these problems go away and handled automatically",
+      "range": {
+        "startLine": 625,
+        "startChar": 0,
+        "endLine": 625,
+        "endChar": 1
+      },
+      "revId": "b756375436e1e49e95d7f0d077482feeb8879aef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
