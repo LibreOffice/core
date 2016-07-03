@@ -1006,7 +1006,10 @@ static void doc_iniUnoCommands ()
         OUString(".uno:StatePageNumber"),
         OUString(".uno:StateWordCount"),
         OUString(".uno:PageStyleName"),
-        OUString(".uno:SelectionMode")
+        OUString(".uno:SelectionMode"),
+        OUString(".uno:PageStatus"),
+        OUString(".uno:LayoutStatus"),
+        OUString(".uno:Context")
     };
 
     util::URL aCommandURL;
