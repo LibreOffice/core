@@ -122,7 +122,7 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
             /*
              * If the current node has children, then its first child
              * should be next current node, and the next event will be
-             * startElement or charaters(PI) based on that child's node
+             * startElement or characters(PI) based on that child's node
              * type. Otherwise, the endElement of current node is the
              * next event.
              */
@@ -150,7 +150,7 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
             /*
              * If the current node has following sibling, that sibling
              * should be next current node, and the next event will be
-             * startElement or charaters(PI) based on that sibling's node
+             * startElement or characters(PI) based on that sibling's node
              * type. Otherwise, the endElement of current node's parent
              * becomes the next event.
              */
@@ -550,7 +550,7 @@ void XMLDocumentWrapper_XmlSecImpl::removeNode(const xmlNodePtr pNode) const
 /****** XMLDocumentWrapper_XmlSecImpl/removeNode ******************************
  *
  *   NAME
- *  removeNode -- Deletes a node with its branch unconditionaly
+ *  removeNode -- Deletes a node with its branch unconditionally
  *
  *   SYNOPSIS
  *  removeNode( pNode );

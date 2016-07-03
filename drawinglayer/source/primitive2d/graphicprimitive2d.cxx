@@ -92,7 +92,7 @@ namespace drawinglayer
                 // instead of creating all as in create2DColorModifierEmbeddingsAsNeeded (see below).
                 // Still, crop, rotation, mirroring and transparency is handled by primitives already
                 // (see above).
-                // This could even be done when vector graphic, but we explicitely want to have the
+                // This could even be done when vector graphic, but we explicitly want to have the
                 // pure primitive solution for this; this will allow vector graphics to stay vector
                 // geraphics, independent from the color filtering stuff. This will enhance e.g.
                 // SVG and print quality while reducing data size at the same time.

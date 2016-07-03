@@ -867,7 +867,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         // no conversion of transparency value for document
                         // styles, because former OpenOffice.org version writes
                         // writes always a transparency value of 100% and doesn't
-                        // read the value. Thus, it's intepreted as 0%
+                        // read the value. Thus, it's interpreted as 0%
                         if ( !bIsDocumentStyle )
                         {
                             OUString aAttrValue( rAttrValue );

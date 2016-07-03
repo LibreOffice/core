@@ -4140,7 +4140,7 @@ AC_SUBST(x_LDFLAGS)
 
 #
 # determine CPUNAME, OS, ...
-# The USING_X11 flag tells whether the host os uses X by default. Can be overriden with the --without-x option.
+# The USING_X11 flag tells whether the host os uses X by default. Can be overridden with the --without-x option.
 #
 case "$host_os" in
 
@@ -4992,7 +4992,7 @@ AC_SUBST(THES_SYSTEM_DIR)
 
 dnl ===================================================================
 dnl enable pch by default on windows
-dnl enable it explicitely otherwise
+dnl enable it explicitly otherwise
 AC_MSG_CHECKING([whether to enable pch feature])
 ENABLE_PCH=""
 if test "$enable_pch" != "no"; then

@@ -36,7 +36,7 @@ namespace dbaui
     {
         friend class VclPtr<OConnectionTabPage>;
     protected:
-        // user authentification
+        // user authentication
         VclPtr<FixedText>          m_pFL2;
         VclPtr<FixedText>          m_pUserNameLabel;
         VclPtr<Edit>               m_pUserName;

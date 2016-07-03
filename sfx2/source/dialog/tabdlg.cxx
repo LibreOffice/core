@@ -583,7 +583,7 @@ sal_uInt16 SfxTabDialog::AddTabPage
 (
     const OString &rName,          // Page ID
     CreateTabPage pCreateFunc,     // Pointer to the Factory Method
-    GetTabPageRanges pRangesFunc   // Pointer to the Method for quering
+    GetTabPageRanges pRangesFunc   // Pointer to the Method for querying
                                    // Ranges onDemand
 )
 {

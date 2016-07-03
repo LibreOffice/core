@@ -222,7 +222,7 @@ void handler::checkCommandLine(int argc, char *argv[])
         }
     }
 
-    // Check all the correct parameters are suplied
+    // Check all the correct parameters are supplied
     bSourceFiles = bTargetDir = bPoDir = false;
     switch (meWorkMode) {
         case DO_CONVERT:

@@ -1020,7 +1020,7 @@ static void formulaChanged(LOKDocView* pLOKDocView, char* pPayload, gpointer /*p
     gtk_entry_set_text(GTK_ENTRY(rWindow.m_pFormulabarEntry), pPayload);
 }
 
-/// LOKDocView password is requried to open the document
+/// LOKDocView password is required to open the document
 static void passwordRequired(LOKDocView* pLOKDocView, gchar* pUrl, gboolean bModify, gpointer /*pData*/)
 {
     GtkWidget* pPasswordDialog = gtk_dialog_new_with_buttons ("Password required",

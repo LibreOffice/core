@@ -3833,7 +3833,7 @@ void SdXMLCustomShapeContext::EndElement()
     // implementations held on the SdrObjects of type
     // SdrObjCustomShape - those tend to linger until the entire file
     // is loaded. For large files with a lot of these, 32bit systems
-    // may crash due to being out of ressources after ca. 4200
+    // may crash due to being out of resources after ca. 4200
     // Outliners and VirtualDevices used there as RefDevice
     try
     {

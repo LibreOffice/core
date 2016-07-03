@@ -335,7 +335,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
     OSL_ENSURE( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
         "extended/AccessibleBrowseBoxAccess::getAccessibleContext: inconsistency!" );
 
-    // if the context died meanwhile (there is no listener, so it won't tell us explicitily when this happens),
+    // if the context died meanwhile (there is no listener, so it won't tell us explicitly when this happens),
     // then reset and re-create.
     if ( m_pContext && !m_pContext->isAlive() )
         m_xContext = m_pContext = nullptr;

@@ -744,7 +744,7 @@ bool XMLHoriMirrorPropHdl_Impl::exportXML(
         const Any&,
         const SvXMLUnitConverter& ) const
 {
-    SAL_WARN( "xmloff", "HorMirror properyt shouldn't be exported" );
+    SAL_WARN( "xmloff", "HorMirror propertyt shouldn't be exported" );
 
     return false;
 }

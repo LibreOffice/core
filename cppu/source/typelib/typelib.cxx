@@ -1481,7 +1481,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                 {
                     if (osl_atomic_increment( &pTDR->pType->nRefCount ) > 1)
                     {
-                        // The refence is incremented. The object cannot be destroyed.
+                        // The reference is incremented. The object cannot be destroyed.
                         // Release the guard at the earliest point.
                         aGuard.clear();
                         ::typelib_typedescription_release( *ppNewDescription );
@@ -2217,7 +2217,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
         sal_Int32 n = osl_atomic_increment( &pRef->pType->nRefCount );
         if( n > 1 )
         {
-            // The refence is incremented. The object cannot be destroyed.
+            // The reference is incremented. The object cannot be destroyed.
             // Release the guard at the earliest point.
             *ppRet = pRef->pType;
             return;
@@ -2259,7 +2259,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
             sal_Int32 n = osl_atomic_increment( &(*aIt).second->nRefCount );
             if( n > 1 )
             {
-                // The refence is incremented. The object cannot be destroyed.
+                // The reference is incremented. The object cannot be destroyed.
                 // Release the guard at the earliest point.
                 *ppRet = (*aIt).second;
             }

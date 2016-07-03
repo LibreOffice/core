@@ -492,7 +492,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         // there will be multiple notifications. On the first invalidation
         // we will start painting, but other events will get fired
         // while the complex command in question executes.
-        // We don't want to supress everything here on the wrong assumption
+        // We don't want to suppress everything here on the wrong assumption
         // that no new events are fired during painting.
         if (type != LOK_CALLBACK_STATE_CHANGED &&
             type != LOK_CALLBACK_INVALIDATE_TILES &&

@@ -288,7 +288,7 @@ class FilterCache : public BaseLock
                     because it listen for changes on the internal used configuration layer.
                     If the new data are needed immediately inside the original container,
                     the method takeOver() can be used to copy all changes back.
-                    The may be following notifications of the configuration will be superflous then.
+                    The may be following notifications of the configuration will be superfluous then.
                     But they can't be stopped ...
 
                     All internal structures will be copied here. But the internal used

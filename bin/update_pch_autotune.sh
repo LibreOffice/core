@@ -207,7 +207,7 @@ for module in $modules; do
                 score_too_low=$(echo "$best_score_for_cuttof < $best_score / 1.10" | bc -l)
                 if [ $score_too_low -eq 1 ];
                 then
-                    echo "Score hit low of $best_score_for_cuttof, well bellow overall best of $best_score. Stopping."
+                    echo "Score hit low of $best_score_for_cuttof, well below overall best of $best_score. Stopping."
                     break;
                 fi
             fi

@@ -150,7 +150,7 @@ Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted() throw(css:
 
         if (n > 1)
         {
-            // The refence is incremented. The object cannot be destroyed.
+            // The reference is incremented. The object cannot be destroyed.
             // Release the guard at the earliest point.
             guard.clear();
             // WeakObject has a (XInterface *) cast operator
