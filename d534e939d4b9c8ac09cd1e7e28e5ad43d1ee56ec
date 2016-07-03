@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_91e51baa",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 17
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-03T17:38:21Z",
+      "side": 0,
+      "message": "Firebird 3.0 doesn\u0027t use ICU anymore?",
+      "revId": "d534e939d4b9c8ac09cd1e7e28e5ad43d1ee56ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
