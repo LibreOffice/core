@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_119f4b04",
+        "filename": "connectivity/source/drivers/firebird/ResultSetMetaData.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-03T18:07:37Z",
+      "side": 1,
+      "message": "This will misbehave if m_sTableName contains any single quote (\"\u0027\"). Think e.g. of a table name:\n\n foo\u0027; DROP TABLE \"students\";\n\nIt needs to be properly escaped.",
+      "range": {
+        "startLine": 155,
+        "startChar": 51,
+        "endLine": 155,
+        "endChar": 63
+      },
+      "revId": "e45af3c798174d70bd6d3df935fd2efc9cfedcbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_31a44f56",
+        "filename": "connectivity/source/drivers/firebird/ResultSetMetaData.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-03T18:07:37Z",
+      "side": 1,
+      "message": "Same. Needs to be escaped.",
+      "range": {
+        "startLine": 156,
+        "startChar": 41,
+        "endLine": 156,
+        "endChar": 52
+      },
+      "revId": "e45af3c798174d70bd6d3df935fd2efc9cfedcbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_5189d3c9",
+        "filename": "connectivity/source/drivers/firebird/Table.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-03T18:07:37Z",
+      "side": 1,
+      "message": "In this case, we should probably generate an error. Throw an SQLException",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 1
+      },
+      "revId": "e45af3c798174d70bd6d3df935fd2efc9cfedcbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
