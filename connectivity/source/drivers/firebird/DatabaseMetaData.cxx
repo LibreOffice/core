@@ -32,6 +32,8 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/KeyRule.hpp>
+#include <com/sun/star/sdbc/Deferrability.hpp>
 
 using namespace connectivity::firebird;
 using namespace com::sun::star;
@@ -478,7 +480,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw(SQLEx
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return false;
+    return true;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException, std::exception)
@@ -840,9 +842,29 @@ uno::Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_FAIL("Not implemented yet!");
-    // TODO implement
-    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
+    ODatabaseMetaDataResultSet* pResultSet = new
+        ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
+    uno::Reference< XResultSet > xResultSet = pResultSet;
+
+    ODatabaseMetaDataResultSet::ORows aResults;
+    ODatabaseMetaDataResultSet::ORow aRow(2);
+
+    aRow[0] = new ORowSetValueDecorator(); // unused
+
+    // TODO Put these statics to one place
+    // like postgreSQL's Statics class.
+
+    aRow[1] = new ORowSetValueDecorator(OUString("TABLE"));
+    aResults.push_back(aRow);
+
+    aRow[1] = new ORowSetValueDecorator(OUString("VIEW"));
+    aResults.push_back(aRow);
+
+    aRow[1] = new ORowSetValueDecorator(OUString("SYSTEM TABLE"));
+    aResults.push_back(aRow);
+
+    pResultSet->setRows(aResults);
+    return xResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
@@ -1465,16 +1487,90 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException, std::exception)
 {
-    // List the columns in a table (which must be primary key, or possibly just
-    // unique) that are referred to in other foreign keys. Will have a similar
-    // 5-table or so join as in getExportedKeys.
-    SAL_WARN("connectivity.firebird", "Not yet implemented");
     (void) catalog;
     (void) schema;
-    (void) table;
-    OSL_FAIL("Not implemented yet!");
-    // TODO implement
-    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eImportedKeys);
+
+    ODatabaseMetaDataResultSet* pResultSet = new
+        ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eImportedKeys);
+    uno::Reference< XResultSet > xResultSet = pResultSet;
+
+    uno::Reference< XStatement > statement = m_pConnection->createStatement();
+    OUString sSQL;
+
+    sSQL = "SELECT "
+           "RDB$REF_CONSTRAINTS.RDB$UPDATE_RULE, " // 1 update rule
+           "RDB$REF_CONSTRAINTS.RDB$DELETE_RULE, " // 2 delete rule
+           "RDB$REF_CONSTRAINTS.RDB$CONST_NAME_UQ, " // 3 primary or unique key name
+           "RDB$REF_CONSTRAINTS.RDB$CONSTRAINT_NAME, " // 4 foreign key name
+           "PRIM.RDB$DEFERRABLE, " // 5 deferrability
+           "PRIM.RDB$INITIALLY_DEFERRED, " // 6 deferrability
+           "PRIM.RDB$RELATION_NAME, " // 7 PK table name
+           "PRIMARY_INDEX.RDB$FIELD_NAME, " // 8 PK column name
+           "PRIMARY_INDEX.RDB$FIELD_POSITION, " // 9 PK sequence number
+           "FOREI.RDB$RELATION_NAME, " // 10 FK table name
+           "FOREIGN_INDEX.RDB$FIELD_NAME " // 11 FK column name
+           "FROM RDB$REF_CONSTRAINTS "
+           "INNER JOIN RDB$RELATION_CONSTRAINTS AS PRIM "
+           "ON RDB$REF_CONSTRAINTS.RDB$CONST_NAME_UQ = PRIM.RDB$CONSTRAINT_NAME "
+           "INNER JOIN RDB$RELATION_CONSTRAINTS AS FOREI "
+           "ON RDB$REF_CONSTRAINTS.RDB$CONSTRAINT_NAME = FOREI.RDB$CONSTRAINT_NAME "
+           "INNER JOIN RDB$INDEX_SEGMENTS AS PRIMARY_INDEX "
+           "ON PRIM.RDB$INDEX_NAME = PRIMARY_INDEX.RDB$INDEX_NAME "
+           "INNER JOIN RDB$INDEX_SEGMENTS AS FOREIGN_INDEX "
+           "ON FOREI.RDB$INDEX_NAME = FOREIGN_INDEX.RDB$INDEX_NAME "
+           "WHERE FOREI.RDB$CONSTRAINT_TYPE = 'FOREIGN KEY' "
+           "AND FOREI.RDB$RELATION_NAME = '"+ table +"'";
+
+    uno::Reference< XResultSet > rs = statement->executeQuery(sSQL);
+    uno::Reference< XRow > xRow( rs, UNO_QUERY_THROW );
+
+    ODatabaseMetaDataResultSet::ORows aResults;
+    ODatabaseMetaDataResultSet::ORow aCurrentRow(15);
+
+    // TODO is it necessary to initialize these?
+    aCurrentRow[0] = new ORowSetValueDecorator(); // Unused
+    aCurrentRow[1] = new ORowSetValueDecorator(); // PKTABLE_CAT unsupported
+    aCurrentRow[2] = new ORowSetValueDecorator(); // PKTABLE_SCHEM unsupported
+    aCurrentRow[5] = new ORowSetValueDecorator(); // FKTABLE_CAT unsupported
+    aCurrentRow[6] = new ORowSetValueDecorator(); // FKTABLE_SCHEM unsupported
+
+    ::std::map< OUString,sal_Int32> aRuleMap;
+    aRuleMap[ OUString("CASCADE")] = KeyRule::CASCADE;
+    aRuleMap[ OUString("RESTRICT")] = KeyRule::RESTRICT;
+    aRuleMap[ OUString("SET NULL")] = KeyRule::SET_NULL;
+    aRuleMap[ OUString("SET DEFAULT")] = KeyRule::SET_DEFAULT;
+    aRuleMap[ OUString("NO ACTION")] = KeyRule::NO_ACTION;
+
+    while(rs->next())
+    {
+        aCurrentRow[3] = new ORowSetValueDecorator(xRow->getString(7)); // PK table
+        aCurrentRow[4] = new ORowSetValueDecorator(xRow->getString(8)); // PK column
+        aCurrentRow[7] = new ORowSetValueDecorator(xRow->getString(10)); // FK table
+        aCurrentRow[8] = new ORowSetValueDecorator(xRow->getString(11)); // FK column
+
+        aCurrentRow[9] = new ORowSetValueDecorator(xRow->getShort(9)); // PK sequence number
+        aCurrentRow[10] = new ORowSetValueDecorator(aRuleMap[xRow->getString(1)]); // update role
+        aCurrentRow[11] = new ORowSetValueDecorator(aRuleMap[xRow->getString(2)]); // delete role
+
+        aCurrentRow[12] = new ORowSetValueDecorator(xRow->getString(4)); // FK name
+        aCurrentRow[13] = new ORowSetValueDecorator(xRow->getString(3)); // PK name
+
+        aCurrentRow[14] = new ORowSetValueDecorator(Deferrability::NONE); // deferrability
+
+        // deferrability is currently not supported, but may be supported in the future.
+        /*
+        aCurrentRow[14] = (xRow->getString(5).compareTo(OUString("NO") == 0 ?
+                          new ORowSetValueDecorator(Deferrability::NONE)
+                        : (xRow->getString(6).compareTo(OUString("NO") == 0 ?
+                            new ORowSetValueDecorator(Deferrability::INITIALLY_IMMEDIATE)
+                          : new ORowSetValueDecorator(Deferrability::INITIALLY_DEFERRED));
+        */
+
+        aResults.push_back(aCurrentRow);
+    }
+
+    pResultSet->setRows( aResults );
+    return xResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
