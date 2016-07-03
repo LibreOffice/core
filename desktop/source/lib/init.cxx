@@ -808,7 +808,11 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Position"),
         OUString(".uno:StateTableCell"),
         OUString(".uno:StatusBarFunc"),
-        OUString(".uno:Size")
+        OUString(".uno:Size"),
+        OUString(".uno:StatePageNumber"),
+        OUString(".uno:StateWordCount"),
+        OUString(".uno:PageStyleName"),
+        OUString(".uno:SelectionMode")
     };
 
     util::URL aCommandURL;

@@ -1143,7 +1143,8 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     }
     else if (aEvent.FeatureURL.Path == "AssignLayout" ||
              aEvent.FeatureURL.Path == "StatusSelectionMode" ||
-             aEvent.FeatureURL.Path == "Signature")
+             aEvent.FeatureURL.Path == "Signature" ||
+             aEvent.FeatureURL.Path == "SelectionMode")
     {
         sal_Int32 aInt32;
 
@@ -1155,7 +1156,10 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     else if (aEvent.FeatureURL.Path == "StatusDocPos" ||
              aEvent.FeatureURL.Path == "RowColSelCount" ||
              aEvent.FeatureURL.Path == "StatusPageStyle" ||
-             aEvent.FeatureURL.Path == "StateTableCell")
+             aEvent.FeatureURL.Path == "StateTableCell" ||
+             aEvent.FeatureURL.Path == "StatePageNumber" ||
+             aEvent.FeatureURL.Path == "StateWordCount" ||
+             aEvent.FeatureURL.Path == "PageStyleName")
     {
         OUString aString;
 
