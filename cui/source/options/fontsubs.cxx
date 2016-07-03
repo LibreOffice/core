@@ -74,11 +74,10 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
 
     OUString sHeader1(get<FixedText>("always")->GetText());
     OUString sHeader2(get<FixedText>("screenonly")->GetText());
-    OUStringBuffer sHeader;
-    sHeader.append(sHeader1).append("\t").append(sHeader2)
-        .append("\t ").append(get<FixedText>("font")->GetText())
-        .append("\t ").append(get<FixedText>("replacewith")->GetText());
-    m_pCheckLB->InsertHeaderEntry(sHeader.makeStringAndClear());
+    OUString sHeader = sHeader1 + "\t" + sHeader2
+        + "\t " + get<FixedText>("font")->GetText()
+        + "\t " + get<FixedText>("replacewith")->GetText();
+    m_pCheckLB->InsertHeaderEntry(sHeader);
 
     HeaderBar &rBar = m_pCheckLB->GetTheHeaderBar();
     HeaderBarItemBits nBits = rBar.GetItemBits(1) | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED;
