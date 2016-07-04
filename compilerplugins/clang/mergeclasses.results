@@ -388,7 +388,6 @@ merge sw::mark::ICheckboxFieldmark with sw::mark::CheckboxFieldmark
 merge sw::sidebarwindows::SwSidebarWin with sw::annotation::SwAnnotationWin
 merge sw::util::WrtRedlineAuthor with WW8_WrtRedlineAuthor
 merge tdoc_ucp::OfficeDocumentsEventListener with tdoc_ucp::ContentProvider
-merge toolkit::NameContainer_Impl with toolkit::ScriptEventContainer
 merge toolkit::ScrollableInterface with toolkit::ScrollableWrapper
 merge unographic::GraphicTransformer with unographic::Graphic
 merge vcl::DeletionNotifier with SalFrame
