@@ -50,13 +50,11 @@ namespace
 
     SmDLL::SmDLL()
     {
-        SmModule** ppShlPtr = reinterpret_cast<SmModule**>(GetAppData(SHL_SM));
-        if ( *ppShlPtr )
+        if ( GetAppData(ToolsModule::Math) )    // Module already active
             return;
 
         SfxObjectFactory& rFactory = SmDocShell::Factory();
         SmModule *pModule = new SmModule( &rFactory );
-        *ppShlPtr = pModule;
 
         rFactory.SetDocumentServiceName( "com.sun.star.formula.FormulaProperties" );
 
@@ -79,13 +77,6 @@ namespace
 
     SmDLL::~SmDLL()
     {
-#if 0
-        // the SdModule must be destroyed
-        SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
-        delete (*ppShlPtr);
-        (*ppShlPtr) = NULL;
-        *GetAppData(SHL_SM) = 0;
-#endif
     }
 
     struct theSmDLLInstance : public rtl::Static<SmDLL, theSmDLLInstance> {};

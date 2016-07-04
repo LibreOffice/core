@@ -160,6 +160,8 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     mbIsInSharedDocLoading( false ),
     mbIsInSharedDocSaving( false )
 {
+    SetAppData(ToolsModule::Calc, this);
+
     // The ResManager (DLL data) is not yet initalized in the ctor!
     SetName("StarCalc"); // for Basic
 
@@ -192,6 +194,8 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 
 ScModule::~ScModule()
 {
+    SetAppData(ToolsModule::Calc, nullptr);
+
     OSL_ENSURE( !pSelTransfer, "Selection Transfer object not deleted" );
 
     // InputHandler does not need to be deleted (there's none in the App anymore)

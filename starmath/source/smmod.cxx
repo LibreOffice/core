@@ -153,6 +153,8 @@ void SmModule::InitInterface_Impl()
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
     SfxModule(ResMgr::CreateResMgr("sm"), {pObjFact})
 {
+    SetAppData(ToolsModule::Math, this);
+
     SetName("StarMath");
 
     SvxModifyControl::RegisterControl(SID_DOC_MODIFIED, this);
@@ -160,6 +162,8 @@ SmModule::SmModule(SfxObjectFactory* pObjFact) :
 
 SmModule::~SmModule()
 {
+    SetAppData(ToolsModule::Math, nullptr);
+
     if (mpColorConfig)
         mpColorConfig->RemoveListener(this);
     mpVirtualDev.disposeAndClear();

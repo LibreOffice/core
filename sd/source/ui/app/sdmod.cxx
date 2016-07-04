@@ -79,6 +79,8 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     mpResourceContainer(new ::sd::SdGlobalResourceContainer()),
     mbEventListenerAdded(false)
 {
+    SetAppData(ToolsModule::Draw, this);
+
     SetName( "StarDraw" );  // Do not translate!
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
     pSearchItem->SetAppFlag(SvxSearchApp::DRAW);
@@ -100,6 +102,8 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
 // Dtor
 SdModule::~SdModule()
 {
+    SetAppData(ToolsModule::Draw, nullptr);
+
     delete pSearchItem;
     delete pNumberFormatter;
 
@@ -109,11 +113,6 @@ SdModule::~SdModule()
     }
 
     mpResourceContainer.reset();
-
-    // Mark the module in the global AppData structure as deleted.
-    SdModule** ppShellPointer = reinterpret_cast<SdModule**>(GetAppData(SHL_DRAW));
-    if (ppShellPointer != nullptr)
-        (*ppShellPointer) = nullptr;
 
     delete mpErrorHdl;
     mpVirtualRefDevice.disposeAndClear();

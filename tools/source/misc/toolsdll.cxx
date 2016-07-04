@@ -19,15 +19,20 @@
 
 #include <tools/shl.hxx>
 
-static void* aAppData[SHL_COUNT];
+static SfxModule* aAppData[static_cast<int>(ToolsModule::Count)] = {nullptr};
 
 /*
  * Query data for other libraries
  */
 
-void** GetAppData( sal_uInt16 nSharedLib )
+SfxModule* GetAppData( ToolsModule nSharedLib )
 {
-    return &(aAppData[nSharedLib]);
+    return aAppData[static_cast<int>(nSharedLib)];
+}
+
+void SetAppData( ToolsModule nSharedLib, SfxModule* pModule )
+{
+    aAppData[static_cast<int>(nSharedLib)] = pModule;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

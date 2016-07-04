@@ -255,7 +255,7 @@ public:
     SC_DLLPUBLIC vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
 };
 
-#define SC_MOD() ( *reinterpret_cast<ScModule**>(GetAppData(SHL_CALC)) )
+#define SC_MOD() ( reinterpret_cast<ScModule*>(GetAppData(ToolsModule::Calc)) )
 
 void global_InitAppOptions();
 
