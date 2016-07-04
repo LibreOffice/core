@@ -66,21 +66,22 @@ void XMLChangedRegionImportContext::StartElement(
                               &sLocalName );
 
         const OUString sValue = xAttrList->getValueByIndex(nAttr);
-        if (XML_NAMESPACE_XML == nPrefix)
+        if (XML_NAMESPACE_DC == nPrefix)
         {
-            if (IsXMLToken(sLocalName, XML_ID))
+            if (IsXMLToken(sLocalName, XML_CREATOR))
             {
                 sID = sValue;
                 bHaveXmlId = true;
             }
-        }
-        else if (XML_NAMESPACE_TEXT == nPrefix)
-        {
-            if (IsXMLToken(sLocalName, XML_ID))
+
+            if (IsXMLToken(sLocalName, XML_DATE))
             {
                 if (!bHaveXmlId) { sID = sValue; }
             }
-            else if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
+        }
+        else if (XML_NAMESPACE_TEXT == nPrefix)
+        {
+            if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
             {
                 bool bTmp(false);
                 if (::sax::Converter::convertBool(bTmp, sValue))
@@ -109,10 +110,6 @@ SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
              IsXMLToken( rLocalName, XML_FORMAT_CHANGE ) )
         {
             // create XMLChangeElementImportContext for all kinds of changes
-            pContext = new XMLChangeElementImportContext(
-               GetImport(), nPrefix, rLocalName,
-               IsXMLToken( rLocalName, XML_DELETION ),
-               *this);
         }
         // else: it may be a text element, see below
     }
@@ -163,29 +160,6 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     {
         GetImport().GetTextImport()->RedlineAdd(
             rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara);
-    }
-}
-
-void XMLChangedRegionImportContext::UseRedlineText()
-{
-    // if we haven't already installed the redline cursor, do it now
-    if (! xOldCursor.is())
-    {
-        // get TextImportHelper and old Cursor
-        rtl::Reference<XMLTextImportHelper> rHelper(GetImport().GetTextImport());
-        Reference<XTextCursor> xCursor( rHelper->GetCursor() );
-
-        // create Redline and new Cursor
-        Reference<XTextCursor> xNewCursor =
-            rHelper->RedlineCreateText(xCursor, sID);
-
-        if (xNewCursor.is())
-        {
-            // save old cursor and install new one
-            xOldCursor = xCursor;
-            rHelper->SetCursor( xNewCursor );
-        }
-        // else: leave as is
     }
 }
 

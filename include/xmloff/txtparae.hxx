@@ -251,7 +251,6 @@ public:
 
     void exportUndoTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
-        sal_uInt32 nParagraphIdx,
         bool bAutoStyles );
     void exportTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
@@ -306,7 +305,6 @@ protected:
         TextPNS eExtensionNS = TextPNS::ODF);
     void exportUndoParagraph(
         const css::uno::Reference< css::text::XTextContent > & rTextContent,
-        sal_uInt32 nParaIdx,
         bool bAutoStyles, bool bProgress,
         MultiPropertySetHelper& rPropSetHelper);
     void exportParagraph(

@@ -26,6 +26,9 @@
 
 
 namespace com { namespace sun { namespace star {
+    namespace text {
+        class XTextCursor;
+    }
     namespace xml { namespace sax {
         class XAttributeList;
     } }
@@ -37,6 +40,25 @@ class XMLTrackedChangesImportContext : public SvXMLImportContext
 {
 public:
 
+
+    /// if we replace the current XTextCursor/XText by the ones for
+    /// the redline, we remember the old cursor here.
+    css::uno::Reference<css::text::XTextCursor> xOldCursor;
+
+    /// redline-ID
+    OUString sID;
+
+    /// redline author
+    OUString sAuthor;
+
+    /// redline comment
+    OUString sComment;
+
+    /// redline date
+    OUString sDate;
+
+    /// merge-last-paragraph flag
+    bool bMergeLastPara;
 
     XMLTrackedChangesImportContext(
         SvXMLImport& rImport,
@@ -52,6 +74,16 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+
+    /// change info: To be called from change-info context
+    void SetChangeInfo(const OUString& rType,
+                       const OUString& rAuthor,
+                       const OUString& rComment,
+                       const OUString& rDate);
+
+    /// create redline XText/XTextCursor on demand and register with
+    /// XMLTextImportHelper
+    void UseRedlineText();
 };
 
 #endif

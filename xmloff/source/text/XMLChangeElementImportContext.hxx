@@ -30,12 +30,12 @@ namespace com { namespace sun { namespace star {
         class XAttributeList;
     } }
 } } }
-class XMLChangedRegionImportContext;
+class XMLTrackedChangesImportContext;
 
 
 /**
  * Import <text:deletion> and <text:insertion> elements contained in a
- * <text:changed-region> element.
+ * <office:change> element.
  */
 class XMLChangeElementImportContext : public SvXMLImportContext
 {
@@ -53,8 +53,8 @@ class XMLChangeElementImportContext : public SvXMLImportContext
      */
     bool bAcceptContent;
 
-    /// context of enclosing <text:changed-region> element
-    XMLChangedRegionImportContext& rChangedRegion;
+    /// context of enclosing <office:change> element
+    XMLTrackedChangesImportContext& rTrackedChange;
 
 public:
 
@@ -65,8 +65,8 @@ public:
         const OUString& rLocalName,
         /// accept text content (paragraphs) in element as redline content?
         bool bAcceptContent,
-        /// context of enclosing <text:changed-region> element
-        XMLChangedRegionImportContext& rParent);
+        /// context of enclosing <office:change> element
+        XMLTrackedChangesImportContext& rParent);
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,

@@ -17,17 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "XMLTrackedChangesImportContext.hxx"
-#include "XMLChangedRegionImportContext.hxx"
+#include <xmloff/XMLTrackedChangesImportContext.hxx>
+#include "XMLChangeElementImportContext.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 
 
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::text::XTextCursor;
+using namespace ::com::sun::star;
 using ::com::sun::star::xml::sax::XAttributeList;
 using namespace ::xmloff::token;
 
@@ -36,7 +40,8 @@ XMLTrackedChangesImportContext::XMLTrackedChangesImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName) :
-        SvXMLImportContext(rImport, nPrefix, rLocalName)
+        SvXMLImportContext(rImport, nPrefix, rLocalName),
+        bMergeLastPara(true)
 {
 }
 
@@ -49,7 +54,7 @@ void XMLTrackedChangesImportContext::StartElement(
 {
     bool bTrackChanges = true;
 
-    // scan for text:track-changes and text:protection-key attributes
+    // scan for office:change and text:protection-key attributes
     sal_Int16 nLength = xAttrList->getLength();
     for( sal_Int16 i = 0; i < nLength; i++ )
     {
@@ -57,18 +62,32 @@ void XMLTrackedChangesImportContext::StartElement(
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
             GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
 
-        if ( XML_NAMESPACE_TEXT == nPrefix )
+        const OUString sValue = xAttrList->getValueByIndex(i);
+        if ( XML_NAMESPACE_OFFICE == nPrefix )
         {
-            if ( IsXMLToken( sLocalName, XML_TRACK_CHANGES ) )
+            if ( IsXMLToken( sLocalName, XML_CHANGE ) )
             {
                 bool bTmp(false);
                 if (::sax::Converter::convertBool(
-                    bTmp, xAttrList->getValueByIndex(i)) )
+                    bTmp, sValue ) )
                 {
                     bTrackChanges = bTmp;
                 }
             }
         }
+        if (XML_NAMESPACE_DC == nPrefix)
+        {
+            if (IsXMLToken(sLocalName, XML_CREATOR))
+            {
+                 sAuthor = sValue;
+            }
+
+            if (IsXMLToken(sLocalName, XML_DATE))
+            {
+                 sDate = sValue;
+            }
+        }
+        sComment = "";
     }
 
     // set tracked changes
@@ -83,20 +102,91 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         IsXMLToken( rLocalName, XML_CHANGED_REGION ) )
+    if (XML_NAMESPACE_TEXT == nPrefix)
     {
-        pContext = new XMLChangedRegionImportContext(GetImport(),
-                                                     nPrefix, rLocalName);
+        // from the ODF 1.2 standard :
+        // The <text:changed-region> element has the following child elements:
+        // <text:deletion>, <text:format-change> and <text:insertion>.
+        if ( IsXMLToken( rLocalName, XML_INSERTION ) ||
+             IsXMLToken( rLocalName, XML_DELETION ) ||
+             IsXMLToken( rLocalName, XML_FORMAT_CHANGE ) )
+        {
+            sal_Int16 nLength = xAttrList->getLength();
+            for( sal_Int16 i = 0; i < nLength; i++ )
+            {
+                OUString sLocalName;
+                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                    GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
+                const OUString sValue = xAttrList->getValueByIndex(i);
+                if (XML_NAMESPACE_C == nPrefix)
+                {
+                    if (IsXMLToken(sLocalName, xmloff::token::XML_START))
+                    {
+                        sID = sValue;
+                    }
+                }
+            }
+            SetChangeInfo( rLocalName, sAuthor, sComment, sDate );
+
+            // create XMLChangeElementImportContext for all kinds of changes
+            pContext = new XMLChangeElementImportContext(
+                GetImport(), nPrefix, rLocalName,
+                IsXMLToken( rLocalName, XML_DELETION ),
+                *this);
+        }
+        // else: it may be a text element, see below
     }
 
     if (nullptr == pContext)
     {
+        // illegal element content! TODO: discard the redlines
+        // for the moment -> use text
+
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
+
+        // or default if text fail
+        if (nullptr == pContext)
+        {
+            pContext = SvXMLImportContext::CreateChildContext(
+                nPrefix, rLocalName, xAttrList);
+        }
     }
 
     return pContext;
+}
+
+void XMLTrackedChangesImportContext::SetChangeInfo(const OUString& rType, const OUString& rAuthor, const OUString& rComment, const OUString& rDate)
+{
+    util::DateTime aDateTime;
+    if (::sax::Converter::parseDateTime(aDateTime, nullptr, rDate))
+    {
+        GetImport().GetTextImport()->RedlineAdd(
+            rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara);
+    }
+}
+
+void XMLTrackedChangesImportContext::UseRedlineText()
+{
+    // if we haven't already installed the redline cursor, do it now
+    if (! xOldCursor.is() )
+    {
+        // get TextImportHelper and old Cursor
+        rtl::Reference<XMLTextImportHelper> rHelper(GetImport().GetTextImport());
+        Reference<XTextCursor> xCursor( rHelper->GetCursor() );
+
+        // create Redline and new Cursor
+        Reference<XTextCursor> xNewCursor =
+            rHelper->RedlineCreateText(xCursor, sID);
+
+        if (xNewCursor.is())
+        {
+            // save old cursor and install new one
+            xOldCursor = xCursor;
+            rHelper->SetCursor( xNewCursor );
+        }
+        // else: leave as is
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

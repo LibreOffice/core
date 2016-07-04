@@ -18,7 +18,7 @@
  */
 
 #include "XMLChangeElementImportContext.hxx"
-#include "XMLChangedRegionImportContext.hxx"
+#include <xmloff/XMLTrackedChangesImportContext.hxx>
 #include "XMLChangeInfoContext.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmlimp.hxx>
@@ -37,10 +37,10 @@ XMLChangeElementImportContext::XMLChangeElementImportContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     bool bAccContent,
-    XMLChangedRegionImportContext& rParent) :
+    XMLTrackedChangesImportContext& rParent) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         bAcceptContent(bAccContent),
-        rChangedRegion(rParent)
+        rTrackedChange(rParent)
 {
 }
 
@@ -51,35 +51,26 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-         IsXMLToken( rLocalName, XML_CHANGE_INFO) )
-    {
-        pContext = new XMLChangeInfoContext(GetImport(), nPrefix, rLocalName,
-                                            rChangedRegion, GetLocalName());
-    }
-    else
-    {
-        // import into redline -> create XText
-        rChangedRegion.UseRedlineText();
+    // import into redline -> create XText
+    rTrackedChange.UseRedlineText();
 
-        pContext = GetImport().GetTextImport()->CreateTextChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList,
-            XML_TEXT_TYPE_CHANGED_REGION);
+    pContext = GetImport().GetTextImport()->CreateTextChildContext(
+        GetImport(), nPrefix, rLocalName, xAttrList,
+        XML_TEXT_TYPE_CHANGED_REGION);
 
-        if (nullptr == pContext)
-        {
-            // no text element
-            // illegal element content! TODO: discard this redline!
-            // for the moment -> use default
-            pContext = SvXMLImportContext::CreateChildContext(
-                nPrefix, rLocalName, xAttrList);
-        }
+    if (nullptr == pContext)
+    {
+        // no text element
+        // illegal element content! TODO: discard this redline!
+        // for the moment -> use default
+        pContext = SvXMLImportContext::CreateChildContext(
+            nPrefix, rLocalName, xAttrList);
     }
 
     return pContext;
 }
 
-void XMLChangeElementImportContext::StartElement( const Reference< XAttributeList >& )
+void XMLChangeElementImportContext::StartElement( const Reference< XAttributeList >& xAttrList )
 {
     if(bAcceptContent)
     {

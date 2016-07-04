@@ -51,7 +51,7 @@
 #include "XMLIndexTOCContext.hxx"
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
-#include "XMLTrackedChangesImportContext.hxx"
+#include <xmloff/XMLTrackedChangesImportContext.hxx>
 #include "XMLChangeImportContext.hxx"
 #include "XMLAutoMarkFileContext.hxx"
 
@@ -2740,6 +2740,7 @@ void XMLTextImportHelper::RedlineAdd( const OUString& /*rType*/,
 Reference<XTextCursor> XMLTextImportHelper::RedlineCreateText(
     Reference<XTextCursor> & /*rOldCursor*/,
     const OUString& /*rId*/)
+
 {
     // dummy implementation: do nothing
     Reference<XTextCursor> xRet;

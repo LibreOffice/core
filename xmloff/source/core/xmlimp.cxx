@@ -88,6 +88,7 @@ sal_Char const sXML_np_dr3d[] = "_dr3d";
 sal_Char const sXML_np_fo[] = "_fo";
 sal_Char const sXML_np_xlink[] = "_xlink";
 sal_Char const sXML_np_dc[] = "_dc";
+sal_Char const sXML_np_c[] = "_c";
 sal_Char const sXML_np_dom[] = "_dom";
 sal_Char const sXML_np_meta[] = "_meta";
 sal_Char const sXML_np_number[] = "_number";
@@ -378,6 +379,7 @@ void SvXMLImport::InitCtor_()
         mpNamespaceMap->Add( sXML_np_fo, GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
         mpNamespaceMap->Add( sXML_np_xlink, GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
         mpNamespaceMap->Add( sXML_np_dc, GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+        mpNamespaceMap->Add( sXML_np_c, GetXMLToken(XML_N_C), XML_NAMESPACE_C );
         mpNamespaceMap->Add( sXML_np_dom, GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
         mpNamespaceMap->Add( sXML_np_meta, GetXMLToken(XML_N_META), XML_NAMESPACE_META );
         mpNamespaceMap->Add( sXML_np_number, GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );

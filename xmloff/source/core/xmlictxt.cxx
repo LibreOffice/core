@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlictxt.hxx>
+#include <xmloff/XMLTrackedChangesImportContext.hxx>
 
 using namespace ::com::sun::star;
 
@@ -50,6 +51,14 @@ SvXMLImportContext *SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLocalName,
                                             const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
+    if(rLocalName == "change")
+    {
+        SvXMLImportContext *pContext = nullptr;
+
+        pContext = new XMLTrackedChangesImportContext( mrImport, nPrefix,
+                                                       rLocalName);
+        return pContext;
+    }
     return mrImport.CreateContext( nPrefix, rLocalName, xAttrList );
 }
 

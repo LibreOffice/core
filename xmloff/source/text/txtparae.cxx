@@ -1817,7 +1817,7 @@ bool XMLTextParagraphExport::exportUndoTextContentEnumeration(
             else
             {
                 setParaIdx(getParaIdx() + 1);
-                exportUndoParagraph( xTxtCntnt, getParaIdx(), bAutoStyles, bIsProgress, aPropSetHelper );
+                exportUndoParagraph( xTxtCntnt, bAutoStyles, bIsProgress, aPropSetHelper );
                 setTextDelCount(0);
             }
         }
@@ -1995,7 +1995,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
 }
 
 void XMLTextParagraphExport::exportUndoParagraph(
-        const Reference < XTextContent > & rTextContent, sal_uInt32 nParaIdx,
+        const Reference < XTextContent > & rTextContent,
         bool bAutoStyles, bool bIsProgress,
         MultiPropertySetHelper& rPropSetHelper)
 {
@@ -2055,10 +2055,10 @@ void XMLTextParagraphExport::exportUndoParagraph(
                                     xContentEnum, bAutoStyles, xSection,
                                     bIsProgress );
         if ( bHasPortions )
-            exportUndoTextRangeEnumeration( xTextEnum, nParaIdx, bAutoStyles );
+            exportUndoTextRangeEnumeration( xTextEnum, bAutoStyles );
     }
     else
-        exportUndoTextRangeEnumeration( xTextEnum, nParaIdx, bAutoStyles );
+        exportUndoTextRangeEnumeration( xTextEnum, bAutoStyles );
 }
 
 void XMLTextParagraphExport::exportParagraph(
@@ -2323,7 +2323,6 @@ void XMLTextParagraphExport::exportParagraph(
 
 void XMLTextParagraphExport::exportUndoTextRangeEnumeration(
         const Reference < XEnumeration > & rTextEnum,
-        sal_uInt32 nParagraphIdx,
         bool bAutoStyles )
 {
     while( rTextEnum->hasMoreElements() )
