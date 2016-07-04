@@ -333,7 +333,7 @@ class SVX_DLLPUBLIC XHatchList : public XPropertyList
 {
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex) override;
-
+    virtual Bitmap CreateBitmap(long nIndex, const Size& rSize);
 public:
     XHatchList(const OUString& rPath, const OUString& rReferer);
     virtual ~XHatchList();
@@ -343,6 +343,7 @@ public:
     using XPropertyList::Remove;
     XHatchEntry* Remove(long nIndex);
     XHatchEntry* GetHatch(long nIndex) const;
+    Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
 
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
