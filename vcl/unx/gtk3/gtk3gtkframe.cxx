@@ -1462,9 +1462,6 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
             gtk_widget_hide( m_pWindow );
             if( m_pIMHandler )
                 m_pIMHandler->focusChanged( false );
-            // flush here; there may be a very seldom race between
-            // the display connection used for clipboard and our connection
-            Flush();
         }
     }
 }
