@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_cced4c90",
+        "filename": "include/svx/SvxPresetListBox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T13:46:59Z",
+      "side": 1,
+      "message": "can be const",
+      "revId": "41d219620c475b1bdd6fb12f61272df32c35513d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_4c021c40",
+        "filename": "include/svx/SvxPresetListBox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T13:46:59Z",
+      "side": 1,
+      "message": "+ it seems to me this one is unused",
+      "revId": "41d219620c475b1bdd6fb12f61272df32c35513d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
