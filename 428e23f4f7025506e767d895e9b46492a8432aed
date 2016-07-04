@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_2cb078f4",
+        "filename": "basegfx/source/polygon/b2dlinegeometry.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2016-07-04T10:21:14Z",
+      "side": 1,
+      "message": "while surely \"propery\" is a typo, \"property\" is wrong fix here. → properly is the proper fix.",
+      "range": {
+        "startLine": 524,
+        "startChar": 31,
+        "endLine": 524,
+        "endChar": 39
+      },
+      "revId": "428e23f4f7025506e767d895e9b46492a8432aed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
