@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYVIEWSWITCH_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYVIEWSWITCH_HXX
 
-#include "queryview.hxx"
+#include "JoinDesignView.hxx"
 
 namespace dbtools
 {
@@ -32,6 +32,8 @@ namespace dbaui
     class OQueryTextView;
     class OAddTableDlg;
     class OQueryContainerWindow;
+    class OQueryController;
+
     class OQueryViewSwitch
     {
         VclPtr<OQueryDesignView>   m_pDesignView;

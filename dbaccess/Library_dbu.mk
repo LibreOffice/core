@@ -215,7 +215,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/querydesign/QueryTableView \
     dbaccess/source/ui/querydesign/QueryTabWinUndoAct \
     dbaccess/source/ui/querydesign/QueryTextView \
-    dbaccess/source/ui/querydesign/queryview \
     dbaccess/source/ui/querydesign/QueryViewSwitch \
     dbaccess/source/ui/querydesign/SelectionBrowseBox \
     dbaccess/source/ui/querydesign/TableConnection \

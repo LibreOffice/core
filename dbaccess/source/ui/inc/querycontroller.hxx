@@ -23,7 +23,6 @@
 #include "JoinController.hxx"
 #include "JoinTableView.hxx"
 #include "querycontainerwindow.hxx"
-#include "queryview.hxx"
 #include "svx/ParseContext.hxx"
 #include "TableFieldDescription.hxx"
 

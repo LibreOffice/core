@@ -33,7 +33,6 @@
 #include "QueryDesignView.hxx"
 #include "QueryTableView.hxx"
 #include "QueryTextView.hxx"
-#include "queryview.hxx"
 #include "QueryViewSwitch.hxx"
 #include "sqlmessage.hxx"
 #include "TableConnectionData.hxx"

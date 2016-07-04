@@ -2477,7 +2477,7 @@ namespace
 OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
                                     OQueryController& _rController,
                                     const Reference< XComponentContext >& _rxContext)
-    :OQueryView( _pParent, _rController, _rxContext )
+    :OJoinDesignView( _pParent, _rController, _rxContext )
     ,m_aSplitter( VclPtr<Splitter>::Create(this) )
     ,m_eChildFocus(NONE)
     ,m_bInSplitHandler( false )
@@ -2514,7 +2514,7 @@ void OQueryDesignView::dispose()
         ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pSelectionBox.disposeAndClear();
     m_aSplitter.disposeAndClear();
-    OQueryView::dispose();
+    OJoinDesignView::dispose();
 }
 
 IMPL_LINK_NOARG_TYPED( OQueryDesignView, SplitHdl, Splitter*, void )
@@ -2534,7 +2534,7 @@ void OQueryDesignView::Construct()
 {
     m_pTableView = VclPtr<OQueryTableView>::Create(m_pScrollWindow,this);
     ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::AddWindow));
-    OQueryView::Construct();
+    OJoinDesignView::Construct();
 }
 
 void OQueryDesignView::initialize()
@@ -2628,10 +2628,6 @@ void OQueryDesignView::clear()
 {
     m_pSelectionBox->ClearAll(); // clear the whole selection
     m_pTableView->ClearAll();
-}
-
-void OQueryDesignView::setStatement(const OUString& /*_rsStatement*/)
-{
 }
 
 void OQueryDesignView::copy()
@@ -2780,7 +2776,7 @@ bool OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
             m_eChildFocus = TABLEVIEW;
     }
 
-    return OQueryView::PreNotify(rNEvt);
+    return OJoinDesignView::PreNotify(rNEvt);
 }
 
 // check if the statement is correct when not returning false
@@ -3094,7 +3090,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDesc
 
 void OQueryDesignView::GetFocus()
 {
-    OQueryView::GetFocus();
+    OJoinDesignView::GetFocus();
     if ( m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus() )
     {
         // first we have to deactivate the current cell to refill when necessary
