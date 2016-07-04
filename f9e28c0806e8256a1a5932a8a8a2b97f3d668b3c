@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_cc038c75",
+        "filename": "include/svx/xtable.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T11:34:58Z",
+      "side": 1,
+      "message": "I think you can make this method non-virtual and private, it is only used internally by CreateBitmapForUI and GetBitmapForPreview, which are both exposed to outside, so no need to expose this one as well",
+      "revId": "f9e28c0806e8256a1a5932a8a8a2b97f3d668b3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
