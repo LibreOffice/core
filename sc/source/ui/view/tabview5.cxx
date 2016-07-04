@@ -354,8 +354,7 @@ void ScTabView::DrawDeselectAll()
     if (pDrawView)
     {
         ScTabViewShell* pViewSh = aViewData.GetViewShell();
-        if ( pDrawActual &&
-            ( pViewSh->IsDrawTextShell() || pDrawActual->GetSlotID() == SID_DRAW_NOTEEDIT ) )
+        if (pDrawActual && pViewSh->IsDrawTextShell())
         {
             // end text edit (as if escape pressed, in FuDraw)
             aViewData.GetDispatcher().Execute( pDrawActual->GetSlotID(),
