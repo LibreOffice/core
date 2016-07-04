@@ -31,7 +31,7 @@
 
 #include <sfx2/recentdocsview.hxx>
 #include <sfx2/templatedefaultview.hxx>
-#include <sfx2/templateabstractview.hxx>
+#include <sfx2/templatelocalview.hxx>
 #include <sfx2/templateviewitem.hxx>
 
 #include <svtools/acceleratorexecute.hxx>

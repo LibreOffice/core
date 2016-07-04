@@ -18,7 +18,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/recentdocsview.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/templateabstractview.hxx>
+#include <sfx2/templatelocalview.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/svapp.hxx>
@@ -83,7 +83,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
 
         if (aExtSize.Width() > aThumbnailSize.Width() || aExtSize.Height() > aThumbnailSize.Height())
         {
-            aExt = TemplateAbstractView::scaleImg(aExt, aThumbnailSize.Width(), aThumbnailSize.Height());
+            aExt = TemplateLocalView::scaleImg(aExt, aThumbnailSize.Width(), aThumbnailSize.Height());
             aExtSize = aExt.GetSizePixel();
         }
 
@@ -98,7 +98,7 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     }
 
     maTitle = aTitle;
-    maPreview1 = TemplateAbstractView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
+    maPreview1 = TemplateLocalView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
 }
 
 Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)

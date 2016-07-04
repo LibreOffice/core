@@ -17,13 +17,14 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 
-#include <sfx2/templateabstractview.hxx>
+#include <sfx2/templatelocalview.hxx>
 
 class Edit;
 class PopupMenu;
-class TemplateAbstractView;
+class TemplateLocalView;
 class TemplateLocalView;
 class TemplateSearchView;
 class ThumbnailView;
