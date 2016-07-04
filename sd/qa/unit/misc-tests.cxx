@@ -23,7 +23,6 @@
 #include <osl/thread.hxx>
 #include <FactoryIds.hxx>
 #include <sdmod.hxx>
-#include <tools/shl.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>

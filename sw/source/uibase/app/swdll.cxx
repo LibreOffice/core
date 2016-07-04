@@ -48,7 +48,7 @@
 #include <unomid.h>
 
 #include "swdllimpl.hxx"
-
+#include <o3tl/make_unique.hxx>
 using namespace com::sun::star;
 
 namespace
@@ -81,9 +81,7 @@ namespace SwGlobals
 
 SwDLL::SwDLL()
 {
-    // the SdModule must be created
-    SwModule** ppShlPtr = reinterpret_cast<SwModule**>(GetAppData(SHL_WRITER));
-    if ( *ppShlPtr )
+    if ( SfxApplication::GetModule(SfxToolsModule::Writer) )    // Module already active
         return;
 
     std::unique_ptr<SvtModuleOptions> xOpt;
@@ -99,8 +97,9 @@ SwDLL::SwDLL()
 
     SfxObjectFactory* pWDocFact = &SwWebDocShell::Factory();
 
-    SwModule* pModule = new SwModule( pWDocFact, pDocFact, pGlobDocFact );
-    *ppShlPtr = pModule;
+    auto pUniqueModule = o3tl::make_unique<SwModule>(pWDocFact, pDocFact, pGlobDocFact);
+    SwModule* pModule = pUniqueModule.get();
+    SfxApplication::SetModule(SfxToolsModule::Writer, std::move(pUniqueModule));
 
     pWDocFact->SetDocumentServiceName("com.sun.star.text.WebDocument");
 

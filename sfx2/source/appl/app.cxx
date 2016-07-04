@@ -128,6 +128,20 @@ SfxApplication* SfxApplication::Get()
     return g_pSfxApplication;
 }
 
+void SfxApplication::SetModule(SfxToolsModule nSharedLib, std::unique_ptr<SfxModule> pModule)
+{
+    assert(g_pSfxApplication != nullptr);
+
+    g_pSfxApplication->pImpl->aModules[nSharedLib] = std::move(pModule);
+}
+
+SfxModule* SfxApplication::GetModule(SfxToolsModule nSharedLib)
+{
+    if (!g_pSfxApplication) // It is possible GetModule is called before SfxApplication is initialised via GetOrCreate()
+        return nullptr;
+    return g_pSfxApplication->pImpl->aModules[nSharedLib].get();
+}
+
 SfxApplication* SfxApplication::GetOrCreate()
 {
     // SFX on demand
@@ -207,7 +221,7 @@ SfxApplication::~SfxApplication()
 
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
-    SfxModule::DestroyModules_Impl();
+    pImpl->aModules = o3tl::enumarray<SfxToolsModule, std::unique_ptr<SfxModule>>();    // Clear modules
 
 #if HAVE_FEATURE_DESKTOP
     delete pSfxHelp;

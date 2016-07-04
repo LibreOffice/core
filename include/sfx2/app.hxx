@@ -88,6 +88,16 @@ namespace sfx2
     }
 }
 
+enum class SfxToolsModule
+{
+    Math = 0,
+    Calc = 1,
+    Draw = 2,
+    Writer = 3,
+    Basic = 4,
+    LAST = Basic
+};
+
 class SfxLinkItem : public SfxPoolItem
 {
     Link<SfxPoolItem*, void> aLink;
@@ -223,6 +233,9 @@ public:
     // already removed, or the below methods?
     SAL_DLLPRIVATE SfxSlotPool& GetAppSlotPool_Impl() const;
     SAL_DLLPRIVATE SfxModule*   GetModule_Impl();
+
+    static void                 SetModule(SfxToolsModule nSharedLib, std::unique_ptr<SfxModule> pModule);
+    static SfxModule*           GetModule(SfxToolsModule nSharedLib);
 
     static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth);
 

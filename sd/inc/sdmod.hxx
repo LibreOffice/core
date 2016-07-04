@@ -24,7 +24,6 @@
 #include "pres.hxx"
 
 #include <sot/storage.hxx>
-#include <tools/shl.hxx>
 #include "sddllapi.h"
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
@@ -192,7 +191,7 @@ private:
 
 };
 
-#define SD_MOD() ( *reinterpret_cast<SdModule**>(GetAppData(SHL_DRAW)) )
+#define SD_MOD() ( static_cast<SdModule*>(SfxApplication::GetModule(SfxToolsModule::Draw)) )
 
 #endif // INCLUDED_SD_INC_SDMOD_HXX
 

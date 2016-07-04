@@ -23,6 +23,8 @@
 #include <sfx2/module.hxx>
 #include "sddllapi.h"
 
+class SdModule;
+
 /*************************************************************************
 |*
 |* This class is a wrapper for a Load-On-Demand-DLL. One instance
@@ -40,8 +42,8 @@ protected:
     static void     RegisterRemotes();
 #endif
     static void     RegisterFactorys();
-    static void     RegisterInterfaces();
-    static void     RegisterControllers();
+    static void     RegisterInterfaces(SdModule* pMod);
+    static void     RegisterControllers(SdModule* pMod);
 
 public:
                     // Ctor/Dtor must be linked to the application

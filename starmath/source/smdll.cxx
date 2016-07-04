@@ -38,6 +38,7 @@
 #include <starmath.hrc>
 
 #include <svx/xmlsecctrl.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace
 {
@@ -50,13 +51,14 @@ namespace
 
     SmDLL::SmDLL()
     {
-        SmModule** ppShlPtr = reinterpret_cast<SmModule**>(GetAppData(SHL_SM));
-        if ( *ppShlPtr )
+        if ( SfxApplication::GetModule(SfxToolsModule::Math) )    // Module already active
             return;
 
         SfxObjectFactory& rFactory = SmDocShell::Factory();
-        SmModule *pModule = new SmModule( &rFactory );
-        *ppShlPtr = pModule;
+
+        auto pUniqueModule = o3tl::make_unique<SmModule>(&rFactory);
+        SmModule* pModule = pUniqueModule.get();
+        SfxApplication::SetModule(SfxToolsModule::Math, std::move(pUniqueModule));
 
         rFactory.SetDocumentServiceName( "com.sun.star.formula.FormulaProperties" );
 
@@ -79,13 +81,6 @@ namespace
 
     SmDLL::~SmDLL()
     {
-#if 0
-        // the SdModule must be destroyed
-        SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
-        delete (*ppShlPtr);
-        (*ppShlPtr) = NULL;
-        *GetAppData(SHL_SM) = 0;
-#endif
     }
 
     struct theSmDLLInstance : public rtl::Static<SmDLL, theSmDLLInstance> {};

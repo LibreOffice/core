@@ -28,7 +28,6 @@
 #include "global.hxx"
 #include "shellids.hxx"
 #include <unotools/options.hxx>
-#include <tools/shl.hxx>
 
 #include <map>
 #include <list>
@@ -255,7 +254,7 @@ public:
     SC_DLLPUBLIC vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
 };
 
-#define SC_MOD() ( *reinterpret_cast<ScModule**>(GetAppData(SHL_CALC)) )
+#define SC_MOD() ( static_cast<ScModule*>(SfxApplication::GetModule(SfxToolsModule::Calc)) )
 
 void global_InitAppOptions();
 
