@@ -96,7 +96,6 @@ Size GraphicReader::GetPreviewSize() const
 
 ImpGraphic::ImpGraphic() :
         mpContext       ( nullptr ),
-        mpGfxLink       ( nullptr ),
         meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -119,9 +118,7 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mbDummyContext  ( rImpGraphic.mbDummyContext )
 {
     if( rImpGraphic.mpGfxLink )
-        mpGfxLink = new GfxLink( *rImpGraphic.mpGfxLink );
-    else
-        mpGfxLink = nullptr;
+        mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
 
     if( rImpGraphic.mpAnimation )
     {
@@ -136,7 +133,6 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
         mpContext       ( nullptr ),
-        mpGfxLink       ( nullptr ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -149,7 +145,6 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
 ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maEx            ( rBitmapEx ),
         mpContext       ( nullptr ),
-        mpGfxLink       ( nullptr ),
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -160,9 +155,7 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 }
 
 ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
-:   mpAnimation( nullptr ),
-    mpContext( nullptr ),
-    mpGfxLink( nullptr ),
+:   mpContext( nullptr ),
     meType( rSvgDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
     mnSizeBytes( 0UL ),
     mnRefCount( 1UL ),
@@ -177,7 +170,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         maEx            ( rAnimation.GetBitmapEx() ),
         mpAnimation     ( o3tl::make_unique<Animation>( rAnimation ) ),
         mpContext       ( nullptr ),
-        mpGfxLink       ( nullptr ),
         meType          ( GraphicType::Bitmap ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -190,7 +182,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
 ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         maMetaFile      ( rMtf ),
         mpContext       ( nullptr ),
-        mpGfxLink       ( nullptr ),
         meType          ( GraphicType::GdiMetafile ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -235,12 +226,10 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
             mpSwapFile = rImpGraphic.mpSwapFile;
         }
 
-        delete mpGfxLink;
+        mpGfxLink.reset();
 
         if( rImpGraphic.mpGfxLink )
-            mpGfxLink = new GfxLink( *rImpGraphic.mpGfxLink );
-        else
-            mpGfxLink = nullptr;
+            mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
 
         maSvgData = rImpGraphic.maSvgData;
         maPdfData = rImpGraphic.maPdfData;
@@ -333,12 +322,7 @@ void ImpGraphic::ImplClearGraphics( bool bCreateSwapInfo )
         mpAnimation.reset();
     }
 
-    if( mpGfxLink )
-    {
-        delete mpGfxLink;
-        mpGfxLink = nullptr;
-    }
-
+    mpGfxLink.reset();
     maSvgData.reset();
     maPdfData = uno::Sequence<sal_Int8>();
 }
@@ -1299,8 +1283,7 @@ bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
 
 void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
 {
-    delete mpGfxLink;
-    mpGfxLink = new GfxLink( rGfxLink );
+    mpGfxLink = o3tl::make_unique<GfxLink>( rGfxLink );
 
     if( mpGfxLink->IsNative() )
         mpGfxLink->SwapOut();
@@ -1313,7 +1296,7 @@ GfxLink ImpGraphic::ImplGetLink()
 
 bool ImpGraphic::ImplIsLink() const
 {
-    return ( mpGfxLink != nullptr );
+    return ( bool(mpGfxLink) );
 }
 
 BitmapChecksum ImpGraphic::ImplGetChecksum() const
@@ -1420,7 +1403,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
                 {
                     // set link only, if no other link was set
-                    const bool bSetLink = ( rImpGraphic.mpGfxLink == nullptr );
+                    const bool bSetLink = ( !rImpGraphic.mpGfxLink );
 
                     // assign graphic
                     rImpGraphic = *aGraphic.ImplGetImpGraphic();
