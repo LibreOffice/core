@@ -120,6 +120,23 @@ Menu RID_SVX_STYLE_MENU
     };
 };
 
+Menu RID_SVX_PRESET_MENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = RID_SVX_PRESET_RENAME;
+            Text [ en-US ] = "Rename";
+        };
+        MenuItem
+        {
+            Identifier = RID_SVX_PRESET_DELETE;
+            Text [ en-US ] = "Delete";
+        };
+    };
+};
+
 String RID_SVXSTR_EXTRAS_CHARBACKGROUND
 {
     Text [ en-US ] = "Highlight Color" ;
