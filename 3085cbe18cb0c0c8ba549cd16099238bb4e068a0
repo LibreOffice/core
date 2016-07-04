@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_4c969c95",
+        "filename": "svx/inc/xpolyimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-04T06:53:33Z",
+      "side": 1,
+      "message": "Thorsten is correct here, Resize() should not be const.",
+      "parentUuid": "ba84c18e_f18ca737",
+      "revId": "3085cbe18cb0c0c8ba549cd16099238bb4e068a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_167ca171",
         "filename": "svx/source/xoutdev/_xpoly.cxx",
         "patchSetId": 2
