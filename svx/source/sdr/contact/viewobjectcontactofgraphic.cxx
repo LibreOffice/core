@@ -37,7 +37,7 @@ namespace sdr
 
         public:
             // basic constructor.
-            AsynchGraphicLoadingEvent(EventHandler& rEventHandler, sdr::contact::ViewObjectContactOfGraphic& rVOCOfGraphic);
+            AsynchGraphicLoadingEvent(TimerEventHandler& rEventHandler, sdr::contact::ViewObjectContactOfGraphic& rVOCOfGraphic);
 
             // destructor
             virtual ~AsynchGraphicLoadingEvent();
@@ -47,7 +47,7 @@ namespace sdr
         };
 
         AsynchGraphicLoadingEvent::AsynchGraphicLoadingEvent(
-            EventHandler& rEventHandler, sdr::contact::ViewObjectContactOfGraphic& rVOCOfGraphic)
+            TimerEventHandler& rEventHandler, sdr::contact::ViewObjectContactOfGraphic& rVOCOfGraphic)
         :   BaseEvent(rEventHandler),
             mrVOCOfGraphic(rVOCOfGraphic)
         {

@@ -323,7 +323,6 @@ merge sdext::presenter::PresenterScrollBar with sdext::presenter::PresenterVerti
 merge sdext::presenter::PresenterSlidePreview with sdext::presenter::(anonymous namespace)::NextSlidePreview
 merge sdr::SelectionController with sdr::table::SvxTableController
 merge sdr::contact::ObjectContactOfPagePainter with sdr::contact::PagePrimitiveExtractor
-merge sdr::event::EventHandler with sdr::event::TimerEventHandler
 merge sdr::table::TableDesignUser with sdr::table::SdrTableObjImpl
 merge sfx2::IXmlIdRegistry with sfx2::XmlIdRegistry
 merge sfx::DummyWindowWrapper with sfx::DummyItemConnection
