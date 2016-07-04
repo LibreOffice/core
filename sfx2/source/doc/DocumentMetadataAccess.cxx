@@ -45,6 +45,7 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <libxml/tree.h>
 
@@ -188,13 +189,13 @@ struct DocumentMetadataAccess_Impl
 {
     // note: these are all initialized in constructor, and loadFromStorage
     const uno::Reference<uno::XComponentContext> m_xContext;
-    const IXmlIdRegistrySupplier & m_rXmlIdRegistrySupplier;
+    const SfxObjectShell & m_rXmlIdRegistrySupplier;
     uno::Reference<rdf::XURI> m_xBaseURI;
     uno::Reference<rdf::XRepository> m_xRepository;
     uno::Reference<rdf::XNamedGraph> m_xManifest;
     DocumentMetadataAccess_Impl(
             uno::Reference<uno::XComponentContext> const& i_xContext,
-            IXmlIdRegistrySupplier const & i_rRegistrySupplier)
+            SfxObjectShell const & i_rRegistrySupplier)
       : m_xContext(i_xContext)
       , m_rXmlIdRegistrySupplier(i_rRegistrySupplier)
       , m_xBaseURI()
@@ -768,7 +769,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
 
 DocumentMetadataAccess::DocumentMetadataAccess(
         uno::Reference< uno::XComponentContext > const & i_xContext,
-        const IXmlIdRegistrySupplier & i_rRegistrySupplier)
+        const SfxObjectShell & i_rRegistrySupplier)
     : m_pImpl(new DocumentMetadataAccess_Impl(i_xContext, i_rRegistrySupplier))
 {
     // no initialization: must call loadFrom...
@@ -776,7 +777,7 @@ DocumentMetadataAccess::DocumentMetadataAccess(
 
 DocumentMetadataAccess::DocumentMetadataAccess(
         uno::Reference< uno::XComponentContext > const & i_xContext,
-        const IXmlIdRegistrySupplier & i_rRegistrySupplier,
+        const SfxObjectShell & i_rRegistrySupplier,
         OUString const & i_rURI)
     : m_pImpl(new DocumentMetadataAccess_Impl(i_xContext, i_rRegistrySupplier))
 {

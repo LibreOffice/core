@@ -326,7 +326,6 @@ merge sdr::contact::ObjectContactOfPagePainter with sdr::contact::PagePrimitiveE
 merge sdr::event::EventHandler with sdr::event::TimerEventHandler
 merge sdr::table::TableDesignUser with sdr::table::SdrTableObjImpl
 merge sfx2::IXmlIdRegistry with sfx2::XmlIdRegistry
-merge sfx2::IXmlIdRegistrySupplier with SfxObjectShell
 merge sfx::DummyWindowWrapper with sfx::DummyItemConnection
 merge sfx::MultiControlWrapperHelper with sfx::MultiControlWrapper
 merge slideshow::internal::(anonymous namespace)::EventContainer with slideshow::internal::ClickEventHandler
