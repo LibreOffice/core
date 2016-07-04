@@ -1011,7 +1011,7 @@ uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection,
     return xRangeProperties;
 }
 
-void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
+void SectionPropertyMap::HandleMarginsHeaderFooter(bool bFirstPage, DomainMapper_Impl& rDM_Impl)
 {
     if( m_nDzaGutter > 0 )
     {
@@ -1030,8 +1030,8 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
     /*** if headers/footers are available then the top/bottom margins of the
       header/footer are copied to the top/bottom margin of the page
       */
-    CopyLastHeaderFooter( false, rDM_Impl );
-    PrepareHeaderFooterProperties( false );
+    CopyLastHeaderFooter( bFirstPage, rDM_Impl );
+    PrepareHeaderFooterProperties( bFirstPage );
 }
 
 bool SectionPropertyMap::FloatingTableConversion(FloatingTableInfo& rInfo)
@@ -1152,9 +1152,15 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                         xRangeProperties->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::makeAny(aName));
 
                     uno::Reference<beans::XPropertySet> xPageStyle (rDM_Impl.GetPageStyles()->getByName(aName), uno::UNO_QUERY_THROW);
-                    HandleMarginsHeaderFooter(rDM_Impl);
+                    HandleMarginsHeaderFooter(false, rDM_Impl);
+                    if( m_bTitlePage )
+                        HandleMarginsHeaderFooter(true, rDM_Impl);
                     if (rDM_Impl.IsNewDoc())
+                    {
                         ApplyProperties_(xPageStyle);
+                        if( m_bTitlePage && m_aFollowPageStyle.is() )
+                            ApplyProperties_(m_aFollowPageStyle);
+                    }
                 }
                 catch( const uno::Exception& )
                 {
@@ -1185,7 +1191,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         //get the properties and create appropriate page styles
         uno::Reference< beans::XPropertySet > xFollowPageStyle = GetPageStyle( rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), false );
 
-        HandleMarginsHeaderFooter(rDM_Impl);
+        HandleMarginsHeaderFooter(/*bFirstPage=*/false, rDM_Impl);
 
         const OUString sTrayIndex = getPropertyName( PROP_PRINTER_PAPER_TRAY_INDEX );
         if( m_nPaperBin >= 0 )

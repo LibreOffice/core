@@ -331,7 +331,7 @@ public:
 
     void CloseSectionGroup( DomainMapper_Impl& rDM_Impl );
     /// Handling of margins, header and footer for any kind of sections breaks.
-    void HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl);
+    void HandleMarginsHeaderFooter(bool bFirstPage, DomainMapper_Impl& rDM_Impl);
     void ClearHeaderFooterLinkToPrevious( bool bHeader, PageType eType );
 };
 
