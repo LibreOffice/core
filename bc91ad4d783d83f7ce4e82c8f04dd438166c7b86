@@ -16,6 +16,24 @@
       "revId": "bc91ad4d783d83f7ce4e82c8f04dd438166c7b86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_cce8ec19",
+        "filename": "sfx2/source/appl/module.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2016-07-04T07:05:16Z",
+      "side": 1,
+      "message": "At the moment a module could pass a nullptr. \nFor example, see https://cgit.freedesktop.org/libreoffice/core/tree/sd/source/ui/app/sddll.cxx#n265\nHere SdModule has optional objects passed to it, with a legacy \u0027bug fix\u0027 because nullptr used to also mean end of list. Of course, all of this could be fixed in the future...",
+      "parentUuid": "ba84c18e_91db5b1b",
+      "revId": "bc91ad4d783d83f7ce4e82c8f04dd438166c7b86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
