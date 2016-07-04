@@ -23,7 +23,6 @@
 #include <unotools/options.hxx>
 #include <sfx2/module.hxx>
 
-#include <tools/shl.hxx>
 #include "swdllapi.h"
 #include "shellid.hxx"
 #include <fldupde.hxx>
@@ -248,7 +247,7 @@ inline const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >
 
 //    Access to SwModule, the View and the shell.
 
-#define SW_MOD() ( *reinterpret_cast<SwModule**>(GetAppData(SHL_WRITER)))
+#define SW_MOD() ( static_cast<SwModule*>(SfxApplication::GetModule(SfxToolsModule::Writer)))
 
 SW_DLLPUBLIC SwView*    GetActiveView();
 SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();

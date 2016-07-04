@@ -32,15 +32,13 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <vcl/settings.hxx>
-
+#include <o3tl/make_unique.hxx>
 
 namespace basctl
 {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-Module* Module::mpModule = nullptr;
 
 namespace
 {
@@ -106,7 +104,7 @@ ExtraData* GetExtraData()
 
 
 IDEResId::IDEResId( sal_uInt16 nId ):
-    ResId(nId, *Module::Get()->GetResMgr())
+    ResId(nId, *SfxApplication::GetModule(SfxToolsModule::Basic)->GetResMgr())
 { }
 
 namespace
@@ -121,11 +119,11 @@ Dll::Dll () :
     ResMgr* pMgr = ResMgr::CreateResMgr(
         "basctl", Application::GetSettings().GetUILanguageTag());
 
-    Module::Get() = new Module( pMgr, &DocShell::Factory() );
+    auto pModule = o3tl::make_unique<Module>( pMgr, &DocShell::Factory() );
+    SfxModule* pMod = pModule.get();
+    SfxApplication::SetModule(SfxToolsModule::Basic, std::move(pModule));
 
     GetExtraData(); // to cause GlobalErrorHdl to be set
-
-    SfxModule* pMod = Module::Get();
 
     SfxObjectFactory& rFactory = DocShell::Factory();
     rFactory.SetDocumentServiceName( "com.sun.star.script.BasicIDE" );

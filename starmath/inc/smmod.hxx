@@ -24,7 +24,6 @@
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include <tools/shl.hxx>
 #include "tools/rc.hxx"
 #include <sfx2/module.hxx>
 
@@ -125,7 +124,7 @@ public:
     virtual VclPtr<SfxTabPage> CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet ) override;
 };
 
-#define SM_MOD() ( *reinterpret_cast<SmModule**>(GetAppData(SHL_SM)) )
+#define SM_MOD() ( static_cast<SmModule*>(SfxApplication::GetModule(SfxToolsModule::Math)) )
 
 #endif // INCLUDED_STARMATH_INC_SMMOD_HXX
 

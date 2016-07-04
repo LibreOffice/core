@@ -27,7 +27,7 @@
 #include <svtools/ehdl.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
-
+#include <o3tl/enumarray.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 
 #include "bitset.hxx"
@@ -132,6 +132,8 @@ public:
 
     SfxDocumentTemplates*       GetDocumentTemplates();
     void                        DeInitDDE();
+
+    o3tl::enumarray<SfxToolsModule, std::unique_ptr<SfxModule>> aModules;
 
     /** called when the Application's BasicManager has been created. This can happen
         explicitly in SfxApplication::GetBasicManager, or implicitly if a document's
