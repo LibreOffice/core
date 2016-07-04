@@ -503,11 +503,11 @@ void ScViewFunc::EditNote()
             // activate object (as in FuSelection::TestComment)
             GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
             // now get the created FuText and set into EditMode
-            FuPoor* pPoor = GetDrawFuncPtr();
-            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    // has no RTTI
+            FuText* pFuText = dynamic_cast<FuText*>(GetDrawFuncPtr());
+            if (pFuText)
             {
                 ScrollToObject( pCaption );         // make object fully visible
-                static_cast< FuText* >( pPoor )->SetInEditMode( pCaption );
+                pFuText->SetInEditMode( pCaption );
             }
         }
     }
