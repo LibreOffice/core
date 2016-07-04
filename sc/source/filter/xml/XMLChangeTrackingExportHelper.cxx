@@ -672,6 +672,11 @@ void ScChangeTrackingExportHelper::CollectActionAutoStyles(ScChangeAction* pActi
 
 void ScChangeTrackingExportHelper::WorkWithChangeAction(ScChangeAction* pAction)
 {
+    if (pAction->GetType() == SC_CAT_NONE)
+    {
+        SAL_WARN("sc.filter", "WorkWithChangeAction: type is not writable");
+        return;
+    }
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pAction->GetActionNumber()));
     GetAcceptanceState(pAction);
     if (pAction->IsRejecting())
@@ -688,7 +693,7 @@ void ScChangeTrackingExportHelper::WorkWithChangeAction(ScChangeAction* pAction)
         WriteRejection(pAction);
     else
     {
-        OSL_FAIL("not a writeable type");
+        assert(false); // tdf#73335 this would create duplicate attributes
     }
     rExport.CheckAttrList();
 }
