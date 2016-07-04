@@ -282,7 +282,7 @@ bool ScTabViewShell::PrepareClose(bool bUI)
 
     // draw text edit mode must be closed
     FuPoor* pPoor = GetDrawFuncPtr();
-    if ( pPoor && ( IsDrawTextShell() || pPoor->GetSlotID() == SID_DRAW_NOTEEDIT ) )
+    if (pPoor && IsDrawTextShell())
     {
         // "clean" end of text edit, including note handling, subshells and draw func switching,
         // as in FuDraw and ScTabView::DrawDeselectAll
