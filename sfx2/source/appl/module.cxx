@@ -36,6 +36,7 @@
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/shl.hxx>
 
 #define SfxModule
 #include "sfxslots.hxx"
@@ -134,6 +135,8 @@ void SfxModule::Construct_Impl()
 
 SfxModule::~SfxModule()
 {
+    ::ClearAppData(this);
+
     if ( SfxGetpApp()->Get_Impl() )
     {
         // The module will be destroyed before the Deinitialize,

@@ -19,15 +19,34 @@
 
 #include <tools/shl.hxx>
 
-static void* aAppData[SHL_COUNT];
+static SfxModule* aAppData[static_cast<int>(ToolsModule::Count)] = {nullptr};
 
 /*
  * Query data for other libraries
  */
 
-void** GetAppData( sal_uInt16 nSharedLib )
+SfxModule* GetAppData( ToolsModule nSharedLib )
 {
-    return &(aAppData[nSharedLib]);
+    return aAppData[static_cast<int>(nSharedLib)];
+}
+
+void SetAppData( ToolsModule nSharedLib, SfxModule* pModule )
+{
+    aAppData[static_cast<int>(nSharedLib)] = pModule;
+}
+
+// Used by ~SfxModule to remove a module from the active tool list
+void ClearAppData( SfxModule* pModule )
+{
+    unsigned int size = static_cast<int>(ToolsModule::Count);
+    for(unsigned int cnt=0; cnt<size; cnt++)
+    {
+        if (aAppData[cnt] == pModule)
+        {
+            aAppData[cnt] = nullptr;
+            break;
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

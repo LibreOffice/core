@@ -110,14 +110,13 @@ ScResId::ScResId( sal_uInt16 nId ) :
 
 void ScDLL::Init()
 {
-    ScModule **ppShlPtr = reinterpret_cast<ScModule**>(GetAppData(SHL_CALC));
-    if ( *ppShlPtr )
+    if ( GetAppData(ToolsModule::Calc) )    // Module already active
         return;
 
     ScDocumentPool::InitVersionMaps(); // Is needed in the ScModule ctor
 
     ScModule* pMod = new ScModule( &ScDocShell::Factory() );
-    (*ppShlPtr) = pMod;
+    SetAppData(ToolsModule::Calc, pMod);
 
     ScDocShell::Factory().SetDocumentServiceName( "com.sun.star.sheet.SpreadsheetDocument" );
 

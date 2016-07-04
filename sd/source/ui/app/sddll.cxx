@@ -244,7 +244,7 @@ void SdDLL::RegisterControllers()
 
 void SdDLL::Init()
 {
-    if ( SD_MOD() )
+    if ( GetAppData(ToolsModule::Draw) )    // Module already active
         return;
 
     SfxObjectFactory* pDrawFact = nullptr;
@@ -256,20 +256,8 @@ void SdDLL::Init()
     if (!utl::ConfigManager::IsAvoidConfig() && SvtModuleOptions().IsDraw())
         pDrawFact = &::sd::GraphicDocShell::Factory();
 
-    // the SdModule must be created
-     SdModule** ppShlPtr = reinterpret_cast<SdModule**>(GetAppData(SHL_DRAW));
-
-     // #i46427#
-     // The SfxModule::SfxModule stops when the first given factory
-     // is 0, so we must not give a 0 as first factory
-     if( pImpressFact )
-     {
-        (*ppShlPtr) = new SdModule( pImpressFact, pDrawFact );
-     }
-     else
-     {
-        (*ppShlPtr) = new SdModule( pDrawFact, pImpressFact );
-     }
+    SdModule* pModule = new SdModule( pImpressFact, pDrawFact );
+    SetAppData(ToolsModule::Draw, pModule);
 
     if (!utl::ConfigManager::IsAvoidConfig() && SvtModuleOptions().IsImpress())
     {
