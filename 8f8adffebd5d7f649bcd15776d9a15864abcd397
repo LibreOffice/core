@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_4c6dbc31",
+        "filename": "include/svx/SvxPresetListBox.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T12:54:59Z",
+      "side": 1,
+      "message": "If you\u0027re not implementing those handlers yet, please do drop some \u0027DO NOT REMOVE, work in progress\u0027 comment here",
+      "revId": "8f8adffebd5d7f649bcd15776d9a15864abcd397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_0c83b4cd",
+        "filename": "include/svx/dialogs.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T12:54:59Z",
+      "side": 1,
+      "message": "style :)",
+      "revId": "8f8adffebd5d7f649bcd15776d9a15864abcd397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_6c6a801c",
+        "filename": "svx/source/tbxctrls/SvxPresetListBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T12:54:59Z",
+      "side": 1,
+      "message": "What happens here if the no. of items doesn\u0027t fit into 5 lines anymore?",
+      "revId": "8f8adffebd5d7f649bcd15776d9a15864abcd397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_2c8878e7",
+        "filename": "svx/source/tbxctrls/SvxPresetListBox.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T12:54:59Z",
+      "side": 1,
+      "message": "nIndex \u003c pList.Count(), you don\u0027t really need the intermediate",
+      "revId": "8f8adffebd5d7f649bcd15776d9a15864abcd397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
