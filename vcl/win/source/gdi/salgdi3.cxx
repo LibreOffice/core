@@ -1471,6 +1471,13 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
     // Prefer the scalable 'Microsoft Sans Serif' to the old raster 'MS Sans Serif'
     if( ImplSalWICompareAscii( aLogFont.lfFaceName, "MS Sans Serif" ) == 0 )
         wcscpy( aLogFont.lfFaceName, L"Microsoft Sans Serif" );
+    // Script and Roman are Win 3.1 bitmap fonts using "FON" font format
+    // which is not supported with "Direct Write" so let's substitute them
+    // with a font that is supported and always available.
+    if (ImplSalWICompareAscii(aLogFont.lfFaceName, "Script") == 0)
+        wcscpy(aLogFont.lfFaceName, L"Times New Roman");
+    if (ImplSalWICompareAscii(aLogFont.lfFaceName, "Roman") == 0)
+        wcscpy(aLogFont.lfFaceName, L"Times New Roman");
 
     // #i47675# limit font requests to MAXFONTHEIGHT
     // TODO: share MAXFONTHEIGHT font instance
