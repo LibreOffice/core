@@ -26,20 +26,29 @@
 #define INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETFACTORY_HXX
 
 #include "ftpresultsetbase.hxx"
-
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/Property.hpp>
+#include <vector>
 
 namespace ftp {
 
-    class ResultSetBase;
+class ResultSetBase;
 
-    class ResultSetFactory
-    {
-    public:
+class ResultSetFactory
+{
+public:
+    ResultSetFactory(const css::uno::Reference<css::uno::XComponentContext >&  rxContext,
+                      const css::uno::Reference<css::ucb::XContentProvider >&  xProvider,
+                      const css::uno::Sequence<css::beans::Property>& seq,
+                      const std::vector<FTPDirentry>& dirvec);
 
-        virtual ~ResultSetFactory() { };
-
-        virtual ResultSetBase* createResultSet() = 0;
-    };
+    ResultSetBase* createResultSet();
+private:
+    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    css::uno::Reference< css::ucb::XContentProvider >         m_xProvider;
+    css::uno::Sequence< css::beans::Property >                m_seq;
+    std::vector<FTPDirentry>                                  m_dirvec;
+};
 
 }
 
