@@ -448,6 +448,11 @@ xray para2.PageStyleName
 
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf95367_inheritFollowStyle, "tdf95367_inheritFollowStyle.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("header"),  parseDump("/root/page[2]/header/txt/text()"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN652364, "n652364.docx")
 {
 /*
