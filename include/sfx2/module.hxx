@@ -96,8 +96,6 @@ public:
     static FieldUnit            GetModuleFieldUnit( css::uno::Reference< css::frame::XFrame > const & i_frame );
     FieldUnit                   GetFieldUnit() const;
 
-    SAL_DLLPRIVATE static std::vector<SfxModule*>& GetModules_Impl();
-    SAL_DLLPRIVATE static void DestroyModules_Impl();
     SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl* GetTbxCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxStbCtrlFactArr_Impl* GetStbCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxChildWinFactArr_Impl* GetChildWinFactories_Impl() const;

@@ -129,6 +129,12 @@ SfxApplication* SfxApplication::Get()
     return g_pSfxApplication;
 }
 
+void SfxApplication::AddModule(std::unique_ptr<SfxModule> pModule)
+{
+    g_pSfxApplication->pImpl->aModules.push_back(std::move(pModule));
+}
+
+
 SfxApplication* SfxApplication::GetOrCreate()
 {
     // SFX on demand
@@ -208,7 +214,7 @@ SfxApplication::~SfxApplication()
 
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
-    SfxModule::DestroyModules_Impl();
+    pImpl->aModules.clear();
 
 #if HAVE_FEATURE_DESKTOP
     delete pSfxHelp;
