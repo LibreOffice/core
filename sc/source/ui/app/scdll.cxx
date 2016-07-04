@@ -102,22 +102,36 @@
 
 #include "dwfunctr.hxx"
 #include "acredlin.hxx"
+#include <o3tl/make_unique.hxx>
 
 ScResId::ScResId( sal_uInt16 nId ) :
     ResId( nId, *SC_MOD()->GetResMgr() )
 {
 }
 
+class ScModuleInstance : public ScModule
+{
+public:
+    ScModuleInstance() : ScModule( &ScDocShell::Factory() )
+    {
+        SetAppData(ToolsModule::Calc, this);
+    }
+    ~ScModuleInstance() override
+    {
+        SetAppData(ToolsModule::Calc, nullptr);
+    }
+};
+
 void ScDLL::Init()
 {
-    ScModule **ppShlPtr = reinterpret_cast<ScModule**>(GetAppData(SHL_CALC));
-    if ( *ppShlPtr )
+    if ( GetAppData(ToolsModule::Calc) )    // Module already active
         return;
 
     ScDocumentPool::InitVersionMaps(); // Is needed in the ScModule ctor
 
-    ScModule* pMod = new ScModule( &ScDocShell::Factory() );
-    (*ppShlPtr) = pMod;
+    auto pUniqueModule = o3tl::make_unique<ScModuleInstance>();
+    ScModule* pMod = pUniqueModule.get();
+    SfxApplication::AddModule(std::move(pUniqueModule));
 
     ScDocShell::Factory().SetDocumentServiceName( "com.sun.star.sheet.SpreadsheetDocument" );
 

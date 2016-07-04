@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <vcl/settings.hxx>
-
+#include <o3tl/make_unique.hxx>
 
 namespace basctl
 {
@@ -121,7 +121,9 @@ Dll::Dll () :
     ResMgr* pMgr = ResMgr::CreateResMgr(
         "basctl", Application::GetSettings().GetUILanguageTag());
 
-    Module::Get() = new Module( pMgr, &DocShell::Factory() );
+    auto pModule = o3tl::make_unique<Module>( pMgr, &DocShell::Factory() );
+    Module::Get() = pModule.get();
+    SfxApplication::AddModule(std::move(pModule));
 
     GetExtraData(); // to cause GlobalErrorHdl to be set
 

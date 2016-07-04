@@ -124,6 +124,8 @@ public:
 
     sal_uInt16                  nInterfaces;
 
+    std::vector<std::unique_ptr<SfxModule>> aModules;
+
     bool                        bDowning:1;   // sal_True on Exit and afterwards
     bool                        bInQuit : 1;
 

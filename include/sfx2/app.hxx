@@ -224,6 +224,8 @@ public:
     SAL_DLLPRIVATE SfxSlotPool& GetAppSlotPool_Impl() const;
     SAL_DLLPRIVATE SfxModule*   GetModule_Impl();
 
+    static void                 AddModule(std::unique_ptr<SfxModule> pModule);
+
     static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth);
 
     /** loads the application logo as used in the impress slideshow pause screen */

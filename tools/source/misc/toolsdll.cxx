@@ -18,16 +18,22 @@
  */
 
 #include <tools/shl.hxx>
+#include <o3tl/enumarray.hxx>
 
-static void* aAppData[SHL_COUNT];
+static o3tl::enumarray<ToolsModule, SfxModule*> aAppData = {nullptr};
 
 /*
  * Query data for other libraries
  */
 
-void** GetAppData( sal_uInt16 nSharedLib )
+SfxModule* GetAppData( ToolsModule nSharedLib )
 {
-    return &(aAppData[nSharedLib]);
+    return aAppData[nSharedLib];
+}
+
+void SetAppData( ToolsModule nSharedLib, SfxModule* pModule )
+{
+    aAppData[nSharedLib] = pModule;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

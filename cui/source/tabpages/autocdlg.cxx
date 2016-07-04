@@ -882,7 +882,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
     get(m_pReplaceTLB, "tabview");
     m_pReplaceTLB->set_height_request(16 * GetTextHeight());
 
-    SfxModule *pMod = *reinterpret_cast<SfxModule**>(GetAppData(SHL_WRITER));
+    SfxModule *pMod = GetAppData(ToolsModule::Writer);
     bSWriter = pMod == SfxModule::GetActiveModule();
 
     LanguageTag aLanguageTag( eLastDialogLanguage );
