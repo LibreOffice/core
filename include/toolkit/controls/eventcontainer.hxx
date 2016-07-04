@@ -26,12 +26,8 @@
 
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <unordered_map>
-
-typedef ::cppu::WeakImplHelper2< css::container::XNameContainer,
-                                 css::container::XContainer > NameContainerHelper;
-
 
 namespace toolkit
 {
@@ -46,7 +42,9 @@ typedef std::unordered_map
 NameContainerNameMap;
 
 
-class NameContainer_Impl : public NameContainerHelper
+class ScriptEventContainer : public ::cppu::WeakImplHelper<
+                                        css::container::XNameContainer,
+                                        css::container::XContainer >
 {
     NameContainerNameMap mHashMap;
     css::uno::Sequence< OUString > mNames;
@@ -57,12 +55,7 @@ class NameContainer_Impl : public NameContainerHelper
     ContainerListenerMultiplexer maContainerListeners;
 
 public:
-    NameContainer_Impl( css::uno::Type const & aType )
-        : mnElementCount( 0 ),
-          mType( aType ),
-          maContainerListeners( *this )
-    {
-    }
+    ScriptEventContainer();
 
     // Methods XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  )
@@ -104,13 +97,6 @@ public:
     void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener )
         throw(css::uno::RuntimeException, std::exception) override;
 };
-
-class ScriptEventContainer : public NameContainer_Impl
-{
-public:
-    ScriptEventContainer();
-};
-
 
 }   // namespace toolkit_namecontainer
 
