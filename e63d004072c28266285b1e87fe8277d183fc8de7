@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_3241ae0c",
+        "filename": "sd/source/ui/sidebar/DefaultShapesPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T20:53:29Z",
+      "side": 1,
+      "message": "Oh dear, 10 different handlers doing more-less the same.\n\nPlease use only 1 IMPL_LINK_TYPED for all value sets. Pass pointer or reference (but then you have to make arg. no. 3 reference as well ... I don\u0027t feel strongly either way) to the particular ValueSet as its 4th argument\n\nFind out which member variable does the argument map to (so you\u0027ll have a lot of \u0027if (pValueSet \u003d\u003d mpFooSet)\u0027 which is still a bit clumsy, but can\u0027t really do better here ). Depending on that, decide which of the maps (\u003cposition, UNOcommand\u003e to use\n\nAnd finally dispatch the corresponding command",
+      "revId": "e63d004072c28266285b1e87fe8277d183fc8de7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_d2bb220d",
+        "filename": "sd/source/ui/sidebar/DefaultShapesPanel.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T20:53:29Z",
+      "side": 1,
+      "message": "And ~same issue here: 10 loops doing the same\n\nPlease create some array or std::vector of ValueSets, with an initializer list { mpFooSet, mpBarSet, ...} or use push_back if choosing vector (but that\u0027s a tad old-style)\n\nThen loop over those: for (auto\u0026 aValueSet: aValueSets) { do_stuff_with_value_set } \n\nso you\u0027ll end up w/ two nested loops instead of 10 identical loops",
+      "revId": "e63d004072c28266285b1e87fe8277d183fc8de7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
