@@ -60,7 +60,7 @@
 #include "salsys.hxx"
 #include "svdata.hxx"
 #include "salimestatus.hxx"
-#include "xconnection.hxx"
+#include "displayconnectiondispatch.hxx"
 #include "window.h"
 #include "accmgr.hxx"
 #include "idlemgr.hxx"
@@ -1573,7 +1573,7 @@ css::uno::Reference< css::awt::XDisplayConnection > Application::GetDisplayConne
 
     if( !pSVData->mxDisplayConnection.is() )
     {
-        pSVData->mxDisplayConnection.set( new vcl::DisplayConnection );
+        pSVData->mxDisplayConnection.set( new vcl::DisplayConnectionDispatch );
         pSVData->mxDisplayConnection->start();
     }
 

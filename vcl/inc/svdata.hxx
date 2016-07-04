@@ -32,7 +32,7 @@
 #include "vcleventlisteners.hxx"
 #include "impfontcache.hxx"
 #include "salwtype.hxx"
-#include "xconnection.hxx"
+#include "displayconnectiondispatch.hxx"
 
 #include <unordered_map>
 #include <boost/functional/hash.hpp>
@@ -87,7 +87,7 @@ class VclEventListeners2;
 class SalData;
 class OpenGLContext;
 
-namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
+namespace vcl { class DisplayConnectionDispatch; class SettingsConfigItem; class DeleteOnDeinitBase; }
 
 class LocaleConfigurationListener : public utl::ConfigurationListener
 {
@@ -334,7 +334,7 @@ struct ImplSVData
     vcl::CommandInfoProvider* mpCommandInfoProvider;
 
     oslThreadIdentifier     mnMainThreadId;
-    rtl::Reference< vcl::DisplayConnection > mxDisplayConnection;
+    rtl::Reference< vcl::DisplayConnectionDispatch > mxDisplayConnection;
 
     css::uno::Reference< css::lang::XComponent > mxAccessBridge;
     vcl::SettingsConfigItem* mpSettingsConfigItem;

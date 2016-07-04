@@ -21,23 +21,45 @@
 #define INCLUDED_VCL_INC_DISPLAYCONNECTIONDISPATCH_HXX
 
 #include <sal/config.h>
-
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <list>
 
 namespace vcl {
 
-class DisplayConnectionDispatch:
+class DisplayConnectionDispatch :
     public cppu::WeakImplHelper< css::awt::XDisplayConnection >
 {
+    ::osl::Mutex                    m_aMutex;
+    ::std::list< css::uno::Reference< css::awt::XEventHandler > >
+                                    m_aHandlers;
+    ::std::list< css::uno::Reference< css::awt::XEventHandler > >
+                                    m_aErrorHandlers;
+    css::uno::Any                   m_aAny;
 public:
-    virtual bool dispatchEvent(void * pData, int nBytes) = 0;
+    DisplayConnectionDispatch();
+    ~DisplayConnectionDispatch() override;
 
-protected:
-    virtual ~DisplayConnectionDispatch() {}
+    void start();
+    void terminate();
+
+    bool dispatchEvent( void* pData, int nBytes );
+
+    // XDisplayConnection
+    virtual void SAL_CALL addEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler, sal_Int32 eventMask ) throw(std::exception) override;
+    virtual void SAL_CALL removeEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler ) throw(std::exception) override;
+    virtual void SAL_CALL addErrorHandler( const css::uno::Reference< css::awt::XEventHandler >& handler ) throw(std::exception) override;
+    virtual void SAL_CALL removeErrorHandler( const css::uno::Reference< css::awt::XEventHandler >& handler ) throw(std::exception) override;
+    virtual css::uno::Any SAL_CALL getIdentifier() throw(std::exception) override;
+
 };
 
 }
+
+
 
 #endif // INCLUDED_VCL_INC_DISPLAYCONNECTIONDISPATCH_HXX
 

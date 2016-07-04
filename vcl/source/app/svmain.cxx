@@ -70,7 +70,7 @@
 #include "salsys.hxx"
 #include "saltimer.hxx"
 #include "salimestatus.hxx"
-#include "xconnection.hxx"
+#include "displayconnectiondispatch.hxx"
 
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
