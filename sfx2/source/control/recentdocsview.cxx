@@ -19,7 +19,7 @@
 
 #include <sax/tools/converter.hxx>
 #include <sfx2/recentdocsview.hxx>
-#include <sfx2/templateabstractview.hxx>
+#include <sfx2/templatelocalview.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxresid.hxx>
