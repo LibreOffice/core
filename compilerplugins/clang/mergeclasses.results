@@ -266,7 +266,6 @@ merge frm::ITextAttributeListener with frm::OAttributeDispatcher
 merge frm::ITextSelectionListener with frm::ORichTextPeer
 merge frm::OFormComponents with frm::ODatabaseForm
 merge ftp::CurlInput with InsertData
-merge ftp::ResultSetFactory with ResultSetFactoryI
 merge gio::Seekable with gio::OutputStream
 merge i_xml_parser_event_handler with (anonymous namespace)::recently_used_file_filter
 merge oglcanvas::CanvasHelper with oglcanvas::BitmapCanvasHelper
