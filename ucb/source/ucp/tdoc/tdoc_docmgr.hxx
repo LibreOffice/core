@@ -36,16 +36,7 @@
 
 namespace tdoc_ucp {
 
-    class OfficeDocumentsEventListener
-    {
-    public:
-        virtual void notifyDocumentOpened( const OUString & rDocId ) = 0;
-        virtual void notifyDocumentClosed( const OUString & rDocId ) = 0;
-
-    protected:
-        ~OfficeDocumentsEventListener() {}
-    };
-
+    class ContentProvider;
 
     struct StorageInfo
     {
@@ -111,7 +102,7 @@ namespace tdoc_ucp {
     public:
         OfficeDocumentsManager(
             const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-            OfficeDocumentsEventListener * pDocEventListener );
+            ContentProvider * pDocEventListener );
         virtual ~OfficeDocumentsManager();
 
         void destroy();
@@ -166,7 +157,7 @@ namespace tdoc_ucp {
         css::uno::Reference< css::frame::XGlobalEventBroadcaster > m_xDocEvtNotifier;
         css::uno::Reference< css::frame::XModuleManager2 >         m_xModuleMgr;
         DocumentList                                        m_aDocs;
-        OfficeDocumentsEventListener *                      m_pDocEventListener;
+        ContentProvider *                              m_pDocEventListener;
         ::rtl::Reference<OfficeDocumentsCloseListener> m_xDocCloseListener;
     };
 
