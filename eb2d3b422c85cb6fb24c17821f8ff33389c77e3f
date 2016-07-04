@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_0cb494f0",
+        "filename": "svx/source/xoutdev/xtabhtch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-04T09:52:54Z",
+      "side": 1,
+      "message": "You can \u0027return CreateBitmap(...)\u0027 right away, without intermediates",
+      "revId": "eb2d3b422c85cb6fb24c17821f8ff33389c77e3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
