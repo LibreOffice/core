@@ -164,7 +164,6 @@ public:
     RectHorAlign GetRectHorAlign() const { return meRectHorAlign; }
 
     const SmRect & GetRect() const { return *this; }
-          SmRect & GetRect()       { return *this; }
 
     void Move(const Point &rPosition);
     void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
