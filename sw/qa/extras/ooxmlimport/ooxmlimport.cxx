@@ -986,6 +986,13 @@ DECLARE_OOXMLIMPORT_TEST(testN780843, "n780843.docx")
     xPara = getParagraph(1);
     aStyleName = getProperty<OUString>(xPara, "PageStyleName");
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aStyleName);
+
+    //tdf64372 this document should only have one page break (2 pages, not 3)
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testShadow, "imgshadow.docx")
