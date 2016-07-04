@@ -22,6 +22,7 @@
 #include "interpre.hxx"
 
 #include <rangelst.hxx>
+#include <rtl/math.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -2096,6 +2097,11 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
 sal_Int32 ScInterpreter::GetInt32()
 {
     double fVal = GetDouble();
+    if (rtl::math::isNan(fVal))
+    {
+        SetError(errIllegalArgument);
+        return SAL_MAX_INT32;
+    }
     if (fVal > 0.0)
     {
         fVal = rtl::math::approxFloor( fVal);
@@ -2120,6 +2126,11 @@ sal_Int32 ScInterpreter::GetInt32()
 sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 {
     double fVal = GetDoubleWithDefault( nDefault);
+    if (rtl::math::isNan(fVal))
+    {
+        SetError(errIllegalArgument);
+        return SAL_MAX_INT32;
+    }
     if (fVal > 0.0)
     {
         fVal = rtl::math::approxFloor( fVal);
@@ -2144,6 +2155,11 @@ sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 sal_Int16 ScInterpreter::GetInt16()
 {
     double fVal = GetDouble();
+    if (rtl::math::isNan(fVal))
+    {
+        SetError(errIllegalArgument);
+        return SAL_MAX_INT16;
+    }
     if (fVal > 0.0)
     {
         fVal = rtl::math::approxFloor( fVal);
@@ -2168,7 +2184,7 @@ sal_Int16 ScInterpreter::GetInt16()
 sal_uInt32 ScInterpreter::GetUInt32()
 {
     double fVal = rtl::math::approxFloor( GetDouble());
-    if (fVal < 0.0 || fVal > SAL_MAX_UINT32)
+    if (rtl::math::isNan(fVal) || fVal < 0.0 || fVal > SAL_MAX_UINT32)
     {
         SetError( errIllegalArgument);
         return SAL_MAX_UINT32;
