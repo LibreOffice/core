@@ -278,6 +278,7 @@ class D2DWriteTextOutRenderer : public TextOutRenderer
 {
     typedef HRESULT(WINAPI *pD2D1CreateFactory_t)(D2D1_FACTORY_TYPE,
         REFIID, const D2D1_FACTORY_OPTIONS *, void **);
+
     typedef HRESULT(WINAPI *pDWriteCreateFactory_t)(DWRITE_FACTORY_TYPE,
         REFIID, IUnknown **);
 
@@ -381,7 +382,12 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex,
     if (!pTxt)
         return false;
 
-    pTxt->BindFont(hDC);
+    if (!pTxt->BindFont(hDC))
+    {
+        SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by Direct Write.");
+        DeleteDC(hDC);
+        return false;
+    }
 
     // Bail for non-horizontal text.
     {
@@ -407,6 +413,11 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex,
     // Fetch the ink boxes and calculate the size of the atlas.
     if (!bRealGlyphIndices)
     {
+        if (!pTxt->GetFontFace())
+        {
+            SAL_WARN("vcl.gdi", "Font face is not available.");
+            return false;
+        }
         if (!SUCCEEDED(pTxt->GetFontFace()->GetGlyphIndices(aCodePointsOrGlyphIndices.data(), aCodePointsOrGlyphIndices.size(), aGlyphIndices.data())))
         {
             pTxt->ReleaseFont();
@@ -417,6 +428,7 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex,
     {
         aGlyphIndices[0] = aCodePointsOrGlyphIndices[0];
     }
+
     Rectangle bounds(0, 0, 0, 0);
     auto aInkBoxes = pTxt->GetGlyphInkBoxes(aGlyphIndices.data(), aGlyphIndices.data() + 1);
     for (auto &box : aInkBoxes)
