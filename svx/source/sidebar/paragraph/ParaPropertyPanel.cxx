@@ -167,11 +167,7 @@ void ParaPropertyPanel::InitToolBoxIndent()
     mpRightIndent->SetModifyHdl( aLink );
     mpFLineIndent->SetModifyHdl( aLink );
 
-    const sal_uInt16 nIdIncrement = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
-    const sal_uInt16 nIdDecrement = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
     const sal_uInt16 nIdHanging   = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT);
-    mpTbxIndent_IncDec->SetItemImage(nIdIncrement, maIncIndentControl.GetIcon());
-    mpTbxIndent_IncDec->SetItemImage(nIdDecrement, maDecIndentControl.GetIcon());
     mpTbxIndent_IncDec->SetItemImage(nIdHanging, maIndHang);
 
     mpTbxIndent_IncDec->SetSelectHdl(LINK( this, ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl ));
