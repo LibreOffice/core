@@ -25,7 +25,6 @@
 #include <vcl/settings.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/transfer.hxx>
-#include <tools/shl.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
@@ -882,7 +881,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
     get(m_pReplaceTLB, "tabview");
     m_pReplaceTLB->set_height_request(16 * GetTextHeight());
 
-    SfxModule *pMod = *reinterpret_cast<SfxModule**>(GetAppData(SHL_WRITER));
+    SfxModule *pMod = SfxApplication::GetModule(SfxToolsModule::Writer);
     bSWriter = pMod == SfxModule::GetActiveModule();
 
     LanguageTag aLanguageTag( eLastDialogLanguage );

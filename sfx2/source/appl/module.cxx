@@ -42,8 +42,6 @@
 #include "childwinimpl.hxx"
 #include <ctrlfactoryimpl.hxx>
 
-static std::vector<SfxModule*>* pModules=nullptr;
-
 class SfxModule_Impl
 {
 public:
@@ -117,8 +115,6 @@ SfxModule::SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pF
 void SfxModule::Construct_Impl()
 {
     SfxApplication *pApp = SfxGetpApp();
-    std::vector<SfxModule*> &rArr = GetModules_Impl();
-    rArr.push_back( this );
     pImpl = new SfxModule_Impl;
     pImpl->pSlotPool = new SfxSlotPool(&pApp->GetAppSlotPool_Impl());
 
@@ -134,21 +130,6 @@ void SfxModule::Construct_Impl()
 
 SfxModule::~SfxModule()
 {
-    if ( SfxGetpApp()->Get_Impl() )
-    {
-        // The module will be destroyed before the Deinitialize,
-        // so remove from the array
-        std::vector<SfxModule*>& rArr = GetModules_Impl();
-        for( sal_uInt16 nPos = rArr.size(); nPos--; )
-        {
-            if( rArr[ nPos ] == this )
-            {
-                rArr.erase( rArr.begin() + nPos );
-                break;
-            }
-        }
-    }
-
     delete pImpl;
     delete pResMgr;
 }
@@ -247,27 +228,6 @@ ImageList* SfxModule::GetImageList_Impl( bool bBig )
 VclPtr<SfxTabPage> SfxModule::CreateTabPage( sal_uInt16, vcl::Window*, const SfxItemSet& )
 {
     return VclPtr<SfxTabPage>();
-}
-
-std::vector<SfxModule*>& SfxModule::GetModules_Impl()
-{
-    if( !pModules )
-        pModules = new std::vector<SfxModule*>;
-    return *pModules;
-};
-
-void SfxModule::DestroyModules_Impl()
-{
-    if ( pModules )
-    {
-        for( sal_uInt16 nPos = pModules->size(); nPos--; )
-        {
-            SfxModule* pMod = (*pModules)[nPos];
-            delete pMod;
-        }
-        delete pModules;
-        pModules = nullptr;
-    }
 }
 
 void SfxModule::Invalidate( sal_uInt16 nId )

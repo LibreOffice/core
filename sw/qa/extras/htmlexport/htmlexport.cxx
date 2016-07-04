@@ -50,7 +50,6 @@ private:
 
         if (OString(filename) == "charborder.odt")
         {
-
             // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
             SwGlobals::ensure(); // make sure that SW_MOD() is not 0
             std::unique_ptr<Resetter> pResetter(new Resetter(

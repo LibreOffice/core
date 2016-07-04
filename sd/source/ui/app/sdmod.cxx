@@ -110,11 +110,6 @@ SdModule::~SdModule()
 
     mpResourceContainer.reset();
 
-    // Mark the module in the global AppData structure as deleted.
-    SdModule** ppShellPointer = reinterpret_cast<SdModule**>(GetAppData(SHL_DRAW));
-    if (ppShellPointer != nullptr)
-        (*ppShellPointer) = nullptr;
-
     delete mpErrorHdl;
     mpVirtualRefDevice.disposeAndClear();
 }
