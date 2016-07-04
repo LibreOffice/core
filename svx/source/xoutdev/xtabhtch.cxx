@@ -80,7 +80,7 @@ bool XHatchList::Create()
     return true;
 }
 
-Bitmap XHatchList::CreateBitmapForUI( long nIndex )
+Bitmap XHatchList::CreateBitmap( long nIndex, const Size& rSize) const
 {
     Bitmap aRetval;
     OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");
@@ -88,7 +88,6 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
     if(nIndex < Count())
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
 
         // prepare polygon geometry for rectangle
         const basegfx::B2DPolygon aRectangle(
@@ -184,6 +183,19 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
     }
 
     return aRetval;
+}
+
+Bitmap XHatchList::CreateBitmapForUI(long nIndex)
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+    Bitmap aRetVal = CreateBitmap(nIndex, rSize);
+    return aRetVal;
+}
+
+Bitmap XHatchList::GetBitmapForPreview(long nIndex, const Size& rSize)
+{
+    return CreateBitmap(nIndex, rSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
