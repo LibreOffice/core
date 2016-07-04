@@ -747,18 +747,18 @@ void LibPage::InsertLib()
     // filter
     OUString aTitle(IDEResId(RID_STR_BASIC).toString());
     OUString aFilter;
-    aFilter =  OUString("*.sbl;*.xlc;*.xlb")        // library files
-            + ";*.sdw;*.sxw;*.odt"        // text
-            + ";*.vor;*.stw;*.ott"        // text template
-            + ";*.sgl;*.sxg;*.odm"        // master document
-            + ";*.oth"                    // html document template
-            + ";*.sdc;*.sxc;*.ods"        // spreadsheet
-            + ";*.stc;*.ots"              // spreadsheet template
-            + ";*.sda;*.sxd;*.odg"        // drawing
-            + ";*.std;*.otg"              // drawing template
-            + ";*.sdd;*.sxi;*.odp"        // presentation
-            + ";*.sti;*.otp"              // presentation template
-            + ";*.sxm;*.odf" ;            // formula
+    aFilter = "*.sbl;*.xlc;*.xlb"        // library files
+              ";*.sdw;*.sxw;*.odt"       // text
+              ";*.vor;*.stw;*.ott"       // text template
+              ";*.sgl;*.sxg;*.odm"       // master document
+              ";*.oth"                   // html document template
+              ";*.sdc;*.sxc;*.ods"       // spreadsheet
+              ";*.stc;*.ots"             // spreadsheet template
+              ";*.sda;*.sxd;*.odg"       // drawing
+              ";*.std;*.otg"             // drawing template
+              ";*.sdd;*.sxi;*.odp"       // presentation
+              ";*.sti;*.otp"             // presentation template
+              ";*.sxm;*.odf";            // formula
     xFP->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
