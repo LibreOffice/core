@@ -30,6 +30,7 @@
 #include <svx/tabarea.hxx>
 #include <svx/hexcolorcontrol.hxx>
 #include <svx/SvxColorValueSet.hxx>
+#include <svx/SvxPresetListBox.hxx>
 
 class SdrModel;
 class SdrView;
@@ -478,13 +479,10 @@ private:
     VclPtr<ListBox>            m_pLbLineType;
     VclPtr<ColorLB>            m_pLbLineColor;
     VclPtr<ColorLB>            m_pLbBackgroundColor;
-    VclPtr<HatchingLB>         m_pLbHatchings;
+    VclPtr<SvxPresetListBox>   m_pHatchLB;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;
-    VclPtr<PushButton>         m_pBtnDelete;
-    VclPtr<PushButton>         m_pBtnLoad;
-    VclPtr<PushButton>         m_pBtnSave;
 
     const SfxItemSet&   m_rOutAttrs;
 
@@ -505,7 +503,8 @@ private:
 
     SfxMapUnit          m_ePoolUnit;
 
-    DECL_LINK_TYPED( ChangeHatchHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ChangeHatchHdl, ValueSet*, void );
+    void ChangeHatchHdl_Impl();
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifiedBackgroundHdl_Impl, ListBox&, void );
@@ -513,9 +512,8 @@ private:
     void ModifiedHdl_Impl(void*);
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickRenameHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
     long CheckChanges_Impl();
     sal_Int32 SearchHatchList(const OUString& rHatchName);

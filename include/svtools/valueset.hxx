@@ -350,6 +350,7 @@ public:
     }
     void                SaveValue() { mnSavedItemId = GetSelectItemId(); }
     sal_Int32           GetSavedValue() const { return mnSavedItemId; }
+    bool IsValueChangedFromSaved() { return mnSavedItemId != GetSelectItemId(); }
     bool IsItemSelected( sal_uInt16 nItemId ) const
     {
         return !mbNoSelection && (nItemId == mnSelItemId);
