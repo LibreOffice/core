@@ -37,20 +37,20 @@ class ImpGraphic
 
 private:
 
-    GDIMetaFile         maMetaFile;
-    BitmapEx            maEx;
-    ImpSwapInfo         maSwapInfo;
-    std::unique_ptr<Animation> mpAnimation;
-    GraphicReader*      mpContext;
+    GDIMetaFile                  maMetaFile;
+    BitmapEx                     maEx;
+    ImpSwapInfo                  maSwapInfo;
+    std::unique_ptr<Animation>   mpAnimation;
+    GraphicReader*               mpContext;
     std::shared_ptr<ImpSwapFile> mpSwapFile;
-    GfxLink*            mpGfxLink;
-    GraphicType         meType;
-    mutable sal_uLong   mnSizeBytes;
-    sal_uLong           mnRefCount;
-    bool                mbSwapOut;
-    bool                mbSwapUnderway;
-    bool                mbDummyContext;
-    SvgDataPtr          maSvgData;
+    std::unique_ptr<GfxLink>     mpGfxLink;
+    GraphicType                  meType;
+    mutable sal_uLong            mnSizeBytes;
+    sal_uLong                    mnRefCount;
+    bool                         mbSwapOut;
+    bool                         mbSwapUnderway;
+    bool                         mbDummyContext;
+    SvgDataPtr                   maSvgData;
     css::uno::Sequence<sal_Int8> maPdfData;
 
 private:
