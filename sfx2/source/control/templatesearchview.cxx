@@ -9,7 +9,7 @@
 
 #include "templatesearchview.hxx"
 #include "templatesearchviewitem.hxx"
-#include <sfx2/templateabstractview.hxx>
+#include <sfx2/templatelocalview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
@@ -227,7 +227,7 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     pItem->setHelpText(rSubtitle);
     pItem->setPath(rPath);
 
-    if(TemplateAbstractView::IsDefaultTemplate(rPath))
+    if(TemplateLocalView::IsDefaultTemplate(rPath))
         pItem->showDefaultIcon(true);
 
     ThumbnailView::AppendItem(pItem);

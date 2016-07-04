@@ -16,9 +16,11 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateviewitem.hxx>
+#include <sfx2/docfac.hxx>
 #include <svl/inettype.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/layout.hxx>
@@ -32,6 +34,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include "../doc/doc.hrc"
+#include "templateview.hrc"
 
 #define MNI_OPEN               1
 #define MNI_EDIT               2
@@ -42,8 +45,52 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 
+bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt)
+{
+    bool bRet = true;
+
+    if (filter == FILTER_APPLICATION::WRITER)
+    {
+        bRet = rExt == "ott" || rExt == "stw" || rExt == "oth" || rExt == "dot" || rExt == "dotx" || rExt == "otm";
+    }
+    else if (filter == FILTER_APPLICATION::CALC)
+    {
+        bRet = rExt == "ots" || rExt == "stc" || rExt == "xlt" || rExt == "xltm" || rExt == "xltx";
+    }
+    else if (filter == FILTER_APPLICATION::IMPRESS)
+    {
+        bRet = rExt == "otp" || rExt == "sti" || rExt == "pot" || rExt == "potm" || rExt == "potx";
+    }
+    else if (filter == FILTER_APPLICATION::DRAW)
+    {
+        bRet = rExt == "otg" || rExt == "std";
+    }
+
+    return bRet;
+}
+
+bool ViewFilter_Application::isValid (const OUString &rPath) const
+{
+    INetURLObject aUrl(rPath);
+    return isFilteredExtension(mApp, aUrl.getExtension());
+}
+
+bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
+{
+    const TemplateViewItem *pTempItem = dynamic_cast<const TemplateViewItem*>(pItem);
+    if (pTempItem)
+        return isValid(pTempItem->getPath());
+
+    return true;
+}
+
 TemplateLocalView::TemplateLocalView ( vcl::Window* pParent)
-    : TemplateAbstractView(pParent),
+    : ThumbnailView(pParent),
+      mnCurRegionId(0),
+      maSelectedItem(nullptr),
+      mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH),
+      mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT),
+      maPosition(0,0),
       mpDocTemplates(new SfxDocumentTemplates)
 {
 }
@@ -65,7 +112,7 @@ void TemplateLocalView::dispose()
     maAllTemplates.clear();
 
     delete mpDocTemplates;
-    TemplateAbstractView::dispose();
+    ThumbnailView::dispose();
 }
 
 void TemplateLocalView::Populate ()
@@ -100,7 +147,7 @@ void TemplateLocalView::Populate ()
             aProperties.aName = aName;
             aProperties.aPath = aURL;
             aProperties.aRegionName = aRegionName;
-            aProperties.aThumbnail = TemplateAbstractView::fetchThumbnail(aURL,
+            aProperties.aThumbnail = TemplateLocalView::fetchThumbnail(aURL,
                                                                           getThumbnailWidth(),
                                                                           getThumbnailHeight());
 
@@ -717,7 +764,7 @@ bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &
         aTemplate.nDocId = nDocId;
         aTemplate.nRegionId = nRegionId;
         aTemplate.aName = aPath;
-        aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,
+        aTemplate.aThumbnail = TemplateLocalView::fetchThumbnail(rPath,
                                                                     TEMPLATE_THUMBNAIL_MAX_WIDTH,
                                                                     TEMPLATE_THUMBNAIL_MAX_HEIGHT);
         aTemplate.aPath = rPath;
@@ -771,6 +818,263 @@ bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, const OUString& sNe
     }
 
     return mpDocTemplates->SetName( sNewTitle, nRegionId, nDocId );
+}
+
+void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected, bool bShowCategoryInTooltip)
+{
+    mItemList.clear();
+
+    std::vector<ThumbnailViewItem*> aItems(rTemplates.size());
+    for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
+    {
+        const TemplateItemProperties *pCur = &rTemplates[i];
+
+        TemplateViewItem *pChild;
+        if(isRegionSelected)
+            pChild = new TemplateViewItem(*this, pCur->nId);
+        else
+            pChild = new TemplateViewItem(*this, i+1);
+
+        pChild->mnDocId = pCur->nDocId;
+        pChild->mnRegionId = pCur->nRegionId;
+        pChild->maTitle = pCur->aName;
+        pChild->setPath(pCur->aPath);
+
+        if(!bShowCategoryInTooltip)
+            pChild->setHelpText(pCur->aName);
+        else
+        {
+            OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP).toString();
+            sHelpText = (sHelpText.replaceFirst("$1", pCur->aName)).replaceFirst("$2", pCur->aRegionName);
+            pChild->setHelpText(sHelpText);
+        }
+
+        pChild->maPreview1 = pCur->aThumbnail;
+
+        if(IsDefaultTemplate(pCur->aPath))
+            pChild->showDefaultIcon(true);
+
+        if ( pCur->aThumbnail.IsEmpty() )
+        {
+            // Use the default thumbnail if we have nothing else
+            pChild->maPreview1 = TemplateLocalView::getDefaultThumbnail(pCur->aPath);
+        }
+
+        aItems[i] = pChild;
+    }
+
+    updateItems(aItems);
+}
+
+void TemplateLocalView::updateThumbnailDimensions(long itemMaxSize)
+{
+    mnThumbnailWidth = itemMaxSize;
+    mnThumbnailHeight = itemMaxSize;
+}
+
+
+void TemplateLocalView::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    GrabFocus();
+    ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+void TemplateLocalView::Command( const CommandEvent& rCEvt )
+{
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
+    {
+        if(rCEvt.IsMouseEvent())
+        {
+            deselectItems();
+            size_t nPos = ImplGetItem(rCEvt.GetMousePosPixel());
+            Point aPosition (rCEvt.GetMousePosPixel());
+            maPosition = aPosition;
+            ThumbnailViewItem* pItem = ImplGetItem(nPos);
+            const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+
+            if(pViewItem)
+            {
+                maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+                maCreateContextMenuHdl.Call(pItem);
+            }
+        }
+        else
+        {
+            for (ThumbnailViewItem* pItem : mFilteredItemList)
+            {
+                //create context menu for the first selected item
+                if (pItem->isSelected())
+                {
+                    deselectItems();
+                    pItem->setSelection(true);
+                    maItemStateHdl.Call(pItem);
+                    Rectangle aRect = pItem->getDrawArea();
+                    maPosition = aRect.Center();
+                    maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+                    maCreateContextMenuHdl.Call(pItem);
+                    break;
+                }
+            }
+        }
+    }
+
+    ThumbnailView::Command(rCEvt);
+}
+
+void TemplateLocalView::KeyInput( const KeyEvent& rKEvt )
+{
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    if(aKeyCode == ( KEY_MOD1 | KEY_A ) )
+    {
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
+        {
+            if (!pItem->isSelected())
+            {
+                pItem->setSelection(true);
+                maItemStateHdl.Call(pItem);
+            }
+        }
+
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
+        return;
+    }
+    else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+
+        if ( aQueryDlg->Execute() != RET_YES )
+            return;
+
+        //copy to avoid changing filtered item list during deletion
+        ThumbnailValueItemList mFilteredItemListCopy = mFilteredItemList;
+
+        for (ThumbnailViewItem* pItem : mFilteredItemListCopy)
+        {
+            if (pItem->isSelected())
+            {
+                maDeleteTemplateHdl.Call(pItem);
+            }
+        }
+        reload();
+    }
+
+    ThumbnailView::KeyInput(rKEvt);
+}
+
+
+void TemplateLocalView::setOpenRegionHdl(const Link<void*,void> &rLink)
+{
+    maOpenRegionHdl = rLink;
+}
+
+void TemplateLocalView::setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maCreateContextMenuHdl = rLink;
+}
+
+void TemplateLocalView::setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maOpenTemplateHdl = rLink;
+}
+
+void TemplateLocalView::setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maEditTemplateHdl = rLink;
+}
+
+void TemplateLocalView::setDeleteTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maDeleteTemplateHdl = rLink;
+}
+
+void TemplateLocalView::setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink)
+{
+    maDefaultTemplateHdl = rLink;
+}
+
+BitmapEx TemplateLocalView::scaleImg (const BitmapEx &rImg, long width, long height)
+{
+    BitmapEx aImg = rImg;
+
+    if (!rImg.IsEmpty())
+    {
+        Size aSize = rImg.GetSizePixel();
+
+        if (aSize.Width() == 0)
+            aSize.Width() = 1;
+
+        if (aSize.Height() == 0)
+            aSize.Height() = 1;
+
+        // make the picture fit the given width/height constraints
+        double nRatio = std::min(double(width)/double(aSize.Width()), double(height)/double(aSize.Height()));
+
+        aImg.Scale(Size(aSize.Width() * nRatio, aSize.Height() * nRatio));
+    }
+
+    return aImg;
+}
+
+bool TemplateLocalView::IsDefaultTemplate(const OUString& rPath)
+{
+    SvtModuleOptions aModOpt;
+    const css::uno::Sequence<OUString> &aServiceNames = aModOpt.GetAllServiceNames();
+
+    for( sal_Int32 i=0, nCount = aServiceNames.getLength(); i < nCount; ++i )
+    {
+        const OUString defaultPath = SfxObjectFactory::GetStandardTemplate( aServiceNames[i] );
+        if(defaultPath.match(rPath))
+            return true;
+    }
+
+    return false;
+}
+
+void TemplateLocalView::RemoveDefaultTemplateIcon(const OUString& rPath)
+{
+    for (ThumbnailViewItem* pItem : mItemList)
+    {
+        TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
+        if (pViewItem && pViewItem->getPath().match(rPath))
+        {
+            pViewItem->showDefaultIcon(false);
+            Invalidate();
+            return;
+        }
+    }
+}
+
+BitmapEx TemplateLocalView::getDefaultThumbnail( const OUString& rPath )
+{
+    BitmapEx aImg;
+    INetURLObject aUrl(rPath);
+    OUString aExt = aUrl.getExtension();
+
+    if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::WRITER, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_TEXT ) );
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::CALC, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_SHEET ) );
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::IMPRESS, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_PRESENTATION ) );
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::DRAW, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_DRAWING ) );
+
+    return aImg;
+}
+
+BitmapEx TemplateLocalView::fetchThumbnail (const OUString &msURL, long width, long height)
+{
+    return TemplateLocalView::scaleImg(ThumbnailView::readThumbnail(msURL), width, height);
+}
+
+void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
+{
+    TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
+
+    if( pViewItem )
+        maOpenTemplateHdl.Call(pViewItem);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
