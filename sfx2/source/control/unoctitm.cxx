@@ -1066,7 +1066,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
 
         if (aEvent.IsEnabled && (aEvent.State >>= aPoint))
         {
-            aBuffer.append(OUString::number(aPoint.X) + OUString(" / ") + OUString::number(aPoint.Y));
+            aBuffer.append(OUString::number(aPoint.X) + " / " + OUString::number(aPoint.Y));
         }
     }
     else if (aEvent.FeatureURL.Path == "StatusBarFunc" ||
@@ -1076,7 +1076,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
 
         if (aEvent.IsEnabled && (aEvent.State >>= aSize))
         {
-            aBuffer.append(OUString::number(aSize.Width) + OUString(" x ") + OUString::number(aSize.Height));
+            aBuffer.append(OUString::number(aSize.Width) + " x " + OUString::number(aSize.Height));
         }
     }
     else
