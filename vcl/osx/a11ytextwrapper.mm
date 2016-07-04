@@ -272,7 +272,7 @@ using namespace ::com::sun::star::uno;
         @try {
             rtfData = [ attrString RTFFromRange: [ range rangeValue ] documentAttributes: @{NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType} ];
         } @catch ( NSException * e) {
-            // emtpy
+            // empty
         }
     }
     return rtfData;

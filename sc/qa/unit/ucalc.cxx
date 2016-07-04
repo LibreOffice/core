@@ -1630,7 +1630,7 @@ void Test::testMatrix()
     CPPUNIT_ASSERT_MESSAGE("incorrect OR result", pMat->Or());
     CPPUNIT_ASSERT_MESSAGE("incorrect AND result", pMat->And());
 
-    // Now test the emtpy matrix type.
+    // Now test the empty matrix type.
     pMat = new ScFullMatrix(10, 20);
     pMat->GetDimensions(nC, nR);
     CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 10 && nR == 20);

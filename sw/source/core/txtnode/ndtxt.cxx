@@ -4186,7 +4186,7 @@ namespace {
     //     is set and changed after the attributes have been set
     // (6) Notify list tree, if count in list - RES_PARATR_LIST_ISCOUNTED - is set
     //     and changed after the attributes have been set
-    // (7) Set or Reset emtpy list style due to changed outline level - RES_PARATR_OUTLINELEVEL.
+    // (7) Set or Reset empty list style due to changed outline level - RES_PARATR_OUTLINELEVEL.
     class HandleSetAttrAtTextNode
     {
         public:

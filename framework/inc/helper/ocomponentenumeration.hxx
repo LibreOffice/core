@@ -95,7 +95,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper< css::container::X
                         sal_False = other way
 
             @onerror    sal_False<BR>
-                        (List is emtpy and there no accessible elements ...)
+                        (List is empty and there no accessible elements ...)
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL hasMoreElements() throw( css::uno::RuntimeException, std::exception ) override;

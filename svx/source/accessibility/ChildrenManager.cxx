@@ -45,7 +45,7 @@ ChildrenManager::~ChildrenManager()
 {
     mpImpl->dispose();
 
-    // emtpy
+    // empty
     OSL_TRACE ("~ChildrenManager");
 }
 

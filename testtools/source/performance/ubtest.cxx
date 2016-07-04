@@ -786,7 +786,7 @@ static void benchmark(
     while (i--)
         xBench->setString( aDummyString );
     tEnd = getSystemTicks();
-    rSheet.insert( "6c: setString() call (emtpy)", nLoop, tEnd - tStart );
+    rSheet.insert( "6c: setString() call (empty)", nLoop, tEnd - tStart );
     i = nLoop;
     tStart = getSystemTicks();
     while (i--)

@@ -1869,7 +1869,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
                 pRow = static_cast<const SwLayoutFrame*>(pRow->GetNext());
 
             // #i31976#
-            // A follow flow row may contain emtpy cells. These are not
+            // A follow flow row may contain empty cells. These are not
             // considered by FirstCell(). Therefore we have to find
             // the first cell manually:
             const SwFrame* pTmpCell = nullptr;

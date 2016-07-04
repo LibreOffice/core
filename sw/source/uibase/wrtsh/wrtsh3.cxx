@@ -166,7 +166,7 @@ sal_uInt16 SwWrtShell::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCa
 }
 
     // If a util::URL-Button is selected, return its util::URL
-    // otherwise an emtpy string.
+    // otherwise an empty string.
 bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
 {
     bool bRet = false;

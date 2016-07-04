@@ -43,7 +43,7 @@ class SwPortionHandler
 {
 public:
 
-    SwPortionHandler() {}           /// (emtpy) constructor
+    SwPortionHandler() {}           /// (empty) constructor
 
     virtual ~SwPortionHandler() {}  /// (empty) destructor
 

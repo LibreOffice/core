@@ -44,7 +44,7 @@ import com.sun.star.ui.dialogs.XFilePickerControlAccess;
 *    FilePicker dialog. </li>
 *  <li> <code>'XFilePickerControlAccess.ControlValue'</code> (of type
 *    <code>Object</code>) <b>optional</b> (but mostly desirable
-*    since the control has emtpy initial value):
+*    since the control has empty initial value):
 *    the value which can set for the control . </li>
 * <ul> <p>
 * Test is <b> NOT </b> multithread compliant. <p>
