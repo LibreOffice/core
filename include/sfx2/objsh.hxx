@@ -199,7 +199,7 @@ template<class T> bool checkSfxObjectShell(const SfxObjectShell* pShell)
 
 class SFX2_DLLPUBLIC SfxObjectShell :
     public SfxShell, virtual public SotObject,
-    public ::comphelper::IEmbeddedHelper, public ::sfx2::IXmlIdRegistrySupplier
+    public ::comphelper::IEmbeddedHelper
 {
 friend struct ModifyBlocker_Impl;
 friend class SfxObjectShellLock;
@@ -720,6 +720,9 @@ public:
     SAL_DLLPRIVATE void CancelCheckOut( );
     SAL_DLLPRIVATE void CheckIn( );
     SAL_DLLPRIVATE css::uno::Sequence< css::document::CmisVersion > GetCmisVersions();
+
+    /** override this if you have a XmlIdRegistry. */
+    virtual const sfx2::IXmlIdRegistry* GetXmlIdRegistry() const { return nullptr; }
 };
 
 #define SFX_GLOBAL_CLASSID \

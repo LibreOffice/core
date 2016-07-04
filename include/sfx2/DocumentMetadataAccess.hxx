@@ -44,6 +44,7 @@
 namespace com { namespace sun { namespace star { namespace embed {
     class XStorage;
 } } } }
+class SfxObjectShell;
 
 namespace sfx2 {
 
@@ -65,9 +66,7 @@ createBaseURI(
     OUString const & i_rSubDocument = OUString());
 
 
-class IXmlIdRegistrySupplier;
 struct DocumentMetadataAccess_Impl;
-
 
 class SFX2_DLLPUBLIC DocumentMetadataAccess :
     public ::cppu::WeakImplHelper1< css::rdf::XDocumentMetadataAccess>
@@ -76,12 +75,12 @@ class SFX2_DLLPUBLIC DocumentMetadataAccess :
     DocumentMetadataAccess& operator=( const DocumentMetadataAccess& ) = delete;
 public:
     explicit DocumentMetadataAccess(css::uno::Reference< css::uno::XComponentContext > const & i_xContext,
-                IXmlIdRegistrySupplier const & i_rRegistrySupplier,
+                SfxObjectShell const & i_rRegistrySupplier,
                 OUString const & i_rBaseURI);
     // N.B.: in contrast to previous, this constructor does _not_ initialize!
     //       caller must immediately call loadFromStorage/Medium!
     explicit DocumentMetadataAccess(css::uno::Reference< css::uno::XComponentContext > const & i_xContext,
-                IXmlIdRegistrySupplier const & i_rRegistrySupplier);
+                SfxObjectShell const & i_rRegistrySupplier);
     virtual ~DocumentMetadataAccess();
 
     // css::rdf::XNode:

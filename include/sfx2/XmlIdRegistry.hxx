@@ -58,24 +58,6 @@ public:
 
 };
 
-/** supplier interface for the registry.
-
-    This indirection is unfortunately necessary, because the SwDocShell
-    is not always connected to a SwDoc, so we cannot guarantee that a
-    registry given to a SfxBaseModel/DocumentMetadataAccess remains valid;
-    it has to be retrieved from this supplier interface on access.
- */
-class SFX2_DLLPUBLIC IXmlIdRegistrySupplier
-{
-
-public:
-    virtual ~IXmlIdRegistrySupplier() { }
-
-    /** override this if you have a XmlIdRegistry. */
-    virtual const IXmlIdRegistry* GetXmlIdRegistry() const { return nullptr; }
-
-};
-
 } // namespace sfx2
 
 #endif // INCLUDED_SFX2_XMLIDREGISTRY_HXX
