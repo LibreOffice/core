@@ -1619,6 +1619,16 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 {
     ScDocShellModificator aModificator( rDocShell );
 
+    if (rDocShell.GetDocument().GetChangeTrack() &&
+            ((eCmd == INS_CELLSDOWN  && (rRange.aStart.Col() != 0 || rRange.aEnd.Col() != MAXCOL)) ||
+             (eCmd == INS_CELLSRIGHT && (rRange.aStart.Row() != 0 || rRange.aEnd.Row() != MAXROW))))
+    {
+        // We should not reach this via UI disabled slots.
+        assert(bApi);
+        SAL_WARN("sc.ui","ScDocFunc::InsertCells - no change-tracking of partial cell shift");
+        return false;
+    }
+
     ScRange aTargetRange( rRange );
 
     // If insertion is for full cols/rows and after the current
@@ -2080,6 +2090,16 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                              bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
+
+    if (rDocShell.GetDocument().GetChangeTrack() &&
+            ((eCmd == DEL_CELLSUP   && (rRange.aStart.Col() != 0 || rRange.aEnd.Col() != MAXCOL)) ||
+             (eCmd == DEL_CELLSLEFT && (rRange.aStart.Row() != 0 || rRange.aEnd.Row() != MAXROW))))
+    {
+        // We should not reach this via UI disabled slots.
+        assert(bApi);
+        SAL_WARN("sc.ui","ScDocFunc::DeleteCells - no change-tracking of partial cell shift");
+        return false;
+    }
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
