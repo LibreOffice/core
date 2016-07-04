@@ -81,9 +81,7 @@ namespace SwGlobals
 
 SwDLL::SwDLL()
 {
-    // the SdModule must be created
-    SwModule** ppShlPtr = reinterpret_cast<SwModule**>(GetAppData(SHL_WRITER));
-    if ( *ppShlPtr )
+    if ( GetAppData(ToolsModule::Writer) )    // Module already active
         return;
 
     std::unique_ptr<SvtModuleOptions> xOpt;
@@ -100,7 +98,6 @@ SwDLL::SwDLL()
     SfxObjectFactory* pWDocFact = &SwWebDocShell::Factory();
 
     SwModule* pModule = new SwModule( pWDocFact, pDocFact, pGlobDocFact );
-    *ppShlPtr = pModule;
 
     pWDocFact->SetDocumentServiceName("com.sun.star.text.WebDocument");
 

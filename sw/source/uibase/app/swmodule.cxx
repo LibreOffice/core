@@ -164,6 +164,8 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     m_pDragDrop( nullptr ),
     m_pXSelection( nullptr )
 {
+    SetAppData(ToolsModule::Writer, this);
+
     SetName( "StarWriter" );
     pSwResMgr = GetResMgr();
     SvxErrorHandler::ensure();
@@ -213,6 +215,8 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
 
 SwModule::~SwModule()
 {
+    SetAppData(ToolsModule::Writer, nullptr);
+
     delete m_pErrorHandler;
     EndListening( *SfxGetpApp() );
 }
