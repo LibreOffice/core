@@ -286,6 +286,14 @@ public:
                                                                const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory,
                                                                bool bFirst);
 
+    OUString GetPageStyleName( bool bFirstPage = false ) { return bFirstPage ? m_sFirstPageStyleName : m_sFollowPageStyleName; }
+    void InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl )
+        throw ( css::beans::UnknownPropertyException,
+                css::beans::PropertyVetoException,
+                css::lang::IllegalArgumentException,
+                css::lang::WrappedTargetException,
+                css::uno::RuntimeException, std::exception);
+
     void SetBorder(BorderPosition ePos, sal_Int32 nLineDistance, const css::table::BorderLine2& rBorderLine, bool bShadow);
     void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
 
