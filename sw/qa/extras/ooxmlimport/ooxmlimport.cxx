@@ -438,6 +438,11 @@ are on page 2 and page 3
     CPPUNIT_ASSERT_EQUAL( OUString("two"), parseDump("/root/page[3]/body/txt/text()") );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf95367_inheritFollowStyle, "tdf95367_inheritFollowStyle.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("header"),  parseDump("/root/page[2]/header/txt/text()"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN652364, "n652364.docx")
 {
 /*
