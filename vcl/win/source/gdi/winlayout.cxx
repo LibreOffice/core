@@ -370,6 +370,7 @@ bool ImplWinFontEntry::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex
 
     if (!pTxt->BindFont(hDC))
     {
+        SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by Direct Write.");
         SelectObject(hDC, hOrigFont);
         DeleteDC(hDC);
         return false;
@@ -399,6 +400,11 @@ bool ImplWinFontEntry::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex
     // Fetch the ink boxes and calculate the size of the atlas.
     if (!bRealGlyphIndices)
     {
+        if (!pTxt->GetFontFace())
+        {
+            SAL_WARN("vcl.gdi", "Font face is not available.");
+            return false;
+        }
         if (!SUCCEEDED(pTxt->GetFontFace()->GetGlyphIndices(aCodePointsOrGlyphIndices.data(), aCodePointsOrGlyphIndices.size(), aGlyphIndices.data())))
         {
             pTxt->ReleaseFont();
@@ -409,6 +415,7 @@ bool ImplWinFontEntry::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex
     {
         aGlyphIndices[0] = aCodePointsOrGlyphIndices[0];
     }
+
     Rectangle bounds(0, 0, 0, 0);
     auto aInkBoxes = pTxt->GetGlyphInkBoxes(aGlyphIndices.data(), aGlyphIndices.data() + 1);
     for (auto &box : aInkBoxes)
