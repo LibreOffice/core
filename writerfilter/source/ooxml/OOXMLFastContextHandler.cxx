@@ -1951,16 +1951,16 @@ Token_t OOXMLFastContextHandlerWrapper::getToken() const
 
 
 /*
-  class OOXMLFastContextHandlerLinear
+  class OOXMLFastContextHandlerMath
  */
 
-OOXMLFastContextHandlerLinear::OOXMLFastContextHandlerLinear(OOXMLFastContextHandler* pContext)
+OOXMLFastContextHandlerMath::OOXMLFastContextHandlerMath(OOXMLFastContextHandler* pContext)
     : OOXMLFastContextHandlerProperties(pContext)
     , depthCount( 0 )
 {
 }
 
-void OOXMLFastContextHandlerLinear::lcl_startFastElement(Token_t Element,
+void OOXMLFastContextHandlerMath::lcl_startFastElement(Token_t Element,
     const uno::Reference< xml::sax::XFastAttributeList >& Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
@@ -1968,7 +1968,7 @@ void OOXMLFastContextHandlerLinear::lcl_startFastElement(Token_t Element,
     ++depthCount;
 }
 
-void OOXMLFastContextHandlerLinear::lcl_endFastElement(Token_t Element)
+void OOXMLFastContextHandlerMath::lcl_endFastElement(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     buffer.appendClosingTag( Element );
@@ -1977,7 +1977,7 @@ void OOXMLFastContextHandlerLinear::lcl_endFastElement(Token_t Element)
 }
 
 uno::Reference< xml::sax::XFastContextHandler >
-OOXMLFastContextHandlerLinear::lcl_createFastChildContext(Token_t,
+OOXMLFastContextHandlerMath::lcl_createFastChildContext(Token_t,
     const uno::Reference< xml::sax::XFastAttributeList >&)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
@@ -1986,19 +1986,10 @@ OOXMLFastContextHandlerLinear::lcl_createFastChildContext(Token_t,
     return xContextHandler;
 }
 
-void OOXMLFastContextHandlerLinear::lcl_characters(const OUString& aChars)
+void OOXMLFastContextHandlerMath::lcl_characters(const OUString& aChars)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     buffer.appendCharacters( aChars );
-}
-
-/*
-  class OOXMLFastContextHandlerLinear
- */
-
-OOXMLFastContextHandlerMath::OOXMLFastContextHandlerMath(OOXMLFastContextHandler* pContext)
-    : OOXMLFastContextHandlerLinear(pContext)
-{
 }
 
 void OOXMLFastContextHandlerMath::process()

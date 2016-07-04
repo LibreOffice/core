@@ -552,21 +552,21 @@ private:
 
  @since 3.5
 */
-class OOXMLFastContextHandlerLinear: public OOXMLFastContextHandlerProperties
+class OOXMLFastContextHandlerMath: public OOXMLFastContextHandlerProperties
 {
 public:
-    explicit OOXMLFastContextHandlerLinear(OOXMLFastContextHandler * pContext);
+    explicit OOXMLFastContextHandlerMath(OOXMLFastContextHandler * pContext);
     /**
      Return the type of the class, as written in model.xml .
      */
-    virtual std::string getType() const override = 0;
+    virtual std::string getType() const override { return "Math"; }
 
 protected:
     /**
      Called when the tokens for the element, its content and sub-elements have been linearized
      and should be processed. The data member @ref buffer contains the converted data.
     */
-    virtual void process() = 0;
+    void process();
 
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
@@ -579,20 +579,9 @@ protected:
 
     virtual void lcl_characters(const OUString & aChars) throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    // should be private, but not much point in making deep copies of it
-    oox::formulaimport::XmlStreamBuilder buffer;
-
 private:
+    oox::formulaimport::XmlStreamBuilder buffer;
     int depthCount;
-};
-
-class OOXMLFastContextHandlerMath: public OOXMLFastContextHandlerLinear
-{
-public:
-    explicit OOXMLFastContextHandlerMath(OOXMLFastContextHandler * pContext);
-    virtual std::string getType() const override { return "Math"; }
-protected:
-    virtual void process() override;
 };
 
 }}
