@@ -31,9 +31,7 @@ namespace sdr
     namespace event
     {
         class BaseEvent;
-        class EventHandler;
-
-        typedef ::std::vector< BaseEvent* > BaseEventVector;
+        class TimerEventHandler;
     } // end of namespace event
 } // end of namespace sdr
 
@@ -44,10 +42,10 @@ namespace sdr
         class BaseEvent
         {
             // the EventHandler this event is registered at
-            EventHandler& mrEventHandler;
+            TimerEventHandler& mrEventHandler;
 
         public:
-            BaseEvent(EventHandler& rEventHandler);
+            BaseEvent(TimerEventHandler& rEventHandler);
 
             virtual ~BaseEvent();
 
@@ -61,9 +59,9 @@ namespace sdr
 {
     namespace event
     {
-        class EventHandler
+        class TimerEventHandler : public Idle
         {
-            BaseEventVector maVector;
+            ::std::vector< BaseEvent* >  maVector;
 
             // to allow BaseEvents to use the add/remove functionality
             friend class BaseEvent;
@@ -77,28 +75,13 @@ namespace sdr
             BaseEvent* GetEvent();
 
         public:
-            EventHandler();
-
-            virtual ~EventHandler();
+            TimerEventHandler();
+            ~TimerEventHandler() override;
 
             // Trigger and consume the events
             void ExecuteEvents();
 
             bool IsEmpty() const;
-        };
-    } // end of namespace event
-} // end of namespace sdr
-
-namespace sdr
-{
-    namespace event
-    {
-        class TimerEventHandler : public EventHandler, public Idle
-        {
-        public:
-            TimerEventHandler();
-
-            virtual ~TimerEventHandler();
 
             // The timer when it is triggered; from class Timer
             virtual void Invoke() override;
