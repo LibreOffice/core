@@ -1090,6 +1090,68 @@ bool SectionPropertyMap::FloatingTableConversion(FloatingTableInfo& rInfo)
     return false;
 }
 
+void SectionPropertyMap::InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl )
+throw ( css::beans::UnknownPropertyException,
+        css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException, std::exception )
+{
+    // don't mess with even/odd headers.
+    // just replicate what was done before to avoid causing any regressions
+    if( rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders() )
+    {
+        if( m_nBreakType != static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_nextColumn) )
+        {
+            OUString aName = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
+            if( !aName.isEmpty() )
+            {
+                HandleMarginsHeaderFooter( /*bFirstPage=*/false, rDM_Impl );
+                if( m_bTitlePage )
+                    HandleMarginsHeaderFooter( /*bFirstPage=*/true, rDM_Impl );
+                uno::Reference<beans::XPropertySet> xPageStyle( rDM_Impl.GetPageStyles()->getByName(aName), uno::UNO_QUERY_THROW );
+                if( rDM_Impl.IsNewDoc() )
+                {
+                    ApplyProperties_( xPageStyle );
+                    if( m_bTitlePage && m_aFollowPageStyle.is() )
+                        ApplyProperties_( m_aFollowPageStyle );
+                }
+            }
+        }
+        return;
+    }
+
+    const uno::Reference< container::XNameContainer >& xPageStyles = rDM_Impl.GetPageStyles();
+    const uno::Reference < lang::XMultiServiceFactory >& xTextFactory = rDM_Impl.GetTextFactory();
+
+    // if no new styles have been created for this section, inherit from the previous section,
+    // otherwise apply this section's settings to the new style.
+    SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext();
+    if( pLastContext && m_sFirstPageStyleName.isEmpty() )
+        m_sFirstPageStyleName =  pLastContext->GetPageStyleName( /*bFirst=*/true );
+    else
+    {
+        HandleMarginsHeaderFooter( /*bFirst=*/true, rDM_Impl );
+        GetPageStyle( xPageStyles, xTextFactory, /*bFirst=*/true );
+        if( rDM_Impl.IsNewDoc() && m_aFirstPageStyle.is() )
+            ApplyProperties_( m_aFirstPageStyle );
+    }
+
+    if( pLastContext && m_sFollowPageStyleName.isEmpty() )
+        m_sFollowPageStyleName = pLastContext->GetPageStyleName();
+    else
+    {
+        HandleMarginsHeaderFooter( /*bFirst=*/false, rDM_Impl );
+        GetPageStyle( xPageStyles, xTextFactory, /*bFirst=*/false );
+        if( rDM_Impl.IsNewDoc() && m_aFollowPageStyle.is() )
+            ApplyProperties_( m_aFollowPageStyle );
+    }
+
+    GetPageStyle( xPageStyles, xTextFactory, /*bFirst=*/true );
+    // Chain m_aFollowPageStyle to be after m_aFirstPageStyle
+    m_aFirstPageStyle->setPropertyValue( "FollowStyle", uno::makeAny(m_sFollowPageStyleName) );
+}
+
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
     // Text area width is known at the end of a section: decide if tables should be converted or not.
@@ -1138,35 +1200,20 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         //todo: insert a section or access the already inserted section
         uno::Reference< beans::XPropertySet > xSection =
                                     rDM_Impl.appendTextSectionAfter( m_xStartingRange );
-        if( m_nColumnCount > 0 && xSection.is())
+        if( m_nColumnCount > 0 && xSection.is() )
             ApplyColumnProperties( xSection, rDM_Impl );
-        uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
-        if (xRangeProperties.is())
-        {
-            OUString aName = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
-            if (!aName.isEmpty())
-            {
-                try
-                {
-                    if( m_bIsFirstSection )
-                        xRangeProperties->setPropertyValue(getPropertyName(PROP_PAGE_DESC_NAME), uno::makeAny(aName));
 
-                    uno::Reference<beans::XPropertySet> xPageStyle (rDM_Impl.GetPageStyles()->getByName(aName), uno::UNO_QUERY_THROW);
-                    HandleMarginsHeaderFooter(false, rDM_Impl);
-                    if( m_bTitlePage )
-                        HandleMarginsHeaderFooter(true, rDM_Impl);
-                    if (rDM_Impl.IsNewDoc())
-                    {
-                        ApplyProperties_(xPageStyle);
-                        if( m_bTitlePage && m_aFollowPageStyle.is() )
-                            ApplyProperties_(m_aFollowPageStyle);
-                    }
-                }
-                catch( const uno::Exception& )
-                {
-                    SAL_WARN("writerfilter", "failed to set PageDescName!");
-                }
-            }
+        try
+        {
+            InheritOrFinalizePageStyles( rDM_Impl );
+            OUString aName = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
+            uno::Reference<beans::XPropertySet> xRangeProperties( lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange) );
+            if ( m_bIsFirstSection && !aName.isEmpty() && xRangeProperties.is() )
+                xRangeProperties->setPropertyValue( getPropertyName(PROP_PAGE_DESC_NAME), uno::makeAny(aName) );
+        }
+        catch( const uno::Exception& )
+        {
+            SAL_WARN("writerfilter", "failed to set PageDescName!");
         }
     }
     // If the section is of type "New column" (0x01), then simply insert a column break.
@@ -1174,17 +1221,22 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // seems to be handled like a page break by MSO.
     else if(m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_nextColumn) && m_nColumnCount > 0 )
     {
-        uno::Reference< beans::XPropertySet > xRangeProperties;
-        if( m_xStartingRange.is() )
+        try
         {
-            xRangeProperties.set( m_xStartingRange, uno::UNO_QUERY_THROW );
+            InheritOrFinalizePageStyles( rDM_Impl );
+            uno::Reference< beans::XPropertySet > xRangeProperties;
+            if( m_xStartingRange.is() )
+            {
+                xRangeProperties.set( m_xStartingRange, uno::UNO_QUERY_THROW );
+            }
+            else
+            {
+                //set the start value at the beginning of the document
+                xRangeProperties.set( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
+            }
+            xRangeProperties->setPropertyValue( getPropertyName(PROP_BREAK_TYPE), uno::makeAny(style::BreakType_COLUMN_BEFORE) );
         }
-        else
-        {
-            //set the start value at the beginning of the document
-            xRangeProperties.set( rDM_Impl.GetTextDocument()->getText()->getStart(), uno::UNO_QUERY_THROW );
-        }
-        xRangeProperties->setPropertyValue(getPropertyName(PROP_BREAK_TYPE), uno::makeAny(style::BreakType_COLUMN_BEFORE));
+        catch( const uno::Exception& ) {}
     }
     else
     {
