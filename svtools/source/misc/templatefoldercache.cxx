@@ -254,22 +254,9 @@ namespace svt
     };
 
 
-    /// functor which allows storing a string
-    struct StoreString
-            :public ::std::unary_function< OUString, void >
-            ,public StorageHelper
-    {
-        explicit StoreString( SvStream& _rStorage ) : StorageHelper( _rStorage ) { }
-
-        void operator() ( const OUString& _rString ) const
-        {
-            m_rStorage.WriteUniOrByteString( _rString, m_rStorage.GetStreamCharSet() );
-        }
-    };
-
     struct StoreContentURL
             :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
-            ,public StoreString
+            ,public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
@@ -277,7 +264,7 @@ namespace svt
                          const uno::Reference<
                             util::XOfficeInstallationDirectories > &
                                 xOfficeInstDirs )
-        : StoreString( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
+        : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
 
         void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
@@ -286,7 +273,7 @@ namespace svt
             // #116281# Keep office installtion relocatable. Never store
             // any direct references to office installation directory.
             sURL = m_xOfficeInstDirs->makeRelocatableURL( sURL );
-            StoreString::operator() ( sURL );
+            m_rStorage.WriteUniOrByteString( sURL, m_rStorage.GetStreamCharSet() );
         }
     };
 
