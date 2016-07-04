@@ -1776,7 +1776,14 @@ void ScInterpreter::ScFV()
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
     if (nParamCount == 5)
+    {
         nFlag = GetDouble();
+        if ( !( nFlag == 0 || nFlag == 1 ) )
+        {
+            PushIllegalArgument();
+            return;
+        }
+    }
     if (nParamCount >= 4)
         nBw   = GetDouble();
     nRmz  = GetDouble();
