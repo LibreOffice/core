@@ -44,6 +44,7 @@
 #include "com/sun/star/util/XCloseBroadcaster.hpp"
 
 #include "tdoc_docmgr.hxx"
+#include "tdoc_provider.hxx"
 
 using namespace com::sun::star;
 using namespace tdoc_ucp;
@@ -92,7 +93,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
 
 OfficeDocumentsManager::OfficeDocumentsManager(
             const uno::Reference< uno::XComponentContext > & rxContext,
-            OfficeDocumentsEventListener * pDocEventListener )
+            ContentProvider * pDocEventListener )
 : m_xContext( rxContext ),
   m_xDocEvtNotifier( frame::theGlobalEventBroadcaster::get( rxContext ) ),
   m_pDocEventListener( pDocEventListener ),
