@@ -43,34 +43,26 @@
 
 using namespace css;
 
-#if !defined(WNT) && !defined(MACOSX)
 static const char* DATA_DIRECTORY = "/sc/qa/unit/screenshots/data/";
-#endif
 
 class ScScreenshotTest : public ScreenshotTest
 {
 public:
     ScScreenshotTest();
 
-#if !defined(WNT) && !defined(MACOSX)
     void testOpeningModalDialogs();
     //void testOpeningModelessDialogs();
-#endif
 
     CPPUNIT_TEST_SUITE(ScScreenshotTest);
-#if !defined(WNT) && !defined(MACOSX)
     CPPUNIT_TEST(testOpeningModalDialogs);
     //CPPUNIT_TEST(testOpeningModelessDialogs);
-#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-#if !defined(WNT) && !defined(MACOSX)
     void initializeWithDoc(const char* pName);
 
     VclAbstractDialog* createDialogByID( sal_uInt32 nID);
 
-#endif
 
     uno::Reference<lang::XComponent> mxComponent;
     SfxObjectShell* pFoundShell;
@@ -86,7 +78,6 @@ ScScreenshotTest::ScScreenshotTest()
 {
 }
 
-#if !defined(WNT) && !defined(MACOSX)
 void ScScreenshotTest::initializeWithDoc(const char* pName)
 {
     if (mxComponent.is())
@@ -257,8 +248,6 @@ void ScScreenshotTest::testOpeningModalDialogs()
         dumpDialogToPath( *pDialog );
     }
 }
-
-#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScScreenshotTest);
 
