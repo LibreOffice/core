@@ -390,7 +390,6 @@ merge tdoc_ucp::OfficeDocumentsEventListener with tdoc_ucp::ContentProvider
 merge toolkit::ScrollableInterface with toolkit::ScrollableWrapper
 merge unographic::GraphicTransformer with unographic::Graphic
 merge vcl::DeletionNotifier with SalFrame
-merge vcl::DisplayConnectionDispatch with vcl::DisplayConnection
 merge vcl::ExtOutDevData with vcl::PDFExtOutDevData
 merge vcl::SolarThreadExecutor with vcl::solarthread::detail::GenericSolarThreadExecutor
 merge vclcanvas::DeviceHelper with vclcanvas::SpriteDeviceHelper

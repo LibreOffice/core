@@ -153,8 +153,7 @@ public:
     void                    SetEventCallback( rtl::Reference< vcl::DisplayConnectionDispatch > const & pInstance )
         { m_pEventInst = pInstance; }
 
-    bool                    CallEventCallback( void* pEvent, int nBytes )
-        { return m_pEventInst.is() && m_pEventInst->dispatchEvent( pEvent, nBytes ); }
+    bool                    CallEventCallback( void* pEvent, int nBytes );
 
     enum ConnectionIdentifierType { AsciiCString, Blob };
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) = 0;

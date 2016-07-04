@@ -19,7 +19,7 @@
 
 #include <vcl/svapp.hxx>
 
-#include "xconnection.hxx"
+#include "displayconnectiondispatch.hxx"
 #include "svdata.hxx"
 #include "salinst.hxx"
 
@@ -28,7 +28,7 @@ using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 
-DisplayConnection::DisplayConnection()
+DisplayConnectionDispatch::DisplayConnectionDispatch()
 {
     SalInstance::ConnectionIdentifierType eType;
     int nBytes;
@@ -44,17 +44,17 @@ DisplayConnection::DisplayConnection()
     }
 }
 
-DisplayConnection::~DisplayConnection()
+DisplayConnectionDispatch::~DisplayConnectionDispatch()
 {}
 
-void DisplayConnection::start()
+void DisplayConnectionDispatch::start()
 {
     DBG_TESTSOLARMUTEX();
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpDefInst->SetEventCallback( this );
 }
 
-void DisplayConnection::terminate()
+void DisplayConnectionDispatch::terminate()
 {
     DBG_TESTSOLARMUTEX();
     ImplSVData* pSVData = ImplGetSVData();
@@ -73,40 +73,40 @@ void DisplayConnection::terminate()
         (*it)->handleEvent( aEvent );
 }
 
-void SAL_CALL DisplayConnection::addEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ ) throw(std::exception)
+void SAL_CALL DisplayConnectionDispatch::addEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ ) throw(std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnection::removeEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
+void SAL_CALL DisplayConnectionDispatch::removeEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aHandlers.remove( handler );
 }
 
-void SAL_CALL DisplayConnection::addErrorHandler( const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
+void SAL_CALL DisplayConnectionDispatch::addErrorHandler( const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aErrorHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnection::removeErrorHandler( const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
+void SAL_CALL DisplayConnectionDispatch::removeErrorHandler( const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aErrorHandlers.remove( handler );
 }
 
-Any SAL_CALL DisplayConnection::getIdentifier() throw(std::exception)
+Any SAL_CALL DisplayConnectionDispatch::getIdentifier() throw(std::exception)
 {
     return m_aAny;
 }
 
-bool DisplayConnection::dispatchEvent( void* pData, int nBytes )
+bool DisplayConnectionDispatch::dispatchEvent( void* pData, int nBytes )
 {
     SolarMutexReleaser aRel;
 

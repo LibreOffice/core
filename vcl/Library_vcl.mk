@@ -320,11 +320,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/helper/canvasbitmap \
     vcl/source/helper/canvastools \
     vcl/source/helper/commandinfoprovider \
+    vcl/source/helper/displayconnectiondispatch \
     vcl/source/helper/evntpost \
     vcl/source/helper/lazydelete \
     vcl/source/helper/strhelper \
     vcl/source/helper/threadex \
-    vcl/source/helper/xconnection \
     vcl/source/app/brand \
     vcl/source/app/dbggui \
     vcl/source/app/dndhelp \
