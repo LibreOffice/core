@@ -92,8 +92,6 @@ void OQueryViewSwitch::setStatement(const OUString& _rsStatement)
 {
     if(m_pTextView->IsVisible())
         m_pTextView->setStatement(_rsStatement);
-    else
-        m_pDesignView->setStatement(_rsStatement);
 }
 
 void OQueryViewSwitch::copy()

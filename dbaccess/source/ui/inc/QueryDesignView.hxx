@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYDESIGNVIEW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYDESIGNVIEW_HXX
 
-#include "queryview.hxx"
+#include "JoinDesignView.hxx"
 #include <vcl/split.hxx>
 #include "QEnumTypes.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -54,8 +54,9 @@ namespace dbaui
 
     class OSelectionBrowseBox;
     class OQueryContainerWindow;
+    class OQueryController;
 
-    class OQueryDesignView : public OQueryView
+    class OQueryDesignView : public OJoinDesignView
     {
         enum ChildFocusState
         {
@@ -74,26 +75,24 @@ namespace dbaui
         bool                                m_bInSplitHandler;
 
     public:
-        OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >& );
+        OQueryDesignView(OQueryContainerWindow* pParent, OQueryController& _rController, const css::uno::Reference< css::uno::XComponentContext >& );
         virtual ~OQueryDesignView();
         virtual void dispose() override;
 
-        virtual bool isCutAllowed() override;
-        virtual bool isPasteAllowed() override;
-        virtual bool isCopyAllowed() override;
-        virtual void copy() override;
-        virtual void cut() override;
-        virtual void paste() override;
+        bool isCutAllowed();
+        bool isPasteAllowed();
+        bool isCopyAllowed();
+        void copy();
+        void cut();
+        void paste();
         // clears the whole query
-        virtual void clear() override;
+        void clear();
         // set the view readonly or not
         virtual void setReadOnly(bool _bReadOnly) override;
         // check if the statement is correct when not returning false
         bool checkStatement();
-        // set the statement for representation
-        virtual void setStatement(const OUString& _rsStatement) override;
         // returns the current sql statement
-        virtual OUString getStatement() override;
+        OUString getStatement();
         /// late construction
         virtual void Construct() override;
         virtual void initialize() override;
@@ -154,7 +153,7 @@ namespace dbaui
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );
 
     private:
-        using OQueryView::SaveTabWinUIConfig;
+        using OJoinDesignView::SaveTabWinUIConfig;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYDESIGNVIEW_HXX
