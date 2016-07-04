@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_6cda807a",
+        "filename": "basctl/source/basicide/basides1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-04T08:09:07Z",
+      "side": 1,
+      "message": "Yes, it does.  rtl::OUString::operator+\u003d is overloaded on rtl::OUStringConcat, too.",
+      "parentUuid": "ba84c18e_cc738cb3",
+      "revId": "5ef442401983b29d05e7fbcdd7207606539ea78c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_8c4b4459",
         "filename": "basctl/source/basicide/basobj2.cxx",
         "patchSetId": 3
@@ -30,6 +48,81 @@
       "writtenOn": "2016-07-04T06:20:36Z",
       "side": 1,
       "message": "It is still okay but I would break the right part of the assignment into several lines to make it easier on the eye because it is getting a little long to read. (See the examples on the EasyHack.)\nYet no strong opinions on this particular line.",
+      "revId": "5ef442401983b29d05e7fbcdd7207606539ea78c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_8ce7c43f",
+        "filename": "basctl/source/basicide/basobj2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-04T08:09:07Z",
+      "side": 1,
+      "message": "(while I personally think that splitting really short sequences across multiple lines makes overall readability worse, not better; in the end, decide for yourself :)",
+      "parentUuid": "ba84c18e_8c4b4459",
+      "revId": "5ef442401983b29d05e7fbcdd7207606539ea78c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_ace4883b",
+        "filename": "basctl/source/basicide/basobj2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-04T08:09:07Z",
+      "side": 1,
+      "message": "Adjacent string literals do not need to be concatenated with \"+\" (as the language already takes care of concatenating them); or (even better in this case, IMO), turn them into a single string literal.  (loplugin:stringconcat would produce a warning for this.)",
+      "range": {
+        "startLine": 340,
+        "startChar": 75,
+        "endLine": 340,
+        "endChar": 76
+      },
+      "revId": "5ef442401983b29d05e7fbcdd7207606539ea78c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_cccf0cb2",
+        "filename": "basctl/source/basicide/basobj3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-04T08:09:07Z",
+      "side": 1,
+      "message": "or get rid of aSubStr completely and replace its single use with the right-hand side expression",
+      "revId": "5ef442401983b29d05e7fbcdd7207606539ea78c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_ecd4d048",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-04T08:09:07Z",
+      "side": 1,
+      "message": "or get rid of aStr completely and replace its single use with the right-hand side expression",
       "revId": "5ef442401983b29d05e7fbcdd7207606539ea78c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
