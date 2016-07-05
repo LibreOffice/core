@@ -16,6 +16,24 @@
       "revId": "16764d715ba4446c341449cb9ac6d9f3d7770a6b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_923c3a31",
+        "filename": "sd/source/ui/app/sdmod.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001302
+      },
+      "writtenOn": "2016-07-05T07:00:42Z",
+      "side": 1,
+      "message": "Yes. Thinking about it, all the modules should do this in the their module destructor, not the SfxModule destructor, where I placed it",
+      "parentUuid": "ba84c18e_b2f21e99",
+      "revId": "16764d715ba4446c341449cb9ac6d9f3d7770a6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
