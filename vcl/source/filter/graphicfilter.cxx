@@ -1330,17 +1330,17 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                                      css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                      WMF_EXTERNALHEADER *pExtHeader )
 {
-    OUString                aFilterName;
-    OUString                aExternalFilterName;
-    sal_uLong               nStreamBegin;
-    sal_uInt16              nStatus;
-    GraphicReader*          pContext = rGraphic.GetContext();
-    GfxLinkType             eLinkType = GfxLinkType::NONE;
-    bool                    bDummyContext = rGraphic.IsDummyContext();
-    const bool              bLinkSet = rGraphic.IsLink();
-    FilterConfigItem*       pFilterConfigItem = nullptr;
+    OUString                       aFilterName;
+    OUString                       aExternalFilterName;
+    sal_uLong                      nStreamBegin;
+    sal_uInt16                     nStatus;
+    std::shared_ptr<GraphicReader> pContext = rGraphic.GetContext();
+    GfxLinkType                    eLinkType = GfxLinkType::NONE;
+    bool                           bDummyContext = rGraphic.IsDummyContext();
+    const bool                     bLinkSet = rGraphic.IsLink();
+    FilterConfigItem*              pFilterConfigItem = nullptr;
 
-    Size                    aPreviewSizeHint( 0, 0 );
+    Size                aPreviewSizeHint( 0, 0 );
     bool                bAllowPartialStreamRead = false;
     bool                bCreateNativeLink = true;
 

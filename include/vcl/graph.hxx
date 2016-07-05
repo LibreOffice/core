@@ -192,10 +192,10 @@ public:
 
 public:
 
-    GraphicReader*  GetContext();
-    void            SetContext( GraphicReader* pReader );
-    void            SetDummyContext(bool value);
-    bool            IsDummyContext();
+    std::shared_ptr<GraphicReader>& GetContext();
+    void                            SetContext( const std::shared_ptr<GraphicReader> &pReader );
+    void                            SetDummyContext(bool value);
+    bool                            IsDummyContext();
 private:
     friend class GraphicObject;
 
