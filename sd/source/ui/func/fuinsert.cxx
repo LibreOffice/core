@@ -67,6 +67,7 @@
 #include <sfx2/opengrf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/charthelper.hxx>
+#include <comphelper/lok.hxx>
 
 #include "app.hrc"
 #include "sdresid.hxx"
@@ -168,12 +169,18 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
             }
 
             Point aPos;
-            Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
-            aPos = aRect.Center();
-            bool bMapModeWasEnabled(mpWindow->IsMapModeEnabled());
-            mpWindow->EnableMapMode(/*true*/);
-            aPos = mpWindow->PixelToLogic(aPos);
-            mpWindow->EnableMapMode(bMapModeWasEnabled);
+            // For LOK, set position to center of the page
+            if (comphelper::LibreOfficeKit::isActive())
+                aPos = Rectangle(aPos, mpView->GetSdrPageView()->GetPage()->GetSize()).Center();
+            else
+            {
+                Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
+                aPos = aRect.Center();
+                bool bMapModeWasEnabled(mpWindow->IsMapModeEnabled());
+                mpWindow->EnableMapMode(/*true*/);
+                aPos = mpWindow->PixelToLogic(aPos);
+                mpWindow->EnableMapMode(bMapModeWasEnabled);
+            }
 
             SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, aPos, pPickObj, nullptr);
 
