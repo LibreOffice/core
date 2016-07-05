@@ -399,14 +399,12 @@ private:
     VclPtr<ColorLB>            m_pLbColorTo;
     VclPtr<MetricField>        m_pMtrColorTo;
     VclPtr<GradientLB>         m_pLbGradients;
+    VclPtr<SvxPresetListBox>   m_pGradientLB;
     VclPtr<NumericField>       m_pMtrIncrement;
     VclPtr<Slider>             m_pSliderIncrement;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;
-    VclPtr<PushButton>         m_pBtnDelete;
-    VclPtr<PushButton>         m_pBtnLoad;
-    VclPtr<PushButton>         m_pBtnSave;
     const SfxItemSet&   m_rOutAttrs;
 
     XColorListRef         m_pColorList;
@@ -426,13 +424,13 @@ private:
 
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ChangeGradientHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ChangeGradientHdl, ValueSet*, void );
+    void ChangeGradientHdl_Impl();
+    DECL_LINK_TYPED( ClickRenameHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
-    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
     void ModifiedHdl_Impl(void*);
 
     long CheckChanges_Impl();
