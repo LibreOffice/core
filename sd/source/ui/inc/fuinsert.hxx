@@ -30,7 +30,9 @@ class FuInsertGraphic
 {
 public:
 
-    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin,
+                                          ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq,
+                                          bool replaceExistingImage);
     virtual void DoExecute( SfxRequest& rReq ) override;
 
 private:
@@ -40,7 +42,10 @@ private:
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
-        SfxRequest& rReq);
+        SfxRequest& rReq,
+        bool replaceExistingImage);
+
+    bool mbReplaceExistingImage;
 };
 
 /************************************************************************/
