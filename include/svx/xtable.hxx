@@ -352,6 +352,9 @@ public:
 
 class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
+private:
+    Bitmap CreateBitmap(long nIndex, const Size& rSize) const;
+
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex) override;
 
@@ -364,6 +367,7 @@ public:
     using XPropertyList::Remove;
     XGradientEntry* Remove(long nIndex);
     XGradientEntry* GetGradient(long nIndex) const;
+    Bitmap GetBitmapForPreview(long nIndex, const Size& rSize);
 
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
