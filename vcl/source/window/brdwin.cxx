@@ -2221,4 +2221,15 @@ Size ImplBorderWindow::GetOptimalSize() const
     return Size(mnMinWidth, mnMinHeight);
 }
 
+void ImplBorderWindow::queue_resize(StateChangedType eReason)
+{
+    //if we are floating, then we don't want to inform our parent that it needs
+    //to calculate a new layout allocation. Because while we are a child
+    //of our parent we are not embedded into the parent so it doesn't care
+    //about us.
+    if (mbFloatWindow)
+        return;
+    vcl::Window::queue_resize(eReason);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

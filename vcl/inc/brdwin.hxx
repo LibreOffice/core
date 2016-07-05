@@ -153,6 +153,7 @@ public:
     virtual void            RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void            StateChanged( StateChangedType nType ) override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
+    virtual void            queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
     void                    InitView();
     void                    UpdateView( bool bNewView, const Size& rNewOutSize );
