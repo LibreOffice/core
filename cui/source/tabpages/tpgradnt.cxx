@@ -80,23 +80,13 @@ SvxGradientTabPage::SvxGradientTabPage
     get(m_pMtrColorFrom,   "colorfrommtr");
     get(m_pLbColorTo,      "colortolb");
     get(m_pMtrColorTo,     "colortomtr");
-    get(m_pLbGradients,    "gradientslb");
-    Size aSize = getDrawListBoxOptimalSize(this);
-    m_pLbGradients->set_width_request(aSize.Width());
-    m_pLbGradients->set_height_request(aSize.Height());
+    get(m_pGradientLB,     "gradientpresetlist");
     get(m_pCtlPreview,     "previewctl");
-    aSize = getDrawPreviewOptimalSize(this);
+    Size aSize = getDrawPreviewOptimalSize(this);
     m_pCtlPreview->set_width_request(aSize.Width());
     m_pCtlPreview->set_height_request(aSize.Height());
     get(m_pBtnAdd,         "add");
     get(m_pBtnModify,      "modify");
-    get(m_pBtnDelete,      "delete");
-    get(m_pBtnLoad,        "load");
-    get(m_pBtnSave,        "save");
-
-    m_pLbGradients->SetAccessibleName(GetText());
-
-
     // this page needs ExchangeSupport
     SetExchangeSupport();
 
@@ -113,13 +103,12 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
     // set handler
-    m_pLbGradients->SetSelectHdl(
-        LINK( this, SvxGradientTabPage, ChangeGradientHdl_Impl ) );
+    m_pGradientLB->SetSelectHdl( LINK( this, SvxGradientTabPage, ChangeGradientHdl ) );
+    m_pGradientLB->SetRenameHdl( LINK( this, SvxGradientTabPage, ClickRenameHdl_Impl ) );
+    m_pGradientLB->SetDeleteHdl( LINK( this, SvxGradientTabPage, ClickDeleteHdl_Impl ) );
     m_pBtnAdd->SetClickHdl( LINK( this, SvxGradientTabPage, ClickAddHdl_Impl ) );
     m_pBtnModify->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickModifyHdl_Impl ) );
-    m_pBtnDelete->SetClickHdl(
-        LINK( this, SvxGradientTabPage, ClickDeleteHdl_Impl ) );
 
     Link<Edit&,void> aLink = LINK( this, SvxGradientTabPage, ModifiedEditHdl_Impl );
     Link<ListBox&,void> aLink2 = LINK( this, SvxGradientTabPage, ModifiedListBoxHdl_Impl );
@@ -135,11 +124,6 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pLbColorFrom->SetSelectHdl( aLink2 );
     m_pMtrColorTo->SetModifyHdl( aLink );
     m_pLbColorTo->SetSelectHdl( aLink2 );
-
-    m_pBtnLoad->SetClickHdl(
-        LINK( this, SvxGradientTabPage, ClickLoadHdl_Impl ) );
-    m_pBtnSave->SetClickHdl(
-        LINK( this, SvxGradientTabPage, ClickSaveHdl_Impl ) );
 
     // #i76307# always paint the preview in LTR, because this is what the document does
     m_pCtlPreview->EnableRTL( false );
@@ -168,13 +152,10 @@ void SvxGradientTabPage::dispose()
     m_pMtrColorFrom.clear();
     m_pLbColorTo.clear();
     m_pMtrColorTo.clear();
-    m_pLbGradients.clear();
+    m_pGradientLB.clear();
     m_pCtlPreview.clear();
     m_pBtnAdd.clear();
     m_pBtnModify.clear();
-    m_pBtnDelete.clear();
-    m_pBtnLoad.clear();
-    m_pBtnSave.clear();
     SfxTabPage::dispose();
 }
 
@@ -184,7 +165,7 @@ void SvxGradientTabPage::Construct()
     m_pLbColorFrom->Fill( m_pColorList );
     m_pLbColorTo->CopyEntries( *m_pLbColorFrom );
 
-    m_pLbGradients->Fill( m_pGradientList );
+    m_pGradientLB->FillPresetListBox( *m_pGradientList );
 }
 
 
@@ -252,10 +233,11 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
             if ( *m_pPageType == PT_GRADIENT && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                m_pLbGradients->SelectEntryPos( *m_pPos );
+                sal_uInt16 nId = m_pGradientLB->GetItemId( static_cast<size_t>( *m_pPos ) );
+                m_pGradientLB->SelectItem( nId );
             }
             // colors could have been deleted
-            ChangeGradientHdl_Impl( *m_pLbGradients );
+            ChangeGradientHdl_Impl();
 
             *m_pPageType = PT_GRADIENT;
             *m_pPos = LISTBOX_ENTRY_NOTFOUND;
@@ -289,10 +271,10 @@ long SvxGradientTabPage::CheckChanges_Impl()
                           (sal_uInt16) m_pMtrColorFrom->GetValue(),
                           (sal_uInt16) m_pMtrColorTo->GetValue() );
 
-    sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
+    size_t nPos = m_pGradientLB->GetSelectItemPos();
+    if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        XGradient aGradient = m_pGradientList->GetGradient( nPos )->GetGradient();
+        XGradient aGradient = m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient();
 
         if( !( aTmpGradient == aGradient ) )
         {
@@ -315,15 +297,12 @@ long SvxGradientTabPage::CheckChanges_Impl()
                 case RET_BTN_1:
                 {
                     ClickModifyHdl_Impl( nullptr );
-                    aGradient = m_pGradientList->GetGradient( nPos )->GetGradient();
                 }
                 break;
 
                 case RET_BTN_2:
                 {
                     ClickAddHdl_Impl( nullptr );
-                    nPos = m_pLbGradients->GetSelectEntryPos();
-                    aGradient = m_pGradientList->GetGradient( nPos )->GetGradient();
                 }
                 break;
 
@@ -332,10 +311,10 @@ long SvxGradientTabPage::CheckChanges_Impl()
             }
         }
     }
-    nPos = m_pLbGradients->GetSelectEntryPos();
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
+    nPos = m_pGradientLB->GetSelectItemPos();
+    if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        *m_pPos = nPos;
+        *m_pPos = static_cast<sal_Int32>(nPos);
     }
     return 0L;
 }
@@ -349,13 +328,12 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 
         std::unique_ptr<XGradient> pXGradient;
         OUString      aString;
-        sal_Int32      nPos = m_pLbGradients->GetSelectEntryPos();
+        size_t        nPos = m_pGradientLB->GetSelectItemPos();
         sal_uInt16     nValue = m_pMtrIncrement->GetValue();
-        if( nPos != LISTBOX_ENTRY_NOTFOUND )
+        if( nPos != VALUESET_ITEM_NOTFOUND )
         {
-            pXGradient.reset(new XGradient( m_pGradientList->GetGradient( nPos )->GetGradient() ));
-            aString = m_pLbGradients->GetSelectEntry();
-
+            pXGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
+            aString = m_pGradientLB->GetItemText( m_pGradientLB->GetSelectItemId() );
         }
         else
         // gradient was passed (unidentified)
@@ -381,22 +359,13 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SvxGradientTabPage::Reset( const SfxItemSet* )
 {
-    // m_pLbGradients->SelectEntryPos( 0 );
-    ChangeGradientHdl_Impl( *m_pLbGradients );
+    ChangeGradientHdl_Impl();
 
     // determine state of the buttons
     if( m_pGradientList->Count() )
-    {
         m_pBtnModify->Enable();
-        m_pBtnDelete->Enable();
-        m_pBtnSave->Enable();
-    }
     else
-    {
         m_pBtnModify->Disable();
-        m_pBtnDelete->Disable();
-        m_pBtnSave->Disable();
-    }
 }
 
 
@@ -518,39 +487,88 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 
         m_pGradientList->Insert( pEntry, nCount );
 
-        m_pLbGradients->Append( *pEntry, m_pGradientList->GetUiBitmap( nCount ) );
-
-        m_pLbGradients->SelectEntryPos( m_pLbGradients->GetEntryCount() - 1 );
-
-#ifdef _WIN32
-        // hack: #31355# W.P.
-        Rectangle aRect( m_pLbGradients->GetPosPixel(), m_pLbGradients->GetSizePixel() );
-        if( sal_True ) {                // ??? overlapped with pDlg
-                                    // and srolling
-            Invalidate( aRect );
-        }
-#endif
+        sal_Int32 nId = m_pGradientLB->GetItemId(nCount - 1); //calculate the last ID
+        Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( nCount, m_pGradientLB->GetIconSize() );
+        m_pGradientLB->InsertItem( nId + 1, Image(aBitmap), aName );
+        m_pGradientLB->SelectItem( nId + 1 );
 
         *m_pnGradientListState |= ChangeType::MODIFIED;
 
-        ChangeGradientHdl_Impl( *m_pLbGradients );
+        ChangeGradientHdl_Impl();
     }
 
     // determine button state
     if( m_pGradientList->Count() )
-    {
         m_pBtnModify->Enable();
-        m_pBtnDelete->Enable();
-        m_pBtnSave->Enable();
-    }
 }
 
 
 IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
+    sal_uInt16 nId = m_pGradientLB->GetSelectItemId();
+    size_t nPos = m_pGradientLB->GetSelectItemPos();
 
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    if ( nPos != VALUESET_ITEM_NOTFOUND )
+    {
+        OUString aName( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetName() );
+
+        XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
+                              m_pLbColorTo->GetSelectEntryColor(),
+                              (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                              static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+                              (sal_uInt16) m_pMtrCenterX->GetValue(),
+                              (sal_uInt16) m_pMtrCenterY->GetValue(),
+                              (sal_uInt16) m_pMtrBorder->GetValue(),
+                              (sal_uInt16) m_pMtrColorFrom->GetValue(),
+                              (sal_uInt16) m_pMtrColorTo->GetValue() );
+
+        XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
+
+        delete m_pGradientList->Replace( pEntry, static_cast<sal_uInt16>(nPos) );
+
+        Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_pGradientLB->GetIconSize() );
+        m_pGradientLB->RemoveItem( nId );
+        m_pGradientLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
+        m_pGradientLB->SelectItem( nId );
+
+        *m_pnGradientListState |= ChangeType::MODIFIED;
+    }
+}
+
+IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
+{
+    sal_uInt16 nId = m_pGradientLB->GetSelectItemId();
+    size_t nPos = m_pGradientLB->GetSelectItemPos();
+
+    if( nPos != VALUESET_ITEM_NOTFOUND )
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui");
+
+        if ( aQueryBox->Execute() == RET_YES )
+        {
+            delete m_pGradientList->Remove( static_cast<sal_uInt16>(nPos) );
+            m_pGradientLB->RemoveItem( nId );
+            nId = m_pGradientLB->GetItemId( 0 );
+            m_pGradientLB->SelectItem( nId );
+
+            m_pCtlPreview->Invalidate();
+
+            ChangeGradientHdl_Impl();
+
+            *m_pnGradientListState |= ChangeType::MODIFIED;
+        }
+    }
+    // determine button state
+    if( !m_pGradientList->Count() )
+        m_pBtnModify->Disable();
+}
+
+IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
+{
+    sal_uInt16 nId = m_pGradientLB->GetSelectItemId();
+    size_t nPos = m_pGradientLB->GetSelectItemPos();
+
+    if ( nPos != VALUESET_ITEM_NOTFOUND )
     {
         OUString aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
         OUString aName( m_pGradientList->GetGradient( nPos )->GetName() );
@@ -561,33 +579,20 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
         assert(pDlg && "Dialog creation failed!");
 
         bool bLoop = true;
-
         while( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
             sal_Int32 nGradientPos = SearchGradientList(aName);
-            bool bValidGradientName = (nGradientPos == nPos) || (nGradientPos == LISTBOX_ENTRY_NOTFOUND);
+            bool bValidGradientName = (nGradientPos == static_cast<sal_Int32>(nPos) ) || (nGradientPos == LISTBOX_ENTRY_NOTFOUND);
 
             if( bValidGradientName )
             {
                 bLoop = false;
-                XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
-                                      m_pLbColorTo->GetSelectEntryColor(),
-                                      (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
-                                      static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
-                                      (sal_uInt16) m_pMtrCenterX->GetValue(),
-                                      (sal_uInt16) m_pMtrCenterY->GetValue(),
-                                      (sal_uInt16) m_pMtrBorder->GetValue(),
-                                      (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                                      (sal_uInt16) m_pMtrColorTo->GetValue() );
+                XGradientEntry* pEntry = m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) );
+                pEntry->SetName( aName );
 
-                XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
-
-                delete m_pGradientList->Replace( pEntry, nPos );
-
-                m_pLbGradients->Modify( *pEntry, nPos, m_pGradientList->GetUiBitmap( nPos ) );
-
-                m_pLbGradients->SelectEntryPos( nPos );
+                m_pGradientLB->SetItemText( nId, aName );
+                m_pGradientLB->SelectItem( nId );
 
                 *m_pnGradientListState |= ChangeType::MODIFIED;
             }
@@ -598,221 +603,22 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
                                                           ,"cui/ui/queryduplicatedialog.ui" );
                 aBox->Execute();
             }
-
         }
     }
 }
 
-
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl, ValueSet*, void)
 {
-    sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
-
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
-    {
-        ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui");
-
-        if ( aQueryBox->Execute() == RET_YES )
-        {
-            delete m_pGradientList->Remove( nPos );
-            m_pLbGradients->RemoveEntry( nPos );
-            m_pLbGradients->SelectEntryPos( 0 );
-
-            m_pCtlPreview->Invalidate();
-
-            ChangeGradientHdl_Impl( *m_pLbGradients );
-
-            *m_pnGradientListState |= ChangeType::MODIFIED;
-        }
-    }
-    // determine button state
-    if( !m_pGradientList->Count() )
-    {
-        m_pBtnModify->Disable();
-        m_pBtnDelete->Disable();
-        m_pBtnSave->Disable();
-    }
+    ChangeGradientHdl_Impl();
 }
 
-
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickLoadHdl_Impl, Button*, void)
-{
-    ResMgr& rMgr = CUI_MGR();
-    sal_uInt16 nReturn = RET_YES;
-
-    if ( *m_pnGradientListState & ChangeType::MODIFIED )
-    {
-        nReturn = ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
-                                 ,"AskSaveList"
-                                 ,"cui/ui/querysavelistdialog.ui")->Execute();
-
-        if ( nReturn == RET_YES )
-            m_pGradientList->Save();
-    }
-
-    if ( nReturn != RET_CANCEL )
-    {
-        ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
-        OUString aStrFilterType( "*.sog" );
-        aDlg.AddFilter( aStrFilterType, aStrFilterType );
-        OUString aPalettePath(SvtPathOptions().GetPalettePath());
-        OUString aLastDir;
-        sal_Int32 nIndex = 0;
-        do
-        {
-            aLastDir = aPalettePath.getToken(0, ';', nIndex);
-        }
-        while (nIndex >= 0);
-
-        INetURLObject aFile(aLastDir);
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        if( aDlg.Execute() == ERRCODE_NONE )
-        {
-            EnterWait();
-
-            INetURLObject aURL( aDlg.GetPath() );
-            INetURLObject aPathURL( aURL );
-
-            aPathURL.removeSegment();
-            aPathURL.removeFinalSlash();
-
-            // save list
-            XGradientListRef pGrdList = XPropertyList::AsGradientList(
-                XPropertyList::CreatePropertyList(
-                    XGRADIENT_LIST,
-                    aPathURL.GetMainURL(INetURLObject::NO_DECODE), ""));
-            pGrdList->SetName( aURL.getName() );
-
-            if ( pGrdList->Load() )
-            {
-                m_pGradientList = pGrdList;
-                static_cast<SvxAreaTabDialog*>( GetParentDialog() )->
-                    SetNewGradientList( m_pGradientList );
-
-                m_pLbGradients->Clear();
-                m_pLbGradients->Fill( m_pGradientList );
-                Reset( &m_rOutAttrs );
-
-                m_pGradientList->SetName( aURL.getName() );
-
-                // determining (possibly cutting) the name
-                // and displaying it in the GroupBox
-                OUString aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                aString += ": ";
-
-                if ( aURL.getBase().getLength() > 18 )
-                {
-                    aString += aURL.getBase().copy( 0, 15 );
-                    aString += "...";
-                }
-                else
-                    aString += aURL.getBase();
-
-                *m_pnGradientListState |= ChangeType::CHANGED;
-                *m_pnGradientListState &= ~ChangeType::MODIFIED;
-                LeaveWait();
-            }
-            else
-            {
-                LeaveWait();
-                ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
-                              ,"NoLoadedFileDialog"
-                              ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
-            }
-        }
-    }
-
-    // determine button state
-    if( m_pGradientList->Count() )
-    {
-        m_pBtnModify->Enable();
-        m_pBtnDelete->Enable();
-        m_pBtnSave->Enable();
-    }
-    else
-    {
-        m_pBtnModify->Disable();
-        m_pBtnDelete->Disable();
-        m_pBtnSave->Disable();
-    }
-}
-
-
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickSaveHdl_Impl, Button*, void)
-{
-    ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE );
-    OUString aStrFilterType( "*.sog" );
-    aDlg.AddFilter( aStrFilterType, aStrFilterType );
-
-    OUString aPalettePath(SvtPathOptions().GetPalettePath());
-    OUString aLastDir;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        aLastDir = aPalettePath.getToken(0, ';', nIndex);
-    }
-    while (nIndex >= 0);
-
-    INetURLObject aFile(aLastDir);
-    SAL_WARN_IF( aFile.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
-
-    if( !m_pGradientList->GetName().isEmpty() )
-    {
-        aFile.Append( m_pGradientList->GetName() );
-
-        if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( "sog" );
-    }
-
-    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-    if ( aDlg.Execute() == ERRCODE_NONE )
-    {
-        INetURLObject   aURL( aDlg.GetPath() );
-        INetURLObject   aPathURL( aURL );
-
-        aPathURL.removeSegment();
-        aPathURL.removeFinalSlash();
-
-        m_pGradientList->SetName( aURL.getName() );
-        m_pGradientList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        if( m_pGradientList->Save() )
-        {
-            // determining (possibly cutting) the name
-            // and displaying it in the GroupBox
-            OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString  += ": ";
-
-            if ( aURL.getBase().getLength() > 18 )
-            {
-                aString += aURL.getBase().copy( 0, 15 );
-                aString += "...";
-            }
-            else
-                aString += aURL.getBase();
-
-            *m_pnGradientListState |= ChangeType::SAVED;
-            *m_pnGradientListState &= ~ChangeType::MODIFIED;
-        }
-        else
-        {
-            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
-                          ,"NoSaveFileDialog"
-                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
-        }
-    }
-}
-
-
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl_Impl, ListBox&, void)
+void SvxGradientTabPage::ChangeGradientHdl_Impl()
 {
     std::unique_ptr<XGradient> pGradient;
-    int nPos = m_pLbGradients->GetSelectEntryPos();
+    size_t nPos = m_pGradientLB->GetSelectItemPos();
 
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        pGradient.reset(new XGradient( m_pGradientList->GetGradient( nPos )->GetGradient() ));
+    if( nPos != VALUESET_ITEM_NOTFOUND )
+        pGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>( nPos ) )->GetGradient() ));
     else
     {
         const SfxPoolItem* pPoolItem = nullptr;
@@ -826,10 +632,10 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl_Impl, ListBox&, void
         }
         if( !pGradient )
         {
-            m_pLbGradients->SelectEntryPos( 0 );
-            nPos = m_pLbGradients->GetSelectEntryPos();
-            if( nPos != LISTBOX_ENTRY_NOTFOUND )
-                pGradient.reset(new XGradient( m_pGradientList->GetGradient( nPos )->GetGradient() ));
+            sal_uInt16 nPosition = m_pGradientLB->GetItemId(0);
+            m_pGradientLB->SelectItem( nPosition );
+            if( nPosition != 0 )
+                pGradient.reset(new XGradient( m_pGradientList->GetGradient( 0 )->GetGradient() ));
         }
     }
 
