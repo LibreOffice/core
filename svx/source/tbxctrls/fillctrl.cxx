@@ -47,6 +47,16 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
+enum eFillStyle
+{
+    EMPTY,
+    SOLID,
+    GRADIENT,
+    HATCH,
+    BITMAP,
+    PATTERN
+};
+
 SFX_IMPL_TOOLBOX_CONTROL( SvxFillToolBoxControl, XFillStyleItem );
 
 SvxFillToolBoxControl::SvxFillToolBoxControl(
@@ -59,6 +69,7 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     , mpFillGradientItem()
     , mpHatchItem()
     , mpBitmapItem()
+    , mpPatternItem()
     , mpFillControl(nullptr)
     , mpLbFillType(nullptr)
     , mpLbFillAttr(nullptr)
@@ -66,15 +77,17 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     , mnLastPosGradient(0)
     , mnLastPosHatch(0)
     , mnLastPosBitmap(0)
+    , mnLastPosPattern(0)
 {
-    addStatusListener( ".uno:FillColor");
-    addStatusListener( ".uno:FillGradient");
-    addStatusListener( ".uno:FillHatch");
-    addStatusListener( ".uno:FillBitmap");
-    addStatusListener( ".uno:ColorTableState");
-    addStatusListener( ".uno:GradientListState");
-    addStatusListener( ".uno:HatchListState");
-    addStatusListener( ".uno:BitmapListState");
+    addStatusListener( ".uno:FillColor" );
+    addStatusListener( ".uno:FillGradient" );
+    addStatusListener( ".uno:FillHatch" );
+    addStatusListener( ".uno:FillBitmap" );
+    addStatusListener( ".uno:ColorTableState" );
+    addStatusListener( ".uno:GradientListState" );
+    addStatusListener( ".uno:HatchListState" );
+    addStatusListener( ".uno:BitmapListState" );
+    addStatusListener( ".uno:PatternListState" );
 }
 
 SvxFillToolBoxControl::~SvxFillToolBoxControl()
@@ -113,15 +126,42 @@ void SvxFillToolBoxControl::StateChanged(
                     mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
                     mpLbFillType->Enable();
                     drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
-                    meLastXFS = eXFS;
-                    mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXFS));
-
-                    if(drawing::FillStyle_NONE == eXFS)
+                    eFillStyle nPos = EMPTY;
+                    switch(eXFS)
                     {
-                        mpLbFillAttr->SetNoSelection();
-                        mpLbFillAttr->Disable();
+                        default:
+                        case drawing::FillStyle_NONE:
+                        {
+                            mpLbFillAttr->SetNoSelection();
+                            mpLbFillAttr->Disable();
+                            nPos = EMPTY;
+                            break;
+                        }
+                        case drawing::FillStyle_SOLID:
+                            nPos = SOLID;
+                            break;
+                        case drawing::FillStyle_GRADIENT:
+                            nPos = GRADIENT;
+                            break;
+                        case drawing::FillStyle_HATCH:
+                            nPos = HATCH;
+                            break;
+                        case drawing::FillStyle_BITMAP:
+                        {
+                            if(mpBitmapItem)
+                            {
+                                if(!mpBitmapItem->isPattern())
+                                    nPos = BITMAP;
+                                else
+                                    nPos = PATTERN;
+                            }
+                            else
+                                nPos = BITMAP;
+                            break;
+                        }
                     }
-
+                    meLastXFS = nPos;
+                    mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(nPos));
                     Update();
                     break;
                 }
@@ -290,6 +330,7 @@ void SvxFillToolBoxControl::StateChanged(
             break;
         }
         case SID_BITMAP_LIST:
+        case SID_PATTERN_LIST:
         {
             if(SfxItemState::DEFAULT == eState)
             {
@@ -299,11 +340,20 @@ void SvxFillToolBoxControl::StateChanged(
                     {
                         const OUString aString( mpBitmapItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+                        //const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
-                        mpLbFillAttr->Fill(aItem.GetBitmapList());
+                        if(!mpBitmapItem->isPattern())
+                        {
+                            const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+                            mpLbFillAttr->Fill(aItem.GetBitmapList());
+                        }
+                        else
+                        {
+                            const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
+                            mpLbFillAttr->Fill(aItem.GetPatternList());
+                        }
                         mpLbFillAttr->SelectEntry(aString);
                     }
                     else
@@ -321,18 +371,18 @@ void SvxFillToolBoxControl::Update()
 {
     if(mpStyleItem)
     {
-        const drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
+        const eFillStyle eXFS = (eFillStyle)mpStyleItem->GetValue();
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         switch( eXFS )
         {
-            case drawing::FillStyle_NONE:
+            case EMPTY:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
                 break;
             }
-            case drawing::FillStyle_SOLID:
+            case SOLID:
             {
                 if(mpColorItem)
                 {
@@ -341,7 +391,7 @@ void SvxFillToolBoxControl::Update()
                 }
                 break;
             }
-            case drawing::FillStyle_GRADIENT:
+            case GRADIENT:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -403,7 +453,7 @@ void SvxFillToolBoxControl::Update()
                 }
                 break;
             }
-            case drawing::FillStyle_HATCH:
+            case HATCH:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -466,7 +516,8 @@ void SvxFillToolBoxControl::Update()
                 }
                 break;
             }
-            case drawing::FillStyle_BITMAP:
+            case BITMAP:
+            case PATTERN:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -577,9 +628,9 @@ void FillControl::dispose()
 
 IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
+    const eFillStyle eXFS = (eFillStyle)mpLbFillType->GetSelectEntryPos();
 
-    if((drawing::FillStyle)meLastXFS != eXFS)
+    if((eFillStyle)meLastXFS != eXFS)
     {
         mpLbFillAttr->Clear();
         SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -592,7 +643,7 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
         switch( eXFS )
         {
             default:
-            case drawing::FillStyle_NONE:
+            case EMPTY:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -605,7 +656,7 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                     { &aXFillStyleItem });
                 break;
             }
-            case drawing::FillStyle_SOLID:
+            case SOLID:
             {
                 mpLbFillAttr->Hide();
                 mpToolBoxColor->Show();
@@ -619,7 +670,7 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                     { &aXFillColorItem, &aXFillStyleItem });
                 break;
             }
-            case drawing::FillStyle_GRADIENT:
+            case GRADIENT:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -659,7 +710,7 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                 }
                 break;
             }
-            case drawing::FillStyle_HATCH:
+            case HATCH:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
@@ -699,7 +750,8 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
                 }
                 break;
             }
-            case drawing::FillStyle_BITMAP:
+            case BITMAP:
+            case PATTERN:
             {
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();

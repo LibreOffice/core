@@ -49,6 +49,7 @@ private:
     std::unique_ptr< XFillGradientItem > mpFillGradientItem;
     std::unique_ptr< XFillHatchItem >    mpHatchItem;
     std::unique_ptr< XFillBitmapItem >   mpBitmapItem;
+    std::unique_ptr< XFillBitmapItem >   mpPatternItem;
 
     VclPtr<FillControl>        mpFillControl;
     VclPtr<SvxFillTypeBox>     mpLbFillType;
@@ -59,6 +60,7 @@ private:
     sal_Int32           mnLastPosGradient;
     sal_Int32           mnLastPosHatch;
     sal_Int32           mnLastPosBitmap;
+    sal_Int32           mnLastPosPattern;
 
     DECL_LINK_TYPED(SelectFillTypeHdl, ListBox&, void);
     DECL_LINK_TYPED(SelectFillAttrHdl, ListBox&, void);
