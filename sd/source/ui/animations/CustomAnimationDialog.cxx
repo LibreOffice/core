@@ -1496,16 +1496,13 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
 {
     SdOpenSoundFileDialog aFileDialog(GetFrameWeld());
 
-    OUString aFile( SvtPathOptions().GetWorkPath() );
-    aFileDialog.SetPath( aFile );
-
     bool bValidSoundFile = false;
     bool bQuitLoop = false;
     long nPos = 0;
 
     while( !bQuitLoop && (aFileDialog.Execute() == ERRCODE_NONE) )
     {
-        aFile = aFileDialog.GetPath();
+        OUString aFile = aFileDialog.GetPath();
         nPos = getSoundObject( aFile );
 
         if( nPos < 0 ) // not in Soundliste
