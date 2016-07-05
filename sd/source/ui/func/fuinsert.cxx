@@ -153,10 +153,10 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
         {
             sal_Int8    nAction = DND_ACTION_COPY;
-            SdrObject* pPickObj;
+            SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
             bool bSelectionReplaced(false);
 
-            if( ( pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() ) ) || ( pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC ) ) )
+            if( pPickObj )
             {
                 nAction = DND_ACTION_LINK;
             }
