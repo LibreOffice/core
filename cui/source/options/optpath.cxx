@@ -630,11 +630,12 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
             else
             {
                 short nRet = xFolderPicker->execute();
-                if ( ExecutableDialogResults::OK != nRet )
-                    return;
-
-                OUString sFolder( xFolderPicker->getDirectory() );
-                ChangeCurrentEntry( sFolder );
+                if (nRet == ExecutableDialogResults::OK)
+                {
+                    OUString sFolder(xFolderPicker->getDirectory());
+                    ChangeCurrentEntry(sFolder);
+                }
+                xFolderPicker.clear();
             }
         }
         catch( Exception& )
@@ -702,20 +703,16 @@ IMPL_LINK_TYPED( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
     }
 }
 
-
-
 IMPL_LINK_TYPED( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 {
-    if ( RET_OK == pEvt->DialogResult )
+    assert(xFolderPicker.is() && "SvxPathTabPage::DialogClosedHdl(): no folder picker");
+    if (RET_OK == pEvt->DialogResult)
     {
-        DBG_ASSERT( xFolderPicker.is(), "SvxPathTabPage::DialogClosedHdl(): no folder picker" );
-
         OUString sURL = xFolderPicker->getDirectory();
         ChangeCurrentEntry( sURL );
     }
+    xFolderPicker.clear();
 }
-
-
 
 void SvxPathTabPage::GetPathList(
     sal_uInt16 _nPathHandle, OUString& _rInternalPath,
