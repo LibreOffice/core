@@ -25,7 +25,7 @@ class SmNode;
 
 enum SmParseError
 {
-    PE_NONE,                    PE_UNEXPECTED_END_OF_INPUT,
+    PE_NONE,
     PE_UNEXPECTED_CHAR,         PE_UNEXPECTED_TOKEN,
     PE_FUNC_EXPECTED,           PE_UNOPER_EXPECTED,
     PE_BINOPER_EXPECTED,        PE_SYMBOL_EXPECTED,
