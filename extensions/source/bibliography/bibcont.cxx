@@ -57,11 +57,6 @@ BibSplitWindow::BibSplitWindow( vcl::Window* pParent, WinBits nStyle ) : SplitWi
 {
 }
 
-BibTabPage::BibTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
-                        TabPage( pParent, rID, rUIXMLDescription ), BibShortCutHandler( this )
-{
-}
-
 using namespace osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
