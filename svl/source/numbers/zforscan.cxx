@@ -1740,10 +1740,6 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     {
                         return nPos;                    // Error
                     }
-                    else if (bFrac && cHere == '0')
-                    {
-                        return nPos;                    // Denominator is 0
-                    }
                     nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                     nPos = nPos + rStr.getLength();
                     i++;
