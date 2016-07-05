@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_b503e8b7",
+        "filename": "sd/source/ui/sidebar/DefaultShapesPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-05T13:17:24Z",
+      "side": 1,
+      "message": "I think what Visual C++ doesn\u0027t really like here is the combo of VclPtr and initializer list (but there are better C++ expert than me).\n\nIf the trick with decltype doesn\u0027t work, try this: \nmpShapesSetMap[VclPtr\u003cValueSet\u003e(mpFooSet)] \u003d aFooShapes",
+      "revId": "b2466b91236be959ed7a87181efd769f35f892ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
