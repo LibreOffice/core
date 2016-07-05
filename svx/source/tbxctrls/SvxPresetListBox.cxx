@@ -90,7 +90,7 @@ void SvxPresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartInd
 {
     const Size aSize(100,60);
     BitmapEx aBitmap;
-    for(sal_Int32 nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
+    for(long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
     {
         aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
         InsertItem(nStartIndex, Image(aBitmap), pList.GetHatch( nIndex )->GetName());
