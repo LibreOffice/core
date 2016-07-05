@@ -2002,6 +2002,24 @@ OUString lcl_GetNumeratorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 n
     return aNumeratorString.makeStringAndClear();
 }
 
+OUString lcl_GetFractionIntegerString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
+{
+    sal_Int16 i;
+    OUStringBuffer aIntegerString;
+    for( i = 0; i < nAnz; i++ )
+    {
+        if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRACBLANK )
+        {
+            for( i--; i >= 0 && rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT ; i-- )
+            {
+                aIntegerString.insert( 0, rInfo.sStrArray[i] );
+            }
+            i = nAnz;
+        }
+    }
+    return aIntegerString.makeStringAndClear();
+}
+
 }
 
 OUString SvNumberformat::GetDenominatorString( sal_uInt16 nNumFor ) const
@@ -2397,6 +2415,9 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     OUStringBuffer sStr, sFrac, sDiv; // Strings, value for
     sal_uInt64 nFrac=0, nDiv=1;       // Integral part
     bool bSign = false;               // Numerator and denominator
+    const OUString sIntegerFormat = lcl_GetFractionIntegerString(rInfo, nAnz);
+    const OUString sNumeratorFormat = lcl_GetNumeratorString(rInfo, nAnz);
+    const OUString sDenominatorFormat = lcl_GetDenominatorString(rInfo, nAnz);
 
     if (fNumber < 0)
     {
@@ -2420,7 +2441,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         return false;
     }
 
-    if( sal_Int32 nForcedDiv = lcl_GetDenominatorString(rInfo, nAnz).toInt32() )
+    if( sal_Int32 nForcedDiv = sDenominatorFormat.toInt32() )
     {   // Forced Denominator
         nDiv = (sal_uInt64) nForcedDiv;
         nFrac = (sal_uInt64)floor ( fNumber * nDiv );
@@ -2500,9 +2521,9 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         impTransliterate(sStr, NumFor[nIx].GetNatNum());
     }
     bool bHideFraction = (rInfo.nCntPre > 0 && nFrac == 0
-                        && (lcl_GetNumeratorString(rInfo, nAnz).indexOf('0') < 0)
-                        && (lcl_GetDenominatorString(rInfo, nAnz).indexOf('0') < 0
-                            || lcl_GetDenominatorString(rInfo, nAnz).toInt32() > 0) );
+                        && (sNumeratorFormat.indexOf('0') < 0)
+                        && (sDenominatorFormat.indexOf('0') < 0
+                        || sDenominatorFormat.toInt32() > 0) );
     if ( bHideFraction )
     {
         sDiv.truncate();
@@ -2522,8 +2543,10 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRAC)
     {
         if ( bHideFraction )
-        {
-            sDiv.insert(0, ' ');
+        {   // do not insert blank for fraction if there is no '?'
+            if ( sNumeratorFormat.indexOf('?') >= 0
+              || sDenominatorFormat.indexOf('?') >= 0 )
+                sDiv.insert(0, ' ');
         }
         else
         {
@@ -2546,18 +2569,43 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     else
     {
         bRes |= ImpNumberFill(sFrac, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRACBLANK);
-        bCont = false;  // there is no main number?
+        bCont = false;  // there is no integer part?
         if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRACBLANK)
         {
-            sFrac.insert(0, rInfo.sStrArray[j]);
             if ( j )
             {
+                if ( bHideFraction )
+                {   // '?' in any format force display of blank as delimiter
+                    if ( sIntegerFormat.indexOf('?') >= 0
+                      || sNumeratorFormat.indexOf('?') >= 0
+                      || sDenominatorFormat.indexOf('?') >= 0 )
+                    {
+                        for (sal_uInt16 i = 0; i < rInfo.sStrArray[j].getLength(); i++)
+                            sFrac.insert(0, ' ');
+                    }
+                }
+                else
+                {
+                    if ( fNum != 0.0 || sIntegerFormat.indexOf('0') >= 0 )
+                        sFrac.insert(0, rInfo.sStrArray[j]); // insert Blank string only if there are both integer and fraction
+                    else
+                    {
+                        if ( sIntegerFormat.indexOf('?') >= 0
+                          || sNumeratorFormat.indexOf('?') >= 0 )
+                        {
+                            for (sal_uInt16 i = 0; i < rInfo.sStrArray[j].getLength(); i++)
+                                sFrac.insert(0, ' ');
+                        }
+                    }
+                }
                 j--;
-                bCont = true;  // Yes, there is a main number
+                bCont = true;  // Yes, there is an integer
             }
+            else
+                sFrac.insert(0, rInfo.sStrArray[j]);
         }
     }
-    // Continue main number
+    // Continue integer part
     if ( !bCont )
     {
         sStr.truncate();
