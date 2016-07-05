@@ -87,7 +87,7 @@ bool XGradientList::Create()
     return true;
 }
 
-Bitmap XGradientList::CreateBitmapForUI( long nIndex )
+Bitmap XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
 {
     Bitmap aRetval;
 
@@ -96,8 +96,6 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
     if(nIndex < Count())
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-
         // prepare polygon geometry for rectangle
         const basegfx::B2DPolygon aRectangle(
             basegfx::tools::createPolygonFromRect(
@@ -210,6 +208,18 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
     }
 
     return aRetval;
+}
+
+Bitmap XGradientList::CreateBitmapForUI(long nIndex)
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+    return CreateBitmap(nIndex, rSize);
+}
+
+Bitmap XGradientList::GetBitmapForPreview(long nIndex, const Size& rSize)
+{
+    return CreateBitmap(nIndex, rSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
