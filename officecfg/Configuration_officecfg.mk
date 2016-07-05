@@ -29,7 +29,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/System.xcu \
 	org/openoffice/UserProfile.xcu \
 	org/openoffice/VCL.xcu \
-	org/openoffice/FirstStartWizard.xcu \
 	org/openoffice/Interaction.xcu \
 	org/openoffice/Office/Calc.xcu \
 	org/openoffice/Office/BasicIDE.xcu \

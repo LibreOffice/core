@@ -122,7 +122,6 @@ postprocess_FILES_lingucomponent := \
 	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-thesaurus.xcu \
 
 postprocess_FILES_main := \
-	$(postprocess_XCS)/FirstStartWizard.xcs \
 	$(postprocess_XCS)/Inet.xcs \
 	$(postprocess_XCS)/Interaction.xcs \
 	$(postprocess_XCS)/LDAP.xcs \
@@ -208,7 +207,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/ucb/Hierarchy.xcs \
 	$(postprocess_XCS)/ucb/InteractionHandler.xcs \
 	$(postprocess_XCS)/ucb/Store.xcs \
-	$(postprocess_XCU)/FirstStartWizard.xcu \
 	$(postprocess_XCU)/Inet.xcu \
 	$(postprocess_XCU)/Interaction.xcu \
 	$(postprocess_XCU)/Office/Accelerators.xcu \
