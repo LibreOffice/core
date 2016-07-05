@@ -735,12 +735,8 @@ void SlideTransitionPane::openSoundFileDialog()
 
     SdOpenSoundFileDialog aFileDialog(GetFrameWeld());
 
-    OUString aFile;
     DBG_ASSERT( mpLB_SOUND->GetSelectedEntryPos() == 2,
                 "Dialog should only open when \"Other sound\" is selected" );
-    aFile = SvtPathOptions().GetWorkPath();
-
-    aFileDialog.SetPath( aFile );
 
     bool bValidSoundFile( false );
     bool bQuitLoop( false );
@@ -748,7 +744,7 @@ void SlideTransitionPane::openSoundFileDialog()
     while( ! bQuitLoop &&
            aFileDialog.Execute() == ERRCODE_NONE )
     {
-        aFile = aFileDialog.GetPath();
+        OUString aFile = aFileDialog.GetPath();
         tSoundListType::size_type nPos = 0;
         bValidSoundFile = lcl_findSoundInList( maSoundList, aFile, nPos );
 
