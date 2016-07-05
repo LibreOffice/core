@@ -165,7 +165,8 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::
 }
 
 BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
-    BibTabPage(pParent, "GeneralPage", "modules/sbibliography/ui/generalpage.ui"),
+    TabPage(pParent, "GeneralPage", "modules/sbibliography/ui/generalpage.ui"),
+    BibShortCutHandler( this ),
     sErrorPrefix(BIB_RESSTR(ST_ERROR_PREFIX)),
     mxBibGeneralPageFocusListener(new BibGeneralPageFocusListener(this)),
     pDatMan(pMan)
@@ -387,7 +388,7 @@ void BibGeneralPage::dispose()
     pCustom5FT.clear();
     for (auto & a: aFixedTexts) a.clear();
     mxBibGeneralPageFocusListener.clear();
-    BibTabPage::dispose();
+    TabPage::dispose();
 }
 
 void BibGeneralPage::RemoveListeners()
