@@ -2561,7 +2561,7 @@ void ScDocument::CopyBlockFromClip(
     SCTAB nClipTab = 0;
     for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); i++)
     {
-        if (maTabs[i] && rMark.GetTableSelect(i) )
+        if (maTabs[i] && !maTabs[i]->IsProtected() && rMark.GetTableSelect(i) )
         {
             while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
 
@@ -5786,7 +5786,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
             SCTAB nMax = static_cast<SCTAB>(maTabs.size());
             ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd && *itr < nMax; ++itr)
-                if (maTabs[*itr])
+                if (maTabs[*itr] && !maTabs[*itr]->IsProtected())
                     maTabs[*itr]->ApplySelectionCache( &aCache, rMark, pDataArray );
         }
     }
