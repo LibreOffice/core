@@ -2499,11 +2499,15 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         sStr.appendAscii( aBuf );
         impTransliterate(sStr, NumFor[nIx].GetNatNum());
     }
-    if (rInfo.nCntPre > 0 && nFrac == 0)
+    bool bHideFraction = (rInfo.nCntPre > 0 && nFrac == 0
+                        && (lcl_GetNumeratorString(rInfo, nAnz).indexOf('0') < 0)
+                        && (lcl_GetDenominatorString(rInfo, nAnz).indexOf('0') < 0
+                            || lcl_GetDenominatorString(rInfo, nAnz).toInt32() > 0) );
+    if ( bHideFraction )
     {
         sDiv.truncate();
     }
-    else
+    else  // if there are some '0' in format, force display of fraction
     {
         sFrac = ImpIntToString( nIx, nFrac );
         sDiv = ImpIntToString( nIx, nDiv );
@@ -2517,7 +2521,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     bool bCont = true;
     if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRAC)
     {
-        if (rInfo.nCntPre > 0 && nFrac == 0)
+        if ( bHideFraction )
         {
             sDiv.insert(0, ' ');
         }
@@ -4306,8 +4310,10 @@ void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
                     nAnzLeading++;
                 }
             }
-            else if (nType == NF_SYMBOLTYPE_DECSEP || nType == NF_SYMBOLTYPE_EXP)
-            {
+            else if (nType == NF_SYMBOLTYPE_DECSEP
+                  || nType == NF_SYMBOLTYPE_EXP
+                  || nType == NF_SYMBOLTYPE_FRACBLANK)  // Fraction: stop after integer part,
+            {                                           // do not count '0' of fraction
                 bStop = true;
             }
             i++;
