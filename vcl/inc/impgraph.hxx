@@ -41,7 +41,7 @@ private:
     BitmapEx                     maEx;
     ImpSwapInfo                  maSwapInfo;
     std::unique_ptr<Animation>   mpAnimation;
-    GraphicReader*               mpContext;
+    std::shared_ptr<GraphicReader> mpContext;
     std::shared_ptr<ImpSwapFile> mpSwapFile;
     std::unique_ptr<GfxLink>     mpGfxLink;
     GraphicType                  meType;
@@ -114,8 +114,8 @@ private:
 
 private:
 
-    GraphicReader*      ImplGetContext() { return mpContext;}
-    void                ImplSetContext( GraphicReader* pReader );
+    std::shared_ptr<GraphicReader>& ImplGetContext() { return mpContext;}
+    void                ImplSetContext( const std::shared_ptr<GraphicReader>& pReader );
     void                ImplSetDummyContext( bool value ) { mbDummyContext = value; }
     bool                ImplReadEmbedded( SvStream& rIStream );
     bool                ImplWriteEmbedded( SvStream& rOStream );
