@@ -1114,7 +1114,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_CHANGE_PICTURE:
         case SID_INSERT_GRAPHIC:
         {
-            SetCurrentFunction( FuInsertGraphic::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            SetCurrentFunction( FuInsertGraphic::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq,
+                                                         nSId == SID_CHANGE_PICTURE ) );
             Cancel();
             rReq.Ignore ();
         }
