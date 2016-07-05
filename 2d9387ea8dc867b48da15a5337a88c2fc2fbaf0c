@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_7572407e",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-05T13:10:37Z",
+      "side": 1,
+      "message": "Changed semantics here slightly ( this won\u0027t trigger if a selected hatch is different from the previous one ) but maybe the position of the last selected hatch is remembered somewhere in the code, so you can test for it here",
+      "revId": "2d9387ea8dc867b48da15a5337a88c2fc2fbaf0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_f50490c7",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-05T13:10:37Z",
+      "side": 1,
+      "message": "As discussed on IRC\u003c kill this code with fire",
+      "revId": "2d9387ea8dc867b48da15a5337a88c2fc2fbaf0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_b56cc89d",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-05T13:10:37Z",
+      "side": 1,
+      "message": "and no saving of the value of the new preset list?",
+      "revId": "2d9387ea8dc867b48da15a5337a88c2fc2fbaf0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_d5694c8d",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-05T13:10:37Z",
+      "side": 1,
+      "message": "*sigh* this is pretty horrible code (end of 90ties all over again) but yeah, it already was like that",
+      "revId": "2d9387ea8dc867b48da15a5337a88c2fc2fbaf0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
