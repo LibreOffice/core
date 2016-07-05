@@ -174,7 +174,8 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
     throw ( uno::RuntimeException, std::exception )
 {
 /*
-    Events documentation: OOo Developer's Guide / Writing UNO Components / Jobs
+    Events documentation: OOo Developer's Guide / Writing UNO Components /
+    Integrating Components into OpenOffice.org / Jobs
 */
 
     if ( Event.EventName == "OnLoadFinished" // document loaded
