@@ -23,6 +23,7 @@
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/sheet/XCellRangeFormula.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
@@ -57,6 +58,8 @@ public:
 
     CPPUNIT_TEST_SUITE(ScPerfObj);
     CPPUNIT_TEST(testSheetFindAll);
+    CPPUNIT_TEST(testFixedSum);
+    CPPUNIT_TEST(testVariableSum);
     CPPUNIT_TEST(testSheetNamedRanges);
     CPPUNIT_TEST(testSheets);
     CPPUNIT_TEST(testSum);
@@ -70,8 +73,6 @@ public:
     CPPUNIT_TEST(testSubTotalWithFormulas);
     CPPUNIT_TEST(testSubTotalWithoutFormulas);
     CPPUNIT_TEST(testLoadingFileWithSingleBigSheet);
-    CPPUNIT_TEST(testFixedSum);
-    CPPUNIT_TEST(testVariableSum);
     CPPUNIT_TEST(testMatConcatSmall);
     CPPUNIT_TEST(testMatConcatLarge);
     CPPUNIT_TEST_SUITE_END();
@@ -557,32 +558,50 @@ void ScPerfObj::testLoadingFileWithSingleBigSheet()
     callgrindDump("sc:loadingFileWithSingleBigSheetdoSubTotal_2000lines");
 }
 
+namespace {
+    void setupBlockFormula(
+        const uno::Reference< sheet::XSpreadsheetDocument > & xDoc,
+        const OUString &rSheetName,
+        const OUString &rCellRange,
+        const OUString &rFormula)
+    {
+        uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+        uno::Any aSheet = xSheets->getByName(rSheetName);
+        uno::Reference< table::XCellRange > xSheetCellRange(aSheet, UNO_QUERY);
+        uno::Reference< sheet::XCellRangeFormula > xCellRange(
+            xSheetCellRange->getCellRangeByName(rCellRange), UNO_QUERY);
+
+        uno::Sequence< uno::Sequence< OUString > > aFormulae(1000);
+        for (sal_Int32 i = 0; i < 1000; ++i)
+        {
+            uno::Sequence< OUString > aRow(1);
+            aRow[0] = rFormula;
+            aFormulae[i] = aRow;
+        }
+
+        // NB. not set Array (matrix) formula
+        xCellRange->setFormulaArray(aFormulae);
+    }
+}
+
 void ScPerfObj::testFixedSum()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions3.ods"), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
-    // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
-
-    uno::Any rSheet = xSheets->getByName("FixedSumSheet");
-
-    // query for the XSpreadsheet interface
-    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
-
-    // query for the XCellRange interface
-    uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
-    // query the cell range
-    uno::Reference< table::XCellRange > xCellRange = rCellRange->getCellRangeByName("B1:B1000");
-
-    uno::Reference< sheet::XArrayFormulaRange > xArrayFormulaRange(xCellRange, UNO_QUERY_THROW);
+    setupBlockFormula(xDoc, "FixedSumSheet", "B1:B1000", "=SUM(A$1:A$1000)");
 
     callgrindStart();
-    xArrayFormulaRange->setArrayFormula("=SUM(A$1:A$1000)");
-    xCalculatable->calculate();
+    xCalculatable->calculateAll();
     callgrindDump("sc:sum_with_fixed_array_formula");
+
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Any aSheet = xSheets->getByName("FixedSumSheet");
+    uno::Reference< sheet::XSpreadsheet > xSheet (aSheet, UNO_QUERY);
 
     for( sal_Int32 i = 0; i < 1000; ++i )
     {
@@ -598,24 +617,10 @@ void ScPerfObj::testVariableSum()
     CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
     uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
 
-    // get getSheets
-    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
-
-    uno::Any rSheet = xSheets->getByName("VariableSumSheet");
-
-    // query for the XSpreadsheet interface
-    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
-
-    // query for the XCellRange interface
-    uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
-    // query the cell range
-    uno::Reference< table::XCellRange > xCellRange = rCellRange->getCellRangeByName("B1:B9000");
-
-    uno::Reference< sheet::XArrayFormulaRange > xArrayFormulaRange(xCellRange, UNO_QUERY_THROW);
+    setupBlockFormula(xDoc, "VariableSumSheet", "B1:B1000", "=SUM(A1:A1000)");
 
     callgrindStart();
-    xArrayFormulaRange->setArrayFormula("=SUM(A1:A1000)");
-    xCalculatable->calculate();
+    xCalculatable->calculateAll();
     callgrindDump("sc:sum_with_variable_array_formula");
 }
 
@@ -641,9 +646,9 @@ void ScPerfObj::testMatConcatSmall()
 
     uno::Reference< sheet::XArrayFormulaRange > xArrayFormulaRange(xCellRange, UNO_QUERY_THROW);
 
-    callgrindStart();
     xArrayFormulaRange->setArrayFormula("=A1:A20&B1:B20");
-    xCalculatable->calculate();
+    callgrindStart();
+    xCalculatable->calculateAll();
     callgrindDump("sc:mat_concat_small");
 }
 
