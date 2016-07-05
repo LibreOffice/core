@@ -827,7 +827,6 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
     sc::AutoCalcSwitch aACSwitch(*this, false);
     sc::RefUpdateInsertTabContext aCxt( *this, nNewPos, 1);
-    sc::StartListeningContext aSLCxt(*this);
 
     if (bValid)
     {
@@ -874,6 +873,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                     if (*it && it != maTabs.begin()+nOldPos && it != maTabs.begin() + nNewPos)
                         (*it)->UpdateCompile();
                 SetNoListening( false );
+                sc::StartListeningContext aSLCxt(*this);
                 for (TableContainer::iterator it = maTabs.begin(); it != maTabs.end(); ++it)
                     if (*it && it != maTabs.begin()+nOldPos && it != maTabs.begin()+nNewPos)
                         (*it)->StartListeners(aSLCxt, true);
@@ -910,6 +910,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         maTabs[nOldPos]->UpdateCompile();
         maTabs[nNewPos]->UpdateCompile( true ); //  maybe already compiled in Clone, but used names need recompilation
         SetNoListening( false );
+        sc::StartListeningContext aSLCxt(*this);
         maTabs[nOldPos]->StartListeners(aSLCxt, true);
         maTabs[nNewPos]->StartListeners(aSLCxt, true);
 
