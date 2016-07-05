@@ -36,56 +36,23 @@
 
 class CGM;
 class CGMBitmapDescriptor;
-class CGMOutAct
+
+class CGMImpressOutAct
 {
-protected:
-        sal_uInt16                  mnCurrentPage;          // defaulted to zero
+    sal_uInt16                  mnCurrentPage;          // defaulted to zero
 
-        sal_uInt32                  mnGroupActCount;        // grouping
-        sal_uInt32                  mnGroupLevel;
-        sal_uInt32*                 mpGroupLevel;
+    sal_uInt32                  mnGroupActCount;        // grouping
+    sal_uInt32                  mnGroupLevel;
+    sal_uInt32*                 mpGroupLevel;
 
-        sal_uInt16                  mnIndex;                // figure
-        sal_uInt8*                  mpFlags;
-        Point*                      mpPoints;
-        tools::PolyPolygon          maPolyPolygon;
-        css::awt::Gradient*         mpGradient;
+    sal_uInt16                  mnIndex;                // figure
+    sal_uInt8*                  mpFlags;
+    Point*                      mpPoints;
+    tools::PolyPolygon          maPolyPolygon;
+    css::awt::Gradient*         mpGradient;
 
-        CGM*                        mpCGM;
+    CGM*                        mpCGM;
 
-public:
-    explicit                    CGMOutAct( CGM& rCGM );
-    virtual                     ~CGMOutAct();
-    void                        FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
-    virtual void                InsertPage() { mnCurrentPage++; } ;
-    virtual void                BeginGroup() {} ;
-    virtual void                EndGroup() {};
-    virtual void                EndGrouping() {} ;
-    void                        BeginFigure() ;
-    void                        CloseRegion() ;
-    void                        NewRegion() ;
-    void                        EndFigure() ;
-    void                        RegPolyLine( tools::Polygon&, bool bReverse = false ) ;
-    void                        SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 nType );
-    void                        SetGradientAngle( long nAngle );
-    void                        SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo );
-    void                        SetGradientStyle( sal_uInt32 nStyle, double fRatio );
-    virtual void                DrawRectangle( FloatRect& ) {} ;
-    virtual void                DrawEllipse( FloatPoint&, FloatPoint&, double& ) {} ;
-    virtual void                DrawEllipticalArc( FloatPoint&, FloatPoint&, double&,
-                                    sal_uInt32, double&, double&) {} ;
-    virtual void                DrawBitmap( CGMBitmapDescriptor* ) {} ;
-    virtual void                DrawPolygon( tools::Polygon& ) {} ;
-    virtual void                DrawPolyLine( tools::Polygon& ) {} ;
-    virtual void                DrawPolybezier( tools::Polygon& ) {} ;
-    virtual void                DrawPolyPolygon( tools::PolyPolygon& ) {} ;
-    virtual void                DrawText( css::awt::Point&, css::awt::Size&, char*, sal_uInt32, FinalFlag ) {} ;
-    virtual void                AppendText( char*, sal_uInt32, FinalFlag ) {} ;
-    virtual void                DrawChart(){} ;
-};
-
-class CGMImpressOutAct : public CGMOutAct
-{
     css::uno::Reference< css::drawing::XDrawPages >               maXDrawPages;
     css::uno::Reference< css::drawing::XDrawPage >                maXDrawPage;
 
@@ -99,29 +66,39 @@ class CGMImpressOutAct : public CGMOutAct
 
     bool                        ImplCreateShape( const OUString& rType );
     bool                        ImplInitPage();
-    void                        ImplSetOrientation( FloatPoint& RefPoint, double& Orientation ) ;
-    void                        ImplSetLineBundle() ;
-    void                        ImplSetFillBundle() ;
-    void                        ImplSetTextBundle( const css::uno::Reference< css::beans::XPropertySet > & ) ;
+    void                        ImplSetOrientation( FloatPoint& RefPoint, double& Orientation );
+    void                        ImplSetLineBundle();
+    void                        ImplSetFillBundle();
+    void                        ImplSetTextBundle( const css::uno::Reference< css::beans::XPropertySet > & );
 public:
-                                CGMImpressOutAct( CGM&, const css::uno::Reference< css::frame::XModel > & ) ;
-                                virtual ~CGMImpressOutAct() {} ;
-    virtual void                InsertPage() override ;
-    virtual void                BeginGroup() override ;
-    virtual void                EndGroup() override ;
-    virtual void                EndGrouping() override ;
-    virtual void                DrawRectangle( FloatRect& ) override ;
-    virtual void                DrawEllipse( FloatPoint& center, FloatPoint&, double& Orientation ) override ;
-    virtual void                DrawEllipticalArc( FloatPoint& center, FloatPoint& size, double& orientation,
-                                    sal_uInt32 etype, double& startangle, double& endangle ) override ;
-    virtual void                DrawBitmap( CGMBitmapDescriptor* ) override ;
-    virtual void                DrawPolygon( tools::Polygon& ) override ;
-    virtual void                DrawPolyLine( tools::Polygon& ) override ;
-    virtual void                DrawPolybezier( tools::Polygon& ) override ;
-    virtual void                DrawPolyPolygon( tools::PolyPolygon& ) override ;
-    virtual void                DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) override ;
-    virtual void                AppendText( char* String, sal_uInt32 StringSize, FinalFlag ) override ;
-    virtual void                DrawChart() override;
+                                CGMImpressOutAct( CGM&, const css::uno::Reference< css::frame::XModel > & );
+                                ~CGMImpressOutAct();
+    void                        InsertPage();
+    void                        BeginGroup();
+    void                        EndGroup();
+    void                        EndGrouping();
+    void                        DrawRectangle( FloatRect& );
+    void                        DrawEllipse( FloatPoint& center, FloatPoint&, double& Orientation );
+    void                        DrawEllipticalArc( FloatPoint& center, FloatPoint& size, double& orientation,
+                                    sal_uInt32 etype, double& startangle, double& endangle );
+    void                        DrawBitmap( CGMBitmapDescriptor* );
+    void                        DrawPolygon( tools::Polygon& );
+    void                        DrawPolyLine( tools::Polygon& );
+    void                        DrawPolybezier( tools::Polygon& );
+    void                        DrawPolyPolygon( tools::PolyPolygon& );
+    void                        DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag );
+    void                        AppendText( char* String, sal_uInt32 StringSize, FinalFlag );
+
+    void                        FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
+    void                        BeginFigure();
+    void                        CloseRegion();
+    void                        NewRegion();
+    void                        EndFigure();
+    void                        RegPolyLine( tools::Polygon&, bool bReverse = false );
+    void                        SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 nType );
+    void                        SetGradientAngle( long nAngle );
+    void                        SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo );
+    void                        SetGradientStyle( sal_uInt32 nStyle, double fRatio );
 };
 
 

@@ -34,7 +34,7 @@ class   Graphic;
 class   SvStream;
 class   CGMChart;
 class   CGMBitmap;
-class   CGMOutAct;
+class   CGMImpressOutAct;
 class   CGMElements;
 class   GDIMetaFile;
 class   VirtualDevice;
@@ -44,7 +44,6 @@ class CGM
         friend class CGMChart;
         friend class CGMBitmap;
         friend class CGMElements;
-        friend class CGMOutAct;
         friend class CGMImpressOutAct;
 
         double              mnOutdx;                // Ausgabe Groesse in 1/100TH mm
@@ -75,7 +74,7 @@ class CGM
                                                     // controls page inserting
         CGMElements*        pElement;
         CGMElements*        pCopyOfE;
-        CGMOutAct*          mpOutAct;
+        CGMImpressOutAct*   mpOutAct;
         ::std::vector< sal_uInt8 * > maDefRepList;
         ::std::vector< sal_uInt32  > maDefRepSizeList;
 
