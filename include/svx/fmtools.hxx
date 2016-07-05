@@ -152,38 +152,6 @@ private:
 };
 
 
-class FmXDisposeMultiplexer;
-class SAL_WARN_UNUSED FmXDisposeListener
-{
-    friend class FmXDisposeMultiplexer;
-
-    rtl::Reference<FmXDisposeMultiplexer> m_pAdapter;
-    osl::Mutex   m_aMutex;
-
-public:
-    virtual ~FmXDisposeListener();
-
-    virtual void disposing(const css::lang::EventObject& _rEvent, sal_Int16 _nId) throw( css::uno::RuntimeException ) = 0;
-
-protected:
-    void setAdapter(FmXDisposeMultiplexer* pAdapter);
-};
-
-class SAL_WARN_UNUSED FmXDisposeMultiplexer : public ::cppu::WeakImplHelper1< css::lang::XEventListener>
-{
-    css::uno::Reference< css::lang::XComponent>       m_xObject;
-    FmXDisposeListener* m_pListener;
-
-    virtual ~FmXDisposeMultiplexer();
-public:
-    FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const css::uno::Reference< css::lang::XComponent>& _rxObject);
-
-// css::lang::XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
-
-    void dispose();
-};
-
 sal_Int16       getControlTypeByObject(const css::uno::Reference< css::lang::XServiceInfo>& _rxObject);
     // get the object type (OBJ_FM_...) from the services the object supports
 
