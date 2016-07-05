@@ -190,34 +190,50 @@ void GridFieldValueListener::dispose()
     m_rParent.FieldListenerDisposing(m_nId);
 }
 
-class DisposeListenerGridBridge : public FmXDisposeListener
+
+class DisposeListenerGridBridge : public ::cppu::WeakImplHelper1< css::lang::XEventListener>
 {
-    DbGridControl&          m_rParent;
-    rtl::Reference<FmXDisposeMultiplexer>  m_xRealListener;
+    osl::Mutex                                     m_aMutex;
+    DbGridControl&                                 m_rParent;
+    css::uno::Reference< css::lang::XComponent>    m_xObject;
 
 public:
     DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject);
     virtual ~DisposeListenerGridBridge();
 
-    virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) override { m_rParent.disposing(_nId, _rEvent); }
+    // css::lang::XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject)
-    :FmXDisposeListener()
-    ,m_rParent(_rParent)
+    :m_rParent(_rParent)
+    ,m_xObject(_rxObject)
 {
-
-    if (_rxObject.is())
-    {
-        m_xRealListener = new FmXDisposeMultiplexer(this, _rxObject);
-    }
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if (m_xObject.is())
+        m_xObject->addEventListener(this);
 }
 
 DisposeListenerGridBridge::~DisposeListenerGridBridge()
 {
-    if (m_xRealListener.is())
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if (m_xObject.is()) {
+        m_xObject->removeEventListener(this);
+        m_xObject = nullptr;
+    }
+}
+
+// css::lang::XEventListener
+void DisposeListenerGridBridge::disposing(const css::lang::EventObject& Source) throw( RuntimeException, std::exception )
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    Reference< css::lang::XEventListener> xPreventDelete(this);
+
+    if (m_xObject.is())
     {
-        m_xRealListener->dispose();
+        m_xObject->removeEventListener(this);
+        m_rParent.disposing(0, Source);
+        m_xObject = nullptr;
     }
 }
 
@@ -1443,7 +1459,10 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     RemoveRows();
     DisconnectFromFields();
 
-    DELETEZ(m_pCursorDisposeListener);
+    {
+        osl::MutexGuard aGuard(m_aDestructionSafety);
+        DELETEZ(m_pCursorDisposeListener);
+    }
 
     {
         ::osl::MutexGuard aGuard(m_aAdjustSafety);
@@ -1638,7 +1657,10 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
     // start listening on the seek cursor
     if (m_pSeekCursor)
+    {
+        osl::MutexGuard aGuard(m_aDestructionSafety);
         m_pCursorDisposeListener = new DisposeListenerGridBridge(*this, Reference< XComponent > (Reference< XInterface >(*m_pSeekCursor), UNO_QUERY));
+    }
 }
 
 void DbGridControl::RemoveColumns()

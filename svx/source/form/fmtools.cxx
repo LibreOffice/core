@@ -273,62 +273,6 @@ CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSet>& _r
     return *this;
 }
 
-FmXDisposeListener::~FmXDisposeListener()
-{
-    setAdapter(nullptr);
-}
-
-void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    m_pAdapter = pAdapter;
-}
-
-FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< css::lang::XComponent>& _rxObject)
-    :m_xObject(_rxObject)
-    ,m_pListener(_pListener)
-{
-    m_pListener->setAdapter(this);
-
-    if (m_xObject.is())
-        m_xObject->addEventListener(this);
-}
-
-FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
-{
-}
-
-// css::lang::XEventListener
-
-void FmXDisposeMultiplexer::disposing(const css::lang::EventObject& Source) throw( RuntimeException, std::exception )
-{
-    Reference< css::lang::XEventListener> xPreventDelete(this);
-
-    if (m_pListener)
-    {
-        m_pListener->disposing(Source, 0);
-        m_pListener->setAdapter(nullptr);
-        m_pListener = nullptr;
-    }
-    m_xObject = nullptr;
-}
-
-
-void FmXDisposeMultiplexer::dispose()
-{
-    if (m_xObject.is())
-    {
-        Reference< css::lang::XEventListener> xPreventDelete(this);
-
-        m_xObject->removeEventListener(this);
-        m_xObject = nullptr;
-
-        m_pListener->setAdapter(nullptr);
-        m_pListener = nullptr;
-    }
-}
-
-
 sal_Int16 getControlTypeByObject(const Reference< css::lang::XServiceInfo>& _rxObject)
 {
     // ask for the persistent service name
