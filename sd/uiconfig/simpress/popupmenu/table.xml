@@ -35,7 +35,8 @@
       <menu:menuitem menu:id=".uno:DistributeRows"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EntireRow"/>
-      <menu:menuitem menu:id=".uno:InsertRowDialog"/>
+      <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
+      <menu:menuitem menu:id=".uno:InsertRowsAfter"/>
       <menu:menuitem menu:id=".uno:DeleteRows"/>
     </menu:menupopup>
   </menu:menu>
@@ -44,7 +45,8 @@
       <menu:menuitem menu:id=".uno:DistributeColumns"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EntireColumn"/>
-      <menu:menuitem menu:id=".uno:InsertColumnDialog"/>
+      <menu:menuitem menu:id=".uno:InsertColumnsBefore"/>
+      <menu:menuitem menu:id=".uno:InsertColumnsAfter"/>
       <menu:menuitem menu:id=".uno:DeleteColumns"/>
     </menu:menupopup>
   </menu:menu>
