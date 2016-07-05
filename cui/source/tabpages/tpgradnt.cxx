@@ -90,9 +90,6 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pCtlPreview->set_height_request(aSize.Height());
     get(m_pBtnAdd,         "add");
     get(m_pBtnModify,      "modify");
-    get(m_pBtnDelete,      "delete");
-    get(m_pBtnLoad,        "load");
-    get(m_pBtnSave,        "save");
 
     m_pLbGradients->SetAccessibleName(GetText());
 
@@ -118,8 +115,6 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pBtnAdd->SetClickHdl( LINK( this, SvxGradientTabPage, ClickAddHdl_Impl ) );
     m_pBtnModify->SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickModifyHdl_Impl ) );
-    m_pBtnDelete->SetClickHdl(
-        LINK( this, SvxGradientTabPage, ClickDeleteHdl_Impl ) );
 
     Link<Edit&,void> aLink = LINK( this, SvxGradientTabPage, ModifiedEditHdl_Impl );
     Link<ListBox&,void> aLink2 = LINK( this, SvxGradientTabPage, ModifiedListBoxHdl_Impl );
@@ -135,11 +130,6 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pLbColorFrom->SetSelectHdl( aLink2 );
     m_pMtrColorTo->SetModifyHdl( aLink );
     m_pLbColorTo->SetSelectHdl( aLink2 );
-
-    m_pBtnLoad->SetClickHdl(
-        LINK( this, SvxGradientTabPage, ClickLoadHdl_Impl ) );
-    m_pBtnSave->SetClickHdl(
-        LINK( this, SvxGradientTabPage, ClickSaveHdl_Impl ) );
 
     // #i76307# always paint the preview in LTR, because this is what the document does
     m_pCtlPreview->EnableRTL( false );
@@ -172,9 +162,6 @@ void SvxGradientTabPage::dispose()
     m_pCtlPreview.clear();
     m_pBtnAdd.clear();
     m_pBtnModify.clear();
-    m_pBtnDelete.clear();
-    m_pBtnLoad.clear();
-    m_pBtnSave.clear();
     SfxTabPage::dispose();
 }
 
@@ -386,17 +373,9 @@ void SvxGradientTabPage::Reset( const SfxItemSet* )
 
     // determine state of the buttons
     if( m_pGradientList->Count() )
-    {
         m_pBtnModify->Enable();
-        m_pBtnDelete->Enable();
-        m_pBtnSave->Enable();
-    }
     else
-    {
         m_pBtnModify->Disable();
-        m_pBtnDelete->Disable();
-        m_pBtnSave->Disable();
-    }
 }
 
 
@@ -538,11 +517,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 
     // determine button state
     if( m_pGradientList->Count() )
-    {
         m_pBtnModify->Enable();
-        m_pBtnDelete->Enable();
-        m_pBtnSave->Enable();
-    }
 }
 
 
@@ -602,8 +577,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
         }
     }
 }
-
-
+/*
 IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbGradients->GetSelectEntryPos();
@@ -627,185 +601,9 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, Button*, void)
     }
     // determine button state
     if( !m_pGradientList->Count() )
-    {
         m_pBtnModify->Disable();
-        m_pBtnDelete->Disable();
-        m_pBtnSave->Disable();
-    }
 }
-
-
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickLoadHdl_Impl, Button*, void)
-{
-    ResMgr& rMgr = CUI_MGR();
-    sal_uInt16 nReturn = RET_YES;
-
-    if ( *m_pnGradientListState & ChangeType::MODIFIED )
-    {
-        nReturn = ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
-                                 ,"AskSaveList"
-                                 ,"cui/ui/querysavelistdialog.ui")->Execute();
-
-        if ( nReturn == RET_YES )
-            m_pGradientList->Save();
-    }
-
-    if ( nReturn != RET_CANCEL )
-    {
-        ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
-        OUString aStrFilterType( "*.sog" );
-        aDlg.AddFilter( aStrFilterType, aStrFilterType );
-        OUString aPalettePath(SvtPathOptions().GetPalettePath());
-        OUString aLastDir;
-        sal_Int32 nIndex = 0;
-        do
-        {
-            aLastDir = aPalettePath.getToken(0, ';', nIndex);
-        }
-        while (nIndex >= 0);
-
-        INetURLObject aFile(aLastDir);
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        if( aDlg.Execute() == ERRCODE_NONE )
-        {
-            EnterWait();
-
-            INetURLObject aURL( aDlg.GetPath() );
-            INetURLObject aPathURL( aURL );
-
-            aPathURL.removeSegment();
-            aPathURL.removeFinalSlash();
-
-            // save list
-            XGradientListRef pGrdList = XPropertyList::AsGradientList(
-                XPropertyList::CreatePropertyList(
-                    XGRADIENT_LIST,
-                    aPathURL.GetMainURL(INetURLObject::NO_DECODE), ""));
-            pGrdList->SetName( aURL.getName() );
-
-            if ( pGrdList->Load() )
-            {
-                m_pGradientList = pGrdList;
-                static_cast<SvxAreaTabDialog*>( GetParentDialog() )->
-                    SetNewGradientList( m_pGradientList );
-
-                m_pLbGradients->Clear();
-                m_pLbGradients->Fill( m_pGradientList );
-                Reset( &m_rOutAttrs );
-
-                m_pGradientList->SetName( aURL.getName() );
-
-                // determining (possibly cutting) the name
-                // and displaying it in the GroupBox
-                OUString aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                aString += ": ";
-
-                if ( aURL.getBase().getLength() > 18 )
-                {
-                    aString += aURL.getBase().copy( 0, 15 );
-                    aString += "...";
-                }
-                else
-                    aString += aURL.getBase();
-
-                *m_pnGradientListState |= ChangeType::CHANGED;
-                *m_pnGradientListState &= ~ChangeType::MODIFIED;
-                LeaveWait();
-            }
-            else
-            {
-                LeaveWait();
-                ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
-                              ,"NoLoadedFileDialog"
-                              ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
-            }
-        }
-    }
-
-    // determine button state
-    if( m_pGradientList->Count() )
-    {
-        m_pBtnModify->Enable();
-        m_pBtnDelete->Enable();
-        m_pBtnSave->Enable();
-    }
-    else
-    {
-        m_pBtnModify->Disable();
-        m_pBtnDelete->Disable();
-        m_pBtnSave->Disable();
-    }
-}
-
-
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickSaveHdl_Impl, Button*, void)
-{
-    ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE );
-    OUString aStrFilterType( "*.sog" );
-    aDlg.AddFilter( aStrFilterType, aStrFilterType );
-
-    OUString aPalettePath(SvtPathOptions().GetPalettePath());
-    OUString aLastDir;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        aLastDir = aPalettePath.getToken(0, ';', nIndex);
-    }
-    while (nIndex >= 0);
-
-    INetURLObject aFile(aLastDir);
-    SAL_WARN_IF( aFile.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
-
-    if( !m_pGradientList->GetName().isEmpty() )
-    {
-        aFile.Append( m_pGradientList->GetName() );
-
-        if( aFile.getExtension().isEmpty() )
-            aFile.SetExtension( "sog" );
-    }
-
-    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-    if ( aDlg.Execute() == ERRCODE_NONE )
-    {
-        INetURLObject   aURL( aDlg.GetPath() );
-        INetURLObject   aPathURL( aURL );
-
-        aPathURL.removeSegment();
-        aPathURL.removeFinalSlash();
-
-        m_pGradientList->SetName( aURL.getName() );
-        m_pGradientList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        if( m_pGradientList->Save() )
-        {
-            // determining (possibly cutting) the name
-            // and displaying it in the GroupBox
-            OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString  += ": ";
-
-            if ( aURL.getBase().getLength() > 18 )
-            {
-                aString += aURL.getBase().copy( 0, 15 );
-                aString += "...";
-            }
-            else
-                aString += aURL.getBase();
-
-            *m_pnGradientListState |= ChangeType::SAVED;
-            *m_pnGradientListState &= ~ChangeType::MODIFIED;
-        }
-        else
-        {
-            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
-                          ,"NoSaveFileDialog"
-                          ,"cui/ui/querynosavefiledialog.ui")->Execute();
-        }
-    }
-}
-
-
+*/
 IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl_Impl, ListBox&, void)
 {
     std::unique_ptr<XGradient> pGradient;
