@@ -7,7 +7,6 @@
 #
 
 officecfg_XCSFILES := \
-    FirstStartWizard \
     Inet \
     Interaction \
     LDAP \

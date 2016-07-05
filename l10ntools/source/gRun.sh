@@ -657,7 +657,7 @@ ${MYCMD} --files mysqlc/source/DataAccess.xcu
 
 ${MYCMD} --files mysqlc/source/registry/data/org/openoffice/Office/DataAccess/Drivers.xcu
 
-${MYCMD} --base officecfg/registry/data/org/openoffice --files FirstStartWizard.xcu Inet.xcu Interaction.xcu
+${MYCMD} --base officecfg/registry/data/org/openoffice --files Inet.xcu Interaction.xcu
 
 ${MYCMD} --base officecfg/registry/data/org/openoffice/Office --files Accelerators.xcu Addons.xcu BasicIDE.xcu Calc.xcu Canvas.xcu Common.xcu Compatibility.xcu DataAccess.xcu Embedding.xcu ExtendedColorScheme.xcu ExtensionDependencies.xcu ExtensionManager.xcu FormWizard.xcu Histories.xcu Impress.xcu Jobs.xcu Linguistic.xcu Logging.xcu Math.xcu Paths.xcu PresentationMinimizer.xcu PresenterScreen.xcu ProtocolHandler.xcu Recovery.xcu ReportDesign.xcu Scripting.xcu Security.xcu TableWizard.xcu TypeDetection.xcu
 
