@@ -411,10 +411,8 @@ void SdTPAction::OpenFileDialog()
         {
             SdOpenSoundFileDialog aFileDialog(GetFrameWeld());
 
-            if( aFile.isEmpty() )
-                aFile = SvtPathOptions().GetWorkPath();
-
-            aFileDialog.SetPath( aFile );
+            if( !aFile.isEmpty() )
+                aFileDialog.SetPath( aFile );
 
             if( aFileDialog.Execute() == ERRCODE_NONE )
             {
