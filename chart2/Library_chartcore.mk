@@ -211,7 +211,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/LifeTime \
     chart2/source/tools/LinearRegressionCurveCalculator \
     chart2/source/tools/LinePropertiesHelper \
-    chart2/source/tools/LineProperties \
     chart2/source/tools/LogarithmicRegressionCurveCalculator \
     chart2/source/tools/MeanValueRegressionCurveCalculator \
     chart2/source/tools/MediaDescriptorHelper \

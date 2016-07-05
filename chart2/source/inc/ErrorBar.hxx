@@ -22,21 +22,25 @@
 #include "MutexContainer.hxx"
 #include "ModifyListenerHelper.hxx"
 #include "charttoolsdllapi.hxx"
-#include "LineProperties.hxx"
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/Color.hpp>
 
 namespace chart
 {
@@ -60,10 +64,16 @@ typedef ::cppu::WeakImplHelper<
 
 class ErrorBar :
         public MutexContainer,
-        public impl::ErrorBar_Base,
-        public LineProperties
+        public impl::ErrorBar_Base
 {
 private:
+    OUString maDashName;
+    css::drawing::LineDash maLineDash;
+    sal_Int32 mnLineWidth;
+    css::drawing::LineStyle meLineStyle;
+    css::util::Color maLineColor;
+    sal_Int16 mnLineTransparence;
+    css::drawing::LineJoint meLineJoint;
     bool mbShowPositiveError;
     bool mbShowNegativeError;
     double mfPositiveError;

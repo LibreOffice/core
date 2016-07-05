@@ -25,7 +25,6 @@
 #include "AxisHelper.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 #include "macros.hxx"
-#include "LineProperties.hxx"
 #include "ChartTypeHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "LegendHelper.hxx"

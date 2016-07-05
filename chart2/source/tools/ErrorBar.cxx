@@ -19,7 +19,6 @@
 
 #include "ErrorBar.hxx"
 #include "macros.hxx"
-#include "LineProperties.hxx"
 #include "ContainerHelper.hxx"
 #include "EventListenerHelper.hxx"
 #include "PropertyHelper.hxx"
@@ -87,9 +86,12 @@ uno::Reference< beans::XPropertySet > createErrorBar( const uno::Reference< uno:
     return new ErrorBar( xContext );
 }
 
-ErrorBar::ErrorBar(
-    uno::Reference< uno::XComponentContext > const & xContext ) :
-    LineProperties(),
+ErrorBar::ErrorBar( uno::Reference< uno::XComponentContext > const & xContext ) :
+    mnLineWidth(0),
+    meLineStyle(drawing::LineStyle_SOLID),
+    maLineColor(0),
+    mnLineTransparence(0),
+    meLineJoint(drawing::LineJoint_ROUND),
     mbShowPositiveError(true),
     mbShowNegativeError(true),
     mfPositiveError(0),
@@ -103,7 +105,13 @@ ErrorBar::ErrorBar(
 ErrorBar::ErrorBar( const ErrorBar & rOther ) :
     MutexContainer(),
     impl::ErrorBar_Base(),
-    LineProperties(rOther),
+    maDashName(rOther.maDashName),
+    maLineDash(rOther.maLineDash),
+    mnLineWidth(rOther.mnLineWidth),
+    meLineStyle(rOther.meLineStyle),
+    maLineColor(rOther.maLineColor),
+    mnLineTransparence(rOther.mnLineTransparence),
+    meLineJoint(rOther.meLineJoint),
     mbShowPositiveError(rOther.mbShowPositiveError),
     mbShowNegativeError(rOther.mbShowNegativeError),
     mfPositiveError(rOther.mfPositiveError),
@@ -169,8 +177,20 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny
         rAny >>= mbShowNegativeError;
     else if(rPropName == "ErrorBarRangePositive" || rPropName == "ErrorBarRangeNegative")
         throw beans::UnknownPropertyException("read-only property", static_cast< uno::XWeak*>(this));
-    else
-        LineProperties::setPropertyValue(rPropName, rAny);
+    else if(rPropName == "LineDashName")
+        rAny >>= maDashName;
+    else if(rPropName == "LineDash")
+        rAny >>= maLineDash;
+    else if(rPropName == "LineWidth")
+        rAny >>= mnLineWidth;
+    else if(rPropName == "LineStyle")
+        rAny >>= meLineStyle;
+    else if(rPropName == "LineColor")
+        rAny >>= maLineColor;
+    else if(rPropName == "LineTransparence")
+        rAny >>= mnLineTransparence;
+    else if(rPropName == "LineJoint")
+        rAny >>= meLineJoint;
 
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
@@ -260,8 +280,20 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
 
         aRet <<= aRange;
     }
-    else
-        aRet = LineProperties::getPropertyValue(rPropName);
+    else if(rPropName == "LineDashName")
+        aRet <<= maDashName;
+    else if(rPropName == "LineDash")
+        aRet <<= maLineDash;
+    else if(rPropName == "LineWidth")
+        aRet <<= mnLineWidth;
+    else if(rPropName == "LineStyle")
+        aRet = uno::makeAny(meLineStyle);
+    else if(rPropName == "LineColor")
+        aRet <<= maLineColor;
+    else if(rPropName == "LineTransparence")
+        aRet <<= mnLineTransparence;
+    else if(rPropName == "LineJoint")
+        aRet <<= meLineJoint;
 
     SAL_WARN_IF(!aRet.hasValue(), "chart2", "asked for property value: " << rPropName);
     return aRet;

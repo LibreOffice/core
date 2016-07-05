@@ -76,7 +76,6 @@ merge ImplEESdrWriter with ImplEscherExSdr
 merge ImplGlyphFallbackFontSubstitution with FcGlyphFallbackSubstitution
 merge ImplPreMatchFontSubstitution with FcPreMatchSubstitution
 merge LineLB with SvxLineBox
-merge LineProperties with chart::ErrorBar
 merge LwpDLList with LwpParaProperty
 merge LwpDLVListHead with LwpPropList
 merge LwpMarker with LwpStoryMarker
