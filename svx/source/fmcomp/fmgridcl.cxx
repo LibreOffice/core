@@ -776,14 +776,13 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
 
 enum InspectorAction { eOpenInspector, eCloseInspector, eUpdateInspector, eNone };
 
-void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
+void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu, sal_uInt16 nExecutionResult)
 {
     Reference< css::container::XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
     sal_uInt16 nPos = GetModelColumnPos(nColId);
 
     // remove and delete the menu we inserted in PreExecuteColumnContextMenu
-    VclPtr<PopupMenu> pControlMenu = rMenu.GetPopupMenu(SID_FM_CHANGECOL);
-    pControlMenu.disposeAndClear(); // NoelG: dodgy, this leaves a dangling pointer
+    rMenu.DisposePopupMenu(SID_FM_CHANGECOL);
 
     OUString aFieldType;
     bool    bReplace = false;

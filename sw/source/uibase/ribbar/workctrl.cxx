@@ -164,8 +164,7 @@ void SwTbxAutoTextCtrl::DelPopup()
     {
         for( sal_uInt16 i = 0; i < pPopup->GetItemCount(); i ++ )
         {
-            VclPtr<PopupMenu> pSubPopup = pPopup->GetPopupMenu(pPopup->GetItemId(i));
-            pSubPopup.disposeAndClear(); // NoelG: dodgy, this leaves a dangling pointer
+            pPopup->DisposePopupMenu(pPopup->GetItemId(i));
         }
         pPopup.disposeAndClear();
     }

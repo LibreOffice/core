@@ -229,13 +229,11 @@ void SvxLineTabPage::dispose()
     // Symbols on a line (e.g. StarCharts), dtor new!
     if (m_pSymbolMB)
     {
-        VclPtr<PopupMenu> p = m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
-        p.disposeAndClear(); // NoelG: dodgy, this leaves a dangling pointer
+        m_pSymbolMB->GetPopupMenu()->DisposePopupMenu( MN_GALLERY );
 
         if(m_pSymbolList)
         {
-            VclPtr<PopupMenu> p2 = m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
-            p2.disposeAndClear(); // NoelG: dodgy, this leaves a dangling pointer
+            m_pSymbolMB->GetPopupMenu()->DisposePopupMenu( MN_SYMBOLS );
         }
         m_pSymbolMB = nullptr;
     }

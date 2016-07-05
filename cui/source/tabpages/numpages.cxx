@@ -1258,8 +1258,7 @@ void SvxNumOptionsTabPage::dispose()
 {
     if (m_pBitmapMB)
     {
-        VclPtr<PopupMenu> p = m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
-        p.disposeAndClear(); // NoelG: dodgy, this leaves a dangling pointer
+        m_pBitmapMB->GetPopupMenu()->DisposePopupMenu(m_nGalleryId);
     }
     delete pActNum;
     pActNum = nullptr;
