@@ -98,14 +98,17 @@ FuInsertGraphic::FuInsertGraphic (
     ::sd::Window* pWin,
     ::sd::View* pView,
     SdDrawDocument* pDoc,
-    SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    SfxRequest& rReq,
+    bool replaceExistingImage)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+      mbReplaceExistingImage(replaceExistingImage)
 {
 }
 
-rtl::Reference<FuPoor> FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
+                                                SdDrawDocument* pDoc, SfxRequest& rReq, bool replaceExistingImage )
 {
-    rtl::Reference<FuPoor> xFunc( new FuInsertGraphic( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuInsertGraphic( pViewSh, pWin, pView, pDoc, rReq, replaceExistingImage ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }
@@ -153,14 +156,14 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
         {
             sal_Int8    nAction = DND_ACTION_COPY;
-            SdrObject* pPickObj;
+            SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
             bool bSelectionReplaced(false);
 
-            if( ( pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() ) ) || ( pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC ) ) )
+            if( pPickObj )
             {
                 nAction = DND_ACTION_LINK;
             }
-            else if(1 == mpView->GetMarkedObjectCount())
+            else if(mbReplaceExistingImage && mpView->GetMarkedObjectCount() == 1)
             {
                 pPickObj = mpView->GetMarkedObjectByIndex(0);
                 nAction = DND_ACTION_MOVE;
