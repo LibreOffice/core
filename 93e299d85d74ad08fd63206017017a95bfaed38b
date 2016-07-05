@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_75afa0e3",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2047,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-05T11:59:57Z",
+      "side": 1,
+      "message": "CUMIPMT() in Excel does *not* evaluate the parameter as logical (!\u003d0,\u003d\u003d0), but tests the double for 1.0 and 0.0 instead (and only then it\u0027s true or false to continue with). Other values generate a #NUM! error. Add the check of fF to the if(fStart \u003c 1.0 || ...) below to bump into PushIllegalArgument().",
+      "revId": "93e299d85d74ad08fd63206017017a95bfaed38b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_95ac24ef",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-05T11:59:57Z",
+      "side": 1,
+      "message": "CUMPRINC() in Excel does *not* evaluate the parameter as logical (!\u003d0,\u003d\u003d0), but tests the double for 1.0 and 0.0 instead (and only then it\u0027s true or false to continue with). Other values generate a #NUM! error. Add the check of fF to the if(fStart \u003c 1.0 || ...) below to bump into PushIllegalArgument().",
+      "revId": "93e299d85d74ad08fd63206017017a95bfaed38b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
