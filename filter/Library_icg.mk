@@ -49,7 +49,6 @@ $(eval $(call gb_Library_add_exception_objects,icg,\
 	filter/source/graphicfilter/icgm/class7 \
 	filter/source/graphicfilter/icgm/classx \
 	filter/source/graphicfilter/icgm/elements \
-	filter/source/graphicfilter/icgm/outact \
 ))
 
 # vim: set noet sw=4 ts=4:

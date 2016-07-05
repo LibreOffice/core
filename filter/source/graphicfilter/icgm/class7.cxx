@@ -55,7 +55,7 @@ void CGM::ImplDoClass7()
                     case 0x1FC : /*AppData - BOCHTDATA */break;
                     case 0x1FD : /*AppData - EOCHTDATA*/
                     {
-                        mpOutAct->DrawChart();
+                        // mpOutAct->DrawChart();
                     }
                     break;
                     case 0x200 : /*AppData - BOSYMGROUP */break;
