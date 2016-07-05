@@ -552,11 +552,10 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             }
             if ( mbDragFull )
             {
-                Point aPos;
-                Point aOldPos = OutputToScreenPixel( aPos );
+                Point aOldPos = OutputToScreenPixel( Point() );
                 EndDocking( aTrackRect, mbLastFloatMode );
                 // repaint if state or position has changed
-                if ( aOldPos != OutputToScreenPixel( aPos ) )
+                if ( aOldPos != OutputToScreenPixel( Point() ) )
                 {
                     ImplUpdateAll();
                     ImplGetFrameWindow()->ImplUpdateAll();

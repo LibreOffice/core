@@ -169,8 +169,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockingHdl, void*, void)
         vcl::Window *pBorder = GetWindow( GetWindowType::Border );
         if( pBorder != this )
         {
-            Point aPt;
-            Rectangle aBorderRect( aPt, pBorder->GetSizePixel() );
+            Rectangle aBorderRect( Point(), pBorder->GetSizePixel() );
             sal_Int32 nLeft, nTop, nRight, nBottom;
             GetBorder( nLeft, nTop, nRight, nBottom );
             // limit borderrect to the caption part only and without the resizing borders
@@ -588,8 +587,7 @@ Point ImplPopupFloatWin::GetTearOffPosition() const
 void ImplPopupFloatWin::DrawBorder(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.SetFillColor();
-    Point aPt;
-    Rectangle aRect( aPt, GetOutputSizePixel() );
+    Rectangle aRect( Point(), GetOutputSizePixel() );
 
     vcl::Region oldClipRgn( GetClipRegion( ) );
     vcl::Region aClipRgn( aRect );
