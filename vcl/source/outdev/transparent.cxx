@@ -117,7 +117,6 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
                                          const Point& rDestPt, const Size& rDestSize,
                                          const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
-    Point       aPt;
     Point       aDestPt( LogicToPixel( rDestPt ) );
     Size        aDestSz( LogicToPixel( rDestSize ) );
     Rectangle   aSrcRect( rSrcPtPixel, rSrcSizePixel );
@@ -149,7 +148,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         }
 
         // source cropped?
-        if( aSrcRect != Rectangle( aPt, aPaint.GetSizePixel() ) )
+        if( aSrcRect != Rectangle( Point(), aPaint.GetSizePixel() ) )
         {
             aPaint.Crop( aSrcRect );
             aMask.Crop( aSrcRect );
