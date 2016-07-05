@@ -65,12 +65,6 @@ public:
                             BibSplitWindow( vcl::Window* pParent,WinBits nStyle = WB_3DLOOK);
 };
 
-class BibTabPage : public TabPage, public BibShortCutHandler
-{
-public:
-    BibTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

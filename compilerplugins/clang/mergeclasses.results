@@ -18,7 +18,6 @@ merge AbstractSwInsertDBColAutoPilot with AbstractSwInsertDBColAutoPilot_Impl
 merge AddressWalker with AddressWalkerWriter
 merge B3dTransformationSet with B3dViewport
 merge B3dViewport with B3dCamera
-merge BibTabPage with BibGeneralPage
 merge CSS1Parser with SvxCSS1Parser
 merge CffGlobal with CffSubsetterContext
 merge DbGridControl with FmGridControl
