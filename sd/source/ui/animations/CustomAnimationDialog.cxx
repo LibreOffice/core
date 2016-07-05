@@ -1540,7 +1540,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
 {
     SdOpenSoundFileDialog   aFileDialog;
 
-    OUString aFile( SvtPathOptions().GetGraphicPath() );
+    OUString aFile( SvtPathOptions().GetWorkPath() );
     aFileDialog.SetPath( aFile );
 
     bool bValidSoundFile = false;
