@@ -95,7 +95,6 @@ Size GraphicReader::GetPreviewSize() const
 }
 
 ImpGraphic::ImpGraphic() :
-        mpContext       ( nullptr ),
         meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -108,7 +107,6 @@ ImpGraphic::ImpGraphic() :
 ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         maMetaFile      ( rImpGraphic.maMetaFile ),
         maEx            ( rImpGraphic.maEx ),
-        mpContext       ( nullptr ),
         mpSwapFile      ( rImpGraphic.mpSwapFile ),
         meType          ( rImpGraphic.meType ),
         mnSizeBytes     ( rImpGraphic.mnSizeBytes ),
@@ -132,7 +130,6 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
 
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
-        mpContext       ( nullptr ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -144,7 +141,6 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
 
 ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maEx            ( rBitmapEx ),
-        mpContext       ( nullptr ),
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -155,8 +151,7 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 }
 
 ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
-:   mpContext( nullptr ),
-    meType( rSvgDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
+:   meType( rSvgDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
     mnSizeBytes( 0UL ),
     mnRefCount( 1UL ),
     mbSwapOut( false ),
@@ -169,7 +164,6 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
 ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         maEx            ( rAnimation.GetBitmapEx() ),
         mpAnimation     ( o3tl::make_unique<Animation>( rAnimation ) ),
-        mpContext       ( nullptr ),
         meType          ( GraphicType::Bitmap ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -181,7 +175,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
 
 ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         maMetaFile      ( rMtf ),
-        mpContext       ( nullptr ),
         meType          ( GraphicType::GdiMetafile ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -194,7 +187,6 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
 ImpGraphic::~ImpGraphic()
 {
     ImplClear();
-    delete mpContext;
 }
 
 ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
@@ -908,9 +900,8 @@ sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
 }
 
 
-void ImpGraphic::ImplSetContext( GraphicReader* pReader )
+void ImpGraphic::ImplSetContext( const std::shared_ptr<GraphicReader>& pReader )
 {
-    assert(!mpContext);
     mpContext = pReader;
     mbDummyContext = false;
 }
