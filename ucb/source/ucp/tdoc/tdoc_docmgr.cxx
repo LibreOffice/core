@@ -361,7 +361,8 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
                         "OnSaveAsDone event notified for unknown document!" );
         }
     }
-    else if ( Event.EventName == "OnTitleChanged" )
+    else if ( Event.EventName == "OnTitleChanged"
+           || Event.EventName == "OnStorageChanged" )
     {
         if ( isOfficeDocument( Event.Source ) )
         {
