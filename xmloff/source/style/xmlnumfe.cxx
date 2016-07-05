@@ -731,13 +731,14 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
 {
     FinishTextElement_Impl();
     sal_Int32 nMaxNumeratorDigits = aNumeratorString.getLength();
-    sal_Int32 nMinNumeratorDigits = aNumeratorString.indexOf('?');
+    // As '0' cannot (yet) be saved in extended ODF, replace them by '?'
+    sal_Int32 nMinNumeratorDigits = aNumeratorString.replaceAll("0","?").indexOf('?');
     if ( nMinNumeratorDigits >= 0 )
         nMinNumeratorDigits = nMaxNumeratorDigits - nMinNumeratorDigits;
     else
         nMinNumeratorDigits = 0;
     sal_Int32 nMaxDenominatorDigits = aDenominatorString.getLength();
-    sal_Int32 nMinDenominatorDigits = aDenominatorString.indexOf('?');
+    sal_Int32 nMinDenominatorDigits = aDenominatorString.replaceAll("0","?").indexOf('?');
     if ( nMinDenominatorDigits >= 0 )
         nMinDenominatorDigits = nMaxDenominatorDigits - nMinDenominatorDigits;
     else
