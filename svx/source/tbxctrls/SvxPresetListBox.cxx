@@ -86,12 +86,22 @@ void SvxPresetListBox::DrawLayout()
     SetLineCount(5);
 }
 
-void SvxPresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex)
+void SvxPresetListBox::FillPresetListBox(XGradientList& pList, sal_uInt32 nStartIndex)
 {
-    const sal_uInt32 nCount = pList.Count();
     const Size aSize(100,60);
     BitmapEx aBitmap;
-    for(sal_uInt32 nIndex(0); nIndex < nCount; nIndex++, nStartIndex++)
+    for(sal_Int32 nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
+    {
+        aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
+        InsertItem(nStartIndex, Image(aBitmap), pList.GetGradient( nIndex )->GetName());
+    }
+}
+
+void SvxPresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex)
+{
+    const Size aSize(100,60);
+    BitmapEx aBitmap;
+    for(sal_Int32 nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
     {
         aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
         InsertItem(nStartIndex, Image(aBitmap), pList.GetHatch( nIndex )->GetName());
