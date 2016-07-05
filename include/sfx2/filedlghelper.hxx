@@ -161,18 +161,6 @@ public:
     void                     AddFilter( const OUString& rFilterName, const OUString& rExtension );
     void                     SetCurrentFilter( const OUString& rFilter );
 
-    /** sets an initial display directory/file name
-
-        @deprecated
-            don't use this method. It contains a lot of magic in determining whether the
-            last segment of the given path/URL denotes a file name or a folder, and by
-            definition, it cannot succeed with this magic *all* the time - there will
-            always be scenarios where it fails.
-
-            Use SetDisplayFolder and SetFileName.
-    */
-    void                     SetDisplayDirectory( const OUString& rPath );
-
     /** sets a new folder whose content is to be displayed in the file picker
 
         @param _rURL

@@ -408,7 +408,7 @@ void XMLFilterTestDialog::onExportBrowse()
             }
         }
 
-        aDlg.SetDisplayDirectory( m_sExportRecentFile );
+        aDlg.SetDisplayFolder( m_sExportRecentFile );
 
         if ( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -576,7 +576,7 @@ void XMLFilterTestDialog::onImportBrowse()
     aFilterName += " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
-    aDlg.SetDisplayDirectory( m_sImportRecentFile );
+    aDlg.SetDisplayFolder( m_sImportRecentFile );
 
     if ( aDlg.Execute() == ERRCODE_NONE )
     {

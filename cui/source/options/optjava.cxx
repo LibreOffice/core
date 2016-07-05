@@ -1009,7 +1009,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
     }
     else
          sFolder = SvtPathOptions().GetWorkPath();
-    aDlg.SetDisplayDirectory( sFolder );
+    aDlg.SetDisplayFolder( sFolder );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         OUString sURL = aDlg.GetPath();

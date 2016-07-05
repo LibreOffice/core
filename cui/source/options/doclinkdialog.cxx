@@ -174,8 +174,7 @@ namespace svx
         OUString sPath = m_pURL->GetText();
         if (!sPath.isEmpty())
         {
-            OFileNotation aTransformer( sPath, OFileNotation::N_SYSTEM );
-            aFileDlg.SetDisplayDirectory( aTransformer.get( OFileNotation::N_URL ) );
+            aFileDlg.SetDisplayFolder( sPath );
         }
 
         if (0 != aFileDlg.Execute())

@@ -707,9 +707,9 @@ namespace dbaui
     {
         OUString sOldPath = getURLNoPrefix();
         if ( !sOldPath.isEmpty() )
-            _aFileOpen.SetDisplayDirectory(sOldPath);
+            _aFileOpen.SetDisplayFolder(sOldPath);
         else
-            _aFileOpen.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+            _aFileOpen.SetDisplayFolder( SvtPathOptions().GetWorkPath() );
         if (0 == _aFileOpen.Execute())
         {
             setURLNoPrefix(_aFileOpen.GetPath());

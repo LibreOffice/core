@@ -1125,7 +1125,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     ::sfx2::FileDialogHelper aFileDlg(
                         ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                         FileDialogFlags::NONE, getView());
-                    aFileDlg.SetDisplayDirectory( sUrl );
+                    aFileDlg.SetDisplayFolder( sUrl );
 
                     std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
                     if ( pFilter )

@@ -1035,14 +1035,12 @@ IMPL_LINK_TYPED(  SvxEMailTabPage, FileDialogHdl_Impl, Button*, pButton, void )
         if ( sPath.isEmpty() )
             sPath = "/usr/bin";
 
-        OUString sUrl;
-        osl::FileBase::getFileURLFromSystemPath(sPath, sUrl);
-        aHelper.SetDisplayDirectory(sUrl);
+        aHelper.SetDisplayFolder(sPath);
         aHelper.AddFilter( m_sDefaultFilterName, "*");
 
         if ( ERRCODE_NONE == aHelper.Execute() )
         {
-            sUrl = aHelper.GetPath();
+            OUString sUrl = aHelper.GetPath();
             if (osl::FileBase::getSystemPathFromFileURL(sUrl, sPath)
                 != osl::FileBase::E_None)
             {

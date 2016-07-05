@@ -445,7 +445,7 @@ void SdTPAction::OpenFileDialog()
             if (bDocument && aFile.isEmpty())
                 aFile = SvtPathOptions().GetWorkPath();
 
-            aFileDialog.SetDisplayDirectory( aFile );
+            aFileDialog.SetDisplayFolder( aFile );
 
             // The following is a workaround for #i4306#:
             // The addition of the implicitly existing "all files"

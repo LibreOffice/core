@@ -197,7 +197,7 @@ namespace dbp
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
-        aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+        aFileDlg.SetDisplayFolder( SvtPathOptions().GetWorkPath() );
 
         std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");

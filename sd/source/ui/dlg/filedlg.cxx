@@ -311,7 +311,7 @@ OUString SdOpenSoundFileDialog::GetPath() const
 
 void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 {
-    mpImpl->SetDisplayDirectory( rPath );
+    mpImpl->SetDisplayFolder( rPath );
 }
 
 // WIP, please don't remove, dear Clang plugins

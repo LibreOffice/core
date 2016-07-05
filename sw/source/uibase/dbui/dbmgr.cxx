@@ -2502,7 +2502,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
     uno::Reference < ui::dialogs::XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
     OUString sHomePath(SvtPathOptions().GetWorkPath());
-    aDlgHelper.SetDisplayDirectory( sHomePath );
+    aDlgHelper.SetDisplayFolder( sHomePath );
 
     uno::Reference<ui::dialogs::XFilterManager> xFltMgr(xFP, uno::UNO_QUERY);
 

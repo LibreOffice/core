@@ -2570,7 +2570,7 @@ IMPL_LINK_NOARG_TYPED(SwGrfExtPage, BrowseHdl, Button*, void)
                 FileDialogFlags::Graphic );
         pGrfDlg->SetTitle(get<VclFrame>("linkframe")->get_label());
     }
-    pGrfDlg->SetDisplayDirectory( m_pConnectED->GetText() );
+    pGrfDlg->SetDisplayFolder( m_pConnectED->GetText() );
     uno::Reference < ui::dialogs::XFilePicker2 > xFP = pGrfDlg->GetFilePicker();
     uno::Reference < ui::dialogs::XFilePickerControlAccess > xCtrlAcc(xFP, uno::UNO_QUERY);
     xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, uno::makeAny(true) );

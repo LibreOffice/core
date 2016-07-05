@@ -104,13 +104,8 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION );
     Reference < XFilePicker2 > xFilePicker = aDialogHelper.GetFilePicker();
 
-    INetURLObject aPath;
-    aPath.SetSmartURL( sGraphicsPath );
-
-    // fish out the graphic's name
-
     aDialogHelper.SetTitle( SVX_RESSTR(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
-    aDialogHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+    aDialogHelper.SetDisplayFolder( sGraphicsPath );
     INetURLObject aURL;
     aURL.SetSmartURL( rGraphicName );
     aDialogHelper.SetFileName( aURL.GetName() );
@@ -158,6 +153,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
         {
             OUString sPath( xFilePicker->getFiles().getConstArray()[0] );
             // remember used path - please don't optimize away!
+            INetURLObject aPath;
             aPath.SetSmartURL( sPath);
             sGraphicsPath = aPath.GetPath();
 

@@ -713,8 +713,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickLoadHdl_Impl, Button*, void)
         }
         while (nIndex >= 0);
 
-        INetURLObject aFile(aLastDir);
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+        aDlg.SetDisplayFolder( aLastDir );
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -804,7 +803,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickSaveHdl_Impl, Button*, void)
             aFile.SetExtension( "soh" );
     }
 
-    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+    aDlg.SetDisplayFolder( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject aURL( aDlg.GetPath() );

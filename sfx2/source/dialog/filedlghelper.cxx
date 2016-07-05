@@ -2467,61 +2467,6 @@ ErrCode FileDialogHelper::GetGraphic( Graphic& rGraphic ) const
     return mpImpl->getGraphic( rGraphic );
 }
 
-static int impl_isFolder( const OUString& rPath )
-{
-    try
-    {
-        ::ucbhelper::Content aContent(
-            rPath, uno::Reference< ucb::XCommandEnvironment > (),
-            comphelper::getProcessComponentContext() );
-        if ( aContent.isFolder() )
-            return 1;
-
-        return 0;
-    }
-    catch ( const Exception & )
-    {
-    }
-
-    return -1;
-}
-
-void FileDialogHelper::SetDisplayDirectory( const OUString& _rPath )
-{
-    if ( _rPath.isEmpty() )
-        return;
-
-    // if the given path isn't a folder, we cut off the last part
-    // and take it as filename and the rest of the path should be
-    // the folder
-
-    INetURLObject aObj( _rPath );
-
-    OUString sFileName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
-    aObj.removeSegment();
-    OUString sPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
-
-    int nIsFolder = impl_isFolder( _rPath );
-    if ( nIsFolder == 0 ||
-         ( nIsFolder == -1 && impl_isFolder( sPath ) == 1 ) )
-    {
-        mpImpl->setFileName( sFileName );
-        mpImpl->displayFolder( sPath );
-    }
-    else
-    {
-        INetURLObject aObjPathName( _rPath );
-        OUString sFolder( aObjPathName.GetMainURL( INetURLObject::NO_DECODE ) );
-        if ( sFolder.isEmpty() )
-        {
-            // _rPath is not a valid path -> fallback to home directory
-            osl::Security aSecurity;
-            aSecurity.getHomeDir( sFolder );
-        }
-        mpImpl->displayFolder( sFolder );
-    }
-}
-
 void FileDialogHelper::SetDisplayFolder( const OUString& _rURL )
 {
     mpImpl->displayFolder( _rURL );

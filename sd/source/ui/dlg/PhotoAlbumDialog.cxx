@@ -505,25 +505,24 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, FileHdl, Button*, void)
         FileDialogFlags::Graphic | FileDialogFlags::MultiSelection
     );
     // Read configuration
-    OUString sUrl(officecfg::Office::Impress::Pictures::Path::get());
+    OUString sPicturesPath(officecfg::Office::Impress::Pictures::Path::get());
 
-    INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
-    if (!sUrl.isEmpty())
-        aDlg.SetDisplayDirectory(sUrl);
+    if (!sPicturesPath.isEmpty())
+        aDlg.SetDisplayFolder(sPicturesPath);
     else
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+        aDlg.SetDisplayFolder( SvtPathOptions().GetUserConfigPath() );
 
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         Sequence< OUString > aFilesArr = aDlg.GetSelectedFiles();
         if( aFilesArr.getLength() )
         {
-            sUrl = aDlg.GetDisplayDirectory();
+            sPicturesPath = aDlg.GetDisplayDirectory();
             // Write out configuration
             {
                 std::shared_ptr< comphelper::ConfigurationChanges > batch(
                     comphelper::ConfigurationChanges::create());
-                officecfg::Office::Impress::Pictures::Path::set(sUrl, batch);
+                officecfg::Office::Impress::Pictures::Path::set(sPicturesPath, batch);
                 batch->commit();
             }
 

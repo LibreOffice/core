@@ -2800,7 +2800,7 @@ namespace pcr
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sCurValue );
         if ( !sCurValue.isEmpty() && !sCurValue.startsWith(GRAPHOBJ_URLPREFIX) )
         {
-            aFileDlg.SetDisplayDirectory( sCurValue );
+            aFileDlg.SetDisplayFolder( sCurValue );
             // TODO: need to set the display directory _and_ the default name
         }
 
@@ -2842,7 +2842,7 @@ namespace pcr
         if ( INetProtocol::File == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
-            aFileDlg.SetDisplayDirectory( sURL );
+            aFileDlg.SetDisplayFolder( aParser.GetMainURL(INetURLObject::NO_DECODE) );
 
         _rClearBeforeDialog.clear();
         bool bSuccess = ( 0 == aFileDlg.Execute() );
@@ -2897,7 +2897,7 @@ namespace pcr
         if ( INetProtocol::File == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
-            aFileDlg.SetDisplayDirectory( sDataSource );
+            aFileDlg.SetDisplayFolder( aParser.GetMainURL(INetURLObject::NO_DECODE) );
 
         std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName("StarOffice XML (Base)");
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");

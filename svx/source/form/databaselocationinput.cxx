@@ -233,7 +233,7 @@ namespace svx
             FileDialogFlags::NONE,
             m_rLocationInput.GetSystemWindow()
         );
-        aFileDlg.SetDisplayDirectory( impl_getCurrentURL() );
+        aFileDlg.SetDisplayFolder( INetURLObject( impl_getCurrentURL()).GetMainURL( INetURLObject::NO_DECODE ) );
 
         aFileDlg.AddFilter( m_sFilterUIName, OUStringBuffer().append( "*." ).append( m_aFilterExtensions[0] ).makeStringAndClear() );
         aFileDlg.SetCurrentFilter( m_sFilterUIName );

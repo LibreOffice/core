@@ -626,7 +626,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
         uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
         const OUString sPath( SvtPathOptions().SubstituteVariable("$(userurl)/database") );
-        aDlgHelper.SetDisplayDirectory( sPath );
+        aDlgHelper.SetDisplayFolder( sPath );
         uno::Reference< XFilterManager > xFltMgr(xFP, uno::UNO_QUERY);
         xFltMgr->appendFilter( m_sAddressListFilterName, "*.csv" );
         xFltMgr->setCurrentFilter( m_sAddressListFilterName ) ;
