@@ -327,7 +327,14 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
     if (!pSectionContext)
         return;
-    uno::Reference< text::XTextCursor > xCursor = GetTopTextAppend()->createTextCursorByRange(pSectionContext->GetStartingRange());
+
+    if (m_aTextAppendStack.empty())
+        return;
+    uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    if (!xTextAppend.is())
+        return;
+
+    uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursorByRange(pSectionContext->GetStartingRange());
 
     // Remove the extra NumPicBullets from the document,
     // which get attached to the first paragraph in the
@@ -366,7 +373,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
 {
     if (m_aTextAppendStack.empty())
         return;
-    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
     if (!xTextAppend.is())
         return;
     try
