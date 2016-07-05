@@ -2921,9 +2921,7 @@ static void lcl_DeleteSubPopups(PopupMenu* pPopup)
         if(pSubPopup)
         {
             lcl_DeleteSubPopups(pSubPopup);
-            // NoelG: this looks very dodgy to me, we are attempting to delete this, but we leave a dangling pointer
-            // in the PopupMenu class?
-            pSubPopup.disposeAndClear();
+            pPopup->DisposePopupMenu( pPopup->GetItemId( i ));
         }
     }
 }
