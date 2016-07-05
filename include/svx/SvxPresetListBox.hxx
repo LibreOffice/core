@@ -41,7 +41,6 @@ public:
     virtual void Resize() override;
     virtual void Command( const CommandEvent& rEvt ) override;
     sal_uInt32 getColumnCount() const { return nColCount; }
-    sal_uInt32 getRowCount() const { return nRowCount; }
 
     void setColumnCount( const sal_uInt32 nCount ) { nColCount = nCount; }
     void setRowCount( const sal_uInt32 nRow ) { nRowCount = nRow; }
@@ -53,6 +52,7 @@ public:
     {
         maDeleteHdl = rLink;
     }
+    void FillPresetListBox(XGradientList& pList, sal_uInt32 nStartIndex = 1);
     void FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex = 1);
     void DrawLayout();
 
