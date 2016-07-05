@@ -43,7 +43,6 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 
 #include "CharacterProperties.hxx"
-#include "LineProperties.hxx"
 #include "FillProperties.hxx"
 
 #include <map>
