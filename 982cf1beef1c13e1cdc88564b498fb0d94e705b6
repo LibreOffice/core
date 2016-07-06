@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_b86cbf9d",
+        "filename": "connectivity/source/drivers/firebird/Table.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-06T13:10:17Z",
+      "side": 1,
+      "message": "Please fill in the fields of the exception with something descriptive / explanatory.\n\n\u003cconnectivity/dbexception.hxx\u003e contains a family of utility functions for this:\n\nthrowGenericSQLException\nthrowFeatureNotImplementedSQLException\nthrowSQLException\n\netc, etc. I\u0027d suggest throwSQLException with an SQLState of \"0A000\" since that is \"feature not supported\".\n\nAlso put a descriptive error message in the message.",
+      "revId": "982cf1beef1c13e1cdc88564b498fb0d94e705b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
