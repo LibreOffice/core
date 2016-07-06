@@ -57,7 +57,12 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
     hb_blob_t* pBlob = nullptr;
     if (pBuffer != nullptr)
+#if defined(_WIN32)
+        pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY,
+                               const_cast<unsigned char*>(pBuffer), [](void* data){ delete[] reinterpret_cast<unsigned char*>(data); } );
+#else
         pBlob = hb_blob_create(reinterpret_cast<const char*>(pBuffer), nLength, HB_MEMORY_MODE_READONLY, nullptr, nullptr);
+#endif
 
     return pBlob;
 }
@@ -74,10 +79,16 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 #if defined(_WIN32)
 CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance)
 :   mhDC(hDC),
+    mhFont((HFONT)GetCurrentObject(hDC, OBJ_FONT)),
     mpHbFace(nullptr),
     maFontSelData(rWinFontInstance.maFontSelData)
 {
     mpHbFace = hb_face_create_for_tables(getFontTable, &hDC, nullptr);
+}
+
+void CommonSalLayout::InitFont() const
+{
+    SelectObject( mhDC, mhFont );
 }
 
 #elif defined(MACOSX) || defined(IOS)
