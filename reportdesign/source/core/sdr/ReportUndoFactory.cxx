@@ -133,9 +133,9 @@ SdrUndoAction* OReportUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, Sdr
 }
 
 // page
-SdrUndoAction*  OReportUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
+SdrUndoAction*  OReportUndoFactory::CreateUndoDeletePage(SdrPage& rPage, bool bSoleOwnerOfFillBitmapProps)
 {
-    return m_pUndoFactory->CreateUndoDeletePage( rPage );
+    return m_pUndoFactory->CreateUndoDeletePage(rPage, bSoleOwnerOfFillBitmapProps);
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoNewPage(SdrPage& rPage)
