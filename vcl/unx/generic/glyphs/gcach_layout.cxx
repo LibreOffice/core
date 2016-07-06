@@ -21,6 +21,7 @@
 #include <sallayout.hxx>
 #include <salgdi.hxx>
 #include <scrptrun.h>
+#include <unx/genpspgraphics.h>
 
 #include <i18nlangtag/mslangid.hxx>
 
@@ -46,7 +47,7 @@ ServerFontLayout::ServerFontLayout( ServerFont& rFont )
 
 void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
 {
-    rSalGraphics.DrawServerFontLayout( *this );
+    rSalGraphics.DrawServerFontLayout( *this, mrServerFont );
 }
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
