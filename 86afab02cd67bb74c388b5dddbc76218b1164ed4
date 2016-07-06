@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_38098f2d",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-06T09:40:56Z",
+      "side": 1,
+      "message": "nURLLength is the length of m_sFirebirdURL in UTF16 code units; since you convert it to UTF8 before putting it in the buffer, it might end up shorter (not a problem a far as buffer size is concerned) or *longer* (and then you get a buffer overflow).\n\nThe same for nPathLength.\n\nIn my opinion, the easiest/safest way to handle these issues is to use an O(U)String (or std::string) to construct the request, and only convert it to a character array when you use it for the isc_service_start(...) call. It also makes code that one is less likely to introduce buffer overruns into with future modifications, since all this is handled automatically.\n\nFor a std::string, you just call the member function c_str(); for an OString, call getStr(); for an OUString, first make an OString out of it and then call getStr().",
+      "range": {
+        "startLine": 625,
+        "startChar": 36,
+        "endLine": 625,
+        "endChar": 46
+      },
+      "revId": "86afab02cd67bb74c388b5dddbc76218b1164ed4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_b81d9f68",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-06T09:40:56Z",
+      "side": 1,
+      "message": "nURLLength is the length in UTF16 code units; the length in UTF-8 code units (bytes) may differ. So both the srtncpy call and the pRequest advancement are incorrect. Again one of these things that string classes handle automatically for you... They also handle exception safety automatically.",
+      "revId": "86afab02cd67bb74c388b5dddbc76218b1164ed4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
