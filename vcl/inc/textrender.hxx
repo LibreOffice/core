@@ -26,7 +26,6 @@
 
 class ImplLayoutArgs;
 class ImplFontMetricData;
-class ServerFontLayout;
 class PhysicalFontCollection;
 class PhysicalFontFace;
 
@@ -71,7 +70,7 @@ public:
     virtual bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) = 0;
     virtual bool                    GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& ) = 0;
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
-    virtual void                    DrawServerFontLayout( const ServerFontLayout& ) = 0;
+    virtual void                    DrawServerFontLayout( const GenericSalLayout&, const ServerFont& ) = 0;
 #if ENABLE_CAIRO_CANVAS
     virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const = 0;
 #endif // ENABLE_CAIRO_CANVAS
