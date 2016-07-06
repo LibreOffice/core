@@ -34,6 +34,7 @@
 
 #include "sft.hxx"
 #include "sallayout.hxx"
+#include "CommonSalLayout.hxx"
 
 #include <cstdio>
 #include <cstdlib>
@@ -67,7 +68,7 @@ public:
 
     virtual ~TextOutRenderer() = default;
 
-    virtual bool operator ()(WinLayout const &rLayout, HDC hDC,
+    virtual bool operator ()(SalLayout const &rLayout, HDC hDC,
         const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) = 0;
 };
@@ -81,7 +82,7 @@ public:
     explicit ExTextOutRenderer() = default;
     virtual ~ExTextOutRenderer() override = default;
 
-    bool operator ()(WinLayout const &rLayout, HDC hDC,
+    bool operator ()(SalLayout const &rLayout, HDC hDC,
         const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) override;
 };
@@ -106,7 +107,7 @@ public:
     explicit D2DWriteTextOutRenderer();
     virtual ~D2DWriteTextOutRenderer() override;
 
-    bool operator ()(WinLayout const &rLayout, HDC hDC,
+    bool operator ()(SalLayout const &rLayout, HDC hDC,
         const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) override;
 
@@ -138,7 +139,7 @@ private:
     D2DWriteTextOutRenderer & operator = (const D2DWriteTextOutRenderer &) = delete;
 
     bool GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const;
-    bool GetDWriteInkBox(IDWriteFontFace & rFontFace, WinLayout const &rLayout, float const lfEmHeight, Rectangle &) const;
+    bool GetDWriteInkBox(IDWriteFontFace & rFontFace, SalLayout const &rLayout, float const lfEmHeight, Rectangle &) const;
     bool DrawGlyphs(const Point & origin, uint16_t * pGid, uint16_t * pGidEnd,
         float * pAdvances, Point * pOffsets) /*override*/;
 
@@ -3485,7 +3486,7 @@ TextOutRenderer & TextOutRenderer::get()
 }
 
 
-bool ExTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
+bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
@@ -3544,7 +3545,7 @@ D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
     CleanupModules();
 }
 
-bool D2DWriteTextOutRenderer::operator ()(WinLayout const &rLayout, HDC hDC,
+bool D2DWriteTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
     const Rectangle* pRectToErase,
     Point* pPos, int* pGetNextGlypInfo)
 {
@@ -3784,7 +3785,7 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
     return succeeded;
 }
 
-bool D2DWriteTextOutRenderer::GetDWriteInkBox(IDWriteFontFace & rFontFace, WinLayout const &rLayout, float const /*lfEmHeight*/, Rectangle & rOut) const
+bool D2DWriteTextOutRenderer::GetDWriteInkBox(IDWriteFontFace & rFontFace, SalLayout const &rLayout, float const /*lfEmHeight*/, Rectangle & rOut) const
 {
     rOut.SetEmpty();
 
@@ -3979,66 +3980,73 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     const WinFontFace& rFontFace = *mpWinFontData[ nFallbackLevel ];
     WinFontInstance& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
-    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
-
-    if (!bUspInited)
-        InitUSP();
-
-    if( !(rArgs.mnFlags & SalLayoutFlags::ComplexDisabled) )
+    if( getenv("SAL_USE_COMMON_LAYOUT") )
     {
-#if ENABLE_GRAPHITE
-        if (rFontFace.SupportsGraphite())
-        {
-            pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
-        }
-        else
-#endif // ENABLE_GRAPHITE
-        {
-            // script complexity is determined in upper layers
-            pWinLayout = new UniscribeLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
-            // NOTE: it must be guaranteed that the WinSalGraphics lives longer than
-            // the created UniscribeLayout, otherwise the data passed into the
-            // constructor might become invalid too early
-        }
+        return new CommonSalLayout( getHDC(), rFontInstance );
     }
     else
     {
+        bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter;
+
+        if (!bUspInited)
+            InitUSP();
+
+        if( !(rArgs.mnFlags & SalLayoutFlags::ComplexDisabled) )
+        {
 #if ENABLE_GRAPHITE
-        if (rFontFace.SupportsGraphite())
-        {
-            pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
-        }
-        else
-#endif // ENABLE_GRAPHITE
-        {
-            static bool bAvoidSimpleWinLayout = (std::getenv("VCL_NO_SIMPLEWINLAYOUT") != NULL);
-
-            if (!bAvoidSimpleWinLayout)
+            if (rFontFace.SupportsGraphite())
             {
-                if( (rArgs.mnFlags & SalLayoutFlags::KerningPairs) && !rFontInstance.HasKernData() )
-                {
-                    // TODO: directly cache kerning info in the rFontInstance
-                    // TODO: get rid of kerning methods+data in WinSalGraphics object
-                    GetKernPairs();
-                    rFontInstance.SetKernData( mnFontKernPairCount, mpFontKernPairs );
-                }
-
-                pWinLayout = new SimpleWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
+                pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
             }
             else
+#endif // ENABLE_GRAPHITE
             {
+                // script complexity is determined in upper layers
                 pWinLayout = new UniscribeLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
                 // NOTE: it must be guaranteed that the WinSalGraphics lives longer than
                 // the created UniscribeLayout, otherwise the data passed into the
                 // constructor might become invalid too early
             }
         }
+        else
+        {
+#if ENABLE_GRAPHITE
+            if (rFontFace.SupportsGraphite())
+            {
+                pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
+            }
+            else
+#endif // ENABLE_GRAPHITE
+            {
+                static bool bAvoidSimpleWinLayout = (std::getenv("VCL_NO_SIMPLEWINLAYOUT") != NULL);
+
+                if (!bAvoidSimpleWinLayout)
+                {
+                    if( (rArgs.mnFlags & SalLayoutFlags::KerningPairs) && !rFontInstance.HasKernData() )
+                    {
+                        // TODO: directly cache kerning info in the rFontInstance
+                        // TODO: get rid of kerning methods+data in WinSalGraphics object
+                        GetKernPairs();
+                        rFontInstance.SetKernData( mnFontKernPairCount, mpFontKernPairs );
+                    }
+
+                    pWinLayout = new SimpleWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
+                }
+                else
+                {
+                    pWinLayout = new UniscribeLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
+                    // NOTE: it must be guaranteed that the WinSalGraphics lives longer than
+                    // the created UniscribeLayout, otherwise the data passed into the
+                    // constructor might become invalid too early
+                }
+            }
+        }
+
+        if( mfFontScale[nFallbackLevel] != 1.0 )
+            pWinLayout->SetFontScale( mfFontScale[nFallbackLevel] );
+
+        return pWinLayout;
     }
-
-    if( mfFontScale[nFallbackLevel] != 1.0 )
-        pWinLayout->SetFontScale( mfFontScale[nFallbackLevel] );
-
-    return pWinLayout;
 }
 
 int    WinSalGraphics::GetMinKashidaWidth()
@@ -4145,6 +4153,34 @@ LogicalFontInstance* WinFontFace::CreateFontInstance( FontSelectPattern& rFSD ) 
 {
     LogicalFontInstance* pFontInstance = new WinFontInstance( rFSD );
     return pFontInstance;
+}
+
+void WinSalGraphics::DrawSalLayout( const CommonSalLayout& rLayout )
+{
+    HDC hDC = getHDC();
+
+    if((std::getenv("SAL_DWRITE_COMMON_LAYOUT")))
+    {
+        Point aPos(0, 0);
+        int nGlyphCount(0);
+        TextOutRenderer &render = TextOutRenderer::get();
+        bool result = render( rLayout, hDC, nullptr, &aPos, &nGlyphCount );
+        assert( !result );
+    }
+    else
+    {
+        Point aPos;
+        sal_GlyphId aGlyphId;
+        int nFetchedGlyphs = 0;
+        UINT oldTa = GetTextAlign( hDC );
+        SetTextAlign( hDC, ( oldTa & ~TA_NOUPDATECP ) );
+        while( rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nFetchedGlyphs ) )
+        {
+            ExtTextOutW( hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, nullptr, reinterpret_cast<LPCWSTR>( &aGlyphId ),
+                         1, nullptr);
+        }
+        SetTextAlign(hDC, oldTa);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
