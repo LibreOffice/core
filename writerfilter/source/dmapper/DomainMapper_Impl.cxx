@@ -5239,6 +5239,10 @@ void DomainMapper_Impl::substream(Id rName,
     appendTableHandler();
     getTableManager().startLevel();
 
+    //finalize any waiting frames before starting alternate streams
+    CheckUnregisteredFrameConversion();
+    ExecuteFrameConversion();
+
     //import of page header/footer
 
     switch( rName )
