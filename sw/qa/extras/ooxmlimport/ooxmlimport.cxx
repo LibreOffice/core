@@ -1732,6 +1732,13 @@ DECLARE_OOXMLIMPORT_TEST(testfdo76583, "fdo76583.docx")
     lcl_countTextFrames( mxComponent, 1 );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf75573, "tdf75573_page1frame.docx")
+{
+    // the problem was that an odd header was defined but not used, flagged as
+    // discardable, and then the unrelated frame was also discarded.
+    lcl_countTextFrames( mxComponent, 1 );
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo43093, "fdo43093.docx")
 {
     // The problem was that the direction and alignment are not correct for RTL paragraphs.
