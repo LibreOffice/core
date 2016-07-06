@@ -2376,7 +2376,6 @@ void SmParser::AddError(SmParseError Type, SmNode *pNode)
         case PE_RBRACE_EXPECTED:     nRID = RID_ERR_RBRACEEXPECTED;         break;
         case PE_FUNC_EXPECTED:       nRID = RID_ERR_FUNCEXPECTED;           break;
         case PE_UNOPER_EXPECTED:     nRID = RID_ERR_UNOPEREXPECTED;         break;
-        case PE_BINOPER_EXPECTED:    nRID = RID_ERR_BINOPEREXPECTED;        break;
         case PE_SYMBOL_EXPECTED:     nRID = RID_ERR_SYMBOLEXPECTED;         break;
         case PE_IDENTIFIER_EXPECTED: nRID = RID_ERR_IDENTEXPECTED;          break;
         case PE_POUND_EXPECTED:      nRID = RID_ERR_POUNDEXPECTED;          break;
