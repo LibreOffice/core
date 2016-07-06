@@ -39,6 +39,8 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
+#include <com/sum/star/xml/sax/XFastNamespaceHandler.idl>
+
 
 module com {  module sun {  module star {  module xml {  module sax {
 
@@ -152,6 +154,8 @@ interface XFastParser: com::sun::star::uno::XInterface
       */
     string getNamespaceURL( [in] string prefix )
         raises( com::sun::star::lang::IllegalArgumentException );
+
+    void setNamespaceHandler( [in] XFastNamespaceHandler Handler);
 };
 
 

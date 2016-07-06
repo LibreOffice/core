@@ -21,11 +21,14 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/attributelist.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
 #include <sax/fastparser.hxx>
+#include <vector>
+#include <o3tl/make_unique.hxx>
 
 using namespace std;
 using namespace ::cppu;
@@ -37,11 +40,73 @@ using namespace io;
 
 namespace {
 
-
-class SaxLegacyFastParser : public WeakImplHelper< XServiceInfo, XParser >
+class NamespaceHandler : public WeakImplHelper< XFastNamespaceHandler >
 {
+private:
+    struct NamespaceDefine
+    {
+        OUString    m_aPrefix;
+        OUString    m_aNamespaceURI;
+
+        NamespaceDefine( const OUString& rPrefix, const OUString& rNamespaceURI ) : m_aPrefix( rPrefix ), m_aNamespaceURI( rNamespaceURI ) {}
+    };
+    vector< unique_ptr< NamespaceDefine > > m_aNamespaceDefines;
+
+public:
+    NamespaceHandler();
+    void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList );
+
+    //XFastNamespaceHandler
+    virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
+                            throw (RuntimeException, exception) override;
+    virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix )
+                            throw (RuntimeException, exception) override;
+};
+
+NamespaceHandler::NamespaceHandler()
+{
+}
+
+void NamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList )
+{
+    for(const auto& aNamespaceDefine : m_aNamespaceDefines)
+    {
+        OUString& rPrefix = aNamespaceDefine.get()->m_aPrefix;
+        OUString& rNamespaceURI = aNamespaceDefine.get()->m_aNamespaceURI;
+        OUString sDecl;
+        if ( rPrefix.isEmpty() )
+            sDecl = "xmlns";
+        else
+            sDecl = "xmlns:" + rPrefix;
+        rAttrList->AddAttribute( sDecl, "CDATA", rNamespaceURI );
+    }
+    m_aNamespaceDefines.clear();
+}
+
+void NamespaceHandler::registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
+                            throw (RuntimeException, exception)
+{
+    m_aNamespaceDefines.push_back( o3tl::make_unique<NamespaceDefine>(
+                                    rNamespacePrefix, rNamespaceURI) );
+}
+
+OUString NamespaceHandler::getNamespaceURI( const OUString&/* rNamespacePrefix */ )
+                            throw (RuntimeException, exception)
+{
+    return OUString();
+}
+
+class SaxLegacyFastParser : public WeakImplHelper< XInitialization, XServiceInfo, XParser >
+{
+private:
+    rtl::Reference< NamespaceHandler > m_aNamespaceHandler;
 public:
     SaxLegacyFastParser();
+
+// css::lang::XInitialization:
+    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments)
+        throw (RuntimeException, Exception, exception) override;
+
 // The SAX-Parser-Interface
     virtual void SAL_CALL parseStream(  const InputSource& structSource)
         throw ( SAXException, IOException, RuntimeException, exception) override;
@@ -86,9 +151,9 @@ class CallbackDocumentHandler : public WeakImplHelper< XFastDocumentHandler >
 {
 private:
     Reference< XDocumentHandler > m_xDocumentHandler;
+    rtl::Reference< NamespaceHandler > m_aNamespaceHandler;
 public:
-    CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler )
-    { m_xDocumentHandler.set( xDocumentHandler ); }
+    CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler, rtl::Reference< NamespaceHandler > const & rNamespaceHandler );
 
     // XFastDocumentHandler
     virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override;
@@ -105,6 +170,12 @@ public:
     virtual void SAL_CALL characters( const OUString& aChars ) throw (SAXException, RuntimeException, exception) override;
 
 };
+
+CallbackDocumentHandler::CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler, rtl::Reference< NamespaceHandler > const & rNamespaceHandler )
+{
+   m_xDocumentHandler.set( xDocumentHandler );
+   m_aNamespaceHandler.set( rNamespaceHandler.get() );
+}
 
 void SAL_CALL CallbackDocumentHandler::startDocument()
         throw (SAXException, RuntimeException, exception)
@@ -139,6 +210,7 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& Name
     {
         OUString elementName;
         rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
+        m_aNamespaceHandler->addNSDeclAttributes( rAttrList );
         if ( !Namespace.isEmpty() )
             elementName =  Namespace + ":" + Name;
         else
@@ -200,11 +272,17 @@ void SAL_CALL CallbackDocumentHandler::characters( const OUString& aChars )
         m_xDocumentHandler->characters( aChars );
 }
 
-SaxLegacyFastParser::SaxLegacyFastParser( )
+SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new NamespaceHandler )
 {
     m_xParser = FastParser::create(
         ::comphelper::getProcessComponentContext() );
     m_xParser->setTokenHandler( new CallbackTokenHandler() );
+    m_xParser->setNamespaceHandler( m_aNamespaceHandler.get() );
+}
+
+void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const&/* rArguments */)
+    throw (RuntimeException, Exception, exception)
+{
 }
 
 void SaxLegacyFastParser::parseStream( const InputSource& structSource )
@@ -212,7 +290,7 @@ void SaxLegacyFastParser::parseStream( const InputSource& structSource )
                 IOException,
                 RuntimeException, exception)
 {
-    m_xParser->setFastDocumentHandler( new CallbackDocumentHandler( m_xDocumentHandler.get() ) );
+    m_xParser->setFastDocumentHandler( new CallbackDocumentHandler( m_xDocumentHandler.get(), m_aNamespaceHandler.get() ) );
     m_xParser->parseStream( structSource );
 }
 

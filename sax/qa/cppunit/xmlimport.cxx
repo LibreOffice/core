@@ -204,149 +204,6 @@ void SAL_CALL TestDocumentHandler::setDocumentLocator( const Reference< XLocator
 {
 }
 
-class TestFastDocumentHandler : public cppu::WeakImplHelper< XFastDocumentHandler >
-{
-private:
-    OUString m_aStr;
-public:
-    const OUString& getString() { return m_aStr; }
-
-    // XFastDocumentHandler
-    virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endDocument() throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) throw (SAXException, RuntimeException, exception) override;
-
-    // XFastContextHandler
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endFastElement( sal_Int32 Element ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) throw (SAXException, RuntimeException, exception) override;
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (SAXException, RuntimeException, exception) override;
-
-};
-
-void SAL_CALL TestFastDocumentHandler::startDocument()
-        throw (SAXException, RuntimeException, exception)
-{
-    m_aStr.clear();
-}
-
-void SAL_CALL TestFastDocumentHandler::endDocument()
-        throw (SAXException, RuntimeException, exception)
-{
-}
-
-void SAL_CALL TestFastDocumentHandler::setDocumentLocator( const Reference< XLocator >&/* xLocator */ )
-        throw (SAXException, RuntimeException, exception)
-{
-}
-
-void SAL_CALL TestFastDocumentHandler::startFastElement( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* Attribs */ )
-        throw (SAXException, RuntimeException, exception)
-{
-}
-
-void SAL_CALL TestFastDocumentHandler::startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
-        throw (SAXException, RuntimeException, exception)
-{
-    if ( !Namespace.isEmpty() )
-        m_aStr = m_aStr + Namespace + ":" + Name;
-    else
-        m_aStr = m_aStr + Name;
-    Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-    sal_uInt16 len = unknownAttribs.getLength();
-    for (sal_uInt16 i = 0; i < len; i++)
-    {
-        OUString& rAttrValue = unknownAttribs[i].Value;
-        OUString& rAttrName = unknownAttribs[i].Name;
-        OUString& rAttrNamespaceURL = unknownAttribs[i].NamespaceURL;
-        if ( !rAttrNamespaceURL.isEmpty() )
-            m_aStr = m_aStr + rAttrNamespaceURL + ":" + rAttrName + rAttrValue;
-        else
-            m_aStr = m_aStr + rAttrName + rAttrValue;
-    }
-
-}
-
-void SAL_CALL TestFastDocumentHandler::endFastElement( sal_Int32/* nElement */)
-        throw (SAXException, RuntimeException, exception)
-{
-}
-
-
-void SAL_CALL TestFastDocumentHandler::endUnknownElement( const OUString& Namespace, const OUString& Name )
-        throw (SAXException, RuntimeException, exception)
-{
-    if ( !Namespace.isEmpty() )
-        m_aStr = m_aStr + Namespace + ":" + Name;
-    else
-        m_aStr = m_aStr + Name;
-}
-
-Reference< XFastContextHandler > SAL_CALL TestFastDocumentHandler::createFastChildContext( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* Attribs */ )
-        throw (SAXException, RuntimeException, exception)
-{
-    return this;
-}
-
-
-Reference< XFastContextHandler > SAL_CALL TestFastDocumentHandler::createUnknownChildContext( const OUString&/* Namespace */, const OUString&/* Name */, const Reference< XFastAttributeList >&/* Attribs */ )
-        throw (SAXException, RuntimeException, exception)
-{
-    return this;
-}
-
-void SAL_CALL TestFastDocumentHandler::characters( const OUString& aChars )
-        throw (SAXException, RuntimeException, exception)
-{
-    m_aStr = m_aStr + aChars;
-}
-
-class TestTokenHandler : public cppu::WeakImplHelper< XFastTokenHandler >
-{
-public:
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const Sequence<sal_Int8>& )
-        throw (RuntimeException, exception) override
-    {
-        return FastToken::DONTKNOW;
-    }
-    virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 )
-        throw (RuntimeException, exception) override
-    {
-        CPPUNIT_ASSERT_MESSAGE( "getUTF8Identifier: unexpected call", false );
-        return Sequence<sal_Int8>();
-    }
-};
-
-class TestLegacyDocumentHandler : public TestDocumentHandler
-{
-public:
-    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endElement( const OUString& aName ) throw (SAXException, RuntimeException, exception) override;
-};
-
-void SAL_CALL TestLegacyDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs )
-        throw( SAXException, RuntimeException, exception )
-{
-    setString( getString() + aName );
-    sal_uInt16 len = xAttribs->getLength();
-    for (sal_uInt16 i = 0; i < len; i++)
-    {
-        OUString sAttrName = xAttribs->getNameByIndex(i);
-        OUString sAttrValue = xAttribs->getValueByIndex(i);
-        setString( getString() + sAttrName + sAttrValue );
-    }
-}
-
-
-void SAL_CALL TestLegacyDocumentHandler::endElement( const OUString& aName )
-    throw( SAXException, RuntimeException, exception )
-{
-    setString( getString() + aName );
-}
-
 class NSDocumentHandler : public cppu::WeakImplHelper< XDocumentHandler >
 {
 public:
@@ -411,12 +268,8 @@ class XMLImportTest : public test::BootstrapFixture
 private:
     OUString m_sDirPath;
     rtl::Reference< TestDocumentHandler > m_xDocumentHandler;
-    rtl::Reference< TestFastDocumentHandler > m_xFastDocumentHandler;
     Reference< XParser > m_xParser;
-    Reference< XFastParser > m_xFastParser;
     Reference< XParser > m_xLegacyFastParser;
-    rtl::Reference< TestLegacyDocumentHandler > m_xLegacyDocumentHandler;
-    Reference< XFastTokenHandler > m_xFastTokenHandler;
 
 public:
     virtual void setUp() override;
@@ -437,17 +290,11 @@ void XMLImportTest::setUp()
     test::BootstrapFixture::setUp();
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     m_xDocumentHandler.set( new TestDocumentHandler() );
-    m_xFastDocumentHandler.set( new TestFastDocumentHandler() );
-    m_xLegacyDocumentHandler.set( new TestLegacyDocumentHandler() );
-    m_xFastTokenHandler.set( new TestTokenHandler() );
     m_xParser = Parser::create( xContext );
-    m_xFastParser = FastParser::create( xContext );
     m_xParser->setDocumentHandler( m_xDocumentHandler.get() );
-    m_xFastParser->setFastDocumentHandler( m_xFastDocumentHandler.get() );
-    m_xFastParser->setTokenHandler( m_xFastTokenHandler );
     m_xLegacyFastParser.set( xContext->getServiceManager()->createInstanceWithContext
                     ( "com.sun.star.xml.sax.LegacyFastParser", xContext ), UNO_QUERY );
-    m_xLegacyFastParser->setDocumentHandler( m_xLegacyDocumentHandler.get() );
+    m_xLegacyFastParser->setDocumentHandler( m_xDocumentHandler.get() );
     m_sDirPath = m_directories.getPathFromSrc( "/sax/qa/data/" );
 }
 
@@ -462,7 +309,7 @@ void XMLImportTest::parse()
                             "multiplens.xml", "multiplepfx.xml",
                             "nstoattributes.xml", "nestedns.xml"};
 
-    for (sal_uInt16 i = 0; i < sizeof( fileNames ) / sizeof( string ); i++)
+    for (sal_uInt16 i = 0; i < sizeof( fileNames ) / sizeof( OUString ); i++)
     {
         InputSource source;
         source.sSystemId    = "internal";
@@ -472,15 +319,10 @@ void XMLImportTest::parse()
         const OUString& rParserStr = m_xDocumentHandler->getString();
 
         source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
-        m_xFastParser->parseStream(source);
-        const OUString& rFastParserStr = m_xFastDocumentHandler->getString();
-
-        source.aInputStream = createStreamFromFile( m_sDirPath + fileNames[i] );
         m_xLegacyFastParser->parseStream(source);
-        const OUString& rLegacyFastParserStr = m_xLegacyDocumentHandler->getString();
+        const OUString& rLegacyFastParserStr = m_xDocumentHandler->getString();
 
-        CPPUNIT_ASSERT_EQUAL( rParserStr, rFastParserStr );
-        CPPUNIT_ASSERT_EQUAL( rFastParserStr, rLegacyFastParserStr );
+        CPPUNIT_ASSERT_EQUAL( rParserStr, rLegacyFastParserStr );
         // OString o = OUStringToOString( Str, RTL_TEXTENCODING_ASCII_US );
         // CPPUNIT_ASSERT_MESSAGE( string(o.pData->buffer), false );
     }
@@ -496,6 +338,10 @@ void XMLImportTest::testIllegalNamespaceUse()
 
     source.aInputStream = createStreamFromFile( m_sDirPath + "multiplepfx.xml" );
     m_xParser->parseStream(source);
+
+    m_xLegacyFastParser->setDocumentHandler( m_xNSDocumentHandler.get() );
+    source.aInputStream = createStreamFromFile( m_sDirPath + "multiplepfx.xml" );
+    m_xLegacyFastParser->parseStream(source);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( XMLImportTest );

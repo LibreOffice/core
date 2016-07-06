@@ -61,6 +61,7 @@ public:
     virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) throw (css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
