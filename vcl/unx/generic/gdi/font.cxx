@@ -24,6 +24,7 @@
 #include "unx/salgdi.h"
 #include "unx/salvd.h"
 #include "textrender.hxx"
+#include "CommonSalLayout.hxx"
 
 GC
 X11SalGraphics::GetFontGC()
@@ -52,9 +53,14 @@ X11SalGraphics::GetFontGC()
     return pFontGC_;
 }
 
-void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
+void X11SalGraphics::DrawServerFontLayout( const GenericSalLayout& rLayout, const ServerFont& rServerFont )
 {
-    mxTextRenderImpl->DrawServerFontLayout(rLayout);
+    mxTextRenderImpl->DrawServerFontLayout(rLayout, rServerFont);
+}
+
+void X11SalGraphics::DrawSalLayout( const CommonSalLayout& rLayout )
+{
+    DrawServerFontLayout( rLayout, rLayout.getFontData() );
 }
 
 const FontCharMapRef X11SalGraphics::GetFontCharMap() const
