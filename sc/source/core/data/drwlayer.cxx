@@ -411,7 +411,7 @@ void ScDrawLayer::ScRemovePage( SCTAB nTab )
     if (bRecording)
     {
         SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-        AddCalcUndo(new SdrUndoDelPage(*pPage));        // Undo-Action becomes the page owner
+        AddCalcUndo(new SdrUndoDelPage(*pPage, true));  // Undo-Action becomes the page owner
         RemovePage( static_cast<sal_uInt16>(nTab) );    // just deliver, not deleting
     }
     else

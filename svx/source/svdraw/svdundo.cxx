@@ -1459,11 +1459,11 @@ SdrUndoPageList::~SdrUndoPageList()
 }
 
 
-
-SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
+SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg, bool bSoleOwnerOfFillBitmapProps)
     : SdrUndoPageList(rNewPg)
     , pUndoGroup(nullptr)
     , mbHasFillBitmap(false)
+    , mbSoleOwnerOfFillBitmapProps(bSoleOwnerOfFillBitmapProps)
 {
     bItsMine = true;
 
@@ -1573,12 +1573,15 @@ void SdrUndoDelPage::clearFillBitmap()
 {
     if (mrPage.IsMasterPage())
     {
-        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
-        assert(bool(pStyleSheet)); // who took away my stylesheet?
-        SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
-        rItemSet.ClearItem(XATTR_FILLBITMAP);
-        if (mbHasFillBitmap)
-            rItemSet.ClearItem(XATTR_FILLSTYLE);
+        if (mbSoleOwnerOfFillBitmapProps)
+        {
+            SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+            assert(bool(pStyleSheet)); // who took away my stylesheet?
+            SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+            rItemSet.ClearItem(XATTR_FILLBITMAP);
+            if (mbHasFillBitmap)
+                rItemSet.ClearItem(XATTR_FILLSTYLE);
+        }
     }
     else
     {
@@ -1593,12 +1596,15 @@ void SdrUndoDelPage::restoreFillBitmap()
 {
     if (mrPage.IsMasterPage())
     {
-        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
-        assert(bool(pStyleSheet)); // who took away my stylesheet?
-        SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
-        rItemSet.Put(*mpFillBitmapItem);
-        if (mbHasFillBitmap)
-            rItemSet.Put(XFillStyleItem(css::drawing::FillStyle_BITMAP));
+        if (mbSoleOwnerOfFillBitmapProps)
+        {
+            SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+            assert(bool(pStyleSheet)); // who took away my stylesheet?
+            SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+            rItemSet.Put(*mpFillBitmapItem);
+            if (mbHasFillBitmap)
+                rItemSet.Put(XFillStyleItem(css::drawing::FillStyle_BITMAP));
+        }
     }
     else
     {
@@ -1858,9 +1864,9 @@ SdrUndoAction* SdrUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLaye
 }
 
 // page
-SdrUndoAction*  SdrUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
+SdrUndoAction*  SdrUndoFactory::CreateUndoDeletePage(SdrPage& rPage, bool bSoleOwnerOfFillBitmapProps)
 {
-    return new SdrUndoDelPage( rPage );
+    return new SdrUndoDelPage(rPage, bSoleOwnerOfFillBitmapProps);
 }
 
 SdrUndoAction* SdrUndoFactory::CreateUndoNewPage(SdrPage& rPage)
