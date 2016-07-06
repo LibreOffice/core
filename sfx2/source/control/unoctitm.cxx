@@ -1051,7 +1051,9 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
             aBuffer.append(aString);
         }
     }
-    else if (aEvent.FeatureURL.Path == "InsertMode")
+    else if (aEvent.FeatureURL.Path == "InsertMode" ||
+             aEvent.FeatureURL.Path == "WrapText" ||
+             aEvent.FeatureURL.Path == "ToggleMergeCells")
     {
         sal_Bool aBool;
 
