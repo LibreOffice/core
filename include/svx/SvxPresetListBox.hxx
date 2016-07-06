@@ -52,6 +52,7 @@ public:
     {
         maDeleteHdl = rLink;
     }
+    void FillPresetListBox(XGradientList& pList, sal_uInt32 nStartIndex = 1);
     void FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex = 1);
     void DrawLayout();
 
