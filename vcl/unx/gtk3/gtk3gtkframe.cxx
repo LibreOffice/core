@@ -1176,9 +1176,9 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     }
     else
     {
-        m_pWindow = gtk_widget_new( GTK_TYPE_WINDOW, "type", eWinType,
-                                    "visible", FALSE, nullptr );
+        m_pWindow = gtk_window_new(eWinType);
     }
+
     g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", this );
     g_object_set_data( G_OBJECT( m_pWindow ), "libo-version", const_cast<char *>(LIBO_VERSION_DOTTED));
 
