@@ -80,7 +80,7 @@ X11SalGraphics::X11SalGraphics():
     m_aXRenderPicture(0),
     pPaintRegion_(nullptr),
     mpClipRegion(nullptr),
-#ifdef ENABLE_CAIRO_CANVAS
+#if ENABLE_CAIRO_CANVAS
     maClipRegion(),
     mnPenColor(SALCOLOR_NONE),
     mnFillColor(SALCOLOR_NONE),
@@ -366,7 +366,7 @@ bool X11SalGraphics::setClipRegion( const vcl::Region& i_rClip )
 
 void X11SalGraphics::SetLineColor()
 {
-#ifdef ENABLE_CAIRO_CANVAS
+#if ENABLE_CAIRO_CANVAS
     mnPenColor = SALCOLOR_NONE;
 #endif // ENABLE_CAIRO_CANVAS
 
@@ -375,7 +375,7 @@ void X11SalGraphics::SetLineColor()
 
 void X11SalGraphics::SetLineColor( SalColor nSalColor )
 {
-#ifdef ENABLE_CAIRO_CANVAS
+#if ENABLE_CAIRO_CANVAS
     mnPenColor = nSalColor;
 #endif // ENABLE_CAIRO_CANVAS
 
@@ -384,7 +384,7 @@ void X11SalGraphics::SetLineColor( SalColor nSalColor )
 
 void X11SalGraphics::SetFillColor()
 {
-#ifdef ENABLE_CAIRO_CANVAS
+#if ENABLE_CAIRO_CANVAS
     mnFillColor = SALCOLOR_NONE;
 #endif // ENABLE_CAIRO_CANVAS
 
@@ -393,7 +393,7 @@ void X11SalGraphics::SetFillColor()
 
 void X11SalGraphics::SetFillColor( SalColor nSalColor )
 {
-#ifdef ENABLE_CAIRO_CANVAS
+#if ENABLE_CAIRO_CANVAS
     mnFillColor = nSalColor;
 #endif // ENABLE_CAIRO_CANVAS
 
@@ -686,7 +686,7 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
     return mxImpl->drawPolyPolygon( rOrigPolyPoly, fTransparency );
 }
 
-#ifdef ENABLE_CAIRO_CANVAS
+#if ENABLE_CAIRO_CANVAS
 void X11SalGraphics::clipRegion(cairo_t* cr)
 {
     if(!maClipRegion.IsEmpty())
