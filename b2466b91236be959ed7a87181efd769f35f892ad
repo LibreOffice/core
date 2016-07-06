@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba84c18e_580e5335",
+        "filename": "sd/source/ui/sidebar/DefaultShapesPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-06T09:38:50Z",
+      "side": 1,
+      "message": "It is pretty bad style to include .cxx files. So please create some .hxx header with map declarations other files can include and move the initialization/implementation into .cxx file, if possible. \n\nEven better style (although it might be a bit overkill in this case) is to create some helper class or struct holding those maps (example: sc/source/filter/xml/editattributemap.[ch]xx)",
+      "revId": "b2466b91236be959ed7a87181efd769f35f892ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_b503e8b7",
         "filename": "sd/source/ui/sidebar/DefaultShapesPanel.cxx",
         "patchSetId": 5
