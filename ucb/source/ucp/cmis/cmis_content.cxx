@@ -538,17 +538,20 @@ namespace cmis
                     string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ) );
                     aParentUrl.removeSegment( );
                     OUString sParentUrl = aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
-
-                    rtl::Reference<Content> xParent( new Content(m_xContext, m_pProvider, new ucbhelper::ContentIdentifier( sParentUrl )) );
-                    libcmis::FolderPtr pParentFolder = boost::dynamic_pointer_cast< libcmis::Folder >( xParent->getObject( xEnv ) );
-                    if ( pParentFolder )
+                    // Avoid infinite recursion if sParentUrl == m_sURL
+                    if (sParentUrl != m_sURL)
                     {
-                        vector< libcmis::ObjectPtr > children = pParentFolder->getChildren( );
-                        for ( vector< libcmis::ObjectPtr >::iterator it = children.begin( );
-                                it != children.end() && !m_pObject; ++it )
+                        rtl::Reference<Content> xParent(new Content(m_xContext, m_pProvider, new ucbhelper::ContentIdentifier(sParentUrl)));
+                        libcmis::FolderPtr pParentFolder = boost::dynamic_pointer_cast< libcmis::Folder >(xParent->getObject(xEnv));
+                        if (pParentFolder)
                         {
-                            if ( ( *it )->getName( ) == sName )
-                                m_pObject = *it;
+                            vector< libcmis::ObjectPtr > children = pParentFolder->getChildren();
+                            for (vector< libcmis::ObjectPtr >::iterator it = children.begin();
+                                it != children.end() && !m_pObject; ++it)
+                            {
+                                if ((*it)->getName() == sName)
+                                    m_pObject = *it;
+                            }
                         }
                     }
 
