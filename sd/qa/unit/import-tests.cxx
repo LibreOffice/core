@@ -1387,7 +1387,7 @@ void SdImportTest::testTdf99729()
     }
     // The numbers 1-9 should be above the Text Box in rectangle 154,16 - 170,112.
     // If text alignment is wrong, the rectangle will be white.
-    CPPUNIT_ASSERT_MESSAGE("Tdf99729: vertical alignment of text is incorrect!", nonwhitecounts[0]>200); // it was 245 at my testing
+    CPPUNIT_ASSERT_MESSAGE("Tdf99729: vertical alignment of text is incorrect!", nonwhitecounts[0]>100); // it is 134 with cleartype disabled
     // The numbers 1-9 should be below the Text Box -> rectangle 154,16 - 170,112 should be white.
     CPPUNIT_ASSERT_MESSAGE("Tdf99729: legacy vertical alignment of text is incorrect!", nonwhitecounts[1] == 0);
 }
