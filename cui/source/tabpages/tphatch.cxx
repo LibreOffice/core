@@ -595,7 +595,8 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, v
         if( aQueryBox->Execute() == RET_YES )
         {
             m_pHatchingList->Remove( nPos - 1 );
-            m_pHatchLB->RemoveItem( nPos );
+            m_pHatchLB->Clear();
+            m_pHatchLB->FillPresetListBox( *m_pHatchingList );
             m_pHatchLB->SelectItem( 1 );
 
             m_pCtlPreview->Invalidate();
