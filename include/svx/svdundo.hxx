@@ -588,9 +588,10 @@ class SVX_DLLPUBLIC SdrUndoDelPage : public SdrUndoPageList
     SdrUndoGroup*               pUndoGroup;
     std::unique_ptr<SfxPoolItem> mpFillBitmapItem;
     bool mbHasFillBitmap;
+    bool mbSoleOwnerOfFillBitmapProps;
 
 public:
-    SdrUndoDelPage(SdrPage& rNewPg);
+    SdrUndoDelPage(SdrPage& rNewPg, bool bSoleOwnerOfFillBitmapProps);
     virtual ~SdrUndoDelPage();
 
     virtual void Undo() override;
@@ -763,7 +764,7 @@ public:
     virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1);
 
     // Page
-    virtual SdrUndoAction*  CreateUndoDeletePage(SdrPage& rPage);
+    virtual SdrUndoAction* CreateUndoDeletePage(SdrPage& rPage, bool bSoleOwnerOfFillBitmapProps = true);
     virtual SdrUndoAction* CreateUndoNewPage(SdrPage& rPage);
     virtual SdrUndoAction* CreateUndoCopyPage(SdrPage& rPage);
     virtual SdrUndoAction* CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1);

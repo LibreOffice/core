@@ -796,8 +796,17 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                  aTest == aMPLayout &&
                  eKind == pTest->GetPageKind() )
             {
-                if( bUndo )
-                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pRefPage));
+                if (bUndo)
+                {
+                    bool bSoleOwnerOfStyleSheet = true;
+                    if (pRefPage->IsMasterPage())
+                    {
+                        const SfxStyleSheet* pRefSheet = pRefPage->getSdrPageProperties().GetStyleSheet();
+                        const SfxStyleSheet* pTestSheet = pTest->getSdrPageProperties().GetStyleSheet();
+                        bSoleOwnerOfStyleSheet = pRefSheet != pTestSheet;
+                    }
+                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pRefPage, bSoleOwnerOfStyleSheet));
+                }
 
                 RemoveMasterPage(nPage);
 
