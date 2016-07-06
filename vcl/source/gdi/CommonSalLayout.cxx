@@ -221,9 +221,10 @@ void CommonSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
     }
 }
 
-void CommonSalLayout::DrawText( SalGraphics& ) const
+void CommonSalLayout::DrawText( SalGraphics& rSalGraphics ) const
 {
     //call platform dependent DrawText functions
+    rSalGraphics.DrawSalLayout( *this );
 }
 
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
