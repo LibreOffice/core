@@ -186,7 +186,7 @@ namespace
     }
 }
 
-void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
+void CairoTextRender::DrawServerFontLayout( const GenericSalLayout& rLayout, const ServerFont& rFont )
 {
     std::vector<cairo_glyph_t> cairo_glyphs;
     std::vector<int> glyph_extrarotation;
@@ -219,7 +219,6 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     if (cairo_glyphs.empty())
         return;
 
-    ServerFont& rFont = rLayout.GetServerFont();
     const FontSelectPattern& rFSD = rFont.GetFontSelData();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
