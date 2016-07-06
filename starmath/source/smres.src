@@ -206,11 +206,6 @@ String RID_ERR_UNOPEREXPECTED
     Text [ en-US ] = "Unary operator expected" ;
 };
 
-String RID_ERR_BINOPEREXPECTED
-{
-    Text [ en-US ] = "Binary operator expected" ;
-};
-
 String RID_ERR_SYMBOLEXPECTED
 {
     Text [ en-US ] = "Symbol expected" ;
