@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_98ac5bef",
+        "filename": "svx/source/tbxctrls/SvxPresetListBox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-06T10:24:58Z",
+      "side": 1,
+      "message": "Hm, this is tough as those methods to get the items from lists are named differently (GetHatch vs. GetGradient vs. GetBitmap vs. dunnowhat) \n\nbut please try to reduce duplicated code here. I have yet to come up w/ some creative idea so as to how exactly (template function?)",
+      "revId": "42c29b264a8d264ed3046dfde11a4d7eb6b2736e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
