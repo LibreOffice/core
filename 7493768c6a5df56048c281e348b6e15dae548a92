@@ -62,6 +62,23 @@
       "revId": "7493768c6a5df56048c281e348b6e15dae548a92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_154f3493",
+        "filename": "tools/source/misc/toolsdll.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-06T07:30:57Z",
+      "side": 1,
+      "message": "might want to use o3tl::enumarray?",
+      "revId": "7493768c6a5df56048c281e348b6e15dae548a92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
