@@ -119,6 +119,7 @@ struct ParserData
     FastTokenHandlerBase*                                      mpTokenHandler;
     css::uno::Reference< css::xml::sax::XErrorHandler >        mxErrorHandler;
     css::uno::Reference< css::xml::sax::XEntityResolver >      mxEntityResolver;
+    css::uno::Reference< css::xml::sax::XFastNamespaceHandler >mxNamespaceHandler;
     css::lang::Locale                                          maLocale;
 
     ParserData();
@@ -210,6 +211,7 @@ public:
     OUString getNamespaceURL( const OUString& rPrefix ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) throw (css::uno::RuntimeException);
     void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) throw (css::uno::RuntimeException);
+    void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) throw (css::uno::RuntimeException);
     void setLocale( const css::lang::Locale& rLocale ) throw (css::uno::RuntimeException);
 
     // called by the C callbacks of the expat parser
@@ -863,6 +865,11 @@ void FastSaxParserImpl::setLocale( const lang::Locale & Locale ) throw (RuntimeE
     maData.maLocale = Locale;
 }
 
+void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHandler >& Handler ) throw (RuntimeException)
+{
+    maData.mxNamespaceHandler = Handler;
+}
+
 void FastSaxParserImpl::deleteUsedEvents()
 {
     Entity& rEntity = getEntity();
@@ -1033,10 +1040,11 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
                 new FastAttributeList( rEntity.mxTokenHandler,
                                        rEntity.mpTokenHandler ) );
 
+    OUString sNamespace;
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
     if (!rEntity.maNamespaceStack.empty())
     {
-        rEvent.msNamespace = rEntity.maNamespaceStack.top().msName;
+        sNamespace = rEntity.maNamespaceStack.top().msName;
         nNamespaceToken = rEntity.maNamespaceStack.top().mnToken;
     }
 
@@ -1054,12 +1062,17 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             {
                     DefineNamespace( OString( XML_CAST( namespaces[ i ] )),
                         OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
+                    if( rEntity.mxNamespaceHandler.is() )
+                        rEntity.mxNamespaceHandler->registerNamespace( OUString( XML_CAST( namespaces[ i ] ),strlen( XML_CAST( namespaces[ i ] )), RTL_TEXTENCODING_UTF8 ),
+                            OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
             }
             else
             {
                 // default namespace
-                rEvent.msNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
-                nNamespaceToken = GetNamespaceToken( rEvent.msNamespace );
+                sNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
+                nNamespaceToken = GetNamespaceToken( sNamespace );
+                if( rEntity.mxNamespaceHandler.is() )
+                    rEntity.mxNamespaceHandler->registerNamespace("", OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ) );
             }
         }
 
@@ -1072,7 +1085,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
                 if( nAttributeToken != FastToken::DONTKNOW )
                     rEvent.mxAttributes->add( nAttributeToken, XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] );
                 else
-                    rEvent.mxAttributes->addUnknown( OUString( XML_CAST( attributes[ i + 2 ] ), strlen( XML_CAST( attributes[ i + 2 ] )), RTL_TEXTENCODING_UTF8 ),
+                    rEvent.mxAttributes->addUnknown( OUString( XML_CAST( attributes[ i + 1 ] ), strlen( XML_CAST( attributes[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ),
                             OString( XML_CAST( attributes[ i ] )), OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
             }
             else
@@ -1088,7 +1101,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
 
         if( prefix != nullptr )
             rEvent.mnElementToken = GetTokenWithPrefix( prefix, strlen( XML_CAST( prefix )), localName, strlen( XML_CAST( localName )));
-        else if( !rEvent.msNamespace.isEmpty() )
+        else if( !sNamespace.isEmpty() )
             rEvent.mnElementToken = GetTokenWithContextNamespace( nNamespaceToken, localName, strlen( XML_CAST( localName )));
         else
             rEvent.mnElementToken = GetToken( localName, strlen( XML_CAST( localName )));
@@ -1097,15 +1110,18 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
         {
             if( prefix != nullptr )
             {
-                rEvent.msNamespace = OUString( XML_CAST( URI ), strlen( XML_CAST( URI )), RTL_TEXTENCODING_UTF8 );
-                nNamespaceToken = GetNamespaceToken( rEvent.msNamespace );
+                sNamespace = OUString( XML_CAST( URI ), strlen( XML_CAST( URI )), RTL_TEXTENCODING_UTF8 );
+                nNamespaceToken = GetNamespaceToken( sNamespace );
+                rEvent.msNamespace = OUString( XML_CAST( prefix ), strlen( XML_CAST( prefix )), RTL_TEXTENCODING_UTF8 );
             }
+            else
+                rEvent.msNamespace.clear();
             rEvent.msElementName = OUString( XML_CAST( localName ), strlen( XML_CAST( localName )), RTL_TEXTENCODING_UTF8 );
         }
         else // token is always preferred.
             rEvent.msElementName.clear();
 
-        rEntity.maNamespaceStack.push( NameWithToken(rEvent.msNamespace, nNamespaceToken) );
+        rEntity.maNamespaceStack.push( NameWithToken(sNamespace, nNamespaceToken) );
         if (rEntity.mbEnableThreads)
             produce();
         else
@@ -1312,6 +1328,12 @@ void FastSaxParser::setLocale( const lang::Locale& rLocale )
     throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setLocale(rLocale);
+}
+
+void FastSaxParser::setNamespaceHandler( const uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler)
+    throw (uno::RuntimeException, std::exception)
+{
+    mpImpl->setNamespaceHandler(Handler);
 }
 
 OUString FastSaxParser::getImplementationName()
