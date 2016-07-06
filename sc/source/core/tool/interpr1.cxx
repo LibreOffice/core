@@ -3629,6 +3629,8 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
             case svDouble :
             {
                 fVal = GetDouble();
+                if ( nGlobalError )
+                    return;
                 values.push_back(fVal);
                 fSum    += fVal;
                 rValCount++;
@@ -3641,6 +3643,8 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 if (aCell.hasNumeric())
                 {
                     fVal = GetCellValue(aAdr, aCell);
+                    if ( nGlobalError )
+                        return;
                     values.push_back(fVal);
                     fSum += fVal;
                     rValCount++;
@@ -3667,6 +3671,11 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                         rValCount++;
                     }
                     while ((nErr == 0) && aValIter.GetNext(fVal, nErr));
+                }
+                if ( nErr )
+                {
+                    SetError(nErr);
+                    return;
                 }
             }
             break;
