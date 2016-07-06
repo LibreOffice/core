@@ -42,6 +42,7 @@
 
 #include <cairo.h>
 #include <cairo-ft.h>
+#include "CommonSalLayout.hxx"
 
 namespace {
 
@@ -540,7 +541,14 @@ SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
         }
         else
 #endif
-            pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
+            if(getenv("SAL_USE_COMMON_LAYOUT"))
+            {
+                pLayout = new CommonSalLayout( *mpServerFont[ nFallbackLevel ] );
+            }
+            else
+            {
+                pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
+            }
     }
 
     return pLayout;
