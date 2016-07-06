@@ -41,6 +41,7 @@
 #include "impfont.hxx"
 #include "impfontcharmap.hxx"
 #include "impfontmetricdata.hxx"
+#include "CommonSalLayout.hxx"
 
 #ifdef MACOSX
 #include "osx/salframe.h"
@@ -413,7 +414,7 @@ bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect 
     return bRC;
 }
 
-void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
+void AquaSalGraphics::DrawSalLayout( const CommonSalLayout& )
 {
 }
 

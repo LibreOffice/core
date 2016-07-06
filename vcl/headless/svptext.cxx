@@ -23,6 +23,7 @@
 #include "headless/svpgdi.hxx"
 #include <config_cairo_canvas.h>
 #include "impfontmetricdata.hxx"
+#include "CommonSalLayout.hxx"
 
 void SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
 {
@@ -116,9 +117,14 @@ SalLayout* SvpSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     return m_aTextRenderImpl.GetTextLayout(rArgs, nFallbackLevel);
 }
 
-void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
+void SvpSalGraphics::DrawServerFontLayout( const GenericSalLayout& rSalLayout, const ServerFont& rServerFont )
 {
-    m_aTextRenderImpl.DrawServerFontLayout(rSalLayout );
+    m_aTextRenderImpl.DrawServerFontLayout( rSalLayout, rServerFont );
+}
+
+void SvpSalGraphics::DrawSalLayout( const CommonSalLayout& rSalLayout )
+{
+    DrawServerFontLayout( rSalLayout, rSalLayout.getFontData() );
 }
 
 void SvpSalGraphics::SetTextColor( SalColor nSalColor )
