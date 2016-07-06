@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_758960ca",
+        "filename": "sc/source/ui/app/scmod.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-06T06:45:16Z",
+      "side": 1,
+      "message": "Passing out the this pointer from within a constructor is not a very good idea, I\u0027d prefer if the registeration happened at the old spots.\n\n(If you absolutely have to do this, it should be done at the __end__ of the constructor, after the object is fully initialised)",
+      "revId": "7493768c6a5df56048c281e348b6e15dae548a92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
