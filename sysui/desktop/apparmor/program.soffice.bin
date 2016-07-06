@@ -120,13 +120,12 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin {
 
   /usr/lib{,32,64}/jvm/                         r,
   /usr/lib{,32,64}/jvm/**                       r,
-  INSTDIR-**                        ra,
-  INSTDIR-**.so                     rm,
-  INSTDIR-share/uno_packages/cache/* rw,
-  INSTDIR-program/soffice.bin       rmix,
-  INSTDIR-program/xpdfimport        rpx,
+  INSTDIR-**                        rw,
+  INSTDIR-**.so                     m,
+  INSTDIR-program/soffice.bin       mix,
+  INSTDIR-program/xpdfimport        px,
+  INSTDIR-program/senddoc           px,
   /usr/bin/xdg-open                 rPUx,
-  INSTDIR-program/senddoc           rpx,
 
   /usr/share/java/**.jar                r,
   /usr/share/hunspell/                  r,
