@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_98c1bb83",
+        "filename": "external/firebird/firebird-rpath.patch.0",
+        "patchSetId": 17
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-06T12:00:58Z",
+      "side": 1,
+      "message": "you update that patch, but you remove its application, so it sits unused.",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 1
+      },
+      "revId": "84e0744986776e0136354325823cd41ec1408fdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -34,6 +34,29 @@
       "revId": "d534e939d4b9c8ac09cd1e7e28e5ad43d1ee56ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_78c4f791",
+        "filename": "external/firebird/UnpackedTarball_firebird.mk",
+        "patchSetId": 17
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-06T12:00:58Z",
+      "side": 0,
+      "message": "You remove the application of this patch, but you still change that patch in the same commit... I guess you don\u0027t what to remove it?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 1
+      },
+      "revId": "d534e939d4b9c8ac09cd1e7e28e5ad43d1ee56ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
