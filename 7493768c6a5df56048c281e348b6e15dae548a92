@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba84c18e_b5aa0818",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-06T07:25:17Z",
+      "side": 1,
+      "message": "\"now\"?",
+      "range": {
+        "startLine": 9,
+        "startChar": 11,
+        "endLine": 9,
+        "endChar": 14
+      },
+      "revId": "7493768c6a5df56048c281e348b6e15dae548a92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_d5a78c4d",
+        "filename": "sc/inc/scmod.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-06T07:25:17Z",
+      "side": 1,
+      "message": "these downcasts need to be static_cast now",
+      "range": {
+        "startLine": 258,
+        "startChar": 19,
+        "endLine": 258,
+        "endChar": 35
+      },
+      "revId": "7493768c6a5df56048c281e348b6e15dae548a92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_758960ca",
         "filename": "sc/source/ui/app/scmod.cxx",
         "patchSetId": 3
