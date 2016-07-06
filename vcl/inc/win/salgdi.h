@@ -52,6 +52,7 @@ class PhysicalFontCollection;
 class SalGraphicsImpl;
 class WinOpenGLSalGraphicsImpl;
 class ImplFontMetricData;
+class CommonSalLayout;
 
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
@@ -450,7 +451,8 @@ public:
     virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) override;
 
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
-    virtual void            DrawServerFontLayout( const ServerFontLayout& ) override;
+    virtual void            DrawSalLayout( const CommonSalLayout& ) override;
+    virtual void            DrawServerFontLayout( const GenericSalLayout&, const ServerFont& ) {};
 
     virtual bool            supportsOperation( OutDevSupportType ) const override;
     // Query the platform layer for control support
