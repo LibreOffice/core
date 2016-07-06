@@ -96,9 +96,36 @@ void ScSimpleUndo::BeginUndo()
         pDetectiveUndo->Undo();
 }
 
+namespace
+{
+    class DisableUndoGuard
+    {
+    private:
+        ScDocument& m_rDoc;
+        bool m_bUndoEnabled;
+    public:
+        DisableUndoGuard(ScDocShell *pDocShell)
+            : m_rDoc(pDocShell->GetDocument())
+            , m_bUndoEnabled(m_rDoc.IsUndoEnabled())
+        {
+            m_rDoc.EnableUndo(false);
+        }
+
+        ~DisableUndoGuard()
+        {
+            m_rDoc.EnableUndo(m_bUndoEnabled);
+        }
+    };
+}
+
 void ScSimpleUndo::EndUndo()
 {
-    pDocShell->SetDocumentModified();
+    {
+        // rhbz#1352881 Temporarily turn off undo generation during
+        // SetDocumentModified
+        DisableUndoGuard aGuard(pDocShell);
+        pDocShell->SetDocumentModified();
+    }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -125,7 +152,12 @@ void ScSimpleUndo::EndRedo()
     if (pDetectiveUndo)
         pDetectiveUndo->Redo();
 
-    pDocShell->SetDocumentModified();
+    {
+        // rhbz#1352881 Temporarily turn off undo generation during
+        // SetDocumentModified
+        DisableUndoGuard aGuard(pDocShell);
+        pDocShell->SetDocumentModified();
+    }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
