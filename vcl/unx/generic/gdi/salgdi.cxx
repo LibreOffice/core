@@ -746,6 +746,7 @@ bool X11SalGraphics::drawPolyLine(
                 break;
             case basegfx::B2DLineJoin::NONE:
                 bNoJoin = true;
+                SAL_FALLTHROUGH;
             case basegfx::B2DLineJoin::Miter:
                 eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
                 break;
