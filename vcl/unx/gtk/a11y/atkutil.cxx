@@ -217,7 +217,7 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
             }
 
             case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-                OSL_TRACE( "Invalidate all children called\n" );
+                SAL_INFO("vcl.a11y", "Invalidate all children called");
                 break;
 
             default:
