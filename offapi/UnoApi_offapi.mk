@@ -4330,6 +4330,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml/sax,\
 	XEntityResolver \
 	XErrorHandler \
 	XExtendedDocumentHandler \
+	XFastNamespaceHandler \
 	XFastAttributeList \
 	XFastContextHandler \
 	XFastDocumentHandler \
