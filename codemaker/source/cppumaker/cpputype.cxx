@@ -443,7 +443,7 @@ void CppuType::dumpDependedTypes(
     if (!options.isValid("-nD")) {
         codemaker::cppumaker::Dependencies::Map const & map
             = m_dependencies.getMap();
-        for (const std::pair<OUString,codemaker::cppumaker::Dependencies::Kind>& entry : map)
+        for (const auto& entry : map)
         {
             produce(entry.first, m_typeMgr, generated, options);
         }

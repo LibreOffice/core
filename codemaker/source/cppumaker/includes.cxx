@@ -136,7 +136,7 @@ void dumpEmptyLineBeforeFirst(FileStream & out, bool * first) {
 void Includes::dump(FileStream & out, OUString const * companionHdl) {
     OSL_ASSERT(companionHdl == nullptr || m_hpp);
     if (!m_includeReference) {
-        for (const std::pair<OUString, codemaker::cppumaker::Dependencies::Kind>& pair : m_map)
+        for (const auto& pair : m_map)
         {
             if (isInterfaceType(u2b(pair.first))) {
                 m_includeReference = true;
@@ -159,7 +159,7 @@ void Includes::dump(FileStream & out, OUString const * companionHdl) {
         dumpInclude(out, u2b(*companionHdl), false);
     }
     bool first = true;
-    for (const std::pair<OUString, codemaker::cppumaker::Dependencies::Kind>& pair : m_map)
+    for (const auto& pair : m_map)
     {
         dumpEmptyLineBeforeFirst(out, &first);
         if (m_hpp || pair.second == Dependencies::KIND_BASE

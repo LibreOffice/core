@@ -757,7 +757,7 @@ void handleEnumType(
         std::list< ClassFile::Code * > blocks;
             //FIXME: pointers contained in blocks may leak
         sal_Int32 last = SAL_MAX_INT32;
-        for (const std::pair< sal_Int32, OString >& pair : map)
+        for (const auto& pair : map)
         {
             sal_Int32 value = pair.first;
             if (last != SAL_MAX_INT32) {
@@ -783,7 +783,7 @@ void handleEnumType(
         defCode->instrAreturn();
         std::list< std::pair< sal_Int32, ClassFile::Code * > > blocks;
             //FIXME: pointers contained in blocks may leak
-        for (const std::pair< sal_Int32, OString >& pair : map )
+        for (const auto& pair : map )
         {
             std::unique_ptr< ClassFile::Code > blockCode(cf->newCode());
             blockCode->instrGetstatic(className, pair.second, classDescriptor);

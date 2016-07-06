@@ -269,7 +269,7 @@ static std::vector<beans::PropertyValue> jsonToPropertyValuesVector(const char* 
         std::stringstream aStream(pJSON);
         boost::property_tree::read_json(aStream, aTree);
 
-        for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+        for (const auto& rPair : aTree)
         {
             const std::string& rType = rPair.second.get<std::string>("type");
             const std::string& rValue = rPair.second.get<std::string>("value");

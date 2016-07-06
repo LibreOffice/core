@@ -1046,7 +1046,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
                                       FSNS(XML_w, XML_element), "RDF",
                                       FSEND);
         m_pSerializer->startElementNS(XML_w, XML_smartTagPr, FSEND);
-        for (const std::pair<OUString, OUString>& rStatement : aStatements)
+        for (const auto& rStatement : aStatements)
             m_pSerializer->singleElementNS(XML_w, XML_attr,
                                            FSNS(XML_w, XML_name), rStatement.first.toUtf8(),
                                            FSNS(XML_w, XML_val), rStatement.second.toUtf8(),

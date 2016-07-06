@@ -416,7 +416,7 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
     for (const std::map<OUString, OUString>& rStatements : m_aStatements)
     {
         // Statements for a single text node.
-        for (const std::pair<OUString, OUString>& rPair : rStatements)
+        for (const auto& rPair : rStatements)
         {
             aSet.insert(rPair.first);
             aSet.insert(rPair.second);
@@ -427,7 +427,7 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
     {
         MSOPropertyBag aPropertyBag;
         aPropertyBag.m_nId = 1;
-        for (const std::pair<OUString, OUString>& rPair : rStatements)
+        for (const auto& rPair : rStatements)
         {
             MSOProperty aProperty;
             aProperty.m_nKey = std::distance(aSet.begin(), aSet.find(rPair.first));

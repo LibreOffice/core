@@ -247,7 +247,7 @@ void DesktopLOKTest::testGetStyles()
 
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
     CPPUNIT_ASSERT( aValues.size() > 0 );
-    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aValues)
+    for (const auto& rPair : aValues)
     {
         if( rPair.first != "ClearStyle")
         {
@@ -281,7 +281,7 @@ void DesktopLOKTest::testGetFonts()
 
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
     CPPUNIT_ASSERT( aValues.size() > 0 );
-    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aValues)
+    for (const auto& rPair : aValues)
     {
         // check that we have font sizes available for each font
         CPPUNIT_ASSERT( rPair.second.size() > 0);
