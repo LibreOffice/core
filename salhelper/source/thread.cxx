@@ -15,6 +15,8 @@
 #include "sal/log.hxx"
 #include "salhelper/thread.hxx"
 
+#include <com/sun/star/uno/Exception.hpp>
+
 salhelper::Thread::Thread(char const * name): name_(name) {}
 
 void salhelper::Thread::launch() {
@@ -38,7 +40,12 @@ void salhelper::Thread::run() {
     try {
         setName(name_);
         execute();
-    } catch (...) {
+    } catch (const std::exception&) {
+        // Work around the problem that onTerminated is not called if run throws
+        // an exception:
+        onTerminated();
+        throw;
+    } catch (const css::uno::Exception&) {
         // Work around the problem that onTerminated is not called if run throws
         // an exception:
         onTerminated();
