@@ -890,7 +890,7 @@ static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pD
     TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
 
     std::string aPayload(pPayload);
-    size_t nPosition = aPayload.find("=");
+    size_t nPosition = aPayload.find('=');
     if (nPosition != std::string::npos)
     {
         std::string aKey = aPayload.substr(0, nPosition);
