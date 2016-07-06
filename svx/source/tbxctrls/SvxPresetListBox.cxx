@@ -85,16 +85,27 @@ void SvxPresetListBox::DrawLayout()
     SetColCount(getColumnCount());
     SetLineCount(5);
 }
-
-void SvxPresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex)
+template< typename ListType, typename EntryType >
+void SvxPresetListBox::FillPresetListBoxImpl(ListType & pList, sal_uInt32 nStartIndex)
 {
     const Size aSize(100,60);
     BitmapEx aBitmap;
     for(long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
     {
         aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
-        InsertItem(nStartIndex, Image(aBitmap), pList.GetHatch( nIndex )->GetName());
+        EntryType *pItem = static_cast<EntryType*>( pList.Get( nIndex ) );
+        InsertItem(nStartIndex, Image(aBitmap), pItem->GetName());
     }
+}
+
+void SvxPresetListBox::FillPresetListBox(XGradientList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XGradientList, XGradientEntry>( pList, nStartIndex );
+}
+
+void SvxPresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartIndex)
+{
+    FillPresetListBoxImpl< XHatchList, XHatchEntry>( pList, nStartIndex );
 }
 
 IMPL_LINK_TYPED(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
