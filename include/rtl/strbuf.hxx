@@ -385,7 +385,14 @@ public:
     /**
         Return a null terminated character array.
      */
-    const sal_Char* getStr() const { return pData->buffer; }
+    const sal_Char* getStr() const & { return pData->buffer; }
+
+#if defined LIBO_INTERNAL_ONLY
+    /**
+     * Prevent accidental usage of the string in a context where it has already been deallocated.
+     */
+    const sal_Char * getStr() const && = delete;
+#endif
 
     /**
       Access to individual characters.

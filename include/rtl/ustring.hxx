@@ -561,7 +561,14 @@ public:
 
       @return   a pointer to the Unicode characters buffer for this object.
     */
-    const sal_Unicode * getStr() const { return pData->buffer; }
+    const sal_Unicode * getStr() const & { return pData->buffer; }
+
+#if defined LIBO_INTERNAL_ONLY
+    /**
+     * Prevent accidental usage of the string in a context where it has already been deallocated.
+     */
+    const sal_Unicode * getStr() const && = delete;
+#endif
 
     /**
       Access to individual characters.
@@ -2830,8 +2837,8 @@ template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, OUString const & rString)
 {
-    return stream <<
-        OUStringToOString(rString, RTL_TEXTENCODING_UTF8).getStr();
+    OString s = OUStringToOString(rString, RTL_TEXTENCODING_UTF8);
+    return stream << s.getStr();
         // best effort; potentially loses data due to conversion failures
         // (stray surrogate halves) and embedded null characters
 }

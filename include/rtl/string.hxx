@@ -427,7 +427,14 @@ public:
       @return a pointer to a null-terminated byte string representing the
       characters of this string object.
     */
-    const sal_Char * getStr() const { return pData->buffer; }
+    const sal_Char * getStr() const & { return pData->buffer; }
+
+#if defined LIBO_INTERNAL_ONLY
+    /**
+     * Prevent accidental usage of the string in a context where it has already been deallocated.
+     */
+    const sal_Char * getStr() const && = delete;
+#endif
 
     /**
       Access to individual characters.

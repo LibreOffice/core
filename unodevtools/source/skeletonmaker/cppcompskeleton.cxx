@@ -60,8 +60,9 @@ void generateIncludes(std::ostream & o,
     std::set< OUString >::const_iterator iter = interfaces.begin();
     while (iter != interfaces.end())
     {
+        OUString s = (*iter).replace('.', '/');
         o << "#include \""
-          << ((*iter).replace('.', '/').getStr())
+          << s.getStr()
           << ".hpp\"\n";
         ++iter;
     }

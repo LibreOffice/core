@@ -276,7 +276,8 @@ int mkdir_u(const rtl_uString* path, mode_t mode)
 
     accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
 
-    int result = mkdir(OUStringToOString(path).getStr(), mode);
+    OString sPath = OUStringToOString(path);
+    int result = mkdir(sPath.getStr(), mode);
 
     done_accessing_file_path(fn.getStr(), state);
 
