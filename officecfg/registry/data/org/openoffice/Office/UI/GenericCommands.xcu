@@ -1888,6 +1888,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Line</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Line</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -2303,6 +2306,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Vertical Text</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Vertical Text</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -2334,6 +2340,9 @@
       <node oor:name=".uno:InsertObjectChart" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Chart...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Chart</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3334,6 +3343,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Image...</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Image</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -3452,6 +3464,9 @@
       <node oor:name=".uno:DrawText" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Text Box</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Text Box</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3600,6 +3615,9 @@
       <node oor:name=".uno:HyperlinkDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Hyperlink...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Hyperlink</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -4494,6 +4512,9 @@
       <node oor:name=".uno:InsertSymbol" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">S~pecial Character...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Special Character</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
