@@ -67,10 +67,10 @@ SvxOpenCLTabPage::~SvxOpenCLTabPage()
 
 void SvxOpenCLTabPage::dispose()
 {
-
     mpUseSwInterpreter.clear();
     mpUseOpenCL.clear();
-    clUsed.clear();
+    mpOclUsed.clear();
+    mpOclNotUsed.clear();
 
     SfxTabPage::dispose();
 }
