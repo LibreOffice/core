@@ -54,6 +54,8 @@ struct AllocatorTraits
 #if OSL_DEBUG_LEVEL > 0
         memcpy (p, m_signature, sizeof(signature_type));
         p = static_cast<char*>(p) + sizeof(signature_type);
+#else
+        (void) this; // silence loplugin:staticmethods
 #endif  /* OSL_DEBUG_LEVEL */
         return p;
     }
@@ -66,6 +68,8 @@ struct AllocatorTraits
         {
             OSL_FAIL("operator delete mismatch");
         }
+#else
+        (void) this; // silence loplugin:staticmethods
 #endif  /* OSL_DEBUG_LEVEL */
         return p;
     }
