@@ -2178,7 +2178,7 @@ void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRo
     }
 }
 
-static uno::Any lcl_GetEnumerated( uno::Reference<container::XEnumerationAccess> xEnumAccess, sal_Int32 nIndex )
+static uno::Any lcl_GetEnumerated( uno::Reference<container::XEnumerationAccess> const & xEnumAccess, sal_Int32 nIndex )
 {
     uno::Any aRet;
     uno::Reference<container::XEnumeration> xEnum( xEnumAccess->createEnumeration() );
@@ -2644,7 +2644,7 @@ void ScXMLExport::ExportMasterStyles_()
     GetPageExport()->exportMasterStyles( true );
 }
 
-void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape )
+void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > const & xShape )
 {
     // detective objects and notes
     if( SvxShape* pShapeImp = SvxShape::getImplementation( xShape ) )
@@ -3040,7 +3040,7 @@ void writeContent(
 
 void flushParagraph(
     ScXMLExport& rExport, const OUString& rParaText,
-    rtl::Reference<XMLPropertySetMapper> xMapper, rtl::Reference<SvXMLAutoStylePoolP> xStylePool,
+    rtl::Reference<XMLPropertySetMapper> const & xMapper, rtl::Reference<SvXMLAutoStylePoolP> const & xStylePool,
     const ScXMLEditAttributeMap& rAttrMap,
     std::vector<editeng::Section>::const_iterator it, std::vector<editeng::Section>::const_iterator itEnd )
 {

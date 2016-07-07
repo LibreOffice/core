@@ -1973,7 +1973,7 @@ void XclImpChSeries::FinalizeDataFormats()
 namespace {
 
 /** Returns the property set of the specified data point. */
-ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > xDataSeries, sal_uInt16 nPointIdx )
+ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > const & xDataSeries, sal_uInt16 nPointIdx )
 {
     ScfPropertySet aPropSet;
     try
@@ -2143,7 +2143,7 @@ XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sa
     return xDataFmt;
 }
 
-void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > xDataSeries ) const
+void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > const & xDataSeries ) const
 {
     Reference< XRegressionCurveContainer > xRegCurveCont( xDataSeries, UNO_QUERY );
     if( xRegCurveCont.is() )
@@ -2358,7 +2358,7 @@ Reference< XCoordinateSystem > XclImpChType::CreateCoordSystem( bool b3dChart ) 
     return xCoordSystem;
 }
 
-Reference< XChartType > XclImpChType::CreateChartType( Reference< XDiagram > xDiagram, bool b3dChart ) const
+Reference< XChartType > XclImpChType::CreateChartType( Reference< XDiagram > const & xDiagram, bool b3dChart ) const
 {
     OUString aService = OUString::createFromAscii( maTypeInfo.mpcServiceName );
     Reference< XChartType > xChartType( ScfApiHelper::CreateInstance( aService ), UNO_QUERY );
@@ -2763,7 +2763,7 @@ Reference< XCoordinateSystem > XclImpChTypeGroup::CreateCoordSystem() const
     return maType.CreateCoordSystem( Is3dChart() );
 }
 
-Reference< XChartType > XclImpChTypeGroup::CreateChartType( Reference< XDiagram > xDiagram, sal_Int32 nApiAxesSetIdx ) const
+Reference< XChartType > XclImpChTypeGroup::CreateChartType( Reference< XDiagram > const & xDiagram, sal_Int32 nApiAxesSetIdx ) const
 {
     OSL_ENSURE( IsValidGroup(), "XclImpChTypeGroup::CreateChartType - type group without series" );
 
@@ -2834,8 +2834,8 @@ void XclImpChTypeGroup::ReadChDataFormat( XclImpStream& rStrm )
         mxGroupFmt = xDataFmt;
 }
 
-void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > xChartType,
-        Reference< XDataSeries > xSeries, sal_Int32 nApiAxesSetIdx ) const
+void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > const & xChartType,
+        Reference< XDataSeries > const & xSeries, sal_Int32 nApiAxesSetIdx ) const
 {
     Reference< XDataSeriesContainer > xSeriesCont( xChartType, UNO_QUERY );
     if( xSeriesCont.is() && xSeries.is() )
@@ -2865,7 +2865,7 @@ void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > xChartType,
     }
 }
 
-void XclImpChTypeGroup::CreateDataSeries( Reference< XChartType > xChartType, sal_Int32 nApiAxesSetIdx ) const
+void XclImpChTypeGroup::CreateDataSeries( Reference< XChartType > const & xChartType, sal_Int32 nApiAxesSetIdx ) const
 {
     bool bSpline = false;
     for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end(); aIt != aEnd; ++aIt )
@@ -2882,7 +2882,7 @@ void XclImpChTypeGroup::CreateDataSeries( Reference< XChartType > xChartType, sa
     }
 }
 
-void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > xChartType, sal_Int32 nApiAxesSetIdx ) const
+void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > const & xChartType, sal_Int32 nApiAxesSetIdx ) const
 {
     // create the data series object
     Reference< XDataSeries > xDataSeries( ScfApiHelper::CreateInstance( SERVICE_CHART2_DATASERIES ), UNO_QUERY );
@@ -3583,7 +3583,7 @@ OUString XclImpChAxesSet::GetSingleSeriesTitle() const
     return (maTypeGroups.size() == 1) ? maTypeGroups.begin()->second->GetSingleSeriesTitle() : OUString();
 }
 
-void XclImpChAxesSet::Convert( Reference< XDiagram > xDiagram ) const
+void XclImpChAxesSet::Convert( Reference< XDiagram > const & xDiagram ) const
 {
     if( IsValidAxesSet() && xDiagram.is() )
     {
@@ -3675,7 +3675,7 @@ void XclImpChAxesSet::ReadChTypeGroup( XclImpStream& rStrm )
             itr, XclImpChTypeGroupMap::value_type(nGroupIdx, xTypeGroup));
 }
 
-Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XDiagram > xDiagram ) const
+Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XDiagram > const & xDiagram ) const
 {
     Reference< XCoordinateSystem > xCoordSystem;
 
@@ -3730,7 +3730,7 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
 
 void XclImpChAxesSet::ConvertAxis(
         XclImpChAxisRef xChAxis, XclImpChTextRef xChAxisTitle,
-        Reference< XCoordinateSystem > xCoordSystem, const XclImpChAxis* pCrossingAxis ) const
+        Reference< XCoordinateSystem > const & xCoordSystem, const XclImpChAxis* pCrossingAxis ) const
 {
     if( xChAxis )
     {
@@ -3773,7 +3773,7 @@ Reference< XAxis > XclImpChAxesSet::CreateAxis( const XclImpChAxis& rChAxis, con
     return xAxis;
 }
 
-void XclImpChAxesSet::ConvertBackground( Reference< XDiagram > xDiagram ) const
+void XclImpChAxesSet::ConvertBackground( Reference< XDiagram > const & xDiagram ) const
 {
     XclImpChTypeGroupRef xTypeGroup = GetFirstTypeGroup();
     if( xTypeGroup && xTypeGroup->Is3dWallChart() )
@@ -4333,7 +4333,7 @@ sal_Size XclImpChart::GetProgressSize() const
         (mxChartDrawing ? mxChartDrawing->GetProgressSize() : 0);
 }
 
-void XclImpChart::Convert( Reference< XModel > xModel, XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
+void XclImpChart::Convert( Reference< XModel > const & xModel, XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
 {
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
     if( xChartDoc.is() )

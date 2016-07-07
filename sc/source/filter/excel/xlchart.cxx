@@ -547,7 +547,7 @@ const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( const OUStri
 
 // Property helpers ===========================================================
 
-XclChObjectTable::XclChObjectTable( Reference< XMultiServiceFactory > xFactory,
+XclChObjectTable::XclChObjectTable( Reference< XMultiServiceFactory > const & xFactory,
         const OUString& rServiceName, const OUString& rObjNameBase ) :
     mxFactory( xFactory ),
     maServiceName( rServiceName ),

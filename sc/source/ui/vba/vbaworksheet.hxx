@@ -78,7 +78,7 @@ public:
     { return mxSheet; }
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
     css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( const OUString& );
-    css::uno::Reference< ov::excel::XWorksheet > createSheetCopy(css::uno::Reference< ov::excel::XWorksheet> xSheet, bool bAfter);
+    css::uno::Reference< ov::excel::XWorksheet > createSheetCopy(css::uno::Reference< ov::excel::XWorksheet> const & xSheet, bool bAfter);
 
     // Attributes
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;

@@ -140,7 +140,7 @@ class ScXMLExport : public SvXMLExport
     virtual void ExportContent_() override;
     virtual void ExportMeta_() override;
 
-    void CollectInternalShape( css::uno::Reference< css::drawing::XShape > xShape );
+    void CollectInternalShape( css::uno::Reference< css::drawing::XShape > const & xShape );
 
     static css::table::CellRangeAddress GetEndAddress(const css::uno::Reference<css::sheet::XSpreadsheet>& xTable,
                                                         const sal_Int32 nTable);

@@ -102,21 +102,21 @@ public:
     /** Creates an OCX form control OBJ record from the passed form control.
         @descr  Writes the form control data to the 'Ctls' stream. */
     std::unique_ptr<XclExpOcxControlObj> CreateOCXCtrlObj(
-                            css::uno::Reference< css::drawing::XShape > xShape,
+                            css::uno::Reference< css::drawing::XShape > const & xShape,
                             const Rectangle* pChildAnchor );
 
 private:
     tools::SvRef<SotStorageStream>  mxCtlsStrm;         /// The 'Ctls' stream.
     /** Creates a TBX form control OBJ record from the passed form control. */
     std::unique_ptr<XclExpTbxControlObj> CreateTBXCtrlObj(
-                            css::uno::Reference< css::drawing::XShape > xShape,
+                            css::uno::Reference< css::drawing::XShape > const & xShape,
                             const Rectangle* pChildAnchor );
 
 private:
     /** Tries to get the name of a Basic macro from a control. */
     void                ConvertTbxMacro(
                             XclExpTbxControlObj& rTbxCtrlObj,
-                            css::uno::Reference< css::awt::XControlModel > xCtrlModel );
+                            css::uno::Reference< css::awt::XControlModel > const & xCtrlModel );
 
     void                DeleteCurrAppData();
 

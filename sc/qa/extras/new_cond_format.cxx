@@ -101,7 +101,7 @@ void ScConditionalFormatTest::testRequestCondFormatListFromSheet()
 
 namespace {
 
-uno::Reference<sheet::XConditionalFormats> getConditionalFormatList(uno::Reference<uno::XInterface> xInterface)
+uno::Reference<sheet::XConditionalFormats> getConditionalFormatList(uno::Reference<uno::XInterface> const & xInterface)
 {
     uno::Reference<sheet::XSpreadsheet> xSheet(xInterface, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xProps(xSheet, uno::UNO_QUERY_THROW);
@@ -186,7 +186,7 @@ void ScConditionalFormatTest::testCondFormatXIndex()
 
 namespace {
 
-void testAxisPosition(uno::Reference<beans::XPropertySet> xPropSet, sal_Int32 ePos)
+void testAxisPosition(uno::Reference<beans::XPropertySet> const & xPropSet, sal_Int32 ePos)
 {
     sal_Int32 eAxisPos;
     uno::Any aAny = xPropSet->getPropertyValue("AxisPosition");
@@ -194,7 +194,7 @@ void testAxisPosition(uno::Reference<beans::XPropertySet> xPropSet, sal_Int32 eP
     CPPUNIT_ASSERT_EQUAL(ePos, eAxisPos);
 }
 
-void testShowValue(uno::Reference<beans::XPropertySet> xPropSet, bool bShowVal)
+void testShowValue(uno::Reference<beans::XPropertySet> const & xPropSet, bool bShowVal)
 {
     bool bShow;
     uno::Any aAny = xPropSet->getPropertyValue("ShowValue");
@@ -202,7 +202,7 @@ void testShowValue(uno::Reference<beans::XPropertySet> xPropSet, bool bShowVal)
     CPPUNIT_ASSERT_EQUAL(bShowVal, bShow);
 }
 
-void testUseGradient(uno::Reference<beans::XPropertySet> xPropSet, bool bUseGradient)
+void testUseGradient(uno::Reference<beans::XPropertySet> const & xPropSet, bool bUseGradient)
 {
     bool bGradient;
     uno::Any aAny = xPropSet->getPropertyValue("UseGradient");
@@ -210,7 +210,7 @@ void testUseGradient(uno::Reference<beans::XPropertySet> xPropSet, bool bUseGrad
     CPPUNIT_ASSERT_EQUAL(bUseGradient, bGradient);
 }
 
-void testPositiveColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
+void testPositiveColor(uno::Reference<beans::XPropertySet> const & xPropSet, Color aColor)
 {
     sal_Int32 nColor = 0;
     uno::Any aAny = xPropSet->getPropertyValue("Color");
@@ -218,7 +218,7 @@ void testPositiveColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColo
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
 }
 
-void testNegativeColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
+void testNegativeColor(uno::Reference<beans::XPropertySet> const & xPropSet, Color aColor)
 {
     sal_Int32 nColor = 0;
     uno::Any aAny = xPropSet->getPropertyValue("NegativeColor");
@@ -226,7 +226,7 @@ void testNegativeColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColo
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
 }
 
-void testAxisColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
+void testAxisColor(uno::Reference<beans::XPropertySet> const & xPropSet, Color aColor)
 {
     sal_Int32 nColor = 0;
     uno::Any aAny = xPropSet->getPropertyValue("AxisColor");
@@ -234,7 +234,7 @@ void testAxisColor(uno::Reference<beans::XPropertySet> xPropSet, Color aColor)
     CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), sal_uInt32(nColor));
 }
 
-void testDataBarEntryValue(uno::Reference<sheet::XDataBarEntry> xEntry,
+void testDataBarEntryValue(uno::Reference<sheet::XDataBarEntry> const & xEntry,
         const OUString& rExpectedValue, sal_Int32 nType)
 {
     switch (nType)
@@ -253,7 +253,7 @@ void testDataBarEntryValue(uno::Reference<sheet::XDataBarEntry> xEntry,
     }
 }
 
-void testDataBarEntries(uno::Reference<beans::XPropertySet> xPropSet,
+void testDataBarEntries(uno::Reference<beans::XPropertySet> const & xPropSet,
         const OUString& rExpectedMinString, sal_Int32 nExpectedMinType,
         const OUString& rExpectedMaxString, sal_Int32 nExpectedMaxType)
 {
@@ -366,7 +366,7 @@ void ScConditionalFormatTest::testDataBarProperties()
 
 namespace {
 
-void testColorScaleEntry(uno::Reference<sheet::XColorScaleEntry> xEntry,
+void testColorScaleEntry(uno::Reference<sheet::XColorScaleEntry> const & xEntry,
         sal_Int32 nType, const OUString& rString, sal_uInt32 nColor)
 {
     CPPUNIT_ASSERT_EQUAL(nType, xEntry->getType());
@@ -386,7 +386,7 @@ void testColorScaleEntry(uno::Reference<sheet::XColorScaleEntry> xEntry,
     }
 }
 
-void testColorScaleEntries(uno::Reference<beans::XPropertySet> xPropSet, sal_Int32 nEntries,
+void testColorScaleEntries(uno::Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nEntries,
         sal_Int32 nMinType, const OUString& rMinString, sal_uInt32 nMinColor,
         sal_Int32 nMediumType, const OUString& rMediumString, sal_uInt32 nMediumColor,
         sal_Int32 nMaxType, const OUString& rMaxString, sal_uInt32 nMaxColor)

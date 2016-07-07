@@ -136,7 +136,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
 
 namespace {
 
-void getRangeFromDataSource( uno::Reference< chart2::data::XDataSource > xDataSource, std::vector<OUString>& rRangeRep)
+void getRangeFromDataSource( uno::Reference< chart2::data::XDataSource > const & xDataSource, std::vector<OUString>& rRangeRep)
 {
     uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence> > xSeqs = xDataSource->getDataSequences();
     for (sal_Int32 i = 0, n = xSeqs.getLength(); i < n; ++i)

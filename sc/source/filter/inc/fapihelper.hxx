@@ -122,7 +122,7 @@ public:
                         ~ScfPropertySet();
 
     /** Sets the passed UNO property set and releases the old UNO property set. */
-    void                Set( css::uno::Reference< css::beans::XPropertySet > xPropSet );
+    void                Set( css::uno::Reference< css::beans::XPropertySet > const & xPropSet );
     /** Queries the passed interface for an XPropertySet and releases the old UNO property set. */
     template< typename InterfaceType >
     inline void         Set( css::uno::Reference< InterfaceType > xInterface )

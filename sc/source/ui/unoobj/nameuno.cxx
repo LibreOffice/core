@@ -81,7 +81,7 @@ static bool lcl_UserVisibleName(const ScRangeData& rData)
     return !rData.HasType(ScRangeData::Type::Database);
 }
 
-ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, const OUString& rNm, Reference<container::XNamed> xSheet):
+ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > const & xParent, ScDocShell* pDocSh, const OUString& rNm, Reference<container::XNamed> const & xSheet):
     mxParent(xParent),
     pDocShell( pDocSh ),
     aName( rNm ),
@@ -867,7 +867,7 @@ SCTAB ScGlobalNamedRangesObj::GetTab_Impl()
     return -1;
 }
 
-ScLocalNamedRangesObj::ScLocalNamedRangesObj( ScDocShell* pDocSh, uno::Reference<container::XNamed> xSheet )
+ScLocalNamedRangesObj::ScLocalNamedRangesObj( ScDocShell* pDocSh, uno::Reference<container::XNamed> const & xSheet )
     : ScNamedRangesObj(pDocSh),
     mxSheet(xSheet)
 {

@@ -240,7 +240,7 @@ ScVbaWorksheet::createSheetCopyInNewDoc(const OUString& aCurrSheetName)
 }
 
 css::uno::Reference< ov::excel::XWorksheet >
-ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> xSheet, bool bAfter)
+ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> const & xSheet, bool bAfter)
 {
     OUString aCurrSheetName = getName();
     ScVbaWorksheet* pDestSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );

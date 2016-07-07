@@ -169,7 +169,7 @@ public:
 protected:
     /** Tries to get spreadsheet cell link and source range link from the passed shape. */
     void                ConvertSheetLinks(
-                            css::uno::Reference< css::drawing::XShape > xShape );
+                            css::uno::Reference< css::drawing::XShape > const & xShape );
 
     /** Returns the Excel token array of the cell link, or 0, if no link present. */
     inline const XclTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
@@ -211,7 +211,7 @@ public:
 class XclExpShapeObj : public XclObjAny, public XclMacroHelper
 {
 public:
-    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > xShape, ScDocument* pDoc );
+    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > const & xShape, ScDocument* pDoc );
     virtual             ~XclExpShapeObj();
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
@@ -226,7 +226,7 @@ class XclExpOcxControlObj : public XclObj, public XclExpControlHelper
 public:
     explicit            XclExpOcxControlObj(
                             XclExpObjectManager& rObjMgr,
-                            css::uno::Reference< css::drawing::XShape > xShape,
+                            css::uno::Reference< css::drawing::XShape > const & xShape,
                             const Rectangle* pChildAnchor,
                             const OUString& rClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
@@ -248,7 +248,7 @@ class XclExpTbxControlObj : public XclObj, public XclMacroHelper
 public:
     explicit            XclExpTbxControlObj(
                             XclExpObjectManager& rObjMgr,
-                            css::uno::Reference< css::drawing::XShape > xShape,
+                            css::uno::Reference< css::drawing::XShape > const & xShape,
                             const Rectangle* pChildAnchor );
 
     /** Sets the name of a macro attached to this control.
@@ -291,7 +291,7 @@ class XclExpChartObj : public XclObj, protected XclExpRoot
 public:
     explicit            XclExpChartObj(
                             XclExpObjectManager& rObjMgr,
-                            css::uno::Reference< css::drawing::XShape > xShape,
+                            css::uno::Reference< css::drawing::XShape > const & xShape,
                             const Rectangle* pChildAnchor );
     virtual             ~XclExpChartObj();
 

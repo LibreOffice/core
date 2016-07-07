@@ -36,7 +36,7 @@ class ScVbaWorkbook : public ScVbaWorkbook_BASE
 
 public:
     ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            css::uno::Reference< css::frame::XModel > xModel );
+            css::uno::Reference< css::frame::XModel > const & xModel );
     ScVbaWorkbook(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
     virtual ~ScVbaWorkbook() {}
 

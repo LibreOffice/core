@@ -277,7 +277,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 ScSpellingEngine::ScSpellingEngine(
         SfxItemPool* pEnginePoolP, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
-        css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller ) :
+        css::uno::Reference< css::linguistic2::XSpellChecker1 > const & xSpeller ) :
     ScConversionEngineBase( pEnginePoolP, rViewData, pUndoDoc, pRedoDoc )
 {
     SetSpeller( xSpeller );

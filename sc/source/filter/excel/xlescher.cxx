@@ -287,7 +287,7 @@ void XclObjTextData::ReadTxo8( XclImpStream& rStrm )
     mnFormatSize = rStrm.ReaduInt16();
 }
 
-Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape > xShape )
+Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape > const & xShape )
 {
     Reference< XControlModel > xCtrlModel;
     Reference< XControlShape > xCtrlShape( xShape, UNO_QUERY );

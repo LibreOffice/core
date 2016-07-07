@@ -35,7 +35,7 @@ protected:
     css::uno::Reference< ov::msforms::XControl> m_xControl;
 public:
     ScVbaOLEObject( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            css::uno::Reference< css::drawing::XControlShape > xControlShape );
+            css::uno::Reference< css::drawing::XControlShape > const & xControlShape );
 
     // XOLEObject Attributes
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException, std::exception) override;

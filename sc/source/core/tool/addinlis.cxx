@@ -46,7 +46,7 @@ ScAddInListener* ScAddInListener::CreateListener(
     return pNew;
 }
 
-ScAddInListener::ScAddInListener( uno::Reference<sheet::XVolatileResult> xVR, ScDocument* pDoc ) :
+ScAddInListener::ScAddInListener( uno::Reference<sheet::XVolatileResult> const & xVR, ScDocument* pDoc ) :
     xVolRes( xVR )
 {
     pDocs = new ScAddInDocs();

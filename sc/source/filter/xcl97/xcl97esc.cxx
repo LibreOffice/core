@@ -405,7 +405,7 @@ void XclEscherEx::EndDocument()
     mpOutStrm->Seek( 0 );
 }
 
-std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
+std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< XShape > const & xShape, const Rectangle* pChildAnchor )
 {
     ::std::unique_ptr< XclExpOcxControlObj > xOcxCtrl;
 
@@ -435,7 +435,7 @@ std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< X
     return xOcxCtrl;
 }
 
-std::unique_ptr<XclExpTbxControlObj> XclEscherEx::CreateTBXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
+std::unique_ptr<XclExpTbxControlObj> XclEscherEx::CreateTBXCtrlObj( Reference< XShape > const & xShape, const Rectangle* pChildAnchor )
 {
     ::std::unique_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pChildAnchor ) );
     if( xTbxCtrl->GetObjType() == EXC_OBJTYPE_UNKNOWN )
@@ -450,7 +450,7 @@ std::unique_ptr<XclExpTbxControlObj> XclEscherEx::CreateTBXCtrlObj( Reference< X
     return xTbxCtrl;
 }
 
-void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< XControlModel > xCtrlModel )
+void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< XControlModel > const & xCtrlModel )
 {
     SdrPage* pSdrPage = GetSdrPage( GetCurrScTab() );
     if( xCtrlModel.is() && GetDocShell() && pSdrPage ) try

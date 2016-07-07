@@ -409,7 +409,7 @@ ScConditionalFormatList* ScCondFormatsObj::getCoreObject()
 namespace {
 
 uno::Reference<beans::XPropertySet> createConditionEntry(const ScFormatEntry* pEntry,
-        rtl::Reference<ScCondFormatObj> xParent)
+        rtl::Reference<ScCondFormatObj> const & xParent)
 {
     switch (pEntry->GetType())
     {
@@ -441,7 +441,7 @@ uno::Reference<beans::XPropertySet> createConditionEntry(const ScFormatEntry* pE
 
 }
 
-ScCondFormatObj::ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> xCondFormats,
+ScCondFormatObj::ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> const & xCondFormats,
         sal_Int32 nKey):
     mxCondFormatList(xCondFormats),
     mpDocShell(pDocShell),
@@ -682,7 +682,7 @@ bool isObjectStillAlive(ScConditionalFormat* pFormat, const ScFormatEntry* pEntr
 
 }
 
-ScConditionEntryObj::ScConditionEntryObj(rtl::Reference<ScCondFormatObj> xParent,
+ScConditionEntryObj::ScConditionEntryObj(rtl::Reference<ScCondFormatObj> const & xParent,
         const ScCondFormatEntry* pFormat):
     mpDocShell(xParent->getDocShell()),
     mxParent(xParent),
@@ -865,7 +865,7 @@ void SAL_CALL ScConditionEntryObj::removeVetoableChangeListener( const OUString&
     SAL_WARN("sc", "not implemented");
 }
 
-ScColorScaleFormatObj::ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+ScColorScaleFormatObj::ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
         const ScColorScaleFormat* pFormat):
     mxParent(xParent),
     maPropSet(getColorScalePropSet()),
@@ -902,7 +902,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScColorScaleFormatObj::getPrope
 
 namespace {
 
-void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorScaleEntry> xEntry)
+void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorScaleEntry> const & xEntry)
 {
     ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
@@ -1041,7 +1041,7 @@ void SAL_CALL ScColorScaleFormatObj::removeVetoableChangeListener( const OUStrin
     SAL_WARN("sc", "not implemented");
 }
 
-ScColorScaleEntryObj::ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj> xParent,
+ScColorScaleEntryObj::ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj> const & xParent,
         size_t nPos):
     mxParent(xParent),
     mnPos(nPos)
@@ -1137,7 +1137,7 @@ void ScColorScaleEntryObj::setFormula(const OUString& rFormula)
 }
 
 
-ScDataBarFormatObj::ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+ScDataBarFormatObj::ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
         const ScDataBarFormat* pFormat):
     mxParent(xParent),
     maPropSet(getDataBarPropSet()),
@@ -1175,7 +1175,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDataBarFormatObj::getProperty
 
 namespace {
 
-void setDataBarEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XDataBarEntry> xEntry)
+void setDataBarEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XDataBarEntry> const & xEntry)
 {
     ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
@@ -1451,7 +1451,7 @@ void SAL_CALL ScDataBarFormatObj::removeVetoableChangeListener( const OUString&,
     SAL_WARN("sc", "not implemented");
 }
 
-ScDataBarEntryObj::ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> xParent,
+ScDataBarEntryObj::ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> const & xParent,
         size_t nPos):
     mxParent(xParent),
     mnPos(nPos)
@@ -1537,7 +1537,7 @@ void ScDataBarEntryObj::setFormula(const OUString& rFormula)
 }
 
 
-ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
         const ScIconSetFormat* pFormat):
     mxParent(xParent),
     maPropSet(getIconSetPropSet()),
@@ -1575,7 +1575,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScIconSetFormatObj::getProperty
 
 namespace {
 
-void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEntry> xEntry, size_t nPos)
+void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEntry> const & xEntry, size_t nPos)
 {
     ScIconSetFormatData* pData = pFormat->GetIconSetData();
     ScColorScaleEntryType eType = ScColorScaleEntryType();
@@ -1770,7 +1770,7 @@ void SAL_CALL ScIconSetFormatObj::removeVetoableChangeListener( const OUString&,
     SAL_WARN("sc", "not implemented");
 }
 
-ScIconSetEntryObj::ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> xParent,
+ScIconSetEntryObj::ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> const & xParent,
         size_t nPos):
     mxParent(xParent),
     mnPos(nPos)
@@ -1860,7 +1860,7 @@ void ScIconSetEntryObj::setFormula(const OUString& rFormula)
     }
 }
 
-ScCondDateFormatObj::ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> xParent,
+ScCondDateFormatObj::ScCondDateFormatObj(rtl::Reference<ScCondFormatObj> const & xParent,
         const ScCondDateFormatEntry* pFormat):
     mxParent(xParent),
     maPropSet(getCondDatePropSet()),

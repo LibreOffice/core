@@ -813,7 +813,7 @@ private:
     XclImpChDataFormatRef CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx );
 
     /** Converts all trend lines and inserts them into the passed API data series object. */
-    void                ConvertTrendLines( css::uno::Reference< css::chart2::XDataSeries > xDataSeries ) const;
+    void                ConvertTrendLines( css::uno::Reference< css::chart2::XDataSeries > const & xDataSeries ) const;
     /** Tries to create an error bar API object from the specified Excel error bars. */
     css::uno::Reference< css::beans::XPropertySet >
                         CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const;
@@ -869,7 +869,7 @@ public:
                         CreateCoordSystem( bool b3dChart ) const;
     /** Creates and returns an object that represents the contained chart type. */
     css::uno::Reference< css::chart2::XChartType >
-                        CreateChartType( css::uno::Reference< css::chart2::XDiagram > xDiagram, bool b3dChart ) const;
+                        CreateChartType( css::uno::Reference< css::chart2::XDiagram > const & xDiagram, bool b3dChart ) const;
 
 private:
     XclChType           maData;             /// Contents of the chart type record.
@@ -1008,7 +1008,7 @@ public:
                         CreateCoordSystem() const;
     /** Creates and returns an object that represents the contained chart type. */
     css::uno::Reference< css::chart2::XChartType >
-                        CreateChartType( css::uno::Reference< css::chart2::XDiagram > xDiagram, sal_Int32 nApiAxesSetIdx ) const;
+                        CreateChartType( css::uno::Reference< css::chart2::XDiagram > const & xDiagram, sal_Int32 nApiAxesSetIdx ) const;
     /** Creates a labeled data sequence object for axis categories. */
     css::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         CreateCategSequence() const;
@@ -1027,14 +1027,14 @@ private:
     inline bool         HasDropBars() const { return !m_DropBars.empty(); }
 
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */
-    void                InsertDataSeries( css::uno::Reference< css::chart2::XChartType > xChartType,
-                                          css::uno::Reference< css::chart2::XDataSeries > xSeries,
+    void                InsertDataSeries( css::uno::Reference< css::chart2::XChartType > const & xChartType,
+                                          css::uno::Reference< css::chart2::XDataSeries > const & xSeries,
                                           sal_Int32 nApiAxesSetIdx ) const;
     /** Creates all data series of any chart type except stock charts. */
-    void                CreateDataSeries( css::uno::Reference< css::chart2::XChartType > xChartType,
+    void                CreateDataSeries( css::uno::Reference< css::chart2::XChartType > const & xChartType,
                                           sal_Int32 nApiAxesSetIdx ) const;
     /** Creates all data series of a stock chart. */
-    void                CreateStockSeries( css::uno::Reference< css::chart2::XChartType > xChartType,
+    void                CreateStockSeries( css::uno::Reference< css::chart2::XChartType > const & xChartType,
                                            sal_Int32 nApiAxesSetIdx ) const;
 
 private:
@@ -1224,7 +1224,7 @@ public:
     OUString            GetSingleSeriesTitle() const;
 
     /** Creates a coordinate system and converts all series and axis settings. */
-    void                Convert( css::uno::Reference< css::chart2::XDiagram >  xDiagram ) const;
+    void                Convert( css::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
     /** Converts the manual positions of all axis titles. */
     void                ConvertTitlePositions() const;
 
@@ -1240,16 +1240,16 @@ private:
 
     /** Creates a coordinate system that contains all chart types for this axes set. */
     css::uno::Reference< css::chart2::XCoordinateSystem >
-                        CreateCoordSystem( css::uno::Reference< css::chart2::XDiagram >  xDiagram ) const;
+                        CreateCoordSystem( css::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
     /** Creates and inserts an axis into the container and registers the coordinate system. */
     void                ConvertAxis( XclImpChAxisRef xChAxis, XclImpChTextRef xChAxisTitle,
-                                     css::uno::Reference< css::chart2::XCoordinateSystem > xCoordSystem,
+                                     css::uno::Reference< css::chart2::XCoordinateSystem > const & xCoordSystem,
                                      const XclImpChAxis* pCrossingAxis ) const;
     /** Creates and returns an API axis object. */
     css::uno::Reference< css::chart2::XAxis >
                         CreateAxis( const XclImpChAxis& rChAxis, const XclImpChAxis* pCrossingAxis ) const;
     /** Writes all properties of the background area to the passed diagram. */
-    void                ConvertBackground( css::uno::Reference< css::chart2::XDiagram >  xDiagram ) const;
+    void                ConvertBackground( css::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
 
 private:
     typedef ::std::map<sal_uInt16, XclImpChTypeGroupRef> XclImpChTypeGroupMap;
@@ -1396,7 +1396,7 @@ public:
     inline bool         IsPivotChart() const { return mbIsPivotChart; }
 
     /** Creates the chart object in the passed component. */
-    void                Convert( css::uno::Reference< css::frame::XModel > xModel,
+    void                Convert( css::uno::Reference< css::frame::XModel > const & xModel,
                             XclImpDffConverter& rDffConv,
                             const OUString& rObjName,
                             const Rectangle& rChartRect ) const;

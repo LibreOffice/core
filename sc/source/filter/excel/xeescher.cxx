@@ -459,7 +459,7 @@ XclExpControlHelper::~XclExpControlHelper()
 {
 }
 
-void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > xShape )
+void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > const & xShape )
 {
     mxCellLink.reset();
     mxSrcRange.reset();
@@ -531,7 +531,7 @@ void XclExpControlHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nS
 //delete for exporting OCX
 //#if EXC_EXP_OCX_CTRL
 
-XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape,
+XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Reference< XShape > const & xShape,
         const Rectangle* pChildAnchor, const OUString& rClassName, sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
     XclObj( rObjMgr, EXC_OBJTYPE_PICTURE, true ),
     XclExpControlHelper( rObjMgr.GetRoot() ),
@@ -636,7 +636,7 @@ void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
 
 //#else
 
-XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference< XShape > xShape , const Rectangle* pChildAnchor ) :
+XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference< XShape > const & xShape , const Rectangle* pChildAnchor ) :
     XclObj( rRoot, EXC_OBJTYPE_UNKNOWN, true ),
     XclMacroHelper( rRoot ),
     meEventType( EXC_TBX_EVENT_ACTION ),
@@ -1065,7 +1065,7 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 
 //#endif
 
-XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape, const Rectangle* pChildAnchor ) :
+XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape > const & xShape, const Rectangle* pChildAnchor ) :
     XclObj( rObjMgr, EXC_OBJTYPE_CHART ),
     XclExpRoot( rObjMgr.GetRoot() ), mxShape( xShape )
 {
@@ -1371,7 +1371,7 @@ XclMacroHelper::SetMacroLink( const OUString& rMacroName )
     return false;
 }
 
-XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > xShape, ScDocument* pDoc ) :
+XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > const & xShape, ScDocument* pDoc ) :
     XclObjAny( rRoot, xShape, pDoc ),
     XclMacroHelper( rRoot )
 {
