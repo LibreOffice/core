@@ -59,7 +59,7 @@ class SfxEvents_Impl : public ::cppu::WeakImplHelper< css::container::XNameRepla
 
 public:
                                 SfxEvents_Impl( SfxObjectShell* pShell,
-                                                css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster );
+                                                css::uno::Reference< css::document::XEventBroadcaster > const & xBroadcaster );
                                virtual ~SfxEvents_Impl();
 
     //  --- XNameReplace ---

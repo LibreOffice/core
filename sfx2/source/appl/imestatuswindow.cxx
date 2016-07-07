@@ -50,7 +50,7 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<css::beans::XPr
         css::uno::WeakReference<css::beans::XPropertyChangeListener> mxOwner;
 
     public:
-        explicit WeakPropertyChangeListener(css::uno::Reference<css::beans::XPropertyChangeListener> xOwner)
+        explicit WeakPropertyChangeListener(css::uno::Reference<css::beans::XPropertyChangeListener> const & xOwner)
             : mxOwner(xOwner)
         {
         }

@@ -46,7 +46,7 @@ void SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile
 }
 
 void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
-                                 const Reference<css::frame::XFrame> xFrame,
+                                 const Reference<css::frame::XFrame> & xFrame,
                                  const OUString& rUIFile)
 {
     assert(pSysWindow);

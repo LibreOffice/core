@@ -141,7 +141,7 @@ private:
 
 public:
     HelpStatusListener_Impl(
-        css::uno::Reference < css::frame::XDispatch > xDispatch,
+        css::uno::Reference < css::frame::XDispatch > const & xDispatch,
         css::util::URL& rURL);
     virtual ~HelpStatusListener_Impl();
 

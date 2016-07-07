@@ -295,7 +295,7 @@ void SAL_CALL HelpListener_Impl::disposing( const css::lang::EventObject& )
 }
 
 HelpStatusListener_Impl::HelpStatusListener_Impl(
-        Reference < XDispatch > aDispatch, URL& rURL)
+        Reference < XDispatch > const & aDispatch, URL& rURL)
 {
     aDispatch->addStatusListener(this, rURL);
 }

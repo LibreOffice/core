@@ -311,7 +311,7 @@ void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ ) t
 
 
 SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
-                                uno::Reference< document::XEventBroadcaster > xBroadcaster )
+                                uno::Reference< document::XEventBroadcaster > const & xBroadcaster )
 {
     // get the list of supported events and store it
     if ( pShell )

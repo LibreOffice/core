@@ -45,7 +45,7 @@ class RequestFilterOptions : public ::cppu::WeakImplHelper< css::task::XInteract
     FilterOptionsContinuation*  m_pOptions;
 
 public:
-    RequestFilterOptions( css::uno::Reference< css::frame::XModel > rModel,
+    RequestFilterOptions( css::uno::Reference< css::frame::XModel > const & rModel,
                               const css::uno::Sequence< css::beans::PropertyValue >& rProperties );
 
     bool    isAbort() { return m_pAbort->wasSelected(); }

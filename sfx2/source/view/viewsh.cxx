@@ -123,7 +123,7 @@ public:
 
     struct AsyncExecuteInfo
     {
-        AsyncExecuteInfo( AsyncExecuteCmd eCmd, uno::Reference< datatransfer::clipboard::XClipboardListener > xThis, SfxClipboardChangeListener* pListener ) :
+        AsyncExecuteInfo( AsyncExecuteCmd eCmd, uno::Reference< datatransfer::clipboard::XClipboardListener > const & xThis, SfxClipboardChangeListener* pListener ) :
             m_eCmd( eCmd ), m_xThis( xThis ), m_pListener( pListener ) {}
 
         AsyncExecuteCmd m_eCmd;
