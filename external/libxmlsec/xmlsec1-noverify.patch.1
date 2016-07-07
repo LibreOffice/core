@@ -1,4 +1,4 @@
-From 56bd53dc3c8b7f05c55023700b3e0439dcd66aac Mon Sep 17 00:00:00 2001
+From d2b22f265df84d605338546b457aec4fb0888861 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:10:16 +0100
 Subject: [PATCH] xmlsec1-noverify.patch
@@ -11,7 +11,7 @@ Conflicts:
  2 files changed, 31 insertions(+), 10 deletions(-)
 
 diff --git a/src/mscrypto/x509vfy.c b/src/mscrypto/x509vfy.c
-index cf31787..80de2c9 100644
+index 899cb6e..cf4cbb7 100644
 --- a/src/mscrypto/x509vfy.c
 +++ b/src/mscrypto/x509vfy.c
 @@ -560,9 +560,16 @@ xmlSecMSCryptoX509StoreVerify(xmlSecKeyDataStorePtr store, HCERTSTORE certs,
@@ -35,7 +35,7 @@ index cf31787..80de2c9 100644
  
      return (NULL);
 diff --git a/src/nss/x509vfy.c b/src/nss/x509vfy.c
-index fdb866f..8a6e97a 100644
+index 9e957fe..0edaa2d 100644
 --- a/src/nss/x509vfy.c
 +++ b/src/nss/x509vfy.c
 @@ -211,13 +211,27 @@ xmlSecNssX509StoreVerify(xmlSecKeyDataStorePtr store, CERTCertList* certs,
@@ -74,5 +74,5 @@ index fdb866f..8a6e97a 100644
  
      if (status == SECSuccess) {
 -- 
-2.6.2
+2.6.6
 
