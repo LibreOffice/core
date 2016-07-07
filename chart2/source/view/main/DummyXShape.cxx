@@ -794,7 +794,7 @@ private:
 }
 
 DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
-        const tAnySequence& rValues, const uno::Any& rTrans, uno::Reference< drawing::XShapes > xTarget, double nRotation ):
+        const tAnySequence& rValues, const uno::Any& rTrans, uno::Reference< drawing::XShapes > const & xTarget, double nRotation ):
     maText(rText),
     maTrans(rTrans),
     mnRotation(nRotation)

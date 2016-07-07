@@ -109,8 +109,8 @@ public:
         {}
         // "full" CTOR
         tDataHeader(
-            css::uno::Reference< css::chart2::XDataSeries > xDataSeries,
-            css::uno::Reference< css::chart2::XChartType >  xChartType,
+            css::uno::Reference< css::chart2::XDataSeries > const & xDataSeries,
+            css::uno::Reference< css::chart2::XChartType > const &xChartType,
             bool                                        bSwapXAndYAxis,
             sal_Int32                                   nStartColumn,
             sal_Int32                                   nEndColumn ) :

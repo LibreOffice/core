@@ -60,7 +60,7 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
 }
 
 ChartColorWrapper::ChartColorWrapper(
-        css::uno::Reference<css::frame::XModel> xModel,
+        css::uno::Reference<css::frame::XModel> const & xModel,
         SvxColorToolBoxControl* pControl,
         const OUString& rName):
     mxModel(xModel),

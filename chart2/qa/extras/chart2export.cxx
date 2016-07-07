@@ -200,7 +200,7 @@ public:
     }
 };
 
-OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAccess > xNames )
+OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAccess > const & xNames )
 {
     uno::Sequence<OUString> rNames = xNames->getElementNames();
     OUString* pElement = std::find_if(rNames.begin(), rNames.end(), CheckForChartName(rDir));
@@ -253,7 +253,7 @@ void Chart2ExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 
 namespace {
 
-void testErrorBar( Reference< XPropertySet > xErrorBar )
+void testErrorBar( Reference< XPropertySet > const & xErrorBar )
 {
     sal_Int32 nErrorBarStyle;
     CPPUNIT_ASSERT(
@@ -272,7 +272,7 @@ void testErrorBar( Reference< XPropertySet > xErrorBar )
 }
 
 void checkCommonTrendline(
-        Reference<chart2::XRegressionCurve> xCurve,
+        Reference<chart2::XRegressionCurve> const & xCurve,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
         bool aExpectedForceIntercept, double aExpectedInterceptValue,
         bool aExpectedShowEquation, bool aExpectedR2)
@@ -311,7 +311,7 @@ void checkCommonTrendline(
     CPPUNIT_ASSERT_EQUAL(aExpectedR2, bShowCorrelationCoefficient);
 }
 
-void checkNameAndType(Reference<XPropertySet> xProperties, const OUString& aExpectedName, const OUString& aExpectedServiceName)
+void checkNameAndType(Reference<XPropertySet> const & xProperties, const OUString& aExpectedName, const OUString& aExpectedServiceName)
 {
     Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
     CPPUNIT_ASSERT(xServiceName.is());
@@ -325,7 +325,7 @@ void checkNameAndType(Reference<XPropertySet> xProperties, const OUString& aExpe
 }
 
 void checkLinearTrendline(
-        Reference<chart2::XRegressionCurve> xCurve, const OUString& aExpectedName,
+        Reference<chart2::XRegressionCurve> const & xCurve, const OUString& aExpectedName,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
         bool aExpectedForceIntercept, double aExpectedInterceptValue,
         bool aExpectedShowEquation, bool aExpectedR2)
@@ -343,7 +343,7 @@ void checkLinearTrendline(
 }
 
 void checkPolynomialTrendline(
-        Reference<chart2::XRegressionCurve> xCurve, const OUString& aExpectedName,
+        Reference<chart2::XRegressionCurve> const & xCurve, const OUString& aExpectedName,
         sal_Int32 aExpectedDegree,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
         bool aExpectedForceIntercept, double aExpectedInterceptValue,
@@ -366,7 +366,7 @@ void checkPolynomialTrendline(
 }
 
 void checkMovingAverageTrendline(
-        Reference<chart2::XRegressionCurve> xCurve, const OUString& aExpectedName, sal_Int32 aExpectedPeriod)
+        Reference<chart2::XRegressionCurve> const & xCurve, const OUString& aExpectedName, sal_Int32 aExpectedPeriod)
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());
@@ -378,7 +378,7 @@ void checkMovingAverageTrendline(
     CPPUNIT_ASSERT_EQUAL(aExpectedPeriod, aPeriod);
 }
 
-void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > xChartDoc)
+void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > const & xChartDoc)
 {
     CPPUNIT_ASSERT(xChartDoc.is());
 
@@ -1148,7 +1148,7 @@ void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
 
 namespace {
 
-void checkGapWidth(Reference<beans::XPropertySet> xPropSet, sal_Int32 nValue)
+void checkGapWidth(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nValue)
 {
     uno::Any aAny = xPropSet->getPropertyValue("GapwidthSequence");
     CPPUNIT_ASSERT(aAny.hasValue());
@@ -1158,7 +1158,7 @@ void checkGapWidth(Reference<beans::XPropertySet> xPropSet, sal_Int32 nValue)
     CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
 }
 
-void checkOverlap(Reference<beans::XPropertySet> xPropSet, sal_Int32 nValue)
+void checkOverlap(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nValue)
 {
     uno::Any aAny = xPropSet->getPropertyValue("OverlapSequence");
     CPPUNIT_ASSERT(aAny.hasValue());
@@ -1168,7 +1168,7 @@ void checkOverlap(Reference<beans::XPropertySet> xPropSet, sal_Int32 nValue)
     CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
 }
 
-void checkSheetForGapWidthAndOverlap(uno::Reference< chart2::XChartDocument > xChartDoc,
+void checkSheetForGapWidthAndOverlap(uno::Reference< chart2::XChartDocument > const & xChartDoc,
         sal_Int32 nExpectedGapWidth, sal_Int32 nExpectedOverlap)
 {
     CPPUNIT_ASSERT(xChartDoc.is());

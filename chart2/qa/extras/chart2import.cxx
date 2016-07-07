@@ -289,7 +289,7 @@ void Chart2ImportTest::testSteppedLines()
     }
 }
 
-uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< chart::XChartDocument > xChart1Doc)
+uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< chart::XChartDocument > const & xChart1Doc)
 {
     CPPUNIT_ASSERT(xChart1Doc.is());
     uno::Reference< chart::XChartDataArray > xChartData ( xChart1Doc->getData(), UNO_QUERY_THROW);

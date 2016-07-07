@@ -22,7 +22,7 @@ class ChartColorWrapper
 private:
 
 public:
-    ChartColorWrapper(css::uno::Reference<css::frame::XModel> xModel,
+    ChartColorWrapper(css::uno::Reference<css::frame::XModel> const & xModel,
             SvxColorToolBoxControl* pControl,
             const OUString& rPropertyName);
 

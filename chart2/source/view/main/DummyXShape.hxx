@@ -307,7 +307,7 @@ class DummyText : public DummyXShape
 public:
     DummyText(const OUString& rText, const tNameSequence& rNames,
             const tAnySequence& rValues, const css::uno::Any& rTrans, css::uno::Reference<
-            css::drawing::XShapes > xTarget, double nRotation);
+            css::drawing::XShapes > const & xTarget, double nRotation);
 
     virtual void render() override;
 

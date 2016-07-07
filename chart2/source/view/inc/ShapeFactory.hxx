@@ -28,7 +28,7 @@ class ShapeFactory : public AbstractShapeFactory
 {
     friend class AbstractShapeFactory;
 
-    ShapeFactory(css::uno::Reference< css::lang::XMultiServiceFactory> xFactory)
+    ShapeFactory(css::uno::Reference< css::lang::XMultiServiceFactory> const & xFactory)
         {m_xShapeFactory = xFactory;}
 
 public:
