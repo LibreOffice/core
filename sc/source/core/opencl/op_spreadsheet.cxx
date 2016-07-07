@@ -45,12 +45,41 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
     CheckSubArgumentIsNan(ss,vSubArguments,arg++);
     int secondParaWidth = 1;
 
+    // tdf#99512 - for now only allow non-dynamic indicees (the
+    // common-case) to validate consistent return types vs. the input.
+    int index = 0;
+    int indexArg = vSubArguments.size() - 2;
+    if (vSubArguments[indexArg]->GetFormulaToken()->GetType() == formula::svDouble)
+    {
+        const formula::FormulaDoubleToken *dblToken = static_cast<const FormulaDoubleToken *>(vSubArguments[indexArg]->GetFormulaToken());
+        index = ::rtl::math::approxFloor(dblToken->GetDouble());
+    }
+
     if (vSubArguments[1]->GetFormulaToken()->GetType() == formula::svDoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[1]->GetFormulaToken();
         const formula::DoubleVectorRefToken*pCurDVR = static_cast<const formula::DoubleVectorRefToken *>(tmpCur);
-        secondParaWidth = pCurDVR->GetArrays().size();
+        const std::vector<VectorRefArray> items = pCurDVR->GetArrays();
+
+        secondParaWidth = items.size();
+
+        if (index < 1 || index > secondParaWidth)
+            throw Unhandled(__FILE__, __LINE__); // oob index.
+
+        if (items[index - 1].mpStringArray)
+        {
+            rtl_uString **pStrings = items[index - 1].mpStringArray;
+            for (size_t i = 0; i < pCurDVR->GetArrayLength(); ++i)
+            {
+                if (pStrings[i] != nullptr)
+                {   // TODO: the GroupTokenConverter should do better.
+                    throw Unhandled(__FILE__, __LINE__); // mixed arguments.
+                }
+            }
+        }
     }
+    else
+        throw Unhandled(__FILE__, __LINE__); // unusual vlookup.
 
     arg += secondParaWidth;
     CheckSubArgumentIsNan(ss,vSubArguments,arg++);
