@@ -643,6 +643,38 @@ bool SwOLENode::IsChart() const
 }
 
 //////////////////////////////////////////////////////////////////////////////
+// due to some problems in test cases with the SharedOptimalPool, I have to
+// use an own iinstance of comphelper::ThreadPool. Prtoblem is that other
+// usages of getSharedOptimalPool() may interfere when more than one pool
+// user calls waitUntilEmpty().
+//
+// It gets created on-demand and will be available during LO's lifetime for
+// loading chart models used in writer in parallel.
+// It would be possible to add a usage count, then trigger
+// a timer and clean it up (due to lifetime issues), but that's unnecessarily
+// complicated. It gets created on demand, is ready for global reuse and makes
+// no harm (not much ressources needed)
+
+static comphelper::ThreadPool* pLocalPool = 0;
+
+comphelper::ThreadPool* getLocalThreadPool()
+{
+    if (pLocalPool)
+    {
+        return pLocalPool;
+    }
+
+    if (0 == comphelper::ThreadPool::getSharedOptimalPool().getWorkerCount())
+    {
+        return nullptr;
+    }
+
+    pLocalPool = new comphelper::ThreadPool(comphelper::ThreadPool::getSharedOptimalPool().getWorkerCount());
+    return pLocalPool;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class holding local data for a parellel executed task to load a chart model
 
 class DeflateData
 {
@@ -702,6 +734,7 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////
+// class defining a parellel executed task to load a chart model
 
 class DeflateThread : public comphelper::ThreadTask
 {
@@ -1049,13 +1082,16 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
 
         if(aXModel.is())
         {
-            // due to some problems in test cases with the SharedOptimalPool,
-            // I need to deactivate this for now
-            static bool bAnynchronousLoadingAllowed = false;
+            // added using own instance of comphelper::ThreadPool, see
+            // getLocalThreadPool(). I ran the UnitTests and the problems from
+            // before seem solved, so I optionally allow asynchronous loading
+            // for now. The static bool below is an anchor point to allow
+            // deactivating this feature quickly if trouble surfaces somewhere
+            static bool bAnynchronousLoadingAllowed = true;
 
             if(bSynchron ||
                 !bAnynchronousLoadingAllowed ||
-                0 == comphelper::ThreadPool::getSharedOptimalPool().getWorkerCount())
+                nullptr == getLocalThreadPool())
             {
                 // load chart synchron in this Thread
                 m_aPrimitive2DSequence = ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
@@ -1071,7 +1107,7 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
                 {
                     m_pDeflateData = new DeflateData(aXModel);
                     DeflateThread* pNew = new DeflateThread(*m_pDeflateData);
-                    comphelper::ThreadPool::getSharedOptimalPool().pushTask(pNew);
+                    getLocalThreadPool()->pushTask(pNew);
                 }
             }
         }
