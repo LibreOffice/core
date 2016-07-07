@@ -330,7 +330,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                         const XFillGradientItem aXFillGradientItem(aGradient);
 
                         // #i122676# change FillStyle and Gradient in one call
-                        XFillStyleItem aXFillStyleItem(drawing::FillStyle_SOLID);
+                        XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
                         setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
                         mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
                         if(mpLbFillGradFrom->GetSelectEntryCount() == 0)
