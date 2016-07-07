@@ -83,7 +83,7 @@ struct UnresolvedListItem {
 
     UnresolvedListItem(
         OUString const & theName,
-        rtl::Reference< ParseManager > theManager):
+        rtl::Reference< ParseManager > const & theManager):
         name(theName), manager(theManager) {}
 };
 
