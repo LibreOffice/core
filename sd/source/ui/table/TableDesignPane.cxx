@@ -317,7 +317,6 @@ void TableValueSet::Resize()
         Image aImage = GetItemImage(GetItemId(0));
         Size aItemSize = aImage.GetSizePixel();
 
-        aItemSize.Width() += 10;
         aItemSize.Height() += 10;
         int nColumnCount = (aValueSetSize.Width() - GetScrollWidth()) / aItemSize.Width();
         if (nColumnCount < 1)
@@ -783,6 +782,7 @@ void TableDesignWidget::FillDesignPreviewControl()
         aSize.Height() += (10 * nRows);
         m_pValueSet->set_width_request(aSize.Width());
         m_pValueSet->set_height_request(aSize.Height());
+        m_pValueSet->Resize();
     }
     catch( Exception& )
     {
