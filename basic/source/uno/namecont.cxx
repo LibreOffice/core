@@ -3355,7 +3355,7 @@ OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDialogLi
     return aRetLib;
 }
 
-ScriptSubPackageIterator::ScriptSubPackageIterator( Reference< deployment::XPackage > xMainPackage )
+ScriptSubPackageIterator::ScriptSubPackageIterator( Reference< deployment::XPackage > const & xMainPackage )
     : m_xMainPackage( xMainPackage )
     , m_bIsValid( false )
     , m_bIsBundle( false )

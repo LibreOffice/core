@@ -2501,7 +2501,7 @@ SbUnoMethod::SbUnoMethod
 (
     const OUString& aName_,
     SbxDataType eSbxType,
-    Reference< XIdlMethod > xUnoMethod_,
+    Reference< XIdlMethod > const & xUnoMethod_,
     bool bInvocation
 )
     : SbxMethod( aName_, eSbxType )
@@ -3722,7 +3722,7 @@ void clearUnoServiceCtors()
     }
 }
 
-SbUnoServiceCtor::SbUnoServiceCtor( const OUString& aName_, Reference< XServiceConstructorDescription > xServiceCtorDesc )
+SbUnoServiceCtor::SbUnoServiceCtor( const OUString& aName_, Reference< XServiceConstructorDescription > const & xServiceCtorDesc )
     : SbxMethod( aName_, SbxOBJECT )
     , m_xServiceCtorDesc( xServiceCtorDesc )
     , pNext(nullptr)

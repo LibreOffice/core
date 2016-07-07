@@ -87,8 +87,8 @@ struct LibraryContainerInfo
 
     LibraryContainerInfo
     (
-        css::uno::Reference< css::script::XPersistentLibraryContainer > xScriptCont,
-        css::uno::Reference< css::script::XPersistentLibraryContainer > xDialogCont,
+        css::uno::Reference< css::script::XPersistentLibraryContainer > const & xScriptCont,
+        css::uno::Reference< css::script::XPersistentLibraryContainer > const & xDialogCont,
         OldBasicPassword* pOldBasicPassword
     )
         : mxScriptCont( xScriptCont )

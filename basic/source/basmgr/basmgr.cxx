@@ -1703,8 +1703,8 @@ public:
     LibraryInfo_Impl
     (
         const OUString& aName,
-        uno::Reference< container::XNameContainer > xModuleContainer,
-        uno::Reference< container::XNameContainer > xDialogContainer,
+        uno::Reference< container::XNameContainer > const & xModuleContainer,
+        uno::Reference< container::XNameContainer > const & xDialogContainer,
         const OUString& aPassword,
         const OUString& aExternaleSourceURL,
         const OUString& aLinkTargetURL

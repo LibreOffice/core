@@ -718,7 +718,7 @@ class ScriptSubPackageIterator
             < css::deployment::XPackage >& rPackage, bool& rbPureDialogLib );
 
 public:
-    ScriptSubPackageIterator( css::uno::Reference< css::deployment::XPackage > xMainPackage );
+    ScriptSubPackageIterator( css::uno::Reference< css::deployment::XPackage > const & xMainPackage );
 
     css::uno::Reference< css::deployment::XPackage > getNextScriptSubPackage( bool& rbPureDialogLib );
 };

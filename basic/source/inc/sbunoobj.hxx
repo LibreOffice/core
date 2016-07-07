@@ -164,7 +164,7 @@ class SbUnoMethod : public SbxMethod
 
 public:
 
-    SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, css::uno::Reference< css::reflection::XIdlMethod > xUnoMethod_,
+    SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, css::uno::Reference< css::reflection::XIdlMethod > const & xUnoMethod_,
         bool bInvocation );
     virtual ~SbUnoMethod();
     virtual SbxInfo* GetInfo() override;
@@ -272,7 +272,7 @@ class SbUnoServiceCtor : public SbxMethod
 
 public:
 
-    SbUnoServiceCtor( const OUString& aName_, css::uno::Reference< css::reflection::XServiceConstructorDescription > xServiceCtorDesc );
+    SbUnoServiceCtor( const OUString& aName_, css::uno::Reference< css::reflection::XServiceConstructorDescription > const & xServiceCtorDesc );
     virtual ~SbUnoServiceCtor();
     virtual SbxInfo* GetInfo() override;
 
