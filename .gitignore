@@ -88,6 +88,10 @@
 .settings
 .eclipsesettingfile
 eclipsesettingfile.xml
+.clang_complete
+.cxx_tags
+.yavide_proj
+.yavide_session
 
 # things below this point are targeted for elimination
 
