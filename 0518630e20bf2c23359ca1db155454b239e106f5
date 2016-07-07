@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_98745bd0",
+        "filename": "compilerplugins/Makefile-clang.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-07T10:06:53Z",
+      "side": 1,
+      "message": "probably didn\u0027t want to include this?",
+      "revId": "0518630e20bf2c23359ca1db155454b239e106f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_f862c715",
+        "filename": "compilerplugins/clang/constparams.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-07T10:06:53Z",
+      "side": 1,
+      "message": "doesThisDeclarationHaveABody, to not look at deleted definitions",
+      "range": {
+        "startLine": 51,
+        "startChar": 55,
+        "endLine": 51,
+        "endChar": 83
+      },
+      "revId": "0518630e20bf2c23359ca1db155454b239e106f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_18684bf5",
+        "filename": "compilerplugins/clang/constparams.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-07T10:06:53Z",
+      "side": 1,
+      "message": "anything under workdir should already be caught by ignoreLocation",
+      "revId": "0518630e20bf2c23359ca1db155454b239e106f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_386d0f05",
+        "filename": "compilerplugins/clang/constparams.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-07T10:06:53Z",
+      "side": 1,
+      "message": "check functionDecl-\u003egetCanonicalDecl()-\u003egetLocation() !\u003d functionDecl-\u003egetLocation() to avoid useless notes",
+      "revId": "0518630e20bf2c23359ca1db155454b239e106f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
