@@ -135,8 +135,8 @@ namespace comphelper
     {
     public:
         OWeakEventListenerAdapter(
-            css::uno::Reference< css::uno::XWeak > _rxListener,
-            css::uno::Reference< css::lang::XComponent > _rxBroadcaster
+            css::uno::Reference< css::uno::XWeak > const & _rxListener,
+            css::uno::Reference< css::lang::XComponent > const & _rxBroadcaster
         );
 
         // nothing to do except an own ctor - the forwarding of the "disposing" is already done

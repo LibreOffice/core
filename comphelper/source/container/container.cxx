@@ -29,7 +29,7 @@ namespace comphelper
 {
 
 
-IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint)
+IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterface> const & xStartingPoint)
     :m_xStartingPoint(xStartingPoint)
     ,m_xCurrentObject(nullptr)
 {
