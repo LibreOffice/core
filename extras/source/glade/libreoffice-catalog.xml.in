@@ -830,5 +830,8 @@
     <glade-widget-class title="Horizontal box hiding childs depending on its priorities" name="sfxlo-PriorityHBox"
                         generic-name="PriorityHBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
+    <glade-widget-class title="Table Design Control" name="sdlo-TableDesignBox"
+                        generic-name="TableDesignBox" parent="GtkImage"
+                        icon-name="widget-gtk-image"/>
   </glade-widget-classes>
 </glade-catalog>
