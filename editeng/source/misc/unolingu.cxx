@@ -744,7 +744,7 @@ uno::Reference< XLinguProperties >  SvxGetLinguPropertySet()
 
 //TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 uno::Reference< XDictionary >  SvxGetOrCreatePosDic(
-        uno::Reference< XSearchableDictionaryList >  /* xDicList */ )
+        uno::Reference< XSearchableDictionaryList > const & /* xDicList */ )
 {
     return LinguMgr::GetStandardDic();
 }

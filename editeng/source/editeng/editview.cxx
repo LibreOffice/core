@@ -616,7 +616,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     pImpEditView->pEditEngine->FormatAndUpdate( this );
 }
 
-void EditView::InsertText( css::uno::Reference< css::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, bool bUseSpecial )
+void EditView::InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & xDataObj, const OUString& rBaseURL, bool bUseSpecial )
 {
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_INSERT );
     pImpEditView->DeleteSelected();

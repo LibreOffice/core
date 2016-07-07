@@ -59,7 +59,7 @@ static rtl_TextEncoding lcl_GetDefaultTextEncodingForRTF()
 // -------------- Methods --------------------
 
 SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
-            uno::Reference<document::XDocumentProperties> i_xDocProps )
+            uno::Reference<document::XDocumentProperties> const & i_xDocProps )
     : SvRTFParser( rIn, 5 )
     , aPlainMap(rPool)
     , aPardMap(rPool)

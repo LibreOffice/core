@@ -40,7 +40,7 @@ protected:
     rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenChars;
 
 public:
-    SvxUnoForbiddenCharsTable(rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars);
+    SvxUnoForbiddenCharsTable(rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars);
     virtual ~SvxUnoForbiddenCharsTable();
 
     // XForbiddenCharacters

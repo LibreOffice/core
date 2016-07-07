@@ -393,7 +393,7 @@ protected:
     css::uno::Reference< css::text::XText >   xParentText;
 
     SvxUnoTextBase( const SvxItemPropertySet* _pSet ) throw();
-    SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > xParent ) throw();
+    SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > const & xParent ) throw();
     SvxUnoTextBase( const SvxUnoTextBase& rText ) throw();
     virtual ~SvxUnoTextBase() throw();
 
@@ -462,7 +462,7 @@ class EDITENG_DLLPUBLIC SvxUnoText : public SvxUnoTextBase,
 {
 public:
     SvxUnoText( const SvxItemPropertySet* _pSet ) throw();
-    SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > xParent ) throw();
+    SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, css::uno::Reference < css::text::XText > const & xParent ) throw();
     SvxUnoText( const SvxUnoText& rText ) throw();
     virtual ~SvxUnoText() throw();
 

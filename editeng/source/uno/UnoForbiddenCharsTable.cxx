@@ -30,7 +30,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::cppu;
 
-SvxUnoForbiddenCharsTable::SvxUnoForbiddenCharsTable(::rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars) :
+SvxUnoForbiddenCharsTable::SvxUnoForbiddenCharsTable(::rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars) :
     mxForbiddenChars( xForbiddenChars )
 {
 }

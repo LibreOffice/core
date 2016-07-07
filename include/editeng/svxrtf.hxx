@@ -288,7 +288,7 @@ protected:
 
     SvxRTFParser( SfxItemPool& rAttrPool,
                     SvStream& rIn,
-                    css::uno::Reference< css::document::XDocumentProperties> i_xDocProps );
+                    css::uno::Reference< css::document::XDocumentProperties> const & i_xDocProps );
     virtual ~SvxRTFParser();
 
     void SetNewDoc( bool bFlag )        { bNewDoc = bFlag; }

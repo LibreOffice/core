@@ -33,7 +33,7 @@
 
 EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw();
 EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule() throw();
-const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > xRule ) throw( css::lang::IllegalArgumentException );
+const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > const & xRule ) throw( css::lang::IllegalArgumentException );
 EDITENG_DLLPUBLIC css::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw();
 
 class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper5< css::container::XIndexReplace, css::ucb::XAnyCompare,

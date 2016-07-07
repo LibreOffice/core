@@ -41,7 +41,7 @@ public:
     SfxPoolItem**   GetDefItems();
 
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable();
-    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
     css::uno::Reference< css::linguistic2::XLanguageGuessing > GetLanguageGuesser();
 };
 

@@ -191,7 +191,7 @@ public:
 
     EditTextObject* CreateTextObject();
     void            InsertText( const EditTextObject& rTextObject );
-    void            InsertText( css::uno::Reference< css::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, bool bUseSpecial );
+    void            InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & xDataObj, const OUString& rBaseURL, bool bUseSpecial );
 
     css::uno::Reference< css::datatransfer::XTransferable > GetTransferable();
 

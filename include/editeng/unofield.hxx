@@ -59,7 +59,7 @@ protected:
 
 public:
     SvxUnoTextField( sal_Int32 nServiceId ) throw();
-    SvxUnoTextField( css::uno::Reference< css::text::XTextRange > xAnchor, const OUString& rPresentation, const SvxFieldData* pFieldData ) throw();
+    SvxUnoTextField( css::uno::Reference< css::text::XTextRange > const & xAnchor, const OUString& rPresentation, const SvxFieldData* pFieldData ) throw();
     virtual ~SvxUnoTextField() throw();
 
     // Internal

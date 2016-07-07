@@ -183,7 +183,7 @@ SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
 
 
 sal_Int16 SvxSpellWrapper::CheckSpellLang(
-        Reference< XSpellChecker1 > xSpell, sal_Int16 nLang)
+        Reference< XSpellChecker1 > const & xSpell, sal_Int16 nLang)
 {
     LangCheckState_map_t &rLCS = GetLangCheckState();
 
@@ -208,7 +208,7 @@ sal_Int16 SvxSpellWrapper::CheckSpellLang(
 }
 
 sal_Int16 SvxSpellWrapper::CheckHyphLang(
-        Reference< XHyphenator >  xHyph, sal_Int16 nLang)
+        Reference< XHyphenator > const & xHyph, sal_Int16 nLang)
 {
     LangCheckState_map_t &rLCS = GetLangCheckState();
 

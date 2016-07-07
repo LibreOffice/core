@@ -792,7 +792,7 @@ EditSelection EditEngine::InsertText(const EditTextObject& rTextObject, const Ed
 }
 
 EditSelection EditEngine::InsertText(
-    uno::Reference<datatransfer::XTransferable >& rxDataObj,
+    uno::Reference<datatransfer::XTransferable > const & rxDataObj,
     const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial)
 {
     return pImpEditEngine->InsertText(rxDataObj, rBaseURL, rPaM, bUseSpecial);
@@ -2111,7 +2111,7 @@ void EditEngine::EraseVirtualDevice()
     pImpEditEngine->EraseVirtualDevice();
 }
 
-void EditEngine::SetSpeller( Reference< XSpellChecker1 >  &xSpeller )
+void EditEngine::SetSpeller( Reference< XSpellChecker1 > const &xSpeller )
 {
     pImpEditEngine->SetSpeller( xSpeller );
 }

@@ -543,7 +543,7 @@ private:
 
     EditTextObject*     CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
-    EditSelection       InsertText( css::uno::Reference< css::datatransfer::XTransferable >& rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
+    EditSelection       InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
 
     void                CheckPageOverflow();
 
@@ -901,7 +901,7 @@ public:
 
     css::uno::Reference< css::linguistic2::XSpellChecker1 >
                         GetSpeller();
-    void                SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 >  &xSpl )
+    void                SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpl )
                             { xSpeller = xSpl; }
     const css::uno::Reference< css::linguistic2::XHyphenator >&
                         GetHyphenator() const { return xHyphenator; }

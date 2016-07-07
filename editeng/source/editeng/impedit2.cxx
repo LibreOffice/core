@@ -3453,7 +3453,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     return xDataObj;
 }
 
-EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransferable >& rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial )
+EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial )
 {
     EditSelection aNewSelection( rPaM );
 

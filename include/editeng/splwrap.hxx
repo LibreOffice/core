@@ -82,10 +82,10 @@ public:
     virtual ~SvxSpellWrapper();
 
     static sal_Int16    CheckSpellLang(
-                            css::uno::Reference< css::linguistic2::XSpellChecker1 >  xSpell,
+                            css::uno::Reference< css::linguistic2::XSpellChecker1 > const & xSpell,
                             sal_Int16 nLang );
     static sal_Int16    CheckHyphLang(
-                            css::uno::Reference< css::linguistic2::XHyphenator >  xHyph,
+                            css::uno::Reference< css::linguistic2::XHyphenator >const & xHyph,
                             sal_Int16 nLang );
 
     static void         ShowLanguageErrors();

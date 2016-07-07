@@ -51,11 +51,11 @@ public:
     static css::uno::Reference< css::datatransfer::XTransferable> CreateTransferableFromText(Outliner *);
 
     static OutlinerParaObject *JuxtaposeParaObject(
-            css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent,
+            css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
             Outliner *,
             OutlinerParaObject *);
     static OutlinerParaObject *DeeplyMergeParaObject(
-            css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent,
+            css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
             Outliner *,
             OutlinerParaObject *);
 };
@@ -74,7 +74,7 @@ public:
 
 private:
     friend class Outliner;
-    OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent);
+    OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent);
 
     css::uno::Reference< css::datatransfer::XTransferable > mxOverflowingContent;
 };

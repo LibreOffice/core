@@ -1664,7 +1664,7 @@ SvxUnoTextBase::SvxUnoTextBase( const SvxItemPropertySet* _pSet  ) throw()
 {
 }
 
-SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > xParent ) throw()
+SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > const & xParent ) throw()
 : SvxUnoTextRangeBase( pSource, _pSet )
 {
     xParentText = xParent;
@@ -2291,7 +2291,7 @@ SvxUnoText::SvxUnoText( const SvxItemPropertySet* _pSet ) throw()
 {
 }
 
-SvxUnoText::SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > xParent ) throw()
+SvxUnoText::SvxUnoText( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > const & xParent ) throw()
 : SvxUnoTextBase( pSource, _pSet, xParent )
 {
 }

@@ -469,7 +469,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
     maRule.SetLevel( (sal_uInt16)nIndex, aFmt );
 }
 
-const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > xRule ) throw( IllegalArgumentException )
+const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > const & xRule ) throw( IllegalArgumentException )
 {
     SvxUnoNumberingRules* pRule = SvxUnoNumberingRules::getImplementation( xRule );
     if( pRule == nullptr )

@@ -172,7 +172,7 @@ private:
             CreateTransferable(const EditSelection& rSelection);
 
     EDITENG_DLLPRIVATE EditSelection InsertText(
-        css::uno::Reference<css::datatransfer::XTransferable >& rxDataObj,
+        css::uno::Reference<css::datatransfer::XTransferable > const & rxDataObj,
         const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
 
     EDITENG_DLLPRIVATE EditPaM EndOfWord(const EditPaM& rPaM);
@@ -415,7 +415,7 @@ public:
     void            EraseVirtualDevice();
 
     void            SetSpeller( css::uno::Reference<
-                            css::linguistic2::XSpellChecker1 > &xSpeller );
+                            css::linguistic2::XSpellChecker1 > const &xSpeller );
     css::uno::Reference<
         css::linguistic2::XSpellChecker1 >
                     GetSpeller();

@@ -140,7 +140,7 @@ EDITENG_DLLPUBLIC css::uno::Reference<
 //TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 EDITENG_DLLPUBLIC css::uno::Reference<
     css::linguistic2::XDictionary >    SvxGetOrCreatePosDic(
-            css::uno::Reference< css::linguistic2::XSearchableDictionaryList >  xDicList );
+            css::uno::Reference< css::linguistic2::XSearchableDictionaryList > const & xDicList );
 EDITENG_DLLPUBLIC css::uno::Reference<
     css::linguistic2::XDictionary >    SvxGetIgnoreAllList();
 EDITENG_DLLPUBLIC css::uno::Reference<

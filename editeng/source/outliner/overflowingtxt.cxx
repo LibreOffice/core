@@ -33,7 +33,7 @@
 
 
 OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
-        css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent,
+        css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
         Outliner *pOutl,
         OutlinerParaObject *pNextPObj)
 {
@@ -68,7 +68,7 @@ OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
 }
 
 OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
-        css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent,
+        css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
         Outliner *pOutl,
         OutlinerParaObject *pNextPObj)
 {
@@ -105,7 +105,7 @@ css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::Creat
 
 // class OverflowingText
 
-OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent) :
+OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent) :
         mxOverflowingContent(xOverflowingContent)
 {
 
