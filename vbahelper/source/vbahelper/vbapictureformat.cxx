@@ -23,7 +23,7 @@ using namespace com::sun::star;
 
 ScVbaPictureFormat::ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent,
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-    uno::Reference< drawing::XShape > xShape )
+    uno::Reference< drawing::XShape > const & xShape )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
     : ScVbaPictureFormat_BASE( xParent, xContext ), m_xShape( xShape )
 {
