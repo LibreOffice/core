@@ -108,11 +108,6 @@ void SvxPresetListBox::FillPresetListBox(XHatchList& pList, sal_uInt32 nStartInd
     FillPresetListBoxImpl< XHatchList, XHatchEntry>( pList, nStartIndex );
 }
 
-void SvxPresetListBox::FillPresetListBox(XBitmapList& pList, sal_uInt32 nStartIndex)
-{
-    FillPresetListBoxImpl< XBitmapList, XBitmapEntry >( pList, nStartIndex );
-}
-
 IMPL_LINK_TYPED(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
 {
     if( pMenu == nullptr )
