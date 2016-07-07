@@ -309,7 +309,7 @@ namespace frm
         {
         public:
             impl_appendOrderByColumn_throw(const FormOperations *pFO,
-                                           css::uno::Reference< css::beans::XPropertySet > xField,
+                                           css::uno::Reference< css::beans::XPropertySet > const & xField,
                                            bool bUp)
                 : m_pFO(pFO)
                 , m_xField(xField)
@@ -328,7 +328,7 @@ namespace frm
         {
         public:
             impl_appendFilterByColumn_throw(const FormOperations *pFO,
-                                            css::uno::Reference< css::beans::XPropertySet > xField)
+                                            css::uno::Reference< css::beans::XPropertySet > const & xField)
                 : m_pFO(pFO)
                 , m_xField(xField)
             {};
