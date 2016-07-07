@@ -417,6 +417,7 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(len(xDataSource.DataSequences), 3)
         expectedValues = ((1, 4), (2, 5), (3, 6))
         expectedCellrange = ('A1:A2', 'B1:B2', 'C1:C2')
+
         for col in range(3):
             xSeq = xDataSource.DataSequences[col].Values
             self.assertEqual(xSeq.ImplementationName, 'SwChartDataSequence')
@@ -429,6 +430,13 @@ class CheckTable(unittest.TestCase):
             self.assertEqual(
                     [int(txtval) for txtval in xSeq.TextualData],
                     [val for val in expectedValues[col]])
+
+            xSeq.Role = "One xSeq to rule them all"
+            self.assertEqual("One xSeq to rule them all", xSeq.Role)
+
+            xSeqClone = xSeq.createClone()
+            self.assertEqual(xSeq.Role, xSeqClone.Role)
+
         xDoc.dispose()
 
     def test_tdf32082(self):
@@ -542,6 +550,29 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(b'', xTableCursor.ImplementationId.value)
 
         xDoc.dispose()
+
+    def test_xmlRangeConversions(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(4, 3)
+        xCursor = xDoc.Text.createTextCursor()
+        xDoc.Text.insertTextContent(xCursor, xTable, False)
+        xTable.ChartColumnAsLabel = False
+        xTable.ChartRowAsLabel = False
+        xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
+
+        xChartDataProvider = xDoc.createInstance('com.sun.star.chart2.data.DataProvider')
+
+        self.assertEqual('', xChartDataProvider.convertRangeToXML(''))
+        self.assertEqual('', xChartDataProvider.convertRangeFromXML(''))
+        self.assertEqual('.A1;.A1', xChartDataProvider.convertRangeFromXML('<some xml>'))
+
+        xml = xChartDataProvider.convertRangeToXML('Table1.A1:C3')
+
+        self.assertEqual("Table1.$A$1:.$C$3", xml)
+
+        xCellRangeString = xChartDataProvider.convertRangeFromXML("Table1.$A$1:.$C$3")
+        self.assertEqual("Table1.A1:C3", xCellRangeString)
 
 if __name__ == '__main__':
     unittest.main()
