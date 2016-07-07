@@ -137,7 +137,7 @@ public:
     DlgEditor (
         vcl::Window&, DialogWindowLayout&,
         css::uno::Reference<css::frame::XModel> const& xModel,
-        css::uno::Reference<css::container::XNameContainer> xDialogModel
+        css::uno::Reference<css::container::XNameContainer> const & xDialogModel
     );
     virtual ~DlgEditor();
 

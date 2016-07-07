@@ -176,7 +176,7 @@ bool DlgEditor::RemarkDialog()
 DlgEditor::DlgEditor (
     vcl::Window& rWindow_, DialogWindowLayout& rLayout_,
     css::uno::Reference<css::frame::XModel> const& xModel,
-    css::uno::Reference<css::container::XNameContainer> xDialogModel
+    css::uno::Reference<css::container::XNameContainer> const & xDialogModel
 )
     :pHScroll(nullptr)
     ,pVScroll(nullptr)
