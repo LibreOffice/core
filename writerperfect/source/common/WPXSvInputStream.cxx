@@ -400,7 +400,7 @@ class WPXSvInputStreamImpl
 {
 public:
     explicit WPXSvInputStreamImpl(css::uno::Reference<
-                                  css::io::XInputStream > xStream);
+                                  css::io::XInputStream > const & xStream);
     ~WPXSvInputStreamImpl();
 
     bool isStructured();
@@ -442,7 +442,7 @@ public:
     unsigned long mnReadBufferPos;
 };
 
-WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference< XInputStream > xStream) :
+WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference< XInputStream > const & xStream) :
     mxStream(xStream),
     mxSeekable(xStream, UNO_QUERY),
     maData(0),
@@ -809,7 +809,7 @@ void WPXSvInputStreamImpl::ensureZipIsInitialized()
         mpZipStorage->initialize();
 }
 
-WPXSvInputStream::WPXSvInputStream(Reference< XInputStream > xStream) :
+WPXSvInputStream::WPXSvInputStream(Reference< XInputStream > const & xStream) :
     mpImpl(new WPXSvInputStreamImpl(xStream))
 {
 }
