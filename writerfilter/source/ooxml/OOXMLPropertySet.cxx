@@ -307,7 +307,7 @@ OOXMLValue * OOXMLStringValue::clone() const
 /*
   class OOXMLInputStreamValue
  */
-OOXMLInputStreamValue::OOXMLInputStreamValue(uno::Reference<io::XInputStream> xInputStream)
+OOXMLInputStreamValue::OOXMLInputStreamValue(uno::Reference<io::XInputStream> const & xInputStream)
 : mxInputStream(xInputStream)
 {
 }
@@ -630,7 +630,7 @@ string OOXMLUniversalMeasureValue::toString() const
  */
 
 
-OOXMLShapeValue::OOXMLShapeValue(uno::Reference<drawing::XShape> rShape)
+OOXMLShapeValue::OOXMLShapeValue(uno::Reference<drawing::XShape> const & rShape)
 : mrShape(rShape)
 {
 }
@@ -661,7 +661,7 @@ OOXMLValue * OOXMLShapeValue::clone() const
  */
 
 
-OOXMLStarMathValue::OOXMLStarMathValue( uno::Reference< embed::XEmbeddedObject > c )
+OOXMLStarMathValue::OOXMLStarMathValue( uno::Reference< embed::XEmbeddedObject > const & c )
 : component(c)
 {
 }

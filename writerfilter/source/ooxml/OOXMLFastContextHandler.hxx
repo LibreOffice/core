@@ -480,7 +480,7 @@ protected:
 class OOXMLFastContextHandlerWrapper : public OOXMLFastContextHandler
 {
 public:
-    explicit OOXMLFastContextHandlerWrapper(OOXMLFastContextHandler * pParent, css::uno::Reference<css::xml::sax::XFastContextHandler> xContext);
+    explicit OOXMLFastContextHandlerWrapper(OOXMLFastContextHandler * pParent, css::uno::Reference<css::xml::sax::XFastContextHandler> const & xContext);
     virtual ~OOXMLFastContextHandlerWrapper();
 
     // css::xml::sax::XFastContextHandler:

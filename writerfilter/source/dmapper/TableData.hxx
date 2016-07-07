@@ -55,7 +55,7 @@ class CellData
 public:
     typedef std::shared_ptr<CellData> Pointer_t;
 
-    CellData(css::uno::Reference<css::text::XTextRange> start, TablePropertyMapPtr pProps)
+    CellData(css::uno::Reference<css::text::XTextRange> const & start, TablePropertyMapPtr pProps)
     : mStart(start), mEnd(start), mpProps(pProps), mbOpen(true)
     {
     }
@@ -67,7 +67,7 @@ public:
 
        @param end     the end handle of the cell
     */
-    void setEnd(css::uno::Reference<css::text::XTextRange> end) { mEnd = end; mbOpen = false; }
+    void setEnd(css::uno::Reference<css::text::XTextRange> const & end) { mEnd = end; mbOpen = false; }
 
     /**
        Adds properties to the cell.

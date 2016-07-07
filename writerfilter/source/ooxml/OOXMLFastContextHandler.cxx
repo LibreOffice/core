@@ -1692,7 +1692,7 @@ void OOXMLFastContextHandlerShape::lcl_characters
 
 OOXMLFastContextHandlerWrapper::OOXMLFastContextHandlerWrapper
 (OOXMLFastContextHandler * pParent,
- uno::Reference<XFastContextHandler> xContext)
+ uno::Reference<XFastContextHandler> const & xContext)
 : OOXMLFastContextHandler(pParent), mxContext(xContext)
 {
     setId(pParent->getId());

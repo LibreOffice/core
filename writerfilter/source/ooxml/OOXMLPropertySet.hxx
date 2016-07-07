@@ -128,7 +128,7 @@ protected:
     css::uno::Reference<css::io::XInputStream> mxInputStream;
 
 public:
-    explicit OOXMLInputStreamValue(css::uno::Reference<css::io::XInputStream> xInputStream);
+    explicit OOXMLInputStreamValue(css::uno::Reference<css::io::XInputStream> const & xInputStream);
     virtual ~OOXMLInputStreamValue();
 
     virtual css::uno::Any getAny() const override;
@@ -250,7 +250,7 @@ class OOXMLShapeValue : public OOXMLValue
 protected:
     css::uno::Reference<css::drawing::XShape> mrShape;
 public:
-    explicit OOXMLShapeValue(css::uno::Reference<css::drawing::XShape> rShape);
+    explicit OOXMLShapeValue(css::uno::Reference<css::drawing::XShape> const & rShape);
     virtual ~OOXMLShapeValue();
 
     virtual css::uno::Any getAny() const override;
@@ -265,7 +265,7 @@ class OOXMLStarMathValue : public OOXMLValue
 protected:
     css::uno::Reference< css::embed::XEmbeddedObject > component;
 public:
-    explicit OOXMLStarMathValue( css::uno::Reference< css::embed::XEmbeddedObject > component );
+    explicit OOXMLStarMathValue( css::uno::Reference< css::embed::XEmbeddedObject > const & component );
     virtual ~OOXMLStarMathValue();
 
     virtual css::uno::Any getAny() const override;

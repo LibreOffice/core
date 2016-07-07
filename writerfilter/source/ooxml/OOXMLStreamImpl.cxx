@@ -32,8 +32,8 @@ namespace ooxml
 using namespace com::sun::star;
 
 OOXMLStreamImpl::OOXMLStreamImpl
-(uno::Reference<uno::XComponentContext> xContext,
- uno::Reference<io::XInputStream> xStorageStream,
+(uno::Reference<uno::XComponentContext> const & xContext,
+ uno::Reference<io::XInputStream> const & xStorageStream,
  StreamType_t nType, bool bRepairStorage)
 : mxContext(xContext), mxStorageStream(xStorageStream), mnStreamType(nType)
 {

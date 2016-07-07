@@ -27,7 +27,7 @@ namespace dmapper
 {
 using namespace com::sun::star;
 
-std::string XTextRangeToString(uno::Reference< text::XTextRange > textRange)
+std::string XTextRangeToString(uno::Reference< text::XTextRange > const & textRange)
 {
     std::string result;
 
