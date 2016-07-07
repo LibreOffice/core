@@ -1053,7 +1053,10 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     }
     else if (aEvent.FeatureURL.Path == "InsertMode" ||
              aEvent.FeatureURL.Path == "WrapText" ||
-             aEvent.FeatureURL.Path == "ToggleMergeCells")
+             aEvent.FeatureURL.Path == "ToggleMergeCells" ||
+             aEvent.FeatureURL.Path == "NumberFormatCurrency" ||
+             aEvent.FeatureURL.Path == "NumberFormatPercent" ||
+             aEvent.FeatureURL.Path == "NumberFormatDate")
     {
         sal_Bool aBool;
 
