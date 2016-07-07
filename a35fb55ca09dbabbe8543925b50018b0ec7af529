@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_9b37f5e2",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2564,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-07T11:54:28Z",
+      "side": 1,
+      "message": "This is a wrong approach, it prevents to copy to any cell if the sheet is protected, even if the individual cell is allowed to be modified.",
+      "revId": "a35fb55ca09dbabbe8543925b50018b0ec7af529",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
