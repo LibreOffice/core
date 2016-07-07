@@ -103,7 +103,7 @@ PageEntry::~PageEntry()
 }
 
 
-static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream >& xOutputStream ) throw( css::uno::Exception )
+static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream > const & xOutputStream ) throw( css::uno::Exception )
 {
     if( xOutputStream.is() )
     {
@@ -281,7 +281,7 @@ static void createSlideFile( const Reference< XComponent >& xDoc, PlacewareZipFi
 
 //#define PLACEWARE_DEBUG 1
 
-bool PlaceWareExporter::doExport( const Reference< XComponent >& xDoc, Reference < XOutputStream > xOutputStream,
+bool PlaceWareExporter::doExport( const Reference< XComponent >& xDoc, Reference < XOutputStream > const &xOutputStream,
                                   const OUString& rURL, const Reference < XInterface >& /* xHandler */, Reference < XStatusIndicator >& xStatusIndicator )
 {
     bool bRet = false;

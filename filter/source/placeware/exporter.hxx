@@ -36,7 +36,7 @@ public:
     ~PlaceWareExporter();
 
     bool doExport( const css::uno::Reference< css::lang::XComponent >& xDoc,
-                   css::uno::Reference < css::io::XOutputStream > xOutputStream,
+                   css::uno::Reference < css::io::XOutputStream > const & xOutputStream,
                    const OUString& rURL,
                    const css::uno::Reference < css::uno::XInterface >& xHandler,
                    css::uno::Reference < css::task::XStatusIndicator >& rxStatusIndicator );

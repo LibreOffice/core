@@ -253,7 +253,7 @@ private:
 
     public:
         explicit T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
-        explicit T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream);
+        explicit T602ImportFilter(css::uno::Reference<css::io::XInputStream> const & xInputStream);
         virtual ~T602ImportFilter();
 
     // XFilter

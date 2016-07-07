@@ -131,7 +131,7 @@ public:
     bool exportAll( const css::uno::Reference< css::lang::XComponent >& xDoc, css::uno::Reference< css::io::XOutputStream > &xOutputStream,    css::uno::Reference< css::task::XStatusIndicator> &xStatusIndicator );
     bool exportSlides( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, css::uno::Reference< css::io::XOutputStream > &xOutputStream, sal_uInt16 nPage);
     sal_uInt16 exportBackgrounds( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, css::uno::Reference< css::io::XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects );
-    sal_uInt16 exportBackgrounds( css::uno::Reference< css::drawing::XDrawPage > xDrawPage, sal_uInt16 nPage, bool bExportObjects );
+    sal_uInt16 exportBackgrounds( css::uno::Reference< css::drawing::XDrawPage > const & xDrawPage, sal_uInt16 nPage, bool bExportObjects );
 
     ChecksumCache gMasterCache;
     ChecksumCache gPrivateCache;
@@ -150,7 +150,7 @@ private:
 
     ::std::map<sal_uInt32, PageInfo> maPagesMap;
 
-    sal_uInt16 exportDrawPageBackground(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage >& xPage);
+    sal_uInt16 exportDrawPageBackground(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage > const & xPage);
     sal_uInt16 exportMasterPageObjects(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage >& xMasterPage);
 
     void exportDrawPageContents( const css::uno::Reference< css::drawing::XDrawPage >& xPage, bool bStream, bool bMaster  );

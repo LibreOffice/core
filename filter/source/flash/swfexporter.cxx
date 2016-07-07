@@ -329,7 +329,7 @@ sal_uInt16 FlashExporter::exportBackgrounds( const Reference< XDrawPage >& xDraw
     return nPage;
 }
 
-sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, sal_uInt16 nPage, bool bExportObjects )
+sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > const & xDrawPage, sal_uInt16 nPage, bool bExportObjects )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
@@ -392,7 +392,7 @@ sal_Int32 nPlaceDepth;
 //  should be reused.  The return value indicates which slide's background to use.
 //  If the return value != nPage, then there is no background (if == -1) or the
 //  background has already been exported.
-sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< XDrawPage >& xPage)
+sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< XDrawPage > const & xPage)
 {
     sal_uInt16 rBackgroundID;
 

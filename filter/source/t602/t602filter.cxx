@@ -140,7 +140,7 @@ T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::lang::XMultiSe
 {
 }
 
-T602ImportFilter::T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream)
+T602ImportFilter::T602ImportFilter(css::uno::Reference<css::io::XInputStream> const & xInputStream)
     : mxInputStream(xInputStream)
     , mpAttrList(nullptr)
     , node(tnode::START)
