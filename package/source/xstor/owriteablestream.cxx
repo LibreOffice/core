@@ -1696,7 +1696,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, bool bTransacted )
     m_pData.reset(new WSInternalData_Impl(pImpl->m_rMutexRef, m_pImpl->m_nStorageType));
 }
 
-OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStream > xStream, bool bTransacted )
+OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStream > const & xStream, bool bTransacted )
 : m_pImpl( pImpl )
 , m_bInStreamDisconnected( false )
 , m_bInitOnDemand( false )

@@ -177,24 +177,24 @@ struct OStorage_Impl
     sal_Int16 m_nRelInfoStatus;
 
     // Constructors
-    OStorage_Impl(  css::uno::Reference< css::io::XInputStream > xInputStream,
+    OStorage_Impl(  css::uno::Reference< css::io::XInputStream > const & xInputStream,
                     sal_Int32 nMode,
                     const css::uno::Sequence< css::beans::PropertyValue >& xProperties,
-                    css::uno::Reference< css::uno::XComponentContext > xContext,
+                    css::uno::Reference< css::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType );
 
-    OStorage_Impl(  css::uno::Reference< css::io::XStream > xStream,
+    OStorage_Impl(  css::uno::Reference< css::io::XStream > const & xStream,
                     sal_Int32 nMode,
                     const css::uno::Sequence< css::beans::PropertyValue >& xProperties,
-                    css::uno::Reference< css::uno::XComponentContext > xContext,
+                    css::uno::Reference< css::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType );
 
     // constructor for a substorage
     OStorage_Impl(  OStorage_Impl* pParent,
                     sal_Int32 nMode,
-                    css::uno::Reference< css::container::XNameContainer > xPackageFolder,
-                    css::uno::Reference< css::lang::XSingleServiceFactory > xPackage,
-                    css::uno::Reference< css::uno::XComponentContext > xContext,
+                    css::uno::Reference< css::container::XNameContainer > const & xPackageFolder,
+                    css::uno::Reference< css::lang::XSingleServiceFactory > const & xPackage,
+                    css::uno::Reference< css::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType );
 
     ~OStorage_Impl();
@@ -304,16 +304,16 @@ protected:
 
 public:
 
-    OStorage(   css::uno::Reference< css::io::XInputStream > xInputStream,
+    OStorage(   css::uno::Reference< css::io::XInputStream > const & xInputStream,
                 sal_Int32 nMode,
                 const css::uno::Sequence< css::beans::PropertyValue >& xProperties,
-                css::uno::Reference< css::uno::XComponentContext > xContext,
+                css::uno::Reference< css::uno::XComponentContext > const & xContext,
                 sal_Int32 nStorageType );
 
-    OStorage(   css::uno::Reference< css::io::XStream > xStream,
+    OStorage(   css::uno::Reference< css::io::XStream > const & xStream,
                 sal_Int32 nMode,
                 const css::uno::Sequence< css::beans::PropertyValue >& xProperties,
-                css::uno::Reference< css::uno::XComponentContext > xContext,
+                css::uno::Reference< css::uno::XComponentContext > const & xContext,
                 sal_Int32 nStorageType );
 
     OStorage(   OStorage_Impl* pImpl, bool bReadOnlyWrap );

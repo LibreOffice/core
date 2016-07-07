@@ -50,11 +50,11 @@ protected:
 
 public:
     OInputCompStream( OWriteStream_Impl& pImpl,
-                      css::uno::Reference< css::io::XInputStream > xStream,
+                      css::uno::Reference< css::io::XInputStream > const & xStream,
                       const css::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
-    OInputCompStream( css::uno::Reference< css::io::XInputStream > xStream,
+    OInputCompStream( css::uno::Reference< css::io::XInputStream > const & xStream,
                       const css::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 

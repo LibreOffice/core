@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
+ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > const & xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
 {
     const OUString sFileEntryElement     ( ELEMENT_FILE_ENTRY );
     const OUString sManifestElement      ( ELEMENT_MANIFEST );

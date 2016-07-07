@@ -26,7 +26,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-ByteChucker::ByteChucker(Reference<XOutputStream> xOstream)
+ByteChucker::ByteChucker(Reference<XOutputStream> const & xOstream)
 : xStream(xOstream)
 , xSeek (xOstream, UNO_QUERY )
 , a1Sequence ( 1 )

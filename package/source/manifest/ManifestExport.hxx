@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star {
 class ManifestExport
 {
 public:
-    ManifestExport(css::uno::Reference < css::xml::sax::XDocumentHandler > xHandler, const css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > &rManList );
+    ManifestExport(css::uno::Reference < css::xml::sax::XDocumentHandler > const & xHandler, const css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > &rManList );
 };
 
 #endif

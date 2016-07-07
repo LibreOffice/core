@@ -39,7 +39,7 @@ protected:
     sal_Int8 * const p1Sequence, * const p2Sequence, * const p4Sequence;
 
 public:
-    ByteChucker (css::uno::Reference<css::io::XOutputStream> xOstream);
+    ByteChucker (css::uno::Reference<css::io::XOutputStream> const & xOstream);
     ~ByteChucker();
 
     void WriteBytes( const css::uno::Sequence< sal_Int8 >& aData )

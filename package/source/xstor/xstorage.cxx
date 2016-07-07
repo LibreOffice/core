@@ -182,10 +182,10 @@ SotElement_Impl::~SotElement_Impl()
 }
 
 // most of properties are holt by the storage but are not used
-OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
+OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > const & xInputStream,
                                 sal_Int32 nMode,
                                 const uno::Sequence< beans::PropertyValue >& xProperties,
-                                uno::Reference< uno::XComponentContext > xContext,
+                                uno::Reference< uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( nullptr )
@@ -223,10 +223,10 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 }
 
 // most of properties are holt by the storage but are not used
-OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
+OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > const & xStream,
                                 sal_Int32 nMode,
                                 const uno::Sequence< beans::PropertyValue >& xProperties,
-                                uno::Reference< uno::XComponentContext > xContext,
+                                uno::Reference< uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( nullptr )
@@ -267,9 +267,9 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 
 OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
                                 sal_Int32 nMode,
-                                uno::Reference< container::XNameContainer > xPackageFolder,
-                                uno::Reference< lang::XSingleServiceFactory > xPackage,
-                                uno::Reference< uno::XComponentContext > xContext,
+                                uno::Reference< container::XNameContainer > const & xPackageFolder,
+                                uno::Reference< lang::XSingleServiceFactory > const & xPackage,
+                                uno::Reference< uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
 : m_rMutexRef( new SotMutexHolder )
 , m_pAntiImpl( nullptr )
@@ -1868,10 +1868,10 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
 
 // OStorage implementation
 
-OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
+OStorage::OStorage( uno::Reference< io::XInputStream > const & xInputStream,
                     sal_Int32 nMode,
                     const uno::Sequence< beans::PropertyValue >& xProperties,
-                    uno::Reference< uno::XComponentContext > xContext,
+                    uno::Reference< uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
 {
@@ -1879,10 +1879,10 @@ OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
     m_pData.reset(new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false));
 }
 
-OStorage::OStorage( uno::Reference< io::XStream > xStream,
+OStorage::OStorage( uno::Reference< io::XStream > const & xStream,
                     sal_Int32 nMode,
                     const uno::Sequence< beans::PropertyValue >& xProperties,
-                    uno::Reference< uno::XComponentContext > xContext,
+                    uno::Reference< uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )
 {

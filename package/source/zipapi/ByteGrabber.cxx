@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
  *  potentially quite slow and may need to be optimised
  */
 
-ByteGrabber::ByteGrabber(uno::Reference  < io::XInputStream > xIstream)
+ByteGrabber::ByteGrabber(uno::Reference  < io::XInputStream > const & xIstream)
 : xStream(xIstream)
 , xSeek (xIstream, uno::UNO_QUERY )
 , aSequence ( 4 )

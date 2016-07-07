@@ -43,7 +43,7 @@ protected:
     const sal_Int8 *pSequence;
 
 public:
-    ByteGrabber (css::uno::Reference < css::io::XInputStream > xIstream);
+    ByteGrabber (css::uno::Reference < css::io::XInputStream > const & xIstream);
     ~ByteGrabber();
 
     void setInputStream (const css::uno::Reference < css::io::XInputStream >& xNewStream);

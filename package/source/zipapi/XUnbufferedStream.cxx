@@ -42,7 +42,7 @@ XUnbufferedStream::XUnbufferedStream(
                       const uno::Reference< uno::XComponentContext >& xContext,
                       const rtl::Reference<SotMutexHolder>& aMutexHolder,
                       ZipEntry & rEntry,
-                      Reference < XInputStream > xNewZipStream,
+                      Reference < XInputStream > const & xNewZipStream,
                       const ::rtl::Reference< EncryptionData >& rData,
                       sal_Int8 nStreamMode,
                       bool bIsEncrypted,

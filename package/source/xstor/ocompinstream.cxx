@@ -29,7 +29,7 @@
 using namespace ::com::sun::star;
 
 OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
-                                    uno::Reference < io::XInputStream > xStream,
+                                    uno::Reference < io::XInputStream > const & xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
 : m_pImpl( &aImpl )
@@ -47,7 +47,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
     assert(m_xStream.is());
 }
 
-OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
+OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > const & xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
 : m_pImpl( nullptr )

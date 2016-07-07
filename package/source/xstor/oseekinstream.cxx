@@ -28,7 +28,7 @@
 using namespace ::com::sun::star;
 
 OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
-                                    uno::Reference < io::XInputStream > xStream,
+                                    uno::Reference < io::XInputStream > const & xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
 : OInputCompStream( pImpl, xStream, aProps, nStorageType )
@@ -37,7 +37,7 @@ OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
     OSL_ENSURE( m_xSeekable.is(), "No seeking support!\n" );
 }
 
-OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > xStream,
+OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > const & xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
 : OInputCompStream( xStream, aProps, nStorageType )

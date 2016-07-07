@@ -67,7 +67,7 @@ public:
                  const css::uno::Reference< css::uno::XComponentContext >& xContext,
                  const rtl::Reference<SotMutexHolder>& aMutexHolder,
                  ZipEntry & rEntry,
-                 css::uno::Reference < css::io::XInputStream > xNewZipStream,
+                 css::uno::Reference < css::io::XInputStream > const & xNewZipStream,
                  const ::rtl::Reference< EncryptionData >& rData,
                  sal_Int8 nStreamMode,
                  bool bIsEncrypted,
