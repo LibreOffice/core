@@ -32,7 +32,7 @@ SvxPresetListBox::SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle)
     : ValueSet(pParent, nWinStyle)
 {
     SetEdgeBlending(true);
-    SetExtraSpacing(2);
+    SetExtraSpacing(4);
 }
 
 VCL_BUILDER_DECL_FACTORY(SvxPresetListBox)
