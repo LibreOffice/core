@@ -32,24 +32,23 @@ enum class FloatWinPopupFlags
 {
     NONE                 = 0x000000,
     AllowTearOff         = 0x000001,
-    NoAnimation          = 0x000002,
-    Down                 = 0x000004,
-    Up                   = 0x000008,
-    Left                 = 0x000010,
-    Right                = 0x000020,
-    NoKeyClose           = 0x000040,
-    NoMouseClose         = 0x000080,
-    NoMouseRectClose     = 0x000100,
-    AllMouseButtonClose  = 0x000200,
-    NoAppFocusClose      = 0x000400,
-    NewLevel             = 0x000800,
-    NoMouseUpClose       = 0x001000,
-    GrabFocus            = 0x002000,
-    NoHorzPlacement      = 0x004000,
+    Down                 = 0x000002,
+    Up                   = 0x000004,
+    Left                 = 0x000008,
+    Right                = 0x000010,
+    NoKeyClose           = 0x000020,
+    NoMouseClose         = 0x000040,
+    NoMouseRectClose     = 0x000080,
+    AllMouseButtonClose  = 0x000100,
+    NoAppFocusClose      = 0x000200,
+    NewLevel             = 0x000400,
+    NoMouseUpClose       = 0x000800,
+    GrabFocus            = 0x001000,
+    NoHorzPlacement      = 0x002000,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<FloatWinPopupFlags> : is_typed_flags<FloatWinPopupFlags, 0x007fff> {};
+    template<> struct typed_flags<FloatWinPopupFlags> : is_typed_flags<FloatWinPopupFlags, 0x003fff> {};
 }
 
 enum class FloatWinPopupEndFlags
