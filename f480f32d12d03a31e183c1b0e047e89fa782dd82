@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_389fcf04",
+        "filename": "sax/source/fastparser/legacyfastparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T08:45:37Z",
+      "side": 1,
+      "message": "this can be unique_ptr ?",
+      "revId": "f480f32d12d03a31e183c1b0e047e89fa782dd82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_58a49356",
+        "filename": "sax/source/fastparser/legacyfastparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T08:45:37Z",
+      "side": 1,
+      "message": "const ptr \u0026",
+      "revId": "f480f32d12d03a31e183c1b0e047e89fa782dd82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_788957ca",
+        "filename": "sax/source/fastparser/legacyfastparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T08:45:37Z",
+      "side": 1,
+      "message": "can use o3tl::make_unique\u003cT\u003e or std::make_shared\u003cT\u003e here\n(depending on whether this should be unique or not)",
+      "revId": "f480f32d12d03a31e183c1b0e047e89fa782dd82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_d8f9834f",
+        "filename": "sax/source/fastparser/legacyfastparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T08:45:37Z",
+      "side": 1,
+      "message": "forgot to implement this?",
+      "revId": "f480f32d12d03a31e183c1b0e047e89fa782dd82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
