@@ -64,28 +64,28 @@ class SwSrcEditWindow : public vcl::Window, public SfxListener
 private:
     class ChangesListener;
     friend class ChangesListener;
-    ExtTextView*    pTextView;
-    ExtTextEngine*  pTextEngine;
+    ExtTextView*    m_pTextView;
+    ExtTextEngine*  m_pTextEngine;
 
-    VclPtr<TextViewOutWin> pOutWin;
-    VclPtr<ScrollBar>      pHScrollbar,
-                           pVScrollbar;
+    VclPtr<TextViewOutWin> m_pOutWin;
+    VclPtr<ScrollBar>      m_pHScrollbar,
+                           m_pVScrollbar;
 
-    SwSrcView*      pSrcView;
+    SwSrcView*      m_pSrcView;
 
-    rtl::Reference< ChangesListener > listener_;
+    rtl::Reference< ChangesListener > m_xListener;
     osl::Mutex mutex_;
     css::uno::Reference< css::beans::XMultiPropertySet >
-        notifier_;
+        m_xNotifier;
 
-    long            nCurTextWidth;
-    sal_uInt16          nStartLine;
-    rtl_TextEncoding eSourceEncoding;
-    bool            bReadonly;
-    bool            bHighlighting;
+    long            m_nCurTextWidth;
+    sal_uInt16          m_nStartLine;
+    rtl_TextEncoding m_eSourceEncoding;
+    bool            m_bReadonly;
+    bool            m_bHighlighting;
 
-    Idle            aSyntaxIdle;
-    std::set<sal_uInt16>   aSyntaxLineTable;
+    Idle            m_aSyntaxIdle;
+    std::set<sal_uInt16>   m_aSyntaxLineTable;
 
     void            ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff );
 
@@ -118,30 +118,30 @@ public:
 
     void            SetScrollBarRanges();
     void            InitScrollBars();
-    void            Read(SvStream& rInput) { pTextEngine->Read(rInput); }
-    void            Write(SvStream& rOutput) { pTextEngine->Write(rOutput); }
+    void            Read(SvStream& rInput) { m_pTextEngine->Read(rInput); }
+    void            Write(SvStream& rOutput) { m_pTextEngine->Write(rOutput); }
 
     ExtTextView*    GetTextView()
-                        {return pTextView;}
+                        {return m_pTextView;}
     TextEngine*     GetTextEngine()
-                        {return pTextEngine;}
-    SwSrcView*      GetSrcView() {return pSrcView;}
+                        {return m_pTextEngine;}
+    SwSrcView*      GetSrcView() {return m_pSrcView;}
 
-    TextViewOutWin* GetOutWin() {return pOutWin;}
+    TextViewOutWin* GetOutWin() {return m_pOutWin;}
 
     virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
 
     void            ClearModifyFlag()
-                        { pTextEngine->SetModified(false); }
+                        { m_pTextEngine->SetModified(false); }
     bool            IsModified() const
-                        { return pTextEngine->IsModified();}
+                        { return m_pTextEngine->IsModified();}
 
-    void            SetReadonly(bool bSet){bReadonly = bSet;}
-    bool            IsReadonly(){return bReadonly;}
+    void            SetReadonly(bool bSet){m_bReadonly = bSet;}
+    bool            IsReadonly(){return m_bReadonly;}
 
     void            DoDelayedSyntaxHighlight( sal_uInt16 nPara );
 
-    void            SetStartLine(sal_uInt16 nLine){nStartLine = nLine;}
+    void            SetStartLine(sal_uInt16 nLine){m_nStartLine = nLine;}
 
     virtual void    Command( const CommandEvent& rCEvt ) override;
     void            HandleWheelCommand( const CommandEvent& rCEvt );
