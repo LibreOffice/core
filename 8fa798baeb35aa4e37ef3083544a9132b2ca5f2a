@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_98229bb8",
+        "filename": "configure.ac",
+        "patchSetId": 18
+      },
+      "lineNbr": 8801,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2016-07-07T10:59:21Z",
+      "side": 1,
+      "message": "please fix the indentation",
+      "range": {
+        "startLine": 8801,
+        "startChar": 0,
+        "endLine": 8801,
+        "endChar": 1
+      },
+      "revId": "8fa798baeb35aa4e37ef3083544a9132b2ca5f2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
