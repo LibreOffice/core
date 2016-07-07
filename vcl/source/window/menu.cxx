@@ -2936,9 +2936,6 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
         nPopupModeFlags |= FloatWinPopupFlags::NewLevel;
     nPopupModeFlags |= FloatWinPopupFlags::NoKeyClose | FloatWinPopupFlags::AllMouseButtonClose;
 
-    // could be useful during debugging.
-    // nPopupModeFlags |= FloatWinPopupFlags::NoFocusClose;
-
     bInCallback = true; // set it here, if Activate overridden
     Activate();
     bInCallback = false;

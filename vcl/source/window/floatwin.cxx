@@ -733,11 +733,8 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
 
     nFlags |=
         FloatWinPopupFlags::NoFocusClose     |
-//        FloatWinPopupFlags::NoMouseClose       |
         FloatWinPopupFlags::AllMouseButtonClose |
-//        FloatWinPopupFlags::NoMouseRectClose   |   // #105968# floating toolboxes should close when clicked in (parent's) float rect
         FloatWinPopupFlags::NoMouseUpClose;
-//          |      FloatWinPopupFlags::NoAppFocusClose;
 
 /*
  *  FloatWinPopupFlags::NoKeyClose       |
