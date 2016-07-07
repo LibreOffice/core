@@ -181,7 +181,7 @@ int xmlEnableStreamInputCallbacks()
 }
 
 int xmlRegisterStreamInputCallbacks(
-    css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding
+    css::uno::Reference< css::xml::crypto::XUriBinding > const & aUriBinding
 ) {
     if( !( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) ) {
         if( xmlEnableStreamInputCallbacks() < 0 )

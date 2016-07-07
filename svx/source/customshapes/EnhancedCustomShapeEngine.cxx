@@ -257,7 +257,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
     return pRenderedShape;
 }
 
-void SetTemporary( uno::Reference< drawing::XShape >& xShape )
+void SetTemporary( uno::Reference< drawing::XShape > const & xShape )
 {
     if ( xShape.is() )
     {

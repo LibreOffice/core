@@ -37,11 +37,11 @@ class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper : public SvXMLImportPropertyM
                 XMLPropertyState *pFontCharsetState );
 
     void FontDefaultsCheck(
-                XMLPropertyState*pFontFamilyName,
-                XMLPropertyState* pFontStyleName,
-                XMLPropertyState* pFontFamily,
-                XMLPropertyState* pFontPitch,
-                XMLPropertyState* pFontCharSet,
+                XMLPropertyState const *pFontFamilyName,
+                XMLPropertyState const * pFontStyleName,
+                XMLPropertyState const * pFontFamily,
+                XMLPropertyState const * pFontPitch,
+                XMLPropertyState const * pFontCharSet,
                 XMLPropertyState** ppNewFontStyleName,
                 XMLPropertyState** ppNewFontFamily,
                 XMLPropertyState** ppNewFontPitch,

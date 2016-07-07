@@ -552,7 +552,7 @@ namespace accessibility
         return GetTextForwarder().HaveImageBullet( GetParagraphIndex() );
     }
 
-    Rectangle AccessibleEditableTextPara::LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder )
+    Rectangle AccessibleEditableTextPara::LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder const & rForwarder )
     {
         // convert to screen coordinates
         return Rectangle( rForwarder.LogicToPixel( rRect.TopLeft(), rMapMode ),

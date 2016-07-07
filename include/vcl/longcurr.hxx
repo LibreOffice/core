@@ -30,7 +30,7 @@ class LocaleDataWrapper;
 class VCL_DLLPUBLIC LongCurrencyFormatter : public FormatterBase
 {
 private:
-    SAL_DLLPRIVATE friend bool ImplLongCurrencyReformat( const OUString&, BigInt, BigInt, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter& );
+    SAL_DLLPRIVATE friend bool ImplLongCurrencyReformat( const OUString&, BigInt, BigInt, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter const & );
     SAL_DLLPRIVATE void        ImpInit();
 
 protected:

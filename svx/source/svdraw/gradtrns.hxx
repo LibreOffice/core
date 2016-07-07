@@ -45,10 +45,10 @@ class GradTransformer
 public:
     GradTransformer() {}
 
-    static void GradToVec(GradTransGradient& rG, GradTransVector& rV,
+    static void GradToVec(GradTransGradient const & rG, GradTransVector& rV,
         const SdrObject* pObj);
-    static void VecToGrad(GradTransVector& rV, GradTransGradient& rG,
-        GradTransGradient& rGOld, const SdrObject* pObj, bool bMoveSingle, bool bMoveFirst);
+    static void VecToGrad(GradTransVector const & rV, GradTransGradient& rG,
+        GradTransGradient const & rGOld, const SdrObject* pObj, bool bMoveSingle, bool bMoveFirst);
 };
 
 #endif // INCLUDED_SVX_SOURCE_SVDRAW_GRADTRNS_HXX

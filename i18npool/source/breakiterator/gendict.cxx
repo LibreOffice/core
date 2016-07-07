@@ -217,7 +217,7 @@ static inline void printIndex1(FILE *source_fp, sal_Int16 *set)
 #endif
 }
 
-static inline void printIndex2(FILE *source_fp, sal_Int16 *set)
+static inline void printIndex2(FILE *source_fp, sal_Int16 const *set)
 {
 #ifndef DICT_JA_ZH_IN_DATAFILE
     fputs ("static const sal_Int32 index2[] = {\n\t", source_fp);

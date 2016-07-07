@@ -106,11 +106,11 @@ Any SAL_CALL DisplayConnectionDispatch::getIdentifier() throw(std::exception)
     return m_aAny;
 }
 
-bool DisplayConnectionDispatch::dispatchEvent( void* pData, int nBytes )
+bool DisplayConnectionDispatch::dispatchEvent( void const * pData, int nBytes )
 {
     SolarMutexReleaser aRel;
 
-    Sequence< sal_Int8 > aSeq( static_cast<sal_Int8*>(pData), nBytes );
+    Sequence< sal_Int8 > aSeq( static_cast<const sal_Int8*>(pData), nBytes );
     Any aEvent;
     aEvent <<= aSeq;
     ::std::list< css::uno::Reference< XEventHandler > > handlers;

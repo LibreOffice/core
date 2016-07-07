@@ -245,7 +245,7 @@ private:
     DECL_LINK_TYPED(NoFormatHdl_Impl, Button*, void);
     DECL_LINK_TYPED(AttributeHdl_Impl, Button*, void);
     DECL_LINK_TYPED( TimeoutHdl_Impl, Timer*, void );
-    void            ClickHdl_Impl(void* pCtrl);
+    void            ClickHdl_Impl(void const * pCtrl);
 
     void            Construct_Impl();
     void            InitControls_Impl();
@@ -259,7 +259,7 @@ private:
 
     void            TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool );
     void            EnableControls_Impl( const SearchOptionFlags nFlags );
-    void            EnableControl_Impl( Control* pCtrl );
+    void            EnableControl_Impl( Control const * pCtrl );
     void            SetItem_Impl( const SvxSearchItem* pItem );
 
     void            SetModifyFlag_Impl( const Control* pCtrl );

@@ -2305,7 +2305,7 @@ bool getAvailablePosAndSizeForDiagram(
 enum TitleAlignment { ALIGN_LEFT, ALIGN_TOP, ALIGN_RIGHT, ALIGN_BOTTOM, ALIGN_Z };
 
 void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
-                               , awt::Rectangle& rDiagramPlusAxesRect, const awt::Size & rPageSize )
+                               , awt::Rectangle const & rDiagramPlusAxesRect, const awt::Size & rPageSize )
 {
     if(!pVTitle)
         return;

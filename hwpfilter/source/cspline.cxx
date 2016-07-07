@@ -53,7 +53,7 @@
 #include "cspline.h"
 #include "solver.h"
 
-void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,
+void NaturalSpline (int N, double const * x, double const * a, double*& b, double*& c,
     double*& d)
 {
   const double oneThird = 1.0/3.0;
@@ -111,7 +111,7 @@ void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,
   }
 }
 
-void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
+void PeriodicSpline (int N, double const * x, double const * a, double*& b, double*& c,
     double*& d)
 {
   std::unique_ptr<double[]> h(new double[N]);

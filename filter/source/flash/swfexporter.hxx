@@ -128,9 +128,9 @@ public:
 
     void Flush();
 
-    bool exportAll( const css::uno::Reference< css::lang::XComponent >& xDoc, css::uno::Reference< css::io::XOutputStream > &xOutputStream,    css::uno::Reference< css::task::XStatusIndicator> &xStatusIndicator );
-    bool exportSlides( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, css::uno::Reference< css::io::XOutputStream > &xOutputStream, sal_uInt16 nPage);
-    sal_uInt16 exportBackgrounds( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, css::uno::Reference< css::io::XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects );
+    bool exportAll( const css::uno::Reference< css::lang::XComponent >& xDoc, css::uno::Reference< css::io::XOutputStream > const &xOutputStream,    css::uno::Reference< css::task::XStatusIndicator> const &xStatusIndicator );
+    bool exportSlides( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, css::uno::Reference< css::io::XOutputStream > const &xOutputStream, sal_uInt16 nPage);
+    sal_uInt16 exportBackgrounds( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, css::uno::Reference< css::io::XOutputStream > const &xOutputStream, sal_uInt16 nPage, bool bExportObjects );
     sal_uInt16 exportBackgrounds( css::uno::Reference< css::drawing::XDrawPage > const & xDrawPage, sal_uInt16 nPage, bool bExportObjects );
 
     ChecksumCache gMasterCache;
@@ -151,16 +151,16 @@ private:
     ::std::map<sal_uInt32, PageInfo> maPagesMap;
 
     sal_uInt16 exportDrawPageBackground(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage > const & xPage);
-    sal_uInt16 exportMasterPageObjects(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage >& xMasterPage);
+    sal_uInt16 exportMasterPageObjects(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage > const & xMasterPage);
 
     void exportDrawPageContents( const css::uno::Reference< css::drawing::XDrawPage >& xPage, bool bStream, bool bMaster  );
     void exportShapes( const css::uno::Reference< css::drawing::XShapes >& xShapes, bool bStream, bool bMaster );
     void exportShape( const css::uno::Reference< css::drawing::XShape >& xShape, bool bMaster);
 
-    BitmapChecksum ActionSummer(css::uno::Reference< css::drawing::XShape >& xShape);
-    BitmapChecksum ActionSummer(css::uno::Reference< css::drawing::XShapes >& xShapes);
+    BitmapChecksum ActionSummer(css::uno::Reference< css::drawing::XShape > const & xShape);
+    BitmapChecksum ActionSummer(css::uno::Reference< css::drawing::XShapes > const & xShapes);
 
-    bool getMetaFile( css::uno::Reference< css::lang::XComponent >&xComponent, GDIMetaFile& rMtf, bool bOnlyBackground = false, bool bExportAsJPEG = false );
+    bool getMetaFile( css::uno::Reference< css::lang::XComponent > const &xComponent, GDIMetaFile& rMtf, bool bOnlyBackground = false, bool bExportAsJPEG = false );
 
     Writer* mpWriter;
 

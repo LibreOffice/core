@@ -173,7 +173,7 @@ SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
 // sMod can be empty ( but we really need the library to search in )
 // if sMod is empty and a macro is found then sMod is updated
 // if sMod is empty, only standard modules will be searched (no class, document, form modules)
-bool hasMacro( SfxObjectShell* pShell, const OUString& sLibrary, OUString& sMod, const OUString& sMacro )
+bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, OUString& sMod, const OUString& sMacro )
 {
     bool bFound = false;
 
@@ -228,7 +228,7 @@ bool hasMacro( SfxObjectShell* pShell, const OUString& sLibrary, OUString& sMod,
     return bFound;
 }
 
-OUString getDefaultProjectName( SfxObjectShell* pShell )
+OUString getDefaultProjectName( SfxObjectShell const * pShell )
 {
     OUString aPrjName;
     if( BasicManager* pBasicMgr = pShell ? pShell->GetBasicManager() : nullptr )
@@ -261,7 +261,7 @@ void parseMacro( const OUString& sMacro, OUString& sContainer, OUString& sModule
        sProcedure = sMacro;
 }
 
-OUString resolveVBAMacro( SfxObjectShell* pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName )
+OUString resolveVBAMacro( SfxObjectShell const * pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName )
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pShell;

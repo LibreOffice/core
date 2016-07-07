@@ -57,7 +57,7 @@ class SpinfieldToolbarController : public ComplexToolbarController
         void Last();
         void Modify();
         void GetFocus();
-        bool PreNotify( NotifyEvent& rNEvt );
+        bool PreNotify( NotifyEvent const & rNEvt );
 
     protected:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;

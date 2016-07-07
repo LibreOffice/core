@@ -595,7 +595,7 @@ namespace
     class theTransBodyMutex : public rtl::Static<osl::Mutex, theTransBodyMutex> {};
 }
 
-void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTransliteration>& body )
+void TransliterationImpl::loadBody( OUString const &implName, Reference<XExtendedTransliteration>& body )
     throw (RuntimeException)
 {
     assert(!implName.isEmpty());

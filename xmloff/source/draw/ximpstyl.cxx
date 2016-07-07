@@ -1180,7 +1180,7 @@ void SdXMLStylesContext::EndElement()
 // set master-page styles (all with family="presentation" and a special
 // prefix) on given master-page.
 
-void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const
+void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext const & rMaster) const
 {
     const uno::Reference<container::XNameAccess>& rStyleFamilies =
         GetSdImport().GetLocalDocStyleFamilies();
@@ -1276,7 +1276,7 @@ static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pProp
 
 // help function used by ImpSetGraphicStyles() and ImpSetMasterPageStyles()
 
-void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess >& xPageStyles,  sal_uInt16 nFamily,  const OUString& rPrefix) const
+void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess > const & xPageStyles,  sal_uInt16 nFamily,  const OUString& rPrefix) const
 {
     sal_Int32 nPrefLen(rPrefix.getLength());
 

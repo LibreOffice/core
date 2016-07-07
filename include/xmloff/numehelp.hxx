@@ -85,9 +85,9 @@ public:
                                 const OUString& rCurrencySymbol,
                                 bool bExportValue = true);
     static bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol,
-        css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
+        css::uno::Reference< css::util::XNumberFormatsSupplier > const & xNumberFormatsSupplier);
     static sal_Int16 GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard,
-        css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
+        css::uno::Reference< css::util::XNumberFormatsSupplier > const & xNumberFormatsSupplier);
     static void SetNumberFormatAttributes(SvXMLExport& rXMLExport,
                                           const sal_Int32 nNumberFormat,
                                           const double& rValue,

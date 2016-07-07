@@ -158,8 +158,8 @@ protected:
     void ForceUndirtyMrkPnt() const                                       { if (mbMrkPntDirty) UndirtyMrkPnt(); }
 
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay) const;
-    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
-    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
+    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
+    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
     bool ImpIsFrameHandles() const;
     void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE) const;
 
@@ -248,8 +248,8 @@ public:
     OUString GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }
     OUString GetDescriptionOfMarkedPoints() const { return GetMarkedObjectList().GetPointMarkDescription(); }
     OUString GetDescriptionOfMarkedGluePoints() const { return GetMarkedObjectList().GetGluePointMarkDescription(); }
-    void GetBoundRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { GetMarkedObjectList().TakeBoundRect(pPageView, rRect); }
-    bool GetSnapRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { return GetMarkedObjectList().TakeSnapRect(pPageView, rRect); }
+    void GetBoundRectFromMarkedObjects(SdrPageView const * pPageView, Rectangle& rRect) const { GetMarkedObjectList().TakeBoundRect(pPageView, rRect); }
+    bool GetSnapRectFromMarkedObjects(SdrPageView const * pPageView, Rectangle& rRect) const { return GetMarkedObjectList().TakeSnapRect(pPageView, rRect); }
 
     // Get a list of all those links which are connected to marked nodes,
     // but which are not marked themselves.
@@ -300,12 +300,12 @@ public:
     void MarkObj(const Rectangle& rRect, bool bUnmark=false);
     void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark=false, bool bImpNoSetMarkHdl=false);
     void MarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
-    void UnmarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
+    void UnmarkAllObj(SdrPageView const * pPV=nullptr); // pPage=NULL => all displayed pages
 
     // This function is time-consuming intensive, as the MarkList has to be scanned.
-    bool IsObjMarked(SdrObject* pObj) const;
+    bool IsObjMarked(SdrObject const * pObj) const;
     // void MarkAll(SdrPageView* pPV=NULL) { MarkAllObj(pPV); } -> replace with inline
-    void UnMarkAll(SdrPageView* pPV=nullptr) { UnmarkAllObj(pPV); }
+    void UnMarkAll(SdrPageView const * pPV=nullptr) { UnmarkAllObj(pPV); }
 
     // Request/set the size of the marking handles. Declaration in Pixel.
     // The value is meant to be the edge length ( link length ).
@@ -342,7 +342,7 @@ public:
 
     // Search for the number of the suitable handle. In case of empty search result,
     // SAL_MAX_SIZE is returned.
-    size_t GetHdlNum(SdrHdl* pHdl) const { return maHdlList.GetHdlNum(pHdl); }
+    size_t GetHdlNum(SdrHdl const * pHdl) const { return maHdlList.GetHdlNum(pHdl); }
     SdrHdl* GetHdl(size_t nHdlNum)  const { return maHdlList.GetHdl(nHdlNum); }
     const SdrHdlList& GetHdlList() const { return maHdlList; }
 

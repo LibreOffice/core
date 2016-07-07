@@ -285,7 +285,7 @@ void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoo
 }
 
 
-void FmFieldWin::UpdateContent(FmFormShell* pShell)
+void FmFieldWin::UpdateContent(FmFormShell const * pShell)
 {
     pListBox->Clear();
     OUString aTitle(SVX_RESSTR(RID_STR_FIELDSELECTION));

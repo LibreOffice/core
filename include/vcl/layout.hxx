@@ -647,7 +647,7 @@ private:
     OUString m_sPrimaryString;
     OUString m_sSecondaryString;
     DECL_DLLPRIVATE_LINK_TYPED(ButtonHdl, Button *, void);
-    void setButtonHandlers(VclButtonBox *pButtonBox);
+    void setButtonHandlers(VclButtonBox const *pButtonBox);
     short get_response(const vcl::Window *pWindow) const;
     void create_owned_areas();
 
@@ -672,7 +672,7 @@ public:
     virtual ~MessageDialog();
     virtual void dispose() override;
 
-    static void SetMessagesWidths(vcl::Window *pParent, VclMultiLineEdit *pPrimaryMessage,
+    static void SetMessagesWidths(vcl::Window const *pParent, VclMultiLineEdit *pPrimaryMessage,
         VclMultiLineEdit *pSecondaryMessage);
 };
 

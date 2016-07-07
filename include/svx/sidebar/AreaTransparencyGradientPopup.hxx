@@ -38,7 +38,7 @@ public:
         ::std::function<PopupControl*(PopupContainer*)> const& rControlCreator);
     virtual ~AreaTransparencyGradientPopup();
 
-    void Rearrange (XFillFloatTransparenceItem* pItem);
+    void Rearrange (XFillFloatTransparenceItem const * pItem);
 };
 
 } } // end of namespace svx::sidebar

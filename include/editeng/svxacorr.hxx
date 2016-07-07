@@ -178,7 +178,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
                                 tools::SvRef<SotStorage>& rStg);
     static void SaveExceptList_Imp( const SvStringsISortDtor& rLst,
                                 const sal_Char* pStrmName,
-                                tools::SvRef<SotStorage>& rStg,
+                                tools::SvRef<SotStorage> const & rStg,
                                 bool bConvert = false);
 
     bool MakeBlocklist_Imp( SotStorage& rStg );
@@ -280,11 +280,11 @@ public:
     // to the actual SwTxtNode/EditNode string because it inserts the character
     // in rDoc and expects that to side-effect rTxt
     void DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                           sal_Int32 nPos, sal_Unicode cInsChar, bool bInsert, vcl::Window* pFrameWin = nullptr );
+                           sal_Int32 nPos, sal_Unicode cInsChar, bool bInsert, vcl::Window const * pFrameWin = nullptr );
 
     // Return for the autotext expansion the previous word,
     // AutoCorrect - corresponding algorithm
-    bool GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+    bool GetPrevAutoCorrWord( SvxAutoCorrDoc const & rDoc, const OUString& rTxt,
                                 sal_Int32 nPos, OUString& rWord ) const;
 
     // Search for the words in the replacement table.
@@ -309,7 +309,7 @@ public:
     void SetStartDoubleQuote( const sal_Unicode cStart )    { cStartDQuote = cStart; }
     void SetEndDoubleQuote( const sal_Unicode cEnd )        { cEndDQuote = cEnd; }
 
-    OUString GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
+    OUString GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPos,
                     sal_Unicode cInsChar, bool bSttQuote );
     void InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                     sal_Unicode cInsChar, bool bSttQuote, bool bIns );

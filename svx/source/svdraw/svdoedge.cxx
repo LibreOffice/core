@@ -587,7 +587,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     }
 }
 
-SdrEscapeDirection SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt)
+SdrEscapeDirection SdrEdgeObj::ImpCalcEscAngle(SdrObject const * pObj, const Point& rPt)
 {
     if (pObj==nullptr) return SdrEscapeDirection::ALL;
     Rectangle aR(pObj->GetSnapRect());

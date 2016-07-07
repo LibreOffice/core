@@ -318,7 +318,7 @@ void SdrObjList::SetRectsDirty()
     if (pUpList!=nullptr) pUpList->SetRectsDirty();
 }
 
-void SdrObjList::impChildInserted(SdrObject& rChild)
+void SdrObjList::impChildInserted(SdrObject const & rChild)
 {
     sdr::contact::ViewContact* pParent = rChild.GetViewContact().GetParentContact();
 
@@ -1694,7 +1694,7 @@ SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 
 /** returns an averaged background color of this page */
 // #i75566# GetBackgroundColor -> GetPageBackgroundColor and bScreenDisplay hint value
-Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay ) const
+Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDisplay ) const
 {
     Color aColor;
 

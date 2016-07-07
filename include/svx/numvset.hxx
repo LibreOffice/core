@@ -83,13 +83,13 @@ public:
     void            SetNumberingSettings(
         const css::uno::Sequence<
                   css::uno::Sequence<css::beans::PropertyValue> >& aNum,
-        css::uno::Reference<css::text::XNumberingFormatter>& xFormatter,
+        css::uno::Reference<css::text::XNumberingFormatter> const & xFormatter,
         const css::lang::Locale& rLocale );
 
     void            SetOutlineNumberingSettings(
             css::uno::Sequence<
-                css::uno::Reference<css::container::XIndexAccess> >& rOutline,
-            css::uno::Reference<css::text::XNumberingFormatter>& xFormatter,
+                css::uno::Reference<css::container::XIndexAccess> > const & rOutline,
+            css::uno::Reference<css::text::XNumberingFormatter> const & xFormatter,
             const css::lang::Locale& rLocale);
 };
 

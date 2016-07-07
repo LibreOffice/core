@@ -165,7 +165,7 @@ public:
 
     void Update(const css::uno::Reference< css::container::XIndexAccess > & xControllers, const css::uno::Reference< css::form::runtime::XFormController > & xCurrent);
     void Clear();
-    bool ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const;
+    bool ValidateText(FmFilterItem const * pItem, OUString& rText, OUString& rErrorMsg) const;
     void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
     void SetTextForItem(FmFilterItem* pItem, const OUString& rText);
 
@@ -270,7 +270,7 @@ protected:
     void DeleteSelection();
     SvTreeListEntry* FindEntry(const FmFilterData* pItem) const;
     void Insert(FmFilterData* pItem, sal_uLong nPos);
-    void Remove(FmFilterData* pItem);
+    void Remove(FmFilterData const * pItem);
 
     DECL_LINK_TYPED(OnRemove, void*, void);
     DECL_LINK_TYPED(OnDropActionTimer, Timer*, void);
@@ -319,7 +319,7 @@ public:
     virtual ~FmFilterNavigatorWin();
     virtual void dispose() override;
 
-    void UpdateContent( FmFormShell* pFormShell );
+    void UpdateContent( FmFormShell const * pFormShell );
     void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
 

@@ -67,7 +67,7 @@ private: //methods
         createDataPoint(
             const css::uno::Reference<css::drawing::XShapes>& xTarget,
             const css::uno::Reference<css::beans::XPropertySet>& xObjectProperties,
-            tPropertyNameValueMap* pOverWritePropertiesMap,
+            tPropertyNameValueMap const * pOverWritePropertiesMap,
             const ShapeParam& rParam );
 
     /** This method creates a text shape for a label of a data point.
@@ -101,11 +101,11 @@ private: //methods
     bool                detectLabelOverlapsAndMove(const css::awt::Size& rPageSize);//returns true when there might be more to do
     void                resetLabelPositionsToPreviousState();
 struct PieLabelInfo;
-    bool                tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondBorder
+    bool                tryMoveLabels( PieLabelInfo const * pFirstBorder, PieLabelInfo const * pSecondBorder
                                 , PieLabelInfo* pCenter, bool bSingleCenter, bool& rbAlternativeMoveDirection
                                 , const css::awt::Size& rPageSize );
 
-    bool                performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
+    bool                performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo const & rPieLabelInfo);
     static bool         performLabelBestFitOuterPlacement(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
     void                performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
 

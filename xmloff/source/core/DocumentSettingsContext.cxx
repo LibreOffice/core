@@ -59,7 +59,7 @@ class XMLMyList
 public:
     explicit XMLMyList(const uno::Reference<uno::XComponentContext>& rxContext);
 
-    void push_back(beans::PropertyValue& aProp) { aProps.push_back(aProp); nCount++; }
+    void push_back(beans::PropertyValue const & aProp) { aProps.push_back(aProp); nCount++; }
     uno::Sequence<beans::PropertyValue> GetSequence();
     uno::Reference<container::XNameContainer> GetNameContainer();
     uno::Reference<container::XIndexContainer> GetIndexContainer();

@@ -432,7 +432,7 @@ sal_Int32 XMLFilter::impl_ImportStream(
     const Reference< xml::sax::XParser > & xParser,
     const Reference< lang::XMultiComponentFactory > & xFactory,
     const Reference< document::XGraphicObjectResolver > & xGraphicObjectResolver,
-    uno::Reference< beans::XPropertySet >& xImportInfo )
+    uno::Reference< beans::XPropertySet > const & xImportInfo )
 {
     sal_Int32 nWarning = ERRCODE_SFX_GENERAL;
 

@@ -107,7 +107,7 @@ static bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString&
     return false;
 }
 
-static Image RetrieveImage( Reference< css::frame::XFrame >& rFrame,
+static Image RetrieveImage( Reference< css::frame::XFrame > const & rFrame,
                             const OUString& aImageId,
                             const OUString& aURL,
                             bool bBigImage

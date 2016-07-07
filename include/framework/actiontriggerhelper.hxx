@@ -56,7 +56,7 @@ namespace framework
             // @param pNewMenu = must be a valid menu
             static void
                 FillActionTriggerContainerFromMenu(
-                    css::uno::Reference< css::container::XIndexContainer >& rActionTriggerContainer,
+                    css::uno::Reference< css::container::XIndexContainer > const & rActionTriggerContainer,
                     const Menu* pMenu );
 
     };

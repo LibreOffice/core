@@ -181,11 +181,11 @@ void XMLTextImportPropertyMapper::FontFinished(
 
     #99928# CL */
 void XMLTextImportPropertyMapper::FontDefaultsCheck(
-                                        XMLPropertyState* pFontFamilyName,
-                                        XMLPropertyState* pFontStyleName,
-                                        XMLPropertyState* pFontFamily,
-                                        XMLPropertyState* pFontPitch,
-                                        XMLPropertyState* pFontCharSet,
+                                        XMLPropertyState const * pFontFamilyName,
+                                        XMLPropertyState const * pFontStyleName,
+                                        XMLPropertyState const * pFontFamily,
+                                        XMLPropertyState const * pFontPitch,
+                                        XMLPropertyState const * pFontCharSet,
                                         XMLPropertyState** ppNewFontStyleName,
                                         XMLPropertyState** ppNewFontFamily,
                                         XMLPropertyState** ppNewFontPitch,

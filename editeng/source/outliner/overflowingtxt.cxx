@@ -35,7 +35,7 @@
 OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
         css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
         Outliner *pOutl,
-        OutlinerParaObject *pNextPObj)
+        OutlinerParaObject const *pNextPObj)
 {
     if (!pNextPObj) {
         pOutl->SetToEmptyText();
@@ -70,7 +70,7 @@ OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
 OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
         css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
         Outliner *pOutl,
-        OutlinerParaObject *pNextPObj)
+        OutlinerParaObject const *pNextPObj)
 {
     if (!pNextPObj) {
         pOutl->SetToEmptyText();
@@ -93,7 +93,7 @@ OutlinerParaObject *TextChainingUtils::DeeplyMergeParaObject(
     return pOutl->CreateParaObject();
 }
 
-css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::CreateTransferableFromText(Outliner *pOutl)
+css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::CreateTransferableFromText(Outliner const  *pOutl)
 {
     const EditEngine &rEditEngine = pOutl->GetEditEngine();
     sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
@@ -145,12 +145,12 @@ ESelection NonOverflowingText::GetOverflowPointSel() const
 
 // The equivalent of ToParaObject for OverflowingText. Here we are prepending the overflowing text to the old dest box's text
 // XXX: In a sense a better name for OverflowingText and NonOverflowingText are respectively DestLinkText and SourceLinkText
-OutlinerParaObject *OverflowingText::JuxtaposeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
+OutlinerParaObject *OverflowingText::JuxtaposeParaObject(Outliner *pOutl, OutlinerParaObject const *pNextPObj)
 {
     return TextChainingUtils::JuxtaposeParaObject(mxOverflowingContent, pOutl, pNextPObj);
 }
 
-OutlinerParaObject *OverflowingText::DeeplyMergeParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
+OutlinerParaObject *OverflowingText::DeeplyMergeParaObject(Outliner *pOutl, OutlinerParaObject const *pNextPObj)
 {
     return TextChainingUtils::DeeplyMergeParaObject(mxOverflowingContent, pOutl, pNextPObj);
 }
@@ -177,7 +177,7 @@ ESelection OFlowChainedText::GetOverflowPointSel() const
     return mpNonOverflowingTxt->GetOverflowPointSel();
 }
 
-OutlinerParaObject *OFlowChainedText::InsertOverflowingText(Outliner *pOutliner, OutlinerParaObject *pTextToBeMerged)
+OutlinerParaObject *OFlowChainedText::InsertOverflowingText(Outliner *pOutliner, OutlinerParaObject const *pTextToBeMerged)
 {
     // Just return the roughly merged paras for now
     if (mpOverflowingTxt == nullptr)
@@ -215,7 +215,7 @@ UFlowChainedText::UFlowChainedText(Outliner *pOutl, bool bIsDeepMerge)
     mbIsDeepMerge = bIsDeepMerge;
 }
 
-OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *pOutl, OutlinerParaObject *pNextLinkWholeText)
+OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *pOutl, OutlinerParaObject const *pNextLinkWholeText)
 {
     OutlinerParaObject *pNewText = nullptr;
 

@@ -993,7 +993,7 @@ bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPo
     return bRet;
 }
 
-bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream>& rxModelStream )
+bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream> const & rxModelStream )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     bool                    bRet = false;

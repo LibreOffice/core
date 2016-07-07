@@ -225,7 +225,7 @@ bool PieChart::shouldSnapRectToUsedArea()
 uno::Reference< drawing::XShape > PieChart::createDataPoint(
     const uno::Reference<drawing::XShapes>& xTarget,
     const uno::Reference<beans::XPropertySet>& xObjectProperties,
-    tPropertyNameValueMap* pOverwritePropertiesMap,
+    tPropertyNameValueMap const * pOverwritePropertiesMap,
     const ShapeParam& rParam )
 {
     //transform position:
@@ -1003,7 +1003,7 @@ bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
 /** Try to remove all overlaps that occur in the list of labels going from
  *  `pFirstBorder` to `pSecondBorder`
  */
-bool PieChart::tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondBorder
+bool PieChart::tryMoveLabels( PieLabelInfo const * pFirstBorder, PieLabelInfo const * pSecondBorder
                              , PieLabelInfo* pCenter
                              , bool bSingleCenter, bool& rbAlternativeMoveDirection, const awt::Size& rPageSize )
 {
@@ -1271,7 +1271,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
  *   4. the top edge when 225 < alpha < 315.
  *
  **/
-bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo)
+bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo const & rPieLabelInfo)
 {
     SAL_INFO( "chart2.pie.label.bestfit.inside",
               "** PieChart::performLabelBestFitInnerPlacement invoked **" );

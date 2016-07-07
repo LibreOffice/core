@@ -373,7 +373,7 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VData
 
 }
 
-OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
+OUString VSeriesPlotter::getLabelTextForValue( VDataSeries const & rDataSeries
                 , sal_Int32 nPointIndex
                 , double fValue
                 , bool bAsPercentage )
@@ -818,7 +818,7 @@ void lcl_AddErrorBottomLine( const drawing::Position3D& rPosition, ::basegfx::B2
 ::basegfx::B2DVector lcl_getErrorBarMainDirection(
               const drawing::Position3D& rStart
             , const drawing::Position3D& rBottomEnd
-            , PlottingPositionHelper* pPosHelper
+            , PlottingPositionHelper const * pPosHelper
             , const drawing::Position3D& rUnscaledLogicPosition
             , bool bYError )
 {
@@ -859,7 +859,7 @@ void lcl_AddErrorBottomLine( const drawing::Position3D& rPosition, ::basegfx::B2
     return aMainDirection;
 }
 
-drawing::Position3D lcl_transformMixedToScene( PlottingPositionHelper* pPosHelper
+drawing::Position3D lcl_transformMixedToScene( PlottingPositionHelper const * pPosHelper
     , double fX /*scaled*/, double fY /*unscaled*/, double fZ /*unscaled*/, bool bClip )
 {
     if(!pPosHelper)
@@ -1059,7 +1059,7 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
     }
 }
 
-void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
+void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSeries,
                             const uno::Reference< drawing::XShapes >& xTarget,
                             const uno::Reference< drawing::XShapes >& xEquationTarget,
                             bool bMaySkipPoints )
@@ -1208,7 +1208,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
     }
 }
 
-sal_Int32 lcl_getOUStringMaxLineLength ( OUStringBuffer& aString )
+sal_Int32 lcl_getOUStringMaxLineLength ( OUStringBuffer const & aString )
 {
     const sal_Int32 nStringLength = aString.getLength();
     sal_Int32 nMaxLineLength = 0;
@@ -1364,7 +1364,7 @@ void VSeriesPlotter::setMappedProperties(
           const uno::Reference< drawing::XShape >& xTargetShape
         , const uno::Reference< beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap* pOverwriteMap )
+        , tPropertyNameValueMap const * pOverwriteMap )
 {
     uno::Reference< beans::XPropertySet > xTargetProp( xTargetShape, uno::UNO_QUERY );
     PropertyMapper::setMappedProperties(xTargetProp,xSource,rMap,pOverwriteMap);

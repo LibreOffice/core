@@ -217,7 +217,7 @@ void comphelper::ConfigurationListener::addListener(ConfigurationListenerPropert
     pListener->setProperty( mxConfig->getPropertyValue( pListener->maName ) );
 }
 
-void comphelper::ConfigurationListener::removeListener(ConfigurationListenerPropertyBase *pListener)
+void comphelper::ConfigurationListener::removeListener(ConfigurationListenerPropertyBase const * pListener)
 {
     auto it = std::find( maListeners.begin(), maListeners.end(), pListener );
     if ( it != maListeners.end() )

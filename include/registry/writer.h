@@ -185,7 +185,7 @@ REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodData(
    @since UDK 3.2.0
  */
 REG_DLLPUBLIC sal_Bool SAL_CALL typereg_writer_setMethodParameterData(
-    void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
+    void const * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
     RTParamMode flags, rtl_uString const * name, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C();
 

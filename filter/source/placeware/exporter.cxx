@@ -282,7 +282,7 @@ static void createSlideFile( const Reference< XComponent >& xDoc, PlacewareZipFi
 //#define PLACEWARE_DEBUG 1
 
 bool PlaceWareExporter::doExport( const Reference< XComponent >& xDoc, Reference < XOutputStream > const &xOutputStream,
-                                  const OUString& rURL, const Reference < XInterface >& /* xHandler */, Reference < XStatusIndicator >& xStatusIndicator )
+                                  const OUString& rURL, const Reference < XInterface >& /* xHandler */, Reference < XStatusIndicator > const & xStatusIndicator )
 {
     bool bRet = false;
 
@@ -397,7 +397,7 @@ bool PlaceWareExporter::doExport( const Reference< XComponent >& xDoc, Reference
 }
 
 
-PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
+PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage > const &xDrawPage )
 {
     Reference< XComponent > xComp( xDrawPage, UNO_QUERY );
 

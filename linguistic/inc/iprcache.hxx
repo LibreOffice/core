@@ -59,8 +59,8 @@ public:
     FlushListener( SpellCache& rFO ) : mrSpellCache(rFO) {}
     virtual ~FlushListener() {}
 
-    void        SetDicList( css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &rDL );
-    void        SetPropSet( css::uno::Reference< css::linguistic2::XLinguProperties > &rPS );
+    void        SetDicList( css::uno::Reference< css::linguistic2::XSearchableDictionaryList > const &rDL );
+    void        SetPropSet( css::uno::Reference< css::linguistic2::XLinguProperties > const &rPS );
 
     //XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw(css::uno::RuntimeException, std::exception) override;

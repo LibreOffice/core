@@ -243,11 +243,11 @@ private:
     void AddNormalData(GLuint normalBuf);
     void AddIndexData(GLuint indexBuf);
     void RenderNonRoundedBar(const Extrude3DInfo& extrude3D);
-    static bool GetSimilarVertexIndex(PackedVertex & packed,
+    static bool GetSimilarVertexIndex(PackedVertex const & packed,
         std::map<PackedVertex,unsigned short> & VertexToOutIndex,
         unsigned short & result
         );
-    static void SetVertex(PackedVertex &packed,
+    static void SetVertex(PackedVertex const &packed,
         std::map<PackedVertex,unsigned short> &VertexToOutIndex,
         std::vector<glm::vec3> &vertex,
         std::vector<glm::vec3> &normal,

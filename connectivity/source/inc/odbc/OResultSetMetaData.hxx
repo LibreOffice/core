@@ -68,13 +68,13 @@ namespace connectivity
             virtual ~OResultSetMetaData();
 
 
-            static SQLLEN getNumColAttrib(OConnection* _pConnection
+            static SQLLEN getNumColAttrib(OConnection const * _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 _column
                                               ,sal_Int32 ident) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
-            static SQLSMALLINT getColumnODBCType(OConnection* _pConnection
+            static SQLSMALLINT getColumnODBCType(OConnection const * _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 column)

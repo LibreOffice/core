@@ -64,7 +64,7 @@ SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 n
     GetWindow()->Show();
 }
 
-sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window* pWindow)
+sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window const * pWindow)
 {
     if (pWindow != nullptr)
     {

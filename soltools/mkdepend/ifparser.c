@@ -74,7 +74,7 @@
 
 
 static const char *
-parse_variable (IfParser *g, const char *cp, const char **varp)
+parse_variable (IfParser const *g, const char *cp, const char **varp)
 {
     SKIPSPACE (cp);
 
@@ -89,7 +89,7 @@ parse_variable (IfParser *g, const char *cp, const char **varp)
 
 
 static const char *
-parse_number (IfParser *g, const char *cp, int *valp)
+parse_number (IfParser const *g, const char *cp, int *valp)
 {
     SKIPSPACE (cp);
 

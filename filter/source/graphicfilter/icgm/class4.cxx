@@ -26,7 +26,7 @@
 
 using namespace ::com::sun::star;
 
-double CGM::ImplGetOrientation( FloatPoint& rCenter, FloatPoint& rPoint )
+double CGM::ImplGetOrientation( FloatPoint const & rCenter, FloatPoint const & rPoint )
 {
     double fOrientation;
 

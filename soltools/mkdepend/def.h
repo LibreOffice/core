@@ -153,18 +153,18 @@ char            *malloc();
 char            *realloc();
 #endif
 
-char            *copy(char *);
+char            *copy(char const *);
 char            *base_name(char *);
 char            *get_line(struct filepointer *);
 char            *isdefined(char *);
 struct filepointer  *getfile(char *);
-struct inclist *newinclude(char *newfile,
-                           char *incstring);
+struct inclist *newinclude(char const *newfile,
+                           char const *incstring);
 struct inclist      *inc_path(char *, char *, boolean,
                                   struct IncludesCollection *);
 
 void define( char *def, struct symhash **symbols );
-void hash_define(char *name, char * val, struct symhash **symbols);
+void hash_define(char *name, char const * val, struct symhash **symbols);
 struct symhash *hash_copy( struct symhash *symbols );
 void hash_free( struct symhash *symbols );
 void freefile( struct filepointer * fp );
@@ -178,17 +178,17 @@ int cppsetup(char *line,
 void add_include(struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, char *include, boolean dot, boolean failOK,
     struct IncludesCollection* incCollection, struct symhash *symbols);
-int match(char *str, char **list);
+int match(char const *str, char **list);
 void recursive_pr_include(struct inclist *head, char *file,
     char *base);
 void recursive_pr_dummy(struct inclist *head, char *file);
 void inc_clean(void);
 
 void fatalerr(char *, ...);
-void warning(char *, ...);
-void warning1(char *, ...);
+void warning(char const *, ...);
+void warning1(char const *, ...);
 
-void convert_slashes(char *);
+void convert_slashes(char const *);
 char *append_slash(char *);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

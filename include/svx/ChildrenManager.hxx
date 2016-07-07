@@ -170,7 +170,7 @@ public:
         @param rShapeTreeInfo
             The new info that replaces the current one.
     */
-    void SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo);
+    void SetInfo(AccessibleShapeTreeInfo const & rShapeTreeInfo);
 
     /** Update the SELECTED and FOCUSED states of all visible children
         according to the given selection.  This includes setting

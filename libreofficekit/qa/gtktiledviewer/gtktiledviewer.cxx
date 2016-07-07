@@ -828,7 +828,7 @@ static void signalSearchPrev(GtkWidget* pButton, gpointer /*pItem*/)
 }
 
 /// Handles the key-press-event of the search entry widget.
-static gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData*/)
+static gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey const * pEvent, gpointer /*pData*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
     gtk_label_set_text(GTK_LABEL(rWindow.m_pFindbarLabel), "");
@@ -885,7 +885,7 @@ static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pD
 }
 
 /// LOKDocView changed command state -> inform the tool button.
-static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pData*/)
+static void signalCommand(LOKDocView* pLOKDocView, char const * pPayload, gpointer /*pData*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
 
@@ -935,7 +935,7 @@ static void signalSearch(LOKDocView* pLOKDocView, char* /*pPayload*/, gpointer /
 }
 
 /// LOKDocView found some search matches -> set the search label accordingly.
-static void signalSearchResultCount(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pData*/)
+static void signalSearchResultCount(LOKDocView* pLOKDocView, char const * pPayload, gpointer /*pData*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
     std::stringstream ss;
@@ -1014,14 +1014,14 @@ static void cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
 }
 
 /// LOKDocView the formula has changed
-static void formulaChanged(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pData*/)
+static void formulaChanged(LOKDocView* pLOKDocView, char const * pPayload, gpointer /*pData*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
     gtk_entry_set_text(GTK_ENTRY(rWindow.m_pFormulabarEntry), pPayload);
 }
 
 /// LOKDocView password is required to open the document
-static void passwordRequired(LOKDocView* pLOKDocView, gchar* pUrl, gboolean bModify, gpointer /*pData*/)
+static void passwordRequired(LOKDocView* pLOKDocView, gchar const * pUrl, gboolean bModify, gpointer /*pData*/)
 {
     GtkWidget* pPasswordDialog = gtk_dialog_new_with_buttons ("Password required",
                                                               GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pLOKDocView))),

@@ -2408,7 +2408,7 @@ sal_Bool FmXGridPeer::supportsMode(const OUString& Mode) throw( RuntimeException
 }
 
 
-void FmXGridPeer::columnVisible(DbGridColumn* pColumn)
+void FmXGridPeer::columnVisible(DbGridColumn const * pColumn)
 {
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
 
@@ -2423,7 +2423,7 @@ void FmXGridPeer::columnVisible(DbGridColumn* pColumn)
 }
 
 
-void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
+void FmXGridPeer::columnHidden(DbGridColumn const * pColumn)
 {
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
 

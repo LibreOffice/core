@@ -46,7 +46,7 @@ namespace framework
 bool hasEmptySize( const css::awt::Size& rSize );
 bool hasDefaultPosValue( const css::awt::Point& rPos );
 bool isDefaultPos( const css::awt::Point& rPos );
-bool isToolboxHorizontalAligned( ToolBox* pToolBox );
+bool isToolboxHorizontalAligned( ToolBox const * pToolBox );
 bool isReverseOrderDockingArea( const sal_Int32 nDockArea );
 bool isHorizontalDockingArea( const sal_Int32 nDockArea );
 bool isHorizontalDockingArea( const css::ui::DockingArea& nDockArea );

@@ -92,7 +92,7 @@ public:
                                     const ::comphelper::NamedValueCollection& i_eventDescriptor,
                                     ::comphelper::NamedValueCollection& o_normalizedDescriptor,
                                     SfxObjectShell* i_document );
-    static void Execute( css::uno::Any& aEventData, const css::document::DocumentEvent& aTrigger, SfxObjectShell* pDoc );
+    static void Execute( css::uno::Any const & aEventData, const css::document::DocumentEvent& aTrigger, SfxObjectShell* pDoc );
 };
 
 #endif

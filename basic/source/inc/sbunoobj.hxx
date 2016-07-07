@@ -117,7 +117,7 @@ class SbUnoObject: public SbxObject
     void implCreateAll();
 
 public:
-    static bool getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp );
+    static bool getDefaultPropName( SbUnoObject const * pUnoObj, OUString& sDfltProp );
     SbUnoObject( const OUString& aName_, const css::uno::Any& aUnoObj_ );
     virtual ~SbUnoObject();
 
@@ -145,13 +145,13 @@ typedef tools::SvRef<SbUnoObject> SbUnoObjectRef;
 
 // #67781 delete return values of the uno-methods
 void clearUnoMethods();
-void clearUnoMethodsForBasic( StarBASIC* pBasic );
+void clearUnoMethodsForBasic( StarBASIC const * pBasic );
 
 class SbUnoMethod : public SbxMethod
 {
     friend class SbUnoObject;
     friend void clearUnoMethods();
-    friend void clearUnoMethodsForBasic( StarBASIC* pBasic );
+    friend void clearUnoMethodsForBasic( StarBASIC const * pBasic );
 
     css::uno::Reference< css::reflection::XIdlMethod > m_xUnoMethod;
     css::uno::Sequence< css::reflection::ParamInfo >* pParamInfoSeq;
@@ -329,17 +329,17 @@ public:
 class StarBASIC;
 
 // Impl-methods for RTL
-void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
-void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
-void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
-void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
-void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
-void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
-void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
-void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
-void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreateUnoStruct( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreateUnoService( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreateUnoValue( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_GetProcessServiceManager( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_HasInterfaces( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_IsUnoStruct( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_EqualUnoObjects( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_GetDefaultContext( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
 
-void disposeComVariablesForBasic( StarBASIC* pBasic );
+void disposeComVariablesForBasic( StarBASIC const * pBasic );
 void clearNativeObjectWrapperVector();
 
 
@@ -355,7 +355,7 @@ class BasicCollection : public SbxObject
     void Initialize();
     virtual ~BasicCollection();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    sal_Int32 implGetIndex( SbxVariable* pIndexVar );
+    sal_Int32 implGetIndex( SbxVariable const * pIndexVar );
     sal_Int32 implGetIndexForName( const OUString& rName );
     void CollAdd( SbxArray* pPar_ );
     void CollItem( SbxArray* pPar_ );

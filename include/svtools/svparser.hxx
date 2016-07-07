@@ -199,7 +199,7 @@ public:
 
     /** Assignment.
     */
-    SvKeyValue& operator= (SvKeyValue &rOther)
+    SvKeyValue& operator= (SvKeyValue const &rOther)
     {
         m_aKey   = rOther.m_aKey;
         m_aValue = rOther.m_aValue;

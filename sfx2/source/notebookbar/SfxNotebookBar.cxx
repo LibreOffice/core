@@ -82,7 +82,7 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         pNotebookBar->Hide();
 }
 
-void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
+void SfxNotebookBar::RemoveListeners(SystemWindow const * pSysWindow)
 {
     Reference<XContextChangeEventMultiplexer> xMultiplexer
                         = ContextChangeEventMultiplexer::get(

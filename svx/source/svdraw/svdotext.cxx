@@ -446,7 +446,7 @@ sal_uInt16 SdrTextObj::GetObjIdentifier() const
     return sal_uInt16(eTextKind);
 }
 
-bool SdrTextObj::HasTextImpl( SdrOutliner* pOutliner )
+bool SdrTextObj::HasTextImpl( SdrOutliner const * pOutliner )
 {
     bool bRet=false;
     if(pOutliner)
@@ -1958,7 +1958,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 /* Begin chaining code */
 
 // XXX: Make it a method somewhere?
-SdrObject *ImpGetObjByName(SdrObjList *pObjList, OUString const& aObjName)
+SdrObject *ImpGetObjByName(SdrObjList const *pObjList, OUString const& aObjName)
 {
     // scan the whole list
     size_t nObjCount = pObjList->GetObjCount();

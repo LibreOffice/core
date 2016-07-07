@@ -122,7 +122,7 @@ void appendSQLWCHARs(OUStringBuffer & s, SQLWCHAR const * d, sal_Int32 n)
 }
 
 
-void OTools::getValue(  OConnection* _pConnection,
+void OTools::getValue(  OConnection const * _pConnection,
                         SQLHANDLE _aStatementHandle,
                         sal_Int32 columnIndex,
                         SQLSMALLINT _nType,
@@ -160,7 +160,7 @@ void OTools::getValue(  OConnection* _pConnection,
     _bWasNull = pcbValue == SQL_NULL_DATA;
 }
 
-void OTools::bindValue( OConnection* _pConnection,
+void OTools::bindValue( OConnection const * _pConnection,
                         SQLHANDLE _aStatementHandle,
                         sal_Int32 columnIndex,
                         SQLSMALLINT _nType,
@@ -411,7 +411,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     return aData;
 }
 
-OUString OTools::getStringValue(OConnection* _pConnection,
+OUString OTools::getStringValue(OConnection const * _pConnection,
                                        SQLHANDLE _aStatementHandle,
                                        sal_Int32 columnIndex,
                                        SQLSMALLINT _fSqlType,
@@ -521,7 +521,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
     return aData.makeStringAndClear();
 }
 
-void OTools::GetInfo(OConnection* _pConnection,
+void OTools::GetInfo(OConnection const * _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
                      OUString &_rValue,
@@ -537,7 +537,7 @@ void OTools::GetInfo(OConnection* _pConnection,
     _rValue = OUString(aValue,nValueLen,_nTextEncoding);
 }
 
-void OTools::GetInfo(OConnection* _pConnection,
+void OTools::GetInfo(OConnection const * _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
                      sal_Int32 &_rValue,
@@ -550,7 +550,7 @@ void OTools::GetInfo(OConnection* _pConnection,
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 
-void OTools::GetInfo(OConnection* _pConnection,
+void OTools::GetInfo(OConnection const * _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
                      SQLUINTEGER &_rValue,
@@ -563,7 +563,7 @@ void OTools::GetInfo(OConnection* _pConnection,
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 
-void OTools::GetInfo(OConnection* _pConnection,
+void OTools::GetInfo(OConnection const * _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
                      SQLUSMALLINT &_rValue,

@@ -285,7 +285,7 @@ void SAXEventKeeperImpl::removeElementMarkBuffer(sal_Int32 nId)
 }
 
 OUString SAXEventKeeperImpl::printBufferNode(
-    BufferNode* pBufferNode, sal_Int32 nIndent) const
+    BufferNode const * pBufferNode, sal_Int32 nIndent) const
 /****** SAXEventKeeperImpl/printBufferNode ***********************************
  *
  *   NAME
@@ -353,7 +353,7 @@ OUString SAXEventKeeperImpl::printBufferNode(
     std::vector< const BufferNode* >::const_iterator jj = vChildren->begin();
     for( ; jj != vChildren->end(); ++jj )
     {
-        rc += printBufferNode(const_cast<BufferNode *>(*jj), nIndent+4);
+        rc += printBufferNode(*jj, nIndent+4);
     }
 
     delete vChildren;
@@ -362,7 +362,7 @@ OUString SAXEventKeeperImpl::printBufferNode(
 }
 
 cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
-    SAXEventKeeperImpl::collectChildWorkingElement(BufferNode* pBufferNode)
+    SAXEventKeeperImpl::collectChildWorkingElement(BufferNode const * pBufferNode)
 /****** SAXEventKeeperImpl/collectChildWorkingElement ************************
  *
  *   NAME

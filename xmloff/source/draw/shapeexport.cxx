@@ -1368,8 +1368,8 @@ void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2D
     }
 }
 
-void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTRScale, double fTRShear,
-    double fTRRotate, ::basegfx::B2DTuple& rTRTranslate, const XMLShapeExportFlags nFeatures)
+void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple const & rTRScale, double fTRShear,
+    double fTRRotate, ::basegfx::B2DTuple const & rTRTranslate, const XMLShapeExportFlags nFeatures)
 {
     // always write Size (rTRScale) since this statement carries the union
     // of the object
@@ -2634,7 +2634,7 @@ void XMLShapeExport::ImpExportConnectorShape(
 
 void XMLShapeExport::ImpExportMeasureShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XmlShapeType, XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point const * pRefPoint /* = NULL */)
 {
     uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
 

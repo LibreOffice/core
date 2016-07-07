@@ -384,7 +384,7 @@ bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XForm
     return bResult;
 }
 
-static vcl::Window* lcl_GetFocusChild( vcl::Window* pParent )
+static vcl::Window* lcl_GetFocusChild( vcl::Window const * pParent )
 {
     sal_uInt16 nChildren = pParent->GetChildCount();
     for( sal_uInt16 nChild = 0; nChild < nChildren; ++nChild)

@@ -65,13 +65,13 @@ protected:
 
     void InitView();
 
-    void ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
-    void ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
+    void ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix const & rLatheMat);
+    void ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix const & rLatheMat);
     void ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj);
     void ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj);
 
     void InitScene(E3dScene* pScene, double fW, double fH, double fCamZ);
-    void ImpIsConvertTo3DPossible(SdrObject* pObj, bool& rAny3D, bool& rGroupSelected) const;
+    void ImpIsConvertTo3DPossible(SdrObject const * pObj, bool& rAny3D, bool& rGroupSelected) const;
     void BreakSingle3DObj(E3dObject* pObj);
 
 public:
@@ -99,13 +99,13 @@ public:
         const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions) override;
 
     // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
-    bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);
+    bool ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dScene* pDstScene, Point aOffset);
 
     bool IsConvertTo3DObjPossible() const;
     void ConvertMarkedObjTo3D(bool bExtrude=true, const basegfx::B2DPoint& rPnt1 = basegfx::B2DPoint(0.0, 0.0), const basegfx::B2DPoint& rPnt2 = basegfx::B2DPoint(0.0, 1.0));
 
     // Means to create all Extrudes in a certain depth order.
-    static void DoDepthArrange(E3dScene* pScene, double fDepth);
+    static void DoDepthArrange(E3dScene const * pScene, double fDepth);
     void ConvertMarkedToPolyObj();
     E3dScene* SetCurrent3DObj(E3dObject* p3DObj);
     void Start3DCreation();

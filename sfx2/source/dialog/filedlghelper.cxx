@@ -2608,7 +2608,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
     return nRet;
 }
 
-ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString& aURL, SfxItemSet* pSet)
+ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet)
 {
     uno::Reference < task::XInteractionHandler2 > xInteractionHandler = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
     // TODO: need a save way to distinguish MS filters from other filters

@@ -83,7 +83,7 @@ using ::com::sun::star::i18n::BreakIterator;
 
 namespace
 {
-void scaleFontWidth(vcl::Font& rFont, vcl::RenderContext& rRenderContext,long& n100PercentFont)
+void scaleFontWidth(vcl::Font& rFont, vcl::RenderContext const & rRenderContext,long& n100PercentFont)
 {
     rFont.SetAverageFontWidth(0);
     n100PercentFont = rRenderContext.GetFontMetric(rFont).GetAverageFontWidth();
@@ -194,13 +194,13 @@ public:
     }
 
     void CheckScript();
-    Size CalcTextSize(vcl::RenderContext& rRenderContext, OutputDevice* pPrinter, const SvxFont& rFont);
+    Size CalcTextSize(vcl::RenderContext& rRenderContext, OutputDevice const * pPrinter, const SvxFont& rFont);
     void DrawPrev(vcl::RenderContext& rRenderContext, Printer* pPrinter, Point& rPt, const SvxFont& rFont);
 
     bool SetFontWidthScale(sal_uInt16 nScaleInPercent);
     inline void Invalidate100PercentFontWidth();
     inline bool Is100PercentFontWidthValid() const;
-    void ScaleFontWidth(vcl::RenderContext& rRenderContext);
+    void ScaleFontWidth(vcl::RenderContext const & rRenderContext);
                             // scales rNonCJKFont and aCJKFont depending on nFontWidthScale and
                             // sets the 100%-Font-Widths
 };
@@ -287,7 +287,7 @@ void FontPrevWin_Impl::CheckScript()
  * The member nAscent is calculated to the maximal ascent of all used fonts.
  */
 
-Size FontPrevWin_Impl::CalcTextSize(vcl::RenderContext& rRenderContext, OutputDevice* _pPrinter, const SvxFont& rInFont)
+Size FontPrevWin_Impl::CalcTextSize(vcl::RenderContext& rRenderContext, OutputDevice const * _pPrinter, const SvxFont& rInFont)
 {
     sal_uInt16 nScript;
     sal_uInt16 nIdx = 0;
@@ -434,7 +434,7 @@ bool FontPrevWin_Impl::SetFontWidthScale(sal_uInt16 nScale)
     return false;
 }
 
-void FontPrevWin_Impl::ScaleFontWidth(vcl::RenderContext& rOutDev)
+void FontPrevWin_Impl::ScaleFontWidth(vcl::RenderContext const & rOutDev)
 {
     if (!Is100PercentFontWidthValid())
     {

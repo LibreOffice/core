@@ -48,7 +48,7 @@ namespace PictReaderInternal {
     //! reads black/white pattern from SvStream
     sal_uLong read(SvStream &stream);
     //! sets the color
-    void setColor(Color &col) { isColor = true; color = col; }
+    void setColor(Color const &col) { isColor = true; color = col; }
     /** returns a color which can be "used" to replace the pattern,
      *     created from ForeColor and BackColor, ...
      *

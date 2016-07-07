@@ -218,7 +218,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     return xFrame;
 }
 
-SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, vcl::Window& rWindow, sal_uInt16 nViewId, bool bHidden )
+SfxFrame* SfxFrame::Create( SfxObjectShell const & rDoc, vcl::Window& rWindow, sal_uInt16 nViewId, bool bHidden )
 {
     SfxFrame* pFrame = nullptr;
     try

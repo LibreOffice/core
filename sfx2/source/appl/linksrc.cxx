@@ -369,7 +369,7 @@ void SvLinkSource::AddDataAdvise( SvBaseLink * pLink, const OUString& rMimeType,
     pImpl->aArr.push_back( pNew );
 }
 
-void SvLinkSource::RemoveAllDataAdvise( SvBaseLink * pLink )
+void SvLinkSource::RemoveAllDataAdvise( SvBaseLink const  * pLink )
 {
     SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
     for( SvLinkSource_Entry_Impl* p = aIter.Curr(); p; p = aIter.Next() )
@@ -386,7 +386,7 @@ void SvLinkSource::AddConnectAdvise( SvBaseLink * pLink )
     pImpl->aArr.push_back( pNew );
 }
 
-void SvLinkSource::RemoveConnectAdvise( SvBaseLink * pLink )
+void SvLinkSource::RemoveConnectAdvise( SvBaseLink const * pLink )
 {
     SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
     for( SvLinkSource_Entry_Impl* p = aIter.Curr(); p; p = aIter.Next() )

@@ -192,7 +192,7 @@ protected:
         @return
             <TRUE/> if the column is selected, otherwise <FALSE/>
     */
-    bool isColumnSelected(sal_uInt16 nColumnId,DbGridColumn* _pColumn);
+    bool isColumnSelected(sal_uInt16 nColumnId,DbGridColumn const * _pColumn);
 };
 
 #endif // INCLUDED_SVX_FMGRIDCL_HXX

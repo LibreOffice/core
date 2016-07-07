@@ -38,7 +38,7 @@
    RTTI identity by comparing string addresses rather than string content).
 */
 
-static void * load(void * address, char const * symbol) {
+static void * load(void const * address, char const * symbol) {
     Dl_info dl_info;
     char * slash;
     size_t len;

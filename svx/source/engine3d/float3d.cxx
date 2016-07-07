@@ -458,7 +458,7 @@ void Svx3DWin::SetUILightState(PushButton& rBtn, bool bState)
     rBtn.SetModeImage( bState ? aImgLightOn : aImgLightOff );
 }
 
-void Svx3DWin::Update( SfxItemSet& rAttrs )
+void Svx3DWin::Update( SfxItemSet const & rAttrs )
 {
     // remember 2d attributes
     if(mpRemember2DAttributes)

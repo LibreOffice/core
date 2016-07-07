@@ -124,7 +124,7 @@ class SfxDispatchController_Impl : public SfxControllerItem
 
     static void         addParametersToArgs( const css::util::URL& aURL,
                                              css::uno::Sequence< css::beans::PropertyValue >& rArgs );
-    static SfxMapUnit   GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot );
+    static SfxMapUnit   GetCoreMetric( SfxItemPool const & rPool, sal_uInt16 nSlot );
 
 public:
                         SfxDispatchController_Impl( SfxOfficeDispatch*                 pDisp,
@@ -136,7 +136,7 @@ public:
 
     static OUString getSlaveCommand( const css::util::URL& rURL );
 
-    void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pServ );
+    void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer const * pServ );
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void                setMasterSlaveCommand( bool bSet );
     void SAL_CALL       dispatch( const css::util::URL& aURL,

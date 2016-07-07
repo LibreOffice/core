@@ -116,7 +116,7 @@ void Close()
         // avoid nontrivial Export dtor being executed during exit
 }
 
-int WorkOnTokenSet( int nTyp, char *pTokenText )
+int WorkOnTokenSet( int nTyp, char const *pTokenText )
 {
     global::exporter->GetParseQueue()->Push( QueueEntry( nTyp , OString(pTokenText) ) );
     return 1;
@@ -777,7 +777,7 @@ OString Export::StripList(const OString & rText)
     return s1.copy( 0 , s1.lastIndexOf('\"'));
 }
 
-void Export::WriteExportList(ResData *pResData, ExportList& rExportList,
+void Export::WriteExportList(ResData const *pResData, ExportList& rExportList,
     const ExportListType nTyp)
 {
     OString sGID(pResData->sGId);

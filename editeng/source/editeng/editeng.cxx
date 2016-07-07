@@ -645,12 +645,12 @@ bool EditEngine::IsIdleFormatterActive() const
     return pImpEditEngine->aIdleFormatter.IsActive();
 }
 
-ParaPortion* EditEngine::FindParaPortion(ContentNode* pNode)
+ParaPortion* EditEngine::FindParaPortion(ContentNode const * pNode)
 {
     return pImpEditEngine->FindParaPortion(pNode);
 }
 
-const ParaPortion* EditEngine::FindParaPortion(ContentNode* pNode) const
+const ParaPortion* EditEngine::FindParaPortion(ContentNode const * pNode) const
 {
     return pImpEditEngine->FindParaPortion(pNode);
 }
@@ -941,7 +941,7 @@ void EditEngine::SetInSelectionMode(bool b)
     pImpEditEngine->bInSelection = b;
 }
 
-bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, vcl::Window* pFrameWin )
+bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, vcl::Window const * pFrameWin )
 {
     DBG_ASSERT( pEditView, "no View - no cookie !" );
 
@@ -2121,7 +2121,7 @@ Reference< XSpellChecker1 >  EditEngine::GetSpeller()
     return pImpEditEngine->GetSpeller();
 }
 
-void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
+void EditEngine::SetHyphenator( Reference< XHyphenator > const & xHyph )
 {
     pImpEditEngine->SetHyphenator( xHyph );
 }

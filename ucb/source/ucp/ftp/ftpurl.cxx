@@ -98,7 +98,7 @@ int MemoryContainer::append(
 
 extern "C" {
 
-    int memory_write(void *buffer,size_t size,size_t nmemb,void *stream)
+    int memory_write(void const *buffer,size_t size,size_t nmemb,void *stream)
     {
         MemoryContainer *_stream =
             static_cast<MemoryContainer*>(stream);

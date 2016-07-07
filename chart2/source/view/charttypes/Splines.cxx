@@ -473,7 +473,7 @@ bool createParameterT(const tPointVecType& rUniquePoints, double* t)
     return bIsSuccessful;
 }
 
-void createKnotVector(const lcl_tSizeType n, const sal_uInt32 p, double* t, double* u)
+void createKnotVector(const lcl_tSizeType n, const sal_uInt32 p, double const * t, double* u)
 {  // precondition: 0 = t_0 < t_1 < ... < t_n = 1
         for (lcl_tSizeType j = 0; j <= p; ++j)
         {

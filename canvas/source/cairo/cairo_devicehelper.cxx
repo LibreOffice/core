@@ -261,7 +261,7 @@ namespace cairocanvas
         return SurfaceSharedPtr();
     }
 
-    SurfaceSharedPtr DeviceHelper::createSurface( BitmapSystemData& rData, const Size& rSize )
+    SurfaceSharedPtr DeviceHelper::createSurface( BitmapSystemData const & rData, const Size& rSize )
     {
         if (mpRefDevice)
             return mpRefDevice->CreateBitmapSurface(rData, rSize);

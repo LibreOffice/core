@@ -371,8 +371,8 @@ private:
 
     void        handleListStore(xmlreader::XmlReader &reader, const OString &rID);
     void        handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex);
-    void        handleAdjustment(const OString &rID, stringmap &rProperties);
-    void        handleTextBuffer(const OString &rID, stringmap &rProperties);
+    void        handleAdjustment(const OString &rID, stringmap const & rProperties);
+    void        handleTextBuffer(const OString &rID, stringmap const & rProperties);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handleMenu(xmlreader::XmlReader &reader, const OString &rID);
     std::vector<OString> handleItems(xmlreader::XmlReader &reader, const OString &rID);

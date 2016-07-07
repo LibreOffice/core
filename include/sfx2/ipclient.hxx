@@ -74,7 +74,7 @@ public:
     const Fraction&     GetScaleWidth() const;
     const Fraction&     GetScaleHeight() const;
     void                Invalidate();
-    static SfxInPlaceClient* GetClient( SfxObjectShell* pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject );
+    static SfxInPlaceClient* GetClient( SfxObjectShell const * pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject );
     sal_Int64           GetAspect() const;
     sal_Int64           GetObjectMiscStatus() const;
     ErrCode             DoVerb( long nVerb );

@@ -122,7 +122,7 @@ ImpSdrGDIMetaFileImport::~ImpSdrGDIMetaFileImport()
     delete mpTextAttr;
 }
 
-void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport)
+void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile const & rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport)
 {
     const sal_uLong nCount(rMtf.GetActionSize());
 
@@ -265,7 +265,7 @@ size_t ImpSdrGDIMetaFileImport::DoImport(
     sal_uInt32 nActionsToReport(0);
 
     // execute
-    DoLoopActions(const_cast< GDIMetaFile& >(rMtf), pProgrInfo, &nActionsToReport);
+    DoLoopActions(rMtf, pProgrInfo, &nActionsToReport);
 
     if(pProgrInfo)
     {
@@ -667,7 +667,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
     }
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction const & rAct)
 {
     // #i73407# reformulation to use new B2DPolygon classes
     const basegfx::B2DPoint aStart(rAct.GetStartPoint().X(), rAct.GetStartPoint().Y());
@@ -710,14 +710,14 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
     }
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaRectAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaRectAction const & rAct)
 {
     SdrRectObj* pRect=new SdrRectObj(rAct.GetRect());
     SetAttributes(pRect);
     InsertObj(pRect);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction const & rAct)
 {
     SdrRectObj* pRect=new SdrRectObj(rAct.GetRect());
     SetAttributes(pRect);
@@ -730,14 +730,14 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction& rAct)
     InsertObj(pRect);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaEllipseAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaEllipseAction const & rAct)
 {
     SdrCircObj* pCirc=new SdrCircObj(OBJ_CIRC,rAct.GetRect());
     SetAttributes(pCirc);
     InsertObj(pCirc);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaArcAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaArcAction const & rAct)
 {
     Point aCenter(rAct.GetRect().Center());
     long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
@@ -747,7 +747,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaArcAction& rAct)
     InsertObj(pCirc);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaPieAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaPieAction const & rAct)
 {
     Point aCenter(rAct.GetRect().Center());
     long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
@@ -757,7 +757,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPieAction& rAct)
     InsertObj(pCirc);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaChordAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaChordAction const & rAct)
 {
     Point aCenter(rAct.GetRect().Center());
     long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
@@ -891,7 +891,7 @@ bool ImpSdrGDIMetaFileImport::isClip() const
     return !maClip.getB2DRange().isEmpty();
 }
 
-void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
+void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction const & rAct )
 {
     // #i73407# reformulation to use new B2DPolygon classes
     basegfx::B2DPolygon aSource(rAct.GetPolygon().getB2DPolygon());
@@ -935,7 +935,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
     }
 }
 
-void ImpSdrGDIMetaFileImport::DoAction( MetaPolygonAction& rAct )
+void ImpSdrGDIMetaFileImport::DoAction( MetaPolygonAction const & rAct )
 {
     // #i73407# reformulation to use new B2DPolygon classes
     basegfx::B2DPolygon aSource(rAct.GetPolygon().getB2DPolygon());
@@ -956,7 +956,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolygonAction& rAct )
     }
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction const & rAct)
 {
     // #i73407# reformulation to use new B2DPolygon classes
     basegfx::B2DPolyPolygon aSource(rAct.GetPolyPolygon().getB2DPolyPolygon());
@@ -1041,28 +1041,28 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     InsertObj( pText, false );
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaTextAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaTextAction const & rAct)
 {
     OUString aStr(rAct.GetText());
     aStr = aStr.copy(rAct.GetIndex(), rAct.GetLen());
     ImportText( rAct.GetPoint(), aStr, rAct );
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaTextArrayAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaTextArrayAction const & rAct)
 {
     OUString aStr(rAct.GetText());
     aStr = aStr.copy(rAct.GetIndex(), rAct.GetLen());
     ImportText( rAct.GetPoint(), aStr, rAct );
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaStretchTextAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaStretchTextAction const & rAct)
 {
     OUString aStr(rAct.GetText());
     aStr = aStr.copy(rAct.GetIndex(), rAct.GetLen());
     ImportText( rAct.GetPoint(), aStr, rAct );
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaBmpAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaBmpAction const & rAct)
 {
     Rectangle aRect(rAct.GetPoint(),rAct.GetBitmap().GetSizePixel());
     aRect.Right()++; aRect.Bottom()++;
@@ -1074,7 +1074,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpAction& rAct)
     InsertObj(pGraf);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScaleAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScaleAction const & rAct)
 {
     Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
     aRect.Right()++; aRect.Bottom()++;
@@ -1086,7 +1086,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScaleAction& rAct)
     InsertObj(pGraf);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExAction const & rAct)
 {
     Rectangle aRect(rAct.GetPoint(),rAct.GetBitmapEx().GetSizePixel());
     aRect.Right()++; aRect.Bottom()++;
@@ -1098,7 +1098,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExAction& rAct)
     InsertObj(pGraf);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScaleAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScaleAction const & rAct)
 {
     Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
     aRect.Right()++; aRect.Bottom()++;
@@ -1111,7 +1111,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScaleAction& rAct)
 }
 
 
-void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
+void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction const & rAct )
 {
     // #i73407# reformulation to use new B2DPolygon classes
     basegfx::B2DPolyPolygon aSource(rAct.GetPolyPolygon().getB2DPolyPolygon());
@@ -1195,7 +1195,7 @@ void ImpSdrGDIMetaFileImport::MapScaling()
 }
 
 
-void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rMtf, sal_uLong& a) // GDIMetaFile* pMtf )
+void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction const & rAct, GDIMetaFile const & rMtf, sal_uLong& a) // GDIMetaFile* pMtf )
 {
     bool aSkipComment = false;
 
@@ -1266,7 +1266,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rM
     }
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaTextRectAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaTextRectAction const & rAct)
 {
     GDIMetaFile aTemp;
 
@@ -1274,7 +1274,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTextRectAction& rAct)
     DoLoopActions(aTemp, nullptr, nullptr);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction const & rAct)
 {
     Rectangle aRect(rAct.GetDestPoint(), rAct.GetDestSize());
     Bitmap aBitmap(rAct.GetBitmap());
@@ -1290,7 +1290,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction& rAct)
     InsertObj(pGraf);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction const & rAct)
 {
     Rectangle aRect(rAct.GetDestPoint(),rAct.GetDestSize());
     BitmapEx aBitmapEx(rAct.GetBitmapEx());
@@ -1306,7 +1306,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction& rAct)
     InsertObj(pGraf);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaMaskAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaMaskAction const & rAct)
 {
     Rectangle aRect(rAct.GetPoint(), rAct.GetBitmap().GetSizePixel());
     BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
@@ -1320,7 +1320,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskAction& rAct)
     InsertObj(pGraf);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScaleAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScaleAction const & rAct)
 {
     Rectangle aRect(rAct.GetPoint(), rAct.GetSize());
     BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
@@ -1334,7 +1334,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScaleAction& rAct)
     InsertObj(pGraf);
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScalePartAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScalePartAction const & rAct)
 {
     Rectangle aRect(rAct.GetDestPoint(), rAct.GetDestSize());
     BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
@@ -1377,7 +1377,7 @@ namespace
     }
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction const & rAct)
 {
     basegfx::B2DRange aRange(rAct.GetRect().Left(), rAct.GetRect().Top(), rAct.GetRect().Right(), rAct.GetRect().Bottom());
 
@@ -1422,7 +1422,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaWallpaperAction&)
     OSL_ENSURE(false, "Tried to construct SdrObject from MetaWallpaperAction: not supported (!)");
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaTransparentAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaTransparentAction const & rAct)
 {
     basegfx::B2DPolyPolygon aSource(rAct.GetPolyPolygon().getB2DPolyPolygon());
 
@@ -1449,7 +1449,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTextLineAction&)
     OSL_ENSURE(false, "Tried to construct SdrObject from MetaTextLineAction: not supported (!)");
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction const & rAct)
 {
     basegfx::B2DPolyPolygon aSource(rAct.GetPolyPolygon().getB2DPolyPolygon());
 
@@ -1488,7 +1488,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction& rAct)
     }
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
+void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
 {
     const GDIMetaFile& rMtf = rAct.GetGDIMetaFile();
 

@@ -49,7 +49,7 @@ public:
     }
 
     static bool getThumbnailFormatFromGDI_Impl(
-            GDIMetaFile* pMetaFile,
+            GDIMetaFile const * pMetaFile,
             const css::uno::Reference< css::io::XStream >& xStream );
 
     static sal_uInt16 getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName,

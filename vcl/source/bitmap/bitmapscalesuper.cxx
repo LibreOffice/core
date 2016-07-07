@@ -90,7 +90,7 @@ class ScaleTask : public comphelper::ThreadTask
     std::vector< ScaleRangeContext > maStrips;
 public:
     explicit ScaleTask( ScaleRangeFn pFn ) : mpFn( pFn ) {}
-    void push( ScaleRangeContext &aRC ) { maStrips.push_back( aRC ); }
+    void push( ScaleRangeContext const &aRC ) { maStrips.push_back( aRC ); }
     virtual void doWork() override
     {
         std::vector< ScaleRangeContext >::iterator it;

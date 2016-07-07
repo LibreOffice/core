@@ -155,7 +155,7 @@ namespace connectivity
             bool IsFull() const;
 
             sal_uInt32 GetPagePos() const {return nPagePos;}
-            ONDXPagePtr& GetChild(ODbaseIndex* pIndex = nullptr);
+            ONDXPagePtr& GetChild(ODbaseIndex const * pIndex = nullptr);
 
             // Parent does not need to be reloaded
             const ONDXPagePtr& GetParent();
@@ -168,7 +168,7 @@ namespace connectivity
 
             sal_uInt16 Search(const ONDXKey& rSearch);
             sal_uInt16 Search(const ONDXPage* pPage);
-            void   SearchAndReplace(const ONDXKey& rSearch, ONDXKey& rReplace);
+            void   SearchAndReplace(const ONDXKey& rSearch, ONDXKey const & rReplace);
 
         protected:
             ONDXPage(ODbaseIndex& rIndex, sal_uInt32 nPos, ONDXPage* = nullptr);
@@ -263,7 +263,7 @@ namespace connectivity
             void            SetChild(ONDXPagePtr aCh = ONDXPagePtr(), ONDXPage* = nullptr);
 
             void Write(SvStream &rStream, const ONDXPage& rPage) const;
-            void Read(SvStream &rStream, ODbaseIndex&);
+            void Read(SvStream &rStream, ODbaseIndex const &);
         };
 
         inline ONDXKey::ONDXKey(const ONDXKey& rKey)

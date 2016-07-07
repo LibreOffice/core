@@ -69,7 +69,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         , TickInfoArraysType& rAllTickInfos
         , const ExplicitIncrementData& rIncrement
         , const ExplicitScaleData& rScale
-        , PolarPlottingPositionHelper* pPosHelper
+        , PolarPlottingPositionHelper const * pPosHelper
         , double fLogicRadius, double fLogicZ )
 {
     Reference< XScaling > xInverseScaling( nullptr );

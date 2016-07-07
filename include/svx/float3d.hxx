@@ -219,7 +219,7 @@ public:
     void    InitColorLB( const SdrModel* pDoc );
     bool    IsUpdateMode() const { return bUpdate; }
 
-    void    Update( SfxItemSet& rSet );
+    void    Update( SfxItemSet const & rSet );
     void    GetAttr( SfxItemSet& rSet );
 
     void UpdatePreview(); // nach oben (private)

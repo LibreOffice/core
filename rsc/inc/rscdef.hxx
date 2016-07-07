@@ -161,7 +161,7 @@ private:
     RscDefine * New( sal_uLong lFileKey, const OString& rDefName,
                      RscExpression * pExpression, size_t lPos );
     bool        Remove();
-    size_t      GetPos( RscDefine* item )
+    size_t      GetPos( RscDefine const* item )
                     {
                         for ( size_t i = 0, n = maList.size(); i < n; ++i )
                             if ( maList[ i ] == item )
@@ -221,7 +221,7 @@ class RscDefTree
 {
     RscDefine * pDefRoot;
 public:
-    static bool Evaluate( RscDefine * pDef );
+    static bool Evaluate( RscDefine const * pDef );
                 RscDefTree(){ pDefRoot = nullptr; }
                 ~RscDefTree();
     void        Remove();

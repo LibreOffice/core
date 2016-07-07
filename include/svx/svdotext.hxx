@@ -617,7 +617,7 @@ public:
         or if the given SdrOutliner contains no text.
         Also checks for one empty paragraph.
     */
-    static bool HasTextImpl( SdrOutliner* pOutliner );
+    static bool HasTextImpl( SdrOutliner const * pOutliner );
 
     friend class ::SdrTextObjTest;
 };

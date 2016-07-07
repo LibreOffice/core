@@ -61,7 +61,7 @@ char *HWPStyle::GetName(int n) const
 }
 
 
-void HWPStyle::SetName(int n, char *name)
+void HWPStyle::SetName(int n, char const *name)
 {
     if (n >= 0 && n < nstyles)
     {
@@ -81,7 +81,7 @@ CharShape *HWPStyle::GetCharShape(int n) const
 }
 
 
-void HWPStyle::SetCharShape(int n, CharShape * cshapep)
+void HWPStyle::SetCharShape(int n, CharShape const * cshapep)
 {
     if (n >= 0 && n < nstyles)
     {
@@ -101,7 +101,7 @@ ParaShape *HWPStyle::GetParaShape(int n) const
 }
 
 
-void HWPStyle::SetParaShape(int n, ParaShape * pshapep)
+void HWPStyle::SetParaShape(int n, ParaShape const * pshapep)
 {
     if (n >= 0 && n < nstyles)
     {

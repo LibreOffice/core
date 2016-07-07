@@ -480,7 +480,7 @@ void E3dObject::Insert3DObj(E3dObject* p3DObj)
     StructureChanged();
 }
 
-void E3dObject::Remove3DObj(E3dObject* p3DObj)
+void E3dObject::Remove3DObj(E3dObject const * p3DObj)
 {
     DBG_ASSERT(p3DObj, "Remove3DObj with NULL-pointer!");
 

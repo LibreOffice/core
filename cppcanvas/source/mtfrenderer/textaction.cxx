@@ -188,7 +188,7 @@ namespace cppcanvas
             uno::Sequence< double > setupDXArray( const OUString&    rText,
                                                   sal_Int32          nStartPos,
                                                   sal_Int32          nLen,
-                                                  VirtualDevice&     rVDev,
+                                                  VirtualDevice const & rVDev,
                                                   const OutDevState& rState )
             {
                 // no external DX array given, create one from given
@@ -264,7 +264,7 @@ namespace cppcanvas
                 o_rTextLayout->applyLogicalAdvancements( rOffsets );
             }
 
-            double getLineWidth( ::VirtualDevice&                rVDev,
+            double getLineWidth( ::VirtualDevice const &         rVDev,
                                  const OutDevState&              rState,
                                  const rendering::StringContext& rStringContext )
             {
@@ -1588,7 +1588,7 @@ namespace cppcanvas
             };
 
             double calcOutlineWidth( const OutDevState& rState,
-                                     VirtualDevice&     rVDev )
+                                     VirtualDevice const & rVDev )
             {
                 const ::basegfx::B2DSize aFontSize( 0,
                                                     rVDev.GetFont().GetFontHeight() / 64.0 );

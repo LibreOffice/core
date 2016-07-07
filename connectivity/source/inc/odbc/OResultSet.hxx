@@ -168,7 +168,7 @@ namespace connectivity
             void fillColumn(sal_Int32 _nToColumn);
             void allocBuffer();
             void releaseBuffer();
-            void updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType, void const * _pValue) throw(css::sdbc::SQLException, css::uno::RuntimeException);
             void fillNeededData(SQLRETURN _nRet);
             bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset);
             TVoidPtr allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex);

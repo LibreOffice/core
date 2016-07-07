@@ -685,7 +685,7 @@ protected:
 
 public:
 
-    sal_uInt32  GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE = nullptr ) const;
+    sal_uInt32  GetBlibStoreContainerSize( SvStream const * pMergePicStreamBSE = nullptr ) const;
     void        WriteBlibStoreContainer( SvStream& rStrm, SvStream* pMergePicStreamBSE = nullptr  );
     void        WriteBlibStoreEntry(SvStream& rStrm, sal_uInt32 nBlipId,
                     bool bWritePictureOffset, sal_uInt32 nResize = 0);
@@ -868,7 +868,7 @@ public:
                     sal_uInt32 nFlags,
                     bool bBezier,
                     css::awt::Rectangle& rGeoRect,
-                    tools::Polygon* pPolygon = nullptr
+                    tools::Polygon const * pPolygon = nullptr
                 );
 
     static sal_uInt32 GetGradientColor(
@@ -944,7 +944,7 @@ public:
                             sal_Int32& rnArrowLength,
                             sal_Int32& rnArrowWidth
                         );
-    static bool         IsDefaultObject( SdrObjCustomShape* pCustoShape, const MSO_SPT eShapeType );
+    static bool         IsDefaultObject( SdrObjCustomShape const * pCustoShape, const MSO_SPT eShapeType );
     static void         LookForPolarHandles(
                             const MSO_SPT eShapeType,
                             sal_Int32& nAdjustmentsWhichNeedsToBeConverted

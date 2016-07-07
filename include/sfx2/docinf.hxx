@@ -63,7 +63,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
 
 
 css::uno::Sequence<sal_Int8> SFX2_DLLPUBLIC convertMetaFile(
-    GDIMetaFile* i_pThumb);
+    GDIMetaFile const * i_pThumb);
 
 } // namespace sfx2
 

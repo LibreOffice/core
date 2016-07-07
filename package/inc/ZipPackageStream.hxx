@@ -137,7 +137,7 @@ public:
                             const rtlRandomPool &rRandomPool ) override;
 
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
-    void successfullyWritten( ZipEntry *pEntry );
+    void successfullyWritten( ZipEntry const *pEntry );
 
     static css::uno::Sequence < sal_Int8 > static_getImplementationId();
 

@@ -30,7 +30,7 @@ class NumberingPopup : public svtools::ToolbarMenu
     VclPtr<SvxNumValueSet> mpValueSet;
     DECL_LINK_TYPED( VSSelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK_TYPED( VSSelectValueSetHdl, ValueSet*, void );
-    void VSSelectHdl(void *);
+    void VSSelectHdl(void const *);
 public:
     NumberingPopup( NumberingToolBoxControl& rController,
                     const css::uno::Reference< css::frame::XFrame >& rFrame,
@@ -165,7 +165,7 @@ IMPL_LINK_TYPED( NumberingPopup, VSSelectToolbarMenuHdl, ToolbarMenu*, pControl,
     VSSelectHdl(pControl);
 }
 
-void NumberingPopup::VSSelectHdl(void* pControl)
+void NumberingPopup::VSSelectHdl(void const * pControl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();

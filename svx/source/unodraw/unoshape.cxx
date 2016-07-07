@@ -1060,7 +1060,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 // Prefixing with 'svx' and marking static to make sure name collisions
 // do not occur.
 
-static bool svx_needLogicRectHack( SdrObject* pObj )
+static bool svx_needLogicRectHack( SdrObject const * pObj )
 {
     if( pObj->GetObjInventor() == SdrInventor)
     {
@@ -1087,7 +1087,7 @@ static bool svx_needLogicRectHack( SdrObject* pObj )
 }
 
 
-static Rectangle svx_getLogicRectHack( SdrObject* pObj )
+static Rectangle svx_getLogicRectHack( SdrObject const * pObj )
 {
     if(svx_needLogicRectHack(pObj))
     {
@@ -1412,7 +1412,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName 
 }
 
 
-bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel* pModel )
+bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel )
 {
     // check if an item with the given name and which id is inside the models
     // pool or the stylesheet pool, if found it's put in the itemset
@@ -1914,7 +1914,7 @@ void SAL_CALL SvxShape::firePropertiesChangeEvent( const css::uno::Sequence< OUS
 }
 
 
-uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap ) const
+uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap ) const
 {
     DBG_TESTSOLARMUTEX();
     uno::Any aAny;

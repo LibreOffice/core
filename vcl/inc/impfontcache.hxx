@@ -49,10 +49,10 @@ public:
                         ImplFontCache();
                         ~ImplFontCache();
 
-    LogicalFontInstance* GetFontInstance( PhysicalFontCollection*,
+    LogicalFontInstance* GetFontInstance( PhysicalFontCollection const *,
                              const vcl::Font&, const Size& rPixelSize, float fExactHeight);
-    LogicalFontInstance* GetFontInstance( PhysicalFontCollection*, FontSelectPattern& );
-    LogicalFontInstance* GetGlyphFallbackFont( PhysicalFontCollection*, FontSelectPattern&,
+    LogicalFontInstance* GetFontInstance( PhysicalFontCollection const *, FontSelectPattern& );
+    LogicalFontInstance* GetGlyphFallbackFont( PhysicalFontCollection const *, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
 
     /// Increase the refcount of the given LogicalFontInstance.

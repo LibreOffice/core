@@ -70,7 +70,7 @@ OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg
 //  misc local helper functions
 
 
-static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale > &rSeq )
+static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale > const &rSeq )
 {
     const css::lang::Locale *pLocale = rSeq.getConstArray();
     sal_Int32 nCount = rSeq.getLength();

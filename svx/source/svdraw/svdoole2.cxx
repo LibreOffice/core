@@ -1828,7 +1828,7 @@ void SdrOle2Obj::GetNewReplacement()
         mpImpl->mxObjRef.UpdateReplacement();
 }
 
-Size SdrOle2Obj::GetOrigObjSize( MapMode* pTargetMapMode ) const
+Size SdrOle2Obj::GetOrigObjSize( MapMode const * pTargetMapMode ) const
 {
     return mpImpl->mxObjRef.GetSize( pTargetMapMode );
 }

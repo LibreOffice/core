@@ -41,7 +41,7 @@ public:
 
     void test( const filter_info_impl& rFilterInfo );
 
-    void updateCurrentDocumentButtonState( css::uno::Reference< css::lang::XComponent > * pRef = nullptr );
+    void updateCurrentDocumentButtonState( css::uno::Reference< css::lang::XComponent > const * pRef = nullptr );
 
 private:
     DECL_LINK_TYPED(ClickHdl_Impl, Button *, void );

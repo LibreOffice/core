@@ -2671,7 +2671,7 @@ OUString DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
     return sRet;
 }
 
-OUString DbGridControl::GetCurrentRowCellText(DbGridColumn* pColumn,const DbGridRowRef& _rRow) const
+OUString DbGridControl::GetCurrentRowCellText(DbGridColumn const * pColumn,const DbGridRowRef& _rRow) const
 {
     // text output for a single row
     OUString aText;

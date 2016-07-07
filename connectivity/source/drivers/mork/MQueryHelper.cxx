@@ -41,7 +41,7 @@ using namespace ::com::sun::star::sdbc;
 
 
 extern
-::std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression* _aExpr, MQueryHelperResultEntry* entry);
+::std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression const * _aExpr, MQueryHelperResultEntry* entry);
 
 MQueryHelperResultEntry::MQueryHelperResultEntry()
 {
@@ -86,7 +86,7 @@ MQueryHelper::~MQueryHelper()
 }
 
 
-void MQueryHelper::setAddressbook(OUString &ab)
+void MQueryHelper::setAddressbook(OUString const &ab)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -270,7 +270,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     return 0;
 }
 
-::std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression* _aExpr, MQueryHelperResultEntry* entry)
+::std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression const * _aExpr, MQueryHelperResultEntry* entry)
 {
     ::std::vector<bool> resultVector;
     MQueryExpression::ExprVector::const_iterator evIter;

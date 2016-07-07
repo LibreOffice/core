@@ -237,7 +237,7 @@ namespace accessibility
         /// Unsets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
         void UnSetState( const sal_Int16 nStateId );
 
-        static Rectangle LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder );
+        static Rectangle LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder const & rForwarder );
 
         SvxEditSourceAdapter& GetEditSource() const;
 

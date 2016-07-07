@@ -126,7 +126,7 @@ bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 }
 
 
-void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrientation )
+void CGMImpressOutAct::ImplSetOrientation( FloatPoint const & rRefPoint, double const & rOrientation )
 {
     maXPropSet->setPropertyValue( "RotationPointX", uno::Any((sal_Int32)rRefPoint.X) );
     maXPropSet->setPropertyValue( "RotationPointY", uno::Any((sal_Int32)rRefPoint.Y) );
@@ -439,7 +439,7 @@ void CGMImpressOutAct::EndGrouping()
     }
 }
 
-void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
+void CGMImpressOutAct::DrawRectangle( FloatRect const & rFloatRect )
 {
     if ( mnGroupActCount != ( mpCGM->mnActCount - 1 ) )         // POWERPOINT HACK !!!
     {
@@ -453,7 +453,7 @@ void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
     }
 }
 
-void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation )
+void CGMImpressOutAct::DrawEllipse( FloatPoint const & rCenter, FloatPoint const & rSize, double fOrientation )
 {
     if ( ImplCreateShape( "com.sun.star.drawing.EllipseShape" ) )
     {
@@ -470,15 +470,15 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
         maXShape->setSize( awt::Size( nXSize, nYSize ) );
         maXShape->setPosition( awt::Point( (long)( rCenter.X - rSize.X ), (long)( rCenter.Y - rSize.Y ) ) );
 
-        if ( rOrientation != 0 )
+        if ( fOrientation != 0 )
         {
-            ImplSetOrientation( rCenter, rOrientation );
+            ImplSetOrientation( rCenter, fOrientation );
         }
         ImplSetFillBundle();
     }
 }
 
-void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation,
+void CGMImpressOutAct::DrawEllipticalArc( FloatPoint const & rCenter, FloatPoint const & rSize, double fOrientation,
             sal_uInt32 nType, double& fStartAngle, double& fEndAngle )
 {
     if ( ImplCreateShape( "com.sun.star.drawing.EllipseShape" ) )
@@ -496,12 +496,12 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
 
         maXShape->setSize( awt::Size ( nXSize, nYSize ) );
 
-        if ( rOrientation != 0 )
+        if ( fOrientation != 0 )
         {
-            fStartAngle += rOrientation;
+            fStartAngle += fOrientation;
             if ( fStartAngle >= 360 )
                 fStartAngle -= 360;
-            fEndAngle += rOrientation;
+            fEndAngle += fOrientation;
             if ( fEndAngle >= 360 )
                 fEndAngle -= 360;
         }
@@ -524,9 +524,9 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
             maXPropSet->setPropertyValue( "CircleEndAngle", uno::Any((sal_Int32)( fEndAngle * 100 )) );
         }
         maXShape->setPosition( awt::Point( (long)( rCenter.X - rSize.X ), (long)( rCenter.Y - rSize.Y ) ) );
-        if ( rOrientation != 0 )
+        if ( fOrientation != 0 )
         {
-            ImplSetOrientation( rCenter, rOrientation );
+            ImplSetOrientation( rCenter, fOrientation );
         }
         if ( eCircleKind == drawing::CircleKind_ARC )
         {
@@ -673,7 +673,7 @@ void CGMImpressOutAct::DrawPolybezier( tools::Polygon& rPolygon )
     }
 }
 
-void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon )
+void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon const & rPolyPolygon )
 {
     sal_uInt32 nNumPolys = rPolyPolygon.Count();
     if ( nNumPolys && ImplCreateShape( "com.sun.star.drawing.ClosedBezierShape" ) )
@@ -716,7 +716,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon )
     }
 }
 
-void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, sal_uInt32 /*nSize*/, FinalFlag eFlag )
+void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size& rTextSize, char const * pString, sal_uInt32 /*nSize*/, FinalFlag eFlag )
 {
     if ( ImplCreateShape( "com.sun.star.drawing.TextShape" ) )
     {
@@ -856,7 +856,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
     }
 }
 
-void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFlag /*eFlag*/ )
+void CGMImpressOutAct::AppendText( char const * pString, sal_uInt32 /*nSize*/, FinalFlag /*eFlag*/ )
 {
     if ( nFinalTextCount )
     {
@@ -931,7 +931,7 @@ void CGMImpressOutAct::EndFigure()
     mnIndex = 0;
 }
 
-void CGMImpressOutAct::RegPolyLine( tools::Polygon& rPolygon, bool bReverse )
+void CGMImpressOutAct::RegPolyLine( tools::Polygon const & rPolygon, bool bReverse )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
     if ( nPoints )

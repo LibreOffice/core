@@ -1074,7 +1074,7 @@ void SdrItemBrowser::GetFocus()
     aBrowse->GrabFocus();
 }
 
-vcl::Window* SdrItemBrowser::ImpGetViewWin(SdrView& rView)
+vcl::Window* SdrItemBrowser::ImpGetViewWin(SdrView const & rView)
 {
     const sal_uInt32 nWinCount(rView.PaintWindowCount());
 

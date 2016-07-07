@@ -85,7 +85,7 @@ public:
     static void setCompleteString( const OUString& rNewText
         , const css::uno::Reference< css::chart2::XTitle >& xTitle
         , const css::uno::Reference< css::uno::XComponentContext > & xContext
-        , float * pDefaultCharHeight = nullptr );
+        , float const * pDefaultCharHeight = nullptr );
 
     static bool getTitleType( eTitleType& rType
                     , const css::uno::Reference< css::chart2::XTitle >& xTitle

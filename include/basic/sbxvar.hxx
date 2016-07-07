@@ -160,7 +160,7 @@ public:
     void PutNull();
 
             // Special methods
-    void PutDecimal( css::bridge::oleautomation::Decimal& rAutomationDec );
+    void PutDecimal( css::bridge::oleautomation::Decimal const & rAutomationDec );
     bool PutDecimal( SbxDecimal* pDecimal ); // This function is needed for Windows build, don't remove
     void fillAutomationDecimal( css::bridge::oleautomation::Decimal& rAutomationDec ) const;
     bool PutCurrency( sal_Int64 );

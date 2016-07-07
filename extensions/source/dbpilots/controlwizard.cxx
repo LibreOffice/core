@@ -637,7 +637,7 @@ namespace dbp
     }
 
 
-    void OControlWizard::commitControlSettings(OControlWizardSettings* _pSettings)
+    void OControlWizard::commitControlSettings(OControlWizardSettings const * _pSettings)
     {
         DBG_ASSERT(m_aContext.xObjectModel.is(), "OControlWizard::commitControlSettings: have no control model to work with!");
         if (!m_aContext.xObjectModel.is())

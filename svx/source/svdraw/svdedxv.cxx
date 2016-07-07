@@ -387,7 +387,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     rOutlView.ShowCursor();
 }
 
-void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
+void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView const & rOutlView) const
 {
     vcl::Window* pWin = rOutlView.GetWindow();
 
@@ -1184,7 +1184,7 @@ SdrPageView* SdrObjEditView::GetTextEditPageView() const
 }
 
 
-OutlinerView* SdrObjEditView::ImpFindOutlinerView(vcl::Window* pWin) const
+OutlinerView* SdrObjEditView::ImpFindOutlinerView(vcl::Window const * pWin) const
 {
     if (pWin==nullptr) return nullptr;
     if (pTextEditOutliner==nullptr) return nullptr;
@@ -2157,7 +2157,7 @@ static SfxItemSet CreatePaintSet( const sal_uInt16 *pRanges, SfxItemPool& rPool,
     return aPaintSet;
 }
 
-void SdrObjEditView::ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats )
+void SdrObjEditView::ApplyFormatPaintBrushToText( SfxItemSet const & rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
     OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
     if(pParaObj)

@@ -158,13 +158,13 @@ private:
 
                                        EditEngine( const EditEngine& ) = delete;
                        EditEngine&     operator=( const EditEngine& ) = delete;
-    EDITENG_DLLPRIVATE bool            PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, vcl::Window* pFrameWin = nullptr );
+    EDITENG_DLLPRIVATE bool            PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, vcl::Window const * pFrameWin = nullptr );
 
     EDITENG_DLLPRIVATE void CursorMoved(ContentNode* pPrevNode);
     EDITENG_DLLPRIVATE void CheckIdleFormatter();
     EDITENG_DLLPRIVATE bool IsIdleFormatterActive() const;
-    EDITENG_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode* pNode);
-    EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode* pNode) const;
+    EDITENG_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode const * pNode);
+    EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode const * pNode) const;
     EDITENG_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
 
     EDITENG_DLLPRIVATE css::uno::Reference<
@@ -420,7 +420,7 @@ public:
         css::linguistic2::XSpellChecker1 >
                     GetSpeller();
     void            SetHyphenator( css::uno::Reference<
-                            css::linguistic2::XHyphenator >& xHyph );
+                            css::linguistic2::XHyphenator > const & xHyph );
 
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
     void SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges );

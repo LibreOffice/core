@@ -960,7 +960,7 @@ void SfxObjectShell::SetProgress_Impl
 }
 
 
-void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
+void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame const * pFrame )
 {
     SfxApplication* pSfxApp = SfxGetpApp();
     if ( !pSfxApp->IsDowning() && !IsLoading() && pFrame && !pFrame->GetFrame().IsClosing_Impl() )
@@ -1681,7 +1681,7 @@ bool SfxObjectShell::AdjustMacroMode()
     return pImpl->aMacroMode.adjustMacroMode( xInteraction );
 }
 
-vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
+vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
 {
     vcl::Window* pWindow = nullptr;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();

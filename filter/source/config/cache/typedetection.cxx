@@ -798,7 +798,7 @@ OUString TypeDetection::impl_getTypeFromFilter(const OUString& rFilterName)
 }
 
 void TypeDetection::impl_getAllFormatTypes(
-    const util::URL& aParsedURL, utl::MediaDescriptor& rDescriptor, FlatDetection& rFlatTypes)
+    const util::URL& aParsedURL, utl::MediaDescriptor const & rDescriptor, FlatDetection& rFlatTypes)
 {
     rFlatTypes.clear();
 
@@ -958,7 +958,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     // <- SAFE ----------------------------------
 }
 
-void TypeDetection::impl_seekStreamToZero(utl::MediaDescriptor& rDescriptor)
+void TypeDetection::impl_seekStreamToZero(utl::MediaDescriptor const & rDescriptor)
 {
     // try to seek to 0 ...
     // But because XSeekable is an optional interface ... try it only .-)

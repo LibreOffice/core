@@ -257,10 +257,10 @@ protected:
     virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings );
 
     const css::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
-    inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
+    inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver );
 
     const css::uno::Reference< css::document::XGraphicObjectResolver >& GetGraphicResolver() const { return mxGraphicResolver; }
-    void SetGraphicResolver( css::uno::Reference< css::document::XGraphicObjectResolver >& _xGraphicResolver );
+    void SetGraphicResolver( css::uno::Reference< css::document::XGraphicObjectResolver > const & _xGraphicResolver );
 
     void SetDocHandler( const css::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler );
 
@@ -480,7 +480,7 @@ public:
     SvXMLExportFlags getExportFlags() const { return mnExportFlags; }
 
     void ExportEmbeddedOwnObject(
-        css::uno::Reference<css::lang::XComponent >& rComp );
+        css::uno::Reference<css::lang::XComponent > const & rComp );
 
     OUString GetRelativeReference(const OUString& rValue);
 
@@ -626,13 +626,13 @@ inline bool SvXMLExport::HasFormExport()
 }
 
 inline void SvXMLExport::SetEmbeddedResolver(
-    css::uno::Reference< css::document::XEmbeddedObjectResolver >& _xEmbeddedResolver )
+    css::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver )
 {
     mxEmbeddedResolver = _xEmbeddedResolver;
 }
 
 inline void SvXMLExport::SetGraphicResolver(
-    css::uno::Reference< css::document::XGraphicObjectResolver >& _xGraphicResolver )
+    css::uno::Reference< css::document::XGraphicObjectResolver > const & _xGraphicResolver )
 {
     mxGraphicResolver = _xGraphicResolver;
 }

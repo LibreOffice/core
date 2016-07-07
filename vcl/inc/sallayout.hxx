@@ -246,7 +246,7 @@ public:
     explicit        MultiSalLayout( SalLayout& rBaseLayout,
                                     const PhysicalFontFace* pBaseFont = nullptr );
     void            AddFallback( SalLayout& rFallbackLayout,
-                                 ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
+                                 ImplLayoutRuns const &, const PhysicalFontFace* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;
     virtual void    InitFont() const override;

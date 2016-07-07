@@ -97,7 +97,7 @@ public:
     void            Clear() { maData.clear(); }
 
     void            Remove( sal_uInt32 nPos );
-    void            Remove( void* pData );
+    void            Remove( void const * pData );
 
     void            Append( void* pData )
                         { maData.push_back( pData ); }
@@ -170,7 +170,7 @@ public:
     SortInfo*                   GetSortInfo() const { return mpSortInfo; }
     sal_IntPtr                  GetCount() const { return mnCount; }
 
-    void                CopyData( SortedResultSet* pSource );
+    void                CopyData( SortedResultSet const * pSource );
     void                Initialize( const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                     const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
     void                CheckProperties( sal_IntPtr nOldCount, bool bWasFinal );

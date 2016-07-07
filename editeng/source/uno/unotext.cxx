@@ -133,7 +133,7 @@ const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet()
 // helper for Item/Property conversion
 
 
-void GetSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw()
+void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw()
 {
     DBG_ASSERT( pForwarder, "I need a valid SvxTextForwarder!" );
     if( pForwarder )
@@ -146,7 +146,7 @@ void GetSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw
     }
 }
 
-void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw()
+void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw()
 {
     DBG_ASSERT( pForwarder, "I need a valid SvxTextForwarder!" );
     if( pForwarder )
@@ -682,7 +682,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
     }
 }
 
-bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, uno::Any& aAny, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL */ )
+bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertySimpleEntry* pMap, uno::Any& aAny, const ESelection* pSelection /* = NULL */, SvxEditSource* pEditSource /* = NULL */ )
     throw( uno::RuntimeException )
 {
     switch( pMap->nWID )

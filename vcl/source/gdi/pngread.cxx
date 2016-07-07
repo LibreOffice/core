@@ -1124,7 +1124,7 @@ void PNGReaderImpl::ImplApplyFilter()
 
 namespace
 {
-    void SanitizePaletteIndexes(sal_uInt8* pEntries, int nLen, BitmapWriteAccess* pAcc)
+    void SanitizePaletteIndexes(sal_uInt8* pEntries, int nLen, BitmapWriteAccess const * pAcc)
     {
         sal_uInt16 nPaletteEntryCount = pAcc->GetPaletteEntryCount();
         for (int nX = 0; nX < nLen; ++nX)

@@ -185,10 +185,10 @@ private:
     void removeElementMarkBuffer(sal_Int32 nId);
 
     OUString printBufferNode(
-        BufferNode* pBufferNode, sal_Int32 nIndent) const;
+        BufferNode const * pBufferNode, sal_Int32 nIndent) const;
 
     static css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
-        collectChildWorkingElement(BufferNode* pBufferNode);
+        collectChildWorkingElement(BufferNode const * pBufferNode);
 
     void smashBufferNode(
         BufferNode* pBufferNode, bool bClearRoot) const;

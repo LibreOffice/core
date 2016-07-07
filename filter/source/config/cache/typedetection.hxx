@@ -75,7 +75,7 @@ private:
      * Get all format types that we handle.
      */
     void impl_getAllFormatTypes(
-        const css::util::URL& aParsedURL, utl::MediaDescriptor& rDescriptor,
+        const css::util::URL& aParsedURL, utl::MediaDescriptor const & rDescriptor,
         FlatDetection& rFlatTypes);
 
 
@@ -140,7 +140,7 @@ private:
         @param      rDescriptor
                     a stl representation of the MediaDescriptor as in/out parameter.
      */
-    static void impl_seekStreamToZero(utl::MediaDescriptor& rDescriptor);
+    static void impl_seekStreamToZero(utl::MediaDescriptor const & rDescriptor);
 
 
     /** @short      make deep type detection for a specified

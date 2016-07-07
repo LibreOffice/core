@@ -168,8 +168,8 @@ public:
 
     sal_uInt32      nFontsAvailable;
     FontEntry*      GetFontEntry( sal_uInt32 );
-    void            InsertName( sal_uInt8* pSource, sal_uInt32 nSize );
-    void            InsertCharSet( CharSetType, sal_uInt8* pSource, sal_uInt32 nSize );
+    void            InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize );
+    void            InsertCharSet( CharSetType, sal_uInt8 const * pSource, sal_uInt32 nSize );
     CGMFList&       operator=( const CGMFList& rFontList );
 };
 

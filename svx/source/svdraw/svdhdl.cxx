@@ -681,7 +681,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
 
 sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
     const basegfx::B2DPoint& rPos,
-    BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, OutputDevice& rOutDev, Point aMoveOutsideOffset)
+    BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, OutputDevice const & rOutDev, Point aMoveOutsideOffset)
 {
     sdr::overlay::OverlayObject* pRetval = nullptr;
 

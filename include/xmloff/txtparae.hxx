@@ -113,7 +113,7 @@ public:
 
     void exportTextRangeSpan(
             const css::uno::Reference< css::text::XTextRange > & rTextRange,
-            css::uno::Reference< css::beans::XPropertySet > & xPropSet,
+            css::uno::Reference< css::beans::XPropertySet > const & xPropSet,
             css::uno::Reference < css::beans::XPropertySetInfo > & xPropSetInfo,
             const bool bIsUICharStyle,
             const bool bHasAutoStyle,

@@ -55,7 +55,7 @@ private: //methods
                         LabelAlignment& rAlignment, sal_Int32 nLabelPlacement
                         , double fScaledX, double fScaledLowerYValue, double fScaledUpperYValue, double fScaledZ
                         , double fScaledLowerBarDepth, double fScaledUpperBarDepth, double fBaseValue
-                        , BarPositionHelper* pPosHelper ) const;
+                        , BarPositionHelper const * pPosHelper ) const;
 
     virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const override;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
 

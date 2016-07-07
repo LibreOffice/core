@@ -190,7 +190,7 @@ namespace connectivity
             bool                       hadError() const { return m_aError.is(); }
             inline ErrorDescriptor&    getError() { return m_aError; }
 
-            void                       setAddressbook( OUString&);
+            void                       setAddressbook( OUString const &);
         };
     }
 }

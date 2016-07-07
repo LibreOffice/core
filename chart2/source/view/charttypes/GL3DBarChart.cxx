@@ -1158,7 +1158,7 @@ void GL3DBarChart::updateRenderFPS()
                        glm::vec4(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 }
 
-int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
+int GL3DBarChart::calcTimeInterval(TimeValue const &startTime, TimeValue const &endTime)
 {
     TimeValue aTime;
     aTime.Seconds = endTime.Seconds - startTime.Seconds - 1;
@@ -1205,7 +1205,7 @@ void GL3DBarChart::updateDataUpdateFPS()
     addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.77f, 0.92f), 0.07f, true, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
 }
 
-void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
+void GL3DBarChart::recordBarHistory(sal_uInt32 nBarID, float nVal)
 {
     std::list<float>& aList = maBarHistory[nBarID];
     if(aList.size() == HISTORY_NUM)

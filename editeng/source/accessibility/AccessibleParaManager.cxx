@@ -295,7 +295,7 @@ namespace accessibility
             mnEventId( nEventId ),
             mrNewValue( rNewValue ),
             mrOldValue( rOldValue ) {}
-        void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
+        void operator()( ::accessibility::AccessibleEditableTextPara const & rPara )
         {
             rPara.FireEvent( mnEventId, mrNewValue, mrOldValue );
         }

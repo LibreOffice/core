@@ -426,7 +426,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL
     }
 }
 
-SfxMapUnit SfxDispatchController_Impl::GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlotId )
+SfxMapUnit SfxDispatchController_Impl::GetCoreMetric( SfxItemPool const & rPool, sal_uInt16 nSlotId )
 {
     sal_uInt16 nWhich = rPool.GetWhich( nSlotId );
     return rPool.GetMetric( nWhich );
@@ -835,7 +835,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const css::uno::Refe
     aListener->statusChanged( aEvent );
 }
 
-void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pSlotServ )
+void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer const * pSlotServ )
 {
     if ( !pDispatch )
         return;

@@ -44,8 +44,8 @@ public:
     virtual ~AreaTransparencyGradientControl();
     virtual void dispose() override;
 
-    void Rearrange(XFillFloatTransparenceItem* pGradientItem);
-    void InitStatus(XFillFloatTransparenceItem* pGradientItem);
+    void Rearrange(XFillFloatTransparenceItem const * pGradientItem);
+    void InitStatus(XFillFloatTransparenceItem const * pGradientItem);
     void ExecuteValueModify( sal_uInt8 nStartCol, sal_uInt8 nEndCol );
 
 private:

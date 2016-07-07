@@ -471,8 +471,8 @@ void OCommonStatement::analyseSQL()
     }
 }
 
-void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
-                                        OSQLParseNode* pAscendingDescending)
+void OCommonStatement::setOrderbyColumn( OSQLParseNode const * pColumnRef,
+                                         OSQLParseNode const * pAscendingDescending)
 {
     OUString aColumnName;
     if (pColumnRef->count() == 1)

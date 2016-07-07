@@ -60,7 +60,7 @@ namespace svt { namespace table
 
     namespace
     {
-        bool lcl_delegateMouseEvent( DefaultInputHandler_Impl& i_impl, ITableControl& i_control, const MouseEvent& i_event,
+        bool lcl_delegateMouseEvent( DefaultInputHandler_Impl& i_impl, ITableControl & i_control, const MouseEvent& i_event,
             FunctionResult ( MouseFunction::*i_handlerMethod )( ITableControl&, const MouseEvent& ) )
         {
             if ( i_impl.pActiveFunction.is() )

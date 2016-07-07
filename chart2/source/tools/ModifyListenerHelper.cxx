@@ -33,7 +33,7 @@ namespace
 {
 
 void lcl_fireModifyEvent(
-    ::cppu::OBroadcastHelper & rBroadcastHelper,
+    ::cppu::OBroadcastHelper const & rBroadcastHelper,
     const Reference< uno::XWeak > & xEventSource,
     const lang::EventObject * pEvent )
 {

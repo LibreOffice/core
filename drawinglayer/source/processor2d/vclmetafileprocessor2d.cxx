@@ -344,7 +344,7 @@ namespace drawinglayer
             }
         }
 
-        void VclMetafileProcessor2D::impStartSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill)
+        void VclMetafileProcessor2D::impStartSvtGraphicFill(SvtGraphicFill const * pSvtGraphicFill)
         {
             if(pSvtGraphicFill && !mnSvtGraphicFillCount)
             {
@@ -532,7 +532,7 @@ namespace drawinglayer
             return pRetval;
         }
 
-        void VclMetafileProcessor2D::impStartSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke)
+        void VclMetafileProcessor2D::impStartSvtGraphicStroke(SvtGraphicStroke const * pSvtGraphicStroke)
         {
             if(pSvtGraphicStroke && !mnSvtGraphicStrokeCount)
             {

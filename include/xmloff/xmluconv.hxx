@@ -207,7 +207,7 @@ public:
 
     static void convertPropertySet(css::uno::Sequence<css::beans::PropertyValue>& rProps,
                         const css::uno::Reference<css::beans::XPropertySet>& aProperties);
-    static void convertPropertySet(css::uno::Reference<css::beans::XPropertySet>& rProperties,
+    static void convertPropertySet(css::uno::Reference<css::beans::XPropertySet> const & rProperties,
                         const css::uno::Sequence<css::beans::PropertyValue>& aProps);
 
     OUString encodeStyleName( const OUString& rName,

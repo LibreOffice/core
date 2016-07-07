@@ -102,7 +102,7 @@
 // don't make more than 15 entries visible at once
 #define MAX_STYLES_ENTRIES          15
 
-static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
+static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet const &rValueSet, const Size &aItemSize );
 
 // namespaces
 using namespace ::editeng;
@@ -3067,7 +3067,7 @@ void SvxCurrencyToolBoxControl::StateChanged(
 }
 
 
-static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
+static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet const &rValueSet, const Size &aItemSize )
 {
     Size aSize = rValueSet.CalcWindowSizePixel( aItemSize );
     aSize.Width()  += 4;

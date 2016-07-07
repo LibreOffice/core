@@ -134,7 +134,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
                      LabelAlignment& rAlignment, sal_Int32 nLabelPlacement
                      , double fScaledX, double fScaledLowerYValue, double fScaledUpperYValue, double fScaledZ
                      , double fScaledLowerBarDepth, double fScaledUpperBarDepth, double fBaseValue
-                     , BarPositionHelper* pPosHelper
+                     , BarPositionHelper const * pPosHelper
                      ) const
 {
     double fX = fScaledX;

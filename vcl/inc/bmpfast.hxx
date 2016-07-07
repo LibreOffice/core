@@ -32,7 +32,7 @@ struct SalTwoRect;
 bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
         const SalTwoRect& rTwoRect );
 
-bool ImplFastBitmapBlending( BitmapWriteAccess& rDst,
+bool ImplFastBitmapBlending( BitmapWriteAccess const & rDst,
     const BitmapReadAccess& rSrc, const BitmapReadAccess& rMask,
     const SalTwoRect& rTwoRect );
 

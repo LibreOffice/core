@@ -24,7 +24,7 @@
 
 #include <stdio.h>
 
-extern "C" int WorkOnTokenSet( int, char* );
+extern "C" int WorkOnTokenSet( int, char const* );
 extern "C" int InitXrmExport( const char * );
 extern "C" int EndXrmExport();
 extern "C" int GetError();

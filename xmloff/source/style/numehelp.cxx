@@ -218,7 +218,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
 }
 
 bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& sCurrencySymbol,
-    uno::Reference <util::XNumberFormatsSupplier>& xNumberFormatsSupplier)
+    uno::Reference <util::XNumberFormatsSupplier> const & xNumberFormatsSupplier)
 {
     if (xNumberFormatsSupplier.is())
     {
@@ -255,7 +255,7 @@ bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nN
 
 
 sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard,
-    uno::Reference <util::XNumberFormatsSupplier>& xNumberFormatsSupplier)
+    uno::Reference <util::XNumberFormatsSupplier> const & xNumberFormatsSupplier)
 {
     if (xNumberFormatsSupplier.is())
     {

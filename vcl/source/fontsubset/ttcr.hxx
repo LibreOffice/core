@@ -171,7 +171,7 @@ namespace vcl
  * memory for its own copy of NameRecords, so nr array has to
  * be explicitly deallocated when it is not needed.
  */
-    TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord *nr);
+    TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord const *nr);
 
 /**
  * Creates a new 'post' table of one of the supported formats
@@ -210,7 +210,7 @@ namespace vcl
  * NOTE: This function duplicates NameRecord, so the argument
  * has to be deallocated by the caller (unlike glyfAdd)
  */
-    void nameAdd(TrueTypeTable *, NameRecord *nr);
+    void nameAdd(TrueTypeTable *, NameRecord const *nr);
 
 } // namespace
 

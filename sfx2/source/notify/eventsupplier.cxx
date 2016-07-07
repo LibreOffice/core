@@ -173,7 +173,7 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasElements() throw ( uno::RuntimeException, s
         return false;
 }
 
-void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
+void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
 {
     uno::Sequence < beans::PropertyValue > aProperties;
     if ( aEventData >>= aProperties )

@@ -79,7 +79,7 @@ private:
                                                   const OUString& rPictureStreamName,
                                                   const OUString& rGraphicId,
                                                   bool bUseGfxLink );
-    SVX_DLLPRIVATE void                     ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt32 nInsertPos, OUString& rRequestedFileName );
+    SVX_DLLPRIVATE void                     ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt32 nInsertPos, OUString const & rRequestedFileName );
 
 protected:
                                 SvXMLGraphicHelper();

@@ -211,7 +211,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 
     private:
         static bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
-                                                                        FrameContainer*                                         pFrameContainer );
+                                                                        FrameContainer const *                              pFrameContainer );
         static bool impldbg_checkParameter_append       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
         static bool impldbg_checkParameter_remove       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
         static bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );

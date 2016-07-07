@@ -113,7 +113,7 @@ struct SdrUnoObjDataHolder
 
 namespace
 {
-    void lcl_ensureControlVisibility( SdrView* _pView, const SdrUnoObj* _pObject, bool _bVisible )
+    void lcl_ensureControlVisibility( SdrView const * _pView, const SdrUnoObj* _pObject, bool _bVisible )
     {
         OSL_PRECOND( _pObject, "lcl_ensureControlVisibility: no object -> no survival!" );
 

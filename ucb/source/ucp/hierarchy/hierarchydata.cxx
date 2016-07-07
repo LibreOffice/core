@@ -868,7 +868,7 @@ bool HierarchyEntry::remove()
 }
 
 
-bool HierarchyEntry::first( iterator& it )
+bool HierarchyEntry::first( iterator const & it )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -938,7 +938,7 @@ bool HierarchyEntry::first( iterator& it )
 }
 
 
-bool HierarchyEntry::next( iterator& it )
+bool HierarchyEntry::next( iterator const & it )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 

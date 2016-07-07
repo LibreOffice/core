@@ -276,7 +276,7 @@ public:
     css::uno::Reference<
             css::io::XInputStream >
         GetDocumentStream(OUString const& rURL,
-                ::comphelper::LifecycleProxy & rProxy) const;
+                ::comphelper::LifecycleProxy const & rProxy) const;
     // Change the template attributes of the symbol objects to hard attributes
     void BurnInStyleSheetAttributes();
     // If you inherit from SdrPage you also need to inherit from SdrModel

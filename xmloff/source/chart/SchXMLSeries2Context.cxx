@@ -235,7 +235,7 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
 XMLPropStyleContext* lcl_GetStylePropContext(
                         const SvXMLStylesContext* pStylesCtxt,
                         const SvXMLStyleContext*& rpStyle,
-                        OUString& rStyleName )
+                        OUString const & rStyleName )
 {
     rpStyle = pStylesCtxt->FindStyleChildContext( SchXMLImportHelper::GetChartFamilyID(), rStyleName );
     XMLPropStyleContext* pPropStyleContext =
@@ -864,7 +864,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                                 SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
                                 const SvXMLStylesContext* pStylesCtxt,
                                 const SvXMLStyleContext*& rpStyle,
-                                OUString& rCurrentStyleName )
+                                OUString const & rCurrentStyleName )
 {
     std::list< RegressionStyle >::iterator iStyle;
 

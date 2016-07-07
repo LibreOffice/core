@@ -51,7 +51,7 @@ void LineWidthValueSet::dispose()
     ValueSet::dispose();
 }
 
-void LineWidthValueSet::SetUnit(OUString* str)
+void LineWidthValueSet::SetUnit(OUString const * str)
 {
     for(int i = 0; i < 9; i++)
     {

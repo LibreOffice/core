@@ -242,7 +242,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
     ModelessDialog::StateChanged( nStateChange );
 }
 
-void SfxModelessDialog::Initialize(SfxChildWinInfo *pInfo)
+void SfxModelessDialog::Initialize(SfxChildWinInfo const *pInfo)
 
 /*  [Description]
 
@@ -572,7 +572,7 @@ void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
 }
 
 
-void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
+void SfxFloatingWindow::Initialize(SfxChildWinInfo const *pInfo)
 
 /*  [Description]
 

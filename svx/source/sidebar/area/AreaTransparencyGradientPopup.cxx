@@ -35,7 +35,7 @@ AreaTransparencyGradientPopup::~AreaTransparencyGradientPopup()
 {
 }
 
-void AreaTransparencyGradientPopup::Rearrange (XFillFloatTransparenceItem* pItem)
+void AreaTransparencyGradientPopup::Rearrange (XFillFloatTransparenceItem const * pItem)
 {
     ProvideContainerAndControl();
 

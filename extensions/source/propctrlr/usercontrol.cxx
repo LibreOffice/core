@@ -142,7 +142,7 @@ namespace pcr
     }
 
 
-    double OFormatSampleControl::getPreviewValue(SvNumberFormatter* _pNF,sal_Int32 _nFormatKey)
+    double OFormatSampleControl::getPreviewValue(SvNumberFormatter const * _pNF,sal_Int32 _nFormatKey)
     {
         const SvNumberformat* pEntry = _pNF->GetEntry(_nFormatKey);
         DBG_ASSERT( pEntry, "OFormattedNumericControl::SetFormatDescription: invalid format key!" );

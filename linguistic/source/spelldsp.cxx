@@ -856,7 +856,7 @@ void SpellCheckerDispatcher::setCharClass(const LanguageTag& rLanguageTag)
 }
 
 
-OUString SAL_CALL SpellCheckerDispatcher::makeLowerCase(const OUString& aTerm, CharClass * pCC)
+OUString SAL_CALL SpellCheckerDispatcher::makeLowerCase(const OUString& aTerm, CharClass const * pCC)
 {
     if (pCC)
         return pCC->lowercase(aTerm);

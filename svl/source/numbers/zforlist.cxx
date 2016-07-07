@@ -174,7 +174,7 @@ public:
     void                    Insert( SvNumberFormatter* pThis )
                                 { aFormatters.push_back( pThis ); }
 
-    void                    Remove( SvNumberFormatter* pThis );
+    void                    Remove( SvNumberFormatter const* pThis );
 
     size_t                  Count()
                                 { return aFormatters.size(); }
@@ -195,7 +195,7 @@ SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
 }
 
 
-void SvNumberFormatterRegistry_Impl::Remove( SvNumberFormatter* pThis )
+void SvNumberFormatterRegistry_Impl::Remove( SvNumberFormatter const* pThis )
 {
     for (SvNumberFormatterList_impl::iterator it = aFormatters.begin();
             it != aFormatters.end(); ++it)

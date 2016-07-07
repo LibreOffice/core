@@ -364,21 +364,21 @@ private:
         bool isBinary );
     void setReferenceCount() const;
 
-    void setX509IssuerName( OUString& ouX509IssuerName );
-    void setX509SerialNumber( OUString& ouX509SerialNumber );
-    void setX509Certificate( OUString& ouX509Certificate );
-    void setSignatureValue( OUString& ouSignatureValue );
-    void setDigestValue( OUString& ouDigestValue );
+    void setX509IssuerName( OUString const & ouX509IssuerName );
+    void setX509SerialNumber( OUString const & ouX509SerialNumber );
+    void setX509Certificate( OUString const & ouX509Certificate );
+    void setSignatureValue( OUString const & ouSignatureValue );
+    void setDigestValue( OUString const & ouDigestValue );
 
-    void setDate( OUString& ouDate );
+    void setDate( OUString const & ouDate );
     void setDescription(const OUString& rDescription);
     void setCertDigest(const OUString& rCertDigest);
 public:
     void setSignatureBytes(const css::uno::Sequence<sal_Int8>& rBytes);
 
 private:
-    void setId( OUString& ouId );
-    void setPropertyId( OUString& ouPropertyId );
+    void setId( OUString const & ouId );
+    void setPropertyId( OUString const & ouPropertyId );
 
     css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToRead(
         sal_Int32 nSecurityId );

@@ -496,7 +496,7 @@ bool E3dView::Paste(
 }
 
 // Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
-bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point /*aOffset*/)
+bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dScene* pDstScene, Point /*aOffset*/)
 {
     bool bRetval(false);
 
@@ -623,7 +623,7 @@ bool E3dView::IsConvertTo3DObjPossible() const
     return bRetval;
 }
 
-void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, bool& rAny3D,
+void E3dView::ImpIsConvertTo3DPossible(SdrObject const * pObj, bool& rAny3D,
     bool& rGroupSelected) const
 {
     if(pObj)
@@ -695,7 +695,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
     }
 }
 
-void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
+void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix const & rLatheMat)
 {
     // Single PathObject, transform this
     SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pObj );
@@ -763,7 +763,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
     }
 }
 
-void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
+void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix const & rLatheMat)
 {
     if(pObj)
     {
@@ -1039,7 +1039,7 @@ struct E3dDepthLayer
     }
 };
 
-void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
+void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
 {
     if(pScene && pScene->GetSubList() && pScene->GetSubList()->GetObjCount() > 1)
     {

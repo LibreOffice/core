@@ -827,7 +827,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
     }
 }
 
-void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
+void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView const & rView )
 {
     SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
     SfxItemSet      aAttrSet( rPool );

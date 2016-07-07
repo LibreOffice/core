@@ -150,7 +150,7 @@ const Reference< css::form::XForms > & FmFormPage::GetForms( bool _bForceCreate 
 }
 
 
-bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
+bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
                               const HelpEvent& rEvt )
 {
     if( pView->IsAction() )

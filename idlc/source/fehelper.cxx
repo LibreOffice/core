@@ -70,7 +70,7 @@ FeInheritanceHeader::FeInheritanceHeader(
     initializeInherits(pInherits);
 }
 
-void FeInheritanceHeader::initializeInherits(OString* pInherits)
+void FeInheritanceHeader::initializeInherits(OString const * pInherits)
 {
     if ( pInherits )
     {

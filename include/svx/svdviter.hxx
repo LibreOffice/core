@@ -76,7 +76,7 @@ class SVX_DLLPUBLIC SdrViewIter
 private:
     SVX_DLLPRIVATE void          ImpInitVars();
     SVX_DLLPRIVATE SdrView*      ImpFindView();
-    SVX_DLLPRIVATE bool          ImpCheckPageView(SdrPageView* pPV) const;
+    SVX_DLLPRIVATE bool          ImpCheckPageView(SdrPageView const * pPV) const;
 
 public:
     SdrViewIter(const SdrPage* pPage);

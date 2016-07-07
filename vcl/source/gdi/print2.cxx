@@ -128,7 +128,7 @@ bool DoesActionHandleTransparency( const MetaAction& rAct )
 bool checkRect( Rectangle&       io_rPrevRect,
                        Color&           o_rBgColor,
                        const Rectangle& rCurrRect,
-                       OutputDevice&    rMapModeVDev )
+                       OutputDevice const & rMapModeVDev )
 {
     // shape needs to fully cover previous content, and have uniform
     // color

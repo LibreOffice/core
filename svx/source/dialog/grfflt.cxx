@@ -30,7 +30,7 @@
 #include <memory>
 
 
-sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
+sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq, GraphicObject& rFilterObject )
 {
     const Graphic&  rGraphic = rFilterObject.GetGraphic();
     sal_uIntPtr         nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;

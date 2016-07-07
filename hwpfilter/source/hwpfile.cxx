@@ -637,7 +637,7 @@ void HWPFile::AddFBoxStyle(FBoxStyle * fbstyle)
     fbslist.push_back(fbstyle);
 }
 
-int HWPFile::compareCharShape(CharShape *shape)
+int HWPFile::compareCharShape(CharShape const *shape)
 {
     int count = cslist.size();
     if( count > 0 )
@@ -663,7 +663,7 @@ int HWPFile::compareCharShape(CharShape *shape)
 }
 
 
-int HWPFile::compareParaShape(ParaShape *shape)
+int HWPFile::compareParaShape(ParaShape const *shape)
 {
     int count = pslist.size();
     if( count > 0 )

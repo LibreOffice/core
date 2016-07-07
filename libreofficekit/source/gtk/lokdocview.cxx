@@ -1804,8 +1804,8 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
 }
 
 static void
-getDragPoint(GdkRectangle* pHandle,
-             GdkEventMotion* pEvent,
+getDragPoint(GdkRectangle const * pHandle,
+             GdkEventMotion const * pEvent,
              GdkPoint* pPoint)
 {
     GdkPoint aCursor, aHandle;

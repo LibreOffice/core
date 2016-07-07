@@ -228,17 +228,17 @@ void Outliner::SetMaxAutoPaperSize( const Size& rSz )
     pEditEngine->SetMaxAutoPaperSize( rSz );
 }
 
-bool Outliner::IsExpanded( Paragraph* pPara ) const
+bool Outliner::IsExpanded( Paragraph const * pPara ) const
 {
     return pParaList->HasVisibleChildren( pPara );
 }
 
-Paragraph* Outliner::GetParent( Paragraph* pParagraph ) const
+Paragraph* Outliner::GetParent( Paragraph const * pParagraph ) const
 {
     return pParaList->GetParent( pParagraph );
 }
 
-sal_Int32 Outliner::GetChildCount( Paragraph* pParent ) const
+sal_Int32 Outliner::GetChildCount( Paragraph const * pParent ) const
 {
     return pParaList->GetChildCount( pParent );
 }
@@ -389,7 +389,7 @@ bool Outliner::SpellNextDocument()
 }
 
 
-void Outliner::SetSpeller( Reference< XSpellChecker1 > &xSpeller )
+void Outliner::SetSpeller( Reference< XSpellChecker1 > const &xSpeller )
 {
     pEditEngine->SetSpeller( xSpeller );
 }
@@ -403,7 +403,7 @@ void Outliner::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharacte
     EditEngine::SetForbiddenCharsTable( xForbiddenChars );
 }
 
-void Outliner::SetHyphenator( Reference< XHyphenator >& xHyph )
+void Outliner::SetHyphenator( Reference< XHyphenator > const & xHyph )
 {
     pEditEngine->SetHyphenator( xHyph );
 }

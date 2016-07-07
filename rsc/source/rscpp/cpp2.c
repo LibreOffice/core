@@ -500,7 +500,7 @@ int openinclude(char* filename, int searchlocal)
  * node/device/directory part of the string is copied to result and
  * hasdirectory returns TRUE.  Else, nothing is copied and it returns FALSE.
  */
-int hasdirectory(char* source, char* result, int max)
+int hasdirectory(char const* source, char* result, int max)
 {
 #if HOST == SYS_UNIX
     char* tp;

@@ -86,7 +86,7 @@ public:
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin) override;
 
     static void createControlLabelPair(
-        OutputDevice* _pOutDev,
+        OutputDevice const * _pOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,
@@ -125,8 +125,8 @@ public:
     /// shortcut to "GetSdrPageView() ? PTR_CAST( FmFormPage, GetSdrPageView() ) : NULL"
     FmFormPage* GetCurPage();
 
-    SVX_DLLPRIVATE void ActivateControls(SdrPageView*);
-    SVX_DLLPRIVATE void DeactivateControls(SdrPageView*);
+    SVX_DLLPRIVATE void ActivateControls(SdrPageView const *);
+    SVX_DLLPRIVATE void DeactivateControls(SdrPageView const *);
 
     SVX_DLLPRIVATE void ChangeDesignMode(bool bDesign);
 

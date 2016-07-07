@@ -240,7 +240,7 @@ void ImplWindowAutoMnemonic( vcl::Window* pWindow )
     }
 }
 
-static VclButtonBox* getActionArea(Dialog *pDialog)
+static VclButtonBox* getActionArea(Dialog const *pDialog)
 {
     VclButtonBox *pButtonBox = nullptr;
     if (pDialog->isLayoutEnabled())
@@ -258,7 +258,7 @@ static VclButtonBox* getActionArea(Dialog *pDialog)
     return pButtonBox;
 }
 
-static vcl::Window* getActionAreaButtonList(Dialog *pDialog)
+static vcl::Window* getActionAreaButtonList(Dialog const *pDialog)
 {
     VclButtonBox* pButtonBox = getActionArea(pDialog);
     if (pButtonBox)
@@ -266,7 +266,7 @@ static vcl::Window* getActionAreaButtonList(Dialog *pDialog)
     return pDialog->GetWindow(GetWindowType::FirstChild);
 }
 
-static PushButton* ImplGetDefaultButton( Dialog* pDialog )
+static PushButton* ImplGetDefaultButton( Dialog const * pDialog )
 {
     vcl::Window* pChild = getActionAreaButtonList(pDialog);
     while ( pChild )
@@ -284,7 +284,7 @@ static PushButton* ImplGetDefaultButton( Dialog* pDialog )
     return nullptr;
 }
 
-static PushButton* ImplGetOKButton( Dialog* pDialog )
+static PushButton* ImplGetOKButton( Dialog const * pDialog )
 {
     vcl::Window* pChild = getActionAreaButtonList(pDialog);
     while ( pChild )
@@ -298,7 +298,7 @@ static PushButton* ImplGetOKButton( Dialog* pDialog )
     return nullptr;
 }
 
-static PushButton* ImplGetCancelButton( Dialog* pDialog )
+static PushButton* ImplGetCancelButton( Dialog const * pDialog )
 {
     vcl::Window* pChild = getActionAreaButtonList(pDialog);
 
@@ -954,7 +954,7 @@ long Dialog::GetResult() const
     return mpDialogImpl->mnResult;
 }
 
-void Dialog::EndAllDialogs( vcl::Window* pParent )
+void Dialog::EndAllDialogs( vcl::Window const * pParent )
 {
     ImplSVData* pSVData = ImplGetSVData();
     Dialog* pTempModDialog;

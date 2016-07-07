@@ -129,7 +129,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     return true;
 }
 
-void ImpUpdateOutlParamsForOverflow(SdrOutliner *pOutl, SdrTextObj *pTextObj)
+void ImpUpdateOutlParamsForOverflow(SdrOutliner *pOutl, SdrTextObj const *pTextObj)
 {
      // Code from ImpSetTextEditParams
     Size aPaperMin;

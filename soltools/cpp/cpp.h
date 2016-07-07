@@ -171,9 +171,8 @@ void        mvl_add(
     the validator is removed.
 */
 void        mvl_check(
-                MacroValidatorList *
-                                inout_pValidators,
-                Token *         inout_pTokenToCheck);
+                MacroValidatorList *  inout_pValidators,
+                Token const *         inout_pTokenToCheck);
 
 void tokenrow_zeroTokenIdentifiers(Tokenrow* trp);
 
@@ -182,7 +181,7 @@ void fixlex(void);
 void setup(int, char **);
 int gettokens(Tokenrow *, int);
 int comparetokens(Tokenrow *, Tokenrow *);
-Source *setsource(char *, int, int, char *, int);
+Source *setsource(char *, int, int, char const *, int);
 void unsetsource(void);
 void puttokens(Tokenrow *);
 void process(Tokenrow *);
@@ -204,25 +203,25 @@ int gatherargs(Tokenrow *, Tokenrow **, int *);
 void substargs(Nlist *, Tokenrow *, Tokenrow **);
 void expandrow(Tokenrow *, char *);
 void maketokenrow(int, Tokenrow *);
-Tokenrow *copytokenrow(Tokenrow *, Tokenrow *);
+Tokenrow *copytokenrow(Tokenrow *, Tokenrow const *);
 Token *growtokenrow(Tokenrow *);
 Tokenrow *normtokenrow(Tokenrow *);
 void adjustrow(Tokenrow *, int);
-void movetokenrow(Tokenrow *, Tokenrow *);
-void insertrow(Tokenrow *, int, Tokenrow *);
+void movetokenrow(Tokenrow *, Tokenrow const *);
+void insertrow(Tokenrow *, int, Tokenrow const *);
 void peektokens(Tokenrow *, char *);
 void doconcat(Tokenrow *);
 Tokenrow *stringify(Tokenrow *);
-int lookuparg(Nlist *, Token *);
+int lookuparg(Nlist *, Token const *);
 long eval(Tokenrow *, int);
 void genline(void);
-void genimport(char *, int, char *, int);
+void genimport(char const *, int, char const *, int);
 void genwrap(int);
 void setempty(Tokenrow *);
 void makespace(Tokenrow *, Token *);
 char *outnum(char *, int);
 int digit(int);
-uchar *newstring(uchar *, size_t, size_t);
+uchar *newstring(uchar const *, size_t, size_t);
 
 #define rowlen(tokrow)  ((tokrow)->lp - (tokrow)->bp)
 

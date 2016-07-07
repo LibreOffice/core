@@ -196,7 +196,7 @@ protected:
         const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
         sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const;
     static bool ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=nullptr);
-    static SdrEscapeDirection ImpCalcEscAngle(SdrObject* pObj, const Point& aPt2);
+    static SdrEscapeDirection ImpCalcEscAngle(SdrObject const * pObj, const Point& aPt2);
     void ImpSetTailPoint(bool bTail1, const Point& rPt);
     void ImpUndirtyEdgeTrack();  // eventuelle Neuberechnung des Verbindungsverlaufs
     void ImpDirtyEdgeTrack();   // invalidate connector path, so it will be recalculated next time

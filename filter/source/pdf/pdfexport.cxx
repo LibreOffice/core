@@ -149,7 +149,7 @@ PDFExport::~PDFExport()
 
 
 bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
-    Reference< css::view::XRenderable >& rRenderable,
+    Reference< css::view::XRenderable > const & rRenderable,
     const Any& rSelection,
     const StringRangeEnumerator& rRangeEnum,
     Sequence< PropertyValue >& rRenderOptions,

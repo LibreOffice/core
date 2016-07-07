@@ -313,7 +313,7 @@ OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle 
 void TitleHelper::setCompleteString( const OUString& rNewText
                     , const uno::Reference< XTitle >& xTitle
                     , const uno::Reference< uno::XComponentContext > & xContext
-                    , float * pDefaultCharHeight /* = 0 */ )
+                    , float const * pDefaultCharHeight /* = 0 */ )
 {
     //the format of the first old text portion will be maintained if there is any
     if(!xTitle.is())

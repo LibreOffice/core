@@ -325,7 +325,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )
     Activate(bMDI);
 }
 
-void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI )
+void SfxShell::DoDeactivate_Impl( SfxViewFrame const *pFrame, bool bMDI )
 {
 #ifdef DBG_UTIL
     const SfxInterface *p_IF = GetInterface();

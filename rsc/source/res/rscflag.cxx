@@ -69,7 +69,7 @@ ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*
     return ERR_RSCFLAG;
 }
 
-RSCINST RscFlag::CreateBasic( RSCINST * pInst )
+RSCINST RscFlag::CreateBasic( RSCINST const* pInst )
 {
     RSCINST aInst;
 
@@ -105,7 +105,7 @@ RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass 
     return aInst;
 }
 
-RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
+RSCINST RscFlag::CreateClient( RSCINST const* pInst, const RSCINST & rDfltI,
                                bool bOwnClass, Atom nConstId )
 {
     RSCINST aInst = CreateBasic( pInst );

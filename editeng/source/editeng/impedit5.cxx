@@ -123,7 +123,7 @@ void ImpEditEngine::UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle )
     }
 }
 
-void ImpEditEngine::RemoveStyleFromParagraphs( SfxStyleSheet* pStyle )
+void ImpEditEngine::RemoveStyleFromParagraphs( SfxStyleSheet const * pStyle )
 {
     for ( sal_Int32 nNode = 0; nNode < aEditDoc.Count(); nNode++ )
     {

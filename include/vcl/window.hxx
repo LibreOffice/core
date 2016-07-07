@@ -490,11 +490,11 @@ public:
     // transparent background for selected or checked items in toolboxes etc.
     // + selection Color with a text color complementing the selection background
     // + rounded edge
-    static void DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow,
+    static void DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow,
                                         const Rectangle& rRect, sal_uInt16 nHighlight,
                                         bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
                                         Color* pSelectionTextColor = nullptr, long nCornerRadius = 0,
-                                        Color* pPaintColor = nullptr);
+                                        Color const * pPaintColor = nullptr);
 };
 
 class VCL_DLLPUBLIC Window : public ::OutputDevice, public Resource
@@ -550,7 +550,7 @@ public:
     DECL_DLLPRIVATE_LINK_TYPED( ImplHandleResizeTimerHdl, Idle*, void );
 
 
-    SAL_DLLPRIVATE static void          ImplInitAppFontData( vcl::Window* pWindow );
+    SAL_DLLPRIVATE static void          ImplInitAppFontData( vcl::Window const * pWindow );
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetFrameWindow() const;
     SalFrame*                           ImplGetFrame() const;
@@ -641,7 +641,7 @@ protected:
     SAL_DLLPRIVATE void                 ImplLoadRes( const ResId& rResId );
 
     SAL_DLLPRIVATE void                 PushPaintHelper(PaintHelper* pHelper, vcl::RenderContext& rRenderContext);
-    SAL_DLLPRIVATE void                 PopPaintHelper(PaintHelper* pHelper);
+    SAL_DLLPRIVATE void                 PopPaintHelper(PaintHelper const * pHelper);
 
 private:
 
@@ -667,8 +667,8 @@ private:
 
     SAL_DLLPRIVATE void                 ImplInitResolutionSettings();
 
-    SAL_DLLPRIVATE void                 ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const;
-    SAL_DLLPRIVATE void                 ImplLogicToPoint(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const;
+    SAL_DLLPRIVATE void                 ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Font& rFont) const;
+    SAL_DLLPRIVATE void                 ImplLogicToPoint(vcl::RenderContext const & rRenderContext, vcl::Font& rFont) const;
 
     SAL_DLLPRIVATE bool                 ImplSysObjClip( const vcl::Region* pOldRegion );
     SAL_DLLPRIVATE void                 ImplUpdateSysObjChildrenClip();
@@ -932,10 +932,10 @@ public:
     void                                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
     void                                SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
-    vcl::Font                           GetPointFont(vcl::RenderContext& rRenderContext) const;
+    vcl::Font                           GetPointFont(vcl::RenderContext const & rRenderContext) const;
     void                                SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
-    long                                GetDrawPixel( ::OutputDevice* pDev, long nPixels ) const;
-    vcl::Font                           GetDrawPixelFont( ::OutputDevice* pDev ) const;
+    long                                GetDrawPixel( ::OutputDevice const * pDev, long nPixels ) const;
+    vcl::Font                           GetDrawPixelFont( ::OutputDevice const * pDev ) const;
 
     void SetControlFont();
     void SetControlFont( const vcl::Font& rFont );
@@ -1204,7 +1204,7 @@ public:
     // transparent background for selected or checked items in toolboxes etc.
     void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder );
     // support rounded edges in the selection rect
-    void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, Color* pSelectionTextColor, Color* pPaintColor );
+    void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, Color* pSelectionTextColor, Color const * pPaintColor );
 
     void                                ShowTracking( const Rectangle& rRect,
                                                       ShowTrackFlags nFlags = ShowTrackFlags::Small );

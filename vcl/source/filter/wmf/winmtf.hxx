@@ -625,7 +625,7 @@ public:
                                         bool bRecordPath = false
                         );
     void                DrawText( Point& rPosition,
-                                  OUString& rString,
+                                  OUString const & rString,
                                   long* pDXArry = nullptr,
                                   bool bRecordPath = false,
                                   sal_Int32 nGraphicsMode = GM_COMPATIBLE);
@@ -644,7 +644,7 @@ public:
     void                UpdateClipRegion();
     void                AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile );
 
-    void                PassEMFPlus( void* pBuffer, sal_uInt32 nLength );
+    void                PassEMFPlus( void const * pBuffer, sal_uInt32 nLength );
     void                PassEMFPlusHeaderInfo();
 
     explicit            WinMtfOutput( GDIMetaFile& rGDIMetaFile );

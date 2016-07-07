@@ -1331,7 +1331,7 @@ void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
 // public methods
 
 
-void SortedResultSet::CopyData( SortedResultSet *pSource )
+void SortedResultSet::CopyData( SortedResultSet const *pSource )
 {
     const SortedEntryList& rSrcS2O = pSource->GetS2OList();
     const SimpleList&      rSrcO2S = pSource->GetO2SList();
@@ -1879,7 +1879,7 @@ void SimpleList::Remove( sal_uInt32 nPos )
 }
 
 
-void SimpleList::Remove( void* pData )
+void SimpleList::Remove( void const * pData )
 {
     bool    bFound = false;
     sal_uInt32  i;

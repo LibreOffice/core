@@ -216,7 +216,7 @@ namespace sdr
         // This is the call from the destructor of the asynch graphic loading event.
         // No one else has to call this. It is needed to let this object forget about
         // the event. The parameter allows checking for the correct event.
-        void ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent)
+        void ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent const * pEvent)
         {
             (void) pEvent; // suppress warning
 

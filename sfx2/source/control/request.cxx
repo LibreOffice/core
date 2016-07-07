@@ -665,7 +665,7 @@ bool SfxRequest::IsDone() const
 }
 
 
-css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame* pView )
+css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame const * pView )
 
 /*  [Description]
 
@@ -695,7 +695,7 @@ css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorde
     return xRecorder;
 }
 
-bool SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
+bool SfxRequest::HasMacroRecorder( SfxViewFrame const * pView )
 {
     return GetMacroRecorder( pView ).is();
 }

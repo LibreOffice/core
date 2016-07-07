@@ -312,8 +312,7 @@ protected:
 
     /// export level paragraph styles
     void ExportLevelParagraphStyles(
-        css::uno::Reference<
-            css::container::XIndexReplace> & xStyles);
+        css::uno::Reference< css::container::XIndexReplace> const & xStyles);
 
 
     /// helper to export boolean properties

@@ -279,7 +279,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         throw container::NoSuchElementException();
 }
 
-static bool getByNameFromPool( const OUString& rSearchName, SfxItemPool* pPool, sal_uInt16 nWhich, uno::Any& rAny )
+static bool getByNameFromPool( const OUString& rSearchName, SfxItemPool const * pPool, sal_uInt16 nWhich, uno::Any& rAny )
 {
     const sal_uInt32 nSurrogateCount = pPool ? pPool->GetItemCount2( nWhich ) : 0;
     for( sal_uInt32 nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
@@ -324,7 +324,7 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
     return aAny;
 }
 
-static void createNamesForPool( SfxItemPool* pPool, sal_uInt16 nWhich, std::set< OUString >& rNameSet )
+static void createNamesForPool( SfxItemPool const * pPool, sal_uInt16 nWhich, std::set< OUString >& rNameSet )
 {
     const sal_uInt32 nSuroCount = pPool->GetItemCount2( nWhich );
 

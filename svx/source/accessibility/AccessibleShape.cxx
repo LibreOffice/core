@@ -1333,7 +1333,7 @@ sal_Int16 SAL_CALL AccessibleShape::getAccessibleRole()
 }
 
 
-void AccessibleShape::UpdateDocumentAllSelState(Reference<XAccessibleStateSet> &xStateSet)
+void AccessibleShape::UpdateDocumentAllSelState(Reference<XAccessibleStateSet> const &xStateSet)
 {
     if (mpParent && mpParent->IsDocumentSelAll())
     {

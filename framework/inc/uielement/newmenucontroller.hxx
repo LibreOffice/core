@@ -82,7 +82,7 @@ namespace framework
         private:
             virtual void impl_setPopupMenu() override;
 
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             void retrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                      const css::uno::Sequence< OUString >& rCommands,
                                                      std::vector< vcl::KeyCode >& aMenuShortCuts );

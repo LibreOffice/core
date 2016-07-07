@@ -682,7 +682,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
     return rName;
 }
 
-bool SdrMarkList::TakeBoundRect(SdrPageView* pPV, Rectangle& rRect) const
+bool SdrMarkList::TakeBoundRect(SdrPageView const * pPV, Rectangle& rRect) const
 {
     bool bFnd(false);
     Rectangle aR;
@@ -713,7 +713,7 @@ bool SdrMarkList::TakeBoundRect(SdrPageView* pPV, Rectangle& rRect) const
     return bFnd;
 }
 
-bool SdrMarkList::TakeSnapRect(SdrPageView* pPV, Rectangle& rRect) const
+bool SdrMarkList::TakeSnapRect(SdrPageView const * pPV, Rectangle& rRect) const
 {
     bool bFnd(false);
 

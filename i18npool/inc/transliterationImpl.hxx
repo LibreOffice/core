@@ -106,7 +106,7 @@ private:
 
     void clear();
 
-    void loadBody( OUString &implName,
+    void loadBody( OUString const &implName,
         css::uno::Reference< css::i18n::XExtendedTransliteration >& body )
         throw (css::uno::RuntimeException);
 

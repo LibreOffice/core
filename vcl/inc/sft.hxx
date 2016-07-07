@@ -393,7 +393,7 @@ namespace vcl
                               sal_uInt8          *encoding,
                               int            nGlyphs,
                               int            nNameRecs,
-                              NameRecord    *nr,
+                              NameRecord const *nr,
                               sal_uInt32        flags);
 
 /**

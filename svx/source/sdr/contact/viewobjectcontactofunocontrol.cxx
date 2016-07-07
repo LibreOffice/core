@@ -602,7 +602,7 @@ namespace sdr { namespace contact {
         /// creates an XControl for the given device and SdrUnoObj
         static bool
                 createControlForDevice(
-                    IPageViewAccess& _rPageView,
+                    IPageViewAccess const & _rPageView,
                     const OutputDevice& _rDevice,
                     const SdrUnoObj& _rUnoObject,
                     const basegfx::B2DHomMatrix& _rInitialViewTransformation,
@@ -708,7 +708,7 @@ namespace sdr { namespace contact {
                 We're not disposed.
         */
         static void impl_adjustControlVisibilityToLayerVisibility_throw( const ControlHolder& _rxControl, const SdrUnoObj& _rUnoObject,
-            IPageViewAccess& _rPageView, bool _bIsCurrentlyVisible, bool _bForce );
+            IPageViewAccess const & _rPageView, bool _bIsCurrentlyVisible, bool _bForce );
 
         /** starts or stops listening at various aspects of our control
 
@@ -775,7 +775,7 @@ namespace sdr { namespace contact {
         /** ensures that we have a control for the given PageView/OutputDevice
         */
         bool impl_ensureControl_nothrow(
-                IPageViewAccess& _rPageView,
+                IPageViewAccess const & _rPageView,
                 const OutputDevice& _rDevice,
                 const basegfx::B2DHomMatrix& _rInitialViewTransformation
              );
@@ -1005,7 +1005,7 @@ namespace sdr { namespace contact {
     }
 
 
-    bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice,
+    bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess const & _rPageView, const OutputDevice& _rDevice,
         const basegfx::B2DHomMatrix& _rInitialViewTransformation )
     {
         if ( m_bCreatingControl )
@@ -1084,7 +1084,7 @@ namespace sdr { namespace contact {
     }
 
 
-    bool ViewObjectContactOfUnoControl_Impl::createControlForDevice( IPageViewAccess& _rPageView,
+    bool ViewObjectContactOfUnoControl_Impl::createControlForDevice( IPageViewAccess const & _rPageView,
         const OutputDevice& _rDevice, const SdrUnoObj& _rUnoObject, const basegfx::B2DHomMatrix& _rInitialViewTransformation,
         const basegfx::B2DHomMatrix& _rInitialZoomNormalization, ControlHolder& _out_rControl )
     {
@@ -1186,7 +1186,7 @@ namespace sdr { namespace contact {
 
 
     void ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw( const ControlHolder& _rControl,
-        const SdrUnoObj& _rUnoObject, IPageViewAccess& _rPageView, bool _bIsCurrentlyVisible, bool _bForce )
+        const SdrUnoObj& _rUnoObject, IPageViewAccess const & _rPageView, bool _bIsCurrentlyVisible, bool _bForce )
     {
         // in design mode, there is no problem with the visibility: The XControl is hidden by
         // default, and the Drawing Layer will simply not call our paint routine, if we're in

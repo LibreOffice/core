@@ -1371,7 +1371,7 @@ void Outliner::DepthChangedHdl()
 }
 
 
-sal_Int32 Outliner::GetAbsPos( Paragraph* pPara )
+sal_Int32 Outliner::GetAbsPos( Paragraph const * pPara )
 {
     DBG_ASSERT(pPara,"GetAbsPos:No Para");
     return pParaList->GetAbsPos( pPara );
@@ -1387,7 +1387,7 @@ Paragraph* Outliner::GetParagraph( sal_Int32 nAbsPos ) const
     return pParaList->GetParagraph( nAbsPos );
 }
 
-bool Outliner::HasChildren( Paragraph* pParagraph ) const
+bool Outliner::HasChildren( Paragraph const * pParagraph ) const
 {
     return pParaList->HasChildren( pParagraph );
 }
@@ -1509,7 +1509,7 @@ void Outliner::ParaAttribsChanged( sal_Int32 nPara )
     }
 }
 
-void Outliner::StyleSheetChanged( SfxStyleSheet* pStyle )
+void Outliner::StyleSheetChanged( SfxStyleSheet const * pStyle )
 {
 
     // The EditEngine calls StyleSheetChanged also for derived styles.
@@ -1665,7 +1665,7 @@ EBulletInfo Outliner::GetBulletInfo( sal_Int32 nPara )
     return aInfo;
 }
 
-OUString Outliner::GetText( Paragraph* pParagraph, sal_Int32 nCount ) const
+OUString Outliner::GetText( Paragraph const * pParagraph, sal_Int32 nCount ) const
 {
 
     OUString aText;
@@ -1679,7 +1679,7 @@ OUString Outliner::GetText( Paragraph* pParagraph, sal_Int32 nCount ) const
     return aText;
 }
 
-void Outliner::Remove( Paragraph* pPara, sal_Int32 nParaCount )
+void Outliner::Remove( Paragraph const * pPara, sal_Int32 nParaCount )
 {
 
     sal_Int32 nPos = pParaList->GetAbsPos( pPara );

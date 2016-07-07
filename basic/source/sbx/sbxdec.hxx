@@ -73,7 +73,7 @@ public:
     void setInt( int val );
     void setUInt( unsigned int val );
     bool setString( OUString* pOUString );
-    void setDecimal( SbxDecimal* pDecimal )
+    void setDecimal( SbxDecimal const * pDecimal )
     {
 #ifdef _WIN32
         if( pDecimal )

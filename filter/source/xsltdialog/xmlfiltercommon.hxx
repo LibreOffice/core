@@ -33,7 +33,7 @@ extern OUString string_encode( const OUString & rText );
 extern OUString string_decode( const OUString & rText );
 
 bool copyStreams( const css::uno::Reference< css::io::XInputStream >& xIS, const css::uno::Reference< css::io::XOutputStream >& xOS );
-bool createDirectory( OUString& rURL );
+bool createDirectory( OUString const & rURL );
 
 
 class filter_info_impl

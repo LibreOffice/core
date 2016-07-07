@@ -112,8 +112,8 @@ namespace utl
         const OUString& getImplName() const { return m_aImplName; }
 
     private: // implementation
-        bool initBaseInstallationData(rtl::Bootstrap& _rData);
-        bool initUserInstallationData(rtl::Bootstrap& _rData);
+        bool initBaseInstallationData(rtl::Bootstrap const & _rData);
+        bool initUserInstallationData(rtl::Bootstrap const & _rData);
     };
 
     namespace
@@ -297,7 +297,7 @@ PathStatus getDerivedPath(
               OUString& _rURL,
               OUString const& _aBaseURL, PathStatus _aBaseStatus,
               OUString const& _sRelativeURL,
-              rtl::Bootstrap& _rData, OUString const& _sBootstrapParameter
+              rtl::Bootstrap const & _rData, OUString const& _sBootstrapParameter
           )
 {
     OUString sDerivedURL;
@@ -345,7 +345,7 @@ PathStatus getDerivedPath(
               OUString& _rURL,
               Bootstrap::Impl::PathData const& _aBaseData,
               OUString const& _sRelativeURL,
-              rtl::Bootstrap& _rData, OUString const& _sBootstrapParameter
+              rtl::Bootstrap const & _rData, OUString const& _sBootstrapParameter
           )
 {
     return getDerivedPath(_rURL,_aBaseData.path,_aBaseData.status,_sRelativeURL,_rData,_sBootstrapParameter);
@@ -385,7 +385,7 @@ Bootstrap::PathStatus updateStatus(Bootstrap::Impl::PathData & _rResult)
 }
 
 static
-Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rBootstrapFile)
+Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap const & _rData, Bootstrap::Impl::PathData & _rBootstrapFile)
 {
     _rData.getIniName(_rBootstrapFile.path);
 
@@ -393,7 +393,7 @@ Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap& _rData, Bootstrap::Im
 }
 
 static
-Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rVersionFile)
+Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap const & _rData, Bootstrap::Impl::PathData & _rVersionFile)
 {
     _rData.getFrom(BOOTSTRAP_ITEM_VERSIONFILE, _rVersionFile.path);
 
@@ -638,7 +638,7 @@ Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage,
 
 // class Bootstrap::Impl
 
-bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap& _rData)
+bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap const & _rData)
 {
     OUString const csBaseInstallItem( BOOTSTRAP_ITEM_BASEINSTALLATION );
     OUString const csBaseInstallDefault( BOOTSTRAP_DEFAULT_BASEINSTALL );
@@ -652,7 +652,7 @@ bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap& _rData)
     return bResult;
 }
 
-bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap& _rData)
+bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap const & _rData)
 {
     OUString const csUserInstallItem( BOOTSTRAP_ITEM_USERINSTALLATION );
 

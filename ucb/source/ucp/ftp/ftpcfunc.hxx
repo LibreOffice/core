@@ -47,7 +47,7 @@ extern "C" {
      */
 
 
-    int file_write(void *buffer,size_t size,size_t nmemb,void *stream);
+    int file_write(void const *buffer,size_t size,size_t nmemb,void *stream);
 
 }
 

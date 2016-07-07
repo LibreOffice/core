@@ -233,7 +233,7 @@ public:
     */
     void    resumeTabOrderUpdate();
 
-    void    onCreatedFormObject( FmFormObj& _rFormObject );
+    void    onCreatedFormObject( FmFormObj const & _rFormObject );
 
     void    breakCreateFormObject();
 
@@ -251,7 +251,7 @@ private:
     SdrObject*  implCreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
 
     static bool createControlLabelPair(
-        OutputDevice& _rOutDev,
+        OutputDevice const & _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,
@@ -268,7 +268,7 @@ private:
     );
 
     bool    createControlLabelPair(
-        OutputDevice& _rOutDev,
+        OutputDevice const & _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
         const css::uno::Reference< css::beans::XPropertySet >& _rxField,

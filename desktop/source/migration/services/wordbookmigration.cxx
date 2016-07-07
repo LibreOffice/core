@@ -99,7 +99,7 @@ namespace migration
     }
 
 
-    void WordbookMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
+    void WordbookMigration::checkAndCreateDirectory( INetURLObject const & rDirURL )
     {
         ::osl::FileBase::RC aResult = ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
         if ( aResult == ::osl::FileBase::E_NOENT )

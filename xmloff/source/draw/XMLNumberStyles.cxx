@@ -607,7 +607,7 @@ SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
 {
 }
 
-void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, bool bLong, bool bTextual, bool   bDecimal02, OUString& rText )
+void SdXMLNumberFormatImportContext::add( OUString const & rNumberStyle, bool bLong, bool bTextual, bool   bDecimal02, OUString const & rText )
 {
     if( mnIndex == -1 || mnIndex == 16 )
     {

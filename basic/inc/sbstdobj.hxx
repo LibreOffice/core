@@ -104,12 +104,12 @@ protected:
     virtual ~SbStdClipboard();
     virtual void   Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    static void    MethClear( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    static void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethClear( SbxVariable* pVar, SbxArray const * pPar_, bool bWrite );
+    static void    MethGetData( SbxVariable const * pVar, SbxArray* pPar_, bool bWrite );
     static void    MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    static void    MethGetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    static void    MethSetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
-    static void    MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethGetText( SbxVariable* pVar, SbxArray const * pPar_, bool bWrite );
+    static void    MethSetData( SbxVariable const * pVar, SbxArray* pPar_, bool bWrite );
+    static void    MethSetText( SbxVariable const * pVar, SbxArray const * pPar_, bool bWrite );
 
 public:
 

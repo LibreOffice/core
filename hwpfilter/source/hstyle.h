@@ -41,9 +41,9 @@ class DLLEXPORT HWPStyle
         CharShape *GetCharShape( int n ) const;
         ParaShape *GetParaShape( int n ) const;
 
-        void SetName( int n, char *name );
-        void SetCharShape( int n, CharShape *cshapep );
-        void SetParaShape( int n, ParaShape *pshapep );
+        void SetName( int n, char const *name );
+        void SetCharShape( int n, CharShape const *cshapep );
+        void SetParaShape( int n, ParaShape const *pshapep );
 
         void Read( HWPFile &hwpf );
 };

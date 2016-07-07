@@ -210,7 +210,7 @@ void ImplBorderWindowView::ImplInitTitle(ImplBorderFrameData* pData)
     }
 }
 
-BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const Point& rPos )
+BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData const * pData, const Point& rPos )
 {
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
 
@@ -327,7 +327,7 @@ bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
     return true;
 }
 
-OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
+OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData const * pData,
                                               const Point& rPos,
                                               Rectangle& rHelpRect )
 {

@@ -95,11 +95,11 @@ public:
 
     static void             SetViewFrame( SfxViewFrame* );
 
-    static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
-    static SfxViewFrame*    LoadDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId );
-    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId = 0 );
-    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const css::uno::Reference< css::frame::XFrame >& i_rFrameItem );
-    static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest );
+    static SfxViewFrame*    LoadHiddenDocument( SfxObjectShell const & i_rDoc, const sal_uInt16 i_nViewId );
+    static SfxViewFrame*    LoadDocument( SfxObjectShell const & i_rDoc, const sal_uInt16 i_nViewId );
+    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell const & i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId = 0 );
+    static SfxViewFrame*    LoadDocumentIntoFrame( SfxObjectShell const & i_rDoc, const css::uno::Reference< css::frame::XFrame >& i_rFrameItem );
+    static SfxViewFrame*    DisplayNewDocument( SfxObjectShell const & i_rDoc, const SfxRequest& i_rCreateDocRequest );
 
     static SfxViewFrame*    Current();
     static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = nullptr, bool bOnlyVisible = true );
@@ -108,7 +108,7 @@ public:
     static SfxViewFrame*    Get( const css::uno::Reference< css::frame::XController>& i_rController, const SfxObjectShell* i_pDoc = nullptr );
 
             void            DoActivate(bool bMDI);
-            void            DoDeactivate(bool bMDI, SfxViewFrame *pOld=nullptr);
+            void            DoDeactivate(bool bMDI, SfxViewFrame const *pOld=nullptr);
 
     SfxViewFrame*           GetParentViewFrame() const;
 

@@ -236,7 +236,7 @@ protected:
     // any aspect of the current format has changed
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
 
-    void ImplSetTextImpl(const OUString& rNew, Selection* pNewSel);
+    void ImplSetTextImpl(const OUString& rNew, Selection const * pNewSel);
     void ImplSetValue(double dValue, bool bForce);
     bool ImplGetValue(double& dNewVal);
 

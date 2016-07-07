@@ -182,14 +182,14 @@ public:
     vcl::Window*        GetContextWindow() const
                         { return pContext ? pContext->GetWindow(): nullptr; }
 
-    vcl::Window*        GetContextWindow( SfxModule *pModule ) const;
+    vcl::Window*        GetContextWindow( SfxModule const *pModule ) const;
 
     virtual SfxChildWinInfo GetInfo() const;
     void                SaveStatus(const SfxChildWinInfo& rInfo);
 
     static void         RegisterChildWindow(SfxModule*, SfxChildWinFactory*);
 
-    static SfxChildWindow* CreateChildWindow( sal_uInt16, vcl::Window*, SfxBindings*, SfxChildWinInfo&);
+    static SfxChildWindow* CreateChildWindow( sal_uInt16, vcl::Window*, SfxBindings*, SfxChildWinInfo const &);
     void                SetHideNotDelete( bool bOn );
     bool                IsHideNotDelete() const;
     bool                IsVisible() const;

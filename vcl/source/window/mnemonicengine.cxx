@@ -38,7 +38,7 @@ namespace vcl
 
     namespace
     {
-        const void* lcl_getEntryForMnemonic( IMnemonicEntryList& _rEntryList, sal_Unicode _cMnemonic, bool& _rbAmbiguous )
+        const void* lcl_getEntryForMnemonic( IMnemonicEntryList const & _rEntryList, sal_Unicode _cMnemonic, bool& _rbAmbiguous )
         {
             _rbAmbiguous = false;
 

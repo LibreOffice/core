@@ -157,8 +157,8 @@ class SvxTextEditSource;
 class SvxFieldData;
 struct ESelection;
 
-EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw();
-EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw();
+EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw();
+EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw();
 
 
 // This class implements a SvxEditSource and SvxTextForwarder and does
@@ -298,7 +298,7 @@ public:
     SvxEditSource*              GetEditSource() const throw() { return mpEditSource; }
 
     static bool SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
-    static bool GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, css::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  ) throw( css::uno::RuntimeException );
+    static bool GetPropertyValueHelper(  SfxItemSet const & rSet, const SfxItemPropertySimpleEntry* pMap, css::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  ) throw( css::uno::RuntimeException );
 
     void attachField( const SvxFieldData* pData ) throw();
 

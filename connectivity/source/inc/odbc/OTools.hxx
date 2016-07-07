@@ -108,7 +108,7 @@ namespace connectivity
                                         rtl_TextEncoding _nTextEncoding = RTL_TEXTENCODING_MS_1252)
                                         throw(css::sdbc::SQLException);
 
-            static void GetInfo(OConnection* _pConnection,
+            static void GetInfo(OConnection const * _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 OUString &_rValue,
@@ -116,19 +116,19 @@ namespace connectivity
                                 rtl_TextEncoding _nTextEncoding)
                                 throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
-            static void GetInfo(OConnection* _pConnection,
+            static void GetInfo(OConnection const * _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 sal_Int32 &_rValue,
                                 const css::uno::Reference< css::uno::XInterface >& _xInterface) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
-            static void GetInfo(OConnection* _pConnection,
+            static void GetInfo(OConnection const * _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 SQLUSMALLINT &_rValue,
                                 const css::uno::Reference< css::uno::XInterface >& _xInterface) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
-            static void GetInfo(OConnection* _pConnection,
+            static void GetInfo(OConnection const * _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 SQLUINTEGER &_rValue,
@@ -179,7 +179,7 @@ namespace connectivity
                                      SQLSMALLINT& fCType,
                                      SQLSMALLINT& fSqlType);
 
-            static OUString getStringValue(  OConnection* _pConnection,
+            static OUString getStringValue(  OConnection const * _pConnection,
                                                     SQLHANDLE _aStatementHandle,
                                                     sal_Int32 columnIndex,
                                                     SQLSMALLINT _fSqlType,
@@ -193,7 +193,7 @@ namespace connectivity
                                                                             SQLSMALLINT _fSqlType,
                                                                             bool &_bWasNull,
                                                                             const css::uno::Reference< css::uno::XInterface >& _xInterface) throw(css::sdbc::SQLException, css::uno::RuntimeException);
-            static void getValue(   OConnection* _pConnection,
+            static void getValue(   OConnection const * _pConnection,
                                     SQLHANDLE _aStatementHandle,
                                     sal_Int32 columnIndex,
                                     SQLSMALLINT _nType,
@@ -202,7 +202,7 @@ namespace connectivity
                                     void* _pValue,
                                     SQLLEN _nSize) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
-            static void bindValue(  OConnection* _pConnection,
+            static void bindValue(  OConnection const * _pConnection,
                                     SQLHANDLE _aStatementHandle,
                                     sal_Int32 columnIndex,
                                     SQLSMALLINT _nType,

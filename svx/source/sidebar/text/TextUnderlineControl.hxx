@@ -50,7 +50,7 @@ private:
     VclPtr<PushButton> maWave;
     VclPtr<PushButton> maMoreOptions;
 
-    FontLineStyle getLineStyle(Button* pButton);
+    FontLineStyle getLineStyle(Button const * pButton);
 
     DECL_LINK_TYPED(PBClickHdl, Button*, void);
 };

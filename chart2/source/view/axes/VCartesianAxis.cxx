@@ -671,7 +671,7 @@ sal_Int32 VCartesianAxis::getTextLevelCount() const
 
 bool VCartesianAxis::createTextShapes(
     const Reference<drawing::XShapes>& xTarget, TickIter& rTickIter,
-    AxisLabelProperties& rAxisLabelProperties, TickFactory2D* pTickFactory,
+    AxisLabelProperties& rAxisLabelProperties, TickFactory2D const * pTickFactory,
     sal_Int32 nScreenDistanceBetweenTicks )
 {
     const bool bIsHorizontalAxis = pTickFactory->isHorizontalAxis();
@@ -886,7 +886,7 @@ bool VCartesianAxis::createTextShapes(
 
 bool VCartesianAxis::createTextShapesSimple(
     const Reference<drawing::XShapes>& xTarget, TickIter& rTickIter,
-    AxisLabelProperties& rAxisLabelProperties, TickFactory2D* pTickFactory )
+    AxisLabelProperties& rAxisLabelProperties, TickFactory2D const * pTickFactory )
 {
     FixedNumberFormatter aFixedNumberFormatter(
                 m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
@@ -1516,7 +1516,7 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
     return nRet;
 }
 
-void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties, TickFactory2D* pTickFactory2D )
+void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties, TickFactory2D const * pTickFactory2D )
 {
     if( !pTickFactory2D )
         return;
@@ -1721,7 +1721,7 @@ void VCartesianAxis::updatePositions()
     doStaggeringOfLabels( m_aAxisLabelProperties, pTickFactory2D );
 }
 
-void VCartesianAxis::createTickMarkLineShapes( TickInfoArrayType& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D& rTickFactory2D, bool bOnlyAtLabels )
+void VCartesianAxis::createTickMarkLineShapes( TickInfoArrayType& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D const & rTickFactory2D, bool bOnlyAtLabels )
 {
     sal_Int32 nPointCount = rTickInfos.size();
     drawing::PointSequenceSequence aPoints(2*nPointCount);

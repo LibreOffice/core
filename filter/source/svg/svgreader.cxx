@@ -1375,7 +1375,7 @@ struct AnnotatingVisitor
 void annotateStyles( StatePool&                                        rStatePool,
                             StateMap&                                         rStateMap,
                             const State&                                       rInitialState,
-                            uno::Reference<xml::dom::XElement>&         rElem,
+                            uno::Reference<xml::dom::XElement> const &         rElem,
                             const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,
                             std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector )
 {
@@ -1804,7 +1804,7 @@ struct ShapeWritingVisitor
     static void pop()
     {}
 
-    void writeBinaryData( rtl::Reference<SvXMLAttributeList>&           xAttrs,
+    void writeBinaryData( rtl::Reference<SvXMLAttributeList> const &    xAttrs,
                         const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
                         const uno::Reference<xml::dom::XElement>&       /* xElem */,
                         const basegfx::B2DRange&                        rShapeBounds,
@@ -1833,7 +1833,7 @@ struct ShapeWritingVisitor
     }
 
 
-    void writeEllipseShape( rtl::Reference<SvXMLAttributeList>&          xAttrs,
+    void writeEllipseShape( rtl::Reference<SvXMLAttributeList> const &   xAttrs,
                          const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
                          const uno::Reference<xml::dom::XElement>&       xElem,
                          const OUString&                            rStyleId,
@@ -1849,7 +1849,7 @@ struct ShapeWritingVisitor
 
     }
 
-    void writePathShape( rtl::Reference<SvXMLAttributeList>&             xAttrs,
+    void writePathShape( rtl::Reference<SvXMLAttributeList> const &      xAttrs,
                          const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
                          const uno::Reference<xml::dom::XElement>&       xElem,
                          const OUString&                                 rStyleId,
@@ -1909,7 +1909,7 @@ struct ShapeWritingVisitor
         }
     }
 
-    void fillShapeProperties( rtl::Reference<SvXMLAttributeList>&       xAttrs,
+    void fillShapeProperties( rtl::Reference<SvXMLAttributeList> const &  xAttrs,
                               const uno::Reference<xml::dom::XElement>& /* xElem */,
                               const basegfx::B2DRange&                  rShapeBounds,
                               const OUString&                      rStyleName )

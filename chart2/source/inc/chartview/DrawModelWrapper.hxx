@@ -81,7 +81,7 @@ public:
     XBitmapListRef    GetBitmapList() const;
 
     SdrObject* getNamedSdrObject( const OUString& rName );
-    static SdrObject* getNamedSdrObject( const OUString& rName, SdrObjList* pObjList );
+    static SdrObject* getNamedSdrObject( const OUString& rName, SdrObjList const * pObjList );
 
     static bool removeShape( const css::uno::Reference< css::drawing::XShape >& xShape );
 };

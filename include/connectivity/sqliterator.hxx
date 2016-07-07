@@ -95,11 +95,11 @@ namespace connectivity
         void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const OUString& _aColumnName, OUString& _aTableRange, const OUString& _rColumnAlias);
         // inserts a table into the map
         void                traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const OUString & rTableRange );
-        void                traverseSearchCondition(OSQLParseNode * pSearchCondition);
+        void                traverseSearchCondition(OSQLParseNode const * pSearchCondition);
         void                traverseOnePredicate(
-                                                OSQLParseNode * pColumnRef,
+                                                OSQLParseNode const * pColumnRef,
                                                 OUString& aValue,
-                                                OSQLParseNode * pParameter);
+                                                OSQLParseNode const * pParameter);
         void traverseByColumnNames(const OSQLParseNode* pSelectNode, bool _bOrder);
         void                traverseParameters(const OSQLParseNode* pSelectNode);
 
@@ -143,8 +143,8 @@ namespace connectivity
             const OUString & rColumnName );
 
       protected:
-        void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt=false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt=false);
-        void appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);
+        void setSelectColumnName(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt=false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt=false);
+        void appendColumns(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);
         // Other member variables that should be available in the "set" functions
         // can be defined in the derived class. They can be initialized
         // in its constructor and, after the "traverse" routines have been used,

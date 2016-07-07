@@ -112,7 +112,7 @@ public:
 
 private:
     void setCharClass(const LanguageTag& rLanguageTag);
-    static OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
+    static OUString SAL_CALL makeLowerCase(const OUString&, CharClass const *);
 
 };
 

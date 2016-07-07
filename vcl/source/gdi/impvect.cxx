@@ -53,7 +53,7 @@ namespace ImplVectorizer
     ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
     void     ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, BmpVectorizeFlags nFlags );
     bool     ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
-    bool     ImplIsUp( ImplVectMap* pMap, long nY, long nX );
+    bool     ImplIsUp( ImplVectMap const * pMap, long nY, long nX );
     void     ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
 }
 
@@ -1052,7 +1052,7 @@ bool ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain 
     return true;
 }
 
-bool ImplIsUp( ImplVectMap* pMap, long nY, long nX )
+bool ImplIsUp( ImplVectMap const * pMap, long nY, long nX )
 {
     if( pMap->IsDone( nY - 1L, nX ) )
         return true;

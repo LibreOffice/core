@@ -1233,7 +1233,7 @@ void SvXMLExport::SetBodyAttributes()
 }
 
 static void
-lcl_AddGrddl(SvXMLExport & rExport, const SvXMLExportFlags /*nExportMode*/)
+lcl_AddGrddl(SvXMLExport const & rExport, const SvXMLExportFlags /*nExportMode*/)
 {
     // check version >= 1.2
     switch (rExport.getDefaultVersion()) {
@@ -2087,7 +2087,7 @@ sal_Int64 SAL_CALL SvXMLExport::getSomething( const uno::Sequence< sal_Int8 >& r
     return 0;
 }
 
-void SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
+void SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent > const & rComp )
 {
     OUString sFilterService;
 

@@ -199,7 +199,7 @@ void ComboboxToolbarController::LoseFocus()
     notifyFocusLost();
 }
 
-bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
+bool ComboboxToolbarController::PreNotify( NotifyEvent const & rNEvt )
 {
     switch ( rNEvt.GetType() )
     {

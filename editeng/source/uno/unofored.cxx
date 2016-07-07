@@ -164,7 +164,7 @@ void SvxEditEngineForwarder::FieldClicked( const SvxFieldItem& rField, sal_Int32
     rEditEngine.FieldClicked( rField, nPara, nPos );
 }
 
-SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
+SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
 {
     std::vector<EECharAttrib> aAttribs;
 

@@ -293,7 +293,7 @@ public:
 
     bool            IsVertical() const;
 
-    bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin = nullptr );
+    bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin = nullptr );
 
     bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -301,8 +301,8 @@ public:
     bool            MouseMove( const MouseEvent& rMouseEvent );
     void            Command( const CommandEvent& rCEvt );
 
-    void            CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard, bool bCut );
-    void            Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard, bool bUseSpecial = false );
+    void            CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bCut );
+    void            Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bUseSpecial = false );
 
     void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
 
@@ -518,7 +518,7 @@ private:
 
 
     void                CursorMoved( ContentNode* pPrevNode );
-    void                ParaAttribsChanged( ContentNode* pNode );
+    void                ParaAttribsChanged( ContentNode const * pNode );
     void                TextModified();
     void                CalcHeight( ParaPortion* pPortion );
 
@@ -559,7 +559,7 @@ private:
     void                RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics, SvxFont& rFont );
     void                CheckAutoPageSize();
 
-    void                ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion* pPortion, sal_Int32 nPortionStart, long nRemainingWidth, bool bCanHyphenate );
+    void                ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion const * pPortion, sal_Int32 nPortionStart, long nRemainingWidth, bool bCanHyphenate );
     void                ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, long nRemainingSpace );
     EditPaM             ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, bool bBackward = false );
     EditPaM             ImpDeleteSelection(const EditSelection& rCurSel);
@@ -586,8 +586,8 @@ private:
 
     void                ShowParagraph( sal_Int32 nParagraph, bool bShow );
 
-    EditPaM             PageUp( const EditPaM& rPaM, EditView* pView);
-    EditPaM             PageDown( const EditPaM& rPaM, EditView* pView);
+    EditPaM             PageUp( const EditPaM& rPaM, EditView const * pView);
+    EditPaM             PageDown( const EditPaM& rPaM, EditView const * pView);
     EditPaM             CursorUp( const EditPaM& rPaM, EditView* pEditView );
     EditPaM             CursorDown( const EditPaM& rPaM, EditView* pEditView );
     EditPaM             CursorLeft( const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = css::i18n::CharacterIteratorMode::SKIPCELL );
@@ -645,8 +645,8 @@ private:
     inline short        GetYValue( short nYValue ) const;
     inline sal_uInt16   GetYValue( sal_uInt16 nYValue ) const;
 
-    ContentNode*        GetPrevVisNode( ContentNode* pCurNode );
-    ContentNode*        GetNextVisNode( ContentNode* pCurNode );
+    ContentNode*        GetPrevVisNode( ContentNode const * pCurNode );
+    ContentNode*        GetNextVisNode( ContentNode const * pCurNode );
 
     const ParaPortion*  GetPrevVisPortion( const ParaPortion* pCurPortion ) const;
     const ParaPortion*  GetNextVisPortion( const ParaPortion* pCurPortion ) const;
@@ -673,7 +673,7 @@ private:
     void                CheckIdleFormatter();
 
     inline const ParaPortion* FindParaPortion( const ContentNode* pNode ) const;
-    inline ParaPortion* FindParaPortion( ContentNode* pNode );
+    inline ParaPortion* FindParaPortion( ContentNode const * pNode );
 
     css::uno::Reference< css::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
 
@@ -782,7 +782,7 @@ public:
     EditPaM         DeleteSelected(const EditSelection& rEditSelection);
     EditPaM         InsertTextUserInput( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite );
     EditPaM         InsertText(const EditSelection& aCurEditSelection, const OUString& rStr);
-    EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, vcl::Window* pFrameWin = nullptr );
+    EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, vcl::Window const * pFrameWin = nullptr );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, sal_uInt8 nMode, sal_uInt8 nDelMode = DELMODE_SIMPLE );
     EditPaM         InsertParaBreak(const EditSelection& rEditSelection);
     EditPaM         InsertLineBreak(const EditSelection& aEditSelection);
@@ -876,7 +876,7 @@ public:
     SfxStyleSheet*      GetStyleSheet( sal_Int32 nPara );
 
     void                UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle );
-    void                RemoveStyleFromParagraphs( SfxStyleSheet* pStyle );
+    void                RemoveStyleFromParagraphs( SfxStyleSheet const * pStyle );
 
     OutputDevice*       GetRefDevice() const { return pRefDev.get(); }
     void                SetRefDevice( OutputDevice* pRefDef );
@@ -905,7 +905,7 @@ public:
                             { xSpeller = xSpl; }
     const css::uno::Reference< css::linguistic2::XHyphenator >&
                         GetHyphenator() const { return xHyphenator; }
-    void                SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator >  &xHyph )
+    void                SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator > const &xHyph )
                             { xHyphenator = xHyph; }
 
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
@@ -1127,7 +1127,7 @@ inline const ParaPortion* ImpEditEngine::FindParaPortion( const ContentNode* pNo
     return GetParaPortions()[ nPos ];
 }
 
-inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode )
+inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode const * pNode )
 {
     sal_Int32 nPos = aEditDoc.GetPos( pNode );
     DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );

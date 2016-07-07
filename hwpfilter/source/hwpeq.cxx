@@ -382,7 +382,7 @@ static const hwpeq eq_tbl[] = {
   { "zeta",       nullptr,       0,  EQ_CASE }
 };
 
-static const hwpeq *lookup_eqn(char *str)
+static const hwpeq *lookup_eqn(char const *str)
 {
   static const int eqCount = SAL_N_ELEMENTS(eq_tbl);
   int l = 0, r = eqCount;
@@ -452,7 +452,7 @@ struct eq_stack {
   istream   *strm;
 
   eq_stack() { strm = nullptr; };
-  bool state(istream *s) {
+  bool state(istream const *s) {
     if( strm != s) { white = nullptr; token = nullptr; }
     return token.length() != 0;
   }
@@ -460,7 +460,7 @@ struct eq_stack {
 
 static eq_stack *stk = nullptr;
 
-void push_token(MzString &white, MzString &token, istream *strm)
+void push_token(MzString const &white, MzString const &token, istream *strm)
 {
   // one time stack
   assert(stk->token.length() == 0);
@@ -733,7 +733,7 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
   return token[0];
 }
 
-void eq2latex(MzString& outs, char *s)
+void eq2latex(MzString& outs, char const *s)
 {
   assert(s);
   if( stk == nullptr )

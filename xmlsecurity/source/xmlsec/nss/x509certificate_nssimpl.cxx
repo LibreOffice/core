@@ -329,7 +329,7 @@ const Sequence< sal_Int8>& X509Certificate_NssImpl::getUnoTunnelId() {
     return theX509Certificate_NssImplUnoTunnelId::get().getSeq();
 }
 
-OUString getAlgorithmDescription(SECAlgorithmID *aid)
+OUString getAlgorithmDescription(SECAlgorithmID const *aid)
 {
     SECOidTag tag;
     tag = SECOID_GetAlgorithmTag(aid);

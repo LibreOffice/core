@@ -714,7 +714,7 @@ void SchXMLPositionAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefi
     }
 }
 
-void SchXMLPositionAttributesHelper::readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
+void SchXMLPositionAttributesHelper::readAutomaticPositioningProperties( XMLPropStyleContext const * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
     if( pPropStyleContext && pStylesCtxt )
     {
@@ -950,7 +950,7 @@ SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
 namespace {
 
 void SetErrorBarStyleProperties( const OUString& rStyleName, const uno::Reference< beans::XPropertySet >& xBarProp,
-                                        SchXMLImportHelper& rImportHelper )
+                                        SchXMLImportHelper const & rImportHelper )
 {
     const SvXMLStylesContext* pStylesCtxt = rImportHelper.GetAutoStylesContext();
     const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(),
@@ -963,7 +963,7 @@ void SetErrorBarStyleProperties( const OUString& rStyleName, const uno::Referenc
 }
 
 void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, const uno::Reference< beans::XPropertySet>& xBarProp,
-                                            SchXMLImportHelper& rImportHelper, OUString& aPosRange, OUString& aNegRange)
+                                            SchXMLImportHelper const & rImportHelper, OUString& aPosRange, OUString& aNegRange)
 {
     const SvXMLStylesContext* pStylesCtxt = rImportHelper.GetAutoStylesContext();
     const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(),

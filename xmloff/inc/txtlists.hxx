@@ -74,7 +74,7 @@ class XMLTextListsHelper
         OUString GenerateNewListId() const;
 
         // Provide list id for a certain list block for import (#i92811#)
-        OUString GetListIdForListBlock( XMLTextListBlockContext& rListBlock );
+        OUString GetListIdForListBlock( XMLTextListBlockContext const & rListBlock );
 
         // keep track of continue list chain for export
         void StoreLastContinuingList( const OUString& sListId,

@@ -48,16 +48,16 @@ class Outliner;
 class TextChainingUtils
 {
 public:
-    static css::uno::Reference< css::datatransfer::XTransferable> CreateTransferableFromText(Outliner *);
+    static css::uno::Reference< css::datatransfer::XTransferable> CreateTransferableFromText(Outliner const *);
 
     static OutlinerParaObject *JuxtaposeParaObject(
             css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
             Outliner *,
-            OutlinerParaObject *);
+            OutlinerParaObject const *);
     static OutlinerParaObject *DeeplyMergeParaObject(
             css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
             Outliner *,
-            OutlinerParaObject *);
+            OutlinerParaObject const *);
 };
 
 /*
@@ -69,8 +69,8 @@ public:
 class OverflowingText
 {
 public:
-    OutlinerParaObject *JuxtaposeParaObject(Outliner *, OutlinerParaObject *);
-    OutlinerParaObject *DeeplyMergeParaObject(Outliner *, OutlinerParaObject *);
+    OutlinerParaObject *JuxtaposeParaObject(Outliner *, OutlinerParaObject const *);
+    OutlinerParaObject *DeeplyMergeParaObject(Outliner *, OutlinerParaObject const *);
 
 private:
     friend class Outliner;
@@ -107,7 +107,7 @@ public:
     OFlowChainedText(Outliner *, bool );
     ~OFlowChainedText();
 
-    OutlinerParaObject *InsertOverflowingText(Outliner *, OutlinerParaObject *);
+    OutlinerParaObject *InsertOverflowingText(Outliner *, OutlinerParaObject const *);
     OutlinerParaObject *RemoveOverflowingText(Outliner *);
 
     ESelection GetOverflowPointSel() const;
@@ -126,7 +126,7 @@ class EDITENG_DLLPUBLIC UFlowChainedText
 {
 public:
     UFlowChainedText(Outliner *, bool);
-    OutlinerParaObject *CreateMergedUnderflowParaObject(Outliner *, OutlinerParaObject *);
+    OutlinerParaObject *CreateMergedUnderflowParaObject(Outliner *, OutlinerParaObject const *);
 
 private:
     css::uno::Reference< css::datatransfer::XTransferable > mxUnderflowingTxt;

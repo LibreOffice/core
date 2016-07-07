@@ -369,7 +369,7 @@ public:
         nStart(0),
         nEnd(0)
     {}
-    void SetCreateParams(SdrDragStat& rStat);
+    void SetCreateParams(SdrDragStat const & rStat);
 };
 
 sal_uInt32 SdrCircObj::GetHdlCount() const
@@ -609,7 +609,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 }
 
 
-void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
+void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
 {
     rStat.TakeCreateRect(aR);
     aR.Justify();

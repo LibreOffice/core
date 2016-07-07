@@ -161,7 +161,7 @@ public:
 
     // Insert 3D object into the group; transfer to other owner!
     void Insert3DObj(E3dObject* p3DObj);
-    void Remove3DObj(E3dObject* p3DObj);
+    void Remove3DObj(E3dObject const * p3DObj);
 
     E3dObject* GetParentObj() const;
     virtual E3dScene* GetScene() const;

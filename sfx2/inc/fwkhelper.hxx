@@ -28,7 +28,7 @@
 #include <rtl/ustring.hxx>
 
 SFX2_DLLPUBLIC void SAL_CALL RefreshToolbars(
-    css::uno::Reference< css::frame::XFrame >& rFrame
+    css::uno::Reference< css::frame::XFrame > const & rFrame
 );
 
 #endif

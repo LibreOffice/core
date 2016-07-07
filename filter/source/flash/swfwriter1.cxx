@@ -953,7 +953,7 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
 }
 
 
-void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 *pCompressed, sal_uInt32 compressed_size )
+void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 const *pCompressed, sal_uInt32 compressed_size )
 {
     startTag( TAG_DEFINEBITSLOSSLESS2 );
 
@@ -968,7 +968,7 @@ void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 h
 }
 
 
-void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pAlphaCompressed, sal_uInt32 alpha_compressed_size )
+void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 const *pAlphaCompressed, sal_uInt32 alpha_compressed_size )
 {
     // AS: Go through the actual JPEG bits, separating out the
     //  header fields from the actual image fields.  Fields are
@@ -1143,7 +1143,7 @@ void Writer::Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY )
 /** Writes the stroke defined by SvtGraphicStroke and returns true or it returns
     false if it can't handle this stroke.
 */
-bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
+bool Writer::Impl_writeStroke( SvtGraphicStroke const & rStroke )
 {
     tools::Polygon aPolygon;
     rStroke.getPath( aPolygon );
@@ -1186,7 +1186,7 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
 /** Writes the filling defined by SvtGraphicFill and returns true or it returns
     false if it can't handle this filling.
 */
-bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
+bool Writer::Impl_writeFilling( SvtGraphicFill const & rFilling )
 {
     tools::PolyPolygon aPolyPolygon;
     rFilling.getPath( aPolyPolygon );

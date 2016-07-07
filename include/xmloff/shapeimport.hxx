@@ -366,14 +366,14 @@ public:
     void shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape >& rShape,
                                sal_Int32 nZIndex );
 
-    void addShapeConnection( css::uno::Reference< css::drawing::XShape >& rConnectorShape,
+    void addShapeConnection( css::uno::Reference< css::drawing::XShape > const & rConnectorShape,
                              bool bStart,
                              const OUString& rDestShapeId,
                              sal_Int32 nDestGlueId );
 
     /** adds a mapping for a glue point identifier from an xml file to the identifier created after inserting
         the new glue point into the core. The saved mappings can be retrieved by getGluePointId() */
-    void addGluePointMapping( css::uno::Reference< css::drawing::XShape >& xShape,
+    void addGluePointMapping( css::uno::Reference< css::drawing::XShape > const & xShape,
                               sal_Int32 nSourceId, sal_Int32 nDestinnationId );
 
     /** find mapping for given DestinationID. This allows to extract the original draw:id imported with a draw:glue-point */
@@ -390,11 +390,11 @@ public:
 
     /** this method must be calling before the first shape is imported for the given page.
         Calls to this method can be nested */
-    void startPage( css::uno::Reference< css::drawing::XShapes >& rShapes );
+    void startPage( css::uno::Reference< css::drawing::XShapes > const & rShapes );
 
     /** this method must be calling after the last shape is imported for the given page
         Calls to this method can be nested */
-    void endPage( css::uno::Reference< css::drawing::XShapes >& rShapes );
+    void endPage( css::uno::Reference< css::drawing::XShapes > const & rShapes );
 
     void restoreConnections();
 

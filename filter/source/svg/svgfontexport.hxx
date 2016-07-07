@@ -56,7 +56,7 @@ private:
     GlyphSet&           implGetGlyphSet( const vcl::Font& rFont );
     void                implCollectGlyphs();
     void                implEmbedFont( const vcl::Font& rFont );
-    void                implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr );
+    void                implEmbedGlyph( OutputDevice const & rOut, const OUString& rCellStr );
 
 public:
 

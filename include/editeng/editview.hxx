@@ -150,7 +150,7 @@ public:
 
     void            InsertText( const OUString& rNew, bool bSelect = false );
 
-    bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin = nullptr );
+    bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin = nullptr );
 
     bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -205,7 +205,7 @@ public:
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;
 
-    void            CompleteAutoCorrect( vcl::Window* pFrameWin = nullptr );
+    void            CompleteAutoCorrect( vcl::Window const * pFrameWin = nullptr );
 
     EESpellState    StartSpeller( bool bMultipleDoc = false );
     EESpellState    StartThesaurus();
@@ -218,7 +218,7 @@ public:
 
     bool            IsCursorAtWrongSpelledWord();
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void            ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = nullptr );
+    void            ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pCallBack = nullptr );
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;

@@ -100,7 +100,7 @@ TableRow& TableRow::operator=( const TableRow& r )
 }
 
 
-void TableRow::insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::iterator* pIter /* = 0 */  )
+void TableRow::insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::iterator const * pIter /* = 0 */  )
 {
     throwIfDisposed();
     if( nCount )

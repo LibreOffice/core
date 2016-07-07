@@ -317,7 +317,7 @@ namespace cairocanvas
    *
    * @return true, if successful
    **/
-    bool TextLayout::draw( CairoSharedPtr&               pSCairo,
+    bool TextLayout::draw( CairoSharedPtr const &        pSCairo,
                            OutputDevice&                 rOutDev,
                            const Point&                  rOutpos,
                            const rendering::ViewState&   viewState,

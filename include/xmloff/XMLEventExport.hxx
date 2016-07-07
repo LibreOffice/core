@@ -84,20 +84,20 @@ public:
     void AddTranslationTable( const XMLEventNameTranslation* pTransTable );
 
     /// export the events (calls EventExport::Export(Reference<XNameAcess>) )
-    void Export( css::uno::Reference<css::document::XEventsSupplier> & xAccess,
+    void Export( css::uno::Reference<css::document::XEventsSupplier> const & xAccess,
                 bool bUseWhitespace = true);
 
     /// export the events (calls EventExport::Export(Reference<XNameAcess>) )
-    void Export( css::uno::Reference<css::container::XNameReplace> & xAccess,
+    void Export( css::uno::Reference<css::container::XNameReplace> const & xAccess,
                 bool bUseWhitespace = true);
 
     /// export the events (writes <office:events> element)
-    void Export( css::uno::Reference<css::container::XNameAccess> & xAccess,
+    void Export( css::uno::Reference<css::container::XNameAccess> const & xAccess,
                 bool bUseWhitespace = true);
 
     /// export the events, but write <officeooo:events> element
     /// (for new file format additions)
-    void ExportExt( css::uno::Reference<css::container::XNameAccess> & xAccess);
+    void ExportExt( css::uno::Reference<css::container::XNameAccess> const & xAccess);
 
     /// export a single event (writes <office:events> element)
     void ExportSingleEvent(

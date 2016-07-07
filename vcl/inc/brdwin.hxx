@@ -253,9 +253,9 @@ public:
     virtual Rectangle       GetMenuRect() const;
 
     static void             ImplInitTitle( ImplBorderFrameData* pData );
-    static BorderWindowHitTest ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
+    static BorderWindowHitTest ImplHitTest( ImplBorderFrameData const * pData, const Point& rPos );
     static bool             ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    static OUString         ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
+    static OUString         ImplRequestHelp( ImplBorderFrameData const * pData, const Point& rPos, Rectangle& rHelpRect );
     static long             ImplCalcTitleWidth( const ImplBorderFrameData* pData );
 };
 

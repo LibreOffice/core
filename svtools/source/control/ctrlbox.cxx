@@ -1082,7 +1082,7 @@ void FontNameBox::ImplCalcUserItemSize()
 
 namespace
 {
-    long shrinkFontToFit(OUString &rSampleText, long nH, vcl::Font &rFont, OutputDevice &rDevice, Rectangle &rTextRect)
+    long shrinkFontToFit(OUString const & rSampleText, long nH, vcl::Font &rFont, OutputDevice &rDevice, Rectangle &rTextRect)
     {
         long nWidth = 0;
 

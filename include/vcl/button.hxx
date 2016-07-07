@@ -143,7 +143,7 @@ protected:
 public:
     SAL_DLLPRIVATE void            ImplSetDefButton( bool bSet );
     SAL_DLLPRIVATE void            ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext, Rectangle& rRect, DrawButtonFlags nStyle);
-    SAL_DLLPRIVATE static bool     ImplHitTestPushButton(vcl::Window* pDev, const Point& rPos);
+    SAL_DLLPRIVATE static bool     ImplHitTestPushButton(vcl::Window const * pDev, const Point& rPos);
     SAL_DLLPRIVATE bool            ImplIsDefButton() const;
 
 protected:

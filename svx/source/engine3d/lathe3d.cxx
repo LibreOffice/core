@@ -90,7 +90,7 @@ E3dLatheObj::E3dLatheObj()
     SetDefaultAttributes(aDefault);
 }
 
-void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
+void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes const & rDefault)
 {
     GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultLatheSmoothed()));
     GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(rDefault.GetDefaultLatheSmoothFrontBack()));

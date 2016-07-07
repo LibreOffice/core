@@ -31,7 +31,7 @@ protected:
     std::shared_ptr<GDIMetaFile> xMetaFile;
 public:
     SfxPreviewBase_Impl(vcl::Window* pParent, WinBits nStyle);
-    void            SetObjectShell( SfxObjectShell* pObj );
+    void            SetObjectShell( SfxObjectShell const * pObj );
     virtual void    Resize() override;
     virtual Size    GetOptimalSize() const override;
 };

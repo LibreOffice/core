@@ -1054,7 +1054,7 @@ void TextView::Cut()
     mpImpl->mpTextEngine->UndoActionEnd();
 }
 
-void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard )
+void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard )
 {
     if ( rxClipboard.is() )
     {
@@ -1085,7 +1085,7 @@ void TextView::Copy()
     Copy( aClipboard );
 }
 
-void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard )
+void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard )
 {
     if ( rxClipboard.is() )
     {

@@ -210,7 +210,7 @@ namespace svxform
     }
 
 
-    void OControlTransferData::buildPathFormat(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot)
+    void OControlTransferData::buildPathFormat(SvTreeListBox const * pTreeBox, SvTreeListEntry const * pRoot)
     {
         m_aControlPaths.realloc(0);
 
@@ -251,7 +251,7 @@ namespace svxform
     }
 
 
-    void OControlTransferData::buildListFromPath(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot)
+    void OControlTransferData::buildListFromPath(SvTreeListBox const * pTreeBox, SvTreeListEntry* pRoot)
     {
         ListBoxEntrySet aEmpty;
         m_aSelectedEntries.swap( aEmpty );

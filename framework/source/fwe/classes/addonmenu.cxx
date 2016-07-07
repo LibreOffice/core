@@ -140,7 +140,7 @@ sal_uInt16 AddonMenuManager::GetNextPos( sal_uInt16 nPos )
     return ( nPos == MENU_APPEND ) ? MENU_APPEND : ( nPos+1 );
 }
 
-static sal_uInt16 FindMenuId( Menu* pMenu, const OUString& aCommand )
+static sal_uInt16 FindMenuId( Menu const * pMenu, const OUString& aCommand )
 {
     sal_uInt16 nPos = 0;
     OUString aCmd;
@@ -157,7 +157,7 @@ static sal_uInt16 FindMenuId( Menu* pMenu, const OUString& aCommand )
 
 // Merge the Add-Ons help menu items into the given menu bar at a defined pos
 void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
-                                           MenuBar* pMergeMenuBar,
+                                           MenuBar const * pMergeMenuBar,
                                            const Reference<XComponentContext>& rContext )
 {
     if ( pMergeMenuBar )

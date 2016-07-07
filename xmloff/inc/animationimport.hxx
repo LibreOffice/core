@@ -53,7 +53,7 @@ public:
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    static void postProcessRootNode( SvXMLImport& rImport, const css::uno::Reference< css::animations::XAnimationNode >& xNode, css::uno::Reference< css::beans::XPropertySet >& xPageProps );
+    static void postProcessRootNode( SvXMLImport& rImport, const css::uno::Reference< css::animations::XAnimationNode >& xNode, css::uno::Reference< css::beans::XPropertySet > const & xPageProps );
 };
 
 }

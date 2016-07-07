@@ -56,7 +56,7 @@ using namespace ::com::sun::star::linguistic2;
 
 #define SCRLRANGE   20  // Scroll 1/20 of the width/height, when in QueryDrop
 
-static inline void lcl_AllignToPixel( Point& rPoint, OutputDevice* pOutDev, short nDiffX, short nDiffY )
+static inline void lcl_AllignToPixel( Point& rPoint, OutputDevice const * pOutDev, short nDiffX, short nDiffY )
 {
     rPoint = pOutDev->LogicToPixel( rPoint );
 
@@ -161,7 +161,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 }
 
 /// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
-void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild)
+void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild)
 {
     // Don't translate if we already have a non-zero origin.
     // This prevents multiple translate calls that negate
@@ -1149,7 +1149,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     return Pair( nRealDiffX, nRealDiffY );
 }
 
-bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin )
+bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin )
 {
     bool bDone = false;
 
@@ -1404,7 +1404,7 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
     return false;
 }
 
-void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard, bool bCut )
+void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bCut )
 {
     if ( rxClipboard.is() && GetEditSelection().HasRange() )
     {
@@ -1439,7 +1439,7 @@ void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XC
     }
 }
 
-void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard, bool bUseSpecial )
+void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bUseSpecial )
 {
     if ( rxClipboard.is() )
     {

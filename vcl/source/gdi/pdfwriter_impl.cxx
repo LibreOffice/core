@@ -963,7 +963,7 @@ public:
     void translate( double tx, double ty );
     void invert();
 
-    void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer );
+    void append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuffer );
 
     Point transform( const Point& rPoint ) const;
 };
@@ -1067,7 +1067,7 @@ void Matrix3::invert()
     set( fn );
 }
 
-void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer )
+void Matrix3::append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuffer )
 {
     appendDouble( f[0], rBuffer );
     rBuffer.append( ' ' );
@@ -2038,7 +2038,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
     rOutBuffer.append( ">" );
 }
 
-inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
+inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer const & rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
 {
     rOutBuffer.append( "(" );
     sal_Int32 nChars = rInString.getLength();
@@ -2913,7 +2913,7 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const PdfBuiltinFontFace* pFD, sal_Int
     return nFontObject;
 }
 
-std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFontFace* pFont, EmbedFont& rEmbed )
+std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFontFace* pFont, EmbedFont const & rEmbed )
 {
     std::map< sal_Int32, sal_Int32 > aRet;
 
@@ -3682,8 +3682,8 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
 }
 
 sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
-                                              sal_Ucs* pUnicodes,
-                                              sal_Int32* pUnicodesPerGlyph,
+                                              sal_Ucs const * pUnicodes,
+                                              sal_Int32 const * pUnicodesPerGlyph,
                                               sal_Int32* pEncToUnicodeIndex,
                                               int nGlyphs )
 {
@@ -6279,7 +6279,7 @@ const SEC_ASN1Template Accuracy_Template[] =
 };
 */
 
-size_t AppendToBuffer(char *ptr, size_t size, size_t nmemb, void *userdata)
+size_t AppendToBuffer(const char *ptr, size_t size, size_t nmemb, void *userdata)
 {
     OStringBuffer *pBuffer = static_cast<OStringBuffer*>(userdata);
     pBuffer->append(ptr, size*nmemb);
@@ -8309,10 +8309,10 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 }
 
 void PDFWriterImpl::registerGlyphs( int nGlyphs,
-                                    sal_GlyphId* pGlyphs,
+                                    sal_GlyphId const * pGlyphs,
                                     sal_Int32* pGlyphWidths,
                                     sal_Ucs* pUnicodes,
-                                    sal_Int32* pUnicodesPerGlyph,
+                                    sal_Int32 const * pUnicodesPerGlyph,
                                     sal_uInt8* pMappedGlyphs,
                                     sal_Int32* pMappedFontObjects,
                                     const PhysicalFontFace* pFallbackFonts[] )

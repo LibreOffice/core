@@ -262,7 +262,7 @@ void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership, bool 
     impl_unregisterApiCall(false);
 }
 
-bool CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, util::CloseVetoException& ex )
+bool CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, util::CloseVetoException const & ex )
     throw ( util::CloseVetoException )
 {
     //this method is called when no closelistener has had a veto during queryclosing

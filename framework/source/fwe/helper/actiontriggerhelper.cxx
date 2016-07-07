@@ -308,7 +308,7 @@ Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XInd
     return Reference< XIndexContainer >();
 }
 
-void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexContainer >& rActionTriggerContainer )
+void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexContainer > const & rActionTriggerContainer )
 {
     SolarMutexGuard aGuard;
 
@@ -365,7 +365,7 @@ void ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
 }
 
 void ActionTriggerHelper::FillActionTriggerContainerFromMenu(
-    Reference< XIndexContainer >& xActionTriggerContainer,
+    Reference< XIndexContainer > const & xActionTriggerContainer,
     const Menu* pMenu )
 {
     FillActionTriggerContainerWithMenu( pMenu, xActionTriggerContainer );

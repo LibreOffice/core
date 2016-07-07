@@ -54,7 +54,7 @@ protected:
     virtual bool        IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const override;
     virtual void        CalcValue() override;
     void                CreateStyleSheets();
-    SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType* pRTFStyle );
+    SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType const * pRTFStyle );
     SvxRTFStyleType*    FindStyleSheet( const OUString& rName );
     void                AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& rEnd );
     void                ReadField();

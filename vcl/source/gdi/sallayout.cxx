@@ -1457,7 +1457,7 @@ MultiSalLayout::~MultiSalLayout()
 }
 
 void MultiSalLayout::AddFallback( SalLayout& rFallback,
-    ImplLayoutRuns& rFallbackRuns, const PhysicalFontFace* pFallbackFont )
+    ImplLayoutRuns const & rFallbackRuns, const PhysicalFontFace* pFallbackFont )
 {
     if( mnLevel >= MAX_FALLBACK )
         return;

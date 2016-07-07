@@ -91,7 +91,7 @@ void XMLEventExport::AddTranslationTable(
     // else? ignore!
 }
 
-void XMLEventExport::Export( Reference<XEventsSupplier> & rSupplier,
+void XMLEventExport::Export( Reference<XEventsSupplier> const & rSupplier,
                              bool bWhitespace)
 {
     if (rSupplier.is())
@@ -102,14 +102,14 @@ void XMLEventExport::Export( Reference<XEventsSupplier> & rSupplier,
     // else: no supplier, no export -> ignore!
 }
 
-void XMLEventExport::Export( Reference<XNameReplace> & rReplace,
+void XMLEventExport::Export( Reference<XNameReplace> const & rReplace,
                              bool bWhitespace)
 {
     Reference<XNameAccess> xAccess(rReplace, UNO_QUERY);
     Export(xAccess, bWhitespace);
 }
 
-void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
+void XMLEventExport::Export( Reference<XNameAccess> const & rAccess,
                              bool bWhitespace)
 {
     // early out if we don't actually get any events
@@ -158,7 +158,7 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
     }
 }
 
-void XMLEventExport::ExportExt( Reference<XNameAccess> & rAccess )
+void XMLEventExport::ExportExt( Reference<XNameAccess> const & rAccess )
 {
     // set bExtNamespace flag to use XML_NAMESPACE_OFFICE_EXT namespace
     // for events element (not for child elements)

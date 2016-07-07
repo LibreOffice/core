@@ -106,7 +106,7 @@ private:
     RegError    deleteSubkeysAndValues(ORegKey* pKey);
 
     RegError    loadAndSaveValue(ORegKey* pTargetKey,
-                                 ORegKey* pSourceKey,
+                                 ORegKey const* pSourceKey,
                                  const OUString& valueName,
                                  sal_uInt32 nCut,
                                  bool bWarnings=false,
@@ -115,12 +115,12 @@ private:
     static RegError checkBlop(store::OStoreStream& rValue,
                           const OUString& sTargetPath,
                           sal_uInt32 srcValueSize,
-                          sal_uInt8* pSrcBuffer,
+                          sal_uInt8 const* pSrcBuffer,
                           bool bReport=false);
 
     static RegError mergeModuleValue(store::OStoreStream& rTargetValue,
-                                 RegistryTypeReader& reader,
-                                 RegistryTypeReader& reader2);
+                                 RegistryTypeReader const& reader,
+                                 RegistryTypeReader const& reader2);
 
     RegError    loadAndSaveKeys(ORegKey* pTargetKey,
                                 ORegKey* pSourceKey,

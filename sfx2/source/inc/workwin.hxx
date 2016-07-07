@@ -233,7 +233,7 @@ protected:
     virtual Rectangle       GetTopRect_Impl();
     SvBorder                Arrange_Impl();
     void                    SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
-    static bool             IsPluginMode( SfxObjectShell* pObjShell );
+    static bool             IsPluginMode( SfxObjectShell const * pObjShell );
 
 public:
                             SfxWorkWindow( vcl::Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = nullptr);

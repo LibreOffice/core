@@ -122,7 +122,7 @@ void AreaTransparencyGradientControl::dispose()
     PopupControl::dispose();
 }
 
-void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGradientItem)
+void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem const * pGradientItem)
 {
     InitStatus(pGradientItem);
     const XGradient& rGradient = pGradientItem->GetGradientValue();
@@ -233,7 +233,7 @@ void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGra
     }
 }
 
-void AreaTransparencyGradientControl::InitStatus(XFillFloatTransparenceItem* pGradientItem)
+void AreaTransparencyGradientControl::InitStatus(XFillFloatTransparenceItem const * pGradientItem)
 {
     const XGradient& rGradient = pGradientItem->GetGradientValue();
 

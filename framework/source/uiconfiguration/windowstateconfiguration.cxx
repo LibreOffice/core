@@ -205,9 +205,9 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
             sal_uInt32                              nMask; // see WindowStateMask
         };
 
-        void                      impl_putPropertiesFromStruct( const WindowStateInfo& rWinStateInfo, Reference< XPropertySet >& xPropSet );
-        Any                       impl_insertCacheAndReturnSequence( const OUString& rResourceURL, Reference< XNameAccess >& rNameAccess );
-        WindowStateInfo&          impl_insertCacheAndReturnWinState( const OUString& rResourceURL, Reference< XNameAccess >& rNameAccess );
+        void                      impl_putPropertiesFromStruct( const WindowStateInfo& rWinStateInfo, Reference< XPropertySet > const & xPropSet );
+        Any                       impl_insertCacheAndReturnSequence( const OUString& rResourceURL, Reference< XNameAccess > const & rNameAccess );
+        WindowStateInfo&          impl_insertCacheAndReturnWinState( const OUString& rResourceURL, Reference< XNameAccess > const & rNameAccess );
         Any                       impl_getSequenceFromStruct( const WindowStateInfo& rWinStateInfo );
         void                      impl_fillStructFromSequence( WindowStateInfo& rWinStateInfo, const Sequence< PropertyValue >& rSeq );
         Any                       impl_getWindowStateFromResourceURL( const OUString& rResourceURL );
@@ -597,7 +597,7 @@ Any ConfigurationAccess_WindowState::impl_getSequenceFromStruct( const WindowSta
     return makeAny( comphelper::containerToSequence(aPropVec) );
 }
 
-Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OUString& rResourceURL, Reference< XNameAccess >& xNameAccess )
+Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OUString& rResourceURL, Reference< XNameAccess > const & xNameAccess )
 {
     sal_Int32                 nMask( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
@@ -793,7 +793,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
     return makeAny( comphelper::containerToSequence(aPropVec) );
 }
 
-ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowState::impl_insertCacheAndReturnWinState( const OUString& rResourceURL, Reference< XNameAccess >& rNameAccess )
+ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowState::impl_insertCacheAndReturnWinState( const OUString& rResourceURL, Reference< XNameAccess > const & rNameAccess )
 {
     sal_Int32                 nMask( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
@@ -1150,7 +1150,7 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
     }
 }
 
-void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const WindowStateInfo& rWinStateInfo, Reference< XPropertySet >& xPropSet )
+void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const WindowStateInfo& rWinStateInfo, Reference< XPropertySet > const & xPropSet )
 {
     sal_Int32                 i( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );

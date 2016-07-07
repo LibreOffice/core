@@ -33,7 +33,7 @@ public:
     CRC32();
     ~CRC32();
 
-    sal_Int64 SAL_CALL updateStream (css::uno::Reference < css::io::XInputStream > & xStream)
+    sal_Int64 SAL_CALL updateStream (css::uno::Reference < css::io::XInputStream > const & xStream)
         throw(css::uno::RuntimeException);
     void SAL_CALL updateSegment(const css::uno::Sequence< sal_Int8 > &b, sal_Int32 len)
         throw(css::uno::RuntimeException);

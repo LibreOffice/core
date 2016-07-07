@@ -1966,7 +1966,7 @@ void SvxPreviewBase::dispose()
     Control::dispose();
 }
 
-void SvxPreviewBase::LocalPrePaint(vcl::RenderContext& rRenderContext)
+void SvxPreviewBase::LocalPrePaint(vcl::RenderContext const & rRenderContext)
 {
     // init BufferDevice
     if (mpBufferDevice->GetOutputSizePixel() != GetOutputSizePixel())

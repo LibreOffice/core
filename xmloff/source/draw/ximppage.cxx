@@ -352,7 +352,7 @@ void SdXMLGenericPageContext::EndElement()
     SetNavigationOrder();
 }
 
-void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
+void SdXMLGenericPageContext::SetStyle( OUString const & rStyleName )
 {
     // set PageProperties?
     if(!rStyleName.isEmpty())
@@ -471,7 +471,7 @@ void SdXMLGenericPageContext::DeleteAllShapes()
     }
 }
 
-void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
+void SdXMLGenericPageContext::SetPageMaster( OUString const & rsPageMasterName )
 {
     if (GetSdImport().GetShapeImport()->GetStylesContext())
     {

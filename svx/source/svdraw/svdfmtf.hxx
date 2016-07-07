@@ -84,24 +84,24 @@ protected:
     bool isClip() const;
 
     // actions
-    void DoAction(MetaLineAction            & rAct);
-    void DoAction(MetaRectAction            & rAct);
-    void DoAction(MetaRoundRectAction       & rAct);
-    void DoAction(MetaEllipseAction         & rAct);
-    void DoAction(MetaArcAction             & rAct);
-    void DoAction(MetaPieAction             & rAct);
-    void DoAction(MetaChordAction           & rAct);
-    void DoAction(MetaPolyLineAction        & rAct);
-    void DoAction(MetaPolygonAction         & rAct);
-    void DoAction(MetaPolyPolygonAction     & rAct);
-    void DoAction(MetaTextAction            & rAct);
-    void DoAction(MetaTextArrayAction       & rAct);
-    void DoAction(MetaStretchTextAction     & rAct);
-    void DoAction(MetaBmpAction             & rAct);
-    void DoAction(MetaBmpScaleAction        & rAct);
-    void DoAction(MetaBmpExAction           & rAct);
-    void DoAction(MetaBmpExScaleAction      & rAct);
-    void DoAction(MetaHatchAction           & rAct);
+    void DoAction(MetaLineAction const      & rAct);
+    void DoAction(MetaRectAction const      & rAct);
+    void DoAction(MetaRoundRectAction const & rAct);
+    void DoAction(MetaEllipseAction const   & rAct);
+    void DoAction(MetaArcAction const       & rAct);
+    void DoAction(MetaPieAction const       & rAct);
+    void DoAction(MetaChordAction const     & rAct);
+    void DoAction(MetaPolyLineAction const  & rAct);
+    void DoAction(MetaPolygonAction const   & rAct);
+    void DoAction(MetaPolyPolygonAction const & rAct);
+    void DoAction(MetaTextAction const      & rAct);
+    void DoAction(MetaTextArrayAction const & rAct);
+    void DoAction(MetaStretchTextAction const & rAct);
+    void DoAction(MetaBmpAction const       & rAct);
+    void DoAction(MetaBmpScaleAction const  & rAct);
+    void DoAction(MetaBmpExAction const     & rAct);
+    void DoAction(MetaBmpExScaleAction const & rAct);
+    void DoAction(MetaHatchAction const     & rAct);
     void DoAction(MetaLineColorAction       & rAct);
     void DoAction(MetaMapModeAction         & rAct);
     void DoAction(MetaFillColorAction       & rAct) { rAct.Execute(mpVD); }
@@ -119,24 +119,24 @@ protected:
 
     // #i125211# The MetaCommentAction needs to advance (if used), thus
     // give current metafile and index which may be changed
-    void DoAction(MetaCommentAction& rAct, GDIMetaFile& rMtf, sal_uLong& a);
+    void DoAction(MetaCommentAction const & rAct, GDIMetaFile const & rMtf, sal_uLong& a);
 
     // missing actions added
-    void DoAction(MetaTextRectAction& rAct);
-    void DoAction(MetaBmpScalePartAction& rAct);
-    void DoAction(MetaBmpExScalePartAction& rAct);
-    void DoAction(MetaMaskAction& rAct);
-    void DoAction(MetaMaskScaleAction& rAct);
-    void DoAction(MetaMaskScalePartAction& rAct);
-    void DoAction(MetaGradientAction& rAct);
+    void DoAction(MetaTextRectAction const & rAct);
+    void DoAction(MetaBmpScalePartAction const & rAct);
+    void DoAction(MetaBmpExScalePartAction const & rAct);
+    void DoAction(MetaMaskAction const & rAct);
+    void DoAction(MetaMaskScaleAction const & rAct);
+    void DoAction(MetaMaskScalePartAction const & rAct);
+    void DoAction(MetaGradientAction const & rAct);
     static void DoAction(MetaWallpaperAction& rAct);
-    void DoAction(MetaTransparentAction& rAct);
+    void DoAction(MetaTransparentAction const & rAct);
     static void DoAction(MetaEPSAction& rAct);
     void DoAction(MetaRefPointAction& rAct)  { rAct.Execute(mpVD); }
     void DoAction(MetaTextLineColorAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
     static void DoAction(MetaTextLineAction& rAct);
-    void DoAction(MetaFloatTransparentAction& rAct);
-    void DoAction(MetaGradientExAction& rAct);
+    void DoAction(MetaFloatTransparentAction const & rAct);
+    void DoAction(MetaGradientExAction const & rAct);
     void DoAction(MetaLayoutModeAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
     void DoAction(MetaTextLanguageAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
     void DoAction(MetaOverlineColorAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
@@ -150,7 +150,7 @@ protected:
     bool CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly);
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
-    void DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport);
+    void DoLoopActions(GDIMetaFile const & rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport);
 
 private:
     // Copy assignment is forbidden and not implemented.

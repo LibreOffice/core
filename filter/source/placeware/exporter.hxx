@@ -39,10 +39,10 @@ public:
                    css::uno::Reference < css::io::XOutputStream > const & xOutputStream,
                    const OUString& rURL,
                    const css::uno::Reference < css::uno::XInterface >& xHandler,
-                   css::uno::Reference < css::task::XStatusIndicator >& rxStatusIndicator );
+                   css::uno::Reference < css::task::XStatusIndicator > const & rxStatusIndicator );
 
 private:
-    PageEntry* exportPage( css::uno::Reference< css::drawing::XDrawPage >&xDrawPage );
+    PageEntry* exportPage( css::uno::Reference< css::drawing::XDrawPage > const &xDrawPage );
 
     css::uno::Reference< css::uno::XComponentContext >        mxContext;
     css::uno::Reference< css::drawing::XGraphicExportFilter > mxGraphicExporter;

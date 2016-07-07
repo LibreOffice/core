@@ -121,7 +121,7 @@ public:
     bool            ImplStartDocking( const Point& rPos );
 
     // those methods actually call the corresponding handlers
-    void            StartDocking( const Point& rPos, Rectangle& rRect );
+    void            StartDocking( const Point& rPos, Rectangle const & rRect );
     bool            Docking( const Point& rPos, Rectangle& rRect );
     void            EndDocking( const Rectangle& rRect, bool bFloatMode );
     bool            PrepareToggleFloatingMode();
@@ -194,7 +194,7 @@ public:
 
     // required because those methods are not virtual in Window (!!!) and must
     // be availbale from the toolkit
-    void        SetPosSizePixel( vcl::Window *pWin, long nX, long nY,
+    void        SetPosSizePixel( vcl::Window const *pWin, long nX, long nY,
                                 long nWidth, long nHeight,
                                 PosSizeFlags nFlags = PosSizeFlags::All );
     Rectangle   GetPosSizePixel( const vcl::Window *pWin );

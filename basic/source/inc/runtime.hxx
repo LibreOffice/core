@@ -295,7 +295,7 @@ class SbiRuntime
     // #56204 swap out DIM-functionality into help method (step0.cxx)
     void DimImpl( SbxVariableRef refVar );
 
-    static bool implIsClass( SbxObject* pObj, const OUString& aClass );
+    static bool implIsClass( SbxObject const * pObj, const OUString& aClass );
 
     void StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt = false );
 
@@ -338,7 +338,7 @@ class SbiRuntime
     void StepPARAM( sal_uInt32, sal_uInt32),    StepCREATE( sal_uInt32, sal_uInt32 );
     void StepCALL( sal_uInt32, sal_uInt32 ),    StepCALLC( sal_uInt32, sal_uInt32 );
     void StepCASEIS( sal_uInt32, sal_uInt32 ),  StepSTMNT( sal_uInt32, sal_uInt32 );
-    SbxVariable* StepSTATIC_Impl( OUString& aName, SbxDataType& t );
+    SbxVariable* StepSTATIC_Impl( OUString const & aName, SbxDataType& t );
     void StepOPEN( sal_uInt32, sal_uInt32 ),    StepSTATIC( sal_uInt32, sal_uInt32 );
     void StepTCREATE(sal_uInt32,sal_uInt32),    StepDCREATE(sal_uInt32,sal_uInt32);
     void StepGLOBAL_P( sal_uInt32, sal_uInt32 ),StepFIND_G( sal_uInt32, sal_uInt32 );
@@ -370,7 +370,7 @@ public:
     SbMethod* GetCaller() { return pMeth;}
     SbxVariable* GetExternalCaller(){ return mpExtCaller; }
 
-    SbiForStack* FindForStackItemForCollection( class BasicCollection* pCollection );
+    SbiForStack* FindForStackItemForCollection( class BasicCollection const * pCollection );
 
     SbxBase* FindElementExtern( const OUString& rName );
     static bool isVBAEnabled();
@@ -383,7 +383,7 @@ inline void checkArithmeticOverflow( double d )
         StarBASIC::Error( ERRCODE_BASIC_MATH_OVERFLOW );
 }
 
-inline void checkArithmeticOverflow( SbxVariable* pVar )
+inline void checkArithmeticOverflow( SbxVariable const * pVar )
 {
     if( pVar->GetType() == SbxDOUBLE )
     {

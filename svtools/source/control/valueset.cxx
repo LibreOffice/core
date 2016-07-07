@@ -223,7 +223,7 @@ void ValueSet::ImplInitScrollBar()
     }
 }
 
-void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, Rectangle aRect)
+void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, Rectangle aRect)
 {
     WinBits nStyle = GetStyle();
     if (nStyle & WB_ITEMBORDER)
@@ -369,7 +369,7 @@ Reference<XAccessible> ValueSet::CreateAccessible()
     return new ValueSetAcc( this, false/*bIsTransientChildrenDisabled*/ );
 }
 
-void ValueSet::Format(vcl::RenderContext& rRenderContext)
+void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 {
     Size aWinSize(GetOutputSizePixel());
     size_t nItemCount = mItemList.size();

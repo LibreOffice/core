@@ -282,20 +282,20 @@ void doinclude( void );
 void dodefine( void );
 void doif( int hash );
 int openinclude( char*, int );
-int hasdirectory( char*, char*, int );
-int openfile( char* );
+int hasdirectory( char const*, char*, int );
+int openfile( char const* );
 
 /* cpp3.c */
-void addfile( FILE* fp, char* filename );
+void addfile( FILE* fp, char const* filename );
 void setincdirs( void );
-int AddInclude( char* pIncStr );
+int AddInclude( char const* pIncStr );
 
 void initdefines( void );
 int dooptions( int argc, char* argv[] );
 int readoptions( char* filename, char*** pfargv );
 
 /* cpp4.c */
-void checkparm( int c, DEFBUF* dp );
+void checkparm( int c, DEFBUF const* dp );
 int expcollect( void );
 void expstuff( DEFBUF* dp );
 
@@ -305,7 +305,7 @@ void dumpparm( char* why );
 #endif
 
 void doundef( void );
-void textput( char* text );
+void textput( char const * text );
 void charput( int c );
 void expand( DEFBUF* tokenp );
 
@@ -328,15 +328,15 @@ int catenate(void);
 int scanstring( int c, void (*outfun)( int c ) );
 void scannumber( int c, void (*outfun)( int c ) );
 void save( int c );
-char* savestring( char* text );
-FILEINFO* getfile( size_t bufsize, char* name );
+char* savestring( char const* text );
+FILEINFO* getfile( size_t bufsize, char const* name );
 char *getmem( size_t size );
 DEFBUF* lookid( int c );
 DEFBUF* defendel( char* name, int delete );
 int get( void );
 int cget( void );
 void unget( void );
-void ungetstring( char* text );
+void ungetstring( char const* text );
 void cerror( char* format, char* sarg );
 void cwarn( char* format, char* sarg );
 void cfatal( char* format, char* sarg );

@@ -40,7 +40,7 @@
 #include <sfx2/printer.hxx>
 #include <vcl/waitobj.hxx>
 
-void SfxPreviewBase_Impl::SetObjectShell(SfxObjectShell* pObj)
+void SfxPreviewBase_Impl::SetObjectShell(SfxObjectShell const * pObj)
 {
     std::shared_ptr<GDIMetaFile> xFile = pObj
         ? pObj->GetPreviewMetaFile()

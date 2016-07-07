@@ -58,7 +58,7 @@ public:
     ~SchXMLPositionAttributesHelper();
 
     void readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
-    void readAutomaticPositioningProperties( XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
+    void readAutomaticPositioningProperties( XMLPropStyleContext const * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 
     bool hasPosSize() const;
     bool isAutomatic() const;

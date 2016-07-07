@@ -1906,7 +1906,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
           sal_uInt32 nFlags,
           bool bBezier,
           css::awt::Rectangle& rGeoRect,
-    tools::Polygon* pPolygon )
+    tools::Polygon const * pPolygon )
 {
     static const char sPolyPolygonBezier [] = "PolyPolygonBezier";
     static const char sPolyPolygon       [] = "PolyPolygon";
@@ -2538,7 +2538,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
     }
 }
 
-bool EscherPropertyContainer::IsDefaultObject( SdrObjCustomShape* pCustoShape , const MSO_SPT eShapeType )
+bool EscherPropertyContainer::IsDefaultObject( SdrObjCustomShape const * pCustoShape , const MSO_SPT eShapeType )
 {
     bool bIsDefaultObject = false;
     switch(eShapeType)
@@ -4121,7 +4121,7 @@ sal_uInt32 EscherGraphicProvider::ImplInsertBlib( EscherBlibEntry* p_EscherBlibE
     return mnBlibEntrys;
 }
 
-sal_uInt32 EscherGraphicProvider::GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE ) const
+sal_uInt32 EscherGraphicProvider::GetBlibStoreContainerSize( SvStream const * pMergePicStreamBSE ) const
 {
     sal_uInt32 nSize = 44 * mnBlibEntrys + 8;
     if ( pMergePicStreamBSE )

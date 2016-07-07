@@ -65,7 +65,7 @@ class SbiImage {
     void MakeStrings( short );      // establish StringPool
     void AddString( const OUString& );
     void AddCode( char*, sal_uInt32 );
-    void AddType(SbxObject *);
+    void AddType(SbxObject const *);
     void AddEnum(SbxObject *);
 
 public:

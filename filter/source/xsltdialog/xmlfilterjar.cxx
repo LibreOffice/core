@@ -79,7 +79,7 @@ static OUString encodeZipUri( const OUString& rURI )
     return Uri::encode( rURI, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8 );
 }
 
-static Reference< XInterface > addFolder( Reference< XInterface >& xRootFolder, Reference< XSingleServiceFactory >& xFactory, const OUString& rName ) throw( Exception )
+static Reference< XInterface > addFolder( Reference< XInterface > const & xRootFolder, Reference< XSingleServiceFactory > const & xFactory, const OUString& rName ) throw( Exception )
 {
     if ( rName == ".." || rName == "." )
         throw lang::IllegalArgumentException();

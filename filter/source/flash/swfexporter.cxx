@@ -121,7 +121,7 @@ const sal_uInt16 cBackgroundObjectsDepth = 3;
 const sal_uInt16 cPageObjectsDepth = 4;
 const sal_uInt16 cWaitButtonDepth = 10;
 
-bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< XOutputStream > &xOutputStream, Reference< XStatusIndicator> &xStatusIndicator )
+bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< XOutputStream > const &xOutputStream, Reference< XStatusIndicator> const &xStatusIndicator )
 {
     Reference< XServiceInfo > xDocServInfo( xDoc, UNO_QUERY );
     if( xDocServInfo.is() )
@@ -264,7 +264,7 @@ bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< X
 }
 
 
-bool FlashExporter::exportSlides( const Reference< XDrawPage >& xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 /* nPage */ )
+bool FlashExporter::exportSlides( const Reference< XDrawPage >& xDrawPage, Reference< XOutputStream > const &xOutputStream, sal_uInt16 /* nPage */ )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
@@ -300,7 +300,7 @@ bool FlashExporter::exportSlides( const Reference< XDrawPage >& xDrawPage, Refer
     return true;
 }
 
-sal_uInt16 FlashExporter::exportBackgrounds( const Reference< XDrawPage >& xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 nPage, bool bExportObjects )
+sal_uInt16 FlashExporter::exportBackgrounds( const Reference< XDrawPage >& xDrawPage, Reference< XOutputStream > const &xOutputStream, sal_uInt16 nPage, bool bExportObjects )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )
@@ -461,7 +461,7 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
     return nPage;
 }
 
-sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< XDrawPage >& xMasterPage)
+sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< XDrawPage > const & xMasterPage)
 {
     Reference< XShapes > xShapes( xMasterPage, UNO_QUERY );
 
@@ -637,7 +637,7 @@ void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster
 }
 
 
-bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile& rMtf, bool bOnlyBackground /* = false */, bool bExportAsJPEG /* = false */)
+bool FlashExporter::getMetaFile( Reference< XComponent > const &xComponent, GDIMetaFile& rMtf, bool bOnlyBackground /* = false */, bool bExportAsJPEG /* = false */)
 {
     if( !mxGraphicExporter.is() )
         mxGraphicExporter = GraphicExportFilter::create( mxContext );
@@ -725,7 +725,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     return rMtf.GetActionSize() != 0;
 }
 
-BitmapChecksum FlashExporter::ActionSummer(Reference< XShape >& xShape)
+BitmapChecksum FlashExporter::ActionSummer(Reference< XShape > const & xShape)
 {
     Reference< XShapes > xShapes( xShape, UNO_QUERY );
 
@@ -744,7 +744,7 @@ BitmapChecksum FlashExporter::ActionSummer(Reference< XShape >& xShape)
     }
 }
 
-BitmapChecksum FlashExporter::ActionSummer(Reference< XShapes >& xShapes)
+BitmapChecksum FlashExporter::ActionSummer(Reference< XShapes > const & xShapes)
 {
     sal_uInt32 nShapeCount = xShapes->getCount();
     BitmapChecksum shapecount = 0;

@@ -552,7 +552,7 @@ protected:
     sal_Int32 AlignSeekCursor();
     bool SetCurrent(long nNewRow);
 
-    OUString GetCurrentRowCellText(DbGridColumn* pCol,const DbGridRowRef& _rRow) const;
+    OUString GetCurrentRowCellText(DbGridColumn const * pCol,const DbGridRowRef& _rRow) const;
     virtual void DeleteSelectedRows();
     static bool IsValid(const DbGridRowRef& _xRow) { return _xRow && _xRow->IsValid(); }
 

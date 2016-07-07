@@ -305,7 +305,7 @@ bool SaveOlePropertySet(
     return (nGlobError == ERRCODE_NONE) && (nDocError == ERRCODE_NONE);
 }
 
-uno::Sequence<sal_Int8> convertMetaFile(GDIMetaFile* i_pThumb)
+uno::Sequence<sal_Int8> convertMetaFile(GDIMetaFile const * i_pThumb)
 {
     if (i_pThumb) {
         BitmapEx aBitmap;

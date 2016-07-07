@@ -114,7 +114,7 @@ class SVX_DLLPUBLIC SvxGrafAttrHelper
 public:
 
     static void     ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView );
-    static void     GetGrafAttrState( SfxItemSet& rSet, SdrView& rView );
+    static void     GetGrafAttrState( SfxItemSet& rSet, SdrView const & rView );
 };
 
 #endif // INCLUDED_SVX_GRAFCTRL_HXX

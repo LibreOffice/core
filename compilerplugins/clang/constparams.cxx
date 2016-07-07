@@ -89,22 +89,36 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
             || name == "PDFSigningPKCS7PasswordCallback"
             || name == "VCLExceptionSignal_impl"
             || name == "parseXcsFile"
+            || name == "StructuredXMLErrorFunction"
+            || name == "PyUNO_getattr"
+            || name == "PyUNO_setattr"
+            || name == "PyUNOStruct_getattr"
+            || name == "PyUNOStruct_setattr"
                 // UNO component entry points
-            || name.endswith("component_getFactory"))
+            || name.endswith("component_getFactory")
+                // filter DLL entry points
+            || name.endswith("GraphicExport")
+                // JNI interface for HSQLDB
+            || name.startswith("Java_com_sun_star_sdbcx"))
                 return true;
     }
 
-    StringRef aFileName = getFilename(functionDecl->getLocStart());
+    StringRef aFileName = getFilename(functionDecl->getCanonicalDecl()->getLocStart());
     if (aFileName.startswith(SRCDIR "/sal/")
         || aFileName.startswith(SRCDIR "/bridges/")
         || aFileName.startswith(SRCDIR "/binaryurp/")
         || aFileName.startswith(SRCDIR "/stoc/")
+        || aFileName.startswith(SRCDIR "/include/LibreOfficeKit")
         || aFileName.startswith(WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx")
         // some weird calling through a function pointer
         || aFileName.startswith(SRCDIR "/svtools/source/table/defaultinputhandler.cxx")
         // windows only
-        || aFileName.startswith(SRCDIR "/basic/source/sbx/sbxdec.cxx")
-        || aFileName.startswith(SRCDIR "/sfx2/source/doc/syspath.cxx")) {
+        || aFileName.startswith(SRCDIR "/basic/source/sbx/sbxdec.hxx")
+        || aFileName.startswith(SRCDIR "/sfx2/source/doc/syspath.hxx")
+        // ??
+        || aFileName.startswith(SRCDIR "/pyuno/source/module/pyuno_impl.hxx")
+        // functions being passed as parameters
+        || aFileName.startswith(SRCDIR "/svx/source/svdraw/svdglev.cxx")) {
         return true;
     }
 
@@ -230,6 +244,16 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
         const CXXOperatorCallExpr* operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(parent);
         const CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(operatorCallExpr->getDirectCallee());
         if (calleeMethodDecl) {
+            if (operatorCallExpr->getOperator() == OO_Call && operatorCallExpr->getNumArgs()>0) {
+                if (operatorCallExpr->getArg(0) == stmt) { // implicit this pointer
+                    return calleeMethodDecl->isConst();
+                }
+                for (unsigned i = 1; i < operatorCallExpr->getNumArgs(); ++i) {
+                    if (operatorCallExpr->getArg(i) == stmt) {
+                        return isPointerOrReferenceToConst(calleeMethodDecl->getParamDecl(i-1)->getType());
+                    }
+                }
+            }
             // unary operator
             if (calleeMethodDecl->getNumParams() == 0) {
                 return calleeMethodDecl->isConst();
@@ -244,14 +268,13 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
         } else {
             const Expr* callee = operatorCallExpr->getCallee()->IgnoreParenImpCasts();
             const DeclRefExpr* dr = dyn_cast<DeclRefExpr>(callee);
-            const FunctionDecl* calleeFunctionDecl = nullptr;
             if (dr) {
-                calleeFunctionDecl = dyn_cast<FunctionDecl>(dr->getDecl());
-            }
-            if (calleeFunctionDecl) {
-                for (unsigned i = 0; i < operatorCallExpr->getNumArgs(); ++i) {
-                    if (operatorCallExpr->getArg(i) == stmt) {
-                        return isPointerOrReferenceToConst(calleeFunctionDecl->getParamDecl(i)->getType());
+                const FunctionDecl* calleeFunctionDecl = dyn_cast<FunctionDecl>(dr->getDecl());
+                if (calleeFunctionDecl) {
+                    for (unsigned i = 0; i < operatorCallExpr->getNumArgs(); ++i) {
+                        if (operatorCallExpr->getArg(i) == stmt) {
+                            return isPointerOrReferenceToConst(calleeFunctionDecl->getParamDecl(i)->getType());
+                        }
                     }
                 }
             }
@@ -343,6 +366,8 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
         return checkIfCanBeConst(parent);
     } else if (isa<ParenExpr>(parent)) {
         return checkIfCanBeConst(parent);
+    } else if (isa<UnaryExprOrTypeTraitExpr>(parent)) {
+        return checkIfCanBeConst(parent);
     } else if (isa<DeclStmt>(parent)) {
         // TODO could do better here, but would require tracking the target(s)
         return false;
@@ -400,7 +425,7 @@ StringRef ConstParams::getFilename(const SourceLocation& loc)
     return name;
 }
 
-loplugin::Plugin::Registration< ConstParams > X("constparams", false);
+loplugin::Plugin::Registration< ConstParams > X("constparams", true);
 
 }
 

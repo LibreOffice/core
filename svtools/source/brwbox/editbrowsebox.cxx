@@ -1173,7 +1173,7 @@ namespace svt
     }
 
 
-    void EditBrowseBox::ResizeController(CellControllerRef& rController, const Rectangle& rRect)
+    void EditBrowseBox::ResizeController(CellControllerRef const & rController, const Rectangle& rRect)
     {
         rController->GetWindow().SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
     }
@@ -1285,7 +1285,7 @@ namespace svt
             InvalidateStatusCell(GetCurRow());
     }
 
-    inline void EditBrowseBox::HideAndDisable(CellControllerRef& rController)
+    inline void EditBrowseBox::HideAndDisable(CellControllerRef const & rController)
     {
         rController->suspend();
     }

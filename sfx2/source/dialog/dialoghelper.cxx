@@ -18,7 +18,7 @@
 //right, get both of their non-preview areas to request the same size
 //so that the preview appears in the same place in each one so
 //flipping between tabs isn't distracting as it jumps around
-void setPreviewsToSamePlace(vcl::Window *pParent, VclBuilderContainer *pPage)
+void setPreviewsToSamePlace(vcl::Window const *pParent, VclBuilderContainer *pPage)
 {
     vcl::Window *pOurGrid = pPage->get<vcl::Window>("maingrid");
     if (!pOurGrid)

@@ -561,7 +561,7 @@ namespace svt
 
         virtual CellController* GetController(long nRow, sal_uInt16 nCol);
         virtual void InitController(CellControllerRef& rController, long nRow, sal_uInt16 nCol);
-        static void ResizeController(CellControllerRef& rController, const Rectangle&);
+        static void ResizeController(CellControllerRef const & rController, const Rectangle&);
         virtual void DoubleClick(const BrowserMouseEvent&) override;
 
         void ActivateCell() { ActivateCell(GetCurRow(), GetCurColumnId()); }
@@ -654,7 +654,7 @@ namespace svt
         using Control::ImplInitSettings;
         SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         SVT_DLLPRIVATE void DetermineFocus( const GetFocusFlags _nGetFocusFlags = GetFocusFlags::NONE);
-        static inline void HideAndDisable(CellControllerRef& rController);
+        static inline void HideAndDisable(CellControllerRef const & rController);
         inline void EnableAndShow() const;
 
         SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp);

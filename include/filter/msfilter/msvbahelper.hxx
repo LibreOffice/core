@@ -59,8 +59,8 @@ struct MSFILTER_DLLPUBLIC MacroResolvedInfo
 
 MSFILTER_DLLPUBLIC OUString makeMacroURL( const OUString& sMacroName );
 MSFILTER_DLLPUBLIC OUString extractMacroName( const OUString& rMacroUrl );
-MSFILTER_DLLPUBLIC OUString getDefaultProjectName( SfxObjectShell* pShell );
-MSFILTER_DLLPUBLIC OUString resolveVBAMacro( SfxObjectShell* pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName );
+MSFILTER_DLLPUBLIC OUString getDefaultProjectName( SfxObjectShell const * pShell );
+MSFILTER_DLLPUBLIC OUString resolveVBAMacro( SfxObjectShell const * pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName );
 MSFILTER_DLLPUBLIC MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& rMacroName, bool bSearchGlobalTemplates = false );
 MSFILTER_DLLPUBLIC bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, css::uno::Sequence< css::uno::Any >& aArgs, css::uno::Any& aRet, const css::uno::Any& aCaller );
 MSFILTER_DLLPUBLIC css::awt::KeyEvent parseKeyEvent( const OUString& sKey ) throw (css::uno::RuntimeException);

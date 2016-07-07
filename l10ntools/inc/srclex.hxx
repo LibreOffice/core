@@ -24,7 +24,7 @@
 
 #include <stdio.h>
 
-extern "C" int WorkOnTokenSet( int, char* );
+extern "C" int WorkOnTokenSet( int, char const* );
 extern "C" FILE * init(int, char **);
 extern "C" int SetError();
 extern "C" int GetError();

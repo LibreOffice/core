@@ -547,7 +547,7 @@ OUString PasswordContainer::EncodePasswords(const vector< OUString >& lines, con
     throw RuntimeException("Can't encode!" );
 }
 
-void PasswordContainer::UpdateVector( const OUString& aURL, list< NamePassRecord >& toUpdate, NamePassRecord& aRecord, bool writeFile ) throw(RuntimeException)
+void PasswordContainer::UpdateVector( const OUString& aURL, list< NamePassRecord >& toUpdate, NamePassRecord const & aRecord, bool writeFile ) throw(RuntimeException)
 {
     for( list< NamePassRecord >::iterator aNPIter = toUpdate.begin(); aNPIter != toUpdate.end(); ++aNPIter )
         if( aNPIter->GetUserName().equals( aRecord.GetUserName() ) )

@@ -292,7 +292,7 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rName )
     return getNamedSdrObject( rName, GetPage(0) );
 }
 
-SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rObjectCID, SdrObjList* pSearchList )
+SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rObjectCID, SdrObjList const * pSearchList )
 {
     if(!pSearchList || rObjectCID.isEmpty())
         return nullptr;

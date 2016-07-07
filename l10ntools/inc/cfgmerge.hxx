@@ -114,7 +114,7 @@ protected:
     static void Error(const OString &rError);
 
 private:
-    void ExecuteAnalyzedToken( int nToken, char *pToken );
+    void ExecuteAnalyzedToken( int nToken, char const *pToken );
     void AddText(
         OString &rText,
         const OString &rIsoLang,
@@ -126,7 +126,7 @@ public:
     CfgParser();
     virtual ~CfgParser();
 
-    void Execute( int nToken, char * pToken );
+    void Execute( int nToken, char const * pToken );
 };
 
 /// Export strings from *.xcu files

@@ -114,7 +114,7 @@ class CGM
         void                ImplGetRectangle( FloatRect&, bool bMap = false );
         void                ImplGetRectangleNS( FloatRect& );
         void                ImplGetVector( double* );
-        static double       ImplGetOrientation( FloatPoint& rCenter, FloatPoint& rPoint );
+        static double       ImplGetOrientation( FloatPoint const & rCenter, FloatPoint const & rPoint );
         static void         ImplSwitchStartEndAngle( double& rStartAngle, double& rEndAngle );
         bool                ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rOrientation );
 

@@ -846,7 +846,7 @@ uno::Reference<embed::XStorage> SdrModel::GetDocumentStorage() const
 
 uno::Reference<io::XInputStream>
 SdrModel::GetDocumentStream( OUString const& rURL,
-                ::comphelper::LifecycleProxy & rProxy) const
+                ::comphelper::LifecycleProxy const & rProxy) const
 {
     uno::Reference<embed::XStorage> const xStorage(GetDocumentStorage());
     if (!xStorage.is())

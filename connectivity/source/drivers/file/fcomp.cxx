@@ -64,7 +64,7 @@ void OPredicateCompiler::dispose()
     m_xIndexes.clear();
 }
 
-void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
+void OPredicateCompiler::start(OSQLParseNode const * pSQLParseNode)
 {
     if (!pSQLParseNode)
         return;
@@ -221,7 +221,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
 }
 
 
-void OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  throw(SQLException, RuntimeException)
+void OPredicateCompiler::execute_COMPARE(OSQLParseNode const * pPredicateNode)  throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 3,"OFILECursor: Fehler im Parse Tree");
 
@@ -267,7 +267,7 @@ void OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  throw(S
 }
 
 
-void OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
+void OPredicateCompiler::execute_LIKE(OSQLParseNode const * pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
     const OSQLParseNode* pPart2 = pPredicateNode->getChild(1);
@@ -315,7 +315,7 @@ void OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(SQLEx
     m_aCodeList.push_back(pOperator);
 }
 
-void OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
+void OPredicateCompiler::execute_BETWEEN(OSQLParseNode const * pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
 
@@ -392,7 +392,7 @@ void OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQ
     m_aCodeList.push_back(pBoolOp);
 }
 
-void OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
+void OPredicateCompiler::execute_ISNULL(OSQLParseNode const * pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
     const OSQLParseNode* pPart2 = pPredicateNode->getChild(1);
@@ -564,7 +564,7 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
     return bResult;
 }
 
-void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal)
+void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList, ORowSetValueDecoratorRef const & _rVal)
 {
     OCodeList::iterator aIter = rCodeList.begin();
     if (!(*aIter))
@@ -590,7 +590,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
         delete pOperand;
 }
 
-void OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   throw(SQLException, RuntimeException)
+void OPredicateCompiler::execute_Fold(OSQLParseNode const * pPredicateNode)   throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
@@ -606,7 +606,7 @@ void OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   throw(SQL
     m_aCodeList.push_back(pOperator);
 }
 
-void OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    throw(SQLException, RuntimeException)
+void OPredicateCompiler::executeFunction(OSQLParseNode const * pPredicateNode)    throw(SQLException, RuntimeException)
 {
     OOperator* pOperator = nullptr;
 

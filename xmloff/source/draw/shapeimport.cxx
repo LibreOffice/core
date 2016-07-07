@@ -899,7 +899,7 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawi
     }
 }
 
-void XMLShapeImportHelper::addShapeConnection( css::uno::Reference< css::drawing::XShape >& rConnectorShape,
+void XMLShapeImportHelper::addShapeConnection( css::uno::Reference< css::drawing::XShape > const & rConnectorShape,
                          bool bStart,
                          const OUString& rDestShapeId,
                          sal_Int32 nDestGlueId )
@@ -971,7 +971,7 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
 
 /** adds a mapping for a glue point identifier from an xml file to the identifier created after inserting
     the new glue point into the core. The saved mappings can be retrieved by getGluePointId() */
-void XMLShapeImportHelper::addGluePointMapping( css::uno::Reference< css::drawing::XShape >& xShape,
+void XMLShapeImportHelper::addGluePointMapping( css::uno::Reference< css::drawing::XShape > const & xShape,
                           sal_Int32 nSourceId, sal_Int32 nDestinnationId )
 {
     if( mpPageContext )
@@ -1046,7 +1046,7 @@ sal_Int32 XMLShapeImportHelper::getGluePointId( const css::uno::Reference< css::
 }
 
 /** this method must be calling before the first shape is imported for the given page */
-void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes >& rShapes )
+void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes > const & rShapes )
 {
     XMLShapeImportPageContextImpl* pOldContext = mpPageContext;
     mpPageContext = new XMLShapeImportPageContextImpl();
@@ -1055,7 +1055,7 @@ void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes
 }
 
 /** this method must be calling after the last shape is imported for the given page */
-void XMLShapeImportHelper::endPage( css::uno::Reference< css::drawing::XShapes >& rShapes )
+void XMLShapeImportHelper::endPage( css::uno::Reference< css::drawing::XShapes > const & rShapes )
 {
     SAL_WARN_IF( !mpPageContext || (mpPageContext->mxShapes != rShapes), "xmloff", "wrong call to endPage(), no startPage called or wrong page" );
     if( nullptr == mpPageContext )

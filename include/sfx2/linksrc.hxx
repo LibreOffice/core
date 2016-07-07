@@ -88,10 +88,10 @@ public:
 
     void                AddDataAdvise( SvBaseLink *, const rtl::OUString & rMimeType,
                                         sal_uInt16 nAdviceMode );
-    void                RemoveAllDataAdvise( SvBaseLink * );
+    void                RemoveAllDataAdvise( SvBaseLink const * );
 
     void                AddConnectAdvise( SvBaseLink * );
-    void                RemoveConnectAdvise( SvBaseLink * );
+    void                RemoveConnectAdvise( SvBaseLink const * );
 
     struct StreamToLoadFrom{
         StreamToLoadFrom(

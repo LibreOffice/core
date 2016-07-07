@@ -472,8 +472,8 @@ public:
     virtual void SAL_CALL addContainerListener(const css::uno::Reference< css::container::XContainerListener >& l) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeContainerListener(const css::uno::Reference< css::container::XContainerListener >& l) throw(css::uno::RuntimeException, std::exception) override;
 
-    void columnVisible(DbGridColumn* pColumn);
-    void columnHidden(DbGridColumn* pColumn);
+    void columnVisible(DbGridColumn const * pColumn);
+    void columnHidden(DbGridColumn const * pColumn);
 
 // css::awt::XView
     virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw(css::uno::RuntimeException, std::exception) override;

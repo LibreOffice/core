@@ -266,7 +266,7 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index )
 }
 
 
-Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl, sal_Int32 childIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control const * pControl, sal_Int32 childIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     for( const auto& pEntry : maEntryVector )
     {
@@ -536,7 +536,7 @@ void ToolbarMenu::initWindow()
 }
 
 
-static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
+static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderContext, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
 {
     rMaxWidth = rCheckHeight = rRadioHeight = 0;
 
@@ -1165,7 +1165,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 }
 
 
-static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow, const Rectangle& i_rRect, bool i_bHighlight )
+static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow, const Rectangle& i_rRect, bool i_bHighlight )
 {
     bool bNativeOk = false;
     if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button))
@@ -1187,7 +1187,7 @@ static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Wi
     }
 }
 
-void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry* pThisOnly, bool bHighlighted)
+void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry const * pThisOnly, bool bHighlighted)
 {
     sal_uInt16 nBorder = 0; long nStartY = 0; // from Menu implementations, needed when we support native menu background & scrollable menu
 

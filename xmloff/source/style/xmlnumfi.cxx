@@ -1599,7 +1599,7 @@ sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
     }
 }
 
-sal_Int32 SvXMLNumFormatContext::CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier >& xFormatsSupplier )
+sal_Int32 SvXMLNumFormatContext::CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier > const & xFormatsSupplier )
 {
     if (nKey <= -1)
     {

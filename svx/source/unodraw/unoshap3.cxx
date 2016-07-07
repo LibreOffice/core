@@ -268,7 +268,7 @@ static bool ConvertHomogenMatrixToObject( E3dObject* pObject, const Any& rValue 
     return false;
 }
 
-static void ConvertObjectToHomogenMatric( E3dObject* pObject, Any& rValue )
+static void ConvertObjectToHomogenMatric( E3dObject const * pObject, Any& rValue )
 {
     drawing::HomogenMatrix aHomMat;
     const basegfx::B3DHomMatrix& rMat = pObject->GetTransform();

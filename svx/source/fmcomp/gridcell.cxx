@@ -516,7 +516,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
 }
 
 
-void DbGridColumn::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat )
+void DbGridColumn::ImplInitWindow( vcl::Window const & rParent, const InitWindowFacet _eInitWhat )
 {
     if ( m_pCell.is() )
         m_pCell->ImplInitWindow( rParent, _eInitWhat );
@@ -706,7 +706,7 @@ bool DbCellControl::Commit()
 }
 
 
-void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat )
+void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindowFacet _eInitWhat )
 {
     vcl::Window* pWindows[] = { m_pPainter, m_pWindow };
 

@@ -135,7 +135,7 @@ public:
     void UpdateSelection_Impl_Acc (bool b_IsDropDownList);
 
     void UpdateFocus_Impl_Acc ( sal_Int32 nPos, bool b_IsDropDownList) ;
-    static void NotifyListItem(css::uno::Any& val);
+    static void NotifyListItem(css::uno::Any const & val);
 protected:
     BoxType     m_aBoxType;
     ::accessibility::IComboListBoxHelper* m_pListBoxHelper;

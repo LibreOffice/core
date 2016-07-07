@@ -260,7 +260,7 @@ public:
     Writer( sal_Int32 nDocWidthInput, sal_Int32 nDocHeightInput, sal_Int32 nDocWidth, sal_Int32 nDocHeight, sal_Int32 nJPEGcompressMode = -1 );
     ~Writer();
 
-    void storeTo( css::uno::Reference< css::io::XOutputStream > &xOutStream );
+    void storeTo( css::uno::Reference< css::io::XOutputStream > const &xOutStream );
 
     // geometry
     void setClipping( const tools::PolyPolygon* pClipPolyPolygon );
@@ -326,9 +326,9 @@ private:
     void endTag();
     sal_uInt16 createID() { return mnNextId++; }
 
-    void Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
+    void Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 const *pCompressed, sal_uInt32 compressed_size );
     void Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const Rectangle& rClipRect, bool bMap );
-    void Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
+    void Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 const *pCompressed, sal_uInt32 compressed_size );
     void Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void Impl_writeActions( const GDIMetaFile& rMtf );
     void Impl_writePolygon( const tools::Polygon& rPoly, bool bFilled );
@@ -341,8 +341,8 @@ private:
     void Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = nullptr );
     void Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY );
     void Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY );
-    bool Impl_writeFilling( SvtGraphicFill& rFilling );
-    bool Impl_writeStroke( SvtGraphicStroke& rStroke );
+    bool Impl_writeFilling( SvtGraphicFill const & rFilling );
+    bool Impl_writeStroke( SvtGraphicStroke const & rStroke );
 
     FlashFont& Impl_getFont( const vcl::Font& rFont );
 

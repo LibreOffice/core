@@ -200,7 +200,7 @@ throw (uno::RuntimeException, std::exception)
 }
 
 void RegressionCurveCalculator::addStringToEquation(
-        OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer& aAddString, sal_Int32* pMaxWidth)
+        OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer const & aAddString, sal_Int32 const * pMaxWidth)
 {
     if ( pMaxWidth && ( nLineLength + aAddString.getLength() > *pMaxWidth ) )
     {  // wrap line

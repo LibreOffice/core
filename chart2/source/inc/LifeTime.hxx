@@ -91,7 +91,7 @@ OOO_DLLPUBLIC_CHARTTOOLS    virtual ~CloseableLifeTimeManager();
 OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposedOrClosed( bool bAssert=true );
 OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_startTryClose(bool bDeliverOwnership)
                     throw ( css::uno::Exception );
-OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException& ex )
+OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException const & ex )
                     throw ( css::util::CloseVetoException );
 OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose(bool bDeliverOwnership, bool bMyVeto );
 OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose_doClose();

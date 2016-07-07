@@ -246,7 +246,7 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow 
 
 namespace {
 
-Point pixelToLogic(const Point& rPoint, vcl::Window* pWindow)
+Point pixelToLogic(const Point& rPoint, vcl::Window const * pWindow)
 {
     if (!pWindow)
         return rPoint;
@@ -896,7 +896,7 @@ namespace
     }
 }
 
-void SvxTableController::onFormatTable( SfxRequest& rReq )
+void SvxTableController::onFormatTable( SfxRequest const & rReq )
 {
     sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
@@ -2640,7 +2640,7 @@ bool SvxTableController::PasteObjModel( const SdrModel& rModel )
 }
 
 
-bool SvxTableController::PasteObject( SdrTableObj* pPasteTableObj )
+bool SvxTableController::PasteObject( SdrTableObj const * pPasteTableObj )
 {
     if( !pPasteTableObj )
         return false;

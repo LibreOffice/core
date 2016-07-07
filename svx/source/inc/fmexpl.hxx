@@ -341,10 +341,10 @@ namespace svxform
         void UpdateContent( const css::uno::Reference< css::form::XForms >& xForms );
 
         void InsertForm(const css::uno::Reference< css::form::XForm >& xForm, sal_uInt32 nRelPos);
-        void RemoveForm(FmFormData* pFormData);
+        void RemoveForm(FmFormData const * pFormData);
 
         void InsertFormComponent(const css::uno::Reference< css::form::XFormComponent >& xComp, sal_uInt32 nRelPos);
-        void RemoveFormComponent(FmControlData* pControlData);
+        void RemoveFormComponent(FmControlData const * pControlData);
         void InsertSdrObj(const SdrObject* pSdrObj);
         void RemoveSdrObj(const SdrObject* pSdrObj);
 
@@ -361,7 +361,7 @@ namespace svxform
         virtual ~NavigatorTreeModel();
 
         void FillBranch( FmFormData* pParentData );
-        void ClearBranch( FmFormData* pParentData );
+        void ClearBranch( FmFormData const * pParentData );
         void UpdateContent( FmFormShell* pNewShell );
 
         void Insert( FmEntryData* pEntryData, sal_uLong nRelPos = CONTAINER_APPEND,
@@ -377,9 +377,9 @@ namespace svxform
         FmFormShell*        GetFormShell() const { return m_pFormShell; }
         FmFormPage*         GetFormPage() const { return m_pFormPage; }
         FmEntryData*        FindData( const css::uno::Reference< css::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
-        FmEntryData*        FindData( const OUString& rText, FmFormData* pParentData, bool bRecurs=true );
+        FmEntryData*        FindData( const OUString& rText, FmFormData const * pParentData, bool bRecurs=true );
         FmEntryDataList*    GetRootList() const { return m_pRootList; }
-        static css::uno::Reference< css::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
+        static css::uno::Reference< css::container::XIndexContainer >   GetFormComponents( FmFormData const * pParentFormData );
         SdrObject*          Search(SdrObjListIter& rIter, const css::uno::Reference< css::form::XFormComponent >& xComp);
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -429,8 +429,8 @@ namespace svxform
         bool            m_bInitialUpdate        : 1;   // bin ich das erste Mal im UpdateContent ?
         bool            m_bKeyboardCut          : 1;
 
-        FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, bool bEditName = true );
-        void            NewForm( SvTreeListEntry* pParentEntry );
+        FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry const * pParentEntry, bool bEditName = true );
+        void            NewForm( SvTreeListEntry const * pParentEntry );
         SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=TREELIST_APPEND );
         void            Remove( FmEntryData* pEntryData );
 
@@ -458,7 +458,7 @@ namespace svxform
         void SynchronizeMarkList();
             // umgekehrte Richtung von SynchronizeMarkList : markiert in der View alle der aktuellen Selektion entsprechenden Controls
 
-        void CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< css::uno::Reference< css::form::XFormComponent > >& _rObjects);
+        void CollectObjects(FmFormData const * pFormData, bool bDeep, ::std::set< css::uno::Reference< css::form::XFormComponent > >& _rObjects);
 
         // im Select aktualisiere ich normalerweise die Marklist der zugehoerigen View, mit folgenden Funktionen
         // kann ich das Locking dieses Verhaltens steuern
@@ -466,7 +466,7 @@ namespace svxform
         void UnlockSelectionHandling() { --m_nSelectLock; }
         bool IsSelectionHandlingLocked() const { return m_nSelectLock>0; }
 
-        static bool IsHiddenControl(FmEntryData* pEntryData);
+        static bool IsHiddenControl(FmEntryData const * pEntryData);
 
         DECL_LINK_TYPED( OnEdit, void*, void );
         DECL_LINK_TYPED( OnDropActionTimer, Timer*, void );
@@ -490,14 +490,14 @@ namespace svxform
 
         void Clear();
         void UpdateContent( FmFormShell* pFormShell );
-        void MarkViewObj( FmFormData* pFormData, bool bDeep );
-        void MarkViewObj( FmControlData* pControlData );
+        void MarkViewObj( FmFormData const * pFormData, bool bDeep );
+        void MarkViewObj( FmControlData const * pControlData );
         void UnmarkAllViewObj();
 
-        static bool IsFormEntry( SvTreeListEntry* pEntry );
-        static bool IsFormComponentEntry( SvTreeListEntry* pEntry );
+        static bool IsFormEntry( SvTreeListEntry const * pEntry );
+        static bool IsFormComponentEntry( SvTreeListEntry const * pEntry );
 
-        OUString GenerateName( FmEntryData* pEntryData );
+        OUString GenerateName( FmEntryData const * pEntryData );
 
         NavigatorTreeModel*    GetNavModel() const { return m_pNavModel; }
         SvTreeListEntry*        FindEntry( FmEntryData* pEntryData );

@@ -242,7 +242,7 @@ private:
     void par602(bool endofpage);
     void inschr(unsigned char ch);
     void inschrdef(unsigned char ch);
-    unsigned char Setformat602(char *cmd);
+    unsigned char Setformat602(char const *cmd);
     sal_Int16 readnum(unsigned char *ch, bool show);
     tnode PointCmd602(unsigned char *ch);
     void setfnt(fonts fnt,bool mustwrite);

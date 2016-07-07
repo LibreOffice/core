@@ -69,7 +69,7 @@ public:
     SVX_DLLPRIVATE void onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs = nullptr );
     SVX_DLLPRIVATE void onDelete( sal_uInt16 nSId );
     SVX_DLLPRIVATE void onSelect( sal_uInt16 nSId );
-    SVX_DLLPRIVATE void onFormatTable( SfxRequest& rReq );
+    SVX_DLLPRIVATE void onFormatTable( SfxRequest const & rReq );
     SVX_DLLPRIVATE void MergeMarkedCells();
     SVX_DLLPRIVATE void SplitMarkedCells();
     SVX_DLLPRIVATE void DistributeColumns();
@@ -124,7 +124,7 @@ private:
     SVX_DLLPRIVATE void SetTableStyle( const SfxItemSet* pArgs );
     SVX_DLLPRIVATE void SetTableStyleSettings( const SfxItemSet* pArgs );
 
-    SVX_DLLPRIVATE bool PasteObject( SdrTableObj* pPasteTableObj );
+    SVX_DLLPRIVATE bool PasteObject( SdrTableObj const * pPasteTableObj );
 
     SVX_DLLPRIVATE bool checkTableObject();
     SVX_DLLPRIVATE const CellPos& getSelectionStart();

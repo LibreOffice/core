@@ -733,7 +733,7 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
     }
 }
 
-void SvXMLUnitConverter::convertPropertySet(uno::Reference<beans::XPropertySet>& rProperties,
+void SvXMLUnitConverter::convertPropertySet(uno::Reference<beans::XPropertySet> const & rProperties,
                     const uno::Sequence<beans::PropertyValue>& aProps)
 {
     sal_Int32 nCount(aProps.getLength());

@@ -141,7 +141,7 @@ protected:
     void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
     void ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
 
-    css::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap ) const;
+    css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap ) const;
 
     bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName );
 
@@ -196,7 +196,7 @@ public:
     sal_uInt32 getShapeKind() const;
 
     // styles need this
-    static bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel* pModel );
+    static bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel const * pModel );
     static bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet );
 
     /** same as SetFillAttribute but for property names instead of which ids,

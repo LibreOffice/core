@@ -481,7 +481,7 @@ void save(int c)
 /*
  * Store a string into free memory.
  */
-char* savestring(char* text)
+char* savestring(char const* text)
 {
     char* result;
 
@@ -494,7 +494,7 @@ char* savestring(char* text)
 /*
  * Common FILEINFO buffer initialization for a new file or macro.
  */
-FILEINFO* getfile(size_t bufsize, char* name)
+FILEINFO* getfile(size_t bufsize, char const* name)
 {
     FILEINFO* file;
     size_t size;
@@ -1019,7 +1019,7 @@ void unget()
  * Push a string back on the input stream.  This is done by treating
  * the text as if it were a macro.
  */
-void ungetstring(char* text)
+void ungetstring(char const* text)
 {
     FILEINFO* file;
     file = getfile(strlen(text) + 1, "");

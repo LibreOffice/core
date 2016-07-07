@@ -921,7 +921,7 @@ bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     return bRet;        // true: currency element written
 }
 
-static OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLang )
+static OUString lcl_GetDefaultCalendar( SvNumberFormatter const * pFormatter, LanguageType nLang )
 {
     //  get name of first non-gregorian calendar for the language
 
@@ -1890,7 +1890,7 @@ void SvXMLNumFmtExport::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
         pUsedList->SetWasUsed(rWasUsed);
 }
 
-static const SvNumberformat* lcl_GetFormat( SvNumberFormatter* pFormatter,
+static const SvNumberformat* lcl_GetFormat( SvNumberFormatter const * pFormatter,
                            sal_uInt32 nKey )
 {
     return ( pFormatter != nullptr ) ? pFormatter->GetEntry( nKey ) : nullptr;

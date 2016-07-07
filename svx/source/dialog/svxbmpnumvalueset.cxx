@@ -423,7 +423,7 @@ void SvxNumValueSet::dispose()
 
 void SvxNumValueSet::SetNumberingSettings(
     const Sequence<Sequence<PropertyValue> >& aNum,
-    Reference<XNumberingFormatter>& xFormat,
+    Reference<XNumberingFormatter> const & xFormat,
     const Locale& rLocale   )
 {
     aNumSettings = aNum;
@@ -440,8 +440,8 @@ void SvxNumValueSet::SetNumberingSettings(
 }
 
 void SvxNumValueSet::SetOutlineNumberingSettings(
-            Sequence<Reference<XIndexAccess> >& rOutline,
-            Reference<XNumberingFormatter>& xFormat,
+            Sequence<Reference<XIndexAccess> > const & rOutline,
+            Reference<XNumberingFormatter> const & xFormat,
             const Locale& rLocale)
 {
     aOutlineSettings = rOutline;

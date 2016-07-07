@@ -191,7 +191,7 @@ void XSecController::setReferenceCount() const
     }
 }
 
-void XSecController::setX509IssuerName( OUString& ouX509IssuerName )
+void XSecController::setX509IssuerName( OUString const & ouX509IssuerName )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -202,7 +202,7 @@ void XSecController::setX509IssuerName( OUString& ouX509IssuerName )
     isi.signatureInfor.ouX509IssuerName = ouX509IssuerName;
 }
 
-void XSecController::setX509SerialNumber( OUString& ouX509SerialNumber )
+void XSecController::setX509SerialNumber( OUString const & ouX509SerialNumber )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -213,7 +213,7 @@ void XSecController::setX509SerialNumber( OUString& ouX509SerialNumber )
     isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
 }
 
-void XSecController::setX509Certificate( OUString& ouX509Certificate )
+void XSecController::setX509Certificate( OUString const & ouX509Certificate )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -224,7 +224,7 @@ void XSecController::setX509Certificate( OUString& ouX509Certificate )
     isi.signatureInfor.ouX509Certificate = ouX509Certificate;
 }
 
-void XSecController::setSignatureValue( OUString& ouSignatureValue )
+void XSecController::setSignatureValue( OUString const & ouSignatureValue )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -235,7 +235,7 @@ void XSecController::setSignatureValue( OUString& ouSignatureValue )
     isi.signatureInfor.ouSignatureValue = ouSignatureValue;
 }
 
-void XSecController::setDigestValue( OUString& ouDigestValue )
+void XSecController::setDigestValue( OUString const & ouDigestValue )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -253,7 +253,7 @@ void XSecController::setDigestValue( OUString& ouDigestValue )
     reference.ouDigestValue = ouDigestValue;
 }
 
-void XSecController::setDate( OUString& ouDate )
+void XSecController::setDate( OUString const & ouDate )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -292,7 +292,7 @@ void XSecController::setCertDigest(const OUString& rCertDigest)
     rInformation.signatureInfor.ouCertDigest = rCertDigest;
 }
 
-void XSecController::setId( OUString& ouId )
+void XSecController::setId( OUString const & ouId )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -303,7 +303,7 @@ void XSecController::setId( OUString& ouId )
     isi.signatureInfor.ouSignatureId = ouId;
 }
 
-void XSecController::setPropertyId( OUString& ouPropertyId )
+void XSecController::setPropertyId( OUString const & ouPropertyId )
 {
     if (m_vInternalSignatureInformations.empty())
     {

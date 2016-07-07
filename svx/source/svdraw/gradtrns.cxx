@@ -27,7 +27,7 @@
 #include <vcl/outdev.hxx>
 
 
-void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, const SdrObject* pObj)
+void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& rV, const SdrObject* pObj)
 {
     // handle start color
     rV.aCol1 = rG.aGradient.GetStartColor();
@@ -179,7 +179,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
 }
 
 
-void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, GradTransGradient& rGOld, const SdrObject* pObj,
+void GradTransformer::VecToGrad(GradTransVector const & rV, GradTransGradient& rG, GradTransGradient const & rGOld, const SdrObject* pObj,
     bool bMoveSingle, bool bMoveFirst)
 {
     // fill old gradient to new gradient to have a base

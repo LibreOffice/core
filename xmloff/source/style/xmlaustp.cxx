@@ -317,8 +317,8 @@ void SvXMLAutoStylePoolP::GetRegisteredNames(
 }
 
 void SvXMLAutoStylePoolP::RegisterNames(
-    uno::Sequence<sal_Int32>& aFamilies,
-    uno::Sequence<OUString>& aNames )
+    uno::Sequence<sal_Int32> const & aFamilies,
+    uno::Sequence<OUString> const & aNames )
 {
     assert(aFamilies.getLength() == aNames.getLength());
 

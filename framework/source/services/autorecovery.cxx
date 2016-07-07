@@ -829,7 +829,7 @@ private:
      */
     static css::frame::FeatureStateEvent implst_createFeatureStateEvent(      sal_Int32                    eJob      ,
                                                                         const OUString&             sEventType,
-                                                                              AutoRecovery::TDocumentInfo* pInfo     );
+                                                                              AutoRecovery::TDocumentInfo const * pInfo     );
 
     class ListenerInformer
     {
@@ -2765,7 +2765,7 @@ void AutoRecovery::implts_changeAllDocVisibility(bool bVisible)
 /* Currently the document is not closed in case of crash,
    so the lock file must be removed explicitly
 */
-void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
+void lc_removeLockFile(AutoRecovery::TDocumentInfo const & rInfo)
 {
 #if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT || HAVE_FEATURE_MACOSX_SANDBOX
     (void) rInfo;
@@ -2869,7 +2869,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
         So we ignore such documents only ...
         Hopefully next time they are not inserted in our cache.
 */
-bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo& rInfo)
+bool lc_checkIfSaveForbiddenByArguments(AutoRecovery::TDocumentInfo const & rInfo)
 {
     if (! rInfo.Document.is())
         return true;
@@ -3637,7 +3637,7 @@ sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
 
 css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(      sal_Int32                    eJob      ,
                                                                            const OUString&             sEventType,
-                                                                                 AutoRecovery::TDocumentInfo* pInfo     )
+                                                                                 AutoRecovery::TDocumentInfo const * pInfo     )
 {
     css::frame::FeatureStateEvent aEvent;
     aEvent.FeatureURL.Complete   = AutoRecovery::implst_getJobDescription(eJob);

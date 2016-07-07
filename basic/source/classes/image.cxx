@@ -77,7 +77,7 @@ void SbiImage::Clear()
 *
 **************************************************************************/
 
-bool SbiGood( SvStream& r )
+bool SbiGood( SvStream const & r )
 {
     return !r.IsEof() && r.GetError() == SVSTREAM_OK;
 }
@@ -618,7 +618,7 @@ void SbiImage::AddCode( char* p, sal_uInt32 s )
 }
 
 // Add user type
-void SbiImage::AddType(SbxObject* pObject)
+void SbiImage::AddType(SbxObject const * pObject)
 {
     if( !rTypes.Is() )
     {

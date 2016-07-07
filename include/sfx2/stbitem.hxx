@@ -113,7 +113,7 @@ public:
     sal_uInt16      GetId() const { return nId; }
     StatusBar&      GetStatusBar() const { return *pBar; }
 
-    static SfxStatusBarControl* CreateControl( sal_uInt16 nSlotID, sal_uInt16 nId, StatusBar *pBar, SfxModule* );
+    static SfxStatusBarControl* CreateControl( sal_uInt16 nSlotID, sal_uInt16 nId, StatusBar *pBar, SfxModule const * );
     static void RegisterStatusBarControl(SfxModule*, const SfxStbCtrlFactory&);
 
 };

@@ -186,7 +186,7 @@ class SdXMLStylesContext : public SvXMLStylesContext
 
     void ImpSetGraphicStyles() const;
     void ImpSetCellStyles() const;
-    void ImpSetGraphicStyles( css::uno::Reference< css::container::XNameAccess >& xPageStyles,
+    void ImpSetGraphicStyles( css::uno::Reference< css::container::XNameAccess > const & xPageStyles,
         sal_uInt16 nFamily, const OUString& rPrefix) const;
 
 protected:
@@ -219,7 +219,7 @@ public:
     virtual void EndElement() override;
     virtual rtl::Reference< SvXMLImportPropertyMapper > GetImportPropertyMapper(sal_uInt16 nFamily) const override;
 
-    void SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const;
+    void SetMasterPageStyles(SdXMLMasterPageContext const & rMaster) const;
 
     css::uno::Reference< css::container::XNameAccess > getPageLayouts() const;
 };

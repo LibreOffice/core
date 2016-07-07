@@ -133,7 +133,7 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox* rURLBox, const OUString& rURL )
     }
 }
 
-OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox* rURLBox )
+OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox const * rURLBox )
 {
     OUString aURL;
     OUString aStrPath ( rURLBox->GetText() );

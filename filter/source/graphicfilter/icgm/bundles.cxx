@@ -163,7 +163,7 @@ static sal_Int8* ImplSearchEntry( sal_Int8* pSource, sal_Int8 const * pDest, sal
     return nullptr;
 }
 
-void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
+void CGMFList::InsertName( sal_uInt8 const * pSource, sal_uInt32 nSize )
 {
     FontEntry* pFontEntry;
     if ( nFontsAvailable == nFontNameCount )
@@ -224,7 +224,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
 }
 
 
-void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_uInt32 nSize )
+void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8 const * pSource, sal_uInt32 nSize )
 {
     FontEntry* pFontEntry;
     if ( nFontsAvailable == nCharSetCount )

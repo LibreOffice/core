@@ -63,12 +63,12 @@ namespace RegressionCurveHelper
              If set, this property-set will be used to apply a line color
      */
     OOO_DLLPUBLIC_CHARTTOOLS void addMeanValueLine(
-        css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegCnt,
+        css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt,
         const css::uno::Reference<css::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
 
     OOO_DLLPUBLIC_CHARTTOOLS void removeMeanValueLine(
-        css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegCnt );
+        css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt );
 
     /** Returns the first regression curve found that is not of type
         mean-value line
@@ -101,7 +101,7 @@ namespace RegressionCurveHelper
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         addRegressionCurve(
             SvxChartRegress eType,
-            css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer,
+            css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xCurveContainer,
             const css::uno::Reference<css::uno::XComponentContext>& xContext,
             const css::uno::Reference<css::beans::XPropertySet >& xPropertySource =
                     css::uno::Reference<css::beans::XPropertySet>(),
@@ -109,16 +109,16 @@ namespace RegressionCurveHelper
                     css::uno::Reference<css::beans::XPropertySet>() );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool removeAllExceptMeanValueLine(
-        css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
+        css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xCurveContainer );
 
     OOO_DLLPUBLIC_CHARTTOOLS void removeEquations(
-        css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
+        css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xCurveContainer );
 
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         changeRegressionCurveType(
             SvxChartRegress eType,
             css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegressionCurveContainer,
-            css::uno::Reference<css::chart2::XRegressionCurve>& xRegressionCurve,
+            css::uno::Reference<css::chart2::XRegressionCurve> const & xRegressionCurve,
             const css::uno::Reference<css::uno::XComponentContext>& xContext );
 
     /// returns a calculator object for regression curves (used by the view)

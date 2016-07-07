@@ -270,7 +270,7 @@ struct ToolbarMenu_Impl
 
     sal_Int32 getAccessibleChildCount() throw (css::uno::RuntimeException);
     css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
-    css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( Control* pControl, sal_Int32 childIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( Control const * pControl, sal_Int32 childIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
     void selectAccessibleChild( sal_Int32 nChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
     bool isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);

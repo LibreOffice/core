@@ -94,8 +94,8 @@ public:
 
     /// register (families + names)
     void RegisterNames(
-        css::uno::Sequence<sal_Int32>& aFamilies,
-        css::uno::Sequence<OUString>& aNames );
+        css::uno::Sequence<sal_Int32> const & aFamilies,
+        css::uno::Sequence<OUString> const & aNames );
 
     /// Add an item set to the pool and return its generated name.
     OUString Add( sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );

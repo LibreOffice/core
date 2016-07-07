@@ -59,7 +59,7 @@ static const struct
 
 static void lcl_AddAsPropertyChangeListener(
         const Reference< XPropertyChangeListener >& xListener,
-        Reference< XLinguProperties > &rPropSet )
+        Reference< XLinguProperties > const &rPropSet )
 {
     if (xListener.is() && rPropSet.is())
     {
@@ -74,7 +74,7 @@ static void lcl_AddAsPropertyChangeListener(
 
 static void lcl_RemoveAsPropertyChangeListener(
         const Reference< XPropertyChangeListener >& xListener,
-        Reference< XLinguProperties > &rPropSet )
+        Reference< XLinguProperties > const &rPropSet )
 {
     if (xListener.is() && rPropSet.is())
     {
@@ -99,7 +99,7 @@ static bool lcl_IsFlushProperty( sal_Int32 nHandle )
 }
 
 
-void FlushListener::SetDicList( Reference<XSearchableDictionaryList> &rDL )
+void FlushListener::SetDicList( Reference<XSearchableDictionaryList> const &rDL )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -115,7 +115,7 @@ void FlushListener::SetDicList( Reference<XSearchableDictionaryList> &rDL )
 }
 
 
-void FlushListener::SetPropSet( Reference< XLinguProperties > &rPS )
+void FlushListener::SetPropSet( Reference< XLinguProperties > const &rPS )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

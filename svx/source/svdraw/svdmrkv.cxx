@@ -1254,7 +1254,7 @@ void SdrMarkView::SetRef2(const Point& rPt)
     }
 }
 
-bool SdrPageView::IsObjSelectable(SdrObject *pObj) const
+bool SdrPageView::IsObjSelectable(SdrObject const *pObj) const
 {
     SdrLayerID nLay=pObj->GetLayer();
     bool bRaus=!pObj->IsInserted(); // Obj deleted?
@@ -1626,7 +1626,7 @@ void SdrMarkView::MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark, bool 
     }
 }
 
-bool SdrMarkView::IsObjMarked(SdrObject* pObj) const
+bool SdrMarkView::IsObjMarked(SdrObject const * pObj) const
 {
     return TryToFindMarkedObject(pObj)!=SAL_MAX_SIZE;
 }
@@ -1712,11 +1712,11 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     return pRet;
 }
 
-SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const
+SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const
 {
     return (*this).CheckSingleSdrObjectHit(rPnt,nTol,pOL,pPV,nOptions,pMVisLay,rpRootObj,nullptr);
 }
-SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const
+SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const
 {
     SdrObject* pRet=nullptr;
     rpRootObj=nullptr;
@@ -1942,7 +1942,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
 }
 
 
-void SdrMarkView::UnmarkAllObj(SdrPageView* pPV)
+void SdrMarkView::UnmarkAllObj(SdrPageView const * pPV)
 {
     if (GetMarkedObjectCount()!=0) {
         BrkAction();

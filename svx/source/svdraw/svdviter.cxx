@@ -62,7 +62,7 @@ SdrViewIter::SdrViewIter(const SdrObject* pObject)
 }
 
 
-bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
+bool SdrViewIter::ImpCheckPageView(SdrPageView const* pPV) const
 {
     if(!mpPage)
         return true;

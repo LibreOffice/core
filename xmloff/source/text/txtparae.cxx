@@ -3307,7 +3307,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
 
 void XMLTextParagraphExport::exportTextRangeSpan(
     const css::uno::Reference< css::text::XTextRange > & rTextRange,
-    Reference< XPropertySet > & xPropSet,
+    Reference< XPropertySet > const & xPropSet,
     Reference < XPropertySetInfo > & xPropSetInfo,
     const bool bIsUICharStyle,
     const bool bHasAutoStyle,

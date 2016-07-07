@@ -177,7 +177,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 
 
 // static
-bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile* pMetaFile, const uno::Reference<io::XStream>& xStream)
+bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile const * pMetaFile, const uno::Reference<io::XStream>& xStream)
 {
     bool bResult = false;
 

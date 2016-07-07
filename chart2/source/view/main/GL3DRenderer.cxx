@@ -473,7 +473,7 @@ void OpenGL3DRenderer::AddIndexData(GLuint indexBuf)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-bool OpenGL3DRenderer::GetSimilarVertexIndex(PackedVertex & packed,
+bool OpenGL3DRenderer::GetSimilarVertexIndex(PackedVertex const & packed,
     std::map<PackedVertex,unsigned short> & VertexToOutIndex,
     unsigned short & result
     )
@@ -490,7 +490,7 @@ bool OpenGL3DRenderer::GetSimilarVertexIndex(PackedVertex & packed,
     }
 }
 
-void OpenGL3DRenderer::SetVertex(PackedVertex &packed,
+void OpenGL3DRenderer::SetVertex(PackedVertex const &packed,
     std::map<PackedVertex,unsigned short> &VertexToOutIndex,
     std::vector<glm::vec3> &vertex,
     std::vector<glm::vec3> &normal,

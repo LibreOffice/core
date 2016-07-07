@@ -119,7 +119,7 @@ class RscError
     void WriteError( const ERRTYPE& rError, const char * pMessage );
     void StdLstOut( const char * pStr );
     void StdLstErr( const char * pStr );
-    void ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
+    void ErrorFormat( const ERRTYPE& rError, RscTop const * pClass,
                       const RscId & aId );
 public:
     virtual ~RscError() {}
@@ -137,7 +137,7 @@ public:
     void            StdOut( const char *, const RscVerbosity _verbosityLevel = RscVerbosityNormal );
     static void     StdErr( const char * );
     void            LstOut( const char * );
-    void            Error( const ERRTYPE& rError, RscTop* pClass, const RscId &aId,
+    void            Error( const ERRTYPE& rError, RscTop const* pClass, const RscId &aId,
                            const char * pMessage = nullptr );
     // Dieser Fehler sollte nur im Compilermodus auftreten,
     // das Programm wird mit exit() verlassen

@@ -125,8 +125,8 @@ public:
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall,
-                                 SfxItemSet* pArgs,
-                                 SfxItemSet* pInternalArgs,
+                                 SfxItemSet const * pArgs,
+                                 SfxItemSet const * pInternalArgs,
                                  sal_uInt16 nModi = 0);
 
     const SfxPoolItem*  ExecuteList( sal_uInt16 nSlot,
@@ -184,7 +184,7 @@ public:
     SAL_DLLPRIVATE void DoParentActivate_Impl();
     SAL_DLLPRIVATE void DoParentDeactivate_Impl();
     SAL_DLLPRIVATE void DoActivate_Impl( bool bMDI, SfxViewFrame* pOld );
-    SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame* pNew );
+    SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame const * pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(bool);
 };
 

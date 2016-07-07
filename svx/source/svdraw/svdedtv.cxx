@@ -117,7 +117,7 @@ void SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
 #include <svx/svdogrp.hxx>
 #include <svx/scene3d.hxx>
 
-bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
+bool SdrEditView::ImpDelLayerCheck(SdrObjList const * pOL, SdrLayerID nDelID) const
 {
     bool bDelAll(true);
 

@@ -100,7 +100,7 @@ protected:
 
 private:
     /// simple ActionChildInserted forwarder to have it on a central place
-    static void impChildInserted(SdrObject& rChild);
+    static void impChildInserted(SdrObject const & rChild);
 public:
     SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList=nullptr);
     virtual ~SdrObjList();
@@ -518,7 +518,7 @@ public:
 
     /** *deprecated* returns an averaged background color of this page */
     // #i75566# GetBackgroundColor -> GetPageBackgroundColor and bScreenDisplay hint value
-    Color GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay = true) const;
+    Color GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDisplay = true) const;
 
     /** this method returns true if the object from the ViewObjectContact should
         be visible on this page while rendering.

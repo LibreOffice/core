@@ -66,11 +66,11 @@ private:
 
 private:
     SVX_DLLPRIVATE void ImpGetCaptParams(ImpCaptParams& rPara) const;
-    SVX_DLLPRIVATE void ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
-    SVX_DLLPRIVATE void ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
-    SVX_DLLPRIVATE void ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
-    SVX_DLLPRIVATE void ImpCalcTail4(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
-    SVX_DLLPRIVATE void ImpCalcTail (const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle& rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle const & rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle const & rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle const & rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail4(const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle const & rRect) const;
+    SVX_DLLPRIVATE void ImpCalcTail (const ImpCaptParams& rPara, tools::Polygon& rPoly, Rectangle const & rRect) const;
     SVX_DLLPRIVATE void ImpRecalcTail();
 
 public:

@@ -235,7 +235,7 @@ void dodefine()
  * the output routine.  This prevents the macro expander from
  * looping if someone writes "#define foo foo".
  */
-void checkparm(int c, DEFBUF* dp)
+void checkparm(int c, DEFBUF const* dp)
 {
     int i;
     char* cp;
@@ -325,7 +325,7 @@ void doundef()
 /*
  * Put the string in the parm[] buffer.
  */
-void textput(char* text)
+void textput(char const* text)
 {
     size_t size;
 

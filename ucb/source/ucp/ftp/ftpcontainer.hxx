@@ -52,7 +52,7 @@ public:
 
 
 extern "C" int memory_write(
-    void *buffer,size_t size,size_t nmemb,void *stream);
+    void const *buffer,size_t size,size_t nmemb,void *stream);
 
 #endif // INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTAINER_HXX
 

@@ -80,7 +80,7 @@ FILE * init(int argc, char ** argv) {
     return pFile;
 }
 
-void workOnTokenSet(int nTyp, char * pTokenText) {
+void workOnTokenSet(int nTyp, char const* pTokenText) {
     global::parser->Execute( nTyp, pTokenText );
 }
 
@@ -161,7 +161,7 @@ void CfgParser::AddText(
     pStackData->sText[ rIsoLang ] = rText;
 }
 
-void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
+void CfgParser::ExecuteAnalyzedToken( int nToken, char const *pToken )
 {
     OString sToken( pToken );
 
@@ -301,7 +301,7 @@ void CfgExport::Output(const OString&)
 {
 }
 
-void CfgParser::Execute( int nToken, char * pToken )
+void CfgParser::Execute( int nToken, char const * pToken )
 {
     OString sToken( pToken );
 

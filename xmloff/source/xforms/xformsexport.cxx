@@ -139,7 +139,7 @@ convert_t xforms_date     = &xforms_convertRef<util::Date,&xforms_formatDate>;
 convert_t xforms_time     = &xforms_convertRef<css::util::Time,&xforms_formatTime>;
 
 // other functions
-static OUString lcl_getXSDType( SvXMLExport& rExport,
+static OUString lcl_getXSDType( SvXMLExport const & rExport,
                          const Reference<XPropertySet>& xType );
 
 
@@ -454,7 +454,7 @@ static void lcl_exportDataTypeFacets( SvXMLExport& rExport,
     }
 }
 
-static OUString lcl_getXSDType( SvXMLExport& rExport,
+static OUString lcl_getXSDType( SvXMLExport const & rExport,
                          const Reference<XPropertySet>& xType )
 {
     // we use string as default...

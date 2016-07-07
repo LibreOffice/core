@@ -196,8 +196,8 @@ private:
     UIElementData*  impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad = true );
     void            impl_requestUIElementData( sal_Int16 nElementType, Layer eLayer, UIElementData& aUIElementData );
     void            impl_storeElementTypeData( const css::uno::Reference< css::embed::XStorage >& xStorage, UIElementType& rElementType, bool bResetModifyState = true );
-    void            impl_resetElementTypeData( UIElementType& rUserElementType, UIElementType& rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
-    void            impl_reloadElementTypeData( UIElementType& rUserElementType, UIElementType& rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
+    void            impl_resetElementTypeData( UIElementType& rUserElementType, UIElementType const & rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
+    void            impl_reloadElementTypeData( UIElementType& rUserElementType, UIElementType const & rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
 
     UIElementTypesVector                                      m_aUIElements[LAYER_COUNT];
     PresetHandler*                                            m_pStorageHandler[css::ui::UIElementType::COUNT];
@@ -631,7 +631,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( const Reference< X
 // This is only allowed to be called on the LAYER_USER_DEFINED!
 void ModuleUIConfigurationManager::impl_resetElementTypeData(
     UIElementType& rUserElementType,
-    UIElementType& rDefaultElementType,
+    UIElementType const & rDefaultElementType,
     ConfigEventNotifyContainer& rRemoveNotifyContainer,
     ConfigEventNotifyContainer& rReplaceNotifyContainer )
 {
@@ -697,7 +697,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
 
 void ModuleUIConfigurationManager::impl_reloadElementTypeData(
     UIElementType&              rUserElementType,
-    UIElementType&              rDefaultElementType,
+    UIElementType const &       rDefaultElementType,
     ConfigEventNotifyContainer& rRemoveNotifyContainer,
     ConfigEventNotifyContainer& rReplaceNotifyContainer )
 {

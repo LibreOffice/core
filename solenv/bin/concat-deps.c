@@ -356,7 +356,7 @@ struct hash
   c ^= b; c -= rot(b,24); \
 }
 
-static unsigned int hash_compute( struct hash* hash, const char* key, int length)
+static unsigned int hash_compute( struct hash const* hash, const char* key, int length)
 {
     unsigned int a;
     unsigned int b;

@@ -57,7 +57,7 @@ using namespace com::sun::star::io;
 
 namespace {
 
-const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
+const MetaCommentAction* ImplCheckForEPS( GDIMetaFile const & rMtf )
 {
     const MetaCommentAction* pComment = nullptr;
 
@@ -618,7 +618,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
     return bRet;
 }
 
-void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt32 nInsertPos, OUString& rRequestedFileName )
+void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt32 nInsertPos, OUString const & rRequestedFileName )
 {
     OUString aPictureStorageName, aPictureStreamName;
     if( ( maURLSet.find( rURLStr ) != maURLSet.end() ) )

@@ -186,7 +186,7 @@ private:
 
     void                ImplAddPath( const tools::Polygon & rPolygon );
     void                ImplWriteLineInfo( double fLineWidth, double fMiterLimit, SvtGraphicStroke::CapType eLineCap,
-                                    SvtGraphicStroke::JoinType eJoinType, SvtGraphicStroke::DashArray& rDashArray );
+                                    SvtGraphicStroke::JoinType eJoinType, SvtGraphicStroke::DashArray const & rDashArray );
     void                ImplWriteLineInfo( const LineInfo& rLineInfo );
     void                ImplRect( const Rectangle & rRectangle );
     void                ImplRectFill ( const Rectangle & rRectangle );
@@ -195,12 +195,12 @@ private:
     void                ImplPolyPoly( const tools::PolyPolygon & rPolyPolygon, bool bTextOutline = false );
     void                ImplPolyLine( const tools::Polygon & rPolygon );
 
-    void                ImplSetClipRegion( vcl::Region& rRegion );
-    void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
-    void                ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
+    void                ImplSetClipRegion( vcl::Region const & rRegion );
+    void                ImplBmp( Bitmap const *, Bitmap const *, const Point &, double nWidth, double nHeight );
+    void                ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
-    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const long* pDXArry = nullptr, bool bStretch = false );
+    void                ImplWriteString( const OString&, VirtualDevice const & rVDev, const long* pDXArry = nullptr, bool bStretch = false );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw();
@@ -1616,7 +1616,7 @@ void PSWriter::ImplPolyLine( const tools::Polygon & rPoly )
     }
 }
 
-void PSWriter::ImplSetClipRegion( vcl::Region& rClipRegion )
+void PSWriter::ImplSetClipRegion( vcl::Region const & rClipRegion )
 {
     if ( !rClipRegion.IsEmpty() )
     {
@@ -1660,7 +1660,7 @@ void PSWriter::ImplSetClipRegion( vcl::Region& rClipRegion )
 //          color       1(pal), 4(pal), 8(pal), 24 Bit
 //
 
-void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoint, double nXWidth, double nYHeightOrg )
+void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, const Point & rPoint, double nXWidth, double nYHeightOrg )
 {
     if ( !pBitmap )
         return;
@@ -1973,7 +1973,7 @@ void PSWriter::ImplWriteCharacter( sal_Char nChar )
     ImplWriteByte( (sal_uInt8)nChar, PS_NONE );
 }
 
-void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, const long* pDXArry, bool bStretch )
+void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rVDev, const long* pDXArry, bool bStretch )
 {
     sal_Int32 nLen = rString.getLength();
     if ( nLen )
@@ -2003,7 +2003,7 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, co
     }
 }
 
-void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev )
+void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
 {
     if ( rUniString.isEmpty() )
         return;
@@ -2232,9 +2232,9 @@ inline void PSWriter::ImplWriteLine( const char* pString, sal_uLong nMode )
 
 
 void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
-                                    SvtGraphicStroke::CapType eLCap,
-                                        SvtGraphicStroke::JoinType eJoin,
-                                            SvtGraphicStroke::DashArray& rLDash )
+                                  SvtGraphicStroke::CapType eLCap,
+                                  SvtGraphicStroke::JoinType eJoin,
+                                  SvtGraphicStroke::DashArray const & rLDash )
 {
     if ( fLineWidth != fLWidth )
     {

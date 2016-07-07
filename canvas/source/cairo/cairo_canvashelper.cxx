@@ -344,7 +344,7 @@ namespace cairocanvas
         return nTemp;
     }
 
-    static bool readAlpha( BitmapReadAccess* pAlphaReadAcc, long nY, const long nWidth, unsigned char* data, long nOff )
+    static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, long nY, const long nWidth, unsigned char* data, long nOff )
     {
         bool bIsAlpha = false;
         long nX;
@@ -703,7 +703,7 @@ namespace cairocanvas
         return uno::Sequence<double>();
     }
 
-    static cairo_pattern_t* patternFromParametricPolyPolygon( ::canvas::ParametricPolyPolygon& rPolygon )
+    static cairo_pattern_t* patternFromParametricPolyPolygon( ::canvas::ParametricPolyPolygon const & rPolygon )
     {
         cairo_pattern_t* pPattern = nullptr;
         const ::canvas::ParametricPolyPolygon::Values aValues = rPolygon.getValues();

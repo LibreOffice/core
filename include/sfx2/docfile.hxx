@@ -208,7 +208,7 @@ public:
 
     SAL_DLLPRIVATE void CloseAndReleaseStreams_Impl();
     SAL_DLLPRIVATE void AddVersion_Impl( css::util::RevisionTag& rVersion );
-    SAL_DLLPRIVATE bool TransferVersionList_Impl( SfxMedium& rMedium );
+    SAL_DLLPRIVATE bool TransferVersionList_Impl( SfxMedium const & rMedium );
     SAL_DLLPRIVATE void SaveVersionList_Impl();
     SAL_DLLPRIVATE void RemoveVersion_Impl( const OUString& rVersion );
 
@@ -220,7 +220,7 @@ public:
 
     SAL_DLLPRIVATE void GetLockingStream_Impl();
     SAL_DLLPRIVATE void GetMedium_Impl();
-    SAL_DLLPRIVATE bool TryDirectTransfer( const OUString& aURL, SfxItemSet& aTargetSet );
+    SAL_DLLPRIVATE bool TryDirectTransfer( const OUString& aURL, SfxItemSet const & aTargetSet );
     SAL_DLLPRIVATE void Transfer_Impl();
     SAL_DLLPRIVATE void CreateFileStream();
     SAL_DLLPRIVATE void SetUpdatePickList(bool);

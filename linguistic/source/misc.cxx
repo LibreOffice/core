@@ -351,7 +351,7 @@ bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicLi
 }
 
 DictionaryError AddEntryToDic(
-        uno::Reference< XDictionary >  &rxDic,
+        uno::Reference< XDictionary > const &rxDic,
         const OUString &rWord, bool bIsNeg,
         const OUString &rRplcTxt, sal_Int16 /* nRplcLang */,
         bool bStripDot )
@@ -391,7 +391,7 @@ DictionaryError AddEntryToDic(
 }
 
 uno::Sequence< sal_Int16 >
-    LocaleSeqToLangSeq( uno::Sequence< Locale > &rLocaleSeq )
+    LocaleSeqToLangSeq( uno::Sequence< Locale > const &rLocaleSeq )
 {
     const Locale *pLocale = rLocaleSeq.getConstArray();
     sal_Int32 nCount = rLocaleSeq.getLength();
@@ -437,7 +437,7 @@ bool    IsReadOnly( const OUString &rURL, bool *pbExist )
 }
 
 static bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUString &rRplc,
-        uno::Reference< XHyphenatedWord > &rxHyphWord )
+        uno::Reference< XHyphenatedWord > const &rxHyphWord )
 {
     bool bRes = rxHyphWord->isAlternativeSpelling();
     if (bRes)
@@ -522,7 +522,7 @@ sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos )
 
 uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         const OUString &rOrigWord,
-        uno::Reference< XHyphenatedWord > &rxHyphWord )
+        uno::Reference< XHyphenatedWord > const &rxHyphWord )
 {
     uno::Reference< XHyphenatedWord > xRes;
     if (!rOrigWord.isEmpty() && rxHyphWord.is())
@@ -605,7 +605,7 @@ bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, sal_Int16 n
             && !(nFlags & KCharacterType::LOWER);
 }
 
-CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
+CapType SAL_CALL capitalType(const OUString& aTerm, CharClass const * pCC)
 {
         sal_Int32 tlen = aTerm.getLength();
         if ((pCC) && (tlen))

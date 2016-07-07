@@ -41,7 +41,7 @@ typedef svt::StatusbarController* ( *pfunc_setStatusBarControllerCreator)(
     const OUString& aCommandURL );
 
 typedef void ( *pfunc_getRefreshToolbars)(
-    css::uno::Reference< css::frame::XFrame >& rFrame );
+    css::uno::Reference< css::frame::XFrame > const & rFrame );
 
 typedef void ( *pfunc_createDockingWindow)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
@@ -70,7 +70,7 @@ FWE_DLLPUBLIC svt::StatusbarController* SAL_CALL CreateStatusBarController(
 
 FWE_DLLPUBLIC pfunc_getRefreshToolbars SAL_CALL SetRefreshToolbars( pfunc_getRefreshToolbars pRefreshToolbarsFunc );
 FWE_DLLPUBLIC void SAL_CALL RefreshToolbars(
-     css::uno::Reference< css::frame::XFrame >& rFrame );
+     css::uno::Reference< css::frame::XFrame > const & rFrame );
 
 FWE_DLLPUBLIC pfunc_createDockingWindow SAL_CALL SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
 FWE_DLLPUBLIC void SAL_CALL CreateDockingWindow(

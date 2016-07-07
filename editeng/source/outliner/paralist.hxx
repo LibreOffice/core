@@ -50,21 +50,21 @@ public:
         return 0 <= nPos && static_cast<size_t>(nPos) < maEntries.size() ? maEntries[nPos] : nullptr;
     }
 
-    sal_Int32       GetAbsPos( Paragraph* pParent ) const;
+    sal_Int32       GetAbsPos( Paragraph const * pParent ) const;
 
     void            Append( Paragraph *pPara);
     void            Insert( Paragraph* pPara, sal_Int32 nAbsPos);
     void            Remove( sal_Int32 nPara );
     void            MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32 nCount );
 
-    Paragraph*      GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const;
-    bool            HasChildren( Paragraph* pParagraph ) const;
-    bool            HasHiddenChildren( Paragraph* pParagraph ) const;
-    bool            HasVisibleChildren( Paragraph* pParagraph ) const;
-    sal_Int32       GetChildCount( Paragraph* pParagraph ) const;
+    Paragraph*      GetParent( Paragraph const * pParagraph /*, sal_uInt16& rRelPos */ ) const;
+    bool            HasChildren( Paragraph const * pParagraph ) const;
+    bool            HasHiddenChildren( Paragraph const * pParagraph ) const;
+    bool            HasVisibleChildren( Paragraph const * pParagraph ) const;
+    sal_Int32       GetChildCount( Paragraph const * pParagraph ) const;
 
-    void            Expand( Paragraph* pParent );
-    void            Collapse( Paragraph* pParent );
+    void            Expand( Paragraph const * pParent );
+    void            Collapse( Paragraph const * pParent );
 
     void            SetVisibleStateChangedHdl( const Link<Paragraph&,void>& rLink ) { aVisibleStateChangedHdl = rLink; }
 

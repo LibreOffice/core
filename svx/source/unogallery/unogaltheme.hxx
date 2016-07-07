@@ -90,7 +90,7 @@ private:
 
     ::GalleryTheme* implGetTheme() const { return mpTheme;}
 
-    void            implReleaseItems( GalleryObject* pObj );
+    void            implReleaseItems( GalleryObject const * pObj );
 
     void            implRegisterGalleryItem( ::unogallery::GalleryItem& rItem );
     void            implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem );

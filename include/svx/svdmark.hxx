@@ -234,8 +234,8 @@ public:
     }
 
     // pPage=0L: Selection of everything! Respect Pages
-    bool TakeBoundRect(SdrPageView* pPageView, Rectangle& rRect) const;
-    bool TakeSnapRect(SdrPageView* pPageView, Rectangle& rRect) const;
+    bool TakeBoundRect(SdrPageView const * pPageView, Rectangle& rRect) const;
+    bool TakeSnapRect(SdrPageView const * pPageView, Rectangle& rRect) const;
 
     // All Entries are copied!
     SdrMarkList& operator=(const SdrMarkList& rLst);

@@ -156,7 +156,7 @@ void LanguageSelectionMenuController::impl_setPopupMenu()
     m_xMenuDispatch_CharDlgForParagraph = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
 
-void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu , const Mode eMode )
+void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu , const Mode eMode )
 {
     VCLXPopupMenu* pVCLPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*     pPopupMenu    = nullptr;

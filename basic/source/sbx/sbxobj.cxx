@@ -329,7 +329,7 @@ void SbxObject::SetDfltProperty( const OUString& rName )
 // the index will be set, otherwise the Count of the Array will be returned.
 // In any case the correct Array will be returned.
 
-SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
+SbxArray* SbxObject::FindVar( SbxVariable const * pVar, sal_uInt16& nArrayIdx )
 {
     SbxArray* pArray = nullptr;
     if( pVar ) switch( pVar->GetClass() )

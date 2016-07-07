@@ -717,7 +717,7 @@ void ImpEditEngine::TextModified()
 }
 
 
-void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
+void ImpEditEngine::ParaAttribsChanged( ContentNode const * pNode )
 {
     assert(pNode && "ParaAttribsChanged: Which one?");
 
@@ -1367,7 +1367,7 @@ EditPaM ImpEditEngine::CursorEndOfDoc()
     return aPaM;
 }
 
-EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView* pView )
+EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView const * pView )
 {
     Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aTopLeft = aRect.TopLeft();
@@ -1380,7 +1380,7 @@ EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView* pView )
     return GetPaM( aTopLeft );
 }
 
-EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView* pView )
+EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView const * pView )
 {
     Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aBottomRight = aRect.BottomRight();
@@ -2463,7 +2463,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 }
 
 EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
-                                    bool bOverwrite, vcl::Window* pFrameWin )
+                                    bool bOverwrite, vcl::Window const * pFrameWin )
 {
     // i.e. Calc has special needs regarding a leading single quotation mark
     // when starting cell input.

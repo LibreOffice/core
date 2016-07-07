@@ -214,13 +214,13 @@ public:
     unsigned short             GetSlotId() const;
 
     void                       Dispatch( const OUString& aCommand,
-                                         css::uno::Sequence< css::beans::PropertyValue >& aArgs );
+                                         css::uno::Sequence< css::beans::PropertyValue > const & aArgs );
     static void                Dispatch( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                                          const OUString& rCommand,
-                                         css::uno::Sequence< css::beans::PropertyValue >& aArgs );
+                                         css::uno::Sequence< css::beans::PropertyValue > const & aArgs );
 
     static SfxItemState        GetItemState( const SfxPoolItem* pState );
-    static SfxToolBoxControl*  CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule *pMod );
+    static SfxToolBoxControl*  CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule const *pMod );
     static void                RegisterToolBoxControl( SfxModule*, const SfxTbxCtrlFactory&);
 };
 

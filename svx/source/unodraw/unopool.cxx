@@ -92,7 +92,7 @@ SfxItemPool* SvxUnoDrawPool::getModelPool( bool bReadOnly ) throw()
     }
 }
 
-void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, uno::Any& rValue )
+void SvxUnoDrawPool::getAny( SfxItemPool const * pPool, const comphelper::PropertyMapEntry* pEntry, uno::Any& rValue )
     throw(beans::UnknownPropertyException)
 {
     switch( pEntry->mnHandle )

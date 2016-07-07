@@ -126,7 +126,7 @@ static SvXMLEnumMapEntry const lcl_aMarkTypeMap[] =
 };
 
 
-static const char *lcl_getFormFieldmarkName(OUString &name)
+static const char *lcl_getFormFieldmarkName(OUString const &name)
 {
     static const char sCheckbox[]=ODF_FORMCHECKBOX;
     static const char sFormDropDown[]=ODF_FORMDROPDOWN;

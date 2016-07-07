@@ -467,7 +467,7 @@ void hash_free( struct symhash *symbols )
     free( symbols->s_pairs );
 }
 
-void hash_define( char *name, char *val, struct symhash **symbols )
+void hash_define( char *name, char const *val, struct symhash **symbols )
 {
     int hashval;
     struct pair *it;

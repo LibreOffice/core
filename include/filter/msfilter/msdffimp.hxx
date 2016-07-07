@@ -694,15 +694,15 @@ public:
                          SwFlyFrameFormat*   pFly = nullptr,
                          short          nHdFtSection = 0) const;
 
-    void ExchangeInShapeOrder(SdrObject*    pOldObject,
+    void ExchangeInShapeOrder(SdrObject const *    pOldObject,
                               sal_uLong     nTxBx,
                               SwFlyFrameFormat*  pFly,
                               SdrObject*    pObject) const;
 
-    void RemoveFromShapeOrder( SdrObject* pObject ) const;
+    void RemoveFromShapeOrder( SdrObject const * pObject ) const;
 
     static SdrOle2Obj* CreateSdrOLEFromStorage( const OUString& rStorageName,
-                                                tools::SvRef<SotStorage>& rSrcStorage,
+                                                tools::SvRef<SotStorage> const & rSrcStorage,
                                                 const css::uno::Reference < css::embed::XStorage >& xDestStg,
                                                 const Graphic& rGraf,
                                                 const Rectangle& rBoundRect,
@@ -729,7 +729,7 @@ public:
     );
 
     void insertShapeId( sal_Int32 nShapeId, SdrObject* pShape );
-    void removeShapeId( SdrObject* pShape );
+    void removeShapeId( SdrObject const * pShape );
     SdrObject* getShapeForId( sal_Int32 nShapeId );
 };
 

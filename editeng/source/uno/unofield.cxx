@@ -210,7 +210,7 @@ static util::DateTime getTime(sal_Int64 const nTime)
     return aTime;
 }
 
-inline tools::Time setTime( util::DateTime& rDate )
+inline tools::Time setTime( util::DateTime const & rDate )
 {
     return tools::Time( rDate  );
 }

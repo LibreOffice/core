@@ -22,7 +22,7 @@ bool BitmapSymmetryCheck::check(Bitmap& rBitmap)
     return checkImpl(aReadAccess.get());
 }
 
-bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess* pReadAccess)
+bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
 {
     long nHeight = pReadAccess->Height();
     long nWidth = pReadAccess->Width();

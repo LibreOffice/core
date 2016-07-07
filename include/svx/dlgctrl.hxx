@@ -386,7 +386,7 @@ protected:
     void InitSettings(bool bForeground, bool bBackground);
 
     // prepare buffered paint
-    void LocalPrePaint(vcl::RenderContext& rRenderContext);
+    void LocalPrePaint(vcl::RenderContext const & rRenderContext);
 
     // end and output buffered paint
     void LocalPostPaint(vcl::RenderContext& rRenderContext);

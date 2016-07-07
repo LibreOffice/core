@@ -505,7 +505,7 @@ PyObject* PyUNO_dir (PyObject* self)
     return member_list;
 }
 
-sal_Int32 lcl_detach_getLength( PyUNO *me )
+sal_Int32 lcl_detach_getLength( PyUNO const *me )
 {
     PyThreadDetach antiguard;
 
@@ -572,7 +572,7 @@ Py_ssize_t PyUNO_len( PyObject* self )
     return -1;
 }
 
-void lcl_getRowsColumns( PyUNO* me, sal_Int32& nRows, sal_Int32& nColumns )
+void lcl_getRowsColumns( PyUNO const * me, sal_Int32& nRows, sal_Int32& nColumns )
 {
     Sequence<short> aOutParamIndex;
     Sequence<Any> aOutParam;
@@ -600,7 +600,7 @@ PyRef lcl_indexToSlice( const PyRef& rIndex )
     return rSlice;
 }
 
-PyObject* lcl_getitem_XCellRange( PyUNO* me, PyObject* pKey )
+PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
 {
     Runtime runtime;
 
@@ -721,7 +721,7 @@ PyObject* lcl_getitem_XCellRange( PyUNO* me, PyObject* pKey )
     return nullptr;
 }
 
-PyObject* lcl_getitem_index( PyUNO *me, PyObject *pKey, Runtime& runtime )
+PyObject* lcl_getitem_index( PyUNO const *me, PyObject *pKey, Runtime const & runtime )
 {
     Any aRet;
     sal_Int32 nIndex;
@@ -750,7 +750,7 @@ PyObject* lcl_getitem_index( PyUNO *me, PyObject *pKey, Runtime& runtime )
     return nullptr;
 }
 
-PyObject* lcl_getitem_slice( PyUNO *me, PyObject *pKey )
+PyObject* lcl_getitem_slice( PyUNO const *me, PyObject *pKey )
 {
     Runtime runtime;
 
@@ -793,7 +793,7 @@ PyObject* lcl_getitem_slice( PyUNO *me, PyObject *pKey )
     return nullptr;
 }
 
-PyObject* lcl_getitem_string( PyUNO *me, PyObject *pKey, Runtime& runtime )
+PyObject* lcl_getitem_string( PyUNO const *me, PyObject *pKey, Runtime const & runtime )
 {
     OUString sKey = pyString2ustring( pKey );
     Any aRet;
@@ -903,7 +903,7 @@ PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
     return nullptr;
 }
 
-int lcl_setitem_index( PyUNO *me, PyObject *pKey, PyObject *pValue )
+int lcl_setitem_index( PyUNO const *me, PyObject *pKey, PyObject *pValue )
 {
     Runtime runtime;
 
@@ -971,7 +971,7 @@ int lcl_setitem_index( PyUNO *me, PyObject *pKey, PyObject *pValue )
     return 1;
 }
 
-int lcl_setitem_slice( PyUNO *me, PyObject *pKey, PyObject *pValue )
+int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue )
 {
     // XIndexContainer insert/remove/replace by slice
     Runtime runtime;
@@ -1089,7 +1089,7 @@ int lcl_setitem_slice( PyUNO *me, PyObject *pKey, PyObject *pValue )
     return 1;
 }
 
-int lcl_setitem_string( PyUNO *me, PyObject *pKey, PyObject *pValue )
+int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue )
 {
     Runtime runtime;
 

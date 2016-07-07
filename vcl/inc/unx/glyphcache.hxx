@@ -75,9 +75,9 @@ public:
 private:
     friend class ServerFont;
     // used by ServerFont class only
-    void                    AddedGlyph( ServerFont&, GlyphData& );
+    void                    AddedGlyph( ServerFont&, GlyphData const & );
     void                    RemovingGlyph();
-    void                    UsingGlyph( ServerFont&, GlyphData& );
+    void                    UsingGlyph( ServerFont&, GlyphData const & );
     void                    GrowNotify();
 
 private:
@@ -161,7 +161,7 @@ public:
 
     const FontSelectPattern& GetFontSelData() const      { return maFontSelData; }
 
-    void                    GetFontMetric( ImplFontMetricDataPtr&, long& rFactor ) const;
+    void                    GetFontMetric( ImplFontMetricDataPtr const &, long& rFactor ) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
     int                     GetEmUnits() const { return maFaceFT->units_per_EM;}
     double                  GetStretch() { return mfStretch; }

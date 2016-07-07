@@ -82,7 +82,7 @@ public:
                         virtual ~SfxSplitWindow();
     virtual void        dispose() override;
 
-    void                ReleaseWindow_Impl(SfxDockingWindow *pWin, bool bSaveConfig=true);
+    void                ReleaseWindow_Impl(SfxDockingWindow const *pWin, bool bSaveConfig=true);
 
     void                InsertWindow( SfxDockingWindow* pDockWin,
                             const Size& rSize);
@@ -99,7 +99,7 @@ public:
                             sal_uInt16 nPos,
                             bool bNewLine=false );
 
-    void                RemoveWindow( SfxDockingWindow* pDockWin, bool bHide=true);
+    void                RemoveWindow( SfxDockingWindow const * pDockWin, bool bHide=true);
 
     void                Lock( bool bLock=true )
                         {

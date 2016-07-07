@@ -423,7 +423,7 @@ void DockingManager::RemoveWindow( const vcl::Window *pWindow )
     }
 }
 
-void DockingManager::SetPosSizePixel( vcl::Window *pWindow, long nX, long nY,
+void DockingManager::SetPosSizePixel( vcl::Window const *pWindow, long nX, long nY,
                                     long nWidth, long nHeight,
                                     PosSizeFlags nFlags )
 {
@@ -961,7 +961,7 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRect )
+void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle const & rRect )
 {
     DockingData data( rPoint, rRect, IsFloatingMode() );
 

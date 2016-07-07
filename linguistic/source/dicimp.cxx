@@ -82,7 +82,7 @@ static bool getTag(const OString &rLine, const sal_Char *pTagName,
 }
 
 
-sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg )
+sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, sal_uInt16 &nLng, bool &bNeg )
 {
     // Sniff the header
     sal_Int16 nDicVersion = DIC_VERSION_DONTKNOW;

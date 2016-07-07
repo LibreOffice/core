@@ -86,7 +86,7 @@ public:
     void NextColumn();
     void NewCellRow();
 
-    void InsertCell( ImportInfo* pInfo );
+    void InsertCell( ImportInfo const * pInfo );
 
     void FillTable();
 
@@ -203,7 +203,7 @@ void SdrTableRTFParser::NextRow()
     ++mnRowCnt;
 }
 
-void SdrTableRTFParser::InsertCell( ImportInfo* pInfo )
+void SdrTableRTFParser::InsertCell( ImportInfo const * pInfo )
 {
     sal_Int32 nCol = mpActDefault->mnCol;
 

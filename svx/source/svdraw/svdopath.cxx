@@ -268,12 +268,12 @@ public:
     XPolygon GetFormPoly() const;
     void CalcBezier(const Point& rP1, const Point& rP2, const Point& rDir, bool bMouseDown);
     XPolygon GetBezierPoly() const;
-    void CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
+    void CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView);
     XPolygon GetCirclePoly() const;
-    void CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
-    static Point    CalcLine(const Point& rCsr, long nDirX, long nDirY, SdrView* pView);
+    void CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView);
+    static Point    CalcLine(const Point& rCsr, long nDirX, long nDirY, SdrView const * pView);
     XPolygon GetLinePoly() const;
-    void CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView);
+    void CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView);
     XPolygon GetRectPoly() const;
 };
 
@@ -310,7 +310,7 @@ XPolygon ImpPathCreateUser::GetBezierPoly() const
     return aXP;
 }
 
-void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView)
+void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView)
 {
     long nTangAngle=GetAngle(rDir);
     aCircStart=rP1;
@@ -382,7 +382,7 @@ XPolygon ImpPathCreateUser::GetCirclePoly() const
     }
 }
 
-Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, SdrView* pView)
+Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, SdrView const * pView)
 {
     long x=aCsr.X();
     long y=aCsr.Y();
@@ -406,7 +406,7 @@ Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, Sdr
     return Point(x,y);
 }
 
-void ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView)
+void ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView)
 {
     aLineStart=rP1;
     aLineEnd=rP2;
@@ -435,7 +435,7 @@ XPolygon ImpPathCreateUser::GetLinePoly() const
     return aXP;
 }
 
-void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView* pView)
+void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView)
 {
     aRectP1=rP1;
     aRectP2=rP1;
@@ -509,9 +509,9 @@ public:
     ~ImpPathForDragAndCreate();
 
     // drag stuff
-    bool beginPathDrag( SdrDragStat& rDrag )  const;
+    bool beginPathDrag( SdrDragStat const & rDrag )  const;
     bool movePathDrag( SdrDragStat& rDrag ) const;
-    bool endPathDrag( SdrDragStat& rDrag );
+    bool endPathDrag( SdrDragStat const & rDrag );
     OUString getSpecialDragComment(const SdrDragStat& rDrag) const;
     basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
 
@@ -552,7 +552,7 @@ ImpPathForDragAndCreate::~ImpPathForDragAndCreate()
     }
 }
 
-bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat& rDrag )  const
+bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat const & rDrag )  const
 {
     const SdrHdl* pHdl=rDrag.GetHdl();
     if(!pHdl)
@@ -831,7 +831,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
     return true;
 }
 
-bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
+bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat const & rDrag)
 {
     Point aLinePt1;
     Point aLinePt2;

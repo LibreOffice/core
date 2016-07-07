@@ -902,7 +902,7 @@ bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKey
     return bProcessed;
 }
 
-ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
+ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, KeyEvent const * pKeyEvent )
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = nullptr;
@@ -927,7 +927,7 @@ ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, Ke
     return nEventId;
 }
 
-ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent )
+ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, MouseEvent const * pMouseEvent )
 {
     const SolarMutexGuard aGuard;
     ImplSVEvent * nEventId = nullptr;
@@ -1134,7 +1134,7 @@ vcl::Window* Application::GetFirstTopLevelWindow()
     return pSVData->maWinData.mpFirstFrame;
 }
 
-vcl::Window* Application::GetNextTopLevelWindow( vcl::Window* pWindow )
+vcl::Window* Application::GetNextTopLevelWindow( vcl::Window const * pWindow )
 {
     return pWindow->mpWindowImpl->mpFrameData->mpNextFrame;
 }
@@ -1371,7 +1371,7 @@ bool Application::InsertAccel( Accelerator* pAccel )
     return pSVData->maAppData.mpAccelMgr->InsertAccel( pAccel );
 }
 
-void Application::RemoveAccel( Accelerator* pAccel )
+void Application::RemoveAccel( Accelerator const * pAccel )
 {
     ImplSVData* pSVData = ImplGetSVData();
 

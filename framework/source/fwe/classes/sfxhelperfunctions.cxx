@@ -88,7 +88,7 @@ pfunc_getRefreshToolbars SAL_CALL SetRefreshToolbars( pfunc_getRefreshToolbars p
     return pOldFunc;
 }
 
-void SAL_CALL RefreshToolbars( css::uno::Reference< css::frame::XFrame >& rFrame )
+void SAL_CALL RefreshToolbars( css::uno::Reference< css::frame::XFrame > const & rFrame )
 {
     pfunc_getRefreshToolbars pCallback = nullptr;
     {

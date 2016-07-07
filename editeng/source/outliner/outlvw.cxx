@@ -71,7 +71,7 @@ void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
     pEditView->Paint( rRect, pTargetDevice );
 }
 
-bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
+bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFrameWin )
 {
     // For the first Paint/KeyInput/Drop an empty Outliner is turned into
     // an Outliner with exactly one paragraph.
@@ -366,7 +366,7 @@ void OutlinerView::ReleaseMouse()
     pEditView->ReleaseMouse();
 }
 
-void OutlinerView::ImpToggleExpand( Paragraph* pPara )
+void OutlinerView::ImpToggleExpand( Paragraph const * pPara )
 {
     sal_Int32 nPara = pOwner->pParaList->GetAbsPos( pPara );
     pEditView->SetSelection( ESelection( nPara, 0, nPara, 0 ) );
@@ -374,7 +374,7 @@ void OutlinerView::ImpToggleExpand( Paragraph* pPara )
     pEditView->ShowCursor();
 }
 
-sal_Int32 OutlinerView::Select( Paragraph* pParagraph, bool bSelect )
+sal_Int32 OutlinerView::Select( Paragraph const * pParagraph, bool bSelect )
 {
     sal_Int32 nPara = pOwner->pParaList->GetAbsPos( pParagraph );
     sal_Int32 nEnd = 0;
@@ -1377,7 +1377,7 @@ bool OutlinerView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIf
     return pEditView->IsWrongSpelledWordAtPos( rPosPixel, bMarkIfWrong );
 }
 
-void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pStartDlg )
+void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pStartDlg )
 {
     pEditView->ExecuteSpellPopup( rPosPixel, pStartDlg );
 }

@@ -440,7 +440,7 @@ namespace svxform
     }
 
 
-    void NavigatorTreeModel::RemoveForm(FmFormData* pFormData)
+    void NavigatorTreeModel::RemoveForm(FmFormData const * pFormData)
     {
 
         // get form and parent
@@ -472,7 +472,7 @@ namespace svxform
     }
 
 
-    void NavigatorTreeModel::RemoveFormComponent(FmControlData* pControlData)
+    void NavigatorTreeModel::RemoveFormComponent(FmControlData const * pControlData)
     {
 
         // get control and parent
@@ -487,7 +487,7 @@ namespace svxform
     }
 
 
-    void NavigatorTreeModel::ClearBranch( FmFormData* pParentData )
+    void NavigatorTreeModel::ClearBranch( FmFormData const * pParentData )
     {
 
         // delete all entries of this branch
@@ -652,7 +652,7 @@ namespace svxform
     }
 
 
-    FmEntryData* NavigatorTreeModel::FindData( const OUString& rText, FmFormData* pParentData, bool bRecurs )
+    FmEntryData* NavigatorTreeModel::FindData( const OUString& rText, FmFormData const * pParentData, bool bRecurs )
     {
         FmEntryDataList* pDataList;
         if( !pParentData )
@@ -889,7 +889,7 @@ namespace svxform
     }
 
 
-    Reference< XIndexContainer >  NavigatorTreeModel::GetFormComponents( FmFormData* pFormData )
+    Reference< XIndexContainer >  NavigatorTreeModel::GetFormComponents( FmFormData const * pFormData )
     {
 
         // get components from form

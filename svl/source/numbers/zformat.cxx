@@ -1840,8 +1840,8 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString)
     return;
 }
 
-short SvNumberformat::ImpCheckCondition(double& fNumber,
-                                        double& fLimit,
+short SvNumberformat::ImpCheckCondition(double fNumber,
+                                        double fLimit,
                                         SvNumberformatLimitOps eOp)
 {
     switch(eOp)

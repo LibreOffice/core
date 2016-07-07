@@ -263,7 +263,7 @@ css::task::UrlRecord find(
     OUString GetMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 
-    void UpdateVector( const OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, bool writeFile )
+    void UpdateVector( const OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord const & rec, bool writeFile )
                                                         throw(css::uno::RuntimeException);
 
     void PrivateAdd( const OUString& aUrl,

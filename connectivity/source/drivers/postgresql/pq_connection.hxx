@@ -89,7 +89,7 @@ static const sal_Int32 SQL = 2;
 static const sal_Int32 INFO = 3;
 static const sal_Int32 DATA = 4;
 }
-bool isLog( ConnectionSettings *settings, int loglevel );
+bool isLog( ConnectionSettings const *settings, int loglevel );
 void log( ConnectionSettings *settings, sal_Int32 level, const OUString &logString );
 void log( ConnectionSettings *settings, sal_Int32 level, const char *str );
 

@@ -96,7 +96,7 @@ public:
 
     // the original size of the object ( size of the icon for iconified object )
     // no conversion is done if no target mode is provided
-    Size            GetSize( MapMode* pTargetMapMode = nullptr ) const;
+    Size            GetSize( MapMode const * pTargetMapMode = nullptr ) const;
 
     void            SetGraphic( const Graphic& rGraphic, const OUString& rMediaType );
     void            SetGraphicStream(

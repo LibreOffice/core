@@ -205,7 +205,7 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 }
 
 
-void PropagateEvent_Impl( SfxObjectShell *pDoc, const OUString& aEventName, const SvxMacro* pMacro )
+void PropagateEvent_Impl( SfxObjectShell const *pDoc, const OUString& aEventName, const SvxMacro* pMacro )
 {
     uno::Reference < document::XEventsSupplier > xSupplier;
     if ( pDoc )
@@ -245,7 +245,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, const OUString& aEventName, cons
 }
 
 
-void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
+void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacro& rMacro, SfxObjectShell const *pDoc )
 {
     std::unique_ptr<SvxMacro> pMacro;
     if ( rMacro.HasMacro() )

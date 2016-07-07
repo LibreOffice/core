@@ -461,12 +461,12 @@ public:
     void DeleteParagraph();
 
     void InsertControlCharacter( sal_Int16 nControl );
-    void InsertTextContent( css::uno::Reference< css::text::XTextContent > & xContent);
+    void InsertTextContent( css::uno::Reference< css::text::XTextContent > const & xContent);
 
     // Add parameter <bOutlineLevelAttrFound> (#i73509#)
     // Add parameter <bSetListAttrs> in order to suppress the handling of the list attributes (#i80724#)
     OUString SetStyleAndAttrs(
-            SvXMLImport& rImport,
+            SvXMLImport const & rImport,
             const css::uno::Reference< css::text::XTextCursor >& rCursor,
             const OUString& rStyleName,
             bool bPara,
@@ -489,7 +489,7 @@ public:
     void SetOutlineStyles( bool bSetEmpty );
 
     void SetHyperlink(
-            SvXMLImport& rImport,
+            SvXMLImport const & rImport,
             const css::uno::Reference< css::text::XTextCursor >& rCursor,
             const OUString& rHRef,
             const OUString& rName,
@@ -498,7 +498,7 @@ public:
             const OUString& rVisitedStyleName,
             XMLEventsImportContext* pEvents = nullptr);
     void SetRuby(
-            SvXMLImport& rImport,
+            SvXMLImport const & rImport,
             const css::uno::Reference< css::text::XTextCursor >& rCursor,
             const OUString& rStyleName,
             const OUString& rTextStyleName,
@@ -578,7 +578,7 @@ public:
     void pushFieldCtx( const OUString& name, const OUString& type );
     void popFieldCtx();
     void addFieldParam( const OUString& name, const OUString& value );
-    void setCurrentFieldParamsTo(css::uno::Reference< css::text::XFormField> &xFormField);
+    void setCurrentFieldParamsTo(css::uno::Reference< css::text::XFormField> const &xFormField);
     OUString getCurrentFieldType();
     bool hasCurrentFieldCtx();
 

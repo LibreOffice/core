@@ -670,7 +670,7 @@ Reference< XInterface >  ConnectionCreateInstance(
 }
 
 
-bool isLog( ConnectionSettings *settings, int loglevel )
+bool isLog( ConnectionSettings const *settings, int loglevel )
 {
     return settings->loglevel >= loglevel && settings->logFile;
 }

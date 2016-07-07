@@ -52,7 +52,7 @@ protected:
         double fNumber,
         sal_Int32* pStringLength = nullptr );
 
-    static void addStringToEquation( OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer& aAddString, sal_Int32* pMaxLength );
+    static void addStringToEquation( OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer const & aAddString, sal_Int32 const * pMaxLength );
 
     double m_fCorrelationCoeffitient;
 

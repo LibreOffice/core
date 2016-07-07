@@ -67,7 +67,7 @@ public:
 
     SVX_DLLPRIVATE void cloneFrom( const CellRef& rCell );
 
-    SVX_DLLPRIVATE void setCellRect( ::Rectangle& rCellRect ) { maCellRect = rCellRect; }
+    SVX_DLLPRIVATE void setCellRect( ::Rectangle const & rCellRect ) { maCellRect = rCellRect; }
     SVX_DLLPRIVATE const ::Rectangle& getCellRect() const { return maCellRect; }
     SVX_DLLPRIVATE ::Rectangle& getCellRect() { return maCellRect; }
 
@@ -190,7 +190,7 @@ public:
 
     SVX_DLLPRIVATE sdr::properties::TextProperties* CloneProperties( SdrObject& rNewObj, Cell& rNewCell );
 
-    SVX_DLLPRIVATE static sdr::properties::TextProperties* CloneProperties( sdr::properties::TextProperties* pProperties, SdrObject& rNewObj, Cell& rNewCell );
+    SVX_DLLPRIVATE static sdr::properties::TextProperties* CloneProperties( sdr::properties::TextProperties const * pProperties, SdrObject& rNewObj, Cell& rNewCell );
 
     SVX_DLLPRIVATE void notifyModified();
 
@@ -198,7 +198,7 @@ protected:
     SVX_DLLPRIVATE virtual const SfxItemSet& GetObjectItemSet() override;
     SVX_DLLPRIVATE virtual void SetObjectItem(const SfxPoolItem& rItem) override;
 
-    SVX_DLLPRIVATE css::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap );
+    SVX_DLLPRIVATE css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap );
 
 private:
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw(css::uno::RuntimeException);

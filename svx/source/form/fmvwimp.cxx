@@ -1008,7 +1008,7 @@ IMPL_LINK_NOARG_TYPED(FmXFormView, OnAutoFocus, void*, void)
 }
 
 
-void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
+void FmXFormView::onCreatedFormObject( FmFormObj const & _rFormObject )
 {
     FmFormShell* pShell = m_pView ? m_pView->GetFormShell() : nullptr;
     FmXFormShell* pShellImpl = pShell ? pShell->GetImpl() : nullptr;
@@ -1508,7 +1508,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
 }
 
 
-bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
+bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
         const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID, const OUString& _rFieldPostfix,
         SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl,
@@ -1536,7 +1536,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
 }
 
 
-bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
+bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
     const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
     const OUString& _rFieldPostfix, sal_uInt32 _nInventor, sal_uInt16 _nLabelObjectID,
@@ -1800,7 +1800,7 @@ void FmXFormView::saveMarkList()
 }
 
 
-static bool lcl_hasObject( SdrObjListIter& rIter, SdrObject* pObj )
+static bool lcl_hasObject( SdrObjListIter& rIter, SdrObject const * pObj )
 {
     bool bFound = false;
     while (rIter.IsMore() && !bFound)

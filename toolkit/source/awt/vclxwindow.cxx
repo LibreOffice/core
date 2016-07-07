@@ -317,7 +317,7 @@ Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 
 // Uses an out-parameter instead of return value, due to the object reference
 
-void ImplInitWindowEvent( css::awt::WindowEvent& rEvent, vcl::Window* pWindow )
+void ImplInitWindowEvent( css::awt::WindowEvent& rEvent, vcl::Window const * pWindow )
 {
     Point aPos = pWindow->GetPosPixel();
     Size aSz = pWindow->GetSizePixel();
@@ -390,7 +390,7 @@ void VCLXWindow::resumeVclEventListening( )
     --mpImpl->mnListenerLockLevel;
 }
 
-void VCLXWindow::notifyWindowRemoved( vcl::Window& _rWindow )
+void VCLXWindow::notifyWindowRemoved( vcl::Window const & _rWindow )
 {
     if ( mpImpl->getContainerListeners().getLength() )
     {

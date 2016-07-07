@@ -150,7 +150,7 @@ public:
 #if defined(_WIN32)
     void                        AddDdeTopic( SfxObjectShell* );
 #endif
-    void                        RemoveDdeTopic( SfxObjectShell* );
+    void                        RemoveDdeTopic( SfxObjectShell const * );
 
     // "static" methods
     /**
@@ -216,7 +216,7 @@ public:
     SAL_DLLPRIVATE void         OpenRemoteExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscState_Impl(SfxItemSet &);
-    SAL_DLLPRIVATE void         PropExec_Impl(SfxRequest &);
+    SAL_DLLPRIVATE void         PropExec_Impl(SfxRequest const &);
     SAL_DLLPRIVATE void         PropState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         OfaExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         OfaState_Impl(SfxItemSet &);

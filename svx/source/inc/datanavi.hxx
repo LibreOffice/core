@@ -133,7 +133,7 @@ namespace svxform
                                                   sal_uInt16 _nEditId,
                                                   sal_uInt16 _nRemoveId);
         void                    DeleteAndClear();
-        void                    RemoveEntry( SvTreeListEntry* _pEntry );
+        void                    RemoveEntry( SvTreeListEntry const * _pEntry );
     };
 
     class ReplaceString
@@ -339,7 +339,7 @@ namespace svxform
         DECL_LINK_TYPED(            MenuActivateHdl, MenuButton *, void );
         DECL_LINK_TYPED(            ActivatePageHdl, TabControl*, void);
         DECL_LINK_TYPED(            UpdateHdl, Timer *, void);
-        void ModelSelectHdl(ListBox*);
+        void ModelSelectHdl(ListBox const *);
         XFormsPage*                 GetCurrentPage( sal_uInt16& rCurId );
         void                        LoadModels();
         void                        SetPageModel();

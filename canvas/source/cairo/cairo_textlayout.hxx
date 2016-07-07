@@ -82,7 +82,7 @@ namespace cairocanvas
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( css::uno::RuntimeException, std::exception ) override;
 
-        bool draw( ::cairo::CairoSharedPtr&                        pSCairo,
+        bool draw( ::cairo::CairoSharedPtr const &                 pSCairo,
                    OutputDevice&                                   rOutDev,
                    const Point&                                    rOutpos,
                    const css::rendering::ViewState&   viewState,

@@ -96,7 +96,7 @@ namespace tdoc_ucp {
     private:
         friend class Storage;
 
-        void releaseElement( Storage * pElement );
+        void releaseElement( Storage const * pElement );
 
         css::uno::Reference< css::embed::XStorage >
         queryParentStorage( const OUString & rUri,
