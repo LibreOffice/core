@@ -139,7 +139,7 @@ private:
         most mnMaximalRecentlyCacheCount members.
     */
     void PutRecentlyUsedCache(
-        DocumentKey pDocument,
+        DocumentKey const & pDocument,
         const Size& rPreviewSize,
         const std::shared_ptr<Cache>& rpCache);
 

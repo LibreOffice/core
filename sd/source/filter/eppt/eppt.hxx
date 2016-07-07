@@ -221,7 +221,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          ImplInsertBookmarkURL( const OUString& rBookmark, const sal_uInt32 nType,
                                 const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 );
         virtual bool        ImplCreateMainNotes() override;
-        void                ImplWriteBackground( css::uno::Reference< css::beans::XPropertySet > & rXBackgroundPropSet );
+        void                ImplWriteBackground( css::uno::Reference< css::beans::XPropertySet > const & rXBackgroundPropSet );
         void                ImplWriteVBA();
         void                ImplWriteOLE();
         bool                ImplWriteAtomEnding();
@@ -259,9 +259,9 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         bool                ImplCloseDocument();        // we write the font, hyper and sound list
 
         virtual void        ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterID, sal_uInt16 nMode,
-                                            bool bHasBackground, css::uno::Reference< css::beans::XPropertySet > aXBackgroundPropSet ) override;
+                                            bool bHasBackground, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
         virtual void        ImplWriteNotes( sal_uInt32 nPageNum ) override;
-        virtual void        ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > aXBackgroundPropSet ) override;
+        virtual void        ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
 
     public:
                                 PPTWriter( tools::SvRef<SotStorage>& rSvStorage,

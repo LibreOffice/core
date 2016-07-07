@@ -86,7 +86,7 @@ class AnimationExporter
     void exportAnimateSet( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >&  xNode, int nAfterEffectType );
     static void exportAnimAction( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
     void exportAnimEvent( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_Int32 nFlags = 0 );
-    void exportNode( SvStream& rStrm, css::uno::Reference< css::animations::XAnimationNode > xNode,
+    void exportNode( SvStream& rStrm, css::uno::Reference< css::animations::XAnimationNode > const & xNode,
                         const css::uno::Reference< css::animations::XAnimationNode >* xParent,
                             const sal_uInt16 nContainerRecType, const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const bool bTakeBackInteractiveSequenceTiming,
                                 const sal_Int16 nFillDefault );

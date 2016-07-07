@@ -87,9 +87,9 @@ public:
 protected:
 
     virtual void ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
-                                 bool bHasBackground, css::uno::Reference< css::beans::XPropertySet > aXBackgroundPropSet ) override;
+                                 bool bHasBackground, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) override;
-    virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > aXBackgroundPropSet ) override;
+    virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     virtual void ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum ) override;
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
     void WriteTheme( sal_Int32 nThemeNum );

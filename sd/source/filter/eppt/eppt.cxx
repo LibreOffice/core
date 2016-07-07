@@ -171,7 +171,7 @@ void PPTWriter::exportPPTPost( )
 void ImplExportComments( const uno::Reference< drawing::XDrawPage >& xPage, SvMemoryStream& rBinaryTagData10Atom );
 
 void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
-                                bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
+                                bool bHasBackground, Reference< XPropertySet > const & aXBackgroundPropSet )
 {
     Any aAny;
 
@@ -359,7 +359,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->CloseContainer();    // EPP_Slide
 }
 
-void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
+void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > const & aXBackgroundPropSet )
 {
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_MainMaster );
@@ -1160,7 +1160,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->CloseContainer();    // EPP_Notes
 };
 
-void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertySet > & rXPropSet )
+void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertySet > const & rXPropSet )
 {
     //************************ ******
     //** DEFAULT BACKGROUND SHAPE **

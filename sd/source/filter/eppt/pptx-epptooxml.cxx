@@ -93,7 +93,7 @@ using ::com::sun::star::container::XIndexAccess;
 using ::sax_fastparser::FSHelperPtr;
 
 
-void dump_pset(Reference< XPropertySet > rXPropSet);
+void dump_pset(Reference< XPropertySet > const & rXPropSet);
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
 
 namespace oox {
@@ -1503,7 +1503,7 @@ bool PowerPointExport::WriteComments( sal_uInt32 nPageNum )
 }
 
 void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 /* nMode */,
-                                       bool bHasBackground, Reference< XPropertySet > aXBackgroundPropSet )
+                                       bool bHasBackground, Reference< XPropertySet > const & aXBackgroundPropSet )
 {
     SAL_INFO("sd.eppt", "write slide: " << nPageNum << "\n----------------");
 
@@ -1666,7 +1666,7 @@ sal_Int32 PowerPointExport::nStyleLevelToken[5] =
     XML_lvl5pPr
 };
 
-void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
+void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > const & aXBackgroundPropSet )
 {
     SAL_INFO("sd.eppt", "write slide master: " << nPageNum << "\n--------------");
 
@@ -2335,7 +2335,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdfilt_component_getFactory( const sal_Char*
 }
 #endif
 
-void dump_pset(Reference< XPropertySet > rXPropSet)
+void dump_pset(Reference< XPropertySet > const & rXPropSet)
 {
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
     Sequence< beans::Property > props = info->getProperties ();

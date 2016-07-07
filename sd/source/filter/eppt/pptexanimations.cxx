@@ -474,9 +474,11 @@ bool AnimationExporter::isEmptyNode( const Reference< XAnimationNode >& xNode ) 
     return true;
 }
 
-void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode > xNode, const Reference< XAnimationNode >* pParent, const sal_uInt16 nContainerRecType,
+void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode > const & xNode_in, const Reference< XAnimationNode >* pParent, const sal_uInt16 nContainerRecType,
                                     const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const bool bTakeBackInteractiveSequenceTiming, const sal_Int16 nFDef )
 {
+    auto xNode = xNode_in;
+
     if( (nGroupLevel == 4) && isEmptyNode( xNode ) )
         return;
 

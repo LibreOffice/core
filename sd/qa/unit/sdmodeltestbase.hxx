@@ -291,7 +291,7 @@ protected:
         return pPage;
     }
 
-    uno::Reference< beans::XPropertySet > getShape( int nShape, uno::Reference< drawing::XDrawPage > xPage )
+    uno::Reference< beans::XPropertySet > getShape( int nShape, uno::Reference< drawing::XDrawPage > const & xPage )
     {
         uno::Reference< beans::XPropertySet > xShape( xPage->getByIndex( nShape ), uno::UNO_QUERY );
         CPPUNIT_ASSERT_MESSAGE( "Failed to load shape", xShape.is() );
@@ -309,7 +309,7 @@ protected:
     }
 
     // Nth paragraph of text in given text shape
-    uno::Reference< text::XTextRange > getParagraphFromShape( int nPara, uno::Reference< beans::XPropertySet > xShape )
+    uno::Reference< text::XTextRange > getParagraphFromShape( int nPara, uno::Reference< beans::XPropertySet > const & xShape )
     {
         uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>( xShape, uno::UNO_QUERY )->getText();
         CPPUNIT_ASSERT_MESSAGE( "Not a text shape", xText.is() );
@@ -325,7 +325,7 @@ protected:
         return xParagraph;
     }
 
-    uno::Reference< text::XTextRange > getRunFromParagraph( int nRun, uno::Reference< text::XTextRange > xParagraph )
+    uno::Reference< text::XTextRange > getRunFromParagraph( int nRun, uno::Reference< text::XTextRange > const & xParagraph )
     {
         uno::Reference< container::XEnumerationAccess > runEnumAccess(xParagraph, uno::UNO_QUERY);
         uno::Reference< container::XEnumeration > runEnum = runEnumAccess->createEnumeration();

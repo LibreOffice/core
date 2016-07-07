@@ -56,7 +56,7 @@ class SearchContext_impl
     SearchContext_impl* mpParent;
 
 public:
-    SearchContext_impl( uno::Reference< drawing::XShapes >  xShapes, SearchContext_impl* pParent = nullptr )
+    SearchContext_impl( uno::Reference< drawing::XShapes > const & xShapes, SearchContext_impl* pParent = nullptr )
         : mxShapes( xShapes ), mnIndex( -1 ), mpParent( pParent ) {}
 
     uno::Reference< drawing::XShape > firstShape()

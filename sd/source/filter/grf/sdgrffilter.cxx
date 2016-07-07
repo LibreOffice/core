@@ -90,7 +90,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task:
 
     public:
 
-    explicit SdGRFFilter_ImplInteractionHdl( css::uno::Reference< css::task::XInteractionHandler > xInteraction ) :
+    explicit SdGRFFilter_ImplInteractionHdl( css::uno::Reference< css::task::XInteractionHandler > const & xInteraction ) :
         m_xInter( xInteraction ),
         nFilterError( GRFILTER_OK )
         {}

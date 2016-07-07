@@ -109,7 +109,7 @@ public:
     enum Mode { ALL, FROM, CUSTOM, PREVIEW };
 
 public:
-    AnimationSlideController( Reference< XIndexAccess > xSlides, Mode eMode );
+    AnimationSlideController( Reference< XIndexAccess > const & xSlides, Mode eMode );
 
     void setStartSlideNumber( sal_Int32 nSlideNumber ) { mnStartSlideNumber = nSlideNumber; }
     sal_Int32 getStartSlideIndex() const;
@@ -189,7 +189,7 @@ void AnimationSlideController::setPreviewNode( const Reference< XAnimationNode >
     mxPreviewNode = xPreviewNode;
 }
 
-AnimationSlideController::AnimationSlideController( Reference< XIndexAccess > xSlides, Mode eMode  )
+AnimationSlideController::AnimationSlideController( Reference< XIndexAccess > const & xSlides, Mode eMode  )
 :   meMode( eMode )
 ,   mnStartSlideNumber(-1)
 ,   mnSlideCount( 0 )

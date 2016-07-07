@@ -367,7 +367,7 @@ void SdOOXMLExportTest2::testTdf91378()
     xDocShRef->DoClose();
 }
 
-bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> xDoc, sal_Int32 nSlideNumber,
+bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> const & xDoc, sal_Int32 nSlideNumber,
                            sal_Int16 nExpectedTransitionType, sal_Int16 nExpectedTransitionSubType,
                            bool bExpectedDirection = true)
 {
@@ -507,7 +507,7 @@ void SdOOXMLExportTest2::testTdf92527()
 
 namespace {
 
-void matchNumberFormat( int nPage, uno::Reference< text::XTextField > xField)
+void matchNumberFormat( int nPage, uno::Reference< text::XTextField > const & xField)
 {
     uno::Reference< beans::XPropertySet > xPropSet( xField, uno::UNO_QUERY_THROW );
     sal_Int32 nNumFmt;

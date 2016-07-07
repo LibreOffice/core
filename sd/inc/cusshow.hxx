@@ -45,7 +45,7 @@ private:
 public:
     // single argument ctors shall be explicit
     explicit SdCustomShow(SdDrawDocument* pDrawDoc);
-    SdCustomShow(SdDrawDocument* pDrawDoc, css::uno::Reference< css::uno::XInterface > xShow );
+    SdCustomShow(SdDrawDocument* pDrawDoc, css::uno::Reference< css::uno::XInterface > const & xShow );
 
     virtual ~SdCustomShow();
 
