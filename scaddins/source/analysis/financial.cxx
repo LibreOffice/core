@@ -452,7 +452,7 @@ double SAL_CALL AnalysisAddIn::getOddlyield( const css::uno::Reference< css::bea
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOB ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception )
 {
-    if( fRate < 0.0 || fPrice <= 0.0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
+    if( fRate <= 0.0 || fPrice <= 0.0 || fRedemp <= 0.0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetOddlyield( GetNullDate( xOpt ), nSettle, nMat, nLastInterest, fRate, fPrice, fRedemp, nFreq,
