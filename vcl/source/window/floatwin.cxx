@@ -267,7 +267,6 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
             Application::GetBestScreen( bRTL ? devRectRTL : devRect ) );
 
     FloatWinPopupFlags nArrangeAry[5];
-    sal_uInt16        nArrangeIndex;
     Point             e1,e2;  // the common edge between the item rect and the floating window
 
     if ( nFlags & FloatWinPopupFlags::Left )
@@ -302,10 +301,8 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
         nArrangeAry[3]  = FloatWinPopupFlags::Left;
         nArrangeAry[4]  = FloatWinPopupFlags::Down;
     }
-    if ( nFlags & FloatWinPopupFlags::NoAutoArrange )
-        nArrangeIndex = 4;
-    else
-        nArrangeIndex = 0;
+
+    sal_uInt16 nArrangeIndex = 0;
 
     for ( ; nArrangeIndex < 5; nArrangeIndex++ )
     {
@@ -397,7 +394,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
         }
 
         // adjust if necessary
-        if ( bBreak && !(nFlags & FloatWinPopupFlags::NoAutoArrange) )
+        if (bBreak)
         {
             if ( (nArrangeAry[nArrangeIndex] == FloatWinPopupFlags::Left)  ||
                  (nArrangeAry[nArrangeIndex] == FloatWinPopupFlags::Right) )
@@ -737,8 +734,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
 
     // set Flags for positioning
     if ( !(nFlags & (FloatWinPopupFlags::Down | FloatWinPopupFlags::Up |
-                     FloatWinPopupFlags::Left | FloatWinPopupFlags::Right |
-                     FloatWinPopupFlags::NoAutoArrange)) )
+                     FloatWinPopupFlags::Left | FloatWinPopupFlags::Right)) )
     {
          if ( pBox->IsHorizontal() )
              nFlags |= FloatWinPopupFlags::Down;
