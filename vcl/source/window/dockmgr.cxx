@@ -375,7 +375,6 @@ void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window 
 void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWindow )
 {
     StartPopupMode( pParentToolBox, pWindow, FloatWinPopupFlags::AllowTearOff         |
-                    FloatWinPopupFlags::NoFocusClose         |
                     FloatWinPopupFlags::AllMouseButtonClose  |
                     FloatWinPopupFlags::NoMouseUpClose );
 }

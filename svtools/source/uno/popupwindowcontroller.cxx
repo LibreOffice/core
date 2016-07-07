@@ -211,7 +211,6 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
             mxImpl->SetPopupWindow(pWin,pToolBox);
             vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin,
                                                            FloatWinPopupFlags::GrabFocus |
-                                                           FloatWinPopupFlags::NoFocusClose |
                                                            FloatWinPopupFlags::AllMouseButtonClose |
                                                            FloatWinPopupFlags::NoMouseUpClose );
         }

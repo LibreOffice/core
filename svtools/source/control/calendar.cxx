@@ -2264,7 +2264,7 @@ bool CalendarField::ShowDropDown( bool bShow )
         mpCalendar->StartSelection();
         mpCalendar->GrabFocus();
         mpCalendar->Show();
-        mpFloatWin->StartPopupMode( aRect, FloatWinPopupFlags::NoFocusClose|FloatWinPopupFlags::Down );
+        mpFloatWin->StartPopupMode( aRect, FloatWinPopupFlags::Down );
     }
     else
     {

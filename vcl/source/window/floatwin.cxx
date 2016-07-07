@@ -732,14 +732,8 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
     aRect.SetPos( aPos );
 
     nFlags |=
-        FloatWinPopupFlags::NoFocusClose     |
         FloatWinPopupFlags::AllMouseButtonClose |
         FloatWinPopupFlags::NoMouseUpClose;
-
-/*
- *  FloatWinPopupFlags::NoKeyClose       |
- *  don't set since it disables closing floaters with escape
- */
 
     // set Flags for positioning
     if ( !(nFlags & (FloatWinPopupFlags::Down | FloatWinPopupFlags::Up |
