@@ -286,7 +286,7 @@ public:
                                                                const css::uno::Reference<css::lang::XMultiServiceFactory>& xTextFactory,
                                                                bool bFirst);
 
-    OUString GetPageStyleName( bool bFirstPage = false ) { return bFirstPage ? m_sFirstPageStyleName : m_sFollowPageStyleName; }
+    OUString const & GetPageStyleName( bool bFirstPage = false ) { return bFirstPage ? m_sFirstPageStyleName : m_sFollowPageStyleName; }
     void InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl )
         throw ( css::beans::UnknownPropertyException,
                 css::beans::PropertyVetoException,
