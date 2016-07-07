@@ -1216,8 +1216,17 @@ sal_uInt32 ImplEESdrObject::ImplGetText()
 {
     Reference< XText > xXText( mXShape, UNO_QUERY );
     mnTextSize = 0;
-    if( xXText.is() )
-        mnTextSize = xXText->getString().getLength();
+    if (xXText.is())
+    {
+        try
+        {
+            mnTextSize = xXText->getString().getLength();
+        }
+        catch (const uno::RuntimeException& e)
+        {
+            SAL_WARN("filter.ms", "ImplGetText exception: " << e.Message);
+        }
+    }
     return mnTextSize;
 }
 
