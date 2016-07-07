@@ -1567,7 +1567,7 @@ void DateFormatter::SetUserDate( const Date& rNewDate )
     ImplSetUserDate( rNewDate );
 }
 
-void DateFormatter::ImplSetUserDate( const Date& rNewDate, Selection* pNewSelection )
+void DateFormatter::ImplSetUserDate( const Date& rNewDate, const Selection* pNewSelection )
 {
     Date aNewDate = rNewDate;
     if ( aNewDate > maMax )
@@ -2388,7 +2388,7 @@ void TimeFormatter::ImplNewFieldValue( const tools::Time& rTime )
     }
 }
 
-void TimeFormatter::ImplSetUserTime( const tools::Time& rNewTime, Selection* pNewSelection )
+void TimeFormatter::ImplSetUserTime( const tools::Time& rNewTime, const Selection* pNewSelection )
 {
     tools::Time aNewTime = rNewTime;
     if ( aNewTime > GetMax() )

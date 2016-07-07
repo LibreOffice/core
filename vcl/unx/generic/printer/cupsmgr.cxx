@@ -88,7 +88,7 @@ struct GetPPDAttribs
         unref();
     }
 
-    OString waitResult( TimeValue *pDelay )
+    OString waitResult( const TimeValue *pDelay )
     {
         m_pSyncMutex->release();
 

@@ -63,7 +63,7 @@ void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
                                       long nCurX, long nCurY,
                                       short nOrientation,
                                       SalGraphics* pGraphics,
-                                      OutputDevice* pOutDev,
+                                      const OutputDevice* pOutDev,
                                       bool bDrawPixAsRect,
                                       long nPixWidth, long nPixHeight )
 {

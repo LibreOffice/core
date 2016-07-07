@@ -108,7 +108,7 @@ public:
                                       vcl::Window* pParent,
                                       const Rectangle& rScreenRect,
                                       const OUString& rText);
-    static void         HidePopover(vcl::Window* pParent, sal_uLong nId);
+    static void         HidePopover(const vcl::Window* pParent, sal_uLong nId);
 };
 
 #endif // INCLUDED_VCL_HELP_HXX

@@ -113,7 +113,7 @@ public:
 
 protected:
     static void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
-                                         SalPrinterQueueInfo* pQueueInfo,
+                                         const SalPrinterQueueInfo* pQueueInfo,
                                          ImplJobSetup* pSetupData );
 };
 

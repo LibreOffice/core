@@ -104,7 +104,7 @@ GraphiteServerFontLayout::~GraphiteServerFontLayout() throw()
     mpFeatures = nullptr;
 }
 
-bool GraphiteServerFontLayout::IsGraphiteEnabledFont(ServerFont& rServerFont)
+bool GraphiteServerFontLayout::IsGraphiteEnabledFont(const ServerFont& rServerFont)
 {
     if (rServerFont.GetGraphiteFace())
     {

@@ -127,7 +127,7 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
     return aReturnBitmap;
 }
 
-void BitmapProcessor::colorizeImage(BitmapEx& rBitmapEx, Color aColor)
+void BitmapProcessor::colorizeImage(const BitmapEx& rBitmapEx, Color aColor)
 {
     Bitmap aBitmap = rBitmapEx.GetBitmap();
     Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);

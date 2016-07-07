@@ -179,7 +179,7 @@ void
  * Generate a pragma import/include directive
  */
 void
-    genimport(char *fname, int angled, char *iname, int import)
+    genimport(const char *fname, int angled, const char *iname, int import)
 {
     static Token ta = {UNCLASS, 0, 0, 0, NULL, 0};
     static Tokenrow tr = {&ta, &ta, &ta + 1, 1};

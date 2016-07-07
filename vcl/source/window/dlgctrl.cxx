@@ -517,7 +517,7 @@ void Window::ImplControlFocus( GetFocusFlags nFlags )
 
 namespace
 {
-    bool isSuitableDestination(vcl::Window *pWindow)
+    bool isSuitableDestination(const vcl::Window *pWindow)
     {
         return (pWindow && isVisibleInLayout(pWindow) &&
                 isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() &&

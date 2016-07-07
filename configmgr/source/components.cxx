@@ -91,7 +91,7 @@ typedef std::list< UnresolvedListItem > UnresolvedList;
 
 void parseXcsFile(
     OUString const & url, int layer, Data & data, Partial const * partial,
-    Modifications * modifications, Additions * additions)
+    const Modifications * modifications, Additions * additions)
 {
     assert(partial == nullptr && modifications == nullptr && additions == nullptr);
     (void) partial; (void) modifications; (void) additions;

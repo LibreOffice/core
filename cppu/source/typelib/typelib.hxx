@@ -35,7 +35,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
 
 extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
     typelib_TypeDescriptionReference ** ppRet,
-    rtl_uString * pName )
+    const rtl_uString * pName )
     SAL_THROW_EXTERN_C();
 
 #endif // INCLUDED_CPPU_SOURCE_TYPELIB_HXX

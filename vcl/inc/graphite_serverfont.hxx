@@ -101,7 +101,7 @@ public:
 
         virtual ~GraphiteServerFontLayout() throw();
 
-        static bool IsGraphiteEnabledFont(ServerFont& rServerFont);
+        static bool IsGraphiteEnabledFont(const ServerFont& rServerFont);
 };
 
 #endif

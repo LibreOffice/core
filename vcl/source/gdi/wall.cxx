@@ -200,7 +200,7 @@ Wallpaper::~Wallpaper()
 {
 }
 
-void Wallpaper::ImplSetCachedBitmap( BitmapEx& rBmp ) const
+void Wallpaper::ImplSetCachedBitmap( const BitmapEx& rBmp ) const
 {
    if( !mpImplWallpaper->mpCache )
       const_cast< ImplWallpaper* >(mpImplWallpaper.get())->mpCache = new BitmapEx( rBmp );

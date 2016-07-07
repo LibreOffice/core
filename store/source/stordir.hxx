@@ -56,8 +56,8 @@ public:
      */
     storeError create (
         OStorePageManager *pManager,
-        rtl_String        *pPath,
-        rtl_String        *pName,
+        const rtl_String  *pPath,
+        const rtl_String  *pName,
         storeAccessMode    eAccessMode);
 
     /** iterate.

@@ -56,15 +56,15 @@ public:
     SvMetaClass* ReadKnownClass();
     SvMetaType*  ReadKnownType();
     void         Read(char cChar);
-    bool         ReadIfBoolAttribute( SvBOOL&, SvStringHashEntry* pName);
-    bool         ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntry* pName );
+    bool         ReadIfBoolAttribute( SvBOOL&, const SvStringHashEntry* pName);
+    bool         ReadIfIdAttribute( SvIdentifier& rIdentifier, const SvStringHashEntry* pName );
     bool         ReadIf(char cChar);
     void         ReadDelimiter();
     bool         ReadIfDelimiter();
     OString      ReadIdentifier();
     OString      ReadString();
-    void         Read(SvStringHashEntry*);
-    bool         ReadIf(SvStringHashEntry*);
+    void         Read(const SvStringHashEntry*);
+    bool         ReadIf(const SvStringHashEntry*);
 };
 
 #endif // INCLUDED_IDL_INC_PARSER_HXX

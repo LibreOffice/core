@@ -316,7 +316,7 @@ void Edit::ImplInitEditData()
     mxDnDListener = pDnDWrapper;
 }
 
-bool Edit::ImplUseNativeBorder(vcl::RenderContext& rRenderContext, WinBits nStyle)
+bool Edit::ImplUseNativeBorder(const vcl::RenderContext& rRenderContext, WinBits nStyle)
 {
     bool bRet = rRenderContext.IsNativeControlSupported(ImplGetNativeControlType(),
                                                         ControlPart::HasBackgroundTexture)
@@ -1022,7 +1022,7 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const Rectang
     }
 }
 
-void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd)
+void Edit::ImplPaintBorder(const vcl::RenderContext& rRenderContext, long nXStart, long nXEnd)
 {
     // this is not needed when double-buffering
     if (SupportsDoubleBuffering())
@@ -1297,12 +1297,12 @@ void Edit::ImplCopyToSelectionClipboard()
     }
 }
 
-void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
+void Edit::ImplCopy( const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
 {
     vcl::unohelper::TextDataObject::CopyStringTo( GetSelected(), rxClipboard );
 }
 
-void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
+void Edit::ImplPaste( const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
 {
     if ( rxClipboard.is() )
     {

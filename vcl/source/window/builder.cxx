@@ -1808,7 +1808,7 @@ namespace
 {
     //return true for window types which exist in vcl but are not themselves
     //represented in the .ui format, i.e. only their children exist.
-    bool isConsideredGtkPseudo(vcl::Window *pWindow)
+    bool isConsideredGtkPseudo(const vcl::Window *pWindow)
     {
         return pWindow->GetType() == WINDOW_TABPAGE;
     }
@@ -2257,12 +2257,12 @@ void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rM
         rMap[sProperty] = sValue;
 }
 
-void VclBuilder::handleAdjustment(const OString &rID, stringmap &rProperties)
+void VclBuilder::handleAdjustment(const OString &rID, const stringmap &rProperties)
 {
     m_pParserState->m_aAdjustments[rID] = rProperties;
 }
 
-void VclBuilder::handleTextBuffer(const OString &rID, stringmap &rProperties)
+void VclBuilder::handleTextBuffer(const OString &rID, const stringmap &rProperties)
 {
     m_pParserState->m_aTextBuffers[rID] = rProperties;
 }

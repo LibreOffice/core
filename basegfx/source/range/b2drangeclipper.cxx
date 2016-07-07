@@ -288,7 +288,7 @@ namespace basegfx
                 processing must proceed with, when going through the
                 list of upcoming active edges).
              */
-            std::ptrdiff_t intersect( SweepLineEvent&   rEvent,
+            std::ptrdiff_t intersect( const SweepLineEvent& rEvent,
                                       ActiveEdge&       rActiveEdge,
                                       VectorOfPolygons& rPolygonPool,
                                       B2DPolyPolygon&   rRes,
@@ -348,7 +348,7 @@ namespace basegfx
             }
 
         private:
-            void handleInitialOwnEdge(SweepLineEvent& rEvent,
+            void handleInitialOwnEdge(const SweepLineEvent& rEvent,
                                       ActiveEdge&     rActiveEdge)
             {
                 const bool isActiveEdgeProceedLeft(
@@ -375,7 +375,7 @@ namespace basegfx
                 mpLeadingRightEdge = &rActiveEdge;
             }
 
-            void handleFinalOwnLeftEdge(ActiveEdge&       rActiveEdge,
+            void handleFinalOwnLeftEdge(const ActiveEdge&       rActiveEdge,
                                         VectorOfPolygons& rPolygonPool,
                                         B2DPolyPolygon&   rRes)
             {
@@ -478,7 +478,7 @@ namespace basegfx
 
             /// True when sweep line hits our own active edge
             static bool metOwnEdge(const SweepLineEvent& rEvent,
-                            ActiveEdge&           rActiveEdge)
+                                   const ActiveEdge&     rActiveEdge)
             {
                 const bool bHitOwnEdge=&rEvent.getRect() == &rActiveEdge.getRect();
                 return bHitOwnEdge;
@@ -618,7 +618,7 @@ namespace basegfx
          */
         void createActiveEdgesFromStartEvent( ListOfEdges&      io_rEdgeList,
                                               VectorOfPolygons& io_rPolygonPool,
-                                              SweepLineEvent&   rCurrEvent )
+                                              const SweepLineEvent&   rCurrEvent )
         {
             ListOfEdges         aNewEdges;
             const B2DRectangle& rRect=rCurrEvent.getRect();
@@ -698,7 +698,7 @@ namespace basegfx
                                  aNewEdges );
         }
 
-        inline bool isSameRect(ActiveEdge&              rEdge,
+        inline bool isSameRect(const ActiveEdge&        rEdge,
                                const basegfx::B2DRange& rRect)
         {
             return &rEdge.getRect() == &rRect;

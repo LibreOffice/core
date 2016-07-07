@@ -150,7 +150,7 @@ public:
         return maRenderEntries;
     }
 
-    bool addDrawTextureWithMaskColor(OpenGLTexture& rTexture, SalColor nColor, const SalTwoRect& r2Rect);
+    bool addDrawTextureWithMaskColor(const OpenGLTexture& rTexture, SalColor nColor, const SalTwoRect& r2Rect);
 
     void addDrawPixel(long nX, long nY, SalColor nColor);
 

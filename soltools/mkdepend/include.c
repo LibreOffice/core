@@ -32,10 +32,10 @@ in this Software without prior written authorization from the X Consortium.
 #include <string.h>
 
 void remove_dotdot( char * );
-int isdot( char * );
-int isdotdot( char * );
+int isdot( const char * );
+int isdotdot( const char * );
 int issymbolic(char * dir, char * component);
-int exists_path(struct IncludesCollection*, char*);
+int exists_path(struct IncludesCollection*, const char*);
 
 
 extern struct inclist inclist[ MAXFILES ],
@@ -147,7 +147,7 @@ struct inclist *inc_path(char *file, char *include, boolean dot, struct Includes
     return ip;
 }
 
-int exists_path(struct IncludesCollection *incCollection, char *path)
+int exists_path(struct IncludesCollection *incCollection, const char *path)
 {
     convert_slashes(path);
     return call_IncludesCollection_exists(incCollection, path);
@@ -226,14 +226,14 @@ void remove_dotdot(char *path)
     strcpy(path, newpath);
 }
 
-int isdot(char *p)
+int isdot(const char *p)
 {
     if(p && p[0] == '.' && p[1] == '\0')
         return TRUE;
     return FALSE;
 }
 
-int isdotdot(char *p)
+int isdotdot(const char *p)
 {
     if(p && p[0] == '.' && p[1] == '.' && p[2] == '\0')
         return TRUE;
@@ -266,7 +266,7 @@ int issymbolic(char *dir, char *component)
 /*
  * Add an include file to the list of those included by 'file'.
  */
-struct inclist *newinclude(char *newfile, char *incstring)
+struct inclist *newinclude(const char *newfile, const char *incstring)
 {
     struct inclist *ip;
 

@@ -170,7 +170,7 @@ namespace utl
     public:
         UpdateFromConfig( const OConfigurationNode& _rRootNode, ::osl::Mutex& _rMutex ) : SubNodeAccess( _rRootNode, _rMutex ) { }
 
-        void operator() ( NodeValueAccessor& _rAccessor )
+        void operator() ( const NodeValueAccessor& _rAccessor )
         {
             ::utl::lcl_copyData( _rAccessor, m_rRootNode.getNodeValue( _rAccessor.getPath( ) ), m_rMutex );
         }
@@ -181,7 +181,7 @@ namespace utl
     public:
         UpdateToConfig( const OConfigurationNode& _rRootNode, ::osl::Mutex& _rMutex ) : SubNodeAccess( _rRootNode, _rMutex ) { }
 
-        void operator() ( NodeValueAccessor& _rAccessor )
+        void operator() ( const NodeValueAccessor& _rAccessor )
         {
             Any aNewValue;
             lcl_copyData( aNewValue, _rAccessor, m_rMutex );

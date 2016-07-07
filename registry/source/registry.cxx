@@ -96,7 +96,7 @@ static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
 static sal_Bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
 {
     if (hReg)
-        return static_cast<ORegistry*>(hReg)->isReadOnly();
+        return static_cast<const ORegistry*>(hReg)->isReadOnly();
     else
         return false;
 }

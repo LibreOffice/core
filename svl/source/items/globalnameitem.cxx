@@ -73,7 +73,7 @@ bool SfxGlobalNameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
     aNew >>= aSeq;
     if ( aSeq.getLength() == 16 )
     {
-        m_aName.MakeFromMemory( const_cast<sal_Int8 *>(aSeq.getConstArray()) );
+        m_aName.MakeFromMemory( aSeq.getConstArray() );
         return true;
     }
 

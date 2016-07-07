@@ -319,7 +319,7 @@ AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
     return nullptr;
 }
 
-AstDeclaration* AstScope::lookupForAdd(AstDeclaration* pDecl)
+AstDeclaration* AstScope::lookupForAdd(const AstDeclaration* pDecl)
 {
     if ( !pDecl )
         return nullptr;

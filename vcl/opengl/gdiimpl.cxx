@@ -1271,13 +1271,13 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor,
     mpProgram->Clean();
 }
 
-void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture& rTexture, SalColor aMaskColor, const SalTwoRect& rPosAry)
+void OpenGLSalGraphicsImpl::DeferredTextDraw(const OpenGLTexture& rTexture, SalColor aMaskColor, const SalTwoRect& rPosAry)
 {
     mpRenderList->addDrawTextureWithMaskColor(rTexture, aMaskColor, rPosAry);
     PostBatchDraw();
 }
 
-bool OpenGLSalGraphicsImpl::FlushLinesOrTriangles(DrawShaderType eType, RenderParameters& rParameters)
+bool OpenGLSalGraphicsImpl::FlushLinesOrTriangles(DrawShaderType eType, const RenderParameters& rParameters)
 {
     if (!UseProgram("combinedVertexShader", "combinedFragmentShader", "#define USE_VERTEX_COLORS"))
         return false;

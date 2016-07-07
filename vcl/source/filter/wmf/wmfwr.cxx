@@ -1685,7 +1685,7 @@ void WMFWriter::UpdateHeader()
 }
 
 bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
-                            FilterConfigItem* pFConfigItem, bool bPlaceable )
+                            const FilterConfigItem* pFConfigItem, bool bPlaceable )
 {
     WMFWriterAttrStackMember * pAt;
 

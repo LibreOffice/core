@@ -53,7 +53,7 @@ namespace utl
 
         /** revokes a termination listener
         */
-        UNOTOOLS_DLLPUBLIC void    revokeTerminationListener( ITerminationListener* _pListener );
+        UNOTOOLS_DLLPUBLIC void    revokeTerminationListener( const ITerminationListener* _pListener );
     }
 
 } // namespace utl

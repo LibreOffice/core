@@ -160,7 +160,7 @@ bool SvGlobalName::operator == ( const SvGlobalName & rObj ) const
     return pImp == rObj.pImp;
 }
 
-void SvGlobalName::MakeFromMemory( void * pData )
+void SvGlobalName::MakeFromMemory( const void * pData )
 {
     memcpy( &pImp->szData, pData, sizeof( pImp->szData ) );
 }

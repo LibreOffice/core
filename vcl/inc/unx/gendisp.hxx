@@ -63,7 +63,7 @@ public:
     virtual void PostUserEvent() = 0;
 
     void SendInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent = SalEvent::UserEvent );
-    void CancelInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent );
+    void CancelInternalEvent( const SalFrame* pFrame, const void* pData, SalEvent nEvent );
     bool DispatchInternalEvent();
     bool HasUserEvents() const;
 

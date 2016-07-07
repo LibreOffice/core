@@ -125,10 +125,10 @@ void PrinterGfx::SetFont(
 
 void PrinterGfx::drawGlyphs(
                             const Point& rPoint,
-                            sal_GlyphId* pGlyphIds,
-                            sal_Unicode* pUnicodes,
+                            const sal_GlyphId* pGlyphIds,
+                            const sal_Unicode* pUnicodes,
                             sal_Int16 nLen,
-                            sal_Int32* pDeltaArray
+                            const sal_Int32* pDeltaArray
                             )
 {
 

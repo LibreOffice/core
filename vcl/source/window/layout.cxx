@@ -2083,7 +2083,7 @@ short MessageDialog::get_response(const vcl::Window *pWindow) const
     return m_pUIBuilder->get_response(pWindow);
 }
 
-void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
+void MessageDialog::setButtonHandlers(const VclButtonBox *pButtonBox)
 {
     assert(pButtonBox);
     for (vcl::Window* pChild = pButtonBox->GetWindow(GetWindowType::FirstChild); pChild;
@@ -2122,7 +2122,7 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
     }
 }
 
-void MessageDialog::SetMessagesWidths(vcl::Window *pParent,
+void MessageDialog::SetMessagesWidths(const vcl::Window *pParent,
     VclMultiLineEdit *pPrimaryMessage, VclMultiLineEdit *pSecondaryMessage)
 {
     if (pSecondaryMessage)

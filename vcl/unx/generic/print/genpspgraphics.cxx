@@ -77,8 +77,8 @@ private:
     Scanline            mpScanAccess;
     sal_PtrDiff         mnScanOffset;
 
-    sal_uInt32          ColorOf (BitmapColor& rColor) const;
-    sal_uInt8           GrayOf  (BitmapColor& rColor) const;
+    sal_uInt32          ColorOf (const BitmapColor& rColor) const;
+    sal_uInt8           GrayOf  (const BitmapColor& rColor) const;
 
     public:
 
@@ -189,7 +189,7 @@ SalPrinterBmp::GetDepth () const
 }
 
 sal_uInt32
-SalPrinterBmp::ColorOf (BitmapColor& rColor) const
+SalPrinterBmp::ColorOf (const BitmapColor& rColor) const
 {
     if (rColor.IsIndex())
         return ColorOf (mpBmpBuffer->maPalette[rColor.GetIndex()]);
@@ -200,7 +200,7 @@ SalPrinterBmp::ColorOf (BitmapColor& rColor) const
 }
 
 sal_uInt8
-SalPrinterBmp::GrayOf (BitmapColor& rColor) const
+SalPrinterBmp::GrayOf (const BitmapColor& rColor) const
 {
     if (rColor.IsIndex())
         return GrayOf (mpBmpBuffer->maPalette[rColor.GetIndex()]);

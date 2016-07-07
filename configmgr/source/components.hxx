@@ -105,7 +105,7 @@ private:
     Components& operator=(const Components&) = delete;
 
     typedef void FileParser(
-        OUString const &, int, Data &, Partial const *, Modifications *,
+        OUString const &, int, Data &, Partial const *, Modifications const *,
         Additions *);
 public:
     explicit Components(

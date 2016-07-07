@@ -119,7 +119,7 @@ struct parse_data {
 };
 
 static const char *
-my_if_errors (IfParser *ip, const char *cp, const char *expecting)
+my_if_errors (const IfParser *ip, const char *cp, const char *expecting)
 {
 #ifdef DEBUG_MKDEPEND
     struct parse_data *pd = (struct parse_data *) ip->data;
@@ -165,7 +165,7 @@ lookup_variable (const char *var, size_t len)
 
 
 static int
-my_eval_defined (IfParser *ip, const char *var, size_t len)
+my_eval_defined (const IfParser *ip, const char *var, size_t len)
 {
     (void)ip;
     if (lookup_variable (var, len))
@@ -177,7 +177,7 @@ my_eval_defined (IfParser *ip, const char *var, size_t len)
 #define isvarfirstletter(ccc) (isalpha(ccc) || (ccc) == '_')
 
 static int
-my_eval_variable (IfParser *ip, const char *var, size_t len)
+my_eval_variable (const IfParser *ip, const char *var, size_t len)
 {
     char *s;
 
