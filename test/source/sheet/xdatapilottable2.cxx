@@ -185,7 +185,7 @@ void XDataPilotTable2::testInsertDrillDownSheet()
     }
 }
 
-void XDataPilotTable2::buildResultCells( uno::Reference< sheet::XDataPilotTable2 > xDPTable)
+void XDataPilotTable2::buildResultCells( uno::Reference< sheet::XDataPilotTable2 > const & xDPTable)
 {
     getOutputRanges(xDPTable);
     maResultCells.clear();
@@ -208,14 +208,14 @@ void XDataPilotTable2::buildResultCells( uno::Reference< sheet::XDataPilotTable2
     }
 }
 
-void XDataPilotTable2::getOutputRanges( uno::Reference< sheet::XDataPilotTable2 > xDPTable)
+void XDataPilotTable2::getOutputRanges( uno::Reference< sheet::XDataPilotTable2 > const & xDPTable)
 {
     maRangeWhole = xDPTable->getOutputRangeByType(sheet::DataPilotOutputRangeType::WHOLE);
     maRangeTable = xDPTable->getOutputRangeByType(sheet::DataPilotOutputRangeType::TABLE);
     maRangeResult = xDPTable->getOutputRangeByType(sheet::DataPilotOutputRangeType::RESULT);
 }
 
-void XDataPilotTable2::buildDataFields( uno::Reference< sheet::XDataPilotTable2 > xDPTable )
+void XDataPilotTable2::buildDataFields( uno::Reference< sheet::XDataPilotTable2 > const & xDPTable )
 {
     uno::Reference< sheet::XDataPilotDescriptor > xDesc(xDPTable, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex(xDesc->getDataPilotFields(), UNO_QUERY_THROW);
@@ -237,7 +237,7 @@ void XDataPilotTable2::buildDataFields( uno::Reference< sheet::XDataPilotTable2 
 
 namespace {
 
-table::CellAddress getLastUsedCellAddress( uno::Reference< sheet::XSpreadsheet > xSheet, sal_Int32 nCol, sal_Int32 nRow )
+table::CellAddress getLastUsedCellAddress( uno::Reference< sheet::XSpreadsheet > const & xSheet, sal_Int32 nCol, sal_Int32 nRow )
 {
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xSheet->getCellRangeByPosition(nCol, nRow, nCol, nRow), UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetCellCursor > xCursor = xSheet->createCursorByRange(xSheetRange);
@@ -250,7 +250,7 @@ table::CellAddress getLastUsedCellAddress( uno::Reference< sheet::XSpreadsheet >
 
 }
 
-bool XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpreadsheet > xSheet, const uno::Sequence< uno::Sequence< Any > >& aData)
+bool XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpreadsheet > const & xSheet, const uno::Sequence< uno::Sequence< Any > >& aData)
 {
     table::CellAddress aLastCell = getLastUsedCellAddress(xSheet, 0, 0);
     CPPUNIT_ASSERT(aData.getLength() > 0);

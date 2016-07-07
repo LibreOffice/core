@@ -67,7 +67,7 @@ void XDataPilotDescriptor::testGetFilterDescriptor()
     CPPUNIT_ASSERT(xSheetFilterDescr.is());
 }
 
-void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr)
+void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > const & xDescr)
 {
     //this method should only be called once but needs to be called before any of the other tests
     static bool bCalled = false;
@@ -185,7 +185,7 @@ void XDataPilotDescriptor::testGetHiddenFields()
     checkName( xIndex, 3 );
 }
 
-void XDataPilotDescriptor::checkName( uno::Reference< container::XIndexAccess > xIndex, sal_Int32 nIndex )
+void XDataPilotDescriptor::checkName( uno::Reference< container::XIndexAccess > const & xIndex, sal_Int32 nIndex )
 {
     CPPUNIT_ASSERT(xIndex.is());
     CPPUNIT_ASSERT(maFieldNames.size() >= static_cast<size_t>(nIndex));

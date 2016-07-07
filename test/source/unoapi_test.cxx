@@ -39,7 +39,7 @@ void UnoApiTest::createFileURL(const OUString& aFileBase, OUString& rFilePath)
     rFilePath = m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileBase;
 }
 
-void UnoApiTest::closeDocument( uno::Reference< lang::XComponent > xDocument )
+void UnoApiTest::closeDocument( uno::Reference< lang::XComponent > const & xDocument )
 {
     uno::Reference< util::XCloseable > xCloseable(xDocument, UNO_QUERY_THROW);
     xCloseable->close(false);

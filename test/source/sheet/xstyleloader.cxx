@@ -64,7 +64,7 @@ void XStyleLoader::testLoadStylesFromDocument()
 
 }
 
-void XStyleLoader::checkStyleProperties( uno::Reference< style::XStyleFamiliesSupplier > xFamilySupplier)
+void XStyleLoader::checkStyleProperties( uno::Reference< style::XStyleFamiliesSupplier > const & xFamilySupplier)
 {
     // check if targetDocument has myStyle
   uno::Reference< container::XNameAccess > xFamilies(xFamilySupplier->getStyleFamilies(), UNO_QUERY_THROW);

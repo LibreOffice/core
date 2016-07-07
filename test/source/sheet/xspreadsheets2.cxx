@@ -293,7 +293,7 @@ uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const OUStri
     return xDoc;
 }
 
-uno::Reference< sheet::XNamedRanges> XSpreadsheets2::getNamedRanges(uno::Reference< sheet::XSpreadsheetDocument> xDoc)
+uno::Reference< sheet::XNamedRanges> XSpreadsheets2::getNamedRanges(uno::Reference< sheet::XSpreadsheetDocument> const & xDoc)
 {
     uno::Reference< beans::XPropertySet > xPropSet (xDoc, UNO_QUERY_THROW);
     OUString NamedRangesPropertyString("NamedRanges");
