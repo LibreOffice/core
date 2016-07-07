@@ -164,7 +164,7 @@ public:
                                      sal_Int32 i_nMinNumber,
                                      sal_Int32 i_nMaxNumber,
                                      sal_Int32 i_nLogicalOffset = -1,
-                                     std::set< sal_Int32 >* i_pPossibleValues = nullptr
+                                     const std::set< sal_Int32 >* i_pPossibleValues = nullptr
                                     );
 };
 

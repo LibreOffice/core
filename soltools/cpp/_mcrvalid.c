@@ -83,7 +83,7 @@ mvl_add( MacroValidatorList *   inout_pValidators,
 
 void
 mvl_check(  MacroValidatorList * inout_pValidators,
-            Token *              inout_pTokenToCheck)
+            const Token *        inout_pTokenToCheck)
 {
     MacroValidator * pV;            /* Running pointer */
     MacroValidator * pCheckedOnes;  /* Here new list is built.  */

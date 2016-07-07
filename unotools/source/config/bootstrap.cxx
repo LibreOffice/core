@@ -297,7 +297,7 @@ PathStatus getDerivedPath(
               OUString& _rURL,
               OUString const& _aBaseURL, PathStatus _aBaseStatus,
               OUString const& _sRelativeURL,
-              rtl::Bootstrap& _rData, OUString const& _sBootstrapParameter
+              const rtl::Bootstrap& _rData, OUString const& _sBootstrapParameter
           )
 {
     OUString sDerivedURL;

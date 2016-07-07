@@ -87,7 +87,7 @@ public:
 
     ~XMLFile2UTFConverter();
 
-    void setInputStream( css::uno::Reference< css::io::XInputStream > &r ) { m_in = r; }
+    void setInputStream( const css::uno::Reference< css::io::XInputStream > &r ) { m_in = r; }
     void setEncoding( const OString &s ) { m_sEncoding = s; }
 
 

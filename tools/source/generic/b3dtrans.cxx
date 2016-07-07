@@ -327,7 +327,7 @@ void B3dTransformationSet::SetPerspective(bool bNew)
     }
 }
 
-void B3dTransformationSet::SetViewportRectangle(Rectangle& rRect, Rectangle& rVisible)
+void B3dTransformationSet::SetViewportRectangle(const Rectangle& rRect, const Rectangle& rVisible)
 {
     if(rRect != maViewportRectangle || rVisible != maVisibleRectangle)
     {

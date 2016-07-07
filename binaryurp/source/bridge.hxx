@@ -122,7 +122,7 @@ public:
 
     void revokeProxy(Proxy & proxy);
 
-    void freeProxy(Proxy & proxy);
+    void freeProxy(const Proxy & proxy);
 
     void incrementCalls(bool normalCall) throw ();
 

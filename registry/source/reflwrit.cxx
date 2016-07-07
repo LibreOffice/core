@@ -1180,10 +1180,10 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setFieldData(
 
 static void TYPEREG_CALLTYPE setFieldData(TypeWriterImpl    hEntry,
                                           sal_uInt16        index,
-                                          rtl_uString*      name,
-                                          rtl_uString*      typeName,
-                                          rtl_uString*      doku,
-                                          rtl_uString*      fileName,
+                                          const rtl_uString*  name,
+                                          const rtl_uString*  typeName,
+                                          const rtl_uString*  doku,
+                                          const rtl_uString*  fileName,
                                           RTFieldAccess     access,
                                           RTValueType       valueType,
                                           RTConstValueUnion constValue)
@@ -1211,12 +1211,12 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodData(
 }
 
 sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodParameterData(
-    void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
+    const void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
     RTParamMode flags, rtl_uString const * name, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
 {
     try {
-        static_cast< TypeWriter * >(handle)->
+        static_cast< const TypeWriter * >(handle)->
             m_methods[methodIndex].m_params[parameterIndex].setData(
                 toByteString(typeName), toByteString(name), flags);
     } catch (std::bad_alloc &) {
@@ -1317,7 +1317,7 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setSuperTypeName(
 }
 
 static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
-    RTTypeClass typeClass, rtl_uString * typeName, rtl_uString * superTypeName,
+    RTTypeClass typeClass, const rtl_uString * typeName, const rtl_uString * superTypeName,
     sal_uInt16 fieldCount, sal_uInt16 methodCount, sal_uInt16 referenceCount)
 {
     OUString empty;

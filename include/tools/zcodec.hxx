@@ -55,7 +55,7 @@ class TOOLS_DLLPUBLIC ZCodec
     void            InitCompress();
     void            InitDecompress(SvStream & inStream);
     void            ImplWriteBack();
-    void            UpdateCRC( sal_uInt8* pSource, long nDatSize );
+    void            UpdateCRC( const sal_uInt8* pSource, long nDatSize );
 
 public:
                     ZCodec( sal_uIntPtr nInBuf = 0x8000UL, sal_uIntPtr nOutBuf = 0x8000UL );

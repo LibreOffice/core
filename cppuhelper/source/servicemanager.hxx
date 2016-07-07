@@ -216,7 +216,7 @@ public:
 
     void loadImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        std::shared_ptr< Data::Implementation > & implementation);
+        const std::shared_ptr< Data::Implementation > & implementation);
 
 private:
     virtual ~ServiceManager();

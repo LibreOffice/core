@@ -18,7 +18,7 @@ endif
 
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin); you
 # may occasionally want to override these:
-CLANGCXXFLAGS=-O2 -Wall -Wextra -Wundef -g
+CLANGCXXFLAGS=-O0 -Wall -Wextra -Wundef -g
 
 # The uninteresting rest.
 

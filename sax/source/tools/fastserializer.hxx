@@ -80,7 +80,7 @@ public:
             from the element.
 
     */
-    void startFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList = nullptr );
+    void startFastElement( ::sal_Int32 Element, const FastAttributeList* pAttrList = nullptr );
 
     /** receives notification of the end of an known element.
         @see startFastElement
@@ -104,7 +104,7 @@ public:
             from the element.
 
     */
-    void singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList = nullptr );
+    void singleFastElement( ::sal_Int32 Element, const FastAttributeList* pAttrList = nullptr );
 
     // C++ helpers
     void writeId( ::sal_Int32 Element );
@@ -235,7 +235,7 @@ private:
 #endif
 
     void writeTokenValueList();
-    void writeFastAttributeList(FastAttributeList& rAttrList);
+    void writeFastAttributeList(const FastAttributeList& rAttrList);
 
     /** Forward the call to the output stream, or write to the stack.
 

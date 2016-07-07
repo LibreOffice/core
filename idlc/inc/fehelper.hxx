@@ -63,7 +63,7 @@ public:
     { return m_typeParameters; }
 
 private:
-    void initializeInherits(OString* pinherits);
+    void initializeInherits(OString const * pinherits);
 
     NodeType        m_nodeType;
     OString* m_pName;
