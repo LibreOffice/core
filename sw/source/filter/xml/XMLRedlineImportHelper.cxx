@@ -47,7 +47,7 @@ using ::com::sun::star::beans::XPropertySetInfo;
 // using util::DateTime;
 
 // a few helper functions
-static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
+static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> const & rCursor )
 {
     Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
     OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextCursor");
@@ -57,7 +57,7 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
     return (pXCursor) ? pXCursor->GetDoc() : nullptr;
 }
 
-static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
+static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> const & rRange )
 {
     Reference<XUnoTunnel> xTunnel(rRange, UNO_QUERY);
     OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextRange");
@@ -437,7 +437,7 @@ void XMLRedlineImportHelper::Add(
 }
 
 Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
-    Reference<XTextCursor> xOldCursor,
+    Reference<XTextCursor> const & xOldCursor,
     const OUString& rId)
 {
     Reference<XTextCursor> xReturn;

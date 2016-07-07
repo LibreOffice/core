@@ -549,7 +549,7 @@ void  SwSendMailDialog::StateChanged( StateChangedType nStateChange )
     }
 }
 
-void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessage,
+void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const & xMessage,
                                         bool bResult,
                                         const OUString* pError )
 {

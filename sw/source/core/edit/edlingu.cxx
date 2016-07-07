@@ -116,11 +116,11 @@ class SwSpellIter : public SwLinguIter
     bool                                bBackToStartOfSentence;
     bool                                bMoveToEndOfSentence;
 
-    void    CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
+    void    CreatePortion(uno::Reference< XSpellAlternatives > const & xAlt,
                 linguistic2::ProofreadingResult* pGrammarResult,
                 bool bIsField, bool bIsHidden);
 
-    void    AddPortion(uno::Reference< XSpellAlternatives > xAlt,
+    void    AddPortion(uno::Reference< XSpellAlternatives > const & xAlt,
                        linguistic2::ProofreadingResult* pGrammarResult,
                        const SpellContentPositions& rDeletedRedlines);
 public:
@@ -1569,7 +1569,7 @@ static LanguageType lcl_GetLanguage(SwEditShell& rSh)
 }
 
 /// create a text portion at the given position
-void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
+void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAlt,
                         linguistic2::ProofreadingResult* pGrammarResult,
         bool bIsField, bool bIsHidden)
 {
@@ -1615,7 +1615,7 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
     }
 }
 
-void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
+void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAlt,
                                 linguistic2::ProofreadingResult* pGrammarResult,
                                 const SpellContentPositions& rDeletedRedlines)
 {

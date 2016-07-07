@@ -167,7 +167,7 @@ void    SwOneExampleFrame::DisposeControl()
     _xController = nullptr;
 }
 
-static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,
+static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xViewProps,
     bool bEnableOnlineMode)
 {
     //the scrollbar logic is kind of busted looking in writer, when the hori scrollbar

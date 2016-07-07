@@ -220,7 +220,7 @@ public:
     void                EnableDesctruction() {m_bDesctructionEnabled = true;}
     void                ShowDialog();
 
-    void                DocumentSent( css::uno::Reference< css::mail::XMailMessage>,
+    void                DocumentSent( css::uno::Reference< css::mail::XMailMessage> const & xMessage,
                                         bool bResult,
                                         const OUString* pError );
     void                AllMailsSent();

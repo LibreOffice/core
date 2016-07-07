@@ -51,7 +51,7 @@ public:
     ~SwOLEObj();
 
     bool UnloadObject();
-    static bool UnloadObject( css::uno::Reference< css::embed::XEmbeddedObject > xObj,
+    static bool UnloadObject( css::uno::Reference< css::embed::XEmbeddedObject > const & xObj,
                                 const SwDoc* pDoc,
                                 sal_Int64 nAspect );
 

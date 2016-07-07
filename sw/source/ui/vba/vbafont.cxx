@@ -103,7 +103,7 @@ public:
     }
 };
 
-SwVbaFont::SwVbaFont( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xPalette, uno::Reference< css::beans::XPropertySet > xPropertySet ) throw ( css::uno::RuntimeException ) : SwVbaFont_BASE( xParent, xContext, xPalette, xPropertySet )
+SwVbaFont::SwVbaFont( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xPalette, uno::Reference< css::beans::XPropertySet > const & xPropertySet ) throw ( css::uno::RuntimeException ) : SwVbaFont_BASE( xParent, xContext, xPalette, xPropertySet )
 {
 }
 

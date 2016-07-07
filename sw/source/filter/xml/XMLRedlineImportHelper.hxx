@@ -81,7 +81,7 @@ public:
     // create a text section for the redline, and return an
     // XText/XTextCursor that may be used to write into it.
     css::uno::Reference<css::text::XTextCursor> CreateRedlineTextSection(
-            css::uno::Reference<css::text::XTextCursor> xOldCursor, // needed to get the document
+            css::uno::Reference<css::text::XTextCursor> const & xOldCursor, // needed to get the document
             const OUString& rId);    // ID used to RedlineAdd() call
 
     // Set start or end position for a redline in the text body.

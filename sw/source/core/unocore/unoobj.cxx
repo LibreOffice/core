@@ -665,7 +665,7 @@ public:
 
     Impl(   SwDoc & rDoc,
             const enum CursorType eType,
-            uno::Reference<text::XText> xParent,
+            uno::Reference<text::XText> const & xParent,
             SwPosition const& rPoint, SwPosition const*const pMark)
         : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eType(eType)

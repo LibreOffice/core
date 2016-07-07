@@ -3612,7 +3612,7 @@ uno::Reference<container::XNameReplace> SAL_CALL
 }
 
 
-SwXOLEListener::SwXOLEListener( SwFormat& rOLEFormat, uno::Reference< XModel > xOLE) :
+SwXOLEListener::SwXOLEListener( SwFormat& rOLEFormat, uno::Reference< XModel > const & xOLE) :
     SwClient(&rOLEFormat),
     xOLEModel(xOLE)
 {

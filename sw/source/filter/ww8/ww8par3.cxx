@@ -2485,7 +2485,7 @@ WW8FormulaCheckBox::WW8FormulaCheckBox(SwWW8ImplReader &rR)
 }
 
 static void lcl_AddToPropertyContainer
-(uno::Reference<beans::XPropertySet> xPropSet,
+(uno::Reference<beans::XPropertySet> const & xPropSet,
  const OUString & rPropertyName, const OUString & rValue)
 {
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo =

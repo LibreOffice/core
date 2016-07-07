@@ -319,14 +319,16 @@ struct SwDBManager_Impl
     }
 };
 
-static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDataSource> xSource)
+static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDataSource> const & xSource)
 {
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     rParam.xFormatter.set(util::NumberFormatter::create(xContext), uno::UNO_QUERY);
-    if(!xSource.is())
-        xSource = SwDBManager::getDataSourceAsParent(rParam.xConnection, rParam.sDataSource);
-
-    uno::Reference<beans::XPropertySet> xSourceProps(xSource, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSourceProps(
+        (xSource.is()
+         ? xSource
+         : SwDBManager::getDataSourceAsParent(
+             rParam.xConnection, rParam.sDataSource)),
+        uno::UNO_QUERY);
     if(xSourceProps.is())
     {
         uno::Any aFormats = xSourceProps->getPropertyValue("NumberFormatsSupplier");
@@ -773,7 +775,7 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
 }
 
 void SwDBManager::GetColumnNames(ListBox* pListBox,
-        uno::Reference< sdbc::XConnection> xConnection,
+        uno::Reference< sdbc::XConnection> const & xConnection,
         const OUString& rTableName)
 {
     pListBox->Clear();
@@ -1707,12 +1709,14 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
     return nRet;
 }
 
-sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> xSource,
-                        uno::Reference< sdbc::XConnection> xConnection,
-                        uno::Reference< beans::XPropertySet> xColumn,
+sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const & xSource_in,
+                        uno::Reference< sdbc::XConnection> const & xConnection,
+                        uno::Reference< beans::XPropertySet> const & xColumn,
                         SvNumberFormatter* pNFormatr,
                         long nLanguage )
 {
+    auto xSource = xSource_in;
+
     // set the NumberFormat in the doc if applicable
     sal_uLong nRet = 0;
 
@@ -1855,7 +1859,7 @@ uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rD
     return xConnection;
 }
 
-uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Reference<sdbc::XConnection> xConnection,
+uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Reference<sdbc::XConnection> const & xConnection,
                                     const OUString& rTableOrQuery,
                                     SwDBSelect   eTableOrQuery)
 {
@@ -1903,7 +1907,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
     return xRet;
 }
 
-OUString SwDBManager::GetDBField(uno::Reference<beans::XPropertySet> xColumnProps,
+OUString SwDBManager::GetDBField(uno::Reference<beans::XPropertySet> const & xColumnProps,
                         const SwDBFormatData& rDBFormatData,
                         double* pNumber)
 {

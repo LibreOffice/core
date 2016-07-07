@@ -991,8 +991,8 @@ private:
 
     void RestoreMacroCmds();
 
-    void DoComboBox(css::uno::Reference<css::beans::XPropertySet> xPropSet);
-    void DoCheckBox(css::uno::Reference<css::beans::XPropertySet> xPropSet);
+    void DoComboBox(css::uno::Reference<css::beans::XPropertySet> const & xPropSet);
+    void DoCheckBox(css::uno::Reference<css::beans::XPropertySet> const & xPropSet);
 
 public:
 

@@ -322,7 +322,7 @@ class SwXOLEListener : public cppu::WeakImplHelper
 
     SwFormat*       GetFormat() const    {  return const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn())); }
 public:
-    SwXOLEListener(SwFormat& rOLEFormat, css::uno::Reference< css::frame::XModel > xOLE);
+    SwXOLEListener(SwFormat& rOLEFormat, css::uno::Reference< css::frame::XModel > const & xOLE);
     virtual ~SwXOLEListener();
 
 // css::lang::XEventListener

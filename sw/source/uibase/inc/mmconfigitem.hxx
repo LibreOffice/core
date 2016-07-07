@@ -82,9 +82,9 @@ public:
     const ResStringArray& GetDefaultAddressHeaders() const;
 
     void SetCurrentConnection(
-        css::uno::Reference< css::sdbc::XDataSource> xSource,
+        css::uno::Reference< css::sdbc::XDataSource> const & xSource,
         const SharedConnection& rConnection,
-        css::uno::Reference< css::sdbcx::XColumnsSupplier> xColumnsSupplier,
+        css::uno::Reference< css::sdbcx::XColumnsSupplier> const & xColumnsSupplier,
         const SwDBData& rDBData);
 
     css::uno::Reference< css::sdbc::XDataSource> GetSource();

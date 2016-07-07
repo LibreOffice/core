@@ -830,7 +830,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                                      Reference< XTextCursor > & xCursor,
                                      bool bAll,
                                      sal_Int32& nResult,
-                                     Reference< XInterface >  xLastResult)
+                                     Reference< XInterface > const & xLastResult)
 {
     Reference< XUnoTunnel > xDescTunnel(xDesc, UNO_QUERY);
     if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
@@ -3843,7 +3843,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames()
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
-            Reference< XNameAccess >  xAccess, const OUString& rLinkDisplayName, const OUString& sSuffix ) :
+            Reference< XNameAccess > const & xAccess, const OUString& rLinkDisplayName, const OUString& sSuffix ) :
     xRealAccess(xAccess),
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),

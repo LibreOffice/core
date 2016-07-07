@@ -2075,7 +2075,7 @@ bool SwAccessibleMap::IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFES
     return false;
 }
 
-void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, uno::Reference < XAccessible > xAccShape)
+void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, uno::Reference < XAccessible > const & xAccShape)
 {
     osl::MutexGuard aGuard( maMutex );
 
@@ -2088,7 +2088,7 @@ void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, uno::Reference < XA
 }
 
 //Added by yanjun for sym2_6407
-void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj, css::uno::Reference < css::accessibility::XAccessible > xAccParent)
+void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj, css::uno::Reference < css::accessibility::XAccessible > const & xAccParent)
 {
     osl::MutexGuard aGuard( maMutex );
     if (mpShapeMap && pParentObj && pParentObj->IsGroupObject() && xAccParent.is())
@@ -2123,7 +2123,7 @@ void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj, css::uno::
 }
 //End
 
-void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Reference < XAccessible > xAccParent)
+void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Reference < XAccessible > const & xAccParent)
 {
     osl::MutexGuard aGuard( maMutex );
     if( mpShapeMap )

@@ -76,7 +76,7 @@ SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
 
 // fills the given itemset with the attributes in the given list
 void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
-                                      uno::Reference< xml::sax::XAttributeList > xAttrList,
+                                      uno::Reference< xml::sax::XAttributeList > const & xAttrList,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       const SvXMLNamespaceMap& rNamespaceMap )
 {

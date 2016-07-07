@@ -29,7 +29,7 @@ typedef cppu::ImplInheritanceHelper< VbaDialogBase, ov::word::XDialog > SwVbaDia
 class SwVbaDialog : public SwVbaDialog_BASE
 {
 public:
-    SwVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):SwVbaDialog_BASE( xParent, xContext, xModel, nIndex ) {}
+    SwVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):SwVbaDialog_BASE( xParent, xContext, xModel, nIndex ) {}
     virtual ~SwVbaDialog() {}
 
     // Methods

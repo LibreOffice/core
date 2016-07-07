@@ -68,7 +68,7 @@ class SwRetrievedInputStreamDataManager
         tDataKey ReserveData( std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer );
 
         void PushData( const tDataKey nDataKey,
-                       css::uno::Reference<css::io::XInputStream> xInputStream,
+                       css::uno::Reference<css::io::XInputStream> const & xInputStream,
                        const bool bIsStreamReadOnly );
 
         bool PopData( const tDataKey nDataKey,

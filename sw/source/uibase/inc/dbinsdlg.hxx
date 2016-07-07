@@ -152,17 +152,17 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 
 public:
     SwInsertDBColAutoPilot( SwView& rView,
-        css::uno::Reference< css::sdbc::XDataSource> rxSource,
-        css::uno::Reference<css::sdbcx::XColumnsSupplier>,
+        css::uno::Reference< css::sdbc::XDataSource> const & rxSource,
+        css::uno::Reference<css::sdbcx::XColumnsSupplier> const & xColSupp,
         const SwDBData& rData  );
 
     virtual ~SwInsertDBColAutoPilot();
     virtual void dispose() override;
 
     void DataToDoc( const css::uno::Sequence< css::uno::Any >& rSelection,
-        css::uno::Reference< css::sdbc::XDataSource> rxSource,
-        css::uno::Reference< css::sdbc::XConnection> xConnection,
-        css::uno::Reference< css::sdbc::XResultSet > xResultSet);
+        css::uno::Reference< css::sdbc::XDataSource> const & rxSource,
+        css::uno::Reference< css::sdbc::XConnection> const & xConnection,
+        css::uno::Reference< css::sdbc::XResultSet > const & xResultSet);
 
 };
 

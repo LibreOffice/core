@@ -184,8 +184,8 @@ bool SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
 }
 
 SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
-        Reference<XDataSource> xDataSource,
-        Reference<sdbcx::XColumnsSupplier> xColSupp,
+        Reference<XDataSource> const & xDataSource,
+        Reference<sdbcx::XColumnsSupplier> const & xColSupp,
         const SwDBData& rData )
     : SfxModalDialog(rView.GetWindow(), "InsertDbColumnsDialog",
         "modules/swriter/ui/insertdbcolumnsdialog.ui")
@@ -952,10 +952,12 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
 }
 
 void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
-    Reference< XDataSource> xSource,
-    Reference< XConnection> xConnection,
-    Reference< sdbc::XResultSet > xResultSet )
+    Reference< XDataSource> const & xSource,
+    Reference< XConnection> const & xConnection,
+    Reference< sdbc::XResultSet > const & xResultSet_in )
 {
+    auto xResultSet = xResultSet_in;
+
     const Any* pSelection = rSelection.getLength() ? rSelection.getConstArray() : nullptr;
     SwWrtShell& rSh = pView->GetWrtShell();
 

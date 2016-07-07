@@ -128,8 +128,8 @@ namespace
 
 /// read a component (file + filter version)
 sal_Int32 ReadThroughComponent(
-    uno::Reference<io::XInputStream> xInputStream,
-    uno::Reference<XComponent> xModelComponent,
+    uno::Reference<io::XInputStream> const & xInputStream,
+    uno::Reference<XComponent> const & xModelComponent,
     const OUString& rStreamName,
     uno::Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pFilterName,
@@ -279,8 +279,8 @@ sal_Int32 ReadThroughComponent(
 
 // read a component (storage version)
 sal_Int32 ReadThroughComponent(
-    uno::Reference<embed::XStorage> xStorage,
-    uno::Reference<XComponent> xModelComponent,
+    uno::Reference<embed::XStorage> const & xStorage,
+    uno::Reference<XComponent> const & xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
     uno::Reference<uno::XComponentContext> & rxContext,

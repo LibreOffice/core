@@ -504,9 +504,9 @@ class ApplyStyle
 {
 public:
     ApplyStyle(SwDocShell &rDocSh, bool bNew, SfxStyleSheetBase* pStyle,
-        sal_uInt16 nRet, rtl::Reference< SwDocStyleSheet > xTmp,
+        sal_uInt16 nRet, rtl::Reference< SwDocStyleSheet > const & xTmp,
         SfxStyleFamily nFamily, SfxAbstractApplyTabDialog *pDlg,
-        rtl::Reference< SfxStyleSheetBasePool > xBasePool,
+        rtl::Reference< SfxStyleSheetBasePool > const & xBasePool,
         bool bModified)
         : m_rDocSh(rDocSh)
         , m_bNew(bNew)

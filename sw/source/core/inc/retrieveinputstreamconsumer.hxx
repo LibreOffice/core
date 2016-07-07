@@ -45,7 +45,7 @@ class SwAsyncRetrieveInputStreamThreadConsumer
         /** method called to provide the retrieved input stream to the thread Consumer
         */
         void ApplyInputStream(
-            css::uno::Reference<css::io::XInputStream> xInputStream,
+            css::uno::Reference<css::io::XInputStream> const & xInputStream,
             const bool bIsStreamReadOnly );
 
     private:

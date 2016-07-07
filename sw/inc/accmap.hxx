@@ -159,11 +159,11 @@ public:
     }
     static bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
     void AddShapeContext(const SdrObject *pObj,
-                             css::uno::Reference < css::accessibility::XAccessible > xAccShape);
+                             css::uno::Reference < css::accessibility::XAccessible > const & xAccShape);
 
     void AddGroupContext(const SdrObject *pParentObj,
-                    css::uno::Reference < css::accessibility::XAccessible > xAccParent);
-    void RemoveGroupContext(const SdrObject *pParentObj, css::uno::Reference < css::accessibility::XAccessible > xAccParent);
+                    css::uno::Reference < css::accessibility::XAccessible > const & xAccParent);
+    void RemoveGroupContext(const SdrObject *pParentObj, css::uno::Reference < css::accessibility::XAccessible > const & xAccParent);
 
     const SwRect& GetVisArea() const;
 

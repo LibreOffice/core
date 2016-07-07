@@ -306,12 +306,12 @@ public:
     void            GetColumnNames(ListBox* pListBox,
                             const OUString& rDBName, const OUString& rTableName);
     static void GetColumnNames(ListBox* pListBox,
-                            css::uno::Reference< css::sdbc::XConnection> xConnection,
+                            css::uno::Reference< css::sdbc::XConnection> const & xConnection,
                             const OUString& rTableName);
 
-    static sal_uLong GetColumnFormat( css::uno::Reference< css::sdbc::XDataSource> xSource,
-                            css::uno::Reference< css::sdbc::XConnection> xConnection,
-                            css::uno::Reference< css::beans::XPropertySet> xColumn,
+    static sal_uLong GetColumnFormat( css::uno::Reference< css::sdbc::XDataSource> const & xSource,
+                            css::uno::Reference< css::sdbc::XConnection> const & xConnection,
+                            css::uno::Reference< css::beans::XPropertySet> const & xColumn,
                             SvNumberFormatter* pNFormatr,
                             long nLanguage );
 
@@ -366,7 +366,7 @@ public:
     static const SwDBData& GetAddressDBName();
 
     static OUString GetDBField(
-                    css::uno::Reference< css::beans::XPropertySet > xColumnProp,
+                    css::uno::Reference< css::beans::XPropertySet > const & xColumnProp,
                     const SwDBFormatData& rDBFormatData,
                     double *pNumber = nullptr);
 
@@ -375,7 +375,7 @@ public:
                 css::uno::Reference< css::sdbc::XDataSource>& rxSource);
 
     static css::uno::Reference< css::sdbcx::XColumnsSupplier>
-            GetColumnSupplier(css::uno::Reference< css::sdbc::XConnection>,
+            GetColumnSupplier(css::uno::Reference< css::sdbc::XConnection> const & xConnection,
                                     const OUString& rTableOrQuery,
                                     SwDBSelect eTableOrQuery = SwDBSelect::UNKNOWN);
 

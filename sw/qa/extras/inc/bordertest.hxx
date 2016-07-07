@@ -26,7 +26,7 @@ public:
     {
 
     }
-    static void testTheBorders(uno::Reference<lang::XComponent> mxComponent, bool isBinaryDoc)
+    static void testTheBorders(uno::Reference<lang::XComponent> const & mxComponent, bool isBinaryDoc)
     {
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), uno::UNO_QUERY);

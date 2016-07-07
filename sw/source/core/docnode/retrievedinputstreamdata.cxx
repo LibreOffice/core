@@ -63,7 +63,7 @@ SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::R
 
 void SwRetrievedInputStreamDataManager::PushData(
         const tDataKey nDataKey,
-        css::uno::Reference<css::io::XInputStream> xInputStream,
+        css::uno::Reference<css::io::XInputStream> const & xInputStream,
         const bool bIsStreamReadOnly )
 {
     osl::MutexGuard aGuard(maMutex);

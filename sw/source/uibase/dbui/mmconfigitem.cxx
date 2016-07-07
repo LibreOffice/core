@@ -809,9 +809,9 @@ void SwMailMergeConfigItem::SetCountrySettings(bool bSet, const OUString& rCount
 }
 
 void SwMailMergeConfigItem::SetCurrentConnection(
-        Reference< XDataSource>       xSource,
+        Reference< XDataSource> const & xSource,
         const SharedConnection&       rConnection,
-        Reference< XColumnsSupplier>  xColumnsSupplier,
+        Reference< XColumnsSupplier> const & xColumnsSupplier,
         const SwDBData& rDBData)
 {
         m_pImpl->m_xSource            = xSource         ;

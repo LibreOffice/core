@@ -396,7 +396,7 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat)
     return false;
 }
 
-void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
+void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> const & xPropSet)
 {
     OUString sSelected;
     uno::Sequence<OUString> aListItems;
@@ -491,7 +491,7 @@ void WW8Export::DoComboBox(const OUString &rName,
     aFFData.Write(pDataStrm);
 }
 
-void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
+void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> const & xPropSet)
 {
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo =
         xPropSet->getPropertySetInfo();

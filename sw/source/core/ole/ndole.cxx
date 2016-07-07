@@ -838,7 +838,7 @@ bool SwOLEObj::UnloadObject()
     return bRet;
 }
 
-bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, const SwDoc* pDoc, sal_Int64 nAspect )
+bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > const & xObj, const SwDoc* pDoc, sal_Int64 nAspect )
 {
     if ( !pDoc )
         return false;

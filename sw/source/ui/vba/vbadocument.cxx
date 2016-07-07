@@ -54,7 +54,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaDocument::SwVbaDocument( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< frame::XModel > xModel ): SwVbaDocument_BASE( xParent, xContext, xModel )
+SwVbaDocument::SwVbaDocument( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< frame::XModel > const & xModel ): SwVbaDocument_BASE( xParent, xContext, xModel )
 {
     Initialize();
 }

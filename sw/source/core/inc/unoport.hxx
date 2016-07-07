@@ -200,22 +200,22 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createContentEnumeration(const OUString& aServiceName) throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
 
-    void SetRefMark( css::uno::Reference< css::text::XTextContent >  xMark)
+    void SetRefMark( css::uno::Reference< css::text::XTextContent > const & xMark)
     { m_xRefMark = xMark; }
 
-    void SetTOXMark( css::uno::Reference< css::text::XTextContent >  xMark)
+    void SetTOXMark( css::uno::Reference< css::text::XTextContent > const & xMark)
     { m_xTOXMark = xMark; }
 
-    void SetBookmark( css::uno::Reference< css::text::XTextContent >  xMark)
+    void SetBookmark( css::uno::Reference< css::text::XTextContent > const & xMark)
     { m_xBookmark = xMark; }
 
-    void SetFootnote( css::uno::Reference< css::text::XFootnote > xNote)
+    void SetFootnote( css::uno::Reference< css::text::XFootnote > const & xNote)
     { m_xFootnote = xNote; }
 
-    void SetTextField( css::uno::Reference< css::text::XTextField> xField)
+    void SetTextField( css::uno::Reference< css::text::XTextField> const & xField)
     { m_xTextField = xField; }
 
-    void SetMeta( css::uno::Reference< css::text::XTextContent >  xMeta)
+    void SetMeta( css::uno::Reference< css::text::XTextContent > const & xMeta)
     { m_xMeta = xMeta; }
 
     void SetCollapsed(bool bSet)        { m_bIsCollapsed = bSet;}

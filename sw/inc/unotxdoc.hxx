@@ -453,7 +453,7 @@ public:
     SwUnoCursor* FindAny(const css::uno::Reference< css::util::XSearchDescriptor > & xDesc,
                                             css::uno::Reference< css::text::XTextCursor > & xCursor, bool bAll,
                                             sal_Int32& nResult,
-                                            css::uno::Reference< css::uno::XInterface >  xLastResult);
+                                            css::uno::Reference< css::uno::XInterface > const & xLastResult);
 
     SwDocShell*                 GetDocShell() {return pDocShell;}
 
@@ -513,7 +513,7 @@ class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper
     SwXTextDocument*                                      pxDoc;
 
 public:
-    SwXLinkNameAccessWrapper(css::uno::Reference< css::container::XNameAccess >  xAccess,
+    SwXLinkNameAccessWrapper(css::uno::Reference< css::container::XNameAccess >  const & xAccess,
             const OUString& rLinkDisplayName, const OUString& sSuffix);
     SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
             const OUString& rLinkDisplayName, const OUString& sSuffix);

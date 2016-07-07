@@ -41,12 +41,12 @@ namespace /* private */
 
         GenericEventNotifier(
             GenericNotificationFunc_t notification_function,
-            ::rtl::Reference<MailDispatcher> mail_dispatcher) :
+            ::rtl::Reference<MailDispatcher> const & mail_dispatcher) :
             notification_function_(notification_function),
             mail_dispatcher_(mail_dispatcher)
         {}
 
-        void operator() (::rtl::Reference<IMailDispatcherListener> listener) const
+        void operator() (::rtl::Reference<IMailDispatcherListener> const & listener) const
         { (listener.get()->*notification_function_)(mail_dispatcher_); }
 
     private:
@@ -57,12 +57,12 @@ namespace /* private */
     class MailDeliveryNotifier
     {
     public:
-        MailDeliveryNotifier(::rtl::Reference<MailDispatcher> xMailDispatcher, uno::Reference<mail::XMailMessage> message) :
+        MailDeliveryNotifier(::rtl::Reference<MailDispatcher> const & xMailDispatcher, uno::Reference<mail::XMailMessage> const & message) :
             mail_dispatcher_(xMailDispatcher),
             message_(message)
         {}
 
-        void operator() (::rtl::Reference<IMailDispatcherListener> listener) const
+        void operator() (::rtl::Reference<IMailDispatcherListener> const & listener) const
         { listener->mailDelivered(mail_dispatcher_, message_); }
 
     private:
@@ -74,15 +74,15 @@ namespace /* private */
     {
     public:
         MailDeliveryErrorNotifier(
-            ::rtl::Reference<MailDispatcher> xMailDispatcher,
-            uno::Reference<mail::XMailMessage> message,
+            ::rtl::Reference<MailDispatcher> const & xMailDispatcher,
+            uno::Reference<mail::XMailMessage> const & message,
             const OUString& error_message) :
             mail_dispatcher_(xMailDispatcher),
             message_(message),
             error_message_(error_message)
         {}
 
-        void operator() (::rtl::Reference<IMailDispatcherListener> listener) const
+        void operator() (::rtl::Reference<IMailDispatcherListener> const & listener) const
         { listener->mailDeliveryError(mail_dispatcher_, message_, error_message_); }
 
     private:
@@ -93,7 +93,7 @@ namespace /* private */
 
 } // namespace private
 
-MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
+MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> const & mailserver) :
     mailserver_ (mailserver),
     run_(false),
     shutdown_requested_(false)
@@ -114,7 +114,7 @@ MailDispatcher::~MailDispatcher()
 {
 }
 
-void MailDispatcher::enqueueMailMessage(uno::Reference<mail::XMailMessage> message)
+void MailDispatcher::enqueueMailMessage(uno::Reference<mail::XMailMessage> const & message)
 {
     ::osl::MutexGuard thread_status_guard(thread_status_mutex_);
     ::osl::MutexGuard message_container_guard(message_container_mutex_);
@@ -187,7 +187,7 @@ void MailDispatcher::shutdown()
 }
 
 
-void MailDispatcher::addListener(::rtl::Reference<IMailDispatcherListener> listener)
+void MailDispatcher::addListener(::rtl::Reference<IMailDispatcherListener> const & listener)
 {
     OSL_PRECOND(!shutdown_requested_, "MailDispatcher thread is shuting down already");
 
@@ -201,7 +201,7 @@ std::list< ::rtl::Reference<IMailDispatcherListener> > MailDispatcher::cloneList
     return listeners_;
 }
 
-void MailDispatcher::sendMailMessageNotifyListener(uno::Reference<mail::XMailMessage> message)
+void MailDispatcher::sendMailMessageNotifyListener(uno::Reference<mail::XMailMessage> const & message)
 {
     try
     {
