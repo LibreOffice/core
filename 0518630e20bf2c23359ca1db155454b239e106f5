@@ -73,6 +73,23 @@
       "revId": "0518630e20bf2c23359ca1db155454b239e106f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_5b73adb1",
+        "filename": "tools/source/generic/fract.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T12:14:19Z",
+      "side": 1,
+      "message": "this is one thing I don\u0027t understand - why does this even compile?\nIt\u0027s modifying stuff via the mpImpl std::unique_ptr member, and nothing is declared mutable, nor are there any const_casts",
+      "revId": "0518630e20bf2c23359ca1db155454b239e106f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
