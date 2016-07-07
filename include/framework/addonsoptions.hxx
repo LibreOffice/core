@@ -207,15 +207,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
         static ::osl::Mutex& GetOwnStaticMutex();
 
-        /*-****************************************************************************************************
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
-                        All access methods are'nt safe!
-                        We create a static mutex only for one ime and use at different times.
-            @return     A reference to a static mutex member.
-        *//*-*****************************************************************************************************/
-        DECL_LINK_TYPED( Notify, void*, void );
-
     private:
         std::shared_ptr<AddonsOptions_Impl>  m_pImpl;
 };
