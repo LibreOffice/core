@@ -70,10 +70,10 @@ css::uno::TypeDescription BinaryAny::getType() const throw () {
 void * BinaryAny::getValue(css::uno::TypeDescription const & type) const
     throw ()
 {
+    assert(type.is());
     assert(
-        type.is() &&
-        (type.get()->eTypeClass == typelib_TypeClass_ANY ||
-         type.equals(css::uno::TypeDescription(data_.pType))));
+        type.get()->eTypeClass == typelib_TypeClass_ANY ||
+         type.equals(css::uno::TypeDescription(data_.pType)));
     return type.get()->eTypeClass == typelib_TypeClass_ANY
         ? &data_ : data_.pData;
 }
