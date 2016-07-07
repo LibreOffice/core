@@ -123,7 +123,7 @@ Databases::Databases( bool showBasic,
                       const OUString& productName,
                       const OUString& productVersion,
                       const OUString& styleSheet,
-                      Reference< uno::XComponentContext > xContext )
+                      Reference< uno::XComponentContext > const & xContext )
     : m_xContext( xContext ),
       m_bShowBasic(showBasic),
       m_nCustomCSSDocLength( 0 ),
@@ -1140,7 +1140,7 @@ void Databases::setInstallPath( const OUString& aInstDir )
 
 ExtensionHelpExistanceMap ExtensionIteratorBase::aHelpExistanceMap;
 
-ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > xContext,
+ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > const & xContext,
     Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
         : m_xContext( xContext )
         , m_rDatabases( rDatabases )

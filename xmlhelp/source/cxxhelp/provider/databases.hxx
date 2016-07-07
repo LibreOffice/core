@@ -143,7 +143,7 @@ namespace chelp {
                  const OUString& productName,
                  const OUString& productVersion,
                  const OUString& styleSheet,
-                 css::uno::Reference< css::uno::XComponentContext > xContext );
+                 css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
         ~Databases();
 
@@ -329,7 +329,7 @@ namespace chelp {
         static ExtensionHelpExistanceMap    aHelpExistanceMap;
 
     public:
-        ExtensionIteratorBase( css::uno::Reference< css::uno::XComponentContext > xContext,
+        ExtensionIteratorBase( css::uno::Reference< css::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage );
         ExtensionIteratorBase( Databases& rDatabases, const OUString& aInitialModule,
             const OUString& aLanguage );
@@ -382,7 +382,7 @@ namespace chelp {
     class DataBaseIterator : public ExtensionIteratorBase
     {
     public:
-        DataBaseIterator( css::uno::Reference< css::uno::XComponentContext > xContext,
+        DataBaseIterator( css::uno::Reference< css::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage, bool bHelpText )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
                 , m_bHelpText( bHelpText )
@@ -407,7 +407,7 @@ namespace chelp {
     class KeyDataBaseFileIterator : public ExtensionIteratorBase
     {
     public:
-        KeyDataBaseFileIterator( css::uno::Reference< css::uno::XComponentContext > xContext,
+        KeyDataBaseFileIterator( css::uno::Reference< css::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
@@ -423,7 +423,7 @@ namespace chelp {
     class JarFileIterator : public ExtensionIteratorBase
     {
     public:
-        JarFileIterator( css::uno::Reference< css::uno::XComponentContext > xContext,
+        JarFileIterator( css::uno::Reference< css::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
