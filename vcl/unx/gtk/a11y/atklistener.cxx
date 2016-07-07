@@ -570,7 +570,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
         }
 
         default:
-            g_warning( "Unknown event notification %d", aEvent.EventId );
+            SAL_WARN("vcl.gtk", "Unknown event notification: " << aEvent.EventId);
             break;
     }
 }
