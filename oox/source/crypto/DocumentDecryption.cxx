@@ -194,7 +194,7 @@ public:
 
 } // namespace
 
-DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage, Reference<XComponentContext> xContext) :
+DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage, Reference<XComponentContext> const & xContext) :
     mxContext(xContext),
     mrOleStorage(rOleStorage),
     mCryptoType(UNKNOWN)

@@ -91,7 +91,7 @@ OUString SAL_CALL Locator::getSystemId() throw( RuntimeException, std::exception
 class ContextStack
 {
 public:
-    explicit            ContextStack( FragmentHandlerRef xHandler );
+    explicit            ContextStack( FragmentHandlerRef const & xHandler );
 
     inline bool         empty() const { return maStack.empty(); }
 
@@ -110,7 +110,7 @@ private:
     ContextInfoVec      maStack;
 };
 
-ContextStack::ContextStack( FragmentHandlerRef xHandler ) :
+ContextStack::ContextStack( FragmentHandlerRef const & xHandler ) :
     mxHandler( xHandler )
 {
 }

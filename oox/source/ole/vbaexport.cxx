@@ -509,7 +509,7 @@ void VBAEncryption::write()
 
 #endif
 
-VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
+VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> const & xModel):
     mxModel(xModel)
 {
 }

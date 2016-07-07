@@ -37,7 +37,7 @@ private:
 
 public:
     DocumentEncryption(
-        css::uno::Reference< css::io::XStream > xDocumentStream,
+        css::uno::Reference< css::io::XStream > const & xDocumentStream,
         oox::ole::OleStorage& rOleStorage,
         const OUString& aPassword);
 

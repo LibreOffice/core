@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
 class OOX_DLLPUBLIC VbaExport
 {
 public:
-    VbaExport(css::uno::Reference<css::frame::XModel> xModel);
+    VbaExport(css::uno::Reference<css::frame::XModel> const & xModel);
 
     void exportVBA(SotStorage* pRootStorage);
 

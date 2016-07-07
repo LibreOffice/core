@@ -58,7 +58,7 @@ namespace drawingml {
 
 namespace {
 
-Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties& aBlipProps, Reference< XGraphic > xGraphic,
+Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties& aBlipProps, Reference< XGraphic > const & xGraphic,
                                                         const GraphicHelper& rGraphicHelper, const sal_Int32 nPhClr )
 {
     if( aBlipProps.maDuotoneColors[0].isUsed() && aBlipProps.maDuotoneColors[1].isUsed() )
@@ -68,7 +68,7 @@ Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties
         try
         {
             Reference< XGraphicTransformer > xTransformer( aBlipProps.mxGraphic, UNO_QUERY_THROW );
-            xGraphic = xTransformer->applyDuotone( xGraphic, nColor1, nColor2 );
+            return xTransformer->applyDuotone( xGraphic, nColor1, nColor2 );
         }
         catch( Exception& )
         {
@@ -77,7 +77,7 @@ Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties
     return xGraphic;
 }
 
-Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProperties &aBlipProps, Reference< XGraphic > xGraphic,
+Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProperties &aBlipProps, Reference< XGraphic > & xGraphic,
                                                             const GraphicHelper& rGraphicHelper, const sal_Int32 nPhClr )
 {
     if( aBlipProps.maColorChangeFrom.isUsed() && aBlipProps.maColorChangeTo.isUsed() )
@@ -89,7 +89,7 @@ Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProper
             sal_Int16 nToTransparence = aBlipProps.maColorChangeTo.getTransparency();
             sal_Int8 nToAlpha = static_cast< sal_Int8 >( (100 - nToTransparence) * 2.55 );
             Reference< XGraphicTransformer > xTransformer( aBlipProps.mxGraphic, UNO_QUERY_THROW );
-            xGraphic = xTransformer->colorChange( xGraphic, nFromColor, 9, nToColor, nToAlpha );
+            return xTransformer->colorChange( xGraphic, nFromColor, 9, nToColor, nToAlpha );
         }
         catch( Exception& )
         {
@@ -98,12 +98,12 @@ Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProper
     return xGraphic;
 }
 
-Reference< XGraphic > applyBrightnessContrast( Reference< XGraphic > xGraphic, sal_Int32 brightness, sal_Int32 contrast )
+Reference< XGraphic > applyBrightnessContrast( Reference< XGraphic > const & xGraphic, sal_Int32 brightness, sal_Int32 contrast )
 {
     try
         {
             Reference< XGraphicTransformer > xTransformer( xGraphic, UNO_QUERY_THROW );
-            xGraphic = xTransformer->applyBrightnessContrast( xGraphic, brightness, contrast, true );
+            return xTransformer->applyBrightnessContrast( xGraphic, brightness, contrast, true );
         }
         catch( Exception& )
         {

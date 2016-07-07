@@ -55,7 +55,7 @@ private:
 public:
     DocumentDecryption(
         oox::ole::OleStorage& rOleStorage,
-        css::uno::Reference< css::uno::XComponentContext > xContext);
+        css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
     bool decrypt(const css::uno::Reference< css::io::XStream >& xDocumentStream);
     bool readEncryptionInfo();
