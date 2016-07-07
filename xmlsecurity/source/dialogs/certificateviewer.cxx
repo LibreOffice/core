@@ -341,7 +341,7 @@ struct CertPath_UserData
     css::uno::Reference< css::security::XCertificate > mxCert;
     bool mbValid;
 
-    CertPath_UserData( css::uno::Reference< css::security::XCertificate > xCert, bool bValid):
+    CertPath_UserData( css::uno::Reference< css::security::XCertificate > const & xCert, bool bValid):
         mxCert(xCert),
         mbValid(bValid)
     {

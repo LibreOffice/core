@@ -137,7 +137,7 @@ public:
 
     InternalSignatureInformation(
         sal_Int32 nId,
-        css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >  xListener)
+        css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > const & xListener)
         :signatureInfor(nId)
     {
         xReferenceResolvedListener = xListener;
