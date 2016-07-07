@@ -87,7 +87,7 @@ class CallbackDocumentHandler : public WeakImplHelper< XFastDocumentHandler >
 private:
     Reference< XDocumentHandler > m_xDocumentHandler;
 public:
-    CallbackDocumentHandler( Reference< XDocumentHandler > xDocumentHandler )
+    CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler )
     { m_xDocumentHandler.set( xDocumentHandler ); }
 
     // XFastDocumentHandler

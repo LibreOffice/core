@@ -115,11 +115,11 @@ public:
         { endElement( FSNS( namespaceTokenId, elementTokenId ) ); }
 
     void singleElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList);
-    inline void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
+    inline void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef const & xAttrList)
         { singleElement(FSNS( namespaceTokenId, elementTokenId), xAttrList); }
 
     void startElement(sal_Int32 elementTokenId, const XFastAttributeListRef& xAttrList);
-    inline void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
+    inline void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef const & xAttrList)
         { startElement( FSNS( namespaceTokenId, elementTokenId ), xAttrList ); }
 
     FastSerializerHelper* write(const char* value);
