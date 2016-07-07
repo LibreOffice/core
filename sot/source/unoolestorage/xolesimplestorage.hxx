@@ -62,7 +62,7 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
 
 public:
 
-    OLESimpleStorage(css::uno::Reference<css::uno::XComponentContext> xContext,
+    OLESimpleStorage(css::uno::Reference<css::uno::XComponentContext> const & xContext,
             css::uno::Sequence<css::uno::Any> const &arguments);
 
     virtual ~OLESimpleStorage();

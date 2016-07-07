@@ -437,7 +437,7 @@ public:
     bool                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
 
                                 UCBStorageStream_Impl( const OUString&, StreamMode, UCBStorageStream*, bool, const OString* pKey=nullptr,
-                                                       bool bRepair = false, Reference< XProgressHandler > xProgress = Reference< XProgressHandler >() );
+                                                       bool bRepair = false, Reference< XProgressHandler > const & xProgress = Reference< XProgressHandler >() );
 
     void                        Free();
     bool                        Init();
@@ -498,9 +498,9 @@ public:
     Reference< XProgressHandler > m_xProgressHandler;
 
                                 UCBStorage_Impl( const ::ucbhelper::Content&, const OUString&, StreamMode, UCBStorage*, bool,
-                                                 bool, bool = false, Reference< XProgressHandler > = Reference< XProgressHandler >() );
+                                                 bool, bool = false, Reference< XProgressHandler > const & = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( const OUString&, StreamMode, UCBStorage*, bool, bool,
-                                                 bool = false, Reference< XProgressHandler > = Reference< XProgressHandler >() );
+                                                 bool = false, Reference< XProgressHandler > const & = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, bool );
     void                        Init();
     sal_Int16                   Commit();
@@ -634,7 +634,7 @@ bool UCBStorageElement_Impl::IsModified()
     return bModified;
 }
 
-UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode nMode, UCBStorageStream* pStream, bool bDirect, const OString* pKey, bool bRepair, Reference< XProgressHandler > xProgress  )
+UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode nMode, UCBStorageStream* pStream, bool bDirect, const OString* pKey, bool bRepair, Reference< XProgressHandler > const & xProgress  )
     : m_pAntiImpl( pStream )
     , m_aURL( rName )
     , m_pContent( nullptr )
@@ -1241,7 +1241,7 @@ void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
     }
 }
 
-UCBStorageStream::UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, Reference< XProgressHandler > xProgress )
+UCBStorageStream::UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, Reference< XProgressHandler > const & xProgress )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
@@ -1451,7 +1451,7 @@ UCBStorage::UCBStorage( const ::ucbhelper::Content& rContent, const OUString& rN
     StorageBase::m_nMode = pImp->m_nMode;
 }
 
-UCBStorage::UCBStorage( const OUString& rName, StreamMode nMode, bool bDirect, bool bIsRoot, bool bIsRepair, Reference< XProgressHandler > xProgressHandler )
+UCBStorage::UCBStorage( const OUString& rName, StreamMode nMode, bool bDirect, bool bIsRoot, bool bIsRepair, Reference< XProgressHandler > const & xProgressHandler )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
@@ -1490,7 +1490,7 @@ UCBStorage::~UCBStorage()
     pImp->ReleaseRef();
 }
 
-UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OUString& rName, StreamMode nMode, UCBStorage* pStorage, bool bDirect, bool bIsRoot, bool bIsRepair, Reference< XProgressHandler > xProgressHandler  )
+UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OUString& rName, StreamMode nMode, UCBStorage* pStorage, bool bDirect, bool bIsRoot, bool bIsRepair, Reference< XProgressHandler > const & xProgressHandler  )
     : m_pAntiImpl( pStorage )
     , m_pContent( new ::ucbhelper::Content( rContent ) )
     , m_pTempFile( nullptr )
@@ -1522,7 +1522,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
     m_aURL = rName;
 }
 
-UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBStorage* pStorage, bool bDirect, bool bIsRoot, bool bIsRepair, Reference< XProgressHandler > xProgressHandler )
+UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBStorage* pStorage, bool bDirect, bool bIsRoot, bool bIsRepair, Reference< XProgressHandler > const & xProgressHandler )
     : m_pAntiImpl( pStorage )
     , m_pContent( nullptr )
     , m_pTempFile( nullptr )

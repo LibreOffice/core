@@ -40,7 +40,7 @@ const sal_Int32 nBytesCount = 32000;
 
 
 OLESimpleStorage::OLESimpleStorage(
-        css::uno::Reference<css::uno::XComponentContext> xContext,
+        css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Sequence<css::uno::Any> const &aArguments)
 : m_bDisposed( false )
 , m_pStream( nullptr )
