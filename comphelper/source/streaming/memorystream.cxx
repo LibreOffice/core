@@ -19,15 +19,13 @@
 
 #include <algorithm>
 
-#include "comphelper_module.hxx"
-#include "comphelper_services.hxx"
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 
 #include <string.h>
@@ -43,11 +41,16 @@ using namespace ::osl;
 namespace comphelper
 {
 
-class UNOMemoryStream : public WeakImplHelper< XStream, XSeekableInputStream, XOutputStream, XTruncate >
+class UNOMemoryStream : public WeakImplHelper<XServiceInfo, XStream, XSeekableInputStream, XOutputStream, XTruncate>
 {
 public:
     UNOMemoryStream();
     virtual ~UNOMemoryStream();
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
     // XStream
     virtual Reference< XInputStream > SAL_CALL getInputStream(  ) throw (RuntimeException, std::exception) override;
@@ -85,6 +88,22 @@ UNOMemoryStream::UNOMemoryStream()
 
 UNOMemoryStream::~UNOMemoryStream()
 {
+}
+
+// XServiceInfo
+OUString SAL_CALL UNOMemoryStream::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("com.sun.star.comp.MemoryStream");
+}
+
+sal_Bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> SAL_CALL UNOMemoryStream::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+{
+    return { "com.sun.star.comp.MemoryStream" };
 }
 
 // XStream
