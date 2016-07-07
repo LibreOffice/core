@@ -42,8 +42,8 @@ namespace // private
       return ((len > 0) && ((dtype == cppu::UnoType<Sequence<sal_Int8>>::get()) || (dtype == cppu::UnoType<OUString>::get())));
     }
 
-bool cmpAllContentTypeParameter(const Reference<XMimeContentType> xLhs,
-                                               const Reference<XMimeContentType> xRhs)
+bool cmpAllContentTypeParameter(const Reference<XMimeContentType> & xLhs,
+                                               const Reference<XMimeContentType> & xRhs)
 {
   Sequence<OUString> xLhsFlavors = xLhs->getParameters();
   Sequence<OUString> xRhsFlavors = xRhs->getParameters();
@@ -78,7 +78,7 @@ bool cmpAllContentTypeParameter(const Reference<XMimeContentType> xLhs,
 
 } // namespace private
 
-OSXTransferable::OSXTransferable(const Reference<XMimeContentTypeFactory> rXMimeCntFactory,
+OSXTransferable::OSXTransferable(const Reference<XMimeContentTypeFactory> & rXMimeCntFactory,
                                  DataFlavorMapperPtr_t pDataFlavorMapper,
                                  NSPasteboard* pasteboard) :
   mrXMimeCntFactory(rXMimeCntFactory),

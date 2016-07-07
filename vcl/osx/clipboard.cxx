@@ -275,7 +275,7 @@ void AquaClipboard::fireClipboardChangedEvent()
     }
 }
 
-void AquaClipboard::fireLostClipboardOwnershipEvent(Reference<XClipboardOwner> oldOwner, Reference<XTransferable> oldContent)
+void AquaClipboard::fireLostClipboardOwnershipEvent(Reference<XClipboardOwner> const & oldOwner, Reference<XTransferable> const & oldContent)
 {
     assert(oldOwner.is());
 

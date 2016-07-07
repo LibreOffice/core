@@ -537,7 +537,7 @@ NSString* DataFlavorMapper::openOfficeImageToSystemFlavor(NSPasteboard* pPastebo
     return sysFlavor;
 }
 
-DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavor, Reference<XTransferable> rTransferable) const
+DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavor, Reference<XTransferable> const & rTransferable) const
 {
   DataProviderPtr_t dp;
 
