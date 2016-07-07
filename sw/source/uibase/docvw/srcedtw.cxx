@@ -221,7 +221,7 @@ private:
         throw (css::uno::RuntimeException, std::exception) override
     {
         osl::MutexGuard g(editor_.mutex_);
-        editor_.notifier_.clear();
+        editor_.m_xNotifier.clear();
     }
 
     virtual void SAL_CALL propertiesChange(
@@ -238,37 +238,37 @@ private:
 SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView ) :
     Window( pParent, WB_BORDER|WB_CLIPCHILDREN ),
 
-    pTextEngine(nullptr),
+    m_pTextEngine(nullptr),
 
-    pOutWin(nullptr),
-    pHScrollbar(nullptr),
-    pVScrollbar(nullptr),
+    m_pOutWin(nullptr),
+    m_pHScrollbar(nullptr),
+    m_pVScrollbar(nullptr),
 
-    pSrcView(pParentView),
+    m_pSrcView(pParentView),
 
-    nCurTextWidth(0),
-    nStartLine(USHRT_MAX),
-    eSourceEncoding(osl_getThreadTextEncoding()),
-    bHighlighting(false),
-    aSyntaxIdle("sw uibase SwSrcEditWindow Syntax")
+    m_nCurTextWidth(0),
+    m_nStartLine(USHRT_MAX),
+    m_eSourceEncoding(osl_getThreadTextEncoding()),
+    m_bHighlighting(false),
+    m_aSyntaxIdle("sw uibase SwSrcEditWindow Syntax")
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
 
     // Using "this" in ctor is a little fishy, but should work here at least as
     // long as there are no derivations:
-    listener_ = new ChangesListener(*this);
+    m_xListener = new ChangesListener(*this);
     css::uno::Reference< css::beans::XMultiPropertySet > n(
         officecfg::Office::Common::Font::SourceViewFont::get(),
         css::uno::UNO_QUERY_THROW);
     {
         osl::MutexGuard g(mutex_);
-        notifier_ = n;
+        m_xNotifier = n;
     }
     css::uno::Sequence< OUString > s(2);
     s[0] = "FontHeight";
     s[1] = "FontName";
-    n->addPropertiesChangeListener(s, listener_.get());
+    n->addPropertiesChangeListener(s, m_xListener.get());
 }
 
 SwSrcEditWindow::~SwSrcEditWindow()
@@ -281,28 +281,28 @@ void SwSrcEditWindow::dispose()
     css::uno::Reference< css::beans::XMultiPropertySet > n;
     {
         osl::MutexGuard g(mutex_);
-        n = notifier_;
+        n = m_xNotifier;
     }
     if (n.is()) {
-        n->removePropertiesChangeListener(listener_.get());
+        n->removePropertiesChangeListener(m_xListener.get());
     }
-    aSyntaxIdle.Stop();
-    if ( pOutWin )
-        pOutWin->SetTextView( nullptr );
+    m_aSyntaxIdle.Stop();
+    if ( m_pOutWin )
+        m_pOutWin->SetTextView( nullptr );
 
-    if ( pTextEngine )
+    if ( m_pTextEngine )
     {
-        EndListening( *pTextEngine );
-        pTextEngine->RemoveView( pTextView );
+        EndListening( *m_pTextEngine );
+        m_pTextEngine->RemoveView( m_pTextView );
 
-        delete pTextView;
-        pTextView = nullptr;
-        delete pTextEngine;
-        pTextEngine = nullptr;
+        delete m_pTextView;
+        m_pTextView = nullptr;
+        delete m_pTextEngine;
+        m_pTextEngine = nullptr;
     }
-    pHScrollbar.disposeAndClear();
-    pVScrollbar.disposeAndClear();
-    pOutWin.disposeAndClear();
+    m_pHScrollbar.disposeAndClear();
+    m_pVScrollbar.disposeAndClear();
+    m_pOutWin.disposeAndClear();
     vcl::Window::dispose();
 }
 
@@ -327,50 +327,50 @@ void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 void  SwSrcEditWindow::Resize()
 {
     // ScrollBars, etc. happens in Adjust...
-    if ( pTextView )
+    if ( m_pTextView )
     {
-        long nVisY = pTextView->GetStartDocPos().Y();
-        pTextView->ShowCursor();
+        long nVisY = m_pTextView->GetStartDocPos().Y();
+        m_pTextView->ShowCursor();
         Size aOutSz( GetOutputSizePixel() );
-        long nMaxVisAreaStart = pTextView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
+        long nMaxVisAreaStart = m_pTextView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
         if ( nMaxVisAreaStart < 0 )
             nMaxVisAreaStart = 0;
-        if ( pTextView->GetStartDocPos().Y() > nMaxVisAreaStart )
+        if ( m_pTextView->GetStartDocPos().Y() > nMaxVisAreaStart )
         {
-            Point aStartDocPos( pTextView->GetStartDocPos() );
+            Point aStartDocPos( m_pTextView->GetStartDocPos() );
             aStartDocPos.Y() = nMaxVisAreaStart;
-            pTextView->SetStartDocPos( aStartDocPos );
-            pTextView->ShowCursor();
+            m_pTextView->SetStartDocPos( aStartDocPos );
+            m_pTextView->ShowCursor();
         }
         long nScrollStd = GetSettings().GetStyleSettings().GetScrollBarSize();
         Size aScrollSz(aOutSz.Width() - nScrollStd, nScrollStd );
         Point aScrollPos(0, aOutSz.Height() - nScrollStd);
 
-        pHScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
+        m_pHScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
 
         aScrollSz.Width() = aScrollSz.Height();
         aScrollSz.Height() = aOutSz.Height();
         aScrollPos = Point(aOutSz.Width() - nScrollStd, 0);
 
-        pVScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
+        m_pVScrollbar->SetPosSizePixel( aScrollPos, aScrollSz);
         aOutSz.Width()  -= nScrollStd;
         aOutSz.Height()     -= nScrollStd;
-        pOutWin->SetOutputSizePixel(aOutSz);
+        m_pOutWin->SetOutputSizePixel(aOutSz);
         InitScrollBars();
 
         // set line in first Resize
-        if(USHRT_MAX != nStartLine)
+        if(USHRT_MAX != m_nStartLine)
         {
-            if(nStartLine < pTextEngine->GetParagraphCount())
+            if(m_nStartLine < m_pTextEngine->GetParagraphCount())
             {
-                TextSelection aSel(TextPaM( nStartLine, 0 ), TextPaM( nStartLine, 0x0 ));
-                pTextView->SetSelection(aSel);
-                pTextView->ShowCursor();
+                TextSelection aSel(TextPaM( m_nStartLine, 0 ), TextPaM( m_nStartLine, 0x0 ));
+                m_pTextView->SetSelection(aSel);
+                m_pTextView->ShowCursor();
             }
-            nStartLine = USHRT_MAX;
+            m_nStartLine = USHRT_MAX;
         }
 
-        if ( nVisY != pTextView->GetStartDocPos().Y() )
+        if ( nVisY != m_pTextView->GetStartDocPos().Y() )
             Invalidate();
     }
 
@@ -501,30 +501,30 @@ void SwSrcEditWindow::CreateTextEngine()
     // FIXME RenderContext
 
     const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
-    pOutWin = VclPtr<TextViewOutWin>::Create(this, 0);
-    pOutWin->SetBackground(Wallpaper(rCol));
-    pOutWin->SetPointer(Pointer(PointerStyle::Text));
-    pOutWin->Show();
+    m_pOutWin = VclPtr<TextViewOutWin>::Create(this, 0);
+    m_pOutWin->SetBackground(Wallpaper(rCol));
+    m_pOutWin->SetPointer(Pointer(PointerStyle::Text));
+    m_pOutWin->Show();
 
     // create Scrollbars
-    pHScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
-        pHScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
-    pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
-    pHScrollbar->Show();
+    m_pHScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
+        m_pHScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
+    m_pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
+    m_pHScrollbar->Show();
 
-    pVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
-        pVScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
-    pVScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
-    pHScrollbar->EnableDrag();
-    pVScrollbar->Show();
+    m_pVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
+        m_pVScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
+    m_pVScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
+    m_pHScrollbar->EnableDrag();
+    m_pVScrollbar->Show();
 
-    pTextEngine = new ExtTextEngine;
-    pTextView = new ExtTextView( pTextEngine, pOutWin );
-    pTextView->SetAutoIndentMode(true);
-    pOutWin->SetTextView(pTextView);
+    m_pTextEngine = new ExtTextEngine;
+    m_pTextView = new ExtTextView( m_pTextEngine, m_pOutWin );
+    m_pTextView->SetAutoIndentMode(true);
+    m_pOutWin->SetTextView(m_pTextView);
 
-    pTextEngine->SetUpdateMode( false );
-    pTextEngine->InsertView( pTextView );
+    m_pTextEngine->SetUpdateMode( false );
+    m_pTextEngine->InsertView( m_pTextView );
 
     vcl::Font aFont;
     aFont.SetTransparent( false );
@@ -532,18 +532,18 @@ void SwSrcEditWindow::CreateTextEngine()
     SetPointFont(*this, aFont);
     aFont = GetFont();
     aFont.SetFillColor( rCol );
-    pOutWin->SetFont( aFont );
-    pTextEngine->SetFont( aFont );
+    m_pOutWin->SetFont( aFont );
+    m_pTextEngine->SetFont( aFont );
 
-    aSyntaxIdle.SetPriority( SchedulerPriority::LOWER );
-    aSyntaxIdle.SetIdleHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
+    m_aSyntaxIdle.SetPriority( SchedulerPriority::LOWER );
+    m_aSyntaxIdle.SetIdleHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
 
-    pTextEngine->EnableUndo( true );
-    pTextEngine->SetUpdateMode( true );
+    m_pTextEngine->EnableUndo( true );
+    m_pTextEngine->SetUpdateMode( true );
 
-    pTextView->ShowCursor();
+    m_pTextView->ShowCursor();
     InitScrollBars();
-    StartListening( *pTextEngine );
+    StartListening( *m_pTextEngine );
 
     SfxBindings& rBind = GetSrcView()->GetViewFrame()->GetBindings();
     rBind.Invalidate( SID_TABLE_CELL );
@@ -553,41 +553,41 @@ void SwSrcEditWindow::SetScrollBarRanges()
 {
     // Extra method, not InitScrollBars, because also for TextEngine events.
 
-    pHScrollbar->SetRange( Range( 0, nCurTextWidth-1 ) );
-    pVScrollbar->SetRange( Range(0, pTextEngine->GetTextHeight()-1) );
+    m_pHScrollbar->SetRange( Range( 0, m_nCurTextWidth-1 ) );
+    m_pVScrollbar->SetRange( Range(0, m_pTextEngine->GetTextHeight()-1) );
 }
 
 void SwSrcEditWindow::InitScrollBars()
 {
     SetScrollBarRanges();
 
-    Size aOutSz( pOutWin->GetOutputSizePixel() );
-    pVScrollbar->SetVisibleSize( aOutSz.Height() );
-    pVScrollbar->SetPageSize(  aOutSz.Height() * 8 / 10 );
-    pVScrollbar->SetLineSize( pOutWin->GetTextHeight() );
-    pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
-    pHScrollbar->SetVisibleSize( aOutSz.Width() );
-    pHScrollbar->SetPageSize( aOutSz.Width() * 8 / 10 );
-    pHScrollbar->SetLineSize( pOutWin->GetTextWidth(OUString('x')) );
-    pHScrollbar->SetThumbPos( pTextView->GetStartDocPos().X() );
+    Size aOutSz( m_pOutWin->GetOutputSizePixel() );
+    m_pVScrollbar->SetVisibleSize( aOutSz.Height() );
+    m_pVScrollbar->SetPageSize(  aOutSz.Height() * 8 / 10 );
+    m_pVScrollbar->SetLineSize( m_pOutWin->GetTextHeight() );
+    m_pVScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
+    m_pHScrollbar->SetVisibleSize( aOutSz.Width() );
+    m_pHScrollbar->SetPageSize( aOutSz.Width() * 8 / 10 );
+    m_pHScrollbar->SetLineSize( m_pOutWin->GetTextWidth(OUString('x')) );
+    m_pHScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().X() );
 
 }
 
 IMPL_LINK_TYPED(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
 {
-    if(pScroll == pVScrollbar)
+    if(pScroll == m_pVScrollbar)
     {
-        long nDiff = pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
+        long nDiff = m_pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
         GetTextView()->Scroll( 0, nDiff );
-        pTextView->ShowCursor( false );
-        pScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
+        m_pTextView->ShowCursor( false );
+        pScroll->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
     }
     else
     {
-        long nDiff = pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
+        long nDiff = m_pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
         GetTextView()->Scroll( nDiff, 0 );
-        pTextView->ShowCursor( false );
-        pScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
+        m_pTextView->ShowCursor( false );
+        pScroll->SetThumbPos( m_pTextView->GetStartDocPos().X() );
     }
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
 }
@@ -595,26 +595,26 @@ IMPL_LINK_TYPED(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
 IMPL_LINK_TYPED( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle, void )
 {
     tools::Time aSyntaxCheckStart( tools::Time::SYSTEM );
-    SAL_WARN_IF(pTextView == nullptr, "sw", "No View yet, but syntax highlighting?!");
+    SAL_WARN_IF(m_pTextView == nullptr, "sw", "No View yet, but syntax highlighting?!");
 
-    bHighlighting = true;
+    m_bHighlighting = true;
     sal_uInt16 nCount  = 0;
     // at first the region around the cursor is processed
-    TextSelection aSel = pTextView->GetSelection();
+    TextSelection aSel = m_pTextView->GetSelection();
     sal_uInt16 nCur = (sal_uInt16)aSel.GetStart().GetPara();
     if(nCur > 40)
         nCur -= 40;
     else
         nCur = 0;
-    if(!aSyntaxLineTable.empty())
+    if(!m_aSyntaxLineTable.empty())
         for(sal_uInt16 i = 0; i < 80 && nCount < 40; i++, nCur++)
         {
-            if(aSyntaxLineTable.find(nCur) != aSyntaxLineTable.end())
+            if(m_aSyntaxLineTable.find(nCur) != m_aSyntaxLineTable.end())
             {
                 DoSyntaxHighlight( nCur );
-                aSyntaxLineTable.erase( nCur );
+                m_aSyntaxLineTable.erase( nCur );
                 nCount++;
-                if(aSyntaxLineTable.empty())
+                if(m_aSyntaxLineTable.empty())
                     break;
                 if((tools::Time( tools::Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime()) > MAX_HIGHLIGHTTIME )
                 {
@@ -624,11 +624,11 @@ IMPL_LINK_TYPED( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle, void )
         }
 
     // when there is still anything left by then, go on from the beginning
-    while ( !aSyntaxLineTable.empty() && nCount < MAX_SYNTAX_HIGHLIGHT)
+    while ( !m_aSyntaxLineTable.empty() && nCount < MAX_SYNTAX_HIGHLIGHT)
     {
-        sal_uInt16 nLine = *aSyntaxLineTable.begin();
+        sal_uInt16 nLine = *m_aSyntaxLineTable.begin();
         DoSyntaxHighlight( nLine );
-        aSyntaxLineTable.erase(nLine);
+        m_aSyntaxLineTable.erase(nLine);
         nCount ++;
         if(tools::Time( tools::Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
         {
@@ -636,33 +636,33 @@ IMPL_LINK_TYPED( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle, void )
         }
     }
 
-    if(!aSyntaxLineTable.empty() && !pIdle->IsActive())
+    if(!m_aSyntaxLineTable.empty() && !pIdle->IsActive())
         pIdle->Start();
     // SyntaxTimerHdl is called when text changed
     // => good opportunity to determine text width!
-    long nPrevTextWidth = nCurTextWidth;
-    nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
-    if ( nCurTextWidth != nPrevTextWidth )
+    long nPrevTextWidth = m_nCurTextWidth;
+    m_nCurTextWidth = m_pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
+    if ( m_nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
-    bHighlighting = false;
+    m_bHighlighting = false;
 }
 
 void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
 {
     // Because of DelayedSyntaxHighlight it could happen,
     // that the line doesn't exist anymore!
-    if ( nPara < pTextEngine->GetParagraphCount() )
+    if ( nPara < m_pTextEngine->GetParagraphCount() )
     {
         bool bTempModified = IsModified();
-        pTextEngine->RemoveAttribs( nPara );
-        OUString aSource( pTextEngine->GetText( nPara ) );
-        pTextEngine->SetUpdateMode( false );
+        m_pTextEngine->RemoveAttribs( nPara );
+        OUString aSource( m_pTextEngine->GetText( nPara ) );
+        m_pTextEngine->SetUpdateMode( false );
         ImpDoHighlight( aSource, nPara );
-        TextView* pTmp = pTextEngine->GetActiveView();
+        TextView* pTmp = m_pTextEngine->GetActiveView();
         pTmp->SetAutoScroll(false);
-        pTextEngine->SetActiveView(nullptr);
-        pTextEngine->SetUpdateMode( true );
-        pTextEngine->SetActiveView(pTmp);
+        m_pTextEngine->SetActiveView(nullptr);
+        m_pTextEngine->SetUpdateMode( true );
+        m_pTextEngine->SetActiveView(pTmp);
         pTmp->SetAutoScroll(true);
         pTmp->ShowCursor( false/*pTmp->IsAutoScroll()*/ );
 
@@ -673,10 +673,10 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
 
 void SwSrcEditWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
 {
-    if ( !bHighlighting )
+    if ( !m_bHighlighting )
     {
-        aSyntaxLineTable.insert( nPara );
-        aSyntaxIdle.Start();
+        m_aSyntaxLineTable.insert( nPara );
+        m_aSyntaxIdle.Start();
     }
 }
 
@@ -736,7 +736,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
                 r.eType = svtools::HTMLUNKNOWN;
         Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
         sal_uInt16 nLine = nLineOff+r.nLine;
-        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
+        m_pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
     }
 }
 
@@ -749,14 +749,14 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     switch (rTextHint.GetId())
     {
         case TEXT_HINT_VIEWSCROLLED:
-            pHScrollbar->SetThumbPos( pTextView->GetStartDocPos().X() );
-            pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
+            m_pHScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().X() );
+            m_pVScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
             break;
 
         case TEXT_HINT_TEXTHEIGHTCHANGED:
-            if ( pTextEngine->GetTextHeight() < pOutWin->GetOutputSizePixel().Height() )
-                pTextView->Scroll( 0, pTextView->GetStartDocPos().Y() );
-            pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
+            if ( m_pTextEngine->GetTextHeight() < m_pOutWin->GetOutputSizePixel().Height() )
+                m_pTextView->Scroll( 0, m_pTextView->GetStartDocPos().Y() );
+            m_pVScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
             SetScrollBarRanges();
             break;
 
@@ -769,7 +769,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 void SwSrcEditWindow::Invalidate(InvalidateFlags )
 {
-    pOutWin->Invalidate();
+    m_pOutWin->Invalidate();
     Window::Invalidate();
 }
 
@@ -783,7 +783,7 @@ void SwSrcEditWindow::Command( const CommandEvent& rCEvt )
         {
             const CommandWheelData* pWData = rCEvt.GetWheelData();
             if( !pWData || CommandWheelMode::ZOOM != pWData->GetMode() )
-                HandleScrollCommand( rCEvt, pHScrollbar, pVScrollbar );
+                HandleScrollCommand( rCEvt, m_pHScrollbar, m_pVScrollbar );
         }
         break;
         default:
@@ -793,13 +793,13 @@ void SwSrcEditWindow::Command( const CommandEvent& rCEvt )
 
 void SwSrcEditWindow::HandleWheelCommand( const CommandEvent& rCEvt )
 {
-    pTextView->Command(rCEvt);
-    HandleScrollCommand( rCEvt, pHScrollbar, pVScrollbar );
+    m_pTextView->Command(rCEvt);
+    HandleScrollCommand( rCEvt, m_pHScrollbar, m_pVScrollbar );
 }
 
 void SwSrcEditWindow::GetFocus()
 {
-    pOutWin->GrabFocus();
+    m_pOutWin->GrabFocus();
 }
 
 static bool lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
@@ -973,7 +973,7 @@ void SwSrcEditWindow::SetFont()
             LANGUAGE_SYSTEM, LANGUAGE_SYSTEM, LANGUAGE_SYSTEM, LANGUAGE_SYSTEM, LANGUAGE_SYSTEM
         };
         vcl::Font aFont;
-        if(lcl_GetLanguagesForEncoding(eSourceEncoding, aLanguages))
+        if(lcl_GetLanguagesForEncoding(m_eSourceEncoding, aLanguages))
         {
             //TODO: check for multiple languages
             aFont = OutputDevice::GetDefaultFont(DefaultFontType::FIXED, aLanguages[0], GetDefaultFontFlags::NONE, this);
@@ -984,7 +984,7 @@ void SwSrcEditWindow::SetFont()
         sFontName = aFont.GetFamilyName();
     }
     const SvxFontListItem* pFontListItem =
-        static_cast<const SvxFontListItem* >(pSrcView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ));
+        static_cast<const SvxFontListItem* >(m_pSrcView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ));
     const FontList*  pList = pFontListItem->GetFontList();
     FontMetric aFontMetric = pList->Get(sFontName,WEIGHT_NORMAL, ITALIC_NONE);
 
@@ -994,14 +994,14 @@ void SwSrcEditWindow::SetFont()
     //font height is stored in point and set in twip
     aSize.Height() =
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() * 20;
-    aFont.SetFontSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
+    aFont.SetFontSize(m_pOutWin->LogicToPixel(aSize, MAP_TWIP));
     GetTextEngine()->SetFont( aFont );
-    pOutWin->SetFont(aFont);
+    m_pOutWin->SetFont(aFont);
 }
 
 void SwSrcEditWindow::SetTextEncoding(rtl_TextEncoding eEncoding)
 {
-    eSourceEncoding = eEncoding;
+    m_eSourceEncoding = eEncoding;
     SetFont();
 }
 
