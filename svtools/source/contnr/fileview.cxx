@@ -352,7 +352,7 @@ public:
     Link<SvtFileView*,void> maOpenDoneLink;
     Reference< XCommandEnvironment >    mxCmdEnv;
 
-    SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv,
+    SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > const & xEnv,
                                               FileViewFlags nFlags,
                                               bool bOnlyFolder );
     virtual                ~SvtFileView_Impl();
@@ -1454,7 +1454,7 @@ const OUString* NameTranslator_Impl::GetTransTableFileName() const
 // class SvtFileView_Impl
 
 
-SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv, FileViewFlags nFlags, bool bOnlyFolder )
+SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > const & xEnv, FileViewFlags nFlags, bool bOnlyFolder )
 
     :mpAntiImpl                 ( pAntiImpl )
     ,m_eAsyncActionResult       ( ::svt::ERROR )
