@@ -203,31 +203,6 @@ private:
     VclPtr<HatchingLB>         m_pLbHatching;
     VclPtr<BitmapLB>           m_pLbBitmap;
     VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
-
-    VclPtr<VclBox>             m_pBxBitmap;
-
-    VclPtr<VclFrame>           m_pFlSize;
-    VclPtr<TriStateBox>        m_pTsbOriginal;
-    VclPtr<TriStateBox>        m_pTsbScale;
-    VclPtr<VclGrid>            m_pGridX_Y;
-    VclPtr<FixedText>          m_pFtXSize;
-    VclPtr<MetricField>        m_pMtrFldXSize;
-    VclPtr<FixedText>          m_pFtYSize;
-    VclPtr<MetricField>        m_pMtrFldYSize;
-
-    VclPtr<VclFrame>           m_pFlPosition;
-    VclPtr<SvxRectCtl>         m_pCtlPosition;
-    VclPtr<VclGrid>            m_pGridOffset;
-    VclPtr<MetricField>        m_pMtrFldXOffset;
-    VclPtr<MetricField>        m_pMtrFldYOffset;
-    VclPtr<VclBox>             m_pBxTile;
-    VclPtr<TriStateBox>        m_pTsbTile;
-    VclPtr<TriStateBox>        m_pTsbStretch;
-    VclPtr<VclFrame>           m_pFlOffset;
-    VclPtr<RadioButton>        m_pRbtRow;
-    VclPtr<RadioButton>        m_pRbtColumn;
-    VclPtr<MetricField>        m_pMtrFldOffset;
-
     VclPtr<SvxXRectPreview>    m_pCtlXRectPreview;
 
     const SfxItemSet&   m_rOutAttrs;
