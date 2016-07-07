@@ -654,7 +654,7 @@ bool SwOLENode::IsChart() const
 // clean it up (due to lifetime issues), but that's probably overkill.
 // It gets created on demand, is ready for global reuse and makes no
 // harm (not much ressources needed)
-static comphelper::ThreadPool* pLocalPool = 0;
+static comphelper::ThreadPool* pLocalPool = nullptr;
 
 comphelper::ThreadPool* getLocalThreadPool()
 {
