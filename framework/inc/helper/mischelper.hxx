@@ -148,7 +148,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XCon
         css::uno::WeakReference<css::container::XContainerListener> mxOwner;
 
     public:
-        WeakContainerListener(css::uno::Reference<css::container::XContainerListener> xOwner)
+        WeakContainerListener(css::uno::Reference<css::container::XContainerListener> const & xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -203,7 +203,7 @@ class WeakChangesListener : public ::cppu::WeakImplHelper<css::util::XChangesLis
         css::uno::WeakReference<css::util::XChangesListener> mxOwner;
 
     public:
-        WeakChangesListener(css::uno::Reference<css::util::XChangesListener> xOwner)
+        WeakChangesListener(css::uno::Reference<css::util::XChangesListener> const & xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -240,7 +240,7 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper<css::document::X
         css::uno::WeakReference<css::document::XDocumentEventListener> mxOwner;
 
     public:
-        WeakDocumentEventListener(css::uno::Reference<css::document::XDocumentEventListener> xOwner)
+        WeakDocumentEventListener(css::uno::Reference<css::document::XDocumentEventListener> const & xOwner)
             : mxOwner(xOwner)
         {
         }

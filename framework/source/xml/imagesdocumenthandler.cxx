@@ -588,7 +588,7 @@ OUString OReadImagesDocumentHandler::getErrorLineString()
 
 OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     const ImageListsDescriptor& aItems,
-    Reference< XDocumentHandler > rWriteDocumentHandler ) :
+    Reference< XDocumentHandler > const & rWriteDocumentHandler ) :
     m_aImageListsItems( aItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {

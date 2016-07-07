@@ -355,7 +355,7 @@ namespace
         Desktop* const m_pDesktop;
         css::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
         public:
-            QuickstartSuppressor(Desktop* const pDesktop, css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher)
+            QuickstartSuppressor(Desktop* const pDesktop, css::uno::Reference< css::frame::XTerminateListener > const & xQuickLauncher)
                 : m_pDesktop(pDesktop)
                 , m_xQuickLauncher(xQuickLauncher)
             {

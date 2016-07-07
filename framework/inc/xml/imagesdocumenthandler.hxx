@@ -135,7 +135,8 @@ class OWriteImagesDocumentHandler
     public:
         OWriteImagesDocumentHandler(
             const ImageListsDescriptor& aItems,
-            css::uno::Reference< css::xml::sax::XDocumentHandler > );
+            css::uno::Reference< css::xml::sax::XDocumentHandler > const &
+                rWriteDocumentHandler);
         virtual ~OWriteImagesDocumentHandler();
 
         void WriteImagesDocument() throw
