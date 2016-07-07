@@ -105,8 +105,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                     }
                     else if ( nHitTest == HITTEST_RECT )
                     {
-                        if ( !(pFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoMouseRectClose) )
-                            pFloat->ImplSetMouseDown();
+                        pFloat->ImplSetMouseDown();
                         return true;
                     }
                 }
