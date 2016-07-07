@@ -269,6 +269,7 @@ class GtkSalFrame : public SalFrame
 #else
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
     void askForXEmbedFocus( sal_Int32 nTimecode );
+    void grabKeyboard(bool bGrab);
 #endif
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
@@ -299,7 +300,6 @@ class GtkSalFrame : public SalFrame
     static GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
 
     static int m_nFloats;
-    static std::vector<GtkWidget*> m_aGrabWidgetsBeforeShowFloat;
 
     bool isFloatGrabWindow() const
     {
@@ -365,7 +365,6 @@ public:
     // be swallowed
     bool Dispatch( const XEvent* pEvent );
     void grabPointer(bool bGrab, bool bOwnerEvents = false);
-    void grabKeyboard(bool bGrab);
 
     static GtkSalDisplay*  getDisplay();
     static GdkDisplay*     getGdkDisplay();
@@ -424,7 +423,7 @@ public:
 
     void WithDrawn();
 
-    static void closePopup(bool bWithDrawn);
+    static void closePopup();
 
 #endif
     virtual ~GtkSalFrame();
