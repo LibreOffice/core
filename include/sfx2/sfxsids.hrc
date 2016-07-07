@@ -87,6 +87,7 @@
 #define SID_HELPTIPS                        (SID_SFX_START + 404)
 #define SID_HELPMENU                        (SID_SFX_START + 410)
 #define SID_SEND_FEEDBACK                   (SID_SFX_START + 421)
+#define SID_Q_AND_A                         (SID_SFX_START + 422)
 #define SID_SHOW_LICENSE                    (SID_SFX_START + 1683)
 #define SID_SHOW_CREDITS                    (SID_SFX_START + 1711)
 #define SID_HELP_TUTORIALS                  (SID_SFX_START + 1695)

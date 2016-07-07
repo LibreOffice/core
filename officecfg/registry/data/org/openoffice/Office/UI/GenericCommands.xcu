@@ -4613,6 +4613,11 @@
           <value xml:lang="en-US">Send Feedback...</value>
         </prop>
       </node>
+      <node oor:name=".uno:QuestionAnswers" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Questions &amp; Answers...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ShowLicense" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">License Information...</value>
