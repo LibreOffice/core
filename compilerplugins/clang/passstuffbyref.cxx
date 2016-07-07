@@ -54,7 +54,6 @@ public:
     bool VisitCallExpr(const CallExpr * ) { if (mbInsideFunctionDecl) mbFoundDisqualifier = true; return true; }
     bool VisitMaterializeTemporaryExpr(const MaterializeTemporaryExpr * ) { if (mbInsideFunctionDecl) mbFoundDisqualifier = true; return true; }
     bool VisitDeclStmt(const DeclStmt * ) { if (mbInsideFunctionDecl) mbFoundDisqualifier = true; return true; }
-    bool VisitLambdaExpr(const LambdaExpr * expr);
 
 private:
     template<typename T> bool traverseAnyFunctionDecl(
@@ -195,6 +194,13 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
                 ("passing %0 by value, rather pass by const lvalue reference"),
                 pvDecl->getLocation())
                 << t << pvDecl->getSourceRange();
+            auto can = functionDecl->getCanonicalDecl();
+            if (can->getLocation() != functionDecl->getLocation()) {
+                report(
+                    DiagnosticsEngine::Note, "function is declared here:",
+                    can->getLocation())
+                    << can->getSourceRange();
+            }
         }
     }
     // ignore stuff that forms part of the stable URE interface
@@ -297,38 +303,49 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     }
 }
 
-bool PassStuffByRef::VisitLambdaExpr(const LambdaExpr * expr) {
-    if (ignoreLocation(expr)) {
-        return true;
-    }
-    for (auto i(expr->capture_begin()); i != expr->capture_end(); ++i) {
-        if (i->getCaptureKind() == LambdaCaptureKind::LCK_ByCopy) {
-            auto const t = i->getCapturedVar()->getType();
-            if (isFat(t)) {
-                report(
-                    DiagnosticsEngine::Warning,
-                    ("%0 capture of %1 variable by copy, rather use capture"
-                     " by reference---UNLESS THE LAMBDA OUTLIVES THE VARIABLE"),
-                    i->getLocation())
-                    << (i->isImplicit() ? "implicit" : "explicit") << t
-                    << expr->getSourceRange();
-            }
-        }
-    }
-    return true;
-}
+// Would produce a wrong recommendation for
+//
+//   PresenterFrameworkObserver::RunOnUpdateEnd(
+//       xCC,
+//       [pSelf](bool){ return pSelf->ShutdownPresenterScreen(); });
+//
+// in PresenterScreen::RequestShutdownPresenterScreen
+// (sdext/source/presenter/PresenterScreen.cxx), with no obvious way to work
+// around it:
+//
+// bool PassStuffByRef::VisitLambdaExpr(const LambdaExpr * expr) {
+//     if (ignoreLocation(expr)) {
+//         return true;
+//     }
+//     for (auto i(expr->capture_begin()); i != expr->capture_end(); ++i) {
+//         if (i->getCaptureKind() == LambdaCaptureKind::LCK_ByCopy) {
+//             auto const t = i->getCapturedVar()->getType();
+//             if (isFat(t)) {
+//                 report(
+//                     DiagnosticsEngine::Warning,
+//                     ("%0 capture of %1 variable by copy, rather use capture"
+//                      " by reference---UNLESS THE LAMBDA OUTLIVES THE VARIABLE"),
+//                     i->getLocation())
+//                     << (i->isImplicit() ? "implicit" : "explicit") << t
+//                     << expr->getSourceRange();
+//             }
+//         }
+//     }
+//     return true;
+// }
 
 bool PassStuffByRef::isFat(QualType type) {
     if (!type->isRecordType()) {
         return false;
     }
-    if ((loplugin::TypeCheck(type).Class("OUString").Namespace("rtl")
-         .GlobalNamespace())
-        || (loplugin::TypeCheck(type).Class("OString").Namespace("rtl")
-            .GlobalNamespace())
-        || (loplugin::TypeCheck(type).Class("Sequence").Namespace("uno")
-            .Namespace("star").Namespace("sun").Namespace("com")
-            .GlobalNamespace()))
+    loplugin::TypeCheck tc(type);
+    if ((tc.Class("Reference").Namespace("uno").Namespace("star")
+            .Namespace("sun").Namespace("com").GlobalNamespace())
+        || (tc.Class("Sequence").Namespace("uno").Namespace("star")
+            .Namespace("sun").Namespace("com").GlobalNamespace())
+        || tc.Class("OString").Namespace("rtl").GlobalNamespace()
+        || tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+        || tc.Class("Reference").Namespace("rtl").GlobalNamespace())
     {
         return true;
     }
