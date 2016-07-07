@@ -451,6 +451,24 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
+        case SID_Q_AND_A:
+        {
+            // Askbot has URL's normalized to languages, not locales
+            // Get language from locale lll-CC
+            sal_Int32 ix= utl::ConfigManager::getLocale().indexOf("-",0);
+            OUString aLang(utl::ConfigManager::getLocale().copy(0,ix));
+            OUString sURL("http://ask.libreoffice.org/" + aLang + "/questions");
+            try
+            {
+                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+            break;
+        }
         case SID_SHOW_LICENSE:
         {
             ScopedVclPtrInstance< LicenseDialog > aDialog;
