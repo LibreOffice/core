@@ -2011,12 +2011,12 @@ void ScFiltersTest::testOptimalHeightReset()
 
 void ScFiltersTest::testTdf100458()
 {
-    ScDocShellRef xDocSh = loadDoc("tdf100458_lost_zero_value.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadDoc("tdf100458_lost_zero_value.", ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
-    ScDocument& rDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(rDoc.HasValueData(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(double(0.0), rDoc.GetValue(0,0,0));
-    CPPUNIT_ASSERT(!rDoc.HasStringData(0, 0, 0));
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc->HasValueData(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(double(0.0), pDoc->GetValue(0,0,0));
+    CPPUNIT_ASSERT(!pDoc->HasStringData(0, 0, 0));
 }
 
 ScFiltersTest::ScFiltersTest()
