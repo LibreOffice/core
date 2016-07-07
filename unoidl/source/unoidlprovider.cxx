@@ -648,7 +648,7 @@ class UnoidlModuleEntity;
 class UnoidlCursor: public MapCursor {
 public:
     UnoidlCursor(
-        rtl::Reference< MappedFile > file,
+        rtl::Reference< MappedFile > const & file,
         rtl::Reference<UnoidlProvider> const & reference1,
         rtl::Reference<UnoidlModuleEntity> const & reference2,
         NestedMap const & map):
