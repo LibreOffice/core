@@ -74,7 +74,7 @@ struct FSStorage_Impl
     uno::Reference< uno::XComponentContext > m_xContext;
 
 
-    FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< uno::XComponentContext > xContext )
+    FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< uno::XComponentContext > const & xContext )
     : m_aURL( aContent.getURL() )
     , m_pContent( new ::ucbhelper::Content( aContent ) )
     , m_nMode( nMode )
@@ -101,7 +101,7 @@ FSStorage_Impl::~FSStorage_Impl()
 
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
                     sal_Int32 nMode,
-                    uno::Reference< uno::XComponentContext > xContext )
+                    uno::Reference< uno::XComponentContext > const & xContext )
 : m_pImpl( new FSStorage_Impl( aContent, nMode, xContext ) )
 {
     // TODO: use properties

@@ -51,7 +51,7 @@ public:
 
     FSStorage(  const ::ucbhelper::Content& aContent,
                 sal_Int32 nMode,
-                css::uno::Reference< css::uno::XComponentContext > xContext );
+                css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
     virtual ~FSStorage();
 
