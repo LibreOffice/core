@@ -60,7 +60,7 @@ public:
     void execute();
     void endExecute( bool bStatus );
 
-    css::uno::Reference< css::awt::XWindowPeer > createWindowPeer( css::uno::Reference< css::awt::XWindowPeer > xParentPeer )
+    css::uno::Reference< css::awt::XWindowPeer > createWindowPeer( css::uno::Reference< css::awt::XWindowPeer > const & xParentPeer )
         throw ( css::uno::Exception );
 
     css::uno::Reference< css::uno::XInterface > insertControlModel( const OUString& rServiceName, const OUString& rName,

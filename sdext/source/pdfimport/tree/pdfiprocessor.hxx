@@ -71,7 +71,7 @@ namespace pdfi
         enum DocumentTextDirecion { LrTb, RlTb, TbLr };
 
         explicit PDFIProcessor( const css::uno::Reference< css::task::XStatusIndicator >& xStat,
-            css::uno::Reference< css::uno::XComponentContext > xContext) ;
+            css::uno::Reference< css::uno::XComponentContext > const & xContext) ;
 
         /// TEMP - enable writer-like text:p on doc level
         void enableToplevelText();

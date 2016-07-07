@@ -50,7 +50,7 @@ namespace pdfi
             PDFIProcessor&                           _rProcessor,
             const css::uno::Reference<
             css::task::XStatusIndicator>& _xStatusIndicator,
-            css::uno::Reference< css::uno::XComponentContext >  xContext)
+            css::uno::Reference< css::uno::XComponentContext > const & xContext)
         :
             rEmitter(_rEmitter),
             rStyles(_rStyles),
