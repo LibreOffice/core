@@ -2605,18 +2605,6 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
         pThis->CallCallback( nEventType, &aEvent );
     }
 
-    if (!aDel.isDeleted())
-    {
-        int frame_x = (int)(pEvent->x_root - pEvent->x);
-        int frame_y = (int)(pEvent->y_root - pEvent->y);
-        if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
-        {
-            pThis->maGeometry.nX = frame_x;
-            pThis->maGeometry.nY = frame_y;
-            pThis->CallCallback( SalEvent::Move, nullptr );
-        }
-    }
-
     return true;
 }
 
