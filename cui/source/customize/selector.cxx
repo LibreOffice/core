@@ -556,7 +556,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 
 Image SvxConfigGroupListBox::GetImage(
     const Reference< browse::XBrowseNode >& node,
-    Reference< XComponentContext > xCtx,
+    Reference< XComponentContext > const & xCtx,
     bool bIsRootNode
 )
 {
@@ -617,7 +617,7 @@ Image SvxConfigGroupListBox::GetImage(
 
 Reference< XInterface  >
 SvxConfigGroupListBox::getDocumentModel(
-    Reference< XComponentContext >& xCtx, OUString& docName )
+    Reference< XComponentContext > const & xCtx, OUString& docName )
 {
     Reference< XInterface > xModel;
     Reference< frame::XDesktop2 > desktop = Desktop::create(xCtx);

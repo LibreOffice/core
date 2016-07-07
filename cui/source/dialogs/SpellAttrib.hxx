@@ -48,7 +48,7 @@ struct SpellErrorDescription
                       const OUString& rText,
                       const css::lang::Locale& rLocale,
                       const css::uno::Sequence< OUString >& rSuggestions,
-                      css::uno::Reference< css::linguistic2::XProofreader > rxGrammarChecker,
+                      css::uno::Reference< css::linguistic2::XProofreader > const & rxGrammarChecker,
                       const OUString* pDialogTitle = nullptr,
                       const OUString* pExplanation = nullptr,
                       const OUString* pRuleId = nullptr,

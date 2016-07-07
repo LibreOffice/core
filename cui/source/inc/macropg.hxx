@@ -103,7 +103,7 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
         const SfxItemSet& rSet,
-        css::uno::Reference< css::container::XNameReplace > xNameReplace,
+        css::uno::Reference< css::container::XNameReplace > const & xNameReplace,
         sal_uInt16 nSelectedIndex
     );
 };

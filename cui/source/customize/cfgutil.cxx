@@ -701,7 +701,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
 
 Image SfxConfigGroupListBox::GetImage(
     const Reference< browse::XBrowseNode >& node,
-    Reference< XComponentContext > xCtx,
+    Reference< XComponentContext > const & xCtx,
     bool bIsRootNode
 )
 {
@@ -764,7 +764,7 @@ Image SfxConfigGroupListBox::GetImage(
 }
 
 Reference< XInterface  >
-SfxConfigGroupListBox::getDocumentModel( Reference< XComponentContext >& xCtx, OUString& docName )
+SfxConfigGroupListBox::getDocumentModel( Reference< XComponentContext > const & xCtx, OUString& docName )
 {
     Reference< XInterface > xModel;
     Reference< frame::XDesktop2 > desktop = frame::Desktop::create( xCtx );

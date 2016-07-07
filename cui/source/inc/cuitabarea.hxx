@@ -84,26 +84,26 @@ protected:
 public:
     SvxAreaTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
 
-    void                SetNewColorList( XColorListRef pColorList )
+    void                SetNewColorList( XColorListRef const & pColorList )
                             { mpNewColorList = pColorList; }
     const XColorListRef&  GetNewColorList() const { return mpNewColorList; }
     const XColorListRef&  GetColorList() const { return mpColorList; }
 
-    void                  SetNewGradientList( XGradientListRef pGrdLst)
+    void                  SetNewGradientList( XGradientListRef const & pGrdLst)
                             { mpNewGradientList = pGrdLst; }
     const XGradientListRef&  GetNewGradientList() const
                             { return mpNewGradientList; }
 
-    void                  SetNewHatchingList( XHatchListRef pHtchLst)
+    void                  SetNewHatchingList( XHatchListRef const & pHtchLst)
                             { mpNewHatchingList = pHtchLst; }
     const XHatchListRef&  GetNewHatchingList() const
                             { return mpNewHatchingList; }
 
-    void                  SetNewBitmapList( XBitmapListRef pBmpLst)
+    void                  SetNewBitmapList( XBitmapListRef const & pBmpLst)
                             { mpNewBitmapList = pBmpLst; }
     const XBitmapListRef& GetNewBitmapList() const { return mpNewBitmapList; }
 
-    void                  SetNewPatternList( XPatternListRef pPtrnLst )
+    void                  SetNewPatternList( XPatternListRef const & pPtrnLst )
                             { mpNewPatternList = pPtrnLst; }
     const XPatternListRef& GetNewPatternList() const { return mpNewPatternList; }
 };
@@ -303,12 +303,12 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
-    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
-    void    SetGradientList( XGradientListRef pGrdLst)
+    void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
+    void    SetGradientList( XGradientListRef const & pGrdLst)
                 { m_pGradientList = pGrdLst; }
-    void    SetHatchingList( XHatchListRef pHtchLst)
+    void    SetHatchingList( XHatchListRef const & pHtchLst)
                 { m_pHatchingList = pHtchLst; }
-    void    SetBitmapList( XBitmapListRef pBmpLst) { m_pBitmapList = pBmpLst; }
+    void    SetBitmapList( XBitmapListRef const & pBmpLst) { m_pBitmapList = pBmpLst; }
 
     void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
@@ -369,7 +369,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
-    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
+    void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
@@ -452,8 +452,8 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
-    void    SetGradientList( XGradientListRef pGrdLst)
+    void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
+    void    SetGradientList( XGradientListRef const & pGrdLst)
                 { m_pGradientList = pGrdLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { m_pPageType = pInType; }
@@ -534,8 +534,8 @@ public:
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
-    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
-    void    SetHatchingList( XHatchListRef pHtchLst)
+    void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
+    void    SetHatchingList( XHatchListRef const & pHtchLst)
                 { m_pHatchingList = pHtchLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { m_pPageType = pInType; }
@@ -616,8 +616,8 @@ public:
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
-    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
-    void    SetPatternList( XPatternListRef pPatternList) { m_pPatternList = pPatternList; }
+    void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
+    void    SetPatternList( XPatternListRef const & pPatternList) { m_pPatternList = pPatternList; }
 
     void    SetPageType( sal_uInt16* pInType ) { m_pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }

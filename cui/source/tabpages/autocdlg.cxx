@@ -2521,7 +2521,7 @@ struct ImplSmartTagLBUserData
     sal_Int32 mnSmartTagIdx;
 
     ImplSmartTagLBUserData( const OUString& rSmartTagType,
-                            uno::Reference< smarttags::XSmartTagRecognizer > xRec,
+                            uno::Reference< smarttags::XSmartTagRecognizer > const & xRec,
                             sal_Int32 nSmartTagIdx ) :
         maSmartTagType( rSmartTagType ),
         mxRec( xRec ),

@@ -161,7 +161,7 @@ public:
 
 public:
     SvxThesaurusDialog( vcl::Window* pParent,
-                        css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
+                        css::uno::Reference< css::linguistic2::XThesaurus > const & xThesaurus,
                         const OUString &rWord, LanguageType nLanguage );
 
     void            SetWindowTitle( LanguageType nLanguage );

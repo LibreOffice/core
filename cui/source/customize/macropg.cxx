@@ -813,7 +813,7 @@ Any SvxMacroTabPage_::GetPropsByName( const OUString& eventName, EventsHash& eve
 SvxMacroTabPage::SvxMacroTabPage(vcl::Window* pParent,
     const Reference< frame::XFrame >& _rxDocumentFrame,
     const SfxItemSet& rSet,
-    Reference< container::XNameReplace > xNameReplace,
+    Reference< container::XNameReplace > const & xNameReplace,
     sal_uInt16 nSelectedIndex)
     : SvxMacroTabPage_(pParent, "MacroAssignPage", "cui/ui/macroassignpage.ui", rSet)
 {

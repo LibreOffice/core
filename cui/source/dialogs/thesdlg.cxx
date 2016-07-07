@@ -440,7 +440,7 @@ IMPL_STATIC_LINK_TYPED( SvxThesaurusDialog, SelectFirstHdl_Impl, void *, p, void
 
 SvxThesaurusDialog::SvxThesaurusDialog(
     vcl::Window* pParent,
-    uno::Reference< linguistic2::XThesaurus >  xThes,
+    uno::Reference< linguistic2::XThesaurus > const & xThes,
     const OUString &rWord,
     LanguageType nLanguage)
     : SvxStandardDialog(pParent, "ThesaurusDialog", "cui/ui/thesaurus.ui")

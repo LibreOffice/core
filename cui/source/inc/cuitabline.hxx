@@ -66,15 +66,15 @@ public:
                       SdrModel* pModel, const SdrObject* pObj = nullptr,
                       bool bHasObj = true );
 
-    void                SetNewDashList( XDashListRef pInLst)
+    void                SetNewDashList( XDashListRef const & pInLst)
                         { pNewDashList = pInLst; }
     const XDashListRef& GetNewDashList() const { return pNewDashList; }
 
-    void                SetNewLineEndList( XLineEndListRef pInLst)
+    void                SetNewLineEndList( XLineEndListRef const & pInLst)
                         { pNewLineEndList = pInLst; }
     const XLineEndListRef& GetNewLineEndList() const { return pNewLineEndList; }
 
-    void                SetNewColorList( XColorListRef pColTab ) { mpNewColorList = pColTab; }
+    void                SetNewColorList( XColorListRef const & pColTab ) { mpNewColorList = pColTab; }
     const XColorListRef& GetNewColorList() const { return mpNewColorList; }
     const XColorListRef& GetColorList() const { return pColorList; }
 };
@@ -219,9 +219,9 @@ public:
 
     virtual void FillUserData() override;
 
-    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
-    void    SetDashList( XDashListRef pDshLst ) { m_pDashList = pDshLst; }
-    void    SetLineEndList( XLineEndListRef pLneEndLst) { m_pLineEndList = pLneEndLst; }
+    void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
+    void    SetDashList( XDashListRef const & pDshLst ) { m_pDashList = pDshLst; }
+    void    SetLineEndList( XLineEndListRef const & pLneEndLst) { m_pLineEndList = pLneEndLst; }
     void    SetObjSelected( bool bHasObj ) { m_bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
@@ -314,7 +314,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
+    void    SetDashList( XDashListRef const & pDshLst ) { pDashList = pDshLst; }
     void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
@@ -384,7 +384,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    void    SetLineEndList( XLineEndListRef pInList ) { pLineEndList = pInList; }
+    void    SetLineEndList( XLineEndListRef const & pInList ) { pLineEndList = pInList; }
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }
     void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
 

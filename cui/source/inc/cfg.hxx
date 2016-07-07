@@ -304,7 +304,7 @@ public:
     void    SetVisible( bool b ) { bIsVisible = b; }
     bool    IsVisible() const { return bIsVisible; }
 
-    void    SetBackupGraphic( css::uno::Reference< css::graphic::XGraphic > graphic )
+    void    SetBackupGraphic( css::uno::Reference< css::graphic::XGraphic > const & graphic )
                 { xBackupGraphic = graphic; }
 
     const css::uno::Reference< css::graphic::XGraphic >& GetBackupGraphic()
