@@ -49,6 +49,7 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:HelpIndex"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:QuestionAnswers"/>
             <menu:menuitem menu:id=".uno:SendFeedback"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShowLicense"/>
