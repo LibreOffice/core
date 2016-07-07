@@ -1094,6 +1094,7 @@ void SfxPopupWindow::StateChanged(
 
 void SfxPopupWindow::Delete()
 {
+    VclPtr<SfxPopupWindow> xThis(this);
     m_aDeleteLink.Call( this );
     disposeOnce();
 }
