@@ -45,7 +45,7 @@ class SvxAreaTabDialog : public SfxTabDialog
     sal_uInt16            m_nColorTabPage;
     sal_uInt16            m_nGradientTabPage;
     sal_uInt16            m_nHatchTabPage;
-    //sal_uInt16            m_nBitmapTabPage;
+    sal_uInt16            m_nBitmapTabPage;
     sal_uInt16            m_nPatternTabPage;
 
 private:
@@ -547,6 +547,81 @@ public:
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
+};
+
+/************************************************************************/
+
+class SvxBitmapTabPage : public SvxTabPage
+{
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+private:
+
+    VclPtr<VclBox>             m_pFillLB;
+    VclPtr<SvxPresetListBox>   m_pBitmapLB;
+    VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
+
+    VclPtr<RadioButton>        m_pRbOriginal;
+    VclPtr<RadioButton>        m_pRbStretch;
+    VclPtr<VclBox>             m_pVBoxStretch;
+    VclPtr<MetricField>        m_pMtrWidth;
+    VclPtr<MetricField>        m_pMtrHeight;
+    VclPtr<ListBox>            m_pLbPosition;
+    VclPtr<TriStateBox>        m_pTsbTile;
+    VclPtr<VclBox>             m_pVBoxPosition;
+    VclPtr<PushButton>         m_pBtnImport;
+
+    const SfxItemSet&          m_rOutAttrs;
+
+    XBitmapListRef             m_pBitmapList;
+    ChangeType*                m_pnBitmapListState;
+    XFillStyleItem             m_aXFStyleItem;
+    XFillBitmapItem            m_aXBitmapItem;
+
+    sal_uInt16*                m_pPageType;
+    sal_uInt16                 m_nDlgType;
+    sal_Int32*                 m_pPos;
+    bool*                      m_pbAreaTP;
+
+    XFillAttrSetItem           m_aXFillAttr;
+    SfxItemSet&                m_rXFSet;
+
+    DECL_LINK_TYPED( ChangeBitmapHdl, ValueSet*, void );
+    void ChangeBitmapHdl_Impl();
+    DECL_LINK_TYPED( ClickRenameHdl, SvxPresetListBox*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl, SvxPresetListBox*, void );
+    DECL_LINK_TYPED( ModifySizeHdl_Impl, RadioButton&, void );
+    DECL_LINK_TYPED( ModifyStretchHdl_Impl, Edit&, void );
+    DECL_LINK_TYPED( ModifyPositionHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( TileClickHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickImportHdl_Impl, Button*, void );
+    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
+
+    void ClickBitmapHdl_Impl();
+    void ModifyBitmapHdl_Impl();
+
+public:
+    SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    virtual ~SvxBitmapTabPage();
+    virtual void dispose() override;
+
+    void    Construct();
+
+    static VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );
+
+    virtual bool FillItemSet( SfxItemSet* ) override;
+    virtual void Reset( const SfxItemSet * ) override;
+    virtual void ActivatePage( const SfxItemSet& rSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
+    virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
+
+    void    SetBitmapList( XBitmapListRef pBmpLst) { m_pBitmapList = pBmpLst; }
+
+    void    SetPageType( sal_uInt16* nInType ) { m_pPageType = nInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
+    void    SetPos( sal_Int32* pInPos ) { m_pPos = pInPos; }
+    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
+    void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
 };
 
 /************************************************************************/
