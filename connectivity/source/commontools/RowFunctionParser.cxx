@@ -57,7 +57,7 @@ class ConstantValueExpression : public ExpressionNode
 
 public:
 
-    explicit ConstantValueExpression( ORowSetValueDecoratorRef rValue ) :
+    explicit ConstantValueExpression( ORowSetValueDecoratorRef const & rValue ) :
         maValue( rValue )
     {
     }

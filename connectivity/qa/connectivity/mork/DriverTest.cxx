@@ -27,7 +27,7 @@ class MorkDriverTest: public test::BootstrapFixture
 public:
     MorkDriverTest() : test::BootstrapFixture(false, false) {};
 
-    void checkAcceptsURL(Reference< XDriver> xDriver, const char* url, bool expected);
+    void checkAcceptsURL(Reference< XDriver> const & xDriver, const char* url, bool expected);
     void test_metadata();
     void test_select_default_all();
     void test_select_list_table_joe_doe_5();
@@ -47,7 +47,7 @@ private:
     Reference<XConnection> m_xConnection;
 };
 
-void MorkDriverTest::checkAcceptsURL(Reference< XDriver> xDriver, const char* url, bool expected)
+void MorkDriverTest::checkAcceptsURL(Reference< XDriver> const & xDriver, const char* url, bool expected)
 {
     bool res = xDriver->acceptsURL(OUString::createFromAscii(url));
     if (res != expected)
