@@ -59,7 +59,7 @@ protected:
     virtual ~BibInterceptorHelper( );
 
 public:
-    BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, css::uno::Reference< css::frame::XDispatch > xDispatch);
+    BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, css::uno::Reference< css::frame::XDispatch > const & xDispatch);
 
     void ReleaseInterceptor();
 

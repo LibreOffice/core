@@ -55,7 +55,7 @@ namespace pcr
         bool                    m_bHaveAssignableControl;
 
     public:
-        OSelectLabelDialog(vcl::Window* pParent, css::uno::Reference< css::beans::XPropertySet >  _xControlModel);
+        OSelectLabelDialog(vcl::Window* pParent, css::uno::Reference< css::beans::XPropertySet > const & _xControlModel);
         virtual ~OSelectLabelDialog();
         virtual void dispose() override;
 

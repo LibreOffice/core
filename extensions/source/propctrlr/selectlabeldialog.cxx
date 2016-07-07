@@ -47,7 +47,7 @@ namespace pcr
     // OSelectLabelDialog
 
 
-    OSelectLabelDialog::OSelectLabelDialog( vcl::Window* pParent, Reference< XPropertySet >  _xControlModel )
+    OSelectLabelDialog::OSelectLabelDialog( vcl::Window* pParent, Reference< XPropertySet > const & _xControlModel )
         :ModalDialog(pParent, "LabelSelectionDialog", "modules/spropctrlr/ui/labelselectiondialog.ui")
         ,m_aModelImages(PcrRes(RID_IL_FORMEXPLORER))
         ,m_xControlModel(_xControlModel)
