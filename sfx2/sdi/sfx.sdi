@@ -5029,6 +5029,21 @@ SfxVoidItem SendFeedback SID_SEND_FEEDBACK
     ToolBoxConfig = TRUE,
     GroupId = GID_APPLICATION;
 ]
+SfxVoidItem QuestionAnswers SID_Q_AND_A
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
 
 
 SfxVoidItem ShowLicense SID_SHOW_LICENSE

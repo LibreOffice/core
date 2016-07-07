@@ -283,6 +283,7 @@
             <menu:menuitem menu:id=".uno:HelpIndex"/>
             <menu:menuitem menu:id=".uno:ExtendedHelp"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:QuestionAnswers"/>
             <menu:menuitem menu:id=".uno:SendFeedback"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShowLicense"/>
