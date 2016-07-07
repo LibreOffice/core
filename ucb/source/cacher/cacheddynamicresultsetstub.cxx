@@ -33,7 +33,7 @@ using namespace com::sun::star::uno;
 
 
 CachedDynamicResultSetStub::CachedDynamicResultSetStub(
-        Reference< XDynamicResultSet > xOrigin
+        Reference< XDynamicResultSet > const & xOrigin
         , const Reference< XComponentContext > & rxContext )
         : DynamicResultSetWrapper( xOrigin, rxContext )
 {

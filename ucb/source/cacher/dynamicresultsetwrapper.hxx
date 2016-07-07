@@ -98,7 +98,7 @@ protected:
 public:
 
     DynamicResultSetWrapper(
-        css::uno::Reference< css::ucb::XDynamicResultSet > xOrigin
+        css::uno::Reference< css::ucb::XDynamicResultSet > const & xOrigin
         , const css::uno::Reference< css::uno::XComponentContext > & rxContext );
 
     virtual ~DynamicResultSetWrapper();

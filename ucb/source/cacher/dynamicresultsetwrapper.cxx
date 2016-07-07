@@ -37,7 +37,7 @@ using namespace comphelper;
 
 
 DynamicResultSetWrapper::DynamicResultSetWrapper(
-                    Reference< XDynamicResultSet > xOrigin
+                    Reference< XDynamicResultSet > const & xOrigin
                     , const Reference< XComponentContext > & rxContext )
 
                 : m_bDisposed( false )

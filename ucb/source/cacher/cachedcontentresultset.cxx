@@ -401,7 +401,7 @@ private:
 
 public:
     explicit CCRS_PropertySetInfo(   Reference<
-            XPropertySetInfo > xPropertySetInfoOrigin );
+            XPropertySetInfo > const & xPropertySetInfoOrigin );
 
     virtual ~CCRS_PropertySetInfo();
 
@@ -439,7 +439,7 @@ OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( "FetchSize" );
 OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( "FetchDirection" );
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
-        Reference< XPropertySetInfo > xInfo )
+        Reference< XPropertySetInfo > const & xInfo )
         : m_pProperties( nullptr )
         , m_nFetchSizePropertyHandle( -1 )
         , m_nFetchDirectionPropertyHandle( -1 )

@@ -41,7 +41,7 @@ using namespace cppu;
 
 
 ContentResultSetWrapper::ContentResultSetWrapper(
-                                Reference< XResultSet > xOrigin )
+                                Reference< XResultSet > const & xOrigin )
                 : m_xResultSetOrigin( xOrigin )
                 , m_xRowOrigin( nullptr )
                 , m_xContentAccessOrigin( nullptr )

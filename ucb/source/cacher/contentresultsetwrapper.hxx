@@ -146,7 +146,7 @@ private:
 protected:
 
 
-    ContentResultSetWrapper( css::uno::Reference< css::sdbc::XResultSet > xOrigin );
+    ContentResultSetWrapper( css::uno::Reference< css::sdbc::XResultSet > const & xOrigin );
 
     virtual ~ContentResultSetWrapper();
 

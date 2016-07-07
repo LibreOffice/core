@@ -43,7 +43,7 @@ protected:
     impl_InitResultSetTwo( const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
 
 public:
-    CachedDynamicResultSet( css::uno::Reference< css::ucb::XDynamicResultSet > xOrigin
+    CachedDynamicResultSet( css::uno::Reference< css::ucb::XDynamicResultSet > const & xOrigin
         , const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentMapping
         , const css::uno::Reference< css::uno::XComponentContext > & xContext );
 

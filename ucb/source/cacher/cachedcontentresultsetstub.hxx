@@ -84,7 +84,7 @@ private:
         throw ( css::uno::RuntimeException );
 
 public:
-    CachedContentResultSetStub( css::uno::Reference< css::sdbc::XResultSet > xOrigin );
+    CachedContentResultSetStub( css::uno::Reference< css::sdbc::XResultSet > const & xOrigin );
 
     virtual ~CachedContentResultSetStub();
 

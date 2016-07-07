@@ -161,7 +161,7 @@ private:
     void                PropertyChanged( const css::beans::PropertyChangeEvent& rEvt );
 
 public:
-                        SortedResultSet( css::uno::Reference< css::sdbc::XResultSet > aResult );
+                        SortedResultSet( css::uno::Reference< css::sdbc::XResultSet > const & aResult );
                         virtual ~SortedResultSet();
 
     const SortedEntryList&      GetS2OList() const { return maS2O; }

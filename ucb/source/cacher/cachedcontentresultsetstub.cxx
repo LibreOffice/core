@@ -32,7 +32,7 @@ using namespace com::sun::star::util;
 using namespace cppu;
 
 
-CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > xOrigin )
+CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > const & xOrigin )
                 : ContentResultSetWrapper( xOrigin )
                 , m_nColumnCount( 0 )
                 , m_bColumnCountCached( false )

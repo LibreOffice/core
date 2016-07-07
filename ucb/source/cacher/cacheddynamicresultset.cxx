@@ -31,7 +31,7 @@ using namespace com::sun::star::uno;
 
 
 CachedDynamicResultSet::CachedDynamicResultSet(
-        Reference< XDynamicResultSet > xOrigin
+        Reference< XDynamicResultSet > const & xOrigin
         , const Reference< XContentIdentifierMapping > & xContentMapping
         , const Reference< XComponentContext > & xContext )
         : DynamicResultSetWrapper( xOrigin, xContext )

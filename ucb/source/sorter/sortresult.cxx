@@ -119,7 +119,7 @@ public:
 };
 
 
-SortedResultSet::SortedResultSet( Reference< XResultSet > aResult )
+SortedResultSet::SortedResultSet( Reference< XResultSet > const & aResult )
 {
     mpDisposeEventListeners = nullptr;
     mpPropChangeListeners   = nullptr;
