@@ -561,7 +561,7 @@ public:
     const OUString& getCurrentValue() const { return m_sCurrentValue; }
 
 public:
-    SearchableControlIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint);
+    SearchableControlIterator(css::uno::Reference< css::uno::XInterface> const & xStartingPoint);
 
     virtual bool ShouldHandleElement(const css::uno::Reference< css::uno::XInterface>& rElement) override;
     virtual bool ShouldStepInto(const css::uno::Reference< css::uno::XInterface>& xContainer) const override;

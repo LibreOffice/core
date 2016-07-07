@@ -72,7 +72,7 @@ struct ActionReference
 {
     css::uno::Reference< css::smarttags::XSmartTagAction > mxSmartTagAction;
     sal_Int32 mnSmartTagIndex;
-    ActionReference( css::uno::Reference< css::smarttags::XSmartTagAction > xSmartTagAction, sal_Int32 nSmartTagIndex )
+    ActionReference( css::uno::Reference< css::smarttags::XSmartTagAction > const & xSmartTagAction, sal_Int32 nSmartTagIndex )
         : mxSmartTagAction( xSmartTagAction), mnSmartTagIndex( nSmartTagIndex ) {}
 };
 

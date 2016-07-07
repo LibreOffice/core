@@ -3960,7 +3960,7 @@ bool FmXFormShell::HasControlFocus() const
 }
 
 
-SearchableControlIterator::SearchableControlIterator(Reference< XInterface> xStartingPoint)
+SearchableControlIterator::SearchableControlIterator(Reference< XInterface> const & xStartingPoint)
     :IndexAccessIterator(xStartingPoint)
 {
 }

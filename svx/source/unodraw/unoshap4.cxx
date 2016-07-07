@@ -1001,7 +1001,7 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
     }
 }
 
-SvxDummyShapeContainer::SvxDummyShapeContainer(uno::Reference< drawing::XShapes > xObject):
+SvxDummyShapeContainer::SvxDummyShapeContainer(uno::Reference< drawing::XShapes > const & xObject):
     m_xDummyObject(xObject)
 {
 }

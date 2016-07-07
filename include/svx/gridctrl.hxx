@@ -362,7 +362,7 @@ protected:
 
 public:
     DbGridControl(
-        css::uno::Reference< css::uno::XComponentContext >,
+        css::uno::Reference< css::uno::XComponentContext > const & _rxContext,
         vcl::Window* pParent,
         WinBits nBits = WB_BORDER);
 

@@ -936,7 +936,7 @@ void DbGridRow::SetState(CursorWrapper* pCur, bool bPaintCursor)
 }
 
 DbGridControl::DbGridControl(
-                Reference< XComponentContext > _rxContext,
+                Reference< XComponentContext > const & _rxContext,
                 vcl::Window* pParent,
                 WinBits nBits)
             :DbGridControl_Base(pParent, EditBrowseBoxFlags::NONE, nBits, DEFAULT_BROWSE_MODE )

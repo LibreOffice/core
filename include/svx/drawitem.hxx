@@ -32,7 +32,7 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             SvxColorListItem();
-                            SvxColorListItem( XColorListRef pTable,
+                            SvxColorListItem( XColorListRef const & pTable,
                                     sal_uInt16 nWhich  );
                             SvxColorListItem( const SvxColorListItem& );
 
@@ -57,7 +57,7 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             SvxGradientListItem();
-                            SvxGradientListItem( XGradientListRef pList,
+                            SvxGradientListItem( XGradientListRef const & pList,
                                     sal_uInt16 nWhich  );
                             SvxGradientListItem( const SvxGradientListItem& );
 
@@ -81,7 +81,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxHatchListItem : public SfxPoolItem
 public:
                             static SfxPoolItem* CreateDefault();
                             SvxHatchListItem();
-                            SvxHatchListItem( XHatchListRef pList,
+                            SvxHatchListItem( XHatchListRef const & pList,
                                     sal_uInt16 nWhich  );
                             SvxHatchListItem( const SvxHatchListItem& );
 
@@ -106,7 +106,7 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             SvxBitmapListItem();
-                            SvxBitmapListItem( XBitmapListRef pBL,
+                            SvxBitmapListItem( XBitmapListRef const & pBL,
                                     sal_uInt16 nWhich  );
                             SvxBitmapListItem( const SvxBitmapListItem& );
 
@@ -131,7 +131,7 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             SvxPatternListItem();
-                            SvxPatternListItem( XPatternListRef pBL,
+                            SvxPatternListItem( XPatternListRef const & pBL,
                                    sal_uInt16 nWhich   );
                             SvxPatternListItem( const SvxPatternListItem& );
 
@@ -155,7 +155,7 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             SvxDashListItem();
-                            SvxDashListItem( XDashListRef pList,
+                            SvxDashListItem( XDashListRef const & pList,
                                     sal_uInt16 nWhich  );
                             SvxDashListItem( const SvxDashListItem& );
 
@@ -180,7 +180,7 @@ public:
                             static SfxPoolItem* CreateDefault();
 
                             SvxLineEndListItem();
-                            SvxLineEndListItem( XLineEndListRef pList,
+                            SvxLineEndListItem( XLineEndListRef const & pList,
                                     sal_uInt16 nWhich  );
                             SvxLineEndListItem( const SvxLineEndListItem& );
 
