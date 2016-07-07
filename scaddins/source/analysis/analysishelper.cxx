@@ -1042,12 +1042,16 @@ double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int3
     double      f0Rate = GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost;
     sal_uInt32  nNumOfFullPeriods = sal_uInt32( ( fCost - fRestVal - f0Rate) / fOneRate );
 
+    double fResult = 0.0;
     if( nPer == 0 )
-        return f0Rate;
+        fResult = f0Rate;
     else if( nPer <= nNumOfFullPeriods )
-        return fOneRate;
+        fResult = fOneRate;
     else if( nPer == nNumOfFullPeriods + 1 )
-        return fCostDelta - fOneRate * nNumOfFullPeriods - f0Rate;
+        fResult = fCostDelta - fOneRate * nNumOfFullPeriods - f0Rate;
+
+    if ( fResult > 0.0 )
+        return fResult;
     else
         return 0.0;
 }
