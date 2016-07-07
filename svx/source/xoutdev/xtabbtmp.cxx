@@ -27,6 +27,9 @@
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xbtmpit.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
 
@@ -51,9 +54,72 @@ bool XBitmapList::Create()
     return true;
 }
 
-Bitmap XBitmapList::CreateBitmapForUI( long /*nIndex*/ )
+Bitmap XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
 {
-    return Bitmap();
+    OSL_ENSURE( nIndex < Count(), "Access out of range" );
+
+    if(nIndex < Count())
+    {
+        BitmapEx rBitmapEx = GetBitmap( nIndex )->GetGraphicObject().GetGraphic().GetBitmapEx();
+        ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
+        pVirtualDevice->SetOutputSizePixel(rSize);
+
+        if(rBitmapEx.IsTransparent())
+        {
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+            if(rStyleSettings.GetPreviewUsesCheckeredBackground())
+            {
+                const Point aNull(0, 0);
+                static const sal_uInt32 nLen(8);
+                static const Color aW(COL_WHITE);
+                static const Color aG(0xef, 0xef, 0xef);
+
+                pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
+            }
+            else
+            {
+                pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
+                pVirtualDevice->Erase();
+            }
+        }
+
+        if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
+        {
+            rBitmapEx.Scale(rSize);
+            pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
+        }
+        else
+        {
+            const Size aBitmapSize(rBitmapEx.GetSizePixel());
+
+            for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
+            {
+                for(long x(0); x < rSize.Width(); x += aBitmapSize.Width())
+                {
+                    pVirtualDevice->DrawBitmapEx(
+                        Point(x, y),
+                        rBitmapEx);
+                }
+            }
+        }
+        rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
+        return rBitmapEx.GetBitmap();
+    }
+    else
+        return Bitmap();
+}
+
+Bitmap XBitmapList::CreateBitmapForUI( long nIndex )
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+    return CreateBitmap(nIndex, rSize);
+}
+
+Bitmap XBitmapList::GetBitmapForPreview( long nIndex, const Size& rSize )
+{
+    return CreateBitmap(nIndex, rSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
