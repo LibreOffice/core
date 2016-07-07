@@ -3167,7 +3167,7 @@ const OUString& Window::GetHelpText() const
     return mpWindowImpl->maHelpText;
 }
 
-void Window::SetWindowPeer( Reference< css::awt::XWindowPeer > xPeer, VCLXWindow* pVCLXWindow  )
+void Window::SetWindowPeer( Reference< css::awt::XWindowPeer > const & xPeer, VCLXWindow* pVCLXWindow  )
 {
     // be safe against re-entrance: first clear the old ref, then assign the new one
     mpWindowImpl->mxWindowPeer.clear();
@@ -3187,7 +3187,7 @@ Reference< css::awt::XWindowPeer > Window::GetComponentInterface( bool bCreate )
     return mpWindowImpl->mxWindowPeer;
 }
 
-void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > xIFace )
+void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > const & xIFace )
 {
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
     SAL_WARN_IF( !pWrapper, "vcl", "SetComponentInterface: No Wrapper!" );
@@ -3232,7 +3232,7 @@ void Window::ImplCallActivateListeners( vcl::Window *pOld )
     }
 }
 
-void Window::SetClipboard(Reference<XClipboard> xClipboard)
+void Window::SetClipboard(Reference<XClipboard> const & xClipboard)
 {
     if (mpWindowImpl->mpFrameData)
         mpWindowImpl->mpFrameData->mxClipboard = xClipboard;

@@ -3925,7 +3925,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_hand
 }
 
 uno::Reference<accessibility::XAccessibleEditableText>
-    FindFocus(uno::Reference< accessibility::XAccessibleContext > xContext)
+    FindFocus(uno::Reference< accessibility::XAccessibleContext > const & xContext)
 {
     if (!xContext.is())
         uno::Reference< accessibility::XAccessibleEditableText >();
