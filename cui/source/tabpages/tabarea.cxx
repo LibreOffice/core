@@ -92,6 +92,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     m_nColorTabPage = AddTabPage( "RID_SVXPAGE_COLOR", SvxColorTabPage::Create, nullptr );
     m_nGradientTabPage = AddTabPage( "RID_SVXPAGE_GRADIENT", SvxGradientTabPage::Create, nullptr );
     m_nHatchTabPage = AddTabPage( "RID_SVXPAGE_HATCH", SvxHatchTabPage::Create, nullptr );
+    m_nBitmapTabPage = AddTabPage( "RID_SVXPAGE_BITMAP", SvxBitmapTabPage::Create, nullptr );
     m_nPatternTabPage = AddTabPage( "RID_SVXPAGE_PATTERN", SvxPatternTabPage::Create,  nullptr);
 
     SetCurPageId( "RID_SVXPAGE_AREA" );
@@ -308,6 +309,16 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             static_cast<SvxHatchTabPage&>(rPage).SetHtchChgd( &mnHatchingListState );
             static_cast<SvxHatchTabPage&>(rPage).SetColorChgd( &mnColorListState );
             static_cast<SvxHatchTabPage&>(rPage).Construct();
+    }
+    else if (nId == m_nBitmapTabPage )
+    {
+            static_cast<SvxBitmapTabPage&>(rPage).SetBitmapList( mpBitmapList );
+            static_cast<SvxBitmapTabPage&>(rPage).SetPageType( &mnPageType );
+            static_cast<SvxBitmapTabPage&>(rPage).SetDlgType( 0 );
+            static_cast<SvxBitmapTabPage&>(rPage).SetPos( &mnPos );
+            static_cast<SvxBitmapTabPage&>(rPage).SetAreaTP( &mbAreaTP );
+            static_cast<SvxBitmapTabPage&>(rPage).SetBmpChgd( &mnBitmapListState );
+            static_cast<SvxBitmapTabPage&>(rPage).Construct();
     }
     else if (nId == m_nPatternTabPage)
     {
