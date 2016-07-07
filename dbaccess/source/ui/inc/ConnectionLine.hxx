@@ -46,7 +46,7 @@ namespace dbaui
         Point                   m_aSourceDescrLinePos,
                                 m_aDestDescrLinePos;
     public:
-        OConnectionLine( OTableConnection* pConn, OConnectionLineDataRef pLineData );
+        OConnectionLine( OTableConnection* pConn, OConnectionLineDataRef const & pLineData );
         OConnectionLine( const OConnectionLine& rLine );
         virtual ~OConnectionLine();
 

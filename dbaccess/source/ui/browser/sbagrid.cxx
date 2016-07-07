@@ -713,7 +713,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& r
 }
 
 // SbaGridControl
-SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
+SbaGridControl::SbaGridControl(Reference< XComponentContext > const & _rM,
                                vcl::Window* pParent, FmXGridPeer* _pPeer, WinBits nBits)
     :FmGridControl(_rM,pParent, _pPeer, nBits)
     ,m_pMasterListener(nullptr)

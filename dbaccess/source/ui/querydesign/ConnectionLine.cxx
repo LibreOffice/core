@@ -110,7 +110,7 @@ namespace
 }
 
 // class OConnectionLine
-OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef _pLineData )
+OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef const & _pLineData )
     : m_pTabConn( _pConn )
     , m_pData( _pLineData )
 {
