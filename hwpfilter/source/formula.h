@@ -42,7 +42,7 @@ public:
     }
     virtual ~Formula(){ }
 
-    void setDocumentHandler(Reference < XDocumentHandler > xHandler )
+    void setDocumentHandler(Reference < XDocumentHandler > const & xHandler )
     {
           m_rxDocumentHandler = xHandler;
     }
