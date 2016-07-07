@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_986a9b19",
+        "filename": "include/vcl/graph.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T06:54:14Z",
+      "side": 1,
+      "message": "I don\u0027t really like default params, makes the code a little too magical \nRather just call with an explicit nullptr",
+      "revId": "cb70a1003522bea97aea469222337dfe29b62900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_d81d03bf",
+        "filename": "vcl/source/filter/igif/gifread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T06:54:14Z",
+      "side": 1,
+      "message": "rather don\u0027t use auto here - the information that we\u0027re dealing with a shared_ptr is fairly important to understanding the logic in this method",
+      "revId": "cb70a1003522bea97aea469222337dfe29b62900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_f87807fb",
+        "filename": "vcl/source/filter/ixbm/xbmread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T06:54:14Z",
+      "side": 1,
+      "message": "also here",
+      "revId": "cb70a1003522bea97aea469222337dfe29b62900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_187e8be4",
+        "filename": "vcl/source/filter/ixpm/xpmread.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T06:54:14Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "cb70a1003522bea97aea469222337dfe29b62900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_786dd731",
+        "filename": "vcl/source/filter/jpeg/jpeg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-07T06:54:14Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "cb70a1003522bea97aea469222337dfe29b62900",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
