@@ -1805,17 +1805,10 @@ IMPL_LINK_NOARG_TYPED(vcl::Window, ImplAsyncFocusHdl, void*, void)
                 pFocusWin->EndExtTextInput();
 #endif
 
-                // XXX #102010# hack for accessibility: do not close the menu,
-                // even after focus lost
-                static const char* pEnv = getenv("SAL_FLOATWIN_NOAPPFOCUSCLOSE");
-                if( !(pEnv && *pEnv) )
-                {
-                    NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pFocusWin );
-                    if ( !ImplCallPreNotify( aNEvt ) )
-                        pFocusWin->CompatLoseFocus();
-                    pFocusWin->ImplCallDeactivateListeners( nullptr );
-                }
-                // XXX
+                NotifyEvent aNEvt(MouseNotifyEvent::LOSEFOCUS, pFocusWin);
+                if (!ImplCallPreNotify(aNEvt))
+                    pFocusWin->CompatLoseFocus();
+                pFocusWin->ImplCallDeactivateListeners(nullptr);
             }
         }
 

@@ -2804,8 +2804,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         ImplSVData* pSVData = ImplGetSVData();
         if ( pSVData->maWinData.mpFirstFloat )
         {
-            static const char* pEnv = getenv( "SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
-            if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose) && !(pEnv && *pEnv) )
+            if (!(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose))
                 pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
         }
     }

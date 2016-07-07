@@ -677,11 +677,6 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
     if( mpWindowImpl->mbFrame && (GetStyle() & WB_MOVEABLE) )
         nFlags |= FloatWinPopupFlags::NoAppFocusClose;
 
-    // #102010# For debugging Accessibility
-    static const char* pEnv = getenv("SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
-    if( pEnv && *pEnv )
-        nFlags |= FloatWinPopupFlags::NoAppFocusClose;
-
     // compute window position according to flags and arrangement
     sal_uInt16 nArrangeIndex;
     Point aPos = ImplCalcPos( this, rRect, nFlags, nArrangeIndex );
