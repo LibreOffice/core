@@ -70,7 +70,7 @@ public:
         bool      bSet;
         TCell(  sal_Int32 _nColSpan,
                 sal_Int32 _nRowSpan,
-                Reference<XReportComponent> _xElement = Reference<XReportComponent>()) :
+                Reference<XReportComponent> const & _xElement = Reference<XReportComponent>()) :
         nColSpan(_nColSpan)
         ,nRowSpan(_nRowSpan)
         ,xElement(_xElement)
