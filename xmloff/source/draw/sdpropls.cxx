@@ -853,12 +853,12 @@ bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
     return bRet;
 }
 
-XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLImport& rImport )
+XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > const & xModel, SvXMLImport& rImport )
 : mxModel( xModel ), mpExport(nullptr), mpImport( &rImport )
 {
 }
 
-XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLExport& rExport )
+XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > const & xModel, SvXMLExport& rExport )
 : mxModel( xModel ), mpExport( &rExport ), mpImport(nullptr)
 {
 }

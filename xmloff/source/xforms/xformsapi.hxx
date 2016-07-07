@@ -40,9 +40,9 @@ void xforms_addXFormsModel(
     const css::uno::Reference<css::frame::XModel>& xDocument,
     const css::uno::Reference<css::xforms::XModel2>& xModel );
 
-css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsBinding( css::uno::Reference<css::frame::XModel>&, const OUString& );
+css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsBinding( css::uno::Reference<css::frame::XModel> const &, const OUString& );
 
-css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsSubmission( css::uno::Reference<css::frame::XModel>&, const OUString& );
+css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsSubmission( css::uno::Reference<css::frame::XModel> const &, const OUString& );
 
 void xforms_setValue(
     css::uno::Reference<css::beans::XPropertySet>& xPropSet,

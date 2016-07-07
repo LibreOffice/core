@@ -216,7 +216,7 @@ namespace
     class FieldParamExporter
     {
         public:
-            FieldParamExporter(SvXMLExport* const pExport, Reference<XNameContainer> xFieldParams)
+            FieldParamExporter(SvXMLExport* const pExport, Reference<XNameContainer> const & xFieldParams)
                 : m_pExport(pExport)
                 , m_xFieldParams(xFieldParams)
                 { };

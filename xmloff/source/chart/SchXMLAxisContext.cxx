@@ -97,7 +97,7 @@ private:
 
 SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport, const OUString& rLocalName,
-                                      Reference< chart::XDiagram > xDiagram,
+                                      Reference< chart::XDiagram > const & xDiagram,
                                       std::vector< SchXMLAxis >& rAxes,
                                       OUString & rCategoriesAddress,
                                       bool bAddMissingXAxisForNetCharts,

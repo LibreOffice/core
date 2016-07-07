@@ -136,7 +136,7 @@ public:
 
     // auto-styles
     /// parse chart and collect all auto-styles used in current pool
-    void collectAutoStyles( css::uno::Reference< css::chart::XChartDocument > rChartDoc );
+    void collectAutoStyles( css::uno::Reference< css::chart::XChartDocument > const & rChartDoc );
 
     /// write the styles collected into the current pool as <style:style> elements
     void exportAutoStyles();
@@ -152,7 +152,7 @@ public:
         which is the outer element of a chart. So these attributes can easily
         be parsed again by the container
      */
-    void exportChart( css::uno::Reference< css::chart::XChartDocument > rChartDoc,
+    void exportChart( css::uno::Reference< css::chart::XChartDocument > const & rChartDoc,
                       bool bIncludeTable );
 
     const rtl::Reference<XMLPropertySetMapper>& GetPropertySetMapper() const;
@@ -181,7 +181,7 @@ public:
     { return mrAutoStylePool; }
 
     /// if bExportContent is false the auto-styles are collected
-    void parseDocument( css::uno::Reference< css::chart::XChartDocument >& rChartDoc,
+    void parseDocument( css::uno::Reference< css::chart::XChartDocument > const & rChartDoc,
                         bool bExportContent,
                         bool bIncludeTable = false );
     void exportTable();
@@ -1070,12 +1070,12 @@ SchXMLExportHelper_Impl::~SchXMLExportHelper_Impl()
 {
 }
 
-void SchXMLExportHelper_Impl::collectAutoStyles( Reference< chart::XChartDocument > rChartDoc )
+void SchXMLExportHelper_Impl::collectAutoStyles( Reference< chart::XChartDocument > const & rChartDoc )
 {
     parseDocument( rChartDoc, false );
 }
 
-void SchXMLExportHelper_Impl::exportChart( Reference< chart::XChartDocument > rChartDoc,
+void SchXMLExportHelper_Impl::exportChart( Reference< chart::XChartDocument > const & rChartDoc,
                                       bool bIncludeTable )
 {
     parseDocument( rChartDoc, true, bIncludeTable );
@@ -1106,7 +1106,7 @@ static OUString lcl_GetStringFromNumberSequence( const css::uno::Sequence< sal_I
 }
 
 /// if bExportContent is false the auto-styles are collected
-void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >& rChartDoc,
+void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > const & rChartDoc,
                                         bool bExportContent,
                                         bool bIncludeTable )
 {

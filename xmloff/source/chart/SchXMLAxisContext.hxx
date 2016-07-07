@@ -27,7 +27,7 @@ class SchXMLAxisContext : public SvXMLImportContext
 public:
     SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                        SvXMLImport& rImport, const OUString& rLocalName,
-                       css::uno::Reference< css::chart::XDiagram > xDiagram,
+                       css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                        std::vector< SchXMLAxis >& aAxes,
                        OUString& rCategoriesAddress,
                        bool bAddMissingXAxisForNetCharts,

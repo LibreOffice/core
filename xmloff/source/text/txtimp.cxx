@@ -824,7 +824,7 @@ namespace
         public:
             typedef pair<OUString,OUString> field_param_t;
             typedef vector<field_param_t> field_params_t;
-            FieldParamImporter(const field_params_t* const pInParams, Reference<XNameContainer> xOutParams)
+            FieldParamImporter(const field_params_t* const pInParams, Reference<XNameContainer> const & xOutParams)
                 : m_pInParams(pInParams)
                 , m_xOutParams(xOutParams)
             { };

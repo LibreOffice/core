@@ -288,7 +288,7 @@ public:
         If this is a non NULL reference, the animation information from all shapes given to exportShape()
         from now on are collected.
     */
-    void setAnimationsExporter( rtl::Reference< XMLAnimationsExporter > xAnimExport ) { mxAnimationsExporter = xAnimExport; }
+    void setAnimationsExporter( rtl::Reference< XMLAnimationsExporter > const & xAnimExport ) { mxAnimationsExporter = xAnimExport; }
 
     /** returns the last set XMLAnimationExport */
     const rtl::Reference< XMLAnimationsExporter >& getAnimationsExporter() const { return mxAnimationsExporter; }

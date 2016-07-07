@@ -39,7 +39,7 @@ private:
     Reference< XPropertySetInfo > mxPropSet2Info;
 
 public:
-    PropertySetMergerImpl( const Reference< XPropertySet > rPropSet1, const Reference< XPropertySet > rPropSet2 );
+    PropertySetMergerImpl( const Reference< XPropertySet > & rPropSet1, const Reference< XPropertySet > & rPropSet2 );
     virtual ~PropertySetMergerImpl();
 
     // XPropertySet
@@ -65,7 +65,7 @@ public:
 
 // Interface implementation
 
-PropertySetMergerImpl::PropertySetMergerImpl( Reference< XPropertySet > rPropSet1, Reference< XPropertySet > rPropSet2 )
+PropertySetMergerImpl::PropertySetMergerImpl( Reference< XPropertySet > const & rPropSet1, Reference< XPropertySet > const & rPropSet2 )
 : mxPropSet1( rPropSet1 )
 , mxPropSet1State( rPropSet1, UNO_QUERY )
 , mxPropSet1Info( rPropSet1->getPropertySetInfo() )

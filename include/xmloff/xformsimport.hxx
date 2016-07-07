@@ -45,7 +45,7 @@ XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(
  *  @param pair<XForms binding ID, reference to control>
  */
 void bindXFormsValueBinding(
-    css::uno::Reference<css::frame::XModel>,
+    css::uno::Reference<css::frame::XModel> const &,
     std::pair<css::uno::Reference<css::beans::XPropertySet>,OUString> );
 
 
@@ -54,7 +54,7 @@ void bindXFormsValueBinding(
  *  @param pair<XForms binding ID, reference to control>
  */
 void bindXFormsListBinding(
-    css::uno::Reference<css::frame::XModel>,
+    css::uno::Reference<css::frame::XModel> const &,
     std::pair<css::uno::Reference<css::beans::XPropertySet>,OUString> );
 
 /** perform the actual binding of an XForms submission with the suitable control
@@ -62,7 +62,7 @@ void bindXFormsListBinding(
  *  @param pair<XForms submission ID, reference to control>
  */
 void bindXFormsSubmission(
-    css::uno::Reference<css::frame::XModel>,
+    css::uno::Reference<css::frame::XModel> const &,
     std::pair<css::uno::Reference<css::beans::XPropertySet>,OUString> );
 
 /** applies the given settings to the given XForms container

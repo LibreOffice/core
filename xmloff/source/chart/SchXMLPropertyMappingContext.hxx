@@ -30,7 +30,7 @@ public:
                           SvXMLImport& rImport, const OUString& rLocalName,
                           tSchXMLLSequencesPerIndex& rLSequencesPerIndex,
                               css::uno::Reference<
-                              css::chart2::XDataSeries > xSeries );
+                              css::chart2::XDataSeries > const & xSeries );
 
     virtual ~SchXMLPropertyMappingContext();
 

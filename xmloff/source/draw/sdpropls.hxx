@@ -60,8 +60,8 @@ private:
     SvXMLImport* mpImport;
 
 public:
-    XMLSdPropHdlFactory( css::uno::Reference< css::frame::XModel >, SvXMLExport& rExport );
-    XMLSdPropHdlFactory( css::uno::Reference< css::frame::XModel >, SvXMLImport& rImport );
+    XMLSdPropHdlFactory( css::uno::Reference< css::frame::XModel > const & xModel, SvXMLExport& rExport );
+    XMLSdPropHdlFactory( css::uno::Reference< css::frame::XModel > const & xModel, SvXMLImport& rImport );
     virtual ~XMLSdPropHdlFactory();
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override;
 };

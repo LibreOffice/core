@@ -122,7 +122,7 @@ public:
             is casted later to one of the two of them.
     */
     explicit MultiPropertySetHandler (css::uno::Reference<
-        css::uno::XInterface> xObject);
+        css::uno::XInterface> const & xObject);
     ~MultiPropertySetHandler();
     /** @descr  Add a property to handle.  The type given implicitly by the
             reference to a variable is used to create an instance of
@@ -175,7 +175,7 @@ private:
 };
 
 MultiPropertySetHandler::MultiPropertySetHandler (css::uno::Reference<
-    css::uno::XInterface> xObject)
+    css::uno::XInterface> const & xObject)
         :   mxObject (xObject)
 {
 }

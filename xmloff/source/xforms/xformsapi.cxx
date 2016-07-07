@@ -95,7 +95,7 @@ void xforms_addXFormsModel(
 }
 
 static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
-    Reference<frame::XModel>& xDocument,
+    Reference<frame::XModel> const & xDocument,
     const OUString& rBindingID,
     bool bBinding )
 {
@@ -150,14 +150,14 @@ static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
 }
 
 Reference<XPropertySet> xforms_findXFormsBinding(
-    Reference<frame::XModel>& xDocument,
+    Reference<frame::XModel> const & xDocument,
     const OUString& rBindingID )
 {
     return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, true );
 }
 
 Reference<XPropertySet> xforms_findXFormsSubmission(
-    Reference<frame::XModel>& xDocument,
+    Reference<frame::XModel> const & xDocument,
     const OUString& rBindingID )
 {
     return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, false );
