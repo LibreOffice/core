@@ -81,7 +81,7 @@ namespace dp_gui {
 class UpdateInstallDialog::Thread: public salhelper::Thread {
     friend class UpdateCommandEnv;
 public:
-    Thread(cssu::Reference< cssu::XComponentContext > ctx,
+    Thread(cssu::Reference< cssu::XComponentContext > const & ctx,
         UpdateInstallDialog & dialog, std::vector< dp_gui::UpdateData > & aVecUpdateData);
 
     void stop();
@@ -146,7 +146,7 @@ public:
 
 
 UpdateInstallDialog::Thread::Thread(
-    cssu::Reference< cssu::XComponentContext> xCtx,
+    cssu::Reference< cssu::XComponentContext> const & xCtx,
     UpdateInstallDialog & dialog,
     std::vector< dp_gui::UpdateData > & aVecUpdateData):
     salhelper::Thread("dp_gui_updateinstalldialog"),

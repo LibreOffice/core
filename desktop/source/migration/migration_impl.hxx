@@ -104,7 +104,7 @@ struct MigrationItem
     MigrationItem(const OUString& sParentNodeName,
         const OUString& sPrevSibling,
         const OUString& sCommandURL,
-        const css::uno::Reference< css::container::XIndexContainer > xPopupMenu)
+        const css::uno::Reference< css::container::XIndexContainer > & xPopupMenu)
     {
         m_sParentNodeName = sParentNodeName;
         m_sPrevSibling    = sPrevSibling;
