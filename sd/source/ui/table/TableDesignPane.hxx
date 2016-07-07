@@ -115,6 +115,12 @@ public:
         , aImpl(this, rBase, false)
     {
     }
+    TableDesignPane( vcl::Window* pParent, ViewShellBase& rBase, bool )
+        : PanelLayout(pParent, "TableDesignPanel",
+        "modules/simpress/ui/tabledesignpanelhorizontal.ui", css::uno::Reference<css::frame::XFrame>())
+        , aImpl(this, rBase, false)
+    {
+    }
 };
 
 class TableDesignDialog : public ModalDialog

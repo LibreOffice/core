@@ -827,5 +827,8 @@
     <glade-widget-class title="Button with small padding" name="vcllo-SmallButton"
                         generic-name="SmallButton" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
+    <glade-widget-class title="Table Design Control" name="sdlo-TableDesignBox"
+                        generic-name="TableDesignBox" parent="GtkImage"
+                        icon-name="widget-gtk-image"/>
   </glade-widget-classes>
 </glade-catalog>
