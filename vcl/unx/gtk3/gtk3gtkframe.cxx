@@ -2550,6 +2550,26 @@ void GtkSalFrame::StartToolKitMoveBy()
                                pEvent->button.time);
 }
 
+void GtkSalFrame::WithDrawn()
+{
+    if (isFloatGrabWindow())
+        closePopup(true);
+}
+
+void GtkSalFrame::closePopup(bool bWithDrawn)
+{
+    if (!m_nFloats)
+        return;
+    ImplSVData* pSVData = ImplGetSVData();
+    if (!pSVData->maWinData.mpFirstFloat)
+        return;
+    bool bClosePopup = bWithDrawn;
+    if (!bClosePopup)
+        bClosePopup = !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose);
+    if (bClosePopup)
+        pSVData->maWinData.mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
+}
+
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
     UpdateLastInputEventTime(pEvent->time);
@@ -2611,13 +2631,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     {
         if( bClosePopups )
         {
-            ImplSVData* pSVData = ImplGetSVData();
-            if ( pSVData->maWinData.mpFirstFloat )
-            {
-                static const char* pEnv = getenv( "SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
-                if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose) && !(pEnv && *pEnv) )
-                    pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
-            }
+            closePopup(false);
         }
 
         if( ! aDel.isDeleted() )
@@ -3142,11 +3156,18 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
         pThis->TriggerPaintEvent();
     }
 
-    if(   (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_MAXIMIZED) &&
-        ! (pThis->m_nState & GDK_WINDOW_STATE_MAXIMIZED) )
+    if ((pEvent->window_state.new_window_state & GDK_WINDOW_STATE_MAXIMIZED) &&
+        !(pThis->m_nState & GDK_WINDOW_STATE_MAXIMIZED))
     {
         pThis->m_aRestorePosSize = GetPosAndSize(GTK_WINDOW(pThis->m_pWindow));
     }
+
+    if ((pEvent->window_state.new_window_state & GDK_WINDOW_STATE_WITHDRAWN) &&
+        !(pThis->m_nState & GDK_WINDOW_STATE_WITHDRAWN))
+    {
+        pThis->WithDrawn();
+    }
+
     pThis->m_nState = pEvent->window_state.new_window_state;
 
     #if OSL_DEBUG_LEVEL > 1
