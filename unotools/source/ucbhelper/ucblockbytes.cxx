@@ -220,8 +220,8 @@ class Moderator
 
 public:
     Moderator(
-        Reference < XContent >& xContent,
-        Reference < XInteractionHandler >& xInteract,
+        Reference < XContent > const & xContent,
+        Reference < XInteractionHandler > const & xInteract,
         const Command& rArg
     )
         throw(
@@ -495,8 +495,8 @@ ModeratorsInteractionHandler::handle(
 }
 
 Moderator::Moderator(
-    Reference < XContent >& xContent,
-    Reference < XInteractionHandler >& xInteract,
+    Reference < XContent > const & xContent,
+    Reference < XInteractionHandler > const & xInteract,
     const Command& rArg
 )
     throw(
@@ -720,10 +720,10 @@ static bool UCBOpenContentSync_(
 
 static bool UCBOpenContentSync(
     const UcbLockBytesRef& xLockBytes,
-    Reference < XContent > xContent,
+    Reference < XContent > const & xContent,
     const Command& rArg,
     const Reference < XInterface >& xSink,
-    Reference < XInteractionHandler > xInteract )
+    Reference < XInteractionHandler > const & xInteract )
 {
     // http protocol must be handled in a special way:
     //        during the opening process the input stream may change

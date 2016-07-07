@@ -33,7 +33,7 @@ class UNOTOOLS_DLLPUBLIC ProgressHandlerWrap : public ::cppu::WeakImplHelper< cs
     css::uno::Reference< css::task::XStatusIndicator > m_xStatusIndicator;
 
 public:
-    ProgressHandlerWrap( css::uno::Reference< css::task::XStatusIndicator > xSI );
+    ProgressHandlerWrap( css::uno::Reference< css::task::XStatusIndicator > const & xSI );
 
     // XProgressHandler
     virtual void SAL_CALL push( const css::uno::Any& Status )
