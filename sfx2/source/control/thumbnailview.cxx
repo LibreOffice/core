@@ -233,7 +233,7 @@ void ThumbnailView::ImplInitScrollBar()
     }
 }
 
-void ThumbnailView::DrawItem(ThumbnailViewItem *pItem)
+void ThumbnailView::DrawItem(ThumbnailViewItem const *pItem)
 {
     if (pItem->isVisible())
     {

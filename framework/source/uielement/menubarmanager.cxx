@@ -2042,7 +2042,7 @@ void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComp
     }
 }
 
-void MenuBarManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,bool bShowMenuImages)
+void MenuBarManager::FillMenuImages(Reference< XFrame > const & _xFrame, Menu* _pMenu,bool bShowMenuImages)
 {
     AddonsOptions       aAddonOptions;
 

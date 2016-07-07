@@ -52,7 +52,7 @@ class VCL_DLLPUBLIC Wallpaper
 public:
     typedef o3tl::cow_wrapper<ImplWallpaper> ImplType;
 
-    SAL_DLLPRIVATE void             ImplSetCachedBitmap( BitmapEx& rBmp ) const;
+    SAL_DLLPRIVATE void             ImplSetCachedBitmap( BitmapEx const & rBmp ) const;
     SAL_DLLPRIVATE const BitmapEx*  ImplGetCachedBitmap() const;
     SAL_DLLPRIVATE void             ImplReleaseCachedBitmap() const;
 

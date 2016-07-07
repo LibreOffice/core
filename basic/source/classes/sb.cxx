@@ -1194,7 +1194,7 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
 }
 
 // Run Init-Code of all modules (including inserted libraries)
-void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
+void StarBASIC::InitAllModules( StarBASIC const * pBasicNotToInit )
 {
     SolarMutexGuard guard;
 
@@ -2121,7 +2121,7 @@ void BasicCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
     SbxObject::Notify( rCst, rHint );
 }
 
-sal_Int32 BasicCollection::implGetIndex( SbxVariable* pIndexVar )
+sal_Int32 BasicCollection::implGetIndex( SbxVariable const * pIndexVar )
 {
     sal_Int32 nIndex = -1;
     if( pIndexVar->GetType() == SbxSTRING )

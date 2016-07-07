@@ -450,7 +450,7 @@ public:
     bool                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
     sal_uInt16          GetVisibleLineCount() const;
     inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
-    void                AddLine( const OUString& sName, css::uno::Any& rAny );
+    void                AddLine( const OUString& sName, css::uno::Any const & rAny );
     bool                AreAllLinesValid() const;
     void                ClearAllLines();
     void                DoScroll( sal_Int32 nNewPos );
@@ -483,7 +483,7 @@ public:
     virtual ~CustomPropertiesControl();
     virtual void dispose() override;
 
-    void            AddLine( const OUString& sName, css::uno::Any& rAny, bool bInteractive );
+    void            AddLine( const OUString& sName, css::uno::Any const & rAny, bool bInteractive );
 
     inline bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
     inline void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
@@ -582,7 +582,7 @@ public:
                   const bool bRequired, const bool bMultiValued,
                   const bool bOpenChoice,
                   css::uno::Any& aChoices,
-                  css::uno::Any& rAny );
+                  css::uno::Any const & rAny );
     void ClearAllLines();
     void DoScroll( sal_Int32 nNewPos );
 
@@ -611,7 +611,7 @@ public:
                   const bool bRequired, const bool bMultiValude,
                   const bool bOpenChoice,
                   css::uno::Any& aChoices,
-                  css::uno::Any& rAny );
+                  css::uno::Any const & rAny );
 
     void ClearAllLines();
     inline css::uno::Sequence< css::document::CmisProperty >

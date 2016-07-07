@@ -68,7 +68,7 @@ MacrosMenuController::~MacrosMenuController()
 }
 
 // private function
-void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     VCLXPopupMenu* pVCLPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*     pPopupMenu    = nullptr;

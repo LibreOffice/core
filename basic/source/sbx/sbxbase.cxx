@@ -134,7 +134,7 @@ void SbxBase::AddFactory( SbxFactory* pFac )
     r.m_Factories.insert(r.m_Factories.begin() + nPos, std::unique_ptr<SbxFactory>(pFac));
 }
 
-void SbxBase::RemoveFactory( SbxFactory* pFac )
+void SbxBase::RemoveFactory( SbxFactory const * pFac )
 {
     SbxAppData& r = GetSbxData_Impl();
     for (auto it = r.m_Factories.begin(); it != r.m_Factories.end(); ++it)

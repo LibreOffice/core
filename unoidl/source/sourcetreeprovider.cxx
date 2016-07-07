@@ -38,7 +38,7 @@ namespace {
 //TODO: Bad hack to work around osl::FileStatus::getFileName not determining the
 // original spelling of a file name (not even with
 // osl_FileStatus_Mask_Validate):
-OUString getFileName(OUString const & uri, osl::FileStatus & status) {
+OUString getFileName(OUString const & uri, osl::FileStatus const & status) {
 #if defined MACOSX
     sal_Int32 i = uri.lastIndexOf('/') + 1;
     OUString path;

@@ -493,7 +493,7 @@ void UnoDialogControl::setMenuBar( const Reference< XMenuBar >& rxMenuBar ) thro
             xTW->setMenuBar( mxMenuBar );
     }
 }
-static ::Size ImplMapPixelToAppFont( OutputDevice* pOutDev, const ::Size& aSize )
+static ::Size ImplMapPixelToAppFont( OutputDevice const * pOutDev, const ::Size& aSize )
 {
     ::Size aTmp = pOutDev->PixelToLogic( aSize, MAP_APPFONT );
     return aTmp;

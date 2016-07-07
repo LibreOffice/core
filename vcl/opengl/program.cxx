@@ -213,14 +213,14 @@ void OpenGLProgram::SetUniform2f( const OString& rName, GLfloat v1, GLfloat v2 )
     CHECK_GL_ERROR();
 }
 
-void OpenGLProgram::SetUniform1fv( const OString& rName, GLsizei nCount, GLfloat* aValues )
+void OpenGLProgram::SetUniform1fv( const OString& rName, GLsizei nCount, GLfloat const * aValues )
 {
     GLuint nUniform = GetUniformLocation( rName );
     glUniform1fv( nUniform, nCount, aValues );
     CHECK_GL_ERROR();
 }
 
-void OpenGLProgram::SetUniform2fv( const OString& rName, GLsizei nCount, GLfloat* aValues )
+void OpenGLProgram::SetUniform2fv( const OString& rName, GLsizei nCount, GLfloat const * aValues )
 {
     GLuint nUniform = GetUniformLocation( rName );
     glUniform2fv( nUniform, nCount, aValues );

@@ -603,7 +603,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     return bRet;
 }
 
-bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color* pExtColor)
+bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color const * pExtColor)
 {
     SAL_WARN_IF( nBitCount <= GetBitCount(), "vcl", "New BitCount must be greater!" );
 
@@ -686,7 +686,7 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color* pExtColor)
     return bRet;
 }
 
-bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color* pExtColor)
+bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
 {
     SAL_WARN_IF(nBitCount > GetBitCount(), "vcl", "New BitCount must be lower ( or equal when pExtColor is set )!");
 
@@ -2260,7 +2260,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
-bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc, int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount)
+bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess const * pReadAcc, int aNumberOfContributions, double* pWeights, int* pPixels, int const * pCount)
 {
     if (!pReadAcc)
         return false;

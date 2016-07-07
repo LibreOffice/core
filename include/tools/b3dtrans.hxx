@@ -127,8 +127,8 @@ public:
 
     void SetPerspective(bool bNew);
 
-    void SetViewportRectangle(Rectangle& rRect, Rectangle& rVisible);
-    void SetViewportRectangle(Rectangle& rRect) { SetViewportRectangle(rRect, rRect); }
+    void SetViewportRectangle(Rectangle const & rRect, Rectangle const & rVisible);
+    void SetViewportRectangle(Rectangle const & rRect) { SetViewportRectangle(rRect, rRect); }
 
     void CalcViewport();
 

@@ -85,7 +85,7 @@ public:
 
     void        SetHash( SvStringHashEntry * pHashP )
                 { pHash = pHashP; nType = SVTOKENTYPE::HashId; }
-    bool        Is( SvStringHashEntry * pEntry ) const
+    bool        Is( SvStringHashEntry const * pEntry ) const
                 { return IsIdentifierHash() && pHash == pEntry; }
 };
 

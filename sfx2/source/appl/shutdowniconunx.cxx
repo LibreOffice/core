@@ -112,7 +112,7 @@ static void oustring_delete (gpointer  data,
 }
 
 static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
-                      OUString *pOverrideLabel,
+                      OUString const *pOverrideLabel,
                       sal_uInt16 nResId, GCallback pFnCallback )
 {
     OUString *pURL = new OUString (OStringToOUString( pAsciiURL,

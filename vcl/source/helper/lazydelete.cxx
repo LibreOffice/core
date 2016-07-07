@@ -54,7 +54,7 @@ void LazyDelete::flush()
 }
 
 // specialized is_less function for Window
-bool LazyDeletor::is_less( vcl::Window* left, vcl::Window* right )
+bool LazyDeletor::is_less( vcl::Window const * left, vcl::Window const * right )
 {
     return left != right && right->IsChild( left, true );
 }

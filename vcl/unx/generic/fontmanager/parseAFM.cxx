@@ -326,7 +326,7 @@ static char *linetoken( FileInputStream* stream )
 #pragma GCC diagnostic pop
 #endif
 
-static inline enum parseKey recognize( char* ident, int len)
+static inline enum parseKey recognize( char const * ident, int len)
 {
     const hash_entry* pEntry = AfmKeywordHash::in_word_set( ident, len );
     return pEntry ? pEntry->eKey : NOPE;

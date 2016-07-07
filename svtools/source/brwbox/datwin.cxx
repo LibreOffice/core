@@ -126,7 +126,7 @@ void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZ
     }
 }
 
-void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos  )
+void BrowserColumn::Draw( BrowseBox const & rBox, OutputDevice& rDev, const Point& rPos  )
 {
     if ( _nId == 0 )
     {

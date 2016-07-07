@@ -275,12 +275,12 @@ void GlyphCache::GarbageCollect()
     }
 }
 
-inline void GlyphCache::UsingGlyph( ServerFont&, GlyphData& rGlyphData )
+inline void GlyphCache::UsingGlyph( ServerFont&, GlyphData const & rGlyphData )
 {
     rGlyphData.SetLruValue( mnLruIndex++ );
 }
 
-inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphData )
+inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData const & rGlyphData )
 {
     ++mnGlyphCount;
     mnBytesUsed += sizeof( rGlyphData );

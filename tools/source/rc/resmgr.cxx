@@ -101,7 +101,7 @@ class InternalResMgr
     void *                  LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                            void **pResHandle );
 public:
-    static void             FreeGlobalRes( void *, void * );
+    static void             FreeGlobalRes( void const *, void * );
 };
 
 class ResMgrContainer
@@ -616,7 +616,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
     return nullptr;
 }
 
-void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
+void InternalResMgr::FreeGlobalRes( void const * pResHandle, void * pResource )
 {
     if ( !pResHandle )
         // Free allocated resource
@@ -1115,30 +1115,30 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
     return pHeader;
 }
 
-sal_Int16 ResMgr::GetShort( void * pShort )
+sal_Int16 ResMgr::GetShort( void const * pShort )
 {
-    return ((*(static_cast<sal_uInt8*>(pShort) + 0) << 8) |
-            (*(static_cast<sal_uInt8*>(pShort) + 1) << 0)   );
+    return ((*(static_cast<const sal_uInt8*>(pShort) + 0) << 8) |
+            (*(static_cast<const sal_uInt8*>(pShort) + 1) << 0)   );
 }
 
-sal_Int32 ResMgr::GetLong( void * pLong )
+sal_Int32 ResMgr::GetLong( void const * pLong )
 {
-    return ((*(static_cast<sal_uInt8*>(pLong) + 0) << 24) |
-            (*(static_cast<sal_uInt8*>(pLong) + 1) << 16) |
-            (*(static_cast<sal_uInt8*>(pLong) + 2) <<  8) |
-            (*(static_cast<sal_uInt8*>(pLong) + 3) <<  0)   );
+    return ((*(static_cast<const sal_uInt8*>(pLong) + 0) << 24) |
+            (*(static_cast<const sal_uInt8*>(pLong) + 1) << 16) |
+            (*(static_cast<const sal_uInt8*>(pLong) + 2) <<  8) |
+            (*(static_cast<const sal_uInt8*>(pLong) + 3) <<  0)   );
 }
 
-sal_uInt64 ResMgr::GetUInt64( void* pDatum )
+sal_uInt64 ResMgr::GetUInt64( void const * pDatum )
 {
-    return ((sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 0)) << 56) |
-            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 1)) << 48) |
-            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 2)) << 40) |
-            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 3)) << 32) |
-            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 4)) << 24) |
-            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 5)) << 16) |
-            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 6)) <<  8) |
-            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 7)) <<  0)   );
+    return ((sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 0)) << 56) |
+            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 1)) << 48) |
+            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 2)) << 40) |
+            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 3)) << 32) |
+            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 4)) << 24) |
+            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 5)) << 16) |
+            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 6)) <<  8) |
+            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 7)) <<  0)   );
 }
 
 sal_uInt32 ResMgr::GetStringWithoutHook( OUString& rStr, const sal_uInt8* pStr )

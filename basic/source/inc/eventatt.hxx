@@ -28,7 +28,7 @@ class StarBASIC;
 // Instantiate "com.sun.star.awt.UnoControlDialog" on basis
 // of a DialogLibrary entry: Convert from XML-ByteSequence
 // and attach events.
-void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreateUnoDialog( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
 
 #endif
 

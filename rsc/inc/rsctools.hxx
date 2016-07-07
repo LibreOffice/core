@@ -159,7 +159,7 @@ public:
     void        Put( sal_uInt16 nValue );
     void        Put( sal_Int16 nValue )
                 { Put( (sal_uInt16)nValue ); }
-    void        PutUTF8( char * pData );
+    void        PutUTF8( char const* pData );
 
     void        PutAt( sal_uInt32 nPos, sal_Int32 lVal )
                 {

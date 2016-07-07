@@ -24,12 +24,12 @@ SVT_DLLPUBLIC UScriptCode otCoverageToScript(vcl::UnicodeCoverage::UnicodeCovera
 SVT_DLLPUBLIC bool isSymbolFont(const vcl::Font &rFont);
 SVT_DLLPUBLIC bool isOpenSymbolFont(const vcl::Font &rFont);
 
-SVT_DLLPUBLIC bool canRenderNameOfSelectedFont(OutputDevice &rDevice);
+SVT_DLLPUBLIC bool canRenderNameOfSelectedFont(OutputDevice const &rDevice);
 
 //These ones are typically for use in the font dropdown box beside the
 //fontname, so say things roughly like "Script/Alphabet/Name-Of-Major-Language"
-SVT_DLLPUBLIC OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice);
-SVT_DLLPUBLIC OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice);
+SVT_DLLPUBLIC OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice const &rDevice);
+SVT_DLLPUBLIC OUString makeShortRepresentativeTextForSelectedFont(OutputDevice const &rDevice);
 SVT_DLLPUBLIC OUString makeShortRepresentativeTextForScript(UScriptCode eScript);
 //For the cases where the font doesn't fully support a script, but has partial support
 //for a useful subset

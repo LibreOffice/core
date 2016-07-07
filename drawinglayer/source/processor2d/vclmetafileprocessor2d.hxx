@@ -79,7 +79,7 @@ namespace drawinglayer
                 Gradient& o_rVCLGradient,
                 const attribute::FillGradientAttribute& rFiGrAtt,
                 bool bIsTransparenceGradient);
-            void impStartSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill);
+            void impStartSvtGraphicFill(SvtGraphicFill const * pSvtGraphicFill);
             void impEndSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill);
             SvtGraphicStroke* impTryToCreateSvtGraphicStroke(
                 const basegfx::B2DPolygon& rB2DPolygon,
@@ -88,7 +88,7 @@ namespace drawinglayer
                 const attribute::StrokeAttribute* pStrokeAttribute,
                 const attribute::LineStartEndAttribute* pStart,
                 const attribute::LineStartEndAttribute* pEnd);
-            void impStartSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
+            void impStartSvtGraphicStroke(SvtGraphicStroke const * pSvtGraphicStroke);
             void impEndSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
 
             /// Convert the fWidth to the same space as its coordinates.

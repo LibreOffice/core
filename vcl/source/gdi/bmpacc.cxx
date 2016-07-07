@@ -122,7 +122,7 @@ BitmapReadAccess::~BitmapReadAccess()
     ImplClearScanBuffer();
 }
 
-void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
+void BitmapReadAccess::ImplInitScanBuffer( Bitmap const & rBitmap )
 {
     if (!mpBuffer)
         return;

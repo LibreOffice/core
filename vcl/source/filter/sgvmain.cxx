@@ -151,7 +151,7 @@ void ReadObjAreaType(SvStream & rInp, ObjAreaType & rArea)
     rInp.ReadUInt16(rArea.FMuster);
 }
 
-void ObjkOverSeek(SvStream& rInp, ObjkType& rObjk)
+void ObjkOverSeek(SvStream& rInp, ObjkType const & rObjk)
 {
     sal_uLong Siz;
     Siz=(sal_uLong)rObjk.MemSize+rObjk.Last;  // ObjSize+ObjAnhSize

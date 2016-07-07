@@ -1443,7 +1443,7 @@ IMPL_LINK_TYPED( SfxBindings, NextJob, Timer *, pTimer, void )
     NextJob_Impl(pTimer);
 }
 
-bool SfxBindings::NextJob_Impl(Timer * pTimer)
+bool SfxBindings::NextJob_Impl(Timer const * pTimer)
 {
 #ifdef DBG_UTIL
     // on Windows very often C++ Exceptions (GPF etc.) are caught by MSVCRT
@@ -1947,7 +1947,7 @@ const css::uno::Reference< css::frame::XDispatchRecorder >& SfxBindings::GetReco
     return pImpl->xRecorder;
 }
 
-void SfxBindings::SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder >& rRecorder )
+void SfxBindings::SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder > const & rRecorder )
 {
     pImpl->xRecorder = rRecorder;
 }

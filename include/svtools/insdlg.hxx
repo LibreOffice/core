@@ -70,7 +70,7 @@ class SVT_DLLPUBLIC SvPasteObjectHelper
 {
 public:
     static OUString GetSotFormatUIName( SotClipboardFormatId nId );
-    static bool GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotClipboardFormatId& _nFormat);
+    static bool GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotClipboardFormatId const & _nFormat);
 };
 
 #endif // INCLUDED_SVTOOLS_INSDLG_HXX

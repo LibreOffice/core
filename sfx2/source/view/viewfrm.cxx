@@ -1091,7 +1091,7 @@ void SfxViewFrame::DoActivate( bool bUI )
     }
 }
 
-void SfxViewFrame::DoDeactivate(bool bUI, SfxViewFrame* pNewFrame )
+void SfxViewFrame::DoDeactivate(bool bUI, SfxViewFrame const * pNewFrame )
 {
     SfxGetpApp();
     m_pDispatcher->DoDeactivate_Impl( bUI, pNewFrame );
@@ -1856,27 +1856,27 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
     return pViewShell;
 }
 
-SfxViewFrame* SfxViewFrame::LoadHiddenDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId )
+SfxViewFrame* SfxViewFrame::LoadHiddenDocument( SfxObjectShell const & i_rDoc, const sal_uInt16 i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, Reference< XFrame >(), i_nViewId, true );
 }
 
-SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell& i_rDoc, const sal_uInt16 i_nViewId )
+SfxViewFrame* SfxViewFrame::LoadDocument( SfxObjectShell const & i_rDoc, const sal_uInt16 i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, Reference< XFrame >(), i_nViewId, false );
 }
 
-SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const Reference< XFrame >& i_rTargetFrame )
+SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell const & i_rDoc, const Reference< XFrame >& i_rTargetFrame )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_rTargetFrame, 0, false );
 }
 
-SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell& i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId )
+SfxViewFrame* SfxViewFrame::LoadDocumentIntoFrame( SfxObjectShell const & i_rDoc, const SfxFrameItem* i_pFrameItem, const sal_uInt16 i_nViewId )
 {
     return LoadViewIntoFrame_Impl_NoThrow( i_rDoc, i_pFrameItem && i_pFrameItem->GetFrame() ? i_pFrameItem->GetFrame()->GetFrameInterface() : nullptr, i_nViewId, false );
 }
 
-SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest )
+SfxViewFrame* SfxViewFrame::DisplayNewDocument( SfxObjectShell const & i_rDoc, const SfxRequest& i_rCreateDocRequest )
 {
     const SfxUnoFrameItem* pFrameItem = i_rCreateDocRequest.GetArg<SfxUnoFrameItem>(SID_FILLFRAME);
     const SfxBoolItem* pHiddenItem = i_rCreateDocRequest.GetArg<SfxBoolItem>(SID_HIDDEN);

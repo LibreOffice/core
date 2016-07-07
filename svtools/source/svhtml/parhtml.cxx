@@ -1394,7 +1394,7 @@ void HTMLParser::UnescapeToken()
     }
 }
 
-const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
+const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 const *pNoConvertToken )
 {
     // If the options for the current token have already been returned,
     // return them once again.

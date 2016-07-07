@@ -586,7 +586,7 @@ namespace
     void createPointArrayPrimitive(
         const std::vector< basegfx::B2DPoint >& rPositions,
         TargetHolder& rTarget,
-        PropertyHolder& rProperties,
+        PropertyHolder const & rProperties,
         const basegfx::BColor& rBColor)
     {
         if(!rPositions.empty())
@@ -619,7 +619,7 @@ namespace
     void createHairlinePrimitive(
         const basegfx::B2DPolygon& rLinePolygon,
         TargetHolder& rTarget,
-        PropertyHolder& rProperties)
+        PropertyHolder const & rProperties)
     {
         if(rLinePolygon.count())
         {
@@ -636,7 +636,7 @@ namespace
     void createFillPrimitive(
         const basegfx::B2DPolyPolygon& rFillPolyPolygon,
         TargetHolder& rTarget,
-        PropertyHolder& rProperties)
+        PropertyHolder const & rProperties)
     {
         if(rFillPolyPolygon.count())
         {
@@ -654,7 +654,7 @@ namespace
         const basegfx::B2DPolygon& rLinePolygon,
         const LineInfo& rLineInfo,
         TargetHolder& rTarget,
-        PropertyHolder& rProperties)
+        PropertyHolder const & rProperties)
     {
         if(rLinePolygon.count())
         {
@@ -720,7 +720,7 @@ namespace
     void createHairlineAndFillPrimitive(
         const basegfx::B2DPolygon& rPolygon,
         TargetHolder& rTarget,
-        PropertyHolder& rProperties)
+        PropertyHolder const & rProperties)
     {
         if(rProperties.getFillColorActive())
         {
@@ -737,7 +737,7 @@ namespace
     void createHairlineAndFillPrimitive(
         const basegfx::B2DPolyPolygon& rPolyPolygon,
         TargetHolder& rTarget,
-        PropertyHolder& rProperties)
+        PropertyHolder const & rProperties)
     {
         if(rProperties.getFillColorActive())
         {
@@ -763,7 +763,7 @@ namespace
         const BitmapEx& rBitmapEx,
         const Point& rPoint,
         TargetHolder& rTarget,
-        PropertyHolder& rProperties)
+        PropertyHolder const & rProperties)
     {
         if(!rBitmapEx.IsEmpty())
         {
@@ -783,7 +783,7 @@ namespace
         const Point& rPoint,
         const Size& rSize,
         TargetHolder& rTarget,
-        PropertyHolder& rProperties)
+        PropertyHolder const & rProperties)
     {
         if(!rBitmapEx.IsEmpty())
         {
@@ -1074,7 +1074,7 @@ namespace
     drawinglayer::primitive2d::BasePrimitive2D* CreateColorWallpaper(
         const basegfx::B2DRange& rRange,
         const basegfx::BColor& rColor,
-        PropertyHolder& rPropertyHolder)
+        PropertyHolder const & rPropertyHolder)
     {
         basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(rRange));
         aOutline.transform(rPropertyHolder.getTransformation());
@@ -1090,7 +1090,7 @@ namespace
     drawinglayer::primitive2d::BasePrimitive2D* CreateGradientWallpaper(
         const basegfx::B2DRange& rRange,
         const Gradient& rGradient,
-        PropertyHolder& rPropertyHolder)
+        PropertyHolder const & rPropertyHolder)
     {
         const drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
 
@@ -1131,7 +1131,7 @@ namespace
         basegfx::B2DRange aWallpaperRange,
         const Wallpaper& rWallpaper,
         TargetHolder& rTarget,
-        PropertyHolder& rProperty)
+        PropertyHolder const & rProperty)
     {
         const BitmapEx aBitmapEx(rWallpaper.GetBitmap());
         const WallpaperStyle eWallpaperStyle(rWallpaper.GetStyle());
@@ -1211,7 +1211,7 @@ namespace
         drawinglayer::attribute::FontAttribute& rFontAttribute,
         basegfx::B2DHomMatrix& rTextTransform,
         basegfx::B2DVector& rAlignmentOffset,
-        PropertyHolder& rProperty)
+        PropertyHolder const & rProperty)
     {
         const vcl::Font& rFont = rProperty.getFont();
         basegfx::B2DVector aFontScaling;
@@ -1261,7 +1261,7 @@ namespace
         sal_uInt16 nTextLength,
         const ::std::vector< double >& rDXArray,
         TargetHolder& rTarget,
-        PropertyHolder& rProperty)
+        PropertyHolder const & rProperty)
     {
         drawinglayer::primitive2d::BasePrimitive2D* pResult = nullptr;
         const vcl::Font& rFont = rProperty.getFont();
@@ -1457,7 +1457,7 @@ namespace
     void proccessMetaTextLineAction(
         const MetaTextLineAction& rAction,
         TargetHolder& rTarget,
-        PropertyHolder& rProperty)
+        PropertyHolder const & rProperty)
     {
         const double fLineWidth(fabs((double)rAction.GetWidth()));
 

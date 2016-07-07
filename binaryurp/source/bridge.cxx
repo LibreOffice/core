@@ -93,7 +93,7 @@ extern "C" void SAL_CALL freeProxyCallback(
     static_cast< Proxy * >(pProxy)->do_free();
 }
 
-bool isThread(salhelper::Thread * thread) {
+bool isThread(salhelper::Thread const * thread) {
     assert(thread != nullptr);
     return osl::Thread::getCurrentIdentifier() == thread->getIdentifier();
 }
@@ -527,7 +527,7 @@ void Bridge::revokeProxy(Proxy & proxy) {
         binaryUno_.get()->pExtEnv, &proxy);
 }
 
-void Bridge::freeProxy(Proxy & proxy) {
+void Bridge::freeProxy(Proxy const & proxy) {
     try {
         makeReleaseCall(proxy.getOid(), proxy.getType());
     } catch (const css::uno::RuntimeException & e) {

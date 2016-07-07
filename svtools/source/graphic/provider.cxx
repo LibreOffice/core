@@ -491,7 +491,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     return xRet;
 }
 
-void ImplCalculateCropRect( ::Graphic& rGraphic, const text::GraphicCrop& rGraphicCropLogic, Rectangle& rGraphicCropPixel )
+void ImplCalculateCropRect( ::Graphic const & rGraphic, const text::GraphicCrop& rGraphicCropLogic, Rectangle& rGraphicCropPixel )
 {
     if ( rGraphicCropLogic.Left || rGraphicCropLogic.Top || rGraphicCropLogic.Right || rGraphicCropLogic.Bottom )
     {

@@ -96,7 +96,7 @@ namespace
 }
 
 // !for NOT REALLY WEAK TYPES only!
-static inline typelib_TypeDescriptionReference * igetTypeByName( rtl_uString * pTypeName )
+static inline typelib_TypeDescriptionReference * igetTypeByName( rtl_uString const * pTypeName )
 {
     typelib_TypeDescriptionReference * pRef = nullptr;
     ::typelib_typedescriptionreference_getByName( &pRef, pTypeName );

@@ -71,7 +71,7 @@ void UIObject::dumpHierarchy() const
 
 namespace {
 
-bool isDialogWindow(vcl::Window* pWindow)
+bool isDialogWindow(vcl::Window const * pWindow)
 {
     WindowType nType = pWindow->GetType();
     // DIALOG to FONTDIALOG
@@ -321,7 +321,7 @@ OUString WindowUIObject::get_type() const
 
 namespace {
 
-vcl::Window* findChild(vcl::Window* pParent, const OUString& rID)
+vcl::Window* findChild(vcl::Window const * pParent, const OUString& rID)
 {
     if (!pParent)
         return nullptr;
@@ -341,7 +341,7 @@ vcl::Window* findChild(vcl::Window* pParent, const OUString& rID)
     return nullptr;
 }
 
-void addChildren(vcl::Window* pParent, std::set<OUString>& rChildren)
+void addChildren(vcl::Window const * pParent, std::set<OUString>& rChildren)
 {
     if (!pParent)
         return;

@@ -228,7 +228,7 @@ void RscWriteRc::Put( sal_uInt16 nVal )
     PutAt( nOldLen, nVal );
 }
 
-void RscWriteRc::PutUTF8( char * pStr )
+void RscWriteRc::PutUTF8( char const * pStr )
 {
     sal_uInt32 nStrLen = 0;
     if( pStr )

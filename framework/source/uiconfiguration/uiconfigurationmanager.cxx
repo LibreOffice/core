@@ -175,7 +175,7 @@ private:
     void            impl_preloadUIElementTypeList( sal_Int16 nElementType );
     UIElementData*  impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad = true );
     void            impl_requestUIElementData( sal_Int16 nElementType, UIElementData& aUIElementData );
-    void            impl_storeElementTypeData( css::uno::Reference< css::embed::XStorage >& xStorage, UIElementType& rElementType, bool bResetModifyState = true );
+    void            impl_storeElementTypeData( css::uno::Reference< css::embed::XStorage > const & xStorage, UIElementType& rElementType, bool bResetModifyState = true );
     void            impl_resetElementTypeData( UIElementType& rDocElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer );
     void            impl_reloadElementTypeData( UIElementType& rDocElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
 
@@ -447,7 +447,7 @@ UIConfigurationManager::UIElementData* UIConfigurationManager::impl_findUIElemen
     return nullptr;
 }
 
-void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& xStorage, UIElementType& rElementType, bool bResetModifyState )
+void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage > const & xStorage, UIElementType& rElementType, bool bResetModifyState )
 {
     UIElementDataHashMap& rHashMap          = rElementType.aElementsHashMap;
     UIElementDataHashMap::iterator pIter    = rHashMap.begin();

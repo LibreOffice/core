@@ -139,7 +139,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
             uno::Reference<uno::XComponentContext> const & context,
             LdapDefinition * definition, OUString * loggedOnUser);
 
-        static bool getLdapStringParam(uno::Reference<container::XNameAccess>& xAccess,
+        static bool getLdapStringParam(uno::Reference<container::XNameAccess> const & xAccess,
                                 const OUString& aLdapSetting,
                                 OUString& aServerParameter);
 

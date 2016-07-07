@@ -136,7 +136,7 @@ public:
     void    suspendVclEventListening( );
     void    resumeVclEventListening( );
 
-    void    notifyWindowRemoved( vcl::Window& _rWindow );
+    void    notifyWindowRemoved( vcl::Window const & _rWindow );
 
     // css::lang::XUnoTunnel
     static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();

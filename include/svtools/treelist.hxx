@@ -90,7 +90,7 @@ class SVT_DLLPUBLIC SvTreeList
 
     bool               IsEntryVisible( const SvListView*,SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*    GetEntryAtVisPos( const SvListView*,sal_uLong nVisPos ) const;
-    sal_uLong           GetVisiblePos( const SvListView*,SvTreeListEntry* pEntry ) const;
+    sal_uLong           GetVisiblePos( const SvListView*,SvTreeListEntry const * pEntry ) const;
     sal_uLong           GetVisibleCount( SvListView* ) const;
     sal_uLong           GetVisibleChildCount( const SvListView*,SvTreeListEntry* pParent ) const;
 
@@ -119,7 +119,7 @@ class SVT_DLLPUBLIC SvTreeList
 
     // rPos is not changed for SortModeNone
     SVT_DLLPRIVATE void GetInsertionPos(
-                            SvTreeListEntry* pEntry,
+                            SvTreeListEntry const * pEntry,
                             SvTreeListEntry* pParent,
                             sal_uLong& rPos
                         );
@@ -139,7 +139,7 @@ public:
     virtual             ~SvTreeList();
 
     void                InsertView( SvListView* );
-    void                RemoveView( SvListView* );
+    void                RemoveView( SvListView const * );
 
     SvListView*         GetView( sal_uLong nPos ) const
     { return ( nPos < aViewList.size() ) ? aViewList[ nPos ] : nullptr; }
@@ -303,10 +303,10 @@ public:
     SvTreeListEntry*        GetEntryAtVisPos( sal_uLong nVisPos ) const
     { return pModel->GetEntryAtVisPos(this,nVisPos); }
 
-    sal_uLong           GetAbsPos( SvTreeListEntry* pEntry ) const
+    sal_uLong           GetAbsPos( SvTreeListEntry const * pEntry ) const
     { return pModel->GetAbsPos(pEntry); }
 
-    sal_uLong           GetVisiblePos( SvTreeListEntry* pEntry ) const
+    sal_uLong           GetVisiblePos( SvTreeListEntry const * pEntry ) const
     { return pModel->GetVisiblePos(this,pEntry); }
 
     sal_uLong           GetVisibleChildCount(SvTreeListEntry* pParent ) const

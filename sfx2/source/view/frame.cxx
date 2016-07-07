@@ -397,7 +397,7 @@ void SfxFrame::GetViewData_Impl()
     }
 }
 
-void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
+void SfxFrame::UpdateDescriptor( SfxObjectShell const *pDoc )
 {
     // For PrepareForDoc_Impl frames, the descriptor of the updated
     // and new itemset to be initialized. All data fir restoring the view
@@ -495,7 +495,7 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
     }
 }
 
-bool SfxFrame::IsParent( SfxFrame *pFrame ) const
+bool SfxFrame::IsParent( SfxFrame const *pFrame ) const
 {
     SfxFrame *pParent = pParentFrame;
     while ( pParent )

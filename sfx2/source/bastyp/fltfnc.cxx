@@ -369,7 +369,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetAnyFilter( SfxFilterFlags 
 
 
 sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
-    SfxMedium& rMedium,
+    SfxMedium const & rMedium,
     std::shared_ptr<const SfxFilter>& rpFilter ) const
 {
     uno::Reference<document::XTypeDetection> xDetection(

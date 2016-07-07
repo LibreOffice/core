@@ -624,7 +624,7 @@ void
  * corresponding index in the argname array.  Return -1 if not found.
  */
 int
-    lookuparg(Nlist * mac, Token * tp)
+    lookuparg(Nlist * mac, Token const * tp)
 {
     Token *ap;
 

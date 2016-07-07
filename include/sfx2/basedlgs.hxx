@@ -101,7 +101,7 @@ protected:
 
 public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
-    void                    Initialize (SfxChildWinInfo* pInfo);
+    void                    Initialize (SfxChildWinInfo const * pInfo);
     virtual bool            Notify( NotifyEvent& rNEvt ) override;
     SfxBindings&            GetBindings()
                             { return *pBindings; }
@@ -144,7 +144,7 @@ protected:
 
 public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
-    void                    Initialize (SfxChildWinInfo* pInfo);
+    void                    Initialize (SfxChildWinInfo const * pInfo);
 
     DECL_LINK_TYPED(TimerHdl, Idle *, void);
 

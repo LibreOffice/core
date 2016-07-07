@@ -32,7 +32,7 @@ public:
                             const css::uno::Reference<css::frame::XFrame> & xFrame,
                             const OUString& rUIFile);
 
-    static void RemoveListeners(SystemWindow* pSysWindow);
+    static void RemoveListeners(SystemWindow const * pSysWindow);
 };
 
 } // namespace sfx2

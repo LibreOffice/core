@@ -1177,7 +1177,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         GetAccessibleParentWindow()->CallEventListeners( VCLEVENT_WINDOW_CHILDCREATED, this );
 }
 
-void Window::ImplInitAppFontData( vcl::Window* pWindow )
+void Window::ImplInitAppFontData( vcl::Window const * pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
     long nTextHeight = pWindow->GetTextHeight();
@@ -1352,7 +1352,7 @@ void Window::ImplInitResolutionSettings()
     }
 }
 
-void Window::ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
+void Window::ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Font& rFont) const
 {
     Size aSize = rFont.GetFontSize();
     sal_uInt16 nScreenFontZoom;
@@ -1381,7 +1381,7 @@ void Window::ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFo
     rFont.SetFontSize(aSize);
 }
 
-void Window::ImplLogicToPoint(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
+void Window::ImplLogicToPoint(vcl::RenderContext const & rRenderContext, vcl::Font& rFont) const
 {
     Size aSize = rFont.GetFontSize();
     sal_uInt16 nScreenFontZoom;
@@ -2190,7 +2190,7 @@ void Window::SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& r
     rRenderContext.SetFont(aFont);
 }
 
-vcl::Font Window::GetPointFont(vcl::RenderContext& rRenderContext) const
+vcl::Font Window::GetPointFont(vcl::RenderContext const & rRenderContext) const
 {
     vcl::Font aFont = rRenderContext.GetFont();
     ImplLogicToPoint(rRenderContext, aFont);
@@ -3327,7 +3327,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                                       bool bChecked,
                                       bool bDrawBorder,
                                       Color* pSelectionTextColor,
-                                      Color* pPaintColor
+                                      Color const * pPaintColor
                                       )
 {
     if( rRect.IsEmpty() )

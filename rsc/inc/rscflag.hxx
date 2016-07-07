@@ -32,11 +32,11 @@ class RscFlag : public RscConst
         sal_uInt32  nFlags;
         sal_uInt32  nDfltFlags;
     };
-    RSCINST         CreateBasic( RSCINST * pInst );
+    RSCINST         CreateBasic( RSCINST const* pInst );
 public:
                     RscFlag( Atom nId, sal_uInt32 nTypId );
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) override;
-    RSCINST         CreateClient( RSCINST * pInst, const RSCINST & rDflt,
+    RSCINST         CreateClient( RSCINST const* pInst, const RSCINST & rDflt,
                                   bool bOwnClass, Atom nConsId );
     sal_uInt32      Size() override;
 

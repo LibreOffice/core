@@ -104,7 +104,7 @@ static sal_Int16 getImageTypeFromBools( bool bBig )
 }
 
 static css::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFrame(
-    css::uno::Reference< css::frame::XFrame >& rFrame )
+    css::uno::Reference< css::frame::XFrame > const & rFrame )
 {
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
 
@@ -1314,7 +1314,7 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager, DoubleClick, ToolBox *, void)
     HandleClick(&XToolbarController::doubleClick);
 }
 
-void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
+void ToolBarManager::ImplClearPopupMenu( ToolBox const *pToolBar )
 {
     if ( m_bDisposed )
         return;

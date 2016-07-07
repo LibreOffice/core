@@ -555,7 +555,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
 }
 
 
-static OString MakeSlotName( SvStringHashEntry * pEntry )
+static OString MakeSlotName( SvStringHashEntry const * pEntry )
 {
     return "SfxSlotMode::" + pEntry->GetName().toAsciiUpperCase();
 };

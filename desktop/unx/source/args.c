@@ -14,7 +14,7 @@
 
 /* do we start -env: */
 static int
-is_env_arg (rtl_uString *str)
+is_env_arg (rtl_uString const *str)
 {
     return !rtl_ustr_ascii_compare_WithLength (str->buffer, 5, "-env:");
 }

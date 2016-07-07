@@ -112,7 +112,7 @@ static char const defaultNameSpace[] = "ooo.vba";
 // redirection built in. The property name specifies the name
 // of the default property.
 
-bool SbUnoObject::getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp )
+bool SbUnoObject::getDefaultPropName( SbUnoObject const * pUnoObj, OUString& sDfltProp )
 {
     bool bResult = false;
     Reference< XDefaultProperty> xDefaultProp( pUnoObj->maTmpUnoObj, UNO_QUERY );
@@ -523,7 +523,7 @@ SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
     return eRetType;
 }
 
-static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, bool bIsZeroIndex, Type* pType = nullptr )
+static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, bool bIsZeroIndex, Type const * pType = nullptr )
 {
     const Type& aType = aValue.getValueType();
     TypeClass eTypeClass = aType.getTypeClass();
@@ -1174,7 +1174,7 @@ static bool implGetTypeByName( const OUString& rName, Type& rRetType )
 
 
 // converting of Sbx to Uno with known target class
-Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProperty )
+Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUnoProperty )
 {
     Any aRetVal;
 
@@ -1514,7 +1514,7 @@ enum INVOKETYPE
    SetProp,
    Func
 };
-Any invokeAutomationMethod( const OUString& Name, Sequence< Any >& args, SbxArray* pParams, sal_uInt32 nParamCount, Reference< XInvocation >& rxInvocation, INVOKETYPE invokeType = Func )
+Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const & args, SbxArray* pParams, sal_uInt32 nParamCount, Reference< XInvocation > const & rxInvocation, INVOKETYPE invokeType = Func )
 {
     Sequence< sal_Int16 > OutParamIndex;
     Sequence< Any > OutParam;
@@ -2445,7 +2445,7 @@ void SbUnoObject::doIntrospection()
 // Start of a list of all SbUnoMethod-Instances
 static SbUnoMethod* pFirst = nullptr;
 
-void clearUnoMethodsForBasic( StarBASIC* pBasic )
+void clearUnoMethodsForBasic( StarBASIC const * pBasic )
 {
     SbUnoMethod* pMeth = pFirst;
     while( pMeth )
@@ -2924,7 +2924,7 @@ void createAllObjectProperties( SbxObject* pObj )
 }
 
 
-void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreateUnoStruct( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -2950,7 +2950,7 @@ void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     refVar->PutObject( xUnoObj.get() );
 }
 
-void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreateUnoService( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -2998,7 +2998,7 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     }
 }
 
-void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -3050,7 +3050,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     }
 }
 
-void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_GetProcessServiceManager( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -3065,7 +3065,7 @@ void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool 
     refVar->PutObject( static_cast<SbUnoObject*>(xUnoObj) );
 }
 
-void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_HasInterfaces( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -3125,7 +3125,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     refVar->PutBool( true );
 }
 
-void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_IsUnoStruct( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -3161,7 +3161,7 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 }
 
 
-void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_EqualUnoObjects( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -4148,7 +4148,7 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
 // Represents the DefaultContext property of the ProcessServiceManager
 // in the Basic runtime system.
-void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_GetDefaultContext( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -4164,7 +4164,7 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
 
 // Creates a Basic wrapper object for a strongly typed Uno value
 // 1. parameter: Uno type as full qualified type name, e.g. "byte[]"
-void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
+void RTL_Impl_CreateUnoValue( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
@@ -4519,7 +4519,7 @@ typedef std::vector< StarBasicDisposeItem* > DisposeItemVector;
 
 static DisposeItemVector GaDisposeItemVector;
 
-static DisposeItemVector::iterator lcl_findItemForBasic( StarBASIC* pBasic )
+static DisposeItemVector::iterator lcl_findItemForBasic( StarBASIC const * pBasic )
 {
     DisposeItemVector::iterator it;
     for( it = GaDisposeItemVector.begin() ; it != GaDisposeItemVector.end() ; ++it )
@@ -4557,7 +4557,7 @@ void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic )
     pArray->Put( pVar, pArray->Count() );
 }
 
-void disposeComVariablesForBasic( StarBASIC* pBasic )
+void disposeComVariablesForBasic( StarBASIC const * pBasic )
 {
     DisposeItemVector::iterator it = lcl_findItemForBasic( pBasic );
     if( it != GaDisposeItemVector.end() )

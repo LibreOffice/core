@@ -781,7 +781,7 @@ void cppuhelper::ServiceManager::addSingletonContextEntries(
 
 void cppuhelper::ServiceManager::loadImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        std::shared_ptr< Data::Implementation > & implementation)
+        std::shared_ptr< Data::Implementation > const & implementation)
 {
     assert(implementation.get() != nullptr);
     {

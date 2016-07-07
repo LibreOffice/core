@@ -293,7 +293,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
     }
 }
 
-void VCLXAccessibleList::NotifyListItem(css::uno::Any& val)
+void VCLXAccessibleList::NotifyListItem(css::uno::Any const & val)
 {
     Reference< XAccessible > xCurItem;
     val >>= xCurItem;

@@ -423,7 +423,7 @@ public:
     */
     BitmapEx            ModifyBitmapEx( const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
-    static BitmapEx     AutoScaleBitmap( BitmapEx & aBitmap, const long aStandardSize );
+    static BitmapEx     AutoScaleBitmap( BitmapEx const & aBitmap, const long aStandardSize );
 
     /// populate from a canvas implementation
     bool                Create(

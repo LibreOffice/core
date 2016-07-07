@@ -494,7 +494,7 @@ public:
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
     // "::rtl::Reference< Paragraph > const &".
-    void changeParagraphText(Paragraph * pParagraph,
+    void changeParagraphText(Paragraph const * pParagraph,
                              OUString const & rText);
 
     // Must be called only after init has been called.
@@ -503,7 +503,7 @@ public:
     // still zero), pass a "Paragraph const &" instead of a
     // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
-    void changeParagraphText(Paragraph * pParagraph, ::sal_Int32 nBegin,
+    void changeParagraphText(Paragraph const * pParagraph, ::sal_Int32 nBegin,
                              ::sal_Int32 nEnd, bool bCut, bool bPaste,
                              OUString const & rText);
 
@@ -523,7 +523,7 @@ public:
     // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
     void changeParagraphAttributes(
-        Paragraph * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
+        Paragraph const * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
         css::uno::Sequence< css::beans::PropertyValue > const &
         rAttributeSet);
 
@@ -533,7 +533,7 @@ public:
     // still zero), pass a "Paragraph const &" instead of a
     // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
-    void changeParagraphSelection(Paragraph * pParagraph,
+    void changeParagraphSelection(Paragraph const * pParagraph,
                                   ::sal_Int32 nBegin, ::sal_Int32 nEnd);
 
     css::i18n::Boundary
@@ -634,7 +634,7 @@ private:
     static void retrieveDefaultAttributesImpl(
         Paragraph const * pParagraph,
         const css::uno::Sequence< OUString >& RequestedAttributes,
-        tPropValMap& rDefAttrSeq);
+        tPropValMap const & rDefAttrSeq);
 
     void retrieveRunAttributesImpl(
         Paragraph const * pParagraph, ::sal_Int32 Index,

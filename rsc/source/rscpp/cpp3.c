@@ -36,7 +36,7 @@
  * Open a file, add it to the linked list of open files.
  * This is called only from openfile() above.
  */
-int openfile(char* filename)
+int openfile(char const* filename)
 {
     FILE* fp;
 
@@ -63,7 +63,7 @@ int openfile(char* filename)
  * structure which is used to read characters.  (getfile() is also called
  * to setup a macro replacement.)
  */
-void addfile(FILE* fp, char* filename)
+void addfile(FILE* fp, char const* filename)
 {
     FILEINFO* file;
 
@@ -128,7 +128,7 @@ void setincdirs()
  * von Kommandos gilt.
  */
 
-int AddInclude( char* pIncStr )
+int AddInclude( char const* pIncStr )
 {
     char* pIncEnv    = NULL;    /* Kopie des INCLUDE     */
     char* pIncPos;              /* wandert zum naechsten */

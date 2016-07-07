@@ -1222,7 +1222,7 @@ throw (RuntimeException, std::exception)
     return aSeq;
 }
 
-bool SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
+bool SfxBaseController::HandleEvent_Impl( NotifyEvent const & rEvent )
 {
     return m_pData->m_aUserInputInterception.handleNotifyEvent( rEvent );
 }

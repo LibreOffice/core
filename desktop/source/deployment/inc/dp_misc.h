@@ -97,7 +97,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 css::uno::Reference< css::uno::XInterface> resolveUnoURL(
     OUString const & connectString,
     css::uno::Reference< css::uno::XComponentContext> const & xLocalContext,
-    AbortChannel * abortChannel = NULL );
+    AbortChannel const * abortChannel = NULL );
 
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool office_is_running();

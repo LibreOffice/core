@@ -317,7 +317,7 @@ NewMenuController::~NewMenuController()
 }
 
 // private function
-void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*     pVCLPopupMenu = nullptr;

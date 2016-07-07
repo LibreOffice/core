@@ -109,7 +109,7 @@ private:
         OUString aTitle;
     };
 
-    void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+    void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
     void executeEntry( sal_Int32 nIndex );
 
     std::vector< RecentFile > m_aRecentFilesItems;
@@ -140,7 +140,7 @@ RecentFilesMenuController::~RecentFilesMenuController()
 }
 
 // private function
-void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*     pVCLPopupMenu = nullptr;

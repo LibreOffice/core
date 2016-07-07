@@ -519,7 +519,7 @@ public:
     virtual void SAL_CALL removeTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
     // C++
     TabControl*  getTabControl() const throw ( css::uno::RuntimeException);
-    sal_uInt16 insertTab( TabPage*, OUString& sTitle );
+    sal_uInt16 insertTab( TabPage*, OUString const & sTitle );
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
@@ -671,7 +671,7 @@ public:
 
     // css::awt::XLayoutConstrains
     css::awt::Size SAL_CALL getMinimumSize() throw(css::uno::RuntimeException, std::exception) override;
-    static css::awt::Size SAL_CALL implGetMinimumSize( vcl::Window* p ) throw(css::uno::RuntimeException);
+    static css::awt::Size SAL_CALL implGetMinimumSize( vcl::Window const * p ) throw(css::uno::RuntimeException);
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }

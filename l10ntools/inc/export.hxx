@@ -141,7 +141,7 @@ private:
     ParserQueue* pParseQueue;
 
     void WriteData( ResData *pResData, bool bCreateNew = false ); ///< called before dest. cur ResData
-    void WriteExportList( ResData *pResData, ExportList& rExportList, const ExportListType nTyp );
+    void WriteExportList( ResData const *pResData, ExportList& rExportList, const ExportListType nTyp );
 
     OString FullId();                    ///< creates cur. GID
 

@@ -497,7 +497,7 @@ public:
         Then the subclass gets the opportunity in every case to respond to the
         event by calling the virtual method <SfxShell::Deactivate(sal_Bool)>.
         */
-    SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI);
+    SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame const *pFrame, bool bMDI);
 };
 
 /**

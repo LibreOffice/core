@@ -148,7 +148,7 @@ public:
     void                 Put( SbxVariable*, sal_uInt16 );
     void                 Insert( SbxVariable*, sal_uInt16 );
     void                 Remove( sal_uInt16 );
-    void                 Remove( SbxVariable* );
+    void                 Remove( SbxVariable const * );
     void                 Merge( SbxArray* );
     OUString             GetAlias( sal_uInt16 );
     void                 PutAlias( const OUString&, sal_uInt16 );

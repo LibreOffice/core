@@ -83,10 +83,10 @@ namespace framework
             DECL_STATIC_LINK_TYPED( ToolbarsMenuController, ExecuteHdl_Impl, void*, void );
 
         private:
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
             css::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
-            void addCommand( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
+            void addCommand( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
             bool isContextSensitiveToolbarNonVisible() { return m_bResetActive;}
 
             css::uno::Reference< css::uno::XComponentContext >        m_xContext;

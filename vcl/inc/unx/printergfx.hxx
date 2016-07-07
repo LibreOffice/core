@@ -292,10 +292,10 @@ public:
                               const sal_Int32* pDeltaArray = nullptr);
 
     void            drawGlyphs( const Point& rPoint,
-                                sal_GlyphId* pGlyphIds,
-                                sal_Unicode* pUnicodes,
+                                sal_GlyphId const * pGlyphIds,
+                                sal_Unicode const * pUnicodes,
                                 sal_Int16 nLen,
-                                sal_Int32* pDeltaArray );
+                                sal_Int32 const * pDeltaArray );
 public:
     PrinterGfx();
     ~PrinterGfx();
@@ -375,7 +375,7 @@ public:
     void            DrawText (const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,
                               const sal_Int32* pDeltaArray = nullptr);
-    void            SetTextColor (PrinterColor& rTextColor)
+    void            SetTextColor (PrinterColor const & rTextColor)
     { maTextColor = rTextColor; }
     sal_Int32       GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo,
                                   long *pWidthArray);

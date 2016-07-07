@@ -542,7 +542,7 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
 
 
 void HelpLinker::main( std::vector<std::string> &args,
-                       std::string* pExtensionPath, std::string* pDestination,
+                       std::string const * pExtensionPath, std::string const * pDestination,
                        const OUString* pOfficeHelpPath )
     throw( HelpProcessingException, std::exception )
 {

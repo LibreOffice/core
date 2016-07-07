@@ -621,7 +621,7 @@ void XcuParser::handleGroupProp(
 }
 
 void XcuParser::handleUnknownGroupProp(
-    xmlreader::XmlReader const & reader, GroupNode * group,
+    xmlreader::XmlReader const & reader, GroupNode const * group,
     OUString const & name, Type type, Operation operation, bool finalized)
 {
     switch (operation) {

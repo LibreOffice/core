@@ -348,7 +348,7 @@ namespace svt
         DECL_DLLPRIVATE_LINK_TYPED(OnPrevPage, Button*, void);
         DECL_DLLPRIVATE_LINK_TYPED(OnFinish, Button*, void);
 
-        SVT_DLLPRIVATE void     implResetDefault(vcl::Window* _pWindow);
+        SVT_DLLPRIVATE void     implResetDefault(vcl::Window const * _pWindow);
         SVT_DLLPRIVATE void     implUpdateTitle();
         SVT_DLLPRIVATE void     implConstruct( const WizardButtonFlags _nButtonFlags );
     };

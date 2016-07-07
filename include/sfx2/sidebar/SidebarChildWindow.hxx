@@ -38,7 +38,7 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID(SidebarChildWindow);
 
-    static sal_Int32 GetDefaultWidth(vcl::Window* pWindow);
+    static sal_Int32 GetDefaultWidth(vcl::Window const * pWindow);
 };
 
 

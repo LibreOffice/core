@@ -142,7 +142,7 @@ StarBASIC* SfxApplication::GetBasic()
 #endif
 }
 
-void SfxApplication::PropExec_Impl( SfxRequest &rReq )
+void SfxApplication::PropExec_Impl( SfxRequest const &rReq )
 {
     sal_uInt16 nSID = rReq.GetSlot();
     switch ( nSID )

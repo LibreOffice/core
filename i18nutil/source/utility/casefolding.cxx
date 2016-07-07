@@ -56,7 +56,7 @@ static bool cased_letter(sal_Unicode ch)
 // whenever there are more accents above.
 #define accent_above(ch) (((ch) >= 0x0300 && (ch) <= 0x0314) || ((ch) >= 0x033D && (ch) <= 0x0344) || (ch) == 0x0346 || ((ch) >= 0x034A && (ch) <= 0x034C))
 
-Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale& aLocale, MappingType nMappingType) throw (RuntimeException)
+Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale const & aLocale, MappingType nMappingType) throw (RuntimeException)
 {
         switch(str[pos]) {
         case 0x03a3:
@@ -85,7 +85,7 @@ Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos,
         throw RuntimeException();
 }
 
-Mapping& casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale& aLocale, MappingType nMappingType) throw (RuntimeException)
+Mapping& casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale const & aLocale, MappingType nMappingType) throw (RuntimeException)
 {
     static Mapping dummy = { 0, 1, { 0, 0, 0 } };
     sal_Int16 address = CaseMappingIndex[str[pos] >> 8];
@@ -129,7 +129,7 @@ is_ja_voice_sound_mark(sal_Unicode& current, sal_Unicode next)
         return c != 0;
 }
 
-sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, Locale& aLocale, MappingType nMappingType, TransliterationModules moduleLoaded) throw (RuntimeException)
+sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, Locale const & aLocale, MappingType nMappingType, TransliterationModules moduleLoaded) throw (RuntimeException)
 {
         if( idx >= len )
         {

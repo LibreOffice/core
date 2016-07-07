@@ -2780,7 +2780,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
     return aPathStr;
 }
 
-inline bool implCheckWildcard( const OUString& rName, SbiRTLData* pRTLData )
+inline bool implCheckWildcard( const OUString& rName, SbiRTLData const * pRTLData )
 {
     bool bMatch = true;
 

@@ -276,8 +276,8 @@ protected:
     void SetFamily( sal_uInt16 nId );
     void ActionSelect( sal_uInt16 nId );
 
-    sal_Int32 LoadFactoryStyleFilter( SfxObjectShell* i_pObjSh );
-    void SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter );
+    sal_Int32 LoadFactoryStyleFilter( SfxObjectShell const * i_pObjSh );
+    void SaveFactoryStyleFilter( SfxObjectShell const * i_pObjSh, sal_Int32 i_nFilter );
     SfxObjectShell* SaveSelection();
 
 public:

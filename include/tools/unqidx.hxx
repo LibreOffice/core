@@ -42,7 +42,7 @@ public:
     void* Remove( Index aIndex );
     void* Get( Index aIndex ) const;
 
-    Index GetIndexOf( void* p ) const;
+    Index GetIndexOf( void const* p ) const;
     Index FirstIndex() const;
     Index LastIndex() const;
     Index NextIndex( Index aCurrIndex ) const;

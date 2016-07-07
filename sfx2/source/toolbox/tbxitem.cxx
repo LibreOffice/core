@@ -267,7 +267,7 @@ void SfxToolBoxControl::RegisterToolBoxControl( SfxModule* pMod, const SfxTbxCtr
     SfxGetpApp()->RegisterToolBoxControl_Impl( pMod, rFact );
 }
 
-SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule* pMod  )
+SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule const * pMod  )
 {
     SolarMutexGuard aGuard;
 
@@ -384,7 +384,7 @@ SfxItemState SfxToolBoxControl::GetItemState(
 void SfxToolBoxControl::Dispatch(
     const Reference< XDispatchProvider >& rProvider,
     const OUString& rCommand,
-    Sequence< ::PropertyValue >& aArgs )
+    Sequence< ::PropertyValue > const & aArgs )
 {
     if ( rProvider.is() )
     {
@@ -399,7 +399,7 @@ void SfxToolBoxControl::Dispatch(
     }
 }
 
-void SfxToolBoxControl::Dispatch( const OUString& aCommand, css::uno::Sequence< css::beans::PropertyValue >& aArgs )
+void SfxToolBoxControl::Dispatch( const OUString& aCommand, css::uno::Sequence< css::beans::PropertyValue > const & aArgs )
 {
     Reference < XController > xController;
 

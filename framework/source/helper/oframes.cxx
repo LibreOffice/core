@@ -349,7 +349,7 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
 // We share the mutex with our owner class, need a valid factory to instanciate new services and
 // use the access to our owner for some operations.
 bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XFrame >&              xOwner          ,
-                                                            FrameContainer*                             pFrameContainer )
+                                                            FrameContainer const *                      pFrameContainer )
 {
     return xOwner.is() && pFrameContainer != nullptr;
 }

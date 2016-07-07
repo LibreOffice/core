@@ -62,7 +62,7 @@ namespace framework
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         private:
-            void fillPopupMenu( const css::uno::Reference< css::frame::XModel >& rModel, css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( const css::uno::Reference< css::frame::XModel >& rModel, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 
             css::uno::Reference< css::frame::XModel > m_xModel;
             bool                                      m_bFooter;

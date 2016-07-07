@@ -49,7 +49,7 @@ public:
     ~ImplOpenGLTexture();
     void Dispose();
 
-    bool InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
+    bool InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData);
 
     void IncreaseRefCount(int nSlotNumber);
     void DecreaseRefCount(int nSlotNumber);
@@ -116,7 +116,7 @@ public:
     GLuint          AddStencil();
     GLuint          StencilId() const;
 
-    bool            CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
+    bool            CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData);
 
     void            SaveToFile(const OUString& rFileName);
 

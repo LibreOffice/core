@@ -86,7 +86,7 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    void fillPopupMenu( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+    void fillPopupMenu( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 
     css::uno::Reference< css::frame::XDispatch >  m_xObjectUpdateDispatch;
 };
@@ -101,7 +101,7 @@ ObjectMenuController::~ObjectMenuController()
 }
 
 // private function
-void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu >& rPopupMenu )
+void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     const css::embed::VerbDescriptor* pVerbCommandArray = rVerbCommandSeq.getConstArray();
     VCLXPopupMenu*                    pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));

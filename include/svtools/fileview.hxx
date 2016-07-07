@@ -90,7 +90,7 @@ public:
     void                    SetViewMode( FileViewMode eMode );
 
     const OUString&         GetViewURL() const;
-    static OUString         GetURL( SvTreeListEntry* pEntry );
+    static OUString         GetURL( SvTreeListEntry const * pEntry );
     OUString                GetCurrentURL() const;
 
     bool                    GetParentURL( OUString& _rParentURL ) const;

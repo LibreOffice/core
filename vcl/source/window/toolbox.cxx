@@ -144,7 +144,7 @@ static ImplTBDragMgr* ImplGetTBDragMgr()
     return pSVData->maCtrlData.mpTBDragMgr;
 }
 
-int ToolBox::ImplGetDragWidth( ToolBox* pThis )
+int ToolBox::ImplGetDragWidth( ToolBox const * pThis )
 {
     int nWidth = TB_DRAGWIDTH;
     if( pThis->IsNativeControlSupported( ControlType::Toolbar, ControlPart::Entire ) )
@@ -182,7 +182,7 @@ ButtonType determineButtonType( ImplToolItem* pItem, ButtonType defaultType )
     return tmpButtonType;
 }
 
-void ToolBox::ImplUpdateDragArea( ToolBox *pThis )
+void ToolBox::ImplUpdateDragArea( ToolBox const *pThis )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
     if( pWrapper )
@@ -212,7 +212,7 @@ void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
 
     // reserve DragArea only for dockable toolbars
-    int    dragwidth = ( pWrapper && !pWrapper->IsLocked() ) ? ImplGetDragWidth( const_cast<ToolBox*>(pThis) ) : 0;
+    int    dragwidth = ( pWrapper && !pWrapper->IsLocked() ) ? ImplGetDragWidth( pThis ) : 0;
 
     // no shadow border for dockable toolbars
     int    borderwidth = pWrapper ? 0: 2;
@@ -922,7 +922,7 @@ sal_uInt16 ToolBox::ImplCalcLines( ToolBox* pThis, long nToolSize )
     return static_cast<sal_uInt16>(nLines);
 }
 
-sal_uInt16 ToolBox::ImplTestLineSize( ToolBox* pThis, const Point& rPos )
+sal_uInt16 ToolBox::ImplTestLineSize( ToolBox const * pThis, const Point& rPos )
 {
     if ( !pThis->ImplIsFloatingMode() &&
          (!pThis->mbScroll || (pThis->mnLines > 1) || (pThis->mnCurLines > pThis->mnVisLines)) )
@@ -3283,7 +3283,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         pMgr->UpdateDragRect();
 }
 
-void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem* pItem)
+void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem)
 {
     if ( !pItem->maRect.IsEmpty() )
     {
@@ -5022,7 +5022,7 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
     return bRet;
 }
 
-bool ImplCloseLastPopup( vcl::Window *pParent )
+bool ImplCloseLastPopup( vcl::Window const *pParent )
 {
     // close last popup toolbox (see also:
     // ImplHandleMouseFloatMode(...) in winproc.cxx )
@@ -5274,7 +5274,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
 }
 
 // returns the current toolbox line of the item
-sal_uInt16 ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
+sal_uInt16 ToolBox::ImplGetItemLine( ImplToolItem const * pCurrentItem )
 {
     std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
     sal_uInt16 nLine = 1;

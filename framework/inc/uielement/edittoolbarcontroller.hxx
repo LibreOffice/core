@@ -53,7 +53,7 @@ class EditToolbarController : public ComplexToolbarController
         void Modify();
         void GetFocus();
         void LoseFocus();
-        bool PreNotify( NotifyEvent& rNEvt );
+        bool PreNotify( NotifyEvent const & rNEvt );
 
     protected:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;

@@ -70,7 +70,7 @@ namespace {
         // #i86923#
         Node* findChildNode( const SfxPoolItem& rItem,
                              const bool bIsItemIgnorable = false );
-        Node* nextItemSet( Node* pLast,
+        Node* nextItemSet( Node const * pLast,
                            const bool bSkipUnusedItemSet,
                            const bool bSkipIgnorable );
         const SfxPoolItem& getPoolItem() const { return *mpItem; }
@@ -160,7 +160,7 @@ namespace {
      * introduce parameters <bSkipUnusedItemSets> and <bSkipIgnorable>
      * and its handling.
      */
-    Node* Node::nextItemSet( Node* pLast,
+    Node* Node::nextItemSet( Node const * pLast,
                              const bool bSkipUnusedItemSets,
                              const bool bSkipIgnorable )
     {

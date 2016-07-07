@@ -648,7 +648,7 @@ void SbxValue::PutNull()
 
 
 // Special decimal methods
-void SbxValue::PutDecimal( css::bridge::oleautomation::Decimal& rAutomationDec )
+void SbxValue::PutDecimal( css::bridge::oleautomation::Decimal const & rAutomationDec )
 {
     SbxValue::Clear();
     aData.pDecimal = new SbxDecimal( rAutomationDec );

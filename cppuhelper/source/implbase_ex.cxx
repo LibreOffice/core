@@ -163,7 +163,7 @@ bool recursivelyFindType(
 }
 
 static inline void * queryDeepNoXInterface(
-    typelib_TypeDescriptionReference * pDemandedTDR, class_data * cd, void * that )
+    typelib_TypeDescriptionReference const * pDemandedTDR, class_data * cd, void * that )
 {
     type_entry * pEntries = getTypeEntries( cd );
     sal_Int32 nTypes = cd->m_nTypes;

@@ -125,7 +125,7 @@ short basis()              /* calculate BASE machine independence     */
 /*----------------------   MODULE tridiagonal  -----------------------*/
 
 sal_uInt16 TriDiagGS(sal_uInt16 n, double* lower,
-                 double* diag, double* upper, double* b)
+                 double* diag, double const * upper, double* b)
                                              /*************************/
                                              /* Gaussian methods for  */
                                              /* tridiagonal matrices  */
@@ -389,7 +389,7 @@ sal_uInt16 ZyklTriDiagGS(sal_uInt16 n, double* lower, double* diag,
 } // extern "C"
 
 // Calculates the coefficients of natural cubic splines with n intervals.
-sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
+sal_uInt16 NaturalSpline(sal_uInt16 n, double const * x, const double* y,
                      double Marg0, double MargN,
                      sal_uInt8 MargCond,
                      double* b, double* c, double* d)
@@ -490,7 +490,7 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
 }
 
 // calculates the coefficients of periodical cubic splines with n intervals.
-sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
+sal_uInt16 PeriodicSpline(sal_uInt16 n, double const * x, double* y,
                       double* b, double* c, double* d)
 {                     // array dimensions should range from [0..n]!
     sal_uInt16  Error;
@@ -616,7 +616,7 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
     return 0;
 }
 
-bool CalcSpline(tools::Polygon& rPoly, bool Periodic, sal_uInt16& n,
+bool CalcSpline(tools::Polygon const & rPoly, bool Periodic, sal_uInt16& n,
                 double*& ax, double*& ay, double*& bx, double*& by,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T)
 {
@@ -685,7 +685,7 @@ bool CalcSpline(tools::Polygon& rPoly, bool Periodic, sal_uInt16& n,
     return bRet;
 }
 
-bool Spline2Poly(tools::Polygon& rSpln, bool Periodic, tools::Polygon& rPoly)
+bool Spline2Poly(tools::Polygon const & rSpln, bool Periodic, tools::Polygon& rPoly)
 {
     const short MinKoord = -32000;    // to prevent
     const short MaxKoord = 32000;     // overflows

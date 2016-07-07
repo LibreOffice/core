@@ -174,11 +174,11 @@ public:
     static sal_uInt32   GetStringSize( const sal_uInt8* pStr, sal_uInt32& nLen );
 
     /// Return a int64
-    static sal_uInt64   GetUInt64( void* pDatum );
+    static sal_uInt64   GetUInt64( void const * pDatum );
     /// Return a long
-    static sal_Int32    GetLong( void * pLong );
+    static sal_Int32    GetLong( void const * pLong );
     /// Return a short
-    static sal_Int16    GetShort( void * pShort );
+    static sal_Int16    GetShort( void const * pShort );
 
     /// Return a pointer to the resource
     void *              GetClass();

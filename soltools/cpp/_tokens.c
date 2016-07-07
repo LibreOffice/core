@@ -251,7 +251,7 @@ int
  * Canonical whitespace is assured on each side.
  */
 void
-    insertrow(Tokenrow * dtr, int ntok, Tokenrow * str)
+    insertrow(Tokenrow * dtr, int ntok, Tokenrow const * str)
 {
     int nrtok = (int)rowlen(str);
 
@@ -290,7 +290,7 @@ void
  *  Not strictly conforming.
  */
 void
-    movetokenrow(Tokenrow * dtr, Tokenrow * str)
+    movetokenrow(Tokenrow * dtr, Tokenrow const * str)
 {
     size_t nby;
 
@@ -326,7 +326,7 @@ void
  * the space for the contents.  Return the destination.
  */
 Tokenrow *
-    copytokenrow(Tokenrow * dtr, Tokenrow * str)
+    copytokenrow(Tokenrow * dtr, Tokenrow const * str)
 {
     int len = (int)rowlen(str);
 
@@ -544,7 +544,7 @@ char *
  * Null terminated.
  */
 uchar *
-    newstring(uchar * s, size_t l, size_t o)
+    newstring(uchar const * s, size_t l, size_t o)
 {
     uchar *ns = (uchar *) domalloc(l + o + 1);
 

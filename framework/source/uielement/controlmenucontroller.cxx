@@ -231,7 +231,7 @@ private:
     };
 
     void updateImagesPopupMenu( PopupMenu* pPopupMenu );
-    void fillPopupMenu( uno::Reference< awt::XPopupMenu >& rPopupMenu );
+    void fillPopupMenu( uno::Reference< awt::XPopupMenu > const & rPopupMenu );
 
     bool                m_bShowMenuImages : 1;
     VclPtr<PopupMenu>   m_pResPopupMenu;
@@ -273,7 +273,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 }
 
 // private function
-void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     VCLXPopupMenu*                                     pPopupMenu        = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*                                         pVCLPopupMenu     = nullptr;

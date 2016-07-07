@@ -71,7 +71,7 @@ public:
     TOOLS_DLLPUBLIC friend bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
 
-    TOOLS_DLLPUBLIC friend SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract );
+    TOOLS_DLLPUBLIC friend SvStream& ReadFraction( SvStream& rIStream, Fraction const & rFract );
     TOOLS_DLLPUBLIC friend SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract );
 };
 

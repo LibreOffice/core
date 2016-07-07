@@ -450,7 +450,7 @@ void RscDefTree::Remove( RscDefine * pDef )
     pDef->DecRef();
 }
 
-bool RscDefTree::Evaluate( RscDefine * pDef )
+bool RscDefTree::Evaluate( RscDefine const * pDef )
 {
     if( pDef )
     {
@@ -521,7 +521,7 @@ bool RscFileTab::TestDef( Index lFileKey, size_t lPos,
     if( lFileKey == pDefDec->GetFileKey() )
     {
         RscFile * pFile = GetFile( pDefDec->GetFileKey() );
-        if( pFile && (lPos <= pFile->aDefLst.GetPos( const_cast<RscDefine *>(pDefDec) ))
+        if( pFile && (lPos <= pFile->aDefLst.GetPos(pDefDec))
             && (lPos != ULONG_MAX ) )
         {
             return false;

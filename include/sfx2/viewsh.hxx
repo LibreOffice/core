@@ -299,14 +299,14 @@ public:
     SAL_DLLPRIVATE bool GlobalKeyInput_Impl( const KeyEvent &rKeyEvent );
 
     SAL_DLLPRIVATE void NewIPClient_Impl( SfxInPlaceClient *pIPClient );
-    SAL_DLLPRIVATE void IPClientGone_Impl( SfxInPlaceClient *pIPClient );
-    SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient *pIP );
+    SAL_DLLPRIVATE void IPClientGone_Impl( SfxInPlaceClient const *pIPClient );
+    SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient const *pIP );
     SAL_DLLPRIVATE void DiscardClients_Impl();
 
     SAL_DLLPRIVATE void SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter );
     SAL_DLLPRIVATE bool IsShowView_Impl() const;
 
-    SAL_DLLPRIVATE bool HandleNotifyEvent_Impl( NotifyEvent& rEvent );
+    SAL_DLLPRIVATE bool HandleNotifyEvent_Impl( NotifyEvent const & rEvent );
     SAL_DLLPRIVATE bool HasKeyListeners_Impl();
     SAL_DLLPRIVATE bool HasMouseClickListeners_Impl();
 
@@ -316,7 +316,7 @@ public:
     SAL_DLLPRIVATE void ExecPrint_Impl(SfxRequest &);
     SAL_DLLPRIVATE void ExecMisc_Impl(SfxRequest &);
     SAL_DLLPRIVATE void GetState_Impl(SfxItemSet&);
-    SAL_DLLPRIVATE void CheckIPClient_Impl(SfxInPlaceClient*, const Rectangle&);
+    SAL_DLLPRIVATE void CheckIPClient_Impl(SfxInPlaceClient const *, const Rectangle&);
     SAL_DLLPRIVATE void PushSubShells_Impl( bool bPush=true );
     SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( false ); }
     SAL_DLLPRIVATE void TakeOwnership_Impl();

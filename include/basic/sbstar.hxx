@@ -119,7 +119,7 @@ public:
     SbxObject*      GetRtl()     { return pRtl;     }
     SbModule*       FindModule( const OUString& );
     // Run init code of all modules (including the inserted Doc-Basics)
-    void            InitAllModules( StarBASIC* pBasicNotToInit = nullptr );
+    void            InitAllModules( StarBASIC const * pBasicNotToInit = nullptr );
     void            DeInitAllModules();
     void            ClearAllModuleVars();
 

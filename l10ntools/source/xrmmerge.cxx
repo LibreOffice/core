@@ -119,7 +119,7 @@ extern FILE *GetXrmFile()
     return nullptr;
 }
 
-int WorkOnTokenSet( int nTyp, char *pTokenText )
+int WorkOnTokenSet( int nTyp, char const *pTokenText )
 {
     //printf("Typ = %d , text = '%s'\n",nTyp , pTokenText );
     pParser->Execute( nTyp, pTokenText );
@@ -156,7 +156,7 @@ XRMResParser::~XRMResParser()
 {
 }
 
-void XRMResParser::Execute( int nToken, char * pToken )
+void XRMResParser::Execute( int nToken, char const * pToken )
 {
     OString rToken( pToken );
 

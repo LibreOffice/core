@@ -1779,7 +1779,7 @@ void CustomPropertiesWindow::updateLineWidth()
     }
 }
 
-void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
+void CustomPropertiesWindow::AddLine( const OUString& sName, Any const & rAny )
 {
     CustomPropertyLine* pNewLine = new CustomPropertyLine( this );
     pNewLine->m_aTypeBox->SetSelectHdl( LINK( this, CustomPropertiesWindow, TypeHdl ) );
@@ -2164,7 +2164,7 @@ IMPL_LINK_NOARG_TYPED(CustomPropertiesControl, RemovedHdl, void*, void)
         m_pVertScroll->DoScrollAction ( SCROLL_LINEUP );
 }
 
-void CustomPropertiesControl::AddLine( const OUString& sName, Any& rAny, bool bInteractive )
+void CustomPropertiesControl::AddLine( const OUString& sName, Any const & rAny, bool bInteractive )
 {
     m_pPropertiesWin->AddLine( sName, rAny );
     long nLineCount = m_pPropertiesWin->GetVisibleLineCount();
@@ -2388,7 +2388,7 @@ void CmisPropertiesWindow::ClearAllLines()
 void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
                                     const OUString& sType, const bool bUpdatable,
                                     const bool bRequired, const bool bMultiValued,
-                                    const bool bOpenChoice, Any& /*aChoices*/, Any& rAny )
+                                    const bool bOpenChoice, Any& /*aChoices*/, Any const & rAny )
 {
     CmisPropertyLine* pNewLine = new CmisPropertyLine( m_pBox );
 
@@ -2640,7 +2640,7 @@ void CmisPropertiesControl::setScrollRange()
 void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
                                      const OUString& sType, const bool bUpdatable,
                                      const bool bRequired, const bool bMultiValued,
-                                     const bool bOpenChoice, Any& aChoices, Any& rAny
+                                     const bool bOpenChoice, Any& aChoices, Any const & rAny
                                      )
 {
     m_pPropertiesWin.AddLine( sId, sName, sType, bUpdatable, bRequired, bMultiValued,

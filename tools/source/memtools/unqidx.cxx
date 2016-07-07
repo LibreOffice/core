@@ -89,7 +89,7 @@ UniqueIndexImpl::Index UniqueIndexImpl::NextIndex(Index aIndex) const
     return it->first;
 }
 
-UniqueIndexImpl::Index UniqueIndexImpl::GetIndexOf(void* p) const
+UniqueIndexImpl::Index UniqueIndexImpl::GetIndexOf(void const * p) const
 {
     for( std::map<Index, void*>::const_iterator it = maMap.begin(); it != maMap.end(); ++it )
         if( it->second == p )

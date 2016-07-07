@@ -184,7 +184,7 @@ private:
     SAL_DLLPRIVATE bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel = false );
     SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus = false );
     SAL_DLLPRIVATE bool            ImplChangeHighlightUpDn( bool bUp, bool bNoCycle = false );
-    SAL_DLLPRIVATE sal_uInt16      ImplGetItemLine( ImplToolItem* pCurrentItem );
+    SAL_DLLPRIVATE sal_uInt16      ImplGetItemLine( ImplToolItem const * pCurrentItem );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( sal_uInt16 nLine );
     SAL_DLLPRIVATE bool            ImplOpenItem( vcl::KeyCode aKeyCode );
     SAL_DLLPRIVATE bool            ImplActivateItem( vcl::KeyCode aKeyCode );
@@ -200,7 +200,7 @@ private:
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( sal_uInt16 nItemId ) const;
     SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
     SAL_DLLPRIVATE bool            ImplHasExternalMenubutton();
-    SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem* pItem );
+    SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem );
 
     DECL_DLLPRIVATE_LINK_TYPED(    ImplCallExecuteCustomMenu, void*, void );
     DECL_DLLPRIVATE_LINK_TYPED(    ImplUpdateHdl, Idle*, void );
@@ -214,8 +214,8 @@ public:
     SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow = nullptr );
     SAL_DLLPRIVATE void            ImplDisableFlatButtons();
 
-    static SAL_DLLPRIVATE int ImplGetDragWidth( ToolBox* pThis );
-    static SAL_DLLPRIVATE void ImplUpdateDragArea( ToolBox *pThis );
+    static SAL_DLLPRIVATE int ImplGetDragWidth( ToolBox const * pThis );
+    static SAL_DLLPRIVATE void ImplUpdateDragArea( ToolBox const * pThis );
     static SAL_DLLPRIVATE void ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
                                                long& rRight, long& rBottom, const ToolBox *pThis );
 
@@ -236,7 +236,7 @@ public:
     static SAL_DLLPRIVATE void ImplCalcMinMaxFloatSize( ToolBox* pThis, Size& rMinSize, Size& rMaxSize );
     static SAL_DLLPRIVATE void ImplSetMinMaxFloatSize( ToolBox *pThis );
     static SAL_DLLPRIVATE sal_uInt16 ImplCalcLines( ToolBox* pThis, long nToolSize );
-    static SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( ToolBox* pThis, const Point& rPos );
+    static SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( ToolBox const * pThis, const Point& rPos );
     static SAL_DLLPRIVATE void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( ToolBox* pBox, const Point& rPos );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList );

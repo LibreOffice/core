@@ -133,7 +133,7 @@ private:
                             SfxItemState eItemState );
     SAL_DLLPRIVATE SfxStateCache* GetStateCache( sal_uInt16 nId, sal_uInt16 *pPos);
     DECL_DLLPRIVATE_LINK_TYPED( NextJob, Timer *, void );
-    SAL_DLLPRIVATE bool NextJob_Impl(Timer * pTimer);
+    SAL_DLLPRIVATE bool NextJob_Impl(Timer const * pTimer);
 
 public:
                      SfxBindings();
@@ -197,7 +197,7 @@ public:
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
     SAL_DLLPRIVATE SfxBindings* GetSubBindings_Impl() const;
-    SAL_DLLPRIVATE void SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder >& );
+    SAL_DLLPRIVATE void SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder > const & );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
     SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId );
 };

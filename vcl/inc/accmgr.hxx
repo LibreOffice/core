@@ -43,7 +43,7 @@ public:
                         ~ImplAccelManager();
 
     bool                InsertAccel( Accelerator* pAccel );
-    void                RemoveAccel( Accelerator* pAccel );
+    void                RemoveAccel( Accelerator const * pAccel );
 
     void                EndSequence();
     void                FlushAccel() { EndSequence(); }

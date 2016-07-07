@@ -2267,7 +2267,7 @@ void SvxIconChoiceCtrl_Impl::ToggleSelection( SvxIconChoiceCtrlEntry* pEntry )
     SelectEntry( pEntry, bSel, true );
 }
 
-void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry* pThisEntryNot,
+void SvxIconChoiceCtrl_Impl::DeselectAllBut( SvxIconChoiceCtrlEntry const * pThisEntryNot,
     bool bPaintSync )
 {
     ClearSelectedRectList();
@@ -2807,7 +2807,7 @@ SvxIconChoiceCtrlTextMode SvxIconChoiceCtrl_Impl::GetEntryTextModeSmart( const S
 // of the background. But what will we see, if the backgroundcolor is gray ? - We will see
 // a gray focusrect on a gray background !!!
 
-void SvxIconChoiceCtrl_Impl::ShowFocus ( Rectangle& rRect )
+void SvxIconChoiceCtrl_Impl::ShowFocus ( Rectangle const & rRect )
 {
     Color aBkgColor(pView->GetBackground().GetColor());
     Color aPenColor;

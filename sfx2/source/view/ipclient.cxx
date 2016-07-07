@@ -846,7 +846,7 @@ bool SfxInPlaceClient::IsObjectInPlaceActive() const
 }
 
 
-SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject )
+SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell const * pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject )
 {
     for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDoc); pFrame; pFrame=SfxViewFrame::GetNext(*pFrame,pDoc) )
     {

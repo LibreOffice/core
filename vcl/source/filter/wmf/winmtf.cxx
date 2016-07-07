@@ -1331,7 +1331,7 @@ void WinMtfOutput::DrawPolyBezier( tools::Polygon& rPolygon, bool bTo, bool bRec
     }
 }
 
-void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, bool bRecordPath, sal_Int32 nGfxMode )
+void WinMtfOutput::DrawText( Point& rPosition, OUString const & rText, long* pDXArry, bool bRecordPath, sal_Int32 nGfxMode )
 {
     UpdateClipRegion();
     rPosition = ImplMap( rPosition );
@@ -2174,7 +2174,7 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     mpGDIMetaFile->UseCanvas( true );
 }
 
-void WinMtfOutput::PassEMFPlus( void* pBuffer, sal_uInt32 nLength )
+void WinMtfOutput::PassEMFPlus( void const * pBuffer, sal_uInt32 nLength )
 {
     EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %04x\n",(unsigned int) nLength));
     mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );

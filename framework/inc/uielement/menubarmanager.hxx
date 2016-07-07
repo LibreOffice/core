@@ -189,7 +189,7 @@ class MenuBarManager : public css::frame::XStatusListener                ,
         void             RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuShortCuts );
         void             CheckAndAddMenuExtension( Menu* pMenu );
         static void      UpdateSpecialWindowMenu( Menu* pMenu, const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        static void      FillMenuImages( css::uno::Reference< css::frame::XFrame >& xFrame, Menu* _pMenu, bool bShowMenuImages );
+        static void      FillMenuImages( css::uno::Reference< css::frame::XFrame > const & xFrame, Menu* _pMenu, bool bShowMenuImages );
         static void      impl_RetrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                                   const css::uno::Sequence< OUString >& rCommands,
                                                                   std::vector< MenuItemHandler* >& aMenuShortCuts );

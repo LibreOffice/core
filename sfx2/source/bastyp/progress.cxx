@@ -417,7 +417,7 @@ void SfxProgress::Reschedule()
 
 SfxProgress* SfxProgress::GetActiveProgress
 (
-    SfxObjectShell* pDocSh        /*  the <SfxObjectShell>, which should be
+    SfxObjectShell const * pDocSh /*  the <SfxObjectShell>, which should be
                                       queried after a current <SfxProgress>,
                                       or 0 if an current SfxProgress for the
                                       entire application should be obtained.

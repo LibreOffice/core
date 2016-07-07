@@ -901,7 +901,7 @@ bool ToolbarLayoutManager::dockAllToolbars()
     return bResult;
 }
 
-long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
+long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent const * pEvent )
 {
     // To enable toolbar controllers to change their image when a sub-toolbar function
     // is activated, we need this mechanism. We have NO connection between these toolbars
@@ -912,7 +912,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
         {
             OUString aToolbarName;
             OUString aCommand;
-            ToolBox*        pToolBox = getToolboxPtr( static_cast<VclWindowEvent*>(pEvent)->GetWindow() );
+            ToolBox*        pToolBox = getToolboxPtr( static_cast<const VclWindowEvent*>(pEvent)->GetWindow() );
 
             if ( pToolBox )
             {
@@ -960,7 +960,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
         {
             if ( !implts_isToolbarCreationActive() )
             {
-                ToolBox* pToolBox = getToolboxPtr( static_cast<VclWindowEvent*>(pEvent)->GetWindow() );
+                ToolBox* pToolBox = getToolboxPtr( static_cast<const VclWindowEvent*>(pEvent)->GetWindow() );
                 if ( pToolBox )
                 {
                     OUString aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );

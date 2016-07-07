@@ -416,7 +416,7 @@ void handleDirectory(
     osl::Directory::remove(sPoUrl);
 }
 
-void handleProjects(char * sSourceRoot, char const * sDestRoot)
+void handleProjects(char const * sSourceRoot, char const * sDestRoot)
 {
     OUString root16;
     if (!rtl_convertStringToUString(

@@ -83,7 +83,7 @@ public:
     void addListener(ConfigurationListenerPropertyBase *pListener);
 
     /// Stop listening.
-    void removeListener(ConfigurationListenerPropertyBase *pListener);
+    void removeListener(ConfigurationListenerPropertyBase const * pListener);
 
     /// Release various circular references
     void dispose();

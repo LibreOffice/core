@@ -86,7 +86,7 @@ public:
     SfxObjectShell*    GetPersist() const              { return pPersist; }
     void        SetPersist( SfxObjectShell * p )   { pPersist = p; }
 
-    void        Remove( SvBaseLink *pLink );
+    void        Remove( SvBaseLink const *pLink );
     void        Remove( size_t nPos, size_t nCnt = 1 );
     bool        Insert( SvBaseLink* pLink );
 
@@ -124,7 +124,7 @@ public:
                                     OUString* pLink = nullptr,
                                     OUString* pFilter = nullptr );
 
-    static SvLinkSourceRef CreateObj( SvBaseLink* );
+    static SvLinkSourceRef CreateObj( SvBaseLink const * );
 
     void        UpdateAllLinks( bool bAskUpdate = true,
                                 bool bCallErrHdl = true,

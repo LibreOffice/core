@@ -300,13 +300,13 @@ private:
     DECL_LINK_TYPED( CallBackWriteRc, const NameNode&, void );
     DECL_LINK_TYPED( CallBackWriteSrc, const NameNode&, void );
 
-    void WriteRc( RscTop * pCl, ObjNode * pRoot )
+    void WriteRc( RscTop * pCl, ObjNode const * pRoot )
     {
         pClass = pCl;
         if( pRoot )
             pRoot->EnumNodes( LINK( this, RscEnumerateObj, CallBackWriteRc ) );
     }
-    void WriteSrc( RscTop * pCl, ObjNode * pRoot ){
+    void WriteSrc( RscTop * pCl, ObjNode const* pRoot ){
         pClass = pCl;
         if( pRoot )
             pRoot->EnumNodes( LINK( this, RscEnumerateObj, CallBackWriteSrc ) );
@@ -503,7 +503,7 @@ void RscTypCont::Delete( RscFileTab::Index lFileKey )
     aFileTab.DeleteFileContext( lFileKey );
 }
 
-bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
+bool IsInstConsistent( ObjNode const * pObjNode, RscTop * pRscTop )
 {
     bool bRet = true;
 

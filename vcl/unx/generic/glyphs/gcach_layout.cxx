@@ -105,7 +105,7 @@ void ServerFontLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
     rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
 }
 
-std::ostream &operator <<(std::ostream& s, ServerFont* pFont)
+std::ostream &operator <<(std::ostream& s, ServerFont const * pFont)
 {
 #ifndef SAL_LOG_INFO
     (void) pFont;

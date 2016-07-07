@@ -83,7 +83,7 @@ public:
     SAL_DLLPRIVATE static bool IsFilterInstalled_Impl( const std::shared_ptr<const SfxFilter>& pFilter );
     DECL_DLLPRIVATE_LINK_TYPED( MaybeFileHdl_Impl, OUString*, bool );
 
-    sal_uInt32               GuessFilterIgnoringContent( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& ) const;
+    sal_uInt32               GuessFilterIgnoringContent( SfxMedium const & rMedium, std::shared_ptr<const SfxFilter>& ) const;
     sal_uInt32               GuessFilter( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& , SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     sal_uInt32               GuessFilterControlDefaultUI( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>&, SfxFilterFlags nMust = SfxFilterFlags::IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     sal_uInt32               DetectFilter( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& ) const;

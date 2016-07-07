@@ -64,9 +64,9 @@ typedef int Bool;
 
 typedef struct if_parser {
     struct {                /* functions */
-      const char *(*handle_error)  (struct if_parser *, const char *, const char *);
-      int         (*eval_variable) (struct if_parser *, const char *, size_t);
-      int         (*eval_defined)  (struct if_parser *, const char *, size_t);
+      const char *(*handle_error)  (struct if_parser const *, const char *, const char *);
+      int         (*eval_variable) (struct if_parser const *, const char *, size_t);
+      int         (*eval_defined)  (struct if_parser const *, const char *, size_t);
     } funcs;
     char *data;
 } IfParser;

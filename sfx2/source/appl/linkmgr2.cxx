@@ -102,7 +102,7 @@ void LinkManager::CloseCachedComps()
 }
 
 
-void LinkManager::Remove( SvBaseLink *pLink )
+void LinkManager::Remove( SvBaseLink const *pLink )
 {
     // No duplicate links inserted
     bool bFound = false;
@@ -339,7 +339,7 @@ void LinkManager::UpdateAllLinks(
 }
 
 
-SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
+SvLinkSourceRef LinkManager::CreateObj( SvBaseLink const * pLink )
 {
     switch( pLink->GetObjType() )
     {

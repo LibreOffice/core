@@ -154,7 +154,7 @@ extern SgfFontLst* pSgfFonts;
 
 // end of DefBase.Pas
 
-bool CheckTextOutl(ObjAreaType& F, ObjLineType& L)
+bool CheckTextOutl(ObjAreaType const & F, const ObjLineType& L)
 {
     return (F.FIntens!=L.LIntens) ||
            ((F.FFarbe!=L.LFarbe)   && (F.FIntens>0)) ||
@@ -566,7 +566,7 @@ struct ProcChrSta {
     ObjTextType Attrib;
 };
 
-void InitProcessCharState(ProcChrSta& State, ObjTextType& AktAtr, sal_uInt16 IndexA)
+void InitProcessCharState(ProcChrSta& State, ObjTextType const & AktAtr, sal_uInt16 IndexA)
 {
     State.Attrib=AktAtr;
     State.OutCh=0;
@@ -589,7 +589,7 @@ UCHAR Upcase(UCHAR c)
     return c;
 }
 
-sal_uInt16 GetCharWidth(OutputDevice& rOut, UCHAR c)
+sal_uInt16 GetCharWidth(OutputDevice const & rOut, UCHAR c)
 {
     sal_uInt16 ChrWidth;
 

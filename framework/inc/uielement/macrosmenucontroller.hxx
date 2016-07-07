@@ -60,7 +60,7 @@ namespace framework
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
         private:
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             void addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId );
     };
 }

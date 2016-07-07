@@ -319,7 +319,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
     }
 }
 
-void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
+void RscError::ErrorFormat( const ERRTYPE& rError, RscTop const * pClass,
                             const RscId & aId ){
     char buf[ 10 ];
     sal_uInt32 i;
@@ -372,7 +372,7 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
         StdLstErr( ": " );
 }
 
-void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
+void RscError::Error( const ERRTYPE& rError, RscTop const* pClass,
                       const RscId & aId, const char * pMessage )
 {
     if( WRN_LOCALID == rError ) // Keine Warning erzeugen

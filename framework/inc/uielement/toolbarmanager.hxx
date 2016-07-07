@@ -141,7 +141,7 @@ class ToolBarManager : public ToolbarManager_Base
         void UpdateController( const css::uno::Reference< css::frame::XToolbarController >& xController);
         //end
         void AddFrameActionListener();
-        void ImplClearPopupMenu( ToolBox *pToolBar );
+        void ImplClearPopupMenu( ToolBox const *pToolBar );
         void RequestImages();
         ToolBoxItemBits ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         css::uno::Reference< css::frame::XModel > GetModelFromFrame() const;

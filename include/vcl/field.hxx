@@ -47,7 +47,7 @@ private:
     bool                    mbDefaultLocale;
 
 protected:
-    SAL_DLLPRIVATE void     ImplSetText( const OUString& rText, Selection* pNewSel = nullptr );
+    SAL_DLLPRIVATE void     ImplSetText( const OUString& rText, Selection const * pNewSel = nullptr );
     SAL_DLLPRIVATE bool     ImplGetEmptyFieldValue() const  { return mbEmptyFieldValue; }
 
     void                    SetEmptyFieldValueData( bool bValue ) { mbEmptyFieldValue = bValue; }
@@ -153,7 +153,7 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE bool ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
-    SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection = nullptr );
+    SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection = nullptr );
 
 public:
     virtual                 ~NumericFormatter();
@@ -294,7 +294,7 @@ protected:
     SAL_DLLPRIVATE bool     ImplDateReformat( const OUString& rStr, OUString& rOutStr,
                                               const AllSettings& rSettings );
     SAL_DLLPRIVATE void     ImplSetUserDate( const Date& rNewDate,
-                                             Selection* pNewSelection = nullptr );
+                                             Selection const * pNewSelection = nullptr );
     SAL_DLLPRIVATE OUString ImplGetDateAsText( const Date& rDate,
                                                const AllSettings& rSettings ) const;
     SAL_DLLPRIVATE void     ImplNewFieldValue( const Date& rDate );
@@ -386,7 +386,7 @@ protected:
 
     SAL_DLLPRIVATE bool     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( const tools::Time& rTime );
-    SAL_DLLPRIVATE void     ImplSetUserTime( const tools::Time& rNewTime, Selection* pNewSelection = nullptr );
+    SAL_DLLPRIVATE void     ImplSetUserTime( const tools::Time& rNewTime, Selection const * pNewSelection = nullptr );
     SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:

@@ -86,7 +86,7 @@ public:
 class StarBASIC;
 class SbxArray;
 
-void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreatePropertySet( StarBASIC const * pBasic, SbxArray& rPar, bool bWrite );
 
 #endif
 

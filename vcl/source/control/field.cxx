@@ -456,7 +456,7 @@ const AllSettings& FormatterBase::GetFieldSettings() const
         return Application::GetSettings();
 }
 
-void FormatterBase::ImplSetText( const OUString& rText, Selection* pNewSelection )
+void FormatterBase::ImplSetText( const OUString& rText, Selection const * pNewSelection )
 {
     if ( mpField )
     {
@@ -604,7 +604,7 @@ OUString NumericFormatter::CreateFieldText( sal_Int64 nValue ) const
     return OUString(ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), IsShowTrailingZeros() ));
 }
 
-void NumericFormatter::ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection )
+void NumericFormatter::ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection )
 {
     nNewValue = ClipAgainstMinMax(nNewValue);
     mnLastValue = nNewValue;

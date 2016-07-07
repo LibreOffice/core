@@ -95,7 +95,7 @@ public:
 
 private:
     void implReleaseToolboxItem(
-            ToolBoxItemsMap::iterator& _rMapPos,
+            ToolBoxItemsMap::iterator const & _rMapPos,
             bool _bNotifyRemoval
         );
 };
