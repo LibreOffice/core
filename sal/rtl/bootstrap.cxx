@@ -413,11 +413,10 @@ struct FundamentalIniData {
     FundamentalIniData() {
         OUString uri;
         ini =
-            ((static_cast< Bootstrap_Impl * >(get_static_bootstrap_handle())->
-              getValue(
-                  "URE_BOOTSTRAP",
-                  &uri.pData, nullptr, LOOKUP_MODE_NORMAL, false, nullptr)) &&
-             resolvePathnameUrl(&uri))
+            (get_static_bootstrap_handle()->getValue(
+                "URE_BOOTSTRAP", &uri.pData, nullptr, LOOKUP_MODE_NORMAL, false,
+                nullptr)
+             && resolvePathnameUrl(&uri))
             ? rtl_bootstrap_args_open(uri.pData) : nullptr;
     }
 
