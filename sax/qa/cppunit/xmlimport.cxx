@@ -349,10 +349,6 @@ void SAL_CALL TestLegacyDocumentHandler::endElement( const OUString& aName )
 
 class NSDocumentHandler : public cppu::WeakImplHelper< XDocumentHandler >
 {
-private:
-    OUString resolveNamespace( const OUString& rName );
-    OUString getNamespaceValue( const OUString& rNamespacePrefix );
-
 public:
     NSDocumentHandler() {}
 
@@ -367,22 +363,19 @@ public:
     virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& /* xLocator */ ) throw (SAXException, RuntimeException, exception) override {}
 };
 
-void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >&/* xAttribs */ )
-        throw( SAXException, RuntimeException, exception )
+OUString getNamespaceValue( const OUString& rNamespacePrefix )
 {
-    if (! (aName == "office:document" || aName == "office:body" || aName == "office:text" ||
-        aName == "text:p" || aName == "note:p") )
-        CPPUNIT_ASSERT(false);
-
-    OUString sResolvedName = resolveNamespace(aName);
-    if (! ( sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:office:1.0:document" ||
-        sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:office:1.0:body" ||
-        sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:office:1.0:text" ||
-        sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:text:1.0:p") )
-        CPPUNIT_ASSERT(false);
+    OUString aNamespaceURI;
+    if (rNamespacePrefix == "office")
+        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+    else if (rNamespacePrefix == "text")
+        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+    else if (rNamespacePrefix == "note")
+        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+    return aNamespaceURI;
 }
 
-OUString NSDocumentHandler::resolveNamespace( const OUString& aName )
+OUString resolveNamespace( const OUString& aName )
 {
     int index;
     if (( index = aName.indexOf( ':' )) > 0 )
@@ -398,18 +391,20 @@ OUString NSDocumentHandler::resolveNamespace( const OUString& aName )
     return aName;
 }
 
-OUString NSDocumentHandler::getNamespaceValue( const OUString& rNamespacePrefix )
+void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >&/* xAttribs */ )
+        throw( SAXException, RuntimeException, exception )
 {
-    OUString aNamespaceURI;
-    if (rNamespacePrefix == "office")
-        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-    else if (rNamespacePrefix == "text")
-        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
-    else if (rNamespacePrefix == "note")
-        aNamespaceURI = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
-    return aNamespaceURI;
-}
+    if (! (aName == "office:document" || aName == "office:body" || aName == "office:text" ||
+        aName == "text:p" || aName == "note:p") )
+        CPPUNIT_ASSERT(false);
 
+    OUString sResolvedName = resolveNamespace(aName);
+    if (! ( sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:office:1.0:document" ||
+        sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:office:1.0:body" ||
+        sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:office:1.0:text" ||
+        sResolvedName == "urn:oasis:names:tc:opendocument:xmlns:text:1.0:p") )
+        CPPUNIT_ASSERT(false);
+}
 
 class XMLImportTest : public test::BootstrapFixture
 {
