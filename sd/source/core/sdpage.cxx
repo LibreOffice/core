@@ -463,7 +463,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
             pOutliner->SetStyleSheet( 0, nullptr );
             pOutliner->SetVertical( bVertical );
 
-            SetObjText( static_cast<SdrTextObj*>(pSdrObj), static_cast<SdrOutliner*>(pOutliner), eObjKind, aString );
+            SetObjText( static_cast<SdrTextObj*>(pSdrObj), pOutliner, eObjKind, aString );
 
             pOutliner->Init( nOutlMode );
             pOutliner->SetStyleSheet( 0, nullptr );
@@ -2076,7 +2076,7 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
     if( !pModel || !pSourceObj )
         return pSourceObj;
 
-    ::svl::IUndoManager* pUndoManager = static_cast<SdDrawDocument*>(pModel)->GetUndoManager();
+    ::svl::IUndoManager* pUndoManager = pModel->GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && rPage.IsInserted();
 
     SdrObject* pNewObj = pSourceObj;

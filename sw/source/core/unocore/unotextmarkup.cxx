@@ -378,7 +378,7 @@ static void lcl_commitGrammarMarkUp(
     if ( bCommit )
     {
         if( nType == text::TextMarkupType::SENTENCE )
-            static_cast<SwGrammarMarkUp*>(pWList)->setSentence( nStart+nLength );
+            pWList->setSentence( nStart+nLength );
         else
             pWList->Insert( rIdentifier, xMarkupInfoContainer, nStart, nLength );
     }

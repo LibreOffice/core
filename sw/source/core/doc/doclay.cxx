@@ -338,7 +338,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             SfxItemState::SET == pAnchorNode->GetSwAttrSet().
             GetItemState(RES_PARATR_ADJUST, true, &pItem))
         {
-            static_cast<SwContentNode *>(pNewTextNd)->SetAttr(*pItem);
+            pNewTextNd->SetAttr(*pItem);
         }
 
          pFormat = MakeFlySection_( *pAnchorPos, *pNewTextNd,
@@ -502,7 +502,7 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
                      (nPamEndContentIndex > nFlyContentIndex )));
         }
 
-    } while( !bOk && pPam != ( pTmp = static_cast<const SwPaM*>(pTmp->GetNext()) ));
+    } while( !bOk && pPam != ( pTmp = pTmp->GetNext() ));
     return bOk;
 }
 

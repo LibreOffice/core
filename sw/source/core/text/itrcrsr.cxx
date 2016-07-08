@@ -1412,7 +1412,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
     if( bFieldInfo && ( nWidth30 < nX || bRightOver || bLeftOver ||
         ( pPor->InNumberGrp() && !pPor->IsFootnoteNumPortion() ) ||
         ( pPor->IsMarginPortion() && nWidth > nX + 30 ) ) )
-        static_cast<SwCursorMoveState*>(pCMS)->m_bPosCorr = true;
+        pCMS->m_bPosCorr = true;
 
     // #i27615#
     if (pCMS)
@@ -1433,16 +1433,16 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
         if( pCMS )
         {
             if( pPor->IsFlyPortion() && bFieldInfo )
-                static_cast<SwCursorMoveState*>(pCMS)->m_bPosCorr = true;
+                pCMS->m_bPosCorr = true;
 
             if (!bRightOver && nX)
             {
                 if( pPor->IsFootnoteNumPortion())
-                    static_cast<SwCursorMoveState*>(pCMS)->m_bFootnoteNoInfo = true;
+                    pCMS->m_bFootnoteNoInfo = true;
                 else if (pPor->InNumberGrp() ) // #i23726#
                 {
-                    static_cast<SwCursorMoveState*>(pCMS)->m_nInNumPostionOffset = nX;
-                    static_cast<SwCursorMoveState*>(pCMS)->m_bInNumPortion = true;
+                    pCMS->m_nInNumPostionOffset = nX;
+                    pCMS->m_bInNumPortion = true;
                 }
             }
         }
@@ -1553,7 +1553,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
                  ! static_cast<SwMultiPortion*>(pPor)->OnTop() )
                 nTmpY = 0;
 
-            SwTextCursorSave aSave( const_cast<SwTextCursor*>(static_cast<const SwTextCursor*>(this)), static_cast<SwMultiPortion*>(pPor),
+            SwTextCursorSave aSave( const_cast<SwTextCursor*>(this), static_cast<SwMultiPortion*>(pPor),
                  nTmpY, nX, nCurrStart, nSpaceAdd );
 
             SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
@@ -1679,7 +1679,7 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
 
                 // set cursor bidi level
                 if ( pCMS )
-                    static_cast<SwCursorMoveState*>(pCMS)->m_nCursorBidiLevel =
+                    pCMS->m_nCursorBidiLevel =
                         aDrawInf.GetCursorBidiLevel();
 
                 if( bFieldInfo && nLength == pPor->GetLen() &&

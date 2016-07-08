@@ -291,7 +291,7 @@ void EditRTFParser::SetEndPrevPara( EditNodeIdx*& rpNodePos,
 
 bool EditRTFParser::IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const
 {
-    return nCnt == ( static_cast<EditNodeIdx*>(pNd)->GetNode()->Len());
+    return nCnt == pNd->GetNode()->Len();
 }
 
 void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )

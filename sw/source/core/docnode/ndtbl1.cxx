@@ -200,7 +200,7 @@ bool FindBox_( FndBox_ & rBox, LinesAndTable* pPara )
     }
     else if (rBox.GetBox())
     {
-        ::InsertLine(pPara->m_rLines, static_cast<SwTableLine*>(rBox.GetBox()->GetUpper()));
+        ::InsertLine(pPara->m_rLines, rBox.GetBox()->GetUpper());
     }
     return true;
 }

@@ -1609,7 +1609,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
     if( !xValObj.Is() || nullptr != dynamic_cast<const SbUnoAnyObject*>( &xValObj) )
         return false;
 
-    SbUnoObject* pUnoVal =  dynamic_cast<SbUnoObject*>( static_cast<SbxObject*>(xValObj.get()) );
+    SbUnoObject* pUnoVal =  dynamic_cast<SbUnoObject*>( xValObj.get() );
     SbUnoStructRefObject* pUnoStructVal = dynamic_cast<SbUnoStructRefObject*>( static_cast<SbxObject*>(xValObj) );
     Any aAny;
     // make doubly sure value is either an Uno object or
@@ -1632,7 +1632,7 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
         else
             SbxBase::ResetError();
 
-        SbUnoStructRefObject* pUnoStructObj = dynamic_cast<SbUnoStructRefObject*>( static_cast<SbxObject*>(xVarObj.get()) );
+        SbUnoStructRefObject* pUnoStructObj = dynamic_cast<SbUnoStructRefObject*>( xVarObj.get() );
 
         OUString sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
         OUString sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();

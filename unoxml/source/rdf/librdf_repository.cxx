@@ -510,11 +510,11 @@ librdf_node* librdf_GraphResult::getContext_Lock() const
 {
     if (!m_pStream.get() || librdf_stream_end(m_pStream.get()))
         return nullptr;
-    librdf_node *pCtxt( static_cast<librdf_node *>
+    librdf_node *pCtxt(
 #if LIBRDF_VERSION >= 10012
-        (librdf_stream_get_context2(m_pStream.get())) );
+        librdf_stream_get_context2(m_pStream.get()) );
 #else
-        (librdf_stream_get_context(m_pStream.get())) );
+        static_cast<librdf_node *>(librdf_stream_get_context(m_pStream.get())) );
 #endif
     if (pCtxt)
         return pCtxt;
@@ -1689,11 +1689,11 @@ librdf_statement *rdfa_context_stream_map_handler(
 {
     OSL_ENSURE(i_pStream, "rdfa_context_stream_map_handler: stream null");
     if (i_pStream) {
-        librdf_node *pCtxt( static_cast<librdf_node *>
+        librdf_node *pCtxt(
 #if LIBRDF_VERSION >= 10012
-            (librdf_stream_get_context2(i_pStream)) );
+            librdf_stream_get_context2(i_pStream) );
 #else
-            (librdf_stream_get_context(i_pStream)) );
+            static_cast<librdf_node *>(librdf_stream_get_context(i_pStream)) );
 #endif
         OSL_ENSURE(pCtxt, "rdfa_context_stream_map_handler: context null");
         if (pCtxt && isInternalContext(pCtxt)) {

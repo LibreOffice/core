@@ -1408,7 +1408,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
 
                 if( rpInsRing )
                 {
-                    SwPaM* pCorr = static_cast<SwPaM*>(rpInsRing->GetPrev());
+                    SwPaM* pCorr = rpInsRing->GetPrev();
                     if( *pCorr->GetPoint() == *pTmp->GetPoint() )
                         *pCorr->GetPoint() = *pTmp->GetMark();
                 }
@@ -1504,8 +1504,8 @@ void CompareData::CheckRanges( CompareData& rData )
 
 void CompareData::ShowInsert( sal_uLong nStt, sal_uLong nEnd )
 {
-    SwPaM* pTmp = new SwPaM( static_cast<const SwCompareLine*>(GetLine( nStt ))->GetNode(), 0,
-                             static_cast<const SwCompareLine*>(GetLine( nEnd-1 ))->GetEndNode(), 0,
+    SwPaM* pTmp = new SwPaM( GetLine( nStt )->GetNode(), 0,
+                             GetLine( nEnd-1 )->GetEndNode(), 0,
                              pInsRing );
     if( !pInsRing )
         pInsRing = pTmp;
@@ -1520,8 +1520,8 @@ void CompareData::ShowDelete(
     sal_uLong nInsPos )
 {
     SwNodeRange aRg(
-        static_cast<const SwCompareLine*>(rData.GetLine( nStt ))->GetNode(), 0,
-        static_cast<const SwCompareLine*>(rData.GetLine( nEnd-1 ))->GetEndNode(), 1 );
+        rData.GetLine( nStt )->GetNode(), 0,
+        rData.GetLine( nEnd-1 )->GetEndNode(), 1 );
 
     sal_uInt16 nOffset = 0;
     const SwCompareLine* pLine = nullptr;
@@ -1540,9 +1540,9 @@ void CompareData::ShowDelete(
     if( pLine )
     {
         if( nOffset )
-            pLineNd = &static_cast<const SwCompareLine*>(pLine)->GetEndNode();
+            pLineNd = &pLine->GetEndNode();
         else
-            pLineNd = &static_cast<const SwCompareLine*>(pLine)->GetNode();
+            pLineNd = &pLine->GetNode();
     }
     else
     {
@@ -1568,7 +1568,7 @@ void CompareData::ShowDelete(
 
     if( pInsRing )
     {
-        SwPaM* pCorr = static_cast<SwPaM*>(pInsRing->GetPrev());
+        SwPaM* pCorr = pInsRing->GetPrev();
         if( *pCorr->GetPoint() == *pTmp->GetPoint() )
         {
             SwNodeIndex aTmpPos( pTmp->GetMark()->nNode, -1 );
@@ -1603,8 +1603,8 @@ void CompareData::CheckForChangesInLine( const CompareData& rData,
 
         if( i )
         {
-            const SwCompareLine* pDstLn = static_cast<const SwCompareLine*>(GetLine( rThisStt + nDstFrom - 1 ));
-            const SwCompareLine* pSrcLn = static_cast<const SwCompareLine*>(rData.GetLine( rStt + nSrcFrom - 1 ));
+            const SwCompareLine* pDstLn = GetLine( rThisStt + nDstFrom - 1 );
+            const SwCompareLine* pSrcLn = rData.GetLine( rStt + nSrcFrom - 1 );
 
             // Show differences in detail for lines that
             // were matched as only slightly different
@@ -2142,8 +2142,8 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
         return false;
     }
 
-    const SwTextNode *pTextNd1 = static_cast<const SwCompareLine*>( rData1.GetLine( nFirst1 + nIdx1 ) )->GetNode().GetTextNode();
-    const SwTextNode *pTextNd2 = static_cast<const SwCompareLine*>( rData2.GetLine( nFirst2 + nIdx2 ) )->GetNode().GetTextNode();
+    const SwTextNode *pTextNd1 = rData1.GetLine( nFirst1 + nIdx1 )->GetNode().GetTextNode();
+    const SwTextNode *pTextNd2 = rData2.GetLine( nFirst2 + nIdx2 )->GetNode().GetTextNode();
 
     if( !pTextNd1 || !pTextNd2
         || ( CmpOptions.bUseRsid && !pTextNd1->CompareParRsid( *pTextNd2 ) ) )

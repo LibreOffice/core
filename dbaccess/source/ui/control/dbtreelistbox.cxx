@@ -189,14 +189,13 @@ void DBTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* _pEntry )
 {
     SvTreeListBox::ModelHasEntryInvalidated( _pEntry );
 
-    SvTreeListEntry* pLBEntry = static_cast<SvTreeListEntry*>(_pEntry);
-    if (m_aSelectedEntries.find(pLBEntry) != m_aSelectedEntries.end())
+    if (m_aSelectedEntries.find(_pEntry) != m_aSelectedEntries.end())
     {
-        SvLBoxItem* pTextItem = pLBEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+        SvLBoxItem* pTextItem = _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
         if ( pTextItem && !static_cast< OBoldListboxString* >( pTextItem )->isEmphasized() )
         {
             implStopSelectionTimer();
-            m_aSelectedEntries.erase(pLBEntry);
+            m_aSelectedEntries.erase(_pEntry);
                 // ehm - why?
         }
     }
@@ -205,11 +204,10 @@ void DBTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* _pEntry )
 void DBTreeListBox::ModelHasRemoved( SvTreeListEntry* _pEntry )
 {
     SvTreeListBox::ModelHasRemoved(_pEntry);
-    SvTreeListEntry* pLBEntry = static_cast<SvTreeListEntry*>(_pEntry);
-    if (m_aSelectedEntries.find(pLBEntry) != m_aSelectedEntries.end())
+    if (m_aSelectedEntries.find(_pEntry) != m_aSelectedEntries.end())
     {
         implStopSelectionTimer();
-        m_aSelectedEntries.erase(pLBEntry);
+        m_aSelectedEntries.erase(_pEntry);
     }
 }
 

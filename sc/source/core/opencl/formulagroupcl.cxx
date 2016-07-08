@@ -4213,7 +4213,7 @@ CLInterpreterContext createCLInterpreterContext( const ScCalcConfig& rConfig,
 {
     CLInterpreterContext aCxt(xGroup->mnLength);
 
-    aCxt.setManagedKernel(static_cast<DynamicKernel*>(DynamicKernel::create(rConfig, rCode, xGroup->mnLength)));
+    aCxt.setManagedKernel(DynamicKernel::create(rConfig, rCode, xGroup->mnLength));
 
     return aCxt;
 }

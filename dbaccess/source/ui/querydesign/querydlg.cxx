@@ -114,7 +114,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     m_pLB_JoinType->SetSelectHdl(LINK(this,DlgQryJoin,LBChangeHdl));
     m_pCBNatural->SetToggleHdl(LINK(this,DlgQryJoin,NaturalToggleHdl));
 
-    if ( static_cast<OQueryTableView*>(pParent)->getDesignView()->getController().isReadOnly() )
+    if ( pParent->getDesignView()->getController().isReadOnly() )
     {
         m_pLB_JoinType->Disable();
         m_pCBNatural->Disable();

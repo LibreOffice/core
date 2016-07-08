@@ -1312,7 +1312,7 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
             if(!m_pTables->hasByName(aComposedName))
             {
                 ::comphelper::UStringMixLess aTmp(m_aAdditiveIterator.getTables().key_comp());
-                ::comphelper::UStringMixEqual aComp(static_cast< ::comphelper::UStringMixLess*>(&aTmp)->isCaseSensitive());
+                ::comphelper::UStringMixEqual aComp(aTmp.isCaseSensitive());
                 for(;pBegin != pEnd;++pBegin)
                 {
                     Reference<XPropertySet> xTableProp;

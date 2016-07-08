@@ -1503,8 +1503,7 @@ void lcl_CopyHint(
         if( pDest && pDest->GetpSwpHints()
             && pDest->GetpSwpHints()->Contains( pNewHt ) )
         {
-            SwCharFormat* pFormat =
-                static_cast<SwCharFormat*>(pHt->GetCharFormat().GetCharFormat());
+            SwCharFormat* pFormat = pHt->GetCharFormat().GetCharFormat();
 
             if (pOtherDoc)
             {

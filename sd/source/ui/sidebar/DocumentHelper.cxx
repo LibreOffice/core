@@ -93,8 +93,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
         sal_uInt16 nMasterPageCount(rTargetDocument.GetMasterSdPageCount(PK_STANDARD));
         for (sal_uInt16 nMaster=0; nMaster<nMasterPageCount; nMaster++)
         {
-            SdPage* pCandidate = static_cast<SdPage*>(
-                rTargetDocument.GetMasterSdPage (nMaster, PK_STANDARD));
+            SdPage* pCandidate = rTargetDocument.GetMasterSdPage (nMaster, PK_STANDARD);
             if (pMasterPage!=nullptr
                 && pCandidate->GetName() == pMasterPage->GetName())
             {

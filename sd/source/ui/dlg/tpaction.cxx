@@ -167,7 +167,7 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
     mpView = pSdView;
 
     // get ColorTable and fill ListBox
-    ::sd::DrawDocShell* pDocSh = static_cast<const ::sd::View*>(mpView)->GetDocSh();
+    ::sd::DrawDocShell* pDocSh = mpView->GetDocSh();
     if( pDocSh && pDocSh->GetViewShell() )
     {
         mpDoc = pDocSh->GetDoc();

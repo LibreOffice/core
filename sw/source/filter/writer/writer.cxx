@@ -171,7 +171,7 @@ bool Writer::CopyNextPam( SwPaM ** ppPam )
     }
 
     // otherwise copy the next value from the next Pam
-    *ppPam = static_cast<SwPaM*>((*ppPam)->GetNext() );
+    *ppPam = (*ppPam)->GetNext();
 
     *pCurPam->GetPoint() = *(*ppPam)->Start();
     *pCurPam->GetMark() = *(*ppPam)->End();
