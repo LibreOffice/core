@@ -1569,10 +1569,9 @@ public:
 
         rRenderContext.Push(PushFlags::FILLCOLOR);
 
-        SvTreeListBox* pTreeBox = static_cast< SvTreeListBox* >(&rOutDev);
-        long nX = pTreeBox->GetSizePixel().Width();
+        long nX = rOutDev.GetSizePixel().Width();
 
-        ScrollBar* pVScroll = pTreeBox->GetVScroll();
+        ScrollBar* pVScroll = rOutDev.GetVScroll();
         if (pVScroll->IsVisible())
         {
             nX -= pVScroll->GetSizePixel().Width();
