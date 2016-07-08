@@ -55,6 +55,13 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 ))
 endif
 
+ifneq ($(DISABLE_PYTHON),TRUE)
+$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+    PythonTest_sc_python \
+))
+endif
+
+
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_condformats \
 	CppunitTest_sc_new_cond_format_api \
@@ -107,6 +114,5 @@ $(eval $(call gb_Module_add_perfcheck_targets,sc,\
 	CppunitTest_sc_perfobj \
 	CppunitTest_sc_tablesheetobj \
 ))
-
 
 # vim: set noet sw=4 ts=4:
