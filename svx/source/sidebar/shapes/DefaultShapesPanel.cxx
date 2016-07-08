@@ -126,7 +126,7 @@ void DefaultShapesPanel::populateShapes()
     for(auto& aSet : mpShapesSetMap)
     {
         aSet.first->SetColCount(6);
-        for(sal_uInt16 i = 0; i < aSet.second.size(); i++)
+        for(std::map<sal_uInt16, rtl::OUString>::size_type i = 0; i < aSet.second.size(); i++)
         {
             sSlotStr = aSet.second[i];
             aSlotImage = ::GetImage(mxFrame, sSlotStr, false);
