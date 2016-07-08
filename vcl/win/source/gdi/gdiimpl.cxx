@@ -1921,7 +1921,7 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
 }
 
 void impAddB2DPolygonToGDIPlusGraphicsPathReal(
-    Gdiplus::GpPath *pPath,
+    Gdiplus::GraphicsPath& rGraphicsPath,
     const basegfx::B2DPolygon& rPolygon,
     bool bNoLineJoin,
     const basegfx::B2DVector* pLineWidths)
@@ -1966,12 +1966,11 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
                         aCb = aNext + ((aCa - aNext) * 0.3);
                     }
 
-                    Gdiplus::DllExports::GdipAddPathBezier(
-                        pPath,
-                        aCurr.getX(), aCurr.getY(),
-                        aCa.getX(), aCa.getY(),
-                        aCb.getX(), aCb.getY(),
-                        aNext.getX(), aNext.getY());
+                    rGraphicsPath.AddBezier(
+                        static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                        static_cast< Gdiplus::REAL >(aCa.getX()), static_cast< Gdiplus::REAL >(aCa.getY()),
+                        static_cast< Gdiplus::REAL >(aCb.getX()), static_cast< Gdiplus::REAL >(aCb.getY()),
+                        static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
                 }
                 else
                 {
@@ -1983,25 +1982,22 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
                         // based on line width to have something relative to current metrics
                         if (!basegfx::fTools::equalZero(pLineWidths->getX()))
                         {
-                            Gdiplus::DllExports::GdipAddPathLine(
-                                pPath,
-                                aCurr.getX(), aCurr.getY(),
-                                aNext.getX() + (pLineWidths->getX() * 0.1), aNext.getY());
+                            rGraphicsPath.AddLine(
+                                static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                                static_cast< Gdiplus::REAL >(aNext.getX() + (pLineWidths->getX() * 0.1)), static_cast< Gdiplus::REAL >(aNext.getY()));
                         }
                         else
                         {
-                            Gdiplus::DllExports::GdipAddPathLine(
-                                pPath,
-                                aCurr.getX(), aCurr.getY(),
-                                aNext.getX(), aNext.getY() + (pLineWidths->getY() * 0.1));
+                            rGraphicsPath.AddLine(
+                                static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                                static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY() + (pLineWidths->getY() * 0.1)));
                         }
                     }
                     else
                     {
-                        Gdiplus::DllExports::GdipAddPathLine(
-                            pPath,
-                            aCurr.getX(), aCurr.getY(),
-                            aNext.getX(), aNext.getY());
+                        rGraphicsPath.AddLine(
+                            static_cast< Gdiplus::REAL >(aCurr.getX()), static_cast< Gdiplus::REAL >(aCurr.getY()),
+                            static_cast< Gdiplus::REAL >(aNext.getX()), static_cast< Gdiplus::REAL >(aNext.getY()));
                     }
                 }
 
@@ -2011,7 +2007,7 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
 
                     if (bNoLineJoin)
                     {
-                        Gdiplus::DllExports::GdipStartPathFigure(pPath);
+                        rGraphicsPath.StartFigure();
                     }
                 }
             }
@@ -2039,8 +2035,8 @@ bool WinSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPol
                 aGraphicsPath.StartFigure();
             }
 
-            impAddB2DPolygonToGDIPlusGraphicsPathReal(pPath, rPolyPolygon.getB2DPolygon(a), false, 0);
-            Gdiplus::DllExports::GdipClosePathFigure(pPath);
+            impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolyPolygon.getB2DPolygon(a), false, 0);
+            aGraphicsPath.CloseFigure();
         }
 
         if (mrParent.getAntiAliasB2DDraw())
@@ -2098,60 +2094,60 @@ bool WinSalGraphicsImpl::drawPolyLine(
 
         switch (eLineJoin)
         {
-        case basegfx::B2DLineJoin::NONE:
-        {
-            if (basegfx::fTools::more(rLineWidths.getX(), 0.0))
+            case basegfx::B2DLineJoin::B2DLINEJOIN_NONE:
             {
-                bNoLineJoin = true;
+                if (basegfx::fTools::more(rLineWidths.getX(), 0.0))
+                {
+                    bNoLineJoin = true;
+                }
+                break;
             }
-            break;
-        }
-        case basegfx::B2DLineJoin::Bevel:
-        {
-            aPen.SetLineJoin(Gdiplus::LineJoinBevel);
-            break;
-        }
-        case basegfx::B2DLineJoin::Miter:
-        {
-            const Gdiplus::REAL aMiterLimit(15.0);
+            case basegfx::B2DLineJoin::B2DLINEJOIN_BEVEL:
+            {
+                aPen.SetLineJoin(Gdiplus::LineJoinBevel);
+                break;
+            }
+            case basegfx::B2DLineJoin::B2DLINEJOIN_MITER:
+            {
+                const Gdiplus::REAL aMiterLimit(15.0);
 
-            aPen.SetMiterLimit(aMiterLimit);
-            // tdf#99165 MS's LineJoinMiter creates non standard conform miter additional
-            // graphics, somewhere clipped in some distance from the edge point, dependent
-            // of MiterLimit. The more default-like option is LineJoinMiterClipped, so use
-            // that instead
-            aPen.SetLineJoin(Gdiplus::LineJoinMiterClipped);
-            break;
-        }
-        case basegfx::B2DLineJoin::Round:
-        {
-            aPen.SetLineJoin(Gdiplus::LineJoinRound);
-            break;
-        }
+                aPen.SetMiterLimit(aMiterLimit);
+                // tdf#99165 MS's LineJoinMiter creates non standard conform miter additional
+                // graphics, somewhere clipped in some distance from the edge point, dependent
+                // of MiterLimit. The more default-like option is LineJoinMiterClipped, so use
+                // that instead
+                aPen.SetLineJoin(Gdiplus::LineJoinMiterClipped);
+                break;
+            }
+            case basegfx::B2DLineJoin::B2DLINEJOIN_ROUND:
+            {
+                aPen.SetLineJoin(Gdiplus::LineJoinRound);
+                break;
+            }
         }
 
         switch (eLineCap)
         {
-        default: /*css::drawing::LineCap_BUTT*/
-        {
-            // nothing to do
-            break;
-        }
-        case css::drawing::LineCap_ROUND:
-        {
-            aPen.SetStartCap(Gdiplus::LineCapRound);
-            aPen.SetEndCap(Gdiplus::LineCapRound);
-            break;
-        }
-        case css::drawing::LineCap_SQUARE:
-        {
-            aPen.SetStartCap(Gdiplus::LineCapSquare);
-            aPen.SetEndCap(Gdiplus::LineCapSquare);
-            break;
-        }
+            default: /*css::drawing::LineCap_BUTT*/
+            {
+                // nothing to do
+                break;
+            }
+            case css::drawing::LineCap_ROUND:
+            {
+                aPen.SetStartCap(Gdiplus::LineCapRound);
+                aPen.SetEndCap(Gdiplus::LineCapRound);
+                break;
+            }
+            case css::drawing::LineCap_SQUARE:
+            {
+                aPen.SetStartCap(Gdiplus::LineCapSquare);
+                aPen.SetEndCap(Gdiplus::LineCapSquare);
+                break;
+            }
         }
 
-        impAddB2DPolygonToGDIPlusGraphicsPathReal(pPath, rPolygon, bNoLineJoin, &rLineWidths);
+        impAddB2DPolygonToGDIPlusGraphicsPathReal(aGraphicsPath, rPolygon, bNoLineJoin, &rLineWidths);
 
         if (rPolygon.isClosed() && !bNoLineJoin)
         {

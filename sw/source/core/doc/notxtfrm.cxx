@@ -999,12 +999,12 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
         if(bIsChart)
         {
             basegfx::B2DRange aSourceRange;
-            const drawinglayer::primitive2d::Primitive2DContainer aSequence(
+            const drawinglayer::primitive2d::Primitive2DSequence aSequence(
                 pOLENd->GetOLEObj().tryToGetChartContentAsPrimitive2DSequence(
                     aSourceRange,
                     bPrn));
 
-            if(!aSequence.empty() && !aSourceRange.isEmpty())
+            if (0 != aSequence.getLength() && !aSourceRange.isEmpty())
             {
                 const basegfx::B2DRange aTargetRange(
                     aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),

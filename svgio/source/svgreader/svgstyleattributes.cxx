@@ -701,18 +701,6 @@ namespace svgio
                                 aDashArray = solveSvgNumberVector(getStrokeDasharray(), mrOwner);
                             }
 
-                            // convert svg:stroke-miterlimit to LineAttrute:mfMiterMinimumAngle
-                            // The default needs to be set explicitely, because svg default <> Draw default
-                            double fMiterMinimumAngle;
-                            if (getStrokeMiterLimit().isSet())
-                            {
-                                fMiterMinimumAngle = 2.0 * asin(1.0/getStrokeMiterLimit().getNumber());
-                            }
-                            else
-                            {
-                                fMiterMinimumAngle = 2.0 * asin(0.25); // 1.0/default 4.0
-                            }
-
                             // todo: Handle getStrokeDashOffset()
 
                             // prepare line attribute
@@ -720,8 +708,7 @@ namespace svgio
                                 pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0),
                                 fStrokeWidth,
                                 aB2DLineJoin,
-                                aLineCap,
-                                fMiterMinimumAngle);
+                                aLineCap);
 
                             if(aDashArray.empty())
                             {

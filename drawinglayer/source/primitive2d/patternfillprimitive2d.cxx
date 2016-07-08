@@ -133,7 +133,7 @@ namespace drawinglayer
                 }
             }
 
-            if(aContent.empty())
+            if (0 == aContent.getLength())
             {
                 // buffering was not tried or did fail - reset remembered buffered size
                 // in any case
@@ -145,7 +145,7 @@ namespace drawinglayer
 
                 // check if content needs to be clipped
                 const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-                const basegfx::B2DRange aContentRange(getChildren().getB2DRange(rViewInformation));
+                const basegfx::B2DRange aContentRange(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
 
                 if(!aUnitRange.isInside(aContentRange))
                 {
@@ -309,7 +309,7 @@ namespace drawinglayer
                 PatternFillPrimitive2D* pThat = const_cast< PatternFillPrimitive2D* >(this);
                 pThat->mnDiscreteWidth = nW;
                 pThat->mnDiscreteHeight = nH;
-                pThat->setBuffered2DDecomposition(Primitive2DContainer());
+                pThat->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
             // call parent
