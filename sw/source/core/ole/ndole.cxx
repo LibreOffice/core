@@ -1111,7 +1111,9 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
             // loaded using own instance of comphelper::ThreadPool,
             // see getLocalThreadPool(). Disable via bool below if
             // trouble surfaces somewhere
-            static bool bAnynchronousLoadingAllowed = true;
+
+            // disabled fro now, need to check deeper
+            static bool bAnynchronousLoadingAllowed = false;
 
             if(bSynchron ||
                 !bAnynchronousLoadingAllowed ||
