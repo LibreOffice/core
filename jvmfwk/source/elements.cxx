@@ -636,7 +636,7 @@ void NodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
     {
         for (int i  = 0; i < size; i++)
         {
-            const OUString sOption(static_cast<rtl_uString*>(arOptions[i]));
+            const OUString sOption(arOptions[i]);
             m_vmParameters->push_back(sOption);
         }
     }
