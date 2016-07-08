@@ -1563,34 +1563,30 @@ void Window::ImplScroll( const Rectangle& rRect,
     // adapt paint areas
     ImplMoveAllInvalidateRegions( aRectMirror, nHorzScroll, nVertScroll, bScrollChildren );
 
-    if ( !(nFlags & ScrollFlags::NoInvalidate) )
+    ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, false );
+
+    // --- RTL ---
+    // if the scrolling on the device is performed in the opposite direction
+    // then move the overlaps in that direction to compute the invalidate region
+    // on the correct side, i.e., revert nHorzScroll
+    if (!aInvalidateRegion.IsEmpty())
     {
-        ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, false );
-
-        // --- RTL ---
-        // if the scrolling on the device is performed in the opposite direction
-        // then move the overlaps in that direction to compute the invalidate region
-        // on the correct side, i.e., revert nHorzScroll
-
-        if ( !aInvalidateRegion.IsEmpty() )
-        {
-            aInvalidateRegion.Move( bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll );
-            bErase = true;
-        }
-
-        Rectangle aDestRect(aRectMirror);
-        aDestRect.Move(bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll);
-        vcl::Region aWinInvalidateRegion(aRectMirror);
-        if (!SupportsDoubleBuffering())
-        {
-            // There will be no CopyArea() call below, so invalidate the
-            // whole visible area, not only the smaller one that was just
-            // scrolled in.
-            aWinInvalidateRegion.Exclude(aDestRect);
-        }
-
-        aInvalidateRegion.Union( aWinInvalidateRegion );
+        aInvalidateRegion.Move(bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll);
+        bErase = true;
     }
+
+    Rectangle aDestRect(aRectMirror);
+    aDestRect.Move(bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll);
+    vcl::Region aWinInvalidateRegion(aRectMirror);
+    if (!SupportsDoubleBuffering())
+    {
+        // There will be no CopyArea() call below, so invalidate the
+        // whole visible area, not only the smaller one that was just
+        // scrolled in.
+        aWinInvalidateRegion.Exclude(aDestRect);
+    }
+
+    aInvalidateRegion.Union(aWinInvalidateRegion);
 
     Point aPoint( mnOutOffX, mnOutOffY );
     vcl::Region aRegion( Rectangle( aPoint, Size( mnOutWidth, mnOutHeight ) ) );
