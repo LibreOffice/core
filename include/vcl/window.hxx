@@ -254,13 +254,12 @@ enum class ScrollFlags
     Clip                     = 0x0001,
     Children                 = 0x0002,
     NoChildren               = 0x0004,
-    NoErase                  = 0x0008,
-    UseClipRegion            = 0x0010,
-    Update                   = 0x0020,
+    UseClipRegion            = 0x0008,
+    Update                   = 0x0010,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ScrollFlags> : is_typed_flags<ScrollFlags, 0x003f> {};
+    template<> struct typed_flags<ScrollFlags> : is_typed_flags<ScrollFlags, 0x001f> {};
 }
 
 // Flags for ParentClipMode

@@ -1542,7 +1542,6 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     vcl::Region  aInvalidateRegion;
     bool    bScrollChildren(nFlags & ScrollFlags::Children);
-    bool    bErase(!(nFlags & ScrollFlags::NoErase));
 
     if ( !mpWindowImpl->mpFirstChild )
         bScrollChildren = false;
@@ -1572,7 +1571,6 @@ void Window::ImplScroll( const Rectangle& rRect,
     if (!aInvalidateRegion.IsEmpty())
     {
         aInvalidateRegion.Move(bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll);
-        bErase = true;
     }
 
     Rectangle aDestRect(aRectMirror);
@@ -1661,8 +1659,6 @@ void Window::ImplScroll( const Rectangle& rRect,
         mpWindowImpl->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
 
         InvalidateFlags nPaintFlags = InvalidateFlags::Children;
-        if ( !bErase )
-            nPaintFlags |= InvalidateFlags::NoErase;
         if ( !bScrollChildren )
         {
             if ( nOrgFlags & ScrollFlags::NoChildren )
