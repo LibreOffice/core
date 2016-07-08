@@ -2567,14 +2567,14 @@ void CellStyle::createCellStyle()
         if( bDefStyle )
         {
             // use existing "Default" style sheet
-            mpStyleSheet = static_cast< ScStyleSheet* >( static_cast< ScStyleSheetPool* >( rDoc.GetStyleSheetPool() )->Find(
+            mpStyleSheet = static_cast< ScStyleSheet* >( rDoc.GetStyleSheetPool()->Find(
                 ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) );
             OSL_ENSURE( mpStyleSheet, "CellStyle::createStyle - Default style not found" );
             bCreatePattern = true;
         }
         else
         {
-            mpStyleSheet = static_cast< ScStyleSheet* >( static_cast< ScStyleSheetPool* >( rDoc.GetStyleSheetPool() )->Find( maFinalName, SfxStyleFamily::Para ) );
+            mpStyleSheet = static_cast< ScStyleSheet* >( rDoc.GetStyleSheetPool()->Find( maFinalName, SfxStyleFamily::Para ) );
             if( !mpStyleSheet )
             {
                 mpStyleSheet = &static_cast< ScStyleSheet& >( rDoc.GetStyleSheetPool()->Make( maFinalName, SfxStyleFamily::Para, SFXSTYLEBIT_USERDEF ) );

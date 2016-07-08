@@ -479,7 +479,7 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
 XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, Rectangle &rFrom, Rectangle &rTo ) :
     XclObj( rObjMgr, EXC_OBJTYPE_NOTE, true )
             , maScPos( rAddress )
-            , mpCaption( static_cast< SdrCaptionObj* >( pCaption->Clone() ) )
+            , mpCaption( pCaption->Clone() )
             , mbVisible( bVisible )
             , maFrom ( rFrom )
             , maTo ( rTo )
