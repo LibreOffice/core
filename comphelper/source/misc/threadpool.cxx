@@ -37,6 +37,7 @@ public:
         while ( ( pTask = waitForWork() ) )
         {
             pTask->doWork();
+            ThreadPool::threadWorkerDone(*pTask);
             delete pTask;
         }
     }
@@ -149,9 +150,26 @@ sal_Int32 ThreadPool::getPreferredConcurrency()
 
 void ThreadPool::waitAndCleanupWorkers()
 {
-    waitUntilEmpty();
-
     osl::ResettableMutexGuard aGuard( maGuard );
+
+    if( maWorkers.empty() )
+    { // no threads at all -> execute the work in-line
+        ThreadTask *pTask;
+        while ( ( pTask = popWork() ) )
+        {
+            pTask->doWork();
+            pTask->mpTag->threadTaskWorkerDone();
+            delete pTask;
+        }
+    }
+    else
+    {
+        aGuard.clear();
+        maTasksComplete.wait();
+        aGuard.reset();
+    }
+    assert( maTasks.empty() );
+
     mbTerminate = true;
 
     while( !maWorkers.empty() )
@@ -205,7 +223,7 @@ void ThreadPool::stopWork()
         maTasksComplete.set();
 }
 
-void ThreadPool::waitUntilEmpty()
+void ThreadPool::waitUntilEmpty(const std::shared_ptr<ThreadTaskTag>& rTag)
 {
     osl::ResettableMutexGuard aGuard( maGuard );
 
@@ -215,16 +233,58 @@ void ThreadPool::waitUntilEmpty()
         while ( ( pTask = popWork() ) )
         {
             pTask->doWork();
+            pTask->mpTag->threadTaskWorkerDone();
             delete pTask;
         }
+        assert( maTasks.empty() );
     }
     else
     {
         aGuard.clear();
-        maTasksComplete.wait();
-        aGuard.reset();
+        rTag->threadTaskWorkerDone();
     }
-    assert( maTasks.empty() );
+}
+
+void ThreadPool::threadWorkerDone(ThreadTask & rTask)
+{
+    rTask.mpTag->threadTaskWorkerDone();
+}
+
+ThreadTask::ThreadTask(const std::shared_ptr<ThreadTaskTag>& pTag) : mpTag(pTag)
+{
+    mpTag->newThreadTask();
+}
+
+ThreadTaskTag::ThreadTaskTag()
+{
+    maTasksComplete.set();
+}
+
+void ThreadTaskTag::newThreadTask()
+{
+    osl_atomic_increment(&mnTasksWorking);
+    maTasksComplete.reset();
+}
+
+void ThreadTaskTag::threadTaskWorkerDone()
+{
+    if (osl_atomic_decrement(&mnTasksWorking) == 0)
+        maTasksComplete.set();
+}
+
+void ThreadTaskTag::waitTillTasksDone()
+{
+    // 2 minute timeout in debug mode so our tests fail sooner rather than later
+#ifdef DBG_UTIL
+    assert(maTasksComplete.wait(TimeValue { 2*60, 0 }) != osl_cond_result_timeout);
+#else
+    maTasksComplete.wait();
+#endif
+}
+
+bool ThreadTaskTag::isDone()
+{
+    return mnTasksWorking == 0;
 }
 
 } // namespace comphelper

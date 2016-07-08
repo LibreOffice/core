@@ -15,15 +15,21 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
-#include <vector>
 #include <comphelper/comphelperdllapi.h>
+#include <vector>
+#include <memory>
 
 namespace comphelper
 {
+class ThreadTaskTag;
+class ThreadPool;
 
 class COMPHELPER_DLLPUBLIC ThreadTask
 {
+friend class ThreadPool;
+    std::shared_ptr<ThreadTaskTag>  mpTag;
 public:
+    ThreadTask(const std::shared_ptr<ThreadTaskTag>& pTag);
     virtual      ~ThreadTask() {}
     virtual void doWork() = 0;
 };
@@ -42,14 +48,14 @@ public:
     /// MAX_CONCURRENCY envar controls the cap.
     static      sal_Int32 getPreferredConcurrency();
 
-                ThreadPool( sal_Int32 nWorkers );
+    ThreadPool( sal_Int32 nWorkers );
     virtual    ~ThreadPool();
 
     /// push a new task onto the work queue
     void        pushTask( ThreadTask *pTask /* takes ownership */ );
 
-    /// wait until all queued tasks are completed
-    void        waitUntilEmpty();
+    /// wait until all queued tasks associated with the tag are completed
+    void        waitUntilEmpty(const std::shared_ptr<ThreadTaskTag>&);
 
     /// return the number of live worker threads
     sal_Int32   getWorkerCount() const { return maWorkers.size(); }
@@ -67,6 +73,7 @@ private:
     ThreadTask *popWork();
     void        startWork();
     void        stopWork();
+    static void    threadWorkerDone(ThreadTask & rTask);
 
     osl::Mutex     maGuard;
     sal_Int32      mnThreadsWorking;
@@ -75,6 +82,22 @@ private:
     bool           mbTerminate;
     std::vector< rtl::Reference< ThreadWorker > > maWorkers;
     std::vector< ThreadTask * >   maTasks;
+};
+
+// used to group thread-tasks for waiting in waitTillDone()
+class COMPHELPER_DLLPUBLIC ThreadTaskTag
+{
+friend class ThreadPool;
+friend class ThreadTask;
+    oslInterlockedCount  mnTasksWorking;
+    osl::Condition       maTasksComplete;
+
+    void           newThreadTask();
+    void           threadTaskWorkerDone();
+public:
+    ThreadTaskTag();
+    bool           isDone();
+    void           waitTillTasksDone();
 };
 
 } // namespace comphelper
