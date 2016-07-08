@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_81922656",
+        "filename": "svx/source/sidebar/shapes/ShapesUtil.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-07-08T21:35:46Z",
+      "side": 1,
+      "message": "these members all look like they could be simplified to be vectors rather than maps?",
+      "revId": "ab9708e179762f97bd1a0ee4c0d4b439f1dabfd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
