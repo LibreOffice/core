@@ -291,12 +291,6 @@ gb_DEBUGINFO_FLAGS := \
 
 gb_DEBUG_CFLAGS := $(gb_DEBUGINFO_FLAGS)
 
-# this does not use CFLAGS so it is not overridable
-ifeq ($(gb_SYMBOL),$(true))
-gb_CFLAGS+=$(gb_DEBUG_CFLAGS)
-gb_CXXFLAGS+=$(gb_DEBUG_CFLAGS)
-endif
-
 gb_COMPILEROPTFLAGS := -O2 -Oy-
 gb_COMPILERNOOPTFLAGS := -Od
 

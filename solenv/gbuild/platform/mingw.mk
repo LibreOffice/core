@@ -74,11 +74,6 @@ gb_DEBUG_CFLAGS := -g -fno-inline
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
-ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CXXFLAGS += $(gb_DEBUGINFO_FLAGS)
-gb_LinkTarget_CFLAGS += $(gb_DEBUGINFO_FLAGS)
-endif
-
 gb_LinkTarget_INCLUDE +=\
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
 
