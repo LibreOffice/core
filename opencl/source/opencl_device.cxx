@@ -30,6 +30,8 @@
 #include <opencl/platforminfo.hxx>
 #include <sal/log.hxx>
 
+#include <opencl/OpenCLZone.hxx>
+
 #include "opencl_device.hxx"
 
 #define INPUTSIZE  15360
@@ -200,14 +202,21 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
         /* Evaluating an OpenCL device */
         SAL_INFO("opencl.device", "Device: \"" << rDevice.sDeviceName << "\" (OpenCL) evaluation...");
         cl_int clStatus;
-        /* Check for 64-bit float extensions */
-        size_t aDevExtInfoSize = 0;
-        clStatus = clGetDeviceInfo(rDevice.aDeviceID, CL_DEVICE_EXTENSIONS, 0, nullptr, &aDevExtInfoSize);
-        DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clGetDeviceInfo");
 
-        std::unique_ptr<char[]> aExtInfo(new char[aDevExtInfoSize]);
-        clStatus = clGetDeviceInfo(rDevice.aDeviceID, CL_DEVICE_EXTENSIONS, sizeof(char) * aDevExtInfoSize, aExtInfo.get(), nullptr);
-        DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clGetDeviceInfo");
+        /* Check for 64-bit float extensions */
+        std::unique_ptr<char[]> aExtInfo;
+        {
+            size_t aDevExtInfoSize = 0;
+
+            OpenCLZone zone;
+            clStatus = clGetDeviceInfo(rDevice.aDeviceID, CL_DEVICE_EXTENSIONS, 0, nullptr, &aDevExtInfoSize);
+            DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clGetDeviceInfo");
+
+            aExtInfo.reset(new char[aDevExtInfoSize]);
+            clStatus = clGetDeviceInfo(rDevice.aDeviceID, CL_DEVICE_EXTENSIONS, sizeof(char) * aDevExtInfoSize, aExtInfo.get(), nullptr);
+            DS_CHECK_STATUS(clStatus, "evaluateScoreForDevice::clGetDeviceInfo");
+        }
+
         bool bKhrFp64Flag = false;
         bool bAmdFp64Flag = false;
         const char* buildOption = nullptr;
@@ -243,6 +252,8 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
         else
         {
             /* 64-bit float support present */
+
+            OpenCLZone zone;
 
             /* Create context and command queue */
             cl_context  clContext = clCreateContext(nullptr, 1, &rDevice.aDeviceID, nullptr, nullptr, &clStatus);
