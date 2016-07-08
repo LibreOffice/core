@@ -224,7 +224,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
 
-    QRegion* clipRegion = nullptr;
+    QRegion* localClipRegion = nullptr;
 
     if (type == ControlType::Pushbutton)
     {
@@ -292,7 +292,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             rect.moveCenter( center );
             // don't paint over popup frame border (like the hack above, but here it can be simpler)
             int fw = QApplication::style()->pixelMetric( QStyle::PM_MenuPanelWidth );
-            clipRegion = new QRegion( rect.translated( widgetRect.topLeft()).adjusted( fw, 0, -fw, 0 ));
+            localClipRegion = new QRegion(rect.translated(widgetRect.topLeft()).adjusted(fw, 0, -fw, 0));
             draw( QStyle::CE_MenuItem, &option, m_image.get(),
                   vclStateValue2StateFlag(nControlState, value), rect );
         }
@@ -356,7 +356,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {   // reduce paint area only to the handle area
         const int width = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
         QRect rect( 0, 0, width, widgetRect.height());
-        clipRegion = new QRegion( widgetRect.x(), widgetRect.y(), width, widgetRect.height());
+        localClipRegion = new QRegion(widgetRect.x(), widgetRect.y(), width, widgetRect.height());
 
         QStyleOption option;
         option.state = QStyle::State_Horizontal;
@@ -508,7 +508,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
         // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
         int fw = static_cast< KDESalInstance* >(GetSalData()->m_pInstance)->getFrameWidth();
-        clipRegion = new QRegion( QRegion( widgetRect ).subtracted( widgetRect.adjusted( fw, fw, -fw, -fw )));
+        localClipRegion = new QRegion(QRegion(widgetRect).subtracted(widgetRect.adjusted(fw, fw, -fw, -fw)));
     }
     else if (type == ControlType::WindowBackground)
     {
@@ -568,10 +568,10 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         // See XRegionToQRegion() comment for a small catch (although not real hopefully).
         QPixmap destPixmap = QPixmap::fromX11Pixmap( GetDrawable(), QPixmap::ExplicitlyShared );
         QPainter paint( &destPixmap );
-        if( clipRegion && mpClipRegion )
-            paint.setClipRegion( clipRegion->intersected( XRegionToQRegion( mpClipRegion )));
-        else if( clipRegion )
-            paint.setClipRegion( *clipRegion );
+        if (localClipRegion && mpClipRegion)
+            paint.setClipRegion(localClipRegion->intersected(XRegionToQRegion(mpClipRegion)));
+        else if (localClipRegion)
+            paint.setClipRegion(*localClipRegion);
         else if( mpClipRegion )
             paint.setClipRegion( XRegionToQRegion( mpClipRegion ));
         paint.drawImage( widgetRect.left(), widgetRect.top(), *m_image,
@@ -582,10 +582,10 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if( gc )
         {
             Region pTempClipRegion = NULL;
-            if( clipRegion )
+            if (localClipRegion)
             {
                 pTempClipRegion = XCreateRegion();
-                foreach( const QRect& r, clipRegion->rects())
+                foreach(const QRect& r, localClipRegion->rects())
                 {
                     XRectangle xr;
                     xr.x = r.x();
@@ -617,7 +617,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             returnVal = false;
 #endif
     }
-    delete clipRegion;
+    delete localClipRegion;
     return returnVal;
 }
 
