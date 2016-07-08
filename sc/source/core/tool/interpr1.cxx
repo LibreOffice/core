@@ -3611,8 +3611,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
         PushDouble(nMax);
 }
 
-void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
-                bool bTextAsZero )
+void ScInterpreter::GetStVarParams( double& rVal, double& rValCount, bool bTextAsZero )
 {
     short nParamCount = GetByte();
 
@@ -3625,18 +3624,18 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
     ScAddress aAdr;
     ScRange aRange;
     size_t nRefInList = 0;
-    while (nParamCount-- > 0)
+    while (!nGlobalError && nParamCount-- > 0)
     {
         switch (GetStackType())
         {
             case svDouble :
             {
                 fVal = GetDouble();
-                if ( nGlobalError )
-                    return;
-                values.push_back(fVal);
-                fSum    += fVal;
-                rValCount++;
+                if (!nGlobalError)
+                {
+                    values.push_back(fVal);
+                    fSum    += fVal;
+                }
             }
             break;
             case svSingleRef :
@@ -3646,16 +3645,15 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 if (aCell.hasNumeric())
                 {
                     fVal = GetCellValue(aAdr, aCell);
-                    if ( nGlobalError )
-                        return;
-                    values.push_back(fVal);
-                    fSum += fVal;
-                    rValCount++;
+                    if (!nGlobalError)
+                    {
+                        values.push_back(fVal);
+                        fSum += fVal;
+                    }
                 }
                 else if (bTextAsZero && aCell.hasString())
                 {
                     values.push_back(0.0);
-                    rValCount++;
                 }
             }
             break;
@@ -3671,14 +3669,12 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                     {
                         values.push_back(fVal);
                         fSum += fVal;
-                        rValCount++;
                     }
                     while ((nErr == 0) && aValIter.GetNext(fVal, nErr));
                 }
                 if ( nErr )
                 {
                     SetError(nErr);
-                    return;
                 }
             }
             break;
@@ -3696,14 +3692,15 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                             if (!pMat->IsString(nMatCol,nMatRow))
                             {
                                 fVal= pMat->GetDouble(nMatCol,nMatRow);
-                                values.push_back(fVal);
-                                fSum += fVal;
-                                rValCount++;
+                                if (!nGlobalError)
+                                {
+                                    values.push_back(fVal);
+                                    fSum += fVal;
+                                }
                             }
                             else if ( bTextAsZero )
                             {
                                 values.push_back(0.0);
-                                rValCount++;
                             }
                         }
                     }
@@ -3716,7 +3713,6 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 if ( bTextAsZero )
                 {
                     values.push_back(0.0);
-                    rValCount++;
                 }
                 else
                     SetError(errIllegalParameter);
@@ -3729,9 +3725,15 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
     }
 
     ::std::vector<double>::size_type n = values.size();
-    vMean = fSum / n;
-    for (::std::vector<double>::size_type i = 0; i < n; i++)
-        vSum += ::rtl::math::approxSub( values[i], vMean) * ::rtl::math::approxSub( values[i], vMean);
+    rValCount = n;
+    if (!n)
+        SetError( errDivisionByZero);
+    if (!nGlobalError)
+    {
+        vMean = fSum / n;
+        for (::std::vector<double>::size_type i = 0; i < n; i++)
+            vSum += ::rtl::math::approxSub( values[i], vMean) * ::rtl::math::approxSub( values[i], vMean);
+    }
     rVal = vSum;
 }
 
