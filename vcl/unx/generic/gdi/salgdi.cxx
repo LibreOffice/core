@@ -66,6 +66,10 @@
 #include "cairo_cairo.hxx"
 #include "cairo_xlib_cairo.hxx"
 
+#if ENABLE_CAIRO_CANVAS
+#include "cairo-xlib.h"
+#endif
+
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 X11SalGraphics::X11SalGraphics():
@@ -711,16 +715,18 @@ bool X11SalGraphics::drawPolyLine(
 
         switch(eLineJoin)
         {
-            case basegfx::B2DLineJoin::Bevel:
+            case basegfx::B2DLineJoin::B2DLINEJOIN_BEVEL:
                 eCairoLineJoin = CAIRO_LINE_JOIN_BEVEL;
                 break;
-            case basegfx::B2DLineJoin::Round:
+            case basegfx::B2DLineJoin::B2DLINEJOIN_ROUND:
                 eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
                 break;
-            case basegfx::B2DLineJoin::NONE:
+            case basegfx::B2DLineJoin::B2DLINEJOIN_MIDDLE:
+            case basegfx::B2DLineJoin::B2DLINEJOIN_NONE:
+                eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
                 bNoJoin = true;
-                SAL_FALLTHROUGH;
-            case basegfx::B2DLineJoin::Miter:
+                break;
+            case basegfx::B2DLineJoin::B2DLINEJOIN_MITER:
                 eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
                 break;
         }
@@ -854,5 +860,23 @@ SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
     else
         return static_cast< SalGeometryProvider * >(m_pVDev);
 }
+
+#if ENABLE_CAIRO_CANVAS
+cairo_t* X11SalGraphics::getCairoContext()
+{
+    cairo_surface_t* surface = cairo_xlib_surface_create(GetXDisplay(), hDrawable_,
+            GetVisual().visual, SAL_MAX_INT16, SAL_MAX_INT16);
+
+    cairo_t *cr = cairo_create(surface);
+    cairo_surface_destroy(surface);
+
+    return cr;
+}
+
+void X11SalGraphics::releaseCairoContext(cairo_t* cr)
+{
+   cairo_destroy(cr);
+}
+#endif // ENABLE_CAIRO_CANVAS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
