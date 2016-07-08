@@ -2737,7 +2737,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         else if (nStyle == 2)
         {
             const OUString& rTmp(GetText());
-            if (rTmp.isEmpty())
+            if (!rTmp.isEmpty())
             {
                 static const sal_Unicode cUppercaseAlpha = 0x0391;
                 static const sal_Unicode cUppercaseOmega = 0x03A9;
