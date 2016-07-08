@@ -799,8 +799,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                 {
                     // Only use Ctrl-TAB if it was allowed for the whole
                     // dialog or for the current control (#103667#)
-                    if ( !aKeyCode.IsMod1() || (nDlgCtrlFlags & DialogControlFlags::Mod1Tab) ||
-                        ( pSWindow->GetStyle() & WB_NODIALOGCONTROL) )
+                    if (!aKeyCode.IsMod1() || (pSWindow->GetStyle() & WB_NODIALOGCONTROL))
                     {
                         if ( aKeyCode.IsShift() )
                         {

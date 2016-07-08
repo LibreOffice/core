@@ -393,12 +393,11 @@ enum class DialogControlFlags
     NONE                       = 0x0000,
     Return                     = 0x0001,
     WantFocus                  = 0x0002,
-    Mod1Tab                    = 0x0004,
-    FloatWinPopupModeEndCancel = 0x0008,
+    FloatWinPopupModeEndCancel = 0x0004,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<DialogControlFlags> : is_typed_flags<DialogControlFlags, 0x000f> {};
+    template<> struct typed_flags<DialogControlFlags> : is_typed_flags<DialogControlFlags, 0x0007> {};
 }
 
 // EndExtTextInput() Flags
