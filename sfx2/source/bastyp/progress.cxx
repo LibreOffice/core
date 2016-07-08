@@ -119,7 +119,7 @@ SfxProgress::SfxProgress
     const OUString&     rText,  /* Text, which appears before the Statusmonitor
                                   in the status line */
 
-    sal_uIntPtr         nRange, /* Max value for range  */
+    sal_uInt32          nRange, /* Max value for range  */
 
     bool                bWait    /* Activate the wait-Pointer initially (TRUE) */
 )
@@ -210,7 +210,7 @@ void SfxProgress::Stop()
 
 void SfxProgress::SetStateText
 (
-    sal_uLong       nNewVal,     /* New value for the progress-bar */
+    sal_uInt32       nNewVal,     /* New value for the progress-bar */
     const OUString& rNewVal     /* Status as Text */
 )
 
@@ -221,9 +221,9 @@ void SfxProgress::SetStateText
 
 void SfxProgress::SetState
 (
-    sal_uLong   nNewVal,    /* new value for the progress bar */
+    sal_uInt32   nNewVal,    /* new value for the progress bar */
 
-    sal_uLong   nNewRange   /* new maximum value, 0 for retaining the old */
+    sal_uInt32   nNewRange   /* new maximum value, 0 for retaining the old */
 )
 /*  [Description]
 
