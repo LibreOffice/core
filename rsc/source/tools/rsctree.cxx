@@ -301,8 +301,8 @@ bool NameNode::Insert( NameNode * pTN )
 
 void NameNode::OrderTree()
 {
-    NameNode * pTmpLeft = static_cast<NameNode *>(Left());
-    NameNode * pTmpRight = static_cast<NameNode *>(Right());
+    NameNode * pTmpLeft = Left();
+    NameNode * pTmpRight = Right();
 
     pLeft = nullptr;
     pRight = nullptr;
@@ -314,8 +314,8 @@ void NameNode::SubOrderTree( NameNode * pOrderNode )
 {
     if( pOrderNode )
     {
-        NameNode * pTmpLeft = static_cast<NameNode *>(pOrderNode->Left());
-        NameNode * pTmpRight = static_cast<NameNode *>(pOrderNode->Right());
+        NameNode * pTmpLeft = pOrderNode->Left();
+        NameNode * pTmpRight = pOrderNode->Right();
         pOrderNode->pLeft = nullptr;
         pOrderNode->pRight = nullptr;
         Insert( pOrderNode );

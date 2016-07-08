@@ -40,7 +40,7 @@
 
 const char* StringContainer::putString( const char* pString )
 {
-    OString aString( static_cast<const sal_Char*>(pString) );
+    OString aString( pString );
     std::pair<
         std::unordered_set< OString, OStringHash >::iterator,
         bool > aInsert =
