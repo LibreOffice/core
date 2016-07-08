@@ -43,7 +43,7 @@ class SW_DLLPUBLIC SwOLEObj
     OUString aName;
 
     // eventually buffered data if it is a chart OLE
-    drawinglayer::primitive2d::Primitive2DContainer     m_aPrimitive2DSequence;
+    drawinglayer::primitive2d::Primitive2DSequence      m_aPrimitive2DSequence;
     basegfx::B2DRange                                   m_aRange;
     class DeflateData*                                  m_pDeflateData;
 
@@ -71,7 +71,7 @@ public:
 
     // try to get OLE visualization in form of a Primitive2DSequence
     // and the corresponding B2DRange. This data may be locally buffered
-    drawinglayer::primitive2d::Primitive2DContainer tryToGetChartContentAsPrimitive2DSequence(
+    drawinglayer::primitive2d::Primitive2DSequence tryToGetChartContentAsPrimitive2DSequence(
         basegfx::B2DRange& rRange,
         bool bSynchron);
     void resetBufferedData();

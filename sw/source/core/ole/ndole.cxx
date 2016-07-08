@@ -683,7 +683,7 @@ private:
     friend class SwOLEObj;
 
     uno::Reference< frame::XModel >                     maXModel;
-    drawinglayer::primitive2d::Primitive2DContainer     maPrimitive2DSequence;
+    drawinglayer::primitive2d::Primitive2DSequence      maPrimitive2DSequence;
     basegfx::B2DRange                                   maRange;
 
     // set from the WorkerThread when done
@@ -704,7 +704,7 @@ public:
     {
     }
 
-    const drawinglayer::primitive2d::Primitive2DContainer& getSequence() const
+    const drawinglayer::primitive2d::Primitive2DSequence& getSequence() const
     {
         return maPrimitive2DSequence;
     }
@@ -778,7 +778,7 @@ private:
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     pOLENd( 0 ),
     pListener( 0 ),
-    xOLERef( xObj )
+    xOLERef( xObj ),
     m_aPrimitive2DSequence(),
     m_aRange(),
     m_pDeflateData(nullptr)
@@ -795,7 +795,7 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
 SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     pOLENd( 0 ),
     pListener( 0 ),
-    aName( rString )
+    aName( rString ),
     m_aPrimitive2DSequence(),
     m_aRange(),
     m_pDeflateData(nullptr)
@@ -1053,7 +1053,7 @@ OUString SwOLEObj::GetDescription()
     return SW_RESSTR(STR_OLE);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAsPrimitive2DSequence(
+drawinglayer::primitive2d::Primitive2DSequence SwOLEObj::tryToGetChartContentAsPrimitive2DSequence(
     basegfx::B2DRange& rRange,
     bool bSynchron)
 {
@@ -1076,7 +1076,7 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
         }
     }
 
-    if(m_aPrimitive2DSequence.empty() && m_aRange.isEmpty() && xOLERef.is() && xOLERef.IsChart())
+    if (0 == m_aPrimitive2DSequence.getLength() && m_aRange.isEmpty() && xOLERef.is() && xOLERef.IsChart())
     {
         const uno::Reference< frame::XModel > aXModel(xOLERef->getComponent(), uno::UNO_QUERY);
 
@@ -1113,7 +1113,7 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
         }
     }
 
-    if(!m_aPrimitive2DSequence.empty() && !m_aRange.isEmpty())
+    if (0 != m_aPrimitive2DSequence.getLength() && !m_aRange.isEmpty())
     {
         // when we have data, also copy the buffered Range data as output
         rRange = m_aRange;
@@ -1124,7 +1124,7 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
 
 void SwOLEObj::resetBufferedData()
 {
-    m_aPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer();
+    m_aPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DSequence();
     m_aRange.reset();
 
     if(m_pDeflateData)
