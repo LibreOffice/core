@@ -212,7 +212,8 @@ ScDocCfg::ScDocCfg() :
     Sequence<Any> aValues;
     const Any* pValues = nullptr;
 
-    sal_uInt16 nDateDay, nDateMonth, nDateYear;
+    sal_uInt16 nDateDay, nDateMonth;
+    sal_Int16 nDateYear;
     GetDate( nDateDay, nDateMonth, nDateYear );
 
     aNames = GetCalcPropertyNames();
@@ -246,7 +247,7 @@ ScDocCfg::ScDocCfg() :
                         if (pValues[nProp] >>= nIntVal) nDateMonth = (sal_uInt16) nIntVal;
                         break;
                     case SCCALCOPT_DATE_YEAR:
-                        if (pValues[nProp] >>= nIntVal) nDateYear = (sal_uInt16) nIntVal;
+                        if (pValues[nProp] >>= nIntVal) nDateYear = (sal_Int16) nIntVal;
                         break;
                     case SCCALCOPT_DECIMALS:
                         if (pValues[nProp] >>= nIntVal) SetStdPrecision( (sal_uInt16) nIntVal );
@@ -310,7 +311,8 @@ IMPL_LINK_NOARG_TYPED(ScDocCfg, CalcCommitHdl, ScLinkConfigItem&, void)
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    sal_uInt16 nDateDay, nDateMonth, nDateYear;
+    sal_uInt16 nDateDay, nDateMonth;
+    sal_Int16 nDateYear;
     GetDate( nDateDay, nDateMonth, nDateYear );
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)

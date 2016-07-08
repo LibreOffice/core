@@ -162,7 +162,8 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
         break;
         case PROP_UNO_NULLDATE:
         {
-            sal_uInt16 nD, nM, nY;
+            sal_uInt16 nD, nM;
+            sal_Int16 nY;
             rOptions.GetDate( nD, nM, nY );
             util::Date aDate( nD, nM, nY );
             aRet <<= aDate;

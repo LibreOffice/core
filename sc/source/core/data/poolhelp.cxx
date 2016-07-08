@@ -78,7 +78,8 @@ void ScPoolHelper::UseDocOptions() const
 {
     if (pFormTable)
     {
-        sal_uInt16 d,m,y;
+        sal_uInt16 d,m;
+        sal_Int16 y;
         aOpt.GetDate( d,m,y );
         pFormTable->ChangeNullDate( d,m,y );
         pFormTable->ChangeStandardPrec( (sal_uInt16)aOpt.GetStdPrecision() );
@@ -102,7 +103,8 @@ SvNumberFormatter* ScPoolHelper::CreateNumberFormatter() const
     p->SetColorLink( LINK(m_pSourceDoc, ScDocument, GetUserDefinedColor) );
     p->SetEvalDateFormat(NF_EVALDATEFORMAT_INTL_FORMAT);
 
-    sal_uInt16 d,m,y;
+    sal_uInt16 d,m;
+    sal_Int16 y;
     aOpt.GetDate(d, m, y);
     p->ChangeNullDate(d, m, y);
     p->ChangeStandardPrec(aOpt.GetStdPrecision());

@@ -176,7 +176,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
 
                     if (aName.compareToIgnoreAsciiCaseAscii("Expires") == 0)
                     {
-                        DateTime aExpires (0, 0);
+                        DateTime aExpires( DateTime::EMPTY );
                         if (INetMIMEMessage::ParseDateField (aValue, aExpires))
                         {
                             aExpires.ConvertToLocalTime();

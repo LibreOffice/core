@@ -807,7 +807,8 @@ void ScInterpreter::ScGetDateDif()
         }
 
         // split dates in day, month, year for use with formats other than "d"
-        sal_uInt16 d1, m1, y1, d2, m2, y2;
+        sal_uInt16 d1, m1, d2, m2;
+        sal_Int16 y1, y2;
         Date aDate1( *( pFormatter->GetNullDate()));
         aDate1 += (long) ::rtl::math::approxFloor( nDate1 );
         y1 = aDate1.GetYear();
@@ -818,6 +819,12 @@ void ScInterpreter::ScGetDateDif()
         y2 = aDate2.GetYear();
         m2 = aDate2.GetMonth();
         d2 = aDate2.GetDay();
+
+        // Close the year 0 gap to calculate year difference.
+        if (y1 < 0 && y2 > 0)
+            ++y1;
+        else if (y1 > 0 && y2 < 0)
+            ++y2;
 
         if (  aInterval.equalsIgnoreAsciiCase( "m" ) )
         {
@@ -871,7 +878,7 @@ void ScInterpreter::ScGetDateDif()
             {
                 if (m2 == 1)
                 {
-                    aDate1.SetYear( y2 - 1 );
+                    aDate1.SetYear( y2 == 1 ? -1 : y2 - 1 );
                     aDate1.SetMonth( 12 );
                 }
                 else

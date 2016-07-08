@@ -446,7 +446,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     InitCompatCur();
 }
 
-void ImpSvNumberformatScan::ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear)
+void ImpSvNumberformatScan::ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
 {
     if ( pNullDate )
         *pNullDate = Date(nDay, nMonth, nYear);

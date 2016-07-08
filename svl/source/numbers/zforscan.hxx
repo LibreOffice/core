@@ -44,7 +44,7 @@ public:
     ~ImpSvNumberformatScan();
     void ChangeIntl(); // Replaces Keywords
 
-    void ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear); // Replaces reference date
+    void ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear); // Replaces reference date
     void ChangeStandardPrec(sal_uInt16 nPrec); // Replaces standard precision
 
     sal_Int32 ScanFormat( OUString& rString ); // Call scan analysis

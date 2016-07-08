@@ -491,12 +491,14 @@ void Calendar_gregorian::submitFields() throw(css::uno::RuntimeException)
         body->set( fieldNameConverter( CalendarFieldIndex::DST_OFFSET), nDSTOffset);
 }
 
-void Calendar_gregorian::submitValues( sal_Int32 nYear,
+void Calendar_gregorian::submitValues( sal_Int32 nEra, sal_Int32 nYear,
         sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute,
         sal_Int32 nSecond, sal_Int32 nMilliSecond, sal_Int32 nZone, sal_Int32 nDST )
             throw(css::uno::RuntimeException)
 {
     submitFields();
+    if (nEra >= 0)
+        body->set( UCAL_ERA, nEra);
     if (nYear >= 0)
         body->set( UCAL_YEAR, nYear);
     if (nMonth >= 0)
@@ -567,12 +569,18 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
 
     bool bNeedZone = !(fieldSet & (1 << CalendarFieldIndex::ZONE_OFFSET));
     bool bNeedDST  = !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET));
-    sal_Int32 nZone1, nDST1, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone0, nDST0;
+    sal_Int32 nZone1, nDST1, nEra, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone0, nDST0;
     nZone1 = nDST1 = nZone0 = nDST0 = 0;
-    nYear = nMonth = nDay = nHour = nMinute = nSecond = nMilliSecond = -1;
+    nEra = nYear = nMonth = nDay = nHour = nMinute = nSecond = nMilliSecond = -1;
     if ( bNeedZone || bNeedDST )
     {
         UErrorCode status;
+        if ( !(fieldSet & (1 << CalendarFieldIndex::ERA)) )
+        {
+            nEra = body->get( UCAL_ERA, status = U_ZERO_ERROR);
+            if ( !U_SUCCESS(status) )
+                nEra = -1;
+        }
         if ( !(fieldSet & (1 << CalendarFieldIndex::YEAR)) )
         {
             nYear = body->get( UCAL_YEAR, status = U_ZERO_ERROR);
@@ -629,7 +637,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
         }
 
         // Submit values to obtain a time zone and DST corresponding to the date/time.
-        submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone0, nDST0);
+        submitValues( nEra, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone0, nDST0);
 
         DUMP_ICU_CAL_MSG(("%s\n","setValue() in bNeedZone||bNeedDST after submitValues()"));
         DUMP_I18N_CAL_MSG(("%s\n","setValue() in bNeedZone||bNeedDST after submitValues()"));
@@ -680,7 +688,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
                 lcl_setCombinedOffsetFieldValues( nDST2, fieldSetValue,
                         fieldValue, CalendarFieldIndex::DST_OFFSET,
                         CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS);
-            submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone2, nDST2);
+            submitValues( nEra, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone2, nDST2);
             DUMP_ICU_CAL_MSG(("%s\n","setValue() after Zone/DST glitch resubmit"));
             DUMP_I18N_CAL_MSG(("%s\n","setValue() after Zone/DST glitch resubmit"));
 
@@ -726,7 +734,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
             }
             if (bResubmit)
             {
-                submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone3, nDST3);
+                submitValues( nEra, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone3, nDST3);
                 DUMP_ICU_CAL_MSG(("%s\n","setValue() after Zone/DST glitch 2nd resubmit"));
                 DUMP_I18N_CAL_MSG(("%s\n","setValue() after Zone/DST glitch 2nd resubmit"));
             }

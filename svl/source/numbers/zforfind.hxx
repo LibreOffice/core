@@ -40,7 +40,7 @@ public:
     /// set reference date for offset calculation
     void ChangeNullDate( const sal_uInt16 nDay,
                          const sal_uInt16 nMonth,
-                         const sal_uInt16 nYear );
+                         const sal_Int16 nYear );
 
     /// convert input string to number
     bool IsNumberFormat( const OUString& rString,            /// input string

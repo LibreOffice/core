@@ -398,7 +398,7 @@ Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex)
 
 void SvNumberFormatter::ChangeNullDate(sal_uInt16 nDay,
                                        sal_uInt16 nMonth,
-                                       sal_uInt16 nYear)
+                                       sal_Int16 nYear)
 {
     pFormatScanner->ChangeNullDate(nDay, nMonth, nYear);
     pStringScanner->ChangeNullDate(nDay, nMonth, nYear);
