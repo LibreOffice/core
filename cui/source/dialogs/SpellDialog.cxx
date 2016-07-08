@@ -825,7 +825,7 @@ int SpellDialog::InitUserDicts()
         // add active, positive dictionary to dic-list (if not already done).
         // This is to ensure that there is at least on dictionary to which
         // words could be added.
-        Reference< XDictionary >  xDic( SvxGetOrCreatePosDic( xDicList ) );
+        Reference< XDictionary >  xDic( SvxGetOrCreatePosDic() );
         if (xDic.is())
             xDic->setActive( true );
 

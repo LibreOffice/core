@@ -431,7 +431,7 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
 
         if (!xDic.is())
         {
-            xDic = SvxGetOrCreatePosDic( xDicList );
+            xDic = SvxGetOrCreatePosDic();
             if (xDic.is())
                 xDic->setActive( true );
         }

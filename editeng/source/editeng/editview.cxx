@@ -873,7 +873,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             // add the default positive dictionary to dic-list (if not already done).
             // This is to ensure that there is at least one dictionary to which
             // words could be added.
-            uno::Reference< linguistic2::XDictionary >  xDic( SvxGetOrCreatePosDic( xDicList ) );
+            uno::Reference< linguistic2::XDictionary >  xDic( SvxGetOrCreatePosDic() );
             if (xDic.is())
                 xDic->setActive( true );
 
