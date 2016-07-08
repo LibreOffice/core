@@ -134,7 +134,7 @@ SwUnoInternalPaM&   SwUnoInternalPaM::operator=(const SwPaM& rPaM)
     }
     else
         DeleteMark();
-    while(&rPaM != (pTmp = static_cast<const SwPaM*>(pTmp->GetNext())))
+    while(&rPaM != (pTmp = pTmp->GetNext()))
     {
         if(pTmp->HasMark())
             new SwPaM(*pTmp->GetMark(), *pTmp->GetPoint(), this);
@@ -285,7 +285,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwPaM *pTmpCursor = &rPaM;
     do {
         pDoc->SetTextFormatColl(*pTmpCursor, pLocal);
-        pTmpCursor = static_cast<SwPaM*>(pTmpCursor->GetNext());
+        pTmpCursor = pTmpCursor->GetNext();
     } while ( pTmpCursor != &rPaM );
     pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
 }
@@ -649,7 +649,7 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
             }
         }
 
-        pTmpCursor = static_cast<SwPaM*>(pTmpCursor->GetNext());
+        pTmpCursor = pTmpCursor->GetNext();
     } while ( pTmpCursor != &rPaM );
     return (bError) ? nullptr : pFormat;
 }
@@ -734,7 +734,7 @@ void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         UnoActionContext aAction(pDoc);
         const sal_Int32 nTextLen = rText.getLength();
         pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
-        auto pCurrent = static_cast<SwCursor*>(pUnoCursor);
+        auto pCurrent = pUnoCursor;
         do
         {
             if (pCurrent->HasMark())

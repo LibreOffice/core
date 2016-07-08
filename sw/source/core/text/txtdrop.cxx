@@ -511,7 +511,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
     nPorLen = m_pFrame->GetTextNode()->GetDropLen( nPorLen );
     if( !nPorLen )
     {
-        static_cast<SwTextFormatter*>(this)->ClearDropFormat();
+        ClearDropFormat();
         return nullptr;
     }
 
@@ -541,7 +541,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
     // font is used.
     if ( GetDropLines() < 2 )
     {
-        static_cast<SwTextFormatter*>(this)->SetPaintDrop( true );
+        SetPaintDrop( true );
         return pDropPor;
     }
 
@@ -587,7 +587,7 @@ SwDropPortion *SwTextFormatter::NewDropPortion( SwTextFormatInfo &rInf )
         pCurrPart = pPart;
     }
 
-    static_cast<SwTextFormatter*>(this)->SetPaintDrop( true );
+    SetPaintDrop( true );
     return pDropPor;
 }
 

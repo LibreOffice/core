@@ -680,7 +680,7 @@ SwCalcOper SwCalc::GetToken()
             CalcOp* pFnd = ::FindOperator( sLowerCaseName );
             if( pFnd )
             {
-                switch( ( eCurrOper = static_cast<CalcOp*>(pFnd)->eOp ) )
+                switch( ( eCurrOper = pFnd->eOp ) )
                 {
                 case CALC_SUM:
                 case CALC_MEAN:

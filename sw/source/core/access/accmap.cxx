@@ -1481,7 +1481,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
         VEC_SHAPE::iterator vi =vecxShapeRemove.begin();
         for (; vi != vecxShapeRemove.end(); ++vi)
         {
-            ::accessibility::AccessibleShape *pAccShape = static_cast< ::accessibility::AccessibleShape * >(vi->get());
+            ::accessibility::AccessibleShape *pAccShape = vi->get();
             if (pAccShape)
             {
                 pAccShape->CommitChange(AccessibleEventId::SELECTION_CHANGED_REMOVE, uno::Any(), uno::Any());
@@ -1536,7 +1536,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
             vi = vecxShapeAdd.begin();
             for (; vi != vecxShapeAdd.end(); ++vi)
             {
-                ::accessibility::AccessibleShape *pAccShape = static_cast< ::accessibility::AccessibleShape * >(vi->get());
+                ::accessibility::AccessibleShape *pAccShape = vi->get();
                 if (pAccShape)
                 {
                     pAccShape->CommitChange(nEventID, uno::Any(), uno::Any());
@@ -1547,7 +1547,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
         vi = vecxShapeAdd.begin();
         for (; vi != vecxShapeAdd.end(); ++vi)
         {
-            ::accessibility::AccessibleShape *pAccShape = static_cast< ::accessibility::AccessibleShape * >(vi->get());
+            ::accessibility::AccessibleShape *pAccShape = vi->get();
             if (pAccShape)
             {
                 SdrObject *pObj = GetSdrObjectFromXShape(pAccShape->GetXShape());
@@ -1577,7 +1577,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
         vi = vecxShapeRemove.begin();
         for (; vi != vecxShapeRemove.end(); ++vi)
         {
-            ::accessibility::AccessibleShape *pAccShape = static_cast< ::accessibility::AccessibleShape * >(vi->get());
+            ::accessibility::AccessibleShape *pAccShape = vi->get();
             if (pAccShape)
             {
                 uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
@@ -3446,7 +3446,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::BuildSelectedParas()
             }
 
         // prepare next turn: get next cursor in ring
-        pCursor = static_cast<SwPaM*>( pCursor->GetNext() );
+        pCursor = pCursor->GetNext();
     } while ( pCursor != pRingStart );
 
     return pRetSelectedParas;

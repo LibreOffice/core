@@ -385,7 +385,7 @@ void SwTextFrame::DestroyImpl()
     if( nullptr != ( pCNd = dynamic_cast<SwContentNode*>( GetRegisteredIn() ) ) &&
         !pCNd->GetDoc()->IsInDtor() && HasFootnote() )
     {
-        SwTextNode *pTextNd = static_cast<SwTextFrame*>(this)->GetTextNode();
+        SwTextNode *pTextNd = GetTextNode();
         const SwFootnoteIdxs &rFootnoteIdxs = pCNd->GetDoc()->GetFootnoteIdxs();
         size_t nPos = 0;
         sal_uLong nIndex = pCNd->GetIndex();

@@ -379,7 +379,7 @@ namespace
                 ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
 
                 do {
-                    pDestDoc->getIDocumentContentOperations().DeleteAndJoin( *static_cast<SwPaM*>(pDelPam->GetNext()) );
+                    pDestDoc->getIDocumentContentOperations().DeleteAndJoin( *pDelPam->GetNext() );
                     if( !pDelPam->IsMultiSelection() )
                         break;
                     delete pDelPam->GetNext();

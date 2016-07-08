@@ -81,7 +81,7 @@ void SwAnchoredObjectPosition::GetInfoAboutObj()
 
     // determine contact object
     {
-        mpContact = static_cast<SwContact*>(GetUserCall( &mrDrawObj ));
+        mpContact = GetUserCall( &mrDrawObj );
         assert(mpContact &&
                 "SwAnchoredObjectPosition::GetInfoAboutObj() - missing SwContact-object.");
     }

@@ -210,14 +210,14 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, std::e
             }
             case word::WdCursorType::wdCursorWait:
             {
-                const Pointer& rPointer( static_cast< PointerStyle >( PointerStyle::Wait ) );
+                const Pointer& rPointer( PointerStyle::Wait );
                 //It will set the edit window, toobar and statusbar's mouse pointer.
                 setCursorHelper( getCurrentWordDoc(mxContext), rPointer, true );
                 break;
             }
             case word::WdCursorType::wdCursorIBeam:
             {
-                const Pointer& rPointer( static_cast< PointerStyle >( PointerStyle::Text ) );
+                const Pointer& rPointer( PointerStyle::Text );
                 //It will set the edit window, toobar and statusbar's mouse pointer.
                 setCursorHelper( getCurrentWordDoc( mxContext ), rPointer, true );
                 break;

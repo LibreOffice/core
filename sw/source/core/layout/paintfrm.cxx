@@ -1661,7 +1661,7 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
             //     parent fly frame.
             if (pFrame->IsFlyFrame() &&
                 (pFly->GetAnchorFrame()->FindFlyFrame() == pFrame) &&
-                static_cast<const SwFlyFrameFormat*>(pFly->GetFormat())->IsBackgroundBrushInherited()
+                pFly->GetFormat()->IsBackgroundBrushInherited()
                )
             {
                 SwRect aRect;
@@ -3971,7 +3971,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
 {
     bool bBackgroundTransparent = GetFormat()->IsBackgroundTransparent();
     if ( !bBackgroundTransparent &&
-         static_cast<const SwFlyFrameFormat*>(GetFormat())->IsBackgroundBrushInherited() )
+         GetFormat()->IsBackgroundBrushInherited() )
     {
         const SvxBrushItem* pBackgrdBrush = nullptr;
         const Color* pSectionTOXColor = nullptr;
@@ -4001,7 +4001,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
                 else
                 {
                     const GraphicObject *pTmpGrf =
-                            static_cast<const GraphicObject*>(pBackgrdBrush->GetGraphicObject());
+                            pBackgrdBrush->GetGraphicObject();
                     if ( (pTmpGrf) &&
                          (pTmpGrf->GetAttr().GetTransparency() != 0)
                        )

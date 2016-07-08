@@ -476,7 +476,7 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
             if ( pTmp )
             {
                 // NEW TABLES
-                SwCellFrame* pDestCell = static_cast<SwCellFrame*>(pCurrDestCell);
+                SwCellFrame* pDestCell = pCurrDestCell;
                 if ( pDestCell->GetTabBox()->getRowSpan() < 1 )
                     pDestCell = & const_cast<SwCellFrame&>(pDestCell->FindStartEndOfRowSpanCell( true ));
 
@@ -838,7 +838,7 @@ static long lcl_GetMaximumLayoutRowSpan( const SwRowFrame& rRow )
 bool SwTabFrame::RemoveFollowFlowLine()
 {
     // find FollowFlowLine
-    SwRowFrame* pFollowFlowLine = static_cast<SwRowFrame*>(GetFollow()->GetFirstNonHeadlineRow());
+    SwRowFrame* pFollowFlowLine = GetFollow()->GetFirstNonHeadlineRow();
 
     // find last row in master
     SwFrame* pLastLine = GetLastLower();

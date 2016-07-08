@@ -1145,8 +1145,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 else if ( pFrame->IsInSct() )
                 {
                     const SwSectionFrame* pSctFrame = pFrame->FindSctFrame();
-                    const SwSection* pSection =
-                            static_cast<const SwSectionFrame*>(pSctFrame)->GetSection();
+                    const SwSection* pSection = pSctFrame->GetSection();
 
                     if ( TOX_CONTENT_SECTION == pSection->GetType() )
                     {
@@ -1202,7 +1201,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                             }
                             pRowFrame = static_cast<const SwRowFrame*>(pRowFrame->GetNext());
                         }
-                        pMasterFrame = static_cast<const SwTabFrame*>(pMasterFrame->GetFollow());
+                        pMasterFrame = pMasterFrame->GetFollow();
                     }
                 }
             }

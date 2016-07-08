@@ -60,8 +60,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     sal_uInt16 nMaxSizeDiff;
 
-    const SwScriptInfo& rSI =
-            static_cast<SwParaPortion*>(rInf.GetParaPortion())->GetScriptInfo();
+    const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
 
     sal_uInt16 nMaxComp = ( SwFontScript::CJK == rInf.GetFont()->GetActual() ) &&
                         rSI.CountCompChg() &&

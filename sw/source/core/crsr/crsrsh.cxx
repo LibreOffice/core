@@ -483,7 +483,7 @@ bool SwCursorShell::bColumnChange()
         return false;
     }
 
-    SwFrame* pCurrCol=static_cast<SwFrame*>(pCurrFrame)->FindColFrame();
+    SwFrame* pCurrCol=pCurrFrame->FindColFrame();
 
     while(pCurrCol== nullptr && pCurrFrame!=nullptr )
     {
@@ -2437,8 +2437,8 @@ sal_uInt16 SwCursorShell::GetCursorCnt( bool bAll ) const
                     *m_pCurrentCursor->GetPoint() != *m_pCurrentCursor->GetMark())) ? 1 : 0;
     while( pTmp != m_pCurrentCursor )
     {
-        if( bAll || ( static_cast<SwPaM*>(pTmp)->HasMark() &&
-                *static_cast<SwPaM*>(pTmp)->GetPoint() != *static_cast<SwPaM*>(pTmp)->GetMark()))
+        if( bAll || ( pTmp->HasMark() &&
+                *pTmp->GetPoint() != *pTmp->GetMark()))
             ++n;
         pTmp = pTmp->GetNext();
     }

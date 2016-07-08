@@ -518,7 +518,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     SwTwips nTopMargin = (pAnchorFrameForVertPos->*fnRect->fnGetTopMargin)();
                     if ( pAnchorFrameForVertPos->IsTextFrame() )
                     {
-                        nTopMargin -= static_cast<const SwTextFrame*>(pAnchorFrameForVertPos)->
+                        nTopMargin -= pAnchorFrameForVertPos->
                             GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
                     }
                     nVertOffsetToFrameAnchorPos += nTopMargin;

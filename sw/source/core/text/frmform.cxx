@@ -545,7 +545,7 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
     {
         while( GetFollow() )
         {
-            if( static_cast<SwTextFrame*>(GetFollow())->IsLocked() )
+            if( GetFollow()->IsLocked() )
             {
                 OSL_FAIL( "+SwTextFrame::JoinFrame: Follow is locked." );
                 return;

@@ -266,7 +266,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             SvxLRSpaceItem aLR(RES_LR_SPACE);
             if ( !bSect && (bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY) )
             {
-                SwFrameFormat* pFormat = static_cast<SwFrameFormat*>(rSh.GetFlyFrameFormat());
+                SwFrameFormat* pFormat = rSh.GetFlyFrameFormat();
                 const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
 
                 bool bVerticalFrame(false);
@@ -425,7 +425,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
             if( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY )
             {
-                SwFrameFormat* pFormat = static_cast<SwFrameFormat*>(rSh.GetFlyFrameFormat());
+                SwFrameFormat* pFormat = rSh.GetFlyFrameFormat();
                 const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
                 const long nDeltaY = rPageRect.Top() + aLongULSpace.GetUpper() - rRect.Top();
                 const long nHeight = nPageHeight - (aLongULSpace.GetUpper() + aLongULSpace.GetLower());

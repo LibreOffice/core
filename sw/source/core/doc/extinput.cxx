@@ -256,7 +256,7 @@ void SwDoc::DeleteExtTextInput( SwExtTextInput* pDel )
     if( pDel == mpExtInputRing )
     {
         if( pDel->GetNext() != mpExtInputRing )
-            mpExtInputRing = static_cast<SwPaM*>(pDel->GetNext());
+            mpExtInputRing = pDel->GetNext();
         else
             mpExtInputRing = nullptr;
     }

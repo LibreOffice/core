@@ -2092,7 +2092,7 @@ void SwFormatChain::SetPrev( SwFlyFrameFormat *pFormat )
     if ( pFormat )
         pFormat->Add( &aPrev );
     else if ( aPrev.GetRegisteredIn() )
-        static_cast<SwModify*>(aPrev.GetRegisteredIn())->Remove( &aPrev );
+        aPrev.GetRegisteredIn()->Remove( &aPrev );
 }
 
 void SwFormatChain::SetNext( SwFlyFrameFormat *pFormat )
@@ -2100,7 +2100,7 @@ void SwFormatChain::SetNext( SwFlyFrameFormat *pFormat )
     if ( pFormat )
         pFormat->Add( &aNext );
     else if ( aNext.GetRegisteredIn() )
-        static_cast<SwModify*>(aNext.GetRegisteredIn())->Remove( &aNext );
+        aNext.GetRegisteredIn()->Remove( &aNext );
 }
 
 bool SwFormatChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -3171,8 +3171,7 @@ bool SwFlyFrameFormat::IsBackgroundTransparent() const
     }
     else
     {
-        const GraphicObject *pTmpGrf =
-                static_cast<const GraphicObject*>(aBackground.GetGraphicObject());
+        const GraphicObject *pTmpGrf = aBackground.GetGraphicObject();
         if ( (pTmpGrf) &&
              (pTmpGrf->GetAttr().GetTransparency() != 0)
            )

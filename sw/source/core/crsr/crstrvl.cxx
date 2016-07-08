@@ -2143,7 +2143,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline( sal_uInt16 nArrPos, bool bSele
                         if( bDel )
                         {
                             // not needed anymore
-                            SwPaM* pPrevPam = static_cast<SwPaM*>(pNextPam->GetPrev());
+                            SwPaM* pPrevPam = pNextPam->GetPrev();
                             delete pNextPam;
                             pNextPam = pPrevPam;
                         }
