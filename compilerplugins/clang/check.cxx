@@ -67,6 +67,15 @@ TypeCheck TypeCheck::Pointer() const {
     return TypeCheck();
 }
 
+TypeCheck TypeCheck::Typedef() const {
+    if (!type_.isNull()) {
+        if (auto const t = type_->getAs<clang::TypedefType>()) {
+            return TypeCheck(t->desugar());
+        }
+    }
+    return TypeCheck();
+}
+
 TypeCheck TypeCheck::NotSubstTemplateTypeParmType() const {
     return
         (!type_.isNull()
