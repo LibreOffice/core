@@ -32,6 +32,8 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <vcl/svapp.hxx>
+
 #include "closepreventer.hxx"
 #include "intercept.hxx"
 #include "persistence.hxx"
@@ -435,7 +437,7 @@ void SAL_CALL OCommonEmbeddedObject::setClassInfo(
 uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent()
         throw ( uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -454,7 +456,7 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
 void SAL_CALL OCommonEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
     throw ( uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -470,7 +472,7 @@ void SAL_CALL OCommonEmbeddedObject::removeStateChangeListener(
                     const uno::Reference< embed::XStateChangeListener >& xListener )
     throw (uno::RuntimeException, std::exception)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->removeInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                 xListener );
@@ -481,7 +483,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
     throw ( util::CloseVetoException,
             uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_bClosed )
         throw lang::DisposedException(); // TODO
 
@@ -585,12 +587,12 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
 void SAL_CALL OCommonEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw ( uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper(m_aMutex);
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
@@ -599,7 +601,7 @@ void SAL_CALL OCommonEmbeddedObject::addCloseListener( const uno::Reference< uti
 void SAL_CALL OCommonEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw (uno::RuntimeException, std::exception)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->removeInterface( cppu::UnoType<util::XCloseListener>::get(),
                                                 xListener );
@@ -609,12 +611,12 @@ void SAL_CALL OCommonEmbeddedObject::removeCloseListener( const uno::Reference< 
 void SAL_CALL OCommonEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper(m_aMutex);
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<document::XEventListener>::get(), xListener );
 }
@@ -623,7 +625,7 @@ void SAL_CALL OCommonEmbeddedObject::addEventListener( const uno::Reference< doc
 void SAL_CALL OCommonEmbeddedObject::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->removeInterface( cppu::UnoType<document::XEventListener>::get(),
                                                 xListener );
