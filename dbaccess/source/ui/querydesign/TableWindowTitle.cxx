@@ -140,7 +140,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
             {
                 m_pTabWin->SetSizePixel(aSize);
 
-                OJoinTableView* pView = static_cast<OJoinTableView*>(m_pTabWin->getTableView());
+                OJoinTableView* pView = m_pTabWin->getTableView();
                 OSL_ENSURE(pView,"No OJoinTableView!");
                 for (auto& conn : pView->getTableConnections())
                     conn->RecalcLines();
@@ -154,7 +154,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
         {
             Point aPos = rEvt.GetPosPixel();
             aPos = OutputToScreenPixel( aPos );
-            OJoinTableView* pView = static_cast<OJoinTableView*>(m_pTabWin->getTableView());
+            OJoinTableView* pView = m_pTabWin->getTableView();
             OSL_ENSURE(pView,"No OJoinTableView!");
             pView->NotifyTitleClicked( static_cast<OTableWindow*>(GetParent()), aPos );
         }
