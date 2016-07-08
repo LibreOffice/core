@@ -15,17 +15,24 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
-#include <vector>
 #include <comphelper/comphelperdllapi.h>
+#include <vector>
+#include <memory>
 
 namespace comphelper
 {
+class ThreadTaskTag;
+class ThreadPool;
 
 class COMPHELPER_DLLPUBLIC ThreadTask
 {
+friend class ThreadPool;
+    std::shared_ptr<ThreadTaskTag>  mpTag;
 public:
+    ThreadTask(const std::shared_ptr<ThreadTaskTag>& pTag);
     virtual      ~ThreadTask() {}
     virtual void doWork() = 0;
+    const std::shared_ptr<ThreadTaskTag>& getTag() { return mpTag; }
 };
 
 /// A very basic thread pool implementation
@@ -36,20 +43,24 @@ public:
     /// count for the CPU
     static      ThreadPool& getSharedOptimalPool();
 
+    static std::shared_ptr<ThreadTaskTag> createThreadTaskTag();
+
+    static bool isTaskTagDone(const std::shared_ptr<ThreadTaskTag>&);
+
     /// returns a configurable max-concurrency
     /// limit to avoid spawning an unnecessarily
     /// large number of threads on high-core boxes.
     /// MAX_CONCURRENCY envar controls the cap.
     static      sal_Int32 getPreferredConcurrency();
 
-                ThreadPool( sal_Int32 nWorkers );
+    ThreadPool( sal_Int32 nWorkers );
     virtual    ~ThreadPool();
 
     /// push a new task onto the work queue
     void        pushTask( ThreadTask *pTask /* takes ownership */ );
 
-    /// wait until all queued tasks are completed
-    void        waitUntilEmpty();
+    /// wait until all queued tasks associated with the tag are completed
+    void        waitUntilDone(const std::shared_ptr<ThreadTaskTag>&);
 
     /// return the number of live worker threads
     sal_Int32   getWorkerCount() const { return maWorkers.size(); }
