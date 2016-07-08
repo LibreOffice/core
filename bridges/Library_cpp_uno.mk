@@ -236,7 +236,7 @@ bridges_NON_CALL_EXCEPTIONS_FLAGS := -fnon-call-exceptions
 endif
 endif
 
-bridges_DEBUGINFO_FLAGS := $(if $(filter-out 0,$(gb_DEBUGLEVEL))$(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))
+bridges_DEBUGINFO_FLAGS := $(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))
 
 $(eval $(call gb_Library_use_libraries,$(gb_CPPU_ENV)_uno,\
 	cppu \

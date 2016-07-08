@@ -52,14 +52,14 @@ else # $(OS)
 icu_CFLAGS:=" \
 	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(SYSBASE),-I$(SYSBASE)/usr/include) \
-	$(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
+	$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
 	$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
 	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
 icu_CXXFLAGS:="$(CXXFLAGS) $(CXXFLAGS_CXX11) \
 	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
-	$(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
+	$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
 	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
 	$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS)) \
