@@ -2010,6 +2010,9 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
     }
 
     SwFootnoteBossFrame * pOldBoss = m_rThis.FindFootnoteBossFrame();
+    if (!pOldBoss)
+        return false;
+
     SwPageFrame * const pOldPage = pOldBoss->FindPageFrame();
     SwLayoutFrame *pNewUpper = nullptr;
     bool bCheckPageDescs = false;
