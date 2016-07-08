@@ -1393,46 +1393,121 @@ void ScInterpreter::ScIRR()
 void ScInterpreter::ScMIRR()
 {   // range_of_values ; rate_invest ; rate_reinvest
     nFuncFmtType = css::util::NumberFormat::PERCENT;
-    if( MustHaveParamCount( GetByte(), 3 ) )
+    if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fRate1_reinvest = GetDouble() + 1;
         double fRate1_invest = GetDouble() + 1;
 
         ScRange aRange;
-        PopDoubleRef( aRange );
+        ScMatrixRef pMat;
+        SCSIZE nC = 0;
+        SCSIZE nR = 0;
+        bool bIsMatrix = false;
+        switch ( GetStackType() )
+        {
+            case svDoubleRef :
+                PopDoubleRef( aRange );
+                break;
+            case svMatrix :
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+                {
+                    pMat = GetMatrix();
+                    if ( pMat )
+                    {
+                        pMat->GetDimensions( nC, nR );
+                        if ( nC == 0 || nR == 0 )
+                            SetError( errIllegalArgument );
+                        bIsMatrix = true;
+                    }
+                    else
+                        SetError( errIllegalArgument );
+                }
+                break;
+            default :
+                SetError( errIllegalParameter );
+                break;
+        }
 
-        if( nGlobalError )
-            PushError( nGlobalError);
+        if ( nGlobalError )
+            PushError( nGlobalError );
         else
         {
             double fNPV_reinvest = 0.0;
             double fPow_reinvest = 1.0;
             double fNPV_invest = 0.0;
             double fPow_invest = 1.0;
-            ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
-            double fCellValue;
             sal_uLong nCount = 0;
-            sal_uInt16 nIterError = 0;
+            bool bHasPosValue = false;
+            bool bHasNegValue = false;
 
-            bool bLoop = aValIter.GetFirst( fCellValue, nIterError );
-            while( bLoop )
+            if ( bIsMatrix )
             {
-                if( fCellValue > 0.0 )          // reinvestments
-                    fNPV_reinvest += fCellValue * fPow_reinvest;
-                else if( fCellValue < 0.0 )     // investments
-                    fNPV_invest += fCellValue * fPow_invest;
-                fPow_reinvest /= fRate1_reinvest;
-                fPow_invest /= fRate1_invest;
-                nCount++;
+                double fX;
+                for ( SCSIZE j = 0; j < nC; j++ )
+                {
+                    for ( SCSIZE k = 0; k < nR; ++k )
+                    {
+                        if ( !pMat->IsValue( j, k ) )
+                            continue;
+                        fX = pMat->GetDouble( j, k );
+                        if ( nGlobalError )
+                            break;
 
-                bLoop = aValIter.GetNext( fCellValue, nIterError );
+                        if ( fX > 0.0 )
+                        {    // reinvestments
+                            bHasPosValue = true;
+                            fNPV_reinvest += fX * fPow_reinvest;
+                        }
+                        else if ( fX < 0.0 )
+                        {   // investments
+                            bHasNegValue = true;
+                            fNPV_invest += fX * fPow_invest;
+                        }
+                        fPow_reinvest /= fRate1_reinvest;
+                        fPow_invest /= fRate1_invest;
+                        nCount++;
+                    }
+                }
             }
-            if( nIterError )
-                PushError( nIterError );
+            else
+            {
+                ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
+                double fCellValue;
+                sal_uInt16 nIterError = 0;
+
+                bool bLoop = aValIter.GetFirst( fCellValue, nIterError );
+                while( bLoop )
+                {
+                    if( fCellValue > 0.0 )          // reinvestments
+                    {    // reinvestments
+                        bHasPosValue = true;
+                        fNPV_reinvest += fCellValue * fPow_reinvest;
+                    }
+                    else if( fCellValue < 0.0 )     // investments
+                    {   // investments
+                        bHasNegValue = true;
+                        fNPV_invest += fCellValue * fPow_invest;
+                    }
+                    fPow_reinvest /= fRate1_reinvest;
+                    fPow_invest /= fRate1_invest;
+                    nCount++;
+
+                    bLoop = aValIter.GetNext( fCellValue, nIterError );
+                }
+
+                if ( nIterError )
+                    SetError( nIterError );
+            }
+            if ( !( bHasPosValue && bHasNegValue ) )
+                SetError( errIllegalArgument );
+
+            if ( nGlobalError )
+                PushError( nGlobalError );
             else
             {
                 double fResult = -fNPV_reinvest / fNPV_invest;
-                fResult *= pow( fRate1_reinvest, (double) nCount - 1 );
+                fResult *= pow( fRate1_reinvest, (double)( nCount - 1 ) );
                 fResult = pow( fResult, div( 1.0, (nCount - 1)) );
                 PushDouble( fResult - 1.0 );
             }
