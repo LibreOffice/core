@@ -91,7 +91,7 @@ private:
 
     virtual void execute() override;
     void downloadExtensions();
-    void download(OUString const & aUrls, UpdateData & aUpdatData);
+    bool download(OUString const & aUrls, UpdateData & aUpdatData);
     void installExtensions();
     void removeTempDownloads();
 
@@ -391,8 +391,8 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 try
                 {
                     OSL_ENSURE(!seqDownloadURLs[j].isEmpty(), "Download URL is empty!");
-                    download(seqDownloadURLs[j], curData);
-                    if (!curData.sLocalURL.isEmpty())
+                    bool bCancelled = download(seqDownloadURLs[j], curData);
+                    if (bCancelled || !curData.sLocalURL.isEmpty())
                         break;
                 }
                 catch ( cssu::Exception & e )
@@ -578,12 +578,12 @@ void UpdateInstallDialog::Thread::removeTempDownloads()
     }
 }
 
-void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, UpdateData & aUpdateData)
+bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, UpdateData & aUpdateData)
 {
     {
         SolarMutexGuard g;
         if (m_stop) {
-            return;
+            return m_stop;
         }
     }
 
@@ -617,12 +617,14 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
         {
             SolarMutexGuard g;
             if (m_stop) {
-                return;
+                return m_stop;
             }
             //all errors should be handled by the command environment.
             aUpdateData.sLocalURL = destFolder + "/" + sTitle;
         }
     }
+
+    return m_stop;
 }
 
 UpdateCommandEnv::UpdateCommandEnv( cssu::Reference< cssu::XComponentContext > const & xCtx,
