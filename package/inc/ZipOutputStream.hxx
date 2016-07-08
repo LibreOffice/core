@@ -35,10 +35,10 @@ class ZipOutputStream
 {
     css::uno::Reference< css::io::XOutputStream > m_xStream;
     ::std::vector < ZipEntry * > m_aZipList;
+    std::shared_ptr<comphelper::ThreadTaskTag> mpThreadTaskTag;
 
     ByteChucker         m_aChucker;
     ZipEntry            *m_pCurrentEntry;
-    comphelper::ThreadPool &m_rSharedThreadPool;
     std::vector< ZipOutputEntry* > m_aEntries;
     ::css::uno::Any m_aDeflateException;
 
@@ -80,6 +80,8 @@ public:
     void reduceScheduledThreadsToGivenNumberOrLess(
         sal_Int32 nThreads,
         sal_Int32 nWaitTimeInTenthSeconds);
+
+    const std::shared_ptr<comphelper::ThreadTaskTag>& getThreadTaskTag() { return mpThreadTaskTag; }
 };
 
 #endif

@@ -42,9 +42,9 @@ using namespace com::sun::star::packages::zip::ZipConstants;
  */
 ZipOutputStream::ZipOutputStream( const uno::Reference < io::XOutputStream > &xOStream )
 : m_xStream(xOStream)
+, mpThreadTaskTag( comphelper::ThreadPool::createThreadTaskTag() )
 , m_aChucker(xOStream)
 , m_pCurrentEntry(nullptr)
-, m_rSharedThreadPool(comphelper::ThreadPool::getSharedOptimalPool())
 {
 }
 
@@ -70,7 +70,7 @@ void ZipOutputStream::setEntry( ZipEntry *pEntry )
 
 void ZipOutputStream::addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThread )
 {
-    m_rSharedThreadPool.pushTask(pThread);
+    comphelper::ThreadPool::getSharedOptimalPool().pushTask(pThread);
     m_aEntries.push_back(pEntry);
 }
 
@@ -178,7 +178,7 @@ void ZipOutputStream::finish()
     assert(!m_aZipList.empty() && "Zip file must have at least one entry!");
 
     // Wait for all threads to finish & write
-    m_rSharedThreadPool.waitUntilEmpty();
+    comphelper::ThreadPool::getSharedOptimalPool().waitUntilDone(mpThreadTaskTag);
 
     // consume all processed entries
     consumeAllScheduledThreadEntries();
