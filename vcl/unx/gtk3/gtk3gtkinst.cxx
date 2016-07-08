@@ -587,6 +587,7 @@ void VclGtkClipboard::setContents(
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
+    bool bOwnerChange = (xOldOwner.is() && xOldOwner != xClipboardOwner);
     Reference< datatransfer::XTransferable > xOldContents( m_aContents );
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
@@ -594,6 +595,10 @@ void VclGtkClipboard::setContents(
     std::list< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
 
+    GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
+    if (bOwnerChange)
+        gtk_clipboard_clear(clipboard);
+    assert(m_aGtkTargets.empty());
     if (m_aContents.is())
     {
         css::uno::Sequence<css::datatransfer::DataFlavor> aFormats = xTrans->getTransferDataFlavors();
@@ -607,14 +612,10 @@ void VclGtkClipboard::setContents(
             aEntry.info = 0;
             aGtkTargets.push_back(aEntry);
 
-            GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
             gtk_clipboard_set_with_data(clipboard, aGtkTargets.data(), aGtkTargets.size(),
                                         ClipboardGetFunc, ClipboardClearFunc, this);
             gtk_clipboard_set_can_store(clipboard, aGtkTargets.data(), aGtkTargets.size());
         }
-
-        for (auto &a : m_aGtkTargets)
-            g_free(a.target);
 
         m_aGtkTargets = aGtkTargets;
     }
@@ -623,7 +624,7 @@ void VclGtkClipboard::setContents(
 
     aGuard.clear();
 
-    if( xOldOwner.is() && xOldOwner != xClipboardOwner )
+    if (bOwnerChange)
         xOldOwner->lostOwnership( this, xOldContents );
     for( std::list< Reference< datatransfer::clipboard::XClipboardListener > >::iterator it =
          aListeners.begin(); it != aListeners.end() ; ++it )
