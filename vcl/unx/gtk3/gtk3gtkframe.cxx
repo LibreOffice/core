@@ -2058,7 +2058,7 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
     if (bGrab)
     {
         gdk_seat_grab(pSeat, widget_get_window(getMouseEventWidget()), GDK_SEAT_CAPABILITY_ALL_POINTING,
-                      bOwnerEvents, NULL, NULL, NULL, NULL);
+                      bOwnerEvents, nullptr, nullptr, nullptr, nullptr);
     }
     else
     {
