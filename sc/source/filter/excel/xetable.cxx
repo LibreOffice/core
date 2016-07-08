@@ -1598,8 +1598,8 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     maXFId.mnXFId = GetXFBuffer().Insert(
         rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ), GetDefApiScript() );
 
-    // column width
-    sal_uInt16 nScWidth = rDoc.GetColWidth( nScCol, nScTab );
+    // column width. If column is hidden then we should return real value (not zero)
+    sal_uInt16 nScWidth = rDoc.GetColWidth( nScCol, nScTab, false );
     mnWidth = XclTools::GetXclColumnWidth( nScWidth, GetCharWidth() );
     mnScWidth =  sc::TwipsToHMM( nScWidth );
 
@@ -1625,7 +1625,10 @@ sal_uInt16 XclExpColinfo::ConvertXFIndexes()
 
 bool XclExpColinfo::IsDefault( const XclExpDefcolwidth& rDefColWidth ) const
 {
-    return (maXFId.mnXFIndex == EXC_XF_DEFAULTCELL) && (mnFlags == 0) && rDefColWidth.IsDefWidth( mnWidth );
+    return (maXFId.mnXFIndex == EXC_XF_DEFAULTCELL) &&
+           (mnFlags == 0) &&
+           (mnOutlineLevel == 0) &&
+           rDefColWidth.IsDefWidth( mnWidth );
 }
 
 bool XclExpColinfo::TryMerge( const XclExpColinfo& rColInfo )
@@ -1633,6 +1636,7 @@ bool XclExpColinfo::TryMerge( const XclExpColinfo& rColInfo )
     if( (maXFId.mnXFIndex == rColInfo.maXFId.mnXFIndex) &&
         (mnWidth == rColInfo.mnWidth) &&
         (mnFlags == rColInfo.mnFlags) &&
+        (mnOutlineLevel == rColInfo.mnOutlineLevel) &&
         (mnLastXclCol + 1 == rColInfo.mnFirstXclCol) )
     {
         mnLastXclCol = rColInfo.mnLastXclCol;
