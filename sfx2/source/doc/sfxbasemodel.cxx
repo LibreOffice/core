@@ -445,6 +445,9 @@ class SfxSaveGuard
         IMPL_SfxBaseModel_DataContainer* m_pData;
         SfxOwnFramesLocker* m_pFramesLock;
 
+        SfxSaveGuard(SfxSaveGuard &) = delete;
+        void operator =(const SfxSaveGuard&) = delete;
+
     public:
         SfxSaveGuard(const Reference< frame::XModel >&             xModel                      ,
                            IMPL_SfxBaseModel_DataContainer* pData);
