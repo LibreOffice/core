@@ -88,7 +88,7 @@ CURL* FTPLoaderThread::handle() {
                 ret = nullptr;
             }
         }
-        osl_setThreadKeyData(m_threadKey,static_cast<void*>(ret));
+        osl_setThreadKeyData(m_threadKey, ret);
     }
 
     return ret;
