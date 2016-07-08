@@ -996,7 +996,7 @@ IMPL_LINK_TYPED(ViewShellManager::Implementation, WindowEventHandler, VclWindowE
                      aI!=maActiveViewShells.end();
                      ++aI)
                 {
-                    if (pEventWindow == static_cast< vcl::Window*>(aI->GetWindow()))
+                    if (pEventWindow == aI->GetWindow())
                     {
                         MoveToTop(*aI->mpShell);
                         break;

@@ -1385,8 +1385,8 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage() throw( RuntimeEx
         throw RuntimeException();
     if(!mxXDrawPage.is())
     {
-        static_cast<SwXTextDocument*>(this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
-        static_cast<SwXTextDocument*>(this)->mxXDrawPage = pDrawPage;
+        pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
+        mxXDrawPage = pDrawPage;
         // Create a Reference to trigger the complete initialization of the
         // object. Otherwise in some corner cases it would get initialized
         // at ::InitNewDoc -> which would get called during

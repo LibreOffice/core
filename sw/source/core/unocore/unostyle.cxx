@@ -1734,7 +1734,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertySimpleEnt
                 aFormat.SetCharFormat(*pCharFormatIt);
             else if(m_pBasePool)
             {
-                auto pBase(static_cast<SfxStyleSheetBasePool*>(m_pBasePool)->Find(rCharName, SfxStyleFamily::Char));
+                auto pBase(m_pBasePool->Find(rCharName, SfxStyleFamily::Char));
                 if(!pBase)
                     pBase = &m_pBasePool->Make(rCharName, SfxStyleFamily::Char);
                 aFormat.SetCharFormat(static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat());

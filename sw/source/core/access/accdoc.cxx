@@ -587,7 +587,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         sal_uLong nLineNum = 0;
         SwTextFrame* pTextFrame = nullptr;
         SwTextFrame* pCurrTextFrame = nullptr;
-        pTextFrame = static_cast< SwTextFrame* >(static_cast< SwPageFrame* > (pCurrPage)->ContainsContent());
+        pTextFrame = static_cast< SwTextFrame* >(pCurrPage->ContainsContent());
         if (pCurrFrame->IsInFly())//such as, graphic,chart
         {
             SwFlyFrame *pFlyFrame = pCurrFrame->FindFlyFrame();

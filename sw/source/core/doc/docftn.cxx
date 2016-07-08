@@ -58,8 +58,7 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
         const_cast<SwModify*>(rInfo.aAnchorCharFormatDep.GetRegisteredIn())->Add(
                                                     &aAnchorCharFormatDep );
     else if( aAnchorCharFormatDep.GetRegisteredIn() )
-        static_cast<SwModify*>(aAnchorCharFormatDep.GetRegisteredIn())->Remove(
-                                                    &aAnchorCharFormatDep );
+        aAnchorCharFormatDep.GetRegisteredIn()->Remove( &aAnchorCharFormatDep );
 
     aFormat = rInfo.aFormat;
     nFootnoteOffset = rInfo.nFootnoteOffset;

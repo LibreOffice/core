@@ -211,7 +211,7 @@ bool SwPageFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         {
             if ( pCMS && (pCMS->m_bStop || pCMS->m_bExactOnly) )
             {
-                static_cast<SwCursorMoveState*>(pCMS)->m_bStop = true;
+                pCMS->m_bStop = true;
                 return false;
             }
             const SwContentFrame *pCnt = GetContentPos( aPoint, false, false, pCMS, false );
@@ -422,7 +422,7 @@ bool SwRootFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
     const_cast<SwRootFrame*>(this)->SetCallbackActionEnabled( false );
     OSL_ENSURE( (Lower() && Lower()->IsPageFrame()), "No PageFrame found." );
     if( pCMS && pCMS->m_pFill )
-        static_cast<SwCursorMoveState*>(pCMS)->m_bFillRet = false;
+        pCMS->m_bFillRet = false;
     Point aOldPoint = rPoint;
 
     // search for page containing rPoint. The borders around the pages are considered
@@ -479,7 +479,7 @@ bool SwCellFrame::GetCursorOfst( SwPosition *pPos, Point &rPoint,
         const SwTabFrame *pTab = FindTabFrame();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *this ) )
         {
-            static_cast<SwCursorMoveState*>(pCMS)->m_bStop = true;
+            pCMS->m_bStop = true;
             return false;
         }
     }

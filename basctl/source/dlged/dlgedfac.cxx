@@ -108,7 +108,7 @@ IMPL_LINK_TYPED( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory, void )
                  else
                  {
                      pNew = new DlgEdObj( "com.sun.star.form.component.ComboBox", xDialogSFact );
-                     static_cast< DlgEdObj* >( pNew )->MakeDataAware( mxModel );
+                     pNew->MakeDataAware( mxModel );
                  }
                  pObjFactory->pNewObj = pNew;
                  try
@@ -157,7 +157,7 @@ IMPL_LINK_TYPED( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory, void )
                  else
                  {
                      pNew = new DlgEdObj( "com.sun.star.form.component.ScrollBar", xDialogSFact );
-                     static_cast< DlgEdObj* >( pNew )->MakeDataAware( mxModel );
+                     pNew->MakeDataAware( mxModel );
                  }
                  pObjFactory->pNewObj = pNew;
                  // set vertical orientation

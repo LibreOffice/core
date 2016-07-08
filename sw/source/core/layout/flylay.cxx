@@ -1147,7 +1147,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             }
             long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
             long nTop;
-            const SwFormat *pFormat = static_cast<SwContact*>(GetUserCall(pSdrObj))->GetFormat();
+            const SwFormat *pFormat = GetUserCall(pSdrObj)->GetFormat();
             const SvxULSpaceItem &rUL = pFormat->GetULSpace();
             if( bMove )
             {

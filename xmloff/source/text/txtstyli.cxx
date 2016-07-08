@@ -387,7 +387,7 @@ void XMLTextStyleContext::FillPropertySet(
     // catch the combined characters attribute
 
     // imitate XMLPropStyleContext::FillPropertySet(...)
-    SvXMLStylesContext* pSvXMLStylesContext = static_cast< SvXMLStylesContext* >(GetStyles());
+    SvXMLStylesContext* pSvXMLStylesContext = GetStyles();
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
     DBG_ASSERT(xImpPrMap.is(),"Where is the import prop mapper?");
 

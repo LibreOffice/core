@@ -2085,7 +2085,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
         if( pPos->IsMultiPortion() && static_cast<SwMultiPortion*>(pPos)->HasFlyInContent() )
         {
             OSL_ENSURE( !GetMulti(), "Too much multi" );
-            const_cast<SwTextFormatter*>(static_cast<const SwTextFormatter*>(this))->pMulti = static_cast<SwMultiPortion*>(pPos);
+            const_cast<SwTextFormatter*>(this)->pMulti = static_cast<SwMultiPortion*>(pPos);
             SwLineLayout *pLay = &GetMulti()->GetRoot();
             Point aSt( aTmpInf.X(), aStart.Y() );
 

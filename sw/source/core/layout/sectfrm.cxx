@@ -325,7 +325,7 @@ void SwSectionFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
             // newly created pSect by the InsertGroup
             SwColumnFrame *pCol = static_cast<SwColumnFrame*>(pParent->GetUpper());
             while( !pSibling && nullptr != ( pCol = static_cast<SwColumnFrame*>(pCol->GetNext()) ) )
-                pSibling = static_cast<SwLayoutFrame*>(static_cast<SwColumnFrame*>(pCol)->Lower())->Lower();
+                pSibling = static_cast<SwLayoutFrame*>(pCol->Lower())->Lower();
             if( pSibling )
             {
                 // Even worse: every following column content has to

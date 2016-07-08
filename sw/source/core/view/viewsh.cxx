@@ -1085,7 +1085,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                 SwRect aPageRect( pPage->GetBoundRect(GetWin()) );
                 if ( bBookMode )
                 {
-                    const SwPageFrame& rFormatPage = static_cast<const SwPageFrame*>(pPage)->GetFormatPage();
+                    const SwPageFrame& rFormatPage = pPage->GetFormatPage();
                     aPageRect.SSize() = rFormatPage.GetBoundRect(GetWin()).SSize();
                 }
 

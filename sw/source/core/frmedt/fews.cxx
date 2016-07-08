@@ -1267,7 +1267,7 @@ bool SwFEShell::IsFrameVertical(const bool bEnvironment, bool& bRTL, bool& bVert
             return bVert;
         }
         // #i26791#
-        SwContact* pContact = static_cast<SwContact*>(GetUserCall( pObj ));
+        SwContact* pContact = GetUserCall( pObj );
         if ( !pContact )
         {
             OSL_FAIL( "<SwFEShell::IsFrameVertical(..)> - missing SwContact instance at marked object -> This is a serious situation" );

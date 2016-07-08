@@ -449,7 +449,7 @@ void Entity::startElement( Event *pEvent )
                 xContext->startFastElement( nElementToken, xAttr );
         }
         // swap the reference we own in to avoid referencing thrash.
-        maContextStack.top().mxContext.set( static_cast<XFastContextHandler *>( xContext.get() ) );
+        maContextStack.top().mxContext.set( xContext.get() );
         xContext.set( nullptr, SAL_NO_ACQUIRE );
     }
     catch (const Exception&)

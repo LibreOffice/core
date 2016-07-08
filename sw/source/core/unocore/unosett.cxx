@@ -1744,7 +1744,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
 
                                 SfxStyleSheetBase* pBase;
                                 SfxStyleSheetBasePool* pPool = pLocalDoc->GetDocShell()->GetStyleSheetPool();
-                                pBase = static_cast<SfxStyleSheetBasePool*>(pPool)->Find(sCharFormatName, SfxStyleFamily::Char);
+                                pBase = pPool->Find(sCharFormatName, SfxStyleFamily::Char);
                                 if(!pBase)
                                     pBase = &pPool->Make(sCharFormatName, SfxStyleFamily::Char);
                                 pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();

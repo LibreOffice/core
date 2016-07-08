@@ -1325,7 +1325,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
 
                         // Current size of the OBJ_GRAF
-                        const Rectangle aRect = static_cast<SdrObject*>(pObj)->GetLogicRect();
+                        const Rectangle aRect = pObj->GetLogicRect();
                         const Size aCurrentSizeofObj = aRect.GetSize();
 
                         // Original size of the OBJ_GRAF

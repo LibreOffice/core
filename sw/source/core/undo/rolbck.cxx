@@ -955,8 +955,7 @@ void SwHistory::Add( SwTextAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
                         static_txtattr_cast<SwTextRefMark*>(pHint), nNodeIdx);
                 break;
             default:
-                pHt = new SwHistorySetText(
-                            static_cast<SwTextAttr*>(pHint), nNodeIdx );
+                pHt = new SwHistorySetText( pHint, nNodeIdx );
         }
     }
     else

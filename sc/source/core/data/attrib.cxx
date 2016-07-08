@@ -150,12 +150,12 @@ SfxPoolItem * ScMergeFlagAttr::Clone(SfxItemPool *) const
 
 bool ScMergeFlagAttr::HasPivotButton() const
 {
-    return bool(static_cast<ScMF>(GetValue()) & ScMF::Button);
+    return bool(GetValue() & ScMF::Button);
 }
 
 bool ScMergeFlagAttr::HasPivotPopupButton() const
 {
-    return bool(static_cast<ScMF>(GetValue()) & ScMF::ButtonPopup);
+    return bool(GetValue() & ScMF::ButtonPopup);
 }
 
 /**

@@ -25,9 +25,82 @@
 
 #include "clang/Sema/Sema.h"
 
+#include "check.hxx"
 #include "plugin.hxx"
 
 namespace {
+
+// Work around <http://reviews.llvm.org/D22128>:
+//
+// SfxErrorHandler::GetClassString (svtools/source/misc/ehdl.cxx):
+//
+//   ErrorResource_Impl aEr(aId, (sal_uInt16)lClassId);
+//   if(aEr)
+//   {
+//       rStr = static_cast<ResString>(aEr).GetString();
+//   }
+//
+// expr->dump():
+//  CXXStaticCastExpr 0x2b74e8e657b8 'class ResString' static_cast<class ResString> <ConstructorConversion>
+//  `-CXXBindTemporaryExpr 0x2b74e8e65798 'class ResString' (CXXTemporary 0x2b74e8e65790)
+//    `-CXXConstructExpr 0x2b74e8e65758 'class ResString' 'void (class ResString &&) noexcept(false)' elidable
+//      `-MaterializeTemporaryExpr 0x2b74e8e65740 'class ResString' xvalue
+//        `-CXXBindTemporaryExpr 0x2b74e8e65720 'class ResString' (CXXTemporary 0x2b74e8e65718)
+//          `-ImplicitCastExpr 0x2b74e8e65700 'class ResString' <UserDefinedConversion>
+//            `-CXXMemberCallExpr 0x2b74e8e656d8 'class ResString'
+//              `-MemberExpr 0x2b74e8e656a0 '<bound member function type>' .operator ResString 0x2b74e8dc1f00
+//                `-DeclRefExpr 0x2b74e8e65648 'struct ErrorResource_Impl' lvalue Var 0x2b74e8e653b0 'aEr' 'struct ErrorResource_Impl'
+// expr->getSubExprAsWritten()->dump():
+//  MaterializeTemporaryExpr 0x2b74e8e65740 'class ResString' xvalue
+//  `-CXXBindTemporaryExpr 0x2b74e8e65720 'class ResString' (CXXTemporary 0x2b74e8e65718)
+//    `-ImplicitCastExpr 0x2b74e8e65700 'class ResString' <UserDefinedConversion>
+//      `-CXXMemberCallExpr 0x2b74e8e656d8 'class ResString'
+//        `-MemberExpr 0x2b74e8e656a0 '<bound member function type>' .operator ResString 0x2b74e8dc1f00
+//          `-DeclRefExpr 0x2b74e8e65648 'struct ErrorResource_Impl' lvalue Var 0x2b74e8e653b0 'aEr' 'struct ErrorResource_Impl'
+//
+// Copies code from Clang's lib/AST/Expr.cpp:
+namespace {
+  Expr *skipImplicitTemporary(Expr *expr) {
+    // Skip through reference binding to temporary.
+    if (MaterializeTemporaryExpr *Materialize
+                                  = dyn_cast<MaterializeTemporaryExpr>(expr))
+      expr = Materialize->GetTemporaryExpr();
+
+    // Skip any temporary bindings; they're implicit.
+    if (CXXBindTemporaryExpr *Binder = dyn_cast<CXXBindTemporaryExpr>(expr))
+      expr = Binder->getSubExpr();
+
+    return expr;
+  }
+}
+Expr *getSubExprAsWritten(CastExpr *This) {
+  Expr *SubExpr = nullptr;
+  CastExpr *E = This;
+  do {
+    SubExpr = skipImplicitTemporary(E->getSubExpr());
+
+    // Conversions by constructor and conversion functions have a
+    // subexpression describing the call; strip it off.
+    if (E->getCastKind() == CK_ConstructorConversion)
+      SubExpr =
+        skipImplicitTemporary(cast<CXXConstructExpr>(SubExpr)->getArg(0));
+    else if (E->getCastKind() == CK_UserDefinedConversion) {
+      assert((isa<CXXMemberCallExpr>(SubExpr) ||
+              isa<BlockExpr>(SubExpr)) &&
+             "Unexpected SubExpr for CK_UserDefinedConversion.");
+      if (isa<CXXMemberCallExpr>(SubExpr))
+        SubExpr = cast<CXXMemberCallExpr>(SubExpr)->getImplicitObjectArgument();
+    }
+
+    // If the subexpression we're left with is an implicit cast, look
+    // through that, too.
+  } while ((E = dyn_cast<ImplicitCastExpr>(SubExpr)));
+
+  return SubExpr;
+}
+const Expr *getSubExprAsWritten(const CastExpr *This) {
+  return getSubExprAsWritten(const_cast<CastExpr *>(This));
+}
 
 bool isVoidPointer(QualType type) {
     return type->isPointerType()
@@ -48,6 +121,8 @@ public:
     }
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
+
+    bool VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr);
 
     bool VisitCXXReinterpretCastExpr(CXXReinterpretCastExpr const * expr);
 
@@ -202,6 +277,48 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
     default:
         break;
     }
+    return true;
+}
+
+bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    auto t1 = getSubExprAsWritten(expr)->getType();
+    auto t2 = expr->getTypeAsWritten();
+    if (t1.getCanonicalType() != t2.getCanonicalType()
+        || t1->isArithmeticType())
+    {
+        return true;
+    }
+    // Don't warn about
+    //
+    //   *pResult = static_cast<oslModule>(RTLD_DEFAULT);
+    //
+    // in osl_getModuleHandle (sal/osl/unx/module.cxx) (where oslModule is a
+    // typedef to void *):
+    if (loplugin::TypeCheck(t2).Typedef("oslModule").GlobalNamespace()
+        && !loplugin::TypeCheck(t1).Typedef())
+    {
+        return true;
+    }
+    // Dont't warn about
+    //
+    //   curl_easy_setopt(static_cast<CURL*>(pData),
+    //                    CURLOPT_HEADERFUNCTION,
+    //                    memory_write_dummy);
+    //
+    // in delete_CURL (ucb/source/ucp/ftp/ftploaderthread.cxx) (where CURL is a
+    // typedef to void):
+    if (loplugin::TypeCheck(t2).Pointer().Typedef("CURL").GlobalNamespace()
+        && !loplugin::TypeCheck(t1).Pointer().Typedef())
+    {
+        return true;
+    }
+    report(
+        DiagnosticsEngine::Warning,
+        "redundant static_cast from %0 to %1", expr->getExprLoc())
+        << t1 << t2 << expr->getSourceRange();
     return true;
 }
 

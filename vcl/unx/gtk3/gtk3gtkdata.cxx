@@ -384,7 +384,7 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
     }
 
     m_pCapture = pFrame;
-    static_cast<GtkSalFrame*>(pFrame)->grabPointer( TRUE );
+    pFrame->grabPointer( TRUE );
     return 1;
 }
 

@@ -467,7 +467,7 @@ void SwHiddenTextPortion::Paint( const SwTextPaintInfo & rInf) const
     aPos.Y() -= 150;
     aPos.X() -= 25;
     SwRect aRect( aPos, Size( 100, 200 ) );
-    static_cast<OutputDevice*>(pOut)->DrawRect( aRect.SVRect() );
+    pOut->DrawRect( aRect.SVRect() );
     pOut->SetFillColor( aOldColor );
 #endif
 }

@@ -1227,7 +1227,7 @@ SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
     }
 
     if( nPageToSelect < (sal_uInt32)mrDoc.GetSdPageCount( PK_STANDARD ) )
-        return static_cast< SdPage* >( mrDoc.GetSdPage( (sal_uInt16)nPageToSelect, PK_STANDARD) );
+        return mrDoc.GetSdPage( (sal_uInt16)nPageToSelect, PK_STANDARD );
 
     return nullptr;
 }

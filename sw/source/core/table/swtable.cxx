@@ -250,7 +250,7 @@ SwTable::~SwTable()
     }
 
     // the table can be deleted if it's the last client of the FrameFormat
-    SwTableFormat* pFormat = static_cast<SwTableFormat*>(GetFrameFormat());
+    SwTableFormat* pFormat = GetFrameFormat();
     pFormat->Remove( this );               // remove
 
     if( !pFormat->HasWriterListeners() )

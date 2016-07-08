@@ -530,7 +530,7 @@ ImageManagerImpl::~ImageManagerImpl()
 
 void ImageManagerImpl::dispose()
 {
-    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
+    uno::Reference< uno::XInterface > xOwner(m_pOwner);
     css::lang::EventObject aEvent( xOwner );
     m_aListenerContainer.disposeAndClear( aEvent );
 
@@ -822,7 +822,7 @@ throw (css::lang::IllegalArgumentException,
         }
     }
 
-    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
+    uno::Reference< uno::XInterface > xOwner(m_pOwner);
     // Notify listeners
     if ( pInsertedImages != nullptr )
     {
@@ -927,7 +927,7 @@ throw ( css::lang::IllegalArgumentException,
     }
 
     // Notify listeners
-    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
+    uno::Reference< uno::XInterface > xOwner(m_pOwner);
     if ( pRemovedImages != nullptr )
     {
         ConfigurationEvent aRemoveEvent;
@@ -1073,7 +1073,7 @@ void ImageManagerImpl::reload()
                 aGuard.clear();
 
                 // Now notify our listeners. Unlock mutex to prevent deadlocks
-                uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
+                uno::Reference< uno::XInterface > xOwner(m_pOwner);
                 if ( pInsertedImages != nullptr )
                 {
                     ConfigurationEvent aInsertEvent;

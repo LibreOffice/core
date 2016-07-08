@@ -48,6 +48,11 @@ public:
     template<std::size_t N> inline ContextCheck Class(char const (& id)[N])
         const;
 
+    TypeCheck Typedef() const;
+
+    template<std::size_t N> inline ContextCheck Typedef(char const (& id)[N])
+        const;
+
     TypeCheck NotSubstTemplateTypeParmType() const;
 
 private:
@@ -147,6 +152,22 @@ template<std::size_t N> ContextCheck TypeCheck::Class(char const (& id)[N])
         auto const t = type_->getAs<clang::RecordType>();
         if (t != nullptr) {
             return detail::checkRecordDecl(t->getDecl(), clang::TTK_Class, id);
+        }
+    }
+    return ContextCheck();
+}
+
+template<std::size_t N> ContextCheck TypeCheck::Typedef(char const (& id)[N])
+    const
+{
+    if (!type_.isNull()) {
+        if (auto const t = type_->getAs<clang::TypedefType>()) {
+            auto const d = t->getDecl();
+            auto const i = d->getIdentifier();
+            assert(i != nullptr);
+            if (i->isStr(id)) {
+                return ContextCheck(d->getDeclContext());
+            }
         }
     }
     return ContextCheck();

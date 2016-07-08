@@ -526,8 +526,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
         BitmapEx aBmp(*m_FrameList[m_nCurrentFrame].first);
 
         SdPage* pPage = pMyDoc->GetSdPage(0, PK_STANDARD);
-        SdrObject *const pObject =
-            static_cast<SdrObject*>(pPage->GetObj(m_nCurrentFrame));
+        SdrObject *const pObject = pPage->GetObj(m_nCurrentFrame);
         if( pObject )
         {
             ScopedVclPtrInstance< VirtualDevice > pVD;

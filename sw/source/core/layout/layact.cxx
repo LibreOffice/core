@@ -376,7 +376,7 @@ SwPageFrame* SwLayAction::CheckFirstVisPage( SwPageFrame *pPage )
     SwContentFrame *pChk = pCnt;
     bool bPageChgd = false;
     while ( pCnt && pCnt->IsFollow() )
-        pCnt = static_cast<SwContentFrame*>(pCnt)->FindMaster();
+        pCnt = pCnt->FindMaster();
     if ( pCnt && pChk != pCnt )
     {   bPageChgd = true;
         pPage = pCnt->FindPageFrame();

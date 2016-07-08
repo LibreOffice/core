@@ -1867,7 +1867,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             }
         }
         // Do not calculate split cell frames.
-        else if ( !pNewUpper->IsCellFrame() || static_cast<SwLayoutFrame*>(pNewUpper)->Lower() )
+        else if ( !pNewUpper->IsCellFrame() || pNewUpper->Lower() )
             pNewUpper->Calc(m_rThis.getRootFrame()->GetCurrShell()->GetOut());
 
         SwFootnoteBossFrame *pNewBoss = pNewUpper->FindFootnoteBossFrame();

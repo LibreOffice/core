@@ -158,7 +158,7 @@ uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XTex
 
 SwTextFormatColl& SwEditShell::GetDfltTextFormatColl() const
 {
-    return *static_cast<SwTextFormatColl*>( (GetDoc()->GetDfltTextFormatColl()));
+    return *GetDoc()->GetDfltTextFormatColl();
 }
 
 sal_uInt16 SwEditShell::GetTextFormatCollCount() const

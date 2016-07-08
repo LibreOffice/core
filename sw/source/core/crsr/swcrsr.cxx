@@ -759,7 +759,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
             pPHdl.reset(new PercentHdl( 0, nCursorCnt, pDoc->GetDocShell() ));
     }
     else
-        pSaveCursor = static_cast<SwPaM*>(pSaveCursor->GetPrev());
+        pSaveCursor = pSaveCursor->GetPrev();
 
     bool bEnd = false;
     do {

@@ -1570,7 +1570,7 @@ void MenuBarManager::FillMenuWithConfiguration(
     MenuBarManager::FillMenu( nId, pMenu, rModuleIdentifier, rItemContainer, xEmptyDispatchProvider );
 
     // Merge add-on menu entries into the menu bar
-    MenuBarManager::MergeAddonMenus( static_cast< Menu* >( pMenu ),
+    MenuBarManager::MergeAddonMenus( pMenu,
                                      AddonsOptions().GetMergeMenuInstructions(),
                                      rModuleIdentifier );
 

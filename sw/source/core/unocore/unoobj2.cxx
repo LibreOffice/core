@@ -324,7 +324,7 @@ void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem 
         // Is the move to the new one finished and will the old one be deleted?
         if( static_cast<const SwFormatChg*>(pNew)->pChangedFormat == pClient->GetRegisteredIn() &&
             static_cast<const SwFormatChg*>(pOld)->pChangedFormat->IsFormatInDTOR() )
-            static_cast<SwModify*>(pClient->GetRegisteredIn())->Remove(pClient);
+            pClient->GetRegisteredIn()->Remove(pClient);
         break;
     }
 }

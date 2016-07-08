@@ -941,7 +941,7 @@ void SwFEShell::UnProtectCells()
         } while ( pFrame && !pFrame->IsCellFrame() );
         if( pFrame )
         {
-            SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()));
+            SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
             aBoxes.insert( pBox );
         }
     }
@@ -984,7 +984,7 @@ bool SwFEShell::CanUnProtectCells() const
             } while ( pFrame && !pFrame->IsCellFrame() );
             if( pFrame )
             {
-                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()));
+                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
                 aBoxes.insert( pBox );
             }
         }
@@ -1149,7 +1149,7 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
         if (!pFrame)
             return false;
 
-        SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()));
+        SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
         aBoxes.insert( pBox );
     }
 

@@ -2305,7 +2305,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
             rPam.DeleteMark();
 
             SwPaM* pTmp = &rPam;
-            while( &rPam != ( pTmp = static_cast<SwPaM*>(pTmp->GetNext()) ))
+            while( &rPam != ( pTmp = pTmp->GetNext() ))
                 for( int i = 0; i < 2; ++i )
                     pTmp->GetBound( (bool)i ) = *rPam.GetPoint();
         }
@@ -3695,7 +3695,7 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
 
     if (rBox.GetBox()->GetSttNd())
     {
-        SwTableBox* pSetBox = static_cast<SwTableBox*>(rBox.GetBox());
+        SwTableBox* pSetBox = rBox.GetBox();
         if (!pSetBox->HasDirectFormatting() || bResetDirect)
         {
             if (bResetDirect)
@@ -4556,7 +4556,7 @@ bool SwDoc::UnProtectTables( const SwPaM& rPam )
                     bFound = pStt->nNode.GetIndex() < nTableIdx &&
                             nTableIdx < pEnd->nNode.GetIndex();
 
-                } while( !bFound && &rPam != ( pTmp = static_cast<SwPaM*>(pTmp->GetNext()) ) );
+                } while( !bFound && &rPam != ( pTmp = pTmp->GetNext() ) );
                 if( !bFound )
                     continue; // Continue searching
             }
