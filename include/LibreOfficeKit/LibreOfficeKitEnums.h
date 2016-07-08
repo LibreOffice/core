@@ -374,6 +374,22 @@ typedef enum
      */
     LOK_CALLBACK_GRAPHIC_VIEW_SELECTION,
 
+    /**
+     * The blinking text cursor in one of the other views is now visible or
+     * not.
+     *
+     * The payload format:
+     *
+     * {
+     *     "viewId": "..."
+     *     "visible": "..."
+     * }
+     *
+     * - viewId is a value returned earlier by lok::Document::createView()
+     * - visible uses the format of LOK_CALLBACK_CURSOR_VISIBLE.
+     */
+    LOK_CALLBACK_VIEW_CURSOR_VISIBLE,
+
 }
 LibreOfficeKitCallbackType;
 
