@@ -68,7 +68,7 @@
         SAL_UNUSED_PARAMETER Class *, SAL_UNUSED_PARAMETER ArgType)
 
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
-    static_cast<Class *>(Instance), &Class::LinkStub##Member)
+    ::tools::detail::castTo<Class *>(Instance), &Class::LinkStub##Member)
 
 template<typename Arg, typename Ret>
 class SAL_WARN_UNUSED Link {
@@ -112,6 +112,11 @@ private:
 class LinkParamNone { LinkParamNone() = delete; };
 
 namespace tools { namespace detail {
+
+// Avoids loplugin:redundantcast in LINK macro, in the common case that Instance
+// is already of type Class * (instead of a derived type):
+template<typename To, typename From> To castTo(From from)
+{ return static_cast<To>(from); }
 
 template<typename Arg, typename Ret>
 Link<Arg, Ret> makeLink(void * instance, Ret (* function)(void *, Arg)) {

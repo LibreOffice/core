@@ -66,7 +66,7 @@ class SfxRequest;
  void SfxStub##aShellClass##aExecMethod( \
    SfxShell *pShell, SfxRequest& rReq) \
   { \
-      static_cast<aShellClass*>(pShell)->aExecMethod( rReq ); \
+      ::tools::detail::castTo<aShellClass*>(pShell)->aExecMethod( rReq ); \
   }
 
 #define SFX_STATE_STUB( aShellClass, aStateMethod) \
