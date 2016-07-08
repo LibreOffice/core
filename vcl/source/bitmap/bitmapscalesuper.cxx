@@ -89,7 +89,8 @@ class ScaleTask : public comphelper::ThreadTask
     ScaleRangeFn mpFn;
     std::vector< ScaleRangeContext > maStrips;
 public:
-    explicit ScaleTask( ScaleRangeFn pFn ) : mpFn( pFn ) {}
+    explicit ScaleTask( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ScaleRangeFn pFn )
+        : comphelper::ThreadTask(pTag), mpFn( pFn ) {}
     void push( ScaleRangeContext &aRC ) { maStrips.push_back( aRC ); }
     virtual void doWork() override
     {
@@ -1000,6 +1001,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
         {
             // partition and queue work
             comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
+            std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
             sal_uInt32 nThreads = rShared.getWorkerCount();
             assert( nThreads > 0 );
             sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
@@ -1008,7 +1010,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
             long nStripY = nStartY;
             for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
             {
-                ScaleTask *pTask = new ScaleTask( pScaleRangeFn );
+                ScaleTask *pTask = new ScaleTask( pTag, pScaleRangeFn );
                 for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
                 {
                     ScaleRangeContext aRC( &aContext, nStripY );
@@ -1020,7 +1022,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
             // finish any remaining bits here
             pScaleRangeFn( aContext, nStripY, nEndY );
 
-            rShared.waitUntilEmpty();
+            rShared.waitUntilDone(pTag);
             SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
         }
 
