@@ -1577,19 +1577,19 @@ void Window::ImplScroll( const Rectangle& rRect,
             aInvalidateRegion.Move( bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll );
             bErase = true;
         }
-        if ( !(nFlags & ScrollFlags::NoWindowInvalidate) )
-        {
-            Rectangle aDestRect( aRectMirror );
-            aDestRect.Move( bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll );
-            vcl::Region aWinInvalidateRegion( aRectMirror );
-            if (!SupportsDoubleBuffering())
-                // There will be no CopyArea() call below, so invalidate the
-                // whole visible area, not only the smaller one that was just
-                // scrolled in.
-                aWinInvalidateRegion.Exclude(aDestRect);
 
-            aInvalidateRegion.Union( aWinInvalidateRegion );
+        Rectangle aDestRect(aRectMirror);
+        aDestRect.Move(bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll);
+        vcl::Region aWinInvalidateRegion(aRectMirror);
+        if (!SupportsDoubleBuffering())
+        {
+            // There will be no CopyArea() call below, so invalidate the
+            // whole visible area, not only the smaller one that was just
+            // scrolled in.
+            aWinInvalidateRegion.Exclude(aDestRect);
         }
+
+        aInvalidateRegion.Union( aWinInvalidateRegion );
     }
 
     Point aPoint( mnOutOffX, mnOutOffY );
