@@ -80,6 +80,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,EBOOK,EBOOK_TARBALL) \
 		$(call fetch_Optional,FREEHAND,FREEHAND_TARBALL) \
 		$(call fetch_Optional,ETONYEK,ETONYEK_TARBALL) \
+		$(call fetch_Optional,EXPAT,EXPAT_TARBALL) \
 		$(call fetch_Optional,FIREBIRD,FIREBIRD_TARBALL) \
 		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
 		$(call fetch_Optional,LIBEOT,LIBEOT_TARBALL) \
@@ -108,7 +109,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,CT2N,$(CT2N_TARBALL)) \
 		$(call fetch_Optional,CURL,$(CURL_TARBALL)) \
 		$(call fetch_Optional,EPM,$(EPM_TARBALL)) \
-		$(call fetch_Optional,EXPAT,$(EXPAT_TARBALL)) \
 		$(call fetch_Optional,MARIADB,$(MARIADB_TARBALL)) \
 		$(call fetch_Optional,MORE_FONTS,$(FONT_CALADEA_TARBALL)) \
 		$(call fetch_Optional,MORE_FONTS,$(FONT_CARLITO_TARBALL)) \

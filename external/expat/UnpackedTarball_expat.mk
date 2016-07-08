@@ -13,8 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,expat,$(EXPAT_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 	external/expat/expat-winapi.patch \
-	external/expat/CVE-2015-1283-refix.patch.1 \
-	external/expat/CVE-2016-0718-v2-2-1.patch.1 \
 ))
 
 # This is a bit hackish.
