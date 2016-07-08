@@ -111,7 +111,7 @@ struct SfxType
 
     const std::type_info* Type() const{return pType;}
     SfxPoolItem*    CreateItem() const
-                    { return static_cast<SfxPoolItem*>(createSfxPoolItemFunc()); }
+                    { return createSfxPoolItemFunc(); }
 };
 
 struct SfxType0
