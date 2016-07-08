@@ -1150,9 +1150,9 @@ AC_ARG_ENABLE(selective-debuginfo,
 
 AC_ARG_ENABLE(symbols,
     AS_HELP_STRING([--enable-symbols],
-        [Include debugging symbols in output while preserve optimization.
-         This enables -g compiler flag for GCC or equivalent,
-         without changing anything else compared to productive code.]))
+        [Generate debug information.
+         By default, enabled for --enable-debug and --enable-dbgutil, disabled
+         otherwise.]))
 
 AC_ARG_ENABLE(runtime-optimizations,
     AS_HELP_STRING([--disable-runtime-optimizations],
@@ -4034,14 +4034,16 @@ AC_SUBST(ENABLE_DEBUGINFO_FOR)
 
 dnl Check for enable symbols option
 dnl ===================================================================
-AC_MSG_CHECKING([whether to include symbols while preserve optimization])
-if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
-    ENABLE_SYMBOLS="TRUE"
-    if test -n "$ENABLE_DBGUTIL"; then
-        AC_MSG_ERROR([--enable-dbgutil cannot be used with --enable-symbols])
-    elif test -n "$ENABLE_DEBUG"; then
-        AC_MSG_ERROR([--enable-debug cannot be used with --enable-symbols])
+AC_MSG_CHECKING([whether to generate debug information])
+if test -z "$enable_symbols"; then
+    if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+        enable_symbols=yes
+    else
+        enable_symbols=no
     fi
+fi
+if test "$enable_symbols" != no; then
+    ENABLE_SYMBOLS=TRUE
     AC_MSG_RESULT([yes])
 else
     ENABLE_SYMBOLS=
