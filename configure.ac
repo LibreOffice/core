@@ -4044,11 +4044,7 @@ if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
     fi
     AC_MSG_RESULT([yes])
 else
-    if test -n "$enable_symbols" -a "$enable_symbols" = "no"; then
-        ENABLE_SYMBOLS="FALSE"
-    else
-        ENABLE_SYMBOLS=
-    fi
+    ENABLE_SYMBOLS=
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SYMBOLS)

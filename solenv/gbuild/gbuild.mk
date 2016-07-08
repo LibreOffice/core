@@ -117,12 +117,10 @@ gb_Deliver_HARDLINK := $(true)
 endif
 
 # note: ENABLE_CRASHDUMP turns on gb_SYMBOL
-ifeq ($(or $(ENABLE_SYMBOLS),$(enable_symbols)),FALSE)
-gb_SYMBOL := $(false)
-else
 ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)$(ENABLE_CRASHDUMP)),)
 gb_SYMBOL := $(true)
-endif
+else
+gb_SYMBOL := $(false)
 endif
 
 ifneq ($(strip $(ENABLE_PCH)),)
