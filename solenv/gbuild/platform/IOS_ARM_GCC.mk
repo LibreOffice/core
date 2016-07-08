@@ -61,7 +61,7 @@ gb_OBJCFLAGS := -x objective-c
 gb_COMPILERDEFS += \
 		-DBOOST_DETAIL_NO_CONTAINER_FWD
 
-gb_DEBUG_CFLAGS := -g -fno-inline
+gb_DEBUG_CFLAGS := -fno-inline
 
 # LinkTarget class
 

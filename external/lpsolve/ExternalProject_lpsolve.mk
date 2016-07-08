@@ -32,7 +32,7 @@ endif # $(COM)
 else # $(OS)!=WNT
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	$(call gb_ExternalProject_run,build,\
-		CC="$(CC) $(if $(debug),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS))" \
+		CC="$(CC) $(if $(debug),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS))" \
 		$(if $(filter MACOSX,$(OS)),EXTRA_LINKFLAGS='-install_name @__________________________________________________OOO/liblpsolve55.dylib') \
 		sh -e $(if $(filter MACOSX,$(OS)),ccc.osx, \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),ccc.static, \

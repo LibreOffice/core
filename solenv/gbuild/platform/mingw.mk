@@ -67,7 +67,7 @@ gb_STDLIBS := \
 	-lmingw32 \
 	-lmingwex \
 
-gb_DEBUG_CFLAGS := -g -fno-inline
+gb_DEBUG_CFLAGS := -fno-inline
 
 # LinkTarget class
 
