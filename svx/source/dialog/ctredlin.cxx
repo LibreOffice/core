@@ -170,8 +170,7 @@ void SvxRedlinTable::SetCalcView()
 void SvxRedlinTable::UpdateFilterTest()
 {
     Date aDateMax( Date::SYSTEM );
-    sal_uInt16 nYEAR=aDateMax.GetYear()+100;
-    aDateMax.SetYear(nYEAR);
+    aDateMax.AddYears(100);
     Date aDateMin(1,1,1989);
     tools::Time aTMin(0);
     tools::Time aTMax(23,59,59);

@@ -245,7 +245,7 @@ void SfxObjectShell::UpdateTime_Impl(
     if (aNow.GetDate()>=pImpl->nTime.GetDate())
     {
         // Get count of days last editing.
-        nDays = aNow.GetSecFromDateTime(pImpl->nTime.GetDate())/86400 ;
+        nDays = aNow.GetSecFromDateTime(Date(pImpl->nTime.GetDate()))/86400 ;
 
         if (nDays==0)
         {

@@ -4584,9 +4584,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                 {
                     css::util::Date aUNODate;
                     aGrabBag[i].Value >>= aUNODate;
-                    aOriginalDate.SetDay(aUNODate.Day);
-                    aOriginalDate.SetMonth(aUNODate.Month);
-                    aOriginalDate.SetYear(aUNODate.Year);
+                    aOriginalDate = aUNODate;
                 }
                 else if (aGrabBag[i].Name == "CharFormat")
                     aGrabBag[i].Value >>= aCharFormat;

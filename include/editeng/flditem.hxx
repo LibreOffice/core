@@ -106,7 +106,7 @@ enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT = 0,   // Set as in App
 
 class EDITENG_DLLPUBLIC SvxDateField : public SvxFieldData
 {
-    sal_uInt32              nFixDate;
+    sal_Int32               nFixDate;
     SvxDateType             eType;
     SvxDateFormat           eFormat;
 
@@ -118,7 +118,7 @@ public:
                                 SvxDateType eType = SVXDATETYPE_VAR,
                                 SvxDateFormat eFormat = SVXDATEFORMAT_STDSMALL );
 
-    sal_uInt32              GetFixDate() const { return nFixDate; }
+    sal_Int32               GetFixDate() const { return nFixDate; }
     void                    SetFixDate( const Date& rDate ) { nFixDate = rDate.GetDate(); }
 
     SvxDateType             GetType() const { return eType; }

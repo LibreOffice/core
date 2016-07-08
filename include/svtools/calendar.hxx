@@ -146,7 +146,7 @@ calls or by ending a selection.
 
 #define DIB_BOLD                    ((sal_uInt16)0x0001)
 
-typedef std::set<sal_uInt32> IntDateSet;
+typedef std::set<sal_Int32> IntDateSet;
 
 
 class SVT_DLLPUBLIC Calendar : public Control
@@ -188,8 +188,8 @@ private:
     long            mnDayHeight;
     long            mnWeekWidth;
     WinBits         mnWinStyle;
-    sal_uInt16      mnFirstYear;
-    sal_uInt16      mnLastYear;
+    sal_Int16       mnFirstYear;
+    sal_Int16       mnLastYear;
     bool            mbCalc:1,
                     mbFormat:1,
                     mbDrag:1,
@@ -224,9 +224,9 @@ private:
     SVT_DLLPRIVATE sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;
     SVT_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
-                                             sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
+                                             sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear,
                                              DayOfWeek eDayOfWeek,
-                                             bool bOther, sal_uLong nToday);
+                                             bool bOther, sal_Int32 nToday);
     SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
     SVT_DLLPRIVATE void         ImplUpdateSelection( IntDateSet* pOld );

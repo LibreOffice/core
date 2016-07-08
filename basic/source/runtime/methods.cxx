@@ -4858,7 +4858,7 @@ sal_Int16 implGetDateYear( double aDate )
     long nDays = (long) aDate;
     nDays -= 2; // standardize: 1.1.1900 => 0.0
     aRefDate += nDays;
-    sal_Int16 nRet = (sal_Int16)( aRefDate.GetYear() );
+    sal_Int16 nRet = aRefDate.GetYear();
     return nRet;
 }
 
@@ -4917,7 +4917,7 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& 
             {
                 nYearAdj = ( ( nMonth -12 ) / 12 );
             }
-            aCurDate.SetYear( aCurDate.GetYear() + nYearAdj );
+            aCurDate.AddYears( nYearAdj );
         }
 
         // adjust day value,

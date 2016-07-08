@@ -333,7 +333,7 @@ public:
     /// Change language/country, also input and format scanner
     void ChangeIntl( LanguageType eLnge );
     /// Change the reference null date
-    void ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear);
+    void ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear);
     /// Change standard precision
     void ChangeStandardPrec(short nPrec);
     /// Set zero value suppression

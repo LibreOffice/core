@@ -1218,7 +1218,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 
     m_pFileStream->Seek(0L);
     (*m_pFileStream).WriteUChar( nDbaseType );                            // dBase format
-    (*m_pFileStream).WriteUChar( aDate.GetYear() % 100 );                 // current date
+    (*m_pFileStream).WriteUChar( aDate.GetYearUnsigned() % 100 );         // current date
 
 
     (*m_pFileStream).WriteUChar( aDate.GetMonth() );

@@ -396,7 +396,7 @@ void SvxDateField::Load( SvPersistStream & rStm )
 {
     sal_uInt16 nType, nFormat;
 
-    rStm.ReadUInt32( nFixDate );
+    rStm.ReadInt32( nFixDate );
     rStm.ReadUInt16( nType );
     rStm.ReadUInt16( nFormat );
 
@@ -407,7 +407,7 @@ void SvxDateField::Load( SvPersistStream & rStm )
 
 void SvxDateField::Save( SvPersistStream & rStm )
 {
-    rStm.WriteUInt32( nFixDate );
+    rStm.WriteInt32( nFixDate );
     rStm.WriteUInt16( eType );
     rStm.WriteUInt16( eFormat );
 }

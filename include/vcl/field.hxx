@@ -336,12 +336,12 @@ public:
     void                    SetEmptyDate();
     bool                    IsEmptyDate() const;
 
-    void                    ResetLastDate() { maLastDate = Date( 0, 0, 0 ); }
+    void                    ResetLastDate() { maLastDate = Date( Date::EMPTY ); }
 
     static void             ExpandCentury( Date& rDate );
     static void             ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart );
 
-    static Date             GetInvalidDate() { return Date( 0, 0, 0 ); }
+    static Date             GetInvalidDate() { return Date( Date::EMPTY ); }
 
     /** enables or disables the enforcement of valid values
 

@@ -1692,7 +1692,7 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
         case condformat::LASTMONTH:
             if( rActDate.GetMonth() == 1 )
             {
-                if( aCellDate.GetMonth() == 12 && rActDate.GetYear() == aCellDate.GetYear() + 1 )
+                if( aCellDate.GetMonth() == 12 && rActDate.GetYear() == aCellDate.GetNextYear() )
                     return true;
             }
             else if( rActDate.GetYear() == aCellDate.GetYear() )
@@ -1721,7 +1721,7 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
             }
             break;
         case condformat::LASTYEAR:
-            if( rActDate.GetYear() == aCellDate.GetYear() + 1 )
+            if( rActDate.GetYear() == aCellDate.GetNextYear() )
                 return true;
             break;
         case condformat::THISYEAR:
