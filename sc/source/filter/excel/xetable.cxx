@@ -2112,8 +2112,10 @@ class RowFinalizeTask : public comphelper::ThreadTask
     const ScfUInt16Vec& mrColXFIndexes;
     std::vector< XclExpRow * > maRows;
 public:
-             RowFinalizeTask( const ScfUInt16Vec& rColXFIndexes,
+             RowFinalizeTask( const std::shared_ptr<comphelper::ThreadTaskTag> pTag,
+                              const ScfUInt16Vec& rColXFIndexes,
                               bool bProgress ) :
+                 comphelper::ThreadTask( pTag ),
                  mbProgress( bProgress ),
                  mrColXFIndexes( rColXFIndexes ) {}
     virtual ~RowFinalizeTask() {}
@@ -2148,9 +2150,10 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     else
     {
         comphelper::ThreadPool &rPool = comphelper::ThreadPool::getSharedOptimalPool();
+        std::shared_ptr<comphelper::ThreadTaskTag> pTag = std::make_shared<comphelper::ThreadTaskTag>();
         std::vector<RowFinalizeTask*> aTasks(nThreads, nullptr);
         for ( size_t i = 0; i < nThreads; i++ )
-            aTasks[ i ] = new RowFinalizeTask( rColXFIndexes, i == 0 );
+            aTasks[ i ] = new RowFinalizeTask( pTag, rColXFIndexes, i == 0 );
 
         RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
         size_t nIdx = 0;
@@ -2163,7 +2166,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
         // Progress bar updates must be synchronous to avoid deadlock
         aTasks[0]->doWork();
 
-        rPool.waitUntilEmpty();
+        rPool.waitUntilDone(pTag);
     }
 
     // *** Default row format *** ---------------------------------------------
