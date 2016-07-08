@@ -466,9 +466,10 @@ class DeflateThread: public comphelper::ThreadTask
     uno::Reference< io::XInputStream > mxInStream;
 
 public:
-    DeflateThread( ZipOutputEntry *pEntry,
+    DeflateThread( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ZipOutputEntry *pEntry,
                    const uno::Reference< io::XInputStream >& xInStream )
-        : mpEntry(pEntry)
+        : comphelper::ThreadTask(pTag)
+        , mpEntry(pEntry)
         , mxInStream(xInStream)
     {}
 
@@ -849,7 +850,7 @@ bool ZipPackageStream::saveChild(
                     // Start a new thread deflating this zip entry
                     ZipOutputEntry *pZipEntry = new ZipOutputEntry(
                             m_xContext, *pTempEntry, this, bToBeEncrypted);
-                    rZipOut.addDeflatingThread( pZipEntry, new DeflateThread(pZipEntry, xStream) );
+                    rZipOut.addDeflatingThread( pZipEntry, new DeflateThread(rZipOut.getThreadTaskTag(), pZipEntry, xStream) );
                 }
                 else
                 {
