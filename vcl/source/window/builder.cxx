@@ -1992,7 +1992,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         pTabControl->SetPageName(nPageId, sID);
         if (context.size() != 0)
         {
-            TabPage* pPage = static_cast<TabPage*>(pTabControl->GetTabPage(nPageId));
+            TabPage* pPage = pTabControl->GetTabPage(nPageId);
             pPage->SetContext(context);
         }
     }

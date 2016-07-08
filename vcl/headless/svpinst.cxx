@@ -194,7 +194,7 @@ void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
             {
                 if (it->m_nEvent == SalEvent::UserEvent)
                 {
-                    delete static_cast<ImplSVEvent *>(it->m_pData);
+                    delete it->m_pData;
                 }
                 it = m_aUserEvents.erase( it );
             }

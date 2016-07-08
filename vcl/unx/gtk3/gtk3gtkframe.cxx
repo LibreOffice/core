@@ -766,7 +766,7 @@ void GtkSalFrame::EnsureAppMenuWatch()
                                                        G_BUS_NAME_WATCHER_FLAGS_NONE,
                                                        on_registrar_available,
                                                        on_registrar_unavailable,
-                                                       static_cast<GtkSalFrame*>(this),
+                                                       this,
                                                        nullptr );
     }
 #else
