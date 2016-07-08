@@ -400,9 +400,11 @@ namespace drawinglayer
 
                         public:
                             explicit Executor(
+                                std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
                                 processor3d::ZBufferProcessor3D* pZBufferProcessor3D,
                                 const primitive3d::Primitive3DContainer& rChildren3D)
-                            :   mpZBufferProcessor3D(pZBufferProcessor3D),
+                            :   comphelper::ThreadTask(rTag),
+                                mpZBufferProcessor3D(pZBufferProcessor3D),
                                 mrChildren3D(rChildren3D)
                             {
                             }
@@ -417,6 +419,7 @@ namespace drawinglayer
 
                         std::vector< processor3d::ZBufferProcessor3D* > aProcessors;
                         const sal_uInt32 nLinesPerThread(aBZPixelRaster.getHeight() / nThreadCount);
+                        std::shared_ptr<comphelper::ThreadTaskTag> aTag = std::make_shared<comphelper::ThreadTaskTag>();
 
                         for(sal_Int32 a(0); a < nThreadCount; a++)
                         {
@@ -432,11 +435,11 @@ namespace drawinglayer
                                 nLinesPerThread * a,
                                 a + 1 == nThreadCount ? aBZPixelRaster.getHeight() : nLinesPerThread * (a + 1));
                             aProcessors.push_back(pNewZBufferProcessor3D);
-                            Executor* pExecutor = new Executor(pNewZBufferProcessor3D, getChildren3D());
+                            Executor* pExecutor = new Executor(aTag, pNewZBufferProcessor3D, getChildren3D());
                             rThreadPool.pushTask(pExecutor);
                         }
 
-                        rThreadPool.waitUntilEmpty();
+                        rThreadPool.waitUntilDone(aTag);
                     }
                     else
                     {

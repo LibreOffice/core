@@ -643,36 +643,7 @@ bool SwOLENode::IsChart() const
     return bIsChart;
 }
 
-// due to some problems in test cases with the SharedOptimalPool, use
-// an own instance of comphelper::ThreadPool. Problem is that other
-// usages of getSharedOptimalPool() may interfere if more than one
-// pool user calls waitUntilEmpty().
-//
-// It gets created on-demand and will be available during LO's
-// lifetime for loading chart models used in writer in parallel.  It
-// would be possible to add a usage count, then trigger a timer and
-// clean it up (due to lifetime issues), but that's probably overkill.
-// It gets created on demand, is ready for global reuse and makes no
-// harm (not much ressources needed)
-static comphelper::ThreadPool* pLocalPool = nullptr;
-
-comphelper::ThreadPool* getLocalThreadPool()
-{
-    if (pLocalPool)
-    {
-        return pLocalPool;
-    }
-
-    if (0 == comphelper::ThreadPool::getSharedOptimalPool().getWorkerCount())
-    {
-        return nullptr;
-    }
-
-    pLocalPool = new comphelper::ThreadPool(comphelper::ThreadPool::getSharedOptimalPool().getWorkerCount());
-    return pLocalPool;
-}
-
-/// Holder for local data for a parallely-executed task to load a chart model
+/// Holder for local data for a parallel-executed task to load a chart model
 class DeflateData
 {
 private:
@@ -683,21 +654,20 @@ private:
     drawinglayer::primitive2d::Primitive2DContainer     maPrimitive2DSequence;
     basegfx::B2DRange                                   maRange;
 
-    // set from the WorkerThread when done
-    std::atomic< bool>                                  mbFinished;
-
     // evtl.set from the SwOLEObj destructor when a WorkerThread is still active
     // since it is not possible to kill it - let it terminate and delete the
     // data working on itself
     std::atomic< bool>                                  mbKilled;
+
+    std::shared_ptr<comphelper::ThreadTaskTag>          mpTag;
 
 public:
     DeflateData(const uno::Reference< frame::XModel >& rXModel)
     :   maXModel(rXModel),
         maPrimitive2DSequence(),
         maRange(),
-        mbFinished(false),
-        mbKilled(false)
+        mbKilled(false),
+        mpTag( std::make_shared<comphelper::ThreadTaskTag>() )
     {
     }
 
@@ -713,12 +683,12 @@ public:
 
     bool isFinished() const
     {
-        return mbFinished;
+        return mpTag->isDone();
     }
 
     void waitFinished()
     {
-        while(!mbFinished && !mbKilled)
+        while(!isFinished() && !mbKilled)
         {
             // need to wait until the load in progress is finished.
             // to do so, Application::Yield() is needed since the execution
@@ -727,6 +697,7 @@ public:
             // the running import
             Application::Yield();
         }
+        mpTag->waitUntilDone();
     }
 };
 
@@ -738,7 +709,7 @@ class DeflateThread : public comphelper::ThreadTask
 
 public:
     DeflateThread(DeflateData& rDeflateData)
-    :   mrDeflateData(rDeflateData)
+    :   comphelper::ThreadTask(rDeflateData.mpTag), mrDeflateData(rDeflateData)
     {
     }
 
@@ -754,7 +725,6 @@ private:
 
             // model no longer needed and done
             mrDeflateData.maXModel.clear();
-            mrDeflateData.mbFinished = true;
         }
         catch (const uno::Exception&)
         {
@@ -1075,16 +1045,11 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
 
         if(aXModel.is())
         {
-            // loaded using own instance of comphelper::ThreadPool,
-            // see getLocalThreadPool(). Disable via bool below if
-            // trouble surfaces somewhere
-
             // disabled fro now, need to check deeper
-            static bool bAnynchronousLoadingAllowed = false;
+            static bool bAsynchronousLoadingAllowed = false;
 
             if(bSynchron ||
-                !bAnynchronousLoadingAllowed ||
-                nullptr == getLocalThreadPool())
+                !bAsynchronousLoadingAllowed)
             {
                 // load chart synchron in this Thread
                 m_aPrimitive2DSequence = ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
@@ -1100,7 +1065,7 @@ drawinglayer::primitive2d::Primitive2DContainer SwOLEObj::tryToGetChartContentAs
                 {
                     m_pDeflateData = new DeflateData(aXModel);
                     DeflateThread* pNew = new DeflateThread(*m_pDeflateData);
-                    getLocalThreadPool()->pushTask(pNew);
+                    comphelper::ThreadPool::getSharedOptimalPool().pushTask(pNew);
                 }
             }
         }
