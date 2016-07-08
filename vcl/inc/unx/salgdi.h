@@ -27,6 +27,11 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/metric.hxx>
+#include <config_cairo_canvas.h>
+
+#if ENABLE_CAIRO_CANVAS
+#include <cairo.h>
+#endif // ENABLE_CAIRO_CANVAS
 
 #include "salgdi.hxx"
 #include "salgeom.hxx"
@@ -296,6 +301,11 @@ public:
      *  them because the next one using XCopyArea can depend on them
      */
     void                            YieldGraphicsExpose();
+
+#if ENABLE_CAIRO_CANVAS
+    cairo_t* getCairoContext();
+    static void releaseCairoContext(cairo_t* cr);
+#endif // ENABLE_CAIRO_CANVAS
 
     // do XCopyArea or XGet/PutImage depending on screen numbers
     // signature is like XCopyArea with screen numbers added
