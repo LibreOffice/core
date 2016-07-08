@@ -157,11 +157,11 @@ enum class PosSizeFlags
     Size             = Width | Height,
     PosSize          = Pos | Size,
     All              = PosSize,
-    Dropdown         = 0x0010,
 };
+
 namespace o3tl
 {
-    template<> struct typed_flags<PosSizeFlags> : is_typed_flags<PosSizeFlags, 0x001f> {};
+    template<> struct typed_flags<PosSizeFlags> : is_typed_flags<PosSizeFlags, 0x000f> {};
 }
 
 // Flags for Show()

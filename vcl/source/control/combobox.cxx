@@ -585,7 +585,7 @@ void ComboBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight,
             aPrefSz.Width() = nWidth;
         m_pImpl->m_pFloatWin->SetPrefSize( aPrefSz );
 
-        if ( IsAutoSizeEnabled() && ! (nFlags & PosSizeFlags::Dropdown) )
+        if (IsAutoSizeEnabled())
             nHeight = m_pImpl->m_nDDHeight;
     }
 

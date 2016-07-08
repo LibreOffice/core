@@ -595,7 +595,7 @@ void ListBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosS
             aPrefSz.Width() = nWidth;
         mpFloatWin->SetPrefSize( aPrefSz );
 
-        if ( IsAutoSizeEnabled() && ! (nFlags & PosSizeFlags::Dropdown) )
+        if (IsAutoSizeEnabled())
             nHeight = mnDDHeight;
     }
 
