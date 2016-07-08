@@ -1,2 +1,2 @@
---enable-dbgtuil
+--enable-dbgutil
 --enable-compiler-plugins
