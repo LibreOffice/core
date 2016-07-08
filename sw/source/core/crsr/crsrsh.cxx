@@ -64,6 +64,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <comphelper/string.hxx>
 #include <PostItMgr.hxx>
 
@@ -2146,7 +2147,9 @@ void SwCursorShell::ShowCursor()
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
+            OString aPayload = OString::boolean(m_bSVCursorVis);
+            GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
+            SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
         }
 
         UpdateCursor();
@@ -2165,7 +2168,9 @@ void SwCursorShell::HideCursor()
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
+            OString aPayload = OString::boolean(m_bSVCursorVis);
+            GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
+            SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
         }
     }
 }

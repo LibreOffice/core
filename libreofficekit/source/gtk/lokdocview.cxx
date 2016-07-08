@@ -83,6 +83,9 @@ struct LOKDocViewPrivateImpl
     gboolean m_bCursorOverlayVisible;
     /// Cursor is visible or hidden (e.g. for graphic selection).
     gboolean m_bCursorVisible;
+    /// Visibility of view selections. The current view can only see / them,
+    /// can't modify them. Key is the view id.
+    std::map<int, bool> m_aViewCursorVisibilities;
     /// Time of the last button press.
     guint32 m_nLastButtonPressTime;
     /// Time of the last button release.
@@ -324,6 +327,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_TEXT_SELECTION_END";
     case LOK_CALLBACK_CURSOR_VISIBLE:
         return "LOK_CALLBACK_CURSOR_VISIBLE";
+    case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+        return "LOK_CALLBACK_VIEW_CURSOR_VISIBLE";
     case LOK_CALLBACK_GRAPHIC_SELECTION:
         return "LOK_CALLBACK_GRAPHIC_SELECTION";
     case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
@@ -1216,6 +1221,18 @@ callback (gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
     }
+    case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+    {
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        int nViewId = aTree.get<int>("viewId");
+        const std::string& rVisible = aTree.get<std::string>("visible");
+        priv->m_aViewCursorVisibilities[nViewId] = rVisible == "true";
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+        break;
+    }
+    break;
     case LOK_CALLBACK_CELL_VIEW_CURSOR:
     {
         std::stringstream aStream(pCallback->m_aPayload);
@@ -1517,6 +1534,10 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
     {
         for (auto& rPair : priv->m_aViewCursors)
         {
+            auto itVisibility = priv->m_aViewCursorVisibilities.find(rPair.first);
+            if (itVisibility != priv->m_aViewCursorVisibilities.end() && !itVisibility->second)
+                continue;
+
             GdkRectangle& rCursor = rPair.second;
             if (rCursor.width < 30)
                 // Set a minimal width if it would be 0.

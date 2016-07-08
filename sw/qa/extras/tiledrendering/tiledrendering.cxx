@@ -54,6 +54,7 @@ public:
     void testPartHash();
     void testViewCursors();
     void testMissingInvalidation();
+    void testViewCursorVisibility();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testViewCursors);
     CPPUNIT_TEST(testMissingInvalidation);
+    CPPUNIT_TEST(testViewCursorVisibility);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -554,13 +556,15 @@ public:
     bool m_bOwnSelectionSet;
     bool m_bViewSelectionSet;
     bool m_bTilesInvalidated;
+    bool m_bViewCursorVisible;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
           m_bViewCursorInvalidated(false),
           m_bOwnSelectionSet(false),
           m_bViewSelectionSet(false),
-          m_bTilesInvalidated(false)
+          m_bTilesInvalidated(false),
+          m_bViewCursorVisible(false)
     {
     }
 
@@ -569,7 +573,7 @@ public:
         static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
     }
 
-    void callbackImpl(int nType, const char* /*pPayload*/)
+    void callbackImpl(int nType, const char* pPayload)
     {
         switch (nType)
         {
@@ -596,6 +600,11 @@ public:
         case LOK_CALLBACK_TEXT_VIEW_SELECTION:
         {
             m_bViewSelectionSet = true;
+        }
+        break;
+        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+        {
+            m_bViewCursorVisible = OString("true") == pPayload;
         }
         break;
         }
@@ -677,6 +686,36 @@ void SwTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView1.m_bViewSelectionSet);
     CPPUNIT_ASSERT(aView2.m_bOwnSelectionSet);
     CPPUNIT_ASSERT(!aView2.m_bViewSelectionSet);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testViewCursorVisibility()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document that has a shape and create two views.
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Click on the shape in the second view.
+    aView1.m_bViewCursorVisible = true;
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    Point aCenter = pObject->GetSnapRect().Center();
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1);
+    Scheduler::ProcessEventsToIdle();
+    // Make sure the "view/text" cursor of the first view gets a notification.
+    CPPUNIT_ASSERT(!aView1.m_bViewCursorVisible);
+    mxComponent->dispose();
+    mxComponent.clear();
 
     comphelper::LibreOfficeKit::setActive(false);
 }

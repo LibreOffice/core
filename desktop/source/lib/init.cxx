@@ -482,6 +482,7 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_CELL_VIEW_CURSOR, "NIL");
     m_states.emplace(LOK_CALLBACK_CELL_FORMULA, "NIL");
     m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
+    m_states.emplace(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "NIL");
     m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
 
     Start();
@@ -525,6 +526,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             type != LOK_CALLBACK_INVALIDATE_TILES &&
             type != LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
             type != LOK_CALLBACK_CURSOR_VISIBLE &&
+            type != LOK_CALLBACK_VIEW_CURSOR_VISIBLE &&
             type != LOK_CALLBACK_TEXT_SELECTION)
         {
             //SAL_WARN("lokevt", "Skipping while painting [" + std::to_string(type) + "]: [" + payload + "].");
@@ -586,6 +588,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_CELL_VIEW_CURSOR:
         case LOK_CALLBACK_CELL_FORMULA:
         case LOK_CALLBACK_CURSOR_VISIBLE:
+        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
         case LOK_CALLBACK_SET_PART:
         case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
             removeAllButLast(type, false);
