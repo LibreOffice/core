@@ -85,6 +85,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
 
+#include <opencl/OpenCLZone.hxx>
 #include <opengl/zone.hxx>
 #include <opengl/watchdog.hxx>
 
@@ -119,6 +120,10 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 #if HAVE_FEATURE_OPENGL
         if (OpenGLZone::isInZone())
             OpenGLZone::hardDisable();
+#endif
+#if HAVE_FEATURE_OPENCL
+        if (OpenCLZone::isInZone())
+            OpenCLZone::hardDisable();
 #endif
     }
 

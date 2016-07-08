@@ -68,7 +68,7 @@ OPENCL_DLLPUBLIC const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo();
  * @return returns true if there is a valid opencl device that has been set up
  */
 OPENCL_DLLPUBLIC bool switchOpenCLDevice(const OUString* pDeviceId, bool bAutoSelect,
-                                         bool bForceEvaluation);
+                                         bool bForceEvaluation, OUString& rOutSelectedDeviceVersionIDString);
 
 OPENCL_DLLPUBLIC void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
 

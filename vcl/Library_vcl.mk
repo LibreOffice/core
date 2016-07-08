@@ -82,6 +82,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     cppuhelper \
     i18nlangtag \
     i18nutil \
+	opencl \
     cppu \
     sal \
     salhelper \

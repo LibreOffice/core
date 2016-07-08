@@ -21,6 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <opencl/OpenCLZone.hxx>
 
 #include <memory>
 #include <unicode/regex.h>
@@ -266,6 +267,8 @@ bool initOpenCLAttr( OpenCLEnv * env )
 
 void releaseOpenCLEnv( GPUEnv *gpuInfo )
 {
+    OpenCLZone zone;
+
     if ( !bIsInited )
     {
         return;
@@ -409,6 +412,8 @@ namespace {
 
 void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bAmdFp64)
 {
+    OpenCLZone zone;
+
     bKhrFp64 = false;
     bAmdFp64 = false;
 
@@ -441,6 +446,8 @@ void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bA
 
 bool initOpenCLRunEnv( GPUEnv *gpuInfo )
 {
+    OpenCLZone zone;
+
     bool bKhrFp64 = false;
     bool bAmdFp64 = false;
 
@@ -689,7 +696,7 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
 
 }
 
-bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation)
+bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation, OUString& rOutSelectedDeviceVersionIDString)
 {
     if(fillOpenCLInfo().empty())
         return false;
@@ -712,7 +719,6 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         if ( aSelectedDevice.eType != DeviceType::OpenCLDevice)
             return false;
         pDeviceId = aSelectedDevice.aDeviceID;
-
     }
 
     if(gpuEnv.mpDevID == pDeviceId)
@@ -722,54 +728,62 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         return pDeviceId != nullptr;
     }
 
+    cl_context context;
     cl_platform_id platformId;
-    cl_int nState = clGetDeviceInfo(pDeviceId, CL_DEVICE_PLATFORM,
-            sizeof(platformId), &platformId, nullptr);
-
-    cl_context_properties cps[3];
-    cps[0] = CL_CONTEXT_PLATFORM;
-    cps[1] = reinterpret_cast<cl_context_properties>(platformId);
-    cps[2] = 0;
-    cl_context context = clCreateContext( cps, 1, &pDeviceId, nullptr, nullptr, &nState );
-    if (nState != CL_SUCCESS)
-        SAL_WARN("opencl", "clCreateContext failed: " << errorString(nState));
-
-    if(nState != CL_SUCCESS || context == nullptr)
-    {
-        if(context != nullptr)
-            clReleaseContext(context);
-
-        SAL_WARN("opencl", "failed to set/switch opencl device");
-        return false;
-    }
-    SAL_INFO("opencl", "Created context " << context << " for platform " << platformId << ", device " << pDeviceId);
-
     cl_command_queue command_queue[OPENCL_CMDQUEUE_SIZE];
-    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
+
     {
-        command_queue[i] = clCreateCommandQueue(
-            context, pDeviceId, 0, &nState);
+        OpenCLZone zone;
+        cl_int nState = clGetDeviceInfo(pDeviceId, CL_DEVICE_PLATFORM,
+                                        sizeof(platformId), &platformId, nullptr);
+
+        cl_context_properties cps[3];
+        cps[0] = CL_CONTEXT_PLATFORM;
+        cps[1] = reinterpret_cast<cl_context_properties>(platformId);
+        cps[2] = 0;
+        context = clCreateContext( cps, 1, &pDeviceId, nullptr, nullptr, &nState );
         if (nState != CL_SUCCESS)
-            SAL_WARN("opencl", "clCreateCommandQueue failed: " << errorString(nState));
+            SAL_WARN("opencl", "clCreateContext failed: " << errorString(nState));
 
-        if (command_queue[i] == nullptr || nState != CL_SUCCESS)
+        if(nState != CL_SUCCESS || context == nullptr)
         {
-            // Release all command queues created so far.
-            for (int j = 0; j <= i; ++j)
-            {
-                if (command_queue[j])
-                {
-                    clReleaseCommandQueue(command_queue[j]);
-                    command_queue[j] = nullptr;
-                }
-            }
+            if(context != nullptr)
+                clReleaseContext(context);
 
-            clReleaseContext(context);
             SAL_WARN("opencl", "failed to set/switch opencl device");
             return false;
         }
+        SAL_INFO("opencl", "Created context " << context << " for platform " << platformId << ", device " << pDeviceId);
 
-        SAL_INFO("opencl", "Created command queue " << command_queue[i] << " for context " << context);
+        for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
+        {
+            command_queue[i] = clCreateCommandQueue(
+                context, pDeviceId, 0, &nState);
+            if (nState != CL_SUCCESS)
+                SAL_WARN("opencl", "clCreateCommandQueue failed: " << errorString(nState));
+
+            if (command_queue[i] == nullptr || nState != CL_SUCCESS)
+            {
+                // Release all command queues created so far.
+                for (int j = 0; j <= i; ++j)
+                {
+                    if (command_queue[j])
+                    {
+                        clReleaseCommandQueue(command_queue[j]);
+                        command_queue[j] = nullptr;
+                    }
+                }
+
+                clReleaseContext(context);
+                SAL_WARN("opencl", "failed to set/switch opencl device");
+                return false;
+            }
+
+            SAL_INFO("opencl", "Created command queue " << command_queue[i] << " for context " << context);
+        }
+
+        OString sDeviceID = getDeviceInfoString(pDeviceId, CL_DEVICE_VENDOR) + " " + getDeviceInfoString(pDeviceId, CL_DRIVER_VERSION);
+        rOutSelectedDeviceVersionIDString = OStringToOUString(sDeviceID, RTL_TEXTENCODING_UTF8);
     }
 
     setOpenCLCmdQueuePosition(0); // Call this just to avoid the method being deleted from unused function deleter.

@@ -24,6 +24,8 @@
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
 
+#include <opencl/OpenCLZone.hxx>
+
 #include <vector>
 
 enum ds_status
@@ -132,6 +134,8 @@ inline bool getDeviceInfoBool(cl_device_id aDeviceId, cl_device_info aDeviceInfo
 
 inline ds_status initDSProfile(std::unique_ptr<ds_profile>& rProfile, OString const & rVersion)
 {
+    OpenCLZone zone;
+
     int numDevices;
     cl_uint numPlatforms;
     std::vector<cl_platform_id> platforms;
