@@ -31,8 +31,8 @@ public:
     static bool IsInSameYear( const Date& rD1, const Date& rD2 );
     static bool IsInSameMonth( const Date& rD1, const Date& rD2 );
 
-    static Date GetDateSomeMonthsAway( const Date& rD, long nMonthDistance );
-    static Date GetDateSomeYearsAway( const Date& rD, long nYearDistance );
+    static Date GetDateSomeMonthsAway( const Date& rD, sal_Int32 nMonthDistance );
+    static Date GetDateSomeYearsAway( const Date& rD, sal_Int32 nYearDistance );
     static bool IsLessThanOneMonthAway( const Date& rD1, const Date& rD2 );
     static bool IsLessThanOneYearAway( const Date& rD1, const Date& rD2 );
 

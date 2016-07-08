@@ -25,6 +25,13 @@ DateTime::DateTime( const css::util::DateTime& rDateTime )
 {
 }
 
+DateTime& DateTime::operator =( const css::util::DateTime& rUDateTime )
+{
+    Date::operator=( Date( rUDateTime.Day, rUDateTime.Month, rUDateTime.Year));
+    Time::operator=( Time( rUDateTime));
+    return *this;
+}
+
 bool DateTime::IsBetween( const DateTime& rFrom, const DateTime& rTo ) const
 {
     if ( (*this >= rFrom) && (*this <= rTo) )

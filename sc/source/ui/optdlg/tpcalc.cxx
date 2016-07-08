@@ -112,7 +112,8 @@ VclPtr<SfxTabPage> ScTpCalcOptions::Create( vcl::Window* pParent, const SfxItemS
 
 void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
 {
-    sal_uInt16  d,m,y;
+    sal_uInt16  d,m;
+    sal_Int16   y;
 
     *pLocalOptions  = *pOldOptions;
 

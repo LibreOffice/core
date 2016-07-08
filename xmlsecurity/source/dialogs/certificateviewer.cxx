@@ -129,8 +129,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
     utl::typeConvert( xCert->getNotValidBefore(), aDateTimeStart );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTimeEnd );
 
-    OUString sValidFromDate = GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() );
-    OUString sValidToDate = GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() );
+    OUString sValidFromDate = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTimeStart.GetDate()));
+    OUString sValidToDate = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTimeEnd.GetDate()));
 
     m_pValidFromDateFI->SetText(sValidFromDate);
     m_pValidToDateFI->SetText(sValidToDate);
@@ -253,12 +253,12 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
 
     DateTime aDateTime( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
-    aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
+    aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTime.GetDate()) );
     aLBEntry += " ";
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( XMLSEC_RES( STR_VALIDFROM ), aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
-    aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
+    aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTime.GetDate()) );
     aLBEntry += " ";
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( XMLSEC_RES( STR_VALIDTO ), aLBEntry, aLBEntry );

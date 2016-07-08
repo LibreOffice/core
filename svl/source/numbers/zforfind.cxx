@@ -3406,7 +3406,7 @@ void ImpSvNumberInputScan::InvalidateDateAcceptancePatterns()
 
 void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
                                            const sal_uInt16 Month,
-                                           const sal_uInt16 Year )
+                                           const sal_Int16 Year )
 {
     if ( pNullDate )
     {

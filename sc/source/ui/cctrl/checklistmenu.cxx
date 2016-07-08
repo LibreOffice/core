@@ -1442,7 +1442,7 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
     Date aDate = *(pFormatter->GetNullDate());
     aDate += static_cast<long>(rtl::math::approxFloor(nVal));
 
-    sal_uInt16 nYear = aDate.GetYear();
+    sal_Int16 nYear = aDate.GetYear();
     sal_uInt16 nMonth = aDate.GetMonth();
     sal_uInt16 nDay = aDate.GetDay();
 

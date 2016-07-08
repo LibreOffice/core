@@ -1134,6 +1134,16 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMin
     return pBuf;
 }
 
+static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_Int64 nNumber, int nMinLen )
+{
+    if (nNumber < 0)
+    {
+        *pBuf++ = '-';
+        nNumber = -nNumber;
+    }
+    return ImplAddUNum( pBuf, nNumber, nMinLen);
+}
+
 static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, bool bLeading )
 {
     DBG_ASSERT( nNumber < 100, "ImplAdd2UNum() - Number >= 100" );
@@ -1324,7 +1334,7 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
     sal_Unicode* pBuf = aBuf;
     sal_uInt16  nDay    = rDate.GetDay();
     sal_uInt16  nMonth  = rDate.GetMonth();
-    sal_uInt16  nYear   = rDate.GetYear();
+    sal_Int16   nYear   = rDate.GetYear();
     sal_uInt16  nYearLen;
 
     if ( true /* IsDateCentury() */ )
@@ -1342,17 +1352,17 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
+            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
         break;
         case MDY :
             pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAdd2UNum( pBuf, nDay, true /* IsDateDayLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );
-            pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
+            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
         break;
         default:
-            pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
+            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
             pBuf = ImplAddString( pBuf, getDateSep() );
             pBuf = ImplAdd2UNum( pBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
             pBuf = ImplAddString( pBuf, getDateSep() );

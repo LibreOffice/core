@@ -152,7 +152,7 @@ tools::Time SwDateTimeField::GetTime() const
 {
     double fDummy;
     double fFract = modf(GetValue(), &fDummy);
-    DateTime aDT((long)fDummy, 0);
+    DateTime aDT(Date(static_cast<sal_Int32>(fDummy)), 0);
     aDT += fFract;
     return static_cast<tools::Time>(aDT);
 }

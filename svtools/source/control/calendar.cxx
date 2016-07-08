@@ -453,8 +453,8 @@ void Calendar::ImplFormat()
     }
 
     // get DateInfo
-    sal_uInt16 nNewFirstYear = maFirstDate.GetYear();
-    sal_uInt16 nNewLastYear = GetLastDate().GetYear();
+    sal_Int16 nNewFirstYear = maFirstDate.GetYear();
+    sal_Int16 nNewLastYear = GetLastDate().GetYear();
     if ( mnFirstYear )
     {
         if ( nNewFirstYear < mnFirstYear )
@@ -670,9 +670,9 @@ void Calendar::ImplDrawSpin(vcl::RenderContext& rRenderContext )
 
 void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
                             long nX, long nY,
-                            sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
+                            sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear,
                             DayOfWeek eDayOfWeek,
-                            bool bOther, sal_uLong nToday )
+                            bool bOther, sal_Int32 nToday )
 {
     Color* pTextColor = nullptr;
     const OUString& rDay = maDayTexts[nDay - 1];
@@ -769,10 +769,10 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
     long nDeltaY;
     long nDayX;
     long nDayY;
-    sal_uLong nToday = Date(Date::SYSTEM).GetDate();
+    sal_Int32 nToday = Date(Date::SYSTEM).GetDate();
     sal_uInt16 nDay;
     sal_uInt16 nMonth;
-    sal_uInt16 nYear;
+    sal_Int16 nYear;
     Date aDate = GetFirstMonth();
     DayOfWeek eStartDay = ImplGetWeekStart();
 
@@ -1559,7 +1559,7 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
                 if ( (nMonth == 12) && (nWeek == 1) )
                 {
                     aStr += ",  ";
-                    aStr += OUString::number(aDate.GetYear()+1);
+                    aStr += OUString::number(aDate.GetNextYear());
                 }
                 else if ( (nMonth == 1) && (nWeek > 50) )
                 {
@@ -1761,7 +1761,7 @@ Date Calendar::GetFirstMonth() const
     if ( maFirstDate.GetDay() > 1 )
     {
         if ( maFirstDate.GetMonth() == 12 )
-            return Date( 1, 1, maFirstDate.GetYear()+1 );
+            return Date( 1, 1, maFirstDate.GetNextYear() );
         else
             return Date( 1, maFirstDate.GetMonth()+1, maFirstDate.GetYear() );
     }
@@ -2155,7 +2155,7 @@ CalendarField::CalendarField(vcl::Window* pParent, WinBits nWinStyle)
     , mnCalendarStyle(0)
     , mpTodayBtn(nullptr)
     , mpNoneBtn(nullptr)
-    , maDefaultDate( 0, 0, 0 )
+    , maDefaultDate( Date::EMPTY )
     , mbToday(false)
     , mbNone(false)
 {

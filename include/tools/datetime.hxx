@@ -34,14 +34,13 @@ public:
         SYSTEM
     };
 
-    // TODO temporary until all uses are inspected and resolved
     enum DateTimeInitEmpty
     {
         EMPTY
     };
 
-                    DateTime( DateTimeInitEmpty ) : Date( Date::EMPTY ), Time( Time::EMPTY ) {}
-                    DateTime( DateTimeInitSystem ) : Date( Date::SYSTEM ), Time( Time::SYSTEM ) {}
+                    explicit DateTime( DateTimeInitEmpty ) : Date( Date::EMPTY ), Time( Time::EMPTY ) {}
+                    explicit DateTime( DateTimeInitSystem ) : Date( Date::SYSTEM ), Time( Time::SYSTEM ) {}
                     DateTime( const DateTime& rDateTime ) :
                         Date( rDateTime ), Time( rDateTime ) {}
                     DateTime( const Date& rDate ) : Date( rDate ), Time(0) {}
@@ -103,6 +102,7 @@ public:
                         { return (const Date&) rDateTime - rDate; }
 
     DateTime&       operator =( const DateTime& rDateTime );
+    DateTime&       operator =( const css::util::DateTime& rUDateTime );
 
     void            GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper );
     static DateTime CreateFromWin32FileDateTime( sal_uInt32 rLower, sal_uInt32 rUpper );

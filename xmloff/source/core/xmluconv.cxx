@@ -375,21 +375,29 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
             aDate += 1;
         }
     }
-    sal_uInt16 nTemp = aDate.GetYear();
-    if (nTemp < 1000)
+    sal_Int16 nTempYear = aDate.GetYear();
+    assert(nTempYear != 0);
+    if (nTempYear < 0)
+    {
+        rBuffer.append( '-');
+        nTempYear = -nTempYear;
+    }
+    if (nTempYear < 1000)
         rBuffer.append( '0');
-    if (nTemp < 100)
+    if (nTempYear < 100)
         rBuffer.append( '0');
-    if (nTemp < 10)
+    if (nTempYear < 10)
         rBuffer.append( '0');
-    rBuffer.append( sal_Int32( nTemp));
+    rBuffer.append( sal_Int32( nTempYear));
     rBuffer.append( '-');
-    nTemp = aDate.GetMonth();
+    sal_uInt16 nTemp = aDate.GetMonth();
+    assert(1 <= nTemp && nTemp <= 12);
     if (nTemp < 10)
         rBuffer.append( '0');
     rBuffer.append( sal_Int32( nTemp));
     rBuffer.append( '-');
     nTemp = aDate.GetDay();
+    assert(1 <= nTemp && nTemp <= 31);
     if (nTemp < 10)
         rBuffer.append( '0');
     rBuffer.append( sal_Int32( nTemp));

@@ -115,6 +115,16 @@ static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLe
     return pBuf;
 }
 
+static sal_Unicode* ImplAddSNum( sal_Unicode* pBuf, sal_Int32 nNumber, int nMinLen )
+{
+    if (nNumber < 0)
+    {
+        *pBuf++ = '-';
+        nNumber = -nNumber;
+    }
+    return ImplAddNum( pBuf, nNumber, nMinLen);
+}
+
 static sal_uInt16 ImplGetNum( const sal_Unicode*& rpBuf, bool& rbError )
 {
     if ( !*rpBuf )
@@ -1048,7 +1058,7 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
         if ( ( nSepPos < 0 ) || ( nSepPos == (aStr.getLength()-1) ) )
         {
             bYear = false;
-            nYear = Date( Date::SYSTEM ).GetYear();
+            nYear = Date( Date::SYSTEM ).GetYearUnsigned();
         }
 
         const sal_Unicode* pBuf = aStr.getStr();
@@ -1114,7 +1124,7 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
 
 bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr, const AllSettings& rSettings )
 {
-    Date aDate( 0, 0, 0 );
+    Date aDate( Date::EMPTY );
     if ( !ImplDateGetValue( rStr, aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
         return true;
 
@@ -1155,7 +1165,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
     {
         // Check if I have to use force showing the century
         sal_uInt16 nTwoDigitYearStart = utl::MiscCfg().GetYear2000();
-        sal_uInt16 nYear = rDate.GetYear();
+        sal_uInt16 nYear = rDate.GetYearUnsigned();
 
         // If year is not in double digit range
         if ( (nYear < nTwoDigitYearStart) || (nYear >= nTwoDigitYearStart+100) )
@@ -1168,7 +1178,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
     OUString aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), GetExtDateFormat( true ) );
     sal_uInt16 nDay = rDate.GetDay();
     sal_uInt16 nMonth = rDate.GetMonth();
-    sal_uInt16 nYear = rDate.GetYear();
+    sal_Int16 nYear = rDate.GetYear();
     sal_uInt16 nYearLen = bShowCentury ? 4 : 2;
 
     if ( !bShowCentury )
@@ -1187,7 +1197,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
             pBuf = ImplAddString( pBuf, aDateSep );
             pBuf = ImplAddNum( pBuf, nMonth, 2 );
             pBuf = ImplAddString( pBuf, aDateSep );
-            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
+            pBuf = ImplAddSNum( pBuf, nYear, nYearLen );
         }
         break;
         case XTDATEF_SHORT_MMDDYY:
@@ -1197,7 +1207,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
             pBuf = ImplAddString( pBuf, aDateSep );
             pBuf = ImplAddNum( pBuf, nDay, 2 );
             pBuf = ImplAddString( pBuf, aDateSep );
-            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
+            pBuf = ImplAddSNum( pBuf, nYear, nYearLen );
         }
         break;
         case XTDATEF_SHORT_YYMMDD:
@@ -1205,7 +1215,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
         case XTDATEF_SHORT_YYMMDD_DIN5008:
         case XTDATEF_SHORT_YYYYMMDD_DIN5008:
         {
-            pBuf = ImplAddNum( pBuf, nYear, nYearLen );
+            pBuf = ImplAddSNum( pBuf, nYear, nYearLen );
             pBuf = ImplAddString( pBuf, aDateSep );
             pBuf = ImplAddNum( pBuf, nMonth, 2 );
             pBuf = ImplAddString( pBuf, aDateSep );
@@ -1227,12 +1237,12 @@ static void ImplDateIncrementDay( Date& rDate, bool bUp )
 
     if ( bUp )
     {
-        if ( (rDate.GetDay() != 31) || (rDate.GetMonth() != 12) || (rDate.GetYear() != 9999) )
+        if ( (rDate.GetDay() != 31) || (rDate.GetMonth() != 12) || (rDate.GetYear() != SAL_MAX_INT16) )
             ++rDate;
     }
     else
     {
-        if ( (rDate.GetDay() != 1 ) || (rDate.GetMonth() != 1) || (rDate.GetYear() != 0) )
+        if ( (rDate.GetDay() != 1 ) || (rDate.GetMonth() != 1) || (rDate.GetYear() != SAL_MIN_INT16) )
             --rDate;
     }
 }
@@ -1242,13 +1252,13 @@ static void ImplDateIncrementMonth( Date& rDate, bool bUp )
     DateFormatter::ExpandCentury( rDate );
 
     sal_uInt16 nMonth = rDate.GetMonth();
-    sal_uInt16 nYear = rDate.GetYear();
+    sal_Int16 nYear = rDate.GetYear();
     if ( bUp )
     {
-        if ( (nMonth == 12) && (nYear < 9999) )
+        if ( (nMonth == 12) && (nYear < SAL_MAX_INT16) )
         {
             rDate.SetMonth( 1 );
-            rDate.SetYear( nYear + 1 );
+            rDate.SetYear( rDate.GetNextYear() );
         }
         else
         {
@@ -1258,10 +1268,10 @@ static void ImplDateIncrementMonth( Date& rDate, bool bUp )
     }
     else
     {
-        if ( (nMonth == 1) && (nYear > 0) )
+        if ( (nMonth == 1) && (nYear > SAL_MIN_INT16) )
         {
             rDate.SetMonth( 12 );
-            rDate.SetYear( nYear - 1 );
+            rDate.SetYear( rDate.GetPrevYear() );
         }
         else
         {
@@ -1279,17 +1289,17 @@ static void ImplDateIncrementYear( Date& rDate, bool bUp )
 {
     DateFormatter::ExpandCentury( rDate );
 
-    sal_uInt16 nYear = rDate.GetYear();
+    sal_Int16 nYear = rDate.GetYear();
     sal_uInt16 nMonth = rDate.GetMonth();
     if ( bUp )
     {
-        if ( nYear < 9999 )
-            rDate.SetYear( nYear + 1 );
+        if ( nYear < SAL_MAX_INT16 )
+            rDate.SetYear( rDate.GetNextYear() );
     }
     else
     {
-        if ( nYear > 0 )
-            rDate.SetYear( nYear - 1 );
+        if ( nYear > SAL_MIN_INT16 )
+            rDate.SetYear( rDate.GetPrevYear() );
     }
     if (nMonth == 2)
     {
@@ -1611,7 +1621,7 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
 
 Date DateFormatter::GetDate() const
 {
-    Date aDate( 0, 0, 0 );
+    Date aDate( Date::EMPTY );
 
     if ( GetField() )
     {
@@ -1705,8 +1715,8 @@ void DateFormatter::ExpandCentury( Date& rDate )
 
 void DateFormatter::ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart )
 {
-    sal_uInt16 nDateYear = rDate.GetYear();
-    if ( nDateYear < 100 )
+    sal_Int16 nDateYear = rDate.GetYear();
+    if ( 0 <= nDateYear && nDateYear < 100 )
     {
         sal_uInt16 nCentury = nTwoDigitYearStart / 100;
         if ( nDateYear < (nTwoDigitYearStart % 100) )

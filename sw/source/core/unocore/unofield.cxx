@@ -1357,12 +1357,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 DateTime aDateTime( DateTime::EMPTY );
                 if (m_pImpl->m_pProps->pDateTime)
                 {
-                    aDateTime.SetYear(m_pImpl->m_pProps->pDateTime->Year);
-                    aDateTime.SetMonth(m_pImpl->m_pProps->pDateTime->Month);
-                    aDateTime.SetDay(m_pImpl->m_pProps->pDateTime->Day);
-                    aDateTime.SetHour(m_pImpl->m_pProps->pDateTime->Hours);
-                    aDateTime.SetMin(m_pImpl->m_pProps->pDateTime->Minutes);
-                    aDateTime.SetSec(m_pImpl->m_pProps->pDateTime->Seconds);
+                    aDateTime = *(m_pImpl->m_pProps->pDateTime);
                 }
                 SwPostItField* pPostItField = new SwPostItField(
                     static_cast<SwPostItFieldType*>(pFieldType),

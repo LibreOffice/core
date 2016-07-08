@@ -146,7 +146,7 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
                 aFirstDateTime.SetTime( 0 );
             }
             aLastDateTime = Date( Date::SYSTEM );
-            aLastDateTime.SetYear( aLastDateTime.GetYear() + 100 );
+            aLastDateTime.AddYears( 100 );
         }
         break;
         default:

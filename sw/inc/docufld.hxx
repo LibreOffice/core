@@ -464,7 +464,7 @@ public:
     virtual SwField*        Copy() const override;
 
     const DateTime&         GetDateTime() const             { return aDateTime; }
-    inline const Date       GetDate() const                 { return aDateTime.GetDate(); }
+    inline const Date       GetDate() const                 { return Date(aDateTime.GetDate()); }
     inline const tools::Time GetTime() const                 { return aDateTime.GetTime(); }
 
     /// Author

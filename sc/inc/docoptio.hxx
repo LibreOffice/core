@@ -73,9 +73,9 @@ public:
     double GetIterEps() const               { return fIterEps; }
     void   SetIterEps( double fEps )        { fIterEps = fEps; }
 
-    void   GetDate( sal_uInt16& rD, sal_uInt16& rM, sal_uInt16& rY ) const
+    void   GetDate( sal_uInt16& rD, sal_uInt16& rM, sal_Int16& rY ) const
                                         { rD = nDay; rM = nMonth; rY = nYear;}
-    void   SetDate (sal_uInt16 nD, sal_uInt16 nM, sal_uInt16 nY)
+    void   SetDate (sal_uInt16 nD, sal_uInt16 nM, sal_Int16 nY)
                                         { nDay = nD; nMonth = nM; nYear = nY; }
     sal_uInt16 GetTabDistance() const { return nTabDistance;}
     void   SetTabDistance( sal_uInt16 nTabDist ) {nTabDistance = nTabDist;}

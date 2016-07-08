@@ -1192,8 +1192,7 @@ void makeRedline( SwPaM& rPaM,
     aDateTimeValue = aPropMap.getUnpackedValueOrDefault("RedlineDateTime", aDateTimeValue);
     if( aDateTimeValue >>= aStamp )
     {
-       aRedlineData.SetTimeStamp(
-        DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), tools::Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
+        aRedlineData.SetTimeStamp( DateTime( aStamp));
     }
 
     SwRedlineExtraData_FormattingChanges* pRedlineExtraData = nullptr;
