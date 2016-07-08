@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,opencl,\
     comphelper \
     cppu \
     sal \
+    salhelper \
     tl \
 ))
 
@@ -46,6 +47,7 @@ $(eval $(call gb_Library_add_exception_objects,opencl,\
     opencl/source/openclwrapper \
     opencl/source/opencl_device \
     opencl/source/platforminfo \
+    opencl/source/OpenCLZone \
 ))
 
 ifeq ($(OS),LINUX)

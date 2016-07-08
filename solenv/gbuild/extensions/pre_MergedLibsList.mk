@@ -35,6 +35,7 @@ MERGE_LIBRARY_LIST := \
 	localebe1 \
 	mcnttype \
 	msfilter \
+	$(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
 	package2 \
 	sax \
 	sb \

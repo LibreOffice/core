@@ -66,11 +66,13 @@ OPENCL_DLLPUBLIC const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo();
  *
  * @param pDeviceId the id of the opencl device of type cl_device_id, NULL means use software calculation
  * @param bAutoSelect use the algorithm to select the best OpenCL device
+ * @param rOutSelectedDeviceVersionIDString returns the selected device's version string.
  *
  * @return returns true if there is a valid opencl device that has been set up
  */
 OPENCL_DLLPUBLIC bool switchOpenCLDevice(const OUString* pDeviceId, bool bAutoSelect,
-                                         bool bForceEvaluation);
+                                         bool bForceEvaluation,
+                                         OUString& rOutSelectedDeviceVersionIDString);
 
 OPENCL_DLLPUBLIC void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
 
