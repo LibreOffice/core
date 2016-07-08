@@ -697,14 +697,11 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType ) throw (RuntimeEx
                 static_cast< XAnimateTransform * >( this ) );
             break;
         case AnimationNodeType::AUDIO:
-            aRet = ::cppu::queryInterface(
-                aType,
-                static_cast< XAudio * >( static_cast< XAudio * >(this) ) );
+            aRet = ::cppu::queryInterface(aType, static_cast< XAudio * >(this) );
             break;
         case AnimationNodeType::COMMAND:
             aRet = ::cppu::queryInterface(
-                aType,
-                static_cast< XCommand * >( static_cast< XCommand * >(this) ) );
+                aType, static_cast< XCommand * >(this) );
             break;
         case AnimationNodeType::TRANSITIONFILTER:
             aRet = ::cppu::queryInterface(
