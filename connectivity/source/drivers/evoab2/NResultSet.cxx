@@ -302,8 +302,8 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
 extern "C"
 int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _userData )
 {
-    EContact* lhs = static_cast< EContact* >( const_cast< gpointer >( _lhs ) );
-    EContact* rhs = static_cast< EContact* >( const_cast< gpointer >( _rhs ) );
+    EContact* lhs = const_cast< gpointer >( _lhs );
+    EContact* rhs = const_cast< gpointer >( _rhs );
 
     GValue aLhsValue = { 0, { { 0 } } };
     GValue aRhsValue = { 0, { { 0 } } };
