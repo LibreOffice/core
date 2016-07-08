@@ -286,7 +286,7 @@ bool PresenterPreviewCache::PresenterCacheContext::IsVisible (CacheKey aKey)
     for (sal_Int32 nIndex=mnFirstVisibleSlideIndex; nIndex<=mnLastVisibleSlideIndex; ++nIndex)
     {
         const SdrPage* pPage = GetPage(nIndex);
-        if (pPage == static_cast<const SdrPage*>(aKey))
+        if (pPage == aKey)
             return true;
     }
     return false;
@@ -294,7 +294,7 @@ bool PresenterPreviewCache::PresenterCacheContext::IsVisible (CacheKey aKey)
 
 const SdrPage* PresenterPreviewCache::PresenterCacheContext::GetPage (CacheKey aKey)
 {
-    return static_cast<const SdrPage*>(aKey);
+    return aKey;
 }
 
 std::shared_ptr<std::vector<CacheKey> >

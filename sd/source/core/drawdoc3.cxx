@@ -1476,8 +1476,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             if( (pMaster == nullptr) || (pNotesMaster == nullptr) )
             {
                 // so take the first MasterPage
-                pMaster = static_cast<SdPage*>( pSourceDoc->GetMasterSdPage(0, PK_STANDARD) );
-                pNotesMaster = static_cast<SdPage*>( pSourceDoc->GetMasterSdPage(0, PK_NOTES) );
+                pMaster = pSourceDoc->GetMasterSdPage(0, PK_STANDARD);
+                pNotesMaster = pSourceDoc->GetMasterSdPage(0, PK_NOTES);
             }
         }
 

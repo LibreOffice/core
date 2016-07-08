@@ -170,8 +170,7 @@ IMPL_LINK_TYPED(AccessibleDocumentViewBase, WindowChildEventListener,
                 // Window is dying.  Unregister from VCL Window.
                 // This is also attempted in the disposing() method.
                 vcl::Window* pWindow = maShapeTreeInfo.GetWindow();
-                vcl::Window* pDyingWindow = static_cast<vcl::Window*>(
-                    rEvent.GetWindow());
+                vcl::Window* pDyingWindow = rEvent.GetWindow();
                 if (pWindow==pDyingWindow && pWindow!=nullptr && maWindowLink.IsSet())
                 {
                     pWindow->RemoveChildEventListener (maWindowLink);
