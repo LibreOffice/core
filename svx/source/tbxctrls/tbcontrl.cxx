@@ -703,7 +703,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
 
                 pItem = pItemSet->GetItem( SID_ATTR_CHAR_RELIEF );
                 if ( pItem )
-                    aFont.SetRelief( static_cast< FontRelief >( static_cast< const SvxCharReliefItem* >( pItem )->GetValue() ) );
+                    aFont.SetRelief( static_cast< const SvxCharReliefItem* >( pItem )->GetValue() );
 
                 pItem = pItemSet->GetItem( SID_ATTR_CHAR_UNDERLINE );
                 if ( pItem )

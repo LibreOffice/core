@@ -1238,7 +1238,7 @@ namespace svxform
 
     void NavigatorTree::ModelHasRemoved( SvTreeListEntry* _pEntry )
     {
-        SvTreeListEntry* pTypedEntry = static_cast< SvTreeListEntry* >( _pEntry );
+        SvTreeListEntry* pTypedEntry = _pEntry;
         if ( doingKeyboardCut() )
             m_aCutEntries.erase( pTypedEntry );
 
