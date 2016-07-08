@@ -1316,6 +1316,41 @@ void ScInterpreter::ScNPV()
                             SetError(nErr);
                     }
                     break;
+                    case svMatrix :
+                    case svExternalSingleRef:
+                    case svExternalDoubleRef:
+                    {
+                        ScMatrixRef pMat = GetMatrix();
+                        if (pMat)
+                        {
+                            SCSIZE nC, nR;
+                            pMat->GetDimensions(nC, nR);
+                            if (nC == 0 || nR == 0)
+                            {
+                                PushIllegalArgument();
+                                return;
+                            }
+                            else
+                            {
+                                double fx;
+                                for ( SCSIZE j = 0; j < nC; j++ )
+                                {
+                                    for (SCSIZE k = 0; k < nR; ++k)
+                                    {
+                                        if (!pMat->IsValue(j,k))
+                                        {
+                                            PushIllegalArgument();
+                                            return;
+                                        }
+                                        fx = pMat->GetDouble(j,k);
+                                        nVal += (fx / pow(1.0 + nInterest, nCount));
+                                        nCount++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
                     default : SetError(errIllegalParameter); break;
                 }
             }
