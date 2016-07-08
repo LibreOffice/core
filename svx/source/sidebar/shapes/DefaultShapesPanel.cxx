@@ -91,6 +91,7 @@ void DefaultShapesPanel::Initialize()
 
 void DefaultShapesPanel::dispose()
 {
+    mpShapesSetMap.clear();
     mpScrollWindow.clear();
     mpLineArrowSet.clear();
     mpCurveSet.clear();
