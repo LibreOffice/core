@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_06d8ec52",
+        "filename": "external/firebird/ExternalProject_firebird.mk",
+        "patchSetId": 25
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2016-07-08T10:58:53Z",
+      "side": 1,
+      "message": "I was wrong about skipping libtommath on Windows.\n\nWe use cygwin to build firebird, which uses the files in builds/posix, so an external libtommath is needed in case of Windows too.\n\n(Libtommath would\u0027ve beeb useless in case we\u0027d use the batch files in builds/win32)",
+      "range": {
+        "startLine": 47,
+        "startChar": 3,
+        "endLine": 47,
+        "endChar": 33
+      },
+      "revId": "784265268abbf7b77517483198bb281ae195b1d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
