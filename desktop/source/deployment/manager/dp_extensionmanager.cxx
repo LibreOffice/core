@@ -44,7 +44,6 @@
 #include <comphelper/sequence.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>
-#include <svtools/restartdialog.hxx>
 #include <vcl/svapp.hxx>
 #include "dp_interact.h"
 #include "dp_resource.h"
@@ -160,11 +159,10 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
 
 namespace dp_manager {
 
-
 //ToDo: bundled extension
 ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& xContext) :
-    ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager >(getMutex()),
-    m_xContext( xContext )
+    ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager >(getMutex())
+    , m_xContext(xContext)
 {
     m_xPackageManagerFactory = css::deployment::thePackageManagerFactory::get(m_xContext);
     OSL_ASSERT(m_xPackageManagerFactory.is());
@@ -173,7 +171,6 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
     m_repositoryNames.push_back("shared");
     m_repositoryNames.push_back("bundled");
 }
-
 
 ExtensionManager::~ExtensionManager()
 {
@@ -1496,9 +1493,6 @@ void ExtensionManager::fireModified()
             [this] (uno::Reference<util::XModifyListener> const& xListener)
                 { return xListener->modified(lang::EventObject(static_cast<OWeakObject *>(this))); });
     }
-
-    SolarMutexGuard aGuard;
-    ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_EXTENSION_INSTALL);
 }
 
 } // namespace dp_manager

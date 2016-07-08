@@ -123,6 +123,7 @@ class ExtMgrDialog : public ModelessDialog,
     bool                 m_bEnableWarning;
     bool                 m_bDisableWarning;
     bool                 m_bDeleteWarning;
+    bool                 m_bClosed;
     long                 m_nProgress;
     Idle                 m_aIdle;
     TheExtensionManager *m_pManager;
@@ -139,6 +140,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_DLLPRIVATE_LINK_TYPED( HandleHyperlink, FixedHyperlink&, void );
     DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
     DECL_DLLPRIVATE_LINK_TYPED( startProgress, void *, void );
+    DECL_DLLPRIVATE_LINK_TYPED( Restart, void *, void );
 
 public:
                     ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );

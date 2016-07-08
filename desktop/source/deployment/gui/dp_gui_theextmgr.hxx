@@ -58,6 +58,7 @@ private:
     ExtensionCmdQueue           *m_pExecuteCmdQueue;
 
     OUString                     m_sGetExtensionsURL;
+    bool                         m_bModified;
 
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;
@@ -68,6 +69,9 @@ public:
 
     void createDialog( const bool bCreateUpdDlg );
     sal_Int16 execute();
+
+    bool isModified() const { return m_bModified; }
+    void clearModified() { m_bModified = false; }
 
     Dialog* getDialog()
     {

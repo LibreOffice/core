@@ -43,6 +43,7 @@
 #include <osl/mutex.hxx>
 
 #include <svtools/extensionlistbox.hxx>
+#include <svtools/restartdialog.hxx>
 
 #include <sfx2/sfxdlg.hxx>
 
@@ -670,6 +671,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
     , m_bEnableWarning(false)
     , m_bDisableWarning(false)
     , m_bDeleteWarning(false)
+    , m_bClosed(false)
     , m_nProgress(0)
     , m_pManager(pManager)
 {
@@ -1146,6 +1148,12 @@ bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
+IMPL_LINK_NOARG_TYPED(ExtMgrDialog, Restart, void*, void)
+{
+    SolarMutexGuard aGuard;
+    ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
+                                    nullptr, svtools::RESTART_REASON_EXTENSION_INSTALL);
+}
 
 bool ExtMgrDialog::Close()
 {
@@ -1154,6 +1162,13 @@ bool ExtMgrDialog::Close()
     {
         bRet = ModelessDialog::Close();
         m_pManager->terminateDialog();
+        //only suggest restart if modified and this is the first close attempt
+        if (!m_bClosed && m_pManager->isModified())
+        {
+            m_pManager->clearModified();
+            Application::PostUserEvent(LINK(nullptr, ExtMgrDialog, Restart));
+        }
+        m_bClosed = true;
     }
     return bRet;
 }

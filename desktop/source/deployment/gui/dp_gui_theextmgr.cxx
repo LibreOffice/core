@@ -54,7 +54,8 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
     m_xParent( xParent ),
     m_pExtMgrDialog( nullptr ),
     m_pUpdReqDialog( nullptr ),
-    m_pExecuteCmdQueue( nullptr )
+    m_pExecuteCmdQueue( nullptr ),
+    m_bModified(false)
 {
     m_xExtensionManager = deployment::ExtensionManager::get( xContext );
     m_xExtensionManager->addModifyListener( this );
@@ -468,6 +469,7 @@ void TheExtensionManager::notifyTermination( ::lang::EventObject const & rEvt )
 void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     throw ( uno::RuntimeException, std::exception )
 {
+    m_bModified = true;
     getDialogHelper()->prepareChecking();
     createPackageList();
     getDialogHelper()->checkEntries();
