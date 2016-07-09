@@ -101,7 +101,7 @@ Args *args_parse (void)
         if (arg[0] != '-')
             continue;
 
-        while (length > 2 && arg[0] == '-') {
+        while (length > 1 && arg[0] == '-') {
             arg++;
             length--;
         }
