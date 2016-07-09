@@ -371,6 +371,9 @@ std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
     vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
     vcl::Window* pWindow = findChild(pDialogParent, rID);
 
+    if (!pWindow)
+        throw css::uno::RuntimeException("Could not find child with id: " + rID);
+
     FactoryFunction aFunction = pWindow->GetUITestFactory();
     return aFunction(pWindow);
 }
