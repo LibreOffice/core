@@ -239,7 +239,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_MAILMERGE_EMAIL_DOCUMENTS:
             {
                 SwView* pView = ::GetActiveView();
-                SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+                SwMailMergeConfigItem* pConfigItem = pView ? pView->GetMailMergeConfigItem() : nullptr;
 
                 // #i51949# hide e-Mail option if e-Mail is not supported
                 // #i63267# printing might be disabled
