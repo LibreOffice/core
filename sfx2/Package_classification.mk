@@ -12,6 +12,7 @@ $(eval $(call gb_Package_Package,sfx2_classification,$(SRCDIR)/sfx2))
 $(eval $(call gb_Package_add_files,sfx2_classification,$(LIBO_SHARE_FOLDER)/classification,\
 	classification/example.xml \
 	classification/example_sl-SI.xml \
+	classification/example_ca-ES.xml \
 ))
 
 # vim: set noet sw=4 ts=4:
