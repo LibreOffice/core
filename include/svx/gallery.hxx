@@ -59,28 +59,28 @@ public:
     static bool                 FillObjListTitle( const sal_uInt32 nThemeId, std::vector< OUString >& rList );
 
     static bool                 InsertURL( const OUString& rThemeName, const OUString& rURL );
-    static bool                 InsertURL( sal_uIntPtr nThemeId, const OUString& rURL );
+    static bool                 InsertURL( sal_uInt32 nThemeId, const OUString& rURL );
 
-    static bool                 GetGraphicObj( const OUString& rThemeName, sal_uIntPtr nPos,
+    static bool                 GetGraphicObj( const OUString& rThemeName, sal_uInt32 nPos,
                                                Graphic* pGraphic = nullptr, BitmapEx* pThumb = nullptr,
                                                bool bProgess = false );
-    static bool                 GetGraphicObj( sal_uIntPtr nThemeId, sal_uIntPtr nPos,
+    static bool                 GetGraphicObj( sal_uInt32 nThemeId, sal_uInt32 nPos,
                                                Graphic* pGraphic = nullptr, BitmapEx* pThumb = nullptr,
                                                bool bProgess = false );
 
-    static sal_uIntPtr          GetSdrObjCount( const OUString& rThemeName );
-    static sal_uIntPtr          GetSdrObjCount( sal_uIntPtr nThemeId );
+    static sal_uInt32           GetSdrObjCount( const OUString& rThemeName );
+    static sal_uInt32           GetSdrObjCount( sal_uInt32 nThemeId );
 
-    static bool                 GetSdrObj( const OUString& rThemeName, sal_uIntPtr nSdrModelPos,
+    static bool                 GetSdrObj( const OUString& rThemeName, sal_uInt32 nSdrModelPos,
                                            SdrModel* pModel = nullptr, BitmapEx* pThumb = nullptr );
-    static bool                 GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModelPos,
+    static bool                 GetSdrObj( sal_uInt32 nThemeId, sal_uInt32 nSdrModelPos,
                                            SdrModel* pModel = nullptr, BitmapEx* pThumb = nullptr );
 
     static bool                 BeginLocking( const OUString& rThemeName );
-    static bool                 BeginLocking( sal_uIntPtr nThemeId );
+    static bool                 BeginLocking( sal_uInt32 nThemeId );
 
     static bool                 EndLocking( const OUString& rThemeName );
-    static bool                 EndLocking( sal_uIntPtr nThemeId );
+    static bool                 EndLocking( sal_uInt32 nThemeId );
 };
 
 #endif // INCLUDED_SVX_GALLERY_HXX
