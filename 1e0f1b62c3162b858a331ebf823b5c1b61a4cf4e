@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_a1e56aa9",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-07-09T07:46:16Z",
+      "side": 0,
+      "message": "Treat \u00270\u0027 in fraction as digit",
+      "revId": "1e0f1b62c3162b858a331ebf823b5c1b61a4cf4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
