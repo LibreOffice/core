@@ -28,7 +28,8 @@ static struct {
     const char   *pPageinType;
 } pArgDescr[] = {
     /* have a trailing argument */
-    { "pt",         0, 0, 0, 0, NULL },
+    { "pt",         1, 0, 0, 0, NULL },
+    { "p",          1, 0, 0, 0, NULL },
     { "display",    0, 0, 0, 0, NULL },
 
     /* no splash */
