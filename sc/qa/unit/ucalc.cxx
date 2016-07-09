@@ -5974,6 +5974,78 @@ void Test::testUndoDataAnchor()
     m_pDoc->DeleteTab(0);
 }
 
+
+void Test::testEmptyCalcDocDefaults()
+{
+    CPPUNIT_ASSERT_EQUAL( (sal_uLong) 0, m_pDoc->GetCellCount() );
+    CPPUNIT_ASSERT_EQUAL( (sal_uLong) 0, m_pDoc->GetFormulaGroupCount() );
+    CPPUNIT_ASSERT_EQUAL( (sal_uLong) 0, m_pDoc->GetCodeCount() );
+    CPPUNIT_ASSERT_EQUAL( (sal_uInt8) 0, m_pDoc->GetAsianCompression() );
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasPrintRange() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsInVBAMode() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasNotes() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsCutMode() );
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->CheckMacroWarn() );
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsUsingEmbededFonts() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsEmbedded() );
+
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsDocEditable() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsDocProtected() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsDocVisible() );
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsUserInteractionEnabled() );
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasAnyCalcNotification() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsAutoCalcShellDisabled() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsForcedFormulaPending() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsCalculatingFormulaTree() );
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsClipOrUndo() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsClipboard() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsUndo() );
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsUndoEnabled() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsCutMode() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsClipboardSource() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsInsertingFromOtherDoc() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->PastingDrawFromOtherDoc() );
+
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsAdjustHeightEnabled() );
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsExecuteLinkEnabled() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsChangeReadOnlyEnabled() );
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IdleCalcTextWidth() );
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsIdleEnabled() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsDetectiveDirty() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->GetHasMacroFunc() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsChartListenerCollectionNeedsUpdate() );
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasRangeOverflow() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsImportingXML() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsCalcingAfterLoad() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->GetNoListening() );
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsValidAsianCompression() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->GetAsianKerning() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsValidAsianKerning() );
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsInInterpreter() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsInInterpreterTableOp() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsInDtorClear() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsExpandRefs() );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsInLinkUpdate() );
+
+    SCTAB tab = m_pDoc->GetVisibleTab();
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsVisible(tab) );
+    CPPUNIT_ASSERT_EQUAL( true, m_pDoc->IsDefaultTabBgColor(tab) );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasTable(tab) );
+
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsActiveScenario(tab) );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasCalcNotification(tab) );
+    CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasManualBreaks(tab) );
+}
+
 ScDocShell* Test::findLoadedDocShellByName(const OUString& rName)
 {
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>, false));
