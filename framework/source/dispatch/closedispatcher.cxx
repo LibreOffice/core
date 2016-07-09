@@ -186,6 +186,15 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     {
         // The closing frame has its own close handler.  Call it instead.
         m_pSysWindow->GetCloseHdl().Call(*m_pSysWindow);
+
+        aWriteLock.clear();
+        // <- SAFE ------------------------------
+
+        implts_notifyResultListener(
+            xListener,
+            css::frame::DispatchResultState::SUCCESS,
+            css::uno::Any());
+
         return;
     }
 
