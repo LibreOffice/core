@@ -398,14 +398,16 @@ void SvxStyleBox_Impl::ReleaseFocus()
 IMPL_LINK_TYPED( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
 {
     OUString sEntry = GetSelectEntry();
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
     ReleaseFocus(); // It must be after getting entry pos!
+    if (IsInDropDown())
+        ToggleDropDown();
     Sequence< PropertyValue > aArgs( 2 );
     aArgs[0].Name   = "Param";
     aArgs[0].Value  = makeAny( sEntry );
     aArgs[1].Name   = "Family";
     aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
 
-    sal_uInt16 nMenuId = pMenu->GetCurItemId();
     switch(nMenuId) {
         case RID_SVX_UPDATE_STYLE:
         {
