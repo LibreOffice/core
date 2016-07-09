@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_a181ea91",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5666,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-09T12:18:54Z",
+      "side": 1,
+      "message": "sucessfully -\u003e successfully",
+      "revId": "566e90030f2d4e45ed11e81987ab9403defbd749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_c17eeead",
+        "filename": "opencl/source/OpenCLZone.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-09T12:18:54Z",
+      "side": 1,
+      "message": "rather use std::atomic\u003cbool\u003e ?",
+      "revId": "566e90030f2d4e45ed11e81987ab9403defbd749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_e1493290",
+        "filename": "vcl/Library_vcl.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-09T12:18:54Z",
+      "side": 1,
+      "message": "indentation ? unless gerrit is displaying it wrong",
+      "revId": "566e90030f2d4e45ed11e81987ab9403defbd749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
