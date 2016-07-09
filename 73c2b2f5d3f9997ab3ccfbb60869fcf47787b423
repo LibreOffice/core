@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_ac62c1d6",
+        "filename": "sfx2/Package_classification.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-07-09T21:56:59Z",
+      "side": 1,
+      "message": "Hm, I should order this alphabetically…",
+      "revId": "73c2b2f5d3f9997ab3ccfbb60869fcf47787b423",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
