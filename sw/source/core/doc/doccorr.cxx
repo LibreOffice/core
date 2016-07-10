@@ -121,6 +121,7 @@ void PaMCorrAbs( const SwPaM& rRange,
         }
     }
 
+    pDoc->cleanupUnoCursorTable();
     for(const auto& pWeakUnoCursor : pDoc->mvUnoCursorTable)
     {
         auto pUnoCursor(pWeakUnoCursor.lock());
@@ -273,6 +274,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
        }
     }
 
+    pDoc->cleanupUnoCursorTable();
     for(const auto& pWeakUnoCursor : pDoc->mvUnoCursorTable)
     {
         auto pUnoCursor(pWeakUnoCursor.lock());
