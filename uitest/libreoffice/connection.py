@@ -63,7 +63,6 @@ class OfficeConnection:
             argv.insert(2, "run")
             argv.insert(3, "--args")
             argv[4] = argv[4].replace("soffice", "soffice.bin")
-        print(argv)
 
         self.pro = subprocess.Popen(argv)
         return self.pro
