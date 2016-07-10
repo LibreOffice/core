@@ -59,7 +59,14 @@ BitmapEx BitmapProcessor::createDisabledImage(const BitmapEx& rBitmapEx)
 {
     const Size aSize(rBitmapEx.GetSizePixel());
 
-    Bitmap aGrey(aSize, rBitmapEx.GetBitCount());
+    //keep disable image at same depth as original where possible, otherwise
+    //use 8 bit
+    sal_uInt16 nBitCount = rBitmapEx.GetBitCount();
+    if (nBitCount < 8)
+        nBitCount = 8;
+    const BitmapPalette* pPal = nBitCount == 8 ? &Bitmap::GetGreyPalette(256) : nullptr;
+    Bitmap aGrey(aSize, nBitCount, pPal);
+
     AlphaMask aGreyAlpha(aSize);
 
     Bitmap aBitmap(rBitmapEx.GetBitmap());
