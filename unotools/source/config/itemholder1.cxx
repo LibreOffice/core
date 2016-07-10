@@ -35,7 +35,6 @@
 #include <unotools/fontoptions.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/lingucfg.hxx>
-#include <unotools/localisationoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/printwarningoptions.hxx>
@@ -173,10 +172,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_LINGUCFG :
             rItem.pItem = new SvtLinguConfig();
-            break;
-
-        case E_LOCALISATIONOPTIONS :
-            rItem.pItem = new SvtLocalisationOptions();
             break;
 
         case E_MODULEOPTIONS :

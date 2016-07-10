@@ -57,7 +57,6 @@ enum EItem
 
     E_LANGUAGEOPTIONS               ,   // 2
     E_LINGUCFG                      ,
-    E_LOCALISATIONOPTIONS           ,
 
     E_MENUOPTIONS                   ,
     E_MISCCFG                       ,   // 2

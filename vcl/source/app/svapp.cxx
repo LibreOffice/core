@@ -1399,20 +1399,6 @@ bool Application::IsAutoHelpIdEnabled()
     return ImplGetSVData()->maHelpData.mbAutoHelpId;
 }
 
-void Application::EnableAutoMnemonic( bool bEnabled )
-{
-    AllSettings aSettings = GetSettings();
-    StyleSettings aStyle = aSettings.GetStyleSettings();
-    aStyle.SetAutoMnemonic( bEnabled );
-    aSettings.SetStyleSettings( aStyle );
-    SetSettings( aSettings );
-}
-
-bool Application::IsAutoMnemonicEnabled()
-{
-    return GetSettings().GetStyleSettings().GetAutoMnemonic();
-}
-
 OUString Application::GetToolkitName()
 {
     ImplSVData* pSVData = ImplGetSVData();

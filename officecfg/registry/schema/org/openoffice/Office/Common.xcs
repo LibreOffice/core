@@ -2758,18 +2758,6 @@
           <value>1</value>
         </prop>
       </group>
-      <group oor:name="Localisation">
-        <info>
-          <desc>Contains localization specific settings.</desc>
-        </info>
-        <prop oor:name="AutoMnemonic" oor:type="xs:boolean" oor:localized="true">
-          <!-- OldPath: International/AutoMnemonic -->
-          <!-- OldLocation: soffice.ini -->
-          <info>
-            <desc>Specifies if shortcuts are assigned automatically.</desc>
-          </info>
-        </prop>
-      </group>
       <group oor:name="Menu">
         <info>
           <desc>Contains menu view settings.</desc>

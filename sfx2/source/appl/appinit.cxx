@@ -30,7 +30,6 @@
 #include <svtools/svtools.hrc>
 #include <unotools/configmgr.hxx>
 #include <unotools/saveopt.hxx>
-#include <unotools/localisationoptions.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -214,12 +213,6 @@ void SfxApplication::Initialize_Impl()
     // SV-Look
     Help::EnableContextHelp();
     Help::EnableExtHelp();
-
-    if (!utl::ConfigManager::IsAvoidConfig())
-    {
-        SvtLocalisationOptions aLocalisation;
-        Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
-    }
 
     pImpl->m_pToolsErrorHdl = new SfxErrorHandler(
         RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);

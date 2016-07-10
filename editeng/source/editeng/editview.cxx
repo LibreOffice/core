@@ -838,11 +838,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         }
 
         // ## Create mnemonics here
-        if ( Application::IsAutoMnemonicEnabled() )
-        {
-            aPopupMenu->CreateAutoMnemonics();
-            aPopupMenu->SetMenuFlags( aPopupMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
-        }
+        aPopupMenu->CreateAutoMnemonics();
+        aPopupMenu->SetMenuFlags(aPopupMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics);
 
         // Replace suggestions...
         Sequence< OUString > aAlt;

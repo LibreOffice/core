@@ -92,7 +92,6 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/securityoptions.hxx>
-#include <unotools/localisationoptions.hxx>
 #include <unotools/fontoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/syslocale.hxx>

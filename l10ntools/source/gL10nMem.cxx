@@ -599,8 +599,6 @@ bool l10nMem::convFilterWarning(const string& sSourceFile,
              sKey        == "WriterCommands.UserInterface.Commands..uno:FlipVertical.Label") ||
             (sSourceFile == "registry/data/org/openoffice/Office/UI/WriterCommands.xcu" &&
              sKey        == "WriterCommands.UserInterface.Commands..uno:FlipHorizontal.Label") ||
-            (sSourceFile == "registry/data/org/openoffice/Office/Common.xcu" &&
-             sKey        == "Common.View.Localisation.AutoMnemonic") ||
             (sSourceFile == "registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu" &&
              sKey        == "ImpressWindowState.UIElements.States.private:resource/toolpanel/DrawingFramework/SlideTransitions.UIName") ||
             (sSourceFile == "registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu" &&

@@ -1075,22 +1075,6 @@ public:
     */
     static void                 RemoveAccel( Accelerator* pAccel );
 
-    /** Enable auto-mnemonics
-
-     @param     bEnabled        True enables auto-mnemonics, and false disables it
-
-     @see IsAutoMnemonicEnabled
-    */
-    static void                 EnableAutoMnemonic( bool bEnabled = true );
-
-    /** Determines if auto-mnemonics are enabled.
-
-     @returns True if auto-mnemonics is enabled, false if not.
-
-     @see EnableAutoMnemonic
-    */
-    static bool                 IsAutoMnemonicEnabled();
-
     /** Get the number of reserved key codes used by the application.
 
      @returns number of reserved key codes
