@@ -107,6 +107,9 @@ SelectPersonaDialog::~SelectPersonaDialog()
 
 void SelectPersonaDialog::dispose()
 {
+    if (m_pSearchThread.is())
+        m_pSearchThread->join();
+
     m_pEdit.clear();
     m_pSearchButton.clear();
     m_pProgressLabel.clear();
