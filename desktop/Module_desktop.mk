@@ -132,6 +132,7 @@ endif
 
 $(eval $(call gb_Module_add_check_targets,desktop, \
     CppunitTest_desktop_version \
+    CppunitTest_desktop_app \
 ))
 
 ifeq ($(OS),LINUX)
