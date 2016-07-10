@@ -50,24 +50,10 @@ namespace svt
                 return;
 
             // first, check which of the objects we hold in s_aHistory can be removed
-            {
-                InterfaceArray aCleanedHistory;
-                for (   InterfaceArray::const_iterator aLoop = _rHistory.begin();
-                        aLoop != _rHistory.end();
-                        ++aLoop
-                    )
-                {
-                    Reference< XInterface > xCurrent( aLoop->get() );
-                    if ( xCurrent.is() )
-                    {
-                        if ( aCleanedHistory.empty() )
-                            // make some room, assume that all interfaces (from here on) are valid
-                            aCleanedHistory.reserve( _rHistory.size() - ( aLoop - _rHistory.begin() ) );
-                        aCleanedHistory.push_back( css::uno::WeakReference< XInterface >( xCurrent ) );
-                    }
-                }
-                _rHistory.swap( aCleanedHistory );
-            }
+            _rHistory.erase(std::remove_if(_rHistory.begin(),
+                              _rHistory.end(),
+                              [](const auto & x){return !x.get().is();}),
+                            _rHistory.end());
 
             // then push_back the picker
             _rHistory.push_back( css::uno::WeakReference< XInterface >( _rxPicker ) );
