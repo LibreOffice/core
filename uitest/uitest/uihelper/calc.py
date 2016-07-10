@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from helper import mkPropertyValues
+from libreoffice.uno.propertyvalue import mkPropertyValues
 
 def enter_text_to_cell(gridwin, cell, text):
     gridwin.executeAction("SELECT", mkPropertyValues({"CELL": cell}))

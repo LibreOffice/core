@@ -9,7 +9,7 @@ import time
 
 from libreoffice.uno.eventlistener import EventListener
 
-from helper import convert_property_values_to_dict
+from libreoffice.uno.propertyvalue import convert_property_values_to_dict
 
 class DialogNotExecutedException(Exception):
     def __init__(self, command):

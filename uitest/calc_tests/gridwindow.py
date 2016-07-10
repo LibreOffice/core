@@ -7,7 +7,7 @@
 
 from uitest_helper import UITest
 
-from helper import mkPropertyValues
+from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.uihelper.calc import enter_text_to_cell
 

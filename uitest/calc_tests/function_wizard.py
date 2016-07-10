@@ -7,7 +7,7 @@
 
 from uitest_helper import UITest
 
-from helper import mkPropertyValues
+from libreoffice.uno.propertyvalue import mkPropertyValues
 import time
 
 from uitest.framework import UITestCase

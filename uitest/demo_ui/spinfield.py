@@ -7,7 +7,7 @@
 
 from uitest_helper import UITest
 
-from helper import mkPropertyValues
+from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest_helper import get_state_as_dict
 
 import time
