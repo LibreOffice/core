@@ -168,16 +168,21 @@ void VCLXAccessibleList::notifyVisibleStates(bool _bSetNew )
     ListItems::iterator aEnd = m_aAccessibleChildren.end();
     UpdateVisibleLineCount();
     // adjust the index inside the VCLXAccessibleListItem
-    for (;aIter != aEnd ; ++aIter)
+    for (;aIter != aEnd ; )
     {
         Reference< XAccessible > xHold = *aIter;
-        VCLXAccessibleListItem* pItem = static_cast<VCLXAccessibleListItem*>(xHold.get());
-        if ( pItem )
+        if (!xHold.is())
         {
+            aIter = m_aAccessibleChildren.erase(aIter);
+        }
+        else
+        {
+            VCLXAccessibleListItem* pItem = static_cast<VCLXAccessibleListItem*>(xHold.get());
             const sal_Int32 nTopEntry = m_pListBoxHelper ? m_pListBoxHelper->GetTopEntry() : 0;
             const sal_Int32 nPos = static_cast<sal_Int32>(aIter - m_aAccessibleChildren.begin());
             bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
             pItem->SetVisible( m_bVisible && bVisible );
+            ++aIter;
         }
 
     }

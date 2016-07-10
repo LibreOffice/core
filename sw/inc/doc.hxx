@@ -1647,11 +1647,10 @@ public:
     void cleanupUnoCursorTable()
     {
         // In most cases we'll remove most of the elements.
-        std::vector< std::weak_ptr<SwUnoCursor> > unoCursorTable;
-        std::copy_if(mvUnoCursorTable.begin(), mvUnoCursorTable.end(),
-                     std::back_inserter(unoCursorTable),
-                     [](const std::weak_ptr<SwUnoCursor>& pWeakPtr) { return !pWeakPtr.expired(); });
-        std::swap(mvUnoCursorTable, unoCursorTable);
+        mvUnoCursorTable.erase( std::remove_if(mvUnoCursorTable.begin(),
+                                               mvUnoCursorTable.end(),
+                                               [] (auto const& x) { return x.expired(); }),
+                                mvUnoCursorTable.end());
     }
 
 private:

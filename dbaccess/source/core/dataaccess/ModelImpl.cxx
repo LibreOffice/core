@@ -627,14 +627,19 @@ void SAL_CALL ODatabaseModelImpl::disposing( const css::lang::EventObject& Sourc
     {
         bool bStore = false;
         OWeakConnectionArray::const_iterator aEnd = m_aConnections.end();
-        for (OWeakConnectionArray::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        for (OWeakConnectionArray::iterator i = m_aConnections.begin(); aEnd != i; )
         {
-            if ( xCon == i->get() )
+            css::uno::WeakReference< css::sdbc::XConnection > xIterConn ( (*i).get() );
+            if ( !xIterConn.is())
+            {
+                i = m_aConnections.erase(i);
+            } else if ( xCon == xIterConn )
             {
                 *i = css::uno::WeakReference< css::sdbc::XConnection >();
                 bStore = true;
                 break;
-            }
+            } else
+                ++i;
         }
 
         if ( bStore )
