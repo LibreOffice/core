@@ -563,6 +563,21 @@ DECLARE_WW8EXPORT_TEST(testTdf92281, "tdf92281.doc")
         CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontName"));
         CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameAsian"));
         CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameComplex"));
+
+        uno::Reference<text::XText> xXText(getParagraph(1)->getText(), uno::UNO_QUERY);
+        uno::Reference<text::XTextCursor> xCursor( xXText->createTextCursor() , uno::UNO_QUERY );
+
+        xCursor->goRight( 5 , false );
+        uno::Reference< beans::XPropertySet > xPropSet(xCursor, uno::UNO_QUERY);
+        OUString sPMingLiUFont= OUString( sal_Unicode( 26032 ) ) +
+                OUString( sal_Unicode( 32048 ) ) +
+                OUString( sal_Unicode( 26126 ) ) +
+                OUString( sal_Unicode( 39636 ) ) +
+                OUString(";PMingLiU");
+
+        CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(xPropSet, "CharFontName"));
+        CPPUNIT_ASSERT_EQUAL(sPMingLiUFont      , getProperty<OUString>(xPropSet, "CharFontNameAsian"));
+        CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xPropSet, "CharFontNameComplex"));
 }
 
 DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
