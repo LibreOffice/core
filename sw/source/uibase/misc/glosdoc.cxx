@@ -442,18 +442,22 @@ void SwGlossaries::RemoveFileFromList( const OUString& rGroup )
                     // tell the UNO AutoTextGroup object that it's not valid anymore
                     for (   UnoAutoTextGroups::iterator aLoop = m_aGlossaryGroups.begin();
                             aLoop != m_aGlossaryGroups.end();
-                            ++aLoop
                         )
                     {
                         Reference< container::XNamed > xNamed( aLoop->get(), UNO_QUERY );
-                        if ( xNamed.is() && ( xNamed->getName() == rGroup ) )
+                        if ( !xNamed.is() )
+                        {
+                            aLoop = m_aGlossaryGroups.erase(aLoop);
+                        }
+                        else if ( xNamed->getName() == rGroup )
                         {
                             static_cast< SwXAutoTextGroup* >( xNamed.get() )->Invalidate();
                                 // note that this static_cast works because we know that the array only
                                 // contains SwXAutoTextGroup implementation
                             m_aGlossaryGroups.erase( aLoop );
                             break;
-                        }
+                        } else
+                            ++aLoop;
                     }
                 }
 

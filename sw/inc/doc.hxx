@@ -1644,14 +1644,14 @@ public:
     std::vector< std::weak_ptr<SwUnoCursor> > mvUnoCursorTable;
 
     // Remove expired UnoCursor weak pointers the document keeps to notify about document death.
-    void cleanupUnoCursorTable()
+    void cleanupUnoCursorTable() const
     {
+        auto & rTable = const_cast<SwDoc*>(this)->mvUnoCursorTable;
         // In most cases we'll remove most of the elements.
-        std::vector< std::weak_ptr<SwUnoCursor> > unoCursorTable;
-        std::copy_if(mvUnoCursorTable.begin(), mvUnoCursorTable.end(),
-                     std::back_inserter(unoCursorTable),
-                     [](const std::weak_ptr<SwUnoCursor>& pWeakPtr) { return !pWeakPtr.expired(); });
-        std::swap(mvUnoCursorTable, unoCursorTable);
+        rTable.erase( std::remove_if(rTable.begin(),
+                                     rTable.end(),
+                                     [] (auto const& x) { return x.expired(); }),
+                       rTable.end());
     }
 
 private:
