@@ -97,7 +97,7 @@ public:
     explicit SelectPersonaDialog( vcl::Window *pParent );
     virtual ~SelectPersonaDialog();
     virtual void dispose() override;
-    ::rtl::Reference< SearchAndParseThread > m_rSearchThread;
+    ::rtl::Reference< SearchAndParseThread > m_pSearchThread;
 
     OUString GetSelectedPersona() const;
     void SetProgress( const OUString& );

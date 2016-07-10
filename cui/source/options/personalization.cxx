@@ -130,8 +130,8 @@ OUString SelectPersonaDialog::GetSelectedPersona() const
 IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
 {
     OUString searchTerm;
-    if( m_rSearchThread.is() )
-        m_rSearchThread->StopExecution();
+    if( m_pSearchThread.is() )
+        m_pSearchThread->StopExecution();
 
     if( pButton ==  m_pSearchButton )
         searchTerm = m_pEdit->GetText();
@@ -157,12 +157,12 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     if ( searchTerm.startsWith( "https://addons.mozilla.org/" ) )
     {
         searchTerm = "https://addons.mozilla.org/en-US/" + searchTerm.copy( searchTerm.indexOf( "firefox" ) );
-        m_rSearchThread = new SearchAndParseThread( this, searchTerm, true );
+        m_pSearchThread = new SearchAndParseThread( this, searchTerm, true );
     }
     else
-        m_rSearchThread = new SearchAndParseThread( this, rSearchURL, false );
+        m_pSearchThread = new SearchAndParseThread( this, rSearchURL, false );
 
-    m_rSearchThread->launch();
+    m_pSearchThread->launch();
 }
 
 IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionOK, Button*, void )
@@ -171,30 +171,30 @@ IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionOK, Button*, void )
 
     if( !aSelectedPersona.isEmpty() )
     {
-        m_rSearchThread = new SearchAndParseThread( this, aSelectedPersona, false );
-        m_rSearchThread->launch();
+        m_pSearchThread = new SearchAndParseThread( this, aSelectedPersona, false );
+        m_pSearchThread->launch();
     }
 
     else
     {
-        if( m_rSearchThread.is() )
-            m_rSearchThread->StopExecution();
+        if( m_pSearchThread.is() )
+            m_pSearchThread->StopExecution();
         EndDialog( RET_OK );
     }
 }
 
 IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionCancel, Button*, void )
 {
-    if( m_rSearchThread.is() )
-        m_rSearchThread->StopExecution();
+    if( m_pSearchThread.is() )
+        m_pSearchThread->StopExecution();
 
     EndDialog();
 }
 
 IMPL_LINK_TYPED( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
 {
-    if( m_rSearchThread.is() )
-        m_rSearchThread->StopExecution();
+    if( m_pSearchThread.is() )
+        m_pSearchThread->StopExecution();
 
     for( sal_Int32 index = 0; index < 9; index++ )
     {
