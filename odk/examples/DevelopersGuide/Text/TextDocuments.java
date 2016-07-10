@@ -704,7 +704,7 @@ public class TextDocuments {
             // service description: com.sun.star.text.TextTableRow)
             XPropertySet xRow = UnoRuntime.queryInterface(
                 XPropertySet.class, xRows.getByIndex ( 0 ) );
-            // If BackTransparant is false, then the background color is visible
+            // If BackTransparent is false, then the background color is visible
             xRow.setPropertyValue( "BackTransparent", Boolean.FALSE);
             // Specify the color of the background to be dark blue
             xRow.setPropertyValue( "BackColor", Integer.valueOf(6710932));

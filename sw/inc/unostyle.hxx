@@ -376,7 +376,7 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
     static SwBoxAutoFormat* GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName = nullptr);
     /// returns box format assigned to this style
     SwBoxAutoFormat* GetBoxFormat();
-    /// Sets the addres of SwBoxAutoFormat this style is bound to. Usable only when style is physical.
+    /// Sets the address of SwBoxAutoFormat this style is bound to. Usable only when style is physical.
     void SetBoxFormat(SwBoxAutoFormat* pBoxFormat);
     void SetPhysical();
     bool IsPhysical();

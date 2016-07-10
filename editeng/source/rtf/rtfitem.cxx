@@ -1663,7 +1663,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
     Color aCol( COL_WHITE ), aFCol;
     if( !nFillValue )
     {
-        // there was only one of two colors specified or no BrushTyp
+        // there was only one of two colors specified or no BrushType
         if( USHRT_MAX != nFillColor )
         {
             nFillValue = 100;
