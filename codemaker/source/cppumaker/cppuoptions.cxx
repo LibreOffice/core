@@ -302,24 +302,24 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
 OString CppuOptions::prepareHelp()
 {
     OString help("\nusing: ");
-    help += m_program + " [-options] file_1 ... file_n\nOptions:\n";
-    help += "    -O<path>   = path describes the root directory for the generated output.\n";
-    help += "                 The output directory tree is generated under this directory.\n";
-    help += "    -T<name>   = name specifies a type or a list of types. The output for this\n";
-    help += "      [t1;...]   type is generated. If no '-T' option is specified,\n";
-    help += "                 then output for all types is generated.\n";
-    help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
-    help += "    -L         = UNO type functions are generated lightweight, that means only\n";
-    help += "                 the name and typeclass are given and everything else is retrieved\n";
-    help += "                 from the type library dynamically. The default is that UNO type\n";
-    help += "                 functions provides enough type information for bootstrapping C++.\n";
-    help += "                 '-L' should be the default for external components.\n";
-    help += "    -C         = UNO type functions are generated comprehensive that means all\n";
-    help += "                 necessary information is available for bridging the type in UNO.\n";
-    help += "    -nD        = no dependent types are generated.\n";
-    help += "    -G         = generate only target files which does not exists.\n";
-    help += "    -Gc        = generate only target files which content will be changed.\n";
-    help += "    -X<file>   = extra types which will not be taken into account for generation.\n\n";
+    help += m_program + " [-options] file_1 ... file_n\nOptions:\n"
+            "    -O<path>   = path describes the root directory for the generated output.\n"
+            "                 The output directory tree is generated under this directory.\n"
+            "    -T<name>   = name specifies a type or a list of types. The output for this\n"
+            "      [t1;...]   type is generated. If no '-T' option is specified,\n"
+            "                 then output for all types is generated.\n"
+            "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n"
+            "    -L         = UNO type functions are generated lightweight, that means only\n"
+            "                 the name and typeclass are given and everything else is retrieved\n"
+            "                 from the type library dynamically. The default is that UNO type\n"
+            "                 functions provides enough type information for bootstrapping C++.\n"
+            "                 '-L' should be the default for external components.\n"
+            "    -C         = UNO type functions are generated comprehensive that means all\n"
+            "                 necessary information is available for bridging the type in UNO.\n"
+            "    -nD        = no dependent types are generated.\n"
+            "    -G         = generate only target files which does not exists.\n"
+            "    -Gc        = generate only target files which content will be changed.\n"
+            "    -X<file>   = extra types which will not be taken into account for generation.\n\n";
     help += prepareVersion();
 
     return help;
