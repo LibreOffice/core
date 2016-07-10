@@ -1651,7 +1651,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     nTypeArray[i] = NF_SYMBOLTYPE_EXP;
                 }
                 else if (eScannedType == css::util::NumberFormat::FRACTION &&
-                         sStrArray[i][0] == ' ')
+                    (sStrArray[i][0] == ' ' || ( nTypeArray[i] == NF_SYMBOLTYPE_STRING && (sStrArray[i][0] < '0' || sStrArray[i][0] > '9') ) ) )
                 {
                     if (!bBlank && !bFrac) // Not double or after a /
                     {
@@ -1659,12 +1659,17 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         {
                             return nPos; // Error
                         }
-                        bBlank = true;
-                        nBlankPos = i;
-                        nCntPre = nCounter;
-                        nCounter = 0;
+                        if (sStrArray[i][0] == ' ' ||  nCounter > 0 )   // treat string as integer/fraction delimiter only if there is integer
+                        {
+                            bBlank = true;
+                            nBlankPos = i;
+                            nCntPre = nCounter;
+                            nCounter = 0;
+                            nTypeArray[i] = NF_SYMBOLTYPE_FRACBLANK;
+                        }
                     }
-                    nTypeArray[i] = NF_SYMBOLTYPE_FRACBLANK;
+                    else if ( sStrArray[i][0] == ' ' )
+                        nTypeArray[i] = NF_SYMBOLTYPE_FRACBLANK;
                 }
                 else if (nTypeArray[i] == NF_KEY_THAI_T)
                 {
@@ -2691,6 +2696,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         switch ( nTypeArray[i] )
         {
         case NF_SYMBOLTYPE_STRING :
+        case NF_SYMBOLTYPE_FRACBLANK :
             nStringPos = rString.getLength();
             do
             {

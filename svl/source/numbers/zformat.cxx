@@ -4707,10 +4707,12 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                     case NF_SYMBOLTYPE_TIME100SECSEP :
                         aStr.append( rLocWrp.getTime100SecSep() );
                         break;
+                    case NF_SYMBOLTYPE_FRACBLANK :
                     case NF_SYMBOLTYPE_STRING :
                         if ( pStr[j].getLength() == 1 )
                         {
-                            aStr.append( '\\' );
+                            if ( pType[j] == NF_SYMBOLTYPE_STRING )
+                                aStr.append( '\\' );
                             aStr.append( pStr[j] );
                         }
                         else
