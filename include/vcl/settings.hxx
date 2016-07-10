@@ -501,12 +501,6 @@ public:
     void                            SetCursorBlinkTime( sal_uInt64 nBlinkTime );
     sal_uInt64                      GetCursorBlinkTime() const;
 
-    void                            SetScreenZoom( sal_uInt16 nPercent );
-    sal_uInt16                      GetScreenZoom() const;
-
-    void                            SetScreenFontZoom( sal_uInt16 nPercent );
-    sal_uInt16                      GetScreenFontZoom() const;
-
     void                            SetDragFullOptions( DragFullOptions nOptions );
     DragFullOptions                 GetDragFullOptions() const;
 

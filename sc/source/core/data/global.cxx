@@ -130,8 +130,6 @@ sal_uInt16          ScGlobal::nStdRowHeight         = 256;
 long            ScGlobal::nLastRowHeightExtra   = 0;
 long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
-static sal_uInt16 nPPTZoom = 0; // ScreenZoom used to determine nScreenPPTX/Y
-
 SfxViewShell* pScActiveViewShell = nullptr; //FIXME: Make this a member
 sal_uInt16 nScClickMouseModifier = 0;    //FIXME: This too
 sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
@@ -521,7 +519,7 @@ void ScGlobal::Init()
     pEmbeddedBrushItem = new SvxBrushItem( Color( COL_LIGHTCYAN ), ATTR_BACKGROUND );
     pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ), ATTR_BACKGROUND );
 
-    UpdatePPT(nullptr);
+    InitPPT();
     //ScCompiler::InitSymbolsNative();
     // ScParameterClassification _after_ Compiler, needs function resources if
     // arguments are to be merged in, which in turn need strings of function
@@ -536,23 +534,12 @@ void ScGlobal::Init()
     //  ScDocumentPool::InitVersionMaps() has been called earlier already
 }
 
-void ScGlobal::UpdatePPT( OutputDevice* pDev )
+void ScGlobal::InitPPT()
 {
-    sal_uInt16 nCurrentZoom = Application::GetSettings().GetStyleSettings().GetScreenZoom();
-    if ( nCurrentZoom != nPPTZoom )
-    {
-        // Screen PPT values must be updated when ScreenZoom has changed.
-        // If called from Window::DataChanged, the window is passed as pDev,
-        // to make sure LogicToPixel uses a device which already uses the new zoom.
-        // For the initial settings, NULL is passed and GetDefaultDevice used.
-
-        if ( !pDev )
-            pDev = Application::GetDefaultDevice();
-        Point aPix1000 = pDev->LogicToPixel( Point(100000,100000), MAP_TWIP );
-        nScreenPPTX = aPix1000.X() / 100000.0;
-        nScreenPPTY = aPix1000.Y() / 100000.0;
-        nPPTZoom = nCurrentZoom;
-    }
+    OutputDevice* pDev = Application::GetDefaultDevice();
+    Point aPix1000 = pDev->LogicToPixel( Point(100000,100000), MAP_TWIP );
+    nScreenPPTX = aPix1000.X() / 100000.0;
+    nScreenPPTY = aPix1000.Y() / 100000.0;
 }
 
 const OUString& ScGlobal::GetClipDocName()

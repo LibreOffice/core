@@ -1905,8 +1905,6 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
             {
                 ScTabView* pView = pViewData->GetView();
 
-                //  update scale in case the UI ScreenZoom has changed
-                ScGlobal::UpdatePPT(this);
                 pView->RecalcPPT();
 
                 //  RepeatResize in case scroll bar sizes have changed

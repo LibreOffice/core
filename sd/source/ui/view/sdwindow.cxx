@@ -749,20 +749,6 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
         if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
              (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
         {
-            // When the screen zoom factor has changed then reset the zoom
-            // factor of the frame to always display the whole page.
-            const AllSettings* pOldSettings = rDCEvt.GetOldSettings ();
-            const AllSettings& rNewSettings = GetSettings ();
-            if (pOldSettings && mpViewShell)
-            {
-                if (pOldSettings->GetStyleSettings().GetScreenZoom()
-                    != rNewSettings.GetStyleSettings().GetScreenZoom())
-                {
-                    mpViewShell->GetViewFrame()->GetDispatcher()->
-                        Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
-                }
-            }
-
             /* Rearrange or initiate Resize for scroll bars since the size of
                the scroll bars my have changed. Within this, inside the resize-
                handler, the size of the scroll bars will be asked from the

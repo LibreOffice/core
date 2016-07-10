@@ -2621,29 +2621,6 @@
       <info>
         <desc>Contains window and dialog settings.</desc>
       </info>
-      <prop oor:name="FontScaling" oor:type="xs:short" oor:nillable="false">
-        <!--OldPath: General/View -->
-        <!--OldLocation: soffice.cfg-->
-        <!--UIHints: Tools  Options - General  View  [Section] Display-->
-        <info>
-          <desc>Specifies the scaling only of the screen representation
-          [UNIT=%].</desc>
-          <label>Scaling</label>
-        </info>
-        <constraints>
-          <minInclusive oor:value="50">
-            <info>
-              <desc>Specifies the minimum range of the scaling.</desc>
-            </info>
-          </minInclusive>
-          <maxInclusive oor:value="200">
-            <info>
-              <desc>Specifies the maximum range of the scaling.</desc>
-            </info>
-          </maxInclusive>
-        </constraints>
-        <value>100</value>
-      </prop>
       <group oor:name="NewDocumentHandling">
         <info>
           <desc>Contains settings to change new document window behavior.</desc>

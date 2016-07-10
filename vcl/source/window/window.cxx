@@ -1138,14 +1138,13 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
 
     // setup the scale factor for Hi-DPI displays
     mnDPIScaleFactor = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
+    mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
+    mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 
     if (!utl::ConfigManager::IsAvoidConfig())
     {
         const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
-        sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
-        mnDPIX          = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
-        mnDPIY          = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
-        maFont          = rStyleSettings.GetAppFont();
+        maFont = rStyleSettings.GetAppFont();
 
         if ( nStyle & WB_3DLOOK )
         {
@@ -1160,8 +1159,6 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     }
     else
     {
-        mnDPIX          = 96;
-        mnDPIY          = 96;
         maFont = GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_ENGLISH_US, GetDefaultFontFlags::NONE );
     }
 
@@ -1326,13 +1323,12 @@ void Window::ImplInitResolutionSettings()
     // recalculate AppFont-resolution and DPI-resolution
     if (mpWindowImpl->mbFrame)
     {
-        const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
-        sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
-        mnDPIX = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
-        mnDPIY = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
+        mnDPIX = mpWindowImpl->mpFrameData->mnDPIX;
+        mnDPIY = mpWindowImpl->mpFrameData->mnDPIY;
 
         // setup the scale factor for Hi-DPI displays
         mnDPIScaleFactor = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
+        const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
         SetPointFont(*this, rStyleSettings.GetAppFont());
     }
     else if ( mpWindowImpl->mpParent )
@@ -1355,25 +1351,16 @@ void Window::ImplInitResolutionSettings()
 void Window::ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
 {
     Size aSize = rFont.GetFontSize();
-    sal_uInt16 nScreenFontZoom;
-    if (!utl::ConfigManager::IsAvoidConfig())
-        nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
-    else
-        nScreenFontZoom = 100;
 
     if (aSize.Width())
     {
         aSize.Width() *= mpWindowImpl->mpFrameData->mnDPIX;
         aSize.Width() += 72 / 2;
         aSize.Width() /= 72;
-        aSize.Width() *= nScreenFontZoom;
-        aSize.Width() /= 100;
     }
     aSize.Height() *= mpWindowImpl->mpFrameData->mnDPIY;
     aSize.Height() += 72/2;
     aSize.Height() /= 72;
-    aSize.Height() *= nScreenFontZoom;
-    aSize.Height() /= 100;
 
     if (rRenderContext.IsMapModeEnabled())
         aSize = rRenderContext.PixelToLogic(aSize);
@@ -1384,25 +1371,16 @@ void Window::ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFo
 void Window::ImplLogicToPoint(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
 {
     Size aSize = rFont.GetFontSize();
-    sal_uInt16 nScreenFontZoom;
-    if (!utl::ConfigManager::IsAvoidConfig())
-        nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
-    else
-        nScreenFontZoom = 100;
 
     if (rRenderContext.IsMapModeEnabled())
         aSize = rRenderContext.LogicToPixel(aSize);
 
     if (aSize.Width())
     {
-        aSize.Width() *= 100;
-        aSize.Width() /= nScreenFontZoom;
         aSize.Width() *= 72;
         aSize.Width() += mpWindowImpl->mpFrameData->mnDPIX / 2;
         aSize.Width() /= mpWindowImpl->mpFrameData->mnDPIX;
     }
-    aSize.Height() *= 100;
-    aSize.Height() /= nScreenFontZoom;
     aSize.Height() *= 72;
     aSize.Height() += mpWindowImpl->mpFrameData->mnDPIY / 2;
     aSize.Height() /= mpWindowImpl->mpFrameData->mnDPIY;

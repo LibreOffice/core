@@ -28,7 +28,6 @@
 
 #define DEFAULT_DRAGMODE    DragMode::SystemDep
 #define DEFAULT_SNAPMODE    SnapType::ToButton
-#define DEFAULT_SCALEFACTOR 100
 #if defined UNX
 #define DEFAULT_AAMINHEIGHT 8
 #endif
@@ -40,7 +39,6 @@ bool SvtTabAppearanceCfg::bInitialized = false;
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     :ConfigItem(OUString("Office.Common/View"))
     ,nDragMode          ( DEFAULT_DRAGMODE )
-    ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
     ,nSnapMode          ( DEFAULT_SNAPMODE )
     ,nMiddleMouse       ( MouseMiddleButtonAction::AutoScroll )
 #if defined( UNX )
@@ -64,26 +62,25 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
             {
                 switch(nProp)
                 {
-                    case  0: *pValues >>= nScaleFactor; break; //"FontScaling",
-                    case  1:    //"Window/Drag"
+                    case  0:    //"Window/Drag"
                     {
                         short nTmp;
                         if (*pValues >>= nTmp)
                             nDragMode = (DragMode)nTmp;
                         break;
                     }
-                    case  2: bMenuMouseFollow = *o3tl::doAccess<bool>(*pValues); break; //"Menu/FollowMouse",
-                    case  3:
+                    case  1: bMenuMouseFollow = *o3tl::doAccess<bool>(*pValues); break; //"Menu/FollowMouse",
+                    case  2:
                     {
                         short nTmp;
                         if (*pValues >>= nTmp)
                             nSnapMode = (SnapType)nTmp; //"Dialog/MousePositioning",
                         break;
                     }
-                    case  4: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
+                    case  3: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
 #if defined( UNX )
-                    case  5: bFontAntialiasing = *o3tl::doAccess<bool>(*pValues); break;    // "FontAntialising/Enabled",
-                    case  6: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
+                    case  4: bFontAntialiasing = *o3tl::doAccess<bool>(*pValues); break;    // "FontAntialising/Enabled",
+                    case  5: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
 #endif
                 }
             }
@@ -102,14 +99,13 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
     {
         static const sal_Char* aPropNames[] =
         {
-             "FontScaling"                       //  0
-            ,"Window/Drag"                       //  1
-            ,"Menu/FollowMouse"                  //  2
-            ,"Dialog/MousePositioning"           //  3
-            ,"Dialog/MiddleMouseButton"          //  4
+             "Window/Drag"                       //  0
+            ,"Menu/FollowMouse"                  //  1
+            ,"Dialog/MousePositioning"           //  2
+            ,"Dialog/MiddleMouseButton"          //  3
 #if defined( UNX )
-            ,"FontAntiAliasing/Enabled"         //  5
-            ,"FontAntiAliasing/MinPixelHeight"  //  6
+            ,"FontAntiAliasing/Enabled"          //  4
+            ,"FontAntiAliasing/MinPixelHeight"   //  5
 #endif
         };
         const int nCount = SAL_N_ELEMENTS( aPropNames );
@@ -133,14 +129,13 @@ void  SvtTabAppearanceCfg::ImplCommit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= nScaleFactor; break;            // "FontScaling",
-            case  1: pValues[nProp] <<= (short)nDragMode; break;        //"Window/Drag",
-            case  2: pValues[nProp] <<= bMenuMouseFollow; break;        //"Menu/FollowMouse",
-            case  3: pValues[nProp] <<= (short)nSnapMode; break;        //"Dialog/MousePositioning",
-            case  4: pValues[nProp] <<= static_cast<short>(nMiddleMouse); break;               //"Dialog/MiddleMouseButton",
+            case  0: pValues[nProp] <<= (short)nDragMode; break;        // "Window/Drag",
+            case  1: pValues[nProp] <<= bMenuMouseFollow; break;        // "Menu/FollowMouse",
+            case  2: pValues[nProp] <<= (short)nSnapMode; break;        // "Dialog/MousePositioning",
+            case  3: pValues[nProp] <<= static_cast<short>(nMiddleMouse); break; // "Dialog/MiddleMouseButton",
 #if defined( UNX )
-            case  5: pValues[nProp] <<= bFontAntialiasing; break; // "FontAntialising/Enabled",
-            case  6: pValues[nProp] <<= nAAMinPixelHeight; break;               // "FontAntialising/MinPixelHeight",
+            case  4: pValues[nProp] <<= bFontAntialiasing; break;       // "FontAntialising/Enabled",
+            case  5: pValues[nProp] <<= nAAMinPixelHeight; break;       // "FontAntialising/MinPixelHeight",
 #endif
         }
     }
@@ -149,12 +144,6 @@ void  SvtTabAppearanceCfg::ImplCommit()
 
 void SvtTabAppearanceCfg::Notify( const css::uno::Sequence< OUString >& )
 {
-}
-
-void SvtTabAppearanceCfg::SetScaleFactor ( sal_uInt16 nSet )
-{
-    nScaleFactor = nSet;
-    SetModified();
 }
 
 void SvtTabAppearanceCfg::SetSnapMode ( SnapType nSet )
@@ -182,11 +171,6 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     hAppStyle.SetStandardStyles();
     // and set it here
     hAppStyle.SetUseSystemUIFonts( bUseSystemUIFonts );
-
-    // Screen and ScreenFont Scaling
-
-    hAppStyle.SetScreenZoom( nScaleFactor );
-    hAppStyle.SetScreenFontZoom( nScaleFactor );
 
 #if defined( UNX )
     // font anti aliasing

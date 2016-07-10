@@ -171,8 +171,6 @@ struct ImplStyleData
     ToolbarIconSize                 mnToolbarIconSize;
     bool                            mnUseFlatMenus;
     StyleSettingsOptions            mnOptions;
-    sal_uInt16                      mnScreenZoom;
-    sal_uInt16                      mnScreenFontZoom;
     bool                            mbHighContrast;
     bool                            mbUseSystemUIFonts;
     bool                            mbAutoMnemonic;
@@ -539,8 +537,6 @@ ImplStyleData::ImplStyleData() :
     mnAntialiasedMin            = 0;
     mnCursorSize                = 2;
     mnCursorBlinkTime           = STYLE_CURSOR_NOBLINKTIME;
-    mnScreenZoom                = 100;
-    mnScreenFontZoom            = 100;
     mnDragFullOptions           = DragFullOptions::All;
     mnSelectionOptions          = SelectionOptions::NONE;
     mnDisplayOptions            = DisplayOptions::NONE;
@@ -648,8 +644,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnAntialiasedMin            = rData.mnAntialiasedMin;
     mnCursorSize                = rData.mnCursorSize;
     mnCursorBlinkTime           = rData.mnCursorBlinkTime;
-    mnScreenZoom                = rData.mnScreenZoom;
-    mnScreenFontZoom            = rData.mnScreenFontZoom;
     mnDragFullOptions           = rData.mnDragFullOptions;
     mnSelectionOptions          = rData.mnSelectionOptions;
     mnDisplayOptions            = rData.mnDisplayOptions;
@@ -1834,32 +1828,6 @@ StyleSettings::GetCursorBlinkTime() const
 }
 
 void
-StyleSettings::SetScreenZoom( sal_uInt16 nPercent )
-{
-    CopyData();
-    mxData->mnScreenZoom = nPercent;
-}
-
-sal_uInt16
-StyleSettings::GetScreenZoom() const
-{
-    return mxData->mnScreenZoom;
-}
-
-void
-StyleSettings::SetScreenFontZoom( sal_uInt16 nPercent )
-{
-    CopyData();
-    mxData->mnScreenFontZoom = nPercent;
-}
-
-sal_uInt16
-StyleSettings::GetScreenFontZoom() const
-{
-    return mxData->mnScreenFontZoom;
-}
-
-void
 StyleSettings::SetDragFullOptions( DragFullOptions nOptions )
 {
     CopyData();
@@ -2312,8 +2280,6 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->mnSplitSize               == rSet.mxData->mnSplitSize)                &&
          (mxData->mnSpinSize                == rSet.mxData->mnSpinSize)                 &&
          (mxData->mnAntialiasedMin          == rSet.mxData->mnAntialiasedMin)           &&
-         (mxData->mnScreenZoom              == rSet.mxData->mnScreenZoom)               &&
-         (mxData->mnScreenFontZoom          == rSet.mxData->mnScreenFontZoom)           &&
          (mxData->mbHighContrast            == rSet.mxData->mbHighContrast)             &&
          (mxData->mbUseSystemUIFonts        == rSet.mxData->mbUseSystemUIFonts)         &&
          (mxData->mnUseFlatBorders          == rSet.mxData->mnUseFlatBorders)           &&

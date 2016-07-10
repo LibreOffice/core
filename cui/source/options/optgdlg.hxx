@@ -79,7 +79,6 @@ class SvtTabAppearanceCfg;
 class OfaViewTabPage : public SfxTabPage
 {
 private:
-    VclPtr<MetricField>    m_pWindowSizeMF;
     VclPtr<ListBox>        m_pIconSizeLB;
     VclPtr<ListBox>        m_pSidebarIconSizeLB;
     VclPtr<ListBox>        m_pIconStyleLB;

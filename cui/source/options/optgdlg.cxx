@@ -619,7 +619,6 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     , mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
     , mpOpenGLConfig(new svt::OpenGLCfg)
 {
-    get(m_pWindowSizeMF, "windowsize");
     get(m_pIconSizeLB, "iconsize");
     get(m_pSidebarIconSizeLB, "sidebariconsize");
     get(m_pIconStyleLB, "iconstyle");
@@ -701,7 +700,6 @@ void OfaViewTabPage::dispose()
     pCanvasSettings = nullptr;
     delete pAppearanceCfg;
     pAppearanceCfg = nullptr;
-    m_pWindowSizeMF.clear();
     m_pIconSizeLB.clear();
     m_pSidebarIconSizeLB.clear();
     m_pIconStyleLB.clear();
@@ -794,17 +792,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     bool bAppearanceChanged = false;
-
-
-    // Screen Scaling
-    sal_uInt16 nOldScale = pAppearanceCfg->GetScaleFactor();
-    sal_uInt16 nNewScale = (sal_uInt16)m_pWindowSizeMF->GetValue();
-
-    if ( nNewScale != nOldScale )
-    {
-        pAppearanceCfg->SetScaleFactor(nNewScale);
-        bAppearanceChanged = true;
-    }
 
     // Mouse Snap Mode
     SnapType eOldSnap = pAppearanceCfg->GetSnapMode();
@@ -941,8 +928,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_pIconStyleLB->SelectEntryPos( nStyleLB_InitialSelection );
     m_pIconStyleLB->SaveValue();
 
-    // Screen Scaling
-    m_pWindowSizeMF->SetValue ( pAppearanceCfg->GetScaleFactor() );
     // Mouse Snap
     m_pMousePosLB->SelectEntryPos((sal_Int32)pAppearanceCfg->GetSnapMode());
     m_pMousePosLB->SaveValue();

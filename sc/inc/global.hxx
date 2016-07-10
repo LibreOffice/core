@@ -500,6 +500,8 @@ class ScGlobal
 
     static ScFieldEditEngine*   pFieldEditEngine;
 
+    static void                 InitPPT();
+
 public:
     static SvtSysLocale*        pSysLocale;
     // for faster access a pointer to the single instance provided by SvtSysLocale
@@ -555,8 +557,6 @@ public:
     static void             Init();                     // during start up
     static void             InitAddIns();
     static void             Clear();                    // at the end of the program
-
-    static void             UpdatePPT(OutputDevice* pDev);
 
     static void             InitTextHeight(SfxItemPool* pPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return pEmptyBrushItem; }
