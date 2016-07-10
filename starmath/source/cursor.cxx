@@ -67,7 +67,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
             }
             break;
         default:
-            SAL_WARN("starmath", "Movement direction not supported!");
+            assert(false);
     }
     if(NewPos){
         mpPosition = NewPos;
