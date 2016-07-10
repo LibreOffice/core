@@ -254,7 +254,7 @@ void SpellDialog::dispose()
     if (pImpl.get())
     {
         // save possibly modified user-dictionaries
-        Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+        Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
         if (xDicList.is())
             SaveDictionaries( xDicList );
 
@@ -314,7 +314,7 @@ void SpellDialog::Init_Impl()
     m_pLanguageLB->SetLanguageList( SvxLanguageListFlags::SPELL_USED, false, false, true );
 
     m_pSentenceED->ClearModifyFlag();
-    SvxGetChangeAllList()->clear();
+    LinguMgr::GetChangeAllList()->clear();
 }
 
 void SpellDialog::UpdateBoxes_Impl()
@@ -599,7 +599,7 @@ IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeAllHdl, Button*, void)
     // add new word to ChangeAll list
     OUString  aOldWord( m_pSentenceED->GetErrorText() );
     SvxPrepareAutoCorrect( aOldWord, aString );
-    Reference<XDictionary> aXDictionary( SvxGetChangeAllList(), UNO_QUERY );
+    Reference<XDictionary> aXDictionary( LinguMgr::GetChangeAllList(), UNO_QUERY );
     DictionaryError nAdded = AddEntryToDic( aXDictionary,
             aOldWord, true,
             aString, eLang );
@@ -624,7 +624,7 @@ IMPL_LINK_TYPED( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
 {
     m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     // add word to IgnoreAll list
-    Reference< XDictionary > aXDictionary( SvxGetIgnoreAllList(), UNO_QUERY );
+    Reference< XDictionary > aXDictionary( LinguMgr::GetIgnoreAllList(), UNO_QUERY );
     //in case the error has been changed manually it has to be restored
     m_pSentenceED->RestoreCurrentError();
     if (pButton == m_pIgnoreRulePB)
@@ -723,7 +723,7 @@ IMPL_LINK_TYPED( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, voi
 void SpellDialog::Impl_Restore(bool bUseSavedSentence)
 {
     //clear the "ChangeAllList"
-    SvxGetChangeAllList()->clear();
+    LinguMgr::GetChangeAllList()->clear();
     //get a new sentence
     m_pSentenceED->SetText(OUString());
     m_pSentenceED->ResetModified();
@@ -819,13 +819,13 @@ int SpellDialog::InitUserDicts()
     const Reference< XDictionary >  *pDic = nullptr;
 
     // get list of dictionaries
-    Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+    Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
     if (xDicList.is())
     {
         // add active, positive dictionary to dic-list (if not already done).
         // This is to ensure that there is at least on dictionary to which
         // words could be added.
-        Reference< XDictionary >  xDic( SvxGetOrCreatePosDic() );
+        Reference< XDictionary >  xDic( LinguMgr::GetStandardDic() );
         if (xDic.is())
             xDic->setActive( true );
 
@@ -846,7 +846,7 @@ int SpellDialog::InitUserDicts()
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
         uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
-        if (!xDicTmp.is() || SvxGetIgnoreAllList() == xDicTmp)
+        if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
             continue;
 
         uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
@@ -909,7 +909,7 @@ void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
     OUString aDicName ( pMenu->GetItemText( nItemId ) );
 
     uno::Reference< linguistic2::XDictionary >      xDic;
-    uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+    uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
     if (xDicList.is())
         xDic = xDicList->getDictionaryByName( aDicName );
 
@@ -1152,7 +1152,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
     bHasReplaced = false;
     bool bRet = true;
     SpellPortions::iterator aStart = rSentence.begin();
-    Reference<XDictionary> xChangeAll( SvxGetChangeAllList(), UNO_QUERY );
+    Reference<XDictionary> xChangeAll( LinguMgr::GetChangeAllList(), UNO_QUERY );
     if(!xChangeAll->getCount())
         return bRet;
     bRet = false;
@@ -1610,7 +1610,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
         }
         // maybe the error found here is already in the ChangeAllList and has to be replaced
 
-        Reference<XDictionary> xChangeAll( SvxGetChangeAllList(), UNO_QUERY );
+        Reference<XDictionary> xChangeAll( LinguMgr::GetChangeAllList(), UNO_QUERY );
         Reference<XDictionaryEntry> xEntry;
 
         const SpellErrorDescription* pSpellErrorDescription = nullptr;

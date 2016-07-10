@@ -155,7 +155,7 @@ SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
     bRevAllowed ( true ),
     bAllRight   ( bIsAllRight )
 {
-    Reference< linguistic2::XLinguProperties >  xProp( SvxGetLinguPropertySet() );
+    Reference< linguistic2::XLinguProperties >  xProp( LinguMgr::GetLinguPropertySet() );
     bool bWrapReverse = xProp.is() && xProp->getIsWrapReverse();
     bReverse = bWrapReverse;
     bStartDone = !bReverse && bStart;
@@ -311,7 +311,7 @@ void SvxSpellWrapper::SpellDocument( )
 
 bool SvxSpellWrapper::SpellNext( )
 {
-    Reference< linguistic2::XLinguProperties >  xProp( SvxGetLinguPropertySet() );
+    Reference< linguistic2::XLinguProperties >  xProp( LinguMgr::GetLinguPropertySet() );
     bool bWrapReverse = xProp.is() && xProp->getIsWrapReverse();
     bool bActRev = bRevAllowed && bWrapReverse;
 
@@ -402,7 +402,7 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
 {
     Reference< XDictionary >  xDic;
 
-    Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+    Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
     if (xDicList.is())
     {
         Sequence< Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
@@ -431,7 +431,7 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
 
         if (!xDic.is())
         {
-            xDic = SvxGetOrCreatePosDic();
+            xDic = LinguMgr::GetStandardDic();
             if (xDic.is())
                 xDic->setActive( true );
         }
@@ -471,7 +471,7 @@ bool SvxSpellWrapper::FindSpellError()
             {
                 // look up in ChangeAllList for misspelled word
                 Reference< XDictionary >    xChangeAllList(
-                        SvxGetChangeAllList(), UNO_QUERY );
+                        LinguMgr::GetChangeAllList(), UNO_QUERY );
                 Reference< XDictionaryEntry >   xEntry;
                 if (xChangeAllList.is())
                     xEntry = xChangeAllList->getEntry( xAlt->getWord() );

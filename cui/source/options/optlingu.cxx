@@ -721,7 +721,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
     const Locale& rCurrentLocale = Application::GetSettings().GetLanguageTag().getLocale();
     Sequence<Any> aArgs(2);//second arguments has to be empty!
-    aArgs.getArray()[0] <<= SvxGetLinguPropertySet();
+    aArgs.getArray()[0] <<= LinguMgr::GetLinguPropertySet();
 
     //read spell checker
     Sequence< OUString > aSpellNames = xLinguSrvcMgr->getAvailableServices(
@@ -1088,8 +1088,8 @@ SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     else
         m_pMoreDictsLink->Hide();
 
-    xProp = SvxGetLinguPropertySet();
-    xDicList.set( SvxGetDictionaryList(), UNO_QUERY );
+    xProp = LinguMgr::GetLinguPropertySet();
+    xDicList.set( LinguMgr::GetDictionaryList(), UNO_QUERY );
     if (xDicList.is())
     {
         // keep references to all **currently** available dictionaries,
@@ -1228,7 +1228,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 uno::Reference< XDictionary > xDic( aDics.getConstArray()[ i ] );
                 if (xDic.is())
                 {
-                    if (SvxGetIgnoreAllList() == xDic)
+                    if (LinguMgr::GetIgnoreAllList() == xDic)
                         bChecked = true;
                     xDic->setActive( bChecked );
 
@@ -1545,7 +1545,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox,
         if (nPos != TREELIST_ENTRY_NOTFOUND)
         {
             const uno::Reference< XDictionary > &rDic = aDics.getConstArray()[ nPos ];
-            if (SvxGetIgnoreAllList() == rDic)
+            if (LinguMgr::GetIgnoreAllList() == rDic)
             {
                 SvTreeListEntry* pEntry = m_pLinguDicsCLB->GetEntry( nPos );
                 if (pEntry)
@@ -1657,7 +1657,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                 xDic = aDics.getConstArray()[ nDicPos ];
                 if (xDic.is())
                 {
-                    if (SvxGetIgnoreAllList() == xDic)
+                    if (LinguMgr::GetIgnoreAllList() == xDic)
                         xDic->clear();
                     else
                     {

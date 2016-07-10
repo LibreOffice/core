@@ -216,13 +216,13 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
         }
         if (SvxLanguageListFlags::SPELL_USED & nLangList)
         {
-            Reference< XSpellChecker1 > xTmp1( SvxGetSpellChecker(), UNO_QUERY );
+            Reference< XSpellChecker1 > xTmp1( LinguMgr::GetSpellChecker(), UNO_QUERY );
             if (xTmp1.is())
                 aSpellUsedLang = xTmp1->getLanguages();
         }
         if (SvxLanguageListFlags::HYPH_USED  & nLangList)
         {
-            Reference< XHyphenator > xTmp( SvxGetHyphenator() );
+            Reference< XHyphenator > xTmp( LinguMgr::GetHyphenator() );
             if (xTmp.is()) {
                 Sequence < css::lang::Locale > aLocaleSequence( xTmp->getLocales() );
                 aHyphUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
@@ -230,7 +230,7 @@ void SvxLanguageBoxBase::SetLanguageList( SvxLanguageListFlags nLangList,
         }
         if (SvxLanguageListFlags::THES_USED  & nLangList)
         {
-            Reference< XThesaurus > xTmp( SvxGetThesaurus() );
+            Reference< XThesaurus > xTmp( LinguMgr::GetThesaurus() );
             if (xTmp.is()) {
                 Sequence < css::lang::Locale > aLocaleSequence( xTmp->getLocales() );
                 aThesUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
@@ -341,7 +341,7 @@ sal_Int32 SvxLanguageBoxBase::ImplInsertLanguage( const LanguageType nLangType, 
 
         if (!m_pSpellUsedLang)
         {
-            Reference< XSpellChecker1 > xSpell( SvxGetSpellChecker(), UNO_QUERY );
+            Reference< XSpellChecker1 > xSpell( LinguMgr::GetSpellChecker(), UNO_QUERY );
             if ( xSpell.is() )
                 m_pSpellUsedLang = new Sequence< sal_Int16 >( xSpell->getLanguages() );
         }

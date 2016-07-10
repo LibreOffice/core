@@ -862,7 +862,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
         SvtLinguConfig aCfg;
 
-        Reference< linguistic2::XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+        Reference< linguistic2::XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
         Sequence< Reference< linguistic2::XDictionary >  > aDics;
         if (xDicList.is())
         {
@@ -870,7 +870,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             // add the default positive dictionary to dic-list (if not already done).
             // This is to ensure that there is at least one dictionary to which
             // words could be added.
-            uno::Reference< linguistic2::XDictionary >  xDic( SvxGetOrCreatePosDic() );
+            uno::Reference< linguistic2::XDictionary >  xDic( LinguMgr::GetStandardDic() );
             if (xDic.is())
                 xDic->setActive( true );
 
@@ -881,7 +881,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             for (sal_uInt16 i = 0; i < nDicCount; i++)
             {
                 uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
-                if (!xDicTmp.is() || SvxGetIgnoreAllList() == xDicTmp)
+                if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
                     continue;
 
                 uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );

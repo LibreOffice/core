@@ -353,7 +353,7 @@ IMPL_LINK_NOARG_TYPED( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, void
     {
         try
         {
-            uno::Reference< linguistic2::XLinguProperties >  xProp( SvxGetLinguPropertySet() );
+            uno::Reference< linguistic2::XLinguProperties >  xProp( LinguMgr::GetLinguPropertySet() );
 
             xProp->setIsHyphAuto( true );
 

@@ -578,7 +578,7 @@ void OfaTreeOptionsDialog::dispose()
             if (pPageInfo->m_nPageId == RID_SFXPAGE_LINGU)
             {
                 // write personal dictionaries
-                Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+                Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
                 if (xDicList.is())
                 {
                     linguistic::SaveDictionaries( xDicList );
@@ -1169,7 +1169,7 @@ OfaPageResource::OfaPageResource() :
 
 SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 {
-    Reference< XLinguProperties >  xProp( SvxGetLinguPropertySet() );
+    Reference< XLinguProperties >  xProp( LinguMgr::GetLinguPropertySet() );
     SfxItemSet* pRet = nullptr;
     switch(nId)
     {
@@ -1225,7 +1225,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 
             // for linguistic
 
-            Reference< XSpellChecker1 >  xSpell = SvxGetSpellChecker();
+            Reference< XSpellChecker1 >  xSpell = LinguMgr::GetSpellChecker();
             pRet->Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
             SfxHyphenRegionItem aHyphen( SID_ATTR_HYPHENREGION );
 
@@ -2130,7 +2130,7 @@ short OfaTreeOptionsDialog::Execute()
     if ( !bIsFromExtensionManager )
     {
         // collect all DictionaryList Events while the dialog is executed
-        Reference<css::linguistic2::XSearchableDictionaryList> xDictionaryList(SvxGetDictionaryList());
+        Reference<css::linguistic2::XSearchableDictionaryList> xDictionaryList(LinguMgr::GetDictionaryList());
         pClamp.reset( new SvxDicListChgClamp( xDictionaryList ) );
     }
     short nRet = SfxModalDialog::Execute();

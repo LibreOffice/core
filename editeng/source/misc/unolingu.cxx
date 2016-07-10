@@ -717,46 +717,6 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
     return xDic;
 }
 
-uno::Reference< XSpellChecker1 >  SvxGetSpellChecker()
-{
-    return LinguMgr::GetSpellChecker();
-}
-
-uno::Reference< XHyphenator >  SvxGetHyphenator()
-{
-    return LinguMgr::GetHyphenator();
-}
-
-uno::Reference< XThesaurus >  SvxGetThesaurus()
-{
-    return LinguMgr::GetThesaurus();
-}
-
-uno::Reference< XSearchableDictionaryList >  SvxGetDictionaryList()
-{
-    return LinguMgr::GetDictionaryList();
-}
-
-uno::Reference< XLinguProperties >  SvxGetLinguPropertySet()
-{
-    return LinguMgr::GetLinguPropertySet();
-}
-
-uno::Reference< XDictionary >  SvxGetOrCreatePosDic()
-{
-    return LinguMgr::GetStandardDic();
-}
-
-uno::Reference< XDictionary >  SvxGetIgnoreAllList()
-{
-    return LinguMgr::GetIgnoreAllList();
-}
-
-uno::Reference< XDictionary >  SvxGetChangeAllList()
-{
-    return LinguMgr::GetChangeAllList();
-}
-
 SvxAlternativeSpelling SvxGetAltSpelling(
         const css::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord )
 {

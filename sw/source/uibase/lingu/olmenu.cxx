@@ -351,14 +351,14 @@ SwSpellPopup::SwSpellPopup(
 
     pMenu = GetPopupMenu(MN_ADD_TO_DIC);
     pMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);     //! necessary to retrieve the correct dictionary name in 'Execute' below
-    uno::Reference< linguistic2::XSearchableDictionaryList >    xDicList( SvxGetDictionaryList() );
+    uno::Reference< linguistic2::XSearchableDictionaryList >    xDicList( LinguMgr::GetDictionaryList() );
     sal_uInt16 nItemId = MN_DICTIONARIES_START;
     if (xDicList.is())
     {
         // add the default positive dictionary to dic-list (if not already done).
         // This is to ensure that there is at least one dictionary to which
         // words could be added.
-        uno::Reference< linguistic2::XDictionary >  xDic( SvxGetOrCreatePosDic() );
+        uno::Reference< linguistic2::XDictionary >  xDic( LinguMgr::GetStandardDic() );
         if (xDic.is())
             xDic->setActive( true );
 
@@ -369,7 +369,7 @@ SwSpellPopup::SwSpellPopup(
         for( sal_uInt16 i = 0; i < nDicCount; i++ )
         {
             uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
-            if (!xDicTmp.is() || SvxGetIgnoreAllList() == xDicTmp)
+            if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
                 continue;
 
             uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
@@ -712,7 +712,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         }
         m_pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
         {
-            uno::Reference<linguistic2::XSearchableDictionaryList> xDictionaryList( SvxGetDictionaryList() );
+            uno::Reference<linguistic2::XSearchableDictionaryList> xDictionaryList( LinguMgr::GetDictionaryList() );
             SvxDicListChgClamp aClamp( xDictionaryList );
             m_pSh->GetView().GetViewFrame()->GetDispatcher()->
                 Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON );
@@ -730,7 +730,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if (nId == MN_IGNORE_WORD)
     {
-        uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
+        uno::Reference< linguistic2::XDictionary > xDictionary( LinguMgr::GetIgnoreAllList(), uno::UNO_QUERY );
         if (m_bGrammarResults) {
             try
             {
@@ -772,7 +772,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             aDicName = m_aDicNameSingle;
 
         uno::Reference< linguistic2::XDictionary >      xDic;
-        uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+        uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
         if (xDicList.is())
             xDic = xDicList->getDictionaryByName( aDicName );
 

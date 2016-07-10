@@ -1305,7 +1305,7 @@ OUString ImpEditView::SpellIgnoreWord()
 
         if ( !aWord.isEmpty() )
         {
-            Reference< XDictionary >  xDic( SvxGetIgnoreAllList(), UNO_QUERY );
+            Reference< XDictionary >  xDic( LinguMgr::GetIgnoreAllList(), UNO_QUERY );
             if (xDic.is())
                 xDic->add( aWord, false, OUString() );
             EditDoc& rDoc = pEditEngine->GetEditDoc();

@@ -46,8 +46,8 @@ EditSpellWrapper::EditSpellWrapper( vcl::Window* _pWin,
 {
     SAL_WARN_IF( !pView, "editeng", "One view has to be abandoned!" );
     // Keep IgnoreList, delete ReplaceList...
-    if (SvxGetChangeAllList().is())
-        SvxGetChangeAllList()->clear();
+    if (LinguMgr::GetChangeAllList().is())
+        LinguMgr::GetChangeAllList()->clear();
     pEditView = pView;
 }
 

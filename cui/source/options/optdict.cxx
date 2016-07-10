@@ -135,7 +135,7 @@ IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
     // add extension for personal dictionaries
     sDict += ".dic";
 
-    Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+    Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
 
     Sequence< Reference< XDictionary >  > aDics;
     if (xDicList.is())
@@ -238,8 +238,8 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     get(pDeletePB,"delete");
 
     sNew=pNewReplacePB->GetText();
-    if (SvxGetDictionaryList().is())
-        aDics = SvxGetDictionaryList()->getDictionaries();
+    if (LinguMgr::GetDictionaryList().is())
+        aDics = LinguMgr::GetDictionaryList()->getDictionaries();
 
     pWordsLB->SetSelectHdl(LINK(this, SvxEditDictionaryDialog, SelectHdl));
     pWordsLB->SetTabs(nStaticTabs);

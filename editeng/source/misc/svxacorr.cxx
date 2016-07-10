@@ -410,7 +410,7 @@ bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
             {
                 // Check that word isn't correctly spelled before correcting:
                 css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller =
-                    SvxGetSpellChecker();
+                    LinguMgr::GetSpellChecker();
                 if( xSpeller->hasLanguage(eLang) )
                 {
                     Sequence< css::beans::PropertyValue > aEmptySeq;

@@ -1452,7 +1452,7 @@ css::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM ) const
 Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
 {
     if ( !xSpeller.is() )
-        xSpeller = SvxGetSpellChecker();
+        xSpeller = LinguMgr::GetSpellChecker();
     return xSpeller;
 }
 
@@ -2487,7 +2487,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
         aCurSel = SelectWord( aCurSel, css::i18n::WordType::DICTIONARY_WORD );
     OUString aWord( GetSelected( aCurSel ) );
 
-    Reference< XThesaurus > xThes( SvxGetThesaurus() );
+    Reference< XThesaurus > xThes( LinguMgr::GetThesaurus() );
     if (!xThes.is())
         return EE_SPELL_ERRORFOUND;
 
