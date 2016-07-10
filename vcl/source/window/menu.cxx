@@ -2980,7 +2980,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
             ImplCallEventListeners(VCLEVENT_MENU_SUBMENUCHANGED, nPos);
         }
     }
-    else if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( nMenuFlags & MenuFlags::NoAutoMnemonics ) )
+    else if (!(nMenuFlags & MenuFlags::NoAutoMnemonics))
     {
         CreateAutoMnemonics();
     }
