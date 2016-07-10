@@ -212,12 +212,16 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
     // don't forget to update all existing frames and her might cached dispatch objects!
     // But look for already killed frames. We hold weak references instead of hard ones ...
     for (SvtFrameVector::const_iterator pIt  = m_lFrames.begin();
-                                        pIt != m_lFrames.end();
-                                      ++pIt                     )
+                                        pIt != m_lFrames.end(); )
     {
         css::uno::Reference< css::frame::XFrame > xFrame(pIt->get(), css::uno::UNO_QUERY);
         if (xFrame.is())
+        {
             xFrame->contextChanged();
+            ++pIt;
+        }
+        else
+            pIt = m_lFrames.erase(pIt);
     }
 }
 
