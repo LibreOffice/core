@@ -39,7 +39,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Horizontal:</property>
+                    <property name="label" translatable="yes">Position _X:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -80,7 +80,7 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Vertical:</property>
+                    <property name="label" translatable="yes">Position _Y:</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
