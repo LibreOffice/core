@@ -56,6 +56,15 @@ class OfficeConnection:
                 "--norestore", "--nologo" ]
         if "--valgrind" in self.args:
             argv.append("--valgrind")
+
+        if "--gdb" in self.args:
+            argv.insert(0, "gdb")
+            argv.insert(1, "-ex")
+            argv.insert(2, "run")
+            argv.insert(3, "--args")
+            argv[4] = argv[4].replace("soffice", "soffice.bin")
+        print(argv)
+
         self.pro = subprocess.Popen(argv)
         return self.pro
 
