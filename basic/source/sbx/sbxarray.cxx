@@ -283,18 +283,13 @@ void SbxArray::Insert( SbxVariable* pVar, sal_uInt16 nIdx )
     Insert32( pVar, nIdx );
 }
 
-void SbxArray::Remove32( sal_uInt32 nIdx )
+void SbxArray::Remove( sal_uInt32 nIdx )
 {
     if( nIdx < mpVarEntries->size() )
     {
         mpVarEntries->erase( mpVarEntries->begin() + nIdx );
         SetFlag( SbxFlagBits::Modified );
     }
-}
-
-void SbxArray::Remove( sal_uInt16 nIdx )
-{
-    Remove32(nIdx);
 }
 
 void SbxArray::Remove( SbxVariable* pVar )
@@ -305,7 +300,7 @@ void SbxArray::Remove( SbxVariable* pVar )
         {
             if (&(*mpVarEntries)[i].mpVar == pVar)
             {
-                Remove32( i ); break;
+                Remove( i ); break;
             }
         }
     }
