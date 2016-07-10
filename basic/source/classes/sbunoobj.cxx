@@ -4576,13 +4576,9 @@ void disposeComVariablesForBasic( StarBASIC* pBasic )
         ComponentRefVector::iterator itCRV;
         for( itCRV = rv.begin() ; itCRV != rv.end() ; ++itCRV )
         {
-            try
-            {
-                Reference< XComponent > xComponent( (*itCRV).get(), UNO_QUERY_THROW );
+            Reference< XComponent > xComponent( (*itCRV).get(), UNO_QUERY );
+            if (xComponent.is())
                 xComponent->dispose();
-            }
-            catch(const Exception& )
-            {}
         }
 
         delete pItem;
