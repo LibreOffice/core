@@ -286,8 +286,8 @@ void SfxTemplateManagerDlg::dispose()
     mpActionBar.clear();
     mpSearchView.clear();
     mpLocalView.clear();
-    mpActionMenu.clear();
-    mpTemplateDefaultMenu.clear();
+    mpActionMenu.disposeAndClear();
+    mpTemplateDefaultMenu.disposeAndClear();
 
     ModalDialog::dispose();
 }
