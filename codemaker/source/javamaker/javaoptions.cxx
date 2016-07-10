@@ -227,17 +227,17 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
 OString JavaOptions::prepareHelp()
 {
     OString help("\nusing: ");
-    help += m_program + " [-options] file_1 ... file_n -Xfile_n+1 -Xfile_n+2\nOptions:\n";
-    help += "    -O<path>   = path describes the root directory for the generated output.\n";
-    help += "                 The output directory tree is generated under this directory.\n";
-    help += "    -T<name>   = name specifies a type or a list of types. The output for this\n";
-    help += "      [t1;...]   type and all dependent types are generated. If no '-T' option is\n";
-    help += "                 specified, then output for all types is generated.\n";
-    help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
-    help += "    -nD        = no dependent types are generated.\n";
-    help += "    -G         = generate only target files which does not exists.\n";
-    help += "    -Gc        = generate only target files which content will be changed.\n";
-    help += "    -X<file>   = extra types which will not be taken into account for generation.\n\n";
+    help += m_program + " [-options] file_1 ... file_n -Xfile_n+1 -Xfile_n+2\nOptions:\n"
+          "    -O<path>   = path describes the root directory for the generated output.\n"
+          "                 The output directory tree is generated under this directory.\n"
+          "    -T<name>   = name specifies a type or a list of types. The output for this\n"
+          "      [t1;...]   type and all dependent types are generated. If no '-T' option is\n"
+          "                 specified, then output for all types is generated.\n"
+          "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n"
+          "    -nD        = no dependent types are generated.\n"
+          "    -G         = generate only target files which does not exists.\n"
+          "    -Gc        = generate only target files which content will be changed.\n"
+          "    -X<file>   = extra types which will not be taken into account for generation.\n\n";
     help += prepareVersion();
 
     return help;
