@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
+#include <desktop/dllapi.h>
 
 namespace desktop
 {
@@ -34,7 +35,7 @@ namespace desktop
 class CommandLineArgs: private boost::noncopyable
 {
     public:
-        struct Supplier
+        struct DESKTOP_DLLPUBLIC Supplier
         {
             // Thrown from constructors and next:
             class Exception {
@@ -51,7 +52,7 @@ class CommandLineArgs: private boost::noncopyable
         };
 
         CommandLineArgs();
-        explicit CommandLineArgs( Supplier& supplier );
+        DESKTOP_DLLPUBLIC explicit CommandLineArgs( Supplier& supplier );
 
         boost::optional< OUString > getCwdUrl() const { return m_cwdUrl; }
 
@@ -97,11 +98,11 @@ class CommandLineArgs: private boost::noncopyable
         bool                    HasSplashPipe() const { return m_splashpipe;}
         std::vector< OUString > const & GetAccept() const { return m_accept;}
         std::vector< OUString > const & GetUnaccept() const { return m_unaccept;}
-        std::vector< OUString > GetOpenList() const;
-        std::vector< OUString > GetViewList() const;
+        DESKTOP_DLLPUBLIC std::vector< OUString > GetOpenList() const;
+        DESKTOP_DLLPUBLIC std::vector< OUString > GetViewList() const;
         std::vector< OUString > GetStartList() const;
-        std::vector< OUString > GetForceOpenList() const;
-        std::vector< OUString > GetForceNewList() const;
+        DESKTOP_DLLPUBLIC std::vector< OUString > GetForceOpenList() const;
+        DESKTOP_DLLPUBLIC std::vector< OUString > GetForceNewList() const;
         std::vector< OUString > GetPrintList() const;
         std::vector< OUString > GetPrintToList() const;
         OUString       GetPrinterName() const { return m_printername;}
