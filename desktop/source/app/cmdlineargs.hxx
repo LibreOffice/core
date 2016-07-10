@@ -27,6 +27,8 @@
 #include <rtl/ustring.hxx>
 #include <boost/optional.hpp>
 
+#include <desktop/dllapi.h>
+
 namespace desktop
 {
 
@@ -44,13 +46,13 @@ class CommandLineArgs
                 Exception & operator =(Exception const &);
             };
 
-            virtual ~Supplier();
+            DESKTOP_DLLPUBLIC virtual ~Supplier();
             virtual boost::optional< OUString > getCwdUrl() = 0;
             virtual bool next(OUString * argument) = 0;
         };
 
         CommandLineArgs();
-        explicit CommandLineArgs( Supplier& supplier );
+        DESKTOP_DLLPUBLIC explicit CommandLineArgs( Supplier& supplier );
 
         CommandLineArgs(const CommandLineArgs&) = delete;
         const CommandLineArgs& operator=(const CommandLineArgs&) = delete;
@@ -100,10 +102,10 @@ class CommandLineArgs
         std::vector< OUString > const & GetAccept() const { return m_accept;}
         std::vector< OUString > const & GetUnaccept() const { return m_unaccept;}
         std::vector< OUString > GetOpenList() const;
-        std::vector< OUString > GetViewList() const;
+        DESKTOP_DLLPUBLIC std::vector< OUString > GetViewList() const;
         std::vector< OUString > GetStartList() const;
-        std::vector< OUString > GetForceOpenList() const;
-        std::vector< OUString > GetForceNewList() const;
+        DESKTOP_DLLPUBLIC std::vector< OUString > GetForceOpenList() const;
+        DESKTOP_DLLPUBLIC std::vector< OUString > GetForceNewList() const;
         std::vector< OUString > GetPrintList() const;
         std::vector< OUString > GetPrintToList() const;
         const OUString&         GetPrinterName() const { return m_printername;}

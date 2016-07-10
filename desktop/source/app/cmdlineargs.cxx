@@ -102,6 +102,80 @@ private:
     sal_uInt32 m_index;
 };
 
+// Office URI Schemes : see https://msdn.microsoft.com/en-us/library/dn906146
+class OfficeURISchemeCommandLineSupplier : public CommandLineArgs::Supplier {
+public:
+    static bool OfficeURI(const OUString& URI, OUString* rest = 0)
+    {
+        return ( URI.startsWith("libreoffice:",   rest) // Proposed extended schema
+              || URI.startsWith("ms-word:",       rest)
+              || URI.startsWith("ms-powerpoint:", rest)
+              || URI.startsWith("ms-excel:",      rest)
+              || URI.startsWith("ms-visio:",      rest)
+              || URI.startsWith("ms-access:",     rest));
+    }
+    OfficeURISchemeCommandLineSupplier(boost::optional< OUString > cwdUrl, const OUString& URI)
+        : m_cwdUrl(cwdUrl)
+    {
+        OSL_ASSERT(OfficeURI(URI));
+        // 1. Strip the scheme name
+        OUString rest1;
+        if (!OfficeURI(URI, &rest1))
+            throw CommandLineArgs::Supplier::Exception();
+
+        OUString rest2;
+        long nURIlen=-1;
+        // 2. Discriminate by command name (incl. 1st command argument descriptor)
+        //    Extract URI: everything up to possible next argument
+        if (rest1.startsWith("ofv|u|", &rest2))
+        {
+            // Open for view
+            m_args.push_back("--view");
+            nURIlen = rest2.indexOf("|");
+        }
+        else if (rest1.startsWith("ofe|u|", &rest2))
+        {
+            // Open for editing
+            m_args.push_back("-o");
+            nURIlen = rest2.indexOf("|");
+        }
+        else if (rest1.startsWith("nft|u|", &rest2))
+        {
+            // New from template
+            // For now, just ignore 2nd argument - default save to
+            m_args.push_back("-n");
+            nURIlen = rest2.indexOf("|");
+        }
+        else
+        {
+            // Abbreviated schema: <scheme-name>:URI
+            // "ofv|u|" implied
+            rest2 = rest1;
+            m_args.push_back("--view");
+        }
+        if (nURIlen < 0)
+            nURIlen = rest2.getLength();
+        m_args.push_back(rest2.copy(0, nURIlen));
+    }
+    OfficeURISchemeCommandLineSupplier() = delete;
+    virtual ~OfficeURISchemeCommandLineSupplier() {}
+    virtual boost::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
+    virtual bool next(OUString * argument) override {
+        OSL_ASSERT(argument != nullptr);
+        if (m_index < m_args.size()) {
+            *argument = m_args[m_index++];
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+private:
+    boost::optional< OUString > m_cwdUrl;
+    std::vector< OUString > m_args;
+    std::vector< OUString >::size_type m_index = 0;
+};
+
 }
 
 CommandLineArgs::Supplier::Exception::Exception() {}
@@ -537,7 +611,18 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 else
                 {
                     // handle this argument as a filename
-                    if ( bOpenEvent )
+
+                    // 1. Check if this is an Office URI
+                    if (OfficeURISchemeCommandLineSupplier::OfficeURI(aArg))
+                    {
+                        try{
+                            OfficeURISchemeCommandLineSupplier OfficeURISupplier(getCwdUrl(), aArg);
+                            // Add the file according its command, ignore current event
+                            ParseCommandLine_Impl(OfficeURISupplier);
+                        }
+                        catch (...) {}
+                    }
+                    else if ( bOpenEvent )
                     {
                         m_openlist.push_back(aArg);
                         bOpenDoc = true;
