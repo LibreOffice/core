@@ -1216,13 +1216,6 @@ public:
     */
     static SystemWindowFlags    GetSystemWindowMode();
 
-
-    /** Set a dialog scaling factor. Used for localization.
-
-     @param     nScale          Scaling factor
-    */
-    static void                 SetDialogScaleX( short nScale );
-
     ///@}
 
     /** @name VCL Toolkit and UNO Wrapper

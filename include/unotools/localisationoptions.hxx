@@ -56,25 +56,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtLocalisationOptions : public utl::de
 
         bool    IsAutoMnemonic  (                   ) const;
 
-        /*-****************************************************************************************************
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Localisation/DialogScale"
-            @descr      These value specifies the factor for increasing controls.
-                        Value from [0..100] are allowed.
-
-            @ATTENTION  These methods don't check for valid or invalid values!
-                        Our configuration server can do it ... but these implementation don't get any notifications
-                        about wrong commits ...!
-                        => If you set an invalid value - nothing will be changed. The information will lost.
-
-            @seealso    baseclass ConfigItem
-
-            @param      "nScale" new value to set it in configuration.
-            @return     The value which represent current state of internal variable.
-
-            @onerror    No error should occur!
-        *//*-*****************************************************************************************************/
-
-        sal_Int32   GetDialogScale(                     ) const;
     private:
 
         /*-****************************************************************************************************

@@ -125,7 +125,6 @@ struct ImplSVAppData
     sal_uInt16              mnDispatchLevel;                // DispatchLevel
     sal_uInt16              mnModalMode;                    // ModalMode Count
     SystemWindowFlags       mnSysWinMode;                   // Mode, when SystemWindows should be created
-    short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
     bool                    mbInAppMain;                    // is Application::Main() on stack
     bool                    mbInAppExecute;                 // is Application::Execute() on stack
     bool                    mbAppQuit;                      // is Application::Quit() called
@@ -172,8 +171,7 @@ struct ImplSVGDIData
     ImplFontCache*          mpScreenFontCache;              // Screen-Font-Cache
     ImplDirectFontSubstitution* mpDirectFontSubst;          // Font-Substitutons defined in Tools->Options->Fonts
     GraphicConverter*       mpGrfConverter;                 // Converter for graphics
-    long                    mnRealAppFontX;                 // AppFont X-Numenator for 40/tel Width
-    long                    mnAppFontX;                     // AppFont X-Numenator for 40/tel Width + DialogScaleX
+    long                    mnAppFontX;                     // AppFont X-Numenator for 40/tel Width
     long                    mnAppFontY;                     // AppFont Y-Numenator for 80/tel Height
     bool                    mbFontSubChanged;               // true: FontSubstitution was changed between Begin/End
     bool                    mbNativeFontConfig;             // true: do not override UI font

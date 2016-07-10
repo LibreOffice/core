@@ -32,15 +32,12 @@ using namespace ::com::sun::star::uno;
 
 #define ROOTNODE_LOCALISATION           OUString("Office.Common/View/Localisation")
 #define DEFAULT_AUTOMNEMONIC            false
-#define DEFAULT_DIALOGSCALE             0
 
 #define PROPERTYNAME_AUTOMNEMONIC       "AutoMnemonic"
-#define PROPERTYNAME_DIALOGSCALE        "DialogScale"
 
 #define PROPERTYHANDLE_AUTOMNEMONIC     0
-#define PROPERTYHANDLE_DIALOGSCALE      1
 
-#define PROPERTYCOUNT                   2
+#define PROPERTYCOUNT                   1
 
 class SvtLocalisationOptions_Impl : public ConfigItem
 {
@@ -69,7 +66,6 @@ class SvtLocalisationOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         bool    IsAutoMnemonic  (                   ) const { return m_bAutoMnemonic;}
-        sal_Int32   GetDialogScale  (                   ) const { return m_nDialogScale;}
 
     private:
 
@@ -87,7 +83,6 @@ class SvtLocalisationOptions_Impl : public ConfigItem
     private:
 
         bool    m_bAutoMnemonic;
-        sal_Int32   m_nDialogScale;
 };
 
 //  constructor
@@ -97,7 +92,6 @@ SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
     :   ConfigItem          ( ROOTNODE_LOCALISATION )
     // Init member then.
     ,   m_bAutoMnemonic     ( DEFAULT_AUTOMNEMONIC  )
-    ,   m_nDialogScale      ( DEFAULT_DIALOGSCALE   )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
@@ -119,12 +113,6 @@ SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
             case PROPERTYHANDLE_AUTOMNEMONIC    :   {
                                                         DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Localisation\\AutoMnemonic\"?" );
                                                         seqValues[nProperty] >>= m_bAutoMnemonic;
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_DIALOGSCALE     :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Localisation\\DialogScale\"?" );
-                                                        seqValues[nProperty] >>= m_nDialogScale;
                                                     }
                                                     break;
         }
@@ -160,12 +148,6 @@ void SvtLocalisationOptions_Impl::Notify( const Sequence< OUString >& seqPropert
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Localisation\\AutoMnemonic\"?" );
             seqValues[nProperty] >>= m_bAutoMnemonic;
         }
-        else
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_DIALOGSCALE )
-        {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Localisation\\DialogScale\"?" );
-            seqValues[nProperty] >>= m_nDialogScale;
-        }
 #if OSL_DEBUG_LEVEL > 0
         else assert(false && "SvtLocalisationOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n");
 #endif
@@ -190,11 +172,6 @@ void SvtLocalisationOptions_Impl::ImplCommit()
                                                         seqValues[nProperty] <<= m_bAutoMnemonic;
                                                     }
                                                     break;
-
-            case PROPERTYHANDLE_DIALOGSCALE     :   {
-                                                        seqValues[nProperty] <<= m_nDialogScale;
-                                                    }
-                                                    break;
         }
     }
     // Set properties in configuration.
@@ -210,7 +187,6 @@ Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
     const OUString aProperties[] =
     {
         OUString(PROPERTYNAME_AUTOMNEMONIC)   ,
-        OUString(PROPERTYNAME_DIALOGSCALE)    ,
     };
     // Initialize return sequence with these list ...
     Sequence< OUString > seqPropertyNames(aProperties, PROPERTYCOUNT);
@@ -252,14 +228,6 @@ bool SvtLocalisationOptions::IsAutoMnemonic() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->IsAutoMnemonic();
-}
-
-//  public method
-
-sal_Int32 SvtLocalisationOptions::GetDialogScale() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetDialogScale();
 }
 
 namespace

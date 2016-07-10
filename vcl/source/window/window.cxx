@@ -1214,10 +1214,6 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
         }
     }
 #endif
-
-    pSVData->maGDIData.mnRealAppFontX = pSVData->maGDIData.mnAppFontX;
-    if ( pSVData->maAppData.mnDialogScaleX )
-        pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*pSVData->maAppData.mnDialogScaleX)/100;
 }
 
 ImplWinData* Window::ImplGetWinData() const

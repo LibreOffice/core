@@ -219,7 +219,6 @@ void SfxApplication::Initialize_Impl()
     {
         SvtLocalisationOptions aLocalisation;
         Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
-        Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
     }
 
     pImpl->m_pToolsErrorHdl = new SfxErrorHandler(

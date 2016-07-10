@@ -2769,27 +2769,6 @@
             <desc>Specifies if shortcuts are assigned automatically.</desc>
           </info>
         </prop>
-        <prop oor:name="DialogScale" oor:type="xs:int" oor:localized="true">
-          <!-- OldPath: International/DialogScaleX -->
-          <!-- OldLocation: soffice.ini -->
-          <info>
-            <desc>Specifies the percentage for enlarging controls.</desc>
-          </info>
-          <constraints>
-            <minInclusive oor:value="0">
-              <info>
-                <desc>Specifies the upper limit for enlarging the controls is
-                100%.</desc>
-              </info>
-            </minInclusive>
-            <maxInclusive oor:value="100">
-              <info>
-                <desc>Specifies the upper limit for enlarging the controls is
-                100%.</desc>
-              </info>
-            </maxInclusive>
-          </constraints>
-        </prop>
       </group>
       <group oor:name="Menu">
         <info>

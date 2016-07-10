@@ -1413,15 +1413,6 @@ bool Application::IsAutoMnemonicEnabled()
     return GetSettings().GetStyleSettings().GetAutoMnemonic();
 }
 
-void Application::SetDialogScaleX( short nScale )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mnDialogScaleX = nScale;
-    pSVData->maGDIData.mnAppFontX = pSVData->maGDIData.mnRealAppFontX;
-    if ( nScale )
-        pSVData->maGDIData.mnAppFontX += (pSVData->maGDIData.mnAppFontX*nScale)/100;
-}
-
 OUString Application::GetToolkitName()
 {
     ImplSVData* pSVData = ImplGetSVData();
