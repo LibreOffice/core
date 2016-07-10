@@ -147,7 +147,6 @@ public:
     SbxVariable*         Get( sal_uInt16 );
     void                 Put( SbxVariable*, sal_uInt16 );
     void                 Insert( SbxVariable*, sal_uInt16 );
-    void                 Remove( sal_uInt16 );
     void                 Remove( SbxVariable* );
     void                 Merge( SbxArray* );
     OUString             GetAlias( sal_uInt16 );
@@ -161,7 +160,7 @@ public:
     SbxVariable*         Get32( sal_uInt32 );
     void                 Put32( SbxVariable*, sal_uInt32 );
     void                 Insert32( SbxVariable*, sal_uInt32 );
-    void                 Remove32( sal_uInt32 );
+    void                 Remove( sal_uInt32 );
 };
 
 // SbxDimArray is an array that can dimensioned using BASIC conventions.

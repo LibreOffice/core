@@ -2267,7 +2267,7 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
     sal_Int32 nIndex = implGetIndex( p );
     if( nIndex >= 0 && nIndex < (sal_Int32)xItemArray->Count32() )
     {
-        xItemArray->Remove32( nIndex );
+        xItemArray->Remove( nIndex );
 
         // Correct for stack if necessary
         SbiInstance* pInst = GetSbData()->pInst;
