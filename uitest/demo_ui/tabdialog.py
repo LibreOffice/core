@@ -9,8 +9,6 @@ from uitest_helper import UITest
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-import time
-
 from uitest.framework import UITestCase
 
 class TabDialogTest(UITestCase):

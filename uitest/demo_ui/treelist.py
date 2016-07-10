@@ -5,8 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-import time
-
 from uitest_helper import UITest
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -15,16 +13,6 @@ from uitest.uihelper.calc import enter_text_to_cell
 from uitest_helper import get_state_as_dict
 
 from uitest.framework import UITestCase
-
-try:
-    import pyuno
-    import uno
-    import unohelper
-except ImportError:
-    print("pyuno not found: try to set PYTHONPATH and URE_BOOTSTRAP variables")
-    print("PYTHONPATH=/installation/opt/program")
-    print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
-    raise
 
 class TreeListTest(UITestCase):
 

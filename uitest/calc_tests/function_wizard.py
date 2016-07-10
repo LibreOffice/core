@@ -8,19 +8,8 @@
 from uitest_helper import UITest
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import time
 
 from uitest.framework import UITestCase
-
-try:
-    import pyuno
-    import uno
-    import unohelper
-except ImportError:
-    print("pyuno not found: try to set PYTHONPATH and URE_BOOTSTRAP variables")
-    print("PYTHONPATH=/installation/opt/program")
-    print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
-    raise
 
 class FunctionWizardTest(UITestCase):
     # tdf#98427
