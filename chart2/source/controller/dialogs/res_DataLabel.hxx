@@ -19,8 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_DATALABEL_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_DATALABEL_HXX
 
-#define NUMBER_SEPARATORS 4
-
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 #include <svl/itemset.hxx>
@@ -56,7 +54,6 @@ private:
 
     VclPtr<VclHBox>             m_pSeparatorResources;
     VclPtr<ListBox>             m_pLB_Separator;
-    OUString             m_aEntryMap[NUMBER_SEPARATORS];
 
     VclPtr<VclHBox>             m_pBxLabelPlacement;
     VclPtr<ListBox>             m_pLB_LabelPlacement;
