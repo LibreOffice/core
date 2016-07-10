@@ -51,7 +51,7 @@ import com.sun.star.uno.UnoRuntime;
 *   frame is used. </li>
 *  <li> <code>'FrameLoader.args'</code> <b>(optional)</b>
 *   (of type <code>Object[]</code>):
-*   necessary arguuments for loading  a component. If omitted
+*   necessary arguments for loading a component. If omitted
 *   then zero length array is passed as parameter</li>
 * <ul> <p>
 * Test is <b> NOT </b> multithread compliant. <p>

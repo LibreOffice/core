@@ -196,7 +196,7 @@ public class ScTableSheetObj extends TestCase {
         oSheet.getCellByPosition(1, 4).setValue(10);
         oSheet.getCellByPosition(2, 0).setValue(-5.15);
         oSheet.getCellByPosition(8, 8).setFormula("= B5 + C1");
-        // fill cells for XSheetOtline::autoutline
+        // fill cells for XSheetOtline::autooutline
         oSheet.getCellByPosition(6, 6).setValue(3);
         oSheet.getCellByPosition(7, 6).setValue(3);
         oSheet.getCellByPosition(8, 6).setFormula("= SUM(G7:H7)");
