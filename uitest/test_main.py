@@ -21,7 +21,7 @@ from libreoffice.connection import OfficeConnection
 
 def parseArgs(argv):
     (optlist,args) = getopt.getopt(argv[1:], "hdr",
-            ["help", "debug", "soffice=", "userdir=", "dir=", "file="])
+            ["help", "debug", "soffice=", "userdir=", "dir=", "file=", "gdb"])
     return (dict(optlist), args)
 
 def usage():
