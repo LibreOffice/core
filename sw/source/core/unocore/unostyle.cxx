@@ -4967,6 +4967,135 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
                 }
                 return;
             }
+            // Paragraph attributes
+            case RES_PARATR_ADJUST:
+            {
+                SvxAdjustItem rAdjustItem = m_pBoxAutoFormat->GetAdjust();
+                rAdjustItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetAdjust(rAdjustItem);
+                return;
+            }
+            case RES_CHRATR_COLOR:
+            {
+                SvxColorItem rColorItem = m_pBoxAutoFormat->GetColor();
+                rColorItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetColor(rColorItem);
+                return;
+            }
+            case RES_CHRATR_SHADOWED:
+            {
+                SvxShadowedItem rShadowedItem = m_pBoxAutoFormat->GetShadowed();
+                bool bValue; aValue >>= bValue;
+                rShadowedItem.SetValue(bValue);
+                m_pBoxAutoFormat->SetShadowed(rShadowedItem);
+                return;
+            }
+            case RES_CHRATR_CONTOUR:
+            {
+                SvxContourItem rContourItem = m_pBoxAutoFormat->GetContour();
+                bool bValue; aValue >>= bValue;
+                rContourItem.SetValue(bValue);
+                m_pBoxAutoFormat->SetContour(rContourItem);
+                return;
+            }
+            case RES_CHRATR_CROSSEDOUT:
+            {
+                SvxCrossedOutItem rCrossedOutItem = m_pBoxAutoFormat->GetCrossedOut();
+                rCrossedOutItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCrossedOut(rCrossedOutItem);
+                return;
+            }
+            case RES_CHRATR_UNDERLINE:
+            {
+                SvxUnderlineItem rUnderlineItem = m_pBoxAutoFormat->GetUnderline();
+                rUnderlineItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetUnderline(rUnderlineItem);
+                return;
+            }
+            case RES_CHRATR_FONTSIZE:
+            {
+                SvxFontHeightItem rFontHeightItem = m_pBoxAutoFormat->GetHeight();
+                rFontHeightItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetHeight(rFontHeightItem);
+                return;
+            }
+            case RES_CHRATR_WEIGHT:
+            {
+                SvxWeightItem rWeightItem = m_pBoxAutoFormat->GetWeight();
+                rWeightItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetWeight(rWeightItem);
+                return;
+            }
+            case RES_CHRATR_POSTURE:
+            {
+                SvxPostureItem rPostureItem = m_pBoxAutoFormat->GetPosture();
+                rPostureItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetPosture(rPostureItem);
+                return;
+            }
+            case RES_CHRATR_FONT:
+            {
+                SvxFontItem rFontItem = m_pBoxAutoFormat->GetFont();
+                rFontItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetFont(rFontItem);
+                return;
+            }
+            case RES_CHRATR_CJK_FONTSIZE:
+            {
+                SvxFontHeightItem rFontHeightItem = m_pBoxAutoFormat->GetCJKHeight();
+                rFontHeightItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCJKHeight(rFontHeightItem);
+                return;
+            }
+            case RES_CHRATR_CJK_WEIGHT:
+            {
+                SvxWeightItem rWeightItem = m_pBoxAutoFormat->GetCJKWeight();
+                rWeightItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCJKWeight(rWeightItem);
+                return;
+            }
+            case RES_CHRATR_CJK_POSTURE:
+            {
+                SvxPostureItem rPostureItem = m_pBoxAutoFormat->GetCJKPosture();
+                rPostureItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCJKPosture(rPostureItem);
+                return;
+            }
+            case RES_CHRATR_CJK_FONT:
+            {
+                SvxFontItem rFontItem = m_pBoxAutoFormat->GetCJKFont();
+                rFontItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCJKFont(rFontItem);
+                return;
+            }
+            case RES_CHRATR_CTL_FONTSIZE:
+            {
+                SvxFontHeightItem rFontHeightItem = m_pBoxAutoFormat->GetCTLHeight();
+                rFontHeightItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCTLHeight(rFontHeightItem);
+                return;
+            }
+            case RES_CHRATR_CTL_WEIGHT:
+            {
+                SvxWeightItem rWeightItem = m_pBoxAutoFormat->GetCTLWeight();
+                rWeightItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCTLWeight(rWeightItem);
+                return;
+            }
+            case RES_CHRATR_CTL_POSTURE:
+            {
+                SvxPostureItem rPostureItem = m_pBoxAutoFormat->GetCTLPosture();
+                rPostureItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCTLPosture(rPostureItem);
+                return;
+            }
+            case RES_CHRATR_CTL_FONT:
+            {
+                SvxFontItem rFontItem = m_pBoxAutoFormat->GetCTLFont();
+                rFontItem.PutValue(aValue, pEntry->nMemberId);
+                m_pBoxAutoFormat->SetCTLFont(rFontItem);
+                return;
+            }
             default:
                 SAL_WARN("sw.uno", "SwXTextCellStyle unknown nWID");
                 throw css::uno::RuntimeException();
@@ -5020,6 +5149,115 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
                     sal_uInt32 nKey = m_pDocShell->GetDoc()->GetNumberFormatter()->GetIndexPuttingAndConverting(sFormat, eLng, eSys, nType, bNew, nCheckPos);
                     aRet <<= nKey;
                 }
+                return aRet;
+            }
+            // Paragraph attributes
+            case RES_PARATR_ADJUST:
+            {
+                const SvxAdjustItem& rAdjustItem = m_pBoxAutoFormat->GetAdjust();
+                rAdjustItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_COLOR:
+            {
+                const SvxColorItem& rColorItem = m_pBoxAutoFormat->GetColor();
+                rColorItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_SHADOWED:
+            {
+                const SvxShadowedItem& rShadowedItem = m_pBoxAutoFormat->GetShadowed();
+                aRet <<= rShadowedItem.GetValue();
+                return aRet;
+            }
+            case RES_CHRATR_CONTOUR:
+            {
+                const SvxContourItem& rContourItem = m_pBoxAutoFormat->GetContour();
+                aRet <<= rContourItem.GetValue();
+                return aRet;
+            }
+            case RES_CHRATR_CROSSEDOUT:
+            {
+                const SvxCrossedOutItem& rCrossedOutItem = m_pBoxAutoFormat->GetCrossedOut();
+                rCrossedOutItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_UNDERLINE:
+            {
+                const SvxUnderlineItem& rUnderlineItem = m_pBoxAutoFormat->GetUnderline();
+                rUnderlineItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_FONTSIZE:
+            {
+                const SvxFontHeightItem& rFontHeightItem = m_pBoxAutoFormat->GetHeight();
+                rFontHeightItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_WEIGHT:
+            {
+                const SvxWeightItem& rWeightItem = m_pBoxAutoFormat->GetWeight();
+                rWeightItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_POSTURE:
+            {
+                const SvxPostureItem& rPostureItem = m_pBoxAutoFormat->GetPosture();
+                rPostureItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_FONT:
+            {
+                const SvxFontItem rFontItem = m_pBoxAutoFormat->GetFont();
+                rFontItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_CJK_FONTSIZE:
+            {
+                const SvxFontHeightItem rFontHeightItem = m_pBoxAutoFormat->GetCJKHeight();
+                rFontHeightItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_CJK_WEIGHT:
+            {
+                const SvxWeightItem& rWeightItem = m_pBoxAutoFormat->GetCJKWeight();
+                rWeightItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_CJK_POSTURE:
+            {
+                const SvxPostureItem& rPostureItem = m_pBoxAutoFormat->GetCJKPosture();
+                rPostureItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_CJK_FONT:
+            {
+                const SvxFontItem rFontItem = m_pBoxAutoFormat->GetCJKFont();
+                rFontItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_CTL_FONTSIZE:
+            {
+                const SvxFontHeightItem rFontHeightItem = m_pBoxAutoFormat->GetCTLHeight();
+                rFontHeightItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_CTL_WEIGHT:
+            {
+                const SvxWeightItem& rWeightItem = m_pBoxAutoFormat->GetCTLWeight();
+                rWeightItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_CTL_POSTURE:
+            {
+                const SvxPostureItem& rPostureItem = m_pBoxAutoFormat->GetCTLPosture();
+                rPostureItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_CHRATR_CTL_FONT:
+            {
+                const SvxFontItem rFontItem = m_pBoxAutoFormat->GetCTLFont();
+                rFontItem.QueryValue(aRet, pEntry->nMemberId);
                 return aRet;
             }
             default:
