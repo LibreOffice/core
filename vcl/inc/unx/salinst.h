@@ -60,7 +60,7 @@ public:
 
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long &nDX, long &nDY,
-                                                     DeviceFormat eFormat, const SystemGraphicsData *pData = NULL ) override;
+                                                     DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
     virtual void                PostPrintersChanged() override;
     virtual GenPspGraphics     *CreatePrintGraphics() override;
 

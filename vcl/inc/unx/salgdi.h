@@ -76,7 +76,7 @@ public:
     virtual                         ~X11SalGraphics();
 
     void                            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
-    void                            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = NULL, bool bDeleteColormap = false );
+    void                            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr, bool bDeleteColormap = false );
     void                            Init( X11OpenGLSalVirtualDevice *pVirtualDevice );
     void                            DeInit();
 
@@ -312,7 +312,7 @@ public:
 
 protected:
     using SalGraphics::SetClipRegion;
-    void                            SetClipRegion( GC pGC, Region pXReg = NULL ) const;
+    void                            SetClipRegion( GC pGC, Region pXReg = nullptr ) const;
     bool                            GetDitherPixmap ( SalColor nSalColor );
 
     using SalGraphics::DrawBitmap;

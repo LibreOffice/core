@@ -9,6 +9,7 @@
 
 #include <cassert>
 #include <cstdlib>
+#include <limits>
 #include <set>
 
 #include "plugin.hxx"
@@ -59,12 +60,16 @@ public:
 
     bool TraverseConstructorInitializer(CXXCtorInitializer * init);
 
+    bool TraverseLinkageSpecDecl(LinkageSpecDecl * decl);
+
     // bool shouldVisitTemplateInstantiations() const { return true; }
 
 private:
     bool isInLokIncludeFile(SourceLocation spellingLocation) const;
 
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
+
+    bool isSharedCAndCppCode(SourceLocation location) const;
 
     void visitCXXCtorInitializer(CXXCtorInitializer const * init);
 
@@ -80,6 +85,7 @@ private:
         char const * replacement);
 
     std::set<Expr const *> gnuNulls_;
+    unsigned int externCContexts_ = 0;
 };
 
 bool Nullptr::VisitImplicitCastExpr(CastExpr const * expr) {
@@ -202,6 +208,15 @@ bool Nullptr::TraverseConstructorInitializer(CXXCtorInitializer * init) {
     return RecursiveASTVisitor::TraverseConstructorInitializer(init);
 }
 
+bool Nullptr::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
+    assert(externCContexts_ != std::numeric_limits<unsigned int>::max()); //TODO
+    ++externCContexts_;
+    bool ret = RecursiveASTVisitor::TraverseLinkageSpecDecl(decl);
+    assert(externCContexts_ != 0);
+    --externCContexts_;
+    return ret;
+}
+
 bool Nullptr::isInLokIncludeFile(SourceLocation spellingLocation) const {
     return compiler.getSourceManager().getFilename(spellingLocation)
         .startswith(SRCDIR "/include/LibreOfficeKit/");
@@ -213,6 +228,16 @@ bool Nullptr::isFromCIncludeFile(SourceLocation spellingLocation) const {
                 compiler.getSourceManager().getPresumedLoc(spellingLocation)
                 .getFilename())
             .endswith(".h"));
+}
+
+bool Nullptr::isSharedCAndCppCode(SourceLocation location) const {
+    // Assume that code is intended to be shared between C and C++ if it comes
+    // from an include file ending in .h, and is either in an extern "C" context
+    // or the body of a macro definition:
+    return
+        isFromCIncludeFile(compiler.getSourceManager().getSpellingLoc(location))
+        && (externCContexts_ != 0
+            || compiler.getSourceManager().isMacroBodyExpansion(location));
 }
 
 void Nullptr::visitCXXCtorInitializer(CXXCtorInitializer const * init) {
@@ -273,12 +298,16 @@ void Nullptr::handleNull(
                 }
                 loc = compiler.getSourceManager()
                     .getImmediateExpansionRange(loc).first;
+                if (ignoreLocation(
+                        compiler.getSourceManager().getSpellingLoc(loc)))
+                {
+                    return;
+                }
                 if (isInUnoIncludeFile(
                         compiler.getSourceManager().getSpellingLoc(loc))
                     || isInLokIncludeFile(
                         compiler.getSourceManager().getSpellingLoc(loc))
-                    || isFromCIncludeFile(
-                        compiler.getSourceManager().getSpellingLoc(loc)))
+                    || isSharedCAndCppCode(loc))
                 {
                     //TODO: if !castKind, warn if NULL is passed into fn call
                     // ellipsis, cast to void*
@@ -309,7 +338,7 @@ void Nullptr::handleNull(
     auto const asMacro = !compiler.getLangOpts().CPlusPlus
         || isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(loc))
         || isInLokIncludeFile(compiler.getSourceManager().getSpellingLoc(loc))
-        || isFromCIncludeFile(compiler.getSourceManager().getSpellingLoc(loc));
+        || isSharedCAndCppCode(loc);
     assert(!asMacro || nullPointerKind != Expr::NPCK_GNUNull);
     rewriteOrWarn(e, castKind, nullPointerKind, asMacro ? "NULL" : "nullptr");
 }

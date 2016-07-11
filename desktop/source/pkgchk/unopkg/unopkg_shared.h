@@ -74,7 +74,7 @@ inline bool readOption(
     bool * flag, OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
     if (isOption( option_info, pIndex )) {
-        OSL_ASSERT( flag != NULL );
+        OSL_ASSERT( flag != nullptr );
         *flag = true;
         return true;
     }

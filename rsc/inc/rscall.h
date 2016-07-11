@@ -78,19 +78,19 @@ struct RSCINST
     RscTop *    pClass;
     CLASS_DATA  pData;
 
-                RSCINST(){ pClass = NULL; pData = NULL; }
+                RSCINST(){ pClass = nullptr; pData = nullptr; }
                 RSCINST( RscTop * pCl, CLASS_DATA pClassData )
                     {
                         pClass = pCl;
                         pData = pClassData;
                     }
-    bool        IsInst() const { return( pData != NULL ); }
+    bool        IsInst() const { return( pData != nullptr ); }
 };
 
 /********************** S U B I N F O S T R U C T ************************/
 struct SUBINFO_STRUCT
 {
-    SUBINFO_STRUCT(){ nPos = 0; pClass = NULL; };
+    SUBINFO_STRUCT(){ nPos = 0; pClass = nullptr; };
     RscId        aId;    // Identifier der Resource
     sal_uInt32   nPos;   // Position der Resource
     RscTop *     pClass; // Klasse des Eintrages

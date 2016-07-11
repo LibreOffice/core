@@ -64,9 +64,9 @@ class Node{
 public:
      explicit Node(int _id) : id(_id)
      {
-          value = NULL;
-          child = NULL;
-          next = NULL;
+          value = nullptr;
+          child = nullptr;
+          next = nullptr;
 #ifdef NODE_DEBUG
           count++;
           printf("Node count : [%d]\n",count);
@@ -77,8 +77,8 @@ public:
           if( value ) free( value );
          // if( child ) delete child;
          // if( next ) delete next;
-          next = NULL;
-          child = NULL;
+          next = nullptr;
+          child = nullptr;
 #ifdef NODE_DEBUG
           count--;
           printf("Node count : [%d]\n",count);

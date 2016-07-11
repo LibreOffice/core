@@ -158,12 +158,12 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
 
     void            updateWMClass();
 public:
-    X11SalFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, SystemParentData* pSystemParent = NULL );
+    X11SalFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, SystemParentData* pSystemParent = nullptr );
     virtual ~X11SalFrame();
 
     long            Dispatch( XEvent *pEvent );
     void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen = SalX11Screen( -1 ),
-                          SystemParentData* pParentData = NULL, bool bUseGeometry = false );
+                          SystemParentData* pParentData = nullptr, bool bUseGeometry = false );
 
     SalDisplay* GetDisplay() const
     {
@@ -178,7 +178,7 @@ public:
     ::Window                GetShellWindow() const { return mhShellWindow; }
     ::Window                GetForeignParent() const { return mhForeignParent; }
     ::Window                GetStackingWindow() const { return mhStackingWindow; }
-    void                    Close() const { CallCallback( SalEvent::Close, NULL ); }
+    void                    Close() const { CallCallback( SalEvent::Close, nullptr ); }
     SalFrameStyleFlags      GetStyle() const { return nStyle_; }
 
     Cursor                  GetCursor() const { return hCursor_; }

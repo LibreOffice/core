@@ -73,7 +73,7 @@ struct ColumnInfo{
     explicit ColumnInfo(int num){
         start_page = num;
         bIsSet = false;
-        coldef = NULL;
+        coldef = nullptr;
     }
 };
 

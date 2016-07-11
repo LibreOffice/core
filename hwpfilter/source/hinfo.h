@@ -87,7 +87,7 @@ struct PaperBackInfo
         , flag(0)
         , range(0)
         , size(0)
-        , data(NULL)
+        , data(nullptr)
         , isset(false)
     {
         memset(reserved1, 0, sizeof(reserved1));

@@ -146,18 +146,18 @@ inline ds_status initDSProfile(std::unique_ptr<ds_profile>& rProfile, OString co
 
     rProfile = std::unique_ptr<ds_profile>(new ds_profile(rVersion));
 
-    clGetPlatformIDs(0, NULL, &numPlatforms);
+    clGetPlatformIDs(0, nullptr, &numPlatforms);
     if (numPlatforms != 0)
     {
         platforms.resize(numPlatforms);
-        clGetPlatformIDs(numPlatforms, platforms.data(), NULL);
+        clGetPlatformIDs(numPlatforms, platforms.data(), nullptr);
     }
 
     numDevices = 0;
     for (i = 0; i < (unsigned int)numPlatforms; i++)
     {
         cl_uint num = 0;
-        cl_int err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, 0, NULL, &num);
+        cl_int err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, 0, nullptr, &num);
         if (err != CL_SUCCESS)
         {
             /* we want to catch at least the case when the call returns

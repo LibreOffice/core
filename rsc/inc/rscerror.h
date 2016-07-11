@@ -127,7 +127,7 @@ public:
     sal_uInt32  nErrors;// Anzahl der Fehler
                     RscError( RscVerbosity _verbosity )
                         {
-                            fListing = NULL;
+                            fListing = nullptr;
                             nErrors = 0;
                             m_verbosity = _verbosity;
                         }
@@ -138,11 +138,11 @@ public:
     static void     StdErr( const char * );
     void            LstOut( const char * );
     void            Error( const ERRTYPE& rError, RscTop* pClass, const RscId &aId,
-                           const char * pMessage = NULL );
+                           const char * pMessage = nullptr );
     // Dieser Fehler sollte nur im Compilermodus auftreten,
     // das Programm wird mit exit() verlassen
     void            FatalError( const ERRTYPE& rError, const RscId &aId,
-                                const char * pMessage = NULL );
+                                const char * pMessage = nullptr );
 };
 
 #endif // INCLUDED_RSC_INC_RSCERROR_H

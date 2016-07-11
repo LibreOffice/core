@@ -122,7 +122,7 @@ struct ImplToolBoxPrivateData
     ImplToolBoxPrivateData();
     ~ImplToolBoxPrivateData();
 
-    void ImplClearLayoutData() { delete m_pLayoutData; m_pLayoutData = NULL; }
+    void ImplClearLayoutData() { delete m_pLayoutData; m_pLayoutData = nullptr; }
 
     // called when dropdown items are clicked
     Link<ToolBox *, void> maDropdownClickHdl;

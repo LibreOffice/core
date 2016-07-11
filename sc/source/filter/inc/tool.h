@@ -53,7 +53,7 @@ public:
                     FormIdent( void )
                     {
                         nStamp = 0;
-                        pAttr = NULL;
+                        pAttr = nullptr;
                     }
 
                     FormIdent( sal_uInt8 nFormat, sal_uInt8 nSt, SfxUInt32Item& rAttr )

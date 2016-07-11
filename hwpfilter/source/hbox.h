@@ -281,7 +281,7 @@ struct FBoxStyle
         , boxnum(0)
         , boxtype(0)
         , cap_len(0)
-        , cell(NULL)
+        , cell(nullptr)
     {
         memset(margin, 0, sizeof(margin));
     }
@@ -521,7 +521,7 @@ struct TCell
 
 struct Table
 {
-     Table() : box(NULL) {};
+     Table() : box(nullptr) {};
      ~Table() {
           std::list<TCell*>::iterator it = cells.begin();
           for( ; it != cells.end(); ++it)
