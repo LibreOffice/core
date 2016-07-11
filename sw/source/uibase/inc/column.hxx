@@ -90,14 +90,14 @@ class SwColumnPage : public SfxTabPage
 
     VclPtr<PushButton>     m_pBtnBack;
     VclPtr<FixedText>      m_pLbl1;
-    PercentField aEd1;
+    PercentField m_aEd1;
     VclPtr<FixedText>      m_pLbl2;
-    PercentField aEd2;
+    PercentField m_aEd2;
     VclPtr<FixedText>      m_pLbl3;
-    PercentField aEd3;
+    PercentField m_aEd3;
     VclPtr<PushButton>     m_pBtnNext;
-    PercentField aDistEd1;
-    PercentField aDistEd2;
+    PercentField m_aDistEd1;
+    PercentField m_aDistEd2;
     VclPtr<CheckBox>       m_pAutoWidthBox;
 
     VclPtr<FixedText>      m_pLineTypeLbl;
@@ -118,21 +118,21 @@ class SwColumnPage : public SfxTabPage
     VclPtr<SwColExample>   m_pPgeExampleWN;
     VclPtr<SwColumnOnlyExample> m_pFrameExampleWN;
 
-    SwColMgr*       pColMgr;
+    SwColMgr*       m_pColMgr;
 
-    sal_uInt16          nFirstVis;
-    sal_uInt16          nCols;
-    long            nColWidth[nMaxCols];
-    long            nColDist[nMaxCols];
-    sal_uInt16          nMinWidth;
-    PercentField*   pModifiedField;
+    sal_uInt16          m_nFirstVis;
+    sal_uInt16          m_nCols;
+    long            m_nColWidth[nMaxCols];
+    long            m_nColDist[nMaxCols];
+    sal_uInt16          m_nMinWidth;
+    PercentField*   m_pModifiedField;
 
     std::map<VclPtr<MetricField>, PercentField*> m_aPercentFieldsMap;
 
-    bool            bFormat;
-    bool            bFrame;
-    bool            bHtmlMode;
-    bool            bLockUpdate;
+    bool            m_bFormat;
+    bool            m_bFrame;
+    bool            m_bHtmlMode;
+    bool            m_bLockUpdate;
 
     // Handler
     DECL_LINK_TYPED( ColModify, Edit&, void );
@@ -182,7 +182,7 @@ public:
 
     void SetFormatUsed(bool bFormatUsed)
     {
-        bFormat = bFormatUsed;
+        m_bFormat = bFormatUsed;
     }
 
     void ShowBalance(bool bShow)
