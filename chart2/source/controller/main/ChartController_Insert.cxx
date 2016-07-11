@@ -531,7 +531,6 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
         uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties());
         if( xEqProp.is())
         {
-            // using assignment for broken gcc 3.3
             UndoGuard aUndoGuard(
                 ActionDescriptionProvider::createDescription(
                     ActionDescriptionProvider::INSERT, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
