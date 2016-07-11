@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_ec30490a",
+        "filename": "sc/source/filter/oox/workbookfragment.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-07-11T12:46:26Z",
+      "side": 1,
+      "message": "The main-loop that used to be here allowed the progress bar to be rendered. I think we need it back.\n\nWrt. holding the solar-mutex: Application::Yield releases the mutex when there is nothing to do itself.\n\nEach of the threads themselves also use the SolarMutex - except for the most intense inner-loop which does the heavy-duty cell storage collection stuff. The reason being that making anything more than that of the import filter thread-safe is a nightmare - even making this smaller piece thread-safe is rather non-trivial.",
+      "revId": "a5636a96344c8e26f82396920c839d5a6ba3dfc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
