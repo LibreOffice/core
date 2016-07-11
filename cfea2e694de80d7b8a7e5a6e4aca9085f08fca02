@@ -16,6 +16,24 @@
       "revId": "cfea2e694de80d7b8a7e5a6e4aca9085f08fca02",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_e74ce278",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2514,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-07-11T14:06:34Z",
+      "side": 1,
+      "message": "Indeed it is.\nI wrongly assumed that the unit test document contained all ODFF1.2 units.\nAdded pica2 to source and to unit test document.",
+      "parentUuid": "ba84c18e_4c405557",
+      "revId": "cfea2e694de80d7b8a7e5a6e4aca9085f08fca02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
