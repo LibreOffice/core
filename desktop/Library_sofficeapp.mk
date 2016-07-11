@@ -57,6 +57,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     deploymentmisc \
     editeng \
     i18nlangtag \
+    opencl \
     sal \
     salhelper \
     sb \

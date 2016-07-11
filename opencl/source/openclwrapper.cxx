@@ -701,7 +701,7 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
 
 bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation, OUString& rOutSelectedDeviceVersionIDString)
 {
-    if(fillOpenCLInfo().empty())
+    if(fillOpenCLInfo().empty() || getenv("SAL_DISABLE_OPENCL"))
         return false;
 
     cl_device_id pDeviceId = nullptr;
