@@ -31,7 +31,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_labels \
 	$(if $(filter WNT,$(OS)),Package_newfiles) \
 	Package_palettes \
-	Package_tpllayoutimpr \
 	Package_tplofficorr \
 	Package_tploffimisc \
 	Package_tplpresnt \
