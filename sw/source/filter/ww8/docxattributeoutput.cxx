@@ -1045,6 +1045,16 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         m_nColBreakStatus = COLBRK_NONE;
     }
 
+    if ( m_bPostponedPageBreak )
+    {
+        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_br,
+                FSNS( XML_w, XML_type ), "page", FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_r );
+
+        m_bPostponedPageBreak = false;
+    }
+
     // merge the properties _before_ the run (strictly speaking, just
     // after the start of the paragraph)
     m_pSerializer->mergeTopMarks(Tag_StartParagraphProperties, sax_fastparser::MergeMarks::PREPEND);
@@ -5395,13 +5405,16 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                     m_pSectionInfo.reset( new WW8_SepInfo( *pSectionInfo ));
                 }
             }
-            else
+            else if ( m_bParagraphOpened )
             {
                 m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
                 m_pSerializer->singleElementNS( XML_w, XML_br,
                         FSNS( XML_w, XML_type ), "page", FSEND );
                 m_pSerializer->endElementNS( XML_w, XML_r );
             }
+            else
+                m_bPostponedPageBreak = true;
+
             break;
         default:
             OSL_TRACE( "Unknown section break to write: %d", nC );
@@ -8446,6 +8459,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bAlternateContentChoiceOpen( false ),
       m_bPostponedProcessingFly( false ),
       m_nColBreakStatus( COLBRK_NONE ),
+      m_bPostponedPageBreak( false ),
       m_nTextFrameLevel( 0 ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
