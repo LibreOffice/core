@@ -2393,7 +2393,9 @@ ConvertDataList::ConvertDataList()
     NEWD( "ft",         3.2808398950131234E00,  CDC_Length ); // Foot               3,2808398950131233595800524934383
     NEWD( "yd",         1.0936132983377078E00,  CDC_Length ); // Yard               1,0936132983377077865266841644794
     NEWDP( "ang",       1.0000000000000000E10,  CDC_Length ); // Angstroem
-    NEWD( "Pica",       2.8346456692913386E03,  CDC_Length ); // Pica (1/72 Inch)   2834,6456692913385826771653543307
+    NEWD( "Pica",       2.8346456692913386E03,  CDC_Length ); // Pica Point (1/72 Inch)   2834,6456692913385826771653543307
+    NEWD( "picapt",     2.8346456692913386E03,  CDC_Length ); // Pica Point (1/72 Inch)   2834,6456692913385826771653543307
+    NEWD( "pica",       2.36220472441E02,       CDC_Length ); // pica (1/6 Inch)
     NEWD( "ell",        8.748906E-01,           CDC_Length ); // *** Ell
     NEWDP( "parsec",    3.240779E-17,           CDC_Length ); // *** Parsec
     NEWDP( "pc",        3.240779E-17,           CDC_Length ); // *** Parsec also
@@ -2482,7 +2484,9 @@ ConvertDataList::ConvertDataList()
     NEWD( "ft3",        3.5314666721488590E-02, CDC_Volume ); // *** Cubic Foot
     NEWD( "yd3",        1.3079506193143922E-03, CDC_Volume ); // *** Cubic Yard
     NEWDP( "ang3",      1.0000000000000000E27,  CDC_Volume ); // *** Cubic Angstroem
-    NEWD( "Pica3",      2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica
+    NEWD( "Pica3",      2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica Point (1/72 inch)
+    NEWD( "picapt3",    2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica Point (1/72 inch)
+    NEWD( "pica3",      1.31811287245E04,       CDC_Volume ); // *** Cubic Pica (1/6 inch)
     NEWD( "barrel",     6.2898107704321051E-03, CDC_Volume ); // *** Barrel (=42gal)
     NEWD( "bushel",     2.837759E-02,           CDC_Volume ); // *** Bushel
     NEWD( "regton",     3.531467E-04,           CDC_Volume ); // *** Register ton
@@ -2506,7 +2510,8 @@ ConvertDataList::ConvertDataList()
     NEWD( "ft2",        1.0763910416709722E01,  CDC_Area ); // *** Square Foot
     NEWD( "yd2",        1.1959900463010803E00,  CDC_Area ); // *** Square Yard
     NEWDP( "ang2",      1.0000000000000000E20,  CDC_Area ); // *** Square Angstroem
-    NEWD( "Pica2",      8.0352160704321409E06,  CDC_Area ); // *** Square Pica
+    NEWD( "Pica2",      8.0352160704321409E06,  CDC_Area ); // *** Square Pica Point (1/72 inch)
+    NEWD( "picapt2",    8.0352160704321409E06,  CDC_Area ); // *** Square Pica Point (1/72 inch)
     NEWD( "Morgen",     4.0000000000000000E-04, CDC_Area ); // *** Morgen
     NEWDP( "ar",        1.000000E-02,           CDC_Area ); // *** Ar
     NEWD( "acre",       2.471053815E-04,        CDC_Area ); // *** Acre
