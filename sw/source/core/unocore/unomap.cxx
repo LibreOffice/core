@@ -1505,7 +1505,9 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aCellStyleMap[] =
                 {
+                    // SvxBrushItem
                     { OUString(UNO_NAME_BACK_COLOR),             RES_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  0                                    },
+                    // SvxBoxItem
                     { OUString(UNO_NAME_LEFT_BORDER),            RES_BOX,           cppu::UnoType<css::table::BorderLine>::get(),  PROPERTY_NONE,  LEFT_BORDER|CONVERT_TWIPS            },
                     { OUString(UNO_NAME_RIGHT_BORDER),           RES_BOX,           cppu::UnoType<css::table::BorderLine>::get(),  PROPERTY_NONE,  RIGHT_BORDER|CONVERT_TWIPS           },
                     { OUString(UNO_NAME_TOP_BORDER),             RES_BOX,           cppu::UnoType<css::table::BorderLine>::get(),  PROPERTY_NONE,  TOP_BORDER|CONVERT_TWIPS             },
@@ -1515,9 +1517,57 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_RIGHT_BORDER_DISTANCE),  RES_BOX,           cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
                     { OUString(UNO_NAME_TOP_BORDER_DISTANCE),    RES_BOX,           cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
                     { OUString(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,           cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
+                    // SwFormatVertOrient
                     { OUString(UNO_NAME_VERT_ORIENT),            RES_VERT_ORIENT,   cppu::UnoType<sal_Int16>::get(),               PROPERTY_NONE,  MID_VERTORIENT_ORIENT                },
+                    // SvxFrameDirectionItem
                     { OUString(UNO_NAME_WRITING_MODE),           RES_FRAMEDIR,      cppu::UnoType<sal_Int16>::get(),               PROPERTY_NONE,  0                                    },
+                    // SvNumberformat
                     { OUString(UNO_NAME_NUMBER_FORMAT),          RES_BOXATR_FORMAT, cppu::UnoType<sal_Int32>::get(),PropertyAttribute::MAYBEVOID,  0                                    },
+                    // SvxAdjustItem
+                    { OUString(UNO_NAME_PARA_ADJUST),            RES_PARATR_ADJUST, cppu::UnoType<sal_Int16>::get(),PropertyAttribute::MAYBEVOID,  MID_PARA_ADJUST                      },
+                    // SvxColorItem
+                    { OUString(UNO_NAME_CHAR_COLOR),             RES_CHRATR_COLOR,  cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  0                                    },
+                    // SvxShadowedItem
+                    { OUString(UNO_NAME_CHAR_SHADOWED),          RES_CHRATR_SHADOWED,    cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
+                    // SvxContouredItem
+                    { OUString(UNO_NAME_CHAR_CONTOURED),         RES_CHRATR_CONTOUR,     cppu::UnoType<bool>::get(),               PROPERTY_NONE,  0                                    },
+                    // SvxCrossedOutItem
+                    { OUString(UNO_NAME_CHAR_STRIKEOUT),     RES_CHRATR_CROSSEDOUT, cppu::UnoType<sal_Int16>::get(),PropertyAttribute::MAYBEVOID,  MID_CROSS_OUT                        },
+                    // SvxUnderlineItem
+                    { OUString(UNO_NAME_CHAR_UNDERLINE),      RES_CHRATR_UNDERLINE, cppu::UnoType<sal_Int16>::get(),               PROPERTY_NONE,  MID_TL_STYLE                         },
+                    { OUString(UNO_NAME_CHAR_UNDERLINE_COLOR), RES_CHRATR_UNDERLINE,cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  MID_TL_COLOR                         },
+                    { OUString(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR), RES_CHRATR_UNDERLINE, cppu::UnoType<bool>::get(),               PROPERTY_NONE,  MID_TL_HASCOLOR                      },
+                    // standard font
+                    // SvxFontHeightItem
+                    { OUString(UNO_NAME_CHAR_HEIGHT),            RES_CHRATR_FONTSIZE,   cppu::UnoType<float>::get(),PropertyAttribute::MAYBEVOID,  MID_FONTHEIGHT|CONVERT_TWIPS         },
+                    // SvxWeightItem
+                    { OUString(UNO_NAME_CHAR_WEIGHT),            RES_CHRATR_WEIGHT,     cppu::UnoType<float>::get(),PropertyAttribute::MAYBEVOID,  MID_WEIGHT                           },
+                    // SvxPostureItem
+                    { OUString(UNO_NAME_CHAR_POSTURE), RES_CHRATR_POSTURE, cppu::UnoType<css::awt::FontSlant>::get(),PropertyAttribute::MAYBEVOID, MID_POSTURE                          },
+                    // SvxFontItem
+                    { OUString(UNO_NAME_CHAR_FONT_NAME),         RES_CHRATR_FONT,   cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID,  MID_FONT_FAMILY_NAME                 },
+                    { OUString(UNO_NAME_CHAR_FONT_STYLE_NAME),   RES_CHRATR_FONT,   cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID,  MID_FONT_STYLE_NAME                  },
+                    { OUString(UNO_NAME_CHAR_FONT_FAMILY),       RES_CHRATR_FONT,  cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID,  MID_FONT_FAMILY                      },
+                    { OUString(UNO_NAME_CHAR_FONT_CHAR_SET),     RES_CHRATR_FONT,  cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID,  MID_FONT_CHAR_SET                    },
+                    { OUString(UNO_NAME_CHAR_FONT_PITCH),        RES_CHRATR_FONT,  cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID,  MID_FONT_PITCH                       },
+                    // cjk font
+                    { OUString(UNO_NAME_CHAR_HEIGHT_ASIAN),             RES_CHRATR_CJK_FONTSIZE,        cppu::UnoType<float>::get(),        PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS },
+                    { OUString(UNO_NAME_CHAR_WEIGHT_ASIAN),             RES_CHRATR_CJK_WEIGHT,          cppu::UnoType<float>::get(),        PropertyAttribute::MAYBEVOID, MID_WEIGHT                   },
+                    { OUString(UNO_NAME_CHAR_POSTURE_ASIAN),            RES_CHRATR_CJK_POSTURE,  cppu::UnoType<css::awt::FontSlant>::get(), PropertyAttribute::MAYBEVOID, MID_POSTURE                  },
+                    { OUString(UNO_NAME_CHAR_FONT_NAME_ASIAN),          RES_CHRATR_CJK_FONT,         cppu::UnoType<OUString>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME         },
+                    { OUString(UNO_NAME_CHAR_FONT_STYLE_NAME_ASIAN),    RES_CHRATR_CJK_FONT,         cppu::UnoType<OUString>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME          },
+                    { OUString(UNO_NAME_CHAR_FONT_FAMILY_ASIAN),        RES_CHRATR_CJK_FONT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY              },
+                    { OUString(UNO_NAME_CHAR_FONT_CHAR_SET_ASIAN),      RES_CHRATR_CJK_FONT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET            },
+                    { OUString(UNO_NAME_CHAR_FONT_PITCH_ASIAN),         RES_CHRATR_CJK_FONT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_PITCH               },
+                    // ctl font
+                    { OUString(UNO_NAME_CHAR_HEIGHT_COMPLEX),           RES_CHRATR_CTL_FONTSIZE,        cppu::UnoType<float>::get(),        PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS },
+                    { OUString(UNO_NAME_CHAR_WEIGHT_COMPLEX),           RES_CHRATR_CTL_WEIGHT,          cppu::UnoType<float>::get(),        PropertyAttribute::MAYBEVOID, MID_WEIGHT                   },
+                    { OUString(UNO_NAME_CHAR_POSTURE_COMPLEX),          RES_CHRATR_CTL_POSTURE,  cppu::UnoType<css::awt::FontSlant>::get(), PropertyAttribute::MAYBEVOID, MID_POSTURE                  },
+                    { OUString(UNO_NAME_CHAR_FONT_NAME_COMPLEX),        RES_CHRATR_CTL_FONT,         cppu::UnoType<OUString>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME         },
+                    { OUString(UNO_NAME_CHAR_FONT_STYLE_NAME_COMPLEX),  RES_CHRATR_CTL_FONT,         cppu::UnoType<OUString>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME          },
+                    { OUString(UNO_NAME_CHAR_FONT_FAMILY_COMPLEX),      RES_CHRATR_CTL_FONT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY              },
+                    { OUString(UNO_NAME_CHAR_FONT_CHAR_SET_COMPLEX),    RES_CHRATR_CTL_FONT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET            },
+                    { OUString(UNO_NAME_CHAR_FONT_PITCH_COMPLEX),       RES_CHRATR_CTL_FONT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_PITCH               },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aCellStyleMap;
