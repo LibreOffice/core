@@ -312,16 +312,21 @@ bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
 
     //  Scrolling
     Size aWinSize = pEngine->GetWindow()->GetOutputSizePixel();
-    bool bRightScroll  = ( aEffPos.X() >= aWinSize.Width() );
     bool bLeftScroll  = ( aEffPos.X() < 0 );
-    bool bBottomScroll = ( aEffPos.Y() >= aWinSize.Height() );
     bool bTopScroll = ( aEffPos.Y() < 0 );
-    bool bScroll = bRightScroll || bBottomScroll || bLeftScroll || bTopScroll;
 
     SCsCOL  nPosX;
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( aEffPos.X(), aEffPos.Y(), GetWhich(),
                                 nPosX, nPosY, true, true );     // with Repair
+
+    Rectangle aEditArea = pViewData->GetEditArea(GetWhich(), nPosX, nPosY,
+                                                 pEngine->GetWindow(),
+                                                 nullptr, false);
+
+    bool bBottomScroll = ( aEditArea.Bottom() >= aWinSize.Height() );
+    bool bRightScroll  = ( aEditArea.Right() >= aWinSize.Width() );
+    bool bScroll = bRightScroll || bBottomScroll || bLeftScroll || bTopScroll;
 
     // for Autofill switch in the center of cell
     // thereby don't prevent scrolling to bottom/right
