@@ -14,6 +14,7 @@ $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/templat
 	Focus.otp \
 	Impress.otp \
 	Midnightblue.otp \
+	Vivid.otp \
 ))
 
 # vim: set noet sw=4 ts=4:
