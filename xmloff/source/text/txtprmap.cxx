@@ -1011,6 +1011,55 @@ XMLPropertyMapEntry aXMLCellPropMap[] =
     MC_E( "VertOrient",           STYLE, VERTICAL_ALIGN,   XML_TYPE_TEXT_VERTICAL_POS,                        0 ),
     MC_E( "WritingMode",          STYLE, WRITING_MODE,     XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT,           0 ),
     MC_E( "NumberFormat",         STYLE, DATA_STYLE_NAME,  XML_TYPE_NUMBER,                                   0 ),
+    // paragraph properties
+    MP_E( "ParaAdjust",           FO,    TEXT_ALIGN,       XML_TYPE_TEXT_ADJUST,                              0 ),
+    // text properties
+    MT_ED( "CharColor",           FO,    COLOR,                    XML_TYPE_COLORAUTO|MID_FLAG_MERGE_PROPERTY,                0 ),
+    MT_ED( "CharColor",           STYLE, USE_WINDOW_FONT_COLOR,    XML_TYPE_ISAUTOCOLOR|MID_FLAG_MERGE_PROPERTY,              0 ),
+    MT_E( "CharShadowed",         FO,    TEXT_SHADOW,              XML_TYPE_TEXT_SHADOWED,                                    0 ),
+    MT_E( "CharContoured",        STYLE, TEXT_OUTLINE,             XML_TYPE_BOOL,                                             0 ),
+    MT_E( "CharStrikeout",        STYLE, TEXT_LINE_THROUGH_STYLE,  XML_TYPE_TEXT_CROSSEDOUT_STYLE|MID_FLAG_MERGE_PROPERTY,    0 ),
+    MT_E( "CharStrikeout",        STYLE, TEXT_LINE_THROUGH_TYPE,   XML_TYPE_TEXT_CROSSEDOUT_TYPE|MID_FLAG_MERGE_PROPERTY,     0 ),
+    MT_E( "CharStrikeout",        STYLE, TEXT_LINE_THROUGH_WIDTH,  XML_TYPE_TEXT_CROSSEDOUT_WIDTH|MID_FLAG_MERGE_PROPERTY,    0 ),
+    MT_E( "CharStrikeout",        STYLE, TEXT_LINE_THROUGH_TEXT,   XML_TYPE_TEXT_CROSSEDOUT_TEXT|MID_FLAG_MERGE_PROPERTY,     0 ),
+    MT_E( "CharUnderline",        STYLE, TEXT_UNDERLINE_STYLE,     XML_TYPE_TEXT_UNDERLINE_STYLE|MID_FLAG_MERGE_PROPERTY,     0 ),
+    MT_E( "CharUnderline",        STYLE, TEXT_UNDERLINE_TYPE,      XML_TYPE_TEXT_UNDERLINE_TYPE|MID_FLAG_MERGE_PROPERTY,      0 ),
+    MT_E( "CharUnderline",        STYLE, TEXT_UNDERLINE_WIDTH,     XML_TYPE_TEXT_UNDERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY,     0 ),
+    MT_E( "CharUnderlineColor",   STYLE, TEXT_UNDERLINE_COLOR,     XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY,     0 ),
+    MT_E( "CharUnderlineHasColor",STYLE, TEXT_UNDERLINE_COLOR,     XML_TYPE_TEXT_UNDERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    // STANDARD FONT
+    MT_ED( "CharHeight",          FO,    FONT_SIZE,                XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY,              0 ),
+    MT_E( "CharWeight",           FO,    FONT_WEIGHT,              XML_TYPE_TEXT_WEIGHT,                                      0 ),
+    MT_E( "CharPosture",          FO,    FONT_STYLE,               XML_TYPE_TEXT_POSTURE,                                     0 ),
+    // RES_CHRATR_FONT
+    MT_ED( "CharFontName",        STYLE, FONT_NAME,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT,              CTF_FONTNAME       ),
+    MT_ED( "CharFontName",        FO,    FONT_FAMILY,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME ),
+    MT_ED( "CharFontStyleName",   STYLE, FONT_STYLE_NAME,    XML_TYPE_STRING,                                           CTF_FONTSTYLENAME  ),
+    MT_ED( "CharFontFamily",      STYLE, FONT_FAMILY_GENERIC,XML_TYPE_TEXT_FONTFAMILY,                                  CTF_FONTFAMILY     ),
+    MT_ED( "CharFontPitch",       STYLE, FONT_PITCH,         XML_TYPE_TEXT_FONTPITCH,                                   CTF_FONTPITCH      ),
+    MT_ED( "CharFontCharSet",     STYLE, FONT_CHARSET,       XML_TYPE_TEXT_FONTENCODING,                                CTF_FONTCHARSET    ),
+    // CJK FONT
+    MT_ED( "CharHeightAsian",         STYLE, FONT_SIZE_ASIAN,            XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY,  0                  ),
+    MT_E( "CharWeightAsian",          STYLE, FONT_WEIGHT_ASIAN,          XML_TYPE_TEXT_WEIGHT,                          0                  ),
+    MT_E( "CharPostureAsian",         STYLE, FONT_STYLE_ASIAN,           XML_TYPE_TEXT_POSTURE,                         0                  ),
+    // RES_CHRATR_CJK_FONT
+    MT_ED( "CharFontNameAsian",       STYLE, FONT_NAME_ASIAN,            XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT,              CTF_FONTNAME_CJK       ),
+    MT_ED( "CharFontNameAsian",       STYLE, FONT_FAMILY_ASIAN,          XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CJK ),
+    MT_ED( "CharFontStyleNameAsian",  STYLE, FONT_STYLE_NAME_ASIAN,      XML_TYPE_STRING,                                           CTF_FONTSTYLENAME_CJK  ),
+    MT_ED( "CharFontFamilyAsian",     STYLE, FONT_FAMILY_GENERIC_ASIAN,  XML_TYPE_TEXT_FONTFAMILY,                                  CTF_FONTFAMILY_CJK     ),
+    MT_ED( "CharFontPitchAsian",      STYLE, FONT_PITCH_ASIAN,           XML_TYPE_TEXT_FONTPITCH,                                   CTF_FONTPITCH_CJK      ),
+    MT_ED( "CharFontCharSetAsian",    STYLE, FONT_CHARSET_ASIAN,         XML_TYPE_TEXT_FONTENCODING,                                CTF_FONTCHARSET_CJK    ),
+    // CTL FONT
+    MT_ED( "CharHeightComplex",       STYLE, FONT_SIZE_COMPLEX,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY,              0                      ),
+    MT_E( "CharWeightComplex",        STYLE, FONT_WEIGHT_COMPLEX,        XML_TYPE_TEXT_WEIGHT,                                      0                      ),
+    MT_E( "CharPostureComplex",       STYLE, FONT_STYLE_COMPLEX,         XML_TYPE_TEXT_POSTURE,                                     0                      ),
+    // RES_CHRATR_CTL_FONT
+    MT_ED( "CharFontNameComplex",     STYLE, FONT_NAME_COMPLEX,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT,              CTF_FONTNAME_CTL       ),
+    MT_ED( "CharFontNameComplex",     STYLE, FONT_FAMILY_COMPLEX,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CTL ),
+    MT_ED( "CharFontStyleNameComplex",STYLE, FONT_STYLE_NAME_COMPLEX,    XML_TYPE_STRING,                                           CTF_FONTSTYLENAME_CTL  ),
+    MT_ED( "CharFontFamilyComplex",   STYLE, FONT_FAMILY_GENERIC_COMPLEX,XML_TYPE_TEXT_FONTFAMILY,                                  CTF_FONTFAMILY_CTL     ),
+    MT_ED( "CharFontPitchComplex",    STYLE, FONT_PITCH_COMPLEX,         XML_TYPE_TEXT_FONTPITCH,                                   CTF_FONTPITCH_CTL      ),
+    MT_ED( "CharFontCharSetComplex",  STYLE, FONT_CHARSET_COMPLEX,       XML_TYPE_TEXT_FONTENCODING,                                CTF_FONTCHARSET_CTL    ),
 
     M_END()
 };

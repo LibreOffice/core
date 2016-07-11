@@ -12,6 +12,7 @@
 #include <initializer_list>
 
 #if !defined(MACOSX)
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -854,6 +855,213 @@ DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), oBorder.Color);
     xCell1Style->getPropertyValue("BottomBorder") >>= oBorder;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), oBorder.Color);
+}
+
+DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
+{
+    // Table styles paragraph and char tests
+    // Doesn't cover all attributes.
+    // Problem: underline for table autoformat doesn't work.
+    uno::Reference<style::XStyleFamiliesSupplier> XFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xFamilies(XFamiliesSupplier->getStyleFamilies());
+    uno::Reference<container::XNameAccess> xTableFamily(xFamilies->getByName("TableStyles"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTableStyle(xTableFamily->getByName("Test style2"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCell1Style;
+
+    float fFloat = 0.;
+    bool bBool = true;
+    sal_Int16 nInt16 = 0xF0;
+    sal_Int32 nInt32 = 0xF0F0F0;
+    sal_Int64 nInt64 = 0xF0F0F0;
+    OUString sString;
+    awt::FontSlant eCharPosture;
+
+    // cell 1
+    xTableStyle->getByName("first-row-start-column") >>= xCell1Style;
+    xCell1Style->getPropertyValue("ParaAdjust") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nInt32);
+    xCell1Style->getPropertyValue("CharColor") >>= nInt64;
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0xFF6600), nInt64);
+    xCell1Style->getPropertyValue("CharContoured") >>= bBool;
+    CPPUNIT_ASSERT_EQUAL(bool(false), bBool);
+    xCell1Style->getPropertyValue("CharShadowed") >>= bBool;
+    CPPUNIT_ASSERT_EQUAL(bool(true), bBool);
+    xCell1Style->getPropertyValue("CharStrikeout") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nInt32);
+    xCell1Style->getPropertyValue("CharUnderline") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nInt32);
+    // underline color is not working for table autoformats
+    // xCell1Style->getPropertyValue("CharUnderlineHasColor") >>= bBool;
+    // CPPUNIT_ASSERT_EQUAL(bool(false), bBool);
+    // xCell1Style->getPropertyValue("CharUnderlineColor") >>= nInt64;
+    // CPPUNIT_ASSERT_EQUAL(sal_Int64(-1), nInt64);
+    // standard font
+    xCell1Style->getPropertyValue("CharHeight") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(18.), fFloat);
+    xCell1Style->getPropertyValue("CharWeight") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
+    xCell1Style->getPropertyValue("CharPosture") >>= eCharPosture;
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    xCell1Style->getPropertyValue("CharFontName") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Courier"), sString);
+    xCell1Style->getPropertyValue("CharFontStyleName") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString(""), sString);
+    xCell1Style->getPropertyValue("CharFontFamily") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
+    xCell1Style->getPropertyValue("CharFontPitch") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nInt16);
+    // cjk font
+    xCell1Style->getPropertyValue("CharHeightAsian") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(18.), fFloat);
+    xCell1Style->getPropertyValue("CharWeightAsian") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
+    xCell1Style->getPropertyValue("CharPostureAsian") >>= eCharPosture;
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    xCell1Style->getPropertyValue("CharFontNameAsian") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Courier"), sString);
+    xCell1Style->getPropertyValue("CharFontStyleNameAsian") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Regularna"), sString);
+    xCell1Style->getPropertyValue("CharFontFamilyAsian") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
+    xCell1Style->getPropertyValue("CharFontPitchAsian") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nInt16);
+    // ctl font
+    xCell1Style->getPropertyValue("CharHeightComplex") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(18.), fFloat);
+    xCell1Style->getPropertyValue("CharWeightComplex") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
+    xCell1Style->getPropertyValue("CharPostureComplex") >>= eCharPosture;
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    xCell1Style->getPropertyValue("CharFontNameComplex") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Courier"), sString);
+    xCell1Style->getPropertyValue("CharFontStyleNameComplex") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Regularna"), sString);
+    xCell1Style->getPropertyValue("CharFontFamilyComplex") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
+    xCell1Style->getPropertyValue("CharFontPitchComplex") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nInt16);
+
+    // cell 2
+    xTableStyle->getByName("first-row") >>= xCell1Style;
+    xCell1Style->getPropertyValue("ParaAdjust") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nInt32);
+    xCell1Style->getPropertyValue("CharColor") >>= nInt64;
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0x9900FF), nInt64);
+    xCell1Style->getPropertyValue("CharContoured") >>= bBool;
+    CPPUNIT_ASSERT_EQUAL(bool(true), bBool);
+    xCell1Style->getPropertyValue("CharShadowed") >>= bBool;
+    CPPUNIT_ASSERT_EQUAL(bool(false), bBool);
+    xCell1Style->getPropertyValue("CharStrikeout") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nInt32);
+    xCell1Style->getPropertyValue("CharUnderline") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nInt32);
+    // underline color test place
+    // standard font
+    xCell1Style->getPropertyValue("CharHeight") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(12.), fFloat);
+    xCell1Style->getPropertyValue("CharWeight") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(150.), fFloat);
+    xCell1Style->getPropertyValue("CharPosture") >>= eCharPosture;
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    xCell1Style->getPropertyValue("CharFontName") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), sString);
+    xCell1Style->getPropertyValue("CharFontStyleName") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString(""), sString);
+    xCell1Style->getPropertyValue("CharFontFamily") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), nInt16);
+    xCell1Style->getPropertyValue("CharFontPitch") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
+    // cjk font
+    xCell1Style->getPropertyValue("CharHeightAsian") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(12.), fFloat);
+    xCell1Style->getPropertyValue("CharWeightAsian") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(150.), fFloat);
+    xCell1Style->getPropertyValue("CharPostureAsian") >>= eCharPosture;
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    xCell1Style->getPropertyValue("CharFontNameAsian") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), sString);
+    xCell1Style->getPropertyValue("CharFontStyleNameAsian") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Pogrubiona"), sString);
+    xCell1Style->getPropertyValue("CharFontFamilyAsian") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), nInt16);
+    xCell1Style->getPropertyValue("CharFontPitchAsian") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
+    // ctl font
+    xCell1Style->getPropertyValue("CharHeightComplex") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(12.), fFloat);
+    xCell1Style->getPropertyValue("CharWeightComplex") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(150.), fFloat);
+    xCell1Style->getPropertyValue("CharPostureComplex") >>= eCharPosture;
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_NONE), eCharPosture);
+    xCell1Style->getPropertyValue("CharFontNameComplex") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), sString);
+    xCell1Style->getPropertyValue("CharFontStyleNameComplex") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Pogrubiona"), sString);
+    xCell1Style->getPropertyValue("CharFontFamilyComplex") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), nInt16);
+    xCell1Style->getPropertyValue("CharFontPitchComplex") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
+
+    // cell 3
+    xTableStyle->getByName("first-row-even-column") >>= xCell1Style;
+    xCell1Style->getPropertyValue("ParaAdjust") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nInt32);
+    xCell1Style->getPropertyValue("CharColor") >>= nInt64;
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), nInt64);
+    xCell1Style->getPropertyValue("CharContoured") >>= bBool;
+    CPPUNIT_ASSERT_EQUAL(bool(true), bBool);
+    xCell1Style->getPropertyValue("CharShadowed") >>= bBool;
+    CPPUNIT_ASSERT_EQUAL(bool(true), bBool);
+    xCell1Style->getPropertyValue("CharStrikeout") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nInt32);
+    xCell1Style->getPropertyValue("CharUnderline") >>= nInt32;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nInt32);
+    // underline color test place
+    // standard font
+    xCell1Style->getPropertyValue("CharHeight") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(12.), fFloat);
+    xCell1Style->getPropertyValue("CharWeight") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
+    xCell1Style->getPropertyValue("CharPosture") >>= eCharPosture;
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_ITALIC), eCharPosture);
+    xCell1Style->getPropertyValue("CharFontName") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Open Sans"), sString);
+    xCell1Style->getPropertyValue("CharFontStyleName") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString(""), sString);
+    xCell1Style->getPropertyValue("CharFontFamily") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nInt16);
+    xCell1Style->getPropertyValue("CharFontPitch") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
+    // cjk font
+    xCell1Style->getPropertyValue("CharHeightAsian") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(12.), fFloat);
+    xCell1Style->getPropertyValue("CharWeightAsian") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
+    xCell1Style->getPropertyValue("CharPostureAsian") >>= eCharPosture;
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_ITALIC), eCharPosture);
+    xCell1Style->getPropertyValue("CharFontNameAsian") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Open Sans"), sString);
+    xCell1Style->getPropertyValue("CharFontStyleNameAsian") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Kursywa"), sString);
+    xCell1Style->getPropertyValue("CharFontFamilyAsian") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nInt16);
+    xCell1Style->getPropertyValue("CharFontPitchAsian") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
+    // ctl font
+    xCell1Style->getPropertyValue("CharHeightComplex") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(12.), fFloat);
+    xCell1Style->getPropertyValue("CharWeightComplex") >>= fFloat;
+    CPPUNIT_ASSERT_EQUAL(float(100.), fFloat);
+    xCell1Style->getPropertyValue("CharPostureComplex") >>= eCharPosture;
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant(awt::FontSlant_ITALIC), eCharPosture);
+    xCell1Style->getPropertyValue("CharFontNameComplex") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Open Sans"), sString);
+    xCell1Style->getPropertyValue("CharFontStyleNameComplex") >>= sString;
+    CPPUNIT_ASSERT_EQUAL(OUString("Kursywa"), sString);
+    xCell1Style->getPropertyValue("CharFontFamilyComplex") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nInt16);
+    xCell1Style->getPropertyValue("CharFontPitchComplex") >>= nInt16;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nInt16);
 }
 
 #endif
