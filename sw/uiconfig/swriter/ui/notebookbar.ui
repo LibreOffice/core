@@ -219,7 +219,7 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <child>
-              <object class="GtkBox" id="FileBox">
+              <object class="sfxlo-PriorityHBox" id="FileBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
@@ -288,14 +288,28 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="vcllo-SmallButton" id="ExportTo">
+                  <object class="GtkBox" id="box63">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="action_name">.uno:ExportTo</property>
-                    <property name="image">ExportToImg</property>
-                    <property name="relief">none</property>
-                    <property name="image_position">top</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="vcllo-SmallButton" id="ExportTo">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:ExportTo</property>
+                        <property name="image">ExportToImg</property>
+                        <property name="relief">none</property>
+                        <property name="image_position">top</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -304,14 +318,28 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="ExportToPDF">
+                  <object class="GtkBox" id="box68">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="action_name">.uno:ExportToPDF</property>
-                    <property name="image">ExportToPDFImg</property>
-                    <property name="relief">none</property>
-                    <property name="image_position">top</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkButton" id="ExportToPDF">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:ExportToPDF</property>
+                        <property name="image">ExportToPDFImg</property>
+                        <property name="relief">none</property>
+                        <property name="image_position">top</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -336,13 +364,27 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="Signature">
+                  <object class="GtkBox" id="box4">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="action_name">.uno:Signature</property>
-                    <property name="relief">none</property>
-                    <property name="image_position">top</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkButton" id="Signature">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:Signature</property>
+                        <property name="relief">none</property>
+                        <property name="image_position">top</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-1"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1419,7 +1461,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="InsertBox">
+              <object class="sfxlo-PriorityHBox" id="InsertBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -1457,6 +1499,9 @@
                         <property name="position">2</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-1"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1506,26 +1551,26 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box12">
+                  <object class="vcllo-SmallButton" id="InsertGraphic">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:InsertGraphic</property>
+                    <property name="image">InsertGraphicImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                    <property name="always_show_image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box69">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <object class="vcllo-SmallButton" id="InsertGraphic">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:InsertGraphic</property>
-                        <property name="image">InsertGraphicImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="vcllo-SmallButton" id="InsertAVMedia">
                         <property name="visible">True</property>
@@ -1540,9 +1585,23 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box70">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="Gallery">
                         <property name="visible">True</property>
@@ -1557,31 +1616,34 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="vcllo-SmallButton" id="InsertObjectChart">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:InsertObjectChart</property>
-                        <property name="image">InsertObjectChartImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="vcllo-SmallButton" id="InsertObjectChart">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:InsertObjectChart</property>
+                    <property name="image">InsertObjectChartImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                    <property name="always_show_image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">7</property>
                   </packing>
                 </child>
                 <child>
@@ -1593,48 +1655,22 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">5</property>
+                    <property name="position">8</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box13">
+                  <object class="GtkBox" id="box29">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkBox" id="box29">
+                      <object class="GtkButton" id="hyperlinkdialog">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkButton" id="hyperlinkdialog">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:HyperlinkDialog</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="bookmark">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:InsertBookmark</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:HyperlinkDialog</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1643,14 +1679,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="vcllo-SmallButton" id="insertreferencefield">
+                      <object class="GtkButton" id="bookmark">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="action_name">.uno:InsertReferenceField</property>
-                        <property name="image">InsertReferenceFieldImg</property>
+                        <property name="action_name">.uno:InsertBookmark</property>
                         <property name="relief">none</property>
-                        <property name="image_position">top</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1658,23 +1693,30 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">6</property>
+                    <property name="position">9</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="separator7">
+                  <object class="vcllo-SmallButton" id="insertreferencefield">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:InsertReferenceField</property>
+                    <property name="image">InsertReferenceFieldImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">7</property>
+                    <property name="position">10</property>
                   </packing>
                 </child>
                 <child>
@@ -1691,19 +1733,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">8</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator8">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">9</property>
+                    <property name="position">11</property>
                   </packing>
                 </child>
                 <child>
@@ -1744,29 +1774,32 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">10</property>
+                    <property name="position">12</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="separator9">
+                  <object class="GtkBox" id="box12">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">11</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="box15">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkSeparator" id="separator9">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="vcllo-SmallButton" id="DrawText">
                         <property name="visible">True</property>
@@ -1781,59 +1814,63 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-1"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">14</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator7">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">15</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparator" id="separator8">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">16</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box50">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkBox" id="box50">
+                      <object class="sfxlo-SidebarToolBox" id="basicshapes">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="basicshapes">
+                          <object class="GtkToolButton" id="BasicShapes">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="BasicShapes">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="is_important">True</property>
-                                <property name="action_name">.uno:BasicShapes</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
+                            <property name="is_important">True</property>
+                            <property name="action_name">.uno:BasicShapes</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="sfxlo-SidebarToolBox" id="insertdraw">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkToolButton" id="InsertDraw">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="is_important">True</property>
-                                <property name="action_name">.uno:InsertDraw</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="homogeneous">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
+                            <property name="expand">True</property>
+                            <property name="homogeneous">True</property>
                           </packing>
                         </child>
                       </object>
@@ -1843,11 +1880,34 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="sfxlo-SidebarToolBox" id="insertdraw">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkToolButton" id="InsertDraw">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="is_important">True</property>
+                            <property name="action_name">.uno:InsertDraw</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">12</property>
+                    <property name="position">17</property>
                   </packing>
                 </child>
                 <child>
@@ -1859,7 +1919,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">13</property>
+                    <property name="position">19</property>
                   </packing>
                 </child>
                 <child>
@@ -1899,11 +1959,14 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-1"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">14</property>
+                    <property name="position">20</property>
                   </packing>
                 </child>
                 <child>
@@ -1941,27 +2004,44 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-4"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">15</property>
+                    <property name="position">21</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="vcllo-SmallButton" id="EditGlossary">
+                  <object class="GtkBox" id="box13">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="action_name">.uno:EditGlossary</property>
-                    <property name="image">EditGlossaryImg</property>
-                    <property name="relief">none</property>
-                    <property name="image_position">top</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="vcllo-SmallButton" id="EditGlossary">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:EditGlossary</property>
+                        <property name="image">EditGlossaryImg</property>
+                        <property name="relief">none</property>
+                        <property name="image_position">top</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">16</property>
+                    <property name="position">22</property>
                   </packing>
                 </child>
               </object>
@@ -1982,49 +2062,48 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="LayoutBox">
+              <object class="sfxlo-PriorityHBox" id="LayoutBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkBox" id="box26">
+                  <object class="vcllo-SmallButton" id="PageDialog">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:PageDialog</property>
+                    <property name="image">PageDialogImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                    <property name="always_show_image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="vcllo-SmallButton" id="FormatColumns">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:FormatColumns</property>
+                    <property name="image">FormatColumnsImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                    <property name="always_show_image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box71">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="vcllo-SmallButton" id="PageDialog">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:PageDialog</property>
-                        <property name="image">PageDialogImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="vcllo-SmallButton" id="FormatColumns">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:FormatColumns</property>
-                        <property name="image">FormatColumnsImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="GtkButton" id="InsertBreak">
                         <property name="visible">True</property>
@@ -2038,9 +2117,23 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box15">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="LineNumberingDialog">
                         <property name="visible">True</property>
@@ -2054,9 +2147,23 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-1"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box26">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="Hyphenate">
                         <property name="visible">True</property>
@@ -2071,14 +2178,17 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
@@ -2090,7 +2200,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">6</property>
                   </packing>
                 </child>
                 <child>
@@ -2121,38 +2231,52 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">7</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-SidebarToolBox" id="lrspacing">
-                    <property name="width_request">450</property>
-                    <property name="height_request">75</property>
+                  <object class="GtkBox" id="box72">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Indent</property>
                     <child>
-                      <object class="GtkToolButton" id="LeftRightParaMargin">
-                        <property name="use_action_appearance">False</property>
+                      <object class="sfxlo-SidebarToolBox" id="lrspacing">
                         <property name="width_request">450</property>
                         <property name="height_request">75</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="is_important">True</property>
-                        <property name="action_name">.uno:LeftRightParaMargin</property>
-                        <property name="use_underline">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_text" translatable="yes">Indent</property>
+                        <child>
+                          <object class="GtkToolButton" id="LeftRightParaMargin">
+                            <property name="use_action_appearance">False</property>
+                            <property name="width_request">450</property>
+                            <property name="height_request">75</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="is_important">True</property>
+                            <property name="action_name">.uno:LeftRightParaMargin</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">8</property>
                   </packing>
                 </child>
               </object>
@@ -2173,7 +2297,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="ReferencesBox">
+              <object class="sfxlo-PriorityHBox" id="ReferencesBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
@@ -2304,43 +2428,43 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box48">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkBox" id="box48">
+                      <object class="GtkButton" id="InsertEndnote1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkButton" id="InsertEndnote1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:InsertEndnote</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="InsertFootnoteDialog">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:InsertFootnoteDialog</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:InsertEndnote</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="InsertFootnoteDialog">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:InsertFootnoteDialog</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2348,11 +2472,14 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-4"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -2364,7 +2491,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -2388,18 +2515,21 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator24">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkSeparator" id="separator3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -2428,43 +2558,30 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-1"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box52">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkBox" id="box52">
+                      <object class="GtkButton" id="InsertAuthoritiesEntry">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkButton" id="InsertAuthoritiesEntry">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:InsertAuthoritiesEntry</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="InsertReferenceField">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:InsertReferenceField</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:InsertAuthoritiesEntry</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2472,11 +2589,30 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkButton" id="InsertReferenceField">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:InsertReferenceField</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">6</property>
+                    <property name="position">8</property>
                   </packing>
                 </child>
               </object>
@@ -2497,30 +2633,30 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="ReviewBox">
+              <object class="sfxlo-PriorityHBox" id="ReviewBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <child>
+                  <object class="vcllo-SmallButton" id="SpellingAndGrammarDialog">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:SpellingAndGrammarDialog</property>
+                    <property name="image">SpellingAndGrammarDialogImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                    <property name="always_show_image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkBox" id="box56">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <object class="vcllo-SmallButton" id="SpellingAndGrammarDialog">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:SpellingAndGrammarDialog</property>
-                        <property name="image">SpellingAndGrammarDialogImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="vcllo-SmallButton" id="SpellOnline">
                         <property name="visible">True</property>
@@ -2538,6 +2674,20 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-5"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box75">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="ThesaurusDialog">
                         <property name="visible">True</property>
@@ -2552,7 +2702,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -2568,14 +2718,17 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-4"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -2587,7 +2740,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -2626,11 +2779,14 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-5"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -2642,7 +2798,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
@@ -2683,145 +2839,154 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkBox" id="box59">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkButton" id="ShowTrackedChanges">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:ShowTrackedChanges</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="CommentChangeTracking">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:CommentChangeTracking</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box62">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <property name="homogeneous">True</property>
-                        <child>
-                          <object class="GtkButton" id="AcceptTrackedChange">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:AcceptTrackedChange</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="RejectTrackedChange">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:RejectTrackedChange</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box60">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <property name="homogeneous">True</property>
-                        <child>
-                          <object class="GtkButton" id="NextTrackedChange">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:NextTrackedChange</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="PreviousTrackedChange">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:PreviousTrackedChange</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">4</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box59">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkButton" id="ShowTrackedChanges">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:ShowTrackedChanges</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="CommentChangeTracking">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:CommentChangeTracking</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-4"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box62">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkButton" id="AcceptTrackedChange">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:AcceptTrackedChange</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="RejectTrackedChange">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:RejectTrackedChange</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box60">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="homogeneous">True</property>
+                    <child>
+                      <object class="GtkButton" id="NextTrackedChange">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:NextTrackedChange</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="PreviousTrackedChange">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:PreviousTrackedChange</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">9</property>
                   </packing>
                 </child>
                 <child>
@@ -2833,7 +2998,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">5</property>
+                    <property name="position">10</property>
                   </packing>
                 </child>
                 <child>
@@ -2873,11 +3038,14 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-1"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">6</property>
+                    <property name="position">11</property>
                   </packing>
                 </child>
               </object>
@@ -2898,7 +3066,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="ViewLabe">
+              <object class="sfxlo-PriorityHBox" id="ViewBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
@@ -2976,46 +3144,19 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box23">
+                  <object class="GtkBox" id="box65">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkBox" id="box65">
+                      <object class="GtkButton" id="Ruler">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkButton" id="Ruler">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:Ruler</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="VRuler">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:VRuler</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:Ruler</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -3023,6 +3164,36 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkButton" id="VRuler">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:VRuler</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box23">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="GridVisible">
                         <property name="visible">True</property>
@@ -3037,21 +3208,24 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator" id="separator12">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator12">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
+                    <style>
+                      <class name="priority-2"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -3098,6 +3272,17 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box74">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="vcllo-SmallButton" id="ZoomOptimal">
                         <property name="visible">True</property>
@@ -3112,58 +3297,64 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkBox" id="box25">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkButton" id="ZoomPage">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:ZoomPage</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="ZoomPageWidth">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="action_name">.uno:ZoomPageWidth</property>
-                            <property name="relief">none</property>
-                            <property name="xalign">0</property>
-                            <property name="always_show_image">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box25">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkButton" id="ZoomPage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:ZoomPage</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="ZoomPageWidth">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:ZoomPageWidth</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">7</property>
                   </packing>
                 </child>
                 <child>
@@ -3175,23 +3366,37 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">5</property>
+                    <property name="position">8</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="HideWhitespace">
+                  <object class="GtkBox" id="box73">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="action_name">.uno:HideWhitespace</property>
-                    <property name="relief">none</property>
-                    <property name="image_position">top</property>
-                    <property name="always_show_image">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkButton" id="HideWhitespace">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="action_name">.uno:HideWhitespace</property>
+                        <property name="relief">none</property>
+                        <property name="image_position">top</property>
+                        <property name="always_show_image">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <style>
+                      <class name="priority-1"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">6</property>
+                    <property name="position">9</property>
                   </packing>
                 </child>
               </object>
@@ -3212,7 +3417,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="TableBox">
+              <object class="sfxlo-PriorityHBox" id="TableBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
@@ -3765,7 +3970,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="ImageBox">
+              <object class="sfxlo-PriorityHBox" id="ImageBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
