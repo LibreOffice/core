@@ -80,7 +80,7 @@ public:
     virtual bool v_isValid(rtl::OUString * pReason) override;
 
     void innerDispatch();
-    void outerDispatch(int loop);
+    void outerDispatch(bool loop);
 };
 
 class InnerThread : public osl::Thread
@@ -129,7 +129,7 @@ void OuterThread::run()
     osl::MutexGuard guard(m_pAffineBridge->m_outerMutex);
 
     m_pAffineBridge->m_outerThreadId = getIdentifier();
-    m_pAffineBridge->outerDispatch(0);
+    m_pAffineBridge->outerDispatch(false);
     m_pAffineBridge->m_outerThreadId = 0;
 
     m_pAffineBridge->m_pOuterThread = nullptr;
@@ -172,7 +172,7 @@ AffineBridge::~AffineBridge()
 }
 
 
-void AffineBridge::outerDispatch(int loop)
+void AffineBridge::outerDispatch(bool loop)
 {
     OSL_ASSERT(m_outerThreadId == osl::Thread::getCurrentIdentifier());
     OSL_ASSERT(m_innerThreadId != m_outerThreadId);
@@ -267,7 +267,7 @@ void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
     m_pParam  = pParam;
     m_innerCondition.set();
 
-    outerDispatch(1);
+    outerDispatch(true);
 
     if (bResetId)
         m_outerThreadId = 0;
