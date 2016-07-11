@@ -1166,10 +1166,10 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
                     vcl::Window* pItemWin = pToolBox->GetItemWindow( i );
                     if ( pItemWin )
                     {
+                        SolarMutexGuard aSolarMutexGuard;
                         FindTextFieldControl* pFindTextFieldControl = dynamic_cast<FindTextFieldControl*>(pItemWin);
                         if ( pFindTextFieldControl )
                             pFindTextFieldControl->SetTextToSelected_Impl();
-                        SolarMutexGuard aSolarMutexGuard;
                         pItemWin->GrabFocus();
                         return;
                     }
