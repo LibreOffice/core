@@ -518,6 +518,41 @@ OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
     }
 }
 
+namespace
+{
+
+void updateEditMode(const Reference<XView> &xView, FrameworkHelper* const pHelper, const EditMode eEMode, bool updateFrameView)
+{
+    // Ensure we have the expected edit mode
+    // The check is only for DrawViewShell as OutlineViewShell
+    // and SlideSorterViewShell have no master mode
+    const ::std::shared_ptr<ViewShell> pCenterViewShell (pHelper->GetViewShell(xView));
+    DrawViewShell* pDrawViewShell
+        = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
+    if (pDrawViewShell != nullptr)
+    {
+        pCenterViewShell->Broadcast (
+            ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
+
+        pDrawViewShell->ChangeEditMode(eEMode, pDrawViewShell->IsLayerModeActive());
+        if (updateFrameView)
+            pDrawViewShell->WriteFrameViewData();
+
+        pCenterViewShell->Broadcast (
+            ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
+    }
+}
+
+void asyncUpdateEditMode(FrameworkHelper* const pHelper, const EditMode eEMode)
+{
+    Reference<XResourceId> xPaneId (
+        FrameworkHelper::CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
+    Reference<XView> xView (pHelper->GetView(xPaneId));
+    updateEditMode(xView, pHelper, eEMode, true);
+}
+
+}
+
 void FrameworkHelper::HandleModeChangeSlot (
     sal_uLong nSlotId,
     SfxRequest& rRequest)
@@ -552,7 +587,6 @@ void FrameworkHelper::HandleModeChangeSlot (
         Reference<XResourceId> xPaneId (
             CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
         Reference<XView> xView (GetView(xPaneId));
-        ::std::shared_ptr<ViewShell> pCenterViewShell (GetViewShell(xView));
 
         // Compute requested view
         OUString sRequestedView;
@@ -595,26 +629,15 @@ void FrameworkHelper::HandleModeChangeSlot (
         if (!(xView.is() && xView->getResourceId()->getResourceURL().equals(sRequestedView)))
 
         {
+            const auto xId = CreateResourceId(sRequestedView, msCenterPaneURL);
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(sRequestedView, msCenterPaneURL),
+                xId,
                 ResourceActivationMode_REPLACE);
+            RunOnResourceActivation(xId, std::bind(&asyncUpdateEditMode, this, eEMode));
         }
-
-        // Ensure we have the expected edit mode
-        // The check is only for DrawViewShell as OutlineViewShell
-        // and SlideSorterViewShell have no master mode
-        DrawViewShell* pDrawViewShell
-            = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
-        if (pDrawViewShell != nullptr)
+        else
         {
-            pCenterViewShell->Broadcast (
-                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
-
-            pDrawViewShell->ChangeEditMode (
-                eEMode, pDrawViewShell->IsLayerModeActive());
-
-            pCenterViewShell->Broadcast (
-                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
+            updateEditMode(xView, this, eEMode, false);
         }
     }
     catch (RuntimeException&)
