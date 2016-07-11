@@ -12,6 +12,7 @@
 MERGE_LIBRARY_LIST := \
 	avmedia \
 	$(if $(filter $(OS),ANDROID),,basebmp) \
+	$(if $(filter OPENCL,$(BUILD_TYPE)),clew) \
 	basegfx \
 	canvastools \
 	configmgr \
