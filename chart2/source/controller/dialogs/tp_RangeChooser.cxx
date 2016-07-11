@@ -375,7 +375,6 @@ IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ControlChangedHdl, Edit&, void)
 IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ChooseRangeHdl, Button*, void)
 {
     OUString aRange = m_pED_Range->GetText();
-    // using assignment for broken gcc 3.3
     OUString aTitle = m_pFTTitle->GetText();
 
     lcl_enableRangeChoosing( true, m_pParentDialog );

@@ -1382,7 +1382,7 @@ void ChartController::executeDispatch_SourceData()
     if( !xChartDoc.is())
         return;
 
-    UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
+    UndoLiveUpdateGuard aUndoGuard(
         SCH_RESSTR(STR_ACTION_EDIT_DATA_RANGES), m_xUndoManager );
     if( xChartDoc.is())
     {

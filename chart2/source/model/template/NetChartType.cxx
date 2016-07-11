@@ -102,9 +102,7 @@ struct StaticNetChartTypeInfoHelper_Initializer
 {
     ::cppu::OPropertyArrayHelper* operator()()
     {
-        // using assignment for broken gcc 3.3
-        static ::cppu::OPropertyArrayHelper aPropHelper = ::cppu::OPropertyArrayHelper(
-            Sequence< beans::Property >() );
+        static ::cppu::OPropertyArrayHelper aPropHelper(Sequence< beans::Property >{});
         return &aPropHelper;
     }
 };
