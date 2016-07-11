@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_e72b0232",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-11T17:31:32Z",
+      "side": 1,
+      "message": "This PopDoubleRef() does not work with svRefList, see other places where svRefList is used. However, I don\u0027t think svRefList is to be supported here, so simply omit.",
+      "revId": "cf0e287546bbc081cef58eacc751a93867732dc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
