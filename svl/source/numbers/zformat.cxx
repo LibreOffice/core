@@ -4144,6 +4144,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     // no normal thousands separators if number divided by thousands
     bool bDoThousands = (rInfo.nThousand == 0);
+    bool bFoundNumber = false;
     short nType;
 
     k = sBuff.getLength(); // behind last digit
@@ -4155,12 +4156,18 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
+                if ( bFoundNumber && eSymbolType != NF_SYMBOLTYPE_EXP )
+                    k = 0; // tdf#100842 jump to beginning of number before inserting something else
                 bRes = lcl_insertStarFillChar( sBuff, k, rInfo.sStrArray[j]);
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
             if (rInfo.sStrArray[j].getLength() >= 2)
+            {
+                if ( bFoundNumber && eSymbolType != NF_SYMBOLTYPE_EXP )
+                    k = 0; // tdf#100842 jump to beginning of number before inserting something else
                 k = InsertBlanks(sBuff, k, rInfo.sStrArray[j][1] );
+            }
             break;
         case NF_SYMBOLTYPE_THSEP:
             // Same as in ImpNumberFillWithThousands() above, do not insert
@@ -4181,6 +4188,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
             break;
         case NF_SYMBOLTYPE_DIGIT:
         {
+            bFoundNumber = true;
             const OUString& rStr = rInfo.sStrArray[j];
             const sal_Unicode* p1 = rStr.getStr();
             const sal_Unicode* p = p1 + rStr.getLength();
@@ -4211,6 +4219,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
         case NF_KEY_GENERAL: // Standard in the String
         {
             OUStringBuffer sNum;
+            bFoundNumber = true;
             ImpGetOutputStandard(rNumber, sNum);
             sNum.stripStart('-');
             sBuff.insert(k, sNum.makeStringAndClear());
@@ -4220,6 +4229,8 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
             break;
 
         default:
+            if ( bFoundNumber && eSymbolType != NF_SYMBOLTYPE_EXP )
+                k = 0; // tdf#100842 jump to beginning of number before inserting something else
             sBuff.insert(k, rInfo.sStrArray[j]);
             break;
         } // of switch
