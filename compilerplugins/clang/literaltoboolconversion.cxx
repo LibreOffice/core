@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cassert>
+#include <limits>
+
 #include "clang/Lex/Lexer.h"
 
 #include "plugin.hxx"
@@ -26,11 +29,17 @@ public:
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
 
+    bool TraverseLinkageSpecDecl(LinkageSpecDecl * decl);
+
 private:
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
 
+    bool isSharedCAndCppCode(SourceLocation location) const;
+
     void handleImplicitCastSubExpr(
         ImplicitCastExpr const * castExpr, Expr const * subExpr);
+
+    unsigned int externCContexts_ = 0;
 };
 
 bool LiteralToBoolConversion::VisitImplicitCastExpr(
@@ -46,6 +55,15 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
     return true;
 }
 
+bool LiteralToBoolConversion::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
+    assert(externCContexts_ != std::numeric_limits<unsigned int>::max()); //TODO
+    ++externCContexts_;
+    bool ret = RecursiveASTVisitor::TraverseLinkageSpecDecl(decl);
+    assert(externCContexts_ != 0);
+    --externCContexts_;
+    return ret;
+}
+
 bool LiteralToBoolConversion::isFromCIncludeFile(
     SourceLocation spellingLocation) const
 {
@@ -54,6 +72,17 @@ bool LiteralToBoolConversion::isFromCIncludeFile(
                 compiler.getSourceManager().getPresumedLoc(spellingLocation)
                 .getFilename())
             .endswith(".h"));
+}
+
+bool LiteralToBoolConversion::isSharedCAndCppCode(SourceLocation location) const
+{
+    // Assume that code is intended to be shared between C and C++ if it comes
+    // from an include file ending in .h, and is either in an extern "C" context
+    // or the body of a macro definition:
+    return
+        isFromCIncludeFile(compiler.getSourceManager().getSpellingLoc(location))
+        && (externCContexts_ != 0
+            || compiler.getSourceManager().isMacroBodyExpansion(location));
 }
 
 void LiteralToBoolConversion::handleImplicitCastSubExpr(
@@ -99,9 +128,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
                 loc = compiler.getSourceManager().getImmediateExpansionRange(
                     loc).first;
             }
-            if (isFromCIncludeFile(
-                    compiler.getSourceManager().getSpellingLoc(loc)))
-            {
+            if (isSharedCAndCppCode(loc)) {
                 return;
             }
         }
