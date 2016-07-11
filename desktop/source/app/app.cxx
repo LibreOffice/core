@@ -1573,6 +1573,11 @@ int Desktop::Main()
             FatalError( MakeStartupErrorMessage(e.Message) );
         }
 
+        // FIXME: move this somewhere sensible.
+#if HAVE_FEATURE_OPENCL
+        CheckOpenCLCompute(xDesktop);
+#endif
+
         // Release solar mutex just before we wait for our client to connect
         {
             SolarMutexReleaser aReleaser;

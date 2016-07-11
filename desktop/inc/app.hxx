@@ -84,6 +84,7 @@ class Desktop : public Application
 
         static void             OpenClients();
         static void             OpenDefault();
+        static void             CheckOpenCLCompute(const css::uno::Reference<css::frame::XDesktop2> &);
 
         DECL_STATIC_LINK_TYPED( Desktop, EnableAcceptors_Impl, void*, void);
 

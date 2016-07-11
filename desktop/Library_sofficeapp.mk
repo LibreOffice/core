@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     deploymentmisc \
     editeng \
     i18nlangtag \
+    $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
     sal \
     salhelper \
     sb \
@@ -93,6 +94,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/langselect \
     desktop/source/app/lockfile2 \
     desktop/source/app/officeipcthread \
+    desktop/source/app/opencl \
     desktop/source/app/sofficemain \
     desktop/source/app/userinstall \
     desktop/source/migration/migration \

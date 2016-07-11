@@ -7,7 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <opencl/openclwrapper.hxx>
 #include <opencl/OpenCLZone.hxx>
+#include "opencl_device.hxx"
 
 #include <memory>
 
@@ -40,6 +42,8 @@ void OpenCLZone::hardDisable()
         auto xConfProvider = css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext());
         css::uno::Reference<css::util::XFlushable> xFlushable(xConfProvider, css::uno::UNO_QUERY_THROW);
         xFlushable->flush();
+
+        releaseOpenCLEnv(&opencl::gpuEnv);
     }
 }
 

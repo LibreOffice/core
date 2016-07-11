@@ -824,6 +824,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		vcl_opengl_blacklist \
 	) \
 	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
+    $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ogltrans,\
