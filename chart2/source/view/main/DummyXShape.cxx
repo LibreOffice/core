@@ -1012,33 +1012,23 @@ DummyChart* DummyChart::getRootShape()
     return this;
 }
 
-#define QUERYINT( xint ) \
-    if( rType == cppu::UnoType<xint>::get() ) \
-        aAny <<= uno::Reference< xint >(this)
-
-#define QUERY_INTERFACE( xint ) \
-    if( rType == cppu::UnoType<xint>::get() ) \
-        return uno::makeAny(uno::Reference<xint>(this));
-
 uno::Any SAL_CALL DummyXShapes::queryInterface( const uno::Type& rType )
     throw(uno::RuntimeException, std::exception)
 {
-    QUERY_INTERFACE( drawing::XShapes );
-    QUERY_INTERFACE( container::XIndexAccess );
+    if( rType == cppu::UnoType<drawing::XShapes>::get() )
+        return uno::makeAny(uno::Reference<drawing::XShapes>(this));
+    if( rType == cppu::UnoType<container::XIndexAccess>::get() )
+        return uno::makeAny(uno::Reference<container::XIndexAccess>(this));
     return DummyXShape::queryInterface(rType);
 }
 
 uno::Any SAL_CALL DummyXShapes::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException, std::exception)
 {
-    uno::Any aAny;
-
-    //QUERYINT( drawing::XShapeGroup );
-    QUERYINT( drawing::XShapes );
+    if( rType == cppu::UnoType<drawing::XShapes>::get() )
+        return uno::makeAny(uno::Reference< drawing::XShapes >(this));
     else
         return DummyXShape::queryAggregation( rType );
-
-    return aAny;
 }
 
 void SAL_CALL DummyXShapes::acquire()
@@ -1083,7 +1073,7 @@ uno::Type SAL_CALL DummyXShapes::getElementType()
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SAL_CALL SAL_CALL DummyXShapes::hasElements()
+sal_Bool SAL_CALL DummyXShapes::hasElements()
     throw(uno::RuntimeException, std::exception)
 {
     return !maUNOShapes.empty();
