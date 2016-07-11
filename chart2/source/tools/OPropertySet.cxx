@@ -88,8 +88,6 @@ Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
         static_cast< XStyleSupplier * >( this ) );
 }
 
-#define LCL_PROP_CPPUTYPE(t) (cppu::UnoType<t>::get())
-
 //  ____ XTypeProvider ____
 Sequence< uno::Type > SAL_CALL
     OPropertySet::getTypes()
@@ -101,17 +99,14 @@ Sequence< uno::Type > SAL_CALL
 
     if( aTypeList.getLength() == 0 )
     {
-        ::std::vector< uno::Type > aTypes;
-
-        aTypes.push_back( LCL_PROP_CPPUTYPE( lang::XTypeProvider ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XPropertySet ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XMultiPropertySet ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XFastPropertySet ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XPropertyState ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XMultiPropertyStates ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( XStyleSupplier ));
-
-        aTypeList = comphelper::containerToSequence( aTypes );
+        aTypeList = Sequence< uno::Type >{
+                cppu::UnoType<lang::XTypeProvider>::get(),
+                cppu::UnoType<beans::XPropertySet>::get(),
+                cppu::UnoType<beans::XMultiPropertySet>::get(),
+                cppu::UnoType<beans::XFastPropertySet>::get(),
+                cppu::UnoType<beans::XPropertyState>::get(),
+                cppu::UnoType<beans::XMultiPropertyStates>::get(),
+                cppu::UnoType<XStyleSupplier>::get() };
     }
 
     return aTypeList;
