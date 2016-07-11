@@ -165,8 +165,6 @@ protected:
         return maScene;
     }
 
-    void setScene(TransitionScene const& rScene);
-
     void displaySlide( double nTime, sal_Int32 glSlideTex, const Primitives_t& primitives, double SlideWidthScale, double SlideHeightScale );
     void displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
     void applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale );
@@ -210,7 +208,7 @@ private:
     virtual GLuint makeShader() const = 0;
 
 private:
-    TransitionScene maScene;
+    const TransitionScene maScene;
     const TransitionSettings maSettings;
 
     /** Calculates the projection and model/view matrices, and upload them.

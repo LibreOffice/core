@@ -70,11 +70,6 @@ OGLTransitionImpl::~OGLTransitionImpl()
 {
 }
 
-void OGLTransitionImpl::setScene(TransitionScene const& rScene)
-{
-    maScene = rScene;
-}
-
 void OGLTransitionImpl::uploadModelViewProjectionMatrices()
 {
     double EyePos(10.0);
@@ -1138,18 +1133,26 @@ public:
         {}
 
 private:
-    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
+    virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
+
+    Primitives_t makeLeavingSlide(double nTime) const;
 };
 
-void DiamondTransition::prepare( double nTime, double /* SlideWidth */, double /* SlideHeight */, double /* DispWidth */, double /* DispHeight */ )
+void DiamondTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
+                                              double SlideWidthScale, double SlideHeightScale )
 {
-    Primitive Slide1, Slide2;
+    CHECK_GL_ERROR();
+    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
-    Slide1.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
-    Slide1.pushTriangle (glm::vec2 (1,0), glm::vec2 (0,1), glm::vec2 (1,1));
-    Primitives_t aEnteringSlidePrimitives;
-    aEnteringSlidePrimitives.push_back (Slide1);
+    CHECK_GL_ERROR();
+    displaySlide( nTime, glLeavingSlideTex, makeLeavingSlide(nTime), SlideWidthScale, SlideHeightScale );
+    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
+}
 
+Primitives_t DiamondTransition::makeLeavingSlide(double nTime) const
+{
+    Primitive Slide2;
     if( nTime >= 0.5 ) {
         double m = 1 - nTime;
 
@@ -1174,13 +1177,20 @@ void DiamondTransition::prepare( double nTime, double /* SlideWidth */, double /
     Primitives_t aLeavingSlidePrimitives;
     aLeavingSlidePrimitives.push_back (Slide2);
 
-    setScene(TransitionScene(aLeavingSlidePrimitives, aEnteringSlidePrimitives));
+    return aLeavingSlidePrimitives;
 }
 
 std::shared_ptr<OGLTransitionImpl>
 makeDiamondTransition(const TransitionSettings& rSettings)
 {
-    return std::make_shared<DiamondTransition>(TransitionScene(), rSettings);
+    Primitive Slide1;
+    Slide1.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
+    Slide1.pushTriangle (glm::vec2 (1,0), glm::vec2 (0,1), glm::vec2 (1,1));
+    Primitives_t aEnteringSlidePrimitives;
+    aEnteringSlidePrimitives.push_back (Slide1);
+    Primitives_t aLeavingSlidePrimitives;
+    aLeavingSlidePrimitives.push_back (Slide1);
+    return std::make_shared<DiamondTransition>(TransitionScene(aLeavingSlidePrimitives, aEnteringSlidePrimitives), rSettings);
 }
 
 }
