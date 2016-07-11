@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_4c405557",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2514,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-11T12:53:23Z",
+      "side": 1,
+      "message": "The lower case \"pica2\" (Square pica (1/6 inch)) is missing.",
+      "revId": "cfea2e694de80d7b8a7e5a6e4aca9085f08fca02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
