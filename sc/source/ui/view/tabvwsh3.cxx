@@ -376,7 +376,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         if( bUnmark )
                         {
                             MoveCursorAbs( nCol, nRow,
-                                SC_FOLLOW_LINE, false, false );
+                                SC_FOLLOW_NONE, false, false );
                         }
                     }
 
