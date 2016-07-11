@@ -33,6 +33,16 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_editprintarea.png</property>
   </object>
+  <object class="GtkImage" id="ExportToImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_exportto.png</property>
+  </object>
+  <object class="GtkImage" id="ExportToPDFImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_exportdirecttopdf.png</property>
+  </object>
   <object class="GtkImage" id="FormatGroupImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -93,6 +103,16 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_insertsymbol.png</property>
   </object>
+  <object class="GtkImage" id="OpenImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_open.png</property>
+  </object>
+  <object class="GtkImage" id="OpenRemoteImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_openremote.png</property>
+  </object>
   <object class="GtkImage" id="PageFormatDialogImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -103,10 +123,25 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_paste.png</property>
   </object>
+  <object class="GtkImage" id="PrintImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_print.png</property>
+  </object>
   <object class="GtkImage" id="ProtectImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_protect.png</property>
+  </object>
+  <object class="GtkImage" id="SaveAsImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_saveas.png</property>
+  </object>
+  <object class="GtkImage" id="SaveImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_save.png</property>
   </object>
   <object class="GtkImage" id="SendToBackImg">
     <property name="visible">True</property>
@@ -168,45 +203,130 @@
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkBox" id="box2">
+                  <object class="vcllo-SmallButton" id="OpenFromCalc">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkButton" id="Open">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:Open</property>
-                        <property name="relief">none</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="Save">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:Save</property>
-                        <property name="relief">none</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:OpenFromCalc</property>
+                    <property name="image">OpenImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="vcllo-SmallButton" id="Save">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:Save</property>
+                    <property name="image">SaveImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="vcllo-SmallButton" id="SaveAs">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:SaveAs</property>
+                    <property name="image">SaveAsImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="vcllo-SmallButton" id="OpenRemote">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:OpenRemote</property>
+                    <property name="image">OpenRemoteImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="vcllo-SmallButton" id="ExportTo">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:ExportTo</property>
+                    <property name="image">ExportToImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="ExportToPDF">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:ExportToPDF</property>
+                    <property name="image">ExportToPDFImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="vcllo-SmallButton" id="Print">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:Print</property>
+                    <property name="image">PrintImg</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="Signature">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="action_name">.uno:Signature</property>
+                    <property name="relief">none</property>
+                    <property name="image_position">top</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">7</property>
                   </packing>
                 </child>
               </object>
@@ -2493,7 +2613,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box33">
+              <object class="GtkBox" id="ViewBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">6</property>

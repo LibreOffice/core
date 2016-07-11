@@ -833,5 +833,8 @@
     <glade-widget-class title="Table Design Control" name="sdlo-TableDesignBox"
                         generic-name="TableDesignBox" parent="GtkImage"
                         icon-name="widget-gtk-image"/>
+    <glade-widget-class title="Custom Animation" name="sdlo-CustomAnimationBox"
+                        generic-name="CustomAnimationBox" parent="GtkImage"
+                        icon-name="widget-gtk-image"/>
   </glade-widget-classes>
 </glade-catalog>
