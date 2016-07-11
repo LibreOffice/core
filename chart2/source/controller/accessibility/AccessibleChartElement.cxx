@@ -169,7 +169,6 @@ Reference< awt::XFont > SAL_CALL AccessibleChartElement::getFont()
     CheckDisposeState();
 
     Reference< awt::XFont > xFont;
-    // using assignment for broken gcc 3.3
     Reference< awt::XDevice > xDevice( Reference< awt::XWindow >( GetInfo().m_xWindow ), uno::UNO_QUERY );
 
     if( xDevice.is())
