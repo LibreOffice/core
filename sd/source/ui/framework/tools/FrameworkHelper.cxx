@@ -521,12 +521,12 @@ OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
 namespace
 {
 
-void updateEditMode(const Reference<XView> &xView, FrameworkHelper* const pHelper, const EditMode eEMode, bool updateFrameView)
+void updateEditMode(const Reference<XView> &xView, const EditMode eEMode, bool updateFrameView)
 {
     // Ensure we have the expected edit mode
     // The check is only for DrawViewShell as OutlineViewShell
     // and SlideSorterViewShell have no master mode
-    const ::std::shared_ptr<ViewShell> pCenterViewShell (pHelper->GetViewShell(xView));
+    const ::std::shared_ptr<ViewShell> pCenterViewShell (FrameworkHelper::GetViewShell(xView));
     DrawViewShell* pDrawViewShell
         = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
     if (pDrawViewShell != nullptr)
@@ -548,7 +548,7 @@ void asyncUpdateEditMode(FrameworkHelper* const pHelper, const EditMode eEMode)
     Reference<XResourceId> xPaneId (
         FrameworkHelper::CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
     Reference<XView> xView (pHelper->GetView(xPaneId));
-    updateEditMode(xView, pHelper, eEMode, true);
+    updateEditMode(xView, eEMode, true);
 }
 
 }
@@ -637,7 +637,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         }
         else
         {
-            updateEditMode(xView, this, eEMode, false);
+            updateEditMode(xView, eEMode, false);
         }
     }
     catch (RuntimeException&)
