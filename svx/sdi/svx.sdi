@@ -2749,9 +2749,9 @@ XFillColorItem FillPageColor SID_ATTR_PAGE_COLOR
 
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
@@ -2860,9 +2860,9 @@ XFillStyleItem FillPageStyle SID_ATTR_PAGE_FILLSTYLE
     RecordPerSet;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
