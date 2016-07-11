@@ -24,6 +24,7 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
 ))
 
 $(eval $(call gb_Library_use_externals,sofficeapp, \
+	$(if $(filter OPENCL,$(BUILD_TYPE)),clew) \
     boost_headers \
     dbus \
 ))
@@ -103,6 +104,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/langselect \
     desktop/source/app/lockfile2 \
     desktop/source/app/officeipcthread \
+    desktop/source/app/opencl \
     desktop/source/app/sofficemain \
     desktop/source/app/userinstall \
     desktop/source/migration/migration \

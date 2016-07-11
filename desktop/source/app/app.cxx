@@ -75,12 +75,6 @@
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 
-#include <com/sun/star/table/XCell2.hpp>
-#include <com/sun/star/sheet/XCalculatable.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-
 #include <desktop/exithelper.h>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -115,7 +109,6 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <opencl/OpenCLZone.hxx>
 
 #include "langselect.hxx"
 
@@ -1333,72 +1326,6 @@ void Desktop::DoExecute()
 #endif
 }
 
-#if HAVE_FEATURE_OPENCL
-void testOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
-{
-    if (getenv("SAL_DISABLE_OPENCL"))
-        return;
-
-    css::uno::Reference< css::lang::XComponent > xComponent;
-
-    SAL_INFO("opencl", "Initiating test of OpenCL device");
-    try {
-        OpenCLZone aZone;
-        css::uno::Reference< css::frame::XComponentLoader > xLoader(xDesktop, css::uno::UNO_QUERY_THROW);
-
-        // FIXME: invisible, read-only etc.
-        css::uno::Sequence< css::beans::PropertyValue > aArgs(1);
-        aArgs[0].Name = "Hidden";
-        aArgs[0].Value = makeAny(true);
-
-        OUString aUrl("$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/opencl/cl-test.ods");
-        rtl::Bootstrap::expandMacros(aUrl);
-
-        xComponent.set(xLoader->loadComponentFromURL(aUrl, "_blank", 0, aArgs));
-
-        // What an unpleasant API to use.
-        css::uno::Reference< css::sheet::XCalculatable > xCalculatable( xComponent, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::sheet::XSpreadsheetDocument > xSpreadDoc( xComponent, css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::container::XIndexAccess > xIndex( xSheets, css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), css::uno::UNO_QUERY_THROW);
-
-        // So we insert our MAX call at the end on a named range.
-        css::uno::Reference< css::table::XCell2 > xThresh( xSheet->getCellByPosition(1,1), css::uno::UNO_QUERY_THROW ); // B2
-        double fThreshold = xThresh->getValue();
-
-        // We need pure OCL formulae all the way through the
-        // dependency chain, or we fall-back.
-        xCalculatable->calculateAll();
-
-        // So we insert our MAX call at the end on a named range.
-        css::uno::Reference< css::table::XCell2 > xCell( xSheet->getCellByPosition(1,0), css::uno::UNO_QUERY_THROW );
-        xCell->setFormula("=MAX(results)");
-        double fResult = xCell->getValue();
-
-        // Ensure the maximum variance is below our tolerance.
-        if (fResult > fThreshold)
-        {
-            SAL_WARN("opencl", "OpenCL results unstable - disabling; result: "
-                     << fResult << " vs. " << fThreshold);
-            OpenCLZone::hardDisable();
-        }
-        else
-        {
-            SAL_INFO("opencl", "calculating smoothly; result: " << fResult);
-        }
-    }
-    catch (const css::uno::Exception &e)
-    {
-        SAL_WARN("opencl", "OpenCL testing failed - disabling.");
-        OpenCLZone::hardDisable();
-    }
-
-    if (xComponent.is())
-        xComponent->dispose();
-}
-#endif // HAVE_FEATURE_OPENCL
-
 int Desktop::Main()
 {
     pExecGlobals = new ExecuteGlobals();
@@ -1680,7 +1607,7 @@ int Desktop::Main()
 
         // FIXME: move this somewhere sensible.
 #if HAVE_FEATURE_OPENCL
-        testOpenCLCompute(xDesktop);
+        CheckOpenCLCompute(xDesktop);
 #endif
 
         // Release solar mutex just before we wait for our client to connect

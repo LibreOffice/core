@@ -268,6 +268,8 @@ bool initOpenCLAttr( OpenCLEnv * env )
     return false;
 }
 
+}
+
 void releaseOpenCLEnv( GPUEnv *gpuInfo )
 {
     OpenCLZone zone;
@@ -297,6 +299,8 @@ void releaseOpenCLEnv( GPUEnv *gpuInfo )
 
     return;
 }
+
+namespace {
 
 bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
 {
@@ -884,7 +888,7 @@ const char* errorString(cl_int nError)
 
 bool GPUEnv::isOpenCLEnabled()
 {
-    return gpuEnv.mpDevID;
+    return gpuEnv.mpDevID && gpuEnv.mpContext;
 }
 
 }
