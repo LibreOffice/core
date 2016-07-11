@@ -149,18 +149,4 @@ void XMLChangedRegionImportContext::EndElement()
     }
 }
 
-void XMLChangedRegionImportContext::SetChangeInfo(
-    const OUString& rType,
-    const OUString& rAuthor,
-    const OUString& rComment,
-    const OUString& rDate)
-{
-    util::DateTime aDateTime;
-    if (::sax::Converter::parseDateTime(aDateTime, nullptr, rDate))
-    {
-        GetImport().GetTextImport()->RedlineAdd(
-            rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara);
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

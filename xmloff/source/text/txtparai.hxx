@@ -49,6 +49,7 @@ class XMLParaContext : public SvXMLImportContext
     bool                 mbOutlineLevelAttrFound;
     bool                 bIgnoreLeadingSpace;
     bool                 bHeading;
+    bool                 bInsertRedline;
     bool                 bIsListHeader;
     bool                 bIsRestart;
     sal_Int16            nStartValue;
@@ -61,7 +62,8 @@ public:
             sal_uInt16 nPrfx,
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            bool bHeading );
+            bool bHeading,
+            bool bInsertRedln = false );
 
     virtual ~XMLParaContext();
 

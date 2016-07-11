@@ -1819,7 +1819,8 @@ XMLParaContext::XMLParaContext(
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
-        bool bHead ) :
+        bool bHead,
+        bool bInsertRedln) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
     m_bHaveAbout(false),
@@ -1829,6 +1830,7 @@ XMLParaContext::XMLParaContext(
     mbOutlineLevelAttrFound( false ),
     bIgnoreLeadingSpace( true ),
     bHeading( bHead ),
+    bInsertRedline( bInsertRedln ),
     bIsListHeader( false ),
     bIsRestart (false),
     nStartValue(0),

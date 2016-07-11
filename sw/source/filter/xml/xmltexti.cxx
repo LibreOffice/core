@@ -976,13 +976,14 @@ void SwXMLTextImportHelper::RedlineAdd(
     const OUString& rAuthor,
     const OUString& rComment,
     const util::DateTime& rDateTime,
-    bool bMergeLastPara)
+    bool bMergeLastPara,
+    const sal_uInt32 nStartParaPos)
 {
     // create redline helper on demand
     OSL_ENSURE(nullptr != pRedlineHelper, "helper should have been created in constructor");
     if (nullptr != pRedlineHelper)
         pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime,
-                            bMergeLastPara);
+                            bMergeLastPara, nStartParaPos);
 }
 
 uno::Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
@@ -997,6 +998,15 @@ uno::Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
     }
 
     return xRet;
+}
+
+bool SwXMLTextImportHelper::CheckRedlineExists(
+    const OUString& rId)
+{
+    if(pRedlineHelper != nullptr)
+        return pRedlineHelper->Check(rId);
+    return false;
+    // else: ignore redline (wasn't added before, else we'd have a helper)
 }
 
 void SwXMLTextImportHelper::RedlineSetCursor(

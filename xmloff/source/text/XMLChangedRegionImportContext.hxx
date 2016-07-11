@@ -71,12 +71,6 @@ public:
     virtual void EndElement() override;
 
 
-    /// change info: To be called from change-info context
-    void SetChangeInfo(const OUString& rType,
-                       const OUString& rAuthor,
-                       const OUString& rComment,
-                       const OUString& rDate);
-
     /// create redline XText/XTextCursor on demand and register with
     /// XMLTextImportHelper
     void UseRedlineText();

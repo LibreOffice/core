@@ -101,6 +101,7 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
     const Reference<XAttributeList> & xAttrList)
 {
     SvXMLImportContext* pContext = nullptr;
+    sal_uInt32 nStartParaPos, nEndParaPos, nStartTextPos, nEndTextPos;
 
     if (XML_NAMESPACE_TEXT == nPrefix)
     {
@@ -122,11 +123,32 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
                 {
                     if (IsXMLToken(sLocalName, xmloff::token::XML_START))
                     {
-                        sID = sValue;
+                        sStart = sValue.pData->buffer + 1;
+                    }
+                    if (IsXMLToken(sLocalName, XML_END))
+                    {
+                        sEnd = sValue;
+                    }
+                }
+                if (XML_NAMESPACE_DC == nPrefix)
+                {
+                    if (IsXMLToken(sLocalName, XML_TYPE))
+                    {
+                        sType = sValue;
                     }
                 }
             }
-            SetChangeInfo( rLocalName, sAuthor, sComment, sDate );
+            if(sStart.indexOf('/') != -1)
+            {
+                sID = OUString(sStart.getStr(), sStart.indexOf('/'));
+                nStartParaPos = sID.toUInt32();
+            }
+            else
+            {
+                nStartParaPos = sStart.toUInt32();
+                sID = sStart;
+            }
+            SetChangeInfo( rLocalName, sAuthor, sComment, sDate, nStartParaPos );
 
             // create XMLChangeElementImportContext for all kinds of changes
             pContext = new XMLChangeElementImportContext(
@@ -156,13 +178,13 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
     return pContext;
 }
 
-void XMLTrackedChangesImportContext::SetChangeInfo(const OUString& rType, const OUString& rAuthor, const OUString& rComment, const OUString& rDate)
+void XMLTrackedChangesImportContext::SetChangeInfo(const OUString& rType, const OUString& rAuthor, const OUString& rComment, const OUString& rDate, const sal_uInt32 nStartParaPos)
 {
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime, nullptr, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(
-            rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara);
+            rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara, nStartParaPos);
     }
 }
 

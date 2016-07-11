@@ -76,13 +76,17 @@ public:
         const OUString& rAuthor,     // name of the author
         const OUString& rComment,    // redline comment
         const css::util::DateTime& rDateTime, // date+time
-        bool bMergeLastParagraph);      // merge last paragraph?
+        bool bMergeLastParagraph,      // merge last paragraph?
+        const sal_uInt32 nStartParaPos); // start paragraph position
 
     // create a text section for the redline, and return an
     // XText/XTextCursor that may be used to write into it.
     css::uno::Reference<css::text::XTextCursor> CreateRedlineTextSection(
             css::uno::Reference<css::text::XTextCursor> xOldCursor, // needed to get the document
             const OUString& rId);    // ID used to RedlineAdd() call
+
+    bool Check(
+        const OUString& rId);     // ID used in RedlineAdd() call
 
     // Set start or end position for a redline in the text body.
     // Accepts XTextRange objects.

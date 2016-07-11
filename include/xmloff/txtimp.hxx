@@ -389,6 +389,8 @@ private:
     std::shared_ptr<BackpatcherImpl> m_xBackpatcherImpl;
     static std::shared_ptr<BackpatcherImpl> MakeBackpatcherImpl();
 
+    sal_Int16            nParaIdx = 0;
+    bool                 bInsertRedline = false;
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
@@ -665,13 +667,18 @@ public:
             /// date+time
             const css::util::DateTime& rDateTime,
             /// merge last paras
-            bool bMergeLastParagraph);
+            bool bMergeLastParagraph,
+            const sal_uInt32 nStartParaPos);
 
     virtual css::uno::Reference< css::text::XTextCursor> RedlineCreateText(
             /// needed to get the document
             css::uno::Reference< css::text::XTextCursor > & rOldCursor,
             /// ID used to RedlineAdd() call
             const OUString& rId);
+
+    virtual bool CheckRedlineExists(
+        /// ID used to RedlineAdd() call
+        const OUString& rId);
 
     virtual void RedlineSetCursor(
         /// ID used to RedlineAdd() call

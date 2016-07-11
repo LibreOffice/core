@@ -89,10 +89,6 @@ SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
 
 void XMLChangeInfoContext::EndElement()
 {
-    // set values at changed region context
-    rChangedRegion.SetChangeInfo(rType, sAuthorBuffer.makeStringAndClear(),
-                                 sCommentBuffer.makeStringAndClear(),
-                                 sDateTimeBuffer.makeStringAndClear());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

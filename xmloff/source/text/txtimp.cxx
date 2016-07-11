@@ -2146,14 +2146,16 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     bool bHeading = false;
     bool bContent = true;
     sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+    OUString sParaIdx;
     switch( nToken )
     {
     case XML_TOK_TEXT_H:
         bHeading = true;
     case XML_TOK_TEXT_P:
+        sParaIdx = OUString::number(++nParaIdx);
         pContext = new XMLParaContext( rImport,
                                        nPrefix, rLocalName,
-                                       xAttrList, bHeading );
+                                       xAttrList, bHeading, bInsertRedline );
         if (m_xImpl->m_bProgress && XML_TEXT_TYPE_SHAPE != eType)
         {
             rImport.GetProgressBarHelper()->Increment();
@@ -2732,7 +2734,8 @@ void XMLTextImportHelper::RedlineAdd( const OUString& /*rType*/,
                                       const OUString& /*rAuthor*/,
                                       const OUString& /*rComment*/,
                                       const util::DateTime& /*rDateTime*/,
-                                      bool /*bMergeLastPara*/)
+                                      bool /*bMergeLastPara*/,
+                                      const sal_uInt32 /*nStartParaPos*/)
 {
     // dummy implementation: do nothing
 }
@@ -2745,6 +2748,12 @@ Reference<XTextCursor> XMLTextImportHelper::RedlineCreateText(
     // dummy implementation: do nothing
     Reference<XTextCursor> xRet;
     return xRet;
+}
+
+bool XMLTextImportHelper::CheckRedlineExists(
+    const OUString& rId)
+{
+    return true;
 }
 
 void XMLTextImportHelper::RedlineSetCursor(

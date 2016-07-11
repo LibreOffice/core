@@ -57,6 +57,15 @@ public:
     /// redline date
     OUString sDate;
 
+    /// redline date
+    OUString sStart;
+
+    /// redline date
+    OUString sEnd;
+
+    /// redline date
+    OUString sType;
+
     /// merge-last-paragraph flag
     bool bMergeLastPara;
 
@@ -79,7 +88,8 @@ public:
     void SetChangeInfo(const OUString& rType,
                        const OUString& rAuthor,
                        const OUString& rComment,
-                       const OUString& rDate);
+                       const OUString& rDate,
+                       const sal_uInt32);
 
     /// create redline XText/XTextCursor on demand and register with
     /// XMLTextImportHelper

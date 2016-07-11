@@ -195,6 +195,7 @@ public:
     OUString sComment;              // change comment string
     util::DateTime aDateTime;       // change DateTime
     bool bMergeLastParagraph;   // the SwRangeRedline::IsDelLastPara flag
+    sal_uInt32 nStartParagraphPos;
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
 
@@ -373,7 +374,8 @@ void XMLRedlineImportHelper::Add(
     const OUString& rAuthor,
     const OUString& rComment,
     const util::DateTime& rDateTime,
-    bool bMergeLastPara)
+    bool bMergeLastPara,
+    const sal_uInt32 nStartParaPos)
 {
     // we need to do the following:
     // 1) parse type string
@@ -411,6 +413,7 @@ void XMLRedlineImportHelper::Add(
     pInfo->sComment = rComment;
     pInfo->aDateTime = rDateTime;
     pInfo->bMergeLastParagraph = bMergeLastPara;
+    pInfo->nStartParagraphPos = nStartParaPos;
 
     // ad 3)
     if (aRedlineMap.end() == aRedlineMap.find(rId))
@@ -485,6 +488,17 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
     // else: unknown redline -> Ignore
 
     return xReturn;
+}
+
+bool XMLRedlineImportHelper::Check(
+    const OUString& rId)
+{
+    RedlineMapType::iterator aFind = aRedlineMap.find(rId);
+    if (aRedlineMap.end() != aFind)
+    {
+        return true;
+    }
+    return false;
 }
 
 void XMLRedlineImportHelper::SetCursor(
