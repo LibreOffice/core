@@ -1257,12 +1257,12 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
             {
                 BitmapColor aCol;
                 long        nR, nG, nB;
-                const long  nMinR = MinMax( (long) rTransColor.GetRed() - nTol, 0, 255 );
-                const long  nMaxR = MinMax( (long) rTransColor.GetRed() + nTol, 0, 255 );
-                const long  nMinG = MinMax( (long) rTransColor.GetGreen() - nTol, 0, 255 );
-                const long  nMaxG = MinMax( (long) rTransColor.GetGreen() + nTol, 0, 255 );
-                const long  nMinB = MinMax( (long) rTransColor.GetBlue() - nTol, 0, 255 );
-                const long  nMaxB = MinMax( (long) rTransColor.GetBlue() + nTol, 0, 255 );
+                const long  nMinR = MinMax<long>(rTransColor.GetRed() - nTol, 0, 255);
+                const long  nMaxR = MinMax<long>(rTransColor.GetRed() + nTol, 0, 255);
+                const long  nMinG = MinMax<long>(rTransColor.GetGreen() - nTol, 0, 255);
+                const long  nMaxG = MinMax<long>(rTransColor.GetGreen() + nTol, 0, 255);
+                const long  nMinB = MinMax<long>(rTransColor.GetBlue() - nTol, 0, 255);
+                const long  nMaxB = MinMax<long>(rTransColor.GetBlue() + nTol, 0, 255);
 
                 if( pReadAcc->HasPalette() )
                 {
@@ -1579,12 +1579,12 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
 
     if( pAcc )
     {
-        const long  nMinR = MinMax( (long) rSearchColor.GetRed() - nTol, 0, 255 );
-        const long  nMaxR = MinMax( (long) rSearchColor.GetRed() + nTol, 0, 255 );
-        const long  nMinG = MinMax( (long) rSearchColor.GetGreen() - nTol, 0, 255 );
-        const long  nMaxG = MinMax( (long) rSearchColor.GetGreen() + nTol, 0, 255 );
-        const long  nMinB = MinMax( (long) rSearchColor.GetBlue() - nTol, 0, 255 );
-        const long  nMaxB = MinMax( (long) rSearchColor.GetBlue() + nTol, 0, 255 );
+        const long  nMinR = MinMax<long>(rSearchColor.GetRed() - nTol, 0, 255);
+        const long  nMaxR = MinMax<long>(rSearchColor.GetRed() + nTol, 0, 255);
+        const long  nMinG = MinMax<long>(rSearchColor.GetGreen() - nTol, 0, 255);
+        const long  nMaxG = MinMax<long>(rSearchColor.GetGreen() + nTol, 0, 255);
+        const long  nMinB = MinMax<long>(rSearchColor.GetBlue() - nTol, 0, 255);
+        const long  nMaxB = MinMax<long>(rSearchColor.GetBlue() + nTol, 0, 255);
 
         if( pAcc->HasPalette() )
         {
@@ -1663,12 +1663,12 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
             const Color&    rCol = pSearchColors[ i ];
             const long      nTol = pTols[ i ];
 
-            pMinR[ i ] = MinMax( (long) rCol.GetRed() - nTol, 0, 255 );
-            pMaxR[ i ] = MinMax( (long) rCol.GetRed() + nTol, 0, 255 );
-            pMinG[ i ] = MinMax( (long) rCol.GetGreen() - nTol, 0, 255 );
-            pMaxG[ i ] = MinMax( (long) rCol.GetGreen() + nTol, 0, 255 );
-            pMinB[ i ] = MinMax( (long) rCol.GetBlue() - nTol, 0, 255 );
-            pMaxB[ i ] = MinMax( (long) rCol.GetBlue() + nTol, 0, 255 );
+            pMinR[ i ] = MinMax<long>(rCol.GetRed() - nTol, 0, 255);
+            pMaxR[ i ] = MinMax<long>(rCol.GetRed() + nTol, 0, 255);
+            pMinG[ i ] = MinMax<long>(rCol.GetGreen() - nTol, 0, 255);
+            pMaxG[ i ] = MinMax<long>(rCol.GetGreen() + nTol, 0, 255);
+            pMinB[ i ] = MinMax<long>(rCol.GetBlue() - nTol, 0, 255);
+            pMaxB[ i ] = MinMax<long>(rCol.GetBlue() + nTol, 0, 255);
         }
 
         if( pAcc->HasPalette() )
