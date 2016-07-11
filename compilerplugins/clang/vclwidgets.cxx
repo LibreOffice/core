@@ -379,8 +379,10 @@ static void findDisposeAndClearStatements(std::set<const FieldDecl*>& aVclPtrFie
         return;
     if (isa<CompoundStmt>(pStmt)) {
         const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pStmt);
-        for(const Stmt* pStmt : pCompoundStatement->body()) {
-            findDisposeAndClearStatements(aVclPtrFields, pStmt);
+        for (auto i = pCompoundStatement->body_begin();
+             i != pCompoundStatement->body_end(); ++i)
+        {
+            findDisposeAndClearStatements(aVclPtrFields, *i);
         }
         return;
     }
@@ -459,22 +461,24 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
             return true;
 
         std::set<const FieldDecl*> aVclPtrFields;
-        for(const auto& fieldDecl : pMethodDecl->getParent()->fields()) {
-            auto const type = loplugin::TypeCheck(fieldDecl->getType());
+        for (auto i = pMethodDecl->getParent()->field_begin();
+             i != pMethodDecl->getParent()->field_end(); ++i)
+        {
+            auto const type = loplugin::TypeCheck((*i)->getType());
             if (type.Class("VclPtr").GlobalNamespace()) {
-               aVclPtrFields.insert(fieldDecl);
+               aVclPtrFields.insert(*i);
             } else if (type.Class("vector").StdNamespace()
                        || type.Class("map").StdNamespace()
                        || type.Class("list").StdNamespace()
                        || type.Class("set").StdNamespace())
             {
-                const RecordType* recordType = dyn_cast_or_null<RecordType>(fieldDecl->getType()->getUnqualifiedDesugaredType());
+                const RecordType* recordType = dyn_cast_or_null<RecordType>((*i)->getType()->getUnqualifiedDesugaredType());
                 if (recordType) {
                     auto d = dyn_cast<ClassTemplateSpecializationDecl>(recordType->getDecl());
                     if (d && d->getTemplateArgs().size()>0) {
                         auto const type = loplugin::TypeCheck(d->getTemplateArgs()[0].getAsType());
                         if (type.Class("VclPtr").GlobalNamespace()) {
-                            aVclPtrFields.insert(fieldDecl);
+                            aVclPtrFields.insert(*i);
                         }
                     }
                 }
