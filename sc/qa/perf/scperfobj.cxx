@@ -12,6 +12,10 @@
 #include <rtl/ustring.hxx>
 #include "cppunit/extensions/HelperMacros.h"
 
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
+
 #include <com/sun/star/util/XSearchable.hpp>
 #include <com/sun/star/util/XSearchDescriptor.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -40,6 +44,10 @@
 
 #include <test/callgrind.hxx>
 
+#include "calcconfig.hxx"
+#include "docsh.hxx"
+#include "tabvwsh.hxx"
+
 using namespace css;
 using namespace css::uno;
 
@@ -59,7 +67,7 @@ public:
     CPPUNIT_TEST_SUITE(ScPerfObj);
     CPPUNIT_TEST(testSheetFindAll);
     CPPUNIT_TEST(testFixedSum);
-    CPPUNIT_TEST(testVariableSum);
+    CPPUNIT_TEST(testFormulaGroupSWInterpreter);
     CPPUNIT_TEST(testSheetNamedRanges);
     CPPUNIT_TEST(testSheets);
     CPPUNIT_TEST(testSum);
@@ -97,7 +105,7 @@ private:
     void testSubTotalWithoutFormulas();
     void testLoadingFileWithSingleBigSheet();
     void testFixedSum();
-    void testVariableSum();
+    void testFormulaGroupSWInterpreter();
     void testMatConcatSmall();
     void testMatConcatLarge();
 };
@@ -133,6 +141,111 @@ void ScPerfObj::tearDown()
     }
     CalcUnoApiTest::tearDown();
 }
+
+namespace {
+
+class SpreadsheetDoc
+{
+public:
+    SpreadsheetDoc();
+    ~SpreadsheetDoc();
+
+    void copyRange( const OUString& rSrcRange, const OUString& rDstRange );
+
+    ScDocument& GetDocument() { return *pDoc; }
+    ScModelObj* GetModel() { return pModel; }
+
+private:
+    uno::Reference< lang::XComponent > xComponent;
+    ScDocument* pDoc;
+    ScModelObj* pModel;
+    ScTabViewShell* pViewShell;
+    bool bOpenCLState;
+};
+
+SpreadsheetDoc::SpreadsheetDoc()
+    : xComponent()
+    , pDoc(nullptr)
+    , pModel(nullptr)
+    , pViewShell(nullptr)
+    , bOpenCLState(ScCalcConfig::isOpenCLEnabled())
+{
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT( xDesktop.is() );
+
+    // create a frame
+    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame( "_blank", 0 );
+    CPPUNIT_ASSERT( xTargetFrame.is() );
+
+    // Create spreadsheet
+    uno::Sequence< beans::PropertyValue > aEmptyArgList;
+    xComponent = xDesktop->loadComponentFromURL(
+            "private:factory/scalc",
+            "_blank",
+            0,
+            aEmptyArgList );
+    CPPUNIT_ASSERT( xComponent.is() );
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh != nullptr);
+
+    uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
+    CPPUNIT_ASSERT( xModel2.is() );
+
+    Reference< frame::XController2 > xController ( xModel2->createDefaultViewController( xTargetFrame ), UNO_QUERY );
+    CPPUNIT_ASSERT( xController.is() );
+
+    // introduce model/view/controller to each other
+    xController->attachModel( xModel2.get() );
+    xModel2->connectController( xController.get() );
+    xTargetFrame->setComponent( xController->getComponentWindow(), xController.get() );
+    xController->attachFrame( xTargetFrame );
+    xModel2->setCurrentController( xController.get() );
+
+    pDoc = &(xDocSh->GetDocument());
+
+    // Get the document controller
+    pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell != nullptr);
+
+    pModel = ScModelObj::getImplementation(pFoundShell->GetModel());
+    CPPUNIT_ASSERT(pModel != nullptr);
+}
+
+SpreadsheetDoc::~SpreadsheetDoc()
+{
+    // Close the document (Ctrl-W)
+    if (pModel)
+        pModel->enableOpenCL(bOpenCLState);
+    if (xComponent.is())
+        xComponent->dispose();
+}
+
+void SpreadsheetDoc::copyRange( const OUString& rSrcRange, const OUString& rDstRange )
+{
+
+   ScDocument aClipDoc(SCDOCMODE_CLIP);
+
+    // 1. Copy
+    ScRange aSrcRange;
+    ScRefFlags nRes = aSrcRange.Parse(rSrcRange, pDoc, pDoc->GetAddressConvention());
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
+    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+
+    // 2. Paste
+    ScRange aDstRange;
+    nRes = aDstRange.Parse(rDstRange, pDoc, pDoc->GetAddressConvention());
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
+    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+}
+
+} // anonymous namespace
 
 void ScPerfObj::testSheetFindAll()
 {
@@ -610,18 +723,34 @@ void ScPerfObj::testFixedSum()
     }
 }
 
-void ScPerfObj::testVariableSum()
+void ScPerfObj::testFormulaGroupSWInterpreter()
 {
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions3.ods"), UNO_QUERY_THROW);
+    // 1. Create spreadsheet
+    SpreadsheetDoc aSpreadsheet;
 
-    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
-    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+    // 2. Disable OpenCL
+    ScModelObj* pModel = aSpreadsheet.GetModel();
+    pModel->enableOpenCL(false);
+    CPPUNIT_ASSERT(!ScCalcConfig::isOpenCLEnabled());
+    pModel->enableAutomaticCalculation(false);
 
-    setupBlockFormula(xDoc, "VariableSumSheet", "B1:B1000", "=SUM(A1:A1000)");
+    // 3. Setup data and formulas
+    ScDocument& rDoc = aSpreadsheet.GetDocument();
 
+    for (unsigned int r = 0; r <= 10000; ++r)
+        rDoc.SetValue( ScAddress(0,r,0), r+1 );
+
+    rDoc.SetString(ScAddress(1,0,0), "=A1");
+    rDoc.SetString(ScAddress(2,0,0), "=PRODUCT(A1,SUM(B1:B$10000))");
+
+    aSpreadsheet.copyRange("B1:C1", "B2:C10000");
+
+    // 4. Calculate
     callgrindStart();
-    xCalculatable->calculateAll();
-    callgrindDump("sc:sum_with_variable_array_formula");
+    pModel->calculateAll();
+    callgrindDump("sc:formula_group_sw_interpreter");
+
+    // 5. Automatically close the document (Ctrl-W) on spreadsheet destruction
 }
 
 void ScPerfObj::testMatConcatSmall()
