@@ -1134,23 +1134,9 @@ public:
 
 private:
     virtual void displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) override;
-
-    Primitives_t makeLeavingSlide(double nTime) const;
 };
 
-void DiamondTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
-                                              double SlideWidthScale, double SlideHeightScale )
-{
-    CHECK_GL_ERROR();
-    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
-
-    CHECK_GL_ERROR();
-    displaySlide( nTime, glLeavingSlideTex, makeLeavingSlide(nTime), SlideWidthScale, SlideHeightScale );
-    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
-    CHECK_GL_ERROR();
-}
-
-Primitives_t DiamondTransition::makeLeavingSlide(double nTime) const
+Primitives_t makeLeavingSlide(double nTime)
 {
     Primitive Slide2;
     if( nTime >= 0.5 ) {
@@ -1178,6 +1164,18 @@ Primitives_t DiamondTransition::makeLeavingSlide(double nTime) const
     aLeavingSlidePrimitives.push_back (Slide2);
 
     return aLeavingSlidePrimitives;
+}
+
+void DiamondTransition::displaySlides_( double nTime, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex,
+                                              double SlideWidthScale, double SlideHeightScale )
+{
+    CHECK_GL_ERROR();
+    applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
+
+    CHECK_GL_ERROR();
+    displaySlide( nTime, glLeavingSlideTex, makeLeavingSlide(nTime), SlideWidthScale, SlideHeightScale );
+    displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
 }
 
 std::shared_ptr<OGLTransitionImpl>
