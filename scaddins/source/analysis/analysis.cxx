@@ -738,18 +738,22 @@ double SAL_CALL AnalysisAddIn::getLcm( const uno::Reference< beans::XPropertySet
     if( aValList.Count() == 0 )
         return 0.0;
 
-    double          f = aValList.Get(0);
+    double f = rtl::math::approxFloor( aValList.Get(0) );
+    if( f < 0.0 )
+        throw lang::IllegalArgumentException();
 
     if( f == 0.0 )
         return f;
 
     for( sal_uInt32 i = 1; i < aValList.Count(); ++i )
     {
-        double      fTmp = aValList.Get(i);
+        double fTmp = rtl::math::approxFloor( aValList.Get(i) );
+        if( fTmp < 0.0 )
+            throw lang::IllegalArgumentException();
+
+        f = fTmp * f / GetGcd( fTmp, f );
         if( f == 0.0 )
             return f;
-        else
-            f = fTmp * f / GetGcd( fTmp, f );
     }
 
     RETURN_FINITE( f );
