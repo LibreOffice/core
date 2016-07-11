@@ -480,10 +480,14 @@ DateTime OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
         struct tm aCTime;
         isc_decode_timestamp(&aISCTimestamp, &aCTime);
 
-        // first field is nanoseconds -- not supported in firebird or struct tm.
-        // last field denotes UTC (true) or unknown (false)
-        return DateTime(0, aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, aCTime.tm_mday,
-                    aCTime.tm_mon, aCTime.tm_year, false);
+        return DateTime(0, //nanoseconds, not supported
+                        aCTime.tm_sec,
+                        aCTime.tm_min,
+                        aCTime.tm_hour,
+                        aCTime.tm_mday,
+                        aCTime.tm_mon + 1, // tm is from 0 to 11
+                        aCTime.tm_year + 1900, //tm_year is the years since 1900
+                        false); // denotes UTC (true), or unknown (false)
     }
     else
     {
