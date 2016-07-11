@@ -581,7 +581,7 @@
           <info>
             <desc>List specifying the order of the global filters within their group.</desc>
           </info>
-          <value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formula.FormularProperties;com.sun.star.sdb.OfficeDatabaseDocument</value>
+          <value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formula.FormulaProperties;com.sun.star.sdb.OfficeDatabaseDocument</value>
         </prop>
         <set oor:name="Classes" oor:node-type="FilterClass">
           <info>

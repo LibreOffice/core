@@ -69,7 +69,7 @@
             <value oor:separator=";">writer_globaldocument_StarOffice_XML_Writer_GlobalDocument;writerglobal8</value>
           </prop>
         </node>
-        <node oor:name="com.sun.star.formula.FormularProperties" oor:op="replace">
+        <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace">
           <prop oor:name="DisplayName">
             <value xml:lang="en-US">Formulas</value>
           </prop>

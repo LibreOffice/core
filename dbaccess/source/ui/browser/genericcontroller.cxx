@@ -1150,7 +1150,7 @@ namespace
                     "com.sun.star.sheet.SpreadsheetDocument", "scalc",
                     "com.sun.star.presentation.PresentationDocument", "simpress",
                     "com.sun.star.drawing.DrawingDocument", "sdraw",
-                    "com.sun.star.formula.FormularProperties", "smath",
+                    "com.sun.star.formula.FormulaProperties", "smath",
                     "com.sun.star.chart.ChartDocument", "schart"
                 };
                 OSL_ENSURE( SAL_N_ELEMENTS( pTransTable ) % 2 == 0,
