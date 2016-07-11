@@ -1351,8 +1351,10 @@ void testOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
         aArgs[0].Name = "Hidden";
         aArgs[0].Value = makeAny(true);
 
-        xComponent.set(xLoader->loadComponentFromURL("file:///tmp/cl-test.ods",
-                                                     "_blank", 0, aArgs));
+        OUString aUrl("$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/opencl/cl-test.ods");
+        rtl::Bootstrap::expandMacros(aUrl);
+
+        xComponent.set(xLoader->loadComponentFromURL(aUrl, "_blank", 0, aArgs));
 
         // What an unpleasant API to use.
         css::uno::Reference< css::sheet::XCalculatable > xCalculatable( xComponent, css::uno::UNO_QUERY_THROW);
