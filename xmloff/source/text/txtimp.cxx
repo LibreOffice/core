@@ -1080,7 +1080,7 @@ SvXMLImportPropertyMapper*
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TextPropMap::CELL, false );
-    return new SvXMLImportPropertyMapper( pPropMapper, rImport );
+    return new XMLTextImportPropertyMapper( pPropMapper, rImport );
 }
 
 void XMLTextImportHelper::SetCursor( const Reference < XTextCursor > & rCursor )
