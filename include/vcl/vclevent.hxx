@@ -225,6 +225,9 @@ private:
     VclPtr<Menu> pMenu;
     sal_uInt16 mnPos;
 
+    VclMenuEvent(VclMenuEvent &) = delete;
+    void operator =(VclMenuEvent) = delete;
+
 public:
     VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos );
     virtual ~VclMenuEvent();

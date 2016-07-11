@@ -35,7 +35,11 @@ typedef std::map<const OUString, OUString> StringMap;
  */
 class UITEST_DLLPUBLIC UIObject
 {
+    UIObject(UIObject &) = delete;
+    void operator =(UIObject) = delete;
+
 public:
+    UIObject() = default;
 
     virtual ~UIObject();
 
