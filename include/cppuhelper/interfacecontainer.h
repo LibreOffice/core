@@ -450,8 +450,8 @@ struct OBroadcastHelperVar
     OBroadcastHelperVar( ::osl::Mutex & rMutex_ )
         : rMutex( rMutex_ )
         , aLC( rMutex_ )
-        , bDisposed( sal_False )
-        , bInDispose( sal_False )
+        , bDisposed( false )
+        , bInDispose( false )
     {}
 
     /**

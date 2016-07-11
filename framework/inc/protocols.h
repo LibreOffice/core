@@ -82,7 +82,7 @@ class ProtocolCheck
      */
     static bool isProtocol( const OUString& sURL, EProtocol eRequired )
     {
-        bool bRet = sal_False;
+        bool bRet = false;
         switch(eRequired)
         {
             case E_PRIVATE:
@@ -116,7 +116,7 @@ class ProtocolCheck
                 bRet = sURL.startsWith(SPECIALPROTOCOL_NEWS);
                 break;
             default:
-                bRet = sal_False;
+                bRet = false;
                 break;
         }
         return bRet;

@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <limits>
 #include <set>
 #include <string>
 
@@ -144,14 +145,19 @@ public:
 
     bool TraverseStaticAssertDecl(StaticAssertDecl * decl);
 
+    bool TraverseLinkageSpecDecl(LinkageSpecDecl * decl);
+
 private:
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
+
+    bool isSharedCAndCppCode(SourceLocation location) const;
 
     bool isInSpecialMainFile(SourceLocation spellingLocation) const;
 
     bool rewrite(SourceLocation location);
 
     std::set<VarDecl const *> varDecls_;
+    unsigned int externCContexts_ = 0;
 };
 
 void SalBool::run() {
@@ -282,10 +288,9 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
             StringRef name { Lexer::getImmediateMacroName(
                 loc, compiler.getSourceManager(), compiler.getLangOpts()) };
             if (name == "sal_False" || name == "sal_True") {
-                auto callLoc = compiler.getSourceManager().getSpellingLoc(
-                    compiler.getSourceManager().getImmediateMacroCallerLoc(
-                        loc));
-                if (!isFromCIncludeFile(callLoc)) {
+                auto callLoc = compiler.getSourceManager()
+                    .getImmediateMacroCallerLoc(loc);
+                if (!isSharedCAndCppCode(callLoc)) {
                     SourceLocation argLoc;
                     if (compat::isMacroArgExpansion(
                             compiler, expr->getLocStart(), &argLoc)
@@ -301,17 +306,19 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
                     }
                     bool b = name == "sal_True";
                     if (rewriter != nullptr) {
+                        auto callSpellLoc = compiler.getSourceManager()
+                            .getSpellingLoc(callLoc);
                         unsigned n = Lexer::MeasureTokenLength(
-                            callLoc, compiler.getSourceManager(),
+                            callSpellLoc, compiler.getSourceManager(),
                             compiler.getLangOpts());
                         if (StringRef(
                                 compiler.getSourceManager().getCharacterData(
-                                    callLoc),
+                                    callSpellLoc),
                                 n)
                             == name)
                         {
                             return replaceText(
-                                callLoc, n, b ? "true" : "false");
+                                callSpellLoc, n, b ? "true" : "false");
                         }
                     }
                     report(
@@ -725,12 +732,31 @@ bool SalBool::TraverseStaticAssertDecl(StaticAssertDecl * decl) {
         || RecursiveASTVisitor::TraverseStaticAssertDecl(decl);
 }
 
+bool SalBool::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
+    assert(externCContexts_ != std::numeric_limits<unsigned int>::max()); //TODO
+    ++externCContexts_;
+    bool ret = RecursiveASTVisitor::TraverseLinkageSpecDecl(decl);
+    assert(externCContexts_ != 0);
+    --externCContexts_;
+    return ret;
+}
+
 bool SalBool::isFromCIncludeFile(SourceLocation spellingLocation) const {
     return !compiler.getSourceManager().isInMainFile(spellingLocation)
         && (StringRef(
                 compiler.getSourceManager().getPresumedLoc(spellingLocation)
                 .getFilename())
             .endswith(".h"));
+}
+
+bool SalBool::isSharedCAndCppCode(SourceLocation location) const {
+    // Assume that code is intended to be shared between C and C++ if it comes
+    // from an include file ending in .h, and is either in an extern "C" context
+    // or the body of a macro definition:
+    return
+        isFromCIncludeFile(compiler.getSourceManager().getSpellingLoc(location))
+        && (externCContexts_ != 0
+            || compiler.getSourceManager().isMacroBodyExpansion(location));
 }
 
 bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {

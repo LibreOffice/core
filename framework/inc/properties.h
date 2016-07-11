@@ -157,7 +157,7 @@ class PropHelper
                                                  css::uno::Any& aOldValue     ,
                                                  css::uno::Any& aChangedValue )
     {
-        bool bChanged = sal_False;
+        bool bChanged = false;
 
         // clear return parameter to be sure, to put out only valid values ...
         aOldValue.clear();
