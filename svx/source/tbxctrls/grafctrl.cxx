@@ -235,6 +235,7 @@ public:
 
     void                    Update( const SfxPoolItem* pItem ) { maField->Update( pItem ); }
     void                    SetText( const OUString& rStr ) override { maField->SetText( rStr ); }
+    virtual void            Resize() override;
 };
 
 ImplGrafControl::ImplGrafControl(
@@ -299,6 +300,15 @@ void ImplGrafControl::GetFocus()
 {
     if (maField)
         maField->GrabFocus();
+}
+
+void ImplGrafControl::Resize()
+{
+    Size aFldSize(maField->GetSizePixel());
+    aFldSize.Width() = GetSizePixel().Width() - SYMBOL_TO_FIELD_OFFSET - maImage->GetSizePixel().Width();
+    maField->SetSizePixel(aFldSize);
+
+    Control::Resize();
 }
 
 class ImplGrafModeControl : public ListBox
