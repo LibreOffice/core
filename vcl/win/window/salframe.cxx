@@ -5387,6 +5387,9 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
 }
 
 static LRESULT ImplHandleIMEQueryCharPosition( HWND hWnd, LPARAM lParam ) {
+    if ( ! ImplSalYieldMutexTryToAcquire() )
+        return FALSE;
+
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     PIMECHARPOSITION pQueryCharPosition = (PIMECHARPOSITION) lParam;
     if ( pQueryCharPosition->dwSize < sizeof(IMECHARPOSITION) )
@@ -5424,6 +5427,7 @@ static LRESULT ImplHandleIMEQueryCharPosition( HWND hWnd, LPARAM lParam ) {
     pQueryCharPosition->rcDocument.right = 0;
     pQueryCharPosition->rcDocument.bottom = 0;
 
+    ImplSalYieldMutexRelease();
     return TRUE;
 }
 
