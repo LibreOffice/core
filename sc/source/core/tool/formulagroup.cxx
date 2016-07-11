@@ -340,24 +340,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     delete msInstance;
     msInstance = nullptr;
 
-    if (bOpenCLEnabled)
-    {
-        msInstance = new sc::opencl::FormulaGroupInterpreterOpenCL();
-
-        if (aSelectedCLDeviceVersionID != officecfg::Office::Common::Misc::SelectedOpenCLDeviceIdentifier::get())
-        {
-            // perform OpenCL calculation tests
-
-            // save the device
-            std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Misc::SelectedOpenCLDeviceIdentifier::set(aSelectedCLDeviceVersionID, xBatch);
-            xBatch->commit();
-        }
-
-        return msInstance != nullptr;
-    }
-
-    return false;
+    return true;
 }
 
 void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId)

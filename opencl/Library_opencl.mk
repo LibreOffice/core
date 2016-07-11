@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_sdk_api,opencl))
 
 $(eval $(call gb_Library_use_libraries,opencl,\
     clew \
-    configmgr \
     comphelper \
     cppu \
     sal \
