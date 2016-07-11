@@ -105,9 +105,8 @@ extern "C" void getFactory(va_list * args) {
     component_getFactoryFunc fn = va_arg(*args, component_getFactoryFunc);
     rtl::OString const * implementation = va_arg(*args, rtl::OString const *);
     void * smgr = va_arg(*args, void *);
-    void * key = va_arg(*args, void *);
     void ** factory = va_arg(*args, void **);
-    *factory = (*fn)(implementation->getStr(), smgr, key);
+    *factory = (*fn)(implementation->getStr(), smgr, nullptr);
 }
 
 css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
@@ -140,7 +139,7 @@ css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
             serviceManager.get(),
             cppu::UnoType<css::lang::XMultiServiceFactory>::get());
         void * factory = nullptr;
-        target.invoke(getFactory, function, &impl, smgr, 0, &factory);
+        target.invoke(getFactory, function, &impl, smgr, &factory);
         if (smgr != nullptr) {
             (*target.get()->pExtEnv->releaseInterface)(
                 target.get()->pExtEnv, smgr);
