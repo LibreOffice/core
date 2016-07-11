@@ -1991,7 +1991,7 @@ double ScInterpreter::GetDouble()
             PopExternalSingleRef(pToken);
             if (!nGlobalError && pToken)
             {
-                if (pToken->GetType() == svDouble)
+                if (pToken->GetType() == svDouble || pToken->GetType() == svEmptyCell)
                     nVal = pToken->GetDouble();
                 else
                     nVal = ConvertStringToValue( pToken->GetString().getString());
