@@ -19,18 +19,13 @@
 
 #include "OPropertySet.hxx"
 #include "ImplOPropertySet.hxx"
-#include "ContainerHelper.hxx"
 #include <cppuhelper/queryinterface.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <vector>
 #include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;
-
-using ::com::sun::star::style::XStyleSupplier;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -85,34 +80,22 @@ Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
         static_cast< beans::XFastPropertySet * >( this ),
         static_cast< beans::XPropertyState * >( this ),
         static_cast< beans::XMultiPropertyStates * >( this ),
-        static_cast< XStyleSupplier * >( this ) );
+        static_cast< style::XStyleSupplier * >( this ) );
 }
-
-#define LCL_PROP_CPPUTYPE(t) (cppu::UnoType<t>::get())
 
 //  ____ XTypeProvider ____
 Sequence< uno::Type > SAL_CALL
     OPropertySet::getTypes()
     throw (uno::RuntimeException, std::exception)
 {
-    static Sequence< uno::Type > aTypeList;
-
-    MutexGuard aGuard( m_rMutex );
-
-    if( aTypeList.getLength() == 0 )
-    {
-        ::std::vector< uno::Type > aTypes;
-
-        aTypes.push_back( LCL_PROP_CPPUTYPE( lang::XTypeProvider ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XPropertySet ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XMultiPropertySet ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XFastPropertySet ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XPropertyState ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( beans::XMultiPropertyStates ));
-        aTypes.push_back( LCL_PROP_CPPUTYPE( XStyleSupplier ));
-
-        aTypeList = comphelper::containerToSequence( aTypes );
-    }
+    static const Sequence< uno::Type > aTypeList{
+        cppu::UnoType<lang::XTypeProvider>::get(),
+        cppu::UnoType<beans::XPropertySet>::get(),
+        cppu::UnoType<beans::XMultiPropertySet>::get(),
+        cppu::UnoType<beans::XFastPropertySet>::get(),
+        cppu::UnoType<beans::XPropertyState>::get(),
+        cppu::UnoType<beans::XMultiPropertyStates>::get(),
+        cppu::UnoType<style::XStyleSupplier>::get() };
 
     return aTypeList;
 }
