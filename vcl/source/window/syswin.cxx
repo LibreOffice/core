@@ -31,6 +31,9 @@
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/unowrap.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
+#include <vcl/mnemonic.hxx>
 
 #include <rtl/strbuf.hxx>
 
@@ -116,6 +119,49 @@ void SystemWindow::dispose()
     Window::dispose();
 }
 
+void ImplHandleControlAccelerator( vcl::Window* pWindow, bool bShow )
+{
+    Control *pControl = dynamic_cast<Control*>(pWindow->ImplGetWindow());
+    if (pControl && pControl->GetText().indexOf('~') != -1)
+    {
+        pControl->SetShowAccelerator( bShow );
+        pControl->Invalidate(InvalidateFlags::Update);
+    }
+}
+
+bool SystemWindow::ImplHandleCmdEvent( const CommandEvent& rCEvent )
+{
+    if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
+    {
+        const CommandModKeyData *pCData = rCEvent.GetModKeyData ();
+        bool bShowAccel =  pCData && pCData->IsMod2();
+
+        Window *pGetChild = firstLogicalChildOfParent(this);
+        while (pGetChild)
+        {
+            if ( pGetChild->GetType() == WINDOW_TABCONTROL )
+            {
+                 // find currently shown tab page
+                 TabControl* pTabControl = static_cast<TabControl*>( pGetChild );
+                 TabPage* pTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
+                 vcl::Window* pTabPageChild =  firstLogicalChildOfParent( pTabPage );
+
+                 // and go through its children
+                 while ( pTabPageChild )
+                 {
+                     ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
+                     pTabPageChild = nextLogicalChildOfParent(pTabPage, pTabPageChild);
+                 }
+            }
+
+            ImplHandleControlAccelerator( pGetChild, bShowAccel );
+            pGetChild = nextLogicalChildOfParent(this, pGetChild);
+        }
+        return true;
+    }
+    return false;
+}
+
 bool SystemWindow::Notify( NotifyEvent& rNEvt )
 {
     // capture KeyEvents for menu handling
@@ -139,6 +185,11 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
         }
         if (bDone)
             return true;
+        if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
+        {
+            if (ImplHandleCmdEvent( *rNEvt.GetCommandEvent()))
+                return true;
+        }
     }
 
     return Window::Notify( rNEvt );

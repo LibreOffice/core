@@ -98,7 +98,7 @@ String SCSTR_MULTIPLE
 
 String SCSTR_STDFILTER
 {
-    Text [ en-US ] = "~Standard Filter..." ;
+    Text [ en-US ] = "Standard Filter..." ;
 };
 
 String SCSTR_TOP10FILTER

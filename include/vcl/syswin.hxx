@@ -179,6 +179,7 @@ public:
 private:
     SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window* i_pConfigureWin );
     virtual void setPosSizeOnContainee(Size aSize, Window &rBox);
+    bool            ImplHandleCmdEvent ( const CommandEvent& rCEvent );
     DECL_DLLPRIVATE_LINK_TYPED( ImplHandleLayoutTimerHdl, Idle*, void );
 
 protected:

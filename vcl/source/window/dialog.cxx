@@ -240,16 +240,6 @@ void ImplWindowAutoMnemonic( vcl::Window* pWindow )
     }
 }
 
-void ImplHandleControlAccelerator( vcl::Window* pWindow, bool bShow )
-{
-    Control *pControl = dynamic_cast<Control*>(pWindow->ImplGetWindow());
-    if (pControl && pControl->GetText().indexOf('~') != -1)
-    {
-        pControl->SetShowAccelerator( bShow );
-        pControl->Invalidate(InvalidateFlags::Update);
-    }
-}
-
 static VclButtonBox* getActionArea(Dialog *pDialog)
 {
     VclButtonBox *pButtonBox = nullptr;
@@ -597,39 +587,6 @@ IMPL_LINK_NOARG_TYPED(Dialog, ImplAsyncCloseHdl, void*, void)
     Close();
 }
 
-bool Dialog::ImplHandleCmdEvent( const CommandEvent& rCEvent )
-{
-    if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
-    {
-        const CommandModKeyData *pCData = rCEvent.GetModKeyData ();
-        bool bShowAccel =  pCData && pCData->IsMod2();
-
-        Window *pGetChild = firstLogicalChildOfParent(this);
-        while (pGetChild)
-        {
-            if ( pGetChild->GetType() == WINDOW_TABCONTROL )
-            {
-                 // find currently shown tab page
-                 TabControl* pTabControl = static_cast<TabControl*>( pGetChild );
-                 TabPage* pTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
-                 vcl::Window* pTabPageChild =  firstLogicalChildOfParent( pTabPage );
-
-                 // and go through its children
-                 while ( pTabPageChild )
-                 {
-                     ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
-                     pTabPageChild = nextLogicalChildOfParent(pTabPage, pTabPageChild);
-                 }
-            }
-
-            ImplHandleControlAccelerator( pGetChild, bShowAccel );
-            pGetChild = nextLogicalChildOfParent(this, pGetChild);
-        }
-        return true;
-    }
-    return false;
-}
-
 bool Dialog::Notify( NotifyEvent& rNEvt )
 {
     // first call the base class due to Tab control
@@ -671,11 +628,6 @@ bool Dialog::Notify( NotifyEvent& rNEvt )
                 }
 
             }
-        }
-        else if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
-        {
-            if (ImplHandleCmdEvent( *rNEvt.GetCommandEvent()))
-                return true;
         }
     }
 
