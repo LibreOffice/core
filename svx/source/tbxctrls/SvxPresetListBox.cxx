@@ -31,6 +31,10 @@
 SvxPresetListBox::SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle)
     : ValueSet(pParent, nWinStyle)
 {
+    nColCount = 2;
+    nRowCount = 5;
+    aIconSize = Size(100,60);
+
     SetEdgeBlending(true);
     SetExtraSpacing(2);
 }
@@ -88,7 +92,7 @@ void SvxPresetListBox::DrawLayout()
 template< typename ListType, typename EntryType >
 void SvxPresetListBox::FillPresetListBoxImpl(ListType & pList, sal_uInt32 nStartIndex)
 {
-    const Size aSize(100,60);
+    const Size aSize( GetSize() );
     BitmapEx aBitmap;
     for(long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
     {

@@ -348,6 +348,10 @@ public:
     {
         return mnSelItemId;
     }
+    sal_uInt16     GetSelectItemPos() const
+    {
+        return static_cast<sal_uInt16>(GetItemPos( mnSelItemId ));
+    }
     void                SaveValue() { mnSavedItemId = GetSelectItemId(); }
     sal_Int32           GetSavedValue() const { return mnSavedItemId; }
     bool IsValueChangedFromSaved() { return mnSavedItemId != GetSelectItemId(); }
