@@ -43,7 +43,7 @@ namespace connectivity
     void release(oslInterlockedCount& _refCount,
                  ::cppu::OBroadcastHelper& rBHelper,
                  css::uno::Reference< css::uno::XInterface >& _xInterface,
-                 css::lang::XComponent* _pObject);
+                 css::lang::XComponent* _pObject) throw ();
 
     // OSubComponent
 
@@ -70,7 +70,7 @@ namespace connectivity
             ::osl::MutexGuard aGuard( m_pDerivedImplementation->WEAK::rBHelper.rMutex );
         m_xParent.clear();
         }
-        void relase_ChildImpl()
+        void relase_ChildImpl() throw ()
         {
             ::connectivity::release(m_pDerivedImplementation->m_refCount,
                                     m_pDerivedImplementation->WEAK::rBHelper,
