@@ -450,7 +450,7 @@ void SlideSorterViewShell::ArrangeGUIElements()
     if (IsActive())
     {
         OSL_ASSERT(mpSlideSorter.get()!=nullptr);
-        mpSlideSorter->ArrangeGUIElements(maViewPos, maViewSize);
+        mpSlideSorter->ArrangeGUIElements(maViewPos, GetViewSize());
         mbIsArrangeGUIElementsPending = false;
     }
     else

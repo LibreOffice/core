@@ -606,7 +606,7 @@ void DrawViewShell::SetUIUnit(FieldUnit eUnit)
 
 IMPL_LINK_TYPED( DrawViewShell, TabSplitHdl, TabBar *, pTab, void )
 {
-    const long int nMax = maViewSize.Width() - maScrBarWH.Width()
+    const long int nMax = GetViewSize().Width() - maScrBarWH.Width()
         - maTabControl->GetPosPixel().X() ;
 
     Size aTabSize = maTabControl->GetSizePixel();

@@ -154,7 +154,7 @@ void PresentationViewShell::Resize()
 
     rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
     if( xSlideshow.is() )
-        xSlideshow->resize(maViewSize);
+        xSlideshow->resize(GetViewSize());
 }
 
 } // end of namespace sd

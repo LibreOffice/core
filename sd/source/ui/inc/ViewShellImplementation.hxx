@@ -96,6 +96,8 @@ public:
     // control.
     std::weak_ptr<ToolBarManagerLock> mpUpdateLockForMouse;
 
+    Size maViewSize;
+
     Implementation (ViewShell& rViewShell);
     ~Implementation();
 

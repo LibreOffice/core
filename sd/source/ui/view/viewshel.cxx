@@ -274,6 +274,11 @@ void ViewShell::doShow()
     GetParentWindow()->Show();
 }
 
+const Size& ViewShell::GetViewSize() const
+{
+    return mpImpl->maViewSize;
+}
+
 void ViewShell::Init (bool bIsMainViewShell)
 {
     mpImpl->mbIsInitialized = true;
@@ -959,7 +964,7 @@ void ViewShell::Resize()
 
     // Remember the new position and size.
     maViewPos = Point(0,0);
-    maViewSize = aSize;
+    mpImpl->maViewSize = aSize;
 
     // Rearrange the UI elements to take care of the new position and size.
     ArrangeGUIElements ();
@@ -1011,8 +1016,8 @@ void ViewShell::ArrangeGUIElements()
     // Calculate border for in-place editing.
     long nLeft = maViewPos.X();
     long nTop  = maViewPos.Y();
-    long nRight = maViewPos.X() + maViewSize.Width();
-    long nBottom = maViewPos.Y() + maViewSize.Height();
+    long nRight = maViewPos.X() + GetViewSize().Width();
+    long nBottom = maViewPos.Y() + GetViewSize().Height();
 
     // Horizontal scrollbar.
     if (mpHorizontalScrollBar.get()!=nullptr
@@ -1093,8 +1098,8 @@ void ViewShell::ArrangeGUIElements()
     // Windows in the center and rulers at the left and top side.
     maAllWindowRectangle = Rectangle(
         maViewPos,
-        Size(maViewSize.Width()-maScrBarWH.Width(),
-            maViewSize.Height()-maScrBarWH.Height()));
+        Size(GetViewSize().Width()-maScrBarWH.Width(),
+            GetViewSize().Height()-maScrBarWH.Height()));
 
     if (mpContentWindow.get() != nullptr)
         mpContentWindow->UpdateMapOrigin();

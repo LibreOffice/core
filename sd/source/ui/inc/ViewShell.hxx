@@ -473,7 +473,6 @@ protected:
     ZoomList*   mpZoomList;
 
     Point       maViewPos;
-    Size        maViewSize;
     Size        maScrBarWH;
 
     bool        mbStartShowWithDialog;    // presentation is started by dialog
@@ -544,6 +543,8 @@ protected:
         debugging assertions enabled
     */
     void doShow();
+
+    const Size& GetViewSize() const;
 
 private:
     VclPtr<vcl::Window> mpParentWindow;

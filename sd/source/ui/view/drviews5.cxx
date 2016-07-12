@@ -97,7 +97,7 @@ void DrawViewShell::Resize()
     rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
     if( xSlideshow.is() && xSlideshow->isRunning() && !xSlideshow->isFullScreen() )
     {
-        xSlideshow->resize(maViewSize);
+        xSlideshow->resize(GetViewSize());
     }
 }
 
@@ -110,7 +110,7 @@ void DrawViewShell::ArrangeGUIElements()
     maScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
     Point aHPos = maViewPos;
-    aHPos.Y() += maViewSize.Height();
+    aHPos.Y() += GetViewSize().Height();
 
     ViewShell::ArrangeGUIElements ();
 
