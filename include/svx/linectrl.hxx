@@ -98,7 +98,6 @@ private:
 protected:
     virtual void    Resizing( Size& rSize ) override;
     virtual void    Resize() override;
-    virtual bool    Close() override;
     virtual void    PopupModeEnd() override;
 
     /** This function is called when the window gets the focus.  It grabs

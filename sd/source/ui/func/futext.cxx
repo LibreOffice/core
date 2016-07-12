@@ -1156,11 +1156,6 @@ void FuText::DeleteDefaultText()
     }
 }
 
-bool FuText::Command(const CommandEvent& rCEvt)
-{
-    return FuPoor::Command(rCEvt);
-}
-
 bool FuText::RequestHelp(const HelpEvent& rHEvt)
 {
     bool bReturn = false;

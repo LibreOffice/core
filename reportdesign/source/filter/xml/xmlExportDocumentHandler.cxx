@@ -89,7 +89,6 @@ ExportDocumentHandler::~ExportDocumentHandler()
     }
 }
 IMPLEMENT_GET_IMPLEMENTATION_ID(ExportDocumentHandler)
-IMPLEMENT_FORWARD_REFCOUNT( ExportDocumentHandler, ExportDocumentHandler_BASE )
 
 OUString SAL_CALL ExportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
 {

@@ -74,11 +74,33 @@ public: \
 };
 
 TRANSLITERATION_ONETOONE( fullwidthToHalfwidth )
-TRANSLITERATION_ONETOONE(halfwidthToFullwidth)
 TRANSLITERATION_ONETOONE( fullwidthKatakanaToHalfwidthKatakana )
-TRANSLITERATION_ONETOONE(halfwidthKatakanaToFullwidthKatakana)
 TRANSLITERATION_ONETOONE( fullwidthToHalfwidthLikeASC )
-TRANSLITERATION_ONETOONE( halfwidthToFullwidthLikeJIS )
+
+class halfwidthToFullwidth : public transliteration_OneToOne
+{
+public:
+    halfwidthToFullwidth();
+    OUString SAL_CALL
+    transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset )
+    throw(css::uno::RuntimeException, std::exception) override;
+};
+class halfwidthKatakanaToFullwidthKatakana : public transliteration_OneToOne
+{
+public:
+    halfwidthKatakanaToFullwidthKatakana();
+    OUString SAL_CALL
+    transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset )
+    throw(css::uno::RuntimeException, std::exception) override;
+};
+class halfwidthToFullwidthLikeJIS : public transliteration_OneToOne
+{
+public:
+    halfwidthToFullwidthLikeJIS();
+    OUString SAL_CALL
+    transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset )
+    throw(css::uno::RuntimeException, std::exception) override;
+};
 
 #undef TRANSLITERATION_ONETOONE
 

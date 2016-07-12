@@ -121,9 +121,7 @@ public:
     virtual void NbcSetAnchorPos(const Point& rPnt) override;
     virtual const Point& GetAnchorPos() const override;
 
-    virtual void RecalcSnapRect() override;
     virtual const Rectangle& GetSnapRect() const override;
-    virtual void NbcSetSnapRect(const Rectangle& rRect) override;
     virtual const Rectangle& GetLogicRect() const override;
     virtual void NbcSetLogicRect(const Rectangle& rRect) override;
 

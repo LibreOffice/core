@@ -83,8 +83,6 @@ public:
     virtual css::awt::Point SAL_CALL getLocation() throw(css::uno::RuntimeException, std::exception) override;
     virtual css::awt::Point SAL_CALL getLocationOnScreen() throw(css::uno::RuntimeException, std::exception) override;
     virtual css::awt::Size SAL_CALL getSize() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addFocusListener ( const css::uno::Reference< css::awt::XFocusListener >& xListener) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL removeFocusListener (const css::uno::Reference< css::awt::XFocusListener >& xListener ) throw (css::uno::RuntimeException) override;
     virtual void SAL_CALL grabFocus() throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getForeground() throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Int32 SAL_CALL getBackground() throw(css::uno::RuntimeException, std::exception) override;

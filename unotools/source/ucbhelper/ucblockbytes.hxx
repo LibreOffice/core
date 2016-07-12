@@ -102,7 +102,6 @@ public:
     static UcbLockBytesRef  CreateLockBytes( const css::uno::Reference < css::io::XStream >& xContent );
 
     // SvLockBytes
-    virtual void            SetSynchronMode (bool bSynchron) override;
     virtual ErrCode         ReadAt(sal_uInt64 nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const override;
     virtual ErrCode         WriteAt(sal_uInt64, const void*, sal_uLong, sal_uLong *pWritten) override;
     virtual ErrCode         Flush() const override;

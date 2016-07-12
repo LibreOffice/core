@@ -131,11 +131,6 @@ void test::BootstrapFixture::setUp()
     test_init_impl(m_bAssertOnDialog, m_bNeedUCB, m_xSFactory.get());
 }
 
-void test::BootstrapFixture::tearDown()
-{
-    test::BootstrapFixtureBase::tearDown();
-}
-
 test::BootstrapFixture::~BootstrapFixture()
 {
 }

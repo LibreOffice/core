@@ -76,10 +76,8 @@ public:
     void                SetWrappedWindow(vcl::Window* const pWindow);
 
     virtual void        StateChanged( StateChangedType nType ) override;
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
     virtual void        Resize() override;
     virtual void        Resizing( Size& rSize ) override;
-    virtual bool        Close() override;
 };
 
 namespace
@@ -266,11 +264,6 @@ void SfxTitleDockingWindow::SetWrappedWindow( vcl::Window* const pWindow )
     }
 }
 
-bool SfxTitleDockingWindow::Notify( NotifyEvent& rNEvt )
-{
-    return SfxDockingWindow::Notify( rNEvt );
-}
-
 void SfxTitleDockingWindow::StateChanged( StateChangedType nType )
 {
     if ( nType == StateChangedType::InitShow )
@@ -298,11 +291,6 @@ void SfxTitleDockingWindow::Resizing( Size &rSize )
     SfxDockingWindow::Resizing( rSize );
     if (m_pWrappedWindow)
         m_pWrappedWindow->SetSizePixel( GetOutputSizePixel() );
-}
-
-bool SfxTitleDockingWindow::Close()
-{
-    return SfxDockingWindow::Close();
 }
 
 namespace

@@ -138,9 +138,6 @@ namespace connectivity
         virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
         css::uno::Reference< css::sdbc::XConnection> getConnection() const;
 
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
-
         // XRename
         virtual void SAL_CALL rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
 

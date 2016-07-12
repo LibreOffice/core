@@ -33,13 +33,10 @@ public:
     virtual void DoExecute( SfxRequest& rReq ) override;
 
     // Mouse- & Key-Events
-    virtual bool KeyInput(const KeyEvent& rKEvt) override;
-    virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     virtual void Activate() override;
-    virtual void Deactivate() override;
 
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
 

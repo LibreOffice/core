@@ -49,7 +49,6 @@ public:
     virtual ~SdXML3DObjectContext();
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
 };
 
 // dr3d:3dcube context

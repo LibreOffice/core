@@ -123,7 +123,6 @@ public:
                             SplitWindow::dispose();
                         }
 
-    virtual void        MouseMove( const MouseEvent& ) override;
     virtual void        AutoHide() override;
     virtual void        FadeIn() override;
     void                Actualize();
@@ -178,12 +177,6 @@ void SfxSplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.GetClicks() != 2 )
         SplitWindow::MouseButtonDown( rMEvt );
 }
-
-void SfxEmptySplitWin_Impl::MouseMove( const MouseEvent& rMEvt )
-{
-    SplitWindow::MouseMove( rMEvt );
-}
-
 
 SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
         SfxWorkWindow *pW, bool bWithButtons, WinBits nBits )

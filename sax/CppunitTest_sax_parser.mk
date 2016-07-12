@@ -17,6 +17,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_parser, \
 	comphelper \
 	cppu \
 	cppuhelper \
+	unotest \
 	expwrap \
 	sal \
 	test \

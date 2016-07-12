@@ -64,8 +64,6 @@ public:
 
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL click() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL doubleClick() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw (css::uno::RuntimeException, std::exception) override;
 private:

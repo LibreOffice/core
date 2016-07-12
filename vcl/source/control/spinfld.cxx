@@ -591,11 +591,6 @@ bool SpinField::Notify(NotifyEvent& rNEvt)
     return bDone || Edit::Notify(rNEvt);
 }
 
-void SpinField::Command(const CommandEvent& rCEvt)
-{
-    Edit::Command(rCEvt);
-}
-
 void SpinField::FillLayoutData() const
 {
     if (mbSpin)

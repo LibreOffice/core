@@ -1423,14 +1423,4 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
     return aResult;
 }
 
-void SAL_CALL SdStyleSheetPool::acquire() throw ()
-{
-    SdStyleSheetPoolBase::acquire();
-}
-
-void SAL_CALL SdStyleSheetPool::release() throw ()
-{
-    SdStyleSheetPoolBase::release();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
