@@ -21,6 +21,7 @@
 
 #include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -343,33 +344,36 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
                 }
             }
 
-            // Writer and editeng selections are not supported in parallel.
-            SvxSearchItem* pSearchItem = SwView::GetSearchItem();
-            // If we just finished search in shape text, don't attempt to do that again.
-            if (!bEndedTextEdit && !(pSearchItem && pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL))
+            if (comphelper::LibreOfficeKit::isActive())
             {
-                // If there are any shapes anchored to this node, search there.
-                SwPaM aPaM(pNode->GetDoc()->GetNodes().GetEndOfContent());
-                aPaM.GetPoint()->nNode = rTextNode;
-                aPaM.GetPoint()->nContent.Assign(aPaM.GetPoint()->nNode.GetNode().GetTextNode(), nStart);
-                aPaM.SetMark();
-                aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
-                aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->nNode.GetNode().GetTextNode(), 0);
-                if (pNode->GetDoc()->getIDocumentDrawModelAccess().Search(aPaM, aSearchItem) && pSdrView)
+                // Writer and editeng selections are not supported in parallel.
+                SvxSearchItem* pSearchItem = SwView::GetSearchItem();
+                // If we just finished search in shape text, don't attempt to do that again.
+                if (!bEndedTextEdit && !(pSearchItem && pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL))
                 {
-                    if (SdrObject* pObject = pSdrView->GetTextEditObject())
+                    // If there are any shapes anchored to this node, search there.
+                    SwPaM aPaM(pNode->GetDoc()->GetNodes().GetEndOfContent());
+                    aPaM.GetPoint()->nNode = rTextNode;
+                    aPaM.GetPoint()->nContent.Assign(aPaM.GetPoint()->nNode.GetNode().GetTextNode(), nStart);
+                    aPaM.SetMark();
+                    aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
+                    aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->nNode.GetNode().GetTextNode(), 0);
+                    if (pNode->GetDoc()->getIDocumentDrawModelAccess().Search(aPaM, aSearchItem) && pSdrView)
                     {
-                        if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
+                        if (SdrObject* pObject = pSdrView->GetTextEditObject())
                         {
-                            const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
-                            if (pPosition)
+                            if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
                             {
-                                // Set search position to the shape's anchor point.
-                                *GetPoint() = *pPosition;
-                                GetPoint()->nContent.Assign(pPosition->nNode.GetNode().GetContentNode(), 0);
-                                SetMark();
-                                bFound = true;
-                                break;
+                                const SwPosition* pPosition = pFrameFormat->GetAnchor().GetContentAnchor();
+                                if (pPosition)
+                                {
+                                    // Set search position to the shape's anchor point.
+                                    *GetPoint() = *pPosition;
+                                    GetPoint()->nContent.Assign(pPosition->nNode.GetNode().GetContentNode(), 0);
+                                    SetMark();
+                                    bFound = true;
+                                    break;
+                                }
                             }
                         }
                     }
