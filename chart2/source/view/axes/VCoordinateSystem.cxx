@@ -40,6 +40,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <comphelper/sequence.hxx>
 
+#include <algorithm>
 #include <rtl/math.hxx>
 
 namespace chart
@@ -152,11 +153,9 @@ void VCoordinateSystem::setTransformationSceneToScreen(
 uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
             const awt::Size& rPageSize, const awt::Size& rPageResolution )
 {
-    uno::Sequence< sal_Int32 > aResolution(2);
+    sal_Int32 nDimensions = m_xCooSysModel->getDimension();
+    uno::Sequence<sal_Int32> aResolution(std::max(nDimensions, 2));
 
-    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    if(nDimensionCount>2)
-        aResolution.realloc(nDimensionCount);
     sal_Int32 nN = 0;
     for( nN = 0 ;nN<aResolution.getLength(); nN++ )
         aResolution[nN]=1000;

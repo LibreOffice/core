@@ -51,23 +51,16 @@ if(rProp.Name == #MediaName) \
 
 MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
                         beans::PropertyValue > & rMediaDescriptor )
+    : m_aRegularProperties(rMediaDescriptor.getLength())
+    , m_aDeprecatedProperties(rMediaDescriptor.getLength())
+    , m_aAdditionalProperties(rMediaDescriptor.getLength())
+    , m_aModelProperties(rMediaDescriptor.getLength())
 {
     impl_init();
 
-    m_aRegularProperties.realloc(0);
-    m_aRegularProperties.realloc(rMediaDescriptor.getLength());
     sal_Int32 nRegularCount = 0;
-
-    m_aDeprecatedProperties.realloc(0);
-    m_aDeprecatedProperties.realloc(rMediaDescriptor.getLength());
     sal_Int32 nDeprecatedCount = 0;
-
-    m_aAdditionalProperties.realloc(0);
-    m_aAdditionalProperties.realloc(rMediaDescriptor.getLength());
     sal_Int32 nAdditionalCount = 0;
-
-    m_aModelProperties.realloc(0);
-    m_aModelProperties.realloc(rMediaDescriptor.getLength());
     sal_Int32 nModelCount = 0;
 
     //read given rMediaDescriptor and store in internal structures:
