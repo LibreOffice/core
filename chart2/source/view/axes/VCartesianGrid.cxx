@@ -57,7 +57,10 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
                 , CuboidPlanePosition eLeftWallPos
                 , CuboidPlanePosition eBackWallPos
                 , CuboidPlanePosition eBottomPos )
-                : m_nDimensionIndex(nDimensionIndex)
+                : P0(3)
+                , P1(3)
+                , P2(3)
+                , m_nDimensionIndex(nDimensionIndex)
 {
     double MinX = pPosHelper->getLogicMinX();
     double MinY = pPosHelper->getLogicMinY();
@@ -88,10 +91,6 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
         MaxZ = fHelp;
     }
     bool bSwapXY = pPosHelper->isSwapXAndY();
-
-    P0.realloc(3);
-    P1.realloc(3);
-    P2.realloc(3);
 
     //P0: point on 'back' wall, not on 'left' wall
     //P1: point on both walls
