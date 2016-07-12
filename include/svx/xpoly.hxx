@@ -119,13 +119,10 @@ class ImpXPolyPolygon;
 class SVX_DLLPUBLIC XPolyPolygon
 {
 protected:
-    ImpXPolyPolygon* pImpXPolyPolygon;
-
-    // check ImpXPolyPolygon-ReferenceCount and decouple if necessary
-    void    CheckReference();
+    o3tl::cow_wrapper< ImpXPolyPolygon > pImpXPolyPolygon;
 
 public:
-                    XPolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
+                    XPolyPolygon();
                     XPolyPolygon( const XPolyPolygon& rXPolyPoly );
 
                     ~XPolyPolygon();
