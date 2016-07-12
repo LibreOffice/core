@@ -49,6 +49,8 @@ public:
     void                CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                                        const OUString& rName, SfxStyleFamily eFamily );
 
+    bool                HasStandardStyles() { return bHasStandardStyles; }
+
     ScStyleSheet*       FindCaseIns( const OUString& rName, SfxStyleFamily eFam );
 
     const OUString*     GetForceStdName() const { return pForceStdName; }
@@ -70,6 +72,7 @@ private:
     SfxStyleSheetBase*  pActualStyleSheet;
     ScDocument*         pDoc;
     const OUString*       pForceStdName;
+    bool                bHasStandardStyles;
 };
 
 #endif // INCLUDED_SC_INC_STLPOOL_HXX
