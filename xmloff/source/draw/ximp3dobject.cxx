@@ -95,13 +95,6 @@ void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttribu
     }
 }
 
-void SdXML3DObjectContext::EndElement()
-{
-    // call parent
-    SdXMLShapeContext::EndElement();
-}
-
-
 SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,

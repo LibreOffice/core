@@ -34,7 +34,6 @@ namespace dbaui
     {
     protected:
         virtual void ConnDoubleClicked(VclPtr<OTableConnection>& rConnection) override;
-        virtual void KeyInput(const KeyEvent& rEvt) override;
 
         virtual VclPtr<OTableWindow> createWindow(const TTableWindowData::value_type& _pData) override;
 

@@ -20,7 +20,6 @@ class StylesPropertyPanel:
 {
 public:
     virtual ~StylesPropertyPanel();
-    virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,

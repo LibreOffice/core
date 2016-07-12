@@ -459,11 +459,6 @@ void FuDraw::Activate()
     ForcePointer();
 }
 
-void FuDraw::Deactivate()
-{
-    FuPoor::Deactivate();
-}
-
 /**
  * Toggle mouse-pointer
  */

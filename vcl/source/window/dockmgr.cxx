@@ -64,7 +64,6 @@ public:
     virtual void    TitleButtonClick( TitleButton nButton ) override;
     virtual void    Pin() override;
     virtual void    Roll() override;
-    virtual void    PopupModeEnd() override;
     virtual void    Resizing( Size& rSize ) override;
     virtual bool    Close() override;
 };
@@ -268,11 +267,6 @@ void ImplDockFloatWin2::Pin()
 void ImplDockFloatWin2::Roll()
 {
     FloatingWindow::Roll();
-}
-
-void ImplDockFloatWin2::PopupModeEnd()
-{
-    FloatingWindow::PopupModeEnd();
 }
 
 void ImplDockFloatWin2::Resizing( Size& rSize )

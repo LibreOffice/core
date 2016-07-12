@@ -567,16 +567,6 @@ OUString SAL_CALL OTableHelper::getName() throw(RuntimeException, std::exception
     return sComposedName;
 }
 
-void SAL_CALL OTableHelper::acquire() throw()
-{
-    OTable_TYPEDEF::acquire();
-}
-
-void SAL_CALL OTableHelper::release() throw()
-{
-    OTable_TYPEDEF::release();
-}
-
 std::shared_ptr<sdbcx::KeyProperties> OTableHelper::getKeyProperties(const OUString& _sName) const
 {
     std::shared_ptr<sdbcx::KeyProperties> pKeyProps;

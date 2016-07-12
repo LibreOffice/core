@@ -580,16 +580,6 @@ void SvxRTFParser::ReadFontTable()
         SetDefault( RTF_DEFF, nDfltFont );
 }
 
-void SvxRTFParser::ReadBitmapData()
-{
-    SvRTFParser::ReadBitmapData();
-}
-
-void SvxRTFParser::ReadOLEData()
-{
-    SvRTFParser::ReadOLEData();
-}
-
 OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
 {
     rStr.clear();

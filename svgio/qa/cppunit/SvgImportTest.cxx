@@ -65,7 +65,6 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     Primitive2DSequence parseSvg(const char* aSource);
 
 public:
-    virtual void setUp() override;
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(Test);
@@ -112,11 +111,6 @@ Primitive2DSequence Test::parseSvg(const char* aSource)
     Reference<XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
 
     return xSvgParser->getDecomposition(aInputStream, aPath);
-}
-
-void Test::setUp()
-{
-    BootstrapFixture::setUp();
 }
 
 void Test::tearDown()

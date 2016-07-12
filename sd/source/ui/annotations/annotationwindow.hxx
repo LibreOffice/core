@@ -59,7 +59,6 @@ protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void    Command( const CommandEvent& rCEvt ) override;
-    virtual void    LoseFocus() override;
 
 public:
     AnnotationTextWindow( AnnotationWindow* pParent, WinBits nBits );
@@ -70,8 +69,6 @@ public:
 
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
-
-    virtual void    GetFocus() override;
 };
 
 class AnnotationWindow : public FloatingWindow
@@ -94,8 +91,6 @@ class AnnotationWindow : public FloatingWindow
         basegfx::B2DPolygon     maPopupTriangle;
 
     protected:
-        void            SetSizePixel( const Size& rNewSize ) override;
-
         DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
 
     public:

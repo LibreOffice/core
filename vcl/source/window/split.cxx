@@ -648,11 +648,6 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
     mbInKeyEvent = 0;
 }
 
-bool Splitter::Notify( NotifyEvent& rNEvt )
-{
-    return Window::Notify( rNEvt );
-}
-
 void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );

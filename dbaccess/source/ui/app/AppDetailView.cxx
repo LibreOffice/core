@@ -601,11 +601,6 @@ void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void OApplicationDetailView::GetFocus()
-{
-    OSplitterView::GetFocus();
-}
-
 void OApplicationDetailView::setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics )
 {
     m_aExternalMnemonics = _rMnemonics;

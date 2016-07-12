@@ -61,11 +61,6 @@ public:
 
     virtual ~AccessiblePageShape();
 
-    /** Initialize a new shape.  See the documentation of the constructor
-        for the reason of this method's existence.
-    */
-    virtual void Init() override;
-
     //=====  XAccessibleContext  ==============================================
 
     /// Returns always 0 because there can be no children.

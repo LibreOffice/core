@@ -230,12 +230,6 @@ Reference< css::container::XNameAccess > Views::create(
     return ret;
 }
 
-void Views::disposing()
-{
-    Container::disposing();
-}
-
-
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

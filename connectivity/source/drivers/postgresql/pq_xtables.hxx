@@ -85,8 +85,7 @@ public: // XDataDescriptorFactory
         throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
-    virtual void SAL_CALL disposing() override;
-
+    using Container::disposing;
 };
 
 }

@@ -61,12 +61,6 @@ void BrowserHeader::Command( const CommandEvent& rCEvt )
 }
 
 
-void BrowserHeader::Select()
-{
-    HeaderBar::Select();
-}
-
-
 void BrowserHeader::EndDrag()
 {
     // call before other actions, it looks more nice in most cases

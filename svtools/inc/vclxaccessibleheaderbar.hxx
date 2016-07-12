@@ -39,9 +39,6 @@ public:
     VclPtr<HeaderBar>  m_pHeadBar;
     virtual ~VCLXAccessibleHeaderBar();
 
-    virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
-
     VCLXAccessibleHeaderBar( VCLXWindow* pVCLXindow );
 
     // XAccessibleContext

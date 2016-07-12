@@ -420,12 +420,6 @@ void SfxToolBoxControl::Dispatch( const OUString& aCommand, css::uno::Sequence< 
     }
 }
 
-void SAL_CALL SfxToolBoxControl::disposing( const css::lang::EventObject& aEvent )
-throw( css::uno::RuntimeException, std::exception )
-{
-    svt::ToolboxController::disposing( aEvent );
-}
-
 // XStatusListener
 void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent )
 throw ( css::uno::RuntimeException, std::exception )

@@ -127,11 +127,6 @@ bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
     return bReturn;
 }
 
-bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
-{
-    return FuConstruct::MouseMove(rMEvt);
-}
-
 bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
     bool bReturn = false;
@@ -158,15 +153,6 @@ bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
     return bReturn;
-}
-
-/**
- * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
- */
-bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
-{
-    return FuConstruct::KeyInput(rKEvt);
 }
 
 void FuConstructArc::Activate()
@@ -210,11 +196,6 @@ void FuConstructArc::Activate()
     mpView->SetCurrentObj((sal_uInt16)aObjKind);
 
     FuConstruct::Activate();
-}
-
-void FuConstructArc::Deactivate()
-{
-    FuConstruct::Deactivate();
 }
 
 SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)

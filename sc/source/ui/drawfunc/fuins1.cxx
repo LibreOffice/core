@@ -303,28 +303,6 @@ FuInsertGraphic::~FuInsertGraphic()
 
 /*************************************************************************
 |*
-|* FuInsertGraphic::Function aktivieren
-|*
-\************************************************************************/
-
-void FuInsertGraphic::Activate()
-{
-    FuPoor::Activate();
-}
-
-/*************************************************************************
-|*
-|* FuInsertGraphic::Function deaktivieren
-|*
-\************************************************************************/
-
-void FuInsertGraphic::Deactivate()
-{
-    FuPoor::Deactivate();
-}
-
-/*************************************************************************
-|*
 |* FuInsertMedia::Konstruktor
 |*
 \************************************************************************/
@@ -387,28 +365,6 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
 
 FuInsertMedia::~FuInsertMedia()
 {
-}
-
-/*************************************************************************
-|*
-|* FuInsertMedia::Function aktivieren
-|*
-\************************************************************************/
-
-void FuInsertMedia::Activate()
-{
-    FuPoor::Activate();
-}
-
-/*************************************************************************
-|*
-|* FuInsertMedia::Function deaktivieren
-|*
-\************************************************************************/
-
-void FuInsertMedia::Deactivate()
-{
-    FuPoor::Deactivate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

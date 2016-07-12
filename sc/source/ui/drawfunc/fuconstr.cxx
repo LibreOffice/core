@@ -341,26 +341,4 @@ bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
-void FuConstruct::Activate()
-{
-    FuDraw::Activate();
-}
-
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
-
-void FuConstruct::Deactivate()
-{
-    FuDraw::Deactivate();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

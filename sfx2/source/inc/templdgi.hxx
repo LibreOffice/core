@@ -97,7 +97,6 @@ private:
     OUString  aStyle;
 
 protected:
-    virtual void Command(const CommandEvent& rMEvt) override;
     virtual bool Notify(NotifyEvent& rNEvt) override;
     virtual bool DoubleClickHdl() override;
     virtual bool ExpandingHdl() override;

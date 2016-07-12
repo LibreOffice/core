@@ -137,8 +137,6 @@ public:
     void                CreateDefaultObject();
     void                SelectFirstObject();
     void                StartPolyEdit();
-
-    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
 };
 
 

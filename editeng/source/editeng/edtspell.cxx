@@ -110,12 +110,6 @@ void EditSpellWrapper::SpellContinue()
     SetLast( pEditView->GetImpEditEngine()->ImpSpell( pEditView ) );
 }
 
-void EditSpellWrapper::SpellEnd()
-{
-    // Base class will show language errors...
-    SvxSpellWrapper::SpellEnd();
-}
-
 bool EditSpellWrapper::HasOtherCnt()
 {
     return false;

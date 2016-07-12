@@ -254,9 +254,6 @@ protected:
     // is called for each token that is recognized in CallParser
     virtual void NextToken( int nToken ) override;
 
-    virtual void ReadBitmapData() override;
-    virtual void ReadOLEData() override;
-
     void ReadStyleTable();
     void ReadColorTable();
     void ReadFontTable();

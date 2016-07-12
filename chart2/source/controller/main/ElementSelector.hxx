@@ -88,8 +88,6 @@ public:
      virtual void SAL_CALL acquire() throw () override;
      virtual void SAL_CALL release() throw () override;
 
-     // XInitialization
-     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
      // XStatusListener
      virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
      // XToolbarController

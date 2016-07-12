@@ -53,10 +53,7 @@ protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
-    virtual void        Select() override;
     virtual void        Modify() override;
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
 public:
     SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::File );
@@ -136,8 +133,6 @@ public:
     Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
     bool MoveToExtraWnd ( Point aNewPos, bool bDisConnectDlg = false );
 
-    virtual void        ActivatePage() override;
-    virtual void        DeactivatePage() override;
     virtual bool        QueryClose() override;
 
 protected:

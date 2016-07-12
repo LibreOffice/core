@@ -1135,11 +1135,6 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         FmGridControl::StartDrag(_nAction, _rPosPixel);
 }
 
-void SbaGridControl::Command(const CommandEvent& rEvt)
-{
-    FmGridControl::Command(rEvt);
-}
-
 void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 {
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
@@ -1499,11 +1494,6 @@ OUString SbaGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowse
     else
         sRet = FmGridControl::GetAccessibleObjectDescription( eObjType,_nPosition);
     return sRet;
-}
-
-void SbaGridControl::DeleteSelectedRows()
-{
-    FmGridControl::DeleteSelectedRows();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
