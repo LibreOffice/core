@@ -122,6 +122,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
     {
         SAL_WARN("opencl", "Failed to initialize OpenCL for test");
         OpenCLZone::hardDisable();
+        return;
     }
 
     // Append our app version as well.
