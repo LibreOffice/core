@@ -1507,7 +1507,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         {
             // check that only acceptable parameters are provided here
             if ( aSeqArgs[nInd].Name != "VersionComment" && aSeqArgs[nInd].Name != "Author"
-              && aSeqArgs[nInd].Name != "DontTerminateEdit"
+              && aSeqArgs[nInd].Name != "DontTerminateEdit" && aSeqArgs[nInd].Name != "DontSaveIfUnmodified"
               && aSeqArgs[nInd].Name != "InteractionHandler" && aSeqArgs[nInd].Name != "StatusIndicator"
               && aSeqArgs[nInd].Name != "VersionMajor"
               && aSeqArgs[nInd].Name != "FailOnWarning"
@@ -1523,6 +1523,13 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             else if ( aSeqArgs[nInd].Name == "CheckIn" )
             {
                 aSeqArgs[nInd].Value >>= bCheckIn;
+            }
+            else if ( aSeqArgs[nInd].Name == "DontSaveIfUnmodified" )
+            {
+                bool bDontSaveIfUnmodified = false;
+                aSeqArgs[nInd].Value >>= bDontSaveIfUnmodified;
+                if ( bDontSaveIfUnmodified && !wasModifiedSinceLastSave() )
+                    return;
             }
         }
 

@@ -85,6 +85,7 @@ SfxFormalArgument aFormalArgs[] = {
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "VersionAuthor", SID_DOCINFO_AUTHOR },
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "VersionComment", SID_DOCINFO_COMMENTS },
     { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "DontTerminateEdit", FN_PARAM_1 },
+    { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "DontSaveIfUnmodified", FN_PARAM_2 },
     { reinterpret_cast<SfxType*>(&aSfxBoolItem_Impl), "VersionMajor", SID_DOCINFO_MAJOR },
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "FilterOptions", SID_FILE_FILTEROPTIONS },
     { reinterpret_cast<SfxType*>(&aSfxStringItem_Impl), "FilterName", SID_FILTER_NAME },

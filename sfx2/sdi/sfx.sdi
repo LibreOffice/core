@@ -3579,7 +3579,7 @@ SfxVoidItem SaveSimple SID_SAVESIMPLE
 ]
 
 SfxBoolItem Save SID_SAVEDOC
-(SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR,SfxBoolItem DontTerminateEdit FN_PARAM_1)
+(SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR,SfxBoolItem DontTerminateEdit FN_PARAM_1, SfxBoolItem DontSaveIfUnmodified FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

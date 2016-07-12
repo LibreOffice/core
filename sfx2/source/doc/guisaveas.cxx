@@ -678,6 +678,7 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     OUString aVersionCommentString("VersionComment");
     OUString aAuthorString("Author");
     OUString aDontTerminateEdit("DontTerminateEdit");
+    OUString aDontSaveIfUnmodified("DontSaveIfUnmodified");
     OUString aInteractionHandlerString("InteractionHandler");
     OUString aStatusIndicatorString("StatusIndicator");
     OUString aFailOnWarningString("FailOnWarning");
@@ -688,6 +689,8 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
         aAcceptedArgs[ aAuthorString ] = GetMediaDescr()[ aAuthorString ];
     if ( GetMediaDescr().find( aDontTerminateEdit ) != GetMediaDescr().end() )
         aAcceptedArgs[ aDontTerminateEdit ] = GetMediaDescr()[ aDontTerminateEdit ];
+    if ( GetMediaDescr().find( aDontSaveIfUnmodified ) != GetMediaDescr().end() )
+        aAcceptedArgs[ aDontSaveIfUnmodified ] = GetMediaDescr()[ aDontSaveIfUnmodified ];
     if ( GetMediaDescr().find( aInteractionHandlerString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aInteractionHandlerString ] = GetMediaDescr()[ aInteractionHandlerString ];
     if ( GetMediaDescr().find( aStatusIndicatorString ) != GetMediaDescr().end() )
