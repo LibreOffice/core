@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_d90342b7",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2016-07-12T12:47:46Z",
+      "side": 1,
+      "message": "these kind of special cases need to be avoided.\nEven hardcoding ask.libreoffice.org URL is nothing I\u0027d do.",
+      "range": {
+        "startLine": 466,
+        "startChar": 12,
+        "endLine": 468,
+        "endChar": 62
+      },
+      "revId": "8309e723bf76aa3b25cebbea0e60f387692b599b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
