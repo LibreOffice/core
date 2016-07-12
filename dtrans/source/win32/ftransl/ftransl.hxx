@@ -39,15 +39,13 @@
 #pragma warning(pop)
 #endif
 
-// CDataFormatTranslator
-
-class CDataFormatTranslator : public
+class CDataFormatTranslatorUNO : public
     cppu::WeakImplHelper< css::datatransfer::XDataFormatTranslator,
                           css::lang::XServiceInfo >
 {
 
 public:
-    explicit CDataFormatTranslator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit CDataFormatTranslatorUNO( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XDataFormatTranslator
 
