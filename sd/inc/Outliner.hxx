@@ -50,6 +50,11 @@ struct SearchSelection
     OString m_aRectangles;
 
     SearchSelection(int nPage, const OString& rRectangles);
+
+    bool operator==(const SearchSelection& rOther) const
+    {
+        return m_nPage == rOther.m_nPage && m_aRectangles == rOther.m_aRectangles;
+    }
 };
 
 /** The main purpose of this class is searching and replacing as well as
