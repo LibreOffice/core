@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,drawinglayer_border, \
 	vcl \
 	test \
 	tl \
+	unotest \
 	$(gb_UWINAPI) \
 ))
 

@@ -305,16 +305,6 @@ void SvxMetricField::ReleaseFocus_Impl()
     }
 }
 
-void SvxMetricField::Down()
-{
-    MetricField::Down();
-}
-
-void SvxMetricField::Up()
-{
-    MetricField::Up();
-}
-
 void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
 {
     ePoolUnit = eUnit;

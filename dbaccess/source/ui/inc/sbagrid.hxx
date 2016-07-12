@@ -227,7 +227,6 @@ namespace dbaui
         virtual ~SbaGridControl();
         virtual void dispose() override;
 
-        virtual void Command( const CommandEvent& rCEvt ) override;
         virtual void Select() override;
 
         void SetMasterListener(SbaGridListener* pListener)  { m_pMasterListener = pListener; }
@@ -250,7 +249,7 @@ namespace dbaui
         */
         virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
 
-        virtual void DeleteSelectedRows() override;
+        using FmGridControl::DeleteSelectedRows;
         /** copies the currently selected rows to the clipboard
             @precond
                 at least one row is selected

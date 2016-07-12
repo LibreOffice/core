@@ -135,7 +135,7 @@ class FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
     using css::beans::XPropertyChangeListener::disposing;
 protected:
     FmXFormShell_Base_Disambiguation( ::osl::Mutex& _rMutex );
-    virtual void SAL_CALL disposing() override;
+    using WeakComponentImplHelperBase::disposing;
 };
 
 

@@ -71,8 +71,6 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void        Tracking( const TrackingEvent& rTEvt ) override;
 
-    virtual bool        Notify( NotifyEvent& rNEvt ) override;
-
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;

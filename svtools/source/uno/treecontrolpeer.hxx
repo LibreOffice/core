@@ -57,9 +57,6 @@ public:
 
     vcl::Window* createVclControl( vcl::Window* pParent, sal_Int64 nWinStyle );
 
-    // VCLXWindow
-    virtual void SetWindow( const VclPtr< vcl::Window > &pWindow ) override;
-
     // css::view::XSelectionSupplier
     virtual sal_Bool SAL_CALL select( const css::uno::Any& xSelection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL getSelection(  ) throw (css::uno::RuntimeException, std::exception) override;

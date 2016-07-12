@@ -784,12 +784,6 @@ protected:
     virtual void                        ClipToPaintRegion( Rectangle& rDstRect ) override;
     virtual bool                        UsePolyPolygonForComplexGradient() override;
 
-    virtual void DrawGradientWallpaper(long nX, long nY, long nWidth, long nHeight,
-                                       const Wallpaper& rWallpaper) override
-    {
-        OutputDevice::DrawGradientWallpaper(nX, nY, nWidth, nHeight, rWallpaper);
-    }
-
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
 public:
     bool                                HasMirroredGraphics() const override;
@@ -812,17 +806,8 @@ public:
     virtual void                        KeyUp( const KeyEvent& rKEvt );
     virtual void                        PrePaint(vcl::RenderContext& rRenderContext);
     virtual void                        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    using OutputDevice::Erase;
     void                                Erase(vcl::RenderContext& rRenderContext);
-
-    virtual void Erase() override
-    {
-        OutputDevice::Erase();
-    }
-
-    virtual void Erase(const Rectangle& rRect) override
-    {
-        OutputDevice::Erase(rRect);
-    }
 
     virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags );
     virtual void                        Move();

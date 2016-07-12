@@ -29,9 +29,6 @@ class FuInsertGraphic : public FuPoor
     FuInsertGraphic( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertGraphic();
-
-    virtual void Activate() override;
-    virtual void Deactivate() override;
 };
 
 class FuInsertOLE : public FuPoor
@@ -39,9 +36,6 @@ class FuInsertOLE : public FuPoor
  public:
     FuInsertOLE( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
-
-    virtual void Activate() override;
-    virtual void Deactivate() override;
 };
 
 class FuInsertChart : public FuPoor
@@ -49,9 +43,6 @@ class FuInsertChart : public FuPoor
  public:
     FuInsertChart( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
-
-    virtual void Activate() override;
-    virtual void Deactivate() override;
 };
 
 class FuInsertChartFromFile : public FuPoor
@@ -59,9 +50,6 @@ class FuInsertChartFromFile : public FuPoor
  public:
     FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq, const OUString& rURL);
-
-    virtual void Activate() override;
-    virtual void Deactivate() override;
 };
 
 class FuInsertMedia : public FuPoor
@@ -70,9 +58,6 @@ class FuInsertMedia : public FuPoor
     FuInsertMedia( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertMedia();
-
-    virtual void Activate() override;
-    virtual void Deactivate() override;
 };
 
 void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage );

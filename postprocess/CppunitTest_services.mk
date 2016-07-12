@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,services, \
 	cppuhelper \
 	sal \
 	test \
+	unotest \
 	vcl \
 	$(gb_UWINAPI) \
 ))

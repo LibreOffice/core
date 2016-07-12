@@ -83,10 +83,6 @@ namespace connectivity
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL
                 getTypes()
                 throw(css::uno::RuntimeException, std::exception) override;
-            // XCloseable
-            virtual void SAL_CALL close()
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
 

@@ -483,12 +483,6 @@ void SvxLineEndWindow::StartSelection()
 }
 
 
-bool SvxLineEndWindow::Close()
-{
-    return SfxPopupWindow::Close();
-}
-
-
 void SvxLineEndWindow::StateChanged(
     sal_uInt16 nSID, SfxItemState, const SfxPoolItem* pState )
 {

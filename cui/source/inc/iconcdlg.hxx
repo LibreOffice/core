@@ -62,9 +62,6 @@ struct IconChoicePageData
 
 class IconChoicePage : public TabPage
 {
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
 private:
     const SfxItemSet*   pSet;
     OUString            aUserString;
@@ -74,6 +71,9 @@ private:
     void                ImplInitSettings();
 
 protected:
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     IconChoicePage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet );
 
 public:

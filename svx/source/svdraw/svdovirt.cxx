@@ -128,11 +128,6 @@ void SdrVirtObj::RecalcBoundRect()
     aOutRect+=aAnchor;
 }
 
-void SdrVirtObj::SetChanged()
-{
-    SdrObject::SetChanged();
-}
-
 SdrVirtObj* SdrVirtObj::Clone() const
 {
     return new SdrVirtObj(this->rRefObj); // only a further reference

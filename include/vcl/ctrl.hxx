@@ -126,8 +126,6 @@ public:
 
     virtual void    EnableRTL ( bool bEnable = true ) override;
 
-    virtual void    GetFocus() override;
-    virtual void    LoseFocus() override;
     virtual bool    Notify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    Resize() override;

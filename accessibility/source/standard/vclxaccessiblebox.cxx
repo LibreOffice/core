@@ -449,13 +449,6 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBind
     return xRet;
 }
 
-//=====  XComponent  ==========================================================
-
-void SAL_CALL VCLXAccessibleBox::disposing()
-{
-    VCLXAccessibleComponent::disposing();
-}
-
 // =====  XAccessibleValue  ===============================================
 Any VCLXAccessibleBox::getCurrentValue( )
     throw( RuntimeException, std::exception )

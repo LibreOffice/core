@@ -396,12 +396,6 @@ namespace svt
     }
 
 
-    void EditBrowseBox::ImplTracking()
-    {
-        BrowseBox::ImplTracking();
-    }
-
-
     void EditBrowseBox::ImplEndTracking()
     {
         if ( bActiveBeforeTracking )

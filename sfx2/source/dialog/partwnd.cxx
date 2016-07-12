@@ -138,18 +138,6 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 }
 
 
-void SfxPartDockWnd_Impl::Resize()
-
-/*  [Description]
-
-    Adjusting the size of the controls wrt the new window size
-*/
-
-{
-    SfxDockingWindow::Resize();
-}
-
-
 bool SfxPartDockWnd_Impl::QueryClose()
 {
     bool bClose = true;

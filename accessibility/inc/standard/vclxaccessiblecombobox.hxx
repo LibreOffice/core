@@ -49,7 +49,6 @@ protected:
     virtual ~VCLXAccessibleComboBox();
 
     virtual bool IsValid() const override;
-    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLECOMBOBOX_HXX

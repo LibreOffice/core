@@ -62,7 +62,6 @@ ImportDocumentHandler::~ImportDocumentHandler()
     }
 }
 IMPLEMENT_GET_IMPLEMENTATION_ID(ImportDocumentHandler)
-IMPLEMENT_FORWARD_REFCOUNT( ImportDocumentHandler, ImportDocumentHandler_BASE )
 
 OUString SAL_CALL ImportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
 {

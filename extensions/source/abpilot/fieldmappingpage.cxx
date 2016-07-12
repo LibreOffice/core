@@ -55,12 +55,6 @@ namespace abp
     }
 
 
-    void FieldMappingPage::DeactivatePage()
-    {
-        AddressBookSourcePage::DeactivatePage();
-    }
-
-
     void FieldMappingPage::initializePage()
     {
         AddressBookSourcePage::initializePage();

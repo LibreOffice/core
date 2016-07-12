@@ -81,9 +81,6 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) override;
 
-    // OComponentHelper
-    virtual void SAL_CALL disposing() override;
-
     // XPersistObject
     virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) override;

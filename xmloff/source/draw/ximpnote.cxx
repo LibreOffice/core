@@ -100,9 +100,4 @@ SvXMLImportContext *SdXMLNotesContext::CreateChildContext( sal_uInt16 nPrefix,
     return SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 }
 
-void SdXMLNotesContext::EndElement()
-{
-    SdXMLGenericPageContext::EndElement();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

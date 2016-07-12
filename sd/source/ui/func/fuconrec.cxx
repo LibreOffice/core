@@ -215,11 +215,6 @@ bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-bool FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
-{
-    return FuConstruct::MouseMove(rMEvt);
-}
-
 bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     bool bReturn(false);
@@ -264,15 +259,6 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
     return bReturn;
-}
-
-/**
- * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
- */
-bool FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
-{
-    return FuConstruct::KeyInput(rKEvt);
 }
 
 void FuConstructRectangle::Activate()

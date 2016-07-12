@@ -59,7 +59,6 @@ protected:
     explicit        SpinField( WindowType nTyp );
 
     virtual bool    Notify( NotifyEvent& rNEvt ) override;
-    virtual void    Command( const CommandEvent& rCEvt ) override;
 
     void            EndDropDown();
 

@@ -69,22 +69,6 @@ Content::~Content()
 {
 }
 
-// XInterface methods.
-
-// virtual
-void SAL_CALL Content::acquire()
-    throw( )
-{
-    ContentImplHelper::acquire();
-}
-
-// virtual
-void SAL_CALL Content::release()
-    throw( )
-{
-    ContentImplHelper::release();
-}
-
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     throw ( uno::RuntimeException, std::exception )

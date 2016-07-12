@@ -385,18 +385,6 @@ awt::Size SAL_CALL AccessibleCell::getSize() throw (RuntimeException, std::excep
 }
 
 
-void SAL_CALL AccessibleCell::addFocusListener ( const css::uno::Reference< css::awt::XFocusListener >& xListener) throw (css::uno::RuntimeException)
-{
-    AccessibleComponentBase::addFocusListener( xListener );
-}
-
-
-void SAL_CALL AccessibleCell::removeFocusListener (const css::uno::Reference< css::awt::XFocusListener >& xListener ) throw (css::uno::RuntimeException)
-{
-    AccessibleComponentBase::removeFocusListener( xListener );
-}
-
-
 void SAL_CALL AccessibleCell::grabFocus() throw (css::uno::RuntimeException, std::exception)
 {
     AccessibleComponentBase::grabFocus();

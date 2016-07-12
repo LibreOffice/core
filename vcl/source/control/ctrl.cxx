@@ -87,16 +87,6 @@ void Control::EnableRTL( bool bEnable )
     OutputDevice::EnableRTL(bEnable);
 }
 
-void Control::GetFocus()
-{
-    Window::GetFocus();
-}
-
-void Control::LoseFocus()
-{
-    Window::LoseFocus();
-}
-
 void Control::Resize()
 {
     ImplClearLayoutData();

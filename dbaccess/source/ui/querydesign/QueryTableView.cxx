@@ -689,11 +689,6 @@ bool OQueryTableView::RemoveConnection(VclPtr<OTableConnection>& rConnection, bo
     return bRet;
 }
 
-void OQueryTableView::KeyInput( const KeyEvent& rEvt )
-{
-    OJoinTableView::KeyInput( rEvt );
-}
-
 OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
 {
     OSL_ENSURE(!rAliasName.isEmpty(), "OQueryTableView::FindTable : the  AliasName should not be empty !");

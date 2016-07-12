@@ -35,8 +35,6 @@ public:
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
 
     // Mouse- & Key-Events
-    virtual bool KeyInput(const KeyEvent& rKEvt) override;
-    virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
