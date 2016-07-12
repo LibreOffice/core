@@ -1485,7 +1485,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                                             uno::Reference< beans::XPropertySet > xEmbeddedProps( xEmbeddedObjects->getByName( aNames[nN] ), uno::UNO_QUERY );
                                             if( xEmbeddedProps.is() )
                                             {
-                                                static OUString aChartCLSID = OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName());
+                                                static OUString aChartCLSID = SvGlobalName( SO3_SCH_CLASSID ).GetHexName();
                                                 OUString aCLSID;
                                                 xEmbeddedProps->getPropertyValue( "CLSID" ) >>= aCLSID;
                                                 if( aCLSID.equals(aChartCLSID) )

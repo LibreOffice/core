@@ -1031,7 +1031,7 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
         mbHasSeriesLabels( false ),
         mbHasCategoryLabels( false ),
         mbRowSourceColumns( true ),
-        msCLSID( OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
+        msCLSID( SvGlobalName( SO3_SCH_CLASSID ).GetHexName() )
 {
     msTableName = "local-table";
 

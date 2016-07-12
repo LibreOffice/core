@@ -1115,11 +1115,11 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                         if(xPropSet->getPropertyValue("CLSID") >>= sCLSID)
                         {
                             if (sCLSID.equals(mrExport.GetChartExport()->getChartCLSID()) ||
-                                sCLSID.equals(OUString( SvGlobalName( SO3_RPTCH_CLASSID ).GetHexName())))
+                                sCLSID.equals( SvGlobalName( SO3_RPTCH_CLASSID ).GetHexName() ))
                             {
                                 eShapeType = XmlShapeTypeDrawChartShape;
                             }
-                            else if (sCLSID.equals(OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())))
+                            else if (sCLSID.equals( SvGlobalName( SO3_SC_CLASSID ).GetHexName() ))
                             {
                                 eShapeType = XmlShapeTypeDrawSheetShape;
                             }
@@ -1165,7 +1165,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                         OUString sCLSID;
                         if(xPropSet->getPropertyValue("CLSID") >>= sCLSID)
                         {
-                            if( sCLSID.equals(OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())) )
+                            if( sCLSID.equals( SvGlobalName( SO3_SC_CLASSID ).GetHexName() ) )
                             {
                                 eShapeType = XmlShapeTypePresSheetShape;
                             }

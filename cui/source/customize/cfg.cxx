@@ -4435,7 +4435,7 @@ void ToolbarSaveInData::LoadToolbar(
 
                 // If custom label not set retrieve it from the command
                 // to info service
-                if ( aLabel.equals( OUString() ) )
+                if ( aLabel.isEmpty() )
                 {
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )

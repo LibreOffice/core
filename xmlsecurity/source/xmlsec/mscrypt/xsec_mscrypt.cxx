@@ -45,15 +45,15 @@ void* SAL_CALL mscrypt_component_getFactory( const sal_Char* pImplName , void* p
     Reference< XSingleServiceFactory > xFactory ;
 
     if( pImplName != NULL && pServiceManager != NULL ) {
-        if( XMLSignature_MSCryptImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
+        if( XMLSignature_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
             xFactory = XMLSignature_MSCryptImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( XMLSecurityContext_MSCryptImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
+        } else if( XMLSecurityContext_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
             xFactory = XMLSecurityContext_MSCryptImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( SecurityEnvironment_MSCryptImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
+        } else if( SecurityEnvironment_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
             xFactory = SecurityEnvironment_MSCryptImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( XMLEncryption_MSCryptImpl::impl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
+        } else if( XMLEncryption_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
             xFactory = XMLEncryption_MSCryptImpl::impl_createFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( SEInitializer_MSCryptImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) ) {
+        } else if( SEInitializer_MSCryptImpl_getImplementationName().equalsAscii( pImplName ) ) {
             xFactory.set( createSingleFactory(
                 reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
                 OUString::createFromAscii( pImplName ),
