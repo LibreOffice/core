@@ -73,10 +73,6 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar)
 {
-    // For this master page selector only we change the default action for
-    // left clicks.
-    mnDefaultClickAction = SID_TP_APPLY_TO_SELECTED_SLIDES;
-
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     rBase.GetEventMultiplexer()->AddEventListener(aLink,
         sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE

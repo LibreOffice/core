@@ -75,7 +75,7 @@ MasterPagesSelector::MasterPagesSelector (
       mpContainer(rpContainer),
       mrDocument(rDocument),
       mrBase(rBase),
-      mnDefaultClickAction(SID_TP_APPLY_TO_ALL_SLIDES),
+      mnDefaultClickAction(SID_TP_APPLY_TO_SELECTED_SLIDES),
       maCurrentItemList(),
       maTokenToValueSetIndex(),
       maLockedMasterPages(),
