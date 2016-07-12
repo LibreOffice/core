@@ -212,7 +212,7 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
     mnPoints   = nNewSize;
 }
 
-void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pInitPoly )
+void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon const * pInitPoly )
 {
     //Can't fit this in :-(, throw ?
     if (mnPoints + nSpace > USHRT_MAX)
@@ -1134,8 +1134,8 @@ public:
     Vector2D&    operator-=( const Vector2D& rVec ) { mfX -= rVec.mfX; mfY -= rVec.mfY; return *this; }
     double       Scalar( const Vector2D& rVec ) const { return mfX * rVec.mfX + mfY * rVec.mfY ; }
     Vector2D&    Normalize();
-    bool         IsPositive( Vector2D& rVec ) const { return ( mfX * rVec.mfY - mfY * rVec.mfX ) >= 0.0; }
-    bool         IsNegative( Vector2D& rVec ) const { return !IsPositive( rVec ); }
+    bool         IsPositive( Vector2D const & rVec ) const { return ( mfX * rVec.mfY - mfY * rVec.mfX ) >= 0.0; }
+    bool         IsNegative( Vector2D const & rVec ) const { return !IsPositive( rVec ); }
 };
 Vector2D& Vector2D::Normalize()
 {
