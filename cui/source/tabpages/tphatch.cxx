@@ -209,7 +209,8 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
             if( *m_pPageType == PT_HATCH && *m_pPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                m_pHatchLB->SelectItem( *m_pPos );
+                sal_uInt16 nId = m_pHatchLB->GetItemId( static_cast<size_t>( *m_pPos ) );
+                m_pHatchLB->SelectItem( nId );
             }
             // colors could have been deleted
             ChangeHatchHdl_Impl();
@@ -292,9 +293,9 @@ long SvxHatchTabPage::CheckChanges_Impl()
         }
     }
 
-    sal_Int32 nPos = m_pHatchLB->GetSelectItemId();
-    if( nPos != 0 )
-        *m_pPos = nPos - 1;
+    size_t nPos = m_pHatchLB->GetSelectItemPos();
+    if( nPos != VALUESET_ITEM_NOTFOUND )
+        *m_pPos = static_cast<sal_Int32>(nPos);
     return 0L;
 }
 
@@ -325,10 +326,10 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 
             std::unique_ptr<XHatch> pXHatch;
             OUString  aString;
-            sal_Int32  nPos = m_pHatchLB->GetSelectItemId();
-            if( nPos != 0 )
+            size_t nPos = m_pHatchLB->GetSelectItemPos();
+            if( nPos != VALUESET_ITEM_NOTFOUND )
             {
-                pXHatch.reset(new XHatch( m_pHatchingList->GetHatch( nPos - 1 )->GetHatch() ));
+                pXHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
                 aString = m_pHatchLB->GetItemText( m_pHatchLB->GetSelectItemId() );
             }
             // gradient has been (unidentifiedly) passed
@@ -429,10 +430,10 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ChangeHatchHdl, ValueSet*, void)
 void SvxHatchTabPage::ChangeHatchHdl_Impl()
 {
     std::unique_ptr<XHatch> pHatch;
-    int nPos = m_pHatchLB->GetSelectItemId();
+    size_t nPos = m_pHatchLB->GetSelectItemPos();
 
-    if( nPos != 0 )
-        pHatch.reset(new XHatch( m_pHatchingList->GetHatch( nPos - 1 )->GetHatch() ));
+    if( nPos != VALUESET_ITEM_NOTFOUND )
+        pHatch.reset(new XHatch( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetHatch() ));
     else
     {
         const SfxPoolItem* pPoolItem = nullptr;
@@ -446,10 +447,10 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
         }
         if( !pHatch )
         {
-            m_pHatchLB->SelectItem( 1 );
-            nPos = m_pHatchLB->GetSelectItemId();
-            if( nPos != 0 )
-                pHatch.reset(new XHatch( m_pHatchingList->GetHatch( nPos - 1 )->GetHatch() ));
+            sal_uInt16 nPosition = m_pHatchLB->GetItemId( 0 );
+            m_pHatchLB->SelectItem( nPosition );
+            if( nPosition != 0 )
+                pHatch.reset( new XHatch( m_pHatchingList->GetHatch( 0 )->GetHatch() ) );
         }
     }
     if( pHatch )
@@ -542,9 +543,11 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 
         m_pHatchingList->Insert( pEntry, nCount );
 
-        m_pHatchLB->Clear();
-        m_pHatchLB->FillPresetListBox( *m_pHatchingList );
-        m_pHatchLB->SelectItem( nCount + 1 );
+        sal_Int32 nId = m_pHatchLB->GetItemId(nCount - 1); // calculate the last ID
+        Bitmap aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, m_pHatchLB->GetSize() );
+        // Insert the new entry at the next ID
+        m_pHatchLB->InsertItem( nId + 1, Image(aBitmap), aName );
+        m_pHatchLB->SelectItem( nId + 1 );
 
         *m_pnHatchingListState |= ChangeType::MODIFIED;
 
@@ -554,11 +557,12 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pHatchLB->GetSelectItemId();
+    sal_uInt16 nId = m_pHatchLB->GetSelectItemId();
+    size_t nPos = m_pHatchLB->GetSelectItemPos();
 
-    if( nPos != 0 )
+    if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        OUString aName( m_pHatchingList->GetHatch( nPos - 1 )->GetName() );
+        OUString aName( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetName() );
 
         XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
                         (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
@@ -567,11 +571,12 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 
         XHatchEntry* pEntry = new XHatchEntry( aXHatch, aName );
 
-        delete m_pHatchingList->Replace( pEntry, nPos - 1 );
+        delete m_pHatchingList->Replace( pEntry, static_cast<sal_uInt16>(nPos) );
 
-        m_pHatchLB->Clear();
-        m_pHatchLB->FillPresetListBox( *m_pHatchingList );
-        m_pHatchLB->SelectItem( nPos );
+        Bitmap aBitmap = m_pHatchingList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_pHatchLB->GetSize() );
+        m_pHatchLB->RemoveItem( nId );
+        m_pHatchLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
+        m_pHatchLB->SelectItem( nId );
 
         // save values for changes recognition (-> method)
         m_pMtrDistance->SaveValue();
@@ -586,18 +591,19 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_Int32 nPos = m_pHatchLB->GetSelectItemId();
+    sal_uInt16 nId = m_pHatchLB->GetSelectItemId();
+    size_t nPos = m_pHatchLB->GetSelectItemPos();
 
-    if( nPos != 0 )
+    if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         ScopedVclPtrInstance< MessageDialog > aQueryBox( GetParentDialog(),"AskDelHatchDialog","cui/ui/querydeletehatchdialog.ui");
 
         if( aQueryBox->Execute() == RET_YES )
         {
-            m_pHatchingList->Remove( nPos - 1 );
-            m_pHatchLB->Clear();
-            m_pHatchLB->FillPresetListBox( *m_pHatchingList );
-            m_pHatchLB->SelectItem( 1 );
+            m_pHatchingList->Remove( static_cast<sal_uInt16>(nPos) );
+            m_pHatchLB->RemoveItem( nId );
+            nId = m_pHatchLB->GetItemId(0);
+            m_pHatchLB->SelectItem( nId );
 
             m_pCtlPreview->Invalidate();
 
@@ -610,12 +616,13 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, v
 
 IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
 {
-    sal_Int32 nPos = m_pHatchLB->GetSelectItemId();
+    sal_uInt16 nId = m_pHatchLB->GetSelectItemId();
+    size_t nPos = m_pHatchLB->GetSelectItemPos();
 
-    if( nPos != 0 )
+    if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         OUString aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
-        OUString aName( m_pHatchingList->GetHatch( nPos - 1 )->GetName() );
+        OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         assert(pFact && "Dialog creation failed!");
@@ -627,18 +634,16 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, v
         {
             pDlg->GetName( aName );
             sal_Int32 nHatchPos = SearchHatchList( aName );
-            bool bValidHatchName = (nHatchPos == nPos - 1) || (nHatchPos == LISTBOX_ENTRY_NOTFOUND);
+            bool bValidHatchName = (nHatchPos == static_cast<sal_Int32>(nPos) ) || (nHatchPos == LISTBOX_ENTRY_NOTFOUND);
 
             if(bValidHatchName)
             {
                 bLoop = false;
-                XHatchEntry* pEntry = m_pHatchingList->GetHatch( nPos - 1 );
+                XHatchEntry* pEntry = m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) );
                 pEntry->SetName( aName );
 
-                delete m_pHatchingList->Replace( pEntry, nPos - 1 );
-                m_pHatchLB->Clear();
-                m_pHatchLB->FillPresetListBox(*m_pHatchingList);
-                m_pHatchLB->SelectItem( nPos );
+                m_pHatchLB->SetItemText(nId, aName);
+                m_pHatchLB->SelectItem( nId );
 
                 *m_pnHatchingListState |= ChangeType::MODIFIED;
             }
