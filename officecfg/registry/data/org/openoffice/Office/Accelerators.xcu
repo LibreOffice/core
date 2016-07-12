@@ -5991,7 +5991,8 @@
         <node oor:name="G_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RepeatSearch</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GotoPage</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:RepeatSearch</value>
             <value xml:lang="es">.uno:Save</value>
             <value xml:lang="fr">.uno:Bold</value>
           </prop>
