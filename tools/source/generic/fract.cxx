@@ -362,7 +362,7 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
     return rVal1.mpImpl->value > rVal2.mpImpl->value;
 }
 
-SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
+SvStream& ReadFraction( SvStream& rIStream, Fraction const & rFract )
 {
     sal_Int32 num(0), den(0);
     rIStream.ReadInt32( num );

@@ -51,7 +51,7 @@ class DynamicErrorInfo_Impl
     sal_uInt16                  nMask;
 
     void                        RegisterEDcr(DynamicErrorInfo *);
-    static void                 UnRegisterEDcr(DynamicErrorInfo *);
+    static void                 UnRegisterEDcr(DynamicErrorInfo const *);
     static ErrorInfo           *GetDynamicErrorInfo(sal_uIntPtr lId);
 
 friend class DynamicErrorInfo;
@@ -83,7 +83,7 @@ void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
         rData.nNextDcr=0;
 }
 
-void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
+void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo const *pDcr)
 {
     DynamicErrorInfo **ppDcr = TheEDcrData::get().ppDcr;
     sal_uIntPtr lIdx = (((sal_uIntPtr)(*pDcr) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;

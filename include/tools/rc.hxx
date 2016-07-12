@@ -52,7 +52,7 @@ protected:
     { return ResMgr::GetObjSize( pHT ); }
 
     // get a 32bit value from Resource data
-    static sal_Int32    GetLongRes( void * pLong )
+    static sal_Int32    GetLongRes( void const * pLong )
     { return ResMgr::GetLong( pLong ); }
 
     // read a 32bit value from resource data and increment pointer
