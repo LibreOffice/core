@@ -170,11 +170,6 @@ namespace frm
         return aSupported;
     }
 
-    void SAL_CALL ONavigationBarModel::disposing()
-    {
-        OControlModel::disposing( );
-    }
-
     OUString SAL_CALL ONavigationBarModel::getServiceName() throw ( RuntimeException, std::exception )
     {
         return OUString(FRM_SUN_COMPONENT_NAVTOOLBAR);

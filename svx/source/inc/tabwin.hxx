@@ -83,7 +83,7 @@ public:
     virtual ~FmFieldWin();
     virtual void dispose() override;
     virtual void Resize() override;
-    virtual bool Close() override;
+    using SfxFloatingWindow::Close;
     virtual void GetFocus() override;
     virtual bool PreNotify( NotifyEvent& _rNEvt ) override;
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,

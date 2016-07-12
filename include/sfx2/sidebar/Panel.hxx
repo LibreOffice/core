@@ -56,10 +56,8 @@ public:
     bool HasIdPredicate (const OUString& rsId) const;
     const OUString& GetId() const { return msPanelId;}
 
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) override;
     virtual void Resize() override;
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
-    virtual void Activate() override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
 private:

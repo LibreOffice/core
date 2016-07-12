@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_uxmloff, \
     svl \
 	test \
     tl \
+    unotest \
     utl \
     vcl \
 	$(gb_UWINAPI) \

@@ -151,16 +151,6 @@ Any SAL_CALL VCLXAccessibleListItem::queryInterface( Type const & rType ) throw 
     return VCLXAccessibleListItem_BASE::queryInterface( rType );
 }
 
-void SAL_CALL VCLXAccessibleListItem::acquire() throw ()
-{
-    VCLXAccessibleListItem_BASE::acquire();
-}
-
-void SAL_CALL VCLXAccessibleListItem::release() throw ()
-{
-    VCLXAccessibleListItem_BASE::release();
-}
-
 // XTypeProvider
 
 Sequence< Type > SAL_CALL VCLXAccessibleListItem::getTypes(  ) throw (RuntimeException, std::exception)

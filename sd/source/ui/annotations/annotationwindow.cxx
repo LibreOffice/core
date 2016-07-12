@@ -226,16 +226,6 @@ void AnnotationTextWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-void AnnotationTextWindow::GetFocus()
-{
-    Window::GetFocus();
-}
-
-void AnnotationTextWindow::LoseFocus()
-{
-    Window::LoseFocus();
-}
-
 OUString AnnotationTextWindow::GetSurroundingText() const
 {
     if( mpOutlinerView )
@@ -446,11 +436,6 @@ void AnnotationWindow::DoResize()
             aPos.Y()+5 ),
             Size( METABUTTON_WIDTH, METABUTTON_HEIGHT ) ) );
 
-}
-
-void AnnotationWindow::SetSizePixel( const Size& rNewSize )
-{
-    Window::SetSizePixel(rNewSize);
 }
 
 void AnnotationWindow::SetScrollbar()

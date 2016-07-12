@@ -2363,16 +2363,6 @@ SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, bool bOrg )
 {
 }
 
-void SAL_CALL SwDocStyleSheetPool::acquire(  ) throw ()
-{
-    comphelper::OWeakTypeObject::acquire();
-}
-
-void SAL_CALL SwDocStyleSheetPool::release(  ) throw ()
-{
-    comphelper::OWeakTypeObject::release();
-}
-
 SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
                                                 SfxStyleFamily  eFam,
                                                 sal_uInt16          _nMask)

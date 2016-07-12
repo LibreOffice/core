@@ -34,7 +34,6 @@ class ScConditionalFormatTest : public CalcUnoApiTest
 public:
     ScConditionalFormatTest();
 
-    virtual void setUp() override;
     virtual void tearDown() override;
 
     uno::Reference< uno::XInterface > init();
@@ -213,11 +212,6 @@ void ScConditionalFormatTest::testUndoAnchor()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     xComponent->dispose();
-}
-
-void ScConditionalFormatTest::setUp()
-{
-    CalcUnoApiTest::setUp();
 }
 
 void ScConditionalFormatTest::tearDown()

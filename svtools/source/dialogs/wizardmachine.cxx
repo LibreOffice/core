@@ -43,11 +43,6 @@ namespace svt
         disposeOnce();
     }
 
-    void OWizardPage::dispose()
-    {
-        TabPage::dispose();
-    }
-
     void OWizardPage::initializePage()
     {
     }

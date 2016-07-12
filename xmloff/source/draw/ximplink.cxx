@@ -65,14 +65,4 @@ SvXMLImportContext* SdXMLShapeLinkContext::CreateChildContext( sal_uInt16 nPrefi
 
 }
 
-void SdXMLShapeLinkContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttr )
-{
-    SvXMLImportContext::StartElement( xAttr );
-}
-
-void SdXMLShapeLinkContext::EndElement()
-{
-    SvXMLImportContext::EndElement();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

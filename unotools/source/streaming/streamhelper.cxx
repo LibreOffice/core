@@ -22,16 +22,6 @@
 namespace utl
 {
 
-void SAL_CALL OInputStreamHelper::acquire() throw ()
-{
-    InputStreamHelper_Base::acquire();
-}
-
-void SAL_CALL OInputStreamHelper::release() throw ()
-{
-    InputStreamHelper_Base::release();
-}
-
 sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
     throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {

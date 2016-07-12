@@ -340,8 +340,6 @@ class MyClass : public osl::DebugBase<MyClass>, public OWeakObject
 public:
     MyClass();
     virtual ~MyClass();
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
 };
 
 
@@ -352,17 +350,6 @@ MyClass::MyClass()
 MyClass::~MyClass()
 {
 }
-
-void MyClass::acquire() throw ()
-{
-    OWeakObject::acquire();
-}
-
-void MyClass::release() throw ()
-{
-    OWeakObject::release();
-}
-
 
 static bool performTest(
     const Reference<XComponentContext> & xContext,

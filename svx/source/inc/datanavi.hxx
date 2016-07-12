@@ -379,7 +379,6 @@ namespace svxform
 
     protected:
         virtual void                Resize() override;
-        virtual bool                Close() override;
         virtual void                GetFocus() override;
         virtual Size                CalcDockingSize( SfxChildAlignment ) override;
         virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment ) override;

@@ -169,11 +169,6 @@ void OReportSection::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
     }
 }
 
-void OReportSection::Resize()
-{
-    Window::Resize();
-}
-
 void OReportSection::fill()
 {
     if ( !m_xSection.is() )

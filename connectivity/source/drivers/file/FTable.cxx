@@ -165,16 +165,6 @@ void OFileTable::FileClose()
     }
 }
 
-void SAL_CALL OFileTable::acquire() throw()
-{
-    OTable_TYPEDEF::acquire();
-}
-
-void SAL_CALL OFileTable::release() throw()
-{
-    OTable_TYPEDEF::release();
-}
-
 bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, const css::uno::Reference< css::container::XIndexAccess>& /*_xCols*/)
 {
     return false;

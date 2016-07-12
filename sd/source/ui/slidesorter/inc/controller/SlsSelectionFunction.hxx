@@ -50,9 +50,6 @@ public:
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
-    virtual void Activate() override;
-    virtual void Deactivate() override;
-
     /// Forward to the clipboard manager.
     virtual void DoCut() override;
 

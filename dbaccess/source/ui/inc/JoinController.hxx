@@ -115,8 +115,6 @@ namespace dbaui
         static void SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY);
 
         // UNO interface overridables
-        // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
         // css::lang::XComponent
         virtual void    SAL_CALL disposing() override;

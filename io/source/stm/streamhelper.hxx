@@ -80,8 +80,6 @@ public:
                   throw( css::io::BufferSizeExceededException );
     sal_Int32     getSize() const throw()
                   { return MemRingBuffer::getSize(); }
-    virtual void  shrink() throw() override
-                  { MemRingBuffer::shrink(); }
 
 };
 

@@ -188,8 +188,6 @@ public:
 
     virtual void SetModel(SdrModel* pNewModel) override;
 
-    virtual void RecalcSnapRect() override;
-
     virtual const Rectangle& GetSnapRect()  const override;
     virtual const Rectangle& GetCurrentBoundRect() const override;
     virtual const Rectangle& GetLogicRect() const override;
@@ -217,7 +215,6 @@ public:
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const override;
     virtual bool applySpecialDrag(SdrDragStat& rDrag) override;
 
-    virtual bool BegCreate( SdrDragStat& rStat ) override;
     virtual bool MovCreate(SdrDragStat& rStat) override; // #i37448#
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
@@ -233,7 +230,6 @@ public:
     virtual bool IsAutoGrowHeight() const override;
     virtual bool IsAutoGrowWidth() const override;
     virtual void SetVerticalWriting( bool bVertical ) override;
-    virtual bool BegTextEdit( SdrOutliner& rOutl ) override;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const override;
     virtual void EndTextEdit( SdrOutliner& rOutl ) override;
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const override;

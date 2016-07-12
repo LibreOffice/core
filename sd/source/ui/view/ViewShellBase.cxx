@@ -813,11 +813,6 @@ SdrView* ViewShellBase::GetDrawView() const
         return SfxViewShell::GetDrawView();
 }
 
-void ViewShellBase::AdjustPosSizePixel (const Point &rOfs, const Size &rSize)
-{
-    SfxViewShell::AdjustPosSizePixel (rOfs, rSize);
-}
-
 void ViewShellBase::SetBusyState (bool bBusy)
 {
     if (GetDocShell() != nullptr)

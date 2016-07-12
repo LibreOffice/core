@@ -44,7 +44,6 @@ namespace abp
 
         // TabDialog overridables
         virtual void        ActivatePage() override;
-        virtual void        DeactivatePage() override;
 
         // OImportPage overridables
         virtual bool        canAdvance() const override;

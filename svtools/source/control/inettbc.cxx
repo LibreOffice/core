@@ -1061,12 +1061,6 @@ bool SvtURLBox::ProcessKey( const vcl::KeyCode& rKey )
 }
 
 
-void SvtURLBox::Modify()
-{
-    ComboBox::Modify();
-}
-
-
 bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetWindow() == GetSubEdit() && rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )

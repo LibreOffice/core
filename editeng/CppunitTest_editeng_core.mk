@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_core, \
     tk \
     tl \
     ucbhelper \
+    unotest \
     utl \
     vcl \
     xo \

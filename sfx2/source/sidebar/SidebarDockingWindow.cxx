@@ -77,12 +77,6 @@ void SidebarDockingWindow::GetFocus()
         SfxDockingWindow::GetFocus();
 }
 
-// fdo#87217
-bool SidebarDockingWindow::Close()
-{
-    return SfxDockingWindow::Close();
-}
-
 SfxChildAlignment SidebarDockingWindow::CheckAlignment (
     SfxChildAlignment eCurrentAlignment,
     SfxChildAlignment eRequestedAlignment)

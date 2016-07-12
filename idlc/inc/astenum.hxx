@@ -38,7 +38,6 @@ public:
 
     virtual bool dump(RegistryKey& rKey) override;
 
-    virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl) override;
 private:
     sal_Int32   m_enumValueCount;
 };

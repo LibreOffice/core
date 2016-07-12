@@ -56,11 +56,6 @@ AddonMenu::~AddonMenu()
     disposeOnce();
 }
 
-void AddonMenu::dispose()
-{
-    PopupMenu::dispose();
-}
-
 // Check if command URL string has the unique prefix to identify addon popup menus
 bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
 {

@@ -104,9 +104,4 @@ bool AstEnum::dump(RegistryKey& rKey)
     return true;
 }
 
-AstDeclaration* AstEnum::addDeclaration(AstDeclaration* pDecl)
-{
-    return AstScope::addDeclaration(pDecl);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

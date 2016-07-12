@@ -4532,11 +4532,6 @@ void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
     }
 }
 
-bool ToolBox::PrepareToggleFloatingMode()
-{
-    return DockingWindow::PrepareToggleFloatingMode();
-}
-
 void ToolBox::SetStyle(WinBits nNewStyle)
 {
     mnWinStyle = nNewStyle;

@@ -39,9 +39,6 @@ class FuConstruct : public FuDraw
 
             bool SimpleMouseButtonUp(const MouseEvent& rMEvt);
 
-    virtual void Activate() override;
-    virtual void Deactivate() override;
-
     // Returns grid sync offset for rInOutPos, additionally adjusts rInOutPos
     // by the offset
     Point CurrentGridSyncOffsetAndPos( Point& rInOutPos);
