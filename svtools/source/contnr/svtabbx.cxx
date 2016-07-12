@@ -377,11 +377,6 @@ sal_uLong SvTabListBox::GetEntryPos( const SvTreeListEntry* pEntry ) const
     return 0xffffffff;
 }
 
-void SvTabListBox::Resize()
-{
-    SvTreeListBox::Resize();
-}
-
 // static
 OUString SvTabListBox::GetToken( const OUString &sStr, sal_Int32& nIndex )
 {

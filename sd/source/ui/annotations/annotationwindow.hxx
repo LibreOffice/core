@@ -70,8 +70,6 @@ public:
 
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
-
-    virtual void    GetFocus() override;
 };
 
 class AnnotationWindow : public FloatingWindow

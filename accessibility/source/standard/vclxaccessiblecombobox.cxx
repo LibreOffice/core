@@ -46,12 +46,6 @@ bool VCLXAccessibleComboBox::IsValid() const
     return GetWindow().get() != nullptr;
 }
 
-void VCLXAccessibleComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent)
-{
-    VCLXAccessibleBox::ProcessWindowEvent( rVclWindowEvent );
-}
-
-
 // XServiceInfo
 
 OUString VCLXAccessibleComboBox::getImplementationName()

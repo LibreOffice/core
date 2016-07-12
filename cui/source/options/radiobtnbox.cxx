@@ -33,11 +33,6 @@ SvxRadioButtonListBox::SvxRadioButtonListBox(SvSimpleTableContainer& rParent, Wi
     EnableCheckButton( new SvLBoxButtonData( this, true ) );
 }
 
-void SvxRadioButtonListBox::SetTabs()
-{
-    SvSimpleTable::SetTabs();
-}
-
 void SvxRadioButtonListBox::MouseButtonUp( const MouseEvent& _rMEvt )
 {
     m_aCurMousePoint = _rMEvt.GetPosPixel();

@@ -37,9 +37,6 @@ public:
     DrawCommandDispatch( const css::uno::Reference< css::uno::XComponentContext >& rxContext, ChartController* pController );
     virtual ~DrawCommandDispatch();
 
-    // late initialisation, especially for adding as listener
-    virtual void initialize() override;
-
     virtual bool isFeatureSupported( const OUString& rCommandURL ) override;
 
     void setAttributes( SdrObject* pObj );

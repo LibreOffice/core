@@ -733,11 +733,6 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
     rRenderContext.DrawLine(Point(0, 0), Point(mnDX-1, 0));
 }
 
-void StatusBar::Move()
-{
-    Window::Move();
-}
-
 void StatusBar::Resize()
 {
     // save width and height

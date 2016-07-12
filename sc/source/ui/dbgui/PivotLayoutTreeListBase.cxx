@@ -52,11 +52,6 @@ DragDropMode ScPivotLayoutTreeListBase::NotifyStartDrag(TransferDataContainer& /
 void ScPivotLayoutTreeListBase::DragFinished(sal_Int8 /*nDropAction*/)
 {}
 
-sal_Int8 ScPivotLayoutTreeListBase::AcceptDrop(const AcceptDropEvent& rEvent)
-{
-    return SvTreeListBox::AcceptDrop(rEvent);
-}
-
 bool ScPivotLayoutTreeListBase::NotifyAcceptDrop(SvTreeListEntry* /*pEntry*/)
 {
     return true;

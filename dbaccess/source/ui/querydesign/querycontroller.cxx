@@ -1166,7 +1166,7 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
         }
     }
 
-    OJoinController::disposing(Source);
+    OJoinController_BASE::disposing(Source);
 }
 
 void OQueryController::reconnect(bool _bUI)

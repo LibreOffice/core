@@ -684,11 +684,6 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
     return nJobID != 0;
 }
 
-void CUPSManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo )
-{
-    PrinterInfoManager::changePrinterInfo( rPrinter, rNewInfo );
-}
-
 bool CUPSManager::checkPrintersChanged( bool bWait )
 {
     bool bChanged = false;

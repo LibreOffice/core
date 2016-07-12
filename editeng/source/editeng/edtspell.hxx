@@ -47,7 +47,6 @@ protected:
     virtual void            SpellStart( SvxSpellArea eArea ) override;
     virtual void            SpellContinue() override;    // Check area
     virtual void            ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage ) override;
-    virtual void            SpellEnd() override;
     virtual bool            SpellMore() override;
     virtual bool            HasOtherCnt() override;
 

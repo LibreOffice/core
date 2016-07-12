@@ -614,17 +614,6 @@ FmXFormShell_Base_Disambiguation::FmXFormShell_Base_Disambiguation( ::osl::Mutex
 {
 }
 
-void SAL_CALL FmXFormShell_Base_Disambiguation::disposing()
-{
-    WeakComponentImplHelperBase::disposing();
-    // Note:
-    // This is a HACK.
-    // Normally it should be sufficient to call the "disposing" of our direct
-    // base class, but SUN PRO 5 does not like this and claims there is a conflict
-    // with the XEventListener::disposing(EventObject) of our various listener
-    // base classes.
-}
-
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
         ,FmXFormShell_CFGBASE(OUString("Office.Common/Misc"), ConfigItemMode::DelayedUpdate)

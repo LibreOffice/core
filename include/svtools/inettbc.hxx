@@ -54,7 +54,6 @@ friend class SvtURLBox_Impl;
 protected:
     virtual bool                    Notify( NotifyEvent& rNEvt ) override;
     virtual void                    Select() override;
-    virtual void                    Modify() override;
     virtual bool                    PreNotify( NotifyEvent& rNEvt ) override;
 
 public:

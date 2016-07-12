@@ -128,8 +128,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         void componentLiveRemoval(ComponentBackendDb::Data const & data);
 
-        virtual void SAL_CALL disposing() override;
-
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
@@ -183,8 +181,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         BackendImpl * getMyBackend() const;
 
         const bool m_jarFile;
-
-        virtual void SAL_CALL disposing() override;
 
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
@@ -386,18 +382,6 @@ BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
             static_cast<OWeakObject*>(const_cast<ComponentPackageImpl *>(this)));
     }
     return pBackend;
-}
-
-
-void BackendImpl::ComponentPackageImpl::disposing()
-{
-    Package::disposing();
-}
-
-
-void BackendImpl::TypelibraryPackageImpl::disposing()
-{
-    Package::disposing();
 }
 
 

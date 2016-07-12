@@ -318,7 +318,6 @@ public:
 private:
     void            ImplTrack( const Point& rScreenPos );
 
-    virtual void    dispose() override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
     virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
@@ -334,11 +333,6 @@ ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
     SetPointer(Pointer(PointerStyle::HSizeBar));
     SetSizePixel(Size(7 * nScaleFactor, 0));
-}
-
-void ImplTabSizer::dispose()
-{
-    vcl::Window::dispose();
 }
 
 void ImplTabSizer::ImplTrack( const Point& rScreenPos )

@@ -144,10 +144,6 @@ namespace pcr
         virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception) override;
         virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) throw (NoSupportException, RuntimeException, std::exception) override;
 
-        // UNOCompatibleNonUNOReference overridables
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
-
     protected:
         virtual ~CachedInspectorUI();
 
@@ -206,18 +202,6 @@ namespace pcr
         clearContainer( aHiddenCategories );
         clearContainer( aEnabledElements );
         clearContainer( aDisabledElements );
-    }
-
-
-    void SAL_CALL CachedInspectorUI::acquire() throw()
-    {
-        CachedInspectorUI_Base::acquire();
-    }
-
-
-    void SAL_CALL CachedInspectorUI::release() throw()
-    {
-        CachedInspectorUI_Base::release();
     }
 
 

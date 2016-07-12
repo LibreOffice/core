@@ -79,11 +79,6 @@ DrawCommandDispatch::~DrawCommandDispatch()
 {
 }
 
-void DrawCommandDispatch::initialize()
-{
-    FeatureCommandDispatchBase::initialize();
-}
-
 bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
 {
     sal_uInt16 nFeatureId = 0;

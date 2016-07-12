@@ -100,9 +100,6 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            virtual void SAL_CALL acquire() throw() override;
-            virtual void SAL_CALL release() throw() override;
-
             const ODbaseTable* getTable() const { return m_pTable; }
             const NDXHeader& getHeader() const { return m_aHeader; }
             OIndexIterator* createIterator();

@@ -1049,7 +1049,7 @@ UcbLockBytes::UcbLockBytes()
     , m_bDontClose( false )
     , m_bStreamValid  (false)
 {
-    SetSynchronMode( true );
+    SetSynchronMode();
 }
 
 UcbLockBytes::~UcbLockBytes()
@@ -1166,11 +1166,6 @@ void UcbLockBytes::terminate_Impl()
         OSL_FAIL("No InputStream, but no error set!" );
         SetError( ERRCODE_IO_NOTEXISTS );
     }
-}
-
-void UcbLockBytes::SetSynchronMode (bool bSynchron)
-{
-    SvLockBytes::SetSynchronMode (bSynchron);
 }
 
 ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
@@ -1398,7 +1393,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
         return nullptr;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes;
-    xLockBytes->SetSynchronMode( true );
+    xLockBytes->SetSynchronMode();
     Reference< XActiveDataControl > xSink;
     if ( eOpenMode & StreamMode::WRITE )
         xSink = static_cast<XActiveDataControl*>(new UcbStreamer_Impl( xLockBytes ));

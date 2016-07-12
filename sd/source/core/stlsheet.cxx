@@ -175,11 +175,6 @@ void SdStyleSheet::Load (SvStream& rIn, sal_uInt16 nVersion)
     nMask &= ~SFXSTYLEBIT_READONLY;
 }
 
-void SdStyleSheet::Store(SvStream& rOut)
-{
-    SfxStyleSheetBase::Store(rOut);
-}
-
 bool SdStyleSheet::SetParent(const OUString& rParentName)
 {
     bool bResult = false;

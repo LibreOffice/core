@@ -55,10 +55,6 @@ Sequence< Type > OSubComponent::getTypes() throw (RuntimeException, std::excepti
 }
 
 // XInterface
-void OSubComponent::acquire() throw ( )
-{
-    OComponentHelper::acquire();
-}
 
 void OSubComponent::release() throw ( )
 {
