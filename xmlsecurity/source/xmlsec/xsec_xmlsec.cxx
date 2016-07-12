@@ -40,21 +40,21 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_
     Reference< XInterface > xFactory ;
 
     if( pImplName != nullptr ) {
-        if( XMLElementWrapper_XmlSecImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        if( XMLElementWrapper_XmlSecImpl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = cppu::createSingleComponentFactory(
                 XMLElementWrapper_XmlSecImpl_createInstance,
                 OUString::createFromAscii( pImplName ),
                 XMLElementWrapper_XmlSecImpl_getSupportedServiceNames() );
         }
-        else if( XMLDocumentWrapper_XmlSecImpl_getImplementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        else if( XMLDocumentWrapper_XmlSecImpl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = cppu::createSingleComponentFactory(
                 XMLDocumentWrapper_XmlSecImpl_createInstance,
                 OUString::createFromAscii( pImplName ),
                 XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames() );
         }
-        else if( xml_security::serial_number_adapter::implementationName().equals( OUString::createFromAscii( pImplName ) ) )
+        else if( xml_security::serial_number_adapter::implementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleComponentFactory(
               xml_security::serial_number_adapter::create,
