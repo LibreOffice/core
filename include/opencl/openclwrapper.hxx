@@ -55,6 +55,7 @@ struct OPENCL_DLLPUBLIC GPUEnv
 };
 
 extern OPENCL_DLLPUBLIC GPUEnv gpuEnv;
+extern OPENCL_DLLPUBLIC sal_uInt64 kernelFailures;
 
 OPENCL_DLLPUBLIC bool generatBinFromKernelSource( cl_program program, const char * clFileName );
 OPENCL_DLLPUBLIC bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);

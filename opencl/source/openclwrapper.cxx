@@ -58,6 +58,7 @@ using namespace std;
 namespace opencl {
 
 GPUEnv gpuEnv;
+sal_uInt64 kernelFailures = 0;
 
 namespace {
 
@@ -883,7 +884,7 @@ const char* errorString(cl_int nError)
 
 bool GPUEnv::isOpenCLEnabled()
 {
-    return gpuEnv.mpDevID;
+    return gpuEnv.mpDevID && gpuEnv.mpContext;
 }
 
 }

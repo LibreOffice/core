@@ -46,6 +46,8 @@ bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &r
     bool bSuccess = false;
     css::uno::Reference< css::lang::XComponent > xComponent;
 
+    sal_uInt64 nKernelFailures = opencl::kernelFailures;
+
     SAL_INFO("opencl", "Starting CL test spreadsheet");
 
     try {
@@ -95,10 +97,20 @@ bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &r
         SAL_WARN("opencl", "OpenCL testing failed - disabling: " << e.Message);
     }
 
+    if (nKernelFailures != opencl::kernelFailures)
+    {
+        // tdf#
+        SAL_WARN("opencl", "OpenCL kernels failed to compile, "
+                 "or took SEH exceptions "
+                 << nKernelFailures << " != " << opencl::kernelFailures);
+        bSuccess = false;
+    }
+
     if (!bSuccess)
         OpenCLZone::hardDisable();
     if (xComponent.is())
         xComponent->dispose();
+
 
     return bSuccess;
 }

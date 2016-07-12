@@ -4057,6 +4057,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
     catch (...)
     {
         SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled compiler error");
+        ::opencl::kernelFailures++;
         return nullptr;
     }
     return pDynamicKernel;
@@ -4167,21 +4168,25 @@ public:
         catch (const UnhandledToken& ut)
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled token: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
+            ::opencl::kernelFailures++;
             return CLInterpreterResult();
         }
         catch (const OpenCLError& oce)
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error from " << oce.mFunction << ": " << ::opencl::errorString(oce.mError) << " at " << oce.mFile << ":" << oce.mLineNumber);
+            ::opencl::kernelFailures++;
             return CLInterpreterResult();
         }
         catch (const Unhandled& uh)
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled case at " << uh.mFile << ":" << uh.mLineNumber);
+            ::opencl::kernelFailures++;
             return CLInterpreterResult();
         }
         catch (...)
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled compiler error");
+            ::opencl::kernelFailures++;
             return CLInterpreterResult();
         }
 
