@@ -849,11 +849,9 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 
 // XPolyPolygon
 
-ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly ) :
-                     aXPolyList( rImpXPolyPoly.aXPolyList )
+ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly )
+    : aXPolyList( rImpXPolyPoly.aXPolyList )
 {
-    nRefCount = 1;
-
     // duplicate elements
     for (XPolygon*& rp : aXPolyList)
         rp = new XPolygon( *rp );
@@ -866,38 +864,33 @@ ImpXPolyPolygon::~ImpXPolyPolygon()
     aXPolyList.clear();
 }
 
-XPolyPolygon::XPolyPolygon( sal_uInt16 /*nInitSize*/, sal_uInt16 /*nResize*/ )
+XPolyPolygon::XPolyPolygon()
+    : pImpXPolyPolygon()
 {
-    pImpXPolyPolygon = new ImpXPolyPolygon();
 }
 
 XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly )
+    : pImpXPolyPolygon( rXPolyPoly.pImpXPolyPolygon )
 {
-    pImpXPolyPolygon = rXPolyPoly.pImpXPolyPolygon;
-    pImpXPolyPolygon->nRefCount++;
+}
+
+XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
+    : pImpXPolyPolygon()
+{
+    for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
+    {
+        basegfx::B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
+        XPolygon aNewPoly(aCandidate);
+        Insert(aNewPoly);
+    }
 }
 
 XPolyPolygon::~XPolyPolygon()
 {
-    if( pImpXPolyPolygon->nRefCount > 1 )
-        pImpXPolyPolygon->nRefCount--;
-    else
-        delete pImpXPolyPolygon;
-}
-
-/// check reference counter and decouple if > 1
-void XPolyPolygon::CheckReference()
-{
-    if( pImpXPolyPolygon->nRefCount > 1 )
-    {
-        pImpXPolyPolygon->nRefCount--;
-        pImpXPolyPolygon = new ImpXPolyPolygon( *pImpXPolyPolygon );
-    }
 }
 
 void XPolyPolygon::Insert( const XPolygon& rXPoly )
 {
-    CheckReference();
     XPolygon* pXPoly = new XPolygon( rXPoly );
     pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
 }
@@ -905,8 +898,6 @@ void XPolyPolygon::Insert( const XPolygon& rXPoly )
 /// insert all XPolygons of a XPolyPolygon
 void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly )
 {
-    CheckReference();
-
     for ( size_t i = 0; i < rXPolyPoly.Count(); i++)
     {
         XPolygon* pXPoly = new XPolygon( rXPolyPoly[i] );
@@ -917,7 +908,6 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly )
 
 XPolygon XPolyPolygon::Remove( sal_uInt16 nPos )
 {
-    CheckReference();
     XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
     ::std::advance( it, nPos );
     XPolygon* pTmpXPoly = *it;
@@ -934,17 +924,9 @@ const XPolygon& XPolyPolygon::GetObject( sal_uInt16 nPos ) const
 
 void XPolyPolygon::Clear()
 {
-    if ( pImpXPolyPolygon->nRefCount > 1 )
-    {
-        pImpXPolyPolygon->nRefCount--;
-        pImpXPolyPolygon = new ImpXPolyPolygon();
-    }
-    else
-    {
-        for(XPolygon* p : pImpXPolyPolygon->aXPolyList)
-            delete p;
-        pImpXPolyPolygon->aXPolyList.clear();
-    }
+    for(XPolygon* p : pImpXPolyPolygon->aXPolyList)
+        delete p;
+    pImpXPolyPolygon->aXPolyList.clear();
 }
 
 sal_uInt16 XPolyPolygon::Count() const
@@ -968,19 +950,11 @@ Rectangle XPolyPolygon::GetBoundRect() const
 
 XPolygon& XPolyPolygon::operator[]( sal_uInt16 nPos )
 {
-    CheckReference();
     return *( pImpXPolyPolygon->aXPolyList[ nPos ] );
 }
 
 XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
 {
-    rXPolyPoly.pImpXPolyPolygon->nRefCount++;
-
-    if( pImpXPolyPolygon->nRefCount > 1 )
-        pImpXPolyPolygon->nRefCount--;
-    else
-        delete pImpXPolyPolygon;
-
     pImpXPolyPolygon = rXPolyPoly.pImpXPolyPolygon;
     return *this;
 }
@@ -998,8 +972,6 @@ XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
 void XPolyPolygon::Distort(const Rectangle& rRefRect,
                            const XPolygon& rDistortedRect)
 {
-    CheckReference();
-
     for (size_t i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList[ i ]->Distort(rRefRect, rDistortedRect);
 }
@@ -1015,18 +987,6 @@ basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
     }
 
     return aRetval;
-}
-
-XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
-{
-    pImpXPolyPolygon = new ImpXPolyPolygon();
-
-    for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
-    {
-        basegfx::B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
-        XPolygon aNewPoly(aCandidate);
-        Insert(aNewPoly);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

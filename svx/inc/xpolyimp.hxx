@@ -55,9 +55,8 @@ class ImpXPolyPolygon
 {
 public:
     XPolygonList aXPolyList;
-    sal_uInt16       nRefCount;
 
-                ImpXPolyPolygon() { nRefCount = 1; }
+                ImpXPolyPolygon() {}
                 ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly );
                 ~ImpXPolyPolygon();
 };
