@@ -191,13 +191,6 @@ OUString SAL_CALL
 
 //=====  XEventListener  ======================================================
 
-void SAL_CALL
-    AccessibleOutlineView::disposing (const lang::EventObject& rEventObject)
-    throw (css::uno::RuntimeException, std::exception)
-{
-    AccessibleDocumentViewBase::disposing (rEventObject);
-}
-
 //=====  protected internal  ==================================================
 
 void AccessibleOutlineView::Activated()

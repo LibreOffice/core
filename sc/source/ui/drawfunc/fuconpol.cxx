@@ -129,20 +129,6 @@ bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* FALSE.
-|*
-\************************************************************************/
-
-bool FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
-{
-    return FuConstruct::KeyInput(rKEvt);
-}
-
-/*************************************************************************
-|*
 |* Function aktivieren
 |*
 \************************************************************************/

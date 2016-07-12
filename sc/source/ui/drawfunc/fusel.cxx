@@ -591,20 +591,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* FALSE.
-|*
-\************************************************************************/
-
-bool FuSelection::KeyInput(const KeyEvent& rKEvt)
-{
-    return FuDraw::KeyInput(rKEvt);
-}
-
-/*************************************************************************
-|*
 |* Function aktivieren
 |*
 \************************************************************************/

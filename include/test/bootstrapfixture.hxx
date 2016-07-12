@@ -53,7 +53,6 @@ public:
   virtual ~BootstrapFixture();
 
   virtual void setUp() override;
-  virtual void tearDown() override;
 
   static void validate(const OUString& rURL, ValidationFormat);
 };

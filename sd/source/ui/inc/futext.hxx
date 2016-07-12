@@ -46,7 +46,6 @@ public:
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual bool Command(const CommandEvent& rCEvt) override;
     virtual bool RequestHelp(const HelpEvent& rHEvt) override;
     virtual void ReceiveRequest(SfxRequest& rReq) override;
     virtual void DoubleClick(const MouseEvent& rMEvt) override;

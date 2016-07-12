@@ -320,16 +320,6 @@ namespace cmis
 
     XTYPEPROVIDER_COMMON_IMPL( RepoContent );
 
-    void SAL_CALL RepoContent::acquire() throw()
-    {
-        ContentImplHelper::acquire();
-    }
-
-    void SAL_CALL RepoContent::release() throw()
-    {
-        ContentImplHelper::release();
-    }
-
     uno::Any SAL_CALL RepoContent::queryInterface( const uno::Type & rType ) throw ( uno::RuntimeException, std::exception )
     {
         return ContentImplHelper::queryInterface(rType);

@@ -118,9 +118,4 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
     return true;
 }
 
-AstDeclaration* AstOperation::addDeclaration(AstDeclaration* pDecl)
-{
-    return AstScope::addDeclaration(pDecl);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

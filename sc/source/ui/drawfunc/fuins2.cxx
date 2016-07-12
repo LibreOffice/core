@@ -377,16 +377,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
         rReq.Ignore();
 }
 
-void FuInsertOLE::Activate()
-{
-    FuPoor::Activate();
-}
-
-void FuInsertOLE::Deactivate()
-{
-    FuPoor::Deactivate();
-}
-
 FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
@@ -726,16 +716,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     // BM/IHA --
 }
 
-void FuInsertChart::Activate()
-{
-    FuPoor::Activate();
-}
-
-void FuInsertChart::Deactivate()
-{
-    FuPoor::Deactivate();
-}
-
 FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq, const OUString& rURL):
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
@@ -767,16 +747,6 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Wind
     pView->MarkObj( pObj, pPV );
 
     pViewShell->ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
-}
-
-void FuInsertChartFromFile::Activate()
-{
-    FuPoor::Activate();
-}
-
-void FuInsertChartFromFile::Deactivate()
-{
-    FuPoor::Deactivate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

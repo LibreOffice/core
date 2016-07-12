@@ -94,17 +94,6 @@ bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* MouseMove-event
-|*
-\************************************************************************/
-
-bool FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
-{
-    return FuConstruct::MouseMove(rMEvt);
-}
-
-/*************************************************************************
-|*
 |* MouseButtonUp-event
 |*
 \************************************************************************/
@@ -140,20 +129,6 @@ bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         bReturn = true;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
-}
-
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* FALSE.
-|*
-\************************************************************************/
-
-bool FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
-{
-    return FuConstruct::KeyInput(rKEvt);
 }
 
 /*************************************************************************

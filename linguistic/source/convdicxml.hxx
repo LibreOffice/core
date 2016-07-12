@@ -94,7 +94,6 @@ public:
     }
 
     virtual void SAL_CALL startDocument() throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL endDocument() throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 
     virtual SvXMLImportContext * CreateContext(
         sal_uInt16 nPrefix, const OUString &rLocalName,

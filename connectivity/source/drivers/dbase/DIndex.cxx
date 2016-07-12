@@ -632,15 +632,4 @@ bool ODbaseIndex::CreateImpl()
 }
 
 
-void SAL_CALL ODbaseIndex::acquire() throw()
-{
-    ODbaseIndex_BASE::acquire();
-}
-
-void SAL_CALL ODbaseIndex::release() throw()
-{
-    ODbaseIndex_BASE::release();
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

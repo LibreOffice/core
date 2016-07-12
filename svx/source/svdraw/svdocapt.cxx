@@ -639,25 +639,9 @@ const Point& SdrCaptionObj::GetAnchorPos() const
     return SdrRectObj::GetAnchorPos();
 }
 
-void SdrCaptionObj::RecalcSnapRect()
-{
-    SdrRectObj::RecalcSnapRect();
-    // #i32599#
-    // TODO: Implementation missing.
-}
-
 const Rectangle& SdrCaptionObj::GetSnapRect() const
 {
     return SdrRectObj::GetSnapRect();
-}
-
-void SdrCaptionObj::NbcSetSnapRect(const Rectangle& rRect)
-{
-    // #i32599#
-    // Move back to see the rectangle of the underlying SdrRectObj
-    // as the SnapRect, without the TailPos. That simplifies SnapRect
-    // handling again, if not allows it at all...
-    SdrRectObj::NbcSetSnapRect(rRect);
 }
 
 const Rectangle& SdrCaptionObj::GetLogicRect() const

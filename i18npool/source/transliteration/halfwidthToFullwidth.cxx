@@ -49,14 +49,6 @@ halfwidthToFullwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
     return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
 }
 
-sal_Unicode SAL_CALL
-halfwidthToFullwidth::transliterateChar2Char( sal_Unicode inChar)
-  throw(RuntimeException, MultipleCharsOutputException, std::exception)
-{
-    return transliteration_OneToOne::transliterateChar2Char(inChar);
-}
-
-
 halfwidthKatakanaToFullwidthKatakana::halfwidthKatakanaToFullwidthKatakana()
 {
     func = nullptr;
@@ -78,14 +70,6 @@ halfwidthKatakanaToFullwidthKatakana::transliterate( const OUString& inStr, sal_
     // Composition: KA + voice-mark --> GA
     return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
 }
-
-sal_Unicode SAL_CALL
-halfwidthKatakanaToFullwidthKatakana::transliterateChar2Char( sal_Unicode inChar)
-  throw(RuntimeException, MultipleCharsOutputException, std::exception)
-{
-    return transliteration_OneToOne::transliterateChar2Char(inChar);
-}
-
 
 halfwidthToFullwidthLikeJIS::halfwidthToFullwidthLikeJIS()
 {
@@ -109,12 +93,6 @@ halfwidthToFullwidthLikeJIS::transliterate( const OUString& inStr, sal_Int32 sta
     return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset, WIDTHFOLDNIG_DONT_USE_COMBINED_VU );
 }
 
-sal_Unicode SAL_CALL
-halfwidthToFullwidthLikeJIS::transliterateChar2Char( sal_Unicode inChar)
-  throw(RuntimeException, MultipleCharsOutputException, std::exception)
-{
-    return transliteration_OneToOne::transliterateChar2Char(inChar);
-}
 
 } } } }
 

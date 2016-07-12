@@ -45,20 +45,6 @@ public:
                                    const OUString& rLocalName,
                                    const OUString& rQName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-
-    // StartElement is called after a context has been constructed and
-    // before a elements context is parsed. It may be used for actions that
-    // require virtual methods. The default is to do nothing.
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-
-    // EndElement is called before a context will be destructed, but
-    // after a elements context has been parsed. It may be used for actions
-    // that require virtual methods. The default is to do nothing.
-    virtual void EndElement() override;
-
-    // This method is called for all characters that are contained in the
-    // current element. The default is to ignore them.
-    virtual void Characters( const OUString& rChars ) override;
 };
 
 XMLParagraphTransformerContext::XMLParagraphTransformerContext(
@@ -80,21 +66,6 @@ rtl::Reference<XMLTransformerContext> XMLParagraphTransformerContext::CreateChil
 {
     return new XMLIgnoreTransformerContext( GetTransformer(),
                                                 rQName, true );
-}
-
-void XMLParagraphTransformerContext::StartElement( const Reference< XAttributeList >& rAttrList )
-{
-    XMLTransformerContext::StartElement( rAttrList );
-}
-
-void XMLParagraphTransformerContext::EndElement()
-{
-    XMLTransformerContext::EndElement();
-}
-
-void XMLParagraphTransformerContext::Characters( const OUString& rChars )
-{
-    XMLTransformerContext::Characters( rChars );
 }
 
 class XMLPersTextContentRNGTransformTContext : public XMLPersTextContentTContext

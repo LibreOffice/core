@@ -80,9 +80,6 @@ public:
     virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber ) override;
     virtual void setupJobContextData( JobData& rData ) override;
 
-    /// changes the info about a named printer
-    virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo ) override;
-
     /// check if the printer configuration has changed
     virtual bool checkPrintersChanged( bool bWait ) override;
 

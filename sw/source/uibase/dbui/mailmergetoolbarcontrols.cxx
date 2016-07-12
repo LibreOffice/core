@@ -94,9 +94,6 @@ public:
     // XComponent
     virtual void SAL_CALL dispose() throw (uno::RuntimeException, std::exception) override;
 
-    // XInitialization
-    virtual void SAL_CALL initialize(const uno::Sequence< uno::Any >& aArguments) throw (uno::Exception, uno::RuntimeException, std::exception) override;
-
     // XToolbarController
     virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception) override;
 
@@ -162,9 +159,6 @@ public:
     // XComponent
     virtual void SAL_CALL dispose() throw (uno::RuntimeException, std::exception) override;
 
-    // XInitialization
-    virtual void SAL_CALL initialize(const uno::Sequence< uno::Any >& aArguments) throw (uno::Exception, uno::RuntimeException, std::exception) override;
-
     // XToolbarController
     virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception) override;
 
@@ -178,11 +172,6 @@ void MMCurrentEntryController::dispose() throw (uno::RuntimeException, std::exce
 
     svt::ToolboxController::dispose();
     m_pCurrentEdit.disposeAndClear();
-}
-
-void MMCurrentEntryController::initialize(const uno::Sequence< uno::Any >& aArguments) throw (uno::Exception, uno::RuntimeException, std::exception)
-{
-    svt::ToolboxController::initialize(aArguments);
 }
 
 uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)
@@ -250,11 +239,6 @@ void MMExcludeEntryController::dispose() throw (uno::RuntimeException, std::exce
 
     svt::ToolboxController::dispose();
     m_pExcludeCheckbox.disposeAndClear();
-}
-
-void MMExcludeEntryController::initialize(const uno::Sequence< uno::Any >& aArguments) throw (uno::Exception, uno::RuntimeException, std::exception)
-{
-    svt::ToolboxController::initialize(aArguments);
 }
 
 uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)

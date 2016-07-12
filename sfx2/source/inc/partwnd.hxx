@@ -58,7 +58,6 @@ public:
 class SfxPartDockWnd_Impl : public SfxDockingWindow
 {
 protected:
-    virtual void            Resize() override;
     virtual bool            Notify( NotifyEvent& rNEvt ) override;
 
 public:
