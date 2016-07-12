@@ -1715,12 +1715,6 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
     return bRet;
 }
 
-bool ScDocShell::IsInformationLost()
-{
-    //FIXME: If we have time build a correct own way how to handle this
-    return SfxObjectShell::IsInformationLost();
-}
-
 namespace {
 
 // Xcl-like column width measured in characters of standard font.
@@ -2462,11 +2456,6 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             SetError(SCERR_IMPORT_NI, OSL_LOG_PREFIX);
     }
     return bRet;
-}
-
-bool ScDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor )
-{
-    return SfxObjectShell::SaveCompleted( xStor );
 }
 
 bool ScDocShell::DoSaveCompleted( SfxMedium * pNewStor, bool bRegisterRecent )

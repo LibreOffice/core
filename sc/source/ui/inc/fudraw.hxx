@@ -37,9 +37,6 @@ class FuDraw : public FuPoor
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
 
-    virtual void Activate() override;
-    virtual void Deactivate() override;
-
     virtual void ForcePointer(const MouseEvent* pMEvt);
 
     virtual bool MouseMove(const MouseEvent& rMEvt) override;

@@ -64,11 +64,6 @@ ShapeController::~ShapeController()
 {
 }
 
-void ShapeController::initialize()
-{
-    FeatureCommandDispatchBase::initialize();
-}
-
 // WeakComponentImplHelperBase
 void ShapeController::disposing()
 {

@@ -2046,14 +2046,6 @@ bool SdrTableObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2D
     return SdrTextObj::TRGetBaseGeometry( rMatrix, rPolyPolygon );
 }
 
-// sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
-// If it's an SdrPathObj it will use the provided geometry information. The Polygon has
-// to use (0,0) as upper left and will be scaled to the given size in the matrix.
-void SdrTableObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon )
-{
-    SdrTextObj::TRSetBaseGeometry( rMatrix, rPolyPolygon );
-}
-
 bool SdrTableObj::IsReallyEdited() const
 {
     return pEdtOutl && pEdtOutl->IsModified();

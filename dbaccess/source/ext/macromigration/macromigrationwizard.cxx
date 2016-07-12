@@ -87,7 +87,6 @@ namespace dbmm
 
     protected:
         virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;
-        virtual void destroyDialog() override;
 
     private:
         Reference<XComponentContext>          m_aContext;
@@ -122,11 +121,6 @@ namespace dbmm
     VclPtr<Dialog> MacroMigrationDialogService::createDialog( vcl::Window* _pParent )
     {
         return VclPtr<MacroMigrationDialog>::Create( _pParent, m_aContext, m_xDocument );
-    }
-
-    void MacroMigrationDialogService::destroyDialog()
-    {
-        MacroMigrationDialogService_Base::destroyDialog();
     }
 
     Sequence< sal_Int8 > SAL_CALL MacroMigrationDialogService::getImplementationId() throw(RuntimeException, std::exception)

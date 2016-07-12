@@ -267,11 +267,6 @@ public:
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
     virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
 
-    // Sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
-    // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
-    // to use (0,0) as upper left and will be scaled to the given size in the matrix.
-    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
-
     // #103836# iterates over the paragraphs of a given SdrObject and removes all
     //          hard set character attributes with the which ids contained in the
     //          given vector

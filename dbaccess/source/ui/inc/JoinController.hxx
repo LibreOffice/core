@@ -116,7 +116,7 @@ namespace dbaui
 
         // UNO interface overridables
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+        using OJoinController_BASE::disposing;
 
         // css::lang::XComponent
         virtual void    SAL_CALL disposing() override;

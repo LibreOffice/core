@@ -55,12 +55,6 @@ namespace abp
     }
 
 
-    void TableSelectionPage::DeactivatePage()
-    {
-        AddressBookSourcePage::DeactivatePage();
-    }
-
-
     void TableSelectionPage::initializePage()
     {
         AddressBookSourcePage::initializePage();

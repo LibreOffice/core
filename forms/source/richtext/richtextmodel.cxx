@@ -500,20 +500,6 @@ namespace frm
     }
 
 
-    void SAL_CALL ORichTextModel::write(const Reference< XObjectOutputStream >& _rxOutStream) throw ( IOException, RuntimeException, std::exception)
-    {
-        OControlModel::write( _rxOutStream );
-        // TODO: place your code here
-    }
-
-
-    void SAL_CALL ORichTextModel::read(const Reference< XObjectInputStream >& _rxInStream) throw ( IOException, RuntimeException, std::exception)
-    {
-        OControlModel::read( _rxInStream );
-        // TODO: place your code here
-    }
-
-
     RichTextEngine* ORichTextModel::getEditEngine( const Reference< XControlModel >& _rxModel )
     {
         RichTextEngine* pEngine = nullptr;

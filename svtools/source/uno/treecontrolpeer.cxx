@@ -212,12 +212,6 @@ void TreeControlPeer::disposeControl()
 }
 
 
-void TreeControlPeer::SetWindow( const VclPtr< vcl::Window > &pWindow )
-{
-    VCLXWindow::SetWindow( pWindow );
-}
-
-
 UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uLong nPos /* = TREELIST_APPEND */ )
 {
     UnoTreeListEntry* pEntry = nullptr;

@@ -75,8 +75,6 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
 
 protected:
     virtual void    Modify() override;
-    virtual void    Down() override;
-    virtual void    Up() override;       // just to be sure
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    Notify( NotifyEvent& rNEvt ) override;

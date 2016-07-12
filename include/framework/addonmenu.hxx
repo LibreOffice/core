@@ -39,7 +39,6 @@ class FWE_DLLPUBLIC AddonMenu : public PopupMenu
     public:
         AddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame );
         virtual ~AddonMenu();
-        virtual void dispose() override;
 
     protected:
         css::uno::Reference< css::frame::XFrame > m_xFrame;
