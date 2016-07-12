@@ -1270,7 +1270,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     aProps[1].Name = "OutputStream";
     aProps[1].Value <<= xOutStream;
 
-    uno::Sequence< beans::PropertyValue > aFilterData(4);
+    uno::Sequence< beans::PropertyValue > aFilterData(8);
     aFilterData[0].Name = "ExportOnlyBackground";
     aFilterData[0].Value <<= false;
     aFilterData[1].Name = "HighContrast";
@@ -1284,17 +1284,15 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     aFilterData[3].Value <<= uno::Reference< uno::XInterface >( m_xDrawPage, uno::UNO_QUERY );
 
     //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
-    {
-        aFilterData.realloc( aFilterData.getLength()+4 );
-        aFilterData[4].Name = "ScaleXNumerator";
-        aFilterData[4].Value = uno::makeAny( m_nScaleXNumerator );
-        aFilterData[5].Name = "ScaleXDenominator";
-        aFilterData[5].Value = uno::makeAny( m_nScaleXDenominator );
-        aFilterData[6].Name = "ScaleYNumerator";
-        aFilterData[6].Value = uno::makeAny( m_nScaleYNumerator );
-        aFilterData[7].Name = "ScaleYDenominator";
-        aFilterData[7].Value = uno::makeAny( m_nScaleYDenominator );
-    }
+    aFilterData[4].Name = "ScaleXNumerator";
+    aFilterData[4].Value = uno::makeAny( m_nScaleXNumerator );
+    aFilterData[5].Name = "ScaleXDenominator";
+    aFilterData[5].Value = uno::makeAny( m_nScaleXDenominator );
+    aFilterData[6].Name = "ScaleYNumerator";
+    aFilterData[6].Value = uno::makeAny( m_nScaleYNumerator );
+    aFilterData[7].Name = "ScaleYDenominator";
+    aFilterData[7].Value = uno::makeAny( m_nScaleYDenominator );
+
 
     aProps[2].Name = "FilterData";
     aProps[2].Value <<= aFilterData;

@@ -538,17 +538,14 @@ void SplineCalculater::CalculateCubicSplines(
 {
     OSL_PRECOND( nGranularity > 0, "Granularity is invalid" );
 
-    rResult.SequenceX.realloc(0);
-    rResult.SequenceY.realloc(0);
-    rResult.SequenceZ.realloc(0);
-
     sal_uInt32 nOuterCount = rInput.SequenceX.getLength();
-    if( !nOuterCount )
-        return;
 
     rResult.SequenceX.realloc(nOuterCount);
     rResult.SequenceY.realloc(nOuterCount);
     rResult.SequenceZ.realloc(nOuterCount);
+
+    if( !nOuterCount )
+        return;
 
     for( sal_uInt32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {
@@ -677,17 +674,14 @@ void SplineCalculater::CalculateBSplines(
     // limit the b-spline degree at 15 to prevent insanely large sets of points
     sal_uInt32 p = std::min<sal_uInt32>(nDegree, 15);
 
-    rResult.SequenceX.realloc(0);
-    rResult.SequenceY.realloc(0);
-    rResult.SequenceZ.realloc(0);
-
     sal_Int32 nOuterCount = rInput.SequenceX.getLength();
-    if( !nOuterCount )
-        return; // no input
 
     rResult.SequenceX.realloc(nOuterCount);
     rResult.SequenceY.realloc(nOuterCount);
     rResult.SequenceZ.realloc(nOuterCount);
+
+    if( !nOuterCount )
+        return; // no input
 
     for( sal_Int32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {

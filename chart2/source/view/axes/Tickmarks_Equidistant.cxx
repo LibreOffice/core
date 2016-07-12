@@ -311,8 +311,6 @@ bool EquidistantTickFactory::isVisible( double fScaledValue ) const
 
 void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) const
 {
-    uno::Sequence< uno::Sequence< double > > aAllTicks;
-
     //create point sequences for each tick depth
     sal_Int32 nDepthCount = this->getTickDepth();
     sal_Int32 nMaxMajorTickCount = this->getMaxTickCount();
@@ -320,7 +318,7 @@ void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) co
     if (nDepthCount <= 0 || nMaxMajorTickCount <= 0)
         return;
 
-    aAllTicks.realloc(nDepthCount);
+    uno::Sequence< uno::Sequence< double > > aAllTicks(nDepthCount);
     aAllTicks[0].realloc(nMaxMajorTickCount);
 
     sal_Int32 nRealMajorTickCount = 0;
