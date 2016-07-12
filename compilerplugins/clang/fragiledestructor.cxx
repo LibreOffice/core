@@ -29,7 +29,7 @@ public:
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool VisitCXXDestructorDecl(const CXXDestructorDecl *);
+    bool TraverseCXXDestructorDecl(CXXDestructorDecl *);
 
     bool VisitCXXMemberCallExpr(const CXXMemberCallExpr *);
 
@@ -37,13 +37,13 @@ private:
     bool mbChecking = false;
 };
 
-bool FragileDestructor::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorDecl)
+bool FragileDestructor::TraverseCXXDestructorDecl(CXXDestructorDecl* pCXXDestructorDecl)
 {
     if (ignoreLocation(pCXXDestructorDecl)) {
-        return true;
+        return RecursiveASTVisitor::TraverseCXXDestructorDecl(pCXXDestructorDecl);
     }
     if (!pCXXDestructorDecl->isThisDeclarationADefinition()) {
-        return true;
+        return RecursiveASTVisitor::TraverseCXXDestructorDecl(pCXXDestructorDecl);
     }
     // ignore this for now, too tricky for me to work out
     StringRef aFileName = compiler.getSourceManager().getFilename(
@@ -55,12 +55,11 @@ bool FragileDestructor::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDest
         // dont know how to detect this in clang - it is making an explicit call to it's own method, so presumably OK
         || aFileName == SRCDIR "/basic/source/sbx/sbxvalue.cxx"
        )
-        return true;
+        return RecursiveASTVisitor::TraverseCXXDestructorDecl(pCXXDestructorDecl);
     mbChecking = true;
-    Stmt * pStmt = pCXXDestructorDecl->getBody();
-    TraverseStmt(pStmt);
+    bool ret = RecursiveASTVisitor::TraverseCXXDestructorDecl(pCXXDestructorDecl);
     mbChecking = false;
-    return true;
+    return ret;
 }
 
 bool FragileDestructor::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr)
