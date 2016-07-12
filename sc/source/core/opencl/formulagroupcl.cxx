@@ -4059,6 +4059,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
         // OpenCLError used to go to the catch-all below, and not delete pDynamicKernel. Was that
         // intentional, should we not do it here then either?
         delete pDynamicKernel;
+        ::opencl::kernelFailures++;
         return nullptr;
     }
     catch (const Unhandled& uh)
@@ -4068,6 +4069,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
         // Unhandled used to go to the catch-all below, and not delete pDynamicKernel. Was that
         // intentional, should we not do it here then either?
         delete pDynamicKernel;
+        ::opencl::kernelFailures++;
         return nullptr;
     }
     catch (...)
@@ -4075,6 +4077,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
         // FIXME: Do we really want to catch random exceptions here?
         SAL_WARN("sc.opencl", "Dynamic formula compiler: unexpected exception");
         // FIXME: Not deleting pDynamicKernel here!?, is that intentional?
+        ::opencl::kernelFailures++;
         return nullptr;
     }
     return pDynamicKernel;
@@ -4185,21 +4188,25 @@ public:
         catch (const UnhandledToken& ut)
         {
             SAL_INFO("sc.opencl", "Dynamic formula compiler: UnhandledToken: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
+            ::opencl::kernelFailures++;
             return CLInterpreterResult();
         }
         catch (const OpenCLError& oce)
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCLError from " << oce.mFunction << ": " << ::opencl::errorString(oce.mError) << " at " << oce.mFile << ":" << oce.mLineNumber);
+            ::opencl::kernelFailures++;
             return CLInterpreterResult();
         }
         catch (const Unhandled& uh)
         {
             SAL_INFO("sc.opencl", "Dynamic formula compiler: Unhandled at " << uh.mFile << ":" << uh.mLineNumber);
+            ::opencl::kernelFailures++;
             return CLInterpreterResult();
         }
         catch (...)
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: unexpected exception");
+            ::opencl::kernelFailures++;
             return CLInterpreterResult();
         }
 
