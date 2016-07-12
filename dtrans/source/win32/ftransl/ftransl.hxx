@@ -58,13 +58,13 @@ struct FormatEntry
 
 // CDataFormatTranslator
 
-class CDataFormatTranslator : public
+class CDataFormatTranslatorUNO : public
     cppu::WeakImplHelper< css::datatransfer::XDataFormatTranslator,
                           css::lang::XServiceInfo >
 {
 
 public:
-    CDataFormatTranslator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    CDataFormatTranslatorUNO( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XDataFormatTranslator
 

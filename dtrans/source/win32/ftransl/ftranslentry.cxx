@@ -52,7 +52,7 @@ namespace
 
     Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
     {
-        return Reference< XInterface >( static_cast< XDataFormatTranslator* >( new CDataFormatTranslator( comphelper::getComponentContext(rServiceManager) ) ) );
+        return Reference< XInterface >( static_cast< XDataFormatTranslator* >( new CDataFormatTranslatorUNO( comphelper::getComponentContext(rServiceManager) ) ) );
     }
 }
 

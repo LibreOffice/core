@@ -94,13 +94,13 @@ FormatEntry::FormatEntry(
 
 // ctor
 
-CDataFormatTranslator::CDataFormatTranslator( const Reference< XComponentContext >& rxContext ) :
+CDataFormatTranslatorUNO::CDataFormatTranslatorUNO( const Reference< XComponentContext >& rxContext ) :
     m_xContext( rxContext )
 {
     initTranslationTable( );
 }
 
-Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataFlavor& aDataFlavor )
+Any SAL_CALL CDataFormatTranslatorUNO::getSystemDataTypeFromDataFlavor( const DataFlavor& aDataFlavor )
     throw( RuntimeException )
 {
     Any aAny;
@@ -155,7 +155,7 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
     return aAny;
 }
 
-DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( const Any& aSysDataType )
+DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( const Any& aSysDataType )
     throw( RuntimeException )
 {
     OSL_PRECOND( aSysDataType.hasValue( ), "Empty system data type delivered" );
@@ -184,14 +184,14 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
 
 // XServiceInfo
 
-OUString SAL_CALL CDataFormatTranslator::getImplementationName(  )
+OUString SAL_CALL CDataFormatTranslatorUNO::getImplementationName(  )
     throw( RuntimeException )
 {
     return OUString( IMPL_NAME );
 }
 
 //  XServiceInfo
-sal_Bool SAL_CALL CDataFormatTranslator::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL CDataFormatTranslatorUNO::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
@@ -199,7 +199,7 @@ sal_Bool SAL_CALL CDataFormatTranslator::supportsService( const OUString& Servic
 
 //  XServiceInfo
 
-Sequence< OUString > SAL_CALL CDataFormatTranslator::getSupportedServiceNames( )
+Sequence< OUString > SAL_CALL CDataFormatTranslatorUNO::getSupportedServiceNames( )
     throw( RuntimeException )
 {
     return DataFormatTranslator_getSupportedServiceNames( );
@@ -212,7 +212,7 @@ Sequence< OUString > SAL_CALL CDataFormatTranslator::getSupportedServiceNames( )
 // format number we can stop if we find the first
 // CF_INVALID
 
-void SAL_CALL CDataFormatTranslator::initTranslationTable()
+void SAL_CALL CDataFormatTranslatorUNO::initTranslationTable()
 {
     //SotClipboardFormatId::DIF
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-dif;windows_formatname=\"DIF\"", "DIF", "DIF", CF_DIF, CPPUTYPE_DEFAULT));
@@ -465,7 +465,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-dummy4;windows_formatname=\"SO_DUMMYFORMAT_4\"", "SO_DUMMYFORMAT_4", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
 }
 
-void SAL_CALL CDataFormatTranslator::findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor& aDataFlavor ) const
+void SAL_CALL CDataFormatTranslatorUNO::findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, DataFlavor& aDataFlavor ) const
 {
     /*
         we break the for loop if we find the first CF_INVALID
@@ -487,7 +487,7 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForStandardFormatId( sal_Int3
     }
 }
 
-void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor ) const
+void SAL_CALL CDataFormatTranslatorUNO::findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor ) const
 {
     vector< FormatEntry >::const_iterator citer_end = m_TranslTable.end( );
     for ( vector< FormatEntry >::const_iterator citer = m_TranslTable.begin( );
@@ -502,7 +502,7 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OU
     }
 }
 
-void SAL_CALL CDataFormatTranslator::findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny ) const
+void SAL_CALL CDataFormatTranslatorUNO::findStandardFormatIdForCharset( const OUString& aCharset, Any& aAny ) const
 {
     if ( aCharset.equalsIgnoreAsciiCase( "utf-16" ) )
         aAny <<= static_cast< sal_Int32 >( CF_UNICODETEXT );
@@ -514,7 +514,7 @@ void SAL_CALL CDataFormatTranslator::findStandardFormatIdForCharset( const OUStr
     }
 }
 
-void SAL_CALL CDataFormatTranslator::setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, Any& aAny ) const
+void SAL_CALL CDataFormatTranslatorUNO::setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, Any& aAny ) const
 {
     vector< FormatEntry >::const_iterator citer_end = m_TranslTable.end( );
     for ( vector< FormatEntry >::const_iterator citer = m_TranslTable.begin( ); citer != citer_end; ++citer )
@@ -528,7 +528,7 @@ void SAL_CALL CDataFormatTranslator::setStandardFormatIdForNativeFormatName( con
     }
 }
 
-void SAL_CALL CDataFormatTranslator::findStdFormatIdOrNativeFormatNameForFullMediaType(
+void SAL_CALL CDataFormatTranslatorUNO::findStdFormatIdOrNativeFormatNameForFullMediaType(
     const Reference< XMimeContentTypeFactory >& aRefXMimeFactory,
     const OUString& aFullMediaType,
     Any& aAny ) const
@@ -554,12 +554,12 @@ void SAL_CALL CDataFormatTranslator::findStdFormatIdOrNativeFormatNameForFullMed
     }
 }
 
-inline sal_Bool CDataFormatTranslator::isTextPlainMediaType( const OUString& fullMediaType ) const
+inline sal_Bool CDataFormatTranslatorUNO::isTextPlainMediaType( const OUString& fullMediaType ) const
 {
     return fullMediaType.equalsIgnoreAsciiCase("text/plain");
 }
 
-DataFlavor SAL_CALL CDataFormatTranslator::mkDataFlv(const OUString& cnttype, const OUString& hpname, Type dtype)
+DataFlavor SAL_CALL CDataFormatTranslatorUNO::mkDataFlv(const OUString& cnttype, const OUString& hpname, Type dtype)
 {
     DataFlavor dflv;
     dflv.MimeType             = cnttype;
