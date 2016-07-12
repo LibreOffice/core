@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_a74e5abf",
+        "filename": "sw/qa/extras/odfexport/odfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-07-12T06:42:25Z",
+      "side": 1,
+      "message": "Did you mean sal_uInt16 here? 0xf0f0 only fits a 16bit integer if it\u0027s unsigned.",
+      "revId": "24ed95b8182772436d8d620b78b743ab11ef1f26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
