@@ -1966,7 +1966,7 @@ namespace connectivity
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
              Reference< XInterface >& _xInterface,
-             ::com::sun::star::lang::XComponent* _pObject)
+             ::com::sun::star::lang::XComponent* _pObject) throw ()
 {
     if (osl_atomic_decrement( &_refCount ) == 0)
     {
@@ -1983,7 +1983,13 @@ void release(oslInterlockedCount& _refCount,
             }
 
             // First dispose
-            _pObject->dispose();
+            try {
+                _pObject->dispose();
+            } catch (css::uno::RuntimeException & e) {
+                SAL_WARN(
+                    "connectivity.commontools",
+                    "Caught exception during dispose, " << e.Message);
+            }
 
             // only the alive ref holds the object
             OSL_ASSERT( _refCount == 1 );
