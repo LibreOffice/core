@@ -42,14 +42,13 @@ namespace sd {
 
 static sal_uInt16 SidArraySpell[] = {
             SID_DRAWINGMODE,
-            SID_SLIDE_MASTER_MODE,
             SID_OUTLINE_MODE,
             SID_SLIDE_SORTER_MODE,
             SID_NOTES_MODE,
-            SID_NOTES_MASTER_MODE,
             SID_HANDOUT_MASTER_MODE,
+            SID_SLIDE_MASTER_MODE,
+            SID_NOTES_MASTER_MODE,
             0 };
-
 
 FuSearch::FuSearch (
     ViewShell* pViewSh,
