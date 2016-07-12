@@ -97,21 +97,9 @@ sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-void SvxHyperURLBox::Select()
-{
-    SvtURLBox::Select();
-}
 void SvxHyperURLBox::Modify()
 {
     SvtURLBox::Modify();
-}
-bool SvxHyperURLBox::Notify( NotifyEvent& rNEvt )
-{
-    return SvtURLBox::Notify( rNEvt );
-}
-bool SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
-{
-    return SvtURLBox::PreNotify( rNEvt );
 }
 
 //# Hyperlink-Dialog: Tabpages-Baseclass                                 #
@@ -154,16 +142,6 @@ void SvxHyperlinkTabPageBase::dispose()
     mpDialog.clear();
 
     IconChoicePage::dispose();
-}
-
-void SvxHyperlinkTabPageBase::ActivatePage()
-{
-    TabPage::ActivatePage();
-}
-
-void SvxHyperlinkTabPageBase::DeactivatePage()
-{
-    TabPage::DeactivatePage();
 }
 
 bool SvxHyperlinkTabPageBase::QueryClose()

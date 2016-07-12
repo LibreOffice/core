@@ -951,11 +951,6 @@ void CustomAnimationList::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEnt
     mpController->onContextMenu( nSelectedPopupEntry );
 }
 
-void CustomAnimationList::SetTabs()
-{
-    SvTreeListBox::SetTabs();
-}
-
 void CustomAnimationList::notify_change()
 {
     update();

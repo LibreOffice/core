@@ -62,7 +62,6 @@ public:
     virtual const Rectangle& GetCurrentBoundRect() const override;
     virtual const Rectangle& GetLastBoundRect() const override;
     virtual void RecalcBoundRect() override;
-    virtual void SetChanged() override;
     virtual SdrVirtObj* Clone() const override;
     SdrVirtObj& operator=(const SdrVirtObj& rObj);
 

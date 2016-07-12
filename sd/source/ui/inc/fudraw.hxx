@@ -43,7 +43,6 @@ public:
     virtual bool RequestHelp(const HelpEvent& rHEvt) override;
 
     virtual void Activate() override;
-    virtual void Deactivate() override;
 
     virtual void ForcePointer(const MouseEvent* pMEvt = nullptr);
 

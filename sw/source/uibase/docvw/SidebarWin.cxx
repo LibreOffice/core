@@ -1187,11 +1187,6 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem& rNewItem)
     Invalidate();
 }
 
-void SwSidebarWin::DataChanged( const DataChangedEvent& aEvent)
-{
-    Window::DataChanged( aEvent );
-}
-
 void SwSidebarWin::GetFocus()
 {
     if (mpSidebarTextControl)

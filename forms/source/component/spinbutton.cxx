@@ -86,12 +86,6 @@ namespace frm
     IMPLEMENT_DEFAULT_CLONING( OSpinButtonModel )
 
 
-    void SAL_CALL OSpinButtonModel::disposing()
-    {
-        OBoundControlModel::disposing();
-    }
-
-
     void OSpinButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )

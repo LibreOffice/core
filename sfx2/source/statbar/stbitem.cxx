@@ -189,22 +189,6 @@ void SAL_CALL SfxStatusBarControl::release() throw()
 }
 
 
-// XEventListener
-void SAL_CALL SfxStatusBarControl::disposing( const lang::EventObject& aEvent )
-throw( uno::RuntimeException, std::exception )
-{
-    svt::StatusbarController::disposing( aEvent );
-}
-
-
-// XComponent
-void SAL_CALL SfxStatusBarControl::dispose()
-throw (uno::RuntimeException, std::exception)
-{
-    svt::StatusbarController::dispose();
-}
-
-
 // XStatusListener
 void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 throw ( css::uno::RuntimeException, std::exception )

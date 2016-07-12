@@ -70,9 +70,6 @@ namespace frm
         virtual css::uno::Any   translateExternalValueToControlValue( const css::uno::Any& _rExternalValue ) const override;
         virtual css::uno::Any   translateControlValueToExternalValue( ) const override;
 
-        // XCoponent and related helpers
-        virtual void SAL_CALL disposing() override;
-
         // prevent method hiding
         using OBoundControlModel::disposing;
         using OBoundControlModel::getFastPropertyValue;

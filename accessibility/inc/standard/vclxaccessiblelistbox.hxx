@@ -48,7 +48,6 @@ protected:
     virtual ~VCLXAccessibleListBox();
 
     virtual bool IsValid() const override;
-    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLELISTBOX_HXX

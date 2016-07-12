@@ -144,11 +144,6 @@ void OTableGrantControl::Init()
     SetMode(nMode);
 }
 
-void OTableGrantControl::Resize()
-{
-    EditBrowseBox::Resize();
-}
-
 bool OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
 {
     if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)

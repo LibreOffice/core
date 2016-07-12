@@ -222,9 +222,6 @@ public:
 
     void dispose();
 
-    virtual void SAL_CALL acquire(  ) throw () override;
-    virtual void SAL_CALL release(  ) throw () override;
-
     void InvalidateIterator();
 
 protected:

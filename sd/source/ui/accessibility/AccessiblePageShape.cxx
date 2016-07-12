@@ -54,11 +54,6 @@ AccessiblePageShape::~AccessiblePageShape()
     OSL_TRACE ("~AccessiblePageShape");
 }
 
-void AccessiblePageShape::Init()
-{
-    AccessibleShape::Init ();
-}
-
 //=====  XAccessibleContext  ==================================================
 
 sal_Int32 SAL_CALL

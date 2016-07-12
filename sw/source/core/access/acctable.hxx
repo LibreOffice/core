@@ -300,12 +300,6 @@ public:
         const css::uno::Type& aType )
         throw (css::uno::RuntimeException, std::exception) override;
 
-    virtual void SAL_CALL acquire(  ) throw () override
-        { SwAccessibleTable::acquire(); };
-
-    virtual void SAL_CALL release(  ) throw () override
-        { SwAccessibleTable::release(); };
-
     // XAccessibleContext
 
     /// Return the number of currently visible children.

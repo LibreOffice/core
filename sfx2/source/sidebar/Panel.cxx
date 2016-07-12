@@ -137,11 +137,6 @@ bool Panel::HasIdPredicate (const OUString& rsId) const
     return msPanelId.equals(rsId);
 }
 
-void Panel::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
-{
-    Window::Paint(rRenderContext, rUpdateArea);
-}
-
 void Panel::Resize()
 {
     Window::Resize();
@@ -154,11 +149,6 @@ void Panel::Resize()
         xElementWindow->setPosSize(0, 0, aSize.Width(), aSize.Height(),
                                    awt::PosSize::POSSIZE);
     }
-}
-
-void Panel::Activate()
-{
-    Window::Activate();
 }
 
 void Panel::DataChanged (const DataChangedEvent& rEvent)

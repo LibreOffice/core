@@ -944,16 +944,6 @@ void SdrGrafObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShea
     SdrRectObj::NbcShear(rRef, nAngle, tn, bVShear);
 }
 
-void SdrGrafObj::NbcSetSnapRect(const Rectangle& rRect)
-{
-    SdrRectObj::NbcSetSnapRect(rRect);
-}
-
-void SdrGrafObj::NbcSetLogicRect( const Rectangle& rRect)
-{
-    SdrRectObj::NbcSetLogicRect(rRect);
-}
-
 SdrObjGeoData* SdrGrafObj::NewGeoData() const
 {
     return new SdrGrafObjGeoData;

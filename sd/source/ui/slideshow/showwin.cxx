@@ -294,11 +294,6 @@ void ShowWindow::LoseFocus()
         TerminateShow();
 }
 
-void ShowWindow::Resize()
-{
-    ::sd::Window::Resize();
-}
-
 void ShowWindow::Move()
 {
     ::sd::Window::Move();

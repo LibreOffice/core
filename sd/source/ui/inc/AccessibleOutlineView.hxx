@@ -87,12 +87,6 @@ public:
         getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override;
 
-    //=====  lang::XEventListener  ============================================
-
-    virtual void SAL_CALL
-        disposing (const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
-
     //=====  XPropertyChangeListener  =========================================
 
     virtual void SAL_CALL

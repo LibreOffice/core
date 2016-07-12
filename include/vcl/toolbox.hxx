@@ -284,7 +284,6 @@ public:
     virtual void        LoseFocus() override;
     virtual void        KeyInput( const KeyEvent& rKEvt ) override;
 
-    virtual bool        PrepareToggleFloatingMode() override;
     virtual void        ToggleFloatingMode() override;
     virtual void        StartDocking() override;
     virtual bool        Docking( const Point& rPos, Rectangle& rRect ) override;

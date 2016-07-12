@@ -104,7 +104,6 @@ namespace svt
          */
         OWizardPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
         virtual ~OWizardPage();
-        virtual void dispose() override;
 
         // IWizardPageController overridables
         virtual void        initializePage() override;

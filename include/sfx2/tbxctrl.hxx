@@ -173,10 +173,6 @@ protected:
     bool    hasBigImages() const;
 
 public:
-    // XEventListener
-    using ::cppu::OPropertySetHelper::disposing;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
-
     // XComponent
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
 

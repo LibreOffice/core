@@ -81,8 +81,6 @@ public:
     CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) override;
 
 protected:
-    virtual void Resize() override;
-
     virtual bool PreNotify(NotifyEvent& rNEvt ) override;
 
     virtual bool IsTabAllowed(bool bForward) const override;

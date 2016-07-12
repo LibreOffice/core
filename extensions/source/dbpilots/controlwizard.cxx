@@ -279,12 +279,6 @@ namespace dbp
     }
 
 
-    void OControlWizard::ActivatePage()
-    {
-        OControlWizard_Base::ActivatePage();
-    }
-
-
     void OControlWizard::implDetermineShape()
     {
         Reference< XIndexAccess > xPageObjects(m_aContext.xDrawPage, UNO_QUERY);

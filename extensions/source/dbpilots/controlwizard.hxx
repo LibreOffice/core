@@ -147,7 +147,7 @@ namespace dbp
         void implDetermineShape();
 
         // made private. Not to be used by derived (or external) classes
-        virtual void ActivatePage() override;
+        using OControlWizard_Base::ActivatePage;
     };
 
 

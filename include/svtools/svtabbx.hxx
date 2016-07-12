@@ -104,7 +104,6 @@ public:
     sal_uLong        GetEntryPos( const OUString&, sal_uInt16 nCol = 0xffff );
     sal_uLong        GetEntryPos( const SvTreeListEntry* pEntry ) const;
 
-    virtual void     Resize() override;
     void             SetTabJustify( sal_uInt16 nTab, SvTabJustify );
 };
 

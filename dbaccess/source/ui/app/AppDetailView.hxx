@@ -163,7 +163,6 @@ namespace dbaui
         virtual ~OApplicationDetailView();
         // Window overrides
         virtual void dispose() override;
-        virtual void GetFocus() override;
 
         /** creates the tables page
             @param  _xConnection

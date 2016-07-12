@@ -81,8 +81,6 @@ public:
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
-    virtual void    SetTabs() override;
-
     virtual void notify_change() override;
 
     const Image& getImage( sal_uInt16 nId );

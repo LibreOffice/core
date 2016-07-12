@@ -62,9 +62,6 @@ public:
 
     AccessibleChartView() = delete;
 
-    // ____ WeakComponentHelper (called from XComponent::dispose()) ____
-    virtual void SAL_CALL disposing() override;
-
     // ____ lang::XInitialization ____
     // 0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
     // 1: frame::XModel representing the chart model - offers access to object data

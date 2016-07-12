@@ -96,11 +96,6 @@ bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-bool ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
-{
-    return SwDrawBase::MouseButtonUp(rMEvt);
-}
-
 void ConstCustomShape::Activate(const sal_uInt16 nSlotId)
 {
     m_pWin->SetSdrDrawMode( OBJ_CUSTOMSHAPE );
