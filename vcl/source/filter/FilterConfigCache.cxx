@@ -69,7 +69,7 @@ void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString
     const char** pPtr;
     for ( pPtr = InternalPixelFilterNameList; *pPtr && !bIsInternalFilter; pPtr++ )
     {
-        if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
+        if ( sFilterName.equalsIgnoreAsciiCaseAscii( *pPtr ) )
         {
             bIsInternalFilter = true;
             bIsPixelFormat = true;
@@ -77,14 +77,14 @@ void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString
     }
     for ( pPtr = InternalVectorFilterNameList; *pPtr && !bIsInternalFilter; pPtr++ )
     {
-        if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
+        if ( sFilterName.equalsIgnoreAsciiCaseAscii( *pPtr ) )
             bIsInternalFilter = true;
     }
     if ( !bIsInternalFilter )
     {
         for ( pPtr = ExternalPixelFilterNameList; *pPtr && !bIsPixelFormat; pPtr++ )
         {
-            if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
+            if ( sFilterName.equalsIgnoreAsciiCaseAscii( *pPtr ) )
                 bIsPixelFormat = true;
         }
         sExternalFilterName = sFilterName;
