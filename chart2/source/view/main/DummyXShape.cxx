@@ -306,15 +306,10 @@ namespace {
 
 uno::Sequence< OUString > listSupportedServices()
 {
-    static uno::Sequence< OUString > aSupportedServices;
-    if(aSupportedServices.getLength() == 0)
-    {
-        aSupportedServices.realloc(3);
-        aSupportedServices[0] = "com.sun.star.drawing.Shape";
-        aSupportedServices[1] = "com.sun.star.container.Named";
-        aSupportedServices[2] = "com.sun.star.beans.PropertySet";
-    }
-
+    static const uno::Sequence< OUString > aSupportedServices{
+        "com.sun.star.drawing.Shape",
+        "com.sun.star.container.Named",
+        "com.sun.star.beans.PropertySet"};
     return aSupportedServices;
 }
 

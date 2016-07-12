@@ -248,19 +248,15 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
 
 bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, chart2::CurveStyle eCurveStyle, PlottingPositionHelper* pPosHelper, drawing::PolyPolygonShape3D &aPoly )
 {
-    drawing::PolyPolygonShape3D aSteppedPoly;
-
-    aSteppedPoly.SequenceX.realloc(0);
-    aSteppedPoly.SequenceY.realloc(0);
-    aSteppedPoly.SequenceZ.realloc(0);
-
     sal_uInt32 nOuterCount = aStartPoly.SequenceX.getLength();
     if ( !nOuterCount )
         return false;
 
+    drawing::PolyPolygonShape3D aSteppedPoly;
     aSteppedPoly.SequenceX.realloc(nOuterCount);
     aSteppedPoly.SequenceY.realloc(nOuterCount);
     aSteppedPoly.SequenceZ.realloc(nOuterCount);
+
     for( sal_uInt32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {
         if( aStartPoly.SequenceX[nOuter].getLength() <= 1 )
