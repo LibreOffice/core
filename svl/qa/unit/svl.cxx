@@ -1114,6 +1114,17 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "2 6/16 inch";
         checkPreviewString(aFormatter, sCode, 2.379, eLang, sExpected);
     }
+    {  // tdf#100842: text before/after fraction
+        sCode = "\"before \"?/?\" after\"";
+        sExpected = "before 11/9 after";
+        checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
+        sCode = "\"before \"# ?/?\" after\"";
+        sExpected = "before 1 2/9 after";
+        checkPreviewString(aFormatter, sCode, 1.2345667, eLang, sExpected);
+        sCode = "\"before \"0.0\"inside\"0E+0\"middle\"0\" after\"";
+        sExpected = "before 1.2inside3E+0middle4 after";
+        checkPreviewString(aFormatter, sCode, 12345.667, eLang, sExpected);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
