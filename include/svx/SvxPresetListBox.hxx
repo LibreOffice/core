@@ -25,12 +25,14 @@
 #include <vcl/ctrl.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/xtable.hxx>
+#include <tools/gen.hxx>
 
 class SVX_DLLPUBLIC SvxPresetListBox : public ValueSet
 {
 private:
-    sal_uInt32 nColCount = 2;
-    sal_uInt32 nRowCount = 5;
+    sal_uInt32 nColCount;
+    sal_uInt32 nRowCount;
+    Size       aIconSize;
     Link<SvxPresetListBox*,void> maRenameHdl;
     Link<SvxPresetListBox*,void> maDeleteHdl;
 
@@ -45,6 +47,7 @@ public:
     virtual void Resize() override;
     virtual void Command( const CommandEvent& rEvt ) override;
     sal_uInt32 getColumnCount() const { return nColCount; }
+    Size GetIconSize() const { return aIconSize; }
 
     void setColumnCount( const sal_uInt32 nCount ) { nColCount = nCount; }
     void setRowCount( const sal_uInt32 nRow ) { nRowCount = nRow; }
