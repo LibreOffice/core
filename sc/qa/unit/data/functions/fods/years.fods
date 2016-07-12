@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2016-06-16T21:00:15.480415068</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/6402c19c9b4d51dd7feaa3129b6f15b20704d356</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="84" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2016-06-16T21:00:15.480415068</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOfficeDev/5.3.0.0.alpha0$Linux_X86_64 LibreOffice_project/83d5a4a9c256eaef4c04f799db38b373d9cff4d5</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="84" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaWidth" config:type="int">33007</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">15335</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">15307</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -28,10 +28,11 @@
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Sheet2">
-       <config:config-item config:name="CursorPositionX" config:type="int">1</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">2</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">11</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -45,10 +46,11 @@
        <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
        <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+       <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
-     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1540</config:config-item>
+     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">567</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
      <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -69,6 +71,7 @@
      <config:config-item config:name="RasterSubdivisionX" config:type="int">1</config:config-item>
      <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
      <config:config-item config:name="IsRasterAxisSynchronized" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
   </config:config-item-set>
@@ -122,7 +125,7 @@
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">hAH+/0dlbmVyaWMgUHJpbnRlcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU0dFTlBSVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAMAqgAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9R2VuZXJpYyBQcmludGVyCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MApjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKUGFnZVNpemU6TGV0dGVyAAASAENPTVBBVF9EVVBMRVhfTU9ERQoARFVQTEVYX09GRg==</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">kAH+/0dlbmVyaWMgUHJpbnRlcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU0dFTlBSVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAMAtgAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9R2VuZXJpYyBQcmludGVyCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MApjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKRHVwbGV4Ok5vbmUAUGFnZVNpemU6TGV0dGVyAAASAENPTVBBVF9EVVBMRVhfTU9ERQoARFVQTEVYX09GRg==</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -145,6 +148,7 @@
  </office:font-face-decls>
  <office:styles>
   <style:default-style style:family="table-cell">
+   <style:table-cell-properties style:decimal-places="2"/>
    <style:paragraph-properties style:tab-stop-distance="36pt"/>
    <style:text-properties style:font-name="Liberation Sans" fo:language="en" fo:country="US" style:font-name-asian="DejaVu Sans" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="DejaVu Sans" style:language-complex="hi" style:country-complex="IN"/>
   </style:default-style>
@@ -311,82 +315,82 @@
    <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
    <style:map style:condition="value()&gt;=0" style:apply-style-name="N144P0"/>
   </number:currency-style>
-  <number:number-style style:name="N146">
+  <number:number-style style:name="N145">
    <number:number number:decimal-places="9" loext:min-decimal-places="9" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N147">
+  <number:number-style style:name="N146">
    <number:number number:decimal-places="8" loext:min-decimal-places="8" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N148">
+  <number:number-style style:name="N147">
    <number:number number:decimal-places="10" loext:min-decimal-places="10" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N149">
+  <number:number-style style:name="N148">
    <number:number number:decimal-places="11" loext:min-decimal-places="11" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N150">
+  <number:number-style style:name="N149">
    <number:number number:decimal-places="12" loext:min-decimal-places="12" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N151">
+  <number:number-style style:name="N150">
    <number:number number:decimal-places="13" loext:min-decimal-places="13" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N152">
+  <number:number-style style:name="N151">
    <number:number number:decimal-places="14" loext:min-decimal-places="14" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N153">
+  <number:number-style style:name="N152">
    <number:number number:decimal-places="15" loext:min-decimal-places="15" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N154">
+  <number:number-style style:name="N153">
    <number:number number:decimal-places="16" loext:min-decimal-places="16" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N155">
+  <number:number-style style:name="N154">
    <number:number number:decimal-places="17" loext:min-decimal-places="17" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N156">
+  <number:number-style style:name="N155">
    <number:number number:decimal-places="18" loext:min-decimal-places="18" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N157">
+  <number:number-style style:name="N156">
    <number:number number:decimal-places="1" loext:min-decimal-places="1" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N158">
+  <number:number-style style:name="N157">
    <number:number number:decimal-places="3" loext:min-decimal-places="3" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N159">
+  <number:number-style style:name="N158">
    <number:number number:decimal-places="4" loext:min-decimal-places="4" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N160">
+  <number:number-style style:name="N159">
    <number:number number:decimal-places="5" loext:min-decimal-places="5" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N161">
+  <number:number-style style:name="N160">
    <number:number number:decimal-places="6" loext:min-decimal-places="6" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:number-style style:name="N162">
+  <number:number-style style:name="N161">
    <number:number number:decimal-places="7" loext:min-decimal-places="7" number:min-integer-digits="1"/>
   </number:number-style>
-  <number:currency-style style:name="N164P0" style:volatile="true">
+  <number:currency-style style:name="N163P0" style:volatile="true">
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
    <number:currency-symbol number:language="fr" number:country="FR">€</number:currency-symbol>
   </number:currency-style>
-  <number:currency-style style:name="N164">
+  <number:currency-style style:name="N163">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
    <number:currency-symbol number:language="fr" number:country="FR">€</number:currency-symbol>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N164P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N163P0"/>
   </number:currency-style>
-  <number:number-style style:name="N166P0" style:volatile="true">
+  <number:number-style style:name="N165P0" style:volatile="true">
    <number:text/>
   </number:number-style>
-  <number:currency-style style:name="N166">
+  <number:currency-style style:name="N165">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
    <number:text> </number:text>
    <number:currency-symbol number:language="fr" number:country="FR">€</number:currency-symbol>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N166P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N165P0"/>
   </number:currency-style>
-  <number:date-style style:name="N167">
+  <number:date-style style:name="N166">
    <number:day-of-week/>
    <number:text> </number:text>
    <number:day number:style="long"/>
@@ -395,7 +399,7 @@
    <number:text>/</number:text>
    <number:year/>
   </number:date-style>
-  <number:date-style style:name="N168">
+  <number:date-style style:name="N167">
    <number:day-of-week number:style="long"/>
    <number:text>  </number:text>
    <number:day number:style="long"/>
@@ -404,18 +408,18 @@
    <number:text>/</number:text>
    <number:year/>
   </number:date-style>
-  <number:currency-style style:name="N170P0" style:volatile="true">
+  <number:currency-style style:name="N169P0" style:volatile="true">
    <number:currency-symbol number:language="de" number:country="AT">€</number:currency-symbol>
    <number:text> </number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
   </number:currency-style>
-  <number:currency-style style:name="N170">
+  <number:currency-style style:name="N169">
    <style:text-properties fo:color="#ff0000"/>
    <number:text>-</number:text>
    <number:currency-symbol number:language="de" number:country="AT">€</number:currency-symbol>
    <number:text> </number:text>
    <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
-   <style:map style:condition="value()&gt;=0" style:apply-style-name="N170P0"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N169P0"/>
   </number:currency-style>
   <style:style style:name="Default" style:family="table-cell">
    <style:text-properties style:font-name-asian="Droid Sans Fallback" style:font-family-asian="&apos;Droid Sans Fallback&apos;" style:font-family-generic-asian="system" style:font-pitch-asian="variable" style:font-name-complex="Droid Sans Devanagari" style:font-family-complex="&apos;Droid Sans Devanagari&apos;" style:font-family-generic-complex="system" style:font-pitch-complex="variable"/>
@@ -727,7 +731,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-06-30">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="18:45:16.504004319">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-13">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="00:25:00.029007930">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -931,14 +935,14 @@
      </table:table-cell>
      <table:table-cell table:style-name="ce30"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce11" table:formula="of:=ORG.OPENOFFICE.YEARS([.K2];[.K3];)" office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3</text:p>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce11" table:formula="of:=ORG.OPENOFFICE.YEARS([.K2];[.K3];)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
-      <text:p>3</text:p>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>err</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=[.A5]=[.B5]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ISERROR([.A5])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A5])" office:value-type="string" office:string-value="=YEARS(K2,K3,)" calcext:value-type="string">
@@ -954,14 +958,14 @@
      </table:table-cell>
      <table:table-cell/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce11" table:formula="of:=ORG.OPENOFFICE.YEARS([.K3];[.K2];)" office:value-type="float" office:value="-3" calcext:value-type="float">
-      <text:p>-3</text:p>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce11" table:formula="of:=ORG.OPENOFFICE.YEARS([.K3];[.K2];)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="-3" calcext:value-type="float">
-      <text:p>-3</text:p>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>err</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" table:formula="of:=[.A6]=[.B6]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce16" table:formula="of:=ISERROR([.A6])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce29" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=YEARS(K3,K2,)" calcext:value-type="string">

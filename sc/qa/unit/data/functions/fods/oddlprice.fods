@@ -7,7 +7,7 @@
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaWidth" config:type="int">25900</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">20866</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">20845</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -50,7 +50,7 @@
       </config:config-item-map-entry>
      </config:config-item-map-named>
      <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
-     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1224</config:config-item>
+     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">567</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">95</config:config-item>
      <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -125,7 +125,7 @@
    <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
    <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
    <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">hAH+/0dlbmVyaWMgUHJpbnRlcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU0dFTlBSVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAMAqgAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9R2VuZXJpYyBQcmludGVyCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MApjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKUGFnZVNpemU6TGV0dGVyAAASAENPTVBBVF9EVVBMRVhfTU9ERQoARFVQTEVYX09GRg==</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">kAH+/0dlbmVyaWMgUHJpbnRlcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU0dFTlBSVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAMAtgAAAAAAAAAIAFZUAAAkbQAASm9iRGF0YSAxCnByaW50ZXI9R2VuZXJpYyBQcmludGVyCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MApjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKRHVwbGV4Ok5vbmUAUGFnZVNpemU6TGV0dGVyAAASAENPTVBBVF9EVVBMRVhfTU9ERQoARFVQTEVYX09GRg==</config:config-item>
    <config:config-item config:name="ApplyUserData" config:type="boolean">false</config:config-item>
    <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
   </config:config-item-set>
@@ -156,6 +156,7 @@
  </office:font-face-decls>
  <office:styles>
   <style:default-style style:family="table-cell">
+   <style:table-cell-properties style:decimal-places="2"/>
    <style:paragraph-properties style:tab-stop-distance="36pt"/>
    <style:text-properties style:font-name="Liberation Sans" fo:language="en" fo:country="US" style:font-name-asian="DejaVu Sans" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="DejaVu Sans" style:language-complex="hi" style:country-complex="IN"/>
   </style:default-style>
@@ -1118,7 +1119,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-12">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="16:24:38.740797965">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-07-13">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="00:04:32.569412927">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -1278,10 +1279,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0.0405;100;2;0)" office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce13" table:formula="of:=[.A2]=[.B2]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1304,10 +1305,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0.0405;100;2;1)" office:value-type="float" office:value="99.879722161123" calcext:value-type="float">
-      <text:p>99.879722161123</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="99.879722161123" calcext:value-type="float">
-      <text:p>99.879722161123</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce13" table:formula="of:=[.A3]=[.B3]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1330,10 +1331,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0.0405;100;2;2)" office:value-type="float" office:value="99.877842402734" calcext:value-type="float">
-      <text:p>99.877842402734</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="99.877842402734" calcext:value-type="float">
-      <text:p>99.877842402734</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce14" table:formula="of:=[.A4]=[.B4]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1356,10 +1357,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0.0405;100;2;3)" office:value-type="float" office:value="99.879722161123" calcext:value-type="float">
-      <text:p>99.879722161123</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="99.879722161123" calcext:value-type="float">
-      <text:p>99.879722161123</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce14" table:formula="of:=[.A5]=[.B5]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1380,10 +1381,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0.0405;100;2;4)" office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=[.A6]=[.B6]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1424,10 +1425,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0.0405;100;1;4)" office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1444,10 +1445,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0.0405;100;4;4)" office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce15" table:formula="of:=[.A9]=[.B9]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1499,10 +1500,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0.0405;100;2;)" office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1516,10 +1517,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0.0405;100;2)" office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="99.8782860147214" calcext:value-type="float">
-      <text:p>99.8782860147214</text:p>
+      <text:p>99.88</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce16" table:formula="of:=[.A13]=[.B13]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1635,7 +1636,7 @@
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="98.5804416403786" calcext:value-type="float">
-      <text:p>98.5804416403786</text:p>
+      <text:p>98.58</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce18" table:formula="of:=ISERROR([.A19])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1654,7 +1655,7 @@
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="98.5804416403786" calcext:value-type="float">
-      <text:p>98.5804416403786</text:p>
+      <text:p>98.58</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce19" table:formula="of:=ISERROR([.A20])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1670,10 +1671,10 @@
     </table:table-row>
     <table:table-row table:style-name="ro7">
      <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; 0;100;2;0)" office:value-type="float" office:value="101.333333333333" calcext:value-type="float">
-      <text:p>101.333333333333</text:p>
+      <text:p>101.33</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="101.333333333333" calcext:value-type="float">
-      <text:p>101.333333333333</text:p>
+      <text:p>101.33</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce20" table:formula="of:=[.A21]=[.B21]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -1687,14 +1688,14 @@
      <table:table-cell table:style-name="ce35"/>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
-    <table:table-row table:style-name="ro7">
-     <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; ;100;2;0)" office:value-type="float" office:value="101.333333333333" calcext:value-type="float">
-      <text:p>101.333333333333</text:p>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:formula="of:=ODDLPRICE(DATE(1999;2;7);DATE(1999;6;15);DATE(1998;10;15); 0.0375; ;100;2;0)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>Err:502</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="float" office:value="101.333333333333" calcext:value-type="float">
-      <text:p>101.333333333333</text:p>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>error</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce20" table:formula="of:=[.A22]=[.B22]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce20" table:formula="of:=ISERROR([.A22])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:formula="of:=FORMULA([.A22])" office:value-type="string" office:string-value="=ODDLPRICE(DATE(1999,2,7),DATE(1999,6,15),DATE(1998,10,15), 0.0375, ,100,2,0)" calcext:value-type="string">

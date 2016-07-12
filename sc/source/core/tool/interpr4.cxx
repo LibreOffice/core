@@ -2481,6 +2481,14 @@ void ScInterpreter::ScExternal()
 
             for (i = nParamCount; (i > 0) && (nGlobalError == 0); i--)
             {
+                if (IsMissing())
+                {
+                    // Old binary Add-In can't distinguish between missing
+                    // omitted argument and 0 (or any other value). Force
+                    // error.
+                    SetError( errParameterExpected);
+                    break;  // for
+                }
                 switch (eParamType[i])
                 {
                     case ParamType::PTR_DOUBLE :
@@ -2558,7 +2566,7 @@ void ScInterpreter::ScExternal()
                 }
             }
             while ( i-- )
-                Pop();      // im Fehlerfall (sonst ist i==0) Parameter wegpoppen
+                Pop();      // In case of error (otherwise i==0) pop all parameters
 
             if (nGlobalError == 0)
             {
@@ -2674,10 +2682,19 @@ void ScInterpreter::ScExternal()
         {
             --nPar;     // 0 .. (nParamCount-1)
 
-            ScAddInArgumentType eType = aCall.GetArgType( nPar );
-            sal_uInt8 nStackType = sal::static_int_cast<sal_uInt8>( GetStackType() );
-
             uno::Any aParam;
+            if (IsMissing())
+            {
+                // Add-In has to explicitly handle an omitted empty missing
+                // argument, do not default to anything like GetDouble() would
+                // do (e.g. 0).
+                Pop();
+                aCall.SetParam( nPar, aParam );
+                continue;   // while
+            }
+
+            sal_uInt8 nStackType = sal::static_int_cast<sal_uInt8>( GetStackType() );
+            ScAddInArgumentType eType = aCall.GetArgType( nPar );
             switch (eType)
             {
                 case SC_ADDINARG_INTEGER:
@@ -2844,8 +2861,6 @@ void ScInterpreter::ScExternal()
                     break;
 
                 case SC_ADDINARG_VALUE_OR_ARRAY:
-                    if ( IsMissing() )
-                        nStackType = svMissing;
                     switch( nStackType )
                     {
                         case svDouble:
@@ -2882,10 +2897,6 @@ void ScInterpreter::ScExternal()
                         case svMatrix:
                             if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix().get() ))
                                 SetError(errIllegalParameter);
-                            break;
-                        case svMissing:
-                            Pop();
-                            aParam.clear();
                             break;
                         default:
                             PopError();
