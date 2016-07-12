@@ -58,6 +58,7 @@ using namespace std;
 namespace opencl {
 
 GPUEnv gpuEnv;
+sal_uInt64 kernelFailures = 0;
 
 namespace {
 
