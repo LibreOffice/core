@@ -298,7 +298,7 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
     {
         for (auto const &token : aTokenTable)
         {
-            if (rName.equalsIgnoreAsciiCase( OUString::createFromAscii(token.pIdent) ))
+            if (rName.equalsIgnoreAsciiCaseAscii( token.pIdent ))
                 return &token;
         }
     }
