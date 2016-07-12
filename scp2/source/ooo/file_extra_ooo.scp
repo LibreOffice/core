@@ -164,13 +164,6 @@ File gid_File_Extra_Palettes
     Name = "extras_palettes.filelist";
 End
 
-File gid_File_Extra_Tpllayoutimpr
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "extras_tpllayoutimpr.filelist";
-End
-
 File gid_File_Extra_Tplofficorr
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
