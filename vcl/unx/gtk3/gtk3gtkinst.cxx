@@ -669,7 +669,14 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
 
     GdkAtom nSelection = (sel == "CLIPBOARD") ? GDK_SELECTION_CLIPBOARD : GDK_SELECTION_PRIMARY;
 
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new VclGtkClipboard(nSelection)) );
+    auto it = m_aClipboards.find(nSelection);
+    if (it != m_aClipboards.end())
+        return it->second;
+
+    Reference<XInterface> xClipboard(static_cast<cppu::OWeakObject *>(new VclGtkClipboard(nSelection)));
+    m_aClipboards[nSelection] = xClipboard;
+
+    return xClipboard;
 }
 
 GtkDropTarget::GtkDropTarget()
