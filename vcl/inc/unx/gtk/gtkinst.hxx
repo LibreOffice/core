@@ -246,6 +246,9 @@ public:
 
 private:
     std::vector<GtkSalTimer *>  m_aTimers;
+#if GTK_CHECK_VERSION(3,0,0)
+    std::unordered_map< GdkAtom, css::uno::Reference<css::uno::XInterface> > m_aClipboards;
+#endif
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
 

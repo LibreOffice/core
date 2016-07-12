@@ -536,7 +536,11 @@ VclGtkClipboard::~VclGtkClipboard()
 {
     GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
-    ClipboardClear(nullptr);
+    if (!m_aGtkTargets.empty())
+    {
+        gtk_clipboard_clear(clipboard);
+    }
+    assert(m_aGtkTargets.empty());
 }
 
 std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
@@ -587,7 +591,6 @@ void VclGtkClipboard::setContents(
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
-    bool bOwnerChange = (xOldOwner.is() && xOldOwner != xClipboardOwner);
     Reference< datatransfer::XTransferable > xOldContents( m_aContents );
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
@@ -596,8 +599,10 @@ void VclGtkClipboard::setContents(
     datatransfer::clipboard::ClipboardEvent aEv;
 
     GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
-    if (bOwnerChange)
+    if (!m_aGtkTargets.empty())
+    {
         gtk_clipboard_clear(clipboard);
+    }
     assert(m_aGtkTargets.empty());
     if (m_aContents.is())
     {
@@ -624,7 +629,7 @@ void VclGtkClipboard::setContents(
 
     aGuard.clear();
 
-    if (bOwnerChange)
+    if (xOldOwner.is() && xOldOwner != xClipboardOwner)
         xOldOwner->lostOwnership( this, xOldContents );
     for( std::list< Reference< datatransfer::clipboard::XClipboardListener > >::iterator it =
          aListeners.begin(); it != aListeners.end() ; ++it )
@@ -672,7 +677,14 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
 
     GdkAtom nSelection = (sel == "CLIPBOARD") ? GDK_SELECTION_CLIPBOARD : GDK_SELECTION_PRIMARY;
 
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new VclGtkClipboard(nSelection)) );
+    auto it = m_aClipboards.find(nSelection);
+    if (it != m_aClipboards.end())
+        return it->second;
+
+    Reference<XInterface> xClipboard(static_cast<cppu::OWeakObject *>(new VclGtkClipboard(nSelection)));
+    m_aClipboards[nSelection] = xClipboard;
+
+    return xClipboard;
 }
 
 GtkDropTarget::GtkDropTarget()
