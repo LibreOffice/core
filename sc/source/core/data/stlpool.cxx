@@ -433,6 +433,8 @@ void ScStyleSheetPool::CreateStandardStyles()
     delete pTxtObj;
 
     delete pEmptyTxtObj;
+
+    bHasStandardStyles = true;
 }
 
 namespace {
