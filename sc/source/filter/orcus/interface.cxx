@@ -34,13 +34,21 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/prntitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #include <formula/token.hxx>
 #include <tools/datetime.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <o3tl/make_unique.hxx>
-
+#include <svl/zforlist.hxx>
+#include <svl/intitem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <comphelper/processfactory.hxx>
+#include <i18nlangtag/lang.h>
+#include <vcl/outdev.hxx>
+#include <tools/colordata.hxx>
+#include <tools/fontenum.hxx>
 
 using namespace com::sun::star;
 
@@ -736,14 +744,32 @@ size_t ScOrcusSharedStrings::commit_segments()
 ScOrcusStyles::ScOrcusStyles(ScDocument& rDoc):
     mrDoc(rDoc)
 {
-    mrDoc.GetStyleSheetPool()->CreateStandardStyles();
+    if (!mrDoc.GetStyleSheetPool()->HasStandardStyles())
+        mrDoc.GetStyleSheetPool()->CreateStandardStyles();
 }
 
 ScOrcusStyles::font::font():
     mbBold(false),
     mbItalic(false),
+    mbHasFontAttr(false),
+    mbHasUnderlineAttr(false),
     mnSize(10),
-    meUnderline(LINESTYLE_NONE)
+    meUnderline(LINESTYLE_NONE),
+    maColor(COL_WHITE, COL_WHITE, COL_WHITE, COL_WHITE)
+{
+}
+
+ScOrcusStyles::fill::fill():
+    maPattern(""),
+    maFgColor(Color(COL_WHITE, COL_WHITE, COL_WHITE)),
+    maBgColor(Color(COL_WHITE, COL_WHITE, COL_WHITE)),
+    mbHasFillAttr(false)
+{
+}
+
+ScOrcusStyles::number_format::number_format():
+    maCode(""),
+    mbHasNumberFormatAttr(false)
 {
 }
 
@@ -767,9 +793,15 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
     FontWeight eWeight = mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL;
     rSet.Put(SvxWeightItem(eWeight, ATTR_FONT_WEIGHT));
 
-    rSet.Put(SvxColorItem(maColor, ATTR_FONT_COLOR));
-    rSet.Put(SvxUnderlineItem(meUnderline, ATTR_FONT_UNDERLINE));
-    rSet.Put(SvxColorItem(maUnderlineColor, ATTR_FONT_UNDERLINE));
+    if (mbHasUnderlineAttr)
+    {
+        rSet.Put(SvxUnderlineItem(meUnderline, ATTR_FONT_UNDERLINE));
+        rSet.Put(SvxColorItem(maUnderlineColor, ATTR_FONT_UNDERLINE));
+    }
+
+    rSet.Put( SvxColorItem(maColor, ATTR_FONT_COLOR));
+    rSet.Put( SvxFontItem( FAMILY_DONTKNOW, maName, maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
+    rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_FONT_HEIGHT));
 }
 
 void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
@@ -785,20 +817,35 @@ void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
 
 ScOrcusStyles::protection::protection():
     mbHidden(false),
-    mbLocked(false)
+    mbLocked(true),
+    mbPrintContent(false),
+    mbFormulaHidden(false),
+    mbHasProtectionAttr(true)
 {
 }
 
 void ScOrcusStyles::protection::applyToItemSet(SfxItemSet& rSet) const
 {
-    rSet.Put(SvxCharHiddenItem(mbHidden, ATTR_PROTECTION));
+    if (mbHidden)
+        rSet.Put(SvxCharHiddenItem(mbHidden, ATTR_PROTECTION));
 
-    if (mbLocked)
-        rSet.Put(SvxProtectItem(ATTR_PROTECTION));
-    rSet.Put(SvxPrintItem(ATTR_PROTECTION, mbPrintContent));
+    if (!mbLocked)
+    {
+        SvxProtectItem aItem(ATTR_PROTECTION);
+
+        aItem.SetContentProtect (false);
+        aItem.SetSizeProtect (false);
+        aItem.SetPosProtect (false);
+
+        rSet.Put(aItem);
+    }
+
+    if (!mbPrintContent)
+        rSet.Put(SvxPrintItem(ATTR_PROTECTION, mbPrintContent));
 }
 
-ScOrcusStyles::border::border()
+ScOrcusStyles::border::border():
+    mbHasBorderAttr(false)
 {
 }
 
@@ -835,16 +882,30 @@ void ScOrcusStyles::border::applyToItemSet(SfxItemSet& rSet) const
     for (auto& current_border_line : border_lines)
     {
         SvxBoxItemLine eDir = getDirection(current_border_line.first);
-        editeng::SvxBorderLine aLine(&current_border_line.second.maColor, 1);
+        editeng::SvxBorderLine aLine(&current_border_line.second.maColor, current_border_line.second.mnWidth, current_border_line.second.mestyle);
         aItem.SetLine(&aLine, eDir);
     }
 
     rSet.Put(aItem);
 }
 
-void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& /*rSet*/) const
+void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& rSet) const
 {
-    (void)this; // loplugin:staticmethods
+    sal_uInt32 nKey;
+    sal_Int32 nCheckPos;
+    SvNumberFormatter NumberFormatter(comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US);
+    OUString Code = maCode; /* <-- Done because the SvNumberFormatter::PutEntry demands a non const NumFormat Code*/
+    sal_Int16 type = css::util::NumberFormat::ALL;
+
+    if (NumberFormatter.PutEntry(Code, nCheckPos, type, nKey, LANGUAGE_ENGLISH_US))
+    {
+        if (nCheckPos == 0)
+        {
+            rSet.Put(SfxUInt32Item(nKey, ATTR_VALUE_FORMAT));
+        }
+    }
+    else
+        SAL_WARN("sc.orcus.style", "Cannot set Number Format");
 }
 
 ScOrcusStyles::xf::xf():
@@ -873,7 +934,8 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
     }
 
     const font& rFont = maFonts[nFontId];
-    rFont.applyToItemSet(rSet);
+    if (rFont.mbHasFontAttr)
+        rFont.applyToItemSet(rSet);
 
     size_t nFillId = rXf.mnFillId;
     if (nFillId >= maFills.size())
@@ -883,7 +945,8 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
     }
 
     const fill& rFill = maFills[nFillId];
-    rFill.applyToItemSet(rSet);
+    if (rFill.mbHasFillAttr)
+        rFill.applyToItemSet(rSet);
 
     size_t nBorderId = rXf.mnBorderId;
     if (nBorderId >= maBorders.size())
@@ -892,7 +955,8 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
         return;
     }
     const border& rBorder = maBorders[nBorderId];
-    rBorder.applyToItemSet(rSet);
+    if (rBorder.mbHasBorderAttr)
+        rBorder.applyToItemSet(rSet);
 
     size_t nProtectionId = rXf.mnProtectionId;
     if (nProtectionId >= maProtections.size())
@@ -901,7 +965,8 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
         return;
     }
     const protection& rProtection = maProtections[nProtectionId];
-    rProtection.applyToItemSet(rSet);
+    if (rProtection.mbHasProtectionAttr)
+        rProtection.applyToItemSet(rSet);
 
     size_t nNumberFormatId = rXf.mnNumberFormatId;
     if (nNumberFormatId >= maNumberFormats.size())
@@ -910,7 +975,8 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
         return;
     }
     const number_format& rFormat = maNumberFormats[nNumberFormatId];
-    rFormat.applyToItemSet(rSet);
+    if (rFormat.mbHasNumberFormatAttr)
+        rFormat.applyToItemSet(rSet);
 }
 
 void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, size_t xfId)
@@ -945,6 +1011,7 @@ void ScOrcusStyles::set_font_name(const char* s, size_t n)
 {
     OUString aName(s, n, RTL_TEXTENCODING_UTF8);
     maCurrentFont.maName = aName;
+    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_font_size(double point)
@@ -989,11 +1056,12 @@ void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
         default:
             ;
     }
+    maCurrentFont.mbHasUnderlineAttr = true;
 }
 
 void ScOrcusStyles::set_font_underline_width(orcus::spreadsheet::underline_width_t e )
 {
-    if (e == orcus::spreadsheet::underline_width_t::bold)
+    if (e == orcus::spreadsheet::underline_width_t::bold || e == orcus::spreadsheet::underline_width_t::thick)
     {
         switch(maCurrentFont.meUnderline)
         {
@@ -1023,6 +1091,7 @@ void ScOrcusStyles::set_font_underline_width(orcus::spreadsheet::underline_width
                 ;
         }
     }
+    maCurrentFont.mbHasUnderlineAttr = true;
 }
 
 void ScOrcusStyles::set_font_underline_mode(orcus::spreadsheet::underline_mode_t /* e */)
@@ -1047,6 +1116,7 @@ void ScOrcusStyles::set_font_underline_type(orcus::spreadsheet::underline_type_t
                 ;
         }
     }
+    maCurrentFont.mbHasUnderlineAttr = true;
 }
 
 void ScOrcusStyles::set_font_underline_color(orcus::spreadsheet::color_elem_t alpha,
@@ -1083,16 +1153,19 @@ void ScOrcusStyles::set_fill_count(size_t /*n*/)
 void ScOrcusStyles::set_fill_pattern_type(const char* s, size_t n)
 {
     maCurrentFill.maPattern = OUString(s, n, RTL_TEXTENCODING_UTF8);
+    maCurrentFill.mbHasFillAttr = true;
 }
 
 void ScOrcusStyles::set_fill_fg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
 {
     maCurrentFill.maFgColor = Color(alpha, red, green, blue);
+    maCurrentFill.mbHasFillAttr = true;
 }
 
 void ScOrcusStyles::set_fill_bg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
 {
     maCurrentFill.maBgColor = Color(alpha, red, green, blue);
+    maCurrentFill.mbHasFillAttr = true;
 }
 
 size_t ScOrcusStyles::commit_fill()
@@ -1158,6 +1231,7 @@ void ScOrcusStyles::set_border_style(
         default:
             ;
     }
+    maCurrentBorder.mbHasBorderAttr = true;
 }
 
 void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t dir,
@@ -1188,21 +1262,25 @@ size_t ScOrcusStyles::commit_border()
 void ScOrcusStyles::set_cell_hidden(bool b)
 {
     maCurrentProtection.mbHidden = b;
+    maCurrentProtection.mbHasProtectionAttr = true;
 }
 
 void ScOrcusStyles::set_cell_locked(bool b)
 {
     maCurrentProtection.mbLocked = b;
+    maCurrentProtection.mbHasProtectionAttr = true;
 }
 
 void ScOrcusStyles::set_cell_print_content(bool b )
 {
     maCurrentProtection.mbPrintContent = b;
+    maCurrentProtection.mbHasProtectionAttr = true;
 }
 
 void ScOrcusStyles::set_cell_formula_hidden(bool b )
 {
     maCurrentProtection.mbFormulaHidden = b;
+    maCurrentProtection.mbHasProtectionAttr = true;
 }
 
 size_t ScOrcusStyles::commit_cell_protection()
@@ -1225,6 +1303,7 @@ void ScOrcusStyles::set_number_format_code(const char* s, size_t n)
 {
     OUString aCode(s, n, RTL_TEXTENCODING_UTF8);
     maCurrentNumberFormat.maCode = aCode;
+    maCurrentNumberFormat.mbHasNumberFormatAttr = true;
 }
 
 size_t ScOrcusStyles::commit_number_format()
@@ -1356,6 +1435,10 @@ size_t ScOrcusStyles::commit_cell_style()
         SAL_WARN("sc.orcus.style", "invalid xf id for commit cell style");
         return 0;
     }
+    if (maCurrentCellStyle.mnXFId == 0)
+    {
+        return 0;
+    }
 
     ScStyleSheetPool* pPool = mrDoc.GetStyleSheetPool();
     SfxStyleSheetBase& rBase = pPool->Make(maCurrentCellStyle.maName, SfxStyleFamily::Para);
@@ -1363,6 +1446,9 @@ size_t ScOrcusStyles::commit_cell_style()
 
     xf& rXf = maCellStyleXfs[maCurrentCellStyle.mnXFId];
     applyXfToItemSet(rSet, rXf);
+
+    maCurrentXF = ScOrcusStyles::xf();
+    maCurrentCellStyle = ScOrcusStyles::cell_style();
 
     return 0;
 }
