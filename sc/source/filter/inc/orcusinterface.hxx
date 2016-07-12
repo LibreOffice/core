@@ -258,7 +258,12 @@ private:
         double mnSize;
         Color maColor;
 
+        bool mbHasFontAttr;
+        bool mbHasUnderlineAttr;
+
         FontLineStyle meUnderline;
+        FontLineStyle meUnderlineType;
+        FontLineStyle meUnderlineWidth;
         Color maUnderlineColor;
 
         font();
@@ -274,6 +279,10 @@ private:
         OUString maPattern;
         Color maFgColor;
         Color maBgColor;
+
+        bool mbHasFillAttr;
+
+        fill();
 
         void applyToItemSet(SfxItemSet& rSet) const;
     };
@@ -291,6 +300,8 @@ private:
         };
         std::map<orcus::spreadsheet::border_direction_t, border_line> border_lines;
 
+        bool mbHasBorderAttr;
+
         border();
 
         void applyToItemSet(SfxItemSet& rSet) const;
@@ -306,6 +317,8 @@ private:
         bool mbPrintContent;
         bool mbFormulaHidden;
 
+        bool mbHasProtectionAttr;
+
         protection();
         void applyToItemSet(SfxItemSet& rSet) const;
     };
@@ -317,6 +330,9 @@ private:
     {
         OUString maCode;
 
+        bool mbHasNumberFormatAttr;
+
+        number_format();
         void applyToItemSet(SfxItemSet& rSet) const;
     };
 
