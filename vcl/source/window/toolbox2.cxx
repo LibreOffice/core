@@ -215,6 +215,12 @@ Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, cons
             // get size of item window and check if it fits
             // no windows in vertical toolbars (the default is mbShowWindow=false)
             Size aWinSize = mpWindow->GetSizePixel();
+
+            if (mpWindow->GetStyle() & WB_NOLABEL)
+                // Window wants no label? Then don't check width, it'll be just
+                // clipped.
+                bCheckMaxWidth = false;
+
             if ( !bCheckMaxWidth || (aWinSize.Width() <= maxWidth) )
             {
                 aSize.Width()   = aWinSize.Width();
