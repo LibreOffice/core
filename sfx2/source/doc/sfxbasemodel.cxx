@@ -1507,6 +1507,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
         {
             // check that only acceptable parameters are provided here
             if ( aSeqArgs[nInd].Name != "VersionComment" && aSeqArgs[nInd].Name != "Author"
+              && aSeqArgs[nInd].Name != "DontTerminateEdit"
               && aSeqArgs[nInd].Name != "InteractionHandler" && aSeqArgs[nInd].Name != "StatusIndicator"
               && aSeqArgs[nInd].Name != "VersionMajor"
               && aSeqArgs[nInd].Name != "FailOnWarning"
