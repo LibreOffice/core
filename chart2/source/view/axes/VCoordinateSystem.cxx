@@ -152,11 +152,9 @@ void VCoordinateSystem::setTransformationSceneToScreen(
 uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
             const awt::Size& rPageSize, const awt::Size& rPageResolution )
 {
-    uno::Sequence< sal_Int32 > aResolution(2);
+    sal_Int32 nDimensions = m_xCooSysModel->getDimension();
+    uno::Sequence<sal_Int32> aResolution((nDimensions > 2)?nDimensions:2);
 
-    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    if(nDimensionCount>2)
-        aResolution.realloc(nDimensionCount);
     sal_Int32 nN = 0;
     for( nN = 0 ;nN<aResolution.getLength(); nN++ )
         aResolution[nN]=1000;

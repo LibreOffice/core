@@ -250,17 +250,15 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
 {
     drawing::PolyPolygonShape3D aSteppedPoly;
 
-    aSteppedPoly.SequenceX.realloc(0);
-    aSteppedPoly.SequenceY.realloc(0);
-    aSteppedPoly.SequenceZ.realloc(0);
-
     sal_uInt32 nOuterCount = aStartPoly.SequenceX.getLength();
-    if ( !nOuterCount )
-        return false;
 
     aSteppedPoly.SequenceX.realloc(nOuterCount);
     aSteppedPoly.SequenceY.realloc(nOuterCount);
     aSteppedPoly.SequenceZ.realloc(nOuterCount);
+
+    if ( !nOuterCount )
+        return false;
+
     for( sal_uInt32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {
         if( aStartPoly.SequenceX[nOuter].getLength() <= 1 )

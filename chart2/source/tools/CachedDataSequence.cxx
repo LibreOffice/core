@@ -81,10 +81,9 @@ CachedDataSequence::CachedDataSequence( const OUString & rSingleText )
         : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
           m_eCurrentDataType( TEXTUAL ),
+          m_aTextualSequence({rSingleText}),
           m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
-    m_aTextualSequence.realloc(1);
-    m_aTextualSequence[0] = rSingleText;
     registerProperties();
 }
 
