@@ -293,10 +293,6 @@ void SAL_CALL ElementSelectorToolbarController::release() throw ()
 {
     ToolboxController::release();
 }
-void SAL_CALL ElementSelectorToolbarController::initialize( const Sequence< Any >& rArguments ) throw (Exception, RuntimeException, std::exception)
-{
-    ToolboxController::initialize(rArguments);
-}
 void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException, std::exception )
 {
     if( m_apSelectorListBox.get() )

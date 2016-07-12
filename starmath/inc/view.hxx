@@ -85,7 +85,6 @@ protected:
         aFormulaDrawPos = rPos;
     }
 
-    virtual void DataChanged( const DataChangedEvent& ) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
     virtual void KeyInput(const KeyEvent& rKEvt) override;
     virtual void Command(const CommandEvent& rCEvt) override;

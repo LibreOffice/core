@@ -188,16 +188,6 @@ void SAL_CALL PopupWindowController::execute( sal_Int16 KeyModifier ) throw (Run
     svt::ToolboxController::execute( KeyModifier );
 }
 
-void SAL_CALL PopupWindowController::click() throw (RuntimeException, std::exception)
-{
-    svt::ToolboxController::click();
-}
-
-void SAL_CALL PopupWindowController::doubleClick() throw (RuntimeException, std::exception)
-{
-    svt::ToolboxController::doubleClick();
-}
-
 Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() throw (RuntimeException, std::exception)
 {
     VclPtr< ToolBox > pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );

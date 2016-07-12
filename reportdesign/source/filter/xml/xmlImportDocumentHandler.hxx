@@ -55,7 +55,8 @@ private:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
-    DECLARE_XINTERFACE( )
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
+
     DECLARE_XTYPEPROVIDER( )
 
     // css::xml::sax::XDocumentHandler:

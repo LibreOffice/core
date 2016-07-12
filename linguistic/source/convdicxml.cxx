@@ -379,12 +379,6 @@ void SAL_CALL ConvDicXMLImport::startDocument()
     SvXMLImport::startDocument();
 }
 
-void SAL_CALL ConvDicXMLImport::endDocument()
-    throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
-{
-    SvXMLImport::endDocument();
-}
-
 SvXMLImportContext * ConvDicXMLImport::CreateContext(
         sal_uInt16 nPrefix,
         const OUString &rLocalName,

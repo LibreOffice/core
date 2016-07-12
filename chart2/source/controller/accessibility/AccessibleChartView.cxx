@@ -366,12 +366,6 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
     }
 }
 
-// lang::XComponent::dispose()
-void SAL_CALL AccessibleChartView::disposing()
-{
-    AccessibleBase::disposing();
-}
-
 // XEventListener
 void SAL_CALL AccessibleChartView::disposing( const lang::EventObject& /*Source*/ )
     throw (uno::RuntimeException, std::exception)

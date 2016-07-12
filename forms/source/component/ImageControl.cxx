@@ -626,14 +626,6 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
     }
 }
 
-// OComponentHelper
-
-void SAL_CALL OImageControlModel::disposing()
-{
-    OBoundControlModel::disposing();
-}
-
-
 void OImageControlModel::resetNoBroadcast()
 {
     if ( hasField() )          // only reset when we are connected to a column

@@ -585,16 +585,6 @@ void SelectionFunction::MoveFocus (
     }
 }
 
-void SelectionFunction::Activate()
-{
-    FuPoor::Activate();
-}
-
-void SelectionFunction::Deactivate()
-{
-    FuPoor::Deactivate();
-}
-
 void SelectionFunction::DoCut()
 {
     if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())

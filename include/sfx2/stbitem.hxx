@@ -70,10 +70,10 @@ protected:
     virtual void               SAL_CALL release() throw() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+    using svt::StatusbarController::disposing;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+    using svt::StatusbarController::dispose;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event )

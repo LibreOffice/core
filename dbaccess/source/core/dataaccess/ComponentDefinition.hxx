@@ -139,7 +139,7 @@ public:
     virtual css::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
     virtual void columnAppended( const css::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
     virtual void columnDropped(const OUString& _sName) override;
-    virtual void notifyDataSourceModified() override { OContentHelper::notifyDataSourceModified(); }
+    using OContentHelper::notifyDataSourceModified;
 
 protected:
 // OPropertyArrayUsageHelper

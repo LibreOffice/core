@@ -145,12 +145,6 @@ void SmGraphicWindow::ApplyColorConfigValues(const svtools::ColorConfig &rColorC
 }
 
 
-void SmGraphicWindow::DataChanged( const DataChangedEvent& rEvt )
-{
-    ScrollableWindow::DataChanged( rEvt );
-}
-
-
 void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 {
     ScrollableWindow::MouseButtonDown(rMEvt);

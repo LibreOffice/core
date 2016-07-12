@@ -426,14 +426,6 @@ bool StyleTreeListBox_Impl::DoubleClickHdl()
     return false;
 }
 
-/** Command Handler; this executes a PopupMenu (designer-specific)
-    SV virtual method.
-*/
-void StyleTreeListBox_Impl::Command( const CommandEvent& rCEvt )
-{
-    SvTreeListBox::Command(rCEvt);
-}
-
 bool StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     // handle <RETURN> as double click

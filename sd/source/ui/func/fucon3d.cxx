@@ -336,11 +336,6 @@ bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-bool FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
-{
-    return FuConstruct::MouseMove(rMEvt);
-}
-
 bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 {
     bool bReturn = false;
@@ -359,25 +354,11 @@ bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/**
- * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
- */
-bool FuConstruct3dObject::KeyInput(const KeyEvent& rKEvt)
-{
-    return FuConstruct::KeyInput(rKEvt);
-}
-
 void FuConstruct3dObject::Activate()
 {
     mpView->SetCurrentObj(OBJ_NONE);
 
     FuConstruct::Activate();
-}
-
-void FuConstruct3dObject::Deactivate()
-{
-    FuConstruct::Deactivate();
 }
 
 SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)

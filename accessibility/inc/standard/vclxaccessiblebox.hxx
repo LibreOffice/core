@@ -112,13 +112,6 @@ public:
                 throw (css::lang::IndexOutOfBoundsException,
                        css::uno::RuntimeException, std::exception) override;
 
-    // XComponent
-
-    /** This method is called from the implementation helper during an
-        XComponent::dispose() call.
-    */
-    virtual void SAL_CALL disposing() override;
-
     // XAccessibleValue
 
     virtual css::uno::Any SAL_CALL getCurrentValue( )

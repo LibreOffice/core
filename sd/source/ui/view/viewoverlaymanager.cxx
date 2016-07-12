@@ -116,9 +116,6 @@ public:
 
 protected:
     virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;
-    virtual void disposing() override;
-    virtual void select() override;
-    virtual void deselect() override;
 
 private:
     SdrObjectWeakRef    mxPlaceholderObj;
@@ -395,21 +392,6 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
 
         rHandlerList.AddHdl( pHdl );
     }
-}
-
-void ChangePlaceholderTag::disposing()
-{
-    SmartTag::disposing();
-}
-
-void ChangePlaceholderTag::select()
-{
-    SmartTag::select();
-}
-
-void ChangePlaceholderTag::deselect()
-{
-    SmartTag::deselect();
 }
 
 ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )

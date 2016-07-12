@@ -188,7 +188,6 @@ class SwSidebarWin : public vcl::Window
         void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
 
     protected:
-        virtual void    DataChanged( const DataChangedEvent& aEvent) override;
         virtual void    LoseFocus() override;
         virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
         virtual void    GetFocus() override;

@@ -2281,16 +2281,6 @@ void OApplicationController::onDeleteEntry()
     executeChecked(nId,Sequence<PropertyValue>());
 }
 
-void OApplicationController::executeUnChecked(const URL& _rCommand, const Sequence< PropertyValue>& aArgs)
-{
-    OGenericUnoController::executeUnChecked( _rCommand, aArgs );
-}
-
-void OApplicationController::executeChecked(const URL& _rCommand, const Sequence< PropertyValue>& aArgs)
-{
-    OGenericUnoController::executeChecked( _rCommand, aArgs );
-}
-
 void OApplicationController::executeUnChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue>& aArgs)
 {
     OGenericUnoController::executeUnChecked( _nCommandId, aArgs );
@@ -2311,24 +2301,9 @@ bool OApplicationController::isCommandEnabled( const OUString& _rCompleteCommand
     return OGenericUnoController::isCommandEnabled( _rCompleteCommandURL );
 }
 
-sal_uInt16 OApplicationController::registerCommandURL( const OUString& _rCompleteCommandURL )
-{
-    return OGenericUnoController::registerCommandURL( _rCompleteCommandURL );
-}
-
-void OApplicationController::notifyHiContrastChanged()
-{
-    OGenericUnoController::notifyHiContrastChanged();
-}
-
 Reference< XController > OApplicationController::getXController() throw( RuntimeException )
 {
     return OGenericUnoController::getXController();
-}
-
-bool OApplicationController::interceptUserInput( const NotifyEvent& _rEvent )
-{
-    return OGenericUnoController::interceptUserInput( _rEvent );
 }
 
 VclPtr<PopupMenu> OApplicationController::getContextMenu( Control& /*_rControl*/ ) const

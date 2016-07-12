@@ -112,7 +112,7 @@ namespace frm
         virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::css::uno::RuntimeException, std::exception) override;
 
         // XPersistObject
-        DECLARE_XPERSISTOBJECT()
+        virtual OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()

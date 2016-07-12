@@ -153,12 +153,6 @@ PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
     disposeOnce();
 }
 
-void PasswordToOpenModifyDialog::dispose()
-{
-    SfxModalDialog::dispose();
-}
-
-
 OUString PasswordToOpenModifyDialog::GetPasswordToOpen() const
 {
     const bool bPasswdOk =

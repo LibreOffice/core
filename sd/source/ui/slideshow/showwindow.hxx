@@ -69,7 +69,6 @@ public:
     void            RestartShow( sal_Int32 nPageIndexToRestart );
 
     virtual void    Move() override;
-    virtual void    Resize() override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 

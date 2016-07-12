@@ -257,12 +257,6 @@ bool FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
 }
 
 
-bool FmFieldWin::Close()
-{
-    return SfxFloatingWindow::Close();
-}
-
-
 void FmFieldWin::_propertyChanged(const css::beans::PropertyChangeEvent& evt) throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Reference< css::form::XForm >  xForm(evt.Source, css::uno::UNO_QUERY);

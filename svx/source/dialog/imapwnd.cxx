@@ -815,11 +815,6 @@ void IMapWindow::CreateDefaultObject()
     }
 }
 
-void IMapWindow::KeyInput( const KeyEvent& rKEvt )
-{
-    GraphCtrl::KeyInput( rKEvt );
-}
-
 void IMapWindow::SelectFirstObject()
 {
     SdrPage*    pPage = pModel->GetPage( 0 );

@@ -119,11 +119,6 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-bool FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
-{
-    return FuConstruct::MouseMove(rMEvt);
-}
-
 bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 {
     bool bReturn = false;
@@ -200,15 +195,6 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
     }
 
     return bReturn;
-}
-
-/**
- * Process keyboard input
- * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
- */
-bool FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
-{
-    return FuConstruct::KeyInput(rKEvt);
 }
 
 void FuConstructBezierPolygon::Activate()

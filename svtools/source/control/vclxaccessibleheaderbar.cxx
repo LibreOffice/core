@@ -65,18 +65,6 @@ VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()
 }
 
 
-void VCLXAccessibleHeaderBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
-{
-    VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
-}
-
-
-void VCLXAccessibleHeaderBar::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
-{
-    VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
-}
-
-
 // XServiceInfo
 
 

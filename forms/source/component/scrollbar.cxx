@@ -132,12 +132,6 @@ namespace frm
     IMPLEMENT_DEFAULT_CLONING( OScrollBarModel )
 
 
-    void SAL_CALL OScrollBarModel::disposing()
-    {
-        OBoundControlModel::disposing();
-    }
-
-
     void OScrollBarModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )

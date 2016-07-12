@@ -43,7 +43,6 @@ namespace abp
 
         // TabDialog overridables
         virtual void        ActivatePage() override;
-        virtual void        DeactivatePage() override;
 
     private:
         DECL_LINK_TYPED( OnInvokeDialog, Button*, void );
