@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_a781fa91",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-12T08:54:06Z",
+      "side": 1,
+      "message": "This method should be private",
+      "revId": "2ee83d76a47400c22f2bb93e5b09f7cbe0028b6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_27440a73",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-12T08:54:06Z",
+      "side": 1,
+      "message": "I already mentioned this w/ hatch tab, so let me repeat it here as well: clearing the list after deleting an item and creating it again a bad habit. Imagine the list has 10k items, or the previews take ages to generate. \n\nIf you don\u0027t want to touch the parent ValueSet class, please modify your PresetListBox class so that on deletion, remaining item ids shift accordingly.",
+      "revId": "2ee83d76a47400c22f2bb93e5b09f7cbe0028b6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_47490e8b",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-12T08:54:06Z",
+      "side": 1,
+      "message": "Same issue here",
+      "revId": "2ee83d76a47400c22f2bb93e5b09f7cbe0028b6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_675e1247",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-12T08:54:06Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "2ee83d76a47400c22f2bb93e5b09f7cbe0028b6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
