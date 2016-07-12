@@ -131,7 +131,6 @@ protected:
     static const SfxItemPropertySimpleEntry* getPropertyMapEntry( const OUString& rPropertyName ) throw (css::uno::RuntimeException);
 
     virtual void Load (SvStream& rIn, sal_uInt16 nVersion) override;
-    virtual void Store(SvStream& rOut) override;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual             ~SdStyleSheet();

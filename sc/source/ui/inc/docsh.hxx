@@ -199,10 +199,8 @@ public:
     virtual bool    ConvertTo( SfxMedium &rMedium ) override;
     virtual bool    PrepareClose( bool bUI = true ) override;
     virtual void    PrepareReload() override;
-    virtual bool    IsInformationLost() override;
     virtual void    LoadStyles( SfxObjectShell &rSource ) override;
 
-    virtual bool    SaveCompleted( const css::uno::Reference< css::embed::XStorage >& ) override;      // SfxInPlaceObject
     virtual bool    DoSaveCompleted( SfxMedium * pNewStor, bool bRegisterRecent ) override;     // SfxObjectShell
     virtual bool    QuerySlotExecutable( sal_uInt16 nSlotId ) override;
 

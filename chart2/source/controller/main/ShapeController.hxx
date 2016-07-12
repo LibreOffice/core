@@ -40,9 +40,6 @@ public:
     ShapeController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, ChartController* pController );
     virtual ~ShapeController();
 
-    // late initialisation, especially for adding as listener
-    virtual void initialize() override;
-
 protected:
     // WeakComponentImplHelperBase
     virtual void SAL_CALL disposing() override;

@@ -496,17 +496,6 @@ public:
         }
     }
 
-    virtual void SAL_CALL acquire()
-        throw () override
-
-    {
-        t_BrowseNodeBase::acquire();
-    }
-    virtual void SAL_CALL release()
-        throw () override
-    {
-        t_BrowseNodeBase::release();
-    }
     // XTypeProvider (implemnented by base, but needs to be overridden for
     //                delegating to aggregate)
     virtual Sequence< Type > SAL_CALL getTypes()

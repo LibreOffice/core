@@ -28,11 +28,6 @@ StylesPropertyPanel::~StylesPropertyPanel()
     disposeOnce();
 }
 
-void StylesPropertyPanel::dispose()
-{
-    PanelLayout::dispose();
-}
-
 void StylesPropertyPanel::DataChanged( const DataChangedEvent& /*rEvent*/)
 {
 

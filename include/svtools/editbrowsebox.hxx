@@ -542,7 +542,6 @@ namespace svt
 
         // callbacks for the data window
         virtual void    ImplStartTracking() override;
-        virtual void    ImplTracking() override;
         virtual void    ImplEndTracking() override;
 
         // when changing a row:

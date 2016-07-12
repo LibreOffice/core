@@ -512,18 +512,15 @@ namespace dbaui
         void containerFound( const css::uno::Reference< css::container::XContainer >& _xContainer);
 
         // IController
-        virtual void        executeUnChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
-        virtual void        executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
+        using  OGenericUnoController::executeUnChecked;
         virtual void        executeUnChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
+        using  OGenericUnoController::executeChecked;
         virtual void        executeChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
         virtual bool        isCommandEnabled(sal_uInt16 _nCommandId) const override;
         virtual bool        isCommandEnabled( const OUString& _rCompleteCommandURL ) const override;
-        virtual sal_uInt16  registerCommandURL( const OUString& _rCompleteCommandURL ) override;
-        virtual void        notifyHiContrastChanged() override;
         virtual bool        isDataSourceReadOnly() const override;
         virtual css::uno::Reference< css::frame::XController >
                             getXController() throw( css::uno::RuntimeException ) override;
-        virtual bool        interceptUserInput( const NotifyEvent& _rEvent ) override;
 
         // IControlActionListener overridables
         virtual bool        requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const override;

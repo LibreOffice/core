@@ -59,11 +59,6 @@ bool VCLXAccessibleDropDownListBox::IsValid() const
     return GetWindow().get() != nullptr;
 }
 
-void VCLXAccessibleDropDownListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
-{
-    VCLXAccessibleBox::ProcessWindowEvent (rVclWindowEvent);
-}
-
 
 // XServiceInfo
 

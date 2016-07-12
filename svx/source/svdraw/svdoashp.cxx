@@ -1409,10 +1409,6 @@ sal_uInt16 SdrObjCustomShape::GetObjIdentifier() const
 }
 
 
-void SdrObjCustomShape::RecalcSnapRect()
-{
-    SdrTextObj::RecalcSnapRect();
-}
 const Rectangle& SdrObjCustomShape::GetSnapRect() const
 {
     return SdrTextObj::GetSnapRect();
@@ -2177,11 +2173,6 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     bSnapRectDirty=true;
 }
 
-bool SdrObjCustomShape::BegCreate( SdrDragStat& rDrag )
-{
-    return SdrTextObj::BegCreate( rDrag );
-}
-
 bool SdrObjCustomShape::MovCreate(SdrDragStat& rStat)
 {
     SdrView* pView = rStat.GetView();       // #i37448#
@@ -2545,10 +2536,6 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
     return bRet;
-}
-bool SdrObjCustomShape::BegTextEdit( SdrOutliner& rOutl )
-{
-    return SdrTextObj::BegTextEdit( rOutl );
 }
 void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
 {

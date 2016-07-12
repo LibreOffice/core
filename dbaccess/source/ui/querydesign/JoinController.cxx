@@ -155,11 +155,6 @@ OJoinController::~OJoinController()
 {
 }
 
-void SAL_CALL OJoinController::disposing( const EventObject& _rSource ) throw(RuntimeException, std::exception)
-{
-    OJoinController_BASE::disposing( _rSource );
-}
-
 OJoinDesignView* OJoinController::getJoinView()
 {
     return static_cast< OJoinDesignView* >( getView() );

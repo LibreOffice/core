@@ -226,11 +226,6 @@ void AnnotationTextWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-void AnnotationTextWindow::GetFocus()
-{
-    Window::GetFocus();
-}
-
 void AnnotationTextWindow::LoseFocus()
 {
     Window::LoseFocus();

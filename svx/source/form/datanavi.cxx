@@ -2185,12 +2185,6 @@ namespace svxform
     }
 
 
-    bool DataNavigator::Close()
-    {
-        return SfxDockingWindow::Close();
-    }
-
-
     Size DataNavigator::CalcDockingSize( SfxChildAlignment eAlign )
     {
         if ( ( eAlign == SfxChildAlignment::TOP ) || ( eAlign == SfxChildAlignment::BOTTOM ) )

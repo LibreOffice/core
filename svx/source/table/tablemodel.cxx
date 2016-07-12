@@ -339,18 +339,6 @@ void TableModel::dispose() throw (RuntimeException, std::exception)
 }
 
 
-void SAL_CALL TableModel::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception)
-{
-    TableModelBase::addEventListener( xListener );
-}
-
-
-void SAL_CALL TableModel::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception)
-{
-    TableModelBase::removeEventListener( xListener );
-}
-
-
 // XModifiable
 
 
