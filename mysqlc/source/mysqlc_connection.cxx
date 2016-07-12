@@ -86,7 +86,7 @@ void SAL_CALL OConnection::release()
     throw()
 {
     OSL_TRACE("OConnection::release");
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyValue >& info)

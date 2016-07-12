@@ -158,7 +158,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 
 void SAL_CALL OConnection::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)

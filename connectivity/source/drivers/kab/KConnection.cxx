@@ -54,7 +54,7 @@ KabConnection::~KabConnection()
 
 void SAL_CALL KabConnection::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 //TODO: is doing this after the ctor, and the manual ref counting really

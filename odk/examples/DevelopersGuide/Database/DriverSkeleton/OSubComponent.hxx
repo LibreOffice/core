@@ -96,7 +96,7 @@ namespace connectivity
                 ::osl::MutexGuard aGuard( m_pDerivedImplementation->rBHelper.rMutex );
                 m_xParent = NULL;
             }
-            void relase_ChildImpl()
+            void release_ChildImpl()
             {
                 release(m_pDerivedImplementation->m_refCount,
                                         m_pDerivedImplementation->rBHelper,

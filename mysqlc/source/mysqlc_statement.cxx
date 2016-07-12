@@ -414,7 +414,7 @@ void SAL_CALL OCommonStatement::release()
     throw()
 {
     OSL_TRACE("OCommonStatement::release");
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 void SAL_CALL OStatement::acquire()

@@ -400,7 +400,7 @@ void SAL_CALL OCommonStatement::acquire() throw()
 
 void SAL_CALL OCommonStatement::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 void SAL_CALL OStatement::acquire() throw()

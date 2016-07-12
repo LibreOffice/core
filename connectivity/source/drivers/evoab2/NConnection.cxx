@@ -61,7 +61,7 @@ OEvoabConnection::~OEvoabConnection()
 
 void SAL_CALL OEvoabConnection::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 // XServiceInfo

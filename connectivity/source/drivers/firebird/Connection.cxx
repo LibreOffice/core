@@ -110,7 +110,7 @@ Connection::~Connection()
 
 void SAL_CALL Connection::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 struct ConnectionGuard

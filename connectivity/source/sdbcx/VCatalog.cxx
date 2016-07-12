@@ -68,7 +68,7 @@ void SAL_CALL OCatalog::acquire() throw()
 
 void SAL_CALL OCatalog::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 

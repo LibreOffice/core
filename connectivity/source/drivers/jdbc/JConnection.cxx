@@ -294,7 +294,7 @@ java_sql_Connection::~java_sql_Connection()
 
 void SAL_CALL java_sql_Connection::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 void java_sql_Connection::disposing()

@@ -57,7 +57,7 @@ OConnection::~OConnection()
 
 void SAL_CALL OConnection::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 

@@ -56,7 +56,7 @@ MacabConnection::~MacabConnection()
 
 void SAL_CALL MacabConnection::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 void MacabConnection::construct(const OUString&, const Sequence< PropertyValue >&) throw(SQLException)

@@ -111,7 +111,7 @@ void SAL_CALL java_sql_Statement_Base::disposing()
 
 void SAL_CALL OStatement_BASE2::release() throw()
 {
-    relase_ChildImpl();
+    release_ChildImpl();
 }
 
 

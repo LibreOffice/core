@@ -123,7 +123,7 @@ public:
                         return true;
                     }
                 }
-                else if (pCalled->getName() == "relase_ChildImpl") // FIXME remove this lunacy
+                else if (pCalled->getName() == "release_ChildImpl") // FIXME remove this lunacy
                 {
                     return true;
                 }
