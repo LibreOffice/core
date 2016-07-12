@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_99a37a9e",
+        "filename": "sw/source/uibase/shells/grfsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-07-12T14:24:04Z",
+      "side": 1,
+      "message": "when an image marked rWrtSh.GetObjRect().SSize() returns 0x0 so SetObjRect doesn\u0027t set the marked graphic. How can i set that marked object\u0027s size?",
+      "range": {
+        "startLine": 517,
+        "startChar": 23,
+        "endLine": 517,
+        "endChar": 33
+      },
+      "revId": "e81362fbe2dc4bcdb84d5e61b024553366075c8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
