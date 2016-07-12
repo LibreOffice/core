@@ -391,7 +391,7 @@ void ZCodec::InitDecompress(SvStream & inStream)
     mpInBuf = new sal_uInt8[ mnInBufSize ];
 }
 
-void ZCodec::UpdateCRC ( sal_uInt8* pSource, long nDatSize)
+void ZCodec::UpdateCRC ( sal_uInt8 const * pSource, long nDatSize)
 {
     mnCRC = rtl_crc32( mnCRC, pSource, nDatSize );
 }

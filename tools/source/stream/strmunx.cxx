@@ -145,7 +145,7 @@ bool lockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
     return true;
 }
 
-void unlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
+void unlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream const * pStream )
 {
     osl::MutexGuard aGuard( LockMutex::get() );
     std::vector<InternalStreamLock> &rLockList = LockList::get();

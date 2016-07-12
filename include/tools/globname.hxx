@@ -85,7 +85,7 @@ public:
     bool          operator != ( const SvGlobalName & rObj ) const
                       { return !(*this == rObj); }
 
-    void          MakeFromMemory( void * pData );
+    void          MakeFromMemory( void const * pData );
     bool          MakeId( const OUString & rId );
     OUString      GetHexName() const;
 
