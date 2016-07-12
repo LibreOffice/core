@@ -826,7 +826,10 @@ bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
         }
         else
         {
-            pSelections->push_back(SearchSelection(maCurrentPosition.mnPageIndex, sRectangles));
+            SearchSelection aSelection(maCurrentPosition.mnPageIndex, sRectangles);
+            bool bDuplicate = !pSelections->empty() && pSelections->back() == aSelection;
+            if (!bDuplicate)
+                pSelections->push_back(aSelection);
         }
     }
 
