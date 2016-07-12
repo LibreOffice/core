@@ -4408,17 +4408,19 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             default:
             break;
         }
-        if( (eLastOp == ocSep ||
-             eLastOp == ocArrayRowSep ||
-             eLastOp == ocArrayColSep ||
-             eLastOp == ocArrayOpen) &&
-            (eOp == ocSep ||
-             eOp == ocClose ||
-             eOp == ocArrayRowSep ||
-             eOp == ocArrayColSep ||
-             eOp == ocArrayClose) )
+        if (!(eLastOp == ocOpen && eOp == ocClose) &&
+                (eLastOp == ocOpen ||
+                 eLastOp == ocSep ||
+                 eLastOp == ocArrayRowSep ||
+                 eLastOp == ocArrayColSep ||
+                 eLastOp == ocArrayOpen) &&
+                (eOp == ocSep ||
+                 eOp == ocClose ||
+                 eOp == ocArrayRowSep ||
+                 eOp == ocArrayColSep ||
+                 eOp == ocArrayClose))
         {
-            // FIXME: should we check for known functions with optional empty
+            // TODO: should we check for known functions with optional empty
             // args so the correction dialog can do better?
             if ( !static_cast<ScTokenArray*>(pArr)->Add( new FormulaMissingToken ) )
             {

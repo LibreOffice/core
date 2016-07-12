@@ -646,6 +646,8 @@ void ScInterpreter::ScGetDate()
     {
         sal_Int16 nDay   = GetInt16();
         sal_Int16 nMonth = GetInt16();
+        if (IsMissing())
+            SetError( errParameterExpected);    // Year must be given.
         sal_Int16 nYear  = GetInt16();
         if (nGlobalError || nYear < 0)
             PushIllegalArgument();
