@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_7cd6a4c6",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 2735,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-07-13T09:54:13Z",
+      "side": 1,
+      "message": "t is missing",
+      "revId": "966e9e4af0bda40d5361fc3ef402e3faa6d06db9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
