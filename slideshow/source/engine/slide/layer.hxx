@@ -71,7 +71,7 @@ namespace slideshow
                 This method will create a layer without a ViewLayer,
                 i.e. one that displays directly on the background.
              */
-            static ::std::shared_ptr< Layer > createBackgroundLayer();
+            static std::shared_ptr< Layer > createBackgroundLayer();
 
             /** Create non-background layer
 
@@ -79,7 +79,7 @@ namespace slideshow
                 background, to contain shapes that should appear in
                 front of animated objects.
              */
-            static ::std::shared_ptr< Layer > createLayer();
+            static std::shared_ptr< Layer > createLayer();
 
 
             /** Predicate, whether this layer is the special
@@ -241,7 +241,7 @@ namespace slideshow
                 const ViewLayerSharedPtr& getViewLayer() const { return mpViewLayer; }
             };
 
-            typedef ::std::vector< ViewEntry > ViewEntryVector;
+            typedef std::vector< ViewEntry > ViewEntryVector;
 
             ViewEntryVector            maViewEntries;
             basegfx::B2DPolyRange      maUpdateAreas;
@@ -255,9 +255,9 @@ namespace slideshow
             bool                       mbClipSet; // true, if beginUpdate set a clip
         };
 
-        typedef ::std::shared_ptr< Layer >    LayerSharedPtr;
-        typedef ::std::weak_ptr< Layer >      LayerWeakPtr;
-        typedef ::std::vector< LayerSharedPtr > LayerVector;
+        typedef std::shared_ptr< Layer >      LayerSharedPtr;
+        typedef std::weak_ptr< Layer >        LayerWeakPtr;
+        typedef std::vector< LayerSharedPtr > LayerVector;
 
     }
 }

@@ -174,7 +174,7 @@ namespace slideshow
 
                 virtual double operator()( double t ) const override
                 {
-                    return ::std::min( (*mpFirstArg)(t), (*mpSecondArg)(t) );
+                    return std::min( (*mpFirstArg)(t), (*mpSecondArg)(t) );
                 }
             };
 
@@ -189,7 +189,7 @@ namespace slideshow
 
                 virtual double operator()( double t ) const override
                 {
-                    return ::std::max( (*mpFirstArg)(t), (*mpSecondArg)(t) );
+                    return std::max( (*mpFirstArg)(t), (*mpSecondArg)(t) );
                 }
             };
         }

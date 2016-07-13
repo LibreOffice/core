@@ -70,7 +70,7 @@ public:
     virtual void viewClobbered( const UnoViewSharedPtr& rView ) = 0;
 };
 
-typedef ::std::shared_ptr< ViewRepaintHandler > ViewRepaintHandlerSharedPtr;
+typedef std::shared_ptr< ViewRepaintHandler > ViewRepaintHandlerSharedPtr;
 
 /** Interface for handling hyperlink clicks.
 
@@ -97,7 +97,7 @@ protected:
     ~HyperlinkHandler() {}
 };
 
-typedef ::std::shared_ptr< HyperlinkHandler > HyperlinkHandlerSharedPtr;
+typedef std::shared_ptr< HyperlinkHandler > HyperlinkHandlerSharedPtr;
 
 /** Interface for handling user paint state changes.
 
@@ -118,7 +118,7 @@ public:
     virtual bool disable() = 0;
 };
 
-typedef ::std::shared_ptr< UserPaintEventHandler > UserPaintEventHandlerSharedPtr;
+typedef std::shared_ptr< UserPaintEventHandler > UserPaintEventHandlerSharedPtr;
 
 /** This class multiplexes user-activated and
     slide-show global events.

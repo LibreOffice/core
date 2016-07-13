@@ -41,7 +41,7 @@ namespace {
 class RewinderEventHandler : public EventHandler
 {
 public:
-    typedef ::std::function<bool ()> Action;
+    typedef std::function<bool ()> Action;
     explicit RewinderEventHandler (const Action& rAction) : maAction(rAction) {}
     virtual ~RewinderEventHandler() {}
 private:
@@ -53,7 +53,7 @@ private:
 class RewinderAnimationEventHandler : public AnimationEventHandler
 {
 public:
-    typedef ::std::function<bool (const AnimationNodeSharedPtr& rpNode)> Action;
+    typedef std::function<bool (const AnimationNodeSharedPtr& rpNode)> Action;
     explicit RewinderAnimationEventHandler (const Action& rAction) : maAction(rAction) {}
     virtual ~RewinderAnimationEventHandler() {}
 private:
@@ -155,9 +155,9 @@ void EffectRewinder::setRootAnimationNode (
 
 
 bool EffectRewinder::rewind (
-    const ::std::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
-    const ::std::function<void ()>& rSlideRewindFunctor,
-    const ::std::function<void ()>& rPreviousSlideFunctor)
+    const std::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
+    const std::function<void ()>& rSlideRewindFunctor,
+    const std::function<void ()>& rPreviousSlideFunctor)
 {
     mpPaintLock = rpPaintLock;
 
@@ -184,7 +184,7 @@ bool EffectRewinder::rewind (
         // No main sequence effects to rewind on the current slide.
         // Go back to the previous slide.
         mpAsynchronousRewindEvent = makeEvent(
-            ::std::bind(
+            std::bind(
                 &EffectRewinder::asynchronousRewindToPreviousSlide,
                 this,
                 rPreviousSlideFunctor),
@@ -195,7 +195,7 @@ bool EffectRewinder::rewind (
         // The actual rewinding is done asynchronously so that we can safely
         // call other methods.
         mpAsynchronousRewindEvent = makeEvent(
-            ::std::bind(
+            std::bind(
                 &EffectRewinder::asynchronousRewind,
                 this,
                 nSkipCount,
@@ -222,12 +222,12 @@ void EffectRewinder::skipAllMainSequenceEffects()
 
     const int nTotalMainSequenceEffectCount (countMainSequenceEffects());
     mpAsynchronousRewindEvent = makeEvent(
-        ::std::bind(
+        std::bind(
             &EffectRewinder::asynchronousRewind,
             this,
             nTotalMainSequenceEffectCount,
             false,
-            ::std::function<void ()>()),
+            std::function<void ()>()),
         "EffectRewinder::asynchronousRewind");
     mrEventQueue.addEvent(mpAsynchronousRewindEvent);
 }
@@ -238,7 +238,7 @@ sal_Int32 EffectRewinder::countMainSequenceEffects()
     // Determine the number of main sequence effects.
     sal_Int32 nMainSequenceNodeCount (0);
 
-    ::std::queue<uno::Reference<animations::XAnimationNode> > aNodeQueue;
+    std::queue<uno::Reference<animations::XAnimationNode> > aNodeQueue;
     aNodeQueue.push(mxCurrentAnimationRootNode);
     while ( ! aNodeQueue.empty())
     {
@@ -296,7 +296,7 @@ bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
 {
     // This notification is only relevant for us when the rpNode belongs to
     // the main sequence.
-    BaseNodeSharedPtr pBaseNode (::std::dynamic_pointer_cast<BaseNode>(rpNode));
+    BaseNodeSharedPtr pBaseNode (std::dynamic_pointer_cast<BaseNode>(rpNode));
     if ( ! pBaseNode)
         return false;
 
@@ -339,7 +339,7 @@ void EffectRewinder::asynchronousRewind (
         if (rSlideRewindFunctor)
             rSlideRewindFunctor();
         mpAsynchronousRewindEvent = makeEvent(
-            ::std::bind(
+            std::bind(
                 &EffectRewinder::asynchronousRewind,
                 this,
                 nEffectCount,
@@ -370,7 +370,7 @@ void EffectRewinder::asynchronousRewind (
 
 
 void EffectRewinder::asynchronousRewindToPreviousSlide (
-    const ::std::function<void ()>& rSlideRewindFunctor)
+    const std::function<void ()>& rSlideRewindFunctor)
 {
     OSL_ASSERT(mpAsynchronousRewindEvent);
 

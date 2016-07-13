@@ -203,7 +203,7 @@ private:
         effects, we have an inner vector containing a distinct
         bitmap for each of the SlideAnimationStates.
     */
-    typedef ::std::vector< std::pair< UnoViewSharedPtr,
+    typedef std::vector< std::pair< UnoViewSharedPtr,
                                       VectorOfSlideBitmaps > > VectorOfVectorOfSlideBitmaps;
 
 
@@ -873,8 +873,8 @@ void SlideImpl::applyShapeAttributes(
         TargetPropertiesCreator::createTargetProperties( xRootAnimationNode, bInitial ) );
 
     // apply extracted values to our shapes
-    const ::std::size_t nSize( aProps.getLength() );
-    for( ::std::size_t i=0; i<nSize; ++i )
+    const std::size_t nSize( aProps.getLength() );
+    for( std::size_t i=0; i<nSize; ++i )
     {
         sal_Int16                         nParaIndex( -1 );
         uno::Reference< drawing::XShape > xShape( aProps[i].Target,
@@ -905,7 +905,7 @@ void SlideImpl::applyShapeAttributes(
             }
 
             AttributableShapeSharedPtr pAttrShape(
-                ::std::dynamic_pointer_cast< AttributableShape >( pShape ) );
+                std::dynamic_pointer_cast< AttributableShape >( pShape ) );
 
             if( !pAttrShape )
             {
@@ -942,8 +942,8 @@ void SlideImpl::applyShapeAttributes(
             }
 
             const uno::Sequence< beans::NamedValue >& rShapeProps( aProps[i].Properties );
-            const ::std::size_t nShapePropSize( rShapeProps.getLength() );
-            for( ::std::size_t j=0; j<nShapePropSize; ++j )
+            const std::size_t nShapePropSize( rShapeProps.getLength() );
+            for( std::size_t j=0; j<nShapePropSize; ++j )
             {
                 bool bVisible=false;
                 if( rShapeProps[j].Name.equalsIgnoreAsciiCase("visibility") &&

@@ -262,7 +262,7 @@ bool SlideChangeBase::operator()( double nValue )
     const std::size_t nEntries( maViewData.size() );
     bool bSpritesVisible( mbSpritesVisible );
 
-    for( ::std::size_t i=0; i<nEntries; ++i )
+    for( std::size_t i=0; i<nEntries; ++i )
     {
         // calc sprite offsets. The enter/leaving bitmaps are only
         // as large as the actual slides. For scaled-down

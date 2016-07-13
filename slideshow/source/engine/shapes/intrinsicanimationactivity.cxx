@@ -64,8 +64,8 @@ namespace slideshow
             IntrinsicAnimationActivity( const SlideShowContext&         rContext,
                                         const DrawShapeSharedPtr&       rDrawShape,
                                         const WakeupEventSharedPtr&     rWakeupEvent,
-                                        const ::std::vector<double>&    rTimeouts,
-                                        ::std::size_t                   nNumLoops,
+                                        const std::vector<double>&      rTimeouts,
+                                        std::size_t                     nNumLoops,
                                         CycleMode                       eCycleMode );
             IntrinsicAnimationActivity(const IntrinsicAnimationActivity&) = delete;
             IntrinsicAnimationActivity& operator=(const IntrinsicAnimationActivity&) = delete;
@@ -84,11 +84,11 @@ namespace slideshow
             std::weak_ptr<DrawShape>              mpDrawShape;
             WakeupEventSharedPtr                    mpWakeupEvent;
             IntrinsicAnimationEventHandlerSharedPtr mpListener;
-            ::std::vector<double>                   maTimeouts;
+            std::vector<double>                     maTimeouts;
             CycleMode                               meCycleMode;
-            ::std::size_t                           mnCurrIndex;
-            ::std::size_t                           mnNumLoops;
-            ::std::size_t                           mnLoopCount;
+            std::size_t                             mnCurrIndex;
+            std::size_t                             mnNumLoops;
+            std::size_t                             mnLoopCount;
             bool                                    mbIsActive;
         };
 
@@ -114,8 +114,8 @@ namespace slideshow
         IntrinsicAnimationActivity::IntrinsicAnimationActivity( const SlideShowContext&         rContext,
                                                                 const DrawShapeSharedPtr&       rDrawShape,
                                                                 const WakeupEventSharedPtr&     rWakeupEvent,
-                                                                const ::std::vector<double>&    rTimeouts,
-                                                                ::std::size_t                   nNumLoops,
+                                                                const std::vector<double>&      rTimeouts,
+                                                                std::size_t                     nNumLoops,
                                                                 CycleMode                       eCycleMode ) :
             maContext( rContext ),
             mpDrawShape( rDrawShape ),
@@ -190,8 +190,8 @@ namespace slideshow
                 return false;
             }
 
-            ::std::size_t       nNewIndex = 0;
-            const ::std::size_t nNumFrames(maTimeouts.size());
+            std::size_t         nNewIndex = 0;
+            const std::size_t nNumFrames(maTimeouts.size());
             switch( meCycleMode )
             {
                 case CYCLE_LOOP:
@@ -208,7 +208,7 @@ namespace slideshow
 
                 case CYCLE_PINGPONGLOOP:
                 {
-                    ::std::size_t nTrueIndex( mnCurrIndex < nNumFrames ?
+                    std::size_t nTrueIndex( mnCurrIndex < nNumFrames ?
                                               mnCurrIndex :
                                               2*nNumFrames - mnCurrIndex - 1 );
                     pDrawShape->setIntrinsicAnimationFrame( nTrueIndex );
@@ -258,8 +258,8 @@ namespace slideshow
             const SlideShowContext&         rContext,
             const DrawShapeSharedPtr&       rDrawShape,
             const WakeupEventSharedPtr&     rWakeupEvent,
-            const ::std::vector<double>&    rTimeouts,
-            ::std::size_t                   nNumLoops,
+            const std::vector<double>&      rTimeouts,
+            std::size_t                     nNumLoops,
             CycleMode                       eCycleMode )
         {
             return ActivitySharedPtr(

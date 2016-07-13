@@ -55,7 +55,7 @@ namespace slideshow
             virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) = 0;
         };
 
-        typedef ::std::shared_ptr< AnimationEventHandler > AnimationEventHandlerSharedPtr;
+        typedef std::shared_ptr< AnimationEventHandler > AnimationEventHandlerSharedPtr;
 
     }
 }

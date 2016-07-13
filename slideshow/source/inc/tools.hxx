@@ -66,21 +66,21 @@ namespace slideshow
         class Shape;
         class ShapeAttributeLayer;
 
-        typedef ::std::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
+        typedef std::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
 
         template <typename T>
-        inline ::std::size_t hash_value( T const * p )
+        inline std::size_t hash_value( T const * p )
         {
-            ::std::size_t d = static_cast< ::std::size_t >(
-                reinterpret_cast< ::std::ptrdiff_t >(p) );
+            std::size_t d = static_cast< std::size_t >(
+                reinterpret_cast< std::ptrdiff_t >(p) );
             return d + (d >> 3);
         }
 
         // xxx todo: remove with boost::hash when 1.33 is available
         template <typename T>
-        struct hash : ::std::unary_function<T, ::std::size_t>
+        struct hash : std::unary_function<T, std::size_t>
         {
-            ::std::size_t operator()( T const& val ) const {
+            std::size_t operator()( T const& val ) const {
                 return hash_value(val);
             }
         };
@@ -90,7 +90,7 @@ namespace slideshow
 namespace com { namespace sun { namespace star { namespace uno {
 
         template <typename T>
-        inline ::std::size_t hash_value(
+        inline std::size_t hash_value(
             css::uno::Reference<T> const& x )
         {
             // normalize to object root, because _only_ XInterface is defined
@@ -287,7 +287,7 @@ namespace slideshow
                                   const basegfx::B2IVector&                     rSize );
 
         /// Gets a random ordinal [0,n)
-        inline ::std::size_t getRandomOrdinal( const ::std::size_t n )
+        inline std::size_t getRandomOrdinal( const std::size_t n )
         {
             return comphelper::rng::uniform_size_distribution(0, n-1);
         }

@@ -134,7 +134,7 @@ namespace slideshow
 
             const double nDuration( mxPlayer->getDuration() );
             if( mxPlayer->isPlaying() )
-                return ::std::max( 0.0,
+                return std::max( 0.0,
                                    nDuration - mxPlayer->getMediaTime() );
             else
                 return nDuration;

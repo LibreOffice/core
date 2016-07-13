@@ -31,7 +31,7 @@ namespace slideshow
     namespace internal
     {
         class ShapeSubset;
-        typedef ::std::shared_ptr< ShapeSubset > ShapeSubsetSharedPtr;
+        typedef std::shared_ptr< ShapeSubset > ShapeSubsetSharedPtr;
 
         /* Definition of ShapeSubset class */
 

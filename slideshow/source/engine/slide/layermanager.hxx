@@ -239,8 +239,8 @@ namespace slideshow
             /** Set of all shapes
              */
         private:
-            typedef ::std::map< ShapeSharedPtr, LayerWeakPtr, ShapeComparator > LayerShapeMap;
-            typedef ::std::set< ShapeSharedPtr > ShapeUpdateSet;
+            typedef std::map< ShapeSharedPtr, LayerWeakPtr, ShapeComparator > LayerShapeMap;
+            typedef std::set< ShapeSharedPtr > ShapeUpdateSet;
 
 
             /// Adds shape area to containing layer's damage area
@@ -346,7 +346,7 @@ namespace slideshow
             bool                     mbDisableAnimationZOrder;
         };
 
-        typedef ::std::shared_ptr< LayerManager > LayerManagerSharedPtr;
+        typedef std::shared_ptr< LayerManager > LayerManagerSharedPtr;
     }
 }
 

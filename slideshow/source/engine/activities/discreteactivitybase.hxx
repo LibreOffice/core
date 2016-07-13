@@ -60,16 +60,16 @@ namespace slideshow
             virtual void startAnimation() override;
 
             sal_uInt32 calcFrameIndex( sal_uInt32       nCurrCalls,
-                                       ::std::size_t    nVectorSize ) const;
+                                       std::size_t      nVectorSize ) const;
 
             sal_uInt32 calcRepeatCount( sal_uInt32      nCurrCalls,
-                                        ::std::size_t   nVectorSize ) const;
+                                        std::size_t     nVectorSize ) const;
 
-            ::std::size_t getNumberOfKeyTimes() const { return maDiscreteTimes.size(); }
+            std::size_t getNumberOfKeyTimes() const { return maDiscreteTimes.size(); }
 
         private:
             WakeupEventSharedPtr            mpWakeupEvent;
-            const ::std::vector< double >   maDiscreteTimes;
+            const std::vector< double >     maDiscreteTimes;
             const double                    mnSimpleDuration;
             sal_uInt32                      mnCurrPerformCalls;
         };

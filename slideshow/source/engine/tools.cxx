@@ -438,7 +438,7 @@ namespace slideshow
             const beans::NamedValue*    pArray = rSequence.getConstArray();
             const size_t                nLen( rSequence.getLength() );
 
-            return ::std::any_of( pArray,
+            return std::any_of( pArray,
                                   pArray + nLen,
                                   NamedValueComparator( rSearchKey ) );
         }

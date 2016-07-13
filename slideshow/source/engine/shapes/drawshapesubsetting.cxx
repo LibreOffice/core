@@ -88,7 +88,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( static_cast< std::size_t >(nIndex) < maActionClassVector.size(),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_CHARACTER_CELL_END;
@@ -102,7 +102,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( static_cast< std::size_t >(nIndex) < maActionClassVector.size(),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_WORD_END;
@@ -116,7 +116,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( static_cast< std::size_t >(nIndex) < maActionClassVector.size(),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_SENTENCE_END;
@@ -167,10 +167,10 @@ namespace slideshow
         void DrawShapeSubsetting::updateSubsetBounds( const SubsetEntry& rSubsetEntry )
         {
             // TODO(F1): This removes too much from non-contiguous subsets
-            mnMinSubsetActionIndex = ::std::min(
+            mnMinSubsetActionIndex = std::min(
                 mnMinSubsetActionIndex,
                 rSubsetEntry.mnStartActionIndex );
-            mnMaxSubsetActionIndex = ::std::max(
+            mnMaxSubsetActionIndex = std::max(
                 mnMaxSubsetActionIndex,
                 rSubsetEntry.mnEndActionIndex );
         }
@@ -260,7 +260,7 @@ namespace slideshow
             mbNodeTreeInitialized = false;
         }
 
-        void DrawShapeSubsetting::reset( const ::std::shared_ptr< GDIMetaFile >& rMtf )
+        void DrawShapeSubsetting::reset( const std::shared_ptr< GDIMetaFile >& rMtf )
         {
             reset();
             mpMtf = rMtf;
@@ -731,9 +731,9 @@ namespace slideshow
                                       const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd,
                                       DocTreeNode::NodeType                                                eNodeType )
             {
-                return DocTreeNode( ::std::distance(rBegin,
+                return DocTreeNode( std::distance(rBegin,
                                                     rStart),
-                                    ::std::distance(rBegin,
+                                    std::distance(rBegin,
                                                     rEnd),
                                     eNodeType );
             }

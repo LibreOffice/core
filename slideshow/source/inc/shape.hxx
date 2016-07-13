@@ -43,7 +43,7 @@ namespace slideshow
         // forward declaration necessary, because methods use ShapeSharedPtr
         class Shape;
 
-        typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
+        typedef std::shared_ptr< Shape > ShapeSharedPtr;
 
         /** Represents a slide's shape object.
 
@@ -251,11 +251,11 @@ namespace slideshow
             };
         };
 
-        typedef ::std::shared_ptr< Shape > ShapeSharedPtr;
+        typedef std::shared_ptr< Shape > ShapeSharedPtr;
 
         /** A set which contains all shapes in an ordered fashion.
          */
-        typedef ::std::set< ShapeSharedPtr, Shape::lessThanShape >  ShapeSet;
+        typedef std::set< ShapeSharedPtr, Shape::lessThanShape >    ShapeSet;
     }
 }
 

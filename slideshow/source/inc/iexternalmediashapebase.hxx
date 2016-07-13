@@ -76,7 +76,7 @@ namespace slideshow
             virtual void setMediaTime(double fTime) = 0;
         };
 
-        typedef ::std::shared_ptr< IExternalMediaShapeBase > IExternalMediaShapeBaseSharedPtr;
+        typedef std::shared_ptr< IExternalMediaShapeBase > IExternalMediaShapeBaseSharedPtr;
 
     }
 }

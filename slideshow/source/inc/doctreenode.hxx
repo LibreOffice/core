@@ -119,7 +119,7 @@ namespace slideshow
 
         };
 
-        typedef ::std::vector< DocTreeNode > VectorOfDocTreeNodes;
+        typedef std::vector< DocTreeNode > VectorOfDocTreeNodes;
     }
 }
 

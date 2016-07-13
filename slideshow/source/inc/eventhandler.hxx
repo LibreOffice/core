@@ -51,7 +51,7 @@ namespace slideshow
             virtual bool handleEvent() = 0;
         };
 
-        typedef ::std::shared_ptr< EventHandler > EventHandlerSharedPtr;
+        typedef std::shared_ptr< EventHandler > EventHandlerSharedPtr;
 
     }
 }

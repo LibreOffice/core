@@ -97,7 +97,7 @@ namespace slideshow
                 constructor). When the queue is empty (i.e. isEmpty()
                 returns true), the returned value is the highest
                 representable double value
-                (::std::numeric_limits<double>::max()). If the topmost
+                (std::numeric_limits<double>::max()). If the topmost
                 event in the queue is already pending, the timeout
                 returned here will actually be negative.
             */
@@ -121,7 +121,7 @@ namespace slideshow
         private:
             mutable ::osl::Mutex      maMutex;
 
-            struct EventEntry : public ::std::unary_function<EventEntry, bool>
+            struct EventEntry : public std::unary_function<EventEntry, bool>
             {
                 EventSharedPtr  pEvent;
                 double          nTime;
@@ -132,9 +132,9 @@ namespace slideshow
                     : pEvent(p), nTime(t) {}
             };
 
-            typedef ::std::priority_queue< EventEntry > ImplQueueType;
+            typedef std::priority_queue< EventEntry > ImplQueueType;
             ImplQueueType                   maEvents;
-            typedef ::std::vector<EventEntry> EventEntryVector;
+            typedef std::vector<EventEntry> EventEntryVector;
             EventEntryVector                maNextEvents;
             ImplQueueType                   maNextNextEvents;
             void process_( bool bFireAllEvents );

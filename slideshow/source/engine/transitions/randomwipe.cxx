@@ -60,7 +60,7 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     for ( sal_Int32 pos1 = nElements ; pos1-- ; )
     {
         const sal_Int32 pos2 = getRandomOrdinal(pos1+1);
-        ::std::swap(m_positions[ pos1], m_positions[ pos2 ]);
+        std::swap(m_positions[ pos1], m_positions[ pos2 ]);
     }
 }
 

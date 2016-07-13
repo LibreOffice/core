@@ -31,7 +31,7 @@ class AnimationColorNode : public AnimationBaseNode
 public:
     AnimationColorNode(
         css::uno::Reference<css::animations::XAnimationNode> const& xNode,
-        ::std::shared_ptr<BaseContainerNode> const& pParent,
+        std::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext )
         : AnimationBaseNode( xNode, pParent, rContext ),
           mxColorNode( xNode, css::uno::UNO_QUERY_THROW ) {}

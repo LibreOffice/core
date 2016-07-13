@@ -56,7 +56,7 @@ namespace slideshow
             virtual void resetCursor() = 0;
         };
 
-        typedef ::std::shared_ptr< CursorManager > CursorManagerSharedPtr;
+        typedef std::shared_ptr< CursorManager > CursorManagerSharedPtr;
 
     }
 }

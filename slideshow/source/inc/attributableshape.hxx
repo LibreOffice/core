@@ -33,7 +33,7 @@ namespace slideshow
         // forward declaration necessary, because methods use AttributableShapeSharedPtr
         class AttributableShape;
 
-        typedef ::std::shared_ptr< AttributableShape > AttributableShapeSharedPtr;
+        typedef std::shared_ptr< AttributableShape > AttributableShapeSharedPtr;
 
         /** Represents an animatable shape, that can have its
             attributes changed.

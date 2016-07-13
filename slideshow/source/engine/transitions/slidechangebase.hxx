@@ -108,7 +108,7 @@ protected:
         const UnoViewSharedPtr& getView() const { return mpView; }
     };
 
-    typedef ::std::vector<ViewEntry> ViewsVecT;
+    typedef std::vector<ViewEntry> ViewsVecT;
 
     ViewsVecT::const_iterator beginViews() { return maViewData.begin(); }
     ViewsVecT::const_iterator endViews() { return maViewData.end(); }

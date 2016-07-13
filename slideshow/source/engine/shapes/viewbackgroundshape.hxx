@@ -90,7 +90,7 @@ namespace slideshow
             const ::basegfx::B2DRectangle                       maBounds;
         };
 
-        typedef ::std::shared_ptr< ViewBackgroundShape > ViewBackgroundShapeSharedPtr;
+        typedef std::shared_ptr< ViewBackgroundShape > ViewBackgroundShapeSharedPtr;
 
     }
 }

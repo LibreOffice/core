@@ -296,7 +296,7 @@ struct EventMultiplexerImpl
         setAutomaticMode(true) call is then able to
         regenerate the event.
     */
-    ::std::weak_ptr< Event >    mpTickEvent;
+    std::weak_ptr< Event >      mpTickEvent;
     bool                          mbIsAutoMode;
 };
 
@@ -579,7 +579,7 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     // coordinate space)
     UnoViewVector::const_iterator       aIter;
     const UnoViewVector::const_iterator aEnd  ( mrViewContainer.end() );
-    if( (aIter=::std::find_if(
+    if( (aIter=std::find_if(
              mrViewContainer.begin(),
              aEnd,
              [&xView]( const UnoViewSharedPtr& pView )

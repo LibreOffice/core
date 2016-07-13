@@ -100,9 +100,9 @@ void AnimationAudioNode::activate_st()
 struct NotifyAudioStopped
 {
     EventMultiplexer & m_rEventMultiplexer;
-    ::std::shared_ptr<BaseNode> m_pSelf;
+    std::shared_ptr<BaseNode> m_pSelf;
     NotifyAudioStopped(EventMultiplexer & rEventMultiplexer,
-            ::std::shared_ptr<BaseNode> const& pSelf)
+            std::shared_ptr<BaseNode> const& pSelf)
         : m_rEventMultiplexer(rEventMultiplexer), m_pSelf(pSelf) { }
 
     void operator()()

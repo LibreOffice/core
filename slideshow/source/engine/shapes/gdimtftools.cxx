@@ -264,7 +264,7 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
 }
 
 bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
-                              ::std::size_t&                o_rLoopCount,
+                              std::size_t&                  o_rLoopCount,
                               CycleMode&                    o_eCycleMode,
                               const Graphic&                rGraphic )
 {

@@ -63,7 +63,7 @@ namespace slideshow
                               "lookupAttributableShape(): no shape found for given XShape" );
 
             AttributableShapeSharedPtr pRes(
-                ::std::dynamic_pointer_cast< AttributableShape >( pShape ) );
+                std::dynamic_pointer_cast< AttributableShape >( pShape ) );
 
             // TODO(E3): Cannot throw here, people might set animation info
             // for non-animatable shapes from the API. AnimationNodes must catch

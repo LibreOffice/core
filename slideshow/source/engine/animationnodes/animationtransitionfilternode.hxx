@@ -31,7 +31,7 @@ class AnimationTransitionFilterNode : public AnimationBaseNode
 public:
     AnimationTransitionFilterNode(
         css::uno::Reference<css::animations::XAnimationNode> const& xNode,
-        ::std::shared_ptr<BaseContainerNode> const& pParent,
+        std::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext )
         : AnimationBaseNode( xNode, pParent, rContext ),
           mxTransitionFilterNode( xNode, css::uno::UNO_QUERY_THROW)

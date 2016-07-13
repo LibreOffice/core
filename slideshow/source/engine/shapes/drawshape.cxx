@@ -166,7 +166,7 @@ namespace slideshow
             // redraw all view shapes, by calling their update() method
             ViewShape::RenderArgs renderArgs( getViewRenderArgs() );
             bool bVisible = isVisible();
-            if( ::std::count_if( maViewShapes.begin(),
+            if( std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
                                  [this, &bVisible, &renderArgs, &nUpdateFlags]
                                  ( const ViewShapeSharedPtr& pShape )
@@ -618,7 +618,7 @@ namespace slideshow
                                       bool                      bRedrawLayer )
         {
             // already added?
-            if( ::std::any_of( maViewShapes.begin(),
+            if( std::any_of( maViewShapes.begin(),
                                maViewShapes.end(),
                                [&rNewLayer]
                                ( const ViewShapeSharedPtr& pShape )
@@ -653,7 +653,7 @@ namespace slideshow
         {
             const ViewShapeVector::iterator aEnd( maViewShapes.end() );
 
-            OSL_ENSURE( ::std::count_if(maViewShapes.begin(),
+            OSL_ENSURE( std::count_if(maViewShapes.begin(),
                                         aEnd,
                                         [&rLayer]
                                         ( const ViewShapeSharedPtr& pShape )
@@ -662,7 +662,7 @@ namespace slideshow
 
             ViewShapeVector::iterator aIter;
 
-            if( (aIter=::std::remove_if( maViewShapes.begin(),
+            if( (aIter=std::remove_if( maViewShapes.begin(),
                                          aEnd,
                                          [&rLayer]
                                          ( const ViewShapeSharedPtr& pShape )
@@ -773,10 +773,10 @@ namespace slideshow
                         {
                             const ::basegfx::B2DSize rShapeBorder( rViewShape->getAntialiasingBorder() );
 
-                            aAABorder.setX( ::std::max(
+                            aAABorder.setX( std::max(
                                     rShapeBorder.getX(),
                                     aAABorder.getX() ) );
-                            aAABorder.setY( ::std::max(
+                            aAABorder.setY( std::max(
                                     rShapeBorder.getY(),
                                     aAABorder.getY() ) );
                         }
@@ -832,7 +832,7 @@ namespace slideshow
             return (!maAnimationFrames.empty() || mbDrawingLayerAnim);
         }
 
-        void DrawShape::setIntrinsicAnimationFrame( ::std::size_t nCurrFrame )
+        void DrawShape::setIntrinsicAnimationFrame( std::size_t nCurrFrame )
         {
             ENSURE_OR_RETURN_VOID( nCurrFrame < maAnimationFrames.size(),
                                "DrawShape::setIntrinsicAnimationFrame(): frame index out of bounds" );

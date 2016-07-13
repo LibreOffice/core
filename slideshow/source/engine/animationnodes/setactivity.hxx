@@ -42,7 +42,7 @@ template <class AnimationT>
 class SetActivity : public AnimationActivity
 {
 public:
-    typedef ::std::shared_ptr< AnimationT >   AnimationSharedPtrT;
+    typedef std::shared_ptr< AnimationT >     AnimationSharedPtrT;
     typedef typename AnimationT::ValueType      ValueT;
 
     SetActivity( const ActivitiesFactory::CommonParameters& rParms,
@@ -131,7 +131,7 @@ private:
 
 template <class AnimationT> AnimationActivitySharedPtr makeSetActivity(
     const ActivitiesFactory::CommonParameters& rParms,
-    const ::std::shared_ptr< AnimationT >&   rAnimation,
+    const std::shared_ptr< AnimationT >&     rAnimation,
     const typename AnimationT::ValueType&      rToValue )
 {
     return AnimationActivitySharedPtr(

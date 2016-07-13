@@ -145,7 +145,7 @@ public:
         const OptionalValueType&                      rTo,
         const OptionalValueType&                      rBy,
         const ActivityParameters&                     rParms,
-        const ::std::shared_ptr< AnimationType >&   rAnim,
+        const std::shared_ptr< AnimationType >&     rAnim,
         const Interpolator< ValueType >&              rInterpolator,
         bool                                          bCumulative )
         : BaseType( rParms ),
@@ -361,7 +361,7 @@ private:
     mutable ValueType                               maStartInterpolationValue;
     mutable sal_uInt32                              mnIteration;
 
-    ::std::shared_ptr< AnimationType >    mpAnim;
+    std::shared_ptr< AnimationType >      mpAnim;
     Interpolator< ValueType >               maInterpolator;
     bool                                    mbDynamicStartValue;
     bool                                    mbCumulative;
@@ -382,7 +382,7 @@ AnimationActivitySharedPtr createFromToByActivity(
     const uno::Any&                                          rToAny,
     const uno::Any&                                          rByAny,
     const ActivityParameters&                                rParms,
-    const ::std::shared_ptr< AnimationType >&              rAnim,
+    const std::shared_ptr< AnimationType >&                rAnim,
     const Interpolator< typename AnimationType::ValueType >& rInterpolator,
     bool                                                     bCumulative,
     const ShapeSharedPtr&                                    rShape,
@@ -620,7 +620,7 @@ AnimationActivitySharedPtr createValueListActivity(
     ValueVectorType aValueVector;
     aValueVector.reserve( rValues.getLength() );
 
-    for( ::std::size_t i=0, nLen=rValues.getLength(); i<nLen; ++i )
+    for( std::size_t i=0, nLen=rValues.getLength(); i<nLen; ++i )
     {
         ValueType aValue;
         ENSURE_OR_THROW(
@@ -663,7 +663,7 @@ template<typename AnimationType>
 AnimationActivitySharedPtr createActivity(
     const ActivitiesFactory::CommonParameters&               rParms,
     const uno::Reference< animations::XAnimate >&            xNode,
-    const ::std::shared_ptr< AnimationType >&              rAnim,
+    const std::shared_ptr< AnimationType >&                rAnim,
     const Interpolator< typename AnimationType::ValueType >& rInterpolator
     = Interpolator< typename AnimationType::ValueType >() )
 {
@@ -797,8 +797,8 @@ AnimationActivitySharedPtr createActivity(
                 if( !aKeyTimes.hasElements() )
                 {
                     // create a dummy vector of 2 key times
-                    const ::std::size_t nLen( 2 );
-                    for( ::std::size_t i=0; i<nLen; ++i )
+                    const std::size_t nLen( 2 );
+                    for( std::size_t i=0; i<nLen; ++i )
                         aActivityParms.maDiscreteTimes.push_back( double(i)/nLen );
                 }
 

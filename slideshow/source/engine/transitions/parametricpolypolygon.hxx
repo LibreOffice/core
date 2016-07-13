@@ -82,7 +82,7 @@ namespace slideshow
             virtual ::basegfx::B2DPolyPolygon operator()( double t ) = 0;
         };
 
-        typedef ::std::shared_ptr< ParametricPolyPolygon > ParametricPolyPolygonSharedPtr;
+        typedef std::shared_ptr< ParametricPolyPolygon > ParametricPolyPolygonSharedPtr;
 
     }
 }

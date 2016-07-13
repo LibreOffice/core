@@ -100,7 +100,7 @@ namespace slideshow
             const sal_Size                                  mnNumPropEntries;
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewAppletShapeSharedPtr > ViewAppletShapeVector;
+            typedef std::vector< ViewAppletShapeSharedPtr > ViewAppletShapeVector;
             ViewAppletShapeVector                           maViewAppletShapes;
             bool                                             mbIsPlaying;
         };
@@ -174,7 +174,7 @@ namespace slideshow
         {
             const ViewAppletShapeVector::iterator aEnd( maViewAppletShapes.end() );
 
-            OSL_ENSURE( ::std::count_if(maViewAppletShapes.begin(),
+            OSL_ENSURE( std::count_if(maViewAppletShapes.begin(),
                                         aEnd,
                                         [&rLayer]
                                         ( const ViewAppletShapeSharedPtr& pShape )
@@ -183,7 +183,7 @@ namespace slideshow
 
             ViewAppletShapeVector::iterator aIter;
 
-            if( (aIter=::std::remove_if( maViewAppletShapes.begin(),
+            if( (aIter=std::remove_if( maViewAppletShapes.begin(),
                                          aEnd,
                                          [&rLayer]
                                          ( const ViewAppletShapeSharedPtr& pShape )
@@ -209,7 +209,7 @@ namespace slideshow
         bool AppletShape::implRender( const ::basegfx::B2DRange& rCurrBounds ) const
         {
             // redraw all view shapes, by calling their update() method
-            if( ::std::count_if( maViewAppletShapes.begin(),
+            if( std::count_if( maViewAppletShapes.begin(),
                                  maViewAppletShapes.end(),
                                  [&rCurrBounds]
                                  ( const ViewAppletShapeSharedPtr& pShape )

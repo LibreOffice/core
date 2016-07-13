@@ -591,7 +591,7 @@ namespace slideshow
                 Type of animation to generate (determines the
                 interface GenericAnimation will implement).
              */
-            template< typename AnimationBase > ::std::shared_ptr< AnimationBase >
+            template< typename AnimationBase > std::shared_ptr< AnimationBase >
                 makeGenericAnimation( const ShapeManagerSharedPtr&                             rShapeManager,
                                       int                                                      nFlags,
                                       bool                              (ShapeAttributeLayer::*pIsValid)() const,
@@ -599,7 +599,7 @@ namespace slideshow
                                       typename AnimationBase::ValueType (ShapeAttributeLayer::*pGetValue)() const,
                                       void                              (ShapeAttributeLayer::*pSetValue)( const typename AnimationBase::ValueType& ) )
             {
-                return ::std::shared_ptr< AnimationBase >(
+                return std::shared_ptr< AnimationBase >(
                     new GenericAnimation< AnimationBase,
                                           SGI_identity< typename AnimationBase::ValueType > >(
                                               rShapeManager,
