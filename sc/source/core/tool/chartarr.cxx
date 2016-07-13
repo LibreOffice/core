@@ -35,7 +35,7 @@
 
 #include <vector>
 
-using ::std::vector;
+using std::vector;
 
 ScMemChart::ScMemChart(SCCOL nCols, SCROW nRows)
 {

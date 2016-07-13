@@ -73,7 +73,7 @@ struct ScSlotData
 
     ScSlotData( SCROW r1, SCROW r2, SCSIZE s, SCSIZE c ) : nStartRow(r1), nStopRow(r2), nSlice(s), nCumulated(c) {}
 };
-typedef ::std::vector< ScSlotData > ScSlotDistribution;
+typedef std::vector< ScSlotData > ScSlotDistribution;
 #if MAXROWCOUNT_DEFINE <= 65536
 // Linear distribution.
 static ScSlotDistribution aSlotDistribution( ScSlotData( 0, MAXROWCOUNT, BCA_SLOT_ROWS, 0));
@@ -471,7 +471,7 @@ void ScBroadcastAreaSlot::UpdateRemoveArea( ScBroadcastArea* pArea )
 
 void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
 {
-    ::std::pair< ScBroadcastAreas::iterator, bool > aPair =
+    std::pair< ScBroadcastAreas::iterator, bool > aPair =
         aBroadcastAreaTbl.insert( pArea);
     if (aPair.second)
         pArea->IncRef();
@@ -1170,7 +1170,7 @@ void ScBroadcastAreaSlotMachine::RemoveBulkGroupArea( ScBroadcastArea* pArea )
 void ScBroadcastAreaSlotMachine::PushAreaToBeErased( ScBroadcastAreaSlot* pSlot,
         ScBroadcastAreas::iterator& rIter )
 {
-    maAreasToBeErased.push_back( ::std::make_pair( pSlot, rIter));
+    maAreasToBeErased.push_back( std::make_pair( pSlot, rIter));
 }
 
 void ScBroadcastAreaSlotMachine::FinallyEraseAreas( ScBroadcastAreaSlot* pSlot )

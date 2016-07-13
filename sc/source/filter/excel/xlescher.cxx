@@ -62,7 +62,7 @@ long lclGetXFromCol( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclCol, sal_uIn
 {
     SCCOL nScCol = static_cast< SCCOL >( nXclCol );
     return static_cast< long >( fScale * (rDoc.GetColOffset( nScCol, nScTab ) +
-        ::std::min( nOffset / 1024.0, 1.0 ) * rDoc.GetColWidth( nScCol, nScTab )) + 0.5 );
+        std::min( nOffset / 1024.0, 1.0 ) * rDoc.GetColWidth( nScCol, nScTab )) + 0.5 );
 }
 
 /** Calculates a drawing layer Y position (in twips) from an object row position. */
@@ -70,7 +70,7 @@ long lclGetYFromRow( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uIn
 {
     SCROW nScRow = static_cast< SCROW >( nXclRow );
     return static_cast< long >( fScale * (rDoc.GetRowOffset( nScRow, nScTab ) +
-        ::std::min( nOffset / 256.0, 1.0 ) * rDoc.GetRowHeight( nScRow, nScTab )) + 0.5 );
+        std::min( nOffset / 256.0, 1.0 ) * rDoc.GetRowHeight( nScRow, nScTab )) + 0.5 );
 }
 
 /** Calculates an object column position from a drawing layer X position (in twips). */

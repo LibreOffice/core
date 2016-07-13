@@ -95,7 +95,7 @@ private:
         explicit            SheetInfo( const SheetInfoModel& rModel, sal_Int16 nCalcSheet, const OUString& rCalcName );
     };
 
-    typedef ::std::pair< sal_Int16, OUString > IndexNamePair;
+    typedef std::pair< sal_Int16, OUString > IndexNamePair;
 
     /** Creates a new sheet in the Calc document. Does not insert anything in the own lists. */
     IndexNamePair       createSheet( const OUString& rPreferredName, sal_Int32 nSheetPos );

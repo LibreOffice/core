@@ -210,7 +210,7 @@ public:
     void Encrypt( SvStream& rStrm, float fValue );
     void Encrypt( SvStream& rStrm, double fValue );
 
-    void EncryptBytes( SvStream& rStrm, ::std::vector<sal_uInt8>& aBytes );
+    void EncryptBytes( SvStream& rStrm, std::vector<sal_uInt8>& aBytes );
 
 private:
     void Init( const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData );

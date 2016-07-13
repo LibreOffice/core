@@ -104,7 +104,7 @@ protected:
     EditEngine*         pEdit;
     SfxItemPool*        pPool;
     SfxItemPool*        pDocPool;
-    ::std::vector< ScEEParseEntry* > maList;
+    std::vector< ScEEParseEntry* > maList;
     ScEEParseEntry*     pActEntry;
     ColWidthsMap        maColWidths;
     int                 nLastToken;

@@ -139,7 +139,7 @@ static sal_uInt16 lcl_canGrow( sal_uInt16 nOld, sal_uInt16 nByMin = 1 )
         return nByMin ? nByMin : 1;
     if (nOld == SAL_MAX_UINT16)
         return 0;
-    sal_uInt32 nNew = ::std::max( static_cast<sal_uInt32>(nOld) * 2,
+    sal_uInt32 nNew = std::max( static_cast<sal_uInt32>(nOld) * 2,
             static_cast<sal_uInt32>(nOld) + nByMin);
     if (nNew > SAL_MAX_UINT16)
         nNew = SAL_MAX_UINT16;
@@ -156,7 +156,7 @@ bool TokenPool::GrowString()
 
     sal_uInt16      nL;
 
-    OUString** ppP_StrNew = new (::std::nothrow) OUString *[ nP_StrNew ];
+    OUString** ppP_StrNew = new (std::nothrow) OUString *[ nP_StrNew ];
     if (!ppP_StrNew)
         return false;
 
@@ -178,7 +178,7 @@ bool TokenPool::GrowDouble()
     if (!nP_DblNew)
         return false;
 
-    double* pP_DblNew = new (::std::nothrow) double[ nP_DblNew ];
+    double* pP_DblNew = new (std::nothrow) double[ nP_DblNew ];
     if (!pP_DblNew)
         return false;
 
@@ -200,7 +200,7 @@ void TokenPool::GrowError()
     if (!nP_ErrNew)
         return false;
 
-    sal_uInt16*     pP_ErrNew = new (::std::nothrow) sal_uInt16[ nP_ErrNew ];
+    sal_uInt16*     pP_ErrNew = new (std::nothrow) sal_uInt16[ nP_ErrNew ];
     if (!pP_ErrNew)
         return false;
 
@@ -223,7 +223,7 @@ bool TokenPool::GrowTripel( sal_uInt16 nByMin )
 
     sal_uInt16          nL;
 
-    ScSingleRefData** ppP_RefTrNew = new (::std::nothrow) ScSingleRefData *[ nP_RefTrNew ];
+    ScSingleRefData** ppP_RefTrNew = new (std::nothrow) ScSingleRefData *[ nP_RefTrNew ];
     if (!ppP_RefTrNew)
         return false;
 
@@ -245,7 +245,7 @@ bool TokenPool::GrowId()
     if (!nP_IdNew)
         return false;
 
-    sal_uInt16* pP_IdNew = new (::std::nothrow) sal_uInt16[ nP_IdNew ];
+    sal_uInt16* pP_IdNew = new (std::nothrow) sal_uInt16[ nP_IdNew ];
     if (!pP_IdNew)
         return false;
 
@@ -265,9 +265,9 @@ bool TokenPool::GrowElement()
     if (!nElementNew)
         return false;
 
-    sal_uInt16* pElementNew = new (::std::nothrow) sal_uInt16[ nElementNew ];
-    E_TYPE* pTypeNew = new (::std::nothrow) E_TYPE[ nElementNew ];
-    sal_uInt16* pSizeNew = new (::std::nothrow) sal_uInt16[ nElementNew ];
+    sal_uInt16* pElementNew = new (std::nothrow) sal_uInt16[ nElementNew ];
+    E_TYPE* pTypeNew = new (std::nothrow) E_TYPE[ nElementNew ];
+    sal_uInt16* pSizeNew = new (std::nothrow) sal_uInt16[ nElementNew ];
     if (!pElementNew || !pTypeNew || !pSizeNew)
     {
         delete [] pElementNew;
@@ -300,7 +300,7 @@ bool TokenPool::GrowExt()
     if (!nNewSize)
         return false;
 
-    EXTCONT** ppNew = new (::std::nothrow) EXTCONT*[ nNewSize ];
+    EXTCONT** ppNew = new (std::nothrow) EXTCONT*[ nNewSize ];
     if (!ppNew)
         return false;
 
@@ -319,7 +319,7 @@ bool TokenPool::GrowNlf()
     if (!nNewSize)
         return false;
 
-    NLFCONT** ppNew = new (::std::nothrow) NLFCONT*[ nNewSize ];
+    NLFCONT** ppNew = new (std::nothrow) NLFCONT*[ nNewSize ];
     if (!ppNew)
         return false;
 
@@ -338,7 +338,7 @@ bool TokenPool::GrowMatrix()
     if (!nNewSize)
         return false;
 
-    ScMatrix**  ppNew = new (::std::nothrow) ScMatrix*[ nNewSize ];
+    ScMatrix**  ppNew = new (std::nothrow) ScMatrix*[ nNewSize ];
     if (!ppNew)
         return false;
 
@@ -643,7 +643,7 @@ const TokenId TokenPool::Store( const OUString& rString )
     // create String
     if( !ppP_Str[ nP_StrAkt ] )
         //...but only, if it does not exist already
-        ppP_Str[ nP_StrAkt ] = new (::std::nothrow) OUString( rString );
+        ppP_Str[ nP_StrAkt ] = new (std::nothrow) OUString( rString );
     else
         //...copy otherwise
         *ppP_Str[ nP_StrAkt ] = rString;

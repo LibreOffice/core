@@ -278,7 +278,7 @@ struct XclExpNumFmt
 };
 
 class SvNumberFormatter;
-typedef ::std::unique_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
+typedef std::unique_ptr< SvNumberFormatter >      SvNumberFormatterPtr;
 
 /** Stores all number formats used in the document. */
 class XclExpNumFmtBuffer : public XclExpRecordBase, protected XclExpRoot
@@ -308,7 +308,7 @@ private:
     OUString            GetFormatCode ( sal_uInt32 nScNumFmt );
 
 private:
-    typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
+    typedef std::vector< XclExpNumFmt >             XclExpNumFmtVec;
 
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     XclExpNumFmtVec     maFormatMap;    /// Maps core formats to Excel indexes.
@@ -690,9 +690,9 @@ private:
         bool                mbHasStyleRec;      /// true = STYLE record created.
         explicit            XclExpBuiltInInfo();
     };
-    typedef ::std::map< sal_uInt32, XclExpBuiltInInfo > XclExpBuiltInMap;
-    typedef ::std::vector< XclExpCellBorder >           XclExpBorderList;
-    typedef ::std::vector< XclExpCellArea >             XclExpFillList;
+    typedef std::map< sal_uInt32, XclExpBuiltInInfo > XclExpBuiltInMap;
+    typedef std::vector< XclExpCellBorder >             XclExpBorderList;
+    typedef std::vector< XclExpCellArea >               XclExpFillList;
 
     XclExpXFList        maXFList;           /// List of all XF records.
     XclExpStyleList     maStyleList;        /// List of all STYLE records.

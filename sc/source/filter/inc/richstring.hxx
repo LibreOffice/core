@@ -101,7 +101,7 @@ struct FontPortionModel
 
 /** A vector with all font portions in a rich-string. */
 class FontPortionModelList {
-    ::std::vector< FontPortionModel > mvModels;
+    std::vector< FontPortionModel > mvModels;
 
 public:
     inline explicit     FontPortionModelList() : mvModels() {}
@@ -113,11 +113,11 @@ public:
 
     void push_back(const FontPortionModel& rModel) { mvModels.push_back(rModel); }
 
-    void insert(::std::vector< FontPortionModel >::iterator it,
+    void insert(std::vector< FontPortionModel >::iterator it,
                 const FontPortionModel& rModel)
     { mvModels.insert(it, rModel); }
 
-    ::std::vector< FontPortionModel >::iterator begin() { return mvModels.begin(); }
+    std::vector< FontPortionModel >::iterator begin() { return mvModels.begin(); }
 
     /** Appends a rich-string font identifier. */
     void                appendPortion( const FontPortionModel& rPortion );
@@ -202,7 +202,7 @@ public:
 
     void push_back(const PhoneticPortionModel& rModel) { mvModels.push_back(rModel); }
 
-    ::std::vector< PhoneticPortionModel >::const_iterator begin() const { return mvModels.begin(); }
+    std::vector< PhoneticPortionModel >::const_iterator begin() const { return mvModels.begin(); }
 
     /** Appends a rich-string phonetic portion. */
     void                appendPortion( const PhoneticPortionModel& rPortion );
@@ -210,7 +210,7 @@ public:
     void                importPortions( SequenceInputStream& rStrm );
 
 private:
-    ::std::vector< PhoneticPortionModel > mvModels;
+    std::vector< PhoneticPortionModel > mvModels;
 };
 
 /** Contains string data and a list of formatting runs for a rich formatted string. */

@@ -86,7 +86,7 @@ public:
         size_t getMatchItemCount() const;
 
     private:
-        ::std::vector<ScDPItemData> maItems;
+        std::vector<ScDPItemData> maItems;
     };
 
     /** single filtering criterion. */
@@ -129,7 +129,7 @@ public:
    /** Get the unique entries for a field specified by index.  The caller must
        make sure that the table is filled before calling function, or it will
        get an empty collection. */
-    const ::std::vector<SCROW>& getFieldEntries( sal_Int32 nColumn ) const;
+    const std::vector<SCROW>& getFieldEntries( sal_Int32 nColumn ) const;
 
     /** Filter the table based on the specified criteria, and copy the
         result to rTabData.  This method is used, for example, to generate
@@ -156,12 +156,12 @@ private:
      * @param nRow index of row to be tested.
      * @param rCriteria a list of criteria
      */
-    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
+    bool isRowQualified(sal_Int32 nRow, const std::vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
 
 private:
 
     /** unique field entires for each field (column). */
-    ::std::vector< ::std::vector<SCROW> > maFieldEntries;
+    std::vector< std::vector<SCROW> > maFieldEntries;
 
     /** Rows visible by standard filter query. */
     RowFlagType maShowByFilter;

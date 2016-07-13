@@ -1228,7 +1228,7 @@ SCROW ScDPCache::GetOrder(long /*nDim*/, SCROW nIndex)
 
 namespace {
 
-std::ostream& operator<< (::std::ostream& os, const OUString& str)
+std::ostream& operator<< (std::ostream& os, const OUString& str)
 {
     return os << OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
 }

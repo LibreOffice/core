@@ -41,12 +41,12 @@
 
 #include <vector>
 
-using ::std::vector;
+using std::vector;
 using namespace formula;
 
 namespace {
 
-struct MatrixAdd : public ::std::binary_function<double,double,double>
+struct MatrixAdd : public std::binary_function<double,double,double>
 {
     inline double operator() (const double& lhs, const double& rhs) const
     {
@@ -54,7 +54,7 @@ struct MatrixAdd : public ::std::binary_function<double,double,double>
     }
 };
 
-struct MatrixSub : public ::std::binary_function<double,double,double>
+struct MatrixSub : public std::binary_function<double,double,double>
 {
     inline double operator() (const double& lhs, const double& rhs) const
     {
@@ -62,7 +62,7 @@ struct MatrixSub : public ::std::binary_function<double,double,double>
     }
 };
 
-struct MatrixMul : public ::std::binary_function<double,double,double>
+struct MatrixMul : public std::binary_function<double,double,double>
 {
     inline double operator() (const double& lhs, const double& rhs) const
     {
@@ -70,7 +70,7 @@ struct MatrixMul : public ::std::binary_function<double,double,double>
     }
 };
 
-struct MatrixDiv : public ::std::binary_function<double,double,double>
+struct MatrixDiv : public std::binary_function<double,double,double>
 {
     inline double operator() (const double& lhs, const double& rhs) const
     {
@@ -78,7 +78,7 @@ struct MatrixDiv : public ::std::binary_function<double,double,double>
     }
 };
 
-struct MatrixPow : public ::std::binary_function<double,double,double>
+struct MatrixPow : public std::binary_function<double,double,double>
 {
     inline double operator() (const double& lhs, const double& rhs) const
     {
@@ -659,11 +659,11 @@ void ScInterpreter::MEMat(const ScMatrixRef& mM, SCSIZE n)
  * the product of the diagonal elements of the LU matrix.
  */
 static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
-        ::std::vector< SCSIZE> & P )
+        std::vector< SCSIZE> & P )
 {
     int nSign = 1;
     // Find scale of each row.
-    ::std::vector< double> aScale(n);
+    std::vector< double> aScale(n);
     for (SCSIZE i=0; i < n; ++i)
     {
         double fMax = 0.0;
@@ -760,8 +760,8 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
  * return the solution vector.
  */
 static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
-        const ::std::vector< SCSIZE> & P, const ::std::vector< double> & B,
-        ::std::vector< double> & X )
+        const std::vector< SCSIZE> & P, const std::vector< double> & B,
+        std::vector< double> & X )
 {
     SCSIZE nFirst = SCSIZE_MAX;
     // Ax=b => PAx=Pb, with decomposition LUx=Pb.
@@ -827,7 +827,7 @@ void ScInterpreter::ScMatDet()
                 PushError( errCodeOverflow);
             else
             {
-                ::std::vector< SCSIZE> P(nR);
+                std::vector< SCSIZE> P(nR);
                 int nDetSign = lcl_LUP_decompose( xLU.get(), nR, P);
                 if (!nDetSign)
                     PushInt(0);     // singular matrix
@@ -954,15 +954,15 @@ void ScInterpreter::ScMatInv()
                 PushError( errCodeOverflow);
             else
             {
-                ::std::vector< SCSIZE> P(nR);
+                std::vector< SCSIZE> P(nR);
                 int nDetSign = lcl_LUP_decompose( xLU.get(), nR, P);
                 if (!nDetSign)
                     PushIllegalArgument();
                 else
                 {
                     // Solve equation for each column.
-                    ::std::vector< double> B(nR);
-                    ::std::vector< double> X(nR);
+                    std::vector< double> B(nR);
+                    std::vector< double> X(nR);
                     for (SCSIZE j=0; j < nR; ++j)
                     {
                         for (SCSIZE i=0; i < nR; ++i)
@@ -1977,7 +1977,7 @@ double lcl_GetSign(double fValue)
  * errors singularity is often not detected.
  */
 bool lcl_CalculateQRdecomposition(const ScMatrixRef& pMatA,
-                                  ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
+                                  std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
 {
     // ScMatrix matrices are zero based, index access (column,row)
     for (SCSIZE col = 0; col <nK; col++)
@@ -2011,7 +2011,7 @@ bool lcl_CalculateQRdecomposition(const ScMatrixRef& pMatA,
 
 // same with transposed matrix A, N is count of columns, K count of rows
 bool lcl_TCalculateQRdecomposition(const ScMatrixRef& pMatA,
-                                   ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
+                                   std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
 {
     double fSum ;
     // ScMatrix matrices are zero based, index access (column,row)
@@ -2083,7 +2083,7 @@ void lcl_TApplyHouseholderTransformation(const ScMatrixRef& pMatA, SCSIZE nR,
  * elements, no check is done.
  */
 void lcl_SolveWithUpperRightTriangle(const ScMatrixRef& pMatA,
-                        ::std::vector< double>& pVecR, const ScMatrixRef& pMatS,
+                        std::vector< double>& pVecR, const ScMatrixRef& pMatS,
                         SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
@@ -2109,7 +2109,7 @@ void lcl_SolveWithUpperRightTriangle(const ScMatrixRef& pMatA,
  * zero elements, no check is done.
  */
 void lcl_SolveWithLowerLeftTriangle(const ScMatrixRef& pMatA,
-                                    ::std::vector< double>& pVecR, const ScMatrixRef& pMatT,
+                                    std::vector< double>& pVecR, const ScMatrixRef& pMatT,
                                     SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
@@ -2134,7 +2134,7 @@ void lcl_SolveWithLowerLeftTriangle(const ScMatrixRef& pMatA,
  * not used.
  */
 void lcl_ApplyUpperRightTriangle(const ScMatrixRef& pMatA,
-                                 ::std::vector< double>& pVecR, const ScMatrixRef& pMatB,
+                                 std::vector< double>& pVecR, const ScMatrixRef& pMatB,
                                  const ScMatrixRef& pMatZ, SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
@@ -2543,7 +2543,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
         // becomes B = R^(-1) * Q' * Y
         if (nCase ==2) // Y is column
         {
-            ::std::vector< double> aVecR(N); // for QR decomposition
+            std::vector< double> aVecR(N); // for QR decomposition
             // Enough memory for needed matrices?
             ScMatrixRef pMeans = GetNewMat(K, 1); // mean of each column
             ScMatrixRef pMatZ; // for Q' * Y , inter alia
@@ -2698,7 +2698,7 @@ void ScInterpreter::CalculateRGPRKP(bool _bRKP)
         }
         else  // nCase == 3, Y is row, all matrices are transposed
         {
-            ::std::vector< double> aVecR(N); // for QR decomposition
+            std::vector< double> aVecR(N); // for QR decomposition
             // Enough memory for needed matrices?
             ScMatrixRef pMeans = GetNewMat(1, K); // mean of each row
             ScMatrixRef pMatZ; // for Q' * Y , inter alia
@@ -3046,7 +3046,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     {
         if (nCase ==2) // Y is column
         {
-            ::std::vector< double> aVecR(N); // for QR decomposition
+            std::vector< double> aVecR(N); // for QR decomposition
             // Enough memory for needed matrices?
             ScMatrixRef pMeans = GetNewMat(K, 1); // mean of each column
             ScMatrixRef pSlopes = GetNewMat(1,K); // from b1 to bK
@@ -3105,7 +3105,7 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
         else
         { // nCase == 3, Y is row, all matrices are transposed
 
-            ::std::vector< double> aVecR(N); // for QR decomposition
+            std::vector< double> aVecR(N); // for QR decomposition
             // Enough memory for needed matrices?
             ScMatrixRef pMeans = GetNewMat(1, K); // mean of each row
             ScMatrixRef pSlopes = GetNewMat(K,1); // row from b1 to bK

@@ -55,7 +55,7 @@ struct SC_DLLPUBLIC ScSortParam
     SCTAB       nDestTab;
     SCCOL       nDestCol;
     SCROW       nDestRow;
-    ::std::vector<ScSortKeyState>
+    std::vector<ScSortKeyState>
                 maKeyState;
     css::lang::Locale aCollatorLocale;
     OUString    aCollatorAlgorithm;

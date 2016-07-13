@@ -183,7 +183,7 @@ OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rStrin
 
 ScTypedCaseStrSet::const_iterator findTextAll(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator itPos,
-    const OUString& rStart, ::std::vector< OUString > &rResultVec, bool bBack)
+    const OUString& rStart, std::vector< OUString > &rResultVec, bool bBack)
 {
     rResultVec.clear(); // clear contents
 
@@ -904,7 +904,7 @@ void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
         {
             sal_Int32 nNextFStart = aHelper.GetFunctionStart( rSelText, nLeftParentPos, true);
             const IFunctionDescription* ppFDesc;
-            ::std::vector< OUString> aArgs;
+            std::vector< OUString> aArgs;
             if( aHelper.GetNextFunc( rSelText, false, nNextFStart, nullptr, &ppFDesc, &aArgs ) )
             {
                 if( !ppFDesc->getFunctionName().isEmpty() )
@@ -1120,11 +1120,11 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
     sal_Int32 nPos = aStart.getLength() - 1;
     sal_Unicode c = aStart[ nPos ];
     // fdo#75264 use maFormulaChar to check if characters are used in function names
-    ::std::set< sal_Unicode >::const_iterator p = maFormulaChar.find( c );
+    std::set< sal_Unicode >::const_iterator p = maFormulaChar.find( c );
     if ( p == maFormulaChar.end() )
         return false; // last character is not part of any function name, quit
 
-    ::std::vector<sal_Unicode> aTemp;
+    std::vector<sal_Unicode> aTemp;
     aTemp.push_back( c );
     for(sal_Int32 i = nPos - 1; i >= 0; --i)
     {
@@ -1137,7 +1137,7 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
         aTemp.push_back( c );
     }
 
-    ::std::vector<sal_Unicode>::reverse_iterator rIt = aTemp.rbegin();
+    std::vector<sal_Unicode>::reverse_iterator rIt = aTemp.rbegin();
     aResult = OUString( *rIt++ );
     while ( rIt != aTemp.rend() )
         aResult += OUString( *rIt++ );
@@ -1145,12 +1145,12 @@ bool ScInputHandler::GetFuncName( OUString& aStart, OUString& aResult )
     return true;
 }
 
-void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec )
+void ScInputHandler::ShowFuncList( const std::vector< OUString > & rFuncStrVec )
 {
     OUString aTipStr;
     OUString aFuncNameStr;
     OUString aDescFuncNameStr;
-    ::std::vector<OUString>::const_iterator itStr = rFuncStrVec.begin();
+    std::vector<OUString>::const_iterator itStr = rFuncStrVec.begin();
     sal_Int32 nMaxFindNumber = 3;
     sal_Int32 nRemainFindNumber = nMaxFindNumber;
     for ( ; itStr != rFuncStrVec.end(); ++itStr )
@@ -1191,7 +1191,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
     sal_Int32 nNextFStart = 0;
     const IFunctionDescription* ppFDesc;
-    ::std::vector< OUString > aArgs;
+    std::vector< OUString > aArgs;
     OUString eqPlusFuncName = "=" + aDescFuncNameStr;
     if ( aHelper.GetNextFunc( eqPlusFuncName, false, nNextFStart, nullptr, &ppFDesc, &aArgs ) )
     {
@@ -1237,7 +1237,7 @@ void ScInputHandler::UseFormulaData()
             {
                 // function name is incomplete:
                 // show matching functions name as tip above cell
-                ::std::vector<OUString> aNewVec;
+                std::vector<OUString> aNewVec;
                 miAutoPosFormula = pFormulaData->end();
                 miAutoPosFormula = findTextAll(*pFormulaData, miAutoPosFormula, aText, aNewVec, false);
                 if (miAutoPosFormula != pFormulaData->end())
@@ -1270,7 +1270,7 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pFormulaData )
     {
-        ::std::vector<OUString> aNewVec;
+        std::vector<OUString> aNewVec;
         ScTypedCaseStrSet::const_iterator itNew = findTextAll(*pFormulaData, miAutoPosFormula, aAutoSearch, aNewVec, bBack);
         if (itNew != pFormulaData->end())
         {

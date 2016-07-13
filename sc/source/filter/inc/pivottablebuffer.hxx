@@ -170,7 +170,7 @@ private:
                         convertRowColPageField( sal_Int32 nAxis );
 
 private:
-    typedef ::std::vector< PTFieldItemModel > ItemModelVector;
+    typedef std::vector< PTFieldItemModel > ItemModelVector;
 
     PivotTable&         mrPivotTable;       /// The parent pivot table object.
     ItemModelVector     maItems;            /// All items of this field.
@@ -349,9 +349,9 @@ public:
 private:
     typedef RefVector< PivotTableField >        PivotTableFieldVector;
     typedef RefVector< PivotTableFilter >       PivotTableFilterVector;
-    typedef ::std::vector< sal_Int32 >          IndexVector;
-    typedef ::std::vector< PTPageFieldModel >   PageFieldVector;
-    typedef ::std::vector< PTDataFieldModel >   DataFieldVector;
+    typedef std::vector< sal_Int32 >            IndexVector;
+    typedef std::vector< PTPageFieldModel >     PageFieldVector;
+    typedef std::vector< PTDataFieldModel >     DataFieldVector;
 
 private:
     /** Returns a pivot table field by its index. */

@@ -55,7 +55,7 @@
 #include <vector>
 #include <memory>
 
-using ::std::vector;
+using std::vector;
 
 namespace {
 
@@ -1868,7 +1868,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
 
 namespace {
 
-class SetTableIndex : public ::std::unary_function<ScRange, void>
+class SetTableIndex : public std::unary_function<ScRange, void>
 {
     SCTAB mnTab;
 public:
@@ -1902,7 +1902,7 @@ void ScTable::CopyPrintRange(const ScTable& rTable)
     // just in case set the correct table index.
 
     aPrintRanges = rTable.aPrintRanges;
-    ::std::for_each(aPrintRanges.begin(), aPrintRanges.end(), SetTableIndex(nTab));
+    std::for_each(aPrintRanges.begin(), aPrintRanges.end(), SetTableIndex(nTab));
 
     bPrintEntireSheet = rTable.bPrintEntireSheet;
 

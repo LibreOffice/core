@@ -30,7 +30,7 @@
 
 namespace {
 
-class FindByName : public ::std::unary_function<ScUserListData::SubStr, bool>
+class FindByName : public std::unary_function<ScUserListData::SubStr, bool>
 {
     const OUString& mrName;
     bool mbUpper;
@@ -114,22 +114,22 @@ size_t ScUserListData::GetSubCount() const
 bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bool& bMatchCase) const
 {
     // First, case sensitive search.
-    SubStringsType::const_iterator itr = ::std::find_if(
+    SubStringsType::const_iterator itr = std::find_if(
         maSubStrings.begin(), maSubStrings.end(), FindByName(rSubStr, false));
     if (itr != maSubStrings.end())
     {
-        rIndex = ::std::distance(maSubStrings.begin(), itr);
+        rIndex = std::distance(maSubStrings.begin(), itr);
         bMatchCase = true;
         return true;
     }
 
     // When that fails, do a case insensitive search.
     OUString aUpStr = ScGlobal::pCharClass->uppercase(rSubStr);
-    itr = ::std::find_if(
+    itr = std::find_if(
         maSubStrings.begin(), maSubStrings.end(), FindByName(aUpStr, true));
     if (itr != maSubStrings.end())
     {
-        rIndex = ::std::distance(maSubStrings.begin(), itr);
+        rIndex = std::distance(maSubStrings.begin(), itr);
         bMatchCase = false;
         return true;
     }
@@ -336,7 +336,7 @@ bool ScUserList::operator!=( const ScUserList& r ) const
 
 bool ScUserList::HasEntry( const OUString& rStr ) const
 {
-    return ::std::any_of(maData.begin(), maData.end(),
+    return std::any_of(maData.begin(), maData.end(),
         [&] (std::unique_ptr<ScUserListData> const& pData)
             { return pData->GetString() == rStr; } );
 }

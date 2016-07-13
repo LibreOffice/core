@@ -919,7 +919,7 @@ ScVbaApplication::getPathSeparator() throw (uno::RuntimeException, std::exceptio
 
 namespace {
 
-typedef ::std::list< ScRange > ListOfScRange;
+typedef std::list< ScRange > ListOfScRange;
 
 /** Appends all ranges of a VBA Range object in the passed Any to the list of ranges. */
 void lclAddToListOfScRange( ListOfScRange& rList, const uno::Any& rArg )
@@ -970,8 +970,8 @@ bool lclTryJoin( ScRange& r1, const ScRange& r2 )
         // check that r1 overlaps or touches r2
         if( ((n1L < n2L) && (n2L - 1 <= n1R)) || ((n2L < n1L) && (n1L - 1 <= n2R)) )
         {
-            r1.aStart.SetCol( ::std::min( n1L, n2L ) );
-            r1.aEnd.SetCol( ::std::max( n1R, n2R ) );
+            r1.aStart.SetCol( std::min( n1L, n2L ) );
+            r1.aEnd.SetCol( std::max( n1R, n2R ) );
             return true;
         }
         return false;
@@ -983,8 +983,8 @@ bool lclTryJoin( ScRange& r1, const ScRange& r2 )
         // check that r1 overlaps or touches r2
         if( ((n1T < n2T) && (n2T + 1 <= n1B)) || ((n2T < n1T) && (n1T + 1 <= n2B)) )
         {
-            r1.aStart.SetRow( ::std::min( n1T, n2T ) );
-            r1.aEnd.SetRow( ::std::max( n1B, n2B ) );
+            r1.aStart.SetRow( std::min( n1T, n2T ) );
+            r1.aEnd.SetRow( std::max( n1B, n2B ) );
             return true;
         }
         return false;

@@ -359,9 +359,9 @@ private:
     void                FillScFuncMap( const XclFunctionInfo* pBeg, const XclFunctionInfo* pEnd );
 
 private:
-    typedef ::std::map< sal_uInt16, const XclFunctionInfo* >    XclFuncMap;
-    typedef ::std::map< OUString, const XclFunctionInfo* >      XclMacroNameMap;
-    typedef ::std::map< OpCode, const XclFunctionInfo* >        ScFuncMap;
+    typedef std::map< sal_uInt16, const XclFunctionInfo* >      XclFuncMap;
+    typedef std::map< OUString, const XclFunctionInfo* >        XclMacroNameMap;
+    typedef std::map< OpCode, const XclFunctionInfo* >          ScFuncMap;
 
     XclFuncMap          maXclFuncMap;       /// Maps Excel function indexes to function data.
     XclMacroNameMap     maXclMacroNameMap;  /// Maps macro function names to function data.

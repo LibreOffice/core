@@ -142,7 +142,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             SdrPage* pDestPage = pDrawModel->GetPage( static_cast< sal_uInt16 >( nTab ) );
             OSL_ENSURE(pDestPage,"who is this, Page?");
 
-            ::std::vector< OUString > aExcludedChartNames;
+            std::vector< OUString > aExcludedChartNames;
             if ( pDestPage )
             {
                 ScChartHelper::GetChartNames( aExcludedChartNames, pDestPage );
@@ -209,7 +209,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( pClient && pClient->IsObjectInPlaceActive() )
             nOptions |= SdrInsertFlags::DONTMARK;
 
-        ::std::vector< OUString > aExcludedChartNames;
+        std::vector< OUString > aExcludedChartNames;
         SCTAB nTab = GetViewData().GetTabNo();
         SdrPage* pPage = pScDrawView->GetModel()->GetPage( static_cast< sal_uInt16 >( nTab ) );
         OSL_ENSURE( pPage, "Page?" );

@@ -33,7 +33,7 @@
 #include <vector>
 #include <cstring>
 
-using ::std::vector;
+using std::vector;
 
 namespace {
 
@@ -46,7 +46,7 @@ namespace {
 bool extractFilePath(const OUString& rUrl, OUString& rPath)
 {
     const char* prefix = "Excel.Sheet.8\3";
-    size_t nPrefixLen = ::std::strlen(prefix);
+    size_t nPrefixLen = std::strlen(prefix);
 
     sal_Int32 n = rUrl.getLength();
     if (n <= static_cast<sal_Int32>(nPrefixLen))

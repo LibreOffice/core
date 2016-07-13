@@ -68,7 +68,7 @@ public:
     void                finalizeImport();
 
 private:
-    typedef ::std::vector< ScenarioCellModel > ScenarioCellVector;
+    typedef std::vector< ScenarioCellModel > ScenarioCellVector;
 
     ScenarioCellVector  maCells;            /// Scenario cells.
     ScenarioModel       maModel;            /// Scenario model data.
@@ -118,7 +118,7 @@ public:
     void                finalizeImport();
 
 private:
-    typedef RefMap< sal_Int16, SheetScenarios, ::std::greater< sal_Int16 > > SheetScenariosMap;
+    typedef RefMap< sal_Int16, SheetScenarios, std::greater< sal_Int16 > > SheetScenariosMap;
     SheetScenariosMap   maSheetScenarios;
 };
 

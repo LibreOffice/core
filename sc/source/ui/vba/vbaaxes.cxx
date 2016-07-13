@@ -36,7 +36,7 @@ using namespace ::ooo::vba::excel::XlAxisGroup;
 // We need to 'flatten' this into a single index in order to be able to wrap
 // iteration over the set of Axis(s) in a XIndexAccess implementation
 
-typedef ::std::pair<sal_Int32, sal_Int32 > AxesCoordinate; // type and group combination
+typedef std::pair<sal_Int32, sal_Int32 > AxesCoordinate; // type and group combination
 
 namespace {
 

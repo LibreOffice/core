@@ -75,7 +75,7 @@ public:
     virtual OUString getCurrentFormula() const override;
 
     virtual formula::IFunctionManager* getFunctionManager() override;
-    virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) override;
+    virtual std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) override;
     virtual css::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const override;
     virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
     virtual css::table::CellAddress getReferencePosition() const override;

@@ -128,7 +128,7 @@ protected:
     uno::Reference< drawing::XShapes > mxShapes;
 
 private:
-    typedef ::std::vector< uno::Reference< drawing::XShape > > ShapeVector;
+    typedef std::vector< uno::Reference< drawing::XShape > > ShapeVector;
     const uno::Type maVbaType;
     ShapeVector maShapes;
 };

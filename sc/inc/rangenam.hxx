@@ -79,7 +79,7 @@ private:
     void InitCode();
 public:
 
-    typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
+    typedef std::map<sal_uInt16, sal_uInt16> IndexMap;
 
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const OUString& rName,
@@ -183,13 +183,13 @@ class ScRangeName
 {
 private:
     typedef std::vector<ScRangeData*> IndexDataType;
-    typedef ::std::map<OUString, std::unique_ptr<ScRangeData>> DataType;
+    typedef std::map<OUString, std::unique_ptr<ScRangeData>> DataType;
     DataType m_Data;
     IndexDataType maIndexToData;
 
 public:
     /// Map that stores non-managed pointers to ScRangeName instances.
-    typedef ::std::map<SCTAB, const ScRangeName*> TabNameCopyMap;
+    typedef std::map<SCTAB, const ScRangeName*> TabNameCopyMap;
 
     typedef DataType::const_iterator const_iterator;
     typedef DataType::iterator iterator;
@@ -241,7 +241,7 @@ public:
     bool empty() const;
 
     /** Insert object into set.
-        @ATTENTION: The underlying ::std::map<std::unique_ptr>::insert(p) takes
+        @ATTENTION: The underlying std::map<std::unique_ptr>::insert(p) takes
         ownership of p and if it can't insert it deletes the object! So, if
         this insert here returns false the object where p pointed to is gone!
      */

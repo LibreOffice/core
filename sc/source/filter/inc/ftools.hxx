@@ -52,27 +52,27 @@
 /** Returns the value, if it is not less than nMin, otherwise nMin. */
 template< typename ReturnType, typename Type >
 inline ReturnType llimit_cast( Type nValue, ReturnType nMin )
-{ return static_cast< ReturnType >( ::std::max< Type >( nValue, nMin ) ); }
+{ return static_cast< ReturnType >( std::max< Type >( nValue, nMin ) ); }
 
 /** Returns the value, if it is not greater than nMax, otherwise nMax. */
 template< typename ReturnType, typename Type >
 inline ReturnType ulimit_cast( Type nValue, ReturnType nMax )
-{ return static_cast< ReturnType >( ::std::min< Type >( nValue, nMax ) ); }
+{ return static_cast< ReturnType >( std::min< Type >( nValue, nMax ) ); }
 
 /** Returns the value, if it fits into ReturnType, otherwise the maximum value of ReturnType. */
 template< typename ReturnType, typename Type >
 inline ReturnType ulimit_cast( Type nValue )
-{ return ulimit_cast( nValue, ::std::numeric_limits< ReturnType >::max() ); }
+{ return ulimit_cast( nValue, std::numeric_limits< ReturnType >::max() ); }
 
 /** Returns the value, if it is not less than nMin and not greater than nMax, otherwise one of the limits. */
 template< typename ReturnType, typename Type >
 inline ReturnType limit_cast( Type nValue, ReturnType nMin, ReturnType nMax )
-{ return static_cast< ReturnType >( ::std::max< Type >( ::std::min< Type >( nValue, nMax ), nMin ) ); }
+{ return static_cast< ReturnType >( std::max< Type >( std::min< Type >( nValue, nMax ), nMin ) ); }
 
 /** Returns the value, if it fits into ReturnType, otherwise one of the limits of ReturnType. */
 template< typename ReturnType, typename Type >
 inline ReturnType limit_cast( Type nValue )
-{ return limit_cast( nValue, ::std::numeric_limits< ReturnType >::min(), ::std::numeric_limits< ReturnType >::max() ); }
+{ return limit_cast( nValue, std::numeric_limits< ReturnType >::min(), std::numeric_limits< ReturnType >::max() ); }
 
 // Read from bitfields --------------------------------------------------------
 
@@ -254,12 +254,12 @@ private:
 
 // Containers =================================================================
 
-typedef ::std::vector< sal_uInt8 >                  ScfUInt8Vec;
-typedef ::std::vector< sal_Int16 >                  ScfInt16Vec;
-typedef ::std::vector< sal_uInt16 >                 ScfUInt16Vec;
-typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
-typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
-typedef ::std::vector< OUString >            ScfStringVec;
+typedef std::vector< sal_uInt8 >                    ScfUInt8Vec;
+typedef std::vector< sal_Int16 >                    ScfInt16Vec;
+typedef std::vector< sal_uInt16 >                   ScfUInt16Vec;
+typedef std::vector< sal_Int32 >                    ScfInt32Vec;
+typedef std::vector< sal_uInt32 >                   ScfUInt32Vec;
+typedef std::vector< OUString >              ScfStringVec;
 
 class ScFormatFilterPluginImpl : public ScFormatFilterPlugin
 {

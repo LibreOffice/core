@@ -27,7 +27,7 @@
 #include "types.hxx"
 #include "address.hxx"
 
-typedef ::std::vector< formula::FormulaToken*> ScTokenVec;
+typedef std::vector< formula::FormulaToken*> ScTokenVec;
 
 struct ScJumpMatrixEntry
 {
@@ -71,8 +71,8 @@ class ScJumpMatrix
     // values at the result matrix in order to avoid multiple shrinks and
     // growths of multi_type_vector segments, which is a major performance
     // bottleneck, see fdo#72929
-    ::std::vector< svl::SharedString >  mvBufferStrings;
-    ::std::vector< double >             mvBufferDoubles;
+    std::vector< svl::SharedString >    mvBufferStrings;
+    std::vector< double >               mvBufferDoubles;
     SCSIZE                              mnBufferCol;
     SCSIZE                              mnBufferRowStart;
     SCSIZE                              mnBufferEmptyCount;

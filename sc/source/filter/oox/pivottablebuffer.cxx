@@ -405,10 +405,10 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
             {
 
                 // create a list of all item names, needed to map between original and group items
-                ::std::vector< OUString > aItems;
+                std::vector< OUString > aItems;
                 pCacheField->getCacheItemNames( aItems );
                 PivotCacheGroupItemVector aItemNames;
-                for( ::std::vector< OUString >::iterator aIt = aItems.begin(), aEnd = aItems.end(); aIt != aEnd; ++aIt )
+                for( std::vector< OUString >::iterator aIt = aItems.begin(), aEnd = aItems.end(); aIt != aEnd; ++aIt )
                     aItemNames.push_back( PivotCacheGroupItem( *aIt ) );
                 // create all nested group fields (if any)
                 mrPivotTable.finalizeParentGroupingImport( xDPField, *pCacheField, aItemNames );
@@ -634,7 +634,7 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
                 XML (where 'defaultSubtotal' is set regardless of other
                 functions) and binary formats (where 'defaultSubtotal' is not
                 set if other functions are set). */
-            ::std::vector< GeneralFunction > aSubtotals;
+            std::vector< GeneralFunction > aSubtotals;
             /*  Order of subtotals is fixed in Excel. Documentation is a little
                 bit confused about which names to use for the count functions.
                 For subtotals, 'countA' means 'count all', and 'count' means
@@ -1190,7 +1190,7 @@ void PivotTable::finalizeImport()
                 aDescProp.setProperty( PROP_DrillDownOnDoubleClick, maDefModel.mbEnableDrill );
 
                 // finalize all fields, this finds field names and creates grouping fields
-                maFields.forEachMem(&PivotTableField::finalizeImport, ::std::cref(mxDPDescriptor));
+                maFields.forEachMem(&PivotTableField::finalizeImport, std::cref(mxDPDescriptor));
 
                 // all row fields
                 for( IndexVector::iterator aIt = maRowFields.begin(), aEnd = maRowFields.end(); aIt != aEnd; ++aIt )
@@ -1208,7 +1208,7 @@ void PivotTable::finalizeImport()
                         pField->convertPageField( *aIt );
 
                 // all hidden fields
-                ::std::set< sal_Int32 > aVisFields;
+                std::set< sal_Int32 > aVisFields;
                 aVisFields.insert( maRowFields.begin(), maRowFields.end() );
                 aVisFields.insert( maColFields.begin(), maColFields.end() );
                 for( PageFieldVector::iterator aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
@@ -1237,7 +1237,7 @@ void PivotTable::finalizeImport()
                 /*  If page fields exist, include them into the destination
                     area (they are excluded in Excel). Add an extra blank row. */
                 if( !maPageFields.empty() )
-                    aPos.Row = ::std::max< sal_Int32 >( static_cast< sal_Int32 >( aPos.Row - maPageFields.size() - 1 ), 0 );
+                    aPos.Row = std::max< sal_Int32 >( static_cast< sal_Int32 >( aPos.Row - maPageFields.size() - 1 ), 0 );
 
                 // insert the DataPilot table into the sheet
                 xDPTables->insertNewByName( maDefModel.maName, aPos, mxDPDescriptor );
@@ -1253,7 +1253,7 @@ void PivotTable::finalizeImport()
 void PivotTable::finalizeDateGroupingImport( const Reference< XDataPilotField >& rxBaseDPField, sal_Int32 nBaseFieldIdx )
 {
     // process all fields, there is no chaining information in the cache fields
-    maFields.forEachMem( &PivotTableField::finalizeDateGroupingImport, ::std::cref(rxBaseDPField), nBaseFieldIdx );
+    maFields.forEachMem( &PivotTableField::finalizeDateGroupingImport, std::cref(rxBaseDPField), nBaseFieldIdx );
 }
 
 void PivotTable::finalizeParentGroupingImport( const Reference< XDataPilotField >& rxBaseDPField,

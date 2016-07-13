@@ -30,7 +30,7 @@ class SdrObject;
 class SdrPage;
 class ScModelObj;
 
-typedef ::std::vector< ScRangeList > ScRangeListVector;
+typedef std::vector< ScRangeList > ScRangeListVector;
 
 /** Use this to handle charts in a calc document
 */
@@ -48,9 +48,9 @@ public:
 
     static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrObject* pObject );
     static void FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrPage* pPage );
-    static void GetChartNames( ::std::vector< OUString >& rChartNames, SdrPage* pPage );
+    static void GetChartNames( std::vector< OUString >& rChartNames, SdrPage* pPage );
     static void CreateProtectedChartListenersAndNotify( ScDocument* pDoc, SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
-        const ScRangeListVector& rRangesVector, const ::std::vector< OUString >& rExcludedChartNames, bool bSameDoc = true );
+        const ScRangeListVector& rRangesVector, const std::vector< OUString >& rExcludedChartNames, bool bSameDoc = true );
 };
 
 #endif

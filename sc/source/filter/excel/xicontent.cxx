@@ -66,7 +66,7 @@
 #include <o3tl/make_unique.hxx>
 
 using ::com::sun::star::uno::Sequence;
-using ::std::unique_ptr;
+using std::unique_ptr;
 
 // Shared string table ========================================================
 
@@ -253,9 +253,9 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     OSL_ENSURE( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
-    ::std::unique_ptr< OUString > xLongName;    // link / file name
-    ::std::unique_ptr< OUString > xShortName;   // 8.3-representation of file name
-    ::std::unique_ptr< OUString > xTextMark;    // text mark
+    std::unique_ptr< OUString > xLongName;      // link / file name
+    std::unique_ptr< OUString > xShortName;     // 8.3-representation of file name
+    std::unique_ptr< OUString > xTextMark;      // text mark
 
     // description (ignore)
     if( ::get_flag( nFlags, EXC_HLINK_DESCR ) )
@@ -654,7 +654,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     const ScAddress& rPos = maRanges.front()->aStart;    // assured above that maRanges is not empty
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
-    ::std::unique_ptr< ScTokenArray > xTokArr1;
+    std::unique_ptr< ScTokenArray > xTokArr1;
     if( nFmlaSize1 > 0 )
     {
         const ScTokenArray* pTokArr = nullptr;
@@ -665,7 +665,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
             xTokArr1.reset( pTokArr->Clone() );
     }
 
-    ::std::unique_ptr< ScTokenArray > pTokArr2;
+    std::unique_ptr< ScTokenArray > pTokArr2;
     if( nFmlaSize2 > 0 )
     {
         const ScTokenArray* pTokArr = nullptr;
@@ -787,7 +787,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     // first formula
     // string list is single tStr token with NUL separators -> replace them with LF
     rStrm.SetNulSubstChar( '\n' );
-    ::std::unique_ptr< ScTokenArray > xTokArr1;
+    std::unique_ptr< ScTokenArray > xTokArr1;
 
     // We can't import the formula directly because we need the range
     sal_uInt16 nLenFormula1 = rStrm.ReaduInt16();
@@ -797,7 +797,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rStrm.Ignore(nLenFormula1);
 
     // second formula
-    ::std::unique_ptr< ScTokenArray > xTokArr2;
+    std::unique_ptr< ScTokenArray > xTokArr2;
 
     sal_uInt16 nLenFormula2 = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );

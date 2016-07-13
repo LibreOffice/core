@@ -100,7 +100,7 @@ bool ScLookupCache::insert( const ScAddress & rResultAddress,
     QueryCriteriaAndResult aResult( rCriteria, rResultAddress);
     if (!bAvailable)
         aResult.maAddress.SetRow(-1);
-    bool bInserted = maQueryMap.insert( ::std::pair< const QueryKey,
+    bool bInserted = maQueryMap.insert( std::pair< const QueryKey,
             QueryCriteriaAndResult>( aKey, aResult)).second;
 
     return bInserted;

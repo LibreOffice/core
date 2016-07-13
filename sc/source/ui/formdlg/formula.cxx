@@ -367,7 +367,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
 void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
     pEdit->SetSelection(Selection(0, SELECTION_MAX));
-    ::std::pair<formula::RefButton*,formula::RefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
+    std::pair<formula::RefButton*,formula::RefEdit*> aPair = RefInputStartBefore( pEdit, pButton );
     m_aHelper.RefInputStart( aPair.second, aPair.first);
     RefInputStartAfter( aPair.second, aPair.first );
 }
@@ -645,9 +645,9 @@ table::CellAddress ScFormulaDlg::getReferencePosition() const
     return table::CellAddress(m_CursorPos.Tab(), m_CursorPos.Col(), m_CursorPos.Row());
 }
 
-::std::unique_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
+std::unique_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
-    ::std::unique_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());
+    std::unique_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());
     pArray->Fill(_aTokenList, m_pDoc->GetSharedStringPool(), m_pDoc->GetExternalRefManager());
     return pArray;
 }

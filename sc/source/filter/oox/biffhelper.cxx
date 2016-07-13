@@ -101,7 +101,7 @@ union DecodedDouble
         if( !rStrm.isEof() && (nCharCount > 0) )
         {
             // SequenceInputStream always supports getRemaining()
-            nCharCount = ::std::min( nCharCount, static_cast< sal_Int32 >( rStrm.getRemaining() / 2 ) );
+            nCharCount = std::min( nCharCount, static_cast< sal_Int32 >( rStrm.getRemaining() / 2 ) );
             aString = rStrm.readUnicodeArray( nCharCount, bAllowNulChars );
         }
     }

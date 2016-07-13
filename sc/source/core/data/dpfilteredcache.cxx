@@ -30,7 +30,7 @@
 
 #include <osl/diagnose.h>
 
-using ::std::vector;
+using std::vector;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 
@@ -291,12 +291,12 @@ OUString ScDPFilteredCache::getFieldName(SCCOL nIndex) const
     return mrCache.GetDimensionName(nIndex);
 }
 
-const ::std::vector<SCROW>&  ScDPFilteredCache::getFieldEntries( sal_Int32 nColumn ) const
+const std::vector<SCROW>&    ScDPFilteredCache::getFieldEntries( sal_Int32 nColumn ) const
 {
     if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
     {
         // index out of bound.  Hopefully this code will never be reached.
-        static const ::std::vector<SCROW> emptyEntries{};
+        static const std::vector<SCROW> emptyEntries{};
         return emptyEntries;
     }
     return maFieldEntries[nColumn];

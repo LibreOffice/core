@@ -96,13 +96,13 @@ public:
 
 private:
     // Vectors indexed by SCTAB - cf. SetSheetCount
-    typedef ::std::vector< std::vector<TokenAddressItem> > FormulaDataArray;
-    typedef ::std::vector< std::vector<TokenRangeAddressItem> > ArrayFormulaDataArray;
+    typedef std::vector< std::vector<TokenAddressItem> > FormulaDataArray;
+    typedef std::vector< std::vector<TokenRangeAddressItem> > ArrayFormulaDataArray;
     // sheet -> list of shared formula descriptions
-    typedef ::std::vector< std::vector<SharedFormulaDesc> > SheetToSharedFormulaid;
+    typedef std::vector< std::vector<SharedFormulaDesc> > SheetToSharedFormulaid;
     // sheet -> stuff needed to create shared formulae
-    typedef ::std::vector< std::vector<SharedFormulaEntry> >  SheetToFormulaEntryArray;
-    typedef ::std::vector< std::vector<FormulaValue> > FormulaValueArray;
+    typedef std::vector< std::vector<SharedFormulaEntry> >    SheetToFormulaEntryArray;
+    typedef std::vector< std::vector<FormulaValue> > FormulaValueArray;
 
     osl::Mutex maMtxData;
     FormulaDataArray         maCellFormulas;

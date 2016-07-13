@@ -117,7 +117,7 @@ private:
 
     static bool             bAutoComplete;              // from app options
     static bool             bOptLoaded;
-    ::std::set< sal_Unicode >    maFormulaChar;  //fdo 75264
+    std::set< sal_Unicode >      maFormulaChar;  //fdo 75264
 
 private:
     void            UpdateActiveView();
@@ -209,7 +209,7 @@ public:
     void            ShowTipCursor();
     void            ShowTip( const OUString& rText );     // at Cursor
     void            ShowTipBelow( const OUString& rText );
-    void            ShowFuncList( const ::std::vector< OUString > & rFuncStrVec );
+    void            ShowFuncList( const std::vector< OUString > & rFuncStrVec );
 
     void            SetRefScale( const Fraction& rX, const Fraction& rY );
     void            UpdateRefDevice();

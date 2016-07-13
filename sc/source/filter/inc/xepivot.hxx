@@ -231,7 +231,7 @@ private:
 class XclExpPivotTable;
 
 /** Data field position specifying the pivot table field index (first) and data info index (second). */
-typedef ::std::pair< sal_uInt16, sal_uInt16 > XclPTDataFieldPos;
+typedef std::pair< sal_uInt16, sal_uInt16 > XclPTDataFieldPos;
 
 class XclExpPTItem : public XclExpRecord
 {
@@ -308,7 +308,7 @@ private:
     void                WriteSxvdex( XclExpStream& rStrm ) const;
 
 private:
-    typedef ::std::vector< XclPTDataFieldInfo > XclPTDataFieldInfoVec;
+    typedef std::vector< XclPTDataFieldInfo > XclPTDataFieldInfoVec;
     typedef XclExpRecordList< XclExpPTItem >    XclExpPTItemList;
 
     const XclExpPivotTable& mrPTable;       /// Parent pivot table containing this field.
@@ -384,7 +384,7 @@ private:
 private:
     typedef XclExpRecordList< XclExpPTField >   XclExpPTFieldList;
     typedef XclExpPTFieldList::RecordRefType    XclExpPTFieldRef;
-    typedef ::std::vector< XclPTDataFieldPos >  XclPTDataFieldPosVec;
+    typedef std::vector< XclPTDataFieldPos >    XclPTDataFieldPosVec;
 
     const XclExpPivotCache& mrPCache;       /// The pivot cache this pivot table bases on.
     XclPTInfo           maPTInfo;           /// Info about the pivot table (SXVIEW record).

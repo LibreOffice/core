@@ -81,8 +81,8 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::sheet::XDimensionsSupplier;
-using ::std::list;
-using ::std::vector;
+using std::list;
+using std::vector;
 
 //          outliner
 

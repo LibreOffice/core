@@ -133,7 +133,7 @@ private:
     void                appendColor( sal_Int32 nRGBValue );
 
 private:
-    ::std::vector< sal_Int32 > maColors;    /// List of RGB values.
+    std::vector< sal_Int32 > maColors;      /// List of RGB values.
     size_t              mnAppendIndex;      /// Index to append a new color.
 };
 
@@ -500,7 +500,7 @@ struct PatternFillModel
 /** Contains XML gradient fill attributes from the gradientFill element. */
 struct GradientFillModel
 {
-    typedef ::std::map< double, Color > ColorMap;
+    typedef std::map< double, Color > ColorMap;
 
     sal_Int32           mnType;             /// Gradient type, linear or path.
     double              mfAngle;            /// Rotation angle for type linear.
@@ -654,7 +654,7 @@ public:
     const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );
 
 private:
-    typedef ::std::unique_ptr< ::ScPatternAttr > ScPatternAttrPtr;
+    typedef std::unique_ptr< ::ScPatternAttr > ScPatternAttrPtr;
 
     ScPatternAttrPtr    mpPattern;          /// Calc item set.
     sal_uLong           mnScNumFmt;         /// Calc number format.
@@ -892,7 +892,7 @@ private:
     typedef RefVector< Fill >                           FillVector;
     typedef RefVector< Xf >                             XfVector;
     typedef RefVector< Dxf >                            DxfVector;
-    typedef ::std::map< sal_Int32, OUString >    DxfStyleMap;
+    typedef std::map< sal_Int32, OUString >      DxfStyleMap;
 
     ColorPalette        maPalette;          /// Color palette.
     FontVector          maFonts;            /// List of font objects.

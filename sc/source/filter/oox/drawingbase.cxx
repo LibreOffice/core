@@ -153,7 +153,7 @@ void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
     meAnchorType = ANCHOR_VML;
     meCellAnchorType = CELLANCHOR_PIXEL;
 
-    ::std::vector< OUString > aTokens;
+    std::vector< OUString > aTokens;
     sal_Int32 nIndex = 0;
     while( nIndex >= 0 )
         aTokens.push_back( rAnchor.getToken( 0, ',', nIndex ).trim() );
@@ -224,8 +224,8 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm 
             OSL_ENSURE( maSize.isValid(), "ShapeAnchor::calcAnchorRectEmu - invalid size" );
             if( maSize.isValid() )
             {
-                aAnchorRect.Width = ::std::min< sal_Int64 >( maSize.Width, aPageSize.Width - aAnchorRect.X );
-                aAnchorRect.Height = ::std::min< sal_Int64 >( maSize.Height, aPageSize.Height - aAnchorRect.Y );
+                aAnchorRect.Width = std::min< sal_Int64 >( maSize.Width, aPageSize.Width - aAnchorRect.X );
+                aAnchorRect.Height = std::min< sal_Int64 >( maSize.Height, aPageSize.Height - aAnchorRect.Y );
             }
         break;
         case ANCHOR_TWOCELL:
@@ -243,11 +243,11 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm 
                 // width (if column index is valid, use the calculated offset, otherwise stretch to maximum available X position)
                 aAnchorRect.Width = aPageSize.Width - aAnchorRect.X;
                 if( aToCell.Col() == maTo.mnCol )
-                    aAnchorRect.Width = ::std::min< sal_Int64 >( aPoint.X - aAnchorRect.X + 1, aAnchorRect.Width );
+                    aAnchorRect.Width = std::min< sal_Int64 >( aPoint.X - aAnchorRect.X + 1, aAnchorRect.Width );
                 // height (if row index is valid, use the calculated offset, otherwise stretch to maximum available Y position)
                 aAnchorRect.Height = aPageSize.Height - aAnchorRect.Y;
                 if( aToCell.Row() == maTo.mnRow )
-                    aAnchorRect.Height = ::std::min< sal_Int64 >( aPoint.Y - aAnchorRect.Y + 1, aAnchorRect.Height );
+                    aAnchorRect.Height = std::min< sal_Int64 >( aPoint.Y - aAnchorRect.Y + 1, aAnchorRect.Height );
             }
         break;
         case ANCHOR_INVALID:

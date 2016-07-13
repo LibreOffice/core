@@ -37,13 +37,13 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <comphelper/random.hxx>
 
-using ::std::vector;
+using std::vector;
 using namespace formula;
 
 #define MAX_ANZ_DOUBLE_FOR_SORT 100000
 
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
-const double fMachEps = ::std::numeric_limits<double>::epsilon();
+const double fMachEps = std::numeric_limits<double>::epsilon();
 
 class ScDistFunc
 {
@@ -68,7 +68,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
 {
     rConvError = false;
     const double fYEps = 1.0E-307;
-    const double fXEps = ::std::numeric_limits<double>::epsilon();
+    const double fXEps = std::numeric_limits<double>::epsilon();
 
     OSL_ENSURE(fAx<fBx, "IterateInverse: wrong interval");
 
@@ -121,7 +121,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
     bool bHasToInterpolate = true;
     nCount = 0;
     while ( nCount < 500 && fabs(fRy) > fYEps &&
-            (fBx-fAx) > ::std::max( fabs(fAx), fabs(fBx)) * fXEps )
+            (fBx-fAx) > std::max( fabs(fAx), fabs(fBx)) * fXEps )
     {
         if (bHasToInterpolate)
         {
@@ -572,7 +572,7 @@ static double lcl_GetLogGammaHelper(double fZ)
 double ScInterpreter::GetGamma(double fZ)
 {
     const double fLogPi = log(F_PI);
-    const double fLogDblMax = log( ::std::numeric_limits<double>::max());
+    const double fLogDblMax = log( std::numeric_limits<double>::max());
 
     if (fZ > fMaxGammaArgument)
     {
@@ -898,8 +898,8 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
     }
 
     // normal cases; result x^(a-1)*(1-x)^(b-1)/Beta(a,b)
-    const double fLogDblMax = log( ::std::numeric_limits<double>::max());
-    const double fLogDblMin = log( ::std::numeric_limits<double>::min());
+    const double fLogDblMax = log( std::numeric_limits<double>::max());
+    const double fLogDblMin = log( std::numeric_limits<double>::min());
     double fLogY = (fX < 0.1) ? ::rtl::math::log1p(-fX) : log(0.5-fX+0.5);
     double fLogX = log(fX);
     double fAm1LogX = (fA-1.0) * fLogX;
@@ -1237,10 +1237,10 @@ double ScInterpreter::GetBinomDistPMF(double x, double n, double p)
 {
     double q = (0.5 - p) + 0.5;
     double fFactor = pow(q, n);
-    if (fFactor <=::std::numeric_limits<double>::min())
+    if (fFactor <=std::numeric_limits<double>::min())
     {
         fFactor = pow(p, n);
-        if (fFactor <= ::std::numeric_limits<double>::min())
+        if (fFactor <= std::numeric_limits<double>::min())
             return GetBetaDistPDF(p, x+1.0, n-x+1.0)/(n+1.0);
         else
         {
@@ -1313,12 +1313,12 @@ void ScInterpreter::ScB()
             else
             {
                 double fFactor = pow(q, n);
-                if (fFactor > ::std::numeric_limits<double>::min())
+                if (fFactor > std::numeric_limits<double>::min())
                     PushDouble(lcl_GetBinomDistRange(n,xs,xe,fFactor,p,q));
                 else
                 {
                     fFactor = pow(p, n);
-                    if (fFactor > ::std::numeric_limits<double>::min())
+                    if (fFactor > std::numeric_limits<double>::min())
                     {
                         // sum from j=xs to xe {(n choose j) * p^j * q^(n-j)}
                         // = sum from i = n-xe to n-xs { (n choose i) * q^i * p^(n-i)}
@@ -1381,10 +1381,10 @@ void ScInterpreter::ScBinomDist()
                 double fFactor = pow(q, n);
                 if (x == 0.0)
                     PushDouble(fFactor);
-                else if (fFactor <= ::std::numeric_limits<double>::min())
+                else if (fFactor <= std::numeric_limits<double>::min())
                 {
                     fFactor = pow(p, n);
-                    if (fFactor <= ::std::numeric_limits<double>::min())
+                    if (fFactor <= std::numeric_limits<double>::min())
                         PushDouble(GetBetaDist(q,n-x,x+1.0));
                     else
                     {
@@ -1427,7 +1427,7 @@ void ScInterpreter::ScCritBinom()
             {
                 // work from 0 upwards
                 fFactor = pow(q,n);
-                if (fFactor > ::std::numeric_limits<double>::min())
+                if (fFactor > std::numeric_limits<double>::min())
                 {
                     double fSum = fFactor;
                     sal_uInt32 max = static_cast<sal_uInt32> (n), i;
@@ -1463,7 +1463,7 @@ void ScInterpreter::ScCritBinom()
             {
                 // work from n backwards
                 fFactor = pow(p, n);
-                if (fFactor > ::std::numeric_limits<double>::min())
+                if (fFactor > std::numeric_limits<double>::min())
                 {
                     double fSum = 1.0 - fFactor;
                     sal_uInt32 max = static_cast<sal_uInt32> (n), i;
@@ -1839,7 +1839,7 @@ void ScInterpreter::ScPoissonDist()
 
 /** Local function used in the calculation of the hypergeometric distribution.
  */
-static void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower, double fUpper, double fBase )
+static void lcl_PutFactorialElements( std::vector< double >& cn, double fLower, double fUpper, double fBase )
 {
     for ( double i = fLower; i <= fUpper; ++i )
     {
@@ -1929,11 +1929,11 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
 {
     const size_t nMaxArraySize = 500000; // arbitrary max array size
 
-    typedef ::std::vector< double > HypContainer;
+    typedef std::vector< double > HypContainer;
     HypContainer cnNumer, cnDenom;
 
-    size_t nEstContainerSize = static_cast<size_t>( x + ::std::min( n, M ) );
-    size_t nMaxSize = ::std::min( cnNumer.max_size(), nMaxArraySize );
+    size_t nEstContainerSize = static_cast<size_t>( x + std::min( n, M ) );
+    size_t nMaxSize = std::min( cnNumer.max_size(), nMaxArraySize );
     if ( nEstContainerSize > nMaxSize )
     {
         PushNoValue();
@@ -2103,8 +2103,8 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
     lcl_PutFactorialElements( cnNumer, fDNumVarLower, nDNumVarUpper, n );
     lcl_PutFactorialElements( cnDenom, nDDenomVarLower, N - n - M + x, N - n - M + x + 1.0 );
 
-    ::std::sort( cnNumer.begin(), cnNumer.end() );
-    ::std::sort( cnDenom.begin(), cnDenom.end() );
+    std::sort( cnNumer.begin(), cnNumer.end() );
+    std::sort( cnDenom.begin(), cnDenom.end() );
     HypContainer::reverse_iterator it1 = cnNumer.rbegin(), it1End = cnNumer.rend();
     HypContainer::reverse_iterator it2 = cnDenom.rbegin(), it2End = cnDenom.rend();
 
@@ -3323,7 +3323,7 @@ double ScInterpreter::GetMedian( vector<double> & rArray )
     // Upper median.
     size_t nMid = nSize / 2;
     vector<double>::iterator iMid = rArray.begin() + nMid;
-    ::std::nth_element( rArray.begin(), iMid, rArray.end());
+    std::nth_element( rArray.begin(), iMid, rArray.end());
     if (nSize & 1)
         return *iMid;   // Lower and upper median are equal.
     else
@@ -3331,7 +3331,7 @@ double ScInterpreter::GetMedian( vector<double> & rArray )
         double fUp = *iMid;
         // Lower median.
         iMid = rArray.begin() + nMid - 1;
-        ::std::nth_element( rArray.begin(), iMid, rArray.end());
+        std::nth_element( rArray.begin(), iMid, rArray.end());
         return (fUp + *iMid) / 2;
     }
 }
@@ -3357,7 +3357,7 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
         double fDiff = fPercentile * (nSize-1) - ::rtl::math::approxFloor( fPercentile * (nSize-1));
         OSL_ENSURE(nIndex < nSize, "GetPercentile: wrong index(1)");
         vector<double>::iterator iter = rArray.begin() + nIndex;
-        ::std::nth_element( rArray.begin(), iter, rArray.end());
+        std::nth_element( rArray.begin(), iter, rArray.end());
         if (fDiff == 0.0)
             return *iter;
         else
@@ -3365,7 +3365,7 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
             OSL_ENSURE(nIndex < nSize-1, "GetPercentile: wrong index(2)");
             double fVal = *iter;
             iter = rArray.begin() + nIndex+1;
-            ::std::nth_element( rArray.begin(), iter, rArray.end());
+            std::nth_element( rArray.begin(), iter, rArray.end());
             return fVal + fDiff * (*iter - fVal);
         }
     }
@@ -3389,7 +3389,7 @@ double ScInterpreter::GetPercentileExclusive( vector<double> & rArray, double fP
     double fDiff = fPercentile *  nSize1 - 1 - ::rtl::math::approxFloor( fPercentile * nSize1 - 1 );
     OSL_ENSURE(nIndex < ( nSize1 - 1 ), "GetPercentile: wrong index(1)");
     vector<double>::iterator iter = rArray.begin() + nIndex;
-    ::std::nth_element( rArray.begin(), iter, rArray.end());
+    std::nth_element( rArray.begin(), iter, rArray.end());
     if (fDiff == 0.0)
         return *iter;
     else
@@ -3397,7 +3397,7 @@ double ScInterpreter::GetPercentileExclusive( vector<double> & rArray, double fP
         OSL_ENSURE(nIndex < nSize1, "GetPercentile: wrong index(2)");
         double fVal = *iter;
         iter = rArray.begin() + nIndex + 1;
-        ::std::nth_element( rArray.begin(), iter, rArray.end());
+        std::nth_element( rArray.begin(), iter, rArray.end());
         return fVal + fDiff * (*iter - fVal);
     }
 }
@@ -3517,7 +3517,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
     {
         // TODO: the sorted case for array: PushDouble( aSortArray[ bSmall ? k-1 : nSize-k ] );
         vector<double>::iterator iPos = aSortArray.begin() + (bSmall ? k-1 : nSize-k);
-        ::std::nth_element( aSortArray.begin(), iPos, aSortArray.end());
+        std::nth_element( aSortArray.begin(), iPos, aSortArray.end());
         PushDouble( *iPos);
     }
 }
@@ -3565,7 +3565,7 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
     }
 }
 
-double ScInterpreter::GetPercentrank( ::std::vector<double> & rArray, double fVal, bool bInclusive )
+double ScInterpreter::GetPercentrank( std::vector<double> & rArray, double fVal, bool bInclusive )
 {
     SCSIZE nSize = rArray.size();
     double fRes;
@@ -3791,7 +3791,7 @@ static void lcl_QuickSort( long nLo, long nHi, vector<double>& rSortArray, vecto
 {
     // If pIndexOrder is not NULL, we assume rSortArray.size() == pIndexOrder->size().
 
-    using ::std::swap;
+    using std::swap;
 
     if (nHi - nLo == 1)
     {
@@ -3857,9 +3857,9 @@ void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<long>* pIndexO
     for (size_t i = 0; (i + 4) <= nValCount-1; i += 4)
     {
         size_t nInd = comphelper::rng::uniform_size_distribution(0, nValCount-2);
-        ::std::swap( rSortArray[i], rSortArray[nInd]);
+        std::swap( rSortArray[i], rSortArray[nInd]);
         if (pIndexOrder)
-            ::std::swap( pIndexOrder->at(i), pIndexOrder->at(nInd));
+            std::swap( pIndexOrder->at(i), pIndexOrder->at(nInd));
     }
 
     lcl_QuickSort(0, n-1, rSortArray, pIndexOrder);

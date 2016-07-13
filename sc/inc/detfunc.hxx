@@ -133,8 +133,8 @@ public:
 
     bool        MarkInvalid(bool& rOverflow);
 
-    void        GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
-    void        GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ::std::vector<ScTokenRef>& rRefTokens);
+    void        GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, std::vector<ScTokenRef>& rRefTokens);
+    void        GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, std::vector<ScTokenRef>& rRefTokens);
 
     static void UpdateAllComments( ScDocument& rDoc );        ///< on all tables
     void        UpdateAllArrowColors();     ///< on all tables

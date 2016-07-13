@@ -68,7 +68,7 @@ public:
 
 private:
     typedef std::shared_ptr< ScExtTabSettings >     ScExtTabSettingsRef;
-    typedef ::std::map< SCTAB, ScExtTabSettingsRef >    ScExtTabSettingsMap;
+    typedef std::map< SCTAB, ScExtTabSettingsRef >      ScExtTabSettingsMap;
 
     /** Makes a deep copy of all objects in the passed map. */
     void                CopyFromMap( const ScExtTabSettingsMap& rMap );

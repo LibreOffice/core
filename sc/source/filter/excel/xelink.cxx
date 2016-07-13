@@ -32,8 +32,8 @@
 #include <vector>
 #include <memory>
 
-using ::std::unique_ptr;
-using ::std::vector;
+using std::unique_ptr;
+using std::vector;
 using ::com::sun::star::uno::Any;
 
 using namespace oox;
@@ -177,7 +177,7 @@ private:
     static void         WriteEmpty( XclExpStream& rStrm );
 
 private:
-    typedef ::std::vector< Any > CachedValues;
+    typedef std::vector< Any > CachedValues;
 
     CachedValues        maValues;   /// All cached values.
     SCCOL               mnScCol;    /// Column index of the first external cell.
@@ -446,7 +446,7 @@ public:
         inline void         Set( sal_uInt16 nSupbook, sal_uInt16 nSBTab )
                                 { mnSupbook = nSupbook; mnSBTab = nSBTab; }
     };
-    typedef ::std::vector< XclExpSBIndex > XclExpSBIndexVec;
+    typedef std::vector< XclExpSBIndex > XclExpSBIndexVec;
 
 private:
     typedef XclExpRecordList< XclExpSupbook >   XclExpSupbookList;
@@ -574,8 +574,8 @@ public:
 private:
     typedef XclExpRecordList< XclExpExternSheet >   XclExpExtSheetList;
     typedef XclExpExtSheetList::RecordRefType       XclExpExtSheetRef;
-    typedef ::std::map< SCTAB, sal_uInt16 >         XclExpIntTabMap;
-    typedef ::std::map< sal_Unicode, sal_uInt16 >   XclExpCodeMap;
+    typedef std::map< SCTAB, sal_uInt16 >           XclExpIntTabMap;
+    typedef std::map< sal_Unicode, sal_uInt16 >     XclExpCodeMap;
 
 private:
     /** Returns the number of EXTERNSHEET records. */
@@ -646,7 +646,7 @@ private:
     sal_uInt16          InsertXti( const XclExpXti& rXti );
 
 private:
-    typedef ::std::vector< XclExpXti > XclExpXtiVec;
+    typedef std::vector< XclExpXti > XclExpXtiVec;
 
     XclExpSupbookBuffer maSBBuffer;     /// List of all SUPBOOK records.
     XclExpXtiVec        maXtiVec;       /// List of XTI structures for the EXTERNSHEET record.
@@ -858,7 +858,7 @@ void XclExpTabInfo::CalcXclIndexes()
     // result: first occur all exported sheets, followed by all external sheets
 }
 
-typedef ::std::pair< OUString, SCTAB > XclExpTabName;
+typedef std::pair< OUString, SCTAB > XclExpTabName;
 
 struct XclExpTabNameSort {
     bool operator ()( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
@@ -871,7 +871,7 @@ struct XclExpTabNameSort {
 void XclExpTabInfo::CalcSortedIndexes()
 {
     ScDocument& rDoc = GetDoc();
-    ::std::vector< XclExpTabName > aVec( mnScCnt );
+    std::vector< XclExpTabName > aVec( mnScCnt );
     SCTAB nScTab;
 
     // fill with sheet names
@@ -880,7 +880,7 @@ void XclExpTabInfo::CalcSortedIndexes()
         rDoc.GetName( nScTab, aVec[ nScTab ].first );
         aVec[ nScTab ].second = nScTab;
     }
-    ::std::sort( aVec.begin(), aVec.end(), XclExpTabNameSort() );
+    std::sort( aVec.begin(), aVec.end(), XclExpTabNameSort() );
 
     // fill index vectors from sorted sheet name vector
     maFromSortedVec.resize( mnScCnt );
@@ -1341,7 +1341,7 @@ bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
         optimize building the CRN record list if the cache table does not
         contain all referred cells, e.g. if big empty ranges are used in the
         formulas. */
-    ::std::pair< SCROW, SCROW > aRowRange = mxCacheTable->getRowRange();
+    std::pair< SCROW, SCROW > aRowRange = mxCacheTable->getRowRange();
     if( aRowRange.first >= aRowRange.second )
         return false;
 
@@ -1351,8 +1351,8 @@ bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
         return false;
 
     /*  Find the resulting row range that needs to be processed. */
-    SCROW nScRow1 = ::std::max( aRowRange.first, maBoundRange.aStart.Row() );
-    SCROW nScRow2 = ::std::min( aRowRange.second - 1, maBoundRange.aEnd.Row() );
+    SCROW nScRow1 = std::max( aRowRange.first, maBoundRange.aStart.Row() );
+    SCROW nScRow2 = std::min( aRowRange.second - 1, maBoundRange.aEnd.Row() );
     if( nScRow1 > nScRow2 )
         return false;
 
@@ -1364,8 +1364,8 @@ bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
     bool bValid = true;
     for( SCROW nScRow = nScRow1; bValid && (nScRow <= nScRow2); ++nScRow )
     {
-        ::std::pair< SCCOL, SCCOL > aColRange = mxCacheTable->getColRange( nScRow );
-        const SCCOL nScEnd = ::std::min( aColRange.second, MAXCOLCOUNT );
+        std::pair< SCCOL, SCCOL > aColRange = mxCacheTable->getColRange( nScRow );
+        const SCCOL nScEnd = std::min( aColRange.second, MAXCOLCOUNT );
         for( SCCOL nScCol = aColRange.first; bValid && (nScCol < nScEnd); ++nScCol )
         {
             if( maUsedCells.IsCellMarked( nScCol, nScRow, true ) )
@@ -1775,7 +1775,7 @@ XclExpSupbookBuffer::XclExpSupbookBuffer( const XclExpRoot& rRoot ) :
         maSBIndexVec.resize( nCount );
 
         // self-ref SUPBOOK first of list
-        XclExpSupbookRef xSupbook( new XclExpSupbook( GetRoot(), ::std::max( nXclCnt, nCodeCnt ) ) );
+        XclExpSupbookRef xSupbook( new XclExpSupbook( GetRoot(), std::max( nXclCnt, nCodeCnt ) ) );
         mnOwnDocSB = Append( xSupbook );
         for( sal_uInt16 nXclTab = 0; nXclTab < nXclCnt; ++nXclTab )
             maSBIndexVec[ nXclTab ].Set( mnOwnDocSB, nXclTab );
@@ -1882,7 +1882,7 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
         return;
 
     FindSBIndexEntry f(nSupbookId, nSheetId);
-    if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
+    if (std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
     {
         maSBIndexVec.push_back(XclExpSBIndex());
         XclExpSBIndex& r = maSBIndexVec.back();
@@ -1946,7 +1946,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
     {
         sal_uInt16 nSheetId = nFirstSheetId + static_cast<sal_uInt16>(nTab);
         FindSBIndexEntry f(nSupbookId, nSheetId);
-        if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
+        if (std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
         {
             maSBIndexVec.push_back(XclExpSBIndex());
             XclExpSBIndex& r = maSBIndexVec.back();
@@ -2049,7 +2049,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const OUString& rTabN
             return aXti;
 
         FindSBIndexEntry f(nSupbookId, nSheetId);
-        if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
+        if (std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
         {
             maSBIndexVec.push_back(XclExpSBIndex());
             XclExpSBIndex& r = maSBIndexVec.back();
@@ -2080,7 +2080,7 @@ void XclExpSupbookBuffer::Save( XclExpStream& rStrm )
 
 void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
 {
-    ::std::map< sal_uInt16, OUString > aMap;
+    std::map< sal_uInt16, OUString > aMap;
     for (size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos)
     {
         XclExpSupbookRef xRef( maSupbookList.GetRecord( nPos));
@@ -2089,8 +2089,8 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
 
         sal_uInt16 nId = xRef->GetFileId();
         const OUString& rUrl = xRef->GetUrl();
-        ::std::pair< ::std::map< sal_uInt16, OUString >::iterator, bool > aInsert(
-                aMap.insert( ::std::make_pair( nId, rUrl)));
+        std::pair< std::map< sal_uInt16, OUString >::iterator, bool > aInsert(
+                aMap.insert( std::make_pair( nId, rUrl)));
         if (!aInsert.second)
         {
             SAL_WARN( "sc.filter", "XclExpSupbookBuffer::SaveXml: file ID already used: " << nId <<

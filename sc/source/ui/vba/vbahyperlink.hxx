@@ -63,7 +63,7 @@ public:
     VBAHELPER_DECL_XHELPERINTERFACE
 
 private:
-    typedef ::std::pair< OUString, OUString > UrlComponents;
+    typedef std::pair< OUString, OUString > UrlComponents;
 
     void ensureTextField() throw (css::uno::RuntimeException);
     UrlComponents getUrlComponents() throw (css::uno::RuntimeException);

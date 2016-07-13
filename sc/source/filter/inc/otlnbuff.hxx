@@ -40,7 +40,7 @@ public:
 private:
     typedef ::mdds::flat_segment_tree<SCSIZE, sal_uInt8> OutlineLevels;
     OutlineLevels       maLevels;
-    ::std::set<SCSIZE>  maCollapsedPosSet;
+    std::set<SCSIZE>    maCollapsedPosSet;
     ScOutlineArray*     mpOutlineArray;
     SCSIZE              mnEndPos;
     sal_uInt8           mnMaxLevel;

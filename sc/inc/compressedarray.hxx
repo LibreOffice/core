@@ -172,7 +172,7 @@ public:
 
     /** Return the last row where an entry meets the condition:
         ((aValue & rBitMask) != 0), start searching at 0. If no entry
-        meets this condition, ::std::numeric_limits<A>::max() is returned. */
+        meets this condition, std::numeric_limits<A>::max() is returned. */
     A                           GetLastAnyBitAccess( const D& rBitMask ) const;
 };
 

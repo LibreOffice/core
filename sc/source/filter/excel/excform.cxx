@@ -37,7 +37,7 @@
 #include "xiname.hxx"
 #include "documentimport.hxx"
 
-using ::std::vector;
+using std::vector;
 
 const sal_uInt16 ExcelToSc::nRowMask = 0x3FFF;
 

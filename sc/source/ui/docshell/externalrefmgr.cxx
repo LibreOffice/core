@@ -61,15 +61,15 @@
 #include <memory>
 #include <algorithm>
 
-using ::std::unique_ptr;
+using std::unique_ptr;
 using ::com::sun::star::uno::Any;
-using ::std::vector;
-using ::std::find;
-using ::std::find_if;
-using ::std::distance;
-using ::std::pair;
-using ::std::list;
-using ::std::unary_function;
+using std::vector;
+using std::find;
+using std::find_if;
+using std::distance;
+using std::pair;
+using std::list;
+using std::unary_function;
 using namespace formula;
 
 #define SRCDOC_LIFE_SPAN     30000      // 5 minutes (in 100th of a sec)
@@ -280,7 +280,7 @@ bool ScExternalRefCache::Table::isReferenced() const
 
 void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex, bool bSetCacheRange)
 {
-    using ::std::pair;
+    using std::pair;
     RowsDataType::iterator itrRow = maRows.find(nRow);
     if (itrRow == maRows.end())
     {
@@ -345,13 +345,13 @@ void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows, SCROW nLow, SCR
             aRows.push_back(itr->first);
 
     // hash map is not ordered, so we need to explicitly sort it.
-    ::std::sort(aRows.begin(), aRows.end());
+    std::sort(aRows.begin(), aRows.end());
     rRows.swap(aRows);
 }
 
-::std::pair< SCROW, SCROW > ScExternalRefCache::Table::getRowRange() const
+std::pair< SCROW, SCROW > ScExternalRefCache::Table::getRowRange() const
 {
-    ::std::pair< SCROW, SCROW > aRange( 0, 0 );
+    std::pair< SCROW, SCROW > aRange( 0, 0 );
     if( !maRows.empty() )
     {
         // iterate over entire container (hash map is not sorted by key)
@@ -385,13 +385,13 @@ void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols, SCC
             aCols.push_back(itrCol->first);
 
     // hash map is not ordered, so we need to explicitly sort it.
-    ::std::sort(aCols.begin(), aCols.end());
+    std::sort(aCols.begin(), aCols.end());
     rCols.swap(aCols);
 }
 
-::std::pair< SCCOL, SCCOL > ScExternalRefCache::Table::getColRange( SCROW nRow ) const
+std::pair< SCCOL, SCCOL > ScExternalRefCache::Table::getColRange( SCROW nRow ) const
 {
-    ::std::pair< SCCOL, SCCOL > aRange( 0, 0 );
+    std::pair< SCCOL, SCCOL > aRange( 0, 0 );
 
     RowsDataType::const_iterator itrRow = maRows.find( nRow );
     if (itrRow == maRows.end())
@@ -792,7 +792,7 @@ void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabNam
     if (!isDocInitialized(nFileId))
         return;
 
-    using ::std::pair;
+    using std::pair;
     DocItem* pDocItem = getDocItem(nFileId);
     if (!pDocItem)
         return;
@@ -816,7 +816,7 @@ void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabNam
 void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRange, const vector<SingleRangeData>& rData,
                                           const TokenArrayRef& pArray)
 {
-    using ::std::pair;
+    using std::pair;
     if (rData.empty() || !isDocInitialized(nFileId))
         // nothing to cache
         return;
@@ -843,7 +843,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
     vector<SingleRangeData>::const_iterator itrDataBeg = rData.begin(), itrDataEnd = rData.end();
     for (vector<SingleRangeData>::const_iterator itrData = itrDataBeg; itrData != itrDataEnd; ++itrData)
     {
-        size_t i = nTabFirstId + ::std::distance(itrDataBeg, itrData);
+        size_t i = nTabFirstId + std::distance(itrDataBeg, itrData);
         TableTypeRef& pTabData = rDoc.maTables[i];
         if (!pTabData.get())
             pTabData.reset(new Table);
@@ -1081,18 +1081,18 @@ SCsTAB ScExternalRefCache::getTabSpan( sal_uInt16 nFileId, const OUString& rStar
     vector<TableName>::const_iterator itrBeg = pDoc->maTableNames.begin();
     vector<TableName>::const_iterator itrEnd = pDoc->maTableNames.end();
 
-    vector<TableName>::const_iterator itrStartTab = ::std::find_if( itrBeg, itrEnd,
+    vector<TableName>::const_iterator itrStartTab = std::find_if( itrBeg, itrEnd,
             TabNameSearchPredicate( rStartTabName));
     if (itrStartTab == itrEnd)
         return -1;
 
-    vector<TableName>::const_iterator itrEndTab = ::std::find_if( itrBeg, itrEnd,
+    vector<TableName>::const_iterator itrEndTab = std::find_if( itrBeg, itrEnd,
             TabNameSearchPredicate( rEndTabName));
     if (itrEndTab == itrEnd)
         return 0;
 
-    size_t nStartDist = ::std::distance( itrBeg, itrStartTab);
-    size_t nEndDist = ::std::distance( itrBeg, itrEndTab);
+    size_t nStartDist = std::distance( itrBeg, itrStartTab);
+    size_t nEndDist = std::distance( itrBeg, itrEndTab);
     return nStartDist <= nEndDist ? static_cast<SCsTAB>(nEndDist - nStartDist + 1) : -static_cast<SCsTAB>(nStartDist - nEndDist + 1);
 }
 
@@ -1100,8 +1100,8 @@ void ScExternalRefCache::getAllNumberFormats(vector<sal_uInt32>& rNumFmts) const
 {
     osl::MutexGuard aGuard(&maMtxDocs);
 
-    using ::std::sort;
-    using ::std::unique;
+    using std::sort;
+    using std::unique;
 
     vector<sal_uInt32> aNumFmts;
     for (DocDataType::const_iterator itrDoc = maDocs.begin(), itrDocEnd = maDocs.end();
@@ -1131,7 +1131,7 @@ bool ScExternalRefCache::setCacheDocReferenced( sal_uInt16 nFileId )
     if (!pDocItem)
         return areAllCacheTablesReferenced();
 
-    for (::std::vector<TableTypeRef>::iterator itrTab = pDocItem->maTables.begin();
+    for (std::vector<TableTypeRef>::iterator itrTab = pDocItem->maTables.begin();
             itrTab != pDocItem->maTables.end(); ++itrTab)
     {
         if ((*itrTab).get())
@@ -1149,7 +1149,7 @@ bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const OUSt
         size_t nIndex = 0;
         if (pDoc->getTableDataIndex( rTabName, nIndex))
         {
-            size_t nStop = ::std::min( nIndex + nSheets, pDoc->maTables.size());
+            size_t nStop = std::min( nIndex + nSheets, pDoc->maTables.size());
             for (size_t i = nIndex; i < nStop; ++i)
             {
                 TableTypeRef pTab = pDoc->maTables[i];
@@ -1179,7 +1179,7 @@ void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
         for (DocDataType::iterator itrDoc = maDocs.begin(); itrDoc != maDocs.end(); ++itrDoc)
         {
             ScExternalRefCache::DocItem& rDocItem = (*itrDoc).second;
-            for (::std::vector<TableTypeRef>::iterator itrTab = rDocItem.maTables.begin();
+            for (std::vector<TableTypeRef>::iterator itrTab = rDocItem.maTables.begin();
                     itrTab != rDocItem.maTables.end(); ++itrTab)
             {
                 if ((*itrTab).get())
@@ -1232,7 +1232,7 @@ void ScExternalRefCache::addCacheTableToReferenced( sal_uInt16 nFileId, size_t n
     if (nFileId >= maReferenced.maDocs.size())
         return;
 
-    ::std::vector<bool> & rTables = maReferenced.maDocs[nFileId].maTables;
+    std::vector<bool> & rTables = maReferenced.maDocs[nFileId].maTables;
     size_t nTables = rTables.size();
     if (nIndex >= nTables)
         return;
@@ -1258,7 +1258,7 @@ void ScExternalRefCache::addCacheDocToReferenced( sal_uInt16 nFileId )
 
     if (!maReferenced.maDocs[nFileId].mbAllTablesReferenced)
     {
-        ::std::vector<bool> & rTables = maReferenced.maDocs[nFileId].maTables;
+        std::vector<bool> & rTables = maReferenced.maDocs[nFileId].maTables;
         size_t nSize = rTables.size();
         for (size_t i=0; i < nSize; ++i)
             rTables[i] = true;
@@ -1440,7 +1440,7 @@ ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) 
 {
     osl::MutexGuard aGuard(&maMtxDocs);
 
-    using ::std::pair;
+    using std::pair;
     DocDataType::iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
     {
@@ -2757,7 +2757,7 @@ bool ScExternalRefManager::hasExternalFile(sal_uInt16 nFileId) const
 
 bool ScExternalRefManager::hasExternalFile(const OUString& rFile) const
 {
-    return ::std::any_of(maSrcFiles.begin(), maSrcFiles.end(), FindSrcFileByName(rFile));
+    return std::any_of(maSrcFiles.begin(), maSrcFiles.end(), FindSrcFileByName(rFile));
 }
 
 const ScExternalRefManager::SrcFileData* ScExternalRefManager::getExternalFileData(sal_uInt16 nFileId) const

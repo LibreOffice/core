@@ -65,7 +65,7 @@ public:
     const XclImpString* GetString( sal_uInt32 nSstIndex ) const;
 
 private:
-    typedef ::std::vector< XclImpString > XclImpStringVec;
+    typedef std::vector< XclImpString > XclImpStringVec;
     XclImpStringVec     maStrings;          /// List with all strings in the SST.
 };
 
@@ -136,7 +136,7 @@ public:
     void                Apply();
 
 private:
-    typedef ::std::unique_ptr< ScConditionalFormat > ScCondFmtPtr;
+    typedef std::unique_ptr< ScConditionalFormat > ScCondFmtPtr;
 
     ScRangeList         maRanges;           /// Destination cell ranges.
     ScCondFmtPtr        mxScCondFmt;        /// Calc conditional format.
@@ -317,7 +317,7 @@ private:
         bool        mbProtected;
         sal_uInt16  mnPasswordHash;
         sal_uInt16  mnOptions;
-        ::std::vector< ScEnhancedProtection >  maEnhancedProtections;
+        std::vector< ScEnhancedProtection >    maEnhancedProtections;
 
         Sheet();
         Sheet(const Sheet& r);
@@ -326,7 +326,7 @@ private:
     Sheet* GetSheetItem( SCTAB nTab );
 
 private:
-    typedef ::std::map<SCTAB, Sheet> ProtectedSheetMap;
+    typedef std::map<SCTAB, Sheet> ProtectedSheetMap;
     ProtectedSheetMap   maProtectedSheets;
 };
 

@@ -58,7 +58,7 @@ using ::com::sun::star::sheet::DataPilotFieldSortInfo;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
-using ::std::vector;
+using std::vector;
 
 // Pivot cache
 
@@ -1417,7 +1417,7 @@ void XclImpPivotTable::Convert()
     ScRange aOutRange( maOutScRange );
     if( !maPageFields.empty() )
     {
-        SCsROW nDecRows = ::std::min< SCsROW >( aOutRange.aStart.Row(), maPageFields.size() + 1 );
+        SCsROW nDecRows = std::min< SCsROW >( aOutRange.aStart.Row(), maPageFields.size() + 1 );
         aOutRange.aStart.IncRow( -nDecRows );
     }
 

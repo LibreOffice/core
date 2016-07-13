@@ -57,7 +57,7 @@ public:
     /** Converts a non-empty vector into a UNO sequence containing elements of the same type. */
     template< typename Type >
     static css::uno::Sequence< Type >
-                            VectorToSequence( const ::std::vector< Type >& rVector );
+                            VectorToSequence( const std::vector< Type >& rVector );
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
     static OUString GetServiceName( const css::uno::Reference< css::uno::XInterface >& xInt );
@@ -82,11 +82,11 @@ public:
         @return  The encryption data or an empty sequence on 'Cancel' or any error. */
     static css::uno::Sequence< css::beans::NamedValue > QueryEncryptionDataForMedium( SfxMedium& rMedium,
                             ::comphelper::IDocPasswordVerifier& rVerifier,
-                            const ::std::vector< OUString >* pDefaultPasswords = nullptr );
+                            const std::vector< OUString >* pDefaultPasswords = nullptr );
 };
 
 template< typename Type >
-css::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< Type >& rVector )
+css::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const std::vector< Type >& rVector )
 {
     OSL_ENSURE( !rVector.empty(), "ScfApiHelper::VectorToSequence - vector is empty" );
     return css::uno::Sequence< Type >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );

@@ -73,14 +73,14 @@ void XclImpColRowSettings::SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec 
 
 void XclImpColRowSettings::SetWidthRange( SCCOL nCol1, SCCOL nCol2, sal_uInt16 nWidth )
 {
-    nCol2 = ::std::min( nCol2, MAXCOL );
+    nCol2 = std::min( nCol2, MAXCOL );
     if (nCol2 == 256)
         // In BIFF8, the column range is 0-255, and the use of 256 probably
         // means the range should extend to the max column if the loading app
         // support columns beyond 255.
         nCol2 = MAXCOL;
 
-    nCol1 = ::std::min( nCol1, nCol2 );
+    nCol1 = std::min( nCol1, nCol2 );
     maColWidths.insert_back(nCol1, nCol2+1, nWidth);
 
     // We need to apply flag values individually since all flag values are aggregated for each column.
@@ -98,8 +98,8 @@ void XclImpColRowSettings::HideCol( SCCOL nCol )
 
 void XclImpColRowSettings::HideColRange( SCCOL nCol1, SCCOL nCol2 )
 {
-    nCol2 = ::std::min( nCol2, MAXCOL );
-    nCol1 = ::std::min( nCol1, nCol2 );
+    nCol2 = std::min( nCol2, MAXCOL );
+    nCol1 = std::min( nCol1, nCol2 );
 
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         ApplyColFlag(nCol, EXC_COLROW_HIDDEN);
@@ -176,8 +176,8 @@ void XclImpColRowSettings::SetDefaultXF( SCCOL nCol1, SCCOL nCol2, sal_uInt16 nX
     /*  assign the default column formatting here to ensure that
         explicit cell formatting is not overwritten. */
     OSL_ENSURE( (nCol1 <= nCol2) && ValidCol( nCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
-    nCol2 = ::std::min( nCol2, MAXCOL );
-    nCol1 = ::std::min( nCol1, nCol2 );
+    nCol2 = std::min( nCol2, MAXCOL );
+    nCol1 = std::min( nCol1, nCol2 );
     XclImpXFRangeBuffer& rXFRangeBuffer = GetXFRangeBuffer();
     for( SCCOL nCol = nCol1; nCol <= nCol2; ++nCol )
         rXFRangeBuffer.SetColumnDefXF( nCol, nXFIndex );
@@ -330,7 +330,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
                 // #i38093# rows hidden by filter need extra flag
                 if (nFirstFilterScRow <= nPrevRow && nPrevRow <= nLastFilterScRow)
                 {
-                    SCROW nLast = ::std::min(nRow-1, nLastFilterScRow);
+                    SCROW nLast = std::min(nRow-1, nLastFilterScRow);
                     rDoc.SetRowFiltered(nPrevRow, nLast, nScTab, true);
                 }
             }

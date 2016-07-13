@@ -78,14 +78,14 @@ public:
         should be passed as a const instance. */
     struct CalcInfo
     {
-        ::std::vector<long>             aColLevelDims;
-        ::std::vector<ScDPDimension*>   aColDims;
-        ::std::vector<ScDPLevel*>       aColLevels;
-        ::std::vector<long>             aRowLevelDims;
-        ::std::vector<ScDPDimension*>   aRowDims;
-        ::std::vector<ScDPLevel*>       aRowLevels;
-        ::std::vector<long>             aPageDims;
-        ::std::vector<long>             aDataSrcCols;
+        std::vector<long>               aColLevelDims;
+        std::vector<ScDPDimension*>     aColDims;
+        std::vector<ScDPLevel*>         aColLevels;
+        std::vector<long>               aRowLevelDims;
+        std::vector<ScDPDimension*>     aRowDims;
+        std::vector<ScDPLevel*>         aRowLevels;
+        std::vector<long>               aPageDims;
+        std::vector<long>               aDataSrcCols;
 
         ScDPInitState*                  pInitState;
         ScDPResultMember*               pColRoot;
@@ -151,10 +151,10 @@ protected:
         each row during cache table iteration. */
     struct CalcRowData
     {
-        ::std::vector< SCROW >  aColData;
-        ::std::vector< SCROW >  aRowData;
-        ::std::vector< SCROW >  aPageData;
-        ::std::vector<ScDPValue> aValues;
+        std::vector< SCROW >    aColData;
+        std::vector< SCROW >    aRowData;
+        std::vector< SCROW >    aPageData;
+        std::vector<ScDPValue> aValues;
     };
 
     void            FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFilteredCache& rCacheTable, const CalcInfo& rInfo, CalcRowData& rData);
@@ -163,7 +163,7 @@ protected:
 
 private:
     void            GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 nRow,
-                                          const ::std::vector<long>& rDims, ::std::vector< SCROW >& rItemData);
+                                          const std::vector<long>& rDims, std::vector< SCROW >& rItemData);
 };
 #endif
 

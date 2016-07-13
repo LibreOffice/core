@@ -164,14 +164,14 @@ public:
         ReferencedFlag getReferencedFlag() const { return meReferenced;}
         bool isReferenced() const;
         /// Obtain a sorted vector of rows.
-        void getAllRows(::std::vector<SCROW>& rRows, SCROW nLow = 0, SCROW nHigh = MAXROW) const;
+        void getAllRows(std::vector<SCROW>& rRows, SCROW nLow = 0, SCROW nHigh = MAXROW) const;
         /// Returns the half-open range of used rows in this table. Returns [0,0) if table is empty.
-        SC_DLLPUBLIC ::std::pair< SCROW, SCROW > getRowRange() const;
+        SC_DLLPUBLIC std::pair< SCROW, SCROW > getRowRange() const;
         /// Obtain a sorted vector of columns.
-        void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols, SCCOL nLow = 0, SCCOL nHigh = MAXCOL) const;
+        void getAllCols(SCROW nRow, std::vector<SCCOL>& rCols, SCCOL nLow = 0, SCCOL nHigh = MAXCOL) const;
         /// Returns the half-open range of used columns in the specified row. Returns [0,0) if row is empty.
-        SC_DLLPUBLIC ::std::pair< SCCOL, SCCOL > getColRange( SCROW nRow ) const;
-        void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
+        SC_DLLPUBLIC std::pair< SCCOL, SCCOL > getColRange( SCROW nRow ) const;
+        void getAllNumberFormats(std::vector<sal_uInt32>& rNumFmts) const;
         bool isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
         void setCachedCell(SCCOL nCol, SCROW nRow);
@@ -245,15 +245,15 @@ public:
         OUString maTableName;
         ScMatrixRef mpRangeData;
     };
-    void setCellRangeData(sal_uInt16 nFileId, const ScRange& rRange, const ::std::vector<SingleRangeData>& rData,
+    void setCellRangeData(sal_uInt16 nFileId, const ScRange& rRange, const std::vector<SingleRangeData>& rData,
                           const TokenArrayRef& pArray);
 
     bool isDocInitialized(sal_uInt16 nFileId);
-    void initializeDoc(sal_uInt16 nFileId, const ::std::vector<OUString>& rTabNames, const OUString& rBaseName);
+    void initializeDoc(sal_uInt16 nFileId, const std::vector<OUString>& rTabNames, const OUString& rBaseName);
     OUString getTableName(sal_uInt16 nFileId, size_t nCacheId) const;
-    void getAllTableNames(sal_uInt16 nFileId, ::std::vector<OUString>& rTabNames) const;
+    void getAllTableNames(sal_uInt16 nFileId, std::vector<OUString>& rTabNames) const;
     SCsTAB getTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const;
-    void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
+    void getAllNumberFormats(std::vector<sal_uInt32>& rNumFmts) const;
 
     /**
      * Set all tables of a document as referenced, used only during
@@ -284,12 +284,12 @@ private:
     {
         struct DocReferenced
         {
-            ::std::vector<bool> maTables;
+            std::vector<bool> maTables;
             bool                mbAllTablesReferenced;
             // Initially, documents have no tables but all referenced.
             DocReferenced() : mbAllTablesReferenced(true) {}
         };
-        typedef ::std::vector<DocReferenced> DocReferencedVec;
+        typedef std::vector<DocReferenced> DocReferencedVec;
 
         DocReferencedVec maDocs;
         bool             mbAllReferenced;
@@ -337,9 +337,9 @@ private:
     struct DocItem
     {
         /** The raw cache tables. */
-        ::std::vector<TableTypeRef> maTables;
+        std::vector<TableTypeRef> maTables;
         /** Table name list in correct order, in both upper- and real-case. */
-        ::std::vector<TableName>    maTableNames;
+        std::vector<TableName>      maTableNames;
         /** Table name to index map.  The names must be stored upper-case. */
         TableNameIndexMap           maTableNameIndex;
         /** Range name cache. */
@@ -497,7 +497,7 @@ public:
         The index in the returned vector corresponds to the table index used to
         access the cache table, e.g. in getCacheTable().
      */
-    void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<OUString>& rTabNames) const;
+    void getAllCachedTableNames(sal_uInt16 nFileId, std::vector<OUString>& rTabNames) const;
 
     /**
      * Get the span (distance+sign(distance)) of two sheets of a specified
@@ -523,7 +523,7 @@ public:
      *
      * @param rNumFmts (reference) all unique number format indices.
      */
-    void getAllCachedNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
+    void getAllCachedNumberFormats(std::vector<sal_uInt32>& rNumFmts) const;
 
     sal_uInt16 getExternalFileCount() const;
 
@@ -753,7 +753,7 @@ private:
      */
     ScExternalRefCache::TokenArrayRef getDoubleRefTokensFromSrcDoc(
         ScDocument* pSrcDoc, const OUString& rTabName, ScRange& rRange,
-        ::std::vector<ScExternalRefCache::SingleRangeData>& rCacheData);
+        std::vector<ScExternalRefCache::SingleRangeData>& rCacheData);
 
     /**
      * Retrieve range name token array from a source document instance.

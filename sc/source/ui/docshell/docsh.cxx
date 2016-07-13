@@ -136,7 +136,7 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using std::shared_ptr;
-using ::std::vector;
+using std::vector;
 
 //  Filter names (like in sclib.cxx)
 

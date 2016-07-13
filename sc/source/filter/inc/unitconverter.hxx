@@ -97,9 +97,9 @@ private:
     void                addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode );
 
 private:
-    typedef ::std::vector< double >                     DoubleVector;
-    typedef ::std::map< OUString, sal_uInt8 >    OoxErrorCodeMap;
-    typedef ::std::map< sal_uInt8, OUString >    BiffErrorCodeMap;
+    typedef std::vector< double >                       DoubleVector;
+    typedef std::map< OUString, sal_uInt8 >      OoxErrorCodeMap;
+    typedef std::map< sal_uInt8, OUString >      BiffErrorCodeMap;
 
     DoubleVector        maCoeffs;           /// Coefficients for unit conversion.
     OoxErrorCodeMap     maOoxErrCodes;      /// Maps error code strings to BIFF error constants.

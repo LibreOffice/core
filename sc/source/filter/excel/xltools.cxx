@@ -65,7 +65,7 @@ XclGuid::XclGuid(
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
-    return ::std::equal( rCmp1.mpnData, std::end( rCmp1.mpnData ), rCmp2.mpnData );
+    return std::equal( rCmp1.mpnData, std::end( rCmp1.mpnData ), rCmp2.mpnData );
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid )
@@ -280,7 +280,7 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, bool bErrOrBool, sal_uIn
 sal_uInt16 XclTools::GetTwipsFromInch( double fInches )
 {
     return static_cast< sal_uInt16 >(
-        ::std::min( ::std::max( (fInches * EXC_TWIPS_PER_INCH + 0.5), 0.0 ), 65535.0 ) );
+        std::min( std::max( (fInches * EXC_TWIPS_PER_INCH + 0.5), 0.0 ), 65535.0 ) );
 }
 
 sal_uInt16 XclTools::GetTwipsFromHmm( sal_Int32 nHmm )
@@ -322,7 +322,7 @@ sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
 
 double XclTools::GetXclDefColWidthCorrection( long nXclDefFontHeight )
 {
-    return 40960.0 / ::std::max( nXclDefFontHeight - 15L, 60L ) + 50.0;
+    return 40960.0 / std::max( nXclDefFontHeight - 15L, 60L ) + 50.0;
 }
 
 // formatting
@@ -409,7 +409,7 @@ struct XclCodePageEntry_TEPred
 
 rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
 {
-    const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_CPPred( nCodePage ) );
+    const XclCodePageEntry* pEntry = std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_CPPred( nCodePage ) );
     if( pEntry == pCodePageTableEnd )
     {
         OSL_TRACE( "XclTools::GetTextEncoding - unknown code page: 0x%04hX (%d)", nCodePage, nCodePage );
@@ -423,7 +423,7 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
     if( eTextEnc == RTL_TEXTENCODING_UNICODE )
         return 1200;    // for BIFF8
 
-    const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
+    const XclCodePageEntry* pEntry = std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
     if( pEntry == pCodePageTableEnd )
     {
         OSL_TRACE( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );

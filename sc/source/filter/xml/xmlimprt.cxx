@@ -2383,12 +2383,12 @@ bool ScXMLImport::GetValidation(const OUString& sName, ScMyImportValidation& aVa
 
 void ScXMLImport::AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp)
 {
-    ::std::unique_ptr<ScMyNamedExpression> p(pNamedExp);
+    std::unique_ptr<ScMyNamedExpression> p(pNamedExp);
     SheetNamedExpMap::iterator itr = m_SheetNamedExpressions.find(nTab);
     if (itr == m_SheetNamedExpressions.end())
     {
         // No chain exists for this sheet.  Create one.
-        ::std::pair<SheetNamedExpMap::iterator, bool> r =
+        std::pair<SheetNamedExpMap::iterator, bool> r =
             m_SheetNamedExpressions.insert(std::make_pair(nTab, o3tl::make_unique<ScMyNamedExpressions>()));
         if (!r.second)
             // insertion failed.
@@ -3074,7 +3074,7 @@ void ScXMLImport::SetLabelRanges()
 
 namespace {
 
-class RangeNameInserter : public ::std::unary_function<ScMyNamedExpression, void>
+class RangeNameInserter : public std::unary_function<ScMyNamedExpression, void>
 {
     ScDocument* mpDoc;
     ScRangeName& mrRangeName;
@@ -3131,7 +3131,7 @@ void ScXMLImport::SetNamedRanges()
 
     // Insert the namedRanges
     ScRangeName* pRangeNames = pDoc->GetRangeName();
-    ::std::for_each(pNamedExpressions->begin(), pNamedExpressions->end(), RangeNameInserter(pDoc, *pRangeNames));
+    std::for_each(pNamedExpressions->begin(), pNamedExpressions->end(), RangeNameInserter(pDoc, *pRangeNames));
 }
 
 void ScXMLImport::SetSheetNamedRanges()
@@ -3147,7 +3147,7 @@ void ScXMLImport::SetSheetNamedRanges()
             continue;
 
         const ScMyNamedExpressions& rNames = *itr.second;
-        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(pDoc, *pRangeNames));
+        std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(pDoc, *pRangeNames));
     }
 }
 

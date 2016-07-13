@@ -369,7 +369,7 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
     , mnAppendIndex(0)
 {
     // default colors
-    maColors.insert( maColors.begin(), spnDefColors8, ::std::end(spnDefColors8) );
+    maColors.insert( maColors.begin(), spnDefColors8, std::end(spnDefColors8) );
     mnAppendIndex = OOX_COLOR_USEROFFSET;
 }
 
@@ -2581,7 +2581,7 @@ void CellStyleBuffer::finalizeImport()
             Reference< XStyle > xStyle( xStyleFamilyIA->getByIndex( nIndex ), UNO_QUERY_THROW );
             if( !xStyle->isUserDefined() )
             {
-                // create an empty entry by using ::std::map<>::operator[]
+                // create an empty entry by using std::map<>::operator[]
                 aCellStyles[ xStyle->getName() ];
             }
         }

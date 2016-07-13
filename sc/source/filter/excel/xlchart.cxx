@@ -708,8 +708,8 @@ void XclChPropSetHelper::ReadLineProperties(
                 // reorder dashes that are shorter than dots
                 if( (aApiDash.Dashes == 0) || (aApiDash.DashLen < aApiDash.DotLen) )
                 {
-                    ::std::swap( aApiDash.Dashes, aApiDash.Dots );
-                    ::std::swap( aApiDash.DashLen, aApiDash.DotLen );
+                    std::swap( aApiDash.Dashes, aApiDash.Dots );
+                    std::swap( aApiDash.DashLen, aApiDash.DotLen );
                 }
                 // ignore dots that are nearly equal to dashes
                 if( aApiDash.DotLen * 3 > aApiDash.DashLen * 2 )
@@ -936,7 +936,7 @@ void XclChPropSetHelper::WriteLineProperties(
     // line style
     cssd::LineStyle eApiStyle = cssd::LineStyle_NONE;
     sal_Int16 nApiTrans = 0;
-    sal_Int32 nDotLen = ::std::min< sal_Int32 >( rLineFmt.mnWeight + 105, 210 );
+    sal_Int32 nDotLen = std::min< sal_Int32 >( rLineFmt.mnWeight + 105, 210 );
     cssd::LineDash aApiDash( cssd::DashStyle_RECT, 0, nDotLen, 0, 4 * nDotLen, nDotLen );
 
     switch( rLineFmt.mnPattern )
@@ -1249,8 +1249,8 @@ void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChar
     mnBorderGapY = rRoot.GetHmmFromPixelY( 5.0 );
 
     // size of a chart unit in 1/100 mm
-    mfUnitSizeX = ::std::max< double >( maChartRect.GetWidth() - 2 * mnBorderGapX, mnBorderGapX ) / EXC_CHART_TOTALUNITS;
-    mfUnitSizeY = ::std::max< double >( maChartRect.GetHeight() - 2 * mnBorderGapY, mnBorderGapY ) / EXC_CHART_TOTALUNITS;
+    mfUnitSizeX = std::max< double >( maChartRect.GetWidth() - 2 * mnBorderGapX, mnBorderGapX ) / EXC_CHART_TOTALUNITS;
+    mfUnitSizeY = std::max< double >( maChartRect.GetHeight() - 2 * mnBorderGapY, mnBorderGapY ) / EXC_CHART_TOTALUNITS;
 
     // create object tables
     Reference< XMultiServiceFactory > xFactory( mxChartDoc, UNO_QUERY );

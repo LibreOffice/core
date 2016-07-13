@@ -357,7 +357,7 @@ void ScAccessibleEditObject::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
-        ::std::unique_ptr < ScAccessibleTextData > pAccessibleTextData;
+        std::unique_ptr < ScAccessibleTextData > pAccessibleTextData;
         if (meObjectType == CellInEditMode || meObjectType == EditControl)
         {
             pAccessibleTextData.reset

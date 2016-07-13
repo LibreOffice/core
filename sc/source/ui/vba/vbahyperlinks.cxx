@@ -121,7 +121,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override;
 
 private:
-    typedef ::std::vector< uno::Reference< excel::XHyperlink > > HyperlinkVector;
+    typedef std::vector< uno::Reference< excel::XHyperlink > > HyperlinkVector;
     HyperlinkVector     maHlinks;
 };
 
@@ -148,7 +148,7 @@ ScVbaHlinkContainer::~ScVbaHlinkContainer()
 
 void ScVbaHlinkContainer::insertHyperlink( const uno::Reference< excel::XHyperlink >& rxHlink ) throw (uno::RuntimeException)
 {
-    HyperlinkVector::iterator aIt = ::std::find_if( maHlinks.begin(), maHlinks.end(), EqualAnchorFunctor( rxHlink ) );
+    HyperlinkVector::iterator aIt = std::find_if( maHlinks.begin(), maHlinks.end(), EqualAnchorFunctor( rxHlink ) );
     if( aIt == maHlinks.end() )
         maHlinks.push_back( rxHlink );
     else

@@ -114,8 +114,8 @@ inline bool ScUnoConversion::Intersects(
         const css::table::CellRangeAddress& rApiRange2 )
 {
     return (rApiRange1.Sheet == rApiRange2.Sheet) &&
-        (::std::max( rApiRange1.StartColumn, rApiRange2.StartColumn ) <= ::std::min( rApiRange1.EndColumn, rApiRange2.EndColumn )) &&
-        (::std::max( rApiRange1.StartRow, rApiRange2.StartRow ) <= ::std::min( rApiRange1.EndRow, rApiRange2.EndRow ));
+        (std::max( rApiRange1.StartColumn, rApiRange2.StartColumn ) <= std::min( rApiRange1.EndColumn, rApiRange2.EndColumn )) &&
+        (std::max( rApiRange1.StartRow, rApiRange2.StartRow ) <= std::min( rApiRange1.EndRow, rApiRange2.EndRow ));
 }
 
 inline bool ScUnoConversion::Contains(

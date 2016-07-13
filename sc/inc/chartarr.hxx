@@ -88,7 +88,7 @@ public:
 
 class ScChartCollection
 {
-    typedef ::std::vector<std::unique_ptr<ScChartArray>> DataType;
+    typedef std::vector<std::unique_ptr<ScChartArray>> DataType;
     DataType m_Data;
 
 public:

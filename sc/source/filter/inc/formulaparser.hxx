@@ -67,7 +67,7 @@ protected:
     virtual OUString resolveDefinedName( sal_Int32 nTokenIndex ) const;
 
 private:
-    typedef ::std::vector< const ApiToken* > ParameterPosVector;
+    typedef std::vector< const ApiToken* > ParameterPosVector;
 
     const FunctionInfo* getFunctionInfo( ApiToken& orFuncToken );
     const FunctionInfo* getExternCallInfo( ApiToken& orFuncToken, const ApiToken& rECToken );
@@ -124,7 +124,7 @@ public:
     OUString     importMacroName( const OUString& rFormulaString );
 
 private:
-    ::std::unique_ptr< FormulaParserImpl > mxImpl;
+    std::unique_ptr< FormulaParserImpl > mxImpl;
 };
 
 } // namespace xls

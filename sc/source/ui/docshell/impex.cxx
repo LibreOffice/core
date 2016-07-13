@@ -1443,7 +1443,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         if (nRow > nStartRow)
             --nRow;
         if (nEndCol > nStartCol)
-            nEndCol = ::std::min( static_cast<SCCOL>(nEndCol - 1), MAXCOL);
+            nEndCol = std::min( static_cast<SCCOL>(nEndCol - 1), MAXCOL);
 
         if (bDetermineRange)
         {
@@ -1716,7 +1716,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     SCROW nEndRow = aRange.aEnd.Row();
     sal_uLong nOldPos = rStrm.Tell();
     bool bData = !bSingle;
-    ::std::vector< sal_uInt32 > aFormats;
+    std::vector< sal_uInt32 > aFormats;
 
     if( !bSingle)
         bOk = StartPaste();

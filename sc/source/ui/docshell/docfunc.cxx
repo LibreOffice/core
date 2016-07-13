@@ -96,7 +96,7 @@
 #include <vector>
 
 using namespace com::sun::star;
-using ::std::vector;
+using std::vector;
 
 IMPL_LINK_TYPED( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction, void )
 {
@@ -1057,7 +1057,7 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
                 nIndex(nTempIndex), aItemSet(rItemSet) {}
         };
 
-        typedef ::std::list<ScMyRememberItem*> ScMyRememberItemList;
+        typedef std::list<ScMyRememberItem*> ScMyRememberItemList;
 
 void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
 {
@@ -1170,7 +1170,7 @@ bool ScDocFunc::SetCellText(
         {
             ScDocument& rDoc = rDocShell.GetDocument();
 
-            ::std::unique_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
+            std::unique_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
             if (bApi)
                 pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(&rDoc));
 
@@ -1897,7 +1897,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
                 if( !qIncreaseRange.empty() )
                 {
-                    for( ::std::vector<ScRange>::const_iterator iIter( qIncreaseRange.begin()); iIter != qIncreaseRange.end(); ++iIter )
+                    for( std::vector<ScRange>::const_iterator iIter( qIncreaseRange.begin()); iIter != qIncreaseRange.end(); ++iIter )
                     {
                         ScRange aRange( *iIter );
                         if( rDoc.HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
@@ -2213,7 +2213,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     //Issue 8302 want to be able to insert into the middle of merged cells
     //the patch comes from maoyg
-    ::std::vector<ScRange> qDecreaseRange;
+    std::vector<ScRange> qDecreaseRange;
     bool bDeletingMerge = false;
     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DELETECELLS );
     if (bRecord)
@@ -2327,7 +2327,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
                 if( !qDecreaseRange.empty() )
                 {
-                    for( ::std::vector<ScRange>::const_iterator iIter( qDecreaseRange.begin()); iIter != qDecreaseRange.end(); ++iIter )
+                    for( std::vector<ScRange>::const_iterator iIter( qDecreaseRange.begin()); iIter != qDecreaseRange.end(); ++iIter )
                     {
                         ScRange aRange( *iIter );
                         if( rDoc.HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
@@ -3699,7 +3699,7 @@ void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
         OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
         if (pProtect)
         {
-            ::std::unique_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
+            std::unique_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
             p->setProtected(true); // just in case ...
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoTabProtect(&rDocShell, nTab, std::move(p)) );
@@ -3729,7 +3729,7 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword, bool /*bApi*/ )
             OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScDocProtection pointer is NULL!");
             if (pProtect)
             {
-                ::std::unique_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
+                std::unique_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
                 p->setProtected(true); // just in case ...
                 rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoDocProtect(&rDocShell, std::move(p)) );
@@ -3751,7 +3751,7 @@ bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword, bool /*bApi*/ )
             OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
             if (pProtect)
             {
-                ::std::unique_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
+                std::unique_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
                 p->setProtected(true); // just in case ...
                 rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoTabProtect(&rDocShell, nTab, std::move(p)) );
@@ -3781,7 +3781,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
             return true;
 
         // save the protection state before unprotect (for undo).
-        ::std::unique_ptr<ScDocProtection> pProtectCopy(new ScDocProtection(*pDocProtect));
+        std::unique_ptr<ScDocProtection> pProtectCopy(new ScDocProtection(*pDocProtect));
 
         if (!pDocProtect->verifyPassword(rPassword))
         {
@@ -3812,7 +3812,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
             return true;
 
         // save the protection state before unprotect (for undo).
-        ::std::unique_ptr<ScTableProtection> pProtectCopy(new ScTableProtection(*pTabProtect));
+        std::unique_ptr<ScTableProtection> pProtectCopy(new ScTableProtection(*pTabProtect));
         if (!pTabProtect->verifyPassword(rPassword))
         {
             if (!bApi)
@@ -4657,7 +4657,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
 
 bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bool bRecord, bool bApi )
 {
-    using ::std::set;
+    using std::set;
 
     ScDocShellModificator aModificator( rDocShell );
 
@@ -4781,7 +4781,7 @@ bool ScDocFunc::UnmergeCells( const ScRange& rRange, bool bRecord )
 
 bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
 {
-    using ::std::set;
+    using std::set;
 
     if (rOption.maTabs.empty())
         // Nothing to unmerge.

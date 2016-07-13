@@ -41,8 +41,8 @@ private:
     virtual SvStream*   ImplQueryPictureStream() override;
 
 private:
-    ::std::unique_ptr< ::utl::TempFile > mxPicTempFile;
-    ::std::unique_ptr< SvStream > mxPicStrm;
+    std::unique_ptr< ::utl::TempFile > mxPicTempFile;
+    std::unique_ptr< SvStream > mxPicStrm;
 };
 
 class XclObj;

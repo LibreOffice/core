@@ -164,7 +164,7 @@ private:
     DECL_LINK_TYPED( processWindowResizeEvent, void*, void );
 
 private:
-    typedef ::std::map< VclPtr<vcl::Window>, uno::Reference< frame::XController > > WindowControllerMap;
+    typedef std::map< VclPtr<vcl::Window>, uno::Reference< frame::XController > > WindowControllerMap;
 
     ::osl::Mutex        maMutex;
     ScVbaEventsHelper&  mrVbaEvents;

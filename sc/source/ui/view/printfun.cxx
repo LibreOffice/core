@@ -1204,7 +1204,7 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
 
                             aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0),
                                                nullptr, GraphicManagerDrawFlags::STANDARD,
-                                               ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
+                                               std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
                         }
                         else
                         {

@@ -72,7 +72,7 @@ public:
     bool HasInGroup(const ScDPItemData& rItem) const;
 };
 
-typedef ::std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
+typedef std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
 
 /**
  * Represents a new group dimension whose dimension ID is higher than the
@@ -167,11 +167,11 @@ public:
 
     OUString CreateGroupDimName(
         const OUString& rSourceName, const ScDPObject& rObject, bool bAllowSource,
-        const ::std::vector<OUString>* pDeletedNames );
+        const std::vector<OUString>* pDeletedNames );
 
     OUString CreateDateGroupDimName(
         sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource,
-        const ::std::vector<OUString>* pDeletedNames );
+        const std::vector<OUString>* pDeletedNames );
 
     void    AddGroupDimension( const ScDPSaveGroupDimension& rGroupDim );
     void    ReplaceGroupDimension( const ScDPSaveGroupDimension& rGroupDim );
@@ -199,8 +199,8 @@ public:
     sal_Int32 CollectDateParts( const OUString& rBaseDimName ) const;
 
 private:
-    typedef ::std::vector< ScDPSaveGroupDimension >         ScDPSaveGroupDimVec;
-    typedef ::std::map<OUString, ScDPSaveNumGroupDimension> ScDPSaveNumGroupDimMap;
+    typedef std::vector< ScDPSaveGroupDimension >           ScDPSaveGroupDimVec;
+    typedef std::map<OUString, ScDPSaveNumGroupDimension> ScDPSaveNumGroupDimMap;
 
     ScDPDimensionSaveData& operator=( const ScDPDimensionSaveData& ) = delete;
 
