@@ -105,7 +105,7 @@ public:
         ViewShellBase.  If such an object does not yet exist, a new one is
         created.
     */
-    static ::std::shared_ptr<FrameworkHelper> Instance (ViewShellBase& rBase);
+    static std::shared_ptr<FrameworkHelper> Instance (ViewShellBase& rBase);
 
     /** Mark the FrameworkHelper object for the given ViewShellBase as
         disposed.  A following ReleaseInstance() call will destroy the
@@ -141,13 +141,13 @@ public:
             When the ViewShell pointer can not be inferred from the given
             reference then an empty pointer is returned.
     */
-    static ::std::shared_ptr<ViewShell> GetViewShell (
+    static std::shared_ptr<ViewShell> GetViewShell (
         const css::uno::Reference<css::drawing::framework::XView>& rxView);
 
-    typedef ::std::function<bool (const css::drawing::framework::ConfigurationChangeEvent&)>
+    typedef std::function<bool (const css::drawing::framework::ConfigurationChangeEvent&)>
         ConfigurationChangeEventFilter;
-    typedef ::std::function<void (bool bEventSeen)> Callback;
-    typedef ::std::function<
+    typedef std::function<void (bool bEventSeen)> Callback;
+    typedef std::function<
         void (
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>&)
@@ -168,7 +168,7 @@ public:
             of the involved objects does not support XUnoTunnel (where
             necessary).
     */
-    ::std::shared_ptr<ViewShell> GetViewShell (const OUString& rsPaneURL);
+    std::shared_ptr<ViewShell> GetViewShell (const OUString& rsPaneURL);
 
     /** Return a reference to the view that is displayed in the specified
         pane.  See GetViewShell () for a variant that returns a ViewShell
@@ -298,9 +298,9 @@ public:
         GetConfigurationController() const { return mxConfigurationController;}
 
 private:
-    typedef ::std::map<
+    typedef std::map<
         ViewShellBase*,
-        ::std::shared_ptr<FrameworkHelper> > InstanceMap;
+        std::shared_ptr<FrameworkHelper> > InstanceMap;
     /** The instance map holds (at least) one FrameworkHelper instance for
         every ViewShellBase object.
     */

@@ -78,9 +78,9 @@ public:
     /// Index of the last page in the run.
     sal_Int32 mnEndIndex;
     /// Offset of each item in the run at the start of the current animation.
-    ::std::vector<Point> maStartOffset;
+    std::vector<Point> maStartOffset;
     /// Target offset of each item in the run at the end of the current animation.
-    ::std::vector<Point> maEndOffset;
+    std::vector<Point> maEndOffset;
     /// Time at which the current animation started.
     double mnStartTime;
 
@@ -96,7 +96,7 @@ public:
 private:
     controller::Animator::AnimationId mnAnimationId;
     AnimatorAccess& mrAnimatorAccess;
-    ::std::function<double (double)> maAccelerationFunction;
+    std::function<double (double)> maAccelerationFunction;
 
     void RestartAnimation();
 };
@@ -134,7 +134,7 @@ private:
     view::SlideSorterView& mrView;
     SlideSorter& mrSlideSorter;
     std::shared_ptr<controller::Animator> mpAnimator;
-    typedef ::std::set<SharedPageObjectRun, PageObjectRun::Comparator> RunContainer;
+    typedef std::set<SharedPageObjectRun, PageObjectRun::Comparator> RunContainer;
     RunContainer maRuns;
     InsertPosition maInsertPosition;
 

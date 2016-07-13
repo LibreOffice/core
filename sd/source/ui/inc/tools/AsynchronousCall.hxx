@@ -38,8 +38,8 @@ namespace sd { namespace tools {
 
     Use this class like this:
     aInstanceOfAsynchronousCall.Post(
-        ::std::bind(
-            ::std::mem_fun(&DrawViewShell::SwitchPage),
+        std::bind(
+            std::mem_fun(&DrawViewShell::SwitchPage),
             pDrawViewShell,
             11));
 */
@@ -61,7 +61,7 @@ public:
             The function object that may be called asynchronously in the
             near future.
     */
-    typedef ::std::function<void ()> AsynchronousFunction;
+    typedef std::function<void ()> AsynchronousFunction;
     void Post (
         const AsynchronousFunction& rFunction);
 
@@ -70,7 +70,7 @@ private:
     /** The function object that will be executed when the TimerCallback
         function is called the next time.  This pointer may be NULL.
     */
-    ::std::unique_ptr<AsynchronousFunction> mpFunction;
+    std::unique_ptr<AsynchronousFunction> mpFunction;
     DECL_LINK_TYPED(TimerCallback,Timer*,void);
 };
 

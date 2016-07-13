@@ -65,7 +65,7 @@ public:
 /** This functor can be used to search for a shell in an STL container when the
     shell pointer is given.
 */
-class IsShell : public ::std::unary_function<ShellDescriptor,bool>
+class IsShell : public std::unary_function<ShellDescriptor,bool>
 {
 public:
     explicit IsShell (const SfxShell* pShell) : mpShell(pShell) {}
@@ -78,7 +78,7 @@ private:
 /** This functor can be used to search for a shell in an STL container when the
     id of the shell is given.
 */
-class IsId : public ::std::unary_function<ShellDescriptor,bool>
+class IsId : public std::unary_function<ShellDescriptor,bool>
 {
 public:
     explicit IsId (ShellId nId) : mnId(nId) {}
@@ -171,7 +171,7 @@ private:
     /** In this member we remember what shells we have pushed on the shell
         stack.
     */
-    typedef ::std::vector<SfxShell*> ShellStack;
+    typedef std::vector<SfxShell*> ShellStack;
 
     int mnUpdateLockCount;
 
@@ -390,7 +390,7 @@ void ViewShellManager::Implementation::AddShellFactory (
     bool bAlreadyAdded (false);
 
     // Check that the given factory has not already been added.
-    ::std::pair<FactoryList::iterator,FactoryList::iterator> aRange(
+    std::pair<FactoryList::iterator,FactoryList::iterator> aRange(
         maShellFactories.equal_range(pViewShell));
     for (FactoryList::const_iterator iFactory=aRange.first; iFactory!=aRange.second; ++iFactory)
         if (iFactory->second == rpFactory)
@@ -408,7 +408,7 @@ void ViewShellManager::Implementation::RemoveShellFactory (
     const SfxShell* pViewShell,
     const SharedShellFactory& rpFactory)
 {
-    ::std::pair<FactoryList::iterator,FactoryList::iterator> aRange(
+    std::pair<FactoryList::iterator,FactoryList::iterator> aRange(
         maShellFactories.equal_range(pViewShell));
     for (FactoryList::iterator iFactory=aRange.first; iFactory!=aRange.second; ++iFactory)
         if (iFactory->second == rpFactory)
@@ -451,7 +451,7 @@ void ViewShellManager::Implementation::DeactivateViewShell (const ViewShell& rSh
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    ActiveShellList::iterator iShell (::std::find_if (
+    ActiveShellList::iterator iShell (std::find_if (
         maActiveViewShells.begin(),
         maActiveViewShells.end(),
         IsShell(&rShell)));
@@ -516,7 +516,7 @@ void ViewShellManager::Implementation::DeactivateShell (const SfxShell& rShell)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    ActiveShellList::iterator iShell (::std::find_if (
+    ActiveShellList::iterator iShell (std::find_if (
         maActiveViewShells.begin(),
         maActiveViewShells.end(),
         IsShell(&rShell)));
@@ -549,7 +549,7 @@ void ViewShellManager::Implementation::ActivateSubShell (
     ::osl::MutexGuard aGuard (maMutex);
 
     // Check that the given view shell is active.
-    ActiveShellList::iterator iShell (::std::find_if (
+    ActiveShellList::iterator iShell (std::find_if (
         maActiveViewShells.begin(),
         maActiveViewShells.end(),
         IsShell(&rParentShell)));
@@ -565,7 +565,7 @@ void ViewShellManager::Implementation::ActivateSubShell (
     // Do not activate an object bar that is already active.  Requesting
     // this is not exactly an error but may be an indication of one.
     SubShellSubList& rList (iList->second);
-    if (::std::find_if(rList.begin(),rList.end(), IsId(nId)) != rList.end())
+    if (std::find_if(rList.begin(),rList.end(), IsId(nId)) != rList.end())
         return;
 
     // Add just the id of the sub shell. The actual shell is created
@@ -588,7 +588,7 @@ void ViewShellManager::Implementation::DeactivateSubShell (
     // Look up the sub shell.
     SubShellSubList& rList (iList->second);
     SubShellSubList::iterator iShell (
-        ::std::find_if(rList.begin(),rList.end(), IsId(nId)));
+        std::find_if(rList.begin(),rList.end(), IsId(nId)));
     if (iShell == rList.end())
         return;
     SfxShell* pShell = iShell->mpShell;
@@ -618,7 +618,7 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
     if (mrBase.GetDispatcher() == nullptr)
         return;
 
-    ActiveShellList::iterator iShell (::std::find_if (
+    ActiveShellList::iterator iShell (std::find_if (
         maActiveViewShells.begin(),
         maActiveViewShells.end(),
         IsShell(&rShell)));
@@ -686,7 +686,7 @@ SfxShell* ViewShellManager::Implementation::GetShell (ShellId nId) const
 
     // First search the active view shells.
     ActiveShellList::const_iterator iShell (
-        ::std::find_if (
+        std::find_if (
         maActiveViewShells.begin(),
         maActiveViewShells.end(),
         IsId(nId)));
@@ -700,7 +700,7 @@ SfxShell* ViewShellManager::Implementation::GetShell (ShellId nId) const
         {
             const SubShellSubList& rList (iList->second);
             SubShellSubList::const_iterator iSubShell(
-                ::std::find_if(rList.begin(),rList.end(), IsId(nId)));
+                std::find_if(rList.begin(),rList.end(), IsId(nId)));
             if (iSubShell != rList.end())
             {
                 pShell = iSubShell->mpShell;
@@ -1037,7 +1037,7 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
     ShellDescriptor aResult;
 
     // Look up the factories for the parent shell.
-    ::std::pair<FactoryList::iterator,FactoryList::iterator> aRange(
+    std::pair<FactoryList::iterator,FactoryList::iterator> aRange(
         maShellFactories.equal_range(pParentShell));
 
     // Try all factories to create the shell.
@@ -1076,7 +1076,7 @@ void ViewShellManager::Implementation::DestroyViewShell (
     }
 
     // Destroy the sub shell factories.
-    ::std::pair<FactoryList::iterator,FactoryList::iterator> aRange(
+    std::pair<FactoryList::iterator,FactoryList::iterator> aRange(
         maShellFactories.equal_range(rDescriptor.mpShell));
     if (aRange.first != maShellFactories.end())
         maShellFactories.erase(aRange.first, aRange.second);

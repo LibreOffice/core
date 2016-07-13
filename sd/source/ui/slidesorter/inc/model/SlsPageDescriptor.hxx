@@ -44,7 +44,7 @@ namespace sd { namespace slidesorter { namespace model {
     fade symbol.</p>
 */
 class PageDescriptor
-    : public ::std::enable_shared_from_this<PageDescriptor>
+    : public std::enable_shared_from_this<PageDescriptor>
 {
 public:
     /** Create a PageDescriptor for the given SdPage object.

@@ -54,7 +54,7 @@ public:
     typedef const SdrPage* CacheKey;
     class CacheEntry;
     class CacheBitmapContainer;
-    typedef ::std::vector<CacheKey> CacheIndex;
+    typedef std::vector<CacheKey> CacheIndex;
 
     /** Create a new cache for bitmap objects.
         The default value from the configuration is used.
@@ -151,7 +151,7 @@ public:
         Entries with the precious flag set are omitted.
         Entries with that have no preview bitmaps are omitted.
     */
-    ::std::unique_ptr<CacheIndex> GetCacheIndex () const;
+    std::unique_ptr<CacheIndex> GetCacheIndex () const;
 
     /** Compress the specified preview bitmap with the given bitmap
         compressor.  A reference to the compressor is stored for later
@@ -191,7 +191,7 @@ private:
     /** The cache compactor is used to reduce the number of bytes used by
         off-screen preview bitmaps.
     */
-    ::std::unique_ptr<CacheCompactor> mpCacheCompactor;
+    std::unique_ptr<CacheCompactor> mpCacheCompactor;
 
     /** This flag stores if the cache is or recently was full, i.e. the
         cache compactor has or had to be run in order to reduce the cache

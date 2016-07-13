@@ -137,7 +137,7 @@ private:
     bool         mbIsMainViewChangePending;
     bool         mbHorizontalLayout;
 
-    typedef ::std::vector< OUString > tSoundListType;
+    typedef std::vector< OUString > tSoundListType;
     tSoundListType  maSoundList;
     mutable OUString maCurrentSoundFile;
 

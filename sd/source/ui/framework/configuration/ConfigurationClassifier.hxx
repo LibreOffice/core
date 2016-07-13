@@ -53,7 +53,7 @@ public:
     */
     bool Partition();
 
-    typedef ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId> > ResourceIdVector;
+    typedef std::vector<css::uno::Reference<css::drawing::framework::XResourceId> > ResourceIdVector;
 
     /** Return the resources that belong to the configuration given as
         rxConfiguration1 to the constructor but that do not belong to

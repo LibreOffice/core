@@ -25,7 +25,7 @@
 
 typedef bool (*weakref_searchfunc)( const css::uno::WeakReference< css::uno::XInterface >& xRef, void* pSearchData );
 
-typedef ::std::list< css::uno::WeakReference< css::uno::XInterface >* > WeakRefList;
+typedef std::list< css::uno::WeakReference< css::uno::XInterface >* > WeakRefList;
 
 class SvUnoWeakContainer
 {

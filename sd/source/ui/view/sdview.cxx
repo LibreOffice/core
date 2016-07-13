@@ -278,12 +278,12 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                         aPolygon.transform(aObjectMatrix);
 
                         // create line and stroke attribute
-                        ::std::vector< double > aDotDashArray;
+                        std::vector< double > aDotDashArray;
 
                         aDotDashArray.push_back(160.0);
                         aDotDashArray.push_back(80.0);
 
-                        const double fFullDotDashLen(::std::accumulate(aDotDashArray.begin(), aDotDashArray.end(), 0.0));
+                        const double fFullDotDashLen(std::accumulate(aDotDashArray.begin(), aDotDashArray.end(), 0.0));
                         const drawinglayer::attribute::LineAttribute aLine(aRGBColor);
                         const drawinglayer::attribute::StrokeAttribute aStroke(aDotDashArray, fFullDotDashLen);
 
@@ -422,7 +422,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                                 fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
-                            const ::std::vector< double > aDXArray{};
+                            const std::vector< double > aDXArray{};
 
                             // create locale; this may need some more information in the future
                             const css::lang::Locale aLocale;

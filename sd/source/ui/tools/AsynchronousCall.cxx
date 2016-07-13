@@ -48,7 +48,7 @@ IMPL_LINK_TYPED(AsynchronousCall,TimerCallback,Timer*,pTimer,void)
 {
     if (pTimer == &maTimer)
     {
-        ::std::unique_ptr<AsynchronousFunction> pFunction;
+        std::unique_ptr<AsynchronousFunction> pFunction;
         pFunction.swap(mpFunction);
         (*pFunction)();
     }

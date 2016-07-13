@@ -38,7 +38,7 @@ public:
     */
     virtual T GetNextElement() = 0;
     virtual void Rewind() = 0;
-    virtual ::std::unique_ptr<Enumeration<T> > Clone() = 0;
+    virtual std::unique_ptr<Enumeration<T> > Clone() = 0;
 };
 
 } } } // end of namespace ::sd::slidesorter::model

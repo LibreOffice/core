@@ -53,7 +53,7 @@ public:
 
 private:
     class Implementation;
-    ::std::unique_ptr<Implementation> mpImpl;
+    std::unique_ptr<Implementation> mpImpl;
 
     /** The constructor creates the one instance of the cache and registers
         it at the SdGlobalResourceContainer to limit is lifetime to that of

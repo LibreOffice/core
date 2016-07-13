@@ -132,12 +132,12 @@ void ConfigurationAccess::CommitChanges()
 
 void ConfigurationAccess::ForAll (
     const Reference<container::XNameAccess>& rxContainer,
-    const ::std::vector<OUString>& rArguments,
+    const std::vector<OUString>& rArguments,
     const Functor& rFunctor)
 {
     if (rxContainer.is())
     {
-        ::std::vector<Any> aValues(rArguments.size());
+        std::vector<Any> aValues(rArguments.size());
         Sequence<OUString> aKeys (rxContainer->getElementNames());
         for (sal_Int32 nItemIndex=0; nItemIndex < aKeys.getLength(); ++nItemIndex)
         {
@@ -158,7 +158,7 @@ void ConfigurationAccess::ForAll (
 void ConfigurationAccess::FillList(
     const Reference<container::XNameAccess>& rxContainer,
     const OUString& rsArgument,
-    ::std::vector<OUString>& rList)
+    std::vector<OUString>& rList)
 {
     try
     {

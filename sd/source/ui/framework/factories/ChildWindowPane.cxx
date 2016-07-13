@@ -40,7 +40,7 @@ ChildWindowPane::ChildWindowPane (
     const Reference<XResourceId>& rxPaneId,
     sal_uInt16 nChildWindowId,
     ViewShellBase& rViewShellBase,
-    ::std::unique_ptr<SfxShell> && pShell)
+    std::unique_ptr<SfxShell> && pShell)
     : ChildWindowPaneInterfaceBase(rxPaneId,nullptr),
       mnChildWindowId(nChildWindowId),
       mrViewShellBase(rViewShellBase),

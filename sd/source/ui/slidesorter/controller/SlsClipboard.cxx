@@ -397,7 +397,7 @@ void Clipboard::CreateSlideTransferable (
     // previews are included into the transferable so that an insertion
     // indicator can be rendered.
     aSelectedPages.Rewind();
-    ::std::vector<TransferableData::Representative> aRepresentatives;
+    std::vector<TransferableData::Representative> aRepresentatives;
     aRepresentatives.reserve(3);
     std::shared_ptr<cache::PageCache> pPreviewCache (
         mrSlideSorter.GetView().GetPreviewCache());
@@ -512,7 +512,7 @@ std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData 
             break;
 
         // Create preview.
-        ::std::vector<TransferableData::Representative> aRepresentatives;
+        std::vector<TransferableData::Representative> aRepresentatives;
         aRepresentatives.reserve(1);
         std::shared_ptr<cache::PageCache> pPreviewCache (
             rSlideSorter.GetView().GetPreviewCache());

@@ -98,13 +98,13 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
         Reference<container::XNameAccess> xFactories (
             aConfiguration.GetConfigurationNode("MultiPaneGUI/Framework/ResourceFactories"),
             UNO_QUERY);
-        ::std::vector<OUString> aProperties (snFactoryPropertyCount);
+        std::vector<OUString> aProperties (snFactoryPropertyCount);
         aProperties[0] = "ServiceName";
         aProperties[1] = "ResourceList";
         ConfigurationAccess::ForAll(
             xFactories,
             aProperties,
-            [this] (OUString const&, ::std::vector<Any> const& xs) {
+            [this] (OUString const&, std::vector<Any> const& xs) {
                 return this->ProcessFactory(xs);
             } );
     }
@@ -114,7 +114,7 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
     }
 }
 
-void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
+void ModuleController::ProcessFactory (const std::vector<Any>& rValues)
 {
     OSL_ASSERT(rValues.size() == snFactoryPropertyCount);
 
@@ -124,7 +124,7 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
 
     // Get all resource URLs that are created by the factory.
     Reference<container::XNameAccess> xResources (rValues[1], UNO_QUERY);
-    ::std::vector<OUString> aURLs;
+    std::vector<OUString> aURLs;
     tools::ConfigurationAccess::FillList(
         xResources,
         "URL",
@@ -134,7 +134,7 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
         OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8).getStr());
 
     // Add the resource URLs to the map.
-    ::std::vector<OUString>::const_iterator iResource;
+    std::vector<OUString>::const_iterator iResource;
     for (iResource=aURLs.begin(); iResource!=aURLs.end(); ++iResource)
     {
         (*mpResourceToFactoryMap)[*iResource] = sServiceName;
@@ -153,12 +153,12 @@ void ModuleController::InstantiateStartupServices()
         Reference<container::XNameAccess> xFactories (
             aConfiguration.GetConfigurationNode("MultiPaneGUI/Framework/StartupServices"),
             UNO_QUERY);
-        ::std::vector<OUString> aProperties (snStartupPropertyCount);
+        std::vector<OUString> aProperties (snStartupPropertyCount);
         aProperties[0] = "ServiceName";
         tools::ConfigurationAccess::ForAll(
             xFactories,
             aProperties,
-            [this] (OUString const&, ::std::vector<Any> const& xs) {
+            [this] (OUString const&, std::vector<Any> const& xs) {
                 return this->ProcessStartupService(xs);
             } );
     }
@@ -168,7 +168,7 @@ void ModuleController::InstantiateStartupServices()
     }
 }
 
-void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
+void ModuleController::ProcessStartupService (const std::vector<Any>& rValues)
 {
     OSL_ASSERT(rValues.size() == snStartupPropertyCount);
 

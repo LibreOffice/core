@@ -71,7 +71,7 @@ public:
         interested ConfigurationChangeListeners.
     */
     void ActivateResources (
-        const ::std::vector<
+        const std::vector<
             css::uno::Reference<css::drawing::framework::XResourceId> >& rResources,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
 
@@ -81,7 +81,7 @@ public:
         interested ConfigurationChangeListeners.
     */
     void DeactivateResources (
-        const ::std::vector<
+        const std::vector<
             css::uno::Reference<css::drawing::framework::XResourceId> >& rResources,
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration);
 
@@ -104,7 +104,7 @@ private:
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxId2) const;
     };
 
-    typedef ::std::map<
+    typedef std::map<
         css::uno::Reference<css::drawing::framework::XResourceId>,
         ResourceDescriptor,
         ResourceComparator> ResourceMap;

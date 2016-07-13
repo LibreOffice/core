@@ -112,7 +112,7 @@ FramePainter::OffsetBitmap::OffsetBitmap (
     OSL_ASSERT(nVerticalPosition>=-1 && nVerticalPosition<=+1);
 
     const sal_Int32 nS (1);
-    const sal_Int32 nC (::std::max<sal_Int32>(0,(rBitmap.GetSizePixel().Width()-nS)/2));
+    const sal_Int32 nC (std::max<sal_Int32>(0,(rBitmap.GetSizePixel().Width()-nS)/2));
     const sal_Int32 nO (nC/2);
 
     const Point aOrigin(
@@ -221,7 +221,7 @@ void FramePainter::OffsetBitmap::PaintCenter (
             rDevice.DrawBitmapEx(
                 Point(nX,nY),
                 Size(
-                    ::std::min(aBitmapSize.Width(), rBox.Right()-nX+1),
+                    std::min(aBitmapSize.Width(), rBox.Right()-nX+1),
                     std::min(aBitmapSize.Height(), rBox.Bottom()-nY+1)),
                 maBitmap);
 }

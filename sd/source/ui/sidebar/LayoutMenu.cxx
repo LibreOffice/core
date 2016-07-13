@@ -447,7 +447,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         if (pPageSelection->empty())
             break;
 
-        ::std::vector<SdPage*>::iterator iPage;
+        std::vector<SdPage*>::iterator iPage;
         for (iPage=pPageSelection->begin(); iPage!=pPageSelection->end(); ++iPage)
             {
                 if ((*iPage) == nullptr)

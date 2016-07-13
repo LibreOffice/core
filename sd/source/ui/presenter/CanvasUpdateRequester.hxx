@@ -55,8 +55,8 @@ private:
     ~CanvasUpdateRequester();
     class Deleter; friend class Deleter;
 
-    typedef ::std::vector<
-        ::std::pair<
+    typedef std::vector<
+        std::pair<
             css::uno::Reference<css::rendering::XSpriteCanvas>,
            std::shared_ptr<CanvasUpdateRequester> > > RequesterMap;
     static RequesterMap maRequesterMap;

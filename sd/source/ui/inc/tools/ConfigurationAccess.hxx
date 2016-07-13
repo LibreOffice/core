@@ -92,7 +92,7 @@ public:
         parameters are the name of key item (often of no further interest)
         and the value of the item.
     */
-    typedef ::std::function<void (
+    typedef std::function<void (
         const OUString&,
         const std::vector<css::uno::Any>&) > Functor;
 
@@ -110,7 +110,7 @@ public:
     */
     static void ForAll (
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,
-        const ::std::vector<OUString>& rArguments,
+        const std::vector<OUString>& rArguments,
         const Functor& rFunctor);
 
     /** Fill a list with the string contents of all sub-elements in the given container.
@@ -127,7 +127,7 @@ public:
     static void FillList(
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,
         const OUString& rsArgument,
-        ::std::vector<OUString>& rList);
+        std::vector<OUString>& rList);
 
 private:
     css::uno::Reference<css::uno::XInterface> mxRoot;

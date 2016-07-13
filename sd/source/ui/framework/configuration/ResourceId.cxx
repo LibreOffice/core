@@ -465,7 +465,7 @@ bool ResourceId::IsBoundToAnchor (
 }
 
 bool ResourceId::IsBoundToAnchor (
-    const ::std::vector<OUString>& rAnchorURLs,
+    const std::vector<OUString>& rAnchorURLs,
     AnchorBindingMode eMode) const
 {
     const sal_uInt32 nLocalAnchorURLCount (maResourceURLs.size() - 1);

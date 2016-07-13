@@ -115,7 +115,7 @@ protected:
         const css::uno::Any& rValue) = 0;
 
 private:
-    typedef ::std::multimap<OUString,
+    typedef std::multimap<OUString,
         css::uno::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;
     std::unique_ptr<ChangeListenerContainer> mpChangeListeners;
 

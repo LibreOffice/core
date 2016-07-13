@@ -231,7 +231,7 @@ private:
             This specifies at which object the iterator points initially.
     */
     static Iterator CreateSelectionIterator (
-        const ::std::vector<SdrObjectWeakRef>& rObjectList,
+        const std::vector<SdrObjectWeakRef>& rObjectList,
         SdDrawDocument* pDocument,
         const std::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward=true,

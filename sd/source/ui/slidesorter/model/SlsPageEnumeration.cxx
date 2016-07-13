@@ -41,7 +41,7 @@ public:
     PageEnumerationImpl& operator=(const PageEnumerationImpl&) = delete;
     /** Create a copy of the called enumeration object.
     */
-    virtual ::std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() override;
+    virtual std::unique_ptr<Enumeration<SharedPageDescriptor> > Clone() override;
 
     virtual bool HasMoreElements() const override;
     virtual SharedPageDescriptor GetNextElement() override;
@@ -75,12 +75,12 @@ PageEnumeration PageEnumeration::Create (
     const SlideSorterModel& rModel,
     const PagePredicate& rPredicate)
 {
-    return PageEnumeration(::std::unique_ptr<Enumeration<SharedPageDescriptor> >(
+    return PageEnumeration(std::unique_ptr<Enumeration<SharedPageDescriptor> >(
         new PageEnumerationImpl(rModel, rPredicate)));
 }
 
 PageEnumeration::PageEnumeration (
-    ::std::unique_ptr<Enumeration<SharedPageDescriptor> > && pImpl)
+    std::unique_ptr<Enumeration<SharedPageDescriptor> > && pImpl)
     : mpImpl(std::move(pImpl))
 {
 }
@@ -102,9 +102,9 @@ PageEnumeration& PageEnumeration::operator= (
     return *this;
 }
 
-::std::unique_ptr<Enumeration<SharedPageDescriptor> > PageEnumeration::Clone()
+std::unique_ptr<Enumeration<SharedPageDescriptor> > PageEnumeration::Clone()
 {
-    return ::std::unique_ptr<Enumeration<SharedPageDescriptor> >(
+    return std::unique_ptr<Enumeration<SharedPageDescriptor> >(
         new PageEnumeration (*this));
 }
 
@@ -151,10 +151,10 @@ PageEnumerationImpl::~PageEnumerationImpl()
 {
 }
 
-::std::unique_ptr<Enumeration<SharedPageDescriptor> >
+std::unique_ptr<Enumeration<SharedPageDescriptor> >
     PageEnumerationImpl::Clone()
 {
-    return ::std::unique_ptr<Enumeration<SharedPageDescriptor> >(
+    return std::unique_ptr<Enumeration<SharedPageDescriptor> >(
         new PageEnumerationImpl(mrModel,maPredicate,mnIndex));
 }
 

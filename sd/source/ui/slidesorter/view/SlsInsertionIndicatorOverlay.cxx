@@ -106,7 +106,7 @@ void InsertionIndicatorOverlay::Create (const SdTransferable* pTransferable)
 }
 
 void InsertionIndicatorOverlay::Create (
-    const ::std::vector<controller::TransferableData::Representative>& rRepresentatives,
+    const std::vector<controller::TransferableData::Representative>& rRepresentatives,
     const sal_Int32 nSelectionCount)
 {
     view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
@@ -151,7 +151,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
     OutputDevice& rContent,
     const Size& rPreviewSize,
     const sal_Int32 nOffset,
-    const ::std::vector<controller::TransferableData::Representative>& rRepresentatives) const
+    const std::vector<controller::TransferableData::Representative>& rRepresentatives) const
 {
     const Point aOffset (0,rRepresentatives.size()==1 ? -nOffset : 0);
 

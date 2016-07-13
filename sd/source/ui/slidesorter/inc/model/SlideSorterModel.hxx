@@ -208,7 +208,7 @@ private:
     SlideSorter& mrSlideSorter;
     css::uno::Reference<css::container::XIndexAccess> mxSlides;
     EditMode meEditMode;
-    mutable ::std::vector<SharedPageDescriptor> maPageDescriptors;
+    mutable std::vector<SharedPageDescriptor> maPageDescriptors;
 
     /** Resize the descriptor container according to current values of
         page kind and edit mode.

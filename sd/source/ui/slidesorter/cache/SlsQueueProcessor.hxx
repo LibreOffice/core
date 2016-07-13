@@ -52,7 +52,7 @@ class RequestQueue;
 class QueueProcessor
 {
 public:
-    typedef ::std::function<bool ()> IdleDetectionCallback;
+    typedef std::function<bool ()> IdleDetectionCallback;
     QueueProcessor (
         RequestQueue& rQueue,
         const std::shared_ptr<BitmapCache>& rpCache,

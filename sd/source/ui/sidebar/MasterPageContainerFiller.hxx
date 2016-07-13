@@ -77,7 +77,7 @@ private:
         ERROR,
         DONE
     } meState;
-    ::std::unique_ptr<TemplateScanner> mpScannerTask;
+    std::unique_ptr<TemplateScanner> mpScannerTask;
     const TemplateEntry* mpLastAddedEntry;
     int mnIndex;
 

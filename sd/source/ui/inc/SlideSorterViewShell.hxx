@@ -148,7 +148,7 @@ public:
         sal_uInt16 nPage = SDRPAGE_NOTFOUND,
         sal_uInt16 nLayer = SDRPAGE_NOTFOUND) override;
 
-    typedef ::std::vector<SdPage*> PageSelection;
+    typedef std::vector<SdPage*> PageSelection;
 
     /** Return the set of selected pages.
     */

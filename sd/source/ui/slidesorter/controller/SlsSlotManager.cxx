@@ -1078,7 +1078,7 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     // Create a list of the pages that are to be duplicated.  The process of
     // duplication alters the selection.
     sal_Int32 nInsertPosition (0);
-    ::std::vector<SdPage*> aPagesToDuplicate;
+    std::vector<SdPage*> aPagesToDuplicate;
     model::PageEnumeration aSelectedPages (
         model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
     while (aSelectedPages.HasMoreElements())
@@ -1097,8 +1097,8 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     if (bUndo)
         mrSlideSorter.GetView().BegUndo(SD_RESSTR(STR_INSERTPAGE));
 
-    ::std::vector<SdPage*> aPagesToSelect;
-    for(::std::vector<SdPage*>::const_iterator
+    std::vector<SdPage*> aPagesToSelect;
+    for(std::vector<SdPage*>::const_iterator
             iPage(aPagesToDuplicate.begin()),
             iEnd(aPagesToDuplicate.end());
         iPage!=iEnd;

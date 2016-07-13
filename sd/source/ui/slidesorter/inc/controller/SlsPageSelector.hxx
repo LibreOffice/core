@@ -117,7 +117,7 @@ public:
     */
     const model::SharedPageDescriptor& GetSelectionAnchor() const { return mpSelectionAnchor;}
 
-    typedef ::std::vector<SdPage*> PageSelection;
+    typedef std::vector<SdPage*> PageSelection;
 
     /** Return an object that describes the current selection.  The caller
         can use that object to later restore the selection.

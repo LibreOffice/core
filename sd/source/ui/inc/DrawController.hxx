@@ -240,7 +240,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     static void FillPropertyTable (
-        ::std::vector< css::beans::Property>& rProperties);
+        std::vector< css::beans::Property>& rProperties);
 
     /**
      * The same as getFastProperyValue, but return the value through
@@ -306,7 +306,7 @@ private:
     */
     bool mbDisposing;
 
-    ::std::unique_ptr< ::cppu::IPropertyArrayHelper> mpPropertyArrayHelper;
+    std::unique_ptr< ::cppu::IPropertyArrayHelper> mpPropertyArrayHelper;
 
     /** The current sub controller.  May be NULL.
     */

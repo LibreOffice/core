@@ -84,9 +84,9 @@ private:
     */
     static RecentlyUsedMasterPages* mpInstance;
 
-    ::std::vector<Link<LinkParamNone*,void>> maListeners;
+    std::vector<Link<LinkParamNone*,void>> maListeners;
 
-    typedef ::std::vector<Descriptor> MasterPageList;
+    typedef std::vector<Descriptor> MasterPageList;
     MasterPageList mvMasterPages;
     unsigned long int mnMaxListSize;
     std::shared_ptr<MasterPageContainer> mpContainer;

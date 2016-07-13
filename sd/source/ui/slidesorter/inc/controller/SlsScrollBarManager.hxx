@@ -141,7 +141,7 @@ public:
     */
     bool AutoScroll (
         const Point& rMouseWindowPosition,
-        const ::std::function<void ()>& rAutoScrollFunctor);
+        const std::function<void ()>& rAutoScrollFunctor);
 
     void StopAutoScroll();
 
@@ -204,7 +204,7 @@ private:
     */
     VclPtr<sd::Window> mpContentWindow;
 
-    ::std::function<void ()> maAutoScrollFunctor;
+    std::function<void ()> maAutoScrollFunctor;
 
     void SetWindowOrigin (
         double nHorizontalPosition,

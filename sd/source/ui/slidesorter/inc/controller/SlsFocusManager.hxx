@@ -179,7 +179,7 @@ private:
     */
     bool mbPageIsFocused;
 
-    ::std::vector<Link<LinkParamNone*,void>> maFocusChangeListeners;
+    std::vector<Link<LinkParamNone*,void>> maFocusChangeListeners;
 
     /** Reset the focus state of the given descriptor and request a repaint
         so that the focus indicator is hidden.

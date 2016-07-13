@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
-using ::std::vector;
+using std::vector;
 
 namespace {
 static const sal_Int32 snShortTimeout (100);

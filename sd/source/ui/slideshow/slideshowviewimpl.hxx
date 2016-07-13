@@ -231,13 +231,13 @@ private:
     css::uno::Reference< css::awt::XPointer >             mxPointer;
     SlideshowImpl*                          mpSlideShow;
     ShowWindow&                             mrOutputWindow;
-    ::std::unique_ptr< SlideShowViewListeners >
+    std::unique_ptr< SlideShowViewListeners >
                                             mpViewListeners;
-    ::std::unique_ptr< SlideShowViewPaintListeners >
+    std::unique_ptr< SlideShowViewPaintListeners >
                                             mpPaintListeners;
-    ::std::unique_ptr< SlideShowViewMouseListeners >
+    std::unique_ptr< SlideShowViewMouseListeners >
                                             mpMouseListeners;
-    ::std::unique_ptr< SlideShowViewMouseMotionListeners >
+    std::unique_ptr< SlideShowViewMouseMotionListeners >
                                             mpMouseMotionListeners;
     SdDrawDocument*                         mpDoc;
     bool                                    mbIsMouseMotionListener;

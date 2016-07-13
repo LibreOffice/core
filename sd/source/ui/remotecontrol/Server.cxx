@@ -182,7 +182,7 @@ void RemoteServer::execute()
 
 RemoteServer *sd::RemoteServer::spServer = nullptr;
 ::osl::Mutex sd::RemoteServer::sDataMutex;
-::std::vector<Communicator*> sd::RemoteServer::sCommunicators;
+std::vector<Communicator*> sd::RemoteServer::sCommunicators;
 
 void RemoteServer::setup()
 {

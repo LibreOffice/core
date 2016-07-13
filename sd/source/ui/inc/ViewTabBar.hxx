@@ -149,7 +149,7 @@ private:
     VclPtr< ::TabControl> mpTabControl;
     css::uno::Reference<css::frame::XController> mxController;
     css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
-    typedef ::std::vector<css::drawing::framework::TabBarButton> TabBarButtonList;
+    typedef std::vector<css::drawing::framework::TabBarButton> TabBarButtonList;
     TabBarButtonList maTabBarButtons;
     VclPtr<TabPage> mpTabPage;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;

@@ -62,7 +62,7 @@ public:
             The set of URLs may be empty.  The result is then the same as
             returned by ResourceId() default constructor.
     */
-    ResourceId (const ::std::vector<OUString>& rsResourceURLs);
+    ResourceId (const std::vector<OUString>& rsResourceURLs);
 
     /** Create a new resource id that has an empty anchor.
         @param rsResourceURL
@@ -218,7 +218,7 @@ private:
             it can be bound indirectly, too.
     */
     bool IsBoundToAnchor (
-        const ::std::vector<OUString>& rResourceURLs,
+        const std::vector<OUString>& rResourceURLs,
         css::drawing::framework::AnchorBindingMode eMode) const;
 
     void ParseResourceURL();

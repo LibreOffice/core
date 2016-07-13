@@ -76,7 +76,7 @@ public:
         :   maEntries(),
             mbSortingEnabled(false), mpEntryCompare(nullptr) {}
 
-    ::std::vector<TemplateEntry*> maEntries;
+    std::vector<TemplateEntry*> maEntries;
 
     void EnableSorting(bool bSortingEnabled = true);
     void InsertEntry(TemplateEntry* pNewEntry);

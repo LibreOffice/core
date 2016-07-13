@@ -55,7 +55,7 @@ private:
     /** The list of master pages displayed by this class.
     */
     class SortedMasterPageDescriptorList;
-    ::std::unique_ptr<SortedMasterPageDescriptorList> mpSortedMasterPages;
+    std::unique_ptr<SortedMasterPageDescriptorList> mpSortedMasterPages;
 
     AllMasterPagesSelector (
         vcl::Window* pParent,

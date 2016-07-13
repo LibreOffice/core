@@ -65,7 +65,7 @@ private:
     Reference<frame::XLayoutManager> mxLayouter;
 };
 
-typedef ::std::vector<OUString> NameList;
+typedef std::vector<OUString> NameList;
 
 /** Store a list of tool bars for each of the tool bar groups.  From
     this the list of requested tool bars is built.
@@ -87,7 +87,7 @@ public:
     void MarkAllToolBarsAsNotActive();
 
 private:
-    typedef ::std::map<sd::ToolBarManager::ToolBarGroup,NameList> Groups;
+    typedef std::map<sd::ToolBarManager::ToolBarGroup,NameList> Groups;
     Groups maGroups;
     NameList maActiveToolBars;
 
@@ -167,7 +167,7 @@ private:
     /** The requested list of tool bar shells that will be active after the
         next call to UpdateShells().
     */
-    typedef ::std::set<ShellDescriptor> GroupedShellList;
+    typedef std::set<ShellDescriptor> GroupedShellList;
     GroupedShellList maNewList;
 
     /** The list of tool bar shells that are currently on the shell stack.
@@ -277,7 +277,7 @@ public:
             this method and that is either released at its end or assigned
             to mpAsynchronousLock in order to be unlocked later.
     */
-    void Update (::std::unique_ptr<LayouterLock> pLayouterLock);
+    void Update (std::unique_ptr<LayouterLock> pLayouterLock);
 
     class UpdateLockImplementation
     {
@@ -313,9 +313,9 @@ private:
         (final) unlocking  is usually done asynchronously *after* the
         list of requested toolbars is updated.
     */
-    ::std::unique_ptr<LayouterLock> mpSynchronousLayouterLock;
-    ::std::unique_ptr<LayouterLock> mpAsynchronousLayouterLock;
-    ::std::unique_ptr<ViewShellManager::UpdateLock> mpViewShellManagerLock;
+    std::unique_ptr<LayouterLock> mpSynchronousLayouterLock;
+    std::unique_ptr<LayouterLock> mpAsynchronousLayouterLock;
+    std::unique_ptr<ViewShellManager::UpdateLock> mpViewShellManagerLock;
     ImplSVEvent * mnPendingUpdateCall;
     ImplSVEvent * mnPendingSetValidCall;
     ToolBarRules maToolBarRules;
@@ -772,7 +772,7 @@ void ToolBarManager::Implementation::UnlockUpdate()
 }
 
 void ToolBarManager::Implementation::Update (
-    ::std::unique_ptr<LayouterLock> pLocalLayouterLock)
+    std::unique_ptr<LayouterLock> pLocalLayouterLock)
 {
     // When the lock is released and there are pending changes to the set of
     // tool bars then update this set now.
@@ -1230,7 +1230,7 @@ void ToolBarList::AddToolBar (
     if (iGroup != maGroups.end())
     {
         NameList::const_iterator iBar (
-            ::std::find(iGroup->second.begin(),iGroup->second.end(),rsName));
+            std::find(iGroup->second.begin(),iGroup->second.end(),rsName));
         if (iBar == iGroup->second.end())
         {
             iGroup->second.push_back(rsName);
@@ -1246,7 +1246,7 @@ bool ToolBarList::RemoveToolBar (
     if (iGroup != maGroups.end())
     {
         NameList::iterator iBar (
-            ::std::find(iGroup->second.begin(),iGroup->second.end(),rsName));
+            std::find(iGroup->second.begin(),iGroup->second.end(),rsName));
         if (iBar != iGroup->second.end())
         {
             iGroup->second.erase(iBar);
@@ -1263,10 +1263,10 @@ void ToolBarList::MakeRequestedToolBarList (NameList& rRequestedToolBars) const
         ::sd::ToolBarManager::ToolBarGroup eGroup = (::sd::ToolBarManager::ToolBarGroup)i;
         Groups::const_iterator iGroup (maGroups.find(eGroup));
         if (iGroup != maGroups.end())
-            ::std::copy(
+            std::copy(
                 iGroup->second.begin(),
                 iGroup->second.end(),
-                ::std::inserter(rRequestedToolBars,rRequestedToolBars.end()));
+                std::inserter(rRequestedToolBars,rRequestedToolBars.end()));
     }
 }
 
@@ -1278,7 +1278,7 @@ void ToolBarList::GetToolBarsToActivate (NameList& rToolBars) const
     NameList::const_iterator iToolBar;
     for (iToolBar=aRequestedToolBars.begin(); iToolBar!=aRequestedToolBars.end(); ++iToolBar)
     {
-        if (::std::find(maActiveToolBars.begin(),maActiveToolBars.end(),*iToolBar)
+        if (std::find(maActiveToolBars.begin(),maActiveToolBars.end(),*iToolBar)
             == maActiveToolBars.end())
         {
             rToolBars.push_back(*iToolBar);
@@ -1294,7 +1294,7 @@ void ToolBarList::GetToolBarsToDeactivate (NameList& rToolBars) const
     NameList::const_iterator iToolBar;
     for (iToolBar=maActiveToolBars.begin(); iToolBar!=maActiveToolBars.end(); ++iToolBar)
     {
-        if (::std::find(aRequestedToolBars.begin(),aRequestedToolBars.end(),*iToolBar)
+        if (std::find(aRequestedToolBars.begin(),aRequestedToolBars.end(),*iToolBar)
             == aRequestedToolBars.end())
         {
             rToolBars.push_back(*iToolBar);
@@ -1310,7 +1310,7 @@ void ToolBarList::MarkToolBarAsActive (const OUString& rsName)
 void ToolBarList::MarkToolBarAsNotActive (const OUString& rsName)
 {
     maActiveToolBars.erase(
-        ::std::find(maActiveToolBars.begin(),maActiveToolBars.end(), rsName));
+        std::find(maActiveToolBars.begin(),maActiveToolBars.end(), rsName));
 }
 
 void ToolBarList::MarkAllToolBarsAsNotActive()
@@ -1407,7 +1407,7 @@ void ToolBarShellList::UpdateShells (
 
         // Deactivate shells that are in maCurrentList, but not in
         // maNewList.
-        ::std::set_difference(maCurrentList.begin(), maCurrentList.end(),
+        std::set_difference(maCurrentList.begin(), maCurrentList.end(),
             maNewList.begin(), maNewList.end(),
             std::insert_iterator<GroupedShellList>(aList,aList.begin()));
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
@@ -1419,7 +1419,7 @@ void ToolBarShellList::UpdateShells (
         // Activate shells that are in maNewList, but not in
         // maCurrentList.
         aList.clear();
-        ::std::set_difference(maNewList.begin(), maNewList.end(),
+        std::set_difference(maNewList.begin(), maNewList.end(),
             maCurrentList.begin(), maCurrentList.end(),
             std::insert_iterator<GroupedShellList>(aList,aList.begin()));
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)

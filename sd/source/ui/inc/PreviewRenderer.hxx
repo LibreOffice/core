@@ -119,7 +119,7 @@ protected:
 
 private:
     ScopedVclPtr<VirtualDevice> mpPreviewDevice;
-    ::std::unique_ptr<DrawView> mpView;
+    std::unique_ptr<DrawView> mpView;
     DrawDocShell* mpDocShellOfView;
     const Color maFrameColor;
     const bool mbHasFrame;

@@ -138,14 +138,14 @@ protected:
 
     virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent);
 
-    typedef ::std::pair<int, MasterPageContainer::Token> UserData;
+    typedef std::pair<int, MasterPageContainer::Token> UserData;
     static UserData* CreateUserData (int nIndex, MasterPageContainer::Token aToken);
     UserData* GetUserData (int nIndex) const;
     void SetUserData (int nIndex, UserData* pData);
 
     sal_Int32 GetIndexForToken (MasterPageContainer::Token aToken) const;
-    typedef ::std::vector<MasterPageContainer::Token> ItemList;
-    void UpdateItemList (::std::unique_ptr<ItemList> && pList);
+    typedef std::vector<MasterPageContainer::Token> ItemList;
+    void UpdateItemList (std::unique_ptr<ItemList> && pList);
     void Clear();
     /** Invalidate the specified item so that on the next Fill() this item
         is updated.
@@ -155,7 +155,7 @@ protected:
     // For every item in the ValueSet we store its associated token.  This
     // allows a faster access and easier change tracking.
     ItemList maCurrentItemList;
-    typedef ::std::map<MasterPageContainer::Token,sal_Int32> TokenToValueSetIndex;
+    typedef std::map<MasterPageContainer::Token,sal_Int32> TokenToValueSetIndex;
     TokenToValueSetIndex maTokenToValueSetIndex;
 
     ItemList maLockedMasterPages;

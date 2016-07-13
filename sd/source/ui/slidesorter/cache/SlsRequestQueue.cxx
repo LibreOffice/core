@@ -74,7 +74,7 @@ public:
 };
 
 class RequestQueue::Container
-    : public ::std::set<
+    : public std::set<
         Request,
         Request::Comparator>
 {
@@ -147,7 +147,7 @@ void RequestQueue::RemoveRequest (
 
     while(true)
     {
-        Container::const_iterator aRequestIterator = ::std::find_if (
+        Container::const_iterator aRequestIterator = std::find_if (
             mpRequestQueue->begin(),
             mpRequestQueue->end(),
             Request::DataComparator(aKey));
@@ -177,7 +177,7 @@ void RequestQueue::ChangeClass (
     OSL_ASSERT(eNewRequestClass>=MIN_CLASS && eNewRequestClass<=MAX_CLASS);
 
     Container::const_iterator iRequest (
-        ::std::find_if (
+        std::find_if (
             mpRequestQueue->begin(),
             mpRequestQueue->end(),
             Request::DataComparator(aKey)));

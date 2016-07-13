@@ -40,13 +40,13 @@ private:
     /** All instances of SdGlobalResource in this vector are owned by the
         container and will be destroyed when the container is destroyed.
     */
-    typedef ::std::vector<SdGlobalResource*> ResourceList;
+    typedef std::vector<SdGlobalResource*> ResourceList;
     ResourceList maResources;
 
-    typedef ::std::vector<std::shared_ptr<SdGlobalResource> > SharedResourceList;
+    typedef std::vector<std::shared_ptr<SdGlobalResource> > SharedResourceList;
     SharedResourceList maSharedResources;
 
-    typedef ::std::vector<Reference<XInterface> > XInterfaceResourceList;
+    typedef std::vector<Reference<XInterface> > XInterfaceResourceList;
     XInterfaceResourceList maXInterfaceResources;
 };
 
@@ -65,12 +65,12 @@ SdGlobalResourceContainer*
 //===== SdGlobalResourceContainer =============================================
 
 void SdGlobalResourceContainer::AddResource (
-    ::std::unique_ptr<SdGlobalResource> && pResource)
+    std::unique_ptr<SdGlobalResource> && pResource)
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     Implementation::ResourceList::iterator iResource;
-    iResource = ::std::find (
+    iResource = std::find (
         mpImpl->maResources.begin(),
         mpImpl->maResources.end(),
         pResource.get());
@@ -94,7 +94,7 @@ void SdGlobalResourceContainer::AddResource (
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     Implementation::SharedResourceList::iterator iResource;
-    iResource = ::std::find (
+    iResource = std::find (
         mpImpl->maSharedResources.begin(),
         mpImpl->maSharedResources.end(),
         pResource);
@@ -112,7 +112,7 @@ void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxReso
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     Implementation::XInterfaceResourceList::iterator iResource;
-    iResource = ::std::find (
+    iResource = std::find (
         mpImpl->maXInterfaceResources.begin(),
         mpImpl->maXInterfaceResources.end(),
         rxResource);

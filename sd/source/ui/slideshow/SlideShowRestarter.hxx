@@ -64,7 +64,7 @@ private:
     ImplSVEvent * mnEventId;
     ::rtl::Reference<SlideShow> mpSlideShow;
     ViewShellBase* mpViewShellBase;
-    ::std::shared_ptr<SlideShowRestarter> mpSelf;
+    std::shared_ptr<SlideShowRestarter> mpSelf;
     sal_Int32 mnDisplayCount;
     SfxDispatcher* mpDispatcher;
     sal_Int32 mnCurrentSlideNumber;

@@ -756,7 +756,7 @@ void Layouter::Implementation::CalculateGeometricPosition (
     // leading and trailing pages.
     const sal_Int32 nAvailableSpace (nTrailingLocation - nLeadingLocation);
     const sal_Int32 nRequiredSpace (bIsVertical ? rIndicatorSize.Height():rIndicatorSize.Width());
-    const sal_Int32 nMissingSpace (::std::max(sal_Int32(0), nRequiredSpace - nAvailableSpace));
+    const sal_Int32 nMissingSpace (std::max(sal_Int32(0), nRequiredSpace - nAvailableSpace));
     sal_Int32 nPrimaryLocation (0);
     sal_Int32 nLeadingOffset (0);
     sal_Int32 nTrailingOffset (0);
@@ -994,7 +994,7 @@ void Layouter::Implementation::CalculateVerticalLogicalInsertPosition (
 {
     const sal_Int32 nY = rModelPosition.Y() - mnTopBorder + maPageObjectSize.Height()/2;
     const sal_Int32 nRowHeight (maPageObjectSize.Height() + mnVerticalGap);
-    const sal_Int32 nRow (::std::min(mnPageCount, nY / nRowHeight));
+    const sal_Int32 nRow (std::min(mnPageCount, nY / nRowHeight));
     rPosition.SetLogicalPosition (
         nRow,
         0,
@@ -1045,7 +1045,7 @@ void HorizontalImplementation::CalculateLogicalInsertPosition (
 {
     const sal_Int32 nX = rModelPosition.X() - mnLeftBorder + maPageObjectSize.Width()/2;
     const sal_Int32 nColumnWidth (maPageObjectSize.Width() + mnHorizontalGap);
-    const sal_Int32 nColumn (::std::min(mnPageCount, nX / nColumnWidth));
+    const sal_Int32 nColumn (std::min(mnPageCount, nX / nColumnWidth));
     rPosition.SetLogicalPosition (
         0,
         nColumn,
@@ -1156,12 +1156,12 @@ void GridImplementation::CalculateLogicalInsertPosition (
     else
     {
         // Handle the general case of more than one column.
-        sal_Int32 nRow (::std::min(
+        sal_Int32 nRow (std::min(
             mnRowCount-1,
             GetRowAtPosition (rModelPosition.Y(), true, GM_BOTH)));
         const sal_Int32 nX = rModelPosition.X() - mnLeftBorder + maPageObjectSize.Width()/2;
         const sal_Int32 nColumnWidth (maPageObjectSize.Width() + mnHorizontalGap);
-        sal_Int32 nColumn (::std::min(mnColumnCount, nX / nColumnWidth));
+        sal_Int32 nColumn (std::min(mnColumnCount, nX / nColumnWidth));
         sal_Int32 nIndex (nRow * mnColumnCount + nColumn);
         bool bIsAtRunEnd (nColumn == mnColumnCount);
 
@@ -1169,7 +1169,7 @@ void GridImplementation::CalculateLogicalInsertPosition (
         {
             nIndex = mnPageCount;
             nRow = mnRowCount-1;
-            nColumn = ::std::min(::std::min(mnPageCount, mnColumnCount), nColumn);
+            nColumn = std::min(std::min(mnPageCount, mnColumnCount), nColumn);
             bIsAtRunEnd = true;
         }
 

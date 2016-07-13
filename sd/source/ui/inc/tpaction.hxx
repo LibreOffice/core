@@ -76,7 +76,7 @@ private:
     bool                    bTreeUpdated;
     std::vector<css::presentation::ClickAction> maCurrentActions;
     OUString                aLastFile;
-    ::std::vector< long >   aVerbVector;
+    std::vector< long >     aVerbVector;
 
     DECL_LINK_TYPED( ClickSearchHdl, Button*, void );
     DECL_LINK_TYPED( ClickActionHdl, ListBox&, void );

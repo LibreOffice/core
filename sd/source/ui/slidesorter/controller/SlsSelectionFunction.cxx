@@ -1186,7 +1186,7 @@ bool NormalModeHandler::ProcessMotionEvent (
             if (maButtonDownLocation)
             {
                 const sal_Int32 nDistance (maButtonDownLocation
-                    ? ::std::max (
+                    ? std::max (
                         std::abs(maButtonDownLocation->X() - rDescriptor.maMousePosition.X()),
                         std::abs(maButtonDownLocation->Y() - rDescriptor.maMousePosition.Y()))
                     : 0);

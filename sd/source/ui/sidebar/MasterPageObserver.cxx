@@ -68,7 +68,7 @@ public:
     void RemoveEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener);
 
 private:
-    ::std::vector<Link<MasterPageObserverEvent&,void>> maListeners;
+    std::vector<Link<MasterPageObserverEvent&,void>> maListeners;
 
     struct DrawDocHash {
         size_t operator()(SdDrawDocument* argument) const
@@ -103,7 +103,7 @@ MasterPageObserver&  MasterPageObserver::Instance()
         {
             MasterPageObserver* pInstance = new MasterPageObserver ();
             SdGlobalResourceContainer::Instance().AddResource (
-                ::std::unique_ptr<SdGlobalResource>(pInstance));
+                std::unique_ptr<SdGlobalResource>(pInstance));
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             Implementation::mpInstance = pInstance;
         }
@@ -179,7 +179,7 @@ void MasterPageObserver::Implementation::UnregisterDocument (
 void MasterPageObserver::Implementation::AddEventListener (
     const Link<MasterPageObserverEvent&,void>& rEventListener)
 {
-    if (::std::find (
+    if (std::find (
         maListeners.begin(),
         maListeners.end(),
         rEventListener) == maListeners.end())
@@ -193,7 +193,7 @@ void MasterPageObserver::Implementation::AddEventListener (
              aDocumentIterator!=maUsedMasterPages.end();
              ++aDocumentIterator)
         {
-            ::std::set<OUString>::reverse_iterator aNameIterator;
+            std::set<OUString>::reverse_iterator aNameIterator;
             for (aNameIterator=aDocumentIterator->second.rbegin();
                  aNameIterator!=aDocumentIterator->second.rend();
                  ++aNameIterator)
@@ -211,7 +211,7 @@ void MasterPageObserver::Implementation::RemoveEventListener (
     const Link<MasterPageObserverEvent&,void>& rEventListener)
 {
     maListeners.erase (
-        ::std::find (
+        std::find (
             maListeners.begin(),
             maListeners.end(),
             rEventListener));
@@ -255,7 +255,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
 {
     // Create a set of names of the master pages used by the given document.
     sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
-    ::std::set<OUString> aCurrentMasterPages;
+    std::set<OUString> aCurrentMasterPages;
     for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
@@ -267,7 +267,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
                 RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    typedef ::std::vector<OUString> StringList;
+    typedef std::vector<OUString> StringList;
     StringList aNewMasterPages;
     StringList aRemovedMasterPages;
     MasterPageContainer::iterator aOldMasterPagesDescriptor (
@@ -276,7 +276,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     {
         StringList::iterator I;
 
-        ::std::set<OUString>::iterator J;
+        std::set<OUString>::iterator J;
         int i=0;
         for (J=aOldMasterPagesDescriptor->second.begin();
              J!=aOldMasterPagesDescriptor->second.end();
@@ -287,12 +287,12 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
                 RTL_TEXTENCODING_UTF8).getStr());
 
         // Send events about the newly used master pages.
-        ::std::set_difference (
+        std::set_difference (
             aCurrentMasterPages.begin(),
             aCurrentMasterPages.end(),
             aOldMasterPagesDescriptor->second.begin(),
             aOldMasterPagesDescriptor->second.end(),
-            ::std::back_insert_iterator<StringList>(aNewMasterPages));
+            std::back_insert_iterator<StringList>(aNewMasterPages));
         for (I=aNewMasterPages.begin(); I!=aNewMasterPages.end(); ++I)
         {
             OSL_TRACE("    added master page %s",
@@ -306,12 +306,12 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
         }
 
         // Send events about master pages that are not used any longer.
-        ::std::set_difference (
+        std::set_difference (
             aOldMasterPagesDescriptor->second.begin(),
             aOldMasterPagesDescriptor->second.end(),
             aCurrentMasterPages.begin(),
             aCurrentMasterPages.end(),
-            ::std::back_insert_iterator<StringList>(aRemovedMasterPages));
+            std::back_insert_iterator<StringList>(aRemovedMasterPages));
         for (I=aRemovedMasterPages.begin(); I!=aRemovedMasterPages.end(); ++I)
         {
             OSL_TRACE("    removed master page %s",

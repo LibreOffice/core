@@ -136,9 +136,9 @@ private:
     };
     ColorData maBackgroundColor;
     ColorData maPageBackgroundColor;
-    ::std::vector<GradientDescriptor> maGradients;
-    ::std::vector<BitmapEx> maIcons;
-    ::std::vector<ColorData> maColor;
+    std::vector<GradientDescriptor> maGradients;
+    std::vector<BitmapEx> maIcons;
+    std::vector<ColorData> maColor;
 
     GradientDescriptor& GetGradient (const GradientColorType eType);
     /** Guarded initialization of the specified icon in the maIcons

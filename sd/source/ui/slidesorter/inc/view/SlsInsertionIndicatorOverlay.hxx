@@ -92,7 +92,7 @@ private:
         OutputDevice& rContent,
         const Size& rPreviewSize,
         const sal_Int32 nOffset,
-        const ::std::vector<controller::TransferableData::Representative>& rPages) const;
+        const std::vector<controller::TransferableData::Representative>& rPages) const;
     void PaintPageCount (
         OutputDevice& rDevice,
         const sal_Int32 nSelectionCount,
@@ -102,7 +102,7 @@ private:
         scaled down previews of some of the selected pages.
     */
     void Create (
-        const ::std::vector<controller::TransferableData::Representative>& rPages,
+        const std::vector<controller::TransferableData::Representative>& rPages,
         const sal_Int32 nSelectionCount);
 };
 

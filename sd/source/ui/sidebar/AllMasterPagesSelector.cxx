@@ -71,7 +71,7 @@ public:
 namespace sd { namespace sidebar {
 
 class AllMasterPagesSelector::SortedMasterPageDescriptorList
-    : public ::std::set<SharedMasterPageDescriptor,MasterPageDescriptorOrder>
+    : public std::set<SharedMasterPageDescriptor,MasterPageDescriptorOrder>
 {
 public:
     SortedMasterPageDescriptorList() {}

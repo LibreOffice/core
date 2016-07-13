@@ -365,7 +365,7 @@ private:
 
     css::uno::Reference< css::media::XPlayer > mxPlayer;
 
-    ::std::unique_ptr<PaneHider> mpPaneHider;
+    std::unique_ptr<PaneHider> mpPaneHider;
 
     ImplSVEvent * mnEndShowEvent;
     ImplSVEvent * mnContextMenuEvent;

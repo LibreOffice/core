@@ -61,16 +61,16 @@ public:
         ::sd::View* pWorkView,
         bool bInitOnGetData,
         SlideSorterViewShell* pViewShell,
-        const ::std::vector<TransferableData::Representative>& rRepresentatives);
+        const std::vector<TransferableData::Representative>& rRepresentatives);
 
     static std::shared_ptr<TransferableData> GetFromTransferable (const SdTransferable* pTransferable);
 
     TransferableData (
         SlideSorterViewShell* pViewShell,
-        const ::std::vector<TransferableData::Representative>& rRepresentatives);
+        const std::vector<TransferableData::Representative>& rRepresentatives);
     virtual ~TransferableData();
 
-    const ::std::vector<Representative>& GetRepresentatives() const { return maRepresentatives;}
+    const std::vector<Representative>& GetRepresentatives() const { return maRepresentatives;}
 
     /** Return the view shell for which the transferable was created.
     */
@@ -78,8 +78,8 @@ public:
 
 private:
     SlideSorterViewShell* mpViewShell;
-    const ::std::vector<Representative> maRepresentatives;
-    typedef ::std::vector<std::function<void (sal_uInt8)> > CallbackContainer;
+    const std::vector<Representative> maRepresentatives;
+    typedef std::vector<std::function<void (sal_uInt8)> > CallbackContainer;
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override;
 };

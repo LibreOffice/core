@@ -157,7 +157,7 @@ const sal_Int32 mso_Anim_Fill_HOLD      = 3;
 const sal_Int32 mso_Anim_Behaviour_FILTER   = 24;
 const sal_Int32 mso_Anim_Behaviour_ANIMATION= 25;
 
-typedef ::std::map< sal_Int32, css::uno::Any > PropertySetMap_t;
+typedef std::map< sal_Int32, css::uno::Any > PropertySetMap_t;
 
 class PropertySet
 {

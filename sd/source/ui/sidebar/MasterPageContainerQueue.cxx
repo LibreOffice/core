@@ -73,7 +73,7 @@ public:
 //===== MasterPageContainerQueue::RequestQueue ================================
 
 class MasterPageContainerQueue::RequestQueue
-    : public ::std::set<PreviewCreationRequest,PreviewCreationRequest::Compare>
+    : public std::set<PreviewCreationRequest,PreviewCreationRequest::Compare>
 {
 public:
     RequestQueue() {}
@@ -122,7 +122,7 @@ bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor&
         sal_Int32 nPriority (CalculatePriority(rpDescriptor));
 
         // Add a new or replace an existing request.
-        RequestQueue::iterator iRequest (::std::find_if(
+        RequestQueue::iterator iRequest (std::find_if(
             mpRequestQueue->begin(),
             mpRequestQueue->end(),
             PreviewCreationRequest::CompareToken(rpDescriptor->maToken)));
@@ -239,7 +239,7 @@ IMPL_LINK_TYPED(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer
 
 bool MasterPageContainerQueue::HasRequest (MasterPageContainer::Token aToken) const
 {
-    RequestQueue::iterator iRequest (::std::find_if(
+    RequestQueue::iterator iRequest (std::find_if(
         mpRequestQueue->begin(),
         mpRequestQueue->end(),
         PreviewCreationRequest::CompareToken(aToken)));

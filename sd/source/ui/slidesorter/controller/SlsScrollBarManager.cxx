@@ -226,7 +226,7 @@ void ScrollBarManager::UpdateScrollBars(bool bUseScrolling)
         mnVerticalPosition = 0;
     }
 
-    double nEps (::std::numeric_limits<double>::epsilon());
+    double nEps (std::numeric_limits<double>::epsilon());
     if (fabs(mnHorizontalPosition-pWindow->GetVisibleX()) > nEps
         || fabs(mnVerticalPosition-pWindow->GetVisibleY()) > nEps)
     {
@@ -485,7 +485,7 @@ void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
 
 bool ScrollBarManager::AutoScroll (
     const Point& rMouseWindowPosition,
-    const ::std::function<void ()>& rAutoScrollFunctor)
+    const std::function<void ()>& rAutoScrollFunctor)
 {
     maAutoScrollFunctor = rAutoScrollFunctor;
     CalcAutoScrollOffset(rMouseWindowPosition);
@@ -530,7 +530,7 @@ bool ScrollBarManager::RepeatAutoScroll()
 
 void ScrollBarManager::clearAutoScrollFunctor()
 {
-    maAutoScrollFunctor = ::std::function<void ()>();
+    maAutoScrollFunctor = std::function<void ()>();
 }
 
 IMPL_LINK_NOARG_TYPED(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, void)

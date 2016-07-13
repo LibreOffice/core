@@ -77,7 +77,7 @@ public:
 };
 
 class BasicPaneFactory::PaneContainer
-    : public ::std::vector<PaneDescriptor>
+    : public std::vector<PaneDescriptor>
 {
 public:
     PaneContainer() {}
@@ -217,7 +217,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
     // Based on the ResourceURL of the given ResourceId look up the
     // corresponding factory descriptor.
     PaneContainer::iterator iDescriptor (
-        ::std::find_if (
+        std::find_if (
             mpPaneContainer->begin(),
             mpPaneContainer->end(),
             [&] (PaneDescriptor const& rPane) {
@@ -282,7 +282,7 @@ void SAL_CALL BasicPaneFactory::releaseResource (
     // Based on the given XPane reference look up the corresponding factory
     // descriptor.
     PaneContainer::iterator iDescriptor (
-        ::std::find_if(
+        std::find_if(
             mpPaneContainer->begin(),
             mpPaneContainer->end(),
             [&] (PaneDescriptor const& rPane) { return rPane.ComparePane(rxPane); } ));
@@ -349,7 +349,7 @@ void SAL_CALL BasicPaneFactory::disposing (
         // reference to that pane, but not the pane descriptor.
         Reference<XResource> xPane (rEventObject.Source, UNO_QUERY);
         PaneContainer::iterator iDescriptor (
-            ::std::find_if (
+            std::find_if (
                 mpPaneContainer->begin(),
                 mpPaneContainer->end(),
                 [&] (PaneDescriptor const& rPane) { return rPane.ComparePane(xPane); } ));
@@ -396,7 +396,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
     {
         // Create the corresponding shell and determine the id of the child window.
         sal_uInt16 nChildWindowId = 0;
-        ::std::unique_ptr<SfxShell> pShell;
+        std::unique_ptr<SfxShell> pShell;
         switch (rDescriptor.mePaneId)
         {
             case LeftImpressPaneId:

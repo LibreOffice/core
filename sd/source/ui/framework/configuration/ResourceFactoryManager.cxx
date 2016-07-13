@@ -129,14 +129,14 @@ void ResourceFactoryManager::RemoveFactoryForReference(
     ::osl::MutexGuard aGuard (maMutex);
 
     // Collect a list with all keys that map to the given factory.
-    ::std::vector<OUString> aKeys;
+    std::vector<OUString> aKeys;
     FactoryMap::const_iterator iFactory;
     for (iFactory=maFactoryMap.begin(); iFactory!=maFactoryMap.end(); ++iFactory)
         if (iFactory->second == rxFactory)
             aKeys.push_back(iFactory->first);
 
     // Remove the entries whose keys we just have collected.
-    ::std::vector<OUString>::const_iterator iKey;
+    std::vector<OUString>::const_iterator iKey;
     for (iKey=aKeys.begin(); iKey!=aKeys.end();  ++iKey)
         maFactoryMap.erase(maFactoryMap.find(*iKey));
 

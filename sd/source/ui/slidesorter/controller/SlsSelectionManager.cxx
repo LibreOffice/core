@@ -88,7 +88,7 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
     // because the pages get deselected when the first one is deleted.
     model::PageEnumeration aPageEnumeration (
         PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
-    ::std::vector<SdPage*> aSelectedPages;
+    std::vector<SdPage*> aSelectedPages;
     sal_Int32 nNewCurrentSlide (-1);
     while (aPageEnumeration.HasMoreElements())
     {
@@ -147,7 +147,7 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
     mrController.GetFocusManager().SetFocusedPage(nNewCurrentSlide);
 }
 
-void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedPages)
+void SelectionManager::DeleteSelectedNormalPages (const std::vector<SdPage*>& rSelectedPages)
 {
     // Prepare the deletion via the UNO API.
     OSL_ASSERT(mrSlideSorter.GetModel().GetEditMode() == EM_PAGE);
@@ -161,7 +161,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
         // and delete the draw page the notes page.  The iteration is done in
         // reverse order so that when one slide is not deleted (to avoid an
         // empty document) the remaining slide is the first one.
-        ::std::vector<SdPage*>::const_reverse_iterator aI;
+        std::vector<SdPage*>::const_reverse_iterator aI;
         for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); ++aI)
         {
             // Do not delete the last slide in the document.
@@ -180,7 +180,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
     }
 }
 
-void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedPages)
+void SelectionManager::DeleteSelectedMasterPages (const std::vector<SdPage*>& rSelectedPages)
 {
     // Prepare the deletion via the UNO API.
     OSL_ASSERT(mrSlideSorter.GetModel().GetEditMode() == EM_MASTERPAGE);
@@ -194,7 +194,7 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
         // and delete the draw page the notes page.  The iteration is done in
         // reverse order so that when one slide is not deleted (to avoid an
         // empty document) the remaining slide is the first one.
-        ::std::vector<SdPage*>::const_reverse_iterator aI;
+        std::vector<SdPage*>::const_reverse_iterator aI;
         for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); ++aI)
         {
             // Do not delete the last slide in the document.
@@ -249,7 +249,7 @@ void SelectionManager::SelectionHasChanged ()
 
 void SelectionManager::AddSelectionChangeListener (const Link<LinkParamNone*,void>& rListener)
 {
-    if (::std::find (
+    if (std::find (
         maSelectionChangeListeners.begin(),
         maSelectionChangeListeners.end(),
         rListener) == maSelectionChangeListeners.end())
@@ -261,7 +261,7 @@ void SelectionManager::AddSelectionChangeListener (const Link<LinkParamNone*,voi
 void SelectionManager::RemoveSelectionChangeListener(const Link<LinkParamNone*,void>& rListener)
 {
     maSelectionChangeListeners.erase (
-        ::std::find (
+        std::find (
             maSelectionChangeListeners.begin(),
             maSelectionChangeListeners.end(),
             rListener));
