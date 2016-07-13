@@ -101,13 +101,13 @@ void test::oustring::EndsWith::endsWith()
         appendString(msg, rtl::OString(data[i].str2, data[i].str2Len));
         msg.append(RTL_CONSTASCII_STRINGPARAM(") == "));
         msg.append(data[i].endsWith);
-        CPPUNIT_ASSERT_MESSAGE(
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
             msg.getStr(),
+            data[i].endsWith,
             rtl::OUString(
                 data[i].str1, data[i].str1Len,
                 RTL_TEXTENCODING_ASCII_US).endsWithIgnoreAsciiCaseAsciiL(
-                    data[i].str2, data[i].str2Len)
-            == data[i].endsWith);
+                    data[i].str2, data[i].str2Len));
     }
 }
 

@@ -88,12 +88,12 @@ void test::ostring::StringLiterals::checkCtors()
     CPPUNIT_ASSERT( CONST_CTOR_USED( bad7[ 1 ] ));
 
 // Check that contents are correct and equal to the case when const char* ctor is used.
-    CPPUNIT_ASSERT( rtl::OString( static_cast<const char*>("") ) == rtl::OString( "" ));
-    CPPUNIT_ASSERT( rtl::OString( static_cast<const char*>("ab") ) == rtl::OString( "ab" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OString( "" ), rtl::OString( static_cast<const char*>("") ) );
+    CPPUNIT_ASSERT_EQUAL( rtl::OString( "ab" ), rtl::OString( static_cast<const char*>("ab") ) );
 
 // Check that contents are correct and equal to the case when RTL_CONSTASCII_STRINGPARAM is used.
-    CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "" )) == rtl::OString( "" ));
-    CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "ab" )) == rtl::OString( "ab" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OString( "" ), rtl::OString( RTL_CONSTASCII_STRINGPARAM( "" )) );
+    CPPUNIT_ASSERT_EQUAL( rtl::OString( "ab" ), rtl::OString( RTL_CONSTASCII_STRINGPARAM( "ab" )) );
 }
 
 const char test::ostring::StringLiterals::bad5[] = "test";
@@ -152,10 +152,10 @@ void test::ostring::StringLiterals::checkUsage()
 //    CPPUNIT_ASSERT( FooBaR.endsWithIgnoreAsciiCase( "bar" ));
 //    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
     rtl_string_unittest_const_literal_function = false;
-    CPPUNIT_ASSERT( foo == "foo" );
+    CPPUNIT_ASSERT( bool(foo == "foo") );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
-    CPPUNIT_ASSERT( "foo" == foo );
+    CPPUNIT_ASSERT( bool("foo" == foo) );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foo != "bar" );
@@ -164,7 +164,7 @@ void test::ostring::StringLiterals::checkUsage()
     CPPUNIT_ASSERT( "foo" != bar );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
     rtl_string_unittest_const_literal_function = false;
-    CPPUNIT_ASSERT( foobarfoo.indexOf( "foo", 1 ) == 6 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(6), foobarfoo.indexOf( "foo", 1 ) );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function );
 //    rtl_string_unittest_const_literal_function = false;
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( "foo" ) == 6 );
@@ -210,16 +210,16 @@ void test::ostring::StringLiterals::checkNonConstUsage()
     CPPUNIT_ASSERT( foobar.endsWith( bar_c ));
 //    CPPUNIT_ASSERT( FooBaR.endsWithIgnoreAsciiCase( (const char*)bar_c ));
 //    CPPUNIT_ASSERT( FooBaR.endsWithIgnoreAsciiCase( bar_c ));
-    CPPUNIT_ASSERT( foo == static_cast<const char*>(foo_c) );
-    CPPUNIT_ASSERT( foo == foo_c );
-    CPPUNIT_ASSERT( static_cast<const char*>(foo_c) == foo );
-    CPPUNIT_ASSERT( foo_c == foo );
+    CPPUNIT_ASSERT( bool(foo == static_cast<const char*>(foo_c)) );
+    CPPUNIT_ASSERT( bool(foo == foo_c) );
+    CPPUNIT_ASSERT( bool(static_cast<const char*>(foo_c) == foo) );
+    CPPUNIT_ASSERT( bool(foo_c == foo) );
     CPPUNIT_ASSERT( foo != static_cast<const char*>(bar_c) );
     CPPUNIT_ASSERT( foo != bar_c );
     CPPUNIT_ASSERT( static_cast<const char*>(foo_c) != bar );
     CPPUNIT_ASSERT( foo_c != bar );
-    CPPUNIT_ASSERT( foobarfoo.indexOf( static_cast<const char*>(foo_c), 1 ) == 6 );
-    CPPUNIT_ASSERT( foobarfoo.indexOf( foo_c, 1 ) == 6 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(6), foobarfoo.indexOf( static_cast<const char*>(foo_c), 1 ) );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(6), foobarfoo.indexOf( foo_c, 1 ) );
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( (const char*)foo_c ) == 6 );
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( foo_c ) == 6 );
     // if this is not true, some of the calls above used const variants
