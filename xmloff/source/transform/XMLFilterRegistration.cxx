@@ -83,10 +83,8 @@ namespace
     };
 }
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL xof_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
@@ -131,8 +129,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xof_component_getFactory( const sal_Char * p
     return pRet;
 }
 
-#ifdef __cplusplus
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

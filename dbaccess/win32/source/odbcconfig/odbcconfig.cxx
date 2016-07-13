@@ -18,10 +18,6 @@
  */
 
 
-#ifndef __cplusplus
-#error Need C++ to compile
-#endif
-
 #define UNICODE
 #define _UNICODE
 #include <tchar.h>

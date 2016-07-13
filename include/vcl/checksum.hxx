@@ -44,9 +44,7 @@ inline void BCToBCOA< BITMAP_CHECKSUM_SIZE >( BitmapChecksum, BitmapChecksumOcte
     return;
 }
 
-#ifdef __cplusplus
 extern "C" {
-#endif
 
 /*========================================================================
  *
@@ -70,10 +68,7 @@ VCL_DLLPUBLIC sal_uInt64 SAL_CALL vcl_crc64 (
 
 VCL_DLLPUBLIC const sal_uInt64* vcl_get_crc64_table();
 
-
-#ifdef __cplusplus
 }
-#endif
 
 inline BitmapChecksum vcl_get_checksum (
     BitmapChecksum  Checksum,

@@ -24,9 +24,7 @@
 #include <sal/main.h>
 #include <sal/types.h>
 
-#ifdef __cplusplus
 extern "C" {
-#endif
 
 //From time.c
 void sal_initGlobalTimer();
@@ -100,8 +98,6 @@ void sal_detail_deinitialize()
     }
 }
 
-#ifdef __cplusplus
 }   // extern "C"
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,17 +36,6 @@
 
 #include <stdio.h>
 
-
-/* cfront 1.2 defines "c_plusplus" instead of "__cplusplus" */
-#ifdef c_plusplus
-#ifndef __cplusplus
-#define __cplusplus
-#endif
-#endif
-
-
-#ifdef __cplusplus
-
 #include <stdlib.h>
 #ifndef _WIN32
 #include <unistd.h>
@@ -60,16 +49,6 @@
 
 /* The "const" storage-class-modifier is valid. */
 #define YY_USE_CONST
-
-#else   /* ! __cplusplus */
-
-#if __STDC__
-
-#define YY_USE_PROTOS
-#define YY_USE_CONST
-
-#endif  /* __STDC__ */
-#endif  /* ! __cplusplus */
 
 #ifdef YY_USE_CONST
 #define yyconst const
@@ -966,14 +945,10 @@ char *yytext;
 #define isatty _isatty
 #endif
 
-#ifdef __cplusplus
 extern "C" {
-#endif
 #include "grammar.h"
 int yywrap();
-#ifdef __cplusplus
 }
-#endif
 
 #ifdef _WIN32
 extern YYSTYPE yylval;
@@ -1023,11 +998,7 @@ static int yy_top_state YY_PROTO(( void ));
 #ifdef YY_MALLOC_DECL
 YY_MALLOC_DECL
 #else
-#if defined __STDC__ && __STDC__
-#ifndef __cplusplus
-#include <stdlib.h>
-#endif
-#else
+#if !(defined __STDC__ && __STDC__)
 /* Just try to get by without declaring the routines.  This will fail
  * miserably on non-ANSI systems for which sizeof(size_t) != sizeof(int)
  * or sizeof(void*) != sizeof(int).

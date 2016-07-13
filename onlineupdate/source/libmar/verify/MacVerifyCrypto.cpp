@@ -11,9 +11,7 @@
 // We declare the necessary parts of the Security Transforms API here since
 // we're building with the 10.6 SDK, which doesn't know about Security
 // Transforms.
-#ifdef __cplusplus
 extern "C" {
-#endif
   const CFStringRef kSecTransformInputAttributeName = CFSTR("INPUT");
   typedef CFTypeRef SecTransformRef;
   typedef struct OpaqueSecKeyRef* SecKeyRef;
@@ -34,9 +32,7 @@ extern "C" {
                                                   CFTypeRef value,
                                                   CFErrorRef* error);
   SecTransformSetAttributeFunc SecTransformSetAttributePtr = NULL;
-#ifdef __cplusplus
 }
-#endif
 
 #define MAC_OS_X_VERSION_10_7_HEX 0x00001070
 
