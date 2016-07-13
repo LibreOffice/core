@@ -72,7 +72,7 @@ http://www.openoffice.org/marketing/ooocon2006/presentations/wednesday_g11.odp,
 slide number 6.
 
 .------- Model --------------.      .------- View -----------------------------------------.
-| SdrObject - ViewContact    | 1..* | ViewObjectContact       1..*                         |
+| SdrObject - ViewContact    | 1..* | ViewObjectContact                                    |
 |              getChild()    |------|    getPrimitiveList()  -----> Object(s) ---> SdrView |
 |              getVOC()      |      |    getRecPrimitiveList()      Contact                |
 |              getViewInd... |      |________|_____________________________________________|
@@ -92,6 +92,10 @@ svx/source/sdr/primitive2d
 The ViewContact / ViewObject / ViewObjectContact are in svx/source/sdr/contact
 Decomposes the SdrObjects, and does all sort of operations on them.
 
-[So far I haven't found a definition / concept what are supposed to be the
-ViewContact / ViewObject / ViewObjectContact.  If you find that out, please
-fix this README :-)]
+If the number of visualizable objects (e.g. SdrObjects) is X, and the number of
+SdrViews is Y, then:
+
+- there are X ViewContact instances (1:1 relation with a visualizable object)
+- there are Y ObjectContact instances (1:1 relation with an SdrView)
+- there are X*Y ViewObjecContact instances (1:N relation to both
+  visualizable objects and SdrViews)
