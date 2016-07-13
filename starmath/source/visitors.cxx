@@ -218,8 +218,6 @@ void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
 
 void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
 {
-    mrDev.SetLineColor( Color( COL_BLACK ) );
-
     //Find the line
     SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
 
