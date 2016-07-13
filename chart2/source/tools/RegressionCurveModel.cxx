@@ -23,7 +23,6 @@
 #include "RegressionCurveHelper.hxx"
 #include "RegressionCalculationHelper.hxx"
 #include "RegressionEquation.hxx"
-#include "ContainerHelper.hxx"
 #include "CloneHelper.hxx"
 #include "PropertyHelper.hxx"
 #include <cppuhelper/supportsservice.hxx>

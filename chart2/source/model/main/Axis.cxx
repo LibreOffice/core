@@ -24,7 +24,6 @@
 #include "LinePropertiesHelper.hxx"
 #include "UserDefinedProperties.hxx"
 #include "PropertyHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "CloneHelper.hxx"
 #include "AxisHelper.hxx"
 #include "EventListenerHelper.hxx"

@@ -24,7 +24,6 @@
 #include "Scaling.hxx"
 #include "DiagramHelper.hxx"
 #include "servicenames_charttypes.hxx"
-#include "ContainerHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include "PropertyHelper.hxx"

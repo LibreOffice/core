@@ -23,7 +23,6 @@
 #include "PolarCoordinateSystem.hxx"
 #include "Scaling.hxx"
 #include "servicenames_charttypes.hxx"
-#include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <cppuhelper/supportsservice.hxx>

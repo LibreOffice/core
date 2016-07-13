@@ -21,7 +21,6 @@
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
 #include "servicenames_charttypes.hxx"
-#include "ContainerHelper.hxx"
 #include <unonames.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

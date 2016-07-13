@@ -20,7 +20,6 @@
 #include "XMLFilter.hxx"
 #include "macros.hxx"
 #include "MediaDescriptorHelper.hxx"
-#include "ContainerHelper.hxx"
 
 #include <svtools/sfxecode.hxx>
 #include <unotools/saveopt.hxx>

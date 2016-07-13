@@ -21,7 +21,6 @@
 #include "macros.hxx"
 #include "Chart2ModelContact.hxx"
 #include "LegendHelper.hxx"
-#include "ContainerHelper.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>

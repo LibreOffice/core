@@ -23,7 +23,6 @@
 #include "DataBrowser.hxx"
 #include "DataBrowserModel.hxx"
 #include "Strings.hrc"
-#include "ContainerHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "ChartModelHelper.hxx"

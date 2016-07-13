@@ -20,7 +20,6 @@
 #include "WallFloorWrapper.hxx"
 #include "macros.hxx"
 #include "Chart2ModelContact.hxx"
-#include "ContainerHelper.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

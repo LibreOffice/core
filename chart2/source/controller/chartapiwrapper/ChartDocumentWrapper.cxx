@@ -36,7 +36,6 @@
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "ChartModelHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "AxisHelper.hxx"
 #include "ThreeDHelper.hxx"
 

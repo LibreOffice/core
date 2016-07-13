@@ -23,7 +23,6 @@
 #include "UserDefinedProperties.hxx"
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
-#include "ContainerHelper.hxx"
 #include "ModifyListenerHelper.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/XStyle.hpp>

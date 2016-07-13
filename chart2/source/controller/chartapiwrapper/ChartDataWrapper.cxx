@@ -22,7 +22,6 @@
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "servicenames_charttypes.hxx"
-#include "ContainerHelper.hxx"
 #include "CommonFunctors.hxx"
 #include "ChartModelHelper.hxx"
 #include "DataSeriesHelper.hxx"

@@ -18,7 +18,6 @@
  */
 
 #include "CharacterProperties.hxx"
-#include "ContainerHelper.hxx"
 #include "macros.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

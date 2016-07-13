@@ -18,7 +18,6 @@
  */
 
 #include "ConfigColorScheme.hxx"
-#include "ContainerHelper.hxx"
 #include "macros.hxx"
 
 #include <unotools/configitem.hxx>

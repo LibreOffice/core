@@ -51,7 +51,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using namespace ::chart::ContainerHelper;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -494,7 +493,7 @@ void addNewSeriesToContainer(
     const Reference<XDataSeries>& xNewSeries )
 {
     Reference<XDataSeriesContainer> xSeriesCnt(xChartType, uno::UNO_QUERY_THROW);
-    std::vector<Reference<XDataSeries> > aSeries = SequenceToVector(xSeriesCnt->getDataSeries());
+    std::vector<Reference<XDataSeries> > aSeries = ContainerHelper::SequenceToVector(xSeriesCnt->getDataSeries());
 
     std::vector<Reference<XDataSeries> >::iterator aIt =
         std::find( aSeries.begin(), aSeries.end(), xSeries);
@@ -828,7 +827,7 @@ void DialogModel::applyInterpretedData(
         // data series
         ::std::vector< Reference< XDataSeriesContainer > > aSeriesCnt( getAllDataSeriesContainers());
         ::std::vector< Sequence< Reference< XDataSeries > > > aNewSeries(
-            SequenceToVector( rNewData.Series ));
+            ContainerHelper::SequenceToVector( rNewData.Series ));
 
         OSL_ASSERT( aSeriesCnt.size() == aNewSeries.size());
 

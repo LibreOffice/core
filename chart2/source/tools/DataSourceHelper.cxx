@@ -23,7 +23,6 @@
 #include "DiagramHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "DataSource.hxx"
-#include "ContainerHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "PropertyHelper.hxx"
 #include "CachedDataSequence.hxx"

@@ -23,7 +23,6 @@
 #include "DiagramHelper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "DataSeriesHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "BaseGFXHelper.hxx"
 #include "AxisHelper.hxx"
 #include "ThreeDHelper.hxx"

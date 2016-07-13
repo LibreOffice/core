@@ -20,7 +20,6 @@
 #include "CachedDataSequence.hxx"
 #include "macros.hxx"
 #include "PropertyHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "CommonFunctors.hxx"
 #include "ModifyListenerHelper.hxx"
 
@@ -32,7 +31,6 @@
 #include <rtl/math.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::chart::ContainerHelper;
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;

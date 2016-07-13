@@ -25,7 +25,6 @@
 #include "AxisHelper.hxx"
 #include "CloneHelper.hxx"
 #include "AxisIndexDefines.hxx"
-#include "ContainerHelper.hxx"
 #include <vcl/svapp.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

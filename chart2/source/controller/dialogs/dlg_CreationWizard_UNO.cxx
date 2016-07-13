@@ -21,7 +21,6 @@
 #include "dlg_CreationWizard.hxx"
 #include "macros.hxx"
 #include "servicenames.hxx"
-#include "ContainerHelper.hxx"
 #include "TimerTriggeredControllerLock.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
