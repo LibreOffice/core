@@ -60,7 +60,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 
     // Stop at a (single) Null-slot (for syntactic reasons the interfaces
     // always contain at least one slot)
-    if ( rInterface.Count() != 0 && !rInterface[0]->nSlotId )
+    if ( rInterface.Count() != 0 && !rInterface.pSlots[0].nSlotId )
         return;
 
     // possibly add Interface-id and group-ids of funcs to the list of groups
@@ -77,7 +77,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 
     for ( size_t nFunc = 0; nFunc < rInterface.Count(); ++nFunc )
     {
-        SfxSlot *pDef = rInterface[nFunc];
+        SfxSlot *pDef = &rInterface.pSlots[nFunc];
         if ( pDef->GetGroupId() && /* pDef->GetGroupId() != GID_INTERN && */
              _pGroups->find(pDef->GetGroupId()) == SfxSlotGroupArr_Impl::npos )
         {
@@ -216,7 +216,7 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
               _nCurMsg < pInterface->Count();
               ++_nCurMsg )
         {
-            const SfxSlot* pMsg = (*pInterface)[_nCurMsg];
+            const SfxSlot* pMsg = &pInterface->pSlots[_nCurMsg];
             if ( pMsg->GetGroupId() == _pGroups->at(_nCurGroup) )
                 return pMsg;
         }
@@ -261,7 +261,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
     SfxInterface* pInterface = (*_pInterfaces)[nInterface];
     while ( ++_nCurMsg < pInterface->Count() )
     {
-        SfxSlot* pMsg = (*pInterface)[_nCurMsg];
+        SfxSlot* pMsg = &pInterface->pSlots[_nCurMsg];
         if ( pMsg->GetGroupId() == _pGroups->at(_nCurGroup) )
             return pMsg;
     }

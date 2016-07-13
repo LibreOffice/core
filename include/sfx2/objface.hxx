@@ -43,8 +43,6 @@ friend class SfxSlotPool;
     bool                    bSuperClass;    // Whether children inherit its toolbars etc
     std::unique_ptr<SfxInterface_Impl>      pImplData;
 
-    SfxSlot*                operator[]( sal_uInt16 nPos ) const;
-
 public:
                             SfxInterface( const char *pClass,
                                           bool bSuperClass,
@@ -95,14 +93,6 @@ public:
 inline sal_uInt16 SfxInterface::Count() const
 {
     return nCount;
-}
-
-
-// returns a function by position in the array
-
-inline SfxSlot* SfxInterface::operator[]( sal_uInt16 nPos ) const
-{
-    return nPos < nCount? pSlots+nPos: nullptr;
 }
 
 #endif
