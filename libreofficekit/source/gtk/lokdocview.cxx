@@ -369,6 +369,10 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_CELL_VIEW_CURSOR";
     case LOK_CALLBACK_CELL_FORMULA:
         return "LOK_CALLBACK_CELL_FORMULA";
+    case LOK_CALLBACK_UNO_COMMAND_RESULT:
+        return "LOK_CALLBACK_UNO_COMMAND_RESULT";
+    case LOK_CALLBACK_ERROR:
+        return "LOK_CALLBACK_ERROR";
     }
     g_assert(false);
     return nullptr;
