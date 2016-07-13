@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/EnumContext.hxx>
 
 struct ImplTabItem;
 struct ImplTabCtrlData;
@@ -45,7 +46,7 @@ class ListBox;
 
 class VCL_DLLPUBLIC TabControl : public Control
 {
-private:
+protected:
     ImplTabCtrlData*    mpTabCtrlData;
     long                mnLastWidth;
     long                mnLastHeight;
@@ -56,7 +57,6 @@ private:
     bool                mbRestoreHelpId;
     bool                mbSmallInvalidate;
     bool                mbLayoutDirty;
-    bool                mbHideDisabledTabs;
     Link<TabControl*,void> maActivateHdl;
     Link<TabControl*,bool> maDeactivateHdl;
 
@@ -64,7 +64,6 @@ private:
     SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth );
-    SAL_DLLPRIVATE bool         ImplPlaceTabs( long nWidth );
     SAL_DLLPRIVATE Rectangle    ImplGetTabRect( sal_uInt16 nPos, long nWidth = -1, long nHeight = -1 );
     SAL_DLLPRIVATE void         ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId );
     SAL_DLLPRIVATE bool         ImplPosCurTabPage();
@@ -73,15 +72,12 @@ private:
     SAL_DLLPRIVATE void         ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem,
                                              const Rectangle& rCurRect, bool bFirstInGroup = false,
                                              bool bLastInGroup = false, bool bIsCurrentItem = false);
-    SAL_DLLPRIVATE void         ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 
     DECL_DLLPRIVATE_LINK_TYPED( ImplListBoxSelectHdl, ListBox&, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplWindowEventListener, VclWindowEvent&, void );
 
-
-protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
 
@@ -89,6 +85,8 @@ protected:
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
+    virtual bool                ImplPlaceTabs( long nWidth );
+    virtual void                ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
 
 public:
                         TabControl( vcl::Window* pParent,
@@ -126,12 +124,11 @@ public:
     void                RemovePage( sal_uInt16 nPageId );
     void                Clear();
     void                EnablePage( sal_uInt16 nPageId, bool bEnable = true );
-    void                HideDisabledTabs(bool bHide = true);
 
     sal_uInt16          GetPagePos( sal_uInt16 nPageId ) const;
     sal_uInt16          GetPageCount() const;
     sal_uInt16          GetPageId( sal_uInt16 nPos ) const;
-    sal_uInt16          GetPageId( const Point& rPos ) const;
+    virtual sal_uInt16  GetPageId( const Point& rPos ) const;
     sal_uInt16          GetPageId( const TabPage& rPage ) const;
     sal_uInt16          GetPageId( const OString& rName ) const;
 
@@ -195,6 +192,23 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
+};
+
+class VCL_DLLPUBLIC NotebookbarTabControl : public TabControl
+{
+public:
+    NotebookbarTabControl( vcl::Window* pParent, WinBits nStyle = WB_STDTABCONTROL );
+
+    void SetContext( vcl::EnumContext::Context eContext );
+
+    virtual sal_uInt16  GetPageId( const Point& rPos ) const override;
+
+protected:
+    virtual bool ImplPlaceTabs( long nWidth ) override;
+    virtual void ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+
+private:
+    vcl::EnumContext::Context eLastContext;
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX

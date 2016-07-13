@@ -12,7 +12,7 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/contexttabctrl.hxx>
+#include <vcl/tabctrl.hxx>
 #include <vcl/EnumContext.hxx>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
@@ -33,7 +33,7 @@ public:
     const css::uno::Reference<css::ui::XContextChangeEventListener>& getContextChangeEventListener() const { return m_pEventListener; }
 private:
     css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
-    VclPtr<ContextTabControl> m_pTabControl;
+    VclPtr<NotebookbarTabControl> m_pTabControl;
 };
 
 
