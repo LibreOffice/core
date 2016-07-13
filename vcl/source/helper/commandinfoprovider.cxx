@@ -18,6 +18,8 @@
  */
 
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/mnemonic.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -163,8 +165,12 @@ OUString CommandInfoProvider::GetTooltipForCommand (
     SetFrame(rxFrame);
 
     OUString sLabel (GetCommandProperty("TooltipLabel", rsCommandName));
-    if (sLabel.isEmpty())
-        sLabel = GetCommandProperty("Name", rsCommandName);
+    if (sLabel.isEmpty()) {
+        sLabel = GetPopupLabelForCommand(rsCommandName, rxFrame);
+        // Remove '...' at the end and mnemonics (we don't want those in tooltips)
+        sLabel = comphelper::string::stripEnd(sLabel, '.');
+        sLabel = MnemonicGenerator::EraseAllMnemonicChars(sLabel);
+    }
 
     // Command can be just an alias to another command,
     // so need to get the shortcut of the "real" command.

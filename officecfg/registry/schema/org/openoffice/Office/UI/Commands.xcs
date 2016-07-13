@@ -43,7 +43,7 @@
       </prop>
       <prop oor:name="TooltipLabel" oor:type="xs:string" oor:localized="true">
         <info>
-          <desc>Used for Tooltips (Toolbar and Glade Widgets that have their 'action_name' specified.)</desc>
+          <desc>Used for Tooltips (Toolbar and Glade Widgets that have their 'action_name' specified.). Defaults to PopupLabel, then Label if empty.</desc>
         </info>
       </prop>
       <prop oor:name="TargetURL" oor:type="xs:string" oor:localized="false">
