@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_fc55541d",
+        "filename": "include/svx/SvxPresetListBox.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-07-13T13:07:46Z",
+      "side": 1,
+      "message": "GetIconSize,please ... it totally confused me when used in tphatch.cxx, I thought GetSize is a size of the whole value set",
+      "revId": "b8140b73fa2cf27a557b11cf6ae1b7d90ea2eb55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
