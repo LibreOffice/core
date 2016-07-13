@@ -133,17 +133,17 @@ void test::oustring::StringLiterals::checkUsage()
     CPPUNIT_ASSERT( FooBaR.startsWithIgnoreAsciiCase( "foo" ));
     CPPUNIT_ASSERT( foobar.endsWith( "bar" ));
     CPPUNIT_ASSERT( FooBaR.endsWithIgnoreAsciiCase( "bar" ));
-    CPPUNIT_ASSERT( foo == "foo" );
-    CPPUNIT_ASSERT( "foo" == foo );
+    CPPUNIT_ASSERT( bool(foo == "foo") );
+    CPPUNIT_ASSERT( bool("foo" == foo) );
     CPPUNIT_ASSERT( foo != "bar" );
     CPPUNIT_ASSERT( "foo" != bar );
-    CPPUNIT_ASSERT( foobarfoo.indexOf( "foo", 1 ) == 6 );
-    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( "foo" ) == 6 );
-    CPPUNIT_ASSERT( foobarfoo.replaceFirst( "foo", test ) == "testbarfoo" );
-    CPPUNIT_ASSERT( foobarfoo.replaceFirst( "foo", "test" ) == "testbarfoo" );
-    CPPUNIT_ASSERT( foobarfoo.replaceAll( "foo", test ) == "testbartest" );
-    CPPUNIT_ASSERT( foobarfoo.replaceAll( "foo", "test" ) == "testbartest" );
-    CPPUNIT_ASSERT( foo.reverseCompareTo( "foo" ) == 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(6), foobarfoo.indexOf( "foo", 1 ) );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(6), foobarfoo.lastIndexOf( "foo" ) );
+    CPPUNIT_ASSERT( bool(foobarfoo.replaceFirst( "foo", test ) == "testbarfoo") );
+    CPPUNIT_ASSERT( bool(foobarfoo.replaceFirst( "foo", "test" ) == "testbarfoo") );
+    CPPUNIT_ASSERT( bool(foobarfoo.replaceAll( "foo", test ) == "testbartest") );
+    CPPUNIT_ASSERT( bool(foobarfoo.replaceAll( "foo", "test" ) == "testbartest") );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(0), foo.reverseCompareTo( "foo" ) );
     // if this is not true, some of the calls above converted to OUString
     CPPUNIT_ASSERT( !rtl_string_unittest_const_literal );
 }
@@ -179,7 +179,7 @@ void test::oustring::StringLiterals::checkNonconstChar()
         !VALID_CONVERSION(
             [&test, &constbar]() {
                 return rtl::OUString("footest").replaceAll(test, constbar); }));
-    CPPUNIT_ASSERT( rtl::OUString( "foobar" ) == rtl::OUString( "footest" ).replaceAll( consttest, constbar ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foobar" ), rtl::OUString( "footest" ).replaceAll( consttest, constbar ));
 }
 
 void test::oustring::StringLiterals::checkBuffer()
@@ -208,8 +208,8 @@ rtl::OUString conditional(bool flag) {
 
 void test::oustring::StringLiterals::checkOUStringLiteral()
 {
-    CPPUNIT_ASSERT(conditional(true) == "a");
-    CPPUNIT_ASSERT(conditional(false) == "bb");
+    CPPUNIT_ASSERT(bool(conditional(true) == "a"));
+    CPPUNIT_ASSERT(bool(conditional(false) == "bb"));
 }
 
 void test::oustring::StringLiterals::checkOUStringLiteral1()

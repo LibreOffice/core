@@ -65,8 +65,8 @@ class TestReferenceRefCounting : public CppUnit::TestFixture
 
         // move should not increment the reference count
         rtl::Reference< MoveTestClass > test2( std::move(test1) );
-        CPPUNIT_ASSERT_MESSAGE("test2.use_count() == 1",
-                               test2->use_count() == 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("test2.use_count() == 1",
+                               static_cast<long>(1), test2->use_count());
 
         // test1 now contains a null pointer
         CPPUNIT_ASSERT_MESSAGE("!test1.is()",
@@ -74,19 +74,19 @@ class TestReferenceRefCounting : public CppUnit::TestFixture
 
         // function return should move the reference
         test2 = get_reference( &cTestClass );
-        CPPUNIT_ASSERT_MESSAGE("test2.use_count() == 1",
-                               test2->use_count() == 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("test2.use_count() == 1",
+                               static_cast<long>(1), test2->use_count());
 
         // normal copy
         test2->set_inc_flag();
         test1 = test2;
-        CPPUNIT_ASSERT_MESSAGE("test2.use_count() == 2",
-                               test2->use_count() == 2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("test2.use_count() == 2",
+                               static_cast<long>(2), test2->use_count());
 
         // use count should decrement
         test2 = rtl::Reference< MoveTestClass >(nullptr);
-        CPPUNIT_ASSERT_MESSAGE("test1.use_count() == 1",
-                               test1->use_count() == 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("test1.use_count() == 1",
+                               static_cast<long>(1), test1->use_count());
 
         // move of a null pointer should not cause an error
         test1 = std::move(test2);
@@ -96,8 +96,8 @@ class TestReferenceRefCounting : public CppUnit::TestFixture
         CPPUNIT_ASSERT_MESSAGE("!test2.is()",
                                !test2.is());
 
-        CPPUNIT_ASSERT_MESSAGE("cTestClass.use_count() == 0",
-                               cTestClass.use_count() == 0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("cTestClass.use_count() == 0",
+                               static_cast<long>(0), cTestClass.use_count());
     }
 
     CPPUNIT_TEST_SUITE(TestReferenceRefCounting);

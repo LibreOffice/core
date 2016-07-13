@@ -90,14 +90,14 @@ void test::oustringbuffer::Utf32::appendUtf32() {
     buf1.appendUtf32('d');
     rtl::OUString res1(buf1.makeStringAndClear());
     createMessage(message, res1, rtl::OUString(str2, str2Len));
-    CPPUNIT_ASSERT_MESSAGE(
-        message.getStr(), res1 == rtl::OUString(str2, str2Len));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        message.getStr(), rtl::OUString(str2, str2Len), res1);
     rtl::OUStringBuffer buf2(rtl::OUString(str2, str2Len));
     buf2.appendUtf32(0x10000);
     rtl::OUString res2(buf2.makeStringAndClear());
     createMessage(message, res2, rtl::OUString(str3, str3Len));
-    CPPUNIT_ASSERT_MESSAGE(
-        message.getStr(), res2 == rtl::OUString(str3, str3Len));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        message.getStr(), rtl::OUString(str3, str3Len), res2);
 }
 
 void test::oustringbuffer::Utf32::insertUtf32() {
@@ -112,14 +112,14 @@ void test::oustringbuffer::Utf32::insertUtf32() {
     buf1.insertUtf32(2, 'd');
     rtl::OUString res1(buf1.makeStringAndClear());
     createMessage(message, res1, rtl::OUString(str2, str2Len));
-    CPPUNIT_ASSERT_MESSAGE(
-        message.getStr(), res1 == rtl::OUString(str2, str2Len));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        message.getStr(), rtl::OUString(str2, str2Len), res1);
     rtl::OUStringBuffer buf2(rtl::OUString(str2, str2Len));
     buf2.insertUtf32(2, 0x10FFFF);
     rtl::OUString res2(buf2.makeStringAndClear());
     createMessage(message, res2, rtl::OUString(str3, str3Len));
-    CPPUNIT_ASSERT_MESSAGE(
-        message.getStr(), res2 == rtl::OUString(str3, str3Len));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        message.getStr(), rtl::OUString(str3, str3Len), res2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

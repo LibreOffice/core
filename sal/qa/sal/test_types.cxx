@@ -35,7 +35,7 @@ template< typename T > void testPrintf(
     char buf[bufsize];
     int n = snprintf(buf, bufsize, format, argument);
     CPPUNIT_ASSERT(n >= 0 && sal::static_int_cast< unsigned int >(n) < bufsize);
-    CPPUNIT_ASSERT(strcmp(buf, result) == 0);
+    CPPUNIT_ASSERT_EQUAL(0, strcmp(buf, result));
 }
 
 class Test: public CppUnit::TestFixture {
