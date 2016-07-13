@@ -109,11 +109,12 @@
       </node>
       <node oor:name=".uno:InsertEndnote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Endnote</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Endnote</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Endnote</value>
+        </prop>
+
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
@@ -399,6 +400,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Caption...</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Caption</value>
+        </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Caption...</value>
         </prop>
@@ -442,10 +446,10 @@
       </node>
       <node oor:name=".uno:InsertPagebreak" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Page Break</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Page Break</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Page Break</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -460,8 +464,14 @@
         </prop>
       </node>
       <node oor:name=".uno:InsertTable" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert ~Table...</value>
+        </prop>
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Table</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Table</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -763,10 +773,10 @@
       </node>
       <node oor:name=".uno:InsertFootnote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Footnote</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Footnote</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Footnote</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
