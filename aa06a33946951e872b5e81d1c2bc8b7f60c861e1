@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_0fff1c02",
+        "filename": "sc/source/filter/excel/excform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-13T13:52:09Z",
+      "side": 0,
+      "message": "Ahum.. commit 64fe06795a7a0880ad796646d835833ffa875b89 sheds some light on this. So either formats \u003cBIFF8 don\u0027t support that the same way as it\u0027s done for BIFF8, or we would have to reimplement it here the same way if needed.",
+      "parentUuid": "ba84c18e_5cb6408b",
+      "revId": "aa06a33946951e872b5e81d1c2bc8b7f60c861e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_9c89a8cd",
         "filename": "sc/source/filter/excel/namebuff.cxx",
         "patchSetId": 1
