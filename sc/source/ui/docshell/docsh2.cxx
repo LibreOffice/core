@@ -22,6 +22,8 @@
 #include <svl/asiancfg.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/unolingu.hxx>
+#include <orcus/orcus_import_ods.hpp>
+#include <orcusfiltersimpl.hxx>
 
 #include "drwlayer.hxx"
 #include "stlpool.hxx"
@@ -29,6 +31,7 @@
 #include "docshimp.hxx"
 #include "docfunc.hxx"
 #include "sc.hrc"
+#include "filter.hxx"
 
 using namespace com::sun::star;
 
@@ -52,6 +55,14 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
     aDocument.GetStyleSheetPool()->CreateStandardStyles();
     aDocument.UpdStlShtPtrsFrmNms();
+
+    /* Create styles that are imported through Orcus */
+
+    OUString aFileName = "styles.xml";
+    ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+    if (!pOrcus)
+        return false;
+    pOrcus->importODS_Styles(aDocument, aFileName);
 
     //  SetDocumentModified is not allowed anymore in Load/InitNew!
     InitItems();
