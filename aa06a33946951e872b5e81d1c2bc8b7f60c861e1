@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_7c49448b",
+        "filename": "sc/inc/dptabsrc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-13T13:28:43Z",
+      "side": 0,
+      "message": "I\u0027d rather keep the incomplete implementation as is, here and in sc/source/core/data/dptabsrc.cxx",
+      "revId": "aa06a33946951e872b5e81d1c2bc8b7f60c861e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_fc2c74ad",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2282,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-13T13:28:43Z",
+      "side": 0,
+      "message": "I\u0027d rather keep this, or ask Michael Meeks or Tor Lillqvist about it. It seems can be executed unconditionally and might be a result of copypasta, but I don\u0027t know about the plans in that area.",
+      "revId": "aa06a33946951e872b5e81d1c2bc8b7f60c861e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
