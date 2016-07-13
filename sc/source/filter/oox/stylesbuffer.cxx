@@ -1982,11 +1982,15 @@ Xf::Xf( const WorkbookHelper& rHelper ) :
 void Xf::importXf( const AttributeList& rAttribs, bool bCellXf )
 {
     maModel.mbCellXf = bCellXf;
-    maModel.mnStyleXfId = rAttribs.getInteger( XML_xfId, -1 );
-    maModel.mnFontId = rAttribs.getInteger( XML_fontId, -1 );
-    maModel.mnNumFmtId = rAttribs.getInteger( XML_numFmtId, -1 );
-    maModel.mnBorderId = rAttribs.getInteger( XML_borderId, -1 );
-    maModel.mnFillId = rAttribs.getInteger( XML_fillId, -1 );
+    // tdf#70565 Set proper default values to "0"
+    // numFmtId, fontId, fillId, borderId, xfId fields when not exists has default values set to "0"
+    // Is is not impacts files created with MS Excel, as these fields are always created,
+    // but it causing wrong LibreOffice import/export files created by external applications (ex. SAP BI)
+    maModel.mnStyleXfId = rAttribs.getInteger( XML_xfId, 0 );
+    maModel.mnFontId = rAttribs.getInteger( XML_fontId, 0 );
+    maModel.mnNumFmtId = rAttribs.getInteger( XML_numFmtId, 0 );
+    maModel.mnBorderId = rAttribs.getInteger( XML_borderId, 0 );
+    maModel.mnFillId = rAttribs.getInteger( XML_fillId, 0 );
 
     /*  Default value of the apply*** attributes is dependent on context:
         true in cellStyleXfs element, false in cellXfs element... */
