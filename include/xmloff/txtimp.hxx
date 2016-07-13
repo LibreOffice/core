@@ -678,7 +678,9 @@ public:
 
     virtual bool CheckRedlineExists(
         /// ID used to RedlineAdd() call
-        const OUString& rId);
+        const OUString& rStartParaPos);
+
+    virtual void InsertRedlinesWithinParagraph(const OUString& rStartParaPos, bool bStart, bool bIsOutsideOfParagraph);
 
     virtual void RedlineSetCursor(
         /// ID used to RedlineAdd() call

@@ -86,6 +86,9 @@ public:
     bool Check(
         const OUString& rParaPos);
 
+    void InsertWithinParagraph(const OUString& rParaPos, bool bStart,
+        css::uno::Reference<css::text::XTextRange> & rRange, bool bIsOusideOfParagraph);
+
     // Set start or end position for a redline in the text body.
     // Accepts XTextRange objects.
     void SetCursor(

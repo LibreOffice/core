@@ -503,6 +503,50 @@ bool XMLRedlineImportHelper::Check(
     return false;
 }
 
+void XMLRedlineImportHelper::InsertWithinParagraph(const OUString& rParaPos, bool bStart,
+    Reference<XTextRange> & rRange, bool bIsOutsideOfParagraph)
+{
+    ::std::map<OUString, RedlineInfo*>::iterator aFind = aRedlineMap[rParaPos].begin();
+    for( ; aRedlineMap[rParaPos].end() != aFind; ++aFind )
+    {
+        // RedlineInfo found; now set Cursor
+        RedlineInfo* pInfo = aFind->second;
+        if (bIsOutsideOfParagraph)
+        {
+            // outside of paragraph: remember SwNodeIndex
+            if (bStart)
+            {
+                pInfo->aAnchorStart.SetAsNodeIndex(rRange);
+            }
+            else
+            {
+                pInfo->aAnchorEnd.SetAsNodeIndex(rRange);
+            }
+
+            // also remember that we expect an adjustment for this redline
+            pInfo->bNeedsAdjustment = true;
+        }
+        else
+        {
+            // inside of a paragraph: use regular XTextRanges (bookmarks)
+            if (bStart)
+                pInfo->aAnchorStart.Set(rRange);
+            else
+                pInfo->aAnchorEnd.Set(rRange);
+        }
+
+        // if this Cursor was the last missing info, we insert the
+        // node into the document
+        // then we can remove the entry from the map and destroy the object
+        if (IsReady(pInfo))
+        {
+            InsertIntoDocument(pInfo);
+            delete pInfo;
+        }
+    }
+    aRedlineMap[rParaPos].clear();
+}
+
 void XMLRedlineImportHelper::SetCursor(
     const OUString& rParaPos,
     const OUString& rTextPos,

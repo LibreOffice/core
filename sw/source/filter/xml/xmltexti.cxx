@@ -1001,12 +1001,21 @@ uno::Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
 }
 
 bool SwXMLTextImportHelper::CheckRedlineExists(
-    const OUString& rId)
+    const OUString& rStartParaPos)
 {
     if(pRedlineHelper != nullptr)
-        return pRedlineHelper->Check(rId);
+        return pRedlineHelper->Check(rStartParaPos);
     return false;
     // else: ignore redline (wasn't added before, else we'd have a helper)
+}
+
+void SwXMLTextImportHelper::InsertRedlinesWithinParagraph(const OUString& rStartParaPos, bool bStart, bool bIsOutsideOfParagraph)
+{
+    if(pRedlineHelper != nullptr)
+    {
+        uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
+        pRedlineHelper->InsertWithinParagraph(rStartParaPos, bStart, xTextRange, bIsOutsideOfParagraph);
+    }
 }
 
 void SwXMLTextImportHelper::RedlineSetCursor(

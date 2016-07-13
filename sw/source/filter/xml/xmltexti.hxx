@@ -97,7 +97,8 @@ public:
             css::uno::Reference<css::text::XTextCursor> & rOldCursor, /// needed to get the document
             const OUString& rParPos, const OUString& rTextPos) override;    /// ID used to RedlineAdd() call
     virtual bool CheckRedlineExists(
-        const OUString& rId) override;         /// ID used to RedlineAdd() call
+        const OUString& rStartParaPos) override;         /// ID used to RedlineAdd() call
+    virtual void InsertRedlinesWithinParagraph(const OUString& rStartParaPos, bool bStart, bool bIsOutsideOfParagraph) override;
     virtual void RedlineSetCursor(
         const OUString& rStartParaPos,
         const OUString& rStartTextPos,

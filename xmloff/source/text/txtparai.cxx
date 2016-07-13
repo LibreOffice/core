@@ -1820,7 +1820,8 @@ XMLParaContext::XMLParaContext(
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         bool bHead,
-        bool bInsertRedln) :
+        bool bInsertRedln,
+        const OUString& rStartParaPos) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
     m_bHaveAbout(false),
@@ -1831,6 +1832,7 @@ XMLParaContext::XMLParaContext(
     bIgnoreLeadingSpace( true ),
     bHeading( bHead ),
     bInsertRedline( bInsertRedln ),
+    sStartParaPos(rStartParaPos),
     bIsListHeader( false ),
     bIsRestart (false),
     nStartValue(0),
@@ -2232,6 +2234,7 @@ void XMLParaContext::Characters( const OUString& rChars )
     if(bInsertRedline)
     {
         GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
+        GetImport().GetTextImport()->InsertRedlinesWithinParagraph(sStartParaPos, true, false);
     }
     else
         GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );

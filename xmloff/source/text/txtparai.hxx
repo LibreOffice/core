@@ -50,6 +50,7 @@ class XMLParaContext : public SvXMLImportContext
     bool                 bIgnoreLeadingSpace;
     bool                 bHeading;
     bool                 bInsertRedline;
+    OUString             sStartParaPos;
     bool                 bIsListHeader;
     bool                 bIsRestart;
     sal_Int16            nStartValue;
@@ -63,7 +64,7 @@ public:
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             bool bHeading,
-            bool bInsertRedln = false );
+            bool bInsertRedln = false, const OUString& rStartParaPos = OUString() );
 
     virtual ~XMLParaContext();
 
