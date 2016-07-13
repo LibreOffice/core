@@ -22,7 +22,6 @@
 #include "macros.hxx"
 #include "PolarCoordinateSystem.hxx"
 #include "servicenames_charttypes.hxx"
-#include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include "AxisHelper.hxx"
 

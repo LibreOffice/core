@@ -26,7 +26,6 @@
 #include "DiagramHelper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "servicenames_coosystems.hxx"
-#include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>

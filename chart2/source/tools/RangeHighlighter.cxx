@@ -21,7 +21,6 @@
 #include "WeakListenerAdapter.hxx"
 #include "ChartModelHelper.hxx"
 #include "DataSourceHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "macros.hxx"
 #include "ObjectIdentifier.hxx"
 #include "DataSeriesHelper.hxx"

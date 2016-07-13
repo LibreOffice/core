@@ -22,7 +22,6 @@
 #include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
 #include "UserDefinedProperties.hxx"
-#include "ContainerHelper.hxx"
 #include "PropertyHelper.hxx"
 
 #include <com/sun/star/drawing/LineStyle.hpp>

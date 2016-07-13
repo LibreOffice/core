@@ -21,7 +21,6 @@
 #include "macros.hxx"
 #include "AxisHelper.hxx"
 #include "Chart2ModelContact.hxx"
-#include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

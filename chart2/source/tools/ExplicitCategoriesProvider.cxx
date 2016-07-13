@@ -24,7 +24,6 @@
 #include "CommonConverters.hxx"
 #include "DataSourceHelper.hxx"
 #include "ChartModelHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "macros.hxx"
 #include "NumberFormatterWrapper.hxx"
 #include <unonames.hxx>

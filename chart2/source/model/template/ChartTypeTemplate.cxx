@@ -23,7 +23,6 @@
 #include "DataSeriesHelper.hxx"
 #include "DataInterpreter.hxx"
 #include "CommonConverters.hxx"
-#include "ContainerHelper.hxx"
 #include "ChartTypeHelper.hxx"
 
 #include "CartesianCoordinateSystem.hxx"

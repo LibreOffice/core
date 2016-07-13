@@ -20,7 +20,6 @@
 #include "ChartTypeManager.hxx"
 #include "macros.hxx"
 #include "StackMode.hxx"
-#include "ContainerHelper.hxx"
 
 #include "CartesianCoordinateSystem.hxx"
 
@@ -48,6 +47,7 @@
 #include <iterator>
 #include <functional>
 #include <o3tl/functional.hxx>
+#include <map>
 
 using namespace ::com::sun::star;
 

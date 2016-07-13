@@ -19,7 +19,6 @@
 
 #include "AreaWrapper.hxx"
 #include "macros.hxx"
-#include "ContainerHelper.hxx"
 #include "Chart2ModelContact.hxx"
 #include "WrappedDirectStateProperty.hxx"
 #include <com/sun/star/drawing/FillStyle.hpp>

@@ -41,7 +41,6 @@
 #include "WrappedSceneProperty.hxx"
 #include "WrappedGL3DProperties.hxx"
 #include "RelativePositionHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "ModifyListenerHelper.hxx"
 #include "DisposeHelper.hxx"

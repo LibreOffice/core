@@ -24,7 +24,6 @@
 #include "UserDefinedProperties.hxx"
 #include "ConfigColorScheme.hxx"
 #include "DiagramHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "ThreeDHelper.hxx"
 #include "CloneHelper.hxx"
 #include "AxisHelper.hxx"

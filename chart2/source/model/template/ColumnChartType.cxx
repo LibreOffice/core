@@ -21,7 +21,6 @@
 #include "macros.hxx"
 #include "servicenames_charttypes.hxx"
 #include "PropertyHelper.hxx"
-#include "ContainerHelper.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
 

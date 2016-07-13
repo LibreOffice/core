@@ -24,7 +24,6 @@
 #include "DataSeriesHelper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "ColumnLineDataInterpreter.hxx"
-#include "ContainerHelper.hxx"
 #include "PropertyHelper.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>

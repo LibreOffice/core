@@ -19,7 +19,6 @@
 
 #include "TitleWrapper.hxx"
 #include "macros.hxx"
-#include "ContainerHelper.hxx"
 #include "ControllerLockGuard.hxx"
 
 #include <cppuhelper/supportsservice.hxx>

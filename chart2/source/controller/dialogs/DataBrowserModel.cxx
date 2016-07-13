@@ -26,7 +26,6 @@
 #include "ControllerLockGuard.hxx"
 #include "macros.hxx"
 #include "StatisticsHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "ChartTypeHelper.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 #include "ExplicitCategoriesProvider.hxx"

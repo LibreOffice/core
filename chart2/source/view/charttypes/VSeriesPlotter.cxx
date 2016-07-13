@@ -33,7 +33,6 @@
 #include "Clipping.hxx"
 #include "servicenames_charttypes.hxx"
 #include "NumberFormatterWrapper.hxx"
-#include "ContainerHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "RegressionCurveHelper.hxx"
 #include "VLegendSymbolFactory.hxx"

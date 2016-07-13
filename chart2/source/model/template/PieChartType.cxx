@@ -23,7 +23,6 @@
 #include "PolarCoordinateSystem.hxx"
 #include "AxisHelper.hxx"
 #include "servicenames_charttypes.hxx"
-#include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

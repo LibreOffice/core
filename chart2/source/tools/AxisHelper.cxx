@@ -23,7 +23,6 @@
 #include "macros.hxx"
 #include "AxisIndexDefines.hxx"
 #include "LinePropertiesHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "servicenames_coosystems.hxx"
 #include "DataSeriesHelper.hxx"
 #include "Scaling.hxx"

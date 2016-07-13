@@ -23,7 +23,6 @@
 #include "DataSeriesHelper.hxx"
 #include "macros.hxx"
 #include "CommonConverters.hxx"
-#include "ContainerHelper.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -35,7 +34,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::std;
-using namespace ::chart::ContainerHelper;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

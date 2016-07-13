@@ -23,7 +23,6 @@
 #include "Chart2ModelContact.hxx"
 #include "ChartTypeHelper.hxx"
 #include "DiagramHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "ChartModelHelper.hxx"
 #include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"

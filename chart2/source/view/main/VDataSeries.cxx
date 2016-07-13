@@ -23,7 +23,6 @@
 #include "CommonConverters.hxx"
 #include "LabelPositionHelper.hxx"
 #include "ChartTypeHelper.hxx"
-#include "ContainerHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "RegressionCurveHelper.hxx"
 #include <unonames.hxx>

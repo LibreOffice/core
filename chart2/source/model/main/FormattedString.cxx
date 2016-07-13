@@ -18,7 +18,6 @@
  */
 
 #include "FormattedString.hxx"
-#include "ContainerHelper.hxx"
 
 #include "CharacterProperties.hxx"
 #include "PropertyHelper.hxx"

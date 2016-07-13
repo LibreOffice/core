@@ -18,7 +18,6 @@
  */
 
 #include "PropertyMapper.hxx"
-#include "ContainerHelper.hxx"
 #include "macros.hxx"
 #include <unonames.hxx>
 
