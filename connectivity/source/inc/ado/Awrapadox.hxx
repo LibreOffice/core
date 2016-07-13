@@ -25,32 +25,32 @@
 #ifndef __User_FWD_DEFINED__
 #define __User_FWD_DEFINED__
 typedef struct _ADOUser User;
-#endif  /* __User_FWD_DEFINED__ */
+#endif
 
 #ifndef __Group_FWD_DEFINED__
 #define __Group_FWD_DEFINED__
 typedef struct _ADOGroup Group;
-#endif /* __Group_FWD_DEFINED__ */
+#endif
 
 #ifndef __Column_FWD_DEFINED__
 #define __Column_FWD_DEFINED__
 typedef struct _ADOColumn Column;
-#endif  /* __Column_FWD_DEFINED__ */
+#endif
 
 #ifndef __Index_FWD_DEFINED__
 #define __Index_FWD_DEFINED__
 typedef struct _ADOIndex Index;
-#endif /* __cplusplus */
+#endif
 
 #ifndef __Key_FWD_DEFINED__
 #define __Key_FWD_DEFINED__
 typedef struct _ADOKey Key;
-#endif  /* __Key_FWD_DEFINED__ */
+#endif
 
 #ifndef __Table_FWD_DEFINED__
 #define __Table_FWD_DEFINED__
 typedef struct _ADOTable Table;
-#endif  /* __Table_FWD_DEFINED__ */
+#endif
 
 
 #include "ado_pre_sys_include.h"
