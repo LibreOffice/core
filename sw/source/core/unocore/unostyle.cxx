@@ -4985,7 +4985,7 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
             case RES_CHRATR_SHADOWED:
             {
                 SvxShadowedItem rShadowedItem = m_pBoxAutoFormat->GetShadowed();
-                bool bValue; aValue >>= bValue;
+                bool bValue = false; aValue >>= bValue;
                 rShadowedItem.SetValue(bValue);
                 m_pBoxAutoFormat->SetShadowed(rShadowedItem);
                 return;
@@ -4993,7 +4993,7 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
             case RES_CHRATR_CONTOUR:
             {
                 SvxContourItem rContourItem = m_pBoxAutoFormat->GetContour();
-                bool bValue; aValue >>= bValue;
+                bool bValue = false; aValue >>= bValue;
                 rContourItem.SetValue(bValue);
                 m_pBoxAutoFormat->SetContour(rContourItem);
                 return;
