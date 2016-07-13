@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_3c9a5c15",
+        "filename": "sc/source/filter/excel/excform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-13T11:36:04Z",
+      "side": 0,
+      "message": "I don\u0027t get why this is removed, what do I fail to see? Removing it looks wrong to me.",
+      "revId": "aa06a33946951e872b5e81d1c2bc8b7f60c861e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_9c89a8cd",
+        "filename": "sc/source/filter/excel/namebuff.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-13T11:36:04Z",
+      "side": 0,
+      "message": "This depends on the IMHO wrong removal in sc/source/filter/excel/excform.cxx",
+      "revId": "aa06a33946951e872b5e81d1c2bc8b7f60c861e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_dc9330f9",
+        "filename": "sc/source/filter/inc/namebuff.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-07-13T11:36:04Z",
+      "side": 0,
+      "message": "Removal in sc/source/filter/excel/excform.cxx depends on this and the above.",
+      "revId": "aa06a33946951e872b5e81d1c2bc8b7f60c861e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
