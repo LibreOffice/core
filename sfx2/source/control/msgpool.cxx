@@ -77,14 +77,14 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 
     for ( size_t nFunc = 0; nFunc < rInterface.Count(); ++nFunc )
     {
-        SfxSlot *pDef = &rInterface.pSlots[nFunc];
-        if ( pDef->GetGroupId() && /* pDef->GetGroupId() != GID_INTERN && */
-             _pGroups->find(pDef->GetGroupId()) == SfxSlotGroupArr_Impl::npos )
+        SfxSlot &rDef = rInterface.pSlots[nFunc];
+        if ( rDef.GetGroupId() && /* rDef.GetGroupId() != GID_INTERN && */
+             _pGroups->find(rDef.GetGroupId()) == SfxSlotGroupArr_Impl::npos )
         {
-            if (pDef->GetGroupId() == GID_INTERN)
-                _pGroups->insert(_pGroups->begin(), pDef->GetGroupId());
+            if (rDef.GetGroupId() == GID_INTERN)
+                _pGroups->insert(_pGroups->begin(), rDef.GetGroupId());
             else
-                _pGroups->push_back(pDef->GetGroupId());
+                _pGroups->push_back(rDef.GetGroupId());
         }
     }
 }
@@ -216,9 +216,9 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
               _nCurMsg < pInterface->Count();
               ++_nCurMsg )
         {
-            const SfxSlot* pMsg = &pInterface->pSlots[_nCurMsg];
-            if ( pMsg->GetGroupId() == _pGroups->at(_nCurGroup) )
-                return pMsg;
+            const SfxSlot& rMsg = pInterface->pSlots[_nCurMsg];
+            if (rMsg.GetGroupId() == _pGroups->at(_nCurGroup))
+                return &rMsg;
         }
     }
 
@@ -261,9 +261,9 @@ const SfxSlot* SfxSlotPool::NextSlot()
     SfxInterface* pInterface = (*_pInterfaces)[nInterface];
     while ( ++_nCurMsg < pInterface->Count() )
     {
-        SfxSlot* pMsg = &pInterface->pSlots[_nCurMsg];
-        if ( pMsg->GetGroupId() == _pGroups->at(_nCurGroup) )
-            return pMsg;
+        SfxSlot& rMsg = pInterface->pSlots[_nCurMsg];
+        if (rMsg.GetGroupId() == _pGroups->at(_nCurGroup))
+            return &rMsg;
     }
 
     return SeekSlot(++_nCurInterface );
