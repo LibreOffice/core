@@ -72,8 +72,8 @@ certain functionality.
 
 @li @c connectivity.commontools
 @li @c connectivity.cpool
-@li @c connectivity.drivers - a bit overly general, maybe it should be removed?
 @li @c connectivity.dbase
+@li @c connectivity.drivers - a bit overly general, maybe it should be removed?
 @li @c connectivity.evoab2
 @li @c connectivity.firebird
 @li @c connectivity.flat
@@ -141,7 +141,6 @@ certain functionality.
 
 @li @c desktop
 @li @c desktop.app
-@li @c destkop.crashreport
 @li @c desktop.deployment
 @li @c desktop.lib
 @li @c desktop.migration
@@ -149,6 +148,7 @@ certain functionality.
 @li @c desktop.opengl
 @li @c desktop.splash
 @li @c desktop.test
+@li @c destkop.crashreport
 
 @section Draw
 
@@ -189,11 +189,11 @@ certain functionality.
 @li @c extensions.abpilot
 @li @c extensions.biblio
 @li @c extensions.dbpilots
+@li @c extensions.olebridge - OLE automation bridge
 @li @c extensions.plugin
 @li @c extensions.propctrlr
 @li @c extensions.scanner
 @li @c extensions.update
-@li @c extensions.olebridge - OLE automation bridge
 
 @section Filter
 
@@ -435,11 +435,11 @@ certain functionality.
 @li @c vcl.kde4 - KDE4
 @li @c vcl.layout - Widget layout
 @li @c vcl.lazydelete
-@li @c vcl.pdfwriter
-@li @c vcl.plugadapt - the Unix/X11 backend plugin mechanism
 @li @c vcl.opengl
 @li @c vcl.osx
 @li @c vcl.osx.print
+@li @c vcl.pdfwriter
+@li @c vcl.plugadapt - the Unix/X11 backend plugin mechanism
 @li @c vcl.quartz
 @li @c vcl.schedule - scheduler / main-loop information
 @li @c vcl.screensaverinhibitor
@@ -447,8 +447,8 @@ certain functionality.
 @li @c vcl.sm - Session Manager
 @li @c vcl.uitest - The UI testing framework code
 @li @c vcl.unity
-@li @c vcl.unx.print
 @li @c vcl.unx.dtrans
+@li @c vcl.unx.print
 @li @c vcl.virdev
 @li @c vcl.window
 @li @c vcl.wmf
@@ -460,14 +460,15 @@ certain functionality.
 @section Writer
 
 @li @c sw
-@li @c sw.core - Writer core
 @li @c sw.a11y - accessibility
+@li @c sw.core - Writer core
 @li @c sw.createcopy
 @li @c sw.doc
 @li @c sw.docappend
 @li @c sw.docx
 @li @c sw.envelp
 @li @c sw.filter
+@li @c sw.html - Writer HTML import/export
 @li @c sw.idle
 @li @c sw.level2
 @li @c sw.mailmerge - Writer mail merge
@@ -477,16 +478,15 @@ certain functionality.
 @li @c sw.uno - Writer UNO interfaces
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
 @li @c sw.ww8.level2 - further info for sw.ww8
-@li @c sw.html - Writer HTML import/export
 @li @c sw.xml - Writer .odt import/export
 
 @section writerfilter
 
 @li @c writerfilter
 @li @c writerfilter.dmapper
-@li @c writerfilter.rtf
 @li @c writerfilter.ooxml
 @li @c writerfilter.profile - load times of filters
+@li @c writerfilter.rtf
 
 @section writerperfect
 
