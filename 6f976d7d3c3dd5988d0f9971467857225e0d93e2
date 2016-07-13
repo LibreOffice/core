@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_7c5f8472",
+        "filename": "chart2/source/view/axes/VCoordinateSystem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-13T09:29:36Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "ba84c18e_3c941c36",
+      "revId": "6f976d7d3c3dd5988d0f9971467857225e0d93e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_5c99e06d",
         "filename": "chart2/source/view/charttypes/AreaChart.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-07-13T07:05:19Z",
       "side": 1,
       "message": "hmm, this part of the change is going to leave the sequences in a different state from before if the return triggers",
+      "revId": "6f976d7d3c3dd5988d0f9971467857225e0d93e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_fc1d54be",
+        "filename": "chart2/source/view/charttypes/AreaChart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-13T09:29:36Z",
+      "side": 1,
+      "message": "return triggers when nOuterCount \u003d\u003d 0, so they get realloc(0) like before.\n\nanyway aSteppedPoly is local, so we could return before creating aSteppedPoly.",
+      "parentUuid": "ba84c18e_5c99e06d",
       "revId": "6f976d7d3c3dd5988d0f9971467857225e0d93e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_3c7edce4",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-13T09:29:36Z",
+      "side": 1,
+      "message": "a bit different here since rResult isn\u0027t local.\n\nstill with nOuterCount \u003d\u003d 0 the Sequences are cleared before return",
+      "parentUuid": "ba84c18e_7c9ea457",
+      "revId": "6f976d7d3c3dd5988d0f9971467857225e0d93e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_9ca3689e",
         "filename": "chart2/source/view/charttypes/Splines.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2016-07-13T07:05:19Z",
       "side": 1,
       "message": "ditto",
+      "revId": "6f976d7d3c3dd5988d0f9971467857225e0d93e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_5c83a0cc",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-07-13T09:29:36Z",
+      "side": 1,
+      "message": "ditto ;)",
+      "parentUuid": "ba84c18e_9ca3689e",
       "revId": "6f976d7d3c3dd5988d0f9971467857225e0d93e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
