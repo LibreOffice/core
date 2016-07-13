@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -334,7 +334,7 @@
                         <property name="can_focus">False</property>
                         <property name="column_spacing">6</property>
                         <child>
-                          <object class="GtkSpinButton" id="compressionjpgnf-nospin">
+                          <object class="GtkSpinButton" id="compressionjpgnf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
@@ -397,7 +397,7 @@
                         <property name="can_focus">False</property>
                         <property name="column_spacing">6</property>
                         <child>
-                          <object class="GtkSpinButton" id="compressionpngnf-nospin">
+                          <object class="GtkSpinButton" id="compressionpngnf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>

@@ -716,7 +716,7 @@ void ExportDialog::createFilterOptions()
             if ((nQuality < 1 ) || (nQuality > 100))
                 nQuality = 75;
             get(mpSbCompression, "compressionjpgsb");
-            get(mpNfCompression, "compressionjpgnf-nospin");
+            get(mpNfCompression, "compressionjpgnf");
             mpSbCompression->SetRangeMin( 1 );
             mpSbCompression->SetRangeMax( 100 );
             mpNfCompression->SetMin( 1 );
@@ -734,7 +734,7 @@ void ExportDialog::createFilterOptions()
                 nCompression = 6;
 
             get(mpSbCompression, "compressionpngsb");
-            get(mpNfCompression, "compressionpngnf-nospin");
+            get(mpNfCompression, "compressionpngnf");
             mpSbCompression->SetRangeMin( 1 );
             mpSbCompression->SetRangeMax( 9 );
             mpNfCompression->SetMin( 1 );

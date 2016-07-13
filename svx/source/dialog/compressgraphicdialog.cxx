@@ -112,6 +112,8 @@ void CompressGraphicsDialog::Initialize()
 
     m_pInterpolationCombo->SelectEntry( "Lanczos" );
 
+    m_pInterpolationCombo->SetSelectHdl( LINK( this, CompressGraphicsDialog, NewInterpolationModifiedHdl ));
+
     m_pMFNewWidth->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewWidthModifiedHdl ));
     m_pMFNewHeight->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewHeightModifiedHdl ));
 
@@ -124,7 +126,11 @@ void CompressGraphicsDialog::Initialize()
     m_pReduceResolutionCB->SetToggleHdl( LINK( this, CompressGraphicsDialog, ToggleReduceResolutionRB ) );
 
     m_pQualitySlider->SetLinkedField(m_pQualityMF);
+    m_pQualitySlider->SetEndSlideHdl( LINK( this, CompressGraphicsDialog, EndSlideHdl ));
     m_pCompressionSlider->SetLinkedField(m_pCompressionMF);
+    m_pCompressionSlider->SetEndSlideHdl( LINK( this, CompressGraphicsDialog, EndSlideHdl ));
+    m_pQualityMF->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewQualityModifiedHdl ));
+    m_pCompressionMF->SetModifyHdl( LINK( this, CompressGraphicsDialog, NewCompressionModifiedHdl ));
 
     m_pJpegCompRB->Check();
     m_pReduceResolutionCB->Check();
@@ -290,10 +296,34 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
 
 IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewWidthModifiedHdl, Edit&, void )
 {
+    fprintf(stderr, "NewWidthModifiedHdl\n");
+
     m_dResolution =  m_pMFNewWidth->GetValue() / GetViewWidthInch();
 
     UpdateNewHeightMF();
     UpdateResolutionLB();
+    Update();
+}
+
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, EndSlideHdl, Slider*, void )
+{
+    Update();
+}
+
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewInterpolationModifiedHdl, ListBox&, void )
+{
+    Update();
+}
+
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewQualityModifiedHdl, Edit&, void )
+{
+    m_pQualitySlider->SetThumbPos(m_pQualityMF->GetValue());
+    Update();
+}
+
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewCompressionModifiedHdl, Edit&, void )
+{
+    m_pCompressionSlider->SetThumbPos(m_pCompressionMF->GetValue());
     Update();
 }
 
@@ -322,6 +352,7 @@ IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleCompressionRB, RadioButton&
     m_pCompressionSlider->Enable(choice);
     m_pQualityMF->Enable(!choice);
     m_pQualitySlider->Enable(!choice);
+    Update();
 }
 
 IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleReduceResolutionRB, CheckBox&, void )
@@ -331,6 +362,7 @@ IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleReduceResolutionRB, CheckBo
     m_pMFNewHeight->Enable(choice);
     m_pResolutionLB->Enable(choice);
     m_pInterpolationCombo->Enable(choice);
+    Update();
 }
 
 IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, CalculateClickHdl, Button*, void )

@@ -63,6 +63,10 @@ private:
 
     void Initialize();
 
+    DECL_LINK_TYPED( EndSlideHdl, Slider*, void );
+    DECL_LINK_TYPED( NewInterpolationModifiedHdl, ListBox&, void );
+    DECL_LINK_TYPED( NewQualityModifiedHdl, Edit&, void );
+    DECL_LINK_TYPED( NewCompressionModifiedHdl, Edit&, void );
     DECL_LINK_TYPED( NewWidthModifiedHdl, Edit&, void );
     DECL_LINK_TYPED( NewHeightModifiedHdl, Edit&, void );
     DECL_LINK_TYPED( ResolutionModifiedHdl, Edit&, void );
