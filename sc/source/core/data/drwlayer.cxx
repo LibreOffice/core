@@ -1012,7 +1012,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
     {
         nStartX = -nStartX;     // positions are negative, swap start/end so the same comparisons work
         nEndX   = -nEndX;
-        ::std::swap( nStartX, nEndX );
+        std::swap( nStartX, nEndX );
     }
 
     const SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
@@ -1055,7 +1055,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
     {
         nStartX = -nStartX;     // reverse transformation, so the same cell address calculation works
         nEndX   = -nEndX;
-        ::std::swap( nStartX, nEndX );
+        std::swap( nStartX, nEndX );
     }
 
     if (bAny)
@@ -1406,11 +1406,11 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
     }
 }
 
-static bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const ScRange& rClipRange )
+static bool lcl_IsAllInRange( const std::vector< ScRangeList >& rRangesVector, const ScRange& rClipRange )
 {
     //  check if every range of rRangesVector is completely in rClipRange
 
-    ::std::vector< ScRangeList >::const_iterator aIt = rRangesVector.begin();
+    std::vector< ScRangeList >::const_iterator aIt = rRangesVector.begin();
     for( ;aIt!=rRangesVector.end(); ++aIt )
     {
         const ScRangeList& rRanges = *aIt;
@@ -1427,12 +1427,12 @@ static bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector,
     return true;            // everything is fine
 }
 
-static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
+static bool lcl_MoveRanges( std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
 {
     bool bChanged = false;
 
     ScRange aErrorRange( ScAddress::UNINITIALIZED );
-    ::std::vector< ScRangeList >::iterator aIt = rRangesVector.begin();
+    std::vector< ScRangeList >::iterator aIt = rRangesVector.begin();
     for( ;aIt!=rRangesVector.end(); ++aIt )
     {
         ScRangeList& rRanges = *aIt;
@@ -1591,7 +1591,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                     if( xNewChart.is() && !xNewChart->hasInternalDataProvider() )
                     {
                         OUString aChartName = static_cast<SdrOle2Obj*>(pNewObject)->GetPersistName();
-                        ::std::vector< ScRangeList > aRangesVector;
+                        std::vector< ScRangeList > aRangesVector;
                         pDoc->GetChartRanges( aChartName, aRangesVector, pDoc );
                         if( !aRangesVector.empty() )
                         {

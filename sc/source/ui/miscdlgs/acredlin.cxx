@@ -1140,7 +1140,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
     if ( pScChangeAction->GetType() == SC_CAT_CONTENT &&
             static_cast<const ScChangeActionContent*>(pScChangeAction)->IsMatrixOrigin() )
     {
-        pActionMap->insert( ::std::make_pair( pScChangeAction->GetActionNumber(),
+        pActionMap->insert( std::make_pair( pScChangeAction->GetActionNumber(),
             const_cast<ScChangeAction*>( pScChangeAction ) ) );
         bParentInserted = true;
     }

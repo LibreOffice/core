@@ -38,7 +38,7 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
-using ::std::vector;
+using std::vector;
 
 ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache) :
     ScDPTableData(pD),

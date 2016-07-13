@@ -498,11 +498,11 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
             XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? nullptr : XclXmlUtils::ToPsz( true ),
             FSEND );
 
-        const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
+        const std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
         if (!rProts.empty())
         {
             rWorksheet->startElement( XML_protectedRanges, FSEND);
-            for (::std::vector<ScEnhancedProtection>::const_iterator it( rProts.begin()), end( rProts.end());
+            for (std::vector<ScEnhancedProtection>::const_iterator it( rProts.begin()), end( rProts.end());
                     it != end; ++it)
             {
                 SAL_WARN_IF( (*it).maSecurityDescriptorXML.isEmpty() && !(*it).maSecurityDescriptor.empty(),

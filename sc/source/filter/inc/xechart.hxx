@@ -921,7 +921,7 @@ private:
 
 private:
     typedef XclExpRecordList< XclExpChSeries >          XclExpChSeriesList;
-    typedef ::std::map<sal_uInt16, std::unique_ptr<XclExpChLineFormat>> XclExpChLineFormatMap;
+    typedef std::map<sal_uInt16, std::unique_ptr<XclExpChLineFormat>> XclExpChLineFormatMap;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
     XclExpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).

@@ -80,9 +80,9 @@
 #include <algorithm>
 
 using namespace com::sun::star;
-using ::std::vector;
-using ::std::unary_function;
-using ::std::shared_ptr;
+using std::vector;
+using std::unary_function;
+using std::shared_ptr;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -2958,7 +2958,7 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     }
 
     // Not cached.  Create a new cache.
-    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     pCache->InitFromDoc(mpDoc, rRange);
     if (pDimData)
         pDimData->WriteToCache(*pCache);
@@ -3127,7 +3127,7 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(
         // already cached.
         return itr->second.get();
 
-    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     pCache->InitFromDoc(mpDoc, rRange);
     if (pDimData)
         pDimData->WriteToCache(*pCache);
@@ -3214,7 +3214,7 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
     if (!xRowSet.is())
         return nullptr;
 
-    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     SvNumberFormatter aFormat( comphelper::getProcessComponentContext(), ScGlobal::eLnge);
     DBConnector aDB(*pCache, xRowSet, *aFormat.GetNullDate());
     if (!aDB.isValid())

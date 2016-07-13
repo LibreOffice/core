@@ -31,7 +31,7 @@
 
 using namespace formula;
 
-using ::std::vector;
+using std::vector;
 
 void ScRefTokenHelper::compileRangeRepresentation(
     vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,

@@ -39,7 +39,7 @@ const sal_Int32 BIFF12_CONNECTION_DSP                   = 8;
 /** Special properties for data connections representing web queries. */
 struct WebPrModel
 {
-    typedef ::std::vector< css::uno::Any > TablesVector;
+    typedef std::vector< css::uno::Any > TablesVector;
 
     TablesVector        maTables;           /// Names or indexes of the web query tables.
     OUString     maUrl;              /// Source URL to refresh the data.
@@ -62,7 +62,7 @@ struct WebPrModel
 /** Common properties of an external data connection. */
 struct ConnectionModel
 {
-    typedef ::std::unique_ptr< WebPrModel > WebPrModelPtr;
+    typedef std::unique_ptr< WebPrModel > WebPrModelPtr;
 
     WebPrModelPtr       mxWebPr;            /// Special settings for web queries.
     OUString     maName;             /// Unique name of this connection.

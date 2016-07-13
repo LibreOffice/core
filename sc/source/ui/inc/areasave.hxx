@@ -50,7 +50,7 @@ public:
 
 class ScAreaLinkSaveCollection
 {
-    typedef ::std::vector<ScAreaLinkSaver> DataType;
+    typedef std::vector<ScAreaLinkSaver> DataType;
     DataType maData;
 public:
     ScAreaLinkSaveCollection();

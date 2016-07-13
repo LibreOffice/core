@@ -175,12 +175,12 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         if (!maRowManualBreaks.empty())
         {
             // Copy all breaks up to nStartRow (non-inclusive).
-            ::std::set<SCROW>::iterator itr1 = maRowManualBreaks.lower_bound(nStartRow);
-            ::std::set<SCROW> aNewBreaks(maRowManualBreaks.begin(), itr1);
+            std::set<SCROW>::iterator itr1 = maRowManualBreaks.lower_bound(nStartRow);
+            std::set<SCROW> aNewBreaks(maRowManualBreaks.begin(), itr1);
 
             // Copy all breaks from nStartRow (inclusive) to the last element,
             // but add nSize to each value.
-            ::std::set<SCROW>::iterator itr2 = maRowManualBreaks.end();
+            std::set<SCROW>::iterator itr2 = maRowManualBreaks.end();
             for (; itr1 != itr2; ++itr1)
                 aNewBreaks.insert(static_cast<SCROW>(*itr1 + nSize));
 
@@ -230,7 +230,7 @@ void ScTable::DeleteRow(
 
             // Copy all breaks from the 1st element up to nStartRow to the new container.
             itr1 = maRowManualBreaks.lower_bound(nStartRow);
-            ::std::set<SCROW> aNewBreaks(maRowManualBreaks.begin(), itr1);
+            std::set<SCROW> aNewBreaks(maRowManualBreaks.begin(), itr1);
 
             // Copy all breaks from nStartRow to the last element, but subtract each value by nSize.
             itr2 = maRowManualBreaks.end();
@@ -297,12 +297,12 @@ void ScTable::InsertCol(
         if (!maColManualBreaks.empty())
         {
             // Copy all breaks up to nStartCol (non-inclusive).
-            ::std::set<SCCOL>::iterator itr1 = maColManualBreaks.lower_bound(nStartCol);
-            ::std::set<SCCOL> aNewBreaks(maColManualBreaks.begin(), itr1);
+            std::set<SCCOL>::iterator itr1 = maColManualBreaks.lower_bound(nStartCol);
+            std::set<SCCOL> aNewBreaks(maColManualBreaks.begin(), itr1);
 
             // Copy all breaks from nStartCol (inclusive) to the last element,
             // but add nSize to each value.
-            ::std::set<SCCOL>::iterator itr2 = maColManualBreaks.end();
+            std::set<SCCOL>::iterator itr2 = maColManualBreaks.end();
             for (; itr1 != itr2; ++itr1)
                 aNewBreaks.insert(static_cast<SCCOL>(*itr1 + nSize));
 
@@ -383,7 +383,7 @@ void ScTable::DeleteCol(
 
             // Copy all breaks from the 1st element up to nStartCol to the new container.
             itr1 = maColManualBreaks.lower_bound(nStartCol);
-            ::std::set<SCCOL> aNewBreaks(maColManualBreaks.begin(), itr1);
+            std::set<SCCOL> aNewBreaks(maColManualBreaks.begin(), itr1);
 
             // Copy all breaks from nStartCol to the last element, but subtract each value by nSize.
             itr2 = maColManualBreaks.end();
@@ -1642,7 +1642,7 @@ void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
     while (nCol <= MAXCOL && rRow > 0)
     {
         if (!aCol[nCol].IsEmptyData())
-            rRow = ::std::min( rRow, aCol[nCol].GetFirstDataPos());
+            rRow = std::min( rRow, aCol[nCol].GetFirstDataPos());
         ++nCol;
     }
 }
@@ -1655,7 +1655,7 @@ void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
         rCol--;
     SCCOL nCol = rCol;
     while (nCol >= 0 && rRow < MAXROW)
-        rRow = ::std::max( rRow, aCol[nCol--].GetLastDataPos());
+        rRow = std::max( rRow, aCol[nCol--].GetLastDataPos());
 }
 
 bool ScTable::HasData( SCCOL nCol, SCROW nRow ) const
@@ -3289,20 +3289,20 @@ SCROW ScTable::GetLastFlaggedRow() const
     }
 
     if (!maRowManualBreaks.empty())
-        nLastFound = ::std::max(nLastFound, *maRowManualBreaks.rbegin());
+        nLastFound = std::max(nLastFound, *maRowManualBreaks.rbegin());
 
     if (mpHiddenRows)
     {
         SCROW nRow = mpHiddenRows->findLastTrue();
         if (ValidRow(nRow))
-            nLastFound = ::std::max(nLastFound, nRow);
+            nLastFound = std::max(nLastFound, nRow);
     }
 
     if (mpFilteredRows)
     {
         SCROW nRow = mpFilteredRows->findLastTrue();
         if (ValidRow(nRow))
-            nLastFound = ::std::max(nLastFound, nRow);
+            nLastFound = std::max(nLastFound, nRow);
     }
 
     return nLastFound;
@@ -3589,7 +3589,7 @@ bool ScTable::RefVisible(ScFormulaCell* pCell)
             SCROW nEndRow;
             if (!RowFiltered(aRef.aStart.Row(), nullptr, &nEndRow))
                 // row not filtered.
-                nEndRow = ::std::numeric_limits<SCROW>::max();
+                nEndRow = std::numeric_limits<SCROW>::max();
 
             if (!ValidRow(nEndRow) || nEndRow < aRef.aEnd.Row())
                 return true;    // at least partly visible
@@ -3615,7 +3615,7 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
     {
         double fValX = GetColOffset( MAXCOL + 1 ) * HMM_PER_TWIPS;
         double fValY = GetRowOffset( MAXROW + 1 ) * HMM_PER_TWIPS;
-        const long nMax = ::std::numeric_limits<long>::max();
+        const long nMax = std::numeric_limits<long>::max();
         // #i113884# Avoid int32 overflow with possible negative results than can cause bad effects.
         // If the draw page size is smaller than all rows, only the bottom of the sheet is affected.
         long x = ( fValX > (double)nMax ) ? nMax : (long) fValX;
@@ -3662,7 +3662,7 @@ sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
 
         n = GetTotalRowHeight(0, nRow-1, bHiddenAsZero);
 #if OSL_DEBUG_LEVEL > 0
-        if (n == ::std::numeric_limits<unsigned long>::max())
+        if (n == std::numeric_limits<unsigned long>::max())
             OSL_FAIL("ScTable::GetRowOffset: row heights overflow");
 #endif
     }

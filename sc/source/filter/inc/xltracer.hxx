@@ -93,7 +93,7 @@ public:
 
 private:
     bool                        mbEnabled;
-    typedef ::std::vector< bool >     BoolVec;
+    typedef std::vector< bool >       BoolVec;
     /** array of flags corresponding to each entry in the XclTracerDetails table. */
     BoolVec                     maFirstTimes;
 };

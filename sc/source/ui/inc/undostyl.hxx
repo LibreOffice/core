@@ -94,7 +94,7 @@ private:
         OUString        maOldStyle;
         explicit        ApplyStyleEntry( SCTAB nTab, const OUString& rOldStyle );
     };
-    typedef ::std::vector< ApplyStyleEntry > ApplyStyleVec;
+    typedef std::vector< ApplyStyleEntry > ApplyStyleVec;
 
     ApplyStyleVec   maEntries;
     OUString        maNewStyle;

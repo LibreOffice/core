@@ -79,7 +79,7 @@
 #include <vector>
 
 using namespace com::sun::star;
-using ::std::vector;
+using std::vector;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 
@@ -121,9 +121,9 @@ namespace
         OUString aConnUrl("sdbc:dbase:");
         aConnUrl += aPath;
 
-        ::std::vector< rtl_TextEncoding > aEncodings;
+        std::vector< rtl_TextEncoding > aEncodings;
         svxform::charset_helper::getSupportedTextEncodings( aEncodings );
-        ::std::vector< rtl_TextEncoding >::iterator aIter = ::std::find(aEncodings.begin(),aEncodings.end(),(rtl_TextEncoding) eCharSet);
+        std::vector< rtl_TextEncoding >::iterator aIter = std::find(aEncodings.begin(),aEncodings.end(),(rtl_TextEncoding) eCharSet);
         if ( aIter == aEncodings.end() )
         {
             OSL_FAIL( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );

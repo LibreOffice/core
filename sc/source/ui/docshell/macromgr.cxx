@@ -32,8 +32,8 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
-using ::std::list;
-using ::std::pair;
+using std::list;
+using std::pair;
 
 /**
  * A simple container to keep track of cells that depend on basic modules

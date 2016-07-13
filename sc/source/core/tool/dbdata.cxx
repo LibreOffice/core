@@ -40,12 +40,12 @@
 #include <memory>
 #include <utility>
 
-using ::std::unique_ptr;
-using ::std::unary_function;
-using ::std::for_each;
-using ::std::find_if;
-using ::std::remove_if;
-using ::std::pair;
+using std::unique_ptr;
+using std::unary_function;
+using std::for_each;
+using std::find_if;
+using std::remove_if;
+using std::pair;
 
 bool ScDBData::less::operator() (const std::unique_ptr<ScDBData>& left, const std::unique_ptr<ScDBData>& right) const
 {
@@ -558,7 +558,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
         {
             // SetArea() invalidates column names, but it is the same column range
             // just on a different sheet; remember and set new.
-            ::std::vector<OUString> aNames( maTableColumnNames);
+            std::vector<OUString> aNames( maTableColumnNames);
             bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
             // Same column range.
             SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
@@ -596,7 +596,7 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
     {
         // MoveTo() invalidates column names via SetArea(); adjust, remember and set new.
         AdjustTableColumnNames( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
-        ::std::vector<OUString> aNames( maTableColumnNames);
+        std::vector<OUString> aNames( maTableColumnNames);
         bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
         MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
         // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
@@ -653,7 +653,7 @@ void ScDBData::EndTableColumnNamesListener()
     EndListeningAll();
 }
 
-void ScDBData::SetTableColumnNames( const ::std::vector< OUString >& rNames )
+void ScDBData::SetTableColumnNames( const std::vector< OUString >& rNames )
 {
     maTableColumnNames = rNames;
     mbTableColumnNamesDirty = false;
@@ -670,7 +670,7 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
     if (nDiff1 == nDiff2)
         return;     // not moved or entirely moved, nothing to do
 
-    ::std::vector<OUString> aNewNames;
+    std::vector<OUString> aNewNames;
     if (eUpdateRefMode == URM_INSDEL)
     {
         if (nDx > 0)
@@ -679,8 +679,8 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
         // nCol1 is the first column of the block that gets shifted, determine
         // the head and tail elements that are to be copied for deletion or
         // insertion.
-        size_t nHead = static_cast<size_t>(::std::max( nCol1 + (nDx < 0 ? nDx : 0) - nOldCol1, 0));
-        size_t nTail = static_cast<size_t>(::std::max( nOldCol2 - nCol1 + 1, 0));
+        size_t nHead = static_cast<size_t>(std::max( nCol1 + (nDx < 0 ? nDx : 0) - nOldCol1, 0));
+        size_t nTail = static_cast<size_t>(std::max( nOldCol2 - nCol1 + 1, 0));
         size_t n = nHead + nTail;
         if (0 < n && n <= maTableColumnNames.size())
         {
@@ -713,7 +713,7 @@ void ScDBData::InvalidateTableColumnNames( bool bSwapToEmptyNames )
 {
     mbTableColumnNamesDirty = true;
     if (bSwapToEmptyNames && !maTableColumnNames.empty())
-        ::std::vector<OUString>().swap( maTableColumnNames);
+        std::vector<OUString>().swap( maTableColumnNames);
     if (mpContainer)
     {
         // Add header range to dirty list.
@@ -750,7 +750,7 @@ private:
     numbering starting at nCount. If nCount==0 then the first attempt is made
     with an unnumbered name and if already present the next attempt with
     nCount=2, so "Original" and "Original2". No check whether nIndex is valid. */
-void SetTableColumnName( ::std::vector<OUString>& rVec, size_t nIndex, const OUString& rName, size_t nCount )
+void SetTableColumnName( std::vector<OUString>& rVec, size_t nIndex, const OUString& rName, size_t nCount )
 {
     OUString aStr;
     do
@@ -762,7 +762,7 @@ void SetTableColumnName( ::std::vector<OUString>& rVec, size_t nIndex, const OUS
             aStr = rName;
             ++nCount;
         }
-        auto it( ::std::find_if( rVec.begin(), rVec.end(), TableColumnNameSearch( aStr)));
+        auto it( std::find_if( rVec.begin(), rVec.end(), TableColumnNameSearch( aStr)));
         if (it == rVec.end())
         {
             rVec[nIndex] = aStr;
@@ -775,7 +775,7 @@ void SetTableColumnName( ::std::vector<OUString>& rVec, size_t nIndex, const OUS
 
 void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
 {
-    ::std::vector<OUString> aNewNames;
+    std::vector<OUString> aNewNames;
     aNewNames.resize( nEndCol - nStartCol + 1);
     bool bHaveEmpty = false;
     if (!HasHeader() || !pDoc)
@@ -867,8 +867,8 @@ sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
     if (maTableColumnNames.empty())
         return -1;
 
-    ::std::vector<OUString>::const_iterator it(
-            ::std::find_if( maTableColumnNames.begin(), maTableColumnNames.end(), TableColumnNameSearch( rName)));
+    std::vector<OUString>::const_iterator it(
+            std::find_if( maTableColumnNames.begin(), maTableColumnNames.end(), TableColumnNameSearch( rName)));
     if (it != maTableColumnNames.end())
         return it - maTableColumnNames.begin();
 
@@ -1242,7 +1242,7 @@ ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
     {
         // Insert a new db data.  They all have identical names.
         OUString aName(STR_DB_GLOBAL_NONAME);
-        ::std::unique_ptr<ScDBData> pNew(new ScDBData(
+        std::unique_ptr<ScDBData> pNew(new ScDBData(
             aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
             rRange.aEnd.Col(), rRange.aEnd.Row(), true, false, false));
         pData = pNew.get();
@@ -1414,7 +1414,7 @@ void ScDBCollection::DeleteOnTab( SCTAB nTab )
 {
     FindByTable func(nTab);
     // First, collect the positions of all items that need to be deleted.
-    ::std::vector<NamedDBs::DBsType::iterator> v;
+    std::vector<NamedDBs::DBsType::iterator> v;
     {
         NamedDBs::DBsType::iterator itr = maNamedDBs.begin(), itrEnd = maNamedDBs.end();
         for (; itr != itrEnd; ++itr)
@@ -1425,7 +1425,7 @@ void ScDBCollection::DeleteOnTab( SCTAB nTab )
     }
 
     // Delete them all.
-    ::std::vector<NamedDBs::DBsType::iterator>::iterator itr = v.begin(), itrEnd = v.end();
+    std::vector<NamedDBs::DBsType::iterator>::iterator itr = v.begin(), itrEnd = v.end();
     for (; itr != itrEnd; ++itr)
         maNamedDBs.erase(*itr);
 

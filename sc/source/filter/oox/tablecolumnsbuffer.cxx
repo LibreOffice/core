@@ -95,7 +95,7 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
     if ( pDBData )
     {
         /* TODO: use svl::SharedString for names */
-        ::std::vector< OUString > aNames( maTableColumnVector.size());
+        std::vector< OUString > aNames( maTableColumnVector.size());
         size_t i = 0;
         for (TableColumnVector::const_iterator aIt = maTableColumnVector.begin(), aEnd = maTableColumnVector.end();
                 aIt != aEnd; ++aIt, ++i)

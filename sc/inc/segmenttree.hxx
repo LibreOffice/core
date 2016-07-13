@@ -76,7 +76,7 @@ public:
     SCROW findLastTrue() const;
 
 private:
-    ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
+    std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
 
 class ScFlatBoolColSegments
@@ -99,7 +99,7 @@ public:
     void insertSegment(SCCOL nCol, SCCOL nSize);
 
 private:
-    ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
+    std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
 
 class ScFlatUInt16SegmentsImpl;
@@ -146,7 +146,7 @@ public:
     void enableTreeSearch(bool bEnable);
 
 private:
-    ::std::unique_ptr<ScFlatUInt16SegmentsImpl> mpImpl;
+    std::unique_ptr<ScFlatUInt16SegmentsImpl> mpImpl;
 };
 
 #endif

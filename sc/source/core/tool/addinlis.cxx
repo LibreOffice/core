@@ -30,7 +30,7 @@ using namespace com::sun::star;
 
 SC_SIMPLE_SERVICE_INFO( ScAddInListener, "ScAddInListener", "stardiv.one.sheet.AddInListener" )
 
-::std::list<ScAddInListener*> ScAddInListener::aAllListeners;
+std::list<ScAddInListener*> ScAddInListener::aAllListeners;
 
 ScAddInListener* ScAddInListener::CreateListener(
                         const uno::Reference<sheet::XVolatileResult>& xVR, ScDocument* pDoc )
@@ -63,7 +63,7 @@ ScAddInListener* ScAddInListener::Get( const uno::Reference<sheet::XVolatileResu
     ScAddInListener* pLst = nullptr;
     sheet::XVolatileResult* pComp = xVR.get();
 
-    for(::std::list<ScAddInListener*>::iterator iter = aAllListeners.begin(); iter != aAllListeners.end(); ++iter)
+    for(std::list<ScAddInListener*>::iterator iter = aAllListeners.begin(); iter != aAllListeners.end(); ++iter)
     {
         if ( pComp == (*iter)->xVolRes.get() )
         {
@@ -77,7 +77,7 @@ ScAddInListener* ScAddInListener::Get( const uno::Reference<sheet::XVolatileResu
 //TODO: move to some container object?
 void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 {
-    ::std::list<ScAddInListener*>::iterator iter = aAllListeners.begin();
+    std::list<ScAddInListener*>::iterator iter = aAllListeners.begin();
     while(iter != aAllListeners.end())
     {
         ScAddInDocs* p = (*iter)->pDocs;

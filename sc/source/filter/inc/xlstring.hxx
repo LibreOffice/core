@@ -77,7 +77,7 @@ inline bool operator<( const XclFormatRun& rLeft, const XclFormatRun& rRight )
 }
 
 /** A vector with all formatting runs for a rich-string. */
-typedef ::std::vector< XclFormatRun > XclFormatRunVec;
+typedef std::vector< XclFormatRun > XclFormatRunVec;
 
 #endif
 

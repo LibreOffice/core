@@ -1065,7 +1065,7 @@ void CondFormat::finalizeImport()
     sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, nTab);
 
     ScRangeList aList;
-    for( ::std::vector< CellRangeAddress >::const_iterator itr = maModel.maRanges.begin(); itr != maModel.maRanges.end(); ++itr)
+    for( std::vector< CellRangeAddress >::const_iterator itr = maModel.maRanges.begin(); itr != maModel.maRanges.end(); ++itr)
     {
         ScRange aRange;
         ScUnoConversion::FillScRange(aRange, *itr);

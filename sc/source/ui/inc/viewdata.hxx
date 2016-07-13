@@ -159,7 +159,7 @@ class SC_DLLPUBLIC ScViewData
 private:
     double              nPPTX, nPPTY;               // Scaling factors
 
-    ::std::vector<ScViewDataTable*> maTabData;
+    std::vector<ScViewDataTable*> maTabData;
     std::unique_ptr<ScMarkData> mpMarkData;
     ScViewDataTable*    pThisTab;                   // Data of the displayed sheet
     ScDocShell*         pDocShell;

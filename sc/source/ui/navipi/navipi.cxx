@@ -594,7 +594,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     aTitleBase = GetText();
 
     const long nListboxYPos =
-        ::std::max(
+        std::max(
             (aTbxCmd->GetPosPixel().Y() + aTbxCmd->GetSizePixel().Height()),
             (aEdRow->GetPosPixel().Y() + aEdRow->GetSizePixel().Height()) )
         + 4;

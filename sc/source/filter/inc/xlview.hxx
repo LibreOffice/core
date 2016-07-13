@@ -117,7 +117,7 @@ typedef std::shared_ptr< XclSelectionData > XclSelectionDataRef;
 /** Contains all view settings for a single sheet. */
 struct XclTabViewData
 {
-    typedef ::std::map< sal_uInt8, XclSelectionDataRef > XclSelectionMap;
+    typedef std::map< sal_uInt8, XclSelectionDataRef > XclSelectionMap;
 
     XclSelectionMap     maSelMap;           /// Selections of all panes.
     Color               maGridColor;        /// Grid color.

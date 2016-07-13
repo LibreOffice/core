@@ -248,8 +248,8 @@ public:
     void            Reset();
 
 private:
-    typedef ::std::vector< ExtName >            ExtNameVec;
-    typedef ::std::map< sal_Int16, ExtNameVec > ExtNameMap;
+    typedef std::vector< ExtName >              ExtNameVec;
+    typedef std::map< sal_Int16, ExtNameVec > ExtNameMap;
 
     ExtNameMap      maExtNames;
 };

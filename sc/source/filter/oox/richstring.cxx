@@ -452,7 +452,7 @@ void RichString::createTextPortions( const OUString& rText, FontPortionModelList
             rPortions.push_back( FontPortionModel( nStrLen, -1 ) );
 
         // create all string portions according to the font id vector
-        for( ::std::vector< FontPortionModel >::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
+        for( std::vector< FontPortionModel >::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
         {
             sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
             if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )
@@ -479,7 +479,7 @@ void RichString::createPhoneticPortions( const OUString& rText, PhoneticPortionM
             rPortions.push_back( PhoneticPortionModel( nStrLen, nBaseLen, 0 ) );
 
         // create all phonetic portions according to the portions vector
-        for( ::std::vector< PhoneticPortionModel >::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
+        for( std::vector< PhoneticPortionModel >::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
         {
             sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
             if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )

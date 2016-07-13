@@ -221,7 +221,7 @@ OUString ScFuncDesc::getSignature() const
     return aSig.makeStringAndClear();
 }
 
-OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) const
+OUString ScFuncDesc::getFormula( const std::vector< OUString >& _aArguments ) const
 {
     OUString sep = ScCompiler::GetNativeSymbol(ocSep);
 
@@ -234,8 +234,8 @@ OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) 
         aFormula.append( "(" );
         if ( nArgCount > 0 && !_aArguments.empty() && !_aArguments[0].isEmpty())
         {
-            ::std::vector< OUString >::const_iterator aIter = _aArguments.begin();
-            ::std::vector< OUString >::const_iterator aEnd = _aArguments.end();
+            std::vector< OUString >::const_iterator aIter = _aArguments.begin();
+            std::vector< OUString >::const_iterator aEnd = _aArguments.end();
 
             aFormula.append( *aIter );
             ++aIter;
@@ -301,12 +301,12 @@ sal_Int32 ScFuncDesc::getSuppressedArgumentCount() const
     return GetSuppressedArgCount();
 }
 
-void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const
+void ScFuncDesc::fillVisibleArgumentMapping(std::vector<sal_uInt16>& _rArguments) const
 {
     if (!bHasSuppressedArgs || !pDefArgFlags)
     {
         _rArguments.resize( nArgCount);
-        ::std::vector<sal_uInt16>::iterator iter = _rArguments.begin();
+        std::vector<sal_uInt16>::iterator iter = _rArguments.begin();
         sal_uInt16 value = 0;
         while (iter != _rArguments.end())
             *iter++ = value++;
@@ -398,7 +398,7 @@ ScFunctionList::ScFunctionList() :
 {
     ScFuncDesc* pDesc = nullptr;
     sal_Int32 nStrLen = 0;
-    ::std::list<ScFuncDesc*> tmpFuncList;
+    std::list<ScFuncDesc*> tmpFuncList;
     sal_uInt16 nDescBlock[] =
     {
         RID_SC_FUNCTION_DESCRIPTIONS1,
@@ -573,7 +573,7 @@ ScFunctionList::ScFunctionList() :
     }
 
     //Move list to vector for better random access performance
-    ::std::vector<const ScFuncDesc*> tmp(tmpFuncList.begin(), tmpFuncList.end());
+    std::vector<const ScFuncDesc*> tmp(tmpFuncList.begin(), tmpFuncList.end());
     tmpFuncList.clear();
     aFunctionList.swap(tmp);
 
@@ -656,7 +656,7 @@ ScFunctionMgr::ScFunctionMgr() :
     OSL_ENSURE( pFuncList, "Functionlist not found." );
     sal_uInt32 catCount[MAX_FUNCCAT] = {0};
 
-    aCatLists[0] = new ::std::vector<const ScFuncDesc*>();
+    aCatLists[0] = new std::vector<const ScFuncDesc*>();
     aCatLists[0]->reserve(pFuncList->GetCount());
 
     // Retrieve all functions, store in cumulative ("All") category, and count
@@ -670,17 +670,17 @@ ScFunctionMgr::ScFunctionMgr() :
     }
 
     // Sort functions in cumulative category by name
-    ::std::sort(aCatLists[0]->begin(), aCatLists[0]->end(), ScFuncDesc::compareByName);
+    std::sort(aCatLists[0]->begin(), aCatLists[0]->end(), ScFuncDesc::compareByName);
 
     // Allocate correct amount of space for categories
     for (sal_uInt16 i = 1; i < MAX_FUNCCAT; ++i)
     {
-        aCatLists[i] = new ::std::vector<const ScFuncDesc*>();
+        aCatLists[i] = new std::vector<const ScFuncDesc*>();
         aCatLists[i]->reserve(catCount[i]);
     }
 
     // Fill categories with the corresponding functions (still sorted by name)
-    for(::std::vector<const ScFuncDesc*>::iterator iter = aCatLists[0]->begin(); iter!=aCatLists[0]->end(); ++iter)
+    for(std::vector<const ScFuncDesc*>::iterator iter = aCatLists[0]->begin(); iter!=aCatLists[0]->end(); ++iter)
     {
         if (((*iter)->nCategory) < MAX_FUNCCAT)
             aCatLists[(*iter)->nCategory]->push_back(*iter);
@@ -754,7 +754,7 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
     return nullptr;
 }
 
-void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const
+void ScFunctionMgr::fillLastRecentlyUsedFunctions(std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
     sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );

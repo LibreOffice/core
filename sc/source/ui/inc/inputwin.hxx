@@ -126,7 +126,7 @@ protected:
 
     ScTabViewShell* GetViewShell() { return mpViewShell;}
 
-    typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
+    typedef std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 
     OUString    aString;
     vcl::Font   aTextFont;

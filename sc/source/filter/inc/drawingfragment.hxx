@@ -112,7 +112,7 @@ protected:
     virtual void        onEndElement() override;
 
 private:
-    typedef ::std::unique_ptr< ShapeAnchor > ShapeAnchorRef;
+    typedef std::unique_ptr< ShapeAnchor > ShapeAnchorRef;
 
     css::uno::Reference< css::drawing::XShapes >
                         mxDrawPage;             /// Drawing page of this sheet.

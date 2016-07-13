@@ -71,7 +71,7 @@ void ScReferenceList::AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab )
 }
 
 template< typename T >
-static void lcl_AddString( ::std::vector<OUString>& rData, T& nCount, const OUString& rInsert )
+static void lcl_AddString( std::vector<OUString>& rData, T& nCount, const OUString& rInsert )
 {
     rData.push_back( rInsert);
     ++nCount;
@@ -130,9 +130,9 @@ void ScConsData::DeleteData()
     DELETEARR( ppSumSqr,nColCount );
     DELETEARR( ppUsed,  nColCount );                // only after ppRefs !!!
     DELETEARR( ppTitlePos, nRowCount );
-    ::std::vector<OUString>().swap( maColHeaders);
-    ::std::vector<OUString>().swap( maRowHeaders);
-    ::std::vector<OUString>().swap( maTitles);
+    std::vector<OUString>().swap( maColHeaders);
+    std::vector<OUString>().swap( maRowHeaders);
+    std::vector<OUString>().swap( maTitles);
     nDataCount = 0;
 
     if (bColByName) nColCount = 0;                  // otherwise maColHeaders is wrong

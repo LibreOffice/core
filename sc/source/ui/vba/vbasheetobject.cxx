@@ -67,8 +67,8 @@ OUString SAL_CALL ScVbaButtonCharacters::getCaption() throw (uno::RuntimeExcepti
 {
     // ignore invalid mnStart and/or mnLength members
     OUString aString = getFullString();
-    sal_Int32 nStart = ::std::min( mnStart, aString.getLength() );
-    sal_Int32 nLength = ::std::min( mnLength, aString.getLength() - nStart );
+    sal_Int32 nStart = std::min( mnStart, aString.getLength() );
+    sal_Int32 nLength = std::min( mnLength, aString.getLength() - nStart );
     return aString.copy( nStart, nLength );
 }
 
@@ -82,8 +82,8 @@ void SAL_CALL ScVbaButtonCharacters::setCaption( const OUString& rCaption ) thro
         string will be covered now, thus may be changed with subsequent
         operations. */
     OUString aString = getFullString();
-    sal_Int32 nStart = ::std::min( mnStart, aString.getLength() );
-    sal_Int32 nLength = ::std::min( mnLength, aString.getLength() - nStart );
+    sal_Int32 nStart = std::min( mnStart, aString.getLength() );
+    sal_Int32 nLength = std::min( mnLength, aString.getLength() - nStart );
     setFullString( aString.replaceAt( nStart, nLength, rCaption ) );
 }
 

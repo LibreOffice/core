@@ -72,7 +72,7 @@
 #include <vector>
 #include <memory>
 
-using ::std::vector;
+using std::vector;
 using namespace com::sun::star;
 
 // line ends are now created with an empty name.
@@ -353,8 +353,8 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) c
 Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
 {
     Rectangle aRect(
-        GetDrawPos( ::std::min( nCol1, nCol2 ), ::std::min( nRow1, nRow2 ), DRAWPOS_TOPLEFT ),
-        GetDrawPos( ::std::max( nCol1, nCol2 ), ::std::max( nRow1, nRow2 ), DRAWPOS_BOTTOMRIGHT ) );
+        GetDrawPos( std::min( nCol1, nCol2 ), std::min( nRow1, nRow2 ), DRAWPOS_TOPLEFT ),
+        GetDrawPos( std::max( nCol1, nCol2 ), std::max( nRow1, nRow2 ), DRAWPOS_BOTTOMRIGHT ) );
     aRect.Justify();    // reorder left/right in RTL sheets
     return aRect;
 }

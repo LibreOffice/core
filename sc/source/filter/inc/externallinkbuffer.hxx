@@ -256,8 +256,8 @@ private:
     ExternalNameRef     createExternalName();
 
 private:
-    typedef ::std::vector< sal_Int16 >  Int16Vector;
-    typedef ::std::vector< sal_Int32 >  Int32Vector;
+    typedef std::vector< sal_Int16 >    Int16Vector;
+    typedef std::vector< sal_Int32 >    Int32Vector;
     typedef RefVector< ExternalName >   ExternalNameVector;
 
     ExternalLinkType    meLinkType;         /// Type of this link object.
@@ -331,7 +331,7 @@ private:
 
 private:
     typedef RefVector< ExternalLink >       ExternalLinkVec;
-    typedef ::std::vector< RefSheetsModel > RefSheetsModelVec;
+    typedef std::vector< RefSheetsModel > RefSheetsModelVec;
 
     ExternalLinkRef     mxSelfRef;          /// Implicit self reference at index 0.
     ExternalLinkVec     maLinks;            /// List of link structures for all kinds of links.

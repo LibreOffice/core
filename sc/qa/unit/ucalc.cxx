@@ -3203,7 +3203,7 @@ void Test::testCopyPasteTranspose()
     ScDocument aNewClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aSrcRange, &aNewClipDoc);
 
-    ::std::unique_ptr<ScDocument> pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    std::unique_ptr<ScDocument> pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aNewClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false);
 
     ScRange aDestRange = ScRange(3,1,1,3,3,1);//target: Sheet2.D2:D4

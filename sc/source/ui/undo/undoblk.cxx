@@ -2125,7 +2125,7 @@ OUString ScUndoRemoveMerge::GetComment() const
 
 void ScUndoRemoveMerge::Undo()
 {
-    using ::std::set;
+    using std::set;
 
     SetCurTab();
     BeginUndo();
@@ -2159,7 +2159,7 @@ void ScUndoRemoveMerge::Undo()
 
 void ScUndoRemoveMerge::Redo()
 {
-    using ::std::set;
+    using std::set;
 
     SetCurTab();
     BeginRedo();

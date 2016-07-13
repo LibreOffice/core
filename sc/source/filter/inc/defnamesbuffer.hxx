@@ -120,7 +120,7 @@ public:
     bool                getAbsoluteRange( css::table::CellRangeAddress& orRange ) const;
 
 private:
-    typedef ::std::unique_ptr< StreamDataSequence >   StreamDataSeqPtr;
+    typedef std::unique_ptr< StreamDataSequence >     StreamDataSeqPtr;
 
     ScRangeData*        mpScRangeData;       /// ScRangeData of the defined name.
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.
@@ -162,8 +162,8 @@ private:
     DefinedNameRef      createDefinedName();
 
 private:
-    typedef ::std::pair< sal_Int16, OUString >   SheetNameKey;
-    typedef ::std::pair< sal_Int16, sal_Unicode >       BuiltinKey;
+    typedef std::pair< sal_Int16, OUString >     SheetNameKey;
+    typedef std::pair< sal_Int16, sal_Unicode >         BuiltinKey;
 
     typedef RefVector< DefinedName >            DefNameVector;
     typedef RefMap< SheetNameKey, DefinedName > DefNameNameMap;

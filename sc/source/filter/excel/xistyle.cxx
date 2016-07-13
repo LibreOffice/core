@@ -67,11 +67,11 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-using ::std::list;
+using std::list;
 using namespace ::com::sun::star;
 
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
-typedef ::std::vector< ColorData > ColorDataVec;
+typedef std::vector< ColorData > ColorDataVec;
 
 class PaletteIndex : public XIndexAccess_BASE
 {
@@ -1599,8 +1599,8 @@ struct IgnoreCaseCompare
 void XclImpXFBuffer::CreateUserStyles()
 {
     // calculate final names of all styles
-    typedef ::std::map< OUString, XclImpStyle*, IgnoreCaseCompare > CellStyleNameMap;
-    typedef ::std::vector< XclImpStyle* > XclImpStyleVector;
+    typedef std::map< OUString, XclImpStyle*, IgnoreCaseCompare > CellStyleNameMap;
+    typedef std::vector< XclImpStyle* > XclImpStyleVector;
 
     CellStyleNameMap aCellStyles;
     XclImpStyleVector aConflictNameStyles;

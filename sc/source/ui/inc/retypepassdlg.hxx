@@ -91,7 +91,7 @@ private:
         OUString       maName;
         TabProtectionPtr    mpProtect;
     };
-    ::std::vector<TableItem> maTableItems;
+    std::vector<TableItem> maTableItems;
 
     DocProtectionPtr    mpDocItem;
     ScPasswordHash      meDesiredHash;

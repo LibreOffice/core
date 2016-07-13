@@ -457,7 +457,7 @@ public:
     inline sal_uLong        GetStdScNumFmt() const { return mnStdScNumFmt; }
 
 protected:
-    typedef ::std::map< sal_uInt16, XclNumFmt > XclNumFmtMap;
+    typedef std::map< sal_uInt16, XclNumFmt > XclNumFmtMap;
 
     /** Clears all buffered data, used to set up for a new sheet. */
     void                InitializeImport();

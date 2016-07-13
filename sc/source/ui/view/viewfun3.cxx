@@ -300,7 +300,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 // TODO: What's this for?
                 break;
 
-            ::std::unique_ptr<ScDocument> pDocClip(new ScDocument(SCDOCMODE_CLIP));
+            std::unique_ptr<ScDocument> pDocClip(new ScDocument(SCDOCMODE_CLIP));
 
             // Check for geometrical feasibility of the ranges.
             bool bValidRanges = true;
@@ -898,7 +898,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     ScDocShellRef aTransShellRef;   // for objects in xTransClip - must remain valid as long as xTransClip
     ScDocument* pOrigClipDoc = nullptr;
-    ::std::unique_ptr< ScDocument > xTransClip;
+    std::unique_ptr< ScDocument > xTransClip;
     if ( bTranspose )
     {
         SCCOL nX;
@@ -1312,7 +1312,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     AdjustBlockHeight();            // update row heights before pasting objects
 
-    ::std::vector< OUString > aExcludedChartNames;
+    std::vector< OUString > aExcludedChartNames;
     SdrPage* pPage = nullptr;
 
     if ( nFlags & InsertDeleteFlags::OBJECTS )
@@ -1457,7 +1457,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
             return false;
         }
 
-        ::std::unique_ptr<ScDocument> pTransClip(new ScDocument(SCDOCMODE_CLIP));
+        std::unique_ptr<ScDocument> pTransClip(new ScDocument(SCDOCMODE_CLIP));
         pClipDoc->TransposeClip(pTransClip.get(), nFlags, bAsLink);
         pClipDoc = pTransClip.release();
         SCCOL nTempColSize = nColSize;
@@ -1514,7 +1514,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     }
 
     bool bRowInfo = ( aMarkedRange.aStart.Col()==0 && aMarkedRange.aEnd.Col()==MAXCOL );
-    ::std::unique_ptr<ScDocument> pUndoDoc;
+    std::unique_ptr<ScDocument> pUndoDoc;
     if (pDoc->IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
@@ -1522,7 +1522,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         pDoc->CopyToDocument(aMarkedRange, nUndoFlags, false, pUndoDoc.get(), &aMark);
     }
 
-    ::std::unique_ptr<ScDocument> pMixDoc;
+    std::unique_ptr<ScDocument> pMixDoc;
     if ( bSkipEmpty || nFunction != ScPasteFunc::NONE)
     {
         if ( nFlags & InsertDeleteFlags::CONTENTS )

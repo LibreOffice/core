@@ -336,13 +336,13 @@ public:
     }
 
 private:
-    typedef ::std::vector< sal_Int32 >                  OutlineLevelVec;
-    typedef ::std::pair< ColumnModel, sal_Int32 >       ColumnModelRange;
-    typedef ::std::map< sal_Int32, ColumnModelRange >   ColumnModelRangeMap;
-    typedef ::std::pair< RowModel, sal_Int32 >          RowModelRange;
-    typedef ::std::map< sal_Int32, RowModelRange >      RowModelRangeMap;
-    typedef ::std::list< HyperlinkModel >               HyperlinkModelList;
-    typedef ::std::list< ValidationModel >              ValidationModelList;
+    typedef std::vector< sal_Int32 >                    OutlineLevelVec;
+    typedef std::pair< ColumnModel, sal_Int32 >         ColumnModelRange;
+    typedef std::map< sal_Int32, ColumnModelRange >     ColumnModelRangeMap;
+    typedef std::pair< RowModel, sal_Int32 >            RowModelRange;
+    typedef std::map< sal_Int32, RowModelRange >        RowModelRangeMap;
+    typedef std::list< HyperlinkModel >                 HyperlinkModelList;
+    typedef std::list< ValidationModel >                ValidationModelList;
 
     /** Inserts all imported hyperlinks into their cell ranges. */
     void finalizeHyperlinkRanges();
@@ -376,8 +376,8 @@ private:
     void UpdateRowProgress( const CellRangeAddress& rUsedArea, sal_Int32 nRow );
 
 private:
-    typedef ::std::unique_ptr< VmlDrawing >       VmlDrawingPtr;
-    typedef ::std::unique_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
+    typedef std::unique_ptr< VmlDrawing >         VmlDrawingPtr;
+    typedef std::unique_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
 
     const OUString      maSheetCellRanges;  /// Service name for a SheetCellRanges object.
     const ScAddress&    mrMaxApiPos;        /// Reference to maximum Calc cell address from address converter.
@@ -747,18 +747,18 @@ void WorksheetGlobals::setVmlDrawingPath( const OUString& rVmlDrawingPath )
 
 void WorksheetGlobals::extendUsedArea( const CellAddress& rAddress )
 {
-    maUsedArea.StartColumn = ::std::min( maUsedArea.StartColumn, rAddress.Column );
-    maUsedArea.StartRow    = ::std::min( maUsedArea.StartRow,    rAddress.Row );
-    maUsedArea.EndColumn   = ::std::max( maUsedArea.EndColumn,   rAddress.Column );
-    maUsedArea.EndRow      = ::std::max( maUsedArea.EndRow,      rAddress.Row );
+    maUsedArea.StartColumn = std::min( maUsedArea.StartColumn, rAddress.Column );
+    maUsedArea.StartRow    = std::min( maUsedArea.StartRow,      rAddress.Row );
+    maUsedArea.EndColumn   = std::max( maUsedArea.EndColumn,     rAddress.Column );
+    maUsedArea.EndRow      = std::max( maUsedArea.EndRow,        rAddress.Row );
 }
 
 void WorksheetGlobals::extendUsedArea( const ScAddress& rAddress )
 {
-    maUsedArea.StartColumn = ::std::min( maUsedArea.StartColumn, sal_Int32( rAddress.Col() ) );
-    maUsedArea.StartRow    = ::std::min( maUsedArea.StartRow,    sal_Int32( rAddress.Row() ) );
-    maUsedArea.EndColumn   = ::std::max( maUsedArea.EndColumn,   sal_Int32( rAddress.Col() ) );
-    maUsedArea.EndRow      = ::std::max( maUsedArea.EndRow,      sal_Int32( rAddress.Row() ) );
+    maUsedArea.StartColumn = std::min( maUsedArea.StartColumn, sal_Int32( rAddress.Col() ) );
+    maUsedArea.StartRow    = std::min( maUsedArea.StartRow,      sal_Int32( rAddress.Row() ) );
+    maUsedArea.EndColumn   = std::max( maUsedArea.EndColumn,     sal_Int32( rAddress.Col() ) );
+    maUsedArea.EndRow      = std::max( maUsedArea.EndRow,        sal_Int32( rAddress.Row() ) );
 }
 
 void WorksheetGlobals::extendUsedArea( const CellRangeAddress& rRange )
@@ -776,10 +776,10 @@ void WorksheetGlobals::extendShapeBoundingBox( const awt::Rectangle& rShapeRect 
     }
     else
     {
-        sal_Int32 nEndX = ::std::max( maShapeBoundingBox.X + maShapeBoundingBox.Width, rShapeRect.X + rShapeRect.Width );
-        sal_Int32 nEndY = ::std::max( maShapeBoundingBox.Y + maShapeBoundingBox.Height, rShapeRect.Y + rShapeRect.Height );
-        maShapeBoundingBox.X = ::std::min( maShapeBoundingBox.X, rShapeRect.X );
-        maShapeBoundingBox.Y = ::std::min( maShapeBoundingBox.Y, rShapeRect.Y );
+        sal_Int32 nEndX = std::max( maShapeBoundingBox.X + maShapeBoundingBox.Width, rShapeRect.X + rShapeRect.Width );
+        sal_Int32 nEndY = std::max( maShapeBoundingBox.Y + maShapeBoundingBox.Height, rShapeRect.Y + rShapeRect.Height );
+        maShapeBoundingBox.X = std::min( maShapeBoundingBox.X, rShapeRect.X );
+        maShapeBoundingBox.Y = std::min( maShapeBoundingBox.Y, rShapeRect.Y );
         maShapeBoundingBox.Width = nEndX - maShapeBoundingBox.X;
         maShapeBoundingBox.Height = nEndY - maShapeBoundingBox.Y;
     }
@@ -827,7 +827,7 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
             // if inserting before another column model, get last free column
             OSL_ENSURE( (aIt == maColModels.end()) || (nLastCol < aIt->first), "WorksheetGlobals::setColModel - multiple models of the same column" );
             if( aIt != maColModels.end() )
-                nLastCol = ::std::min( nLastCol, aIt->first - 1 );
+                nLastCol = std::min( nLastCol, aIt->first - 1 );
             if( aIt != maColModels.begin() )
             {
                 // go to previous map element (which may be able to merge with the passed model)
@@ -835,7 +835,7 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
                 // the usage of upper_bound() above ensures that aIt->first is less than or equal to nFirstCol now
                 sal_Int32& rnLastMapCol = aIt->second.second;
                 OSL_ENSURE( rnLastMapCol < nFirstCol, "WorksheetGlobals::setColModel - multiple models of the same column" );
-                nFirstCol = ::std::max( rnLastMapCol + 1, nFirstCol );
+                nFirstCol = std::max( rnLastMapCol + 1, nFirstCol );
                 if( (rnLastMapCol + 1 == nFirstCol) && (nFirstCol <= nLastCol) && aIt->second.first.isMergeable( rModel ) )
                 {
                     // can merge with existing model, update last column index
@@ -1181,7 +1181,7 @@ void WorksheetGlobals::convertColumns()
     for( ColumnModelRangeMap::iterator aIt = maColModels.begin(), aEnd = maColModels.end(); aIt != aEnd; ++aIt )
     {
         // column indexes are stored 0-based in maColModels
-        ValueRange aColRange( ::std::max( aIt->first, nNextCol ), ::std::min( aIt->second.second, nMaxCol ) );
+        ValueRange aColRange( std::max( aIt->first, nNextCol ), std::min( aIt->second.second, nMaxCol ) );
         // process gap between two column models, use default column model
         if( nNextCol < aColRange.mnFirst )
             convertColumns( aColLevels, ValueRange( nNextCol, aColRange.mnFirst - 1 ), maDefColModel );
@@ -1259,7 +1259,7 @@ void WorksheetGlobals::convertRows()
     for( RowModelRangeMap::iterator aIt = maRowModels.begin(), aEnd = maRowModels.end(); aIt != aEnd; ++aIt )
     {
         // row indexes are stored 0-based in maRowModels
-        ValueRange aRowRange( ::std::max( aIt->first, nNextRow ), ::std::min( aIt->second.second, nMaxRow ) );
+        ValueRange aRowRange( std::max( aIt->first, nNextRow ), std::min( aIt->second.second, nMaxRow ) );
         // process gap between two row models, use default row model
         if( nNextRow < aRowRange.mnFirst )
             convertRows( aRowLevels, ValueRange( nNextRow, aRowRange.mnFirst - 1 ), maDefRowModel );
@@ -1311,7 +1311,7 @@ void WorksheetGlobals::convertOutlines( OutlineLevelVec& orLevels,
         without any gaps between the processed column or row ranges. */
 
     OSL_ENSURE( nLevel >= 0, "WorksheetGlobals::convertOutlines - negative outline level" );
-    nLevel = ::std::max< sal_Int32 >( nLevel, 0 );
+    nLevel = std::max< sal_Int32 >( nLevel, 0 );
 
     sal_Int32 nSize = orLevels.size();
     if( nSize < nLevel )

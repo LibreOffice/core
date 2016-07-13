@@ -77,9 +77,9 @@ private:
     double**            ppCount;
     double**            ppSumSqr;
     ScReferenceList**   ppRefs;
-    ::std::vector<OUString> maColHeaders;
-    ::std::vector<OUString> maRowHeaders;
-    ::std::vector<OUString> maTitles;
+    std::vector<OUString> maColHeaders;
+    std::vector<OUString> maRowHeaders;
+    std::vector<OUString> maTitles;
     SCSIZE              nDataCount;
     SCSIZE**            ppTitlePos;
     bool                bCornerUsed;

@@ -264,7 +264,7 @@ sal_Int32 BiffInputStream::readData( StreamDataSequence& orData, sal_Int32 nByte
     sal_Int32 nRet = 0;
     if( !mbEof )
     {
-        orData.realloc( ::std::max< sal_Int32 >( nBytes, 0 ) );
+        orData.realloc( std::max< sal_Int32 >( nBytes, 0 ) );
         if( nBytes > 0 )
             nRet = readMemory( orData.getArray(), nBytes, nAtomSize );
     }
@@ -475,7 +475,7 @@ void BiffInputStream::readUniStringHeader( bool& orb16BitChars, sal_Int32& ornAd
     orb16BitChars = getFlag( nFlags, BIFF_STRF_16BIT );
     sal_uInt16 nFontCount = getFlag( nFlags, BIFF_STRF_RICH ) ? readuInt16() : 0;
     sal_Int32 nPhoneticSize = getFlag( nFlags, BIFF_STRF_PHONETIC ) ? readInt32() : 0;
-    ornAddSize = 4 * nFontCount + ::std::max< sal_Int32 >( 0, nPhoneticSize );
+    ornAddSize = 4 * nFontCount + std::max< sal_Int32 >( 0, nPhoneticSize );
 }
 
 } // namespace xls

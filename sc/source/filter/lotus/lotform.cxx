@@ -599,7 +599,7 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
 
                 if( nStrLen )
                 {
-                    std::unique_ptr<sal_Char[]> p(new (::std::nothrow) sal_Char[ nStrLen + 1 ]);
+                    std::unique_ptr<sal_Char[]> p(new (std::nothrow) sal_Char[ nStrLen + 1 ]);
                     if (p)
                     {
                         aIn.ReadBytes(p.get(), nStrLen);

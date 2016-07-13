@@ -598,7 +598,7 @@ bool ScDPDimensionSaveData::operator==( const ScDPDimensionSaveData& ) const
 
 void ScDPDimensionSaveData::AddGroupDimension( const ScDPSaveGroupDimension& rGroupDim )
 {
-    OSL_ENSURE( ::std::none_of( maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDim.GetGroupDimName() ) ),
+    OSL_ENSURE( std::none_of( maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDim.GetGroupDimName() ) ),
         "ScDPDimensionSaveData::AddGroupDimension - group dimension exists already" );
     // ReplaceGroupDimension() adds new or replaces existing
     ReplaceGroupDimension( rGroupDim );
@@ -606,7 +606,7 @@ void ScDPDimensionSaveData::AddGroupDimension( const ScDPSaveGroupDimension& rGr
 
 void ScDPDimensionSaveData::ReplaceGroupDimension( const ScDPSaveGroupDimension& rGroupDim )
 {
-    ScDPSaveGroupDimVec::iterator aIt = ::std::find_if(
+    ScDPSaveGroupDimVec::iterator aIt = std::find_if(
         maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDim.GetGroupDimName() ) );
     if( aIt == maGroupDims.end() )
         maGroupDims.push_back( rGroupDim );
@@ -616,7 +616,7 @@ void ScDPDimensionSaveData::ReplaceGroupDimension( const ScDPSaveGroupDimension&
 
 void ScDPDimensionSaveData::RemoveGroupDimension( const OUString& rGroupDimName )
 {
-    ScDPSaveGroupDimVec::iterator aIt = ::std::find_if(
+    ScDPSaveGroupDimVec::iterator aIt = std::find_if(
         maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDimName ) );
     if( aIt != maGroupDims.end() )
         maGroupDims.erase( aIt );
@@ -712,14 +712,14 @@ ScDPSaveGroupDimension* ScDPDimensionSaveData::GetGroupDimAccForBase( const OUSt
 
 ScDPSaveGroupDimension* ScDPDimensionSaveData::GetNamedGroupDimAcc( const OUString& rGroupDimName )
 {
-    ScDPSaveGroupDimVec::iterator aIt = ::std::find_if(
+    ScDPSaveGroupDimVec::iterator aIt = std::find_if(
         maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDimName ) );
     return (aIt == maGroupDims.end()) ? nullptr : &*aIt;
 }
 
 ScDPSaveGroupDimension* ScDPDimensionSaveData::GetFirstNamedGroupDimAcc( const OUString& rBaseDimName )
 {
-    ScDPSaveGroupDimVec::iterator aIt = ::std::find_if(
+    ScDPSaveGroupDimVec::iterator aIt = std::find_if(
         maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupSourceNameFunc( rBaseDimName ) );
     return (aIt == maGroupDims.end()) ? nullptr : &*aIt;
 }
@@ -727,11 +727,11 @@ ScDPSaveGroupDimension* ScDPDimensionSaveData::GetFirstNamedGroupDimAcc( const O
 ScDPSaveGroupDimension* ScDPDimensionSaveData::GetNextNamedGroupDimAcc( const OUString& rGroupDimName )
 {
     // find the group dimension with the passed name
-    ScDPSaveGroupDimVec::iterator aIt = ::std::find_if(
+    ScDPSaveGroupDimVec::iterator aIt = std::find_if(
         maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDimName ) );
     // find next group dimension based on the same source dimension name
     if( aIt != maGroupDims.end() )
-        aIt = ::std::find_if( aIt + 1, maGroupDims.end(), ScDPSaveGroupSourceNameFunc( aIt->GetSourceDimName() ) );
+        aIt = std::find_if( aIt + 1, maGroupDims.end(), ScDPSaveGroupSourceNameFunc( aIt->GetSourceDimName() ) );
     return (aIt == maGroupDims.end()) ? nullptr : &*aIt;
 }
 

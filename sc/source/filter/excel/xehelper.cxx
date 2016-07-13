@@ -190,7 +190,7 @@ XclAddress XclExpAddressConverter::CreateValidAddress( const ScAddress& rScPos, 
 {
     XclAddress aXclPos( ScAddress::UNINITIALIZED );
     if( !ConvertAddress( aXclPos, rScPos, bWarn ) )
-        lclFillAddress( aXclPos, ::std::min( rScPos.Col(), maMaxPos.Col() ), ::std::min( rScPos.Row(), maMaxPos.Row() ) );
+        lclFillAddress( aXclPos, std::min( rScPos.Col(), maMaxPos.Col() ), std::min( rScPos.Row(), maMaxPos.Row() ) );
     return aXclPos;
 }
 
@@ -213,9 +213,9 @@ bool XclExpAddressConverter::ValidateRange( ScRange& rScRange, bool bWarn )
         ScAddress& rScEnd = rScRange.aEnd;
         if( !CheckAddress( rScEnd, bWarn ) )
         {
-            rScEnd.SetCol( ::std::min( rScEnd.Col(), maMaxPos.Col() ) );
-            rScEnd.SetRow( ::std::min( rScEnd.Row(), maMaxPos.Row() ) );
-            rScEnd.SetTab( ::std::min( rScEnd.Tab(), maMaxPos.Tab() ) );
+            rScEnd.SetCol( std::min( rScEnd.Col(), maMaxPos.Col() ) );
+            rScEnd.SetRow( std::min( rScEnd.Row(), maMaxPos.Row() ) );
+            rScEnd.SetTab( std::min( rScEnd.Tab(), maMaxPos.Tab() ) );
         }
     }
 
@@ -236,8 +236,8 @@ bool XclExpAddressConverter::ConvertRange( XclRange& rXclRange,
         SCROW nScRow2 = rScRange.aEnd.Row();
         if( !CheckAddress( rScRange.aEnd, bWarn ) )
         {
-            nScCol2 = ::std::min( nScCol2, maMaxPos.Col() );
-            nScRow2 = ::std::min( nScRow2, maMaxPos.Row() );
+            nScCol2 = std::min( nScCol2, maMaxPos.Col() );
+            nScRow2 = std::min( nScRow2, maMaxPos.Row() );
         }
         lclFillAddress( rXclRange.maLast, nScCol2, nScRow2 );
     }
@@ -758,7 +758,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 if( bFontHtChanged )
                     aParaText += "&" + OUString::number( aNewData.mnHeight );
                 // update maximum paragraph height, convert to twips
-                nParaHeight = ::std::max< sal_Int32 >( nParaHeight, aNewData.mnHeight * 20 );
+                nParaHeight = std::max< sal_Int32 >( nParaHeight, aNewData.mnHeight * 20 );
 
                 // underline
                 aNewData.mnUnderline = EXC_FONTUNDERL_NONE;
@@ -868,7 +868,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     if( !aText.isEmpty() )
     {
         maHFString += "&" + OUString(cPortionCode) + aText;
-        mnTotalHeight = ::std::max( mnTotalHeight, nHeight );
+        mnTotalHeight = std::max( mnTotalHeight, nHeight );
     }
 }
 

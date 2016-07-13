@@ -43,7 +43,7 @@ public:
     inline const FontModel& getDefaultFontModel() const { return *mxDefFontModel; }
 
 private:
-    typedef ::std::unique_ptr< FontModel > FontModelPtr;
+    typedef std::unique_ptr< FontModel > FontModelPtr;
     FontModelPtr        mxDefFontModel;
 };
 

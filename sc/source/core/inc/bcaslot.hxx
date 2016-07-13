@@ -281,9 +281,9 @@ private:
         TableSlots& operator=( const TableSlots& ) = delete;
     };
 
-    typedef ::std::map< SCTAB, TableSlots* > TableSlotsMap;
+    typedef std::map< SCTAB, TableSlots* > TableSlotsMap;
 
-    typedef ::std::vector< ::std::pair< ScBroadcastAreaSlot*, ScBroadcastAreas::iterator > > AreasToBeErased;
+    typedef std::vector< std::pair< ScBroadcastAreaSlot*, ScBroadcastAreas::iterator > > AreasToBeErased;
 
 private:
     ScBroadcastAreasBulk  aBulkBroadcastAreas;

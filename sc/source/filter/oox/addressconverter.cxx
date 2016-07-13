@@ -113,7 +113,7 @@ void BinRangeList::read( SequenceInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
     mvRanges.resize( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 16 ) );
-    for( ::std::vector< BinRange >::iterator aIt = mvRanges.begin(), aEnd = mvRanges.end(); aIt != aEnd; ++aIt )
+    for( std::vector< BinRange >::iterator aIt = mvRanges.begin(), aEnd = mvRanges.end(); aIt != aEnd; ++aIt )
         aIt->read( rStrm );
 }
 
@@ -174,7 +174,7 @@ bool AddressConverter::parseOoxAddress2d(
         return false;
 
     const sal_Unicode* pcChar = rString.getStr() + nStart;
-    const sal_Unicode* pcEndChar = pcChar + ::std::min( nLength, rString.getLength() - nStart );
+    const sal_Unicode* pcEndChar = pcChar + std::min( nLength, rString.getLength() - nStart );
 
     enum { STATE_COL, STATE_ROW } eState = STATE_COL;
     while( pcChar < pcEndChar )
@@ -400,8 +400,8 @@ ScAddress AddressConverter::createValidCellAddress(
     if( !convertToCellAddress( aAddress, rString, nSheet, bTrackOverflow ) )
     {
         aAddress.SetTab( getLimitedValue< sal_Int16, sal_Int16 >( nSheet, 0, maMaxPos.Tab() ) );
-        aAddress.SetCol( ::std::min( aAddress.Col(), maMaxPos.Col() ) );
-        aAddress.SetRow( ::std::min( aAddress.Row(), maMaxPos.Row() ) );
+        aAddress.SetCol( std::min( aAddress.Col(), maMaxPos.Col() ) );
+        aAddress.SetRow( std::min( aAddress.Row(), maMaxPos.Row() ) );
     }
     return aAddress;
 }
@@ -447,9 +447,9 @@ bool AddressConverter::checkCellRange( const CellRangeAddress& rRange, bool bAll
 bool AddressConverter::validateCellRange( CellRangeAddress& orRange, bool bAllowOverflow, bool bTrackOverflow )
 {
     if( orRange.StartColumn > orRange.EndColumn )
-        ::std::swap( orRange.StartColumn, orRange.EndColumn );
+        std::swap( orRange.StartColumn, orRange.EndColumn );
     if( orRange.StartRow > orRange.EndRow )
-        ::std::swap( orRange.StartRow, orRange.EndRow );
+        std::swap( orRange.StartRow, orRange.EndRow );
     if( !checkCellRange( orRange, bAllowOverflow, bTrackOverflow ) )
         return false;
     if( orRange.EndColumn > maMaxPos.Col() )
@@ -516,7 +516,7 @@ void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
         const BinRangeList& rBinRanges, sal_Int16 nSheet, bool bTrackOverflow )
 {
     CellRangeAddress aRange;
-    for( ::std::vector< BinRange >::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
+    for( std::vector< BinRange >::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
         if( convertToCellRange( aRange, *aIt, nSheet, true, bTrackOverflow ) )
             orRanges.push_back( aRange );
 }

@@ -2368,7 +2368,7 @@ void ScRange::IncEndColSticky( SCsCOL nDelta )
         return;
 
     if (nCol < MAXCOL)
-        aEnd.SetCol( ::std::min( static_cast<SCCOL>(nCol + nDelta), MAXCOL));
+        aEnd.SetCol( std::min( static_cast<SCCOL>(nCol + nDelta), MAXCOL));
     else
         aEnd.IncCol( nDelta);   // was greater than MAXCOL, caller should know..
 }
@@ -2388,7 +2388,7 @@ void ScRange::IncEndRowSticky( SCsROW nDelta )
         return;
 
     if (nRow < MAXROW)
-        aEnd.SetRow( ::std::min( static_cast<SCROW>(nRow + nDelta), MAXROW));
+        aEnd.SetRow( std::min( static_cast<SCROW>(nRow + nDelta), MAXROW));
     else
         aEnd.IncRow( nDelta);   // was greater than MAXROW, caller should know..
 }

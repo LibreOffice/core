@@ -39,11 +39,11 @@ struct ScFormulaRecursionEntry
     }
 };
 
-typedef ::std::list< ScFormulaRecursionEntry > ScFormulaRecursionList;
+typedef std::list< ScFormulaRecursionEntry > ScFormulaRecursionList;
 
 class ScRecursionHelper
 {
-    typedef ::std::stack< ScFormulaCell* >  ScRecursionInIterationStack;
+    typedef std::stack< ScFormulaCell* >    ScRecursionInIterationStack;
     ScFormulaRecursionList              aRecursionFormulas;
     ScFormulaRecursionList::iterator    aInsertPos;
     ScFormulaRecursionList::iterator    aLastIterationStart;

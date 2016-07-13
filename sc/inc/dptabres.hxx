@@ -75,7 +75,7 @@ private:
     std::vector<Member> maMembers;
 };
 
-typedef ::std::vector<sal_Int32> ScMemberSortOrder;
+typedef std::vector<sal_Int32> ScMemberSortOrder;
 
 /**
  * Select subtotal information, passed down the dimensions.
@@ -252,14 +252,14 @@ public:
 class LateInitParams
 {
 private:
-    const ::std::vector<ScDPDimension*>& mppDim;
-    const ::std::vector<ScDPLevel*>& mppLev;
+    const std::vector<ScDPDimension*>& mppDim;
+    const std::vector<ScDPLevel*>& mppLev;
 
     bool mbRow:1;
     bool mbInitChild:1;
     bool mbAllChildren:1;
 public:
-    LateInitParams( const ::std::vector<ScDPDimension*>& ppDim, const ::std::vector<ScDPLevel*>& ppLev,
+    LateInitParams( const std::vector<ScDPDimension*>& ppDim, const std::vector<ScDPLevel*>& ppLev,
         bool bRow);
     ~LateInitParams();
 
@@ -354,14 +354,14 @@ public:
     ScDPResultMember(  const ScDPResultData* pData, bool bForceSub );
     ~ScDPResultMember();
 
-    void                InitFrom( const ::std::vector<ScDPDimension*>& ppDim,
-                                        const ::std::vector<ScDPLevel*>& ppLev,
+    void                InitFrom( const std::vector<ScDPDimension*>& ppDim,
+                                        const std::vector<ScDPLevel*>& ppLev,
                                         size_t nPos,
                                         ScDPInitState& rInitState,
                                   bool bInitChild = true );
     void               LateInitFrom(
                                         LateInitParams& rParams,
-                                        const ::std::vector< SCROW >& pItemData,
+                                        const std::vector< SCROW >& pItemData,
                                         size_t nPos,
                                         ScDPInitState& rInitState);
     void CheckShowEmpty( bool bShow = false );
@@ -380,15 +380,15 @@ public:
     long                GetSubTotalCount( long* pUserSubStart = nullptr ) const;
 
     bool IsNamedItem( SCROW nIndex ) const;
-    bool IsValidEntry( const ::std::vector< SCROW >& aMembers ) const;
+    bool IsValidEntry( const std::vector< SCROW >& aMembers ) const;
 
     void SetHasElements() { bHasElements = true; }
     void SetAutoHidden() { bAutoHidden = true; }
 
-    void                ProcessData( const ::std::vector<SCROW>& aChildMembers,
+    void                ProcessData( const std::vector<SCROW>& aChildMembers,
                                         const ScDPResultDimension* pDataDim,
-                                        const ::std::vector<SCROW>& aDataMembers,
-                                        const ::std::vector<ScDPValue>& aValues );
+                                        const std::vector<SCROW>& aDataMembers,
+                                        const std::vector<ScDPValue>& aValues );
     void FillMemberResults(
         css::uno::Sequence< css::sheet::MemberResult>* pSequences,
         long& rPos, long nMeasure, bool bRoot, const OUString* pMemberName, const OUString* pMemberCaption );
@@ -439,7 +439,7 @@ private:
     ScDPDataDimension*      pChildDimension;
     ScDPAggData             aAggregate;
 
-    void                UpdateValues( const ::std::vector<ScDPValue>& aValues, const ScDPSubTotalState& rSubState );
+    void                UpdateValues( const std::vector<ScDPValue>& aValues, const ScDPSubTotalState& rSubState );
 
 public:
                         ScDPDataMember( const ScDPResultData* pData, const ScDPResultMember* pRes );
@@ -454,7 +454,7 @@ public:
     bool IsNamedItem( SCROW nRow ) const;
     bool HasHiddenDetails() const;
 
-    void                ProcessData( const ::std::vector< SCROW >& aChildMembers, const ::std::vector<ScDPValue>& aValues,
+    void                ProcessData( const std::vector< SCROW >& aChildMembers, const std::vector<ScDPValue>& aValues,
                                        const ScDPSubTotalState& rSubState );
     bool HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const;
     double              GetAggregate( long nMeasure, const ScDPSubTotalState& rSubState ) const;
@@ -518,7 +518,7 @@ private:
     ScDPResultMember*        AddMember( const ScDPParentDimData& aData );
     ScDPResultMember*        InsertMember( ScDPParentDimData* pMemberData );
     void                                  InitWithMembers( LateInitParams& rParams,
-                                                            const ::std::vector< SCROW >& pItemData,
+                                                            const std::vector< SCROW >& pItemData,
                                                             size_t  nPos,
                                                             ScDPInitState& rInitState  );
 public:
@@ -527,23 +527,23 @@ public:
 
                         //  allocates new members
     void InitFrom(
-        const ::std::vector<ScDPDimension*>& ppDim, const ::std::vector<ScDPLevel*>& ppLev,
+        const std::vector<ScDPDimension*>& ppDim, const std::vector<ScDPLevel*>& ppLev,
         size_t nPos, ScDPInitState& rInitState,  bool bInitChild = true );
     void                LateInitFrom(  LateInitParams& rParams,
-                                        const ::std::vector< SCROW >& pItemData,
+                                        const std::vector< SCROW >& pItemData,
                                         size_t nPos,
                                         ScDPInitState& rInitState );
     void CheckShowEmpty( bool bShow = false );
 
     long                GetSize(long nMeasure) const;
 
-    bool                IsValidEntry( const ::std::vector<SCROW>& aMembers ) const;
+    bool                IsValidEntry( const std::vector<SCROW>& aMembers ) const;
 
     //  modifies existing members, allocates data dimensions
-    void                ProcessData( const ::std::vector<SCROW>& aMembers,
+    void                ProcessData( const std::vector<SCROW>& aMembers,
                                      const ScDPResultDimension* pDataDim,
-                                     const ::std::vector<SCROW>& aDataMembers,
-                                     const ::std::vector<ScDPValue>& aValues ) const;   //! Test
+                                     const std::vector<SCROW>& aDataMembers,
+                                     const std::vector<ScDPValue>& aValues ) const;     //! Test
     void                FillMemberResults( css::uno::Sequence<
                                                 css::sheet::MemberResult>* pSequences,
                                             long nStart, long nMeasure );
@@ -620,7 +620,7 @@ public:
                         ~ScDPDataDimension();
 
     void                InitFrom( const ScDPResultDimension* pDim );        // recursive
-    void                ProcessData( const ::std::vector< SCROW >& aDataMembers, const ::std::vector<ScDPValue>& aValues,
+    void                ProcessData( const std::vector< SCROW >& aDataMembers, const std::vector<ScDPValue>& aValues,
                                        const ScDPSubTotalState& rSubState );
     void FillDataRow(
         const ScDPResultDimension* pRefDim,
@@ -662,7 +662,7 @@ public:
     ~ScDPResultVisibilityData();
 
     void addVisibleMember(const OUString& rDimName, const ScDPItemData& rMemberItem);
-    void fillFieldFilters(::std::vector<ScDPFilteredCache::Criterion>& rFilters) const;
+    void fillFieldFilters(std::vector<ScDPFilteredCache::Criterion>& rFilters) const;
 
 private:
     struct MemberHash

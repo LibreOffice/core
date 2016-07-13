@@ -306,7 +306,7 @@ void ConnectionsBuffer::insertConnectionToMap( const ConnectionRef& rxConnection
     {
         OSL_ENSURE( !maConnectionsById.has( nConnId ), "ConnectionsBuffer::insertConnectionToMap - multiple connection identifier" );
         maConnectionsById[ nConnId ] = rxConnection;
-        mnUnusedId = ::std::max< sal_Int32 >( mnUnusedId, nConnId + 1 );
+        mnUnusedId = std::max< sal_Int32 >( mnUnusedId, nConnId + 1 );
     }
 }
 

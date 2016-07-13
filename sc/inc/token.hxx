@@ -44,7 +44,7 @@ struct RangeMatrix;
 class ScJumpMatrix;
 class ScMatrix;
 
-typedef ::std::vector< ScComplexRefData > ScRefList;
+typedef std::vector< ScComplexRefData > ScRefList;
 
 #if DEBUG_FORMULA_COMPILER
 void DumpToken(formula::FormulaToken const & rToken);

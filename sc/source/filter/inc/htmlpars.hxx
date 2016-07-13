@@ -48,8 +48,8 @@ class ScHTMLTable;
 class ScHTMLStyles
 {
     typedef std::unordered_map<OUString, OUString, OUStringHash> PropsType;
-    typedef ::std::map<OUString, std::unique_ptr<PropsType>> NamePropsType;
-    typedef ::std::map<OUString, std::unique_ptr<NamePropsType>> ElemsType;
+    typedef std::map<OUString, std::unique_ptr<PropsType>> NamePropsType;
+    typedef std::map<OUString, std::unique_ptr<NamePropsType>> ElemsType;
 
     NamePropsType m_GlobalProps;     /// global properties (for a given class for all elements)
     NamePropsType m_ElemGlobalProps; /// element global properties (no class specified)
@@ -146,15 +146,15 @@ class ScDocument;
 class HTMLOption;
 
 // TODO these need better names
-typedef ::std::map<SCROW, SCROW> InnerMap;
-typedef ::std::map<sal_uInt16, InnerMap*> OuterMap;
+typedef std::map<SCROW, SCROW> InnerMap;
+typedef std::map<sal_uInt16, InnerMap*> OuterMap;
 
 class ScHTMLLayoutParser : public ScHTMLParser
 {
 private:
     Size                aPageSize;
     OUString            aBaseURL;
-    ::std::stack< ScHTMLTableStackEntry* >
+    std::stack< ScHTMLTableStackEntry* >
                         aTableStack;
     OUString            aString;
     ScRangeListRef      xLockedList;        // je Table
@@ -429,7 +429,7 @@ protected:
     explicit            ScHTMLTable(
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
-                            ::std::vector< ScEEParseEntry* >& rEEParseList,
+                            std::vector< ScEEParseEntry* >& rEEParseList,
                             ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser );
 
     /** Fills all empty cells in this and nested tables with dummy parse entries. */
@@ -441,12 +441,12 @@ protected:
     void                RecalcDocPos( const ScHTMLPos& rBasePos );
 
 private:
-    typedef ::std::unique_ptr< ScHTMLTableMap >         ScHTMLTableMapPtr;
-    typedef ::std::unique_ptr< SfxItemSet >             SfxItemSetPtr;
-    typedef ::std::vector< SCCOLROW >                   ScSizeVec;
-    typedef ::std::list< ScHTMLEntry* >                 ScHTMLEntryList;
-    typedef ::std::map< ScHTMLPos, ScHTMLEntryList >    ScHTMLEntryMap;
-    typedef ::std::unique_ptr< ScHTMLEntry >            ScHTMLEntryPtr;
+    typedef std::unique_ptr< ScHTMLTableMap >           ScHTMLTableMapPtr;
+    typedef std::unique_ptr< SfxItemSet >               SfxItemSetPtr;
+    typedef std::vector< SCCOLROW >                     ScSizeVec;
+    typedef std::list< ScHTMLEntry* >                   ScHTMLEntryList;
+    typedef std::map< ScHTMLPos, ScHTMLEntryList >      ScHTMLEntryMap;
+    typedef std::unique_ptr< ScHTMLEntry >              ScHTMLEntryPtr;
 
     /** Returns true, if the current cell does not contain an entry yet. */
     bool                IsEmptyCell() const;
@@ -528,7 +528,7 @@ private:
     ScRangeList         maVMergedCells;     /// List of all vertically merged cells.
     ScRangeList         maUsedCells;        /// List of all used cells.
     EditEngine&         mrEditEngine;       /// Edit engine (from ScEEParser).
-    ::std::vector< ScEEParseEntry* >& mrEEParseList;      /// List that owns the parse entries (from ScEEParser).
+    std::vector< ScEEParseEntry* >& mrEEParseList;        /// List that owns the parse entries (from ScEEParser).
     ScHTMLEntryMap      maEntryMap;         /// List of entries for each cell.
     ScHTMLEntryList*    mpCurrEntryList;    /// Current entry list from map for faster access.
     ScHTMLEntryPtr      mxCurrEntry;        /// Working entry, not yet inserted in a list.
@@ -551,7 +551,7 @@ public:
     explicit            ScHTMLGlobalTable(
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
-                            ::std::vector< ScEEParseEntry* >& rEEParseList,
+                            std::vector< ScEEParseEntry* >& rEEParseList,
                             ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser );
 
     virtual             ~ScHTMLGlobalTable();
@@ -608,7 +608,7 @@ private:
     DECL_LINK_TYPED( HTMLImportHdl, ImportInfo&, void );
 
 private:
-    typedef ::std::unique_ptr< ScHTMLGlobalTable >    ScHTMLGlobalTablePtr;
+    typedef std::unique_ptr< ScHTMLGlobalTable >      ScHTMLGlobalTablePtr;
 
     OUStringBuffer maTitle;            /// The title of the document.
     ScHTMLGlobalTablePtr mxGlobTable;       /// Contains the entire imported document.

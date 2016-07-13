@@ -159,7 +159,7 @@ void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
         if (!aRangeList.empty())
         {
             ScRangeList* pRangeList = aProt.maRangeList = new ScRangeList;
-            for (::std::vector< css::table::CellRangeAddress >::const_iterator itr( aRangeList.begin()), end( aRangeList.end()); itr != end; ++itr)
+            for (std::vector< css::table::CellRangeAddress >::const_iterator itr( aRangeList.begin()), end( aRangeList.end()); itr != end; ++itr)
             {
                 ScRange aRange;
                 ScUnoConversion::FillScRange( aRange, *itr);

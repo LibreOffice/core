@@ -61,7 +61,7 @@ struct SheetProtectionModel
     bool                mbPivotTables;          /// True = pivot tables locked.
     bool                mbSelectUnlocked;       /// True = select unlocked cells locked.
 
-    ::std::vector< ScEnhancedProtection >   maEnhancedProtections;
+    std::vector< ScEnhancedProtection >     maEnhancedProtections;
 
     explicit            SheetProtectionModel();
 };

@@ -404,8 +404,8 @@ void XclExpImgData::Save( XclExpStream& rStrm )
 
     if( BitmapReadAccess* pAccess = aBmp.AcquireReadAccess() )
     {
-        sal_Int32 nWidth = ::std::min< sal_Int32 >( pAccess->Width(), 0xFFFF );
-        sal_Int32 nHeight = ::std::min< sal_Int32 >( pAccess->Height(), 0xFFFF );
+        sal_Int32 nWidth = std::min< sal_Int32 >( pAccess->Width(), 0xFFFF );
+        sal_Int32 nHeight = std::min< sal_Int32 >( pAccess->Height(), 0xFFFF );
         if( (nWidth > 0) && (nHeight > 0) )
         {
             sal_uInt8 nPadding = static_cast< sal_uInt8 >( nWidth & 0x03 );
@@ -824,7 +824,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
                     mnSelEntry = aSelection[ 0 ] + 1;
                     maMultiSel.resize( nLen );
                     const sal_Int16* pnBegin = aSelection.getConstArray();
-                    ::std::copy( pnBegin, pnBegin + nLen, maMultiSel.begin() );
+                    std::copy( pnBegin, pnBegin + nLen, maMultiSel.begin() );
                 }
             }
 
@@ -844,7 +844,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
             {
                 const OUString* pBegin = aStringList.getConstArray();
                 const OUString* pEnd = pBegin + aStringList.getLength();
-                const OUString* pString = ::std::find( pBegin, pEnd, aDefText );
+                const OUString* pString = std::find( pBegin, pEnd, aDefText );
                 if( pString != pEnd )
                     mnSelEntry = static_cast< sal_Int16 >( pString - pBegin + 1 );  // 1-based
                 if( mnSelEntry > 0 )
@@ -1224,7 +1224,7 @@ void XclExpNote::Save( XclExpStream& rStrm )
 
             while( nCharsLeft )
             {
-                sal_uInt16 nWriteChars = ::std::min( nCharsLeft, EXC_NOTE5_MAXLEN );
+                sal_uInt16 nWriteChars = std::min( nCharsLeft, EXC_NOTE5_MAXLEN );
 
                 rStrm.StartRecord( EXC_ID_NOTE, 6 + nWriteChars );
                 if( pcBuffer == maNoteText.getStr() )

@@ -54,7 +54,7 @@ private:
     const ScFuncDesc*   pFuncDesc;
     sal_uInt16              nArgs;
 
-    ::std::vector< const formula::IFunctionDescription*> aLRUList;
+    std::vector< const formula::IFunctionDescription*> aLRUList;
 
     void            UpdateFunctionList();
     void            UpdateLRUList();

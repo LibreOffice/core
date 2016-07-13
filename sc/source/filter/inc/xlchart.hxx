@@ -1150,7 +1150,7 @@ public:
     const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
 
 private:
-    typedef ::std::map< XclChObjectType, const XclChFormatInfo* > XclFmtInfoMap;
+    typedef std::map< XclChObjectType, const XclChFormatInfo* > XclFmtInfoMap;
     XclFmtInfoMap       maInfoMap;          /// Maps object type to formatting data.
 };
 
@@ -1248,7 +1248,7 @@ public:
     const XclChTypeInfo& GetTypeInfoFromService( const OUString& rServiceName ) const;
 
 private:
-    typedef ::std::map< XclChTypeId, const XclChTypeInfo* > XclChTypeInfoMap;
+    typedef std::map< XclChTypeId, const XclChTypeInfo* > XclChTypeInfoMap;
     XclChTypeInfoMap    maInfoMap;          /// Maps chart types to type info data.
 };
 
@@ -1266,7 +1266,7 @@ enum XclChTextType
 };
 
 /** A map key for text and title objects. */
-struct XclChTextKey : public ::std::pair< XclChTextType, ::std::pair< sal_uInt16, sal_uInt16 > >
+struct XclChTextKey : public std::pair< XclChTextType, std::pair< sal_uInt16, sal_uInt16 > >
 {
     inline explicit     XclChTextKey( XclChTextType eTextType, sal_uInt16 nMainIdx = 0, sal_uInt16 nSubIdx = 0 )
                             { first = eTextType; second.first = nMainIdx; second.second = nSubIdx; }

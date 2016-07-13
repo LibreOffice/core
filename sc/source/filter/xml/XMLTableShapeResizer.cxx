@@ -37,8 +37,8 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using ::std::unique_ptr;
-using ::std::vector;
+using std::unique_ptr;
+using std::vector;
 
 ScMyOLEFixer::ScMyOLEFixer(ScXMLImport& rTempImport)
     : rImport(rTempImport),

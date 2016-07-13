@@ -94,8 +94,8 @@
 using namespace com::sun::star;
 using ::editeng::SvxBorderLine;
 
-using ::std::vector;
-using ::std::unique_ptr;
+using std::vector;
+using std::unique_ptr;
 
 bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
 {
@@ -1207,7 +1207,7 @@ void ScViewFunc::FillSimple( FillDir eDir )
             bool bDoAutoSpell = pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
             if ( bDoAutoSpell )
                 CopyAutoSpellData(eDir, aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(),
-                        ::std::numeric_limits<sal_uLong>::max());
+                        std::numeric_limits<sal_uLong>::max());
         }
     }
     else
@@ -1290,7 +1290,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
     ScGridWindow* pWin = this->GetActiveWin();
     if ( pWin->InsideVisibleRange(nStartCol, nStartRow) && pWin->InsideVisibleRange(nEndCol, nEndRow) )
     {
-        if ( nCount == ::std::numeric_limits<sal_uLong>::max() )
+        if ( nCount == std::numeric_limits<sal_uLong>::max() )
         {
             switch( eDir )
             {

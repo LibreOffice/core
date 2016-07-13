@@ -780,7 +780,7 @@ struct ScMyNamedExpression
     bool               bIsExpression;
 };
 
-typedef ::std::list<std::unique_ptr<ScMyNamedExpression>> ScMyNamedExpressions;
+typedef std::list<std::unique_ptr<ScMyNamedExpression>> ScMyNamedExpressions;
 
 struct ScMyLabelRange
 {
@@ -824,7 +824,7 @@ class ScXMLImport: public SvXMLImport
     const ScXMLImport& operator=(const ScXMLImport&) = delete;
 
     typedef std::unordered_map< OUString, sal_Int16, OUStringHash >   CellTypeMap;
-    typedef ::std::map<SCTAB, std::unique_ptr<ScMyNamedExpressions>> SheetNamedExpMap;
+    typedef std::map<SCTAB, std::unique_ptr<ScMyNamedExpressions>> SheetNamedExpMap;
 
     CellTypeMap             aCellTypeMap;
 

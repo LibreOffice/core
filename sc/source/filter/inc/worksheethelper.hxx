@@ -59,7 +59,7 @@ class SheetViewSettings;
 class VmlDrawing;
 class WorksheetSettings;
 
-typedef ::std::map< OUString, ScDataBarFormatData* >  ExtLst;
+typedef std::map< OUString, ScDataBarFormatData* >    ExtLst;
 
 /** An enumeration for all types of sheets in a workbook. */
 enum WorksheetType

@@ -77,10 +77,10 @@ XclRange XclRangeList::GetEnclosingRange() const
         aXclRange = *aIt;
         for( ++aIt; aIt != aEnd; ++aIt )
         {
-            aXclRange.maFirst.mnCol = ::std::min( aXclRange.maFirst.mnCol, aIt->maFirst.mnCol );
-            aXclRange.maFirst.mnRow = ::std::min( aXclRange.maFirst.mnRow, aIt->maFirst.mnRow );
-            aXclRange.maLast.mnCol = ::std::max( aXclRange.maLast.mnCol, aIt->maLast.mnCol );
-            aXclRange.maLast.mnRow = ::std::max( aXclRange.maLast.mnRow, aIt->maLast.mnRow );
+            aXclRange.maFirst.mnCol = std::min( aXclRange.maFirst.mnCol, aIt->maFirst.mnCol );
+            aXclRange.maFirst.mnRow = std::min( aXclRange.maFirst.mnRow, aIt->maFirst.mnRow );
+            aXclRange.maLast.mnCol = std::max( aXclRange.maLast.mnCol, aIt->maLast.mnCol );
+            aXclRange.maLast.mnRow = std::max( aXclRange.maLast.mnRow, aIt->maLast.mnRow );
         }
     }
     return aXclRange;
@@ -108,7 +108,7 @@ void XclRangeList::WriteSubList( XclExpStream& rStrm, size_t nBegin, size_t nCou
         sal_uInt16 nCountInStream ) const
 {
     OSL_ENSURE( nBegin <= mRanges.size(), "XclRangeList::WriteSubList - invalid start position" );
-    size_t nEnd = ::std::min< size_t >( nBegin + nCount, mRanges.size() );
+    size_t nEnd = std::min< size_t >( nBegin + nCount, mRanges.size() );
     if (!nCountInStream)
     {
         sal_uInt16 nXclCount = ulimit_cast< sal_uInt16 >( nEnd - nBegin );

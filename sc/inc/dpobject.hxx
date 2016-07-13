@@ -207,7 +207,7 @@ public:
     bool                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, css::uno::Reference< css::sheet::XMembersAccess >& xMembers );
 
     bool                GetMemberNames( sal_Int32 nDim, css::uno::Sequence< OUString >& rNames );
-    bool                GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );
+    bool                GetMembers( sal_Int32 nDim, sal_Int32 nHier, std::vector<ScDPLabelData::Member>& rMembers );
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
@@ -296,7 +296,7 @@ public:
     class NameCaches
     {
         friend class ScDPCollection;
-        typedef ::std::map<OUString, std::unique_ptr<ScDPCache>> CachesType;
+        typedef std::map<OUString, std::unique_ptr<ScDPCache>> CachesType;
         CachesType m_Caches;
         ScDocument* mpDoc;
     public:
@@ -324,7 +324,7 @@ public:
         OUString maCommand;
         DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
-        struct less : public ::std::binary_function<DBType, DBType, bool>
+        struct less : public std::binary_function<DBType, DBType, bool>
         {
             bool operator() (const DBType& left, const DBType& right) const;
         };
@@ -336,7 +336,7 @@ public:
     class DBCaches
     {
         friend class ScDPCollection;
-        typedef ::std::map<DBType, std::unique_ptr<ScDPCache>, DBType::less> CachesType;
+        typedef std::map<DBType, std::unique_ptr<ScDPCache>, DBType::less> CachesType;
         CachesType m_Caches;
         ScDocument* mpDoc;
     public:

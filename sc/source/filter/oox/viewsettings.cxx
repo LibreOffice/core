@@ -625,7 +625,7 @@ void ViewSettings::finalizeImport()
 
 sal_Int16 ViewSettings::getActiveCalcSheet() const
 {
-    return maBookViews.empty() ? 0 : ::std::max< sal_Int16 >( getWorksheets().getCalcSheetIndex( maBookViews.front()->mnActiveSheet ), 0 );
+    return maBookViews.empty() ? 0 : std::max< sal_Int16 >( getWorksheets().getCalcSheetIndex( maBookViews.front()->mnActiveSheet ), 0 );
 }
 
 // private --------------------------------------------------------------------

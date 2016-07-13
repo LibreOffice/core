@@ -305,7 +305,7 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
         if( (0 < nSepPos) && (nSepPos + 1 < aColSpanToken.getLength()) )
         {
             // OOXML uses 1-based integer column indexes, row model expects 0-based colspans
-            sal_Int32 nLastCol = ::std::min( aColSpanToken.copy( nSepPos + 1 ).toInt32() - 1, nMaxCol );
+            sal_Int32 nLastCol = std::min( aColSpanToken.copy( nSepPos + 1 ).toInt32() - 1, nMaxCol );
             aModel.insertColSpan( ValueRange( aColSpanToken.copy( 0, nSepPos ).toInt32() - 1, nLastCol ) );
         }
     }
@@ -402,7 +402,7 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
         sal_Int32 nFirstCol, nLastCol;
         nFirstCol = rStrm.readInt32();
         nLastCol = rStrm.readInt32();
-        aModel.insertColSpan( ValueRange( nFirstCol, ::std::min( nLastCol, nMaxCol ) ) );
+        aModel.insertColSpan( ValueRange( nFirstCol, std::min( nLastCol, nMaxCol ) ) );
     }
 
     // set row properties in the current sheet

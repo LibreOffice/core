@@ -284,7 +284,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     void            SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY );
 
-    void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
+    void            GetSelectionRects( std::vector< Rectangle >& rPixelRects );
 
 
     void            updateLibreOfficeKitCellCursor();

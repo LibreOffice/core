@@ -84,7 +84,7 @@ public:
     void                setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans );
 
 private:
-    typedef ::std::map< sal_Int32, ValueRangeVector >   ColSpanVectorMap;
+    typedef std::map< sal_Int32, ValueRangeVector >     ColSpanVectorMap;
 
     ColSpanVectorMap    maColSpans;             /// Buffered column spans, mapped by row index.
     sal_Int32           mnCurrRow;              /// Current row index used for buffered cell import.
@@ -175,12 +175,12 @@ private:
     void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const css::table::CellRangeAddress& rAddress, bool bProcessRowRange = false );
 private:
     /** Stores cell range address and formula token array of an array formula. */
-    typedef ::std::pair< css::table::CellRangeAddress, ApiTokenSequence > ArrayFormula;
-    typedef ::std::list< ArrayFormula > ArrayFormulaList;
+    typedef std::pair< css::table::CellRangeAddress, ApiTokenSequence > ArrayFormula;
+    typedef std::list< ArrayFormula > ArrayFormulaList;
 
     /** Stores cell range address and settings of a table operation. */
-    typedef ::std::pair< css::table::CellRangeAddress, DataTableModel > TableOperation;
-    typedef ::std::list< TableOperation > TableOperationList;
+    typedef std::pair< css::table::CellRangeAddress, DataTableModel > TableOperation;
+    typedef std::list< TableOperation > TableOperationList;
 
     /** Stores information about a range of rows with equal cell formatting. */
     struct XfIdRowRange
@@ -193,10 +193,10 @@ private:
         bool                tryExpand( sal_Int32 nRow, sal_Int32 nXfId );
     };
 
-    typedef ::std::pair< sal_Int32, sal_Int32 > XfIdNumFmtKey;
-    typedef ::std::map< XfIdNumFmtKey, ApiCellRangeList > XfIdRangeListMap;
+    typedef std::pair< sal_Int32, sal_Int32 > XfIdNumFmtKey;
+    typedef std::map< XfIdNumFmtKey, ApiCellRangeList > XfIdRangeListMap;
 
-    typedef ::std::pair< sal_Int32, sal_Int32 > RowRange;
+    typedef std::pair< sal_Int32, sal_Int32 > RowRange;
     struct RowRangeStyle
     {
         sal_Int32 mnStartRow;
@@ -210,8 +210,8 @@ private:
             return lhs.mnEndRow<rhs.mnStartRow;
         }
     };
-    typedef ::std::set< RowRangeStyle, StyleRowRangeComp > RowStyles;
-    typedef ::std::map< sal_Int32, RowStyles > ColStyles;
+    typedef std::set< RowRangeStyle, StyleRowRangeComp > RowStyles;
+    typedef std::map< sal_Int32, RowStyles > ColStyles;
     /** Stores information about a merged cell range. */
     struct MergedRange
     {
@@ -223,13 +223,13 @@ private:
         explicit            MergedRange( const ScAddress& rAddress, sal_Int32 nHorAlign );
         bool                tryExpand( const ScAddress& rAddress, sal_Int32 nHorAlign );
     };
-    typedef ::std::list< MergedRange > MergedRangeList;
+    typedef std::list< MergedRange > MergedRangeList;
 
     ColStyles           maStylesPerColumn;      /// Stores cell styles by column ( in row ranges )
     CellBlockBuffer     maCellBlocks;           /// Manages all open cell blocks.
     ArrayFormulaList    maArrayFormulas;        /// All array formulas in the sheet.
     TableOperationList  maTableOperations;      /// All table operations in the sheet.
-    ::std::map< BinAddress, ApiTokenSequence >
+    std::map< BinAddress, ApiTokenSequence >
                         maSharedFormulas;       /// Maps shared formula base address to defined name token index.
     ScAddress           maSharedFmlaAddr;       /// Address of a cell containing a pending shared formula.
     ScAddress           maSharedBaseAddr;       /// Base address of the pending shared formula.

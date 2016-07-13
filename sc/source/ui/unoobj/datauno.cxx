@@ -2221,7 +2221,7 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(size_t nIndex)
         return nullptr;
 
     ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin();
-    ::std::advance(itr, nIndex); // boundary check is done above.
+    std::advance(itr, nIndex); // boundary check is done above.
     return new ScDatabaseRangeObj(pDocShell, (*itr)->GetName());
 }
 

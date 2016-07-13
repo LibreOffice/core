@@ -27,7 +27,7 @@ class ScRange;
 
 class ScPrintSaverTab
 {
-    typedef ::std::vector< ScRange > ScRangeVec;
+    typedef std::vector< ScRange > ScRangeVec;
 
     ScRangeVec  maPrintRanges;      ///< Array
     ScRange*    mpRepeatCol;        ///< single

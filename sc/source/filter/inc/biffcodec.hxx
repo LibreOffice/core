@@ -128,9 +128,9 @@ private:
 private:
     ::oox::core::BinaryCodec_RCF maCodec;   /// Cipher algorithm implementation.
     css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
-    ::std::vector< sal_uInt8 > maSalt;
-    ::std::vector< sal_uInt8 > maVerifier;
-    ::std::vector< sal_uInt8 > maVerifierHash;
+    std::vector< sal_uInt8 > maSalt;
+    std::vector< sal_uInt8 > maVerifier;
+    std::vector< sal_uInt8 > maVerifierHash;
 };
 
 /** Helper for BIFF stream codecs. Holds the used codec object. */

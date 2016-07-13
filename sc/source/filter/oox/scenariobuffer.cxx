@@ -104,7 +104,7 @@ void Scenario::importInputCells( SequenceInputStream& rStrm )
 void Scenario::finalizeImport()
 {
     AddressConverter& rAddrConv = getAddressConverter();
-    ::std::vector< CellRangeAddress > aRanges;
+    std::vector< CellRangeAddress > aRanges;
     for( ScenarioCellVector::iterator aIt = maCells.begin(), aEnd = maCells.end(); aIt != aEnd; ++aIt )
         if( !aIt->mbDeleted && rAddrConv.checkCellAddress( aIt->maPos, true ) )
             aRanges.push_back( CellRangeAddress( aIt->maPos.Tab(), aIt->maPos.Col(), aIt->maPos.Row(), aIt->maPos.Col(), aIt->maPos.Row() ) );
