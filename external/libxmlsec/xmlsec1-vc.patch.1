@@ -4,14 +4,14 @@ Date: Fri, 4 Mar 2016 16:12:29 +0100
 Subject: [PATCH] xmlsec1-vc.patch
 
 ---
- win32/Makefile.msvc | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ win32/Makefile.msvc | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index 30b9dfb..51c53a7 100644
+index 978336e..a474592 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
-@@ -309,6 +309,10 @@ CFLAGS 			= $(CFLAGS) /D PACKAGE=\"$(XMLSEC_NAME)\"
+@@ -311,6 +311,10 @@ CFLAGS 			= $(CFLAGS) /D PACKAGE=\"$(XMLSEC_NAME)\"
  CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_STRING_H" /D "HAVE_CTYPE_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_MALLOC_H" /D "HAVE_MEMORY_H"
@@ -22,7 +22,7 @@ index 30b9dfb..51c53a7 100644
  
  !if "$(UNICODE)" == "1"
  CFLAGS 			= $(CFLAGS) /D "UNICODE" /D "_UNICODE"
-@@ -332,7 +332,7 @@ CFLAGS 			= $(CFLAGS) /DXMLSEC_MSCRYPTO_NT4=1
+@@ -334,7 +338,7 @@ CFLAGS 			= $(CFLAGS) /DXMLSEC_MSCRYPTO_NT4=1
  !else 
  !endif
  
@@ -31,7 +31,7 @@ index 30b9dfb..51c53a7 100644
  !if "$(WITH_DL)" == "1"
  CFLAGS			= $(CFLAGS) /D "XMLSEC_DL_WIN32"
  APP_CFLAGS		= $(APP_CFLAGS) /D "XMLSEC_CRYPTO_DYNAMIC_LOADING"
-@@ -363,7 +367,11 @@ LIBS 			=
+@@ -365,7 +369,11 @@ LIBS 			=
  !if "$(DEBUG)" == "1"
  LDFLAGS 		= $(LDFLAGS) /DEBUG
  !else
