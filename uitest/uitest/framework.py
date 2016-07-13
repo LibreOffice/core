@@ -8,7 +8,7 @@
 import unittest
 import time
 
-from uitest_helper import UITest
+from uitest.test import UITest
 
 from libreoffice.connection import PersistentConnection, OfficeConnection
 

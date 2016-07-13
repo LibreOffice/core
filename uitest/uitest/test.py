@@ -6,6 +6,7 @@
 #
 
 import time
+from uitest.config import DEFAULT_SLEEP
 
 from libreoffice.uno.eventlistener import EventListener
 
@@ -18,8 +19,6 @@ class DialogNotExecutedException(Exception):
 
 class UITest(object):
 
-    DEFAULT_SLEEP = 0.1
-
     def __init__(self, xUITest, xContext):
         self._xUITest = xUITest
         self._xContext = xContext
@@ -30,10 +29,10 @@ class UITest(object):
             time_ = 0
             while time_ < 30:
                 if event.executed:
-                    time.sleep(self.DEFAULT_SLEEP)
+                    time.sleep(DEFAULT_SLEEP)
                     return
-                time_ += self.DEFAULT_SLEEP
-                time.sleep(self.DEFAULT_SLEEP)
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
 
         raise DialogNotExecutedException(command)
 
@@ -43,10 +42,10 @@ class UITest(object):
             time_ = 0
             while time_ < 30:
                 if event.executed:
-                    time.sleep(self.DEFAULT_SLEEP)
+                    time.sleep(DEFAULT_SLEEP)
                     return
-                time_ += self.DEFAULT_SLEEP
-                time.sleep(self.DEFAULT_SLEEP)
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
 
         raise DialogNotExecutedException(command)
 
@@ -59,8 +58,8 @@ class UITest(object):
             while time_ < 30:
                 if event.executed:
                     return
-                time_ += self.DEFAULT_SLEEP
-                time.sleep(self.DEFAULT_SLEEP)
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
 
         print("failure doc in start center")
 
@@ -79,7 +78,7 @@ class UITest(object):
                 elif event.hasExecuted("OnViewClosed"):
                     return
 
-                time_ += self.DEFAULT_SLEEP
-                time.sleep(self.DEFAULT_SLEEP)
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,4 +7,6 @@
 
 use_sleep = False
 
+DEFAULT_SLEEP = 0.1
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
