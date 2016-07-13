@@ -621,7 +621,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     mpLbSizeX->SetSelectHdl( LINK( this, ExportDialog, SelectListBoxHdl ) );
 
     if (mpSbCompression)
-        mpSbCompression->SetScrollHdl(LINK(this, ExportDialog, SbCompressionUpdateHdl));
+        mpSbCompression->SetSlideHdl(LINK(this, ExportDialog, SbCompressionUpdateHdl));
     if (mpNfCompression)
         mpNfCompression->SetModifyHdl(LINK(this, ExportDialog, SelectHdl));
 
@@ -1067,7 +1067,7 @@ IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlNfResolution, Edit&, void)
     updateControls();
 }
 
-IMPL_LINK_NOARG_TYPED(ExportDialog, SbCompressionUpdateHdl, ScrollBar*, void)
+IMPL_LINK_NOARG_TYPED(ExportDialog, SbCompressionUpdateHdl, Slider*, void)
 {
     mpNfCompression->SetValue( mpSbCompression->GetThumbPos() );
     updateControls();

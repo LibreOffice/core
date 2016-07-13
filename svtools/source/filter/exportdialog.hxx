@@ -29,7 +29,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/scrbar.hxx>
+#include <vcl/slider.hxx>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -66,7 +66,7 @@ private:
     VclPtr<VclContainer>       mpJPGQuality;
     VclPtr<VclContainer>       mpPNGCompression;
 
-    VclPtr<ScrollBar>          mpSbCompression;
+    VclPtr<Slider>             mpSbCompression;
     VclPtr<NumericField>       mpNfCompression;
 
     VclPtr<VclContainer>       mpMode;
@@ -144,7 +144,7 @@ private:
                         DECL_LINK_TYPED( UpdateHdlMtfSizeX, Edit&, void );
                         DECL_LINK_TYPED( UpdateHdlMtfSizeY, Edit&, void );
                         DECL_LINK_TYPED( UpdateHdlNfResolution, Edit&, void );
-                        DECL_LINK_TYPED( SbCompressionUpdateHdl, ScrollBar*, void );
+                        DECL_LINK_TYPED( SbCompressionUpdateHdl, Slider*, void );
 
                         DECL_LINK_TYPED( OK, Button*, void );
 
