@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_8f132c5c",
+        "filename": "chart2/source/view/axes/VCoordinateSystem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-13T14:03:52Z",
+      "side": 1,
+      "message": "ah, my bad, I forgot windows is painful here. The are two ways to fix this\n(1) cast the parameters to the same type (sal_Int32 in this case)\n(2) do std::max\u003csal_Int32\u003e(a,b) to tell the MSVC compiler what to expect",
+      "parentUuid": "ba84c18e_7c5f8472",
+      "revId": "6f976d7d3c3dd5988d0f9971467857225e0d93e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_5c99e06d",
         "filename": "chart2/source/view/charttypes/AreaChart.cxx",
         "patchSetId": 1
