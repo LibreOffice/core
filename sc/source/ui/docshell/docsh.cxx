@@ -109,6 +109,8 @@
 #include "docshimp.hxx"
 #include "sizedev.hxx"
 #include "refreshtimerprotector.hxx"
+#include <orcus/orcus_import_ods.hpp>
+#include <orcusfiltersimpl.hxx>
 
 #include <officecfg/Office/Calc.hxx>
 #include <comphelper/processfactory.hxx>
@@ -574,6 +576,14 @@ bool ScDocShell::Load( SfxMedium& rMedium )
             aDocument.MakeTable(0);
             aDocument.GetStyleSheetPool()->CreateStandardStyles();
             aDocument.UpdStlShtPtrsFrmNms();
+
+            /* Create styles that are imported through Orcus */
+
+            OUString aFileName = "styles.xml";
+            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+            if (!pOrcus)
+                return false;
+            pOrcus->importODS_Styles(aDocument, aFileName);
 
             bRet = LoadXML( &rMedium, nullptr );
         }
