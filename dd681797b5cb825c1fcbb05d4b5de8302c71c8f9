@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_dc06d01f",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-13T13:48:05Z",
+      "side": 1,
+      "message": "please make this:\n\n  const basegfx::B2DPolygon\u0026 rCandidate \u003d rPolyPolygon.getB2DPolygon(a)\n\nso we don\u0027t create unnecessary temporaries",
+      "revId": "dd681797b5cb825c1fcbb05d4b5de8302c71c8f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
