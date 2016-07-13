@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba84c18e_5cb6408b",
+        "filename": "sc/source/filter/excel/excform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-13T11:39:56Z",
+      "side": 0,
+      "message": "bLink in ExtSheetBuffer::Cont is always false, which means IsLink() is always false, which means this whole if block cannot be executed",
+      "parentUuid": "ba84c18e_3c9a5c15",
+      "revId": "aa06a33946951e872b5e81d1c2bc8b7f60c861e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba84c18e_9c89a8cd",
         "filename": "sc/source/filter/excel/namebuff.cxx",
         "patchSetId": 1
