@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/EnumContext.hxx>
 
 struct ImplTabItem;
 struct ImplTabCtrlData;
@@ -59,6 +60,7 @@ private:
     bool                mbHideDisabledTabs;
     Link<TabControl*,void> maActivateHdl;
     Link<TabControl*,bool> maDeactivateHdl;
+    vcl::EnumContext::Context eLastContext;
 
     using Control::ImplInitSettings;
     SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
@@ -127,6 +129,7 @@ public:
     void                Clear();
     void                EnablePage( sal_uInt16 nPageId, bool bEnable = true );
     void                HideDisabledTabs(bool bHide = true);
+    void                SetContext( vcl::EnumContext::Context eContext );
 
     sal_uInt16          GetPagePos( sal_uInt16 nPageId ) const;
     sal_uInt16          GetPageCount() const;

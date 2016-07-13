@@ -32,6 +32,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "controldata.hxx"
 #include "svdata.hxx"
@@ -97,6 +98,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mpTabCtrlData               = new ImplTabCtrlData;
     mpTabCtrlData->mpListBox    = nullptr;
     mbHideDisabledTabs          = false;
+    eLastContext                = vcl::EnumContext::Context::Context_Any;
 
     ImplInitSettings( true, true, true );
 
@@ -399,6 +401,7 @@ bool TabControl::ImplPlaceTabs( long nWidth )
 
     size_t nIndex = 0;
     sal_uInt16 nPos = 0;
+    sal_uInt16 nHiddenWidth = 0;
 
     for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it, ++nIndex )
@@ -427,6 +430,14 @@ bool TabControl::ImplPlaceTabs( long nWidth )
         Rectangle aNewRect( Point( nX, nY ), aSize );
         if ( mbSmallInvalidate && (it->maRect != aNewRect) )
             mbSmallInvalidate = false;
+
+        // don't show empty space when tab is hidden, move next tabs to the left
+        if ( mbHideDisabledTabs && it->mpTabPage && !it->mpTabPage->HasContext(vcl::EnumContext::Context_Any) )
+        {
+            aNewRect.setX(aNewRect.getX() - nHiddenWidth);
+            nHiddenWidth += aNewRect.getWidth();
+        }
+
         it->maRect = aNewRect;
         it->mnLine = nLines;
         it->mbFullVisible = true;
@@ -1796,7 +1807,8 @@ sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
     for( size_t i = 0; i < mpTabCtrlData->maItemList.size(); ++i )
     {
         if ( const_cast<TabControl*>(this)->ImplGetTabRect( static_cast<sal_uInt16>(i) ).IsInside( rPos ) )
-            return mpTabCtrlData->maItemList[ i ].mnId;
+            if ( !mbHideDisabledTabs || mpTabCtrlData->maItemList[ i ].mbEnabled )
+                return mpTabCtrlData->maItemList[ i ].mnId;
     }
 
     return 0;
@@ -2206,6 +2218,34 @@ std::vector<sal_uInt16> TabControl::GetPageIDs() const
 FactoryFunction TabControl::GetUITestFactory() const
 {
     return TabControlUIObject::create;
+}
+
+void TabControl::SetContext( vcl::EnumContext::Context eContext )
+{
+    if (eLastContext != eContext)
+    {
+        for (int nChild = 0; nChild < GetChildCount(); ++nChild)
+        {
+            TabPage* pPage = static_cast<TabPage*>(GetChild(nChild));
+
+            if (pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Context_Any))
+                EnablePage(nChild + 1);
+            else
+                EnablePage(nChild + 1, false);
+
+            if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Context_Any)
+                SetCurPageId(nChild + 1);
+        }
+
+        eLastContext = eContext;
+    }
+}
+
+VCL_BUILDER_DECL_FACTORY(ContextTabControl)
+{
+    (void)rMap;
+    rRet = VclPtr<TabControl>::Create(pParent);
+    static_cast<TabControl*>(rRet.get())->HideDisabledTabs();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
