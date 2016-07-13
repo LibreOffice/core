@@ -972,29 +972,29 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
 // (override to provide the real implementation)
 void SwXMLTextImportHelper::RedlineAdd(
     const OUString& rType,
-    const OUString& rId,
     const OUString& rAuthor,
     const OUString& rComment,
     const util::DateTime& rDateTime,
     bool bMergeLastPara,
-    const sal_uInt32 nStartParaPos)
+    const OUString& rStartParaPos,
+    const OUString& rStartTextPos)
 {
     // create redline helper on demand
     OSL_ENSURE(nullptr != pRedlineHelper, "helper should have been created in constructor");
     if (nullptr != pRedlineHelper)
-        pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime,
-                            bMergeLastPara, nStartParaPos);
+        pRedlineHelper->Add(rType, rAuthor, rComment, rDateTime,
+                            bMergeLastPara, rStartParaPos, rStartTextPos);
 }
 
 uno::Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
     uno::Reference<XTextCursor> & rOldCursor,
-    const OUString& rId)
+    const OUString& rParaPos, const OUString& rTextPos)
 {
     uno::Reference<XTextCursor> xRet;
 
     if (nullptr != pRedlineHelper)
     {
-        xRet = pRedlineHelper->CreateRedlineTextSection(rOldCursor, rId);
+        xRet = pRedlineHelper->CreateRedlineTextSection(rOldCursor, rParaPos, rTextPos);
     }
 
     return xRet;
@@ -1010,13 +1010,14 @@ bool SwXMLTextImportHelper::CheckRedlineExists(
 }
 
 void SwXMLTextImportHelper::RedlineSetCursor(
-    const OUString& rId,
+    const OUString& rParaPos,
+    const OUString& rTextPos,
     bool bStart,
     bool bIsOutsideOfParagraph)
 {
     if (nullptr != pRedlineHelper) {
         uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
-        pRedlineHelper->SetCursor(rId, bStart, xTextRange,
+        pRedlineHelper->SetCursor(rParaPos, rTextPos, bStart, xTextRange,
                                   bIsOutsideOfParagraph);
     }
     // else: ignore redline (wasn't added before, else we'd have a helper)
@@ -1025,12 +1026,13 @@ void SwXMLTextImportHelper::RedlineSetCursor(
 void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
     bool bStart)
 {
-    OUString rId = GetOpenRedlineId();
-    if ((nullptr != pRedlineHelper) && !rId.isEmpty())
+    OUString rParaPos = GetOpenRedlineParaPos();
+    OUString rTextPos = GetOpenRedlineTextPos();
+    if ((nullptr != pRedlineHelper) && !rParaPos.isEmpty() && !rTextPos.isEmpty())
     {
         uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
-        pRedlineHelper->AdjustStartNodeCursor(rId, bStart, xTextRange );
-        ResetOpenRedlineId();
+        pRedlineHelper->AdjustStartNodeCursor(rParaPos, rTextPos, bStart, xTextRange );
+        ResetOpenRedlinePositions();
     }
     // else: ignore redline (wasn't added before, or no open redline ID
 }

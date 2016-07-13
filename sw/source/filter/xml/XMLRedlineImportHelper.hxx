@@ -36,15 +36,12 @@ namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
 } } }
 
-typedef ::std::map< OUString, RedlineInfo* > RedlineMapType;
-
 class XMLRedlineImportHelper
 {
     const OUString sInsertion;
     const OUString sDeletion;
     const OUString sFormatChange;
 
-    RedlineMapType aRedlineMap;
 
     // if true, no redlines should be inserted into document
     // (This typically happen when a document is loaded in 'insert'-mode.)
@@ -72,26 +69,28 @@ public:
     //  and end cursor has been set.)
     void Add(
         const OUString& rType,       // redline type (insert, del,... )
-        const OUString& rId,         // use to identify this redline
         const OUString& rAuthor,     // name of the author
         const OUString& rComment,    // redline comment
         const css::util::DateTime& rDateTime, // date+time
         bool bMergeLastParagraph,      // merge last paragraph?
-        const sal_uInt32 nStartParaPos); // start paragraph position
+        const OUString& rStartParaPos, // start paragraph position
+        const OUString& rStartTextPos);
 
     // create a text section for the redline, and return an
     // XText/XTextCursor that may be used to write into it.
     css::uno::Reference<css::text::XTextCursor> CreateRedlineTextSection(
             css::uno::Reference<css::text::XTextCursor> xOldCursor, // needed to get the document
-            const OUString& rId);    // ID used to RedlineAdd() call
+            const OUString& rParaPos,
+            const OUString& rTextPos);
 
     bool Check(
-        const OUString& rId);     // ID used in RedlineAdd() call
+        const OUString& rParaPos);
 
     // Set start or end position for a redline in the text body.
     // Accepts XTextRange objects.
     void SetCursor(
-        const OUString& rId,     // ID used in RedlineAdd() call
+        const OUString& rParaPos,
+        const OUString& rTextPos,
         bool bStart,                // start or end Range
         css::uno::Reference<css::text::XTextRange> & rRange, // the actual XTextRange
         // text range is (from an XML view) outside of a paragraph
@@ -107,7 +106,8 @@ public:
      * only be considered valid if it points to the next text node
      * after the position given in a previous SetCursor */
     void AdjustStartNodeCursor(
-         const OUString& rId,        // ID used in RedlineAdd() call
+         const OUString& rStartParaPos,
+         const OUString& rStartTextPos,
         bool bStart,
         // XTextRange _inside_ a table/section
         css::uno::Reference<css::text::XTextRange> & rRange);

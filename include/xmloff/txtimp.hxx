@@ -390,7 +390,6 @@ private:
     static std::shared_ptr<BackpatcherImpl> MakeBackpatcherImpl();
 
     sal_Int16            nParaIdx = 0;
-    bool                 bInsertRedline = false;
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
@@ -658,8 +657,6 @@ public:
     virtual void RedlineAdd(
             /// redline type (insert, del,... )
             const OUString& rType,
-            /// use to identify this redline
-            const OUString& rId,
             /// name of the author
             const OUString& rAuthor,
             /// redline comment
@@ -668,13 +665,16 @@ public:
             const css::util::DateTime& rDateTime,
             /// merge last paras
             bool bMergeLastParagraph,
-            const sal_uInt32 nStartParaPos);
+            /// start position
+            const OUString& rStartParaPos,
+            const OUString& rStartTextPos);
 
     virtual css::uno::Reference< css::text::XTextCursor> RedlineCreateText(
             /// needed to get the document
             css::uno::Reference< css::text::XTextCursor > & rOldCursor,
             /// ID used to RedlineAdd() call
-            const OUString& rId);
+            const OUString& rParaPos,
+            const OUString& rTextPos);
 
     virtual bool CheckRedlineExists(
         /// ID used to RedlineAdd() call
@@ -682,7 +682,8 @@ public:
 
     virtual void RedlineSetCursor(
         /// ID used to RedlineAdd() call
-        const OUString& rId,
+        const OUString& rParaPos,
+        const OUString& rTextPos,
         /// start or end Cursor
         bool bStart,
         /// range is not within <text:p>
@@ -695,11 +696,15 @@ public:
         const css::uno::Sequence<sal_Int8> & rProtectionKey );
 
     /// get the last open redline ID
-    OUString GetOpenRedlineId();
+    OUString GetOpenRedlineParaPos();
+    /// get the last open redline ID
+    OUString GetOpenRedlineTextPos();
     /// modify the last open redline ID
-    void SetOpenRedlineId( OUString const & rId);
+    void SetOpenRedlineParaPos( OUString const & rParaPos);
+    /// modify the last open redline ID
+    void SetOpenRedlineTextPos( OUString const & rTextPos);
     /// reset the last open redline ID
-    void ResetOpenRedlineId();
+    void ResetOpenRedlinePositions();
 
     /** redlining : Setter to remember the fact we are inside/outside
      * a <text:deletion> element (deleted redline section) */

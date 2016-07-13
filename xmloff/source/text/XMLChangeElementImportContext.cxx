@@ -70,7 +70,7 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
     return pContext;
 }
 
-void XMLChangeElementImportContext::StartElement( const Reference< XAttributeList >& xAttrList )
+void XMLChangeElementImportContext::StartElement( const Reference< XAttributeList >& )
 {
     if(bAcceptContent)
     {

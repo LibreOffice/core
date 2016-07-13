@@ -87,19 +87,20 @@ public:
     // (here is the real implementation)
     virtual void RedlineAdd(
         const OUString& rType,       /// redline type (insert, del,... )
-        const OUString& rId,         /// use to identify this redline
         const OUString& rAuthor,     /// name of the author
         const OUString& rComment,    /// redline comment
         const css::util::DateTime& rDateTime,  /// date+time
         bool bMergeLastPara,           /// merge last paragraph
-        const sal_uInt32 nStartParaPos) override;
+        const OUString& rStartParaPos,
+        const OUString& rStartTextPos) override;
     virtual css::uno::Reference<css::text::XTextCursor> RedlineCreateText(
             css::uno::Reference<css::text::XTextCursor> & rOldCursor, /// needed to get the document
-            const OUString& rId) override;    /// ID used to RedlineAdd() call
+            const OUString& rParPos, const OUString& rTextPos) override;    /// ID used to RedlineAdd() call
     virtual bool CheckRedlineExists(
         const OUString& rId) override;         /// ID used to RedlineAdd() call
     virtual void RedlineSetCursor(
-        const OUString& rId,         /// ID used to RedlineAdd() call
+        const OUString& rStartParaPos,
+        const OUString& rStartTextPos,
         bool bStart,                    /// start or end Cursor
         bool bIsOutsideOfParagraph) override;
     virtual void RedlineAdjustStartNodeCursor( bool bStart) override;

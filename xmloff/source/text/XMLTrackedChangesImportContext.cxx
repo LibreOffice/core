@@ -101,7 +101,7 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
     const Reference<XAttributeList> & xAttrList)
 {
     SvXMLImportContext* pContext = nullptr;
-    sal_uInt32 nStartParaPos, nEndParaPos, nStartTextPos, nEndTextPos;
+    OUString sStart, sEnd;
 
     if (XML_NAMESPACE_TEXT == nPrefix)
     {
@@ -116,7 +116,7 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
             for( sal_Int16 i = 0; i < nLength; i++ )
             {
                 OUString sLocalName;
-                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                nPrefix = GetImport().GetNamespaceMap().
                     GetKeyByAttrName( xAttrList->getNameByIndex(i), &sLocalName );
                 const OUString sValue = xAttrList->getValueByIndex(i);
                 if (XML_NAMESPACE_C == nPrefix)
@@ -124,10 +124,28 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
                     if (IsXMLToken(sLocalName, xmloff::token::XML_START))
                     {
                         sStart = sValue.pData->buffer + 1;
+                        if(sStart.indexOf('/') != -1)
+                        {
+                            sStartParaPos = OUString( sStart.getStr(), sStart.indexOf('/') );
+                            sStartTextPos = sStart.pData->buffer + sStart.indexOf('/') + 1;
+                        }
+                        else
+                        {
+                            sStartParaPos = sStart;
+                        }
                     }
                     if (IsXMLToken(sLocalName, XML_END))
                     {
-                        sEnd = sValue;
+                        sEnd = sValue.pData->buffer + 1;
+                        if(sEnd.indexOf('/') != -1)
+                        {
+                            sEndParaPos = OUString(sEnd.getStr(), sEnd.indexOf('/'));
+                            sEndTextPos = sEnd.pData->buffer + sEnd.indexOf('/') + 1;
+                        }
+                        else
+                        {
+                            sEndParaPos = sEnd;
+                        }
                     }
                 }
                 if (XML_NAMESPACE_DC == nPrefix)
@@ -138,17 +156,7 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
                     }
                 }
             }
-            if(sStart.indexOf('/') != -1)
-            {
-                sID = OUString(sStart.getStr(), sStart.indexOf('/'));
-                nStartParaPos = sID.toUInt32();
-            }
-            else
-            {
-                nStartParaPos = sStart.toUInt32();
-                sID = sStart;
-            }
-            SetChangeInfo( rLocalName, sAuthor, sComment, sDate, nStartParaPos );
+            SetChangeInfo( rLocalName, sAuthor, sComment, sDate, sStartParaPos, sStartTextPos );
 
             // create XMLChangeElementImportContext for all kinds of changes
             pContext = new XMLChangeElementImportContext(
@@ -178,13 +186,13 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
     return pContext;
 }
 
-void XMLTrackedChangesImportContext::SetChangeInfo(const OUString& rType, const OUString& rAuthor, const OUString& rComment, const OUString& rDate, const sal_uInt32 nStartParaPos)
+void XMLTrackedChangesImportContext::SetChangeInfo(const OUString& rType, const OUString& rAuthor, const OUString& rComment, const OUString& rDate, const OUString& rStartParaPos, const OUString& rStartTextPos)
 {
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime, nullptr, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(
-            rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara, nStartParaPos);
+            rType, rAuthor, rComment, aDateTime, bMergeLastPara, rStartParaPos, rStartTextPos);
     }
 }
 
@@ -199,7 +207,7 @@ void XMLTrackedChangesImportContext::UseRedlineText()
 
         // create Redline and new Cursor
         Reference<XTextCursor> xNewCursor =
-            rHelper->RedlineCreateText(xCursor, sID);
+            rHelper->RedlineCreateText(xCursor, sStartParaPos, sStartTextPos);
 
         if (xNewCursor.is())
         {

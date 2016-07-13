@@ -57,13 +57,15 @@ public:
     /// redline date
     OUString sDate;
 
-    /// redline date
-    OUString sStart;
+    /// redline start
+    OUString sStartParaPos;
+    OUString sStartTextPos;
 
-    /// redline date
-    OUString sEnd;
+    /// redline end
+    OUString sEndParaPos;
+    OUString sEndTextPos;
 
-    /// redline date
+    /// redline type
     OUString sType;
 
     /// merge-last-paragraph flag
@@ -89,7 +91,8 @@ public:
                        const OUString& rAuthor,
                        const OUString& rComment,
                        const OUString& rDate,
-                       const sal_uInt32);
+                       const OUString& rStartParaPos,
+                       const OUString& rStartTextPos);
 
     /// create redline XText/XTextCursor on demand and register with
     /// XMLTextImportHelper

@@ -68,7 +68,7 @@ void XMLChangeImportContext::StartElement(
             rtl::Reference<XMLTextImportHelper> rHelper =
                 GetImport().GetTextImport();
             OUString sID = xAttrList->getValueByIndex(nAttr);
-
+/*
             // call for bStart and bEnd (may both be true)
             if (bIsStart)
                 rHelper->RedlineSetCursor(sID, true, bIsOutsideOfParagraph);
@@ -79,7 +79,7 @@ void XMLChangeImportContext::StartElement(
             if (bIsOutsideOfParagraph)
             {
                 rHelper->SetOpenRedlineId(sID);
-            }
+            }*/
         }
         // else: ignore
     }

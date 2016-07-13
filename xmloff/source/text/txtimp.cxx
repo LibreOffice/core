@@ -536,7 +536,8 @@ struct XMLTextImportHelper::Impl
     BookmarkVector_t m_BookmarkVector;
 
     /// name of the last 'open' redline that started between paragraphs
-    OUString m_sOpenRedlineIdentifier;
+    OUString m_sOpenRedlineParaPos;
+    OUString m_sOpenRedlineTextPos;
 
     uno::Reference<text::XText> m_xText;
     uno::Reference<text::XTextCursor> m_xCursor;
@@ -2144,6 +2145,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 
     const SvXMLTokenMap& rTokenMap = GetTextElemTokenMap();
     bool bHeading = false;
+    bool bInsertRedline = false;
     bool bContent = true;
     sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
     OUString sParaIdx;
@@ -2153,6 +2155,10 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         bHeading = true;
     case XML_TOK_TEXT_P:
         sParaIdx = OUString::number(++nParaIdx);
+        if( rImport.GetTextImport()->CheckRedlineExists(sParaIdx) )
+        {
+            bInsertRedline = true;
+        }
         pContext = new XMLParaContext( rImport,
                                        nPrefix, rLocalName,
                                        xAttrList, bHeading, bInsertRedline );
@@ -2730,19 +2736,20 @@ void XMLTextImportHelper::endAppletOrPlugin(
 }
 // redline helper: dummy implementation to be overridden in sw/filter/xml
 void XMLTextImportHelper::RedlineAdd( const OUString& /*rType*/,
-                                      const OUString& /*rId*/,
                                       const OUString& /*rAuthor*/,
                                       const OUString& /*rComment*/,
                                       const util::DateTime& /*rDateTime*/,
                                       bool /*bMergeLastPara*/,
-                                      const sal_uInt32 /*nStartParaPos*/)
+                                      const OUString& /*rStartParaPos*/,
+                                      const OUString& /*rStartTextPos*/)
 {
     // dummy implementation: do nothing
 }
 
 Reference<XTextCursor> XMLTextImportHelper::RedlineCreateText(
     Reference<XTextCursor> & /*rOldCursor*/,
-    const OUString& /*rId*/)
+    const OUString& /*rParaPos*/,
+    const OUString& /*rTextPos*/)
 
 {
     // dummy implementation: do nothing
@@ -2751,13 +2758,14 @@ Reference<XTextCursor> XMLTextImportHelper::RedlineCreateText(
 }
 
 bool XMLTextImportHelper::CheckRedlineExists(
-    const OUString& rId)
+    const OUString& /*rId*/)
 {
     return true;
 }
 
 void XMLTextImportHelper::RedlineSetCursor(
-    const OUString& /*rId*/,
+    const OUString& /*rParaPos*/,
+    const OUString& /*rTextPos*/,
     bool /*bStart*/,
     bool /*bIsOutsideOfParagraph*/)
 {
@@ -2784,19 +2792,30 @@ void XMLTextImportHelper::SetChangesProtectionKey(const Sequence<sal_Int8> &)
 }
 
 
-OUString XMLTextImportHelper::GetOpenRedlineId()
+OUString XMLTextImportHelper::GetOpenRedlineParaPos()
 {
-    return m_xImpl->m_sOpenRedlineIdentifier;
+    return m_xImpl->m_sOpenRedlineParaPos;
 }
 
-void XMLTextImportHelper::SetOpenRedlineId( OUString const & rId)
+OUString XMLTextImportHelper::GetOpenRedlineTextPos()
 {
-    m_xImpl->m_sOpenRedlineIdentifier = rId;
+    return m_xImpl->m_sOpenRedlineTextPos;
 }
 
-void XMLTextImportHelper::ResetOpenRedlineId()
+void XMLTextImportHelper::SetOpenRedlineParaPos( OUString const & rParaPos)
 {
-    SetOpenRedlineId("");
+    m_xImpl->m_sOpenRedlineParaPos = rParaPos;
+}
+
+void XMLTextImportHelper::SetOpenRedlineTextPos( OUString const & rTextPos)
+{
+    m_xImpl->m_sOpenRedlineTextPos = rTextPos;
+}
+
+void XMLTextImportHelper::ResetOpenRedlinePositions()
+{
+    SetOpenRedlineParaPos("");
+    SetOpenRedlineTextPos("");
 }
 
 void

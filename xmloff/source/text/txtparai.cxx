@@ -2229,7 +2229,12 @@ void XMLParaContext::Characters( const OUString& rChars )
         GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,
                                                        nStarFontsConvFlags,
                                                        true, GetImport() );
-    GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
+    if(bInsertRedline)
+    {
+        GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
+    }
+    else
+        GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
 }
 
 

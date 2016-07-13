@@ -45,6 +45,9 @@ using ::com::sun::star::beans::XPropertySetInfo;
 // collision with tools/DateTime: use UNO DateTime as util::DateTime
 // using util::DateTime;
 
+typedef ::std::map< OUString, RedlineInfo* > RedlineMapType;
+::std::map< OUString, ::std::map< OUString, RedlineInfo* > > aRedlineMap;
+
 // a few helper functions
 static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
 {
@@ -66,6 +69,7 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
     // OSL_ENSURE( pXRange, "SwXTextRange missing" );
     return (pXRange) ? &pXRange->GetDoc() : nullptr;
 }
+
 
 // XTextRangeOrNodeIndexPosition: store a position into the text
 // *either* as an XTextRange or as an SwNodeIndex. The reason is that
@@ -246,7 +250,6 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
         sInsertion( GetXMLToken( XML_INSERTION )),
         sDeletion( GetXMLToken( XML_DELETION )),
         sFormatChange( GetXMLToken( XML_FORMAT_CHANGE )),
-        aRedlineMap(),
         bIgnoreRedlines(bNoRedlinesPlease),
         xModelPropertySet(rModel),
         xImportInfoPropertySet(rImportInfo)
@@ -287,7 +290,7 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
 }
 
 XMLRedlineImportHelper::~XMLRedlineImportHelper()
-{
+{/*
     // delete all left over (and obviously incomplete) RedlineInfos (and map)
     RedlineMapType::iterator aFind = aRedlineMap.begin();
     for( ; aRedlineMap.end() != aFind; ++aFind )
@@ -322,7 +325,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         }
         delete pInfo;
     }
-    aRedlineMap.clear();
+    aRedlineMap.clear();*/
 
     // set redline mode, either to info property set, or directly to
     // the document
@@ -370,12 +373,12 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
 
 void XMLRedlineImportHelper::Add(
     const OUString& rType,
-    const OUString& rId,
     const OUString& rAuthor,
     const OUString& rComment,
     const util::DateTime& rDateTime,
     bool bMergeLastPara,
-    const sal_uInt32 nStartParaPos)
+    const OUString& rStartParaPos,
+    const OUString& rStartTextPos)
 {
     // we need to do the following:
     // 1) parse type string
@@ -413,13 +416,12 @@ void XMLRedlineImportHelper::Add(
     pInfo->sComment = rComment;
     pInfo->aDateTime = rDateTime;
     pInfo->bMergeLastParagraph = bMergeLastPara;
-    pInfo->nStartParagraphPos = nStartParaPos;
 
     // ad 3)
-    if (aRedlineMap.end() == aRedlineMap.find(rId))
+    if (aRedlineMap.end() == aRedlineMap.find(rStartParaPos) || aRedlineMap[rStartParaPos].end() == aRedlineMap[rStartParaPos].find(rStartTextPos))
     {
         // 3a) insert into map
-        aRedlineMap[rId] = pInfo;
+        aRedlineMap[rStartParaPos][rStartTextPos] = pInfo;
     }
     else
     {
@@ -429,7 +431,7 @@ void XMLRedlineImportHelper::Add(
 
         // find last element
         RedlineInfo* pInfoChain;
-        for( pInfoChain = aRedlineMap[rId];
+        for( pInfoChain = aRedlineMap[rStartParaPos][rStartTextPos];
             nullptr != pInfoChain->pNextRedline;
             pInfoChain = pInfoChain->pNextRedline) ; // empty loop
 
@@ -440,7 +442,7 @@ void XMLRedlineImportHelper::Add(
 
 Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
     Reference<XTextCursor> xOldCursor,
-    const OUString& rId)
+    const OUString& rParaPos, const OUString& rTextPos)
 {
     Reference<XTextCursor> xReturn;
 
@@ -448,8 +450,8 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
     SolarMutexGuard aGuard;
 
     // get RedlineInfo
-    RedlineMapType::iterator aFind = aRedlineMap.find(rId);
-    if (aRedlineMap.end() != aFind)
+    RedlineMapType::iterator aFind = aRedlineMap[rParaPos].find(rTextPos);
+    if (aRedlineMap[rParaPos].end() != aFind)
     {
         // get document from old cursor (via tunnel)
         SwDoc* pDoc = lcl_GetDocViaTunnel(xOldCursor);
@@ -491,9 +493,9 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 }
 
 bool XMLRedlineImportHelper::Check(
-    const OUString& rId)
+    const OUString& rParaPos)
 {
-    RedlineMapType::iterator aFind = aRedlineMap.find(rId);
+    ::std::map<OUString, ::std::map<OUString, RedlineInfo*>>::iterator aFind = aRedlineMap.find(rParaPos);
     if (aRedlineMap.end() != aFind)
     {
         return true;
@@ -502,13 +504,14 @@ bool XMLRedlineImportHelper::Check(
 }
 
 void XMLRedlineImportHelper::SetCursor(
-    const OUString& rId,
+    const OUString& rParaPos,
+    const OUString& rTextPos,
     bool bStart,
     Reference<XTextRange> & rRange,
     bool bIsOutsideOfParagraph)
 {
-    RedlineMapType::iterator aFind = aRedlineMap.find(rId);
-    if (aRedlineMap.end() != aFind)
+    RedlineMapType::iterator aFind = aRedlineMap[rParaPos].find(rTextPos);
+    if (aRedlineMap[rParaPos].end() != aFind)
     {
         // RedlineInfo found; now set Cursor
         RedlineInfo* pInfo = aFind->second;
@@ -542,7 +545,7 @@ void XMLRedlineImportHelper::SetCursor(
         if (IsReady(pInfo))
         {
             InsertIntoDocument(pInfo);
-            aRedlineMap.erase(rId);
+            aRedlineMap[rParaPos].erase(rTextPos);
             delete pInfo;
         }
     }
@@ -550,7 +553,8 @@ void XMLRedlineImportHelper::SetCursor(
 }
 
 void XMLRedlineImportHelper::AdjustStartNodeCursor(
-    const OUString& rId,        /// ID used in RedlineAdd() call
+    const OUString& rStartParaPos,
+    const OUString& rStartTextPos,
     bool /*bStart*/,
     Reference<XTextRange> & /*rRange*/)
 {
@@ -560,8 +564,8 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
     // start + end nodes are treated the same. For either it's
     // necessary that the target node already exists.
 
-    RedlineMapType::iterator aFind = aRedlineMap.find(rId);
-    if (aRedlineMap.end() != aFind)
+    RedlineMapType::iterator aFind = aRedlineMap[rStartParaPos].find(rStartTextPos);
+    if (aRedlineMap[rStartParaPos].end() != aFind)
     {
         // RedlineInfo found; now set Cursor
         RedlineInfo* pInfo = aFind->second;
@@ -572,7 +576,7 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
         if( IsReady(pInfo) )
         {
             InsertIntoDocument(pInfo);
-            aRedlineMap.erase(rId);
+            aRedlineMap[rStartParaPos].erase(rStartTextPos);
             delete pInfo;
         }
     }
