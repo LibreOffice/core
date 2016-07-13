@@ -932,6 +932,11 @@ globalCallback (gpointer pData)
         g_signal_emit (pCallback->m_pDocView, doc_view_signals[PASSWORD_REQUIRED], 0, pURL, bModify);
     }
     break;
+    case LOK_CALLBACK_ERROR:
+    {
+        reportError(pCallback->m_pDocView, pCallback->m_aPayload);
+    }
+    break;
     default:
         g_assert(false);
         break;
