@@ -1189,6 +1189,8 @@ void ListBox::EnableMultiSelection( bool bMulti, bool bStackSelection )
 
 bool ListBox::IsMultiSelectionEnabled() const
 {
+    if (!mpImplLB)
+        return false;
     return mpImplLB->IsMultiSelectionEnabled();
 }
 
