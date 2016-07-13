@@ -88,7 +88,7 @@ namespace toolkit
     struct AnimatedImagesPeer_Data
     {
         AnimatedImagesPeer&                             rAntiImpl;
-        ::std::vector< ::std::vector< CachedImage > >   aCachedImageSets;
+        std::vector< std::vector< CachedImage > >       aCachedImageSets;
 
         explicit AnimatedImagesPeer_Data( AnimatedImagesPeer& i_antiImpl )
             :rAntiImpl( i_antiImpl )
@@ -164,7 +164,7 @@ namespace toolkit
         }
 
 
-        void lcl_init( Sequence< OUString > const& i_imageURLs, ::std::vector< CachedImage >& o_images )
+        void lcl_init( Sequence< OUString > const& i_imageURLs, std::vector< CachedImage >& o_images )
         {
             o_images.resize(0);
             size_t count = size_t( i_imageURLs.getLength() );
@@ -198,10 +198,10 @@ namespace toolkit
                 }
                 else
                 {
-                    ::std::vector< Size > aImageSizes( nImageSetCount );
+                    std::vector< Size > aImageSizes( nImageSetCount );
                     for ( size_t nImageSet = 0; nImageSet < nImageSetCount; ++nImageSet )
                     {
-                        ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
+                        std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
                         if  (   ( rImageSet.empty() )
                             ||  ( !lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rImageSet[0] ) )
                             )
@@ -216,8 +216,8 @@ namespace toolkit
 
                     // find the set with the smallest difference between window size and image size
                     const ::Size aWindowSizePixel = pThrobber->GetSizePixel();
-                    long nMinimalDistance = ::std::numeric_limits< long >::max();
-                    for (   ::std::vector< Size >::const_iterator check = aImageSizes.begin();
+                    long nMinimalDistance = std::numeric_limits< long >::max();
+                    for (   std::vector< Size >::const_iterator check = aImageSizes.begin();
                             check != aImageSizes.end();
                             ++check
                         )
@@ -244,10 +244,10 @@ namespace toolkit
                 if ( ( nPreferredSet >= 0 ) && ( size_t( nPreferredSet ) < nImageSetCount ) )
                 {
                     // => set the images
-                    ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );
+                    std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );
                     aImages.resize( rImageSet.size() );
                     sal_Int32 imageIndex = 0;
-                    for (   ::std::vector< CachedImage >::const_iterator cachedImage = rImageSet.begin();
+                    for (   std::vector< CachedImage >::const_iterator cachedImage = rImageSet.begin();
                             cachedImage != rImageSet.end();
                             ++cachedImage, ++imageIndex
                         )
@@ -274,7 +274,7 @@ namespace toolkit
                 for ( sal_Int32 set = 0;  set < nImageSetCount; ++set )
                 {
                     const Sequence< OUString > aImageURLs( i_images->getImageSet( set ) );
-                    ::std::vector< CachedImage > aImages;
+                    std::vector< CachedImage > aImages;
                     lcl_init( aImageURLs, aImages );
                     i_data.aCachedImageSets.push_back( aImages );
                 }
@@ -448,7 +448,7 @@ namespace toolkit
 
         Sequence< OUString > aImageURLs;
         OSL_VERIFY( i_event.Element >>= aImageURLs );
-        ::std::vector< CachedImage > aImages;
+        std::vector< CachedImage > aImages;
         lcl_init( aImageURLs, aImages );
         m_xData->aCachedImageSets.insert( m_xData->aCachedImageSets.begin() + position, aImages );
         lcl_updateImageList_nothrow( *m_xData );
@@ -490,7 +490,7 @@ namespace toolkit
 
         Sequence< OUString > aImageURLs;
         OSL_VERIFY( i_event.Element >>= aImageURLs );
-        ::std::vector< CachedImage > aImages;
+        std::vector< CachedImage > aImages;
         lcl_init( aImageURLs, aImages );
         m_xData->aCachedImageSets[ position ] = aImages;
         lcl_updateImageList_nothrow( *m_xData );

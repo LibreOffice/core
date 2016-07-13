@@ -116,7 +116,7 @@ namespace pcr
             DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
         long nActTextWindowHeight = impl_getHelpTextBorderHeight() + aTextRect.GetHeight();
 
-        long nOptTextWindowHeight = ::std::max( nMinTextWindowHeight, ::std::min( nMaxTextWindowHeight, nActTextWindowHeight ) );
+        long nOptTextWindowHeight = std::max( nMinTextWindowHeight, std::min( nMaxTextWindowHeight, nActTextWindowHeight ) );
 
         // --- then add the space above the text window
         return nOptTextWindowHeight + impl_getSpaceAboveTextWindow();

@@ -157,7 +157,7 @@ namespace XPath
                 // we could already have this prefix from a child node
                 if (rNamespaces.find(aPrefix) == rNamespaces.end())
                 {
-                    rNamespaces.insert(::std::make_pair(aPrefix, aURI));
+                    rNamespaces.insert(std::make_pair(aPrefix, aURI));
                 }
                 curDef = curDef->next;
             }

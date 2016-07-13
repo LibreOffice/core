@@ -57,7 +57,7 @@ private:
     VCLExternalSolarLock*   m_pExternalLock;
 
 protected:
-    typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
+    typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
     AccessibleChildren      m_aAccessibleChildren;
     VclPtr<Menu>            m_pMenu;

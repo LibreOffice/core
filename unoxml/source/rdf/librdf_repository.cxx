@@ -435,7 +435,7 @@ private:
     librdf_TypeConverter m_TypeConverter;
 
     /// set of xml:ids of elements with xhtml:content
-    ::std::set< OUString > m_RDFaXHTMLContentSet;
+    std::set< OUString > m_RDFaXHTMLContentSet;
 };
 
 
@@ -1240,7 +1240,7 @@ librdf_Repository::getGraphNames()
 throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
-    ::std::vector< uno::Reference<rdf::XURI> > ret;
+    std::vector< uno::Reference<rdf::XURI> > ret;
     std::transform(m_NamedGraphs.begin(), m_NamedGraphs.end(),
         std::back_inserter(ret),
         [](std::pair<OUString, ::rtl::Reference<librdf_NamedGraph>> const& it)
@@ -1571,10 +1571,10 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         librdf_TypeConverter::extractResource_NoLock(i_xSubject));
     std::shared_ptr<librdf_TypeConverter::Node> const pContent(
         librdf_TypeConverter::extractNode_NoLock(xContent));
-    ::std::vector< std::shared_ptr<librdf_TypeConverter::Resource> >
+    std::vector< std::shared_ptr<librdf_TypeConverter::Resource> >
         predicates;
-    ::std::transform(i_rPredicates.begin(), i_rPredicates.end(),
-        ::std::back_inserter(predicates),
+    std::transform(i_rPredicates.begin(), i_rPredicates.end(),
+        std::back_inserter(predicates),
         [](uno::Reference<rdf::XURI> const& xURI)
             { return librdf_TypeConverter::extractResource_NoLock(xURI); });
 
@@ -1589,7 +1589,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
     try
     {
-        for (::std::vector< std::shared_ptr<librdf_TypeConverter::Resource> >
+        for (std::vector< std::shared_ptr<librdf_TypeConverter::Resource> >
                 ::iterator iter = predicates.begin(); iter != predicates.end();
              ++iter)
         {
@@ -1654,7 +1654,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "cannot create URI for XML ID", *this, uno::makeAny(iae));
     }
 
-    ::std::vector< rdf::Statement > ret;
+    std::vector< rdf::Statement > ret;
     try
     {
         const uno::Reference<container::XEnumeration> xIter(

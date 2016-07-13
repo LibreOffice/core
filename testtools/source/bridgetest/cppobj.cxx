@@ -674,7 +674,7 @@ void dothrow(const RuntimeException& e)
     // in case of a thrown non-UNO exception:
     try
     {
-        throw ::std::bad_alloc();
+        throw std::bad_alloc();
     }
     catch (...)
     {

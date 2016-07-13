@@ -38,8 +38,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 
-using ::std::vector;
-using ::std::find;
+using std::vector;
+using std::find;
 
 namespace unocontrols{
 
@@ -826,7 +826,7 @@ void ProgressMonitor::impl_cleanMemory ()
 IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, bool bbeforeProgress )
 {
     // Get right textlist for following operations.
-    ::std::vector< IMPL_TextlistItem* >* pTextList;
+    std::vector< IMPL_TextlistItem* >* pTextList;
 
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex );

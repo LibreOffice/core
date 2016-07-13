@@ -37,7 +37,7 @@ namespace utl
     namespace
     {
 
-        typedef ::std::list< ITerminationListener* > Listeners;
+        typedef std::list< ITerminationListener* > Listeners;
 
         struct ListenerAdminData
         {

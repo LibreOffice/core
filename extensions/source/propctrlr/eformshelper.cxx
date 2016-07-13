@@ -242,7 +242,7 @@ namespace pcr
     {
         if ( !_bDoListen )
         {
-            ::std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > pListenerIterator = m_aPropertyListeners.createIterator();
+            std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > pListenerIterator = m_aPropertyListeners.createIterator();
             while ( pListenerIterator->hasMoreElements() )
             {
                 PropertyEventTranslation* pTranslator = dynamic_cast< PropertyEventTranslation* >( pListenerIterator->next() );
@@ -276,7 +276,7 @@ namespace pcr
             }
             else
             {
-                ::std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > pListenerIterator = m_aPropertyListeners.createIterator();
+                std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > pListenerIterator = m_aPropertyListeners.createIterator();
                 while ( pListenerIterator->hasMoreElements() )
                 {
                     Reference< XPropertyChangeListener > xListener( pListenerIterator->next(), UNO_QUERY );
@@ -293,7 +293,7 @@ namespace pcr
     }
 
 
-    void EFormsHelper::getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const
+    void EFormsHelper::getFormModelNames( std::vector< OUString >& /* [out] */ _rModelNames ) const
     {
         if ( m_xDocument.is() )
         {
@@ -307,7 +307,7 @@ namespace pcr
                 {
                     Sequence< OUString > aModelNames = xForms->getElementNames();
                     _rModelNames.resize( aModelNames.getLength() );
-                    ::std::copy( aModelNames.begin(), aModelNames.end(), _rModelNames.begin() );
+                    std::copy( aModelNames.begin(), aModelNames.end(), _rModelNames.begin() );
                 }
             }
             catch( const Exception& )
@@ -318,7 +318,7 @@ namespace pcr
     }
 
 
-    void EFormsHelper::getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const
+    void EFormsHelper::getBindingNames( const OUString& _rModelName, std::vector< OUString >& /* [out] */ _rBindingNames ) const
     {
         _rBindingNames.resize( 0 );
         try
@@ -332,7 +332,7 @@ namespace pcr
                 {
                     Sequence< OUString > aNames = xBindings->getElementNames();
                     _rBindingNames.resize( aNames.getLength() );
-                    ::std::copy( aNames.begin(), aNames.end(), _rBindingNames.begin() );
+                    std::copy( aNames.begin(), aNames.end(), _rBindingNames.begin() );
                 }
             }
         }
@@ -482,7 +482,7 @@ namespace pcr
             m_xBindableControl->setValueBinding( xBinding );
             impl_toggleBindingPropertyListening_throw( true, nullptr );
 
-            ::std::set< OUString > aSet;
+            std::set< OUString > aSet;
             firePropertyChanges( xOldBinding, _rxBinding, aSet );
         }
         catch( const Exception& )
@@ -510,7 +510,7 @@ namespace pcr
             // determine the model which the binding should belong to
             if ( sTargetModel.isEmpty() )
             {
-                ::std::vector< OUString > aModelNames;
+                std::vector< OUString > aModelNames;
                 getFormModelNames( aModelNames );
                 if ( !aModelNames.empty() )
                     sTargetModel = *aModelNames.begin();
@@ -570,7 +570,7 @@ namespace pcr
     namespace
     {
 
-        struct PropertyBagInserter : public ::std::unary_function< Property, void >
+        struct PropertyBagInserter : public std::unary_function< Property, void >
         {
         private:
             PropertyBag& m_rProperties;
@@ -593,7 +593,7 @@ namespace pcr
             if ( xInfo.is() )
             {
                 Sequence< Property > aProperties = xInfo->getProperties();
-                ::std::for_each( aProperties.getConstArray(), aProperties.getConstArray() + aProperties.getLength(),
+                std::for_each( aProperties.getConstArray(), aProperties.getConstArray() + aProperties.getLength(),
                     PropertyBagInserter( _rBag )
                 );
             }
@@ -638,7 +638,7 @@ namespace pcr
     }
 
 
-    void EFormsHelper::getAllElementUINames( const ModelElementType _eType, ::std::vector< OUString >& /* [out] */ _rElementNames, bool _bPrepentEmptyEntry )
+    void EFormsHelper::getAllElementUINames( const ModelElementType _eType, std::vector< OUString >& /* [out] */ _rElementNames, bool _bPrepentEmptyEntry )
     {
         MapStringToPropertySet& rMapUINameToElement( ( _eType == Submission ) ? m_aSubmissionUINames : m_aBindingUINames );
         rMapUINameToElement.clear();
@@ -650,12 +650,12 @@ namespace pcr
         try
         {
             // obtain the model names
-            ::std::vector< OUString > aModels;
+            std::vector< OUString > aModels;
             getFormModelNames( aModels );
             _rElementNames.reserve( aModels.size() * 2 );    // heuristics
 
             // for every model, obtain the element
-            for ( ::std::vector< OUString >::const_iterator pModelName = aModels.begin();
+            for ( std::vector< OUString >::const_iterator pModelName = aModels.begin();
                   pModelName != aModels.end();
                   ++pModelName
                 )
@@ -700,7 +700,7 @@ namespace pcr
         }
 
         _rElementNames.resize( rMapUINameToElement.size() );
-        ::std::transform( rMapUINameToElement.begin(), rMapUINameToElement.end(), _rElementNames.begin(),
+        std::transform( rMapUINameToElement.begin(), rMapUINameToElement.end(), _rElementNames.begin(),
                 ::o3tl::select1st< MapStringToPropertySet::value_type >() );
     }
 
@@ -731,7 +731,7 @@ namespace pcr
     }
 
 
-    void EFormsHelper::firePropertyChanges( const Reference< XPropertySet >& _rxOldProps, const Reference< XPropertySet >& _rxNewProps, ::std::set< OUString >& _rFilter ) const
+    void EFormsHelper::firePropertyChanges( const Reference< XPropertySet >& _rxOldProps, const Reference< XPropertySet >& _rxNewProps, std::set< OUString >& _rFilter ) const
     {
         if ( m_aPropertyListeners.empty() )
             return;

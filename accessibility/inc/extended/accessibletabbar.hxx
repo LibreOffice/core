@@ -47,7 +47,7 @@ namespace accessibility
                                 public AccessibleTabBar_BASE
     {
     private:
-        typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
+        typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
         AccessibleChildren      m_aAccessibleChildren;
 

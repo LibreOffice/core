@@ -151,7 +151,7 @@ namespace utl
     //= functors on NodeValueAccessor instances
 
     /// base class for functors synchronizing between exchange locations and config sub nodes
-    struct SubNodeAccess : public ::std::unary_function< NodeValueAccessor, void >
+    struct SubNodeAccess : public std::unary_function< NodeValueAccessor, void >
     {
     protected:
         const OConfigurationNode&   m_rRootNode;
@@ -299,7 +299,7 @@ namespace utl
             "OConfigurationValueContainer::implRegisterExchangeLocation: invalid relative path!" );
 
         // another check (should be the first container for this node)
-        SAL_WARN_IF(!(m_pImpl->aAccessors.end() == ::std::find(
+        SAL_WARN_IF(!(m_pImpl->aAccessors.end() == std::find(
             m_pImpl->aAccessors.begin(),
             m_pImpl->aAccessors.end(),
             _rAccessor)),

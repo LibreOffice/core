@@ -36,7 +36,7 @@ using namespace ::com::sun::star::ucb;
 namespace utl
 {
 
-typedef ::std::vector< OUString* > StringList_Impl;
+typedef std::vector< OUString* > StringList_Impl;
 
 css::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, bool bFolder )
 {

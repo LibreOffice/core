@@ -232,8 +232,8 @@ namespace pcr
         for ( sal_uInt16 d = 0; d < nDigits; ++d )
             n *= 10;
 
-        if ( n > ::std::numeric_limits< long >::max() )
-            return ::std::numeric_limits< long >::max();
+        if ( n > std::numeric_limits< long >::max() )
+            return std::numeric_limits< long >::max();
         return (long)n;
     }
 
@@ -503,7 +503,7 @@ namespace pcr
         Optional< double > aReturn( true, 0 );
 
         sal_Int64 minValue = getTypedControlWindow()->GetMin();
-        if ( minValue == ::std::numeric_limits< sal_Int64 >::min() )
+        if ( minValue == std::numeric_limits< sal_Int64 >::min() )
             aReturn.IsPresent = false;
         else
             aReturn.Value = (double)minValue;
@@ -515,7 +515,7 @@ namespace pcr
     void SAL_CALL ONumericControl::setMinValue( const Optional< double >& _minvalue ) throw (RuntimeException, std::exception)
     {
         if ( !_minvalue.IsPresent )
-            getTypedControlWindow()->SetMin( ::std::numeric_limits< sal_Int64 >::min() );
+            getTypedControlWindow()->SetMin( std::numeric_limits< sal_Int64 >::min() );
         else
             getTypedControlWindow()->SetMin( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) , m_eValueUnit);
     }
@@ -526,7 +526,7 @@ namespace pcr
         Optional< double > aReturn( true, 0 );
 
         sal_Int64 maxValue = getTypedControlWindow()->GetMax();
-        if ( maxValue == ::std::numeric_limits< sal_Int64 >::max() )
+        if ( maxValue == std::numeric_limits< sal_Int64 >::max() )
             aReturn.IsPresent = false;
         else
             aReturn.Value = (double)maxValue;
@@ -538,7 +538,7 @@ namespace pcr
     void SAL_CALL ONumericControl::setMaxValue( const Optional< double >& _maxvalue ) throw (RuntimeException, std::exception)
     {
         if ( !_maxvalue.IsPresent )
-            getTypedControlWindow()->SetMax( ::std::numeric_limits< sal_Int64 >::max() );
+            getTypedControlWindow()->SetMax( std::numeric_limits< sal_Int64 >::max() );
         else
             getTypedControlWindow()->SetMax( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ), m_eValueUnit );
     }

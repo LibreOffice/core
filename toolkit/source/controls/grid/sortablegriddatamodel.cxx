@@ -193,8 +193,8 @@ private:
     css::uno::Reference< css::i18n::XCollator >                   m_collator;
     ::sal_Int32                                                   m_currentSortColumn;
     bool                                                    m_sortAscending;
-    ::std::vector< ::sal_Int32 >                                  m_publicToPrivateRowIndex;
-    ::std::vector< ::sal_Int32 >                                  m_privateToPublicRowIndex;
+    std::vector< ::sal_Int32 >                                    m_publicToPrivateRowIndex;
+    std::vector< ::sal_Int32 >                                    m_privateToPublicRowIndex;
 };
 
     namespace
@@ -372,9 +372,9 @@ private:
 
     namespace
     {
-        void lcl_decrementValuesGreaterThan( ::std::vector< ::sal_Int32 > & io_indexMap, sal_Int32 const i_threshold )
+        void lcl_decrementValuesGreaterThan( std::vector< ::sal_Int32 > & io_indexMap, sal_Int32 const i_threshold )
         {
-            for (   ::std::vector< ::sal_Int32 >::iterator loop = io_indexMap.begin();
+            for (   std::vector< ::sal_Int32 >::iterator loop = io_indexMap.begin();
                     loop != io_indexMap.end();
                     ++loop
                 )
@@ -497,11 +497,11 @@ private:
 
     namespace
     {
-        class CellDataLessComparison : public ::std::binary_function< sal_Int32, sal_Int32, bool >
+        class CellDataLessComparison : public std::binary_function< sal_Int32, sal_Int32, bool >
         {
         public:
             CellDataLessComparison(
-                ::std::vector< Any > const & i_data,
+                std::vector< Any > const & i_data,
                 ::comphelper::IKeyPredicateLess& i_predicate,
                 bool const i_sortAscending
             )
@@ -529,7 +529,7 @@ private:
             }
 
         private:
-            ::std::vector< Any > const &            m_data;
+            std::vector< Any > const &              m_data;
             ::comphelper::IKeyPredicateLess const & m_predicate;
             bool const                          m_sortAscending;
         };
@@ -539,12 +539,12 @@ private:
     bool SortableGridDataModel::impl_reIndex_nothrow( ::sal_Int32 const i_columnIndex, bool const i_sortAscending )
     {
         ::sal_Int32 const rowCount( getRowCount() );
-        ::std::vector< ::sal_Int32 > aPublicToPrivate( rowCount );
+        std::vector< ::sal_Int32 > aPublicToPrivate( rowCount );
 
         try
         {
             // build an unsorted translation table, and retrieve the unsorted data
-            ::std::vector< Any > aColumnData( rowCount );
+            std::vector< Any > aColumnData( rowCount );
             Type dataType;
             for ( ::sal_Int32 rowIndex = 0; rowIndex < rowCount; ++rowIndex )
             {
@@ -557,12 +557,12 @@ private:
             }
 
             // get predicate object
-            ::std::unique_ptr< ::comphelper::IKeyPredicateLess > const pPredicate( ::comphelper::getStandardLessPredicate( dataType, m_collator ) );
+            std::unique_ptr< ::comphelper::IKeyPredicateLess > const pPredicate( ::comphelper::getStandardLessPredicate( dataType, m_collator ) );
             ENSURE_OR_RETURN_FALSE( pPredicate.get(), "SortableGridDataModel::impl_reIndex_nothrow: no sortable data found!" );
 
             // then sort
             CellDataLessComparison const aComparator( aColumnData, *pPredicate, i_sortAscending );
-            ::std::sort( aPublicToPrivate.begin(), aPublicToPrivate.end(), aComparator );
+            std::sort( aPublicToPrivate.begin(), aPublicToPrivate.end(), aComparator );
         }
         catch( const Exception& )
         {
@@ -571,7 +571,7 @@ private:
         }
 
         // also build the "private to public" mapping
-        ::std::vector< sal_Int32 > aPrivateToPublic( aPublicToPrivate.size() );
+        std::vector< sal_Int32 > aPrivateToPublic( aPublicToPrivate.size() );
         for ( size_t i=0; i<aPublicToPrivate.size(); ++i )
             aPrivateToPublic[ aPublicToPrivate[i] ] = i;
 

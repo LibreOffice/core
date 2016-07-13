@@ -103,7 +103,7 @@ void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
         pLocaleData->setDateAcceptancePatterns( uno::Sequence<OUString>());     // reset
     else
     {
-        ::std::vector< OUString > aVec;
+        std::vector< OUString > aVec;
         for (sal_Int32 nIndex = 0; nIndex >= 0; /*nop*/)
         {
             OUString aTok( aStr.getToken( 0, ';', nIndex));

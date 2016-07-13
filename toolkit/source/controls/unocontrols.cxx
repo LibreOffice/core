@@ -347,7 +347,7 @@ namespace
     void lcl_normalize( awt::Selection& _rSel )
     {
         if ( _rSel.Min > _rSel.Max )
-            ::std::swap( _rSel.Min, _rSel.Max );
+            std::swap( _rSel.Min, _rSel.Max );
     }
 }
 
@@ -367,7 +367,7 @@ void UnoEditControl::insertText( const awt::Selection& rSel, const OUString& rNe
     if ( aNewSelection.Max > aSelection.Max )
         aNewSelection.Max -= nDeletedCharacters;
 #else
-    aNewSelection.Max = ::std::min( aNewSelection.Min, aNewSelection.Max ) + rNewText.getLength();
+    aNewSelection.Max = std::min( aNewSelection.Min, aNewSelection.Max ) + rNewText.getLength();
     aNewSelection.Min = aNewSelection.Max;
 #endif
 
@@ -2096,7 +2096,7 @@ struct ListItem
 
 typedef beans::Pair< OUString, OUString > UnoListItem;
 
-struct StripItemData : public ::std::unary_function< ListItem, UnoListItem >
+struct StripItemData : public std::unary_function< ListItem, UnoListItem >
 {
     UnoListItem operator()( const ListItem& i_rItem )
     {
@@ -2137,7 +2137,7 @@ struct UnoControlListBoxModel_Data
     Sequence< UnoListItem > getAllItems() const
     {
         Sequence< UnoListItem > aItems( sal_Int32( m_aListItems.size() ) );
-        ::std::transform( m_aListItems.begin(), m_aListItems.end(), aItems.getArray(), StripItemData() );
+        std::transform( m_aListItems.begin(), m_aListItems.end(), aItems.getArray(), StripItemData() );
         return aItems;
     }
 
@@ -2146,7 +2146,7 @@ struct UnoControlListBoxModel_Data
         m_aListItems = i_copySource.m_aListItems;
     }
 
-    void    setAllItems( const ::std::vector< ListItem >& i_rItems )
+    void    setAllItems( const std::vector< ListItem >& i_rItems )
     {
         m_aListItems = i_rItems;
     }
@@ -2160,7 +2160,7 @@ struct UnoControlListBoxModel_Data
 
     void removeAllItems()
     {
-        ::std::vector< ListItem > aEmpty;
+        std::vector< ListItem > aEmpty;
         m_aListItems.swap( aEmpty );
     }
 
@@ -2169,7 +2169,7 @@ public:
 
 private:
     UnoControlListBoxModel&     m_rAntiImpl;
-    ::std::vector< ListItem >   m_aListItems;
+    std::vector< ListItem >     m_aListItems;
 };
 
 
@@ -2252,7 +2252,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlListBoxModel::getPropertySet
 
 namespace
 {
-    struct CreateListItem : public ::std::unary_function< OUString, ListItem >
+    struct CreateListItem : public std::unary_function< OUString, ListItem >
     {
         ListItem operator()( const OUString& i_rItemText )
         {
@@ -2280,8 +2280,8 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
             getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
             OSL_VERIFY( aPropValue >>= aStringItemList );
 
-            ::std::vector< ListItem > aItems( aStringItemList.getLength() );
-            ::std::transform(
+            std::vector< ListItem > aItems( aStringItemList.getLength() );
+            std::transform(
                 aStringItemList.getConstArray(),
                 aStringItemList.getConstArray() + aStringItemList.getLength(),
                 aItems.begin(),
@@ -2477,7 +2477,7 @@ void SAL_CALL UnoControlListBoxModel::removeItemListListener( const uno::Referen
 }
 
 
-void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& o_rStringItems ) const
+void UnoControlListBoxModel::impl_getStringItemList( std::vector< OUString >& o_rStringItems ) const
 {
     Sequence< OUString > aStringItemList;
     Any aPropValue;
@@ -2485,7 +2485,7 @@ void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& 
     OSL_VERIFY( aPropValue >>= aStringItemList );
 
     o_rStringItems.resize( size_t( aStringItemList.getLength() ) );
-    ::std::copy(
+    std::copy(
         aStringItemList.getConstArray(),
         aStringItemList.getConstArray() + aStringItemList.getLength(),
         o_rStringItems.begin()
@@ -2493,7 +2493,7 @@ void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& 
 }
 
 
-void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< OUString >& i_rStringItems )
+void UnoControlListBoxModel::impl_setStringItemList_nolck( const std::vector< OUString >& i_rStringItems )
 {
     Sequence< OUString > aStringItems( comphelper::containerToSequence(i_rStringItems) );
     m_xData->m_bSettingLegacyProperty = true;
@@ -2515,7 +2515,7 @@ void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition,
 {
     // SYNCHRONIZED ----->
     // sync with legacy StringItemList property
-    ::std::vector< OUString > aStringItems;
+    std::vector< OUString > aStringItems;
     impl_getStringItemList( aStringItems );
     OSL_ENSURE( size_t( i_nItemPosition ) <= aStringItems.size(), "UnoControlListBoxModel::impl_handleInsert" );
     if ( size_t( i_nItemPosition ) <= aStringItems.size() )
@@ -2538,7 +2538,7 @@ void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition,
     // SYNCHRONIZED ----->
     const bool bAllItems = ( i_nItemPosition < 0 );
     // sync with legacy StringItemList property
-    ::std::vector< OUString > aStringItems;
+    std::vector< OUString > aStringItems;
     impl_getStringItemList( aStringItems );
     if ( !bAllItems )
     {
@@ -2578,7 +2578,7 @@ void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition,
     if ( !!i_rItemText )
     {
         // sync with legacy StringItemList property
-        ::std::vector< OUString > aStringItems;
+        std::vector< OUString > aStringItems;
         impl_getStringItemList( aStringItems );
         OSL_ENSURE( size_t( i_nItemPosition ) < aStringItems.size(), "UnoControlListBoxModel::impl_handleModify" );
         if ( size_t( i_nItemPosition ) < aStringItems.size() )
@@ -3125,8 +3125,8 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
         getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
         OSL_VERIFY( aPropValue >>= aStringItemList );
 
-        ::std::vector< ListItem > aItems( aStringItemList.getLength() );
-        ::std::transform(
+        std::vector< ListItem > aItems( aStringItemList.getLength() );
+        std::transform(
             aStringItemList.getConstArray(),
             aStringItemList.getConstArray() + aStringItemList.getLength(),
             aItems.begin(),

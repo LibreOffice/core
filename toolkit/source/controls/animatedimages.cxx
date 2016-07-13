@@ -209,7 +209,7 @@ namespace toolkit {
 
     struct AnimatedImagesControlModel_Data
     {
-        ::std::vector< Sequence< OUString > >    aImageSets;
+        std::vector< Sequence< OUString > >      aImageSets;
     };
 
     namespace
@@ -469,7 +469,7 @@ namespace toolkit {
         lcl_checkIndex( *m_xData, i_index, *this );
 
         // actual removal
-        ::std::vector< Sequence< OUString > >::iterator removalPos = m_xData->aImageSets.begin() + i_index;
+        std::vector< Sequence< OUString > >::iterator removalPos = m_xData->aImageSets.begin() + i_index;
         Sequence< OUString > aRemovedElement( *removalPos );
         m_xData->aImageSets.erase( removalPos );
 

@@ -540,7 +540,7 @@ namespace pcr
         if ( !m_xAssociatedShape.is() )
             return Sequence< Property >();
 
-        ::std::vector< Property > aProperties;
+        std::vector< Property > aProperties;
 
         addInt32PropertyDescription( aProperties, PROPERTY_POSITIONX );
         addInt32PropertyDescription( aProperties, PROPERTY_POSITIONY );
@@ -720,7 +720,7 @@ namespace pcr
     {
         ::comphelper::ComponentMethodGuard aGuard( *this );
 
-        ::std::vector< EventTranslation > aEventTranslations;
+        std::vector< EventTranslation > aEventTranslations;
         aEventTranslations.reserve(2);
 
         if ( _event.PropertyName == "Position" )
@@ -748,7 +748,7 @@ namespace pcr
         aTranslatedEvent.Source = m_rParent;
 
         aGuard.clear();
-        for ( ::std::vector< EventTranslation >::const_iterator t = aEventTranslations.begin();
+        for ( std::vector< EventTranslation >::const_iterator t = aEventTranslations.begin();
               t != aEventTranslations.end();
               ++t
             )

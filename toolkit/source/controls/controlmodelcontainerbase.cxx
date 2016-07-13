@@ -103,7 +103,7 @@ namespace
 
 
 // functor for disposing a control model
-struct DisposeControlModel : public ::std::unary_function< Reference< XControlModel >, void >
+struct DisposeControlModel : public std::unary_function< Reference< XControlModel >, void >
 {
     void operator()( Reference< XControlModel >& _rxModel )
     {
@@ -120,7 +120,7 @@ struct DisposeControlModel : public ::std::unary_function< Reference< XControlMo
 
 
 // functor for searching control model by name
-struct FindControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
+struct FindControlModel : public std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
 {
 private:
     const OUString& m_rName;
@@ -136,7 +136,7 @@ public:
 
 
 // functor for cloning a control model, and insertion into a target list
-struct CloneControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, void >
+struct CloneControlModel : public std::unary_function< ControlModelContainerBase::UnoControlModelHolder, void >
 {
 private:
     ControlModelContainerBase::UnoControlModelHolderList&   m_rTargetList;
@@ -159,7 +159,7 @@ public:
 
 
 // functor for comparing a XControlModel with a given reference
-struct CompareControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
+struct CompareControlModel : public std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
 {
 private:
     Reference< XControlModel > m_xReference;
@@ -279,9 +279,9 @@ void SAL_CALL ControlModelContainerBase::dispose(  ) throw(RuntimeException, std
 
     // dispose our child models
     // for this, collect the models (we collect them from maModels, and this is modified when disposing children)
-    ::std::vector< Reference< XControlModel > > aChildModels( maModels.size() );
+    std::vector< Reference< XControlModel > > aChildModels( maModels.size() );
 
-    ::std::transform(
+    std::transform(
         maModels.begin(), maModels.end(),               // source range
         aChildModels.begin(),                           // target location
         []( const UnoControlModelHolder& rUnoControlModelHolder )
@@ -289,7 +289,7 @@ void SAL_CALL ControlModelContainerBase::dispose(  ) throw(RuntimeException, std
     );
 
     // now dispose
-    ::std::for_each( aChildModels.begin(), aChildModels.end(), DisposeControlModel() );
+    std::for_each( aChildModels.begin(), aChildModels.end(), DisposeControlModel() );
     aChildModels.clear();
 
     mbGroupsUpToDate = false;
@@ -304,7 +304,7 @@ Reference< XPropertySetInfo > ControlModelContainerBase::getPropertySetInfo(  ) 
 void ControlModelContainerBase::Clone_Impl(ControlModelContainerBase& _rClone) const
 {
     // clone all children
-    ::std::for_each(
+    std::for_each(
         maModels.begin(), maModels.end(),
         CloneControlModel( _rClone.maModels )
     );
@@ -320,7 +320,7 @@ UnoControlModel* ControlModelContainerBase::Clone() const
 
 ControlModelContainerBase::UnoControlModelHolderList::iterator ControlModelContainerBase::ImplFindElement( const OUString& rName )
 {
-    return ::std::find_if( maModels.begin(), maModels.end(), FindControlModel( rName ) );
+    return std::find_if( maModels.begin(), maModels.end(), FindControlModel( rName ) );
 }
 
 // ::XMultiServiceFactory
@@ -536,7 +536,7 @@ Sequence< OUString > ControlModelContainerBase::getElementNames() throw(RuntimeE
 {
     Sequence< OUString > aNames( maModels.size() );
 
-    ::std::transform(
+    std::transform(
         maModels.begin(), maModels.end(),               // source range
         aNames.getArray(),                              // target range
         []( const UnoControlModelHolder& rUnoControlModelHolder )
@@ -685,7 +685,7 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
     {
         // look up the control in our own structure. This is to prevent invalid arguments
         UnoControlModelHolderList::const_iterator aPos =
-            ::std::find_if(
+            std::find_if(
                 maModels.begin(), maModels.end(),
                 CompareControlModel( *pControls )
             );
@@ -705,7 +705,7 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
 }
 
 
-typedef ::std::multimap< sal_Int32, Reference< XControlModel >, ::std::less< sal_Int32 > > MapIndexToModel;
+typedef std::multimap< sal_Int32, Reference< XControlModel >, std::less< sal_Int32 > > MapIndexToModel;
 
 
 Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getControlModels(  ) throw (RuntimeException, std::exception)
@@ -714,7 +714,7 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
 
     MapIndexToModel aSortedModels;
         // will be the sorted container of all models which have a tab index property
-    ::std::vector< Reference< XControlModel > > aUnindexedModels;
+    std::vector< Reference< XControlModel > > aUnindexedModels;
         // will be the container of all models which do not have a tab index property
 
     UnoControlModelHolderList::const_iterator aLoop = maModels.begin();
@@ -746,9 +746,9 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
     // plus a container of "unindexed" models
     // -> merge them
     Sequence< Reference< XControlModel > > aReturn( aUnindexedModels.size() + aSortedModels.size() );
-    ::std::transform(
+    std::transform(
             aSortedModels.begin(), aSortedModels.end(),
-            ::std::copy( aUnindexedModels.begin(), aUnindexedModels.end(), aReturn.getArray() ),
+            std::copy( aUnindexedModels.begin(), aUnindexedModels.end(), aReturn.getArray() ),
             [] ( const MapIndexToModel::value_type& entryIndexToModel )
             { return entryIndexToModel.second; }
         );
@@ -876,7 +876,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
         AllGroups::const_iterator aGroupPos = maGroups.begin() + _nGroup;
         _rGroup.realloc( aGroupPos->size() );
         // copy the models
-        ::std::copy( aGroupPos->begin(), aGroupPos->end(), _rGroup.getArray() );
+        std::copy( aGroupPos->begin(), aGroupPos->end(), _rGroup.getArray() );
         // give the group a name
         _rName = OUString::number( _nGroup );
     }
@@ -1038,7 +1038,7 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
     // the accessor for the changed element
     OUString sAccessor;
     UnoControlModelHolderList::const_iterator aPos =
-        ::std::find_if(
+        std::find_if(
             maModels.begin(), maModels.end(),
             CompareControlModel( Reference< XControlModel >( _rEvent.Source, UNO_QUERY ) )
         );

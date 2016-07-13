@@ -85,7 +85,7 @@ class SvtCmdOptions
         CommandHashMap m_aCommandHashMap;
 };
 
-typedef ::std::vector< css::uno::WeakReference< css::frame::XFrame > > SvtFrameVector;
+typedef std::vector< css::uno::WeakReference< css::frame::XFrame > > SvtFrameVector;
 
 class SvtCommandOptions_Impl : public ConfigItem
 {
@@ -266,7 +266,7 @@ void SvtCommandOptions_Impl::EstablisFrameCallback(const css::uno::Reference< cs
     // ignore double registrations
     // every frame must be notified one times only!
     css::uno::WeakReference< css::frame::XFrame > xWeak(xFrame);
-    SvtFrameVector::const_iterator pIt = ::std::find(m_lFrames.begin(), m_lFrames.end(), xWeak);
+    SvtFrameVector::const_iterator pIt = std::find(m_lFrames.begin(), m_lFrames.end(), xWeak);
     if (pIt == m_lFrames.end())
         m_lFrames.push_back(xWeak);
 }

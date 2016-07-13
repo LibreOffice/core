@@ -218,8 +218,8 @@ OUString DefaultFontConfiguration::getDefaultFont( const LanguageTag& rLanguageT
         }
         else
         {
-            ::std::vector< OUString > aFallbacks( rLanguageTag.getFallbackStrings( false));
-            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin());
+            std::vector< OUString > aFallbacks( rLanguageTag.getFallbackStrings( false));
+            for (std::vector< OUString >::const_iterator it( aFallbacks.begin());
                     it != aFallbacks.end() && aRet.isEmpty(); ++it)
             {
                 aRet = tryLocale( *it, aType );
@@ -779,7 +779,7 @@ void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rSh
     }
 }
 
-struct StrictStringSort : public ::std::binary_function< const FontNameAttr&, const FontNameAttr&, bool >
+struct StrictStringSort : public std::binary_function< const FontNameAttr&, const FontNameAttr&, bool >
 {
     bool operator()( const FontNameAttr& rLeft, const FontNameAttr& rRight )
     { return rLeft.Name.compareTo( rRight.Name ) < 0; }
@@ -1090,11 +1090,11 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
     if( aLanguageTag.isSystemLocale() )
         aLanguageTag = SvtSysLocale().GetUILanguageTag();
 
-    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
+    std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
     if (aLanguageTag.getLanguage() != "en")
         aFallbacks.push_back("en");
 
-    for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
+    for (std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
     {
         std::unordered_map< OUString, LocaleSubst, OUStringHash >::const_iterator lang = m_aSubst.find( *fb );
         if( lang != m_aSubst.end() )
@@ -1103,7 +1103,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
                 readLocaleSubst( *fb );
             // try to find an exact match
             // because the list is sorted this will also find fontnames of the form searchfontname*
-            std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.aSubstAttributes.begin(), lang->second.aSubstAttributes.end(), aSearchAttr, StrictStringSort() );
+            std::vector< FontNameAttr >::const_iterator it = std::lower_bound( lang->second.aSubstAttributes.begin(), lang->second.aSubstAttributes.end(), aSearchAttr, StrictStringSort() );
             if( it != lang->second.aSubstAttributes.end())
             {
                 const FontNameAttr& rFoundAttr = *it;

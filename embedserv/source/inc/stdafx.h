@@ -39,8 +39,8 @@
 extern CComModule _Module;
 #ifdef __MINGW32__
 #include <algorithm>
-using ::std::min;
-using ::std::max;
+using std::min;
+using std::max;
 #endif
 #include <atlcom.h>
 #include <atlctl.h>

@@ -168,7 +168,7 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
 
 OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
 
-typedef ::std::vector< FORMATETC* > FormatEtcList;
+typedef std::vector< FORMATETC* > FormatEtcList;
 
 FORMATETC pFormatTemplates[FORMATS_NUM] = {
                     { CF_ENHMETAFILE, NULL, 0, -1, TYMED_ENHMF },

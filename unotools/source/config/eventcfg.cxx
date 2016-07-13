@@ -263,7 +263,7 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
     else
     {
         // not yet accessed - is it a supported name?
-        SupportedEventsVector::iterator pos = ::std::find(
+        SupportedEventsVector::iterator pos = std::find(
             m_supportedEvents.begin(), m_supportedEvents.end(), aName );
         if ( pos == m_supportedEvents.end() )
             throw container::NoSuchElementException( aName );
@@ -285,7 +285,7 @@ bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (
         return true;
 
     // never accessed before - is it supported in general?
-    SupportedEventsVector::iterator pos = ::std::find(
+    SupportedEventsVector::iterator pos = std::find(
         m_supportedEvents.begin(), m_supportedEvents.end(), aName );
     if ( pos != m_supportedEvents.end() )
         return true;

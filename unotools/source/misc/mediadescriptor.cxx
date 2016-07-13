@@ -449,7 +449,7 @@ void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
 css::uno::Sequence< css::beans::NamedValue > MediaDescriptor::requestAndVerifyDocPassword(
         comphelper::IDocPasswordVerifier& rVerifier,
         comphelper::DocPasswordRequestType eRequestType,
-        const ::std::vector< OUString >* pDefaultPasswords )
+        const std::vector< OUString >* pDefaultPasswords )
 {
     css::uno::Sequence< css::beans::NamedValue > aMediaEncData = getUnpackedValueOrDefault(
         PROP_ENCRYPTIONDATA(), css::uno::Sequence< css::beans::NamedValue >() );

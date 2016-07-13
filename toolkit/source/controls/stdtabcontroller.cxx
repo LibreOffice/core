@@ -275,7 +275,7 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException, std::exception)
         }
         if ( nPos < aCtrls.size() ) {
             ComponentEntryList::iterator it = aCtrls.begin();
-            ::std::advance( it, nPos );
+            std::advance( it, nPos );
             aCtrls.insert( it, pE );
         } else {
             aCtrls.push_back( pE );

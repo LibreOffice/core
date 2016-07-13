@@ -39,7 +39,7 @@ struct FilterNamePair
     OUString sUI      ;
 };
 
-typedef ::std::vector< FilterNamePair > FilterNameList   ;
+typedef std::vector< FilterNamePair > FilterNameList     ;
 typedef FilterNameList::const_iterator  FilterNameListPtr;
 
 class FilterDialog : public ModalDialog

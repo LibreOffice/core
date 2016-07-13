@@ -90,9 +90,9 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
 
 private:
-    typedef ::std::pair< Any, Any >     CellData;
-    typedef ::std::vector< CellData >   RowData;
-    typedef ::std::vector< RowData >    GridData;
+    typedef std::pair< Any, Any >       CellData;
+    typedef std::vector< CellData >     RowData;
+    typedef std::vector< RowData >      GridData;
 
     void broadcast(
         GridDataEvent const & i_event,
@@ -109,7 +109,7 @@ private:
     RowData&            impl_getRowDataAccess_throw( sal_Int32 const i_rowIndex, size_t const i_requiredColumnCount );
 
     GridData m_aData;
-    ::std::vector< css::uno::Any > m_aRowHeaders;
+    std::vector< css::uno::Any > m_aRowHeaders;
     sal_Int32 m_nColumnCount;
 };
 
@@ -233,7 +233,7 @@ private:
         Sequence< Any > resultData( m_nColumnCount );
         RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
 
-        ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(),
+        std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(),
                           [] ( const CellData& rCellData )
                           { return rCellData.first; });
         return resultData;
@@ -410,8 +410,8 @@ private:
             rDataRow[ columnIndex ].first = i_values[ col ];
         }
 
-        sal_Int32 const firstAffectedColumn = *::std::min_element( i_columnIndexes.begin(), i_columnIndexes.end() );
-        sal_Int32 const lastAffectedColumn = *::std::max_element( i_columnIndexes.begin(), i_columnIndexes.end() );
+        sal_Int32 const firstAffectedColumn = *std::min_element( i_columnIndexes.begin(), i_columnIndexes.end() );
+        sal_Int32 const lastAffectedColumn = *std::max_element( i_columnIndexes.begin(), i_columnIndexes.end() );
         broadcast(
             GridDataEvent( *this, firstAffectedColumn, lastAffectedColumn, i_rowIndex, i_rowIndex ),
             &XGridDataListener::dataChanged,
@@ -476,7 +476,7 @@ private:
         GridData aEmptyData;
         m_aData.swap( aEmptyData );
 
-        ::std::vector< Any > aEmptyRowHeaders;
+        std::vector< Any > aEmptyRowHeaders;
         m_aRowHeaders.swap( aEmptyRowHeaders );
 
         m_nColumnCount = 0;

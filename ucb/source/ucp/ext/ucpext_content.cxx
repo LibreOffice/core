@@ -98,7 +98,7 @@ namespace ucb { namespace ucp { namespace ext
         }
 
 
-        struct SelectPropertyName : public ::std::unary_function< Property, OUString >
+        struct SelectPropertyName : public std::unary_function< Property, OUString >
         {
             const OUString& operator()( const Property& i_rProperty ) const
             {
@@ -475,7 +475,7 @@ namespace ucb { namespace ucp { namespace ext
 
             // translate the property request
             Sequence< OUString > aPropertyNames( i_rProperties.getLength() );
-            ::std::transform(
+            std::transform(
                 i_rProperties.getConstArray(),
                 i_rProperties.getConstArray() + i_rProperties.getLength(),
                 aPropertyNames.getArray(),

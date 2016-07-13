@@ -59,7 +59,7 @@ void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRec
         rRect.Left() = 0;
         rRect.Top() = 0;
         rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
-        rRect.Move( ::std::min(aXArray[0], aXArray[1]), 0 );
+        rRect.Move( std::min(aXArray[0], aXArray[1]), 0 );
     }
 
     if( mrFont.IsVertical() )

@@ -56,8 +56,8 @@ namespace DOM
 
         ::rtl::Reference<CElement> const m_pElement;
         ::osl::Mutex & m_rMutex;
-        ::std::unique_ptr<xmlChar[]> const m_pName;
-        ::std::unique_ptr<xmlChar[]> const m_pURI;
+        std::unique_ptr<xmlChar[]> const m_pName;
+        std::unique_ptr<xmlChar[]> const m_pURI;
         bool m_bRebuild;
         nodevector_t m_nodevector;
 

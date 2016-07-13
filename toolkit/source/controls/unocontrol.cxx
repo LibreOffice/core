@@ -115,7 +115,7 @@ public:
     VclListenerLock& operator=(const VclListenerLock&) = delete;
 };
 
-typedef ::std::map< OUString, sal_Int32 >    MapString2Int;
+typedef std::map< OUString, sal_Int32 >      MapString2Int;
 struct UnoControl_Data
 {
     MapString2Int   aSuspendedPropertyNotifications;
@@ -415,7 +415,7 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
                 if ( mpData->aSuspendedPropertyNotifications.find( pEvents->PropertyName ) != mpData->aSuspendedPropertyNotifications.end() )
                 {
                     if ( pEvents != pEventsEnd )
-                        ::std::copy( pEvents + 1, pEventsEnd, pEvents );
+                        std::copy( pEvents + 1, pEventsEnd, pEvents );
                     --pEventsEnd;
                 }
                 else

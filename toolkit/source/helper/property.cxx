@@ -293,7 +293,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 }
 
 
-struct ImplPropertyInfoCompareFunctor : ::std::binary_function<ImplPropertyInfo,OUString,bool>
+struct ImplPropertyInfoCompareFunctor : std::binary_function<ImplPropertyInfo,OUString,bool>
 {
     inline bool operator()(const ImplPropertyInfo& lhs,const ImplPropertyInfo& rhs) const
     {
@@ -312,7 +312,7 @@ void ImplAssertValidPropertyArray()
     {
         sal_uInt16 nElements;
         ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
-        ::std::sort(pInfo, pInfo+nElements,ImplPropertyInfoCompareFunctor());
+        std::sort(pInfo, pInfo+nElements,ImplPropertyInfoCompareFunctor());
         bSorted = true;
     }
 }
@@ -323,7 +323,7 @@ sal_uInt16 GetPropertyId( const OUString& rPropertyName )
 
     sal_uInt16 nElements;
     ImplPropertyInfo* pInfo = ImplGetPropertyInfos( nElements );
-    ImplPropertyInfo* pInf = ::std::lower_bound(pInfo,pInfo+nElements,rPropertyName,ImplPropertyInfoCompareFunctor());
+    ImplPropertyInfo* pInf = std::lower_bound(pInfo,pInfo+nElements,rPropertyName,ImplPropertyInfoCompareFunctor());
 /*
         (ImplPropertyInfo*)
                                 bsearch( &aSearch, pInfo, nElements, sizeof( ImplPropertyInfo ), ImplPropertyInfoCompare );

@@ -232,11 +232,11 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     LanguageTag aLocale( rLocale );
     std::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
 
-    ::std::vector< OUString > aFallbacks( aLocale.getFallbackStrings( true));
+    std::vector< OUString > aFallbacks( aLocale.getFallbackStrings( true));
     if (!isAlreadyPureenUS( aLocale))
         aFallbacks.push_back( "en-US");     // last resort if all fallbacks fail
 
-    for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
+    for (std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
     {
         OUString aSearch( rPrefix + *fb );
         it = m_aResFiles.find( aSearch );
@@ -355,7 +355,7 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
      * passed / remember a fallback list and an index within to pick the next.
      * */
 
-    ::std::vector< OUString > aFallbacks( pMgr->aLocale.getFallbackStrings( true));
+    std::vector< OUString > aFallbacks( pMgr->aLocale.getFallbackStrings( true));
     // The first is the locale itself, use next fallback or en-US.
     /* TODO: what happens if the chain is "en-US", "en" -> "en-US", ...
      * This was already an issue with the previous code. */
@@ -407,7 +407,7 @@ struct ImpContent
     sal_uInt32   nOffset;
 };
 
-struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpContent, bool>
+struct ImpContentLessCompare : public std::binary_function< ImpContent, ImpContent, bool>
 {
     inline bool operator() (const ImpContent& lhs, const ImpContent& rhs) const
     {
@@ -533,7 +533,7 @@ bool InternalResMgr::Create()
         OSL_ENSURE( bSorted, "content not sorted" );
         OSL_ENSURE( bEqual2Content, "resource structure wrong" );
         if( !bSorted )
-            ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
+            std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
             //  qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
 
         bDone = true;
@@ -548,7 +548,7 @@ bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) cons
     // Anfang der Strings suchen
     ImpContent aValue;
     aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
-    ImpContent * pFind = ::std::lower_bound(pContent,
+    ImpContent * pFind = std::lower_bound(pContent,
                                             pContent + nEntries,
                                             aValue,
                                             ImpContentLessCompare());
@@ -567,7 +567,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
     ImpContent aValue;
     aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent* pEnd = (pContent + nEntries);
-    ImpContent* pFind = ::std::lower_bound( pContent,
+    ImpContent* pFind = std::lower_bound( pContent,
                                             pEnd,
                                             aValue,
                                             ImpContentLessCompare());

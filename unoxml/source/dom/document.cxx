@@ -99,7 +99,7 @@ namespace DOM
         // add the doc itself to its nodemap!
         xDoc->m_NodeMap.insert(
             nodemap_t::value_type(reinterpret_cast<xmlNodePtr>(pDoc),
-                ::std::make_pair(
+                std::make_pair(
                     WeakReference<XNode>(static_cast<XDocument*>(xDoc.get())),
                     xDoc.get())));
         return xDoc;
@@ -262,7 +262,7 @@ namespace DOM
         if (pCNode != nullptr) {
             bool const bInserted = m_NodeMap.insert(
                     nodemap_t::value_type(pNode,
-                        ::std::make_pair(WeakReference<XNode>(pCNode.get()),
+                        std::make_pair(WeakReference<XNode>(pCNode.get()),
                         pCNode.get()))
                 ).second;
             OSL_ASSERT(bInserted);

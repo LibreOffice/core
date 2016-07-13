@@ -175,7 +175,7 @@ ErrorContext::ErrorContext(vcl::Window *pWinP)
 ErrorContext::~ErrorContext()
 {
     auto &rContexts = TheEDcrData::get().contexts;
-    rContexts.erase( ::std::remove(rContexts.begin(), rContexts.end(), this), rContexts.end());
+    rContexts.erase( std::remove(rContexts.begin(), rContexts.end(), this), rContexts.end());
 }
 
 ErrorContext *ErrorContext::GetContext()
@@ -195,7 +195,7 @@ ErrorHandler::ErrorHandler()
 ErrorHandler::~ErrorHandler()
 {
     auto &rErrorHandlers = TheEDcrData::get().errorHandlers;
-    rErrorHandlers.erase( ::std::remove(rErrorHandlers.begin(), rErrorHandlers.end(), this), rErrorHandlers.end());
+    rErrorHandlers.erase( std::remove(rErrorHandlers.begin(), rErrorHandlers.end(), this), rErrorHandlers.end());
 }
 
 vcl::Window* ErrorContext::GetParent()

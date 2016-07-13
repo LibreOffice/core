@@ -378,7 +378,7 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
 
     case uno::TypeClass_BOOLEAN:
     {
-        ::std::vector< OUString > aListEntries;
+        std::vector< OUString > aListEntries;
         tools::StringListResource aRes(PcrRes(RID_RSC_ENUM_YESNO),aListEntries);
         bool bValue = false;
         _rValue >>= bValue;
@@ -517,7 +517,7 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 
     case uno::TypeClass_BOOLEAN:
     {
-        ::std::vector< OUString > aListEntries;
+        std::vector< OUString > aListEntries;
         tools::StringListResource aRes(PcrRes(RID_RSC_ENUM_YESNO),aListEntries);
         _rValue <<= aListEntries[0] != _rStringRep;
     }

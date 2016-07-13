@@ -80,10 +80,10 @@ namespace DOM
         css::uno::Reference< css::io::XOutputStream > m_rOutputStream;
 
         typedef std::map< const xmlNodePtr,
-                    ::std::pair< css::uno::WeakReference<css::xml::dom::XNode>, CNode* > > nodemap_t;
+                    std::pair< css::uno::WeakReference<css::xml::dom::XNode>, CNode* > > nodemap_t;
         nodemap_t m_NodeMap;
 
-        ::std::unique_ptr<events::CEventDispatcher> const m_pEventDispatcher;
+        std::unique_ptr<events::CEventDispatcher> const m_pEventDispatcher;
 
         explicit CDocument(xmlDocPtr const pDocPtr);
 

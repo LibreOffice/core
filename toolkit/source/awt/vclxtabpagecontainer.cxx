@@ -124,8 +124,8 @@ Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPageBy
 {
     SolarMutexGuard aGuard;
     Reference< css::awt::tab::XTabPage > xTabPage;
-    ::std::vector< Reference< css::awt::tab::XTabPage > >::iterator aIter = m_aTabPages.begin();
-    ::std::vector< Reference< css::awt::tab::XTabPage > >::iterator aEnd = m_aTabPages.end();
+    std::vector< Reference< css::awt::tab::XTabPage > >::iterator aIter = m_aTabPages.begin();
+    std::vector< Reference< css::awt::tab::XTabPage > >::iterator aEnd = m_aTabPages.end();
     for(;aIter != aEnd;++aIter)
     {
         Reference< awt::XControl > xControl(*aIter,UNO_QUERY );
@@ -208,7 +208,7 @@ void SAL_CALL VCLXTabPageContainer::elementRemoved( const css::container::Contai
         Reference< awt::XControl > xControl(xTabPage,UNO_QUERY );
         Reference< awt::tab::XTabPageModel > xP( xControl->getModel(), UNO_QUERY );
         pTabCtrl->RemovePage(xP->getTabPageID());
-        m_aTabPages.erase(::std::remove(m_aTabPages.begin(),m_aTabPages.end(),xTabPage));
+        m_aTabPages.erase(std::remove(m_aTabPages.begin(),m_aTabPages.end(),xTabPage));
     }
 }
 void SAL_CALL VCLXTabPageContainer::elementReplaced( const css::container::ContainerEvent& /*Event*/ ) throw (css::uno::RuntimeException, std::exception)

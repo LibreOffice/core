@@ -60,7 +60,7 @@ namespace pcr
     namespace
     {
 
-        struct StringCompare : public ::std::unary_function< OUString, bool >
+        struct StringCompare : public std::unary_function< OUString, bool >
         {
         private:
             OUString m_sReference;
@@ -382,7 +382,7 @@ namespace pcr
             if ( xDocumentFactory.is() )
                 aAvailableServices = xDocumentFactory->getAvailableServiceNames( );
 
-            const OUString* pFound = ::std::find_if(
+            const OUString* pFound = std::find_if(
                 aAvailableServices.getConstArray(),
                 aAvailableServices.getConstArray() + aAvailableServices.getLength(),
                 StringCompare( _rService )

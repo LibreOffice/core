@@ -83,7 +83,7 @@ public:
     virtual void SAL_CALL disposing() override;
 
 private:
-    typedef ::std::vector< css::uno::Reference< css::awt::grid::XGridColumn > >   Columns;
+    typedef std::vector< css::uno::Reference< css::awt::grid::XGridColumn > >     Columns;
 
     ::comphelper::OInterfaceContainerHelper2   m_aContainerListeners;
     Columns                             m_aColumns;
@@ -249,8 +249,8 @@ private:
 
     void SAL_CALL DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements) throw (RuntimeException, std::exception)
     {
-        ::std::vector< ContainerEvent > aRemovedColumns;
-        ::std::vector< ContainerEvent > aInsertedColumns;
+        std::vector< ContainerEvent > aRemovedColumns;
+        std::vector< ContainerEvent > aInsertedColumns;
 
         {
             ::comphelper::ComponentGuard aGuard( *this, rBHelper );
@@ -295,7 +295,7 @@ private:
         }
 
         // fire removal notifications
-        for (   ::std::vector< ContainerEvent >::const_iterator event = aRemovedColumns.begin();
+        for (   std::vector< ContainerEvent >::const_iterator event = aRemovedColumns.begin();
                 event != aRemovedColumns.end();
                 ++event
             )
@@ -304,7 +304,7 @@ private:
         }
 
         // fire insertion notifications
-        for (   ::std::vector< ContainerEvent >::const_iterator event = aInsertedColumns.begin();
+        for (   std::vector< ContainerEvent >::const_iterator event = aInsertedColumns.begin();
                 event != aInsertedColumns.end();
                 ++event
             )
@@ -313,7 +313,7 @@ private:
         }
 
         // dispose removed columns
-        for (   ::std::vector< ContainerEvent >::const_iterator event = aRemovedColumns.begin();
+        for (   std::vector< ContainerEvent >::const_iterator event = aRemovedColumns.begin();
                 event != aRemovedColumns.end();
                 ++event
             )

@@ -185,7 +185,7 @@ OString makeOString(const sal_uInt8* p, sal_uInt64 n)
         #ifdef _WIN32
         abort();
         #else
-        ::std::abort(); //TODO: handle this gracefully
+        std::abort(); //TODO: handle this gracefully
         #endif
     }
     return OString(

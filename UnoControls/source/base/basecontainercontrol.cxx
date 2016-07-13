@@ -292,8 +292,8 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
 
                 // ... free memory
                 delete pControl;
-                ::std::vector<IMPL_ControlInfo*>::iterator itr = maControlInfoList.begin();
-                ::std::advance(itr, n);
+                std::vector<IMPL_ControlInfo*>::iterator itr = maControlInfoList.begin();
+                std::advance(itr, n);
                 maControlInfoList.erase(itr);
 
                 // Send message to all other listener

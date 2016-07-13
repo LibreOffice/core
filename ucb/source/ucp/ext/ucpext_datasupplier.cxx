@@ -66,7 +66,7 @@ namespace ucb { namespace ucp { namespace ext
         Reference< XRow >               xRow;
     };
 
-    typedef ::std::vector< ResultListEntry >    ResultList;
+    typedef std::vector< ResultListEntry >      ResultList;
 
 
     //= DataSupplier_Impl

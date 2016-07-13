@@ -177,7 +177,7 @@ namespace DOM { namespace events {
         Reference< XEvent > const xEvent(pEvent);
 
         // build the path from target node to the root
-        typedef std::vector< ::std::pair<Reference<XEventTarget>, xmlNodePtr> >
+        typedef std::vector< std::pair<Reference<XEventTarget>, xmlNodePtr> >
             NodeVector_t;
         NodeVector_t captureVector;
         TypeListenerMap captureListeners;
@@ -190,7 +190,7 @@ namespace DOM { namespace events {
             {
                 Reference< XEventTarget > const xRef(
                         rDocument.GetCNode(cur).get());
-                captureVector.push_back(::std::make_pair(xRef, cur));
+                captureVector.push_back(std::make_pair(xRef, cur));
                 cur = cur->parent;
             }
             captureListeners = m_CaptureListeners;

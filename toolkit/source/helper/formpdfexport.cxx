@@ -151,8 +151,8 @@ namespace toolkitform
                 return -1;
 
             // count the leafs in the hierarchy, until we encounter radio button
-            ::std::vector< Reference< XIndexAccess > > aAncestors;
-            ::std::vector< sal_Int32 >                 aPath;
+            std::vector< Reference< XIndexAccess > > aAncestors;
+            std::vector< sal_Int32 >                   aPath;
 
             Reference< XInterface > xNormalizedLookup( _rxRadioModel, UNO_QUERY );
             OUString sRadioGroupName;
@@ -242,13 +242,13 @@ namespace toolkitform
 
         /** copies a StringItemList to a PDF widget's list
         */
-        void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< OUString >& _rVector )
+        void getStringItemVector( const Reference< XPropertySet >& _rxModel, std::vector< OUString >& _rVector )
         {
             static const char FM_PROP_STRINGITEMLIST[] = "StringItemList";
             Sequence< OUString > aListEntries;
             OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_STRINGITEMLIST ) >>= aListEntries );
-            ::std::copy( aListEntries.begin(), aListEntries.end(),
-                         ::std::back_insert_iterator< ::std::vector< OUString > >( _rVector ) );
+            std::copy( aListEntries.begin(), aListEntries.end(),
+                         std::back_insert_iterator< std::vector< OUString > >( _rVector ) );
         }
     }
 
@@ -492,7 +492,7 @@ namespace toolkitform
                         pButtonWidget->Dest = i_pdfExportData.RegisterDest();
 
                         // and put it into the bookmarks, to ensure the future handling really happens
-                        ::std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks( i_pdfExportData.GetBookmarks() );
+                        std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks( i_pdfExportData.GetBookmarks() );
                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
                         aBookmark.nDestId = pButtonWidget->Dest;
                         aBookmark.aBookmark = sURL;

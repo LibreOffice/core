@@ -60,9 +60,9 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
-    typedef ::std::vector< beans::PropertyValue > PropertyValueVector;
+    typedef std::vector< beans::PropertyValue > PropertyValueVector;
 
-    class PropertyValueEqualFunctor : public ::std::binary_function< beans::PropertyValue, beans::PropertyValue, bool >
+    class PropertyValueEqualFunctor : public std::binary_function< beans::PropertyValue, beans::PropertyValue, bool >
     {
     public:
         PropertyValueEqualFunctor()
@@ -111,7 +111,7 @@ namespace accessibility
         AccessibleStaticTextBase_Impl();
         ~AccessibleStaticTextBase_Impl();
 
-        void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
+        void SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource );
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
         {
@@ -197,7 +197,7 @@ namespace accessibility
     {
     }
 
-    void AccessibleStaticTextBase_Impl::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
+    void AccessibleStaticTextBase_Impl::SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource )
     {
 
         maEditSource.SetEditSource( std::move(pEditSource) );
@@ -444,7 +444,7 @@ namespace accessibility
 
     // AccessibleStaticTextBase implementation
 
-    AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::unique_ptr< SvxEditSource > && pEditSource ) :
+    AccessibleStaticTextBase::AccessibleStaticTextBase( std::unique_ptr< SvxEditSource > && pEditSource ) :
         mpImpl( new AccessibleStaticTextBase_Impl() )
     {
         SolarMutexGuard aGuard;
@@ -456,7 +456,7 @@ namespace accessibility
     {
     }
 
-    void AccessibleStaticTextBase::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
+    void AccessibleStaticTextBase::SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource )
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -681,7 +681,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         if( nStartIndex > nEndIndex )
-            ::std::swap(nStartIndex, nEndIndex);
+            std::swap(nStartIndex, nEndIndex);
         //if startindex equals endindex we will get nothing. So return an empty string directly.
         if ( nStartIndex == nEndIndex )
         {
@@ -902,7 +902,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         if( nStartIndex > nEndIndex )
-            ::std::swap(nStartIndex, nEndIndex);
+            std::swap(nStartIndex, nEndIndex);
 
         EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
         EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
@@ -932,7 +932,7 @@ namespace accessibility
             {
                 const beans::PropertyValue* pItr = aSeq.getConstArray();
                 const beans::PropertyValue* pEnd  = pItr + aSeq.getLength();
-                const beans::PropertyValue* pFind = ::std::find_if( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), std::cref( *aItr ) ) );
+                const beans::PropertyValue* pFind = std::find_if( pItr, pEnd, std::bind2nd( PropertyValueEqualFunctor(), std::cref( *aItr ) ) );
                 if ( pFind != pEnd )
                 {
                     aIntersectionVec.push_back( *pFind );
@@ -970,7 +970,7 @@ namespace accessibility
         {
             const beans::PropertyValue* pItr = aIntersectionSeq.getConstArray();
             const beans::PropertyValue* pEnd  = pItr + aIntersectionSeq.getLength();
-            bool bNone = ::std::none_of( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), std::cref( pDefAttr[i] ) ) );
+            bool bNone = std::none_of( pItr, pEnd, std::bind2nd( PropertyValueEqualFunctor(), std::cref( pDefAttr[i] ) ) );
             if ( bNone && pDefAttr[i].Handle != 0)
             {
                 aDiffVec.push_back( pDefAttr[i] );

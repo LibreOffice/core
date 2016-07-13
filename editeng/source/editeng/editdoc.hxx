@@ -358,7 +358,7 @@ struct ExtraPortionInfo
     bool    bCompressed;
 
     long*    pOrgDXArray;
-    ::std::vector< sal_Int32 > lineBreaksList;
+    std::vector< sal_Int32 > lineBreaksList;
 
 
             ExtraPortionInfo();

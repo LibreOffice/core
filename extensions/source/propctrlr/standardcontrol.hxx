@@ -266,7 +266,7 @@ namespace pcr
     class OColorControl : public OColorControl_Base
     {
     private:
-        ::std::set< OUString >   m_aNonColorEntries;
+        std::set< OUString >     m_aNonColorEntries;
 
     public:
         OColorControl( vcl::Window* pParent, WinBits nWinStyle );

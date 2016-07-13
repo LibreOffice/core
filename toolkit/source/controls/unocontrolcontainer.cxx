@@ -66,7 +66,7 @@ public:
     typedef sal_Int32                                       ControlIdentifier;
 private:
     typedef std::shared_ptr< UnoControlHolder >         ControlInfo;
-    typedef ::std::map< ControlIdentifier, ControlInfo >    ControlMap;
+    typedef std::map< ControlIdentifier, ControlInfo >      ControlMap;
 
 private:
     ControlMap  maControls;
@@ -274,7 +274,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_addControl( c
 
 UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdentifier_throw()
 {
-    for ( ControlIdentifier candidateId = 0; candidateId < ::std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
+    for ( ControlIdentifier candidateId = 0; candidateId < std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
     {
         ControlMap::const_iterator existent = maControls.find( candidateId );
         if ( existent == maControls.end() )
@@ -287,7 +287,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
 OUString UnoControlHolderList::impl_getFreeName_throw()
 {
     OUString name( "control_" );
-    for ( ControlIdentifier candidateId = 0; candidateId < ::std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
+    for ( ControlIdentifier candidateId = 0; candidateId < std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
     {
         OUString candidateName( name + OUString::number( candidateId ) );
         ControlMap::const_iterator loop = maControls.begin();

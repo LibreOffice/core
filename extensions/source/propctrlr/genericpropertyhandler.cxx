@@ -74,7 +74,7 @@ namespace pcr
         EnumRepresentation& operator=(const EnumRepresentation&) = delete;
 
         // IPropertyEnumRepresentation implementqation
-        virtual ::std::vector< OUString >
+        virtual std::vector< OUString >
                                     SAL_CALL getDescriptions() const override;
         virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, css::uno::Any& _out_rValue ) const override;
         virtual OUString            SAL_CALL getDescriptionForValue( const css::uno::Any& _rEnumValue ) const override;
@@ -103,7 +103,7 @@ namespace pcr
         }
     }
 
-    ::std::vector< OUString > EnumRepresentation::getDescriptions() const
+    std::vector< OUString > EnumRepresentation::getDescriptions() const
     {
         Sequence< OUString > aNames;
         try
@@ -116,7 +116,7 @@ namespace pcr
             OSL_FAIL( "EnumRepresentation::getDescriptions: caught an exception!" );
         }
 
-        return ::std::vector< OUString >( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength() );
+        return std::vector< OUString >( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength() );
     }
 
     void EnumRepresentation::impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const
@@ -135,9 +135,9 @@ namespace pcr
 
     void EnumRepresentation::getValueFromDescription( const OUString& _rDescription, Any& _out_rValue ) const
     {
-        ::std::vector< OUString > aDescriptions( getDescriptions() );
+        std::vector< OUString > aDescriptions( getDescriptions() );
 
-        sal_Int32 index = ::std::find( aDescriptions.begin(), aDescriptions.end(),
+        sal_Int32 index = std::find( aDescriptions.begin(), aDescriptions.end(),
             _rDescription ) - aDescriptions.begin();
 
         Sequence< sal_Int32 > aValues;
@@ -162,10 +162,10 @@ namespace pcr
         Sequence< sal_Int32 > aValues;
         impl_getValues( aValues );
 
-        sal_Int32 index = ::std::find( aValues.getConstArray(), aValues.getConstArray() + aValues.getLength(),
+        sal_Int32 index = std::find( aValues.getConstArray(), aValues.getConstArray() + aValues.getLength(),
             nAsInt ) - aValues.getConstArray();
 
-        ::std::vector< OUString > aDescriptions( getDescriptions() );
+        std::vector< OUString > aDescriptions( getDescriptions() );
         if ( ( index >= 0 ) && ( index < (sal_Int32)aDescriptions.size() ) )
             sDescription = aDescriptions[ index ];
         else

@@ -86,7 +86,7 @@ namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 class VCLXWindowImpl
 {
 private:
-    typedef ::std::vector< VCLXWindow::Callback >                       CallbackArray;
+    typedef std::vector< VCLXWindow::Callback >                         CallbackArray;
 
 private:
     VCLXWindow&                         mrAntiImpl;

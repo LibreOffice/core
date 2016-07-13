@@ -34,7 +34,7 @@
 
 namespace DOM
 {
-    typedef ::std::pair< OString, OString > stringpair_t;
+    typedef std::pair< OString, OString > stringpair_t;
 
     typedef ::cppu::ImplInheritanceHelper< CNode, css::xml::dom::XAttr > CAttr_Base;
 
@@ -46,7 +46,7 @@ namespace DOM
 
     private:
         xmlAttrPtr m_aAttrPtr;
-        ::std::unique_ptr< stringpair_t > m_pNamespace;
+        std::unique_ptr< stringpair_t > m_pNamespace;
 
     protected:
         CAttr(CDocument const& rDocument, ::osl::Mutex const& rMutex,

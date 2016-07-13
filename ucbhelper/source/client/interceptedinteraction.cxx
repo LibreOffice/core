@@ -32,7 +32,7 @@ void InterceptedInteraction::setInterceptedHandler(const css::uno::Reference< cs
     m_xInterceptedHandler = xInterceptedHandler;
 }
 
-void InterceptedInteraction::setInterceptions(const ::std::vector< InterceptedRequest >& lInterceptions)
+void InterceptedInteraction::setInterceptions(const std::vector< InterceptedRequest >& lInterceptions)
 {
     m_lInterceptions = lInterceptions;
 }
@@ -106,7 +106,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
 
     // check against the list of static requests
     sal_Int32 nHandle = 0;
-    ::std::vector< InterceptedRequest >::const_iterator pIt;
+    std::vector< InterceptedRequest >::const_iterator pIt;
     for (  pIt  = m_lInterceptions.begin();
            pIt != m_lInterceptions.end()  ;
          ++pIt                            )

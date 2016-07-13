@@ -55,7 +55,7 @@ void MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
         // merge them
         aSels[ nPos1 ]->Max() = aSels[ nPos2 ]->Max();
         ImpSelList::iterator it = aSels.begin();
-        ::std::advance( it, nPos2 );
+        std::advance( it, nPos2 );
         delete *it;
         aSels.erase( it );
     }
@@ -185,7 +185,7 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
             // create a new sub selection
             if ( nSubSelPos < aSels.size() ) {
                 ImpSelList::iterator it = aSels.begin();
-                ::std::advance( it, nSubSelPos );
+                std::advance( it, nSubSelPos );
                 aSels.insert( it, new Range( nIndex, nIndex ) );
             } else {
                 aSels.push_back( new Range( nIndex, nIndex ) );
@@ -212,7 +212,7 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
         {
             // remove the complete sub selection
             ImpSelList::iterator it = aSels.begin();
-            ::std::advance( it, nSubSelPos );
+            std::advance( it, nSubSelPos );
             delete *it;
             aSels.erase( it );
             return true;
@@ -230,7 +230,7 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
             // split the sub selection
             if ( nSubSelPos < aSels.size() ) {
                 ImpSelList::iterator it = aSels.begin();
-                ::std::advance( it, nSubSelPos );
+                std::advance( it, nSubSelPos );
                 aSels.insert( it, new Range( aSels[ nSubSelPos ]->Min(), nIndex-1 ) );
             } else {
                 aSels.push_back( new Range( aSels[ nSubSelPos ]->Min(), nIndex-1 ) );
@@ -342,7 +342,7 @@ void MultiSelection::Insert( long nIndex, long nCount )
         ) { // split the sub selection
             if ( nSubSelPos < aSels.size() ) {
                 ImpSelList::iterator it = aSels.begin();
-                ::std::advance( it, nSubSelPos );
+                std::advance( it, nSubSelPos );
                 aSels.insert( it, new Range( aSels[ nSubSelPos ]->Min(), nIndex-1 ) );
             } else {
                 aSels.push_back( new Range( aSels[ nSubSelPos ]->Min(), nIndex-1 ) );
@@ -393,7 +393,7 @@ void MultiSelection::Remove( long nIndex )
         if ( aSels[ nSubSelPos ]->Len() == 1 ) {
             // completely remove the sub selection
             ImpSelList::iterator it = aSels.begin();
-            ::std::advance( it, nSubSelPos );
+            std::advance( it, nSubSelPos );
             delete *it;
             aSels.erase( it );
         } else {

@@ -1001,7 +1001,7 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
    curve does not deviate more than one pixel from a straight line.
 
 */
-static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< Point > >& rPointIter,
+static void ImplAdaptiveSubdivide( std::back_insert_iterator< std::vector< Point > >& rPointIter,
                                    const double old_d2,
                                    int recursionDepth,
                                    const double d2,
@@ -1027,7 +1027,7 @@ static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< P
     const double fJ1y( P2y - P1y - 1.0/3.0*(P4y - P1y) );
     const double fJ2x( P3x - P1x - 2.0/3.0*(P4x - P1x) );
     const double fJ2y( P3y - P1y - 2.0/3.0*(P4y - P1y) );
-    const double distance2( ::std::max( fJ1x*fJ1x + fJ1y*fJ1y,
+    const double distance2( std::max( fJ1x*fJ1x + fJ1y*fJ1y,
                                         fJ2x*fJ2x + fJ2y*fJ2y) );
 
     // stop if error measure does not improve anymore. This is a
@@ -1075,9 +1075,9 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
     {
         sal_uInt16 i;
         sal_uInt16 nPts( GetSize() );
-        ::std::vector< Point > aPoints;
+        std::vector< Point > aPoints;
         aPoints.reserve( nPts );
-        ::std::back_insert_iterator< ::std::vector< Point > > aPointIter( aPoints );
+        std::back_insert_iterator< std::vector< Point > > aPointIter( aPoints );
 
         for(i=0; i<nPts;)
         {
@@ -1119,7 +1119,7 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
 
         // fill result polygon
         rResult = tools::Polygon( (sal_uInt16)aPoints.size() ); // ensure sufficient size for copy
-        ::std::copy(aPoints.begin(), aPoints.end(), rResult.mpImplPolygon->mpPointAry);
+        std::copy(aPoints.begin(), aPoints.end(), rResult.mpImplPolygon->mpPointAry);
     }
 }
 

@@ -72,7 +72,7 @@ namespace pcr
         // special handling for booleans (this will become a list)
         if ( _rProperty.Type.getTypeClass() == TypeClass_BOOLEAN )
         {
-            ::std::vector< OUString > aListEntries;
+            std::vector< OUString > aListEntries;
             tools::StringListResource aRes(PcrRes(RID_RSC_ENUM_YESNO),aListEntries);
             _out_rDescriptor.Control = createListBoxControl( _rxControlFactory, aListEntries, bReadOnlyControl, false );
             return;
@@ -115,7 +115,7 @@ namespace pcr
     {
         Reference< XPropertyControl > lcl_implCreateListLikeControl(
                 const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const ::std::vector< OUString >& _rInitialListEntries,
+                const std::vector< OUString >& _rInitialListEntries,
                 bool _bReadOnlyControl,
                 bool _bSorted,
                 bool _bTrueIfListBoxFalseIfComboBox
@@ -128,11 +128,11 @@ namespace pcr
                 UNO_QUERY_THROW
             );
 
-            ::std::vector< OUString > aInitialEntries( _rInitialListEntries );
+            std::vector< OUString > aInitialEntries( _rInitialListEntries );
             if ( _bSorted )
-                ::std::sort( aInitialEntries.begin(), aInitialEntries.end() );
+                std::sort( aInitialEntries.begin(), aInitialEntries.end() );
 
-            for (   ::std::vector< OUString >::const_iterator loop = aInitialEntries.begin();
+            for (   std::vector< OUString >::const_iterator loop = aInitialEntries.begin();
                     loop != aInitialEntries.end();
                     ++loop
                 )
@@ -143,14 +143,14 @@ namespace pcr
 
 
     Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const ::std::vector< OUString >& _rInitialListEntries, bool _bReadOnlyControl, bool _bSorted )
+                const std::vector< OUString >& _rInitialListEntries, bool _bReadOnlyControl, bool _bSorted )
     {
         return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, true );
     }
 
 
     Reference< XPropertyControl > PropertyHandlerHelper::createComboBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const ::std::vector< OUString >& _rInitialListEntries, bool _bReadOnlyControl, bool _bSorted )
+                const std::vector< OUString >& _rInitialListEntries, bool _bReadOnlyControl, bool _bSorted )
     {
         return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, false );
     }

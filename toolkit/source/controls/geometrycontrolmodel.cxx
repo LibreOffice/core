@@ -156,7 +156,7 @@
             // concat the sequences
             sal_Int32 nOldSize = aTypes.getLength();
             aTypes.realloc( nOldSize + aAggTypes.getLength() );
-            ::std::copy(
+            std::copy(
                 aAggTypes.getConstArray(),
                 aAggTypes.getConstArray() + aAggTypes.getLength(),
                 aTypes.getArray() + nOldSize
@@ -441,7 +441,7 @@
 
     typedef std::unordered_map< OUString, sal_Int32, OUStringHash > HashMapString2Int;
     typedef std::vector< css::uno::Sequence< css::beans::Property > >   PropSeqArray;
-    typedef std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
+    typedef std::vector< std::vector< sal_Int32 > > IntArrayArray;
 
     // for creating class-unique PropertySetInfo's, we need some info:
     namespace { struct ServiceSpecifierMap : public rtl::Static< HashMapString2Int, ServiceSpecifierMap > {}; }
@@ -492,7 +492,7 @@
     }
 
 
-    struct PropertyNameLess : public ::std::binary_function< Property, Property, bool >
+    struct PropertyNameLess : public std::binary_function< Property, Property, bool >
     {
         bool operator()( const Property& _rLHS, const Property& _rRHS )
         {
@@ -501,7 +501,7 @@
     };
 
 
-    struct PropertyNameEqual : public ::std::unary_function< Property, bool >
+    struct PropertyNameEqual : public std::unary_function< Property, bool >
     {
         const OUString&  m_rCompare;
         explicit PropertyNameEqual( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
@@ -530,7 +530,7 @@
         // look for duplicates, and remember them
         IntArrayArray::value_type& rDuplicateIds = AmbiguousPropertyIds::get()[ _nId ];
         // for this, sort the aggregate properties
-        ::std::sort(
+        std::sort(
             aAggregateProps.getArray(),
             aAggregateProps.getArray() + aAggregateProps.getLength(),
             PropertyNameLess()
@@ -544,7 +544,7 @@
         while ( pProp < pPropEnd )
         {
             // look for the current property in the properties of our aggregate
-            const Property* pAggPropPos = ::std::find_if( pAggProps, pAggPropsEnd, PropertyNameEqual( pProp->Name ) );
+            const Property* pAggPropPos = std::find_if( pAggProps, pAggPropsEnd, PropertyNameEqual( pProp->Name ) );
             if ( pAggPropPos != pAggPropsEnd )
             {   // found a duplicate
                 // -> remove from the aggregate property sequence
@@ -561,7 +561,7 @@
         }
 
         // now, finally, sort the duplicates
-        ::std::sort( rDuplicateIds.begin(), rDuplicateIds.end(), ::std::less< sal_Int32 >() );
+        std::sort( rDuplicateIds.begin(), rDuplicateIds.end(), std::less< sal_Int32 >() );
 
         return new OPropertyArrayAggregationHelper(aProps, aAggregateProps);
     }
@@ -584,7 +584,7 @@
     }
 
 
-    struct Int32Equal : public ::std::unary_function< sal_Int32, bool >
+    struct Int32Equal : public std::unary_function< sal_Int32, bool >
     {
         sal_Int32   m_nCompare;
         explicit Int32Equal( sal_Int32 _nCompare ) : m_nCompare( _nCompare ) { }
@@ -603,7 +603,7 @@
         // look if this id is one we recognized as duplicate
         IntArrayArray::value_type& rDuplicateIds = AmbiguousPropertyIds::get()[ m_nPropertyMapId ];
 
-        IntArrayArray::value_type::const_iterator aPos = ::std::find_if(
+        IntArrayArray::value_type::const_iterator aPos = std::find_if(
             rDuplicateIds.begin(),
             rDuplicateIds.end(),
             Int32Equal( _nHandle )

@@ -164,7 +164,7 @@ private:
     void impl_cleanMemory();
 
     // list of pointer of "struct IMPL_ControlInfo" to hold child-controls
-    ::std::vector< IMPL_ControlInfo* > maControlInfoList;
+    std::vector< IMPL_ControlInfo* > maControlInfoList;
 
     // list of references of XTabController to hold tab-order in this container
     css::uno::Sequence< css::uno::Reference< css::awt::XTabController > >  m_xTabControllerList;

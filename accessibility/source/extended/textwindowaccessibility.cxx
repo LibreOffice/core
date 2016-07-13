@@ -878,8 +878,8 @@ void Document::retrieveParagraphSelection(Paragraph const * pParagraph,
     Paragraphs::size_type nNumber = pParagraph->getNumber();
     TextPaM aStartPaM( rSelection.GetStart() );
     TextPaM aEndPaM( rSelection.GetEnd() );
-    TextPaM aMinPaM( ::std::min( aStartPaM, aEndPaM ) );
-    TextPaM aMaxPaM( ::std::max( aStartPaM, aEndPaM ) );
+    TextPaM aMinPaM( std::min( aStartPaM, aEndPaM ) );
+    TextPaM aMaxPaM( std::max( aStartPaM, aEndPaM ) );
 
     if ( nNumber >= aMinPaM.GetPara() && nNumber <= aMaxPaM.GetPara() )
     {
@@ -891,7 +891,7 @@ void Document::retrieveParagraphSelection(Paragraph const * pParagraph,
             // XXX  numeric overflow (3x)
 
         if ( aStartPaM > aEndPaM )
-            ::std::swap( *pBegin, *pEnd );
+            std::swap( *pBegin, *pEnd );
     }
     else
     {
@@ -2289,8 +2289,8 @@ void Document::handleSelectionChangeNotification()
         case 2:
             {
                 //old has no selection but new has selection
-                nMin = ::std::min(nNewFirstPara, nNewLastPara);
-                nMax = ::std::max(nNewFirstPara, nNewLastPara);
+                nMin = std::min(nNewFirstPara, nNewLastPara);
+                nMax = std::max(nNewFirstPara, nNewLastPara);
                 sendEvent(nMin, nMax,  css::accessibility::AccessibleEventId::SELECTION_CHANGED);
                 sendEvent(nMin, nMax,  css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
             }
@@ -2298,8 +2298,8 @@ void Document::handleSelectionChangeNotification()
         case 3:
             {
                 //old has selection but new has no selection.
-                nMin = ::std::min(m_nSelectionFirstPara, m_nSelectionLastPara);
-                nMax = ::std::max(m_nSelectionFirstPara, m_nSelectionLastPara);
+                nMin = std::min(m_nSelectionFirstPara, m_nSelectionLastPara);
+                nMax = std::max(m_nSelectionFirstPara, m_nSelectionLastPara);
                 sendEvent(nMin, nMax,  css::accessibility::AccessibleEventId::SELECTION_CHANGED);
                 sendEvent(nMin, nMax,  css::accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED);
             }
@@ -2419,12 +2419,12 @@ void Document::handleSelectionChangeNotification()
     else
     {
         // old and new selection not empty => notify events for the two ranges left and right of the overlap
-        ::std::vector< TextPaM > aTextPaMs(4);
+        std::vector< TextPaM > aTextPaMs(4);
         aTextPaMs[0] = aOldTextStart;
         aTextPaMs[1] = aOldTextEnd;
         aTextPaMs[2] = aNewTextStart;
         aTextPaMs[3] = aNewTextEnd;
-        ::std::sort( aTextPaMs.begin(), aTextPaMs.end() );
+        std::sort( aTextPaMs.begin(), aTextPaMs.end() );
 
         nFirst1 = aTextPaMs[0].GetPara();
         nLast1 = aTextPaMs[1].GetPara() + ( aTextPaMs[0] != aTextPaMs[1] ? 1 : 0 );

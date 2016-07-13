@@ -58,8 +58,8 @@ namespace editeng
     class HangulHanjaConversion_Impl
     {
     private:
-        typedef ::std::set< OUString, ::std::less< OUString > >                   StringBag;
-        typedef ::std::map< OUString, OUString, ::std::less< OUString > >  StringMap;
+        typedef std::set< OUString, std::less< OUString > >                       StringBag;
+        typedef std::map< OUString, OUString, std::less< OUString > >      StringMap;
 
     private:
         StringBag               m_sIgnoreList;

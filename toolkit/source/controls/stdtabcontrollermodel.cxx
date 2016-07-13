@@ -54,7 +54,7 @@ void UnoControlModelEntryList::Reset()
 void UnoControlModelEntryList::DestroyEntry( size_t nEntry )
 {
     UnoControlModelEntryListBase::iterator it = maList.begin();
-    ::std::advance( it, nEntry );
+    std::advance( it, nEntry );
 
     if ( (*it)->bGroup )
         delete (*it)->pGroup;
@@ -80,7 +80,7 @@ void UnoControlModelEntryList::push_back( UnoControlModelEntry* item ) {
 void UnoControlModelEntryList::insert( size_t i, UnoControlModelEntry* item ) {
     if ( i < maList.size() ) {
         UnoControlModelEntryListBase::iterator it = maList.begin();
-        ::std::advance( it, i );
+        std::advance( it, i );
         maList.insert( it, item );
     } else {
         maList.push_back( item );
