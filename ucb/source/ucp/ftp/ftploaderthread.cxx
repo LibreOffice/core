@@ -34,10 +34,7 @@ using namespace ftp;
 /*                                                                              */
 /********************************************************************************/
 
-
-#ifdef __cplusplus
 extern "C" {
-#endif
 
     int memory_write_dummy(void *,size_t,size_t,void *)
     {
@@ -54,10 +51,7 @@ extern "C" {
         curl_easy_cleanup(static_cast<CURL*>(pData));
     }
 
-#ifdef __cplusplus
 }
-#endif
-
 
 /********************************************************************************/
 /*                                                                              */

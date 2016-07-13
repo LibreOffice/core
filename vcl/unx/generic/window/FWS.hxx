@@ -22,9 +22,7 @@
 
 #include <X11/Xlib.h>
 
-#if defined(__cplusplus)
 extern "C" {
-#endif
 
 /* Initialize our atoms and determine if the current window manager is
  * providing FWS extension support.
@@ -48,9 +46,7 @@ RegisterFwsWindow (Display *display, Window window);
 void
 AddFwsProtocols (Display *display, Window window);
 
-#if defined(__cplusplus)
 } /* extern "C" */
-#endif
 
 #endif // INCLUDED_VCL_UNX_GENERIC_WINDOW_FWS_HXX
 

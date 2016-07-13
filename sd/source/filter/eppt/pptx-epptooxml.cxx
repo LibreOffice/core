@@ -2321,19 +2321,15 @@ static const struct cppu::ImplementationEntry g_entries[] =
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdfilt_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
 {
     return cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 
-#ifdef __cplusplus
 }
-#endif
 
 void dump_pset(Reference< XPropertySet > const & rXPropSet)
 {

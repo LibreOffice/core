@@ -22,9 +22,7 @@
 #include <salwtype.hxx>
 #include <vector>
 
-#ifdef __cplusplus
 extern "C" {
-#endif
 
 // xim callbacks
 void PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data);
@@ -46,9 +44,7 @@ void IM_IMDestroyCallback (XIM im, XPointer client_data, XPointer call_data);
 
 Bool IsControlCode(sal_Unicode nChar);
 
-#ifdef __cplusplus
 } /* extern "C" */
-#endif
 
 typedef struct {
   sal_Unicode   *pUnicodeBuffer;

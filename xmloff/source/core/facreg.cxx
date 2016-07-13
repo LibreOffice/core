@@ -33,10 +33,8 @@
 
 using namespace com::sun::star;
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 
 #define SINGLEFACTORY(classname)\
         if( classname##_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )\
@@ -142,8 +140,6 @@ XMLOFF_DLLPUBLIC void * SAL_CALL xo_component_getFactory( const sal_Char * pImpl
     return pRet;
 }
 
-#ifdef __cplusplus
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

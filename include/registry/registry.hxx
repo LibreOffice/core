@@ -24,9 +24,7 @@
 #include <registry/regtype.h>
 #include <rtl/ustring.hxx>
 
-#ifdef __cplusplus
 extern "C" {
-#endif
 
 /** specifies a collection of function pointers which represents the complete registry C-API.
 
@@ -73,10 +71,7 @@ struct Registry_Api
 */
 REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api();
 
-#ifdef __cplusplus
 }
-#endif
-
 
 class RegistryKey;
 

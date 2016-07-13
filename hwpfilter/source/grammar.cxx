@@ -58,13 +58,6 @@ typedef union {
 } YYSTYPE;
 #include <stdio.h>
 
-#ifndef __cplusplus
-#ifndef __STDC__
-#define const
-#endif
-#endif
-
-
 #define YYFINAL     102
 #define YYFLAG      -32768
 #define YYNTBASE    43
@@ -438,13 +431,8 @@ int yydebug;            /*  nonzero means print parse trace */
    to the proper pointer type.  */
 
 #ifdef YYPARSE_PARAM
-#ifdef __cplusplus
 #define YYPARSE_PARAM_ARG void *YYPARSE_PARAM
 #define YYPARSE_PARAM_DECL
-#else /* not __cplusplus */
-#define YYPARSE_PARAM_ARG YYPARSE_PARAM
-#define YYPARSE_PARAM_DECL void *YYPARSE_PARAM;
-#endif /* not __cplusplus */
 #else /* not YYPARSE_PARAM */
 #define YYPARSE_PARAM_ARG
 #define YYPARSE_PARAM_DECL
