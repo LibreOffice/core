@@ -114,7 +114,7 @@ WKTYP ScanVersion(LotusContext &rContext, SvStream& aStream)
 
     // first byte has to be 0 because of BOF!
     aStream.ReadUInt16( nOpcode );
-    if (nOpcode != rContext.nBOF)
+    if (nOpcode != LotusContext::nBOF)
         return eWK_UNKNOWN;
 
     aStream.ReadUInt16( nRecLen ).ReadUInt16( nVersNr );
