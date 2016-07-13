@@ -2282,8 +2282,8 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
         if (!pNode->GetWrongList()->IsValid())
         {
             WrongList* pWrongList = pNode->GetWrongList();
-            const sal_Int32 nInvStart = pWrongList->GetInvalidStart();
-            const sal_Int32 nInvEnd = pWrongList->GetInvalidEnd();
+            const size_t nInvStart = pWrongList->GetInvalidStart();
+            const size_t nInvEnd = pWrongList->GetInvalidEnd();
 
             sal_Int32 nPaintFrom = -1;
             sal_Int32 nPaintTo = 0;
@@ -2295,7 +2295,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             EditSelection aSel( aPaM, aPaM );
             while ( ( aSel.Max().GetNode() == pNode ) /* && !bStop */ )
             {
-                if ( ( aSel.Min().GetIndex() > nInvEnd )
+                if ( ( static_cast<size_t>(aSel.Min().GetIndex()) > nInvEnd )
                         || ( ( aSel.Max().GetNode() == pLastNode ) && ( aSel.Max().GetIndex() >= pLastNode->Len() ) ) )
                     break;  // Document end or end of invalid region
 
