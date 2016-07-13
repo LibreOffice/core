@@ -182,6 +182,11 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pLbConnect3->SetSelectHdl( LINK( this, ScFilterDlg, LbSelectHdl ) );
     pLbConnect4->SetSelectHdl( LINK( this, ScFilterDlg, LbSelectHdl ) );
 
+    pLbField1->setMaxWidthChars(10);
+    pLbField2->setMaxWidthChars(10);
+    pLbField3->setMaxWidthChars(10);
+    pLbField4->setMaxWidthChars(10);
+
     pLbCond1->SetSelectHdl( LINK( this, ScFilterDlg, LbSelectHdl ) );
     pLbCond2->SetSelectHdl( LINK( this, ScFilterDlg, LbSelectHdl ) );
     pLbCond3->SetSelectHdl( LINK( this, ScFilterDlg, LbSelectHdl ) );
@@ -373,12 +378,13 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         pEdVal4->Disable();
     }
 
-    if(pDoc!=nullptr &&
-        pDoc->GetChangeTrack()!=nullptr) pBtnCopyResult->Disable();
-    // Switch on modal mode
-//  SetDispatcherLock( true );
-    //@BugID 54702 Enable/disable only in Basic class
-//  SFX_APPWINDOW->Disable(false);      //! general method in ScAnyRefDlg
+    pEdVal1->setMaxWidthChars(10);
+    pEdVal2->setMaxWidthChars(10);
+    pEdVal3->setMaxWidthChars(10);
+    pEdVal4->setMaxWidthChars(10);
+
+    if (pDoc != nullptr && pDoc->GetChangeTrack() != nullptr)
+        pBtnCopyResult->Disable();
 }
 
 bool ScFilterDlg::Close()
