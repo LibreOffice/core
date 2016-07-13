@@ -31,6 +31,7 @@
 #include "SlideTransitionPanel.hxx"
 #include "TableDesignPanel.hxx"
 #include "SlideBackground.hxx"
+#include "MoreShapesPanel.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -132,6 +133,8 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         pControl = VclPtr<NavigatorWrapper>::Create(pParentWindow, *pBase, pBindings);
     else if (EndsWith(rsUIElementResourceURL, "/SlideBackgroundPanel"))
         pControl = VclPtr<SlideBackground>::Create(pParentWindow, *pBase, xFrame, pBindings);
+    else if (EndsWith(rsUIElementResourceURL, "/MoreShapesPanel"))
+        pControl = VclPtr<MoreShapesPanel>::Create(pParentWindow, xFrame);
 #undef EndsWith
 
     if (!pControl)

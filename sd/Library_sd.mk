@@ -336,6 +336,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/sidebar/MasterPageDescriptor \
 	sd/source/ui/sidebar/MasterPageObserver \
 	sd/source/ui/sidebar/MasterPagesSelector \
+	sd/source/ui/sidebar/MoreShapesPanel \
 	sd/source/ui/sidebar/NavigatorWrapper \
 	sd/source/ui/sidebar/PanelBase \
 	sd/source/ui/sidebar/PanelFactory \

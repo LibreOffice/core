@@ -118,6 +118,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/dialog/hexcolorcontrol \
     svx/source/dialog/framelink \
     svx/source/dialog/langbox \
+    svx/source/dialog/moreshapeslistbox \
     svx/source/dialog/pagenumberlistbox \
     svx/source/dialog/papersizelistbox \
     svx/source/dialog/stddlg \

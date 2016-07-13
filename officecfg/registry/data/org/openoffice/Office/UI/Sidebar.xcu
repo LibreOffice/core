@@ -739,6 +739,33 @@
         </prop>
       </node>
 
+      <node oor:name="MoreShapesPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">More</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>MoreShapesPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ShapesDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            DrawImpress, DrawPage,        visible  ;
+            DrawImpress, default,         visible  ;
+            DrawImpress, HandoutPage,     visible  ;
+            DrawImpress, NotesPage,       visible  ;
+            DrawImpress, SlidesorterPage, visible  ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SdPanelFactory/MoreShapesPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>200</value>
+        </prop>
+      </node>
+
       <node oor:name="SlideBackgroundPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Slide</value>
