@@ -106,7 +106,7 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
     return eERR_OK;
 }
 
-WKTYP ScanVersion(LotusContext &rContext, SvStream& aStream)
+WKTYP ScanVersion(SvStream& aStream)
 {
     // PREC:    pWKFile:   pointer to open file
     // POST:    return:     type of file
@@ -114,7 +114,7 @@ WKTYP ScanVersion(LotusContext &rContext, SvStream& aStream)
 
     // first byte has to be 0 because of BOF!
     aStream.ReadUInt16( nOpcode );
-    if (nOpcode != rContext.nBOF)
+    if (nOpcode != LotusContext::nBOF)
         return eWK_UNKNOWN;
 
     aStream.ReadUInt16( nRecLen ).ReadUInt16( nVersNr );
@@ -182,7 +182,7 @@ FltError ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocume
     ScfStreamProgressBar aPrgrsBar( aStream, pDocument->GetDocumentShell() );
 
     // detect file type
-    rContext.eTyp = ScanVersion(rContext, aStream);
+    rContext.eTyp = ScanVersion(aStream);
     rContext.aLotusPatternPool.clear();
 
     return generate_Opcodes(rContext, aStream, aPrgrsBar);
