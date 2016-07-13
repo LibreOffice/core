@@ -2502,10 +2502,7 @@ void SvxMenuConfigPage::dispose()
 {
     for ( sal_Int32 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
-        MenuSaveInData* pData =
-            static_cast<MenuSaveInData*>(m_pSaveInListBox->GetEntryData( i ));
-
-        delete pData;
+        delete static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
     }
     m_pSaveInListBox->Clear();
 
