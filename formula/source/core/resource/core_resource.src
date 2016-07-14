@@ -405,8 +405,6 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_BETA_INV_MS { Text = "COM.MICROSOFT.BETA.INV" ; };
     String SC_OPCODE_WEEK { Text = "WEEKNUM" ; };
     String SC_OPCODE_ISOWEEKNUM { Text = "ISOWEEKNUM" ; };
-    /* WEEKNUM_OOO currently (5.1) not written, see
-     * formula/source/core/api/token.cxx FormulaTokenArray::RewriteMissing() */
     String SC_OPCODE_WEEKNUM_OOO { Text = "ORG.LIBREOFFICE.WEEKNUM_OOO" ; };
     String SC_OPCODE_EASTERSUNDAY { Text = "ORG.OPENOFFICE.EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
