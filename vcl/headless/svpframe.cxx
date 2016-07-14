@@ -285,13 +285,8 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 
 void SvpSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    if( m_bVisible )
-    {
-        rWidth = maGeometry.nWidth;
-        rHeight = maGeometry.nHeight;
-    }
-    else
-        rWidth = rHeight = 0;
+    rWidth = maGeometry.nWidth;
+    rHeight = maGeometry.nHeight;
 }
 
 void SvpSalFrame::GetWorkArea( Rectangle& rRect )
