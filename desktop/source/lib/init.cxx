@@ -308,6 +308,19 @@ static std::vector<beans::PropertyValue> jsonToPropertyValuesVector(const char* 
     return aArguments;
 }
 
+static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
+{
+    boost::property_tree::ptree aTree;
+    OUString aType = anyItem.getValueTypeName();
+    aTree.put("type", aType.toUtf8().getStr());
+
+    if (aType == "string")
+        aTree.put("value", anyItem.get<OUString>().toUtf8().getStr());
+    // TODO: Add more as required
+
+    return aTree;
+}
+
 extern "C"
 {
 
@@ -1458,10 +1471,12 @@ public:
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
+    std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
 
     // handle potential interaction
     if (gImpl && aCommand == ".uno:Save")
@@ -1475,11 +1490,42 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         aValue.Value <<= xInteraction;
 
         aPropertyValuesVector.push_back(aValue);
+
+        // Check if DontSaveIfUnmodified is specified
+        bool bDontSaveIfUnmodified = false;
+        auto it = aPropertyValuesVector.begin();
+        while (it != aPropertyValuesVector.end())
+        {
+            if (it->Name == "DontSaveIfUnmodified")
+            {
+                bDontSaveIfUnmodified = it->Value.get<bool>();
+
+                // Also remove this param before handling to core
+                it = aPropertyValuesVector.erase(it);
+            }
+            else
+                it++;
+        }
+
+        // skip saving and tell the result via UNO_COMMAND_RESULT
+        if (bDontSaveIfUnmodified && !pDocSh->IsModified())
+        {
+            boost::property_tree::ptree aTree;
+            aTree.put("commandName", pCommand);
+            aTree.put("success", false);
+
+            // Add the reason for not saving
+            const uno::Any aResultValue = uno::makeAny(OUString("unmodified"));
+            aTree.add_child("result", unoAnyToPropertyTree(aResultValue));
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, strdup(aStream.str().c_str()));
+            return;
+        }
     }
 
     bool bResult = false;
-
-    std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
     if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers[nView])
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
