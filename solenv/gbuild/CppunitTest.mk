@@ -49,6 +49,8 @@ gb_CppunitTest_VALGRINDTOOL := valgrind --tool=callgrind --dump-instr=yes --inst
 ifneq ($(strip $(VALGRIND_GDB)),)
 gb_CppunitTest_VALGRINDTOOL += --vgdb=yes --vgdb-error=0
 endif
+else
+gb_CppunitTest_malloc_check_params := $(gb_CppunitTest_malloc_check)
 endif
 
 # defined by platform
@@ -109,7 +111,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(if $(HEADLESS),,VCL_HIDE_WINDOWS=1) \
-		$(gb_CppunitTest_malloc_check) \
+		$(gb_CppunitTest_malloc_check_params) \
 		$(if $(strip $(PYTHON_URE)),\
 			PYTHONDONTWRITEBYTECODE=1) \
 		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
