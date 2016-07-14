@@ -922,8 +922,6 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
 
     if( mxClipboard.is() && !mxTerminateListener.is() )
     {
-        SolarMutexReleaser aReleaser;
-
         try
         {
             TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
@@ -949,8 +947,6 @@ void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
 
     if( xSelection.is() && !mxTerminateListener.is() )
     {
-        SolarMutexReleaser aReleaser;
-
         try
         {
             TransferableHelper*                 pThis = const_cast< TransferableHelper* >( this );
