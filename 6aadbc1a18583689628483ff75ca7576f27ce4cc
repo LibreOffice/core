@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba84c18e_efc11830",
+        "filename": "svx/source/xoutdev/_xpoly.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-07-14T01:57:48Z",
+      "side": 1,
+      "message": "hmmmm, this is missing a \u0026 ?\nah, but I see that  B2DPolyPolygon::getB2DPolygon is not returning a const\u0026 either, that is not very efficient.\nI guess we can commit this and then fix up  B2DPolyPolygon::getB2DPolygon later",
+      "revId": "6aadbc1a18583689628483ff75ca7576f27ce4cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
