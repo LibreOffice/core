@@ -1013,7 +1013,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:ToggleMergeCells"),
         OUString(".uno:NumberFormatCurrency"),
         OUString(".uno:NumberFormatPercent"),
-        OUString(".uno:NumberFormatDate")
+        OUString(".uno:NumberFormatDate"),
+        OUString(".uno:SortAscending"),
+        OUString(".uno:SortDescending")
     };
 
     util::URL aCommandURL;
