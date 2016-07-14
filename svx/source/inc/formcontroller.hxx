@@ -81,7 +81,7 @@
 
 #include <cppuhelper/compbase.hxx>
 
-struct FmXTextComponentLess : public ::std::binary_function< css::uno::Reference< css::awt::XTextComponent >, css::uno::Reference< css::awt::XTextComponent> , bool>
+struct FmXTextComponentLess : public std::binary_function< css::uno::Reference< css::awt::XTextComponent >, css::uno::Reference< css::awt::XTextComponent> , bool>
 {
     bool operator() (const css::uno::Reference< css::awt::XTextComponent >& x, const css::uno::Reference< css::awt::XTextComponent >& y) const
     {
@@ -89,15 +89,15 @@ struct FmXTextComponentLess : public ::std::binary_function< css::uno::Reference
     }
 };
 
-typedef ::std::map< css::uno::Reference< css::awt::XTextComponent >, OUString, FmXTextComponentLess> FmFilterRow;
-typedef ::std::vector< FmFilterRow > FmFilterRows;
-typedef ::std::vector< css::uno::Reference< css::form::runtime::XFormController > > FmFormControllers;
+typedef std::map< css::uno::Reference< css::awt::XTextComponent >, OUString, FmXTextComponentLess> FmFilterRow;
+typedef std::vector< FmFilterRow > FmFilterRows;
+typedef std::vector< css::uno::Reference< css::form::runtime::XFormController > > FmFormControllers;
 
 namespace vcl { class Window; }
 
 namespace svxform
 {
-    typedef ::std::vector< css::uno::Reference< css::awt::XTextComponent > >    FilterComponents;
+    typedef std::vector< css::uno::Reference< css::awt::XTextComponent > >      FilterComponents;
     class ControlBorderManager;
     struct FmFieldInfo;
 
@@ -133,7 +133,7 @@ namespace svxform
                                         ,public ::comphelper::OAggregationArrayUsageHelper< FormController >
                                         ,public ::svxform::OSQLParserClient
     {
-        typedef ::std::map  <   sal_Int16,
+        typedef std::map    <   sal_Int16,
                                 css::uno::Reference< css::frame::XDispatch >
                             >   DispatcherContainer;
 
@@ -172,7 +172,7 @@ namespace svxform
         css::uno::Reference< css::form::runtime::XFormOperations >
                                     m_xFormOperations;
         DispatcherContainer         m_aFeatureDispatchers;
-        ::std::set< sal_Int16 >     m_aInvalidFeatures;     // for asynchronous feature invalidation
+        std::set< sal_Int16 >       m_aInvalidFeatures;     // for asynchronous feature invalidation
 
         OUString                    m_aMode;
 
@@ -181,7 +181,7 @@ namespace svxform
         ::svxform::DelayedEvent     m_aActivationEvent;
         ::svxform::DelayedEvent     m_aDeactivationEvent;
 
-        ::std::unique_ptr< ColumnInfoCache >
+        std::unique_ptr< ColumnInfoCache >
                                     m_pColumnInfoCache;
 
         sal_Int32                   m_nCurrentFilterPosition;   // current level for filtering (or-criteria)
@@ -434,7 +434,7 @@ namespace svxform
 
         void startFiltering();
         void stopFiltering();
-        void setFilter(::std::vector<FmFieldInfo>&);
+        void setFilter(std::vector<FmFieldInfo>&);
         void startListening();
         void stopListening();
 

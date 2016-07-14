@@ -420,7 +420,7 @@ Sequence< Type > SAL_CALL AccessibleControlShape::getTypes() throw (RuntimeExcep
         Type aThisRoundType = *pBegin;
         if ( ++pBegin != pEnd )
         {
-            pEnd = ::std::remove( pBegin, pEnd, aThisRoundType );
+            pEnd = std::remove( pBegin, pEnd, aThisRoundType );
             // now all types between begin and (the old) end which equal aThisRoundType
             // are moved behind the new end
         }

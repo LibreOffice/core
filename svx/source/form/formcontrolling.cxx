@@ -72,7 +72,7 @@ namespace svx
             sal_Int32       nSlotId;        // the SFX-compatible slot ID
             sal_Int16       nFormFeature;   // the css.form.runtime.FormFeature ID
         };
-        typedef ::std::vector< FeatureDescription > FeatureDescriptions;
+        typedef std::vector< FeatureDescription > FeatureDescriptions;
 
 
         const FeatureDescriptions& getFeatureDescriptions()
@@ -117,7 +117,7 @@ namespace svx
     namespace
     {
 
-        struct MatchFeatureDescriptionByURL : public ::std::unary_function< FeatureDescription, bool >
+        struct MatchFeatureDescriptionByURL : public std::unary_function< FeatureDescription, bool >
         {
             const OUString&  m_rURL;
             explicit MatchFeatureDescriptionByURL( const OUString& _rURL ) :m_rURL( _rURL ) { }
@@ -129,7 +129,7 @@ namespace svx
         };
 
 
-        struct MatchFeatureDescriptionBySlotId : public ::std::unary_function< FeatureDescription, bool >
+        struct MatchFeatureDescriptionBySlotId : public std::unary_function< FeatureDescription, bool >
         {
             sal_Int32   m_nSlotId;
             explicit MatchFeatureDescriptionBySlotId( sal_Int32 _nSlotId ) :m_nSlotId( _nSlotId ) { }
@@ -141,7 +141,7 @@ namespace svx
         };
 
 
-        struct MatchFeatureDescriptionByFormFeature : public ::std::unary_function< FeatureDescription, bool >
+        struct MatchFeatureDescriptionByFormFeature : public std::unary_function< FeatureDescription, bool >
         {
             sal_Int32   m_nFormFeature;
             explicit MatchFeatureDescriptionByFormFeature( sal_Int32 _nFormFeature ) :m_nFormFeature( _nFormFeature ) { }
@@ -153,7 +153,7 @@ namespace svx
         };
 
 
-        struct FormFeatureToSlotId : public ::std::unary_function< sal_Int16, sal_Int32 >
+        struct FormFeatureToSlotId : public std::unary_function< sal_Int16, sal_Int32 >
         {
             sal_Int32 operator()( sal_Int16 FormFeature )
             {
@@ -166,7 +166,7 @@ namespace svx
     sal_Int32 FeatureSlotTranslation::getControllerFeatureSlotIdForURL( const OUString& _rMainURL )
     {
         const FeatureDescriptions& rDescriptions( getFeatureDescriptions() );
-        FeatureDescriptions::const_iterator pos = ::std::find_if( rDescriptions.begin(), rDescriptions.end(), MatchFeatureDescriptionByURL( _rMainURL ) );
+        FeatureDescriptions::const_iterator pos = std::find_if( rDescriptions.begin(), rDescriptions.end(), MatchFeatureDescriptionByURL( _rMainURL ) );
         return ( pos != rDescriptions.end() ) ? pos->nSlotId : -1;
     }
 
@@ -174,7 +174,7 @@ namespace svx
     sal_Int16 FeatureSlotTranslation::getFormFeatureForSlotId( sal_Int32 _nSlotId )
     {
         const FeatureDescriptions& rDescriptions( getFeatureDescriptions() );
-        FeatureDescriptions::const_iterator pos = ::std::find_if( rDescriptions.begin(), rDescriptions.end(), MatchFeatureDescriptionBySlotId( _nSlotId ) );
+        FeatureDescriptions::const_iterator pos = std::find_if( rDescriptions.begin(), rDescriptions.end(), MatchFeatureDescriptionBySlotId( _nSlotId ) );
         OSL_ENSURE( pos != rDescriptions.end(), "FeatureSlotTranslation::getFormFeatureForSlotId: not found!" );
         return ( pos != rDescriptions.end() ) ? pos->nFormFeature : -1;
     }
@@ -183,7 +183,7 @@ namespace svx
     sal_Int32 FeatureSlotTranslation::getSlotIdForFormFeature( sal_Int16 _nFormFeature )
     {
         const FeatureDescriptions& rDescriptions( getFeatureDescriptions() );
-        FeatureDescriptions::const_iterator pos = ::std::find_if( rDescriptions.begin(), rDescriptions.end(), MatchFeatureDescriptionByFormFeature( _nFormFeature ) );
+        FeatureDescriptions::const_iterator pos = std::find_if( rDescriptions.begin(), rDescriptions.end(), MatchFeatureDescriptionByFormFeature( _nFormFeature ) );
         OSL_ENSURE( pos != rDescriptions.end(), "FeatureSlotTranslation::getSlotIdForFormFeature: not found!" );
         return ( pos != rDescriptions.end() ) ? pos->nSlotId : -1;
     }
@@ -387,8 +387,8 @@ namespace svx
             // nobody's interested in ...
             return;
 
-        ::std::vector< sal_Int32 > aFeatures( Features.getLength() );
-        ::std::transform(
+        std::vector< sal_Int32 > aFeatures( Features.getLength() );
+        std::transform(
             Features.getConstArray(),
             Features.getConstArray() + Features.getLength(),
             aFeatures.begin(),
@@ -408,7 +408,7 @@ namespace svx
         // actually, it's a little bit more than the supported features,
         // but on the medium term, we are to support everything listed
         // here
-        ::std::vector< sal_Int32 > aSupportedFeatures;
+        std::vector< sal_Int32 > aSupportedFeatures;
         const sal_Int32 pSupportedFeatures[] =
         {
             SID_FM_RECORD_FIRST,
@@ -436,7 +436,7 @@ namespace svx
         };
         sal_Int32 nFeatureCount = SAL_N_ELEMENTS( pSupportedFeatures );
         aSupportedFeatures.resize( nFeatureCount );
-        ::std::copy( pSupportedFeatures, pSupportedFeatures + nFeatureCount, aSupportedFeatures.begin() );
+        std::copy( pSupportedFeatures, pSupportedFeatures + nFeatureCount, aSupportedFeatures.begin() );
 
         m_pInvalidationCallback->invalidateFeatures( aSupportedFeatures );
     }

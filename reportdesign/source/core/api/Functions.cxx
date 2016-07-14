@@ -84,7 +84,7 @@ void SAL_CALL OFunctions::insertByIndex( ::sal_Int32 Index, const uno::Any& aEle
         else
         {
             TFunctions::iterator aPos = m_aFunctions.begin();
-            ::std::advance(aPos,Index);
+            std::advance(aPos,Index);
             m_aFunctions.insert(aPos, xFunction);
         }
         xFunction->setParent(*this);
@@ -102,7 +102,7 @@ void SAL_CALL OFunctions::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexO
         ::osl::MutexGuard aGuard(m_aMutex);
         checkIndex(Index);
         TFunctions::iterator aPos = m_aFunctions.begin();
-        ::std::advance(aPos,Index);
+        std::advance(aPos,Index);
         xFunction = *aPos;
         m_aFunctions.erase(aPos);
         xFunction->setParent(nullptr);
@@ -122,7 +122,7 @@ void SAL_CALL OFunctions::replaceByIndex( ::sal_Int32 Index, const uno::Any& Ele
         if ( !xFunction.is() )
             throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_xContext->getServiceManager()),*this,2);
         TFunctions::iterator aPos = m_aFunctions.begin();
-        ::std::advance(aPos,Index);
+        std::advance(aPos,Index);
         aOldElement <<= *aPos;
         *aPos = xFunction;
     }
@@ -143,7 +143,7 @@ uno::Any SAL_CALL OFunctions::getByIndex( ::sal_Int32 Index ) throw (lang::Index
     ::osl::MutexGuard aGuard(m_aMutex);
     checkIndex(Index);
     TFunctions::const_iterator aPos = m_aFunctions.begin();
-    ::std::advance(aPos,Index);
+    std::advance(aPos,Index);
     return uno::makeAny(*aPos);
 }
 

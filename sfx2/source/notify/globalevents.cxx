@@ -54,7 +54,7 @@ public:
     osl::Mutex m_aLock;
 };
 
-typedef ::std::vector< css::uno::Reference< css::frame::XModel > > TModelList;
+typedef std::vector< css::uno::Reference< css::frame::XModel > > TModelList;
 
 
 //TODO: remove support of obsolete document::XEventBroadcaster/Listener

@@ -121,7 +121,7 @@ void SdrPageView::AppendPageWindow(SdrPageWindow& rNew)
 
 SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
 {
-    const SdrPageWindowVector::iterator aFindResult = ::std::find(maPageWindows.begin(), maPageWindows.end(), &rOld);
+    const SdrPageWindowVector::iterator aFindResult = std::find(maPageWindows.begin(), maPageWindows.end(), &rOld);
 
     if(aFindResult != maPageWindows.end())
     {

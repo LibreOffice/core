@@ -2114,7 +2114,7 @@ const TransitionInfo* getTransitionInfo(
     static const TransitionInfo* pTableEnd = lcl_transitionInfo+
         SAL_N_ELEMENTS(lcl_transitionInfo);
 
-    const TransitionInfo* pRes = ::std::find_if(
+    const TransitionInfo* pRes = std::find_if(
         lcl_transitionInfo, pTableEnd,
         TransitionInfo::Comparator( nTransitionType,
                                     nTransitionSubType ) );

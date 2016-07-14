@@ -540,7 +540,7 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeEx
 
     case BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS:
     {
-        ::boost::optional< ::std::vector< ::Color > > aColors( m_xTableModel->getRowBackgroundColors() );
+        ::boost::optional< std::vector< ::Color > > aColors( m_xTableModel->getRowBackgroundColors() );
         if ( !aColors )
             aPropertyValue.clear();
         else

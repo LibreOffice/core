@@ -78,7 +78,7 @@ namespace ControlModification
     static const ::sal_Int32 HEIGHT_GREATEST    = (sal_Int32)10;
 }
 
-class AnyConverter : public ::std::binary_function< OUString,css::uno::Any,css::uno::Any >
+class AnyConverter : public std::binary_function< OUString,css::uno::Any,css::uno::Any >
 {
 public:
     virtual ~AnyConverter(){}
@@ -87,7 +87,7 @@ public:
         return lhs;
     }
 };
-typedef ::std::pair< OUString, std::shared_ptr<AnyConverter> > TPropertyConverter;
+typedef std::pair< OUString, std::shared_ptr<AnyConverter> > TPropertyConverter;
 typedef std::map<OUString, TPropertyConverter> TPropertyNamePair;
 /** returns the property name map for the given property id
     @param  _nObjectId  the object id

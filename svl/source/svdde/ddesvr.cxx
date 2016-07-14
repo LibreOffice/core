@@ -543,7 +543,7 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
                 if( pC->pTopic == &rTopic )
                 {
                     ConvList::iterator it = pConv->begin();
-                    ::std::advance( it, n );
+                    std::advance( it, n );
                     delete *it;
                     pConv->erase( it );
                 }

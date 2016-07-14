@@ -36,7 +36,7 @@ class CKeywordsTag : public ITag
         virtual void addCharacters(const std::wstring& characters);
         virtual void addAttributes(const XmlTagAttributes_t& attributes);
         virtual std::wstring getTagContent();
-        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ::std::wstring(); };
+        virtual std::wstring const getTagAttribute( std::wstring      const & /*attrname*/ ){ return std::wstring(); };
 
     private:
         StringList_t m_slKeywords;

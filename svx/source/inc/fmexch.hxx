@@ -39,7 +39,7 @@ namespace svxform
 {
 
 
-    typedef ::std::set< SvTreeListEntry* >  ListBoxEntrySet;
+    typedef std::set< SvTreeListEntry* >    ListBoxEntrySet;
 
 
     //= OLocalExchange

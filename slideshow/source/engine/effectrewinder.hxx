@@ -90,9 +90,9 @@ public:
             is called then the other functor is not called.
     */
     bool rewind (
-        const ::std::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
-        const ::std::function<void ()>& rSlideRewindFunctor,
-        const ::std::function<void ()>& rPreviousSlideFunctor);
+        const std::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
+        const std::function<void ()>& rSlideRewindFunctor,
+        const std::function<void ()>& rPreviousSlideFunctor);
 
     /** Call this method after gotoPreviousEffect() triggered a slide change
         to the previous slide.
@@ -119,7 +119,7 @@ private:
     EventSharedPtr mpAsynchronousRewindEvent;
 
     css::uno::Reference<css::animations::XAnimationNode> mxCurrentAnimationRootNode;
-    ::std::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
+    std::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
 
     bool mbNonUserTriggeredMainSequenceEffectSeen;
 
@@ -153,7 +153,7 @@ private:
     void asynchronousRewind (
         sal_Int32 nEffectCount,
         const bool bRedisplayCurrentSlide,
-        const ::std::function<void ()>& rSlideRewindFunctor);
+        const std::function<void ()>& rSlideRewindFunctor);
 
     /** Go to the previous slide and replay all of its main sequence effects
         (or effect groups).
@@ -161,7 +161,7 @@ private:
             This functor is used to go to the previous slide.
     */
     void asynchronousRewindToPreviousSlide (
-        const ::std::function<void ()>& rPreviousSlideFunctor);
+        const std::function<void ()>& rPreviousSlideFunctor);
 };
 
 } } // end of namespace ::slideshow::internal

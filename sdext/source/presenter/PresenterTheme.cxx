@@ -145,7 +145,7 @@ typedef std::shared_ptr<PaneStyle> SharedPaneStyle;
 class PaneStyleContainer
 {
 private:
-    ::std::vector<SharedPaneStyle> mStyles;
+    std::vector<SharedPaneStyle> mStyles;
 
 public:
     void Read (
@@ -158,7 +158,7 @@ private:
     void ProcessPaneStyle (
         ReadContext& rReadContext,
         const OUString& rsKey,
-        const ::std::vector<css::uno::Any>& rValues);
+        const std::vector<css::uno::Any>& rValues);
 };
 
 /** A ViewStyle describes how a view is displayed.
@@ -184,7 +184,7 @@ typedef std::shared_ptr<ViewStyle> SharedViewStyle;
 class ViewStyleContainer
 {
 private:
-    ::std::vector<SharedViewStyle> mStyles;
+    std::vector<SharedViewStyle> mStyles;
 
 public:
     void Read (
@@ -203,7 +203,7 @@ class ViewDescriptor
 {
 };
 typedef std::shared_ptr<ViewDescriptor> SharedViewDescriptor;
-typedef ::std::vector<SharedViewDescriptor> ViewDescriptorContainer;
+typedef std::vector<SharedViewDescriptor> ViewDescriptorContainer;
 
 class StyleAssociationContainer
 {
@@ -221,7 +221,7 @@ private:
     void ProcessStyleAssociation(
         ReadContext& rReadContext,
         const OUString& rsKey,
-        const ::std::vector<css::uno::Any>& rValues);
+        const std::vector<css::uno::Any>& rValues);
 };
 
 } // end of anonymous namespace
@@ -317,7 +317,7 @@ OUString PresenterTheme::GetStyleName (const OUString& rsResourceURL) const
     return sStyleName;
 }
 
-::std::vector<sal_Int32> PresenterTheme::GetBorderSize (
+std::vector<sal_Int32> PresenterTheme::GetBorderSize (
     const OUString& rsStyleName,
     const bool bOuter) const
 {
@@ -331,7 +331,7 @@ OUString PresenterTheme::GetStyleName (const OUString& rsResourceURL) const
             return pPaneStyle->maInnerBorderSize.ToVector();
     else
     {
-        return ::std::vector<sal_Int32>(4,0);
+        return std::vector<sal_Int32>(4,0);
     }
 }
 
@@ -854,7 +854,7 @@ void PaneStyleContainer::Read (
         UNO_QUERY);
     if (xPaneStyleList.is())
     {
-        ::std::vector<OUString> aProperties;
+        std::vector<OUString> aProperties;
         aProperties.reserve(6);
         aProperties.push_back("StyleName");
         aProperties.push_back("ParentStyle");
@@ -875,7 +875,7 @@ void PaneStyleContainer::Read (
 void PaneStyleContainer::ProcessPaneStyle(
     ReadContext& rReadContext,
     const OUString& rsKey,
-    const ::std::vector<Any>& rValues)
+    const std::vector<Any>& rValues)
 {
     (void)rsKey;
 
@@ -890,7 +890,7 @@ void PaneStyleContainer::ProcessPaneStyle(
     if (rValues[1] >>= sParentStyleName)
     {
         // Find parent style.
-        ::std::vector<SharedPaneStyle>::const_iterator iStyle;
+        std::vector<SharedPaneStyle>::const_iterator iStyle;
         for (iStyle=mStyles.begin(); iStyle!=mStyles.end(); ++iStyle)
             if ((*iStyle)->msStyleName.equals(sParentStyleName))
             {
@@ -932,8 +932,8 @@ void PaneStyleContainer::ProcessPaneStyle(
 
 SharedPaneStyle PaneStyleContainer::GetPaneStyle (const OUString& rsStyleName) const
 {
-    ::std::vector<SharedPaneStyle>::const_iterator iEnd (mStyles.end());
-    for (::std::vector<SharedPaneStyle>::const_iterator iStyle=mStyles.begin(); iStyle!=iEnd; ++iStyle)
+    std::vector<SharedPaneStyle>::const_iterator iEnd (mStyles.end());
+    for (std::vector<SharedPaneStyle>::const_iterator iStyle=mStyles.begin(); iStyle!=iEnd; ++iStyle)
         if ((*iStyle)->msStyleName == rsStyleName)
             return *iStyle;
     return SharedPaneStyle();
@@ -1018,7 +1018,7 @@ void ViewStyleContainer::ProcessViewStyle(
         >>= sParentStyleName)
     {
         // Find parent style.
-        ::std::vector<SharedViewStyle>::const_iterator iStyle;
+        std::vector<SharedViewStyle>::const_iterator iStyle;
         for (iStyle=mStyles.begin(); iStyle!=mStyles.end(); ++iStyle)
             if ((*iStyle)->msStyleName.equals(sParentStyleName))
             {
@@ -1054,8 +1054,8 @@ void ViewStyleContainer::ProcessViewStyle(
 
 SharedViewStyle ViewStyleContainer::GetViewStyle (const OUString& rsStyleName) const
 {
-    ::std::vector<SharedViewStyle>::const_iterator iEnd (mStyles.end());
-    for (::std::vector<SharedViewStyle>::const_iterator iStyle=mStyles.begin(); iStyle!=iEnd; ++iStyle)
+    std::vector<SharedViewStyle>::const_iterator iEnd (mStyles.end());
+    for (std::vector<SharedViewStyle>::const_iterator iStyle=mStyles.begin(); iStyle!=iEnd; ++iStyle)
         if ((*iStyle)->msStyleName == rsStyleName)
             return *iStyle;
     return SharedViewStyle();
@@ -1106,7 +1106,7 @@ void StyleAssociationContainer::Read (
         UNO_QUERY);
     if (xStyleAssociationList.is())
     {
-        ::std::vector<OUString> aProperties (2);
+        std::vector<OUString> aProperties (2);
         aProperties[0] = "ResourceURL";
         aProperties[1] = "StyleName";
         PresenterConfigurationAccess::ForAll(
@@ -1131,7 +1131,7 @@ OUString StyleAssociationContainer::GetStyleName (const OUString& rsResourceName
 void StyleAssociationContainer::ProcessStyleAssociation(
     ReadContext& rReadContext,
     const OUString& rsKey,
-    const ::std::vector<Any>& rValues)
+    const std::vector<Any>& rValues)
 {
     (void)rReadContext;
     (void)rsKey;

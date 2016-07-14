@@ -41,8 +41,8 @@ class PresenterFrameworkObserver
       public PresenterFrameworkObserverInterfaceBase
 {
 public:
-    typedef ::std::function<bool ()> Predicate;
-    typedef ::std::function<void (bool)> Action;
+    typedef std::function<bool ()> Predicate;
+    typedef std::function<void (bool)> Action;
 
     PresenterFrameworkObserver(const PresenterFrameworkObserver&) = delete;
     PresenterFrameworkObserver& operator=(const PresenterFrameworkObserver&) = delete;

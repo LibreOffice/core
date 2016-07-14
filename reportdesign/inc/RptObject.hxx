@@ -36,7 +36,7 @@
 
 namespace rptui
 {
-typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexToNameMap;
+typedef std::multimap< sal_Int16, OUString, std::less< sal_Int16 > > IndexToNameMap;
     enum DlgEdHintKind
     {
         RPTUI_HINT_UNKNOWN,

@@ -77,7 +77,7 @@ namespace slideshow
             double                  mnDuration;
         };
 
-        typedef ::std::vector< MtfAnimationFrame > VectorOfMtfAnimationFrames;
+        typedef std::vector< MtfAnimationFrame > VectorOfMtfAnimationFrames;
 
 
         /** Retrieve a meta file for the given shape
@@ -119,7 +119,7 @@ namespace slideshow
             Input graphic object, to extract animations from
          */
         bool getAnimationFromGraphic( VectorOfMtfAnimationFrames& o_rFrames,
-                                      ::std::size_t&              o_rLoopCount,
+                                      std::size_t&                o_rLoopCount,
                                       CycleMode&                  o_eCycleMode,
                                       const Graphic&              rGraphic );
 

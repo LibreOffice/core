@@ -159,7 +159,7 @@ struct TURLInfo
 };
 
 
-typedef ::std::vector< TURLInfo > TURLList;
+typedef std::vector< TURLInfo > TURLList;
 
 
 class IRecoveryUpdateListener

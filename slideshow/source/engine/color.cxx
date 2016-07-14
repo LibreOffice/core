@@ -49,8 +49,8 @@ namespace slideshow
                 // r,g,b in [0,1], h in [0,360] and s,l in [0,1]
                 HSLColor::HSLTriple aRes;
 
-                const double nMax( ::std::max(nRed,::std::max(nGreen, nBlue)) );
-                const double nMin( ::std::min(nRed,::std::min(nGreen, nBlue)) );
+                const double nMax( std::max(nRed,std::max(nGreen, nBlue)) );
+                const double nMin( std::min(nRed,std::min(nGreen, nBlue)) );
 
                 const double nDelta( nMax - nMin );
 
@@ -130,16 +130,16 @@ namespace slideshow
             /// Truncate range of value to [0,1]
             double truncateRangeStd( double nVal )
             {
-                return ::std::max( 0.0,
-                                   ::std::min( 1.0,
+                return std::max( 0.0,
+                                   std::min( 1.0,
                                                nVal ) );
             }
 
             /// Truncate range of value to [0,360]
             double truncateRangeHue( double nVal )
             {
-                return ::std::max( 0.0,
-                                   ::std::min( 360.0,
+                return std::max( 0.0,
+                                   std::min( 360.0,
                                                nVal ) );
             }
 

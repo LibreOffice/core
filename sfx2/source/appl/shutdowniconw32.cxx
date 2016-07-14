@@ -147,7 +147,7 @@ static HMENU createSystrayMenu( )
         return NULL;
 
     // collect the URLs of the entries in the File/New menu
-    ::std::set< OUString > aFileNewAppsAvailable;
+    std::set< OUString > aFileNewAppsAvailable;
     SvtDynamicMenuOptions aOpt;
     Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
     const OUString sURLKey( "URL"  );

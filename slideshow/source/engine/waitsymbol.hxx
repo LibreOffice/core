@@ -71,8 +71,8 @@ private:
     void setVisible( const bool bVisible );
     ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
 
-    typedef ::std::vector<
-        ::std::pair<UnoViewSharedPtr,
+    typedef std::vector<
+        std::pair<UnoViewSharedPtr,
                     cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
 
     css::uno::Reference<css::rendering::XBitmap>  mxBitmap;

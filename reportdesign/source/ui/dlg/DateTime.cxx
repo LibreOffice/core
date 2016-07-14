@@ -161,7 +161,7 @@ short ODateTimeDialog::Execute()
             if ( m_pTime->IsChecked() )
             {
                 OUString sDateFormat = m_pTimeListBox->GetSelectEntry();
-                nWidth = ::std::max<sal_Int32>(LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM),nWidth);
+                nWidth = std::max<sal_Int32>(LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM),nWidth);
             }
 
             if ( nWidth > 4000 )

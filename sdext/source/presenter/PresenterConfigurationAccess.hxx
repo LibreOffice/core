@@ -49,7 +49,7 @@ class PresenterConfigurationAccess
 {
 public:
     enum WriteMode { READ_WRITE, READ_ONLY };
-    typedef ::std::function<bool (
+    typedef std::function<bool (
         const OUString&,
         const css::uno::Reference<css::beans::XPropertySet>&)> Predicate;
     static const OUString msPresenterScreenRootName;
@@ -122,10 +122,10 @@ public:
     */
     void CommitChanges();
 
-    typedef ::std::function<void (
+    typedef std::function<void (
         const OUString&,
-        const ::std::vector<css::uno::Any>&) > ItemProcessor;
-    typedef ::std::function<void (
+        const std::vector<css::uno::Any>&) > ItemProcessor;
+    typedef std::function<void (
         const OUString&,
         const css::uno::Reference<css::beans::XPropertySet>&) > PropertySetProcessor;
 
@@ -143,7 +143,7 @@ public:
     */
     static void ForAll (
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,
-        const ::std::vector<OUString>& rArguments,
+        const std::vector<OUString>& rArguments,
         const ItemProcessor& rProcessor);
     static void ForAll (
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,

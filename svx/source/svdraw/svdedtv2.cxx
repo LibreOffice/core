@@ -44,7 +44,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <memory>
 #include <vector>
-using ::std::vector;
+using std::vector;
 using namespace com::sun::star;
 
 SdrObject* SdrEditView::GetMaxToTopObj(SdrObject* /*pObj*/) const

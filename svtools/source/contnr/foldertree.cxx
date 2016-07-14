@@ -51,7 +51,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
                 GetModel()->Remove(pChild);
             }
 
-            ::std::vector< SortingData_Impl* > aContent;
+            std::vector< SortingData_Impl* > aContent;
 
             ::rtl::Reference< ::svt::FileViewContentEnumerator >
                 xContentEnumerator(new FileViewContentEnumerator(
@@ -85,7 +85,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
     }
 }
 
-void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std::pair< OUString, OUString > >& rFolders )
+void FolderTree::FillTreeEntry( const OUString & rUrl, const std::vector< std::pair< OUString, OUString > >& rFolders )
 {
     SetTreePath( rUrl );
 
@@ -99,7 +99,7 @@ void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std:
         }
 
 
-        for(::std::vector< std::pair< OUString, OUString > >::const_iterator it = rFolders.begin(); it != rFolders.end() ; ++it)
+        for(std::vector< std::pair< OUString, OUString > >::const_iterator it = rFolders.begin(); it != rFolders.end() ; ++it)
         {
             SvTreeListEntry* pNewEntry = InsertEntry( it->first, pParent, true  );
             OUString* sData = new OUString( it->second );

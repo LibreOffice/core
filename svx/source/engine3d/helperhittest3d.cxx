@@ -44,7 +44,7 @@ public:
         mfDepth(fDepth)
     {}
 
-    // for ::std::sort
+    // for std::sort
     bool operator<(const ImplPairDephAndObject& rComp) const
     {
         return (mfDepth < rComp.mfDepth);
@@ -60,7 +60,7 @@ void getAllHit3DObjectWithRelativePoint(
     const basegfx::B3DPoint& rBack,
     const E3dCompoundObject& rObject,
     const drawinglayer::geometry::ViewInformation3D& rObjectViewInformation3D,
-    ::std::vector< basegfx::B3DPoint >& o_rResult,
+    std::vector< basegfx::B3DPoint >& o_rResult,
     bool bAnyHit)
 {
     o_rResult.clear();
@@ -157,7 +157,7 @@ E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInf
 void getAllHit3DObjectsSortedFrontToBack(
     const basegfx::B2DPoint& rPoint,
     const E3dScene& rScene,
-    ::std::vector< const E3dCompoundObject* >& o_rResult)
+    std::vector< const E3dCompoundObject* >& o_rResult)
 {
     o_rResult.clear();
     SdrObjList* pList = rScene.GetSubList();
@@ -176,7 +176,7 @@ void getAllHit3DObjectsSortedFrontToBack(
         if(aRelativePoint.getX() >= 0.0 && aRelativePoint.getX() <= 1.0 && aRelativePoint.getY() >= 0.0 && aRelativePoint.getY() <= 1.0)
         {
             SdrObjListIter aIterator(*pList, IM_DEEPNOGROUPS);
-            ::std::vector< ImplPairDephAndObject > aDepthAndObjectResults;
+            std::vector< ImplPairDephAndObject > aDepthAndObjectResults;
             const uno::Sequence< beans::PropertyValue > aEmptyParameters;
             drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
 
@@ -197,7 +197,7 @@ void getAllHit3DObjectsSortedFrontToBack(
                     if(!aFront.equal(aBack))
                     {
                         // get all hit points with object
-                        ::std::vector< basegfx::B3DPoint > aHitsWithObject;
+                        std::vector< basegfx::B3DPoint > aHitsWithObject;
                         getAllHit3DObjectWithRelativePoint(aFront, aBack, *pCandidate, aViewInfo3D, aHitsWithObject, false);
 
                         for(basegfx::B3DPoint & a : aHitsWithObject)
@@ -215,11 +215,11 @@ void getAllHit3DObjectsSortedFrontToBack(
             if(nCount)
             {
                 // sort aDepthAndObjectResults by depth
-                ::std::sort(aDepthAndObjectResults.begin(), aDepthAndObjectResults.end());
+                std::sort(aDepthAndObjectResults.begin(), aDepthAndObjectResults.end());
 
                 // copy SdrObject pointers to return result set
-                ::std::vector< ImplPairDephAndObject >::iterator aIterator2(aDepthAndObjectResults.begin());
-                ::std::vector< ImplPairDephAndObject >::const_iterator aEnd(aDepthAndObjectResults.end());
+                std::vector< ImplPairDephAndObject >::iterator aIterator2(aDepthAndObjectResults.begin());
+                std::vector< ImplPairDephAndObject >::const_iterator aEnd(aDepthAndObjectResults.end());
 
                 for(;aIterator2 != aEnd; ++aIterator2)
                 {
@@ -261,7 +261,7 @@ bool checkHitSingle3DObject(
             if(!aFront.equal(aBack))
             {
                 // get all hit points with object
-                ::std::vector< basegfx::B3DPoint > aHitsWithObject;
+                std::vector< basegfx::B3DPoint > aHitsWithObject;
                 getAllHit3DObjectWithRelativePoint(aFront, aBack, rCandidate, aViewInfo3D, aHitsWithObject, true);
 
                 if(!aHitsWithObject.empty())

@@ -254,7 +254,7 @@ private:
     virtual void        ImplSave( SvStream& rStrm ) override;
 
 private:
-    typedef ::std::map< sal_Int32, OUString > SfxOlePropNameMap;
+    typedef std::map< sal_Int32, OUString > SfxOlePropNameMap;
     SfxOlePropNameMap   maPropNameMap;
 };
 
@@ -263,7 +263,7 @@ private:
 class SfxOleSection : public SfxOleObjectBase
 {
 private:
-    typedef ::std::map< sal_Int32, SfxOlePropertyRef > SfxOlePropMap;
+    typedef std::map< sal_Int32, SfxOlePropertyRef > SfxOlePropMap;
 
 public:
     explicit            SfxOleSection( bool bSupportsDict );
@@ -323,7 +323,7 @@ public:
     void                SetPropertyName( sal_Int32 nPropId, const OUString& rPropName );
 
     /** Returns the identifiers of all existing properties in the passed vector. */
-    void                GetPropertyIds( ::std::vector< sal_Int32 >& rPropIds ) const;
+    void                GetPropertyIds( std::vector< sal_Int32 >& rPropIds ) const;
     /** Returns a property identifier not used in this section. */
     sal_Int32           GetFreePropertyId() const;
 
@@ -384,7 +384,7 @@ private:
     static const SvGlobalName& GetSectionGuid( SfxOleSectionType eSection );
 
 private:
-    typedef ::std::map< SvGlobalName, SfxOleSectionRef > SfxOleSectionMap;
+    typedef std::map< SvGlobalName, SfxOleSectionRef > SfxOleSectionMap;
     SfxOleSectionMap    maSectionMap;
 };
 

@@ -62,13 +62,13 @@ namespace validation
     };
 
     // a row in the transition table (means the set of states to be reached from a given state)
-    typedef ::std::map< sal_Unicode, State >        StateTransitions;
+    typedef std::map< sal_Unicode, State >          StateTransitions;
 
     // a single transition
     typedef StateTransitions::value_type            Transition;
 
     // the complete transition table
-    typedef ::std::map< State, StateTransitions >   TransitionTable;
+    typedef std::map< State, StateTransitions >     TransitionTable;
 
     // the validator class
     class NumberValidator

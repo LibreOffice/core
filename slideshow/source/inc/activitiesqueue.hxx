@@ -90,7 +90,7 @@ namespace slideshow
         private:
             std::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
 
-            typedef ::std::deque< ActivitySharedPtr > ActivityQueue;
+            typedef std::deque< ActivitySharedPtr > ActivityQueue;
 
             ActivityQueue           maCurrentActivitiesWaiting;  // currently running
                                                                  // activities, that still

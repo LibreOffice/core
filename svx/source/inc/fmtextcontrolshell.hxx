@@ -94,7 +94,7 @@ namespace svx
 
         // listening at all controls of the active controller for focus changes
         typedef rtl::Reference<FmFocusListenerAdapter> FocusListenerAdapter;
-        typedef ::std::vector< FocusListenerAdapter >  FocusListenerAdapters;
+        typedef std::vector< FocusListenerAdapter >    FocusListenerAdapters;
         FocusListenerAdapters                                         m_aControlObservers;
 
         typedef rtl::Reference<FmMouseListenerAdapter> MouseListenerAdapter;
@@ -102,7 +102,7 @@ namespace svx
 
         // translating between "slots" of the framework and "features" of the active control
         typedef rtl::Reference<FmTextControlFeature> ControlFeature;
-        typedef ::std::map< SfxSlotId, ControlFeature, ::std::less< SfxSlotId > >   ControlFeatures;
+        typedef std::map< SfxSlotId, ControlFeature, std::less< SfxSlotId > >       ControlFeatures;
         ControlFeatures                                             m_aControlFeatures;
 
         SfxViewFrame*                                               m_pViewFrame;

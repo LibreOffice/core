@@ -45,7 +45,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
     if( ! m_bStarted ) {
         // it should be possible to find the encoding attribute
         // within the first 512 bytes == 128 chars in UCS-4
-        nMaxToRead = ::std::max( sal_Int32(512) , nMaxToRead );
+        nMaxToRead = std::max( sal_Int32(512) , nMaxToRead );
     }
 
     sal_Int32 nRead;

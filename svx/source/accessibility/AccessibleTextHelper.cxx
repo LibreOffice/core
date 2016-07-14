@@ -77,19 +77,19 @@ namespace accessibility
 // AccessibleTextHelper_Impl declaration
 
     template < typename first_type, typename second_type >
-        ::std::pair< first_type, second_type > makeSortedPair( first_type   first,
+        std::pair< first_type, second_type > makeSortedPair( first_type     first,
                                                                                  second_type    second  )
     {
         if( first > second )
-            return ::std::make_pair( second, first );
+            return std::make_pair( second, first );
         else
-            return ::std::make_pair( first, second );
+            return std::make_pair( first, second );
     }
 
     class AccessibleTextHelper_Impl : public SfxListener
     {
     public:
-        typedef ::std::vector< sal_Int16 > VectorOfStates;
+        typedef std::vector< sal_Int16 > VectorOfStates;
 
         // receive pointer to our frontend class and view window
         AccessibleTextHelper_Impl();
@@ -108,7 +108,7 @@ namespace accessibility
 
         SvxEditSourceAdapter& GetEditSource() const;
 
-        void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
+        void SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource );
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
         {
@@ -335,7 +335,7 @@ namespace accessibility
     }
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
-    class AccessibleTextHelper_OffsetChildIndex : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
+    class AccessibleTextHelper_OffsetChildIndex : public std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
     {
     public:
         explicit AccessibleTextHelper_OffsetChildIndex( sal_Int32 nDifference ) : mnDifference(nDifference) {}
@@ -359,7 +359,7 @@ namespace accessibility
             // update children
             AccessibleTextHelper_OffsetChildIndex aFunctor( nOffset - nOldOffset );
 
-            ::std::for_each( maParaManager.begin(), maParaManager.end(),
+            std::for_each( maParaManager.begin(), maParaManager.end(),
                              AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_OffsetChildIndex > (aFunctor) );
         }
     }
@@ -535,8 +535,8 @@ namespace accessibility
                         {
                             if( maLastSelection.nEndPara < maParaManager.GetNum() )
                             {
-                                maParaManager.FireEvent( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ),
-                                                         ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1,
+                                maParaManager.FireEvent( std::min( maLastSelection.nEndPara, nMaxValidParaIndex ),
+                                                         std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1,
                                                          AccessibleEventId::CARET_CHANGED,
                                                          uno::makeAny(static_cast<sal_Int32>(-1)),
                                                          uno::makeAny(static_cast<sal_Int32>(maLastSelection.nEndPos)) );
@@ -586,14 +586,14 @@ namespace accessibility
                             << maLastSelection.nEndPara);
 
                     // #108947# Sort new range before calling FireEvent
-                    ::std::pair<sal_Int32, sal_Int32> sortedSelection(
-                        makeSortedPair(::std::min( aSelection.nStartPara, nMaxValidParaIndex ),
-                                       ::std::min( aSelection.nEndPara, nMaxValidParaIndex ) ) );
+                    std::pair<sal_Int32, sal_Int32> sortedSelection(
+                        makeSortedPair(std::min( aSelection.nStartPara, nMaxValidParaIndex ),
+                                       std::min( aSelection.nEndPara, nMaxValidParaIndex ) ) );
 
                     // #108947# Sort last range before calling FireEvent
-                    ::std::pair<sal_Int32, sal_Int32> sortedLastSelection(
-                        makeSortedPair(::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
-                                       ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) );
+                    std::pair<sal_Int32, sal_Int32> sortedLastSelection(
+                        makeSortedPair(std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
+                                       std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) );
 
                     // event TEXT_SELECTION_CHANGED has to be submitted. (#i27299#)
                     const sal_Int16 nTextSelChgEventId =
@@ -720,10 +720,10 @@ namespace accessibility
         if( maEditSource.IsValid() )
             EndListening( maEditSource.GetBroadcaster() );
 
-        maEditSource.SetEditSource( ::std::unique_ptr< SvxEditSource >() );
+        maEditSource.SetEditSource( std::unique_ptr< SvxEditSource >() );
     }
 
-    void AccessibleTextHelper_Impl::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
+    void AccessibleTextHelper_Impl::SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource )
     {
         // This should only be called with solar mutex locked, i.e. from the main office thread
 
@@ -834,7 +834,7 @@ namespace accessibility
     }
 
     // functor for checking changes in paragraph bounding boxes (no stand-alone function, maybe not inlined)
-    class AccessibleTextHelper_UpdateChildBounds : public ::std::unary_function< const ::accessibility::AccessibleParaManager::WeakChild&,
+    class AccessibleTextHelper_UpdateChildBounds : public std::unary_function< const ::accessibility::AccessibleParaManager::WeakChild&,
         ::accessibility::AccessibleParaManager::WeakChild >
     {
     public:
@@ -871,7 +871,7 @@ namespace accessibility
     {
         // send BOUNDRECT_CHANGED to affected children
         AccessibleTextHelper_UpdateChildBounds aFunctor;
-        ::std::transform( maParaManager.begin(), maParaManager.end(), maParaManager.begin(), aFunctor );
+        std::transform( maParaManager.begin(), maParaManager.end(), maParaManager.begin(), aFunctor );
     }
 
 #ifdef DBG_UTIL
@@ -886,7 +886,7 @@ namespace accessibility
 #endif
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
-    class AccessibleTextHelper_LostChildEvent : public ::std::unary_function< const ::accessibility::AccessibleParaManager::WeakChild&, void >
+    class AccessibleTextHelper_LostChildEvent : public std::unary_function< const ::accessibility::AccessibleParaManager::WeakChild&, void >
     {
     public:
         explicit AccessibleTextHelper_LostChildEvent( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
@@ -940,7 +940,7 @@ namespace accessibility
         // sort nParagraph, nParam1 and nParam2 in ascending order, calc range
         if( nMiddle < nFirst )
         {
-            ::std::swap(nFirst, nMiddle);
+            std::swap(nFirst, nMiddle);
         }
         else if( nMiddle < nLast )
         {
@@ -948,7 +948,7 @@ namespace accessibility
         }
         else
         {
-            ::std::swap(nMiddle, nLast);
+            std::swap(nMiddle, nLast);
             nLast = nLast + nMiddle - nFirst;
         }
 
@@ -965,15 +965,15 @@ namespace accessibility
             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
-            ::std::advance( begin, nFirst );
-            ::std::advance( end, nLast+1 );
+            std::advance( begin, nFirst );
+            std::advance( end, nLast+1 );
 
             // TODO: maybe optimize here in the following way.  If the
             // number of removed children exceeds a certain threshold,
             // use InvalidateFlags::Children
             AccessibleTextHelper_LostChildEvent aFunctor( *this );
 
-            ::std::for_each( begin, end, aFunctor );
+            std::for_each( begin, end, aFunctor );
 
             maParaManager.Release(nFirst, nLast+1);
             // should be no need for UpdateBoundRect, since all affected children are cleared.
@@ -981,7 +981,7 @@ namespace accessibility
     }
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
-    class AccessibleTextHelper_ChildrenTextChanged : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
+    class AccessibleTextHelper_ChildrenTextChanged : public std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
     {
     public:
         void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
@@ -995,7 +995,7 @@ namespace accessibility
         Reacts on TEXT_HINT_PARAINSERTED/REMOVED events and stores
         their content
      */
-    class AccessibleTextHelper_QueueFunctor : public ::std::unary_function< const SfxHint*, void >
+    class AccessibleTextHelper_QueueFunctor : public std::unary_function< const SfxHint*, void >
     {
     public:
         AccessibleTextHelper_QueueFunctor() :
@@ -1114,9 +1114,9 @@ namespace accessibility
             else if( aFunctor.GetHintId() == TEXT_HINT_PARAREMOVED )
             {
                 ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
-                ::std::advance( begin, aFunctor.GetParaIndex() );
+                std::advance( begin, aFunctor.GetParaIndex() );
                 ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
-                ::std::advance( end, 1 );
+                std::advance( end, 1 );
 
                 // #i61812# remember para to be removed for later notification
                 // AFTER the new state is applied (that after the para got removed)
@@ -1167,7 +1167,7 @@ namespace accessibility
 
         while( !maEventQueue.IsEmpty() )
         {
-            ::std::unique_ptr< SfxHint > pHint( maEventQueue.PopFront() );
+            std::unique_ptr< SfxHint > pHint( maEventQueue.PopFront() );
             if( pHint.get() )
             {
                 const SfxHint& rHint = *(pHint.get());
@@ -1231,14 +1231,14 @@ namespace accessibility
                                 if( nPara == EE_PARA_ALL )
                                 {
                                     // #108900# Call every child
-                                    ::std::for_each( maParaManager.begin(), maParaManager.end(),
+                                    std::for_each( maParaManager.begin(), maParaManager.end(),
                                                      AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aNotifyChildrenFunctor) );
                                 }
                                 else
                                     if( nPara < nParas )
                                     {
                                         // #108900# Call child at index nPara
-                                        ::std::for_each( maParaManager.begin()+nPara, maParaManager.begin()+nPara+1,
+                                        std::for_each( maParaManager.begin()+nPara, maParaManager.begin()+nPara+1,
                                                          AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aNotifyChildrenFunctor) );
                                     }
                                 break;
@@ -1497,7 +1497,7 @@ namespace accessibility
             EndListening( maEditSource.GetBroadcaster() );
 
         // clear references
-        maEditSource.SetEditSource( ::std::unique_ptr< SvxEditSource >() );
+        maEditSource.SetEditSource( std::unique_ptr< SvxEditSource >() );
         mxFrontEnd = nullptr;
     }
 
@@ -1630,7 +1630,7 @@ namespace accessibility
 
     // AccessibleTextHelper implementation (simply forwards to impl)
 
-    AccessibleTextHelper::AccessibleTextHelper( ::std::unique_ptr< SvxEditSource > && pEditSource ) :
+    AccessibleTextHelper::AccessibleTextHelper( std::unique_ptr< SvxEditSource > && pEditSource ) :
         mpImpl( new AccessibleTextHelper_Impl() )
     {
         SolarMutexGuard aGuard;
@@ -1657,7 +1657,7 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
+    void AccessibleTextHelper::SetEditSource( std::unique_ptr< SvxEditSource > && pEditSource )
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked

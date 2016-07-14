@@ -38,7 +38,7 @@ namespace svt { namespace table
     class DefaultInputHandler : public ITableInputHandler
     {
     private:
-        ::std::unique_ptr< DefaultInputHandler_Impl > m_pImpl;
+        std::unique_ptr< DefaultInputHandler_Impl > m_pImpl;
 
     public:
         DefaultInputHandler();

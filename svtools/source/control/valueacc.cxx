@@ -79,7 +79,7 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
 {
     if( nEventId )
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
+        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                    aTmpListeners( mxEventListeners );
         accessibility::AccessibleEventObject                                                        aEvtObject;
 
         aEvtObject.EventId = nEventId;
@@ -87,7 +87,7 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
         aEvtObject.NewValue = rNewValue;
         aEvtObject.OldValue = rOldValue;
 
-        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
+        for (std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
             aIter != aTmpListeners.end() ; ++aIter)
         {
             try
@@ -360,7 +360,7 @@ void SAL_CALL ValueSetAcc::addAccessibleEventListener( const uno::Reference< acc
 
     if( rxListener.is() )
     {
-           ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
+           std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
         bool bFound = false;
 
         while( !bFound && ( aIter != mxEventListeners.end() ) )
@@ -385,7 +385,7 @@ void SAL_CALL ValueSetAcc::removeAccessibleEventListener( const uno::Reference< 
 
     if( rxListener.is() )
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
+        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
             std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
 
         if (aIter != mxEventListeners.end())
@@ -629,7 +629,7 @@ sal_Int64 SAL_CALL ValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >& r
 
 void SAL_CALL ValueSetAcc::disposing()
 {
-    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
+    std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
 
     {
         // Make a copy of the list and clear the original.
@@ -644,7 +644,7 @@ void SAL_CALL ValueSetAcc::disposing()
     }
 
     // Inform all listeners that this objects is disposing.
-    ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> >::const_iterator
+    std::vector<uno::Reference<accessibility::XAccessibleEventListener> >::const_iterator
           aListenerIterator (aListenerListCopy.begin());
     lang::EventObject aEvent (static_cast<accessibility::XAccessible*>(this));
     while (aListenerIterator != aListenerListCopy.end())
@@ -730,7 +730,7 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
 {
     if( nEventId )
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
+        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                    aTmpListeners( mxEventListeners );
         accessibility::AccessibleEventObject                                                        aEvtObject;
 
         aEvtObject.EventId = nEventId;
@@ -738,7 +738,7 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
         aEvtObject.NewValue = rNewValue;
         aEvtObject.OldValue = rOldValue;
 
-        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
+        for (std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
              aIter != aTmpListeners.end() ; ++aIter)
         {
             (*aIter)->notifyEvent( aEvtObject );
@@ -963,7 +963,7 @@ void SAL_CALL ValueItemAcc::addAccessibleEventListener( const uno::Reference< ac
 
     if( rxListener.is() )
     {
-           ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
+           std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
         bool bFound = false;
 
         while( !bFound && ( aIter != mxEventListeners.end() ) )
@@ -987,7 +987,7 @@ void SAL_CALL ValueItemAcc::removeAccessibleEventListener( const uno::Reference<
 
     if( rxListener.is() )
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
+        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
             std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
 
         if (aIter != mxEventListeners.end())

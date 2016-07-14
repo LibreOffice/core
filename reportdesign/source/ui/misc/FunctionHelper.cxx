@@ -68,7 +68,7 @@ const formula::IFunctionCategory* FunctionManager::getCategory(sal_uInt32 _nPos)
     return m_aCategoryIndex[_nPos]->second.get();
 }
 
-void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& /*_rLastRUFunctions*/) const
+void FunctionManager::fillLastRecentlyUsedFunctions(std::vector< const formula::IFunctionDescription*>& /*_rLastRUFunctions*/) const
 {
 }
 
@@ -156,7 +156,7 @@ sal_Int32 FunctionDescription::getSuppressedArgumentCount() const
     return m_aParameter.getLength();
 }
 
-OUString FunctionDescription::getFormula(const ::std::vector< OUString >& _aArguments) const
+OUString FunctionDescription::getFormula(const std::vector< OUString >& _aArguments) const
 {
     OUString sFormula;
     try
@@ -170,7 +170,7 @@ OUString FunctionDescription::getFormula(const ::std::vector< OUString >& _aArgu
     return sFormula;
 }
 
-void FunctionDescription::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const
+void FunctionDescription::fillVisibleArgumentMapping(std::vector<sal_uInt16>& _rArguments) const
 {
     const sal_Int32 nCount = m_aParameter.getLength();
     for(sal_Int32 i = 0;i < nCount; ++i)

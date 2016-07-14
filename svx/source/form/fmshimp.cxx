@@ -818,7 +818,7 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
 }
 
 
-void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures )
+void FmXFormShell::invalidateFeatures( const std::vector< sal_Int32 >& _rFeatures )
 {
     if ( impl_checkDisposed() )
         return;
@@ -828,18 +828,18 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
     if ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
     {
         // unfortunately, SFX requires sal_uInt16
-        ::std::vector< sal_uInt16 > aSlotIds;
+        std::vector< sal_uInt16 > aSlotIds;
         aSlotIds.reserve( _rFeatures.size() );
-        ::std::copy( _rFeatures.begin(),
+        std::copy( _rFeatures.begin(),
             _rFeatures.end(),
-            ::std::insert_iterator< ::std::vector< sal_uInt16 > >( aSlotIds, aSlotIds.begin() )
+            std::insert_iterator< std::vector< sal_uInt16 > >( aSlotIds, aSlotIds.begin() )
         );
 
         // furthermore, SFX wants a terminating 0
         aSlotIds.push_back( 0 );
 
         // and, last but not least, SFX wants the ids to be sorted
-        ::std::sort( aSlotIds.begin(), aSlotIds.end() - 1 );
+        std::sort( aSlotIds.begin(), aSlotIds.end() - 1 );
 
         sal_uInt16 *pSlotIds = &(aSlotIds[0]);
         m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( pSlotIds );
@@ -1442,7 +1442,7 @@ void FmXFormShell::ExecuteSearch()
     // eine Sammlung aller (logischen) Formulare
     FmFormArray aEmpty;
     m_aSearchForms.swap( aEmpty );
-    ::std::vector< OUString > aContextNames;
+    std::vector< OUString > aContextNames;
     impl_collectFormSearchContexts_nothrow( m_pShell->GetCurPage()->GetForms(), OUString(), m_aSearchForms, aContextNames );
 
     if ( m_aSearchForms.size() != aContextNames.size() )
@@ -1454,9 +1454,9 @@ void FmXFormShell::ExecuteSearch()
     // filter out the forms which do not contain valid controls at all
     {
         FmFormArray aValidForms;
-        ::std::vector< OUString > aValidContexts;
+        std::vector< OUString > aValidContexts;
         FmFormArray::const_iterator form = m_aSearchForms.begin();
-        ::std::vector< OUString >::const_iterator contextName = aContextNames.begin();
+        std::vector< OUString >::const_iterator contextName = aContextNames.begin();
         for ( ; form != m_aSearchForms.end(); ++form, ++contextName )
         {
             FmSearchContext aTestContext;
@@ -2381,7 +2381,7 @@ IMPL_LINK_TYPED(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscCon
                 // the current element has no ControlSource, so it is a GridControl (that
                 // is the only thing that still permits the SearchableControlIteratore)
                 xControl = impl_getControl( xControlModel, *pFormObject );
-                DBG_ASSERT(xControl.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
+                DBG_ASSERT(xControl.is(), "FmXFormShell::OnSearchContextRequest : didn't std::find a control with requested model !");
 
                 Reference< XGridPeer> xGridPeer;
                 if ( xControl.is() )
@@ -2442,7 +2442,7 @@ IMPL_LINK_TYPED(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscCon
                     if (!xControl.is())
                     {
                         xControl = impl_getControl( xControlModel, *pFormObject );
-                        DBG_ASSERT(xControl.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
+                        DBG_ASSERT(xControl.is(), "FmXFormShell::OnSearchContextRequest : didn't std::find a control with requested model !");
                     }
 
                     if (IsSearchableControl(xControl))
@@ -2873,7 +2873,7 @@ Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlMod
 
 
 void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInterface>& _rxStartingPoint,
-    const OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< OUString >& _out_rNames )
+    const OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, std::vector< OUString >& _out_rNames )
 {
     try
     {
@@ -2948,8 +2948,8 @@ void FmXFormShell::startFiltering()
     PFormViewPageWindowAdapter pAdapter = pXView->findWindow( xContainer );
     if ( pAdapter.is() )
     {
-        const ::std::vector< Reference< runtime::XFormController> >& rControllerList = pAdapter->GetList();
-        for (   ::std::vector< Reference< runtime::XFormController> >::const_iterator j = rControllerList.begin();
+        const std::vector< Reference< runtime::XFormController> >& rControllerList = pAdapter->GetList();
+        for (   std::vector< Reference< runtime::XFormController> >::const_iterator j = rControllerList.begin();
                 j != rControllerList.end();
                 ++j
             )
@@ -3025,13 +3025,13 @@ void FmXFormShell::stopFiltering(bool bSave)
     PFormViewPageWindowAdapter pAdapter = pXView->findWindow(xContainer);
     if ( pAdapter.is() )
     {
-        const ::std::vector< Reference< runtime::XFormController > >& rControllerList = pAdapter->GetList();
-        ::std::vector < OUString >   aOriginalFilters;
-        ::std::vector < sal_Bool >          aOriginalApplyFlags;
+        const std::vector< Reference< runtime::XFormController > >& rControllerList = pAdapter->GetList();
+        std::vector < OUString >     aOriginalFilters;
+        std::vector < sal_Bool >            aOriginalApplyFlags;
 
         if (bSave)
         {
-            for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
+            for (std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
                  j != rControllerList.end(); ++j)
             {
                 if (bSave)
@@ -3056,7 +3056,7 @@ void FmXFormShell::stopFiltering(bool bSave)
                 saveFilter(*j);
             }
         }
-        for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
+        for (std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
              j != rControllerList.end(); ++j)
         {
 
@@ -3066,8 +3066,8 @@ void FmXFormShell::stopFiltering(bool bSave)
         }
         if (bSave)  // execute the filter
         {
-            const ::std::vector< Reference< runtime::XFormController > > & rControllers = pAdapter->GetList();
-            for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllers.begin();
+            const std::vector< Reference< runtime::XFormController > > & rControllers = pAdapter->GetList();
+            for (std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllers.begin();
                  j != rControllers.end(); ++j)
             {
                 Reference< XLoadable> xReload((*j)->getModel(), UNO_QUERY);
@@ -3573,7 +3573,7 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivate
     {
         // move all events from our queue to a new one, omit the events for the deactivated
         // page
-        ::std::queue< FmLoadAction > aNewEvents;
+        std::queue< FmLoadAction > aNewEvents;
         while ( !m_aLoadingPages.empty() )
         {
             FmLoadAction aAction = m_aLoadingPages.front();

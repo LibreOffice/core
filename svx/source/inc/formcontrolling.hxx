@@ -60,7 +60,7 @@ namespace svx
             @param _rFeatures
                 Ids of the features to be invalidated.
         */
-        virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures ) = 0;
+        virtual void invalidateFeatures( const std::vector< sal_Int32 >& _rFeatures ) = 0;
 
     protected:
         ~IControllerFeatureInvalidation() {}

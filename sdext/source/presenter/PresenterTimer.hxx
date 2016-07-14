@@ -47,7 +47,7 @@ class PresenterTimer
 public:
     /** A task is called with the current time.
     */
-    typedef ::std::function<void (const TimeValue&)> Task;
+    typedef std::function<void (const TimeValue&)> Task;
 
     static const sal_Int32 NotAValidTaskId = 0;
 
@@ -102,7 +102,7 @@ private:
     static ::rtl::Reference<PresenterClockTimer> mpInstance;
 
     ::osl::Mutex maMutex;
-    typedef ::std::vector<SharedListener> ListenerContainer;
+    typedef std::vector<SharedListener> ListenerContainer;
     ListenerContainer maListeners;
     oslDateTime maDateTime;
     sal_Int32 mnTimerTaskId;

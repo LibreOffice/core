@@ -118,7 +118,7 @@ struct JNI_type_info_holder
     inline JNI_type_info_holder() : m_info( nullptr ) {}
 };
 
-typedef ::std::unordered_map<
+typedef std::unordered_map<
     OUString, JNI_type_info_holder, OUStringHash > t_str2type;
 
 class JNI_info

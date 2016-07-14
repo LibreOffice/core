@@ -328,7 +328,7 @@ void Deck::ScrollContainerWindow::Paint(vcl::RenderContext& rRenderContext, cons
     }
 }
 
-void Deck::ScrollContainerWindow::SetSeparators (const ::std::vector<sal_Int32>& rSeparators)
+void Deck::ScrollContainerWindow::SetSeparators (const std::vector<sal_Int32>& rSeparators)
 {
     maSeparators = rSeparators;
 }

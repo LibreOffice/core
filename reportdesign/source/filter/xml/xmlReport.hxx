@@ -28,8 +28,8 @@ namespace rptxml
     class OXMLReport : public OXMLReportElementBase, public IMasterDetailFieds
     {
         css::uno::Reference< css::report::XReportDefinition > m_xComponent;
-        ::std::vector< OUString> m_aMasterFields;
-        ::std::vector< OUString> m_aDetailFields;
+        std::vector< OUString> m_aMasterFields;
+        std::vector< OUString> m_aDetailFields;
         OXMLReport(const OXMLReport&) = delete;
         void operator =(const OXMLReport&) = delete;
     public:
@@ -47,7 +47,7 @@ namespace rptxml
 
         virtual void EndElement() override;
 
-        virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) override;
+        virtual void addMasterDetailPair(const std::pair< OUString,OUString >& _aPair) override;
 
     private:
         /** initializes our object's properties whose runtime (API) default is different from the file

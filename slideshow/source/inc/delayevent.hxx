@@ -31,7 +31,7 @@ namespace internal {
 class Delay : public Event
 {
 public:
-    typedef ::std::function<void ()> FunctorT;
+    typedef std::function<void ()> FunctorT;
 
     template <typename FuncT>
         Delay( FuncT const& func,

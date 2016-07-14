@@ -112,7 +112,7 @@ namespace slideshow
             /** Call this method to create a lock instead of calling
                 lockUpdates() and unlockUpdates() directly.
             */
-            ::std::shared_ptr<UpdateLock> createLock();
+            std::shared_ptr<UpdateLock> createLock();
 
             /** Lock updates to prevent intermediate repaints.
             */

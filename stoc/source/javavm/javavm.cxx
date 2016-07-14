@@ -1414,8 +1414,8 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
                 // Set all network properties with the VM
                 JVM jvm;
                 getINetPropsFromConfig( &jvm, m_xContext->getServiceManager(), m_xContext);
-                const ::std::vector< OUString> & Props = jvm.getProperties();
-                typedef ::std::vector< OUString >::const_iterator C_IT;
+                const std::vector< OUString> & Props = jvm.getProperties();
+                typedef std::vector< OUString >::const_iterator C_IT;
 
                 for( C_IT i= Props.begin(); i != Props.end(); ++i)
                 {

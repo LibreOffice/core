@@ -561,7 +561,7 @@ namespace
     void lcl_stripType( Sequence< uno::Type >& io_rTypes, const uno::Type& i_rTypeToStrip )
     {
         Sequence< uno::Type > aStrippedTypes( io_rTypes.getLength() - 1 );
-        ::std::remove_copy_if(
+        std::remove_copy_if(
             io_rTypes.getConstArray(),
             io_rTypes.getConstArray() + io_rTypes.getLength(),
             aStrippedTypes.getArray(),

@@ -344,7 +344,7 @@ public:
             case UNARY_FUNC_COS : fRet = cos( (*rArg)() );  break;
             case UNARY_FUNC_TAN : fRet = tan( (*rArg)() );  break;
             case UNARY_FUNC_ATAN: fRet = atan( (*rArg)() ); break;
-            case UNARY_FUNC_NEG : fRet = ::std::negate<double>()( (*rArg)() ); break;
+            case UNARY_FUNC_NEG : fRet = std::negate<double>()( (*rArg)() ); break;
             default:
                 break;
         }
@@ -513,8 +513,8 @@ public:
             case BINARY_FUNC_MINUS: fRet = (*rFirstArg)() - (*rSecondArg)(); break;
             case BINARY_FUNC_MUL :  fRet = (*rFirstArg)() * (*rSecondArg)(); break;
             case BINARY_FUNC_DIV :  fRet = (*rFirstArg)() / (*rSecondArg)(); break;
-            case BINARY_FUNC_MIN :  fRet = ::std::min( (*rFirstArg)(), (*rSecondArg)() ); break;
-            case BINARY_FUNC_MAX :  fRet = ::std::max( (*rFirstArg)(), (*rSecondArg)() ); break;
+            case BINARY_FUNC_MIN :  fRet = std::min( (*rFirstArg)(), (*rSecondArg)() ); break;
+            case BINARY_FUNC_MAX :  fRet = std::max( (*rFirstArg)(), (*rSecondArg)() ); break;
             case BINARY_FUNC_ATAN2: fRet = atan2( (*rFirstArg)(), (*rSecondArg)() ); break;
             default:
                 break;
@@ -768,7 +768,7 @@ typedef const sal_Char* StringIteratorT;
 
 struct ParserContext
 {
-    typedef ::std::stack< std::shared_ptr<ExpressionNode> > OperandStack;
+    typedef std::stack< std::shared_ptr<ExpressionNode> > OperandStack;
 
     // stores a stack of not-yet-evaluated operands. This is used
     // by the operators (i.e. '+', '*', 'sin' etc.) to pop their
@@ -1185,7 +1185,7 @@ std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& r
                                     ::boost::spirit::space_p ) );
 
 #if (OSL_DEBUG_LEVEL > 0)
-    ::std::cout.flush(); // needed to keep stdout and cout in sync
+    std::cout.flush(); // needed to keep stdout and cout in sync
 #endif
 
     // input fully congested by the parser?

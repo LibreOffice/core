@@ -283,8 +283,8 @@ SvxShowCharSetAcc::~SvxShowCharSetAcc()
 void SAL_CALL SvxShowCharSetAcc::disposing()
 {
     OAccessibleSelectionHelper::disposing();
-    ::std::vector< Reference< XAccessible > >::const_iterator aEnd  = m_aChildren.end();
-    for (::std::vector< Reference< XAccessible > >::iterator aIter = m_aChildren.begin();aIter != aEnd ; ++aIter)
+    std::vector< Reference< XAccessible > >::const_iterator aEnd    = m_aChildren.end();
+    for (std::vector< Reference< XAccessible > >::iterator aIter = m_aChildren.begin();aIter != aEnd ; ++aIter)
         ::comphelper::disposeComponent(*aIter);
 
     m_aChildren.clear();

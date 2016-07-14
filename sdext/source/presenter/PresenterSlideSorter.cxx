@@ -99,7 +99,7 @@ public:
         const sal_Int32 nRelativeHorizontalPosition,
         const sal_Int32 nRelativeVerticalPosition) const;
     css::awt::Rectangle GetBoundingBox (const sal_Int32 nSlideIndex) const;
-    void ForAllVisibleSlides (const ::std::function<void (sal_Int32)>& rAction);
+    void ForAllVisibleSlides (const std::function<void (sal_Int32)>& rAction);
     sal_Int32 GetFirstVisibleSlideIndex() const;
     sal_Int32 GetLastVisibleSlideIndex() const;
     bool SetHorizontalOffset (const double nOffset);
@@ -1186,7 +1186,7 @@ void PresenterSlideSorter::Layout::Update (
             if (nWidth - gnMinimalHorizontalPreviewGap >= gnPreferredPreviewWidth)
                 nPreviewWidth = nWidth - gnMinimalHorizontalPreviewGap;
             else
-                nPreviewWidth = ::std::max(gnMinimalPreviewWidth, nWidth-mnHorizontalGap);
+                nPreviewWidth = std::max(gnMinimalPreviewWidth, nWidth-mnHorizontalGap);
         }
     }
     else if (nElementWidth > gnMaximalPreviewWidth + gnMaximalHorizontalPreviewGap)
@@ -1224,7 +1224,7 @@ void PresenterSlideSorter::Layout::Update (
 
     // Now determine the row count, preview height, and vertical gap.
     const double nPreviewHeight = nPreviewWidth / nSlideAspectRatio;
-    mnRowCount = ::std::max(
+    mnRowCount = std::max(
         sal_Int32(1),
         sal_Int32(ceil((nHeight+gnPreferredVerticalPreviewGap)
                 / (nPreviewHeight + gnPreferredVerticalPreviewGap))));
@@ -1245,7 +1245,7 @@ void PresenterSlideSorter::Layout::SetupVisibleArea()
     geometry::RealPoint2D aPoint (GetLocalPosition(
         geometry::RealPoint2D(maBoundingBox.X1, maBoundingBox.Y1)));
     mnFirstVisibleColumn = 0;
-    mnFirstVisibleRow = ::std::max(sal_Int32(0), GetRow(aPoint));
+    mnFirstVisibleRow = std::max(sal_Int32(0), GetRow(aPoint));
 
     aPoint = GetLocalPosition(geometry::RealPoint2D( maBoundingBox.X2, maBoundingBox.Y2));
     mnLastVisibleColumn = mnColumnCount - 1;
@@ -1388,7 +1388,7 @@ awt::Rectangle PresenterSlideSorter::Layout::GetBoundingBox (const sal_Int32 nSl
 }
 
 void PresenterSlideSorter::Layout::ForAllVisibleSlides(
-        const ::std::function<void (sal_Int32)>& rAction)
+        const std::function<void (sal_Int32)>& rAction)
 {
     for (sal_Int32 nRow=mnFirstVisibleRow; nRow<=mnLastVisibleRow; ++nRow)
     {
@@ -1409,7 +1409,7 @@ sal_Int32 PresenterSlideSorter::Layout::GetFirstVisibleSlideIndex() const
 
 sal_Int32 PresenterSlideSorter::Layout::GetLastVisibleSlideIndex() const
 {
-    return ::std::min(
+    return std::min(
         GetIndex(mnLastVisibleRow, mnLastVisibleColumn),
         mnSlideCount);
 }
@@ -1824,23 +1824,23 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
 
     if (mpTopLeft.get() != nullptr)
     {
-        mnTopFrameSize = ::std::max(mnTopFrameSize, mpTopLeft->mnHeight);
-        mnLeftFrameSize = ::std::max(mnLeftFrameSize, mpTopLeft->mnWidth);
+        mnTopFrameSize = std::max(mnTopFrameSize, mpTopLeft->mnHeight);
+        mnLeftFrameSize = std::max(mnLeftFrameSize, mpTopLeft->mnWidth);
     }
     if (mpTopRight.get() != nullptr)
     {
-        mnTopFrameSize = ::std::max(mnTopFrameSize, mpTopRight->mnHeight);
-        mnRightFrameSize = ::std::max(mnRightFrameSize, mpTopRight->mnWidth);
+        mnTopFrameSize = std::max(mnTopFrameSize, mpTopRight->mnHeight);
+        mnRightFrameSize = std::max(mnRightFrameSize, mpTopRight->mnWidth);
     }
     if (mpBottomLeft.get() != nullptr)
     {
-        mnLeftFrameSize = ::std::max(mnLeftFrameSize, mpBottomLeft->mnWidth);
-        mnBottomFrameSize = ::std::max(mnBottomFrameSize, mpBottomLeft->mnHeight);
+        mnLeftFrameSize = std::max(mnLeftFrameSize, mpBottomLeft->mnWidth);
+        mnBottomFrameSize = std::max(mnBottomFrameSize, mpBottomLeft->mnHeight);
     }
     if (mpBottomRight.get() != nullptr)
     {
-        mnRightFrameSize = ::std::max(mnRightFrameSize, mpBottomRight->mnWidth);
-        mnBottomFrameSize = ::std::max(mnBottomFrameSize, mpBottomRight->mnHeight);
+        mnRightFrameSize = std::max(mnRightFrameSize, mpBottomRight->mnWidth);
+        mnBottomFrameSize = std::max(mnBottomFrameSize, mpBottomRight->mnHeight);
     }
 }
 

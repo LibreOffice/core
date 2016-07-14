@@ -43,8 +43,8 @@ namespace svgio
 {
     namespace svgreader
     {
-        typedef ::std::vector< SvgNode* > SvgNodeVector;
-        typedef ::std::vector< const SvgStyleAttributes* > SvgStyleAttributeVector;
+        typedef std::vector< SvgNode* > SvgNodeVector;
+        typedef std::vector< const SvgStyleAttributes* > SvgStyleAttributeVector;
 
         enum XmlSpace
         {

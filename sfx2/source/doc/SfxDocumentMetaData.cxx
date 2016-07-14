@@ -881,7 +881,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
 std::pair<css::uno::Sequence< OUString>, AttrVector> SAL_CALL
 propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
 {
-    ::std::vector< OUString > values;
+    std::vector< OUString > values;
     AttrVector attrs;
 
     css::uno::Reference<css::beans::XPropertySetInfo> xSetInfo
@@ -1701,7 +1701,7 @@ SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException, 
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
-    ::std::vector<css::beans::NamedValue> stats;
+    std::vector<css::beans::NamedValue> stats;
     for (size_t i = 0; s_stdStats[i] != nullptr; ++i) {
         const char * aName = s_stdStatAttrs[i];
         OUString text = getMetaAttr("meta:document-statistic", aName);

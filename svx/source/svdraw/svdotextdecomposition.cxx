@@ -248,7 +248,7 @@ namespace
 
             // prepare DXArray content. To make it independent from font size (and such from
             // the text transformation), scale it to unit coordinates
-            ::std::vector< double > aDXArray;
+            std::vector< double > aDXArray;
             static bool bDisableTextArray(false);
 
             if(!bDisableTextArray && rInfo.mpDXArray && rInfo.mnTextLen)

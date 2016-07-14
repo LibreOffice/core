@@ -50,7 +50,7 @@ namespace writerfilter {
 namespace dmapper
 {
 
-typedef ::std::map< OUString, OUString> StringPairMap_t;
+typedef std::map< OUString, OUString> StringPairMap_t;
 
 
 StyleSheetEntry::StyleSheetEntry() :

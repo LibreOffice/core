@@ -158,7 +158,7 @@ void FmEntryDataList::insert( FmEntryData* pItem, size_t Index )
     if ( Index < maEntryDataList.size() )
     {
         FmEntryDataBaseList::iterator it = maEntryDataList.begin();
-        ::std::advance( it, Index );
+        std::advance( it, Index );
         maEntryDataList.insert( it, pItem );
     }
     else

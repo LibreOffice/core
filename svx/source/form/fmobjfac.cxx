@@ -115,7 +115,7 @@ IMPL_STATIC_LINK_TYPED(
     {
         OUString sServiceSpecifier;
 
-        typedef ::std::vector< ::std::pair< OUString, Any > > PropertyValueArray;
+        typedef std::vector< std::pair< OUString, Any > > PropertyValueArray;
         PropertyValueArray aInitialProperties;
 
         switch ( pObjFactory->nIdentifier )

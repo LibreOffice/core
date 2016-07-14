@@ -749,7 +749,7 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
 
 void delete_all_singleton_entries(
     Reference < registry::XRegistryKey > const & xSingletons_section,
-    ::std::list< OUString > const & impl_names )
+    std::list< OUString > const & impl_names )
     // throw (InvalidRegistryException, RuntimeException)
 {
     Sequence< Reference< registry::XRegistryKey > > singletons( xSingletons_section->openKeys() );
@@ -776,8 +776,8 @@ void delete_all_singleton_entries(
             {
                 OUString const & registered_implname = p[ n ];
 
-                ::std::list< OUString >::const_iterator iPos( impl_names.begin() );
-                ::std::list< OUString >::const_iterator const iEnd( impl_names.end() );
+                std::list< OUString >::const_iterator iPos( impl_names.begin() );
+                std::list< OUString >::const_iterator const iEnd( impl_names.end() );
                 for ( ; iPos != iEnd; ++iPos )
                 {
                     if (iPos->equals( registered_implname ))

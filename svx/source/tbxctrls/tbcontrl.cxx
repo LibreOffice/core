@@ -179,7 +179,7 @@ class SvxFontNameBox_Impl : public FontNameBox
     using Window::Update;
 private:
     const FontList*                pFontList;
-    ::std::unique_ptr<FontList>    m_aOwnFontList;
+    std::unique_ptr<FontList>      m_aOwnFontList;
     vcl::Font                      aCurFont;
     Size                           aLogicalSize;
     OUString                       aCurText;
@@ -225,7 +225,7 @@ public:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    Notify( NotifyEvent& rNEvt ) override;
     virtual Reference< css::accessibility::XAccessible > CreateAccessible() override;
-    void     SetOwnFontList(::std::unique_ptr<FontList> && _aOwnFontList) { m_aOwnFontList = std::move(_aOwnFontList); }
+    void     SetOwnFontList(std::unique_ptr<FontList> && _aOwnFontList) { m_aOwnFontList = std::move(_aOwnFontList); }
 };
 
 // SelectHdl needs the Modifiers, get them in MouseButtonUp
@@ -897,7 +897,7 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
             static_cast<const SvxFontListItem*>(pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ));
     else
     {
-        ::std::unique_ptr<FontList> aFontList(new FontList( pBox->GetParent() ));
+        std::unique_ptr<FontList> aFontList(new FontList( pBox->GetParent() ));
         *ppFontList = aFontList.get();
         pBox->SetOwnFontList(std::move(aFontList));
         bChanged = true;
@@ -2083,7 +2083,7 @@ struct SvxStyleToolBoxControl::Impl
 {
     OUString                     aClearForm;
     OUString                     aMore;
-    ::std::vector< OUString >    aDefaultStyles;
+    std::vector< OUString >      aDefaultStyles;
     bool                     bSpecModeWriter;
     bool                     bSpecModeCalc;
 

@@ -80,13 +80,13 @@ private:
 
     SfxBindings* mpBindings;
 
-    ::std::unique_ptr<SfxInt16Item>      mpPageColumnItem;
-    ::std::unique_ptr<SvxPageItem>       mpPageItem;
-    ::std::unique_ptr<XFillStyleItem>    mpBgFillStyleItem;
-    ::std::unique_ptr<XFillColorItem>    mpBgColorItem;
-    ::std::unique_ptr<XFillGradientItem> mpBgGradientItem;
-    ::std::unique_ptr<XFillHatchItem>    mpBgHatchItem;
-    ::std::unique_ptr<XFillBitmapItem>   mpBgBitmapItem;
+    std::unique_ptr<SfxInt16Item>        mpPageColumnItem;
+    std::unique_ptr<SvxPageItem>         mpPageItem;
+    std::unique_ptr<XFillStyleItem>      mpBgFillStyleItem;
+    std::unique_ptr<XFillColorItem>      mpBgColorItem;
+    std::unique_ptr<XFillGradientItem> mpBgGradientItem;
+    std::unique_ptr<XFillHatchItem>      mpBgHatchItem;
+    std::unique_ptr<XFillBitmapItem>     mpBgBitmapItem;
 
     ::sfx2::sidebar::ControllerItem maPageColumnControl;
     ::sfx2::sidebar::ControllerItem maPageNumFormatControl;

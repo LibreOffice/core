@@ -283,14 +283,14 @@ namespace slideshow
             ::osl::MutexGuard aGuard( maMutex );
 
             // return time for next entry (if any)
-            double nTimeout (::std::numeric_limits<double>::max());
+            double nTimeout (std::numeric_limits<double>::max());
             const double nCurrentTime (mpTimer->getElapsedTime());
             if ( ! maEvents.empty())
                 nTimeout = maEvents.top().nTime - nCurrentTime;
             if ( ! maNextEvents.empty())
-                nTimeout = ::std::min(nTimeout, maNextEvents.front().nTime - nCurrentTime);
+                nTimeout = std::min(nTimeout, maNextEvents.front().nTime - nCurrentTime);
             if ( ! maNextNextEvents.empty())
-                nTimeout = ::std::min(nTimeout, maNextNextEvents.top().nTime - nCurrentTime);
+                nTimeout = std::min(nTimeout, maNextNextEvents.top().nTime - nCurrentTime);
 
             return nTimeout;
         }

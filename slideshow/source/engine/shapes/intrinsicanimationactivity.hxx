@@ -59,8 +59,8 @@ namespace slideshow
             const SlideShowContext&         rContext,
             const DrawShapeSharedPtr&       rDrawShape,
             const WakeupEventSharedPtr&     rWakeupEvent,
-            const ::std::vector<double>&    rTimeouts,
-            ::std::size_t                   nNumLoops,
+            const std::vector<double>&      rTimeouts,
+            std::size_t                     nNumLoops,
             CycleMode                       eCycleMode );
     }
 }

@@ -33,7 +33,7 @@ namespace svt { namespace table
 
 
     typedef ::rtl::Reference< MouseFunction >  PMouseFunction;
-    typedef ::std::vector< PMouseFunction >     MouseFunctions;
+    typedef std::vector< PMouseFunction >       MouseFunctions;
     struct DefaultInputHandler_Impl
     {
         PMouseFunction  pActiveFunction;

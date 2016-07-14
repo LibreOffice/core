@@ -99,7 +99,7 @@ public:
         const css::uno::Reference<css::rendering::XGraphicDevice>& rxDevice);
 
     static css::uno::Reference<css::rendering::XPolyPolygon2D> CreatePolygon(
-        const ::std::vector<css::awt::Rectangle>& rBoxes,
+        const std::vector<css::awt::Rectangle>& rBoxes,
         const css::uno::Reference<css::rendering::XGraphicDevice>& rxDevice);
 
     /** Create a polygon for a rounded rectangle.

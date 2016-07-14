@@ -98,7 +98,7 @@ protected:
 
         @return style of the current content.
     */
-    ::std::wstring getCurrentContentStyle();
+    std::wstring getCurrentContentStyle();
 
     /** add chunk into Chunk Buffer.
     */

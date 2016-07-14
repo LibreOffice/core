@@ -84,7 +84,7 @@ namespace slideshow
             virtual void implSetIntrinsicAnimationTime(double) override;
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
+            typedef std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
             ViewMediaShapeVector                             maViewMediaShapes;
             bool                                             mbIsPlaying;
         };
@@ -140,7 +140,7 @@ namespace slideshow
         {
             const ViewMediaShapeVector::iterator aEnd( maViewMediaShapes.end() );
 
-            OSL_ENSURE( ::std::count_if(maViewMediaShapes.begin(),
+            OSL_ENSURE( std::count_if(maViewMediaShapes.begin(),
                                         aEnd,
                                         [&rLayer]
                                         ( const ViewMediaShapeSharedPtr& pShape )
@@ -149,7 +149,7 @@ namespace slideshow
 
             ViewMediaShapeVector::iterator aIter;
 
-            if( (aIter=::std::remove_if( maViewMediaShapes.begin(),
+            if( (aIter=std::remove_if( maViewMediaShapes.begin(),
                                          aEnd,
                                          [&rLayer]
                                          ( const ViewMediaShapeSharedPtr& pShape )
@@ -175,7 +175,7 @@ namespace slideshow
         bool MediaShape::implRender( const ::basegfx::B2DRange& rCurrBounds ) const
         {
             // redraw all view shapes, by calling their update() method
-            if( ::std::count_if( maViewMediaShapes.begin(),
+            if( std::count_if( maViewMediaShapes.begin(),
                                  maViewMediaShapes.end(),
                                  [&rCurrBounds]
                                  ( const ViewMediaShapeSharedPtr& pShape )

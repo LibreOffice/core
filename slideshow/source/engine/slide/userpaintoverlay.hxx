@@ -38,8 +38,8 @@ namespace slideshow
         struct SlideShowContext;
 
         class PaintOverlayHandler;
-        typedef ::std::shared_ptr< class UserPaintOverlay > UserPaintOverlaySharedPtr;
-        typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
+        typedef std::shared_ptr< class UserPaintOverlay > UserPaintOverlaySharedPtr;
+        typedef std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
         /** Slide overlay, which can be painted into by the user.
 
             This class registers itself at the EventMultiplexer,
@@ -75,7 +75,7 @@ namespace slideshow
                               const PolyPolygonVector& rPolygons,
                               bool                    bActive );
 
-            ::std::shared_ptr<PaintOverlayHandler>    mpHandler;
+            std::shared_ptr<PaintOverlayHandler>      mpHandler;
             EventMultiplexer&                           mrMultiplexer;
         };
     }

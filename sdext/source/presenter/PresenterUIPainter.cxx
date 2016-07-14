@@ -76,7 +76,7 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
         const awt::Rectangle aLeftBoundingBox (
             rBoundingBox.X,
             rBoundingBox.Y,
-            ::std::min(aLeftBitmapSize.Width, rBoundingBox.Width),
+            std::min(aLeftBitmapSize.Width, rBoundingBox.Width),
             rBoundingBox.Height);
         aViewState.Clip.set(
             PresenterGeometryHelper::CreatePolygon(
@@ -94,7 +94,7 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
         const awt::Rectangle aRightBoundingBox (
             rBoundingBox.X + rBoundingBox.Width - aRightBitmapSize.Width,
             rBoundingBox.Y,
-            ::std::min(aRightBitmapSize.Width, rBoundingBox.Width),
+            std::min(aRightBitmapSize.Width, rBoundingBox.Width),
             rBoundingBox.Height);
         aViewState.Clip.set(
             PresenterGeometryHelper::CreatePolygon(
@@ -179,7 +179,7 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
             rBoundingBox.X,
             rBoundingBox.Y,
             rBoundingBox.Width,
-            ::std::min(aTopBitmapSize.Height, rBoundingBox.Height));
+            std::min(aTopBitmapSize.Height, rBoundingBox.Height));
         aViewState.Clip.set(
             PresenterGeometryHelper::CreatePolygon(
                 PresenterGeometryHelper::Intersection(rRepaintBox, aTopBoundingBox),
@@ -193,7 +193,7 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
     // Paint the bottom bitmap once.
     if (rxBottomBitmap.is())
     {
-        const sal_Int32 nBBoxHeight (::std::min(aBottomBitmapSize.Height, rBoundingBox.Height));
+        const sal_Int32 nBBoxHeight (std::min(aBottomBitmapSize.Height, rBoundingBox.Height));
         const awt::Rectangle aBottomBoundingBox (
             rBoundingBox.X,
             rBoundingBox.Y  + rBoundingBox.Height - nBBoxHeight,

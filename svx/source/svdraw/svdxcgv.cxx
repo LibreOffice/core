@@ -477,7 +477,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
             // rendering errors with tiled bitmap fills (these will be tiled in a
             // in-between metafile, but tend to show 'gaps' since the target is *no*
             // bitmap rendering)
-            ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
+            std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
             const sal_uInt32 nCount(aSdrObjects.size());
 
             if(nCount)
@@ -665,14 +665,14 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 }
 
 
-::std::vector< SdrObject* > SdrExchangeView::GetMarkedObjects() const
+std::vector< SdrObject* > SdrExchangeView::GetMarkedObjects() const
 {
     SortMarkedObjects();
-    ::std::vector< SdrObject* > aRetval;
+    std::vector< SdrObject* > aRetval;
 
-    ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
-    ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
-    ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
+    std::vector< std::vector< SdrMark* > >      aObjVectors( 2 );
+    std::vector< SdrMark* >&                    rObjVector1 = aObjVectors[ 0 ];
+    std::vector< SdrMark* >&                    rObjVector2 = aObjVectors[ 1 ];
     const SdrLayerAdmin&                        rLayerAdmin = mpModel->GetLayerAdmin();
     const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), false );
 
@@ -701,7 +701,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 
 void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut) const
 {
-    ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
+    std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
 
     if(aSdrObjects.size())
     {
@@ -725,7 +725,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
     if( !mxSelectionController.is() || !mxSelectionController->GetMarkedObjModel( pNeuPag ) )
     {
-        ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
+        std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
 
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors

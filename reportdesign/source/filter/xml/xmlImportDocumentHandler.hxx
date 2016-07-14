@@ -78,8 +78,8 @@ private:
 
     ::osl::Mutex                                                      m_aMutex;
     bool                                                              m_bImportedChart;
-    ::std::vector< OUString>                                          m_aMasterFields;
-    ::std::vector< OUString>                                          m_aDetailFields;
+    std::vector< OUString>                                            m_aMasterFields;
+    std::vector< OUString>                                            m_aDetailFields;
     css::uno::Sequence< css::beans::PropertyValue >                   m_aArguments;
     css::uno::Reference< css::uno::XComponentContext >                m_xContext;
     css::uno::Reference< css::xml::sax::XDocumentHandler >            m_xDelegatee;
@@ -89,7 +89,7 @@ private:
     css::uno::Reference< css::chart2::XChartDocument >                m_xModel;
     css::uno::Reference< css::chart2::data::XDatabaseDataProvider >   m_xDatabaseDataProvider;
 
-    ::std::unique_ptr<SvXMLTokenMap>                                  m_pReportElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>                                    m_pReportElemTokenMap;
 };
 
 } // namespace rptxml

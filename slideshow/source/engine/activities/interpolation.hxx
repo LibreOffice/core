@@ -125,7 +125,7 @@ namespace slideshow
                                                        const ValueType&                 rFrom,
                                                        const ValueType&                 rTo,
                                                        sal_uInt32                       nFrame,
-                                                       ::std::size_t                    nTotalFrames )
+                                                       std::size_t                      nTotalFrames )
         {
             // TODO(P1): There's a nice HAKMEM trick for that
             // nTotalFrames > 1 condition below
@@ -141,7 +141,7 @@ namespace slideshow
                                                 const sal_Int16&                    rFrom,
                                                 const sal_Int16&                    rTo,
                                                 sal_uInt32                          nFrame,
-                                                ::std::size_t                       nTotalFrames )
+                                                std::size_t                         nTotalFrames )
         {
             // until one half of the total frames are over, take from value.
             // after that, take to value.
@@ -155,7 +155,7 @@ namespace slideshow
                                                             const OUString&                  rFrom,
                                                             const OUString&                  rTo,
                                                             sal_uInt32                              nFrame,
-                                                            ::std::size_t                           nTotalFrames )
+                                                            std::size_t                             nTotalFrames )
         {
             // until one half of the total frames are over, take from value.
             // after that, take to value.
@@ -169,7 +169,7 @@ namespace slideshow
                                       const bool&                   bFrom,
                                       const bool&                   bTo,
                                       sal_uInt32                    nFrame,
-                                      ::std::size_t                 nTotalFrames )
+                                      std::size_t                   nTotalFrames )
         {
             // until one half of the total frames are over, take from value.
             // after that, take to value.

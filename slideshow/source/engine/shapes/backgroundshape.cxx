@@ -109,7 +109,7 @@ namespace slideshow
             ::basegfx::B2DRectangle     maBounds; // always needed for rendering
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewBackgroundShapeSharedPtr > ViewBackgroundShapeVector;
+            typedef std::vector< ViewBackgroundShapeSharedPtr > ViewBackgroundShapeVector;
             ViewBackgroundShapeVector   maViewShapes;
         };
 
@@ -160,7 +160,7 @@ namespace slideshow
                                             bool                        bRedrawLayer )
         {
             // already added?
-            if( ::std::any_of( maViewShapes.begin(),
+            if( std::any_of( maViewShapes.begin(),
                                maViewShapes.end(),
                                [&rNewLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
                                { return pBgShape->getViewLayer() == rNewLayer; } ) )
@@ -182,7 +182,7 @@ namespace slideshow
         {
             const ViewBackgroundShapeVector::iterator aEnd( maViewShapes.end() );
 
-            OSL_ENSURE( ::std::count_if(maViewShapes.begin(),
+            OSL_ENSURE( std::count_if(maViewShapes.begin(),
                                         aEnd,
                                         [&rLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
                                         { return pBgShape->getViewLayer() == rLayer; } ) < 2,
@@ -190,7 +190,7 @@ namespace slideshow
 
             ViewBackgroundShapeVector::iterator aIter;
 
-            if( (aIter=::std::remove_if( maViewShapes.begin(),
+            if( (aIter=std::remove_if( maViewShapes.begin(),
                                          aEnd,
                                          [&rLayer]( const ViewBackgroundShapeSharedPtr& pBgShape )
                                          { return pBgShape->getViewLayer() == rLayer; } )) == aEnd )
@@ -260,7 +260,7 @@ namespace slideshow
             }
 
             // redraw all view shapes, by calling their render() method
-            if( ::std::count_if( maViewShapes.begin(),
+            if( std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
                                  [this]( const ViewBackgroundShapeSharedPtr& pBgShape )
                                  { return pBgShape->render( this->mpMtf ); } )

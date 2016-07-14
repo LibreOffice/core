@@ -94,7 +94,7 @@ namespace svt
     //= TemplateContent
 
     struct TemplateContent;
-    typedef ::std::vector< ::rtl::Reference< TemplateContent > >    TemplateFolderContent;
+    typedef std::vector< ::rtl::Reference< TemplateContent > >      TemplateFolderContent;
     typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
     typedef TemplateFolderContent::iterator                 FolderIterator;
 
@@ -159,7 +159,7 @@ namespace svt
 
     /// compares two TemplateContent by URL
     struct TemplateContentURLLess
-        :public ::std::binary_function  <   ::rtl::Reference< TemplateContent >
+        :public std::binary_function    <   ::rtl::Reference< TemplateContent >
                                         ,   ::rtl::Reference< TemplateContent >
                                         ,   bool
                                         >
@@ -172,19 +172,19 @@ namespace svt
 
 
     /// sorts the sib contents of a TemplateFolderContent
-    struct SubContentSort : public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
+    struct SubContentSort : public std::unary_function< ::rtl::Reference< TemplateContent >, void >
     {
         void operator() ( TemplateFolderContent& _rFolder ) const
         {
             // sort the directory by name
-            ::std::sort(
+            std::sort(
                 _rFolder.begin(),
                 _rFolder.end(),
                 TemplateContentURLLess()
             );
 
             // sort the sub directories by name
-            ::std::for_each(
+            std::for_each(
                 _rFolder.begin(),
                 _rFolder.end(),
                 *this
@@ -203,7 +203,7 @@ namespace svt
     /** does a deep compare of two template contents
     */
     struct TemplateContentEqual
-        :public ::std::binary_function  <   ::rtl::Reference< TemplateContent >
+        :public std::binary_function    <   ::rtl::Reference< TemplateContent >
                                         ,   ::rtl::Reference< TemplateContent >
                                         ,   bool
                                         >
@@ -230,7 +230,7 @@ namespace svt
             if ( _rLHS->getSubContents().size() )
             {   // there are children
                 // -> compare them
-                ::std::pair< FolderIterator, FolderIterator > aFirstDifferent = ::std::mismatch(
+                std::pair< FolderIterator, FolderIterator > aFirstDifferent = std::mismatch(
                     _rLHS->getSubContents().begin(),
                     _rLHS->getSubContents().end(),
                     _rRHS->getSubContents().begin(),
@@ -255,7 +255,7 @@ namespace svt
 
 
     struct StoreContentURL
-            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
+            :public std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
@@ -280,7 +280,7 @@ namespace svt
 
     /// functor which stores the complete content of a TemplateContent
     struct StoreFolderContent
-            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
+            :public std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
@@ -302,13 +302,13 @@ namespace svt
             // the number
             m_rStorage.WriteInt32( _rContent.size() );
             // their URLs ( the local name is not enough, since URL might be not a hierarchical one, "expand:" for example )
-            ::std::for_each(
+            std::for_each(
                 _rContent.getSubContents().begin(),
                 _rContent.getSubContents().end(),
                 StoreContentURL( m_rStorage, m_xOfficeInstDirs )
             );
             // their content
-            ::std::for_each(
+            std::for_each(
                 _rContent.getSubContents().begin(),
                 _rContent.getSubContents().end(),
                 *this
@@ -328,7 +328,7 @@ namespace svt
 
     /// functor which reads a complete TemplateContent instance
     struct ReadFolderContent
-            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
+            :public std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
@@ -364,7 +364,7 @@ namespace svt
             }
 
             // their content
-            ::std::for_each(
+            std::for_each(
                 _rContent.getSubContents().begin(),
                 _rContent.getSubContents().end(),
                 *this
@@ -483,7 +483,7 @@ namespace svt
         // as both arrays are sorted (by definition - this is a precondition of this method)
         // we can simply go from the front to the back and compare the single elements
 
-        ::std::pair< ConstFolderIterator, ConstFolderIterator > aFirstDifferent = ::std::mismatch(
+        std::pair< ConstFolderIterator, ConstFolderIterator > aFirstDifferent = std::mismatch(
             _rLHS.begin(),
             _rLHS.end(),
             _rRHS.begin(),
@@ -507,14 +507,14 @@ namespace svt
             // the size
             m_pCacheStream->WriteInt32( m_aCurrentState.size() );
             // the complete URLs
-            ::std::for_each(
+            std::for_each(
                 m_aCurrentState.begin(),
                 m_aCurrentState.end(),
                 StoreContentURL( *m_pCacheStream, getOfficeInstDirs() )
             );
 
             // the contents
-            ::std::for_each(
+            std::for_each(
                 m_aCurrentState.begin(),
                 m_aCurrentState.end(),
                 StoreFolderContent( *m_pCacheStream, getOfficeInstDirs() )
@@ -693,7 +693,7 @@ namespace svt
         }
 
         // read the contents of the root folders
-        ::std::for_each(
+        std::for_each(
             m_aPreviousState.begin(),
             m_aPreviousState.end(),
             ReadFolderContent( *m_pCacheStream, getOfficeInstDirs() )

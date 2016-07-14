@@ -130,7 +130,7 @@ namespace sfx2
 
     namespace
     {
-        struct IsSpecialArgument : public ::std::unary_function< Any, bool >
+        struct IsSpecialArgument : public std::unary_function< Any, bool >
         {
             static bool isSpecialArgumentName( const OUString& _rValueName )
             {
@@ -169,7 +169,7 @@ namespace sfx2
         // the object with the given arguments, stripped by the three special ones
         Sequence< Any > aStrippedArguments( _rArguments.getLength() );
         Any* pStrippedArgs = aStrippedArguments.getArray();
-        Any* pStrippedArgsEnd = ::std::remove_copy_if(
+        Any* pStrippedArgsEnd = std::remove_copy_if(
             _rArguments.getConstArray(),
             _rArguments.getConstArray() + _rArguments.getLength(),
             pStrippedArgs,

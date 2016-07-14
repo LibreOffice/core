@@ -103,7 +103,7 @@ namespace slideshow
             virtual void notifyIntrinsicAnimationsDisabled() = 0;
         };
 
-        typedef ::std::shared_ptr< SubsettableShapeManager > SubsettableShapeManagerSharedPtr;
+        typedef std::shared_ptr< SubsettableShapeManager > SubsettableShapeManagerSharedPtr;
     }
 }
 

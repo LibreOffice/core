@@ -96,7 +96,7 @@ SidebarController::SidebarController (
               mpParentWindow,
               rxFrame,
               [this](const ::rtl::OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
-              [this](const Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
+              [this](const Rectangle& rButtonBox,const std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
               this)),
       mxFrame(rxFrame),
       maCurrentContext(OUString(), OUString()),
@@ -918,7 +918,7 @@ IMPL_LINK_TYPED(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, 
 
 void SidebarController::ShowPopupMenu (
     const Rectangle& rButtonBox,
-    const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
+    const std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
     VclPtr<PopupMenu> pMenu = CreatePopupMenu(rMenuData);
     pMenu->SetSelectHdl(LINK(const_cast<SidebarController*>(this), SidebarController, OnMenuItemSelected));
@@ -930,7 +930,7 @@ void SidebarController::ShowPopupMenu (
 }
 
 VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
-    const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
+    const std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
     // Create the top level popup menu.
     VclPtrInstance<PopupMenu> pMenu;
@@ -948,7 +948,7 @@ VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
     // Add one entry for every tool panel element to individually make
     // them visible or hide them.
     sal_Int32 nIndex (0);
-    for(::std::vector<TabBar::DeckMenuData>::const_iterator
+    for(std::vector<TabBar::DeckMenuData>::const_iterator
             iItem(rMenuData.begin()),
             iEnd(rMenuData.end());
         iItem!=iEnd;

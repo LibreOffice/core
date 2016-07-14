@@ -1447,8 +1447,8 @@ void RTFDocumentImpl::sendProperties(
 
 void RTFDocumentImpl::replayRowBuffer(
     RTFBuffer_t& rBuffer,
-    ::std::deque<RTFSprms>& rCellsSrpms,
-    ::std::deque<RTFSprms>& rCellsAttributes,
+    std::deque<RTFSprms>& rCellsSrpms,
+    std::deque<RTFSprms>& rCellsAttributes,
     int const nCells)
 {
     for (int i = 0; i < nCells; ++i)

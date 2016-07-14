@@ -35,13 +35,13 @@ namespace rptxml
             sal_Int32 nHeight;
             sal_Int32 nColSpan;
             sal_Int32 nRowSpan;
-            ::std::vector< css::uno::Reference< css::report::XReportComponent> > xElements;
+            std::vector< css::uno::Reference< css::report::XReportComponent> > xElements;
             TCell() : nWidth(0),nHeight(0),nColSpan(1),nRowSpan(1){}
         };
     private:
-        ::std::vector< ::std::vector<TCell> >                                               m_aGrid;
-        ::std::vector<sal_Int32>                                                            m_aHeight;
-        ::std::vector<sal_Int32>                                                            m_aWidth;
+        std::vector< std::vector<TCell> >                                                   m_aGrid;
+        std::vector<sal_Int32>                                                              m_aHeight;
+        std::vector<sal_Int32>                                                              m_aWidth;
         css::uno::Reference< css::report::XSection >                                        m_xSection;
         OUString                                                                            m_sStyleName;
         sal_Int32                                                                           m_nColSpan;

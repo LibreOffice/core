@@ -212,7 +212,7 @@ void OXMLReport::EndElement()
         m_xComponent->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
 }
 
-void OXMLReport::addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair)
+void OXMLReport::addMasterDetailPair(const std::pair< OUString,OUString >& _aPair)
 {
     m_aMasterFields.push_back(_aPair.first);
     m_aDetailFields.push_back(_aPair.second);

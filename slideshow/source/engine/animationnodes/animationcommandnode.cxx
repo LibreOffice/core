@@ -36,7 +36,7 @@ namespace internal {
 namespace EffectCommands = css::presentation::EffectCommands;
 
 AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimationNode> const& xNode,
-                                             ::std::shared_ptr<BaseContainerNode> const& pParent,
+                                             std::shared_ptr<BaseContainerNode> const& pParent,
                                              NodeContext const& rContext ) :
     BaseNode( xNode, pParent, rContext ),
     mpShape(),
@@ -45,7 +45,7 @@ AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimatio
     uno::Reference< drawing::XShape > xShape( mxCommandNode->getTarget(),
                                               uno::UNO_QUERY );
     ShapeSharedPtr pShape( getContext().mpSubsettableShapeManager->lookupShape( xShape ) );
-    mpShape = ::std::dynamic_pointer_cast< IExternalMediaShapeBase >( pShape );
+    mpShape = std::dynamic_pointer_cast< IExternalMediaShapeBase >( pShape );
 }
 
 void AnimationCommandNode::dispose()

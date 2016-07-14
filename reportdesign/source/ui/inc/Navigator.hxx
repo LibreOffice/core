@@ -29,7 +29,7 @@ namespace rptui
     class ONavigator :  public FloatingWindow
     {
         OModuleClient       m_aModuleClient;
-        ::std::unique_ptr<ONavigatorImpl> m_pImpl;
+        std::unique_ptr<ONavigatorImpl> m_pImpl;
         ONavigator(const ONavigator&) = delete;
         void operator =(const ONavigator&) = delete;
     public:

@@ -194,8 +194,8 @@ class SectionPropertyMap : public PropertyMap
     bool                                    m_bTitlePage;
     sal_Int16                               m_nColumnCount;
     sal_Int32                               m_nColumnDistance;
-    ::std::vector< sal_Int32 >              m_aColWidth;
-    ::std::vector< sal_Int32 >              m_aColDistance;
+    std::vector< sal_Int32 >                m_aColWidth;
+    std::vector< sal_Int32 >                m_aColDistance;
 
     bool                                    m_bSeparatorLineIsOn;
     bool                                    m_bEvenlySpaced;

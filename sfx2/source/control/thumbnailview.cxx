@@ -992,7 +992,7 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
 
         // delete item from the filter item list
         ThumbnailValueItemList::iterator it = mFilteredItemList.begin();
-        ::std::advance( it, nPos );
+        std::advance( it, nPos );
 
         if ((*it)->isSelected())
         {

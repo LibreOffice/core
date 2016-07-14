@@ -29,7 +29,7 @@ class PropertyAnimationNode : public AnimationBaseNode
 public:
     PropertyAnimationNode(
         css::uno::Reference<css::animations::XAnimationNode> const& xNode,
-        ::std::shared_ptr<BaseContainerNode> const& pParent,
+        std::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext )
         : AnimationBaseNode( xNode, pParent, rContext ) {}
 

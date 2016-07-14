@@ -360,7 +360,7 @@ sal_Int32 VtableFactory::createVtables(
 #ifdef USE_DOUBLE_MMAP
         //Finished generating block, swap writable pointer with executable
         //pointer
-            ::std::swap(block.start, block.exec);
+            std::swap(block.start, block.exec);
 #endif
             blocks.push_back(block);
         } catch (...) {

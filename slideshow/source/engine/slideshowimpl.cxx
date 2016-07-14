@@ -200,10 +200,10 @@ private:
 
 typedef cppu::WeakComponentImplHelper<presentation::XSlideShow> SlideShowImplBase;
 
-typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
+typedef std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
 
 /// Maps XDrawPage for annotations persistence
-typedef ::std::map< css::uno::Reference<
+typedef std::map< css::uno::Reference<
                                     css::drawing::XDrawPage>,
                                     PolyPolygonVector>  PolygonMap;
 

@@ -140,7 +140,7 @@ void OXMLSubDocument::EndElement()
     }
 }
 
-void OXMLSubDocument::addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair)
+void OXMLSubDocument::addMasterDetailPair(const std::pair< OUString,OUString >& _aPair)
 {
     m_aMasterFields.push_back(_aPair.first);
     m_aDetailFields.push_back(_aPair.second);

@@ -213,8 +213,8 @@ public:
         OSL_TRACE("PluginSlideChange viewRemoved");
         SlideChangeBase::viewRemoved( rView );
 
-        ::std::vector< TransitionViewPair* >::const_iterator aEnd(maTransitions.end());
-        for( ::std::vector< TransitionViewPair* >::iterator aIter =maTransitions.begin();
+        std::vector< TransitionViewPair* >::const_iterator aEnd(maTransitions.end());
+        for( std::vector< TransitionViewPair* >::iterator aIter =maTransitions.begin();
              aIter != aEnd;
              ++aIter )
         {

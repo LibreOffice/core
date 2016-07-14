@@ -57,7 +57,7 @@ public:
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
     virtual bool handleSpecialItem(
             XMLPropertyState& /*rProperty*/,
-            ::std::vector< XMLPropertyState >& /*rProperties*/,
+            std::vector< XMLPropertyState >& /*rProperties*/,
             const OUString& /*rValue*/,
             const SvXMLUnitConverter& /*rUnitConverter*/,
             const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const override

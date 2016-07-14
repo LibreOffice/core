@@ -31,7 +31,7 @@ namespace rptxml
     class SAL_NO_VTABLE IMasterDetailFieds
     {
     public:
-        virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) = 0;
+        virtual void addMasterDetailPair(const std::pair< OUString,OUString >& _aPair) = 0;
 
     protected:
         ~IMasterDetailFieds() {}

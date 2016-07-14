@@ -206,8 +206,8 @@ protected:
     sal_uInt32 mnStateSet;
     bool mbIsFocused;
     css::uno::Reference<css::accessibility::XAccessible> mxParentAccessible;
-    ::std::vector<rtl::Reference<AccessibleObject> > maChildren;
-    ::std::vector<Reference<XAccessibleEventListener> > maListeners;
+    std::vector<rtl::Reference<AccessibleObject> > maChildren;
+    std::vector<Reference<XAccessibleEventListener> > maListeners;
 
     virtual awt::Point GetRelativeLocation();
     virtual awt::Size GetSize();
@@ -294,7 +294,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    ::std::vector<AccessibleRelation> maRelations;
+    std::vector<AccessibleRelation> maRelations;
 };
 
 //===== PresenterAccessibleParagraph ==========================================
@@ -518,7 +518,7 @@ public:
 
 private:
     static std::shared_ptr<AccessibleFocusManager> mpInstance;
-    ::std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> > maFocusableObjects;
+    std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> > maFocusableObjects;
 
     AccessibleFocusManager();
 };
@@ -1239,7 +1239,7 @@ void PresenterAccessible::AccessibleObject::RemoveChild (
     const ::rtl::Reference<AccessibleObject>& rpChild)
 {
     rpChild->SetAccessibleParent(Reference<XAccessible>());
-    maChildren.erase(::std::find(maChildren.begin(), maChildren.end(), rpChild));
+    maChildren.erase(std::find(maChildren.begin(), maChildren.end(), rpChild));
     FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
 }
 
@@ -1274,8 +1274,8 @@ void PresenterAccessible::AccessibleObject::FireAccessibleEvent (
     aEventObject.NewValue = rNewValue;
     aEventObject.OldValue = rOldValue;
 
-    ::std::vector<Reference<XAccessibleEventListener> > aListenerCopy(maListeners);
-    for (::std::vector<Reference<XAccessibleEventListener> >::const_iterator
+    std::vector<Reference<XAccessibleEventListener> > aListenerCopy(maListeners);
+    for (std::vector<Reference<XAccessibleEventListener> >::const_iterator
              iListener(aListenerCopy.begin()),
              iEnd(aListenerCopy.end());
          iListener!=iEnd;
@@ -1401,7 +1401,7 @@ sal_Bool SAL_CALL AccessibleStateSet::containsAll (const css::uno::Sequence<sal_
 css::uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSet::getStates()
     throw (css::uno::RuntimeException, std::exception)
 {
-    ::std::vector<sal_Int16> aStates;
+    std::vector<sal_Int16> aStates;
     aStates.reserve(sizeof(mnStateSet)*8);
     for (sal_uInt16 nIndex=0; nIndex<sizeof(mnStateSet)*8; ++nIndex)
         if ((mnStateSet & GetStateMask(nIndex)) != 0)
@@ -1451,7 +1451,7 @@ AccessibleRelation SAL_CALL AccessibleRelationSet::getRelation (sal_Int32 nIndex
 sal_Bool SAL_CALL AccessibleRelationSet::containsRelation (sal_Int16 nRelationType)
     throw (css::uno::RuntimeException, std::exception)
 {
-    for (::std::vector<AccessibleRelation>::const_iterator iRelation(maRelations.begin());
+    for (std::vector<AccessibleRelation>::const_iterator iRelation(maRelations.begin());
          iRelation!=maRelations.end();
          ++iRelation)
     {
@@ -1464,7 +1464,7 @@ sal_Bool SAL_CALL AccessibleRelationSet::containsRelation (sal_Int16 nRelationTy
 AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType (sal_Int16 nRelationType)
     throw (css::uno::RuntimeException, std::exception)
 {
-    for (::std::vector<AccessibleRelation>::const_iterator iRelation(maRelations.begin());
+    for (std::vector<AccessibleRelation>::const_iterator iRelation(maRelations.begin());
          iRelation!=maRelations.end();
          ++iRelation)
     {
@@ -1862,15 +1862,15 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
 void AccessibleNotes::SetTextView (
     const std::shared_ptr<PresenterTextView>& rpTextView)
 {
-    ::std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> > aChildren;
+    std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> > aChildren;
 
     // Release any listeners to the current text view.
     if (mpTextView)
     {
         mpTextView->GetCaret()->SetCaretMotionBroadcaster(
-            ::std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>());
+            std::function<void (sal_Int32,sal_Int32,sal_Int32,sal_Int32)>());
         mpTextView->SetTextChangeBroadcaster(
-            ::std::function<void ()>());
+            std::function<void ()>());
     }
 
     mpTextView = rpTextView;
@@ -1930,7 +1930,7 @@ void AccessibleNotes::SetWindow (
 
     // Set the windows at the children as well, so that every paragraph can
     // setup its geometry.
-    for (::std::vector<rtl::Reference<AccessibleObject> >::const_iterator
+    for (std::vector<rtl::Reference<AccessibleObject> >::const_iterator
              iChild(maChildren.begin()),
              iEnd(maChildren.end());
          iChild!=iEnd;
@@ -2008,7 +2008,7 @@ void AccessibleFocusManager::AddFocusableObject (
     const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
 {
     OSL_ASSERT(rpObject.is());
-    OSL_ASSERT(::std::find(maFocusableObjects.begin(),maFocusableObjects.end(), rpObject)==maFocusableObjects.end());
+    OSL_ASSERT(std::find(maFocusableObjects.begin(),maFocusableObjects.end(), rpObject)==maFocusableObjects.end());
 
     maFocusableObjects.push_back(rpObject);
 }
@@ -2016,8 +2016,8 @@ void AccessibleFocusManager::AddFocusableObject (
 void AccessibleFocusManager::RemoveFocusableObject (
     const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
 {
-    ::std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> >::iterator iObject (
-        ::std::find(maFocusableObjects.begin(),maFocusableObjects.end(), rpObject));
+    std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> >::iterator iObject (
+        std::find(maFocusableObjects.begin(),maFocusableObjects.end(), rpObject));
 
     if (iObject != maFocusableObjects.end())
         maFocusableObjects.erase(iObject);
@@ -2031,7 +2031,7 @@ void AccessibleFocusManager::FocusObject (
     const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
 {
     // Remove the focus of any of the other focusable objects.
-    for (::std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> >::const_iterator
+    for (std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> >::const_iterator
              iObject (maFocusableObjects.begin()),
              iEnd (maFocusableObjects.end());
          iObject != iEnd;

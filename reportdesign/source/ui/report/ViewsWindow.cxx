@@ -320,11 +320,11 @@ void OViewsWindow::removeSection(sal_uInt16 _nPosition)
 
 void OViewsWindow::toggleGrid(bool _bVisible)
 {
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+    std::for_each(m_aSections.begin(),m_aSections.end(),
         [_bVisible] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().SetGridVisible(_bVisible);
         });
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+    std::for_each(m_aSections.begin(),m_aSections.end(),
         [] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().Window::Invalidate(InvalidateFlags::NoErase);
         });
@@ -360,7 +360,7 @@ void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 
 void OViewsWindow::SetMode( DlgEdMode eNewMode )
 {
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+    std::for_each(m_aSections.begin(),m_aSections.end(),
         [&eNewMode] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().SetMode(eNewMode);
         });
@@ -378,7 +378,7 @@ bool OViewsWindow::HasSelection() const
 void OViewsWindow::Delete()
 {
     m_bInUnmark = true;
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+    std::for_each(m_aSections.begin(),m_aSections.end(),
         [] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().Delete();
         });
@@ -388,7 +388,7 @@ void OViewsWindow::Delete()
 void OViewsWindow::Copy()
 {
     uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+    std::for_each(m_aSections.begin(),m_aSections.end(),
         [&aAllreadyCopiedObjects] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().Copy(aAllreadyCopiedObjects);
         });
@@ -403,7 +403,7 @@ void OViewsWindow::Paste()
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(this));
     OReportExchange::TSectionElements aCopies = OReportExchange::extractCopies(aTransferData);
     if ( aCopies.getLength() > 1 )
-        ::std::for_each(m_aSections.begin(),m_aSections.end(),
+        std::for_each(m_aSections.begin(),m_aSections.end(),
             [&aCopies] (const TSectionsMap::value_type& sectionPtr) {
                 sectionPtr->getReportSection().Paste(aCopies);
             });
@@ -507,7 +507,7 @@ bool OViewsWindow::IsPasteAllowed() const
 void OViewsWindow::SelectAll(const sal_uInt16 _nObjectType)
 {
     m_bInUnmark = true;
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+    std::for_each(m_aSections.begin(),m_aSections.end(),
         [&_nObjectType] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().SelectAll(_nObjectType);
         });
@@ -552,11 +552,11 @@ void OViewsWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void OViewsWindow::showRuler(bool _bShow)
 {
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+    std::for_each(m_aSections.begin(),m_aSections.end(),
         [_bShow] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getStartMarker().showRuler(_bShow);
         });
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+    std::for_each(m_aSections.begin(),m_aSections.end(),
         [] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getStartMarker().Window::Invalidate(InvalidateFlags::NoErase);
         });
@@ -784,8 +784,8 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
 
     bool bMove = true;
 
-    ::std::mem_fun_t<long&,Rectangle> aGetFun       = ::std::mem_fun<long&,Rectangle>(&Rectangle::Bottom);
-    ::std::mem_fun_t<long&,Rectangle> aRefFun       = ::std::mem_fun<long&,Rectangle>(&Rectangle::Top);
+    std::mem_fun_t<long&,Rectangle> aGetFun         = std::mem_fun<long&,Rectangle>(&Rectangle::Bottom);
+    std::mem_fun_t<long&,Rectangle> aRefFun         = std::mem_fun<long&,Rectangle>(&Rectangle::Top);
     TRectangleMap::const_iterator aRectIter = aSortRectangles.begin();
     TRectangleMap::const_iterator aRectEnd = aSortRectangles.end();
     for (;aRectIter != aRectEnd ; ++aRectIter)
@@ -804,8 +804,8 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
             switch(_nControlModification)
             {
                 case ControlModification::TOP   :
-                    aGetFun  = ::std::mem_fun<long&,Rectangle>(&Rectangle::Top);
-                    aRefFun  = ::std::mem_fun<long&,Rectangle>(&Rectangle::Bottom);
+                    aGetFun  = std::mem_fun<long&,Rectangle>(&Rectangle::Top);
+                    aRefFun  = std::mem_fun<long&,Rectangle>(&Rectangle::Bottom);
                     pValue = &nYMov;
                     break;
                 case ControlModification::BOTTOM:
@@ -818,16 +818,16 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
                     bMove = false;
                     break;
                 case ControlModification::RIGHT :
-                    aGetFun  = ::std::mem_fun<long&,Rectangle>(&Rectangle::Right);
-                    aRefFun  = ::std::mem_fun<long&,Rectangle>(&Rectangle::Left);
+                    aGetFun  = std::mem_fun<long&,Rectangle>(&Rectangle::Right);
+                    aRefFun  = std::mem_fun<long&,Rectangle>(&Rectangle::Left);
                     break;
                 case ControlModification::CENTER_HORIZONTAL:
                     nXMov = aCenter.X() - aObjRect.Center().X();
                     bMove = false;
                     break;
                 case ControlModification::LEFT  :
-                    aGetFun  = ::std::mem_fun<long&,Rectangle>(&Rectangle::Left);
-                    aRefFun  = ::std::mem_fun<long&,Rectangle>(&Rectangle::Right);
+                    aGetFun  = std::mem_fun<long&,Rectangle>(&Rectangle::Left);
+                    aRefFun  = std::mem_fun<long&,Rectangle>(&Rectangle::Right);
                     break;
                 default:
                     bMove = false;
@@ -963,7 +963,7 @@ namespace
         eForceToAnotherPage,
         eBreakAction
     };
-    class ApplySectionViewAction : public ::std::unary_function< OViewsWindow::TSectionsMap::value_type, void >
+    class ApplySectionViewAction : public std::unary_function< OViewsWindow::TSectionsMap::value_type, void >
     {
     private:
         SectionViewAction   m_eAction;
@@ -1011,7 +1011,7 @@ namespace
 void OViewsWindow::BrkAction()
 {
     EndDragObj_removeInvisibleObjects();
-    ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction(eBreakAction) );
+    std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction(eBreakAction) );
 }
 
 void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _aRect, const OSectionView& _rSection)
@@ -1046,7 +1046,7 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _
 
 bool OViewsWindow::isObjectInMyTempList(SdrObject *_pObj)
 {
-    return ::std::find(m_aBegDragTempList.begin(),m_aBegDragTempList.end(),_pObj) != m_aBegDragTempList.end();
+    return std::find(m_aBegDragTempList.begin(),m_aBegDragTempList.end(),_pObj) != m_aBegDragTempList.end();
 }
 
 
@@ -1102,8 +1102,8 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
                     Rectangle aRect( pObj->GetCurrentBoundRect() );
                     aRect.Move(0, aNewObjPos.Y());
 
-                    aLeftTop.X() = ::std::min( aRect.Left(), aLeftTop.X() );
-                    aLeftTop.Y() = ::std::min( aRect.Top(), aLeftTop.Y() );
+                    aLeftTop.X() = std::min( aRect.Left(), aLeftTop.X() );
+                    aLeftTop.Y() = std::min( aRect.Top(), aLeftTop.Y() );
 
                     SAL_INFO(
                         "reportdesign",
@@ -1159,7 +1159,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
 
 void OViewsWindow::ForceMarkedToAnotherPage()
 {
-    ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction(eForceToAnotherPage ) );
+    std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction(eForceToAnotherPage ) );
 }
 
 void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
@@ -1352,7 +1352,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
     }
     else
     {
-        ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction( false ) );
+        std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction( false ) );
         EndDragObj_removeInvisibleObjects();
     }
     m_aDragDelta = Point(SAL_MAX_INT32, SAL_MAX_INT32);
@@ -1360,7 +1360,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
 
 void OViewsWindow::EndAction()
 {
-    ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction() );
+    std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction() );
 }
 
 void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bool _bMove, bool _bControlKeySet)
@@ -1682,13 +1682,13 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
 
 void OViewsWindow::stopScrollTimer()
 {
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+    std::for_each(m_aSections.begin(),m_aSections.end(),
         [] (const TSectionsMap::value_type& sectionPtr) {
             sectionPtr->getReportSection().stopScrollTimer();
         });
 }
 
-void OViewsWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
+void OViewsWindow::fillCollapsedSections(std::vector<sal_uInt16>& _rCollapsedPositions) const
 {
     TSectionsMap::const_iterator aIter = m_aSections.begin();
     TSectionsMap::const_iterator aEnd = m_aSections.end();
@@ -1765,7 +1765,7 @@ void OViewsWindow::scrollChildren(const Point& _aThumbPos)
     }
 }
 
-void OViewsWindow::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
+void OViewsWindow::fillControlModelSelection(std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
     TSectionsMap::const_iterator aIter = m_aSections.begin();
     TSectionsMap::const_iterator aEnd = m_aSections.end();

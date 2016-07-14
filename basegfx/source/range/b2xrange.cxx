@@ -32,7 +32,7 @@ namespace basegfx
             nested types.
          */
         template< class RangeType > void doComputeSetDifference(
-            ::std::vector< RangeType >& o_rRanges,
+            std::vector< RangeType >& o_rRanges,
             const RangeType&            a,
             const RangeType&            b )
         {
@@ -98,7 +98,7 @@ namespace basegfx
         }
     }
 
-    ::std::vector< B2IRange >& computeSetDifference( ::std::vector< B2IRange >& o_rResult,
+    std::vector< B2IRange >& computeSetDifference( std::vector< B2IRange >& o_rResult,
                                                      const B2IRange&            rFirst,
                                                      const B2IRange&            rSecond )
     {
@@ -107,7 +107,7 @@ namespace basegfx
         return o_rResult;
     }
 
-    ::std::vector< B2DRange >& computeSetDifference( ::std::vector< B2DRange >& o_rResult,
+    std::vector< B2DRange >& computeSetDifference( std::vector< B2DRange >& o_rResult,
                                                      const B2DRange&            rFirst,
                                                      const B2DRange&            rSecond )
     {

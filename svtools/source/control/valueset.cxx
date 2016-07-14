@@ -1636,7 +1636,7 @@ void ValueSet::ImplInsertItem( ValueSetItem *const pItem, const size_t nPos )
 
     if ( nPos < mItemList.size() ) {
         ValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
+        std::advance( it, nPos );
         mItemList.insert( it, pItem );
     } else {
         mItemList.push_back( pItem );
@@ -1678,7 +1678,7 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
 
     if ( nPos < mItemList.size() ) {
         ValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
+        std::advance( it, nPos );
         delete *it;
         mItemList.erase( it );
     }

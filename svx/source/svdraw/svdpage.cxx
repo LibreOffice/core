@@ -60,11 +60,11 @@
 using namespace ::com::sun::star;
 
 class SdrObjList::WeakSdrObjectContainerType
-    : public ::std::vector<SdrObjectWeakRef>
+    : public std::vector<SdrObjectWeakRef>
 {
 public:
     explicit WeakSdrObjectContainerType (const sal_Int32 nInitialSize)
-        : ::std::vector<SdrObjectWeakRef>(nInitialSize) {};
+        : std::vector<SdrObjectWeakRef>(nInitialSize) {};
 };
 
 
@@ -771,7 +771,7 @@ void SdrObjList::SetObjectNavigationPosition (
     if (mxNavigationOrder.get() == nullptr)
     {
         mxNavigationOrder.reset(new WeakSdrObjectContainerType(maList.size()));
-        ::std::copy(
+        std::copy(
             maList.begin(),
             maList.end(),
             mxNavigationOrder->begin());
@@ -782,7 +782,7 @@ void SdrObjList::SetObjectNavigationPosition (
     SdrObjectWeakRef aReference (&rObject);
 
     // Look up the object whose navigation position is to be changed.
-    WeakSdrObjectContainerType::iterator iObject (::std::find(
+    WeakSdrObjectContainerType::iterator iObject (std::find(
         mxNavigationOrder->begin(),
         mxNavigationOrder->end(),
         aReference));
@@ -793,7 +793,7 @@ void SdrObjList::SetObjectNavigationPosition (
     }
 
     // Move the object to its new position.
-    const sal_uInt32 nOldPosition = ::std::distance(mxNavigationOrder->begin(), iObject);
+    const sal_uInt32 nOldPosition = std::distance(mxNavigationOrder->begin(), iObject);
     if (nOldPosition != nNewPosition)
     {
         mxNavigationOrder->erase(iObject);
@@ -941,7 +941,7 @@ void SdrObjList::ReplaceObjectInContainer (
         // the later object from/to the navigation order.
         OSL_ASSERT(nObjectPosition < maList.size());
         SdrObjectWeakRef aReference (maList[nObjectPosition]);
-        WeakSdrObjectContainerType::iterator iObject (::std::find(
+        WeakSdrObjectContainerType::iterator iObject (std::find(
             mxNavigationOrder->begin(),
             mxNavigationOrder->end(),
             aReference));
@@ -971,7 +971,7 @@ void SdrObjList::RemoveObjectFromContainer (
     if (HasObjectNavigationOrder())
     {
         SdrObjectWeakRef aReference (maList[nObjectPosition]);
-        WeakSdrObjectContainerType::iterator iObject (::std::find(
+        WeakSdrObjectContainerType::iterator iObject (std::find(
             mxNavigationOrder->begin(),
             mxNavigationOrder->end(),
             aReference));
@@ -1020,7 +1020,7 @@ void SdrPage::AddPageUser(sdr::PageUser& rNewUser)
 
 void SdrPage::RemovePageUser(sdr::PageUser& rOldUser)
 {
-    const sdr::PageUserVector::iterator aFindResult = ::std::find(maPageUsers.begin(), maPageUsers.end(), &rOldUser);
+    const sdr::PageUserVector::iterator aFindResult = std::find(maPageUsers.begin(), maPageUsers.end(), &rOldUser);
     if(aFindResult != maPageUsers.end())
     {
         maPageUsers.erase(aFindResult);

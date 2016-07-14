@@ -353,7 +353,7 @@ protected:
         // slide is long gone.
         if( io_rHitShape->second.empty() )
         {
-            // this looks funny, since ::std::map does
+            // this looks funny, since std::map does
             // provide an erase( iterator )
             // method. Unfortunately, C++ does not
             // declare the obvious erase(
@@ -796,8 +796,8 @@ void UserEventQueue::registerMouseLeaveEvent( const EventSharedPtr& rEvent,
 
 void UserEventQueue::callSkipEffectEventHandler()
 {
-    ::std::shared_ptr<SkipEffectEventHandler> pHandler (
-        ::std::dynamic_pointer_cast<SkipEffectEventHandler>(mpSkipEffectEventHandler));
+    std::shared_ptr<SkipEffectEventHandler> pHandler (
+        std::dynamic_pointer_cast<SkipEffectEventHandler>(mpSkipEffectEventHandler));
     if (pHandler)
         pHandler->skipEffect();
 }

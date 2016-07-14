@@ -458,7 +458,7 @@ bool XDash::operator==(const XDash& rDash) const
 // sequence and fills the given vetor of doubles accordingly (also resizing, so deleting it).
 static double SMALLEST_DASH_WIDTH(26.95);
 
-double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double fLineWidth) const
+double XDash::CreateDotDashArray(std::vector< double >& rDotDashArray, double fLineWidth) const
 {
     double fFullDotDashLen(0.0);
     const sal_uInt16 nNumDotDashArray = (GetDots() + GetDashes()) * 2;

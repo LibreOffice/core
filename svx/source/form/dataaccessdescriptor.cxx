@@ -41,12 +41,12 @@ namespace svx
         bool                    m_bSequenceOutOfDate    : 1;
 
     public:
-        typedef ::std::map< DataAccessDescriptorProperty, Any >     DescriptorValues;
+        typedef std::map< DataAccessDescriptorProperty, Any >       DescriptorValues;
         DescriptorValues            m_aValues;
         Sequence< PropertyValue >   m_aAsSequence;
         Reference< XPropertySet >   m_xAsSet;
 
-        typedef ::std::map< OUString, PropertyMapEntry const * >    MapString2PropertyEntry;
+        typedef std::map< OUString, PropertyMapEntry const * >      MapString2PropertyEntry;
 
     public:
         ODADescriptorImpl();

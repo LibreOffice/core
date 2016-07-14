@@ -97,7 +97,7 @@ private:
     static sal_Int32 mnTaskId;
 
     ::osl::Mutex maTaskContainerMutex;
-    typedef ::std::set<SharedTimerTask,TimerTaskComparator> TaskContainer;
+    typedef std::set<SharedTimerTask,TimerTaskComparator> TaskContainer;
     TaskContainer maScheduledTasks;
     ::osl::Mutex maCurrentTaskMutex;
     SharedTimerTask mpCurrentTask;
@@ -426,7 +426,7 @@ void PresenterClockTimer::RemoveListener (const SharedListener& rListener)
 {
     osl::MutexGuard aGuard (maMutex);
 
-    ListenerContainer::iterator iListener (::std::find(
+    ListenerContainer::iterator iListener (std::find(
         maListeners.begin(),
         maListeners.end(),
         rListener));
@@ -500,10 +500,10 @@ void SAL_CALL PresenterClockTimer::notify (const css::uno::Any& rUserData)
 
         mbIsCallbackPending = false;
 
-        ::std::copy(
+        std::copy(
             maListeners.begin(),
             maListeners.end(),
-            ::std::back_inserter(aListenerCopy));
+            std::back_inserter(aListenerCopy));
     }
 
     if (aListenerCopy.size() > 0)

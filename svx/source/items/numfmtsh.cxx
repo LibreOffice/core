@@ -257,7 +257,7 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
 
     if ( nAddKey != NUMBERFORMAT_ENTRY_NOT_FOUND ) // exists already?
     {
-        ::std::vector<sal_uInt32>::iterator nAt = GetRemoved_Impl( nAddKey );
+        std::vector<sal_uInt32>::iterator nAt = GetRemoved_Impl( nAddKey );
         if ( nAt != aDelList.end() )
         {
             aDelList.erase( nAt );
@@ -333,7 +333,7 @@ bool SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
     {
         aDelList.push_back( nDelKey );
 
-        ::std::vector<sal_uInt32>::iterator nAt = GetAdded_Impl( nDelKey );
+        std::vector<sal_uInt32>::iterator nAt = GetAdded_Impl( nDelKey );
         if( nAt != aAddList.end() )
         {
             aAddList.erase( nAt );
@@ -1130,9 +1130,9 @@ void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpC
 }
 
 
-::std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetRemoved_Impl( size_t nKey )
+std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetRemoved_Impl( size_t nKey )
 {
-    return ::std::find(aDelList.begin(), aDelList.end(), nKey);
+    return std::find(aDelList.begin(), aDelList.end(), nKey);
 }
 
 
@@ -1142,9 +1142,9 @@ bool SvxNumberFormatShell::IsRemoved_Impl( size_t nKey )
 }
 
 
-::std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetAdded_Impl( size_t nKey )
+std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetAdded_Impl( size_t nKey )
 {
-    return ::std::find(aAddList.begin(), aAddList.end(), nKey);
+    return std::find(aAddList.begin(), aAddList.end(), nKey);
 }
 
 
@@ -1345,7 +1345,7 @@ short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
 {
     short nSelP=SELPOS_NONE;
     // Check list size against return type limit.
-    if( aCurEntryList.size() <= static_cast<size_t>(::std::numeric_limits< short >::max()) )
+    if( aCurEntryList.size() <= static_cast<size_t>(std::numeric_limits< short >::max()) )
     {
         for(size_t i=0; i < aCurEntryList.size(); ++i)
         {

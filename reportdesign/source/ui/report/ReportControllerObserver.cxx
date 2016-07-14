@@ -50,7 +50,7 @@ typedef std::map<uno::Reference< beans::XPropertySet >, AllProperties> PropertyS
 class OXReportControllerObserverImpl
 {
 public:
-    ::std::vector< uno::Reference< container::XChild> > m_aSections;
+    std::vector< uno::Reference< container::XChild> > m_aSections;
     ::osl::Mutex                                        m_aMutex;
     oslInterlockedCount                                 m_nLocks;
 
@@ -96,8 +96,8 @@ public:
 
                     // send all Section Objects a 'tingle'
                     // maybe they need a change in format, color, etc
-                    ::std::vector< uno::Reference< container::XChild > >::const_iterator aIter = m_pImpl->m_aSections.begin();
-                    ::std::vector< uno::Reference< container::XChild > >::const_iterator aEnd = m_pImpl->m_aSections.end();
+                    std::vector< uno::Reference< container::XChild > >::const_iterator aIter = m_pImpl->m_aSections.begin();
+                    std::vector< uno::Reference< container::XChild > >::const_iterator aEnd = m_pImpl->m_aSections.end();
                     for (;aIter != aEnd; ++aIter)
                     {
                         const uno::Reference<container::XChild> xChild (*aIter);
@@ -202,7 +202,7 @@ void OXReportControllerObserver::RemoveSection(const uno::Reference< report::XSe
     try
     {
         uno::Reference<container::XChild> xChild(_xSection.get());
-        m_pImpl->m_aSections.erase(::std::remove(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),
+        m_pImpl->m_aSections.erase(std::remove(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),
             xChild), m_pImpl->m_aSections.end());
         uno::Reference< uno::XInterface >  xInt(_xSection);
         RemoveElement(xInt);
@@ -334,12 +334,12 @@ void OXReportControllerObserver::RemoveElement(const uno::Reference< uno::XInter
 }
 
 
-::std::vector< uno::Reference< container::XChild> >::const_iterator OXReportControllerObserver::getSection(const uno::Reference<container::XChild>& _xContainer) const
+std::vector< uno::Reference< container::XChild> >::const_iterator OXReportControllerObserver::getSection(const uno::Reference<container::XChild>& _xContainer) const
 {
-    ::std::vector< uno::Reference< container::XChild> >::const_iterator aFind = m_pImpl->m_aSections.end();
+    std::vector< uno::Reference< container::XChild> >::const_iterator aFind = m_pImpl->m_aSections.end();
     if ( _xContainer.is() )
     {
-        aFind = ::std::find(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),_xContainer);
+        aFind = std::find(m_pImpl->m_aSections.begin(),m_pImpl->m_aSections.end(),_xContainer);
 
         if ( aFind == m_pImpl->m_aSections.end() )
         {

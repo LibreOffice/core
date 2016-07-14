@@ -40,7 +40,7 @@ namespace rptui
                                         >
         , public SfxListener
     {
-        const ::std::unique_ptr<OXUndoEnvironmentImpl> m_pImpl;
+        const std::unique_ptr<OXUndoEnvironmentImpl> m_pImpl;
 
         OXUndoEnvironment(const OXUndoEnvironment&) = delete;
         OXUndoEnvironment& operator=(const OXUndoEnvironment&) = delete;
@@ -135,7 +135,7 @@ namespace rptui
         void    switchListening( const css::uno::Reference< css::container::XIndexAccess >& _rxContainer, bool _bStartListening );
         void    switchListening( const css::uno::Reference< css::uno::XInterface >& _rxObject, bool _bStartListening );
 
-        ::std::vector< css::uno::Reference< css::container::XChild> >::const_iterator
+        std::vector< css::uno::Reference< css::container::XChild> >::const_iterator
             getSection(const css::uno::Reference< css::container::XChild>& _xContainer) const;
     };
 

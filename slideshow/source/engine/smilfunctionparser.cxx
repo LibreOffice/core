@@ -59,7 +59,7 @@ namespace slideshow
 
             struct ParserContext
             {
-                typedef ::std::stack< std::shared_ptr<ExpressionNode> > OperandStack;
+                typedef std::stack< std::shared_ptr<ExpressionNode> > OperandStack;
 
                 // stores a stack of not-yet-evaluated operands. This is used
                 // by the operators (i.e. '+', '*', 'sin' etc.) to pop their
@@ -76,7 +76,7 @@ namespace slideshow
                 bool                        mbParseAnimationFunction;
             };
 
-            typedef ::std::shared_ptr< ParserContext > ParserContextSharedPtr;
+            typedef std::shared_ptr< ParserContext > ParserContextSharedPtr;
 
 
             template< typename Generator > class ShapeBoundsFunctor
@@ -425,10 +425,10 @@ namespace slideshow
                                     str_p( "$"      )[ ValueTFunctor(                                                              self.getContext()) ]
                               |     str_p( "pi"     )[ ConstantFunctor(M_PI,                                                       self.getContext()) ]
                               |     str_p( "e"      )[ ConstantFunctor(M_E,                                                        self.getContext()) ]
-                              |     str_p( "x"      )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getCenterX),self.getContext()) ]
-                              |     str_p( "y"      )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getCenterY),self.getContext()) ]
-                              |     str_p( "width"  )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getWidth),  self.getContext()) ]
-                              |     str_p( "height" )[ makeShapeBoundsFunctor(::std::mem_fun_ref(&::basegfx::B2DRange::getHeight), self.getContext()) ]
+                              |     str_p( "x"      )[ makeShapeBoundsFunctor(std::mem_fun_ref(&::basegfx::B2DRange::getCenterX),self.getContext()) ]
+                              |     str_p( "y"      )[ makeShapeBoundsFunctor(std::mem_fun_ref(&::basegfx::B2DRange::getCenterY),self.getContext()) ]
+                              |     str_p( "width"  )[ makeShapeBoundsFunctor(std::mem_fun_ref(&::basegfx::B2DRange::getWidth),    self.getContext()) ]
+                              |     str_p( "height" )[ makeShapeBoundsFunctor(std::mem_fun_ref(&::basegfx::B2DRange::getHeight), self.getContext()) ]
                               ;
 
                         unaryFunction =
@@ -458,7 +458,7 @@ namespace slideshow
                             ;
 
                         unaryExpression =
-                                ('-' >> basicExpression)[ makeUnaryFunctionFunctor(::std::negate<double>(), self.getContext()) ]
+                                ('-' >> basicExpression)[ makeUnaryFunctionFunctor(std::negate<double>(), self.getContext()) ]
                             |   basicExpression
                             ;
 
@@ -560,7 +560,7 @@ namespace slideshow
                                           ::boost::spirit::space_p ) );
 
 #if OSL_DEBUG_LEVEL > 0
-            ::std::cout.flush(); // needed to keep stdout and cout in sync
+            std::cout.flush(); // needed to keep stdout and cout in sync
 #endif
 
             // input fully congested by the parser?
@@ -609,7 +609,7 @@ namespace slideshow
                                           ::boost::spirit::space_p ) );
 
 #if OSL_DEBUG_LEVEL > 0
-            ::std::cout.flush(); // needed to keep stdout and cout in sync
+            std::cout.flush(); // needed to keep stdout and cout in sync
 #endif
             // input fully congested by the parser?
             if( !aParseInfo.full )

@@ -839,7 +839,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
         while ( nIndex2 >= 0 );
     }
 
-    maGrfURLs.push_back( ::std::make_pair( aURL, OUString() ) );
+    maGrfURLs.push_back( std::make_pair( aURL, OUString() ) );
     ImplInsertGraphicURL( aURL, nIndex, aRequestedFileName );
 
     return maGrfURLs[ nIndex ].second;
@@ -892,7 +892,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
 
     if( ( GRAPHICHELPER_MODE_READ == meCreateMode ) && rxBinaryStream.is() )
     {
-        if( ::std::find( maGrfStms.begin(), maGrfStms.end(), rxBinaryStream ) != maGrfStms.end() )
+        if( std::find( maGrfStms.begin(), maGrfStms.end(), rxBinaryStream ) != maGrfStms.end() )
         {
             SvXMLGraphicOutputStream* pOStm = static_cast< SvXMLGraphicOutputStream* >( rxBinaryStream.get() );
 

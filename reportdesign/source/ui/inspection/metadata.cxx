@@ -67,7 +67,7 @@ namespace rptui
 
 
     // Vergleichen von PropertyInfo
-    struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
+    struct PropertyInfoLessByName : public std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
         bool operator()( const OPropertyInfoImpl& _lhs, const OPropertyInfoImpl& _rhs )
         {
@@ -150,7 +150,7 @@ namespace rptui
 
         s_pPropertyInfos = aPropertyInfos;
         s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
-        ::std::sort( aPropertyInfos, aPropertyInfos + SAL_N_ELEMENTS(aPropertyInfos), PropertyInfoLessByName() );
+        std::sort( aPropertyInfos, aPropertyInfos + SAL_N_ELEMENTS(aPropertyInfos), PropertyInfoLessByName() );
 
         return s_pPropertyInfos;
     }
@@ -191,7 +191,7 @@ namespace rptui
             getPropertyInfo();
         OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), "", PropUIFlags::NONE);
 
-        const OPropertyInfoImpl* pPropInfo = ::std::lower_bound(
+        const OPropertyInfoImpl* pPropInfo = std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
 
         if ( ( pPropInfo < s_pPropertyInfos + s_nCount ) && pPropInfo->sName == _rName )
@@ -229,7 +229,7 @@ namespace rptui
     }
 
 
-    void OPropertyInfoService::getExcludeProperties(::std::vector< beans::Property >& _rExcludeProperties,const css::uno::Reference< css::inspection::XPropertyHandler >& _xFormComponentHandler)
+    void OPropertyInfoService::getExcludeProperties(std::vector< beans::Property >& _rExcludeProperties,const css::uno::Reference< css::inspection::XPropertyHandler >& _xFormComponentHandler)
     {
         uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
         static const OUString pExcludeProperties[] =

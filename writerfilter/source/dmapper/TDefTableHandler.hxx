@@ -41,8 +41,8 @@ class TDefTableHandler : public LoggedProperties
 public:
 
 private:
-    ::std::vector<sal_Int32>                                m_aCellBorderPositions;
-    ::std::vector<sal_Int32>                                m_aCellVertAlign;
+    std::vector<sal_Int32>                                  m_aCellBorderPositions;
+    std::vector<sal_Int32>                                  m_aCellVertAlign;
 
     std::vector<css::table::BorderLine2> m_aLeftBorderLines;
     std::vector<css::table::BorderLine2> m_aRightBorderLines;
@@ -71,7 +71,7 @@ public:
     TDefTableHandler();
     virtual ~TDefTableHandler();
 
-    void fillCellProperties( size_t nCell, const ::std::shared_ptr< TablePropertyMap >& pCellProperties) const;
+    void fillCellProperties( size_t nCell, const std::shared_ptr< TablePropertyMap >& pCellProperties) const;
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
     static OUString getBorderTypeString(sal_Int32 nType);

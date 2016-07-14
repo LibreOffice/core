@@ -689,7 +689,7 @@ namespace svgio
                             // get LineJoin, LineCap and stroke array
                             const basegfx::B2DLineJoin aB2DLineJoin(StrokeLinejoinToB2DLineJoin(getStrokeLinejoin()));
                             const css::drawing::LineCap aLineCap(StrokeLinecapToDrawingLineCap(getStrokeLinecap()));
-                            ::std::vector< double > aDashArray;
+                            std::vector< double > aDashArray;
 
                             if(!getStrokeDasharray().empty())
                             {

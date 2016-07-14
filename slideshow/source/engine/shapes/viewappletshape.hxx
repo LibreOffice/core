@@ -153,7 +153,7 @@ namespace slideshow
                 css::uno::XComponentContext>         mxComponentContext;
         };
 
-        typedef ::std::shared_ptr< ViewAppletShape > ViewAppletShapeSharedPtr;
+        typedef std::shared_ptr< ViewAppletShape > ViewAppletShapeSharedPtr;
 
     }
 }

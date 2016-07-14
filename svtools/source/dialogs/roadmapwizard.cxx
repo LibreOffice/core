@@ -33,16 +33,16 @@ namespace svt
 {
     namespace
     {
-        typedef ::std::set< WizardTypes::WizardState > StateSet;
+        typedef std::set< WizardTypes::WizardState > StateSet;
 
-        typedef ::std::map<
+        typedef std::map<
                     RoadmapWizardTypes::PathId,
                     RoadmapWizardTypes::WizardPath
                 > Paths;
 
-        typedef ::std::map<
+        typedef std::map<
                     WizardTypes::WizardState,
-                    ::std::pair<
+                    std::pair<
                         OUString,
                         RoadmapWizardTypes::RoadmapPageFactory
                     >
@@ -99,7 +99,7 @@ namespace svt
 
     sal_Int32 RoadmapWizardImpl::getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS )
     {
-        sal_Int32 nMinLength = ::std::min( _rLHS.size(), _rRHS.size() );
+        sal_Int32 nMinLength = std::min( _rLHS.size(), _rRHS.size() );
         for ( sal_Int32 nCheck = 0; nCheck < nMinLength; ++nCheck )
         {
             if ( _rLHS[ nCheck ] != _rRHS[ nCheck ] )
@@ -281,7 +281,7 @@ namespace svt
 
         // now, we have to remove all items after nCurrentStatePathIndex, and insert the items from the active
         // path, up to (excluding) nUpperStepBoundary
-        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( (RoadmapTypes::ItemIndex)nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
+        RoadmapTypes::ItemIndex nLoopUntil = std::max( (RoadmapTypes::ItemIndex)nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
         for ( RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
         {
             bool bExistentItem = ( nItemIndex < m_pImpl->pRoadmap->GetItemCount() );
@@ -411,10 +411,10 @@ namespace svt
         OWizardMachine::updateTravelUI();
 
         // disable the "Previous" button if all states in our history are disabled
-        ::std::vector< WizardState > aHistory;
+        std::vector< WizardState > aHistory;
         getStateHistory( aHistory );
         bool bHaveEnabledState = false;
-        for (   ::std::vector< WizardState >::const_iterator state = aHistory.begin();
+        for (   std::vector< WizardState >::const_iterator state = aHistory.begin();
                 state != aHistory.end() && !bHaveEnabledState;
                 ++state
             )
@@ -558,7 +558,7 @@ namespace svt
     {
         const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
         RoadmapTypes::ItemIndex nUpperStepBoundary = (RoadmapTypes::ItemIndex)rActivePath.size();
-        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( (RoadmapTypes::ItemIndex)nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
+        RoadmapTypes::ItemIndex nLoopUntil = std::max( (RoadmapTypes::ItemIndex)nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
         sal_Int32 nCurrentStatePathIndex = -1;
         if ( m_pImpl->nActivePath != -1 )
             nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );

@@ -30,7 +30,7 @@
 
 #define MIN_COLUMNWIDTH  2
 
-typedef ::std::vector< Rectangle* > RectangleList;
+typedef std::vector< Rectangle* > RectangleList;
 
 
 class ButtonFrame

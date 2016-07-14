@@ -530,8 +530,8 @@ private:
     OUString  impl_formatText(const OUString& _rText);
 
 private:
-    ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pValueFormatter;
-    ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pPaintFormatter;
+    std::unique_ptr< ::dbtools::FormattedColumnValue >    m_pValueFormatter;
+    std::unique_ptr< ::dbtools::FormattedColumnValue >    m_pPaintFormatter;
     css::uno::Reference<css::uno::XComponentContext>    m_xContext;
 };
 

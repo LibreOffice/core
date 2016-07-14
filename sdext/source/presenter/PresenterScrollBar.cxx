@@ -72,7 +72,7 @@ PresenterScrollBar::PresenterScrollBar (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<awt::XWindow>& rxParentWindow,
     const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
-    const ::std::function<void (double)>& rThumbMotionListener)
+    const std::function<void (double)>& rThumbMotionListener)
     : PresenterScrollBarInterfaceBase(m_aMutex),
       mxComponentContext(rxComponentContext),
       mxWindow(),
@@ -613,7 +613,7 @@ PresenterVerticalScrollBar::PresenterVerticalScrollBar (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<awt::XWindow>& rxParentWindow,
     const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
-    const ::std::function<void (double)>& rThumbMotionListener)
+    const std::function<void (double)>& rThumbMotionListener)
     : PresenterScrollBar(rxComponentContext, rxParentWindow, rpPaintManager, rThumbMotionListener),
       mnScrollBarWidth(0)
 {
@@ -706,8 +706,8 @@ void PresenterVerticalScrollBar::UpdateBorders()
     }
     else
     {
-        const double nThumbSize = ::std::min(mnThumbSize,mnTotalSize);
-        const double nThumbPosition = ::std::min(::std::max(0.0,mnThumbPosition), mnTotalSize - nThumbSize);
+        const double nThumbSize = std::min(mnThumbSize,mnTotalSize);
+        const double nThumbPosition = std::min(std::max(0.0,mnThumbPosition), mnTotalSize - nThumbSize);
         maBox[Thumb] = geometry::RealRectangle2D(
             0, nThumbPosition / mnTotalSize * nPagerHeight,
             aWindowBox.Width,

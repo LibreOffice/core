@@ -78,7 +78,7 @@ namespace svt
     struct WizardMachineImplData : public WizardTypes
     {
         OUString                        sTitleBase;         // the base for the title
-        ::std::stack< WizardState >     aStateHistory;      // the history of all states (used for implementing "Back")
+        std::stack< WizardState >       aStateHistory;      // the history of all states (used for implementing "Back")
 
         WizardState                     nFirstUnknownPage;
             // the WizardDialog does not allow non-linear transitions (e.g. it's
@@ -438,8 +438,8 @@ namespace svt
             return false;
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
-        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
-        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+        std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+        std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
 
         WizardState nCurrentRollbackState = getCurrentState();
         while ( nCurrentRollbackState != _nTargetState )
@@ -467,8 +467,8 @@ namespace svt
             return false;
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
-        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
-        ::std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
+        std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+        std::stack< WizardState > aOldStateHistory = m_pImpl->aStateHistory;
         while ( nCurrentState != _nTargetState )
         {
             WizardState nNextState = determineNextState( nCurrentState );
@@ -585,7 +585,7 @@ namespace svt
     void  OWizardMachine::removePageFromHistory( WizardState nToRemove )
     {
 
-        ::std::stack< WizardState > aTemp;
+        std::stack< WizardState > aTemp;
         while(!m_pImpl->aStateHistory.empty())
         {
             WizardState nPreviousState = m_pImpl->aStateHistory.top();
@@ -640,9 +640,9 @@ namespace svt
     }
 
 
-    void OWizardMachine::getStateHistory( ::std::vector< WizardState >& _out_rHistory )
+    void OWizardMachine::getStateHistory( std::vector< WizardState >& _out_rHistory )
     {
-        ::std::stack< WizardState > aHistoryCopy( m_pImpl->aStateHistory );
+        std::stack< WizardState > aHistoryCopy( m_pImpl->aStateHistory );
         while ( !aHistoryCopy.empty() )
         {
             _out_rHistory.push_back( aHistoryCopy.top() );

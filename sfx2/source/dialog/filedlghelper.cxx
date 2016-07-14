@@ -1313,7 +1313,7 @@ void FileDialogHelper_Impl::implStartExecute()
 }
 
 void lcl_saveLastURLs(std::vector<OUString>& rpURLList,
-                      ::std::vector< OUString >& lLastURLs )
+                      std::vector< OUString >& lLastURLs )
 {
     lLastURLs.clear();
     for(std::vector<OUString>::iterator i = rpURLList.begin(); i != rpURLList.end(); ++i)
@@ -2187,7 +2187,7 @@ void FileDialogHelper_Impl::addFilterPair( const OUString& rFilter,
 OUString FileDialogHelper_Impl::getFilterName( const OUString& rFilterWithExtension ) const
 {
     OUString sRet;
-    for( ::std::vector< css::beans::StringPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
+    for( std::vector< css::beans::StringPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
     {
         if ( (*pIter).Second == rFilterWithExtension )
         {
@@ -2201,7 +2201,7 @@ OUString FileDialogHelper_Impl::getFilterName( const OUString& rFilterWithExtens
 OUString FileDialogHelper_Impl::getFilterWithExtension( const OUString& rFilter ) const
 {
     OUString sRet;
-    for( ::std::vector< css::beans::StringPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
+    for( std::vector< css::beans::StringPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
     {
         if ( (*pIter).First == rFilter )
         {

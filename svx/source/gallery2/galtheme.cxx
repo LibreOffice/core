@@ -125,7 +125,7 @@ bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, Galle
                 if ( nPos < aObjectList.size() )
                 {
                     GalleryObjectList::iterator it = aObjectList.begin();
-                    ::std::advance( it, nPos );
+                    std::advance( it, nPos );
                     aObjectList.insert( it, pEntry );
                 }
                 else
@@ -457,7 +457,7 @@ bool GalleryTheme::RemoveObject( size_t nPos )
     if ( nPos < aObjectList.size() )
     {
         GalleryObjectList::iterator it = aObjectList.begin();
-        ::std::advance( it, nPos );
+        std::advance( it, nPos );
         pEntry = *it;
         aObjectList.erase( it );
     }
@@ -490,14 +490,14 @@ bool GalleryTheme::ChangeObjectPos( size_t nOldPos, size_t nNewPos )
     GalleryObject* pEntry = aObjectList[nOldPos];
 
     GalleryObjectList::iterator it = aObjectList.begin();
-    ::std::advance(it, nNewPos);
+    std::advance(it, nNewPos);
     aObjectList.insert(it, pEntry);
 
     if (nNewPos < nOldPos)
         nOldPos++;
 
     it = aObjectList.begin();
-    ::std::advance(it, nOldPos);
+    std::advance(it, nOldPos);
     aObjectList.erase(it);
 
     ImplSetModified(true);
@@ -1122,7 +1122,7 @@ bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos 
 bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos )
 {
     INetURLObject                   aURL;
-    ::std::vector< INetURLObject >  aURLVector;
+    std::vector< INetURLObject >    aURLVector;
     bool                            bRet = false;
 
     try
@@ -1159,7 +1159,7 @@ bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_u
     {
     }
 
-    ::std::vector< INetURLObject >::const_iterator aIter( aURLVector.begin() ), aEnd( aURLVector.end() );
+    std::vector< INetURLObject >::const_iterator aIter( aURLVector.begin() ), aEnd( aURLVector.end() );
 
     while( aIter != aEnd )
         bRet = bRet || InsertURL( *aIter++, nInsertPos );

@@ -198,7 +198,7 @@ namespace {
 } // end of anonymous namespace
 
 class PresenterToolBar::ElementContainerPart
-    : public ::std::vector<rtl::Reference<Element> >
+    : public std::vector<rtl::Reference<Element> >
 {
 };
 
@@ -724,7 +724,7 @@ void PresenterToolBar::Layout (
     ElementContainer::iterator iPart;
     ElementContainer::iterator iEnd (maElementContainer.end());
     ElementContainer::iterator iBegin (maElementContainer.begin());
-    ::std::vector<geometry::RealSize2D> aPartSizes (maElementContainer.size());
+    std::vector<geometry::RealSize2D> aPartSizes (maElementContainer.size());
     geometry::RealSize2D aTotalSize (0,0);
     bool bIsHorizontal (true);
     sal_Int32 nIndex;
@@ -749,7 +749,7 @@ void PresenterToolBar::Layout (
         // Width is accumulated.
         aTotalSize.Width += aSize.Width;
         // Height is the maximum height of all parts.
-        aTotalSize.Height = ::std::max(aTotalSize.Height, aSize.Height);
+        aTotalSize.Height = std::max(aTotalSize.Height, aSize.Height);
     }
     // Add gaps between parts.
     if (maElementContainer.size() > 1)
@@ -1562,7 +1562,7 @@ awt::Size Button::CreateBoundingSize (
     {
         geometry::IntegerSize2D aSize (xBitmap->getSize());
         return awt::Size(
-            ::std::max(aSize.Width, sal_Int32(0.5 + aTextBBox.X2 - aTextBBox.X1)),
+            std::max(aSize.Width, sal_Int32(0.5 + aTextBBox.X2 - aTextBBox.X1)),
             aSize.Height+ nGap + nTextHeight);
     }
     else

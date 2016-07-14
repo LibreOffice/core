@@ -47,7 +47,7 @@ namespace rptui
                                         >
     {
 
-        const ::std::unique_ptr<OXReportControllerObserverImpl> m_pImpl;
+        const std::unique_ptr<OXReportControllerObserverImpl> m_pImpl;
 
         FormattedFieldBeautifier m_aFormattedFieldBeautifier;
         FixedTextColor           m_aFixedTextColor;
@@ -106,7 +106,7 @@ namespace rptui
         DECL_LINK_TYPED(SettingsChanged, VclSimpleEvent&, void );
     private:
 
-        ::std::vector< css::uno::Reference< css::container::XChild> >::const_iterator getSection(const css::uno::Reference< css::container::XChild>& _xContainer) const;
+        std::vector< css::uno::Reference< css::container::XChild> >::const_iterator getSection(const css::uno::Reference< css::container::XChild>& _xContainer) const;
 
     };
 

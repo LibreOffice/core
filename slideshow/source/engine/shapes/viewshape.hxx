@@ -234,7 +234,7 @@ namespace slideshow
                 ::cppcanvas::BitmapCanvasSharedPtr  mpLastBitmapCanvas;
             };
 
-            typedef ::std::vector< RendererCacheEntry > RendererCacheVector;
+            typedef std::vector< RendererCacheEntry > RendererCacheVector;
 
 
             /** Prefetch Renderer for given canvas
@@ -317,7 +317,7 @@ namespace slideshow
             mutable bool                                mbForceUpdate;
         };
 
-        typedef ::std::shared_ptr< ViewShape > ViewShapeSharedPtr;
+        typedef std::shared_ptr< ViewShape > ViewShapeSharedPtr;
 
     }
 }

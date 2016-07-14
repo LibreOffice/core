@@ -28,7 +28,7 @@
 
 #include <vector>
 
-typedef ::std::vector<css::beans::PropertyValue> SbPropertyValueArr_Impl;
+typedef std::vector<css::beans::PropertyValue> SbPropertyValueArr_Impl;
 
 typedef ::cppu::WeakImplHelper< css::beans::XPropertySet,
                                 css::beans::XPropertyAccess > SbPropertyValuesHelper;

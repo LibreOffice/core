@@ -138,7 +138,7 @@ private:
     CContentReader *          m_pContentReader;         // A content reader that retrieves document content.
     CMetaInfoReader *         m_pMetaInfoReader;        // A metainfo reader that retrieves document metainfo.
     FilterState               m_eState;                 // State of filtering
-    ::std::wstring            m_pwszFileName;           // Name of input file to filter
+    std::wstring              m_pwszFileName;           // Name of input file to filter
     ULONG                     m_ulUnicodeBufferLen;     // UNICODE Characters read from file to chunk buffer
     ULONG                     m_ulUnicodeCharsRead;     // UNICODE Characters read from chunk buffer
     ULONG                     m_ulPropertyNum;          // Number of properties that has been processed
@@ -146,7 +146,7 @@ private:
     ULONG                     m_ulChunkID;              // Current chunk id
     BOOL                      m_fContents;              // TRUE if contents requested
     BOOL                      m_fEof;                   // TRUE if end of file reached
-    ::std::wstring            m_pwsBuffer;              // Buffer to save UNICODE content from ChunkBuffer.
+    std::wstring              m_pwsBuffer;              // Buffer to save UNICODE content from ChunkBuffer.
     ULONG                     m_ChunkPosition;          // Chunk pointer to specify the current Chunk;
     ULONG                     m_cAttributes;            // Count of attributes
     CFullPropSpec *           m_pAttributes;            // Attributes to filter

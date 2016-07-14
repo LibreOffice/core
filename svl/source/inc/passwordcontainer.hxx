@@ -52,13 +52,13 @@ class NamePassRecord
 
     // there are two lists of passwords, memory passwords and persistent passwords
     bool                                                  m_bHasMemPass;
-    ::std::vector< OUString >                      m_aMemPass;
+    std::vector< OUString >                        m_aMemPass;
 
     // persistent passwords are encrypted in one string
     bool                                                  m_bHasPersPass;
     OUString                                       m_aPersPass;
 
-    void InitArrays( bool bHasMemoryList, const ::std::vector< OUString >& aMemoryList,
+    void InitArrays( bool bHasMemoryList, const std::vector< OUString >& aMemoryList,
                      bool bHasPersistentList, const OUString& aPersistentList )
     {
         m_bHasMemPass = bHasMemoryList;
@@ -121,12 +121,12 @@ public:
         return false;
     }
 
-    ::std::vector< OUString > GetMemPasswords() const
+    std::vector< OUString > GetMemPasswords() const
     {
         if ( m_bHasMemPass )
             return m_aMemPass;
 
-        return ::std::vector< OUString >();
+        return std::vector< OUString >();
     }
 
     OUString GetPersPasswords() const
@@ -137,7 +137,7 @@ public:
         return OUString();
     }
 
-    void SetMemPasswords( const ::std::vector< OUString >& aMemList )
+    void SetMemPasswords( const std::vector< OUString >& aMemList )
     {
         m_aMemPass = aMemList;
         m_bHasMemPass = true;
@@ -166,8 +166,8 @@ public:
 };
 
 
-typedef ::std::pair< const OUString, ::std::list< NamePassRecord > > PairUrlRecord;
-typedef ::std::map< OUString, ::std::list< NamePassRecord > > PassMap;
+typedef std::pair< const OUString, std::list< NamePassRecord > > PairUrlRecord;
+typedef std::map< OUString, std::list< NamePassRecord > > PassMap;
 
 
 class PasswordContainer;
@@ -226,7 +226,7 @@ private:
     SysCredentialsConfig mUrlContainer;
 
     css::uno::Sequence< css::task::UserRecord > CopyToUserRecordSequence(
-                                        const ::std::list< NamePassRecord >& original,
+                                        const std::list< NamePassRecord >& original,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 
@@ -236,7 +236,7 @@ private:
                                         const css::uno::Reference< css::task::XInteractionHandler >& aHandler );
 
     css::uno::Sequence< css::task::UserRecord > FindUsr(
-                                        const ::std::list< NamePassRecord >& userlist,
+                                        const std::list< NamePassRecord >& userlist,
                                         const OUString& name,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
@@ -263,7 +263,7 @@ css::task::UrlRecord find(
     OUString GetMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 
-    void UpdateVector( const OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, bool writeFile )
+    void UpdateVector( const OUString& url, std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, bool writeFile )
                                                         throw(css::uno::RuntimeException);
 
     void PrivateAdd( const OUString& aUrl,
@@ -273,7 +273,7 @@ css::task::UrlRecord find(
                               const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 
-    static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword )
+    static std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword )
                                                         throw(css::uno::RuntimeException);
 
     static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword )

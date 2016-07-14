@@ -56,12 +56,12 @@ bool getBool(utl::OConfigurationNode const & aNode, const char* pNodeName)
 
 css::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
 {
-    const ::std::vector<ContextList::Entry>& entries = rContextList.GetEntries();
+    const std::vector<ContextList::Entry>& entries = rContextList.GetEntries();
 
      css::uno::Sequence<OUString> result(entries.size());
      long i = 0;
 
-    for (::std::vector<ContextList::Entry>::const_iterator iEntry(entries.begin()), iEnd(entries.end());
+    for (std::vector<ContextList::Entry>::const_iterator iEntry(entries.begin()), iEnd(entries.end());
                                                             iEntry!=iEnd; ++iEntry)
          {
             OUString appName = iEntry->maContext.msApplication;
@@ -190,7 +190,7 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
                                              && rDeckDescriptor.mbIsEnabled;
 
 
-        aOrderedIds.insert(::std::multimap<sal_Int32,DeckContextDescriptor>::value_type(
+        aOrderedIds.insert(std::multimap<sal_Int32,DeckContextDescriptor>::value_type(
                 rDeckDescriptor.mnOrderIndex,
                 aDeckContextDescriptor));
     }

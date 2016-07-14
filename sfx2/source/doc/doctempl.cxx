@@ -94,8 +94,8 @@ using namespace ::ucbhelper;
 #include <unotools/ucbhelper.hxx>
 
 #include <vector>
-using ::std::vector;
-using ::std::advance;
+using std::vector;
+using std::advance;
 
 
 #define TITLE                   "Title"

@@ -185,12 +185,12 @@ void PresenterConfigurationAccess::CommitChanges()
 
 void PresenterConfigurationAccess::ForAll (
     const Reference<container::XNameAccess>& rxContainer,
-    const ::std::vector<OUString>& rArguments,
+    const std::vector<OUString>& rArguments,
     const ItemProcessor& rProcessor)
 {
     if (rxContainer.is())
     {
-        ::std::vector<Any> aValues(rArguments.size());
+        std::vector<Any> aValues(rArguments.size());
         Sequence<OUString> aKeys (rxContainer->getElementNames());
         for (sal_Int32 nItemIndex=0; nItemIndex<aKeys.getLength(); ++nItemIndex)
         {

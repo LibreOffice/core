@@ -69,7 +69,7 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
     if ( sDetailField.isEmpty() )
         sDetailField = sMasterField;
     if ( !sMasterField.isEmpty() )
-        m_pReport->addMasterDetailPair(::std::pair< OUString,OUString >(sMasterField,sDetailField));
+        m_pReport->addMasterDetailPair(std::pair< OUString,OUString >(sMasterField,sDetailField));
 }
 
 

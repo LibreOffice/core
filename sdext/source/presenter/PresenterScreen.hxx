@@ -152,7 +152,7 @@ private:
         {
         }
     };
-    typedef ::std::map<OUString,ViewDescriptor> ViewDescriptorContainer;
+    typedef std::map<OUString,ViewDescriptor> ViewDescriptorContainer;
     ViewDescriptorContainer maViewDescriptors;
 
     void ShutdownPresenterScreen();
@@ -189,7 +189,7 @@ private:
     */
     void ProcessComponent (
         const OUString& rsKey,
-        const ::std::vector<css::uno::Any>& rValues,
+        const std::vector<css::uno::Any>& rValues,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId);
 
@@ -202,7 +202,7 @@ private:
     */
     void ProcessViewDescription (
         const OUString& rsKey,
-        const ::std::vector<css::uno::Any>& rValues);
+        const std::vector<css::uno::Any>& rValues);
 
     void SetupView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,

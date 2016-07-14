@@ -136,7 +136,7 @@ sal_Int32 ColorListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
         if ( static_cast<size_t>(nPos) < pColorList->size() )
         {
             ImpColorList::iterator it = pColorList->begin();
-            ::std::advance( it, nPos );
+            std::advance( it, nPos );
             pColorList->insert( it, pData );
         }
         else
@@ -158,7 +158,7 @@ sal_Int32 ColorListBox::InsertEntry( const Color& rColor, const OUString& rStr,
         if ( static_cast<size_t>(nPos) < pColorList->size() )
         {
             ImpColorList::iterator it = pColorList->begin();
-            ::std::advance( it, nPos );
+            std::advance( it, nPos );
             pColorList->insert( it, pData );
         }
         else
@@ -182,7 +182,7 @@ void ColorListBox::RemoveEntry( sal_Int32 nPos )
     if ( 0 <= nPos && static_cast<size_t>(nPos) < pColorList->size() )
     {
             ImpColorList::iterator it = pColorList->begin();
-            ::std::advance( it, nPos );
+            std::advance( it, nPos );
             delete *it;
             pColorList->erase( it );
     }
@@ -210,7 +210,7 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
             if ( static_cast<size_t>(nPos) < pColorList->size() )
             {
                 ImpColorList::iterator it = pColorList->begin();
-                ::std::advance( it, nPos );
+                std::advance( it, nPos );
                 pColorList->insert( it, new ImplColorListData( *pData ) );
             }
             else
@@ -1038,7 +1038,7 @@ void FontNameBox::Fill( const FontList* pList )
         {
             if ( nIndex < mpFontList->size() ) {
                 ImplFontList::iterator it = mpFontList->begin();
-                ::std::advance( it, nIndex );
+                std::advance( it, nIndex );
                 mpFontList->insert( it, rFontMetric );
             } else {
                 mpFontList->push_back( rFontMetric );

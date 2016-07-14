@@ -20,7 +20,7 @@
 #include "eventhandler.hxx"
 
 // for SOLARIS compiler include of algorithm part of _STL is necessary to
-// get access to basic algos like ::std::find
+// get access to basic algos like std::find
 #include <algorithm>
 #include <tools/debug.hxx>
 
@@ -60,7 +60,7 @@ namespace sdr
             }
             else
             {
-                const auto aFindResult = ::std::find(
+                const auto aFindResult = std::find(
                     maVector.begin(), maVector.end(), &rBaseEvent);
                 DBG_ASSERT(aFindResult != maVector.end(),
                     "EventHandler::RemoveEvent: Event to be removed not found (!)");

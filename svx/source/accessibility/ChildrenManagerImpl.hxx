@@ -38,7 +38,7 @@ namespace accessibility {
 class AccessibleShape;
 
 class ChildDescriptor; // See below for declaration.
-typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
+typedef std::vector<ChildDescriptor> ChildDescriptorListType;
 
 // Re-using MutexOwner class defined in AccessibleContextBase.hxx
 

@@ -43,7 +43,7 @@ namespace slideshow
         struct SlideShowContext;
         class  DrawShapeSubsetting;
         class  DrawShape;
-        typedef ::std::shared_ptr< DrawShape > DrawShapeSharedPtr;
+        typedef std::shared_ptr< DrawShape > DrawShapeSharedPtr;
 
         /** This class is the representation of a draw document's
             XShape, and implements the Shape, AnimatableShape, and
@@ -193,7 +193,7 @@ namespace slideshow
                 Used by IntrinsicAnimationActivity, to show the next
                 animation frame.
              */
-            void setIntrinsicAnimationFrame( ::std::size_t nCurrFrame );
+            void setIntrinsicAnimationFrame( std::size_t nCurrFrame );
 
             /** forces the drawshape to load and return a specially
                 crafted metafile, usable to display drawing layer text
@@ -283,7 +283,7 @@ namespace slideshow
                 available.
              */
             mutable VectorOfMtfAnimationFrames                                      maAnimationFrames;
-            ::std::size_t                                                           mnCurrFrame;
+            std::size_t                                                             mnCurrFrame;
 
             /// Metafile of currently active frame (static for shapes w/o intrinsic animation)
             mutable GDIMetaFileSharedPtr                                            mpCurrMtf;
@@ -318,15 +318,15 @@ namespace slideshow
             mutable State::StateId                                                  mnAttributeVisibilityState;
 
             /// the list of active view shapes (one for each registered view layer)
-            typedef ::std::vector< ViewShapeSharedPtr > ViewShapeVector;
+            typedef std::vector< ViewShapeSharedPtr > ViewShapeVector;
             ViewShapeVector                                                         maViewShapes;
 
             css::uno::Reference< css::uno::XComponentContext>                       mxComponentContext;
 
             /// hyperlink support
-            typedef ::std::pair<sal_Int32 /* mtf start */,
+            typedef std::pair<sal_Int32 /* mtf start */,
                                 sal_Int32 /* mtf end */> HyperlinkIndexPair;
-            typedef ::std::vector<HyperlinkIndexPair> HyperlinkIndexPairVector;
+            typedef std::vector<HyperlinkIndexPair> HyperlinkIndexPairVector;
             mutable HyperlinkIndexPairVector                                        maHyperlinkIndices;
             mutable HyperlinkRegions                                                maHyperlinkRegions;
 
@@ -337,7 +337,7 @@ namespace slideshow
             int                                                                     mnIsAnimatedCount;
 
             /// Number of times the bitmap animation shall loop
-            ::std::size_t                                                           mnAnimationLoopCount;
+            std::size_t                                                             mnAnimationLoopCount;
 
             /// Cycle mode for bitmap animation
             CycleMode                                                               meCycleMode;

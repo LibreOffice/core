@@ -571,8 +571,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 // collect the views of the document
                 // TODO: when UNO ViewFactories are available for SFX-based documents, the below code should
                 // be UNOized, too
-                typedef ::std::pair< Reference< XFrame >, sal_uInt16 >  ViewDescriptor;
-                ::std::list< ViewDescriptor > aViewFrames;
+                typedef std::pair< Reference< XFrame >, sal_uInt16 >    ViewDescriptor;
+                std::list< ViewDescriptor > aViewFrames;
                 SfxViewFrame *pView = GetFirst( xOldObj );
                 while ( pView )
                 {

@@ -83,14 +83,14 @@ public:
         ,bSet(true)
         {}
     };
-    typedef ::std::pair< OUString ,OUString> TStringPair;
-    typedef ::std::vector< OUString>                         TStringVec;
-    typedef ::std::map< Reference<XPropertySet> ,OUString >  TPropertyStyleMap;
-    typedef ::std::map< Reference<XPropertySet> ,  TStringVec>      TGridStyleMap;
-    typedef ::std::vector< TCell >                                  TRow;
-    typedef ::std::vector< ::std::pair< bool, TRow > >              TGrid;
-    typedef ::std::map< Reference<XPropertySet> ,TGrid >            TSectionsGrid;
-    typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
+    typedef std::pair< OUString ,OUString> TStringPair;
+    typedef std::vector< OUString>                           TStringVec;
+    typedef std::map< Reference<XPropertySet> ,OUString >    TPropertyStyleMap;
+    typedef std::map< Reference<XPropertySet> ,    TStringVec>      TGridStyleMap;
+    typedef std::vector< TCell >                                    TRow;
+    typedef std::vector< std::pair< bool, TRow > >                  TGrid;
+    typedef std::map< Reference<XPropertySet> ,TGrid >              TSectionsGrid;
+    typedef std::map< Reference<XGroup> ,Reference<XFunction> >     TGroupFunctionMap;
 private:
     TSectionsGrid                                   m_aSectionsGrid;
 
@@ -132,7 +132,7 @@ private:
     void                    exportAutoStyle(const Reference<XSection>& _xProp);
     void                    exportReportComponentAutoStyles(const Reference<XSection>& _xProp);
     void                    collectComponentStyles();
-    void                    collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames);
+    void                    collectStyleNames(sal_Int32 _nFamily,const std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames);
     void                    exportParagraph(const Reference< XReportControlModel >& _xReportElement);
     bool                    exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OUString& _sFormula);
     void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);

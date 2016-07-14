@@ -388,7 +388,7 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     // same time)
 
     // collect all views in which our old layer is visible
-    ::std::set< SdrView* > aPreviouslyVisible;
+    std::set< SdrView* > aPreviouslyVisible;
 
     {
         SdrViewIter aIter( this );
@@ -399,13 +399,13 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     SdrRectObj::NbcSetLayer( _nLayer );
 
     // collect all views in which our new layer is visible
-    ::std::set< SdrView* > aNewlyVisible;
+    std::set< SdrView* > aNewlyVisible;
 
     {
         SdrViewIter aIter( this );
         for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
         {
-            ::std::set< SdrView* >::const_iterator aPrevPos = aPreviouslyVisible.find( pView );
+            std::set< SdrView* >::const_iterator aPrevPos = aPreviouslyVisible.find( pView );
             if ( aPreviouslyVisible.end() != aPrevPos )
             {   // in pView, we were visible _before_ the layer change, and are
                 // visible _after_ the layer change, too
@@ -423,7 +423,7 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     }
 
     // now aPreviouslyVisible contains all views where we became invisible
-    ::std::set< SdrView* >::const_iterator aLoopViews;
+    std::set< SdrView* >::const_iterator aLoopViews;
     for (   aLoopViews = aPreviouslyVisible.begin();
             aLoopViews != aPreviouslyVisible.end();
             ++aLoopViews

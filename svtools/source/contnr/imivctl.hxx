@@ -104,7 +104,7 @@ struct LocalFocus
 
 // Entry-List
 
-typedef ::std::vector< SvxIconChoiceCtrlEntry* > SvxIconChoiceCtrlEntryList_impl;
+typedef std::vector< SvxIconChoiceCtrlEntry* > SvxIconChoiceCtrlEntryList_impl;
 
 class EntryList_Impl
 {

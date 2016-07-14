@@ -43,7 +43,7 @@ public:
     virtual SbxObject* CreateObject( const OUString& ) override;
 };
 
-typedef ::std::vector< OUString > StringVector;
+typedef std::vector< OUString > StringVector;
 
 struct SbClassData
 {

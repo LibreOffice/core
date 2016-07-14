@@ -536,8 +536,8 @@ void TabBar::dispose()
     Window::dispose();
 }
 
-const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
-const sal_uInt16 TabBar::PAGE_NOT_FOUND = ::std::numeric_limits<sal_uInt16>::max();
+const sal_uInt16 TabBar::APPEND         = std::numeric_limits<sal_uInt16>::max();
+const sal_uInt16 TabBar::PAGE_NOT_FOUND = std::numeric_limits<sal_uInt16>::max();
 
 void TabBar::ImplInit( WinBits nWinStyle )
 {

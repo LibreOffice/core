@@ -196,7 +196,7 @@ public:
     const FormControlHelper::Pointer_t& getFormControlHelper() const { return m_pFormControlHelper; }
     const PropertyMapPtr& getProperties() { return m_pProperties; }
 
-    ::std::vector<OUString> GetCommandParts() const;
+    std::vector<OUString> GetCommandParts() const;
 };
 
 struct TextAppendContext
@@ -403,7 +403,7 @@ private:
     PropertyMapPtr           m_pLastSectionContext;
     PropertyMapPtr           m_pLastCharacterContext;
 
-    ::std::vector<DeletableTabStop> m_aCurrentTabStops;
+    std::vector<DeletableTabStop> m_aCurrentTabStops;
     OUString                 m_sCurrentParaStyleId;
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos

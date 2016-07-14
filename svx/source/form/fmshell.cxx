@@ -1374,9 +1374,9 @@ namespace
 }
 
 
-::std::unique_ptr< svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice )
+std::unique_ptr< svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice )
 {
-    ::std::unique_ptr< svx::ISdrObjectFilter > pFilter;
+    std::unique_ptr< svx::ISdrObjectFilter > pFilter;
 
     if ( !i_rView.IsDesignMode() )
         pFilter.reset( new FocusableControlsFilter( i_rView, i_rDevice ) );

@@ -40,7 +40,7 @@ class DomainMapperTableManager : public TableManager
     typedef std::shared_ptr< std::vector<sal_Int32> > IntVectorPtr;
 
     sal_uInt32      m_nRow;
-    ::std::vector< sal_uInt32 > m_nCell;
+    std::vector< sal_uInt32 > m_nCell;
     sal_uInt32      m_nGridSpan;
     sal_uInt32      m_nGridBefore; ///< number of grid columns in the parent table's table grid which must be skipped before the contents of this table row are added to the parent table
     sal_uInt32      m_nGridAfter; ///< number of grid columns in the parent table's table grid which shall be left after the last cell in the table row
@@ -57,12 +57,12 @@ class DomainMapperTableManager : public TableManager
     std::vector< TablePropertyMapPtr > m_aTmpTableProperties; ///< Temporarily stores the table properties until end of row
     PropertyMapPtr  m_pTableStyleTextProperies;
 
-    ::std::vector< IntVectorPtr >  m_aTableGrid;
-    ::std::vector< IntVectorPtr >  m_aGridSpans;
+    std::vector< IntVectorPtr >    m_aTableGrid;
+    std::vector< IntVectorPtr >    m_aGridSpans;
     /// If this is true, then we pushed a width before the next level started, and that should be carried over when starting the next level.
     bool            m_bPushCurrentWidth;
     /// Individual table cell width values, used only in case the number of cells doesn't match the table grid.
-    ::std::vector< IntVectorPtr >  m_aCellWidths;
+    std::vector< IntVectorPtr >    m_aCellWidths;
     /// Remember if a cell already set this, then it should not be set at a row level.
     bool m_bRowSizeTypeInserted;
     /// At least one cell in the current row has the btLr text direction.

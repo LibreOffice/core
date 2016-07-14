@@ -117,7 +117,7 @@ public:
 
 private:
     std::shared_ptr<PresenterBitmapContainer> mpParentContainer;
-    typedef ::std::map<OUString, std::shared_ptr<BitmapDescriptor> > BitmapContainer;
+    typedef std::map<OUString, std::shared_ptr<BitmapDescriptor> > BitmapContainer;
     BitmapContainer maIconContainer;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;

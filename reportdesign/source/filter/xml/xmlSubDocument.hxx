@@ -30,8 +30,8 @@ namespace rptxml
     class OXMLSubDocument : public OXMLReportElementBase, public IMasterDetailFieds
     {
         css::uno::Reference< css::report::XReportComponent>   m_xFake;
-        ::std::vector< OUString> m_aMasterFields;
-        ::std::vector< OUString> m_aDetailFields;
+        std::vector< OUString> m_aMasterFields;
+        std::vector< OUString> m_aDetailFields;
         OXMLCell*       m_pCellParent;
         sal_Int32       m_nCurrentCount;
         bool            m_bContainsShape;
@@ -53,7 +53,7 @@ namespace rptxml
         virtual ~OXMLSubDocument();
 
         virtual void EndElement() override;
-        virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) override;
+        virtual void addMasterDetailPair(const std::pair< OUString,OUString >& _aPair) override;
     };
 
 } // namespace rptxml

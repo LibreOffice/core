@@ -59,7 +59,7 @@ namespace slideshow
                 generated with verbose text comments switched on).
              */
             DrawShapeSubsetting( const DocTreeNode&                         rShapeSubset,
-                                 const ::std::shared_ptr< GDIMetaFile >&  rMtf );
+                                 const std::shared_ptr< GDIMetaFile >&    rMtf );
 
             /// Forbid copy construction
             DrawShapeSubsetting(const DrawShapeSubsetting&) = delete;
@@ -78,7 +78,7 @@ namespace slideshow
                 Metafile to retrieve subset info from (must have been
                 generated with verbose text comments switched on).
              */
-            void reset( const ::std::shared_ptr< GDIMetaFile >&   rMtf );
+            void reset( const std::shared_ptr< GDIMetaFile >&     rMtf );
 
             // Shape subsetting methods
 
@@ -163,7 +163,7 @@ namespace slideshow
                 CLASS_CHARACTER_CELL_END
             };
 
-            typedef ::std::vector< IndexClassificator > IndexClassificatorVector;
+            typedef std::vector< IndexClassificator > IndexClassificatorVector;
 
         private:
             /** Entry for subset shape
@@ -199,7 +199,7 @@ namespace slideshow
 
             };
 
-            typedef ::std::set< SubsetEntry >       ShapeSet;
+            typedef std::set< SubsetEntry >         ShapeSet;
 
             void ensureInitializedNodeTree() const;
             void updateSubsetBounds( const SubsetEntry& rSubsetEntry );
@@ -218,7 +218,7 @@ namespace slideshow
             mutable IndexClassificatorVector    maActionClassVector;
 
             /// Metafile to retrieve subset info from
-            ::std::shared_ptr< GDIMetaFile >  mpMtf;
+            std::shared_ptr< GDIMetaFile >    mpMtf;
 
             /// Subset of the metafile represented by this object
             DocTreeNode                         maSubset;

@@ -44,7 +44,7 @@ namespace reportdesign
                     public ShapePropertySet
     {
         friend class OShapeHelper;
-        ::std::unique_ptr< ::comphelper::OPropertyArrayAggregationHelper> m_pAggHelper;
+        std::unique_ptr< ::comphelper::OPropertyArrayAggregationHelper> m_pAggHelper;
         OReportControlModel                                             m_aProps;
         css::drawing::HomogenMatrix3                                    m_Transformation;
         sal_Int32                                                       m_nZOrder;

@@ -83,7 +83,7 @@ public:
     {
         const double nElapsedTime( maTimer.getElapsedTime() );
 
-        return ::std::max( nCurrentTime,
+        return std::max( nCurrentTime,
                            nCurrentTime - nElapsedTime + mnNextTime );
     }
 

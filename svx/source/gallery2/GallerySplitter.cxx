@@ -22,7 +22,7 @@
 GallerySplitter::GallerySplitter(
     vcl::Window* pParent,
     WinBits nStyle,
-    const ::std::function<void ()>& rDataChangeFunctor)
+    const std::function<void ()>& rDataChangeFunctor)
     : Splitter(pParent, nStyle)
     , maDataChangeFunctor(rDataChangeFunctor)
 {

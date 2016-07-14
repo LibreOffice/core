@@ -34,7 +34,7 @@
 */
 std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
 {
-    ::std::wstring ws8601DateTime(isoDate);
+    std::wstring ws8601DateTime(isoDate);
 
     // Get rid of the optional milliseconds part if it exists.
     // Function accepts date/time as a combined date/time string in extended ISO8601 format,
@@ -42,7 +42,7 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
     // that's why we cut off at 19.
     if (ws8601DateTime.length() > 19)
     {
-      ws8601DateTime.erase(19, ::std::basic_string<char>::npos);
+      ws8601DateTime.erase(19, std::basic_string<char>::npos);
     }
 
     if ( ws8601DateTime.length() == 19 )

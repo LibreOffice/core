@@ -386,7 +386,7 @@ AnimationBaseNode::fillCommonParameters() const
     }
 
     // minimal duration we fallback to (avoid 0 here!)
-    nDuration = ::std::max( 0.001, nDuration );
+    nDuration = std::max( 0.001, nDuration );
 
     const bool bAutoReverse( mxAnimateNode->getAutoReverse() );
 

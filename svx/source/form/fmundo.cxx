@@ -417,7 +417,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
                     // part of the form component hierarchy of the current page
                     xNewParent = xObjectParent;
                     xForm.set( xNewParent, UNO_QUERY_THROW );
-                    nPos = ::std::min( pObj->GetOriginalIndex(), xNewParent->getCount() );
+                    nPos = std::min( pObj->GetOriginalIndex(), xNewParent->getCount() );
                 }
                 else
                 {

@@ -55,7 +55,7 @@ public:
 class E3dDragMethod : public SdrDragMethod
 {
 protected:
-    ::std::vector< E3dDragMethodUnit >  maGrp;
+    std::vector< E3dDragMethodUnit >    maGrp;
     E3dDragConstraint                   meConstraint;
     Point                               maLastPos;
     Rectangle                           maFullBound;

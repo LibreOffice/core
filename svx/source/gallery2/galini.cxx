@@ -33,7 +33,7 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
 
     const LanguageTag &rLangTag = Application::GetSettings().GetUILanguageTag();
 
-    ::std::vector< OUString > aFallbacks = rLangTag.getFallbackStrings( true);
+    std::vector< OUString > aFallbacks = rLangTag.getFallbackStrings( true);
 
     OUString aResult;
     sal_Int32 nRank = 42;

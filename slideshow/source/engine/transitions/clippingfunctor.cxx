@@ -202,7 +202,7 @@ namespace slideshow
             // scale polygon up to current shape size
             if( mbScaleIsotrophically )
             {
-                const double nScale( ::std::max( rTargetSize.getX(),
+                const double nScale( std::max( rTargetSize.getX(),
                                                  rTargetSize.getY() ) );
                 aMatrix.scale( nScale, nScale );
                 aMatrix.translate( -(nScale-rTargetSize.getX())/2.0,

@@ -44,7 +44,7 @@ struct Link
         , m_target( target )
         {}
 };
-typedef ::std::vector< Link > t_links;
+typedef std::vector< Link > t_links;
 
 
 static void mergeKeys(

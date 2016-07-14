@@ -115,7 +115,7 @@ namespace svt { namespace uno
         using WizardShell_Base::activatePath;
 
     private:
-        typedef ::std::map< VclPtr<TabPage>, PWizardPageController > Page2ControllerMap;
+        typedef std::map< VclPtr<TabPage>, PWizardPageController > Page2ControllerMap;
 
         const css::uno::Reference< css::ui::dialogs::XWizardController >  m_xController;
         const sal_Int16                                                                             m_nFirstPageID;

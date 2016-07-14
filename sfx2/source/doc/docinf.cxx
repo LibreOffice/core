@@ -146,9 +146,9 @@ sal_uInt32 LoadOlePropertySet(
     {
         uno::Reference < beans::XPropertyContainer > xUserDefined(
             i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-        ::std::vector< sal_Int32 > aPropIds;
+        std::vector< sal_Int32 > aPropIds;
         xCustomSect->GetPropertyIds( aPropIds );
-        for( ::std::vector< sal_Int32 >::const_iterator aIt = aPropIds.begin(),
+        for( std::vector< sal_Int32 >::const_iterator aIt = aPropIds.begin(),
              aEnd = aPropIds.end(); aIt != aEnd; ++aIt )
         {
             OUString aPropName = xCustomSect->GetPropertyName( *aIt );

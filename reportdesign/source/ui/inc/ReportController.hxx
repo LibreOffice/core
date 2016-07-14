@@ -203,7 +203,7 @@ namespace rptui
                          ,sal_Int32 _nGroupPos
                          ,bool _bShow);
 
-        void executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
+        void executeMethodWithUndo(sal_uInt16 _nUndoStrId,const std::mem_fun_t<void,ODesignView>& _pMemfun);
         void alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection = false);
 
         // open the help agent of report designer at start time

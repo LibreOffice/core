@@ -58,8 +58,8 @@ namespace svt { namespace table
 
     //= UnoControlTableModel_Impl
 
-    typedef ::std::vector< PTableModelListener >    ModellListeners;
-    typedef ::std::vector< PColumnModel >           ColumnModels;
+    typedef std::vector< PTableModelListener >      ModellListeners;
+    typedef std::vector< PColumnModel >             ColumnModels;
     struct UnoControlTableModel_Impl
     {
         ColumnModels                                    aColumns;
@@ -81,7 +81,7 @@ namespace svt { namespace table
         ::boost::optional< ::Color >                    m_aInactiveSelectionTextColor;
         ::boost::optional< ::Color >                    m_aTextColor;
         ::boost::optional< ::Color >                    m_aTextLineColor;
-        ::boost::optional< ::std::vector< ::Color > >   m_aRowColors;
+        ::boost::optional< std::vector< ::Color > >     m_aRowColors;
         VerticalAlignment                               m_eVerticalAlign;
         bool                                            bEnabled;
         ModellListeners                                 m_aListeners;
@@ -702,7 +702,7 @@ namespace svt { namespace table
     }
 
 
-    ::boost::optional< ::std::vector< ::Color > > UnoControlTableModel::getRowBackgroundColors() const
+    ::boost::optional< std::vector< ::Color > > UnoControlTableModel::getRowBackgroundColors() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aRowColors;
@@ -717,7 +717,7 @@ namespace svt { namespace table
             m_pImpl->m_aRowColors.reset();
         else
         {
-            ::std::vector< ::Color > aColors( aAPIColors.getLength() );
+            std::vector< ::Color > aColors( aAPIColors.getLength() );
             for ( sal_Int32 i=0; i<aAPIColors.getLength(); ++i )
             {
                 aColors[i] = ::Color( aAPIColors[i] );

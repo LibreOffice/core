@@ -1688,9 +1688,9 @@ namespace svgio
             return rCandidate;
         }
 
-        ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider)
+        std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider)
         {
-            ::std::vector< double > aRetval;
+            std::vector< double > aRetval;
 
             if(!rInput.empty())
             {

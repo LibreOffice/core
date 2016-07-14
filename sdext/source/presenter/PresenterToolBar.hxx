@@ -74,7 +74,7 @@ class PresenterToolBar
       public CachablePresenterView
 {
 public:
-    typedef ::std::function<void ()> Action;
+    typedef std::function<void ()> Action;
 
     enum Anchor { Left, Center, Right };
 
@@ -165,7 +165,7 @@ private:
 
     class ElementContainerPart;
     typedef std::shared_ptr<ElementContainerPart> SharedElementContainerPart;
-    typedef ::std::vector<SharedElementContainerPart> ElementContainer;
+    typedef std::vector<SharedElementContainerPart> ElementContainer;
     ElementContainer maElementContainer;
     SharedElementContainerPart mpCurrentContainerPart;
     css::uno::Reference<css::awt::XWindow> mxWindow;

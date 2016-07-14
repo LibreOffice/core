@@ -40,14 +40,14 @@ class FunctionManager : public formula::IFunctionManager
     typedef std::map< OUString, std::shared_ptr< FunctionCategory > > TCategoriesMap;
     css::uno::Reference< css::report::meta::XFunctionManager> m_xMgr;
     mutable TCategoriesMap  m_aCategories;
-    mutable ::std::vector< TCategoriesMap::iterator > m_aCategoryIndex;
+    mutable std::vector< TCategoriesMap::iterator > m_aCategoryIndex;
     mutable TFunctionsMap   m_aFunctions;
 public:
             FunctionManager(const css::uno::Reference< css::report::meta::XFunctionManager>& _xMgr);
     virtual ~FunctionManager();
     virtual sal_uInt32                              getCount() const override;
     virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const override;
-    virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const override;
+    virtual void                                    fillLastRecentlyUsedFunctions(std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const override;
     virtual sal_Unicode                             getSingleToken(const EToken _eToken) const override;
 
     std::shared_ptr< FunctionDescription >      get(const css::uno::Reference< css::report::meta::XFunctionDescription>& _xFunctionDescription) const;
@@ -66,8 +66,8 @@ public:
     virtual const formula::IFunctionCategory* getCategory() const override ;
     virtual OUString getDescription() const override ;
     virtual sal_Int32 getSuppressedArgumentCount() const override ;
-    virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const override ;
-    virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const override ;
+    virtual OUString getFormula(const std::vector< OUString >& _aArguments) const override ;
+    virtual void fillVisibleArgumentMapping(std::vector<sal_uInt16>& _rArguments) const override ;
     virtual void initArgumentInfo()  const override;
     virtual OUString getSignature() const override ;
     virtual OString getHelpId() const override ;
@@ -81,7 +81,7 @@ public:
 
 class FunctionCategory : public formula::IFunctionCategory
 {
-    mutable ::std::vector< std::shared_ptr< FunctionDescription > > m_aFunctions;
+    mutable std::vector< std::shared_ptr< FunctionDescription > > m_aFunctions;
     css::uno::Reference< css::report::meta::XFunctionCategory> m_xCategory;
     sal_uInt32 m_nFunctionCount;
     sal_uInt32 m_nNumber;

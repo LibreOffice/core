@@ -61,12 +61,12 @@ class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
     typedef std::map<OUString, OUString> TDisplayNames;
     typedef std::map<OUString, ExtendedColorConfigValue> TConfigValues;
-    typedef ::std::vector<TConfigValues::iterator> TMapPos;
-    typedef ::std::pair< TConfigValues, TMapPos > TComponentMapping;
+    typedef std::vector<TConfigValues::iterator> TMapPos;
+    typedef std::pair< TConfigValues, TMapPos > TComponentMapping;
     typedef std::map<OUString, TComponentMapping> TComponents;
     TComponents         m_aConfigValues;
     TDisplayNames       m_aComponentDisplayNames;
-    ::std::vector<TComponents::iterator> m_aConfigValuesPos;
+    std::vector<TComponents::iterator> m_aConfigValuesPos;
 
     OUString        m_sLoadedScheme;
     bool            m_bIsBroadcastEnabled;

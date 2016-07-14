@@ -166,9 +166,9 @@ std::wstring CMetaInfoReader::getTagAttribute(const std::wstring& TagName,  cons
 
 /** helper function for getDefaultLocale().
 */
-const LocaleSet_t EN_US_LOCALE( ::std::make_pair( ::std::wstring( L"en" ),  ::std::wstring( L"US" )));
+const LocaleSet_t EN_US_LOCALE( std::make_pair( std::wstring( L"en" ),      std::wstring( L"US" )));
 
-bool isValidLocale(const ::std::wstring& Locale)
+bool isValidLocale(const std::wstring& Locale)
 {
     return ( Locale.length() == 5 );
 }
@@ -179,8 +179,8 @@ LocaleSet_t CMetaInfoReader::getDefaultLocale()
 {
     if (hasTag(META_INFO_LANGUAGE))
     {
-        ::std::wstring locale = m_AllMetaInfo[META_INFO_LANGUAGE].first;
-        return isValidLocale(locale) ? ::std::make_pair(locale.substr( 0,2), locale.substr( 3,2)) : EN_US_LOCALE;
+        std::wstring locale = m_AllMetaInfo[META_INFO_LANGUAGE].first;
+        return isValidLocale(locale) ? std::make_pair(locale.substr( 0,2), locale.substr( 3,2)) : EN_US_LOCALE;
     }
     else
         return EN_US_LOCALE;

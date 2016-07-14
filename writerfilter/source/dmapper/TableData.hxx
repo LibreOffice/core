@@ -105,7 +105,7 @@ public:
  */
 class RowData
 {
-    typedef ::std::vector<CellData::Pointer_t> Cells;
+    typedef std::vector<CellData::Pointer_t> Cells;
 
     /**
        the cell data of the row
@@ -242,7 +242,7 @@ public:
 class TableData
 {
     typedef RowData::Pointer_t RowPointer_t;
-    typedef ::std::vector<RowPointer_t> Rows;
+    typedef std::vector<RowPointer_t> Rows;
 
     /**
        the data of the rows of the table

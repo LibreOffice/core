@@ -190,9 +190,9 @@ namespace svt { namespace table
         {
             return ::boost::optional< ::Color >();
         }
-        virtual ::boost::optional< ::std::vector< ::Color > > getRowBackgroundColors() const override
+        virtual ::boost::optional< std::vector< ::Color > > getRowBackgroundColors() const override
         {
-            return ::boost::optional< ::std::vector< ::Color > >();
+            return ::boost::optional< std::vector< ::Color > >();
         }
         virtual css::style::VerticalAlignment getVerticalAlign() const override
         {
@@ -294,10 +294,10 @@ namespace svt { namespace table
 
     namespace
     {
-        bool lcl_adjustSelectedRows( ::std::vector< RowPos >& io_selectionIndexes, RowPos const i_firstAffectedRowIndex, TableSize const i_offset )
+        bool lcl_adjustSelectedRows( std::vector< RowPos >& io_selectionIndexes, RowPos const i_firstAffectedRowIndex, TableSize const i_offset )
         {
             bool didChanges = false;
-            for (   ::std::vector< RowPos >::iterator selPos = io_selectionIndexes.begin();
+            for (   std::vector< RowPos >::iterator selPos = io_selectionIndexes.begin();
                     selPos != io_selectionIndexes.end();
                     ++selPos
                 )
@@ -698,7 +698,7 @@ namespace svt { namespace table
 
 
     long TableControl_Impl::impl_ni_calculateColumnWidths( ColPos const i_assumeInflexibleColumnsUpToIncluding,
-        bool const i_assumeVerticalScrollbar, ::std::vector< long >& o_newColWidthsPixel ) const
+        bool const i_assumeVerticalScrollbar, std::vector< long >& o_newColWidthsPixel ) const
     {
         // the available horizontal space
         long gridWidthPixel = m_rAntiImpl.GetOutputSizePixel().Width();
@@ -722,15 +722,15 @@ namespace svt { namespace table
         // collect some meta data for our columns:
         // - their current (pixel) metrics
         long accumulatedCurrentWidth = 0;
-        ::std::vector< long > currentColWidths;
+        std::vector< long > currentColWidths;
         currentColWidths.reserve( colCount );
-        typedef ::std::vector< ::std::pair< long, long > >   ColumnLimits;
+        typedef std::vector< std::pair< long, long > >       ColumnLimits;
         ColumnLimits effectiveColumnLimits;
         effectiveColumnLimits.reserve( colCount );
         long accumulatedMinWidth = 0;
         long accumulatedMaxWidth = 0;
         // - their relative flexibility
-        ::std::vector< ::sal_Int32 > columnFlexibilities;
+        std::vector< ::sal_Int32 > columnFlexibilities;
         columnFlexibilities.reserve( colCount );
         long flexibilityDenominator = 0;
         size_t flexibleColumnCount = 0;
@@ -783,7 +783,7 @@ namespace svt { namespace table
             if ( flexibility > 0 )
                 ++flexibleColumnCount;
 
-            effectiveColumnLimits.push_back( ::std::pair< long, long >( effectiveMin, effectiveMax ) );
+            effectiveColumnLimits.push_back( std::pair< long, long >( effectiveMin, effectiveMax ) );
             accumulatedMinWidth += effectiveMin;
             accumulatedMaxWidth += effectiveMax;
         }
@@ -845,7 +845,7 @@ namespace svt { namespace table
                 while ( startOver );
 
                 // are there pixels left (might be caused by rounding errors)?
-                distributePixel = gridWidthPixel - ::std::accumulate( o_newColWidthsPixel.begin(), o_newColWidthsPixel.end(), 0 );
+                distributePixel = gridWidthPixel - std::accumulate( o_newColWidthsPixel.begin(), o_newColWidthsPixel.end(), 0 );
                 while ( ( distributePixel > 0 ) && ( flexibleColumnCount > 0 ) )
                 {
                     // yes => ignore relative flexibilities, and subsequently distribute single pixels to all flexible
@@ -920,7 +920,7 @@ namespace svt { namespace table
                 while ( startOver );
 
                 // are there pixels left (might be caused by rounding errors)?
-                takeAwayPixel = ::std::accumulate( o_newColWidthsPixel.begin(), o_newColWidthsPixel.end(), 0 ) - gridWidthPixel;
+                takeAwayPixel = std::accumulate( o_newColWidthsPixel.begin(), o_newColWidthsPixel.end(), 0 ) - gridWidthPixel;
                 while ( ( takeAwayPixel > 0 ) && ( flexibleColumnCount > 0 ) )
                 {
                     // yes => ignore relative flexibilities, and subsequently take away pixels from all flexible
@@ -974,7 +974,7 @@ namespace svt { namespace table
         //     - V-YES: all fine, result from 1. is still valid
         //     - V-NO: redistribute the remaining space (if any) amongst all columns which allow it
 
-        ::std::vector< long > newWidthsPixel;
+        std::vector< long > newWidthsPixel;
         long gridWidthPixel = impl_ni_calculateColumnWidths( i_assumeInflexibleColumnsUpToIncluding, true, newWidthsPixel );
 
         // the width/height of a scrollbar, needed several times below
@@ -988,7 +988,7 @@ namespace svt { namespace table
 
         OSL_ENSURE( ( m_nRowCount == m_pModel->getRowCount() ) && ( m_nColumnCount == m_pModel->getColumnCount() ),
             "TableControl_Impl::impl_ni_relayout: how is this expected to work with invalid data?" );
-        long const nAllColumnsWidth = ::std::accumulate( newWidthsPixel.begin(), newWidthsPixel.end(), 0 );
+        long const nAllColumnsWidth = std::accumulate( newWidthsPixel.begin(), newWidthsPixel.end(), 0 );
 
         ScrollbarVisibility const eVertScrollbar = m_pModel->getVerticalScrollbarVisibility();
         ScrollbarVisibility const eHorzScrollbar = m_pModel->getHorizontalScrollbarVisibility();
@@ -1398,14 +1398,14 @@ namespace svt { namespace table
 
         case cursorPageUp:
         {
-            RowPos nNewRow = ::std::max( (RowPos)0, m_nCurRow - impl_getVisibleRows( false ) );
+            RowPos nNewRow = std::max( (RowPos)0, m_nCurRow - impl_getVisibleRows( false ) );
             bSuccess = goTo( m_nCurColumn, nNewRow );
         }
         break;
 
         case cursorPageDown:
         {
-            RowPos nNewRow = ::std::min( m_nRowCount - 1, m_nCurRow + impl_getVisibleRows( false ) );
+            RowPos nNewRow = std::min( m_nRowCount - 1, m_nCurRow + impl_getVisibleRows( false ) );
             bSuccess = goTo( m_nCurColumn, nNewRow );
         }
         break;
@@ -1885,7 +1885,7 @@ namespace svt { namespace table
 
     void TableControl_Impl::invalidateSelectedRows()
     {
-        for (   ::std::vector< RowPos >::iterator selRow = m_aSelectedRows.begin();
+        for (   std::vector< RowPos >::iterator selRow = m_aSelectedRows.begin();
                 selRow != m_aSelectedRows.end();
                 ++selRow
             )
@@ -2044,8 +2044,8 @@ namespace svt { namespace table
     {
         // compute new top row
         RowPos nNewTopRow =
-            ::std::max(
-                ::std::min( (RowPos)( m_nTopRow + _nRowDelta ), (RowPos)( m_nRowCount - 1 ) ),
+            std::max(
+                std::min( (RowPos)( m_nTopRow + _nRowDelta ), (RowPos)( m_nRowCount - 1 ) ),
                 (RowPos)0
             );
 
@@ -2108,8 +2108,8 @@ namespace svt { namespace table
     {
         // compute new left column
         const ColPos nNewLeftColumn =
-            ::std::max(
-                ::std::min( (ColPos)( m_nLeftColumn + _nColumnDelta ), (ColPos)( m_nColumnCount - 1 ) ),
+            std::max(
+                std::min( (ColPos)( m_nLeftColumn + _nColumnDelta ), (ColPos)( m_nColumnCount - 1 ) ),
                 (ColPos)0
             );
 
@@ -2183,7 +2183,7 @@ namespace svt { namespace table
 
     bool TableControl_Impl::isRowSelected( RowPos i_row ) const
     {
-        return ::std::find( m_aSelectedRows.begin(), m_aSelectedRows.end(), i_row ) != m_aSelectedRows.end();
+        return std::find( m_aSelectedRows.begin(), m_aSelectedRows.end(), i_row ) != m_aSelectedRows.end();
     }
 
 
@@ -2195,9 +2195,9 @@ namespace svt { namespace table
     }
 
 
-    int TableControl_Impl::getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current)
+    int TableControl_Impl::getRowSelectedNumber(const std::vector<RowPos>& selectedRows, RowPos current)
     {
-        std::vector<RowPos>::const_iterator it = ::std::find(selectedRows.begin(),selectedRows.end(),current);
+        std::vector<RowPos>::const_iterator it = std::find(selectedRows.begin(),selectedRows.end(),current);
         if ( it != selectedRows.end() )
         {
             return it - selectedRows.begin();
@@ -2214,7 +2214,7 @@ namespace svt { namespace table
         if ( i_ordinate < m_nRowHeaderWidthPixel )
             return COL_ROW_HEADERS;
 
-        ColumnPositions::const_iterator lowerBound = ::std::lower_bound(
+        ColumnPositions::const_iterator lowerBound = std::lower_bound(
             m_aColumnWidths.begin(),
             m_aColumnWidths.end(),
             MutableColumnMetrics(i_ordinate+1, i_ordinate+1),
@@ -2248,7 +2248,7 @@ namespace svt { namespace table
 
     bool TableControl_Impl::markRowAsDeselected( RowPos const i_rowIndex )
     {
-        ::std::vector< RowPos >::iterator selPos = ::std::find( m_aSelectedRows.begin(), m_aSelectedRows.end(), i_rowIndex );
+        std::vector< RowPos >::iterator selPos = std::find( m_aSelectedRows.begin(), m_aSelectedRows.end(), i_rowIndex );
         if ( selPos == m_aSelectedRows.end() )
             return false;
 

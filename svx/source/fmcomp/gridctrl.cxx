@@ -1690,7 +1690,7 @@ sal_uInt16 DbGridControl::AppendColumn(const OUString& rName, sal_uInt16 nWidth,
     else
     {
         DbGridColumns::iterator it = m_aColumns.begin();
-        ::std::advance( it, nModelPos );
+        std::advance( it, nModelPos );
         m_aColumns.insert( it, CreateColumn(nId) );
     }
 
@@ -1801,11 +1801,11 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     DbGridColumn* temp = m_aColumns[ nOldModelPos ];
 
     DbGridColumns::iterator it = m_aColumns.begin();
-    ::std::advance( it, nOldModelPos );
+    std::advance( it, nOldModelPos );
     m_aColumns.erase( it );
 
     it = m_aColumns.begin();
-    ::std::advance( it, nNewModelPos );
+    std::advance( it, nNewModelPos );
     m_aColumns.insert( it, temp );
 }
 

@@ -47,7 +47,7 @@ namespace rptui
 
             Field() : sName(), nDataType( 0 ), nScale( 0 ), bIsCurrency( false ) { }
         };
-        typedef ::std::vector< Field >  FieldList;
+        typedef std::vector< Field >    FieldList;
 
     private:
         const OReportModel&                                       m_rModel;

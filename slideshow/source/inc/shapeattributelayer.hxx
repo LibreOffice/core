@@ -53,7 +53,7 @@ namespace slideshow
             virtual ~State() {}
 
             /// Abstract, numerically encoded state ID
-            typedef ::std::size_t StateId;
+            typedef std::size_t StateId;
 
             /** This method returns a numerical state identifier.
 
@@ -67,11 +67,11 @@ namespace slideshow
             ;
         };
 
-        typedef ::std::shared_ptr< State > StateSharedPtr;
+        typedef std::shared_ptr< State > StateSharedPtr;
 
         class ShapeAttributeLayer;
 
-        typedef ::std::shared_ptr< ShapeAttributeLayer > ShapeAttributeLayerSharedPtr;
+        typedef std::shared_ptr< ShapeAttributeLayer > ShapeAttributeLayerSharedPtr;
 
         /** Encapsulates all modifiable attributes of a shape.
 

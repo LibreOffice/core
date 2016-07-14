@@ -48,7 +48,7 @@ namespace
 {
     void disposeAndClearHeaderCell(::svt::BrowseBoxImpl::THeaderCellMap& _rHeaderCell)
     {
-        ::std::for_each(
+        std::for_each(
                         _rHeaderCell.begin(),
                         _rHeaderCell.end(),
                         ::svt::BrowseBoxImpl::THeaderCellMapFunctorDispose()
@@ -275,7 +275,7 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
     if ( nPos < pCols->size() )
     {
         BrowserColumns::iterator it = pCols->begin();
-        ::std::advance( it, nPos );
+        std::advance( it, nPos );
         pCols->insert( it, new BrowserColumn( nItemId, rText, nWidth, GetZoom() ) );
     }
     else
@@ -345,11 +345,11 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId )
         sal_uInt16 nFirstScrollable = FrozenColCount();
         BrowserColumn *pColumn = (*pCols)[ nItemPos ];
         BrowserColumns::iterator it = pCols->begin();
-        ::std::advance( it, nItemPos );
+        std::advance( it, nItemPos );
         pCols->erase( it );
         nItemPos = nFirstScrollable;
         it = pCols->begin();
-        ::std::advance( it, nItemPos );
+        std::advance( it, nItemPos );
         pCols->insert( it, pColumn );
     }
 
@@ -408,11 +408,11 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
         // move column internally
         {
             BrowserColumns::iterator it = pCols->begin();
-            ::std::advance( it, nOldPos );
+            std::advance( it, nOldPos );
             BrowserColumn* pTemp = *it;
             pCols->erase( it );
             it = pCols->begin();
-            ::std::advance( it, nPos );
+            std::advance( it, nPos );
             pCols->insert( it, pTemp );
         }
 
@@ -671,7 +671,7 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
 
     // delete column
     BrowserColumns::iterator it = pCols->begin();
-    ::std::advance( it, nPos );
+    std::advance( it, nPos );
     delete *it;
     pCols->erase( it );
     if ( nFirstCol >= nPos && nFirstCol > FrozenColCount() )

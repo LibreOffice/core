@@ -132,7 +132,7 @@ private:
 
     // Properties of each level. This can also reflect the overridden
     // levels of a numbering.
-    ::std::vector< ListLevel::Pointer >  m_aLevels;
+    std::vector< ListLevel::Pointer >    m_aLevels;
 
     // Only used during the numberings import
     ListLevel::Pointer                         m_pCurrentLevel;

@@ -113,7 +113,7 @@ struct ActivityParameters
     std::shared_ptr<ExpressionNode>                     mpFormula;
 
     /// Key times, for discrete and key time activities
-    ::std::vector< double >                     maDiscreteTimes;
+    std::vector< double >                       maDiscreteTimes;
 
     /// Total duration of activity (including all repeats)
     const double                                mnMinDuration;

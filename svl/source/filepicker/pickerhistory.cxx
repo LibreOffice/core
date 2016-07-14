@@ -27,7 +27,7 @@ namespace svt
 
     namespace
     {
-        typedef ::std::vector< css::uno::WeakReference< XInterface >  >  InterfaceArray;
+        typedef std::vector< css::uno::WeakReference< XInterface >    >  InterfaceArray;
 
 
         InterfaceArray& getFolderPickerHistory()

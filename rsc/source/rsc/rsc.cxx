@@ -240,7 +240,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     // was an inputted file specified
     else if( !aInputList.empty() )
     {
-        ::std::list<OutputFile>::iterator it;
+        std::list<OutputFile>::iterator it;
         for( it = m_aOutputFiles.begin(); it != m_aOutputFiles.end(); ++it )
         {
             if( it->aOutputRc.isEmpty() )
@@ -567,7 +567,7 @@ ERRTYPE RscCompiler::Link()
 
     if( !(pCL->nCommands & NOLINK_FLAG) )
     {
-        ::std::list<RscCmdLine::OutputFile>::const_iterator it;
+        std::list<RscCmdLine::OutputFile>::const_iterator it;
 
         for( it = pCL->m_aOutputFiles.begin(); it != pCL->m_aOutputFiles.end(); ++it )
         {
@@ -747,17 +747,17 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                     OString& rImagePath,
                                     FILE* pSysListFile )
 {
-    ::std::list< OString >  aFileNames;
+    std::list< OString >    aFileNames;
     bool bFound = false;
 
     aFileNames.push_back( rBaseFileName + OString(".png") );
     aFileNames.push_back( rBaseFileName + OString(".bmp") );
 
-    ::std::list< OString >::iterator aFileIter( aFileNames.begin() );
+    std::list< OString >::iterator aFileIter( aFileNames.begin() );
 
     while( ( aFileIter != aFileNames.end() ) && !bFound )
     {
-        ::std::list< OString >::const_iterator aDirIter( rOutputFile.aSysSearchDirs.begin() );
+        std::list< OString >::const_iterator aDirIter( rOutputFile.aSysSearchDirs.begin() );
 
         while( ( aDirIter != rOutputFile.aSysSearchDirs.end() ) && !bFound )
         {
@@ -833,7 +833,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 {
     SvFileStream                aIStm( rSrsInPath, StreamMode::READ );
     SvFileStream                aOStm( rSrsOutPath, StreamMode::WRITE | StreamMode::TRUNC );
-    ::std::vector< OString > aMissingImages;
+    std::vector< OString > aMissingImages;
     FILE*                       pSysListFile = rContext.aOutputSysList.isEmpty() ? nullptr : fopen( rContext.aOutputSysList.getStr(), "ab" );
 
     if( !aIStm.GetError() && !aOStm.GetError() )
@@ -861,7 +861,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
             }
             else if (aLine.indexOf("ImageList") != -1)
             {
-                ::std::vector< ::std::pair< OString, sal_Int32 > > aEntryVector;
+                std::vector< std::pair< OString, sal_Int32 > > aEntryVector;
 
                 aOStm.WriteLine(aLine);
 
@@ -907,7 +907,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                             OString aBaseFileName = aBuf.makeStringAndClear();
 
                             if( GetImageFilePath( rOutputFile, rContext, aBaseFileName, aFilePath, pSysListFile ) )
-                                aEntryVector.push_back( ::std::pair< OString, sal_Int32 >( aFilePath, nNumber ) );
+                                aEntryVector.push_back( std::pair< OString, sal_Int32 >( aFilePath, nNumber ) );
                             else
                                 aMissingImages.push_back( aBaseFileName );
                         }

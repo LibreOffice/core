@@ -252,7 +252,7 @@ public:
     void    deinitializeControls();
 
 private:
-    typedef ::std::vector< ColumnInfo > ColumnInfos;
+    typedef std::vector< ColumnInfo > ColumnInfos;
     ColumnInfos                         m_aColumns;
     bool                                m_bControlsInitialized;
 };
@@ -499,7 +499,7 @@ IMPL_LINK_NOARG_TYPED( FormController, OnActivateTabOrder, Idle*, void )
 }
 
 
-struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >, bool >
+struct UpdateAllListeners : public std::unary_function< Reference< XDispatch >, bool >
 {
     bool operator()( const Reference< XDispatch >& _rxDispatcher ) const
     {
@@ -512,7 +512,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
 IMPL_LINK_NOARG_TYPED( FormController, OnInvalidateFeatures, Timer*, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    for ( ::std::set< sal_Int16 >::const_iterator aLoop = m_aInvalidFeatures.begin();
+    for ( std::set< sal_Int16 >::const_iterator aLoop = m_aInvalidFeatures.begin();
           aLoop != m_aInvalidFeatures.end();
           ++aLoop
         )
@@ -703,7 +703,7 @@ Sequence< OUString> FormController::getSupportedServiceNames_Static()
 
 namespace
 {
-    struct ResetComponentText : public ::std::unary_function< Reference< XTextComponent >, void >
+    struct ResetComponentText : public std::unary_function< Reference< XTextComponent >, void >
     {
         void operator()( const Reference< XTextComponent >& _rxText )
         {
@@ -711,7 +711,7 @@ namespace
         }
     };
 
-    struct RemoveComponentTextListener : public ::std::unary_function< Reference< XTextComponent >, void >
+    struct RemoveComponentTextListener : public std::unary_function< Reference< XTextComponent >, void >
     {
         explicit RemoveComponentTextListener( const Reference< XTextListener >& _rxListener )
             :m_xListener( _rxListener )
@@ -735,7 +735,7 @@ void FormController::impl_setTextOnAllFilter_throw()
     ::comphelper::FlagGuard aResetFlag( m_bSuspendFilterTextListening );
 
     // reset the text for all controls
-    ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), ResetComponentText() );
+    std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), ResetComponentText() );
 
     if ( m_aFilterRows.empty() )
         // nothing to do anymore
@@ -1485,7 +1485,7 @@ void SAL_CALL FormController::textChanged(const TextEvent& e) throw( RuntimeExce
     // multiplex the event to our FilterControllerListeners
     FilterEvent aEvent;
     aEvent.Source = *this;
-    aEvent.FilterComponent = ::std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xText ) - m_aFilterComponents.begin();
+    aEvent.FilterComponent = std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xText ) - m_aFilterComponents.begin();
     aEvent.DisjunctiveTerm = getActiveTerm();
     aEvent.PredicateExpression = aText;
 
@@ -2021,7 +2021,7 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
             m_aTabActivationIdle.Stop();
 
         // clear the filter map
-        ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), RemoveComponentTextListener( this ) );
+        std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), RemoveComponentTextListener( this ) );
         m_aFilterComponents.clear();
 
         // einsammeln der Controls
@@ -2526,7 +2526,7 @@ void FormController::removeControl(const Reference< XControl > & xControl)
         }
     }
 
-    FilterComponents::iterator componentPos = ::std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xControl );
+    FilterComponents::iterator componentPos = std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xControl );
     if ( componentPos != m_aFilterComponents.end() )
         m_aFilterComponents.erase( componentPos );
 
@@ -2595,7 +2595,7 @@ void FormController::loaded(const EventObject& rEvent) throw( RuntimeException, 
 
 void FormController::updateAllDispatchers() const
 {
-    ::std::for_each(
+    std::for_each(
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
         [] (const DispatcherContainer::value_type& dispatcher) {
@@ -2882,7 +2882,7 @@ void SAL_CALL FormController::elementRemoved(const ContainerEvent& evt) throw( R
     // are we in filtermode and a XModeSelector has inserted an element
     else if (m_bFiltering && Reference< XModeSelector > (evt.Source, UNO_QUERY).is())
     {
-        FilterComponents::iterator componentPos = ::std::find(
+        FilterComponents::iterator componentPos = std::find(
             m_aFilterComponents.begin(), m_aFilterComponents.end(), xControl );
         if ( componentPos != m_aFilterComponents.end() )
             m_aFilterComponents.erase( componentPos );
@@ -3033,7 +3033,7 @@ void SAL_CALL FormController::setInteractionHandler( const Reference< XInteracti
 }
 
 
-void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
+void FormController::setFilter(std::vector<FmFieldInfo>& rFieldInfos)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     // create the composer
@@ -3072,8 +3072,8 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         Reference< XNameAccess > xQueryColumns =
             Reference< XColumnsSupplier >( m_xComposer, UNO_QUERY_THROW )->getColumns();
 
-        ::std::vector<FmFieldInfo>::const_iterator aEnd = rFieldInfos.end();
-        for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
+        std::vector<FmFieldInfo>::const_iterator aEnd = rFieldInfos.end();
+        for (std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
             iter != aEnd; ++iter)
         {
             if ( xQueryColumns->hasByName((*iter).aFieldName) )
@@ -3155,7 +3155,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                 }
 
                 // find the text component
-                for (::std::vector<FmFieldInfo>::const_iterator iter = rFieldInfos.begin();
+                for (std::vector<FmFieldInfo>::const_iterator iter = rFieldInfos.begin();
                     iter != aEnd; ++iter)
                 {
                     // we found the field so insert a new entry to the filter row
@@ -3203,7 +3203,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
     }
 
     // now set the filter controls
-    for (   ::std::vector<FmFieldInfo>::const_iterator field = rFieldInfos.begin(), aEnd = rFieldInfos.end();
+    for (   std::vector<FmFieldInfo>::const_iterator field = rFieldInfos.begin(), aEnd = rFieldInfos.end();
             field != aEnd;
             ++field
         )
@@ -3244,7 +3244,7 @@ void FormController::startFiltering()
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
     // structure for storing the field info
-    ::std::vector<FmFieldInfo> aFieldInfos;
+    std::vector<FmFieldInfo> aFieldInfos;
 
     for (sal_Int32 i = nControlCount; i > 0;)
     {
@@ -3370,7 +3370,7 @@ void FormController::stopFiltering()
     sal_Int32 nControlCount = aControlsCopy.getLength();
 
     // clear the filter control map
-    ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), RemoveComponentTextListener( this ) );
+    std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), RemoveComponentTextListener( this ) );
     m_aFilterComponents.clear();
 
     for ( sal_Int32 i = nControlCount; i > 0; )
@@ -4030,8 +4030,8 @@ void SAL_CALL FormController::invalidateFeatures( const Sequence< ::sal_Int16 >&
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // for now, just copy the ids of the features, because ....
-    ::std::copy( Features.begin(), Features.end(),
-        ::std::insert_iterator< ::std::set< sal_Int16 > >( m_aInvalidFeatures, m_aInvalidFeatures.begin() )
+    std::copy( Features.begin(), Features.end(),
+        std::insert_iterator< std::set< sal_Int16 > >( m_aInvalidFeatures, m_aInvalidFeatures.begin() )
     );
 
     // ... we will do the real invalidation asynchronously

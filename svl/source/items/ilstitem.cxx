@@ -32,7 +32,7 @@ SfxIntegerListItem::SfxIntegerListItem()
 {
 }
 
-SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const ::std::vector < sal_Int32 >& rList )
+SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const std::vector < sal_Int32 >& rList )
     : SfxPoolItem( which )
     , m_aList( rList )
 {

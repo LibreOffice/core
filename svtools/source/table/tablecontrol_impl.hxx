@@ -62,7 +62,7 @@ namespace svt { namespace table
         }
     };
 
-    typedef ::std::vector< MutableColumnMetrics >    ColumnPositions;
+    typedef std::vector< MutableColumnMetrics >      ColumnPositions;
 
     class TableControl;
     class TableDataWindow;
@@ -183,7 +183,7 @@ namespace svt { namespace table
         OUString getCellContentAsString( RowPos const i_row, ColPos const i_col );
 
         /** returns the position of the current row in the selection vector */
-        static int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
+        static int getRowSelectedNumber(const std::vector<RowPos>& selectedRows, RowPos current);
 
         void invalidateRect(const Rectangle &rInvalidateRect);
 
@@ -376,7 +376,7 @@ namespace svt { namespace table
         long        impl_ni_calculateColumnWidths(
                         ColPos const i_assumeInflexibleColumnsUpToIncluding,
                         bool const i_assumeVerticalScrollbar,
-                        ::std::vector< long >& o_newColWidthsPixel
+                        std::vector< long >& o_newColWidthsPixel
                     ) const;
 
         /** positions all child windows, e.g. the both scrollbars, the corner window, and the data window

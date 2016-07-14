@@ -417,7 +417,7 @@ void TDefTableHandler::lcl_sprm(Sprm & rSprm)
 }
 
 void TDefTableHandler::fillCellProperties(
-            size_t nCell, const ::std::shared_ptr< TablePropertyMap >& pCellProperties ) const
+            size_t nCell, const std::shared_ptr< TablePropertyMap >& pCellProperties ) const
 {
     if( m_aCellBorderPositions.size() > nCell )
     {

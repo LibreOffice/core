@@ -42,7 +42,7 @@ namespace svt
         OUString convertToString( const css::uno::Any& i_cellValue );
 
     private:
-        ::std::unique_ptr< CellValueConversion_Data > m_pData;
+        std::unique_ptr< CellValueConversion_Data > m_pData;
     };
 
 

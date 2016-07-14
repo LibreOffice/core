@@ -919,7 +919,7 @@ XPolygon XPolyPolygon::Remove( sal_uInt16 nPos )
 {
     CheckReference();
     XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
-    ::std::advance( it, nPos );
+    std::advance( it, nPos );
     XPolygon* pTmpXPoly = *it;
     pImpXPolyPolygon->aXPolyList.erase( it );
     XPolygon  aXPoly( *pTmpXPoly );

@@ -179,8 +179,8 @@ void OXMLTable::EndElement()
                 }
             }
             // set height
-            ::std::vector<sal_Int32>::const_iterator aIter = m_aHeight.begin();
-            ::std::vector<sal_Int32>::const_iterator aEnd = m_aHeight.end();
+            std::vector<sal_Int32>::const_iterator aIter = m_aHeight.begin();
+            std::vector<sal_Int32>::const_iterator aEnd = m_aHeight.end();
             sal_Int32 nHeight = 0;
             for (; aIter != aEnd; ++aIter)
                 nHeight += *aIter;
@@ -188,20 +188,20 @@ void OXMLTable::EndElement()
             // set positions, widths, and heights
             sal_Int32 nLeftMargin = rptui::getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
             sal_Int32 nPosY = 0;
-            ::std::vector< ::std::vector<TCell> >::iterator aRowIter = m_aGrid.begin();
-            ::std::vector< ::std::vector<TCell> >::const_iterator aRowEnd = m_aGrid.end();
+            std::vector< std::vector<TCell> >::iterator aRowIter = m_aGrid.begin();
+            std::vector< std::vector<TCell> >::const_iterator aRowEnd = m_aGrid.end();
             for (sal_Int32 i = 0; aRowIter != aRowEnd; ++aRowIter,++i)
             {
                 sal_Int32 nPosX = nLeftMargin;
-                ::std::vector<TCell>::iterator aColIter = (*aRowIter).begin();
-                ::std::vector<TCell>::const_iterator aColEnd = (*aRowIter).end();
+                std::vector<TCell>::iterator aColIter = (*aRowIter).begin();
+                std::vector<TCell>::const_iterator aColEnd = (*aRowIter).end();
                 for (sal_Int32 j = 0; aColIter != aColEnd; ++aColIter,++j)
                 {
                     TCell& rCell = *aColIter;
                     if ( !rCell.xElements.empty())
                     {
-                        ::std::vector< uno::Reference< report::XReportComponent> >::const_iterator aCellIter = rCell.xElements.begin();
-                        const ::std::vector< uno::Reference< report::XReportComponent> >::const_iterator aCellEnd = rCell.xElements.end();
+                        std::vector< uno::Reference< report::XReportComponent> >::const_iterator aCellIter = rCell.xElements.begin();
+                        const std::vector< uno::Reference< report::XReportComponent> >::const_iterator aCellEnd = rCell.xElements.end();
                         for (;aCellIter != aCellEnd ; ++aCellIter)
                         {
                             uno::Reference<report::XShape> xShape(*aCellIter,uno::UNO_QUERY);
@@ -215,7 +215,7 @@ void OXMLTable::EndElement()
                                 sal_Int32 nColSpan = rCell.nColSpan;
                                 if ( nColSpan > 1 )
                                 {
-                                    ::std::vector<TCell>::const_iterator aWidthIter = aColIter + 1;
+                                    std::vector<TCell>::const_iterator aWidthIter = aColIter + 1;
                                     while ( nColSpan > 1 )
                                     {
                                         nWidth += (aWidthIter++)->nWidth;
@@ -226,7 +226,7 @@ void OXMLTable::EndElement()
                                 sal_Int32 nRowSpan = rCell.nRowSpan;
                                 if ( nRowSpan > 1 )
                                 {
-                                    ::std::vector< ::std::vector<TCell> >::const_iterator aHeightIter = aRowIter + 1;
+                                    std::vector< std::vector<TCell> >::const_iterator aHeightIter = aRowIter + 1;
                                     while( nRowSpan > 1)
                                     {
                                         nHeight += (*aHeightIter)[j].nHeight;
@@ -298,7 +298,7 @@ void OXMLTable::incrementRowIndex()
 {
     ++m_nRowIndex;
     m_nColumnIndex = 0;
-    m_aGrid.push_back(::std::vector<TCell>(m_aWidth.size()));
+    m_aGrid.push_back(std::vector<TCell>(m_aWidth.size()));
 }
 
 } // namespace rptxml

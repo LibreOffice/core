@@ -44,7 +44,7 @@ namespace slideshow
             // check parameters: rDiscreteTimes must be sorted in
             // ascending order, and contain values only from the range
             // [0,1]
-            for( ::std::size_t i=1, len=maDiscreteTimes.size(); i<len; ++i )
+            for( std::size_t i=1, len=maDiscreteTimes.size(); i<len; ++i )
             {
                 if( maDiscreteTimes[i] < 0.0 ||
                     maDiscreteTimes[i] > 1.0 ||
@@ -69,7 +69,7 @@ namespace slideshow
         }
 
         sal_uInt32 DiscreteActivityBase::calcFrameIndex( sal_uInt32     nCurrCalls,
-                                                         ::std::size_t  nVectorSize ) const
+                                                         std::size_t    nVectorSize ) const
         {
             if( isAutoReverse() )
             {
@@ -91,7 +91,7 @@ namespace slideshow
         }
 
         sal_uInt32 DiscreteActivityBase::calcRepeatCount( sal_uInt32    nCurrCalls,
-                                                          ::std::size_t nVectorSize ) const
+                                                          std::size_t nVectorSize ) const
         {
             if( isAutoReverse() )
                 return nCurrCalls / (2*nVectorSize); // we've got 2 cycles per repeat
@@ -105,7 +105,7 @@ namespace slideshow
             if( !ActivityBase::perform() )
                 return false; // done, we're ended
 
-            const ::std::size_t nVectorSize( maDiscreteTimes.size() );
+            const std::size_t nVectorSize( maDiscreteTimes.size() );
 
             // actually perform something
             // ==========================

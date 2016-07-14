@@ -189,7 +189,7 @@ FormViewPageWindowAdapter::~FormViewPageWindowAdapter()
 
 void FormViewPageWindowAdapter::dispose()
 {
-    for (   ::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
+    for (   std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
             i != m_aControllerList.end();
             ++i
         )
@@ -286,7 +286,7 @@ Reference< XFormController >  getControllerSearchChildren( const Reference< XInd
 Reference< XFormController >  FormViewPageWindowAdapter::getController( const Reference< XForm > & xForm ) const
 {
     Reference< XTabControllerModel >  xModel(xForm, UNO_QUERY);
-    for (::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
+    for (std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
          i != m_aControllerList.end(); ++i)
     {
         if ((*i)->getModel().get() == xModel.get())
@@ -738,7 +738,7 @@ IMPL_LINK_NOARG_TYPED(FmXFormView, OnActivate, void*, void)
         if ( pAdapter.is() )
         {
             Reference< XFormController > xControllerToActivate;
-            for (   ::std::vector< Reference< XFormController > >::const_iterator i = pAdapter->GetList().begin();
+            for (   std::vector< Reference< XFormController > >::const_iterator i = pAdapter->GetList().begin();
                     i != pAdapter->GetList().end();
                     ++i
                 )
@@ -1576,7 +1576,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
 
     // the label
-    ::std::unique_ptr< SdrUnoObj > pLabel;
+    std::unique_ptr< SdrUnoObj > pLabel;
     Reference< XPropertySet > xLabelModel;
     if ( bNeedLabel )
     {
@@ -1607,7 +1607,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     }
 
     // the control
-    ::std::unique_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
+    std::unique_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
         SdrObjFactory::MakeNewObject( _nInventor, _nControlObjectID, _pControlPage, _pModel ) ) );
     OSL_ENSURE( pControl.get(), "FmXFormView::createControlLabelPair: could not create the control!" );
     if ( !pControl.get() )

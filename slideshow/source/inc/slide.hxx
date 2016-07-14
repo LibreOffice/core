@@ -53,7 +53,7 @@ namespace slideshow
     {
         class RGBColor;
         class ScreenUpdater;
-        typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
+        typedef std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
         class Slide
         {
         public:
@@ -149,7 +149,7 @@ namespace slideshow
             ~Slide() {}
         };
 
-        typedef ::std::shared_ptr< Slide > SlideSharedPtr;
+        typedef std::shared_ptr< Slide > SlideSharedPtr;
 
         class EventQueue;
         class CursorManager;

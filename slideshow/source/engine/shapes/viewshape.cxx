@@ -134,8 +134,8 @@ namespace slideshow
                         aParms.maFontWeight =
                             static_cast< sal_Int8 >(
                                 ::basegfx::fround(
-                                    ::std::max( 0.0,
-                                                ::std::min( 11.0,
+                                    std::max( 0.0,
+                                                std::min( 11.0,
                                                             rAttr->getCharWeight() / 20.0 ) ) ) );
                     }
                     if( rAttr->isCharPostureValid() )
@@ -735,7 +735,7 @@ namespace slideshow
             const RendererCacheVector::iterator aEnd( maRenderers.end() );
 
             // already there?
-            if( (aIter=::std::find_if( maRenderers.begin(),
+            if( (aIter=std::find_if( maRenderers.begin(),
                                        aEnd,
                                        [&rDestinationCanvas]( const RendererCacheEntry& rCacheEntry )
                                        { return rDestinationCanvas == rCacheEntry.getDestinationCanvas(); } ) ) == aEnd )

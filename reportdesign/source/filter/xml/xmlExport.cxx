@@ -169,7 +169,7 @@ namespace rptxml
                 const XMLPropertyState& /*rProperty*/,
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
-                const ::std::vector< XMLPropertyState >* /*pProperties*/ = nullptr,
+                const std::vector< XMLPropertyState >* /*pProperties*/ = nullptr,
                 sal_uInt32 /*nIdx*/ = 0 ) const override
         {
             // nothing to do here
@@ -188,8 +188,8 @@ void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
         {
             if ( aRowIter->first )
             {
-                ::std::vector< ORptExport::TCell >::const_iterator aColIter = aRowIter->second.begin();
-                ::std::vector< ORptExport::TCell >::const_iterator aColEnd = aRowIter->second.end();
+                std::vector< ORptExport::TCell >::const_iterator aColIter = aRowIter->second.begin();
+                std::vector< ORptExport::TCell >::const_iterator aColEnd = aRowIter->second.end();
                 for (; aColIter != aColEnd; ++aColIter)
                 {
                     if ( aColIter->nRowSpan > 1 )
@@ -480,7 +480,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
         exportComponent(_xReportElement.get());
 }
 
-void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sal_Int32>& _aPosY,ORptExport::TGrid& _rColumns)
+void lcl_calculate(const std::vector<sal_Int32>& _aPosX,const std::vector<sal_Int32>& _aPosY,ORptExport::TGrid& _rColumns)
 {
     sal_Int32 nCountX = _aPosX.size() - 1;
     sal_Int32 nCountY = _aPosY.size() - 1;
@@ -496,13 +496,13 @@ void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sa
     }
 }
 
-void ORptExport::collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames)
+void ORptExport::collectStyleNames(sal_Int32 _nFamily,const std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames)
 {
-    ::std::vector< XMLPropertyState > aPropertyStates;
+    std::vector< XMLPropertyState > aPropertyStates;
     aPropertyStates.push_back(XMLPropertyState(0));
-    ::std::vector<sal_Int32>::const_iterator aIter = _aSize.begin();
-    ::std::vector<sal_Int32>::const_iterator aIter2 = aIter + 1;
-    ::std::vector<sal_Int32>::const_iterator aEnd = _aSize.end();
+    std::vector<sal_Int32>::const_iterator aIter = _aSize.begin();
+    std::vector<sal_Int32>::const_iterator aIter2 = aIter + 1;
+    std::vector<sal_Int32>::const_iterator aEnd = _aSize.end();
     for (;aIter2 != aEnd ; ++aIter,++aIter2)
     {
         sal_Int32 nValue = static_cast<sal_Int32>(*aIter2 - *aIter);
@@ -521,12 +521,12 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
     const sal_Int32 nOffset = rptui::getStyleProperty<sal_Int32>(xReport,PROPERTY_LEFTMARGIN);
     const sal_Int32 nCount  = _xProp->getCount();
 
-    ::std::vector<sal_Int32> aColumnPos;
+    std::vector<sal_Int32> aColumnPos;
     aColumnPos.reserve(2*(nCount + 1));
     aColumnPos.push_back(nOffset);
     aColumnPos.push_back(aSize.Width - rptui::getStyleProperty<sal_Int32>(xReport,PROPERTY_RIGHTMARGIN));
 
-    ::std::vector<sal_Int32> aRowPos;
+    std::vector<sal_Int32> aRowPos;
     aRowPos.reserve(2*(nCount + 1));
     aRowPos.push_back(0);
     aRowPos.push_back(_xProp->getHeight());
@@ -561,11 +561,11 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
         aRowPos.push_back(nY); // --nY why?
     }
 
-    ::std::sort(aColumnPos.begin(),aColumnPos.end(),::std::less<sal_Int32>());
-    aColumnPos.erase(::std::unique(aColumnPos.begin(),aColumnPos.end()),aColumnPos.end());
+    std::sort(aColumnPos.begin(),aColumnPos.end(),std::less<sal_Int32>());
+    aColumnPos.erase(std::unique(aColumnPos.begin(),aColumnPos.end()),aColumnPos.end());
 
-    ::std::sort(aRowPos.begin(),aRowPos.end(),::std::less<sal_Int32>());
-    aRowPos.erase(::std::unique(aRowPos.begin(),aRowPos.end()),aRowPos.end());
+    std::sort(aRowPos.begin(),aRowPos.end(),std::less<sal_Int32>());
+    aRowPos.erase(std::unique(aRowPos.begin(),aRowPos.end()),aRowPos.end());
 
     TSectionsGrid::iterator aInsert = m_aSectionsGrid.insert(
         TSectionsGrid::value_type(
@@ -595,18 +595,18 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
         if ( xShape.is() )
             continue;
         sal_Int32 nPos = xReportElement->getPositionX();
-        x1 = (::std::find(aColumnPos.begin(),aColumnPos.end(),nPos) - aColumnPos.begin());
+        x1 = (std::find(aColumnPos.begin(),aColumnPos.end(),nPos) - aColumnPos.begin());
         Reference<XFixedLine> xFixedLine(xReportElement,uno::UNO_QUERY);
         if ( xFixedLine.is() && xFixedLine->getOrientation() == 1 ) // vertical
             nPos += static_cast<sal_Int32>(xReportElement->getWidth()*0.5);
         else
             nPos += xReportElement->getWidth(); // -1 why
-        x2 = (::std::find(aColumnPos.begin(),aColumnPos.end(),nPos) - aColumnPos.begin());
+        x2 = (std::find(aColumnPos.begin(),aColumnPos.end(),nPos) - aColumnPos.begin());
 
         nPos = xReportElement->getPositionY();
-        y1 = (::std::find(aRowPos.begin(),aRowPos.end(),nPos) - aRowPos.begin());
+        y1 = (std::find(aRowPos.begin(),aRowPos.end(),nPos) - aRowPos.begin());
         nPos += xReportElement->getHeight(); // -1 why?
-        y2 = (::std::find(aRowPos.begin(),aRowPos.end(),nPos) - aRowPos.begin());
+        y2 = (std::find(aRowPos.begin(),aRowPos.end(),nPos) - aRowPos.begin());
 
         isOverlap = false;
         yi = y1;
@@ -769,22 +769,22 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
     OSL_ENSURE(aRowFind->second.size() == aFind->second.size(),"Different count for rows");
 
     bool bShapeHandled = false;
-    ::std::map<sal_Int32,sal_Int32> aRowSpan;
+    std::map<sal_Int32,sal_Int32> aRowSpan;
     for (sal_Int32 j = 0; aRowIter != aRowEnd; ++aRowIter,++j,++aHeightIter)
     {
         AddAttribute( m_sTableStyle,*aHeightIter );
         SvXMLElementExport aRow(*this,XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true);
         if ( aRowIter->first )
         {
-            ::std::vector< TCell >::const_iterator aColIter = aRowIter->second.begin();
-            ::std::vector< TCell >::const_iterator aColEnd = aRowIter->second.end();
+            std::vector< TCell >::const_iterator aColIter = aRowIter->second.begin();
+            std::vector< TCell >::const_iterator aColEnd = aRowIter->second.end();
             sal_Int32 nEmptyCellColSpan = 0;
             for (; aColIter != aColEnd; ++aColIter)
             {
                 bool bCoveredCell = false;
                 sal_Int32 nColSpan = 0;
                 sal_Int32 nColIndex = aColIter - aRowIter->second.begin();
-                ::std::map<sal_Int32,sal_Int32>::iterator aRowSpanFind = aRowSpan.find(nColIndex);
+                std::map<sal_Int32,sal_Int32>::iterator aRowSpanFind = aRowSpan.find(nColIndex);
                 if ( aRowSpanFind != aRowSpan.end() )
                 {
                     nColSpan = 1;
@@ -1134,11 +1134,11 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     const uno::Reference< report::XShape> xShape(_xProp,uno::UNO_QUERY);
     if ( xShape.is() )
     {
-        ::std::vector< XMLPropertyState > aPropertyStates( m_xParaPropMapper->Filter(_xProp) );
+        std::vector< XMLPropertyState > aPropertyStates( m_xParaPropMapper->Filter(_xProp) );
         if ( !aPropertyStates.empty() )
             m_aAutoStyleNames.insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aPropertyStates )));
     }
-    ::std::vector< XMLPropertyState > aPropertyStates( m_xCellStylesExportPropertySetMapper->Filter(_xProp) );
+    std::vector< XMLPropertyState > aPropertyStates( m_xCellStylesExportPropertySetMapper->Filter(_xProp) );
     Reference<XFixedLine> xFixedLine(_xProp,uno::UNO_QUERY);
     if ( xFixedLine.is() )
     {
@@ -1155,7 +1155,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
         sal_Int32 nSectionHeight = xFixedLine->getSection()->getHeight();
 
         OUString sBorderProp;
-        ::std::vector< OUString> aProps;
+        std::vector< OUString> aProps;
         if ( xFixedLine->getOrientation() == 1 ) // vertical
         {
             // check if border should be left
@@ -1200,8 +1200,8 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             xBorderProp->setPropertyValue(it, aEmpty);
         }
 
-        ::std::vector< XMLPropertyState > aBorderStates(m_xCellStylesExportPropertySetMapper->Filter(xBorderProp));
-        ::std::copy(aBorderStates.begin(),aBorderStates.end(),::std::back_inserter(aPropertyStates));
+        std::vector< XMLPropertyState > aBorderStates(m_xCellStylesExportPropertySetMapper->Filter(xBorderProp));
+        std::copy(aBorderStates.begin(),aBorderStates.end(),std::back_inserter(aPropertyStates));
     }
     else
     {
@@ -1217,7 +1217,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
                 sal_Int32 nStyleMapIndex = m_xCellStylesExportPropertySetMapper->getPropertySetMapper()->FindEntryIndex( CTF_RPT_NUMBERFORMAT );
                 addDataStyle(nNumberFormat);
                 XMLPropertyState aNumberStyleState( nStyleMapIndex, uno::makeAny( getDataStyleName(nNumberFormat) ) );
-                auto const iter(::std::find_if(
+                auto const iter(std::find_if(
                     aPropertyStates.begin(), aPropertyStates.end(),
                     [nStyleMapIndex] (XMLPropertyState const& rItem)
                         { return rItem.mnIndex == nStyleMapIndex; } ));
@@ -1241,7 +1241,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
 
 void ORptExport::exportAutoStyle(const Reference<XSection>& _xProp)
 {
-    ::std::vector< XMLPropertyState > aPropertyStates( m_xTableStylesExportPropertySetMapper->Filter(_xProp.get()) );
+    std::vector< XMLPropertyState > aPropertyStates( m_xTableStylesExportPropertySetMapper->Filter(_xProp.get()) );
     if ( !aPropertyStates.empty() )
         m_aAutoStyleNames.insert( TPropertyStyleMap::value_type(_xProp.get(),GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_TABLE, aPropertyStates )));
 }
@@ -1468,7 +1468,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
     rtl::Reference< XMLShapeExport > xShapeExport = GetShapeExport();
     xShapeExport->seekShapes(_xSection.get());
     const sal_Int32 nCount = _xSection->getCount();
-    ::std::unique_ptr<SvXMLElementExport> pParagraphContent;
+    std::unique_ptr<SvXMLElementExport> pParagraphContent;
     if ( _bAddParagraph )
         pParagraphContent.reset(new SvXMLElementExport(*this,XML_NAMESPACE_TEXT, XML_P, true, false));
 
@@ -1479,7 +1479,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
         uno::Reference< XShape > xShape(_xSection->getByIndex(i),uno::UNO_QUERY);
         if ( xShape.is() )
         {
-            ::std::unique_ptr<SvXMLElementExport> pSubDocument;
+            std::unique_ptr<SvXMLElementExport> pSubDocument;
             uno::Reference< frame::XModel> xModel(xShape->getPropertyValue("Model"),uno::UNO_QUERY);
             if ( xModel.is() ) // special handling for chart object
             {

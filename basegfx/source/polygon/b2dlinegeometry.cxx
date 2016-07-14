@@ -245,7 +245,7 @@ namespace basegfx
                     {
                         // before splitting recursively with internal simple criteria, use
                         // ExtremumPosFinder to remove those
-                        ::std::vector< double > aExtremumPositions;
+                        std::vector< double > aExtremumPositions;
 
                         aExtremumPositions.reserve(4);
                         aEdge.getAllExtremumPositions(aExtremumPositions);
@@ -257,7 +257,7 @@ namespace basegfx
                             if(nCount > 1)
                             {
                                 // create order from left to right
-                                ::std::sort(aExtremumPositions.begin(), aExtremumPositions.end());
+                                std::sort(aExtremumPositions.begin(), aExtremumPositions.end());
                             }
 
                             for(sal_uInt32 b(0); b < nCount;)

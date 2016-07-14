@@ -226,7 +226,7 @@ namespace svxform
             )
         {
             // erst mal sammeln wir den Pfad in einem Array ein
-            ::std::vector< sal_uInt32 > aCurrentPath;
+            std::vector< sal_uInt32 > aCurrentPath;
             SvTreeListEntry* pCurrentEntry = *loop;
 
             SvTreeListEntry* pLoop = pCurrentEntry;

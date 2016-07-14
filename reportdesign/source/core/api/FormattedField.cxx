@@ -220,8 +220,8 @@ uno::Reference< util::XCloneable > SAL_CALL OFormattedField::createClone(  ) thr
 
     if ( xSet.is() )
     {
-        ::std::vector< uno::Reference< report::XFormatCondition> >::const_iterator aIter = m_aProps.m_aFormatConditions.begin();
-        ::std::vector< uno::Reference< report::XFormatCondition> >::const_iterator aEnd  = m_aProps.m_aFormatConditions.end();
+        std::vector< uno::Reference< report::XFormatCondition> >::const_iterator aIter = m_aProps.m_aFormatConditions.begin();
+        std::vector< uno::Reference< report::XFormatCondition> >::const_iterator aEnd    = m_aProps.m_aFormatConditions.end();
         for (sal_Int32 i = 0; aIter != aEnd; ++aIter,++i)
         {
             uno::Reference< report::XFormatCondition > xCond = xSet->createFormatCondition();

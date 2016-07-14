@@ -67,7 +67,7 @@ public:
 
 class CoordinateDataArray3D
 {
-    typedef ::std::vector< CoordinateData3D > CoordinateData3DVector;
+    typedef std::vector< CoordinateData3D > CoordinateData3DVector;
 
     CoordinateData3DVector                          maVector;
 
@@ -226,7 +226,7 @@ public:
 
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
-                ::std::swap(*aStart, *aEnd);
+                std::swap(*aStart, *aEnd);
                 ++aStart;
                 --aEnd;
             }
@@ -247,7 +247,7 @@ public:
 
 class BColorArray
 {
-    typedef ::std::vector< ::basegfx::BColor > BColorDataVector;
+    typedef std::vector< ::basegfx::BColor > BColorDataVector;
 
     BColorDataVector                                    maVector;
     sal_uInt32                                          mnUsedEntries;
@@ -395,7 +395,7 @@ public:
 
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
-                ::std::swap(*aStart, *aEnd);
+                std::swap(*aStart, *aEnd);
                 ++aStart;
                 --aEnd;
             }
@@ -405,7 +405,7 @@ public:
 
 class NormalsArray3D
 {
-    typedef ::std::vector< ::basegfx::B3DVector > NormalsData3DVector;
+    typedef std::vector< ::basegfx::B3DVector > NormalsData3DVector;
 
     NormalsData3DVector                                 maVector;
     sal_uInt32                                          mnUsedEntries;
@@ -552,7 +552,7 @@ public:
 
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
-                ::std::swap(*aStart, *aEnd);
+                std::swap(*aStart, *aEnd);
                 ++aStart;
                 --aEnd;
             }
@@ -572,7 +572,7 @@ public:
 
 class TextureCoordinate2D
 {
-    typedef ::std::vector< ::basegfx::B2DPoint > TextureData2DVector;
+    typedef std::vector< ::basegfx::B2DPoint > TextureData2DVector;
 
     TextureData2DVector                                 maVector;
     sal_uInt32                                          mnUsedEntries;
@@ -719,7 +719,7 @@ public:
 
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
-                ::std::swap(*aStart, *aEnd);
+                std::swap(*aStart, *aEnd);
                 ++aStart;
                 --aEnd;
             }

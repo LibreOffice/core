@@ -180,7 +180,7 @@ namespace sdr
             {
                 // copy events which need to be executed to a vector. Remove them from
                 // the scheduler
-                ::std::vector< Event* > EventPointerVector;
+                std::vector< Event* > EventPointerVector;
 
                 while(pNextEvent && pNextEvent->GetTime() <= mnTime)
                 {
@@ -190,8 +190,8 @@ namespace sdr
                 }
 
                 // execute events from the vector
-                ::std::vector< Event* >::const_iterator aEnd = EventPointerVector.end();
-                for(::std::vector< Event* >::iterator aCandidate = EventPointerVector.begin();
+                std::vector< Event* >::const_iterator aEnd = EventPointerVector.end();
+                for(std::vector< Event* >::iterator aCandidate = EventPointerVector.begin();
                     aCandidate != aEnd; ++aCandidate)
                 {
                     // trigger event. This may re-insert the event to the scheduler again

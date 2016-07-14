@@ -793,7 +793,7 @@ namespace slideshow
         State::StateId ShapeAttributeLayer::getTransformationState() const
         {
             return haveChild() ?
-                ::std::max( mnTransformationState,
+                std::max( mnTransformationState,
                             mpChild->getTransformationState() ) :
                 mnTransformationState;
         }
@@ -801,7 +801,7 @@ namespace slideshow
         State::StateId ShapeAttributeLayer::getClipState() const
         {
             return haveChild() ?
-                ::std::max( mnClipState,
+                std::max( mnClipState,
                             mpChild->getClipState() ) :
                 mnClipState;
         }
@@ -809,7 +809,7 @@ namespace slideshow
         State::StateId ShapeAttributeLayer::getAlphaState() const
         {
             return haveChild() ?
-                ::std::max( mnAlphaState,
+                std::max( mnAlphaState,
                             mpChild->getAlphaState() ) :
                 mnAlphaState;
         }
@@ -817,7 +817,7 @@ namespace slideshow
         State::StateId ShapeAttributeLayer::getPositionState() const
          {
             return haveChild() ?
-                ::std::max( mnPositionState,
+                std::max( mnPositionState,
                             mpChild->getPositionState() ) :
                 mnPositionState;
         }
@@ -825,7 +825,7 @@ namespace slideshow
         State::StateId ShapeAttributeLayer::getContentState() const
         {
             return haveChild() ?
-                ::std::max( mnContentState,
+                std::max( mnContentState,
                             mpChild->getContentState() ) :
                 mnContentState;
         }
@@ -833,7 +833,7 @@ namespace slideshow
         State::StateId ShapeAttributeLayer::getVisibilityState() const
         {
             return haveChild() ?
-                ::std::max( mnVisibilityState,
+                std::max( mnVisibilityState,
                             mpChild->getVisibilityState() ) :
                 mnVisibilityState;
         }

@@ -49,7 +49,7 @@ namespace rptui
 
 namespace
 {
-    void lcl_collectElements(const uno::Reference< report::XSection >& _xSection,::std::vector< uno::Reference< drawing::XShape> >& _rControls)
+    void lcl_collectElements(const uno::Reference< report::XSection >& _xSection,std::vector< uno::Reference< drawing::XShape> >& _rControls)
     {
         if ( _xSection.is() )
         {
@@ -65,12 +65,12 @@ namespace
         }
     }
 
-    void lcl_insertElements(const uno::Reference< report::XSection >& _xSection,const ::std::vector< uno::Reference< drawing::XShape> >& _aControls)
+    void lcl_insertElements(const uno::Reference< report::XSection >& _xSection,const std::vector< uno::Reference< drawing::XShape> >& _aControls)
     {
         if ( _xSection.is() )
         {
-            ::std::vector< uno::Reference< drawing::XShape> >::const_reverse_iterator aIter = _aControls.rbegin();
-            ::std::vector< uno::Reference< drawing::XShape> >::const_reverse_iterator aEnd = _aControls.rend();
+            std::vector< uno::Reference< drawing::XShape> >::const_reverse_iterator aIter = _aControls.rbegin();
+            std::vector< uno::Reference< drawing::XShape> >::const_reverse_iterator aEnd = _aControls.rend();
             for (; aIter != aEnd; ++aIter)
             {
                 try
@@ -89,12 +89,12 @@ namespace
         }
     }
 
-    void lcl_setValues(const uno::Reference< report::XSection >& _xSection,const ::std::vector< ::std::pair< OUString ,uno::Any> >& _aValues)
+    void lcl_setValues(const uno::Reference< report::XSection >& _xSection,const std::vector< std::pair< OUString ,uno::Any> >& _aValues)
     {
         if ( _xSection.is() )
         {
-            ::std::vector< ::std::pair< OUString ,uno::Any> >::const_iterator aIter = _aValues.begin();
-            ::std::vector< ::std::pair< OUString ,uno::Any> >::const_iterator aEnd = _aValues.end();
+            std::vector< std::pair< OUString ,uno::Any> >::const_iterator aIter = _aValues.begin();
+            std::vector< std::pair< OUString ,uno::Any> >::const_iterator aEnd = _aValues.end();
             for (; aIter != aEnd; ++aIter)
             {
                 try
@@ -127,8 +127,8 @@ OSectionUndo::~OSectionUndo()
     if ( !m_bInserted )
     {
         OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-        ::std::vector< uno::Reference< drawing::XShape> >::const_iterator aEnd = m_aControls.end();
-        for (::std::vector< uno::Reference< drawing::XShape> >::const_iterator aIter = m_aControls.begin(); aIter != aEnd; ++aIter)
+        std::vector< uno::Reference< drawing::XShape> >::const_iterator aEnd = m_aControls.end();
+        for (std::vector< uno::Reference< drawing::XShape> >::const_iterator aIter = m_aControls.begin(); aIter != aEnd; ++aIter)
         {
             uno::Reference< drawing::XShape> xShape = *aIter;
             rEnv.RemoveElement(xShape);
@@ -164,7 +164,7 @@ void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xS
         for(;pIter != pEnd;++pIter)
         {
             if ( 0 == (pIter->Attributes & beans::PropertyAttribute::READONLY) )
-                m_aValues.push_back(::std::pair< OUString ,uno::Any>(pIter->Name,_xSection->getPropertyValue(pIter->Name)));
+                m_aValues.push_back(std::pair< OUString ,uno::Any>(pIter->Name,_xSection->getPropertyValue(pIter->Name)));
         }
         lcl_collectElements(_xSection,m_aControls);
     }
@@ -217,7 +217,7 @@ void OSectionUndo::Redo()
 
 
 OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
-                                       ,::std::mem_fun_t< uno::Reference< report::XSection >
+                                       ,std::mem_fun_t< uno::Reference< report::XSection >
                                             ,OReportHelper> _pMemberFunction
                                        ,const uno::Reference< report::XReportDefinition >& _xReport
                                        ,Action _eAction)
@@ -254,7 +254,7 @@ void OReportSectionUndo::implReRemove( )
 
 
 OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
-                                       ,::std::mem_fun_t< uno::Reference< report::XSection >
+                                       ,std::mem_fun_t< uno::Reference< report::XSection >
                                             ,OGroupHelper> _pMemberFunction
                                        ,const uno::Reference< report::XGroup >& _xGroup
                                        ,Action _eAction

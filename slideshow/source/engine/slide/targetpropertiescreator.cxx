@@ -39,7 +39,7 @@ namespace internal
     namespace
     {
         // Vector containing all properties for a given shape
-        typedef ::std::vector< beans::NamedValue > VectorOfNamedValues;
+        typedef std::vector< beans::NamedValue > VectorOfNamedValues;
 
         /** The hash map key
 
@@ -69,7 +69,7 @@ namespace internal
         // A hash functor for ShapeHashKey objects
         struct ShapeKeyHasher
         {
-            ::std::size_t operator()( const ShapeHashKey& rKey ) const
+            std::size_t operator()( const ShapeHashKey& rKey ) const
             {
                 // TODO(P2): Maybe a better hash function would be to
                 // spread mnParagraphIndex to 32 bit: a0b0c0d0e0... Hakmem
@@ -84,7 +84,7 @@ namespace internal
                 // Costs about 17 cycles on a RISC machine with infinite
                 // instruction level parallelism (~42 basic
                 // instructions). Thus I truly doubt this pays off...
-                return reinterpret_cast< ::std::size_t >(rKey.mxRef.get()) ^ (rKey.mnParagraphIndex << 16L);
+                return reinterpret_cast< std::size_t >(rKey.mxRef.get()) ^ (rKey.mnParagraphIndex << 16L);
             }
         };
 
@@ -353,7 +353,7 @@ namespace internal
         // output to result sequence
         uno::Sequence< animations::TargetProperties > aRes( aShapeHash.size() );
 
-        ::std::size_t                       nCurrIndex(0);
+        std::size_t                         nCurrIndex(0);
         for( const auto& rIter : aShapeHash )
         {
             animations::TargetProperties& rCurrProps( aRes[ nCurrIndex++ ] );

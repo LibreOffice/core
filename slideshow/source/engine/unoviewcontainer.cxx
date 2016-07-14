@@ -43,7 +43,7 @@ namespace slideshow
 
             uno::Reference< presentation::XSlideShowView > rTmpView = rView->getUnoView();
             // already added?
-            if( ::std::any_of( maViews.begin(),
+            if( std::any_of( maViews.begin(),
                                maViews.end(),
                                [&rTmpView]( const UnoViewSharedPtr& pView )
                                { return rTmpView == pView->getUnoView(); } ) )
@@ -65,7 +65,7 @@ namespace slideshow
             UnoViewVector::iterator aIter;
 
             // added in the first place?
-            if( (aIter=::std::find_if( maViews.begin(),
+            if( (aIter=std::find_if( maViews.begin(),
                                        aEnd,
                                        [&xView]( const UnoViewSharedPtr& pView )
                                        { return xView == pView->getUnoView(); } )) == aEnd )
@@ -75,7 +75,7 @@ namespace slideshow
             }
 
             OSL_ENSURE(
-                ::std::count_if(
+                std::count_if(
                     maViews.begin(),
                     aEnd,
                     [&xView]( const UnoViewSharedPtr& pView )

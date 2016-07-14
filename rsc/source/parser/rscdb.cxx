@@ -70,7 +70,7 @@ OString RscTypCont::ChangeLanguage(const OString& rNewLang)
     OString aRet = aLanguage;
     aLanguage = rNewLang;
 
-    ::std::vector< OUString > aFallbacks;
+    std::vector< OUString > aFallbacks;
 
     if (rNewLang.isEmpty())
         aFallbacks.push_back( "" );     // do not resolve to SYSTEM (en-US)
@@ -88,7 +88,7 @@ OString RscTypCont::ChangeLanguage(const OString& rNewLang)
 
     aLangFallbacks.clear();
 
-    for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+    for (std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
     {
         OString aLang( OUStringToOString( *it, RTL_TEXTENCODING_ASCII_US));
         sal_uInt32 nID = GetLangId( aLang );

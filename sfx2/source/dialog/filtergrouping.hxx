@@ -33,7 +33,7 @@ namespace sfx2
     class TSortedFilterList
     {
     private:
-        ::std::vector< OUString > m_lFilters;
+        std::vector< OUString > m_lFilters;
         sal_Int32 m_nIterator;
 
     public:

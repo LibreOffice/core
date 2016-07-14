@@ -63,7 +63,7 @@
 #include "propspec.hxx"
 #ifdef __MINGW32__
 #include <algorithm>
-using ::std::min;
+using std::min;
 #endif
 
 #include "stream_helper.hxx"
@@ -443,7 +443,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
 //  Returns:    corresponding metainfo names.
 
 
-::std::wstring GetMetaInfoNameFromPropertyId( ULONG ulPropID )
+std::wstring GetMetaInfoNameFromPropertyId( ULONG ulPropID )
 {
     switch ( ulPropID )
     {
@@ -477,10 +477,10 @@ SCODE STDMETHODCALLTYPE COooFilter::GetValue(PROPVARIANT ** ppPropValue)
         PROPVARIANT *pPropVar = (PROPVARIANT *) CoTaskMemAlloc( sizeof (PROPVARIANT) );
         if ( pPropVar == 0 )
             return E_OUTOFMEMORY;
-        ::std::wstring wsTagName= GetMetaInfoNameFromPropertyId( m_pAttributes[m_ulCurrentPropertyNum].GetPropertyPropid() );
+        std::wstring wsTagName= GetMetaInfoNameFromPropertyId( m_pAttributes[m_ulCurrentPropertyNum].GetPropertyPropid() );
         if ( wsTagName == EMPTY_STRING )
             return FILTER_E_NO_VALUES;
-        ::std::wstring wsTagData = m_pMetaInfoReader->getTagData(wsTagName);
+        std::wstring wsTagData = m_pMetaInfoReader->getTagData(wsTagName);
         pPropVar->vt = VT_LPWSTR;
         size_t cw = wsTagData.length() + 1; // reserve one for the '\0'
         pPropVar->pwszVal = static_cast<WCHAR*>( CoTaskMemAlloc(cw*sizeof(WCHAR)) );

@@ -243,7 +243,7 @@ namespace basegfx
             }
 
             // min/max limitations
-            nHorSeg = ::std::min(nMaxSegments, ::std::max(nMinSegments, nHorSeg));
+            nHorSeg = std::min(nMaxSegments, std::max(nMinSegments, nHorSeg));
 
             if(!nVerSeg)
             {
@@ -251,7 +251,7 @@ namespace basegfx
             }
 
             // min/max limitations
-            nVerSeg = ::std::min(nMaxSegments, ::std::max(nMinSegments, nVerSeg));
+            nVerSeg = std::min(nMaxSegments, std::max(nMinSegments, nVerSeg));
 
             // create constants
             const double fVerDiffPerStep((fVerStop - fVerStart) / (double)nVerSeg);
@@ -342,7 +342,7 @@ namespace basegfx
             }
 
             // min/max limitations
-            nHorSeg = ::std::min(nMaxSegments, ::std::max(nMinSegments, nHorSeg));
+            nHorSeg = std::min(nMaxSegments, std::max(nMinSegments, nHorSeg));
 
             if(!nVerSeg)
             {
@@ -350,7 +350,7 @@ namespace basegfx
             }
 
             // min/max limitations
-            nVerSeg = ::std::min(nMaxSegments, ::std::max(nMinSegments, nVerSeg));
+            nVerSeg = std::min(nMaxSegments, std::max(nMinSegments, nVerSeg));
 
             // vertical loop
             for(sal_uInt32 a(0); a < nVerSeg; a++)

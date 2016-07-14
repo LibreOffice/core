@@ -92,7 +92,7 @@ namespace
         }
     };
 
-    typedef ::std::pair< Reference< XInterface >, Reference< XInterface > > FormComponentPair;
+    typedef std::pair< Reference< XInterface >, Reference< XInterface > > FormComponentPair;
 
     class FormHierarchyComparator
     {
@@ -119,7 +119,7 @@ namespace
         }
     };
 
-    typedef ::std::map< Reference< XControlModel >, Reference< XControlModel >, ::comphelper::OInterfaceCompare< XControlModel > > MapControlModels;
+    typedef std::map< Reference< XControlModel >, Reference< XControlModel >, ::comphelper::OInterfaceCompare< XControlModel > > MapControlModels;
 
     class FormComponentAssignment
     {

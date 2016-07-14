@@ -87,7 +87,7 @@ void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElemen
         else
         {
             TGroups::iterator aPos = m_aGroups.begin();
-            ::std::advance(aPos,Index);
+            std::advance(aPos,Index);
             m_aGroups.insert(aPos, xGroup);
         }
     }
@@ -104,7 +104,7 @@ void SAL_CALL OGroups::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutO
         ::osl::MutexGuard aGuard(m_aMutex);
         checkIndex(Index);
         TGroups::iterator aPos = m_aGroups.begin();
-        ::std::advance(aPos,Index);
+        std::advance(aPos,Index);
         xGroup = *aPos;
         m_aGroups.erase(aPos);
     }
@@ -123,7 +123,7 @@ void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Elemen
         if ( !xGroup.is() )
             throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_xContext->getServiceManager()),*this,2);
         TGroups::iterator aPos = m_aGroups.begin();
-        ::std::advance(aPos,Index);
+        std::advance(aPos,Index);
         aOldElement <<= *aPos;
         *aPos = xGroup;
     }
@@ -144,7 +144,7 @@ uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOut
     ::osl::MutexGuard aGuard(m_aMutex);
     checkIndex(Index);
     TGroups::const_iterator aPos = m_aGroups.begin();
-    ::std::advance(aPos,Index);
+    std::advance(aPos,Index);
     return uno::makeAny(*aPos);
 }
 

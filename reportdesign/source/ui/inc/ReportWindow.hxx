@@ -49,7 +49,7 @@ namespace rptui
         VclPtr<OScrollWindowHelper>    m_pParent;
         VclPtr<OViewsWindow>           m_aViewsWindow;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pReportListener;
-        ::std::unique_ptr<DlgEdFactory>
+        std::unique_ptr<DlgEdFactory>
                                 m_pObjFac;
 
         void ImplInitSettings();
@@ -188,7 +188,7 @@ namespace rptui
         *
         * \param _rCollapsedPositions Out parameter which holds afterwards all positions of the collapsed sections.
         */
-        void fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const;
+        void fillCollapsedSections(std::vector<sal_uInt16>& _rCollapsedPositions) const;
 
         /** collpase all sections given by their position
         *
@@ -209,7 +209,7 @@ namespace rptui
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
-        void fillControlModelSelection(::std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
+        void fillControlModelSelection(std::vector< css::uno::Reference< css::uno::XInterface > >& _rSelection) const;
 
         /** calculates the zoom factor.
             @param  _eType  which kind of zoom is needed

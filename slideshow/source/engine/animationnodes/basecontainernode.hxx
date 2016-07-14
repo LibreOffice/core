@@ -32,7 +32,7 @@ class BaseContainerNode : public BaseNode
 public:
     BaseContainerNode(
         css::uno::Reference<css::animations::XAnimationNode> const& xNode,
-        ::std::shared_ptr<BaseContainerNode> const& pParent,
+        std::shared_ptr<BaseContainerNode> const& pParent,
         NodeContext const& rContext );
 
     /** Add given child node to this container
@@ -82,16 +82,16 @@ protected:
         }
     }
 
-    typedef ::std::vector<AnimationNodeSharedPtr> VectorOfNodes;
+    typedef std::vector<AnimationNodeSharedPtr> VectorOfNodes;
     VectorOfNodes       maChildren;
-    ::std::size_t       mnFinishedChildren;
+    std::size_t         mnFinishedChildren;
     double       mnLeftIterations;
 
 private:
     const bool          mbDurationIndefinite;
 };
 
-typedef ::std::shared_ptr< BaseContainerNode > BaseContainerNodeSharedPtr;
+typedef std::shared_ptr< BaseContainerNode > BaseContainerNodeSharedPtr;
 
 } // namespace interface
 } // namespace presentation

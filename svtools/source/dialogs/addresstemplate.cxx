@@ -925,7 +925,7 @@ void AssignmentPersistentData::ImplCommit()
         const OUString* pEnd = pColumnNames + aColumnNames.getLength();
 
         // for quicker access
-        ::std::set< OUString > aColumnNameSet;
+        std::set< OUString > aColumnNameSet;
         for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
             aColumnNameSet.insert(*pColumnNames);
 
@@ -1073,8 +1073,8 @@ void AssignmentPersistentData::ImplCommit()
             // the new row for the focus
             sal_Int32 nNewFocusRow = nOldFocusRow + nDelta;
             // normalize
-            nNewFocusRow = std::min(nNewFocusRow, (sal_Int32)(FIELD_PAIRS_VISIBLE - 1), ::std::less< sal_Int32 >());
-            nNewFocusRow = std::max(nNewFocusRow, (sal_Int32)0, ::std::less< sal_Int32 >());
+            nNewFocusRow = std::min(nNewFocusRow, (sal_Int32)(FIELD_PAIRS_VISIBLE - 1), std::less< sal_Int32 >());
+            nNewFocusRow = std::max(nNewFocusRow, (sal_Int32)0, std::less< sal_Int32 >());
             // set the new focus (in the same column)
             m_pImpl->pFields[nNewFocusRow * 2 + nOldFocusColumn]->GrabFocus();
         }
