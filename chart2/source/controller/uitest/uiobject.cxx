@@ -9,6 +9,12 @@
 
 #include "uiobject.hxx"
 
+#include "ChartWindow.hxx"
+#include "ChartController.hxx"
+#include "ObjectHierarchy.hxx"
+
+#include <algorithm>
+
 ChartWindowUIObject::ChartWindowUIObject(VclPtr<chart::ChartWindow> xChartWindow):
     WindowUIObject(xChartWindow),
     mxChartWindow(xChartWindow)
@@ -19,16 +25,40 @@ StringMap ChartWindowUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
+    chart::ChartController* pController = mxChartWindow->GetController();
+    if (pController)
+    {
+        css::uno::Any aAny = pController->getSelection();
+        OUString aSelectedObject;
+        aAny >>= aSelectedObject;
+        aMap["SelectedObject"] = aSelectedObject;
+    }
+
     return aMap;
 }
 
 void ChartWindowUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    WindowUIObject::execute(rAction, rParameters);
+    if (rAction == "SELECT")
+    {
+        auto itr = rParameters.find("NAME");
+        if (itr == rParameters.end())
+            throw css::uno::RuntimeException("Missing Parameter 'NAME' for action 'SELECT'");
+
+
+        const OUString& rName = itr->second;
+        css::uno::Any aAny;
+        aAny <<= rName;
+
+        chart::ChartController* pController = mxChartWindow->GetController();
+        pController->select(aAny);
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
 }
 
-std::unique_ptr<UIObject> ChartWindowUIObject::get_child(const OUString& rID)
+std::unique_ptr<UIObject> ChartWindowUIObject::get_child(const OUString& /*rID*/)
 {
     return nullptr;
 }
@@ -36,6 +66,18 @@ std::unique_ptr<UIObject> ChartWindowUIObject::get_child(const OUString& rID)
 std::set<OUString> ChartWindowUIObject::get_children() const
 {
     std::set<OUString> aChildren;
+
+    css::uno::Reference< css::chart2::XChartDocument > xChartDoc( mxChartWindow->GetController()->getModel(), css::uno::UNO_QUERY );
+    chart::ObjectHierarchy aHierarchy(xChartDoc, nullptr, true);
+    chart::ObjectIdentifier aIdentifier = aHierarchy.getRootNodeOID();
+    aChildren.insert(aIdentifier.getObjectCID());
+    std::vector<chart::ObjectIdentifier> aChildIndentifiers = aHierarchy.getChildren(aIdentifier);
+    std::transform(aChildIndentifiers.begin(), aChildIndentifiers.end(), std::inserter(aChildren, aChildren.begin()),
+                [](const chart::ObjectIdentifier& rObject)
+                {
+                    return rObject.getObjectCID();
+                }
+            );
 
     return aChildren;
 }

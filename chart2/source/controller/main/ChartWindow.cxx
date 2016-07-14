@@ -312,6 +312,11 @@ FactoryFunction ChartWindow::GetUITestFactory() const
     return ChartWindowUIObject::create;
 }
 
+ChartController* ChartWindow::GetController()
+{
+    return m_pWindowController;
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -67,6 +67,8 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
+    ChartController* GetController();
+
 private:
     ChartController* m_pWindowController;
     bool m_bInPaint;
