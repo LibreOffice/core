@@ -1660,12 +1660,6 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
         }
     }
 
-    // missing features
-    // #i20819# polynomial trend lines
-    // #i66819# moving average trend lines
-    // #i5085# manual trend line size
-    // #i34093# manual crossing point
-
     return xRegCurve;
 }
 
