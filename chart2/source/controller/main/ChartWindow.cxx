@@ -20,6 +20,7 @@
 #include "ChartWindow.hxx"
 #include "ChartController.hxx"
 #include "HelpIds.hrc"
+#include "uiobject.hxx"
 
 #include <vcl/help.hxx>
 #include <vcl/openglwin.hxx>
@@ -304,6 +305,11 @@ void ChartWindow::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags
     {
         m_pOpenGLWindow->Invalidate( rRegion, nFlags );
     }
+}
+
+FactoryFunction ChartWindow::GetUITestFactory() const
+{
+    return ChartWindowUIObject::create;
 }
 
 } //namespace chart

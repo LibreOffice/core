@@ -65,6 +65,8 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
+    virtual FactoryFunction GetUITestFactory() const override;
+
 private:
     ChartController* m_pWindowController;
     bool m_bInPaint;
