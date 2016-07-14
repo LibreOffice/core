@@ -505,7 +505,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_GET_ACT_DATE { Text = "TODAY" ; };
     String SC_OPCODE_GET_ACT_TIME { Text = "NOW" ; };
     String SC_OPCODE_NO_VALUE { Text = "NA" ; };
-    String SC_OPCODE_CURRENT { Text = "CURRENT" ; };
+    String SC_OPCODE_CURRENT { Text = "_xlfn.ORG.OPENOFFICE.CURRENT" ; };
     String SC_OPCODE_DEG { Text = "DEGREES" ; };
     String SC_OPCODE_RAD { Text = "RADIANS" ; };
     String SC_OPCODE_SIN { Text = "SIN" ; };
@@ -706,7 +706,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_LOOKUP { Text = "LOOKUP" ; };
     String SC_OPCODE_V_LOOKUP { Text = "VLOOKUP" ; };
     String SC_OPCODE_H_LOOKUP { Text = "HLOOKUP" ; };
-    String SC_OPCODE_MULTI_AREA { Text = "MULTIRANGE" ; };      // legacy for range list (union)
+    String SC_OPCODE_MULTI_AREA { Text = "_xlfn.ORG.OPENOFFICE.MULTIRANGE" ; };      // legacy for range list (union)
     String SC_OPCODE_OFFSET { Text = "OFFSET" ; };
     String SC_OPCODE_INDEX { Text = "INDEX" ; };
     String SC_OPCODE_AREAS { Text = "AREAS" ; };
@@ -739,7 +739,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_MAT_MULT { Text = "MMULT" ; };
     String SC_OPCODE_MAT_TRANS { Text = "TRANSPOSE" ; };
     String SC_OPCODE_MATRIX_UNIT { Text = "_xlfn.MUNIT" ; };
-    String SC_OPCODE_BACK_SOLVER { Text = "GOALSEEK" ; };
+    String SC_OPCODE_BACK_SOLVER { Text = "_xlfn.ORG.OPENOFFICE.GOALSEEK" ; };
     String SC_OPCODE_HYP_GEOM_DIST { Text = "HYPGEOMDIST" ; };
     String SC_OPCODE_HYP_GEOM_DIST_MS { Text = "_xlfn.HYPGEOM.DIST" ; };
     String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
@@ -846,13 +846,13 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_WEEK { Text = "WEEKNUM" ; };
     String SC_OPCODE_ISOWEEKNUM { Text = "_xlfn.ISOWEEKNUM" ; };
     String SC_OPCODE_WEEKNUM_OOO { Text = "_xlfn.ORG.LIBREOFFICE.WEEKNUM_OOO" ; };
-    String SC_OPCODE_EASTERSUNDAY { Text = "EASTERSUNDAY" ; };
+    String SC_OPCODE_EASTERSUNDAY { Text = "_xlfn.ORG.OPENOFFICE.EASTERSUNDAY" ; };
     String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
     String SC_OPCODE_NETWORKDAYS { Text = "NETWORKDAYS" ; };
     String SC_OPCODE_NETWORKDAYS_MS { Text = "NETWORKDAYS.INTL" ; };
     String SC_OPCODE_WORKDAY_MS { Text = "WORKDAY.INTL" ; };
     String SC_OPCODE_NO_NAME { Text = "#NAME!" ; };
-    String SC_OPCODE_STYLE { Text = "STYLE" ; };
+    String SC_OPCODE_STYLE { Text = "_xlfn.ORG.OPENOFFICE.STYLE" ; };
     String SC_OPCODE_DDE { Text = "DDE" ; };
     String SC_OPCODE_BASE { Text = "_xlfn.BASE" ; };
     String SC_OPCODE_DECIMAL { Text = "_xlfn.DECIMAL" ; };

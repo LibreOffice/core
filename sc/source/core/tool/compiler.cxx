@@ -2750,8 +2750,13 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             OpCode          eOp;
         };
         static const FunctionName aOoxmlAliases[] = {
-            { "EFFECTIVE",  ocEffect },     // EFFECTIVE -> EFFECT
-            { "ERRORTYPE",  ocErrorType }   // ERRORTYPE -> _xlfn.ORG.OPENOFFICE.ERRORTYPE
+            { "EFFECTIVE",      ocEffect },         // EFFECTIVE -> EFFECT
+            { "ERRORTYPE",      ocErrorType },      // ERRORTYPE -> _xlfn.ORG.OPENOFFICE.ERRORTYPE
+            { "MULTIRANGE",     ocMultiArea },      // MULTIRANGE -> _xlfn.ORG.OPENOFFICE.MULTIRANGE
+            { "GOALSEEK",       ocBackSolver },     // GOALSEEK -> _xlfn.ORG.OPENOFFICE.GOALSEEK
+            { "EASTERSUNDAY",   ocEasterSunday },   // EASTERSUNDAY -> _xlfn.ORG.OPENOFFICE.EASTERSUNDAY
+            { "CURRENT",        ocCurrent },        // CURRENT -> _xlfn.ORG.OPENOFFICE.CURRENT
+            { "STYLE",          ocStyle }           // STYLE -> _xlfn.ORG.OPENOFFICE.STYLE
         };
         for (const FunctionName& rOoxmlAlias : aOoxmlAliases)
         {
