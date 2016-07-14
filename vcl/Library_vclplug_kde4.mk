@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_externals,vclplug_kde4,\
 	icuuc \
 	kde4 \
 	glew \
+	cairo \
 ))
 
 $(eval $(call gb_Library_add_libs,vclplug_kde4,\

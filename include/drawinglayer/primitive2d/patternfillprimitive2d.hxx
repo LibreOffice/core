@@ -84,7 +84,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
             /// overload to react on evtl. buffered content
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
