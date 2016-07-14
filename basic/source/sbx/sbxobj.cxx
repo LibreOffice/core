@@ -695,9 +695,7 @@ static bool CollectAttrs( const SbxBase* p, OUString& rRes )
     }
     if( !aAttrs.isEmpty() )
     {
-        rRes = " (";
-        rRes += aAttrs;
-        rRes += ")";
+        rRes = " (" + aAttrs + ")";
         return true;
     }
     else
@@ -763,9 +761,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
         SbxVariable* pVar = r;
         if( pVar )
         {
-            OUString aLine( aIndent );
-            aLine += "  - ";
-            aLine += pVar->GetName( SbxNAME_SHORT_TYPES );
+            OUString aLine = aIndent + "  - " + pVar->GetName( SbxNAME_SHORT_TYPES );
             OUString aAttrs2;
             if( CollectAttrs( pVar, aAttrs2 ) )
             {
@@ -802,9 +798,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
             SbxVariable* pVar = r;
             if( pVar )
             {
-                OUString aLine( aIndent );
-                aLine += "  - ";
-                aLine += pVar->GetName( SbxNAME_SHORT_TYPES );
+                OUString aLine = aIndent + "  - " + pVar->GetName( SbxNAME_SHORT_TYPES );
                 OUString aAttrs3;
                 if( CollectAttrs( pVar, aAttrs3 ) )
                 {

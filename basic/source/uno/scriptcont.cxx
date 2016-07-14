@@ -620,9 +620,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
             SbModule* pMod = pBasicLib->FindModule( aElementName );
             if( pMod )
             {
-                OUString aCodeStreamName = aElementName;
-                aCodeStreamName += ".bin";
-
+                OUString aCodeStreamName = aElementName + ".bin";
                 try
                 {
                     uno::Reference< io::XStream > xCodeStream = xStorage->openStreamElement(
@@ -668,9 +666,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     continue;
                 }
 
-                OUString aSourceStreamName = aElementName;
-                aSourceStreamName += ".xml";
-
+                OUString aSourceStreamName = aElementName + ".xml";
                 try
                 {
                     uno::Reference< io::XStream > xSourceStream = xStorage->openStreamElement(
@@ -945,9 +941,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     pBasicLib->SetModified( false );
                 }
 
-                OUString aCodeStreamName= aElementName;
-                aCodeStreamName += ".bin";
-
+                OUString aCodeStreamName= aElementName + ".bin";
                 try
                 {
                     uno::Reference< io::XStream > xCodeStream = xLibraryStor->openStreamElement(
@@ -981,9 +975,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             if( bLoadSource || bVerifyPasswordOnly )
             {
                 // Access encrypted source stream
-                OUString aSourceStreamName = aElementName;
-                aSourceStreamName += ".xml";
-
+                OUString aSourceStreamName = aElementName + ".xml";
                 try
                 {
                     uno::Reference< io::XStream > xSourceStream = xLibraryStor->openEncryptedStreamElement(
