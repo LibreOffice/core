@@ -45,7 +45,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "Japanese",
@@ -114,10 +114,10 @@ struct StaticCandleStickChartTypeInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -226,7 +226,7 @@ uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRo
     getFastPropertyValue( PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST ) >>= bShowFirst;
     getFastPropertyValue( PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW ) >>= bShowHiLow;
 
-    ::std::vector< OUString > aMandRoles;
+    std::vector< OUString > aMandRoles;
 
     aMandRoles.push_back( "label");
     if( bShowFirst )
@@ -251,7 +251,7 @@ Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
     getFastPropertyValue( PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST ) >>= bShowFirst;
     getFastPropertyValue( PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW ) >>= bShowHiLow;
 
-    ::std::vector< OUString > aOptRoles;
+    std::vector< OUString > aOptRoles;
 
     if( ! bShowFirst )
         aOptRoles.push_back( "values-first");

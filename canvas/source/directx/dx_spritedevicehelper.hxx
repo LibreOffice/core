@@ -68,7 +68,7 @@ namespace dxcanvas
 
         const IDXRenderModuleSharedPtr& getRenderModule() const { return mpRenderModule; }
         const DXSurfaceBitmapSharedPtr& getBackBuffer() const { return mpBackBuffer; }
-        const ::std::shared_ptr<canvas::ISurfaceProxyManager> &getSurfaceProxy() const { return mpSurfaceProxyManager; }
+        const std::shared_ptr<canvas::ISurfaceProxyManager> &getSurfaceProxy() const { return mpSurfaceProxyManager; }
 
         css::uno::Any isAccelerated() const;
 
@@ -89,7 +89,7 @@ namespace dxcanvas
         DXSurfaceBitmapSharedPtr                mpBackBuffer;
 
         /// Instance passing out HW textures
-        ::std::shared_ptr<canvas::ISurfaceProxyManager> mpSurfaceProxyManager;
+        std::shared_ptr<canvas::ISurfaceProxyManager> mpSurfaceProxyManager;
 
         /// Our encapsulation interface to DirectX
         IDXRenderModuleSharedPtr                mpRenderModule;

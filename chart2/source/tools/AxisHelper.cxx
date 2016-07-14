@@ -197,7 +197,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                     Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( xChartDoc ) );
                     if( xSource.is() )
                     {
-                        ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aXValues(
+                        std::vector< Reference< chart2::data::XLabeledDataSequence > > aXValues(
                             DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), "values-x", true ) );
                         if( aXValues.empty() )
                         {
@@ -232,7 +232,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
 
         if( !bFormatSet )
         {
-            typedef ::std::map< sal_Int32, sal_Int32 > tNumberformatFrequency;
+            typedef std::map< sal_Int32, sal_Int32 > tNumberformatFrequency;
             tNumberformatFrequency aKeyMap;
             bool bNumberFormatKeyFoundViaAttachedData = false;
 
@@ -512,8 +512,8 @@ void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, co
 {
     //axis is hidden if no data is attached anymore but data is available
     bool bOtherSeriesAttachedToThisAxis = false;
-    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-    ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt = aSeriesVector.begin();
+    std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt = aSeriesVector.begin();
     for( ; aIt != aSeriesVector.end(); ++aIt)
     {
         uno::Reference< chart2::XAxis > xCurrentAxis( DiagramHelper::getAttachedAxis( *aIt, xDiagram ), uno::UNO_QUERY );
@@ -1057,8 +1057,8 @@ Reference< XCoordinateSystem > AxisHelper::getCoordinateSystemOfAxis(
             xCooSys = aCooSysList[nCooSysIndex];
             std::vector< Reference< XAxis > > aAllAxis( AxisHelper::getAllAxesOfCoordinateSystem( xCooSys ) );
 
-            ::std::vector< Reference< XAxis > >::iterator aFound =
-                  ::std::find( aAllAxis.begin(), aAllAxis.end(), xAxis );
+            std::vector< Reference< XAxis > >::iterator aFound =
+                  std::find( aAllAxis.begin(), aAllAxis.end(), xAxis );
             if( aFound != aAllAxis.end())
             {
                 xRet.set( xCooSys );
@@ -1155,8 +1155,8 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
 Reference< XChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( const Reference< chart2::XDiagram >& xDiagram, const sal_Int32 nAttachedAxisIndex )
 {
     Reference< XChartType > xChartType;
-    ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-    ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
+    std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
     for( ; aIter != aSeriesVector.end(); ++aIter )
     {
         sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );

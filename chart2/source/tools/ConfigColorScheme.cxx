@@ -65,7 +65,7 @@ protected:
 
 private:
     ConfigColorScheme &      m_rListener;
-    ::std::set< OUString >   m_aPropertiesToNotify;
+    std::set< OUString >     m_aPropertiesToNotify;
 };
 
 ChartConfigItem::ChartConfigItem( ConfigColorScheme & rListener ) :

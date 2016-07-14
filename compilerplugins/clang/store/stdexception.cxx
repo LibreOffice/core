@@ -19,7 +19,7 @@ namespace {
 bool isStdException(QualType type) {
     //TODO:
     std::string name { type.getAsString() };
-    return name == "std::exception" || name == "::std::exception";
+    return name == "std::exception" || name == "std::exception";
 }
 
 class StdException:

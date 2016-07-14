@@ -32,7 +32,7 @@ static const sal_Int32 HANDLE_AUTHENTICATIONREQUEST = 4;
 SimpleFileAccessInteraction::SimpleFileAccessInteraction(
     const css::uno::Reference< css::task::XInteractionHandler >& xHandler )
 {
-    ::std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
+    std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
     ::ucbhelper::InterceptedInteraction::InterceptedRequest                  aInterceptedRequest;
 
     //intercept standard IO error exception (local file and WebDAV)

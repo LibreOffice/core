@@ -57,7 +57,7 @@ namespace svx
 
     };
 
-    typedef ::std::map< OUString, DatabaseRegistration > DatabaseRegistrations;
+    typedef std::map< OUString, DatabaseRegistration > DatabaseRegistrations;
 
     class DatabaseMapItem : public SfxPoolItem
     {

@@ -67,7 +67,7 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
 
 RegressionEquationItemConverter::~RegressionEquationItemConverter()
 {
-    ::std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
+    std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void RegressionEquationItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

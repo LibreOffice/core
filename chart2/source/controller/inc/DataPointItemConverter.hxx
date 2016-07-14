@@ -69,7 +69,7 @@ protected:
         throw (css::uno::Exception) override;
 
 private:
-    ::std::vector< ItemConverter * >    m_aConverters;
+    std::vector< ItemConverter * >      m_aConverters;
     bool                                m_bDataSeries;
     bool                                m_bOverwriteLabelsForAttributedDataPointsAlso;
     bool                                m_bUseSpecialFillColor;

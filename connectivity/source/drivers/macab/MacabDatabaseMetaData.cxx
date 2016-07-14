@@ -991,7 +991,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
         ODatabaseMetaDataResultSet::ORow aRow(6);
 
         MacabRecords *xRecords = m_xConnection->getAddressBook()->getMacabRecords();
-        ::std::vector<MacabGroup *> xGroups = m_xConnection->getAddressBook()->getMacabGroups();
+        std::vector<MacabGroup *> xGroups = m_xConnection->getAddressBook()->getMacabGroups();
         sal_Int32 i, nGroups;
         nGroups = xGroups.size();
 

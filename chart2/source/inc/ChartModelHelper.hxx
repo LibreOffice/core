@@ -62,12 +62,12 @@ public:
     static css::uno::Reference< css::chart2::XCoordinateSystem >
         getFirstCoordinateSystem( const css::uno::Reference< css::frame::XModel >& xModel );
 
-    SAL_DLLPRIVATE static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+    SAL_DLLPRIVATE static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
         getDataSeries( ChartModel& rModel );
 
-    SAL_DLLPRIVATE static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+    SAL_DLLPRIVATE static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
             getDataSeries( const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
-    static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+    static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
             getDataSeries( const css::uno::Reference< css::frame::XModel > & xModel );
 
     static css::uno::Reference< css::chart2::XChartType >

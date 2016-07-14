@@ -42,7 +42,7 @@ class ObjectHierarchy
 {
 public:
     typedef ObjectIdentifier tOID;
-    typedef ::std::vector< tOID > tChildContainer;
+    typedef std::vector< tOID > tChildContainer;
 
     /** @param bFlattenDiagram
             If <TRUE/>, the content of the diagram (data series, wall, floor,
@@ -73,7 +73,7 @@ public:
 
 private:
 
-    ::std::unique_ptr< impl::ImplObjectHierarchy > m_apImpl;
+    std::unique_ptr< impl::ImplObjectHierarchy > m_apImpl;
 };
 
 class ObjectKeyNavigation

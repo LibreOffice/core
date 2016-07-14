@@ -160,7 +160,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext >
                         m_xContext;
 
-    typedef ::std::vector< css::uno::Reference<
+    typedef std::vector< css::uno::Reference<
             css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
     tDataSequenceContainer m_aDataSequences;
 

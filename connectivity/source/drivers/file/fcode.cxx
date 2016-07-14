@@ -345,8 +345,8 @@ double OOp_DIV::operate(const double& fLeft,const double& fRight) const
 
 void ONthOperator::Exec(OCodeStack& rCodeStack)
 {
-    ::std::vector<ORowSetValue> aValues;
-    ::std::vector<OOperand*> aOperands;
+    std::vector<ORowSetValue> aValues;
+    std::vector<OOperand*> aOperands;
     OOperand* pOperand;
     do
     {
@@ -362,8 +362,8 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
 
     rCodeStack.push(new OOperandResult(operate(aValues)));
 
-    ::std::vector<OOperand*>::iterator aIter = aOperands.begin();
-    ::std::vector<OOperand*>::const_iterator aEnd = aOperands.end();
+    std::vector<OOperand*>::iterator aIter = aOperands.begin();
+    std::vector<OOperand*>::const_iterator aEnd = aOperands.end();
     for (; aIter != aEnd; ++aIter)
     {
         if (typeid(OOperandResult) == typeid(*(*aIter)))

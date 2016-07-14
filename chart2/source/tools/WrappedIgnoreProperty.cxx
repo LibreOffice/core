@@ -93,7 +93,7 @@ void WrappedIgnoreProperties::addIgnoreFillProperties( std::vector< WrappedPrope
     addIgnoreFillProperties_only_BitmapProperties( rList );
 }
 
-void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( ::std::vector< WrappedProperty* >& rList )
+void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( std::vector< WrappedProperty* >& rList )
 {
     rList.push_back( new WrappedIgnoreProperty( "FillStyle", uno::makeAny( drawing::FillStyle_SOLID ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillColor", uno::makeAny( sal_Int32(-1) ) ) );
@@ -107,7 +107,7 @@ void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( 
     rList.push_back( new WrappedIgnoreProperty( "FillBackground", uno::makeAny( false ) ) );
 }
 
-void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( ::std::vector< WrappedProperty* >& rList )
+void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( std::vector< WrappedProperty* >& rList )
 {
 //     rList.push_back( new WrappedIgnoreProperty( "FillBitmapName", uno::makeAny( OUString() ) ) );
 //    rList.push_back( new WrappedIgnoreProperty( "FillBitmap", uno::makeAny( uno::Reference< awt::XBitmap > (0) ) ) );

@@ -191,7 +191,7 @@ namespace connectivity
             OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
-            TStorages::const_iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
+            TStorages::const_iterator aFind = std::find_if(rMap.begin(),rMap.end(),
                 [&_xStorage] (const TStorages::value_type& storage) {
                     return storage.second.mapStorage() == _xStorage;
                 });
@@ -222,7 +222,7 @@ namespace connectivity
             OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
-            TStorages::const_iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
+            TStorages::const_iterator aFind = std::find_if(rMap.begin(),rMap.end(),
                 [&_xStorage] (const TStorages::value_type& storage) {
                     return storage.second.mapStorage() == _xStorage;
                 });

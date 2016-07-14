@@ -70,7 +70,7 @@ namespace cppcanvas
             void popState();
             void clearStateStack();
         private:
-            ::std::vector< OutDevState > m_aStates;
+            std::vector< OutDevState > m_aStates;
         };
 
         // EMF+
@@ -159,7 +159,7 @@ static float GetSwapFloat( SvStream& rSt )
             OutDevState aDevState;
         } EmfPlusGraphicState;
 
-        typedef ::std::map<int,EmfPlusGraphicState> GraphicStateMap;
+        typedef std::map<int,EmfPlusGraphicState> GraphicStateMap;
 
         class ImplRenderer : public virtual Renderer, protected CanvasGraphicHelper
         {
@@ -194,7 +194,7 @@ static float GetSwapFloat( SvStream& rSt )
 
             // prefetched and prepared canvas actions
             // (externally not visible)
-            typedef ::std::vector< MtfAction >      ActionVector;
+            typedef std::vector< MtfAction >        ActionVector;
 
             /* EMF+ */
             static void ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed = false);

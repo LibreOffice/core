@@ -62,12 +62,12 @@ struct StaticDataSeriesInfoHelper : public rtl::StaticWithInit< ::cppu::OPropert
 {
     uno::Sequence< Property > operator()()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         ::chart::DataSeriesProperties::AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -91,7 +91,7 @@ void lcl_SetParent(
         xChild->setParent( xParentInterface );
 }
 
-typedef ::std::map< sal_Int32, css::uno::Reference< css::beans::XPropertySet > >
+typedef std::map< sal_Int32, css::uno::Reference< css::beans::XPropertySet > >
     lcl_tDataPointMap;
 
 void lcl_CloneAttributedDataPoints(
@@ -323,7 +323,7 @@ Reference< beans::XPropertySet >
         aSequences = comphelper::containerToSequence( m_aDataSequences );
     }
 
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
         DataSeriesHelper::getAllDataSequencesByRole( aSequences , "values", true ) );
 
     if (aValuesSeries.empty())
@@ -442,7 +442,7 @@ void SAL_CALL DataSeries::addRegressionCurve(
     {
         MutexGuard aGuard( GetMutex() );
         xModifyEventForwarder = m_xModifyEventForwarder;
-        if( ::std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), xRegressionCurve )
+        if( std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), xRegressionCurve )
             != m_aRegressionCurves.end())
             throw lang::IllegalArgumentException();
         m_aRegressionCurves.push_back( xRegressionCurve );
@@ -464,7 +464,7 @@ void SAL_CALL DataSeries::removeRegressionCurve(
         MutexGuard aGuard( GetMutex() );
         xModifyEventForwarder = m_xModifyEventForwarder;
         tRegressionCurveContainerType::iterator aIt(
-            ::std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), xRegressionCurve ) );
+            std::find( m_aRegressionCurves.begin(), m_aRegressionCurves.end(), xRegressionCurve ) );
         if( aIt == m_aRegressionCurves.end())
             throw container::NoSuchElementException(
                 "The given regression curve is no element of this series",
@@ -543,7 +543,7 @@ void SAL_CALL DataSeries::disposing( const lang::EventObject& rEventObject )
 {
     // forget disposed data sequences
     tDataSequenceContainer::iterator aIt(
-        ::std::find( m_aDataSequences.begin(), m_aDataSequences.end(), rEventObject.Source ));
+        std::find( m_aDataSequences.begin(), m_aDataSequences.end(), rEventObject.Source ));
     if( aIt != m_aDataSequences.end())
         m_aDataSequences.erase( aIt );
 }

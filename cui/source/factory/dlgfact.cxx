@@ -1210,7 +1210,7 @@ AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (vcl::Wind
 
 AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::Window* pParent,
                                                         const OUString& strInitialText,
-                                                        const ::std::vector< OUString >& _rContexts,
+                                                        const std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)
 {

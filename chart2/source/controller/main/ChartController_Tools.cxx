@@ -214,7 +214,7 @@ void ChartController::executeDispatch_NewArrangement()
             }
 
             // regression curve equations
-            ::std::vector< Reference< chart2::XRegressionCurve > > aRegressionCurves(
+            std::vector< Reference< chart2::XRegressionCurve > > aRegressionCurves(
                 RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram ));
 
             // reset equation position

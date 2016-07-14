@@ -145,7 +145,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "AttributedDataPoints",
@@ -460,7 +460,7 @@ struct StaticDiagramWrapperPropertyArray_Initializer
 private:
     static uno::Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
@@ -474,7 +474,7 @@ private:
         WrappedAutomaticPositionProperties::addProperties( aProperties );
         WrappedGL3DProperties::addProperties(aProperties);
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -510,7 +510,7 @@ sal_Int32 lcl_getNewAPIIndexForOldAPIIndex(
             nNewAPIIndex -= 1;
     }
 
-    ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
+    std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
         ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     if( nNewAPIIndex >= static_cast<sal_Int32>(aSeriesList.size()) )
         nNewAPIIndex = -1;
@@ -1598,7 +1598,7 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
     uno::Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( xDiagram.is() && xChartDoc.is() )
     {
-        ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
+        std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
         if( aSeriesVector.size() > 0 )
         {
@@ -1756,9 +1756,9 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
 
     if( xDiagram.is() && xDiaProp.is())
     {
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
+        std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
             ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-        ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+        std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
                 aSeriesVector.begin();
         sal_Int32 i = 0;
         for( ; aIt != aSeriesVector.end(); ++aIt, ++i )
@@ -1789,12 +1789,12 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
 
     if( xDiagram.is() && xDiaProp.is())
     {
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
+        std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
             ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
 
         uno::Sequence< uno::Sequence< sal_Int32 > > aResult( aSeriesVector.size() );
 
-        ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+        std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
                 aSeriesVector.begin();
         sal_Int32 i = 0;
         for( ; aIt != aSeriesVector.end(); ++aIt, ++i )
@@ -2038,7 +2038,7 @@ const Sequence< beans::Property >& DiagramWrapper::getPropertySequence()
 
 const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
 {
-    ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+    std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
     WrappedAxisAndGridExistenceProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedAxisTitleExistenceProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );

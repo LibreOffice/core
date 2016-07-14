@@ -70,7 +70,7 @@ struct OptionsLeaf
         m_nGroupIndex( nGroupIndex ) {}
 };
 
-typedef ::std::vector< OptionsLeaf* > VectorOfLeaves;
+typedef std::vector< OptionsLeaf* > VectorOfLeaves;
 
 // struct OptionsNode ----------------------------------------------------
 
@@ -81,7 +81,7 @@ struct OptionsNode
     OUString                m_sPageURL;
     bool                    m_bAllModules;
     VectorOfLeaves          m_aLeaves;
-    ::std::vector< VectorOfLeaves >
+    std::vector< VectorOfLeaves >
                             m_aGroupedLeaves;
 
     OptionsNode(    const OUString& rId,
@@ -102,7 +102,7 @@ struct OptionsNode
     }
 };
 
-typedef ::std::vector< OptionsNode* > VectorOfNodes;
+typedef std::vector< OptionsNode* > VectorOfNodes;
 
 struct LastPageSaver
 {

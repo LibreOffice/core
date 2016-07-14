@@ -81,7 +81,7 @@ public:
     typedef OUString tPropertyNameType;
     typedef sal_uInt8            tMemberIdType;
 
-    typedef ::std::pair< tPropertyNameType, tMemberIdType > tPropertyNameWithMemberId;
+    typedef std::pair< tPropertyNameType, tMemberIdType > tPropertyNameWithMemberId;
 
     /** applies all properties that can be mapped to items into the given item
         set.

@@ -86,7 +86,7 @@ protected:
         throw (css::uno::RuntimeException, std::exception) override;
     /// denotes if the chart needs categories at the first scale
     virtual sal_Bool SAL_CALL supportsCategories()
-        throw (css::uno::RuntimeException, ::std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL changeDiagram(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram )

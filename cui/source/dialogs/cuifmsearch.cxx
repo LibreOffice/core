@@ -73,7 +73,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
     m_pbClose->SetHelpText(OUString());
 }
 
-FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
+FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialText, const std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
     const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)
     :ModalDialog(pParent, "RecordSearchDialog", "cui/ui/fmsearchdialog.ui")
     ,m_sCancel( Button::GetStandardText( StandardButtonType::Cancel ) )
@@ -126,7 +126,7 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
     }
 #endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
 
-    for (   ::std::vector< OUString >::const_iterator context = _rContexts.begin();
+    for (   std::vector< OUString >::const_iterator context = _rContexts.begin();
             context != _rContexts.end();
             ++context
         )

@@ -34,7 +34,7 @@ namespace connectivity
         public:
             Indexes(Table* pTable,
                     ::osl::Mutex& rMutex,
-                    const ::std::vector< ::rtl::OUString>& rVector);
+                    const std::vector< ::rtl::OUString>& rVector);
         };
 
     } // namespace firebird

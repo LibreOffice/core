@@ -66,8 +66,8 @@ private:
     VclPtr<VclHBox>             m_pBxTextDirection;
     VclPtr<TextDirectionListBox>    m_pLB_TextDirection;
 
-    ::std::map< sal_Int32, sal_uInt16 > m_aPlacementToListBoxMap;
-    ::std::map< sal_uInt16, sal_Int32 > m_aListBoxToPlacementMap;
+    std::map< sal_Int32, sal_uInt16 > m_aPlacementToListBoxMap;
+    std::map< sal_uInt16, sal_Int32 > m_aListBoxToPlacementMap;
 
     SvNumberFormatter*  m_pNumberFormatter;
     bool                m_bNumberFormatMixedState;

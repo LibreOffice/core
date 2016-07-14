@@ -105,7 +105,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
 void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicTarget
         , TickInfoArraysType& /* rRadiusTickInfos */
         , TickInfoArraysType& rAngleTickInfos
-        , const ::std::vector<VLineProperties>& rLinePropertiesList )
+        , const std::vector<VLineProperties>& rLinePropertiesList )
 {
     Reference< drawing::XShapes > xMainTarget(
         this->createGroupShape( xLogicTarget, m_aCID ) );
@@ -159,7 +159,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
 void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogicTarget
         , TickInfoArraysType& rRadiusTickInfos
         , TickInfoArraysType& rAngleTickInfos
-        , const ::std::vector<VLineProperties>& rLinePropertiesList )
+        , const std::vector<VLineProperties>& rLinePropertiesList )
 {
     Reference< drawing::XShapes > xMainTarget(
         this->createGroupShape( xLogicTarget, m_aCID ) );
@@ -233,7 +233,7 @@ void VPolarGrid::createShapes()
     getAllTickInfos( 0, aAngleTickInfos );
     getAllTickInfos( 1, aRadiusTickInfos );
 
-    ::std::vector<VLineProperties> aLinePropertiesList;
+    std::vector<VLineProperties> aLinePropertiesList;
     VCartesianGrid::fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
     //create tick mark line shapes

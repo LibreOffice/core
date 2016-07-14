@@ -523,9 +523,9 @@ namespace vclcanvas
 
         int numColorSteps( const ::Color& rColor1, const ::Color& rColor2 )
         {
-            return ::std::max(
+            return std::max(
                 labs( rColor1.GetRed() - rColor2.GetRed() ),
-                ::std::max(
+                std::max(
                     labs( rColor1.GetGreen() - rColor2.GetGreen() ),
                     labs( rColor1.GetBlue()  - rColor2.GetBlue() ) ) );
         }

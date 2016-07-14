@@ -30,7 +30,7 @@ namespace dbtools
 {
     class OOO_DLLPUBLIC_DBTOOLS OPropertyMap
     {
-        ::std::map<sal_Int32, OUString> m_aPropertyMap;
+        std::map<sal_Int32, OUString> m_aPropertyMap;
     public:
         OPropertyMap();
         const OUString& getNameByIndex(sal_Int32 _nIndex) const;

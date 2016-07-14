@@ -1608,7 +1608,7 @@ void InterfaceType::dumpExceptionSpecification(
         if (!bFirst) {
             out << ", ";
         }
-        out << "::css::uno::RuntimeException, ::std::exception";
+        out << "::css::uno::RuntimeException, std::exception";
     }
     out << ")";
 #if !defined DBG_UTIL

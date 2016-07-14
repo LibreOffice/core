@@ -122,7 +122,7 @@ public:
         {}
     };
 
-    typedef ::std::vector< tDataHeader > tDataHeaderVector;
+    typedef std::vector< tDataHeader > tDataHeaderVector;
 
     const tDataHeaderVector& getDataHeaders() const { return m_aHeaders;}
 
@@ -151,7 +151,7 @@ private:
     struct tDataColumn;
     struct implColumnLess;
 
-    typedef ::std::vector< tDataColumn > tDataColumnVector;
+    typedef std::vector< tDataColumn > tDataColumnVector;
 
     tDataColumnVector m_aColumns;
     tDataHeaderVector m_aHeaders;

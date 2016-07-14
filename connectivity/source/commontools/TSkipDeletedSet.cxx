@@ -151,7 +151,7 @@ bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, s
             if ( nDriverPos > (sal_Int32)m_aBookmarksPositions.size() )
                 m_aBookmarksPositions.push_back(nDriverPos);
         }
-        else if ( ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
+        else if ( std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
             m_aBookmarksPositions.push_back(nDriverPos);
         /*sal_Int32 nDriverPos = m_pHelper->getDriverPos();
         if(m_aBookmarks.find(nDriverPos) == m_aBookmarks.end())
@@ -225,13 +225,13 @@ bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,bool _bRetrieveData)
 
 void OSkipDeletedSet::clear()
 {
-    ::std::vector<sal_Int32>().swap(m_aBookmarksPositions);
+    std::vector<sal_Int32>().swap(m_aBookmarksPositions);
     //TInt2IntMap().swap(m_aBookmarks);
 }
 
 sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
 {
-    ::std::vector<sal_Int32>::const_iterator aFind = ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nPos);
+    std::vector<sal_Int32>::const_iterator aFind = std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nPos);
     if ( aFind !=  m_aBookmarksPositions.end() )
         return (aFind - m_aBookmarksPositions.begin()) + 1;
     /*TInt2IntMap::const_iterator aFind = m_aBookmarks.find(_nPos);
@@ -245,13 +245,13 @@ void OSkipDeletedSet::insertNewPosition(sal_Int32 _nPos)
 {
     //OSL_ENSURE(m_aBookmarks.find(_nPos) == m_aBookmarks.end(),"OSkipDeletedSet::insertNewPosition: Invalid position");
     //m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type(_nPos,m_aBookmarksPositions.size()+1)).first);
-    //OSL_ENSURE(::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nPos) == m_aBookmarksPositions.end(),"Invalid driver pos");
+    //OSL_ENSURE(std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nPos) == m_aBookmarksPositions.end(),"Invalid driver pos");
     m_aBookmarksPositions.push_back(_nPos);
 }
 
 void OSkipDeletedSet::deletePosition(sal_Int32 _nBookmark)
 {
-    ::std::vector<sal_Int32>::iterator aFind = ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nBookmark);
+    std::vector<sal_Int32>::iterator aFind = std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),_nBookmark);
     if ( aFind !=  m_aBookmarksPositions.end() )
     {
     //TInt2IntMap::iterator aFind = m_aBookmarks.find(_nPos);

@@ -208,10 +208,10 @@ namespace canvas
             ::basegfx::fround(rArea.getMaximum().getY()) );
 
         // clip the positions to the area this surface covers
-        aPos1.setX(::std::max(aPos1.getX(),maSourceOffset.getX()));
-        aPos1.setY(::std::max(aPos1.getY(),maSourceOffset.getY()));
-        aPos2.setX(::std::min(aPos2.getX(),maSourceOffset.getX()+maSize.getX()));
-        aPos2.setY(::std::min(aPos2.getY(),maSourceOffset.getY()+maSize.getY()));
+        aPos1.setX(std::max(aPos1.getX(),maSourceOffset.getX()));
+        aPos1.setY(std::max(aPos1.getY(),maSourceOffset.getY()));
+        aPos2.setX(std::min(aPos2.getX(),maSourceOffset.getX()+maSize.getX()));
+        aPos2.setY(std::min(aPos2.getY(),maSourceOffset.getY()+maSize.getY()));
 
         // if the resulting area is empty, return immediately
         ::basegfx::B2IVector aSize(aPos2 - aPos1);

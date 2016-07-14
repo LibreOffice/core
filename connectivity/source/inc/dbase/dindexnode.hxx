@@ -234,7 +234,7 @@ namespace connectivity
         SvStream& WriteONDXPage(SvStream &rStream, const ONDXPage& rPage);
 
 
-        typedef ::std::vector<ONDXPage*>    ONDXPageList;
+        typedef std::vector<ONDXPage*>      ONDXPageList;
 
 
         // Index Node

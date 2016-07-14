@@ -56,8 +56,8 @@ namespace dxcanvas
                                    bool                  /*bFullscreen*/ )
     {
         // #i60490# ensure backbuffer has sensible minimal size
-        const sal_Int32 w( ::std::max(sal_Int32(1),sal_Int32(rRect.Width)));
-        const sal_Int32 h( ::std::max(sal_Int32(1),sal_Int32(rRect.Height)));
+        const sal_Int32 w( std::max(sal_Int32(1),sal_Int32(rRect.Width)));
+        const sal_Int32 h( std::max(sal_Int32(1),sal_Int32(rRect.Height)));
 
         rSpriteCanvas.setWindow(
             uno::Reference<awt::XWindow2>(
@@ -185,8 +185,8 @@ namespace dxcanvas
         // #i60490# ensure backbuffer has sensible minimal size
         const sal_Int32 x(rBounds.X);
         const sal_Int32 y(rBounds.Y);
-        const sal_Int32 w(::std::max(sal_Int32(1),sal_Int32(rBounds.Width)));
-        const sal_Int32 h(::std::max(sal_Int32(1),sal_Int32(rBounds.Height)));
+        const sal_Int32 w(std::max(sal_Int32(1),sal_Int32(rBounds.Width)));
+        const sal_Int32 h(std::max(sal_Int32(1),sal_Int32(rBounds.Height)));
 
         if( mpRenderModule )
             mpRenderModule->resize(::basegfx::B2IRange(x,y,x+w,y+h));

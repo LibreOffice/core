@@ -285,7 +285,7 @@ void VDataSeries::doSortByXValues()
     if( m_aValues_X.is() && m_aValues_X.Doubles.getLength() )
     {
         //prepare a vector for sorting
-        std::vector< ::std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of the point
+        std::vector< std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of the point
         double fNan;
         ::rtl::math::setNan( & fNan );
         sal_Int32 nPointIndex = 0;
@@ -780,7 +780,7 @@ double VDataSeries::getYMeanValue() const
 
 std::unique_ptr<Symbol> getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
-    ::std::unique_ptr< Symbol > apSymbolProps( new Symbol() );
+    std::unique_ptr< Symbol > apSymbolProps( new Symbol() );
     try
     {
         if( xProp->getPropertyValue("Symbol") >>= *apSymbolProps )
@@ -926,7 +926,7 @@ uno::Reference<beans::XPropertySet> VDataSeries::getPropertiesOfSeries() const
 
 std::unique_ptr<DataPointLabel> getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
-    ::std::unique_ptr< DataPointLabel > apLabel( new DataPointLabel() );
+    std::unique_ptr< DataPointLabel > apLabel( new DataPointLabel() );
     try
     {
         if( !(xProp->getPropertyValue(CHART_UNONAME_LABEL) >>= *apLabel) )

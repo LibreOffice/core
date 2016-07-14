@@ -87,7 +87,7 @@ protected:
 
     css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
 
-    ::std::vector< ChartTypeDialogController* > m_aChartTypeDialogControllerList;
+    std::vector< ChartTypeDialogController* > m_aChartTypeDialogControllerList;
     ChartTypeDialogController*                  m_pCurrentMainType;
 
     sal_Int32 m_nChangingCalls;

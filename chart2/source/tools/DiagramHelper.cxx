@@ -673,11 +673,11 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
     return nullptr;
 }
 
-::std::vector< Reference< XDataSeries > >
+std::vector< Reference< XDataSeries > >
     DiagramHelper::getDataSeriesFromDiagram(
         const Reference< XDiagram > & xDiagram )
 {
-    ::std::vector< Reference< XDataSeries > > aResult;
+    std::vector< Reference< XDataSeries > > aResult;
 
     try
     {
@@ -693,8 +693,8 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
             {
                 Reference< XDataSeriesContainer > xDSCnt( aChartTypeSeq[j], uno::UNO_QUERY_THROW );
                 Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
-                ::std::copy( aSeriesSeq.begin(), aSeriesSeq.end(),
-                             ::std::back_inserter( aResult ));
+                std::copy( aSeriesSeq.begin(), aSeriesSeq.end(),
+                             std::back_inserter( aResult ));
             }
         }
     }
@@ -1221,7 +1221,7 @@ Sequence< Reference< XChartType > >
     DiagramHelper::getChartTypesFromDiagram(
         const Reference< XDiagram > & xDiagram )
 {
-    ::std::vector< Reference< XChartType > > aResult;
+    std::vector< Reference< XChartType > > aResult;
 
     if(xDiagram.is())
     {
@@ -1235,8 +1235,8 @@ Sequence< Reference< XChartType > >
             {
                 Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
                 Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-                ::std::copy( aChartTypeSeq.begin(), aChartTypeSeq.end(),
-                             ::std::back_inserter( aResult ));
+                std::copy( aChartTypeSeq.begin(), aChartTypeSeq.end(),
+                             std::back_inserter( aResult ));
             }
         }
         catch( const uno::Exception & ex )
@@ -1254,10 +1254,10 @@ bool DiagramHelper::areChartTypesCompatible( const Reference< ::chart2::XChartTy
     if( !xFirstType.is() || !xSecondType.is() )
         return false;
 
-    ::std::vector< OUString > aFirstRoles( ContainerHelper::SequenceToVector( xFirstType->getSupportedMandatoryRoles() ) );
-    ::std::vector< OUString > aSecondRoles( ContainerHelper::SequenceToVector( xSecondType->getSupportedMandatoryRoles() ) );
-    ::std::sort( aFirstRoles.begin(), aFirstRoles.end() );
-    ::std::sort( aSecondRoles.begin(), aSecondRoles.end() );
+    std::vector< OUString > aFirstRoles( ContainerHelper::SequenceToVector( xFirstType->getSupportedMandatoryRoles() ) );
+    std::vector< OUString > aSecondRoles( ContainerHelper::SequenceToVector( xSecondType->getSupportedMandatoryRoles() ) );
+    std::sort( aFirstRoles.begin(), aFirstRoles.end() );
+    std::sort( aSecondRoles.begin(), aSecondRoles.end() );
     return ( aFirstRoles == aSecondRoles );
 }
 
@@ -1508,13 +1508,13 @@ sal_Int32 DiagramHelper::getGeometry3D(
     rbFound = false;
     rbAmbiguous = false;
 
-    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+    std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
     if( aSeriesVec.empty())
         rbAmbiguous = true;
 
-    for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+    for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
              aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
     {
         try
@@ -1550,10 +1550,10 @@ void DiagramHelper::setGeometry3D(
     const Reference< chart2::XDiagram > & xDiagram,
     sal_Int32 nNewGeometry )
 {
-    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+    std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-    for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+    for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
              aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
     {
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(

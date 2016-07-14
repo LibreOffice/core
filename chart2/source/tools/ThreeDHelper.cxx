@@ -1312,7 +1312,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
 
         drawing::LineStyle aLineStyle( drawing::LineStyle_SOLID );
 
-        ::std::vector< uno::Reference< XDataSeries > > aSeriesList(
+        std::vector< uno::Reference< XDataSeries > > aSeriesList(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
         sal_Int32 nSeriesCount = static_cast<sal_Int32>( aSeriesList.size() );
 
@@ -1412,7 +1412,7 @@ void ThreeDHelper::setRoundedEdgesAndObjectLines(
     uno::Any aALineStyle( uno::makeAny(aLineStyle));
     uno::Any aARoundedEdges( uno::makeAny( static_cast< sal_Int16 >( nRoundedEdges )));
 
-    ::std::vector< uno::Reference< XDataSeries > > aSeriesList(
+    std::vector< uno::Reference< XDataSeries > > aSeriesList(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     sal_Int32 nSeriesCount = static_cast<sal_Int32>( aSeriesList.size() );
     for( sal_Int32 nS = 0; nS < nSeriesCount; ++nS )

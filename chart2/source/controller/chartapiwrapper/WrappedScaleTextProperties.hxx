@@ -34,7 +34,7 @@ namespace wrapper
 class WrappedScaleTextProperties
 {
 public:
-    static void addProperties( ::std::vector< css::beans::Property >& rOutProperties );
+    static void addProperties( std::vector< css::beans::Property >& rOutProperties );
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList
                     , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );
 };

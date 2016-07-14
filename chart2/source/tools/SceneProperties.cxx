@@ -36,7 +36,7 @@ namespace chart
 {
 
 void SceneProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     // transformation matrix
     rOutProperties.push_back(

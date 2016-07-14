@@ -658,7 +658,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     // outer border:
 
-    ::std::pair<svx::FrameBorderType,SvxBoxItemLine> eTypes1[] = {
+    std::pair<svx::FrameBorderType,SvxBoxItemLine> eTypes1[] = {
                                 { svx::FRAMEBORDER_TOP,SvxBoxItemLine::TOP },
                                 { svx::FRAMEBORDER_BOTTOM,SvxBoxItemLine::BOTTOM },
                                 { svx::FRAMEBORDER_LEFT,SvxBoxItemLine::LEFT },
@@ -672,7 +672,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
     aBoxItem.SetRemoveAdjacentCellBorder( mbRemoveAdjacentCellBorders );
     // border hor/ver and TableFlag
 
-    ::std::pair<svx::FrameBorderType,SvxBoxInfoItemLine> eTypes2[] = {
+    std::pair<svx::FrameBorderType,SvxBoxInfoItemLine> eTypes2[] = {
                                 { svx::FRAMEBORDER_HOR,SvxBoxInfoItemLine::HORI },
                                 { svx::FRAMEBORDER_VER,SvxBoxInfoItemLine::VERT }
                             };
@@ -1228,7 +1228,7 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
     const SvxBoxItem*     pOldBoxItem     = static_cast<const SvxBoxItem*>(GetOldItem( rOldSet, SID_ATTR_BORDER_OUTER ));
     if( !pOldBoxInfoItem || !pOldBoxItem )
         return;
-    ::std::pair<svx::FrameBorderType, SvxBoxInfoItemValidFlags> eTypes1[] = {
+    std::pair<svx::FrameBorderType, SvxBoxInfoItemValidFlags> eTypes1[] = {
         { svx::FRAMEBORDER_TOP,SvxBoxInfoItemValidFlags::TOP },
         { svx::FRAMEBORDER_BOTTOM,SvxBoxInfoItemValidFlags::BOTTOM },
         { svx::FRAMEBORDER_LEFT,SvxBoxInfoItemValidFlags::LEFT },

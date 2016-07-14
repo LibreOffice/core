@@ -144,7 +144,7 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitIncrementData
     positions of subsequent tickmarks in relation to their parent tickmarks
     given by the preceding SubIncrement.</p>
     */
-    ::std::vector< ExplicitSubIncrement > SubIncrements;
+    std::vector< ExplicitSubIncrement > SubIncrements;
 };
 
 } //namespace chart

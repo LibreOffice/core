@@ -237,7 +237,7 @@ DataPointItemConverter::DataPointItemConverter(
 
 DataPointItemConverter::~DataPointItemConverter()
 {
-    ::std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
+    std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void DataPointItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

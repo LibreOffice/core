@@ -118,8 +118,8 @@ VDataSeriesGroup::~VDataSeriesGroup()
 void VDataSeriesGroup::deleteSeries()
 {
     //delete all data series help objects:
-    ::std::vector< VDataSeries* >::const_iterator aIter = m_aSeriesVector.begin();
-    const ::std::vector< VDataSeries* >::const_iterator aEnd  = m_aSeriesVector.end();
+    std::vector< VDataSeries* >::const_iterator aIter = m_aSeriesVector.begin();
+    const std::vector< VDataSeries* >::const_iterator aEnd    = m_aSeriesVector.end();
     for( ; aIter != aEnd; ++aIter )
     {
         delete *aIter;
@@ -158,12 +158,12 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
 VSeriesPlotter::~VSeriesPlotter()
 {
     //delete all data series help objects:
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-    const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
+    std::vector< std::vector< VDataSeriesGroup > >::iterator                 aZSlotIter = m_aZSlots.begin();
+    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator      aZSlotEnd = m_aZSlots.end();
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
-        ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+        std::vector< VDataSeriesGroup >::iterator               aXSlotIter = aZSlotIter->begin();
+        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
         for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             aXSlotIter->deleteSeries();
@@ -209,14 +209,14 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
     if(zSlot<0 || zSlot>=static_cast<sal_Int32>(m_aZSlots.size()))
     {
         //new z slot
-        ::std::vector< VDataSeriesGroup > aZSlot;
+        std::vector< VDataSeriesGroup > aZSlot;
         aZSlot.push_back( VDataSeriesGroup(pSeries) );
         m_aZSlots.push_back( aZSlot );
     }
     else
     {
         //existing zslot
-        ::std::vector< VDataSeriesGroup >& rXSlots = m_aZSlots[zSlot];
+        std::vector< VDataSeriesGroup >& rXSlots = m_aZSlots[zSlot];
 
         if(xSlot<0 || xSlot>=static_cast<sal_Int32>(rXSlots.size()))
         {
@@ -271,18 +271,18 @@ drawing::Direction3D VSeriesPlotter::getPreferredDiagramAspectRatio() const
 
 void VSeriesPlotter::releaseShapes()
 {
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-    const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
+    std::vector< std::vector< VDataSeriesGroup > >::iterator                 aZSlotIter = m_aZSlots.begin();
+    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
-        ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+        std::vector< VDataSeriesGroup >::iterator               aXSlotIter = aZSlotIter->begin();
+        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
         for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
-            ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+            std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
-            ::std::vector< VDataSeries* >::iterator             aSeriesIter = pSeriesList->begin();
-            const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+            std::vector< VDataSeries* >::iterator               aSeriesIter = pSeriesList->begin();
+            const std::vector< VDataSeries* >::const_iterator aSeriesEnd    = pSeriesList->end();
 
             //iterate through all series in this x slot
             for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
@@ -1549,12 +1549,12 @@ void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximu
     ::rtl::math::setInf(&rfMinimum, false);
     ::rtl::math::setInf(&rfMaximum, true);
 
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator       aZSlotIter = m_aZSlots.begin();
-    const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
+    std::vector< std::vector< VDataSeriesGroup > >::const_iterator           aZSlotIter = m_aZSlots.begin();
+    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator      aZSlotEnd = m_aZSlots.end();
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
-        ::std::vector< VDataSeriesGroup >::const_iterator      aXSlotIter = aZSlotIter->begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+        std::vector< VDataSeriesGroup >::const_iterator        aXSlotIter = aZSlotIter->begin();
+        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
         for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             double fLocalMinimum, fLocalMaximum;
@@ -1576,12 +1576,12 @@ void VSeriesPlotter::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, d
     ::rtl::math::setInf(&rfMinY, false);
     ::rtl::math::setInf(&rfMaxY, true);
 
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator       aZSlotIter = m_aZSlots.begin();
-    const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
+    std::vector< std::vector< VDataSeriesGroup > >::const_iterator           aZSlotIter = m_aZSlots.begin();
+    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator      aZSlotEnd = m_aZSlots.end();
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
-        ::std::vector< VDataSeriesGroup >::const_iterator      aXSlotIter = aZSlotIter->begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+        std::vector< VDataSeriesGroup >::const_iterator        aXSlotIter = aZSlotIter->begin();
+        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
         for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
             double fLocalMinimum, fLocalMaximum;
@@ -1602,13 +1602,13 @@ sal_Int32 VSeriesPlotter::getPointCount() const
 {
     sal_Int32 nRet = 0;
 
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator       aZSlotIter = m_aZSlots.begin();
-    const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
+    std::vector< std::vector< VDataSeriesGroup > >::const_iterator           aZSlotIter = m_aZSlots.begin();
+    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
 
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
-        ::std::vector< VDataSeriesGroup >::const_iterator       aXSlotIter = aZSlotIter->begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+        std::vector< VDataSeriesGroup >::const_iterator         aXSlotIter = aZSlotIter->begin();
+        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
         for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
@@ -1642,8 +1642,8 @@ sal_Int32 VDataSeriesGroup::getPointCount() const
         return m_nMaxPointCount;
 
     sal_Int32 nRet = 0;
-    ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = m_aSeriesVector.begin();
-    const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd = m_aSeriesVector.end();
+    std::vector< VDataSeries* >::const_iterator         aSeriesIter = m_aSeriesVector.begin();
+    const std::vector< VDataSeries* >::const_iterator aSeriesEnd = m_aSeriesVector.end();
 
     for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter)
     {
@@ -1661,8 +1661,8 @@ sal_Int32 VDataSeriesGroup::getPointCount() const
 sal_Int32 VDataSeriesGroup::getAttachedAxisIndexForFirstSeries() const
 {
     sal_Int32 nRet = 0;
-    ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = m_aSeriesVector.begin();
-    const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd = m_aSeriesVector.end();
+    std::vector< VDataSeries* >::const_iterator         aSeriesIter = m_aSeriesVector.begin();
+    const std::vector< VDataSeries* >::const_iterator aSeriesEnd = m_aSeriesVector.end();
 
     if( aSeriesIter != aSeriesEnd )
         nRet = (*aSeriesIter)->getAttachedAxisIndex();
@@ -1672,10 +1672,10 @@ sal_Int32 VDataSeriesGroup::getAttachedAxisIndexForFirstSeries() const
 
 void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const
 {
-    const ::std::vector< VDataSeries* >* pSeriesList = &this->m_aSeriesVector;
+    const std::vector< VDataSeries* >* pSeriesList = &this->m_aSeriesVector;
 
-    ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-    const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+    std::vector< VDataSeries* >::const_iterator         aSeriesIter = pSeriesList->begin();
+    const std::vector< VDataSeries* >::const_iterator aSeriesEnd    = pSeriesList->end();
 
     ::rtl::math::setInf(&rfMinimum, false);
     ::rtl::math::setInf(&rfMaximum, true);
@@ -1907,8 +1907,8 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
     ::rtl::math::setNan( &fFirstPositiveY );
     ::rtl::math::setNan( &fFirstNegativeY );
 
-    ::std::vector< VDataSeries* >::const_iterator aSeriesIter = m_aSeriesVector.begin();
-    ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = m_aSeriesVector.end();
+    std::vector< VDataSeries* >::const_iterator aSeriesIter = m_aSeriesVector.begin();
+    std::vector< VDataSeries* >::const_iterator aSeriesEnd    = m_aSeriesVector.end();
 
     if( bSeparateStackingForDifferentSigns )
     {
@@ -2055,12 +2055,12 @@ void VSeriesPlotter::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& /
 
 VDataSeries* VSeriesPlotter::getFirstSeries() const
 {
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotIter( m_aZSlots.begin() );
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd( m_aZSlots.end() );
+    std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotIter( m_aZSlots.begin() );
+    std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd( m_aZSlots.end() );
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
-        ::std::vector< VDataSeriesGroup >::const_iterator       aXSlotIter = aZSlotIter->begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd  = aZSlotIter->end();
+        std::vector< VDataSeriesGroup >::const_iterator         aXSlotIter = aZSlotIter->begin();
+        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd    = aZSlotIter->end();
 
         if( aXSlotIter != aXSlotEnd )
         {
@@ -2078,18 +2078,18 @@ VDataSeries* VSeriesPlotter::getFirstSeries() const
 
 uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
 {
-    ::std::vector< OUString > aRetVector;
+    std::vector< OUString > aRetVector;
 
     OUString aRole;
     if( m_xChartTypeModel.is() )
         aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
 
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotIter( m_aZSlots.begin() );
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd( m_aZSlots.end() );
+    std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotIter( m_aZSlots.begin() );
+    std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd( m_aZSlots.end() );
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
-        ::std::vector< VDataSeriesGroup >::const_iterator       aXSlotIter = aZSlotIter->begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd  = aZSlotIter->end();
+        std::vector< VDataSeriesGroup >::const_iterator         aXSlotIter = aZSlotIter->begin();
+        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd    = aZSlotIter->end();
 
         if( aXSlotIter != aXSlotEnd )
         {
@@ -2111,13 +2111,13 @@ uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
 
 namespace
 {
-struct lcl_setRefSizeAtSeriesGroup : public ::std::unary_function< VDataSeriesGroup, void >
+struct lcl_setRefSizeAtSeriesGroup : public std::unary_function< VDataSeriesGroup, void >
 {
     explicit lcl_setRefSizeAtSeriesGroup( awt::Size aRefSize ) : m_aRefSize( aRefSize ) {}
     void operator()( VDataSeriesGroup & rGroup )
     {
-        ::std::vector< VDataSeries* >::iterator aIt( rGroup.m_aSeriesVector.begin());
-        const ::std::vector< VDataSeries* >::iterator aEndIt( rGroup.m_aSeriesVector.end());
+        std::vector< VDataSeries* >::iterator aIt( rGroup.m_aSeriesVector.begin());
+        const std::vector< VDataSeries* >::iterator aEndIt( rGroup.m_aSeriesVector.end());
         for( ; aIt != aEndIt; ++aIt )
             (*aIt)->setPageReferenceSize( m_aRefSize );
     }
@@ -2133,8 +2133,8 @@ void VSeriesPlotter::setPageReferenceSize( const css::awt::Size & rPageRefSize )
 
     // set reference size also at all data series
 
-    ::std::vector< VDataSeriesGroup > aSeriesGroups( FlattenVector( m_aZSlots ));
-    ::std::for_each( aSeriesGroups.begin(), aSeriesGroups.end(),
+    std::vector< VDataSeriesGroup > aSeriesGroups( FlattenVector( m_aZSlots ));
+    std::for_each( aSeriesGroups.begin(), aSeriesGroups.end(),
                      lcl_setRefSizeAtSeriesGroup( m_aPageReferenceSize ));
 }
 
@@ -2172,17 +2172,17 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
         //iterate through all series
         bool bBreak = false;
         bool bFirstSeries = true;
-        ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-        const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
+        std::vector< std::vector< VDataSeriesGroup > >::iterator                 aZSlotIter = m_aZSlots.begin();
+        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator      aZSlotEnd = m_aZSlots.end();
         for( ; aZSlotIter!=aZSlotEnd && !bBreak; ++aZSlotIter )
         {
-            ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+            std::vector< VDataSeriesGroup >::iterator               aXSlotIter = aZSlotIter->begin();
+            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
             for( ; aXSlotIter!=aXSlotEnd && !bBreak; ++aXSlotIter )
             {
-                ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-                ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+                std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+                std::vector< VDataSeries* >::const_iterator         aSeriesIter = pSeriesList->begin();
+                const std::vector< VDataSeries* >::const_iterator aSeriesEnd    = pSeriesList->end();
                 //iterate through all series in this x slot
                 for( ; aSeriesIter!=aSeriesEnd && !bBreak; ++aSeriesIter )
                 {
@@ -2224,18 +2224,18 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
     return aResult;
 }
 
-::std::vector< VDataSeries* > VSeriesPlotter::getAllSeries()
+std::vector< VDataSeries* > VSeriesPlotter::getAllSeries()
 {
-    ::std::vector< VDataSeries* > aAllSeries;
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
-    const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
+    std::vector< VDataSeries* > aAllSeries;
+    std::vector< std::vector< VDataSeriesGroup > >::iterator                aZSlotIter = m_aZSlots.begin();
+    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
     for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
-        ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+        std::vector< VDataSeriesGroup >::iterator               aXSlotIter = aZSlotIter->begin();
+        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
         for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
-            ::std::vector< VDataSeries* > aSeriesList = aXSlotIter->m_aSeriesVector;
+            std::vector< VDataSeries* > aSeriesList = aXSlotIter->m_aSeriesVector;
             aAllSeries.insert( aAllSeries.end(), aSeriesList.begin(), aSeriesList.end() );
         }
     }
@@ -2293,9 +2293,9 @@ awt::Size VSeriesPlotter::getPreferredLegendKeyAspectRatio()
     bool bSeriesAllowsLines = (getLegendSymbolStyle() == LegendSymbolStyle_LINE);
     bool bHasLines = false;
     bool bHasDashedLines = false;
-    ::std::vector< VDataSeries* > aAllSeries( getAllSeries() );
-    ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = aAllSeries.begin();
-    const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = aAllSeries.end();
+    std::vector< VDataSeries* > aAllSeries( getAllSeries() );
+    std::vector< VDataSeries* >::const_iterator         aSeriesIter = aAllSeries.begin();
+    const std::vector< VDataSeries* >::const_iterator aSeriesEnd    = aAllSeries.end();
     //iterate through all series
     for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
     {

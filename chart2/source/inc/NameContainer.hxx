@@ -81,7 +81,7 @@ private: //member
     const OUString                 m_aServicename;
     const OUString                 m_aImplementationName;
 
-    typedef ::std::map< OUString, css::uno::Any > tContentMap;
+    typedef std::map< OUString, css::uno::Any > tContentMap;
 
     tContentMap m_aMap;
 };

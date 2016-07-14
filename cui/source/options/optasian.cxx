@@ -59,7 +59,7 @@ SvxForbiddenChars_Impl::~SvxForbiddenChars_Impl()
     delete pCharacters;
 }
 
-typedef ::std::map< LanguageType, SvxForbiddenChars_Impl* > SvxForbiddenCharacterMap_Impl;
+typedef std::map< LanguageType, SvxForbiddenChars_Impl* > SvxForbiddenCharacterMap_Impl;
 
 struct SvxAsianLayoutPage_Impl
 {
@@ -110,7 +110,7 @@ void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
         SvxForbiddenChars_Impl* pChar = new SvxForbiddenChars_Impl;
         pChar->bRemoved = nullptr == pForbidden;
         pChar->pCharacters = pForbidden ? new ForbiddenCharacters(*pForbidden) : nullptr;
-        aChangedLanguagesMap.insert( ::std::make_pair( eLang, pChar ) );
+        aChangedLanguagesMap.insert( std::make_pair( eLang, pChar ) );
     }
     else
     {

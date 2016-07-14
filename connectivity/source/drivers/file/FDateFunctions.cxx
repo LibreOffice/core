@@ -195,7 +195,7 @@ ORowSetValue OOp_Quarter::operate(const ORowSetValue& lhs) const
     return nRet;
 }
 
-ORowSetValue OOp_Week::operate(const ::std::vector<ORowSetValue>& lhs) const
+ORowSetValue OOp_Week::operate(const std::vector<ORowSetValue>& lhs) const
 {
     if ( lhs.empty() || lhs.size() > 2 )
         return ORowSetValue();
@@ -248,7 +248,7 @@ ORowSetValue OOp_Second::operate(const ORowSetValue& lhs) const
     return static_cast<sal_Int16>(aT.Seconds);
 }
 
-ORowSetValue OOp_CurDate::operate(const ::std::vector<ORowSetValue>& lhs) const
+ORowSetValue OOp_CurDate::operate(const std::vector<ORowSetValue>& lhs) const
 {
     if ( !lhs.empty() )
         return ORowSetValue();
@@ -257,7 +257,7 @@ ORowSetValue OOp_CurDate::operate(const ::std::vector<ORowSetValue>& lhs) const
     return aCurDate.GetUNODate();
 }
 
-ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
+ORowSetValue OOp_CurTime::operate(const std::vector<ORowSetValue>& lhs) const
 {
     if ( !lhs.empty() )
         return ORowSetValue();
@@ -266,7 +266,7 @@ ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
     return aCurTime.GetUNOTime();
 }
 
-ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const
+ORowSetValue OOp_Now::operate(const std::vector<ORowSetValue>& lhs) const
 {
     if ( !lhs.empty() )
         return ORowSetValue();

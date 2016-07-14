@@ -389,7 +389,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
             aObjDescr[1].Name = "DefaultParentBaseURL";
             aObjDescr[1].Value <<= *pBaseURL;
         }
-        ::std::copy( rArgs.begin(), rArgs.end(), aObjDescr.getArray() + nExtraArgs );
+        std::copy( rArgs.begin(), rArgs.end(), aObjDescr.getArray() + nExtraArgs );
         xObj.set( xFactory->createInstanceInitNew(
                     rClassId, OUString(), pImpl->mxStorage, rNewName,
                     aObjDescr ), uno::UNO_QUERY );

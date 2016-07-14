@@ -39,7 +39,7 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 }
 
 bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
-                                                   ::std::vector< OUString >& _rStrings)
+                                                   std::vector< OUString >& _rStrings)
 {
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTableStrings()");
 
@@ -51,7 +51,7 @@ bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
     std::set<std::string> lists;
     MorkParser* pMork = _pCon->getMorkParser("AddressBook");
     pMork->retrieveLists(lists);
-    for (::std::set<std::string>::const_iterator iter = lists.begin(); iter != lists.end(); ++iter) {
+    for (std::set<std::string>::const_iterator iter = lists.begin(); iter != lists.end(); ++iter) {
         OUString groupTableName = OStringToOUString((*iter).c_str(), RTL_TEXTENCODING_UTF8);
         SAL_INFO("connectivity.mork", "add Table " << groupTableName);
 
@@ -63,7 +63,7 @@ bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
     std::set<std::string> lists_history;
     pMork = _pCon->getMorkParser("CollectedAddressBook");
     pMork->retrieveLists(lists_history);
-    for (::std::set<std::string>::const_iterator iter = lists_history.begin(); iter != lists_history.end(); ++iter) {
+    for (std::set<std::string>::const_iterator iter = lists_history.begin(); iter != lists_history.end(); ++iter) {
         OUString groupTableName = OStringToOUString((*iter).c_str(), RTL_TEXTENCODING_UTF8);
         SAL_INFO("connectivity.mork", "add Table " << groupTableName);
 
@@ -91,7 +91,7 @@ bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
     aRows.clear();
 
-    ::std::vector< OUString > tables;
+    std::vector< OUString > tables;
 
     if ( !getTableStrings( _pCon, tables ) )
         return false;

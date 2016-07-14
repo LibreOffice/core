@@ -174,7 +174,7 @@ VCartesianGrid::~VCartesianGrid()
     m_pPosHelper = nullptr;
 }
 
-void VCartesianGrid::fillLinePropertiesFromGridModel( ::std::vector<VLineProperties>& rLinePropertiesList
+void VCartesianGrid::fillLinePropertiesFromGridModel( std::vector<VLineProperties>& rLinePropertiesList
                                      , const Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
 {
     rLinePropertiesList.clear();
@@ -205,7 +205,7 @@ void VCartesianGrid::createShapes()
     if(!xGroupShape_Shapes.is())
         return;
 
-    ::std::vector<VLineProperties> aLinePropertiesList;
+    std::vector<VLineProperties> aLinePropertiesList;
     fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
     //create all scaled tickmark values

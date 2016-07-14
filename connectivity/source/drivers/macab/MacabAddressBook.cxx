@@ -35,13 +35,13 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-void manageDuplicateGroups(::std::vector<MacabGroup *> _xGroups)
+void manageDuplicateGroups(std::vector<MacabGroup *> _xGroups)
 {
     /* If we have two cases of groups, say, family, this makes it:
      * family
      * family (2)
      */
-    ::std::vector<MacabGroup *>::reverse_iterator iter1, iter2;
+    std::vector<MacabGroup *>::reverse_iterator iter1, iter2;
     sal_Int32 count;
 
     for(iter1 = _xGroups.rbegin(); iter1 != _xGroups.rend(); ++iter1)
@@ -95,7 +95,7 @@ MacabAddressBook::~MacabAddressBook()
 
     if(!m_xMacabGroups.empty())
     {
-        ::std::vector<MacabGroup *>::iterator iter, end;
+        std::vector<MacabGroup *>::iterator iter, end;
         iter = m_xMacabGroups.begin();
         end = m_xMacabGroups.end();
         for( ; iter != end; ++iter)
@@ -160,7 +160,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString& _tableName)
 }
 
 
-::std::vector<MacabGroup *> MacabAddressBook::getMacabGroups()
+std::vector<MacabGroup *> MacabAddressBook::getMacabGroups()
 {
     /* If the MacabGroups haven't been created yet, create them. */
     if(!m_bRetrievedGroups)
@@ -175,7 +175,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString& _tableName)
 
         CFArrayRef allGroups = ABCopyArrayOfAllGroups(m_aAddressBook);
         sal_Int32 nGroups = CFArrayGetCount(allGroups);
-        m_xMacabGroups = ::std::vector<MacabGroup *>(nGroups);
+        m_xMacabGroups = std::vector<MacabGroup *>(nGroups);
 
         sal_Int32 i;
         ABGroupRef xGroup;

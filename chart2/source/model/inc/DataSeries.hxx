@@ -180,15 +180,15 @@ protected:
 
 private:
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
-    typedef ::std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
+    typedef std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
     tDataSequenceContainer        m_aDataSequences;
 
-    typedef ::std::map< sal_Int32,
+    typedef std::map< sal_Int32,
         css::uno::Reference< css::beans::XPropertySet > > tDataPointAttributeContainer;
     tDataPointAttributeContainer  m_aAttributedDataPoints;
 
     typedef
-        ::std::vector< css::uno::Reference< css::chart2::XRegressionCurve > >
+        std::vector< css::uno::Reference< css::chart2::XRegressionCurve > >
         tRegressionCurveContainerType;
     tRegressionCurveContainerType m_aRegressionCurves;
 

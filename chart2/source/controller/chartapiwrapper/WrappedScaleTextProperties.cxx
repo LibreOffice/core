@@ -125,7 +125,7 @@ enum
 
 }//anonymous namespace
 
-void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOutProperties )
+void WrappedScaleTextProperties::addProperties( std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "ScaleText",
