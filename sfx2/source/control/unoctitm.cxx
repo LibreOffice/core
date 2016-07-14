@@ -1140,14 +1140,17 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     }
     else if (aEvent.FeatureURL.Path == "InsertPage" ||
              aEvent.FeatureURL.Path == "DeletePage" ||
-             aEvent.FeatureURL.Path == "DuplicatePage")
+             aEvent.FeatureURL.Path == "DuplicatePage" ||
+             aEvent.FeatureURL.Path == "SortAscending" ||
+             aEvent.FeatureURL.Path == "SortDescending")
     {
         aBuffer.append(OUString::boolean(aEvent.IsEnabled));
     }
     else if (aEvent.FeatureURL.Path == "AssignLayout" ||
              aEvent.FeatureURL.Path == "StatusSelectionMode" ||
              aEvent.FeatureURL.Path == "Signature" ||
-             aEvent.FeatureURL.Path == "SelectionMode")
+             aEvent.FeatureURL.Path == "SelectionMode" ||
+             aEvent.FeatureURL.Path == "StatusBarFunc")
     {
         sal_Int32 aInt32;
 
@@ -1197,8 +1200,7 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
             aBuffer.append(OUString::number(aPoint.X) + OUString(" / ") + OUString::number(aPoint.Y));
         }
     }
-    else if (aEvent.FeatureURL.Path == "StatusBarFunc" ||
-             aEvent.FeatureURL.Path == "Size")
+    else if (aEvent.FeatureURL.Path == "Size")
     {
         css::awt::Size aSize;
 
