@@ -16,6 +16,24 @@
       "revId": "2dfc3cadc79c4a000ac2dc2de7e31116f91e38f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba84c18e_ef2cb8ad",
+        "filename": "svx/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-07-14T09:41:22Z",
+      "side": 1,
+      "message": "\u0027ViewObjectContact and Views have a conceptual 1:1 relationship\u0027 -\u003e not the case. Relation is 1:n where \u00271\u0027 is the view and \u0027n\u0027 is potentially all visualizable objects (NOT limited to SdrObjects btw). It is limited to the visible ones and VOCs can be elliminated/recreated at every time, they are layouted as every-moment-reconstructable (e.g. for refreshes).\n\nText at the end is correct, graphic is misleading. In short:\n\n- ViewContact is the base class to implement a visualizable object, SdrObjects and SdrPages create these on-demand (but that is choice, not necessary)\n- ObjectContact ist the base class on View-side to work with visualizable objects\n- all object visualization in view and pack-path (intgeraction) is/should be implemented in this concept\n- ViewObjectContact is the in-between data holder which connects VC and OC. When you have the VOC you have access to the model object and the view, all necessary data to create a visualization\n- At each VC, n instances of VOCs can exist (one per OC aka View)\n- at each OC, m instances of VOCs can exist where m \u003c\u003d visializable objects in the model that is visualized\n- OC and VC use the same VOCs\n- all instances are create-on-demand, used by references and thus always exist. All instances may be flushed on changes.\n- This makes the VC the natural place for view-independent primitive creation and the VOC for view-dependent ones and their bufferings\n\nHTH!",
+      "parentUuid": "ba84c18e_2f4f8093",
+      "revId": "2dfc3cadc79c4a000ac2dc2de7e31116f91e38f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
