@@ -34,8 +34,8 @@ class XMLEventContextFactory;
 class XMLEventsImportContext;
 struct XMLEventNameTranslation;
 
-typedef ::std::map< OUString, XMLEventContextFactory* > FactoryMap;
-typedef ::std::map< XMLEventName, OUString > NameMap;
+typedef std::map< OUString, XMLEventContextFactory* > FactoryMap;
+typedef std::map< XMLEventName, OUString > NameMap;
 
 
 /**

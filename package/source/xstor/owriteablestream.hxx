@@ -68,7 +68,7 @@ namespace package {
 
 struct WSInternalData_Impl;
 
-typedef ::std::list< OInputCompStream* > InputStreamsList_Impl;
+typedef std::list< OInputCompStream* > InputStreamsList_Impl;
 
 struct OStorage_Impl;
 class OWriteStream;

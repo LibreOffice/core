@@ -539,7 +539,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             {
                 // Get parent and remove hyperlinks (they aren't of interest)
                 rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
-                for( ::std::vector< XMLPropertyState >::iterator i(aPropStates.begin());
+                for( std::vector< XMLPropertyState >::iterator i(aPropStates.begin());
                       nIgnoreProps < 2 && i != aPropStates.end(); )
                 {
                     if( i->mnIndex == -1 )
@@ -726,10 +726,10 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
     rbHyperlink = rbHasCharStyle = rbHasAutoStyle = false;
     sal_uInt16 nIgnoreProps = 0;
     rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
-    ::std::vector< XMLPropertyState >::iterator aFirstDel = aPropStates.end();
-    ::std::vector< XMLPropertyState >::iterator aSecondDel = aPropStates.end();
+    std::vector< XMLPropertyState >::iterator aFirstDel = aPropStates.end();
+    std::vector< XMLPropertyState >::iterator aSecondDel = aPropStates.end();
 
-    for( ::std::vector< XMLPropertyState >::iterator
+    for( std::vector< XMLPropertyState >::iterator
             i = aPropStates.begin();
          nIgnoreProps < 2 && i != aPropStates.end();
          ++i )
@@ -1129,7 +1129,7 @@ void XMLTextParagraphExport::exportListChange(
 
 struct XMLTextParagraphExport::Impl
 {
-    typedef ::std::map<Reference<XFormField>, sal_Int32> FieldMarkMap_t;
+    typedef std::map<Reference<XFormField>, sal_Int32> FieldMarkMap_t;
     FieldMarkMap_t m_FieldMarkMap;
 
     explicit Impl() {}
@@ -1137,7 +1137,7 @@ struct XMLTextParagraphExport::Impl
     {
         assert(m_FieldMarkMap.find(i_xFieldMark) == m_FieldMarkMap.end());
         sal_Int32 const ret(m_FieldMarkMap.size());
-        m_FieldMarkMap.insert(::std::make_pair(i_xFieldMark, ret));
+        m_FieldMarkMap.insert(std::make_pair(i_xFieldMark, ret));
         return ret;
     }
     sal_Int32 GetFieldMarkIndex(Reference<XFormField> const& i_xFieldMark)

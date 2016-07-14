@@ -82,7 +82,7 @@ private:
 protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
-        ::std::vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
 public:
     XMLShapeExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
@@ -92,7 +92,7 @@ public:
                             SvXMLExport& rExport,
                             const XMLPropertyState& rProperty,
                             SvXmlExportFlags nFlags,
-                            const ::std::vector< XMLPropertyState >* pProperties = nullptr,
+                            const std::vector< XMLPropertyState >* pProperties = nullptr,
                             sal_uInt32 nIdx = 0
                             ) const override;
 
@@ -103,7 +103,7 @@ public:
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
-            const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+            const std::vector< XMLPropertyState > *pProperties = nullptr,
             sal_uInt32 nIdx = 0 ) const override;
 };
 
@@ -115,7 +115,7 @@ private:
 protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
-        ::std::vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         const css::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
 public:
     XMLPageExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
@@ -125,7 +125,7 @@ public:
                             SvXMLExport& rExport,
                             const XMLPropertyState& rProperty,
                             SvXmlExportFlags nFlags,
-                            const ::std::vector< XMLPropertyState >* pProperties = nullptr,
+                            const std::vector< XMLPropertyState >* pProperties = nullptr,
                             sal_uInt32 nIdx = 0
                             ) const override;
 };

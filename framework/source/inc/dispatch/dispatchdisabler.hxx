@@ -50,61 +50,61 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::css::uno::Sequence< ::css::uno::Any >& aArguments )
-        throw (::css::uno::Exception, ::css::uno::RuntimeException, ::std::exception) override;
+        throw (::css::uno::Exception, ::css::uno::RuntimeException, std::exception) override;
 
     // XDispatchProvider
     virtual ::css::uno::Reference< ::css::frame::XDispatch > SAL_CALL
         queryDispatch( const ::css::util::URL& URL,
                const OUString& TargetFrameName,
                ::sal_Int32 SearchFlags )
-           throw (::css::uno::RuntimeException, ::std::exception) override;
+           throw (::css::uno::RuntimeException, std::exception) override;
     virtual ::css::uno::Sequence< ::css::uno::Reference< ::css::frame::XDispatch > > SAL_CALL
         queryDispatches( const ::css::uno::Sequence< ::css::frame::DispatchDescriptor >& Requests )
-           throw (::css::uno::RuntimeException, ::std::exception) override;
+           throw (::css::uno::RuntimeException, std::exception) override;
 
     // XDispatchProviderInterceptor
     virtual ::css::uno::Reference< ::css::frame::XDispatchProvider > SAL_CALL
-        getSlaveDispatchProvider() throw (::css::uno::RuntimeException, ::std::exception) override;
+        getSlaveDispatchProvider() throw (::css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
         setSlaveDispatchProvider( const ::css::uno::Reference< ::css::frame::XDispatchProvider >& NewDispatchProvider )
-            throw (::css::uno::RuntimeException, ::std::exception) override;
+            throw (::css::uno::RuntimeException, std::exception) override;
     virtual ::css::uno::Reference< ::css::frame::XDispatchProvider > SAL_CALL
-        getMasterDispatchProvider() throw (::css::uno::RuntimeException, ::std::exception) override;
+        getMasterDispatchProvider() throw (::css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL
         setMasterDispatchProvider( const ::css::uno::Reference< ::css::frame::XDispatchProvider >& NewSupplier )
-            throw (::css::uno::RuntimeException, ::std::exception) override;
+            throw (::css::uno::RuntimeException, std::exception) override;
 
     // XInterceptorInfo
     virtual ::css::uno::Sequence< OUString > SAL_CALL
-        getInterceptedURLs() throw (::css::uno::RuntimeException, ::std::exception) override;
+        getInterceptedURLs() throw (::css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
     virtual ::css::uno::Type SAL_CALL getElementType()
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+        throw (::css::uno::RuntimeException, std::exception) override;
     virtual ::sal_Bool SAL_CALL hasElements()
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+        throw (::css::uno::RuntimeException, std::exception) override;
 
     // XNameAccess
     virtual ::css::uno::Any SAL_CALL getByName( const OUString& aName )
         throw (::css::container::NoSuchElementException, ::css::lang::WrappedTargetException,
-               ::css::uno::RuntimeException, ::std::exception) override;
+               ::css::uno::RuntimeException, std::exception) override;
     virtual ::css::uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+        throw (::css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+        throw (::css::uno::RuntimeException, std::exception) override;
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const OUString& aName, const ::css::uno::Any& aElement )
         throw (::css::lang::IllegalArgumentException, ::css::container::NoSuchElementException,
-               ::css::lang::WrappedTargetException, ::css::uno::RuntimeException, ::std::exception) override;
+               ::css::lang::WrappedTargetException, ::css::uno::RuntimeException, std::exception) override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const ::css::uno::Any& aElement )
         throw (::css::lang::IllegalArgumentException, ::css::container::ElementExistException,
-               ::css::lang::WrappedTargetException, ::css::uno::RuntimeException, ::std::exception) override;
+               ::css::lang::WrappedTargetException, ::css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeByName( const OUString& Name )
         throw (::css::container::NoSuchElementException, ::css::lang::WrappedTargetException,
-               ::css::uno::RuntimeException, ::std::exception) override;
+               ::css::uno::RuntimeException, std::exception) override;
 
     DECLARE_XSERVICEINFO
 };

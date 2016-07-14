@@ -113,7 +113,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::std::vector;
+using std::vector;
 
 // class SchXMLExportHelper_Impl
 
@@ -121,9 +121,9 @@ class SchXMLExportHelper_Impl
 {
 public:
     // first: data sequence for label, second: data sequence for values.
-    typedef ::std::pair< css::uno::Reference< css::chart2::data::XDataSequence >,
+    typedef std::pair< css::uno::Reference< css::chart2::data::XDataSequence >,
             css::uno::Reference< css::chart2::data::XDataSequence > > tLabelValuesDataPair;
-    typedef ::std::vector< tLabelValuesDataPair > tDataSequenceCont;
+    typedef std::vector< tLabelValuesDataPair > tDataSequenceCont;
 
 public:
     SchXMLExportHelper_Impl( SvXMLExport& rExport,
@@ -171,7 +171,7 @@ public:
     /** first parseDocument: collect autostyles and store names in this queue
         second parseDocument: export content and use names from this queue
      */
-    ::std::queue< OUString > maAutoStyleNameQueue;
+    std::queue< OUString > maAutoStyleNameQueue;
     void CollectAutoStyle(
         const std::vector< XMLPropertyState >& aStates );
     void AddAutoStyleAttribute(
@@ -275,7 +275,7 @@ public:
 namespace
 {
 
-class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+class lcl_MatchesRole : public std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
 public:
     explicit lcl_MatchesRole( const OUString & aRole ) :
@@ -299,15 +299,15 @@ private:
 };
 
 template< typename T >
-    void lcl_SequenceToVectorAppend( const Sequence< T > & rSource, ::std::vector< T > & rDestination )
+    void lcl_SequenceToVectorAppend( const Sequence< T > & rSource, std::vector< T > & rDestination )
 {
     rDestination.reserve( rDestination.size() + rSource.getLength());
-    ::std::copy( rSource.begin(), rSource.end(),
-                 ::std::back_inserter( rDestination ));
+    std::copy( rSource.begin(), rSource.end(),
+                 std::back_inserter( rDestination ));
 }
 
 template< typename T >
-    void lcl_SequenceToVector( const Sequence< T > & rSource, ::std::vector< T > & rDestination )
+    void lcl_SequenceToVector( const Sequence< T > & rSource, std::vector< T > & rDestination )
 {
     rDestination.clear();
     lcl_SequenceToVectorAppend( rSource, rDestination );
@@ -370,12 +370,12 @@ Reference< chart2::data::XDataSource > lcl_createDataSource(
 
 Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequences( const Reference< chart2::XChartDocument >& xChartDoc )
 {
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aContainer;
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aContainer;
     if( xChartDoc.is() )
     {
         Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
-        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
+        std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
+        for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
             ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
         {
             Reference< chart2::data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
@@ -399,7 +399,7 @@ Reference< chart2::data::XLabeledDataSequence >
     const Reference< chart2::data::XLabeledDataSequence > * pBegin = aLabeledSeq.getConstArray();
     const Reference< chart2::data::XLabeledDataSequence > * pEnd = pBegin + aLabeledSeq.getLength();
     const Reference< chart2::data::XLabeledDataSequence > * pMatch =
-        ::std::find_if( pBegin, pEnd, lcl_MatchesRole( rRole ));
+        std::find_if( pBegin, pEnd, lcl_MatchesRole( rRole ));
 
     if( pMatch != pEnd )
         return *pMatch;
@@ -409,7 +409,7 @@ Reference< chart2::data::XLabeledDataSequence >
 
 Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( const Reference< chart2::XChartDocument >& xChartDoc, bool& rOutSourceHasCategoryLabels )
 {
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aLabeledSeqVector;
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aLabeledSeqVector;
 
     //categories are always the first sequence
     Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
@@ -473,7 +473,7 @@ OUString lcl_ConvertRange( const OUString & rRange, const Reference< chart2::XCh
     return aResult;
 }
 
-typedef ::std::pair< OUString, OUString > tLabelAndValueRange;
+typedef std::pair< OUString, OUString > tLabelAndValueRange;
 
 tLabelAndValueRange lcl_getLabelAndValueRangeByRole(
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aSeqCnt,
@@ -589,11 +589,11 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
 
     return aResult;
 }
-::std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
+std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
 {
     double fNan = 0.0;
     ::rtl::math::setNan( &fNan );
-    ::std::vector< double > aResult;
+    std::vector< double > aResult;
     if(!xSeq.is())
         return aResult;
 
@@ -654,8 +654,8 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
         }
     }
 
-    ::std::copy( aValuesSequence.begin(), aValuesSequence.end(),
-                 ::std::back_inserter( aResult ));
+    std::copy( aValuesSequence.begin(), aValuesSequence.end(),
+                 std::back_inserter( aResult ));
     return aResult;
 }
 
@@ -700,14 +700,14 @@ struct lcl_TableData
     Sequence< Sequence< uno::Any > >    aComplexColumnDescriptions;//outer index is columns - inner index is level
     Sequence< Sequence< uno::Any > >    aComplexRowDescriptions;//outer index is rows - inner index is level
 
-    ::std::vector< sal_Int32 > aHiddenColumns;
+    std::vector< sal_Int32 > aHiddenColumns;
 };
 
-typedef ::std::map< sal_Int32, SchXMLExportHelper_Impl::tLabelValuesDataPair >
+typedef std::map< sal_Int32, SchXMLExportHelper_Impl::tLabelValuesDataPair >
     lcl_DataSequenceMap;
 
 struct lcl_SequenceToMapElement :
-    public ::std::unary_function< lcl_DataSequenceMap::mapped_type, lcl_DataSequenceMap::value_type >
+    public std::unary_function< lcl_DataSequenceMap::mapped_type, lcl_DataSequenceMap::value_type >
 {
     lcl_SequenceToMapElement()
     {}
@@ -729,8 +729,8 @@ void lcl_ReorderInternalSequencesAccordingToTheirRangeName(
     SchXMLExportHelper_Impl::tDataSequenceCont & rInOutSequences )
 {
     lcl_DataSequenceMap aIndexSequenceMap;
-    ::std::transform( rInOutSequences.begin(), rInOutSequences.end(),
-                      ::std::inserter( aIndexSequenceMap, aIndexSequenceMap.begin()),
+    std::transform( rInOutSequences.begin(), rInOutSequences.end(),
+                      std::inserter( aIndexSequenceMap, aIndexSequenceMap.begin()),
                       lcl_SequenceToMapElement());
 
     rInOutSequences.clear();
@@ -846,7 +846,7 @@ lcl_TableData lcl_getDataForLocalTable(
             else
                 aResult.aRowDescriptions_Ranges.push_back( aRange );
 
-            ::std::vector< double > aNumbers( lcl_getAllValuesFromSequence( aIt->second ));
+            std::vector< double > aNumbers( lcl_getAllValuesFromSequence( aIt->second ));
             if( bSeriesFromColumns )
             {
                 const sal_Int32 nSize( static_cast< sal_Int32 >( aNumbers.size()));
@@ -899,10 +899,10 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
     }
 }
 
-::std::vector< Reference< chart2::data::XDataSequence > >
+std::vector< Reference< chart2::data::XDataSequence > >
     lcl_getErrorBarSequences( const Reference< beans::XPropertySet > & xErrorBarProp )
 {
-    ::std::vector< Reference< chart2::data::XDataSequence > > aResult;
+    std::vector< Reference< chart2::data::XDataSequence > > aResult;
     Reference< chart2::data::XDataSource > xErrorBarDataSource( xErrorBarProp, uno::UNO_QUERY );
     if( !xErrorBarDataSource.is())
         return aResult;
@@ -3066,9 +3066,9 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                 uno::Reference< chart2::XChartDocument > xNewDoc(mrExport.GetModel(), uno::UNO_QUERY);
 
                 // register data ranges for error bars for export in local table
-                ::std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
+                std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
                     lcl_getErrorBarSequences( xErrorBarProp ));
-                for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
+                for( std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
                          aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
                 {
                     m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
@@ -3253,7 +3253,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     if( xDiagram.is())
         xColorScheme.set( xDiagram->getDefaultColorScheme());
 
-    ::std::list< SchXMLDataPointStruct > aDataPointList;
+    std::list< SchXMLDataPointStruct > aDataPointList;
 
     sal_Int32 nLastIndex = -1;
     sal_Int32 nCurrIndex = 0;
@@ -3261,10 +3261,10 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     // collect elements
     if( bVaryColorsByPoint && xColorScheme.is() )
     {
-        ::std::set< sal_Int32 > aAttrPointSet;
-        ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
-                        ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
-        const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
+        std::set< sal_Int32 > aAttrPointSet;
+        std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
+                        std::inserter( aAttrPointSet, aAttrPointSet.begin()));
+        const std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
         for( nElement = 0; nElement < nSeriesLength; ++nElement )
         {
             aPropertyStates.clear();
@@ -3402,7 +3402,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         return;
 
     // write elements (merge equal ones)
-    ::std::list< SchXMLDataPointStruct >::iterator aIter = aDataPointList.begin();
+    std::list< SchXMLDataPointStruct >::iterator aIter = aDataPointList.begin();
     SchXMLDataPointStruct aPoint;
     SchXMLDataPointStruct aLastPoint;
 

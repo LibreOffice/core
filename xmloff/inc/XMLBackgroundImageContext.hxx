@@ -57,7 +57,7 @@ public:
         sal_Int32 nFilterIdx,
         sal_Int32 nTransparencyIdx,
         sal_Int32 nBitmapModeIdx,
-        ::std::vector< XMLPropertyState > &rProps );
+        std::vector< XMLPropertyState > &rProps );
 
     virtual ~XMLBackgroundImageContext();
 

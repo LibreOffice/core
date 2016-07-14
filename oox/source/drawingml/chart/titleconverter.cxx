@@ -73,7 +73,7 @@ Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
         const OUString& rDefaultText, const ModelRef< TextBody >& rxTextProp, ObjectType eObjType )
 {
     OSL_ENSURE( !mrModel.mxDataSeq || !mrModel.mxTextBody, "TextConverter::createStringSequence - linked string and rich text found" );
-    ::std::vector< Reference< XFormattedString > > aStringVec;
+    std::vector< Reference< XFormattedString > > aStringVec;
     if( mrModel.mxTextBody.is() )
     {
         // rich-formatted text objects can be created, but currently Chart2 is not able to show them
@@ -117,7 +117,7 @@ Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
 }
 
 Reference< XFormattedString > TextConverter::appendFormattedString(
-        ::std::vector< Reference< XFormattedString > >& orStringVec, const OUString& rString, bool bAddNewLine ) const
+        std::vector< Reference< XFormattedString > >& orStringVec, const OUString& rString, bool bAddNewLine ) const
 {
     Reference< XFormattedString2 > xFmtStr;
     try

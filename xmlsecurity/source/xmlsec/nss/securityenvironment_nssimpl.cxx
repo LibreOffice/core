@@ -579,7 +579,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     sal_Int32 validity = csss::CertificateValidity::INVALID;
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
-    ::std::vector<CERTCertificate*> vecTmpNSSCertificates;
+    std::vector<CERTCertificate*> vecTmpNSSCertificates;
     Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
     if( !xCertTunnel.is() ) {
         throw RuntimeException() ;

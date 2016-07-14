@@ -90,7 +90,7 @@ namespace framework
             virtual sal_Bool SAL_CALL isReadOnly() throw (css::uno::RuntimeException, std::exception) override;
 
         private:
-            ::std::unique_ptr<ImageManagerImpl>                                               m_pImpl;
+            std::unique_ptr<ImageManagerImpl>                                                 m_pImpl;
    };
 }
 

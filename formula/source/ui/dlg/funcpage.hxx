@@ -66,7 +66,7 @@ private:
     VclPtr<FormulaListBox>   m_pLbFunction;
     const IFunctionManager*  m_pFunctionManager;
 
-    ::std::vector< TFunctionDesc >  aLRUList;
+    std::vector< TFunctionDesc >    aLRUList;
     OString    m_aHelpId;
 
 

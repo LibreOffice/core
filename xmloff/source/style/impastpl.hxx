@@ -45,19 +45,19 @@ class SvXMLExport;
 class XMLAutoStylePoolProperties
 {
     OUString                     msName;
-    ::std::vector< XMLPropertyState >   maProperties;
+    std::vector< XMLPropertyState >     maProperties;
     sal_uInt32                          mnPos;
 
 public:
 
-    XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rParentname );
+    XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const std::vector< XMLPropertyState >& rProperties, OUString& rParentname );
 
     ~XMLAutoStylePoolProperties()
     {
     }
 
     const OUString& GetName() const { return msName; }
-    const ::std::vector< XMLPropertyState >& GetProperties() const { return maProperties; }
+    const std::vector< XMLPropertyState >& GetProperties() const { return maProperties; }
     sal_uInt32 GetPos() const { return mnPos; }
 
     void SetName( const OUString& rNew ) { msName = rNew; }
@@ -82,11 +82,11 @@ public:
 
     ~XMLAutoStylePoolParent();
 
-    bool Add( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek = false );
+    bool Add( XMLAutoStyleFamily& rFamilyData, const std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek = false );
 
-    bool AddNamed( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const OUString& rName );
+    bool AddNamed( XMLAutoStyleFamily& rFamilyData, const std::vector< XMLPropertyState >& rProperties, const OUString& rName );
 
-    OUString Find( const XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
+    OUString Find( const XMLAutoStyleFamily& rFamilyData, const std::vector< XMLPropertyState >& rProperties ) const;
 
     const OUString& GetParent() const { return msParent; }
 
@@ -162,16 +162,16 @@ public:
     bool Add(
         OUString& rName, sal_Int32 nFamily,
         const OUString& rParentName,
-        const ::std::vector< XMLPropertyState >& rProperties,
+        const std::vector< XMLPropertyState >& rProperties,
         bool bDontSeek = false );
 
     bool AddNamed(
         const OUString& rName, sal_Int32 nFamily,
         const OUString& rParentName,
-        const ::std::vector< XMLPropertyState >& rProperties );
+        const std::vector< XMLPropertyState >& rProperties );
 
     OUString Find( sal_Int32 nFamily, const OUString& rParent,
-                          const ::std::vector< XMLPropertyState >& rProperties ) const;
+                          const std::vector< XMLPropertyState >& rProperties ) const;
 
     void exportXML( sal_Int32 nFamily,
         const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,

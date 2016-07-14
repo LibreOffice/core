@@ -69,8 +69,8 @@ struct SeriesDefaultsAndStyles
     css::uno::Any    maLinesOnProperty;
 
     //styles for series and datapoints
-    ::std::list< DataRowPointStyle > maSeriesStyleList;
-    ::std::list< RegressionStyle >   maRegressionStyleList;
+    std::list< DataRowPointStyle > maSeriesStyleList;
+    std::list< RegressionStyle >     maRegressionStyleList;
 };
 
 class SchXMLChartContext : public SvXMLImportContext

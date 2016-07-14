@@ -267,9 +267,9 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
     return aDmlColor;
 }
 
-void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& rPointLists, ::std::vector< ::std::vector< PolygonFlags > >& rFlagLists, const OUString& rPath )
+void ConversionHelper::decodeVmlPath( std::vector< std::vector< Point > >& rPointLists, std::vector< std::vector< PolygonFlags > >& rFlagLists, const OUString& rPath )
 {
-    ::std::vector< sal_Int32 > aCoordList;
+    std::vector< sal_Int32 > aCoordList;
     Point aCurrentPoint;
     sal_Int32 nTokenStart = 0;
     sal_Int32 nTokenLen = 0;
@@ -279,8 +279,8 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                      LINE_REL, LINE_ABS, CLOSE, END, UNSUPPORTED };
     VML_State state = START;
 
-    rPointLists.push_back( ::std::vector< Point>() );
-    rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+    rPointLists.push_back( std::vector< Point>() );
+    rFlagLists.push_back( std::vector< PolygonFlags >() );
 
     for ( sal_Int32 i = 0; i < rPath.getLength(); i++ )
     {
@@ -314,8 +314,8 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                 case MOVE_REL: // 2* params -> param count reset
                     if ( rPointLists.size() > 0 && rPointLists.back().size() > 0 )
                     {
-                        rPointLists.push_back( ::std::vector< Point >() );
-                        rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                        rPointLists.push_back( std::vector< Point >() );
+                        rFlagLists.push_back( std::vector< PolygonFlags >() );
                     }
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
@@ -326,8 +326,8 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                 case MOVE_ABS: // 2 params -> no param count reset
                     if ( rPointLists.size() > 0 && rPointLists.back().size() > 0 )
                     {
-                        rPointLists.push_back( ::std::vector< Point >() );
-                        rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                        rPointLists.push_back( std::vector< Point >() );
+                        rFlagLists.push_back( std::vector< PolygonFlags >() );
                     }
                     rPointLists.back().push_back( Point( (aCoordList[ 0 ]), (aCoordList.size() > 1 ? aCoordList[ 1 ] : 0) ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
@@ -385,8 +385,8 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                     break;
 
                 case END: // 0 param
-                    rPointLists.push_back( ::std::vector< Point >() );
-                    rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                    rPointLists.push_back( std::vector< Point >() );
+                    rFlagLists.push_back( std::vector< PolygonFlags >() );
                     break;
 
                 case START:
@@ -527,7 +527,7 @@ void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::Da
             // try to convert user-defined dash style
             default:
             {
-                ::std::vector< sal_Int32 > aValues;
+                std::vector< sal_Int32 > aValues;
                 sal_Int32 nIndex = 0;
                 while( nIndex >= 0 )
                     aValues.push_back( rDashStyle.getToken( 0, ' ', nIndex ).toInt32() );

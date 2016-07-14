@@ -67,22 +67,22 @@ namespace xmloff
         MapDrawPage2Map         m_aControlIds;          // ids of the controls on all known page
         MapDrawPage2Map::iterator m_aCurrentPageIds;      // ifs of the controls on the current page
 
-        typedef ::std::pair< css::uno::Reference< css::beans::XPropertySet >, OUString >
+        typedef std::pair< css::uno::Reference< css::beans::XPropertySet >, OUString >
                                 ModelStringPair;
-        ::std::vector< ModelStringPair >
+        std::vector< ModelStringPair >
                                 m_aControlReferences;   // control reference descriptions for current page
-        ::std::vector< ModelStringPair >
+        std::vector< ModelStringPair >
                                 m_aCellValueBindings;   // information about controls bound to spreadsheet cells
-        ::std::vector< ModelStringPair >
+        std::vector< ModelStringPair >
                                 m_aCellRangeListSources;// information about controls bound to spreadsheet cell range list sources
 
-        ::std::vector< ModelStringPair >
+        std::vector< ModelStringPair >
                                 m_aXFormsValueBindings; // collect xforms:bind attributes to be resolved
 
-        ::std::vector< ModelStringPair >
+        std::vector< ModelStringPair >
                                 m_aXFormsListBindings; // collect forms:xforms-list-source attributes to be resolved
 
-        ::std::vector< ModelStringPair >
+        std::vector< ModelStringPair >
                                 m_aXFormsSubmissions;   // collect xforms:submission attributes to be resolved
 
     public:

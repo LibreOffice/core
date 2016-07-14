@@ -100,7 +100,7 @@ namespace skeleton
 
         OPropertyMap::~OPropertyMap()
         {
-            ::std::map<sal_Int32 , rtl_uString*>::iterator aIter = m_aPropertyMap.begin();
+            std::map<sal_Int32 , rtl_uString*>::iterator aIter = m_aPropertyMap.begin();
             for(;aIter != m_aPropertyMap.end();++aIter)
                 if(aIter->second)
                     rtl_uString_release(aIter->second);
@@ -109,7 +109,7 @@ namespace skeleton
         ::rtl::OUString OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
         {
             ::rtl::OUString sRet;
-            ::std::map<sal_Int32 , rtl_uString*>::const_iterator aIter = m_aPropertyMap.find(_nIndex);
+            std::map<sal_Int32 , rtl_uString*>::const_iterator aIter = m_aPropertyMap.find(_nIndex);
             if(aIter == m_aPropertyMap.end())
                 sRet = const_cast<OPropertyMap*>(this)->fillValue(_nIndex);
             else

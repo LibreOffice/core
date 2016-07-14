@@ -925,7 +925,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
             css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() ) );
 
-        ::std::vector< css::uno::Any > lParams;
+        std::vector< css::uno::Any > lParams;
         css::beans::NamedValue aParam;
 
         // set root path
@@ -1070,7 +1070,7 @@ void FilterCache::impl_validateAndOptimize()
             OUString sNormalizedExtension = pExtensions[e].toAsciiLowerCase();
 
             OUStringList& lTypesForExtension = m_lExtensions2Types[sNormalizedExtension];
-            if (::std::find(lTypesForExtension.begin(), lTypesForExtension.end(), sType) != lTypesForExtension.end())
+            if (std::find(lTypesForExtension.begin(), lTypesForExtension.end(), sType) != lTypesForExtension.end())
                 continue;
 
             if (bPreferred)
@@ -1083,7 +1083,7 @@ void FilterCache::impl_validateAndOptimize()
         for (sal_Int32 u=0; u<cu; ++u)
         {
             OUStringList& lTypesForURLPattern = m_lURLPattern2Types[pURLPattern[u]];
-            if (::std::find(lTypesForURLPattern.begin(), lTypesForURLPattern.end(), sType) != lTypesForURLPattern.end())
+            if (std::find(lTypesForURLPattern.begin(), lTypesForURLPattern.end(), sType) != lTypesForURLPattern.end())
                 continue;
 
             if (bPreferred)
@@ -1220,7 +1220,7 @@ void FilterCache::impl_validateAndOptimize()
                                           pTypesReg != lTypesReg.end()  ;
                                         ++pTypesReg                     )
         {
-            OUStringList::iterator pTypeCheck = ::std::find(lTypes.begin(), lTypes.end(), *pTypesReg);
+            OUStringList::iterator pTypeCheck = std::find(lTypes.begin(), lTypes.end(), *pTypesReg);
             if (pTypeCheck != lTypes.end())
                 lTypes.erase(pTypeCheck);
         }
@@ -1270,7 +1270,7 @@ void FilterCache::impl_addItem2FlushList(      EItemType        eType,
         default : throw css::uno::RuntimeException("unsupported item type", nullptr);
     }
 
-    OUStringList::const_iterator pItem = ::std::find(pList->begin(), pList->end(), sItem);
+    OUStringList::const_iterator pItem = std::find(pList->begin(), pList->end(), sItem);
     if (pItem == pList->end())
         pList->push_back(sItem);
 }
@@ -1529,9 +1529,9 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     if (!(aVal >>= xUIName) && !xUIName.is())
         return;
 
-    const ::std::vector< OUString >                 lLocales(comphelper::sequenceToContainer< ::std::vector< OUString >>(
+    const std::vector< OUString >                   lLocales(comphelper::sequenceToContainer< std::vector< OUString >>(
                                                                 xUIName->getElementNames()));
-          ::std::vector< OUString >::const_iterator pLocale ;
+          std::vector< OUString >::const_iterator pLocale ;
           ::comphelper::SequenceAsHashMap                                   lUINames;
 
     for (  pLocale  = lLocales.begin();
@@ -2251,7 +2251,7 @@ OUString FilterCache::impl_searchFrameLoaderForType(const OUString& sType) const
         OUStringList                    lTypes(
                 comphelper::sequenceToContainer<OUStringList>(lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >()));
 
-        if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
+        if (std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
             return sItem;
     }
 
@@ -2270,7 +2270,7 @@ OUString FilterCache::impl_searchContentHandlerForType(const OUString& sType) co
         ::comphelper::SequenceAsHashMap lProps(pIt->second);
         OUStringList                    lTypes(
                 comphelper::sequenceToContainer<OUStringList>( lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >() ));
-        if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
+        if (std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
             return sItem;
     }
 

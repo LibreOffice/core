@@ -79,12 +79,12 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
     /*  Map attribute names to char-pointer of all attributes. This map is used
         to find multiple occurrences of attributes with the same name. The
         mapped pointers are used as map key in the next map below. */
-    typedef ::std::map< OString, const sal_Char* > AttributeNameMap;
+    typedef std::map< OString, const sal_Char* > AttributeNameMap;
     AttributeNameMap aAttributeNames;
 
     /*  Map the char-pointers of all attributes to the full attribute definition
         string. This preserves the original order of the used attributes. */
-    typedef ::std::map< const sal_Char*, OString > AttributeDataMap;
+    typedef std::map< const sal_Char*, OString > AttributeDataMap;
     AttributeDataMap aAttributes;
 
     bool bOk = true;
@@ -281,7 +281,7 @@ sal_Int32 SAL_CALL InputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int3
     while( (nBytesToRead > 0) && !mxTextStrm->isEOF() )
     {
         updateBuffer();
-        sal_Int32 nReadSize = ::std::min( nBytesToRead, maBuffer.getLength() - mnBufferPos );
+        sal_Int32 nReadSize = std::min( nBytesToRead, maBuffer.getLength() - mnBufferPos );
         if( nReadSize > 0 )
         {
             memcpy( pcDest + nRet, maBuffer.getStr() + mnBufferPos, static_cast< size_t >( nReadSize ) );
@@ -310,7 +310,7 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
     while( (nBytesToSkip > 0) && !mxTextStrm->isEOF() )
     {
         updateBuffer();
-        sal_Int32 nSkipSize = ::std::min( nBytesToSkip, maBuffer.getLength() - mnBufferPos );
+        sal_Int32 nSkipSize = std::min( nBytesToSkip, maBuffer.getLength() - mnBufferPos );
         mnBufferPos += nSkipSize;
         nBytesToSkip -= nSkipSize;
     }

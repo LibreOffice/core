@@ -409,8 +409,8 @@ namespace frm
         // the size of the viewport - note that the viewport does *not* occupy all the place
         // which is left when subtracting the scrollbar width/height
         Size aViewportPlaygroundPixel( aPlaygroundSizePixel );
-        aViewportPlaygroundPixel.Width() = ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Width() - nScrollBarWidth ) );
-        aViewportPlaygroundPixel.Height() = ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Height() - nScrollBarHeight ) );
+        aViewportPlaygroundPixel.Width() = std::max( long( 10 ), long( aViewportPlaygroundPixel.Width() - nScrollBarWidth ) );
+        aViewportPlaygroundPixel.Height() = std::max( long( 10 ), long( aViewportPlaygroundPixel.Height() - nScrollBarHeight ) );
         Size aViewportPlaygroundLogic( m_pViewport->PixelToLogic( aViewportPlaygroundPixel ) );
 
         const long nOffset = 2;
@@ -444,7 +444,7 @@ namespace frm
             // ... is the scroll size for the vertical scrollbar
             m_pVScroll->SetLineSize( nFontHeight );
             // the viewport width, minus one line, is the page scroll size
-            m_pVScroll->SetPageSize( ::std::max( nFontHeight, aViewportPlaygroundLogic.Height() - nFontHeight ) );
+            m_pVScroll->SetPageSize( std::max( nFontHeight, aViewportPlaygroundLogic.Height() - nFontHeight ) );
         }
 
         // the font width
@@ -463,7 +463,7 @@ namespace frm
             // ... is the scroll size for the horizontal scrollbar
             m_pHScroll->SetLineSize( 5 * nFontWidth );
             // the viewport height, minus one character, is the page scroll size
-            m_pHScroll->SetPageSize( ::std::max( nFontWidth, aViewportPlaygroundLogic.Width() - nFontWidth ) );
+            m_pHScroll->SetPageSize( std::max( nFontWidth, aViewportPlaygroundLogic.Width() - nFontWidth ) );
         }
 
         // update range and position of the scrollbars

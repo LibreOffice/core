@@ -124,7 +124,7 @@ XMLTextDropCapImportContext::XMLTextDropCapImportContext(
         const Reference< xml::sax::XAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
         sal_Int32 nWholeWordIdx,
-        ::std::vector< XMLPropertyState > &rProps ) :
+        std::vector< XMLPropertyState > &rProps ) :
     XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
     aWholeWordProp( nWholeWordIdx )
 {

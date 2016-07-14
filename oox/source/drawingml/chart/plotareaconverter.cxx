@@ -384,7 +384,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
 
             // collect the maximum series index for automatic series formatting
             for( TypeGroupModel::SeriesVector::iterator aSIt = xTypeGroup->maSeries.begin(), aSEnd = xTypeGroup->maSeries.end(); aSIt != aSEnd; ++aSIt )
-                nMaxSeriesIdx = ::std::max( nMaxSeriesIdx, (*aSIt)->mnIndex );
+                nMaxSeriesIdx = std::max( nMaxSeriesIdx, (*aSIt)->mnIndex );
         }
     }
     getFormatter().setMaxSeriesIndex( nMaxSeriesIdx );

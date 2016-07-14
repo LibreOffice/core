@@ -31,7 +31,7 @@ struct CommandInfo
                     nImageInfo( 0 ) {}
 
     sal_uInt16                  nId;
-    ::std::vector< sal_uInt16 > aIds;
+    std::vector< sal_uInt16 > aIds;
     sal_Int16                   nImageInfo;
 };
 

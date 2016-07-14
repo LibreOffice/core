@@ -248,7 +248,7 @@ namespace xmloff
             // translate our properties so that the XMultiPropertySet can handle them
 
             // sort our property value array so that we can use it in a setPropertyValues
-            ::std::sort( m_aValues.begin(), m_aValues.end(), PropertyValueLess());
+            std::sort( m_aValues.begin(), m_aValues.end(), PropertyValueLess());
 
             // the names
             Sequence< OUString > aNames(m_aValues.size());
@@ -1416,7 +1416,7 @@ namespace xmloff
             simulateDefaultedAttribute(OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, "false");
     }
 
-    struct EqualHandle : public ::std::unary_function< PropertyValue, bool >
+    struct EqualHandle : public std::unary_function< PropertyValue, bool >
     {
         const sal_Int32 m_nHandle;
         explicit EqualHandle( sal_Int32 _nHandle ) : m_nHandle( _nHandle ) { }
@@ -1437,7 +1437,7 @@ namespace xmloff
             // handle, so we do not need to determine the name of our value property here
             // (normally, it should be "Text", since no other controls than the edit field should
             // have the text:p elements)
-            PropertyValueArray::iterator aValuePropertyPos = ::std::find_if(
+            PropertyValueArray::iterator aValuePropertyPos = std::find_if(
                 m_aValues.begin(),
                 m_aValues.end(),
                 EqualHandle( PROPID_CURRENT_VALUE )
@@ -1447,7 +1447,7 @@ namespace xmloff
                 OSL_ENSURE( aValuePropertyPos->Name == PROPERTY_TEXT, "OTextLikeImport::EndElement: text:p was present, but our value property is *not* 'Text'!" );
                 if ( aValuePropertyPos->Name == PROPERTY_TEXT )
                 {
-                    ::std::copy(
+                    std::copy(
                         aValuePropertyPos + 1,
                         m_aValues.end(),
                         aValuePropertyPos
@@ -1469,7 +1469,7 @@ namespace xmloff
         // since this is the default of this property, anyway.
     }
 
-    struct EqualName : public ::std::unary_function< PropertyValue, bool >
+    struct EqualName : public std::unary_function< PropertyValue, bool >
     {
         const OUString m_sName;
         explicit EqualName( const OUString& _rName ) : m_sName( _rName ) { }
@@ -1485,7 +1485,7 @@ namespace xmloff
         // In OpenOffice.org 2.0, we changed the implementation of the css.form.component.TextField (the model of a text field control),
         // so that it now uses another default control. So if we encounter a text field where the *old* default
         // control property is writing, we are not allowed to use it
-        PropertyValueArray::iterator aDefaultControlPropertyPos = ::std::find_if(
+        PropertyValueArray::iterator aDefaultControlPropertyPos = std::find_if(
             m_aValues.begin(),
             m_aValues.end(),
             EqualName( OUString( "DefaultControl"  ) )
@@ -1498,7 +1498,7 @@ namespace xmloff
             {
                 // complete remove this property value from the array. Today's "default value" of the "DefaultControl"
                 // property is sufficient
-                ::std::copy(
+                std::copy(
                     aDefaultControlPropertyPos + 1,
                     m_aValues.end(),
                     aDefaultControlPropertyPos
@@ -1983,7 +1983,7 @@ namespace xmloff
         {
             // For the moment, we build a vector instead of a Sequence. It's easier to handle because of its
             // push_back method
-            ::std::vector< OUString > aElements;
+            std::vector< OUString > aElements;
             // estimate the number of tokens
             sal_Int32 nEstimate = 0, nLength = _rValue.getLength();
             const sal_Unicode* pChars = _rValue.getStr();

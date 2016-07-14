@@ -67,13 +67,13 @@ using namespace ::com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-typedef ::std::list< uno::WeakReference< lang::XComponent > > WeakComponentList;
+typedef std::list< uno::WeakReference< lang::XComponent > > WeakComponentList;
 
 struct StorInternalData_Impl
 {
     rtl::Reference<SotMutexHolder> m_rSharedMutexRef;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
-    ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
+    std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
     bool m_bIsRoot;
     sal_Int32 m_nStorageType; // the mode in which the storage is used
     bool m_bReadOnlyWrap;

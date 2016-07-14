@@ -40,7 +40,7 @@ namespace {
  */
 OUString lclGetRelationsPath( const OUString& rFragmentPath )
 {
-    sal_Int32 nPathLen = ::std::max< sal_Int32 >( rFragmentPath.lastIndexOf( '/' ) + 1, 0 );
+    sal_Int32 nPathLen = std::max< sal_Int32 >( rFragmentPath.lastIndexOf( '/' ) + 1, 0 );
     return
         OUStringBuffer( rFragmentPath.copy( 0, nPathLen ) ).    // file path including slash
         append( "_rels/" ).                                // additional '_rels/' path
@@ -79,7 +79,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
 
                 OSL_ENSURE( mxRelations->count( aRelation.maId ) == 0,
                     "RelationsFragment::createFastChildContext - relation identifier exists already" );
-                mxRelations->insert( ::std::map< OUString, Relation >::value_type( aRelation.maId, aRelation ) );
+                mxRelations->insert( std::map< OUString, Relation >::value_type( aRelation.maId, aRelation ) );
             }
         }
         break;

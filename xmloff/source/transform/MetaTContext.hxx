@@ -25,7 +25,7 @@
 
 #include "FlatTContext.hxx"
 
-typedef ::std::multimap< OUString,
+typedef std::multimap< OUString,
                     ::rtl::Reference< XMLPersTextContentTContext > > XMLMetaContexts_Impl;
 
 

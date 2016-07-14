@@ -93,7 +93,7 @@ public:
                                 ~SotElement_Impl();
 };
 
-typedef ::std::list< SotElement_Impl* > SotElementList_Impl;
+typedef std::list< SotElement_Impl* > SotElementList_Impl;
 
 // Main storage implementation
 

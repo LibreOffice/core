@@ -123,11 +123,11 @@ void lclConvertCustomDash( LineDash& orLineDash, const LineProperties::DashStopV
         }
         nDistance += nConvertedDistance;
     }
-    orLineDash.DotLen = (nDots > 0) ? ::std::max< sal_Int32 >( nDotLen / nDots, 1 ) : 0;
+    orLineDash.DotLen = (nDots > 0) ? std::max< sal_Int32 >( nDotLen / nDots, 1 ) : 0;
     orLineDash.Dots = nDots;
-    orLineDash.DashLen = (nDashes > 0) ? ::std::max< sal_Int32 >( nDashLen / nDashes, 1 ) : 0;
+    orLineDash.DashLen = (nDashes > 0) ? std::max< sal_Int32 >( nDashLen / nDashes, 1 ) : 0;
     orLineDash.Dashes = nDashes;
-    orLineDash.Distance = ::std::max< sal_Int32 >( nDistance / rCustomDash.size(), 1 );
+    orLineDash.Distance = std::max< sal_Int32 >( nDistance / rCustomDash.size(), 1 );
 }
 
 DashStyle lclGetDashStyle( sal_Int32 nToken )
@@ -228,7 +228,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
             case OOX_ARROWSIZE_LARGE:   fArrowWidth = (bIsArrow ? 6.0 : 5.0);  break;
         }
         // set arrow width relative to line width
-        sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 70 );
+        sal_Int32 nBaseLineWidth = std::max< sal_Int32 >( nLineWidth, 70 );
         nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nBaseLineWidth );
 
         /*  Test if the marker already exists in the marker table, do not
@@ -240,7 +240,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
 // pass X and Y as percentage to OOX_ARROW_POINT
 #define OOX_ARROW_POINT( x, y ) awt::Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
 
-            ::std::vector< awt::Point > aPoints;
+            std::vector< awt::Point > aPoints;
             OSL_ASSERT((rArrowProps.moArrowType.get() & sal_Int32(0xFFFF0000))==0);
             switch( rArrowProps.moArrowType.get() )
             {
@@ -298,7 +298,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
                 aMarkerCoords.Coordinates.realloc( 1 );
                 aMarkerCoords.Coordinates[ 0 ] = ContainerHelper::vectorToSequence( aPoints );
 
-                ::std::vector< PolygonFlags > aFlags( aPoints.size(), PolygonFlags_NORMAL );
+                std::vector< PolygonFlags > aFlags( aPoints.size(), PolygonFlags_NORMAL );
                 aMarkerCoords.Flags.realloc( 1 );
                 aMarkerCoords.Flags[ 0 ] = ContainerHelper::vectorToSequence( aFlags );
 
@@ -381,7 +381,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 lclConvertCustomDash( aLineDash, maCustomDash );
 
             // convert relative dash/dot length to absolute length
-            sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 35 );
+            sal_Int32 nBaseLineWidth = std::max< sal_Int32 >( nLineWidth, 35 );
             aLineDash.DotLen *= nBaseLineWidth;
             aLineDash.DashLen *= nBaseLineWidth;
             aLineDash.Distance *= nBaseLineWidth;

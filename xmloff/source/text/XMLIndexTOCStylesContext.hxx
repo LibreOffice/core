@@ -48,7 +48,7 @@ class XMLIndexTOCStylesContext : public SvXMLImportContext
     css::uno::Reference<css::beans::XPropertySet> & rTOCPropertySet;
 
     /// style names for this level
-    ::std::vector< OUString > aStyleNames;
+    std::vector< OUString > aStyleNames;
 
     /// outline level
     sal_Int32 nOutlineLevel;

@@ -458,12 +458,12 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
             // #TODO cater for mxOleOverridesSink, like I used to before
             // call Basic source code import for each module, std::[c]ref enforces pass-by-ref
             maModules.forEachMem( &VbaModule::createAndImportModule,
-                ::std::ref( *xVbaStrg ), ::std::cref( xBasicLib ),
-                ::std::cref( xDocObjectNA ) );
+                std::ref( *xVbaStrg ), std::cref( xBasicLib ),
+                std::cref( xDocObjectNA ) );
 
             // create empty dummy modules
             aDummyModules.forEachMem( &VbaModule::createEmptyModule,
-                ::std::cref( xBasicLib ), ::std::cref( xDocObjectNA ) );
+                std::cref( xBasicLib ), std::cref( xDocObjectNA ) );
         }
     }
     catch(const Exception& )
@@ -474,9 +474,9 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
         must exist for every form. We are a bit more tolerant and scan the
         project storage for all form substorages. This may 'repair' broken VBA
         storages that misses to mention a module for an existing form. */
-    ::std::vector< OUString > aElements;
+    std::vector< OUString > aElements;
     rVbaPrjStrg.getElementNames( aElements );
-    for( ::std::vector< OUString >::iterator aIt = aElements.begin(), aEnd = aElements.end(); aIt != aEnd; ++aIt )
+    for( std::vector< OUString >::iterator aIt = aElements.begin(), aEnd = aElements.end(); aIt != aEnd; ++aIt )
     {
         // try to open the element as storage
         if( *aIt != "VBA" )
@@ -517,7 +517,7 @@ void VbaProject::attachMacros()
         aArgs[ 1 ] <<= maPrjName;
         Reference< XVBAMacroResolver > xResolver( xFactory->createInstanceWithArgumentsAndContext(
             "com.sun.star.script.vba.VBAMacroResolver", aArgs, mxContext ), UNO_QUERY_THROW );
-        maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::std::cref( xResolver ) );
+        maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, std::cref( xResolver ) );
     }
     catch(const Exception& )
     {

@@ -71,7 +71,7 @@ sal_Int32 VbaInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes
     sal_Int32 nRet = 0;
     if( !mbEof )
     {
-        orData.realloc( ::std::max< sal_Int32 >( nBytes, 0 ) );
+        orData.realloc( std::max< sal_Int32 >( nBytes, 0 ) );
         if( nBytes > 0 )
         {
             nRet = readMemory( orData.getArray(), nBytes, nAtomSize );
@@ -89,7 +89,7 @@ sal_Int32 VbaInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t /*nA
     while( (nBytes > 0) && updateChunk() )
     {
         sal_Int32 nChunkLeft = static_cast< sal_Int32 >( maChunk.size() - mnChunkPos );
-        sal_Int32 nReadBytes = ::std::min( nBytes, nChunkLeft );
+        sal_Int32 nReadBytes = std::min( nBytes, nChunkLeft );
         memcpy( opnMem, &*(maChunk.begin() + mnChunkPos), nReadBytes );
         opnMem += nReadBytes;
         mnChunkPos += static_cast< size_t >( nReadBytes );
@@ -104,7 +104,7 @@ void VbaInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
     while( (nBytes > 0) && updateChunk() )
     {
         sal_Int32 nChunkLeft = static_cast< sal_Int32 >( maChunk.size() - mnChunkPos );
-        sal_Int32 nSkipBytes = ::std::min( nBytes, nChunkLeft );
+        sal_Int32 nSkipBytes = std::min( nBytes, nChunkLeft );
         mnChunkPos += static_cast< size_t >( nSkipBytes );
         nBytes -= nSkipBytes;
     }
@@ -172,10 +172,10 @@ bool VbaInputStream::updateChunk()
                         const sal_uInt8* pnEnd = pnTo + nLength;
                         const sal_uInt8* pnFrom = pnTo - nOffset;
                         // offset may be less than length, effectively duplicating source data several times
-                        size_t nRunLen = ::std::min< size_t >( nLength, nOffset );
+                        size_t nRunLen = std::min< size_t >( nLength, nOffset );
                         while( pnTo < pnEnd )
                         {
-                            size_t nStepLen = ::std::min< size_t >( nRunLen, pnEnd - pnTo );
+                            size_t nStepLen = std::min< size_t >( nRunLen, pnEnd - pnTo );
                             memcpy( pnTo, pnFrom, nStepLen );
                             pnTo += nStepLen;
                         }

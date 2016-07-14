@@ -65,7 +65,7 @@ namespace xmloff
         friend class OListPropertyContext;
 
     protected:
-        typedef ::std::vector< css::beans::PropertyValue > PropertyValueArray;
+        typedef std::vector< css::beans::PropertyValue > PropertyValueArray;
         PropertyValueArray          m_aValues;
         PropertyValueArray          m_aGenericValues;
             // the values which the instance collects between StartElement and EndElement
@@ -189,7 +189,7 @@ namespace xmloff
         OPropertyImportRef                  m_xPropertyImporter;
         OUString                     m_sPropertyName;
         OUString                     m_sPropertyType;
-        ::std::vector< OUString >    m_aListValues;
+        std::vector< OUString >      m_aListValues;
 
     public:
         OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,

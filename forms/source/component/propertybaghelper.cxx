@@ -225,25 +225,25 @@ namespace frm
     namespace
     {
 
-        struct SelectNameOfProperty : public ::std::unary_function< Property, OUString >
+        struct SelectNameOfProperty : public std::unary_function< Property, OUString >
         {
             const OUString& operator()( const Property& _rProp ) const { return _rProp.Name; }
         };
 
 
-        struct SelectNameOfPropertyValue : public ::std::unary_function< PropertyValue, OUString >
+        struct SelectNameOfPropertyValue : public std::unary_function< PropertyValue, OUString >
         {
             const OUString& operator()( const PropertyValue& _rProp ) const { return _rProp.Name; }
         };
 
 
-        struct SelectValueOfPropertyValue : public ::std::unary_function< PropertyValue, Any >
+        struct SelectValueOfPropertyValue : public std::unary_function< PropertyValue, Any >
         {
             const Any& operator()( const PropertyValue& _rProp ) const { return _rProp.Value; }
         };
 
 
-        struct PropertyValueLessByName : public ::std::binary_function< PropertyValue, PropertyValue, bool >
+        struct PropertyValueLessByName : public std::binary_function< PropertyValue, PropertyValue, bool >
         {
             bool operator()( const PropertyValue& _lhs, const PropertyValue& _rhs ) const
             {
@@ -263,7 +263,7 @@ namespace frm
 
         Sequence< Property > aProperties( xPSI->getProperties() );
         Sequence< OUString > aPropertyNames( aProperties.getLength() );
-        ::std::transform( aProperties.getConstArray(), aProperties.getConstArray() + aProperties.getLength(),
+        std::transform( aProperties.getConstArray(), aProperties.getConstArray() + aProperties.getLength(),
             aPropertyNames.getArray(), SelectNameOfProperty() );
 
         Sequence< Any > aValues;
@@ -305,7 +305,7 @@ namespace frm
         // XMultiPropertySet::setPropertyValues expects its arguments to be sorted by name
         // while XPropertyAccess::setPropertyValues doesn't. So first of all, sort.
         Sequence< PropertyValue > aSortedProps( _rProps );
-        ::std::sort( aSortedProps.getArray(), aSortedProps.getArray() + nPropertyValues, PropertyValueLessByName() );
+        std::sort( aSortedProps.getArray(), aSortedProps.getArray() + nPropertyValues, PropertyValueLessByName() );
 
         // also, XPropertyAccess::setPropertyValues is expected to throw an UnknownPropertyException
         // for unsupported properties, while XMultiPropertySet::setPropertyValues is expected to ignore
@@ -323,11 +323,11 @@ namespace frm
         // Now finally split into a Name and a Value sequence, and forward to
         // XMultiPropertySet::setPropertyValues
         Sequence< OUString > aNames( nPropertyValues );
-        ::std::transform( aSortedProps.getConstArray(), aSortedProps.getConstArray() + nPropertyValues,
+        std::transform( aSortedProps.getConstArray(), aSortedProps.getConstArray() + nPropertyValues,
             aNames.getArray(), SelectNameOfPropertyValue() );
 
         Sequence< Any > aValues( nPropertyValues );
-        ::std::transform( aSortedProps.getConstArray(), aSortedProps.getConstArray() + nPropertyValues,
+        std::transform( aSortedProps.getConstArray(), aSortedProps.getConstArray() + nPropertyValues,
             aValues.getArray(), SelectValueOfPropertyValue() );
 
         Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), UNO_QUERY_THROW );

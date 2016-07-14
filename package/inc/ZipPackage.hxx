@@ -114,8 +114,8 @@ protected:
     void getZipFileContents();
 
     void WriteMimetypeMagicFile( ZipOutputStream& aZipOut );
-    void WriteManifest( ZipOutputStream& aZipOut, const ::std::vector< css::uno::Sequence< css::beans::PropertyValue > >& aManList );
-    void WriteContentTypes( ZipOutputStream& aZipOut, const ::std::vector< css::uno::Sequence< css::beans::PropertyValue > >& aManList );
+    void WriteManifest( ZipOutputStream& aZipOut, const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& aManList );
+    void WriteContentTypes( ZipOutputStream& aZipOut, const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& aManList );
 
     css::uno::Reference< css::io::XInputStream > writeTempFile();
     css::uno::Reference < css::io::XActiveDataStreamer > openOriginalForOutput();

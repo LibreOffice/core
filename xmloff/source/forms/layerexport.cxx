@@ -413,8 +413,8 @@ namespace xmloff
         bool bPageIsKnown = implMoveIterators(_rxDrawPage, true);
         OSL_ENSURE(!bPageIsKnown, "OFormLayerXMLExport_Impl::examineForms: examining a page twice!");
 
-        ::std::stack< Reference< XIndexAccess > >   aContainerHistory;
-        ::std::stack< sal_Int32 >                   aIndexHistory;
+        std::stack< Reference< XIndexAccess > >     aContainerHistory;
+        std::stack< sal_Int32 >                     aIndexHistory;
 
         Reference< XIndexAccess > xLoop = xCollectionIndex;
         sal_Int32 nChildPos = 0;
@@ -464,7 +464,7 @@ namespace xmloff
 
     namespace
     {
-        struct AccumulateSize : public ::std::binary_function< size_t, MapPropertySet2Map::value_type, size_t >
+        struct AccumulateSize : public std::binary_function< size_t, MapPropertySet2Map::value_type, size_t >
         {
             size_t operator()( size_t _size, const MapPropertySet2Map::value_type& _map ) const
             {
@@ -477,7 +477,7 @@ namespace xmloff
             static const char sControlIdBase[] = "control";
             OUString sControlId = sControlIdBase;
 
-            size_t nKnownControlCount = ::std::accumulate( _rAllPagesControlIds.begin(), _rAllPagesControlIds.end(), (size_t)0, AccumulateSize() );
+            size_t nKnownControlCount = std::accumulate( _rAllPagesControlIds.begin(), _rAllPagesControlIds.end(), (size_t)0, AccumulateSize() );
             sControlId += OUString::number( (sal_Int32)nKnownControlCount + 1 );
 
         #ifdef DBG_UTIL
@@ -586,7 +586,7 @@ namespace xmloff
                 // determine a number style, if needed
                 xColumnPropertiesMeta = xColumnProperties->getPropertySetInfo();
                 // get the styles of the column
-                ::std::vector< XMLPropertyState > aPropertyStates = m_xStyleExportMapper->Filter( xColumnProperties );
+                std::vector< XMLPropertyState > aPropertyStates = m_xStyleExportMapper->Filter( xColumnProperties );
 
                 // care for the number format, additionally
                 OUString sColumnNumberStyle;
@@ -604,7 +604,7 @@ namespace xmloff
                 }
 
 #if OSL_DEBUG_LEVEL > 0
-                ::std::vector< XMLPropertyState >::const_iterator aHaveALook = aPropertyStates.begin();
+                std::vector< XMLPropertyState >::const_iterator aHaveALook = aPropertyStates.begin();
                 for ( ; aHaveALook != aPropertyStates.end(); ++aHaveALook )
                 {
                     (void)aHaveALook;
@@ -745,7 +745,7 @@ namespace xmloff
     {
         Reference< XPropertySet > xProps( _rxControl, UNO_QUERY );
         OSL_ENSURE( xProps.is(), "OFormLayerXMLExport_Impl::excludeFromExport: invalid control model!" );
-        ::std::pair< PropertySetBag::iterator, bool > aPos =
+        std::pair< PropertySetBag::iterator, bool > aPos =
               m_aIgnoreList.insert( xProps );
         OSL_ENSURE( aPos.second, "OFormLayerXMLExport_Impl::excludeFromExport: element already exists in the ignore list!" );
     }

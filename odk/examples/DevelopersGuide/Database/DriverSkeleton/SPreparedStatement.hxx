@@ -71,7 +71,7 @@ namespace connectivity
 
             };
 
-            ::std::vector< Parameter>       m_aParameters;
+            std::vector< Parameter>         m_aParameters;
 
             // Data attributes
 

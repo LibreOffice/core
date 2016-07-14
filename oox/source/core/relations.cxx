@@ -29,7 +29,7 @@ namespace {
 
 OUString lclRemoveFileName( const OUString& rPath )
 {
-    return rPath.copy( 0, ::std::max< sal_Int32 >( rPath.lastIndexOf( '/' ), 0 ) );
+    return rPath.copy( 0, std::max< sal_Int32 >( rPath.lastIndexOf( '/' ), 0 ) );
 }
 
 OUString lclAppendFileName( const OUString& rPath, const OUString& rFileName )
@@ -58,13 +58,13 @@ Relations::Relations( const OUString& rFragmentPath )
 
 const Relation* Relations::getRelationFromRelId( const OUString& rId ) const
 {
-    ::std::map< OUString, Relation >::const_iterator aIt = maMap.find( rId );
+    std::map< OUString, Relation >::const_iterator aIt = maMap.find( rId );
     return (aIt == maMap.end()) ? nullptr : &aIt->second;
 }
 
 const Relation* Relations::getRelationFromFirstType( const OUString& rType ) const
 {
-    for( ::std::map< OUString, Relation >::const_iterator aIt = maMap.begin(), aEnd = maMap.end(); aIt != aEnd; ++aIt )
+    for( std::map< OUString, Relation >::const_iterator aIt = maMap.begin(), aEnd = maMap.end(); aIt != aEnd; ++aIt )
         if( aIt->second.maType.equalsIgnoreAsciiCase( rType ) )
             return &aIt->second;
     return nullptr;
@@ -73,7 +73,7 @@ const Relation* Relations::getRelationFromFirstType( const OUString& rType ) con
 RelationsRef Relations::getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const
 {
     RelationsRef xRelations( new Relations( maFragmentPath ) );
-    for( ::std::map< OUString, Relation >::const_iterator aIt = maMap.begin(), aEnd = maMap.end(); aIt != aEnd; ++aIt )
+    for( std::map< OUString, Relation >::const_iterator aIt = maMap.begin(), aEnd = maMap.end(); aIt != aEnd; ++aIt )
         if( aIt->second.maType.equalsIgnoreAsciiCase( createOfficeDocRelationTypeTransitional(rType) ) ||
                 aIt->second.maType.equalsIgnoreAsciiCase( createOfficeDocRelationTypeStrict(rType) ))
             xRelations->maMap[ aIt->first ] = aIt->second;

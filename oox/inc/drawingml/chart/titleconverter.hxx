@@ -57,7 +57,7 @@ public:
 private:
     css::uno::Reference< css::chart2::XFormattedString >
                         appendFormattedString(
-                            ::std::vector< css::uno::Reference< css::chart2::XFormattedString > >& orStringVec,
+                            std::vector< css::uno::Reference< css::chart2::XFormattedString > >& orStringVec,
                             const OUString& rString,
                             bool bAddNewLine ) const;
 };

@@ -28,7 +28,7 @@ public:
     XMLLabelSeparatorContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                            const OUString& rLName,
                            const XMLPropertyState& rProp,
-                           ::std::vector< XMLPropertyState > &rProps );
+                           std::vector< XMLPropertyState > &rProps );
     virtual ~XMLLabelSeparatorContext();
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;

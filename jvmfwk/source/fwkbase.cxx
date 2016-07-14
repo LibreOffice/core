@@ -226,9 +226,9 @@ std::vector<OUString> VendorSettings::getSupportedVendors()
     return vecVendors;
 }
 
-::std::vector<OString> BootParams::getVMParameters()
+std::vector<OString> BootParams::getVMParameters()
 {
-    ::std::vector<OString> vecParams;
+    std::vector<OString> vecParams;
 
     for (sal_Int32 i = 1; ; i++)
     {

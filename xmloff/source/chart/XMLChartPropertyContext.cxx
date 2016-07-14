@@ -32,7 +32,7 @@ XMLChartPropertyContext::XMLChartPropertyContext(
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList,
     sal_uInt32 nFamily,
-    ::std::vector< XMLPropertyState >& rProps,
+    std::vector< XMLPropertyState >& rProps,
     const rtl::Reference< SvXMLImportPropertyMapper >& rMapper ) :
         SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily, rProps, rMapper )
 {
@@ -45,7 +45,7 @@ SvXMLImportContext* XMLChartPropertyContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-    ::std::vector< XMLPropertyState > &rProperties,
+    std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
     SvXMLImportContext *pContext = nullptr;

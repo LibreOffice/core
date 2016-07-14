@@ -140,7 +140,7 @@ XMLFontStyleContextFontFace::~XMLFontStyleContextFontFace()
 }
 
 void XMLFontStyleContextFontFace::FillProperties(
-        ::std::vector< XMLPropertyState > &rProps,
+        std::vector< XMLPropertyState > &rProps,
         sal_Int32 nFamilyNameIdx,
         sal_Int32 nStyleNameIdx,
         sal_Int32 nFamilyIdx,
@@ -387,7 +387,7 @@ XMLFontStylesContext::~XMLFontStylesContext()
 }
 
 bool XMLFontStylesContext::FillProperties( const OUString& rName,
-                         ::std::vector< XMLPropertyState > &rProps,
+                         std::vector< XMLPropertyState > &rProps,
                          sal_Int32 nFamilyNameIdx,
                          sal_Int32 nStyleNameIdx,
                          sal_Int32 nFamilyIdx,

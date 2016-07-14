@@ -40,7 +40,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
         sal_Int32 nWholeWOrdIdx,
-        ::std::vector< XMLPropertyState > &rProps );
+        std::vector< XMLPropertyState > &rProps );
 
     virtual ~XMLTextDropCapImportContext();
 

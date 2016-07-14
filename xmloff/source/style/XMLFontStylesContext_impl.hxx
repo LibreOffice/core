@@ -55,7 +55,7 @@ public:
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
                        const OUString& rValue ) override;
 
-    void FillProperties( ::std::vector< XMLPropertyState > &rProps,
+    void FillProperties( std::vector< XMLPropertyState > &rProps,
                          sal_Int32 nFamilyNameIdx,
                          sal_Int32 nStyleNameIdx,
                          sal_Int32 nFamilyIdx,

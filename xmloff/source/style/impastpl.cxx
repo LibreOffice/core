@@ -303,7 +303,7 @@ bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector<
     {
         pProperties = new XMLAutoStylePoolProperties( rFamilyData, rProperties, msParent );
         PropertiesListType::iterator it = m_PropertiesList.begin();
-        ::std::advance( it, i );
+        std::advance( it, i );
         m_PropertiesList.insert(it, std::unique_ptr<XMLAutoStylePoolProperties>(pProperties));
         bAdded = true;
     }
@@ -344,7 +344,7 @@ bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const ve
         // ignore the generated name
         pProperties->SetName( rName );
         PropertiesListType::iterator it = m_PropertiesList.begin();
-        ::std::advance( it, i );
+        std::advance( it, i );
         m_PropertiesList.insert(it, std::move(pProperties));
         bAdded = true;
     }
@@ -495,7 +495,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
 
 bool SvXMLAutoStylePoolP_Impl::Add(
     OUString& rName, sal_Int32 nFamily, const OUString& rParentName,
-    const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek )
+    const std::vector< XMLPropertyState >& rProperties, bool bDontSeek )
 {
     std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
     auto const iter = m_FamilySet.find(pTemp);
@@ -527,7 +527,7 @@ bool SvXMLAutoStylePoolP_Impl::Add(
 
 bool SvXMLAutoStylePoolP_Impl::AddNamed(
     const OUString& rName, sal_Int32 nFamily, const OUString& rParentName,
-    const ::std::vector< XMLPropertyState >& rProperties )
+    const std::vector< XMLPropertyState >& rProperties )
 {
     // get family and parent the same way as in Add()
 

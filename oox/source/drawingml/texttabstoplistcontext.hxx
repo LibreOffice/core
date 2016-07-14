@@ -32,13 +32,13 @@ namespace oox { namespace drawingml {
     {
     public:
         TextTabStopListContext( ::oox::core::ContextHandler2Helper& rParent,
-                ::std::list< css::style::TabStop >  & aTabList );
+                std::list< css::style::TabStop >    & aTabList );
         virtual ~TextTabStopListContext();
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
-        ::std::list< css::style::TabStop >  & maTabList;
+        std::list< css::style::TabStop >    & maTabList;
     };
 
 } }

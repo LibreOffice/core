@@ -53,7 +53,7 @@ namespace xmloff
         {
             const OUString* pStart = _rNames.getConstArray();
             const OUString* pEnd = _rNames.getConstArray() + _rNames.getLength();
-            const OUString* pPos = ::std::find( pStart, pEnd, _rName );
+            const OUString* pPos = std::find( pStart, pEnd, _rName );
             if ( pPos != pEnd )
                 return pPos - pStart;
             return -1;

@@ -125,7 +125,7 @@ void PPTShapeGroupContext::importExtDrawings( )
 {
     if( pGraphicShape )
     {
-        for( ::std::vector<OUString>::const_iterator aIt = pGraphicShape->getExtDrawings().begin(), aEnd = pGraphicShape->getExtDrawings().end();
+        for( std::vector<OUString>::const_iterator aIt = pGraphicShape->getExtDrawings().begin(), aEnd = pGraphicShape->getExtDrawings().end();
                     aIt != aEnd; ++aIt )
             {
                 getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), getFragmentPathFromRelId( *aIt ),

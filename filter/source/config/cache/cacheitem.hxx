@@ -48,7 +48,7 @@ struct BaseLock
 };
 
 
-typedef ::std::vector< OUString > OUStringList;
+typedef std::vector< OUString > OUStringList;
 
 
 /** @short  represent an item of a FilterCache
@@ -194,7 +194,7 @@ struct FlatDetectionInfo
     FlatDetectionInfo();
 };
 
-typedef ::std::list< FlatDetectionInfo > FlatDetection;
+typedef std::list< FlatDetectionInfo > FlatDetection;
 
     } // namespace config
 } // namespace filter

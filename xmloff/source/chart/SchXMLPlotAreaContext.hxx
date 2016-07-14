@@ -111,7 +111,7 @@ private:
     SchXMLImportHelper& mrImportHelper;
     css::uno::Reference< css::chart::XDiagram > mxDiagram;
     css::uno::Reference< css::chart2::XChartDocument > mxNewDoc;
-    ::std::vector< SchXMLAxis > maAxes;
+    std::vector< SchXMLAxis > maAxes;
     OUString& mrCategoriesAddress;
     SeriesDefaultsAndStyles& mrSeriesDefaultsAndStyles;
     sal_Int32 mnNumOfLinesProp;
@@ -142,14 +142,14 @@ private:
 class SchXMLDataPointContext : public SvXMLImportContext
 {
 private:
-    ::std::list< DataRowPointStyle >& mrStyleList;
+    std::list< DataRowPointStyle >& mrStyleList;
     css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
     sal_Int32& mrIndex;
     bool mbSymbolSizeForSeriesIsMissingInFile;
 
 public:
     SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
-                             ::std::list< DataRowPointStyle >& rStyleList,
+                             std::list< DataRowPointStyle >& rStyleList,
                              const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
                              sal_Int32& rIndex,
                              bool bSymbolSizeForSeriesIsMissingInFile );
@@ -239,7 +239,7 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const OUString &rSeriesStyleName,
-        ::std::list< DataRowPointStyle >& rStyleList,
+        std::list< DataRowPointStyle >& rStyleList,
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ContextType eContextType,
         tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
@@ -254,7 +254,7 @@ public:
 
 private:
     SchXMLImportHelper &                           mrImportHelper;
-    ::std::list< DataRowPointStyle > &             mrStyleList;
+    std::list< DataRowPointStyle > &               mrStyleList;
     css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
     ContextType                                    meContextType;
     OUString maSeriesStyleName;

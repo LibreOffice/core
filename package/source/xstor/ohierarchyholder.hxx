@@ -48,8 +48,8 @@ typedef std::unordered_map< OUString,
                          OUStringHash,
                          eqFunc > OHierarchyElementList_Impl;
 
-typedef ::std::vector< OUString > OStringList_Impl;
-typedef ::std::list< css::uno::WeakReference< css::embed::XExtendedStorageStream > >
+typedef std::vector< OUString > OStringList_Impl;
+typedef std::list< css::uno::WeakReference< css::embed::XExtendedStorageStream > >
                         OWeakStorRefList_Impl;
 
 struct OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransactionListener >

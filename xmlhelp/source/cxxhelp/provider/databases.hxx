@@ -349,7 +349,7 @@ namespace chelp {
         ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
         OUString implGetFileFromPackage( const OUString& rFileExtension,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
-        void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
+        void implGetLanguageVectorFromPackage( std::vector< OUString > &rv,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
 
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;

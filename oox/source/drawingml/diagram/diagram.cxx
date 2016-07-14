@@ -416,7 +416,7 @@ void loadDiagram( ShapePtr& pShape,
                 xRefDataModel->getFragmentPath(), "image" );
 
         // Pass the info to pShape
-        for( ::std::vector<OUString>::const_iterator aIt = pData->getExtDrawings().begin(), aEnd = pData->getExtDrawings().end();
+        for( std::vector<OUString>::const_iterator aIt = pData->getExtDrawings().begin(), aEnd = pData->getExtDrawings().end();
                 aIt != aEnd; ++aIt )
                 pShape->addExtDrawingRelId( *aIt );
     }

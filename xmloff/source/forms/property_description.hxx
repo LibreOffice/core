@@ -110,10 +110,10 @@ namespace xmloff
     };
 
     //= PropertyDescriptionList
-    typedef ::std::vector< const PropertyDescription* > PropertyDescriptionList;
+    typedef std::vector< const PropertyDescription* > PropertyDescriptionList;
 
     //= PropertyGroups
-    typedef ::std::list< PropertyDescriptionList >  PropertyGroups;
+    typedef std::list< PropertyDescriptionList >    PropertyGroups;
 
 } // namespace xmloff
 

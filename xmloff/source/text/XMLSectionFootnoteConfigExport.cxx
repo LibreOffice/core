@@ -39,7 +39,7 @@
 
 using namespace ::xmloff::token;
 
-using ::std::vector;
+using std::vector;
 using css::style::NumberingType::ARABIC;
 
 

@@ -69,7 +69,7 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
 
     Sequence< Sequence< StringPair > > aPropsInfo = xRelation->getRelationshipsByType( rStreamType );
 
-    ::std::vector< InputSource > aResult;
+    std::vector< InputSource > aResult;
 
     for( sal_Int32 nIndex = 0, nLength = aPropsInfo.getLength(); nIndex < nLength; ++nIndex )
     {

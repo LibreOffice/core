@@ -205,7 +205,7 @@ void ZipOutputEntry::doDeflate()
             sal_Int32 nDiff = n_ConstDigestLength - m_nDigested;
             if ( nDiff )
             {
-                sal_Int32 nEat = ::std::min( nLength, nDiff );
+                sal_Int32 nEat = std::min( nLength, nDiff );
                 uno::Sequence< sal_Int8 > aTmpSeq( aTmpBuffer.getConstArray(), nEat );
                 m_xDigestContext->updateDigest( aTmpSeq );
                 m_nDigested = m_nDigested + static_cast< sal_Int16 >( nEat );

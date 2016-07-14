@@ -65,7 +65,7 @@ extern const bool aAllowedTokenTypesTable[];
 class XMLIndexTemplateContext : public SvXMLImportContext
 {
     // pick up PropertyValues to be turned into a sequence.
-    ::std::vector< css::beans::PropertyValues > aValueVector;
+    std::vector< css::beans::PropertyValues > aValueVector;
 
     OUString sStyleName;
 

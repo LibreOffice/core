@@ -1036,7 +1036,7 @@ inline bool isLetter( sal_Unicode c )
     return rtl::isAsciiAlpha(c);
 }
 
-void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
+void ExtensionIteratorBase::implGetLanguageVectorFromPackage( std::vector< OUString > &rv,
     const css::uno::Reference< css::deployment::XPackage >& xPackage )
 {
     rv.clear();
@@ -1163,9 +1163,9 @@ OUString TreeFileIterator::implGetTreeFileFromPackage
             if( m_xSFA->exists( aRetFile ) )
                 break;
 
-            ::std::vector< OUString > av;
+            std::vector< OUString > av;
             implGetLanguageVectorFromPackage( av, xPackage );
-            ::std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
+            std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
             if( pFound != av.end() )
                 aLanguage = *pFound;
         }

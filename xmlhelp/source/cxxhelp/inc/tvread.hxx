@@ -299,7 +299,7 @@ namespace treeview {
         css::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
             ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
-        void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
+        void implGetLanguageVectorFromPackage( std::vector< OUString > &rv,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
 
         osl::Mutex                                                                  m_aMutex;

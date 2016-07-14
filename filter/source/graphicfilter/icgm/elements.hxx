@@ -26,7 +26,7 @@
 
 #define nBackGroundColor    aColorTable[ 0 ]
 
-typedef ::std::vector< Bundle* > BundleList;
+typedef std::vector< Bundle* > BundleList;
 
 class CGMElements
 {
@@ -115,7 +115,7 @@ class CGMElements
         FillBundle          aFillBundle;
         BundleList          aFillList;
         FloatPoint          aFillRefPoint;
-        ::std::map<sal_uInt32, HatchEntry>
+        std::map<sal_uInt32, HatchEntry>
                             maHatchMap;
 
         Transparency        eTransparency;

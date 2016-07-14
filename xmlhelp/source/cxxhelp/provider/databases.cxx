@@ -1346,9 +1346,9 @@ OUString ExtensionIteratorBase::implGetFileFromPackage(
             if( m_xSFA->exists( aFile ) )
                 break;
 
-            ::std::vector< OUString > av;
+            std::vector< OUString > av;
             implGetLanguageVectorFromPackage( av, xPackage );
-            ::std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
+            std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
             if( pFound != av.end() )
                 aLanguage = *pFound;
         }
@@ -1361,7 +1361,7 @@ inline bool isLetter( sal_Unicode c )
     return rtl::isAsciiAlpha(c);
 }
 
-void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
+void ExtensionIteratorBase::implGetLanguageVectorFromPackage( std::vector< OUString > &rv,
     const css::uno::Reference< css::deployment::XPackage >& xPackage )
 {
     rv.clear();
@@ -1481,9 +1481,9 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( const Reference
         // Language fallback
         if( !pRetHdf )
         {
-            ::std::vector< OUString > av;
+            std::vector< OUString > av;
             implGetLanguageVectorFromPackage( av, xPackage );
-            ::std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
+            std::vector< OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
             if( pFound != av.end() )
             {
                 aUsedLanguage = *pFound;

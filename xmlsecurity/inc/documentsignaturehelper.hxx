@@ -85,7 +85,7 @@ public:
     static bool isOOo3_2_Signature(const SignatureInformation & sigInfo);
     static DocumentSignatureAlgorithm getDocumentAlgorithm(
         const OUString & sODFVersion, const SignatureInformation & sigInfo);
-    static bool checkIfAllFilesAreSigned( const ::std::vector< OUString > & sElementList,
+    static bool checkIfAllFilesAreSigned( const std::vector< OUString > & sElementList,
         const SignatureInformation & sigInfo, const DocumentSignatureAlgorithm alg);
     static bool equalsReferenceUriManifestPath(
         const OUString & rUri, const OUString & rPath);

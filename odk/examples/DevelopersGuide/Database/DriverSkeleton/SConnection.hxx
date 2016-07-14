@@ -65,7 +65,7 @@ namespace connectivity
         class ODatabaseMetaData;
 
         typedef OMetaConnection_BASE                OConnection_BASE; // implements basics and text encoding
-        typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
+        typedef std::vector< ::connectivity::OTypeInfo>     TTypeInfoVector;
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
 
         class OConnection : public OBase_Mutex,

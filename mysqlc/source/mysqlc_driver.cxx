@@ -236,7 +236,7 @@ Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const rtl:
 {
     OSL_TRACE("MysqlCDriver::getPropertyInfo");
     if (acceptsURL(url)) {
-        ::std::vector< DriverPropertyInfo > aDriverInfo;
+        std::vector< DriverPropertyInfo > aDriverInfo;
 
         aDriverInfo.push_back(DriverPropertyInfo(
                 rtl::OUString("Hostname")

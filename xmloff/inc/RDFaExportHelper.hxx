@@ -44,7 +44,7 @@ private:
 
     css::uno::Reference<css::rdf::XDocumentRepository> m_xRepository;
 
-    typedef ::std::map< OUString, OUString >
+    typedef std::map< OUString, OUString >
         BlankNodeMap_t;
 
     BlankNodeMap_t m_BlankNodeMap;

@@ -46,7 +46,7 @@ using namespace ::com::sun::star::text;
 
 bool XMLTextImportPropertyMapper::handleSpecialItem(
             XMLPropertyState& rProperty,
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             const OUString& rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const
@@ -352,7 +352,7 @@ void lcl_SeparateBorder(
 }
 
 void XMLTextImportPropertyMapper::finished(
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
 {
     bool bHasAnyHeight = false;
@@ -409,14 +409,14 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pBackTransparent = nullptr;  // transparency as boolean
     XMLPropertyState* pAllParaMargin = nullptr;
     XMLPropertyState* pParaMargins[4] = { nullptr, nullptr, nullptr, nullptr };
-    ::std::unique_ptr<XMLPropertyState> pNewParaMargins[4];
+    std::unique_ptr<XMLPropertyState> pNewParaMargins[4];
     XMLPropertyState* pAllMargin = nullptr;
     XMLPropertyState* pMargins[4] = { nullptr, nullptr, nullptr, nullptr };
-    ::std::unique_ptr<XMLPropertyState> pNewMargins[4];
+    std::unique_ptr<XMLPropertyState> pNewMargins[4];
     XMLPropertyState* pFillStyle(nullptr);
     XMLPropertyState* pFillColor(nullptr);
 
-    for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
+    for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
          ++aIter )
     {

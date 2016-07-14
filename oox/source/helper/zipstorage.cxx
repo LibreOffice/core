@@ -107,7 +107,7 @@ Reference< XStorage > ZipStorage::implGetXStorage() const
     return mxStorage;
 }
 
-void ZipStorage::implGetElementNames( ::std::vector< OUString >& orElementNames ) const
+void ZipStorage::implGetElementNames( std::vector< OUString >& orElementNames ) const
 {
     Sequence< OUString > aNames;
     if( mxStorage.is() ) try

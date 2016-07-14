@@ -527,10 +527,10 @@ uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropSty
     uno::Any aRet;
     if( !pPropStyleContext || !pStylesCtxt )
         return aRet;
-    const ::std::vector< XMLPropertyState >& rProperties = pPropStyleContext->GetProperties();
+    const std::vector< XMLPropertyState >& rProperties = pPropStyleContext->GetProperties();
     const rtl::Reference< XMLPropertySetMapper >& rMapper = pStylesCtxt->GetImportPropertyMapper( pPropStyleContext->GetFamily()/*XML_STYLE_FAMILY_SCH_CHART_ID*/ )->getPropertySetMapper();
-    ::std::vector< XMLPropertyState >::const_iterator aEnd( rProperties.end() );
-    ::std::vector< XMLPropertyState >::const_iterator aPropIter( rProperties.begin() );
+    std::vector< XMLPropertyState >::const_iterator aEnd( rProperties.end() );
+    std::vector< XMLPropertyState >::const_iterator aPropIter( rProperties.begin() );
     for( aPropIter = rProperties.begin(); aPropIter != aEnd; ++aPropIter )
     {
         sal_Int32 nIdx = aPropIter->mnIndex;
@@ -844,7 +844,7 @@ Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Refere
             const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
             const OUString * pBegin = aServiceNames.getConstArray();
             const OUString * pEnd = pBegin + aServiceNames.getLength();
-            if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
+            if( std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
             {
                 xRet.set( xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );
             }

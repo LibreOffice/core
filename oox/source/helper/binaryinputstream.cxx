@@ -57,14 +57,14 @@ OString BinaryInputStream::readCharArray( sal_Int32 nChars, bool bAllowNulChars 
     if( nChars <= 0 )
         return OString();
 
-    ::std::vector< sal_uInt8 > aBuffer;
+    std::vector< sal_uInt8 > aBuffer;
     sal_Int32 nCharsRead = readArray( aBuffer, nChars );
     if( nCharsRead <= 0 )
         return OString();
 
     aBuffer.resize( static_cast< size_t >( nCharsRead ) );
     if( !bAllowNulChars )
-        ::std::replace( aBuffer.begin(), aBuffer.end(), '\0', '?' );
+        std::replace( aBuffer.begin(), aBuffer.end(), '\0', '?' );
 
     return OString( reinterpret_cast< sal_Char* >( &aBuffer.front() ), nCharsRead );
 }
@@ -79,18 +79,18 @@ OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars, bool bAllowNulCh
     if( nChars <= 0 )
         return OUString();
 
-    ::std::vector< sal_uInt16 > aBuffer;
+    std::vector< sal_uInt16 > aBuffer;
     sal_Int32 nCharsRead = readArray( aBuffer, nChars );
     if( nCharsRead <= 0 )
         return OUString();
 
     aBuffer.resize( static_cast< size_t >( nCharsRead ) );
     if( !bAllowNulChars )
-        ::std::replace( aBuffer.begin(), aBuffer.begin() + nCharsRead, '\0', '?' );
+        std::replace( aBuffer.begin(), aBuffer.begin() + nCharsRead, '\0', '?' );
 
     OUStringBuffer aStringBuffer;
     aStringBuffer.ensureCapacity( nCharsRead );
-    for( ::std::vector< sal_uInt16 >::iterator aIt = aBuffer.begin(), aEnd = aBuffer.end(); aIt != aEnd; ++aIt )
+    for( std::vector< sal_uInt16 >::iterator aIt = aBuffer.begin(), aEnd = aBuffer.end(); aIt != aEnd; ++aIt )
         aStringBuffer.append( static_cast< sal_Unicode >( *aIt ) );
     return aStringBuffer.makeStringAndClear();
 }
@@ -251,7 +251,7 @@ RelativeInputStream::RelativeInputStream( BinaryInputStream& rInStrm, sal_Int64 
     mnRelPos( 0 )
 {
     sal_Int64 nRemaining = rInStrm.getRemaining();
-    mnSize = (nRemaining >= 0) ? ::std::min( nSize, nRemaining ) : nSize;
+    mnSize = (nRemaining >= 0) ? std::min( nSize, nRemaining ) : nSize;
     mbEof = mbEof || rInStrm.isEof() || (mnSize < 0);
 }
 

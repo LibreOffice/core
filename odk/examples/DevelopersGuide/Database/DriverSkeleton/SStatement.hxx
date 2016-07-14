@@ -72,7 +72,7 @@ namespace connectivity
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             //  for this Statement
 
-            ::std::list< ::rtl::OUString>               m_aBatchList;
+            std::list< ::rtl::OUString>                 m_aBatchList;
 
             OConnection*                                m_pConnection;  // The owning Connection object
         protected:

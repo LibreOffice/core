@@ -31,7 +31,7 @@ PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
                                       const css::uno::Reference< css::xml::sax::XAttributeList>&,
-                                      ::std::vector< XMLPropertyState > & rTempProperties,
+                                      std::vector< XMLPropertyState > & rTempProperties,
                                       const rtl::Reference < SvXMLImportPropertyMapper > &rTempMap,
                                       sal_Int32 nStart, sal_Int32 nEnd,
                                       const bool bTempHeader ) :

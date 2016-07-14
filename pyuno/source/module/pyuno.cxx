@@ -1032,7 +1032,7 @@ int lcl_setitem_slice( PyUNO *me, PyObject *pKey, PyObject *pValue )
         }
 
         sal_Int32 nCur, i;
-        sal_Int32 nMax = ::std::max( nSliceLength, nTupleLength );
+        sal_Int32 nMax = std::max( nSliceLength, nTupleLength );
         for ( nCur = nStart, i = 0; i < nMax; nCur += nStep, i++ )
         {
             if ( i < nTupleLength )

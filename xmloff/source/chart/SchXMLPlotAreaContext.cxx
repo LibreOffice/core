@@ -65,7 +65,7 @@ using com::sun::star::uno::Reference;
 namespace
 {
 
-struct lcl_AxisHasCategories : public ::std::unary_function< SchXMLAxis, bool >
+struct lcl_AxisHasCategories : public std::unary_function< SchXMLAxis, bool >
 {
     bool operator() ( const SchXMLAxis & rAxis )
     {
@@ -522,8 +522,8 @@ void SchXMLPlotAreaContext::EndElement()
             mxNewDoc->getDataProvider()  );
         // @todo: correct coordinate system index
         sal_Int32 nDimension( 0 );
-        ::std::vector< SchXMLAxis >::const_iterator aIt(
-            ::std::find_if( maAxes.begin(), maAxes.end(), lcl_AxisHasCategories()));
+        std::vector< SchXMLAxis >::const_iterator aIt(
+            std::find_if( maAxes.begin(), maAxes.end(), lcl_AxisHasCategories()));
         if( aIt != maAxes.end())
             nDimension = static_cast< sal_Int32 >( (*aIt).eDimension );
         SchXMLTools::CreateCategories(
@@ -601,7 +601,7 @@ void SchXMLPlotAreaContext::EndElement()
 }
 
 SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
-                                                 ::std::list< DataRowPointStyle >& rStyleList,
+                                                 std::list< DataRowPointStyle >& rStyleList,
                                                  const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
                                                  sal_Int32& rIndex,
                                                  bool bSymbolSizeForSeriesIsMissingInFile ) :
@@ -929,7 +929,7 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const OUString &rSeriesStyleName,
-    ::std::list< DataRowPointStyle >& rStyleList,
+    std::list< DataRowPointStyle >& rStyleList,
     const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
     ContextType eContextType,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex) :

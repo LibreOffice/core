@@ -399,7 +399,7 @@ void BinaryCodec_RCF::skip( sal_Int32 nBytes )
     bool bResult = true;
     while( bResult && (nBytesLeft > 0) )
     {
-        sal_Int32 nBlockLen = ::std::min( nBytesLeft, static_cast< sal_Int32 >( sizeof( pnDummy ) ) );
+        sal_Int32 nBlockLen = std::min( nBytesLeft, static_cast< sal_Int32 >( sizeof( pnDummy ) ) );
         bResult = decode( pnDummy, pnDummy, nBlockLen );
         nBytesLeft -= nBlockLen;
     }

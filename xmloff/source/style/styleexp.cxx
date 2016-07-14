@@ -317,7 +317,7 @@ bool XMLStyleExport::exportStyle(
         rPropMapper->SetStyleName( sName );
 
         // <style:properties>
-        ::std::vector< XMLPropertyState > aPropStates =
+        std::vector< XMLPropertyState > aPropStates =
             rPropMapper->Filter( xPropSet, true );
         bool const bUseExtensionNamespaceForGraphicProperties(
                 rXMLFamily != "drawing-page" &&
@@ -360,7 +360,7 @@ bool XMLStyleExport::exportDefaultStyle(
                                   XML_DEFAULT_STYLE,
                                   true, true );
         // <style:properties>
-        ::std::vector< XMLPropertyState > aPropStates =
+        std::vector< XMLPropertyState > aPropStates =
             rPropMapper->FilterDefaults( xPropSet );
         rPropMapper->exportXML( GetExport(), aPropStates,
                                      SvXmlExportFlags::IGN_WS );

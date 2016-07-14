@@ -252,12 +252,12 @@ namespace frm
         if ( m_aSupportedFeatures.empty() )
         {
             // ask the derivee which feature ids it wants us to support
-            ::std::vector< sal_Int16 > aFeatureIds;
+            std::vector< sal_Int16 > aFeatureIds;
             getSupportedFeatures( aFeatureIds );
 
             OFormNavigationMapper aUrlMapper( m_xORB );
 
-            for (   ::std::vector< sal_Int16 >::const_iterator aLoop = aFeatureIds.begin();
+            for (   std::vector< sal_Int16 >::const_iterator aLoop = aFeatureIds.begin();
                     aLoop != aFeatureIds.end();
                     ++aLoop
                 )

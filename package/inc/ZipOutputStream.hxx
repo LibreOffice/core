@@ -34,7 +34,7 @@ class ZipPackageStream;
 class ZipOutputStream
 {
     css::uno::Reference< css::io::XOutputStream > m_xStream;
-    ::std::vector < ZipEntry * > m_aZipList;
+    std::vector < ZipEntry * > m_aZipList;
 
     ByteChucker         m_aChucker;
     ZipEntry            *m_pCurrentEntry;

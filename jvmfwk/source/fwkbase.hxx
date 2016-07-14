@@ -36,7 +36,7 @@ public:
 
     VersionInfo getVersionInformation(const OUString & sVendor);
 
-    ::std::vector< OUString> getSupportedVendors();
+    std::vector< OUString> getSupportedVendors();
 };
 
 /* The class offers functions to retrieve verified bootstrap parameters.
@@ -51,7 +51,7 @@ namespace  BootParams
 */
 OUString getJREHome();
 
-::std::vector< OString> getVMParameters();
+std::vector< OString> getVMParameters();
 
 OUString getUserData();
 

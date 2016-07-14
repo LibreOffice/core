@@ -99,7 +99,7 @@ namespace xmloff
         // determine the last element
         for ( pEnd = _pMap; pEnd->msApiName; ++pEnd)
             ;
-        ::std::sort(_pMap, pEnd, XMLPropertyMapEntryLess());
+        std::sort(_pMap, pEnd, XMLPropertyMapEntryLess());
     }
 
     void initializePropertyMaps()
@@ -119,7 +119,7 @@ namespace xmloff
     }
 
     void OFormComponentStyleExportMapper::handleSpecialItem( SvXMLAttributeList& _rAttrList, const XMLPropertyState& _rProperty, const SvXMLUnitConverter& _rUnitConverter,
-        const SvXMLNamespaceMap& _rNamespaceMap, const ::std::vector< XMLPropertyState >* _pProperties,
+        const SvXMLNamespaceMap& _rNamespaceMap, const std::vector< XMLPropertyState >* _pProperties,
         sal_uInt32 _nIdx ) const
     {
         // ignore the number style of grid columns - this is formatted elsewhere

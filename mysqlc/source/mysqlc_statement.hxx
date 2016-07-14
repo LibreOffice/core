@@ -71,7 +71,7 @@ namespace connectivity
             SQLWarning m_aLastWarning;
 
         protected:
-            ::std::list< rtl::OUString>  m_aBatchList;
+            std::list< rtl::OUString>    m_aBatchList;
 
             OConnection*            m_pConnection;  // The owning Connection object
 

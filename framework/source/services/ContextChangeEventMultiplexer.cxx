@@ -90,7 +90,7 @@ public:
         const css::lang::EventObject& rEvent)
         throw (cssu::RuntimeException, std::exception) override;
 
-    typedef ::std::vector<cssu::Reference<css::ui::XContextChangeEventListener> > ListenerContainer;
+    typedef std::vector<cssu::Reference<css::ui::XContextChangeEventListener> > ListenerContainer;
     class FocusDescriptor
     {
     public:
@@ -98,7 +98,7 @@ public:
         ::rtl::OUString msCurrentApplicationName;
         ::rtl::OUString msCurrentContextName;
     };
-    typedef ::std::map<cssu::Reference<cssu::XInterface>, FocusDescriptor> ListenerMap;
+    typedef std::map<cssu::Reference<cssu::XInterface>, FocusDescriptor> ListenerMap;
     ListenerMap maListeners;
 
     /** Notify all listeners in the container that is associated with
@@ -170,7 +170,7 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
     if (pFocusDescriptor != nullptr)
     {
         ListenerContainer& rContainer (pFocusDescriptor->maListeners);
-        if (::std::find(rContainer.begin(), rContainer.end(), rxListener) == rContainer.end())
+        if (std::find(rContainer.begin(), rContainer.end(), rxListener) == rContainer.end())
             rContainer.push_back(rxListener);
         else
         {
@@ -207,7 +207,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
     {
         ListenerContainer& rContainer (pFocusDescriptor->maListeners);
         const ListenerContainer::iterator iListener (
-            ::std::find(rContainer.begin(), rContainer.end(), rxListener));
+            std::find(rContainer.begin(), rContainer.end(), rxListener));
         if (iListener != rContainer.end())
         {
             rContainer.erase(iListener);
@@ -235,7 +235,7 @@ void SAL_CALL ContextChangeEventMultiplexer::removeAllContextChangeEventListener
          ++iContainer)
     {
         const ListenerContainer::iterator iListener (
-            ::std::find(iContainer->second.maListeners.begin(), iContainer->second.maListeners.end(), rxListener));
+            std::find(iContainer->second.maListeners.begin(), iContainer->second.maListeners.end(), rxListener));
         if (iListener != iContainer->second.maListeners.end())
         {
             iContainer->second.maListeners.erase(iListener);

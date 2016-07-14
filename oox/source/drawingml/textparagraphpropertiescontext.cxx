@@ -138,13 +138,13 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
     else
         rPropertyMap.setProperty( PROP_ParaLineSpacing, css::style::LineSpacing( css::style::LineSpacingMode::PROP, 100 ));
 
-    ::std::list< TabStop >::size_type nTabCount = maTabList.size();
+    std::list< TabStop >::size_type nTabCount = maTabList.size();
     if( nTabCount != 0 )
     {
         Sequence< TabStop > aSeq( nTabCount );
         TabStop * aArray = aSeq.getArray();
         OSL_ENSURE( aArray != nullptr, "sequence array is NULL" );
-        ::std::copy( maTabList.begin(), maTabList.end(), aArray );
+        std::copy( maTabList.begin(), maTabList.end(), aArray );
         rPropertyMap.setProperty( PROP_ParaTabStops, aSeq);
     }
 

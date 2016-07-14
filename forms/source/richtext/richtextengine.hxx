@@ -43,7 +43,7 @@ namespace frm
     {
     private:
         SfxItemPool*                            m_pEnginePool;
-        ::std::vector< IEngineStatusListener* > m_aStatusListeners;
+        std::vector< IEngineStatusListener* > m_aStatusListeners;
 
     public:
         static  RichTextEngine* Create();

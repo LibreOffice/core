@@ -56,7 +56,7 @@ using ::com::sun::star::text::XTextSection;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::std::list;
+using std::list;
 
 
 XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp)

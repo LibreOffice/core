@@ -921,7 +921,7 @@ Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShape
     awt::Rectangle aCoordSys = getCoordSystem();
     if( !maShapeModel.maPoints.empty() && (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
     {
-        ::std::vector< awt::Point > aAbsPoints;
+        std::vector< awt::Point > aAbsPoints;
         for( ShapeModel::PointVector::const_iterator aIt = maShapeModel.maPoints.begin(), aEnd = maShapeModel.maPoints.end(); aIt != aEnd; ++aIt )
             aAbsPoints.push_back( lclGetAbsPoint( *aIt, rShapeRect, aCoordSys ) );
         PointSequenceSequence aPointSeq( 1 );
@@ -986,8 +986,8 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
 
         // Bezier paths may consist of one or more sub-paths
-        typedef ::std::vector< ::std::vector< awt::Point > > SubPathList;
-        typedef ::std::vector< ::std::vector< PolygonFlags > > FlagsList;
+        typedef std::vector< std::vector< awt::Point > > SubPathList;
+        typedef std::vector< std::vector< PolygonFlags > > FlagsList;
         SubPathList aCoordLists;
         FlagsList aFlagLists;
         sal_Int32 nIndex = 0;
@@ -995,8 +995,8 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         // Curve defined by to, from, control1 and control2 attributes
         if ( maShapeModel.maVmlPath.isEmpty() )
         {
-            aCoordLists.push_back( ::std::vector< awt::Point >() );
-            aFlagLists.push_back( ::std::vector< PolygonFlags >() );
+            aCoordLists.push_back( std::vector< awt::Point >() );
+            aFlagLists.push_back( std::vector< PolygonFlags >() );
 
             // Start point
             aCoordLists[ 0 ].push_back(
@@ -1027,7 +1027,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
             ConversionHelper::decodeVmlPath( aCoordLists, aFlagLists, maShapeModel.maVmlPath );
 
             for ( SubPathList::iterator aListIt = aCoordLists.begin(); aListIt != aCoordLists.end(); ++aListIt )
-                for ( ::std::vector< awt::Point >::iterator aPointIt = (*aListIt).begin(); aPointIt != (*aListIt).end(); ++aPointIt)
+                for ( std::vector< awt::Point >::iterator aPointIt = (*aListIt).begin(); aPointIt != (*aListIt).end(); ++aPointIt)
                 {
                     (*aPointIt) = lclGetAbsPoint( (*aPointIt), rShapeRect, aCoordSys );
                 }

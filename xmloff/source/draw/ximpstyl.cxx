@@ -59,7 +59,7 @@ public:
     SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                  const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-                 ::std::vector< XMLPropertyState > &rProps,
+                 std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
     virtual ~SdXMLDrawingPagePropertySetContext();
@@ -68,7 +68,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-                                   ::std::vector< XMLPropertyState > &rProperties,
+                                   std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp) override;
 };
 
@@ -77,7 +77,7 @@ SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,
                  const OUString& rLName,
                  const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-                 ::std::vector< XMLPropertyState > &rProps,
+                 std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
     SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList,
                              XML_TYPE_PROP_DRAWING_PAGE, rProps, rMap )
@@ -92,7 +92,7 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
                    sal_uInt16 p_nPrefix,
                    const OUString& rLocalName,
                    const uno::Reference< xml::sax::XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
+                   std::vector< XMLPropertyState > &rProperties,
                    const XMLPropertyState& rProp )
 {
     SvXMLImportContext *pContext = nullptr;
@@ -196,11 +196,11 @@ void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
 {
     XMLPropStyleContext::Finish( bOverwrite );
 
-    ::std::vector< XMLPropertyState > &rProperties = GetProperties();
+    std::vector< XMLPropertyState > &rProperties = GetProperties();
 
     const rtl::Reference< XMLPropertySetMapper >& rImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
 
-    ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
+    std::vector< XMLPropertyState >::iterator property = rProperties.begin();
     for(; property != rProperties.end(); ++property)
     {
         if( property->mnIndex == -1 )
@@ -1255,8 +1255,8 @@ static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pProp
         sal_Int32 nIndexStyle = rPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, "auto-grow-height", 0);
         if (nIndexStyle != -1)
         {
-            const ::std::vector< XMLPropertyState > &rProperties = pPropStyle->GetProperties();
-            ::std::vector< XMLPropertyState >::const_iterator property = rProperties.begin();
+            const std::vector< XMLPropertyState > &rProperties = pPropStyle->GetProperties();
+            std::vector< XMLPropertyState >::const_iterator property = rProperties.begin();
             for(; property != rProperties.end(); ++property)
             {
                 sal_Int32 nIdx = property->mnIndex;

@@ -47,7 +47,7 @@ public:
         const OUString& rLName,
         const Reference< XAttributeList >& xAttrList,
                  sal_uInt32 nFamily,
-        ::std::vector< XMLPropertyState > &rProps,
+        std::vector< XMLPropertyState > &rProps,
         const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
     virtual ~XMLTextShapePropertySetContext_Impl();
@@ -56,7 +56,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList >& xAttrList,
-        ::std::vector< XMLPropertyState > &rProperties,
+        std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp) override;
 };
 
@@ -65,7 +65,7 @@ XMLTextShapePropertySetContext_Impl::XMLTextShapePropertySetContext_Impl(
                  const OUString& rLName,
                  const Reference< XAttributeList > & xAttrList,
                  sal_uInt32 nFamily,
-                 ::std::vector< XMLPropertyState > &rProps,
+                 std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
     XMLShapePropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
                                 rProps, rMap )
@@ -80,7 +80,7 @@ SvXMLImportContext *XMLTextShapePropertySetContext_Impl::CreateChildContext(
                    sal_uInt16 nPrefix,
                    const OUString& rLocalName,
                    const Reference< XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
+                   std::vector< XMLPropertyState > &rProperties,
                    const XMLPropertyState& rProp )
 {
     SvXMLImportContext *pContext = nullptr;

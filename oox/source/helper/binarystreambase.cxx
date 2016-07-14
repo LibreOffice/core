@@ -37,7 +37,7 @@ sal_Int64 BinaryStreamBase::getRemaining() const
     // do not use isSeekable(), implementations may provide stream position and size even if not seekable
     sal_Int64 nPos = tell();
     sal_Int64 nLen = size();
-    return ((nPos >= 0) && (nLen >= 0)) ? ::std::max< sal_Int64 >( nLen - nPos, 0 ) : -1;
+    return ((nPos >= 0) && (nLen >= 0)) ? std::max< sal_Int64 >( nLen - nPos, 0 ) : -1;
 }
 
 void BinaryStreamBase::alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos )

@@ -134,8 +134,8 @@ class XMLTextListsHelper
         // container type for processed lists:
         // map with <ListId> as key and pair( <ListStyleName, ContinueListId> )
         // as value
-        typedef ::std::map< OUString,
-                            ::std::pair< OUString, OUString > > tMapForLists;
+        typedef std::map< OUString,
+                            std::pair< OUString, OUString > > tMapForLists;
         tMapForLists* mpProcessedLists;
         OUString msLastProcessedListId;
         OUString msListStyleOfLastProcessedList;
@@ -149,28 +149,28 @@ class XMLTextListsHelper
         // container type to build up continue list chain:
         // map with <ListId> of master list as key and <ListId> of last list
         // continuing the master list as value
-        typedef ::std::map< OUString, OUString > tMapForContinuingLists;
+        typedef std::map< OUString, OUString > tMapForContinuingLists;
         tMapForContinuingLists* mpContinuingLists;
 
         // stack type for opened list elements and its list style:
         // vector with pair( <ListId>, <ListStyleName> ) as value
-        typedef ::std::vector< ::std::pair< OUString, OUString > >
+        typedef std::vector< std::pair< OUString, OUString > >
                                                                 tStackForLists;
         tStackForLists* mpListStack;
 
         /// to connect numbered-paragraphs that have no list-id attribute:
         /// vector of pair of style-name and list-id (indexed by level)
-        typedef ::std::vector< ::std::pair< OUString, OUString > >
+        typedef std::vector< std::pair< OUString, OUString > >
             LastNumberedParagraphs_t;
 
         LastNumberedParagraphs_t mLastNumberedParagraphs;
 
         /// numbered-paragraphs
-        typedef ::std::vector<
-                    ::std::pair<
+        typedef std::vector<
+                    std::pair<
                         OUString,
                         css::uno::Reference< css::container::XIndexReplace > > > NumParaList_t;
-        ::std::map< OUString, NumParaList_t > mNPLists;
+        std::map< OUString, NumParaList_t > mNPLists;
 
 };
 #endif

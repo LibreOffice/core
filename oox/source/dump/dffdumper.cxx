@@ -167,7 +167,7 @@ struct PropInfo
                             maName( rName ), meType( eType ), mnId( nId ), mnSize( nSize ) {}
 };
 
-typedef ::std::vector< PropInfo > PropInfoVector;
+typedef std::vector< PropInfo > PropInfoVector;
 
 } // namespace
 
@@ -188,7 +188,7 @@ void DffStreamObject::dumpDffOpt()
             writeHexItem( "complex-size", nValue, "CONV-DEC" );
             String aName;
             PropType eType = PROPTYPE_BINARY;
-            ::std::map< sal_Int64, ItemFormat >::const_iterator aIt = maComplexProps.find( nBaseId );
+            std::map< sal_Int64, ItemFormat >::const_iterator aIt = maComplexProps.find( nBaseId );
             if( aIt != maComplexProps.end() )
             {
                 const ItemFormat& rItemFmt = aIt->second;
@@ -206,7 +206,7 @@ void DffStreamObject::dumpDffOpt()
         }
         else
         {
-            ::std::map< sal_Int64, ItemFormat >::const_iterator aIt = maSimpleProps.find( nBaseId );
+            std::map< sal_Int64, ItemFormat >::const_iterator aIt = maSimpleProps.find( nBaseId );
             if( aIt != maSimpleProps.end() )
             {
                 const ItemFormat& rItemFmt = aIt->second;

@@ -37,7 +37,7 @@ public:
     SvxXMLTabStopImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                 const OUString& rLName,
                                 const XMLPropertyState& rProp,
-                                 ::std::vector< XMLPropertyState > &rProps );
+                                 std::vector< XMLPropertyState > &rProps );
 
     virtual ~SvxXMLTabStopImportContext();
 

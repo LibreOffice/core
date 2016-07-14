@@ -61,7 +61,7 @@ class XMLIndexBibliographyConfigurationContext : public SvXMLStyleContext
     bool bNumberedEntries;
     bool bSortByPosition;
 
-    ::std::vector< css::uno::Sequence< css::beans::PropertyValue> > aSortKeys;
+    std::vector< css::uno::Sequence< css::beans::PropertyValue> > aSortKeys;
 
 public:
 

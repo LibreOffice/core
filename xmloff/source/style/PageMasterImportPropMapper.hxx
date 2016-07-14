@@ -40,14 +40,14 @@ public:
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
     virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             const OUString& rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const override;
 
     /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
     virtual void finished(
-            ::std::vector< XMLPropertyState >& rProperties,
+            std::vector< XMLPropertyState >& rProperties,
             sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const override;
 };
 

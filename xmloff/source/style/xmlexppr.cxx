@@ -140,7 +140,7 @@ void XMLPropertyStates_Impl::FillPropertyStateVector(
     if (nCount)
     {
         rVector.resize(nCount, XMLPropertyState(-1));
-        ::std::copy( aPropStates.begin(), aPropStates.end(), rVector.begin() );
+        std::copy( aPropStates.begin(), aPropStates.end(), rVector.begin() );
     }
 }
 
@@ -384,7 +384,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     Sequence < OUString > aAPINames( nValueCount );
                     OUString *pAPINames = aAPINames.getArray();
 
-                    ::std::vector< FilterPropertyInfoList_Impl::iterator > aPropIters;
+                    std::vector< FilterPropertyInfoList_Impl::iterator > aPropIters;
                     aPropIters.reserve( nValueCount );
 
                     FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
@@ -407,7 +407,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     aValues = xMultiPropSet->getPropertyValues( aAPINames );
                     const Any *pValues = aValues.getConstArray();
 
-                    ::std::vector< FilterPropertyInfoList_Impl::iterator >::const_iterator
+                    std::vector< FilterPropertyInfoList_Impl::iterator >::const_iterator
                         pPropIter = aPropIters.begin();
 
                     XMLPropertyState aNewProperty( -1 );
@@ -416,7 +416,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                         aNewProperty.mnIndex = -1;
                         aNewProperty.maValue = *pValues;
 
-                        const ::std::list< sal_uInt32 >& rIndexes( (*pPropIter)->GetIndexes() );
+                        const std::list< sal_uInt32 >& rIndexes( (*pPropIter)->GetIndexes() );
                         for (   std::list<sal_uInt32>::const_iterator aIndexItr = rIndexes.begin();
                                 aIndexItr != rIndexes.end();
                                 ++aIndexItr
@@ -724,7 +724,7 @@ bool SvXMLExportPropertyMapper::Equals(
 
 /** fills the given attribute list with the items in the given set
 void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
-        const ::std::vector< XMLPropertyState >& rProperties,
+        const std::vector< XMLPropertyState >& rProperties,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         sal_uInt16 nFlags ) const
@@ -734,7 +734,7 @@ void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
 }
 
 void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
-        const ::std::vector< XMLPropertyState >& rProperties,
+        const std::vector< XMLPropertyState >& rProperties,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
@@ -747,7 +747,7 @@ void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
 
 void SvXMLExportPropertyMapper::exportXML(
         SvXMLExport& rExport,
-        const ::std::vector< XMLPropertyState >& rProperties,
+        const std::vector< XMLPropertyState >& rProperties,
         SvXmlExportFlags nFlags,
         bool bUseExtensionNamespaceForGraphicProperties) const
 {
@@ -757,7 +757,7 @@ void SvXMLExportPropertyMapper::exportXML(
 
 void SvXMLExportPropertyMapper::exportXML(
         SvXMLExport& rExport,
-        const ::std::vector< XMLPropertyState >& rProperties,
+        const std::vector< XMLPropertyState >& rProperties,
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
         SvXmlExportFlags nFlags, bool bUseExtensionNamespaceForGraphicProperties) const
 {
@@ -809,7 +809,7 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-        const ::std::vector< XMLPropertyState > *pProperties,
+        const std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
     OSL_ENSURE(mpImpl->mxNextMapper.is(), "special item not handled in xml export");
@@ -824,7 +824,7 @@ void SvXMLExportPropertyMapper::handleElementItem(
         SvXMLExport& rExport,
         const XMLPropertyState& rProperty,
         SvXmlExportFlags nFlags,
-        const ::std::vector< XMLPropertyState > *pProperties,
+        const std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
     OSL_ENSURE(mpImpl->mxNextMapper.is(), "element item not handled in xml export");
@@ -838,7 +838,7 @@ void SvXMLExportPropertyMapper::handleElementItem(
 void SvXMLExportPropertyMapper::_exportXML(
         sal_uInt16 nPropType, sal_uInt16& rPropTypeFlags,
         SvXMLAttributeList& rAttrList,
-        const ::std::vector< XMLPropertyState >& rProperties,
+        const std::vector< XMLPropertyState >& rProperties,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         SvXmlExportFlags nFlags,
@@ -894,7 +894,7 @@ void SvXMLExportPropertyMapper::_exportXML(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
         SvXmlExportFlags /*nFlags*/,
-        const ::std::vector< XMLPropertyState > *pProperties,
+        const std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
     if ((mpImpl->mxPropMapper->GetEntryFlags(rProperty.mnIndex) & MID_FLAG_SPECIAL_ITEM_EXPORT) != 0)
@@ -1027,7 +1027,7 @@ void SvXMLExportPropertyMapper::_exportXML(
 
 void SvXMLExportPropertyMapper::exportElementItems(
         SvXMLExport& rExport,
-        const ::std::vector< XMLPropertyState >& rProperties,
+        const std::vector< XMLPropertyState >& rProperties,
         SvXmlExportFlags nFlags,
         const std::vector<sal_uInt16>& rIndexArray ) const
 {

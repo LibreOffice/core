@@ -47,7 +47,7 @@ namespace skeleton
 {
     class OPropertyMap
     {
-        ::std::map<sal_Int32 , rtl_uString*> m_aPropertyMap;
+        std::map<sal_Int32 , rtl_uString*> m_aPropertyMap;
 
         ::rtl::OUString fillValue(sal_Int32 _nIndex);
     public:

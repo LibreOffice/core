@@ -625,7 +625,7 @@ bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
         return true;
     }
 
-    ::std::list<Any> items;
+    std::list<Any> items;
     do
     {
         PyRef rItem( pItem, SAL_NO_ACQUIRE );

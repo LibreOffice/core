@@ -586,7 +586,7 @@ void OComboBoxModel::loadData( bool _bForce )
         return;
     }
 
-    ::std::vector< OUString >    aStringList;
+    std::vector< OUString >      aStringList;
     aStringList.reserve(16);
     try
     {

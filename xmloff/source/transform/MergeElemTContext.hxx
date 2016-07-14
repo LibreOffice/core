@@ -24,7 +24,7 @@
 #include "FlatTContext.hxx"
 #include <vector>
 
-typedef ::std::vector< ::rtl::Reference< XMLPersTextContentTContext> >
+typedef std::vector< ::rtl::Reference< XMLPersTextContentTContext> >
         XMLPersTextContentTContextVector;
 
 class XMLMergeElemTransformerContext : public XMLTransformerContext

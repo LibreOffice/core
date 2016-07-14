@@ -132,9 +132,9 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         // import numbering rules from the style:properties element
         const rtl::Reference< XMLPropertySetMapper >&rMapper = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
 
-        ::std::vector< XMLPropertyState > &rProperties = GetProperties();
-        ::std::vector< XMLPropertyState >::iterator end( rProperties.end() );
-        ::std::vector< XMLPropertyState >::iterator property;
+        std::vector< XMLPropertyState > &rProperties = GetProperties();
+        std::vector< XMLPropertyState >::iterator end( rProperties.end() );
+        std::vector< XMLPropertyState >::iterator property;
 
         // first, look for the old format, where we had a text:list-style-name
         // attribute in the style:properties element

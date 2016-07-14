@@ -346,7 +346,7 @@ throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs, StringHashMap& o_aConvertedAttribs )
 {
     StringHashMap aNamespaces;
-    ::std::vector< ::std::pair< OUString, OUString > > aAttribsStrs;
+    std::vector< std::pair< OUString, OUString > > aAttribsStrs;
 
     if ( xAttribs.is() ) {
         sal_Int16 nAttrCount = xAttribs.is() ? xAttribs->getLength() : 0;

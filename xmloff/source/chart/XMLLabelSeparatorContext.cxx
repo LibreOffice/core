@@ -33,7 +33,7 @@ XMLLabelSeparatorContext::XMLLabelSeparatorContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const XMLPropertyState& rProp,
-    ::std::vector< XMLPropertyState > &rProps ) :
+    std::vector< XMLPropertyState > &rProps ) :
         XMLElementPropertyContext(
             rImport, nPrfx, rLocalName, rProp, rProps ),
             m_aSeparator()

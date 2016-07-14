@@ -1049,7 +1049,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
 void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
 {
     // collect elements
-    ::std::vector< ElementDescriptor* > all_elements;
+    std::vector< ElementDescriptor* > all_elements;
     // read out all props
     Reference<  container::XNameContainer > xDialogModel( _xProps, UNO_QUERY );
     if ( !xDialogModel.is() )

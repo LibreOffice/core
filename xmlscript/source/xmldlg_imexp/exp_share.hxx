@@ -75,7 +75,7 @@ struct Style
 };
 class StyleBag
 {
-    ::std::vector< Style * > _styles;
+    std::vector< Style * > _styles;
 
 public:
     ~StyleBag() ;

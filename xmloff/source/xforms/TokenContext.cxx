@@ -133,7 +133,7 @@ void TokenContext::Characters( const OUString& rCharacters )
     const sal_Unicode* pEnd = &( pBegin[ rCharacters.getLength() ] );
 
     // raise error if non-whitespace character is found
-    if( !::std::all_of( pBegin, pEnd, lcl_IsWhiteSpace ) )
+    if( !std::all_of( pBegin, pEnd, lcl_IsWhiteSpace ) )
         GetImport().SetError( XMLERROR_UNKNOWN_CHARACTERS, rCharacters );
 }
 

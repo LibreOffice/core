@@ -37,7 +37,7 @@ SchXMLAutoStylePoolP::~SchXMLAutoStylePoolP()
 void SchXMLAutoStylePoolP::exportStyleAttributes(
     SvXMLAttributeList& rAttrList,
     sal_Int32 nFamily,
-    const ::std::vector< XMLPropertyState >& rProperties,
+    const std::vector< XMLPropertyState >& rProperties,
     const SvXMLExportPropertyMapper& rPropExp
     , const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap
@@ -48,7 +48,7 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
 
     if( nFamily == XML_STYLE_FAMILY_SCH_CHART_ID )
     {
-        for( ::std::vector< XMLPropertyState >::const_iterator iter = rProperties.begin();
+        for( std::vector< XMLPropertyState >::const_iterator iter = rProperties.begin();
              (iter != rProperties.end()); ++iter )
         {
             if( iter->mnIndex == -1 )

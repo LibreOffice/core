@@ -168,7 +168,7 @@ private:
             PropertyWrapper.  It uses OUStringComparison for sorting
             the property names.
     */
-    ::std::map< OUString, PropertyWrapperBase*, OUStringComparison> aPropertyList;
+    std::map< OUString, PropertyWrapperBase*, OUStringComparison> aPropertyList;
 
     /// The object from which to get the property values.
     css::uno::Reference< css::uno::XInterface>    mxObject;
@@ -182,14 +182,14 @@ MultiPropertySetHandler::MultiPropertySetHandler (css::uno::Reference<
 
 MultiPropertySetHandler::~MultiPropertySetHandler()
 {
-    ::std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
+    std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
     for (I=aPropertyList.begin(); I!=aPropertyList.end(); ++I)
         delete I->second;
 }
 
 bool    MultiPropertySetHandler::GetProperties()
 {
-    ::std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
+    std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
     css::uno::Sequence< OUString> aNameList (aPropertyList.size());
     int i;
     for (I=aPropertyList.begin(),i=0; I!=aPropertyList.end(); ++I)
@@ -208,7 +208,7 @@ bool    MultiPropertySetHandler::MultiGet   (const css::uno::Sequence<
     if (xMultiSet.is())
         try
         {
-            ::std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
+            std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
             int i;
             css::uno::Sequence< css::uno::Any> aValueList =
                 xMultiSet->getPropertyValues (rNameList);
@@ -233,7 +233,7 @@ bool    MultiPropertySetHandler::SingleGet  (const css::uno::Sequence<
     if (xSingleSet.is())
         try
         {
-            ::std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
+            std::map< OUString, PropertyWrapperBase*, OUStringComparison>::iterator I;
             int i;
             for (I=aPropertyList.begin(),i=0; I!=aPropertyList.end(); ++I)
                 I->second->SetValue (xSingleSet->getPropertyValue (rNameList[i++]));

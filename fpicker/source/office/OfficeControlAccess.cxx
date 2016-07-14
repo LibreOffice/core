@@ -68,7 +68,7 @@ namespace svt
 
 
         typedef const ControlDescription* ControlDescIterator;
-        typedef ::std::pair< ControlDescIterator, ControlDescIterator > ControlDescRange;
+        typedef std::pair< ControlDescIterator, ControlDescIterator > ControlDescRange;
 
 
         #define PROPERTY_FLAGS_COMMON       ( PROPERTY_FLAG_ENDBALED | PROPERTY_FLAG_VISIBLE | PROPERTY_FLAG_HELPURL )
@@ -222,7 +222,7 @@ namespace svt
             // will throw an IllegalArgumentException if the name is not valid
 
         // look up the property
-        ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
+        ControlPropertyIterator aPropDesc = std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
         if ( aPropDesc == s_pPropertiesEnd )
             // it's a completely unknown property
             lcl_throwIllegalArgumentException();
@@ -243,7 +243,7 @@ namespace svt
         tmpDesc.pControlName = aControlName.getStr();
 
         // translate the name into an id
-        ControlDescRange aFoundRange = ::std::equal_range( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
+        ControlDescRange aFoundRange = std::equal_range( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
         if ( aFoundRange.first != aFoundRange.second )
         {
             // get the VCL control determined by this id
@@ -272,7 +272,7 @@ namespace svt
             // will throw an IllegalArgumentException if the name is not valid
 
         // look up the property
-        ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
+        ControlPropertyIterator aPropDesc = std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
         if ( aPropDesc == s_pPropertiesEnd )
             lcl_throwIllegalArgumentException();
 
@@ -323,7 +323,7 @@ namespace svt
         ControlDescription tmpDesc;
         OString aControlName = OUStringToOString(_rControlName, RTL_TEXTENCODING_UTF8);
         tmpDesc.pControlName = aControlName.getStr();
-        return ::std::binary_search( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
+        return std::binary_search( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
     }
 
 
@@ -336,7 +336,7 @@ namespace svt
             // will throw an IllegalArgumentException if the name is not valid
 
         // look up the property
-        ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
+        ControlPropertyIterator aPropDesc = std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( _rControlProperty ) );
         if ( aPropDesc == s_pPropertiesEnd )
             // it's a property which is completely unknown
             return false;

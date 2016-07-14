@@ -36,7 +36,7 @@ XMLTextPropertySetContext::XMLTextPropertySetContext(
                  const OUString& rLName,
                  const Reference< xml::sax::XAttributeList > & xAttrList,
                  sal_uInt32 nFamily,
-                 ::std::vector< XMLPropertyState > &rProps,
+                 std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                  OUString& rDCTextStyleName ) :
     SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
@@ -53,7 +53,7 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                    sal_uInt16 nPrefix,
                    const OUString& rLocalName,
                    const Reference< xml::sax::XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
+                   std::vector< XMLPropertyState > &rProperties,
                    const XMLPropertyState& rProp )
 {
     SvXMLImportContext *pContext = nullptr;

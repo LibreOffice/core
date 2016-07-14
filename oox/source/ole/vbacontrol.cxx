@@ -95,7 +95,7 @@ public:
     OUString            generateDummyName();
 
 private:
-    typedef ::std::set< OUString > OUStringSet;
+    typedef std::set< OUString > OUStringSet;
     OUStringSet         maCtrlNames;
     const OUString      maDummyBaseName;
     sal_Int32           mnIndex;
@@ -410,7 +410,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                 stream (for embedded simple controls) or from the substorage
                 (for embedded container controls). */
             maControls.forEachMem( &VbaFormControl::importModelOrStorage,
-                ::std::ref( aOStrm ), ::std::ref( rStrg ), ::std::cref( maClassTable ) );
+                std::ref( aOStrm ), std::ref( rStrg ), std::cref( maClassTable ) );
 
             // Special handling for multi-page which has non-standard
             // containment and additionally needs to re-order Page children
@@ -498,7 +498,7 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
                 /*  Call conversion for all controls. Pass vector index as new
                     tab order to make option button groups work correctly. */
                 maControls.forEachMemWithIndex( &VbaFormControl::createAndConvert,
-                    ::std::cref( xCtrlModelNC ), ::std::cref( rConv ) );
+                    std::cref( xCtrlModelNC ), std::cref( rConv ) );
             }
             catch(const Exception& )
             {
@@ -584,7 +584,7 @@ void VbaFormControl::finalizeEmbeddedControls()
      */
 
     // first, sort all controls by original tab index
-    ::std::sort( maControls.begin(), maControls.end(), &compareByTabIndex );
+    std::sort( maControls.begin(), maControls.end(), &compareByTabIndex );
 
     /*  Collect the programmatical names of all embedded controls (needed to be
         able to set unused names to new dummy controls created below). Also
@@ -704,7 +704,7 @@ void VbaFormControl::moveEmbeddedToAbsoluteParent()
         }
 
         // move the embedded controls
-        maControls.forEachMem( &VbaFormControl::moveRelative, ::std::cref( aDistance ) );
+        maControls.forEachMem( &VbaFormControl::moveRelative, std::cref( aDistance ) );
     }
 }
 

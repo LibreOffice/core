@@ -347,13 +347,13 @@ OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
     return sName;
 }
 
-bool SvXMLAutoStylePoolP::Add(OUString& rName, sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties )
+bool SvXMLAutoStylePoolP::Add(OUString& rName, sal_Int32 nFamily, const OUString& rParent, const std::vector< XMLPropertyState >& rProperties )
 {
     return pImpl->Add(rName, nFamily, rParent, rProperties);
 }
 
 bool SvXMLAutoStylePoolP::AddNamed( const OUString& rName, sal_Int32 nFamily, const OUString& rParent,
-                                        const ::std::vector< XMLPropertyState >& rProperties )
+                                        const std::vector< XMLPropertyState >& rProperties )
 
 {
     return pImpl->AddNamed(rName, nFamily, rParent, rProperties);

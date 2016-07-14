@@ -981,7 +981,7 @@ Reference< XShape > Shape::createAndInsert(
             if( aShapeProps.hasProperty( PROP_FillGradient ) )
             {
                 Sequence< PropertyValue > aGradientStops( aFillProperties.maGradientProps.maGradientStops.size() );
-                ::std::map< double, Color >::iterator aIt = aFillProperties.maGradientProps.maGradientStops.begin();
+                std::map< double, Color >::iterator aIt = aFillProperties.maGradientProps.maGradientStops.begin();
                 for( size_t i = 0; i < aFillProperties.maGradientProps.maGradientStops.size(); ++i )
                 { // for each stop in the gradient definition:
 
@@ -1474,7 +1474,7 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFro
         if ( xImageRels )
         {
             xRelListTemp.realloc( xImageRels->size() );
-            for( ::std::map< OUString, core::Relation >::const_iterator aIt = xImageRels->begin(), aEnd = xImageRels->end(); aIt != aEnd; ++aIt )
+            for( std::map< OUString, core::Relation >::const_iterator aIt = xImageRels->begin(), aEnd = xImageRels->end(); aIt != aEnd; ++aIt )
             {
                 uno::Sequence< uno::Any > diagramRelTuple (3);
                 // [0] => RID, [1] => InputStream [2] => extension

@@ -313,7 +313,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
                 if( xDataSink.is() )
                 {
                     // create vector of all value sequences
-                    ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
+                    std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
                     // add positive values
                     if( bShowPos )
                     {
@@ -578,7 +578,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     if( xDataSink.is() )
     {
         // create vector of all value sequences
-        ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
+        std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
         // add Y values
         Reference< XLabeledDataSequence > xYValueSeq = createValueSequence( "values-y" );
         if( xYValueSeq.is() )

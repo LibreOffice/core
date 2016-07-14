@@ -320,7 +320,7 @@ void SvXMLMetaExport::Export()
     uno::Reference< xml::sax::XSAXSerializable> xSAXable(mxDocProps,
         uno::UNO_QUERY);
     if (xSAXable.is()) {
-        ::std::vector< beans::StringPair > namespaces;
+        std::vector< beans::StringPair > namespaces;
         const SvXMLNamespaceMap & rNsMap(mrExport.GetNamespaceMap());
         for (sal_uInt16 key = rNsMap.GetFirstKey();
              key != USHRT_MAX; key = rNsMap.GetNextKey(key)) {

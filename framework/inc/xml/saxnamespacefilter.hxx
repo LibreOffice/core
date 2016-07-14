@@ -77,7 +77,7 @@ class FWE_DLLPUBLIC SaxNamespaceFilter :
                 css::uno::RuntimeException, std::exception ) override;
 
     protected:
-        typedef ::std::stack< XMLNamespaces > NamespaceStack;
+        typedef std::stack< XMLNamespaces > NamespaceStack;
 
         OUString getErrorLineString();
 

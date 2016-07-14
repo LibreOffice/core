@@ -55,7 +55,7 @@ static void lcl_RemoveStateIfZero16( XMLPropertyState* pState )
         lcl_RemoveState( pState );
 }
 
-static void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int32 nIndex, const OUString& rProperty, const uno::Reference< beans::XPropertySet >& xProps)
+static void lcl_AddState(std::vector< XMLPropertyState >& rPropState, sal_Int32 nIndex, const OUString& rProperty, const uno::Reference< beans::XPropertySet >& xProps)
 {
     if(::cppu::any2bool(xProps->getPropertyValue(rProperty)))
         rPropState.push_back(XMLPropertyState (nIndex, css::uno::Any(true)));
@@ -90,7 +90,7 @@ struct XMLPropertyStateBuffer
     XMLPropertyState*       pPMPaddingRight;
 
                             XMLPropertyStateBuffer();
-    void                    ContextFilter( ::std::vector< XMLPropertyState >& rPropState );
+    void                    ContextFilter( std::vector< XMLPropertyState >& rPropState );
 };
 
 XMLPropertyStateBuffer::XMLPropertyStateBuffer()
@@ -120,7 +120,7 @@ XMLPropertyStateBuffer::XMLPropertyStateBuffer()
 {
 }
 
-void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
+void XMLPropertyStateBuffer::ContextFilter( std::vector< XMLPropertyState >& )
 {
     if (pPMMarginAll)
     {
@@ -223,7 +223,7 @@ void XMLPageMasterExportPropMapper::handleElementItem(
         SvXMLExport&,
         const XMLPropertyState& rProperty,
         SvXmlExportFlags /*nFlags*/,
-        const ::std::vector< XMLPropertyState >* pProperties,
+        const std::vector< XMLPropertyState >* pProperties,
         sal_uInt32 nIdx ) const
 {
     XMLPageMasterExportPropMapper* pThis = const_cast<XMLPageMasterExportPropMapper*>(this);
@@ -292,14 +292,14 @@ void XMLPageMasterExportPropMapper::handleSpecialItem(
         const XMLPropertyState&,
         const SvXMLUnitConverter&,
         const SvXMLNamespaceMap&,
-        const ::std::vector< XMLPropertyState >*,
+        const std::vector< XMLPropertyState >*,
         sal_uInt32 /*nIdx*/) const
 {
 }
 
 void XMLPageMasterExportPropMapper::ContextFilter(
         bool bEnableFoFontFamily,
-        ::std::vector< XMLPropertyState >& rPropState,
+        std::vector< XMLPropertyState >& rPropState,
         const Reference< XPropertySet >& rPropSet ) const
 {
     XMLPropertyStateBuffer  aPageBuffer;
@@ -336,7 +336,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
     rtl::Reference < XMLPropertySetMapper > aPropMapper(getPropertySetMapper());
 
-    for( ::std::vector< XMLPropertyState >::iterator aIter = rPropState.begin(); aIter != rPropState.end(); ++aIter )
+    for( std::vector< XMLPropertyState >::iterator aIter = rPropState.begin(); aIter != rPropState.end(); ++aIter )
     {
         XMLPropertyState *pProp = &(*aIter);
         sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );

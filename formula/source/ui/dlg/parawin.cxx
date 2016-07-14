@@ -326,7 +326,7 @@ void ParaWin::SetArgument(sal_uInt16 no, const OUString& aString)
 
 void ParaWin::DelParaArray()
 {
-    ::std::vector<OUString>().swap(aParaArray);
+    std::vector<OUString>().swap(aParaArray);
 }
 
 void ParaWin::SetArgumentFonts(const vcl::Font&aBoldFont,const vcl::Font&aLightFont)

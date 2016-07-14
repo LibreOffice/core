@@ -59,7 +59,7 @@ namespace frm
                                         m_pImageProvider;
         ImageSize                       m_eImageSize;
         VclPtr<ImplNavToolBar>          m_pToolbar;
-        ::std::vector< VclPtr<vcl::Window> > m_aChildWins;
+        std::vector< VclPtr<vcl::Window> > m_aChildWins;
         const OUString                  m_sModuleId;
 
     public:

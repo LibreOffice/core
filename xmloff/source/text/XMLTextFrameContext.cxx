@@ -77,7 +77,7 @@ using ::com::sun::star::document::XEventsSupplier;
 #define XML_TEXT_FRAME_PLUGIN 6
 #define XML_TEXT_FRAME_FLOATING_FRAME 7
 
-typedef ::std::map < const OUString, OUString > ParamMap;
+typedef std::map < const OUString, OUString > ParamMap;
 
 class XMLTextFrameContextHyperlink_Impl
 {

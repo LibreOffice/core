@@ -44,7 +44,7 @@ class FWE_DLLPUBLIC XMLNamespaces
             throw(  css::xml::sax::SAXException, std::exception );
 
     private:
-        typedef ::std::map< OUString, OUString > NamespaceMap;
+        typedef std::map< OUString, OUString > NamespaceMap;
 
         OUString getNamespaceValue( const OUString& aNamespace ) const
             throw( css::xml::sax::SAXException );

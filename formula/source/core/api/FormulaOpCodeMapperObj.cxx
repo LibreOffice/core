@@ -37,7 +37,7 @@ sal_Bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const OUString& _rSer
     return cppu::supportsService(this, _rServiceName);
 }
 
-FormulaOpCodeMapperObj::FormulaOpCodeMapperObj(::std::unique_ptr<FormulaCompiler> && _pCompiler)
+FormulaOpCodeMapperObj::FormulaOpCodeMapperObj(std::unique_ptr<FormulaCompiler> && _pCompiler)
 : m_pCompiler(std::move(_pCompiler))
 {
 }

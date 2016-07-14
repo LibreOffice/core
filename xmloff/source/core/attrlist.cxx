@@ -65,8 +65,8 @@ struct SvXMLAttributeList_Impl
     {
     }
 
-    ::std::vector<struct SvXMLTagAttribute_Impl> vecAttribute;
-    typedef ::std::vector<struct SvXMLTagAttribute_Impl>::size_type size_type;
+    std::vector<struct SvXMLTagAttribute_Impl> vecAttribute;
+    typedef std::vector<struct SvXMLTagAttribute_Impl>::size_type size_type;
 };
 
 
@@ -120,7 +120,7 @@ OUString SAL_CALL SvXMLAttributeList::getTypeByName( const OUString& ) throw( cs
 
 OUString SAL_CALL SvXMLAttributeList::getValueByName(const OUString& sName) throw( css::uno::RuntimeException, std::exception )
 {
-    ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
+    std::vector<struct SvXMLTagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
     for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
@@ -165,7 +165,7 @@ void SvXMLAttributeList::Clear()
 
 void SvXMLAttributeList::RemoveAttribute( const OUString& sName )
 {
-    ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
+    std::vector<struct SvXMLTagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
     for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
@@ -222,7 +222,7 @@ void SvXMLAttributeList::RenameAttributeByIndex( sal_Int16 i,
 
 sal_Int16 SvXMLAttributeList::GetIndexByName( const OUString& rName ) const
 {
-    ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii =
+    std::vector<struct SvXMLTagAttribute_Impl>::iterator ii =
         m_pImpl->vecAttribute.begin();
 
     for( sal_Int16 nIndex=0; ii!=m_pImpl->vecAttribute.end(); ++ii, ++nIndex )

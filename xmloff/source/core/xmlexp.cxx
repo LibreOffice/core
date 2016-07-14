@@ -168,7 +168,7 @@ public:
                     GetComponentContext() const override;
 private:
     SvXMLExport&                    m_rExport;
-    ::std::stack< OUString > m_aElements;
+    std::stack< OUString > m_aElements;
 };
 
 void SettingsExportFacade::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue )
@@ -264,11 +264,11 @@ public:
 
     /// stack of backed up namespace maps
     /// long: depth at which namespace map has been backed up into the stack
-    ::std::stack< ::std::pair< SvXMLNamespaceMap *, long > > mNamespaceMaps;
+    std::stack< std::pair< SvXMLNamespaceMap *, long > > mNamespaceMaps;
     /// counts depth (number of open elements/start tags)
     long mDepth;
 
-    ::std::unique_ptr< ::xmloff::RDFaExportHelper> mpRDFaHelper;
+    std::unique_ptr< ::xmloff::RDFaExportHelper> mpRDFaHelper;
 
     bool                                                mbExportTextNumberElement;
     bool                                                mbNullDateInitialized;
@@ -920,7 +920,7 @@ SvXMLExport::EnsureNamespace(OUString const & i_rNamespace)
         {
             // top was created for lower depth... need a new namespace map!
             mpImpl->mNamespaceMaps.push(
-                ::std::make_pair(mpNamespaceMap, mpImpl->mDepth) );
+                std::make_pair(mpNamespaceMap, mpImpl->mDepth) );
             mpNamespaceMap = new SvXMLNamespaceMap( *mpNamespaceMap );
         }
 
@@ -1088,7 +1088,7 @@ void SvXMLExport::ImplExportSettings()
 {
     CheckAttrList();
 
-    ::std::list< SettingsGroup > aSettings;
+    std::list< SettingsGroup > aSettings;
     sal_Int32 nSettingsCount = 0;
 
     // view settings
@@ -1115,7 +1115,7 @@ void SvXMLExport::ImplExportSettings()
         SettingsExportFacade aSettingsExportContext( *this );
         XMLSettingsExportHelper aSettingsExportHelper( aSettingsExportContext );
 
-        for (   ::std::list< SettingsGroup >::const_iterator settings = aSettings.begin();
+        for (   std::list< SettingsGroup >::const_iterator settings = aSettings.begin();
                 settings != aSettings.end();
                 ++settings
             )
@@ -1839,7 +1839,7 @@ void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>&)
 {
 }
 
-sal_Int32 SvXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings )
+sal_Int32 SvXMLExport::GetDocumentSpecificSettings( std::list< SettingsGroup >& _out_rSettings )
 {
     (void)_out_rSettings;
     return 0;

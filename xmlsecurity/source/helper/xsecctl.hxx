@@ -133,7 +133,7 @@ public:
 
     css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
 
-    ::std::vector< sal_Int32 > vKeeperIds;
+    std::vector< sal_Int32 > vKeeperIds;
 
     InternalSignatureInformation(
         sal_Int32 nId,

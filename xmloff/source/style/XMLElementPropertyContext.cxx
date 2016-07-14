@@ -24,7 +24,7 @@ XMLElementPropertyContext::XMLElementPropertyContext (
                                 SvXMLImport& rImport, sal_uInt16 nPrfx,
                                 const OUString& rLName,
                                 const XMLPropertyState& rProp,
-                                 ::std::vector< XMLPropertyState > &rProps ) :
+                                 std::vector< XMLPropertyState > &rProps ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     bInsert( false ),
       rProperties( rProps ),

@@ -34,7 +34,7 @@ namespace xmloff
     class OStackedLogging
     {
     private:
-        ::std::stack< ::rtl::Logfile* >     m_aLogger;
+        std::stack< ::rtl::Logfile* >       m_aLogger;
 
     protected:
         OStackedLogging() { }

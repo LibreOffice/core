@@ -291,7 +291,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
 void XMLChartExportPropertyMapper::handleElementItem(
     SvXMLExport& rExport,
     const XMLPropertyState& rProperty, SvXmlExportFlags nFlags,
-    const ::std::vector< XMLPropertyState > *pProperties,
+    const std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx ) const
 {
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ))
@@ -371,7 +371,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
     SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap,
-    const ::std::vector< XMLPropertyState > *pProperties,
+    const std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx ) const
 {
     bool bHandled = false;
@@ -540,7 +540,7 @@ XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()
 
 bool XMLChartImportPropertyMapper::handleSpecialItem(
     XMLPropertyState& rProperty,
-    ::std::vector< XMLPropertyState >& rProperties,
+    std::vector< XMLPropertyState >& rProperties,
     const OUString& rValue,
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap ) const
@@ -677,7 +677,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
     return bRet;
 }
 
-void XMLChartImportPropertyMapper::finished( ::std::vector< XMLPropertyState >& /*rProperties*/, sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
+void XMLChartImportPropertyMapper::finished( std::vector< XMLPropertyState >& /*rProperties*/, sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
 {
 }
 

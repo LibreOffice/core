@@ -24,7 +24,7 @@ DispatchDisabler::DispatchDisabler(const uno::Reference< uno::XComponentContext 
 
 // XInitialization
 void SAL_CALL DispatchDisabler::initialize( const uno::Sequence< uno::Any >& aArguments )
-        throw (uno::Exception, uno::RuntimeException, ::std::exception)
+        throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aDisabledURLs;
     if( aArguments.getLength() > 0 &&
@@ -40,7 +40,7 @@ uno::Reference< frame::XDispatch > SAL_CALL
 DispatchDisabler::queryDispatch( const util::URL& rURL,
                                  const OUString& rTargetFrameName,
                                  ::sal_Int32 nSearchFlags )
-    throw (uno::RuntimeException, ::std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     // If present - disabled.
     if( maDisabledURLs.find(rURL.Complete) != maDisabledURLs.end() ||
@@ -52,7 +52,7 @@ DispatchDisabler::queryDispatch( const util::URL& rURL,
 
 uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
 DispatchDisabler::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& rRequests )
-    throw (uno::RuntimeException, ::std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Reference< frame::XDispatch > > aResult(rRequests.getLength());
     for( sal_Int32 i = 0; i < rRequests.getLength(); ++i )
@@ -64,25 +64,25 @@ DispatchDisabler::queryDispatches( const uno::Sequence< frame::DispatchDescripto
 
 // XDispatchProviderInterceptor
 uno::Reference< frame::XDispatchProvider > SAL_CALL
-DispatchDisabler::getSlaveDispatchProvider() throw (uno::RuntimeException, ::std::exception)
+DispatchDisabler::getSlaveDispatchProvider() throw (uno::RuntimeException, std::exception)
 {
     return mxSlave;
 }
 
 void SAL_CALL DispatchDisabler::setSlaveDispatchProvider( const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider )
-    throw (uno::RuntimeException, ::std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     mxSlave = xNewDispatchProvider;
 }
 
 uno::Reference< frame::XDispatchProvider > SAL_CALL
-DispatchDisabler::getMasterDispatchProvider() throw (uno::RuntimeException, ::std::exception)
+DispatchDisabler::getMasterDispatchProvider() throw (uno::RuntimeException, std::exception)
 {
     return mxMaster;
 }
 void SAL_CALL
 DispatchDisabler::setMasterDispatchProvider( const uno::Reference< frame::XDispatchProvider >& xNewSupplier )
-        throw (uno::RuntimeException, ::std::exception)
+        throw (uno::RuntimeException, std::exception)
 {
     mxMaster = xNewSupplier;
 }
@@ -90,7 +90,7 @@ DispatchDisabler::setMasterDispatchProvider( const uno::Reference< frame::XDispa
 // XInterceptorInfo
 uno::Sequence< OUString > SAL_CALL
     DispatchDisabler::getInterceptedURLs()
-    throw (uno::RuntimeException, ::std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aDisabledURLs(maDisabledURLs.size());
     sal_Int32 n = 0;
@@ -101,14 +101,14 @@ uno::Sequence< OUString > SAL_CALL
 
 // XElementAccess
 uno::Type SAL_CALL DispatchDisabler::getElementType()
-    throw (uno::RuntimeException, ::std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     uno::Type aModuleType = cppu::UnoType<OUString>::get();
     return aModuleType;
 }
 
 ::sal_Bool SAL_CALL DispatchDisabler::hasElements()
-        throw (uno::RuntimeException, ::std::exception)
+        throw (uno::RuntimeException, std::exception)
 {
     return maDisabledURLs.size() > 0;
 }
@@ -116,19 +116,19 @@ uno::Type SAL_CALL DispatchDisabler::getElementType()
 // XNameAccess
 uno::Any SAL_CALL DispatchDisabler::getByName( const OUString& )
         throw (container::NoSuchElementException, lang::WrappedTargetException,
-               uno::RuntimeException, ::std::exception)
+               uno::RuntimeException, std::exception)
 {
     return uno::Any();
 }
 
 uno::Sequence< OUString > SAL_CALL DispatchDisabler::getElementNames()
-        throw (uno::RuntimeException, ::std::exception)
+        throw (uno::RuntimeException, std::exception)
 {
     return getInterceptedURLs();
 }
 
 sal_Bool SAL_CALL DispatchDisabler::hasByName( const OUString& rName )
-        throw (uno::RuntimeException, ::std::exception)
+        throw (uno::RuntimeException, std::exception)
 {
     return maDisabledURLs.find(rName) != maDisabledURLs.end();
 }
@@ -136,7 +136,7 @@ sal_Bool SAL_CALL DispatchDisabler::hasByName( const OUString& rName )
 // XNameReplace
 void SAL_CALL DispatchDisabler::replaceByName( const OUString& rName, const uno::Any& aElement )
         throw (lang::IllegalArgumentException, container::NoSuchElementException,
-               lang::WrappedTargetException, uno::RuntimeException, ::std::exception)
+               lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     removeByName( rName );
     insertByName( rName, aElement );
@@ -145,14 +145,14 @@ void SAL_CALL DispatchDisabler::replaceByName( const OUString& rName, const uno:
 // XNameContainer
 void DispatchDisabler::insertByName( const OUString& rName, const uno::Any& )
     throw (lang::IllegalArgumentException, container::ElementExistException,
-           lang::WrappedTargetException, uno::RuntimeException, ::std::exception)
+           lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     maDisabledURLs.insert(rName);
 }
 
 void DispatchDisabler::removeByName( const OUString& rName )
     throw (container::NoSuchElementException, lang::WrappedTargetException,
-           uno::RuntimeException, ::std::exception)
+           uno::RuntimeException, std::exception)
 {
     auto it = maDisabledURLs.find(rName);
     if( it != maDisabledURLs.end() )

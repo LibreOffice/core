@@ -108,7 +108,7 @@ class Desktop : private cppu::BaseMutex,
     private:
 
         /** used temporary to know which listener was already called or not. */
-        typedef ::std::vector< css::uno::Reference< css::frame::XTerminateListener > > TTerminateListenerList;
+        typedef std::vector< css::uno::Reference< css::frame::XTerminateListener > > TTerminateListenerList;
 
     // public methods
     public:

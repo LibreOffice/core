@@ -56,7 +56,7 @@ using ::oox::core::XmlFilterBase;
 
 namespace {
 
-struct TitleKey : public ::std::pair< ObjectType, ::std::pair< sal_Int32, sal_Int32 > >
+struct TitleKey : public std::pair< ObjectType, std::pair< sal_Int32, sal_Int32 > >
 {
     inline explicit     TitleKey( ObjectType eObjType, sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 )
                             { first = eObjType; second.first = nMainIdx; second.second = nSubIdx; }
@@ -140,7 +140,7 @@ OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 
 struct ConverterData
 {
-    typedef ::std::map< TitleKey, TitleLayoutInfo > TitleMap;
+    typedef std::map< TitleKey, TitleLayoutInfo > TitleMap;
 
     ObjectFormatter     maFormatter;
     TitleMap            maTitles;

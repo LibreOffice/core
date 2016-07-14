@@ -584,7 +584,7 @@ private:
     sal_Int32           getSchemeColor( sal_Int32 nColorToken, sal_Int32 nModToken, sal_Int32 nModValue ) const;
 
 protected:
-    typedef ::std::vector< sal_Int32 > ColorPatternVec;
+    typedef std::vector< sal_Int32 > ColorPatternVec;
 
     ObjectFormatterData& mrData;            /// Shared formatter data.
     sal_Int32           mnPhClr;            /// RGB placeholder color for themed style.

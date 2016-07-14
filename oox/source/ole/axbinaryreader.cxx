@@ -116,7 +116,7 @@ bool lclReadString( AxAlignedInputStream& rInStrm, OUString& rValue, sal_uInt32 
     bool bValidChars = nChars <= 65536;
     OSL_ENSURE( bValidChars, "lclReadString - string too long" );
     sal_Int64 nEndPos = rInStrm.tell() + nChars * (bCompressed ? 1 : 2);
-    nChars = ::std::min< sal_Int32 >( nChars, 65536 );
+    nChars = std::min< sal_Int32 >( nChars, 65536 );
     rValue = rInStrm.readCompressedUnicodeArray( nChars, bCompressed );
     rInStrm.seek( nEndPos );
     return bValidChars;

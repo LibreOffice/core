@@ -144,7 +144,7 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
         mpProcessedLists = new tMapForLists();
     }
 
-    ::std::pair< OUString, OUString >
+    std::pair< OUString, OUString >
                                 aListData( sListStyleName, sContinueListId );
     (*mpProcessedLists)[ sListId ] = aListData;
 
@@ -162,7 +162,7 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
         if ( mpMapListIdToListStyleDefaultListId->find( sListStyleName ) ==
                                 mpMapListIdToListStyleDefaultListId->end() )
         {
-            ::std::pair< OUString, OUString >
+            std::pair< OUString, OUString >
                                 aListIdMapData( sListId, sListStyleDefaultListId );
             (*mpMapListIdToListStyleDefaultListId)[ sListStyleName ] =
                                                                 aListIdMapData;
@@ -311,7 +311,7 @@ void XMLTextListsHelper::PushListOnStack( const OUString& sListId,
     {
         mpListStack = new tStackForLists();
     }
-    ::std::pair< OUString, OUString >
+    std::pair< OUString, OUString >
                                 aListData( sListId, sListStyleName );
     mpListStack->push_back( aListData );
 }
@@ -375,7 +375,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     if ( rNPList.empty() ) {
         // create default list style for top level
         sal_Int16 lev(0);
-        rNPList.push_back(::std::make_pair(none,
+        rNPList.push_back(std::make_pair(none,
             MakeNumRule(i_rImport, nullptr, none, none, lev) ));
     }
     // create num rule first because this might clamp the level...
@@ -403,7 +403,7 @@ XMLTextListsHelper::EnsureNumberedParagraph(
         }
         NumParaList_t::value_type const rule(rNPList.back());
         rNPList.push_back(xNumRules.is()
-            ? ::std::make_pair(i_StyleName, xNumRules)
+            ? std::make_pair(i_StyleName, xNumRules)
             : rule);
     } else {
         // old level: no need to enlarge; possibly shrink

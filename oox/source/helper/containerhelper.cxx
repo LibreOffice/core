@@ -52,7 +52,7 @@ void ValueRangeSet::insert( const ValueRange& rRange )
     // find the first range that contains or follows the starting point of the passed range
     ValueRangeVector::iterator aBeg = maRanges.begin();
     ValueRangeVector::iterator aEnd = maRanges.end();
-    ValueRangeVector::iterator aIt = ::std::lower_bound( aBeg, aEnd, rRange, ValueRangeComp() );
+    ValueRangeVector::iterator aIt = std::lower_bound( aBeg, aEnd, rRange, ValueRangeComp() );
     // nothing to do if found range contains passed range
     if( (aIt != aEnd) && aIt->contains( rRange ) ) return;
     // check if previous range can be used to merge with the passed range
@@ -61,12 +61,12 @@ void ValueRangeSet::insert( const ValueRange& rRange )
     if( (aIt != aEnd) && aIt->intersects( rRange ) )
     {
         // set new start value to existing range
-        aIt->mnFirst = ::std::min( aIt->mnFirst, rRange.mnFirst );
+        aIt->mnFirst = std::min( aIt->mnFirst, rRange.mnFirst );
         // search first range that cannot be merged anymore (aNext)
         ValueRangeVector::iterator aNext = aIt + 1;
         while( (aNext != aEnd) && aNext->intersects( rRange ) ) ++aNext;
         // set new end value to existing range
-        aIt->mnLast = ::std::max( (aNext - 1)->mnLast, rRange.mnLast );
+        aIt->mnLast = std::max( (aNext - 1)->mnLast, rRange.mnLast );
         // remove ranges covered by new existing range (aIt)
         maRanges.erase( aIt + 1, aNext );
     }

@@ -126,7 +126,7 @@ bool isPrimaryAxes(sal_Int32 nIndex)
 
 }
 
-class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+class lcl_MatchesRole : public std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
 public:
     explicit lcl_MatchesRole( const OUString & aRole ) :
@@ -150,11 +150,11 @@ private:
 };
 
 template< typename T >
-    void lcl_SequenceToVectorAppend( const Sequence< T > & rSource, ::std::vector< T > & rDestination )
+    void lcl_SequenceToVectorAppend( const Sequence< T > & rSource, std::vector< T > & rDestination )
 {
     rDestination.reserve( rDestination.size() + rSource.getLength());
-    ::std::copy( rSource.begin(), rSource.end(),
-                 ::std::back_inserter( rDestination ));
+    std::copy( rSource.begin(), rSource.end(),
+                 std::back_inserter( rDestination ));
 }
 
 Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram )
@@ -219,12 +219,12 @@ Reference< chart2::data::XDataSource > lcl_createDataSource(
 
 Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequences( const Reference< chart2::XChartDocument >& xChartDoc )
 {
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aContainer;
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aContainer;
     if( xChartDoc.is() )
     {
         Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
-        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
+        std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
+        for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
             ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
         {
             Reference< chart2::data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
@@ -248,7 +248,7 @@ Reference< chart2::data::XLabeledDataSequence >
     const Reference< chart2::data::XLabeledDataSequence > * pBegin = aLabeledSeq.getConstArray();
     const Reference< chart2::data::XLabeledDataSequence > * pEnd = pBegin + aLabeledSeq.getLength();
     const Reference< chart2::data::XLabeledDataSequence > * pMatch =
-        ::std::find_if( pBegin, pEnd, lcl_MatchesRole( rRole ));
+        std::find_if( pBegin, pEnd, lcl_MatchesRole( rRole ));
 
     if( pMatch != pEnd )
         return *pMatch;
@@ -258,7 +258,7 @@ Reference< chart2::data::XLabeledDataSequence >
 
 Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( const Reference< chart2::XChartDocument >& xChartDoc, bool& rOutSourceHasCategoryLabels )
 {
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aLabeledSeqVector;
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aLabeledSeqVector;
 
     //categories are always the first sequence
     Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
@@ -352,7 +352,7 @@ OUString lcl_getLabelString( const Reference< chart2::data::XDataSequence > & xL
 
 void lcl_fillCategoriesIntoStringVector(
     const Reference< chart2::data::XDataSequence > & xCategories,
-    ::std::vector< OUString > & rOutCategories )
+    std::vector< OUString > & rOutCategories )
 {
     OSL_ASSERT( xCategories.is());
     if( !xCategories.is())
@@ -362,8 +362,8 @@ void lcl_fillCategoriesIntoStringVector(
     {
         rOutCategories.clear();
         Sequence< OUString > aTextData( xTextualDataSequence->getTextualData());
-        ::std::copy( aTextData.begin(), aTextData.end(),
-                     ::std::back_inserter( rOutCategories ));
+        std::copy( aTextData.begin(), aTextData.end(),
+                     std::back_inserter( rOutCategories ));
     }
     else
     {
@@ -374,18 +374,18 @@ void lcl_fillCategoriesIntoStringVector(
     }
 }
 
-::std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
+std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
 {
     double fNan = 0.0;
     ::rtl::math::setNan( &fNan );
-    ::std::vector< double > aResult;
+    std::vector< double > aResult;
 
     Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
     if( xNumSeq.is())
     {
         Sequence< double > aValues( xNumSeq->getNumericalData());
-        ::std::copy( aValues.begin(), aValues.end(),
-                     ::std::back_inserter( aResult ));
+        std::copy( aValues.begin(), aValues.end(),
+                     std::back_inserter( aResult ));
     }
     else if( xSeq.is())
     {
@@ -799,7 +799,7 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
             sal_Int32 nSepPos = externalDataPath.indexOf( '/', nStartPos );
             if( nSepPos > 0)
             {
-                relationPath = relationPath.copy( nSepPos,  ::std::max< sal_Int32 >( externalDataPath.getLength(), 0 ) -  nSepPos );
+                relationPath = relationPath.copy( nSepPos,  std::max< sal_Int32 >( externalDataPath.getLength(), 0 ) -    nSepPos );
                 relationPath = OUStringBuffer( ".." ).append( relationPath ).makeStringAndClear();
             }
         }
@@ -2276,7 +2276,7 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
     pFS->writeEscaped( aCellRange );
     pFS->endElement( FSNS( XML_c, XML_f ) );
 
-    ::std::vector< OUString > aCategories;
+    std::vector< OUString > aCategories;
     lcl_fillCategoriesIntoStringVector( xValueSeq, aCategories );
     sal_Int32 ptCount = aCategories.size();
     pFS->startElement( FSNS( XML_c, XML_strCache ),
@@ -2319,7 +2319,7 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
     pFS->writeEscaped( aCellRange );
     pFS->endElement( FSNS( XML_c, XML_f ) );
 
-    ::std::vector< double > aValues;
+    std::vector< double > aValues;
     aValues = lcl_getAllValuesFromSequence( xValueSeq );
     sal_Int32 ptCount = aValues.size();
     pFS->startElement( FSNS( XML_c, XML_numCache ),
@@ -3137,10 +3137,10 @@ void ChartExport::exportDataPoints(
 
     if( bVaryColorsByPoint && xColorScheme.is() )
     {
-        ::std::set< sal_Int32 > aAttrPointSet;
-        ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
-                    ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
-        const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
+        std::set< sal_Int32 > aAttrPointSet;
+        std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
+                    std::inserter( aAttrPointSet, aAttrPointSet.begin()));
+        const std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
         for( nElement = 0; nElement < nSeriesLength; ++nElement )
         {
             uno::Reference< beans::XPropertySet > xPropSet;

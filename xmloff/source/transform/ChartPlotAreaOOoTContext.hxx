@@ -28,7 +28,7 @@
 class XMLAxisOOoContext;
 
 class XMLAxisContextVector :
-    public ::std::vector< ::rtl::Reference< XMLAxisOOoContext > >
+    public std::vector< ::rtl::Reference< XMLAxisOOoContext > >
 {
 };
 

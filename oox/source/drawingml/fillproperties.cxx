@@ -374,8 +374,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         aGradient.XOffset = getLimitedValue< sal_Int16, sal_Int32 >( nCenterX / PER_PERCENT, 30, 70 );
                         sal_Int32 nCenterY = (MAX_PERCENT + aFillToRect.Y1 - aFillToRect.Y2) / 2;
                         aGradient.YOffset = getLimitedValue< sal_Int16, sal_Int32 >( nCenterY / PER_PERCENT, 30, 70 );
-                        ::std::swap( aGradient.StartColor, aGradient.EndColor );
-                        ::std::swap( nStartTrans, nEndTrans );
+                        std::swap( aGradient.StartColor, aGradient.EndColor );
+                        std::swap( nStartTrans, nEndTrans );
                     }
                     else
                     {

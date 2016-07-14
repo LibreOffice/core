@@ -59,7 +59,7 @@ typedef std::unordered_map< OUString, sal_Int32, OUStringHash > t_OUString2LongM
 
 struct PrefixEntry
 {
-    ::std::vector< sal_Int32 > m_Uids;
+    std::vector< sal_Int32 > m_Uids;
 
     inline PrefixEntry()
         { m_Uids.reserve( 4 ); }
@@ -71,7 +71,7 @@ typedef std::unordered_map<
 struct ElementEntry
 {
     Reference< xml::input::XElement > m_xElement;
-    ::std::vector< OUString > m_prefixes;
+    std::vector< OUString > m_prefixes;
 
     inline ElementEntry()
         { m_prefixes.reserve( 2 ); }
@@ -489,7 +489,7 @@ void DocumentHandlerImpl::startElement(
     Reference< xml::input::XAttributes > xAttributes;
     sal_Int32 nUid;
     OUString aLocalName;
-    ::std::unique_ptr< ElementEntry > elementEntry( new ElementEntry );
+    std::unique_ptr< ElementEntry > elementEntry( new ElementEntry );
 
     { // guard start:
     MGuard aGuard( m_pMutex );

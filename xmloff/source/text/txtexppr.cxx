@@ -47,7 +47,7 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         SvXMLExport& rExp,
         const XMLPropertyState& rProperty,
         SvXmlExportFlags nFlags,
-        const ::std::vector< XMLPropertyState > *pProperties,
+        const std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
     XMLTextExportPropertySetMapper *pThis =
@@ -139,7 +139,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-        const ::std::vector< XMLPropertyState > *pProperties,
+        const std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
     XMLTextExportPropertySetMapper *pThis =
@@ -498,7 +498,7 @@ void lcl_FilterBorders(
 
 void XMLTextExportPropertySetMapper::ContextFilter(
     bool bEnableFoFontFamily,
-    ::std::vector< XMLPropertyState >& rProperties,
+    std::vector< XMLPropertyState >& rProperties,
     const Reference< XPropertySet >& rPropSet ) const
 {
     // filter font
@@ -675,7 +675,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     bool bNeedsAnchor = false;
 
-    for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
+    for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
          ++aIter )
     {

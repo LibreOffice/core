@@ -295,7 +295,7 @@ EvaluationContext Binding::getEvaluationContext() const
     return aContext;
 }
 
-::std::vector<EvaluationContext> Binding::getMIPEvaluationContexts()
+std::vector<EvaluationContext> Binding::getMIPEvaluationContexts()
 {
     OSL_ENSURE( getModelImpl() != nullptr, "need model impl" );
 
@@ -524,14 +524,14 @@ static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
     }
 }
 
-::std::vector<EvaluationContext> Binding::_getMIPEvaluationContexts() const
+std::vector<EvaluationContext> Binding::_getMIPEvaluationContexts() const
 {
     OSL_ENSURE( getModelImpl() != nullptr, "need model impl" );
 
     // iterate over nodes of bind expression and create
     // EvaluationContext for each
     PathExpression::NodeVector_t aNodes = maBindingExpression.getNodeList();
-    ::std::vector<EvaluationContext> aVector;
+    std::vector<EvaluationContext> aVector;
     sal_Int32 nCount = 0; // count nodes for context position
     for( PathExpression::NodeVector_t::iterator aIter = aNodes.begin();
          aIter != aNodes.end();
@@ -612,8 +612,8 @@ void Binding::bind( bool bForceRebind )
     pModel->removeMIPs( this );
 
     // 4) calculate all MIPs
-    ::std::vector<EvaluationContext> aMIPContexts = _getMIPEvaluationContexts();
-    for( ::std::vector<EvaluationContext>::iterator aIter = aMIPContexts.begin();
+    std::vector<EvaluationContext> aMIPContexts = _getMIPEvaluationContexts();
+    for( std::vector<EvaluationContext>::iterator aIter = aMIPContexts.begin();
          aIter != aMIPContexts.end();
          ++aIter )
     {
@@ -697,15 +697,15 @@ void Binding::valueModified()
     // using this object as source (will also update validity, because
     // control will query once the value has changed)
     Reference<XInterface> xSource = static_cast<XPropertySet*>( this );
-    ::std::for_each( maModifyListeners.begin(),
+    std::for_each( maModifyListeners.begin(),
               maModifyListeners.end(),
-                     ::std::bind( lcl_modified, std::placeholders::_1, xSource ) );
-    ::std::for_each( maListEntryListeners.begin(),
+                     std::bind( lcl_modified, std::placeholders::_1, xSource ) );
+    std::for_each( maListEntryListeners.begin(),
               maListEntryListeners.end(),
-                     ::std::bind( lcl_listentry, std::placeholders::_1, xSource ) );
-    ::std::for_each( maValidityListeners.begin(),
+                     std::bind( lcl_listentry, std::placeholders::_1, xSource ) );
+    std::for_each( maValidityListeners.begin(),
               maValidityListeners.end(),
-                     ::std::bind( lcl_validate, std::placeholders::_1, xSource ) );
+                     std::bind( lcl_validate, std::placeholders::_1, xSource ) );
 
     // now distribute MIPs to children
     if( xNode.is() )
@@ -1139,7 +1139,7 @@ void Binding::addListEntryListener( const css::uno::Reference<css::form::binding
            RuntimeException, std::exception )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
-    if( ::std::find( maListEntryListeners.begin(),
+    if( std::find( maListEntryListeners.begin(),
               maListEntryListeners.end(),
               xListener)
         == maListEntryListeners.end() )
@@ -1151,7 +1151,7 @@ void Binding::removeListEntryListener( const css::uno::Reference<css::form::bind
            RuntimeException, std::exception )
 {
     XListEntryListeners_t::iterator aIter =
-        ::std::find( maListEntryListeners.begin(), maListEntryListeners.end(),
+        std::find( maListEntryListeners.begin(), maListEntryListeners.end(),
               xListener );
     if( aIter != maListEntryListeners.end() )
         maListEntryListeners.erase( aIter );
@@ -1188,7 +1188,7 @@ void Binding::addValidityConstraintListener(
            RuntimeException, std::exception )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
-    if( ::std::find(maValidityListeners.begin(), maValidityListeners.end(), xListener)
+    if( std::find(maValidityListeners.begin(), maValidityListeners.end(), xListener)
         == maValidityListeners.end() )
         maValidityListeners.push_back( xListener );
 }
@@ -1199,7 +1199,7 @@ void Binding::removeValidityConstraintListener(
            RuntimeException, std::exception )
 {
     XValidityConstraintListeners_t::iterator aIter =
-        ::std::find( maValidityListeners.begin(), maValidityListeners.end(),
+        std::find( maValidityListeners.begin(), maValidityListeners.end(),
               xListener );
     if( aIter != maValidityListeners.end() )
         maValidityListeners.erase( aIter );
@@ -1311,7 +1311,7 @@ void Binding::addModifyListener(
     throw( RuntimeException, std::exception )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
-    if( ::std::find( maModifyListeners.begin(), maModifyListeners.end(), xListener )
+    if( std::find( maModifyListeners.begin(), maModifyListeners.end(), xListener )
           == maModifyListeners.end() )
         maModifyListeners.push_back( xListener );
 
@@ -1326,7 +1326,7 @@ void Binding::removeModifyListener(
     throw( RuntimeException, std::exception )
 {
     ModifyListeners_t::iterator aIter =
-        ::std::find( maModifyListeners.begin(), maModifyListeners.end(), xListener );
+        std::find( maModifyListeners.begin(), maModifyListeners.end(), xListener );
     if( aIter != maModifyListeners.end() )
         maModifyListeners.erase( aIter );
 }

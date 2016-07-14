@@ -349,7 +349,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 
         // reverse series order for some unstacked 2D chart types
         if( isReverseSeries() )
-            ::std::reverse( aSeries.begin(), aSeries.end() );
+            std::reverse( aSeries.begin(), aSeries.end() );
 
         // decide whether to use varying colors for each data point
         bool bVaryColorsByPoint = bSupportsVaryColorsByPoint && mrModel.mbVaryColors;
@@ -370,7 +370,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             if( xDataSink.is() )
             {
                 // create a list of data sequences from all series
-                ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
+                std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
                 OSL_ENSURE( aSeries.size() >= 3, "TypeGroupConverter::convertFromModel - too few stock chart series" );
                 int nRoleIdx = (aSeries.size() == 3) ? 1 : 0;
                 for( SeriesConvVector::iterator aIt = aSeries.begin(), aEnd = aSeries.end(); (nRoleIdx < 4) && (aIt != aEnd); ++nRoleIdx, ++aIt )

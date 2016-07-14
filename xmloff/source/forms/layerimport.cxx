@@ -391,7 +391,7 @@ void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPa
         return;
 
     // add a new entry to our page map
-    ::std::pair< MapDrawPage2Map::iterator, bool > aPagePosition;
+    std::pair< MapDrawPage2Map::iterator, bool > aPagePosition;
     aPagePosition =
         m_aControlIds.insert(MapDrawPage2Map::value_type(_rxDrawPage, MapString2PropertySet()));
     OSL_ENSURE(aPagePosition.second, "OFormLayerXMLImport_Impl::startPage: already imported this page!");
@@ -411,8 +411,8 @@ void OFormLayerXMLImport_Impl::endPage()
         OUString sSeparator(&s_nSeparator, 1);
         Reference< XPropertySet > xCurrentReferring;
         sal_Int32 nSeparator, nPrevSep;
-        ::std::vector< ModelStringPair >::const_iterator aEnd = m_aControlReferences.end();
-        for (   ::std::vector< ModelStringPair >::const_iterator aReferences = m_aControlReferences.begin();
+        std::vector< ModelStringPair >::const_iterator aEnd = m_aControlReferences.end();
+        for (   std::vector< ModelStringPair >::const_iterator aReferences = m_aControlReferences.begin();
                 aReferences != aEnd;
                 ++aReferences
             )
@@ -517,8 +517,8 @@ void OFormLayerXMLImport_Impl::documentDone( )
         )
     {
         static const char s_sIndex[] = ":index";
-        ::std::vector< ModelStringPair >::const_iterator aEnd = m_aCellValueBindings.end();
-        for (   ::std::vector< ModelStringPair >::const_iterator aCellBindings = m_aCellValueBindings.begin();
+        std::vector< ModelStringPair >::const_iterator aEnd = m_aCellValueBindings.end();
+        for (   std::vector< ModelStringPair >::const_iterator aCellBindings = m_aCellValueBindings.begin();
                 aCellBindings != aEnd;
                 ++aCellBindings
             )
@@ -557,7 +557,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
         &&  FormCellBindingHelper::isListCellRangeAllowed( rImport.GetModel() )
         )
     {
-        for (   ::std::vector< ModelStringPair >::const_iterator aRangeBindings = m_aCellRangeListSources.begin();
+        for (   std::vector< ModelStringPair >::const_iterator aRangeBindings = m_aCellRangeListSources.begin();
                 aRangeBindings != m_aCellRangeListSources.end();
                 ++aRangeBindings
             )

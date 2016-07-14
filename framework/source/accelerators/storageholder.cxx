@@ -303,7 +303,7 @@ void StorageHolder::addStorageListener(      XMLBasedAcceleratorConfiguration* p
         return;
 
     TStorageInfo& rInfo = pIt1->second;
-    TStorageListenerList::iterator pIt2 = ::std::find(rInfo.Listener.begin(), rInfo.Listener.end(), pListener);
+    TStorageListenerList::iterator pIt2 = std::find(rInfo.Listener.begin(), rInfo.Listener.end(), pListener);
     if (pIt2 == rInfo.Listener.end())
         rInfo.Listener.push_back(pListener);
 }
@@ -320,7 +320,7 @@ void StorageHolder::removeStorageListener(      XMLBasedAcceleratorConfiguration
         return;
 
     TStorageInfo& rInfo = pIt1->second;
-    TStorageListenerList::iterator pIt2 = ::std::find(rInfo.Listener.begin(), rInfo.Listener.end(), pListener);
+    TStorageListenerList::iterator pIt2 = std::find(rInfo.Listener.begin(), rInfo.Listener.end(), pListener);
     if (pIt2 != rInfo.Listener.end())
         rInfo.Listener.erase(pIt2);
 }

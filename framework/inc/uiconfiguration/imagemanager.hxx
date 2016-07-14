@@ -108,7 +108,7 @@ namespace framework
             void setStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) throw (css::uno::RuntimeException);
 
         private:
-            ::std::unique_ptr<ImageManagerImpl> m_pImpl;
+            std::unique_ptr<ImageManagerImpl> m_pImpl;
    };
 }
 

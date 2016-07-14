@@ -34,7 +34,7 @@ XMLShapePropertySetContext::XMLShapePropertySetContext(
                  const OUString& rLName,
                  const Reference< xml::sax::XAttributeList > & xAttrList,
                  sal_uInt32 nFam,
-                 ::std::vector< XMLPropertyState > &rProps,
+                 std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
     SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFam,
                              rProps, rMap ),
@@ -67,7 +67,7 @@ SvXMLImportContext *XMLShapePropertySetContext::CreateChildContext(
                    sal_uInt16 nPrefix,
                    const OUString& rLocalName,
                    const Reference< xml::sax::XAttributeList > & xAttrList,
-                   ::std::vector< XMLPropertyState > &rProperties,
+                   std::vector< XMLPropertyState > &rProperties,
                    const XMLPropertyState& rProp )
 {
     SvXMLImportContext *pContext = nullptr;

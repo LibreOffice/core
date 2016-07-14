@@ -51,7 +51,7 @@ private:
 protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
-        ::std::vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 
 private:
@@ -59,14 +59,14 @@ private:
     virtual void handleElementItem(
         SvXMLExport& rExport,
         const XMLPropertyState& rProperty, SvXmlExportFlags nFlags,
-        const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+        const std::vector< XMLPropertyState > *pProperties = nullptr,
         sal_uInt32 nIdx = 0  ) const override;
 
     /// this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set
     virtual void handleSpecialItem(
         SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
-        const ::std::vector< XMLPropertyState > *pProperties = nullptr,
+        const std::vector< XMLPropertyState > *pProperties = nullptr,
         sal_uInt32 nIdx = 0  ) const override;
 
 public:
@@ -89,13 +89,13 @@ public:
 
     virtual bool handleSpecialItem(
         XMLPropertyState& rProperty,
-        ::std::vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         const OUString& rValue,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const override;
 
     virtual void finished(
-        ::std::vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const override;
 };
 

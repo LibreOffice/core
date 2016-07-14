@@ -35,7 +35,7 @@ namespace {
 /** Global storage for predefined color values used in OOXML file formats. */
 struct PresetColorsPool
 {
-    typedef ::std::vector< sal_Int32 > ColorVector;
+    typedef std::vector< sal_Int32 > ColorVector;
 
     ColorVector         maDmlColors;        /// Predefined colors in DrawingML, indexed by XML token.
     ColorVector         maVmlColors;        /// Predefined colors in VML, indexed by XML token.
@@ -723,8 +723,8 @@ void Color::toHsl() const
             double fR = static_cast< double >( mnC1 ) / 255.0;  // red [0.0, 1.0]
             double fG = static_cast< double >( mnC2 ) / 255.0;  // green [0.0, 1.0]
             double fB = static_cast< double >( mnC3 ) / 255.0;  // blue [0.0, 1.0]
-            double fMin = ::std::min( ::std::min( fR, fG ), fB );
-            double fMax = ::std::max( ::std::max( fR, fG ), fB );
+            double fMin = std::min( std::min( fR, fG ), fB );
+            double fMax = std::max( std::max( fR, fG ), fB );
             double fD = fMax - fMin;
 
             using ::rtl::math::approxEqual;

@@ -322,7 +322,7 @@ uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::R
         return lSource;
 
     const OUString                  sPath  = lSource[0];
-          ::std::vector< OUString > lTarget;
+          std::vector< OUString > lTarget;
           ::sal_Int32               i      = 1;
     for (i=1; i<c; ++i)
     {

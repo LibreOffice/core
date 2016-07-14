@@ -59,7 +59,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-class lcl_MatchesChartType : public ::std::unary_function< Reference< chart2::XChartType >, bool >
+class lcl_MatchesChartType : public std::unary_function< Reference< chart2::XChartType >, bool >
 {
 public:
     explicit lcl_MatchesChartType( const OUString & aChartTypeName ) :
@@ -467,7 +467,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
                 const Reference< chart2::XChartType > * pBegin = aChartTypes.getConstArray();
                 const Reference< chart2::XChartType > * pEnd = pBegin + aChartTypes.getLength();
                 const Reference< chart2::XChartType > * pIt =
-                    ::std::find_if( pBegin, pEnd, lcl_MatchesChartType( rChartTypeName ));
+                    std::find_if( pBegin, pEnd, lcl_MatchesChartType( rChartTypeName ));
                 if( pIt != pEnd )
                     xCurrentType.set( *pIt );
                 // if chart type is set at series and differs from current one,
@@ -641,7 +641,7 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
                     const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
                     const OUString * pBegin = aServiceNames.getConstArray();
                     const OUString * pEnd = pBegin + aServiceNames.getLength();
-                    if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
+                    if( std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
                     {
                         Reference< chart2::data::XDataProvider > xProvider(
                             xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );

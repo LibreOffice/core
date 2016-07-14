@@ -87,7 +87,7 @@ namespace frm
     namespace
     {
 
-        struct RowSetValueToString : public ::std::unary_function< ORowSetValue, OUString >
+        struct RowSetValueToString : public std::unary_function< ORowSetValue, OUString >
         {
             OUString operator()( const ORowSetValue& _value ) const
             {
@@ -96,7 +96,7 @@ namespace frm
         };
 
 
-        struct AppendRowSetValueString : public ::std::unary_function< OUString, void >
+        struct AppendRowSetValueString : public std::unary_function< OUString, void >
         {
             explicit AppendRowSetValueString( OUString& _string )
                 :m_string( _string )
@@ -116,7 +116,7 @@ namespace frm
         Sequence< OUString > lcl_convertToStringSequence( const ValueList& _values )
         {
             Sequence< OUString > aStrings( _values.size() );
-            ::std::transform(
+            std::transform(
                 _values.begin(),
                 _values.end(),
                 aStrings.getArray(),
@@ -316,10 +316,10 @@ namespace frm
 
             // copy to member
             ValueList().swap(m_aListSourceValues);
-            ::std::copy(
+            std::copy(
                 aListSource.getConstArray(),
                 aListSource.getConstArray() + aListSource.getLength(),
-                ::std::insert_iterator< ValueList >( m_aListSourceValues, m_aListSourceValues.end() )
+                std::insert_iterator< ValueList >( m_aListSourceValues, m_aListSourceValues.end() )
             );
 
             // propagate
@@ -442,13 +442,13 @@ namespace frm
 
         const OUString* pStartPos = _rPropertyNames.getConstArray();
         const OUString* pEndPos   = _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
-        const OUString* pSelectedItemsPos = ::std::find_if(
+        const OUString* pSelectedItemsPos = std::find_if(
             pStartPos, pEndPos,
-             ::std::bind2nd( ::std::equal_to< OUString >(), PROPERTY_SELECT_SEQ )
+             std::bind2nd( std::equal_to< OUString >(), PROPERTY_SELECT_SEQ )
         );
-        const OUString* pStringItemListPos = ::std::find_if(
+        const OUString* pStringItemListPos = std::find_if(
             pStartPos, pEndPos,
-             ::std::bind2nd( ::std::equal_to< OUString >(), PROPERTY_STRINGITEMLIST )
+             std::bind2nd( std::equal_to< OUString >(), PROPERTY_STRINGITEMLIST )
         );
         if ( ( pSelectedItemsPos != pEndPos ) && ( pStringItemListPos != pEndPos ) )
         {
@@ -698,7 +698,7 @@ namespace frm
         OUString sListSource;
         // if our list source type is no value list, we need to concatenate
         // the single list source elements
-        ::std::for_each(
+        std::for_each(
             m_aListSourceValues.begin(),
             m_aListSourceValues.end(),
             AppendRowSetValueString( sListSource )
@@ -935,10 +935,10 @@ namespace frm
                     if (xFieldNames.is())
                     {
                         css::uno::Sequence<OUString> seqNames = xFieldNames->getElementNames();
-                        ::std::copy(
+                        std::copy(
                             seqNames.getConstArray(),
                             seqNames.getConstArray() + seqNames.getLength(),
-                            ::std::insert_iterator< ValueList >( aDisplayList, aDisplayList.end() )
+                            std::insert_iterator< ValueList >( aDisplayList, aDisplayList.end() )
                         );
                         if(*aBoundColumn == -1)
                         {
@@ -1167,7 +1167,7 @@ namespace frm
             assert( m_nConvertedBoundValuesType == getValueType());
             ORowSetValue v(i_aValue);
             v.setTypeKind( m_nConvertedBoundValuesType );
-            ValueList::const_iterator curValuePos = ::std::find( aValues.begin(), aValues.end(), v );
+            ValueList::const_iterator curValuePos = std::find( aValues.begin(), aValues.end(), v );
             if ( curValuePos != aValues.end() )
             {
                 aSelectionIndicies.realloc( 1 );
@@ -1197,7 +1197,7 @@ namespace frm
                 ORowSetValue v;
                 v.fill(*pValue);
                 v.setTypeKind( m_nConvertedBoundValuesType );
-                ValueList::const_iterator curValuePos = ::std::find( aValues.begin(), aValues.end(), v );
+                ValueList::const_iterator curValuePos = std::find( aValues.begin(), aValues.end(), v );
                 if ( curValuePos != aValues.end() )
                 {
                     *pIndex = curValuePos - aValues.begin();
@@ -1359,7 +1359,7 @@ namespace frm
             Sequence< sal_Int32 > aSelectIndexesPure;
             OSL_VERIFY( _rExternalValue >>= aSelectIndexesPure );
             aSelectIndexes.realloc( aSelectIndexesPure.getLength() );
-            ::std::copy(
+            std::copy(
                 aSelectIndexesPure.getConstArray(),
                 aSelectIndexesPure.getConstArray() + aSelectIndexesPure.getLength(),
                 aSelectIndexes.getArray()
@@ -1385,7 +1385,7 @@ namespace frm
             Sequence< OUString > aSelectEntries;
             OSL_VERIFY( _rExternalValue >>= aSelectEntries );
 
-            ::std::set< sal_Int16 > aSelectionSet;
+            std::set< sal_Int16 > aSelectionSet;
 
             // find the selection entries in our item list
             const OUString* pSelectEntries = aSelectEntries.getArray();
@@ -1411,7 +1411,7 @@ namespace frm
         {
             OUString sStringToSelect;
             OSL_VERIFY( _rExternalValue >>= sStringToSelect );
-            ::std::set< sal_Int16 > aSelectionSet;
+            std::set< sal_Int16 > aSelectionSet;
             int idx = 0;
             for(const OUString& s : getStringItemList())
             {
@@ -1432,7 +1432,7 @@ namespace frm
     namespace
     {
 
-        struct ExtractStringFromSequence_Safe : public ::std::unary_function< sal_Int16, OUString >
+        struct ExtractStringFromSequence_Safe : public std::unary_function< sal_Int16, OUString >
         {
         protected:
             const std::vector< OUString >&  m_rList;
@@ -1473,7 +1473,7 @@ namespace frm
         Any lcl_getMultiSelectedEntries( const Sequence< sal_Int16 >& _rSelectSequence, const std::vector< OUString >& _rStringList )
         {
             Sequence< OUString > aSelectedEntriesTexts( _rSelectSequence.getLength() );
-            ::std::transform(
+            std::transform(
                 _rSelectSequence.getConstArray(),
                 _rSelectSequence.getConstArray() + _rSelectSequence.getLength(),
                 aSelectedEntriesTexts.getArray(),
@@ -1483,7 +1483,7 @@ namespace frm
         }
 
 
-        struct ExtractAnyFromValueList_Safe : public ::std::unary_function< sal_Int16, Any >
+        struct ExtractAnyFromValueList_Safe : public std::unary_function< sal_Int16, Any >
         {
         protected:
             const ValueList&  m_rList;
@@ -1520,7 +1520,7 @@ namespace frm
         Any lcl_getMultiSelectedEntriesAny( const Sequence< sal_Int16 >& _rSelectSequence, const ValueList& _rStringList )
         {
             Sequence< Any > aSelectedEntriesValues( _rSelectSequence.getLength() );
-            ::std::transform(
+            std::transform(
                 _rSelectSequence.getConstArray(),
                 _rSelectSequence.getConstArray() + _rSelectSequence.getLength(),
                 aSelectedEntriesValues.getArray(),
@@ -1554,7 +1554,7 @@ namespace frm
             // unfortunately, the select sequence is a sequence<short>, but our binding
             // expects int's
             Sequence< sal_Int32 > aTransformed( aSelectSequence.getLength() );
-            ::std::copy(
+            std::copy(
                 aSelectSequence.getConstArray(),
                 aSelectSequence.getConstArray() + aSelectSequence.getLength(),
                 aTransformed.getArray()

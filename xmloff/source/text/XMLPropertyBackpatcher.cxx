@@ -24,7 +24,7 @@
 #include "XMLPropertyBackpatcher.hxx"
 #include <xmloff/txtimp.hxx>
 
-using ::std::map;
+using std::map;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::beans::XPropertySet;
@@ -126,14 +126,14 @@ template class XMLPropertyBackpatcher<OUString>;
 struct XMLTextImportHelper::BackpatcherImpl
 {
     /// backpatcher for references to footnotes and endnotes
-    ::std::unique_ptr< XMLPropertyBackpatcher<sal_Int16> >
+    std::unique_ptr< XMLPropertyBackpatcher<sal_Int16> >
         m_pFootnoteBackpatcher;
 
     /// backpatchers for references to sequences
-    ::std::unique_ptr< XMLPropertyBackpatcher<sal_Int16> >
+    std::unique_ptr< XMLPropertyBackpatcher<sal_Int16> >
         m_pSequenceIdBackpatcher;
 
-    ::std::unique_ptr< XMLPropertyBackpatcher< OUString> >
+    std::unique_ptr< XMLPropertyBackpatcher< OUString> >
         m_pSequenceNameBackpatcher;
 };
 

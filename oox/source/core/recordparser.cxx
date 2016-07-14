@@ -103,8 +103,8 @@ public:
     void                popContext();
 
 private:
-    typedef ::std::pair< RecordInfo, ContextHandlerRef >    ContextInfo;
-    typedef ::std::vector< ContextInfo >                    ContextInfoVec;
+    typedef std::pair< RecordInfo, ContextHandlerRef >      ContextInfo;
+    typedef std::vector< ContextInfo >                      ContextInfoVec;
 
     FragmentHandlerRef  mxHandler;
     ContextInfoVec      maStack;

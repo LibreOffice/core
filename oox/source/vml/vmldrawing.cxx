@@ -114,7 +114,7 @@ void Drawing::registerBlockId( sal_Int32 nBlockId )
     if( nBlockId > 0 )
     {
         // lower_bound() returns iterator pointing to element equal to nBlockId, if existing
-        BlockIdVector::iterator aIt = ::std::lower_bound( maBlockIds.begin(), maBlockIds.end(), nBlockId );
+        BlockIdVector::iterator aIt = std::lower_bound( maBlockIds.begin(), maBlockIds.end(), nBlockId );
         if( (aIt == maBlockIds.end()) || (nBlockId != *aIt) )
             maBlockIds.insert( aIt, nBlockId );
     }
@@ -173,7 +173,7 @@ sal_Int32 Drawing::getLocalShapeIndex( const OUString& rShapeId ) const
 
     // get block id from shape id and find its index in the list of used blocks
     sal_Int32 nBlockId = (nShapeId - 1) / 1024;
-    BlockIdVector::iterator aIt = ::std::lower_bound( maBlockIds.begin(), maBlockIds.end(), nBlockId );
+    BlockIdVector::iterator aIt = std::lower_bound( maBlockIds.begin(), maBlockIds.end(), nBlockId );
     sal_Int32 nIndex = static_cast< sal_Int32 >( aIt - maBlockIds.begin() );
 
     // block id not found in set -> register it now (value of nIndex remains valid)

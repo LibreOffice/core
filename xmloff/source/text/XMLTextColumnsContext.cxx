@@ -266,7 +266,7 @@ XMLTextColumnsContext::XMLTextColumnsContext(
                                 const Reference< xml::sax::XAttributeList >&
                                     xAttrList,
                                 const XMLPropertyState& rProp,
-                                 ::std::vector< XMLPropertyState > &rProps )
+                                 std::vector< XMLPropertyState > &rProps )
 :   XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps )
 ,   sSeparatorLineIsOn("SeparatorLineIsOn")
 ,   sSeparatorLineWidth("SeparatorLineWidth")

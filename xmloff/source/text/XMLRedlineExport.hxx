@@ -37,11 +37,11 @@ namespace com { namespace sun { namespace star {
  } } }
 
 // store a list of redline properties
-typedef ::std::list<
+typedef std::list<
             css::uno::Reference<css::beans::XPropertySet> > ChangesListType;
 
 // store a list of redline properties for each XText
-typedef ::std::map<
+typedef std::map<
             css::uno::Reference< css::text::XText>,
             ChangesListType* > ChangesMapType;
 

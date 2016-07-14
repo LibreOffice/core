@@ -50,7 +50,7 @@ struct SignatureReferenceInformation
     }
 };
 
-typedef ::std::vector< SignatureReferenceInformation > SignatureReferenceInformations;
+typedef std::vector< SignatureReferenceInformation > SignatureReferenceInformations;
 
 struct SignatureInformation
 {
@@ -95,7 +95,7 @@ struct SignatureInformation
     }
 };
 
-typedef ::std::vector< SignatureInformation > SignatureInformations;
+typedef std::vector< SignatureInformation > SignatureInformations;
 
 #endif
 

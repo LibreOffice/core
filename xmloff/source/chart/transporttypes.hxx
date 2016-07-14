@@ -60,7 +60,7 @@ struct SchXMLTable
 
     OUString aTableNameOfFile;                   /// the table name read at the table:table element
 
-    ::std::vector< sal_Int32 > aHiddenColumns;
+    std::vector< sal_Int32 > aHiddenColumns;
 
     bool bProtected;
 
@@ -82,8 +82,8 @@ enum SchXMLLabeledSequencePart
     SCH_XML_PART_VALUES,
     SCH_XML_PART_ERROR_BARS
 };
-typedef ::std::pair< tSchXMLIndex, SchXMLLabeledSequencePart > tSchXMLIndexWithPart;
-typedef ::std::multimap< tSchXMLIndexWithPart,
+typedef std::pair< tSchXMLIndex, SchXMLLabeledSequencePart > tSchXMLIndexWithPart;
+typedef std::multimap< tSchXMLIndexWithPart,
         css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
     tSchXMLLSequencesPerIndex;
 
@@ -188,7 +188,7 @@ struct DataRowPointStyle
         {}
 };
 
-typedef ::std::multimap< OUString, css::uno::Reference<
+typedef std::multimap< OUString, css::uno::Reference<
         css::chart2::data::XDataSequence > > tSchXMLRangeSequenceMap;
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_TRANSPORTTYPES_HXX

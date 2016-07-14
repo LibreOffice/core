@@ -172,12 +172,12 @@ private:
         If /java/vmParameters@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    boost::optional< ::std::vector< OUString> > m_vmParameters;
+    boost::optional< std::vector< OUString> > m_vmParameters;
     /** User configurable option. /java/jreLocations
         If /java/jreLocaltions@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    boost::optional< ::std::vector< OUString> > m_JRELocations;
+    boost::optional< std::vector< OUString> > m_JRELocations;
 
 public:
 
@@ -233,11 +233,11 @@ public:
 
     /** returns the parameters from the element /java/vmParameters/param.
      */
-    const boost::optional< ::std::vector< OUString> > & getVmParameters() const { return m_vmParameters;}
+    const boost::optional< std::vector< OUString> > & getVmParameters() const { return m_vmParameters;}
 
     /** returns the parameters from the element /java/jreLocations/location.
      */
-    const boost::optional< ::std::vector< OUString> > & getJRELocations() const { return m_JRELocations;}
+    const boost::optional< std::vector< OUString> > & getJRELocations() const { return m_JRELocations;}
 };
 
 /** merges the settings for shared, user and installation during construction.
@@ -272,9 +272,9 @@ private:
 
     OUString m_sClassPath;
 
-    ::std::vector< OUString> m_vmParams;
+    std::vector< OUString> m_vmParams;
 
-    ::std::vector< OUString> m_JRELocations;
+    std::vector< OUString> m_JRELocations;
 
     CNodeJavaInfo m_javaInfo;
 
@@ -288,7 +288,7 @@ public:
 
     const OUString & getUserClassPath() const { return m_sClassPath;}
 
-    ::std::vector< OString> getVmParametersUtf8() const;
+    std::vector< OString> getVmParametersUtf8() const;
     /** returns a JavaInfo structure representing the node
         /java/javaInfo. Every time a new JavaInfo structure is created
         which needs to be freed by the caller.
@@ -314,13 +314,13 @@ public:
      */
     void getVmParametersArray(rtl_uString *** parParameters, sal_Int32 * size) const;
 
-    const ::std::vector< OUString> & getJRELocations() const { return m_JRELocations;}
+    const std::vector< OUString> & getJRELocations() const { return m_JRELocations;}
 };
 
 
 class VersionInfo
 {
-    ::std::vector< OUString> vecExcludeVersions;
+    std::vector< OUString> vecExcludeVersions;
     rtl_uString ** arVersions;
 
 public:

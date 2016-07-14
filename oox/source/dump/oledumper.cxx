@@ -186,7 +186,7 @@ OlePropertyStreamObject::OlePropertyStreamObject( const ObjectBase& rParent, con
 void OlePropertyStreamObject::implDump()
 {
     OUStringVector aGuidVec;
-    ::std::vector< sal_uInt32 > aStartPosVec;
+    std::vector< sal_uInt32 > aStartPosVec;
 
     // dump header
     writeEmptyItem( "HEADER" );
@@ -232,7 +232,7 @@ void OlePropertyStreamObject::dumpSection( const OUString& rGuid, sal_uInt32 nSt
         mxPropIds->includeList( cfg().getNameList( "OLEPROP-BASEIDS" ) );
 
     // property ID/position map
-    typedef ::std::map< sal_Int32, sal_uInt32 > PropertyPosMap;
+    typedef std::map< sal_Int32, sal_uInt32 > PropertyPosMap;
     PropertyPosMap aPropMap;
 
     // dump section header line

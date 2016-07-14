@@ -1124,8 +1124,8 @@ void CombiList::implSetName( sal_Int64 nKey, const OUString& rName )
 {
     if( (nKey & (nKey - 1)) != 0 )  // more than a single bit set?
     {
-        typedef ::std::set< ExtItemFormatKey > ExtItemFormatKeySet;
-        ::std::set< ExtItemFormatKey > aItemKeys;
+        typedef std::set< ExtItemFormatKey > ExtItemFormatKeySet;
+        std::set< ExtItemFormatKey > aItemKeys;
         ExtItemFormat aItemFmt;
         OUStringVector aRemain = aItemFmt.parse( rName );
         for( OUStringVector::iterator aIt = aRemain.begin(), aEnd = aRemain.end(); aIt != aEnd; ++aIt )
@@ -1573,7 +1573,7 @@ void Output::tab( size_t nCol )
     {
         sal_Int32 nColPos = maColPos[ mnCol ];
         if( maLine.getLength() >= nColPos )
-            maLine.setLength( ::std::max< sal_Int32 >( nColPos - 1, 0 ) );
+            maLine.setLength( std::max< sal_Int32 >( nColPos - 1, 0 ) );
         StringHelper::appendChar( maLine, ' ', nColPos - maLine.getLength() );
     }
     else
@@ -1984,7 +1984,7 @@ void OutputObjectBase::writeStringItem( const String& rName, const OUString& rDa
     mxOut->writeAscii( "(len=" );
     mxOut->writeDec( rData.getLength() );
     mxOut->writeAscii( ")," );
-    OUStringBuffer aValue( rData.copy( 0, ::std::min( rData.getLength(), OOX_DUMP_MAXSTRLEN ) ) );
+    OUStringBuffer aValue( rData.copy( 0, std::min( rData.getLength(), OOX_DUMP_MAXSTRLEN ) ) );
     StringHelper::enclose( aValue, OOX_DUMP_STRQUOTE );
     mxOut->writeString( aValue.makeStringAndClear() );
     if( rData.getLength() > OOX_DUMP_MAXSTRLEN )
@@ -2039,7 +2039,7 @@ bool InputObjectBase::implIsValid() const
 
 void InputObjectBase::skipBlock( sal_Int64 nBytes, bool bShowSize )
 {
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( mxStrm->tell() + nBytes, mxStrm->size() );
+    sal_Int64 nEndPos = std::min< sal_Int64 >( mxStrm->tell() + nBytes, mxStrm->size() );
     if( mxStrm->tell() < nEndPos )
     {
         if( bShowSize )
@@ -2060,8 +2060,8 @@ void InputObjectBase::dumpRawBinary( sal_Int64 nBytes, bool bShowOffset, bool bS
         bStream ? "max-binary-stream-size" : "max-binary-data-size", SAL_MAX_INT64 );
 
     bool bSeekable = mxStrm->size() >= 0;
-    sal_Int64 nEndPos = bSeekable ? ::std::min< sal_Int64 >( mxStrm->tell() + nBytes, mxStrm->size() ) : 0;
-    sal_Int64 nDumpEnd = bSeekable ? ::std::min< sal_Int64 >( mxStrm->tell() + nMaxShowSize, nEndPos ) : nMaxShowSize;
+    sal_Int64 nEndPos = bSeekable ? std::min< sal_Int64 >( mxStrm->tell() + nBytes, mxStrm->size() ) : 0;
+    sal_Int64 nDumpEnd = bSeekable ? std::min< sal_Int64 >( mxStrm->tell() + nMaxShowSize, nEndPos ) : nMaxShowSize;
     sal_Int64 nPos = bSeekable ? mxStrm->tell() : 0;
     bool bLoop = true;
 
@@ -2071,7 +2071,7 @@ void InputObjectBase::dumpRawBinary( sal_Int64 nBytes, bool bShowOffset, bool bS
         mxOut->tab();
 
         sal_uInt8 pnLineData[ OOX_DUMP_BYTESPERLINE ];
-        sal_Int32 nLineSize = bSeekable ? ::std::min( static_cast< sal_Int32 >( nDumpEnd - mxStrm->tell() ), OOX_DUMP_BYTESPERLINE ) : OOX_DUMP_BYTESPERLINE;
+        sal_Int32 nLineSize = bSeekable ? std::min( static_cast< sal_Int32 >( nDumpEnd - mxStrm->tell() ), OOX_DUMP_BYTESPERLINE ) : OOX_DUMP_BYTESPERLINE;
         sal_Int32 nReadSize = mxStrm->readMemory( pnLineData, nLineSize );
         bLoop = nReadSize == nLineSize;
         nPos += nReadSize;
@@ -2169,7 +2169,7 @@ OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rt
     OUString aString;
     if( nDumpSize > 0 )
     {
-        ::std::vector< sal_Char > aBuffer( static_cast< sal_Size >( nLen ) + 1 );
+        std::vector< sal_Char > aBuffer( static_cast< sal_Size >( nLen ) + 1 );
         sal_Int32 nCharsRead = mxStrm->readMemory( &aBuffer.front(), nLen );
         aBuffer[ nCharsRead ] = 0;
         aString = OStringToOUString( OString( &aBuffer.front() ), eTextEnc );
@@ -2489,7 +2489,7 @@ void RecordObjectBase::implDump()
         // record body
         if( !mbBinaryOnly && cfg().hasName( xRecNames, mnRecId ) )
         {
-            ::std::map< sal_Int64, ItemFormat >::const_iterator aIt = aSimpleRecs.find( mnRecId );
+            std::map< sal_Int64, ItemFormat >::const_iterator aIt = aSimpleRecs.find( mnRecId );
             if( aIt != aSimpleRecs.end() )
                 dumpItem( aIt->second );
             else

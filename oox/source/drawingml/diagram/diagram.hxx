@@ -155,7 +155,7 @@ typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > Diag
 class DiagramData
 {
 public:
-    ::std::vector<OUString>  maExtDrawings;
+    std::vector<OUString>    maExtDrawings;
     typedef std::map< OUString, dgm::Point* > PointNameMap;
     typedef std::map< OUString,
                       std::vector<dgm::Point*> >   PointsNameMap;
@@ -178,7 +178,7 @@ public:
         { return maPointNameMap; }
     PointsNameMap & getPointsPresNameMap()
         { return maPointsPresNameMap; }
-    ::std::vector<OUString> &getExtDrawings()
+    std::vector<OUString> &getExtDrawings()
         { return maExtDrawings; }
     void dump();
 private:

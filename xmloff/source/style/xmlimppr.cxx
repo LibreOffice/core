@@ -333,7 +333,7 @@ bool SvXMLImportPropertyMapper::handleSpecialItem(
 }
 
 void SvXMLImportPropertyMapper::FillPropertySequence(
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             css::uno::Sequence< css::beans::PropertyValue >& rValues )
             const
 {
@@ -360,7 +360,7 @@ void SvXMLImportPropertyMapper::FillPropertySequence(
 }
 
 void SvXMLImportPropertyMapper::CheckSpecialContext(
-            const ::std::vector< XMLPropertyState >& aProperties,
+            const std::vector< XMLPropertyState >& aProperties,
             const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
             ContextID_Index_Pair* pSpecialContextIds ) const
 {

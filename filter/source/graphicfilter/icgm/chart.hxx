@@ -65,7 +65,7 @@ class CGMChart
 
     protected:
         sal_Int8                mnCurrentFileType;
-        ::std::vector< TextEntry* > maTextEntryList;
+        std::vector< TextEntry* > maTextEntryList;
         DataNode                mDataNode[ 7 ];
 
     public:

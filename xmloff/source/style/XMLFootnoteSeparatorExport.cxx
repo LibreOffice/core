@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using ::std::vector;
+using std::vector;
 
 XMLFootnoteSeparatorExport::XMLFootnoteSeparatorExport(SvXMLExport& rExp) :
     rExport(rExp)

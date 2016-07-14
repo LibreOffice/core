@@ -144,7 +144,7 @@ bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & si
 {
     OUString sManifestURI("META-INF/manifest.xml");
     bool bOOo3_2 = false;
-    typedef ::std::vector< SignatureReferenceInformation >::const_iterator CIT;
+    typedef std::vector< SignatureReferenceInformation >::const_iterator CIT;
     for (CIT i = sigInfo.vSignatureReferenceInfors.begin();
         i < sigInfo.vSignatureReferenceInfors.end(); ++i)
     {
@@ -412,7 +412,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
 //the uri s in the Reference elements in the signature, were not properly encoded.
 // For example: <Reference URI="ObjectReplacements/Object 1">
 bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
-    const ::std::vector< OUString > & sElementList,
+    const std::vector< OUString > & sElementList,
     const SignatureInformation & sigInfo,
     const DocumentSignatureAlgorithm alg)
 {
@@ -436,7 +436,7 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
             }
 
             //find the file in the element list
-            typedef ::std::vector< OUString >::const_iterator CIT;
+            typedef std::vector< OUString >::const_iterator CIT;
             for (CIT aIter = sElementList.begin(); aIter != sElementList.end(); ++aIter)
             {
                 OUString sElementListURI = *aIter;

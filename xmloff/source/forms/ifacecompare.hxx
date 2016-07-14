@@ -32,7 +32,7 @@ namespace xmloff
     */
     template < class IAFCE >
     struct OInterfaceCompare
-        :public ::std::binary_function  <   css::uno::Reference< IAFCE >
+        :public std::binary_function    <   css::uno::Reference< IAFCE >
                                         ,   css::uno::Reference< IAFCE >
                                         ,   bool
                                         >

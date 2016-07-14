@@ -34,11 +34,11 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-::std::vector< Reference< chart2::XDataSeries > >
+std::vector< Reference< chart2::XDataSeries > >
     SchXMLSeriesHelper::getDataSeriesFromDiagram(
         const Reference< chart2::XDiagram > & xDiagram )
 {
-    ::std::vector< Reference< chart2::XDataSeries > > aResult;
+    std::vector< Reference< chart2::XDataSeries > > aResult;
 
     try
     {
@@ -54,8 +54,8 @@ using ::com::sun::star::uno::Sequence;
             {
                 Reference< chart2::XDataSeriesContainer > xDSCnt( aChartTypeSeq[j], uno::UNO_QUERY_THROW );
                 Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
-                ::std::copy( aSeriesSeq.begin(), aSeriesSeq.end(),
-                             ::std::back_inserter( aResult ));
+                std::copy( aSeriesSeq.begin(), aSeriesSeq.end(),
+                             std::back_inserter( aResult ));
             }
         }
     }
@@ -67,16 +67,16 @@ using ::com::sun::star::uno::Sequence;
     return aResult;
 }
 
-::std::map< Reference< chart2::XDataSeries >, sal_Int32 > SchXMLSeriesHelper::getDataSeriesIndexMapFromDiagram(
+std::map< Reference< chart2::XDataSeries >, sal_Int32 > SchXMLSeriesHelper::getDataSeriesIndexMapFromDiagram(
         const Reference< chart2::XDiagram > & xDiagram )
 {
-    ::std::map< Reference< chart2::XDataSeries >, sal_Int32 > aRet;
+    std::map< Reference< chart2::XDataSeries >, sal_Int32 > aRet;
 
     sal_Int32 nIndex=0;
 
-    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
-    const ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesEnd( aSeriesVector.end() );
-    for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
+    std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
+    const std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesEnd( aSeriesVector.end() );
+    for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
         ; aSeriesIt != aSeriesEnd
         ; ++aSeriesIt, nIndex++ )
     {

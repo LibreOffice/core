@@ -557,7 +557,7 @@ namespace oox { namespace ppt {
 
         virtual ~AnimContext() throw ()
             {
-                ::std::list< TimeAnimationValue >::iterator iter, end;
+                std::list< TimeAnimationValue >::iterator iter, end;
                 int nKeyTimes = maTavList.size();
                 if( nKeyTimes > 0)
                 {

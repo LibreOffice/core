@@ -277,7 +277,7 @@ struct XMLDocumentSettingsContext_Data
 {
     css::uno::Any                   aViewProps;
     css::uno::Any                   aConfigProps;
-    ::std::list< SettingsGroup >    aDocSpecificSettings;
+    std::list< SettingsGroup >      aDocSpecificSettings;
 };
 
 XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -339,7 +339,7 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p
                 {
                     m_pData->aDocSpecificSettings.push_back( SettingsGroup( aLocalConfigName, uno::Any() ) );
 
-                    ::std::list< SettingsGroup >::reverse_iterator settingsPos =
+                    std::list< SettingsGroup >::reverse_iterator settingsPos =
                         m_pData->aDocSpecificSettings.rbegin();
 
                     pContext = new XMLConfigItemSetContext(GetImport(),
@@ -413,7 +413,7 @@ void XMLDocumentSettingsContext::EndElement()
         GetImport().SetConfigurationSettings( aSeqConfigProps );
     }
 
-    for (   ::std::list< SettingsGroup >::const_iterator settings = m_pData->aDocSpecificSettings.begin();
+    for (   std::list< SettingsGroup >::const_iterator settings = m_pData->aDocSpecificSettings.begin();
             settings != m_pData->aDocSpecificSettings.end();
             ++settings
         )

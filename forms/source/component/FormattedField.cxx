@@ -999,7 +999,7 @@ Any OFormattedModel::translateDbColumnToControlValue()
 
 Sequence< Type > OFormattedModel::getSupportedBindingTypes()
 {
-    ::std::list< Type > aTypes;
+    std::list< Type > aTypes;
     aTypes.push_back( cppu::UnoType< double >::get() );
     switch ( m_nKeyType & ~NumberFormat::DEFINED )
     {

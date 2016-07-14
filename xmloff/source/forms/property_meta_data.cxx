@@ -86,7 +86,7 @@ namespace xmloff { namespace metadata
             return s_propertyDescriptionsByName;
         }
 
-        typedef ::std::map< PropertyGroup, PropertyDescriptionList > IndexedPropertyGroups;
+        typedef std::map< PropertyGroup, PropertyDescriptionList > IndexedPropertyGroups;
 
         const IndexedPropertyGroups& lcl_getIndexedPropertyGroups()
         {
@@ -123,7 +123,7 @@ namespace xmloff { namespace metadata
             return s_reverseTokenLookup;
         }
 
-        struct AttributeHash : public ::std::unary_function< AttributeDescription, size_t >
+        struct AttributeHash : public std::unary_function< AttributeDescription, size_t >
         {
             size_t operator()( const AttributeDescription& i_attribute ) const
             {
@@ -198,7 +198,7 @@ namespace xmloff { namespace metadata
     {
         const AttributeGroups& rAttributeGroups = lcl_getAttributeGroups();
 
-        ::std::pair< AttributeGroups::const_iterator, AttributeGroups::const_iterator >
+        std::pair< AttributeGroups::const_iterator, AttributeGroups::const_iterator >
             range = rAttributeGroups.equal_range( i_attribute );
 
         if ( range.first == range.second )

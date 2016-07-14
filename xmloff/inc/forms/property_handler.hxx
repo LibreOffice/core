@@ -33,7 +33,7 @@
 namespace xmloff
 {
 
-    typedef ::std::map< PropertyId, css::uno::Any >    PropertyValues;
+    typedef std::map< PropertyId, css::uno::Any >      PropertyValues;
 
     class PropertyHandlerBase : public ::salhelper::SimpleReferenceObject
     {

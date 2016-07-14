@@ -49,7 +49,7 @@ struct ManifestScopeEntry
     {}
 };
 
-typedef ::std::vector< ManifestScopeEntry > ManifestStack;
+typedef std::vector< ManifestScopeEntry > ManifestStack;
 
 class ManifestImport : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
 {
@@ -58,7 +58,7 @@ protected:
     ManifestStack aStack;
     bool bIgnoreEncryptData;
     sal_Int32 nDerivedKeySize;
-    ::std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rManVector;
+    std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rManVector;
 
     const OUString sFileEntryElement;
     const OUString sEncryptionDataElement;

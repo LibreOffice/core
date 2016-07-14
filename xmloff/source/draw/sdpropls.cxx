@@ -1514,7 +1514,7 @@ void XMLShapeExportPropertyMapper::handleSpecialItem(
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-        const ::std::vector< XMLPropertyState > *pProperties,
+        const std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
@@ -1533,7 +1533,7 @@ void XMLShapeExportPropertyMapper::handleElementItem(
     SvXMLExport& rExport,
     const XMLPropertyState& rProperty,
     SvXmlExportFlags nFlags,
-    const ::std::vector< XMLPropertyState > *pProperties,
+    const std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx) const
 {
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
@@ -1718,7 +1718,7 @@ void XMLPageExportPropertyMapper::handleElementItem(
     SvXMLExport& rExport,
     const XMLPropertyState& rProperty,
     SvXmlExportFlags nFlags,
-    const ::std::vector< XMLPropertyState > *pProperties,
+    const std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx) const
 {
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )

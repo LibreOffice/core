@@ -62,7 +62,7 @@ class XMLPropertyBackpatcher
      OUString sPropertyName;
 
     /// backpatch list type
-    typedef ::std::vector<
+    typedef std::vector<
                 css::uno::Reference<css::beans::XPropertySet> > BackpatchListType;
 
     /* use void* instead of BackpatchListType to avoid linker problems
@@ -70,11 +70,11 @@ class XMLPropertyBackpatcher
        >1200 chars. */
 
     /// backpatch list for unresolved IDs
-    //::std::map<const OUString, BackpatchListType*> aBackpatchListMap;
-    ::std::map<const OUString, void*> aBackpatchListMap;
+    //std::map<const OUString, BackpatchListType*> aBackpatchListMap;
+    std::map<const OUString, void*> aBackpatchListMap;
 
     /// mapping of names -> IDs
-    ::std::map<const OUString, A> aIDMap;
+    std::map<const OUString, A> aIDMap;
 
 public:
 

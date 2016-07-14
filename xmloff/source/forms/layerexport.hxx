@@ -41,18 +41,18 @@ class SvXMLExportPropertyMapper;
 namespace xmloff
 {
 
-    typedef ::std::set  <   css::uno::Reference< css::beans::XPropertySet >
+    typedef std::set    <   css::uno::Reference< css::beans::XPropertySet >
                         ,   OPropertySetCompare
                         >   PropertySetBag;
 
     // maps objects (property sets) to strings, e.g. control ids.
-    typedef ::std::map  <   css::uno::Reference< css::beans::XPropertySet >
+    typedef std::map    <   css::uno::Reference< css::beans::XPropertySet >
                         ,   OUString
                         ,   OPropertySetCompare
                         >   MapPropertySet2String;
 
     // map pages to maps (of property sets to strings)
-    typedef ::std::map  <   css::uno::Reference< css::drawing::XDrawPage >
+    typedef std::map    <   css::uno::Reference< css::drawing::XDrawPage >
                         ,   MapPropertySet2String
                         ,   ODrawPageCompare
                         >   MapPropertySet2Map;

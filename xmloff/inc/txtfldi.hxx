@@ -1116,7 +1116,7 @@ class XMLBibliographyFieldImportContext : public XMLTextFieldImportContext
 {
     const OUString sPropertyFields;
 
-    ::std::vector< css::beans::PropertyValue> aValues;
+    std::vector< css::beans::PropertyValue> aValues;
 
 public:
 

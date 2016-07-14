@@ -44,7 +44,7 @@ using namespace ::xmloff::token;
 
 bool XMLPageExport::findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const
 {
-    for( ::std::vector< XMLPageExportNameEntry >::const_iterator pEntry = aNameVector.begin();
+    for( std::vector< XMLPageExportNameEntry >::const_iterator pEntry = aNameVector.begin();
             pEntry != aNameVector.end(); ++pEntry )
     {
         if( pEntry->sStyleName == rStyleName )
@@ -63,7 +63,7 @@ void XMLPageExport::collectPageMasterAutoStyle(
     SAL_WARN_IF( !xPageMasterPropSetMapper.is(), "xmloff", "page master family/XMLPageMasterPropSetMapper not found" );
     if( xPageMasterPropSetMapper.is() )
     {
-        ::std::vector<XMLPropertyState> aPropStates = xPageMasterExportPropMapper->Filter( rPropSet );
+        std::vector<XMLPropertyState> aPropStates = xPageMasterExportPropMapper->Filter( rPropSet );
         if( !aPropStates.empty())
         {
             OUString sParent;
@@ -230,12 +230,12 @@ void XMLPageExport::exportDefaultStyle()
             // <style:default-style ...>
             GetExport().CheckAttrList();
 
-            ::std::vector< XMLPropertyState > aPropStates =
+            std::vector< XMLPropertyState > aPropStates =
                 xPageMasterExportPropMapper->FilterDefaults( xPropSet );
 
             bool bExport = false;
             rtl::Reference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
-            for( ::std::vector< XMLPropertyState >::iterator aIter = aPropStates.begin(); aIter != aPropStates.end(); ++aIter )
+            for( std::vector< XMLPropertyState >::iterator aIter = aPropStates.begin(); aIter != aPropStates.end(); ++aIter )
             {
                 XMLPropertyState *pProp = &(*aIter);
                 sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );

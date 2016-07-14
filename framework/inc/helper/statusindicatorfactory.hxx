@@ -121,7 +121,7 @@ struct IndicatorInfo
 };
 
 /** @descr  Define a lits of child indicator objects and her data. */
-typedef ::std::vector< IndicatorInfo > IndicatorStack;
+typedef std::vector< IndicatorInfo > IndicatorStack;
 
 /** @short          implement a factory service to create new status indicator objects
 

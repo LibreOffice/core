@@ -45,7 +45,7 @@ public:
     static void exportXML(
         SvXMLExport& rExport,
         bool bEndnote,
-        const ::std::vector<XMLPropertyState> * pProperties,
+        const std::vector<XMLPropertyState> * pProperties,
         sal_uInt32 nIdx,
         const rtl::Reference<XMLPropertySetMapper> & rMapper);    /// used only for debugging
 };

@@ -38,8 +38,8 @@ class XMLSdPropHdlFactory;
 class XMLShapeExportPropertyMapper;
 class XMLPageExportPropertyMapper;
 
-typedef ::std::vector< ImpXMLEXPPageMasterInfo* > ImpXMLEXPPageMasterList;
-typedef ::std::vector< ImpXMLAutoLayoutInfo*    > ImpXMLAutoLayoutInfoList;
+typedef std::vector< ImpXMLEXPPageMasterInfo* > ImpXMLEXPPageMasterList;
+typedef std::vector< ImpXMLAutoLayoutInfo*      > ImpXMLAutoLayoutInfoList;
 
 enum XmlPlaceholder
 {
@@ -93,16 +93,16 @@ class SdXMLExport : public SvXMLExport
 
     css::uno::Sequence< OUString > maDrawPagesAutoLayoutNames;
 
-    ::std::vector< OUString >        maDrawPagesStyleNames;
-    ::std::vector< OUString >        maDrawNotesPagesStyleNames;
-    ::std::vector< OUString >        maMasterPagesStyleNames;
+    std::vector< OUString >          maDrawPagesStyleNames;
+    std::vector< OUString >          maDrawNotesPagesStyleNames;
+    std::vector< OUString >          maMasterPagesStyleNames;
     OUString                         maHandoutMasterStyleName;
-    ::std::vector< HeaderFooterPageSettingsImpl >   maDrawPagesHeaderFooterSettings;
-    ::std::vector< HeaderFooterPageSettingsImpl >   maDrawNotesPagesHeaderFooterSettings;
+    std::vector< HeaderFooterPageSettingsImpl >     maDrawPagesHeaderFooterSettings;
+    std::vector< HeaderFooterPageSettingsImpl >     maDrawNotesPagesHeaderFooterSettings;
 
-    ::std::vector< OUString >        maHeaderDeclsVector;
-    ::std::vector< OUString >        maFooterDeclsVector;
-    ::std::vector< DateTimeDeclImpl >       maDateTimeDeclsVector;
+    std::vector< OUString >          maHeaderDeclsVector;
+    std::vector< OUString >          maFooterDeclsVector;
+    std::vector< DateTimeDeclImpl >         maDateTimeDeclsVector;
 
     HeaderFooterPageSettingsImpl            maHandoutPageHeaderFooterSettings;
 

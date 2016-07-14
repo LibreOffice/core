@@ -137,8 +137,8 @@ void FuncPage::UpdateFunctionList()
     }
     else // LRU-List
     {
-        ::std::vector< TFunctionDesc >::iterator aIter = aLRUList.begin();
-        ::std::vector< TFunctionDesc >::iterator aEnd = aLRUList.end();
+        std::vector< TFunctionDesc >::iterator aIter = aLRUList.begin();
+        std::vector< TFunctionDesc >::iterator aEnd = aLRUList.end();
 
         for ( ; aIter != aEnd; ++aIter )
         {

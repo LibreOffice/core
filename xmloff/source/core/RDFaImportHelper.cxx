@@ -80,7 +80,7 @@ class RDFaInserter
     const uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference< rdf::XDocumentRepository > m_xRepository;
 
-    typedef ::std::map< OUString, uno::Reference< rdf::XBlankNode > >
+    typedef std::map< OUString, uno::Reference< rdf::XBlankNode > >
         BlankNodeMap_t;
 
     BlankNodeMap_t m_BlankNodeMap;
@@ -108,13 +108,13 @@ public:
 struct ParsedRDFaAttributes
 {
     OUString m_About;
-    ::std::vector< OUString > m_Properties;
+    std::vector< OUString > m_Properties;
     OUString m_Content;
     OUString m_Datatype;
 
     ParsedRDFaAttributes(
             OUString const & i_rAbout,
-            ::std::vector< OUString > const & i_rProperties,
+            std::vector< OUString > const & i_rProperties,
             OUString const & i_rContent,
             OUString const & i_rDatatype)
         : m_About(i_rAbout)
@@ -196,7 +196,7 @@ RDFaReader::ReadCURIE(OUString const & i_rCURIE) const
     return OUString();
 }
 
-::std::vector< OUString >
+std::vector< OUString >
 RDFaReader::ReadCURIEs(OUString const & i_rCURIEs) const
 {
     std::vector< OUString > vec;
@@ -316,7 +316,7 @@ void RDFaInserter::InsertRDFaEntry(
         return; // invalid
     }
 
-    ::std::vector< uno::Reference< rdf::XURI > > predicates;
+    std::vector< uno::Reference< rdf::XURI > > predicates;
 
     predicates.reserve(i_rEntry.m_xRDFaAttributes->m_Properties.size());
 
@@ -382,7 +382,7 @@ RDFaImportHelper::ParseRDFa(
     if (about.isEmpty()) {
         return std::shared_ptr<ParsedRDFaAttributes>();
     }
-    const ::std::vector< OUString > properties(
+    const std::vector< OUString > properties(
         reader.ReadCURIEs(i_rProperty) );
     if (properties.empty()) {
         return std::shared_ptr<ParsedRDFaAttributes>();

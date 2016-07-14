@@ -773,12 +773,12 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             GetImport().GetFontDecls();
         if( pFontDecls )
         {
-            ::std::vector < XMLPropertyState > aProps;
+            std::vector < XMLPropertyState > aProps;
             if( pFontDecls->FillProperties( sFontName, aProps, 0, 1, 2, 3, 4 ) )
             {
                 OUString sTmp;
                 sal_Int16 nTmp = 0;
-                ::std::vector< XMLPropertyState >::iterator i;
+                std::vector< XMLPropertyState >::iterator i;
                 for( i = aProps.begin(); i != aProps.end(); ++i )
                 {
                     switch( i->mnIndex )

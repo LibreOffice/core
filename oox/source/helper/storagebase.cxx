@@ -111,7 +111,7 @@ OUString StorageBase::getPath() const
     return aBuffer.makeStringAndClear();
 }
 
-void StorageBase::getElementNames( ::std::vector< OUString >& orElementNames ) const
+void StorageBase::getElementNames( std::vector< OUString >& orElementNames ) const
 {
     orElementNames.clear();
     implGetElementNames( orElementNames );
@@ -222,9 +222,9 @@ void StorageBase::copyStorageToStorage( StorageBase& rDestStrg )
     OSL_ENSURE( rDestStrg.isStorage() && !rDestStrg.isReadOnly(), "StorageBase::copyToStorage - invalid destination" );
     if( rDestStrg.isStorage() && !rDestStrg.isReadOnly() )
     {
-        ::std::vector< OUString > aElements;
+        std::vector< OUString > aElements;
         getElementNames( aElements );
-        for( ::std::vector< OUString >::iterator aIt = aElements.begin(), aEnd = aElements.end(); aIt != aEnd; ++aIt )
+        for( std::vector< OUString >::iterator aIt = aElements.begin(), aEnd = aElements.end(); aIt != aEnd; ++aIt )
             copyToStorage( rDestStrg, *aIt );
     }
 }

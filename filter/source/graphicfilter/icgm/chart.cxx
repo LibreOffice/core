@@ -45,7 +45,7 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
     if ( pTextEntry )
     {
         delete pTextEntry->pText;
-        ::std::vector< TextEntry* >::iterator it;
+        std::vector< TextEntry* >::iterator it;
         for ( it = maTextEntryList.begin(); it != maTextEntryList.end(); ++it )
         {
             if ( *it == pTextEntry )

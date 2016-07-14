@@ -44,7 +44,7 @@ public:
     ~XMLFootnoteSeparatorExport();
 
     void exportXML(
-        const ::std::vector<XMLPropertyState> * pProperties,
+        const std::vector<XMLPropertyState> * pProperties,
         sal_uInt32 nIdx,
         /// used only for debugging
         const rtl::Reference<XMLPropertySetMapper> & rMapper);

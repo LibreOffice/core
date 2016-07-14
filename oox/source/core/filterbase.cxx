@@ -68,7 +68,7 @@ namespace {
 struct UrlPool
 {
     ::osl::Mutex        maMutex;
-    ::std::set< OUString > maUrls;
+    std::set< OUString > maUrls;
 };
 
 struct StaticUrlPool : public ::rtl::Static< UrlPool, StaticUrlPool > {};

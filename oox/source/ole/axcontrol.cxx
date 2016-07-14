@@ -312,8 +312,8 @@ void ControlConverter::convertScrollBar( PropertyMap& rPropMap,
         sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nPosition,
         sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel )
 {
-    rPropMap.setProperty( PROP_ScrollValueMin, ::std::min( nMin, nMax ) );
-    rPropMap.setProperty( PROP_ScrollValueMax, ::std::max( nMin, nMax ) );
+    rPropMap.setProperty( PROP_ScrollValueMin, std::min( nMin, nMax ) );
+    rPropMap.setProperty( PROP_ScrollValueMax, std::max( nMin, nMax ) );
     rPropMap.setProperty( PROP_LineIncrement, nSmallChange );
     rPropMap.setProperty( PROP_BlockIncrement, nLargeChange );
     rPropMap.setProperty( bAwtModel ? PROP_ScrollValue : PROP_DefaultScrollValue, nPosition );
@@ -804,8 +804,8 @@ void ComCtlProgressBarModel::convertProperties( PropertyMap& rPropMap, const Con
     sal_uInt16 nBorder = getFlag( mnFlags, COMCTL_COMMON_3DBORDER ) ? API_BORDER_SUNKEN :
         (getFlag( mnFlags, COMCTL_COMMON_FLATBORDER ) ? API_BORDER_FLAT : API_BORDER_NONE);
     rPropMap.setProperty( PROP_Border, nBorder );
-    rPropMap.setProperty( PROP_ProgressValueMin, getLimitedValue< sal_Int32, double >( ::std::min( mfMin, mfMax ), 0.0, SAL_MAX_INT32 ) );
-    rPropMap.setProperty( PROP_ProgressValueMax, getLimitedValue< sal_Int32, double >( ::std::max( mfMin, mfMax ), 0.0, SAL_MAX_INT32 ) );
+    rPropMap.setProperty( PROP_ProgressValueMin, getLimitedValue< sal_Int32, double >( std::min( mfMin, mfMax ), 0.0, SAL_MAX_INT32 ) );
+    rPropMap.setProperty( PROP_ProgressValueMax, getLimitedValue< sal_Int32, double >( std::max( mfMin, mfMax ), 0.0, SAL_MAX_INT32 ) );
     // ComCtl model does not provide current value?
     ComCtlModelBase::convertProperties( rPropMap, rConv );
 }
@@ -2102,8 +2102,8 @@ void AxSpinButtonModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
 
 void AxSpinButtonModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
-    sal_Int32 nMin = ::std::min( mnMin, mnMax );
-    sal_Int32 nMax = ::std::max( mnMin, mnMax );
+    sal_Int32 nMin = std::min( mnMin, mnMax );
+    sal_Int32 nMax = std::max( mnMin, mnMax );
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_FLAGS_ENABLED ) );
     rPropMap.setProperty( PROP_SpinValueMin, nMin );
     rPropMap.setProperty( PROP_SpinValueMax, nMax );

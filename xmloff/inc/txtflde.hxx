@@ -154,9 +154,9 @@ class XMLTextFieldExport
     SvXMLExport& rExport;
 
     /// store used text field master names (NULL means: don't collect)
-    ::std::map<
+    std::map<
             css::uno::Reference< css::text::XText >,
-            ::std::set< OUString > > *
+            std::set< OUString > > *
         pUsedMasters;
 
 public:

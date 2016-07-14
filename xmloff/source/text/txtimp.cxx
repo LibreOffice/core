@@ -564,11 +564,11 @@ struct XMLTextImportHelper::Impl
     /// Are we inside a <text:deletion> element (deleted redline section)
     bool m_bInsideDeleteContext : 1;
 
-    typedef ::std::pair< OUString, OUString> field_name_type_t;
-    typedef ::std::pair< OUString, OUString > field_param_t;
-    typedef ::std::vector< field_param_t > field_params_t;
-    typedef ::std::pair< field_name_type_t, field_params_t > field_stack_item_t;
-    typedef ::std::stack< field_stack_item_t > field_stack_t;
+    typedef std::pair< OUString, OUString> field_name_type_t;
+    typedef std::pair< OUString, OUString > field_param_t;
+    typedef std::vector< field_param_t > field_params_t;
+    typedef std::pair< field_name_type_t, field_params_t > field_stack_item_t;
+    typedef std::stack< field_stack_item_t > field_stack_t;
 
     field_stack_t m_FieldStack;
 
@@ -603,7 +603,7 @@ struct XMLTextImportHelper::Impl
         {
             size_t const size(m_xChapterNumbering->getCount());
             m_xOutlineStylesCandidates.reset(
-                new ::std::vector< OUString >[size] );
+                new std::vector< OUString >[size] );
         }
     }
 
@@ -837,8 +837,8 @@ namespace
 
     void FieldParamImporter::Import()
     {
-        ::std::vector<OUString> vListEntries;
-        ::std::map<OUString, Any> vOutParams;
+        std::vector<OUString> vListEntries;
+        std::map<OUString, Any> vOutParams;
         for(field_params_t::const_iterator pCurrent = m_pInParams->begin();
             pCurrent != m_pInParams->end();
             ++pCurrent)
@@ -867,7 +867,7 @@ namespace
             copy(vListEntries.begin(), vListEntries.end(), vListEntriesSeq.begin());
             vOutParams[OUString(ODF_FORMDROPDOWN_LISTENTRY)] = makeAny(vListEntriesSeq);
         }
-        for(::std::map<OUString, Any>::const_iterator pCurrent = vOutParams.begin();
+        for(std::map<OUString, Any>::const_iterator pCurrent = vOutParams.begin();
             pCurrent != vOutParams.end();
             ++pCurrent)
         {
@@ -1973,7 +1973,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
                    of the outline style causes side effects on the children
                    paragraph styles in Writer. (#i106218#)
         */
-        ::std::vector<OUString> sChosenStyles(nCount);
+        std::vector<OUString> sChosenStyles(nCount);
         for( sal_Int32 i=0; i < nCount; ++i )
         {
             if ( bSetEmptyLevels ||

@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
  */
 class XMLSectionFootnoteConfigImport : public SvXMLImportContext
 {
-    ::std::vector<XMLPropertyState> & rProperties;
+    std::vector<XMLPropertyState> & rProperties;
     rtl::Reference<XMLPropertySetMapper> rMapper;
 
 public:
@@ -50,7 +50,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        ::std::vector<XMLPropertyState> & rProperties,
+        std::vector<XMLPropertyState> & rProperties,
         const rtl::Reference<XMLPropertySetMapper> & rMapperRef);
 
     virtual ~XMLSectionFootnoteConfigImport();

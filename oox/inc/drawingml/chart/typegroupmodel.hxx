@@ -41,7 +41,7 @@ struct UpDownBarsModel
 struct TypeGroupModel
 {
     typedef ModelVector< SeriesModel >  SeriesVector;
-    typedef ::std::vector< sal_Int32 >  AxisIdVector;
+    typedef std::vector< sal_Int32 >    AxisIdVector;
     typedef ModelRef< DataLabelsModel > DataLabelsRef;
     typedef ModelRef< UpDownBarsModel > UpDownBarsRef;
     typedef ModelRef< Shape >           ShapeRef;

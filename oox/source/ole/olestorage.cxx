@@ -282,7 +282,7 @@ Reference< XStorage > OleStorage::implGetXStorage() const
     return Reference< XStorage >();
 }
 
-void OleStorage::implGetElementNames( ::std::vector< OUString >& orElementNames ) const
+void OleStorage::implGetElementNames( std::vector< OUString >& orElementNames ) const
 {
     Sequence< OUString > aNames;
     if( mxStorage.is() ) try
