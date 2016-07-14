@@ -585,7 +585,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_S_NORM_INV_MS { Text = "_xlfn.NORM.S.INV" ; };
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
     String SC_OPCODE_GAMMA_LN_MS { Text = "_xlfn.GAMMALN.PRECISE" ; };
-    String SC_OPCODE_ERROR_TYPE { Text = "ERRORTYPE" ; };
+    String SC_OPCODE_ERROR_TYPE { Text = "_xlfn.ORG.OPENOFFICE.ERRORTYPE" ; };
     String SC_OPCODE_ERROR_TYPE_ODF { Text = "ERROR.TYPE" ; };
     String SC_OPCODE_FORMULA { Text = "_xlfn.FORMULATEXT"; };
     String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };

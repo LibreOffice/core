@@ -259,7 +259,7 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocRank,               216,    2,  3,  V, { VR, RO, VR }, 0, nullptr },
     { ocDB,                 247,    4,  5,  V, { VR }, 0, nullptr },
     { ocFrequency,          252,    2,  2,  A, { RA }, 0, nullptr },
-    { ocErrorType,          261,    1,  1,  V, { VR }, 0, nullptr },
+    { ocErrorType_ODF,      261,    1,  1,  V, { VR }, 0, nullptr },
     { ocAveDev,             269,    1,  MX, V, { RX }, 0, nullptr },
     { ocBetaDist,           270,    3,  5,  V, { VR }, 0, nullptr },
     { ocGammaLn,            271,    1,  1,  V, { VR }, 0, nullptr },
@@ -605,9 +605,15 @@ static const XclFunctionInfo saFuncTable_Odf[] =
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
     { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
 
+// Import Broken Raw ... even without leading _xlfn.
+#define EXC_FUNCENTRY_OOO_IBR( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), asciiname }
+
 /** Functions defined by Calc, but not in OpenFormula nor supported by Excel. */
 static const XclFunctionInfo saFuncTable_OOoLO[] =
 {
+    EXC_FUNCENTRY_OOO( ocErrorType,     1,  1,  0,  "ORG.OPENOFFICE.ERRORTYPE" ),
+    EXC_FUNCENTRY_OOO_IBR( ocErrorType, 1,  1,  0,  "ERRORTYPE" ),      // was written wrongly, read it
     EXC_FUNCENTRY_OOO( ocConvert,       3,  3,  0,  "ORG.OPENOFFICE.CONVERT" ),
     EXC_FUNCENTRY_OOO( ocColor,         3,  4,  0,  "ORG.LIBREOFFICE.COLOR" ),
     EXC_FUNCENTRY_OOO( ocRawSubtract,   2, MX,  0,  "ORG.LIBREOFFICE.RAWSUBTRACT" ),
@@ -617,6 +623,7 @@ static const XclFunctionInfo saFuncTable_OOoLO[] =
     EXC_FUNCENTRY_OOO( ocForecast_ETS_STM, 3,  6,  0,  "ORG.LIBREOFFICE.FORECAST.ETS.STAT.MULT" )
 };
 
+#undef EXC_FUNCENTRY_OOO_IBR
 #undef EXC_FUNCENTRY_OOO
 
 XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
